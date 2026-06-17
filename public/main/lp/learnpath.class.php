@@ -7853,15 +7853,32 @@ document.addEventListener("DOMContentLoaded", function () {
     {
         $return = '<ul class="mt-2 bg-white list-group list-group-flush border border-gray-25 rounded lp_resource">';
 
+        $courseEntity = api_get_course_entity(api_get_course_int_id());
+        $courseResourceNode = $courseEntity instanceof Course ? $courseEntity->getResourceNode() : null;
+        $createSurveyUrl = api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&'.http_build_query([
+            'action' => 'add',
+            'lp_id' => $this->lp_id,
+        ]);
+
+        if (null !== $courseResourceNode && $courseResourceNode->getId() > 0) {
+            $createSurveyUrl = api_get_path(WEB_PATH).'resources/survey/'.$courseResourceNode->getId().'/create?'.http_build_query([
+                'cid' => api_get_course_int_id(),
+                'sid' => api_get_session_id(),
+                'gid' => api_get_group_id(),
+                'origin' => 'learnpath',
+                'lp_id' => $this->lp_id,
+                'type' => 'step',
+                'returnToLp' => 1,
+                'isStudentView' => 'false',
+            ]);
+        }
+
         // First add link
         $return .= '<li class="list-group-item border-gray-25 lp_resource_element disable_drag">';
         $return .= Display::getMdiIcon('clipboard-question-outline', 'ch-tool-icon', null, 32, get_lang('Create survey'));
         $return .= Display::url(
             get_lang('Create survey'),
-            api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&'.http_build_query([
-                'action' => 'add',
-                'lp_id' => $this->lp_id,
-            ]),
+            $createSurveyUrl,
             ['title' => get_lang('Create survey')]
         );
         $return .= '</li>';
@@ -9209,6 +9226,45 @@ document.addEventListener("DOMContentLoaded", function () {
         return $path.'?'.http_build_query($query);
     }
 
+    private static function buildVueSurveyLearningPathUrl(
+        int $courseId,
+        int $sessionId,
+        int $learningPathId,
+        int $learningPathItemId,
+        int $surveyId
+    ): string {
+        if ($courseId <= 0 || $surveyId <= 0) {
+            return '';
+        }
+
+        $em = Database::getManager();
+        $course = $em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return '';
+        }
+
+        $courseResourceNodeId = (int) $course->getResourceNode()->getId();
+        if ($courseResourceNodeId <= 0) {
+            return '';
+        }
+
+        $query = [
+            'cid' => $courseId,
+            'sid' => $sessionId,
+            'gid' => api_get_group_id(),
+            'origin' => 'learnpath',
+            'lp_id' => $learningPathId,
+            'lpItemId' => $learningPathItemId,
+            'type' => 'step',
+            'returnToLp' => 1,
+            'embedded' => 1,
+            'isStudentView' => 'true',
+            'invitationCode' => 'auto',
+        ];
+
+        return api_get_path(WEB_PATH).'resources/survey/'.$courseResourceNodeId.'/'.$surveyId.'/answer?'.http_build_query($query);
+    }
+
     public static function rl_get_resource_link_for_learnpath(
         $course_id,
         $learningPathId,
@@ -9402,25 +9458,38 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 return '';
             case TOOL_SURVEY:
-
                 $surveyId = (int) $id;
                 $repo = Container::getSurveyRepository();
                 if (!empty($surveyId)) {
                     /** @var CSurvey $survey */
                     $survey = $repo->find($surveyId);
-                    $autoSurveyLink = SurveyUtil::generateFillSurveyLink(
-                        $survey,
-                        'auto',
-                        api_get_course_entity($course_id),
-                        $session_id
-                    );
-                    $lpParams = [
-                        'lp_id' => $learningPathId,
-                        'lp_item_id' => $id_in_path,
-                        'origin' => 'learnpath',
-                    ];
+                    if ($survey instanceof CSurvey) {
+                        $surveyUrl = self::buildVueSurveyLearningPathUrl(
+                            (int) $course_id,
+                            $session_id,
+                            $learningPathId,
+                            $id_in_path,
+                            $surveyId
+                        );
 
-                    return $autoSurveyLink.'&'.http_build_query($lpParams).'&'.$extraParams;
+                        if ('' !== $surveyUrl) {
+                            return $surveyUrl;
+                        }
+
+                        $autoSurveyLink = SurveyUtil::generateFillSurveyLink(
+                            $survey,
+                            'auto',
+                            api_get_course_entity($course_id),
+                            $session_id
+                        );
+                        $lpParams = [
+                            'lp_id' => $learningPathId,
+                            'lp_item_id' => $id_in_path,
+                            'origin' => 'learnpath',
+                        ];
+
+                        return $autoSurveyLink.'&'.http_build_query($lpParams).'&'.$extraParams;
+                    }
                 }
         }
 

@@ -22,6 +22,7 @@
 
         <div class="flex flex-wrap items-center gap-2">
           <BaseButton
+            v-if="!isLearningPathContext"
             :label="t('Back to surveys')"
             :route="buildListRoute()"
             icon="back"
@@ -408,6 +409,17 @@ const successMessage = ref("")
 
 const isCreateMode = computed(() => route.name === "SurveyMeetingCreate")
 const isEditorMode = computed(() => isCreateMode.value || route.name === "SurveyMeetingEdit")
+const isLearningPathContext = computed(() => {
+  const origin = String(getQueryValue(route.query.origin) || "")
+  const returnToLp = String(getQueryValue(route.query.returnToLp) || "")
+
+  return (
+    origin === "learnpath" ||
+    returnToLp === "1" ||
+    Boolean(getQueryValue(route.query.lp_id)) ||
+    Boolean(getQueryValue(route.query.lpItemId || route.query.lp_item_id))
+  )
+})
 const pageTitle = computed(() => {
   if (isCreateMode.value) {
     return t("Create meeting poll")
@@ -429,6 +441,13 @@ function getContextParams(extra = {}) {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
+    lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
+    lp_id: getQueryValue(route.query.lp_id),
+    origin: getQueryValue(route.query.origin),
+    type: getQueryValue(route.query.type),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    embedded: getQueryValue(route.query.embedded),
+    isStudentView: getQueryValue(route.query.isStudentView),
     ...extra,
   }
 }

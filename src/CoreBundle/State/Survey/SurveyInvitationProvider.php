@@ -530,16 +530,24 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
             : (int) $course->getId();
         $route = 3 === $survey->getSurveyType() ? 'meeting' : 'answer';
 
+        $query = [
+            'invitationCode' => $invitationCode,
+        ];
+
+        if ($this->isAnonymous($survey)) {
+            $query['publicCid'] = (int) $course->getId();
+            $query['publicSid'] = (int) ($session?->getId() ?? 0);
+        } else {
+            $query['cid'] = (int) $course->getId();
+            $query['sid'] = (int) ($session?->getId() ?? 0);
+        }
+
         return \sprintf(
             '/resources/survey/%d/%d/%s?%s',
             $nodeId,
             (int) $survey->getIid(),
             $route,
-            http_build_query([
-                'cid' => (int) $course->getId(),
-                'sid' => (int) ($session?->getId() ?? 0),
-                'invitationCode' => $invitationCode,
-            ]),
+            http_build_query($query),
         );
     }
 }

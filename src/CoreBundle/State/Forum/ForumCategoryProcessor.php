@@ -58,6 +58,14 @@ final class ForumCategoryProcessor implements ProcessorInterface
             $session = $this->getSession($this->entityManager, $request);
             $group = $this->getGroup($this->entityManager, $request);
             $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
+            $this->assertParentResourceNodeIsWritableInForumContext(
+                $this->entityManager,
+                $this->security,
+                $parentResourceNodeId,
+                $course,
+                $session,
+                $group,
+            );
 
             $category = (new CForumCategory())
                 ->setTitle($this->getRequiredText($payload, 'title', 255))
@@ -91,6 +99,8 @@ final class ForumCategoryProcessor implements ProcessorInterface
      */
     private function updateCategory(CForumCategory $category, array $payload): CForumCategory
     {
+        $this->assertEditableForumResource($category->getResourceNode(), $this->security);
+
         $category
             ->setTitle($this->getRequiredText($payload, 'title', 255))
             ->setCatComment($this->getOptionalText($payload, 'comment'))
@@ -108,6 +118,8 @@ final class ForumCategoryProcessor implements ProcessorInterface
 
     private function toggleCategoryLock(CForumCategory $category): JsonResponse
     {
+        $this->assertEditableForumResource($category->getResourceNode(), $this->security);
+
         $category->setLocked(0 === $category->getLocked() ? 1 : 0);
 
         $this->entityManager->persist($category);

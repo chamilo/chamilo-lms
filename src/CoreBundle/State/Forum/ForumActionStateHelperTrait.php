@@ -12,10 +12,12 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use const FILTER_VALIDATE_BOOLEAN;
 
@@ -26,6 +28,79 @@ trait ForumActionStateHelperTrait
         if (null === $resourceNode || !$security->isGranted('EDIT', $resourceNode)) {
             throw new AccessDeniedHttpException('You are not allowed to edit this forum resource.');
         }
+    }
+
+
+    private function assertResourceNodeInForumContext(
+        ?ResourceNode $resourceNode,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        string $message,
+    ): void {
+        if (!$resourceNode instanceof ResourceNode) {
+            throw new AccessDeniedHttpException($message);
+        }
+
+        $link = $resourceNode->getResourceLinkByContext($course, $session, $group);
+        $link ??= $resourceNode->getResourceLinkByContext($course, $session);
+        $link ??= $resourceNode->getResourceLinkByContext($course);
+
+        if (!$link instanceof ResourceLink) {
+            throw new AccessDeniedHttpException($message);
+        }
+    }
+
+    private function assertEditableResourceNodeInForumContext(
+        ?ResourceNode $resourceNode,
+        Security $security,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        string $message,
+    ): void {
+        $this->assertResourceNodeInForumContext($resourceNode, $course, $session, $group, $message);
+
+        if (!$security->isGranted('EDIT', $resourceNode)) {
+            throw new AccessDeniedHttpException($message);
+        }
+    }
+
+    private function assertParentResourceNodeIsWritableInForumContext(
+        EntityManagerInterface $entityManager,
+        Security $security,
+        int $parentResourceNodeId,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): ResourceNode {
+        $parentResourceNode = $entityManager->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+        if (!$parentResourceNode instanceof ResourceNode) {
+            throw new NotFoundHttpException('Parent forum resource node not found.');
+        }
+
+        $courseResourceNode = $course->getResourceNode();
+        if ($courseResourceNode instanceof ResourceNode && $courseResourceNode->getId() === $parentResourceNode->getId()) {
+            if ($security->isGranted('ROLE_ADMIN')
+                || $security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+                || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            ) {
+                return $parentResourceNode;
+            }
+
+            throw new AccessDeniedHttpException('You are not allowed to create forum resources in this context.');
+        }
+
+        $this->assertEditableResourceNodeInForumContext(
+            $parentResourceNode,
+            $security,
+            $course,
+            $session,
+            $group,
+            'You are not allowed to create forum resources in this context.',
+        );
+
+        return $parentResourceNode;
     }
 
     private function setForumResourceVisibility(

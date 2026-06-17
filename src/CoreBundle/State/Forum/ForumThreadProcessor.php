@@ -116,6 +116,13 @@ final class ForumThreadProcessor implements ProcessorInterface
         $course = $this->getCourse($this->entityManager, $request);
         $session = $this->getSession($this->entityManager, $request);
         $group = $this->getGroup($this->entityManager, $request);
+        $this->assertResourceNodeInForumContext(
+            $forum->getResourceNode(),
+            $course,
+            $session,
+            $group,
+            'The selected forum does not belong to this context.',
+        );
         $user = $this->security->getUser();
 
         if (!$user instanceof User) {

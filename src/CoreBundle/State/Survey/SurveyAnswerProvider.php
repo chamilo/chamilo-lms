@@ -78,13 +78,14 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
         if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
+        $survey = $this->getSurvey($surveyId);
+        $course = $this->getCourse($request, $survey);
+        $session = $this->getSession($request);
         $survey = $this->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
         $preview = $request->query->getBoolean('preview');
@@ -105,7 +106,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             throw new BadRequestHttpException('Meeting poll answers must be opened in the meeting view.');
         }
 
-        $user = $this->getCurrentUser();
+        $user = $this->getCurrentUserOrNull();
         $invitation = null;
         if (!$preview) {
             $this->assertSurveyIsAvailable($survey);
@@ -119,7 +120,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         $response->preview = $preview;
         $response->survey = $this->normalizeSurvey($survey, $course, $session);
         $response->questions = $this->getQuestions($survey);
-        $response->profileFields = $this->getSurveyAnswerProfileFields($survey, $user);
+        $response->profileFields = $user instanceof User ? $this->getSurveyAnswerProfileFields($survey, $user) : [];
         $response->pages = $this->buildPages($survey, $response->questions);
         $response->settings = $this->getSettings();
         $response->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
@@ -142,9 +143,30 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         return $response;
     }
 
-    public function getCourse(Request $request): Course
+    public function getSurvey(int $surveyId): CSurvey
+    {
+        $survey = $this->surveyRepository->find($surveyId);
+        if (!$survey instanceof CSurvey) {
+            throw new NotFoundHttpException('The requested survey was not found.');
+        }
+
+        return $survey;
+    }
+
+    public function getCourse(Request $request, ?CSurvey $survey = null): Course
     {
         $courseId = $request->query->getInt('cid');
+        if ($courseId <= 0) {
+            $courseId = $request->query->getInt('publicCid');
+        }
+
+        if ($courseId <= 0 && $survey instanceof CSurvey) {
+            $course = $this->getCourseFromSurveyResource($survey);
+            if ($course instanceof Course) {
+                return $course;
+            }
+        }
+
         if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
@@ -161,6 +183,10 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     {
         $sessionId = $request->query->getInt('sid');
         if ($sessionId <= 0) {
+            $sessionId = $request->query->getInt('publicSid');
+        }
+
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -172,9 +198,16 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         return $session;
     }
 
-    public function getCurrentUser(): User
+    public function getCurrentUserOrNull(): ?User
     {
         $user = $this->security->getUser();
+
+        return $user instanceof User ? $user : null;
+    }
+
+    public function getCurrentUser(): User
+    {
+        $user = $this->getCurrentUserOrNull();
         if (!$user instanceof User) {
             throw new AccessDeniedHttpException('A valid user is required.');
         }
@@ -184,10 +217,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 
     public function getSurveyFromCurrentContext(int $surveyId, Course $course, ?Session $session): CSurvey
     {
-        $survey = $this->surveyRepository->find($surveyId);
-        if (!$survey instanceof CSurvey) {
-            throw new NotFoundHttpException('The requested survey was not found.');
-        }
+        $survey = $this->getSurvey($surveyId);
 
         if ($this->isSurveyInContext($survey, $course, $session)) {
             return $survey;
@@ -196,10 +226,18 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         throw new AccessDeniedHttpException('The requested survey does not belong to the current course context.');
     }
 
-    public function getInvitation(CSurvey $survey, Course $course, ?Session $session, User $user, Request $request): CSurveyInvitation
+    public function getInvitation(CSurvey $survey, Course $course, ?Session $session, ?User $user, Request $request): CSurveyInvitation
     {
-        $invitationCode = trim((string) ($request->query->get('invitationCode') ?? $request->query->get('invitationcode') ?? ''));
+        $invitationCode = $this->getInvitationCode($request);
         if ('auto' === $invitationCode) {
+            if ('1' === (string) $survey->getAnonymous() && !$user instanceof User) {
+                return $this->getOrCreateAnonymousAutoInvitation($survey, $course, $session, $request);
+            }
+
+            if (!$user instanceof User) {
+                throw new AccessDeniedHttpException('A valid user is required.');
+            }
+
             return $this->getOrCreateAutoInvitation($survey, $course, $session, $user);
         }
 
@@ -208,10 +246,10 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             ->from(CSurveyInvitation::class, 'invitation')
             ->andWhere('IDENTITY(invitation.survey) = :surveyId')
             ->andWhere('IDENTITY(invitation.course) = :courseId')
-            ->andWhere('IDENTITY(invitation.user) = :userId')
+            ->andWhere('invitation.lpItemId = :lpItemId')
             ->setParameter('surveyId', (int) $survey->getIid(), Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ->setParameter('lpItemId', $request->query->getInt('lpItemId'), Types::INTEGER)
         ;
 
         if ('' !== $invitationCode) {
@@ -219,6 +257,19 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
                 ->andWhere('invitation.invitationCode = :invitationCode')
                 ->setParameter('invitationCode', $invitationCode)
             ;
+        }
+
+        if ('1' !== (string) $survey->getAnonymous()) {
+            if (!$user instanceof User) {
+                throw new AccessDeniedHttpException('A valid user is required.');
+            }
+
+            $queryBuilder
+                ->andWhere('IDENTITY(invitation.user) = :userId')
+                ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ;
+        } elseif ('' === $invitationCode) {
+            throw new AccessDeniedHttpException('A valid survey invitation code is required.');
         }
 
         if (null === $session) {
@@ -243,9 +294,13 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         return $invitation;
     }
 
-    public function getAnswerUserKey(CSurvey $survey, User $user, Request $request): string
+    public function getAnswerUserKey(CSurvey $survey, ?User $user, Request $request): string
     {
         if ('1' !== (string) $survey->getAnonymous()) {
+            if (!$user instanceof User) {
+                throw new AccessDeniedHttpException('A valid user is required.');
+            }
+
             return (string) $user->getId();
         }
 
@@ -258,6 +313,25 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         }
 
         return $answerUser;
+    }
+
+    private function getCourseFromSurveyResource(CSurvey $survey): ?Course
+    {
+        if (!method_exists($survey, 'getResourceNode') || null === $survey->getResourceNode()) {
+            return null;
+        }
+
+        foreach ($survey->getResourceNode()->getResourceLinks() as $resourceLink) {
+            if (method_exists($resourceLink, 'getDeletedAt') && null !== $resourceLink->getDeletedAt()) {
+                continue;
+            }
+
+            if (method_exists($resourceLink, 'getCourse') && $resourceLink->getCourse() instanceof Course) {
+                return $resourceLink->getCourse();
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -473,6 +547,42 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         }
 
         return $answers;
+    }
+
+    private function getInvitationCode(Request $request): string
+    {
+        return trim((string) ($request->query->get('invitationCode') ?? $request->query->get('invitationcode') ?? ''));
+    }
+
+    private function getOrCreateAnonymousAutoInvitation(CSurvey $survey, Course $course, ?Session $session, Request $request): CSurveyInvitation
+    {
+        $sessionStorage = $request->getSession();
+        $sessionKey = 'survey_auto_invitation_'.(int) $survey->getIid().'_'.$request->query->getInt('lpItemId');
+        $code = (string) $sessionStorage->get($sessionKey, '');
+
+        if ('' === $code) {
+            $code = 'auto-ANONY_'.sha1(uniqid('', true)).'-'.(string) $survey->getCode();
+            $sessionStorage->set($sessionKey, $code);
+        }
+
+        $request->query->set('invitationCode', $code);
+
+        try {
+            return $this->getInvitation($survey, $course, $session, null, $request);
+        } catch (AccessDeniedHttpException) {
+            $this->entityManager->getConnection()->insert('c_survey_invitation', [
+                'c_id' => (int) $course->getId(),
+                'survey_id' => (int) $survey->getIid(),
+                'user_id' => null,
+                'session_id' => null !== $session ? (int) $session->getId() : null,
+                'invitation_code' => $code,
+                'answered' => 0,
+                'invitation_date' => (new DateTime())->format('Y-m-d H:i:s'),
+                'c_lp_item_id' => $request->query->getInt('lpItemId'),
+            ]);
+
+            return $this->getInvitation($survey, $course, $session, null, $request);
+        }
     }
 
     private function getOrCreateAutoInvitation(CSurvey $survey, Course $course, ?Session $session, User $user): CSurveyInvitation

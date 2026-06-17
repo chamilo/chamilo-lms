@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Survey;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyAnswer;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer as CSurveyAnswerEntity;
@@ -59,9 +60,10 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         $payload = $this->getPayload($request, $data);
         $this->validateCsrfToken((string) ($payload['csrfToken'] ?? ''));
 
-        $course = $this->surveyAnswerProvider->getCourse($request);
+        $survey = $this->surveyAnswerProvider->getSurvey($surveyId);
+        $course = $this->surveyAnswerProvider->getCourse($request, $survey);
         $session = $this->surveyAnswerProvider->getSession($request);
-        $user = $this->surveyAnswerProvider->getCurrentUser();
+        $user = $this->surveyAnswerProvider->getCurrentUserOrNull();
         $survey = $this->surveyAnswerProvider->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
         $invitation = $this->surveyAnswerProvider->getInvitation($survey, $course, $session, $user, $request);
@@ -80,7 +82,9 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         $questions = $this->surveyAnswerProvider->getOrderedQuestions($survey);
 
         $this->validateMandatoryAnswers($questions, $answers, $otherAnswers);
-        $this->applySurveyProfileValues($survey, $user, $profileValues);
+        if ($user instanceof User) {
+            $this->applySurveyProfileValues($survey, $user, $profileValues);
+        }
         $answerUserKey = $this->surveyAnswerProvider->getAnswerUserKey($survey, $user, $request);
         $this->removeExistingAnswers($survey, $answerUserKey, $request);
 

@@ -423,6 +423,14 @@ function getContextParams() {
   }
 }
 
+function getPublicContextParams() {
+  return {
+    publicCid: route.query.cid,
+    publicSid: route.query.sid,
+    publicGid: route.query.gid,
+  }
+}
+
 function buildListRoute() {
   return {
     name: "SurveyList",
@@ -446,6 +454,7 @@ function buildPreviewRoute() {
 }
 
 function buildAnswerUrl(invitation) {
+  const isAnonymousSurvey = survey.value?.anonymous === true || survey.value?.anonymous === 1 || survey.value?.anonymous === "1"
   const resolved = router.resolve({
     name: survey.value.surveyType === 3 ? "SurveyMeeting" : "SurveyAnswer",
     params: {
@@ -453,7 +462,7 @@ function buildAnswerUrl(invitation) {
       surveyId: surveyId.value,
     },
     query: {
-      ...getContextParams(),
+      ...(isAnonymousSurvey ? getPublicContextParams() : getContextParams()),
       invitationCode: invitation.invitationCode,
     },
   })

@@ -15,7 +15,7 @@
 
       <div class="flex flex-wrap items-center justify-end gap-2">
         <BaseButton
-          v-if="!isLearningPathContext"
+          v-if="showBackToSurveyList"
           :label="t('Back to survey list')"
           :route="buildListRoute()"
           icon="back"
@@ -430,6 +430,17 @@ const isLearningPathContext = computed(() => {
     Boolean(getQueryValue(route.query.lpItemId || route.query.lp_item_id))
   )
 })
+const isPublicAnswerContext = computed(() => {
+  return (
+    Boolean(getQueryValue(route.query.invitationCode || route.query.invitationcode)) ||
+    Boolean(getQueryValue(route.query.publicCid)) ||
+    Boolean(getQueryValue(route.query.publicSid)) ||
+    Boolean(getQueryValue(route.query.publicGid))
+  )
+})
+const showBackToSurveyList = computed(() => {
+  return !isLearningPathContext.value && !isPublicAnswerContext.value
+})
 const canInteract = computed(() => previewMode.value || canSubmit.value)
 const totalPages = computed(() => Math.max(1, pages.value.length))
 const currentQuestionIds = computed(() => pages.value[currentPageIndex.value] || [])
@@ -447,6 +458,9 @@ function getContextParams() {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
+    publicCid: getQueryValue(route.query.publicCid),
+    publicSid: getQueryValue(route.query.publicSid),
+    publicGid: getQueryValue(route.query.publicGid),
     invitationCode: getQueryValue(route.query.invitationCode || route.query.invitationcode),
     lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
     lp_id: getQueryValue(route.query.lp_id),

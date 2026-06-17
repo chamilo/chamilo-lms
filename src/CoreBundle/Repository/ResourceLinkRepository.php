@@ -37,7 +37,7 @@ class ResourceLinkRepository extends SortableRepository
         'agenda' => '/resources/ccalendarevent',
         'forum' => '/main/forum/index.php',
         'student_publication' => '/resources/assignment/%resource_node_id%',
-        'survey' => '/main/survey/survey_list.php',
+        'survey' => '/resources/survey/%resource_node_id%/',
         'notebook' => '/main/notebook/index.php',
     ];
 

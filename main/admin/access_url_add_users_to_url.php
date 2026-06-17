@@ -79,7 +79,7 @@ $first_letter_user_lower = Database::escape_string(api_strtolower($first_letter_
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $target_name = 'lastname';
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
-	    WHERE ".$target_name." LIKE '".$first_letter_user_lower."%' OR ".$target_name." LIKE '".$first_letter_user_lower."%'
+	    WHERE ".$target_name." LIKE '".$first_letter_user_lower."%'
 		ORDER BY ".(count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
 $result = Database::query($sql);
 $db_users = Database::store_result($result);

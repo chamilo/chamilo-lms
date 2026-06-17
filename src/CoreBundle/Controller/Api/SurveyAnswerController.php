@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
-use Chamilo\CoreBundle\State\SurveyAnswerProcessor;
-use Chamilo\CoreBundle\State\SurveyAnswerProvider;
+use Chamilo\CoreBundle\State\Survey\SurveyAnswerProcessor;
+use Chamilo\CoreBundle\State\Survey\SurveyAnswerProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;

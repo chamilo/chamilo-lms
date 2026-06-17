@@ -466,6 +466,16 @@ const router = createRouter({
       component: MySessionListUpcoming,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/survey/pending",
+      name: "SurveyPending",
+      component: () => import("../views/survey/SurveyPendingView.vue"),
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+        breadcrumb: "Pending surveys",
+      },
+    },
     fileManagerRoutes,
     socialNetworkRoutes,
     catalogue,
@@ -584,12 +594,13 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // Determine what the route requires
+  const allowsAnonymousAccess = to.matched.some((record) => record.meta?.allowAnonymousAccess === true)
   const needsAuth = to.matched.some((record) => record.meta?.requiresAuth === true)
   const wantsAdmin = to.matched.some((record) => record.meta?.requiresAdmin === true)
   const wantsSessionAdmin = to.matched.some((record) => record.meta?.requiresSessionAdmin === true)
   const wantsHR = to.matched.some((record) => record.meta?.requiresHR === true)
 
-  const mustBeLogged = needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR
+  const mustBeLogged = !allowsAnonymousAccess && (needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR)
 
   if (mustBeLogged && !securityStore.isLoading) {
     await securityStore.checkSession()

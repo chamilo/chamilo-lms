@@ -66,6 +66,95 @@ function resolveCourseId(to) {
   return parseInt(to.query?.cid ?? 0)
 }
 
+function normalizeInternalUrl(url) {
+  if (!url || typeof url !== "string") {
+    return null
+  }
+
+  try {
+    const parsedUrl = new URL(url, window.location.origin)
+
+    if (parsedUrl.origin !== window.location.origin) {
+      return null
+    }
+
+    return parsedUrl
+  } catch (error) {
+    return null
+  }
+}
+
+function appendCourseContext(url, courseId, sessionId) {
+  const parsedUrl = normalizeInternalUrl(url)
+
+  if (!parsedUrl) {
+    return null
+  }
+
+  if (!parsedUrl.searchParams.has("cid")) {
+    parsedUrl.searchParams.set("cid", courseId)
+  }
+
+  if (sessionId && !parsedUrl.searchParams.has("sid")) {
+    parsedUrl.searchParams.set("sid", sessionId)
+  }
+
+  return parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
+}
+
+function isForumCourseTool(tool) {
+  const title = String(tool?.title || tool?.tool?.title || "").toLowerCase()
+
+  return title === "forum"
+}
+
+function buildForumToolUrlFromResourceNode(tool, courseId, sessionId) {
+  const nodeId = parseInt(tool?.resourceNode?.id || tool?.resourceNodeId || 0)
+
+  if (!nodeId) {
+    return null
+  }
+
+  const query = new URLSearchParams({ cid: String(courseId) })
+
+  if (sessionId) {
+    query.set("sid", String(sessionId))
+  }
+
+  return `/resources/forum/${nodeId}/?${query.toString()}`
+}
+
+async function resolveForumAutoLaunchUrl(courseId, sessionId, course) {
+  try {
+    const cTools = await courseService.loadCTools(courseId, sessionId || 0)
+    const forumTool = Array.isArray(cTools) ? cTools.find(isForumCourseTool) : null
+
+    if (forumTool) {
+      const toolUrl = appendCourseContext(forumTool.url, courseId, sessionId)
+
+      if (toolUrl && !toolUrl.includes("/main/forum/")) {
+        return toolUrl
+      }
+
+      const resourceNodeUrl = buildForumToolUrlFromResourceNode(forumTool, courseId, sessionId)
+
+      if (resourceNodeUrl) {
+        return resourceNodeUrl
+      }
+    }
+  } catch (error) {
+    console.error("[CourseHome] Failed to resolve forum tool URL", error)
+  }
+
+  const courseResourceNodeUrl = buildForumToolUrlFromResourceNode({ resourceNode: course?.resourceNode }, courseId, sessionId)
+
+  if (courseResourceNodeUrl) {
+    return courseResourceNodeUrl
+  }
+
+  return null
+}
+
 /**
  * Applies "page-*" marker classes on both the DOM marker and the <body>.
  * This keeps stable theming hooks during SPA navigation (issue #6047).
@@ -257,10 +346,16 @@ async function courseHomeBeforeEnter(to) {
     const forumAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
 
     if (forumAutoLaunch === 1) {
-      sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/main/forum/index.php?cid=${courseId}` + sid
+      const forumAutoLaunchUrl = await resolveForumAutoLaunchUrl(courseId, sessionId, cidReqStore.course)
 
-      return false
+      if (forumAutoLaunchUrl) {
+        sessionStorage.setItem(autoLaunchKey, "true")
+        window.location.href = forumAutoLaunchUrl
+
+        return false
+      }
+
+      console.warn("[CourseHome] Forum auto-launch is enabled but the Vue forum URL could not be resolved.")
     }
   } catch (error) {
     console.error("Error during CourseHome route guard:", error)

@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumThreadsByForum;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumNotification;
@@ -30,6 +31,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class ForumThreadCollectionStateProvider implements ProviderInterface
 {
+    use ForumCourseSettingHelperTrait;
+    use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
 
     public function __construct(
@@ -37,6 +40,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly CForumRepository $forumRepository,
         private readonly Security $security,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -126,6 +130,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
                 $showHidden ? $this->countPendingPosts($thread) : 0,
                 $canSubscribe && $this->isSubscribedToThread($course, $user, (int) $thread->getIid()),
                 $canSubscribe,
+                $this->isForumThreadLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread),
             );
         }
 
@@ -144,11 +149,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
 
     private function areForumPostNotificationsHidden(Course $course): bool
     {
-        if (!\function_exists('api_get_course_setting')) {
-            return false;
-        }
-
-        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
+        return $this->isCourseSettingEnabled($this->entityManager, $course, 'hide_forum_notifications');
     }
 
     private function isSubscribedToThread(Course $course, User $user, int $threadId): bool
@@ -170,7 +171,10 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         int $pendingPostCount,
         bool $subscribed,
         bool $canSubscribe,
+        bool $lockedByGradebook,
     ): array {
+        $canMutate = $canManage && !$lockedByGradebook;
+
         return [
             '@id' => '/api/forum_threads/'.$thread->getIid(),
             '@type' => 'ForumThread',
@@ -187,15 +191,17 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
             'threadWeight' => $thread->getThreadWeight(),
             'threadPeerQualify' => $thread->isThreadPeerQualify(),
             'gradebookEnabled' => $thread->getThreadQualifyMax() > 0,
+            'lockedByGradebook' => $lockedByGradebook,
+            'gradebookLockedMessage' => $lockedByGradebook ? $this->getForumThreadGradebookLockedMessage() : '',
             'posterFullName' => $thread->getPosterFullName(),
             'pendingPostCount' => $pendingPostCount,
             'subscribed' => $subscribed,
             'canSubscribe' => $canSubscribe,
-            'canEdit' => $canManage,
-            'canDelete' => $canManage,
-            'canToggleLock' => $canManage,
-            'canToggleSticky' => $canManage,
-            'canToggleVisibility' => $canManage,
+            'canEdit' => $canMutate,
+            'canDelete' => $canMutate,
+            'canToggleLock' => $canMutate,
+            'canToggleSticky' => $canMutate,
+            'canToggleVisibility' => $canMutate,
         ];
     }
 

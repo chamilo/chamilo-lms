@@ -63,7 +63,7 @@
         </select>
       </label>
       <BaseButton
-        v-if="canManageThread"
+        v-if="thread?.canToggleSticky"
         :label="thread?.threadSticky ? t('Remove sticky') : t('Make sticky')"
         icon="tag-outline"
         only-icon
@@ -81,7 +81,7 @@
         @click="toggleThreadVisibility"
       />
       <BaseButton
-        v-if="canManageThread"
+        v-if="thread?.canToggleLock"
         :label="Number(thread?.locked || 0) ? t('Open thread') : t('Close thread')"
         :icon="Number(thread?.locked || 0) ? 'unlock' : 'lock'"
         only-icon
@@ -90,7 +90,7 @@
         @click="toggleThreadLock"
       />
       <BaseButton
-        v-if="canManageThread"
+        v-if="thread?.canDelete"
         :label="t('Delete thread')"
         icon="delete"
         only-icon
@@ -105,6 +105,13 @@
       class="mb-4 rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-700"
     >
       {{ t("This thread is hidden from learners.") }}
+    </div>
+
+    <div
+      v-if="thread?.lockedByGradebook"
+      class="mb-4 rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-700"
+    >
+      {{ t("This option is not available.") }}
     </div>
 
     <div
@@ -449,7 +456,6 @@ const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
 const canReply = computed(() => Boolean(thread.value?.canReply))
-const canManageThread = computed(() => Boolean(thread.value?.canEdit || thread.value?.canDelete || thread.value?.canToggleLock))
 const canToggleThreadVisibility = computed(() => Boolean(thread.value?.canToggleVisibility))
 
 const baseQuery = computed(() => ({

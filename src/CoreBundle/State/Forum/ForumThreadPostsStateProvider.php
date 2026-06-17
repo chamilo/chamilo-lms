@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
@@ -22,7 +23,6 @@ use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use ExtraFieldValue;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -36,6 +36,9 @@ use Throwable;
  */
 final class ForumThreadPostsStateProvider implements ProviderInterface
 {
+    use ForumCourseSettingHelperTrait;
+    use ForumExtraFieldHelperTrait;
+    use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
 
     /** @var array<int, string> */
@@ -48,6 +51,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly CForumAttachmentRepository $attachmentRepository,
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
+        private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
     ) {}
 
     /**
@@ -150,6 +154,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $posts = $postsQueryBuilder->getQuery()->getResult();
 
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
+        $lockedByGradebook = $this->isForumThreadLockedByGradebook(
+            $this->entityManager,
+            $this->settingsManager,
+            $this->security,
+            $course,
+            $thread,
+        );
 
         return [
             'forum' => $this->serializeForum($forum),
@@ -160,6 +171,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                 $canManage,
                 $canSubscribe && $this->isSubscribedToThread($course, $user, (int) $thread->getIid()),
                 $canSubscribe,
+                $lockedByGradebook,
             ),
             'canReply' => $this->canReply($forum, $thread),
             'canManageThread' => $canManage,
@@ -170,6 +182,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                     $thread,
                     $canManage,
                     $showPosterAvatar,
+                    $lockedByGradebook,
                 ),
                 $posts,
             ),
@@ -195,20 +208,12 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function areForumPostNotificationsHidden(Course $course): bool
     {
-        if (!\function_exists('api_get_course_setting')) {
-            return false;
-        }
-
-        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
+        return $this->isCourseSettingEnabled($this->entityManager, $course, 'hide_forum_notifications');
     }
 
     private function arePosterImagesAllowed(Course $course): bool
     {
-        if (!\function_exists('api_get_course_setting')) {
-            return false;
-        }
-
-        return 1 === (int) api_get_course_setting('allow_user_image_forum', $course);
+        return $this->isCourseSettingEnabled($this->entityManager, $course, 'allow_user_image_forum');
     }
 
     private function shouldHideForumPostRevisionLanguage(): bool
@@ -258,8 +263,10 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         bool $canManage,
         bool $subscribed,
         bool $canSubscribe,
+        bool $lockedByGradebook,
     ): array {
         $visible = $this->isForumResourceVisible($thread, $course, $session);
+        $canMutate = $canManage && !$lockedByGradebook;
 
         return [
             'iid' => $thread->getIid(),
@@ -272,11 +279,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'posterFullName' => $thread->getPosterFullName(),
             'subscribed' => $subscribed,
             'canSubscribe' => $canSubscribe,
-            'canEdit' => $canManage,
-            'canDelete' => $canManage,
-            'canToggleLock' => $canManage,
-            'canToggleSticky' => $canManage,
-            'canToggleVisibility' => $canManage,
+            'lockedByGradebook' => $lockedByGradebook,
+            'gradebookLockedMessage' => $lockedByGradebook ? $this->getForumThreadGradebookLockedMessage() : '',
+            'canEdit' => $canMutate,
+            'canDelete' => $canMutate,
+            'canToggleLock' => $canMutate,
+            'canToggleSticky' => $canMutate,
+            'canToggleVisibility' => $canMutate,
         ];
     }
 
@@ -289,8 +298,10 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         CForumThread $thread,
         bool $canManage,
         bool $showPosterAvatar,
+        bool $lockedByGradebook,
     ): array {
-        $canEdit = $this->canEditPost($post, $forum, $thread, $canManage);
+        $canEdit = !$lockedByGradebook && $this->canEditPost($post, $forum, $thread, $canManage);
+        $canModerate = $canManage && !$lockedByGradebook;
         $attachments = [];
 
         foreach ($post->getAttachments() as $attachment) {
@@ -326,15 +337,15 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'showPosterAvatar' => $showPosterAvatar && '' !== $posterAvatarUrl,
             'canEdit' => $canEdit,
             'canDelete' => $canEdit,
-            'canApprove' => $canManage && CForumPost::STATUS_VALIDATED !== $status,
-            'canReject' => $canManage && CForumPost::STATUS_REJECTED !== $status,
-            'canToggleVisibility' => $canManage,
+            'canApprove' => $canModerate && CForumPost::STATUS_VALIDATED !== $status,
+            'canReject' => $canModerate && CForumPost::STATUS_REJECTED !== $status,
+            'canToggleVisibility' => $canModerate,
             'canReplyToPost' => $this->canReply($forum, $thread),
             'canQuote' => $this->canReply($forum, $thread),
-            'canMove' => $canManage && !$this->isFirstPost($post, $thread),
+            'canMove' => $canModerate && !$this->isFirstPost($post, $thread),
             'revisionRequested' => $revisionRequested,
             'revisionLanguage' => $revisionLanguage,
-            'canAskRevision' => $isAuthor && $this->areForumPostRevisionsEnabled(),
+            'canAskRevision' => !$lockedByGradebook && $isAuthor && $this->areForumPostRevisionsEnabled(),
             'canGiveRevision' => !$isAuthor && $revisionRequested && $this->canReply($forum, $thread),
             'canReport' => $this->isReportAvailableForCurrentRequest(),
             'attachments' => $attachments,
@@ -343,11 +354,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function areForumPostRevisionsEnabled(): bool
     {
-        if (!\function_exists('api_get_setting')) {
-            return false;
-        }
-
-        return $this->isTruthySetting(api_get_setting('forum.allow_forum_post_revisions'));
+        return $this->isTruthySetting(
+            $this->settingsManager->getSetting('forum.allow_forum_post_revisions', true),
+        );
     }
 
     private function isTruthySetting(mixed $value): bool
@@ -367,7 +376,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function getPosterAvatarUrl(?User $user): string
     {
-        if (!$user instanceof User || !\function_exists('api_get_user_info')) {
+        if (!$user instanceof User) {
             return '';
         }
 
@@ -376,16 +385,16 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             return $this->posterAvatarUrlByUserId[$userId];
         }
 
-        $userInfo = api_get_user_info($userId, false, false, false, false, true);
-        if (!\is_array($userInfo)) {
-            $this->posterAvatarUrlByUserId[$userId] = '';
+        $illustrationUrl = trim((string) ($user->illustrationUrl ?? ''));
+        if ('' !== $illustrationUrl) {
+            $this->posterAvatarUrlByUserId[$userId] = $illustrationUrl;
 
-            return '';
+            return $illustrationUrl;
         }
 
-        $this->posterAvatarUrlByUserId[$userId] = (string) ($userInfo['avatar_small'] ?? $userInfo['avatar'] ?? '');
+        $this->posterAvatarUrlByUserId[$userId] = '';
 
-        return $this->posterAvatarUrlByUserId[$userId];
+        return '';
     }
 
     private function isReportAvailableForCurrentRequest(): bool
@@ -406,72 +415,12 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function getExtraFieldValue(string $itemType, int $itemId, string $variable): mixed
     {
-        $databaseValue = $this->getExtraFieldValueFromDatabase($itemType, $itemId, $variable);
-        if (null !== $databaseValue) {
-            return $databaseValue;
-        }
-
-        if (!class_exists('ExtraFieldValue')) {
-            return null;
-        }
-
-        $extraFieldValue = new ExtraFieldValue($itemType);
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, $variable);
-
-        return \is_array($value) ? ($value['value'] ?? null) : null;
-    }
-
-    private function getExtraFieldValueFromDatabase(string $itemType, int $itemId, string $variable): mixed
-    {
-        $fieldId = $this->getExtraFieldId($itemType, $variable);
-        if (null === $fieldId) {
-            return null;
-        }
-
-        $value = $this->entityManager->getConnection()->fetchOne(
-            'SELECT field_value FROM extra_field_values WHERE field_id = :fieldId AND item_id = :itemId ORDER BY id DESC LIMIT 1',
-            [
-                'fieldId' => $fieldId,
-                'itemId' => $itemId,
-            ],
-            [
-                'fieldId' => Types::INTEGER,
-                'itemId' => Types::INTEGER,
-            ],
+        return $this->getForumExtraFieldValue(
+            $this->extraFieldValuesRepository,
+            $itemType,
+            $itemId,
+            $variable,
         );
-
-        return false === $value ? null : $value;
-    }
-
-    private function getExtraFieldId(string $itemType, string $variable): ?int
-    {
-        $itemTypeId = $this->getExtraFieldItemTypeId($itemType);
-        if (null === $itemTypeId) {
-            return null;
-        }
-
-        $fieldId = $this->entityManager->getConnection()->fetchOne(
-            'SELECT id FROM extra_field WHERE item_type = :itemType AND variable = :variable ORDER BY id DESC LIMIT 1',
-            [
-                'itemType' => $itemTypeId,
-                'variable' => $variable,
-            ],
-            [
-                'itemType' => Types::INTEGER,
-                'variable' => Types::STRING,
-            ],
-        );
-
-        return false === $fieldId ? null : (int) $fieldId;
-    }
-
-    private function getExtraFieldItemTypeId(string $itemType): ?int
-    {
-        return match ($itemType) {
-            'course' => 2,
-            'forum_post' => 16,
-            default => null,
-        };
     }
 
     private function getPostStatusLabel(int $status): string

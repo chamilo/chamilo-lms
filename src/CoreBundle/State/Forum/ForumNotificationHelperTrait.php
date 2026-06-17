@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\State\Forum;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -15,7 +17,6 @@ use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Doctrine\ORM\EntityManagerInterface;
-use MessageManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -25,6 +26,8 @@ use const FILTER_VALIDATE_BOOLEAN;
 
 trait ForumNotificationHelperTrait
 {
+    use ForumCourseSettingHelperTrait;
+
     private function getCurrentForumUser(Security $security): User
     {
         $user = $security->getUser();
@@ -131,18 +134,119 @@ trait ForumNotificationHelperTrait
         return false;
     }
 
-    private function areForumPostNotificationsHidden(Course $course): bool
+    private function areForumPostNotificationsHidden(EntityManagerInterface $entityManager, Course $course): bool
     {
-        if (!\function_exists('api_get_course_setting')) {
+        return $this->isCourseSettingEnabled($entityManager, $course, 'hide_forum_notifications');
+    }
+
+    private function shouldStorePostNotification(EntityManagerInterface $entityManager, Course $course, bool $requestedNotification): bool
+    {
+        return !$this->areForumPostNotificationsHidden($entityManager, $course) && $requestedNotification;
+    }
+
+    private function subscribeUsersToForumNotifications(
+        EntityManagerInterface $entityManager,
+        Course $course,
+        ?Session $session,
+        CForum $forum,
+    ): int {
+        if (!$this->isCourseSettingEnabled($entityManager, $course, 'subscribe_users_to_forum_notifications')) {
+            return 0;
+        }
+
+        $forumId = (int) $forum->getIid();
+        if ($forumId <= 0) {
+            return 0;
+        }
+
+        $createdCount = 0;
+        foreach ($this->getForumAutoSubscriptionUserIds($entityManager, $course, $session) as $userId) {
+            if ($this->addForumSubscriptionForUserId($entityManager, $course, $userId, $forumId)) {
+                ++$createdCount;
+            }
+        }
+
+        return $createdCount;
+    }
+
+    /**
+     * @return int[]
+     */
+    private function getForumAutoSubscriptionUserIds(
+        EntityManagerInterface $entityManager,
+        Course $course,
+        ?Session $session,
+    ): array {
+        if ($session instanceof Session && (int) $session->getId() > 0) {
+            $rows = $entityManager->createQueryBuilder()
+                ->select('IDENTITY(rel.user) AS userId')
+                ->from(SessionRelCourseRelUser::class, 'rel')
+                ->andWhere('rel.course = :course')
+                ->andWhere('rel.session = :session')
+                ->andWhere('rel.status = :status')
+                ->setParameter('course', $course)
+                ->setParameter('session', $session)
+                ->setParameter('status', Session::STUDENT)
+                ->getQuery()
+                ->getScalarResult()
+            ;
+
+            return $this->normalizeForumNotificationUserIds(array_column($rows, 'userId'));
+        }
+
+        $userIds = [];
+        foreach ($course->getStudentSubscriptions() as $subscription) {
+            if (!method_exists($subscription, 'getUser')) {
+                continue;
+            }
+
+            $user = $subscription->getUser();
+            if ($user instanceof User) {
+                $userIds[] = (int) $user->getId();
+            }
+        }
+
+        return $this->normalizeForumNotificationUserIds($userIds);
+    }
+
+    /**
+     * @param array<int, mixed> $userIds
+     *
+     * @return int[]
+     */
+    private function normalizeForumNotificationUserIds(array $userIds): array
+    {
+        return array_values(array_unique(array_filter(
+            array_map('intval', $userIds),
+            static fn (int $userId): bool => $userId > 0,
+        )));
+    }
+
+    private function addForumSubscriptionForUserId(
+        EntityManagerInterface $entityManager,
+        Course $course,
+        int $userId,
+        int $forumId,
+    ): bool {
+        $notification = $entityManager->getRepository(CForumNotification::class)->findOneBy([
+            'cId' => (int) $course->getId(),
+            'userId' => $userId,
+            'forumId' => $forumId,
+        ]);
+
+        if ($notification instanceof CForumNotification) {
             return false;
         }
 
-        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
-    }
+        $notification = (new CForumNotification())
+            ->setCId((int) $course->getId())
+            ->setUserId($userId)
+            ->setForumId($forumId)
+        ;
 
-    private function shouldStorePostNotification(Course $course, bool $requestedNotification): bool
-    {
-        return !$this->areForumPostNotificationsHidden($course) && $requestedNotification;
+        $entityManager->persist($notification);
+
+        return true;
     }
 
     private function sendForumSubscriptionNotifications(
@@ -154,13 +258,14 @@ trait ForumNotificationHelperTrait
         CForumThread $thread,
         CForumPost $post,
         User $author,
+        MessageHelper $messageHelper,
     ): int {
         if (!$this->canSendForumNotification($course, $session, $forum, $thread, $post)) {
             return 0;
         }
 
         $recipientIds = $this->getForumNotificationRecipientIds($entityManager, $course, $forum, $thread, $author);
-        if ([] === $recipientIds || !class_exists(MessageManager::class)) {
+        if ([] === $recipientIds) {
             return 0;
         }
 
@@ -169,8 +274,9 @@ trait ForumNotificationHelperTrait
         $sentCount = 0;
 
         foreach ($recipientIds as $recipientId) {
-            MessageManager::send_message_simple($recipientId, $subject, $content);
-            ++$sentCount;
+            if (null !== $messageHelper->sendMessageSimple($recipientId, $subject, $content, (int) $author->getId(), false, false)) {
+                ++$sentCount;
+            }
         }
 
         return $sentCount;

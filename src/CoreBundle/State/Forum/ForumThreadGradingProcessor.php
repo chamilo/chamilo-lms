@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -40,6 +41,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final class ForumThreadGradingProcessor implements ProcessorInterface
 {
     use ForumActionStateHelperTrait;
+    use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
 
@@ -51,6 +53,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         private readonly CForumThreadRepository $threadRepository,
         private readonly Security $security,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -78,6 +81,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         $this->assertEditableForumResource($thread->getResourceNode(), $this->security);
 
         $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread);
         $enabled = $this->getBoolean($payload, 'enabled');
 
         if (!$enabled) {
@@ -179,6 +183,8 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         if (!$qualifyUser instanceof User) {
             throw new AccessDeniedHttpException('A valid user is required.');
         }
+
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread);
 
         $canManage = $this->canManageForumsInCurrentView($this->security, $request);
         if ($canManage) {

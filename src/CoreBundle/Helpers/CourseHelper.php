@@ -481,6 +481,8 @@ class CourseHelper
             'allow_user_edit_announcement' => ['default' => 0, 'category' => 'announcement'],
             'email_alert_manager_on_new_quiz' => ['default' => $defaultEmailExerciseAlert, 'category' => 'quiz'],
             'allow_user_image_forum' => ['default' => 1, 'category' => 'forum'],
+            'hide_forum_notifications' => ['default' => 0, 'category' => 'forum'],
+            'subscribe_users_to_forum_notifications' => ['default' => 0, 'category' => 'forum'],
             'course_theme' => ['default' => '', 'category' => 'theme'],
             'allow_learning_path_theme' => ['default' => 1, 'category' => 'theme'],
             'allow_open_chat_window' => ['default' => 1, 'category' => 'chat'],

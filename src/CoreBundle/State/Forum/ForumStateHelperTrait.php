@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTimeImmutable;
@@ -80,6 +81,23 @@ trait ForumStateHelperTrait
         $session = $entityManager->getRepository(Session::class)->find($sessionId);
         if (!$session instanceof Session) {
             throw new NotFoundHttpException('Session not found.');
+        }
+
+        $courseId = $request->query->getInt('cid');
+        if ($courseId > 0) {
+            $course = $entityManager->getRepository(Course::class)->find($courseId);
+            if (!$course instanceof Course) {
+                throw new NotFoundHttpException('Course not found.');
+            }
+
+            $sessionCourse = $entityManager->getRepository(SessionRelCourse::class)->findOneBy([
+                'course' => $course,
+                'session' => $session,
+            ]);
+
+            if (!$sessionCourse instanceof SessionRelCourse) {
+                throw new AccessDeniedHttpException('The requested session is not linked to this course.');
+            }
         }
 
         return $session;

@@ -8,9 +8,14 @@ namespace Chamilo\CoreBundle\State\Forum;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -59,14 +64,28 @@ final class ForumProcessor implements ProcessorInterface
             $session = $this->getSession($this->entityManager, $request);
             $group = $this->getGroup($this->entityManager, $request);
             $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
+            $this->assertParentResourceNodeIsWritableInForumContext(
+                $this->entityManager,
+                $this->security,
+                $parentResourceNodeId,
+                $course,
+                $session,
+                $group,
+            );
 
             $forum = (new CForum())
                 ->setParentResourceNode($parentResourceNodeId)
                 ->setResourceLinkArray($this->buildResourceLinkList($course, $session, $group))
             ;
 
-            $this->applyPayloadToForum($forum, $payload, true);
+            $learningPath = $this->getLearningPathFromPayload($payload, $course, $session, $group);
+            $this->applyPayloadToForum($forum, $payload, true, $course, $session, $group, $learningPath);
             $this->forumRepository->create($forum);
+            $this->addForumToLearningPathIfNeeded($forum, $learningPath);
+            $subscribedUsers = $this->subscribeUsersToForumNotifications($this->entityManager, $course, $session, $forum);
+            if ($subscribedUsers > 0) {
+                $this->entityManager->flush();
+            }
             $this->registerForumEventLog('new-forum', 'forum', (string) $forum->getIid());
 
             return $forum;
@@ -90,7 +109,18 @@ final class ForumProcessor implements ProcessorInterface
      */
     private function updateForum(CForum $forum, array $payload): CForum
     {
-        $this->applyPayloadToForum($forum, $payload, false);
+        $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            throw new BadRequestHttpException('Request is missing.');
+        }
+
+        $course = $this->getCourse($this->entityManager, $request);
+        $session = $this->getSession($this->entityManager, $request);
+        $group = $this->getGroup($this->entityManager, $request);
+
+        $this->applyPayloadToForum($forum, $payload, false, $course, $session, $group);
         $this->entityManager->persist($forum);
         $this->entityManager->flush();
 
@@ -101,6 +131,8 @@ final class ForumProcessor implements ProcessorInterface
 
     private function toggleForumLock(CForum $forum): JsonResponse
     {
+        $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+
         $forum->setLocked(0 === $forum->getLocked() ? 1 : 0);
 
         $this->entityManager->persist($forum);
@@ -180,7 +212,7 @@ final class ForumProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->entityManager, $request);
-        if ($this->areForumPostNotificationsHidden($course)) {
+        if ($this->areForumPostNotificationsHidden($this->entityManager, $course)) {
             throw new AccessDeniedHttpException('Forum notifications are disabled for this course.');
         }
 
@@ -217,7 +249,15 @@ final class ForumProcessor implements ProcessorInterface
     /**
      * @param array<string, mixed> $payload
      */
-    private function applyPayloadToForum(CForum $forum, array $payload, bool $isCreate): void
+    private function applyPayloadToForum(
+        CForum $forum,
+        array $payload,
+        bool $isCreate,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        ?CLp $learningPath = null,
+    ): void
     {
         $startTime = $this->getUtcDateTimeOrNull($payload['startTime'] ?? null);
         $endTime = $this->getUtcDateTimeOrNull($payload['endTime'] ?? null);
@@ -228,7 +268,7 @@ final class ForumProcessor implements ProcessorInterface
         $forum
             ->setTitle($this->getRequiredText($payload, 'title', 255))
             ->setForumComment($this->getOptionalText($payload, 'comment'))
-            ->setForumCategory($this->getCategory($this->getOptionalInt($payload, 'categoryId')))
+            ->setForumCategory($this->getCategory($this->getOptionalInt($payload, 'categoryId'), $course, $session, $group))
             ->setAllowEdit($this->getBooleanAsInt($payload, 'studentsCanEdit'))
             ->setApprovalDirectPost((string) $this->getBooleanAsInt($payload, 'requiresApproval'))
             ->setAllowAttachments($this->getBooleanAsInt($payload, 'allowAttachments', 1))
@@ -243,8 +283,104 @@ final class ForumProcessor implements ProcessorInterface
         ;
 
         if ($isCreate) {
-            $forum->setAllowAnonymous(0);
+            $forum
+                ->setAllowAnonymous(0)
+                ->setLp($learningPath)
+            ;
         }
+    }
+
+    private function addForumToLearningPathIfNeeded(CForum $forum, ?CLp $learningPath): void
+    {
+        if (!$learningPath instanceof CLp) {
+            return;
+        }
+
+        $forumId = (int) $forum->getIid();
+        if ($forumId <= 0) {
+            return;
+        }
+
+        $existingItem = $this->entityManager->getRepository(CLpItem::class)->findOneBy([
+            'lp' => $learningPath,
+            'itemType' => 'forum',
+            'path' => (string) $forumId,
+        ]);
+
+        if ($existingItem instanceof CLpItem) {
+            return;
+        }
+
+        $learningPathItem = (new CLpItem())
+            ->setLp($learningPath)
+            ->setItemType('forum')
+            ->setTitle($forum->getTitle())
+            ->setDescription($forum->getForumComment())
+            ->setPath((string) $forumId)
+            ->setRef((string) $forumId)
+            ->setMinScore(0.0)
+            ->setMaxScore(100.0)
+            ->setLaunchData('')
+            ->setDisplayOrder($this->getNextLearningPathItemDisplayOrder($learningPath))
+        ;
+
+        $rootItem = $this->getLearningPathRootItem($learningPath);
+        if ($rootItem instanceof CLpItem) {
+            $learningPathItem->setParent($rootItem);
+        }
+
+        $this->entityManager->persist($learningPathItem);
+        $this->entityManager->flush();
+    }
+
+    private function getLearningPathRootItem(CLp $learningPath): ?CLpItem
+    {
+        return $this->entityManager->getRepository(CLpItem::class)->findOneBy([
+            'lp' => $learningPath,
+            'itemType' => 'root',
+            'path' => 'root',
+        ]);
+    }
+
+    private function getNextLearningPathItemDisplayOrder(CLp $learningPath): int
+    {
+        $maxDisplayOrder = $this->entityManager->getRepository(CLpItem::class)
+            ->createQueryBuilder('item')
+            ->select('COALESCE(MAX(item.displayOrder), 0)')
+            ->andWhere('item.lp = :learningPath')
+            ->setParameter('learningPath', $learningPath)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return ((int) $maxDisplayOrder) + 1;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function getLearningPathFromPayload(array $payload, Course $course, ?Session $session, ?CGroup $group): ?CLp
+    {
+        $lpId = $this->getOptionalInt($payload, 'lpId');
+        if ($lpId <= 0) {
+            return null;
+        }
+
+        $learningPath = $this->entityManager->getRepository(CLp::class)->find($lpId);
+        if (!$learningPath instanceof CLp) {
+            throw new NotFoundHttpException('Learning path not found.');
+        }
+
+        $this->assertEditableResourceNodeInForumContext(
+            $learningPath->getResourceNode(),
+            $this->security,
+            $course,
+            $session,
+            $group,
+            'The selected learning path does not belong to this context.',
+        );
+
+        return $learningPath;
     }
 
     /**
@@ -270,7 +406,7 @@ final class ForumProcessor implements ProcessorInterface
         return \in_array($visibility, ['public', 'private'], true) ? $visibility : 'public';
     }
 
-    private function getCategory(int $categoryId): ?CForumCategory
+    private function getCategory(int $categoryId, Course $course, ?Session $session, ?CGroup $group): ?CForumCategory
     {
         if ($categoryId <= 0) {
             return null;
@@ -280,6 +416,15 @@ final class ForumProcessor implements ProcessorInterface
         if (!$category instanceof CForumCategory) {
             throw new NotFoundHttpException('Forum category not found.');
         }
+
+        $this->assertEditableResourceNodeInForumContext(
+            $category->getResourceNode(),
+            $this->security,
+            $course,
+            $session,
+            $group,
+            'The selected forum category does not belong to this context.',
+        );
 
         return $category;
     }

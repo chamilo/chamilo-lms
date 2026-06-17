@@ -8,7 +8,6 @@
 
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\DomCrawler\Crawler;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -247,9 +246,7 @@ function parse_csv_data($file)
 
 function parse_xml_data($file)
 {
-    $crawler = new Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
-    $crawler = $crawler->filter('Contacts > Contact ');
+    $crawler = Import::xml($file)->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {
         $row = [];

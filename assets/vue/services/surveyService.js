@@ -36,6 +36,10 @@ export default {
     return await baseService.get("/api/survey/list", cleanParams(params), surveyRequestConfig())
   },
 
+  async getPendingSurveys(params = {}) {
+    return await baseService.get("/api/survey/pending", cleanParams(params), surveyRequestConfig())
+  },
+
   async getSurveyConfiguration(params = {}, surveyId = null) {
     const endpoint = surveyId ? `/api/survey/configuration/${surveyId}` : "/api/survey/configuration"
 

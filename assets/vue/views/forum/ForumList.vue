@@ -546,6 +546,18 @@ const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
 const currentGroupId = computed(() => gid.value)
+const shouldOpenCreateForumDialogOnLoad = computed(() => {
+  const create = String(route.query.create || route.query.content || "").toLowerCase()
+  const action = String(route.query.action || "").toLowerCase()
+
+  return isAllowedToEdit.value && ("forum" === create || ("add" === action && "forum" === create))
+})
+const shouldReturnToLearningPathAfterForumCreate = computed(() => {
+  const origin = String(route.query.origin || "").toLowerCase()
+  const returnToLp = String(route.query.returnToLp || "")
+
+  return Boolean(lpId.value) && "learnpath" === origin && "1" === returnToLp
+})
 const baseQuery = computed(() => ({
   "resourceNode.parent": parentId.value || null,
   cid: cid.value || null,
@@ -627,9 +639,30 @@ function goBackToLearningPath() {
   params.set("gid", String(gid.value || 0))
   params.set("gradebook", "")
   params.set("action", "add_item")
-  params.set("type", "step")
+  params.set("type", String(route.query.type || "step"))
   params.set("lp_id", String(lpId.value))
-  window.location.href = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+
+  if (route.query.node) {
+    params.set("node", String(route.query.node))
+  }
+
+  const returnUrl = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage(
+      {
+        type: "forum-created-for-learning-path",
+        returnUrl,
+      },
+      window.location.origin,
+    )
+
+    window.parent.location.href = returnUrl
+
+    return
+  }
+
+  window.location.href = returnUrl
 }
 
 function isCategoryVisible(category) {
@@ -881,10 +914,13 @@ async function saveForum() {
     endTime: toApiDateTime(forumForm.endTime),
     locked: forumForm.locked,
     parentResourceNodeId: parentId.value,
+    lpId: lpId.value || 0,
     csrfToken: csrfToken.value,
   }
 
   try {
+    const isCreate = !forumForm.id
+
     if (forumForm.id) {
       await forumService.updateForum(forumForm.id, baseQuery.value, payload)
       notifications.showSuccessNotification(t("Forum updated"))
@@ -894,6 +930,13 @@ async function saveForum() {
     }
 
     isForumDialogVisible.value = false
+
+    if (isCreate && shouldReturnToLearningPathAfterForumCreate.value) {
+      goBackToLearningPath()
+
+      return
+    }
+
     await loadForums()
   } catch (error) {
     console.error("Error saving forum:", error)
@@ -1058,5 +1101,9 @@ watch(categoryLanguageFilter, async () => {
 
 onMounted(async () => {
   await Promise.all([loadToken(), loadForums()])
+
+  if (shouldOpenCreateForumDialogOnLoad.value) {
+    openCreateForumDialog()
+  }
 })
 </script>

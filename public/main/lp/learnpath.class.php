@@ -21,6 +21,8 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -5484,9 +5486,20 @@ class learnpath
                 );
                 break;
             case TOOL_FORUM:
+                $forumUrl = self::buildVueForumLearningPathUrl(
+                    $course_id,
+                    $lpId,
+                    $item_id,
+                    (int) $path
+                );
+
+                if ('' === $forumUrl) {
+                    $forumUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$path;
+                }
+
                 $return .= Display::url(
                     get_lang('Go to the forum'),
-                    api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$path,
+                    $forumUrl,
                     ['class' => 'btn btn--primary']
                 );
                 break;
@@ -7557,19 +7570,177 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $return = '<ul class="mt-2 bg-white list-group list-group-flush border border-gray-25 rounded lp_resource">';
 
+        $courseResourceNode = $courseEntity?->getResourceNode();
+        $isVueCreateForumUrl = false;
+        $createForumUrl = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&'.http_build_query([
+            'action' => 'add',
+            'content' => 'forum',
+            'lp_id' => $this->lp_id,
+        ]);
+
+        if (null !== $courseResourceNode && $courseResourceNode->getId() > 0) {
+            $createForumQuery = [
+                'cid' => api_get_course_int_id(),
+                'sid' => api_get_session_id(),
+                'gid' => api_get_group_id(),
+                'origin' => 'learnpath',
+                'lp_id' => $this->lp_id,
+                'type' => 'step',
+                'returnToLp' => 1,
+                'create' => 'forum',
+                'embedded' => 1,
+            ];
+
+            if (isset($_REQUEST['node'])) {
+                $createForumQuery['node'] = (int) $_REQUEST['node'];
+            }
+
+            $createForumUrl = api_get_path(WEB_PATH).'resources/forum/'.$courseResourceNode->getId().'/?'.http_build_query($createForumQuery);
+            $isVueCreateForumUrl = true;
+        }
+
+        $createForumLinkAttributes = ['title' => get_lang('Create a new forum')];
+        if ($isVueCreateForumUrl) {
+            $createForumLinkAttributes['class'] = 'lp-create-forum-vue-link';
+            $createForumLinkAttributes['data-lp-forum-create-url'] = $createForumUrl;
+        }
+
         // First add link
         $return .= '<li class="list-group-item border-gray-25 lp_resource_element disable_drag">';
         $return .= Display::getMdiIcon('comment-quote	', 'ch-tool-icon', null, 32, get_lang('Create a new forum'));
         $return .= Display::url(
             get_lang('Create a new forum'),
-            api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&'.http_build_query([
-                'action' => 'add',
-                'content' => 'forum',
-                'lp_id' => $this->lp_id,
-            ]),
-            ['title' => get_lang('Create a new forum')]
+            $createForumUrl,
+            $createForumLinkAttributes
         );
         $return .= '</li>';
+
+        if ($isVueCreateForumUrl) {
+            $return .= '
+<style>
+                .lp-forum-create-modal[hidden] { display: none; }
+                .lp-forum-create-modal {
+                    position: fixed;
+                    inset: 0;
+                    z-index: 1050;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 2rem;
+                    background: rgba(15, 23, 42, .55);
+                }
+                .lp-forum-create-dialog {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    width: min(1180px, calc(100vw - 4rem));
+                    height: min(820px, calc(100vh - 4rem));
+                    overflow: hidden;
+                    background: #fff;
+                    border-radius: .75rem;
+                    box-shadow: 0 20px 45px rgba(15, 23, 42, .35);
+                }
+                .lp-forum-create-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 1rem;
+                    padding: .75rem 1rem;
+                    border-bottom: 1px solid #e5e7eb;
+                    font-weight: 600;
+                }
+                .lp-forum-create-close {
+                    border: 0;
+                    background: transparent;
+                    font-size: 1.5rem;
+                    line-height: 1;
+                    cursor: pointer;
+                }
+                .lp-forum-create-frame {
+                    flex: 1;
+                    width: 100%;
+                    border: 0;
+                }
+            </style>
+            <div id="lp-forum-create-modal" class="lp-forum-create-modal" hidden>
+                <div class="lp-forum-create-dialog" role="dialog" aria-modal="true" aria-label="'.Security::remove_XSS(get_lang('Create a new forum')).'">
+                    <div class="lp-forum-create-header">
+                        <span>'.Security::remove_XSS(get_lang('Create a new forum')).'</span>
+                        <button type="button" class="lp-forum-create-close" aria-label="'.Security::remove_XSS(get_lang('Close')).'">&times;</button>
+                    </div>
+                    <iframe id="lp-forum-create-frame" class="lp-forum-create-frame" title="'.Security::remove_XSS(get_lang('Create a new forum')).'"></iframe>
+                </div>
+            </div>
+            <script>
+                (function () {
+                    if (window.lpForumCreateModalInitialized) {
+                        return;
+                    }
+
+                    window.lpForumCreateModalInitialized = true;
+
+                    function getModal() {
+                        return document.getElementById("lp-forum-create-modal");
+                    }
+
+                    function getFrame() {
+                        return document.getElementById("lp-forum-create-frame");
+                    }
+
+                    function closeModal() {
+                        var modal = getModal();
+                        var frame = getFrame();
+
+                        if (frame) {
+                            frame.removeAttribute("src");
+                        }
+
+                        if (modal) {
+                            modal.hidden = true;
+                        }
+                    }
+
+                    function openModal(url) {
+                        var modal = getModal();
+                        var frame = getFrame();
+
+                        if (!modal || !frame || !url) {
+                            window.location.href = url;
+                            return;
+                        }
+
+                        frame.src = url;
+                        modal.hidden = false;
+                    }
+
+                    document.addEventListener("click", function (event) {
+                        var closeButton = event.target.closest ? event.target.closest(".lp-forum-create-close") : null;
+                        if (closeButton) {
+                            event.preventDefault();
+                            closeModal();
+                            return;
+                        }
+
+                        var link = event.target.closest ? event.target.closest(".lp-create-forum-vue-link") : null;
+                        if (!link) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        openModal(link.getAttribute("href"));
+                    });
+
+                    window.addEventListener("message", function (event) {
+                        if (event.origin !== window.location.origin || !event.data || "forum-created-for-learning-path" !== event.data.type) {
+                            return;
+                        }
+
+                        var returnUrl = event.data.returnUrl || window.location.href;
+                        window.location.href = returnUrl;
+                    });
+                })();
+            </script>';
+        }
 
         $return .= '<script>
             function toggle_forum(forum_id) {
@@ -7589,9 +7760,20 @@ document.addEventListener("DOMContentLoaded", function () {
             $isForumSession = (null !== $forumSession);
             $forumId = $forum->getIid();
             $title = Security::remove_XSS($forum->getTitle());
+            $forumPreviewUrl = self::buildVueForumLearningPathUrl(
+                api_get_course_int_id(),
+                (int) $this->lp_id,
+                0,
+                (int) $forumId
+            );
+
+            if ('' === $forumPreviewUrl) {
+                $forumPreviewUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
+            }
+
             $link = Display::url(
                 Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
-                api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
+                $forumPreviewUrl,
                 ['target' => '_blank']
             );
 
@@ -7631,10 +7813,22 @@ document.addEventListener("DOMContentLoaded", function () {
             if (is_array($threads)) {
                 foreach ($threads as $thread) {
                     $threadId = $thread->getIid();
+                    $threadPreviewUrl = self::buildVueForumLearningPathUrl(
+                        api_get_course_int_id(),
+                        (int) $this->lp_id,
+                        0,
+                        (int) $forumId,
+                        (int) $threadId
+                    );
+
+                    if ('' === $threadPreviewUrl) {
+                        $threadPreviewUrl = api_get_path(WEB_CODE_PATH).
+                            'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId;
+                    }
+
                     $link = Display::url(
                         Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
-                        api_get_path(WEB_CODE_PATH).
-                        'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
+                        $threadPreviewUrl,
                         ['target' => '_blank']
                     );
 
@@ -7674,16 +7868,36 @@ document.addEventListener("DOMContentLoaded", function () {
     {
         $return = '<ul class="mt-2 bg-white list-group list-group-flush border border-gray-25 rounded lp_resource">';
 
+        $courseEntity = api_get_course_entity(api_get_course_int_id());
+        $courseResourceNode = $courseEntity instanceof Course ? $courseEntity->getResourceNode() : null;
+        $createSurveyUrl = '#';
+        $createSurveyLinkAttributes = [
+            'title' => get_lang('Create survey'),
+            'aria-disabled' => 'true',
+            'class' => 'disabled',
+        ];
+
+        if (null !== $courseResourceNode && $courseResourceNode->getId() > 0) {
+            $createSurveyUrl = api_get_path(WEB_PATH).'resources/survey/'.$courseResourceNode->getId().'/create?'.http_build_query([
+                'cid' => api_get_course_int_id(),
+                'sid' => api_get_session_id(),
+                'gid' => api_get_group_id(),
+                'origin' => 'learnpath',
+                'lp_id' => $this->lp_id,
+                'type' => 'step',
+                'returnToLp' => 1,
+                'isStudentView' => 'false',
+            ]);
+            $createSurveyLinkAttributes = ['title' => get_lang('Create survey')];
+        }
+
         // First add link
         $return .= '<li class="list-group-item border-gray-25 lp_resource_element disable_drag">';
         $return .= Display::getMdiIcon('clipboard-question-outline', 'ch-tool-icon', null, 32, get_lang('Create survey'));
         $return .= Display::url(
             get_lang('Create survey'),
-            api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&'.http_build_query([
-                'action' => 'add',
-                'lp_id' => $this->lp_id,
-            ]),
-            ['title' => get_lang('Create survey')]
+            $createSurveyUrl,
+            $createSurveyLinkAttributes
         );
         $return .= '</li>';
 
@@ -8981,6 +9195,94 @@ document.addEventListener("DOMContentLoaded", function () {
      *
      * @return string
      */
+    private static function buildVueForumLearningPathUrl(
+        int $courseId,
+        int $learningPathId,
+        int $learningPathItemId,
+        int $forumId,
+        ?int $threadId = null,
+        ?int $postId = null
+    ): string {
+        if ($courseId <= 0 || $forumId <= 0) {
+            return '';
+        }
+
+        $em = Database::getManager();
+        $course = $em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return '';
+        }
+
+        $courseResourceNodeId = (int) $course->getResourceNode()->getId();
+        if ($courseResourceNodeId <= 0) {
+            return '';
+        }
+
+        $query = [
+            'cid' => $courseId,
+            'sid' => api_get_session_id(),
+            'gid' => api_get_group_id(),
+            'origin' => 'learnpath',
+            'lp_id' => $learningPathId,
+            'returnToLp' => 1,
+            'embedded' => 1,
+        ];
+
+        if ($learningPathItemId > 0) {
+            $query['lp_item_id'] = $learningPathItemId;
+        }
+
+        if (null !== $postId && $postId > 0) {
+            $query['post_id'] = $postId;
+        }
+
+        $path = api_get_path(WEB_PATH).'resources/forum/'.$courseResourceNodeId.'/forum/'.$forumId;
+        if (null !== $threadId && $threadId > 0) {
+            $path .= '/thread/'.$threadId;
+        }
+
+        return $path.'?'.http_build_query($query);
+    }
+
+    private static function buildVueSurveyLearningPathUrl(
+        int $courseId,
+        int $sessionId,
+        int $learningPathId,
+        int $learningPathItemId,
+        int $surveyId
+    ): string {
+        if ($courseId <= 0 || $surveyId <= 0) {
+            return '';
+        }
+
+        $em = Database::getManager();
+        $course = $em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return '';
+        }
+
+        $courseResourceNodeId = (int) $course->getResourceNode()->getId();
+        if ($courseResourceNodeId <= 0) {
+            return '';
+        }
+
+        $query = [
+            'cid' => $courseId,
+            'sid' => $sessionId,
+            'gid' => api_get_group_id(),
+            'origin' => 'learnpath',
+            'lp_id' => $learningPathId,
+            'lpItemId' => $learningPathItemId,
+            'type' => 'step',
+            'returnToLp' => 1,
+            'embedded' => 1,
+            'isStudentView' => 'true',
+            'invitationCode' => 'auto',
+        ];
+
+        return api_get_path(WEB_PATH).'resources/survey/'.$courseResourceNodeId.'/'.$surveyId.'/answer?'.http_build_query($query);
+    }
+
     public static function rl_get_resource_link_for_learnpath(
         $course_id,
         $learningPathId,
@@ -9066,13 +9368,40 @@ document.addEventListener("DOMContentLoaded", function () {
             case TOOL_HOTPOTATOES:
                 return '';
             case TOOL_FORUM:
+                $forumUrl = self::buildVueForumLearningPathUrl(
+                    (int) $course_id,
+                    $learningPathId,
+                    $id_in_path,
+                    (int) $id
+                );
+
+                if ('' !== $forumUrl) {
+                    return $forumUrl;
+                }
+
                 return $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
             case TOOL_THREAD:
-                // forum post
-                $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
                 if (empty($id)) {
                     return '';
                 }
+
+                $thread = $em->getRepository(CForumThread::class)->find((int) $id);
+                $forum = $thread instanceof CForumThread ? $thread->getForum() : null;
+                $forumId = $forum instanceof CForum ? (int) $forum->getIid() : 0;
+                $threadUrl = self::buildVueForumLearningPathUrl(
+                    (int) $course_id,
+                    $learningPathId,
+                    $id_in_path,
+                    $forumId,
+                    (int) $id
+                );
+
+                if ('' !== $threadUrl) {
+                    return $threadUrl;
+                }
+
+                // Fallback kept only when the Vue route cannot be resolved.
+                $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
                 $sql = "SELECT * FROM $tbl_topics WHERE iid=$id";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
@@ -9080,6 +9409,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 return $main_dir_path.'forum/viewthread.php?thread='.$id.'&forum='.$row['forum_id'].'&lp=true&'
                     .$extraParams;
             case TOOL_POST:
+                $post = $em->getRepository(CForumPost::class)->find((int) $id);
+                $thread = $post instanceof CForumPost ? $post->getThread() : null;
+                $forum = $post instanceof CForumPost ? $post->getForum() : null;
+                if (!$forum instanceof CForum && $thread instanceof CForumThread) {
+                    $forum = $thread->getForum();
+                }
+
+                $forumId = $forum instanceof CForum ? (int) $forum->getIid() : 0;
+                $threadId = $thread instanceof CForumThread ? (int) $thread->getIid() : 0;
+                $postUrl = self::buildVueForumLearningPathUrl(
+                    (int) $course_id,
+                    $learningPathId,
+                    $id_in_path,
+                    $forumId,
+                    $threadId,
+                    (int) $id
+                );
+
+                if ('' !== $postUrl) {
+                    return $postUrl;
+                }
+
+                // Fallback kept only when the Vue route cannot be resolved.
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 $result = Database::query("SELECT * FROM $tbl_post WHERE post_id=$id");
                 $row = Database::fetch_array($result);
@@ -9141,25 +9493,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 return '';
             case TOOL_SURVEY:
-
                 $surveyId = (int) $id;
                 $repo = Container::getSurveyRepository();
                 if (!empty($surveyId)) {
                     /** @var CSurvey $survey */
                     $survey = $repo->find($surveyId);
-                    $autoSurveyLink = SurveyUtil::generateFillSurveyLink(
-                        $survey,
-                        'auto',
-                        api_get_course_entity($course_id),
-                        $session_id
-                    );
-                    $lpParams = [
-                        'lp_id' => $learningPathId,
-                        'lp_item_id' => $id_in_path,
-                        'origin' => 'learnpath',
-                    ];
+                    if ($survey instanceof CSurvey) {
+                        $surveyUrl = self::buildVueSurveyLearningPathUrl(
+                            (int) $course_id,
+                            $session_id,
+                            $learningPathId,
+                            $id_in_path,
+                            $surveyId
+                        );
 
-                    return $autoSurveyLink.'&'.http_build_query($lpParams).'&'.$extraParams;
+                        if ('' !== $surveyUrl) {
+                            return $surveyUrl;
+                        }
+
+                        return '';
+                    }
                 }
         }
 

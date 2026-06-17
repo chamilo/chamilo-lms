@@ -42,7 +42,10 @@
         <p class="text-sm text-gray-500">{{ t("Invited") }}</p>
         <p class="mt-1 text-2xl font-semibold text-gray-90">{{ counts.invited || 0 }}</p>
       </div>
-      <div class="rounded-lg border border-gray-25 bg-white p-4 shadow-sm">
+      <div
+        v-if="canShowAnsweredDetails"
+        class="rounded-lg border border-gray-25 bg-white p-4 shadow-sm"
+      >
         <p class="text-sm text-gray-500">{{ t("Answered") }}</p>
         <p class="mt-1 text-2xl font-semibold text-green-700">{{ counts.answered || 0 }}</p>
       </div>
@@ -192,7 +195,10 @@
               >
               <span>{{ t("Send mail") }}</span>
             </label>
-            <label class="flex items-center gap-2">
+            <label
+              v-if="canRemindUnanswered"
+              class="flex items-center gap-2"
+            >
               <input
                 v-model="remindUnanswered"
                 name="remind_unanswered"
@@ -268,6 +274,7 @@
             @click="activeTab = 'invited'"
           />
           <BaseButton
+            v-if="canShowAnsweredDetails"
             :label="t('Answered')"
             :type="activeTab === 'answered' ? 'primary' : 'plain'"
             size="small"
@@ -385,6 +392,7 @@ const users = ref([])
 const groups = ref([])
 const invitations = ref([])
 const settings = ref({})
+const anonymousLink = ref("")
 const selectedUserIds = ref([])
 const selectedGroupIds = ref([])
 const csrfToken = ref("")
@@ -401,10 +409,50 @@ const successMessage = ref("")
 const activeTab = ref("invited")
 
 const surveyId = computed(() => Number(route.params.surveyId || 0))
-const autoAnswerUrl = computed(() => buildAnswerUrl({ invitationCode: "auto" }))
+const isAnonymousSurvey = computed(() => isTruthy(survey.value?.anonymous) || isTruthy(settings.value?.anonymous))
+const autoAnswerUrl = computed(() => {
+  if (isAnonymousSurvey.value) {
+    return buildAnswerUrl({ invitationCode: "auto" })
+  }
+
+  const responseLink = String(anonymousLink.value || "")
+  if (responseLink && responseLink !== "auto") {
+    return toAbsoluteUrl(responseLink)
+  }
+
+  return buildAnswerUrl({ invitationCode: "auto" })
+})
+const canShowAnsweredDetails = computed(() => {
+  const setting = settings.value?.canShowAnsweredDetails
+  if (isTruthy(setting)) {
+    return true
+  }
+
+  if (isExplicitFalse(setting)) {
+    return false
+  }
+
+  return !isAnonymousSurvey.value || isTruthy(settings.value?.anonymousShowAnswered)
+})
+const canRemindUnanswered = computed(() => {
+  const setting = settings.value?.canRemindUnanswered
+  if (isTruthy(setting)) {
+    return true
+  }
+
+  if (isExplicitFalse(setting)) {
+    return false
+  }
+
+  return !isAnonymousSurvey.value || isTruthy(settings.value?.anonymousShowAnswered)
+})
 
 const filteredInvitations = computed(() => {
   if (activeTab.value === "answered") {
+    if (!canShowAnsweredDetails.value) {
+      return []
+    }
+
     return invitations.value.filter((item) => item.answered || item.answeredHidden)
   }
 
@@ -416,11 +464,45 @@ const filteredInvitations = computed(() => {
 })
 
 function getContextParams() {
-  return {
+  return cleanQuery({
     cid: route.query.cid,
     sid: route.query.sid,
     gid: route.query.gid,
+  })
+}
+
+function getPublicContextParams() {
+  return cleanQuery({
+    publicCid: route.query.publicCid ?? route.query.cid,
+    publicSid: route.query.publicSid ?? route.query.sid,
+    publicGid: route.query.publicGid ?? route.query.gid ?? 0,
+  })
+}
+
+function cleanQuery(query) {
+  return Object.fromEntries(
+    Object.entries(query).filter(([, value]) => value !== undefined && value !== null && value !== ""),
+  )
+}
+
+function isTruthy(value) {
+  return value === true || value === 1 || String(value).toLowerCase() === "true" || String(value) === "1"
+}
+
+function isExplicitFalse(value) {
+  return value === false || value === 0 || String(value).toLowerCase() === "false" || String(value) === "0"
+}
+
+function toAbsoluteUrl(value) {
+  if (!value) {
+    return ""
   }
+
+  if (/^https?:\/\//i.test(value)) {
+    return value
+  }
+
+  return `${window.location.origin}${String(value).startsWith("/") ? "" : "/"}${value}`
 }
 
 function buildListRoute() {
@@ -453,8 +535,8 @@ function buildAnswerUrl(invitation) {
       surveyId: surveyId.value,
     },
     query: {
-      ...getContextParams(),
-      invitationCode: invitation.invitationCode,
+      ...(isAnonymousSurvey.value ? getPublicContextParams() : getContextParams()),
+      invitationCode: invitation?.invitationCode || "auto",
     },
   })
 
@@ -477,6 +559,13 @@ async function loadInvitationData() {
     groups.value = Array.isArray(response.groups) ? response.groups : []
     invitations.value = Array.isArray(response.invitations) ? response.invitations : []
     settings.value = response.settings || {}
+    anonymousLink.value = response.anonymousLink || ""
+    if (!canShowAnsweredDetails.value && activeTab.value === "answered") {
+      activeTab.value = "invited"
+    }
+    if (!canRemindUnanswered.value) {
+      remindUnanswered.value = false
+    }
     selectedUserIds.value = Array.isArray(response.selectedUserIds) ? response.selectedUserIds : []
     selectedGroupIds.value = Array.isArray(response.selectedGroupIds) ? response.selectedGroupIds : []
     csrfToken.value = response.csrfToken || ""
@@ -516,7 +605,7 @@ async function publishSurvey() {
         mailText: mailText.value,
         sendMail: sendMail.value,
         resendToAll: resendToAll.value,
-        remindUnanswered: remindUnanswered.value,
+        remindUnanswered: canRemindUnanswered.value && remindUnanswered.value,
         hideLink: hideLink.value,
         additionalEmails: [],
       },
@@ -532,6 +621,13 @@ async function publishSurvey() {
     selectedUserIds.value = Array.isArray(response.selectedUserIds) ? response.selectedUserIds : selectedUserIds.value
     selectedGroupIds.value = Array.isArray(response.selectedGroupIds) ? response.selectedGroupIds : selectedGroupIds.value
     csrfToken.value = response.csrfToken || csrfToken.value
+    settings.value = response.settings || settings.value
+    if (settings.value?.canShowAnsweredDetails === false && activeTab.value === "answered") {
+      activeTab.value = "invited"
+    }
+    if (!canRemindUnanswered.value) {
+      remindUnanswered.value = false
+    }
     successMessage.value = t(response.message || "Survey published")
   } catch (error) {
     console.error("Error publishing survey", error)
@@ -602,4 +698,16 @@ watch(
   () => [route.params.surveyId, route.query.cid, route.query.sid, route.query.gid],
   () => loadInvitationData(),
 )
+
+watch(canShowAnsweredDetails, (canShow) => {
+  if (!canShow && activeTab.value === "answered") {
+    activeTab.value = "invited"
+  }
+})
+
+watch(canRemindUnanswered, (canRemind) => {
+  if (!canRemind) {
+    remindUnanswered.value = false
+  }
+})
 </script>

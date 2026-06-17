@@ -86,6 +86,28 @@
       v-else
       class="flex flex-col gap-4"
     >
+      <div
+        v-if="canFilterCategoryLanguage"
+        class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+      >
+        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <BaseSelect
+            id="forum-category-language-filter"
+            v-model="categoryLanguageFilter"
+            :label="t('Language')"
+            :options="categoryLanguageFilterOptions"
+            class="min-w-64"
+            name="extra_language"
+          />
+          <BaseButton
+            v-if="categoryLanguageFilter"
+            :label="t('Reset')"
+            size="small"
+            type="plain"
+            @click="resetCategoryLanguageFilter"
+          />
+        </div>
+      </div>
       <section
         v-if="forumsWithoutCategory.length"
         class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
@@ -93,7 +115,7 @@
         <div class="flex flex-col gap-3 border-b border-gray-20 bg-gray-15 p-4 md:flex-row md:items-center md:justify-between">
           <div class="flex items-center gap-2">
             <BaseIcon
-              icon="folder-generic"
+              icon="folder-open"
               size="normal"
             />
             <h2 class="text-lg font-semibold text-gray-90">{{ t("General") }}</h2>
@@ -147,6 +169,15 @@
               >
                 {{ t("Hidden") }}
               </span>
+              <BaseButton
+                v-if="canFoldCategories"
+                :label="isCategoryFolded(category) ? t('Show') : t('Hide')"
+                :icon="isCategoryFolded(category) ? 'unfold' : 'fold'"
+                only-icon
+                size="small"
+                type="plain"
+                @click="toggleCategoryFold(category)"
+              />
             </div>
             <p
               v-if="category.catComment"
@@ -221,7 +252,10 @@
           </div>
         </div>
 
-        <div class="p-4">
+        <div
+          v-show="!isCategoryFolded(category)"
+          class="p-4"
+        >
           <ForumCardList
             v-if="category.forums.length"
             :can-manage="isAllowedToEdit"
@@ -268,6 +302,14 @@
           :label="t('Description')"
           name="forum_category_comment"
           rows="5"
+        />
+        <BaseSelect
+          v-if="canEditCategoryLanguage"
+          id="forum-category-language"
+          v-model="categoryForm.language"
+          :label="t('Language')"
+          :options="categoryLanguageFilterOptions"
+          name="extra_language"
         />
         <BaseCheckbox
           id="forum-category-locked"
@@ -425,7 +467,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -442,13 +484,11 @@ import ForumCardList from "./ForumCardList.vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
-import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const route = useRoute()
 const notifications = useNotification()
 const { requireConfirmation } = useConfirmation()
-const platformConfigStore = usePlatformConfig()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
 const isLoading = ref(false)
@@ -459,14 +499,27 @@ const forumFormSubmitted = ref(false)
 const isCategoryDialogVisible = ref(false)
 const isForumDialogVisible = ref(false)
 const csrfToken = ref("")
+const forumSettings = ref({
+  defaultForumView: "flat",
+  forumFoldCategories: false,
+  allowForumPostRevisions: false,
+  hideForumPostRevisionLanguage: false,
+  categoryLanguageFilter: {
+    enabled: false,
+    options: [],
+  },
+})
 const categories = ref([])
 const forums = ref([])
+const foldedCategoryIds = ref(new Set())
+const categoryLanguageFilter = ref("")
 
 const categoryForm = reactive({
   id: null,
   title: "",
   comment: "",
   locked: false,
+  language: "",
 })
 
 const forumForm = reactive({
@@ -493,17 +546,48 @@ const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
 const currentGroupId = computed(() => gid.value)
+const shouldOpenCreateForumDialogOnLoad = computed(() => {
+  const create = String(route.query.create || route.query.content || "").toLowerCase()
+  const action = String(route.query.action || "").toLowerCase()
+
+  return isAllowedToEdit.value && ("forum" === create || ("add" === action && "forum" === create))
+})
+const shouldReturnToLearningPathAfterForumCreate = computed(() => {
+  const origin = String(route.query.origin || "").toLowerCase()
+  const returnToLp = String(route.query.returnToLp || "")
+
+  return Boolean(lpId.value) && "learnpath" === origin && "1" === returnToLp
+})
 const baseQuery = computed(() => ({
   "resourceNode.parent": parentId.value || null,
   cid: cid.value || null,
   sid: sid.value || null,
   gid: gid.value || null,
 }))
+const categoryQuery = computed(() => ({
+  ...baseQuery.value,
+  extra_language: categoryLanguageFilter.value || null,
+  language_filter_applied: categoryLanguageFilter.value ? 1 : null,
+}))
 const defaultForumView = computed(() => {
-  const value = String(platformConfigStore.getSetting("forum.default_forum_view") || "flat")
+  const value = String(forumSettings.value.defaultForumView || "flat")
 
   return ["flat", "threaded", "nested"].includes(value) ? value : "flat"
 })
+const canFoldCategories = computed(() => Boolean(forumSettings.value.forumFoldCategories))
+const categoryLanguageOptions = computed(() => {
+  const options = forumSettings.value.categoryLanguageFilter?.options
+
+  return Array.isArray(options) ? options : []
+})
+const canFilterCategoryLanguage = computed(
+  () => Boolean(forumSettings.value.categoryLanguageFilter?.enabled) && categoryLanguageOptions.value.length > 0,
+)
+const canEditCategoryLanguage = computed(() => canFilterCategoryLanguage.value)
+const categoryLanguageFilterOptions = computed(() => [
+  { label: t("Please select a language"), value: "" },
+  ...categoryLanguageOptions.value,
+])
 
 const defaultViewOptions = computed(() => [
   { label: t("Flat"), value: "flat" },
@@ -555,9 +639,30 @@ function goBackToLearningPath() {
   params.set("gid", String(gid.value || 0))
   params.set("gradebook", "")
   params.set("action", "add_item")
-  params.set("type", "step")
+  params.set("type", String(route.query.type || "step"))
   params.set("lp_id", String(lpId.value))
-  window.location.href = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+
+  if (route.query.node) {
+    params.set("node", String(route.query.node))
+  }
+
+  const returnUrl = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage(
+      {
+        type: "forum-created-for-learning-path",
+        returnUrl,
+      },
+      window.location.origin,
+    )
+
+    window.parent.location.href = returnUrl
+
+    return
+  }
+
+  window.location.href = returnUrl
 }
 
 function isCategoryVisible(category) {
@@ -574,6 +679,27 @@ function isForumVisible(forum) {
   }
 
   return true === forum.forumVisible || 1 === forum.forumVisible || "1" === String(forum.forumVisible)
+}
+
+
+function isCategoryFolded(category) {
+  return canFoldCategories.value && foldedCategoryIds.value.has(Number(category?.iid || 0))
+}
+
+function toggleCategoryFold(category) {
+  const categoryId = Number(category?.iid || 0)
+  if (!categoryId) {
+    return
+  }
+
+  const nextValue = new Set(foldedCategoryIds.value)
+  if (nextValue.has(categoryId)) {
+    nextValue.delete(categoryId)
+  } else {
+    nextValue.add(categoryId)
+  }
+
+  foldedCategoryIds.value = nextValue
 }
 
 function getCategoryIdFromForum(forum) {
@@ -595,6 +721,7 @@ function resetCategoryForm() {
   categoryForm.title = ""
   categoryForm.comment = ""
   categoryForm.locked = false
+  categoryForm.language = ""
   categoryFormSubmitted.value = false
 }
 
@@ -660,6 +787,7 @@ function openEditCategoryDialog(category) {
   categoryForm.title = category.title || ""
   categoryForm.comment = category.catComment || ""
   categoryForm.locked = Boolean(Number(category.locked || 0))
+  categoryForm.language = category.language || ""
   categoryFormSubmitted.value = false
   isCategoryDialogVisible.value = true
 }
@@ -692,6 +820,10 @@ function openEditForumDialog(forum) {
 async function loadToken() {
   const response = await forumService.getActionToken()
   csrfToken.value = response.token || ""
+  forumSettings.value = {
+    ...forumSettings.value,
+    ...(response.settings || {}),
+  }
 }
 
 async function loadForums() {
@@ -699,7 +831,7 @@ async function loadForums() {
 
   try {
     const [categoryItems, forumItems] = await Promise.all([
-      forumService.getCategories(baseQuery.value),
+      forumService.getCategories(categoryQuery.value),
       forumService.getForums(baseQuery.value),
     ])
 
@@ -726,6 +858,7 @@ async function saveCategory() {
     title: categoryForm.title.trim(),
     comment: categoryForm.comment.trim(),
     locked: categoryForm.locked,
+    language: canEditCategoryLanguage.value ? categoryForm.language : "",
     parentResourceNodeId: parentId.value,
     csrfToken: csrfToken.value,
   }
@@ -781,10 +914,13 @@ async function saveForum() {
     endTime: toApiDateTime(forumForm.endTime),
     locked: forumForm.locked,
     parentResourceNodeId: parentId.value,
+    lpId: lpId.value || 0,
     csrfToken: csrfToken.value,
   }
 
   try {
+    const isCreate = !forumForm.id
+
     if (forumForm.id) {
       await forumService.updateForum(forumForm.id, baseQuery.value, payload)
       notifications.showSuccessNotification(t("Forum updated"))
@@ -794,6 +930,13 @@ async function saveForum() {
     }
 
     isForumDialogVisible.value = false
+
+    if (isCreate && shouldReturnToLearningPathAfterForumCreate.value) {
+      goBackToLearningPath()
+
+      return
+    }
+
     await loadForums()
   } catch (error) {
     console.error("Error saving forum:", error)
@@ -944,7 +1087,23 @@ async function moveForum(forum, direction) {
   }
 }
 
+function resetCategoryLanguageFilter() {
+  categoryLanguageFilter.value = ""
+}
+
+watch(categoryLanguageFilter, async () => {
+  if (!canFilterCategoryLanguage.value) {
+    return
+  }
+
+  await loadForums()
+})
+
 onMounted(async () => {
   await Promise.all([loadToken(), loadForums()])
+
+  if (shouldOpenCreateForumDialogOnLoad.value) {
+    openCreateForumDialog()
+  }
 })
 </script>

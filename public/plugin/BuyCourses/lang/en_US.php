@@ -677,3 +677,4 @@ $strings['FrequencyIsNotConfigured'] = 'Subscription periods are not configured 
 $strings['SubscriptionSaveError'] = 'The subscription could not be saved. Please review the data and try again.';
 $strings['SubscriptionPeriodsRequired'] = 'You must add at least one subscription period before saving.';
 $strings['FrequencyNotRemoved'] = 'The subscription period could not be removed.';
+$strings['CourseSessionBlock'] = 'Courses/Sessions';

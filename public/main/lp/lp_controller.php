@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use ChamiloSession as Session;
 
 /**
@@ -422,6 +423,55 @@ switch ($action) {
         }
 
         Session::write('refresh', 1);
+
+        $requestType = isset($_REQUEST['type']) ? (string) $_REQUEST['type'] : '';
+        $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
+
+        if ('GET' === $_SERVER['REQUEST_METHOD'] && TOOL_SURVEY === $requestType && $surveyId > 0) {
+            $survey = Container::getSurveyRepository()->find($surveyId);
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
+
+            if (!$survey instanceof CSurvey) {
+                Display::addFlash(Display::return_message(get_lang('Survey not found'), 'error'));
+                header('Location: '.$url);
+                exit;
+            }
+
+            if ($survey->getQuestions()->isEmpty()) {
+                Display::addFlash(Display::return_message(get_lang('You must add at least one question'), 'warning'));
+                header('Location: '.$url);
+                exit;
+            }
+
+            if (!empty($_REQUEST['parent'])) {
+                $parent = $lpItemRepo->find((int) $_REQUEST['parent']);
+            } else {
+                $parent = $lpItemRepo->getRootItem((int) $oLP->lp_id);
+            }
+
+            $previous = !empty($_REQUEST['previous']) ? (int) $_REQUEST['previous'] : $oLP->getLastInFirstLevel();
+            $surveyTitle = trim(strip_tags($survey->getTitle()));
+            if ('' === $surveyTitle) {
+                $surveyTitle = get_lang('Survey');
+            }
+
+            $createdItemId = $oLP->add_item(
+                $parent,
+                $previous,
+                TOOL_SURVEY,
+                $surveyId,
+                $surveyTitle
+            );
+
+            if (!empty($createdItemId)) {
+                Display::addFlash(Display::return_message(get_lang('Added'), 'confirmation', false));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('Unable to add the survey to the learning path'), 'error'));
+            }
+
+            header('Location: '.$url);
+            exit;
+        }
 
         if (isset($_POST['submit_button']) && !empty($post_title)) {
             $validateLpItemPrerequisiteDates();

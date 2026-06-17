@@ -12,8 +12,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\State\SurveyAnswerProcessor;
-use Chamilo\CoreBundle\State\SurveyAnswerProvider;
+use Chamilo\CoreBundle\State\Survey\SurveyAnswerProcessor;
+use Chamilo\CoreBundle\State\Survey\SurveyAnswerProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
@@ -31,10 +31,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'preview', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'invitationCode', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'invitationcode', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'lpItemId', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_survey_answer',
             provider: SurveyAnswerProvider::class,
         ),
@@ -48,10 +48,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'invitationCode', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'invitationcode', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'lpItemId', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'post_survey_answer',
             processor: SurveyAnswerProcessor::class,
         ),

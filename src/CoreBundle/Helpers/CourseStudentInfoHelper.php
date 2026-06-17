@@ -599,7 +599,7 @@ final class CourseStudentInfoHelper
             'forums' => $base.'main/forum/index.php?'.$qs,
             'wikis' => $base.'main/wiki/index.php?'.$qs,
             'links' => $base.'resources/links/'.$parentResourceNodeId.'/?'.$qs,
-            'surveys' => $base.'main/survey/survey_list.php?'.$qs,
+            'surveys' => $base.'resources/survey/'.$parentResourceNodeId.'/?'.$qs,
             'gradebook' => $base.'main/gradebook/index.php?'.$qs,
             'attendances' => $base.'resources/attendance/'.$parentResourceNodeId.'/?'.$qs,
             'dropbox' => $base.'resources/dropbox/'.$parentResourceNodeId.'/received?'.$qs,

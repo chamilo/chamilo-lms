@@ -13,10 +13,19 @@
 
       <div class="flex flex-wrap items-center justify-end gap-2">
         <BaseButton
+          v-if="!isLearningPathContext"
           :label="t('Back to survey list')"
           :route="buildListRoute()"
           icon="back"
           type="black"
+        />
+        <BaseButton
+          v-if="isLearningPathContext"
+          :disabled="questions.length === 0"
+          :label="t('Finish and return to learning path')"
+          icon="check"
+          type="success"
+          @click="finishLearningPathSurvey"
         />
         <BaseButton
           :label="t('Configure')"
@@ -41,6 +50,13 @@
       class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
     >
       {{ successMessage }}
+    </div>
+
+    <div
+      v-if="isLearningPathContext && questions.length === 0 && !isLoading"
+      class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700"
+    >
+      {{ t("Add at least one question before returning to the learning path.") }}
     </div>
 
     <div
@@ -538,13 +554,46 @@ const optionEditorConfig = {
   resize: true,
 }
 
-function getContextParams() {
-  return {
-    cid: route.query.cid,
-    sid: route.query.sid,
-    gid: route.query.gid,
+function getQueryValue(value) {
+  if (Array.isArray(value)) {
+    return value[0] || ""
   }
+
+  return value || ""
 }
+
+function cleanQueryParams(params = {}) {
+  const cleanParams = {}
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && String(value) !== "") {
+      cleanParams[key] = value
+    }
+  }
+
+  return cleanParams
+}
+
+function getContextParams(extra = {}) {
+  return cleanQueryParams({
+    cid: getQueryValue(route.query.cid),
+    sid: getQueryValue(route.query.sid),
+    gid: getQueryValue(route.query.gid),
+    origin: getQueryValue(route.query.origin),
+    lp_id: getQueryValue(route.query.lp_id),
+    lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
+    type: getQueryValue(route.query.type),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    isStudentView: getQueryValue(route.query.isStudentView),
+    ...extra,
+  })
+}
+
+const learningPathId = computed(() => Number(getQueryValue(route.query.lp_id) || 0))
+
+const isLearningPathContext = computed(() => {
+  return getQueryValue(route.query.origin) === "learnpath" && learningPathId.value > 0
+})
 
 function createEmptyForm() {
   return {
@@ -581,6 +630,41 @@ function buildConfigureRoute() {
   }
 }
 
+function buildLearningPathQuery(extra = {}) {
+  const query = new URLSearchParams()
+
+  query.set("action", extra.action || "add_item")
+  query.set("type", extra.type || "step")
+  query.set("lp_id", String(learningPathId.value))
+
+  for (const key of ["cid", "sid", "gid"]) {
+    const value = getQueryValue(route.query[key])
+
+    if (String(value) !== "") {
+      query.set(key, String(value))
+    }
+  }
+
+  query.set("isStudentView", "false")
+
+  if (extra.surveyId) {
+    query.set("survey_id", String(extra.surveyId))
+  }
+
+  return query.toString()
+}
+
+function buildLearningPathAddSurveyUrl() {
+  return `/main/lp/lp_controller.php?${buildLearningPathQuery({ type: "survey", surveyId: surveyId.value })}`
+}
+
+function finishLearningPathSurvey() {
+  if (!isLearningPathContext.value || questions.value.length === 0) {
+    return
+  }
+
+  window.location.href = buildLearningPathAddSurveyUrl()
+}
 
 function translateOptions(items) {
   return items.map((item) => ({

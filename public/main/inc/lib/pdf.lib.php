@@ -175,7 +175,7 @@ class PDF
 
         $css = Container::getThemeHelper()->getAssetContents('print.css');
 
-        self::content_to_pdf(
+        $this->content_to_pdf(
             $html,
             $css,
             $this->params['filename'],
@@ -242,7 +242,7 @@ class PDF
         ];
 
         // Formatting the pdf
-        self::format_pdf($courseInfo, $complete_style);
+        $this->format_pdf($courseInfo, $complete_style);
 
         $counter = 1;
         foreach ($htmlFileArray as $file) {
@@ -397,7 +397,7 @@ class PDF
         $completeHeader = true,
         $disableFooter = false,
         $disablePagination = false
-    ) {
+    ): ?string {
         $urlAppend = '';
 
         if (empty($document_html)) {
@@ -836,7 +836,7 @@ class PDF
                 }
 
                 if (empty($this->custom_footer)) {
-                    self::set_footer();
+                    $this->set_footer();
                 } else {
                     $this->pdf->SetHTMLFooter($this->custom_footer);
                 }
@@ -859,7 +859,7 @@ class PDF
 
         $css = Container::getThemeHelper()->getAssetContents('print.css');
 
-        $pdfPath = self::content_to_pdf(
+        $pdfPath = $this->content_to_pdf(
             $html,
             $css,
             $fileName,

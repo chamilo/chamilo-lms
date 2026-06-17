@@ -15,6 +15,7 @@
 
       <div class="flex flex-wrap items-center justify-end gap-2">
         <BaseButton
+          v-if="showBackToSurveyList"
           :label="t('Back to survey list')"
           :route="buildListRoute()"
           icon="back"
@@ -418,6 +419,28 @@ const currentPageIndex = ref(0)
 
 const surveyId = computed(() => Number(route.params.surveyId || 0))
 const previewMode = computed(() => route.name === "SurveyPreview" || route.query.preview === "1")
+const isLearningPathContext = computed(() => {
+  const origin = String(getQueryValue(route.query.origin) || "")
+  const returnToLp = String(getQueryValue(route.query.returnToLp) || "")
+
+  return (
+    origin === "learnpath" ||
+    returnToLp === "1" ||
+    Boolean(getQueryValue(route.query.lp_id)) ||
+    Boolean(getQueryValue(route.query.lpItemId || route.query.lp_item_id))
+  )
+})
+const isPublicAnswerContext = computed(() => {
+  return (
+    Boolean(getQueryValue(route.query.invitationCode || route.query.invitationcode)) ||
+    Boolean(getQueryValue(route.query.publicCid)) ||
+    Boolean(getQueryValue(route.query.publicSid)) ||
+    Boolean(getQueryValue(route.query.publicGid))
+  )
+})
+const showBackToSurveyList = computed(() => {
+  return !isLearningPathContext.value && !isPublicAnswerContext.value
+})
 const canInteract = computed(() => previewMode.value || canSubmit.value)
 const totalPages = computed(() => Math.max(1, pages.value.length))
 const currentQuestionIds = computed(() => pages.value[currentPageIndex.value] || [])
@@ -426,13 +449,26 @@ const currentVisibleQuestions = computed(() => currentQuestions.value.filter((qu
 const canGoNext = computed(() => currentPageIndex.value < totalPages.value - 1)
 const canGoBack = computed(() => settings.value.backwardsEnabled && currentPageIndex.value > 0)
 
+function getQueryValue(value) {
+  return Array.isArray(value) ? value[0] : value
+}
+
 function getContextParams() {
   return {
-    cid: route.query.cid,
-    sid: route.query.sid,
-    gid: route.query.gid,
-    invitationCode: route.query.invitationCode || route.query.invitationcode,
-    lpItemId: route.query.lpItemId || route.query.lp_item_id,
+    cid: getQueryValue(route.query.cid),
+    sid: getQueryValue(route.query.sid),
+    gid: getQueryValue(route.query.gid),
+    publicCid: getQueryValue(route.query.publicCid),
+    publicSid: getQueryValue(route.query.publicSid),
+    publicGid: getQueryValue(route.query.publicGid),
+    invitationCode: getQueryValue(route.query.invitationCode || route.query.invitationcode),
+    lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
+    lp_id: getQueryValue(route.query.lp_id),
+    origin: getQueryValue(route.query.origin),
+    type: getQueryValue(route.query.type),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    embedded: getQueryValue(route.query.embedded),
+    isStudentView: getQueryValue(route.query.isStudentView),
     preview: previewMode.value ? 1 : undefined,
   }
 }
@@ -442,9 +478,9 @@ function buildListRoute() {
     name: "SurveyList",
     params: { node: route.params.node },
     query: {
-      cid: route.query.cid,
-      sid: route.query.sid,
-      gid: route.query.gid,
+      ...getContextParams(),
+      invitationCode: undefined,
+      preview: undefined,
     },
   }
 }
@@ -457,9 +493,9 @@ function buildConfigureRoute() {
       surveyId: surveyId.value,
     },
     query: {
-      cid: route.query.cid,
-      sid: route.query.sid,
-      gid: route.query.gid,
+      ...getContextParams(),
+      invitationCode: undefined,
+      preview: undefined,
     },
   }
 }

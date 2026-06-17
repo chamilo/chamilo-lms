@@ -11,7 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\State\ForumThreadCollectionStateProvider;
+use Chamilo\CoreBundle\State\Forum\ForumThreadCollectionStateProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(

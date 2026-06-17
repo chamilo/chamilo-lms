@@ -232,8 +232,15 @@ const isTruthyQueryValue = (value) => {
 const isLearnpathEmbeddedRoute = computed(() => {
   const qp = queryParams.value
   const origin = String(qp.get("origin") || "").toLowerCase()
+  const lpAction = String(qp.get("action") || "").toLowerCase()
+  const hasLpId = qp.has("lp_id")
 
-  if (qp.has("lp_id") && "view" === qp.get("action")) {
+  // LP player/runtime screens are rendered inside the learning path player.
+  // They must use EmptyLayout to avoid duplicated Chamilo header/sidebar.
+  if (
+    hasLpId &&
+    ("view" === lpAction || isTruthyQueryValue(qp.get("embedded")) || isTruthyQueryValue(qp.get("isStudentView")))
+  ) {
     return true
   }
 
@@ -241,9 +248,8 @@ const isLearnpathEmbeddedRoute = computed(() => {
     return false
   }
 
-  // Exercise creation launched from the LP add-item screen must keep the full
-  // course layout. Only the runtime/result embedded inside the LP player needs
-  // the empty layout to avoid duplicated Chamilo menus.
+  // Authoring screens launched from the LP add-item screen must keep the full
+  // course layout. This is used by Exercise, Forum and Survey creation flows.
   if (isTruthyQueryValue(qp.get("returnToLp"))) {
     return false
   }

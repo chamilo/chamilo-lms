@@ -25,9 +25,9 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
-use Chamilo\CoreBundle\State\ForumCategoryCollectionStateProvider;
-use Chamilo\CoreBundle\State\ForumCategoryProcessor;
-use Chamilo\CoreBundle\State\ForumDeleteProcessor;
+use Chamilo\CoreBundle\State\Forum\ForumCategoryCollectionStateProvider;
+use Chamilo\CoreBundle\State\Forum\ForumCategoryProcessor;
+use Chamilo\CoreBundle\State\Forum\ForumDeleteProcessor;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -52,6 +52,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'title' => ['type' => 'string'],
                                     'comment' => ['type' => 'string'],
                                     'locked' => ['type' => 'boolean'],
+                                    'language' => ['type' => 'string'],
                                     'parentResourceNodeId' => ['type' => 'integer'],
                                     'csrfToken' => ['type' => 'string'],
                                 ],

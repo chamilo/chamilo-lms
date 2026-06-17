@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use PhpZip\ZipFile;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\FlockStore;
 
@@ -98,8 +97,7 @@ class scorm extends learnpath
 
             // UTF-8 is supported by DOMDocument class, this is for sure.
             $xml = api_utf8_encode_xml($xml, $this->manifest_encoding);
-            $crawler = new Crawler();
-            $crawler->addXmlContent($xml);
+            $crawler = Import::xmlFromString($xml);
             $xmlErrors = libxml_get_errors();
 
             if (!empty($xmlErrors)) {

@@ -167,7 +167,7 @@ class Imscc13Import
         $dom->formatOutput = false;
 
         // Load as XML (NOT HTML); suppress warnings but we control edits
-        if (!@$dom->loadXML($xml)) {
+        if (!@$dom->loadXML($xml, LIBXML_NONET)) {
             // If DOM fails, just write normalized string to a temp file
             return self::writeTempValidatedCopy($xml);
         }

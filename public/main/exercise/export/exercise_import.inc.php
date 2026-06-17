@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use PhpZip\ZipFile;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
@@ -422,7 +421,7 @@ function parseQti2($xmlData)
     global $questionTempDir;
     global $resourcesLinks;
 
-    $crawler = new Crawler($xmlData);
+    $crawler = Import::xmlFromString($xmlData);
     $nodes = $crawler->filter('*');
 
     $currentQuestionIdent = '';

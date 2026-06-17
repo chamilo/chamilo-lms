@@ -466,6 +466,16 @@ const router = createRouter({
       component: MySessionListUpcoming,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/survey/pending",
+      name: "SurveyPending",
+      component: () => import("../views/survey/SurveyPendingView.vue"),
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+        breadcrumb: "Pending surveys",
+      },
+    },
     fileManagerRoutes,
     socialNetworkRoutes,
     catalogue,

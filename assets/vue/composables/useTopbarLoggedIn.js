@@ -304,8 +304,11 @@ export function useTopbarLoggedIn(props) {
       if (resolvedRoute?.href) {
         return resolvedRoute.href
       }
-    } catch {}
-    return "/main/survey/pending.php"
+    } catch (error) {
+      console.error("Could not resolve pending surveys route", error)
+    }
+
+    return "/survey/pending"
   })
 
   const myServicesUrl = computed(() => {

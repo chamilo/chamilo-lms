@@ -82,7 +82,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         }
 
         $invitations = $this->getInvitations($survey, $course, $session);
-        $counts = $this->buildCounts($invitations);
+        $counts = $this->buildCounts($survey, $invitations);
 
         $response = new SurveyInvitation();
         $response->surveyId = (int) $survey->getIid();
@@ -90,14 +90,14 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         $response->canManage = true;
         $response->message = $message;
         $response->survey = $this->normalizeSurvey($survey);
-        $response->settings = $this->getSettings();
+        $response->settings = $this->getSettings($survey);
         $response->counts = $counts;
         $response->users = $this->getAvailableUsers($course, $session, $invitations);
         $response->groups = $this->getAvailableGroups($course, $session, $invitations);
         $response->invitations = $this->normalizeInvitations($survey, $course, $session, $invitations);
         $response->mailSubject = $survey->getMailSubject();
         $response->mailText = '' !== trim($survey->getReminderMail()) ? $survey->getReminderMail() : $survey->getInviteMail();
-        $response->anonymousLink = $this->buildAutoAnswerLink($survey);
+        $response->anonymousLink = $this->buildAutoAnswerLink($survey, $course, $session);
         $response->selectedUserIds = $this->getSelectedUserIds($invitations);
         $response->selectedGroupIds = $this->getSelectedGroupIds($invitations);
 
@@ -381,12 +381,18 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
     private function normalizeInvitations(CSurvey $survey, Course $course, ?Session $session, array $invitations): array
     {
         $items = [];
-        $showAnswered = !$this->isAnonymous($survey) || $this->isSettingEnabled('survey.survey_anonymous_show_answered');
+        $showAnsweredDetails = !$this->isAnonymous($survey) || $this->isSettingEnabled('survey.survey_anonymous_show_answered');
 
         foreach ($invitations as $invitation) {
             $user = $invitation->getUser();
+            if (!$user instanceof User || null === $user->getId()) {
+                continue;
+            }
+
             $group = $invitation->getGroup();
             $answered = 1 === (int) $invitation->getAnswered();
+            $visibleAnswered = $showAnsweredDetails && $answered;
+
             $items[] = [
                 'id' => $invitation->getIid(),
                 'userId' => (int) $user->getId(),
@@ -394,8 +400,8 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
                 'email' => $user->getEmail(),
                 'groupId' => $group?->getIid(),
                 'groupTitle' => $group?->getTitle(),
-                'answered' => $showAnswered && $answered,
-                'answeredHidden' => !$showAnswered && $answered,
+                'answered' => $visibleAnswered,
+                'answeredHidden' => false,
                 'invitationDate' => $this->formatDate($invitation->getInvitationDate()),
                 'reminderDate' => $this->formatDate($invitation->getReminderDate()),
                 'answeredAt' => null,
@@ -412,13 +418,17 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
      *
      * @return array<string, int>
      */
-    private function buildCounts(array $invitations): array
+    private function buildCounts(CSurvey $survey, array $invitations): array
     {
         $answered = 0;
         foreach ($invitations as $invitation) {
             if (1 === (int) $invitation->getAnswered()) {
                 ++$answered;
             }
+        }
+
+        if ($this->isAnonymous($survey) && !$this->isSettingEnabled('survey.survey_anonymous_show_answered') && $answered < 2) {
+            $answered = 0;
         }
 
         return [
@@ -448,10 +458,16 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function getSettings(): array
+    private function getSettings(CSurvey $survey): array
     {
+        $anonymous = $this->isAnonymous($survey);
+        $anonymousShowAnswered = $this->isSettingEnabled('survey.survey_anonymous_show_answered');
+
         return [
-            'anonymousShowAnswered' => $this->isSettingEnabled('survey.survey_anonymous_show_answered'),
+            'anonymous' => $anonymous,
+            'anonymousShowAnswered' => $anonymousShowAnswered,
+            'canShowAnsweredDetails' => !$anonymous || $anonymousShowAnswered,
+            'canRemindUnanswered' => !$anonymous || $anonymousShowAnswered,
             'hideReportingButton' => $this->isSettingEnabled('survey.hide_survey_reporting_button'),
             'externalEmailsSupported' => false,
             'mailSendingSupported' => class_exists('MessageManager'),
@@ -468,7 +484,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         $ids = [];
         foreach ($invitations as $invitation) {
             $user = $invitation->getUser();
-            if (null !== $user->getId()) {
+            if ($user instanceof User && null !== $user->getId()) {
                 $ids[] = (int) $user->getId();
             }
         }
@@ -496,9 +512,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
 
     private function isSettingEnabled(string $name): bool
     {
-        $value = $this->settingsManager->getSetting($name, true);
-
-        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+        return $this->isEnabledValue($this->settingsManager->getSetting($name, true));
     }
 
     private function formatUserName(User $user): string
@@ -515,12 +529,25 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
 
     private function isAnonymous(CSurvey $survey): bool
     {
-        return '1' === (string) $survey->getAnonymous();
+        return $this->isEnabledValue($survey->getAnonymous());
     }
 
-    private function buildAutoAnswerLink(CSurvey $survey): string
+    private function isEnabledValue(mixed $value): bool
     {
-        return 'auto';
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        if (\is_int($value)) {
+            return 1 === $value;
+        }
+
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
+    }
+
+    private function buildAutoAnswerLink(CSurvey $survey, Course $course, ?Session $session): string
+    {
+        return $this->buildModernAnswerLink($survey, 'auto', $course, $session);
     }
 
     private function buildModernAnswerLink(CSurvey $survey, string $invitationCode, Course $course, ?Session $session): string
@@ -537,9 +564,11 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         if ($this->isAnonymous($survey)) {
             $query['publicCid'] = (int) $course->getId();
             $query['publicSid'] = (int) ($session?->getId() ?? 0);
+            $query['publicGid'] = 0;
         } else {
             $query['cid'] = (int) $course->getId();
             $query['sid'] = (int) ($session?->getId() ?? 0);
+            $query['gid'] = 0;
         }
 
         return \sprintf(

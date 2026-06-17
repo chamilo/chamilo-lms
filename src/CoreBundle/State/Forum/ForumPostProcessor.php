@@ -130,6 +130,20 @@ final class ForumPostProcessor implements ProcessorInterface
         $course = $this->getCourse($this->entityManager, $request);
         $session = $this->getSession($this->entityManager, $request);
         $group = $this->getGroup($this->entityManager, $request);
+        $this->assertResourceNodeInForumContext(
+            $forum->getResourceNode(),
+            $course,
+            $session,
+            $group,
+            'The selected forum does not belong to this context.',
+        );
+        $this->assertResourceNodeInForumContext(
+            $thread->getResourceNode(),
+            $course,
+            $session,
+            $group,
+            'The selected thread does not belong to this context.',
+        );
         $user = $this->security->getUser();
 
         if (!$user instanceof User) {
@@ -558,6 +572,20 @@ final class ForumPostProcessor implements ProcessorInterface
         $course = $this->getCourse($this->entityManager, $request);
         $session = $this->getSession($this->entityManager, $request);
         $group = $this->getGroup($this->entityManager, $request);
+        $this->assertResourceNodeInForumContext(
+            $sourceForum->getResourceNode(),
+            $course,
+            $session,
+            $group,
+            'The source forum does not belong to this context.',
+        );
+        $this->assertResourceNodeInForumContext(
+            $sourceThread->getResourceNode(),
+            $course,
+            $session,
+            $group,
+            'The source thread does not belong to this context.',
+        );
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $sourceThread);
 
         if ($this->isFirstPost($data, $sourceThread)) {
@@ -594,8 +622,22 @@ final class ForumPostProcessor implements ProcessorInterface
                 throw new NotFoundHttpException('Target forum not found.');
             }
 
-            $this->assertEditableForumResource($targetThread->getResourceNode(), $this->security);
-            $this->assertEditableForumResource($targetForum->getResourceNode(), $this->security);
+            $this->assertEditableResourceNodeInForumContext(
+                $targetThread->getResourceNode(),
+                $this->security,
+                $course,
+                $session,
+                $group,
+                'The target thread does not belong to this context.',
+            );
+            $this->assertEditableResourceNodeInForumContext(
+                $targetForum->getResourceNode(),
+                $this->security,
+                $course,
+                $session,
+                $group,
+                'The target forum does not belong to this context.',
+            );
 
             if ($targetThread->getIid() === $sourceThread->getIid()) {
                 throw new BadRequestHttpException('The post is already in the selected thread.');

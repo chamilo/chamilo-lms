@@ -8,9 +8,12 @@ namespace Chamilo\CoreBundle\State\Forum;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -59,13 +62,21 @@ final class ForumProcessor implements ProcessorInterface
             $session = $this->getSession($this->entityManager, $request);
             $group = $this->getGroup($this->entityManager, $request);
             $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
+            $this->assertParentResourceNodeIsWritableInForumContext(
+                $this->entityManager,
+                $this->security,
+                $parentResourceNodeId,
+                $course,
+                $session,
+                $group,
+            );
 
             $forum = (new CForum())
                 ->setParentResourceNode($parentResourceNodeId)
                 ->setResourceLinkArray($this->buildResourceLinkList($course, $session, $group))
             ;
 
-            $this->applyPayloadToForum($forum, $payload, true);
+            $this->applyPayloadToForum($forum, $payload, true, $course, $session, $group);
             $this->forumRepository->create($forum);
             $subscribedUsers = $this->subscribeUsersToForumNotifications($this->entityManager, $course, $session, $forum);
             if ($subscribedUsers > 0) {
@@ -94,7 +105,18 @@ final class ForumProcessor implements ProcessorInterface
      */
     private function updateForum(CForum $forum, array $payload): CForum
     {
-        $this->applyPayloadToForum($forum, $payload, false);
+        $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            throw new BadRequestHttpException('Request is missing.');
+        }
+
+        $course = $this->getCourse($this->entityManager, $request);
+        $session = $this->getSession($this->entityManager, $request);
+        $group = $this->getGroup($this->entityManager, $request);
+
+        $this->applyPayloadToForum($forum, $payload, false, $course, $session, $group);
         $this->entityManager->persist($forum);
         $this->entityManager->flush();
 
@@ -105,6 +127,8 @@ final class ForumProcessor implements ProcessorInterface
 
     private function toggleForumLock(CForum $forum): JsonResponse
     {
+        $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+
         $forum->setLocked(0 === $forum->getLocked() ? 1 : 0);
 
         $this->entityManager->persist($forum);
@@ -221,7 +245,14 @@ final class ForumProcessor implements ProcessorInterface
     /**
      * @param array<string, mixed> $payload
      */
-    private function applyPayloadToForum(CForum $forum, array $payload, bool $isCreate): void
+    private function applyPayloadToForum(
+        CForum $forum,
+        array $payload,
+        bool $isCreate,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): void
     {
         $startTime = $this->getUtcDateTimeOrNull($payload['startTime'] ?? null);
         $endTime = $this->getUtcDateTimeOrNull($payload['endTime'] ?? null);
@@ -232,7 +263,7 @@ final class ForumProcessor implements ProcessorInterface
         $forum
             ->setTitle($this->getRequiredText($payload, 'title', 255))
             ->setForumComment($this->getOptionalText($payload, 'comment'))
-            ->setForumCategory($this->getCategory($this->getOptionalInt($payload, 'categoryId')))
+            ->setForumCategory($this->getCategory($this->getOptionalInt($payload, 'categoryId'), $course, $session, $group))
             ->setAllowEdit($this->getBooleanAsInt($payload, 'studentsCanEdit'))
             ->setApprovalDirectPost((string) $this->getBooleanAsInt($payload, 'requiresApproval'))
             ->setAllowAttachments($this->getBooleanAsInt($payload, 'allowAttachments', 1))
@@ -274,7 +305,7 @@ final class ForumProcessor implements ProcessorInterface
         return \in_array($visibility, ['public', 'private'], true) ? $visibility : 'public';
     }
 
-    private function getCategory(int $categoryId): ?CForumCategory
+    private function getCategory(int $categoryId, Course $course, ?Session $session, ?CGroup $group): ?CForumCategory
     {
         if ($categoryId <= 0) {
             return null;
@@ -284,6 +315,15 @@ final class ForumProcessor implements ProcessorInterface
         if (!$category instanceof CForumCategory) {
             throw new NotFoundHttpException('Forum category not found.');
         }
+
+        $this->assertEditableResourceNodeInForumContext(
+            $category->getResourceNode(),
+            $this->security,
+            $course,
+            $session,
+            $group,
+            'The selected forum category does not belong to this context.',
+        );
 
         return $category;
     }

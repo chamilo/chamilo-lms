@@ -935,7 +935,7 @@ class MoodleImport
         }
         $doc = new DOMDocument();
         $doc->preserveWhiteSpace = false;
-        if (!@$doc->loadXML($xml)) {
+        if (!@$doc->loadXML($xml, LIBXML_NONET)) {
             throw new RuntimeException('Invalid XML: '.$path);
         }
 

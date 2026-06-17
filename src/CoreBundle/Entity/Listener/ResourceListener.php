@@ -442,8 +442,10 @@ class ResourceListener
     {
         $resourceName = $resource->getResourceName();
 
+        // Legacy Chamilo 1.x data may have empty titles/filenames. Use a safe
+        // fallback so migrations do not abort on dirty rows.
         if (empty($resourceName)) {
-            throw new InvalidArgumentException('Resource needs a name');
+            $resourceName = 'resource-'.$resource->getResourceIdentifier();
         }
 
         $resourceNode = $resource->getResourceNode();

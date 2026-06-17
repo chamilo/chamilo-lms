@@ -36,6 +36,8 @@ final class ForumWriteInput
 
     public ?int $parentResourceNodeId = null;
 
+    public ?int $lpId = null;
+
     public ?string $csrfToken = null;
 
     public ?int $groupForum = null;

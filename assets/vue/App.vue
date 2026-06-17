@@ -242,7 +242,12 @@ const layout = computed(() => {
     return EmptyLayout
   }
 
-  if ((qp.has("lp_id") && "view" === qp.get("action")) || (qp.has("origin") && "learnpath" === qp.get("origin"))) {
+  const lpAction = String(qp.get("action") || "").toLowerCase()
+  const isLearningPathPlayerContext =
+    qp.has("lp_id") &&
+    ("view" === lpAction || "1" === qp.get("embedded") || "true" === String(qp.get("isStudentView") || ""))
+
+  if (isLearningPathPlayerContext) {
     return EmptyLayout
   }
 

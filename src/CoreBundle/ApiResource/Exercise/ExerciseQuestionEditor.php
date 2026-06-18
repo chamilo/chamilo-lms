@@ -368,6 +368,9 @@ final class ExerciseQuestionEditor
     public bool $allowMandatoryQuestion = false;
 
     #[Groups(['exercise_question_editor:read'])]
+    public bool $canUseHotspotDelineationScenario = false;
+
+    #[Groups(['exercise_question_editor:read'])]
     public bool $isLinkedToLearningPath = false;
 
     #[Groups(['exercise_question_editor:read'])]

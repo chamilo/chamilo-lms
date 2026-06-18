@@ -602,7 +602,7 @@
                   class="rounded-lg border border-gray-20 bg-gray-10 p-3"
                 >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                    {{ t("Learner clicks") }}
+                    {{ question.answer.delineation ? t("Delineation review") : t("Learner clicks") }}
                   </div>
                   <div
                     v-if="question.answer.imageUrl"
@@ -615,6 +615,32 @@
                         :src="question.answer.imageUrl"
                         @load="onResultHotspotImageLoad(question, $event)"
                       />
+                      <svg
+                        v-if="question.answer.delineation && resultHotspotImageReady(question)"
+                        class="pointer-events-none absolute inset-0 h-full w-full"
+                        :viewBox="resultHotspotViewBox(question)"
+                        preserveAspectRatio="none"
+                      >
+                        <polygon
+                          v-for="zone in resultHotspotPolygonZones(question)"
+                          :key="`${question.id}-result-zone-${zone.id}`"
+                          :class="resultHotspotZoneClass(zone)"
+                          :points="resultHotspotPolylinePoints(zone.points)"
+                          fill="currentColor"
+                          fill-opacity="0.18"
+                          stroke="currentColor"
+                          stroke-width="3"
+                        />
+                        <polygon
+                          v-if="question.answer.studentPoints?.length >= 3"
+                          class="text-primary"
+                          :points="resultHotspotPolylinePoints(question.answer.studentPoints)"
+                          fill="currentColor"
+                          fill-opacity="0.22"
+                          stroke="currentColor"
+                          stroke-width="4"
+                        />
+                      </svg>
                       <span
                         v-for="point in question.answer.studentPoints"
                         :key="`${question.id}-result-hotspot-${point.label}`"
@@ -636,6 +662,24 @@
                     class="mt-2 text-sm text-gray-600"
                   >
                     {{ t("No answer") }}
+                  </div>
+                  <div
+                    v-if="question.answer.delineation && question.answer.studentPoints?.length"
+                    class="mt-2 flex flex-wrap gap-2 text-xs"
+                  >
+                    <span class="rounded bg-primary/10 px-2 py-1 text-primary">{{ t("Learner delineation") }}</span>
+                    <span
+                      v-if="hasResultHotspotZoneType(question, 'delineation')"
+                      class="rounded bg-success/10 px-2 py-1 text-success"
+                    >
+                      {{ t("Expected delineation") }}
+                    </span>
+                    <span
+                      v-if="hasResultHotspotZoneType(question, 'oar')"
+                      class="rounded bg-danger/10 px-2 py-1 text-danger"
+                    >
+                      {{ t("Area to avoid") }}
+                    </span>
                   </div>
                 </div>
 
@@ -1810,6 +1854,37 @@ function resultHotspotPointStyle(question, point) {
     left: `${Number(point.x || 0)}px`,
     top: `${Number(point.y || 0)}px`,
   }
+}
+
+function resultHotspotImageReady(question) {
+  const size = resultHotspotImageSizes.value[question.id] || {}
+
+  return Number(size.width || 0) > 0 && Number(size.height || 0) > 0
+}
+
+function resultHotspotViewBox(question) {
+  const size = resultHotspotImageSizes.value[question.id] || {}
+
+  return `0 0 ${Number(size.width || 1)} ${Number(size.height || 1)}`
+}
+
+function resultHotspotPolylinePoints(points) {
+  return (Array.isArray(points) ? points : [])
+    .map((point) => `${Number(point.x || 0)},${Number(point.y || 0)}`)
+    .join(" ")
+}
+
+function resultHotspotPolygonZones(question) {
+  return (Array.isArray(question?.answer?.zones) ? question.answer.zones : [])
+    .filter((zone) => Array.isArray(zone.points) && zone.points.length >= 3)
+}
+
+function resultHotspotZoneClass(zone) {
+  return zone?.hotspotType === "oar" ? "text-danger" : "text-success"
+}
+
+function hasResultHotspotZoneType(question, hotspotType) {
+  return resultHotspotPolygonZones(question).some((zone) => zone.hotspotType === hotspotType)
 }
 
 function resultAnnotationImageReady(question) {

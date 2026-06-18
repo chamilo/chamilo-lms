@@ -73,6 +73,12 @@ final class ExerciseQuestion
     public bool $canManage = false;
 
     #[Groups(['exercise_question:read'])]
+    public bool $isAdaptiveFeedback = false;
+
+    #[Groups(['exercise_question:read'])]
+    public bool $canRecycleQuestions = true;
+
+    #[Groups(['exercise_question:read'])]
     public bool $usesLegacyQuestionEditors = true;
 
     #[Groups(['exercise_question:read'])]

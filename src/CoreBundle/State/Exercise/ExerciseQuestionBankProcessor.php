@@ -83,6 +83,10 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         }
 
         if (self::ACTION_REUSE === $action) {
+            if ($quiz instanceof CQuiz && $this->isAdaptiveFeedbackExercise($quiz)) {
+                throw new AccessDeniedHttpException('Question recycling is not available in adaptive/direct feedback exercises.');
+            }
+
             [$addedCount, $skippedCount] = $this->reuseQuestions($quiz, $data, $course, $session);
         } else {
             $addedCount = $this->deleteQuestions($data, $course, $session);
@@ -391,7 +395,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
     private function isQuestionTypeAllowedByFeedback(int $type, int $feedbackType): bool
     {
         if (1 === $feedbackType) {
-            return !\in_array($type, [5, 13, 20, 22, 23, 31], true);
+            return \in_array($type, [1, 8], true);
         }
 
         if (3 === $feedbackType) {
@@ -399,6 +403,11 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         }
 
         return true;
+    }
+
+    private function isAdaptiveFeedbackExercise(CQuiz $quiz): bool
+    {
+        return 1 === (int) $quiz->getFeedbackType();
     }
 
     /**

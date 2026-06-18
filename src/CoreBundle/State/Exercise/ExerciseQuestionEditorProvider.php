@@ -47,6 +47,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private const FREE_ANSWER = 5;
     private const HOT_SPOT = 6;
     private const HOT_SPOT_DELINEATION = 8;
+    private const EXERCISE_FEEDBACK_TYPE_DIRECT = 1;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
     private const UNIQUE_ANSWER_NO_OPTION = 10;
     private const MULTIPLE_ANSWER_TRUE_FALSE = 11;
@@ -116,6 +117,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         if (!$this->isVueSupportedQuestionType($type)) {
             throw new BadRequestHttpException('This question type is still managed by the legacy exercise tool.');
         }
+        $this->assertQuestionTypeAllowedByFeedback($quiz, $type);
 
         $response = $this->buildNewQuestionResponse($quiz, $type, $course, $session);
         if (!$this->shouldGenerateDefaultContent($request)) {
@@ -185,10 +187,13 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             $response->score = self::HOT_SPOT_COMBINATION === $type ? 0.0 : 10.0;
             $response->globalScore = self::HOT_SPOT_COMBINATION === $type ? 10.0 : 0.0;
             $response->hotspotItems = $this->getDefaultHotspotItems($type);
-            if (self::HOT_SPOT_DELINEATION === $type && $quiz instanceof CQuiz) {
+            if (self::HOT_SPOT_DELINEATION === $type && $this->isHotspotDelineationQuestionAllowed($quiz)) {
                 $this->addHotspotScenarioOptions($response, $quiz, null);
             }
             $response->answers = [];
+        }
+        if (!$this->usesHotspot($type) && $this->isAdaptiveScenarioQuestionType($type) && $this->isHotspotDelineationQuestionAllowed($quiz)) {
+            $this->addHotspotScenarioOptions($response, $quiz, null);
         }
         if ($this->usesMatching($type)) {
             $response->score = $this->usesGlobalScore($type) ? 0.0 : 20.0;
@@ -252,6 +257,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->questionId = $questionId;
         $response->type = $type;
         $response->typeLabel = $this->getQuestionTypeLabel($type);
+        $this->assertQuestionTypeAllowedByFeedback($quiz, $type);
         $response->title = $question->getQuestion();
         $response->description = (string) $question->getDescription();
         $response->feedback = (string) $question->getFeedback();
@@ -269,6 +275,9 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->answers = $this->getAnswers($question);
         $this->addAnnotationData($response, $question, $course, $session);
         $this->addHotspotData($response, $quiz, $question, $course, $session);
+        if (!$this->usesHotspot($type) && $this->isAdaptiveScenarioQuestionType($type) && $this->isHotspotDelineationQuestionAllowed($quiz)) {
+            $this->addHotspotScenarioOptions($response, $quiz, $question);
+        }
         $this->addCalculatedData($response, $question);
         $this->addFillBlanksData($response, $question);
         $this->addMatchingData($response, $question);
@@ -296,6 +305,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
         $response->imageZoomEnabled = $this->isImageZoomEnabled();
         $response->allowMandatoryQuestion = $this->isMandatoryQuestionInCategoryEnabled($quiz);
+        $response->canUseHotspotDelineationScenario = $this->isHotspotDelineationQuestionAllowed($quiz);
         $response->isLinkedToLearningPath = $this->isExerciseLinkedToLearningPath((int) $quiz->getIid());
         $response->isReadOnlyFromLearningPath = $response->isLinkedToLearningPath && !$this->isSettingEnabled('lp.force_edit_exercise_in_lp');
         $response->learningPathReadOnlyMessage = $response->isLinkedToLearningPath ? self::LP_READ_ONLY_MESSAGE : '';
@@ -315,6 +325,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
         $response->imageZoomEnabled = $this->isImageZoomEnabled();
         $response->allowMandatoryQuestion = false;
+        $response->canUseHotspotDelineationScenario = false;
         $response->isLinkedToLearningPath = false;
         $response->isReadOnlyFromLearningPath = false;
         $response->learningPathReadOnlyMessage = '';
@@ -340,6 +351,37 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $value = $this->settingsManager->getSetting($settingName, true);
 
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function isHotspotDelineationQuestionAllowed(?CQuiz $quiz): bool
+    {
+        return $quiz instanceof CQuiz
+            && self::EXERCISE_FEEDBACK_TYPE_DIRECT === (int) $quiz->getFeedbackType()
+            && $this->isSettingEnabled('enable_quiz_scenario');
+    }
+
+    private function assertQuestionTypeAllowedByFeedback(?CQuiz $quiz, int $type): void
+    {
+        if (!$quiz instanceof CQuiz) {
+            return;
+        }
+
+        $feedbackType = (int) $quiz->getFeedbackType();
+        if (self::EXERCISE_FEEDBACK_TYPE_DIRECT === $feedbackType) {
+            if (self::UNIQUE_ANSWER === $type) {
+                return;
+            }
+
+            if (self::HOT_SPOT_DELINEATION === $type && $this->isHotspotDelineationQuestionAllowed($quiz)) {
+                return;
+            }
+
+            throw new BadRequestHttpException('Only unique answer and hotspot delineation questions are available in adaptive exercises with immediate feedback.');
+        }
+
+        if (self::HOT_SPOT_DELINEATION === $type) {
+            throw new BadRequestHttpException('Hotspot delineation questions are only available in adaptive exercises with immediate feedback.');
+        }
     }
 
     private function isMandatoryQuestionInCategoryEnabled(CQuiz $quiz): bool
@@ -791,6 +833,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             self::MATCHING,
             self::FREE_ANSWER,
             self::HOT_SPOT,
+            self::HOT_SPOT_DELINEATION,
             self::ORAL_EXPRESSION,
             self::MULTIPLE_ANSWER_COMBINATION,
             self::UNIQUE_ANSWER_NO_OPTION,
@@ -850,6 +893,11 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             self::PAGE_BREAK => 'Page break',
             default => 'Question',
         };
+    }
+
+    private function isAdaptiveScenarioQuestionType(int $type): bool
+    {
+        return \in_array($type, [self::UNIQUE_ANSWER, self::HOT_SPOT_DELINEATION], true);
     }
 
     private function usesSingleCorrectAnswer(int $type): bool
@@ -953,8 +1001,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             }
         }
 
-        $response->hotspotItems = $this->getHotspotItems($question);
-        if (self::HOT_SPOT_DELINEATION === (int) $question->getType()) {
+        $response->hotspotItems = $this->getHotspotItems($question, $quiz);
+        if (self::HOT_SPOT_DELINEATION === (int) $question->getType() && $this->isHotspotDelineationQuestionAllowed($quiz)) {
             $this->addHotspotScenarioOptions($response, $quiz, $question);
         }
         $response->answers = [];
@@ -1044,7 +1092,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getHotspotItems(CQuizQuestion $question): array
+    private function getHotspotItems(CQuizQuestion $question, ?CQuiz $quiz = null): array
     {
         $answers = $this->entityManager->createQueryBuilder()
             ->select('answer')
@@ -1056,6 +1104,10 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             ->getResult()
         ;
 
+        $thresholds = self::HOT_SPOT_DELINEATION === (int) $question->getType() && $quiz instanceof CQuiz
+            ? $this->getHotspotDelineationThresholds($quiz, $question)
+            : [];
+
         $items = [];
         foreach ($answers as $answer) {
             if (!$answer instanceof CQuizAnswer) {
@@ -1066,15 +1118,22 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
                 continue;
             }
 
-            $items[] = [
+            $position = (int) $answer->getPosition();
+            $item = [
                 'id' => (int) $answer->getIid(),
                 'answer' => $answer->getAnswer(),
                 'comment' => (string) $answer->getComment(),
                 'score' => (float) $answer->getPonderation(),
-                'position' => (int) $answer->getPosition(),
+                'position' => $position,
                 'hotspotType' => (string) ($answer->getHotspotType() ?: 'square'),
                 'coordinates' => (string) ($answer->getHotspotCoordinates() ?: '0;0|0|0'),
             ];
+
+            if (isset($thresholds[$position])) {
+                $item += $thresholds[$position];
+            }
+
+            $items[] = $item;
         }
 
         return [] !== $items ? $items : $this->getDefaultHotspotItems((int) $question->getType());
@@ -1095,6 +1154,9 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
                     'position' => 1,
                     'hotspotType' => 'delineation',
                     'coordinates' => '0;0|0|0',
+                    'minOverlap' => 1,
+                    'maxExcess' => 100,
+                    'maxMissing' => 100,
                 ],
             ];
         }
@@ -1110,6 +1172,51 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
                 'coordinates' => '0;0|0|0',
             ],
         ];
+    }
+
+    /**
+     * @return array<int, array{minOverlap: int, maxExcess: int, maxMissing: int}>
+     */
+    private function getHotspotDelineationThresholds(CQuiz $quiz, CQuizQuestion $question): array
+    {
+        $relation = $this->entityManager->getRepository(CQuizRelQuestion::class)->findOneBy([
+            'quiz' => $quiz,
+            'question' => $question,
+        ]);
+
+        if (!$relation instanceof CQuizRelQuestion || '' === (string) $relation->getDestination()) {
+            return [];
+        }
+
+        $destination = json_decode((string) $relation->getDestination(), true);
+        if (!\is_array($destination)) {
+            return [];
+        }
+
+        $thresholds = \is_array($destination['thresholds'] ?? null) ? $destination['thresholds'] : [];
+        $result = [];
+        foreach ($thresholds as $position => $values) {
+            if (!\is_array($values)) {
+                continue;
+            }
+
+            $result[(int) $position] = [
+                'minOverlap' => $this->normalizePercentage($values['minOverlap'] ?? 1, 1),
+                'maxExcess' => $this->normalizePercentage($values['maxExcess'] ?? 100, 100),
+                'maxMissing' => $this->normalizePercentage($values['maxMissing'] ?? 100, 100),
+            ];
+        }
+
+        return $result;
+    }
+
+    private function normalizePercentage(mixed $value, int $default): int
+    {
+        if (!is_numeric($value)) {
+            return $default;
+        }
+
+        return min(100, max(0, (int) $value));
     }
 
     private function usesHotspot(int $type): bool

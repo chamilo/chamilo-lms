@@ -383,7 +383,7 @@
         </div>
 
         <section
-          v-if="isHotspotDelineationQuestion"
+          v-if="showHotspotDelineationScenario"
           class="space-y-3 rounded-lg border border-info/30 bg-support-1 px-4 py-3"
         >
           <h3 class="text-sm font-semibold uppercase tracking-wide text-support-4">
@@ -418,6 +418,27 @@
               :label="t('Custom URL')"
               name="hotspot_failure_url"
             />
+          </div>
+
+          <div class="rounded-lg border border-info/20 bg-white p-3 text-sm text-gray-80">
+            <div class="mb-2 font-semibold text-gray-90">
+              {{ t("Dependency tree") }}
+            </div>
+            <div class="flex flex-col gap-2 md:flex-row md:items-center">
+              <div class="rounded border border-gray-20 bg-gray-10 px-3 py-2 font-medium">
+                {{ t("Current question") }}
+              </div>
+              <div class="flex flex-1 flex-col gap-2">
+                <div
+                  v-for="item in hotspotDependencyTreeItems"
+                  :key="item.key"
+                  class="rounded border border-gray-20 bg-gray-10 px-3 py-2"
+                >
+                  <span class="font-semibold">{{ item.label }}:</span>
+                  <span>{{ item.destination }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -465,6 +486,24 @@
                     class="w-28 border border-gray-20 px-2 py-2 text-right"
                   >
                     {{ t("Score") }}
+                  </th>
+                  <th
+                    v-if="isHotspotDelineationQuestion"
+                    class="w-36 border border-gray-20 px-2 py-2 text-right"
+                  >
+                    {{ t("Minimum overlap") }}
+                  </th>
+                  <th
+                    v-if="isHotspotDelineationQuestion"
+                    class="w-36 border border-gray-20 px-2 py-2 text-right"
+                  >
+                    {{ t("Maximum excess") }}
+                  </th>
+                  <th
+                    v-if="isHotspotDelineationQuestion"
+                    class="w-36 border border-gray-20 px-2 py-2 text-right"
+                  >
+                    {{ t("Maximum missing") }}
                   </th>
                   <th class="min-w-[220px] border border-gray-20 px-2 py-2 text-left">{{ t("Feedback") }}</th>
                   <th class="w-28 border border-gray-20 px-2 py-2 text-right">{{ t("Actions") }}</th>
@@ -521,6 +560,66 @@
                       class="rounded border border-gray-20 bg-gray-15 px-3 py-2 text-sm text-gray-70"
                     >
                       {{ t("Area to avoid") }}: 0
+                    </div>
+                  </td>
+                  <td
+                    v-if="isHotspotDelineationQuestion"
+                    class="border border-gray-20 px-2 py-2 align-top"
+                  >
+                    <BaseInputNumber
+                      v-if="item.hotspotType === 'delineation'"
+                      :id="`exercise-hotspot-min-overlap-${item.localId}`"
+                      v-model="item.minOverlap"
+                      :label="t('Minimum overlap')"
+                      :name="`hotspot_min_overlap_${index}`"
+                      :min="0"
+                      :step="1"
+                    />
+                    <div
+                      v-else
+                      class="rounded border border-gray-20 bg-gray-15 px-3 py-2 text-sm text-gray-70"
+                    >
+                      {{ t("Area to avoid") }}
+                    </div>
+                  </td>
+                  <td
+                    v-if="isHotspotDelineationQuestion"
+                    class="border border-gray-20 px-2 py-2 align-top"
+                  >
+                    <BaseInputNumber
+                      v-if="item.hotspotType === 'delineation'"
+                      :id="`exercise-hotspot-max-excess-${item.localId}`"
+                      v-model="item.maxExcess"
+                      :label="t('Maximum excess')"
+                      :name="`hotspot_max_excess_${index}`"
+                      :min="0"
+                      :step="1"
+                    />
+                    <div
+                      v-else
+                      class="rounded border border-gray-20 bg-gray-15 px-3 py-2 text-sm text-gray-70"
+                    >
+                      {{ t("Area to avoid") }}
+                    </div>
+                  </td>
+                  <td
+                    v-if="isHotspotDelineationQuestion"
+                    class="border border-gray-20 px-2 py-2 align-top"
+                  >
+                    <BaseInputNumber
+                      v-if="item.hotspotType === 'delineation'"
+                      :id="`exercise-hotspot-max-missing-${item.localId}`"
+                      v-model="item.maxMissing"
+                      :label="t('Maximum missing')"
+                      :name="`hotspot_max_missing_${index}`"
+                      :min="0"
+                      :step="1"
+                    />
+                    <div
+                      v-else
+                      class="rounded border border-gray-20 bg-gray-15 px-3 py-2 text-sm text-gray-70"
+                    >
+                      {{ t("Area to avoid") }}
                     </div>
                   </td>
                   <td class="border border-gray-20 px-2 py-2 align-top">
@@ -1238,6 +1337,66 @@
         </div>
       </section>
 
+      <section
+        v-if="showUniqueAnswerAdaptiveScenario"
+        class="space-y-3 rounded-lg border border-info/30 bg-support-1 px-4 py-3"
+      >
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-support-4">
+          {{ t("Adaptive behavior (success/failure)") }}
+        </h3>
+        <div class="grid gap-4 md:grid-cols-2">
+          <BaseSelect
+            id="exercise-adaptive-success-destination"
+            v-model="form.hotspotScenarioSuccessType"
+            :label="t('On success')"
+            name="adaptive_success_destination"
+            :options="form.hotspotScenarioOptions"
+          />
+          <BaseInputText
+            v-if="form.hotspotScenarioSuccessType === 'url'"
+            id="exercise-adaptive-success-url"
+            v-model="form.hotspotScenarioSuccessUrl"
+            :label="t('Custom URL')"
+            name="adaptive_success_url"
+          />
+          <BaseSelect
+            id="exercise-adaptive-failure-destination"
+            v-model="form.hotspotScenarioFailureType"
+            :label="t('On failure')"
+            name="adaptive_failure_destination"
+            :options="form.hotspotScenarioOptions"
+          />
+          <BaseInputText
+            v-if="form.hotspotScenarioFailureType === 'url'"
+            id="exercise-adaptive-failure-url"
+            v-model="form.hotspotScenarioFailureUrl"
+            :label="t('Custom URL')"
+            name="adaptive_failure_url"
+          />
+        </div>
+
+        <div class="rounded-lg border border-info/20 bg-white p-3 text-sm text-gray-80">
+          <div class="mb-2 font-semibold text-gray-90">
+            {{ t("Dependency tree") }}
+          </div>
+          <div class="flex flex-col gap-2 md:flex-row md:items-center">
+            <div class="rounded border border-gray-20 bg-gray-10 px-3 py-2 font-medium">
+              {{ t("Current question") }}
+            </div>
+            <div class="flex flex-1 flex-col gap-2">
+              <div
+                v-for="item in hotspotDependencyTreeItems"
+                :key="item.key"
+                class="rounded border border-gray-20 bg-gray-10 px-3 py-2"
+              >
+                <span class="font-semibold">{{ item.label }}:</span>
+                <span>{{ item.destination }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div
         v-if="!isMatchingQuestion && !isDraggableOrderingQuestion"
         class="flex flex-wrap items-center gap-2"
@@ -1550,6 +1709,7 @@ const showAdvancedSettings = ref(false)
 const allowQuestionFeedback = ref(false)
 const imageZoomEnabled = ref(false)
 const allowMandatoryQuestion = ref(false)
+const canUseHotspotDelineationScenario = ref(false)
 const isReadOnlyFromLearningPath = ref(false)
 const learningPathReadOnlyMessage = ref(
   "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.",
@@ -1724,6 +1884,9 @@ const isUniqueAnswerImage = computed(() => UNIQUE_ANSWER_IMAGE === Number(form.t
 const isAnnotationQuestion = computed(() => ANNOTATION === Number(form.type))
 const isHotspotQuestion = computed(() => [HOT_SPOT, HOT_SPOT_DELINEATION, HOT_SPOT_COMBINATION].includes(Number(form.type)))
 const isHotspotDelineationQuestion = computed(() => HOT_SPOT_DELINEATION === Number(form.type))
+const showAdaptiveQuestionScenario = computed(() => canUseHotspotDelineationScenario.value && [UNIQUE_ANSWER, HOT_SPOT_DELINEATION].includes(Number(form.type)))
+const showHotspotDelineationScenario = computed(() => isHotspotDelineationQuestion.value && showAdaptiveQuestionScenario.value)
+const showUniqueAnswerAdaptiveScenario = computed(() => isUniqueAnswer.value && showAdaptiveQuestionScenario.value)
 const isHotspotCombinationQuestion = computed(() => HOT_SPOT_COMBINATION === Number(form.type))
 const isCalculatedAnswerQuestion = computed(() => CALCULATED_ANSWER === Number(form.type))
 const isOpenQuestion = computed(() => FREE_ANSWER === Number(form.type))
@@ -1764,6 +1927,18 @@ const hotspotEditorTitle = computed(() => {
   return isHotspotCombinationQuestion.value ? t("Hotspot combination") : t("Hotspot")
 })
 const addHotspotLabel = computed(() => isHotspotDelineationQuestion.value ? t("Add delineation") : t("Add hotspot"))
+const hotspotDependencyTreeItems = computed(() => [
+  {
+    key: "success",
+    label: t("On success"),
+    destination: getScenarioOptionLabel(form.hotspotScenarioSuccessType, form.hotspotScenarioSuccessUrl),
+  },
+  {
+    key: "failure",
+    label: t("On failure"),
+    destination: getScenarioOptionLabel(form.hotspotScenarioFailureType, form.hotspotScenarioFailureUrl),
+  },
+])
 const regularAnswerCount = computed(() => form.answers.filter((answer) => !answer.isUnknown).length)
 const dropdownOptionCount = computed(() => form.answers.length)
 const editorTitle = computed(() => {
@@ -2277,6 +2452,7 @@ function fillForm(data) {
   allowQuestionFeedback.value = true === data.allowQuestionFeedback
   imageZoomEnabled.value = true === data.imageZoomEnabled
   allowMandatoryQuestion.value = true === data.allowMandatoryQuestion
+  canUseHotspotDelineationScenario.value = true === data.canUseHotspotDelineationScenario
 
   if (isDropdownQuestion.value) {
     form.matchingOptions = []
@@ -2678,6 +2854,9 @@ function normalizeHotspotItems(items = []) {
       position: index + 1,
       hotspotType,
       coordinates: item.coordinates || "0;0|0|0",
+      minOverlap: normalizePercentage(item.minOverlap ?? 1, 1),
+      maxExcess: normalizePercentage(item.maxExcess ?? 100, 100),
+      maxMissing: normalizePercentage(item.maxMissing ?? 100, 100),
     }
   })
 }
@@ -2686,6 +2865,28 @@ function normalizeScenarioOptions(options = []) {
   return options
     .filter((option) => option && option.value !== undefined)
     .map((option) => ({ label: t(option.label || String(option.value)), value: String(option.value) }))
+}
+
+function normalizePercentage(value, fallback) {
+  const numericValue = Number(value)
+
+  if (!Number.isFinite(numericValue)) {
+    return fallback
+  }
+
+  return Math.min(100, Math.max(0, Math.round(numericValue)))
+}
+
+function getScenarioOptionLabel(value, urlFallback = "") {
+  const normalizedValue = String(value || "")
+
+  if (normalizedValue === "url") {
+    return urlFallback || t("Custom URL")
+  }
+
+  const option = form.hotspotScenarioOptions.find((item) => String(item.value) === normalizedValue)
+
+  return option?.label || t("None")
 }
 
 function normalizeHotspotTypeValue(type) {
@@ -2729,6 +2930,9 @@ function createEmptyHotspotItem(index = 0, forcedType = "") {
     position: index + 1,
     hotspotType,
     coordinates: "0;0|0|0",
+    minOverlap: 1,
+    maxExcess: 100,
+    maxMissing: 100,
   }
 }
 
@@ -3109,12 +3313,15 @@ function buildPayload() {
           position: index + 1,
           hotspotType: normalizeHotspotTypeValue(item.hotspotType),
           coordinates: item.coordinates || "",
+          minOverlap: normalizePercentage(item.minOverlap ?? 1, 1),
+          maxExcess: normalizePercentage(item.maxExcess ?? 100, 100),
+          maxMissing: normalizePercentage(item.maxMissing ?? 100, 100),
         }))
       : [],
-    hotspotScenarioSuccessType: isHotspotDelineationQuestion.value ? form.hotspotScenarioSuccessType : "",
-    hotspotScenarioSuccessUrl: isHotspotDelineationQuestion.value ? form.hotspotScenarioSuccessUrl : "",
-    hotspotScenarioFailureType: isHotspotDelineationQuestion.value ? form.hotspotScenarioFailureType : "",
-    hotspotScenarioFailureUrl: isHotspotDelineationQuestion.value ? form.hotspotScenarioFailureUrl : "",
+    hotspotScenarioSuccessType: showAdaptiveQuestionScenario.value ? form.hotspotScenarioSuccessType : "",
+    hotspotScenarioSuccessUrl: showAdaptiveQuestionScenario.value ? form.hotspotScenarioSuccessUrl : "",
+    hotspotScenarioFailureType: showAdaptiveQuestionScenario.value ? form.hotspotScenarioFailureType : "",
+    hotspotScenarioFailureUrl: showAdaptiveQuestionScenario.value ? form.hotspotScenarioFailureUrl : "",
     score: Number(form.score || 0),
     globalScore: Number(form.globalScore || 0),
     correctScore: Number(form.correctScore || 0),

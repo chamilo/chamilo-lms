@@ -49,6 +49,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     private const FREE_ANSWER = 5;
     private const HOT_SPOT = 6;
     private const HOT_SPOT_DELINEATION = 8;
+    private const EXERCISE_FEEDBACK_TYPE_DIRECT = 1;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
     private const UNIQUE_ANSWER_NO_OPTION = 10;
     private const MULTIPLE_ANSWER_TRUE_FALSE = 11;
@@ -114,6 +115,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         $questionId = isset($uriVariables['questionId']) ? (int) $uriVariables['questionId'] : (int) ($data->questionId ?? 0);
+        $this->assertQuestionTypeAllowedByFeedback($quiz, (int) $data->type);
         $this->validatePayload($data);
         $this->validateAnnotationImageOnCreate($data, 0 >= $questionId);
         $this->validateHotspotImageOnCreate($data, 0 >= $questionId);
@@ -164,6 +166,37 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
+    private function isHotspotDelineationQuestionAllowed(?CQuiz $quiz): bool
+    {
+        return $quiz instanceof CQuiz
+            && self::EXERCISE_FEEDBACK_TYPE_DIRECT === (int) $quiz->getFeedbackType()
+            && $this->isSettingEnabled('enable_quiz_scenario');
+    }
+
+    private function assertQuestionTypeAllowedByFeedback(?CQuiz $quiz, int $type): void
+    {
+        if (!$quiz instanceof CQuiz) {
+            return;
+        }
+
+        $feedbackType = (int) $quiz->getFeedbackType();
+        if (self::EXERCISE_FEEDBACK_TYPE_DIRECT === $feedbackType) {
+            if (self::UNIQUE_ANSWER === $type) {
+                return;
+            }
+
+            if (self::HOT_SPOT_DELINEATION === $type && $this->isHotspotDelineationQuestionAllowed($quiz)) {
+                return;
+            }
+
+            throw new BadRequestHttpException('Only unique answer and hotspot delineation questions are available in adaptive exercises with immediate feedback.');
+        }
+
+        if (self::HOT_SPOT_DELINEATION === $type) {
+            throw new BadRequestHttpException('Hotspot delineation questions are only available in adaptive exercises with immediate feedback.');
+        }
+    }
+
     private function createQuestion(CQuiz $quiz, ExerciseQuestionEditor $data, Course $course, ?Session $session): CQuizQuestion
     {
         $question = new CQuizQuestion();
@@ -185,7 +218,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             ->setQuestion($question)
             ->setQuestionOrder($this->getNextQuestionOrder($quiz))
         ;
-        $this->applyHotspotDelineationDestination($relation, $data);
+        $this->applyAdaptiveQuestionDestination($relation, $data);
         $this->entityManager->persist($relation);
 
         return $question;
@@ -228,7 +261,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $this->updateQuestionCategory($question, $data, $course, $session);
         $relation = $this->getQuestionRelation($quiz, $question);
         if ($relation instanceof CQuizRelQuestion) {
-            $this->applyHotspotDelineationDestination($relation, $data);
+            $this->applyAdaptiveQuestionDestination($relation, $data);
         }
         $this->entityManager->persist($question);
 
@@ -1142,6 +1175,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             self::MATCHING,
             self::FREE_ANSWER,
             self::HOT_SPOT,
+            self::HOT_SPOT_DELINEATION,
             self::ORAL_EXPRESSION,
             self::MULTIPLE_ANSWER_COMBINATION,
             self::UNIQUE_ANSWER_NO_OPTION,
@@ -1201,6 +1235,11 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             self::PAGE_BREAK => 'Page break',
             default => 'Question',
         };
+    }
+
+    private function isAdaptiveScenarioQuestionType(int $type): bool
+    {
+        return \in_array($type, [self::UNIQUE_ANSWER, self::HOT_SPOT_DELINEATION], true);
     }
 
     private function usesSingleCorrectAnswer(int $type): bool
@@ -1885,21 +1924,32 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             }
         }
 
+        $thresholds = self::HOT_SPOT_DELINEATION === (int) $question->getType()
+            ? $this->getHotspotDelineationThresholds($quiz, $question)
+            : [];
+
         $items = [];
         foreach ($this->getExistingAnswers($question) as $answer) {
             if ('noerror' === (string) $answer->getHotspotType()) {
                 continue;
             }
 
-            $items[] = [
+            $position = (int) $answer->getPosition();
+            $item = [
                 'id' => $answer->getIid(),
                 'answer' => $answer->getAnswer(),
                 'comment' => (string) $answer->getComment(),
                 'score' => (float) $answer->getPonderation(),
-                'position' => (int) $answer->getPosition(),
+                'position' => $position,
                 'hotspotType' => (string) ($answer->getHotspotType() ?: 'square'),
                 'coordinates' => (string) ($answer->getHotspotCoordinates() ?: '0;0|0|0'),
             ];
+
+            if (isset($thresholds[$position])) {
+                $item += $thresholds[$position];
+            }
+
+            $items[] = $item;
         }
 
         $response->hotspotItems = [] !== $items ? $items : $this->getDefaultHotspotItems((int) $question->getType());
@@ -1981,6 +2031,38 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         return $options;
     }
 
+    /**
+     * @return array<int, array{minOverlap: int, maxExcess: int, maxMissing: int}>
+     */
+    private function getHotspotDelineationThresholds(CQuiz $quiz, CQuizQuestion $question): array
+    {
+        $relation = $this->getQuestionRelation($quiz, $question);
+        if (!$relation instanceof CQuizRelQuestion || '' === (string) $relation->getDestination()) {
+            return [];
+        }
+
+        $destination = json_decode((string) $relation->getDestination(), true);
+        if (!\is_array($destination)) {
+            return [];
+        }
+
+        $thresholds = \is_array($destination['thresholds'] ?? null) ? $destination['thresholds'] : [];
+        $result = [];
+        foreach ($thresholds as $position => $values) {
+            if (!\is_array($values)) {
+                continue;
+            }
+
+            $result[(int) $position] = [
+                'minOverlap' => $this->normalizePercentage($values['minOverlap'] ?? 1, 1),
+                'maxExcess' => $this->normalizePercentage($values['maxExcess'] ?? 100, 100),
+                'maxMissing' => $this->normalizePercentage($values['maxMissing'] ?? 100, 100),
+            ];
+        }
+
+        return $result;
+    }
+
     private function getQuestionRelation(CQuiz $quiz, CQuizQuestion $question): ?CQuizRelQuestion
     {
         $relation = $this->entityManager->getRepository(CQuizRelQuestion::class)->findOneBy([
@@ -1991,15 +2073,16 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         return $relation instanceof CQuizRelQuestion ? $relation : null;
     }
 
-    private function applyHotspotDelineationDestination(CQuizRelQuestion $relation, ExerciseQuestionEditor $data): void
+    private function applyAdaptiveQuestionDestination(CQuizRelQuestion $relation, ExerciseQuestionEditor $data): void
     {
-        if (self::HOT_SPOT_DELINEATION !== (int) $data->type) {
+        $type = (int) $data->type;
+        if (!$this->isAdaptiveScenarioQuestionType($type) || !$this->isHotspotDelineationQuestionAllowed($relation->getQuiz())) {
             $relation->setDestination(null);
 
             return;
         }
 
-        $destination = json_encode([
+        $destinationData = [
             'success' => [
                 'type' => $this->normalizeScenarioDestinationType($data->hotspotScenarioSuccessType),
                 'url' => trim($data->hotspotScenarioSuccessUrl),
@@ -2008,9 +2091,36 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                 'type' => $this->normalizeScenarioDestinationType($data->hotspotScenarioFailureType),
                 'url' => trim($data->hotspotScenarioFailureUrl),
             ],
-        ]);
+        ];
+
+        if (self::HOT_SPOT_DELINEATION === $type) {
+            $thresholds = [];
+            foreach ($this->getCleanHotspotItems($data) as $item) {
+                if ('delineation' !== (string) ($item['hotspotType'] ?? '')) {
+                    continue;
+                }
+
+                $thresholds[(string) (int) ($item['position'] ?? 1)] = [
+                    'minOverlap' => (int) ($item['minOverlap'] ?? 1),
+                    'maxExcess' => (int) ($item['maxExcess'] ?? 100),
+                    'maxMissing' => (int) ($item['maxMissing'] ?? 100),
+                ];
+            }
+            $destinationData['thresholds'] = $thresholds;
+        }
+
+        $destination = json_encode($destinationData);
 
         $relation->setDestination(false === $destination ? null : $destination);
+    }
+
+    private function normalizePercentage(mixed $value, int $default): int
+    {
+        if (!is_numeric($value)) {
+            return $default;
+        }
+
+        return min(100, max(0, (int) $value));
     }
 
     private function normalizeScenarioDestinationType(string $value): string
@@ -2060,6 +2170,9 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                 'position' => $index + 1,
                 'hotspotType' => $hotspotType,
                 'coordinates' => $coordinates,
+                'minOverlap' => $this->normalizePercentage($item['minOverlap'] ?? 1, 1),
+                'maxExcess' => $this->normalizePercentage($item['maxExcess'] ?? 100, 100),
+                'maxMissing' => $this->normalizePercentage($item['maxMissing'] ?? 100, 100),
             ];
         }
 

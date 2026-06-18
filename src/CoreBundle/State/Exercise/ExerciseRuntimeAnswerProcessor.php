@@ -63,7 +63,8 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     private const CALCULATED_TYPES = [16];
     private const FREE_ANSWER_TYPES = [5];
     private const ANNOTATION_TYPES = [20];
-    private const HOTSPOT_TYPES = [6, 26];
+    private const HOTSPOT_DELINEATION = 8;
+    private const HOTSPOT_TYPES = [6, self::HOTSPOT_DELINEATION, 26];
 
     public function __construct(
         private RequestStack $requestStack,
@@ -1292,6 +1293,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             'score' => $score,
             'maxScore' => $maxScore,
             'entries' => $this->buildFeedbackEntries($question, $answers, $rows),
+            ...$this->resolveAdaptiveFeedbackAction($quiz, $question, $status),
         ];
     }
 
@@ -1330,6 +1332,68 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
      * @param array<int, CQuizQuestionOption> $options
      * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
      */
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function resolveAdaptiveFeedbackAction(CQuiz $quiz, CQuizQuestion $question, string $status): array
+    {
+        if (self::FEEDBACK_TYPE_DIRECT !== (int) $quiz->getFeedbackType()) {
+            return [];
+        }
+
+        $relation = $this->entityManager->getRepository(CQuizRelQuestion::class)->findOneBy([
+            'quiz' => $quiz,
+            'question' => $question,
+        ]);
+
+        if (!$relation instanceof CQuizRelQuestion || '' === trim((string) $relation->getDestination())) {
+            return [];
+        }
+
+        $destination = json_decode((string) $relation->getDestination(), true);
+        if (!\is_array($destination)) {
+            return [];
+        }
+
+        $key = 'correct' === $status ? 'success' : 'failure';
+        $scenario = \is_array($destination[$key] ?? null) ? $destination[$key] : [];
+        $type = trim((string) ($scenario['type'] ?? ''));
+        $url = trim((string) ($scenario['url'] ?? ''));
+
+        if ('' === $type) {
+            return [];
+        }
+
+        if ('-1' === $type) {
+            return ['afterAction' => 'finish'];
+        }
+
+        if ('repeat' === $type) {
+            return ['afterAction' => 'repeat'];
+        }
+
+        if ('url' === $type) {
+            if ('' === $url) {
+                return [];
+            }
+
+            return [
+                'afterAction' => 'url',
+                'targetUrl' => $url,
+            ];
+        }
+
+        if (ctype_digit($type) && 0 < (int) $type) {
+            return [
+                'afterAction' => 'question',
+                'targetQuestionId' => (int) $type,
+            ];
+        }
+
+        return [];
+    }
+
     private function scoreFeedbackQuestion(CQuiz $quiz, CQuizQuestion $question, array $answers, array $options, array $rows): float
     {
         $type = (int) $question->getType();
@@ -1372,6 +1436,10 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
         if (\in_array($type, self::CALCULATED_TYPES, true)) {
             return $this->scoreCalculatedRowsForFeedback($question, $answers, $rows);
+        }
+
+        if (self::HOTSPOT_DELINEATION === $type) {
+            return $this->scoreHotspotDelineationRowsForFeedback($quiz, $question, $answers, $rows);
         }
 
         return 0.0;
@@ -1724,6 +1792,315 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         return '';
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreHotspotDelineationRowsForFeedback(CQuiz $quiz, CQuizQuestion $question, array $answers, array $rows): float
+    {
+        $studentPolygon = $this->getSavedDelineationPolygonFromRows($rows);
+        if (3 > \count($studentPolygon)) {
+            return 0.0;
+        }
+
+        $teacherDelineation = null;
+        $organsAtRisk = [];
+        foreach ($answers as $answer) {
+            $hotspotType = (string) $answer->getHotspotType();
+            if ('delineation' === $hotspotType && null === $teacherDelineation) {
+                $teacherDelineation = $answer;
+                continue;
+            }
+
+            if ('oar' === $hotspotType) {
+                $organsAtRisk[] = $answer;
+            }
+        }
+
+        if (!$teacherDelineation instanceof CQuizAnswer) {
+            return 0.0;
+        }
+
+        $teacherPolygon = $this->parseDelineationPolygon((string) $teacherDelineation->getHotspotCoordinates());
+        if (3 > \count($teacherPolygon)) {
+            return 0.0;
+        }
+
+        $metrics = $this->getDelineationOverlapMetrics($teacherPolygon, $studentPolygon);
+        $thresholds = $this->getDelineationThresholds($quiz, $question, (int) $teacherDelineation->getPosition());
+
+        if ($metrics['overlap'] < $thresholds['minOverlap']) {
+            return 0.0;
+        }
+
+        if ($metrics['excess'] > $thresholds['maxExcess']) {
+            return 0.0;
+        }
+
+        if ($metrics['missing'] > $thresholds['maxMissing']) {
+            return 0.0;
+        }
+
+        foreach ($organsAtRisk as $organAtRisk) {
+            $organPolygon = $this->parseDelineationPolygon((string) $organAtRisk->getHotspotCoordinates());
+            if (3 <= \count($organPolygon) && $this->polygonsOverlap($studentPolygon, $organPolygon)) {
+                return 0.0;
+            }
+        }
+
+        $score = (float) $teacherDelineation->getPonderation();
+
+        return 0.0 < $score ? $score : (float) $question->getPonderation();
+    }
+
+    /**
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     *
+     * @return array<int, array{x: float, y: float}>
+     */
+    private function getSavedDelineationPolygonFromRows(array $rows): array
+    {
+        $row = $rows[0] ?? null;
+        if (!\is_array($row)) {
+            return [];
+        }
+
+        return $this->parseDelineationPolygon((string) ($row['answer'] ?? ''));
+    }
+
+    /**
+     * @return array<int, array{x: float, y: float}>
+     */
+    private function parseDelineationPolygon(string $coordinates): array
+    {
+        $normalizedCoordinates = str_replace('/', '|', trim($coordinates));
+        $points = [];
+        foreach (explode('|', $normalizedCoordinates) as $coordinate) {
+            $point = $this->decodeHotspotPoint($coordinate);
+            if (null !== $point) {
+                $points[] = ['x' => $point['x'], 'y' => $point['y']];
+            }
+        }
+
+        return $this->removeDuplicateClosingPoint($points);
+    }
+
+    /**
+     * @param array<int, array{x: float, y: float}> $points
+     *
+     * @return array<int, array{x: float, y: float}>
+     */
+    private function removeDuplicateClosingPoint(array $points): array
+    {
+        $count = \count($points);
+        if (4 > $count) {
+            return $points;
+        }
+
+        $first = $points[0];
+        $last = $points[$count - 1];
+        if (abs($first['x'] - $last['x']) < 0.0001 && abs($first['y'] - $last['y']) < 0.0001) {
+            array_pop($points);
+        }
+
+        return $points;
+    }
+
+    /**
+     * @param array<int, array{x: float, y: float}> $expectedPolygon
+     * @param array<int, array{x: float, y: float}> $studentPolygon
+     *
+     * @return array{overlap: float, missing: float, excess: float}
+     */
+    private function getDelineationOverlapMetrics(array $expectedPolygon, array $studentPolygon): array
+    {
+        $bounds = $this->getPolygonUnionBounds($expectedPolygon, $studentPolygon);
+        if (null === $bounds) {
+            return ['overlap' => 0.0, 'missing' => 100.0, 'excess' => 100.0];
+        }
+
+        $maxDimension = max($bounds['maxX'] - $bounds['minX'], $bounds['maxY'] - $bounds['minY']);
+        $step = max(1.0, ceil($maxDimension / 500.0));
+        $expectedArea = 0;
+        $studentArea = 0;
+        $overlapArea = 0;
+        $expectedCoordinates = $this->encodePolygonCoordinates($expectedPolygon);
+        $studentCoordinates = $this->encodePolygonCoordinates($studentPolygon);
+
+        for ($x = $bounds['minX']; $x <= $bounds['maxX']; $x += $step) {
+            for ($y = $bounds['minY']; $y <= $bounds['maxY']; $y += $step) {
+                $point = ['x' => $x + ($step / 2), 'y' => $y + ($step / 2)];
+                $insideExpected = $this->isPointInPolygon($point, $expectedCoordinates);
+                $insideStudent = $this->isPointInPolygon($point, $studentCoordinates);
+
+                if ($insideExpected) {
+                    ++$expectedArea;
+                }
+                if ($insideStudent) {
+                    ++$studentArea;
+                }
+                if ($insideExpected && $insideStudent) {
+                    ++$overlapArea;
+                }
+            }
+        }
+
+        if (0 >= $expectedArea) {
+            return ['overlap' => 0.0, 'missing' => 100.0, 'excess' => 100.0];
+        }
+
+        $overlap = round(($overlapArea / $expectedArea) * 100.0, 2);
+        $missing = max(0.0, 100.0 - $overlap);
+        $excess = round((max(0, $studentArea - $overlapArea) / $expectedArea) * 100.0, 2);
+
+        return [
+            'overlap' => min(100.0, $overlap),
+            'missing' => min(100.0, $missing),
+            'excess' => min(100.0, $excess),
+        ];
+    }
+
+    /**
+     * @param array<int, array{x: float, y: float}> $firstPolygon
+     * @param array<int, array{x: float, y: float}> $secondPolygon
+     */
+    private function polygonsOverlap(array $firstPolygon, array $secondPolygon): bool
+    {
+        $metrics = $this->getDelineationOverlapMetrics($secondPolygon, $firstPolygon);
+
+        return $metrics['overlap'] > 0.0;
+    }
+
+    /**
+     * @param array<int, array{x: float, y: float}> $firstPolygon
+     * @param array<int, array{x: float, y: float}> $secondPolygon
+     *
+     * @return array{minX: float, maxX: float, minY: float, maxY: float}|null
+     */
+    private function getPolygonUnionBounds(array $firstPolygon, array $secondPolygon): ?array
+    {
+        $points = [...$firstPolygon, ...$secondPolygon];
+        if ([] === $points) {
+            return null;
+        }
+
+        $xValues = array_map(static fn (array $point): float => $point['x'], $points);
+        $yValues = array_map(static fn (array $point): float => $point['y'], $points);
+
+        return [
+            'minX' => min($xValues),
+            'maxX' => max($xValues),
+            'minY' => min($yValues),
+            'maxY' => max($yValues),
+        ];
+    }
+
+    /**
+     * @param array<int, array{x: float, y: float}> $polygon
+     */
+    private function encodePolygonCoordinates(array $polygon): string
+    {
+        return implode('|', array_map(static fn (array $point): string => $point['x'].';'.$point['y'], $polygon));
+    }
+
+    /**
+     * @return array{minOverlap: float, maxExcess: float, maxMissing: float}
+     */
+    private function getDelineationThresholds(CQuiz $quiz, CQuizQuestion $question, int $position): array
+    {
+        $relation = $this->entityManager->getRepository(CQuizRelQuestion::class)->findOneBy([
+            'quiz' => $quiz,
+            'question' => $question,
+        ]);
+
+        if (!$relation instanceof CQuizRelQuestion || '' === (string) $relation->getDestination()) {
+            return ['minOverlap' => 1.0, 'maxExcess' => 100.0, 'maxMissing' => 100.0];
+        }
+
+        $destination = json_decode((string) $relation->getDestination(), true);
+        if (!\is_array($destination)) {
+            return ['minOverlap' => 1.0, 'maxExcess' => 100.0, 'maxMissing' => 100.0];
+        }
+
+        $thresholds = \is_array($destination['thresholds'] ?? null) ? $destination['thresholds'] : [];
+        $positionThresholds = \is_array($thresholds[(string) $position] ?? null) ? $thresholds[(string) $position] : [];
+
+        return [
+            'minOverlap' => $this->normalizePercentage($positionThresholds['minOverlap'] ?? 1.0, 1.0),
+            'maxExcess' => $this->normalizePercentage($positionThresholds['maxExcess'] ?? 100.0, 100.0),
+            'maxMissing' => $this->normalizePercentage($positionThresholds['maxMissing'] ?? 100.0, 100.0),
+        ];
+    }
+
+    private function normalizePercentage(mixed $value, float $default): float
+    {
+        if (!is_numeric($value)) {
+            return $default;
+        }
+
+        return min(100.0, max(0.0, (float) $value));
+    }
+
+    /**
+     * @return array{x: float, y: float, answerId?: int}|null
+     */
+    private function decodeHotspotPoint(string $coordinate): ?array
+    {
+        $answerId = 0;
+        $coordinateValue = trim($coordinate);
+        if (str_contains($coordinateValue, ':')) {
+            [$answerIdValue, $coordinateValue] = explode(':', $coordinateValue, 2);
+            $answerId = (int) $answerIdValue;
+        }
+
+        $parts = array_map('trim', explode(';', $coordinateValue));
+        if (2 > \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+            return null;
+        }
+
+        $point = ['x' => (float) $parts[0], 'y' => (float) $parts[1]];
+        if (0 < $answerId) {
+            $point['answerId'] = $answerId;
+        }
+
+        return $point;
+    }
+
+    /**
+     * @param array{x: float, y: float} $point
+     */
+    private function isPointInPolygon(array $point, string $coordinates): bool
+    {
+        $vertices = [];
+        foreach (explode('|', $coordinates) as $coordinate) {
+            $decoded = $this->decodeHotspotPoint($coordinate);
+            if (null !== $decoded) {
+                $vertices[] = $decoded;
+            }
+        }
+
+        $count = \count($vertices);
+        if (3 > $count) {
+            return false;
+        }
+
+        $inside = false;
+        for ($i = 0, $j = $count - 1; $i < $count; $j = $i++) {
+            $xi = $vertices[$i]['x'];
+            $yi = $vertices[$i]['y'];
+            $xj = $vertices[$j]['x'];
+            $yj = $vertices[$j]['y'];
+
+            $intersects = (($yi > $point['y']) !== ($yj > $point['y']))
+                && ($point['x'] < ($xj - $xi) * ($point['y'] - $yi) / (($yj - $yi) ?: 0.000001) + $xi);
+            if ($intersects) {
+                $inside = !$inside;
+            }
+        }
+
+        return $inside;
     }
 
     /**

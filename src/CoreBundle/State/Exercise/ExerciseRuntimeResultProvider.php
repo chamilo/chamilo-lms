@@ -49,9 +49,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 {
     private const STATUS_COMPLETED = 'completed';
     private const ANNOTATION = 20;
+    private const HOTSPOT_DELINEATION = 8;
     private const DRAGGABLE = 18;
     private const VISIBILITY_PUBLISHED = 2;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
+    private const FEEDBACK_TYPE_DIRECT = 1;
     private const FEEDBACK_TYPE_EXAM = 2;
     private const RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS = 0;
     private const RESULT_NO_SCORE_AND_EXPECTED_ANSWERS = 1;
@@ -110,6 +112,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         $rowsByQuestion = $this->getAttemptRowsByQuestion((int) $attempt->getExeId());
+        $questionIds = $this->normalizeResultQuestionIds($quiz, $questionIds, $rowsByQuestion);
         $pendingQuestionIds = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
         $isReviewMode = $this->isReviewMode($attempt, $canManage, $request);
         $isLastAllowedAttempt = $this->isLastAllowedAttempt($quiz, $attempt, $course, $session);
@@ -504,6 +507,32 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         return $questionIds;
+    }
+
+    /**
+     * Direct feedback/adaptive exercises can end before visiting every question.
+     * Result details must only show questions that were actually reached by the learner.
+     *
+     * @param array<int, int>                       $questionIds
+     * @param array<int, array<int, TrackEAttempt>> $rowsByQuestion
+     *
+     * @return array<int, int>
+     */
+    private function normalizeResultQuestionIds(CQuiz $quiz, array $questionIds, array $rowsByQuestion): array
+    {
+        if (self::FEEDBACK_TYPE_DIRECT !== (int) $quiz->getFeedbackType()) {
+            return $questionIds;
+        }
+
+        $answeredQuestionIds = array_map('intval', array_keys($rowsByQuestion));
+        if ([] === $answeredQuestionIds) {
+            return $questionIds;
+        }
+
+        return array_values(array_filter(
+            $questionIds,
+            static fn (int $questionId): bool => \in_array($questionId, $answeredQuestionIds, true)
+        ));
     }
 
     /**
@@ -1118,7 +1147,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             return $this->normalizeCalculatedAnswer($question, $rows, $visibility, $showQuestionCorrection);
         }
 
-        if (\in_array($type, [6, 26], true)) {
+        if (\in_array($type, [6, self::HOTSPOT_DELINEATION, 26], true)) {
             return $this->normalizeHotspotAnswer($question, $rows, $visibility, $showQuestionCorrection);
         }
 
@@ -1545,14 +1574,17 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
         $studentPoints = $showStudentAnswers && $row instanceof TrackEAttempt ? $this->parseHotspotCoordinates((string) $row->getAnswer()) : [];
         $zones = [];
+        $isDelineation = self::HOTSPOT_DELINEATION === (int) $question->getType();
+        $allowedHotspotTypes = $isDelineation ? ['delineation', 'oar'] : ['square', 'circle', 'poly'];
 
         if ($showExpectedAnswers) {
             foreach ($this->getOrderedAnswers($question) as $answer) {
-                $hotspotType = (string) ($answer->getHotspotType() ?: 'square');
-                if (!\in_array($hotspotType, ['square', 'circle', 'poly'], true)) {
+                $hotspotType = (string) ($answer->getHotspotType() ?: ($isDelineation ? 'delineation' : 'square'));
+                if (!\in_array($hotspotType, $allowedHotspotTypes, true)) {
                     continue;
                 }
 
+                $coordinates = (string) ($answer->getHotspotCoordinates() ?: '');
                 $zones[] = [
                     'id' => (int) $answer->getIid(),
                     'answer' => $answer->getAnswer(),
@@ -1560,7 +1592,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                     'score' => (float) $answer->getPonderation(),
                     'position' => (int) $answer->getPosition(),
                     'hotspotType' => $hotspotType,
-                    'coordinates' => (string) ($answer->getHotspotCoordinates() ?: ''),
+                    'coordinates' => $coordinates,
+                    'points' => $this->parseHotspotCoordinates($coordinates),
                 ];
             }
         }
@@ -1572,6 +1605,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'studentPoints' => $studentPoints,
             'zones' => $zones,
             'combination' => 26 === (int) $question->getType(),
+            'delineation' => $isDelineation,
         ];
     }
 

@@ -65,6 +65,10 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
         $quiz = 0 < $exerciseId ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        if ($quiz instanceof CQuiz && $this->isAdaptiveFeedbackExercise($quiz)) {
+            throw new AccessDeniedHttpException('Question recycling is not available in adaptive/direct feedback exercises.');
+        }
+
         $filters = $this->getFilters($request);
         $page = max(1, (int) $filters['page']);
         $itemsPerPage = min(100, max(5, (int) $filters['itemsPerPage']));
@@ -545,7 +549,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     private function isQuestionTypeAllowedByFeedback(int $type, int $feedbackType): bool
     {
         if (1 === $feedbackType) {
-            return !\in_array($type, [5, 13, 20, 22, 23, 31], true);
+            return \in_array($type, [1, 8], true);
         }
 
         if (3 === $feedbackType) {
@@ -555,6 +559,11 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         return true;
     }
 
+
+    private function isAdaptiveFeedbackExercise(CQuiz $quiz): bool
+    {
+        return 1 === (int) $quiz->getFeedbackType();
+    }
 
     private function canRunRestrictedAction(): bool
     {

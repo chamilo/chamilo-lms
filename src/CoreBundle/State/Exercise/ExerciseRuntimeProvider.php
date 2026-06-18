@@ -70,7 +70,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     private const ORAL_EXPRESSION_TYPES = [13];
     private const UPLOAD_ANSWER_TYPES = [23];
     private const ANNOTATION_TYPES = [20];
-    private const HOTSPOT_TYPES = [6, 26];
+    private const HOTSPOT_TYPES = [6, 8, 26];
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
     private const QUESTION_SELECTION_RANDOM = 2;
@@ -1817,7 +1817,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
      */
     private function getHotspotRuntime(CQuizQuestion $question, Course $course, ?Session $session, bool $canManage): ?array
     {
-        if (!\in_array((int) $question->getType(), self::HOTSPOT_TYPES, true)) {
+        $questionType = (int) $question->getType();
+        if (!\in_array($questionType, self::HOTSPOT_TYPES, true)) {
             return null;
         }
 
@@ -1830,7 +1831,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         foreach ($this->getOrderedAnswers($question) as $answer) {
             $hotspotType = (string) ($answer->getHotspotType() ?: 'square');
-            if (!\in_array($hotspotType, ['square', 'circle', 'poly'], true)) {
+            $allowedTypes = 8 === $questionType ? ['delineation', 'oar'] : ['square', 'circle', 'poly'];
+            if (!\in_array($hotspotType, $allowedTypes, true)) {
                 continue;
             }
 
@@ -1857,7 +1859,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'imageName' => (string) ($image['imageName'] ?? ''),
             'imageUrl' => (string) ($image['imageUrl'] ?? ''),
             'maxClicks' => max(1, $maxClicks),
-            'combination' => 26 === (int) $question->getType(),
+            'combination' => 26 === $questionType,
+            'delineation' => 8 === $questionType,
             'zones' => $zones,
         ];
     }
@@ -2097,6 +2100,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             4 => 'Matching',
             5 => 'Open question',
             6 => 'Hotspot',
+            8 => 'Hotspot delineation',
             9 => 'Exact Selection',
             10 => 'Unique answer with unknown',
             11 => 'Multiple answer true/false',

@@ -294,7 +294,7 @@
             :label="isFinishingAttempt ? t('Finishing') : t('End test')"
             icon="check"
             type="primary"
-            @click="finishAttempt({ skipDraftSave: true, skipReviewAnswers: true })"
+            @click="finishAttempt({ skipDraftSave: true, skipReviewAnswers: true, ignoreFeedback: true })"
           />
         </div>
       </div>
@@ -1004,14 +1004,37 @@
                       @click="onHotspotImageClick(question, $event)"
                       @load="onHotspotImageLoad(question, $event)"
                     />
+                    <svg
+                      v-if="isHotspotDelineationQuestion(question) && hotspotPlacedPoints(question).length"
+                      class="pointer-events-none absolute inset-0 h-full w-full text-primary"
+                      :viewBox="hotspotImageViewBox(question)"
+                    >
+                      <polygon
+                        v-if="hotspotPlacedPoints(question).length >= 3"
+                        class="fill-primary/20 stroke-primary"
+                        :points="hotspotDelineationSvgPoints(question)"
+                        stroke-linejoin="round"
+                        stroke-width="3"
+                        vector-effect="non-scaling-stroke"
+                      />
+                      <polyline
+                        v-else-if="hotspotPlacedPoints(question).length >= 2"
+                        class="stroke-primary"
+                        fill="none"
+                        :points="hotspotDelineationSvgPoints(question)"
+                        stroke-linejoin="round"
+                        stroke-width="3"
+                        vector-effect="non-scaling-stroke"
+                      />
+                    </svg>
                     <button
                       v-for="point in hotspotPlacedPoints(question)"
-                      :key="`${question.id}-hotspot-point-${point.answerId || point.label}`"
+                      :key="`${question.id}-hotspot-point-${point.answerId || 0}-${point.index ?? point.label}`"
                       class="absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-primary text-xs font-bold text-white shadow"
                       :style="hotspotPointStyle(question, point)"
                       type="button"
                       :title="t('Remove point')"
-                      @click.stop="removeHotspotPoint(question, point.answerId)"
+                      @click.stop="removeHotspotPoint(question, point.answerId, point.index)"
                     >
                       {{ hotspotPointLabel(question, point) }}
                     </button>
@@ -1025,40 +1048,72 @@
                 </div>
 
                 <aside class="space-y-3 rounded-lg border border-gray-20 bg-white p-3">
-                  <div class="text-sm font-semibold text-gray-90">
-                    {{ t("Answers") }}
-                  </div>
-                  <div class="space-y-2">
-                    <button
-                      v-for="(zone, zoneIndex) in hotspotZones(question)"
-                      :key="zone.id"
-                      class="w-full rounded-lg border px-3 py-2 text-left text-sm transition hover:bg-gray-10"
-                      :class="Number(answers[question.id].selectedHotspotAnswerId) === Number(zone.id) ? 'border-primary bg-primary/5 text-primary' : 'border-gray-20 text-gray-700'"
-                      type="button"
-                      @click="selectHotspotZone(question, zone.id)"
-                    >
-                      <div class="flex items-start gap-2">
-                        <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-                          {{ zone.position || zoneIndex + 1 }}
-                        </span>
-                        <span class="min-w-0 flex-1">
-                          <span class="exercise-runtime-html block font-medium" v-html="zone.answer" />
-                          <span
-                            v-if="hotspotPointByAnswer(question, zone.id)"
-                            class="mt-1 block text-xs text-success"
-                          >
-                            {{ t("Placed") }}
+                  <template v-if="isHotspotDelineationQuestion(question)">
+                    <div class="text-sm font-semibold text-gray-90">
+                      {{ t("Delineation") }}
+                    </div>
+                    <div class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4">
+                      {{ t("Click the image to draw the delineation polygon.") }}
+                      <span v-if="hotspotPlacedPoints(question).length">
+                        {{ t("Click a marker to remove it.") }}
+                      </span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                      <button
+                        class="rounded border border-gray-30 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-10"
+                        type="button"
+                        @click="undoHotspotDelineation(question)"
+                      >
+                        {{ t("Undo") }}
+                      </button>
+                      <button
+                        class="rounded border border-danger/30 px-3 py-2 text-xs font-semibold text-danger hover:bg-danger/10"
+                        type="button"
+                        @click="clearHotspotDelineation(question)"
+                      >
+                        {{ t("Clear") }}
+                      </button>
+                    </div>
+                    <div class="text-xs text-gray-70">
+                      {{ t("Points") }}: {{ hotspotPlacedPoints(question).length }}
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div class="text-sm font-semibold text-gray-90">
+                      {{ t("Answers") }}
+                    </div>
+                    <div class="space-y-2">
+                      <button
+                        v-for="(zone, zoneIndex) in hotspotZones(question)"
+                        :key="zone.id"
+                        class="w-full rounded-lg border px-3 py-2 text-left text-sm transition hover:bg-gray-10"
+                        :class="Number(answers[question.id].selectedHotspotAnswerId) === Number(zone.id) ? 'border-primary bg-primary/5 text-primary' : 'border-gray-20 text-gray-700'"
+                        type="button"
+                        @click="selectHotspotZone(question, zone.id)"
+                      >
+                        <div class="flex items-start gap-2">
+                          <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                            {{ zone.position || zoneIndex + 1 }}
                           </span>
-                        </span>
-                      </div>
-                    </button>
-                  </div>
-                  <div class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4">
-                    {{ t("Select an answer, then click on the image to mark it.") }}
-                    <span v-if="hotspotPlacedPoints(question).length">
-                      {{ t("Click a marker to remove it.") }}
-                    </span>
-                  </div>
+                          <span class="min-w-0 flex-1">
+                            <span class="exercise-runtime-html block font-medium" v-html="zone.answer" />
+                            <span
+                              v-if="hotspotPointByAnswer(question, zone.id)"
+                              class="mt-1 block text-xs text-success"
+                            >
+                              {{ t("Placed") }}
+                            </span>
+                          </span>
+                        </div>
+                      </button>
+                    </div>
+                    <div class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4">
+                      {{ t("Select an answer, then click on the image to mark it.") }}
+                      <span v-if="hotspotPlacedPoints(question).length">
+                        {{ t("Click a marker to remove it.") }}
+                      </span>
+                    </div>
+                  </template>
                 </aside>
               </div>
             </div>
@@ -1196,7 +1251,10 @@
           </label>
         </div>
 
-        <div class="flex flex-wrap justify-between gap-2 rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+        <div
+          v-if="showRuntimeNavigationControls"
+          class="flex flex-wrap justify-between gap-2 rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+        >
           <BaseButton
             v-if="showPreviousNavigationButton"
             :disabled="!canMovePrevious || isSavingAnswer || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
@@ -1454,9 +1512,10 @@ const visibleQuestions = computed(() => {
 })
 
 const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
-const isReviewAnswersEnabled = computed(() => Number(settings.value.reviewAnswers || 0) > 0)
-const isCheckAnswersBeforeFinishEnabled = computed(() => true === settings.value.checkAllAnswersBeforeEndTest)
-const isFinalAnswerChecklistEnabled = computed(() => isReviewAnswersEnabled.value || isCheckAnswersBeforeFinishEnabled.value)
+const isImmediateFeedbackRuntime = computed(() => [1, 3].includes(Number(settings.value.feedbackType || 0)))
+const isReviewAnswersEnabled = computed(() => !isImmediateFeedbackRuntime.value && Number(settings.value.reviewAnswers || 0) > 0)
+const isCheckAnswersBeforeFinishEnabled = computed(() => !isImmediateFeedbackRuntime.value && true === settings.value.checkAllAnswersBeforeEndTest)
+const isFinalAnswerChecklistEnabled = computed(() => !isImmediateFeedbackRuntime.value && (isReviewAnswersEnabled.value || isCheckAnswersBeforeFinishEnabled.value))
 const isReviewingMarkedQuestions = computed(() => reviewQueue.value.length > 0)
 const showReviewReminderScreen = computed(() => {
   return !canManage.value
@@ -1569,8 +1628,12 @@ const reviewReminderTitle = computed(() => {
   return isReviewAnswersEnabled.value ? t("Questions to be reviewed") : t("Review my answers")
 })
 const feedbackDialogTitle = computed(() => t(feedbackDialog.value?.title || "Feedback"))
+const hasVisibleDirectFeedback = computed(() => {
+  return visibleQuestions.value.some((question) => Boolean(directFeedbackForQuestion(question)))
+})
+const showRuntimeNavigationControls = computed(() => !hasVisibleDirectFeedback.value)
 const requiresSavedAnswerConfirmation = computed(() => {
-  return !canManage.value && Boolean(activeAttempt.value?.attemptId) && true === settings.value.confirmSavedAnswers
+  return !isImmediateFeedbackRuntime.value && !canManage.value && Boolean(activeAttempt.value?.attemptId) && true === settings.value.confirmSavedAnswers
 })
 const canFinishWithConfirmation = computed(() => {
   return !requiresSavedAnswerConfirmation.value || true === confirmedSavedAnswers.value
@@ -2550,7 +2613,9 @@ function handleRuntimeFeedback(question, feedback, afterAction = "none") {
   const normalizedFeedback = {
     ...feedback,
     questionId: Number(feedback.questionId || question.id || 0),
-    afterAction,
+    afterAction: feedback.afterAction || afterAction,
+    targetQuestionId: Number(feedback.targetQuestionId || 0),
+    targetUrl: feedback.targetUrl || "",
   }
 
   feedbackShownOnLastSave.value = true
@@ -2611,7 +2676,7 @@ async function proceedAfterFeedback(feedback) {
   feedbackDialog.value = null
 
   if (feedback.afterAction === "finish") {
-    await finishAttempt({ skipDraftSave: true, ignoreFeedback: true })
+    await finishAttempt({ skipDraftSave: true, skipReviewAnswers: true, ignoreFeedback: true })
     return
   }
 
@@ -2624,6 +2689,22 @@ async function proceedAfterFeedback(feedback) {
   if (feedback.afterAction === "previous" && canMovePrevious.value) {
     currentQuestionIndex.value -= 1
     syncQuestionCountdown()
+    return
+  }
+
+  if (feedback.afterAction === "question" && Number(feedback.targetQuestionId || 0) > 0) {
+    setCurrentQuestionById(Number(feedback.targetQuestionId))
+    syncQuestionCountdown()
+    return
+  }
+
+  if (feedback.afterAction === "repeat") {
+    syncQuestionCountdown()
+    return
+  }
+
+  if (feedback.afterAction === "url" && feedback.targetUrl) {
+    window.location.href = feedback.targetUrl
   }
 }
 
@@ -2963,7 +3044,9 @@ function applySavedAnswer(question, rows) {
 
   if (isHotspotQuestion(question)) {
     questionAnswer.hotspotPoints = parseSavedHotspotPoints(rows[0]?.answer || "")
-    questionAnswer.selectedHotspotAnswerId = firstMissingHotspotZoneId(question) || hotspotZones(question)[0]?.id || null
+    questionAnswer.selectedHotspotAnswerId = isHotspotDelineationQuestion(question)
+      ? null
+      : (firstMissingHotspotZoneId(question) || hotspotZones(question)[0]?.id || null)
     return
   }
 
@@ -3073,7 +3156,7 @@ function initializeAnswerState() {
       annotationImageSize: null,
       hotspotPoints: [],
       hotspotImageSize: null,
-      selectedHotspotAnswerId: hotspotZones(question)[0]?.id || null,
+      selectedHotspotAnswerId: isHotspotDelineationQuestion(question) ? null : (hotspotZones(question)[0]?.id || null),
       reviewLater: reviewQuestionIds.value.has(Number(question.id || 0)),
     }
 
@@ -3362,8 +3445,7 @@ function onHotspotImageLoad(question, event) {
 function onHotspotImageClick(question, event) {
   const questionAnswer = answers.value[question.id]
   const image = event?.target
-  const selectedAnswerId = Number(questionAnswer?.selectedHotspotAnswerId || 0)
-  if (!questionAnswer || !image || selectedAnswerId <= 0) {
+  if (!questionAnswer || !image) {
     return
   }
 
@@ -3377,6 +3459,19 @@ function onHotspotImageClick(question, event) {
   const x = Math.round(((event.clientX - rect.left) / rect.width) * naturalWidth)
   const y = Math.round(((event.clientY - rect.top) / rect.height) * naturalHeight)
   questionAnswer.hotspotImageSize = { width: naturalWidth, height: naturalHeight }
+
+  if (isHotspotDelineationQuestion(question)) {
+    questionAnswer.hotspotPoints.push({
+      x: Math.max(0, x),
+      y: Math.max(0, y),
+    })
+    return
+  }
+
+  const selectedAnswerId = Number(questionAnswer?.selectedHotspotAnswerId || 0)
+  if (selectedAnswerId <= 0) {
+    return
+  }
 
   const nextPoint = {
     answerId: selectedAnswerId,
@@ -3402,9 +3497,20 @@ function selectHotspotZone(question, answerId) {
   questionAnswer.selectedHotspotAnswerId = Number(answerId || 0) || null
 }
 
-function removeHotspotPoint(question, answerId) {
+function removeHotspotPoint(question, answerId, pointIndex = null) {
   const questionAnswer = answers.value[question.id]
   if (!questionAnswer) {
+    return
+  }
+
+  if (isHotspotDelineationQuestion(question)) {
+    const numericIndex = Number(pointIndex)
+    if (Number.isInteger(numericIndex) && numericIndex >= 0) {
+      questionAnswer.hotspotPoints.splice(numericIndex, 1)
+      return
+    }
+
+    questionAnswer.hotspotPoints.pop()
     return
   }
 
@@ -3416,6 +3522,19 @@ function removeHotspotPoint(question, answerId) {
   }
 
   questionAnswer.hotspotPoints.pop()
+}
+
+function undoHotspotDelineation(question) {
+  removeHotspotPoint(question, 0)
+}
+
+function clearHotspotDelineation(question) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer) {
+    return
+  }
+
+  questionAnswer.hotspotPoints = []
 }
 
 function hotspotZones(question) {
@@ -3435,6 +3554,16 @@ function hotspotPlacedPoints(question) {
   const questionAnswer = answers.value[question.id] || {}
   const zones = hotspotZones(question)
   const rawPoints = questionAnswer.hotspotPoints || []
+
+  if (isHotspotDelineationQuestion(question)) {
+    return rawPoints.map((point, index) => ({
+      ...point,
+      answerId: 0,
+      index,
+      label: index + 1,
+    }))
+  }
+
   const orderedPoints = []
 
   for (const [zoneIndex, zone] of zones.entries()) {
@@ -3472,6 +3601,10 @@ function hotspotPointLabel(question, point) {
 }
 
 function firstMissingHotspotZoneId(question) {
+  if (isHotspotDelineationQuestion(question)) {
+    return null
+  }
+
   const questionAnswer = answers.value[question.id] || {}
   const placedAnswerIds = new Set((questionAnswer.hotspotPoints || []).map((point) => Number(point.answerId || 0)).filter((value) => value > 0))
   const missingZone = hotspotZones(question).find((zone) => !placedAnswerIds.has(Number(zone.id || 0)))
@@ -3496,6 +3629,21 @@ function hotspotPointStyle(question, point) {
     left: `${Number(point.x || 0)}px`,
     top: `${Number(point.y || 0)}px`,
   }
+}
+
+function hotspotImageViewBox(question) {
+  const questionAnswer = answers.value[question.id] || {}
+  const size = questionAnswer.hotspotImageSize || {}
+  const width = Number(size.width || 0) || 1
+  const height = Number(size.height || 0) || 1
+
+  return `0 0 ${width} ${height}`
+}
+
+function hotspotDelineationSvgPoints(question) {
+  return hotspotPlacedPoints(question)
+    .map((point) => `${Number(point.x || 0)},${Number(point.y || 0)}`)
+    .join(' ')
 }
 
 function parseSavedHotspotPoints(value) {
@@ -3711,7 +3859,11 @@ function isAnnotationQuestion(question) {
 }
 
 function isHotspotQuestion(question) {
-  return [6, 26].includes(Number(question.type)) && question.hotspot
+  return [6, 8, 26].includes(Number(question.type)) && question.hotspot
+}
+
+function isHotspotDelineationQuestion(question) {
+  return Number(question.type) === 8 && question.hotspot
 }
 
 function isReadingQuestion(question) {

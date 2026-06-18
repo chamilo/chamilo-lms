@@ -84,6 +84,7 @@
               @click="finishLearningPathCreation"
             />
             <BaseButton
+              v-if="canRecycleQuestions"
               :disabled="isReadOnlyFromLearningPath"
               :label="t('Recycle existing questions')"
               :route="
@@ -656,6 +657,7 @@ const totalScore = ref(0)
 const questionTypes = ref([])
 const questions = ref([])
 const csrfToken = ref("")
+const canRecycleQuestions = ref(true)
 const isReadOnlyFromLearningPath = ref(false)
 const learningPathReadOnlyMessage = ref(
   "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.",
@@ -759,7 +761,7 @@ function isVueQuestionType(questionTypeOrId) {
     return true
   }
 
-  return [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31].includes(getQuestionTypeId(questionTypeOrId))
+  return [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31].includes(getQuestionTypeId(questionTypeOrId))
 }
 
 function questionTypeHelp(questionTypeOrId) {
@@ -870,7 +872,7 @@ function isAnnotationQuestionType(type) {
 }
 
 function isHotspotQuestionType(type) {
-  return [6, 26].includes(Number(type))
+  return [6, 8, 26].includes(Number(type))
 }
 
 function isHotspotCombinationQuestionType(type) {
@@ -1140,6 +1142,7 @@ async function loadQuestionSelector() {
     totalScore.value = Number(response.totalScore || 0)
     questionTypes.value = Array.isArray(response.questionTypes) ? response.questionTypes : []
     questions.value = Array.isArray(response.questions) ? response.questions : []
+    canRecycleQuestions.value = response.canRecycleQuestions !== false
     csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading exercise questions", error)

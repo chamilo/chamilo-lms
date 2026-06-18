@@ -66,7 +66,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private const ORAL_EXPRESSION_TYPES = [13];
     private const UPLOAD_ANSWER_TYPES = [23];
     private const ANNOTATION_TYPES = [20];
-    private const HOTSPOT_TYPES = [6, 26];
+    private const HOTSPOT_TYPES = [6, 8, 26];
     private const PAGE_BREAK = 31;
     private const MEDIA_QUESTION = 15;
     private const STRUCTURAL_CONTENT_TYPES = [self::MEDIA_QUESTION, self::PAGE_BREAK];

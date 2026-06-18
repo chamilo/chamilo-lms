@@ -85,6 +85,8 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         $response->totalScore = $this->getTotalScore($questions);
         $response->legacyUrls = [];
         $response->canManage = true;
+        $response->isAdaptiveFeedback = 1 === (int) $quiz->getFeedbackType();
+        $response->canRecycleQuestions = !$response->isAdaptiveFeedback;
         $response->isLinkedToLearningPath = $isLinkedToLearningPath;
         $response->isReadOnlyFromLearningPath = $isReadOnlyFromLearningPath;
         $response->learningPathReadOnlyMessage = $isLinkedToLearningPath ? self::LP_READ_ONLY_MESSAGE : '';
@@ -796,13 +798,19 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
 
     private function isQuestionTypeVisibleInSelector(int $type, int $feedbackType): bool
     {
-        return 8 !== $type;
+        if (8 === $type) {
+            return 1 === $feedbackType && $this->isSettingEnabled('enable_quiz_scenario');
+        }
+
+        return true;
     }
 
     private function isQuestionTypeAllowedByFeedback(int $type, int $feedbackType): bool
     {
         if (1 === $feedbackType) {
-            return !\in_array($type, [5, 13, 20, 22, 23, 31], true);
+            // Legacy question_create.php only allows Unique answer and Hotspot delineation
+            // in direct-feedback/adaptive exercises.
+            return \in_array($type, [1, 8], true);
         }
 
         if (3 === $feedbackType) {
@@ -814,7 +822,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
 
     private function isVueQuestionEditorType(int $type): bool
     {
-        return \in_array($type, [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31], true);
+        return \in_array($type, [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31], true);
     }
 
     private function getQuestionTypeLabel(int $type): string

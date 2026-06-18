@@ -252,7 +252,7 @@ async function loadAddedDocuments() {
   try {
     const { items } = await cStudentPublicationService.getRelDocuments({
       ...buildCidParams(),
-      publication: `/api/c_student_publications/${assignmentId}`,
+      "publication.iid": assignmentId,
     })
     addedDocuments.value = items
   } catch (e) {

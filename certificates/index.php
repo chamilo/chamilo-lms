@@ -34,6 +34,21 @@ if (empty($certificateData)) {
     api_not_allowed(false, Display::return_message(get_lang('NoCertificateAvailable'), 'warning'));
 }
 
+// Access control: only the owner, a platform admin, or a teacher of the certificate's course
+// may view or export a certificate. Compare against $certificate->user_id (set from DB in the
+// constructor) — not the $userId GET parameter, which an attacker can spoof to their own ID
+// while supplying someone else's certificate $id.
+$currentUserId = api_get_user_id();
+if (!api_is_anonymous() && (int) $currentUserId !== (int) $certificate->user_id) {
+    $isCourseTeacher = false;
+    if (!empty($category) && !empty($category->get_course_code())) {
+        $isCourseTeacher = CourseManager::is_course_teacher($currentUserId, $category->get_course_code());
+    }
+    if (!api_is_platform_admin() && !$isCourseTeacher) {
+        api_not_allowed(true);
+    }
+}
+
 CustomCertificatePlugin::redirectCheck($certificate, $certificateId, $userId);
 
 switch ($action) {

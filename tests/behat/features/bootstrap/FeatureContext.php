@@ -1023,6 +1023,17 @@ JS;
     }
 
     /**
+     * @Then /^I should see (\d+) elements? matching "([^"]*)"$/
+     */
+    public function iShouldSeeElementsMatching(int $count, string $css): void
+    {
+        $actual = count($this->getSession()->getPage()->findAll('css', $css));
+        if ($actual !== $count) {
+            throw new \Exception("Expected {$count} elements matching '{$css}', found {$actual}");
+        }
+    }
+
+    /**
      * @When /^I set flatpickr field "([^"]*)" to "([^"]*)"$/
      */
     public function iSetFlatpickrField($fieldId, $value)
@@ -1073,6 +1084,41 @@ JS;
         $this->calendarClickDay($endDay);
 
         // Click "Select" to commit internalValue → modelValue and close panel
+        $footerBtns = $session->getPage()->findAll('css', '.base-calendar-footer .p-button');
+        foreach ($footerBtns as $btn) {
+            if (stripos(trim($btn->getText()), 'Select') !== false) {
+                $btn->click();
+                $session->wait(400);
+                break;
+            }
+        }
+    }
+
+    /**
+     * @When /^I set primevue datepicker "([^"]*)" to "([^"]*)"$/
+     */
+    public function iSetPrimevueDatepicker($inputId, $date)
+    {
+        $session = $this->getSession();
+
+        $day   = (int) date('j', strtotime($date));
+        $month = (int) date('n', strtotime($date));
+        $year  = (int) date('Y', strtotime($date));
+
+        $input = $session->getPage()->find('css', '#' . $inputId);
+        if ($input) { $input->click(); }
+
+        for ($attempt = 0; $attempt < 25; $attempt++) {
+            $session->wait(200);
+            if ($session->getPage()->find('css', '[data-pc-section="month"]')) break;
+        }
+
+        $cur   = $this->calendarReadMonth();
+        $steps = ($year - $cur['year']) * 12 + ($month - $cur['month']);
+        $this->calendarNavigateSteps($steps);
+        $this->calendarClickDay($day);
+
+        $session->wait(300);
         $footerBtns = $session->getPage()->findAll('css', '.base-calendar-footer .p-button');
         foreach ($footerBtns as $btn) {
             if (stripos(trim($btn->getText()), 'Select') !== false) {

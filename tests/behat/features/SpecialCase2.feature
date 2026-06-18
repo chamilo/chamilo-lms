@@ -778,7 +778,8 @@ Feature: Special admin settings flows — case 2
     Then I should see "Add event"
     And I fill in "event-title" with "Evenement 4 jours"
     And I wait very long for the page to be loaded
-    When I set primevue datepicker "calendar-id" range from "2026-06-15" to "2026-06-18"
+    When I set primevue datepicker "calendar-start-date" to "2026-06-15"
+    And I set primevue datepicker "calendar-end-date" to "2026-06-18"
     And I wait very long for the page to be loaded
     And I fill in tinymce field "calendar-event-content" with "Evenement 4 jours"
     And I wait very long for the page to be loaded
@@ -792,7 +793,8 @@ Feature: Special admin settings flows — case 2
     Then I should see "Add event"
     And I fill in "event-title" with "Evenement mois avant"
     And I wait very long for the page to be loaded
-    When I set primevue datepicker "calendar-id" range from "2026-05-15" to "2026-06-18"
+    When I set primevue datepicker "calendar-start-date" to "2026-05-15"
+    And I set primevue datepicker "calendar-end-date" to "2026-06-18"
     And I wait very long for the page to be loaded
     And I fill in tinymce field "calendar-event-content" with "Evenement mois avant"
     And I wait very long for the page to be loaded
@@ -806,7 +808,8 @@ Feature: Special admin settings flows — case 2
     Then I should see "Add event"
     And I fill in "event-title" with "Evenement mois apres"
     And I wait very long for the page to be loaded
-    When I set primevue datepicker "calendar-id" range from "2026-06-15" to "2026-07-18"
+    When I set primevue datepicker "calendar-start-date" to "2026-06-15"
+    And I set primevue datepicker "calendar-end-date" to "2026-07-18"
     And I wait very long for the page to be loaded
     And I fill in tinymce field "calendar-event-content" with "Evenement mois apres"
     And I wait very long for the page to be loaded
@@ -820,11 +823,146 @@ Feature: Special admin settings flows — case 2
     Then I should see "Add event"
     And I fill in "event-title" with "Evenement avant et apres"
     And I wait very long for the page to be loaded
-    When I set primevue datepicker "calendar-id" range from "2026-05-15" to "2026-07-18"
+    When I set primevue datepicker "calendar-start-date" to "2026-05-15"
+    And I set primevue datepicker "calendar-end-date" to "2026-07-18"
     And I wait very long for the page to be loaded
     And I fill in tinymce field "calendar-event-content" with "Evenement avant et apres"
     And I wait very long for the page to be loaded
     And I press "Add"
     And I wait very long for the page to be loaded
     Then I should not see an error
+
+    # ---- SOCIAL NETWORK — Home ----
+    When I click the "[aria-label='Social network']" element
+    And I wait very long for the page to be loaded
+    And I click the "a.p-menuitem-link[href='/social']" element
+    And I wait very long for the page to be loaded
+    Then I should see "All Messages"
+    And I should see "Promoted Messages"
+    And I fill in tinymce field "content-editor" with "voici mon poste"
+    And I wait very long for the page to be loaded
+    And I click the "span.mdi-send" element
+    And I wait very long for the page to be loaded
+    Then I should see "voici mon poste"
+    And I should not see an error
+
+    # ---- ADMINISTRATION ----
+    When I click the "[aria-label='Administration']" element
+    And I wait very long for the page to be loaded
+    And I click the "a.p-menuitem-link[href='/admin']" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I wait very long for the page to be loaded
+    And I follow "Course list"
+    And I wait very long for the page to be loaded
+    And I click the "span.mdi-plus" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I wait very long for the page to be loaded
+    And I fill in "title" with "Titre du cours"
+    And I wait very long for the page to be loaded
+    And I click the "em.mdi-plus" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "Titre du cours"
+    And I should not see an error
+
+    # ---- SURVEY DOODLE ----
+    When I click the "[aria-label='Administration']" element
+    And I wait very long for the page to be loaded
+    And I click the "a.p-menuitem-link[href='/admin/course-list']" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I wait very long for the page to be loaded
+    And I follow "Titre du cours"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I wait very long for the page to be loaded
+    And I follow "Surveys"
+    And I wait very long for the page to be loaded
+    And I click the "i.mdi-calendar-multiselect" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I wait very long for the page to be loaded
+    And I fill in "survey_title" with "Test Doodle"
+    And I wait very long for the page to be loaded
+    And I set flatpickr field "start_date" to "2026-06-07"
+    And I wait very long for the page to be loaded
+    And I set flatpickr field "end_date" to "2026-06-14"
+    And I wait very long for the page to be loaded
+    And I set flatpickr field "time_1" to "2026-06-08"
+    And I wait very long for the page to be loaded
+    And I set flatpickr field "time_2" to "2026-06-09"
+    And I wait very long for the page to be loaded
+    And I set flatpickr field "time_3" to "2026-06-11"
+    And I wait very long for the page to be loaded
+    And I click the "em.mdi-plus" element
+    And I wait very long for the page to be loaded
+    Then I should see "Test Doodle"
+    And I should not see an error
+
+    # ---- PUBLIER L'INVITATION DOODLE ----
+    And I zoom out to maximum
+    And I wait very long for the page to be loaded
+    And I click the "i.mdi-email-alert" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I wait very long for the page to be loaded
+    And I click the "#users_rightAll" element
+    And I wait very long for the page to be loaded
+    And I wait very long for the page to be loaded
+    And I fill in "mail_title" with "Invitation Test Doodle"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "mail_text" with "Vous etes invite a repondre a ce sondage."
+    And I wait very long for the page to be loaded
+    And I click the "#publish_form_submit" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- REMPLIR LE DOODLE ----
+    When I go to "/resources/messages"
+    And I wait very long for the page to be loaded
+    Then I should see "Invitation Test Doodle"
+    When I follow "Invitation Test Doodle"
+    And I wait very long for the page to be loaded
+    # When I follow "Click here to answer the survey"
+    # (lien direct dans le mail)
+    When I go to "/main/survey/fillsurvey.php?iid=3&invitationcode=7a85590bfbe3238fc86d4fd214d99b3a&cid=21&course=TITREDUCOURS&sid=0&language=en_US"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+    When I click the "a[href*='invitationcode'] i.mdi-pencil" element
+    And I wait very long for the page to be loaded
+    And I press "Save"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- REMPLIR LE DOODLE — cocher la 1ère case ----
+    When I click the "a[href*='invitationcode'] i.mdi-pencil" element
+    And I wait very long for the page to be loaded
+    And I check "1"
+    And I wait very long for the page to be loaded
+    And I press "Save"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+    Then I should see 1 element matching "i.mdi-check-circle.text-success"
+
+    # ---- RETOUR MESSAGES — cocher la 1ère case non cochée ----
+    When I go to "/resources/messages"
+    And I wait very long for the page to be loaded
+    Then I should see "Invitation Test Doodle"
+    When I follow "Invitation Test Doodle"
+    And I wait very long for the page to be loaded
+    # When I follow "Click here to answer the survey"
+    # (lien direct dans le mail)
+    When I go to "/main/survey/fillsurvey.php?iid=3&invitationcode=7a85590bfbe3238fc86d4fd214d99b3a&cid=21&course=TITREDUCOURS&sid=0&language=en_US"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+    When I click the "a[href*='invitationcode'] i.mdi-pencil" element
+    And I wait very long for the page to be loaded
+    And I check "2"
+    And I wait very long for the page to be loaded
+    And I press "Save"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+    Then I should see 2 elements matching "i.mdi-check-circle.text-success"
 

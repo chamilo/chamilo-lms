@@ -3106,9 +3106,7 @@ class MySpace
      */
     public static function parse_xml_data($file)
     {
-        $crawler = new \Symfony\Component\DomCrawler\Crawler();
-        $crawler->addXmlContent(file_get_contents($file));
-        $crawler = $crawler->filter('Contacts > Contact ');
+        $crawler = Import::xml($file)->filter('Contacts > Contact ');
         $array = [];
         foreach ($crawler as $domElement) {
             $row = [];

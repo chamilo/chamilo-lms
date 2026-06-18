@@ -58,11 +58,19 @@ switch ($action) {
         exit;
         break;
     case 'lock':
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         $category_to_lock = Category::load((int) $_GET['category_id']);
         $category_to_lock[0]->lockAllItems(1);
         $confirmation_message = get_lang('This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).');
         break;
     case 'unlock':
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         if (api_is_platform_admin()) {
             $category_to_lock = Category::load((int) $_GET['category_id']);
             $category_to_lock[0]->lockAllItems(0);
@@ -339,6 +347,10 @@ if (isset($_GET['movelink'])) {
 
 if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $cats = Category::load($_GET['deletecat']);
     if (isset($cats[0])) {
         // Delete all categories,subcategories and results
@@ -356,6 +368,10 @@ if (isset($_GET['deletecat'])) {
 // Parameters for evaluations.
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $locked = (int) $_GET['lockedeval'];
     $type_locked = 1;
     $confirmation_message = get_lang('Evaluation has been locked');
@@ -373,6 +389,10 @@ if (isset($_GET['lockedeval'])) {
 
 if (isset($_GET['deleteeval'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $eval = Evaluation::load($_GET['deleteeval']);
     if (null != $eval[0]) {
         $eval[0]->delete_with_results();
@@ -383,6 +403,10 @@ if (isset($_GET['deleteeval'])) {
 
 if (isset($_GET['deletelink'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $get_delete_link = (int) $_GET['deletelink'];
     //fixing #5229
     if (!empty($get_delete_link)) {
@@ -432,6 +456,10 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
 // Actions on the sortabletable.
 if (isset($_POST['action'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('post')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $number_of_selected_items = count($_POST['id']);
 
     if (0 == $number_of_selected_items) {

@@ -1,6 +1,9 @@
 <template>
   <!-- Special / sticky courses -->
-  <StickyCourses />
+  <StickyCourses
+    :key="stickyCoursesKey"
+    @loaded="onStickyCoursesLoaded"
+  />
 
   <!-- Regular courses -->
   <div class="relative min-h-[300px]">
@@ -47,7 +50,7 @@
     </div>
 
     <EmptyState
-      v-else-if="!loading && isInitialLoaded && courses.length === 0"
+      v-else-if="showEmptyCoursesState"
       :detail="t('Go to Explore to find a topic of interest, or wait for someone to subscribe you')"
       :summary="t('You don\'t have any course yet.')"
       icon="courses"
@@ -76,6 +79,8 @@ const allCourses = ref([])
 const courses = ref([])
 const isLoadingMore = ref(false)
 const lastCourseRef = ref(null)
+const stickyCoursesCount = ref(0)
+const stickyCoursesLoaded = ref(false)
 
 const observer = ref(null)
 let fetchAbort = null
@@ -86,6 +91,30 @@ const serverPage = ref(1)
 const serverHasMore = ref(true)
 const serverFetching = ref(false)
 const uniqueKeys = new Set()
+
+const stickyCoursesKey = computed(() => securityStore.user?.["@id"] || "anonymous")
+const hasStickyCourses = computed(() => stickyCoursesCount.value > 0)
+const showEmptyCoursesState = computed(() => {
+  return (
+    !loading.value &&
+    isInitialLoaded.value &&
+    courses.value.length === 0 &&
+    stickyCoursesLoaded.value &&
+    !hasStickyCourses.value
+  )
+})
+
+function resetStickyCoursesState() {
+  stickyCoursesCount.value = 0
+  stickyCoursesLoaded.value = false
+}
+
+function onStickyCoursesLoaded(count) {
+  const numericCount = Number(count)
+
+  stickyCoursesCount.value = Number.isFinite(numericCount) && numericCount > 0 ? numericCount : 0
+  stickyCoursesLoaded.value = true
+}
 
 const toBool = (v) => {
   if (v === true) return true
@@ -331,6 +360,7 @@ watch(
     serverPage.value = 1
     serverHasMore.value = true
     isInitialLoaded.value = false
+    resetStickyCoursesState()
     loadMyCourses()
   },
 )

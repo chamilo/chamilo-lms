@@ -37,6 +37,11 @@ class DataForm extends FormValidator
         $this->form_type = $form_type;
         if (self::TYPE_IMPORT == $this->form_type) {
             $this->build_import_form();
+            // Only the import is state-changing (overwrites scores). The export
+            // branches call validate() twice on the same request, which is
+            // incompatible with protect() (validate() clears the token), so they
+            // are intentionally left without it.
+            $this->protect();
         } elseif (self::TYPE_EXPORT == $this->form_type) {
             if (0 == $locked_status) {
                 $this->build_export_form_option(false);

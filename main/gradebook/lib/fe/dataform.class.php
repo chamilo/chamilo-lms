@@ -34,6 +34,11 @@ class DataForm extends FormValidator
         $this->form_type = $form_type;
         if ($this->form_type == self::TYPE_IMPORT) {
             $this->build_import_form();
+            // Only the import is state-changing (overwrites scores). The export
+            // branches call validate() twice on the same request, which is
+            // incompatible with protect() (validate() clears the token), so they
+            // are intentionally left without CSRF protection here.
+            $this->protect();
         } elseif ($this->form_type == self::TYPE_EXPORT) {
             if ($locked_status == 0) {
                 $this->build_export_form_option(false);

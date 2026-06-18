@@ -1,6 +1,7 @@
 #!/bin/bash
 # =============================================================================
-# watch_and_run.sh — Watch .feature files and re-run Behat on change.
+# watch_and_run.sh — Watch .feature files and re-run Behat on changes to 
+# featureContext.php and any feature in the features/ directory.
 # Requires: inotifywait (sudo apt install inotify-tools)
 #
 # Usage:

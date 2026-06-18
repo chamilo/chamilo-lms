@@ -161,7 +161,7 @@ $errorMsg = $firstLetterCourse = '';
 $UserList = [];
 
 $msg = '';
-if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
+if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent']) && Security::check_token('post')) {
     $courses_list = isset($_POST['CoursesList']) ? $_POST['CoursesList'] : [];
     $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
     if ($affected_rows) {
@@ -225,6 +225,7 @@ $result = Database::query($sql);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1" />
+<?php echo Security::get_HTML_token(); ?>
 <?php
 if (!empty($msg)) {
     echo Display::return_message($msg, 'normal'); //main API

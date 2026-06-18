@@ -65,6 +65,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private const PAGE_BREAK = 31;
     private const ORAL_EXPRESSION = 13;
     private const UPLOAD_ANSWER = 23;
+    private const ANSWER_IN_OFFICE_DOC = 30;
     private const ANNOTATION = 20;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
     private const UNIQUE_ANSWER_NO_OPTION = 10;
@@ -110,6 +111,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         self::DRAGGABLE => 'Sequence ordering',
         self::ORAL_EXPRESSION => 'Oral expression',
         self::UPLOAD_ANSWER => 'Upload answer',
+        self::ANSWER_IN_OFFICE_DOC => 'Answer in Office document',
         self::ANNOTATION => 'Annotation',
         self::MEDIA_QUESTION => 'Media question',
         self::READING_COMPREHENSION => 'Reading comprehension',
@@ -1024,6 +1026,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             self::FREE_ANSWER,
             self::ORAL_EXPRESSION,
             self::UPLOAD_ANSWER,
+            self::ANSWER_IN_OFFICE_DOC,
             self::ANNOTATION => $this->scoreManualAnswer($rows),
             default => 0.0,
         };
@@ -2151,7 +2154,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
      */
     private function requiresManualCorrection(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::UPLOAD_ANSWER, self::ANNOTATION], true);
+        return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC, self::ANNOTATION], true);
     }
 
     private function getSavedAnswerIds(array $rows): array

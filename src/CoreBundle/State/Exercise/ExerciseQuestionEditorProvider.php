@@ -61,6 +61,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private const READING_COMPREHENSION = 21;
     private const MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY = 22;
     private const UPLOAD_ANSWER = 23;
+    private const ANSWER_IN_OFFICE_DOC = 30;
     private const PAGE_BREAK = 31;
     private const DRAGGABLE = 18;
     private const MATCHING_DRAGGABLE = 19;
@@ -209,7 +210,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             $response->matchingOrientation = 'h';
             $response->answers = [];
         }
-        if (\in_array($type, [self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER], true)) {
+        if (\in_array($type, [self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC], true)) {
             $response->score = 10.0;
             $response->globalScore = 0.0;
             $response->answers = [];
@@ -274,6 +275,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->parentMediaId = (int) ($question->getParentMediaId() ?? 0);
         $response->answers = $this->getAnswers($question);
         $this->addAnnotationData($response, $question, $course, $session);
+        $this->addOnlyofficeData($response, $quiz, $question, $course, $session);
         $this->addHotspotData($response, $quiz, $question, $course, $session);
         if (!$this->usesHotspot($type) && $this->isAdaptiveScenarioQuestionType($type) && $this->isHotspotDelineationQuestionAllowed($quiz)) {
             $this->addHotspotScenarioOptions($response, $quiz, $question);
@@ -362,6 +364,16 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
     private function assertQuestionTypeAllowedByFeedback(?CQuiz $quiz, int $type): void
     {
+        if (self::ANSWER_IN_OFFICE_DOC === $type) {
+            if (!$quiz instanceof CQuiz) {
+                throw new BadRequestHttpException('OnlyOffice questions must be linked to an exercise.');
+            }
+
+            if (!$this->isOnlyofficePluginEnabled()) {
+                throw new BadRequestHttpException('OnlyOffice plugin is not enabled.');
+            }
+        }
+
         if (!$quiz instanceof CQuiz) {
             return;
         }
@@ -418,6 +430,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         return $course;
     }
+
 
     private function getSession(Request $request): ?Session
     {
@@ -847,6 +860,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             self::READING_COMPREHENSION,
             self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
             self::UPLOAD_ANSWER,
+            self::ANSWER_IN_OFFICE_DOC,
             self::DRAGGABLE,
             self::MATCHING_DRAGGABLE,
             self::MATCHING_COMBINATION,
@@ -882,6 +896,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             self::READING_COMPREHENSION => 'Reading comprehension',
             self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => 'Multiple answer true/false with degree of certainty',
             self::UPLOAD_ANSWER => 'Upload answer',
+            self::ANSWER_IN_OFFICE_DOC => 'Answer in Office document',
             self::DRAGGABLE => 'Draggable',
             self::MATCHING_DRAGGABLE => 'Matching draggable',
             self::MATCHING_COMBINATION => 'Matching combination',
@@ -1222,6 +1237,62 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private function usesHotspot(int $type): bool
     {
         return \in_array($type, [self::HOT_SPOT, self::HOT_SPOT_DELINEATION, self::HOT_SPOT_COMBINATION], true);
+    }
+
+
+    private function addOnlyofficeData(
+        ExerciseQuestionEditor $response,
+        CQuiz $quiz,
+        CQuizQuestion $question,
+        Course $course,
+        ?Session $session,
+    ): void {
+        if (self::ANSWER_IN_OFFICE_DOC !== (int) $question->getType()) {
+            return;
+        }
+
+        $resourceNode = $question->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $resourceFile = $resourceNode->getResourceFiles()->first();
+        if (!$resourceFile instanceof ResourceFile) {
+            return;
+        }
+
+        $response->onlyofficeTemplateName = (string) ($resourceFile->getOriginalName() ?: $question->getExtra() ?: $resourceNode->getTitle());
+        $response->onlyofficeTemplateUrl = $this->appendCourseContextToUrl(
+            $this->questionRepository->getHotSpotImageUrl($question),
+            $course,
+            $session
+        );
+        $response->answers = [];
+    }
+
+    private function isOnlyofficePluginEnabled(): bool
+    {
+        try {
+            if (!\class_exists('OnlyofficePlugin')) {
+                $pluginPath = \api_get_path(\SYS_PLUGIN_PATH).'Onlyoffice/lib/onlyofficePlugin.php';
+                if (is_file($pluginPath)) {
+                    require_once $pluginPath;
+                }
+            }
+
+            if (!\class_exists('OnlyofficePlugin')) {
+                return false;
+            }
+
+            $plugin = \OnlyofficePlugin::create();
+            if (method_exists($plugin, 'isEnabledForCurrentAccessUrl')) {
+                return (bool) $plugin->isEnabledForCurrentAccessUrl();
+            }
+
+            return 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     private function addAnnotationData(ExerciseQuestionEditor $response, CQuizQuestion $question, Course $course, ?Session $session): void

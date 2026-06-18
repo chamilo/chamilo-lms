@@ -65,6 +65,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private const FREE_ANSWER_TYPES = [5];
     private const ORAL_EXPRESSION_TYPES = [13];
     private const UPLOAD_ANSWER_TYPES = [23];
+    private const ONLYOFFICE_TYPES = [30];
     private const ANNOTATION_TYPES = [20];
     private const HOTSPOT_TYPES = [6, 8, 26];
     private const PAGE_BREAK = 31;
@@ -502,6 +503,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             || \in_array($type, self::FREE_ANSWER_TYPES, true)
             || \in_array($type, self::ORAL_EXPRESSION_TYPES, true)
             || \in_array($type, self::UPLOAD_ANSWER_TYPES, true)
+            || \in_array($type, self::ONLYOFFICE_TYPES, true)
             || \in_array($type, self::ANNOTATION_TYPES, true)
             || \in_array($type, self::HOTSPOT_TYPES, true);
     }

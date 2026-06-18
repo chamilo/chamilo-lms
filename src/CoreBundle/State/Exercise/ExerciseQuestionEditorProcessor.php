@@ -63,6 +63,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     private const READING_COMPREHENSION = 21;
     private const MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY = 22;
     private const UPLOAD_ANSWER = 23;
+    private const ANSWER_IN_OFFICE_DOC = 30;
     private const PAGE_BREAK = 31;
     private const DRAGGABLE = 18;
     private const MATCHING_DRAGGABLE = 19;
@@ -119,6 +120,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $this->validatePayload($data);
         $this->validateAnnotationImageOnCreate($data, 0 >= $questionId);
         $this->validateHotspotImageOnCreate($data, 0 >= $questionId);
+        $this->validateOnlyofficeTemplateOnCreate($data, 0 >= $questionId);
 
         if (0 < $questionId) {
             $question = $quiz instanceof CQuiz
@@ -175,6 +177,16 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function assertQuestionTypeAllowedByFeedback(?CQuiz $quiz, int $type): void
     {
+        if (self::ANSWER_IN_OFFICE_DOC === $type) {
+            if (!$quiz instanceof CQuiz) {
+                throw new BadRequestHttpException('OnlyOffice questions must be linked to an exercise.');
+            }
+
+            if (!$this->isOnlyofficePluginEnabled()) {
+                throw new BadRequestHttpException('OnlyOffice plugin is not enabled.');
+            }
+        }
+
         if (!$quiz instanceof CQuiz) {
             return;
         }
@@ -209,6 +221,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $this->questionRepository->create($question);
         $this->addAnnotationImageOnCreate($question, $data);
         $this->addHotspotImageOnCreate($question, $data);
+        $this->addOnlyofficeTemplateOnSave($quiz, $question, $data, $course);
         $this->replaceAnswers($question, $data);
         $this->updateQuestionCategory($question, $data, $course, $session);
 
@@ -257,6 +270,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     {
         $question = $this->getQuestionFromExercise($quiz, $questionId);
         $this->applyQuestionFields($quiz, $question, $data, (int) $question->getPosition());
+        $this->addOnlyofficeTemplateOnSave($quiz, $question, $data, $course);
         $this->replaceAnswers($question, $data);
         $this->updateQuestionCategory($question, $data, $course, $session);
         $relation = $this->getQuestionRelation($quiz, $question);
@@ -298,7 +312,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         $type = (int) $data->type;
-        if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER], true) || $this->isStructuralQuestionType($type)) {
+        if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC], true) || $this->isStructuralQuestionType($type)) {
             return;
         }
 
@@ -374,7 +388,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             return;
         }
 
-        if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER], true)) {
+        if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC], true)) {
             if (0 >= (float) $data->score) {
                 throw new BadRequestHttpException('Required field.');
             }
@@ -513,6 +527,146 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         );
     }
 
+
+    private function validateOnlyofficeTemplateOnCreate(ExerciseQuestionEditor $data, bool $isCreate): void
+    {
+        if (self::ANSWER_IN_OFFICE_DOC !== (int) $data->type) {
+            return;
+        }
+
+        if (!$this->isOnlyofficePluginEnabled()) {
+            throw new BadRequestHttpException('OnlyOffice plugin is not enabled.');
+        }
+
+        if (!$isCreate && '' === trim($data->onlyofficeTemplateData)) {
+            return;
+        }
+
+        if ('' === trim($data->onlyofficeTemplateData)) {
+            throw new BadRequestHttpException('Please select an Office document.');
+        }
+
+        $this->decodeOnlyofficeTemplate($data);
+    }
+
+    private function addOnlyofficeTemplateOnSave(CQuiz $quiz, CQuizQuestion $question, ExerciseQuestionEditor $data, Course $course): void
+    {
+        if (self::ANSWER_IN_OFFICE_DOC !== (int) $data->type) {
+            return;
+        }
+
+        if ('' === trim($data->onlyofficeTemplateData)) {
+            if (!$this->questionHasStoredOnlyofficeTemplate($question)) {
+                throw new BadRequestHttpException('Please select an Office document.');
+            }
+
+            return;
+        }
+
+        $template = $this->decodeOnlyofficeTemplate($data);
+        $questionId = (int) ($question->getIid() ?? 0);
+        if (0 >= $questionId) {
+            throw new BadRequestHttpException('A valid exercise question is required to store the Office document.');
+        }
+
+        $fileName = 'office_'.$questionId.'.'.$template['extension'];
+        $this->questionRepository->addFileFromString(
+            $question,
+            $fileName,
+            $template['mimeType'],
+            $template['content'],
+            true
+        );
+
+        $question->setExtra($fileName);
+    }
+
+    private function questionHasStoredOnlyofficeTemplate(CQuizQuestion $question): bool
+    {
+        $resourceNode = $question->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+            if ($resourceFile instanceof ResourceFile) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array{fileName: string, mimeType: string, extension: string, content: string}
+     */
+    private function decodeOnlyofficeTemplate(ExerciseQuestionEditor $data): array
+    {
+        $rawData = trim($data->onlyofficeTemplateData);
+        $mimeType = strtolower(trim($data->onlyofficeTemplateMimeType));
+        $encodedContent = $rawData;
+
+        if (preg_match('/^data:([^;]+);base64,(.+)$/i', $rawData, $matches)) {
+            $mimeType = strtolower($matches[1]);
+            $encodedContent = $matches[2];
+        }
+
+        $fileName = basename(trim($data->onlyofficeTemplateName));
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+        if (!\in_array($extension, ['doc', 'docx', 'xls', 'xlsx'], true)) {
+            throw new BadRequestHttpException('Only DOC, DOCX, XLS or XLSX documents are allowed.');
+        }
+
+        $allowedMimeTypes = [
+            '',
+            'application/octet-stream',
+            'application/msword',
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ];
+        if (!\in_array($mimeType, $allowedMimeTypes, true)) {
+            throw new BadRequestHttpException('Only DOC, DOCX, XLS or XLSX documents are allowed.');
+        }
+
+        $content = base64_decode($encodedContent, true);
+        if (false === $content || '' === $content) {
+            throw new BadRequestHttpException('Only DOC, DOCX, XLS or XLSX documents are allowed.');
+        }
+
+        return [
+            'fileName' => $fileName,
+            'mimeType' => $mimeType,
+            'extension' => $extension,
+            'content' => $content,
+        ];
+    }
+
+    private function isOnlyofficePluginEnabled(): bool
+    {
+        try {
+            if (!\class_exists('OnlyofficePlugin')) {
+                $pluginPath = \api_get_path(\SYS_PLUGIN_PATH).'Onlyoffice/lib/onlyofficePlugin.php';
+                if (is_file($pluginPath)) {
+                    require_once $pluginPath;
+                }
+            }
+
+            if (!\class_exists('OnlyofficePlugin')) {
+                return false;
+            }
+
+            $plugin = \OnlyofficePlugin::create();
+            if (method_exists($plugin, 'isEnabledForCurrentAccessUrl')) {
+                return (bool) $plugin->isEnabledForCurrentAccessUrl();
+            }
+
+            return 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     /**
      * @return array{fileName: string, mimeType: string, content: string}
      */
@@ -612,6 +766,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         return $course;
     }
+
 
     private function getSession(Request $request): ?Session
     {
@@ -1075,7 +1230,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             return $score;
         }
 
-        if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER, self::CALCULATED_ANSWER], true)) {
+        if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC, self::CALCULATED_ANSWER], true)) {
             return max(0.0, (float) $data->score);
         }
 
@@ -1189,6 +1344,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             self::READING_COMPREHENSION,
             self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
             self::UPLOAD_ANSWER,
+            self::ANSWER_IN_OFFICE_DOC,
             self::DRAGGABLE,
             self::MATCHING_DRAGGABLE,
             self::MATCHING_COMBINATION,
@@ -1224,6 +1380,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             self::READING_COMPREHENSION => 'Reading comprehension',
             self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => 'Multiple answer true/false with degree of certainty',
             self::UPLOAD_ANSWER => 'Upload answer',
+            self::ANSWER_IN_OFFICE_DOC => 'Answer in Office document',
             self::DRAGGABLE => 'Draggable',
             self::MATCHING_DRAGGABLE => 'Matching draggable',
             self::MATCHING_COMBINATION => 'Matching combination',

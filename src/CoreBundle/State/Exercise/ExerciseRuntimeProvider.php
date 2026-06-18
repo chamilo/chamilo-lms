@@ -69,6 +69,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     private const FREE_ANSWER_TYPES = [5];
     private const ORAL_EXPRESSION_TYPES = [13];
     private const UPLOAD_ANSWER_TYPES = [23];
+    private const ONLYOFFICE_TYPES = [30];
+    private const ANSWER_IN_OFFICE_DOC = 30;
     private const ANNOTATION_TYPES = [20];
     private const HOTSPOT_TYPES = [6, 8, 26];
     private const MEDIA_QUESTION = 15;
@@ -186,6 +188,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             || \in_array($type, self::FREE_ANSWER_TYPES, true)
             || \in_array($type, self::ORAL_EXPRESSION_TYPES, true)
             || \in_array($type, self::UPLOAD_ANSWER_TYPES, true)
+            || \in_array($type, self::ONLYOFFICE_TYPES, true)
             || \in_array($type, self::ANNOTATION_TYPES, true)
             || \in_array($type, self::HOTSPOT_TYPES, true)
             || \in_array($type, self::STRUCTURAL_CONTENT_TYPES, true);
@@ -416,6 +419,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
                 'mimeType' => $mimeType,
                 'url' => $this->getAttemptFileDownloadUrl($attemptRow, $resourceNode, $course, $session),
                 'inlineUrl' => $this->getAttemptFileDownloadUrl($attemptRow, $resourceNode, $course, $session, true),
+                'onlyofficeEditorUrl' => $this->getOnlyofficeEditorUrl($attemptRow, $resourceNode, $course, $session),
             ];
         }
 
@@ -464,6 +468,33 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             (int) $resourceNode->getId(),
             http_build_query($query)
         );
+    }
+
+
+    private function getOnlyofficeEditorUrl(TrackEAttempt $attemptRow, ResourceNode $resourceNode, Course $course, ?Session $session): string
+    {
+        $attempt = $attemptRow->getTrackEExercise();
+        $quiz = $attempt->getQuiz();
+        $resourceNodeId = (int) ($resourceNode->getId() ?? 0);
+        if (null === $quiz || null === $quiz->getIid() || 0 >= $resourceNodeId) {
+            return '';
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        $query = [
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => (int) $quiz->getIid(),
+            'exeId' => (int) $attempt->getExeId(),
+            'questionId' => (int) $attemptRow->getQuestionId(),
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'origin' => 'exercise',
+            'embedded' => 1,
+            'forceEdit' => 'true',
+        ];
+
+        return '/plugin/Onlyoffice/editor.php?'.http_build_query($query);
     }
 
     /**
@@ -1120,6 +1151,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'calculated' => $this->getCalculatedRuntime($question, $attempt),
             'annotation' => $this->getImageRuntime($question, $course, $session, [20]),
             'hotspot' => $this->getHotspotRuntime($question, $course, $session, $canManage),
+            'onlyoffice' => $this->getOnlyofficeRuntime($question, $course, $session, $attempt),
             'reading' => $this->getReadingRuntime($question),
             'content' => $this->getContentRuntime($question),
             'isContent' => \in_array($type, self::STRUCTURAL_CONTENT_TYPES, true),
@@ -1896,6 +1928,69 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     /**
      * @return array<string, mixed>|null
      */
+    private function getOnlyofficeRuntime(CQuizQuestion $question, Course $course, ?Session $session, ?TrackEExercise $attempt): ?array
+    {
+        if (self::ANSWER_IN_OFFICE_DOC !== (int) $question->getType()) {
+            return null;
+        }
+
+        $templateName = (string) ($question->getExtra() ?: '');
+        $templateUrl = '';
+        $resourceNode = $question->getResourceNode();
+        if (null !== $resourceNode) {
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+            if ($resourceFile instanceof ResourceFile) {
+                $templateName = (string) ($resourceFile->getOriginalName() ?: $templateName ?: $resourceNode->getTitle());
+                $templateUrl = $this->appendCourseContextToUrl($this->questionRepository->getHotSpotImageUrl($question), $course, $session);
+            }
+        }
+
+        $editorUrl = '';
+        if ($attempt instanceof TrackEExercise) {
+            $attemptRow = $this->getOnlyofficeAttemptRow((int) $attempt->getExeId(), (int) $question->getIid());
+            if ($attemptRow instanceof TrackEAttempt) {
+                foreach ($attemptRow->getAttemptFiles() as $attemptFile) {
+                    $attemptResourceNode = $attemptFile->getResourceNode();
+                    if ($attemptResourceNode instanceof ResourceNode) {
+                        $editorUrl = $this->getOnlyofficeEditorUrl($attemptRow, $attemptResourceNode, $course, $session);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return [
+            'templateName' => $templateName,
+            'templateUrl' => $templateUrl,
+            'editorUrl' => $editorUrl,
+            'manualCorrection' => true,
+        ];
+    }
+
+    private function getOnlyofficeAttemptRow(int $attemptId, int $questionId): ?TrackEAttempt
+    {
+        $row = $this->entityManager->createQueryBuilder()
+            ->select('saved')
+            ->addSelect('attemptFile', 'resourceNode', 'resourceFile')
+            ->from(TrackEAttempt::class, 'saved')
+            ->leftJoin('saved.attemptFiles', 'attemptFile')
+            ->leftJoin('attemptFile.resourceNode', 'resourceNode')
+            ->leftJoin('resourceNode.resourceFiles', 'resourceFile')
+            ->andWhere('IDENTITY(saved.trackExercise) = :attemptId')
+            ->andWhere('saved.questionId = :questionId')
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->setParameter('questionId', $questionId, Types::INTEGER)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $row instanceof TrackEAttempt ? $row : null;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getReadingRuntime(CQuizQuestion $question): ?array
     {
         if (21 !== (int) $question->getType()) {
@@ -2116,6 +2211,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             21 => 'Reading comprehension',
             22 => 'Multiple answer true/false with degree of certainty',
             23 => 'Upload answer',
+            30 => 'Answer in Office document',
             24 => 'Matching combination',
             25 => 'Matching draggable combination',
             26 => 'Hotspot combination',

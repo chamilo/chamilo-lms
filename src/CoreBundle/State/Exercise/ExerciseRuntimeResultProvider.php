@@ -49,6 +49,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 {
     private const STATUS_COMPLETED = 'completed';
     private const ANNOTATION = 20;
+    private const ANSWER_IN_OFFICE_DOC = 30;
     private const HOTSPOT_DELINEATION = 8;
     private const DRAGGABLE = 18;
     private const VISIBILITY_PUBLISHED = 2;
@@ -1163,6 +1164,10 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             return $this->normalizeUploadAnswer($rows, $visibility);
         }
 
+        if (self::ANSWER_IN_OFFICE_DOC === $type) {
+            return $this->normalizeOnlyofficeAnswer($rows, $visibility);
+        }
+
         if (self::ANNOTATION === $type) {
             return $this->normalizeAnnotationAnswer($question, $rows, $visibility);
         }
@@ -1807,6 +1812,35 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         return [
             'kind' => 'upload_answer',
+            'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row) : [],
+            'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'marks' => (float) $row->getMarks(),
+            'showStudentAnswers' => $showStudentAnswers,
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeOnlyofficeAnswer(array $rows, array $visibility): array
+    {
+        $row = $rows[0] ?? null;
+        if (!$row instanceof TrackEAttempt) {
+            return [
+                'kind' => 'onlyoffice',
+                'files' => [],
+                'teacherComment' => null,
+                'marks' => 0.0,
+            ];
+        }
+
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+
+        return [
+            'kind' => 'onlyoffice',
             'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row) : [],
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'marks' => (float) $row->getMarks(),

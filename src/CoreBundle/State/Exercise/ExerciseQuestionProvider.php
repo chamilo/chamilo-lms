@@ -785,6 +785,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
             ['type' => 21, 'label' => 'Reading comprehension', 'icon' => 'reading_comprehension.png'],
             ['type' => 22, 'label' => 'Multiple answer true/false with degree of certainty', 'icon' => 'mccert.png'],
             ['type' => 23, 'label' => 'Upload Answer', 'icon' => 'file_upload_question.png'],
+            ['type' => 30, 'label' => 'Answer in Office document', 'icon' => 'file_upload_question.png'],
             ['type' => 24, 'label' => 'Matching combination', 'icon' => 'matching_co.png'],
             ['type' => 25, 'label' => 'Matching draggable combination', 'icon' => 'matchingdrag_co.png'],
             ['type' => 26, 'label' => 'Hotspot combination', 'icon' => 'hotspot_co.png'],
@@ -800,6 +801,10 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     {
         if (8 === $type) {
             return 1 === $feedbackType && $this->isSettingEnabled('enable_quiz_scenario');
+        }
+
+        if (30 === $type) {
+            return 1 !== $feedbackType && $this->isOnlyofficePluginEnabled();
         }
 
         return true;
@@ -822,7 +827,33 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
 
     private function isVueQuestionEditorType(int $type): bool
     {
-        return \in_array($type, [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31], true);
+        return \in_array($type, [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], true);
+    }
+
+
+    private function isOnlyofficePluginEnabled(): bool
+    {
+        try {
+            if (!\class_exists('OnlyofficePlugin')) {
+                $pluginPath = api_get_path(SYS_PLUGIN_PATH).'Onlyoffice/lib/onlyofficePlugin.php';
+                if (is_file($pluginPath)) {
+                    require_once $pluginPath;
+                }
+            }
+
+            if (!\class_exists('OnlyofficePlugin')) {
+                return false;
+            }
+
+            $plugin = \OnlyofficePlugin::create();
+            if (method_exists($plugin, 'isEnabledForCurrentAccessUrl')) {
+                return (bool) $plugin->isEnabledForCurrentAccessUrl();
+            }
+
+            return 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     private function getQuestionTypeLabel(int $type): string

@@ -188,7 +188,7 @@
       </section>
 
       <section
-        v-if="isOpenQuestion || isOralExpressionQuestion || isUploadAnswerQuestion"
+        v-if="isOpenQuestion || isOralExpressionQuestion || isUploadAnswerQuestion || isOnlyofficeQuestion"
         class="grid gap-4 rounded-lg border border-gray-20 bg-white p-4 md:grid-cols-3"
       >
         <BaseInputNumber
@@ -202,6 +202,46 @@
         <p class="self-end pb-2 text-sm text-gray-70 md:col-span-2">
           {{ manualCorrectionHelpText }}
         </p>
+      </section>
+
+      <section
+        v-if="isOnlyofficeQuestion"
+        class="space-y-4 rounded-lg border border-gray-20 bg-white p-4 shadow-sm"
+      >
+        <div class="space-y-1">
+          <h2 class="text-xl font-semibold text-gray-90">{{ t("Office document") }}</h2>
+          <p class="text-sm text-gray-70">
+            {{ t("Upload the Office document template that learners will edit with OnlyOffice.") }}
+          </p>
+        </div>
+
+        <BaseFileUpload
+          accept=".doc,.docx,.xls,.xlsx,application/msword,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          :label="form.onlyofficeTemplateName ? t('Replace Office document') : t('Office document')"
+          size="small"
+          @file-selected="selectOnlyofficeTemplate"
+        />
+
+        <div
+          v-if="form.onlyofficeTemplateName"
+          class="rounded-lg border border-gray-20 bg-gray-10 px-4 py-3 text-sm text-gray-80"
+        >
+          <p class="font-semibold">{{ t("Current Office document") }}</p>
+          <a
+            v-if="form.onlyofficeTemplateUrl"
+            class="text-primary hover:underline"
+            :href="form.onlyofficeTemplateUrl"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {{ form.onlyofficeTemplateName }}
+          </a>
+          <span v-else>{{ form.onlyofficeTemplateName }}</span>
+        </div>
+
+        <div class="rounded-lg border border-yellow-100 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+          {{ t("This question is corrected manually after the learner submits the edited document.") }}
+        </div>
       </section>
 
       <section
@@ -1693,6 +1733,7 @@ const HOT_SPOT_COMBINATION = 26
 const FILL_IN_BLANKS_COMBINATION = 27
 const MULTIPLE_ANSWER_DROPDOWN_COMBINATION = 28
 const MULTIPLE_ANSWER_DROPDOWN = 29
+const ANSWER_IN_OFFICE_DOC = 30
 const PAGE_BREAK = 31
 const UNKNOWN_ANSWER_POSITION = 666
 
@@ -1854,6 +1895,10 @@ const form = reactive({
   hotspotScenarioSuccessUrl: "",
   hotspotScenarioFailureType: "",
   hotspotScenarioFailureUrl: "",
+  onlyofficeTemplateUrl: "",
+  onlyofficeTemplateName: "",
+  onlyofficeTemplateData: "",
+  onlyofficeTemplateMimeType: "",
   score: 1,
   globalScore: 0,
   correctScore: 1,
@@ -1892,6 +1937,7 @@ const isCalculatedAnswerQuestion = computed(() => CALCULATED_ANSWER === Number(f
 const isOpenQuestion = computed(() => FREE_ANSWER === Number(form.type))
 const isOralExpressionQuestion = computed(() => ORAL_EXPRESSION === Number(form.type))
 const isUploadAnswerQuestion = computed(() => UPLOAD_ANSWER === Number(form.type))
+const isOnlyofficeQuestion = computed(() => ANSWER_IN_OFFICE_DOC === Number(form.type))
 const isMediaQuestion = computed(() => MEDIA_QUESTION === Number(form.type))
 const isReadingComprehensionQuestion = computed(() => READING_COMPREHENSION === Number(form.type))
 const isPageBreakQuestion = computed(() => PAGE_BREAK === Number(form.type))
@@ -1904,7 +1950,7 @@ const isDropdownCombinationQuestion = computed(() => MULTIPLE_ANSWER_DROPDOWN_CO
 const isMatchingQuestion = computed(() => [MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION].includes(Number(form.type)))
 const isMatchingCombinationQuestion = computed(() => [MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION].includes(Number(form.type)))
 const isDraggableOrderingQuestion = computed(() => DRAGGABLE === Number(form.type))
-const hasAnswerOptions = computed(() => !isOpenQuestion.value && !isOralExpressionQuestion.value && !isAnnotationQuestion.value && !isHotspotQuestion.value && !isUploadAnswerQuestion.value && !isCalculatedAnswerQuestion.value && !isStructuralQuestion.value && !isFillBlanksQuestion.value && !isDropdownQuestion.value && !isMatchingQuestion.value && !isDraggableOrderingQuestion.value)
+const hasAnswerOptions = computed(() => !isOpenQuestion.value && !isOralExpressionQuestion.value && !isAnnotationQuestion.value && !isHotspotQuestion.value && !isUploadAnswerQuestion.value && !isOnlyofficeQuestion.value && !isCalculatedAnswerQuestion.value && !isStructuralQuestion.value && !isFillBlanksQuestion.value && !isDropdownQuestion.value && !isMatchingQuestion.value && !isDraggableOrderingQuestion.value)
 const isGlobalMultipleAnswer = computed(() => GLOBAL_MULTIPLE_ANSWER === Number(form.type))
 const isDegreeCertaintyQuestion = computed(() => MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === Number(form.type))
 const isTrueFalseQuestion = computed(() => [MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY].includes(Number(form.type)))
@@ -1960,6 +2006,10 @@ const summaryText = computed(() => {
   return formatTranslatedText("{0} questions, for a total score (all questions) of {1}.", [questionCount.value, totalScore.value])
 })
 const manualCorrectionHelpText = computed(() => {
+  if (isOnlyofficeQuestion.value) {
+    return t("This Office document question has no answer options. Its score is assigned during correction/results review.")
+  }
+
   if (isUploadAnswerQuestion.value) {
     return t("This upload question has no answer options. Its score is assigned during correction/results review.")
   }
@@ -2138,6 +2188,10 @@ function getTypeLabel(type) {
 
   if (UPLOAD_ANSWER === type) {
     return "Upload answer"
+  }
+
+  if (ANSWER_IN_OFFICE_DOC === type) {
+    return "Answer in Office document"
   }
 
   if (DRAGGABLE === type) {
@@ -2425,6 +2479,10 @@ function fillForm(data) {
   form.hotspotImageData = ""
   form.hotspotImageName = data.hotspotImageName || ""
   form.hotspotImageMimeType = ""
+  form.onlyofficeTemplateUrl = data.onlyofficeTemplateUrl || ""
+  form.onlyofficeTemplateName = data.onlyofficeTemplateName || ""
+  form.onlyofficeTemplateData = ""
+  form.onlyofficeTemplateMimeType = ""
   form.hotspotItems = normalizeHotspotItems(data.hotspotItems || [])
   form.hotspotScenarioOptions = Array.isArray(data.hotspotScenarioOptions) ? normalizeScenarioOptions(data.hotspotScenarioOptions) : []
   form.hotspotScenarioSuccessType = data.hotspotScenarioSuccessType || ""
@@ -2963,8 +3021,69 @@ function selectHotspotItem(index) {
   hotspotPolygonPoints.value = []
 }
 
+function isAllowedOnlyofficeTemplate(file) {
+  const extension = String(file.name || "").split(".").pop().toLowerCase()
+  const allowedExtensions = ["doc", "docx", "xls", "xlsx"]
+  const allowedMimeTypes = [
+    "",
+    "application/octet-stream",
+    "application/msword",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ]
+
+  return allowedExtensions.includes(extension) && allowedMimeTypes.includes(String(file.type || "").toLowerCase())
+}
+
+function getOnlyofficeMimeTypeFromExtension(fileName) {
+  const extension = String(fileName || "").split(".").pop().toLowerCase()
+
+  if ("doc" === extension) {
+    return "application/msword"
+  }
+
+  if ("xls" === extension) {
+    return "application/vnd.ms-excel"
+  }
+
+  if ("xlsx" === extension) {
+    return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  }
+
+  return "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+}
+
 function selectHotspotImage(file) {
   selectQuestionImage(file, "hotspot")
+}
+
+function selectOnlyofficeTemplate(file) {
+  if (!file) {
+    return
+  }
+
+  if (!isAllowedOnlyofficeTemplate(file)) {
+    errorMessage.value = t("Only DOC, DOCX, XLS or XLSX documents are allowed.")
+    form.onlyofficeTemplateData = ""
+    form.onlyofficeTemplateName = ""
+    form.onlyofficeTemplateMimeType = ""
+    form.onlyofficeTemplateUrl = ""
+    return
+  }
+
+  const reader = new FileReader()
+  reader.onload = () => {
+    form.onlyofficeTemplateData = String(reader.result || "")
+    form.onlyofficeTemplateName = file.name || "office_document"
+    form.onlyofficeTemplateUrl = ""
+    form.onlyofficeTemplateMimeType = file.type || getOnlyofficeMimeTypeFromExtension(file.name)
+    errorMessage.value = ""
+  }
+  reader.onerror = () => {
+    errorMessage.value = t("Could not save question")
+  }
+  reader.readAsDataURL(file)
 }
 
 function selectQuestionImage(file, target) {
@@ -3305,6 +3424,9 @@ function buildPayload() {
     hotspotImageData: isHotspotQuestion.value && !isEditMode.value ? form.hotspotImageData : "",
     hotspotImageName: isHotspotQuestion.value && !isEditMode.value ? form.hotspotImageName : "",
     hotspotImageMimeType: isHotspotQuestion.value && !isEditMode.value ? form.hotspotImageMimeType : "",
+    onlyofficeTemplateData: isOnlyofficeQuestion.value ? form.onlyofficeTemplateData : "",
+    onlyofficeTemplateName: isOnlyofficeQuestion.value ? form.onlyofficeTemplateName : "",
+    onlyofficeTemplateMimeType: isOnlyofficeQuestion.value ? form.onlyofficeTemplateMimeType : "",
     hotspotItems: isHotspotQuestion.value
       ? form.hotspotItems.map((item, index) => ({
           answer: item.answer,
@@ -3383,9 +3505,19 @@ function validateForm() {
     return true
   }
 
-  if (isOpenQuestion.value || isOralExpressionQuestion.value || isUploadAnswerQuestion.value) {
+  if (isOpenQuestion.value || isOralExpressionQuestion.value || isUploadAnswerQuestion.value || isOnlyofficeQuestion.value) {
     if (Number(form.score || 0) <= 0) {
       errorMessage.value = t("Required field")
+      return false
+    }
+
+    if (isOnlyofficeQuestion.value && !form.onlyofficeTemplateName) {
+      errorMessage.value = t("Please select an Office document.")
+      return false
+    }
+
+    if (isOnlyofficeQuestion.value && !isEditMode.value && !form.onlyofficeTemplateData) {
+      errorMessage.value = t("Please select an Office document.")
       return false
     }
 

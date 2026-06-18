@@ -1130,14 +1130,14 @@
               </div>
             </template>
 
-            <template v-else-if="question.answer.kind === 'upload_answer'">
+            <template v-else-if="['upload_answer', 'onlyoffice'].includes(question.answer.kind)">
               <div class="space-y-3">
                 <div
                   v-if="visibility.showStudentAnswers !== false"
                   class="rounded-lg border border-gray-20 bg-gray-10 p-3"
                 >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                    {{ t("Learner file") }}
+                    {{ question.answer.kind === 'onlyoffice' ? t("Learner Office document") : t("Learner file") }}
                   </div>
                   <div
                     v-if="question.answer.files?.length"
@@ -1152,14 +1152,14 @@
                       target="_blank"
                     >
                       <BaseIcon icon="download" size="small" />
-                      {{ file.name || t("Download file") }}
+                      {{ file.name || (question.answer.kind === 'onlyoffice' ? t("Download Office document") : t("Download file")) }}
                     </a>
                   </div>
                   <div
                     v-else
                     class="text-sm text-gray-600"
                   >
-                    {{ t("No uploaded file") }}
+                    {{ question.answer.kind === 'onlyoffice' ? t("No submitted document") : t("No uploaded file") }}
                   </div>
                 </div>
 
@@ -1923,7 +1923,7 @@ function questionLabel(position) {
 }
 
 function isManualCorrectionQuestion(question) {
-  return ["free_answer", "oral_expression", "upload_answer"].includes(question?.answer?.kind)
+  return ["free_answer", "oral_expression", "upload_answer", "onlyoffice"].includes(question?.answer?.kind)
 }
 
 function hasPartialManualScore(question) {

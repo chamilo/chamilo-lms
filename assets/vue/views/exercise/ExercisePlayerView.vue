@@ -861,6 +861,84 @@
               </div>
             </div>
 
+            <div v-else-if="isOnlyofficeQuestion(question)" class="space-y-3">
+              <div class="rounded-lg border border-info/30 bg-support-1 p-4 text-sm text-support-4">
+                <div class="mb-2 font-semibold text-gray-90">
+                  {{ t("Office document") }}
+                </div>
+                <p v-if="question.onlyoffice?.templateName" class="mb-3">
+                  {{ t("Template") }}: {{ question.onlyoffice.templateName }}
+                </p>
+                <p class="mb-3">
+                  {{ t("Complete the document in the editor below. The file will be attached to this attempt for teacher correction.") }}
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <BaseButton
+                    :disabled="answers[question.id]?.onlyofficePreparing || isSavingDraft"
+                    :label="onlyofficeEditorUrl(question) ? t('Reload Office editor') : t('Prepare Office document')"
+                    icon="onlyoffice"
+                    size="small"
+                    type="primary"
+                    @click="prepareOnlyofficeDocument(question, true)"
+                  />
+                  <BaseButton
+                    v-if="onlyofficeEditorUrl(question)"
+                    :label="t('Open in new tab')"
+                    icon="link-external"
+                    size="small"
+                    type="primary-text"
+                    @click="openOnlyofficeDocumentInNewTab(question)"
+                  />
+                </div>
+                <p
+                  v-if="answers[question.id]?.onlyofficePreparing"
+                  class="mt-3 text-xs text-gray-600"
+                >
+                  {{ t("Preparing Office document") }}
+                </p>
+                <p
+                  v-if="answers[question.id]?.onlyofficeError"
+                  class="mt-3 text-xs text-danger"
+                >
+                  {{ answers[question.id].onlyofficeError }}
+                </p>
+              </div>
+
+              <div
+                v-if="onlyofficeEditorUrl(question)"
+                class="overflow-hidden rounded-lg border border-gray-20 bg-white shadow-sm"
+              >
+                <iframe
+                  :key="onlyofficeEditorUrl(question)"
+                  :src="onlyofficeEditorUrl(question)"
+                  class="h-[72vh] min-h-[560px] w-full"
+                  :title="question.onlyoffice?.templateName || t('Office document')"
+                />
+              </div>
+
+              <div
+                v-if="onlyofficeAttemptFiles(question).length"
+                class="space-y-2 rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success"
+              >
+                <div class="font-semibold">{{ t("Submitted document") }}</div>
+                <div
+                  v-for="file in onlyofficeAttemptFiles(question)"
+                  :key="file.id || file.name"
+                >
+                  <a
+                    v-if="file.url"
+                    class="text-primary underline"
+                    :href="file.url"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {{ file.name || t("Office document") }}
+                  </a>
+                  <span v-else>{{ file.name || t("Office document") }}</span>
+                </div>
+              </div>
+            </div>
+
             <div v-else-if="isAnnotationQuestion(question)" class="space-y-3">
               <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
                 <div
@@ -2250,6 +2328,8 @@ async function loadRuntime() {
     syncRuntimeSettingsEffects()
     syncQuestionCountdown()
     scheduleRuntimeHtmlEnhancement()
+    await nextTick()
+    prepareVisibleOnlyofficeDocuments()
   } catch (error) {
     console.error("Error loading exercise runtime", error)
     errorMessage.value = t("Could not load exercise")
@@ -2288,6 +2368,8 @@ async function startAttempt() {
       syncCountdownFromAttempt(response)
       syncRuntimeSettingsEffects()
       syncQuestionCountdown()
+      await nextTick()
+      prepareVisibleOnlyofficeDocuments()
       return
     }
 
@@ -2557,6 +2639,11 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
     const nextSavedQuestionIds = new Set(savedQuestionIds.value)
     nextSavedQuestionIds.delete(Number(question.id))
     savedQuestionIds.value = nextSavedQuestionIds
+  }
+
+  const onlyofficeEditor = response?.feedback?.onlyoffice?.editorUrl || ""
+  if (isOnlyofficeQuestion(question) && onlyofficeEditor && answers.value[question.id]) {
+    answers.value[question.id].onlyofficeEditorUrl = onlyofficeEditor
   }
 
   rememberQuestionSecondsSpent(question)
@@ -2908,6 +2995,10 @@ function buildAnswerPayload(question) {
     return { text: questionAnswer.text || "" }
   }
 
+  if (isOnlyofficeQuestion(question)) {
+    return { onlyoffice: true }
+  }
+
   return {}
 }
 
@@ -2923,6 +3014,7 @@ function isDraftSaveSupported(question) {
     || isHotspotQuestion(question)
     || isAnnotationQuestion(question)
     || isDraftFreeAnswerQuestion(question)
+    || isOnlyofficeQuestion(question)
     || isUploadQuestion(question)
     || isOralQuestion(question)
 }
@@ -3055,6 +3147,13 @@ function applySavedAnswer(question, rows) {
     return
   }
 
+  if (isOnlyofficeQuestion(question)) {
+    const files = extractSavedAttemptFiles(rows)
+    questionAnswer.onlyofficeFiles = files
+    questionAnswer.onlyofficeEditorUrl = files.find((file) => file?.onlyofficeEditorUrl)?.onlyofficeEditorUrl || question.onlyoffice?.editorUrl || ""
+    return
+  }
+
   if (isUploadQuestion(question)) {
     const files = extractSavedAttemptFiles(rows)
     questionAnswer.uploadedFiles = files.length > 0 ? files : (rows.length > 0 ? [{ name: t("Upload file") }] : [])
@@ -3146,6 +3245,10 @@ function initializeAnswerState() {
       uploadFile: null,
       uploadFileName: "",
       uploadedFiles: [],
+      onlyofficeEditorUrl: question.onlyoffice?.editorUrl || "",
+      onlyofficeFiles: [],
+      onlyofficePreparing: false,
+      onlyofficeError: "",
       oralFile: null,
       oralFileName: "",
       oralPreviewUrl: "",
@@ -3169,6 +3272,69 @@ function initializeAnswerState() {
   selectedMatchingOptions.value = nextSelectedMatchingOptions
 }
 
+
+async function prepareOnlyofficeDocument(question, forceReload = false) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer || canManage.value || !activeAttempt.value?.attemptId) {
+    return
+  }
+
+  if (!forceReload && (questionAnswer.onlyofficeEditorUrl || questionAnswer.onlyofficePreparing)) {
+    return
+  }
+
+  questionAnswer.onlyofficePreparing = true
+  questionAnswer.onlyofficeError = ""
+
+  try {
+    const response = await saveQuestionDraftAnswer(question, "none")
+    const editorUrl = response?.feedback?.onlyoffice?.editorUrl || onlyofficeEditorUrl(question)
+    if (editorUrl) {
+      questionAnswer.onlyofficeEditorUrl = editorUrl
+    }
+
+    const files = extractSavedAttemptFiles(response?.savedAnswer || [])
+    if (files.length > 0) {
+      questionAnswer.onlyofficeFiles = files
+    }
+  } catch (error) {
+    console.error("Error preparing OnlyOffice document", error)
+    questionAnswer.onlyofficeError = t("Could not prepare Office document")
+  } finally {
+    questionAnswer.onlyofficePreparing = false
+  }
+}
+
+function prepareVisibleOnlyofficeDocuments() {
+  if (canManage.value || !activeAttempt.value?.attemptId) {
+    return
+  }
+
+  for (const question of visibleQuestions.value) {
+    if (isOnlyofficeQuestion(question)) {
+      void prepareOnlyofficeDocument(question)
+    }
+  }
+}
+
+function openOnlyofficeDocumentInNewTab(question) {
+  const editorUrl = onlyofficeEditorUrl(question)
+  if (editorUrl) {
+    window.open(editorUrl, "_blank", "noopener")
+  }
+}
+
+function onlyofficeEditorUrl(question) {
+  const questionAnswer = answers.value[question.id] || {}
+
+  return questionAnswer.onlyofficeEditorUrl || question.onlyoffice?.editorUrl || ""
+}
+
+function onlyofficeAttemptFiles(question) {
+  const questionAnswer = answers.value[question.id] || {}
+
+  return Array.isArray(questionAnswer.onlyofficeFiles) ? questionAnswer.onlyofficeFiles : []
+}
 
 function onUploadAnswerFileChange(question, event) {
   const file = event?.target?.files?.[0] || null
@@ -3838,6 +4004,10 @@ function isOpenQuestion(question) {
   return Number(question.type) === 5
 }
 
+function isOnlyofficeQuestion(question) {
+  return Number(question?.type) === 30
+}
+
 function isUploadQuestion(question) {
   return Number(question.type) === 23
 }
@@ -4220,7 +4390,10 @@ watch(
     glossaryTerms.value.length,
     visibleQuestions.value.map((question) => question.id).join(","),
   ],
-  () => scheduleRuntimeHtmlEnhancement(),
+  () => {
+    scheduleRuntimeHtmlEnhancement()
+    prepareVisibleOnlyofficeDocuments()
+  },
 )
 </script>
 

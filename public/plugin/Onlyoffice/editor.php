@@ -18,6 +18,9 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -47,6 +50,7 @@ if (empty($docApiUrl)) {
 
 $isMetaRequest = isset($_GET['meta']) && '1' === (string) $_GET['meta'];
 $docId = isset($_GET['docId']) ? (int) $_GET['docId'] : null;
+$resourceNodeId = isset($_GET['resourceNodeId']) ? (int) $_GET['resourceNodeId'] : null;
 $docPath = isset($_GET['doc']) ? urldecode((string) $_GET['doc']) : null;
 
 $groupId = isset($_GET['groupId']) && !empty($_GET['groupId'])
@@ -89,6 +93,7 @@ $jwtManager = new OnlyofficeJwtManager($appSettings);
 
 onlyofficeEditorLog('DEBUG', 'Editor entry', [
     'docId' => $docId,
+    'resourceNodeId' => $resourceNodeId,
     'docPath' => $docPath,
     'courseId' => $courseId,
     'courseCode' => $courseCode,
@@ -107,7 +112,102 @@ onlyofficeEditorLog('DEBUG', 'Editor entry', [
     'learnpathEmbedded' => $isLearnpathEmbedded,
 ]);
 
-if (!empty($docPath)) {
+if (!empty($resourceNodeId)) {
+    if (!userCanOpenExerciseResourceNodeForOnlyofficeEditor($resourceNodeId, (int) $exerciseId, (int) $exeId, (int) $questionId, $userId)) {
+        onlyofficeEditorLog('ERROR', 'Resource node is not linked to the current exercise attempt', [
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'exeId' => $exeId,
+            'questionId' => $questionId,
+            'userId' => $userId,
+        ]);
+        api_not_allowed(true);
+    }
+
+    $resolvedC2 = resolveResourceNodeSourceFromC2ForEditor($resourceNodeId);
+    if (null !== $resolvedC2) {
+        $fileId = 'rn'.$resourceNodeId;
+        $versionToken = $resolvedC2['versionToken'];
+
+        $downloadPayload = [
+            'type' => 'download',
+            'courseId' => $courseId,
+            'userId' => $userId,
+            'resourceNodeId' => $resourceNodeId,
+            'sessionId' => $sessionId,
+        ];
+
+        $trackPayload = [
+            'type' => 'track',
+            'courseId' => $courseId,
+            'userId' => $userId,
+            'resourceNodeId' => $resourceNodeId,
+            'sessionId' => $sessionId,
+        ];
+
+        if (!empty($groupId)) {
+            $downloadPayload['groupId'] = $groupId;
+            $trackPayload['groupId'] = $groupId;
+        }
+
+        $downloadHash = $jwtManager->getHash($downloadPayload);
+        $trackHash = $jwtManager->getHash($trackPayload);
+
+        $fileUrl = appendVersionTokenToUrl(
+            api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash,
+            $versionToken
+        );
+
+        $callbackUrl = appendVersionTokenToUrl(
+            api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash,
+            $versionToken
+        );
+
+        $docInfo = [
+            'iid' => null,
+            'id' => null,
+            'c_id' => $courseId,
+            'path' => $resolvedC2['storagePath'],
+            'comment' => null,
+            'title' => $resolvedC2['title'],
+            'filetype' => 'file',
+            'size' => $resolvedC2['size'],
+            'readonly' => (int) $isReadOnly,
+            'session_id' => $sessionId,
+            'url' => api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?resourceNodeId='.$resourceNodeId
+                .($exerciseId ? '&exerciseId='.$exerciseId : '')
+                .($exeId ? '&exeId='.$exeId : '')
+                .($questionId ? '&questionId='.$questionId : '')
+                .($isReadOnly ? '&readOnly='.$isReadOnly : '')
+                .($groupId ? '&groupId='.$groupId : '')
+                .($forceEdit ? '&forceEdit=true' : '')
+                .($origin ? '&origin='.rawurlencode($origin) : '')
+                .($isEmbedded ? '&embedded=1' : '')
+                .($returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : ''),
+            'document_url' => $callbackUrl,
+            'direct_url' => $fileUrl,
+            'basename' => basename((string) $resolvedC2['title']),
+            'parent_id' => 0,
+            'parents' => [],
+            'forceEdit' => $forceEdit,
+            'exercise_id' => $exerciseId,
+            'creator_id' => $resolvedC2['creatorId'],
+            'resource_node_id' => $resolvedC2['resourceNodeId'],
+            'resource_file_id' => $resolvedC2['resourceFileId'],
+            'version_token' => $versionToken,
+            'return_url' => $returnUrl,
+            'origin' => $origin,
+            'embedded' => $isEmbedded,
+        ];
+
+        onlyofficeEditorLog('DEBUG', 'Resolved C2 resource node for exercise', [
+            'resourceNodeId' => $resourceNodeId,
+            'title' => $resolvedC2['title'],
+            'storagePath' => $resolvedC2['storagePath'],
+            'versionToken' => $versionToken,
+        ]);
+    }
+} elseif (!empty($docPath)) {
     $resolvedDocPath = resolveOnlyofficeEditorDocPath($docPath);
     if (null === $resolvedDocPath) {
         onlyofficeEditorLog('ERROR', 'Invalid document path', [
@@ -374,6 +474,7 @@ if (!empty($docPath)) {
 if (empty($docInfo) || empty($fileId)) {
     onlyofficeEditorLog('ERROR', 'Document not found', [
         'docId' => $docId,
+        'resourceNodeId' => $resourceNodeId,
         'docPath' => $docPath,
     ]);
     exit('Error: Document not found.');
@@ -394,13 +495,14 @@ $editorReadOnly = shouldOpenOnlyofficeInReadOnlyMode(
     $exeId
 );
 
-$fileIdentifier = $docId ? (string) $docId : md5((string) $docPath);
+$fileIdentifier = $docId ? (string) $docId : (!empty($resourceNodeId) ? 'rn'.(string) $resourceNodeId : md5((string) $docPath));
 $versionToken = (string) ($docInfo['version_token'] ?? buildOnlyofficeVersionTokenFromLegacyDocInfo($docInfo, $fileIdentifier));
 $runtimeIdentifier = buildOnlyofficeRuntimeFileIdentifier($fileIdentifier, $versionToken);
 $runtimeKey = buildOnlyofficeRuntimeDocumentKey($fileIdentifier, $courseCode, $docInfo, $versionToken);
 $documentIdentity = buildOnlyofficeDocumentIdentity($courseId, $sessionId, $groupId, $fileIdentifier);
 $metaUrl = buildOnlyofficeMetaUrl(
     $docId,
+    $resourceNodeId,
     $docPath,
     $groupId,
     $exerciseId,
@@ -886,6 +988,121 @@ function resolveDocumentSourceFromC2ForEditor(int $docId): ?array
 }
 
 /**
+ * Resolve a C2 resource node directly. Used by exercise AttemptFile resources.
+ */
+function resolveResourceNodeSourceFromC2ForEditor(int $resourceNodeId): ?array
+{
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        onlyofficeEditorLog('ERROR', 'Entity manager could not be resolved');
+
+        return null;
+    }
+
+    /** @var ResourceNode|null $resourceNode */
+    $resourceNode = $entityManager->getRepository(ResourceNode::class)->find($resourceNodeId);
+    if (!$resourceNode instanceof ResourceNode) {
+        onlyofficeEditorLog('ERROR', 'ResourceNode not found', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    $resourceFile = $resourceNode->getFirstResourceFile();
+    if (!$resourceFile instanceof ResourceFile) {
+        onlyofficeEditorLog('ERROR', 'ResourceFile not found for ResourceNode', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    $resourceNodeRepository = getResourceNodeRepositoryForOnlyofficeEditor();
+    if (null === $resourceNodeRepository) {
+        onlyofficeEditorLog('ERROR', 'ResourceNodeRepository could not be resolved');
+
+        return null;
+    }
+
+    $storagePath = '';
+    try {
+        $storagePath = (string) $resourceNodeRepository->getFilename($resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeEditorLog('WARNING', 'Failed to resolve storage path', [
+            'message' => $e->getMessage(),
+        ]);
+    }
+
+    $title = (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle() ?: $resourceNode->getTitle());
+    $size = (int) ($resourceFile->getSize() ?? 0);
+    $versionToken = buildOnlyofficeVersionTokenFromDatabase(
+        $entityManager,
+        (int) $resourceNode->getId(),
+        (int) $resourceFile->getId(),
+        $size,
+        $storagePath ?: $title
+    );
+
+    return [
+        'title' => $title,
+        'size' => $size,
+        'storagePath' => $storagePath,
+        'resourceNodeId' => (int) $resourceNode->getId(),
+        'resourceFileId' => (int) $resourceFile->getId(),
+        'creatorId' => $resourceNode->getCreator() ? (int) $resourceNode->getCreator()->getId() : (int) api_get_user_id(),
+        'versionToken' => $versionToken,
+    ];
+}
+
+function userCanOpenExerciseResourceNodeForOnlyofficeEditor(int $resourceNodeId, int $exerciseId, int $exeId, int $questionId, int $userId): bool
+{
+    if ($resourceNodeId <= 0 || $exerciseId <= 0 || $exeId <= 0 || $questionId <= 0 || $userId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    try {
+        $row = $entityManager->createQueryBuilder()
+            ->select('saved.id')
+            ->from(TrackEAttempt::class, 'saved')
+            ->innerJoin('saved.trackExercise', 'exerciseAttempt')
+            ->innerJoin('saved.attemptFiles', 'attemptFile')
+            ->andWhere('saved.questionId = :questionId')
+            ->andWhere('IDENTITY(saved.trackExercise) = :exeId')
+            ->andWhere('IDENTITY(exerciseAttempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(exerciseAttempt.user) = :userId')
+            ->andWhere('IDENTITY(attemptFile.resourceNode) = :resourceNodeId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('exeId', $exeId)
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('userId', $userId)
+            ->setParameter('resourceNodeId', $resourceNodeId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return null !== $row;
+    } catch (\Throwable $exception) {
+        onlyofficeEditorLog('ERROR', 'Failed to validate exercise resource node ownership', [
+            'message' => $exception->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'exeId' => $exeId,
+            'questionId' => $questionId,
+            'userId' => $userId,
+        ]);
+
+        return false;
+    }
+}
+
+/**
  * Resolve Doctrine entity manager.
  */
 function getEntityManagerForOnlyofficeEditor()
@@ -1079,6 +1296,7 @@ function buildOnlyofficeDocumentIdentity(int $courseId, int $sessionId, int $gro
  */
 function buildOnlyofficeMetaUrl(
     ?int $docId,
+    ?int $resourceNodeId,
     ?string $docPath,
     int $groupId,
     ?int $exerciseId,
@@ -1098,7 +1316,11 @@ function buildOnlyofficeMetaUrl(
         $params['docId'] = (string) $docId;
     }
 
-    if (!empty($docPath)) {
+    if (!empty($resourceNodeId)) {
+        $params['resourceNodeId'] = (string) $resourceNodeId;
+    }
+
+    if (empty($resourceNodeId) && !empty($docPath)) {
         $params['doc'] = $docPath;
     }
 

@@ -241,6 +241,18 @@ final class ExerciseQuestionEditor
     #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
     public string $hotspotImageMimeType = '';
 
+    #[Groups(['exercise_question_editor:read'])]
+    public string $onlyofficeTemplateUrl = '';
+
+    #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
+    public string $onlyofficeTemplateName = '';
+
+    #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
+    public string $onlyofficeTemplateData = '';
+
+    #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
+    public string $onlyofficeTemplateMimeType = '';
+
     /**
      * @var array<int, array<string, mixed>>
      */

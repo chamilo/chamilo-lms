@@ -9,13 +9,19 @@ namespace Chamilo\CoreBundle\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeAnswer;
+use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -31,6 +37,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -65,6 +72,9 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     private const ANNOTATION_TYPES = [20];
     private const HOTSPOT_DELINEATION = 8;
     private const HOTSPOT_TYPES = [6, self::HOTSPOT_DELINEATION, 26];
+    private const ANSWER_IN_OFFICE_DOC = 30;
+    private const ATTEMPT_FILE_RESOURCE_TYPE = 'attempt_file';
+    private const ONLYOFFICE_ALLOWED_EXTENSIONS = ['doc', 'docx', 'xls', 'xlsx'];
 
     public function __construct(
         private RequestStack $requestStack,
@@ -72,6 +82,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private ResourceNodeRepository $resourceNodeRepository,
     ) {}
 
     /**
@@ -132,6 +143,36 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
             $response = $this->createResponse($exerciseId, $attemptId, $questionId);
             $response->message = 'Review list updated';
+
+            return $response;
+        }
+
+        if (self::ANSWER_IN_OFFICE_DOC === (int) $question->getType()) {
+            $attemptRow = $this->createOrReuseOnlyofficeAttemptRow(
+                $attempt,
+                $question,
+                $user,
+                max(0, (int) $data->secondsSpent),
+                $course,
+                $session
+            );
+
+            if (null !== $data->reviewLater) {
+                $this->syncReviewQuestion($attempt, $questionId, true === $data->reviewLater);
+            }
+
+            $this->blockCategoryIfNeeded($attempt, $quiz, $question, $navigationAction);
+            $this->lockPreventBackwardsStepIfNeeded($attempt, $quiz, $questionId, $navigationAction);
+            $this->entityManager->flush();
+
+            $response = $this->createResponse($exerciseId, $attemptId, $questionId);
+            $response->message = 'Office document prepared';
+            $response->feedback = [
+                'onlyoffice' => [
+                    'editorUrl' => $this->getOnlyofficeEditorUrl($attemptRow, $course, $session),
+                    'manualCorrection' => true,
+                ],
+            ];
 
             return $response;
         }
@@ -683,6 +724,247 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         return array_values(array_filter(array_map(static fn (string $id): int => (int) trim($id), explode(',', $value))));
+    }
+
+    private function createOrReuseOnlyofficeAttemptRow(
+        TrackEExercise $attempt,
+        CQuizQuestion $question,
+        User $user,
+        int $secondsSpent,
+        Course $course,
+        ?Session $session,
+    ): TrackEAttempt {
+        $questionId = (int) ($question->getIid() ?? 0);
+        $existingRow = $this->getOnlyofficeAttemptRow((int) $attempt->getExeId(), $questionId);
+        if ($existingRow instanceof TrackEAttempt) {
+            $existingRow->setTms(new DateTime());
+            $existingRow->setSecondsSpent(max($existingRow->getSecondsSpent(), $secondsSpent));
+            $resourceNode = $this->getFirstAttemptResourceNode($existingRow);
+            if ($resourceNode instanceof ResourceNode && null !== $resourceNode->getId()) {
+                $existingRow->setAnswer('onlyoffice:'.(int) $resourceNode->getId());
+            }
+
+            return $existingRow;
+        }
+
+        $templateResourceFile = $this->getOnlyofficeQuestionTemplateFile($question);
+        $templateResourceNode = $question->getResourceNode();
+        if (!$templateResourceNode instanceof ResourceNode || !$templateResourceFile instanceof ResourceFile) {
+            throw new BadRequestHttpException('This Office document question does not have a template document.');
+        }
+
+        try {
+            $content = $this->resourceNodeRepository->getResourceNodeFileContent($templateResourceNode, $templateResourceFile);
+        } catch (\Throwable $exception) {
+            throw new BadRequestHttpException('The Office document template could not be read.', $exception);
+        }
+
+        if ('' === $content) {
+            throw new BadRequestHttpException('The Office document template is empty.');
+        }
+
+        $fileName = $this->sanitizeFileName((string) ($templateResourceFile->getOriginalName() ?: $templateResourceFile->getTitle() ?: $question->getExtra() ?: 'office_document.docx'));
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+        if (!\in_array($extension, self::ONLYOFFICE_ALLOWED_EXTENSIONS, true)) {
+            throw new BadRequestHttpException('The Office document template format is not supported.');
+        }
+
+        $resourceNode = $this->createAttemptFileResourceNodeFromContent(
+            $content,
+            $fileName,
+            (string) ($templateResourceFile->getMimeType() ?: $this->getOfficeMimeType($extension)),
+            $user
+        );
+
+        $attemptRow = (new TrackEAttempt())
+            ->setTrackEExercise($attempt)
+            ->setUser($user)
+            ->setQuestionId($questionId)
+            ->setAnswer('onlyoffice:'.(int) $resourceNode->getId())
+            ->setTeacherComment('')
+            ->setMarks(0.0)
+            ->setPosition(0)
+            ->setTms(new DateTime())
+            ->setSecondsSpent($secondsSpent)
+        ;
+        $this->entityManager->persist($attemptRow);
+
+        $attemptFile = new AttemptFile();
+        $attemptFile->setResourceNode($resourceNode);
+        $attemptRow->addAttemptFile($attemptFile);
+        $this->entityManager->persist($attemptFile);
+
+        return $attemptRow;
+    }
+
+    private function getOnlyofficeAttemptRow(int $attemptId, int $questionId): ?TrackEAttempt
+    {
+        $row = $this->entityManager->createQueryBuilder()
+            ->select('saved')
+            ->addSelect('attemptFile', 'resourceNode', 'resourceFile')
+            ->from(TrackEAttempt::class, 'saved')
+            ->leftJoin('saved.attemptFiles', 'attemptFile')
+            ->leftJoin('attemptFile.resourceNode', 'resourceNode')
+            ->leftJoin('resourceNode.resourceFiles', 'resourceFile')
+            ->andWhere('IDENTITY(saved.trackExercise) = :attemptId')
+            ->andWhere('saved.questionId = :questionId')
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->setParameter('questionId', $questionId, Types::INTEGER)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $row instanceof TrackEAttempt ? $row : null;
+    }
+
+    private function getFirstAttemptResourceNode(TrackEAttempt $attemptRow): ?ResourceNode
+    {
+        foreach ($attemptRow->getAttemptFiles() as $attemptFile) {
+            if (!$attemptFile instanceof AttemptFile) {
+                continue;
+            }
+
+            $resourceNode = $attemptFile->getResourceNode();
+            if ($resourceNode instanceof ResourceNode) {
+                return $resourceNode;
+            }
+        }
+
+        return null;
+    }
+
+    private function getOnlyofficeQuestionTemplateFile(CQuizQuestion $question): ?ResourceFile
+    {
+        $resourceNode = $question->getResourceNode();
+        if (!$resourceNode instanceof ResourceNode) {
+            return null;
+        }
+
+        foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+            if ($resourceFile instanceof ResourceFile) {
+                return $resourceFile;
+            }
+        }
+
+        return null;
+    }
+
+    private function createAttemptFileResourceNodeFromContent(string $content, string $fileName, string $mimeType, User $user): ResourceNode
+    {
+        $tmpPath = tempnam(sys_get_temp_dir(), 'chamilo_onlyoffice_attempt_');
+        if (false === $tmpPath) {
+            throw new BadRequestHttpException('The Office document attempt file could not be prepared.');
+        }
+
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+        if (!\in_array($extension, self::ONLYOFFICE_ALLOWED_EXTENSIONS, true)) {
+            $extension = 'docx';
+        }
+
+        $tmpPathWithExtension = $tmpPath.'.'.$extension;
+        if (false === @rename($tmpPath, $tmpPathWithExtension)) {
+            $tmpPathWithExtension = $tmpPath;
+        }
+
+        if (false === file_put_contents($tmpPathWithExtension, $content)) {
+            throw new BadRequestHttpException('The Office document attempt file could not be prepared.');
+        }
+
+        $uploadedFile = new UploadedFile($tmpPathWithExtension, $fileName, $mimeType, null, true);
+        $resourceType = $this->getOrCreateAttemptFileResourceType();
+
+        $node = new ResourceNode();
+        $node->setTitle($fileName);
+        $node->setResourceType($resourceType);
+        $node->setCreator($user);
+
+        $resourceFile = new ResourceFile();
+        $resourceFile
+            ->setTitle($fileName)
+            ->setOriginalName($fileName)
+            ->setMimeType($mimeType)
+            ->setSize(\strlen($content))
+            ->setFile($uploadedFile)
+        ;
+        $node->addResourceFile($resourceFile);
+
+        $this->entityManager->persist($node);
+        $this->entityManager->persist($resourceFile);
+
+        return $node;
+    }
+
+    private function getOrCreateAttemptFileResourceType(): ResourceType
+    {
+        $resourceType = $this->entityManager->getRepository(ResourceType::class)->findOneBy([
+            'title' => self::ATTEMPT_FILE_RESOURCE_TYPE,
+        ]);
+        if ($resourceType instanceof ResourceType) {
+            return $resourceType;
+        }
+
+        $tool = $this->entityManager->getRepository(Tool::class)->findOneBy([
+            'title' => 'quiz',
+        ]);
+        if (!$tool instanceof Tool) {
+            throw new BadRequestHttpException('Missing Tool "quiz" for attempt file uploads.');
+        }
+
+        $resourceType = new ResourceType();
+        $resourceType->setTitle(self::ATTEMPT_FILE_RESOURCE_TYPE);
+        $resourceType->setTool($tool);
+        $this->entityManager->persist($resourceType);
+
+        return $resourceType;
+    }
+
+    private function sanitizeFileName(string $fileName): string
+    {
+        $safeName = preg_replace('/[^A-Za-z0-9._-]+/', '_', basename($fileName));
+        if (!\is_string($safeName)) {
+            return 'office_document.docx';
+        }
+
+        $safeName = trim($safeName, '._-');
+
+        return '' !== $safeName ? $safeName : 'office_document.docx';
+    }
+
+    private function getOfficeMimeType(string $extension): string
+    {
+        return match ($extension) {
+            'doc' => 'application/msword',
+            'xls' => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            default => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        };
+    }
+
+    private function getOnlyofficeEditorUrl(TrackEAttempt $attemptRow, Course $course, ?Session $session): string
+    {
+        $resourceNode = $this->getFirstAttemptResourceNode($attemptRow);
+        $attempt = $attemptRow->getTrackEExercise();
+        $quiz = $attempt->getQuiz();
+        if (!$resourceNode instanceof ResourceNode || null === $resourceNode->getId() || null === $quiz || null === $quiz->getIid()) {
+            return '';
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        $query = [
+            'resourceNodeId' => (int) $resourceNode->getId(),
+            'exerciseId' => (int) $quiz->getIid(),
+            'exeId' => (int) $attempt->getExeId(),
+            'questionId' => (int) $attemptRow->getQuestionId(),
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'origin' => 'exercise',
+            'embedded' => 1,
+            'forceEdit' => 'true',
+        ];
+
+        return '/plugin/Onlyoffice/editor.php?'.http_build_query($query);
     }
 
     /**

@@ -137,6 +137,16 @@
         <template #body="{ data }">
           <div class="flex justify-center gap-2">
             <BaseButton
+              v-if="getSubmissionPreviewUrl(data)"
+              icon="link-external"
+              size="small"
+              only-icon
+              :label="t('Preview')"
+              :class="actionBtnClass"
+              @click="openSubmissionPreview(data)"
+              type="primary-text"
+            />
+            <BaseButton
               icon="download"
               size="small"
               only-icon
@@ -463,6 +473,31 @@ async function viewSubmission(item) {
   } catch (e) {
     notification.showErrorNotification(e)
   }
+}
+
+function getSubmissionPreviewUrl(item) {
+  const contentUrl = String(item?.contentUrl || "").trim()
+  if (contentUrl) {
+    return contentUrl
+  }
+
+  const downloadUrl = String(item?.downloadUrl || "").trim()
+  if (!downloadUrl) {
+    return ""
+  }
+
+  return downloadUrl.replace(/\/download(\?.*)?$/, "/view$1")
+}
+
+function openSubmissionPreview(item) {
+  const previewUrl = getSubmissionPreviewUrl(item)
+
+  if (!previewUrl) {
+    notification.showErrorNotification(t("No download available"))
+    return
+  }
+
+  window.open(previewUrl, "_blank", "noopener,noreferrer")
 }
 
 function saveCorrection(item) {

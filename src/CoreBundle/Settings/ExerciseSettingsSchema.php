@@ -21,6 +21,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             'exercise_min_score' => '0',
             'exercise_max_score' => '20',
             'enable_quiz_scenario' => 'true',
+            'quiz_question_category_destinations' => 'false',
             'allow_coach_feedback_exercises' => 'true',
             'show_official_code_exercise_result_list' => 'false',
             'email_alert_manager_on_new_quiz' => 'true',
@@ -86,6 +87,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             'exercise_min_score' => ['string', 'null'],
             'exercise_max_score' => ['string', 'null'],
             'enable_quiz_scenario' => ['string'],
+            'quiz_question_category_destinations' => ['string'],
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -97,6 +99,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('exercise_min_score')
             ->add('exercise_max_score')
             ->add('enable_quiz_scenario', YesNoType::class)
+            ->add('quiz_question_category_destinations', YesNoType::class)
             ->add('allow_coach_feedback_exercises', YesNoType::class)
             ->add('show_official_code_exercise_result_list', YesNoType::class)
             ->add('email_alert_manager_on_new_quiz', YesNoType::class)

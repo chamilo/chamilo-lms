@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizDestinationResult;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
@@ -153,9 +154,29 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             : [];
         $response->finalActions = $this->getFinalActions($quiz, $attempt, $course, $session, $isReviewMode);
         $response->aiCorrection = $this->getAiCorrectionConfiguration($canManage && $isReviewMode);
+        $response->progressiveAdaptiveResult = $this->getProgressiveAdaptiveResult($attempt);
         $response->canManage = $canManage;
 
         return $response;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getProgressiveAdaptiveResult(TrackEExercise $attempt): array
+    {
+        $destinationResult = $this->entityManager->getRepository(CQuizDestinationResult::class)->findOneBy([
+            'exe' => $attempt,
+        ]);
+
+        if (!$destinationResult instanceof CQuizDestinationResult) {
+            return [];
+        }
+
+        return [
+            'achievedLevel' => $destinationResult->getAchievedLevel(),
+            'hash' => $destinationResult->getHash(),
+        ];
     }
 
     private function getCourse(Request $request): Course

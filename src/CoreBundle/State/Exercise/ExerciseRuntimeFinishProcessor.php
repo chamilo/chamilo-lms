@@ -21,7 +21,9 @@ use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizDestinationResult;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -51,6 +53,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private const LP_STATUS_FAILED = 'failed';
     private const LP_STATUS_PASSED = 'passed';
     private const FEEDBACK_TYPE_DIRECT = 1;
+    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 3;
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -224,6 +227,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             ->setQuestionsToCheck(implode(',', $questionsToCheck))
         ;
 
+        $this->recordProgressiveAdaptiveResult($quiz, $attempt, $questions, $questionIds, $user);
         $this->recordSavedAnswersConfirmation($data, $attempt, $quiz, $course, $session, $user, \count($questionIds));
         $learnpathTracking = $this->synchronizeLearnpathTracking($request, $attempt, $quiz, $course, $session, $user);
 
@@ -867,7 +871,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
      */
     private function normalizeCompletedQuestionIds(CQuiz $quiz, TrackEExercise $attempt, array $questionIds): array
     {
-        if (self::FEEDBACK_TYPE_DIRECT !== (int) $quiz->getFeedbackType()) {
+        if (!\in_array((int) $quiz->getFeedbackType(), [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE], true)) {
             return $questionIds;
         }
 
@@ -880,6 +884,69 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             $questionIds,
             static fn (int $questionId): bool => \in_array($questionId, $answeredQuestionIds, true)
         ));
+    }
+
+    /**
+     * @param array<int, CQuizQuestion> $questions
+     * @param array<int, int> $questionIds
+     */
+    private function recordProgressiveAdaptiveResult(CQuiz $quiz, TrackEExercise $attempt, array $questions, array $questionIds, User $user): void
+    {
+        if (self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE !== (int) $quiz->getFeedbackType()) {
+            return;
+        }
+
+        $achievedLevel = $this->resolveProgressiveAdaptiveAchievedLevel($questions, $questionIds);
+        if ('' === $achievedLevel) {
+            return;
+        }
+
+        $destinationResult = $this->entityManager->getRepository(CQuizDestinationResult::class)->findOneBy([
+            'exe' => $attempt,
+        ]);
+
+        if (!$destinationResult instanceof CQuizDestinationResult) {
+            $destinationResult = (new CQuizDestinationResult())
+                ->setExe($attempt)
+                ->setUser($user)
+                ->setHash(hash('sha256', uniqid((string) $attempt->getExeId(), true)))
+            ;
+        }
+
+        $destinationResult->setAchievedLevel($achievedLevel);
+        $this->entityManager->persist($destinationResult);
+    }
+
+    /**
+     * @param array<int, CQuizQuestion> $questions
+     * @param array<int, int> $questionIds
+     */
+    private function resolveProgressiveAdaptiveAchievedLevel(array $questions, array $questionIds): string
+    {
+        for ($index = \count($questionIds) - 1; $index >= 0; $index--) {
+            $question = $questions[$questionIds[$index]] ?? null;
+            if (!$question instanceof CQuizQuestion) {
+                continue;
+            }
+
+            $category = $this->getPrimaryQuestionCategory($question);
+            if ($category instanceof CQuizQuestionCategory) {
+                return $category->getTitle();
+            }
+        }
+
+        return '';
+    }
+
+    private function getPrimaryQuestionCategory(CQuizQuestion $question): ?CQuizQuestionCategory
+    {
+        foreach ($question->getCategories() as $category) {
+            if ($category instanceof CQuizQuestionCategory) {
+                return $category;
+            }
+        }
+
+        return null;
     }
 
     /**

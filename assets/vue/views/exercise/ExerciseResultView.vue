@@ -184,6 +184,19 @@
           >
             {{ t("Corrections are hidden according to the exercise result settings.") }}
           </div>
+
+          <div
+            v-if="progressiveAdaptiveResult.achievedLevel"
+            class="mt-4 rounded-lg border border-info/30 bg-support-1 p-4 text-sm text-support-4"
+          >
+            <div class="flex items-center gap-2 font-semibold">
+              <BaseIcon icon="flag-checkered" size="small" />
+              {{ t("Progressive adaptive result") }}
+            </div>
+            <div class="mt-2">
+              {{ t("Achieved level") }}: <strong>{{ progressiveAdaptiveResult.achievedLevel }}</strong>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -1595,6 +1608,7 @@ const questions = ref([])
 const categoryScores = ref([])
 const ranking = ref([])
 const finalActions = ref({})
+const progressiveAdaptiveResult = ref({})
 const aiCorrection = ref({})
 const isStartingAttempt = ref(false)
 const correctionForms = ref({})
@@ -1811,6 +1825,7 @@ async function loadResult() {
     categoryScores.value = Array.isArray(response.categoryScores) ? response.categoryScores : []
     ranking.value = Array.isArray(response.ranking) ? response.ranking : []
     finalActions.value = response.finalActions || {}
+    progressiveAdaptiveResult.value = response.progressiveAdaptiveResult || {}
     aiCorrection.value = response.aiCorrection || {}
     initializeCorrectionForms()
     initializeAiCorrectionForms()

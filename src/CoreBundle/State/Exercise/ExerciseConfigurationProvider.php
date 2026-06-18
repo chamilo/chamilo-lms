@@ -245,6 +245,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             'allowNotificationSettingPerExercise' => $this->isSettingEnabled('exercise.allow_notification_setting_per_exercise'),
             'allowHideQuestionNumberSetting' => $this->isSettingEnabled('exercise.quiz_hide_question_number'),
             'enableQuizScenario' => $this->isSettingEnabled('enable_quiz_scenario'),
+            'quizQuestionCategoryDestinations' => $this->isProgressiveAdaptiveSettingEnabled(),
         ];
     }
 
@@ -315,9 +316,12 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             ['value' => 2, 'label' => 'Exam (no feedback)'],
         ];
 
-        if ($this->isSettingEnabled('enable_quiz_scenario') || \in_array($quiz?->getFeedbackType(), [1, 3], true)) {
+        if ($this->isSettingEnabled('enable_quiz_scenario') || 1 === (int) ($quiz?->getFeedbackType() ?? 0)) {
             $options[] = ['value' => 1, 'label' => 'Adaptative test with immediate feedback'];
-            $options[] = ['value' => 3, 'label' => 'Direct pop-up mode'];
+        }
+
+        if ($this->isProgressiveAdaptiveSettingEnabled() || 3 === (int) ($quiz?->getFeedbackType() ?? 0)) {
+            $options[] = ['value' => 3, 'label' => 'Progressive adaptive'];
         }
 
         return $options;
@@ -394,7 +398,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             static fn (array $left, array $right): int => strcasecmp((string) $left['title'], (string) $right['title'])
         );
 
-        $savedCounts = $this->getSavedCategoryQuestionCounts($exerciseId);
+        $savedCategorySettings = $this->getSavedCategoryQuestionSettings($exerciseId);
         $matrix = [];
         foreach ($categories as $category) {
             $categoryId = (int) $category['categoryId'];
@@ -402,7 +406,8 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
                 'categoryId' => $categoryId,
                 'title' => (string) $category['title'],
                 'availableQuestions' => (int) $category['availableQuestions'],
-                'countQuestions' => $savedCounts[$categoryId] ?? -1,
+                'countQuestions' => $savedCategorySettings[$categoryId]['countQuestions'] ?? -1,
+                'destinations' => $savedCategorySettings[$categoryId]['destinations'] ?? '',
             ];
         }
 
@@ -410,29 +415,33 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             'categoryId' => 0,
             'title' => 'General',
             'availableQuestions' => $generalQuestionCount,
-            'countQuestions' => $savedCounts[0] ?? -1,
+            'countQuestions' => $savedCategorySettings[0]['countQuestions'] ?? -1,
+            'destinations' => $savedCategorySettings[0]['destinations'] ?? '',
         ];
 
         return $matrix;
     }
 
     /**
-     * @return array<int, int>
+     * @return array<int, array{countQuestions: int, destinations: string}>
      */
-    private function getSavedCategoryQuestionCounts(int $exerciseId): array
+    private function getSavedCategoryQuestionSettings(int $exerciseId): array
     {
         $rows = $this->entityManager->getConnection()->fetchAllAssociative(
-            'SELECT category_id, count_questions FROM c_quiz_rel_category WHERE exercise_id = :exerciseId',
+            'SELECT category_id, count_questions, destinations FROM c_quiz_rel_category WHERE exercise_id = :exerciseId',
             ['exerciseId' => $exerciseId],
             ['exerciseId' => Types::INTEGER]
         );
 
-        $counts = [];
+        $settings = [];
         foreach ($rows as $row) {
-            $counts[(int) $row['category_id']] = (int) $row['count_questions'];
+            $settings[(int) $row['category_id']] = [
+                'countQuestions' => (int) $row['count_questions'],
+                'destinations' => (string) ($row['destinations'] ?? ''),
+            ];
         }
 
-        return $counts;
+        return $settings;
     }
 
     /**
@@ -986,6 +995,19 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+    }
+
+    private function isProgressiveAdaptiveSettingEnabled(): bool
+    {
+        $value = $this->entityManager->getConnection()->fetchOne(
+            'SELECT selected_value FROM settings WHERE category = :category AND variable = :variable LIMIT 1',
+            [
+                'category' => 'exercise',
+                'variable' => 'quiz_question_category_destinations',
+            ]
+        );
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
     private function isSettingEnabled(string $name): bool

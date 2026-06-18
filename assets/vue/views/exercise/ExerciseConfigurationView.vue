@@ -209,7 +209,7 @@
           </div>
 
           <div
-            v-if="showCategorySelectionOptions"
+            v-if="showCategorySelectionOptions || showCategoryDestinations"
             class="space-y-3 rounded-lg border border-gray-20 bg-gray-5 p-3"
           >
             <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
@@ -234,6 +234,12 @@
                     <th class="px-3 py-2">{{ t("Categories") }}</th>
                     <th class="px-3 py-2">{{ t("Available questions") }}</th>
                     <th class="px-3 py-2">{{ t("Number of questions") }}</th>
+                    <th
+                      v-if="showCategoryDestinations"
+                      class="px-3 py-2"
+                    >
+                      {{ t("Category destinations") }}
+                    </th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-20 bg-white">
@@ -252,6 +258,56 @@
                         :name="`categoryMatrix[${row.categoryId}]`"
                         :min="-1"
                       />
+                    </td>
+                    <td
+                      v-if="showCategoryDestinations"
+                      class="min-w-[520px] px-3 py-2"
+                    >
+                      <div class="space-y-3">
+                        <div
+                          v-for="(rule, ruleIndex) in row.destinationRules"
+                          :key="`category-destination-${row.categoryId}-${ruleIndex}`"
+                          class="grid gap-2 rounded-lg border border-gray-20 bg-white p-2 md:grid-cols-[140px_1fr_auto] md:items-end"
+                        >
+                          <BaseInputNumber
+                            :id="`exercise-category-destination-threshold-${row.categoryId}-${ruleIndex}`"
+                            v-model="rule.threshold"
+                            :label="t('Maximum score (%)')"
+                            :name="`categoryDestinations[${row.categoryId}][${ruleIndex}][threshold]`"
+                            :min="0"
+                            :max="100"
+                          />
+                          <BaseSelect
+                            :id="`exercise-category-destination-target-${row.categoryId}-${ruleIndex}`"
+                            v-model="rule.categoryId"
+                            :label="t('Go to')"
+                            :name="`categoryDestinations[${row.categoryId}][${ruleIndex}][categoryId]`"
+                            :options="destinationCategoryOptions(row)"
+                            option-label="label"
+                            option-value="value"
+                          />
+                          <BaseButton
+                            :label="t('Remove destination')"
+                            icon="delete"
+                            only-icon
+                            size="small"
+                            type="danger-text"
+                            @click="removeCategoryDestinationRule(row, ruleIndex)"
+                          />
+                        </div>
+
+                        <BaseButton
+                          :label="t('Add destination')"
+                          icon="add"
+                          size="small"
+                          type="secondary"
+                          @click="addCategoryDestinationRule(row)"
+                        />
+
+                        <p class="text-xs text-gray-50">
+                          {{ t("Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test.") }}
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -916,6 +972,8 @@ const notificationOptions = computed(() => mapTranslatedOptions(options.value.no
 const saveCorrectAnswerOptions = computed(() => mapTranslatedOptions(options.value.saveCorrectAnswerOptions || []))
 const showRandomQuestionCount = computed(() => [2, 3, 4, 5, 6].includes(Number(form.questionSelectionType)))
 const showCategorySelectionOptions = computed(() => 3 <= Number(form.questionSelectionType))
+const showCategoryDestinations = computed(() => Number(form.feedbackType || 0) === 3 && true === settings.value.quizQuestionCategoryDestinations)
+const showCategoryMatrix = computed(() => showCategorySelectionOptions.value || showCategoryDestinations.value)
 const hasCategoryMatrixWarning = computed(() =>
   form.categoryMatrix.some((row) => {
     const count = Number(row.countQuestions || 0)
@@ -928,6 +986,37 @@ const booleanOptions = computed(() => [
   { booleanValue: true, label: t("Yes") },
   { booleanValue: false, label: t("No") },
 ])
+
+function destinationCategoryOptions(row) {
+  const sourceCategoryId = Number(row?.categoryId || 0)
+  const categoryItems = form.categoryMatrix
+    .filter((item) => 0 < Number(item.categoryId || 0) && Number(item.categoryId || 0) !== sourceCategoryId)
+    .map((item) => ({
+      value: Number(item.categoryId),
+      label: item.title || t("Untitled"),
+    }))
+
+  return [{ value: 0, label: t("Finish exercise") }, ...categoryItems]
+}
+
+function addCategoryDestinationRule(row) {
+  if (!Array.isArray(row.destinationRules)) {
+    row.destinationRules = []
+  }
+
+  row.destinationRules.push({
+    threshold: 100,
+    categoryId: 0,
+  })
+}
+
+function removeCategoryDestinationRule(row, index) {
+  if (!Array.isArray(row.destinationRules)) {
+    return
+  }
+
+  row.destinationRules.splice(index, 1)
+}
 const effectiveLockedFields = computed(() => {
   if (lockedFields.value.length > 0) {
     return lockedFields.value
@@ -1154,12 +1243,54 @@ function normalizeCategoryMatrix(rows) {
     return []
   }
 
-  return rows.map((row) => ({
-    categoryId: Number(row.categoryId || 0),
-    title: row.title || t("General"),
-    availableQuestions: Number(row.availableQuestions || 0),
-    countQuestions: Number(row.countQuestions ?? -1),
-  }))
+  return rows.map((row) => {
+    const destinations = row.destinations || serializeCategoryDestinationRules(row.destinationRules || [])
+
+    return {
+      categoryId: Number(row.categoryId || 0),
+      title: row.title || t("General"),
+      availableQuestions: Number(row.availableQuestions || 0),
+      countQuestions: Number(row.countQuestions ?? -1),
+      destinations,
+      destinationRules: parseCategoryDestinationRules(destinations),
+    }
+  })
+}
+
+function parseCategoryDestinationRules(destinations) {
+  if (!destinations || "string" !== typeof destinations) {
+    return []
+  }
+
+  return destinations
+    .split("@@")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => {
+      const [threshold, categoryId] = item.split(":")
+
+      return {
+        threshold: Math.max(0, Math.min(100, Number(threshold || 0))),
+        categoryId: Math.max(0, Number(categoryId || 0)),
+      }
+    })
+    .filter((rule) => Number.isFinite(rule.threshold) && Number.isFinite(rule.categoryId))
+}
+
+function serializeCategoryDestinationRules(rules) {
+  if (!Array.isArray(rules)) {
+    return ""
+  }
+
+  return rules
+    .map((rule) => ({
+      threshold: Math.max(0, Math.min(100, Number(rule.threshold || 0))),
+      categoryId: Math.max(0, Number(rule.categoryId || 0)),
+    }))
+    .filter((rule) => Number.isFinite(rule.threshold) && Number.isFinite(rule.categoryId))
+    .sort((left, right) => left.threshold - right.threshold)
+    .map((rule) => `${rule.threshold}:${rule.categoryId}`)
+    .join("@@")
 }
 
 function normalizeNotificationValues(values) {

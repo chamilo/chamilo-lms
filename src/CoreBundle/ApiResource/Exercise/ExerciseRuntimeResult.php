@@ -104,6 +104,12 @@ final class ExerciseRuntimeResult
     #[Groups(['exercise_runtime_result:read'])]
     public array $aiCorrection = [];
 
+    /**
+     * @var array<string, mixed>
+     */
+    #[Groups(['exercise_runtime_result:read'])]
+    public array $progressiveAdaptiveResult = [];
+
     #[Groups(['exercise_runtime_result:read'])]
     public bool $canManage = false;
 

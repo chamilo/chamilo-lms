@@ -34,6 +34,7 @@ use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTime;
 use DateTimeImmutable;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -58,7 +59,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const STATUS_INCOMPLETE = 'incomplete';
     private const FEEDBACK_TYPE_DIRECT = 1;
-    private const FEEDBACK_TYPE_POPUP = 3;
+    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 3;
     private const UNIQUE_TYPES = [1, 10, 17, 21];
     private const MULTIPLE_TYPES = [2, 9, 14];
     private const TRUE_FALSE_TYPES = [11, 12];
@@ -178,7 +179,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         $rows = $this->buildDraftRows($question, $data->answer, max(0, (int) $data->secondsSpent));
-        $feedback = $this->buildFeedback($quiz, $question, $rows);
+        $feedback = $this->buildFeedback($quiz, $attempt, $question, $rows);
         $marks = [] !== $feedback ? (float) ($feedback['score'] ?? 0.0) : 0.0;
         $this->deletePreviousDraftRows($attempt, $questionId);
 
@@ -1549,10 +1550,10 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
      *
      * @return array<string, mixed>
      */
-    private function buildFeedback(CQuiz $quiz, CQuizQuestion $question, array $rows): array
+    private function buildFeedback(CQuiz $quiz, TrackEExercise $attempt, CQuizQuestion $question, array $rows): array
     {
         $feedbackType = (int) $quiz->getFeedbackType();
-        if (!\in_array($feedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP], true)) {
+        if (!\in_array($feedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE], true)) {
             return [];
         }
 
@@ -1568,7 +1569,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
         return [
             'enabled' => true,
-            'mode' => self::FEEDBACK_TYPE_POPUP === $feedbackType ? 'popup' : 'direct',
+            'mode' => 'direct',
             'questionId' => (int) $question->getIid(),
             'status' => $status,
             'title' => $this->getFeedbackTitle($status),
@@ -1576,6 +1577,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             'maxScore' => $maxScore,
             'entries' => $this->buildFeedbackEntries($question, $answers, $rows),
             ...$this->resolveAdaptiveFeedbackAction($quiz, $question, $status),
+            ...$this->resolveProgressiveAdaptiveFeedbackAction($quiz, $attempt, $question, $rows),
         ];
     }
 
@@ -1674,6 +1676,241 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         return [];
+    }
+
+    /**
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $currentRows
+     *
+     * @return array<string, mixed>
+     */
+    private function resolveProgressiveAdaptiveFeedbackAction(CQuiz $quiz, TrackEExercise $attempt, CQuizQuestion $question, array $currentRows): array
+    {
+        if (self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE !== (int) $quiz->getFeedbackType()) {
+            return [];
+        }
+
+        $category = $this->getPrimaryQuestionCategory($question);
+        if (!$category instanceof CQuizQuestionCategory || null === $category->getIid()) {
+            return ['afterAction' => 'next'];
+        }
+
+        $categoryId = (int) $category->getIid();
+        if (!$this->isLastQuestionInCategory($attempt, $question, $categoryId)) {
+            return ['afterAction' => 'next'];
+        }
+
+        $categoryQuestionIds = $this->getQuestionIdsInCategory($quiz, $categoryId);
+        $scoreInCategory = $this->calculateProgressiveCategoryPercentage($quiz, $attempt, $categoryQuestionIds, (int) $question->getIid(), $currentRows);
+        $destinationCategoryId = $this->resolveProgressiveDestinationCategory((int) ($quiz->getIid() ?? 0), $categoryId, $scoreInCategory);
+
+        if (0 >= $destinationCategoryId || $this->hasAnsweredCategory($attempt, $quiz, $destinationCategoryId)) {
+            return [
+                'afterAction' => 'finish',
+                'achievedLevel' => $category->getTitle(),
+                'categoryScore' => $scoreInCategory,
+            ];
+        }
+
+        $targetQuestionId = $this->getFirstQuestionIdInCategory($quiz, $destinationCategoryId);
+        if (0 >= $targetQuestionId) {
+            return [
+                'afterAction' => 'finish',
+                'achievedLevel' => $category->getTitle(),
+                'categoryScore' => $scoreInCategory,
+            ];
+        }
+
+        return [
+            'afterAction' => 'question',
+            'targetQuestionId' => $targetQuestionId,
+            'categoryScore' => $scoreInCategory,
+        ];
+    }
+
+    private function getPrimaryQuestionCategory(CQuizQuestion $question): ?CQuizQuestionCategory
+    {
+        foreach ($question->getCategories() as $category) {
+            if ($category instanceof CQuizQuestionCategory) {
+                return $category;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getQuestionIdsInCategory(CQuiz $quiz, int $categoryId): array
+    {
+        $relations = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion', 'question', 'category')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.question', 'question')
+            ->innerJoin('question.categories', 'category')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->andWhere('category.iid = :categoryId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('categoryId', $categoryId, Types::INTEGER)
+            ->orderBy('relQuestion.questionOrder', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $questionIds = [];
+        foreach ($relations as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $question = $relation->getQuestion();
+            if ($question instanceof CQuizQuestion && null !== $question->getIid()) {
+                $questionIds[] = (int) $question->getIid();
+            }
+        }
+
+        return $questionIds;
+    }
+
+    private function getFirstQuestionIdInCategory(CQuiz $quiz, int $categoryId): int
+    {
+        $questionIds = $this->getQuestionIdsInCategory($quiz, $categoryId);
+        if ([] === $questionIds) {
+            return 0;
+        }
+
+        return (int) reset($questionIds);
+    }
+
+    /**
+     * @param array<int, int> $categoryQuestionIds
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $currentRows
+     */
+    private function calculateProgressiveCategoryPercentage(CQuiz $quiz, TrackEExercise $attempt, array $categoryQuestionIds, int $currentQuestionId, array $currentRows): float
+    {
+        $score = 0.0;
+        $maxScore = 0.0;
+
+        foreach ($categoryQuestionIds as $questionId) {
+            $question = $this->entityManager->getRepository(CQuizQuestion::class)->find($questionId);
+            if (!$question instanceof CQuizQuestion) {
+                continue;
+            }
+
+            $answers = $this->getQuestionAnswerMap($question);
+            $options = $this->getQuestionOptionMap($question);
+            $rows = $questionId === $currentQuestionId ? $currentRows : $this->getSavedProgressiveAttemptRows($attempt, $questionId);
+            $questionScore = $this->scoreFeedbackQuestion($quiz, $question, $answers, $options, $rows);
+            if (0 === (int) $quiz->getPropagateNeg() && 0 > $questionScore) {
+                $questionScore = 0.0;
+            }
+
+            $score += $questionScore;
+            $maxScore += $this->getQuestionWeight($question, $answers);
+        }
+
+        if (0.0 >= $maxScore) {
+            return 0.0;
+        }
+
+        return round(($score / $maxScore) * 100, 2);
+    }
+
+    /**
+     * @return array<int, array{answer: string, position: int, secondsSpent: int}>
+     */
+    private function getSavedProgressiveAttemptRows(TrackEExercise $attempt, int $questionId): array
+    {
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('saved')
+            ->from(TrackEAttempt::class, 'saved')
+            ->andWhere('IDENTITY(saved.trackExercise) = :attemptId')
+            ->andWhere('saved.questionId = :questionId')
+            ->setParameter('attemptId', (int) $attempt->getExeId(), Types::INTEGER)
+            ->setParameter('questionId', $questionId, Types::INTEGER)
+            ->orderBy('saved.position', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $normalized = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof TrackEAttempt) {
+                continue;
+            }
+
+            $normalized[] = [
+                'answer' => (string) $row->getAnswer(),
+                'position' => (int) $row->getPosition(),
+                'secondsSpent' => (int) $row->getSecondsSpent(),
+            ];
+        }
+
+        return $normalized;
+    }
+
+    private function resolveProgressiveDestinationCategory(int $exerciseId, int $categoryId, float $scoreInCategory): int
+    {
+        $destinations = (string) $this->entityManager->getConnection()->fetchOne(
+            'SELECT destinations FROM c_quiz_rel_category WHERE exercise_id = :exerciseId AND category_id = :categoryId',
+            [
+                'exerciseId' => $exerciseId,
+                'categoryId' => $categoryId,
+            ],
+            [
+                'exerciseId' => Types::INTEGER,
+                'categoryId' => Types::INTEGER,
+            ]
+        );
+
+        if ('' === trim($destinations)) {
+            return 0;
+        }
+
+        $rules = [];
+        foreach (explode('@@', $destinations) as $rule) {
+            if (!str_contains($rule, ':')) {
+                continue;
+            }
+
+            [$threshold, $destination] = array_pad(explode(':', $rule, 2), 2, '0');
+            $rules[(int) $threshold] = max(0, (int) $destination);
+        }
+
+        if ([] === $rules) {
+            return 0;
+        }
+
+        ksort($rules);
+        foreach ($rules as $threshold => $destinationCategoryId) {
+            $matches = 100 === (int) $threshold ? $scoreInCategory <= $threshold : $scoreInCategory < $threshold;
+            if ($matches) {
+                return $destinationCategoryId;
+            }
+        }
+
+        return 0;
+    }
+
+    private function hasAnsweredCategory(TrackEExercise $attempt, CQuiz $quiz, int $categoryId): bool
+    {
+        $questionIds = $this->getQuestionIdsInCategory($quiz, $categoryId);
+        if ([] === $questionIds) {
+            return false;
+        }
+
+        $count = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(DISTINCT saved.questionId)')
+            ->from(TrackEAttempt::class, 'saved')
+            ->andWhere('IDENTITY(saved.trackExercise) = :attemptId')
+            ->andWhere('saved.questionId IN (:questionIds)')
+            ->setParameter('attemptId', (int) $attempt->getExeId(), Types::INTEGER)
+            ->setParameter('questionIds', $questionIds, ArrayParameterType::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return 0 < $count;
     }
 
     private function scoreFeedbackQuestion(CQuiz $quiz, CQuizQuestion $question, array $answers, array $options, array $rows): float

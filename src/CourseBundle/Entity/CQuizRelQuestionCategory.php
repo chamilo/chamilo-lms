@@ -31,6 +31,9 @@ class CQuizRelQuestionCategory
     #[ORM\Column(name: 'count_questions', type: 'integer', nullable: false)]
     protected int $countQuestions;
 
+    #[ORM\Column(name: 'destinations', type: 'text', nullable: true)]
+    protected ?string $destinations = null;
+
     public function getIid(): ?int
     {
         return $this->iid;
@@ -71,4 +74,17 @@ class CQuizRelQuestionCategory
 
         return $this;
     }
+
+    public function getDestinations(): ?string
+    {
+        return $this->destinations;
+    }
+
+    public function setDestinations(?string $destinations): self
+    {
+        $this->destinations = $destinations;
+
+        return $this;
+    }
 }
+

@@ -1,6 +1,7 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
@@ -78,7 +79,11 @@ class PDF
                 'margin_footer' => 8,
                 'orientation' => $orientation,
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
-            ]
+            ],
+            // Inject an SSRF-safe HTTP client so mPDF cannot fetch remote
+            // `<img src>`/CSS `url()` pointing to internal/private hosts or the
+            // cloud metadata endpoint when rendering user-supplied HTML.
+            SafeMpdfHttpClient::container()
         );
 
         $this->pdf->margin_footer = $params['margin_footer'];

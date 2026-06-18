@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# Launch Behat and log output
+# Helps identify changes upstream by comparing logs
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOG_DIR="$SCRIPT_DIR"

@@ -436,6 +436,9 @@ class SortableTable extends HTML_Table
                 name="form_'.$this->table_name.'"
                 class="form-search"
                 method="post" action="'.api_get_self().'?'.$params.'" >';
+            // CSRF token for the bulk-action POST. Kept in the request body only
+            // (not the action URL) to avoid leaking it through Referer/logs.
+            $html .= '<input type="hidden" name="sec_token" value="'.Security::get_existing_token().'" />';
         }
 
         $html .= '<div class="table-responsive">'.$content.'</div>';

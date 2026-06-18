@@ -56,11 +56,19 @@ switch ($action) {
         exit;
         break;
     case 'lock':
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         $category_to_lock = Category::load($_GET['category_id']);
         $category_to_lock[0]->lockAllItems(1);
         $confirmation_message = get_lang('GradebookLockedAlert');
         break;
     case 'unlock':
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         if (api_is_platform_admin()) {
             $category_to_lock = Category::load($_GET['category_id']);
             $category_to_lock[0]->lockAllItems(0);
@@ -360,6 +368,10 @@ if (isset($_GET['visiblecat'])) {
 }
 
 if (isset($_GET['deletecat'])) {
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     GradebookUtils::block_students();
     $cats = Category::load($_GET['deletecat']);
     if (isset($cats[0])) {
@@ -397,6 +409,10 @@ if (isset($_GET['visibleeval'])) {
 
 // Parameters for evaluations.
 if (isset($_GET['lockedeval'])) {
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     GradebookUtils::block_students();
     $locked = (int) $_GET['lockedeval'];
     $type_locked = 1;
@@ -414,6 +430,10 @@ if (isset($_GET['lockedeval'])) {
 }
 
 if (isset($_GET['deleteeval'])) {
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     GradebookUtils::block_students();
     $eval = Evaluation::load($_GET['deleteeval']);
     if ($eval[0] != null) {
@@ -446,6 +466,10 @@ if (isset($_GET['visiblelink'])) {
 }
 
 if (isset($_GET['deletelink'])) {
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     GradebookUtils::block_students();
     $get_delete_link = (int) $_GET['deletelink'];
     //fixing #5229
@@ -495,6 +519,10 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
 
 // Actions on the sortabletable.
 if (isset($_POST['action'])) {
+    if (!Security::check_token('post')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     GradebookUtils::block_students();
     $number_of_selected_items = count($_POST['id']);
 

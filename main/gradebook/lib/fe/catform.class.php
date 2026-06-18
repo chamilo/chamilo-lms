@@ -53,6 +53,7 @@ class CatForm extends FormValidator
                 break;
         }
 
+        $this->protect();
         $this->setDefaults();
     }
 

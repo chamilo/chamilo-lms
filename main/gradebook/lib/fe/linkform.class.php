@@ -55,6 +55,7 @@ class LinkForm extends FormValidator
         } elseif (self::TYPE_MOVE == $form_type) {
             $this->build_move();
         }
+        $this->protect();
     }
 
     protected function build_move()

@@ -205,6 +205,7 @@ class LinkAddEditForm extends FormValidator
             $defaults['visible'] = $visibility_default;
         }
 
+        $this->protect();
         // set default values
         $this->setDefaults($defaults);
     }

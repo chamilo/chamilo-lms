@@ -263,11 +263,13 @@ class GradebookUtils
             );
 
             if (api_is_allowed_to_edit(null, true)) {
+                // Shared CSRF token for the destructive GET links below.
+                $token = Security::get_existing_token();
                 // Locking button
                 if (api_get_setting('gradebook_locking_enabled') === 'true') {
                     if ($cat->is_locked()) {
                         if (api_is_platform_admin()) {
-                            $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToUnlockElement')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=unlock">'.
+                            $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToUnlockElement')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=unlock&sec_token='.$token.'">'.
                                 Display::return_icon('lock.png', get_lang('UnLockEvaluation'), '', ICON_SIZE_SMALL).'</a>';
                         } else {
                             $modify_icons .= '&nbsp;<a href="#">'.
@@ -275,7 +277,7 @@ class GradebookUtils
                         }
                         $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat='.$cat->get_id().'" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToLockElement')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=lock">'.
+                        $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToLockElement')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=lock&sec_token='.$token.'">'.
                             Display::return_icon('unlock.png', get_lang('LockEvaluation'), '', ICON_SIZE_SMALL).'</a>';
                         $modify_icons .= '&nbsp;<a href="#" >'.
                             Display::return_icon('pdf_na.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
@@ -332,7 +334,7 @@ class GradebookUtils
                         ICON_SIZE_SMALL
                     );
                 } else {
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deletecat='.$cat->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'" onclick="return confirmation();">'.
+                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deletecat='.$cat->get_id().'&selectcat='.$selectcat.'&sec_token='.$token.'&'.$courseParams.'" onclick="return confirmation();">'.
                         Display::return_icon(
                             'delete.png',
                             get_lang('DeleteAll'),
@@ -421,7 +423,7 @@ class GradebookUtils
                         ICON_SIZE_SMALL
                     );
             } else {
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deleteeval='.$eval->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'" onclick="return confirmation();">'.
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deleteeval='.$eval->get_id().'&selectcat='.$selectcat.'&sec_token='.Security::get_existing_token().'&'.$courseParams.'" onclick="return confirmation();">'.
                     Display::return_icon(
                         'delete.png',
                         get_lang('Delete'),
@@ -518,7 +520,7 @@ class GradebookUtils
             } else {
                 $modify_icons .= '&nbsp;
                 <a
-                    href="'.api_get_self().'?deletelink='.$link->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'"
+                    href="'.api_get_self().'?deletelink='.$link->get_id().'&selectcat='.$selectcat.'&sec_token='.Security::get_existing_token().'&'.$courseParams.'"
                     onclick="return confirmation();">'.
                     Display::return_icon(
                         'delete.png',

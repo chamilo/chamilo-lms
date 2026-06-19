@@ -217,7 +217,7 @@ CSS uses **Tailwind CSS 3.4** with SCSS. Legacy pages also use Bootstrap 5 and j
 - Import classes via `use` statements — no inline `\Fully\Qualified\Name` in code.
 - Ordered class elements: constants → properties → constructor → public → protected → private.
 - Modern type casting: `(int)` not `intval()`.
-- `setParameter()` in QueryBuilder **must** include an explicit type (3rd arg) for non-scalars: `Types::INTEGER` for entity IDs, `Types::DATETIME_MUTABLE` for DateTime, `ArrayParameterType::INTEGER` for int arrays.
+- `setParameter()` in QueryBuilder infers the binding type automatically for integers, string/int arrays, `DateTime` instances and managed entities, so passing those directly is **functionally** correct. However, inferring the type of an **entity object** forces Doctrine to resolve its metadata to extract the identifier — Psalm's `QueryBuilderSetParameter` flags this as a performance cost. So: **prefer passing the scalar identifier** of an entity, e.g. `->setParameter('course', (int) $course->getId())` (Core entities) or `(int) $entity->getIid()` (CourseBundle entities). Once the value is a cast scalar, **omit** the 3rd-arg type — inference is trivial and `Types::INTEGER` is redundant. Reserve the explicit 3rd arg (`Types::*` / `ParameterType::*`) for when you need a binding type different from the inferred one (e.g. forcing `Types::STRING` on a numeric string) or for genuinely non-scalar values. Note: some existing code still passes `..., Types::INTEGER` after a cast — harmless legacy redundancy, not a pattern to copy.
 - All methods must have return types; all parameters must have type hints.
 
 ### JavaScript / Vue

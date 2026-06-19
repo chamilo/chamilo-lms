@@ -115,7 +115,7 @@
 
     <div
       class="tiny-content"
-      v-html="item.content"
+      v-html="sanitizeHtml(item.content)"
     />
 
     <template v-if="item.attachments && item.attachments.length > 0">
@@ -174,6 +174,7 @@ import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import { useNotification } from "../../composables/notification"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 import { MESSAGE_TYPE_INBOX } from "../../constants/entity/message"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { requireConfirmation } = useConfirmation()
 const { t } = useI18n()

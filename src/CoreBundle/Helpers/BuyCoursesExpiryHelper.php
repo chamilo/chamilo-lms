@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use BuyCoursesPlugin;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;

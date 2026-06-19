@@ -56,7 +56,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
      * Chat completion entrypoint for AiTutorChatService.
      *
      * @param array<int, array{role:string,content:string}> $messages
-     * @param array<string,mixed>                           $options
+     * @param array<string, mixed>                           $options
      */
     public function chat(array $messages, array $options = []): string
     {
@@ -360,7 +360,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
      * Images are described through the Responses API. Audio and video files are sent
      * to the transcription endpoint when the provider supports it.
      *
-     * @param array<string,mixed> $options
+     * @param array<string, mixed> $options
      */
     public function extractSearchableMediaText(
         string $filename,
@@ -382,7 +382,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     }
 
     /**
-     * @param array<string,mixed> $options
+     * @param array<string, mixed> $options
      */
     private function describeImageForSearch(
         string $filename,
@@ -485,7 +485,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     }
 
     /**
-     * @param array<string,mixed> $options
+     * @param array<string, mixed> $options
      */
     private function transcribeMediaForSearch(
         string $filename,

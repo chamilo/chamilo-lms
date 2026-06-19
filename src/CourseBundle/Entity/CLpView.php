@@ -9,7 +9,6 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,9 +50,6 @@ class CLpView
 
     #[ORM\Column(name: 'progress', type: 'integer', nullable: true)]
     protected ?int $progress = null;
-
-    #[ORM\Column(name: 'compdate', type: 'date', nullable: true)]
-    protected ?DateTimeInterface $completionDate = null;
 
     public function getIid(): ?int
     {
@@ -109,18 +105,6 @@ class CLpView
     public function getProgress()
     {
         return $this->progress;
-    }
-
-    public function getCompletionDate(): ?DateTimeInterface
-    {
-        return $this->completionDate;
-    }
-
-    public function setCompletionDate(?DateTimeInterface $completionDate): self
-    {
-        $this->completionDate = $completionDate;
-
-        return $this;
     }
 
     public function getLp(): CLp

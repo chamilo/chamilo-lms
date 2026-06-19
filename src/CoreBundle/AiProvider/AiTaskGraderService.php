@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\AiProvider;
 
+use Chamilo\CoreBundle\Entity\AiRequests;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -518,7 +519,7 @@ final class AiTaskGraderService
                 $requestText = 'Assignment AI grader request';
             }
 
-            $aiRequest = new \Chamilo\CoreBundle\Entity\AiRequests();
+            $aiRequest = new AiRequests();
             $aiRequest
                 ->setUserId($teacherId)
                 ->setToolName('task_grader')

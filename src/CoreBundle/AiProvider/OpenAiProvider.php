@@ -56,7 +56,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
      * Chat completion entrypoint for AiTutorChatService.
      *
      * @param array<int, array{role:string,content:string}> $messages
-     * @param array<string, mixed>                           $options
+     * @param array<string, mixed>                          $options
      */
     public function chat(array $messages, array $options = []): string
     {

@@ -35,7 +35,7 @@ final class Version20260619120000 extends AbstractMigrationChamilo
     private function enableDisclosureWhenUnset(string $table): void
     {
         $this->addSql(
-            sprintf(
+            \sprintf(
                 "UPDATE %s
                  SET selected_value = 'true'
                  WHERE variable = 'disclose_ai_assistance'
@@ -46,6 +46,6 @@ final class Version20260619120000 extends AbstractMigrationChamilo
             )
         );
 
-        $this->write(sprintf('Enabled disclose_ai_assistance in %s when it was unset.', $table));
+        $this->write(\sprintf('Enabled disclose_ai_assistance in %s when it was unset.', $table));
     }
 }

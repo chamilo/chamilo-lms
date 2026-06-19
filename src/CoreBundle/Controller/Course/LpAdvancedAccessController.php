@@ -160,11 +160,6 @@ final class LpAdvancedAccessController extends AbstractController
             return $this->json(['error' => 'User not found.'], 404);
         }
 
-        $dateError = $this->validateDateRange($payload);
-        if (null !== $dateError) {
-            return $this->json(['error' => $dateError], 400);
-        }
-
         $entry = $this->findRestriction($entityManager, $course, $lp, $session, $user, null);
         if ($entry instanceof CLpRelUser) {
             $entityManager->remove($entry);

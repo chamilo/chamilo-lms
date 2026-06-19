@@ -837,6 +837,68 @@ if ($formSent) {
         return $courseInfoCache[$courseId];
     };
 
+    $getCourseIdFromResourceLink = static function ($resourceLink): int {
+        if (!is_object($resourceLink)) {
+            return 0;
+        }
+
+        try {
+            if (method_exists($resourceLink, 'getCourse') && $resourceLink->getCourse()) {
+                $course = $resourceLink->getCourse();
+
+                if (is_object($course) && method_exists($course, 'getId')) {
+                    return (int) $course->getId();
+                }
+            }
+
+            if (method_exists($resourceLink, 'getCourseId')) {
+                return (int) $resourceLink->getCourseId();
+            }
+        } catch (\Throwable $e) {
+            return 0;
+        }
+
+        return 0;
+    };
+
+    $getFirstResourceLinkFromResource = static function ($resource) {
+        if (!is_object($resource)) {
+            return null;
+        }
+
+        try {
+            if (method_exists($resource, 'getFirstResourceLink')) {
+                $resourceLink = $resource->getFirstResourceLink();
+
+                if ($resourceLink) {
+                    return $resourceLink;
+                }
+            }
+
+            if (method_exists($resource, 'getResourceNode') && $resource->getResourceNode()) {
+                $resourceNode = $resource->getResourceNode();
+
+                if (method_exists($resourceNode, 'getResourceLinks')) {
+                    foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+                        if ($resourceLink) {
+                            return $resourceLink;
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        return null;
+    };
+
+    $getCourseIdFromResource = static function ($resource) use ($getFirstResourceLinkFromResource, $getCourseIdFromResourceLink): int {
+        $resourceLink = $getFirstResourceLinkFromResource($resource);
+
+        return $getCourseIdFromResourceLink($resourceLink);
+    };
+
     /** @var CQuizQuestion $question */
     if (is_array($items)) {
         foreach ($items as $question) {
@@ -852,16 +914,7 @@ if ($formSent) {
             // ---------------------------------------------------------
             $resolvedCourseId = 0;
 
-            $firstResourceLink = null;
-            try {
-                $firstResourceLink = $question->getFirstResourceLink();
-            } catch (\Throwable $e) {
-                $firstResourceLink = null;
-            }
-
-            if ($firstResourceLink && method_exists($firstResourceLink, 'getCourse') && $firstResourceLink->getCourse()) {
-                $resolvedCourseId = (int) $firstResourceLink->getCourse()->getId();
-            }
+            $resolvedCourseId = $getCourseIdFromResource($question);
 
             if ($resolvedCourseId <= 0 && $selectedCourse > 0) {
                 $resolvedCourseId = $selectedCourse;
@@ -885,6 +938,7 @@ if ($formSent) {
             // Preview rendering
             // ---------------------------------------------------------
             $questionObject = null;
+            $legacyExerciseList = [];
 
             if (!empty($courseInfo) && $resolvedCourseId > 0) {
                 $exercise = new Exercise($resolvedCourseId);
@@ -928,6 +982,27 @@ if ($formSent) {
                 $questionObject = Question::read($questionId, [], false);
 
                 if ($questionObject) {
+                    try {
+                        if ($questionObject->getCountExercise() > 0) {
+                            $legacyExerciseList = $questionObject->getExerciseListWhereQuestionExists();
+
+                            foreach ($legacyExerciseList as $exerciseEntity) {
+                                $fallbackCourseId = $getCourseIdFromResource($exerciseEntity);
+                                if ($fallbackCourseId > 0) {
+                                    $resolvedCourseId = $fallbackCourseId;
+                                    $courseInfo = $getCourseInfoCached($resolvedCourseId);
+                                    $courseCode = !empty($courseInfo['code']) ? $courseInfo['code'] : $courseCode;
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (\Throwable $e) {
+                        $legacyExerciseList = [];
+                    }
+
+                    $question->courseCode = $courseCode;
+                    $question->resolvedCourseId = $resolvedCourseId;
+
                     $fallbackHtml = '<div class="space-y-3">';
                     $fallbackHtml .= Display::return_message(
                         get_lang('Preview shown without course context. Some course-specific data may be unavailable.'),
@@ -974,17 +1049,22 @@ if ($formSent) {
             }
 
             // ---------------------------------------------------------
-            // Delete URL only if we have a usable course context
+            // Delete URL
+            // Deletion is a global question-manager action and does not
+            // require a course context. Keep the course id when available
+            // only to preserve contextual redirects and debugging data.
             // ---------------------------------------------------------
-            $deleteUrl = '';
-            if ($resolvedCourseId > 0 && !empty($courseInfo)) {
-                $deleteUrl = $url.'&'.http_build_query([
-                        'courseId' => $resolvedCourseId,
-                        'questionId' => $questionId,
-                        'action' => 'delete',
-                        $deleteTokenVar => $deleteToken,
-                    ]);
+            $deleteParams = [
+                'questionId' => $questionId,
+                'action' => 'delete',
+                $deleteTokenVar => $deleteToken,
+            ];
+
+            if ($resolvedCourseId > 0) {
+                $deleteParams['courseId'] = $resolvedCourseId;
             }
+
+            $deleteUrl = $url.'&'.http_build_query($deleteParams);
 
             // ---------------------------------------------------------
             // Exercises list: GLOBAL across courses (Tailwind-ish markup)
@@ -1045,8 +1125,8 @@ if ($formSent) {
                 $question->questionData .= '<br />'.$exerciseData;
             } else {
                 // Fallback to legacy behavior if we have a readable Question object
-                if ($questionObject && $questionObject->getCountExercise() > 0) {
-                    $exerciseList = $questionObject->getExerciseListWhereQuestionExists();
+                if ($questionObject && ($questionObject->getCountExercise() > 0 || !empty($legacyExerciseList))) {
+                    $exerciseList = !empty($legacyExerciseList) ? $legacyExerciseList : $questionObject->getExerciseListWhereQuestionExists();
                     if (!empty($exerciseList)) {
                         $question->questionData .= '<p><strong>'.get_lang('Tests').'</strong></p>';
                         foreach ($exerciseList as $exerciseEntity) {
@@ -1056,6 +1136,17 @@ if ($formSent) {
                             $activeFlag = null; // Only used if we can reliably read a "deleted" marker (-1)
 
                             if (is_object($exerciseEntity)) {
+                                if ($resolvedCourseId <= 0) {
+                                    $fallbackCourseId = $getCourseIdFromResource($exerciseEntity);
+                                    if ($fallbackCourseId > 0) {
+                                        $resolvedCourseId = $fallbackCourseId;
+                                        $courseInfo = $getCourseInfoCached($resolvedCourseId);
+                                        $courseCode = !empty($courseInfo['code']) ? $courseInfo['code'] : $courseCode;
+                                        $question->courseCode = $courseCode;
+                                        $question->resolvedCourseId = $resolvedCourseId;
+                                    }
+                                }
+
                                 if (method_exists($exerciseEntity, 'getTitle')) {
                                     $exerciseTitle = (string) $exerciseEntity->getTitle();
                                 } elseif (method_exists($exerciseEntity, 'getName')) {
@@ -1122,7 +1213,7 @@ if ($formSent) {
                     $editQuestionUrl,
                     [
                         'target' => '_blank',
-                        'class' => 'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50',
+                        'class' => 'inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 no-underline hover:bg-slate-50',
                     ]
                 );
             } else {
@@ -1137,7 +1228,7 @@ if ($formSent) {
                     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon text-white', null, ICON_SIZE_SMALL, get_lang('Delete')).' '.get_lang('Delete'),
                     $deleteUrl,
                     [
-                        'class' => 'inline-flex items-center rounded-lg bg-danger px-3 py-1.5 text-sm font-semibold text-white hover:bg-danger/90',
+                        'class' => 'inline-flex cursor-pointer items-center gap-2 rounded-lg bg-danger px-3 py-1.5 text-sm font-semibold text-white no-underline hover:bg-danger/90',
                         'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
                     ]
                 );
@@ -1189,11 +1280,9 @@ switch ($action) {
         }
 
         $questionId = isset($_REQUEST['questionId']) ? (int) $_REQUEST['questionId'] : 0;
-        $courseId = isset($_REQUEST['courseId']) ? (int) $_REQUEST['courseId'] : 0;
-        $courseInfo = $courseId > 0 ? api_get_course_info_by_id($courseId) : [];
 
-        if (empty($courseInfo) || $questionId <= 0) {
-            Display::addFlash(Display::return_message(get_lang('Delete failed: missing course context or invalid question id.'), 'warning'));
+        if ($questionId <= 0) {
+            Display::addFlash(Display::return_message(get_lang('Delete failed: invalid question id.'), 'warning'));
             Security::clear_token($deleteTokenPrefix);
             header('Location: '.$url);
             exit;

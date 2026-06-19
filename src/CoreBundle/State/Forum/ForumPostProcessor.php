@@ -1166,7 +1166,7 @@ final class ForumPostProcessor implements ProcessorInterface
      */
     private function flattenRecipientUserIds(mixed $value): array
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $userIds = [];
             foreach ($value as $item) {
                 $userIds = array_merge($userIds, $this->flattenRecipientUserIds($item));

@@ -30,6 +30,7 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -3128,14 +3129,14 @@ class AiController extends AbstractController
         $reservedTokens = $this->getConfiguredAiRequestTokenCost($provider, $serviceType);
 
         if ($limits['daily'] > 0) {
-            $dailyUsed = $this->getAiTokensUsedSince($userId, $provider, new \DateTimeImmutable('today'));
+            $dailyUsed = $this->getAiTokensUsedSince($userId, $provider, new DateTimeImmutable('today'));
             if ($dailyUsed + $reservedTokens > $limits['daily']) {
                 return $this->translator->trans('Your daily AI token limit has been reached. Please try again tomorrow.');
             }
         }
 
         if ($limits['monthly'] > 0) {
-            $monthlyUsed = $this->getAiTokensUsedSince($userId, $provider, new \DateTimeImmutable('first day of this month 00:00:00'));
+            $monthlyUsed = $this->getAiTokensUsedSince($userId, $provider, new DateTimeImmutable('first day of this month 00:00:00'));
             if ($monthlyUsed + $reservedTokens > $limits['monthly']) {
                 return $this->translator->trans('Your monthly AI token limit has been reached. Please try again next month.');
             }
@@ -3186,7 +3187,7 @@ class AiController extends AbstractController
         return \is_string($firstProvider) ? $firstProvider : null;
     }
 
-    private function getAiTokensUsedSince(int $userId, ?string $providerName, \DateTimeImmutable $start): int
+    private function getAiTokensUsedSince(int $userId, ?string $providerName, DateTimeImmutable $start): int
     {
         try {
             $connection = $this->em->getConnection();
@@ -3267,7 +3268,7 @@ class AiController extends AbstractController
             $this->em->getConnection()->insert('ai_requests', [
                 'user_id' => $userId,
                 'tool_name' => $toolName.'_estimated_cost',
-                'requested_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+                'requested_at' => (new DateTimeImmutable())->format('Y-m-d H:i:s'),
                 'request_text' => mb_substr($prompt, 0, 900),
                 'prompt_tokens' => 0,
                 'completion_tokens' => 0,

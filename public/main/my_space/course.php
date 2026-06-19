@@ -540,23 +540,26 @@ Display::display_header($headerTitle);
 
 echo '<div class="w-full px-4 md:px-8 pb-8 space-y-6">';
 
-// Header row: title on the left, toolbar and optional import link on the right.
-echo '  <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">';
-echo '      <div class="space-y-1">';
-echo            Display::page_subheader($pageTitle);
-echo '      </div>';
+// Toolbar must be displayed before the page title in this legacy report page.
+echo '  <div class="flex flex-col gap-3">';
 
-echo '      <div class="flex flex-col items-end gap-2">';
-echo '          <div class="flex justify-start md:justify-end gap-2">';
-echo                $toolbar;
-echo '          </div>';
+if (!empty($toolbar) || !empty($importLink)) {
+    echo '      <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">';
+    echo '          <div class="flex flex-wrap items-center gap-2">';
+    echo                $toolbar;
+    echo '          </div>';
 
-if (!empty($importLink)) {
-    echo '      <div class="mt-1 text-sm text-right">';
-    echo            $importLink;
+    if (!empty($importLink)) {
+        echo '      <div class="text-sm md:text-right">';
+        echo            $importLink;
+        echo '      </div>';
+    }
+
     echo '      </div>';
 }
 
+echo '      <div class="space-y-1">';
+echo            Display::page_subheader($pageTitle);
 echo '      </div>';
 echo '  </div>';
 

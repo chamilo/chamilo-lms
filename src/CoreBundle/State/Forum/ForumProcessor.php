@@ -347,7 +347,7 @@ final class ForumProcessor implements ProcessorInterface
             ->createQueryBuilder('item')
             ->select('COALESCE(MAX(item.displayOrder), 0)')
             ->andWhere('item.lp = :learningPath')
-            ->setParameter('learningPath', $learningPath)
+            ->setParameter('learningPath', (int) $learningPath->getIid())
             ->getQuery()
             ->getSingleScalarResult()
         ;

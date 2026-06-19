@@ -179,8 +179,8 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
             ->andWhere('IDENTITY(invitation.course) = :courseId')
             ->orderBy('user.lastname', 'ASC')
             ->addOrderBy('user.firstname', 'ASC')
-            ->setParameter('surveyId', (int) $survey->getIid(), Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('surveyId', (int) $survey->getIid())
+            ->setParameter('courseId', (int) $course->getId())
         ;
 
         if (null === $session) {
@@ -188,7 +188,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         } else {
             $queryBuilder
                 ->andWhere('IDENTITY(invitation.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId())
             ;
         }
 
@@ -214,7 +214,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
 
             $queryBuilder
                 ->andWhere('resource.iid = :surveyId')
-                ->setParameter('surveyId', (int) $survey->getIid(), Types::INTEGER)
+                ->setParameter('surveyId', (int) $survey->getIid())
             ;
 
             if (null !== $queryBuilder->getQuery()->getOneOrNullResult()) {
@@ -280,7 +280,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
             ->andWhere('u.active = :active')
             ->orderBy('u.lastname', 'ASC')
             ->addOrderBy('u.firstname', 'ASC')
-            ->setParameter('course', $course)
+            ->setParameter('course', (int) $course->getId())
             ->setParameter('student', CourseRelUser::STUDENT, Types::INTEGER)
             ->setParameter('active', User::ACTIVE, Types::INTEGER)
             ->getQuery()
@@ -305,8 +305,8 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
             ->andWhere('u.active = :active')
             ->orderBy('u.lastname', 'ASC')
             ->addOrderBy('u.firstname', 'ASC')
-            ->setParameter('course', $course)
-            ->setParameter('session', $session)
+            ->setParameter('course', (int) $course->getId())
+            ->setParameter('session', (int) $session->getId())
             ->setParameter('student', Session::STUDENT, Types::INTEGER)
             ->setParameter('active', User::ACTIVE, Types::INTEGER)
             ->getQuery()

@@ -385,8 +385,8 @@ final readonly class SurveyListProvider implements ProviderInterface
             ->andWhere('survey.availFrom <= :now')
             ->andWhere('survey.availTill >= :now')
             ->orderBy('survey.title', 'ASC')
-            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $user->getId())
+            ->setParameter('courseId', (int) $course->getId())
             ->setParameter('now', $now, Types::DATETIME_MUTABLE)
         ;
 
@@ -395,7 +395,7 @@ final readonly class SurveyListProvider implements ProviderInterface
         } else {
             $queryBuilder
                 ->andWhere('IDENTITY(invitation.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId())
             ;
         }
 
@@ -521,8 +521,8 @@ final readonly class SurveyListProvider implements ProviderInterface
             ->from(CGroupRelTutor::class, 'relation')
             ->andWhere('relation.cId = :courseId')
             ->andWhere('relation.group = :group')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('group', $group)
+            ->setParameter('courseId', (int) $course->getId())
+            ->setParameter('group', (int) $group->getIid())
             ->getQuery()
             ->getSingleScalarResult() > 0
         ;

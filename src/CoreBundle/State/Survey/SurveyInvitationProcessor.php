@@ -226,7 +226,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             ->andWhere('u.active = :active')
             ->orderBy('u.lastname', 'ASC')
             ->addOrderBy('u.firstname', 'ASC')
-            ->setParameter('course', $course)
+            ->setParameter('course', (int) $course->getId())
             ->setParameter('student', CourseRelUser::STUDENT, Types::INTEGER)
             ->setParameter('active', User::ACTIVE, Types::INTEGER)
             ->getQuery()
@@ -251,8 +251,8 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             ->andWhere('u.active = :active')
             ->orderBy('u.lastname', 'ASC')
             ->addOrderBy('u.firstname', 'ASC')
-            ->setParameter('course', $course)
-            ->setParameter('session', $session)
+            ->setParameter('course', (int) $course->getId())
+            ->setParameter('session', (int) $session->getId())
             ->setParameter('student', Session::STUDENT, Types::INTEGER)
             ->setParameter('active', User::ACTIVE, Types::INTEGER)
             ->getQuery()
@@ -478,8 +478,8 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             ->from(CSurveyInvitation::class, 'invitation')
             ->andWhere('IDENTITY(invitation.survey) = :surveyId')
             ->andWhere('IDENTITY(invitation.course) = :courseId')
-            ->setParameter('surveyId', (int) $survey->getIid(), Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('surveyId', (int) $survey->getIid())
+            ->setParameter('courseId', (int) $course->getId())
         ;
 
         if (null === $session) {
@@ -487,7 +487,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         } else {
             $queryBuilder
                 ->andWhere('IDENTITY(invitation.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId())
             ;
         }
 

@@ -18,10 +18,7 @@
         @click="selectDiscussion(discussion)"
       >
         <div class="discussion-content">
-          <div
-            class="discussion-title"
-            v-html="discussion.title"
-          ></div>
+          <div class="discussion-title">{{ discussion.title }}</div>
           <div class="discussion-details">
             <i class="mdi mdi-message-reply-text icon"></i>
             <span>{{ discussion.repliesCount }} {{ t("Replies") }}</span>

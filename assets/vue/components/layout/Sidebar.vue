@@ -12,30 +12,9 @@
         <BaseSidebarPanelMenu v-model="menuItemsBeforeMyCourse" />
 
         <BaseSidebarPanelMenu
-          v-if="menuItemMyCourse.length > 0 && enrolledStore.isInitialized"
+          v-if="menuItemMyCourse.length > 0"
           v-model="menuItemMyCourse"
         />
-        <div
-          v-else-if="!hasOnlyOneItem && !enrolledStore.isInitialized"
-          class="flex mx-7 my-1.5 py-2 ml-8 gap-4"
-        >
-          <BaseIcon
-            class="text-sm"
-            icon="courses"
-            size="small"
-          />
-          <div
-            v-if="sidebarIsOpen"
-            class="font-bold text-sm self-center"
-          >
-            {{ t("Course") }}
-          </div>
-          <BaseIcon
-            class="text-sm animate-spin"
-            icon="sync"
-            size="small"
-          />
-        </div>
 
         <BaseSidebarPanelMenu v-model="menuItemsAfterMyCourse" />
       </div>
@@ -93,7 +72,6 @@ import { useSidebarMenu } from "../../composables/sidebarMenu"
 import { usePlatformConfig } from "../../store/platformConfig"
 import PageList from "../page/PageList.vue"
 import { useEnrolledStore } from "../../store/enrolledStore"
-import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseSidebarPanelMenu from "../basecomponents/BaseSidebarPanelMenu.vue"
 import CategoryLinks from "../page/CategoryLinks.vue"
 

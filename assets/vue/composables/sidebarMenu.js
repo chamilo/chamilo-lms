@@ -416,6 +416,28 @@ export function useSidebarMenu() {
     const items = []
 
     if (securityStore.isAuthenticated && isMenuTabEnabled("my_courses")) {
+      const defaultCourseItems = [
+        {
+          label: t("My courses"),
+          route: { name: "MyCourses" },
+        },
+        {
+          label: t("My sessions"),
+          route: { name: "MySessions" },
+        },
+      ]
+
+      if (!enrolledStore.isInitialized) {
+        items.push({
+          icon: "mdi mdi-book-open-page-variant",
+          label: t("My courses"),
+          items: defaultCourseItems,
+          expanded: isActive({ items: defaultCourseItems }),
+        })
+
+        return items
+      }
+
       const courseItems = []
 
       if (enrolledStore.isEnrolledInCourses) {
@@ -435,7 +457,7 @@ export function useSidebarMenu() {
       if (courseItems.length > 0) {
         items.push({
           icon: "mdi mdi-book-open-page-variant",
-          label: courseItems.length > 1 ? t("Courses") : courseItems[0].label,
+          label: enrolledStore.isEnrolledInCourses ? t("My courses") : courseItems[0].label,
           items: courseItems.length > 1 ? courseItems : undefined,
           route: 1 === courseItems.length ? courseItems[0].route : undefined,
           class: courseItems.length > 0 ? courseItems[0].class : "",

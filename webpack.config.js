@@ -15,7 +15,7 @@ const isProd = Encore.isProduction()
 Encore.setOutputPath("public/build/")
   .setManifestKeyPrefix("public/build/")
   .setPublicPath("/build")
-  .enableBuildNotifications()
+  // .enableBuildNotifications()
 
 // Clean output only in production to speed up development builds.
 if (isProd) {

@@ -37,6 +37,10 @@ use const PATHINFO_EXTENSION;
 #[Route('/search')]
 final class SearchController extends AbstractController
 {
+    private const DEFAULT_RESULTS_PER_PAGE = 20;
+
+    private const MAX_RESULTS_PER_PAGE = 100;
+
     public function __construct(
         private readonly XapianSearchService $xapianSearchService,
         private readonly XapianIndexService $xapianIndexService,
@@ -64,17 +68,22 @@ final class SearchController extends AbstractController
 
         $languageIso = $this->resolveRequestLanguageIso($request);
 
+        $page = max(1, (int) $request->query->get('page', 1));
+        $itemsPerPage = $this->resolveItemsPerPage($request);
+        $offset = ($page - 1) * $itemsPerPage;
+
         try {
             $result = $this->xapianSearchService->search(
                 queryString: $q,
-                offset: 0,
-                length: 20,
+                offset: $offset,
+                length: $itemsPerPage,
                 extra: [
                     'language' => $languageIso,
                 ]
             );
 
             $results = $result['results'];
+            $estimatedTotal = (int) ($result['count'] ?? 0);
 
             // Mirror the page action: drop hits the caller cannot access unless the
             // platform is configured to show unlinked results. Without this, the JSON
@@ -90,7 +99,10 @@ final class SearchController extends AbstractController
             return $this->json([
                 'query' => $q,
                 'language' => $languageIso,
-                'total' => \count($results),
+                'page' => $page,
+                'itemsPerPage' => $itemsPerPage,
+                'total' => $estimatedTotal,
+                'visibleTotal' => \count($results),
                 'results' => $results,
             ]);
         } catch (Throwable $e) {
@@ -112,6 +124,9 @@ final class SearchController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $q = trim((string) $request->query->get('q', ''));
+        $page = max(1, (int) $request->query->get('page', 1));
+        $itemsPerPage = $this->resolveItemsPerPage($request);
+        $offset = ($page - 1) * $itemsPerPage;
 
         $estimatedTotal = 0;
         $results = [];
@@ -126,8 +141,8 @@ final class SearchController extends AbstractController
             try {
                 $searchResult = $this->xapianSearchService->search(
                     queryString: $q,
-                    offset: 0,
-                    length: 20,
+                    offset: $offset,
+                    length: $itemsPerPage,
                     extra: [
                         'language' => $languageIso,
                     ]
@@ -149,12 +164,22 @@ final class SearchController extends AbstractController
             }
         }
 
+        $visibleTotal = \is_array($results) ? \count($results) : 0;
+        $firstResultNumber = $visibleTotal > 0 ? $offset + 1 : 0;
+        $lastResultNumber = $visibleTotal > 0 ? $offset + $visibleTotal : 0;
+        $totalPages = $estimatedTotal > 0 ? (int) ceil($estimatedTotal / $itemsPerPage) : 1;
+
         return $this->render('@ChamiloCore/Search/xapian_search.html.twig', [
             'query' => $q,
             'language' => $languageIso,
             'show_unlinked' => $showUnlinked,
             'estimated_total' => $estimatedTotal,
-            'visible_total' => \is_array($results) ? \count($results) : 0,
+            'visible_total' => $visibleTotal,
+            'first_result_number' => $firstResultNumber,
+            'last_result_number' => $lastResultNumber,
+            'current_page' => $page,
+            'items_per_page' => $itemsPerPage,
+            'total_pages' => $totalPages,
             'results' => $results,
             'error' => $error,
         ]);
@@ -1047,6 +1072,17 @@ final class SearchController extends AbstractController
         }
 
         return $escaped;
+    }
+
+    private function resolveItemsPerPage(Request $request): int
+    {
+        $itemsPerPage = (int) $request->query->get('itemsPerPage', self::DEFAULT_RESULTS_PER_PAGE);
+
+        if ($itemsPerPage <= 0) {
+            return self::DEFAULT_RESULTS_PER_PAGE;
+        }
+
+        return min($itemsPerPage, self::MAX_RESULTS_PER_PAGE);
     }
 
     private function resolveRequestLanguageIso(Request $request): ?string

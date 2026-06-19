@@ -44,7 +44,7 @@ jobs:
               run: composer install --no-progress
 
             - name: Cache clear
-              run: php bin/console cache:clear
+              run: php bin/console cache:clear --no-warmup
 
             - name: Check Symfony requirements
               run: vendor/bin/requirements-checker

@@ -3981,8 +3981,12 @@ class SessionManager
             return 0;
         }
 
-        $userId = $userInfo['user_id'];
-        $user = api_get_user_entity();
+        $userId = (int) $userInfo['user_id'];
+        $user = api_get_user_entity($userId);
+
+        if (null === $user) {
+            return 0;
+        }
 
         // Only subscribe DRH users.
         $rolesAllowed = [
@@ -3992,7 +3996,8 @@ class SessionManager
             COURSE_TUTOR,
         ];
         $isAdmin = api_is_platform_admin_by_id($userInfo['user_id']);
-        if (!$isAdmin && !in_array($userInfo['status'], $rolesAllowed)) {
+        $currentUserCanAssignFromDashboard = api_is_platform_admin();
+        if (!$isAdmin && !$currentUserCanAssignFromDashboard && !in_array($userInfo['status'], $rolesAllowed)) {
             return 0;
         }
 

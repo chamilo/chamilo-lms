@@ -93,10 +93,23 @@ if (isset($typeSelected) && '0' != $typeSelected) {
 
         $parent_cat = Category::load($addvalues['select_gradebook']);
         $global_weight = $category[0]->get_weight();
-        $link->set_weight($addvalues['weight_mask']);
 
         if (isset($addvalues['min_score']) && $addvalues['min_score'] !== '') {
             $link->set_min_score(api_float_val($addvalues['min_score']));
+        }
+
+        if (LINK_FORUM_PARTICIPATION == $link->get_type()) {
+            $pointsOne = isset($addvalues['points_one']) && '' !== $addvalues['points_one']
+                ? api_float_val($addvalues['points_one'])
+                : null;
+            $pointsMany = isset($addvalues['points_many']) && '' !== $addvalues['points_many']
+                ? api_float_val($addvalues['points_many'])
+                : null;
+            $link->set_points_one($pointsOne);
+            $link->set_points_many($pointsMany);
+            // Weight is derived from the points by ForumParticipationLink::get_weight().
+        } else {
+            $link->set_weight($addvalues['weight_mask']);
         }
 
         if ($link->needs_max()) {

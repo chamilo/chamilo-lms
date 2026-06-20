@@ -53,8 +53,6 @@ $form = new LinkAddEditForm(
 if ($form->validate()) {
     $values = $form->exportValues();
     $parent_cat = Category::load($values['select_gradebook']);
-    $final_weight = $values['weight_mask'];
-    $link->set_weight($final_weight);
 
     if (!empty($values['select_gradebook'])) {
         $link->set_category_id($values['select_gradebook']);
@@ -63,6 +61,22 @@ if ($form->validate()) {
     if (isset($values['min_score']) && $values['min_score'] !== '') {
         $link->set_min_score(api_float_val($values['min_score']));
     }
+
+    if (LINK_FORUM_PARTICIPATION == $link->get_type()) {
+        $pointsOne = isset($values['points_one']) && '' !== $values['points_one']
+            ? api_float_val($values['points_one'])
+            : null;
+        $pointsMany = isset($values['points_many']) && '' !== $values['points_many']
+            ? api_float_val($values['points_many'])
+            : null;
+        $link->set_points_one($pointsOne);
+        $link->set_points_many($pointsMany);
+        // Weight is derived from the points by ForumParticipationLink::get_weight().
+        $final_weight = $link->get_weight();
+    } else {
+        $final_weight = $values['weight_mask'];
+    }
+    $link->set_weight($final_weight);
     $link->save();
 
     //Update weight for attendance

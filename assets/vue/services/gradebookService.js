@@ -39,4 +39,68 @@ export default {
   async getDefaultCertificate(courseId) {
     return await baseService.get(`${API_BASE}/default_certificate/${courseId}`)
   },
+
+  /**
+   * Updates the calculation mode (weighted_average | points_sum) of a gradebook category.
+   * @param {number|string} categoryId The numeric id of the gradebook category.
+   * @param {string} calculationMode The target calculation mode.
+   * @returns {Promise<Object>} The updated category resource.
+   */
+  async updateCalculationMode(categoryId, calculationMode) {
+    return await baseService.put(`/api/gradebook_categories/${categoryId}`, { calculationMode })
+  },
+
+  /**
+   * Fetches the gradebook links of a category.
+   * @param {number|string} categoryId The numeric id of the gradebook category.
+   * @returns {Promise<Array>} The list of gradebook links.
+   */
+  async getLinks(categoryId) {
+    return await baseService.getCollection("/api/gradebook_links", {
+      category: `/api/gradebook_categories/${categoryId}`,
+    })
+  },
+
+  /**
+   * Creates a forum participation gradebook item.
+   * @param {Object} payload The link payload.
+   * @param {number} payload.threadId The forum thread id used as ref_id.
+   * @param {number} payload.courseId The course id.
+   * @param {number|string} payload.categoryId The gradebook category id.
+   * @param {number} payload.pointsOne Points awarded for exactly one message.
+   * @param {number} payload.pointsMany Points awarded for two or more messages.
+   * @returns {Promise<Object>} The created gradebook link resource.
+   */
+  async createForumParticipationLink({ threadId, courseId, categoryId, pointsOne, pointsMany }) {
+    // 11 = LINK_FORUM_PARTICIPATION. Weight equals pointsMany (the item's max points) so in
+    // points_sum the contribution equals the earned points.
+    return await baseService.post("/api/gradebook_links", {
+      type: 11,
+      refId: threadId,
+      course: `/api/courses/${courseId}`,
+      category: `/api/gradebook_categories/${categoryId}`,
+      weight: Number(pointsMany),
+      pointsOne: String(pointsOne),
+      pointsMany: String(pointsMany),
+    })
+  },
+
+  /**
+   * Updates a forum participation gradebook item.
+   * @param {number|string} linkId The numeric id of the gradebook link.
+   * @param {Object} payload The fields to update (pointsOne, pointsMany, refId).
+   * @returns {Promise<Object>} The updated gradebook link resource.
+   */
+  async updateForumParticipationLink(linkId, payload) {
+    return await baseService.put(`/api/gradebook_links/${linkId}`, payload)
+  },
+
+  /**
+   * Deletes a gradebook link.
+   * @param {number|string} linkId The numeric id of the gradebook link.
+   * @returns {Promise<Object>}
+   */
+  async deleteLink(linkId) {
+    return await baseService.delete(`/api/gradebook_links/${linkId}`)
+  },
 }

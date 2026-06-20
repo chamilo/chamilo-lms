@@ -212,7 +212,7 @@ final class AiCourseAnalyzerService
             ->innerJoin('resourceNode.resourceLinks', 'resourceLink')
             ->andWhere('resourceLink.course = :course')
             ->andWhere('resourceLink.visibility = :visibility')
-            ->setParameter('course', $course)
+            ->setParameter('course', (int) $course->getId())
             ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ->setMaxResults(self::MAX_LESSONS)
             ->orderBy('resourceLink.displayOrder', 'ASC')
@@ -221,7 +221,7 @@ final class AiCourseAnalyzerService
         if ($session instanceof Session) {
             $qb
                 ->andWhere('(resourceLink.session IS NULL OR resourceLink.session = :session)')
-                ->setParameter('session', $session)
+                ->setParameter('session', (int) $session->getId())
             ;
         } else {
             $qb->andWhere('resourceLink.session IS NULL');
@@ -556,7 +556,7 @@ final class AiCourseAnalyzerService
             ->andWhere('resourceLink.course = :course')
             ->andWhere('resourceLink.visibility = :visibility')
             ->andWhere('document.filetype = :filetype')
-            ->setParameter('course', $course)
+            ->setParameter('course', (int) $course->getId())
             ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ->setParameter('filetype', 'file', Types::STRING)
             ->setMaxResults(self::MAX_STANDALONE_DOCUMENTS)
@@ -573,7 +573,7 @@ final class AiCourseAnalyzerService
         if ($session instanceof Session) {
             $qb
                 ->andWhere('(resourceLink.session IS NULL OR resourceLink.session = :session)')
-                ->setParameter('session', $session)
+                ->setParameter('session', (int) $session->getId())
             ;
         } else {
             $qb->andWhere('resourceLink.session IS NULL');
@@ -608,7 +608,7 @@ final class AiCourseAnalyzerService
             ->leftJoin('question.answers', 'answer')
             ->andWhere('resourceLink.course = :course')
             ->andWhere('resourceLink.visibility = :visibility')
-            ->setParameter('course', $course)
+            ->setParameter('course', (int) $course->getId())
             ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ->setMaxResults(self::MAX_STANDALONE_EXERCISES)
             ->orderBy('resourceLink.displayOrder', 'ASC')
@@ -624,7 +624,7 @@ final class AiCourseAnalyzerService
         if ($session instanceof Session) {
             $qb
                 ->andWhere('(resourceLink.session IS NULL OR resourceLink.session = :session)')
-                ->setParameter('session', $session)
+                ->setParameter('session', (int) $session->getId())
             ;
         } else {
             $qb->andWhere('resourceLink.session IS NULL');

@@ -160,11 +160,6 @@ final class LpAdvancedAccessController extends AbstractController
             return $this->json(['error' => 'User not found.'], 404);
         }
 
-        $dateError = $this->validateDateRange($payload);
-        if (null !== $dateError) {
-            return $this->json(['error' => $dateError], 400);
-        }
-
         $entry = $this->findRestriction($entityManager, $course, $lp, $session, $user, null);
         if ($entry instanceof CLpRelUser) {
             $entityManager->remove($entry);
@@ -416,8 +411,8 @@ final class LpAdvancedAccessController extends AbstractController
             ->join('rn.resourceLinks', 'rl')
             ->where('lp = :lp')
             ->andWhere('rl.course = :course')
-            ->setParameter('lp', $lp)
-            ->setParameter('course', $course)
+            ->setParameter('lp', (int) $lp->getIid())
+            ->setParameter('course', (int) $course->getId())
         ;
 
         if ($sessionId > 0) {
@@ -450,7 +445,7 @@ final class LpAdvancedAccessController extends AbstractController
             ->andWhere('cru.status = :student')
             ->orderBy('u.lastname', 'ASC')
             ->addOrderBy('u.firstname', 'ASC')
-            ->setParameter('course', $course)
+            ->setParameter('course', (int) $course->getId())
             ->setParameter('student', CourseRelUser::STUDENT, Types::INTEGER)
         ;
 
@@ -509,7 +504,7 @@ final class LpAdvancedAccessController extends AbstractController
             ->join('gru.group', 'g')
             ->where('gru.cId = :courseId')
             ->orderBy('g.title', 'ASC')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId())
         ;
 
         /** @var list<CGroupRelUser> $groupRelations */
@@ -560,12 +555,12 @@ final class LpAdvancedAccessController extends AbstractController
             ->leftJoin('rel.group', 'g')
             ->where('rel.course = :course')
             ->andWhere('rel.lp = :lp')
-            ->setParameter('course', $course)
-            ->setParameter('lp', $lp)
+            ->setParameter('course', (int) $course->getId())
+            ->setParameter('lp', (int) $lp->getIid())
         ;
 
         if ($session instanceof Session) {
-            $qb->andWhere('rel.session = :session')->setParameter('session', $session);
+            $qb->andWhere('rel.session = :session')->setParameter('session', (int) $session->getId());
         } else {
             $qb->andWhere('rel.session IS NULL');
         }
@@ -602,12 +597,12 @@ final class LpAdvancedAccessController extends AbstractController
             ->where('rel.course = :course')
             ->andWhere('rel.lp = :lp')
             ->andWhere('rel.group IS NOT NULL')
-            ->setParameter('course', $course)
-            ->setParameter('lp', $lp)
+            ->setParameter('course', (int) $course->getId())
+            ->setParameter('lp', (int) $lp->getIid())
         ;
 
         if ($session instanceof Session) {
-            $qb->andWhere('rel.session = :session')->setParameter('session', $session);
+            $qb->andWhere('rel.session = :session')->setParameter('session', (int) $session->getId());
         } else {
             $qb->andWhere('rel.session IS NULL');
         }
@@ -640,7 +635,7 @@ final class LpAdvancedAccessController extends AbstractController
             ->join('gru.group', 'g')
             ->where('gru.cId = :courseId')
             ->orderBy('g.title', 'ASC')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId())
         ;
 
         /** @var list<CGroupRelUser> $rows */
@@ -673,8 +668,8 @@ final class LpAdvancedAccessController extends AbstractController
             ->join('gru.user', 'u')
             ->where('gru.cId = :courseId')
             ->andWhere('gru.group = :group')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('group', $group)
+            ->setParameter('courseId', (int) $course->getId())
+            ->setParameter('group', (int) $group->getIid())
         ;
 
         /** @var list<CGroupRelUser> $rows */

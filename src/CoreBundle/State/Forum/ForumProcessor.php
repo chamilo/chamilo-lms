@@ -257,8 +257,7 @@ final class ForumProcessor implements ProcessorInterface
         ?Session $session,
         ?CGroup $group,
         ?CLp $learningPath = null,
-    ): void
-    {
+    ): void {
         $startTime = $this->getUtcDateTimeOrNull($payload['startTime'] ?? null);
         $endTime = $this->getUtcDateTimeOrNull($payload['endTime'] ?? null);
         if (null !== $startTime && null !== $endTime && $startTime >= $endTime) {
@@ -348,7 +347,7 @@ final class ForumProcessor implements ProcessorInterface
             ->createQueryBuilder('item')
             ->select('COALESCE(MAX(item.displayOrder), 0)')
             ->andWhere('item.lp = :learningPath')
-            ->setParameter('learningPath', $learningPath)
+            ->setParameter('learningPath', (int) $learningPath->getIid())
             ->getQuery()
             ->getSingleScalarResult()
         ;

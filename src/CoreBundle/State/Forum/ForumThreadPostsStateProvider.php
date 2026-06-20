@@ -41,7 +41,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
 
-    /** @var array<int, string> */
+    /**
+     * @var array<int, string>
+     */
     private array $posterAvatarUrlByUserId = [];
 
     public function __construct(

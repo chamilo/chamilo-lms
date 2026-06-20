@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\State\Forum;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumNotification;
@@ -184,8 +184,8 @@ trait ForumNotificationHelperTrait
                 ->andWhere('rel.course = :course')
                 ->andWhere('rel.session = :session')
                 ->andWhere('rel.status = :status')
-                ->setParameter('course', $course)
-                ->setParameter('session', $session)
+                ->setParameter('course', (int) $course->getId())
+                ->setParameter('session', (int) $session->getId())
                 ->setParameter('status', Session::STUDENT)
                 ->getQuery()
                 ->getScalarResult()

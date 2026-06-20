@@ -12,8 +12,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -29,7 +29,6 @@ trait ForumActionStateHelperTrait
             throw new AccessDeniedHttpException('You are not allowed to edit this forum resource.');
         }
     }
-
 
     private function assertResourceNodeInForumContext(
         ?ResourceNode $resourceNode,

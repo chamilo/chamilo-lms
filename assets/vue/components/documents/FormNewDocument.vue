@@ -1014,6 +1014,19 @@ export default {
       this.showAiMediaDialog = false
       this.insertMediaAfterSelectedBlock(payload)
     },
+    escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+    },
+    buildAiGeneratedMediaHtml(mediaHtml) {
+      const label = this.escapeHtml(this.t("AI generated"))
+
+      return `<span data-ai-generated-media-wrapper="1" style="position:relative;display:inline-block;max-width:100%;">${mediaHtml}<span data-ai-generated-media="1" style="position:absolute;right:8px;bottom:8px;z-index:1;display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(15,23,42,.82);color:#fff;font-size:12px;font-weight:600;line-height:16px;">${label}</span></span>`
+    },
     insertMediaAfterSelectedBlock(payload) {
       const editor = this.getTinyEditor()
 
@@ -1022,15 +1035,17 @@ export default {
       }
 
       const mediaType = String(payload.type || "image").toLowerCase()
-      const safeUrl = String(payload.url).trim()
-      const safeAlt = String(payload.alt || payload.title || "Generated media").trim()
+      const safeUrl = this.escapeHtml(String(payload.url).trim())
+      const safeAlt = this.escapeHtml(String(payload.alt || payload.title || "Generated media").trim())
 
-      let html = ""
+      let mediaHtml = ""
       if ("video" === mediaType) {
-        html = `<p><video controls src="${safeUrl}"></video></p>`
+        mediaHtml = `<video controls src="${safeUrl}" style="display:block;max-width:100%;"></video>`
       } else {
-        html = `<p><img src="${safeUrl}" alt="${safeAlt}" /></p>`
+        mediaHtml = `<img src="${safeUrl}" alt="${safeAlt}" style="display:block;max-width:100%;" />`
       }
+
+      const html = `<p>${this.buildAiGeneratedMediaHtml(mediaHtml)}</p>`
 
       editor.focus()
 

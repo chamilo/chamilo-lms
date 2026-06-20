@@ -14,7 +14,6 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class LpAdvancedAccessHelper
@@ -57,16 +56,16 @@ final readonly class LpAdvancedAccessHelper
             ->andWhere('rel.lp = :lp')
             ->andWhere('rel.user = :user')
             ->andWhere('rel.group IS NULL')
-            ->setParameter('course', $course)
-            ->setParameter('lp', $lp)
-            ->setParameter('user', $user)
+            ->setParameter('course', (int) $course->getId())
+            ->setParameter('lp', (int) $lp->getIid())
+            ->setParameter('user', (int) $user->getId())
             ->setMaxResults(1)
         ;
 
         if ($session instanceof Session) {
             $qb
                 ->andWhere('rel.session = :session')
-                ->setParameter('session', $session)
+                ->setParameter('session', (int) $session->getId())
             ;
         } else {
             $qb->andWhere('rel.session IS NULL');
@@ -97,16 +96,16 @@ final readonly class LpAdvancedAccessHelper
             ->andWhere('rel.lp = :lp')
             ->andWhere('rel.user = :user')
             ->andWhere('rel.group IS NOT NULL')
-            ->setParameter('course', $course)
-            ->setParameter('lp', $lp)
-            ->setParameter('user', $user)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('course', (int) $course->getId())
+            ->setParameter('lp', (int) $lp->getIid())
+            ->setParameter('user', (int) $user->getId())
+            ->setParameter('courseId', (int) $course->getId())
         ;
 
         if ($session instanceof Session) {
             $qb
                 ->andWhere('rel.session = :session')
-                ->setParameter('session', $session)
+                ->setParameter('session', (int) $session->getId())
             ;
         } else {
             $qb->andWhere('rel.session IS NULL');

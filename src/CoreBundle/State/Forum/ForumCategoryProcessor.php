@@ -193,7 +193,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
      */
     private function saveCategoryLanguage(CForumCategory $category, array $payload): void
     {
-        if (!array_key_exists('language', $payload)) {
+        if (!\array_key_exists('language', $payload)) {
             return;
         }
 

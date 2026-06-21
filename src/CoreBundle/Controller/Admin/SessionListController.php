@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Throwable;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 #[Route('/admin/session-list-data')]
@@ -79,7 +80,7 @@ class SessionListController extends AbstractController
 
         try {
             return new DateTimeZone('' !== $tz ? $tz : 'UTC');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return new DateTimeZone('UTC');
         }
     }

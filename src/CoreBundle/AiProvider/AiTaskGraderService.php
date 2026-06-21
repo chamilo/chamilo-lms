@@ -6,9 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\AiProvider;
 
+use Chamilo\CoreBundle\Entity\AiRequests;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Process\Process;
 use Throwable;
@@ -27,6 +31,7 @@ final class AiTaskGraderService
 
     public function __construct(
         private readonly AiProviderFactory $aiProviderFactory,
+        private readonly AiRequestsRepository $aiRequestsRepository,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         #[Autowire('%kernel.environment%')]
         private readonly string $kernelEnvironment = 'prod',
@@ -39,7 +44,7 @@ final class AiTaskGraderService
 
     /**
      * Grades an assignment submission using AI.
-     * This method does NOT persist anything.
+     * This method stores an ai_requests audit row after a successful grading call.
      *
      * @param array<string,mixed> $options
      *
@@ -306,6 +311,8 @@ final class AiTaskGraderService
         $finalPrompt = $basePrompt."\n\n".$guard."\n---\n".$context;
 
         // Call provider
+        $requestStartedAt = new DateTimeImmutable();
+
         try {
             $raw = '';
 
@@ -338,15 +345,16 @@ final class AiTaskGraderService
                     options: $providerOptions
                 );
             } else {
-                // Preferred: generateText(prompt, options) if available.
-                if (method_exists($provider, 'generateText')) {
+                // Prefer the generic grading API so provider-level ai_requests
+                // keep the functional tool name "task_grader".
+                if ($provider instanceof AiProviderInterface) {
+                    $raw = (string) ($provider->gradeOpenAnswer($finalPrompt, 'task_grader') ?? '');
+                }
+                // Fallback: generateText(prompt, options) if available.
+                elseif (method_exists($provider, 'generateText')) {
                     /** @var callable $call */
                     $call = [$provider, 'generateText'];
                     $raw = (string) $call($finalPrompt, $providerOptions);
-                }
-                // Fallback: gradeOpenAnswer
-                elseif ($provider instanceof AiProviderInterface) {
-                    $raw = (string) ($provider->gradeOpenAnswer($finalPrompt, 'task_grader') ?? '');
                 }
                 // Optional: chat fallback
                 elseif (method_exists($provider, 'chat')) {
@@ -384,12 +392,179 @@ final class AiTaskGraderService
 
         $suggested = $this->extractSuggestedScore($raw, $maxScore);
 
+        $linkedProviderLog = $this->linkLatestTaskGraderAiRequestToSubmission(
+            teacher: $teacher,
+            submission: $submission,
+            providerName: $providerName,
+            requestStartedAt: $requestStartedAt
+        );
+
+        if (!$linkedProviderLog) {
+            $this->logTaskGraderAiRequestMetadata(
+                submission: $submission,
+                assignment: $assignment,
+                teacher: $teacher,
+                providerName: $providerName,
+                effectiveMode: $effectiveMode,
+                requestedMode: $requestedMode,
+                language: $language,
+                hasFile: $hasFile,
+                fileMeta: $fileMeta,
+                userPrompt: $userPrompt,
+                teacherNotes: $teacherNotes,
+                rubric: $rubric,
+                providerOptions: $providerOptions
+            );
+        }
+
         return [
             'success' => true,
             'feedback' => $raw,
             'suggestedScore' => $suggested,
             'mode' => $effectiveMode,
         ];
+    }
+
+    /**
+     * Links the provider-level task_grader log row to the evaluated submission.
+     *
+     * Providers already write the low-level ai_requests row with prompt, tokens,
+     * model and endpoint information. The task grader only adds the missing
+     * submission id to avoid creating a duplicate audit row for the same AI call.
+     */
+    private function linkLatestTaskGraderAiRequestToSubmission(
+        User $teacher,
+        CStudentPublication $submission,
+        string $providerName,
+        DateTimeInterface $requestStartedAt
+    ): bool {
+        try {
+            $teacherId = method_exists($teacher, 'getId') ? (int) $teacher->getId() : 0;
+            $submissionIid = (int) ($submission->getIid() ?? 0);
+
+            if ($teacherId <= 0 || $submissionIid <= 0) {
+                return false;
+            }
+
+            $aiRequest = $this->aiRequestsRepository->findLatestUnlinkedToolRequestSince(
+                $teacherId,
+                'task_grader',
+                $providerName,
+                $requestStartedAt
+            );
+
+            if (null === $aiRequest) {
+                return false;
+            }
+
+            $aiRequest->setToolItemId($submissionIid);
+            $this->aiRequestsRepository->save($aiRequest);
+
+            return true;
+        } catch (Throwable $e) {
+            $this->dbg('Failed to link task grader ai request', ['error' => $e->getMessage()]);
+
+            return false;
+        }
+    }
+
+    /**
+     * Stores a fallback feature-level audit row only when the provider did not
+     * create a task_grader ai_requests row that can be linked to the submission.
+     *
+     * @param array<string,mixed> $fileMeta
+     * @param array<string,mixed> $providerOptions
+     */
+    private function logTaskGraderAiRequestMetadata(
+        CStudentPublication $submission,
+        CStudentPublication $assignment,
+        User $teacher,
+        string $providerName,
+        string $effectiveMode,
+        string $requestedMode,
+        string $language,
+        bool $hasFile,
+        array $fileMeta,
+        string $userPrompt,
+        string $teacherNotes,
+        string $rubric,
+        array $providerOptions
+    ): void {
+        try {
+            $teacherId = method_exists($teacher, 'getId') ? (int) $teacher->getId() : 0;
+            $submissionIid = (int) ($submission->getIid() ?? 0);
+            $assignmentIid = (int) ($assignment->getIid() ?? 0);
+
+            if ($teacherId <= 0 || $submissionIid <= 0) {
+                return;
+            }
+
+            $payload = [
+                'feature' => 'assignment_task_grader',
+                'assignment_iid' => $assignmentIid,
+                'submission_iid' => $submissionIid,
+                'requested_mode' => $requestedMode,
+                'effective_mode' => $effectiveMode,
+                'language' => $language,
+                'has_file' => $hasFile,
+                'file_extension' => $hasFile ? (string) ($fileMeta['extension'] ?? '') : '',
+                'file_mime_type' => $hasFile ? (string) ($fileMeta['mimeType'] ?? '') : '',
+                'has_custom_prompt' => '' !== trim($userPrompt),
+                'teacher_notes_length' => mb_strlen($teacherNotes),
+                'rubric_length' => mb_strlen($rubric),
+            ];
+
+            $requestText = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            if (!\is_string($requestText) || '' === trim($requestText)) {
+                $requestText = 'Assignment AI grader request';
+            }
+
+            $aiRequest = new AiRequests();
+            $aiRequest
+                ->setUserId($teacherId)
+                ->setToolName('task_grader')
+                ->setToolItemId($submissionIid)
+                ->setRequestText($requestText)
+                ->setPromptTokens(0)
+                ->setCompletionTokens(0)
+                ->setTotalTokens(0)
+                ->setAiProvider($providerName)
+            ;
+
+            $model = $this->extractProviderOption($providerOptions, ['model', 'ai_model']);
+            if (null !== $model) {
+                $aiRequest->setAiModel($model);
+            }
+
+            $endpoint = $this->extractProviderOption($providerOptions, ['url', 'endpoint', 'ai_endpoint']);
+            if (null !== $endpoint) {
+                $aiRequest->setAiEndpoint($endpoint);
+            }
+
+            $this->aiRequestsRepository->save($aiRequest);
+        } catch (Throwable $e) {
+            $this->dbg('Failed to log task grader ai request metadata', ['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     * @param array<int,string>   $keys
+     */
+    private function extractProviderOption(array $options, array $keys): ?string
+    {
+        foreach ($keys as $key) {
+            if (!\array_key_exists($key, $options)) {
+                continue;
+            }
+
+            $value = trim((string) $options[$key]);
+            if ('' !== $value) {
+                return mb_substr($value, 0, 255);
+            }
+        }
+
+        return null;
     }
 
     private function fail(string $message, int $httpStatus, string $mode): array

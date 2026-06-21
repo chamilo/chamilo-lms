@@ -241,7 +241,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
 
             $queryBuilder
                 ->andWhere('resource.iid = :surveyId')
-                ->setParameter('surveyId', (int) $survey->getIid(), Types::INTEGER)
+                ->setParameter('surveyId', (int) $survey->getIid())
             ;
 
             if (null !== $queryBuilder->getQuery()->getOneOrNullResult()) {
@@ -788,7 +788,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
             ->select('MAX(question.sort)')
             ->from(CSurveyQuestion::class, 'question')
             ->andWhere('question.survey = :survey')
-            ->setParameter('survey', $survey)
+            ->setParameter('survey', (int) $survey->getIid())
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -944,8 +944,8 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
             ->andWhere('user.active = :active')
             ->orderBy('user.lastname', 'ASC')
             ->addOrderBy('user.firstname', 'ASC')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('group', $group)
+            ->setParameter('courseId', (int) $course->getId())
+            ->setParameter('group', (int) $group->getIid())
             ->setParameter('active', User::ACTIVE, Types::INTEGER)
             ->getQuery()
             ->getResult()
@@ -979,8 +979,8 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
             ->innerJoin('invitation.user', 'user')
             ->andWhere('invitation.survey = :survey')
             ->andWhere('invitation.course = :course')
-            ->setParameter('survey', $survey)
-            ->setParameter('course', $course)
+            ->setParameter('survey', (int) $survey->getIid())
+            ->setParameter('course', (int) $course->getId())
         ;
 
         if (null === $session) {
@@ -988,7 +988,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         } else {
             $queryBuilder
                 ->andWhere('invitation.session = :session')
-                ->setParameter('session', $session)
+                ->setParameter('session', (int) $session->getId())
             ;
         }
 
@@ -1115,8 +1115,8 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
             ->from(CSurveyInvitation::class, 'invitation')
             ->andWhere('IDENTITY(invitation.survey) = :surveyId')
             ->andWhere('IDENTITY(invitation.course) = :courseId')
-            ->setParameter('surveyId', (int) $survey->getIid(), Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('surveyId', (int) $survey->getIid())
+            ->setParameter('courseId', (int) $course->getId())
         ;
 
         if (null === $session) {
@@ -1124,7 +1124,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         } else {
             $queryBuilder
                 ->andWhere('IDENTITY(invitation.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId())
             ;
         }
 
@@ -1182,23 +1182,23 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         $answerQueryBuilder = $this->entityManager->createQueryBuilder()
             ->delete(CSurveyAnswer::class, 'answer')
             ->andWhere('answer.survey = :survey')
-            ->setParameter('survey', $survey)
+            ->setParameter('survey', (int) $survey->getIid())
         ;
 
         $invitationQueryBuilder = $this->entityManager->createQueryBuilder()
             ->delete(CSurveyInvitation::class, 'invitation')
             ->andWhere('invitation.survey = :survey')
-            ->setParameter('survey', $survey)
+            ->setParameter('survey', (int) $survey->getIid())
         ;
 
         if (null !== $session) {
             $answerQueryBuilder
                 ->andWhere('answer.sessionId = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId())
             ;
             $invitationQueryBuilder
                 ->andWhere('IDENTITY(invitation.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId())
             ;
         }
 

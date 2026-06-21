@@ -33,9 +33,30 @@ const { t } = useI18n()
 
 const securityStore = useSecurityStore()
 
+const emit = defineEmits({
+  loaded: (count) => Number.isInteger(count) && count >= 0,
+})
+
 const courses = ref([])
 
-if (securityStore.isAuthenticated) {
-  getStickyCourses().then((items) => (courses.value = items))
+async function loadStickyCourses() {
+  if (!securityStore.isAuthenticated) {
+    courses.value = []
+    emit("loaded", 0)
+
+    return
+  }
+
+  try {
+    const items = await getStickyCourses()
+    courses.value = Array.isArray(items) ? items : []
+  } catch (error) {
+    console.warn("[StickyCourses] Failed to fetch sticky courses.", error)
+    courses.value = []
+  } finally {
+    emit("loaded", courses.value.length)
+  }
 }
+
+loadStickyCourses()
 </script>

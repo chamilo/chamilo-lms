@@ -44,7 +44,7 @@ jobs:
               run: composer install --no-progress
 
             - name: Cache clear
-              run: php bin/console cache:clear
+              run: php bin/console cache:clear --no-warmup
 
             - name: Check Symfony requirements
               run: vendor/bin/requirements-checker
@@ -56,5 +56,11 @@ jobs:
               id: psalm
               run: vendor/bin/psalm --show-info=false --output-format=github --shepherd
 
+            - name: Start MySQL service
+              run: sudo /etc/init.d/mysql start
+
+            - name: Create test database
+              run: php bin/console --env=test doctrine:database:create
+
             - name: Doctrine Schema Validator
-              run: php bin/console doctrine:schema:validate --skip-sync
+              run: php bin/console --env=test doctrine:schema:validate --skip-sync

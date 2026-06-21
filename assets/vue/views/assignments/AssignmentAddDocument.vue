@@ -124,7 +124,7 @@ async function loadAddedDocuments() {
   try {
     const { items } = await cStudentPublicationService.getRelDocuments({
       ...buildCidParams(),
-      publication: `/api/c_student_publications/${publicationId}`,
+      "publication.iid": publicationId,
     })
     addedDocuments.value = items
   } catch (e) {

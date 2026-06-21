@@ -111,6 +111,143 @@ function build_question_type_icon_html(int $type): string
     );
 }
 
+
+/**
+ * Some legacy question renderers can echo preview HTML directly while only a
+ * return value is expected. Keep the global admin list output clean.
+ */
+$callWithoutLegacyOutput = static function (callable $callback) {
+    $level = ob_get_level();
+    ob_start();
+
+    try {
+        return $callback();
+    } finally {
+        while (ob_get_level() > $level) {
+            ob_end_clean();
+        }
+    }
+};
+
+
+/**
+ * Build a compact and safe answer preview for the global question list.
+ * This intentionally avoids ExerciseLib::showQuestion(), because some legacy
+ * renderers echo HTML/JS directly and can break the whole admin page.
+ */
+$buildSafeAnswerPreviewHtml = static function (
+    int $questionId,
+    int $courseId,
+    int $questionType,
+    array $exerciseRefs = []
+) use ($callWithoutLegacyOutput): string {
+    if ($questionId <= 0 || $courseId <= 0 || !class_exists('Answer')) {
+        return '';
+    }
+
+    $isFillBlankQuestion = (defined('FILL_IN_BLANKS') && FILL_IN_BLANKS === $questionType)
+        || (defined('FILL_IN_BLANKS_COMBINATION') && FILL_IN_BLANKS_COMBINATION === $questionType);
+
+    return (string) $callWithoutLegacyOutput(static function () use ($questionId, $courseId, $exerciseRefs, $isFillBlankQuestion) {
+        $exercise = null;
+
+        if (class_exists('Exercise')) {
+            $exercise = new Exercise($courseId);
+
+            foreach ($exerciseRefs as $ref) {
+                $refCourseId = (int) ($ref['course_id'] ?? 0);
+                $refExerciseId = (int) ($ref['exercise_id'] ?? 0);
+
+                if ($refCourseId === $courseId && $refExerciseId > 0) {
+                    $exercise->read($refExerciseId, false);
+                    break;
+                }
+            }
+        }
+
+        $answer = new Answer($questionId, $courseId, $exercise, true);
+        $answerCount = (int) $answer->selectNbrAnswers();
+
+        if ($answerCount <= 0) {
+            return '';
+        }
+
+        $items = '';
+
+        for ($i = 1; $i <= $answerCount; $i++) {
+            $answerText = (string) $answer->selectAnswer($i);
+
+            if ('' === trim(strip_tags($answerText))) {
+                continue;
+            }
+
+            if ($isFillBlankQuestion) {
+                if (!class_exists('FillBlanks')) {
+                    $fillBlanksFile = __DIR__.'/../exercise/fill_blanks.class.php';
+                    if (is_file($fillBlanksFile)) {
+                        require_once $fillBlanksFile;
+                    }
+                }
+
+                if (class_exists('FillBlanks')) {
+                    $blankInfo = FillBlanks::getAnswerInfo($answerText);
+                    $answerText = (string) ($blankInfo['text'] ?? $answerText);
+                }
+
+                $answerText = (string) preg_replace('/::.*$/s', '', $answerText);
+            }
+
+            $answerHtml = Security::remove_XSS($answerText);
+
+            if ($isFillBlankQuestion) {
+                $answerHtml = (string) preg_replace_callback(
+                    '/\\[([^\\]]+)\\]/',
+                    static function (array $matches): string {
+                        return '<span class="inline-flex items-center rounded-md border border-primary/30 bg-primary/10 px-1.5 py-0.5 text-xs font-semibold text-primary">'
+                            .Security::remove_XSS(trim((string) $matches[1]))
+                            .'</span>';
+                    },
+                    $answerHtml
+                );
+            }
+
+            $isCorrect = 0 !== (int) $answer->isCorrect($i);
+            $weighting = $answer->selectWeighting($i);
+
+            $meta = '';
+            if ($isCorrect) {
+                $meta .= '<span class="inline-flex items-center rounded-full bg-success/10 px-2 py-0.5 text-xs font-semibold text-success">'
+                    .get_lang('Correct answer')
+                    .'</span>';
+            }
+
+            if (null !== $weighting && '' !== (string) $weighting) {
+                $meta .= '<span class="inline-flex items-center rounded-full bg-gray-15 px-2 py-0.5 text-xs font-semibold text-gray-70">'
+                    .get_lang('Score').': '.Security::remove_XSS((string) $weighting)
+                    .'</span>';
+            }
+
+            $items .= '<li class="rounded-lg border border-gray-25 bg-white px-3 py-2">'
+                .'<div class="ck-content text-body-2 text-gray-90">'.$answerHtml.'</div>';
+
+            if ('' !== $meta) {
+                $items .= '<div class="mt-2 flex flex-wrap gap-2">'.$meta.'</div>';
+            }
+
+            $items .= '</li>';
+        }
+
+        if ('' === $items) {
+            return '';
+        }
+
+        return '<div class="mt-4">'
+            .'<div class="mb-2 text-body-2 font-semibold text-gray-90">'.get_lang('Answers').'</div>'
+            .'<ol class="list-decimal space-y-2 pl-5">'.$items.'</ol>'
+            .'</div>';
+    });
+};
+
 /**
  * Find the best relation table and column names to map question -> exercises across courses.
  * This is defensive to reduce breakage across schema variants.
@@ -837,6 +974,68 @@ if ($formSent) {
         return $courseInfoCache[$courseId];
     };
 
+    $getCourseIdFromResourceLink = static function ($resourceLink): int {
+        if (!is_object($resourceLink)) {
+            return 0;
+        }
+
+        try {
+            if (method_exists($resourceLink, 'getCourse') && $resourceLink->getCourse()) {
+                $course = $resourceLink->getCourse();
+
+                if (is_object($course) && method_exists($course, 'getId')) {
+                    return (int) $course->getId();
+                }
+            }
+
+            if (method_exists($resourceLink, 'getCourseId')) {
+                return (int) $resourceLink->getCourseId();
+            }
+        } catch (\Throwable $e) {
+            return 0;
+        }
+
+        return 0;
+    };
+
+    $getFirstResourceLinkFromResource = static function ($resource) {
+        if (!is_object($resource)) {
+            return null;
+        }
+
+        try {
+            if (method_exists($resource, 'getFirstResourceLink')) {
+                $resourceLink = $resource->getFirstResourceLink();
+
+                if ($resourceLink) {
+                    return $resourceLink;
+                }
+            }
+
+            if (method_exists($resource, 'getResourceNode') && $resource->getResourceNode()) {
+                $resourceNode = $resource->getResourceNode();
+
+                if (method_exists($resourceNode, 'getResourceLinks')) {
+                    foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+                        if ($resourceLink) {
+                            return $resourceLink;
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        return null;
+    };
+
+    $getCourseIdFromResource = static function ($resource) use ($getFirstResourceLinkFromResource, $getCourseIdFromResourceLink): int {
+        $resourceLink = $getFirstResourceLinkFromResource($resource);
+
+        return $getCourseIdFromResourceLink($resourceLink);
+    };
+
     /** @var CQuizQuestion $question */
     if (is_array($items)) {
         foreach ($items as $question) {
@@ -852,16 +1051,7 @@ if ($formSent) {
             // ---------------------------------------------------------
             $resolvedCourseId = 0;
 
-            $firstResourceLink = null;
-            try {
-                $firstResourceLink = $question->getFirstResourceLink();
-            } catch (\Throwable $e) {
-                $firstResourceLink = null;
-            }
-
-            if ($firstResourceLink && method_exists($firstResourceLink, 'getCourse') && $firstResourceLink->getCourse()) {
-                $resolvedCourseId = (int) $firstResourceLink->getCourse()->getId();
-            }
+            $resolvedCourseId = $getCourseIdFromResource($question);
 
             if ($resolvedCourseId <= 0 && $selectedCourse > 0) {
                 $resolvedCourseId = $selectedCourse;
@@ -884,83 +1074,96 @@ if ($formSent) {
             // ---------------------------------------------------------
             // Preview rendering
             // ---------------------------------------------------------
-            $questionObject = null;
+            $questionObject = $callWithoutLegacyOutput(static function () use ($questionId, $courseInfo) {
+                return Question::read($questionId, !empty($courseInfo) ? $courseInfo : [], false);
+            });
 
-            if (!empty($courseInfo) && $resolvedCourseId > 0) {
-                $exercise = new Exercise($resolvedCourseId);
-                $exercise->course_id = $resolvedCourseId;
-                $exercise->course = $courseInfo;
+            $legacyExerciseList = [];
 
-                $questionObject = Question::read($questionId, $courseInfo);
-                $question->typeIconHtml = build_question_type_icon_html((int) $question->getType());
-                // Pick an exercise for preview rendering when possible
-                $previewExerciseId = 0;
+            if ($questionObject) {
+                try {
+                    $legacyExerciseCount = (int) $callWithoutLegacyOutput(static function () use ($questionObject) {
+                        return $questionObject->getCountExercise();
+                    });
 
-                foreach ($exerciseRefs as $ref) {
-                    if ((int) ($ref['course_id'] ?? 0) === $resolvedCourseId) {
-                        $previewExerciseId = (int) ($ref['exercise_id'] ?? 0);
-                        if ($previewExerciseId > 0) {
-                            break;
+                    if ($legacyExerciseCount > 0) {
+                        $legacyExerciseList = $callWithoutLegacyOutput(static function () use ($questionObject) {
+                            return $questionObject->getExerciseListWhereQuestionExists();
+                        });
+
+                        if ($resolvedCourseId <= 0) {
+                            foreach ($legacyExerciseList as $exerciseEntity) {
+                                $fallbackCourseId = $getCourseIdFromResource($exerciseEntity);
+                                if ($fallbackCourseId > 0) {
+                                    $resolvedCourseId = $fallbackCourseId;
+                                    $courseInfo = $getCourseInfoCached($resolvedCourseId);
+                                    $courseCode = !empty($courseInfo['code']) ? $courseInfo['code'] : $courseCode;
+                                    break;
+                                }
+                            }
                         }
                     }
+                } catch (\Throwable $e) {
+                    $legacyExerciseList = [];
                 }
 
-                if ($previewExerciseId > 0) {
-                    $exercise->read($previewExerciseId);
-                }
+                $question->courseCode = $courseCode;
+                $question->resolvedCourseId = $resolvedCourseId;
 
-                ob_start();
-                ExerciseLib::showQuestion(
-                    $exercise,
-                    $questionId,
-                    false,
-                    null,
-                    null,
-                    false,
-                    true,
-                    false,
-                    true,
-                    true
-                );
-                $question->questionData = (string) ob_get_clean();
-            } else {
-                // We still want to show the question content instead of blocking preview.
-                $questionObject = Question::read($questionId, [], false);
+                // Keep the admin list preview safe and self-contained.
+                // Do not call ExerciseLib::showQuestion() here: some legacy
+                // question renderers can echo HTML/JS directly before the page
+                // header, which breaks pagination for specific question types.
+                $previewHtml = '<div class="space-y-3">';
 
-                if ($questionObject) {
-                    $fallbackHtml = '<div class="space-y-3">';
-                    $fallbackHtml .= Display::return_message(
+                if (empty($courseInfo) || $resolvedCourseId <= 0) {
+                    $previewHtml .= Display::return_message(
                         get_lang('Preview shown without course context. Some course-specific data may be unavailable.'),
                         'warning'
                     );
+                }
 
-                    $title = $questionObject->selectTitle();
-                    if (!empty($title)) {
-                        $fallbackHtml .= Display::tag(
-                            'div',
-                            $title,
-                            ['class' => 'text-lg font-semibold text-gray-90']
-                        );
-                    }
-
-                    $description = $questionObject->selectDescription();
-                    if (!empty($description)) {
-                        $fallbackHtml .= Display::tag(
-                            'div',
-                            $description,
-                            ['class' => 'ck-content']
-                        );
-                    }
-
-                    $fallbackHtml .= '</div>';
-
-                    $question->questionData = $fallbackHtml;
-                } else {
-                    $question->questionData = Display::return_message(
-                        get_lang('Preview is not available for this question.'),
-                        'warning'
+                $title = $callWithoutLegacyOutput(static function () use ($questionObject) {
+                    return $questionObject->selectTitle();
+                });
+                if (!empty($title)) {
+                    $previewHtml .= Display::tag(
+                        'div',
+                        Security::remove_XSS((string) $title),
+                        ['class' => 'text-lg font-semibold text-gray-90']
                     );
                 }
+
+                $description = $callWithoutLegacyOutput(static function () use ($questionObject) {
+                    return $questionObject->selectDescription();
+                });
+                if (!empty($description)) {
+                    $previewHtml .= Display::tag(
+                        'div',
+                        Security::remove_XSS((string) $description),
+                        ['class' => 'ck-content']
+                    );
+                }
+
+                $answersPreviewHtml = $buildSafeAnswerPreviewHtml(
+                    $questionId,
+                    $resolvedCourseId,
+                    (int) $question->getType(),
+                    $exerciseRefs
+                );
+
+                if ('' !== $answersPreviewHtml) {
+                    $previewHtml .= $answersPreviewHtml;
+                }
+
+                $previewHtml .= '</div>';
+
+                $question->questionData = $previewHtml;
+            } else {
+                $question->questionData = Display::return_message(
+                    get_lang('Preview is not available for this question.'),
+                    'warning'
+                );
             }
 
             // PDF export: just append content and continue
@@ -974,17 +1177,22 @@ if ($formSent) {
             }
 
             // ---------------------------------------------------------
-            // Delete URL only if we have a usable course context
+            // Delete URL
+            // Deletion is a global question-manager action and does not
+            // require a course context. Keep the course id when available
+            // only to preserve contextual redirects and debugging data.
             // ---------------------------------------------------------
-            $deleteUrl = '';
-            if ($resolvedCourseId > 0 && !empty($courseInfo)) {
-                $deleteUrl = $url.'&'.http_build_query([
-                        'courseId' => $resolvedCourseId,
-                        'questionId' => $questionId,
-                        'action' => 'delete',
-                        $deleteTokenVar => $deleteToken,
-                    ]);
+            $deleteParams = [
+                'questionId' => $questionId,
+                'action' => 'delete',
+                $deleteTokenVar => $deleteToken,
+            ];
+
+            if ($resolvedCourseId > 0) {
+                $deleteParams['courseId'] = $resolvedCourseId;
             }
+
+            $deleteUrl = $url.'&'.http_build_query($deleteParams);
 
             // ---------------------------------------------------------
             // Exercises list: GLOBAL across courses (Tailwind-ish markup)
@@ -1045,8 +1253,14 @@ if ($formSent) {
                 $question->questionData .= '<br />'.$exerciseData;
             } else {
                 // Fallback to legacy behavior if we have a readable Question object
-                if ($questionObject && $questionObject->getCountExercise() > 0) {
-                    $exerciseList = $questionObject->getExerciseListWhereQuestionExists();
+                if ($questionObject && (!empty($legacyExerciseList) || (int) $callWithoutLegacyOutput(static function () use ($questionObject) {
+                    return $questionObject->getCountExercise();
+                }) > 0)) {
+                    $exerciseList = !empty($legacyExerciseList)
+                        ? $legacyExerciseList
+                        : $callWithoutLegacyOutput(static function () use ($questionObject) {
+                            return $questionObject->getExerciseListWhereQuestionExists();
+                        });
                     if (!empty($exerciseList)) {
                         $question->questionData .= '<p><strong>'.get_lang('Tests').'</strong></p>';
                         foreach ($exerciseList as $exerciseEntity) {
@@ -1056,6 +1270,17 @@ if ($formSent) {
                             $activeFlag = null; // Only used if we can reliably read a "deleted" marker (-1)
 
                             if (is_object($exerciseEntity)) {
+                                if ($resolvedCourseId <= 0) {
+                                    $fallbackCourseId = $getCourseIdFromResource($exerciseEntity);
+                                    if ($fallbackCourseId > 0) {
+                                        $resolvedCourseId = $fallbackCourseId;
+                                        $courseInfo = $getCourseInfoCached($resolvedCourseId);
+                                        $courseCode = !empty($courseInfo['code']) ? $courseInfo['code'] : $courseCode;
+                                        $question->courseCode = $courseCode;
+                                        $question->resolvedCourseId = $resolvedCourseId;
+                                    }
+                                }
+
                                 if (method_exists($exerciseEntity, 'getTitle')) {
                                     $exerciseTitle = (string) $exerciseEntity->getTitle();
                                 } elseif (method_exists($exerciseEntity, 'getName')) {
@@ -1122,7 +1347,7 @@ if ($formSent) {
                     $editQuestionUrl,
                     [
                         'target' => '_blank',
-                        'class' => 'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50',
+                        'class' => 'inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 no-underline hover:bg-slate-50',
                     ]
                 );
             } else {
@@ -1137,7 +1362,7 @@ if ($formSent) {
                     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon text-white', null, ICON_SIZE_SMALL, get_lang('Delete')).' '.get_lang('Delete'),
                     $deleteUrl,
                     [
-                        'class' => 'inline-flex items-center rounded-lg bg-danger px-3 py-1.5 text-sm font-semibold text-white hover:bg-danger/90',
+                        'class' => 'inline-flex cursor-pointer items-center gap-2 rounded-lg bg-danger px-3 py-1.5 text-sm font-semibold text-white no-underline hover:bg-danger/90',
                         'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
                     ]
                 );
@@ -1189,11 +1414,9 @@ switch ($action) {
         }
 
         $questionId = isset($_REQUEST['questionId']) ? (int) $_REQUEST['questionId'] : 0;
-        $courseId = isset($_REQUEST['courseId']) ? (int) $_REQUEST['courseId'] : 0;
-        $courseInfo = $courseId > 0 ? api_get_course_info_by_id($courseId) : [];
 
-        if (empty($courseInfo) || $questionId <= 0) {
-            Display::addFlash(Display::return_message(get_lang('Delete failed: missing course context or invalid question id.'), 'warning'));
+        if ($questionId <= 0) {
+            Display::addFlash(Display::return_message(get_lang('Delete failed: invalid question id.'), 'warning'));
             Security::clear_token($deleteTokenPrefix);
             header('Location: '.$url);
             exit;

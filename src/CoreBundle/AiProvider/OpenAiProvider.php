@@ -56,7 +56,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
      * Chat completion entrypoint for AiTutorChatService.
      *
      * @param array<int, array{role:string,content:string}> $messages
-     * @param array<string,mixed>                           $options
+     * @param array<string, mixed>                          $options
      */
     public function chat(array $messages, array $options = []): string
     {
@@ -360,7 +360,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
      * Images are described through the Responses API. Audio and video files are sent
      * to the transcription endpoint when the provider supports it.
      *
-     * @param array<string,mixed> $options
+     * @param array<string, mixed> $options
      */
     public function extractSearchableMediaText(
         string $filename,
@@ -382,7 +382,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     }
 
     /**
-     * @param array<string,mixed> $options
+     * @param array<string, mixed> $options
      */
     private function describeImageForSearch(
         string $filename,
@@ -485,7 +485,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     }
 
     /**
-     * @param array<string,mixed> $options
+     * @param array<string, mixed> $options
      */
     private function transcribeMediaForSearch(
         string $filename,
@@ -852,8 +852,13 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $cfg = $this->getTypeConfig('image');
         $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/images/generations');
         $model = (string) ($cfg['model'] ?? 'gpt-image-1');
+        $normalizedModel = strtolower(trim($model));
         $size = (string) ($cfg['size'] ?? '1024x1024');
-        $quality = (string) ($cfg['quality'] ?? 'standard');
+        $configuredQuality = isset($cfg['quality']) ? trim((string) $cfg['quality']) : '';
+        $quality = '' !== $configuredQuality ? $configuredQuality : ($this->isGptImageModel($normalizedModel) ? 'auto' : 'standard');
+        if ($this->isGptImageModel($normalizedModel) && 'standard' === strtolower($quality)) {
+            $quality = 'auto';
+        }
         $n = (int) (($options['n'] ?? null) ?? ($cfg['n'] ?? 1));
 
         $promptTrimmed = trim($prompt);
@@ -872,11 +877,9 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             'n' => $n,
         ];
 
-        // Best-effort: allow response_format for any model that supports it.
-        $responseFormat = (string) ($cfg['response_format'] ?? 'b64_json');
-        if ('' !== trim($responseFormat)) {
-            $payload['response_format'] = $responseFormat;
-        }
+        // Do not send response_format. New OpenAI image models reject it, and the
+        // provider already supports both b64_json and url responses.
+        unset($payload['response_format']);
 
         try {
             $response = $this->httpClient->request('POST', $url, [
@@ -1363,6 +1366,11 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         }
 
         return $validQuestions;
+    }
+
+    private function isGptImageModel(string $model): bool
+    {
+        return str_starts_with(strtolower(trim($model)), 'gpt-image-');
     }
 
     private function getTypeConfig(string $type): array

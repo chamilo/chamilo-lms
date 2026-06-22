@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Component\Mpdf;
 
+use Chamilo\CoreBundle\Component\Http\SafeHttp;
 use Mpdf\Container\SimpleContainer;
 use Mpdf\Http\ClientInterface;
 use Mpdf\PsrHttpMessageShim\Response;
@@ -47,7 +48,7 @@ final class SafeMpdfHttpClient implements ClientInterface
         $response = new Response();
 
         $uri = (string) $request->getUri();
-        $ip = self::resolveSafeIp($uri);
+        $ip = SafeHttp::resolveSafeIp($uri);
 
         if (null === $ip) {
             // Blocked or unresolvable target: return an empty 403 so mPDF
@@ -91,91 +92,6 @@ final class SafeMpdfHttpClient implements ClientInterface
             ->withStatus($httpCode)
             ->withBody(Stream::create($data))
         ;
-    }
-
-    /**
-     * Validates the URL and returns a single safe IP to connect to, or null if
-     * the target must be blocked.
-     *
-     * A target is blocked when: the scheme is not http(s), the host is missing,
-     * the host does not resolve, or ANY resolved address falls inside a
-     * private/reserved/loopback/link-local range (e.g. 127.0.0.0/8,
-     * 169.254.0.0/16, 10/8, ::1, fc00::/7).
-     */
-    private static function resolveSafeIp(string $uri): ?string
-    {
-        $parts = parse_url($uri);
-
-        if (false === $parts || empty($parts["host"])) {
-            return null;
-        }
-
-        $scheme = strtolower($parts["scheme"] ?? "");
-        if (!in_array($scheme, ["http", "https"], true)) {
-            return null;
-        }
-
-        $host = $parts["host"];
-        // parse_url keeps IPv6 literals wrapped in brackets.
-        $host = trim($host, "[]");
-
-        $addresses = self::resolveHost($host);
-        if (empty($addresses)) {
-            return null;
-        }
-
-        $safeIp = null;
-        foreach ($addresses as $address) {
-            if (!self::isPublicIp($address)) {
-                // A single private/reserved hit blocks the whole request.
-                return null;
-            }
-            if (null === $safeIp) {
-                $safeIp = $address;
-            }
-        }
-
-        return $safeIp;
-    }
-
-    /**
-     * Resolves a host (or returns it as-is if already an IP literal) into a
-     * list of IPv4/IPv6 addresses.
-     *
-     * @return string[]
-     */
-    private static function resolveHost(string $host): array
-    {
-        if (filter_var($host, FILTER_VALIDATE_IP)) {
-            return [$host];
-        }
-
-        $addresses = [];
-
-        $ipv4 = @gethostbynamel($host);
-        if (is_array($ipv4)) {
-            $addresses = $ipv4;
-        }
-
-        $records = @dns_get_record($host, DNS_AAAA);
-        if (is_array($records)) {
-            foreach ($records as $record) {
-                if (!empty($record["ipv6"])) {
-                    $addresses[] = $record["ipv6"];
-                }
-            }
-        }
-
-        return array_values(array_unique($addresses));
-    }
-
-    private static function isPublicIp(string $ip): bool
-    {
-        return false !== filter_var(
-            $ip,
-            FILTER_VALIDATE_IP,
-            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-        );
     }
 
     private static function closeCurl($ch): void

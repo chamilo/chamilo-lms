@@ -142,7 +142,7 @@ class CourseDescriptionController
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 if (1) {
                     $title = $_POST['title'];
-                    $content = $_POST['contentDescription'];
+                    $content = Security::remove_XSS($_POST['contentDescription'], COURSEMANAGERLOWSECURITY);
                     $description_type = $_POST['description_type'];
                     $id = $_POST['id'];
                     if (empty($id)) {
@@ -253,7 +253,7 @@ class CourseDescriptionController
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 if (1) {
                     $title = $_POST['title'];
-                    $content = $_POST['contentDescription'];
+                    $content = Security::remove_XSS($_POST['contentDescription'], COURSEMANAGERLOWSECURITY);
                     $description_type = $_POST['description_type'];
                     if ($description_type >= ADD_BLOCK) {
                         $course_description->set_description_type($description_type);

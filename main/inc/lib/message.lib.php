@@ -2906,11 +2906,11 @@ class MessageManager
         if (api_get_configuration_value('mail_template_system') == true) {
             $mailTemplateManager = new MailTemplateManager();
             $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
-            if (empty($templateText)) {
-            } else {
-                // custom procedure to load a template as a string (doesn't use cache so may slow down)
-                $template = $tplMailBody->twig->createTemplate($templateText);
-                $emailbody = $template->render($tplMailBody->params);
+            if (!empty($templateText)) {
+                // Stored mail templates are admin-edited and therefore untrusted: render
+                // them through a sandboxed Twig environment instead of compiling the raw
+                // string with the full application Twig (which would allow SSTI → RCE).
+                $emailbody = MailTemplateManager::renderSandboxedTemplate($templateText, $tplMailBody->params);
             }
         }
         if (empty($emailbody)) {

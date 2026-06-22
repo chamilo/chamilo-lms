@@ -9,6 +9,9 @@
  *
  * @package chamilo.buycourses_plugin
  */
+
+use Chamilo\CoreBundle\Component\Essence\SafeEssenceHttpClient;
+
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
@@ -34,7 +37,14 @@ if (!$service['id']) {
 $template = new Template(false);
 $template->assign('pageUrl', api_get_path(WEB_PATH)."service/{$serviceId}/information/");
 $template->assign('service', $service);
-$template->assign('essence', Essence\Essence::instance());
+// SSRF protection: route Essence's server-side OEmbed/OpenGraph fetches
+// through an IP-filtered HTTP client.
+$template->assign(
+    'essence',
+    Essence\Essence::instance(
+        ['Http' => new SafeEssenceHttpClient()]
+    )
+);
 
 $content = $template->fetch('buycourses/view/service_information.tpl');
 

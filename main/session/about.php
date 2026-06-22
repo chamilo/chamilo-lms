@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Essence\SafeEssenceHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
@@ -238,7 +239,11 @@ $redirectToSession = 1 == $coursesCount && $redirectToSession
 
 $template->assign('redirect_to_session', $redirectToSession);
 $template->assign('courses', $courses);
-$essence = Essence\Essence::instance();
+// SSRF protection: route Essence's server-side OEmbed/OpenGraph fetches of the
+// teacher-set video URL through an IP-filtered HTTP client.
+$essence = Essence\Essence::instance(
+    ['Http' => new SafeEssenceHttpClient()]
+);
 $template->assign('essence', $essence);
 $template->assign(
     'session_extra_fields',

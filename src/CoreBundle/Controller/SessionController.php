@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Component\Essence\SafeEssenceHttpClient;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
@@ -318,6 +319,23 @@ class SessionController extends AbstractController
                 $rel->setUrl($accessUrl);
 
                 $em->persist($rel);
+
+                // Copy the user's first auth source to the new URL so they can log in on it,
+                // mirroring the behaviour of access_url_edit_users_to_url.php.
+                $alreadyHasAuthSource = $user->getAuthSourcesByUrl($accessUrl)->count() > 0;
+                if (!$alreadyHasAuthSource) {
+                    $firstAuthSource = $user->getAuthSources()->first();
+                    $authentication = $firstAuthSource
+                        ? $firstAuthSource->getAuthentication()
+                        : UserAuthSource::PLATFORM;
+
+                    $userAuthSource = new UserAuthSource();
+                    $userAuthSource->setUser($user);
+                    $userAuthSource->setUrl($accessUrl);
+                    $userAuthSource->setAuthentication($authentication);
+
+                    $em->persist($userAuthSource);
+                }
             }
         }
 

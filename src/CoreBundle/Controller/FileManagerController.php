@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,22 +33,6 @@ class FileManagerController extends AbstractController
         $this->baseResourceFileAction = $baseResourceFileAction;
         $this->personalFileRepository = $personalFileRepository;
         $this->entityManager = $entityManager;
-    }
-
-    #[Route('/list', name: 'file_manager_list', methods: ['GET'])]
-    public function list(): JsonResponse
-    {
-        // Implement logic to list files and folders
-        // This could be a call to your service or logic to retrieve files/folders
-        return $this->json(['files' => []]);
-    }
-
-    #[Route('/upload', name: 'file_manager_upload', methods: ['POST'])]
-    public function upload(): JsonResponse
-    {
-        // Implement logic to upload files
-        // This part will handle receiving and storing uploaded files
-        return $this->json(['message' => 'File(s) uploaded successfully']);
     }
 
     /**
@@ -80,36 +63,5 @@ class FileManagerController extends AbstractController
             'data' => $result,
             'location' => $this->personalFileRepository->getResourceFileUrl($resource),
         ]);
-    }
-
-    #[Route('/create-folder', name: 'file_manager_create_folder', methods: ['POST'])]
-    public function createFolder(): JsonResponse
-    {
-        // Implement logic to create new folders
-        return $this->json(['message' => 'Folder created successfully']);
-    }
-
-    #[Route('/rename', name: 'file_manager_rename', methods: ['POST'])]
-    public function rename(): JsonResponse
-    {
-        // Implement logic to rename files/folders
-        return $this->json(['message' => 'File/folder renamed successfully']);
-    }
-
-    #[Route('/delete', name: 'file_manager_delete', methods: ['DELETE'])]
-    public function delete(): JsonResponse
-    {
-        // Implement logic to delete files/folders
-        return $this->json(['message' => 'File/folder deleted successfully']);
-    }
-
-    #[Route('/download/{filename}', name: 'file_manager_download', methods: ['GET'])]
-    public function download(string $filename): Response
-    {
-        // Implement logic to download files
-        // Replace 'path/to/your/files' with the actual path where the files are stored
-        $filePath = 'path/to/your/files/'.$filename;
-
-        return new BinaryFileResponse($filePath);
     }
 }

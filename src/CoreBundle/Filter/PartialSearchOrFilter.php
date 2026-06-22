@@ -15,6 +15,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class PartialSearchOrFilter extends AbstractFilter
 {
@@ -29,6 +30,7 @@ final class PartialSearchOrFilter extends AbstractFilter
     public function __construct(
         ManagerRegistry $managerRegistry,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly Security $security,
         ?LoggerInterface $logger = null,
         ?array $properties = null
     ) {
@@ -169,6 +171,14 @@ final class PartialSearchOrFilter extends AbstractFilter
         }
 
         if (!$this->accessUrlHelper->isMultiple()) {
+            return;
+        }
+
+        // Super admins and Global admins manage all URLs and must see all users regardless of their portal assignment.
+        if (
+            $this->security->isGranted('ROLE_SUPER_ADMIN')
+            || $this->security->isGranted('ROLE_GLOBAL_ADMIN')
+        ) {
             return;
         }
 

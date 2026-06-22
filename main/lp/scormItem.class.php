@@ -56,7 +56,7 @@ class scormItem extends learnpathItem
                                     case 'title':
                                         $tmp_children = $child->childNodes;
                                         if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
-                                            $this->title = $child->firstChild->nodeValue;
+                                            $this->title = Security::remove_XSS($child->firstChild->nodeValue);
                                         }
                                         break;
                                     case 'max_score':

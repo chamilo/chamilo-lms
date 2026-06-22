@@ -2376,8 +2376,8 @@ class SessionManager
             if (false === $isUserSubscribed) {
                 $enreg_user = (int) $enreg_user;
                 if ($session->getDuration() > 0) {
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
-                        VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at)
+                        VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."')";
                 } else {
                     if (null != ($accessStartDate = $session->getAccessStartDate())) {
                         $accessStartDate = "'".$accessStartDate->format('Y-m-d H:i:s')."'";
@@ -2389,8 +2389,8 @@ class SessionManager
                     } else {
                         $accessEndDate = "NULL";
                     }
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at, access_start_date, access_end_date)
-                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."', ".$accessStartDate.", ".$accessEndDate.")";
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at, access_start_date, access_end_date)
+                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."', ".$accessStartDate.", ".$accessEndDate.")";
                 }
                 Database::query($sql);
                 Event::addEvent(

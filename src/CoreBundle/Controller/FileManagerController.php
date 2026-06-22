@@ -106,6 +106,10 @@ class FileManagerController extends AbstractController
     #[Route('/download/{filename}', name: 'file_manager_download', methods: ['GET'])]
     public function download(string $filename): Response
     {
+        // Strip any directory component so the route parameter cannot be used to
+        // traverse outside the intended storage directory (e.g. "..%2F..%2Fetc%2Fpasswd").
+        $filename = basename($filename);
+
         // Implement logic to download files
         // Replace 'path/to/your/files' with the actual path where the files are stored
         $filePath = 'path/to/your/files/'.$filename;

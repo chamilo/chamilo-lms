@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelSession;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\UsergroupHelper;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +30,7 @@ class UsergroupSessionsController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly UsergroupHelper $usergroupHelper,
     ) {}
 
     #[Route('/{id}', name: 'admin_usergroup_sessions_data', requirements: ['id' => '\d+'], methods: ['GET'])]
@@ -115,31 +118,55 @@ class UsergroupSessionsController extends AbstractController
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $sessionIds = array_map('intval', (array) $request->request->all('sessionIds'));
+        $sessionIds = array_values(
+            array_unique(
+                array_filter(
+                    array_map('intval', (array) $request->request->all('sessionIds')),
+                    static fn (int $sessionId): bool => $sessionId > 0
+                )
+            )
+        );
+        $sessionIds = $this->filterAllowedSessionIds($sessionIds);
 
-        $this->em->createQueryBuilder()
-            ->delete(UsergroupRelSession::class, 'rs')
-            ->where('rs.usergroup = :ugId')
-            ->setParameter('ugId', $id, Types::INTEGER)
-            ->getQuery()
-            ->execute()
-        ;
-
-        foreach ($sessionIds as $sessionId) {
-            $session = $this->em->find(Session::class, $sessionId);
-            if (null === $session) {
-                continue;
-            }
-
-            $rel = new UsergroupRelSession();
-            $rel->setUsergroup($usergroup);
-            $rel->setSession($session);
-            $this->em->persist($rel);
-        }
-
-        $this->em->flush();
+        $this->usergroupHelper->synchronizeSessions($id, $sessionIds);
 
         return $this->json(['success' => true]);
+    }
+
+    /**
+     * @param list<int> $sessionIds
+     *
+     * @return list<int>
+     */
+    private function filterAllowedSessionIds(array $sessionIds): array
+    {
+        if (empty($sessionIds)) {
+            return [];
+        }
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('s.id')
+            ->from(Session::class, 's')
+            ->where('s.id IN (:sessionIds)')
+            ->setParameter('sessionIds', $sessionIds, ArrayParameterType::INTEGER)
+        ;
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $accessUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $accessUrl) {
+                $qb->innerJoin('s.urls', 'urlRel')
+                    ->andWhere('urlRel.url = :urlId')
+                    ->setParameter('urlId', $accessUrl->getId(), Types::INTEGER)
+                ;
+            }
+        }
+
+        return array_map(
+            'intval',
+            $qb
+                ->getQuery()
+                ->getSingleColumnResult()
+        );
     }
 
     private function belongsToCurrentUrl(Usergroup $usergroup): bool

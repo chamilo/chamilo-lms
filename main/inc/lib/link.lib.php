@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Http\SafeHttp;
 use Chamilo\CourseBundle\Entity\CLink;
 use GuzzleHttp\Client;
 
@@ -1816,6 +1817,21 @@ class Link extends Model
 
     public static function checkUrl(string $url): bool
     {
+        // SSRF guard (CWE-918): reject targets that resolve to a
+        // loopback/private/reserved/link-local address (incl. the cloud
+        // metadata endpoint) or use a non-http(s) scheme before any request.
+        if (null === SafeHttp::resolveSafeIp($url)) {
+            return false;
+        }
+
+        // Re-validate every redirect hop so a 30x cannot bounce the request to
+        // an internal host after the initial check passed.
+        $onRedirect = function ($request, $response, $uri) {
+            if (null === SafeHttp::resolveSafeIp((string) $uri)) {
+                throw new \RuntimeException("Blocked redirect to a non-public host.");
+            }
+        };
+
         $defaults = [
             'allow_redirects' => [
                 'max' => 5, // max number of redirects allowed
@@ -1823,6 +1839,7 @@ class Link extends Model
                 'referer' => true, // whether to add the Referer header when redirecting
                 'protocols' => ['http', 'https'], // protocols allowed to be redirected to
                 'track_redirects' => true, // whether to keep track of the number of redirects
+                'on_redirect' => $onRedirect,
             ],
             'connect_timeout' => 4,
             'timeout' => 4,

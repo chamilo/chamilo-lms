@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
@@ -30,8 +32,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['access_url:write', 'course_category:write'],
     ],
-    security: "is_granted('ROLE_ADMIN')"
+    security: "is_granted('ROLE_ADMIN')",
+    paginationEnabled: false,
 )]
+#[ApiFilter(OrderFilter::class, properties: ['url', 'description'])]
 #[ORM\Table(name: 'access_url')]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: AccessUrlRepository::class)]

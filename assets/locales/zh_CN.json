@@ -2389,5 +2389,7 @@
     "Search term is too short": "\u641c\u7d22\u8bcd\u8fc7\u77ed",
     "Could not search forums": "\u65e0\u6cd5\u641c\u7d22\u8bba\u575b",
     "Moderated": "\u5df2\u5ba1\u6838",
-    "View threads": "\u67e5\u770b\u4e3b\u9898"
+    "View threads": "\u67e5\u770b\u4e3b\u9898",
+    "Current": "\u5f53\u524d",
+    "No auth source": "No auth source"
 }

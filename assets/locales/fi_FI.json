@@ -2389,5 +2389,7 @@
     "Search term is too short": "Hakutermi on liian lyhyt",
     "Could not search forums": "Foorumeita ei voitu hakea",
     "Moderated": "Moderoitu",
-    "View threads": "N\u00e4yt\u00e4 ketjut"
+    "View threads": "N\u00e4yt\u00e4 ketjut",
+    "Current": "Nykyinen",
+    "No auth source": "No auth source"
 }

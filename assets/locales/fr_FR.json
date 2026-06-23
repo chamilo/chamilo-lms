@@ -2389,5 +2389,7 @@
     "Search term is too short": "Le terme de recherche est trop court",
     "Could not search forums": "Impossible de rechercher dans les forums",
     "Moderated": "Mod\u00e9r\u00e9",
-    "View threads": "Voir les fils de discussion"
+    "View threads": "Voir les fils de discussion",
+    "Current": "Actuel",
+    "No auth source": "Pas d'auth source"
 }

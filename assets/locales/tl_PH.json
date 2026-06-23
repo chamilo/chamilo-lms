@@ -2389,5 +2389,7 @@
     "Search term is too short": "Masyadong maikli ang termino ng paghahanap",
     "Could not search forums": "Hindi mahanap ang mga forum",
     "Moderated": "Naka-moderate",
-    "View threads": "Tingnan ang mga thread"
+    "View threads": "Tingnan ang mga thread",
+    "Current": "Kasalukuyan",
+    "No auth source": "No auth source"
 }

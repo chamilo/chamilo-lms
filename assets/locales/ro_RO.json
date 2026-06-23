@@ -2389,5 +2389,7 @@
     "Search term is too short": "Termenul de c\u0103utare este prea scurt",
     "Could not search forums": "Nu s-au putut c\u0103uta forumurile",
     "Moderated": "Moderat",
-    "View threads": "Vizualizare subiecte"
+    "View threads": "Vizualizare subiecte",
+    "Current": "Actual",
+    "No auth source": "No auth source"
 }

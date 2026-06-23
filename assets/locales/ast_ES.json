@@ -2389,5 +2389,7 @@
     "Search term is too short": "El t\u00e9rminu de busca ye enforma curtiu",
     "Could not search forums": "Nun se pudieron buscar foros",
     "Moderated": "Moderao",
-    "View threads": "Ver filos"
+    "View threads": "Ver filos",
+    "Current": "Actual",
+    "No auth source": "No auth source"
 }

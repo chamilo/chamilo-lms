@@ -2389,5 +2389,7 @@
     "Search term is too short": "El t\u00e9rmino de b\u00fasqueda es demasiado corto",
     "Could not search forums": "No se pudo buscar en los foros",
     "Moderated": "Moderado",
-    "View threads": "Ver hilos"
+    "View threads": "Ver hilos",
+    "Current": "Actual",
+    "No auth source": "No auth source"
 }

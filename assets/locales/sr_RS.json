@@ -2389,5 +2389,7 @@
     "Search term is too short": "Pretraga je prekratka",
     "Could not search forums": "Nije mogu\u0107e pretra\u017eiti forume",
     "Moderated": "Moderirano",
-    "View threads": "Prika\u017ei teme"
+    "View threads": "Prika\u017ei teme",
+    "Current": "Trenutno",
+    "No auth source": "No auth source"
 }

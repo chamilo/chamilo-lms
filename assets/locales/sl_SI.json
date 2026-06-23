@@ -2389,5 +2389,7 @@
     "Search term is too short": "Iskalni izraz je prekratek",
     "Could not search forums": "Forumov ni bilo mogo\u010de iskati",
     "Moderated": "Moderirano",
-    "View threads": "Ogled niti"
+    "View threads": "Ogled niti",
+    "Current": "Trenutno",
+    "No auth source": "No auth source"
 }

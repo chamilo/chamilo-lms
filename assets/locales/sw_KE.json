@@ -2389,5 +2389,7 @@
     "Search term is too short": "Neno la utafutaji ni fupi mno",
     "Could not search forums": "Haikuweza kutafuta majukwaa",
     "Moderated": "Imedhibitiwa",
-    "View threads": "Tazama nyuzi"
+    "View threads": "Tazama nyuzi",
+    "Current": "Sasa",
+    "No auth source": "No auth source"
 }

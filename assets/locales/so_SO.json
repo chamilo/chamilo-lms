@@ -2389,5 +2389,7 @@
     "Search term is too short": "Erayga raadinta aad buu u gaaban yahay",
     "Could not search forums": "Golayaasha lama baadhi karin",
     "Moderated": "La dhex-dhexaajiyay",
-    "View threads": "Eeg mawduucyada"
+    "View threads": "Eeg mawduucyada",
+    "Current": "Hadda",
+    "No auth source": "No auth source"
 }

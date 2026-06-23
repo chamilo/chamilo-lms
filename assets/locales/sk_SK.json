@@ -2389,5 +2389,7 @@
     "Search term is too short": "H\u013eadan\u00fd v\u00fdraz je pr\u00edli\u0161 kr\u00e1tky",
     "Could not search forums": "F\u00f3ra sa nepodarilo vyh\u013eada\u0165",
     "Moderated": "Moderovan\u00e9",
-    "View threads": "Zobrazi\u0165 t\u00e9my"
+    "View threads": "Zobrazi\u0165 t\u00e9my",
+    "Current": "S\u00fa\u010dasn\u00fd",
+    "No auth source": "No auth source"
 }

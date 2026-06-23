@@ -2389,5 +2389,7 @@
     "Search term is too short": "S\u00f8geordet er for kort",
     "Could not search forums": "Kunne ikke s\u00f8ge i fora",
     "Moderated": "Modereret",
-    "View threads": "Vis tr\u00e5de"
+    "View threads": "Vis tr\u00e5de",
+    "Current": "Nuv\u00e6rende",
+    "No auth source": "No auth source"
 }

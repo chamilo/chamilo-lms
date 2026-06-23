@@ -38363,3 +38363,5 @@ msgstr "Modéré"
 msgid "View threads"
 msgstr "Voir les fils de discussion"
 
+msgid "No auth source"
+msgstr "Pas d'auth source"

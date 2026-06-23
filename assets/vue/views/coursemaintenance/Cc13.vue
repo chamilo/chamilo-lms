@@ -227,13 +227,13 @@
 
           <!-- Export button -->
           <div class="mt-2 flex justify-end">
-            <button
-              class="btn-primary"
+            <BaseButton
+              :label="t('Export')"
+              icon="export"
+              type="primary"
               :disabled="loadingExport || (scope === 'selected' && selectedCount === 0)"
               @click="doExport"
-            >
-              <i class="mdi mdi-package-variant-closed"></i> {{ t("Export") }}
-            </button>
+            />
           </div>
 
           <p
@@ -257,13 +257,13 @@
             class="w-full rounded border border-gray-300 p-2 text-sm"
           />
           <div class="mt-2 flex justify-end">
-            <button
-              class="btn-primary"
+            <BaseButton
+              :label="t('Import')"
+              icon="import"
+              type="success"
               :disabled="!file || loadingImport"
               @click="doImport"
-            >
-              <i class="mdi mdi-package-down"></i> {{ t("Import") }}
-            </button>
+            />
           </div>
         </div>
       </div>
@@ -288,6 +288,7 @@ import { ref, computed, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import svc from "../../services/courseMaintenance"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const route = useRoute()

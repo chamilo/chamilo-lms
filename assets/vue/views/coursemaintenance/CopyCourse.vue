@@ -119,6 +119,7 @@
             <input
               v-model="copyOption"
               type="radio"
+              name="copy_option"
               value="full_copy"
             />
             <span class="text-sm text-gray-90">{{ t("Full copy") }}</span>
@@ -127,26 +128,25 @@
             <input
               v-model="copyOption"
               type="radio"
+              name="copy_option"
               value="select_items"
             />
             <span class="text-sm text-gray-90">{{ t("Let me select learning objects") }}</span>
           </label>
 
           <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <label class="flex items-center gap-2">
-              <input
-                v-model="includeUsers"
-                type="checkbox"
-              />
-              <span class="text-sm text-gray-90">{{ t("Include users (enrollments)") }}</span>
-            </label>
-            <label class="flex items-center gap-2">
-              <input
-                v-model="resetDates"
-                type="checkbox"
-              />
-              <span class="text-sm text-gray-90">{{ t("Reset dates") }}</span>
-            </label>
+            <BaseCheckbox
+              id="copy-include-users"
+              v-model="includeUsers"
+              name="include_users"
+              :label="t('Include users (enrollments)')"
+            />
+            <BaseCheckbox
+              id="copy-reset-dates"
+              v-model="resetDates"
+              name="reset_dates"
+              :label="t('Reset dates')"
+            />
           </div>
 
           <div class="mt-4">
@@ -159,6 +159,7 @@
                   v-model.number="sameFileNameOption"
                   :value="1"
                   type="radio"
+                  name="same_file_name_option"
                 />
                 <span class="text-sm text-gray-90">{{ t("Skip same file name") }}</span>
               </label>
@@ -167,6 +168,7 @@
                   v-model.number="sameFileNameOption"
                   :value="2"
                   type="radio"
+                  name="same_file_name_option"
                 />
                 <span class="text-sm text-gray-90">
                   {{ t("Rename file (eg file.pdf becomes file_1.pdf)") }}
@@ -177,6 +179,7 @@
                   v-model.number="sameFileNameOption"
                   :value="3"
                   type="radio"
+                  name="same_file_name_option"
                 />
                 <span class="text-sm text-gray-90">{{ t("Overwrite file") }}</span>
               </label>
@@ -186,20 +189,20 @@
       </div>
 
       <div class="col-span-full flex justify-end gap-3">
-        <button
+        <BaseButton
+          :label="t('Reset')"
+          icon="refresh"
+          type="tertiary-alternative"
           :disabled="loading"
-          class="btn-secondary"
           @click="resetAll"
-        >
-          <i class="mdi mdi-refresh"></i> {{ t("Reset") }}
-        </button>
-        <button
+        />
+        <BaseButton
+          :label="t('Continue')"
+          icon="arrow-right"
+          type="primary"
           :disabled="loading || !sourceCourseId"
-          class="btn-primary"
           @click="nextFromStep1"
-        >
-          <i class="mdi mdi-arrow-right"></i> {{ t("Continue") }}
-        </button>
+        />
       </div>
     </section>
 
@@ -218,20 +221,20 @@
         </template>
       </CMInfo>
       <div class="flex justify-between">
-        <button
+        <BaseButton
+          :label="t('Back')"
+          icon="arrow-left"
+          type="tertiary-alternative"
           :disabled="loading"
-          class="btn-secondary"
           @click="step = 1"
-        >
-          <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
-        </button>
-        <button
+        />
+        <BaseButton
+          :label="t('Start copying')"
+          icon="copy"
+          type="success"
           :disabled="loading"
-          class="btn-primary"
           @click="doCopy"
-        >
-          <i class="mdi mdi-content-copy"></i> {{ t("Start copying") }}
-        </button>
+        />
       </div>
     </section>
 
@@ -255,20 +258,20 @@
       />
 
       <div class="flex justify-between">
-        <button
+        <BaseButton
+          :label="t('Back')"
+          icon="arrow-left"
+          type="tertiary-alternative"
           :disabled="loading"
-          class="btn-secondary"
           @click="step = 1"
-        >
-          <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
-        </button>
-        <button
+        />
+        <BaseButton
+          :label="t('Copy selected')"
+          icon="copy"
+          type="success"
           :disabled="loading"
-          class="btn-primary"
           @click="doCopy"
-        >
-          <i class="mdi mdi-content-copy"></i> {{ t("Copy selected") }}
-        </button>
+        />
       </div>
     </section>
 
@@ -288,6 +291,8 @@ import { useI18n } from "vue-i18n"
 import svc from "../../services/courseMaintenance"
 import ResourceSelector from "../../components/coursemaintenance/ResourceSelector.vue"
 import BaseSearchSelect from "../../components/basecomponents/BaseSearchSelect.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 
 const { t } = useI18n()
 const route = useRoute()

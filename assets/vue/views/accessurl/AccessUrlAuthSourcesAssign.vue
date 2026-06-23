@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue"
+import { ref, computed, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -26,18 +26,64 @@ const isLoadingAssign = ref(false)
 
 const userFinder = ref({ selectedUsers: [] })
 
+/** Map of userIri → current auth_source string (or null) for the selected URL */
+const currentAuthSourceMap = ref({})
+
+async function fetchCurrentAuthSources(accessUrlIri) {
+  currentAuthSourceMap.value = {}
+  const users = userFinder.value.selectedUsers
+  if (!accessUrlIri || users.length === 0) {
+    return
+  }
+
+  try {
+    const params = new URLSearchParams()
+    params.append("access_url", accessUrlIri)
+    users.forEach((u) => params.append("users[]", u["@id"]))
+
+    const data = await baseService.get(`/access-url/auth-sources/users-current?${params.toString()}`)
+    currentAuthSourceMap.value = data
+  } catch (e) {
+    // Non-blocking: just skip the display
+  }
+}
+
+/** Selected users enriched with their current auth_source label for the chosen URL */
+const selectedUsersWithAuthSource = computed(() =>
+  userFinder.value.selectedUsers.map((user) => {
+    const iri = user["@id"]
+    const current = currentAuthSourceMap.value[iri]
+    return {
+      ...user,
+      roleLabel: current ? `${t("Current")}: ${current}` : t("No auth source"),
+    }
+  }),
+)
+
 async function listAuthSourcesByAccessUrl({ value: accessUrlIri }) {
   authSourceList.value = []
   authSource.value = null
 
   try {
     const data = await baseService.get("/access-url/auth-sources/list", { access_url: accessUrlIri })
-
     authSourceList.value = data.map((methodName) => ({ label: methodName, value: methodName }))
   } catch (error) {
     showErrorNotification(error)
   }
+
+  await fetchCurrentAuthSources(accessUrlIri)
 }
+
+// Re-fetch when the selected user list changes while a URL is already chosen.
+watch(
+  () => userFinder.value.selectedUsers,
+  () => {
+    if (accessUrl.value) {
+      fetchCurrentAuthSources(accessUrl.value)
+    }
+  },
+  { deep: true },
+)
 
 async function assignAuthSources() {
   isLoadingAssign.value = true
@@ -52,6 +98,7 @@ async function assignAuthSources() {
     showSuccessNotification(t("Authentication sources assigned successfully"))
 
     userFinder.value.selectedUsers = []
+    currentAuthSourceMap.value = {}
   } catch (e) {
     showErrorNotification(e)
   } finally {
@@ -104,8 +151,8 @@ listAccessUrl().then((items) => (accessUrlList.value = items))
 
       <div class="field">
         <BaseAvatarList
-          :count-several="userFinder.selectedUsers.length || 0"
-          :users="userFinder.selectedUsers || []"
+          :count-several="selectedUsersWithAuthSource.length || 0"
+          :users="selectedUsersWithAuthSource"
         />
       </div>
 

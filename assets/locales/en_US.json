@@ -1434,6 +1434,7 @@
     "Images": "Images",
     "Media": "Media",
     "Files": "Files",
+    "Folder": "Folder",
     "Folder name": "Folder name",
     "Rename folder": "Rename folder",
     "New name": "New name",
@@ -2388,5 +2389,7 @@
     "Search term is too short": "Search term is too short",
     "Could not search forums": "Could not search forums",
     "Moderated": "Moderated",
-    "View threads": "View threads"
+    "View threads": "View threads",
+    "Current": "Current",
+    "No auth source": "No auth source"
 }

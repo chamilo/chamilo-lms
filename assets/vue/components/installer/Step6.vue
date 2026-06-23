@@ -406,7 +406,11 @@ const sanitizedDbName = computed(() => {
 })
 
 const loading = ref(false)
-const isButtonDisabled = ref(installerData.value.isUpdateAvailable)
+// Do NOT initialize from isUpdateAvailable: a pending/failed migration means
+// isUpdateAvailable=true, but the button must stay enabled so the user can
+// (re)run the migration.  The button is disabled only while the migration is
+// actually running (loading=true, set in btnStep6OnClick).
+const isButtonDisabled = ref(false)
 const isExecutable = ref("")
 
 const progressPercentage = ref(0)

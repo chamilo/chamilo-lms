@@ -347,7 +347,7 @@
             />
             <BaseButton
               :label="t('Create a backup')"
-              :to-url="`/main/course_copy/create_backup.php?cid=${data.id}`"
+              :route="{ name: 'CMCreateBackup', params: { node: data.resourceNodeId }, query: { cid: data.id } }"
               icon="folder-backup"
               only-icon
               size="small"

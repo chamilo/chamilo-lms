@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Essence\SafeEssenceHttpClient;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
@@ -195,7 +196,11 @@ if ($hasRequirements) {
 $template = new Template($course->getTitle(), true, true, false, true, false);
 
 $template->assign('course', $courseItem);
-$essence = Essence\Essence::instance();
+// SSRF protection: route Essence's server-side OEmbed/OpenGraph fetches of the
+// teacher-set video URL through an IP-filtered HTTP client.
+$essence = Essence\Essence::instance(
+    ['Http' => new SafeEssenceHttpClient()]
+);
 $template->assign('essence', $essence);
 $template->assign('is_premium', $courseIsPremium);
 $template->assign('allow_subscribe', $allowSubscribe);

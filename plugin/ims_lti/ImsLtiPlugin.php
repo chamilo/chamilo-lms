@@ -2,6 +2,7 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Http\SafeHttp;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -466,15 +467,25 @@ class ImsLtiPlugin extends Plugin
      */
     public function getLaunchUrlFromCartridge($configUrl)
     {
+        // SSRF guard (CWE-918): only fetch public http(s) targets. Reject
+        // loopback/private/reserved/link-local hosts and the cloud metadata
+        // endpoint before issuing any request.
+        $safeIp = SafeHttp::resolveSafeIp($configUrl);
+
+        if (null === $safeIp) {
+            throw new Exception($this->get_lang('NoAccessToUrl'));
+        }
+
         $options = [
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_POST => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER => false,
-            CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_ENCODING => '',
-            CURLOPT_SSL_VERIFYPEER => false,
         ];
+        // Forbid redirects/non-HTTP schemes and pin the validated IP to defeat
+        // DNS rebinding; restore TLS verification.
+        $options += SafeHttp::secureCurlOptions($configUrl, $safeIp);
 
         $ch = curl_init($configUrl);
         curl_setopt_array($ch, $options);

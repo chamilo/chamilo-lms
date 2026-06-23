@@ -1,30 +1,32 @@
 <?php
 /**
  * This file is part of php-pens.
- * 
- * php-pens is free software: you can redistribute it and/or modify 
+ *
+ * php-pens is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * php-pens is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with php-pens.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  /**
  * PENSServer
- * 
+ *
  * Provides the PENSServer class
- * 
+ *
  * @package PENS
  * @author Guillaume Viguier-Just <guillaume@viguierjust.com>
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
+
+use Chamilo\CoreBundle\Component\Http\SafeHttp;
 
 require_once __DIR__ . '/pens_controller.php';
 require_once __DIR__ . '/pens_package_handler.php';
@@ -33,9 +35,9 @@ require_once __DIR__ . '/pens_response.php';
 
 /**
  * PENSServer
- * 
+ *
  * Class that implements the PENS Server
- * 
+ *
  * @package PENS
  * @author Guillaume Viguier-Just <guillaume@viguierjust.com>
  * @licence http://www.gnu.org/licenses/gpl.txt
@@ -47,19 +49,19 @@ class PENSServer extends PENSController {
 	 * @var PENSServer
 	 */
 	private static $_instance;
-	
+
 	/**
 	 * Package handler
 	 * @var PENSPackageHandler
 	 */
 	protected $_package_handler = null;
-	
+
 	/**
 	 * Private constructor
 	 */
 	private function __construct() {
 	}
-	
+
 	/**
 	 * Singleton method
 	 */
@@ -70,21 +72,21 @@ class PENSServer extends PENSController {
 		}
 		return self::$_instance;
 	}
-	
+
 	/**
 	 * Prevent users to clone the instance
 	 */
 	public function __clone() {
 		trigger_error('Clone is not allowed', E_USER_ERROR);
 	}
-	
+
 	public function getPackageHandler() {
 		return $this->_package_handler;
 	}
-	
+
 	/**
 	 * Sets the package handler. Does nothing if the argument is not an instance of PENSPackageHandler
-	 * 
+	 *
 	 * @param PENSPackageHandler Package handler
 	 */
 	public function setPackageHandler($package_handler) {
@@ -92,7 +94,7 @@ class PENSServer extends PENSController {
 			$this->_package_handler = $package_handler;
 		}
 	}
-	
+
 	/**
 	 * Receives a collect request and treats it
 	 */
@@ -140,16 +142,16 @@ class PENSServer extends PENSController {
 					curl_close($ch);
 				}
 			}
-				
+
 		} catch(PENSException $e) {
 			// If we could not parse the request, send the error back to the client
 			$this->sendResponse(new PENSResponse($e));
 		}
 	}
-	
+
 	/**
 	 * Collects the package onto the local server
-	 * 
+	 *
 	 * @param PENSRequest request
 	 * @return string Path to the package on the hard drive
 	 * @throws PENSException if an exception occured
@@ -166,7 +168,7 @@ class PENSServer extends PENSController {
 		if(!$this->isExpiryDateValid($request->getPackageUrlExpiry())) {
 			throw new PENSException(1322);
 		}
-		
+
 		// Try to download the package in the temporary directory
 		$tmp = null;
 		if(function_exists("sys_get_temp_dir")) {
@@ -175,11 +177,22 @@ class PENSServer extends PENSController {
 			$tmp = "/tmp";
 		}
 		$path_to_file = $tmp."/".$request->getFilename();
+		// SSRF guard (CWE-918): block downloads from targets resolving to a
+		// loopback/private/reserved/link-local address (incl. the cloud metadata
+		// endpoint) or using a non-http(s) scheme, before opening any socket.
+		$packageUrl = $request->getPackageUrl();
+		$safeIp = SafeHttp::resolveSafeIp($packageUrl);
+		if (null === $safeIp) {
+			throw new PENSException(1310);
+		}
 		$fp = fopen($path_to_file, 'w');
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $request->getPackageUrl());
-		curl_setopt($ch, CURLOPT_HEADER, false);	
+		curl_setopt($ch, CURLOPT_URL, $packageUrl);
+		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_FILE, $fp);
+		// Forbid redirects/non-HTTP schemes and pin the validated IP to defeat
+		// DNS rebinding; keep TLS verification on.
+		curl_setopt_array($ch, SafeHttp::secureCurlOptions($packageUrl, $safeIp));
 		if(!is_null($request->getPackageUrlUserId())) {
 			curl_setopt($ch, CURLOPT_USERPWD, $request->getPackageUrlUserId().":".$request->getPackageUrlPassword());
 		}
@@ -207,16 +220,16 @@ class PENSServer extends PENSController {
 					break;
 			}
 			return null;
-				
+
 		} else {
 			curl_close($ch);
 			return $path_to_file;
 		}
 	}
-	
+
 	/**
 	 * Verifies that the package url is not expired
-	 * 
+	 *
 	 * @param DateTime DateTime object to verify against current time
 	 */
 	protected function isExpiryDateValid($expiry) {
@@ -229,10 +242,10 @@ class PENSServer extends PENSController {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Sends an alert or a receipt. Called by sendReceipt and sendAlert
-	 * 
+	 *
 	 * @param PENSRequest Original collect request
 	 * @param PENSResponse Reponse to send in the receipt or the alert
 	 * @param string Mode (alert | receipt)
@@ -263,10 +276,20 @@ class PENSServer extends PENSController {
 				} else {
 					$params = array_merge($request->getSendReceiptArray(), $response->getArray());
 				}
+				// SSRF guard (CWE-918): only POST the alert/receipt callback
+				// to a public http(s) host; block loopback/private/reserved/
+				// link-local targets (incl. the cloud metadata endpoint).
+				$safeIp = SafeHttp::resolveSafeIp($url);
+				if (null === $safeIp) {
+					return null;
+				}
 				$ch = curl_init($url);
 				curl_setopt($ch, CURLOPT_POST, true);
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				// Forbid redirects/non-HTTP schemes and pin the validated IP
+				// to defeat DNS rebinding; keep TLS verification on.
+				curl_setopt_array($ch, SafeHttp::secureCurlOptions($url, $safeIp));
 				$data = curl_exec($ch);
 				curl_close($ch);
 				if($data === false) {
@@ -277,10 +300,10 @@ class PENSServer extends PENSController {
 			}
 		}
 	}
-	
+
 	/**
 	 * Sends a receipt. Returns a PENSResponse in case of success, null if a problem occured
-	 * 
+	 *
 	 * @param PENSRequest Original collect request
 	 * @param PENSResponse Response to send in the receipt
 	 * @return PENSResponse Response
@@ -288,20 +311,20 @@ class PENSServer extends PENSController {
 	protected function sendReceipt($request, $receipt) {
 		return $this->sendAlertOrReceipt($request, $receipt, "receipt");
 	}
-	
+
 	/**
 	 * Processes the package using the handler provided
-	 * 
+	 *
 	 * @param PENSRequest Original collect request
 	 * @param string Path to the package on the hard drive
 	 */
 	protected function processPackage($request, $path_to_package) {
 		return $this->_package_handler->processPackage($request, $path_to_package);
 	}
-	
+
 	/**
 	 * Sends an alert to the client. Returns a PENSResponse in case of success, null if a problem occured
-	 * 
+	 *
 	 * @param PENSRequest Original collect request
 	 * @param PENSResponse Response to send in the alert
 	 * @return PENSResponse Response
@@ -309,5 +332,5 @@ class PENSServer extends PENSController {
 	public function sendAlert($request, $alert) {
 		return $this->sendAlertOrReceipt($request, $alert, "alert");
 	}
-	
+
 }

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Http\SafeHttp;
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -13443,43 +13444,51 @@ EOD;
 
         if ($protocolFixApplied == false) {
             if (strpos(api_get_path(WEB_PATH), $host) === false) {
-                // Check X-Frame-Options
-                $ch = curl_init();
-                $options = [
-                    CURLOPT_URL => $src,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_HEADER => true,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_ENCODING => "",
-                    CURLOPT_AUTOREFERER => true,
-                    CURLOPT_CONNECTTIMEOUT => 120,
-                    CURLOPT_TIMEOUT => 120,
-                    CURLOPT_MAXREDIRS => 10,
-                ];
+                // Check X-Frame-Options through an SSRF guard (CWE-918): only
+                // probe public http(s) hosts. A target resolving to a
+                // loopback/private/reserved/link-local address (incl. the cloud
+                // metadata endpoint) is left untouched, exactly as the legacy
+                // path behaved when the request failed.
+                $safeIp = SafeHttp::resolveSafeIp($src);
 
-                $proxySettings = api_get_configuration_value('proxy_settings');
-                if (!empty($proxySettings) &&
-                    isset($proxySettings['curl_setopt_array'])
-                ) {
-                    $options[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
-                    $options[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
-                }
+                if (null !== $safeIp) {
+                    $ch = curl_init();
+                    $options = [
+                        CURLOPT_URL => $src,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_HEADER => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_CONNECTTIMEOUT => 120,
+                        CURLOPT_TIMEOUT => 120,
+                    ];
+                    // Forbid redirects/non-HTTP schemes and pin the validated IP
+                    // to defeat DNS rebinding; restore TLS verification.
+                    $options += SafeHttp::secureCurlOptions($src, $safeIp);
 
-                curl_setopt_array($ch, $options);
-                $response = curl_exec($ch);
-                $httpCode = curl_getinfo($ch);
-                $headers = substr($response, 0, $httpCode['header_size']);
+                    $proxySettings = api_get_configuration_value('proxy_settings');
+                    if (!empty($proxySettings) &&
+                        isset($proxySettings['curl_setopt_array'])
+                    ) {
+                        $options[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
+                        $options[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+                    }
 
-                $error = false;
-                if (stripos($headers, 'X-Frame-Options: DENY') > -1
-                    //|| stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
-                ) {
-                    $error = true;
-                }
+                    curl_setopt_array($ch, $options);
+                    $response = curl_exec($ch);
+                    $httpCode = curl_getinfo($ch);
+                    $headers = substr($response, 0, $httpCode['header_size']);
 
-                if ($error) {
-                    Session::write('x_frame_source', $src);
-                    $src = 'blank.php?error=x_frames_options';
+                    $error = false;
+                    if (stripos($headers, 'X-Frame-Options: DENY') > -1
+                        //|| stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
+                    ) {
+                        $error = true;
+                    }
+
+                    if ($error) {
+                        Session::write('x_frame_source', $src);
+                        $src = 'blank.php?error=x_frames_options';
+                    }
                 }
             }
         }

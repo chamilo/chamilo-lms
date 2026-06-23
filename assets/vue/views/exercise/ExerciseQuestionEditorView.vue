@@ -674,7 +674,7 @@
                     <div class="flex justify-end gap-1">
                       <BaseButton
                         :label="t('Select')"
-                        icon="cursor-default-click"
+                        icon="crosshairs"
                         only-icon
                         size="small"
                         type="primary-text"

@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
@@ -350,7 +349,7 @@ function parseQti2($xmlData)
     global $questionTempDir;
     global $resourcesLinks;
 
-    $crawler = new Crawler($xmlData);
+    $crawler = Import::xmlFromString($xmlData);
     $nodes = $crawler->filter('*');
 
     $currentQuestionIdent = '';

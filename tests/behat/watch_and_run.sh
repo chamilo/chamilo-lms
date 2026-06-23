@@ -32,7 +32,9 @@ while true; do
         WATCH_PATH="$FEATURES_DIR"
     fi
 
-    # Wait for a file change
+    # Block until any modify or create event fires on the watched path.
+    # -q suppresses the "Watching..." startup line; --format '%f' returns only
+    # the filename so we can pass it directly to run_and_log.sh.
     CHANGED=$(inotifywait -q -e modify -e create --format '%f' "$WATCH_PATH" 2>/dev/null)
     echo ""
     echo ">>> Change detected: $CHANGED at $(date '+%H:%M:%S') — running Behat..."

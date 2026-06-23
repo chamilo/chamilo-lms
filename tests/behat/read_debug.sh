@@ -9,6 +9,8 @@
 #   ./read_debug.sh clean        → delete all debug files
 # ============================================================
 
+# Debug files are written by FeatureContext.php on step failure.
+# Naming convention: <timestamp>_<scenario>_{full.html,meta.txt,form_summary.txt}
 DEBUG_DIR="$(dirname "$0")/behat_debug"
 
 if [ ! -d "$DEBUG_DIR" ]; then

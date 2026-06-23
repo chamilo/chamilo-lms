@@ -7,28 +7,27 @@ Feature: Special admin settings flows
     Given I am a platform administrator
     And I wait very long for the page to be loaded
 
-  Scenario: Initial platform searches and basic settings
+  Scenario: Platform settings — diagnostic and tabs
     Given I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
 
     # Diagnostic search
     When I fill in the following:
       | platform_management_search | Diagnostic |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_search_diagnostic']" to appear
     And I select "Yes" from "form_allow_search_diagnostic"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
     And I wait very long for the page to be loaded
-
     # Tabs configuration
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | tabs |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_show_tabs']" to appear
     And I fill in "form_show_tabs" with "{\"menu\":{\"campus_homepage\":true,\"my_courses\":true,\"reporting\":true,\"platform_administration\":true,\"my_agenda\":true,\"social\":true,\"videoconference\":true,\"diagnostics\":true,\"catalogue\":true,\"session_admin\":true,\"search\":true,\"question_manager\":false},\"topbar\":{\"topbar_my_certificates\":true,\"topbar_my_custom_certificate\":false,\"topbar_skills\":true}}"
     And I zoom out to maximum
     And I click the "i.mdi-content-save" element
@@ -51,23 +50,25 @@ Feature: Special admin settings flows
     And I should see "Administration"
     And I should see "Agenda"
 
+  Scenario: Platform settings — anonymous users and certificates
+
     # Multiple anonymous users
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | Multiple anonymous users |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_max_anonymous_users']" to appear
     And I fill in the following:
       | form_max_anonymous_users | 100 |
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     # Course catalogue on homepage
     When I fill in the following:
       | search_keyword | course_catalog_display_in_home |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_course_catalog_display_in_home']" to appear
     And I select "No" from "form_course_catalog_display_in_home"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -85,11 +86,11 @@ Feature: Special admin settings flows
 
     # Certificate links
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | hide_my_certificate_link |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_hide_my_certificate_link']" to appear
     And I select "Yes" from "form_hide_my_certificate_link"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -104,11 +105,11 @@ Feature: Special admin settings flows
     And I am logged as "admin"
     And I wait very long for the page to be loaded
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | allow_general_certificate |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_general_certificate']" to appear
     And I select "Yes" from "form_allow_general_certificate"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -127,13 +128,15 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I am on "/admin"
     And I wait very long for the page to be loaded
+  Scenario: Platform settings — active tools and LP forum
+
     # NOTE: commented out — “no such window: target window already closed” after the save button
     When I fill in the following:
        | platform_management_search | active_tools_on_create |
     And I press "platform_management_search_button"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    And I wait very long for the page to be loaded
+    And I wait for the element "#form_active_tools_on_create_0" to appear
     And I click the "#form_active_tools_on_create_0" element
     And I click the "#form_active_tools_on_create_1" element
     And I click the "#form_active_tools_on_create_2" element
@@ -190,101 +193,101 @@ Feature: Special admin settings flows
 
     Then I should not see an error
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | enable_help_link |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_enable_help_link']" to appear
     And I select "No" from "form_enable_help_link"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     # Now reuse search_keyword for subsequent settings (no need to go back to /admin)
     When I fill in the following:
       | search_keyword | translate_html |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_translate_html']" to appear
     And I select "Yes" from "form_translate_html"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | allow_forum_post_revisions |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_forum_post_revisions']" to appear
     And I select "Yes" from "form_allow_forum_post_revisions"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | hide_forum_post_revision_language |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_hide_forum_post_revision_language']" to appear
     And I select "Yes" from "form_hide_forum_post_revision_language"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | allow_forum_category_language_filter |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_forum_category_language_filter']" to appear
     And I select "Yes" from "form_allow_forum_category_language_filter"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | subscribe_users_to_forum_notifications_also_in_base_course |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_subscribe_users_to_forum_notifications_also_in_base_course']" to appear
     And I select "Yes" from "form_subscribe_users_to_forum_notifications_also_in_base_course"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | allow_course_multiple_languages |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_course_multiple_languages']" to appear
     And I select "Yes" from "form_allow_course_multiple_languages"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | validate_lp_prerequisite_from_other_session |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_validate_lp_prerequisite_from_other_session']" to appear
     And I select "Yes" from "form_validate_lp_prerequisite_from_other_session"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     # Hidden exercise in LP
     When I fill in the following:
       | search_keyword | show_hidden_exercise_added_to_lp |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_show_hidden_exercise_added_to_lp']" to appear
     And I select "No" from "form_show_hidden_exercise_added_to_lp"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     # Ticket/LP and message settings
     When I fill in the following:
       | search_keyword | ticket_lp_quiz_info_add |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_ticket_lp_quiz_info_add']" to appear
     And I select "Yes" from "form_ticket_lp_quiz_info_add"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | force_edit_exercise_in_lp |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_force_edit_exercise_in_lp']" to appear
     And I select "Yes" from "form_force_edit_exercise_in_lp"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
 
   # Verify force_edit_exercise_in_lp: exercise added to LP remains editable
     When I am on "/main/admin/course_add.php"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     When I fill in the following:
       | title | Force Edit Course |
     And I zoom out to maximum
@@ -298,7 +301,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     When I follow "Tests"
-    And I wait very long for the page to be loaded
+    And I wait for the element "a[href*='exercise_admin.php']" to appear
     When I click the "a[href*='exercise_admin.php']" element
     And I wait very long for the page to be loaded
     And I zoom out to maximum
@@ -315,10 +318,8 @@ Feature: Special admin settings flows
     When I follow "Learning paths"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I click the "button[aria-label='More actions']" element
-    And I wait for the element ".menu-content" to appear
     And I press "Create new learning path"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='lp_name']" to appear
     And I fill in the following:
       | lp_name | Force Edit LP |
     And I press "Continue"
@@ -337,28 +338,39 @@ Feature: Special admin settings flows
     When I click the "i.mdi-pencil" element
     And I wait very long for the page to be loaded
     Then I should not see an error
-    And I should not see an error
+
+  Scenario: Platform settings — messaging and students
 
     When I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     And I fill in the following:
       | platform_management_search | allow_send_message_to_all_platform_users |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_send_message_to_all_platform_users']" to appear
     And I select "Yes" from "form_allow_send_message_to_all_platform_users"
+    And I click the "i.mdi-content-save" element
+    And I wait very long for the page to be loaded
+
+    # Enable admins_can_set_users_pass so the "Set password manually" radio appears in user_edit.php
+    And I am on "/admin"
+    And I wait for the element "#platform_management_search" to appear
+    And I fill in the following:
+      | platform_management_search | admins_can_set_users_pass |
+    And I press "platform_management_search_button"
+    And I wait for the element "[name='form_admins_can_set_users_pass']" to appear
+    And I select "Yes" from "form_admins_can_set_users_pass"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
 
     # Create two students to test internal messaging autocomplete
     And I am on "/main/admin/user_add.php"
     And I zoom out to maximum
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='firstname']" to appear
     And I fill in the following:
       | firstname | Student |
       | lastname  | One     |
       | email     | student.one@example.test |
       | username  | studentone |
-      | password  | studentone |
     And I select "Learner" from "user_add_roles"
     And I click the "input#send_mail_no" element
     And I press "submit"
@@ -376,7 +388,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "input[name='reset_password'][value='2']" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='password']" to appear
     And I fill in "password" with "studentone"
     And I press "submit"
     And I wait very long for the page to be loaded
@@ -384,13 +396,12 @@ Feature: Special admin settings flows
 
     And I am on "/main/admin/user_add.php"
     And I zoom out to maximum
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='firstname']" to appear
     And I fill in the following:
       | firstname | Student |
       | lastname  | Two     |
       | email     | student.two@example.test |
       | username  | studenttwo |
-      | password  | studenttwo |
     And I select "Learner" from "user_add_roles"
     And I click the "input#send_mail_no" element
     And I press "submit"
@@ -408,7 +419,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "input[name='reset_password'][value='2']" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='password']" to appear
     And I fill in "password" with "studenttwo"
     And I press "submit"
     And I wait very long for the page to be loaded
@@ -417,13 +428,12 @@ Feature: Special admin settings flows
     # Create a third student (no subscriptions) for default menu entry test
     And I am on "/main/admin/user_add.php"
     And I zoom out to maximum
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='firstname']" to appear
     And I fill in the following:
       | firstname | Student |
       | lastname  | Three   |
       | email     | student.three@example.test |
       | username  | studentthree |
-      | password  | studentthree |
     And I select "Learner" from "user_add_roles"
     And I click the "input#send_mail_no" element
     And I press "submit"
@@ -441,7 +451,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "input[name='reset_password'][value='2']" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='password']" to appear
     And I fill in "password" with "studentthree"
     And I press "submit"
     And I wait very long for the page to be loaded
@@ -452,7 +462,7 @@ Feature: Special admin settings flows
     Then I am logged as "studentone"
     And I wait very long for the page to be loaded
     And I am on "resources/messages"
-    And I wait very long for the page to be loaded
+    And I wait for the element "span.mdi-email-plus-outline" to appear
     And I click the "span.mdi-email-plus-outline" element
     And I wait very long for the page to be loaded
     And I should not see an error
@@ -472,31 +482,33 @@ Feature: Special admin settings flows
     Then I am logged as "admin"
     And I wait very long for the page to be loaded
 
+  Scenario: Platform settings — cookie registration and terms
+
     When I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     And I fill in the following:
       | platform_management_search | private_messages_about_user_visible_to_user |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_private_messages_about_user_visible_to_user']" to appear
     And I select "Yes" from "form_private_messages_about_user_visible_to_user"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
 
     # Cookie, registration, terms and extra fields
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | cookie_warning |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_cookie_warning']" to appear
     And I select "Yes" from "form_cookie_warning"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | allow_registration |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_registration']" to appear
     And I select "Yes" from "form_allow_registration"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -515,11 +527,11 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | allow_registration_as_teacher |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_registration_as_teacher']" to appear
     And I select "No" from "form_allow_registration_as_teacher"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -534,11 +546,11 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | allow_terms_conditions |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_terms_conditions']" to appear
     And I select "Yes" from "form_allow_terms_conditions"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -547,7 +559,7 @@ Feature: Special admin settings flows
     And I zoom out to maximum
     And I should see "Terms and conditions"
 
-  Scenario: Add user extra fields
+  Scenario: User extra fields 1 to 10
 
     # 1) Gender (Radio)
     Given I am on "/main/admin/extra_fields.php?type=user"
@@ -739,6 +751,7 @@ Feature: Special admin settings flows
 
     Then I should not see an error
 
+  Scenario: User extra fields 11 to 21
 
     # 11) Last diploma obtained (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
@@ -944,6 +957,8 @@ Feature: Special admin settings flows
     And I press "user_field_submit"
     And I wait very long for the page to be loaded
 
+  Scenario: User extra fields 22 to 30
+
     # 22) termactivated (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
@@ -1111,6 +1126,8 @@ Feature: Special admin settings flows
     And I click the "#filter_yes" element
     And I press "user_field_submit"
     And I wait very long for the page to be loaded
+
+  Scenario: User extra fields 31 to 41
 
     # 31) Un smartphone (Checkbox)
     And I am on "/main/admin/extra_fields.php?type=user"
@@ -1312,7 +1329,7 @@ Feature: Special admin settings flows
 
     Then I should not see an error
 
-  Scenario: Add minimal session extra fields
+  Scenario: Session extra fields 1 to 12
 
 
     # 1) Je commence mon apprentissage sur la plateforme le (Date)
@@ -1552,12 +1569,14 @@ Feature: Special admin settings flows
 
     Then I should not see an error
 
+  Scenario: Session settings — registration and redirect
+
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | required_extra_fields_in_inscription |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_required_extra_fields_in_inscription']" to appear
     And I fill in the following:
       | form_required_extra_fields_in_inscription | {"options":["terms_adresse","terms_codepostal","terms_ville","terms_paysresidence","terms_datedenaissance","terms_genre","filiere_user","terms_formation_niveau","gdpr","platformuseconditions","langue_cible"]} |
     And I click the "i.mdi-content-save" element
@@ -1584,11 +1603,11 @@ Feature: Special admin settings flows
 
     # Registration fields and messages
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | allow_fields_inscription |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_fields_inscription']" to appear
     And I fill in the following:
       | form_allow_fields_inscription | {"fields":["lastname","firstname","email","language","phone","address"],"extra_fields":["terms_nationalite","terms_numeroderue","terms_nomderue","terms_codepostal","terms_paysresidence","terms_ville","terms_datedenaissance","terms_genre","filiere_user","terms_formation_niveau","terms_villedustage","terms_adresse","gdpr","platformuseconditions","langue_cible"]} |
     And I click the "i.mdi-content-save" element
@@ -1624,19 +1643,19 @@ Feature: Special admin settings flows
    # And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | send_inscription_msg_to_inbox |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_send_inscription_msg_to_inbox']" to appear
     And I select "Yes" from "form_send_inscription_msg_to_inbox"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | redirect_after_login |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_redirect_after_login']" to appear
     And I fill in the following:
       | form_redirect_after_login | {"COURSEMANAGER":"sessions","STUDENT":"sessions","DRH":"sessions","SESSIONADMIN":"sessions","STUDENT_BOSS":"sessions","INVITEE":"","ADMIN":"sessions"} |
     And I click the "i.mdi-content-save" element
@@ -1653,28 +1672,28 @@ Feature: Special admin settings flows
 
     # Legal accept, captcha limits and session toggles
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | hide_legal_accept_checkbox |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_hide_legal_accept_checkbox']" to appear
     And I select "Yes" from "form_hide_legal_accept_checkbox"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | captcha_number_mistakes_to_block_account |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_captcha_number_mistakes_to_block_account']" to appear
     And I fill in the following:
       | form_captcha_number_mistakes_to_block_account | 5 |
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | captcha_time_to_block |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_captcha_time_to_block']" to appear
     And I fill in the following:
       | form_captcha_time_to_block | 5 |
     And I click the "i.mdi-content-save" element
@@ -1684,32 +1703,32 @@ Feature: Special admin settings flows
     Given I am not logged
     And I wait very long for the page to be loaded
     When I am on "/login"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='login']" to appear
     And I fill in the following:
       | login    | acostea  |
       | password | wrongpwd |
     And I press "Sign in"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='login']" to appear
     When I fill in the following:
       | login    | acostea  |
       | password | wrongpwd |
     And I press "Sign in"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='login']" to appear
     When I fill in the following:
       | login    | acostea  |
       | password | wrongpwd |
     And I press "Sign in"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='login']" to appear
     When I fill in the following:
       | login    | acostea  |
       | password | wrongpwd |
     And I press "Sign in"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='login']" to appear
     When I fill in the following:
       | login    | acostea  |
       | password | wrongpwd |
     And I press "Sign in"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='login']" to appear
     # 6th attempt — account should now be blocked
     When I fill in the following:
       | login    | acostea  |
@@ -1726,20 +1745,24 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     When I am logged as "admin"
     And I wait very long for the page to be loaded
+
+
+  nario: Session settings — session admin
+
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | anonymous_autoprovisioning |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_anonymous_autoprovisioning']" to appear
     And I select "Yes" from "form_anonymous_autoprovisioning"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | allow_session_admins_to_manage_all_sessions |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_session_admins_to_manage_all_sessions']" to appear
     And I select "Yes" from "form_allow_session_admins_to_manage_all_sessions"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -1757,23 +1780,21 @@ Feature: Special admin settings flows
     And I wait for the page to be loaded
     And I am logged as "admin"
     And I wait very long for the page to be loaded
-    And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | allow_search_diagnostic |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_search_diagnostic']" to appear
     And I select "Yes" from "form_allow_search_diagnostic"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | session_admins_edit_courses_content |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_session_admins_edit_courses_content']" to appear
     And I select "Yes" from "form_session_admins_edit_courses_content"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -1822,11 +1843,11 @@ Feature: Special admin settings flows
     # And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | session_list_show_count_users |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_session_list_show_count_users']" to appear
     And I select "Yes" from "form_session_list_show_count_users"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -1838,23 +1859,25 @@ Feature: Special admin settings flows
     And I am on "/admin"
     And I wait very long for the page to be loaded
 
+  Scenario: Session settings — social badges and skills
+
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | session_admins_access_all_content |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_session_admins_access_all_content']" to appear
     And I select "Yes" from "form_session_admins_access_all_content"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | default_session_list_view |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_default_session_list_view']" to appear
     And I select "custom" from "form_default_session_list_view"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
  # And I am not logged
  # And I am logged as "sessionadmin"
@@ -1871,7 +1894,7 @@ Feature: Special admin settings flows
     When I fill in the following:
       | search_keyword | session_model_list_field_ordered_by_id |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_session_model_list_field_ordered_by_id']" to appear
     And I select "Yes" from "form_session_model_list_field_ordered_by_id"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -1891,12 +1914,12 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     Then I should see "Custom"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
 
     When I fill in the following:
       | platform_management_search | hide_social_groups_block |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_hide_social_groups_block']" to appear
     And I select "Yes" from "form_hide_social_groups_block"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -1904,37 +1927,37 @@ Feature: Special admin settings flows
 
     # Badges, skills and social
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | badge_assignation_notification |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_badge_assignation_notification']" to appear
     And I select "Yes" from "form_badge_assignation_notification"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
 
     When I fill in the following:
       | search_keyword | allow_teacher_access_student_skills |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_teacher_access_student_skills']" to appear
     And I select "Yes" from "form_allow_teacher_access_student_skills"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | skill_levels_names |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_skill_levels_names']" to appear
     And I fill in the following:
       | form_skill_levels_names | {"levels":{"1":"Skills","2":"Capability","3":"Dimension"}} |
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | manual_assignment_subskill_autoload |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_manual_assignment_subskill_autoload']" to appear
     And I select "Yes" from "form_manual_assignment_subskill_autoload"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -1966,7 +1989,7 @@ Feature: Special admin settings flows
 
     # Assign parent skill and check subskill list appears for user
     And I am on "main/skills/assign.php?user=1"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='skill']" to appear
     When I select "NewSkill" from "skill"
     And I wait very long for the page to be loaded
     Then I should see "SubSkill"
@@ -1974,11 +1997,11 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | social_enable_messages_feedback |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_social_enable_messages_feedback']" to appear
     And I select "Yes" from "form_social_enable_messages_feedback"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -1996,11 +2019,11 @@ Feature: Special admin settings flows
 
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | disable_dislike_option |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_disable_dislike_option']" to appear
     And I select "Yes" from "form_disable_dislike_option"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -2017,23 +2040,25 @@ Feature: Special admin settings flows
 
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | social_show_language_flag_in_profile |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_social_show_language_flag_in_profile']" to appear
     And I select "Yes" from "form_social_show_language_flag_in_profile"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
 
 
+  Scenario: Session settings — tickets and quiz
+
     # Ticket settings
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | ticket_allow_category_edition |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_ticket_allow_category_edition']" to appear
     And I select "Yes" from "form_ticket_allow_category_edition"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -2048,11 +2073,11 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | ticket_allow_student_add |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_ticket_allow_student_add']" to appear
     And I select "Yes" from "form_ticket_allow_student_add"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -2072,96 +2097,96 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | ticket_send_warning_to_all_admins |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_ticket_send_warning_to_all_admins']" to appear
     And I select "Yes" from "form_ticket_send_warning_to_all_admins"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | ticket_project_user_roles |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_ticket_project_user_roles']" to appear
     And I fill in the following:
       | form_ticket_project_user_roles | {"permissions":{"1":[17,1]}} |
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | show_link_ticket_notification |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_show_link_ticket_notification']" to appear
     And I select "Yes" from "form_show_link_ticket_notification"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | exercise_hide_label |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_exercise_hide_label']" to appear
     And I select "Yes" from "form_exercise_hide_label"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     # Quiz & UI settings
     When I fill in the following:
       | search_keyword | allow_quiz_question_feedback |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_quiz_question_feedback']" to appear
     And I select "Yes" from "form_allow_quiz_question_feedback"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | quiz_show_description_on_results_page |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_quiz_show_description_on_results_page']" to appear
     And I select "Yes" from "form_quiz_show_description_on_results_page"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | allow_notification_setting_per_exercise |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_notification_setting_per_exercise']" to appear
     And I select "Yes" from "form_allow_notification_setting_per_exercise"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | hide_free_question_score |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_hide_free_question_score']" to appear
     And I select "Yes" from "form_hide_free_question_score"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | show_exercise_expected_choice |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_show_exercise_expected_choice']" to appear
     And I select "Yes" from "form_show_exercise_expected_choice"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | allow_quiz_results_page_config |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_quiz_results_page_config']" to appear
     And I select "Yes" from "form_allow_quiz_results_page_config"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     # Changeable and visible options
     When I fill in the following:
       | search_keyword | changeable_options |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_changeable_options']" to appear
     And I select "Language" from "form_changeable_options"
     And I additionally select "Picture" from "form_changeable_options"
     And I click the "i.mdi-content-save" element
@@ -2178,11 +2203,11 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | visible_options |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_visible_options']" to appear
     And I select "Official code" from "form_visible_options"
     And I additionally select "E-mail" from "form_visible_options"
     And I additionally select "Language" from "form_visible_options"
@@ -2203,7 +2228,7 @@ Feature: Special admin settings flows
     And I am logged as "admin"
     And I wait very long for the page to be loaded
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | use_users_timezone |
     And I press "platform_management_search_button"
@@ -2211,23 +2236,23 @@ Feature: Special admin settings flows
     And I zoom out to maximum
     And I select "No" from "form_use_users_timezone"
     And I click the "i.mdi-content-save" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='search_keyword']" to appear
 
     When I fill in the following:
       | search_keyword | my_space_users_items_per_page |
     And I press "search_search"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_my_space_users_items_per_page']" to appear
     And I fill in the following:
       | form_my_space_users_items_per_page | 10000 |
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | profile_fields_visibility |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_profile_fields_visibility']" to appear
     And I fill in the following:
       | form_profile_fields_visibility | {"options":{"vcard":false,"firstname":true,"lastname":true,"picture":true,"email":false,"language":true,"chat":true,"terms_ville":true,"terms_datedenaissance":true,"terms_paysresidence":false,"filiere_user":true,"terms_villedustage":true,"hobbies":true,"langue_cible":true}} |
     And I click the "i.mdi-content-save" element
@@ -2247,21 +2272,24 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | allow_social_map_fields |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_allow_social_map_fields']" to appear
     And I fill in the following:
       | form_allow_social_map_fields | {"fields":["terms_villedustage","terms_ville"]} |
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
 
+  Scenario: Session settings — profile terms and menu
+
     # Terms and redirect/default menu
+    And I am on "/admin"
     When I fill in the following:
-      | search_keyword | show_terms_if_profile_completed |
-    And I press "search_search"
-    And I wait very long for the page to be loaded
+      | platform_management_search | show_terms_if_profile_completed |
+    And I press "platform_management_search_button"
+    And I wait for the element "[name='form_show_terms_if_profile_completed']" to appear
     And I select "Yes" from "form_show_terms_if_profile_completed"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -2278,11 +2306,11 @@ Feature: Special admin settings flows
     # And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | load_term_conditions_section |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_load_term_conditions_section']" to appear
     And I select "Course" from "form_load_term_conditions_section"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -2301,11 +2329,11 @@ Feature: Special admin settings flows
 
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | redirect_index_to_url_for_logged_users |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_redirect_index_to_url_for_logged_users']" to appear
     And I fill in the following:
       | form_redirect_index_to_url_for_logged_users | sessions |
     And I click the "i.mdi-content-save" element
@@ -2323,11 +2351,11 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/admin"
-    And I wait very long for the page to be loaded
+    And I wait for the element "#platform_management_search" to appear
     When I fill in the following:
       | platform_management_search | default_menu_entry_for_course_or_session |
     And I press "platform_management_search_button"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='form_default_menu_entry_for_course_or_session']" to appear
     And I select "my_sessions" from "form_default_menu_entry_for_course_or_session"
     And I click the "i.mdi-content-save" element
     And I wait very long for the page to be loaded
@@ -2360,7 +2388,7 @@ Feature: Special admin settings flows
     And I click the "span.mdi-magnify" element
     And I wait up to 20 seconds for the element ".tox-tinymce" to appear
     And I fill in tinymce field "terms_section_0" with "Test Terms and Conditions content"
-    And I wait very long for the page to be loaded
+    And I wait for the element "span.mdi-content-save" to appear
     And I click the "span.mdi-content-save" element
     And I wait very long for the page to be loaded
     Then I should not see an error
@@ -2369,7 +2397,7 @@ Feature: Special admin settings flows
 
   # Create courses
     When I am on "/main/admin/course_add.php"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     When I fill in the following:
       | title      | Testing course en |
     And I select "en_US" from "course_language"
@@ -2379,7 +2407,7 @@ Feature: Special admin settings flows
     Then I should see "Testing course en"
 
     When I am on "/main/admin/course_add.php"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     When I fill in the following:
       | title      | Special |
     And I zoom out to maximum
@@ -2389,7 +2417,7 @@ Feature: Special admin settings flows
     Then I should see "Special"
 
     When I am on "/main/admin/course_add.php"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     When I fill in the following:
       | title      | Testing course fr |
     And I select "fr_FR" from "course_language"
@@ -2411,7 +2439,7 @@ Feature: Special admin settings flows
     When I follow "Documents"
     And I wait very long for the page to be loaded
     When I press "Nouveau document"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     And I fill in the following:
       | title | introduction |
     And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
@@ -2421,7 +2449,7 @@ Feature: Special admin settings flows
     Then I should see "introduction"
 
     When I press "Nouveau document"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     And I fill in the following:
       | title | final |
     And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
@@ -2440,17 +2468,17 @@ Feature: Special admin settings flows
 
   # Create exercises: one with QRU + image selection, one open question
     When I follow "Exercices"
-    And I wait very long for the page to be loaded
+    And I wait for the element "a[href*='exercise_admin.php']" to appear
     When I click the "a[href*='exercise_admin.php']" element
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I fill in the following:
       | exerciseTitle | QRU and Image Selection exercise |
     And I press "submitExercise"
-    And I wait very long for the page to be loaded
+    And I wait for the element "a[title='Question à réponse unique (QRU)']" to appear
   # Add QRU question
     When I click the "a[title='Question à réponse unique (QRU)']" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='questionName']" to appear
     And I fill in the following:
       | questionName | QRU Question |
     And I zoom out to maximum
@@ -2459,10 +2487,10 @@ Feature: Special admin settings flows
     And I fill in tinymce field "answer3" with "Option C"
     And I fill in tinymce field "answer4" with "Option D"
     And I press "submit-question"
-    And I wait very long for the page to be loaded
+    And I wait for the element "a[title*='lection']" to appear
   # Add Image selection question
     When I click the "a[title*='lection']" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='questionName']" to appear
     And I fill in the following:
       | questionName | Image selection question |
     And I zoom out to maximum
@@ -2481,16 +2509,16 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     When I follow "Exercices"
-    And I wait very long for the page to be loaded
+    And I wait for the element "a[href*='exercise_admin.php']" to appear
     When I click the "a[href*='exercise_admin.php']" element
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I fill in the following:
       | exerciseTitle | Open question exercise |
     And I press "submitExercise"
-    And I wait very long for the page to be loaded
+    And I wait for the element "a[title='Question ouverte']" to appear
     When I click the "a[title='Question ouverte']" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='questionName']" to appear
     And I fill in the following:
       | questionName | Open Question |
       | weighting     | 5 |
@@ -2512,9 +2540,9 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     When I follow "Parcours d'apprentissage"
-    And I wait very long for the page to be loaded
+    And I wait for the element "span.mdi-plus" to appear
     When I click the "span.mdi-plus" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='lp_name']" to appear
     And I fill in the following:
       | lp_name | LP Test |
     And I press "Continue"
@@ -2569,7 +2597,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     When I click the "a[href*='gradebook_add_eval']" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='name']" to appear
     And I fill in the following:
       | name        | Course validation |
       | weight_mask | 100               |
@@ -2608,7 +2636,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "input[name='reset_password'][value='2']" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='password']" to appear
     And I fill in "password" with "teacher"
     And I press "submit"
     And I wait very long for the page to be loaded
@@ -2619,7 +2647,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     And I fill in the following:
       | title             | Present session  |
     And I set hidden field "access_start_date" to "2026-01-20 00:00"
@@ -2631,7 +2659,7 @@ Feature: Special admin settings flows
     And I press "submit"
     And I wait very long for the page to be loaded
     And I type and select "Testing course fr" in select2 field "courses"
-    And I wait very long for the page to be loaded
+    And I wait for the element "input[name='copy_evaluation']" to appear
     And I click the "input[name='copy_evaluation']" element
     And I wait very long for the page to be loaded
     And I press "submit"
@@ -2641,9 +2669,9 @@ Feature: Special admin settings flows
     Then I should not see an error
 
     # Edit session to set coach
-    And I wait very long for the page to be loaded
+    And I wait for the element "i.mdi-pencil" to appear
     And I click the "i.mdi-pencil" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "button.select2-selection__choice__remove" to appear
     And I click the "button.select2-selection__choice__remove" element
     And I type and select "teacher" in select2 field "coach_username"
     And I press "submit"
@@ -2651,14 +2679,14 @@ Feature: Special admin settings flows
     Then I should not see an error
 
     # Edit session to set status via advanced params
-    And I wait very long for the page to be loaded
+    And I wait for the element "i.mdi-pencil" to appear
     And I click the "i.mdi-pencil" element
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='status']" to appear
     And I select "In progress" from "status"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='extra_domaine']" to appear
 
     # Set extra fields for the session
     And I select "vie-quotidienne" from "extra_domaine"
@@ -2689,7 +2717,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     And I fill in the following:
       | title             | Session in the futur |
     And I set hidden field "access_start_date" to "2026-02-03 00:00"
@@ -2701,7 +2729,7 @@ Feature: Special admin settings flows
     And I press "submit"
     And I wait very long for the page to be loaded
     And I type and select "Testing course fr" in select2 field "courses"
-    And I wait very long for the page to be loaded
+    And I wait for the element "input[name='copy_evaluation']" to appear
     And I click the "input[name='copy_evaluation']" element
     And I wait very long for the page to be loaded
     And I press "submit"
@@ -2711,9 +2739,9 @@ Feature: Special admin settings flows
     Then I should not see an error
 
     # Edit session to set coach
-    And I wait very long for the page to be loaded
+    And I wait for the element "i.mdi-pencil" to appear
     And I click the "i.mdi-pencil" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "button.select2-selection__choice__remove" to appear
     And I click the "button.select2-selection__choice__remove" element
     And I type and select "teacher" in select2 field "coach_username"
     And I press "submit"
@@ -2721,14 +2749,14 @@ Feature: Special admin settings flows
     Then I should not see an error
 
     # Edit session to set status via advanced params
-    And I wait very long for the page to be loaded
+    And I wait for the element "i.mdi-pencil" to appear
     And I click the "i.mdi-pencil" element
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='status']" to appear
     And I select "Planned" from "status"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='extra_domaine']" to appear
 
     # Set extra fields for the session
     And I select "vie-quotidienne" from "extra_domaine"
@@ -2759,7 +2787,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     And I fill in the following:
       | title             | Past session      |
     And I set hidden field "access_start_date" to "2026-01-06 00:00"
@@ -2771,7 +2799,7 @@ Feature: Special admin settings flows
     And I press "submit"
     And I wait very long for the page to be loaded
     And I type and select "Testing course fr" in select2 field "courses"
-    And I wait very long for the page to be loaded
+    And I wait for the element "input[name='copy_evaluation']" to appear
     And I click the "input[name='copy_evaluation']" element
     And I wait very long for the page to be loaded
     And I press "submit"
@@ -2781,9 +2809,9 @@ Feature: Special admin settings flows
     Then I should not see an error
 
     # Edit session to set coach
-    And I wait very long for the page to be loaded
+    And I wait for the element "i.mdi-pencil" to appear
     And I click the "i.mdi-pencil" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "button.select2-selection__choice__remove" to appear
     And I click the "button.select2-selection__choice__remove" element
     And I type and select "teacher" in select2 field "coach_username"
     And I press "submit"
@@ -2792,14 +2820,14 @@ Feature: Special admin settings flows
 
     # Edit session to set status via advanced params
 
-    And I wait very long for the page to be loaded
+    And I wait for the element "i.mdi-pencil" to appear
     And I click the "i.mdi-pencil" element
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='status']" to appear
     And I select "Finished" from "status"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='extra_domaine']" to appear
 
     # Set extra fields for the session
     And I select "vie-quotidienne" from "extra_domaine"
@@ -2830,7 +2858,7 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='title']" to appear
     And I fill in the following:
       | title             | Session in the futur en |
     And I set hidden field "access_start_date" to "2026-04-26 00:00"
@@ -2842,7 +2870,7 @@ Feature: Special admin settings flows
     And I press "submit"
     And I wait very long for the page to be loaded
     And I type and select "Testing course en" in select2 field "courses"
-    And I wait very long for the page to be loaded
+    And I wait for the element "input[name='copy_evaluation']" to appear
     And I click the "input[name='copy_evaluation']" element
     And I wait very long for the page to be loaded
     And I press "submit"
@@ -2852,9 +2880,9 @@ Feature: Special admin settings flows
     Then I should not see an error
 
     # Edit session to set coach
-    And I wait very long for the page to be loaded
+    And I wait for the element "i.mdi-pencil" to appear
     And I click the "i.mdi-pencil" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "button.select2-selection__choice__remove" to appear
     And I click the "button.select2-selection__choice__remove" element
     And I type and select "teacher" in select2 field "coach_username"
     And I press "submit"
@@ -2862,14 +2890,14 @@ Feature: Special admin settings flows
     Then I should not see an error
 
     # Edit session to set status via advanced params
-    And I wait very long for the page to be loaded
+    And I wait for the element "i.mdi-pencil" to appear
     And I click the "i.mdi-pencil" element
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='status']" to appear
     And I select "Planned" from "status"
-    And I wait very long for the page to be loaded
+    And I wait for the element "[name='extra_domaine']" to appear
 
     # Set extra fields for the session
     And I select "vie-quotidienne" from "extra_domaine"

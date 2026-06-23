@@ -554,8 +554,35 @@ class FeatureContext extends MinkContext
      */
     public function iWaitForElementToAppear($selector): void
     {
+        // Waits until a CSS element is present AND visible in the DOM (up to 20s).
+        // "Visible" = getBoundingClientRect().height > 0: avoids false positives where Vue inserts
+        // the element into the DOM before the panel open animation ends (element present
+        // but hidden), which would make the wait pass but crash the subsequent select/fill.
+        // Searches simultaneously by name AND id: [name='X'] also tries #X and vice versa,
+        // because some Vue fields only expose one of the two depending on the component.
+        $alt = null;
+        if (preg_match("/^\[name='([^']+)'\]$/", $selector, $m)) {
+            $alt = '#'.$m[1];
+        } elseif (preg_match('/^#([\w\-]+)$/', $selector, $m)) {
+            $alt = "[name='".$m[1]."']";
+        }
+
         $escaped = addslashes($selector);
-        $this->getSession()->wait(10000, "document.querySelector('{$escaped}') !== null");
+        $altPart = null !== $alt ? " || document.querySelector('".addslashes($alt)."')" : '';
+        $condition = "(function(){var e=document.querySelector('{$escaped}'){$altPart};return e!==null&&e.getBoundingClientRect().height>0;})()";
+
+        $this->getSession()->wait(20000, $condition);
+
+        $found = $this->getSession()->getPage()->find('css', $selector);
+        if (null === $found && null !== $alt) {
+            $found = $this->getSession()->getPage()->find('css', $alt);
+        }
+        if (null === $found) {
+            throw new \Behat\Mink\Exception\ExpectationException(
+                "Element '{$selector}' did not appear and become visible within 20 seconds.",
+                $this->getSession()
+            );
+        }
     }
 
     /**
@@ -590,6 +617,10 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * Checks a radio button by finding an element containing the label text, then checking
+     * the first input inside its parent. Uses jQuery — only works on pages that load jQuery.
+     * Prefer iCheckTheRadioButton() (which uses Mink's findField) for standard radio inputs.
+     *
      * @When /^I check radio button with label "([^"]*)"$/
      */
     public function iCheckTheRadioButtonWithLabel($label)
@@ -698,30 +729,6 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I am a student subscribed to session "([^"]*)"$/
-     *
-     * @param string$sessionName
-     */
-    public function iAmStudentSubscribedToXSession($sessionName)
-    {
-        $this->iAmAPlatformAdministrator();
-        $this->visit('/main/session/session_add.php');
-        $this->fillField('name', $sessionName);
-        $this->pressButton('Next step');
-        $this->selectOption('NoSessionCoursesList[]', 'TEMP (TEMP)');
-        $this->pressButton('add_course');
-        $this->pressButton('Next step');
-        $this->assertPageContainsText('Update successful');
-        $this->fillField('user_to_add', 'acostea');
-        $this->waitForThePageToBeLoaded();
-        $this->clickLink('Costea Andrea (acostea)');
-        $this->pressButton('Finish session creation');
-        $this->assertPageContainsText('Session overview');
-        //$this->assertPageContainsText('Costea Andrea (acostea)');
-        $this->iAmAStudent();
-    }
-
-    /**
      * Example: Then I should see the table "#category_results":
      *               | Categories    | Absolute score | Relative score |
      *               | Categoryname2 | 50 / 70        | 71.43%         |
@@ -825,38 +832,6 @@ JS);
     }
 
     /**
-     * @When /^I click the "([^"]*)" element bypassing overlay$/
-     */
-    public function iClickElementBypassingOverlay($selector): void
-    {
-        $safe = addslashes($selector);
-        // Disable pointer events on fixed overlays (sidebar, etc.) so WebDriver click reaches the target
-        $this->getSession()->executeScript("
-            document.querySelectorAll('.app-sidebar, .app-sidebar__panel, .app-sidebar__wrapper')
-                .forEach(function(el) {
-                    el.setAttribute('data-saved-pe', el.style.pointerEvents);
-                    el.style.pointerEvents = 'none';
-                });
-        ");
-        $this->getSession()->wait(200);
-
-        $element = $this->getSession()->getPage()->find('css', $selector);
-        if (!$element) {
-            throw new \Exception("Element not found: $selector");
-        }
-        $element->click();
-
-        $this->getSession()->executeScript("
-            document.querySelectorAll('.app-sidebar, .app-sidebar__panel, .app-sidebar__wrapper')
-                .forEach(function(el) {
-                    el.style.pointerEvents = el.getAttribute('data-saved-pe') || '';
-                    el.removeAttribute('data-saved-pe');
-                });
-        ");
-        $this->getSession()->wait(200);
-    }
-
-    /**
      * @Then I should see the :selector element
      */
     public function iShouldSeeTheElement($selector)
@@ -906,56 +881,9 @@ JS;
     }
 
     /**
-     * @Then /^(?:I see|I should see|And I see)\s+"?([^\"]+)"?\s+in the element "([^\"]+)"$/
-     */
-    public function iSeeInElement($expected, $elementSelector)
-    {
-        $page = $this->getSession()->getPage();
-        $el = null;
-
-        // If the selector contains a comma or starts with #/. or contains CSS combinators, use CSS directly
-        $useCssDirectly = (strpos($elementSelector, ',') !== false)
-            || strpos($elementSelector, '#') === 0
-            || strpos($elementSelector, '.') === 0
-            || preg_match('/[>\s\[\]\:\,\+]/', $elementSelector);
-
-        if ($useCssDirectly) {
-            $el = $page->find('css', $elementSelector);
-        } else {
-            // try findById if available
-            if (method_exists($page, 'findById')) {
-                $el = $page->findById($elementSelector);
-            }
-
-            // fallback to CSS id
-            if (!$el) {
-                $el = $page->find('css', '#'.$elementSelector);
-            }
-        }
-
-        if (!$el) {
-            throw new \Exception(sprintf('Element with selector/id "%s" not found on the page.', $elementSelector));
-        }
-
-        // getText() returns visible text (includes children)
-        $textRaw = $el->getText();
-
-        // normalization: trim, replace NBSP and compress spaces/newlines
-        $text = trim($textRaw);
-        $text = str_replace("\xC2\xA0", ' ', $text); // NBSP UTF-8 -> space
-        $text = preg_replace('/\s+/u', ' ', $text);
-
-        // case-insensitive check
-        if (mb_stripos($text, $expected) === false) {
-            throw new \Exception(sprintf('Expected "%s" inside element "%s" but found "%s".', $expected, $elementSelector, $text));
-        }
-
-        return true;
-    }
-
-    // php
-
-    /**
+     * Resets any CSS zoom or transform scale applied to the page (e.g. after a zoom-out step),
+     * restoring the browser to its default 100% view.
+     *
      * @When /^I reset zoom$/
      */
     public function resetZoom(): void
@@ -968,6 +896,10 @@ JS;
     }
 
     /**
+     * Scales the page down to 25% using CSS zoom (Chrome) or CSS transform/scale (Firefox fallback).
+     * Useful when an element is outside the visible viewport and Behat cannot click it at normal zoom.
+     * Call "I reset zoom" afterwards to restore the page before the next interaction.
+     *
      * @When /^I zoom out to maximum$/
      */
     public function zoomOutMax()
@@ -1023,6 +955,9 @@ JS;
     }
 
     /**
+     * Asserts that exactly $count elements matching the given CSS selector are present on the page.
+     * Throws an exception if the actual count differs from the expected count.
+     *
      * @Then /^I should see (\d+) elements? matching "([^"]*)"$/
      */
     public function iShouldSeeElementsMatching(int $count, string $css): void
@@ -1034,6 +969,15 @@ JS;
     }
 
     /**
+     * Sets a date/time value on a Flatpickr date picker field via its JavaScript API.
+     * Falls back to direct input value injection if Flatpickr is not initialized on the element.
+     *
+     * Date format: "YYYY-MM-DD" for date-only fields, "YYYY-MM-DD HH:MM:SS" for datetime fields.
+     *
+     * Example:
+     *   And I set flatpickr field "start_date" to "2026-06-02"
+     *   And I set flatpickr field "event_date_start" to "2026-06-02 08:00:00"
+     *
      * @When /^I set flatpickr field "([^"]*)" to "([^"]*)"$/
      */
     public function iSetFlatpickrField($fieldId, $value)
@@ -1049,9 +993,18 @@ JS;
     }
 
     /**
-     * @When /^I set primevue datepicker "([^"]*)" range from "([^"]*)" to "([^"]*)"$/
+     * Selects a date range on a PrimeVue calendar picker by navigating the graphical calendar.
+     * Clicks the start date first, then navigates to the end month and clicks the end date,
+     * then confirms with the "Select" button.
+     *
+     * Date format: "YYYY-MM-DD"
+     *
+     * Example:
+     *   And I set datepicker "calendar-range" range from "2026-06-01" to "2026-06-30"
+     *
+     * @When /^I set datepicker "([^"]*)" range from "([^"]*)" to "([^"]*)"$/
      */
-    public function iSetPrimevueDatepickerRange($inputId, $startDate, $endDate)
+    public function iSetDatepickerRange($inputId, $startDate, $endDate)
     {
         $session = $this->getSession();
 
@@ -1095,9 +1048,9 @@ JS;
     }
 
     /**
-     * @When /^I set primevue datepicker "([^"]*)" to "([^"]*)"$/
+     * @When /^I set datepicker "([^"]*)" to "([^"]*)"$/
      */
-    public function iSetPrimevueDatepicker($inputId, $date)
+    public function iSetDatepicker($inputId, $date)
     {
         $session = $this->getSession();
 
@@ -1129,12 +1082,26 @@ JS;
         }
     }
 
+    /**
+     * Internal helper — reads the month and year currently displayed in the open PrimeVue calendar panel.
+     * Used by: iSetDatepicker(), iSetDatepickerRange()
+     */
     private function calendarReadMonth(): array
     {
         $session = $this->getSession();
         $monthNames = [
-            'January'=>1,'February'=>2,'March'=>3,'April'=>4,'May'=>5,'June'=>6,
-            'July'=>7,'August'=>8,'September'=>9,'October'=>10,'November'=>11,'December'=>12,
+            'January'   => 1,
+            'February'  => 2,
+            'March'     => 3,
+            'April'     => 4,
+            'May'       => 5,
+            'June'      => 6,
+            'July'      => 7,
+            'August'    => 8,
+            'September' => 9,
+            'October'   => 10,
+            'November'  => 11,
+            'December'  => 12,
         ];
         for ($w = 0; $w < 10; $w++) {
             $session->wait(200);
@@ -1149,6 +1116,11 @@ JS;
         return ['month' => (int) date('n'), 'year' => (int) date('Y')];
     }
 
+    /**
+     * Internal helper — clicks the prev/next arrow of the PrimeVue calendar the required number of times.
+     * Negative steps go backward (prev), positive steps go forward (next).
+     * Used by: iSetDatepicker(), iSetDatepickerRange()
+     */
     private function calendarNavigateSteps(int $steps): void
     {
         if ($steps === 0) return;
@@ -1160,6 +1132,11 @@ JS;
         }
     }
 
+    /**
+     * Internal helper — clicks the cell matching the given day number in the currently displayed month.
+     * Ignores days belonging to adjacent months (data-p-other-month="true").
+     * Used by: iSetDatepicker(), iSetDatepickerRange()
+     */
     private function calendarClickDay(int $day): void
     {
         $session = $this->getSession();
@@ -1178,6 +1155,13 @@ JS;
     }
 
     /**
+     * Types and selects a value in a Select2 multiple field (search input always visible, no dropdown to open).
+     * Unlike iTypeAndSelectInSelect2(), targets the field by its specific container ID instead of a global
+     * querySelector — required when multiple Select2 fields coexist on the same page.
+     *
+     * Example:
+     *   And I type and select "theme1" in inline select2 "extra_theme_fr"
+     *
      * @When /^I type and select "([^"]*)" in inline select2 "([^"]*)"$/
      */
     public function iTypeAndSelectInInlineSelect2($value, $fieldId)
@@ -1205,6 +1189,12 @@ JS;
     }
 
     /**
+     * Selects the first non-empty option of a native <select> field via JavaScript.
+     * Useful when option values are dynamic (loaded from DB) and not known in advance.
+     *
+     * Example:
+     *   And I select the first option from "extra_ecouter"
+     *
      * @When /^I select the first option from "([^"]*)"$/
      */
     public function iSelectFirstOptionFrom(string $fieldName): void
@@ -1219,7 +1209,7 @@ JS;
      * @AfterStep
      *
      * When a step fails, dump the full HTML of the page and a form-summary
-     * into tests/behat/behat_debug/ so Claude (or a developer) can analyse
+     * into tests/behat/behat_debug/ so AI (or a developer) can analyse
      * the real state of the page and find the correct selectors.
      */
     public function dumpHtmlOnFailure(AfterStepScope $scope): void
@@ -1503,6 +1493,13 @@ JS;
     }
 
     /**
+     * Switches ChromeDriver context into the iframe with the given name attribute.
+     * All subsequent Behat interactions will target the iframe's DOM until switchback.
+     * Used for Chamilo exercises displayed inside an <iframe name="content_name">.
+     *
+     * Example:
+     *   And I switch to the iframe "content_name"
+     *
      * @When /^I switch to the iframe "([^"]*)"$/
      */
     public function iSwitchToIframe(string $name): void
@@ -1512,6 +1509,12 @@ JS;
     }
 
     /**
+     * Switches ChromeDriver context back to the main page after having entered an iframe.
+     * Must be called after iSwitchToIframe() once interactions inside the iframe are done.
+     *
+     * Example:
+     *   And I switch back to the main window
+     *
      * @When /^I switch back to the main window$/
      */
     public function iSwitchBackToMainWindow(): void
@@ -1521,6 +1524,12 @@ JS;
     }
 
     /**
+     * Fills the first <textarea> found on the page with the given value via JavaScript.
+     * Used for open-question exercises inside iframes where there is only one textarea.
+     *
+     * Example:
+     *   And I fill in the first textarea with "example"
+     *
      * @When /^I fill in the first textarea with "([^"]*)"$/
      */
     public function iFillInFirstTextareaWith(string $value): void

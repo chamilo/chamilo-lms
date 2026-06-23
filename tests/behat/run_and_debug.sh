@@ -17,6 +17,8 @@
 BEHAT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$BEHAT_DIR/../.." && pwd)"
 DEBUG_DIR="$BEHAT_DIR/behat_debug"
+# wsl_output.txt is the Windows-readable bridge file: WSL writes here (/mnt/c/...)
+# and Windows (IDE, Claude Code) reads from C:\wamp64\www\chamilo2\tests\behat\wsl_output.txt.
 OUTPUT_FILE="/mnt/c/wamp64/www/chamilo2/tests/behat/wsl_output.txt"
 
 FEATURE_FILE="$1"

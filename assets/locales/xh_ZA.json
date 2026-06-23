@@ -2336,5 +2336,7 @@
     "Forum category created": "Udidi lwefowamu lwenziwe",
     "Could not save forum category": "Ayikwazanga ukugcina udidi lwefowamu",
     "Forum updated": "Ifowamu ihlaziyiwe",
-    "Forum created": "Ifowamu yenziwe"
+    "Forum created": "Ifowamu yenziwe",
+    "Current": "Yangokuqhubekayo",
+    "No auth source": "No auth source"
 }

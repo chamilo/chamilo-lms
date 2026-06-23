@@ -2389,5 +2389,7 @@
     "Search term is too short": "Arama terimi \u00e7ok k\u0131sa",
     "Could not search forums": "Forumlar aranamad\u0131",
     "Moderated": "Y\u00f6netimli",
-    "View threads": "Konular\u0131 g\u00f6r\u00fcnt\u00fcle"
+    "View threads": "Konular\u0131 g\u00f6r\u00fcnt\u00fcle",
+    "Current": "Mevcut",
+    "No auth source": "No auth source"
 }

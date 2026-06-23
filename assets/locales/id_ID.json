@@ -2389,5 +2389,7 @@
     "Search term is too short": "Kata kunci pencarian terlalu pendek",
     "Could not search forums": "Forum tidak dapat dicari",
     "Moderated": "Dimoderasi",
-    "View threads": "Lihat topik"
+    "View threads": "Lihat topik",
+    "Current": "Saat ini",
+    "No auth source": "No auth source"
 }

@@ -2389,5 +2389,7 @@
     "Search term is too short": "\u1ecc\u0300r\u1ecd\u0300 \u00ecw\u00e1d\u00ec\u00ed ti k\u00e9r\u00e9 j\u00f9",
     "Could not search forums": "K\u00f2 \u1e63e\u00e9 w\u00e1d\u00ec\u00ed \u00e0w\u1ecdn f\u00f3\u00f3r\u1ecd\u0300",
     "Moderated": "Ti \u1e63\u00e0k\u00f3so",
-    "View threads": "Wo \u00e0w\u1ecdn \u00ecs\u1ecd\u0300r\u1ecd\u0300"
+    "View threads": "Wo \u00e0w\u1ecdn \u00ecs\u1ecd\u0300r\u1ecd\u0300",
+    "Current": "L\u1ecdw\u1ecdl\u1ecdw\u1ecd",
+    "No auth source": "No auth source"
 }

@@ -2389,5 +2389,7 @@
     "Search term is too short": "Bilaketa-terminoa laburregia da",
     "Could not search forums": "Ezin izan da fororik bilatu",
     "Moderated": "Moderatua",
-    "View threads": "Ikusi hariak"
+    "View threads": "Ikusi hariak",
+    "Current": "Une honetakoa",
+    "No auth source": "No auth source"
 }

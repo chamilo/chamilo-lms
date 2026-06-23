@@ -2389,5 +2389,7 @@
     "Search term is too short": "T\u1eeb kh\u00f3a t\u00ecm ki\u1ebfm qu\u00e1 ng\u1eafn",
     "Could not search forums": "Kh\u00f4ng th\u1ec3 t\u00ecm ki\u1ebfm di\u1ec5n \u0111\u00e0n",
     "Moderated": "\u0110\u01b0\u1ee3c ki\u1ec3m duy\u1ec7t",
-    "View threads": "Xem ch\u1ee7 \u0111\u1ec1"
+    "View threads": "Xem ch\u1ee7 \u0111\u1ec1",
+    "Current": "Hi\u1ec7n t\u1ea1i",
+    "No auth source": "No auth source"
 }

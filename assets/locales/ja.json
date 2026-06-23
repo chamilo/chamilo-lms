@@ -2389,5 +2389,7 @@
     "Search term is too short": "\u691c\u7d22\u8a9e\u304c\u77ed\u3059\u304e\u307e\u3059",
     "Could not search forums": "\u30d5\u30a9\u30fc\u30e9\u30e0\u3092\u691c\u7d22\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f",
     "Moderated": "\u30e2\u30c7\u30ec\u30fc\u30c8\u6e08\u307f",
-    "View threads": "\u30b9\u30ec\u30c3\u30c9\u3092\u8868\u793a"
+    "View threads": "\u30b9\u30ec\u30c3\u30c9\u3092\u8868\u793a",
+    "Current": "\u73fe\u5728",
+    "No auth source": "No auth source"
 }

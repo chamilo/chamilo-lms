@@ -2389,5 +2389,7 @@
     "Search term is too short": "El terme de cerca \u00e9s massa curt",
     "Could not search forums": "No s'han pogut cercar els f\u00f2rums",
     "Moderated": "Moderat",
-    "View threads": "Mostra els fils"
+    "View threads": "Mostra els fils",
+    "Current": "Actual",
+    "No auth source": "No auth source"
 }

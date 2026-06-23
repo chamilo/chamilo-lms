@@ -2389,5 +2389,7 @@
     "Search term is too short": "Maskay simiqa ancha pisilla",
     "Could not search forums": "Forokunata maskayta mana atikunchu",
     "Moderated": "Churanakusqa",
-    "View threads": "Qillqasqakunata qhaway"
+    "View threads": "Qillqasqakunata qhaway",
+    "Current": "Kunan",
+    "No auth source": "No auth source"
 }

@@ -11,6 +11,30 @@
 class MoodleImport
 {
     /**
+     * Loads XML into a DOMDocument hardened against XXE attacks.
+     *
+     * External entity loading is blocked (libxml_disable_entity_loader) so a
+     * malicious Moodle backup cannot trigger SSRF via network entities nor
+     * disclose local files via file:// entities. LIBXML_NONET is passed as
+     * defense-in-depth. The previous loader state is restored afterwards.
+     *
+     * @param \DOMDocument $doc document populated in place
+     * @param string       $xml XML to parse
+     *
+     * @return bool result of DOMDocument::loadXML()
+     */
+    private static function loadXml(\DOMDocument $doc, $xml)
+    {
+        $previous = @libxml_disable_entity_loader(true);
+
+        try {
+            return @$doc->loadXML($xml, LIBXML_NONET);
+        } finally {
+            @libxml_disable_entity_loader($previous);
+        }
+    }
+
+    /**
      * Import moodle file.
      *
      * @param resource $uploadedFile *.* mbz file moodle course backup
@@ -134,7 +158,7 @@ class MoodleImport
 
         $xml = @file_get_contents($destinationDir.'/moodle_backup.xml');
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($xml);
+        $res = self::loadXml($doc, $xml);
 
         if (empty($res)) {
             removeDir($destinationDir);
@@ -617,7 +641,7 @@ class MoodleImport
         $xml = file_get_contents($moodleBackupXmlPath);
 
         $doc = new DOMDocument();
-        $doc->loadXML($xml);
+        self::loadXml($doc, $xml);
         $backupRelease = $doc->getElementsByTagName('backup_release');
         $version = null;
         foreach ($backupRelease as $release) {
@@ -788,7 +812,7 @@ class MoodleImport
     public function readSections($xml, $destinationDir)
     {
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($xml);
+        $res = self::loadXml($doc, $xml);
         if (empty($res)) {
             return false;
         }
@@ -823,7 +847,7 @@ class MoodleImport
     public function readSectionModule($sectionInfoXml)
     {
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($sectionInfoXml);
+        $res = self::loadXml($doc, $sectionInfoXml);
         if (empty($res)) {
             return false;
         }
@@ -852,7 +876,7 @@ class MoodleImport
     public function readLessonModule($moduleXml)
     {
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($moduleXml);
+        $res = self::loadXml($doc, $moduleXml);
         if (empty($res)) {
             return false;
         }
@@ -906,7 +930,7 @@ class MoodleImport
     public function readAssignModule($moduleXml)
     {
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($moduleXml);
+        $res = self::loadXml($doc, $moduleXml);
         if (empty($res)) {
             return false;
         }
@@ -991,7 +1015,7 @@ class MoodleImport
     public function readScormModule($moduleXml)
     {
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($moduleXml);
+        $res = self::loadXml($doc, $moduleXml);
         if (empty($res)) {
             return false;
         }
@@ -1025,7 +1049,7 @@ class MoodleImport
     public function readGlossaryModule($moduleXml, $moduleId)
     {
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($moduleXml);
+        $res = self::loadXml($doc, $moduleXml);
         if (empty($res)) {
             return false;
         }
@@ -1059,7 +1083,7 @@ class MoodleImport
     public function readHtmlModule($moduleXml, $moduleName)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = self::loadXml($moduleDoc, $moduleXml);
         if (empty($moduleRes)) {
             return false;
         }
@@ -1660,7 +1684,7 @@ class MoodleImport
     public function readForumModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = self::loadXml($moduleDoc, $moduleXml);
         if (empty($moduleRes)) {
             return false;
         }
@@ -1715,7 +1739,7 @@ class MoodleImport
     public function readFolderModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = self::loadXml($moduleDoc, $moduleXml);
         if (empty($moduleRes)) {
             return false;
         }
@@ -1748,7 +1772,7 @@ class MoodleImport
     public function readResourceModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = self::loadXml($moduleDoc, $moduleXml);
         if (empty($moduleRes)) {
             return false;
         }
@@ -1781,7 +1805,7 @@ class MoodleImport
     public function readUrlModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = self::loadXml($moduleDoc, $moduleXml);
         if (empty($moduleRes)) {
             return false;
         }
@@ -1811,7 +1835,7 @@ class MoodleImport
     public function readQuizGradeModule($gradeXml, $quizId)
     {
         $doc = new DOMDocument();
-        $gradeRes = @$doc->loadXML($gradeXml);
+        $gradeRes = self::loadXml($doc, $gradeXml);
         if (empty($gradeRes)) {
             return false;
         }
@@ -1851,7 +1875,7 @@ class MoodleImport
     public function readQuizModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = self::loadXml($moduleDoc, $moduleXml);
         if (empty($moduleRes)) {
             return false;
         }
@@ -1895,7 +1919,7 @@ class MoodleImport
     public function readQuizModuleV4($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        @$moduleDoc->loadXML($moduleXml);
+        self::loadXml($moduleDoc, $moduleXml);
 
         $quizData = [];
         $quizNodes = $moduleDoc->getElementsByTagName('quiz');
@@ -1932,10 +1956,10 @@ class MoodleImport
     public function readMainQuestionsXmlV4($questionsXml, $quizXml)
     {
         $questionsDoc = new DOMDocument();
-        @$questionsDoc->loadXML($questionsXml);
+        self::loadXml($questionsDoc, $questionsXml);
 
         $quizDoc = new DOMDocument();
-        @$quizDoc->loadXML($quizXml);
+        self::loadXml($quizDoc, $quizXml);
 
         $isByCategory = $quizDoc->getElementsByTagName('question_set_reference')->length > 0;
         $isByBankReference = $quizDoc->getElementsByTagName('question_reference')->length > 0;
@@ -1960,7 +1984,7 @@ class MoodleImport
     public function readFolderModuleFilesXml($filesXml, $contextId = null)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($filesXml);
+        $moduleRes = self::loadXml($moduleDoc, $filesXml);
 
         if (empty($moduleRes)) {
             return false;
@@ -2005,7 +2029,7 @@ class MoodleImport
     public function readMainFilesXml($filesXml, $contextId)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($filesXml);
+        $moduleRes = self::loadXml($moduleDoc, $filesXml);
 
         if (empty($moduleRes)) {
             return false;
@@ -2048,7 +2072,7 @@ class MoodleImport
     public function readMainQuestionsXml($questionsXml, $questionId)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($questionsXml);
+        $moduleRes = self::loadXml($moduleDoc, $questionsXml);
         if (empty($moduleRes)) {
             return false;
         }
@@ -2610,7 +2634,7 @@ class MoodleImport
     public function getAllQuestionFiles($filesXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($filesXml);
+        $moduleRes = self::loadXml($moduleDoc, $filesXml);
 
         if (empty($moduleRes)) {
             return [];

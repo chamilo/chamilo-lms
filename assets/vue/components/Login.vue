@@ -48,7 +48,7 @@
         <VirtualKeyboard @key-press="handleVirtualKeyboardKey" />
       </div>
       <div
-        v-if="captchaEnabled && !requires2FA"
+        v-if="captchaRequired && !requires2FA"
         class="field"
       >
         <div class="mb-3">
@@ -160,6 +160,9 @@ import VirtualKeyboard from "./login/VirtualKeyboard.vue"
 const useVirtualKeyboard = computed(() => {
   return "true" === platformConfigStore.getSetting("platform.use_virtual_keyboard")
 })
+const captchaAllowed = computed(() => {
+  return "true" === platformConfigStore.getSetting("security.allow_captcha")
+})
 const isInIframe = window.self !== window.top
 const isHttps = window.location.protocol === "https:"
 
@@ -190,7 +193,7 @@ const focusedField = ref(null)
 const totp = ref("")
 const remember = ref(false)
 
-const captchaEnabled = ref(false)
+const captchaRequired = ref(false)
 const captchaCode = ref("")
 const captchaImageUrl = ref("")
 const captchaBlocked = ref(false)
@@ -207,20 +210,24 @@ async function refreshCaptcha() {
 }
 
 async function loadCaptchaStatus() {
+  if (!captchaAllowed.value) {
+    return
+  }
+
   try {
     const response = await securityService.getLoginCaptchaStatus(login.value || "")
 
-    captchaEnabled.value = !!response.enabled
+    captchaRequired.value = !!response.enabled
     captchaBlocked.value = !!response.blocked
     captchaBlockedSeconds.value = response.remainingSeconds || 0
     captchaImageUrl.value = response.imageUrl || ""
 
-    if (!captchaEnabled.value) {
+    if (!captchaRequired.value) {
       resetCaptchaState()
       captchaImageUrl.value = ""
     }
   } catch (error) {
-    captchaEnabled.value = false
+    captchaRequired.value = false
     captchaBlocked.value = false
     captchaBlockedSeconds.value = 0
     captchaImageUrl.value = ""
@@ -268,7 +275,7 @@ function handleVirtualKeyboardKey(key) {
 }
 
 async function onSubmitLoginForm() {
-  if (!requires2FA.value && captchaEnabled.value && !captchaImageUrl.value) {
+  if (!requires2FA.value && captchaRequired.value && !captchaImageUrl.value) {
     await refreshCaptcha()
   }
 
@@ -276,7 +283,7 @@ async function onSubmitLoginForm() {
     login: login.value,
     password: password.value,
     totp: requires2FA.value ? totp.value : null,
-    captcha_code: captchaEnabled.value ? captchaCode.value : null,
+    captcha_code: captchaRequired.value ? captchaCode.value : null,
     _remember_me: isHttps ? remember.value : false,
     isLoginLdap: ldapAuth.value,
   })
@@ -292,7 +299,7 @@ async function onSubmitLoginForm() {
   if (result?.captchaRequired) {
     captchaCode.value = ""
     await loadCaptchaStatus()
-    if (captchaEnabled.value && !captchaImageUrl.value) {
+    if (captchaRequired.value && !captchaImageUrl.value) {
       await refreshCaptcha()
     }
     return
@@ -301,7 +308,7 @@ async function onSubmitLoginForm() {
   if (!result?.success && !requires2FA.value) {
     captchaCode.value = ""
     await loadCaptchaStatus()
-    if (captchaEnabled.value && !captchaImageUrl.value) {
+    if (captchaRequired.value && !captchaImageUrl.value) {
       await refreshCaptcha()
     }
   }

@@ -66,8 +66,8 @@
           variant="filled"
         />
         <button
-          type="button"
           class="mt-2 text-sm text-primary hover:underline"
+          type="button"
           @click="refreshCaptcha"
         >
           {{ t("Refresh captcha") }}
@@ -172,7 +172,7 @@ if (isInIframe) {
     const parent = new URL(parentUrl)
     const redirectPath = parent.pathname + parent.search + parent.hash
     window.top.location.href = "/login?redirect=" + encodeURIComponent(redirectPath)
-  } catch (error) {
+  } catch {
     window.top.location.href = "/login"
   }
 }
@@ -226,7 +226,7 @@ async function loadCaptchaStatus() {
       resetCaptchaState()
       captchaImageUrl.value = ""
     }
-  } catch (error) {
+  } catch {
     captchaRequired.value = false
     captchaBlocked.value = false
     captchaBlockedSeconds.value = 0
@@ -315,7 +315,7 @@ async function onSubmitLoginForm() {
 }
 
 onMounted(async () => {
-  redirectNotAuthenticated()
+  await redirectNotAuthenticated()
   await loadCaptchaStatus()
 })
 </script>

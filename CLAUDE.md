@@ -449,3 +449,45 @@ security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')
 - **`Post` (create) can't use object-level checks.** On create the `resourceNode` does not exist yet, so `is_granted('CREATE', object)` / `object.resourceNode` fails closed. Gate creation with the contextual teacher roles through an operation-own `security:` (not `securityPostDenormalize`), which also avoids inheriting a resource-level `security:` that may omit `SESSION_TEACHER` and would otherwise block session teachers. `CToolIntro` is the reference.
 - **Output format negotiation runs before security.** Endpoints with binary `outputFormats` (`zip`, `bin`) reject the request with 406 if the `Accept` header is `application/ld+json`. Regression tests must send `Accept: application/zip` (or the matching MIME type) to reach the security gate.
 - **The skill `/migrate-contextual-roles <Entity>`** automates this migration for a single entity, including Vue-caller compatibility checks and lint/test runs.
+
+### Securing a per-user owned `#[ApiResource]` (Voter + Extension + Processor)
+
+For **CoreBundle** resources that are **not** course-scoped but are **owned by one user** (e.g. `PushSubscription`, personal tokens, per-user settings rows), do **not** try to express ownership with `security: "... and object.getUser() == user"`. That expression returns **403** (leaks the row's existence), silently blocks admins unless you also `or is_granted('ROLE_ADMIN')`, and duplicates the rule across operations. Each concern has its own idiomatic tool — **an API Platform Voter acts on a single item only**, so split the work three ways:
+
+| Concern                  | Operations                         | Tool                                                                                | Why                                                                                                         |
+|--------------------------|------------------------------------|-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| Per-object authorization | `Get` / `Put` / `Patch` / `Delete` | **Voter** (`is_granted('VIEW'\|'EDIT'\|'DELETE', object)`)                          | Object exists; voter is reusable from non-API code too                                                      |
+| Collection scoping       | `GetCollection`                    | **`QueryCollectionExtensionInterface`** in `src/CoreBundle/DataProvider/Extension/` | A voter can't filter a collection; an extension adds a `WHERE` so foreign rows are never selected           |
+| Create / mass-assignment | `Post`                             | **Processor** forcing `$data->setUser($currentUser)`                                | On create no object exists yet, so no voter can run — forcing the owner is the only mass-assignment defense |
+
+**Voter** — standard Symfony voter on the entity, e.g. returns `$subscription->getUser() === $user || $security->isGranted('ROLE_ADMIN')`. Reference dedicated voters already in the repo: `CCalendarEventVoter`, `UsergroupVoter`, `SessionVoter`. Wire it on the item operations with `security: "is_granted('DELETE', object)"`.
+
+**Collection extension** — a `QueryCollectionExtensionInterface` in `src/CoreBundle/DataProvider/Extension/` that adds the ownership `WHERE` on the root alias, with an admin bypass. API Platform runs every registered collection extension (including the built-in Filter / Order / Pagination) automatically, so you only add your `WHERE` — no need to re-apply those extensions by hand. Canonical reference: `SessionRelUserExtension` (`src/CoreBundle/DataProvider/Extension/SessionRelUserExtension.php`):
+
+```php
+final class XExtension implements QueryCollectionExtensionInterface
+{
+    public function __construct(private readonly Security $security) {}
+
+    public function applyToCollection(QueryBuilder $qb, QueryNameGeneratorInterface $g, string $resourceClass, ?Operation $op = null, array $ctx = []): void
+    {
+        if (X::class !== $resourceClass || $this->security->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+        $user = $this->security->getUser() ?? throw new AccessDeniedException();
+        $alias = $qb->getRootAliases()[0];
+        $qb->andWhere("$alias.user = :current_user")->setParameter('current_user', $user->getId());
+    }
+}
+```
+
+**Processor** — forces ownership on create (and can also re-validate on delete). Branch on `$operation instanceof DeleteOperationInterface`; inject the inner services with `#[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]` / `...remove_processor`.
+
+**When to fall back to an all-in-one State Provider instead of a Voter+Extension:** only when the collection can't be a plain `WHERE` (custom/aggregated data source — see `StickyCourseStateProvider`), or when you must return **404 instead of the voter's 403** for foreign items (no existence disclosure). The merged `PushSubscription` fix used a single `PushSubscriptionStateProvider` + `PushSubscriptionStateProcessor` for the latter reason; for the typical case prefer the Voter + Extension + Processor split above.
+
+**Cross-cutting rules learned here:**
+- **Current user:** `UserHelper::getCurrent(): ?User` (inject `UserHelper`), never `$security->getUser()` — except inside a `QueryCollectionExtension`, where `$this->security->getUser()` is the established idiom (see `SessionRelUserExtension`).
+- **Role checks:** `$security->isGranted('ROLE_ADMIN')` (respects the hierarchy), never `$user->isAdmin()` / `hasRole()`.
+- **Serialization:** owner relation → **read-only** group (mass-assignment defense); secrets (tokens, keys) → **write-only** group so they are never echoed back.
+- **No `services.yaml` wiring needed:** classes implementing `VoterInterface` / `QueryCollectionExtensionInterface` / `ProcessorInterface` are auto-tagged via `autoconfigure`; inner API Platform services are pulled in with `#[Autowire(service: ...)]`.
+- **Regression test gotcha:** the test DB host in `.env.test` may not be reachable from the PHP container — override `DATABASE_HOST`/`DATABASE_PASSWORD` env vars on the `php bin/phpunit` call. To test admin access over a JWT Bearer token, create the admin with `createUser('name', '', '', 'ROLE_ADMIN')` (it registers the `UserAuthSource::PLATFORM` row that `UserAuthSourceListener` requires); the fixture `admin/admin` account may lack it in a fresh test DB.

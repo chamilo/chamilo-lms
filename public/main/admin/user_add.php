@@ -211,6 +211,8 @@ if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     }
 }
 
+$hasSingleAuthSource = 1 === count($authSources);
+
 $form->addHtml(
     '<div class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">'.
     '<div class="mb-4">'.
@@ -219,41 +221,52 @@ $form->addHtml(
     '</div>'
 );
 
-$form->addElement(
-    'select',
-    'auth_source',
-    get_lang('Authentication methods'),
-    $authSources,
-    [
-        'id' => 'auth_source',
-        'multiple' => 'multiple',
-        'size' => max(3, min(count($authSources), 8)),
-        'class' => 'w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary',
-    ]
-);
-$form->addRule('auth_source', get_lang('Required field'), 'required');
+if ($hasSingleAuthSource) {
+    $singleAuthSourceLabel = (string) reset($authSources);
+    $form->addElement(
+        'static',
+        null,
+        get_lang('Authentication methods'),
+        htmlspecialchars($singleAuthSourceLabel, \ENT_QUOTES, 'UTF-8')
+    );
+} else {
+    $form->addElement(
+        'select',
+        'auth_source',
+        get_lang('Authentication methods'),
+        $authSources,
+        [
+            'id' => 'auth_source',
+            'multiple' => 'multiple',
+            'size' => max(3, min(count($authSources), 8)),
+            'class' => 'w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary',
+        ]
+    );
+    $form->addRule('auth_source', get_lang('Required field'), 'required');
+}
 
 $form->addHtml(
     '<div id="user-add-password-section" class="mt-6 rounded-xl border border-gray-25 bg-gray-5 p-4">'.
     '<h4 class="mb-3 text-body-1 font-semibold text-gray-90">'.get_lang('Password').'</h4>'
 );
 
-$passwordGroup = [];
-$passwordGroup[] = $form->createElement(
-    'radio',
-    'password_auto',
-    null,
-    get_lang('Automatically generate a new password'),
-    1
-);
-
 if ($adminsCanSetUsersPass) {
+    $passwordGroup = [];
     $passwordGroup[] = $form->createElement(
         'radio',
         'password_auto',
-        'id="radio_user_password"',
+        null,
+        get_lang('Automatically generate a new password'),
+        1,
+        ['id' => 'radio_user_password_auto']
+    );
+    $passwordGroup[] = $form->createElement(
+        'radio',
+        'password_auto',
+        null,
         get_lang('Set password manually'),
-        0
+        0,
+        ['id' => 'radio_user_password']
     );
     $passwordGroup[] = $form->createElement(
         'password',
@@ -266,9 +279,16 @@ if ($adminsCanSetUsersPass) {
             'show_hide' => true,
         ]
     );
-}
 
-$form->addGroup($passwordGroup, 'password', null, null, false);
+    $form->addGroup($passwordGroup, 'password');
+} else {
+    $form->addElement(
+        'static',
+        null,
+        null,
+        htmlspecialchars(get_lang('Automatically generate a new password'), \ENT_QUOTES, 'UTF-8')
+    );
+}
 $form->addHtml('</div></div>');
 
 // Status
@@ -383,7 +403,9 @@ $(function () {
 
 // Set default values
 $defaults['mail']['send_mail'] = 1;
-$defaults['auth_source'] = [UserAuthSource::PLATFORM];
+if (!$hasSingleAuthSource) {
+    $defaults['auth_source'] = [UserAuthSource::PLATFORM];
+}
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $days = api_get_setting('account_valid_duration');
@@ -430,8 +452,11 @@ if ($form->validate()) {
         $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
         $allowedAuthSources = array_map('strval', array_keys($authSources));
+        $submittedAuthSources = $hasSingleAuthSource
+            ? $allowedAuthSources
+            : array_map('strval', (array) ($user['auth_source'] ?? []));
         $auth_source = array_values(array_intersect(
-            array_map('strval', (array) ($user['auth_source'] ?? [])),
+            $submittedAuthSources,
             $allowedAuthSources
         ));
 

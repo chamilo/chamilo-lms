@@ -19,7 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 #[Route('/validate')]
@@ -69,21 +68,6 @@ class ValidationTokenController extends AbstractController
         return $this->render('@ChamiloCore/Validation/success.html.twig', [
             'type' => $type,
         ]);
-    }
-
-    #[Route('/test/generate-token/{type}/{resourceId}', name: 'test_generate_token')]
-    public function testGenerateToken(string $type, int $resourceId): Response
-    {
-        $typeId = $this->validationTokenHelper->getTypeId($type);
-        $token = new ValidationToken($typeId, $resourceId);
-        $this->tokenRepository->save($token, true);
-
-        $validationLink = $this->generateUrl('validate_token', [
-            'type' => $type,
-            'hash' => $token->getHash(),
-        ], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        return new Response("Generated token: {$token->getHash()}<br>Validation link: <a href='{$validationLink}'>{$validationLink}</a>");
     }
 
     /**

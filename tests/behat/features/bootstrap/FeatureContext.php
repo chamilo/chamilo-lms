@@ -1,7 +1,9 @@
 <?php
 
+use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Features context. (MinkContext extends BehatContext)
@@ -340,7 +342,7 @@ class FeatureContext extends MinkContext
         }
 
         $this->getSession()->executeScript(
-            "tinymce.get(\"$fieldId\").getBody().innerHTML = \"$value\";"
+            "var ed = tinymce.get(\"$fieldId\"); ed.setContent(\"$value\"); ed.fire('input'); ed.fire('change');"
         );
     }
 
@@ -376,7 +378,7 @@ class FeatureContext extends MinkContext
      */
     public function iFillInSelectInputWithAndSelect($field, $id, $value)
     {
-        $this->getSession()->executeScript("$('$field').select2({data : [{id: $id, text: '$value'}]});");
+        $this->getSession()->executeScript("$('$field').select2({data : [{id: '$id', text: '$value'}]});");
     }
 
     /**
@@ -385,7 +387,7 @@ class FeatureContext extends MinkContext
     public function iFillInAjaxSelectInputWithAndSelect($field, $id, $value)
     {
         $this->getSession()->executeScript("
-            var newOption = new Option('$value', $id, true, true);
+            var newOption = new Option('$value', '$id', true, true);
             $('$field').append(newOption).trigger('change');
         ");
     }
@@ -395,15 +397,15 @@ class FeatureContext extends MinkContext
      */
     public function confirmPopup()
     {
-       $session = $this->getSession();
+        $session = $this->getSession();
         // 1) accept_alert() (alert native)
         try {
             $driver = $session->getDriver();
 
-                try {
-                    $driver->getWebDriverSession()->accept_alert();
-                    return;
-                } catch (\Exception $e) {}
+            try {
+                $driver->getWebDriverSession()->accept_alert();
+                return;
+            } catch (\Exception $e) {}
 
         } catch (\Exception $e) {
             // ignore
@@ -527,7 +529,7 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded()
     {
-        $this->getSession()->wait(8000);
+        $this->getSession()->wait(4000);
     }
 
     /**
@@ -546,6 +548,52 @@ class FeatureContext extends MinkContext
     {
         $this->getSession()->wait(9000, "document.readyState === 'complete'");
     }
+
+    /**
+     * @When /^I wait for the element "([^"]*)" to appear$/
+     */
+    public function iWaitForElementToAppear($selector): void
+    {
+        // Waits until a CSS element is present AND visible in the DOM (up to 20s).
+        // "Visible" = getBoundingClientRect().height > 0: avoids false positives where Vue inserts
+        // the element into the DOM before the panel open animation ends (element present
+        // but hidden), which would make the wait pass but crash the subsequent select/fill.
+        // Searches simultaneously by name AND id: [name='X'] also tries #X and vice versa,
+        // because some Vue fields only expose one of the two depending on the component.
+        $alt = null;
+        if (preg_match("/^\[name='([^']+)'\]$/", $selector, $m)) {
+            $alt = '#'.$m[1];
+        } elseif (preg_match('/^#([\w\-]+)$/', $selector, $m)) {
+            $alt = "[name='".$m[1]."']";
+        }
+
+        $escaped = addslashes($selector);
+        $altPart = null !== $alt ? " || document.querySelector('".addslashes($alt)."')" : '';
+        $condition = "(function(){var e=document.querySelector('{$escaped}'){$altPart};return e!==null&&e.getBoundingClientRect().height>0;})()";
+
+        $this->getSession()->wait(20000, $condition);
+
+        $found = $this->getSession()->getPage()->find('css', $selector);
+        if (null === $found && null !== $alt) {
+            $found = $this->getSession()->getPage()->find('css', $alt);
+        }
+        if (null === $found) {
+            throw new \Behat\Mink\Exception\ExpectationException(
+                "Element '{$selector}' did not appear and become visible within 20 seconds.",
+                $this->getSession()
+            );
+        }
+    }
+
+    /**
+     * @When /^I wait up to 20 seconds for the element "([^"]*)" to appear$/
+     */
+    public function iWait20SecondsForElementToAppear($selector): void
+    {
+        $escaped = addslashes($selector);
+        $this->getSession()->wait(20000, "document.querySelector('{$escaped}') !== null");
+    }
+
 
     /**
      * @When /^(?:|I )wait one minute for the page to be loaded$/
@@ -569,6 +617,10 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * Checks a radio button by finding an element containing the label text, then checking
+     * the first input inside its parent. Uses jQuery — only works on pages that load jQuery.
+     * Prefer iCheckTheRadioButton() (which uses Mink's findField) for standard radio inputs.
+     *
      * @When /^I check radio button with label "([^"]*)"$/
      */
     public function iCheckTheRadioButtonWithLabel($label)
@@ -580,7 +632,7 @@ class FeatureContext extends MinkContext
         ");
     }
 
-     /**
+    /**
      * @When /^I press advanced settings$/
      */
     public function iSelectFromSelectWithLabel()
@@ -588,7 +640,7 @@ class FeatureContext extends MinkContext
         $this->pressButton('Advanced settings');
     }
 
-     /**
+    /**
      * Clicks link with specified id|title|alt|text
      * Example: When I follow "Log In"
      * Example: And I follow "Log In"
@@ -677,30 +729,6 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I am a student subscribed to session "([^"]*)"$/
-     *
-     * @param string$sessionName
-     */
-    public function iAmStudentSubscribedToXSession($sessionName)
-    {
-        $this->iAmAPlatformAdministrator();
-        $this->visit('/main/session/session_add.php');
-        $this->fillField('name', $sessionName);
-        $this->pressButton('Next step');
-        $this->selectOption('NoSessionCoursesList[]', 'TEMP (TEMP)');
-        $this->pressButton('add_course');
-        $this->pressButton('Next step');
-        $this->assertPageContainsText('Update successful');
-        $this->fillField('user_to_add', 'acostea');
-        $this->waitForThePageToBeLoaded();
-        $this->clickLink('Costea Andrea (acostea)');
-        $this->pressButton('Finish session creation');
-        $this->assertPageContainsText('Session overview');
-        //$this->assertPageContainsText('Costea Andrea (acostea)');
-        $this->iAmAStudent();
-    }
-
-    /**
      * Example: Then I should see the table "#category_results":
      *               | Categories    | Absolute score | Relative score |
      *               | Categoryname2 | 50 / 70        | 71.43%         |
@@ -780,56 +808,98 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Then /^(?:I see|I should see|And I see)\s+"?([^\"]+)"?\s+in the element "([^\"]+)"$/
+     * @When /^I click element "([^"]*)" containing text "([^"]*)"$/
      */
-    public function iSeeInElement($expected, $elementSelector)
+    public function iClickElementContainingText(string $selector, string $text): void
     {
-        $page = $this->getSession()->getPage();
-        $el = null;
-
-        // If the selector contains a comma or starts with #/. or contains CSS combinators, use CSS directly
-        $useCssDirectly = (strpos($elementSelector, ',') !== false)
-            || strpos($elementSelector, '#') === 0
-            || strpos($elementSelector, '.') === 0
-            || preg_match('/[>\s\[\]\:\,\+]/', $elementSelector);
-
-        if ($useCssDirectly) {
-            $el = $page->find('css', $elementSelector);
-        } else {
-            // try findById if available
-            if (method_exists($page, 'findById')) {
-                $el = $page->findById($elementSelector);
-            }
-
-            // fallback to CSS id
-            if (!$el) {
-                $el = $page->find('css', '#'.$elementSelector);
-            }
+        $safeSelector = addslashes($selector);
+        $safeText = addslashes($text);
+        $result = $this->getSession()->evaluateScript(<<<JS
+(function() {
+    var els = document.querySelectorAll('$safeSelector');
+    for (var i = 0; i < els.length; i++) {
+        if (els[i].textContent.indexOf('$safeText') !== -1) {
+            els[i].click();
+            return true;
         }
-
-        if (!$el) {
-            throw new \Exception(sprintf('Element with selector/id "%s" not found on the page.', $elementSelector));
+    }
+    return false;
+})();
+JS);
+        if (!$result) {
+            throw new \Exception(sprintf('No "%s" element containing text "%s" found', $selector, $text));
         }
-
-        // getText() returns visible text (includes children)
-        $textRaw = $el->getText();
-
-        // normalization: trim, replace NBSP and compress spaces/newlines
-        $text = trim($textRaw);
-        $text = str_replace("\xC2\xA0", ' ', $text); // NBSP UTF-8 -> space
-        $text = preg_replace('/\s+/u', ' ', $text);
-
-        // case-insensitive check
-        if (mb_stripos($text, $expected) === false) {
-            throw new \Exception(sprintf('Expected "%s" inside element "%s" but found "%s".', $expected, $elementSelector, $text));
-        }
-
-        return true;
     }
 
-    // php
+    /**
+     * @Then I should see the :selector element
+     */
+    public function iShouldSeeTheElement($selector)
+    {
+        $this->assertSession()->elementExists('css', $selector);
+    }
 
     /**
+     * Check all checkboxes whose name contains the given partial name.
+     * Useful for checkbox groups like form[show_tabs][] where IDs are dynamic.
+     *
+     * @Then I check all checkboxes with name containing :partialName
+     */
+    public function iCheckAllCheckboxesWithNameContaining($partialName)
+    {
+        $js = <<<JS
+(function() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"][name*="$partialName"]');
+    checkboxes.forEach(function(cb) { if (!cb.checked) cb.click(); });
+    return checkboxes.length;
+})();
+JS;
+        $count = $this->getSession()->evaluateScript($js);
+        if ($count === 0) {
+            throw new \Exception(sprintf('No checkboxes found with name containing "%s"', $partialName));
+        }
+    }
+
+    /**
+     * Uncheck all checkboxes whose name contains the given partial name.
+     *
+     * @Then I uncheck all checkboxes with name containing :partialName
+     */
+    public function iUncheckAllCheckboxesWithNameContaining($partialName)
+    {
+        $js = <<<JS
+(function() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"][name*="$partialName"]');
+    checkboxes.forEach(function(cb) { if (cb.checked) cb.click(); });
+    return checkboxes.length;
+})();
+JS;
+        $count = $this->getSession()->evaluateScript($js);
+        if ($count === 0) {
+            throw new \Exception(sprintf('No checkboxes found with name containing "%s"', $partialName));
+        }
+    }
+
+    /**
+     * Resets any CSS zoom or transform scale applied to the page (e.g. after a zoom-out step),
+     * restoring the browser to its default 100% view.
+     *
+     * @When /^I reset zoom$/
+     */
+    public function resetZoom(): void
+    {
+        $this->getSession()->executeScript("
+            document.body.style.zoom = '';
+            document.documentElement.style.transform = '';
+        ");
+        $this->getSession()->wait(300);
+    }
+
+    /**
+     * Scales the page down to 25% using CSS zoom (Chrome) or CSS transform/scale (Firefox fallback).
+     * Useful when an element is outside the visible viewport and Behat cannot click it at normal zoom.
+     * Call "I reset zoom" afterwards to restore the page before the next interaction.
+     *
      * @When /^I zoom out to maximum$/
      */
     public function zoomOutMax()
@@ -849,10 +919,630 @@ JS;
         return true;
     }
 
+    /**
+     * @When /^I type and select "([^"]*)" in select2 field "([^"]*)"$/
+     */
+    public function iTypeAndSelectInSelect2($value, $fieldId)
+    {
+        $session = $this->getSession();
+        $session->executeScript("$('#" . $fieldId . "').select2('open');");
+        $session->wait(500);
+        $session->executeScript("
+            var input = document.querySelector('.select2-search__field');
+            if (input) {
+                input.value = '" . $value . "';
+                input.dispatchEvent(new Event('input', {bubbles: true}));
+                input.dispatchEvent(new KeyboardEvent('keyup', {bubbles: true}));
+            }
+        ");
+        $session->wait(2000);
+        $page = $session->getPage();
+        $result = $page->find('css', '.select2-results__option--highlighted, .select2-results__option');
+        if ($result) {
+            $result->click();
+        }
+        $session->wait(500);
+    }
+
+    /**
+     * @When /^I set hidden field "([^"]*)" to "([^"]*)"$/
+     */
+    public function iSetHiddenField($fieldId, $value)
+    {
+        $this->getSession()->executeScript(
+            "document.getElementById('" . $fieldId . "').value = '" . $value . "';"
+        );
+    }
+
+    /**
+     * Asserts that exactly $count elements matching the given CSS selector are present on the page.
+     * Throws an exception if the actual count differs from the expected count.
+     *
+     * @Then /^I should see (\d+) elements? matching "([^"]*)"$/
+     */
+    public function iShouldSeeElementsMatching(int $count, string $css): void
+    {
+        $actual = count($this->getSession()->getPage()->findAll('css', $css));
+        if ($actual !== $count) {
+            throw new \Exception("Expected {$count} elements matching '{$css}', found {$actual}");
+        }
+    }
+
+    /**
+     * Sets a date/time value on a Flatpickr date picker field via its JavaScript API.
+     * Falls back to direct input value injection if Flatpickr is not initialized on the element.
+     *
+     * Date format: "YYYY-MM-DD" for date-only fields, "YYYY-MM-DD HH:MM:SS" for datetime fields.
+     *
+     * Example:
+     *   And I set flatpickr field "start_date" to "2026-06-02"
+     *   And I set flatpickr field "event_date_start" to "2026-06-02 08:00:00"
+     *
+     * @When /^I set flatpickr field "([^"]*)" to "([^"]*)"$/
+     */
+    public function iSetFlatpickrField($fieldId, $value)
+    {
+        $this->getSession()->executeScript(
+            "var el = document.getElementById('" . $fieldId . "');
+             if (el && el._flatpickr) {
+                 el._flatpickr.setDate('" . $value . "', true);
+             } else {
+                 el.value = '" . $value . "';
+             }"
+        );
+    }
+
+    /**
+     * Selects a date range on a PrimeVue calendar picker by navigating the graphical calendar.
+     * Clicks the start date first, then navigates to the end month and clicks the end date,
+     * then confirms with the "Select" button.
+     *
+     * Date format: "YYYY-MM-DD"
+     *
+     * Example:
+     *   And I set datepicker "calendar-range" range from "2026-06-01" to "2026-06-30"
+     *
+     * @When /^I set datepicker "([^"]*)" range from "([^"]*)" to "([^"]*)"$/
+     */
+    public function iSetDatepickerRange($inputId, $startDate, $endDate)
+    {
+        $session = $this->getSession();
+
+        $startDay   = (int) date('j', strtotime($startDate));
+        $startMonth = (int) date('n', strtotime($startDate));
+        $startYear  = (int) date('Y', strtotime($startDate));
+        $endDay     = (int) date('j', strtotime($endDate));
+        $endMonth   = (int) date('n', strtotime($endDate));
+        $endYear    = (int) date('Y', strtotime($endDate));
+
+        // Open the range datepicker (ONE input handles both dates)
+        $input = $session->getPage()->find('css', '#' . $inputId);
+        if ($input) { $input->click(); }
+
+        // Wait for calendar panel to appear
+        for ($attempt = 0; $attempt < 25; $attempt++) {
+            $session->wait(200);
+            if ($session->getPage()->find('css', '[data-pc-section="month"]')) break;
+        }
+
+        // Step 1 — navigate to start month: read displayed month ONCE then navigate the exact diff
+        $cur   = $this->calendarReadMonth();
+        $steps = ($startYear - $cur['year']) * 12 + ($startMonth - $cur['month']);
+        $this->calendarNavigateSteps($steps);
+        $this->calendarClickDay($startDay);
+
+        // Step 2 — navigate to end month: diff relative to start month (no DOM re-read needed)
+        $steps = ($endYear - $startYear) * 12 + ($endMonth - $startMonth);
+        $this->calendarNavigateSteps($steps);
+        $this->calendarClickDay($endDay);
+
+        // Click "Select" to commit internalValue → modelValue and close panel
+        $footerBtns = $session->getPage()->findAll('css', '.base-calendar-footer .p-button');
+        foreach ($footerBtns as $btn) {
+            if (stripos(trim($btn->getText()), 'Select') !== false) {
+                $btn->click();
+                $session->wait(400);
+                break;
+            }
+        }
+    }
+
+    /**
+     * @When /^I set datepicker "([^"]*)" to "([^"]*)"$/
+     */
+    public function iSetDatepicker($inputId, $date)
+    {
+        $session = $this->getSession();
+
+        $day   = (int) date('j', strtotime($date));
+        $month = (int) date('n', strtotime($date));
+        $year  = (int) date('Y', strtotime($date));
+
+        $input = $session->getPage()->find('css', '#' . $inputId);
+        if ($input) { $input->click(); }
+
+        for ($attempt = 0; $attempt < 25; $attempt++) {
+            $session->wait(200);
+            if ($session->getPage()->find('css', '[data-pc-section="month"]')) break;
+        }
+
+        $cur   = $this->calendarReadMonth();
+        $steps = ($year - $cur['year']) * 12 + ($month - $cur['month']);
+        $this->calendarNavigateSteps($steps);
+        $this->calendarClickDay($day);
+
+        $session->wait(300);
+        $footerBtns = $session->getPage()->findAll('css', '.base-calendar-footer .p-button');
+        foreach ($footerBtns as $btn) {
+            if (stripos(trim($btn->getText()), 'Select') !== false) {
+                $btn->click();
+                $session->wait(400);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Internal helper — reads the month and year currently displayed in the open PrimeVue calendar panel.
+     * Used by: iSetDatepicker(), iSetDatepickerRange()
+     */
+    private function calendarReadMonth(): array
+    {
+        $session = $this->getSession();
+        $monthNames = [
+            'January'   => 1,
+            'February'  => 2,
+            'March'     => 3,
+            'April'     => 4,
+            'May'       => 5,
+            'June'      => 6,
+            'July'      => 7,
+            'August'    => 8,
+            'September' => 9,
+            'October'   => 10,
+            'November'  => 11,
+            'December'  => 12,
+        ];
+        for ($w = 0; $w < 10; $w++) {
+            $session->wait(200);
+            $monthEl = $session->getPage()->find('css', '[data-pc-section="month"]');
+            $yearEl  = $session->getPage()->find('css', '[data-pc-section="year"]');
+            if ($monthEl && $yearEl) {
+                $mn = $monthNames[trim($monthEl->getText())] ?? 0;
+                $yr = (int) trim($yearEl->getText());
+                if ($mn > 0 && $yr > 2000) return ['month' => $mn, 'year' => $yr];
+            }
+        }
+        return ['month' => (int) date('n'), 'year' => (int) date('Y')];
+    }
+
+    /**
+     * Internal helper — clicks the prev/next arrow of the PrimeVue calendar the required number of times.
+     * Negative steps go backward (prev), positive steps go forward (next).
+     * Used by: iSetDatepicker(), iSetDatepickerRange()
+     */
+    private function calendarNavigateSteps(int $steps): void
+    {
+        if ($steps === 0) return;
+        $session = $this->getSession();
+        $btnCss = $steps < 0 ? '.p-datepicker-prev-button' : '.p-datepicker-next-button';
+        for ($i = 0; $i < abs($steps); $i++) {
+            $btn = $session->getPage()->find('css', $btnCss);
+            if ($btn) { $btn->click(); $session->wait(500); }
+        }
+    }
+
+    /**
+     * Internal helper — clicks the cell matching the given day number in the currently displayed month.
+     * Ignores days belonging to adjacent months (data-p-other-month="true").
+     * Used by: iSetDatepicker(), iSetDatepickerRange()
+     */
+    private function calendarClickDay(int $day): void
+    {
+        $session = $this->getSession();
+        $session->wait(300);
+        $spans = $session->getPage()->findAll(
+            'css',
+            'td[data-pc-section="daycell"]:not([data-p-other-month="true"]) span[data-pc-section="day"]'
+        );
+        foreach ($spans as $span) {
+            if ((int) trim($span->getText()) === $day) {
+                $span->click();
+                $session->wait(600);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Types and selects a value in a Select2 multiple field (search input always visible, no dropdown to open).
+     * Unlike iTypeAndSelectInSelect2(), targets the field by its specific container ID instead of a global
+     * querySelector — required when multiple Select2 fields coexist on the same page.
+     *
+     * Example:
+     *   And I type and select "theme1" in inline select2 "extra_theme_fr"
+     *
+     * @When /^I type and select "([^"]*)" in inline select2 "([^"]*)"$/
+     */
+    public function iTypeAndSelectInInlineSelect2($value, $fieldId)
+    {
+        $session = $this->getSession();
+        $session->executeScript("
+            var container = document.getElementById('select2-" . $fieldId . "-container');
+            if (container) {
+                var textarea = container.closest('.select2-selection').querySelector('.select2-search__field');
+                if (textarea) {
+                    textarea.focus();
+                    textarea.value = '" . $value . "';
+                    textarea.dispatchEvent(new Event('input', {bubbles: true}));
+                    textarea.dispatchEvent(new KeyboardEvent('keyup', {bubbles: true}));
+                }
+            }
+        ");
+        $session->wait(2000);
+        $page = $session->getPage();
+        $result = $page->find('css', '.select2-results__option--highlighted, .select2-results__option');
+        if ($result) {
+            $result->click();
+        }
+        $session->wait(500);
+    }
+
+    /**
+     * Selects the first non-empty option of a native <select> field via JavaScript.
+     * Useful when option values are dynamic (loaded from DB) and not known in advance.
+     *
+     * Example:
+     *   And I select the first option from "extra_ecouter"
+     *
+     * @When /^I select the first option from "([^"]*)"$/
+     */
+    public function iSelectFirstOptionFrom(string $fieldName): void
+    {
+        $js = "var s=document.querySelector('select[name=\"" . $fieldName . "\"],select#" . $fieldName . "');"
+            . "if(s){var f=Array.from(s.options).find(function(o){return o.value!==''});"
+            . "if(f){s.value=f.value;s.dispatchEvent(new Event('change',{bubbles:true}));}}";
+        $this->getSession()->executeScript($js);
+    }
+
+    /**
+     * @AfterStep
+     *
+     * When a step fails, dump the full HTML of the page and a form-summary
+     * into tests/behat/behat_debug/ so AI (or a developer) can analyse
+     * the real state of the page and find the correct selectors.
+     */
+    public function dumpHtmlOnFailure(AfterStepScope $scope): void
+    {
+        // Only act on failed steps
+        if ($scope->getTestResult()->getResultCode() !== TestResult::FAILED) {
+            return;
+        }
+
+        try {
+            $session = $this->getSession();
+            $page = $session->getPage();
+
+            // Try to get the RENDERED DOM (after JavaScript execution) via Selenium/ChromeDriver.
+            // This captures the final state including Vue.js/PrimeVue dynamic components.
+            // Falls back to getContent() (server-side HTML source) if JS evaluation fails.
+            try {
+                $driver = $session->getDriver();
+                $html = $driver->evaluateScript('return document.documentElement.outerHTML');
+            } catch (\Exception $jsEx) {
+                $html = $page->getContent();
+            }
+
+            if (empty($html)) {
+                $html = $page->getContent();
+            }
+        } catch (\Exception $e) {
+            // If we can't even get the page content, bail out silently
+            return;
+        }
+
+        // Build output directory
+        $debugDir = __DIR__ . '/../../behat_debug';
+        if (!is_dir($debugDir)) {
+            mkdir($debugDir, 0777, true);
+        }
+
+        // Build a unique filename from scenario + step line
+        $feature = basename($scope->getFeature()->getFile(), '.feature');
+        $line = $scope->getStep()->getLine();
+        $timestamp = date('Ymd_His');
+        $baseName = "{$feature}_line{$line}_{$timestamp}";
+
+        // --- 1) Full HTML dump ---
+        file_put_contents("{$debugDir}/{$baseName}_full.html", $html);
+
+        // --- 2) Form-summary: extract all form elements so we can see
+        //         the real field names, types, ids, options, etc. ---
+        $summary = $this->extractFormSummary($html, $session);
+        file_put_contents("{$debugDir}/{$baseName}_form_summary.txt", $summary);
+
+        // --- 3) Current URL ---
+        try {
+            $url = $session->getCurrentUrl();
+        } catch (\Exception $e) {
+            $url = '(unable to retrieve URL)';
+        }
+
+        // --- 4) Meta file with context ---
+        $stepText = $scope->getStep()->getText();
+        $meta = "BEHAT DEBUG — Step failure\n";
+        $meta .= "==========================\n\n";
+        $meta .= "Feature : {$scope->getFeature()->getFile()}\n";
+        $meta .= "Step    : {$stepText}\n";
+        $meta .= "Line    : {$line}\n";
+        $meta .= "URL     : {$url}\n";
+        $meta .= "Time    : {$timestamp}\n\n";
+        $meta .= "Files generated:\n";
+        $meta .= "  - {$baseName}_full.html        (complete page HTML)\n";
+        $meta .= "  - {$baseName}_form_summary.txt (extracted form fields)\n";
+        file_put_contents("{$debugDir}/{$baseName}_meta.txt", $meta);
+    }
+
+    /**
+     * Parse the HTML and extract a human-readable summary of all form fields.
+     * This includes: inputs, selects (with their options), textareas, buttons.
+     */
+    private function extractFormSummary(string $html, $session): string
+    {
+        $lines = [];
+        $lines[] = "=== FORM FIELDS SUMMARY ===";
+        $lines[] = "URL: " . (method_exists($session, 'getCurrentUrl') ? $session->getCurrentUrl() : 'N/A');
+        $lines[] = str_repeat('=', 60);
+        $lines[] = '';
+
+        // Use DOMDocument to parse
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html, LIBXML_NOERROR | LIBXML_NOWARNING);
+        $xpath = new \DOMXPath($dom);
+
+        // --- INPUTS ---
+        $inputs = $xpath->query('//input');
+        if ($inputs->length > 0) {
+            $lines[] = "--- INPUT FIELDS ({$inputs->length}) ---";
+            foreach ($inputs as $input) {
+                $type = $input->getAttribute('type') ?: 'text';
+                $name = $input->getAttribute('name');
+                $id = $input->getAttribute('id');
+                $value = $input->getAttribute('value');
+                $checked = $input->getAttribute('checked') ? ' [CHECKED]' : '';
+                $disabled = $input->getAttribute('disabled') ? ' [DISABLED]' : '';
+                $placeholder = $input->getAttribute('placeholder');
+
+                $info = "  <input type=\"{$type}\"";
+                if ($name) $info .= " name=\"{$name}\"";
+                if ($id) $info .= " id=\"{$id}\"";
+                if ($value && strlen($value) < 100) $info .= " value=\"{$value}\"";
+                if ($placeholder) $info .= " placeholder=\"{$placeholder}\"";
+                $info .= "{$checked}{$disabled}>";
+                $lines[] = $info;
+            }
+            $lines[] = '';
+        }
+
+        // --- SELECTS ---
+        $selects = $xpath->query('//select');
+        if ($selects->length > 0) {
+            $lines[] = "--- SELECT FIELDS ({$selects->length}) ---";
+            foreach ($selects as $select) {
+                $name = $select->getAttribute('name');
+                $id = $select->getAttribute('id');
+                $multiple = $select->getAttribute('multiple') ? ' [MULTIPLE]' : '';
+
+                $lines[] = "  <select name=\"{$name}\" id=\"{$id}\"{$multiple}>";
+
+                $options = $xpath->query('.//option', $select);
+                foreach ($options as $option) {
+                    $optValue = $option->getAttribute('value');
+                    $optText = trim($option->textContent);
+                    $selected = $option->getAttribute('selected') ? ' *SELECTED*' : '';
+                    $lines[] = "    <option value=\"{$optValue}\"{$selected}>{$optText}</option>";
+                }
+                $lines[] = "  </select>";
+                $lines[] = '';
+            }
+        }
+
+        // --- TEXTAREAS ---
+        $textareas = $xpath->query('//textarea');
+        if ($textareas->length > 0) {
+            $lines[] = "--- TEXTAREA FIELDS ({$textareas->length}) ---";
+            foreach ($textareas as $ta) {
+                $name = $ta->getAttribute('name');
+                $id = $ta->getAttribute('id');
+                $content = substr(trim($ta->textContent), 0, 200);
+                $lines[] = "  <textarea name=\"{$name}\" id=\"{$id}\">{$content}...</textarea>";
+            }
+            $lines[] = '';
+        }
+
+        // --- BUTTONS ---
+        $buttons = $xpath->query('//button | //input[@type="submit"] | //input[@type="button"]');
+        if ($buttons->length > 0) {
+            $lines[] = "--- BUTTONS ({$buttons->length}) ---";
+            foreach ($buttons as $btn) {
+                $tag = $btn->nodeName;
+                $type = $btn->getAttribute('type') ?: '';
+                $name = $btn->getAttribute('name');
+                $id = $btn->getAttribute('id');
+                $text = trim($btn->textContent);
+                $classes = $btn->getAttribute('class');
+
+                $info = "  <{$tag}";
+                if ($type) $info .= " type=\"{$type}\"";
+                if ($name) $info .= " name=\"{$name}\"";
+                if ($id) $info .= " id=\"{$id}\"";
+                if ($classes) $info .= " class=\"{$classes}\"";
+                $info .= ">";
+                if ($text) $info .= "{$text}</{$tag}>";
+                $lines[] = $info;
+            }
+            $lines[] = '';
+        }
+
+        // --- LABELS (useful to map labels to field IDs) ---
+        $labels = $xpath->query('//label[@for]');
+        if ($labels->length > 0) {
+            $lines[] = "--- LABELS WITH 'for' ATTRIBUTE ({$labels->length}) ---";
+            foreach ($labels as $label) {
+                $for = $label->getAttribute('for');
+                $text = trim($label->textContent);
+                if ($text) {
+                    $lines[] = "  <label for=\"{$for}\">{$text}</label>";
+                }
+            }
+            $lines[] = '';
+        }
+
+        return implode("\n", $lines);
+    }
+
     public function visit($page): void
     {
         parent::visit($page);
 
         $this->waitForThePageToBeLoaded();
+    }
+
+    /**
+     * Adds an LP item by simulating the Sortable.js AJAX call used for drag-and-drop.
+     *
+     * Handles two DOM layouts:
+     *  - Quiz items  : text is inside  <a class="link_with_id">Title</a>
+     *  - Document items: text is a bare text-node in <div class="item_data">, outside the link
+     *
+     * @When /^I add LP item "([^"]*)" from the resource panel$/
+     */
+    public function iAddLpItemFromResourcePanel(string $title): void
+    {
+        $safeTitle = addslashes($title);
+
+        $infoJs = <<<JS
+(function() {
+    var items = document.querySelectorAll('ul.lp_resource li');
+    for (var i = 0; i < items.length; i++) {
+        var li   = items[i];
+        var link = li.querySelector('.link_with_id');
+
+        // Strategy 1 – quiz: title attr on <li> (e.g. title="QRU and Image Selection exercise")
+        if (li.getAttribute('title') === '{$safeTitle}') {
+            return JSON.stringify({ id: li.getAttribute('id'), type: link ? link.getAttribute('data_type') : null });
+        }
+
+        // Strategy 2 – quiz: text directly inside .link_with_id
+        if (link) {
+            var linkText = link.textContent.replace(/ /g, ' ').trim();
+            if (linkText === '{$safeTitle}') {
+                return JSON.stringify({ id: li.getAttribute('id'), type: link.getAttribute('data_type') });
+            }
+        }
+
+        // Strategy 3 – document: bare text-node(s) inside div.item_data (text lives outside the <a>)
+        var itemData = li.querySelector('.item_data');
+        if (itemData) {
+            var raw = '';
+            for (var j = 0; j < itemData.childNodes.length; j++) {
+                if (itemData.childNodes[j].nodeType === 3) raw += itemData.childNodes[j].textContent;
+            }
+            if (raw.trim() === '{$safeTitle}') {
+                return JSON.stringify({ id: li.getAttribute('id'), type: link ? link.getAttribute('data_type') : 'document' });
+            }
+        }
+    }
+    return null;
+})();
+JS;
+
+        $result = $this->getSession()->evaluateScript($infoJs);
+        if (!$result) {
+            throw new \Exception("LP item '{$title}' not found in resource panel");
+        }
+
+        $data   = json_decode($result, true);
+        $itemId = $data['id'];
+        $type   = $data['type'];
+
+        $currentUrl = $this->getSession()->getCurrentUrl();
+        parse_str(parse_url($currentUrl, PHP_URL_QUERY) ?? '', $params);
+        $lpId = $params['lp_id'] ?? '';
+        $cid  = $params['cid']  ?? '';
+        $sid  = $params['sid']  ?? 0;
+
+        $escapedTitle = str_replace("'", "\\'", $title);
+
+        $this->getSession()->executeScript("
+            \$.ajax({
+                url: '/main/inc/ajax/lp.ajax.php',
+                data: {
+                    lp_id: '{$lpId}', cid: '{$cid}', sid: '{$sid}',
+                    a: 'add_lp_item', id: '{$itemId}', type: '{$type}',
+                    title: '{$escapedTitle}',
+                    parent_id: '', previous_id: 0
+                },
+                async: false
+            });
+        ");
+
+        $this->getSession()->wait(1000);
+        $this->getSession()->reload();
+        $this->waitVeryLongForThePageToBeLoaded();
+    }
+
+    /**
+     * Switches ChromeDriver context into the iframe with the given name attribute.
+     * All subsequent Behat interactions will target the iframe's DOM until switchback.
+     * Used for Chamilo exercises displayed inside an <iframe name="content_name">.
+     *
+     * Example:
+     *   And I switch to the iframe "content_name"
+     *
+     * @When /^I switch to the iframe "([^"]*)"$/
+     */
+    public function iSwitchToIframe(string $name): void
+    {
+        $this->getSession()->getDriver()->switchToIFrame($name);
+        $this->getSession()->wait(500);
+    }
+
+    /**
+     * Switches ChromeDriver context back to the main page after having entered an iframe.
+     * Must be called after iSwitchToIframe() once interactions inside the iframe are done.
+     *
+     * Example:
+     *   And I switch back to the main window
+     *
+     * @When /^I switch back to the main window$/
+     */
+    public function iSwitchBackToMainWindow(): void
+    {
+        $this->getSession()->getDriver()->switchToIFrame(null);
+        $this->getSession()->wait(500);
+    }
+
+    /**
+     * Fills the first <textarea> found on the page with the given value via JavaScript.
+     * Used for open-question exercises inside iframes where there is only one textarea.
+     *
+     * Example:
+     *   And I fill in the first textarea with "example"
+     *
+     * @When /^I fill in the first textarea with "([^"]*)"$/
+     */
+    public function iFillInFirstTextareaWith(string $value): void
+    {
+        $safe = addslashes($value);
+        $this->getSession()->executeScript("
+            var ta = document.querySelector('textarea');
+            if (ta) {
+                ta.value = '{$safe}';
+                ta.dispatchEvent(new Event('input', { bubbles: true }));
+                ta.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        ");
+        $this->getSession()->wait(300);
     }
 }

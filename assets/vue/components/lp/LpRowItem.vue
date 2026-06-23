@@ -7,9 +7,11 @@ import BaseMenu from "../basecomponents/BaseMenu.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import lpService from "../../services/lpService"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
+const { showErrorNotification } = useNotification()
 const route = useRoute()
 
 const props = defineProps({
@@ -20,11 +22,12 @@ const props = defineProps({
   canAutoLaunch: { type: Boolean, default: false },
   buildDates: { type: Function, required: true },
   legacyContext: { type: Object, required: true },
+  csrfToken: { type: String, default: "" },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
 
-const emit = defineEmits(["export-pdf"])
+const emit = defineEmits(["export-pdf", "visibility-changed"])
 
 // Only SCORM packages (type = 2 in Chamilo legacy)
 const canUpdateScorm = computed(() => {
@@ -39,8 +42,7 @@ const canUpdateScorm = computed(() => {
 
 const openUrl = computed(() =>
   lpService.buildLegacyViewUrl(props.lp.iid, {
-    cid: props.legacyContext.cid || 0,
-    sid: props.legacyContext.sid || 0,
+    ...props.legacyContext,
     isStudentView: route.query?.isStudentView === "true" ? "true" : "false",
   }),
 )
@@ -79,13 +81,6 @@ const togglePublishUrl = computed(() =>
   }),
 )
 
-const toggleVisibleUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "toggle_visible", {
-    ...props.legacyContext,
-    params: { new_status: isLpVisible.value ? 0 : 1 },
-  }),
-)
-
 const toggleAutoLaunchUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "auto_launch", {
     ...props.legacyContext,
@@ -100,10 +95,35 @@ const advancedAccessUrl = computed(() => {
 
   search.set("cid", props.legacyContext.cid || 0)
   search.set("sid", props.legacyContext.sid || 0)
+  search.set("gid", props.legacyContext.gid || 0)
   search.set("lp_id", props.lp.iid)
 
   return `/resources/lp/${props.legacyContext.node}/advanced-access?${search.toString()}`
 })
+
+const onToggleVisibility = async () => {
+  if (!props.csrfToken || isLpSubscriptionMode.value) {
+    return
+  }
+
+  try {
+    await lpService.toggleVisibility(
+      props.lp.iid,
+      {
+        cid: props.legacyContext.cid || 0,
+        sid: props.legacyContext.sid || 0,
+        gid: props.legacyContext.gid || 0,
+      },
+      {
+        visible: !isLpVisible.value,
+        csrfToken: props.csrfToken,
+      },
+    )
+    emit("visibility-changed")
+  } catch (error) {
+    showErrorNotification(error)
+  }
+}
 
 const visibilityAction = computed(() => {
   if (isLpSubscriptionMode.value) {
@@ -111,15 +131,15 @@ const visibilityAction = computed(() => {
       label: t("Learning path only visible to selected learners"),
       icon: "eye-on",
       disabled: true,
-      toUrl: null,
+      command: null,
     }
   }
 
   return {
     label: isLpVisible.value ? t("Hide") : t("Show"),
     icon: isLpVisible.value ? "eye-on" : "eye-off",
-    disabled: false,
-    toUrl: toggleVisibleUrl.value,
+    disabled: !props.csrfToken,
+    command: onToggleVisibility,
   }
 })
 
@@ -165,7 +185,7 @@ const buttonActions = computed(() =>
     {
       label: visibilityAction.value.label,
       icon: visibilityAction.value.icon,
-      toUrl: visibilityAction.value.toUrl,
+      command: visibilityAction.value.command,
       disabled: visibilityAction.value.disabled,
       visible: true,
     },

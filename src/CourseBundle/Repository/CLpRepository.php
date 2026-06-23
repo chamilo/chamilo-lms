@@ -13,12 +13,16 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpView;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use InvalidArgumentException;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -71,9 +75,10 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         ?string $title = null,
         ?int $active = null,
         bool $onlyPublished = true,
-        ?int $categoryId = null
+        ?int $categoryId = null,
+        ?CGroup $group = null,
     ): QueryBuilder {
-        $qb = $this->getResourcesByCourse($course, $session, null, null, true, true);
+        $qb = $this->getResourcesByCourse($course, $session, $group, null, $onlyPublished, true);
 
         /*if ($onlyPublished) {
             $this->addDateFilterQueryBuilder(new DateTime(), $qb);
@@ -203,65 +208,118 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         return $map;
     }
 
-    public function reorderByIds(int $courseId, ?int $sessionId, array $orderedLpIds, ?int $categoryId = null): void
-    {
-        if (!$orderedLpIds) {
-            return;
+    /**
+     * @param array<int, int> $orderedLpIds
+     */
+    public function reorderByIds(
+        int $courseId,
+        ?int $sessionId,
+        array $orderedLpIds,
+        ?int $categoryId = null,
+        ?int $groupId = null,
+    ): void {
+        if ([] === $orderedLpIds) {
+            throw new InvalidArgumentException('The learning path order cannot be empty.');
         }
 
-        $em = $this->getEntityManager();
-        $course = $em->getReference(Course::class, $courseId);
-        $session = $sessionId ? $em->getReference(Session::class, $sessionId) : null;
+        if (\count($orderedLpIds) !== \count(array_unique($orderedLpIds))) {
+            throw new InvalidArgumentException('The learning path order contains duplicate identifiers.');
+        }
 
-        $qb = $this->createQueryBuilder('lp')
-            ->addSelect('rn', 'rl')
-            ->join('lp.resourceNode', 'rn')
-            ->join('rn.resourceLinks', 'rl')
+        $entityManager = $this->getEntityManager();
+        $course = $entityManager->getReference(Course::class, $courseId);
+        $session = null !== $sessionId ? $entityManager->getReference(Session::class, $sessionId) : null;
+        $group = null !== $groupId ? $entityManager->getReference(CGroup::class, $groupId) : null;
+
+        $queryBuilder = $this->createQueryBuilder('lp')
+            ->addSelect('resourceNode', 'resourceLink')
+            ->join('lp.resourceNode', 'resourceNode')
+            ->join('resourceNode.resourceLinks', 'resourceLink')
             ->where('lp.iid IN (:ids)')
-            ->andWhere('rl.course = :course')->setParameter('course', $course)
-            ->setParameter('ids', $orderedLpIds)
+            ->andWhere('IDENTITY(resourceLink.course) = :courseId')
+            ->setParameter('ids', $orderedLpIds, ArrayParameterType::INTEGER)
+            ->setParameter('courseId', $courseId, Types::INTEGER)
         ;
 
-        if ($session) {
-            $qb->andWhere('rl.session = :sid')->setParameter('sid', $session);
+        if (null !== $sessionId) {
+            $sessionExpression = null === $groupId
+                ? '(IDENTITY(resourceLink.session) = :sessionId OR resourceLink.session IS NULL)'
+                : 'IDENTITY(resourceLink.session) = :sessionId';
+
+            $queryBuilder
+                ->andWhere($sessionExpression)
+                ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ;
         } else {
-            $qb->andWhere('rl.session IS NULL');
+            $queryBuilder->andWhere('resourceLink.session IS NULL');
+        }
+
+        if (null !== $groupId) {
+            $queryBuilder
+                ->andWhere('IDENTITY(resourceLink.group) = :groupId')
+                ->setParameter('groupId', $groupId, Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('resourceLink.group IS NULL');
         }
 
         if (null !== $categoryId) {
-            $qb->andWhere('lp.category = :cat')->setParameter('cat', $categoryId);
+            $queryBuilder
+                ->andWhere('IDENTITY(lp.category) = :categoryId')
+                ->setParameter('categoryId', $categoryId, Types::INTEGER)
+            ;
         } else {
-            $qb->andWhere('lp.category IS NULL');
+            $queryBuilder->andWhere('lp.category IS NULL');
         }
 
-        /** @var CLp[] $lps */
-        $lps = $qb->getQuery()->getResult();
-        $linksByLpId = [];
-        $positions = [];
-        foreach ($lps as $lp) {
-            $link = $lp->getResourceNode()->getResourceLinkByContext($course, $session);
-            if (!$link) {
-                continue;
-            }
-            $linksByLpId[(int) $lp->getIid()] = $link;
-            $positions[] = (int) $link->getDisplayOrder();
+        /** @var array<int, CLp> $learningPaths */
+        $learningPaths = $queryBuilder->getQuery()->getResult();
+        if (\count($learningPaths) !== \count($orderedLpIds)) {
+            throw new InvalidArgumentException('The order contains learning paths outside the current context.');
         }
-        if (!$linksByLpId) {
+
+        $linksByLearningPathId = [];
+        $positions = [];
+
+        foreach ($learningPaths as $learningPath) {
+            $resourceNode = $learningPath->getResourceNode();
+            if (null === $resourceNode) {
+                throw new InvalidArgumentException('A learning path has no resource node.');
+            }
+
+            $resourceLink = $resourceNode->getResourceLinkByContext($course, $session, $group);
+            if (null === $resourceLink && null !== $session && null === $group) {
+                $baseCourseLink = $resourceNode->getResourceLinkByContext($course);
+                if (null !== $baseCourseLink) {
+                    continue;
+                }
+            }
+
+            if (null === $resourceLink) {
+                throw new InvalidArgumentException('A learning path is not linked to the current context.');
+            }
+
+            $learningPathId = (int) $learningPath->getIid();
+            $linksByLearningPathId[$learningPathId] = $resourceLink;
+            $positions[] = $resourceLink->getDisplayOrder();
+        }
+
+        if ([] === $linksByLearningPathId) {
             return;
         }
 
         sort($positions);
-        $start = $positions[0];
+        $position = $positions[0];
 
-        $pos = $start;
-        foreach ($orderedLpIds as $lpId) {
-            if (!isset($linksByLpId[$lpId])) {
+        foreach ($orderedLpIds as $learningPathId) {
+            if (!isset($linksByLearningPathId[$learningPathId])) {
                 continue;
             }
-            $linksByLpId[$lpId]->setDisplayOrder($pos);
-            $pos++;
+
+            $linksByLearningPathId[$learningPathId]->setDisplayOrder($position);
+            ++$position;
         }
 
-        $em->flush();
+        $entityManager->flush();
     }
 }

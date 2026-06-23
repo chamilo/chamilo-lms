@@ -66,11 +66,13 @@
                 :canEdit="canEdit"
                 :canExportPdf="canExportPdf"
                 :canExportScorm="canExportScorm"
+                :csrf-token="actionToken"
                 :legacyContext="legacyContext"
                 :lp="element"
                 :ringDash="ringDash"
                 :ringValue="ringValue"
                 @export-pdf="onExportPdf"
+                @visibility-changed="load"
               />
             </template>
           </Draggable>
@@ -83,6 +85,7 @@
           :canEdit="canEdit"
           :canExportPdf="canExportPdf"
           :canExportScorm="canExportScorm"
+          :csrf-token="actionToken"
           :category="group[0]"
           :isSessionCategory="group[2]"
           :list="group[1]"
@@ -91,6 +94,7 @@
           :title="group[0]?.title"
           @reorder="(ids) => onReorderCategory(group[0], ids)"
           @export-pdf="onExportPdf"
+          @visibility-changed="load"
         />
       </template>
     </div>
@@ -249,6 +253,7 @@ const canAutoLaunch = computed(() => {
 const items = ref([])
 const categories = ref([])
 const visibilityMap = ref({})
+const actionToken = ref("")
 
 function isTruthy(value) {
   return value === true || value === 1 || value === "1" || String(value).toLowerCase() === "true"
@@ -438,6 +443,10 @@ async function loadVisibilityFor(lpIds) {
     params.append("sid", legacyContext.value.sid)
   }
 
+  if (legacyContext.value.gid) {
+    params.append("gid", legacyContext.value.gid)
+  }
+
   const { data } = await api.get(`/main/inc/ajax/lp.ajax.php?${params.toString()}`).catch(() => ({ data: {} }))
   const map = data.map || {}
   visibilityMap.value = Object.fromEntries(Object.entries(map).map(([key, value]) => [String(key), value]))
@@ -460,6 +469,10 @@ const withCidSid = (url) => {
     sp.set("sid", legacyContext.value.sid)
   }
 
+  if (legacyContext.value.gid) {
+    sp.set("gid", legacyContext.value.gid)
+  }
+
   const qs = sp.toString()
 
   return path + (qs ? `?${qs}` : "") + (hash ? `#${hash}` : "")
@@ -476,19 +489,34 @@ const load = async () => {
     }
 
     rawCanEdit.value = !!allowed
+    actionToken.value = ""
+
+    if (rawCanEdit.value) {
+      const tokenResult = await lpService.getActionToken({
+        cid: legacyContext.value.cid,
+        sid: legacyContext.value.sid ?? 0,
+        gid: legacyContext.value.gid ?? 0,
+      })
+      actionToken.value = tokenResult?.token ?? ""
+    }
   } catch (e) {
     showErrorNotification(e)
   }
 
   try {
     categories.value = await lpService.getLpCategories({
+      "resourceNode.parent": route.params?.node ?? 0,
       cid: legacyContext.value.cid,
       sid: legacyContext.value.sid ?? 0,
+      gid: legacyContext.value.gid ?? 0,
+      isStudentView: isStudentView.value ? "true" : "false",
     })
 
     const raw = await lpService.getLearningPaths({
       "resourceNode.parent": route.params?.node ?? 0,
       sid: legacyContext.value.sid ?? 0,
+      gid: legacyContext.value.gid ?? 0,
+      isStudentView: isStudentView.value ? "true" : "false",
       pagination: false,
     })
 
@@ -577,12 +605,18 @@ function applyOrderWithinContext(predicate, orderedIds) {
 }
 
 async function sendReorder(orderedIds, { categoryId } = {}) {
-  await lpService.reorder({
-    courseId: legacyContext.value.cid,
-    sessionId: legacyContext.value.sid,
-    categoryId: categoryId ?? null,
-    ids: orderedIds,
-  })
+  await lpService.reorder(
+    {
+      cid: legacyContext.value.cid,
+      sid: legacyContext.value.sid ?? 0,
+      gid: legacyContext.value.gid ?? 0,
+    },
+    {
+      order: orderedIds,
+      categoryId: categoryId ?? null,
+      csrfToken: actionToken.value,
+    },
+  )
 }
 
 async function onReorderCategory(cat, ids) {

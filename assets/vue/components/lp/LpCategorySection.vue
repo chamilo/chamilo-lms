@@ -6,8 +6,10 @@ import LpCardItem from "./LpCardItem.vue"
 import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import lpService from "../../services/lpService"
 import { useI18n } from "vue-i18n"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showErrorNotification } = useNotification()
 
 const props = defineProps({
   title: { type: String, default: "Learning Path Category" },
@@ -21,9 +23,10 @@ const props = defineProps({
   ringValue: { type: Function, required: true },
   buildDates: { type: Function, required: false },
   isSessionCategory: { type: Boolean, default: false },
+  csrfToken: { type: String, default: "" },
 })
 
-const emit = defineEmits(["export-pdf", "reorder"])
+const emit = defineEmits(["export-pdf", "reorder", "visibility-changed"])
 
 const displayTitle = computed(() => props.title || t("Learning path categories"))
 
@@ -51,12 +54,16 @@ const route = useRoute()
 const cid = computed(() => Number(route.query?.cid ?? 0) || undefined)
 const sid = computed(() => Number(route.query?.sid ?? 0) || undefined)
 const node = computed(() => Number(route.params?.node ?? 0) || undefined)
+const gid = computed(() => Number(route.query?.gid ?? 0))
 
 const goCat = (action, extraParams = {}) => {
   const url = lpService.buildLegacyActionUrl(action, {
     cid: cid.value,
     sid: sid.value,
     node: node.value,
+    gid: gid.value,
+    gradebook: Number(route.query?.gradebook ?? 0),
+    origin: String(route.query?.origin ?? ""),
     params: { id: props.category.iid, ...extraParams },
   })
   window.location.assign(url)
@@ -65,10 +72,38 @@ const goCat = (action, extraParams = {}) => {
 const onCatEdit = () => goCat("add_lp_category")
 const onCatAddUsers = () => goCat("add_users_to_category")
 
-const onCatToggleVisibility = () => {
-  const vis = props.category.visibility ?? props.category.visible
-  const next = typeof vis === "number" ? (vis ? 0 : 1) : 1
-  goCat("toggle_category_visibility", { new_status: next })
+const categoryIsVisible = computed(() => {
+  const value = props.category.visible ?? props.category.visibility
+
+  if (typeof value === "string") {
+    return ["1", "true", "v", "visible", "published"].includes(value.toLowerCase())
+  }
+
+  return typeof value === "undefined" || value === null ? true : Boolean(value)
+})
+
+const onCatToggleVisibility = async () => {
+  if (!props.csrfToken) {
+    return
+  }
+
+  try {
+    await lpService.toggleCategoryVisibility(
+      props.category.iid,
+      {
+        cid: cid.value || 0,
+        sid: sid.value || 0,
+        gid: gid.value || 0,
+      },
+      {
+        visible: !categoryIsVisible.value,
+        csrfToken: props.csrfToken,
+      },
+    )
+    emit("visibility-changed")
+  } catch (error) {
+    showErrorNotification(error)
+  }
 }
 
 const onCatTogglePublish = () => {
@@ -307,10 +342,12 @@ const toggleOpen = () => {
             :canEdit="canEdit"
             :canExportPdf="canExportPdf"
             :canExportScorm="canExportScorm"
+            :csrf-token="csrfToken"
             :lp="element"
             :ringDash="ringDash"
             :ringValue="ringValue"
             @export-pdf="emit('export-pdf', element)"
+            @visibility-changed="emit('visibility-changed')"
           />
         </template>
       </Draggable>

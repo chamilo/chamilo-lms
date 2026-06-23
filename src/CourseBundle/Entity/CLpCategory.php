@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -18,6 +19,8 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathCategoryCollectionProvider;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathVisibilityProcessor;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -35,8 +38,16 @@ use Symfony\Component\Validator\Constraints as Assert;
                 summary: 'List LP categories by course (resourceNode.parent) or sid',
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            provider: LearningPathCategoryCollectionProvider::class,
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Put(
+            uriTemplate: '/learning_path_categories/{iid}/toggle-visibility',
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            name: 'toggle_learning_path_category_visibility',
+            processor: LearningPathVisibilityProcessor::class,
+        ),
     ],
     normalizationContext: [
         'groups' => ['lp_category:read', 'resource_node:read', 'resource_link:read'],
@@ -76,6 +87,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Resourc
      */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLp::class, cascade: ['detach', 'persist'])]
     protected Collection $lps;
+
+    #[Groups(['lp_category:read'])]
+    private ?bool $visible = null;
 
     public function __construct()
     {
@@ -176,6 +190,16 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Resourc
         $this->users->removeElement($user);
 
         return $this;
+    }
+
+    public function getVisible(): bool
+    {
+        return $this->visible ?? true;
+    }
+
+    public function setVisible(?bool $visible): void
+    {
+        $this->visible = $visible;
     }
 
     /**

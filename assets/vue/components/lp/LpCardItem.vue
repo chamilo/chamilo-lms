@@ -7,9 +7,11 @@ import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import lpService from "../../services/lpService"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
+const { showErrorNotification } = useNotification()
 const route = useRoute()
 
 const props = defineProps({
@@ -20,19 +22,20 @@ const props = defineProps({
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
   buildDates: { type: Function, required: true },
+  csrfToken: { type: String, default: "" },
 })
-const emit = defineEmits(["export-pdf"])
+const emit = defineEmits(["export-pdf", "visibility-changed"])
 
 const routeCtx = computed(() => ({
   cid: Number(route.query?.cid ?? 0) || undefined,
   sid: Number(route.query?.sid ?? 0) || undefined,
   node: Number(route.params?.node ?? 0) || undefined,
+  gid: Number(route.query?.gid ?? 0),
 }))
 
 const openUrl = computed(() =>
   lpService.buildLegacyViewUrl(props.lp.iid, {
-    cid: routeCtx.value.cid ?? 0,
-    sid: routeCtx.value.sid ?? 0,
+    ...routeCtx.value,
     isStudentView: route.query?.isStudentView === "true" ? "true" : "false",
   }),
 )
@@ -80,22 +83,40 @@ const togglePublishUrl = computed(() =>
   }),
 )
 
-const toggleVisibleUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "toggle_visible", {
-    ...routeCtx.value,
-    params: { new_status: isLpVisible.value ? 0 : 1 },
-  }),
-)
-
 const advancedAccessUrl = computed(() => {
   const search = new URLSearchParams()
 
   search.set("cid", routeCtx.value.cid || 0)
   search.set("sid", routeCtx.value.sid || 0)
+  search.set("gid", routeCtx.value.gid || 0)
   search.set("lp_id", props.lp.iid)
 
   return `/resources/lp/${routeCtx.value.node}/advanced-access?${search.toString()}`
 })
+
+const onToggleVisibility = async () => {
+  if (!props.csrfToken || isLpSubscriptionMode.value) {
+    return
+  }
+
+  try {
+    await lpService.toggleVisibility(
+      props.lp.iid,
+      {
+        cid: routeCtx.value.cid || 0,
+        sid: routeCtx.value.sid || 0,
+        gid: routeCtx.value.gid || 0,
+      },
+      {
+        visible: !isLpVisible.value,
+        csrfToken: props.csrfToken,
+      },
+    )
+    emit("visibility-changed")
+  } catch (error) {
+    showErrorNotification(error)
+  }
+}
 
 const visibilityAction = computed(() => {
   if (isLpSubscriptionMode.value) {
@@ -103,15 +124,13 @@ const visibilityAction = computed(() => {
       label: t("Learning path only visible to selected learners"),
       icon: "eye-on",
       disabled: true,
-      toUrl: null,
     }
   }
 
   return {
     label: isLpVisible.value ? t("Hide") : t("Show"),
     icon: isLpVisible.value ? "eye-on" : "eye-off",
-    disabled: false,
-    toUrl: toggleVisibleUrl.value,
+    disabled: !props.csrfToken,
   }
 })
 
@@ -396,11 +415,11 @@ const progressTextClass = computed(() =>
         <BaseButton
           :disabled="visibilityAction.disabled"
           :label="visibilityAction.label"
-          :to-url="visibilityAction.toUrl"
           :icon="visibilityAction.icon"
           only-icon
           size="small"
           type="tertiary-alternative-text"
+          @click="onToggleVisibility"
         />
 
         <BaseButton

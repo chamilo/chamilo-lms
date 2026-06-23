@@ -1,5 +1,10 @@
 import baseService from "./baseService"
 
+const cleanParams = (params = {}) =>
+  Object.fromEntries(
+    Object.entries(params).filter(([, value]) => value !== undefined && value !== null && String(value) !== ""),
+  )
+
 /** Lists learning paths filtered by course/session/title. */
 const getLearningPaths = async (params) => {
   const { items } = await baseService.getCollection(`/api/learning_paths`, params)
@@ -13,13 +18,31 @@ const getLearningPath = async (lpId) => {
 }
 
 /** Builds legacy VIEW URL (old student/teacher mode). */
-const buildLegacyViewUrl = (lpId, { cid, sid, isStudentView = "true" } = {}) => {
+const buildLegacyViewUrl = (
+  lpId,
+  { cid, sid = 0, gid = 0, node, gradebook = 0, origin = "", isStudentView = "true" } = {},
+) => {
   if (!lpId) {
-    console.warn("[buildLegacyViewUrl] called with empty lpId!", { lpId, cid, sid })
+    console.warn("[buildLegacyViewUrl] called with empty lpId!", { lpId, cid, sid, gid })
     console.trace()
   }
 
-  const qs = new URLSearchParams({ action: "view", cid, sid, isStudentView })
+  const qs = new URLSearchParams({
+    action: "view",
+    sid: Number(sid),
+    gid: Number(gid),
+    gradebook: Number(gradebook),
+    origin,
+    isStudentView,
+  })
+
+  if (cid !== undefined && cid !== null && String(cid) !== "" && Number(cid) !== 0) {
+    qs.set("cid", cid)
+  }
+
+  if (node !== undefined && node !== null && String(node) !== "") {
+    qs.set("node", node)
+  }
 
   if (lpId) {
     qs.set("lp_id", lpId)
@@ -107,24 +130,29 @@ const goLegacyAction = (lpId, action, opts = {}) => {
       : ""
 }
 
-/**
- * Persists the display order of learning paths.
- *
- * @param {Object} params
- * @param {number} params.courseId
- * @param {number} params.sessionId
- * @param {number|null} params.categoryId
- * @param {number[]} params.ids
- * @returns {Promise<void>}
- */
-const reorder = async ({ courseId, sessionId, categoryId = null, ids }) => {
-  await baseService.post("/api/learning_paths/reorder", {
-    courseId,
-    sessionId,
-    sid: sessionId,
-    categoryId,
-    ids,
-    order: ids,
+/** Fetches the CSRF token used by modern LP write actions. */
+const getActionToken = async (params = {}) => {
+  return await baseService.get("/api/learning_paths/action-token", cleanParams(params))
+}
+
+/** Toggles LP visibility in the current course/session/group context. */
+const toggleVisibility = async (lpId, params, payload) => {
+  return await baseService.put(`/api/learning_paths/${lpId}/toggle-visibility`, payload, {
+    params: cleanParams(params),
+  })
+}
+
+/** Toggles LP category visibility in the current course/session/group context. */
+const toggleCategoryVisibility = async (categoryId, params, payload) => {
+  return await baseService.put(`/api/learning_path_categories/${categoryId}/toggle-visibility`, payload, {
+    params: cleanParams(params),
+  })
+}
+
+/** Persists LP display order inside the current validated context. */
+const reorder = async (params, payload) => {
+  await baseService.post("/api/learning_paths/reorder", payload, {}, {
+    params: cleanParams(params),
   })
 }
 
@@ -178,6 +206,9 @@ export default {
   buildLegacyUploadUrl,
   goLegacyAction,
   getLpCategories,
+  getActionToken,
+  toggleVisibility,
+  toggleCategoryVisibility,
   reorder,
   getAdvancedAccessData,
   saveUserAdvancedAccess,

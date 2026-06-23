@@ -33,6 +33,7 @@ export const buttonTypeValidator = (value) => {
     "warning",
     "danger",
     "tertiary",
+    "tertiary-alternative",
   ]
 
   return baseTypes.includes(value) || baseTypes.includes(value.replace("-text", ""))

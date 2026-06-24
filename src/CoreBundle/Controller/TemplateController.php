@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Repository\TemplatesRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -45,7 +46,12 @@ class TemplateController extends AbstractController
             return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
         }
 
-        $this->denyAccessUnlessGranted('EDIT', $document->getResourceNode());
+        $documentCourse = $document->getFirstResourceLink()?->getCourse();
+        if (!$documentCourse instanceof Course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $documentCourse);
 
         $user = $userHelper->getCurrent();
         $course = null;

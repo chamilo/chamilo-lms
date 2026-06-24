@@ -134,6 +134,8 @@ class TemplateController extends AbstractController
             throw new NotFoundHttpException('Course not found');
         }
 
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+
         $languageFilterEnabled = $this->isSettingEnabled(
             $settingsManager->getSetting('language.template_activate_language_filter', true)
         );

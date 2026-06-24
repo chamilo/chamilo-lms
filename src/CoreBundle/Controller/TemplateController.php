@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Repository\TemplatesRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +41,18 @@ class TemplateController extends AbstractController
             return $this->json(['error' => 'No image provided.'], Response::HTTP_BAD_REQUEST);
         }
 
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document) {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $documentCourse = $document->getFirstResourceLink()?->getCourse();
+        if (!$documentCourse instanceof Course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $documentCourse);
+
         $user = $userHelper->getCurrent();
         $course = null;
         if ($cid) {
@@ -61,13 +75,8 @@ class TemplateController extends AbstractController
         $template->setImage($asset);
         $entityManager->persist($template);
 
-        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
-        if ($document) {
-            $document->setTemplate(true);
-            $entityManager->persist($document);
-        } else {
-            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
-        }
+        $document->setTemplate(true);
+        $entityManager->persist($document);
 
         $entityManager->flush();
 

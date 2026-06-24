@@ -2391,5 +2391,6 @@
     "Moderated": "\u5df2\u5ba1\u6838",
     "View threads": "\u67e5\u770b\u4e3b\u9898",
     "Current": "\u5f53\u524d",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "\u5141\u8bb8\u6700\u5927\u8ba2\u9605\u6570\u3002\u8bbe\u4e3a 0 \u4ee5\u4e0d\u9650\u5236\u3002"
 }

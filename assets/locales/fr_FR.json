@@ -916,7 +916,7 @@
     "of": "sur",
     "messages": "messages",
     "Error deleting message": "Erreur lors de la suppression du message",
-    "Re:": "Re\u202f:",
+    "Re:": "Re: ",
     "Show public link": "Afficher le lien public",
     "Public link": "Lien public",
     "You can share or copy this link:": "Vous pouvez partager ou copier ce lien :",
@@ -2391,5 +2391,6 @@
     "Moderated": "Mod\u00e9r\u00e9",
     "View threads": "Voir les fils de discussion",
     "Current": "Actuel",
-    "No auth source": "Pas d'auth source"
+    "No auth source": "Pas d'auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Nombre maximum d'inscription autoris\u00e9e. Laisser \u00e0 0 pour ne pas avoir de limite."
 }

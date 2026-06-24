@@ -2391,5 +2391,6 @@
     "Moderated": "Modererert",
     "View threads": "Vis tr\u00e5dar",
     "Current": "Noverande",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maksimalt antal p\u00e5meldingar tillate. Sett til 0 for ikkje \u00e5 setje grense."
 }

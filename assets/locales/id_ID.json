@@ -2391,5 +2391,6 @@
     "Moderated": "Dimoderasi",
     "View threads": "Lihat topik",
     "Current": "Saat ini",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Jumlah pendaftaran maksimum yang diizinkan. Biarkan 0 untuk tidak membatasi."
 }

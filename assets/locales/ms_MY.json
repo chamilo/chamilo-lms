@@ -2391,5 +2391,6 @@
     "Moderated": "Disederhanakan",
     "View threads": "Lihat tren",
     "Current": "Semasa ini",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Bilangan pendaftaran maksimum yang dibenarkan. Biarkan pada 0 untuk tidak hadkan."
 }

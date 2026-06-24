@@ -2338,5 +2338,6 @@
     "Forum updated": "Ifowamu ihlaziyiwe",
     "Forum created": "Ifowamu yenziwe",
     "Current": "Yangokuqhubekayo",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Inani eliphezulu lezibhaliso livunyelwe. Shiya ku-0 ukuze lungasibekelwanga umda."
 }

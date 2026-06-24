@@ -2391,5 +2391,6 @@
     "Moderated": "Moderirano",
     "View threads": "Prika\u017ei teme",
     "Current": "Trenutno",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maksimalan broj pretplata dozvoljen. Ostavite na 0 da ne ograni\u010davate."
 }

@@ -2391,5 +2391,6 @@
     "Moderated": "Naka-moderate",
     "View threads": "Tingnan ang mga thread",
     "Current": "Kasalukuyan",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximum na bilang ng mga subscription na pinapayagan. Iwanang 0 upang hindi limitahan."
 }

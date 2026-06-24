@@ -2391,5 +2391,6 @@
     "Moderated": "Moderat",
     "View threads": "Vizualizare subiecte",
     "Current": "Actual",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Num\u0103rul maxim de \u00eenscrieri permise. L\u0103sa\u021bi la 0 pentru a nu limita."
 }

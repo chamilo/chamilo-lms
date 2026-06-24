@@ -2391,5 +2391,6 @@
     "Moderated": "Ti \u1e63\u00e0k\u00f3so",
     "View threads": "Wo \u00e0w\u1ecdn \u00ecs\u1ecd\u0300r\u1ecd\u0300",
     "Current": "L\u1ecdw\u1ecdl\u1ecdw\u1ecd",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "N\u1ecdmba ti o p\u1ecdju ti aw\u1ecdn iforuk\u1ecdsil\u1eb9 ti a gba laaye. Fi sil\u1eb9 ni 0 lati ma \u1e63e idiw\u1ecdn r\u1eb9."
 }

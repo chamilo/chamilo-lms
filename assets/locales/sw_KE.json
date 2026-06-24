@@ -2391,5 +2391,6 @@
     "Moderated": "Imedhibitiwa",
     "View threads": "Tazama nyuzi",
     "Current": "Sasa",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Idadi ya juu ya usajili inaruhusiwa. Acha 0 ili isizuiwe."
 }

@@ -2391,5 +2391,6 @@
     "Moderated": "\uc911\uc7ac\ub428",
     "View threads": "\uc2a4\ub808\ub4dc \ubcf4\uae30",
     "Current": "\ud604\uc7ac",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "\ud5c8\uc6a9\ub418\ub294 \ucd5c\ub300 \uad6c\ub3c5 \uc218. \uc81c\ud55c\ud558\uc9c0 \uc54a\uc73c\ub824\uba74 0\uc73c\ub85c \ub450\uc138\uc694."
 }

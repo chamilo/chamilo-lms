@@ -2391,5 +2391,6 @@
     "Moderated": "Moder\u0113ts",
     "View threads": "Skat\u012bt t\u0113mas",
     "Current": "Pa\u0161reiz\u0113jais",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "At\u013cautais abonementu skaita maksimums. atst\u0101jiet 0, lai neierobe\u017eotu."
 }

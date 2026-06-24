@@ -2391,5 +2391,6 @@
     "Moderated": "Moderado",
     "View threads": "Ver t\u00f3picos",
     "Current": "Atual",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "N\u00famero m\u00e1ximo de inscri\u00e7\u00f5es permitido. Deixe em 0 para n\u00e3o limitar."
 }

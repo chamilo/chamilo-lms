@@ -2391,5 +2391,6 @@
     "Moderated": "Churanakusqa",
     "View threads": "Qillqasqakunata qhaway",
     "Current": "Kunan",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Huk musuq qispachinakuy imayna pusaq. 0-manta saqiy imayna pusaq kayninchayta mana qispachanakunaykichu."
 }

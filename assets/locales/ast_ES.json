@@ -2391,5 +2391,6 @@
     "Moderated": "Moderao",
     "View threads": "Ver filos",
     "Current": "Actual",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "N\u00famberu m\u00e1ximu d'inscripciones permit\u00edes. Dexalo en 0 pa nun limitarlo."
 }

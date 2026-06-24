@@ -2391,5 +2391,6 @@
     "Moderated": "Moderatua",
     "View threads": "Ikusi hariak",
     "Current": "Une honetakoa",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Izen emate maximo kopurua onartua. 0 utzi mugagabe izateko."
 }

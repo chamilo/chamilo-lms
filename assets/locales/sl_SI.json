@@ -2391,5 +2391,6 @@
     "Moderated": "Moderirano",
     "View threads": "Ogled niti",
     "Current": "Trenutno",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Najve\u010dje dovoljeno \u0161tevilo vpisov. Pustite na 0, \u010de ni omejitve."
 }

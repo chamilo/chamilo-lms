@@ -2391,5 +2391,6 @@
     "Moderated": "Moderato",
     "View threads": "Visualizza discussioni",
     "Current": "Attuale",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Numero massimo di iscrizioni consentite. Lascia a 0 per non limitarlo."
 }

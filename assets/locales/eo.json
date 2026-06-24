@@ -2391,5 +2391,6 @@
     "Moderated": "Moderatita",
     "View threads": "Vidi fadenojn",
     "Current": "Nuna",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maksimuma nombro da abonoj permesitaj. Lasu je 0 por ne limigi \u011din."
 }

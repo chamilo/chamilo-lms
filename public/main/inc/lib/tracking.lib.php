@@ -3426,7 +3426,8 @@ class Tracking
             $sql = "SELECT DISTINCT(iid) FROM $lpTable
                 WHERE 1=1 $condition_lp";
             $result = Database::query($sql);
-            $session_condition = api_get_session_condition($sessionId);
+            $sessionCondition = api_get_session_condition($sessionId);
+            $vSessionCondition = api_get_session_condition($sessionId, true, false, 'v.session_id');
 
             // calculates time
             if (Database::num_rows($result) > 0) {
@@ -3448,7 +3449,7 @@ class Tracking
                                 c_id = $courseId AND
                                 lp_id = $lp_id AND
                                 user_id = $student_id
-                                $session_condition";
+                                $sessionCondition";
                         $res = Database::query($sql);
                         $view = '';
                         if (Database::num_rows($res) > 0) {
@@ -3476,8 +3477,8 @@ class Tracking
                                 i.lp_id = $lp_id  AND
                                 v.user_id = $student_id AND
                                 item_type = 'quiz' AND
-                                path <> '' AND
-                                v.session_id = $sessionId
+                                path <> ''
+                                $vSessionCondition
                                 $viewCondition
                             ORDER BY iv.view_count DESC ";
 
@@ -3486,7 +3487,6 @@ class Tracking
                             $row = Database::fetch_array($resultRow);
                             $totalTimeInLpItemView = $row['mytime'];
                             $lpItemViewId = $row['iid'];
-                            $sessionCondition = api_get_session_condition($sessionId);
                             $sql = 'SELECT SUM(exe_duration) exe_duration
                                 FROM '.$trackExercises.'
                                 WHERE
@@ -3528,8 +3528,8 @@ class Tracking
                         WHERE
                             view.c_id = $courseId AND
                             view.lp_id = $lp_id AND
-                            view.user_id = $student_id AND
-                            session_id = $sessionId";
+                            view.user_id = $student_id
+                            $sessionCondition";
 
                     $rs = Database::query($sql);
                     if (Database::num_rows($rs) > 0) {

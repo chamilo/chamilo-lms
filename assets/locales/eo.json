@@ -2389,5 +2389,8 @@
     "Search term is too short": "Ser\u0109vorto estas tro mallonga",
     "Could not search forums": "Ne eblis ser\u0109i forumojn",
     "Moderated": "Moderatita",
-    "View threads": "Vidi fadenojn"
+    "View threads": "Vidi fadenojn",
+    "Current": "Nuna",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maksimuma nombro da abonoj permesitaj. Lasu je 0 por ne limigi \u011din."
 }

@@ -32,70 +32,52 @@
       <nav class="px-6 pb-3">
         <ul class="flex flex-wrap gap-3 text-body-2">
           <li>
-            <BaseAppLink
-              :to="tabTo('CMImportBackup')"
-              class="cm-tab"
-              active-class="cm-tab--active"
-              @click="goToTab('CMImportBackup', $event)"
-            >
-              <i class="mdi mdi-tray-arrow-down cm-tab__icon"></i>
-              <span>{{ t("Import backup") }}</span>
-            </BaseAppLink>
+            <BaseButton
+              :label="t('Import backup')"
+              icon="import"
+              :type="isActive('CMImportBackup') ? 'primary-alternative' : 'tertiary-alternative-text'"
+              :route="tabTo('CMImportBackup')"
+            />
           </li>
           <li>
-            <BaseAppLink
-              :to="tabTo('CMCreateBackup')"
-              class="cm-tab"
-              active-class="cm-tab--active"
-              @click="goToTab('CMCreateBackup', $event)"
-            >
-              <i class="mdi mdi-content-save cm-tab__icon"></i>
-              <span>{{ t("Create a backup") }}</span>
-            </BaseAppLink>
+            <BaseButton
+              :label="t('Create a backup')"
+              icon="save"
+              :type="isActive('CMCreateBackup') ? 'primary-alternative' : 'tertiary-alternative-text'"
+              :route="tabTo('CMCreateBackup')"
+            />
           </li>
           <li>
-            <BaseAppLink
-              :to="tabTo('CMCopyCourse')"
-              class="cm-tab"
-              active-class="cm-tab--active"
-              @click="goToTab('CMCopyCourse', $event)"
-            >
-              <i class="mdi mdi-content-copy cm-tab__icon"></i>
-              <span>{{ t("Copy course") }}</span>
-            </BaseAppLink>
+            <BaseButton
+              :label="t('Copy course')"
+              icon="copy"
+              :type="isActive('CMCopyCourse') ? 'primary-alternative' : 'tertiary-alternative-text'"
+              :route="tabTo('CMCopyCourse')"
+            />
           </li>
           <li>
-            <BaseAppLink
-              :to="tabTo('CMCc13')"
-              class="cm-tab"
-              active-class="cm-tab--active"
-              @click="goToTab('CMCc13', $event)"
-            >
-              <i class="mdi mdi-layers cm-tab__icon"></i>
-              <span>IMS CC 1.3</span>
-            </BaseAppLink>
+            <BaseButton
+              label="IMS CC 1.3"
+              icon="package"
+              :type="isActive('CMCc13') ? 'primary-alternative' : 'tertiary-alternative-text'"
+              :route="tabTo('CMCc13')"
+            />
           </li>
           <li>
-            <BaseAppLink
-              :to="tabTo('CMRecycle')"
-              class="cm-tab"
-              active-class="cm-tab--active"
-              @click="goToTab('CMRecycle', $event)"
-            >
-              <i class="mdi mdi-recycle cm-tab__icon"></i>
-              <span>{{ t("Recycle course") }}</span>
-            </BaseAppLink>
+            <BaseButton
+              :label="t('Recycle course')"
+              icon="delete"
+              :type="isActive('CMRecycle') ? 'primary-alternative' : 'tertiary-alternative-text'"
+              :route="tabTo('CMRecycle')"
+            />
           </li>
           <li>
-            <BaseAppLink
-              :to="tabTo('CMDelete')"
-              class="cm-tab cm-tab--danger"
-              active-class="cm-tab--active"
-              @click="goToTab('CMDelete', $event)"
-            >
-              <i class="mdi mdi-trash-can-outline cm-tab__icon"></i>
-              <span>{{ t("Completely delete this course") }}</span>
-            </BaseAppLink>
+            <BaseButton
+              :label="t('Completely delete this course')"
+              icon="delete-forever"
+              :type="isActive('CMDelete') ? 'danger' : 'danger-text'"
+              :route="tabTo('CMDelete')"
+            />
           </li>
         </ul>
       </nav>
@@ -114,6 +96,7 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -133,14 +116,9 @@ function tabTo(name) {
   }
 }
 
-function goToTab(name, evt) {
-  if (route.name !== name) return
-  evt?.preventDefault?.()
-  router.push({
-    name,
-    params: { node },
-    query: { ...route.query, _r: Date.now().toString() },
-  })
+/** Whether the given route name is the currently active tab */
+function isActive(name) {
+  return route.name === name
 }
 
 /** Optionally ensure query context if missing but store knows it */

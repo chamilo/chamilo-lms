@@ -916,7 +916,7 @@
     "of": "von",
     "messages": "Nachrichten",
     "Error deleting message": "Fehler beim L\u00f6schen der Nachricht",
-    "Re:": "Aw:",
+    "Re:": "Aw: ",
     "Show public link": "\u00d6ffentlichen Link anzeigen",
     "Public link": "\u00d6ffentlicher Link",
     "You can share or copy this link:": "Sie k\u00f6nnen diesen Link teilen oder kopieren:",
@@ -2389,5 +2389,8 @@
     "Search term is too short": "Suchbegriff ist zu kurz",
     "Could not search forums": "Foren konnten nicht durchsucht werden",
     "Moderated": "Moderiert",
-    "View threads": "Themen anzeigen"
+    "View threads": "Themen anzeigen",
+    "Current": "Aktuell",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximale Anzahl erlaubter Abonnements. Bei 0 eingeben, um es nicht zu begrenzen."
 }

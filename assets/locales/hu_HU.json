@@ -2389,5 +2389,8 @@
     "Search term is too short": "A keres\u00e9si kifejez\u00e9s t\u00fal r\u00f6vid",
     "Could not search forums": "Nem siker\u00fclt keresni a f\u00f3rumokban",
     "Moderated": "Moder\u00e1lt",
-    "View threads": "T\u00e9m\u00e1k megtekint\u00e9se"
+    "View threads": "T\u00e9m\u00e1k megtekint\u00e9se",
+    "Current": "Jelenlegi",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maxim\u00e1lis feliratkoz\u00e1sok sz\u00e1ma. Hagyja 0-\u00e1n a korl\u00e1t n\u00e9lk\u00fcli enged\u00e9lyez\u00e9shez."
 }

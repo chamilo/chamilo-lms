@@ -229,9 +229,10 @@ if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     }
 }
 
+$hasSingleAuthSource = 1 === count($authSources);
 $currentAuthSources = (array) ($userInfo['auth_sources'] ?? []);
-if (empty($currentAuthSources)) {
-    $currentAuthSources = [UserAuthSource::PLATFORM];
+if ($hasSingleAuthSource || empty($currentAuthSources)) {
+    $currentAuthSources = array_keys($authSources);
 }
 $showPasswordSection = in_array(UserAuthSource::PLATFORM, $currentAuthSources, true);
 
@@ -243,32 +244,48 @@ $form->addHtml(
     '</div>'
 );
 
-$form->addElement(
-    'select',
-    'auth_source',
-    get_lang('Authentication methods'),
-    $authSources,
-    [
-        'id' => 'auth_source',
-        'multiple' => 'multiple',
-        'size' => max(3, min(count($authSources), 8)),
-        'class' => 'w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary',
-    ]
-);
-$form->addRule('auth_source', get_lang('Required field'), 'required');
+if ($hasSingleAuthSource) {
+    $singleAuthSourceLabel = (string) reset($authSources);
+    $form->addElement(
+        'static',
+        null,
+        get_lang('Authentication methods'),
+        htmlspecialchars($singleAuthSourceLabel, \ENT_QUOTES, 'UTF-8')
+    );
+} else {
+    $form->addElement(
+        'select',
+        'auth_source',
+        get_lang('Authentication methods'),
+        $authSources,
+        [
+            'id' => 'auth_source',
+            'multiple' => 'multiple',
+            'size' => max(3, min(count($authSources), 8)),
+            'class' => 'w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary',
+        ]
+    );
+    $form->addRule('auth_source', get_lang('Required field'), 'required');
+}
 
 $form->addHtml(
     '<div id="user-edit-password-section" class="mt-6 rounded-xl border border-gray-25 bg-gray-5 p-4 '.($showPasswordSection ? '' : 'hidden').'">'.
     '<h4 class="mb-3 text-body-1 font-semibold text-gray-90">'.get_lang('Password').'</h4>'
 );
 
-$form->addElement('radio', 'reset_password', null, get_lang('Don\'t reset password'), 0);
-$form->addElement('radio', 'reset_password', null, get_lang('Automatically generate a new password'), 1);
+$resetPasswordOptions = [
+    0 => get_lang('Don\'t reset password'),
+    1 => get_lang('Automatically generate a new password'),
+];
 
 if ($adminsCanSetUsersPass) {
-    $group = [];
-    $group[] = $form->createElement('radio', 'reset_password', null, get_lang('Set password manually'), 2);
-    $group[] = $form->createElement(
+    $resetPasswordOptions[2] = get_lang('Set password manually');
+}
+
+$form->addRadio('reset_password', null, $resetPasswordOptions);
+
+if ($adminsCanSetUsersPass) {
+    $form->addElement(
         'password',
         'password',
         null,
@@ -279,9 +296,7 @@ if ($adminsCanSetUsersPass) {
             'autocomplete' => 'new-password',
         ]
     );
-
-    $form->addGroup($group, 'password', null, null, false);
-    $form->addPasswordRule('password', 'password');
+    $form->addPasswordRule('password');
 }
 
 $form->addHtml('</div></div>');
@@ -439,7 +454,9 @@ $form->addButtonSave(get_lang('Save'));
 
 // Set default values
 $user_data['reset_password'] = 0;
-$user_data['auth_source'] = $currentAuthSources;
+if (!$hasSingleAuthSource) {
+    $user_data['auth_source'] = $currentAuthSources;
+}
 
 if (!$hideFields) {
     $expiration_date = $user_data['expiration_date'];
@@ -492,8 +509,11 @@ if ($form->validate()) {
         }
     }
     $allowedAuthSources = array_map('strval', array_keys($authSources));
+    $submittedAuthSources = $hasSingleAuthSource
+        ? $allowedAuthSources
+        : array_map('strval', (array) ($user['auth_source'] ?? []));
     $authSource = array_values(array_intersect(
-        array_map('strval', (array) ($user['auth_source'] ?? [])),
+        $submittedAuthSources,
         $allowedAuthSources
     ));
 

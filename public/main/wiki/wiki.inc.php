@@ -5379,9 +5379,40 @@ final class WikiManager
 
         // Sanitize title for document/file names
         $safeTitle = trim($title) !== '' ? $title : 'wiki_page';
-        $downloadName = preg_replace('/\s+/', '_', (string) api_replace_dangerous_char($safeTitle)).'.pdf';
+        $fileName = preg_replace('/\s+/', '_', (string) api_replace_dangerous_char($safeTitle));
 
-        // Wrap content (keep structure simple for HTML→PDF engines)
+        $body = '<div class="wiki-title"><h1>'.htmlspecialchars($safeTitle).'</h1></div>'
+            .'<div class="wiki-content">'.$content.'</div>';
+
+        // Render through the shared PDF class: its mPDF instance routes remote
+        // asset fetches through the SSRF-guarded HTTP client, replacing the
+        // former direct mPDF/Dompdf instantiation (Dompdf's isRemoteEnabled was
+        // the second SSRF sink). complete_style=false keeps the course
+        // header/footer/watermark out of the wiki export, as before.
+        try {
+            $pdf = new PDF('A4', 'P', [
+                'left'   => 12,
+                'right'  => 12,
+                'top'    => 12,
+                'bottom' => 12,
+            ]);
+            // Write the CSS as header CSS: html_to_pdf renders the page content
+            // in body mode (HTML_BODY), which ignores inline <style> blocks.
+            $pdf->pdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
+            $pdf->html_to_pdf(
+                [['title' => $safeTitle, 'content' => $body]],
+                $fileName,
+                $courseCode,
+                false,
+                false,
+                false
+            );
+        } catch (\Throwable $e) {
+            // Continue to final fallback
+        }
+
+        // --- Final fallback: deliver HTML as download (not PDF) ---
+        $downloadName = $fileName.'.pdf';
         $html = '<!DOCTYPE html><html lang="'.htmlspecialchars(api_get_language_isocode()).'"><head>'
             .'<meta charset="'.htmlspecialchars(api_get_system_encoding()).'">'
             .'<title>'.htmlspecialchars($safeTitle).'</title>'
@@ -5390,48 +5421,6 @@ final class WikiManager
             .'<div class="wiki-title"><h1>'.htmlspecialchars($safeTitle).'</h1></div>'
             .'<div class="wiki-content">'.$content.'</div>'
             .'</body></html>';
-
-        // --- Try mPDF first ---
-        if (class_exists('\\Mpdf\\Mpdf')) {
-            // Use mPDF directly
-            try {
-                $mpdf = new \Mpdf\Mpdf([
-                    'tempDir' => sys_get_temp_dir(),
-                    'mode'    => 'utf-8',
-                    'format'  => 'A4',
-                    'margin_left'   => 12,
-                    'margin_right'  => 12,
-                    'margin_top'    => 12,
-                    'margin_bottom' => 12,
-                ]);
-                $mpdf->SetTitle($safeTitle);
-                $mpdf->WriteHTML($html);
-                // Force download
-                $mpdf->Output($downloadName, 'D');
-                exit;
-            } catch (\Throwable $e) {
-                // Continue to next engine
-            }
-        }
-
-        // --- Try Dompdf fallback ---
-        if (class_exists('\\Dompdf\\Dompdf')) {
-            try {
-                $dompdf = new \Dompdf\Dompdf([
-                    'chroot' => realpath(__DIR__.'/../../..'),
-                    'isRemoteEnabled' => true,
-                ]);
-                $dompdf->loadHtml($html, 'UTF-8');
-                $dompdf->setPaper('A4', 'portrait');
-                $dompdf->render();
-                $dompdf->stream($downloadName, ['Attachment' => true]);
-                exit;
-            } catch (\Throwable $e) {
-                // Continue to final fallback
-            }
-        }
-
-        // --- Final fallback: deliver HTML as download (not PDF) ---
         // Clean buffers to avoid header issues
         if (function_exists('ob_get_level')) {
             while (ob_get_level() > 0) { @ob_end_clean(); }

@@ -17,19 +17,21 @@
       <h3 class="text-sm font-semibold text-gray-90">{{ t('Recycling options') }}</h3>
 
       <label class="flex items-center gap-2">
-        <input type="radio" value="full_recycle" v-model="recycleOption" />
+        <input type="radio" name="recycle_option" value="full_recycle" v-model="recycleOption" />
         <span class="text-sm text-gray-90">{{ t("Delete everything") }}</span>
       </label>
       <label class="flex items-center gap-2">
-        <input type="radio" value="select_items" v-model="recycleOption" />
+        <input type="radio" name="recycle_option" value="select_items" v-model="recycleOption" />
         <span class="text-sm text-gray-90">{{ t('Let me select learning objects') }}</span>
       </label>
 
       <div v-if="recycleOption==='full_recycle'" class="mt-2">
-        <label class="block text-xs font-medium text-gray-60 mb-1">{{ t('Type the course code to confirm') }}</label>
-        <input
+        <BaseInputText
+          id="recycle-course-code-confirmation"
           v-model.trim="confirm"
-          class="w-64 rounded border border-gray-25 p-2 text-sm"
+          class="w-64"
+          :label="t('Type the course code to confirm')"
+          name="course_code_confirmation"
           :placeholder="courseCode"
           autocomplete="off"
         />
@@ -39,10 +41,13 @@
                :text="t('This will remove or reset selected resources. This action cannot be undone.')" />
 
       <div class="flex justify-end gap-3">
-        <button class="btn-primary" @click="nextFromStep1" :disabled="loading">
-          <i class="mdi" :class="recycleOption==='select_items' ? 'mdi-arrow-right' : 'mdi-recycle'"></i>
-          {{ recycleOption==='select_items' ? t('Continue') : t('Recycle course') }}
-        </button>
+        <BaseButton
+          :label="recycleOption === 'select_items' ? t('Continue') : t('Recycle course')"
+          :icon="recycleOption === 'select_items' ? 'arrow-right' : 'delete'"
+          :type="recycleOption === 'select_items' ? 'primary' : 'danger'"
+          :disabled="loading"
+          @click="nextFromStep1"
+        />
       </div>
     </section>
 
@@ -56,12 +61,20 @@
       />
 
       <div class="flex justify-between">
-        <button class="btn-secondary" @click="step=1" :disabled="loading">
-          <i class="mdi mdi-arrow-left"></i> {{ t('Back') }}
-        </button>
-        <button class="btn-danger" @click="doRecycle" :disabled="loading">
-          <i class="mdi mdi-recycle"></i> {{ t('Recycle selected') }}
-        </button>
+        <BaseButton
+          :label="t('Back')"
+          icon="arrow-left"
+          type="tertiary-alternative"
+          :disabled="loading"
+          @click="step = 1"
+        />
+        <BaseButton
+          :label="t('Recycle selected')"
+          icon="delete"
+          type="danger"
+          :disabled="loading"
+          @click="doRecycle"
+        />
       </div>
     </section>
 
@@ -81,6 +94,8 @@ import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import svc, { courseContextParams } from "../../services/courseMaintenance"
 import ResourceSelector from "../../components/coursemaintenance/ResourceSelector.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 
 const { t } = useI18n()
 const route = useRoute()

@@ -2389,5 +2389,8 @@
     "Search term is too short": "S\u00f6kordet \u00e4r f\u00f6r kort",
     "Could not search forums": "Kunde inte s\u00f6ka i forum",
     "Moderated": "Modererad",
-    "View threads": "Visa tr\u00e5dar"
+    "View threads": "Visa tr\u00e5dar",
+    "Current": "Aktuellt",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximalt antal prenumerationer till\u00e5tet. L\u00e4mna p\u00e5 0 f\u00f6r att inte begr\u00e4nsa det."
 }

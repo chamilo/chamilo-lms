@@ -2389,5 +2389,8 @@
     "Search term is too short": "Pojam pretrage je prekratak",
     "Could not search forums": "Nije mogu\u0107e pretra\u017eiti forume",
     "Moderated": "Moderirano",
-    "View threads": "Prika\u017ei teme"
+    "View threads": "Prika\u017ei teme",
+    "Current": "Trenutno",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maksimalan broj pretplata dozvoljen. Ostavite na 0 da ne ograni\u010davate."
 }

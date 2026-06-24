@@ -2389,5 +2389,8 @@
     "Search term is too short": "Il tiermin di ricercje al \u00e8 masse curt",
     "Could not search forums": "No si \u00e0 pod\u00fbt cir\u00ee tai forums",
     "Moderated": "Moder\u00e2t",
-    "View threads": "Vi\u00f4t i threads"
+    "View threads": "Vi\u00f4t i threads",
+    "Current": "Atu\u00e2l",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Numar massim di iscrions permet\u00fbs. Lassilu a 0 par no limit\u00e2lu."
 }

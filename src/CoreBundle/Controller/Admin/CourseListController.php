@@ -125,7 +125,7 @@ class CourseListController extends AbstractController
         $total = (int) $countQb->select('COUNT(DISTINCT c.id)')->getQuery()->getSingleScalarResult();
 
         $rows = (clone $qb)
-            ->select('DISTINCT c.id, c.title, c.code, c.courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate')
+            ->select('DISTINCT c.id, c.title, c.code, c.courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate, IDENTITY(c.resourceNode) AS resourceNodeId')
             ->orderBy($dqlSortField, $sortOrder)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
@@ -158,6 +158,7 @@ class CourseListController extends AbstractController
             $courseId = (int) $row['id'];
             $item = [
                 'id' => $courseId,
+                'resourceNodeId' => isset($row['resourceNodeId']) ? (int) $row['resourceNodeId'] : null,
                 'title' => $row['title'] ?? '',
                 'code' => $row['code'] ?? '',
                 'courseLanguage' => $row['courseLanguage'] ?? '',

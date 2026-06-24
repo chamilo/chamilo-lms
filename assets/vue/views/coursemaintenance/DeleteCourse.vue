@@ -15,12 +15,11 @@
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
-          <label class="mb-1 block text-xs font-medium text-rose-900">
-            {{ t("Course code") }}
-          </label>
-          <input
+          <BaseInputText
+            id="delete-course-code"
             v-model="confirmText"
-            class="w-full rounded border border-rose-300 p-2 text-sm"
+            :label="t('Course code')"
+            name="course_code"
             :placeholder="courseCode || 'ABC101'"
           />
           <p
@@ -31,38 +30,31 @@
           </p>
 
           <!-- Extra option: delete orphan documents too -->
-          <div class="mt-3 flex items-start gap-2 text-xs text-rose-900">
-            <input
+          <div class="mt-3 text-xs text-rose-900">
+            <BaseCheckbox
               id="delete-docs"
               v-model="deleteDocs"
-              type="checkbox"
-              class="mt-[2px] h-4 w-4 rounded border-rose-300"
+              name="delete_docs"
+              :label="t('Also delete documents that are only used in this course (if any).')"
             />
-            <label
-              for="delete-docs"
-              class="select-none"
-            >
-              {{ t("Also delete documents that are only used in this course (if any).") }}
-              <span class="block text-[11px] text-rose-700">
-                {{
-                  t(
-                    "If unchecked, those files will remain available to the platform administrator through the 'File information' tool.",
-                  )
-                }}
-              </span>
-            </label>
+            <p class="mt-1 text-[11px] text-rose-700">
+              {{
+                t(
+                  "If unchecked, those files will remain available to the platform administrator through the 'File information' tool.",
+                )
+              }}
+            </p>
           </div>
         </div>
 
         <div class="flex items-end">
-          <button
-            class="btn-danger"
+          <BaseButton
+            :label="t('Delete course')"
+            icon="delete-forever"
+            type="danger"
             :disabled="loading || !canDelete"
             @click="submit"
-          >
-            <i class="mdi mdi-delete-alert"></i>
-            {{ t("Delete course") }}
-          </button>
+          />
         </div>
       </div>
     </section>
@@ -88,6 +80,9 @@ import { useRoute } from "vue-router"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
 import svc from "../../services/courseMaintenance"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 
 const { t } = useI18n()
 const route = useRoute()

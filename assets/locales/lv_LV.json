@@ -2389,5 +2389,8 @@
     "Search term is too short": "Mekl\u0113\u0161anas v\u0101rds ir p\u0101r\u0101k \u012bss",
     "Could not search forums": "Neizdev\u0101s mekl\u0113t forumus",
     "Moderated": "Moder\u0113ts",
-    "View threads": "Skat\u012bt t\u0113mas"
+    "View threads": "Skat\u012bt t\u0113mas",
+    "Current": "Pa\u0161reiz\u0113jais",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "At\u013cautais abonementu skaita maksimums. atst\u0101jiet 0, lai neierobe\u017eotu."
 }

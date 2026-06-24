@@ -680,7 +680,20 @@ if ($form->validate()) {
         $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
     }
 
-    if (api_get_setting('allow_registration_as_teacher') === 'false') {
+    // Security rule: if teacher registration is disabled, force learner status.
+    $allowTeacherRegistration = api_get_setting('allow_registration_as_teacher') !== 'false';
+    if (!$allowTeacherRegistration) {
+        $values['status'] = STUDENT;
+    }
+
+    // Security rule: server-side allow-list on submitted status to prevent
+    // privilege mass-assignment (CWE-915). The UI only offers STUDENT/COURSEMANAGER;
+    // any other value (e.g. SESSIONADMIN, DRH, COURSEMANAGERLOWSECURITY) coming
+    // from a tampered POST must be downgraded to STUDENT.
+    $allowedSelfRegistrationStatus = $allowTeacherRegistration
+        ? [STUDENT, COURSEMANAGER]
+        : [STUDENT];
+    if (!in_array((int) ($values['status'] ?? STUDENT), $allowedSelfRegistrationStatus, true)) {
         $values['status'] = STUDENT;
     }
 

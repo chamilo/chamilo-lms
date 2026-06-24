@@ -305,6 +305,21 @@ class UserManager
         $emailTemplate = [],
         $redirectToURLAfterLogin = ''
     ) {
+        // Defense in depth against privilege mass-assignment (CWE-915):
+        // when the effective requester is anonymous AND no creator was supplied
+        // (the self-registration path), never allow elevated platform roles to
+        // be assigned. Only STUDENT and COURSEMANAGER are acceptable for
+        // self-service flows. Trusted server-to-server callers that pass an
+        // explicit $creatorId (e.g. the secret-key SOAP WSCreateUsers service,
+        // which runs without a session) are intentionally exempt.
+        if (empty($creatorId)
+            && api_is_anonymous()
+            && !in_array((int) $status, [STUDENT, COURSEMANAGER], true)
+        ) {
+            $status = STUDENT;
+            $isAdmin = false;
+        }
+
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
         $creatorInfo = api_get_user_info($creatorId);
         $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';

@@ -125,7 +125,18 @@ class TemplateController extends AbstractController
             throw new NotFoundHttpException('Course not found');
         }
 
-        $systemTemplates = $systemTemplateRepository->findAll();
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+
+        $languageFilterEnabled = $this->isSettingEnabled(
+            $settingsManager->getSetting('language.template_activate_language_filter', true)
+        );
+
+        $systemTemplates = $languageFilterEnabled
+            ? $systemTemplateRepository->findForLanguageFilter(
+                $this->getTemplateLanguageCandidates($request->getLocale(), $course)
+            )
+            : $systemTemplateRepository->findAll();
+
         $platformTemplates = $this->formatSystemTemplates($systemTemplates, $assetRepository);
 
         $courseDocumentTemplates = $this->formatCourseDocumentTemplates($course, $templatesRepository, $assetRepository, $documentRepository);

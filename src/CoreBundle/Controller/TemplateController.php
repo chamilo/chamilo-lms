@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Repository\TemplatesRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -125,6 +126,8 @@ class TemplateController extends AbstractController
         if (!$course) {
             throw new NotFoundHttpException('Course not found');
         }
+
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
 
         $languageFilterEnabled = $this->isSettingEnabled(
             $settingsManager->getSetting('language.template_activate_language_filter', true)

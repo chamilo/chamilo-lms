@@ -4708,9 +4708,12 @@ class SessionManager
             $access_url_id = api_get_current_access_url_id();
 
             if (-1 != $access_url_id) {
-                $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url
+                $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl AS access_url_rel_session
                     ON (s.id = access_url_rel_session.session_id)";
-                $whereConditions .= " AND access_url_rel_session.access_url_id = $access_url_id";
+                $urlCondition = "access_url_rel_session.access_url_id = $access_url_id";
+                $whereConditions = empty($whereConditions)
+                    ? $urlCondition
+                    : $whereConditions.' AND '.$urlCondition;
             }
         }
         $sql = "SELECT s.* FROM $sessionTable AS s $innerJoin ";

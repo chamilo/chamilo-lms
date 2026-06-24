@@ -40,6 +40,13 @@ class TemplateController extends AbstractController
             return $this->json(['error' => 'No image provided.'], Response::HTTP_BAD_REQUEST);
         }
 
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document) {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->denyAccessUnlessGranted('EDIT', $document->getResourceNode());
+
         $user = $userHelper->getCurrent();
         $course = null;
         if ($cid) {
@@ -62,13 +69,8 @@ class TemplateController extends AbstractController
         $template->setImage($asset);
         $entityManager->persist($template);
 
-        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
-        if ($document) {
-            $document->setTemplate(true);
-            $entityManager->persist($document);
-        } else {
-            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
-        }
+        $document->setTemplate(true);
+        $entityManager->persist($document);
 
         $entityManager->flush();
 

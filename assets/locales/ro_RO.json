@@ -2391,5 +2391,7 @@
     "Moderated": "Moderat",
     "View threads": "Vizualizare subiecte",
     "Current": "Actual",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "  <strong> Bine ati venit </ strong> pe cursul Chamilo. <br> Ai invatat pas cu pas cum sa creezi un curs. Structura de cursului va aparea intr-un meniu pe partea stanga a ferestrei.",
+    "To start, give a title to your course": "Pentru inceput, dati un titlu cursului"
 }

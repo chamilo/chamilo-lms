@@ -2391,5 +2391,7 @@
     "Moderated": "Moderatua",
     "View threads": "Ikusi hariak",
     "Current": "Une honetakoa",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "Ongi eorri ikastaroak editatzeko Chamilo tresnara.",
+    "To start, give a title to your course": "Hasteko, jarri izen bat ikastaroari"
 }

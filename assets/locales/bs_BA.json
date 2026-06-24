@@ -2391,5 +2391,7 @@
     "Moderated": "Moderirano",
     "View threads": "Prika\u017ei teme",
     "Current": "Trenutno",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Dobrodo\u0161li</strong> u alat za autore Chamilo kursa.<br />Kreirajte svoje kurseve korak po korak. Sadr\u017eaj \u0107e se pojaviti s lijeva.",
+    "To start, give a title to your course": "Da biste zapo\u010deli, dajte naslov svom kursu"
 }

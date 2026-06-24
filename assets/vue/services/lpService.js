@@ -168,6 +168,52 @@ const getLpCategories = async (searchParams) => {
   return items
 }
 
+
+const getConfiguration = async (lpId, params) => {
+  const endpoint = lpId
+    ? `/api/learning_paths/${lpId}/configuration`
+    : "/api/learning_paths/configuration"
+
+  return await baseService.get(endpoint, cleanParams(params))
+}
+
+const saveConfiguration = async (lpId, params, payload, imageFile = null, extraFiles = {}) => {
+  const formData = new FormData()
+  formData.append("payload", JSON.stringify(payload))
+
+  if (imageFile instanceof File) {
+    formData.append("image", imageFile)
+  }
+
+  Object.entries(extraFiles).forEach(([fieldId, file]) => {
+    if (file instanceof File) {
+      formData.append(`extraFile_${fieldId}`, file)
+    }
+  })
+
+  const endpoint = lpId
+    ? `/api/learning_paths/${lpId}/configuration`
+    : "/api/learning_paths/configuration"
+
+  return await baseService.post(endpoint, formData, {}, {
+    params: cleanParams(params),
+  })
+}
+
+const createCategory = async (params, payload) =>
+  await baseService.post("/api/learning_path_categories/manage", payload, {}, { params: cleanParams(params) })
+
+const updateCategory = async (categoryId, params, payload) =>
+  await baseService.put(`/api/learning_path_categories/${categoryId}/manage`, payload, {
+    params: cleanParams(params),
+  })
+
+const deleteCategory = async (categoryId, params, csrfToken) =>
+  await baseService.delete(`/api/learning_path_categories/${categoryId}/manage`, {
+    params: cleanParams(params),
+    data: { csrfToken },
+  })
+
 /** Fetches advanced-access data (users/groups restrictions) for a learning path. */
 const getAdvancedAccessData = async (lpId, contextQuery) => {
   return baseService.get(`/resources/lp/${lpId}/advanced-access-data?${contextQuery}`)
@@ -210,6 +256,11 @@ export default {
   toggleVisibility,
   toggleCategoryVisibility,
   reorder,
+  getConfiguration,
+  saveConfiguration,
+  createCategory,
+  updateCategory,
+  deleteCategory,
   getAdvancedAccessData,
   saveUserAdvancedAccess,
   saveGroupAdvancedAccess,

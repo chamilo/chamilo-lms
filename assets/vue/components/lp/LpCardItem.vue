@@ -42,7 +42,7 @@ const openUrl = computed(() =>
 
 const reportUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "report", routeCtx.value))
 
-const settingsUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "edit", routeCtx.value))
+const settingsRoute = computed(() => ({ name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query }))
 
 const buildUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "add_item", {
@@ -323,12 +323,12 @@ const progressTextClass = computed(() =>
                 >
                   {{ t("Export as SCORM") }}
                 </BaseAppLink>
-                <BaseAppLink
-                  :url="settingsUrl"
-                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
+                <router-link
+                  :to="settingsRoute"
+                  class="block w-full rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
                 >
                   {{ t("Settings") }}
-                </BaseAppLink>
+                </router-link>
                 <button
                   class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger"
                   type="button"
@@ -434,7 +434,7 @@ const progressTextClass = computed(() =>
 
         <BaseButton
           :label="t('Settings')"
-          :to-url="settingsUrl"
+          :route="settingsRoute"
           icon="cog"
           only-icon
           size="small"

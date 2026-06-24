@@ -2391,5 +2391,7 @@
     "Moderated": "\uc911\uc7ac\ub428",
     "View threads": "\uc2a4\ub808\ub4dc \ubcf4\uae30",
     "Current": "\ud604\uc7ac",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>\ud658\uc601\ud569\ub2c8\ub2e4</strong> Chamilo \uacfc\uc815 \uc800\uc791 \ub3c4\uad6c\uc5d0 \uc624\uc2e0 \uac83\uc744.<br />\uacfc\uc815\uc744 \ub2e8\uacc4\ubcc4\ub85c \uc0dd\uc131\ud558\uc2ed\uc2dc\uc624. \ubaa9\ucc28\ub294 \uc67c\ucabd\uc5d0 \ub098\ud0c0\ub0a9\ub2c8\ub2e4.",
+    "To start, give a title to your course": "\uc2dc\uc791\ud558\ub824\uba74 \uacfc\uc815 \uc81c\ubaa9\uc744 \uc785\ub825\ud558\uc2ed\uc2dc\uc624"
 }

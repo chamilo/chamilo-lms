@@ -2391,5 +2391,7 @@
     "Moderated": "Modereret",
     "View threads": "Vis tr\u00e5de",
     "Current": "Nuv\u00e6rende",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "L\u00e6ringsstien struktur vil kunne ses i menuen til venstre. L\u00e6ringsstien kan l\u00f8bende \u00e6ndres.",
+    "To start, give a title to your course": "Til at starte med skal du angive en titel til l\u00e6ringsstien"
 }

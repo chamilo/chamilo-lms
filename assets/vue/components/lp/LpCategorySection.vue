@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import Draggable from "vuedraggable"
 import LpCardItem from "./LpCardItem.vue"
 import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
@@ -51,6 +51,7 @@ function onEndCat() {
 }
 
 const route = useRoute()
+const router = useRouter()
 const cid = computed(() => Number(route.query?.cid ?? 0) || undefined)
 const sid = computed(() => Number(route.query?.sid ?? 0) || undefined)
 const node = computed(() => Number(route.params?.node ?? 0) || undefined)
@@ -69,7 +70,7 @@ const goCat = (action, extraParams = {}) => {
   window.location.assign(url)
 }
 
-const onCatEdit = () => goCat("add_lp_category")
+const onCatEdit = () => router.push({ name: "LpCategoryEdit", params: { categoryId: props.category.iid }, query: route.query })
 const onCatAddUsers = () => goCat("add_users_to_category")
 
 const categoryIsVisible = computed(() => {

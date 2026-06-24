@@ -2391,5 +2391,7 @@
     "Moderated": "Moderatita",
     "View threads": "Vidi fadenojn",
     "Current": "Nuna",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Bonvenon</strong> al la Chamilo-kursa a\u016dtora ilo.<br />Kruu viajn kursojn pa\u015don post pa\u015do. La tabelo de enhavo aperos maldekstre.",
+    "To start, give a title to your course": "Por komenci, donu titolon al via kurso"
 }

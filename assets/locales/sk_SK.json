@@ -2391,5 +2391,7 @@
     "Moderated": "Moderovan\u00e9",
     "View threads": "Zobrazi\u0165 t\u00e9my",
     "Current": "S\u00fa\u010dasn\u00fd",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Vitajte</strong> v pomocn\u00fdch n\u00e1strojoch pre Chamilo u\u010debn\u00fa osnovu.<br />Budete m\u00f4c\u0165 vytvori\u0165 u\u010debn\u00fa osnovu etapu po etape. \u0160trukt\u00fara u\u010debnej osnovy sa zobraz\u00ed v \u013eavom menu.",
+    "To start, give a title to your course": "Pre spustenie, zadajte n\u00e1zov u\u010debnej osnovy"
 }

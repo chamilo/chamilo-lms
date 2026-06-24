@@ -2391,5 +2391,7 @@
     "Moderated": "Umsit",
     "View threads": "V\u00eds tr\u00e1\u00f0ir",
     "Current": "N\u00faverandi",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Velkominn</strong> til Chamilo tilal\u00f8g rith\u00f8gldarverkf\u00e6ri\u00f0.<br />Stovta tilal\u00f8gini t\u00edtt stig fyri stig. Innholdsregistri\u00f0 kemur at s\u00edna seg til vinstri.",
+    "To start, give a title to your course": "At byrja, gev ein heiti tilal\u00f8gini t\u00edtt"
 }

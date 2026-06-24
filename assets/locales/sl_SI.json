@@ -2391,5 +2391,7 @@
     "Moderated": "Moderirano",
     "View threads": "Ogled niti",
     "Current": "Trenutno",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Dobrodo\u0161li</strong> v Chamilo avtorsko orodje za kreiranje u\u010dnih poti.<br /> Orodje omogo\u010da kreiranje u\u010dnih poti korak za korakom. Struktura u\u010dne je ves \u010das vidna in dosegljiva v meniju na levi strani.",
+    "To start, give a title to your course": "Za za\u010detek, vnesite naslov va\u0161e u\u010dne poti"
 }

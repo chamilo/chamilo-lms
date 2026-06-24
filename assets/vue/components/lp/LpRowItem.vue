@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
@@ -13,6 +13,7 @@ const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
 const { showErrorNotification } = useNotification()
 const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
   lp: { type: Object, required: true },
@@ -198,7 +199,7 @@ const buttonActions = computed(() =>
     {
       label: t("Settings"),
       icon: "cog",
-      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "edit", { ...props.legacyContext }),
+      route: { name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query },
       visible: true,
     },
     {
@@ -255,7 +256,7 @@ const itemActionsMobile = computed(() =>
     },
     { label: t("Export as SCORM"), url: exportScormUrl.value, visible: props.canExportScorm },
     { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
-    { label: t("Settings"), url: lpService.buildLegacyActionUrl(props.lp.iid, "edit", props.legacyContext) },
+    { label: t("Settings"), command: () => router.push({ name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query }) },
     { label: t("Delete"), command: onDelete },
   ].filter((item) => item.visible !== false),
 )

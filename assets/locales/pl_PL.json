@@ -2391,5 +2391,7 @@
     "Moderated": "Moderowany",
     "View threads": "Wy\u015bwietl w\u0105tki",
     "Current": "Bie\u017c\u0105cy",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "Witamy w autorskim programie Chamilo Course. Utw\u00f3rz swoje kursy krok po kroku. Spis tre\u015bci pojawi si\u0119 po lewej stronie.",
+    "To start, give a title to your course": "Aby rozpocz\u0105\u0107, nale\u017cy poda\u0107 tytu\u0142 kursu"
 }

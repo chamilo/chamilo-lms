@@ -2391,5 +2391,7 @@
     "Moderated": "Modererad",
     "View threads": "Visa tr\u00e5dar",
     "Current": "Aktuellt",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>V\u00e4lkommen</strong> till Chamilos kursf\u00f6rfattarverktyg.<br />Skapa dina kurser steg-f\u00f6r-steg. Inneh\u00e5llsf\u00f6rteckningen kommer att visas till v\u00e4nster.",
+    "To start, give a title to your course": "F\u00f6r att b\u00f6rja, ge din inl\u00e4rningsv\u00e4g en titel"
 }

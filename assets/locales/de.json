@@ -2391,5 +2391,7 @@
     "Moderated": "Moderiert",
     "View threads": "Themen anzeigen",
     "Current": "Aktuell",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Willkommen</strong> zum Chamilo Lernpfad Erstellungstool.<br />Sie k\u00f6nnen Ihren Lernpfad Schritt f\u00fcr Schritt erstellen.  Die Struktur Ihres Lernpfads erscheint links in dem Menu.",
+    "To start, give a title to your course": "Beginnen Sie damit, Ihrem Lernpfad einen Titel zu geben"
 }

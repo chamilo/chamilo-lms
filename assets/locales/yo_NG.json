@@ -2391,5 +2391,7 @@
     "Moderated": "Ti \u1e63\u00e0k\u00f3so",
     "View threads": "Wo \u00e0w\u1ecdn \u00ecs\u1ecd\u0300r\u1ecd\u0300",
     "Current": "L\u1ecdw\u1ecdl\u1ecdw\u1ecd",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strongKaab\u1ecd</strong> si ohun elo ti n \u1e63\u1eb9da Chamilo Course.<br />\u1e62\u1eb9da aw\u1ecdn ipil\u1eb9\u1e63\u1eb9 r\u1eb9 ni igbes\u1eb9-a\u1e63\u1eb9. Tabili aw\u1ecdn akoonu yoo han si apa osi.",
+    "To start, give a title to your course": "Lati b\u1eb9r\u1eb9, fun ak\u1ecdle kan si ipil\u1eb9\u1e63\u1eb9 r\u1eb9"
 }

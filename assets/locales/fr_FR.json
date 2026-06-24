@@ -2391,5 +2391,7 @@
     "Moderated": "Mod\u00e9r\u00e9",
     "View threads": "Voir les fils de discussion",
     "Current": "Actuel",
-    "No auth source": "Pas d'auth source"
+    "No auth source": "Pas d'auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Bienvenue</strong> dans l'outil de cr\u00e9ation de parcours de Chamilo.<br />Ici, vous pourrez cr\u00e9er votre parcours \u00e9tape par \u00e9tape. Sa structure appara\u00eetra dans le menu sur la gauche.",
+    "To start, give a title to your course": "Pour commencer, choisissez un titre pour votre parcours"
 }

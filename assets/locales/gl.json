@@ -2391,5 +2391,7 @@
     "Moderated": "Moderado",
     "View threads": "Ver f\u00edos",
     "Current": "Actual",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Reciba a benvida</strong> \u00e1 ferramenta de creaci\u00f3n de Rotas de Aprendizaxe de Chamilo.<br />Poder\u00e1 crear a s\u00faa rota de aprendizaxe paso a paso. A estrutura da s\u00faa rota de aprendizaxe mostrar\u00e1se nun men\u00fa \u00e1 esquerda.",
+    "To start, give a title to your course": "Para comezar, delle un t\u00edtulo \u00e1 rota de aprendizaxe"
 }

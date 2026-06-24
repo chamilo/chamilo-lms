@@ -187,12 +187,12 @@ const mItems = computed(() => {
   }
 
   return [
-    { label: t("Create new learning path"), url: lpService.buildLegacyActionUrl("add_lp", ctx) },
+    { label: t("Create new learning path"), command: () => router.push({ name: "LpCreate", query: route.query }) },
     ...(canUseAi.value
       ? [{ label: t("AI learning path generator"), url: lpService.buildLegacyActionUrl("ai_helper", ctx) }]
       : []),
     { label: t("Import"), url: `/main/upload/index.php?${uploadParams}` },
-    { label: t("Add category"), url: lpService.buildLegacyActionUrl("add_lp_category", ctx) },
+    { label: t("Add category"), command: () => router.push({ name: "LpCategoryCreate", query: route.query }) },
   ]
 })
 
@@ -237,7 +237,7 @@ const canExportPdf = computed(() => platformConfig.getSetting("lp.hide_scorm_pdf
 // A static :to-url binding can render before the store resolves, producing a
 // link without cid that the legacy controller rejects as "Not allowed".
 const goCreateLp = () => {
-  window.location.assign(lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value }))
+  router.push({ name: "LpCreate", query: route.query })
 }
 
 const canAutoLaunch = computed(() => {

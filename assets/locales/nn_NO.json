@@ -2391,5 +2391,7 @@
     "Moderated": "Modererert",
     "View threads": "Vis tr\u00e5dar",
     "Current": "Noverande",
-    "No auth source": "No auth source"
+    "No auth source": "No auth source",
+    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Velkommen</strong> til Chamilo-kursforfattarverkt\u00f8yet.<br />Opprett kursa dine steg for steg. Innhaldsfortegninga vil dukke opp til venstre.",
+    "To start, give a title to your course": "For \u00e5 starte, gi eit tittel til kurset ditt"
 }

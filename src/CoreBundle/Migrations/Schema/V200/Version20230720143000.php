@@ -7,131 +7,280 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\PersonalFile;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use DirectoryIterator;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\ORM\Query\Expr\Join;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-use const GLOB_ONLYDIR;
+use Throwable;
 
 final class Version20230720143000 extends AbstractMigrationChamilo
 {
+    private const FILE_FLUSH_BATCH_SIZE = 25;
+    private const PROGRESS_INTERVAL = 500;
+
+    private int $seenFiles = 0;
+    private int $migratedFiles = 0;
+    private int $alreadyExistingFiles = 0;
+    private int $missingUsers = 0;
+    private float $startedAt = 0.0;
+
     public function getDescription(): string
     {
-        return 'Migrate my_files of users to personal_files ';
+        return 'Migrate user my_files with DBAL candidate checks and bounded filesystem batches';
     }
 
     public function up(Schema $schema): void
     {
         $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
+        $projectDir = rtrim((string) $kernel->getProjectDir(), '/');
+        $usersDirectory = $projectDir.'/app/upload/users';
 
-        $fallbackUser = $this->getFallbackUser();
-        $directory = $this->getUpdateRootPath().'/app/upload/users/';
-
-        $variable = 'split_users_upload_directory';
-        $query = $this->entityManager->createQuery('SELECT s.selectedValue FROM Chamilo\CoreBundle\Entity\SettingsCurrent s WHERE s.variable = :variable')
-            ->setParameter('variable', $variable)
-        ;
-        $result = $query->getOneOrNullResult();
-        $splitUsersUploadDirectory = $result['selectedValue'] ?? 'false';
-
-        if ('true' === $splitUsersUploadDirectory) {
-            $parentDirectories = glob($directory.'*', GLOB_ONLYDIR);
-
-            foreach ($parentDirectories as $parentDir) {
-                $firstDigit = basename($parentDir);
-                $subDirectories = glob($parentDir.'/*', GLOB_ONLYDIR);
-                foreach ($subDirectories as $userDir) {
-                    $userId = basename($userDir);
-                    $this->processUserDirectory($userId, $userDir, $fallbackUser, true);
-                }
-            }
-        } else {
-            $userDirectories = glob($directory.'*', GLOB_ONLYDIR);
-            foreach ($userDirectories as $userDir) {
-                $userId = basename($userDir);
-                $this->processUserDirectory($userId, $userDir, $fallbackUser, false);
-            }
-        }
-    }
-
-    private function processUserDirectory(string $userId, string $userDir, User $fallbackUser, bool $splitUsersUploadDirectory): void
-    {
-        $userEntity = $this->entityManager->getRepository(User::class)->find($userId);
-        $userToAssign = $userEntity ?? $fallbackUser;
-
-        if (null === $userEntity) {
-            error_log("User with ID {$userId} not found. Using fallback_user.");
-        } else {
-            error_log("Processing files for user with ID {$userId}.");
-        }
-
-        if ($splitUsersUploadDirectory) {
-            $baseDir = $userDir.'/';
-        } else {
-            $baseDir = $this->getUpdateRootPath().'/app/upload/users/'.$userId.'/';
-        }
-
-        error_log("Final path to check: {$baseDir}");
-
-        if (!is_dir($baseDir)) {
-            error_log("Directory not found for user with ID {$userId}. Skipping.");
+        if (!is_dir($usersDirectory)) {
+            $this->getLogger()->warning('Personal-file source directory does not exist.', [
+                'directory' => $usersDirectory,
+            ]);
 
             return;
         }
 
-        $myFilesDir = $baseDir.'my_files/';
-        $files = glob($myFilesDir.'*');
+        $fallback = $this->resolveFallbackUserRow();
+        $splitUsersUploadDirectory = $this->resolveSplitUsersUploadDirectory();
+        $this->startedAt = microtime(true);
 
-        foreach ($files as $file) {
-            if (!is_file($file)) {
+        $this->getLogger()->info('Starting optimized personal-file migration.', [
+            'source' => $usersDirectory,
+            'split_users_upload_directory' => $splitUsersUploadDirectory,
+            'flush_batch_size' => self::FILE_FLUSH_BATCH_SIZE,
+        ]);
+
+        if ($splitUsersUploadDirectory) {
+            foreach (new DirectoryIterator($usersDirectory) as $parentDirectory) {
+                if ($parentDirectory->isDot() || !$parentDirectory->isDir()) {
+                    continue;
+                }
+
+                foreach (new DirectoryIterator($parentDirectory->getPathname()) as $userDirectory) {
+                    if ($userDirectory->isDot() || !$userDirectory->isDir()) {
+                        continue;
+                    }
+
+                    $this->processUserDirectory(
+                        (string) $userDirectory->getFilename(),
+                        $userDirectory->getPathname(),
+                        $fallback
+                    );
+                }
+            }
+        } else {
+            foreach (new DirectoryIterator($usersDirectory) as $userDirectory) {
+                if ($userDirectory->isDot() || !$userDirectory->isDir()) {
+                    continue;
+                }
+
+                $this->processUserDirectory(
+                    (string) $userDirectory->getFilename(),
+                    $userDirectory->getPathname(),
+                    $fallback
+                );
+            }
+        }
+
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+        $this->logProgress(true);
+    }
+
+    /**
+     * @param array{id: int, resource_node_id: int} $fallback
+     */
+    private function processUserDirectory(string $legacyUserId, string $userDirectory, array $fallback): void
+    {
+        if (!ctype_digit($legacyUserId)) {
+            return;
+        }
+
+        $userRow = $this->connection->fetchAssociative(
+            'SELECT id, resource_node_id
+             FROM user
+             WHERE id = :id',
+            ['id' => (int) $legacyUserId]
+        );
+
+        if (!$userRow || empty($userRow['resource_node_id'])) {
+            ++$this->missingUsers;
+            $userId = $fallback['id'];
+            $parentResourceNodeId = $fallback['resource_node_id'];
+        } else {
+            $userId = (int) $userRow['id'];
+            $parentResourceNodeId = (int) $userRow['resource_node_id'];
+        }
+
+        $myFilesDirectory = rtrim($userDirectory, '/').'/my_files';
+        if (!is_dir($myFilesDirectory)) {
+            return;
+        }
+
+        $existingTitles = $this->loadExistingTitlesForCreator($userId);
+        $pendingInEntityManager = 0;
+        $userReference = $this->entityManager->getReference(User::class, $userId);
+
+        foreach (new DirectoryIterator($myFilesDirectory) as $fileInfo) {
+            if ($fileInfo->isDot() || !$fileInfo->isFile() || !$fileInfo->isReadable()) {
                 continue;
             }
 
-            $title = basename($file);
-            error_log("Processing file: {$file} for user with ID {$userToAssign->getId()}.");
+            ++$this->seenFiles;
+            $title = (string) $fileInfo->getFilename();
 
-            $queryBuilder = $this->entityManager->createQueryBuilder();
-            $queryBuilder
-                ->select('p')
-                ->from(ResourceNode::class, 'n')
-                ->innerJoin(PersonalFile::class, 'p', Join::WITH, 'p.resourceNode = n.id')
-                ->where('n.title = :title')
-                ->andWhere('n.creator = :creator')
-                ->setParameter('title', $title)
-                ->setParameter('creator', $userToAssign->getId())
-            ;
-
-            $result = $queryBuilder->getQuery()->getOneOrNullResult();
-
-            if ($result) {
-                error_log('MIGRATIONS :: '.$file.' (Skipped: Already exists) ...');
-
+            if (isset($existingTitles[$title])) {
+                ++$this->alreadyExistingFiles;
+                $this->logProgress();
                 continue;
             }
 
-            error_log("MIGRATIONS :: Associating file {$file} to user with ID {$userToAssign->getId()}.");
-            $personalFile = new PersonalFile();
-            $personalFile->setTitle($title);
-            $personalFile->setCreator($userToAssign);
-            $personalFile->setParentResourceNode($userToAssign->getResourceNode()->getId());
-            $personalFile->setResourceName($title);
-            $mimeType = mime_content_type($file);
-            $uploadedFile = new UploadedFile($file, $title, $mimeType, null, true);
-            $personalFile->setUploadFile($uploadedFile);
-            $personalFile->addUserLink($userToAssign);
+            try {
+                $path = $fileInfo->getPathname();
+                $mimeType = (string) (mime_content_type($path) ?: 'application/octet-stream');
+                $uploadedFile = new UploadedFile($path, $title, $mimeType, null, true);
 
-            // Save the object to the database
-            $this->entityManager->persist($personalFile);
+                $personalFile = (new PersonalFile())
+                    ->setTitle($title)
+                    ->setCreator($userReference)
+                    ->setParentResourceNode($parentResourceNodeId)
+                    ->setResourceName($title)
+                    ->setUploadFile($uploadedFile)
+                ;
+                $personalFile->addUserLink($userReference);
+
+                $this->entityManager->persist($personalFile);
+                $existingTitles[$title] = true;
+                ++$this->migratedFiles;
+                ++$pendingInEntityManager;
+
+                if (0 === $pendingInEntityManager % self::FILE_FLUSH_BATCH_SIZE) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+                    $userReference = $this->entityManager->getReference(User::class, $userId);
+                }
+            } catch (Throwable $exception) {
+                $this->getLogger()->warning('Personal file could not be migrated.', [
+                    'legacy_user_id' => (int) $legacyUserId,
+                    'assigned_user_id' => $userId,
+                    'filename' => $title,
+                    'error' => $exception->getMessage(),
+                ]);
+            }
+
+            $this->logProgress();
+        }
+
+        if ($pendingInEntityManager > 0) {
             $this->entityManager->flush();
+            $this->entityManager->clear();
         }
     }
 
-    private function getFallbackUser(): ?User
+    /**
+     * @return array<string, true>
+     */
+    private function loadExistingTitlesForCreator(int $creatorId): array
     {
-        return $this->entityManager->getRepository(User::class)->findOneBy(['status' => User::ROLE_FALLBACK], ['id' => 'ASC']);
+        $titles = $this->connection->fetchFirstColumn(
+            'SELECT DISTINCT node.title
+             FROM personal_file file
+             INNER JOIN resource_node node ON node.id = file.resource_node_id
+             WHERE node.creator_id = :creatorId',
+            ['creatorId' => $creatorId]
+        );
+
+        $map = [];
+        foreach ($titles as $title) {
+            $map[(string) $title] = true;
+        }
+
+        return $map;
+    }
+
+    /**
+     * @return array{id: int, resource_node_id: int}
+     */
+    private function resolveFallbackUserRow(): array
+    {
+        $row = $this->connection->fetchAssociative(
+            'SELECT id, resource_node_id
+             FROM user
+             WHERE status = :status
+               AND resource_node_id IS NOT NULL
+             ORDER BY id
+             LIMIT 1',
+            ['status' => User::ROLE_FALLBACK]
+        );
+
+        if (!$row) {
+            throw new RuntimeException('Fallback user with a resource node was not found.');
+        }
+
+        return [
+            'id' => (int) $row['id'],
+            'resource_node_id' => (int) $row['resource_node_id'],
+        ];
+    }
+
+    private function resolveSplitUsersUploadDirectory(): bool
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+        $settingsTable = null;
+
+        if ($schemaManager->tablesExist(['settings'])) {
+            $settingsTable = 'settings';
+        } elseif ($schemaManager->tablesExist(['settings_current'])) {
+            $settingsTable = 'settings_current';
+        }
+
+        if (null === $settingsTable) {
+            $this->getLogger()->warning('Split users upload setting could not be read because no settings table exists. Using the non-split directory layout.');
+
+            return false;
+        }
+
+        $value = $this->connection->fetchOne(
+            sprintf(
+                'SELECT selected_value
+                 FROM %s
+                 WHERE variable = :variable
+                 ORDER BY id
+                 LIMIT 1',
+                $settingsTable
+            ),
+            ['variable' => 'split_users_upload_directory']
+        );
+
+        $enabled = 'true' === strtolower(trim((string) $value));
+
+        $this->getLogger()->info('Resolved split users upload directory setting.', [
+            'settings_table' => $settingsTable,
+            'enabled' => $enabled,
+        ]);
+
+        return $enabled;
+    }
+
+    private function logProgress(bool $force = false): void
+    {
+        if (!$force && (0 === $this->seenFiles || 0 !== $this->seenFiles % self::PROGRESS_INTERVAL)) {
+            return;
+        }
+
+        $elapsed = max(1, (int) (microtime(true) - $this->startedAt));
+        $this->getLogger()->info('Personal-file migration progress.', [
+            'seen' => $this->seenFiles,
+            'migrated' => $this->migratedFiles,
+            'already_existing' => $this->alreadyExistingFiles,
+            'missing_users_using_fallback' => $this->missingUsers,
+            'files_per_second' => round($this->seenFiles / $elapsed, 2),
+            'elapsed_seconds' => $elapsed,
+        ]);
     }
 }

@@ -15,6 +15,14 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         return 'Migration to update foreign key constraints, drop and create indexes, and alter table structures to ensure data consistency and prevent errors during execution.';
     }
 
+    public function isTransactional(): bool
+    {
+        // This migration contains many DDL statements. MySQL/MariaDB commit
+        // DDL implicitly, so running it as a single logical transaction only
+        // obscures progress and makes retries harder to reason about.
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         // When enabled, we keep legacy attendance columns to avoid data loss
@@ -60,11 +68,16 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE ticket_category_rel_user DROP FOREIGN KEY IF EXISTS FK_5B8A987A76ED395');
         $this->addSql('ALTER TABLE ticket_category_rel_user ADD CONSTRAINT FK_5B8A987A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
 
-        // track_e_attempt
-        $this->addSql('DROP INDEX IF EXISTS course ON track_e_attempt');
-        $this->addSql('DROP INDEX IF EXISTS session_id ON track_e_attempt');
-        $this->addSql('ALTER TABLE track_e_attempt DROP COLUMN IF EXISTS c_id');
-        $this->addSql('ALTER TABLE track_e_attempt DROP COLUMN IF EXISTS session_id');
+        // track_e_attempt (about 8.5M rows on Ricky): combine index and
+        // column removals into one ALTER to avoid rebuilding/scanning the
+        // table multiple times.
+        $this->addSql(
+            'ALTER TABLE track_e_attempt
+             DROP INDEX IF EXISTS course,
+             DROP INDEX IF EXISTS session_id,
+             DROP COLUMN IF EXISTS c_id,
+             DROP COLUMN IF EXISTS session_id'
+        );
 
         // course_request
         $this->addSql('ALTER TABLE course_request DROP FOREIGN KEY IF EXISTS FK_33548A73A76ED395');

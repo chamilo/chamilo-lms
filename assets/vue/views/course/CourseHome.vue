@@ -488,7 +488,9 @@ async function changeVisibility(tool) {
 
 async function onClickShowAll() {
   try {
-    await baseService.post(`/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
+    await baseService.post(
+      `/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`,
+    )
     tools.value.forEach((tool) => setToolVisibility(tool, 2))
   } catch (error) {
     console.log(error)
@@ -497,7 +499,9 @@ async function onClickShowAll() {
 
 async function onClickHideAll() {
   try {
-    await baseService.post(`/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
+    await baseService.post(
+      `/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`,
+    )
     tools.value.forEach((tool) => setToolVisibility(tool, 0))
   } catch (error) {
     console.log(error)
@@ -538,7 +542,6 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 }
 
 const { isAllowedToEdit } = useIsAllowedToEdit()
-
 
 async function enforceCourseLegalAgreement() {
   if (!course.value?.id) {

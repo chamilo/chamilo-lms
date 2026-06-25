@@ -23,16 +23,6 @@ export default {
   },
 
   /**
-   * Fetches the CourseHomeNotify plugin notification for a course.
-   * @param {number} cid
-   * @param {number} sid
-   * @returns {Promise<Object>}
-   */
-  getCourseHomeNotification: async (cid, sid = 0) => {
-    return await baseService.get("/plugin/CourseHomeNotify/ajax.php", { cid, sid, gid: 0 })
-  },
-
-  /**
    * Lists the current user's courses (paginated). Returns the raw response body
    * so the caller can normalize it; accepts extra axios options (e.g. a signal).
    * @param {number} page

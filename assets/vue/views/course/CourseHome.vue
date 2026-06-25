@@ -5,52 +5,6 @@
     class="course-home"
   >
     <div
-      v-if="courseHomeNotifyVisible"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
-      role="dialog"
-      aria-modal="true"
-      :aria-label="courseHomeNotify.title"
-    >
-      <div class="max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl">
-        <div class="flex items-center justify-between gap-4 border-b border-gray-25 px-6 py-4">
-          <h2 class="text-lg font-semibold text-gray-90">
-            {{ courseHomeNotify.title }}
-          </h2>
-
-          <button
-            type="button"
-            class="inline-flex h-8 w-8 items-center justify-center rounded-full text-gray-50 hover:bg-gray-10 hover:text-gray-90"
-            :aria-label="t('Close')"
-            @click="closeCourseHomeNotify"
-          >
-            <span class="mdi mdi-close" />
-          </button>
-        </div>
-
-        <div
-          class="max-h-[55vh] overflow-y-auto px-6 py-4 text-gray-90"
-          v-html="courseHomeNotify.content"
-        />
-
-        <div
-          v-if="courseHomeNotify.requiresLink && courseHomeNotify.contentUrl"
-          class="flex justify-end border-t border-gray-25 px-6 py-4"
-        >
-          <a
-            :href="courseHomeNotify.contentUrl"
-            class="btn btn--primary"
-            target="_blank"
-            rel="noopener noreferrer"
-            @click="closeCourseHomeNotify"
-          >
-            <span class="mdi mdi-open-in-new ch-tool-icon" />
-            {{ courseHomeNotify.linkLabel }}
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div
       v-if="isCourseLoading"
       class="flex flex-col gap-4"
     >
@@ -344,8 +298,6 @@ const { getSetting } = storeToRefs(platformConfigStore)
 
 const tools = ref([])
 const shortcuts = ref([])
-const courseHomeNotify = ref({})
-const courseHomeNotifyVisible = ref(false)
 
 const courseIntroEl = ref(null)
 
@@ -604,41 +556,12 @@ async function enforceCourseLegalAgreement() {
   }
 }
 
-async function loadCourseHomeNotification() {
-  if (!course.value?.id) {
-    return
-  }
-
-  try {
-    const data = await courseService.getCourseHomeNotification(course.value.id, session.value?.id || 0)
-
-    if (!data?.show) {
-      courseHomeNotify.value = {}
-      courseHomeNotifyVisible.value = false
-
-      return
-    }
-
-    courseHomeNotify.value = data
-    courseHomeNotifyVisible.value = true
-  } catch (error) {
-    console.error("[CourseHomeNotify] Failed to load course notification", error)
-    courseHomeNotify.value = {}
-    courseHomeNotifyVisible.value = false
-  }
-}
-
-function closeCourseHomeNotify() {
-  courseHomeNotifyVisible.value = false
-}
-
 const showCourseSequence = computed(() => {
   return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
 })
 
 onMounted(() => {
   enforceCourseLegalAgreement()
-  loadCourseHomeNotification()
 
   documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
   exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0

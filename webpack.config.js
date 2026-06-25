@@ -227,4 +227,11 @@ config.cache = {
   type: "filesystem",
 }
 
+// Use a lightweight source map in development to lower the build's memory peak.
+// The default ("inline-source-map") inlines full per-module maps and is the main
+// driver of "JavaScript heap out of memory" failures on smaller servers.
+if (!isProd) {
+  config.devtool = "eval-cheap-module-source-map"
+}
+
 module.exports = config

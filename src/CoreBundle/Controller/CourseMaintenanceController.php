@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Export;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import\Imscc13Import;
@@ -24,6 +26,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -369,7 +372,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/copy/resources', name: 'copy_resources', methods: ['GET'])]
-    public function copyResources(int $node, Request $req): JsonResponse
+    public function copyResources(int $node, Request $req, EntityManagerInterface $em): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -377,6 +380,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         if ('' === $sourceCourseCode) {
             return $this->jsonError('Missing sourceCourseId', 400);
         }
+
+        $this->assertSourceCourseAccess($sourceCourseCode, $em);
 
         $cb = new CourseBuilder();
         $cb->set_tools_to_build(self::LEGACY_SNAPSHOT_TOOLS);
@@ -391,21 +396,23 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/copy/execute', name: 'copy_execute', methods: ['POST'])]
-    public function copyExecute(int $node, Request $req): JsonResponse
+    public function copyExecute(int $node, Request $req, EntityManagerInterface $em): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
-        try {
-            $payload = $this->getJsonPayload($req);
+        $payload = $this->getJsonPayload($req);
 
-            $sourceCourseId = (string) ($payload['sourceCourseId'] ?? '');
+        $sourceCourseId = (string) ($payload['sourceCourseId'] ?? '');
+        if ('' === $sourceCourseId) {
+            return $this->jsonError('Missing sourceCourseId', 400);
+        }
+
+        $this->assertSourceCourseAccess($sourceCourseId, $em);
+
+        try {
             $copyOption = (string) ($payload['copyOption'] ?? 'full_copy'); // full_copy | select_items
             $sameFileNameOption = (int) ($payload['sameFileNameOption'] ?? 2);
             $selectedResourcesMap = (array) ($payload['resources'] ?? []);
-
-            if ('' === $sourceCourseId) {
-                return $this->jsonError('Missing sourceCourseId', 400);
-            }
 
             $cb = new CourseBuilder('partial');
             $cb->set_tools_to_build(self::LEGACY_SNAPSHOT_TOOLS);
@@ -1129,6 +1136,22 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
             return $this->jsonError('Diagnosis failed: '.$e->getMessage(), 500);
         }
+    }
+
+    /**
+     * Resolve the source course by its code and ensure the current user is
+     * authorized to view (and therefore copy from) it. The request listener
+     * only gates the destination course via cid; the user-supplied source
+     * course must be authorized explicitly to prevent cross-course access.
+     */
+    private function assertSourceCourseAccess(string $courseCode, EntityManagerInterface $em): void
+    {
+        $course = $em->getRepository(CourseEntity::class)->findOneBy(['code' => $courseCode]);
+        if (!$course instanceof CourseEntity) {
+            throw new NotFoundHttpException('Source course not found');
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
     }
 
     /**

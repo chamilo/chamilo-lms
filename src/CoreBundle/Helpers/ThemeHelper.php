@@ -270,7 +270,7 @@ final class ThemeHelper
             $visual = $this->getVisualTheme();
 
             // 1) Look for any logo variant in the active theme first.
-            if ($visual !== self::DEFAULT_THEME) {
+            if (self::DEFAULT_THEME !== $visual) {
                 foreach ($emailCandidates as $relPath) {
                     try {
                         if ($this->filesystem->fileExists($visual.DIRECTORY_SEPARATOR.$relPath)) {

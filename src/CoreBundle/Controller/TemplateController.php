@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Repository\TemplatesRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -40,6 +41,18 @@ class TemplateController extends AbstractController
             return $this->json(['error' => 'No image provided.'], Response::HTTP_BAD_REQUEST);
         }
 
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document) {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $documentCourse = $document->getFirstResourceLink()?->getCourse();
+        if (!$documentCourse instanceof Course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $documentCourse);
+
         $user = $userHelper->getCurrent();
         $course = null;
         if ($cid) {
@@ -62,13 +75,8 @@ class TemplateController extends AbstractController
         $template->setImage($asset);
         $entityManager->persist($template);
 
-        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
-        if ($document) {
-            $document->setTemplate(true);
-            $entityManager->persist($document);
-        } else {
-            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
-        }
+        $document->setTemplate(true);
+        $entityManager->persist($document);
 
         $entityManager->flush();
 
@@ -88,6 +96,18 @@ class TemplateController extends AbstractController
     #[Route('/document-templates/{documentId}/delete', methods: ['POST'])]
     public function deleteDocumentTemplate(int $documentId, EntityManagerInterface $entityManager): Response
     {
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document) {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $course = $document->getFirstResourceLink()?->getCourse();
+        if (!$course instanceof Course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         $template = $entityManager->getRepository(Templates::class)->findOneBy(['refDoc' => $documentId]);
 
         if (!$template) {
@@ -96,13 +116,8 @@ class TemplateController extends AbstractController
 
         $entityManager->remove($template);
 
-        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
-        if ($document) {
-            $document->setTemplate(false);
-            $entityManager->persist($document);
-        } else {
-            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
-        }
+        $document->setTemplate(false);
+        $entityManager->persist($document);
 
         $entityManager->flush();
 
@@ -125,6 +140,8 @@ class TemplateController extends AbstractController
         if (!$course) {
             throw new NotFoundHttpException('Course not found');
         }
+
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
 
         $languageFilterEnabled = $this->isSettingEnabled(
             $settingsManager->getSetting('language.template_activate_language_filter', true)

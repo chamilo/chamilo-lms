@@ -22,6 +22,9 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201215160445 extends AbstractMigrationChamilo
 {
+    /** Batch size for post processing. Larger than BATCH_SIZE because posts have no file I/O. */
+    private const POST_BATCH_SIZE = 200;
+
     public function getDescription(): string
     {
         return 'Migrate c_forum tables';
@@ -30,13 +33,13 @@ final class Version20201215160445 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $forumCategoryRepo = $this->container->get(CForumCategoryRepository::class);
-        $forumRepo = $this->container->get(CForumRepository::class);
-        $forumThreadRepo = $this->container->get(CForumThreadRepository::class);
-        $forumPostRepo = $this->container->get(CForumPostRepository::class);
-        $courseRepo = $this->container->get(CourseRepository::class);
+        $forumRepo         = $this->container->get(CForumRepository::class);
+        $forumThreadRepo   = $this->container->get(CForumThreadRepository::class);
+        $forumPostRepo     = $this->container->get(CForumPostRepository::class);
+        $courseRepo        = $this->container->get(CourseRepository::class);
 
         /** @var Kernel $kernel */
-        $kernel = $this->container->get('kernel');
+        $kernel   = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
@@ -44,15 +47,16 @@ final class Version20201215160445 extends AbstractMigrationChamilo
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
-            $course = $courseRepo->find($courseId);
+            $course   = $courseRepo->find($courseId);
+            $admin    = $this->getAdmin();
 
-            $admin = $this->getAdmin();
-
-            // Categories.
-            $sql = "SELECT * FROM c_forum_category WHERE c_id = {$courseId}
-                    ORDER BY iid";
+            // ----------------------------------------------------------------
+            // 1. Forum categories (small set – keep simple, batch flush)
+            // ----------------------------------------------------------------
+            $sql    = "SELECT * FROM c_forum_category WHERE c_id = {$courseId} ORDER BY iid";
             $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
+            $items  = $result->fetchAllAssociative();
+
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
 
@@ -61,6 +65,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
+
                 $result = $this->fixItemProperty(
                     'forum_category',
                     $forumCategoryRepo,
@@ -75,19 +80,21 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 }
 
                 $this->entityManager->persist($resource);
-                $this->entityManager->flush();
             }
 
             $this->entityManager->flush();
             $this->entityManager->clear();
 
-            // Forums.
-            $sql = "SELECT * FROM c_forum_forum WHERE c_id = {$courseId}
-                    ORDER BY iid";
+            // ----------------------------------------------------------------
+            // 2. Forums (small set – keep simple, batch flush)
+            // ----------------------------------------------------------------
+            $sql    = "SELECT * FROM c_forum_forum WHERE c_id = {$courseId} ORDER BY iid";
             $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
+            $items  = $result->fetchAllAssociative();
 
-            $admin = $this->getAdmin();
+            $course = $courseRepo->find($courseId);
+            $admin  = $this->getAdmin();
+
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
 
@@ -97,16 +104,12 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $course = $courseRepo->find($courseId);
-
-                $parent = null;
+                $parent     = null;
                 $categoryId = $itemData['forum_category'];
                 if (!empty($categoryId)) {
                     $parent = $forumCategoryRepo->find($categoryId);
                 }
 
-                // Parent should not be null, because every forum must have a category, in this case use the course
-                // as parent.
                 if (null === $parent) {
                     $parent = $course;
                 }
@@ -121,7 +124,6 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 );
 
                 $this->entityManager->persist($resource);
-                $this->entityManager->flush();
 
                 $forumImage = $itemData['forum_image'];
                 if (!empty($forumImage)) {
@@ -135,25 +137,39 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 if (false === $result) {
                     continue;
                 }
+
                 $this->entityManager->persist($resource);
-                $this->entityManager->flush();
             }
+
             $this->entityManager->flush();
             $this->entityManager->clear();
 
-            // Threads.
-            $sql = "SELECT * FROM c_forum_thread WHERE c_id = {$courseId}
-                    ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            $admin = $this->getAdmin();
+            // ----------------------------------------------------------------
+            // 3. Threads (small set – prefetch item properties, batch flush)
+            // ----------------------------------------------------------------
+            $sql         = "SELECT * FROM c_forum_thread WHERE c_id = {$courseId} ORDER BY iid";
+            $result      = $this->connection->executeQuery($sql);
+            $threadItems = $result->fetchAllAssociative();
 
-            foreach ($items as $itemData) {
+            $course = $courseRepo->find($courseId);
+            $admin  = $this->getAdmin();
+
+            // Prefetch all c_item_property for threads in this course at once.
+            $allThreadRefs     = array_map(static fn($r) => (int) $r['iid'], $threadItems);
+            $threadPropsMap    = $this->fetchItemPropertiesMap('forum_thread', $courseId, $allThreadRefs);
+
+            // Batch-load all CForumThread entities for this course.
+            $threadEntities = !empty($allThreadRefs) ? $forumThreadRepo->findBy(['iid' => $allThreadRefs]) : [];
+            $threadEntityMap = [];
+            foreach ($threadEntities as $t) {
+                $threadEntityMap[$t->getIid()] = $t;
+            }
+
+            foreach ($threadItems as $itemData) {
                 $id = (int) $itemData['iid'];
 
-                /** @var CForumThread $resource */
-                $resource = $forumThreadRepo->find($id);
-                if ($resource->hasResourceNode()) {
+                $resource = $threadEntityMap[$id] ?? null;
+                if (null === $resource || $resource->hasResourceNode()) {
                     continue;
                 }
 
@@ -168,15 +184,14 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $course = $courseRepo->find($courseId);
-
                 $result = $this->fixItemProperty(
                     'forum_thread',
                     $forumThreadRepo,
                     $course,
                     $admin,
                     $resource,
-                    $forum
+                    $forum,
+                    $threadPropsMap[$id] ?? []
                 );
 
                 if (false === $result) {
@@ -184,84 +199,128 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 }
 
                 $this->entityManager->persist($resource);
-                $this->entityManager->flush();
             }
 
             $this->entityManager->flush();
             $this->entityManager->clear();
 
-            // Posts.
-            $sql = "SELECT * FROM c_forum_post WHERE c_id = {$courseId}
-                    ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            $admin = $this->getAdmin();
-            foreach ($items as $itemData) {
-                $id = (int) $itemData['iid'];
+            // ----------------------------------------------------------------
+            // 4. Posts (1.3 M rows – full batch optimisation)
+            //
+            //    Key improvements vs. original:
+            //    a) Fetch all post rows for the course once, split into chunks.
+            //    b) fetchItemPropertiesMap() prefetches c_item_property for the
+            //       entire chunk (1 query / batch instead of 1 / post).
+            //    c) findBy(['iid' => $refs]) batch-loads CForumPost entities
+            //       (1 query / batch instead of 1 / post).
+            //    d) Thread map built once per batch via a single findBy() call;
+            //       only 717 threads total so the cost is negligible.
+            //    e) Single flush() per batch (not per post).
+            // ----------------------------------------------------------------
+            $sql       = "SELECT iid, thread_id FROM c_forum_post WHERE c_id = {$courseId} ORDER BY iid";
+            $postItems = $this->connection->executeQuery($sql)->fetchAllAssociative();
 
-                /** @var CForumPost $resource */
-                $resource = $forumPostRepo->find($id);
+            $total         = \count($postItems);
+            $postBatchSize = self::POST_BATCH_SIZE;
 
-                if ($resource->hasResourceNode()) {
-                    continue;
-                }
-
-                if (empty(trim($resource->getTitle()))) {
-                    $resource->setTitle(\sprintf('Post #%s', $resource->getIid()));
-                }
-
-                $threadId = (int) $itemData['thread_id'];
-
-                if (empty($threadId)) {
-                    continue;
-                }
-
-                /** @var CForumThread|null $thread */
-                $thread = $forumThreadRepo->find($threadId);
-
-                if (null === $thread) {
-                    continue;
-                }
-
-                $forum = $thread->getForum();
-
-                // For some reason the thread doesn't have a forum, so we ignore the thread posts.
-                if (null === $forum) {
-                    continue;
-                }
-
+            for ($offset = 0; $offset < $total; $offset += $postBatchSize) {
+                // Reload managed entities after previous clear().
                 $course = $courseRepo->find($courseId);
+                if (null === $course) {
+                    break;
+                }
+                $admin = $this->getAdmin();
 
-                $result = $this->fixItemProperty(
-                    'forum_post',
-                    $forumPostRepo,
-                    $course,
-                    $admin,
-                    $resource,
-                    $thread
+                // Rebuild thread map with freshly-managed entities.
+                $threadRows = $this->connection->fetchAllAssociative(
+                    'SELECT iid FROM c_forum_thread WHERE c_id = :cid',
+                    ['cid' => $courseId]
                 );
-
-                if (false === $result) {
-                    continue;
+                $threadIds = array_map(static fn($r) => (int) $r['iid'], $threadRows);
+                $freshThreads = !empty($threadIds) ? $forumThreadRepo->findBy(['iid' => $threadIds]) : [];
+                $threadMap = [];
+                foreach ($freshThreads as $t) {
+                    $threadMap[$t->getIid()] = $t;
                 }
 
-                $this->entityManager->persist($resource);
+                $chunk = \array_slice($postItems, $offset, $postBatchSize);
+                $refs  = array_map(static fn($r) => (int) $r['iid'], $chunk);
+
+                // Prefetch c_item_property for all posts in this chunk.
+                $itemPropsMap = $this->fetchItemPropertiesMap('forum_post', $courseId, $refs);
+
+                // Batch-load CForumPost entities for this chunk.
+                $postEntities = $forumPostRepo->findBy(['iid' => $refs]);
+                $postMap      = [];
+                foreach ($postEntities as $p) {
+                    $postMap[$p->getIid()] = $p;
+                }
+
+                foreach ($chunk as $itemData) {
+                    $id = (int) $itemData['iid'];
+
+                    /** @var CForumPost|null $resource */
+                    $resource = $postMap[$id] ?? null;
+                    if (null === $resource || $resource->hasResourceNode()) {
+                        continue;
+                    }
+
+                    if (empty(trim($resource->getTitle()))) {
+                        $resource->setTitle(\sprintf('Post #%s', $id));
+                    }
+
+                    $threadId = (int) $itemData['thread_id'];
+                    if (empty($threadId)) {
+                        continue;
+                    }
+
+                    $thread = $threadMap[$threadId] ?? null;
+                    if (null === $thread) {
+                        continue;
+                    }
+
+                    $forum = $thread->getForum();
+                    if (null === $forum) {
+                        continue;
+                    }
+
+                    $result = $this->fixItemProperty(
+                        'forum_post',
+                        $forumPostRepo,
+                        $course,
+                        $admin,
+                        $resource,
+                        $thread,
+                        $itemPropsMap[$id] ?? []
+                    );
+
+                    if (false === $result) {
+                        continue;
+                    }
+
+                    $this->entityManager->persist($resource);
+                }
+
+                // Single flush per batch – not per post.
                 $this->entityManager->flush();
+                $this->entityManager->clear();
             }
 
-            $this->entityManager->flush();
-            $this->entityManager->clear();
+            // ----------------------------------------------------------------
+            // 5. Post attachments (file I/O – keep one flush per file)
+            // ----------------------------------------------------------------
+            $course = $courseRepo->find($courseId);
+            if (null === $course) {
+                continue;
+            }
 
-            // Post attachments
-            $sql = "SELECT * FROM c_forum_attachment WHERE c_id = {$courseId}
-                    ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
+            $sql   = "SELECT * FROM c_forum_attachment WHERE c_id = {$courseId} ORDER BY iid";
+            $items = $this->connection->executeQuery($sql)->fetchAllAssociative();
 
             foreach ($items as $itemData) {
-                $id = $itemData['iid'];
-                $postId = (int) $itemData['post_id'];
-                $path = $itemData['path'];
+                $id       = $itemData['iid'];
+                $postId   = (int) $itemData['post_id'];
+                $path     = $itemData['path'];
                 $fileName = $itemData['filename'];
 
                 /** @var CForumPost|null $post */
@@ -281,6 +340,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     }
                 }
             }
+
             $this->entityManager->flush();
             $this->entityManager->clear();
         }

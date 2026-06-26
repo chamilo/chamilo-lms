@@ -10,7 +10,7 @@
  */
 
 return [
-    'new_version' => '2.0.2',
+    'new_version' => '2.0.3',
     'new_version_status' => 'stable',
     'new_version_last_id' => '1',
     'new_version_stable' => true,

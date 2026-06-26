@@ -109,6 +109,7 @@ export const useSecurityStore = defineStore("security", () => {
     isTeacher,
     isAdmin,
     isCurrentCourseStudent,
+    isCurrentCourseTeacher,
     isCurrentTeacher,
     isCourseAdmin,
     isSessionAdmin,

@@ -22,6 +22,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleImport;
 use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +39,7 @@ use const DIRECTORY_SEPARATOR;
 use const FILTER_VALIDATE_BOOL;
 use const PATHINFO_EXTENSION;
 
-#[IsGranted('ROLE_TEACHER')]
+#[IsGranted(new Expression('is_granted("ROLE_CURRENT_COURSE_TEACHER")'))]
 #[Route('/course_maintenance/{node}', name: 'cm_', requirements: ['node' => '\d+'])]
 class CourseMaintenanceController extends AbstractCourseMaintenanceController
 {

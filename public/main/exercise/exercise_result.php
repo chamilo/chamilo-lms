@@ -30,6 +30,23 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $origin = api_get_origin();
+$requestedOrigin = isset($_REQUEST['origin']) && is_string($_REQUEST['origin'])
+    ? trim($_REQUEST['origin'])
+    : '';
+$requestedLearnpathId = (int) ($_REQUEST['learnpath_id'] ?? ($_REQUEST['lp_id'] ?? 0));
+$requestedLearnpathItemId = (int) ($_REQUEST['learnpath_item_id'] ?? ($_REQUEST['lp_item_id'] ?? 0));
+$requestedLearnpathItemViewId = (int) ($_REQUEST['learnpath_item_view_id'] ?? ($_REQUEST['lp_item_view_id'] ?? 0));
+
+// Result redirects in the exercise flow historically did not always preserve origin.
+// Explicit LP identifiers are sufficient to keep the result embedded in the LP player.
+if (
+    'learnpath' === $requestedOrigin
+    || $requestedLearnpathId > 0
+    || $requestedLearnpathItemId > 0
+    || $requestedLearnpathItemViewId > 0
+) {
+    $origin = 'learnpath';
+}
 
 $ltiSession = Session::read('_ltiProvider');
 $ltiLaunchId = '';
@@ -142,9 +159,16 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     );
 }
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
-$learnpath_id = $exercise_stat_info['orig_lp_id'] ?? 0;
-$learnpath_item_id = $exercise_stat_info['orig_lp_item_id'] ?? 0;
-$learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'] ?? 0;
+$learnpath_id = (int) ($exercise_stat_info['orig_lp_id'] ?? $requestedLearnpathId);
+$learnpath_item_id = (int) ($exercise_stat_info['orig_lp_item_id'] ?? $requestedLearnpathItemId);
+$learnpath_item_view_id = (int) ($exercise_stat_info['orig_lp_item_view_id'] ?? $requestedLearnpathItemViewId);
+
+if ($learnpath_id > 0 || $learnpath_item_id > 0 || $learnpath_item_view_id > 0) {
+    $origin = 'learnpath';
+    $showHeader = false;
+    $showFooter = false;
+    $showLearnPath = false;
+}
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
@@ -188,6 +212,7 @@ if ('embeddable' !== $origin) {
             'learnpath_id' => $learnpath_id,
             'learnpath_item_id' => $learnpath_item_id,
             'learnpath_item_view_id' => $learnpath_item_view_id,
+            'origin' => $origin,
         ]),
         'pencil',
         'info'
@@ -409,7 +434,7 @@ $template->assign('exe_id', $exeId);
 $template->assign('actions', $pageActions);
 $template->assign('content', $template->fetch($template->get_template('exercise/result.tpl')));
 
-if ('embeddable' === $origin) {
+if (in_array($origin, ['learnpath', 'embeddable'], true)) {
     $template->display_blank_template();
 } else {
     $template->display_one_col_template();

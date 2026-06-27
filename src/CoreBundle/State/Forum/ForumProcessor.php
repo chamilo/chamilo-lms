@@ -79,9 +79,10 @@ final class ForumProcessor implements ProcessorInterface
             ;
 
             $learningPath = $this->getLearningPathFromPayload($payload, $course, $session, $group);
+            $learningPathParentItemId = $this->getOptionalInt($payload, 'lpParentId');
             $this->applyPayloadToForum($forum, $payload, true, $course, $session, $group, $learningPath);
             $this->forumRepository->create($forum);
-            $this->addForumToLearningPathIfNeeded($forum, $learningPath);
+            $this->addForumToLearningPathIfNeeded($forum, $learningPath, $learningPathParentItemId);
             $subscribedUsers = $this->subscribeUsersToForumNotifications($this->entityManager, $course, $session, $forum);
             if ($subscribedUsers > 0) {
                 $this->entityManager->flush();
@@ -257,7 +258,8 @@ final class ForumProcessor implements ProcessorInterface
         ?Session $session,
         ?CGroup $group,
         ?CLp $learningPath = null,
-    ): void {
+    ): void
+    {
         $startTime = $this->getUtcDateTimeOrNull($payload['startTime'] ?? null);
         $endTime = $this->getUtcDateTimeOrNull($payload['endTime'] ?? null);
         if (null !== $startTime && null !== $endTime && $startTime >= $endTime) {
@@ -289,7 +291,11 @@ final class ForumProcessor implements ProcessorInterface
         }
     }
 
-    private function addForumToLearningPathIfNeeded(CForum $forum, ?CLp $learningPath): void
+    private function addForumToLearningPathIfNeeded(
+        CForum $forum,
+        ?CLp $learningPath,
+        int $parentItemId,
+    ): void
     {
         if (!$learningPath instanceof CLp) {
             return;
@@ -310,8 +316,16 @@ final class ForumProcessor implements ProcessorInterface
             return;
         }
 
+        $rootItem = $this->getLearningPathRootItem($learningPath);
+        if (!$rootItem instanceof CLpItem) {
+            throw new NotFoundHttpException('Learning path root item not found.');
+        }
+
+        $parentItem = $this->getLearningPathParentItem($learningPath, $parentItemId, $rootItem);
         $learningPathItem = (new CLpItem())
             ->setLp($learningPath)
+            ->setRoot($rootItem)
+            ->setParent($parentItem)
             ->setItemType('forum')
             ->setTitle($forum->getTitle())
             ->setDescription($forum->getForumComment())
@@ -323,13 +337,29 @@ final class ForumProcessor implements ProcessorInterface
             ->setDisplayOrder($this->getNextLearningPathItemDisplayOrder($learningPath))
         ;
 
-        $rootItem = $this->getLearningPathRootItem($learningPath);
-        if ($rootItem instanceof CLpItem) {
-            $learningPathItem->setParent($rootItem);
-        }
-
         $this->entityManager->persist($learningPathItem);
         $this->entityManager->flush();
+    }
+
+    private function getLearningPathParentItem(
+        CLp $learningPath,
+        int $parentItemId,
+        CLpItem $rootItem,
+    ): CLpItem
+    {
+        if ($parentItemId <= 0) {
+            return $rootItem;
+        }
+
+        $parentItem = $this->entityManager->getRepository(CLpItem::class)->find($parentItemId);
+        if (!$parentItem instanceof CLpItem
+            || $parentItem->getLp()->getIid() !== $learningPath->getIid()
+            || 'dir' !== $parentItem->getItemType()
+        ) {
+            throw new BadRequestHttpException('The selected learning path parent is invalid.');
+        }
+
+        return $parentItem;
     }
 
     private function getLearningPathRootItem(CLp $learningPath): ?CLpItem

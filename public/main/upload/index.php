@@ -59,6 +59,33 @@ if (isset($_REQUEST['tool'])) {
     Session::write('my_tool', $my_tool);
 }
 
+if (
+    'GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET')
+    && isset($_REQUEST['tool'])
+    && TOOL_LEARNPATH === $_REQUEST['tool']
+) {
+    $course = api_get_course_entity();
+    $nodeId = 0;
+    if ($course && $course->getResourceNode()) {
+        $nodeId = (int) $course->getResourceNode()->getId();
+    }
+    $query = ['cid' => api_get_course_int_id()];
+    $sessionId = api_get_session_id();
+    if ($sessionId > 0) {
+        $query['sid'] = $sessionId;
+    }
+    $groupId = api_get_group_id();
+    if ($groupId > 0) {
+        $query['gid'] = $groupId;
+    }
+
+    if ($nodeId > 0) {
+        $target = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'/import?'.http_build_query($query);
+        header('Location: '.$target);
+        exit;
+    }
+}
+
 Event::event_access_tool(TOOL_UPLOAD);
 
 /**

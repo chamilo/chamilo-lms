@@ -1074,7 +1074,17 @@ class AiController extends AbstractController
             }
 
             if (\is_array($result) && isset($result['success']) && false === (bool) $result['success']) {
-                $msg = isset($result['message']) ? (string) $result['message'] : 'Learning path generation failed.';
+                $msg = isset($result['message']) ? trim((string) $result['message']) : '';
+                if ('' === $msg) {
+                    $msg = 'Learning path generation failed.';
+                }
+
+                $providerName = $this->normalizeProviderNameFromPayload($aiProvider) ?? 'default';
+                error_log(
+                    '[AI][learnpath] Provider failure. provider='
+                    .$providerName
+                    .' message='.mb_substr($msg, 0, 1000)
+                );
 
                 return new JsonResponse([
                     'success' => false,

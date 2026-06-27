@@ -168,7 +168,13 @@ if (isset($exercise_stat_info['exe_id'])) {
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
-    api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+    api_get_cidreq()
+    .'&exerciseId='.$objExercise->id
+    .'&learnpath_id='.$learnpath_id
+    .'&learnpath_item_id='.$learnpath_item_id
+    .'&learnpath_item_view_id='.$learnpathItemViewId
+    .'&origin='.urlencode($origin)
+    .$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,

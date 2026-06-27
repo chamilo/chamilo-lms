@@ -32,6 +32,30 @@ const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessi
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher || isAllowedToEdit.value)
 const { item, retrieve, updateItemWithFormData, isLoading } = useDatatableUpdate("Documents")
 
+const learningPathId = computed(() => Number(route.query.lp_id || 0))
+const isLearningPathContext = computed(
+  () => "learnpath" === String(route.query.origin || "").toLowerCase() && learningPathId.value > 0,
+)
+
+function buildLearningPathBuilderRoute() {
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
+  delete query.id
+  delete query.filetype
+
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: learningPathId.value,
+    },
+    query,
+  }
+}
+
 const canEditItem = computed(() => {
   const resourceLink = item.value?.resourceLinkListFromEntity?.[0]
   const sidFromResourceLink = resourceLink?.session?.["@id"]
@@ -89,6 +113,12 @@ function getContainingNodeId(documentItem) {
 
 async function updateAndReturnToList(payload) {
   await updateItemWithFormData(payload)
+
+  if (isLearningPathContext.value) {
+    await router.push(buildLearningPathBuilderRoute())
+
+    return
+  }
 
   const containingNodeId = getContainingNodeId(payload)
 

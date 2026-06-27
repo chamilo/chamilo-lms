@@ -114,6 +114,7 @@
 <script setup>
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import linkService from "../../services/linkService"
+import lpService from "../../services/lpService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed, onMounted, reactive, ref, watch } from "vue"
@@ -143,6 +144,10 @@ const router = useRouter()
 const route = useRoute()
 const selectedFile = ref(null)
 const showAdvancedSettings = ref(false)
+const learningPathId = computed(() => Number(route.query.lp_id || 0))
+const isLearningPathContext = computed(
+  () => "learnpath" === String(route.query.origin || "").toLowerCase() && learningPathId.value > 0,
+)
 
 const objectUrl = ref(null)
 
@@ -235,6 +240,49 @@ const courseContextParams = computed(() => {
 
   return params
 })
+
+function extractResourceId(resource) {
+  const directId = Number(resource?.iid || resource?.id || 0)
+  if (directId > 0) {
+    return directId
+  }
+
+  const iri = String(resource?.["@id"] || "")
+  const match = iri.match(/\/(\d+)\/?$/)
+
+  return match ? Number(match[1]) : 0
+}
+
+function buildLearningPathBuilderRoute() {
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
+
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: learningPathId.value,
+    },
+    query,
+  }
+}
+
+async function addCreatedLinkToLearningPath(linkId) {
+  const builder = await lpService.getBuilder(learningPathId.value, courseContextParams.value)
+
+  await lpService.addBuilderResource(learningPathId.value, courseContextParams.value, {
+    resourceType: "link",
+    resourceId: linkId,
+    parentId: Number(route.query.parent || 0) || null,
+    exportAllowed: false,
+    csrfToken: builder.csrfToken,
+  })
+
+  await router.push(buildLearningPathBuilderRoute())
+}
 
 const formData = reactive({
   url: "https://",
@@ -356,13 +404,16 @@ const submitForm = async () => {
     language: formData.language || "",
   }
   try {
-    let linkId = props.linkId
+    let linkId = Number(props.linkId || 0)
 
     if (props.linkId) {
       await linkService.updateLink(props.linkId, postData)
     } else {
       const newLink = await linkService.createLink(postData)
-      linkId = newLink.iid
+      linkId = extractResourceId(newLink)
+      if (linkId <= 0) {
+        throw new Error("Invalid link identifier.")
+      }
     }
 
     if (formData.showOnHomepage && (formData.removeImage || selectedFile.value)) {
@@ -378,6 +429,16 @@ const submitForm = async () => {
     }
 
     notification.showSuccessNotification(t("Link saved"))
+
+    if (isLearningPathContext.value) {
+      if (!props.linkId) {
+        await addCreatedLinkToLearningPath(linkId)
+      } else {
+        await router.push(buildLearningPathBuilderRoute())
+      }
+
+      return
+    }
 
     await router.push({
       name: "LinksList",

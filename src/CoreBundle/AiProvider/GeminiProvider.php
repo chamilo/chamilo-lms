@@ -22,6 +22,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 {
     private array $providerConfig;
     private string $apiKey;
+    private ?string $lastTextError = null;
 
     // Text defaults
     private string $textModel;
@@ -225,6 +226,8 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             $topic
         );
 
+        $this->lastTextError = null;
+
         $lpStructure = $this->requestGeminiText(
             $this->buildUrl($this->textUrlTemplate, $this->textModel),
             $this->textTemperature,
@@ -234,7 +237,10 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         );
 
         if (!$lpStructure) {
-            return ['success' => false, 'message' => 'Failed to generate course structure.'];
+            return [
+                'success' => false,
+                'message' => $this->buildTextFailureMessage('Gemini'),
+            ];
         }
 
         $lpItems = [];
@@ -409,9 +415,13 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 
     private function requestGeminiText(string $url, float $temperature, int $maxOutputTokens, string $prompt, string $toolName): ?string
     {
+        $this->lastTextError = null;
+
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
+            $this->lastTextError = 'User is not authenticated.';
+
+            return null;
         }
 
         $payload = [
@@ -431,11 +441,15 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         try {
             $data = $this->postJson($url, $payload);
             if (empty($data)) {
+                $this->lastTextError ??= 'Gemini returned an empty response.';
+
                 return null;
             }
 
             $text = $this->extractFirstTextFromGenerateContent($data);
             if (null === $text || '' === trim($text)) {
+                $this->lastTextError ??= $this->extractGeminiNoTextReason($data);
+
                 return null;
             }
 
@@ -455,6 +469,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 
             return trim($text);
         } catch (Exception $e) {
+            $this->lastTextError = $e->getMessage();
             error_log('[AI][Gemini] Exception: '.$e->getMessage());
 
             return null;
@@ -643,6 +658,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             $data = json_decode($raw, true);
 
             if (!\is_array($data)) {
+                $this->lastTextError = 'Gemini returned invalid JSON (HTTP '.$status.').';
                 error_log('[AI][Gemini] Invalid JSON response (status='.$status.'). Raw: '.mb_substr($raw, 0, 800));
 
                 return [];
@@ -650,11 +666,13 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 
             if ($status < 200 || $status >= 300) {
                 $msg = $this->extractGeminiErrorMessage($data) ?? 'Request failed.';
+                $this->lastTextError = 'HTTP '.$status.': '.$msg;
                 error_log('[AI][Gemini] HTTP '.$status.': '.$msg);
             }
 
             return $data;
         } catch (Throwable $e) {
+            $this->lastTextError = $e->getMessage();
             error_log('[AI][Gemini] HTTP exception: '.$e->getMessage());
 
             return [];
@@ -1035,6 +1053,36 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         }
 
         return null;
+    }
+
+    private function extractGeminiNoTextReason(array $data): string
+    {
+        $error = $this->extractGeminiErrorMessage($data);
+        if (null !== $error) {
+            return $error;
+        }
+
+        $blockReason = $data['promptFeedback']['blockReason'] ?? null;
+        if (\is_string($blockReason) && '' !== trim($blockReason)) {
+            return 'Gemini blocked the prompt: '.trim($blockReason).'.';
+        }
+
+        $finishReason = $data['candidates'][0]['finishReason'] ?? null;
+        if (\is_string($finishReason) && '' !== trim($finishReason)) {
+            return 'Gemini returned no text. Finish reason: '.trim($finishReason).'.';
+        }
+
+        return 'Gemini returned no text content.';
+    }
+
+    private function buildTextFailureMessage(string $provider): string
+    {
+        $detail = trim((string) $this->lastTextError);
+        if ('' === $detail) {
+            return $provider.' failed to generate the course structure.';
+        }
+
+        return $provider.' failed to generate the course structure: '.mb_substr($detail, 0, 1000);
     }
 
     private function extractFirstTextFromGenerateContent(array $data): ?string

@@ -454,6 +454,14 @@
       </form>
       <template #footer>
         <BaseButton
+          v-if="shouldReturnToLearningPathAfterForumSave"
+          :disabled="isSavingForum"
+          :label="t('Cancel')"
+          icon="close"
+          type="black"
+          @click="goBackToLearningPath"
+        />
+        <BaseButton
           :disabled="isSavingForum"
           :is-loading="isSavingForum"
           :label="forumForm.id ? t('Save') : t('Create forum')"
@@ -469,7 +477,7 @@
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
@@ -487,6 +495,7 @@ import { useConfirmation } from "../../composables/useConfirmation"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const notifications = useNotification()
 const { requireConfirmation } = useConfirmation()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
@@ -545,6 +554,7 @@ const cid = computed(() => Number(route.query.cid || 0))
 const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
+const requestedForumEditId = computed(() => Number(route.query.editForumId || 0))
 const currentGroupId = computed(() => gid.value)
 const shouldOpenCreateForumDialogOnLoad = computed(() => {
   const create = String(route.query.create || route.query.content || "").toLowerCase()
@@ -552,7 +562,7 @@ const shouldOpenCreateForumDialogOnLoad = computed(() => {
 
   return isAllowedToEdit.value && ("forum" === create || ("add" === action && "forum" === create))
 })
-const shouldReturnToLearningPathAfterForumCreate = computed(() => {
+const shouldReturnToLearningPathAfterForumSave = computed(() => {
   const origin = String(route.query.origin || "").toLowerCase()
   const returnToLp = String(route.query.returnToLp || "")
 
@@ -633,36 +643,21 @@ const categoriesWithForums = computed(() => {
 })
 
 function goBackToLearningPath() {
-  const params = new URLSearchParams()
-  params.set("cid", String(cid.value || ""))
-  params.set("sid", String(sid.value || 0))
-  params.set("gid", String(gid.value || 0))
-  params.set("gradebook", "")
-  params.set("action", "add_item")
-  params.set("type", String(route.query.type || "step"))
-  params.set("lp_id", String(lpId.value))
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.editForumId
+  delete query.lpItemId
 
-  if (route.query.node) {
-    params.set("node", String(route.query.node))
-  }
-
-  const returnUrl = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
-
-  if (window.parent && window.parent !== window) {
-    window.parent.postMessage(
-      {
-        type: "forum-created-for-learning-path",
-        returnUrl,
-      },
-      window.location.origin,
-    )
-
-    window.parent.location.href = returnUrl
-
-    return
-  }
-
-  window.location.href = returnUrl
+  return router.push({
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: lpId.value,
+    },
+    query,
+  })
 }
 
 function isCategoryVisible(category) {
@@ -915,12 +910,11 @@ async function saveForum() {
     locked: forumForm.locked,
     parentResourceNodeId: parentId.value,
     lpId: lpId.value || 0,
+    lpParentId: Number(route.query.parent || 0) || 0,
     csrfToken: csrfToken.value,
   }
 
   try {
-    const isCreate = !forumForm.id
-
     if (forumForm.id) {
       await forumService.updateForum(forumForm.id, baseQuery.value, payload)
       notifications.showSuccessNotification(t("Forum updated"))
@@ -931,8 +925,8 @@ async function saveForum() {
 
     isForumDialogVisible.value = false
 
-    if (isCreate && shouldReturnToLearningPathAfterForumCreate.value) {
-      goBackToLearningPath()
+    if (shouldReturnToLearningPathAfterForumSave.value) {
+      await goBackToLearningPath()
 
       return
     }
@@ -1104,6 +1098,15 @@ onMounted(async () => {
 
   if (shouldOpenCreateForumDialogOnLoad.value) {
     openCreateForumDialog()
+
+    return
+  }
+
+  if (isAllowedToEdit.value && requestedForumEditId.value > 0) {
+    const forum = forums.value.find((item) => Number(item.iid || 0) === requestedForumEditId.value)
+    if (forum) {
+      openEditForumDialog(forum)
+    }
   }
 })
 </script>

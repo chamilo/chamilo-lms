@@ -669,11 +669,11 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * Returns the sum of question's ponderation.
      */
-    public function getMaxScore(): int
+    public function getMaxScore(): float
     {
-        $maxScore = 0;
+        $maxScore = 0.0;
         foreach ($this->questions as $relQuestion) {
-            $maxScore += $relQuestion->getQuestion()->getPonderation();
+            $maxScore += (float) $relQuestion->getQuestion()->getPonderation();
         }
 
         return $maxScore;

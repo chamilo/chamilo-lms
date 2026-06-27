@@ -107,11 +107,26 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
                 $lp_id = get_lp_Id($idPageTop);
                 $courseSysPage = '';
                 if ('chamil' == $VDB->engine) {
-                    $cidReq = api_get_cidreq_params(
-                        getCourseIdFromLp($lp_id),
-                    );
-                    $courseSysPage = $VDB->w_get_path(WEB_PATH).'main/lp/lp_controller.php?'.$cidReq;
-                    $courseSysPage .= '&gradebook=0&origin=&action=view&lp_id='.$lp_id.'&isStudentView=true&teachdoc=edit';
+                    $courseId = getCourseIdFromLp($lp_id);
+                    $courseNodeId = getCourseResourceNodeIdFromLp($lp_id);
+
+                    if (!empty($courseId) && $courseNodeId > 0) {
+                        $cidReq = api_get_cidreq_params($courseId);
+                        $contextParams = [];
+                        parse_str(html_entity_decode((string) $cidReq, ENT_QUOTES, 'UTF-8'), $contextParams);
+
+                        $contextParams['cid'] = $contextParams['cid'] ?? $courseId;
+                        $contextParams['sid'] = $contextParams['sid'] ?? 0;
+                        $contextParams['gid'] = $contextParams['gid'] ?? 0;
+                        $contextParams['gradebook'] = $contextParams['gradebook'] ?? 0;
+                        $contextParams['origin'] = $contextParams['origin'] ?? 'learnpath';
+                        $contextParams['isStudentView'] = 'true';
+                        $contextParams['teachdoc'] = 'edit';
+
+                        $courseSysPage = rtrim($VDB->w_get_path(WEB_PATH), '/')
+                            .'/resources/lp/'.$courseNodeId.'/'.$lp_id.'/runtime?'
+                            .http_build_query($contextParams, '', '&');
+                    }
                 }
 
                 echo $courseSysPage;

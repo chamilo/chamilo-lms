@@ -1197,7 +1197,7 @@ function processRender(CreateRedirect){
 	
 	$('#loadsave').css("display","block");
 	
-	if (CreateRedirect&&RedirectToLP!=''&&RedirectToLP.indexOf('.php')!=-1) {
+	if (CreateRedirect&&RedirectToLP!='') {
 		
 		var quitVar = '&quit=0';
 		if (globalQuitAction) {
@@ -1218,7 +1218,7 @@ function processRender(CreateRedirect){
 			url :urRend,type: "POST",
 			success: function(data,textStatus,jqXHR){
 				
-				if(CreateRedirect&&RedirectToLP!=''&&RedirectToLP.indexOf('.php')!=-1){
+				if(CreateRedirect&&RedirectToLP!=''){
 					window.location.href = RedirectToLP;
 					onlyOneUpdate = true;
 				}else{

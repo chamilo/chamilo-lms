@@ -82,13 +82,26 @@ if (isset($_GET['id'])) {
     echo "optionsCSCDT = '".$options_studio_cdt."';";
     echo 'renderFromSvg = '.json_encode((string) $fromsvg).';';
 
-    // Authorization gate: deny anonymous outright. The previous code nested the
-    // role check inside `!is_anonymous()`, which let anonymous callers fall
-    // through to the CSRF check (where cotk=-2 used to pass) and reach the
-    // template-lang require sink. Teachers only — checked before anything else.
-    if ($VDB->w_api_is_anonymous() || !$VDB->w_api_is_allowed_to_edit()) {
-        echo 'Context token is not valid or has expired. User rejected !</br>';
-        echo "<a href='javascript:history.back();' >Return</a></br></head></html>";
+    // Authorization gate: deny anonymous users outright. CStudio editor URLs are
+    // opened without a cid parameter after the project link redirects to
+    // editor/index.php, so the strict course-context edit check can fail even for
+    // teachers. Use the same fallback as oel_tools_teachdoc_link.php.
+    $isAllowedToEdit = false;
+
+    if (!$VDB->w_api_is_anonymous()) {
+        $isAllowedToEdit = (bool) $VDB->w_api_is_allowed_to_edit();
+
+        if (!$isAllowedToEdit && function_exists('api_is_allowed_to_edit')) {
+            $isAllowedToEdit = (bool) api_is_allowed_to_edit(null, true, false, false);
+        }
+    }
+
+    if (!$isAllowedToEdit) {
+        echo '<script>';
+        echo 'document.addEventListener("DOMContentLoaded", function () {';
+        echo 'document.body.innerHTML = "<p style=\"padding:20px;color:#b91c1c;font-family:sans-serif;\">Context token is not valid or has expired. User rejected.</p>";';
+        echo '});';
+        echo '</script>';
 
         exit;
     }
@@ -233,6 +246,7 @@ if (isset($_GET['id'])) {
         echo 'var cstudioCourseLocale = '.json_encode($cstudioCourseLocale).';';
         echo '</script>';
 
+        echo '<script>var baseMyCollImgs = [];</script>';
         echo '<script type="text/javascript" src="img_cache/getextras.php?id='.$id_parent.'" ></script>';
     } else {
         echo "<script>location.href = '../oel_tools_teachdoc_list.php';</script>";

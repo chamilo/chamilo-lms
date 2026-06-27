@@ -2389,9 +2389,5 @@
     "Search term is too short": "Termi i k\u00ebrkimit \u00ebsht\u00eb shum\u00eb i shkurt\u00ebr",
     "Could not search forums": "Nuk mund t\u00eb k\u00ebrkoheshin forumet",
     "Moderated": "I moderuar",
-    "View threads": "Shiko temat",
-    "Current": "Aktuale",
-    "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Mir\u00ebsevini</strong> n\u00eb mjetin e autorimit t\u00eb Kursit Chamilo.<br />Krijoni kurset tuaja hap pas hapi. Tabela e p\u00ebrmbajtjeve do t\u00eb shfaqet n\u00eb t\u00eb majt\u00eb.",
-    "To start, give a title to your course": "P\u00ebr t\u00eb filluar, jepni nj\u00eb titull kursit tuaj"
+    "View threads": "Shiko temat"
 }

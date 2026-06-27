@@ -2389,9 +2389,5 @@
     "Search term is too short": "T\u00e1 an t\u00e9arma cuardaigh r\u00f3-ghearr",
     "Could not search forums": "N\u00edorbh fh\u00e9idir na f\u00f3raim a chuardach",
     "Moderated": "Modhnaithe",
-    "View threads": "Sn\u00e1itheanna a fheice\u00e1il",
-    "Current": "Reatha",
-    "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>F\u00e1ilte romhat</strong> chuig uirlis \u00fadar\u00e1is Ch\u00farsa Chamilo.<br />Cruthaigh do chursa\u00ed c\u00e9im ar ch\u00e9im. Beidh cl\u00e1r na n-\u00e1bhar le feice\u00e1il ar chl\u00e9.",
-    "To start, give a title to your course": "Le tos\u00fa, tabhair teideal do do ch\u00farsa"
+    "View threads": "Sn\u00e1itheanna a fheice\u00e1il"
 }

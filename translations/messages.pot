@@ -36401,15 +36401,3 @@ msgstr ""
 
 msgid "No auth source"
 msgstr ""
-
-msgid "You must add at least one question"
-msgstr ""
-
-msgid "Import other learning path formats"
-msgstr ""
-
-msgid "Use a spacebar or arrow keys to navigate"
-msgstr ""
-
-msgid "Tap on the left or right to navigate"
-msgstr ""

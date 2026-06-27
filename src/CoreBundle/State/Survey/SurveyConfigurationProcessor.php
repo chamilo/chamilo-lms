@@ -38,6 +38,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
 {
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
+    use SurveyCsrfTokenValidationTrait;
 
     private const VISIBLE_TUTOR = 0;
     private const VISIBLE_TUTOR_STUDENT = 1;
@@ -69,7 +70,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $this->validateCsrfToken($data->csrfToken);
+        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, self::CSRF_TOKEN_ID, $data, $data->csrfToken);
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);

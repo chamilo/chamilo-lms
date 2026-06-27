@@ -43,6 +43,7 @@ use Throwable;
 final readonly class SurveyActionProcessor implements ProcessorInterface
 {
     use SurveyPersonalitySupportTrait;
+    use SurveyCsrfTokenValidationTrait;
 
     public const CSRF_TOKEN_ID = 'survey_action';
 
@@ -73,7 +74,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateCsrfToken((string) ($payload['csrfToken'] ?? ''));
+        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, self::CSRF_TOKEN_ID, $payload);
 
         $operationName = (string) $operation->getName();
         if ('post_survey_action_bulk_delete' === $operationName) {

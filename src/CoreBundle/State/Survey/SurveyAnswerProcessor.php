@@ -32,6 +32,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
 {
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
+    use SurveyCsrfTokenValidationTrait;
 
     public function __construct(
         private RequestStack $requestStack,
@@ -58,7 +59,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateCsrfToken((string) ($payload['csrfToken'] ?? ''));
+        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, SurveyAnswerProvider::CSRF_TOKEN_ID, $payload);
 
         $survey = $this->surveyAnswerProvider->getSurvey($surveyId);
         $course = $this->surveyAnswerProvider->getCourse($request, $survey);

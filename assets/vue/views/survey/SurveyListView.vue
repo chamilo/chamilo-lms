@@ -192,7 +192,17 @@
                 class="ch-tool-icon"
                 aria-hidden="true"
               />
-              <span class="font-semibold text-gray-90">
+              <RouterLink
+                v-if="data.canAnswer"
+                :to="buildAnswerRoute(data)"
+                class="font-semibold text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              >
+                {{ displayText(data.title, t("Untitled")) }}
+              </RouterLink>
+              <span
+                v-else
+                class="font-semibold text-gray-90"
+              >
                 {{ displayText(data.title, t("Untitled")) }}
               </span>
             </div>
@@ -315,7 +325,7 @@
               v-if="data.canAnswer"
               :label="t('Answer')"
               :route="buildAnswerRoute(data)"
-              icon="check"
+              icon="reply"
               only-icon
               size="small"
               type="primary-text"

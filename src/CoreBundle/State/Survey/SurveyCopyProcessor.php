@@ -35,6 +35,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class SurveyCopyProcessor implements ProcessorInterface
 {
     use SurveyPersonalitySupportTrait;
+    use SurveyCsrfTokenValidationTrait;
 
     public function __construct(
         private RequestStack $requestStack,
@@ -65,7 +66,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateCsrfToken((string) ($payload['csrfToken'] ?? ''));
+        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, SurveyActionProcessor::CSRF_TOKEN_ID, $payload);
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
         if ($surveyId <= 0) {

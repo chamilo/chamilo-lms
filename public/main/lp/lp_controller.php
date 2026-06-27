@@ -58,6 +58,38 @@ if (isset($_GET['isStudentView'])) {
     $qs['isStudentView'] = Security::remove_XSS($_GET['isStudentView']);
 }
 $listUrl = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'?'.http_build_query($qs);
+$importUrl = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'/import?'.http_build_query($qs);
+
+$adminQs = $qs;
+$adminQs['isStudentView'] = 'false';
+
+$buildModernLpUrl = static function (string $suffix, array $extra = []) use ($nodeId, $adminQs): string {
+    $params = array_merge($adminQs, $extra);
+    $query = http_build_query($params);
+
+    return api_get_path(WEB_PATH).'resources/lp/'.$nodeId.$suffix.('' !== $query ? '?'.$query : '');
+};
+
+$buildUpdateScormUrl = static function (int $targetLpId) use ($nodeId, $qs): string {
+    return api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'/'.$targetLpId.'/update-scorm?'.http_build_query($qs);
+};
+$buildScormPackageUrl = static function (int $targetLpId) use ($nodeId, $qs): string {
+    $packageParams = $qs;
+    $packageParams['node'] = $nodeId;
+
+    return api_get_path(WEB_PATH).'api/learning_paths/'.$targetLpId.'/scorm/package?'.http_build_query($packageParams);
+};
+$buildContentPdfUrl = static function (int $targetLpId, array $itemIds = []) use ($qs): string {
+    $pdfParams = $qs;
+    if (!empty($itemIds)) {
+        $pdfParams['items'] = implode(',', array_map(static fn (mixed $itemId): int => (int) $itemId, $itemIds));
+    }
+
+    return api_get_path(WEB_PATH).'api/learning_paths/'.$targetLpId.'/content.pdf?'.http_build_query($pdfParams);
+};
+$buildChamiloBackupUrl = static function (int $targetLpId) use ($qs): string {
+    return api_get_path(WEB_PATH).'api/learning_paths/'.$targetLpId.'/chamilo-backup.zip?'.http_build_query($qs);
+};
 $glossaryExtraTools        = api_get_setting('glossary.show_glossary_in_extra_tools');
 $glossaryDocumentsMode     = api_get_setting('document.show_glossary_in_documents');
 $glossaryDocumentsEnabled  = in_array(
@@ -171,6 +203,10 @@ if (isset($oLP)) {
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $isBuildView = isset($_REQUEST['view']) && 'build' === $_REQUEST['view'];
+if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && 'upload' === $action && $nodeId > 0) {
+    header('Location: '.$importUrl);
+    exit;
+}
 if ('POST' === $_SERVER['REQUEST_METHOD']
     && 'edit' === $action
     && $lpItemId > 0
@@ -211,6 +247,117 @@ $goList = static function () use ($listUrl) {
     header('Location: '.$listUrl);
     exit;
 };
+
+$redirectToModernTeacherPage = static function (string $url) use ($is_allowed_to_edit): void {
+    if (!$is_allowed_to_edit) {
+        api_not_allowed(true);
+    }
+
+    header('Location: '.$url, true, 302);
+    exit;
+};
+
+if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && $nodeId > 0) {
+    switch ($action) {
+        case 'ai_helper':
+            $redirectToModernTeacherPage($buildModernLpUrl('/ai-generator'));
+            break;
+
+        case 'add_lp':
+            $redirectToModernTeacherPage($buildModernLpUrl('/create'));
+            break;
+
+        case 'add_audio':
+            if (!$lp_found || $lpId <= 0) {
+                $goList();
+            }
+
+            $extra = ['panel' => 'audio'];
+            if ($lpItemId > 0) {
+                $extra['item_id'] = $lpItemId;
+            }
+
+            $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder', $extra));
+            break;
+
+        case 'author_view':
+            if (!api_is_platform_admin()) {
+                api_not_allowed(true);
+            }
+            if (!$lp_found || $lpId <= 0) {
+                $goList();
+            }
+
+            $redirectToModernTeacherPage(
+                $buildModernLpUrl('/'.$lpId.'/builder', ['panel' => 'author-price'])
+            );
+            break;
+
+        case 'add_lp_category':
+            $categoryId = (int) ($_GET['id'] ?? 0);
+            $suffix = $categoryId > 0
+                ? '/categories/'.$categoryId.'/edit'
+                : '/categories/create';
+
+            $redirectToModernTeacherPage($buildModernLpUrl($suffix));
+            break;
+
+        case 'add_users_to_category':
+            $categoryId = (int) ($_GET['id'] ?? 0);
+            if ($categoryId <= 0) {
+                $goList();
+            }
+
+            $redirectToModernTeacherPage(
+                $buildModernLpUrl('/categories/'.$categoryId.'/subscriptions')
+            );
+            break;
+
+        case 'admin_view':
+        case 'build':
+            if (!$lp_found || $lpId <= 0) {
+                $goList();
+            }
+
+            $extra = [];
+            if (!empty($_GET['updateaudio'])) {
+                $extra['panel'] = 'audio';
+            }
+
+            $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder', $extra));
+            break;
+
+        case 'add_item':
+            $requestType = (string) ($_GET['type'] ?? '');
+            $surveyId = (int) ($_GET['survey_id'] ?? 0);
+
+            // Survey links can still perform a legacy add operation and must not
+            // be converted into a passive page redirect.
+            if ($surveyId <= 0 && in_array($requestType, ['', 'step'], true)) {
+                if (!$lp_found || $lpId <= 0) {
+                    $goList();
+                }
+
+                $extra = [];
+                if (isset($_GET['parent'])) {
+                    $extra['parent'] = (int) $_GET['parent'];
+                }
+
+                $redirectToModernTeacherPage(
+                    $buildModernLpUrl('/'.$lpId.'/builder', $extra)
+                );
+            }
+            break;
+
+        case 'edit':
+            if (!$lp_found || $lpId <= 0) {
+                $goList();
+            }
+
+            $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/settings'));
+            break;
+    }
+}
 
 $isAdvancedAccessAllowed = static function (
     CLp $lp,
@@ -320,8 +467,8 @@ $validateLpItemPrerequisiteDates = static function (): void {
 };
 switch ($action) {
     case 'recalculate':
-        // Recalculating another user's results is a teacher/grading action: a course
-        // member without edit rights must not be able to alter anyone's scores.
+        // Recalculation is now a protected POST operation in the Vue reporting page.
+        // Keep old GET URLs as navigation-only compatibility links.
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -340,10 +487,7 @@ switch ($action) {
             exit;
         }
 
-        $oLP->recalculateResultsForLp($userId);
-
-        $url = api_get_self().'?action=report&lp_id='.$lpId.'&'.api_get_cidreq();
-        header("Location: $url");
+        header('Location: '.$buildModernLpUrl('/'.$lpId.'/reporting', ['studentId' => $userId]));
         exit;
     case 'author_view':
         $teachers = [];
@@ -978,46 +1122,42 @@ switch ($action) {
         if ('true' === $hideScormExportLink) {
             api_not_allowed(true);
         }
-        if (!$lp_found) {
+        if (!($lp instanceof CLp)) {
             $goList();
-        } else {
-            ScormExport::export($oLP);
-            exit();
         }
-        break;
+        if (CLp::SCORM_TYPE !== (int) $lp->getLpType()) {
+            Display::addFlash(Display::return_message(get_lang('Not a SCORM learning path'), 'error'));
+            $goList();
+        }
+
+        header('Location: '.$buildScormPackageUrl($lpId));
+        exit;
     case 'export_to_pdf':
         $hideScormPdfLink = api_get_setting('lp.hide_scorm_pdf_link');
         if ('true' === $hideScormPdfLink) {
-           api_not_allowed(true);
+            api_not_allowed(true);
         }
 
         if (!$lp_found) {
             $goList();
-        } else {
-            $selectedItems = isset($_GET['items']) ? explode(',', $_GET['items']) : [];
-            $selectedItems = array_values(array_filter(array_map('intval', $selectedItems), static function ($v) { return $v > 0; }));
-            $result = ScormExport::exportToPdf($lpId, $courseInfo, $selectedItems);
-            if (!$result) {
-                $goList();
-            }
-            exit;
         }
-        break;
+
+        $selectedItems = isset($_GET['items']) ? explode(',', (string) $_GET['items']) : [];
+        $selectedItems = array_values(array_filter(
+            array_map('intval', $selectedItems),
+            static fn (int $itemId): bool => $itemId > 0,
+        ));
+
+        header('Location: '.$buildContentPdfUrl($lpId, $selectedItems));
+        exit;
     case 'export_to_course_build':
         $allowExport = ('true' === api_get_setting('lp.allow_lp_chamilo_export'));
-        if (api_is_allowed_to_edit() && $allowExport) {
-            if (!$lp_found) {
-                $goList();
-            } else {
-                $result = $oLP->exportToCourseBuildFormat($lpId);
-                if (!$result) {
-                    $goList();
-                }
-                exit;
-            }
+        if (!$is_allowed_to_edit || !$allowExport || !$lp_found) {
+            $goList();
         }
-        $goList();
-        break;
+
+        header('Location: '.$buildChamiloBackupUrl($lpId));
+        exit;
     case 'delete':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -1329,14 +1469,7 @@ switch ($action) {
             exit;
         }
 
-        $script = 'lp_update_scorm.php';
-        if (!is_file(__DIR__.'/lp_update_scorm.php') && is_file(__DIR__.'/lp_upload_scorm.php')) {
-            $script = 'lp_upload_scorm.php';
-        }
-
-        $target = api_get_path(WEB_CODE_PATH).'lp/'.$script.'?'.api_get_cidreq().'&lp_id='.$lpId;
-        $target .= '&returnTo='.urlencode($listUrl);
-        header('Location: '.$target);
+        header('Location: '.$buildUpdateScormUrl($lpId));
         exit;
     case 'return_to_course_homepage':
         if (!$lp_found) {

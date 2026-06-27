@@ -13,8 +13,10 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,6 +35,8 @@ final readonly class LearningPathCategoryCollectionProvider implements ProviderI
         private Security $security,
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
+        private CShortcutRepository $shortcutRepository,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -88,14 +92,46 @@ final readonly class LearningPathCategoryCollectionProvider implements ProviderI
             ->getResult()
         ;
 
+        $subscriptionsAllowed = $this->allowsCategorySubscriptions();
+
         foreach ($categories as $category) {
             $link = $this->getContextResourceLink($category, $course, $session, $group);
+            $resourceNode = $category->getResourceNode();
+            $exactContextLink = $resourceNode?->getResourceLinkByContext($course, $session, $group);
 
             $category->setVisible(
                 $link instanceof ResourceLink && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility(),
             );
+            $category->setPublishedOnCourseHome(
+                null !== $this->shortcutRepository->findShortcutFromResourceInCourse($category, $course),
+            );
+            $category->setSubscriptionsAllowed($subscriptionsAllowed);
+            $category->setReorderable(
+                $canManage
+                && $exactContextLink instanceof ResourceLink
+                && null !== $resourceNode
+                && $this->security->isGranted('EDIT', $resourceNode),
+            );
         }
 
         return $categories;
+    }
+
+    private function allowsCategorySubscriptions(): bool
+    {
+        $value = $this->settingsManager->getSetting('lp.lp_subscription_settings');
+        if (\is_string($value)) {
+            $decoded = json_decode($value, true);
+            if (\is_array($decoded)) {
+                $value = $decoded;
+            }
+        }
+        if (!\is_array($value)) {
+            return true;
+        }
+
+        $options = \is_array($value['options'] ?? null) ? $value['options'] : $value;
+
+        return (bool) ($options['allow_add_users_to_lp_category'] ?? true);
     }
 }

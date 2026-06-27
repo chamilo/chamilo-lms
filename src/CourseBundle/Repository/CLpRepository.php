@@ -93,15 +93,31 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
 
     public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
     {
-        $params = [
-            'lp_id' => $resource->getResourceIdentifier(),
-            'action' => 'view',
-        ];
-        if (!empty($extraParams)) {
-            $params = array_merge($params, $extraParams);
+        $courseNodeId = $resource instanceof CLp
+            ? (int) ($resource->getResourceNode()?->getParent()?->getId() ?? 0)
+            : 0;
+        if ($courseNodeId <= 0) {
+            $fallbackParams = array_merge(
+                [
+                    'lp_id' => $resource->getResourceIdentifier(),
+                    'action' => 'view',
+                ],
+                $extraParams,
+            );
+
+            return '/main/lp/lp_controller.php?'.http_build_query($fallbackParams);
         }
 
-        return '/main/lp/lp_controller.php?'.http_build_query($params);
+        unset($extraParams['action'], $extraParams['lp_id'], $extraParams['node']);
+        $extraParams['origin'] = $extraParams['origin'] ?? 'learnpath';
+        $extraParams['isStudentView'] = $extraParams['isStudentView'] ?? 'true';
+
+        $url = $router->generate('resources_lp_runtime', [
+            'node' => $courseNodeId,
+            'lpId' => $resource->getResourceIdentifier(),
+        ]);
+
+        return [] === $extraParams ? $url : $url.'?'.http_build_query($extraParams);
     }
 
     public function findAutoLaunchableLPByCourseAndSession(Course $course, ?Session $session = null): ?int

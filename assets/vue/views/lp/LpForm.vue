@@ -118,6 +118,16 @@
             />
 
             <BaseSelect
+              id="lp-default-view-mode"
+              v-model="form.defaultViewMode"
+              name="defaultViewMode"
+              :label="t('Default view type')"
+              :options="viewModeOptions"
+              option-label="label"
+              option-value="value"
+            />
+
+            <BaseSelect
               v-if="form.showTheme"
               id="lp-theme"
               v-model="form.theme"
@@ -407,6 +417,7 @@ const form = reactive({
   categoryId: null,
   language: "",
   hideTocFrame: false,
+  defaultViewMode: "embedded",
   theme: "",
   author: "",
   searchIndexEnabled: true,
@@ -452,6 +463,16 @@ const context = computed(() => ({
   sid: Number(session.value?.id ?? route.query.sid ?? 0),
   gid: Number(route.query.gid ?? 0),
 }))
+
+const viewModeOptions = computed(() => [
+  { label: t("Current view mode: fullscreen"), value: "fullscreen" },
+  { label: t("Current view mode: embedded"), value: "embedded" },
+  {
+    label: t("Current view mode: external embed. Use only for embedding in external sites."),
+    value: "embedframe",
+  },
+  { label: t("Current view mode: Impress"), value: "impress" },
+])
 
 const titleEditorConfig = {
   height: 120,
@@ -519,15 +540,10 @@ async function save() {
     const result = await lpService.saveConfiguration(lpId.value, context.value, payload, imageFile.value, extraFiles)
     showSuccessNotification(t("Saved"))
     const savedId = Number(result.id || lpId.value)
-    window.location.href = lpService.buildLegacyActionUrl(savedId, "add_item", {
-      ...context.value,
-      node: Number(route.params.node || 0),
-      gradebook: Number(route.query.gradebook || 0),
-      origin: String(route.query.origin || ""),
-      params: {
-        type: "step",
-        isStudentView: "false",
-      },
+    await router.push({
+      name: "LpBuilder",
+      params: { lpId: savedId },
+      query: route.query,
     })
   } catch (error) {
     showErrorNotification(error)
@@ -542,6 +558,7 @@ function buildPayload() {
     categoryId: form.categoryId || null,
     language: form.showLanguage ? form.language : "",
     hideTocFrame: form.hideTocFrame,
+    defaultViewMode: form.defaultViewMode,
     theme: form.theme,
     author: form.author,
     searchIndexEnabled: form.searchIndexEnabled,

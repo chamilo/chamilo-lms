@@ -324,19 +324,20 @@ async function courseHomeBeforeEnter(to) {
 
     // Learning path auto-launch
     const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
+    const learningPathNodeId = Number(cidReqStore.course?.resourceNode?.id || 0)
 
-    if (lpAutoLaunch === 2) {
+    if (lpAutoLaunch === 2 && learningPathNodeId > 0) {
       sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/main/lp/lp_controller.php?cid=${courseId}` + sid
+      window.location.href = `/resources/lp/${learningPathNodeId}?cid=${courseId}` + sid
 
       return false
-    } else if (lpAutoLaunch === 1) {
+    } else if (lpAutoLaunch === 1 && learningPathNodeId > 0) {
       const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
 
       if (lpId) {
         sessionStorage.setItem(autoLaunchKey, "true")
         window.location.href =
-          `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true` + sid
+          `/resources/lp/${learningPathNodeId}/${lpId}/runtime?cid=${courseId}&isStudentView=true` + sid
 
         return false
       }

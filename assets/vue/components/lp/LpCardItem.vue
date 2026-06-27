@@ -1,30 +1,39 @@
 <script setup>
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import lpService from "../../services/lpService"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
 const { showErrorNotification } = useNotification()
 const route = useRoute()
+const router = useRouter()
+const securityStore = useSecurityStore()
 
 const props = defineProps({
   lp: { type: Object, required: true },
   canEdit: { type: Boolean, default: false },
+  canReorder: { type: Boolean, default: false },
   canExportScorm: { type: Boolean, default: false },
   canExportPdf: { type: Boolean, default: false },
+  canExportChamilo: { type: Boolean, default: false },
+  canAutoLaunch: { type: Boolean, default: false },
+  canCopy: { type: Boolean, default: false },
+  canCopyScorm: { type: Boolean, default: false },
+  canSeriousGame: { type: Boolean, default: false },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
   buildDates: { type: Function, required: true },
   csrfToken: { type: String, default: "" },
 })
-const emit = defineEmits(["export-pdf", "visibility-changed"])
+const emit = defineEmits(["export-chamilo", "export-pdf", "management-changed", "visibility-changed"])
 
 const routeCtx = computed(() => ({
   cid: Number(route.query?.cid ?? 0) || undefined,
@@ -34,31 +43,41 @@ const routeCtx = computed(() => ({
 }))
 
 const openUrl = computed(() =>
-  lpService.buildLegacyViewUrl(props.lp.iid, {
+  lpService.buildRuntimeUrl(props.lp.iid, {
     ...routeCtx.value,
-    isStudentView: route.query?.isStudentView === "true" ? "true" : "false",
+    isStudentView: "true",
   }),
 )
 
-const reportUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "report", routeCtx.value))
+const reportingRoute = computed(() => ({
+  name: "LpReporting",
+  params: { lpId: props.lp.iid },
+  query: route.query,
+}))
 
 const settingsRoute = computed(() => ({ name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query }))
 
-const buildUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "add_item", {
-    ...routeCtx.value,
-    params: { type: "step", isStudentView: "false" },
+const updateScormRoute = computed(() => ({
+  name: "LpScormUpdate",
+  params: { lpId: props.lp.iid },
+  query: route.query,
+}))
+
+const buildRoute = computed(() => ({
+  name: "LpBuilder",
+  params: { lpId: props.lp.iid },
+  query: route.query,
+}))
+
+const exportScormUrl = computed(() =>
+  lpService.buildScormPackageDownloadUrl(props.lp.iid, {
+    cid: routeCtx.value.cid || 0,
+    sid: routeCtx.value.sid || 0,
+    gid: routeCtx.value.gid || 0,
+    node: routeCtx.value.node || undefined,
   }),
 )
 
-const exportScormUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "export", {
-    ...routeCtx.value,
-    gid: Number(route.query?.gid ?? 0),
-    gradebook: Number(route.query?.gradebook ?? 0),
-    origin: String(route.query?.origin ?? ""),
-  }),
-)
 
 const isLpSubscriptionMode = computed(() => Number(props.lp?.subscribeUsers ?? props.lp?.subscribe_users ?? 0) === 1)
 
@@ -76,12 +95,103 @@ const isLpVisible = computed(() => {
   return Boolean(value)
 })
 
-const togglePublishUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "toggle_publish", {
-    ...routeCtx.value,
-    params: { new_status: props.lp.published === "v" ? "i" : "v" },
-  }),
-)
+const manageableInContext = computed(() => props.lp?.manageableInContext !== false)
+
+const canUpdateScorm = computed(() => {
+  if (!props.canEdit) {
+    return false
+  }
+
+  const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
+
+  return type === 2
+})
+
+const canDownloadScormPackage = computed(() => {
+  const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
+
+  return props.canExportScorm && type === 2
+})
+
+const canCopyLearningPath = computed(() => {
+  const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
+
+  return props.canCopy && type !== 3 && (type !== 2 || props.canCopyScorm)
+})
+
+const managementParams = computed(() => ({
+  cid: routeCtx.value.cid || 0,
+  sid: routeCtx.value.sid || 0,
+  gid: routeCtx.value.gid || 0,
+}))
+
+const onManage = async (action, extra = {}) => {
+  if (!props.csrfToken || !manageableInContext.value) {
+    return
+  }
+
+  try {
+    await lpService.manageLearningPath(props.lp.iid, managementParams.value, {
+      action,
+      csrfToken: props.csrfToken,
+      ...extra,
+    })
+    emit("management-changed")
+  } catch (error) {
+    showErrorNotification(error)
+  }
+}
+
+const publishAction = computed(() => ({
+  label: props.lp?.publishedOnCourseHome ? t("do not publish") : t("Publish on course homepage"),
+  command: () => onManage("toggle_publish"),
+}))
+
+const attemptModeAction = computed(() => {
+  const seriousGame = Boolean(props.lp?.seriousgameMode)
+  const preventReinit = Boolean(props.lp?.preventReinit)
+  const isMultiple = !seriousGame && !preventReinit
+
+  return {
+    label: isMultiple ? t("Prevent multiple attempts") : t("Allow multiple attempts"),
+    command: () => onManage("switch_attempt_mode"),
+  }
+})
+
+const viewModeAction = computed(() => {
+  const mode = String(props.lp?.defaultViewMod || "embedded")
+  const value = {
+    fullscreen: "fullscreen",
+    embedded: "embedded",
+    embedframe: "external embed",
+    impress: "Impress",
+  }[mode] || "embedded"
+
+  return {
+    label: t("Current view mode"),
+    value,
+  }
+})
+
+const debugAction = computed(() => ({
+  label: props.lp?.debug ? t("Hide debug") : t("Show debug"),
+  command: () => onManage("switch_scorm_debug"),
+}))
+
+const seriousGameAction = computed(() => ({
+  label: props.lp?.seriousgameMode ? t("Disable gamification mode") : t("Enable gamification mode"),
+  command: () => onManage("toggle_serious_game"),
+}))
+
+const autoLaunchAction = computed(() => ({
+  label:
+    Number(props.lp?.autolaunch) === 1
+      ? t("Disable learning path auto-launch")
+      : t("Enable learning path auto-launch"),
+  icon: Number(props.lp?.autolaunch) === 1 ? "autolunch" : "autolunch-off",
+  disabled: !props.csrfToken || !manageableInContext.value,
+  command: () => onManage("toggle_auto_launch", { enabled: Number(props.lp?.autolaunch) !== 1 }),
+}))
 
 const advancedAccessUrl = computed(() => {
   const search = new URLSearchParams()
@@ -134,16 +244,21 @@ const visibilityAction = computed(() => {
   }
 })
 
-const deleteUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "delete", routeCtx.value))
+const onCopy = () => {
+  const label = (props.lp.title || "").trim() || t("Learning path")
+
+  requireConfirmation({
+    message: `${t("Are you sure to copy")} ${label}?`,
+    accept: () => onManage("copy"),
+  })
+}
 
 const onDelete = () => {
   const label = (props.lp.title || "").trim() || t("Learning path")
 
   requireConfirmation({
     message: `${t("Are you sure to delete")} ${label}?`,
-    accept: () => {
-      window.location.href = deleteUrl.value
-    },
+    accept: () => onManage("delete"),
   })
 }
 
@@ -163,7 +278,7 @@ const progressTextClass = computed(() =>
 <template>
   <div class="relative rounded-2xl border border-gray-25 bg-white px-2 sm:px-4 pt-3 pb-4 min-h-[220px] flex flex-col">
     <button
-      v-if="canEdit"
+      v-if="canReorder"
       :aria-label="t('Drag to reorder')"
       :title="t('Drag to reorder')"
       class="drag-handle absolute left-0 sm:left-3 top-3 w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:text-gray-90 hover:bg-gray-15 cursor-move"
@@ -300,37 +415,120 @@ const progressTextClass = computed(() =>
             </template>
             <template #menu>
               <div
-                class="absolute right-0 w-44 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-40 mb-2"
+                class="absolute right-0 min-w-[18rem] bg-white border border-gray-25 rounded-xl shadow-xl p-2 z-40 mb-2"
                 style="bottom: calc(-100% + 2.5rem)"
               >
-                <BaseAppLink
-                  :url="togglePublishUrl"
-                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15"
+                <button
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="publishAction.command"
                 >
-                  {{ t("Publish / Hide") }}
-                </BaseAppLink>
+                  {{ publishAction.label }}
+                </button>
+                <button
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="attemptModeAction.command"
+                >
+                  {{ attemptModeAction.label }}
+                </button>
+                <div class="my-2 rounded-lg bg-gray-15 px-3 py-2 text-left">
+                  <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                    {{ viewModeAction.label }}
+                  </div>
+                  <div class="mt-1 text-body-2 font-semibold text-gray-90">
+                    {{ viewModeAction.value }}
+                  </div>
+                </div>
+                <div class="my-2 border-t border-gray-25"></div>
+                <button
+                  v-if="securityStore.isAdmin"
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="debugAction.command"
+                >
+                  {{ debugAction.label }}
+                </button>
+                <button
+                  v-if="canSeriousGame"
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="seriousGameAction.command"
+                >
+                  {{ seriousGameAction.label }}
+                </button>
+                <button
+                  v-if="canAutoLaunch"
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="autoLaunchAction.command"
+                >
+                  {{ autoLaunchAction.label }}
+                </button>
                 <BaseAppLink
                   v-if="isLpSubscriptionMode"
                   :url="advancedAccessUrl"
-                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
                 >
                   {{ t("Subscribe users to learning path") }}
                 </BaseAppLink>
                 <BaseAppLink
-                  v-if="canExportScorm"
+                  v-if="canDownloadScormPackage"
                   :url="exportScormUrl"
-                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
                 >
                   {{ t("Export as SCORM") }}
                 </BaseAppLink>
+                <button
+                  v-if="canExportChamilo"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
+                  type="button"
+                  @click="emit('export-chamilo', lp)"
+                >
+                  {{ t("Export to Chamilo format") }}
+                </button>
+                <button
+                  v-if="canUpdateScorm"
+                  :disabled="!manageableInContext"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50 md:hidden"
+                  type="button"
+                  @click="router.push(updateScormRoute)"
+                >
+                  {{ t("Update SCORM") }}
+                </button>
+                <button
+                  v-if="canExportPdf"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
+                  type="button"
+                  @click="emit('export-pdf', lp)"
+                >
+                  {{ t("Export to PDF") }}
+                </button>
                 <router-link
+                  v-if="manageableInContext"
                   :to="settingsRoute"
-                  class="block w-full rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
                 >
                   {{ t("Settings") }}
                 </router-link>
                 <button
-                  class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger"
+                  v-if="canCopyLearningPath"
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="onCopy"
+                >
+                  {{ t("Copy") }}
+                </button>
+                <div class="my-2 border-t border-gray-25"></div>
+                <button
+                  :disabled="!manageableInContext"
+                  class="w-full whitespace-nowrap rounded px-3 py-2 text-left font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
                   type="button"
                   @click="onDelete"
                 >
@@ -395,8 +593,9 @@ const progressTextClass = computed(() =>
         class="ml-auto flex items-center gap-2"
       >
         <BaseButton
+          :disabled="!manageableInContext"
           :label="t('Edit learnpath')"
-          :to-url="buildUrl"
+          :route="buildRoute"
           icon="edit"
           only-icon
           size="small"
@@ -404,8 +603,9 @@ const progressTextClass = computed(() =>
         />
 
         <BaseButton
+          :disabled="!manageableInContext"
           :label="t('Reports')"
-          :to-url="reportUrl"
+          :route="reportingRoute"
           icon="tracking"
           only-icon
           size="small"
@@ -433,6 +633,7 @@ const progressTextClass = computed(() =>
         />
 
         <BaseButton
+          :disabled="!manageableInContext"
           :label="t('Settings')"
           :route="settingsRoute"
           icon="cog"
@@ -440,62 +641,135 @@ const progressTextClass = computed(() =>
           size="small"
           type="tertiary-alternative-text"
         />
-        <div class="relative w-8 h-8 hidden md:block">
+
+        <BaseButton
+          v-if="canCopyLearningPath"
+          :disabled="!manageableInContext || !csrfToken"
+          :label="t('Copy')"
+          icon="copy"
+          only-icon
+          size="small"
+          type="tertiary-alternative-text"
+          @click="onCopy"
+        />
+
+        <BaseButton
+          v-if="canDownloadScormPackage"
+          :label="t('Export as SCORM')"
+          :to-url="exportScormUrl"
+          icon="zip-pack"
+          only-icon
+          size="small"
+          type="tertiary-alternative-text"
+        />
+
+        <BaseButton
+          v-if="canExportChamilo"
+          :label="t('Export to Chamilo format')"
+          icon="download"
+          only-icon
+          size="small"
+          type="tertiary-alternative-text"
+          @click="emit('export-chamilo', lp)"
+        />
+
+        <BaseButton
+          v-if="canUpdateScorm"
+          :disabled="!manageableInContext"
+          :label="t('Update SCORM')"
+          :route="updateScormRoute"
+          icon="upload"
+          only-icon
+          size="small"
+          type="tertiary-alternative-text"
+        />
+
+        <BaseButton
+          v-if="canExportPdf"
+          :label="t('Export to PDF')"
+          icon="file-pdf"
+          only-icon
+          size="small"
+          type="tertiary-alternative-text"
+          @click="emit('export-pdf', lp)"
+        />
+
+        <BaseButton
+          v-if="canAutoLaunch"
+          :disabled="autoLaunchAction.disabled"
+          :label="autoLaunchAction.label"
+          :icon="autoLaunchAction.icon"
+          only-icon
+          size="small"
+          type="tertiary-alternative-text"
+          @click="autoLaunchAction.command"
+        />
+        <div class="relative hidden md:flex shrink-0 items-center ml-4">
           <BaseDropdownMenu
             v-if="canEdit"
             :dropdown-id="`card-${lp.iid}`"
-            class="absolute"
           >
             <template #button>
-              <span
-                :aria-label="t('More')"
-                :title="t('More')"
-                class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
-              >
-                <i
-                  aria-hidden
-                  class="mdi mdi-dots-vertical text-lg"
-                ></i>
-              </span>
+              <BaseButton
+                :label="t('More actions')"
+                icon="dots-vertical"
+                only-icon
+                size="small"
+                type="tertiary-alternative-text"
+              />
             </template>
             <template #menu>
               <div
-                class="absolute right-0 w-44 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-40 mb-2"
+                class="absolute right-0 min-w-[18rem] bg-white border border-gray-25 rounded-xl shadow-xl p-2 z-40 mb-2"
                 style="bottom: calc(-100% + 2.5rem)"
               >
-                <BaseAppLink
-                  :url="togglePublishUrl"
-                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                >
-                  {{ t("Publish / Hide") }}
-                </BaseAppLink>
-
-                <BaseAppLink
-                  v-if="isLpSubscriptionMode"
-                  :url="advancedAccessUrl"
-                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                >
-                  {{ t("Subscribe users to learning path") }}
-                </BaseAppLink>
-
-                <BaseAppLink
-                  v-if="canExportScorm"
-                  :url="exportScormUrl"
-                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                >
-                  {{ t("Export as SCORM") }}
-                </BaseAppLink>
-
                 <button
-                  v-if="canExportPdf"
-                  class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                   type="button"
-                  @click="emit('export-pdf', lp)"
+                  @click="publishAction.command"
                 >
-                  {{ t("Export to PDF") }}
+                  {{ publishAction.label }}
                 </button>
                 <button
-                  class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger"
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="attemptModeAction.command"
+                >
+                  {{ attemptModeAction.label }}
+                </button>
+                <div class="my-2 rounded-lg bg-gray-15 px-3 py-2 text-left">
+                  <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                    {{ viewModeAction.label }}
+                  </div>
+                  <div class="mt-1 text-body-2 font-semibold text-gray-90">
+                    {{ viewModeAction.value }}
+                  </div>
+                </div>
+                <div class="my-2 border-t border-gray-25"></div>
+                <button
+                  v-if="securityStore.isAdmin"
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="debugAction.command"
+                >
+                  {{ debugAction.label }}
+                </button>
+                <button
+                  v-if="canSeriousGame"
+                  :disabled="!manageableInContext || !csrfToken"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  type="button"
+                  @click="seriousGameAction.command"
+                >
+                  {{ seriousGameAction.label }}
+                </button>
+                <div class="my-2 border-t border-gray-25"></div>
+                <button
+                  :disabled="!manageableInContext"
+                  class="w-full whitespace-nowrap rounded px-3 py-2 text-left font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
                   type="button"
                   @click="onDelete"
                 >
@@ -509,31 +783,41 @@ const progressTextClass = computed(() =>
 
       <div
         v-else
-        class="ml-auto flex items-center gap-2"
+        class="ml-auto flex items-center gap-2 shrink-0"
       >
         <div
-          aria-label="Student actions"
+          :aria-label="t('Actions')"
           class="flex items-center gap-2"
           role="toolbar"
         >
-          <button
-            v-if="canExportPdf"
-            :aria-label="t('Export to PDF')"
-            :title="t('Export to PDF')"
-            class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
-            type="button"
-            @click="emit('export-pdf', lp)"
-          >
-            <i class="mdi mdi-file-pdf-box text-xl" />
-          </button>
+          <BaseButton
+            v-if="canDownloadScormPackage"
+            :label="t('Export as SCORM')"
+            :to-url="exportScormUrl"
+            icon="zip-pack"
+            only-icon
+            size="small"
+            type="tertiary-alternative-text"
+          />
 
-          <BaseAppLink
-            :title="t('Open')"
-            :url="openUrl"
-            class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
-          >
-            <i class="mdi mdi-open-in-new text-lg" />
-          </BaseAppLink>
+          <BaseButton
+            v-if="canExportPdf"
+            :label="t('Export to PDF')"
+            icon="file-pdf"
+            only-icon
+            size="small"
+            type="tertiary-alternative-text"
+            @click="emit('export-pdf', lp)"
+          />
+
+          <BaseButton
+            :label="t('Open')"
+            :to-url="openUrl"
+            icon="link-external"
+            only-icon
+            size="small"
+            type="tertiary-alternative-text"
+          />
         </div>
       </div>
     </div>

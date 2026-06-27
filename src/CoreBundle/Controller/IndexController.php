@@ -30,7 +30,18 @@ class IndexController extends BaseController
     #[Route('/resources/courses', name: 'resources_courses', methods: ['GET'])]
     #[Route('/resources/courses/{vueRouting}', name: 'resources_courses_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/document/{nodeId}/manager', name: 'resources_filemanager', methods: ['GET'])]
+    #[Route('/resources/lp/{node}/{lpId}/builder', name: 'resources_lp_builder', requirements: ['node' => '\\d+', 'lpId' => '\\d+'], methods: ['GET'])]
+    #[Route('/resources/lp/{node}/{lpId}/runtime', name: 'resources_lp_runtime', requirements: ['node' => '\\d+', 'lpId' => '\\d+'], methods: ['GET'])]
+    #[Route('/resources/lp/{node}/{lpId}/reporting', name: 'resources_lp_reporting', requirements: ['node' => '\\d+', 'lpId' => '\\d+'], methods: ['GET'])]
+    #[Route('/resources/lp/{node}/{lpId}/update-scorm', name: 'resources_lp_scorm_update', requirements: ['node' => '\\d+', 'lpId' => '\\d+'], methods: ['GET'])]
+    #[Route(
+        '/resources/lp/{node}/import',
+        name: 'resources_lp_scorm_import',
+        requirements: ['node' => '\\d+'],
+        methods: ['GET'],
+    )]
     #[Route('/resources/lp/{node}/advanced-access', name: 'resources_lp_advanced_access', methods: ['GET'])]
+    #[Route('/resources/lp/{node}/categories/{categoryId}/subscriptions', name: 'resources_lp_category_subscriptions', requirements: ['node' => '\\d+', 'categoryId' => '\\d+'], methods: ['GET'])]
     #[Route('/resources/forum/{vueRouting}', name: 'resources_forum_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/survey/{vueRouting}', name: 'resources_survey_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/survey/pending', name: 'survey_pending_vue_entrypoint', methods: ['GET'])]

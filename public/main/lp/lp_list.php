@@ -70,7 +70,7 @@ if ($is_allowed_to_edit) {
     $actionLeft .= Display::url(
         Display::getMdiIcon('archive-arrow-up', 'ch-tool-icon', 'font-size: 32px; width: 32px; height: 32px;'),
         '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH,
-        ['title' => htmlentities(get_lang('Import AICC, SCORM and Chamilo learning path'))]
+        ['title' => htmlentities(get_lang('Import').' SCORM')]
     );
 
     if ('true' === api_get_setting('service_ppt2lp', 'active')) {

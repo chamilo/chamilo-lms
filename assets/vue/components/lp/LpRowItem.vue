@@ -4,23 +4,31 @@ import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
+import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import lpService from "../../services/lpService"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
 const { showErrorNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
+const securityStore = useSecurityStore()
 
 const props = defineProps({
   lp: { type: Object, required: true },
   canEdit: { type: Boolean, default: false },
+  canReorder: { type: Boolean, default: false },
   canExportScorm: { type: Boolean, default: false },
   canExportPdf: { type: Boolean, default: false },
+  canExportChamilo: { type: Boolean, default: false },
   canAutoLaunch: { type: Boolean, default: false },
+  canCopy: { type: Boolean, default: false },
+  canCopyScorm: { type: Boolean, default: false },
+  canSeriousGame: { type: Boolean, default: false },
   buildDates: { type: Function, required: true },
   legacyContext: { type: Object, required: true },
   csrfToken: { type: String, default: "" },
@@ -28,7 +36,7 @@ const props = defineProps({
   ringValue: { type: Function, required: true },
 })
 
-const emit = defineEmits(["export-pdf", "visibility-changed"])
+const emit = defineEmits(["export-chamilo", "export-pdf", "management-changed", "visibility-changed"])
 
 // Only SCORM packages (type = 2 in Chamilo legacy)
 const canUpdateScorm = computed(() => {
@@ -41,23 +49,42 @@ const canUpdateScorm = computed(() => {
   return Number(v) === 2
 })
 
+const canDownloadScormPackage = computed(() => {
+  const type = Number(
+    props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? props.lp?.lpTypeId ?? props.lp?.lp_type_id ?? 0,
+  )
+
+  return props.canExportScorm && type === 2
+})
+
+const canCopyLearningPath = computed(() => {
+  const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
+
+  return props.canCopy && type !== 3 && (type !== 2 || props.canCopyScorm)
+})
+
 const openUrl = computed(() =>
-  lpService.buildLegacyViewUrl(props.lp.iid, {
+  lpService.buildRuntimeUrl(props.lp.iid, {
     ...props.legacyContext,
-    isStudentView: route.query?.isStudentView === "true" ? "true" : "false",
+    isStudentView: "true",
   }),
 )
 
 const exportScormUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "export", { ...props.legacyContext }),
-)
-
-const updateScormUrl = computed(() =>
-  lpService.buildLegacyActionUrl("update_scorm", {
-    ...props.legacyContext,
-    params: { lp_id: props.lp.iid },
+  lpService.buildScormPackageDownloadUrl(props.lp.iid, {
+    cid: props.legacyContext.cid || 0,
+    sid: props.legacyContext.sid || 0,
+    gid: props.legacyContext.gid || 0,
+    node: props.legacyContext.node || undefined,
   }),
 )
+
+
+const updateScormRoute = computed(() => ({
+  name: "LpScormUpdate",
+  params: { lpId: props.lp.iid },
+  query: route.query,
+}))
 
 const isLpSubscriptionMode = computed(() => Number(props.lp?.subscribeUsers ?? props.lp?.subscribe_users ?? 0) === 1)
 
@@ -75,21 +102,91 @@ const isLpVisible = computed(() => {
   return Boolean(value)
 })
 
-const togglePublishUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "toggle_publish", {
-    ...props.legacyContext,
-    params: { new_status: props.lp.published === "v" ? "i" : "v" },
-  }),
-)
+const manageableInContext = computed(() => props.lp?.manageableInContext !== false)
 
-const toggleAutoLaunchUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "auto_launch", {
-    ...props.legacyContext,
-    params: { status: Number(props.lp.autolaunch) === 1 ? 0 : 1 },
-  }),
-)
+const managementParams = computed(() => ({
+  cid: props.legacyContext.cid || 0,
+  sid: props.legacyContext.sid || 0,
+  gid: props.legacyContext.gid || 0,
+}))
 
-const deleteUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "delete", { ...props.legacyContext }))
+const onManage = async (action, extra = {}) => {
+  if (!props.csrfToken || !manageableInContext.value) {
+    return
+  }
+
+  try {
+    await lpService.manageLearningPath(props.lp.iid, managementParams.value, {
+      action,
+      csrfToken: props.csrfToken,
+      ...extra,
+    })
+    emit("management-changed")
+  } catch (error) {
+    showErrorNotification(error)
+  }
+}
+
+const publishAction = computed(() => ({
+  label: props.lp?.publishedOnCourseHome ? t("do not publish") : t("Publish on course homepage"),
+  icon: props.lp?.publishedOnCourseHome ? "checkbox-multiple-blank" : "checkbox-multiple-blank-outline",
+  disabled: !props.csrfToken || !manageableInContext.value,
+  command: () => onManage("toggle_publish"),
+}))
+
+const attemptModeAction = computed(() => {
+  const seriousGame = Boolean(props.lp?.seriousgameMode)
+  const preventReinit = Boolean(props.lp?.preventReinit)
+  const isMultiple = !seriousGame && !preventReinit
+
+  return {
+    label: isMultiple ? t("Prevent multiple attempts") : t("Allow multiple attempts"),
+    icon: seriousGame ? "sync-circle" : "sync",
+    disabled: !props.csrfToken || !manageableInContext.value,
+    command: () => onManage("switch_attempt_mode"),
+  }
+})
+
+const viewModeAction = computed(() => {
+  const mode = String(props.lp?.defaultViewMod || "embedded")
+  const value = {
+    fullscreen: "fullscreen",
+    embedded: "embedded",
+    embedframe: "external embed",
+    impress: "Impress",
+  }[mode] || "embedded"
+
+  return {
+    label: t("Current view mode"),
+    value,
+    disabled: true,
+  }
+})
+
+const debugAction = computed(() => ({
+  label: props.lp?.debug ? t("Hide debug") : t("Show debug"),
+  icon: props.lp?.debug ? "bug-check" : "bug-outline",
+  disabled: !props.csrfToken || !manageableInContext.value,
+  command: () => onManage("switch_scorm_debug"),
+}))
+
+const seriousGameAction = computed(() => ({
+  label: props.lp?.seriousgameMode ? t("Disable gamification mode") : t("Enable gamification mode"),
+  icon: "trophy",
+  disabled: !props.csrfToken || !manageableInContext.value,
+  command: () => onManage("toggle_serious_game"),
+}))
+
+const autoLaunchAction = computed(() => ({
+  label:
+    Number(props.lp?.autolaunch) === 1
+      ? t("Disable learning path auto-launch")
+      : t("Enable learning path auto-launch"),
+  icon: Number(props.lp?.autolaunch) === 1 ? "autolunch" : "autolunch-off",
+  disabled: !props.csrfToken || !manageableInContext.value,
+  command: () => onManage("toggle_auto_launch", { enabled: Number(props.lp?.autolaunch) !== 1 }),
+}))
+
 
 const advancedAccessUrl = computed(() => {
   const search = new URLSearchParams()
@@ -144,14 +241,21 @@ const visibilityAction = computed(() => {
   }
 })
 
+const onCopy = () => {
+  const label = (props.lp.title || "").trim() || t("Learning path")
+
+  requireConfirmation({
+    message: `${t("Are you sure to copy")} ${label}?`,
+    accept: () => onManage("copy"),
+  })
+}
+
 const onDelete = () => {
   const label = (props.lp.title || "").trim() || t("Learning path")
 
   requireConfirmation({
     message: `${t("Are you sure to delete")} ${label}?`,
-    accept: () => {
-      window.location.href = deleteUrl.value
-    },
+    accept: () => onManage("delete"),
   })
 }
 
@@ -171,16 +275,15 @@ const buttonActions = computed(() =>
     {
       label: t("Edit learnpath"),
       icon: "edit",
-      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "add_item", {
-        ...props.legacyContext,
-        params: { type: "step", isStudentView: "false" },
-      }),
+      route: { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
+      disabled: !manageableInContext.value,
       visible: true,
     },
     {
       label: t("Reports"),
       icon: "tracking",
-      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "report", { ...props.legacyContext }),
+      route: { name: "LpReporting", params: { lpId: props.lp.iid }, query: route.query },
+      disabled: !manageableInContext.value,
       visible: true,
     },
     {
@@ -194,26 +297,43 @@ const buttonActions = computed(() =>
       label: t("Subscribe users to learning path"),
       icon: "join-group",
       toUrl: advancedAccessUrl.value,
+      disabled: !manageableInContext.value,
       visible: isLpSubscriptionMode.value,
     },
     {
       label: t("Settings"),
       icon: "cog",
       route: { name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query },
+      disabled: !manageableInContext.value,
       visible: true,
+    },
+    {
+      label: t("Copy"),
+      icon: "copy",
+      command: onCopy,
+      disabled: !manageableInContext.value || !props.csrfToken,
+      visible: canCopyLearningPath.value,
     },
     {
       label: t("Export as SCORM"),
       icon: "zip-pack",
       toUrl: exportScormUrl.value,
-      visible: props.canExportScorm,
+      visible: canDownloadScormPackage.value,
+      styleClass: "hidden md:flex",
+    },
+    {
+      label: t("Export to Chamilo format"),
+      icon: "download",
+      command: () => emit("export-chamilo", props.lp),
+      visible: props.canExportChamilo,
       styleClass: "hidden md:flex",
     },
     {
       label: t("Update SCORM"),
       visible: canUpdateScorm.value,
       icon: "upload",
-      toUrl: updateScormUrl.value,
+      command: () => router.push(updateScormRoute.value),
+      disabled: !manageableInContext.value,
       styleClass: "hidden md:flex",
     },
     {
@@ -224,49 +344,71 @@ const buttonActions = computed(() =>
       styleClass: "hidden md:flex",
     },
     {
-      label:
-        Number(props.lp.autolaunch) === 1
-          ? t("Disable learning path auto-launch")
-          : t("Enable learning path auto-launch"),
-      icon: Number(props.lp.autolaunch) === 1 ? "autolunch" : "autolunch-off",
+      ...autoLaunchAction.value,
       visible: props.canAutoLaunch,
-      toUrl: toggleAutoLaunchUrl.value,
       styleClass: "hidden md:flex",
     },
-  ].filter((a) => a.visible),
+  ].filter((action) => action.visible),
 )
 
-const mItemActions = ref()
-
-const itemActions = computed(() => [
-  { label: t("Publish / Hide"), url: togglePublishUrl.value },
-  { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
-  { label: t("Delete"), command: onDelete },
-])
-
 const mItemActionsMobile = ref()
+const rowMenuOpen = ref(false)
+
+const viewModeMobileAction = computed(() => ({
+  label: `${viewModeAction.value.label}: ${viewModeAction.value.value}`,
+  disabled: true,
+}))
 
 const itemActionsMobile = computed(() =>
   [
-    { label: t("Publish / Hide"), url: togglePublishUrl.value },
+    publishAction.value,
+    attemptModeAction.value,
+    viewModeMobileAction.value,
+    ...(securityStore.isAdmin ? [debugAction.value] : []),
+    ...(props.canSeriousGame ? [seriousGameAction.value] : []),
+    ...(props.canAutoLaunch ? [autoLaunchAction.value] : []),
     {
       label: t("Subscribe users to learning path"),
       url: advancedAccessUrl.value,
+      disabled: !manageableInContext.value,
       visible: isLpSubscriptionMode.value,
     },
-    { label: t("Export as SCORM"), url: exportScormUrl.value, visible: props.canExportScorm },
-    { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
-    { label: t("Settings"), command: () => router.push({ name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query }) },
-    { label: t("Delete"), command: onDelete },
+    { label: t("Export as SCORM"), url: exportScormUrl.value, visible: canDownloadScormPackage.value },
+    { label: t("Export to Chamilo format"), command: () => emit("export-chamilo", props.lp), visible: props.canExportChamilo },
+    {
+      label: t("Update SCORM"),
+      visible: canUpdateScorm.value,
+      disabled: !manageableInContext.value,
+      command: () => router.push(updateScormRoute.value),
+    },
+    {
+      label: t("Export to PDF"),
+      command: () => emit("export-pdf", props.lp),
+      visible: props.canExportPdf,
+    },
+    {
+      label: t("Settings"),
+      disabled: !manageableInContext.value,
+      command: () =>
+        router.push({ name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query }),
+    },
+    {
+      label: t("Copy"),
+      command: onCopy,
+      disabled: !manageableInContext.value || !props.csrfToken,
+      visible: canCopyLearningPath.value,
+    },
+    { label: t("Delete"), command: onDelete, disabled: !manageableInContext.value },
   ].filter((item) => item.visible !== false),
 )
+
 </script>
 
 <template>
-  <div class="lp-panel">
+  <div :class="['lp-panel', { 'lp-panel--menu-open': rowMenuOpen }]">
     <article class="lp-panel__container">
       <button
-        v-if="canEdit"
+        v-if="canReorder"
         :aria-label="t('Drag to reorder')"
         :title="t('Drag to reorder')"
         class="lp-panel__drag-handler drag-handle"
@@ -380,6 +522,7 @@ const itemActionsMobile = computed(() =>
         </div>
 
         <BaseButton
+          v-if="canEdit"
           :label="t('More actions')"
           class="lp-panel__mobile-dropdown"
           icon="dots-vertical"
@@ -390,6 +533,7 @@ const itemActionsMobile = computed(() =>
           @click="mItemActionsMobile.toggle($event)"
         />
         <BaseMenu
+          v-if="canEdit"
           id="lp-menu-mobile"
           ref="mItemActionsMobile"
           :model="itemActionsMobile"
@@ -411,7 +555,7 @@ const itemActionsMobile = computed(() =>
 
       <template v-if="canEdit">
         <div class="lp-panel__actions">
-          <div class="lp-panel__action-buttons">
+          <div class="lp-panel__action-buttons flex items-center gap-2">
             <BaseButton
               v-for="(buttonAction, i) in buttonActions"
               :key="i"
@@ -427,21 +571,86 @@ const itemActionsMobile = computed(() =>
               @click="buttonAction.command"
             />
 
-            <BaseButton
-              :label="t('More actions')"
-              class="hidden md:flex"
-              icon="dots-vertical"
-              only-icon
-              popup-identifier="lp-menu"
-              size="small"
-              type="tertiary-alternative-text"
-              @click="mItemActions.toggle($event)"
-            />
-            <BaseMenu
-              id="lp-menu"
-              ref="mItemActions"
-              :model="itemActions"
-            />
+            <div class="relative hidden md:flex shrink-0 items-center ml-4">
+              <BaseDropdownMenu
+                :dropdown-id="`lp-row-menu-${lp.iid}`"
+                @close="rowMenuOpen = false"
+                @open="rowMenuOpen = true"
+              >
+                <template #button>
+                  <BaseButton
+                    :label="t('More actions')"
+                    icon="dots-vertical"
+                    only-icon
+                    size="small"
+                    type="tertiary-alternative-text"
+                  />
+                </template>
+                <template #menu>
+                  <div class="min-w-[18rem] overflow-hidden rounded-xl border border-gray-25 bg-white py-1 text-body-2 shadow-xl">
+                    <button
+                      :disabled="publishAction.disabled"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                      type="button"
+                      @click="publishAction.command"
+                    >
+                      {{ publishAction.label }}
+                    </button>
+                    <button
+                      :disabled="attemptModeAction.disabled"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                      type="button"
+                      @click="attemptModeAction.command"
+                    >
+                      {{ attemptModeAction.label }}
+                    </button>
+
+                    <div class="my-1 border-t border-gray-25"></div>
+
+                    <div class="mx-2 my-1 rounded-lg bg-gray-15 px-3 py-2 text-left">
+                      <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                        {{ viewModeAction.label }}
+                      </div>
+                      <div class="mt-0.5 text-body-2 font-semibold text-gray-90">
+                        {{ viewModeAction.value }}
+                      </div>
+                    </div>
+
+                    <div class="my-1 border-t border-gray-25"></div>
+
+                    <button
+                      v-if="securityStore.isAdmin"
+                      :disabled="debugAction.disabled"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                      type="button"
+                      @click="debugAction.command"
+                    >
+                      {{ debugAction.label }}
+                    </button>
+                    <button
+                      v-if="canSeriousGame"
+                      :disabled="seriousGameAction.disabled"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                      type="button"
+                      @click="seriousGameAction.command"
+                    >
+                      {{ seriousGameAction.label }}
+                    </button>
+
+                    <div class="my-1 border-t border-gray-25"></div>
+
+                    <button
+                      :disabled="!manageableInContext"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-left font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
+                      type="button"
+                      @click="onDelete"
+                    >
+                      {{ t("Delete") }}
+                    </button>
+                  </div>
+                </template>
+              </BaseDropdownMenu>
+            </div>
           </div>
 
           <div class="lp-panel__progress">
@@ -487,66 +696,79 @@ const itemActionsMobile = computed(() =>
       </template>
 
       <template v-else>
-        <div class="lp-panel__student">
+        <div class="lp-panel__student flex items-center justify-end gap-4">
           <div
-            aria-label="Student actions"
-            class="lp-panel__student-actions"
+            :aria-label="t('Actions')"
+            class="lp-panel__student-actions flex items-center gap-2 shrink-0"
             role="toolbar"
           >
-            <button
-              v-if="canExportPdf"
-              :aria-label="t('Export to PDF')"
-              :title="t('Export to PDF')"
-              class="lp-panel__student-button"
-              @click="emit('export-pdf', lp)"
-            >
-              <i class="mdi mdi-file-pdf-box text-xl" />
-            </button>
+            <BaseButton
+              v-if="canDownloadScormPackage"
+              :label="t('Export as SCORM')"
+              :to-url="exportScormUrl"
+              icon="zip-pack"
+              only-icon
+              size="small"
+              type="tertiary-alternative-text"
+            />
 
-            <BaseAppLink
-              :title="t('Open')"
-              :url="openUrl"
-              class="lp-panel__student-button"
-            >
-              <i class="mdi mdi-open-in-new text-lg" />
-            </BaseAppLink>
+            <BaseButton
+              v-if="canExportPdf"
+              :label="t('Export to PDF')"
+              icon="file-pdf"
+              only-icon
+              size="small"
+              type="tertiary-alternative-text"
+              @click="emit('export-pdf', lp)"
+            />
+
+            <BaseButton
+              :label="t('Open')"
+              :to-url="openUrl"
+              icon="link-external"
+              only-icon
+              size="small"
+              type="tertiary-alternative-text"
+            />
           </div>
 
-          <span class="lp-panel__progress-label">
-            {{ ringValue(lp.progress) === 100 ? t("Completed") : t("Progress") }}
-          </span>
-          <div class="lp-panel__progress-ring">
-            <svg
-              class="w-10 h-10"
-              viewBox="0 0 40 40"
-            >
-              <circle
-                class="text-gray-25"
-                cx="20"
-                cy="20"
-                fill="none"
-                r="16"
-                stroke="currentColor"
-                stroke-width="3.5"
+          <div class="lp-panel__student-progress flex items-center gap-2 shrink-0">
+            <span class="lp-panel__progress-label">
+              {{ ringValue(lp.progress) === 100 ? t("Completed") : t("Progress") }}
+            </span>
+            <div class="lp-panel__progress-ring">
+              <svg
+                class="w-10 h-10"
+                viewBox="0 0 40 40"
+              >
+                <circle
+                  class="text-gray-25"
+                  cx="20"
+                  cy="20"
+                  fill="none"
+                  r="16"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <circle
+                  :stroke-dasharray="ringDash(lp.progress)"
+                  class="text-support-5"
+                  cx="20"
+                  cy="20"
+                  fill="none"
+                  r="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                  transform="rotate(-90 20 20)"
+                />
+              </svg>
+              <span
+                aria-hidden="true"
+                class="lp-panel__progress-dot lp-panel__progress-dot--student"
               />
-              <circle
-                :stroke-dasharray="ringDash(lp.progress)"
-                class="text-support-5"
-                cx="20"
-                cy="20"
-                fill="none"
-                r="16"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="3.5"
-                transform="rotate(-90 20 20)"
-              />
-            </svg>
-            <span
-              aria-hidden="true"
-              class="lp-panel__progress-dot lp-panel__progress-dot--student"
-            />
-            <div class="lp-panel__progress-value">{{ ringValue(lp.progress) }}%</div>
+              <div class="lp-panel__progress-value">{{ ringValue(lp.progress) }}%</div>
+            </div>
           </div>
         </div>
       </template>

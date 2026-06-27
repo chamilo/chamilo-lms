@@ -53,6 +53,8 @@ use const JSON_THROW_ON_ERROR;
 /** @implements ProcessorInterface<mixed, LearningPathConfiguration> */
 final readonly class LearningPathConfigurationProcessor implements ProcessorInterface
 {
+    private const VIEW_MODES = ['fullscreen', 'embedded', 'embedframe', 'impress'];
+
     use LearningPathStateHelperTrait;
 
     private const ITEM_TYPE_LEARNING_PATH = 4;
@@ -95,7 +97,7 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         $course = $this->getContextCourse($this->entityManager, $request);
         $session = $this->getContextSession($this->entityManager, $request, $course);
         $group = $this->getContextGroup($this->entityManager, $request, $course);
-        $lpId = (int) ($uriVariables['lpId'] ?? 0);
+        $lpId = (int) ($uriVariables['id'] ?? 0);
         $isEdit = 0 < $lpId;
 
         $lp = $isEdit ? $this->lpRepository->find($lpId) : new CLp();
@@ -272,6 +274,7 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
     ): void {
         $lp
             ->setHideTocFrame($this->payloadBoolean($payload, 'hideTocFrame', false))
+            ->setDefaultViewMod($this->validateViewMode($payload['defaultViewMode'] ?? $lp->getDefaultViewMod()))
             ->setAuthor($this->sanitizeRichText((string) ($payload['author'] ?? '')))
             ->setPrerequisite($this->validateRelatedLearningPathId($payload['prerequisiteId'] ?? 0, $lp, $course, $session, $group))
         ;
@@ -295,6 +298,16 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         if ($this->security->isGranted('ROLE_ADMIN')) {
             $lp->setUseMaxScore($this->payloadBoolean($payload, 'useMaxScore', true) ? 1 : 0);
         }
+    }
+
+    private function validateViewMode(mixed $value): string
+    {
+        $mode = trim((string) $value);
+        if (!\in_array($mode, self::VIEW_MODES, true)) {
+            throw new BadRequestHttpException('Invalid learning path view mode.');
+        }
+
+        return $mode;
     }
 
     private function validateRelatedLearningPathId(

@@ -36484,3 +36484,15 @@ msgstr "View threads"
 
 msgid "No auth source"
 msgstr "No auth source"
+
+msgid "You must add at least one question"
+msgstr "You must add at least one question"
+
+msgid "Import other learning path formats"
+msgstr "Import other learning path formats"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Use a spacebar or arrow keys to navigate"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Tap on the left or right to navigate"

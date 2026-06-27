@@ -22,7 +22,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
         new Get(
-            uriTemplate: '/learning_paths/{lpId}/configuration',
+            uriTemplate: '/learning_paths/{id}/configuration',
+            requirements: ['id' => '\\d+'],
+            name: 'get_learning_path_configuration',
             provider: LearningPathConfigurationProvider::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
@@ -35,7 +37,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
             deserialize: false,
         ),
         new Post(
-            uriTemplate: '/learning_paths/{lpId}/configuration',
+            uriTemplate: '/learning_paths/{id}/configuration',
+            requirements: ['id' => '\\d+'],
+            name: 'update_learning_path_configuration',
             controller: LearningPathConfigurationAction::class,
             processor: LearningPathConfigurationProcessor::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
@@ -64,6 +68,9 @@ final class LearningPathConfiguration
 
     #[Groups(['lp_configuration:read'])]
     public bool $hideTocFrame = false;
+
+    #[Groups(['lp_configuration:read'])]
+    public string $defaultViewMode = 'embedded';
 
     #[Groups(['lp_configuration:read'])]
     public string $theme = '';

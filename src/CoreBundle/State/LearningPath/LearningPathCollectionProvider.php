@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CLpRepository;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
@@ -37,6 +38,7 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
     public function __construct(
         private EntityManagerInterface $entityManager,
         private CLpRepository $learningPathRepository,
+        private CShortcutRepository $shortcutRepository,
         private Security $security,
         private SettingsManager $settingsManager,
         private LpAdvancedAccessHelper $advancedAccessHelper,
@@ -113,7 +115,7 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
             );
         }
 
-        $this->applyContextualVisibility($learningPaths, $course, $session, $group);
+        $this->applyContextualManagementState($learningPaths, $course, $session, $group);
 
         if ($user instanceof User) {
             $progress = $this->learningPathRepository->lastProgressForUser($learningPaths, $user, $session);
@@ -168,13 +170,22 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
     /**
      * @param array<int, CLp> $learningPaths
      */
-    private function applyContextualVisibility(array $learningPaths, Course $course, ?Session $session, ?CGroup $group): void
-    {
+    private function applyContextualManagementState(
+        array $learningPaths,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): void {
         foreach ($learningPaths as $learningPath) {
             $link = $this->getContextResourceLink($learningPath, $course, $session, $group);
+            $exactLink = $learningPath->getResourceNode()?->getResourceLinkByContext($course, $session, $group);
 
             $learningPath->setVisible(
                 $link instanceof ResourceLink && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility(),
+            );
+            $learningPath->setManageableInContext($exactLink instanceof ResourceLink);
+            $learningPath->setPublishedOnCourseHome(
+                null !== $this->shortcutRepository->findShortcutFromResourceInCourse($learningPath, $course),
             );
         }
     }

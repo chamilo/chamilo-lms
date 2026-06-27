@@ -237,19 +237,14 @@ class CLpItem implements Stringable
         return $this->minScore;
     }
 
-    public function setMaxScore(float $maxScore): self
+    public function setMaxScore(?float $maxScore): self
     {
         $this->maxScore = $maxScore;
 
         return $this;
     }
 
-    /**
-     * Get maxScore.
-     *
-     * @return float
-     */
-    public function getMaxScore()
+    public function getMaxScore(): ?float
     {
         return $this->maxScore;
     }

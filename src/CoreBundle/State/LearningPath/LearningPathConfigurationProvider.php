@@ -76,7 +76,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         $session = $this->getContextSession($this->entityManager, $request, $course);
         $group = $this->getContextGroup($this->entityManager, $request, $course);
 
-        $lpId = (int) ($uriVariables['lpId'] ?? 0);
+        $lpId = (int) ($uriVariables['id'] ?? 0);
         $lp = null;
         if (0 < $lpId) {
             $lp = $this->lpRepository->find($lpId);
@@ -93,6 +93,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         $result->categoryId = $lp?->getCategory()?->getIid();
         $result->language = $lp?->getResourceNode()?->getLanguage()?->getIsocode() ?? '';
         $result->hideTocFrame = $lp?->getHideTocFrame() ?? false;
+        $result->defaultViewMode = $lp?->getDefaultViewMod() ?? 'embedded';
         $result->theme = $lp?->getTheme() ?? '';
         $result->author = $lp?->getAuthor() ?? '';
         $result->prerequisiteId = $lp?->getPrerequisite() ?? 0;

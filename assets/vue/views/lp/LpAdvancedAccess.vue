@@ -13,12 +13,17 @@ const router = useRouter()
 const isLoading = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref("")
+const successMessage = ref("")
 const search = ref("")
 const lp = ref(null)
 const course = ref(null)
 const session = ref(null)
 const users = ref([])
 const groups = ref([])
+const allowUserGroups = ref(false)
+const userGroups = ref([])
+const selectedUserGroupIds = ref([])
+const csrfToken = ref("")
 const selectedUserId = ref(null)
 const selectedGroupId = ref(null)
 const form = ref({
@@ -62,6 +67,16 @@ const filteredGroups = computed(() => {
   }
 
   return groups.value.filter((group) => normalizeSearch(group.title).includes(query))
+})
+
+const filteredUserGroups = computed(() => {
+  const query = normalizeSearch(search.value)
+
+  if (!query) {
+    return userGroups.value
+  }
+
+  return userGroups.value.filter((userGroup) => normalizeSearch(userGroup.title).includes(query))
 })
 
 const selectedUser = computed(() => users.value.find((user) => Number(user.id) === Number(selectedUserId.value)) || null)
@@ -167,6 +182,12 @@ async function loadData() {
     session.value = data.session
     users.value = data.users || []
     groups.value = data.groups || []
+    allowUserGroups.value = Boolean(data.allowUserGroups)
+    userGroups.value = data.userGroups || []
+    selectedUserGroupIds.value = userGroups.value
+      .filter((userGroup) => userGroup.selected)
+      .map((userGroup) => userGroup.id)
+    csrfToken.value = data.csrfToken || ""
   } catch (error) {
     errorMessage.value = error?.response?.data?.error || t("An error occurred")
   } finally {
@@ -237,6 +258,25 @@ async function removeGroupRestriction(group) {
   }
 }
 
+async function saveUserGroups() {
+  isSaving.value = true
+  errorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    await lpService.saveUserGroupAdvancedAccess(lpId.value, contextQuery.value, {
+      selectedUserGroupIds: selectedUserGroupIds.value,
+      csrfToken: csrfToken.value,
+    })
+    successMessage.value = t("Updated")
+    await loadData()
+  } catch (error) {
+    errorMessage.value = error?.response?.data?.error || t("An error occurred")
+  } finally {
+    isSaving.value = false
+  }
+}
+
 async function clearDates() {
   if (!window.confirm(t("Remove all date restrictions for this learning path?"))) {
     return
@@ -290,6 +330,13 @@ onMounted(loadData)
     </div>
 
     <div
+      v-if="successMessage"
+      class="rounded-xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success"
+    >
+      {{ successMessage }}
+    </div>
+
+    <div
       v-if="isLoading"
       class="rounded-2xl border border-gray-25 bg-white p-6 text-gray-60 shadow-sm"
     >
@@ -336,6 +383,57 @@ onMounted(loadData)
           type="search"
           :placeholder="t('Search by name, email, username or group')"
         />
+      </section>
+
+      <section
+        v-if="allowUserGroups"
+        class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm"
+      >
+        <div class="mb-4 flex items-center justify-between gap-4">
+          <h2 class="text-lg font-bold text-gray-90">
+            {{ t("Classes") }}
+          </h2>
+          <span class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
+            {{ selectedUserGroupIds.length }} / {{ userGroups.length }}
+          </span>
+        </div>
+
+        <div
+          v-if="filteredUserGroups.length"
+          class="grid gap-3 md:grid-cols-2"
+        >
+          <label
+            v-for="userGroup in filteredUserGroups"
+            :key="userGroup.id"
+            class="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-gray-25 bg-white px-4 py-3"
+          >
+            <span class="font-semibold text-gray-90">{{ userGroup.title }}</span>
+            <input
+              v-model="selectedUserGroupIds"
+              :value="userGroup.id"
+              class="h-4 w-4 rounded border-gray-30 text-primary focus:ring-primary"
+              name="lp-usergroups[]"
+              type="checkbox"
+            />
+          </label>
+        </div>
+
+        <div
+          v-else
+          class="rounded-xl border border-gray-25 bg-gray-15 px-4 py-6 text-center text-sm text-gray-60"
+        >
+          {{ t("No classes found") }}
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <BaseButton
+            :disabled="isSaving"
+            :label="isSaving ? t('Saving') : t('Save')"
+            icon="save"
+            type="success"
+            @click="saveUserGroups"
+          />
+        </div>
       </section>
 
       <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">

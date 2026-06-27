@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\LearningPath;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathActionToken;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
@@ -20,6 +21,7 @@ final readonly class LearningPathActionTokenProvider implements ProviderInterfac
 
     public function __construct(
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -30,7 +32,19 @@ final readonly class LearningPathActionTokenProvider implements ProviderInterfac
     {
         $result = new LearningPathActionToken();
         $result->token = $this->csrfTokenManager->getToken(self::ACTION_TOKEN_INTENTION)->getValue();
+        $result->allowChamiloExport = $this->isTruthy(
+            $this->settingsManager->getSetting('lp.allow_lp_chamilo_export', true),
+        );
 
         return $result;
+    }
+
+    private function isTruthy(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 }

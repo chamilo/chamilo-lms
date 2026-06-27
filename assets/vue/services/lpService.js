@@ -17,18 +17,12 @@ const getLearningPath = async (lpId) => {
   return await baseService.get(`/api/learning_paths/${lpId}/`)
 }
 
-/** Builds legacy VIEW URL (old student/teacher mode). */
-const buildLegacyViewUrl = (
+/** Builds the Vue learner runtime URL. */
+const buildRuntimeUrl = (
   lpId,
-  { cid, sid = 0, gid = 0, node, gradebook = 0, origin = "", isStudentView = "true" } = {},
+  { cid, sid = 0, gid = 0, node, gradebook = 0, origin = "learnpath", isStudentView = "true", itemId = 0 } = {},
 ) => {
-  if (!lpId) {
-    console.warn("[buildLegacyViewUrl] called with empty lpId!", { lpId, cid, sid, gid })
-    console.trace()
-  }
-
   const qs = new URLSearchParams({
-    action: "view",
     sid: Number(sid),
     gid: Number(gid),
     gradebook: Number(gradebook),
@@ -36,99 +30,94 @@ const buildLegacyViewUrl = (
     isStudentView,
   })
 
-  if (cid !== undefined && cid !== null && String(cid) !== "" && Number(cid) !== 0) {
-    qs.set("cid", cid)
+  if (Number(cid) > 0) {
+    qs.set("cid", Number(cid))
   }
 
-  if (node !== undefined && node !== null && String(node) !== "") {
-    qs.set("node", node)
+  if (Number(itemId) > 0) {
+    qs.set("item_id", Number(itemId))
   }
 
-  if (lpId) {
-    qs.set("lp_id", lpId)
-  }
-
-  return `/main/lp/lp_controller.php?${qs.toString()}`
+  return `/resources/lp/${Number(node)}/${Number(lpId)}/runtime?${qs.toString()}`
 }
 
-/**
- * Builds a generic legacy controller URL (lp_controller.php) for any action.
- *
- * Supported signatures:
- *  buildLegacyActionUrl(lpId, "report", { cid, sid, node, params })
- *  buildLegacyActionUrl("add_lp", { cid, sid, node, params }) // without lpId
- */
-const buildLegacyActionUrl = (arg1, arg2, arg3 = {}) => {
-  let lpId, action, opts
+/** Loads the validated learner runtime state. */
+const getRuntime = async (lpId, params = {}) =>
+  await baseService.get(`/api/learning_paths/${lpId}/runtime`, cleanParams(params))
 
-  if (typeof arg2 === "string") {
-    lpId = arg1
-    action = arg2
-    opts = arg3
-  } else {
-    lpId = undefined
-    action = arg1
-    opts = arg2 || {}
+/** Records the current runtime item after backend access checks. */
+const openRuntimeItem = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/runtime/item`, payload, {}, { params: cleanParams(params) })
+
+/** Synchronizes progress after the active tool updates its LP item view. */
+const syncRuntime = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/runtime/sync`, payload, {}, { params: cleanParams(params) })
+
+/** Persists the active item timer while the browser page is being unloaded. */
+const syncRuntimeBeacon = (lpId, params, payload) => {
+  if (!navigator.sendBeacon) {
+    return false
   }
 
-  const { cid, sid, node, gid = 0, gradebook = 0, origin = "", params = {} } = opts
+  const query = new URLSearchParams(cleanParams(params))
+  const body = new Blob([JSON.stringify(payload)], { type: "application/json" })
 
-  const search = new URLSearchParams()
-  search.set("action", action)
+  return navigator.sendBeacon(`/api/learning_paths/${lpId}/runtime/sync?${query.toString()}`, body)
+}
 
-  if (cid !== undefined && cid !== null && String(cid) !== "" && Number(cid) !== 0) {
-    search.set("cid", cid)
-  }
-
-  if (lpId !== undefined && lpId !== null && String(lpId) !== "" && Number(lpId) !== 0) {
-    search.set("lp_id", lpId)
-  }
-
-  // include sid even if it is 0
-  if (sid !== undefined && sid !== null) {
-    search.set("sid", Number.isNaN(Number(sid)) ? String(sid) : Number(sid))
-  }
-
-  search.set("gid", Number(gid))
-  search.set("gradebook", Number(gradebook))
-  search.set("origin", origin)
-
-  if (node !== undefined && node !== null) {
-    search.set("node", node)
-  }
-
-  Object.entries(params).forEach(([k, v]) => {
-    if (v !== undefined && v !== null) search.set(k, String(v))
+/** Persists the active SCORM data model values. */
+const commitScormRuntime = async (lpId, itemId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/runtime/scorm/commit`, payload, {}, {
+    params: cleanParams(params),
   })
 
-  return `/main/lp/lp_controller.php?${search.toString()}`
+/** Persists SCORM values while the browser page is being unloaded. */
+const commitScormRuntimeBeacon = (lpId, itemId, params, payload) => {
+  if (!navigator.sendBeacon) {
+    return false
+  }
+
+  const query = new URLSearchParams(cleanParams(params))
+  const body = new Blob([JSON.stringify(payload)], { type: "application/json" })
+
+  return navigator.sendBeacon(
+    `/api/learning_paths/${lpId}/runtime/scorm/commit?${query.toString()}`,
+    body,
+  )
 }
 
-/** Build URL for updating/uploading SCORM package for an existing LP. */
-const buildLegacyUploadUrl = (lpId, { cid, sid, node, gid = 0, gradebook = 0, origin = "" } = {}) => {
-  return buildLegacyActionUrl(lpId, "upload", {
-    cid,
-    sid,
-    node,
-    gid,
-    gradebook,
-    origin,
-    params: {
-      // force teacher mode context
-      isStudentView: "false",
-    },
+/** Creates a new whole-learning-path attempt after backend validation. */
+const restartRuntime = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/runtime/restart`, payload, {}, { params: cleanParams(params) })
+
+/** Imports a SCORM ZIP package into the current validated context. */
+const importScormPackage = async (params, formData) =>
+  await baseService.post("/api/learning_paths/scorm/import", formData, {}, { params: cleanParams(params) })
+
+/** Replaces the files of an existing SCORM package after backend compatibility validation. */
+const updateScormPackage = async (lpId, params, formData) =>
+  await baseService.post(`/api/learning_paths/${lpId}/scorm/update`, formData, {}, {
+    params: cleanParams(params),
   })
+
+/** Builds the download URL for the original package of a SCORM learning path. */
+const buildScormPackageDownloadUrl = (lpId, params = {}) => {
+  const query = new URLSearchParams(cleanParams(params))
+
+  return `/api/learning_paths/${lpId}/scorm/package?${query.toString()}`
 }
 
-/** Navigates immediately to a legacy controller action. */
-const goLegacyAction = (lpId, action, opts = {}) => {
-  window.location.href =
-    typeof action === "string"
-      ? (opts.absoluteUrl ?? false)
-        ? action // allow passing a direct absolute URL
-        : (opts.urlOverride ?? null) || buildLegacyActionUrl(lpId, action, opts)
-      : ""
-}
+/** Loads the validated AI generator configuration for the current course context. */
+const getAiGeneratorConfiguration = async (params = {}) =>
+  await baseService.get("/api/learning_paths/ai-generator", cleanParams(params))
+
+/** Requests generated learning-path content from the configured AI provider. */
+const generateAiLearningPath = async (params, payload) =>
+  await baseService.post("/ai/generate_learnpath", payload, {}, { params: cleanParams(params) })
+
+/** Persists validated generated content as a learning path in the current context. */
+const saveAiLearningPath = async (params, payload) =>
+  await baseService.post("/api/learning_paths/ai-generator", payload, {}, { params: cleanParams(params) })
 
 /** Fetches the CSRF token used by modern LP write actions. */
 const getActionToken = async (params = {}) => {
@@ -149,9 +138,23 @@ const toggleCategoryVisibility = async (categoryId, params, payload) => {
   })
 }
 
+/** Executes a validated management action for one learning path. */
+const manageLearningPath = async (lpId, params, payload) => {
+  return await baseService.post(`/api/learning_paths/${lpId}/manage`, payload, {}, {
+    params: cleanParams(params),
+  })
+}
+
 /** Persists LP display order inside the current validated context. */
 const reorder = async (params, payload) => {
   await baseService.post("/api/learning_paths/reorder", payload, {}, {
+    params: cleanParams(params),
+  })
+}
+
+/** Atomically persists category order, LP order and LP category assignment. */
+const saveLayout = async (params, payload) => {
+  await baseService.post("/api/learning_paths/layout", payload, {}, {
     params: cleanParams(params),
   })
 }
@@ -167,7 +170,6 @@ const getLpCategories = async (searchParams) => {
 
   return items
 }
-
 
 const getConfiguration = async (lpId, params) => {
   const endpoint = lpId
@@ -200,6 +202,69 @@ const saveConfiguration = async (lpId, params, payload, imageFile = null, extraF
   })
 }
 
+const getBuilder = async (lpId, params) =>
+  await baseService.get(`/api/learning_paths/${lpId}/builder`, cleanParams(params))
+
+const createBuilderSection = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/builder/sections`, payload, {}, { params: cleanParams(params) })
+
+const updateBuilderItem = async (lpId, itemId, params, payload, extraFiles = {}) => {
+  const formData = new FormData()
+  formData.append("payload", JSON.stringify({ ...payload, lpId }))
+
+  Object.entries(extraFiles).forEach(([fieldId, file]) => {
+    if (file instanceof File) {
+      formData.append(`extraFile_${fieldId}`, file)
+    }
+  })
+
+  return await baseService.post(`/api/learning_path_builder_items/${itemId}/edit`, formData, {}, {
+    params: cleanParams(params),
+  })
+}
+
+const deleteBuilderItem = async (lpId, itemId, params, payload) =>
+  await baseService.post(`/api/learning_path_builder_items/${itemId}/delete`, { ...payload, lpId }, {}, {
+    params: cleanParams(params),
+  })
+
+const reorderBuilderItems = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/builder/reorder`, payload, {}, { params: cleanParams(params) })
+
+const addBuilderResource = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/builder/resources`, payload, {}, { params: cleanParams(params) })
+
+const updateBuilderPrerequisites = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/builder/prerequisites`, payload, {}, {
+    params: cleanParams(params),
+  })
+
+const updateBuilderItemPrerequisite = async (lpId, itemId, params, payload) =>
+  await baseService.put(`/api/learning_path_builder_items/${itemId}/prerequisite`, { ...payload, lpId }, {
+    params: cleanParams(params),
+  })
+
+const updateBuilderItemAudio = async (lpId, itemId, params, payload) =>
+  await baseService.put(`/api/learning_path_builder_items/${itemId}/audio`, { ...payload, lpId }, {
+    params: cleanParams(params),
+  })
+
+const updateBuilderBulkAuthorPrice = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/builder/author-price`, payload, {}, {
+    params: cleanParams(params),
+  })
+
+const createBuilderDocument = async (params, formData) =>
+  await baseService.post("/api/documents", formData, {}, { params: cleanParams(params) })
+
+const updateBuilderDocument = async (documentId, params, payload) =>
+  await baseService.put(`/api/documents/${documentId}`, payload, { params: cleanParams(params) })
+
+const saveBuilderFinalItem = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/builder/final-item`, payload, {}, {
+    params: cleanParams(params),
+  })
+
 const createCategory = async (params, payload) =>
   await baseService.post("/api/learning_path_categories/manage", payload, {}, { params: cleanParams(params) })
 
@@ -209,10 +274,114 @@ const updateCategory = async (categoryId, params, payload) =>
   })
 
 const deleteCategory = async (categoryId, params, csrfToken) =>
-  await baseService.delete(`/api/learning_path_categories/${categoryId}/manage`, {
+  await baseService.post(
+    `/api/learning_path_categories/${categoryId}/manage-action`,
+    { action: "delete", csrfToken },
+    {},
+    { params: cleanParams(params) },
+  )
+
+const manageCategory = async (categoryId, params, payload) =>
+  await baseService.post(`/api/learning_path_categories/${categoryId}/manage-action`, payload, {}, {
     params: cleanParams(params),
-    data: { csrfToken },
   })
+
+const getCategorySubscriptions = async (categoryId, params) =>
+  await baseService.get(`/api/learning_path_categories/${categoryId}/subscriptions`, cleanParams(params))
+
+const saveCategorySubscriptions = async (categoryId, params, payload) =>
+  await baseService.put(`/api/learning_path_categories/${categoryId}/subscriptions`, payload, {
+    params: cleanParams(params),
+  })
+
+/** Loads the teacher reporting overview and optional learner details. */
+const getReporting = async (lpId, params = {}) =>
+  await baseService.get(`/api/learning_paths/${lpId}/reporting`, cleanParams(params))
+
+/** Resets learning path tracking for selected learners after backend validation. */
+const resetReporting = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/reporting/reset`, payload, {}, {
+    params: cleanParams(params),
+  })
+
+/** Recalculates quiz attempts linked to one learner in the learning path. */
+const recalculateReporting = async (lpId, params, payload) =>
+  await baseService.post(`/api/learning_paths/${lpId}/reporting/recalculate`, payload, {}, {
+    params: cleanParams(params),
+  })
+
+/** Builds the downloadable PDF URL for the current reporting filters. */
+const buildReportingPdfUrl = (lpId, params = {}) => {
+  const query = new URLSearchParams(cleanParams(params))
+
+  return `/api/learning_paths/${lpId}/reporting.pdf?${query.toString()}`
+}
+
+
+/** Loads the exportable learning path content items for the PDF selector. */
+const getContentPdfItems = async (lpId, params = {}) =>
+  await baseService.get(`/api/learning_paths/${lpId}/content-pdf/items`, cleanParams(params))
+
+/** Builds the downloadable PDF URL for selected learning path content items. */
+const buildContentPdfUrl = (lpId, params = {}, itemIds = []) => {
+  const queryParams = { ...cleanParams(params) }
+
+  if (Array.isArray(itemIds) && itemIds.length > 0) {
+    queryParams.items = itemIds.map((id) => Number(id)).filter((id) => id > 0).join(",")
+  }
+
+  const query = new URLSearchParams(queryParams)
+
+  return `/api/learning_paths/${lpId}/content.pdf?${query.toString()}`
+}
+
+/** Builds the downloadable Chamilo-native Learning Path backup URL. */
+const buildChamiloBackupUrl = (lpId, params = {}) => {
+  const query = new URLSearchParams(cleanParams(params))
+
+  return `/api/learning_paths/${lpId}/chamilo-backup.zip?${query.toString()}`
+}
+
+/** Downloads the Chamilo-native backup without leaving the SPA on backend errors. */
+const downloadChamiloBackup = async (lpId, params = {}) => {
+  const response = await fetch(buildChamiloBackupUrl(lpId, params), {
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/zip, application/ld+json",
+    },
+  })
+
+  if (!response.ok) {
+    const contentType = String(response.headers.get("content-type") || "").toLowerCase()
+    let message = ""
+
+    if (contentType.includes("json")) {
+      const payload = await response.json().catch(() => ({}))
+      message = payload.detail || payload["hydra:description"] || payload.message || ""
+    } else {
+      message = (await response.text().catch(() => "")).trim()
+    }
+
+    const error = new Error(message || `Backup export failed with HTTP ${response.status}.`)
+    error.status = response.status
+
+    throw error
+  }
+
+  const blob = await response.blob()
+  const disposition = String(response.headers.get("content-disposition") || "")
+  const encodedMatch = disposition.match(/filename\*=UTF-8''([^;]+)/i)
+  const plainMatch = disposition.match(/filename="?([^";]+)"?/i)
+  let filename = `learning-path-${lpId}.zip`
+
+  if (encodedMatch?.[1]) {
+    filename = decodeURIComponent(encodedMatch[1])
+  } else if (plainMatch?.[1]) {
+    filename = plainMatch[1]
+  }
+
+  return { blob, filename }
+}
 
 /** Fetches advanced-access data (users/groups restrictions) for a learning path. */
 const getAdvancedAccessData = async (lpId, contextQuery) => {
@@ -239,6 +408,11 @@ const removeGroupAdvancedAccess = async (lpId, groupId, contextQuery) => {
   return baseService.delete(`/resources/lp/${lpId}/advanced-access/group/${groupId}?${contextQuery}`)
 }
 
+/** Saves the selected platform classes for a learning path. */
+const saveUserGroupAdvancedAccess = async (lpId, contextQuery, payload) => {
+  return baseService.post(`/resources/lp/${lpId}/advanced-access/usergroups?${contextQuery}`, payload)
+}
+
 /** Clears all advanced-access date restrictions for a learning path. */
 const clearAdvancedAccessDates = async (lpId, contextQuery) => {
   return baseService.post(`/resources/lp/${lpId}/advanced-access/clear-dates?${contextQuery}`, {})
@@ -247,24 +421,61 @@ const clearAdvancedAccessDates = async (lpId, contextQuery) => {
 export default {
   getLearningPaths,
   getLearningPath,
-  buildLegacyViewUrl,
-  buildLegacyActionUrl,
-  buildLegacyUploadUrl,
-  goLegacyAction,
+  buildRuntimeUrl,
+  getRuntime,
+  openRuntimeItem,
+  syncRuntime,
+  syncRuntimeBeacon,
+  commitScormRuntime,
+  commitScormRuntimeBeacon,
+  restartRuntime,
+  importScormPackage,
+  updateScormPackage,
+  buildScormPackageDownloadUrl,
   getLpCategories,
+  getAiGeneratorConfiguration,
+  generateAiLearningPath,
+  saveAiLearningPath,
   getActionToken,
   toggleVisibility,
   toggleCategoryVisibility,
+  manageLearningPath,
   reorder,
+  saveLayout,
   getConfiguration,
   saveConfiguration,
+  getBuilder,
+  createBuilderSection,
+  updateBuilderItem,
+  deleteBuilderItem,
+  reorderBuilderItems,
+  addBuilderResource,
+  updateBuilderPrerequisites,
+  updateBuilderItemPrerequisite,
+  updateBuilderItemAudio,
+  updateBuilderBulkAuthorPrice,
+  createBuilderDocument,
+  updateBuilderDocument,
+  saveBuilderFinalItem,
   createCategory,
   updateCategory,
   deleteCategory,
+  manageCategory,
+  getCategorySubscriptions,
+  saveCategorySubscriptions,
+  getReporting,
+  resetReporting,
+  recalculateReporting,
+  buildReportingPdfUrl,
+  getContentPdfItems,
+  buildContentPdfUrl,
+  buildChamiloBackupUrl,
+  downloadChamiloBackup,
   getAdvancedAccessData,
   saveUserAdvancedAccess,
   saveGroupAdvancedAccess,
   removeUserAdvancedAccess,
   removeGroupAdvancedAccess,
+  saveUserGroupAdvancedAccess,
   clearAdvancedAccessDates,
 }

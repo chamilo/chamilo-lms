@@ -1,6 +1,11 @@
 .lp-panel {
-  @apply rounded-lg border border-gray-30 shadow-none bg-white
+  @apply relative z-0 rounded-lg border border-gray-30 shadow-none bg-white
     sm:rounded-r-lg sm:rounded-l-none sm:border-0 sm:border-none sm:bg-support-6 sm:shadow-xl;
+
+  &:focus-within,
+  &--menu-open {
+    @apply z-[1000];
+  }
 
   & &__container {
     @apply relative rounded-lg p-4 w-full

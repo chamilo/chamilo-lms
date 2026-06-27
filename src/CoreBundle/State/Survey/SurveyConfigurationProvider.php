@@ -340,9 +340,12 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
                 continue;
             }
 
+            $title = trim(strip_tags(html_entity_decode((string) $survey->getTitle(), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+            $code = trim((string) $survey->getCode());
+
             $items[] = [
                 'value' => (int) $survey->getIid(),
-                'label' => trim($survey->getTitle()) ?: (string) $survey->getCode(),
+                'label' => '' !== $title ? $title : $code,
             ];
         }
 
@@ -380,11 +383,27 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
 
             $items[] = [
                 'value' => (int) $category->getId(),
-                'label' => $category->getTitle(),
+                'label' => $this->getGradebookCategoryLabel($category),
             ];
         }
 
         return $items;
+    }
+
+    private function getGradebookCategoryLabel(GradebookCategory $category): string
+    {
+        $title = trim((string) $category->getTitle());
+        $title = '' !== $title && !ctype_digit($title) ? $title : 'Default';
+
+        $parent = $category->getParent();
+        if (!$parent instanceof GradebookCategory) {
+            return $title;
+        }
+
+        $parentTitle = trim((string) $parent->getTitle());
+        $parentTitle = '' !== $parentTitle && !ctype_digit($parentTitle) ? $parentTitle : 'Default';
+
+        return $parentTitle.' / '.$title;
     }
 
     private function findGradebookLink(Course $course, int $surveyId): ?GradebookLink

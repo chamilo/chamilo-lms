@@ -60,7 +60,7 @@ const canDownloadScormPackage = computed(() => {
 const canCopyLearningPath = computed(() => {
   const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
 
-  return props.canCopy && type !== 3 && (type !== 2 || props.canCopyScorm)
+  return props.canCopy && !isCStudioLearningPath.value && type !== 3 && (type !== 2 || props.canCopyScorm)
 })
 
 const openUrl = computed(() =>
@@ -69,6 +69,40 @@ const openUrl = computed(() =>
     isStudentView: "true",
   }),
 )
+
+const isCStudioLearningPath = computed(() => {
+  const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
+  const path = String(props.lp?.path ?? "").toLowerCase()
+
+  return type === 2 && path.startsWith("teachcs-")
+})
+
+const cstudioEditorUrl = computed(() => {
+  const search = new URLSearchParams()
+
+  search.set("action", "redir")
+  search.set("idLudiLP", props.lp.iid)
+
+  if (props.legacyContext.cid) {
+    search.set("cid", props.legacyContext.cid)
+  }
+
+  if (props.legacyContext.sid) {
+    search.set("sid", props.legacyContext.sid)
+  }
+
+  if (props.legacyContext.gid) {
+    search.set("gid", props.legacyContext.gid)
+  }
+
+  return `/plugin/CStudio/oel_tools_teachdoc_link.php?${search.toString()}`
+})
+
+const editLearningPathRoute = computed(() =>
+  isCStudioLearningPath.value ? null : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
+)
+
+const editLearningPathUrl = computed(() => (isCStudioLearningPath.value ? cstudioEditorUrl.value : null))
 
 const exportScormUrl = computed(() =>
   lpService.buildScormPackageDownloadUrl(props.lp.iid, {
@@ -275,7 +309,8 @@ const buttonActions = computed(() =>
     {
       label: t("Edit learnpath"),
       icon: "edit",
-      route: { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
+      route: editLearningPathRoute.value,
+      toUrl: editLearningPathUrl.value,
       disabled: !manageableInContext.value,
       visible: true,
     },
@@ -330,7 +365,7 @@ const buttonActions = computed(() =>
     },
     {
       label: t("Update SCORM"),
-      visible: canUpdateScorm.value,
+      visible: canUpdateScorm.value && !isCStudioLearningPath.value,
       icon: "upload",
       command: () => router.push(updateScormRoute.value),
       disabled: !manageableInContext.value,
@@ -339,7 +374,7 @@ const buttonActions = computed(() =>
     {
       label: t("Export to PDF"),
       icon: "file-pdf",
-      visible: props.canExportPdf,
+      visible: props.canExportPdf && !isCStudioLearningPath.value,
       command: () => emit("export-pdf", props.lp),
       styleClass: "hidden md:flex",
     },
@@ -362,9 +397,9 @@ const viewModeMobileAction = computed(() => ({
 const itemActionsMobile = computed(() =>
   [
     publishAction.value,
-    attemptModeAction.value,
+    ...(isCStudioLearningPath.value ? [] : [attemptModeAction.value]),
     viewModeMobileAction.value,
-    ...(securityStore.isAdmin ? [debugAction.value] : []),
+    ...(securityStore.isAdmin && !isCStudioLearningPath.value ? [debugAction.value] : []),
     ...(props.canSeriousGame ? [seriousGameAction.value] : []),
     ...(props.canAutoLaunch ? [autoLaunchAction.value] : []),
     {
@@ -377,14 +412,14 @@ const itemActionsMobile = computed(() =>
     { label: t("Export to Chamilo format"), command: () => emit("export-chamilo", props.lp), visible: props.canExportChamilo },
     {
       label: t("Update SCORM"),
-      visible: canUpdateScorm.value,
+      visible: canUpdateScorm.value && !isCStudioLearningPath.value,
       disabled: !manageableInContext.value,
       command: () => router.push(updateScormRoute.value),
     },
     {
       label: t("Export to PDF"),
       command: () => emit("export-pdf", props.lp),
-      visible: props.canExportPdf,
+      visible: props.canExportPdf && !isCStudioLearningPath.value,
     },
     {
       label: t("Settings"),
@@ -405,7 +440,11 @@ const itemActionsMobile = computed(() =>
 </script>
 
 <template>
-  <div :class="['lp-panel', { 'lp-panel--menu-open': rowMenuOpen }]">
+  <div
+    :class="['lp-panel', { 'lp-panel--menu-open': rowMenuOpen, 'lp-panel--cstudio': isCStudioLearningPath }]"
+    :data-lp-id="lp.iid"
+    :data-lp-cstudio="isCStudioLearningPath ? '1' : '0'"
+  >
     <article class="lp-panel__container">
       <button
         v-if="canReorder"
@@ -597,6 +636,7 @@ const itemActionsMobile = computed(() =>
                       {{ publishAction.label }}
                     </button>
                     <button
+                      v-if="!isCStudioLearningPath"
                       :disabled="attemptModeAction.disabled"
                       class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                       type="button"
@@ -619,7 +659,7 @@ const itemActionsMobile = computed(() =>
                     <div class="my-1 border-t border-gray-25"></div>
 
                     <button
-                      v-if="securityStore.isAdmin"
+                      v-if="securityStore.isAdmin && !isCStudioLearningPath"
                       :disabled="debugAction.disabled"
                       class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                       type="button"
@@ -713,7 +753,7 @@ const itemActionsMobile = computed(() =>
             />
 
             <BaseButton
-              v-if="canExportPdf"
+              v-if="canExportPdf && !isCStudioLearningPath"
               :label="t('Export to PDF')"
               icon="file-pdf"
               only-icon

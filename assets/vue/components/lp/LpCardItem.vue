@@ -49,6 +49,34 @@ const openUrl = computed(() =>
   }),
 )
 
+const isCStudioLearningPath = computed(() => {
+  const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
+  const path = String(props.lp?.path ?? "").toLowerCase()
+
+  return type === 2 && path.startsWith("teachcs-")
+})
+
+const cstudioEditorUrl = computed(() => {
+  const search = new URLSearchParams()
+
+  search.set("action", "redir")
+  search.set("idLudiLP", props.lp.iid)
+
+  if (routeCtx.value.cid) {
+    search.set("cid", routeCtx.value.cid)
+  }
+
+  if (routeCtx.value.sid) {
+    search.set("sid", routeCtx.value.sid)
+  }
+
+  if (routeCtx.value.gid) {
+    search.set("gid", routeCtx.value.gid)
+  }
+
+  return `/plugin/CStudio/oel_tools_teachdoc_link.php?${search.toString()}`
+})
+
 const reportingRoute = computed(() => ({
   name: "LpReporting",
   params: { lpId: props.lp.iid },
@@ -63,11 +91,11 @@ const updateScormRoute = computed(() => ({
   query: route.query,
 }))
 
-const buildRoute = computed(() => ({
-  name: "LpBuilder",
-  params: { lpId: props.lp.iid },
-  query: route.query,
-}))
+const buildRoute = computed(() =>
+  isCStudioLearningPath.value ? null : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
+)
+
+const buildUrl = computed(() => (isCStudioLearningPath.value ? cstudioEditorUrl.value : null))
 
 const exportScormUrl = computed(() =>
   lpService.buildScormPackageDownloadUrl(props.lp.iid, {
@@ -116,7 +144,7 @@ const canDownloadScormPackage = computed(() => {
 const canCopyLearningPath = computed(() => {
   const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
 
-  return props.canCopy && type !== 3 && (type !== 2 || props.canCopyScorm)
+  return props.canCopy && !isCStudioLearningPath.value && type !== 3 && (type !== 2 || props.canCopyScorm)
 })
 
 const managementParams = computed(() => ({
@@ -276,7 +304,11 @@ const progressTextClass = computed(() =>
 </script>
 
 <template>
-  <div class="relative rounded-2xl border border-gray-25 bg-white px-2 sm:px-4 pt-3 pb-4 min-h-[220px] flex flex-col">
+  <div
+    class="relative rounded-2xl border border-gray-25 bg-white px-2 sm:px-4 pt-3 pb-4 min-h-[220px] flex flex-col"
+    :data-lp-id="lp.iid"
+    :data-lp-cstudio="isCStudioLearningPath ? '1' : '0'"
+  >
     <button
       v-if="canReorder"
       :aria-label="t('Drag to reorder')"
@@ -427,6 +459,7 @@ const progressTextClass = computed(() =>
                   {{ publishAction.label }}
                 </button>
                 <button
+                  v-if="!isCStudioLearningPath"
                   :disabled="!manageableInContext || !csrfToken"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                   type="button"
@@ -444,7 +477,7 @@ const progressTextClass = computed(() =>
                 </div>
                 <div class="my-2 border-t border-gray-25"></div>
                 <button
-                  v-if="securityStore.isAdmin"
+                  v-if="securityStore.isAdmin && !isCStudioLearningPath"
                   :disabled="!manageableInContext || !csrfToken"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                   type="button"
@@ -493,7 +526,7 @@ const progressTextClass = computed(() =>
                   {{ t("Export to Chamilo format") }}
                 </button>
                 <button
-                  v-if="canUpdateScorm"
+                  v-if="canUpdateScorm && !isCStudioLearningPath"
                   :disabled="!manageableInContext"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50 md:hidden"
                   type="button"
@@ -502,7 +535,7 @@ const progressTextClass = computed(() =>
                   {{ t("Update SCORM") }}
                 </button>
                 <button
-                  v-if="canExportPdf"
+                  v-if="canExportPdf && !isCStudioLearningPath"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
                   type="button"
                   @click="emit('export-pdf', lp)"
@@ -517,7 +550,7 @@ const progressTextClass = computed(() =>
                   {{ t("Settings") }}
                 </router-link>
                 <button
-                  v-if="canCopyLearningPath"
+                  v-if="canCopyLearningPath && !isCStudioLearningPath"
                   :disabled="!manageableInContext || !csrfToken"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                   type="button"
@@ -596,6 +629,7 @@ const progressTextClass = computed(() =>
           :disabled="!manageableInContext"
           :label="t('Edit learnpath')"
           :route="buildRoute"
+          :to-url="buildUrl"
           icon="edit"
           only-icon
           size="small"
@@ -643,7 +677,7 @@ const progressTextClass = computed(() =>
         />
 
         <BaseButton
-          v-if="canCopyLearningPath"
+          v-if="canCopyLearningPath && !isCStudioLearningPath"
           :disabled="!manageableInContext || !csrfToken"
           :label="t('Copy')"
           icon="copy"
@@ -674,7 +708,7 @@ const progressTextClass = computed(() =>
         />
 
         <BaseButton
-          v-if="canUpdateScorm"
+          v-if="canUpdateScorm && !isCStudioLearningPath"
           :disabled="!manageableInContext"
           :label="t('Update SCORM')"
           :route="updateScormRoute"
@@ -685,7 +719,7 @@ const progressTextClass = computed(() =>
         />
 
         <BaseButton
-          v-if="canExportPdf"
+          v-if="canExportPdf && !isCStudioLearningPath"
           :label="t('Export to PDF')"
           icon="file-pdf"
           only-icon
@@ -732,6 +766,7 @@ const progressTextClass = computed(() =>
                   {{ publishAction.label }}
                 </button>
                 <button
+                  v-if="!isCStudioLearningPath"
                   :disabled="!manageableInContext || !csrfToken"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                   type="button"
@@ -749,7 +784,7 @@ const progressTextClass = computed(() =>
                 </div>
                 <div class="my-2 border-t border-gray-25"></div>
                 <button
-                  v-if="securityStore.isAdmin"
+                  v-if="securityStore.isAdmin && !isCStudioLearningPath"
                   :disabled="!manageableInContext || !csrfToken"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                   type="button"
@@ -801,7 +836,7 @@ const progressTextClass = computed(() =>
           />
 
           <BaseButton
-            v-if="canExportPdf"
+            v-if="canExportPdf && !isCStudioLearningPath"
             :label="t('Export to PDF')"
             icon="file-pdf"
             only-icon

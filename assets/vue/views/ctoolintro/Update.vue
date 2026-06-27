@@ -71,9 +71,6 @@ export default {
       violations: "violations",
     }),
     ...mapGetters("ctoolintro", ["find"]),
-    ...mapGetters({
-      isCurrentTeacher: "security/isCurrentTeacher",
-    }),
   },
   methods: {
     ...mapActions("ctoolintro", {

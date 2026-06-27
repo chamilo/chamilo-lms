@@ -2392,6 +2392,5 @@
     "View threads": "\uc2a4\ub808\ub4dc \ubcf4\uae30",
     "Current": "\ud604\uc7ac",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>\ud658\uc601\ud569\ub2c8\ub2e4</strong> Chamilo \uacfc\uc815 \uc800\uc791 \ub3c4\uad6c\uc5d0 \uc624\uc2e0 \uac83\uc744.<br />\uacfc\uc815\uc744 \ub2e8\uacc4\ubcc4\ub85c \uc0dd\uc131\ud558\uc2ed\uc2dc\uc624. \ubaa9\ucc28\ub294 \uc67c\ucabd\uc5d0 \ub098\ud0c0\ub0a9\ub2c8\ub2e4.",
-    "To start, give a title to your course": "\uc2dc\uc791\ud558\ub824\uba74 \uacfc\uc815 \uc81c\ubaa9\uc744 \uc785\ub825\ud558\uc2ed\uc2dc\uc624"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "\ud5c8\uc6a9\ub418\ub294 \ucd5c\ub300 \uad6c\ub3c5 \uc218. \uc81c\ud55c\ud558\uc9c0 \uc54a\uc73c\ub824\uba74 0\uc73c\ub85c \ub450\uc138\uc694."
 }

@@ -2392,6 +2392,5 @@
     "View threads": "Visualizza discussioni",
     "Current": "Attuale",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Benvenuti</strong> nel sistema autore di moduli didattici di Chamilo. Puoi creare il modulo elemento per elemento. A sinistra vedrai la struttura del modulo.",
-    "To start, give a title to your course": "Per iniziare, indica il Titolo del modulo didattico"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Numero massimo di iscrizioni consentite. Lascia a 0 per non limitarlo."
 }

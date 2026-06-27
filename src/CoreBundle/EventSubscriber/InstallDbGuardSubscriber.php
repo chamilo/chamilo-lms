@@ -118,7 +118,7 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
                 // table exists and has rows (= migration is in progress or failed).
                 try {
                     $migrationCount = $this->connection->fetchOne(
-                        "SELECT COUNT(*) FROM version"
+                        'SELECT COUNT(*) FROM version'
                     );
                     if ($migrationCount > 0) {
                         // Migration has started (or is running) – allow the request

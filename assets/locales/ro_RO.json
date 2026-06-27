@@ -2392,6 +2392,5 @@
     "View threads": "Vizualizare subiecte",
     "Current": "Actual",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "  <strong> Bine ati venit </ strong> pe cursul Chamilo. <br> Ai invatat pas cu pas cum sa creezi un curs. Structura de cursului va aparea intr-un meniu pe partea stanga a ferestrei.",
-    "To start, give a title to your course": "Pentru inceput, dati un titlu cursului"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Num\u0103rul maxim de \u00eenscrieri permise. L\u0103sa\u021bi la 0 pentru a nu limita."
 }

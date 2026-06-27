@@ -148,7 +148,15 @@ if ($isDiagnosisLoadSearch) {
         api_not_allowed(true);
     }
 } elseif (in_array($action, $adminActions, true)) {
-    api_protect_admin_script(true);
+    // Admin actions whose result sets are already scoped to the entities the HR manager
+    // (DRH) actually follows. Only these may be opened to DRH; the rest (e.g. get_sessions,
+    // which lists every session on the platform) stay admin / session-admin only.
+    $drhScopedActions = [
+        'get_sessions_tracking',
+        'get_user_course_report',
+        'get_user_course_report_resumed',
+    ];
+    api_protect_admin_script(true, in_array($action, $drhScopedActions, true));
 } else {
     api_protect_admin_script(true);
 }

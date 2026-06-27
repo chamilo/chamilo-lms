@@ -2392,6 +2392,5 @@
     "View threads": "N\u00e4yt\u00e4 ketjut",
     "Current": "Nykyinen",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Tervetuloa</strong> Chamilo kurssity\u00f6kaluun.<br />Tee kurssisi askel askeleelta. Sis\u00e4llysluettelo ilmestyy vasemmalle.",
-    "To start, give a title to your course": "Aloittaaksesi anna kurssillesi otsikko"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Suurin sallittu rekister\u00f6intien m\u00e4\u00e4r\u00e4. J\u00e4t\u00e4 0:ksi rajoittamatta."
 }

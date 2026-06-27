@@ -2392,6 +2392,5 @@
     "View threads": "Tazama nyuzi",
     "Current": "Sasa",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Karibu</strong> na zana ya uundaji wa Kozi ya Chamilo.<br />Unda kozi zako hatua kwa hatua. Jedwali la yaliyomo litaonekana upande wa kushoto.",
-    "To start, give a title to your course": "Ili kuanza, toa kichwa cha kozi yako"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Idadi ya juu ya usajili inaruhusiwa. Acha 0 ili isizuiwe."
 }

@@ -2392,6 +2392,5 @@
     "View threads": "Prika\u017ei teme",
     "Current": "Trenutno",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Dobrodo\u0161li</strong> u Chamilo alat za kreiranje kursa.<br />Kreirajte svoje kurseve korak po korak. Sadr\u017eaj \u0107e se pojaviti levo.",
-    "To start, give a title to your course": "Da biste po\u010deli, dajte naslov svom kursu"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maksimalan broj pretplata dozvoljen. Ostavi na 0 da ne ograni\u010di\u0161."
 }

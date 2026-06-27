@@ -2392,6 +2392,5 @@
     "View threads": "T\u00e9m\u00e1k megtekint\u00e9se",
     "Current": "Jelenlegi",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>\u00dcdv\u00f6zli \u00d6nt</strong> a Chamilo Tanul\u00e1si \u00datvonal szerkeszt\u0151. <br />l\u00e9p\u00e9sr\u0151l l\u00e9p\u00e9sre l\u00e9trehozhatja tanul\u00e1si \u00fatvonal\u00e1t, amelynek strukt\u00far\u00e1ja a bal oldali men\u00fcben l\u00e1that\u00f3.",
-    "To start, give a title to your course": "Kezd\u00e9sk\u00e9nt nevezze el a tanul\u00e1si \u00fatvonal\u00e1t."
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maxim\u00e1lis feliratkoz\u00e1sok sz\u00e1ma. Hagyja 0-\u00e1n a korl\u00e1t n\u00e9lk\u00fcli enged\u00e9lyez\u00e9shez."
 }

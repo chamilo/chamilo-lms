@@ -2392,6 +2392,5 @@
     "View threads": "Mostra els fils",
     "Current": "Actual",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Benvingut</strong> a l'eina d'autor de Chamilo: Itineraris formatius.Podreu crear el vostre itinerari formatiu pas a pas. L'estructura del vostre itinerari formatiu apareixer\u00e0 al men\u00fa de l'esquerra.",
-    "To start, give a title to your course": "Per comen\u00e7ar, poseu un t\u00edtol al vostre itinerari formatiu"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Nombre m\u00e0xim d'inscripcions permeses. Deixeu-ho a 0 per no limitar-ho."
 }

@@ -2912,7 +2912,7 @@ msgid "This is a sticky message (appears always on top and has a special sticky 
 msgstr "C'est un message \"Post it\" (il apparaît toujours au premier plan)"
 
 msgid "Re:"
-msgstr "Re :"
+msgstr "Re: "
 
 msgid "Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted"
 msgstr ""

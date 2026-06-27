@@ -2392,6 +2392,5 @@
     "View threads": "Eeg mawduucyada",
     "Current": "Hadda",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Waad ku soo dhaweyn</strong> qalabka qorista Koorsada Chamilo.<br />Abuur koorsooyinkaada tallaabo-tallaabo. Miiska waxyaabaha ayaa ka muuqan doona bidixda.",
-    "To start, give a title to your course": "Si aad u bilowdo, sii magac koorsadaada"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Tirada ugu badan ee diiwaangelinta la oggol yahay. Ka tag 0 si aadan u xadidin."
 }

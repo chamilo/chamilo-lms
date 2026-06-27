@@ -2392,6 +2392,5 @@
     "View threads": "Zobrazit vl\u00e1kna",
     "Current": "Aktu\u00e1ln\u00ed",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>V\u00edtejte</strong> v n\u00e1stroji pro tvorbu kurz\u016f Chamilo.<br />Vytv\u00e1\u0159ejte sv\u00e9 kurzy krok za krokem. Obsah se objev\u00ed vlevo.",
-    "To start, give a title to your course": "Za\u010dn\u011bte zad\u00e1n\u00edm n\u00e1zvu kurzu"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maxim\u00e1ln\u00ed povolen\u00fd po\u010det p\u0159ihl\u00e1\u0161ek. Nechte na 0 pro neomezen\u00ed."
 }

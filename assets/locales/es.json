@@ -2392,6 +2392,5 @@
     "View threads": "Ver hilos",
     "Current": "Actual",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Bienvenido</strong> a Lecciones, la herramienta de autor de Chamilo con la que podr\u00e1 crear lecciones en formato SCORM<br />La estructura de la lecci\u00f3n aparecer\u00e1 el men\u00fa izquierdo",
-    "To start, give a title to your course": "Para comenzar, de un t\u00edtulo a su lecci\u00f3n"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Cantidad m\u00e1xima permitida de suscripciones. Dejar en 0 para no limitarlo."
 }

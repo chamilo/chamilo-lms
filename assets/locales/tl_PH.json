@@ -2392,6 +2392,5 @@
     "View threads": "Tingnan ang mga thread",
     "Current": "Kasalukuyan",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Malugod</strong> na pagdating sa authoring tool ng Kurso ng Chamilo.<br />Lumikha ng iyong mga kurso ng hakbang-sa-hakbang. Ang talaan ng mga nilalaman ay lilitaw sa bandang kaliwa.",
-    "To start, give a title to your course": "Upang magsimula, magbigay ng pamagat sa iyong kurso"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximum na bilang ng mga subscription na pinapayagan. Iwanang 0 upang hindi limitahan."
 }

@@ -2392,6 +2392,5 @@
     "View threads": "Veire los fils",
     "Current": "Actual",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Benvenguda</strong> dins l'\u00f2pti d'autoria de cors Chamilo.<br />Creatz v\u00f2stres cors pas a pas. La taula de mat\u00e8rias apartr\u00e9ir\u00e0 a esqu\u00e8rra.",
-    "To start, give a title to your course": "Per comen\u00e7ar, donatz un t\u00edtol a v\u00f2stre cors"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Nombre maximal d'inscripcions auturizatadas. Daissar a 0 per pas limitar."
 }

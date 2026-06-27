@@ -2392,6 +2392,5 @@
     "View threads": "Per\u017ei\u016br\u0117ti temas",
     "Current": "Dabartinis",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "\u010cia \u017eingsnis po \u017eingsnio galite sukurti teorin\u0119 med\u017eiag\u0105 j\u016bs\u0173 kurse.",
-    "To start, give a title to your course": "\u012era\u0161ykite antra\u0161t\u0119"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Leid\u017eiamas maksimalus prenumerat\u0173 skai\u010dius. Palikite 0, jei nenorite riboti."
 }

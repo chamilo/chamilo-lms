@@ -2339,6 +2339,5 @@
     "Forum created": "Ifowamu yenziwe",
     "Current": "Yangokuqhubekayo",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Wamkelekile</strong> kwisixhobo sokubhala iSifundo seChamilo.<br />Yakha izifundo zakho inyathelo nenyathelo. Itheyibhile yezinto eziqulethweyo iya kuvela ekhanyela.",
-    "To start, give a title to your course": "Ukuqala, nika isihloko kwisifundo sakho"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Inani eliphezulu lezibhaliso livunyelwe. Shiya ku-0 ukuze lungasibekelwanga umda."
 }

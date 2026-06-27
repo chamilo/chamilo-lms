@@ -2392,6 +2392,5 @@
     "View threads": "Skat\u012bt t\u0113mas",
     "Current": "Pa\u0161reiz\u0113jais",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Laipni l\u016bdzam</strong> Chamilo m\u0101c\u012bbu kursa t\u0113mas satura veido\u0161anas instrument\u0101 ! <br><br><b>Soli pa solim, veidojiet kursa t\u0113mas saturu.</b> <br><br>Izveidotie <b>m\u0101c\u012bbu materi\u0101li</b> -  teksts, video, foto u.t.t , tiks att\u0113loti ekr\u0101na <b>labaj\u0101 pus\u0113</b>.<br> M\u0101c\u012bbu <b>satura  r\u0101d\u012bt\u0101js</b> tiks novietots ekr\u0101na <b>kreisaj\u0101</b> pus\u0113.",
-    "To start, give a title to your course": "Lai s\u0101ktu, pie\u0161\u0137iriet J\u016bsu t\u0113mai nosaukumu"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "At\u013cautais abonementu skaita maksimums. atst\u0101jiet 0, lai neierobe\u017eotu."
 }

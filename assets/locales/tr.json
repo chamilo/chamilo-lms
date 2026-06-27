@@ -2392,6 +2392,5 @@
     "View threads": "Konular\u0131 g\u00f6r\u00fcnt\u00fcle",
     "Current": "Mevcut",
     "No auth source": "No auth source",
-    "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Ho\u015f geldiniz</strong> Chamilo Kurs olu\u015fturma arac\u0131na.<br />Kurslar\u0131n\u0131z\u0131 ad\u0131m ad\u0131m olu\u015fturun. \u0130\u00e7indekiler tablosu sol tarafta g\u00f6r\u00fcnecek.",
-    "To start, give a title to your course": "Ba\u015flamak i\u00e7in kursunuza bir ba\u015fl\u0131k verin"
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "\u0130zin verilen maksimum abonelik say\u0131s\u0131. S\u0131n\u0131rlamamak i\u00e7in 0 b\u0131rak\u0131n."
 }

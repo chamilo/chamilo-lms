@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\State\Forum\ForumThreadCollectionStateProvider;
+use Chamilo\CoreBundle\State\Forum\ForumThreadCreateStateProvider;
 use Chamilo\CoreBundle\State\Forum\ForumThreadProcessor;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTime;
@@ -47,7 +48,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/forum_threads/create',
             name: 'create_forum_thread',
             input: ForumThreadWriteInput::class,
+            provider: ForumThreadCreateStateProvider::class,
             processor: ForumThreadProcessor::class,
+            deserialize: false,
+            read: true,
             inputFormats: [
                 'jsonld' => ['application/ld+json'],
                 'json' => ['application/json'],
@@ -91,7 +95,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
-            read: false,
         ),
         new Put(
             uriTemplate: '/forum_threads/{iid}/update',

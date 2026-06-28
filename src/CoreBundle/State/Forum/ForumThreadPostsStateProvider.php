@@ -14,11 +14,16 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CGroup;
+use DateTimeInterface;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Doctrine\DBAL\Types\Types;
@@ -54,6 +59,8 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private readonly IllustrationRepository $illustrationRepository,
+        private readonly CourseAccessResolver $courseAccessResolver,
     ) {}
 
     /**
@@ -119,6 +126,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
         $course = $this->getCourse($this->entityManager, $request);
         $session = $this->getSession($this->entityManager, $request);
+        $group = $this->getGroup($this->entityManager, $request);
         $canManage = $this->canManageForumsInCurrentView($this->security, $request);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
@@ -174,6 +182,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                 $canSubscribe && $this->isSubscribedToThread($course, $user, (int) $thread->getIid()),
                 $canSubscribe,
                 $lockedByGradebook,
+                $group,
             ),
             'canReply' => $this->canReply($forum, $thread),
             'canManageThread' => $canManage,
@@ -185,6 +194,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                     $canManage,
                     $showPosterAvatar,
                     $lockedByGradebook,
+                    $course,
+                    $session,
+                    $group,
                 ),
                 $posts,
             ),
@@ -215,7 +227,12 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function arePosterImagesAllowed(Course $course): bool
     {
-        return $this->isCourseSettingEnabled($this->entityManager, $course, 'allow_user_image_forum');
+        $value = $this->getCourseSettingValue($this->entityManager, $course, 'allow_user_image_forum');
+        if (null === $value || '' === trim((string) $value)) {
+            return true;
+        }
+
+        return $this->isTruthyForumCourseSettingValue($value);
     }
 
     private function shouldHideForumPostRevisionLanguage(): bool
@@ -266,19 +283,33 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         bool $subscribed,
         bool $canSubscribe,
         bool $lockedByGradebook,
+        ?CGroup $group,
     ): array {
         $visible = $this->isForumResourceVisible($thread, $course, $session);
         $canMutate = $canManage && !$lockedByGradebook;
+        $poster = $thread->getUser();
+        $posterRole = $this->getPosterRole($poster, $course, $session, $group);
+        $threadDate = $thread->getThreadDate();
 
         return [
             'iid' => $thread->getIid(),
             'title' => $thread->getTitle(),
             'locked' => $thread->getLocked(),
-            'threadDate' => $this->formatDate($thread->getThreadDate()),
+            'threadDate' => $this->formatDate($threadDate),
+            'createdAt' => $this->formatDate($threadDate),
+            'date' => $this->formatDate($threadDate),
+            'threadDateIso' => $this->formatDateIso($threadDate),
+            'createdAtIso' => $this->formatDateIso($threadDate),
+            'threadDateTimestamp' => $threadDate?->getTimestamp(),
+            'threadRelativeTime' => $this->formatRelativeTimeLabel($threadDate),
             'threadSticky' => $thread->getThreadSticky(),
             'threadVisible' => $visible,
             'threadReplies' => $thread->getThreadReplies(),
+            'posterUserId' => $poster instanceof User ? (int) $poster->getId() : 0,
             'posterFullName' => $thread->getPosterFullName(),
+            'posterRole' => $posterRole,
+            'posterRoleLabel' => $this->getPosterRoleLabel($posterRole),
+            'posterIsTeacher' => 'teacher' === $posterRole,
             'subscribed' => $subscribed,
             'canSubscribe' => $canSubscribe,
             'lockedByGradebook' => $lockedByGradebook,
@@ -301,6 +332,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         bool $canManage,
         bool $showPosterAvatar,
         bool $lockedByGradebook,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
     ): array {
         $canEdit = !$lockedByGradebook && $this->canEditPost($post, $forum, $thread, $canManage);
         $canModerate = $canManage && !$lockedByGradebook;
@@ -323,20 +357,36 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $isAuthor = $currentUser instanceof User && $post->getUser()->getId() === $currentUser->getId();
         $revisionRequested = $this->postNeedsRevision($post);
         $revisionLanguage = $this->shouldHideForumPostRevisionLanguage() ? '' : $this->getPostRevisionLanguage($post);
-        $posterAvatarUrl = $showPosterAvatar ? $this->getPosterAvatarUrl($post->getUser()) : '';
+        $poster = $post->getUser();
+        $posterRole = $this->getPosterRole($poster, $course, $session, $group);
+        $posterAvatarUrl = $showPosterAvatar ? $this->getPosterAvatarUrl($poster) : '';
+        $postDate = $post->getPostDate();
 
         return [
             'iid' => $post->getIid(),
             'title' => $post->getTitle(),
             'postText' => $post->getPostText(),
-            'postDate' => $this->formatDate($post->getPostDate()),
+            'postDate' => $this->formatDate($postDate),
+            'createdAt' => $this->formatDate($postDate),
+            'date' => $this->formatDate($postDate),
+            'sentAt' => $this->formatDate($postDate),
+            'postDateIso' => $this->formatDateIso($postDate),
+            'createdAtIso' => $this->formatDateIso($postDate),
+            'sentAtIso' => $this->formatDateIso($postDate),
+            'postDateTimestamp' => $postDate?->getTimestamp(),
+            'createdAtTimestamp' => $postDate?->getTimestamp(),
+            'postRelativeTime' => $this->formatRelativeTimeLabel($postDate),
             'postParentId' => $post->getPostParent()?->getIid(),
             'visible' => $post->getVisible(),
             'status' => $status,
             'statusLabel' => $this->getPostStatusLabel($status),
+            'posterUserId' => $poster instanceof User ? (int) $poster->getId() : 0,
             'posterFullName' => $post->getPosterFullName(),
             'posterAvatarUrl' => $posterAvatarUrl,
             'showPosterAvatar' => $showPosterAvatar && '' !== $posterAvatarUrl,
+            'posterRole' => $posterRole,
+            'posterRoleLabel' => $this->getPosterRoleLabel($posterRole),
+            'posterIsTeacher' => 'teacher' === $posterRole,
             'canEdit' => $canEdit,
             'canDelete' => $canEdit,
             'canApprove' => $canModerate && CForumPost::STATUS_VALIDATED !== $status,
@@ -375,6 +425,62 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     {
         return (string) ($this->getExtraFieldValue('forum_post', (int) $post->getIid(), 'revision_language') ?? '');
     }
+    private function formatDateIso(?DateTimeInterface $date): string
+    {
+        if (!$date instanceof DateTimeInterface) {
+            return '';
+        }
+
+        return $date->format(DateTimeInterface::ATOM);
+    }
+
+    private function formatRelativeTimeLabel(?DateTimeInterface $date): string
+    {
+        if (!$date instanceof DateTimeInterface) {
+            return '';
+        }
+
+        $diffInSeconds = $date->getTimestamp() - time();
+        $units = [
+            ['unit' => 'year', 'seconds' => 31536000, 'en' => ['year', 'years'], 'es' => ['año', 'años']],
+            ['unit' => 'month', 'seconds' => 2592000, 'en' => ['month', 'months'], 'es' => ['mes', 'meses']],
+            ['unit' => 'week', 'seconds' => 604800, 'en' => ['week', 'weeks'], 'es' => ['semana', 'semanas']],
+            ['unit' => 'day', 'seconds' => 86400, 'en' => ['day', 'days'], 'es' => ['día', 'días']],
+            ['unit' => 'hour', 'seconds' => 3600, 'en' => ['hour', 'hours'], 'es' => ['hora', 'horas']],
+            ['unit' => 'minute', 'seconds' => 60, 'en' => ['minute', 'minutes'], 'es' => ['minuto', 'minutos']],
+            ['unit' => 'second', 'seconds' => 1, 'en' => ['second', 'seconds'], 'es' => ['segundo', 'segundos']],
+        ];
+
+        $absoluteDiff = abs($diffInSeconds);
+        $locale = strtolower((string) ($this->requestStack->getCurrentRequest()?->getLocale() ?? ''));
+        if (45 > $absoluteDiff) {
+            return str_starts_with($locale, 'es') ? 'ahora' : 'just now';
+        }
+
+        $selected = $units[count($units) - 1];
+        foreach ($units as $unit) {
+            if ($absoluteDiff >= $unit['seconds']) {
+                $selected = $unit;
+                break;
+            }
+        }
+
+        $amount = (int) round($diffInSeconds / $selected['seconds']);
+        if (0 === $amount) {
+            $amount = 0 > $diffInSeconds ? -1 : 1;
+        }
+
+        $absoluteAmount = abs($amount);
+        if (str_starts_with($locale, 'es')) {
+            $unit = $selected['es'][1 === $absoluteAmount ? 0 : 1];
+
+            return 0 > $amount ? 'hace '.$absoluteAmount.' '.$unit : 'en '.$absoluteAmount.' '.$unit;
+        }
+
+        $unit = $selected['en'][1 === $absoluteAmount ? 0 : 1];
+
+        return 0 > $amount ? $absoluteAmount.' '.$unit.' ago' : 'in '.$absoluteAmount.' '.$unit;
+    }
 
     private function getPosterAvatarUrl(?User $user): string
     {
@@ -388,15 +494,66 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         }
 
         $illustrationUrl = trim((string) ($user->illustrationUrl ?? ''));
-        if ('' !== $illustrationUrl) {
-            $this->posterAvatarUrlByUserId[$userId] = $illustrationUrl;
+        if ('' === $illustrationUrl) {
+            $illustrationUrl = trim((string) $this->illustrationRepository->getIllustrationUrl($user));
+        }
 
-            return $illustrationUrl;
+        if ('' !== $illustrationUrl) {
+            $this->posterAvatarUrlByUserId[$userId] = $this->normalizeAvatarUrl($illustrationUrl);
+
+            return $this->posterAvatarUrlByUserId[$userId];
         }
 
         $this->posterAvatarUrlByUserId[$userId] = '';
 
         return '';
+    }
+
+    private function normalizeAvatarUrl(string $avatarUrl): string
+    {
+        if (str_contains($avatarUrl, 'w=')) {
+            return $avatarUrl;
+        }
+
+        return $avatarUrl.(str_contains($avatarUrl, '?') ? '&' : '?').'w=64';
+    }
+
+
+    private function getPosterRole(?User $user, Course $course, ?Session $session, ?CGroup $group): string
+    {
+        if (!$user instanceof User) {
+            return '';
+        }
+
+        if ($this->isPosterTeacher($user, $course, $session, $group)) {
+            return 'teacher';
+        }
+
+        return 'student';
+    }
+
+    private function isPosterTeacher(User $user, Course $course, ?Session $session, ?CGroup $group): bool
+    {
+        if ($group instanceof CGroup) {
+            $groupRoles = $this->courseAccessResolver->resolveGroupRoles($user, $course, $group);
+            if (\in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER, $groupRoles, true)) {
+                return true;
+            }
+        }
+
+        $courseRoles = $this->courseAccessResolver->resolveCourseRoles($user, $course, $session);
+
+        return \in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER, $courseRoles, true)
+            || \in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER, $courseRoles, true);
+    }
+
+    private function getPosterRoleLabel(string $role): string
+    {
+        return match ($role) {
+            'teacher' => 'Teacher',
+            'student' => 'Student',
+            default => '',
+        };
     }
 
     private function isReportAvailableForCurrentRequest(): bool

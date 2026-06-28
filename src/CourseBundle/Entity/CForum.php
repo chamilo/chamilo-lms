@@ -114,6 +114,46 @@ use Symfony\Component\Validator\Constraints as Assert;
             name: 'toggle_forum_subscription',
             processor: ForumProcessor::class,
         ),
+        new Post(
+            uriTemplate: '/forums/{iid}/image',
+            openapi: new Operation(
+                summary: 'Upload or remove a forum image',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'image' => ['type' => 'string', 'format' => 'binary'],
+                                    'removeImage' => ['type' => 'boolean'],
+                                    'csrfToken' => ['type' => 'string'],
+                                ],
+                                'required' => ['csrfToken'],
+                            ],
+                        ],
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'removeImage' => ['type' => 'boolean'],
+                                    'csrfToken' => ['type' => 'string'],
+                                ],
+                                'required' => ['csrfToken'],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            inputFormats: [
+                'jsonld' => ['application/ld+json'],
+                'json' => ['application/json'],
+                'multipart' => ['multipart/form-data'],
+            ],
+            name: 'upload_forum_image',
+            processor: ForumProcessor::class,
+        ),
         new Delete(
             uriTemplate: '/forums/{iid}',
             security: "is_granted('EDIT', object.resourceNode)",
@@ -253,6 +293,7 @@ class CForum extends AbstractResource implements ResourceInterface, ResourceShow
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
 
+    #[Groups(['forum:read'])]
     #[ORM\Column(name: 'forum_image', type: 'string', length: 255, nullable: false)]
     protected string $forumImage;
 

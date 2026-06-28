@@ -2389,5 +2389,8 @@
     "Search term is too short": "Lo t\u00e8rme de rec\u00e8rca es tr\u00f2p cort",
     "Could not search forums": "Impossible de recercar los f\u00f2rums",
     "Moderated": "Moderat",
-    "View threads": "Veire los fils"
+    "View threads": "Veire los fils",
+    "Current": "Actual",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Nombre maximal d'inscripcions auturizatadas. Daissar a 0 per pas limitar."
 }

@@ -2389,5 +2389,8 @@
     "Search term is too short": "Fraza wyszukiwania jest za kr\u00f3tka",
     "Could not search forums": "Nie mo\u017cna przeszuka\u0107 for\u00f3w",
     "Moderated": "Moderowany",
-    "View threads": "Wy\u015bwietl w\u0105tki"
+    "View threads": "Wy\u015bwietl w\u0105tki",
+    "Current": "Bie\u017c\u0105cy",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maksymalna liczba subskrypcji. Zostaw 0, aby nie ogranicza\u0107."
 }

@@ -250,13 +250,55 @@ final class ThemeHelper
     /**
      * Return the preferred logo URL for current theme (header/email),
      * falling back to DEFAULT_THEME if needed.
+     *
+     * For emails: try PNG candidates first, then SVG candidates, all within the
+     * active theme before falling back to the default Chamilo theme. This prevents
+     * themes that only provide SVG logos from silently showing the default Chamilo
+     * logo in outgoing emails.
      */
     public function getPreferredLogoUrl(string $type = 'header', bool $absoluteUrl = false): string
     {
-        // For e-mails, prefer PNG only (Gmail often blocks SVG rendering in emails).
-        $candidates = 'email' === $type
-            ? ['images/email-logo.png', 'images/header-logo.png']
-            : ['images/header-logo.svg', 'images/header-logo.png'];
+        if ('email' === $type) {
+            // Priority order for email logos (PNG preferred, SVG accepted as fallback).
+            $emailCandidates = [
+                'images/email-logo.png',
+                'images/header-logo.png',
+                'images/email-logo.svg',
+                'images/header-logo.svg',
+            ];
+
+            $visual = $this->getVisualTheme();
+
+            // 1) Look for any logo variant in the active theme first.
+            if (self::DEFAULT_THEME !== $visual) {
+                foreach ($emailCandidates as $relPath) {
+                    try {
+                        if ($this->filesystem->fileExists($visual.DIRECTORY_SEPARATOR.$relPath)) {
+                            return $this->router->generate(
+                                'theme_asset',
+                                ['name' => $visual, 'path' => $relPath],
+                                $absoluteUrl ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH
+                            );
+                        }
+                    } catch (FilesystemException) {
+                        // continue to next candidate
+                    }
+                }
+            }
+
+            // 2) Nothing in the active theme — fall back to the default theme (PNG only).
+            foreach (['images/email-logo.png', 'images/header-logo.png'] as $relPath) {
+                $url = $this->getThemeAssetUrl($relPath, $absoluteUrl);
+                if ('' !== $url) {
+                    return $url;
+                }
+            }
+
+            return '';
+        }
+
+        // Non-email (header, etc.): original behaviour.
+        $candidates = ['images/header-logo.svg', 'images/header-logo.png'];
 
         foreach ($candidates as $relPath) {
             $url = $this->getThemeAssetUrl($relPath, $absoluteUrl);

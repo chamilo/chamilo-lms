@@ -2389,5 +2389,8 @@
     "Search term is too short": "Paie\u0161kos fraz\u0117 per trumpa",
     "Could not search forums": "Nepavyko ie\u0161koti forumuose",
     "Moderated": "Moderuojama",
-    "View threads": "Per\u017ei\u016br\u0117ti temas"
+    "View threads": "Per\u017ei\u016br\u0117ti temas",
+    "Current": "Dabartinis",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Leid\u017eiamas maksimalus prenumerat\u0173 skai\u010dius. Palikite 0, jei nenorite riboti."
 }

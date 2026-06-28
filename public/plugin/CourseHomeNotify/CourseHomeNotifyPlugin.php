@@ -91,9 +91,10 @@ class CourseHomeNotifyPlugin extends Plugin
      */
     public function renderRegion($region)
     {
+        $routeName = Container::getRequest()->query->get('_route_name');
+
         if (
-            'main_bottom' !== $region
-            || strpos($_SERVER['SCRIPT_NAME'], 'course_home/course_home.php') === false
+            'content_bottom' !== $region || $routeName !== 'CourseHome'
         ) {
             return '';
         }
@@ -122,8 +123,8 @@ class CourseHomeNotifyPlugin extends Plugin
             return '';
         }
 
-        $modalFooter = '';
-        $modalConfig = ['show' => true];
+        $footerJs = '';
+        $preventCloseJs = '';
 
         if ($notification->getExpirationLink()) {
             /** @var NotificationRelUser $notificationUser */
@@ -150,40 +151,49 @@ class CourseHomeNotifyPlugin extends Plugin
                 ['id' => 'course-home-notify-link', 'target' => '_blank']
             );
 
-            $modalConfig['keyboard'] = false;
-            $modalConfig['backdrop'] = 'static';
+            $footerJs = "footer.html(".json_encode($link).");\n"
+                ."\$('#course-home-notify-link').on('click', function () {\n"
+                ."dialog.close();\n"
+                ."});";
 
-            $modalFooter = '<div class="modal-footer">'.$link.'</div>';
+            // Equivalent to the old keyboard:false / backdrop:static config:
+            // prevent dismissing with the Escape key so the user follows the link.
+            $preventCloseJs = "dialog.addEventListener('cancel', function (e) {\n"
+                ."e.preventDefault();\n"
+                ."});";
         }
 
-        $modal = '<div id="course-home-notify-modal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="'.get_lang('Close').'">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">'.$this->get_lang('CourseNotice').'</h4>
-                    </div>
-                    <div class="modal-body">
-                        '.$notification->getContent().'
-                    </div>
-                    '.$modalFooter.'
-                </div>
-            </div>
-        </div>';
+        // The notice is authored with a rich-text editor and rendered through
+        // jQuery .html(), so sanitize it to strip scripts, inline event handlers
+        // and javascript: URLs while keeping legitimate formatting (stored XSS).
+        $content = Security::remove_XSS($notification->getContent());
 
-        $modal .= "<script>
-            $(document).ready(function () {
-                \$('#course-home-notify-modal').modal(".json_encode($modalConfig).");
+        return "<script>
+            \$(function () {
+                var dialog = document.getElementById('global-modal');
 
-                \$('#course-home-notify-link').on('click', function () {
-                    \$('#course-home-notify-modal').modal('hide');
+                if (!dialog) {
+                    return;
+                }
+
+                \$('#global-modal-title').text(".json_encode($this->get_lang('CourseNotice')).");
+                \$('#global-modal-body').html(".json_encode($content).");
+
+                var footer = \$('#global-modal .legacy-modal__footer');
+                footer.empty();
+                $footerJs
+
+                $preventCloseJs
+
+                dialog.addEventListener('close', function () {
+                    footer.empty();
                 });
+
+                if (!dialog.open) {
+                    dialog.showModal();
+                }
             });
         </script>";
-
-        return $modal;
     }
 
     /**

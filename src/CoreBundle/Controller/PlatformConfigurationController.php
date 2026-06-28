@@ -250,6 +250,8 @@ class PlatformConfigurationController extends AbstractController
             ];
 
             $configuration['plugins']['onlyoffice'] = $this->getOnlyofficeFrontendConfig();
+        } else {
+            $configuration['settings']['security.allow_captcha'] = $settingsManager->getSetting('security.allow_captcha', true);
         }
 
         return new JsonResponse($configuration);

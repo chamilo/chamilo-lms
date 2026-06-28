@@ -2389,5 +2389,8 @@
     "Search term is too short": "Search term is too short",
     "Could not search forums": "Could not search forums",
     "Moderated": "Moderated",
-    "View threads": "View threads"
+    "View threads": "View threads",
+    "Current": "Current",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximum number of subscriptions allowed. Leave at 0 to not limit it."
 }

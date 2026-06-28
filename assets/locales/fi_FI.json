@@ -2389,5 +2389,8 @@
     "Search term is too short": "Hakutermi on liian lyhyt",
     "Could not search forums": "Foorumeita ei voitu hakea",
     "Moderated": "Moderoitu",
-    "View threads": "N\u00e4yt\u00e4 ketjut"
+    "View threads": "N\u00e4yt\u00e4 ketjut",
+    "Current": "Nykyinen",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Suurin sallittu rekister\u00f6intien m\u00e4\u00e4r\u00e4. J\u00e4t\u00e4 0:ksi rajoittamatta."
 }

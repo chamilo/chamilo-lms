@@ -2389,5 +2389,8 @@
     "Search term is too short": "Erayga raadinta aad buu u gaaban yahay",
     "Could not search forums": "Golayaasha lama baadhi karin",
     "Moderated": "La dhex-dhexaajiyay",
-    "View threads": "Eeg mawduucyada"
+    "View threads": "Eeg mawduucyada",
+    "Current": "Hadda",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Tirada ugu badan ee diiwaangelinta la oggol yahay. Ka tag 0 si aadan u xadidin."
 }

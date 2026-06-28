@@ -55,7 +55,7 @@ const isFocused = ref(false)
 const props = defineProps({
   editorId: { type: String, required: true },
   required: { type: Boolean, default: false },
-  title: { type: String, default: "" },
+  title: { type: String, default: "", required: true },
   editorConfig: { type: Object, default: () => ({}) },
   helpText: { type: String, default: "" },
   // If true: use Chamilo file manager; if false: use system file picker.

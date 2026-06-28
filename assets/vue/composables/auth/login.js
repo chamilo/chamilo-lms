@@ -1,4 +1,4 @@
-import { ref } from "vue"
+import { computed, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
@@ -10,7 +10,7 @@ function isValidHttpUrl(string) {
   try {
     const url = new URL(string)
     return url.protocol === "http:" || url.protocol === "https:"
-  } catch (_) {
+  } catch {
     return false
   }
 }
@@ -95,6 +95,16 @@ export function useLogin() {
 
   const isLoading = ref(false)
   const requires2FA = ref(false)
+
+  const captcha = reactive({
+    required: false,
+    code: "",
+    imageUrl: "",
+    blocked: false,
+    blockedSeconds: 0,
+  })
+
+  const captchaAllowed = computed(() => "true" === platformConfigurationStore.getSetting("security.allow_captcha"))
 
   async function performLogin({
     login,
@@ -274,6 +284,116 @@ export function useLogin() {
     }
   }
 
+  /**
+   * Resets the transient captcha state (typed code and block info).
+   * @returns {void}
+   */
+  function resetCaptchaState() {
+    captcha.code = ""
+    captcha.blocked = false
+    captcha.blockedSeconds = 0
+  }
+
+  /**
+   * Refreshes the captcha image URL with a cache-busting timestamp.
+   * @returns {Promise<void>}
+   */
+  async function refreshCaptcha() {
+    captcha.imageUrl = `/login/captcha/image?ts=${Date.now()}`
+  }
+
+  /**
+   * Loads the captcha status for the given username from the backend.
+   * Skips the request entirely when captcha is not allowed by the platform.
+   * @param {string} [username=""]
+   * @returns {Promise<void>}
+   */
+  async function loadCaptchaStatus(username = "") {
+    if (!captchaAllowed.value) {
+      return
+    }
+
+    try {
+      const response = await securityService.getLoginCaptchaStatus(username || "")
+
+      captcha.required = !!response.enabled
+      captcha.blocked = !!response.blocked
+      captcha.blockedSeconds = response.remainingSeconds || 0
+      captcha.imageUrl = response.imageUrl || ""
+
+      if (!captcha.required) {
+        resetCaptchaState()
+        captcha.imageUrl = ""
+      }
+    } catch {
+      captcha.required = false
+      captcha.blocked = false
+      captcha.blockedSeconds = 0
+      captcha.imageUrl = ""
+    }
+  }
+
+  /**
+   * Loads the captcha status on demand (e.g. when the username field loses
+   * focus), unless the 2FA step is currently active.
+   * @param {string} [username=""]
+   * @returns {Promise<void>}
+   */
+  async function updateCaptchaStatus(username = "") {
+    if (requires2FA.value) {
+      return
+    }
+
+    await loadCaptchaStatus(username)
+  }
+
+  /**
+   * Orchestrates a login submission together with the captcha flow: ensures a
+   * captcha image is shown when required, performs the login, and refreshes the
+   * captcha state from the result on block or failure.
+   * @param {Object} credentials
+   * @param {string} credentials.login
+   * @param {string} credentials.password
+   * @param {string|null} [credentials.totp=null]
+   * @param {boolean} [credentials._remember_me=false]
+   * @param {boolean} [credentials.isLoginLdap=false]
+   * @returns {Promise<Object>}
+   */
+  async function submitLogin({ login, password, totp = null, _remember_me = false, isLoginLdap = false }) {
+    if (!requires2FA.value && captcha.required && !captcha.imageUrl) {
+      await refreshCaptcha()
+    }
+
+    const result = await performLogin({
+      login,
+      password,
+      totp,
+      captcha_code: captcha.required ? captcha.code : null,
+      _remember_me,
+      isLoginLdap,
+    })
+
+    if (result?.captchaBlocked) {
+      captcha.blocked = true
+      captcha.blockedSeconds = result.captchaBlockedSeconds || 0
+      captcha.code = ""
+      await refreshCaptcha()
+
+      return result
+    }
+
+    if (result?.captchaRequired || (!result?.success && !requires2FA.value)) {
+      captcha.code = ""
+      await loadCaptchaStatus(login)
+
+      if (captcha.required && !captcha.imageUrl) {
+        await refreshCaptcha()
+      }
+    }
+
+    return result
+  }
+
   async function redirectNotAuthenticated() {
     if (!securityStore.isAuthenticated) {
       return
@@ -293,6 +413,11 @@ export function useLogin() {
     isLoading,
     requires2FA,
     performLogin,
+    submitLogin,
     redirectNotAuthenticated,
+    captcha,
+    refreshCaptcha,
+    loadCaptchaStatus,
+    updateCaptchaStatus,
   }
 }

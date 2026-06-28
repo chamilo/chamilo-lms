@@ -109,6 +109,28 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
             }
 
             if (empty($version)) {
+                // chamilo_database_version is missing. This can mean:
+                // a) Fresh Chamilo 1 DB before migration (should redirect)
+                // b) Migration started but not yet finished (should NOT redirect –
+                //    redirecting here creates an infinite loop because APP_INSTALLED=1
+                //    is written to .env at step 5, before the migration runs).
+                // Distinguish by checking whether the Doctrine migrations version
+                // table exists and has rows (= migration is in progress or failed).
+                try {
+                    $migrationCount = $this->connection->fetchOne(
+                        'SELECT COUNT(*) FROM version'
+                    );
+                    if ($migrationCount > 0) {
+                        // Migration has started (or is running) – allow the request
+                        // through so the installer can display progress / retry.
+                        $isHealthy = true;
+
+                        return;
+                    }
+                } catch (Throwable) {
+                    // version table does not exist yet – fall through to redirect.
+                }
+
                 $this->redirectToInstaller($event);
 
                 return;

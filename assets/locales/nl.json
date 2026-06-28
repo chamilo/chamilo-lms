@@ -2389,5 +2389,8 @@
     "Search term is too short": "Zoekterm is te kort",
     "Could not search forums": "Kon forums niet doorzoeken",
     "Moderated": "Gemodereerd",
-    "View threads": "Onderwerpen bekijken"
+    "View threads": "Onderwerpen bekijken",
+    "Current": "Huidig",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximaal aantal toegestane inschrijvingen. Laat op 0 staan om het niet te beperken."
 }

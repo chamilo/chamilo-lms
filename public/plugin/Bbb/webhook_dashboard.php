@@ -505,7 +505,7 @@ $html = ob_get_clean();
 /* Render */
 $tpl->assign('content', $html);
 $actionLinks = Display::toolbarButton(
-    get_lang('VideoConference'),
+    get_lang('Videoconference'),
     api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?global=1&user_id='.api_get_user_id(),
     'video',
     'primary'

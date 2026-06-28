@@ -2389,5 +2389,8 @@
     "Search term is too short": "Leitior\u00f0 er ov stutt",
     "Could not search forums": "Kundi ikki leita \u00ed evnum",
     "Moderated": "Umsit",
-    "View threads": "V\u00eds tr\u00e1\u00f0ir"
+    "View threads": "V\u00eds tr\u00e1\u00f0ir",
+    "Current": "N\u00faverandi",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Meistaratal av tilmeldingum loyvd. Lat vera 0 at ikki takmarka ta\u00f0."
 }

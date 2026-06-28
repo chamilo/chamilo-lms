@@ -149,6 +149,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
             'iid' => $forum->getIid(),
             'title' => $forum->getTitle(),
             'forumComment' => $forum->getForumComment(),
+            'forumImage' => $this->getForumImageUrl($forum),
             'forumThreads' => $forum->getForumThreads(),
             'forumPosts' => $forum->getForumPosts(),
             'forumCategory' => null === $category ? null : '/api/forum_categories/'.$category->getIid(),
@@ -172,5 +173,10 @@ final class ForumCollectionStateProvider implements ProviderInterface
             'subscribed' => $canSubscribe && $this->isSubscribedToForum($course, $user, (int) $forum->getIid()),
             'canSubscribe' => $canSubscribe,
         ];
+    }
+
+    private function getForumImageUrl(CForum $forum): string
+    {
+        return trim($forum->getForumImage());
     }
 }

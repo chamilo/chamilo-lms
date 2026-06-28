@@ -143,193 +143,225 @@
         :key="post.iid"
         :class="['rounded-xl border border-gray-20 bg-white p-4 shadow-sm', getPostLevelClass(post)]"
       >
-        <div class="mb-3 flex flex-col gap-3 border-b border-gray-20 pb-3 md:flex-row md:items-start md:justify-between">
-          <div class="flex min-w-0 gap-3">
-            <img
-              v-if="post.showPosterAvatar && post.posterAvatarUrl"
-              :alt="post.posterFullName || t('Unknown user')"
-              :src="post.posterAvatarUrl"
-              class="h-10 w-10 shrink-0 rounded-full object-cover"
-            />
+        <div class="grid gap-4 md:grid-cols-[10rem_minmax(0,1fr)]">
+          <aside class="flex flex-row items-center gap-3 md:flex-col md:items-center md:border-r md:border-gray-20 md:pr-4 md:text-center">
+            <div class="relative shrink-0">
+              <BaseUserAvatar
+                :alt="post.posterFullName || t('Unknown user')"
+                :image-url="getPosterAvatarUrl(post)"
+                size="large"
+              />
+              <span
+                v-if="isTeacherRole(post)"
+                :title="getRoleLabel(post)"
+                class="absolute -bottom-1 -right-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
+              >
+                <i
+                  class="mdi mdi-account-tie text-sm"
+                  aria-hidden="true"
+                ></i>
+                <span class="sr-only">{{ getRoleLabel(post) }}</span>
+              </span>
+            </div>
             <div class="min-w-0">
-              <h2 class="truncate text-base font-semibold text-gray-90">{{ post.title }}</h2>
-              <div class="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
-                <span>{{ post.posterFullName || t("Unknown user") }}</span>
-                <span v-if="post.postDate">{{ formatDate(post.postDate) }}</span>
-                <span v-if="!isPostVisible(post)">{{ t("Hidden") }}</span>
-                <span
-                  v-if="showModerationStatus(post)"
-                  :class="getModerationBadgeClass(post)"
-                >
-                  {{ t(post.statusLabel || getModerationStatusLabel(post)) }}
-                </span>
-                <span
-                  v-if="post.revisionRequested"
-                  class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
-                >
-                  {{ t('Revision requested') }}
-                </span>
-                <span
-                  v-if="post.revisionLanguage"
-                  class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
-                >
-                  {{ t('Revision') }}
-                </span>
+              <div class="truncate text-sm font-semibold text-primary">
+                {{ post.posterFullName || t("Unknown user") }}
+              </div>
+              <div
+                v-if="getPostRelativeTime(post) || getPostDateValue(post)"
+                class="mt-1 text-xs text-gray-500"
+              >
+                <span :title="formatDate(getPostDateValue(post)) || getPostRelativeTime(post)">{{ getPostRelativeTime(post) }}</span>
               </div>
             </div>
-          </div>
+          </aside>
 
-          <div class="flex shrink-0 flex-wrap items-center justify-end gap-1">
-            <BaseButton
-              v-if="post.canApprove"
-              :label="t('Approve post')"
-              icon="check"
-              only-icon
-              size="small"
-              type="success-text"
-              @click="approvePost(post)"
-            />
-            <BaseButton
-              v-if="post.canReject"
-              :label="t('Reject post')"
-              icon="close"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmRejectPost(post)"
-            />
-            <BaseButton
-              v-if="post.canToggleVisibility"
-              :label="isPostVisible(post) ? t('Hide') : t('Show')"
-              :icon="isPostVisible(post) ? 'eye-on' : 'eye-off'"
-              only-icon
-              size="small"
-              type="primary-text"
-              @click="togglePostVisibility(post)"
-            />
-            <BaseButton
-              v-if="canReply && post.canReplyToPost"
-              :label="t('Reply to this message')"
-              :route="getReplyToPostRoute(post)"
-              icon="send"
-              only-icon
-              size="small"
-              type="success-text"
-            />
-            <BaseButton
-              v-if="canReply && post.canQuote"
-              :label="t('Quote this message')"
-              :route="getQuotePostRoute(post)"
-              icon="comment"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="post.canAskRevision"
-              :label="post.revisionRequested ? t('Cancel revision request') : t('Ask for a revision')"
-              icon="refresh"
-              only-icon
-              size="small"
-              type="secondary-text"
-              @click="askRevision(post)"
-            />
-            <BaseButton
-              v-if="post.canGiveRevision"
-              :label="t('Give revision')"
-              :route="getGiveRevisionRoute(post)"
-              icon="reply"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="post.canReport"
-              :label="t('Report')"
-              icon="alert"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmReportPost(post)"
-            />
-            <BaseButton
-              v-if="post.canMove"
-              :label="t('Move post')"
-              icon="arrows-left-right"
-              only-icon
-              size="small"
-              type="secondary-text"
-              @click="openMovePost(post)"
-            />
-            <BaseButton
-              v-if="post.canEdit"
-              :label="t('Edit post')"
-              icon="edit"
-              only-icon
-              size="small"
-              type="secondary-text"
-              @click="openEditPost(post)"
-            />
-            <BaseButton
-              v-if="post.canDelete"
-              :label="t('Delete post')"
-              icon="delete"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmDeletePost(post)"
-            />
-          </div>
-        </div>
+          <div class="min-w-0">
+            <div class="mb-3 flex flex-col gap-3 border-b border-gray-20 pb-3 md:flex-row md:items-start md:justify-between">
+              <div class="min-w-0">
+                <h2 class="truncate text-base font-semibold text-gray-90">{{ post.title }}</h2>
+                <div class="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
+                  <span v-if="!isPostVisible(post)">{{ t("Hidden") }}</span>
+                  <span
+                    v-if="showModerationStatus(post)"
+                    :class="getModerationBadgeClass(post)"
+                  >
+                    {{ t(post.statusLabel || getModerationStatusLabel(post)) }}
+                  </span>
+                  <span
+                    v-if="getPostRelativeTime(post) || getPostDateValue(post)"
+                    :title="formatDate(getPostDateValue(post)) || getPostRelativeTime(post)"
+                  >
+                    {{ getPostRelativeTime(post) }}
+                  </span>
+                  <span
+                    v-if="post.revisionRequested"
+                    class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
+                  >
+                    {{ t('Revision requested') }}
+                  </span>
+                  <span
+                    v-if="post.revisionLanguage"
+                    class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                  >
+                    {{ t('Revision') }}
+                  </span>
+                </div>
+              </div>
 
-        <div
-          class="prose prose-sm max-w-none text-gray-800"
-          v-html="sanitizePostText(post.postText)"
-        />
+              <div class="flex shrink-0 flex-wrap items-center justify-end gap-1">
+                <BaseButton
+                  v-if="post.canApprove"
+                  :label="t('Approve post')"
+                  icon="check"
+                  only-icon
+                  size="small"
+                  type="success-text"
+                  @click="approvePost(post)"
+                />
+                <BaseButton
+                  v-if="post.canReject"
+                  :label="t('Reject post')"
+                  icon="close"
+                  only-icon
+                  size="small"
+                  type="danger-text"
+                  @click="confirmRejectPost(post)"
+                />
+                <BaseButton
+                  v-if="post.canToggleVisibility"
+                  :label="isPostVisible(post) ? t('Hide') : t('Show')"
+                  :icon="isPostVisible(post) ? 'eye-on' : 'eye-off'"
+                  only-icon
+                  size="small"
+                  type="primary-text"
+                  @click="togglePostVisibility(post)"
+                />
+                <BaseButton
+                  v-if="canReply && post.canReplyToPost"
+                  :label="t('Reply to this message')"
+                  :route="getReplyToPostRoute(post)"
+                  icon="send"
+                  only-icon
+                  size="small"
+                  type="success-text"
+                />
+                <BaseButton
+                  v-if="canReply && post.canQuote"
+                  :label="t('Quote this message')"
+                  :route="getQuotePostRoute(post)"
+                  icon="comment"
+                  only-icon
+                  size="small"
+                  type="primary-text"
+                />
+                <BaseButton
+                  v-if="post.canAskRevision"
+                  :label="post.revisionRequested ? t('Cancel revision request') : t('Ask for a revision')"
+                  icon="refresh"
+                  only-icon
+                  size="small"
+                  type="secondary-text"
+                  @click="askRevision(post)"
+                />
+                <BaseButton
+                  v-if="post.canGiveRevision"
+                  :label="t('Give revision')"
+                  :route="getGiveRevisionRoute(post)"
+                  icon="reply"
+                  only-icon
+                  size="small"
+                  type="primary-text"
+                />
+                <BaseButton
+                  v-if="post.canReport"
+                  :label="t('Report')"
+                  icon="alert"
+                  only-icon
+                  size="small"
+                  type="danger-text"
+                  @click="confirmReportPost(post)"
+                />
+                <BaseButton
+                  v-if="post.canMove"
+                  :label="t('Move post')"
+                  icon="arrows-left-right"
+                  only-icon
+                  size="small"
+                  type="secondary-text"
+                  @click="openMovePost(post)"
+                />
+                <BaseButton
+                  v-if="post.canEdit"
+                  :label="t('Edit post')"
+                  icon="edit"
+                  only-icon
+                  size="small"
+                  type="secondary-text"
+                  @click="openEditPost(post)"
+                />
+                <BaseButton
+                  v-if="post.canDelete"
+                  :label="t('Delete post')"
+                  icon="delete"
+                  only-icon
+                  size="small"
+                  type="danger-text"
+                  @click="confirmDeletePost(post)"
+                />
+              </div>
+            </div>
 
-        <div
-          v-if="getAttachments(post).length"
-          class="mt-4 rounded-lg border border-gray-20 bg-gray-10 p-3"
-        >
-          <h3 class="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-800">
-            <BaseIcon
-              icon="attachment"
-              size="small"
+            <div
+              class="prose prose-sm max-w-none text-gray-800"
+              v-html="sanitizePostText(post.postText)"
             />
-            {{ t('Attachments') }}
-          </h3>
-          <ul class="flex flex-col gap-2">
-            <li
-              v-for="attachment in getAttachments(post)"
-              :key="attachment.iid || attachment.id || attachment.filename"
-              class="flex items-center justify-between gap-2 text-sm"
+
+            <div
+              v-if="getAttachments(post).length"
+              class="mt-4 rounded-lg border border-gray-20 bg-gray-10 p-3"
             >
-              <div class="flex min-w-0 items-center gap-2">
+              <h3 class="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-800">
                 <BaseIcon
-                  icon="file-generic"
+                  icon="attachment"
                   size="small"
                 />
-                <a
-                  :href="getAttachmentUrl(attachment)"
-                  class="truncate text-primary hover:underline"
-                  rel="noopener noreferrer"
-                  target="_blank"
+                {{ t('Attachments') }}
+              </h3>
+              <ul class="flex flex-col gap-2">
+                <li
+                  v-for="attachment in getAttachments(post)"
+                  :key="attachment.iid || attachment.id || attachment.filename"
+                  class="flex items-center justify-between gap-2 text-sm"
                 >
-                  {{ attachment.filename || attachment.path || t('Attachment') }}
-                </a>
-                <span class="shrink-0 text-xs text-gray-500">{{ formatSize(attachment.size) }}</span>
-              </div>
-              <BaseButton
-                v-if="attachment.canDelete"
-                :label="t('Delete attachment')"
-                icon="delete"
-                only-icon
-                size="small"
-                type="danger-text"
-                @click="confirmDeleteAttachment(attachment)"
-              />
-            </li>
-          </ul>
+                  <div class="flex min-w-0 items-center gap-2">
+                    <BaseIcon
+                      icon="file-generic"
+                      size="small"
+                    />
+                    <a
+                      :href="getAttachmentUrl(attachment)"
+                      class="truncate text-primary hover:underline"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {{ attachment.filename || attachment.path || t('Attachment') }}
+                    </a>
+                    <span class="shrink-0 text-xs text-gray-500">{{ formatSize(attachment.size) }}</span>
+                  </div>
+                  <BaseButton
+                    v-if="attachment.canDelete"
+                    :label="t('Delete attachment')"
+                    icon="delete"
+                    only-icon
+                    size="small"
+                    type="danger-text"
+                    @click="confirmDeleteAttachment(attachment)"
+                  />
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </article>
     </div>
@@ -415,16 +447,19 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import forumService from "../../services/forumService"
+import { useSecurityStore } from "../../store/securityStore"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
-const { t, d } = useI18n()
+const { t, d, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const notifications = useNotification()
+const securityStore = useSecurityStore()
 const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(false)
@@ -594,7 +629,9 @@ function isPostVisible(post) {
 
 
 function showModerationStatus(post) {
-  return Boolean(forum.value?.moderated || post?.status)
+  const status = getModerationStatus(post)
+
+  return 1 !== status && (Boolean(forum.value?.moderated) || status > 0)
 }
 
 function getModerationStatus(post) {
@@ -638,12 +675,170 @@ function getAttachmentUrl(attachment) {
   return attachment.downloadUrl || attachment.contentUrl || attachment.url || "#"
 }
 
-function formatDate(value) {
+const relativeTimeFormatter = computed(() => {
+  try {
+    return new Intl.RelativeTimeFormat(locale.value || undefined, { numeric: "auto" })
+  } catch (error) {
+    console.error("Error creating relative time formatter:", error)
+
+    return null
+  }
+})
+
+function normalizeDateValue(value) {
   if (!value) {
     return ""
   }
 
-  return d(new Date(value), "long")
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? "" : value
+  }
+
+  if (typeof value === "number") {
+    const timestamp = value > 100000000000 ? value : value * 1000
+    const date = new Date(timestamp)
+
+    return Number.isNaN(date.getTime()) ? "" : date
+  }
+
+  if (typeof value === "object") {
+    return normalizeDateValue(
+      value.date || value.datetime || value.dateTime || value.value || value.timestamp || value.time || "",
+    )
+  }
+
+  const rawValue = String(value).trim()
+  if (!rawValue) {
+    return ""
+  }
+
+  if (/^\d+$/.test(rawValue)) {
+    return normalizeDateValue(Number(rawValue))
+  }
+
+  const normalizedValue = rawValue.includes("T") ? rawValue : rawValue.replace(" ", "T")
+  const date = new Date(normalizedValue)
+
+  return Number.isNaN(date.getTime()) ? "" : date
+}
+
+function resolveDateValue(...values) {
+  for (const value of values) {
+    const date = normalizeDateValue(value)
+    if (date) {
+      return date
+    }
+  }
+
+  return ""
+}
+
+function formatDate(value) {
+  const date = normalizeDateValue(value)
+  if (!date) {
+    return ""
+  }
+
+  return d(date, "long")
+}
+
+function isDefaultAvatarUrl(value) {
+  const avatarUrl = String(value || "").trim()
+  if (!avatarUrl) {
+    return true
+  }
+
+  return ["/img/user_default.svg", "user_default.svg", "unknown.png", "anonymous"].some((marker) =>
+    avatarUrl.includes(marker),
+  )
+}
+
+function getCurrentUserAvatarUrl() {
+  const user = securityStore.user || {}
+
+  return String(user.illustrationUrl || user.avatarUrl || user.pictureUri || "").trim()
+}
+
+function isCurrentUserItem(item) {
+  const posterUserId = Number(item?.posterUserId || 0)
+  const currentUserId = Number(securityStore.user?.id || 0)
+
+  return posterUserId > 0 && currentUserId > 0 && posterUserId === currentUserId
+}
+
+function getPosterAvatarUrl(item) {
+  const avatarUrl = String(item?.posterAvatarUrl || item?.avatarUrl || "").trim()
+  if (avatarUrl && !isDefaultAvatarUrl(avatarUrl)) {
+    return avatarUrl
+  }
+
+  if (isCurrentUserItem(item)) {
+    const currentAvatarUrl = getCurrentUserAvatarUrl()
+    if (currentAvatarUrl && !isDefaultAvatarUrl(currentAvatarUrl)) {
+      return currentAvatarUrl
+    }
+  }
+
+  return ""
+}
+
+function getPostDateValue(post) {
+  return resolveDateValue(
+    post?.postDateIso,
+    post?.createdAtIso,
+    post?.sentAtIso,
+    post?.postDate,
+    post?.createdAt,
+    post?.date,
+    post?.sentAt,
+    post?.postDateTimestamp,
+    post?.createdAtTimestamp,
+    post?.post_date,
+    post?.created_at,
+  )
+}
+
+function getPostRelativeTime(post) {
+  return (
+    post?.postRelativeTime ||
+    post?.relativeTime ||
+    post?.createdAtRelative ||
+    (getPostDateValue(post) ? formatRelativeTime(getPostDateValue(post)) : "")
+  )
+}
+
+function formatRelativeTime(value) {
+  const date = normalizeDateValue(value)
+  if (!date) {
+    return ""
+  }
+
+  const diffInSeconds = Math.round((date.getTime() - Date.now()) / 1000)
+  const units = [
+    { unit: "year", seconds: 31536000 },
+    { unit: "month", seconds: 2592000 },
+    { unit: "week", seconds: 604800 },
+    { unit: "day", seconds: 86400 },
+    { unit: "hour", seconds: 3600 },
+    { unit: "minute", seconds: 60 },
+    { unit: "second", seconds: 1 },
+  ]
+  const selected = units.find((item) => Math.abs(diffInSeconds) >= item.seconds) || units[units.length - 1]
+  const amount = Math.round(diffInSeconds / selected.seconds)
+
+  if (relativeTimeFormatter.value) {
+    return relativeTimeFormatter.value.format(amount, selected.unit)
+  }
+
+  return formatDate(value)
+}
+
+function isTeacherRole(item) {
+  return Boolean(item?.posterIsTeacher || item?.posterRole === "teacher")
+}
+
+function getRoleLabel(item) {
+  return item?.posterRoleLabel ? t(item.posterRoleLabel) : t("Teacher")
 }
 
 function formatSize(value) {

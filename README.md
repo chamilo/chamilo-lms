@@ -113,14 +113,14 @@ sudo apt install -y apache2 libapache2-mod-php mariadb-client mariadb-server php
 sudo mysql -e "CREATE USER chamilo2@localhost IDENTIFIED BY 'chamilo2';"
 sudo mysql -e "GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;"
 cd /var/www
-sudo wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-RC.2/chamilo-2.0.0-RC.2.tar.gz
-sudo tar zxf chamilo-2.0.0-RC.2.tar.gz
-sudo mv chamilo-2.0.0-RC.2 chamilo
+sudo wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.3/chamilo-2.0.3.tar.gz
+sudo tar zxf chamilo-2.0.3.tar.gz
 cd chamilo
 sudo cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.chamilo.net.conf
-# Edit /etc/apache2/sites-available/my.chamilo.net.conf to match your domain
+# Edit /etc/apache2/sites-available/my.chamilo.net.conf to match your domain name
 sudo a2ensite my.chamilo.net
 sudo a2enmod rewrite ssl headers expires
+sudo touch .env
 sudo chown -R www-data: .env config/ var/
 sudo systemctl restart apache2
 # Open http://my.chamilo.net in your browser to go through the installation wizard

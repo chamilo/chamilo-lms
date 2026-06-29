@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
+use KnpU\OAuth2ClientBundle\Security\Exception\InvalidStateAuthenticationException;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,6 +82,23 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
+        // On invalid OAuth2 state (session lost between redirect and callback), restart the
+        // auth flow silently. One auto-retry per provider; a second failure falls through to
+        // the normal error path so a broken session can't loop indefinitely.
+        if ($exception instanceof InvalidStateAuthenticationException && $request->hasSession()) {
+            $session = $request->getSession();
+            $retryKey = '_oauth2_state_retry_'.$this->providerName;
+
+            if (!$session->get($retryKey, false)) {
+                $session->set($retryKey, true);
+                $startRoute = 'chamilo.oauth2_'.$this->providerName.'_start';
+
+                return new RedirectResponse($this->router->generate($startRoute));
+            }
+
+            $session->remove($retryKey);
+        }
+
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
 
         if ($request->hasSession()) {

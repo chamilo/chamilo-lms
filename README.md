@@ -120,6 +120,7 @@ sudo cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.cha
 # Edit /etc/apache2/sites-available/my.chamilo.net.conf to match your domain name
 sudo a2ensite my.chamilo.net
 sudo a2enmod rewrite ssl headers expires
+sudo touch .env
 sudo chown -R www-data: .env config/ var/
 sudo systemctl restart apache2
 # Open http://my.chamilo.net in your browser to go through the installation wizard

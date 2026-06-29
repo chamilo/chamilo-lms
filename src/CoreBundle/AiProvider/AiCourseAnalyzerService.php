@@ -530,9 +530,22 @@ final class AiCourseAnalyzerService
 
     private function buildExerciseEditUrl(CQuiz $quiz, Course $course, ?Session $session): string
     {
-        return $this->buildLegacyCourseUrl('/main/exercise/exercise_admin.php', $course, $session, [
-            'exerciseId' => (int) $quiz->getIid(),
-        ]);
+        $courseResourceNode = $course->getResourceNode();
+        if (!$courseResourceNode instanceof ResourceNode || null === $courseResourceNode->getId()) {
+            return $this->buildLegacyCourseUrl('/main/exercise/exercise_admin.php', $course, $session, [
+                'exerciseId' => (int) $quiz->getIid(),
+            ]);
+        }
+
+        $query = [
+            'cid' => (int) $course->getId(),
+            'sid' => $session instanceof Session ? (int) $session->getId() : 0,
+            'gid' => 0,
+            'gradebook' => 0,
+            'origin' => '',
+        ];
+
+        return '/resources/exercise/'.(int) $courseResourceNode->getId().'/'.(int) $quiz->getIid().'/edit?'.http_build_query($query);
     }
 
     /**

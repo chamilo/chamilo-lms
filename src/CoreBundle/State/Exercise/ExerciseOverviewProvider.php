@@ -140,6 +140,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $overview->showDetailsColumn = $this->shouldShowDetailsColumn($quiz, $currentUserAttemptCount);
         $overview->attemptLimitReached = $attemptLimitReached;
         $overview->startButtonLabel = 0 < $currentUserAttemptCount || $hasIncompleteAttempt ? 'Proceed with the test' : 'Start test';
+        $overview->browserCheckEnabled = $this->isSettingEnabled('exercise.quiz_check_button_enable');
         $overview->notice = $this->getOverviewNotice($currentUserAttemptCount, $newAttemptsDisabled, $hasIncompleteAttempt, $canManage);
 
         return $overview;

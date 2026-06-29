@@ -97,6 +97,12 @@ final class ExerciseRuntimeReport
     #[Groups(['exercise_runtime_report:read'])]
     public bool $showOfficialCode = false;
 
+    #[Groups(['exercise_runtime_report:read'])]
+    public bool $showUsername = false;
+
+    #[Groups(['exercise_runtime_report:read'])]
+    public bool $showIp = true;
+
     /**
      * @var array<int, array<string, mixed>>
      */

@@ -31,6 +31,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'origin', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'returnToLp', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'lp_id', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'learnpath_id', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'lp_parent_id', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'parent', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
@@ -47,6 +53,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'origin', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'returnToLp', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'lp_id', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'learnpath_id', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'lp_parent_id', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'parent', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
                 requestBody: new RequestBody(
                     content: new ArrayObject([
@@ -125,6 +137,15 @@ final class ExerciseQuestionImport
 
     #[Groups(['exercise_question_import:read'])]
     public string $sample = '';
+
+    #[Groups(['exercise_question_import:read'])]
+    public bool $learningPathContext = false;
+
+    #[Groups(['exercise_question_import:read'])]
+    public ?int $learningPathItemId = null;
+
+    #[Groups(['exercise_question_import:read'])]
+    public string $learningPathMessage = '';
 
     public function getImportType(): string
     {

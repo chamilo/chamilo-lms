@@ -41,6 +41,12 @@
       >
         {{ t("Skipped questions") }}: {{ skippedQuestionCount }}
       </p>
+      <p
+        v-if="learningPathMessage"
+        class="mt-1"
+      >
+        {{ t(learningPathMessage) }}
+      </p>
       <div
         v-if="createdExerciseId"
         class="mt-3 flex flex-wrap gap-2"
@@ -203,6 +209,8 @@ const rowErrors = ref([])
 const createdExerciseId = ref(null)
 const importedQuestionCount = ref(0)
 const skippedQuestionCount = ref(0)
+const learningPathMessage = ref("")
+const learningPathItemId = ref(null)
 
 const isAikenImport = computed(() => props.importType === "aiken")
 const isExcelImport = computed(() => props.importType === "excel")
@@ -272,6 +280,12 @@ function getContextParams() {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
+    origin: getQueryValue(route.query.origin),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    lp_id: getQueryValue(route.query.lp_id),
+    learnpath_id: getQueryValue(route.query.learnpath_id),
+    lp_parent_id: getQueryValue(route.query.lp_parent_id),
+    parent: getQueryValue(route.query.parent),
   }
 }
 
@@ -330,6 +344,8 @@ async function submitImport() {
     importedQuestionCount.value = Number(response.importedQuestionCount || 0)
     skippedQuestionCount.value = Number(response.skippedQuestionCount || 0)
     rowErrors.value = Array.isArray(response.errors) ? response.errors : []
+    learningPathMessage.value = response.learningPathMessage || ""
+    learningPathItemId.value = response.learningPathItemId || null
   } catch (error) {
     console.error("Error importing exercise questions", error)
     errorMessage.value = error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not import questions")

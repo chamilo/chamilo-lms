@@ -69,6 +69,9 @@ final class ExerciseRuntimeAnswer
     #[Groups(['exercise_runtime_answer:write'])]
     public string $navigationAction = '';
 
+    #[Groups(['exercise_runtime_answer:write'])]
+    public bool $confirmCategory = false;
+
     #[Groups(['exercise_runtime_answer:read'])]
     public bool $success = false;
 
@@ -104,6 +107,12 @@ final class ExerciseRuntimeAnswer
      */
     #[Groups(['exercise_runtime_answer:read'])]
     public array $feedback = [];
+
+    /**
+     * @var array<string, mixed>
+     */
+    #[Groups(['exercise_runtime_answer:read'])]
+    public array $categoryReminder = [];
 
     public function getExerciseId(): ?int
     {

@@ -465,6 +465,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
             'limitTeacherAccess' => $this->isSettingEnabled('exercise.limit_exercise_teacher_access'),
             'exerciseGeneratorEnabled' => $this->isCourseSettingEnabled($course, 'exercise_generator'),
             'canCleanAllResults' => $this->canCleanResults(),
+            'showPendingExerciseAttempts' => $this->isSettingEnabled('exercise.my_courses_show_pending_exercise_attempts'),
         ];
     }
 

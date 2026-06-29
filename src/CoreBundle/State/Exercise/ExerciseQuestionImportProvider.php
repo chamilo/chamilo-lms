@@ -59,6 +59,7 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
         $response->canManage = true;
         $response->actionUrls = $this->getActionUrls($course, $session, $request);
         $response->sample = $this->getImportSample($importType);
+        $response->learningPathContext = $this->isLearningPathImportContext($request);
 
         return $response;
     }
@@ -135,12 +136,33 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
             'cid' => (int) $course->getId(),
             'sid' => (int) ($session?->getId() ?? 0),
             'gid' => $request->query->getInt('gid'),
+            'origin' => (string) $request->query->get('origin', ''),
+            'returnToLp' => (string) $request->query->get('returnToLp', ''),
+            'lp_id' => $request->query->getInt('lp_id'),
+            'learnpath_id' => $request->query->getInt('learnpath_id'),
+            'lp_parent_id' => $request->query->getInt('lp_parent_id'),
+            'parent' => $request->query->getInt('parent'),
         ];
-        $queryString = http_build_query(array_filter($params, static fn (int $value): bool => 0 < $value));
+        $queryString = http_build_query(array_filter(
+            $params,
+            static fn (mixed $value): bool => \is_int($value) ? 0 < $value : '' !== trim((string) $value)
+        ));
 
         return [
             'excelTemplate' => '/api/exercise/import/excel/template.xlsx'.('' !== $queryString ? '?'.$queryString : ''),
         ];
+    }
+
+
+    private function isLearningPathImportContext(Request $request): bool
+    {
+        $origin = strtolower(trim((string) $request->query->get('origin', '')));
+        $returnToLp = strtolower(trim((string) $request->query->get('returnToLp', '')));
+
+        return 'learnpath' === $origin
+            || \in_array($returnToLp, ['1', 'true', 'yes'], true)
+            || 0 < $request->query->getInt('lp_id')
+            || 0 < $request->query->getInt('learnpath_id');
     }
 
     private function getImportSample(string $importType): string

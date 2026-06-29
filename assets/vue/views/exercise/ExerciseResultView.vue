@@ -200,6 +200,57 @@
         </div>
       </header>
 
+      <section
+        v-if="correctionHistory.length > 0"
+        class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
+      >
+        <div class="border-b border-gray-20 bg-gray-10 p-4">
+          <div class="flex items-center gap-2">
+            <span class="mdi mdi-history text-base text-primary" aria-hidden="true" />
+            <h2 class="text-lg font-semibold text-gray-90">{{ t("Correction history") }}</h2>
+          </div>
+          <p class="mt-1 text-sm text-gray-600">
+            {{ t("History of manual corrections made for this attempt.") }}
+          </p>
+        </div>
+        <div class="overflow-x-auto p-4">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="border-b border-gray-20 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th class="px-3 py-2">{{ t("Question") }}</th>
+                <th class="px-3 py-2">{{ t("Value") }}</th>
+                <th class="px-3 py-2">{{ t("Feedback") }}</th>
+                <th class="px-3 py-2">{{ t("Author") }}</th>
+                <th class="px-3 py-2">{{ t("Date") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in correctionHistory"
+                :key="item.id || `${item.questionId}-${item.insertedAt}`"
+                class="border-b border-gray-10 last:border-0"
+              >
+                <td class="px-3 py-2 align-top font-medium text-gray-90">
+                  {{ displayText(item.questionTitle, `${t("Question")} #${item.questionId}`) }}
+                </td>
+                <td class="px-3 py-2 align-top text-gray-700">
+                  {{ formatNumber(item.marks) }}
+                </td>
+                <td class="px-3 py-2 align-top text-gray-700">
+                  {{ displayText(item.teacherComment, t("Without comment")) }}
+                </td>
+                <td class="px-3 py-2 align-top text-gray-700">
+                  {{ item.isOriginalValue ? t("Original value") : displayText(item.authorName, "-") }}
+                </td>
+                <td class="px-3 py-2 align-top text-gray-700">
+                  {{ formatDate(item.insertedAt) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <div
         v-if="visibility.showRadar"
         class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
@@ -1609,6 +1660,7 @@ const categoryScores = ref([])
 const ranking = ref([])
 const finalActions = ref({})
 const progressiveAdaptiveResult = ref({})
+const correctionHistory = ref([])
 const aiCorrection = ref({})
 const isStartingAttempt = ref(false)
 const correctionForms = ref({})
@@ -1826,6 +1878,7 @@ async function loadResult() {
     ranking.value = Array.isArray(response.ranking) ? response.ranking : []
     finalActions.value = response.finalActions || {}
     progressiveAdaptiveResult.value = response.progressiveAdaptiveResult || {}
+    correctionHistory.value = Array.isArray(response.correctionHistory) ? response.correctionHistory : []
     aiCorrection.value = response.aiCorrection || {}
     initializeCorrectionForms()
     initializeAiCorrectionForms()

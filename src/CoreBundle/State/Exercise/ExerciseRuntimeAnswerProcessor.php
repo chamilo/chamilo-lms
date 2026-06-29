@@ -162,6 +162,17 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
                 $this->syncReviewQuestion($attempt, $questionId, true === $data->reviewLater);
             }
 
+            $categoryReminder = $this->buildCategoryReminderIfNeeded($attempt, $quiz, $question, $navigationAction, true === $data->confirmCategory);
+            if ([] !== $categoryReminder) {
+                $this->entityManager->flush();
+
+                $response = $this->createResponse($exerciseId, $attemptId, $questionId);
+                $response->message = 'Category review required';
+                $response->categoryReminder = $categoryReminder;
+
+                return $response;
+            }
+
             $this->blockCategoryIfNeeded($attempt, $quiz, $question, $navigationAction);
             $this->lockPreventBackwardsStepIfNeeded($attempt, $quiz, $questionId, $navigationAction);
             $this->entityManager->flush();
@@ -200,6 +211,17 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
         if (null !== $data->reviewLater) {
             $this->syncReviewQuestion($attempt, $questionId, true === $data->reviewLater);
+        }
+
+        $categoryReminder = $this->buildCategoryReminderIfNeeded($attempt, $quiz, $question, $navigationAction, true === $data->confirmCategory);
+        if ([] !== $categoryReminder) {
+            $this->entityManager->flush();
+
+            $response = $this->createResponse($exerciseId, $attemptId, $questionId);
+            $response->message = 'Category review required';
+            $response->categoryReminder = $categoryReminder;
+
+            return $response;
         }
 
         $this->blockCategoryIfNeeded($attempt, $quiz, $question, $navigationAction);
@@ -313,6 +335,77 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         return -1;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildCategoryReminderIfNeeded(TrackEExercise $attempt, CQuiz $quiz, CQuizQuestion $question, string $navigationAction, bool $categoryConfirmed): array
+    {
+        if ($categoryConfirmed || !\in_array($navigationAction, ['next', 'finish'], true) || !$this->isBlockCategoryRuntimeEnabled($quiz)) {
+            return [];
+        }
+
+        $category = $this->getPrimaryQuestionCategory($question);
+        if (!$category instanceof CQuizQuestionCategory || null === $category->getIid()) {
+            return [];
+        }
+
+        $categoryId = (int) $category->getIid();
+        if (!$this->isLastQuestionInCategory($attempt, $question, $categoryId)) {
+            return [];
+        }
+
+        $blockedCategories = $this->parseBlockedCategories((string) $attempt->getBlockedCategories());
+        if (\in_array($categoryId, $blockedCategories, true)) {
+            return [];
+        }
+
+        $questionIds = $this->getQuestionIdsInCategory($quiz, $categoryId);
+        $orderedAttemptQuestionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
+        if ([] !== $orderedAttemptQuestionIds) {
+            $questionIdMap = array_fill_keys($questionIds, true);
+            $questionIds = array_values(array_filter(
+                $orderedAttemptQuestionIds,
+                static fn (int $attemptQuestionId): bool => isset($questionIdMap[$attemptQuestionId])
+            ));
+        }
+
+        return [
+            'enabled' => true,
+            'categoryId' => $categoryId,
+            'categoryTitle' => (string) $category->getTitle(),
+            'categoryDescription' => method_exists($category, 'getDescription') ? (string) $category->getDescription() : '',
+            'questionIds' => $questionIds,
+            'afterAction' => $navigationAction,
+            'lastCategory' => $this->isLastRuntimeCategory($attempt, $quiz, $categoryId),
+        ];
+    }
+
+    private function isLastRuntimeCategory(TrackEExercise $attempt, CQuiz $quiz, int $categoryId): bool
+    {
+        $orderedCategoryIds = [];
+        foreach ($this->parseQuestionIds((string) $attempt->getDataTracking()) as $attemptQuestionId) {
+            $attemptQuestion = $this->entityManager->getRepository(CQuizQuestion::class)->find($attemptQuestionId);
+            if (!$attemptQuestion instanceof CQuizQuestion) {
+                continue;
+            }
+
+            $attemptCategoryId = $this->getPrimaryCategoryId($attemptQuestion);
+            if (0 >= $attemptCategoryId) {
+                continue;
+            }
+
+            if (!\in_array($attemptCategoryId, $orderedCategoryIds, true)) {
+                $orderedCategoryIds[] = $attemptCategoryId;
+            }
+        }
+
+        if ([] === $orderedCategoryIds) {
+            return true;
+        }
+
+        return $categoryId === (int) end($orderedCategoryIds);
     }
 
     private function blockCategoryIfNeeded(TrackEExercise $attempt, CQuiz $quiz, CQuizQuestion $question, string $navigationAction): void

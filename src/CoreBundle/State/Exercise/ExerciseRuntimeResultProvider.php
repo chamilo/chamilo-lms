@@ -155,9 +155,94 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $response->finalActions = $this->getFinalActions($quiz, $attempt, $course, $session, $isReviewMode);
         $response->aiCorrection = $this->getAiCorrectionConfiguration($canManage && $isReviewMode);
         $response->progressiveAdaptiveResult = $this->getProgressiveAdaptiveResult($attempt);
+        $response->correctionHistory = $canManage ? $this->getCorrectionHistory($attempt, $questions) : [];
         $response->canManage = $canManage;
 
         return $response;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $questions
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function getCorrectionHistory(TrackEExercise $attempt, array $questions): array
+    {
+        $attemptId = (int) $attempt->getExeId();
+        if (0 >= $attemptId) {
+            return [];
+        }
+
+        $questionTitles = [];
+        foreach ($questions as $question) {
+            $questionId = (int) ($question['id'] ?? 0);
+            if (0 >= $questionId) {
+                continue;
+            }
+
+            $questionTitles[$questionId] = (string) ($question['title'] ?? $question['question'] ?? '');
+        }
+
+        $rows = $this->entityManager->getConnection()->fetchAllAssociative(
+            <<<'SQL'
+                SELECT
+                    taq.id,
+                    taq.question_id,
+                    taq.marks,
+                    taq.teacher_comment,
+                    taq.insert_date,
+                    taq.author,
+                    u.firstname,
+                    u.lastname
+                FROM track_e_attempt_qualify taq
+                LEFT JOIN user u ON u.id = taq.author
+                WHERE taq.exe_id = :attemptId
+                ORDER BY taq.insert_date ASC, taq.id ASC
+            SQL,
+            [
+                'attemptId' => $attemptId,
+            ]
+        );
+
+        $items = [];
+        foreach ($rows as $row) {
+            $questionId = (int) ($row['question_id'] ?? 0);
+            $firstName = trim((string) ($row['firstname'] ?? ''));
+            $lastName = trim((string) ($row['lastname'] ?? ''));
+            $authorName = trim($firstName.' '.$lastName);
+
+            $items[] = [
+                'id' => (int) ($row['id'] ?? 0),
+                'questionId' => $questionId,
+                'questionTitle' => $questionTitles[$questionId] ?? '',
+                'marks' => (float) ($row['marks'] ?? 0),
+                'teacherComment' => (string) ($row['teacher_comment'] ?? ''),
+                'authorId' => (int) ($row['author'] ?? 0),
+                'authorName' => $authorName,
+                'isOriginalValue' => 0 >= (int) ($row['author'] ?? 0),
+                'insertedAt' => $this->formatNullableDate($row['insert_date'] ?? null),
+            ];
+        }
+
+        return $items;
+    }
+
+    private function formatNullableDate(mixed $value): ?string
+    {
+        if ($value instanceof DateTimeInterface) {
+            return $value->format(DateTimeInterface::ATOM);
+        }
+
+        $rawValue = trim((string) $value);
+        if ('' === $rawValue) {
+            return null;
+        }
+
+        try {
+            return (new DateTimeImmutable($rawValue))->format(DateTimeInterface::ATOM);
+        } catch (\Throwable) {
+            return $rawValue;
+        }
     }
 
     /**
@@ -670,6 +755,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'showRadar' => self::RESULT_RADAR === $resultsDisabled,
             'isLastAllowedAttempt' => $isLastAllowedAttempt,
             'pageResultConfiguration' => $pageResultConfiguration,
+            'showUserInfo' => !$this->isSettingEnabled('exercise.hide_user_info_in_quiz_result'),
+            'showResultAnswersReport' => $this->isSettingEnabled('exercise.quiz_results_answers_report'),
+            'showExpectedChoice' => $this->isSettingEnabled('exercise.show_exercise_expected_choice'),
         ];
     }
 
@@ -784,11 +872,33 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
     private function getFinishedText(CQuiz $quiz, ?bool $passed): string
     {
-        if (false === $passed && '' !== (string) $quiz->getTextWhenFinishedFailure()) {
-            return (string) $quiz->getTextWhenFinishedFailure();
+        $text = false === $passed && '' !== (string) $quiz->getTextWhenFinishedFailure()
+            ? (string) $quiz->getTextWhenFinishedFailure()
+            : (string) $quiz->getTextWhenFinished();
+
+        return $this->sanitizeFinishedText($text);
+    }
+
+    private function sanitizeFinishedText(string $text): string
+    {
+        $text = trim($text);
+        if ('' === $text) {
+            return '';
         }
 
-        return (string) $quiz->getTextWhenFinished();
+        $allowedTags = $this->isSettingEnabled('exercise.exercise_result_end_text_html_strict_filtering')
+            ? '<p><br><strong><b><em><i><u><ul><ol><li><a><blockquote><span><div><h1><h2><h3><h4><h5><h6><table><thead><tbody><tr><th><td>>'
+            : '<p><br><strong><b><em><i><u><ul><ol><li><a><blockquote>>';
+
+        $text = (string) preg_replace(
+            '/<(script|iframe|object|embed|form|input|button|textarea|select)\b[^>]*>.*?<\/\1>/is',
+            '',
+            $text
+        );
+        $text = (string) preg_replace('/\s+on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $text);
+        $text = (string) preg_replace('/(href|src)\s*=\s*("|\')\s*javascript:[^"\']*("|\')/i', '$1="#"', $text);
+
+        return strip_tags($text, $allowedTags);
     }
 
     /**

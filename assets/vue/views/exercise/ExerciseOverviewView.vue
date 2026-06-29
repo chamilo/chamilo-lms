@@ -107,14 +107,34 @@
         v-if="overview.canStart"
         class="rounded-xl border border-gray-20 bg-white p-5 shadow-sm"
       >
-        <BaseButton
-          :disabled="isStartingAttempt"
-          :label="isStartingAttempt ? t('Starting') : t(overview.startButtonLabel || 'Start test')"
-          icon="play-box-outline"
-          size="normal"
-          type="success"
-          @click="startAndOpenPlayer"
-        />
+        <div class="flex flex-wrap items-center gap-2">
+          <BaseButton
+            v-if="overview.browserCheckEnabled"
+            :disabled="isCheckingBrowser"
+            :label="isCheckingBrowser ? t('Loading') : t('Test your browser')"
+            icon="sync"
+            size="normal"
+            :type="browserCheckButtonType"
+            @click="testBrowser"
+          />
+          <BaseButton
+            :disabled="isStartingAttempt"
+            :label="isStartingAttempt ? t('Starting') : t(overview.startButtonLabel || 'Start test')"
+            icon="play-box-outline"
+            size="normal"
+            type="success"
+            @click="startAndOpenPlayer"
+          />
+        </div>
+        <p
+          v-if="browserCheckMessage"
+          :class="[
+            'mt-3 text-sm font-medium',
+            browserCheckStatus === 'success' ? 'text-success' : 'text-danger',
+          ]"
+        >
+          {{ browserCheckMessage }}
+        </p>
       </div>
 
       <section
@@ -204,6 +224,9 @@ const router = useRouter()
 
 const isLoading = ref(false)
 const isStartingAttempt = ref(false)
+const isCheckingBrowser = ref(false)
+const browserCheckStatus = ref("idle")
+const browserCheckMessage = ref("")
 const errorMessage = ref("")
 const overview = reactive({
   exerciseId: 0,
@@ -232,6 +255,7 @@ const overview = reactive({
   canOpen: false,
   canStart: false,
   canReport: false,
+  browserCheckEnabled: false,
   availabilityStatus: "open",
   showAttemptsTable: false,
   showScoreColumn: false,
@@ -313,6 +337,18 @@ const isLearnpathContext = computed(() => {
     || isEmbeddedInLearnpath()
 })
 
+const browserCheckButtonType = computed(() => {
+  if (browserCheckStatus.value === "success") {
+    return "success"
+  }
+
+  if (browserCheckStatus.value === "error") {
+    return "danger"
+  }
+
+  return "secondary"
+})
+
 function getExerciseId() {
   return Number(getQueryValue(route.params.exerciseId) || 0)
 }
@@ -360,6 +396,44 @@ function openLegacyRuntime(startResponse = null) {
   }
 
   return false
+}
+
+async function testBrowser() {
+  const exerciseId = getExerciseId()
+  if (exerciseId <= 0) {
+    browserCheckStatus.value = "error"
+    browserCheckMessage.value = t("Your browser could not be verified. Please try again, or try another browser or device before starting your test.")
+
+    return
+  }
+
+  isCheckingBrowser.value = true
+  browserCheckStatus.value = "idle"
+  browserCheckMessage.value = ""
+
+  try {
+    const contextParams = getContextParams()
+    const [firstCheckOk, secondCheckOk] = await Promise.all([
+      exerciseService.checkExerciseBrowser(contextParams, exerciseId, false),
+      exerciseService.checkExerciseBrowser(contextParams, exerciseId, true),
+    ])
+
+    if (firstCheckOk && secondCheckOk) {
+      browserCheckStatus.value = "success"
+      browserCheckMessage.value = t("Your browser has been verified. You can safely proceed.")
+
+      return
+    }
+
+    browserCheckStatus.value = "error"
+    browserCheckMessage.value = t("Your browser could not be verified. Please try again, or try another browser or device before starting your test.")
+  } catch (error) {
+    console.error("Error testing browser before exercise start", error)
+    browserCheckStatus.value = "error"
+    browserCheckMessage.value = t("Your browser could not be verified. Please try again, or try another browser or device before starting your test.")
+  } finally {
+    isCheckingBrowser.value = false
+  }
 }
 
 async function startAndOpenPlayer() {
@@ -411,6 +485,8 @@ async function loadOverview() {
     const response = await exerciseService.getExerciseOverview(getContextParams(), exerciseId)
     Object.assign(overview, response || {})
     overview.currentUserAttempts = Array.isArray(response?.currentUserAttempts) ? response.currentUserAttempts : []
+    browserCheckStatus.value = "idle"
+    browserCheckMessage.value = ""
   } catch (error) {
     console.error("Error loading exercise overview", error)
     errorMessage.value = t("Could not load exercise overview")

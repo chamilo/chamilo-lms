@@ -30,6 +30,60 @@ function exerciseRequestConfig(config = {}) {
   }
 }
 
+
+function getLegacyBasePath() {
+  if (typeof window === "undefined") {
+    return ""
+  }
+
+  const pathname = window.location?.pathname || ""
+  const markers = ["/resources/", "/courses/", "/search/", "/main/"]
+
+  for (const marker of markers) {
+    const markerPosition = pathname.indexOf(marker)
+
+    if (markerPosition > 0) {
+      return pathname.substring(0, markerPosition)
+    }
+  }
+
+  return ""
+}
+
+function buildLegacyExerciseAjaxUrl(params = {}) {
+  const query = new URLSearchParams()
+
+  query.set("a", "browser_test")
+
+  for (const [key, value] of Object.entries(cleanParams(params))) {
+    if (["cid", "sid", "gid"].includes(key)) {
+      query.set(key, String(value))
+    }
+  }
+
+  return `${getLegacyBasePath()}/main/inc/ajax/exercise.ajax.php?${query.toString()}`
+}
+
+function buildBrowserCheckBody(params = {}, exerciseId, sleep = false) {
+  const body = new URLSearchParams()
+
+  body.set("exe_id", "1")
+  body.set("exerciseId", String(exerciseId || 0))
+  body.set("learnpath_id", String(params.learnpath_id || params.lp_id || 0))
+  body.set("learnpath_item_id", String(params.learnpath_item_id || params.lp_item_id || 0))
+  body.set("learnpath_item_view_id", String(params.learnpath_item_view_id || 0))
+  body.set("reminder", "0")
+  body.set("type", "simple")
+  body.set("question_id", "23")
+  body.set("choice[23]", "45")
+
+  if (sleep) {
+    body.set("sleep", "1")
+  }
+
+  return body
+}
+
 export default {
   async getExerciseList(params = {}) {
     return await baseService.get("/api/exercise/list", cleanParams(params), exerciseRequestConfig())
@@ -43,6 +97,24 @@ export default {
 
   async getExerciseOverview(params = {}, exerciseId) {
     return await baseService.get(`/api/exercise/overview/${exerciseId}`, cleanParams(params), exerciseRequestConfig())
+  },
+
+  async checkExerciseBrowser(params = {}, exerciseId, sleep = false) {
+    const response = await fetch(buildLegacyExerciseAjaxUrl(params), {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body: buildBrowserCheckBody(params, exerciseId, sleep),
+    })
+
+    if (!response.ok) {
+      return false
+    }
+
+    return (await response.text()).trim() === "ok"
   },
 
   async getExerciseCategories(categoryType, params = {}) {
@@ -349,6 +421,22 @@ export default {
     const queryString = buildQueryString(params)
 
     return await baseService.postForm(`/api/exercise/import/${importType}${queryString}`, formData, exerciseRequestConfig())
+  },
+
+  async getExercisePendingAttempts(params = {}) {
+    return await baseService.get('/api/exercise/pending-attempts', cleanParams(params), exerciseRequestConfig())
+  },
+
+  buildExercisePendingAttemptsCsvUrl(params = {}) {
+    return `/api/exercise/pending-attempts/export.csv${buildQueryString(params)}`
+  },
+
+  async getExerciseGlobalReport(params = {}) {
+    return await baseService.get('/api/exercise/global-report', cleanParams(params), exerciseRequestConfig())
+  },
+
+  buildExerciseGlobalReportCsvUrl(params = {}) {
+    return `/api/exercise/global-report/export.csv${buildQueryString(params)}`
   },
 
   async saveExerciseConfiguration(payload, params = {}, exerciseId = null) {

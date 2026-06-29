@@ -11,7 +11,7 @@
       v-if="showPendingExerciseAttemptsLink"
       :label="t('Pending tests')"
       icon="quiz"
-      to-url="/main/exercise/pending.php"
+      :route="{ name: 'ExercisePendingAttempts' }"
       type="primary"
     />
   </SectionHeader>

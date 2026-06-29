@@ -358,7 +358,7 @@
       <Column :header="t('First name')" field="firstName" sortable>
         <template #body="{ data }">
           <div class="font-semibold text-gray-90">{{ displayText(data.firstName, '-') }}</div>
-          <div class="text-xs text-gray-500">{{ data.username }}</div>
+          <div v-if="showUsername" class="text-xs text-gray-500">{{ data.username }}</div>
         </template>
       </Column>
       <Column :header="t('Last name')" field="lastName" sortable>
@@ -393,7 +393,7 @@
           </span>
         </template>
       </Column>
-      <Column :header="t('IP')" field="ip">
+      <Column v-if="showIp" :header="t('IP')" field="ip">
         <template #body="{ data }">
           {{ displayText(data.ip, '-') }}
         </template>
@@ -512,6 +512,8 @@ const selectedAttempts = ref([])
 const actionUrls = ref({})
 const groupOptions = ref([])
 const showOfficialCode = ref(false)
+const showUsername = ref(false)
+const showIp = ref(true)
 const lockedByGradebook = ref(false)
 const canBulkDelete = ref(false)
 const canCleanResults = ref(false)
@@ -673,6 +675,8 @@ async function loadReport() {
     actionUrls.value = response.actionUrls || {}
     groupOptions.value = buildGroupOptions(response.groupOptions)
     showOfficialCode.value = true === response.showOfficialCode
+    showUsername.value = true === response.showUsername
+    showIp.value = true !== response.showIp ? false : true
     lockedByGradebook.value = true === response.lockedByGradebook
     canBulkDelete.value = true === response.canBulkDelete
     canCleanResults.value = true === response.canCleanResults

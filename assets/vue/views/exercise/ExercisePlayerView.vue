@@ -1435,6 +1435,95 @@
     </BaseDialog>
 
     <BaseDialog
+      v-model:is-visible="isCategoryReminderDialogVisible"
+      :show-close-button="false"
+      :title="displayText(categoryReminder?.categoryTitle, t('Question category'))"
+      header-icon="alert-circle-outline"
+    >
+      <div class="space-y-4 text-sm text-gray-700">
+        <p>
+          {{ t("You finished the questions related to this question category, it is your last chance to go back and revise those questions.") }}
+        </p>
+        <p v-if="categoryReminder?.categoryDescription" class="rounded-lg bg-gray-10 p-3">
+          {{ categoryReminder.categoryDescription }}
+        </p>
+        <div v-if="categoryReminderError" class="text-danger">
+          {{ categoryReminderError }}
+        </div>
+        <div v-if="isReviewAnswersEnabled && categoryReminderQuestions.length > 0" class="space-y-2">
+          <label
+            v-for="question in categoryReminderQuestions"
+            :key="`category-reminder-question-${question.id}`"
+            class="flex items-start gap-3 rounded-lg border border-gray-20 p-3"
+          >
+            <input
+              :checked="reviewQuestionIds.has(Number(question.id))"
+              class="mt-1"
+              :disabled="isCategoryReminderProceeding"
+              :name="`category_remind_list_${question.id}`"
+              type="checkbox"
+              @change="toggleReviewQuestion(question.id, $event.target.checked)"
+            />
+            <span class="min-w-0 flex-1">
+              <span class="block font-semibold text-gray-90">
+                {{ question.position }}. {{ displayText(question.title, t("Untitled")) }}
+              </span>
+              <span
+                v-if="!savedQuestionIds.has(Number(question.id))"
+                class="mt-1 inline-block rounded bg-danger/10 px-2 py-0.5 text-xs text-danger"
+              >
+                {{ t("Questions without answer") }}
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <template #footer>
+        <div class="flex flex-wrap gap-2">
+          <BaseButton
+            :disabled="isCategoryReminderProceeding"
+            :label="t('Go back')"
+            icon="back"
+            type="plain"
+            @click="closeCategoryReminder"
+          />
+          <BaseButton
+            v-if="isReviewAnswersEnabled"
+            :disabled="isCategoryReminderProceeding || selectedCategoryReminderQuestionIds.length === 0"
+            :label="t('Review selected questions')"
+            icon="playlist-check"
+            type="primary"
+            @click="reviewSelectedCategoryQuestions"
+          />
+          <BaseButton
+            v-if="isReviewAnswersEnabled"
+            :disabled="isCategoryReminderProceeding"
+            :label="t('Select all')"
+            icon="checkbox-marked-outline"
+            type="plain"
+            @click="setCategoryReminderQuestions(true)"
+          />
+          <BaseButton
+            v-if="isReviewAnswersEnabled"
+            :disabled="isCategoryReminderProceeding"
+            :label="t('Unselect all')"
+            icon="checkbox-blank-outline"
+            type="plain"
+            @click="setCategoryReminderQuestions(false)"
+          />
+          <BaseButton
+            :disabled="isCategoryReminderProceeding"
+            :label="categoryReminder?.lastCategory ? t('End test') : t('Proceed with the test')"
+            icon="check"
+            type="primary"
+            @click="confirmCategoryReminder"
+          />
+        </div>
+      </template>
+    </BaseDialog>
+
+    <BaseDialog
       v-model:is-visible="isZoomDialogVisible"
       :show-close-button="false"
       :title="zoomImageAlt || t('Image')"
@@ -1522,6 +1611,10 @@ const directFeedbackByQuestion = ref({})
 const feedbackDialog = ref(null)
 const isFeedbackDialogVisible = ref(false)
 const feedbackShownOnLastSave = ref(false)
+const categoryReminder = ref(null)
+const isCategoryReminderDialogVisible = ref(false)
+const isCategoryReminderProceeding = ref(false)
+const categoryReminderError = ref("")
 const confirmedSavedAnswers = ref(false)
 const isZoomDialogVisible = ref(false)
 const zoomImageSrc = ref("")
@@ -1691,6 +1784,20 @@ const finishButtonLabel = computed(() => {
   return isReviewAnswersEnabled.value ? t("Review my answers") : t("Finish test")
 })
 const selectedReviewQuestionIds = computed(() => Array.from(reviewQuestionIds.value).map(Number).filter((questionId) => questionId > 0))
+const categoryReminderQuestions = computed(() => {
+  const ids = Array.isArray(categoryReminder.value?.questionIds) ? categoryReminder.value.questionIds.map(Number).filter((id) => id > 0) : []
+
+  return ids
+    .map((questionId) => questionMap.value.get(questionId))
+    .filter(Boolean)
+    .map((question, index) => ({
+      ...question,
+      position: Number(question.position || index + 1),
+    }))
+})
+const selectedCategoryReminderQuestionIds = computed(() => categoryReminderQuestions.value
+  .map((question) => Number(question.id || 0))
+  .filter((questionId) => questionId > 0 && reviewQuestionIds.value.has(questionId)))
 const reviewQuestionList = computed(() => answerableQuestions.value.map((question, index) => ({
   ...question,
   position: Number(question.position || index + 1),
@@ -1888,6 +1995,91 @@ async function setAllReviewQuestions(checked) {
     reviewFlagError.value = t("Could not save draft answer")
   } finally {
     isReviewFlagSaving.value = false
+  }
+}
+
+function showCategoryReminder(reminder) {
+  categoryReminder.value = reminder || null
+  categoryReminderError.value = ""
+  isCategoryReminderDialogVisible.value = true
+  feedbackShownOnLastSave.value = true
+}
+
+function closeCategoryReminder() {
+  isCategoryReminderDialogVisible.value = false
+  categoryReminder.value = null
+  categoryReminderError.value = ""
+  syncQuestionCountdown()
+}
+
+function setCategoryReminderQuestions(checked) {
+  const nextReviewQuestionIds = new Set(reviewQuestionIds.value)
+  categoryReminderQuestions.value.forEach((question) => {
+    const questionId = Number(question.id || 0)
+    if (questionId <= 0) {
+      return
+    }
+
+    if (checked) {
+      nextReviewQuestionIds.add(questionId)
+    } else {
+      nextReviewQuestionIds.delete(questionId)
+    }
+  })
+  reviewQuestionIds.value = nextReviewQuestionIds
+}
+
+function reviewSelectedCategoryQuestions() {
+  const orderedSelectedIds = categoryReminderQuestions.value
+    .map((question) => Number(question.id || 0))
+    .filter((questionId) => questionId > 0 && reviewQuestionIds.value.has(questionId))
+
+  if (orderedSelectedIds.length === 0) {
+    return
+  }
+
+  reviewQueue.value = orderedSelectedIds
+  reviewQueueIndex.value = 0
+  isCategoryReminderDialogVisible.value = false
+  categoryReminder.value = null
+  setCurrentQuestionById(orderedSelectedIds[0])
+  syncQuestionCountdown()
+}
+
+async function confirmCategoryReminder() {
+  const reminder = categoryReminder.value || {}
+  const action = reminder.lastCategory ? "finish" : (reminder.afterAction || "next")
+  const question = visibleQuestions.value.find(isDraftSaveSupported)
+  if (!question) {
+    closeCategoryReminder()
+    return
+  }
+
+  isCategoryReminderProceeding.value = true
+  categoryReminderError.value = ""
+
+  try {
+    feedbackShownOnLastSave.value = false
+    await saveQuestionDraftAnswer(question, action, { confirmCategory: true })
+    isCategoryReminderDialogVisible.value = false
+    categoryReminder.value = null
+
+    if (feedbackShownOnLastSave.value) {
+      return
+    }
+
+    if (action === "finish" || reminder.lastCategory || !canMoveNext.value) {
+      await finishAttempt({ skipDraftSave: true, skipReviewAnswers: true, ignoreFeedback: true })
+      return
+    }
+
+    currentQuestionIndex.value += 1
+    syncQuestionCountdown()
+  } catch (error) {
+    console.error("Error confirming exercise category reminder", error)
+    categoryReminderError.value = t("Could not save draft answer")
+  } finally {
+    isCategoryReminderProceeding.value = false
   }
 }
 
@@ -2595,7 +2787,7 @@ async function finishAttempt(options = {}) {
   }
 }
 
-async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
+async function saveQuestionDraftAnswer(question, afterFeedback = "none", options = {}) {
   const exerciseId = getExerciseId()
   const attemptId = Number(activeAttempt.value?.attemptId || 0)
   if (!exerciseId || !attemptId || !question?.id) {
@@ -2603,7 +2795,7 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
   }
 
   const response = isUploadQuestion(question) || isOralQuestion(question)
-    ? await saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback)
+    ? await saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback, options)
     : await exerciseService.saveExerciseRuntimeAnswer(
       {
         exerciseId,
@@ -2613,6 +2805,7 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
         reviewLater: isQuestionMarkedForReview(question.id),
         secondsSpent: getQuestionSecondsSpent(question),
         navigationAction: afterFeedback,
+        confirmCategory: true === options.confirmCategory,
       },
       getContextParams(),
       exerciseId,
@@ -2641,6 +2834,11 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
     savedQuestionIds.value = nextSavedQuestionIds
   }
 
+  if (response?.categoryReminder?.enabled) {
+    showCategoryReminder(response.categoryReminder)
+    return response
+  }
+
   const onlyofficeEditor = response?.feedback?.onlyoffice?.editorUrl || ""
   if (isOnlyofficeQuestion(question) && onlyofficeEditor && answers.value[question.id]) {
     answers.value[question.id].onlyofficeEditorUrl = onlyofficeEditor
@@ -2654,7 +2852,7 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
 }
 
 
-async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback = "none") {
+async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback = "none", options = {}) {
   const questionAnswer = answers.value[question.id] || {}
   if (!questionAnswer.uploadFile && !questionAnswer.oralFile) {
     return null
@@ -2665,6 +2863,7 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFe
   formData.append("secondsSpent", String(getQuestionSecondsSpent(question)))
   formData.append("reviewLater", isQuestionMarkedForReview(question.id) ? "1" : "0")
   formData.append("navigationAction", afterFeedback)
+  formData.append("confirmCategory", true === options.confirmCategory ? "1" : "0")
   formData.append("file", questionAnswer.uploadFile || questionAnswer.oralFile)
 
   const response = await exerciseService.uploadExerciseRuntimeAnswer(

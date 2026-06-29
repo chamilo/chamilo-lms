@@ -81,7 +81,9 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
         $lockedByGradebook = $this->isGradebookLocked((int) $quiz->getIid(), $course);
-        $attempts = $this->getAttempts($request, $quiz, $course, $session, $lockedByGradebook);
+        $showUsername = $this->shouldShowUsername();
+        $showIp = $this->shouldShowIp();
+        $attempts = $this->getAttempts($request, $quiz, $course, $session, $lockedByGradebook, $showUsername, $showIp);
         $showOfficialCode = $this->shouldShowOfficialCode();
         $groupOptions = $this->getGroupOptions($course);
 
@@ -105,6 +107,8 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $response->canCleanResults = !$lockedByGradebook && $this->canCleanResults();
         $response->canBulkRecalculate = !$lockedByGradebook;
         $response->showOfficialCode = $showOfficialCode;
+        $response->showUsername = $showUsername;
+        $response->showIp = $showIp;
         $response->extraFields = $this->getFilterableUserExtraFields();
         $response->bulkActionToken = $this->csrfTokenManager->getToken(self::BULK_ACTION_CSRF_TOKEN_ID)->getValue();
         $response->emailActionToken = $this->csrfTokenManager->getToken(self::EMAIL_ACTION_CSRF_TOKEN_ID)->getValue();
@@ -195,7 +199,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getAttempts(Request $request, CQuiz $quiz, Course $course, ?Session $session, bool $lockedByGradebook): array
+    private function getAttempts(Request $request, CQuiz $quiz, Course $course, ?Session $session, bool $lockedByGradebook, bool $showUsername, bool $showIp): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('attempt', 'user')
@@ -254,7 +258,9 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
                 $quiz,
                 $request,
                 $lockedByGradebook,
-                $groupNamesByUser[$userId] ?? '-'
+                $groupNamesByUser[$userId] ?? '-',
+                $showUsername,
+                $showIp
             );
         }
 
@@ -264,7 +270,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function normalizeAttempt(TrackEExercise $attempt, CQuiz $quiz, Request $request, bool $lockedByGradebook, string $groupName): array
+    private function normalizeAttempt(TrackEExercise $attempt, CQuiz $quiz, Request $request, bool $lockedByGradebook, string $groupName, bool $showUsername, bool $showIp): array
     {
         $user = $attempt->getUser();
         $questionsToCheck = $this->parseQuestionIds($attempt->getQuestionsToCheck());
@@ -286,7 +292,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             'attemptId' => $attemptId,
             'exerciseId' => (int) $quiz->getIid(),
             'userId' => $userId,
-            'username' => $user->getUsername(),
+            'username' => $showUsername ? $user->getUsername() : '',
             'officialCode' => (string) ($user->getOfficialCode() ?? ''),
             'firstName' => (string) $user->getFirstname(),
             'lastName' => (string) $user->getLastname(),
@@ -298,7 +304,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             'score' => $score,
             'maxScore' => $maxScore,
             'percentage' => $percentage,
-            'ip' => $attempt->getUserIp(),
+            'ip' => $showIp ? $attempt->getUserIp() : '',
             'status' => $status,
             'statusLabel' => $statusLabel,
             'pendingCorrection' => $pendingCorrection,
@@ -573,6 +579,16 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     private function shouldShowOfficialCode(): bool
     {
         return $this->isSettingEnabled('exercise.show_official_code_exercise_result_list');
+    }
+
+    private function shouldShowUsername(): bool
+    {
+        return $this->isSettingEnabled('exercise.exercise_attempts_report_show_username');
+    }
+
+    private function shouldShowIp(): bool
+    {
+        return !$this->isSettingEnabled('exercise.exercise_hide_ip');
     }
 
     /**

@@ -452,6 +452,26 @@ const router = createRouter({
           component: MyCourseList,
           meta: { requiresAuth: true },
         },
+        {
+          path: "exercise/pending-attempts",
+          name: "ExercisePendingAttempts",
+          component: () => import("../views/exercise/ExercisePendingAttemptsView.vue"),
+          meta: {
+            requiresAuth: true,
+            showBreadcrumb: true,
+            breadcrumb: "Pending attempts",
+          },
+        },
+        {
+          path: "exercise/global-report",
+          name: "ExerciseGlobalReport",
+          component: () => import("../views/exercise/ExerciseGlobalReportView.vue"),
+          meta: {
+            requiresAuth: true,
+            showBreadcrumb: true,
+            breadcrumb: "Exercises global report",
+          },
+        },
       ],
     },
     {

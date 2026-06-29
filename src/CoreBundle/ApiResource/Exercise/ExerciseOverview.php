@@ -139,6 +139,9 @@ final class ExerciseOverview
     public string $startButtonLabel = 'Start test';
 
     #[Groups(['exercise_overview:read'])]
+    public bool $browserCheckEnabled = false;
+
+    #[Groups(['exercise_overview:read'])]
     public string $notice = '';
 
     public function getExerciseId(): ?int

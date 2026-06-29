@@ -12,12 +12,15 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionImport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ImportService;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -85,7 +88,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         }
 
         if ('qti2' === $importType) {
-            return $this->processQti2Import($uploadedFile, $course, $session);
+            return $this->processQti2Import($uploadedFile, $request, $course, $session);
         }
 
         return $this->processAikenImport($uploadedFile, $request, $course, $session);
@@ -183,6 +186,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('No valid Aiken questions were imported.');
         }
 
+        $lpItem = $this->attachImportedExerciseToLearningPathIfNeeded($quiz, $request, $course, $session);
         $this->entityManager->flush();
 
         return $this->buildSuccessResponse(
@@ -193,6 +197,8 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             $importedQuestionCount,
             (int) $parsedQuestions['skippedCount'],
             $parsedQuestions['errors'],
+            $lpItem,
+            $this->isLearningPathImportContext($request),
         );
     }
 
@@ -215,6 +221,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('No valid Excel questions were imported.');
         }
 
+        $lpItem = $this->attachImportedExerciseToLearningPathIfNeeded($quiz, $request, $course, $session);
         $this->entityManager->flush();
 
         return $this->buildSuccessResponse(
@@ -225,21 +232,28 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             $importResult['importedCount'],
             $importResult['skippedCount'],
             $importResult['errors'],
+            $lpItem,
+            $this->isLearningPathImportContext($request),
         );
     }
 
-    private function processQti2Import(UploadedFile $uploadedFile, Course $course, ?Session $session): ExerciseQuestionImport
+    private function processQti2Import(UploadedFile $uploadedFile, Request $request, Course $course, ?Session $session): ExerciseQuestionImport
     {
         $importResult = $this->qti2ImportService->import($uploadedFile, $course, $session);
+        $quiz = $importResult['quiz'];
+        $lpItem = $quiz instanceof CQuiz ? $this->attachImportedExerciseToLearningPathIfNeeded($quiz, $request, $course, $session) : null;
+        $this->entityManager->flush();
 
         return $this->buildSuccessResponse(
             'qti2',
             'Import exercises QTI2',
             'File imported',
-            $importResult['quiz'],
+            $quiz,
             $importResult['importedCount'],
             $importResult['skippedCount'],
             $importResult['errors'],
+            $lpItem,
+            $this->isLearningPathImportContext($request),
         );
     }
 
@@ -254,6 +268,8 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         int $importedQuestionCount,
         int $skippedQuestionCount,
         array $errors,
+        ?CLpItem $learningPathItem = null,
+        bool $learningPathContext = false,
     ): ExerciseQuestionImport {
         $response = new ExerciseQuestionImport();
         $response->importType = $importType;
@@ -266,8 +282,201 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         $response->skippedQuestionCount = $skippedQuestionCount;
         $response->errors = $errors;
         $response->message = $message;
+        $response->learningPathContext = $learningPathContext;
+        if ($learningPathItem instanceof CLpItem) {
+            $response->learningPathItemId = (int) $learningPathItem->getIid();
+            $response->learningPathMessage = 'Exercise added to learning path.';
+        }
 
         return $response;
+    }
+
+
+    private function isLearningPathImportContext(Request $request): bool
+    {
+        $origin = strtolower(trim((string) $request->query->get('origin', '')));
+        $returnToLp = strtolower(trim((string) $request->query->get('returnToLp', '')));
+
+        return 'learnpath' === $origin
+            || \in_array($returnToLp, ['1', 'true', 'yes'], true)
+            || 0 < $request->query->getInt('lp_id')
+            || 0 < $request->query->getInt('learnpath_id');
+    }
+
+    private function attachImportedExerciseToLearningPathIfNeeded(CQuiz $quiz, Request $request, Course $course, ?Session $session): ?CLpItem
+    {
+        if (!$this->isLearningPathImportContext($request)) {
+            return null;
+        }
+
+        $lp = $this->getLearningPathFromCurrentContext($request, $course, $session);
+        $exerciseId = (int) $quiz->getIid();
+        if (0 >= $exerciseId) {
+            return null;
+        }
+
+        $existingItem = $this->getExistingLearningPathExerciseItem($lp, $exerciseId);
+        if ($existingItem instanceof CLpItem) {
+            return $existingItem;
+        }
+
+        $parent = $this->resolveParentItem($request, $lp) ?? $this->getLearningPathRootItem($lp);
+        $lpItem = (new CLpItem())
+            ->setTitle($quiz->getTitle())
+            ->setDescription('')
+            ->setPath((string) $exerciseId)
+            ->setRef('')
+            ->setLp($lp)
+            ->setItemType('quiz')
+            ->setMaxScore($this->getExerciseMaxScore($quiz))
+            ->setMaxTimeAllowed('0')
+            ->setPrerequisite('0')
+            ->setDisplayOrder($this->getNextLearningPathItemDisplayOrder($lp, $parent))
+            ->setParent($parent)
+        ;
+
+        $this->entityManager->persist($lpItem);
+        $lp->setModifiedOn(new DateTime());
+
+        return $lpItem;
+    }
+
+    private function getLearningPathFromCurrentContext(Request $request, Course $course, ?Session $session): CLp
+    {
+        $lpId = $request->query->getInt('lp_id', $request->query->getInt('learnpath_id'));
+        if (0 >= $lpId) {
+            throw new BadRequestHttpException('A valid learning path id is required.');
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('lp')
+            ->from(CLp::class, 'lp')
+            ->innerJoin('lp.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('lp.iid = :lpId')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('lpId', $lpId)
+            ->setParameter('courseId', (int) $course->getId())
+            ->setMaxResults(1)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
+                ->setParameter('sessionId', (int) $session->getId())
+            ;
+        } else {
+            $queryBuilder->andWhere('links.session IS NULL');
+        }
+
+        $lp = $queryBuilder->getQuery()->getOneOrNullResult();
+        if (!$lp instanceof CLp) {
+            throw new AccessDeniedHttpException('The requested learning path does not belong to the current course context.');
+        }
+
+        return $lp;
+    }
+
+    private function getExistingLearningPathExerciseItem(CLp $lp, int $exerciseId): ?CLpItem
+    {
+        $item = $this->entityManager->createQueryBuilder()
+            ->select('item')
+            ->from(CLpItem::class, 'item')
+            ->andWhere('item.lp = :lp')
+            ->andWhere('item.itemType = :itemType')
+            ->andWhere('item.path = :path')
+            ->setParameter('lp', $lp)
+            ->setParameter('itemType', 'quiz')
+            ->setParameter('path', (string) $exerciseId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $item instanceof CLpItem ? $item : null;
+    }
+
+    private function getLearningPathRootItem(CLp $lp): CLpItem
+    {
+        $root = $this->entityManager->createQueryBuilder()
+            ->select('item')
+            ->from(CLpItem::class, 'item')
+            ->andWhere('item.lp = :lp')
+            ->andWhere('item.path = :path')
+            ->setParameter('lp', $lp)
+            ->setParameter('path', 'root')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!$root instanceof CLpItem) {
+            throw new BadRequestHttpException('The learning path root item was not found.');
+        }
+
+        return $root;
+    }
+
+    private function resolveParentItem(Request $request, CLp $lp): ?CLpItem
+    {
+        foreach (['lp_parent_id', 'parent'] as $parameterName) {
+            $candidateId = $request->query->getInt($parameterName);
+            if (0 >= $candidateId) {
+                continue;
+            }
+
+            $candidate = $this->entityManager->createQueryBuilder()
+                ->select('item')
+                ->from(CLpItem::class, 'item')
+                ->andWhere('item.iid = :itemId')
+                ->andWhere('item.lp = :lp')
+                ->setParameter('itemId', $candidateId)
+                ->setParameter('lp', $lp)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+
+            if (!$candidate instanceof CLpItem) {
+                continue;
+            }
+
+            if ('dir' === $candidate->getItemType()) {
+                return $candidate;
+            }
+
+            return $candidate->getParent();
+        }
+
+        return null;
+    }
+
+    private function getNextLearningPathItemDisplayOrder(CLp $lp, CLpItem $parent): int
+    {
+        $maxDisplayOrder = $this->entityManager->createQueryBuilder()
+            ->select('COALESCE(MAX(item.displayOrder), 0)')
+            ->from(CLpItem::class, 'item')
+            ->andWhere('item.lp = :lp')
+            ->andWhere('item.parent = :parent')
+            ->setParameter('lp', $lp)
+            ->setParameter('parent', $parent)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return ((int) $maxDisplayOrder) + 1;
+    }
+
+    private function getExerciseMaxScore(CQuiz $quiz): float
+    {
+        $maxScore = 0.0;
+        foreach ($quiz->getQuestions() as $relQuestion) {
+            $maxScore += (float) $relQuestion->getQuestion()->getPonderation();
+        }
+
+        return $maxScore;
     }
 
     private function normalizeBoolean(string $value): bool

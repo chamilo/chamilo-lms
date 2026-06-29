@@ -36,6 +36,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CBlog;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CShortcut;
@@ -71,6 +72,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
@@ -1036,7 +1038,13 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
-    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
+    public function getToolIntro(
+        Request $request,
+        Course $course,
+        EntityManagerInterface $em,
+        CLpRepository $lpRepository,
+        RouterInterface $router
+    ): Response
     {
         // Reading a tool introduction requires access to the course. CourseVoter::VIEW
         // grants course members (students/teachers), session users and anonymous users
@@ -1112,11 +1120,131 @@ class CourseController extends ToolBaseController
         }
 
         if ($activeIntro) {
+            $introText = $activeIntro->getIntroText();
+
             $responseData['iid'] = $activeIntro->getIid();
-            $responseData['introText'] = $activeIntro->getIntroText();
+            $responseData['introText'] = $this->rewriteLegacyLearningPathIntroLinks(
+                $introText,
+                $request,
+                $course,
+                $lpRepository,
+                $router
+            );
         }
 
         return new JsonResponse($responseData);
+    }
+
+    private function rewriteLegacyLearningPathIntroLinks(
+        string $introText,
+        Request $request,
+        Course $course,
+        CLpRepository $lpRepository,
+        RouterInterface $router
+    ): string {
+        if ('' === trim($introText) || !str_contains($introText, 'lp_controller.php')) {
+            return $introText;
+        }
+
+        $rewritten = preg_replace_callback(
+            '/(href\s*=\s*)(["\'])([^"\']*lp_controller\.php[^"\']*)\2/i',
+            function (array $matches) use ($request, $course, $lpRepository, $router): string {
+                $newUrl = $this->buildVueLearningPathRuntimeUrlFromLegacyIntroLink(
+                    $matches[3],
+                    $request,
+                    $course,
+                    $lpRepository,
+                    $router
+                );
+
+                if (null === $newUrl) {
+                    return $matches[0];
+                }
+
+                return $matches[1].$matches[2].htmlspecialchars($newUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').$matches[2];
+            },
+            $introText
+        );
+
+        return $rewritten ?? $introText;
+    }
+
+    private function buildVueLearningPathRuntimeUrlFromLegacyIntroLink(
+        string $legacyUrl,
+        Request $request,
+        Course $course,
+        CLpRepository $lpRepository,
+        RouterInterface $router
+    ): ?string {
+        $decodedUrl = html_entity_decode($legacyUrl, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $parts = parse_url($decodedUrl);
+
+        if (false === $parts) {
+            return null;
+        }
+
+        $host = $parts['host'] ?? null;
+        if (null !== $host && 0 !== strcasecmp($host, $request->getHost())) {
+            return null;
+        }
+
+        $path = ltrim((string) ($parts['path'] ?? ''), '/');
+        if (!$this->isLegacyLearningPathControllerPath($path)) {
+            return null;
+        }
+
+        $params = [];
+        parse_str((string) ($parts['query'] ?? ''), $params);
+
+        $lpId = (int) ($params['lp_id'] ?? 0);
+        if ($lpId <= 0) {
+            return null;
+        }
+
+        $linkCourseId = (int) ($params['cid'] ?? 0);
+        if ($linkCourseId > 0 && $linkCourseId !== (int) $course->getId()) {
+            return null;
+        }
+
+        $lp = $lpRepository->find($lpId);
+        if (!$lp instanceof CLp || !$this->learningPathBelongsToCourse($lp, $course)) {
+            return null;
+        }
+
+        $currentSessionId = (int) $request->query->get('sid', 0);
+        $linkSessionId = (int) ($params['sid'] ?? 0);
+        $groupId = (int) ($params['gid'] ?? $request->query->get('gid', 0));
+
+        $params['cid'] = (int) $course->getId();
+        $params['sid'] = $linkSessionId > 0 ? $linkSessionId : $currentSessionId;
+        $params['gid'] = max(0, $groupId);
+        unset($params['cidReq']);
+
+        $url = $lpRepository->getLink($lp, $router, $params);
+
+        if (isset($parts['fragment']) && '' !== (string) $parts['fragment']) {
+            $url .= '#'.$parts['fragment'];
+        }
+
+        return $url;
+    }
+
+    private function isLegacyLearningPathControllerPath(string $path): bool
+    {
+        return 'main/lp/lp_controller.php' === $path
+            || str_ends_with($path, '/main/lp/lp_controller.php')
+            || 'lp/lp_controller.php' === $path
+            || str_ends_with($path, '/lp/lp_controller.php');
+    }
+
+    private function learningPathBelongsToCourse(CLp $lp, Course $course): bool
+    {
+        $lpCourseNode = $lp->getResourceNode()?->getParent();
+        $courseNode = $course->getResourceNode();
+
+        return null !== $lpCourseNode
+            && null !== $courseNode
+            && (int) $lpCourseNode->getId() === (int) $courseNode->getId();
     }
 
     #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]

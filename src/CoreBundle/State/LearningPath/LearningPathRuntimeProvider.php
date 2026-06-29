@@ -791,6 +791,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             if (!$quiz instanceof CQuiz) {
                 return '';
             }
+            $params['origin'] = 'learnpath';
             $params['lp_init'] = 1;
             $params['learnpath_id'] = $learningPathId;
             $params['learnpath_item_id'] = $learningPathItemId;

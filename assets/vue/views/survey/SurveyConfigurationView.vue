@@ -41,14 +41,20 @@
 
     <div
       v-if="errorMessage"
-      class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+      ref="errorAlertRef"
+      class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700"
+      role="alert"
+      tabindex="-1"
     >
       {{ errorMessage }}
     </div>
 
     <div
       v-if="successMessage"
-      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
+      ref="successAlertRef"
+      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm font-semibold text-green-700"
+      role="status"
+      tabindex="-1"
     >
       {{ successMessage }}
     </div>
@@ -88,32 +94,32 @@
             :disabled="isEditMode"
             :form-submitted="formSubmitted"
             :help-text="isEditMode ? t('The survey code cannot be changed after creation.') : ''"
-            :is-invalid="formSubmitted && !isEditMode && !form.code.trim()"
-            :label="t('Code')"
+            :is-invalid="isCodeInvalid"
+            :label="isEditMode ? t('Code') : requiredLabel(t('Code'))"
             :required="!isEditMode"
-            error-text="Required field"
+            :error-text="t('Required field')"
+            aria-required="true"
             maxlength="40"
             name="survey_code"
-          />
-
-          <BaseSelect
-            id="resource_language"
-            v-model="form.resourceLanguage"
-            :allow-clear="true"
-            :label="t('Language')"
-            :options="languageOptions"
-            name="language"
           />
         </div>
 
         <div class="mt-6 grid gap-6">
-          <BaseTinyEditor
-            editor-id="survey_title"
-            v-model="form.title"
-            :editor-config="smallEditorConfig"
-            :full-page="false"
-            :title="t('Survey title')"
-          />
+          <div>
+            <BaseTinyEditor
+              editor-id="survey_title"
+              v-model="form.title"
+              :editor-config="smallEditorConfig"
+              :full-page="false"
+              :title="requiredLabel(t('Survey title'))"
+            />
+            <p
+              v-if="isTitleInvalid"
+              class="mt-1 text-sm text-danger"
+            >
+              {{ t("Required field") }}
+            </p>
+          </div>
 
           <BaseTinyEditor
             editor-id="survey_subtitle"
@@ -139,8 +145,8 @@
             id="available_from"
             v-model="form.availableFrom"
             :error-text="t('Invalid date')"
-            :is-invalid="formSubmitted && !form.availableFrom"
-            :label="t('Start Date')"
+            :is-invalid="isAvailableFromInvalid"
+            :label="requiredLabel(t('Start Date'))"
             :show-time="true"
           />
 
@@ -148,8 +154,8 @@
             id="available_until"
             v-model="form.availableUntil"
             :error-text="t('Invalid date')"
-            :is-invalid="formSubmitted && !form.availableUntil"
-            :label="t('End Date')"
+            :is-invalid="isAvailableUntilInvalid"
+            :label="requiredLabel(t('End Date'))"
             :show-time="true"
           />
         </div>
@@ -244,6 +250,16 @@
       <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
         <div class="grid gap-6 md:grid-cols-2">
           <BaseSelect
+            v-if="languageOptions.length > 2"
+            id="resource_language"
+            v-model="form.resourceLanguage"
+            :allow-clear="true"
+            :label="t('Language')"
+            :options="languageOptions"
+            name="language"
+          />
+
+          <BaseSelect
             v-if="!isEditMode"
             id="parent_id"
             v-model="form.parentId"
@@ -251,6 +267,48 @@
             :options="parentSurveyOptions"
             name="parent_id"
           />
+
+          <div
+            v-if="gradebookCategoryOptions.length > 0"
+            class="rounded-xl border border-gray-20 bg-white p-4 md:col-span-2"
+          >
+            <div class="mb-4 flex items-center gap-3">
+              <BaseIcon
+                icon="gradebook"
+                size="small"
+              />
+              <h2 class="text-lg font-semibold text-gray-90">{{ t("Gradebook") }}</h2>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3">
+              <BaseCheckbox
+                id="survey_qualify_gradebook"
+                v-model="form.gradebookEnabled"
+                :label="t('Grade in the assessment tool')"
+                name="survey_qualify_gradebook"
+              />
+
+              <BaseSelect
+                id="category_id"
+                v-model="form.gradebookCategoryId"
+                :disabled="!form.gradebookEnabled"
+                :is-invalid="isGradebookCategoryInvalid"
+                :label="t('Select assessment')"
+                :options="gradebookCategoryOptions"
+                name="category_id"
+              />
+
+              <BaseInputNumber
+                id="survey_weight"
+                v-model="form.gradebookWeight"
+                :disabled="!form.gradebookEnabled"
+                :label="t('Weight in Report')"
+                :min="0"
+                :step="0.1"
+                name="survey_weight"
+              />
+            </div>
+          </div>
 
           <div
             v-if="isEditMode && !form.anonymous && settings.showProfileFormSupported"
@@ -302,62 +360,8 @@
             {{ t("Profile field selection is available only for non-anonymous surveys.") }}
           </div>
 
-          <div
-            v-if="!settings.skillsSupported"
-            class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700"
-          >
-            {{ t("Skill linkage will be migrated in a dedicated batch.") }}
-          </div>
-
-          <div
-            v-if="settings.personalityUnsupportedReason"
-            class="rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm text-orange-700"
-          >
-            {{ t(settings.personalityUnsupportedReason) }}
-          </div>
         </div>
       </BaseAdvancedSettingsButton>
-
-      <div
-        v-if="gradebookCategoryOptions.length > 0"
-        class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
-      >
-        <div class="mb-6 flex items-center gap-3">
-          <BaseIcon
-            icon="gradebook"
-            size="small"
-          />
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("Gradebook") }}</h2>
-        </div>
-
-        <div class="grid gap-6 md:grid-cols-3">
-          <BaseCheckbox
-            id="survey_qualify_gradebook"
-            v-model="form.gradebookEnabled"
-            :label="t('Grade in the assessment tool')"
-            name="survey_qualify_gradebook"
-          />
-
-          <BaseSelect
-            id="category_id"
-            v-model="form.gradebookCategoryId"
-            :disabled="!form.gradebookEnabled"
-            :label="t('Select assessment')"
-            :options="gradebookCategoryOptions"
-            name="category_id"
-          />
-
-          <BaseInputNumber
-            id="survey_weight"
-            v-model="form.gradebookWeight"
-            :disabled="!form.gradebookEnabled"
-            :label="t('Weight in Report')"
-            :min="0"
-            :step="0.1"
-            name="survey_weight"
-          />
-        </div>
-      </div>
 
       <div
         class="flex flex-col-reverse gap-3 rounded-2xl border border-gray-20 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-end"
@@ -389,7 +393,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, nextTick, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
@@ -412,6 +416,9 @@ const isSaving = ref(false)
 const formSubmitted = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
+const errorAlertRef = ref(null)
+const successAlertRef = ref(null)
+const firstInvalidFieldId = ref("")
 const questionUrl = ref("")
 const settings = ref({})
 const options = ref({})
@@ -422,11 +429,18 @@ const form = ref(createEmptyForm())
 
 const isEditMode = computed(() => Number(route.params.surveyId || 0) > 0)
 const surveyId = computed(() => Number(route.params.surveyId || 0))
+const isCodeInvalid = computed(() => formSubmitted.value && !isEditMode.value && !form.value.code.trim())
+const isTitleInvalid = computed(() => formSubmitted.value && !stripHtml(form.value.title).trim())
+const isAvailableFromInvalid = computed(() => formSubmitted.value && !form.value.availableFrom)
+const isAvailableUntilInvalid = computed(() => formSubmitted.value && !form.value.availableUntil)
+const isGradebookCategoryInvalid = computed(
+  () => formSubmitted.value && form.value.gradebookEnabled && !form.value.gradebookCategoryId,
+)
 
 const visibleResultOptions = computed(() => translateOptions(options.value.visibleResults || []))
 const languageOptions = computed(() => translateOptions(options.value.languages || []))
-const parentSurveyOptions = computed(() => translateOptions(options.value.parentSurveys || []))
-const gradebookCategoryOptions = computed(() => translateOptions(options.value.gradebookCategories || []))
+const parentSurveyOptions = computed(() => normalizeOptions(options.value.parentSurveys || []))
+const gradebookCategoryOptions = computed(() => normalizeOptions(options.value.gradebookCategories || []))
 const profileFieldOptions = computed(() => translateOptions(options.value.profileFields || []))
 
 const durationValue = computed({
@@ -586,6 +600,17 @@ function translateOptions(items) {
   }))
 }
 
+function normalizeOptions(items) {
+  return items.map((item) => ({
+    ...item,
+    label: stripHtml(item.label || "").trim(),
+  }))
+}
+
+function requiredLabel(label) {
+  return `${label} *`
+}
+
 function toDate(value) {
   if (!value) {
     return null
@@ -666,32 +691,47 @@ async function loadConfiguration() {
 }
 
 function validateForm() {
+  firstInvalidFieldId.value = ""
+
   if (!isEditMode.value && !form.value.code.trim()) {
     errorMessage.value = t("The survey code is required.")
+    firstInvalidFieldId.value = "survey_code"
 
     return false
   }
 
   if (!stripHtml(form.value.title).trim()) {
     errorMessage.value = t("The survey title is required.")
+    firstInvalidFieldId.value = "survey_title"
 
     return false
   }
 
-  if (!form.value.availableFrom || !form.value.availableUntil) {
+  if (!form.value.availableFrom) {
     errorMessage.value = t("Invalid date")
+    firstInvalidFieldId.value = "available_from"
+
+    return false
+  }
+
+  if (!form.value.availableUntil) {
+    errorMessage.value = t("Invalid date")
+    firstInvalidFieldId.value = "available_until"
 
     return false
   }
 
   if (form.value.availableFrom > form.value.availableUntil) {
     errorMessage.value = t("The first date should be before the end date")
+    firstInvalidFieldId.value = "available_from"
 
     return false
   }
 
   if (form.value.gradebookEnabled && !form.value.gradebookCategoryId) {
     errorMessage.value = t("Select assessment")
+    firstInvalidFieldId.value = "category_id"
+    showAdvancedSettings.value = true
 
     return false
   }
@@ -716,12 +756,35 @@ function buildPayload() {
   return payload
 }
 
+async function scrollToFeedback(target = "error") {
+  await nextTick()
+
+  const alert = "success" === target ? successAlertRef.value : errorAlertRef.value
+  if (alert?.scrollIntoView) {
+    alert.scrollIntoView({ behavior: "smooth", block: "center" })
+    alert.focus?.({ preventScroll: true })
+  }
+}
+
+async function focusFirstInvalidField() {
+  await nextTick()
+
+  const selector = firstInvalidFieldId.value ? `#${firstInvalidFieldId.value}` : "[aria-invalid='true']"
+  const element = document.querySelector(selector)
+  const focusTarget = element?.querySelector?.("input, textarea, select, button, [contenteditable='true']") || element
+
+  focusTarget?.focus?.({ preventScroll: true })
+}
+
 async function submitForm() {
   formSubmitted.value = true
   errorMessage.value = ""
   successMessage.value = ""
 
   if (!validateForm()) {
+    await scrollToFeedback()
+    await focusFirstInvalidField()
+
     return
   }
 
@@ -757,10 +820,11 @@ async function submitForm() {
     }
 
     successMessage.value = t("The survey has been saved successfully")
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    await scrollToFeedback("success")
   } catch (error) {
     console.error("Error saving survey configuration", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not save survey configuration")
+    await scrollToFeedback()
   } finally {
     isSaving.value = false
   }

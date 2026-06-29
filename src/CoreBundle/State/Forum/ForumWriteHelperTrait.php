@@ -32,6 +32,10 @@ trait ForumWriteHelperTrait
      */
     private function getJsonData(Request $request): array
     {
+        if (str_starts_with((string) $request->headers->get('Content-Type'), 'multipart/form-data')) {
+            return $request->request->all();
+        }
+
         try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException) {

@@ -34,6 +34,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class SurveyQuestionProcessor implements ProcessorInterface
 {
     use SurveyPersonalitySupportTrait;
+    use SurveyCsrfTokenValidationTrait;
 
     /**
      * @var array<int, string>
@@ -110,7 +111,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateCsrfToken((string) ($payload['csrfToken'] ?? ''));
+        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, SurveyQuestionProvider::CSRF_TOKEN_ID, $payload);
 
         $survey = $this->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);

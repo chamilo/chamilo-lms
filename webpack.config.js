@@ -15,7 +15,13 @@ const isProd = Encore.isProduction()
 Encore.setOutputPath("public/build/")
   .setManifestKeyPrefix("public/build/")
   .setPublicPath("/build")
-  .enableBuildNotifications()
+
+// Desktop build notifications are optional. Keep them disabled by default
+// because webpack-notifier pulls node-notifier, which is not compatible with
+// the ESM-only uuid package on newer Node.js versions and breaks the build.
+if (process.env.CHAMILO_WEBPACK_NOTIFICATIONS === "1") {
+  Encore.enableBuildNotifications()
+}
 
 // Clean output only in production to speed up development builds.
 if (isProd) {

@@ -7,8 +7,16 @@
     >
       <div class="flex flex-col gap-4 p-4 md:flex-row md:items-center md:justify-between">
         <div class="flex min-w-0 flex-1 gap-4">
-          <div class="flex h-16 w-20 shrink-0 items-center justify-center rounded-lg bg-gray-15">
+          <div class="flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-15">
+            <img
+              v-if="getForumImage(forum)"
+              :alt="forum.title || t('Forum image')"
+              :src="getForumImage(forum)"
+              class="h-full w-full object-cover"
+              @error="markForumImageAsBroken(forum)"
+            />
             <BaseIcon
+              v-else
               :icon="Number(forum.locked || 0) ? 'lock' : 'comment'"
               size="big"
             />
@@ -26,12 +34,11 @@
               {{ forum.title }}
             </router-link>
 
-            <p
+            <div
               v-if="forum.forumComment"
-              class="mt-1 text-sm leading-5 text-gray-600"
-            >
-              {{ forum.forumComment }}
-            </p>
+              class="prose prose-sm mt-1 max-w-none text-sm leading-5 text-gray-600"
+              v-html="sanitizeForumComment(forum.forumComment)"
+            />
 
             <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-gray-500">
               <span>{{ t("Threads") }}: {{ forum.forumThreads || 0 }}</span>
@@ -143,15 +150,17 @@
 </template>
 
 <script setup>
-import { computed } from "vue"
+import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { t } = useI18n()
 const route = useRoute()
 const node = computed(() => Number(route.params.node || 0))
+const brokenForumImageIds = ref(new Set())
 
 defineProps({
   forums: {
@@ -165,6 +174,30 @@ defineProps({
 })
 
 defineEmits(["edit-forum", "delete-forum", "toggle-forum-lock", "toggle-forum-visibility", "move-forum", "toggle-forum-notification"])
+
+function sanitizeForumComment(value) {
+  return sanitizeHtml(value || "")
+}
+
+function getForumImage(forum) {
+  const forumId = Number(forum?.iid || 0)
+  if (forumId && brokenForumImageIds.value.has(forumId)) {
+    return ""
+  }
+
+  return String(forum?.forumImage || forum?.forumImageUrl || "").trim()
+}
+
+function markForumImageAsBroken(forum) {
+  const forumId = Number(forum?.iid || 0)
+  if (!forumId) {
+    return
+  }
+
+  const nextValue = new Set(brokenForumImageIds.value)
+  nextValue.add(forumId)
+  brokenForumImageIds.value = nextValue
+}
 
 function isForumVisible(forum) {
   if (forum?.forumVisible === undefined || forum?.forumVisible === null) {

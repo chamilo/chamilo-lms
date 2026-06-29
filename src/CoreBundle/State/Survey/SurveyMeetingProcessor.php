@@ -34,6 +34,8 @@ use Throwable;
  */
 final readonly class SurveyMeetingProcessor implements ProcessorInterface
 {
+    use SurveyCsrfTokenValidationTrait;
+
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
@@ -56,7 +58,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateCsrfToken((string) ($payload['csrfToken'] ?? ''));
+        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, SurveyMeetingProvider::CSRF_TOKEN_ID, $payload);
 
         $course = $this->surveyMeetingProvider->getCourse($request);
         $session = $this->surveyMeetingProvider->getSession($request);

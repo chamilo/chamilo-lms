@@ -17,7 +17,7 @@ function buildForumFormData(payload = {}) {
   const attachments = Array.isArray(payload.attachments) ? payload.attachments : []
 
   for (const [key, value] of Object.entries(payload)) {
-    if (key === "attachments") {
+    if (["attachments", "image"].includes(key)) {
       continue
     }
 
@@ -30,6 +30,10 @@ function buildForumFormData(payload = {}) {
     formData.append("attachments[]", file)
   })
 
+  if (hasForumImage(payload)) {
+    formData.append("image", payload.image)
+  }
+
   return formData
 }
 
@@ -37,8 +41,16 @@ function hasAttachments(payload = {}) {
   return Array.isArray(payload.attachments) && payload.attachments.length > 0
 }
 
-export default {
+function hasForumImage(payload = {}) {
+  const image = payload.image
 
+  return (
+    (typeof File !== "undefined" && image instanceof File) ||
+    (typeof Blob !== "undefined" && image instanceof Blob)
+  )
+}
+
+export default {
   async searchForums(params = {}) {
     return await baseService.get("/api/forum/search", cleanParams(params))
   },
@@ -82,7 +94,6 @@ export default {
     return await baseService.get(`/api/forums/${forumId}`, cleanParams(params))
   },
 
-
   async createForum(params, payload) {
     return await baseService.post("/api/forums/create", payload, {}, { params: cleanParams(params) })
   },
@@ -109,6 +120,12 @@ export default {
 
   async toggleForumSubscription(forumId, params, payload) {
     return await baseService.put(`/api/forums/${forumId}/toggle-subscription`, payload, { params: cleanParams(params) })
+  },
+
+  async uploadForumImage(forumId, params, payload) {
+    const body = hasForumImage(payload) ? buildForumFormData(payload) : payload
+
+    return await baseService.post(`/api/forums/${forumId}/image`, body, {}, { params: cleanParams(params) })
   },
 
   async getThreads(forumId, params) {
@@ -189,7 +206,6 @@ export default {
   async togglePostVisibility(postId, params, payload) {
     return await baseService.put(`/api/forum_posts/${postId}/toggle-visibility`, payload, { params: cleanParams(params) })
   },
-
 
   async approvePost(postId, params, payload) {
     return await baseService.put(`/api/forum_posts/${postId}/approve`, payload, { params: cleanParams(params) })

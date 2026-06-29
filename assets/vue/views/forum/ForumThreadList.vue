@@ -74,30 +74,100 @@
         :key="thread.iid"
         class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
       >
-        <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-          <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <BaseIcon
-                :icon="thread.locked ? 'lock' : 'add-topic'"
-                size="normal"
+        <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div class="flex min-w-0 flex-1 gap-4">
+            <div class="relative shrink-0">
+              <BaseUserAvatar
+                :alt="thread.posterFullName || t('Unknown user')"
+                :image-url="getPosterAvatarUrl(thread)"
+                size="large"
               />
-              <h2 class="truncate text-base font-semibold text-gray-90">{{ thread.title }}</h2>
-            </div>
-            <div class="mt-2 flex flex-wrap gap-2 text-xs text-gray-500">
-              <span>{{ t("Replies") }}: {{ thread.threadReplies || 0 }}</span>
-              <span>{{ t("Views") }}: {{ thread.threadViews || 0 }}</span>
-              <span v-if="thread.threadSticky">{{ t("Sticky") }}</span>
-              <span v-if="Number(thread.threadQualifyMax || 0) > 0">{{ t("Graded") }}</span>
-              <span v-if="thread.lockedByGradebook && !thread.locked">{{ t("Locked") }}</span>
-              <span v-if="thread.locked">{{ t("Locked") }}</span>
-              <span v-if="!isThreadVisible(thread)">{{ t("Hidden") }}</span>
               <span
-                v-if="Number(thread.pendingPostCount || 0)"
-                class="rounded-full bg-yellow-100 px-2 py-0.5 text-yellow-700"
+                v-if="isTeacherRole(thread)"
+                :title="getRoleLabel(thread)"
+                class="absolute -bottom-1 -right-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
               >
-                {{ t("Posts pending moderation") }}: {{ thread.pendingPostCount }}
+                <i
+                  class="mdi mdi-account-tie text-sm"
+                  aria-hidden="true"
+                ></i>
+                <span class="sr-only">{{ getRoleLabel(thread) }}</span>
               </span>
-              <span v-if="thread.posterFullName">{{ thread.posterFullName }}</span>
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start gap-2">
+                <BaseIcon
+                  :icon="thread.locked ? 'lock' : 'add-topic'"
+                  class="mt-0.5 shrink-0"
+                  size="normal"
+                />
+                <router-link
+                  :to="getThreadRoute(thread)"
+                  class="min-w-0 truncate text-base font-semibold text-primary hover:underline"
+                >
+                  {{ thread.title }}
+                </router-link>
+              </div>
+
+              <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+                <span v-if="thread.posterFullName">{{ t("By") }} {{ thread.posterFullName }}</span>
+                <span
+                  v-if="getThreadRelativeTime(thread) || getThreadDateValue(thread)"
+                  :title="formatAbsoluteDate(getThreadDateValue(thread)) || getThreadRelativeTime(thread)"
+                >
+                  {{ getThreadRelativeTime(thread) }}
+                </span>
+                <span>{{ t("Replies") }}: {{ thread.threadReplies || 0 }}</span>
+                <span>{{ t("Views") }}: {{ thread.threadViews || 0 }}</span>
+                <span v-if="thread.lastPostDate">{{ getThreadLastPostLabel(thread) }}</span>
+              </div>
+
+              <p
+                v-if="getThreadPreview(thread)"
+                class="mt-2 text-sm text-gray-700"
+              >
+                {{ getThreadPreview(thread) }}
+              </p>
+
+              <div class="mt-2 flex flex-wrap gap-2 text-xs text-gray-500">
+                <span
+                  v-if="thread.threadSticky"
+                  class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
+                >
+                  {{ t("Sticky") }}
+                </span>
+                <span
+                  v-if="Number(thread.threadQualifyMax || 0) > 0"
+                  class="rounded-full bg-green-100 px-2 py-0.5 text-green-700"
+                >
+                  {{ t("Graded") }}
+                </span>
+                <span
+                  v-if="thread.lockedByGradebook && !thread.locked"
+                  class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                >
+                  {{ t("Locked") }}
+                </span>
+                <span
+                  v-if="thread.locked"
+                  class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                >
+                  {{ t("Locked") }}
+                </span>
+                <span
+                  v-if="!isThreadVisible(thread)"
+                  class="rounded-full bg-red-100 px-2 py-0.5 text-red-700"
+                >
+                  {{ t("Hidden") }}
+                </span>
+                <span
+                  v-if="Number(thread.pendingPostCount || 0)"
+                  class="rounded-full bg-yellow-100 px-2 py-0.5 text-yellow-700"
+                >
+                  {{ t("Posts pending moderation") }}: {{ thread.pendingPostCount }}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -437,16 +507,19 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import forumService from "../../services/forumService"
+import { useSecurityStore } from "../../store/securityStore"
 
-const { t } = useI18n()
+const { t, d, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const notifications = useNotification()
+const securityStore = useSecurityStore()
 const { requireConfirmation } = useConfirmation()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
@@ -601,6 +674,211 @@ function isThreadVisible(thread) {
   }
 
   return true === thread.threadVisible || 1 === thread.threadVisible || "1" === String(thread.threadVisible)
+}
+
+function getThreadRoute(thread) {
+  return {
+    name: "ForumPostList",
+    params: { node: parentId.value, forumId: forumId.value, threadId: thread.iid },
+    query: route.query,
+  }
+}
+
+function stripTags(value) {
+  const element = document.createElement("div")
+  element.innerHTML = value || ""
+
+  return element.textContent || element.innerText || ""
+}
+
+function getThreadPreview(thread) {
+  return stripTags(thread?.lastPostText || "").trim()
+}
+
+const relativeTimeFormatter = computed(() => {
+  try {
+    return new Intl.RelativeTimeFormat(locale.value || undefined, { numeric: "auto" })
+  } catch (error) {
+    console.error("Error creating relative time formatter:", error)
+
+    return null
+  }
+})
+
+function normalizeDateValue(value) {
+  if (!value) {
+    return ""
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? "" : value
+  }
+
+  if (typeof value === "number") {
+    const timestamp = value > 100000000000 ? value : value * 1000
+    const date = new Date(timestamp)
+
+    return Number.isNaN(date.getTime()) ? "" : date
+  }
+
+  if (typeof value === "object") {
+    return normalizeDateValue(
+      value.date || value.datetime || value.dateTime || value.value || value.timestamp || value.time || "",
+    )
+  }
+
+  const rawValue = String(value).trim()
+  if (!rawValue) {
+    return ""
+  }
+
+  if (/^\d+$/.test(rawValue)) {
+    return normalizeDateValue(Number(rawValue))
+  }
+
+  const normalizedValue = rawValue.includes("T") ? rawValue : rawValue.replace(" ", "T")
+  const date = new Date(normalizedValue)
+
+  return Number.isNaN(date.getTime()) ? "" : date
+}
+
+function resolveDateValue(...values) {
+  for (const value of values) {
+    const date = normalizeDateValue(value)
+    if (date) {
+      return date
+    }
+  }
+
+  return ""
+}
+
+function formatAbsoluteDate(value) {
+  const date = normalizeDateValue(value)
+  if (!date) {
+    return ""
+  }
+
+  return d(date, "long")
+}
+
+function isDefaultAvatarUrl(value) {
+  const avatarUrl = String(value || "").trim()
+  if (!avatarUrl) {
+    return true
+  }
+
+  return ["/img/user_default.svg", "user_default.svg", "unknown.png", "anonymous"].some((marker) =>
+    avatarUrl.includes(marker),
+  )
+}
+
+function getCurrentUserAvatarUrl() {
+  const user = securityStore.user || {}
+
+  return String(user.illustrationUrl || user.avatarUrl || user.pictureUri || "").trim()
+}
+
+function isCurrentUserItem(item) {
+  const posterUserId = Number(item?.posterUserId || 0)
+  const currentUserId = Number(securityStore.user?.id || 0)
+
+  return posterUserId > 0 && currentUserId > 0 && posterUserId === currentUserId
+}
+
+function getPosterAvatarUrl(item) {
+  const avatarUrl = String(item?.posterAvatarUrl || item?.avatarUrl || "").trim()
+  if (avatarUrl && !isDefaultAvatarUrl(avatarUrl)) {
+    return avatarUrl
+  }
+
+  if (isCurrentUserItem(item)) {
+    const currentAvatarUrl = getCurrentUserAvatarUrl()
+    if (currentAvatarUrl && !isDefaultAvatarUrl(currentAvatarUrl)) {
+      return currentAvatarUrl
+    }
+  }
+
+  return ""
+}
+
+function getThreadDateValue(thread) {
+  return resolveDateValue(
+    thread?.threadDateIso,
+    thread?.createdAtIso,
+    thread?.threadDate,
+    thread?.createdAt,
+    thread?.date,
+    thread?.threadDateTimestamp,
+    thread?.thread_date,
+    thread?.created_at,
+  )
+}
+
+function getLastPostDateValue(thread) {
+  return resolveDateValue(
+    thread?.lastPostDateIso,
+    thread?.lastPostCreatedAtIso,
+    thread?.lastPostDate,
+    thread?.lastPostCreatedAt,
+    thread?.lastPostDateTimestamp,
+    thread?.last_post_date,
+    thread?.last_post_created_at,
+  )
+}
+
+function getThreadRelativeTime(thread) {
+  return (
+    thread?.threadRelativeTime ||
+    thread?.relativeTime ||
+    thread?.createdAtRelative ||
+    (getThreadDateValue(thread) ? formatRelativeTime(getThreadDateValue(thread)) : "")
+  )
+}
+
+function getLastPostRelativeTime(thread) {
+  return thread?.lastPostRelativeTime || (getLastPostDateValue(thread) ? formatRelativeTime(getLastPostDateValue(thread)) : "")
+}
+
+function formatRelativeTime(value) {
+  const date = normalizeDateValue(value)
+  if (!date) {
+    return ""
+  }
+
+  const diffInSeconds = Math.round((date.getTime() - Date.now()) / 1000)
+  const units = [
+    { unit: "year", seconds: 31536000 },
+    { unit: "month", seconds: 2592000 },
+    { unit: "week", seconds: 604800 },
+    { unit: "day", seconds: 86400 },
+    { unit: "hour", seconds: 3600 },
+    { unit: "minute", seconds: 60 },
+    { unit: "second", seconds: 1 },
+  ]
+  const selected = units.find((item) => Math.abs(diffInSeconds) >= item.seconds) || units[units.length - 1]
+  const amount = Math.round(diffInSeconds / selected.seconds)
+
+  if (relativeTimeFormatter.value) {
+    return relativeTimeFormatter.value.format(amount, selected.unit)
+  }
+
+  return formatAbsoluteDate(value)
+}
+
+function getThreadLastPostLabel(thread) {
+  const author = thread?.lastPosterFullName ? ` ${t("by")} ${thread.lastPosterFullName}` : ""
+  const date = getLastPostRelativeTime(thread)
+
+  return `${t("Last post")}${author}${date ? ` - ${date}` : ""}`
+}
+
+function isTeacherRole(item) {
+  return Boolean(item?.posterIsTeacher || item?.posterRole === "teacher")
+}
+
+function getRoleLabel(item) {
+  return item?.posterRoleLabel ? t(item.posterRoleLabel) : t("Teacher")
 }
 
 function getForumCategoryId(item) {

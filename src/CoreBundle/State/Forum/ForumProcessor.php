@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -19,7 +20,9 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -36,6 +39,8 @@ final class ForumProcessor implements ProcessorInterface
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
 
+    private const FORUM_IMAGE_ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CForumRepository $forumRepository,
@@ -43,6 +48,7 @@ final class ForumProcessor implements ProcessorInterface
         private readonly Security $security,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly SettingsManager $settingsManager,
+        private readonly UploadFilenamePolicy $uploadFilenamePolicy,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CForum|JsonResponse
@@ -101,6 +107,7 @@ final class ForumProcessor implements ProcessorInterface
             'toggle_forum_visibility' => $this->toggleForumVisibility($data, $payload),
             'move_forum' => $this->moveForum($data, $payload),
             'toggle_forum_subscription' => $this->toggleForumSubscription($data, $payload),
+            'upload_forum_image' => $this->uploadForumImage($data, $request, $payload),
             default => $this->updateForum($data, $payload),
         };
     }
@@ -245,6 +252,84 @@ final class ForumProcessor implements ProcessorInterface
             'subscribed' => $subscribed,
             'message' => $subscribed ? 'Forum notifications enabled.' : 'Forum notifications disabled.',
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function uploadForumImage(CForum $forum, Request $request, array $payload): JsonResponse
+    {
+        $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+
+        $uploadedImage = $this->getUploadedForumImage($request);
+        $removeImage = $this->getBoolean($payload, 'removeImage');
+
+        if (!$uploadedImage instanceof UploadedFile && !$removeImage) {
+            throw new BadRequestHttpException('Forum image is missing.');
+        }
+
+        if ($removeImage) {
+            $forum->setForumImage('');
+        }
+
+        if ($uploadedImage instanceof UploadedFile) {
+            $forum->setForumImage($this->storeForumImage($forum, $uploadedImage));
+        }
+
+        $this->entityManager->persist($forum);
+        $this->entityManager->flush();
+
+        $this->registerForumEventLog('update-forum-image', 'forum', (string) $forum->getIid());
+
+        return new JsonResponse([
+            'forumId' => $forum->getIid(),
+            'forumImage' => $forum->getForumImage(),
+            'message' => '' === $forum->getForumImage() ? 'Forum image removed.' : 'Forum image updated.',
+        ]);
+    }
+
+    private function getUploadedForumImage(Request $request): ?UploadedFile
+    {
+        $file = $request->files->get('image') ?? $request->files->get('forumImage') ?? $request->files->get('picture');
+
+        return $file instanceof UploadedFile ? $file : null;
+    }
+
+    private function storeForumImage(CForum $forum, UploadedFile $file): string
+    {
+        if (!$file->isValid()) {
+            throw new BadRequestHttpException('Invalid forum image upload.');
+        }
+
+        $this->assertAllowedForumImage($file);
+        $this->forumRepository->addFile($forum, $file);
+        $this->forumRepository->update($forum);
+
+        $imageUrl = trim((string) $this->forumRepository->getResourceFileUrl($forum));
+        if ('' === $imageUrl) {
+            throw new BadRequestHttpException('Forum image URL could not be generated.');
+        }
+
+        return $imageUrl;
+    }
+
+    private function assertAllowedForumImage(UploadedFile $file): void
+    {
+        $originalName = $file->getClientOriginalName();
+        $extension = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));
+        if (!\in_array($extension, self::FORUM_IMAGE_ALLOWED_EXTENSIONS, true)) {
+            throw new BadRequestHttpException('Only JPG, PNG, GIF, WEBP and BMP images are allowed.');
+        }
+
+        $mimeType = strtolower((string) ($file->getMimeType() ?: $file->getClientMimeType()));
+        if (!str_starts_with($mimeType, 'image/') || \in_array($mimeType, ['image/svg', 'image/svg+xml'], true)) {
+            throw new BadRequestHttpException('Only image files are allowed.');
+        }
+
+        $policy = $this->uploadFilenamePolicy->filter($originalName);
+        if (false === ($policy['allowed'] ?? false)) {
+            throw new BadRequestHttpException('File upload failed: this file extension or file type is prohibited.');
+        }
     }
 
     /**

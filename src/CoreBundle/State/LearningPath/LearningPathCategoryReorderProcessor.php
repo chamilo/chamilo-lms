@@ -62,17 +62,22 @@ final readonly class LearningPathCategoryReorderProcessor implements ProcessorIn
             throw new BadRequestHttpException('Course resource node is missing.');
         }
 
+        $courseNodeId = (int) $courseNode->getId();
+        if ($courseNodeId <= 0) {
+            throw new BadRequestHttpException('Course resource node is missing.');
+        }
+
         $queryBuilder = $this->entityManager->getRepository(CLpCategory::class)->createQueryBuilder('category');
         $queryBuilder
             ->addSelect('resourceNode', 'resourceLink')
             ->join('category.resourceNode', 'resourceNode')
             ->join('resourceNode.resourceLinks', 'resourceLink')
-            ->where('resourceNode.parent = :courseNode')
+            ->where('IDENTITY(resourceNode.parent) = :courseNodeId')
             ->andWhere('IDENTITY(resourceLink.course) = :courseId')
             ->andWhere('resourceLink.userGroup IS NULL')
             ->andWhere('resourceLink.user IS NULL')
             ->andWhere('resourceLink.deletedAt IS NULL')
-            ->setParameter('courseNode', $courseNode)
+            ->setParameter('courseNodeId', $courseNodeId)
             ->setParameter('courseId', (int) $course->getId())
         ;
 

@@ -196,11 +196,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
             $link['gid'] = (int) $group->getIid();
         }
 
-        $lp
-            ->setParentResourceNode((int) $courseNode->getId())
-            ->setResourceLinkArray([$link])
-            ->setLpType(CLp::LP_TYPE)
-        ;
+        $lp->setParentResourceNode((int) $courseNode->getId());
+        $lp->setResourceLinkArray([$link]);
+        $lp->setLpType(CLp::LP_TYPE);
     }
 
     private function resolveCategory(mixed $rawId, Course $course, ?Session $session, ?CGroup $group): ?CLpCategory
@@ -422,7 +420,7 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         }
     }
 
-    private function normalizeExtraFieldValue(ExtraField $field, mixed $value): ?string
+    private function normalizeExtraFieldValue(ExtraField $field, mixed $value): string
     {
         if (ExtraField::FIELD_TYPE_CHECKBOX === $field->getValueType()) {
             return filter_var($value, FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
@@ -445,7 +443,6 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         return $value;
     }
 
-    /** @param mixed[] $rawSkillIds */
     private function saveSkills(int $lpId, mixed $rawSkillIds, Course $course, ?Session $session): void
     {
         if (!$this->settingEnabled('skill.allow_skill_rel_items')) {

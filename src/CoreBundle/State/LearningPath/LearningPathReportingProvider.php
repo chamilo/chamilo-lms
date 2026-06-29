@@ -484,7 +484,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         );
 
         foreach ($latestViews as $userId => $latestView) {
-            $metrics[$userId]['progress'] = max(0, min(100, (int) ($latestView->getProgress() ?? 0)));
+            $metrics[$userId]['progress'] = max(0, min(100, (int) $latestView->getProgress()));
             $metrics[$userId]['score'] = $this->calculateScore(
                 $lp,
                 $scorableAttempts[$userId] ?? [],
@@ -512,7 +512,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         foreach ($attempts as $attempt) {
             $item = $attempt->getItem();
             $score = (float) $attempt->getScore();
-            $maxScore = (float) ($item->getMaxScore() ?? 0);
+            $maxScore = (float) $item->getMaxScore();
 
             if ('quiz' === $item->getItemType()) {
                 $exerciseAttempt = null !== $attempt->getIid()
@@ -522,12 +522,12 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
                     $score = $exerciseAttempt->getScore();
                     $maxScore = $exerciseAttempt->getMaxScore();
                 } elseif ($maxScore <= 0) {
-                    $maxScore = (float) ($attempt->getMaxScore() ?? 0);
+                    $maxScore = (float) $attempt->getMaxScore();
                 }
             } elseif ('sco' === $item->getItemType() && $maxScore <= 0) {
                 $maxScore = 1 === $lp->getUseMaxScore()
                     ? 100.0
-                    : (float) ($attempt->getMaxScore() ?? 0);
+                    : (float) $attempt->getMaxScore();
             }
 
             if ($maxScore <= 0) {
@@ -712,7 +712,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
                 static fn (CLpView $view): array => [
                     'id' => (int) $view->getIid(),
                     'attempt' => (int) $view->getViewCount(),
-                    'progress' => (int) ($view->getProgress() ?? 0),
+                    'progress' => (int) $view->getProgress(),
                     'lastItem' => (int) $view->getLastItem(),
                 ],
                 $views,

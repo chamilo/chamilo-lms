@@ -145,7 +145,7 @@ final readonly class LearningPathRuntimeProgressManager
 
     public function synchronize(CLp $lp, CLpView $view): int
     {
-        $previousProgress = max(0, min(100, (int) ($view->getProgress() ?? 0)));
+        $previousProgress = max(0, min(100, (int) $view->getProgress()));
         $items = $this->getItems($lp);
         $latestViews = $this->indexLatestItemViews($view);
 

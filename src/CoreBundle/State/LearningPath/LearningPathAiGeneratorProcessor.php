@@ -156,13 +156,12 @@ final readonly class LearningPathAiGeneratorProcessor implements ProcessorInterf
             $resourceLink['gid'] = (int) $group->getIid();
         }
 
-        $learningPath = (new CLp())
-            ->setLpType(CLp::LP_TYPE)
-            ->setTitle($title)
-            ->setDescription('')
-            ->setParentResourceNode((int) $courseNode->getId())
-            ->setResourceLinkArray([$resourceLink])
-        ;
+        $learningPath = new CLp();
+        $learningPath->setLpType(CLp::LP_TYPE);
+        $learningPath->setTitle($title);
+        $learningPath->setDescription('');
+        $learningPath->setParentResourceNode((int) $courseNode->getId());
+        $learningPath->setResourceLinkArray([$resourceLink]);
 
         $this->lpRepository->createLp($learningPath);
         $this->entityManager->flush();

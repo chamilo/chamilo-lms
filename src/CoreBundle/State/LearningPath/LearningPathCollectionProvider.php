@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * @implements ProviderInterface<array<int, CLp>>
+ * @implements ProviderInterface<CLp>
  */
 readonly class LearningPathCollectionProvider implements ProviderInterface
 {

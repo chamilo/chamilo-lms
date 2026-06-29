@@ -41,7 +41,6 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
-use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
@@ -79,7 +78,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         private SettingsManager $settingsManager,
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
-        private CDocumentRepository $documentRepository,
         private ResourceNodeRepository $resourceNodeRepository,
         private ExtraFieldRepository $extraFieldRepository,
     ) {}
@@ -339,12 +337,12 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             }
 
             $resourceNode = $document->getResourceNode();
-            $resourceFile = $resourceNode?->getFirstResourceFile();
+            $resourceFile = $resourceNode->getFirstResourceFile();
             if (!$resourceFile instanceof ResourceFile || !$this->isAudioResourceFile($resourceFile)) {
                 throw new BadRequestHttpException('The selected document is not an audio file.');
             }
 
-            $audioPath = trim((string) $resourceNode?->getPath());
+            $audioPath = trim((string) $resourceNode->getPath());
             if ('' === $audioPath) {
                 throw new BadRequestHttpException('The selected audio document has no storage path.');
             }
@@ -898,7 +896,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         return $data;
     }
 
-    /** @param array<string, mixed> $submitted */
+    /** @param array<array-key, mixed> $submitted */
     private function saveItemExtraFields(int $itemId, array $submitted, Request $request): void
     {
         foreach ($this->extraFieldRepository->getExtraFields(ExtraField::LP_ITEM_FIELD_TYPE) as $field) {
@@ -976,7 +974,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         }
     }
 
-    private function normalizeItemExtraFieldValue(ExtraField $field, mixed $value): ?string
+    private function normalizeItemExtraFieldValue(ExtraField $field, mixed $value): string
     {
         if (ExtraField::FIELD_TYPE_CHECKBOX === $field->getValueType()) {
             return filter_var($value, FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
@@ -1121,8 +1119,8 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
     }
 
     /**
-     * @param array<int, array{id:int, parentId:int|null}> $order
-     * @param array<int, CLpItem>                          $items
+     * @param array<int, array{id?: mixed, parentId?: mixed}> $order
+     * @param array<int, CLpItem>                            $items
      *
      * @return array<int, array{id:int, parentId:int|null}>
      */
@@ -1140,7 +1138,11 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
                 throw new BadRequestHttpException('Invalid item order.');
             }
 
-            $itemId = (int) ($entry['id'] ?? 0);
+            if (!isset($entry['id'])) {
+                throw new BadRequestHttpException('Invalid learning path item.');
+            }
+
+            $itemId = (int) $entry['id'];
             $parentId = isset($entry['parentId']) && null !== $entry['parentId']
                 ? (int) $entry['parentId']
                 : null;

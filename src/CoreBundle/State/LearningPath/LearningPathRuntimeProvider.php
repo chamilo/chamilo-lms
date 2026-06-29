@@ -371,7 +371,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         }
 
         $prerequisiteView = $this->findLatestView($prerequisiteLp, $course, $session, $user);
-        if (!$prerequisiteView instanceof CLpView || 100 > (int) ($prerequisiteView->getProgress() ?? 0)) {
+        if (!$prerequisiteView instanceof CLpView || 100 > (int) $prerequisiteView->getProgress()) {
             throw new AccessDeniedHttpException('The learning path prerequisite is not completed.');
         }
     }
@@ -619,8 +619,8 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             return true;
         }
 
-        $minScore = (float) ($item->getPrerequisiteMinScore() ?? 0.0);
-        $maxScore = (float) ($item->getPrerequisiteMaxScore() ?? 100.0);
+        $minScore = (float) $item->getPrerequisiteMinScore();
+        $maxScore = (float) $item->getPrerequisiteMaxScore();
         $score = (float) $prerequisiteView->getScore();
 
         return $score >= $minScore && $score <= $maxScore;

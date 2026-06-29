@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
- * @implements ProcessorInterface<CLp|CLpCategory, JsonResponse>
+ * @implements ProcessorInterface<object, JsonResponse>
  */
 final readonly class LearningPathVisibilityProcessor implements ProcessorInterface
 {

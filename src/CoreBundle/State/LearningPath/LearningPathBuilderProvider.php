@@ -243,10 +243,10 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
                 'displayOrder' => (int) $item->getDisplayOrder(),
                 'hasPrerequisite' => '' !== $prerequisite && '0' !== $prerequisite,
                 'prerequisiteId' => ctype_digit($prerequisite) ? (int) $prerequisite : 0,
-                'prerequisiteMinScore' => (float) ($item->getPrerequisiteMinScore() ?? 0.0),
-                'prerequisiteMaxScore' => (float) ($item->getPrerequisiteMaxScore() ?? 100.0),
+                'prerequisiteMinScore' => (float) $item->getPrerequisiteMinScore(),
+                'prerequisiteMaxScore' => (float) $item->getPrerequisiteMaxScore(),
                 'maxScore' => $maxScore,
-                'masteryScore' => (float) ($item->getMasteryScore() ?? 0.0),
+                'masteryScore' => (float) $item->getMasteryScore(),
                 'editableContent' => $editableContent,
                 'exportConfigurable' => $exportConfigurable,
                 'content' => $content,
@@ -529,15 +529,13 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         usort(
             $authors,
             static fn (array $left, array $right): int => strcasecmp(
-                (string) ($left['label'] ?? ''),
-                (string) ($right['label'] ?? ''),
+                (string) $left['label'],
+                (string) $right['label'],
             ),
         );
 
         foreach ($values as $itemId => $itemValue) {
-            $storedAuthorIds = \is_array($itemValue['authorIds'] ?? null)
-                ? array_map(static fn (mixed $authorId): int => (int) $authorId, $itemValue['authorIds'])
-                : [];
+            $storedAuthorIds = array_map(static fn (mixed $authorId): int => (int) $authorId, $itemValue['authorIds']);
             $values[$itemId]['authorNames'] = array_values(array_filter(array_map(
                 static fn (int $authorId): ?string => $usersById[$authorId] ?? null,
                 $storedAuthorIds,
@@ -615,10 +613,6 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             ],
             ['id' => 'ASC'],
         ) as $category) {
-            if (!$category instanceof GradebookCategory || null === $category->getId()) {
-                continue;
-            }
-
             $categories[] = [
                 'value' => (int) $category->getId(),
                 'label' => $category->getTitle(),

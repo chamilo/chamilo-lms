@@ -44,13 +44,7 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $payload = [
-            'categories' => $data->categories,
-            'uncategorized' => $data->uncategorized,
-            'csrfToken' => $data->csrfToken,
-        ];
-
-        $this->validateActionToken($this->csrfTokenManager, $payload['csrfToken']);
+        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $this->assertLearningPathTeacher($this->security);
 
         $course = $this->getContextCourse($this->entityManager, $request);
@@ -63,13 +57,10 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
             );
         }
 
-        $categoryRows = $payload['categories'] ?? null;
-        if (!\is_array($categoryRows)) {
-            throw new BadRequestHttpException('The learning path categories are required.');
-        }
+        $categoryRows = $data->categories;
 
         $uncategorizedIds = $this->normalizeIdList(
-            $payload['uncategorized'] ?? null,
+            $data->uncategorized,
             'The uncategorized learning path order is invalid.'
         );
 
@@ -83,7 +74,7 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
             }
 
             $categoryId = $this->normalizeIdList(
-                [$categoryRow['id'] ?? null],
+                [$categoryRow['id']],
                 'The learning path category order contains invalid identifiers.'
             )[0];
 
@@ -92,7 +83,7 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
             }
 
             $learningPathIds = $this->normalizeIdList(
-                $categoryRow['learningPathIds'] ?? null,
+                $categoryRow['learningPathIds'],
                 'A learning path category order is invalid.'
             );
 

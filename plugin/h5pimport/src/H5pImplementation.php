@@ -392,4 +392,9 @@ class H5pImplementation implements \H5PFrameworkInterface
     {
         // TODO: Implement libraryHasUpgrade() method.
     }
+
+    public function resetHubOrganizationData()
+    {
+        // TODO: Implement resetHubOrganizationData() method.
+    }
 }

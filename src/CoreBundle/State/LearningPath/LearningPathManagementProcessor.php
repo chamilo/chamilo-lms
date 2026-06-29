@@ -218,7 +218,16 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
                 $learningPath->setAsset(null);
                 $this->entityManager->persist($learningPath);
                 $this->entityManager->flush();
-                $this->assetRepository->delete($asset);
+
+                try {
+                    $this->assetRepository->delete($asset);
+                } catch (Throwable $exception) {
+                    $this->logger->warning('Failed to delete the learning path asset during learning path deletion.', [
+                        'learningPathId' => $learningPathId,
+                        'assetId' => $asset->getId(),
+                        'exception' => $exception,
+                    ]);
+                }
             }
         }
 

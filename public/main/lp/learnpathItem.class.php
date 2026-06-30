@@ -4119,11 +4119,7 @@ class learnpathItem
                     ['c_id' => $courseId, 'order_id' => $index, 'lp_iv_id' => $lpIvId],
                     $params
                 );
-                $insertId = Database::insert($ivaTable, $params);
-                if ($insertId) {
-                    $sql = "UPDATE $ivaTable SET id = iid WHERE iid = $insertId";
-                    Database::query($sql);
-                }
+                Database::insert($ivaTable, $params);
             }
         }
     }

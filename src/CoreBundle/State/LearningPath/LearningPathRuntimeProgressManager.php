@@ -8,11 +8,14 @@ namespace Chamilo\CoreBundle\State\LearningPath;
 
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -149,6 +152,9 @@ final readonly class LearningPathRuntimeProgressManager
         $items = $this->getItems($lp);
         $latestViews = $this->indexLatestItemViews($view);
 
+        $this->synchronizeExerciseItemViews($view, $latestViews);
+        $latestViews = $this->indexLatestItemViews($view);
+
         $this->completeParentSections($items, $latestViews, $view);
         $latestViews = $this->indexLatestItemViews($view);
 
@@ -211,6 +217,97 @@ final readonly class LearningPathRuntimeProgressManager
         }
 
         return $latest;
+    }
+
+    /** @param array<int, CLpItemView> $latestViews */
+    private function synchronizeExerciseItemViews(CLpView $view, array $latestViews): void
+    {
+        $quizItemViews = [];
+        foreach ($latestViews as $itemView) {
+            if ('quiz' !== strtolower(trim($itemView->getItem()->getItemType()))) {
+                continue;
+            }
+
+            $itemViewId = (int) $itemView->getIid();
+            if ($itemViewId <= 0) {
+                continue;
+            }
+
+            $quizItemViews[$itemViewId] = $itemView;
+        }
+
+        if ([] === $quizItemViews) {
+            return;
+        }
+
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('exercise')
+            ->from(TrackEExercise::class, 'exercise')
+            ->andWhere('exercise.origLpItemViewId IN (:itemViewIds)')
+            ->andWhere('exercise.origLpId = :lpId')
+            ->andWhere('IDENTITY(exercise.course) = :courseId')
+            ->andWhere('IDENTITY(exercise.user) = :userId')
+            ->andWhere('exercise.status = :exerciseStatus')
+            ->setParameter('itemViewIds', array_keys($quizItemViews), ArrayParameterType::INTEGER)
+            ->setParameter('lpId', (int) $view->getLp()->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $view->getCourse()->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $view->getUser()->getId(), Types::INTEGER)
+            ->setParameter('exerciseStatus', '', Types::STRING)
+            ->orderBy('exercise.exeDate', 'DESC')
+        ;
+
+        $session = $view->getSession();
+        if (null === $session) {
+            $qb->andWhere('exercise.session IS NULL');
+        } else {
+            $qb
+                ->andWhere('IDENTITY(exercise.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        }
+
+        /** @var array<int, TrackEExercise> $attempts */
+        $attempts = $qb->getQuery()->getResult();
+        $updatedItemViewIds = [];
+        foreach ($attempts as $attempt) {
+            $itemViewId = $attempt->getOrigLpItemViewId();
+            if ($itemViewId <= 0 || isset($updatedItemViewIds[$itemViewId])) {
+                continue;
+            }
+
+            $itemView = $quizItemViews[$itemViewId] ?? null;
+            if (!$itemView instanceof CLpItemView) {
+                continue;
+            }
+
+            $itemView
+                ->setScore($attempt->getScore())
+                ->setStatus($this->getExerciseItemViewStatus($itemView->getItem(), $attempt))
+            ;
+
+            $maxScore = $attempt->getMaxScore();
+            if ($maxScore > 0.0) {
+                $itemView->setMaxScore((string) $maxScore);
+            }
+
+            $updatedItemViewIds[$itemViewId] = true;
+        }
+    }
+
+    private function getExerciseItemViewStatus(CLpItem $item, TrackEExercise $attempt): string
+    {
+        $score = $attempt->getScore();
+        $maxScore = $attempt->getMaxScore();
+        if ($maxScore <= 0.0) {
+            return 'completed';
+        }
+
+        $minimumScore = (float) ($item->getMasteryScore() ?: $item->getMinScore());
+        if ($minimumScore > 0.0) {
+            return $score >= $minimumScore ? 'passed' : 'failed';
+        }
+
+        return $score >= $maxScore ? 'passed' : 'completed';
     }
 
     /**

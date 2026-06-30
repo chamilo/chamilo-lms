@@ -4098,7 +4098,7 @@ class learnpathItem
             $params = [
                 'interaction_id' => $interaction[0],
                 'interaction_type' => $interaction[1],
-                'weighting' => $interaction[3],
+                'weighting' => '' !== (string) $interaction[3] ? (float) $interaction[3] : 0.0,
                 'completion_time' => $interaction[2],
                 'correct_responses' => $correctResp,
                 'student_response' => $interaction[5],

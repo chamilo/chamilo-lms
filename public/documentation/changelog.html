@@ -25,6 +25,7 @@
         <h2>Releases</h2>
         <ul>
             <li><a href="#2.1.0">2.1.0 - Grand Canyon Village</a></li>
+            <li><a href="#2.0.3">2.0.3 - Axbridge</a></li>
             <li><a href="#2.0.2">2.0.2 - Little Weston</a></li>
             <li><a href="#2.0.1">2.0.1 - Blackford</a></li>
             <li><a href="#2.0-stable">2.0 stable - Cadbury</a></li>
@@ -47,7 +48,7 @@
     </p>
 
     <h3>Release name</h3>
-    <p>Grand Canyon Village is the popular entry point to an awe-inspiring natural monument. We believe version 2.1 will popularize te greatness of Chamilo 2 (in comparison with Chamilo 1.11) as it reintroduces all plugins and settings that were on hold, completing the implementation of Chamilo 2 as a follower of 1.11, making it more accessible (through more complete upgrades from 1.11) and more fun to work with thanks to jaw-dropping (optional and customizable) AI features.</p>
+    <p>Grand Canyon Village is the popular entry point to an awe-inspiring natural monument. We believe version 2.1 will popularize the greatness of Chamilo 2 (in comparison with Chamilo 1.11) as it reintroduces all plugins and settings that were on hold, completing the implementation of Chamilo 2 as a follower of 1.11, making it more accessible (through more complete upgrades from 1.11) and more fun to work with thanks to jaw-dropping (optional and customizable) AI features.</p>
 
     <h3>Security fixes</h3>
     <ul aria-live="off">
@@ -107,6 +108,70 @@
         <li>[2026-05-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/017c0bb14c8db35d1165fbef34165796bac68fb8">017c0bb1</a>) Internal: Handle expired sessions in Tour AJAX</li>
         <li>[2026-05-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/cdfba24430d8ee399c5121ff87deab328f49bd31">cdfba244</a>) Social: Fix social group images in search results</li>
         <li>[2026-05-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/524463dc2d7d3de0878186f696a2e177d920a29d">524463dc</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5774">GH#5774</a>) Course: Fix class-linked course group synchronization</li>
+    </ul>
+
+    <a id="2.0.3"></a>
+    <h1>Chamilo 2.0.3 - Axbridge, 2026-06-29</h1>
+    <h3>Release notes - summary</h3>
+    <p>
+        Third patch release of Chamilo 2.0. This is a security-focused release bundling
+        more than forty fixes across the platform: XXE/SSRF hardening in import, PDF
+        export and media-embed paths, path-traversal and Zip Slip protections, stored-XSS
+        sanitization, CSRF token enforcement on state-changing actions, IDOR and
+        access-control fixes in API resources, SSTI&rarr;RCE prevention in
+        admin-edited email templates, and SQL injection prevention in ExtraField filters.
+    </p>
+
+    <h3>Security fixes</h3>
+    <ul aria-live="off">
+        <li>[2026-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/342e1f64b091">342e1f64</a>) Security: Escape array filter values in ExtraField::get_where_clause()</li>
+        <li>[2026-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/6af980ddf7a7">6af980dd</a>) Security: Restrict Course Maintenance to teachers of the current course</li>
+        <li>[2026-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/2415d863d5ec">2415d863</a>) Security: Enforce source-course authorization in Course Maintenance copy endpoints</li>
+        <li>[2026-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/1fcbee2ed0bf">1fcbee2e</a>) Security: Fix unauthenticated Template deletion</li>
+        <li>[2026-06-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/83fbe2677340">83fbe267</a>) Security: Fix IDOR and mass-assignment in PushSubscription API resource</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/e696d0f72a34">e696d0f7</a>) Security: Secure member roster access in `GroupMembersStateProvider` with Voter and exception handling</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/895216d2a08d">895216d2</a>) Security: Prevent path traversal and arbitrary file write in sub-language editor</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/109facf3ed71">109facf3</a>) Security: Remove path-traversal-prone placeholder endpoints in FileManagerController</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/aa4c1c12647c">aa4c1c12</a>) Security: Remove exposed validation-token test endpoint</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/cb7a94cbbc8a">cb7a94cb</a>) Security: sanitize message content at render time via DOMPurify</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/090671a95b02">090671a9</a>) Security: stored XSS via social group discussion thread title</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/abe9e8f002e4">abe9e8f0</a>) Security: enforce CSRF tokens on state-changing admin endpoints</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/6162884883f1">61628848</a>) Security: harden remaining XML import parsers against XXE</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/e6314ec35c95">e6314ec3</a>) Security: harden user-import XML parsing against XXE (GHSA-h24x-xw47-2wwx)</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/03848db16d76">03848db1</a>) Security: add CSRF token to gradebook score import form (GHSA-vjmr-7vxh-wpg2)</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/e41b12461ecb">e41b1246</a>) Security: add CSRF tokens to gradebook delete/lock/form actions</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/585822604fe0">58582260</a>) Security: escape language original name to prevent stored XSS</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/0416463f6061">0416463f</a>) Security: Fix SSRF via mPDF/Dompdf in Wiki PDF export</li>
+        <li>[2026-06-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1a8798907cb">a1a87989</a>) Security: Restrict student tracking permissions to prevent unauthorized access</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/813ba8c31af8">813ba8c3</a>) Security: Restrict allowed classes in Sequence::getUnSerializeGraph()</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/c263033b8943">c263033b</a>) Security: Contain backup-import document source paths within the extraction root</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/7d24b4c21eae">7d24b4c2</a>) Security: Validate ical_export redirect target against local origin</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/8e587f231919">8e587f23</a>) Security: Cast course_id to int in model.ajax to prevent SQL injection</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/b9e6bdb5ddff">b9e6bdb5</a>) Security: Require authorization on session_info and get_description AJAX actions</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/3ea9c407f6ca">3ea9c407</a>) Security: Sanitize `SocialWallComment` content to prevent XSS vulnerabilities in SocialWall comments</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/d945ecbd448e">d945ecbd</a>) Security: Sanitize `SocialPost` content to prevent XSS vulnerabilities in SocialWall posts</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/181687053b56">18168705</a>) Security: Sanitize `contentDescription` input to prevent XSS vulnerabilities in course descriptions</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/17ed88c12b97">17ed88c1</a>) Security: Enforce strict user and group authorization checks across SocialController actions, preventing privilege escalation and unauthorized access</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/69710f5a42ff">69710f5a</a>) Security: Sanitize admin-edited email templates by enforcing sandboxed Twig rendering to prevent SSTI &rarr; RCE exploits</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/ada53f39ab64">ada53f39</a>) Security: prevent SSRF in mPDF remote asset fetch via injected IP-filtered HTTP client</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/71d13d0b703d">71d13d0b</a>) Security: prevent SSRF in Essence video embed via injected IP-filtered HTTP client</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/4b240d81824a">4b240d81</a>) Security: prevent SSRF in PENS package download and alert/receipt callbacks</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/19a6f2ff3e56">19a6f2ff</a>) Security: Plugin: Refactor IMS LTI cartridge handling to centralize fetch and parse logic using NoPrivateNetworkHttpClient</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/5733d033b171">5733d033</a>) Security: Message: Enforce group membership check on /api/messages/by-group/list</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/dc1e9494b7ac">dc1e9494</a>) Security: TrackEAttempt: Add Doctrine collection extension to prevent IDOR on /api/track_e_attempts</li>
+        <li>[2026-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/ecb5f0bef1b0">ecb5f0be</a>) Fix: prevent XXE/SSRF in BBB plugin (use cURL + LIBXML_NONET)</li>
+        <li>[2026-06-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/08e7cbe96697">08e7cbe9</a>) Security: Reject unsupported MIME types in Moodle import (deny by default)</li>
+        <li>[2026-06-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/d7d161e1898b">d7d161e1</a>) Security: Validate URL scheme of imported Moodle 'url' resources</li>
+        <li>[2026-06-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/b95520623258">b9552062</a>) Security: Harden XML parsing in Moodle import against XXE (LIBXML_NONET)</li>
+        <li>[2026-06-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/10cceca16497">10cceca1</a>) Security: Sanitize user-supplied file extension in Moodle import</li>
+        <li>[2026-06-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/7615133dcdd2">7615133d</a>) Security: Fix path traversal in Moodle import module file reads</li>
+        <li>[2026-06-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/2a9e67028c80">2a9e6702</a>) Security: Fix Zip Slip path traversal in Moodle import (application/zip branch)</li>
+        <li>[2026-06-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/a2e404fb1d51">a2e404fb</a>) Security updates</li>
+    </ul>
+
+    <h3>Changed</h3>
+    <ul aria-live="off">
+        <li>[2026-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/ea2ad0ba581a">ea2ad0ba</a>) Internal: Bump Chamilo version and update changelog for 2.0.3</li>
     </ul>
 
     <a id="2.0.2"></a>

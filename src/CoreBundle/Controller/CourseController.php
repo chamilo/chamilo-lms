@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\CourseLinkSessionHelper;
 use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -1036,7 +1037,7 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
-    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
+    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em, CourseLinkSessionHelper $courseLinkSessionHelper): Response
     {
         // Reading a tool introduction requires access to the course. CourseVoter::VIEW
         // grants course members (students/teachers), session users and anonymous users
@@ -1113,7 +1114,10 @@ class CourseController extends ToolBaseController
 
         if ($activeIntro) {
             $responseData['iid'] = $activeIntro->getIid();
-            $responseData['introText'] = $activeIntro->getIntroText();
+            $responseData['introText'] = $courseLinkSessionHelper->rewriteSessionForCourse(
+                (string) $activeIntro->getIntroText(),
+                (int) $course->getId()
+            );
         }
 
         return new JsonResponse($responseData);

@@ -105,10 +105,23 @@
         <div class="lp-runtime-sidebar-inner">
           <div class="lp-runtime-info">
             <img
+              v-if="shouldShowPreviewImage"
               :alt="runtime.title"
-              :src="runtime.previewImageUrl"
+              :src="previewImageUrl"
               class="lp-runtime-preview"
+              @error="handlePreviewImageError"
             />
+            <div
+              v-else
+              :aria-label="runtime.title"
+              class="lp-runtime-preview lp-runtime-preview-fallback"
+              role="img"
+            >
+              <BaseIcon
+                icon="learning-paths"
+                size="large"
+              />
+            </div>
 
             <div
               v-if="runtime.author"
@@ -341,6 +354,7 @@ const isChangingItem = ref(false)
 const isSyncingRuntime = ref(false)
 const iframeLoading = ref(false)
 const iframeReloadKey = ref(0)
+const previewImageFailed = ref(false)
 const errorMessage = ref("")
 const menuOpen = ref(false)
 const tocCollapsed = ref(false)
@@ -411,6 +425,12 @@ function exposeLegacyCidContext() {
 const currentItem = computed(
   () => runtime.value?.items?.find((item) => Number(item.id) === Number(runtime.value.currentItemId)) || null,
 )
+const previewImageUrl = computed(() => String(runtime.value?.previewImageUrl || ""))
+const shouldShowPreviewImage = computed(() => {
+  const url = previewImageUrl.value.trim()
+
+  return url !== "" && !url.endsWith("/main/img/icons/128/unknown.png") && !previewImageFailed.value
+})
 const isImpressMode = computed(() => String(runtime.value?.displayMode || "") === "impress")
 const itemsById = computed(() =>
   Object.fromEntries((runtime.value?.items || []).map((item) => [Number(item.id), item])),
@@ -449,6 +469,10 @@ const settingsRoute = computed(() => ({
   params: { node: route.params.node, lpId: route.params.lpId },
   query: editorQuery.value,
 }))
+
+function handlePreviewImageError() {
+  previewImageFailed.value = true
+}
 
 function formatDuration(value) {
   const seconds = Math.max(0, Number(value || 0))
@@ -659,6 +683,7 @@ function applyRuntime(data, { contentChanged = false } = {}) {
 
   installScormRuntime(data, { forceRecreate: contentChanged })
   runtime.value = data
+  previewImageFailed.value = false
   runtimeLoadedAt.value = Date.now()
   clockTick.value = Date.now()
 
@@ -994,6 +1019,20 @@ body.lp-runtime-document {
   margin: 0 auto 14px;
   border-radius: 16px;
   object-fit: contain;
+}
+
+.lp-runtime-preview-fallback {
+  display: flex;
+  min-height: 92px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(var(--color-primary-base) / 0.18);
+  background: rgb(var(--color-primary-base) / 0.08);
+  color: rgb(var(--color-primary-base));
+}
+
+.lp-runtime-preview-fallback :deep(.mdi) {
+  font-size: 48px;
 }
 
 .lp-runtime-author {

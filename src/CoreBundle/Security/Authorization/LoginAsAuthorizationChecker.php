@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use SessionManager;
-use UserManager;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
  * Centralized authorization policy for "login as" / Symfony switch_user impersonation.
@@ -24,16 +24,19 @@ use UserManager;
  *  4. Impersonator is a session administrator (ROLE_SESSION_MANAGER) -> may impersonate
  *     only users with status STUDENT, plus COURSEMANAGER when the setting
  *     session.allow_session_admin_login_as_teacher is enabled.
- *  5. Impersonator is a HR manager (ROLE_HR / DRH) -> may impersonate either
- *       a) users followed via the UserRelUser RRHH relation, or
- *       b) users belonging to one of their sessions when the setting
- *          drh_can_access_all_session_content is enabled.
+ *  5. Impersonator is a HR manager (ROLE_HR / DRH) -> may impersonate ONLY users they
+ *     follow directly via the UserRelUser RRHH relation, and only when the target holds no
+ *     privilege the DRH itself lacks. Merely belonging to a session the DRH coaches does
+ *     NOT grant impersonation rights, and a followed user with higher privileges (session
+ *     admin, platform admin, etc.) can never be impersonated.
  *  6. Default deny.
  */
 final class LoginAsAuthorizationChecker
 {
     public function __construct(
         private readonly SettingsManager $settingsManager,
+        private readonly UserRepository $userRepository,
+        private readonly RoleHierarchyInterface $roleHierarchy,
     ) {}
 
     /**
@@ -79,9 +82,13 @@ final class LoginAsAuthorizationChecker
     }
 
     /**
-     * Replicates api_is_global_platform_admin(): the user is a platform admin AND is
-     * registered on access URL #1 (the main installation). Falls back to the legacy
-     * helper to honor multi-URL setups.
+     * Replicates api_is_global_platform_admin(): a platform admin who is also a global
+     * (super) admin. Resolved directly from the already-loaded User entity instead of the
+     * legacy api_is_global_platform_admin() helper, which reloads the user through the
+     * legacy Container. That Container is only wired by LegacyListener (kernel.request,
+     * priority 7), but the Symfony firewall fires switch_user earlier (priority 8) — so
+     * during a "login as" attempt the legacy Container is still null and the legacy helper
+     * would fatal with "Call to a member function get() on null".
      */
     private function isGlobalPlatformAdmin(User $user): bool
     {
@@ -89,7 +96,7 @@ final class LoginAsAuthorizationChecker
             return false;
         }
 
-        return \api_is_global_platform_admin($user->getId());
+        return $user->isSuperAdmin();
     }
 
     /**
@@ -127,23 +134,34 @@ final class LoginAsAuthorizationChecker
     }
 
     /**
-     * HR manager (ROLE_HR / DRH) may login as:
-     *  - users they explicitly follow (UserRelUser RRHH relation), or
-     *  - users in one of their sessions when drh_can_access_all_session_content is enabled.
+     * HR manager (ROLE_HR / DRH) may login as a user only when BOTH hold:
+     *  - the user is followed directly via the UserRelUser RRHH relation (legacy parity:
+     *    belonging to a session the DRH coaches is intentionally NOT enough), and
+     *  - the user does not hold any privilege the DRH lacks, so impersonation can never be
+     *    used to escalate privileges (e.g. a followed session admin or admin is refused).
+     *
+     * The RRHH lookup goes through UserRepository (Doctrine) instead of the legacy
+     * UserManager helper, so the policy no longer depends on the legacy Container being
+     * bootstrapped — which the Symfony firewall has not yet done when switch_user fires.
      */
     private function canDrhLoginAs(User $impersonator, User $target): bool
     {
-        if ('true' === (string) $this->settingsManager->getSetting('drh_can_access_all_session_content')) {
-            $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', $impersonator->getId());
-            if (is_array($users)) {
-                foreach ($users as $row) {
-                    if (isset($row['id']) && (int) $row['id'] === $target->getId()) {
-                        return true;
-                    }
-                }
-            }
+        if (!$this->userRepository->isUserFollowedByDrh((int) $target->getId(), (int) $impersonator->getId())) {
+            return false;
         }
 
-        return UserManager::is_user_followed_by_drh($target->getId(), $impersonator->getId());
+        return !$this->targetHasHigherPrivileges($impersonator, $target);
+    }
+
+    /**
+     * Whether $target holds at least one (hierarchy-expanded) role that $impersonator does
+     * not have. Used as a privilege-escalation guard for non-admin impersonators.
+     */
+    private function targetHasHigherPrivileges(User $impersonator, User $target): bool
+    {
+        $impersonatorRoles = $this->roleHierarchy->getReachableRoleNames($impersonator->getRoles());
+        $targetRoles = $this->roleHierarchy->getReachableRoleNames($target->getRoles());
+
+        return [] !== array_diff($targetRoles, $impersonatorRoles);
     }
 }

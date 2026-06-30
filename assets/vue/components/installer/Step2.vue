@@ -84,15 +84,14 @@
           class="block"
           v-text="extension.title"
         />
-
-        <Tag
+        <BaseTag
           :icon="{
             'mdi mdi-check': 'success' === extension.status.severity,
             'mdi mdi-alert': 'warning' === extension.status.severity,
             'mdi mdi-close': 'danger' === extension.status.severity,
           }"
-          :severity="extension.status.severity"
-          :value="extension.status.message"
+          :label="extension.status.message"
+          :type="extension.status.severity"
         />
       </p>
     </div>
@@ -361,6 +360,7 @@ import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import SectionHeader from "../layout/SectionHeader.vue"
+import BaseTag from "../basecomponents/BaseTag.vue"
 
 const { t } = useI18n()
 

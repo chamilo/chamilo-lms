@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\CourseLinkSessionHelper;
 use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -1042,6 +1043,7 @@ class CourseController extends ToolBaseController
         Request $request,
         Course $course,
         EntityManagerInterface $em,
+        CourseLinkSessionHelper $courseLinkSessionHelper,
         CLpRepository $lpRepository,
         RouterInterface $router
     ): Response
@@ -1120,7 +1122,10 @@ class CourseController extends ToolBaseController
         }
 
         if ($activeIntro) {
-            $introText = $activeIntro->getIntroText();
+            $introText = $courseLinkSessionHelper->rewriteSessionForCourse(
+                (string) $activeIntro->getIntroText(),
+                (int) $course->getId()
+            );
 
             $responseData['iid'] = $activeIntro->getIid();
             $responseData['introText'] = $this->rewriteLegacyLearningPathIntroLinks(

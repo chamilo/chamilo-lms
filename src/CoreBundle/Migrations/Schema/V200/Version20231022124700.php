@@ -23,6 +23,16 @@ final class Version20231022124700 extends AbstractMigrationChamilo
     {
         $this->entityManager->clear();
 
+        // Extend MySQL session timeouts to survive long processing on shared hosting.
+        try {
+            $this->connection->executeStatement('SET SESSION wait_timeout = 28800');
+            $this->connection->executeStatement('SET SESSION interactive_timeout = 28800');
+            $this->connection->executeStatement('SET SESSION net_read_timeout = 3600');
+            $this->connection->executeStatement('SET SESSION net_write_timeout = 3600');
+        } catch (\Exception) {
+            // Non-fatal: the server may not allow changing these session variables.
+        }
+
         // Configuration for content updates in the database
         $updateConfigurations = [
             ['table' => 'c_tool_intro', 'field' => 'intro_text'],
@@ -51,20 +61,56 @@ final class Version20231022124700 extends AbstractMigrationChamilo
         $fields = isset($config['field']) ? [$config['field']] : $config['fields'] ?? [];
 
         foreach ($fields as $field) {
-            $sql = "SELECT iid, {$field} FROM {$config['table']}";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
+            // Only process rows that actually contain the old cidReq pattern.
+            $sql = "SELECT iid, {$field} FROM {$config['table']} WHERE {$field} LIKE '%cidReq=%'";
 
-            foreach ($items as $item) {
+            // Use iterateAssociative() for streaming (one row at a time) to avoid
+            // loading millions of rows into memory and to keep the connection active.
+            $rows = $this->connection->executeQuery($sql)->iterateAssociative();
+
+            foreach ($rows as $item) {
                 $originalText = $item[$field];
                 if (\is_string($originalText) && '' !== trim($originalText)) {
                     $updatedText = $this->replaceURLParametersInContent($originalText);
                     if ($originalText !== $updatedText) {
-                        $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
-                        $this->connection->executeQuery($updateSql, ['newText' => $updatedText, 'id' => $item['iid']]);
+                        $this->executeWithReconnect(function () use ($config, $field, $updatedText, $item): void {
+                            $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
+                            $this->connection->executeQuery($updateSql, ['newText' => $updatedText, 'id' => $item['iid']]);
+                        });
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Execute a callable, reconnecting once if the MySQL connection has gone away.
+     */
+    private function executeWithReconnect(callable $fn): void
+    {
+        try {
+            $fn();
+        } catch (\Exception $e) {
+            if (str_contains($e->getMessage(), 'server has gone away') || str_contains($e->getMessage(), '2006')) {
+                $this->connection->close();
+                $this->connection->connect();
+                $fn();
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * Send a lightweight query to keep the MySQL connection alive.
+     */
+    private function keepAlive(): void
+    {
+        try {
+            $this->connection->executeQuery('SELECT 1');
+        } catch (\Exception) {
+            $this->connection->close();
+            $this->connection->connect();
         }
     }
 

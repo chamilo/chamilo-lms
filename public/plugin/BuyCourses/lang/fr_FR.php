@@ -677,3 +677,4 @@ $strings['FrequencyIsNotConfigured'] = 'Les périodes d’abonnement ne sont pas
 $strings['SubscriptionSaveError'] = 'L’abonnement n’a pas pu être enregistré. Vérifiez les données et réessayez.';
 $strings['SubscriptionPeriodsRequired'] = 'Vous devez ajouter au moins une période d’abonnement avant d’enregistrer.';
 $strings['FrequencyNotRemoved'] = 'La période d’abonnement n’a pas pu être supprimée.';
+$strings['CourseSessionBlock'] = 'Cours/Sessions';

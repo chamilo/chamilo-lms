@@ -27,7 +27,7 @@
                         href="{{ back_url|default(url('index') ~ 'plugin/BuyCourses/index.php') }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -35,7 +35,7 @@
                         href="{{ frequency_url|default(url('index') ~ 'plugin/BuyCourses/src/configure_frequency.php') }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                 >
-                    <em class="fa fa-calendar-alt fa-fw"></em>
+                    <em class="mdi mdi-calendar-month"></em>
                     {{ 'ConfigureSubscriptionsFrequencies'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
             </div>
@@ -173,12 +173,12 @@
                     <td class="px-6 py-4 text-center">
                         {% if item.buyCourseData %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
-                                            <em class="fa fa-check fa-fw"></em>
+                                            <em class="mdi mdi-check"></em>
                                             {{ 'Yes'|get_lang }}
                                         </span>
                         {% else %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-gray-20 px-3 py-1 text-xs font-semibold text-gray-50">
-                                            <em class="fa fa-times fa-fw"></em>
+                                            <em class="mdi mdi-close"></em>
                                             {{ 'No'|get_lang }}
                                         </span>
                         {% endif %}
@@ -200,7 +200,7 @@
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_subscription.php?' ~ {'id': item.id, 'type': product_type_course}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-wrench fa-fw"></em>
+                            <em class="mdi mdi-wrench"></em>
                             {{ 'Configure'|get_lang }}
                         </a>
                         {% else %}
@@ -208,7 +208,7 @@
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/subscription_add.php?' ~ {'id': item.id, 'type': product_type_course}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-wrench fa-fw"></em>
+                            <em class="mdi mdi-wrench"></em>
                             {{ 'Configure'|get_lang }}
                         </a>
                         {% endif %}
@@ -380,12 +380,12 @@
                     <td class="px-6 py-4 text-center">
                         {% if item.buyCourseData %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
-                                            <em class="fa fa-check fa-fw"></em>
+                                            <em class="mdi mdi-check"></em>
                                             {{ 'Yes'|get_lang }}
                                         </span>
                         {% else %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-gray-20 px-3 py-1 text-xs font-semibold text-gray-50">
-                                            <em class="fa fa-times fa-fw"></em>
+                                            <em class="mdi mdi-close"></em>
                                             {{ 'No'|get_lang }}
                                         </span>
                         {% endif %}
@@ -407,7 +407,7 @@
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_subscription.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-wrench fa-fw"></em>
+                            <em class="mdi mdi-wrench"></em>
                             {{ 'Configure'|get_lang }}
                         </a>
                         {% else %}
@@ -415,7 +415,7 @@
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/subscription_add.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-wrench fa-fw"></em>
+                            <em class="mdi mdi-wrench"></em>
                             {{ 'Configure'|get_lang }}
                         </a>
                         {% endif %}

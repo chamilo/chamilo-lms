@@ -22,7 +22,7 @@
                         href="{{ back_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -80,7 +80,7 @@
                             type="submit"
                             class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                     >
-                        <em class="fa fa-filter fa-fw"></em>
+                        <em class="mdi mdi-filter"></em>
                         {{ 'Search'|get_lang }}
                     </button>
 
@@ -88,7 +88,7 @@
                             href="{{ pagination_base_path|default('subscription_course_catalog.php') }}"
                             class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                     >
-                        <em class="fa fa-eraser fa-fw"></em>
+                        <em class="mdi mdi-eraser"></em>
                         {{ 'Reset'|get_lang }}
                     </a>
                 </div>
@@ -154,13 +154,13 @@
                             {% if course.teachers is defined and course.teachers %}
                             {% for teacher in course.teachers %}
                             <div class="flex items-center gap-2">
-                                <em class="fa fa-user text-primary"></em>
+                                <em class="mdi mdi-account text-primary"></em>
                                 <span>{{ teacher }}</span>
                             </div>
                             {% endfor %}
                             {% else %}
                             <div class="flex items-center gap-2">
-                                <em class="fa fa-user text-primary"></em>
+                                <em class="mdi mdi-account text-primary"></em>
                                 <span>{{ 'NoTeacherInformationAvailable'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                             </div>
                             {% endif %}
@@ -176,7 +176,7 @@
 
                         {% if course.enrolled == 'YES' %}
                         <div class="rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-gray-90">
-                            <em class="fa fa-check-square-o fa-fw"></em>
+                            <em class="mdi mdi-checkbox-marked-outline"></em>
                             {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
                         </div>
                         {% elseif course.enrolled == 'TMP' %}
@@ -191,7 +191,7 @@
                                     href="{{ course_description_url }}"
                                     data-title="{{ course.title }}"
                             >
-                                <em class="fa fa-file-text fa-fw"></em>
+                                <em class="mdi mdi-file-document-outline"></em>
                                 {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                             </a>
                             {% endif %}
@@ -200,7 +200,7 @@
                                     class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                     href="{{ url('index') ~ 'plugin/BuyCourses/src/subscription_process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}"
                             >
-                                <em class="fa fa-shopping-cart fa-fw"></em>
+                                <em class="mdi mdi-cart-outline"></em>
                                 {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                             </a>
                         </div>
@@ -212,7 +212,7 @@
             {% else %}
             <div class="rounded-3xl border border-gray-25 bg-white p-10 text-center shadow-sm">
                 <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                    <em class="fa fa-search text-xl"></em>
+                    <em class="mdi mdi-magnify text-xl"></em>
                 </div>
                 <h3 class="mt-4 text-lg font-semibold text-gray-90">
                     {{ 'NoSubscriptionsFound'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -226,7 +226,7 @@
                             href="{{ admin_empty_catalog_action_url }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-plus fa-fw"></em>
+                            <em class="mdi mdi-plus"></em>
                             {{ admin_empty_catalog_action_label }}
                         </a>
                     </div>
@@ -260,13 +260,13 @@
                         <div class="space-y-2 text-sm text-gray-50">
                             {% if 'show_session_coach'|api_get_setting == 'true' %}
                             <div class="flex items-center gap-2">
-                                <em class="fa fa-user text-primary"></em>
+                                <em class="mdi mdi-account text-primary"></em>
                                 <span>{{ session.coach }}</span>
                             </div>
                             {% endif %}
 
                             <div class="flex items-center gap-2">
-                                <em class="fa fa-calendar text-primary"></em>
+                                <em class="mdi mdi-calendar text-primary"></em>
                                 <span>
                                                 {% if session.duration %}
                                     {{ 'SessionDurationXDaysTotal'|get_lang|format(session.duration) }}
@@ -287,7 +287,7 @@
 
                         {% if session.enrolled == 'YES' %}
                         <div class="rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-gray-90">
-                            <em class="fa fa-check-square-o fa-fw"></em>
+                            <em class="mdi mdi-checkbox-marked-outline"></em>
                             {{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}
                         </div>
                         {% elseif session.enrolled == 'TMP' %}
@@ -299,7 +299,7 @@
                                 class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/subscription_process.php?' ~ {'i': session.id, 't': 2}|url_encode }}"
                         >
-                            <em class="fa fa-shopping-cart fa-fw"></em>
+                            <em class="mdi mdi-cart-outline"></em>
                             {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                         </a>
                         {% endif %}
@@ -310,7 +310,7 @@
             {% else %}
             <div class="rounded-3xl border border-gray-25 bg-white p-10 text-center shadow-sm">
                 <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                    <em class="fa fa-search text-xl"></em>
+                    <em class="mdi mdi-magnify text-xl"></em>
                 </div>
                 <h3 class="mt-4 text-lg font-semibold text-gray-90">
                     {{ 'NoSubscriptionsFound'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -324,7 +324,7 @@
                             href="{{ admin_empty_catalog_action_url }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-plus fa-fw"></em>
+                            <em class="mdi mdi-plus"></em>
                             {{ admin_empty_catalog_action_label }}
                         </a>
                     </div>

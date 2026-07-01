@@ -24,7 +24,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -32,7 +32,7 @@
                     href="{{ subscriptions_list_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                 >
-                    <em class="fa fa-repeat fa-fw"></em>
+                    <em class="mdi mdi-repeat"></em>
                     {{ 'SubscriptionList'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
             </div>
@@ -138,7 +138,7 @@
                                         class="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-gray-25 px-4 py-2.5 text-sm font-semibold text-gray-50"
                                         title="{{ 'SubscriptionPeriodInUseCannotBeDeleted'|get_plugin_lang('BuyCoursesPlugin')|e('html_attr') }}"
                                     >
-                                        <em class="fa fa-lock fa-fw"></em>
+                                        <em class="mdi mdi-lock"></em>
                                         {{ 'Delete'|get_lang }}
                                     </button>
                                 {% else %}
@@ -151,7 +151,7 @@
                                             class="{{ btnDanger }}"
                                             onclick="return confirm('{{ 'AreYouSureToDelete'|get_lang|e('js') }}');"
                                         >
-                                            <em class="fa fa-remove fa-fw"></em>
+                                            <em class="mdi mdi-close"></em>
                                             {{ 'Delete'|get_lang }}
                                         </button>
                                     </form>

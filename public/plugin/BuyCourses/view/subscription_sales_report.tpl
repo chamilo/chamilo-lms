@@ -24,7 +24,7 @@
                         href="{{ back_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -41,7 +41,7 @@
                         href="{{ paypal_payout_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:ring-offset-2"
                 >
-                    <em class="fa fa-paypal fa-fw"></em>
+                    <em class="mdi mdi-bank-transfer"></em>
                     {{ 'PaypalPayoutCommissions'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
                 {% endif %}
@@ -51,7 +51,7 @@
                         href="{{ payout_report_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"
                 >
-                    <em class="fa fa-money fa-fw"></em>
+                    <em class="mdi mdi-cash"></em>
                     {{ 'PayoutReport'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
                 {% endif %}
@@ -317,7 +317,7 @@
                     <td colspan="{{ invoicing_enable ? 13 : 12 }}" class="px-4 py-10 text-center">
                         <div class="mx-auto max-w-md space-y-2">
                             <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                                <em class="fa fa-repeat text-xl"></em>
+                                <em class="mdi mdi-repeat text-xl"></em>
                             </div>
                             <h3 class="text-lg font-semibold text-gray-90">
                                 {{ 'NoResults'|get_lang }}

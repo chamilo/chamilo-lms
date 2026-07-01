@@ -316,6 +316,7 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <link href="templates/styles/classic-ux.css?v=<?php echo $version; ?>" rel="stylesheet"/>
 
     <script src="dist/js/filestack-0.1.10.js?v=<?php echo $version; ?>"></script>
+    <script src="dist/js/grapes.js?v=<?php echo $version; ?>"></script>
     <script src="dist/js/grapesludi.js?v=<?php echo $version; ?>"></script>
     <script src="dist/grapesjs-preset-webpage.min.js?v=<?php echo $version; ?>"></script>
     <script src="jscss/jquery.js?v=<?php echo $version; ?>"></script>

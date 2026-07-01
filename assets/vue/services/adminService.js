@@ -12,6 +12,29 @@ export default {
   findSupport: () => baseService.get("/main/inc/ajax/admin.ajax.php?a=get_support"),
   findBlocks: () => baseService.get("/admin/index"),
 
+  findSystemUpdateStatus: () => baseService.get("/admin/system-update/status"),
+
+  checkSystemUpdateManifest: (payload) => baseService.post("/admin/system-update/check", payload),
+
+  verifySystemUpdatePackage: (payload) => baseService.post("/admin/system-update/verify", payload),
+
+  runSystemUpdatePreflight: (payload) => baseService.post("/admin/system-update/preflight", payload),
+
+  stageSystemUpdatePackage: (payload) => baseService.post("/admin/system-update/stage", payload),
+
+  buildSystemUpdateApplyPlan: (payload) => baseService.post("/admin/system-update/apply-plan", payload),
+
+  applySystemUpdateFiles: (payload) => baseService.post("/admin/system-update/apply-files", payload),
+
+  runSystemUpdatePostApplyChecks: (payload) => baseService.post("/admin/system-update/post-apply", payload),
+
+  runSystemUpdateMigrationSafetyChecks: (payload) => baseService.post("/admin/system-update/migration-safety", payload),
+
+  runSystemUpdatePostApplyActions: (payload) => baseService.post("/admin/system-update/run-post-apply", payload),
+
+  findSystemUpdateProgress: (operationId) =>
+    baseService.get(`/admin/system-update/progress/${encodeURIComponent(operationId)}`),
+
   fetchThirdParties: async () => {
     const data = await baseService.get("/api/third_parties")
     return data["hydra:member"] || []

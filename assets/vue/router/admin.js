@@ -65,6 +65,12 @@ export default {
       component: () => import("../views/admin/ListIcons.vue"),
     },
     {
+      name: "AdminSystemUpdate",
+      path: "system-update",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System update" },
+      component: () => import("../views/admin/SystemUpdate.vue"),
+    },
+    {
       name: "AdminSessionList",
       path: "session-list",
       meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Session list" },

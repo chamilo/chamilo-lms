@@ -17,6 +17,8 @@ use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -40,10 +42,12 @@ final class ForumProcessor implements ProcessorInterface
     use ForumWriteHelperTrait;
 
     private const FORUM_IMAGE_ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
+    private const DEFAULT_FORUM_CATEGORY_TITLE = 'General';
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CForumRepository $forumRepository,
+        private readonly CForumCategoryRepository $categoryRepository,
         private readonly RequestStack $requestStack,
         private readonly Security $security,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
@@ -78,6 +82,15 @@ final class ForumProcessor implements ProcessorInterface
                 $session,
                 $group,
             );
+
+            if ($this->getOptionalInt($payload, 'categoryId') <= 0) {
+                $payload['categoryId'] = $this->getOrCreateDefaultCategory(
+                    $course,
+                    $session,
+                    $group,
+                    $parentResourceNodeId,
+                )->getIid();
+            }
 
             $forum = (new CForum())
                 ->setParentResourceNode($parentResourceNodeId)
@@ -488,6 +501,46 @@ final class ForumProcessor implements ProcessorInterface
         $visibility = (string) ($payload['groupVisibility'] ?? $forum->getForumGroupPublicPrivate() ?: 'public');
 
         return \in_array($visibility, ['public', 'private'], true) ? $visibility : 'public';
+    }
+
+    private function getOrCreateDefaultCategory(
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        int $parentResourceNodeId,
+    ): CForumCategory {
+        $parentNode = $this->entityManager->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+        if (!$parentNode instanceof ResourceNode) {
+            throw new NotFoundHttpException('Resource node parent not found.');
+        }
+
+        $queryBuilder = $this->categoryRepository->getResourcesByCourse(
+            $course,
+            $session,
+            $group,
+            $parentNode,
+            false,
+            true,
+        );
+
+        foreach ($queryBuilder->getQuery()->getResult() as $category) {
+            if ($category instanceof CForumCategory && self::DEFAULT_FORUM_CATEGORY_TITLE === trim($category->getTitle())) {
+                return $category;
+            }
+        }
+
+        $category = (new CForumCategory())
+            ->setTitle(self::DEFAULT_FORUM_CATEGORY_TITLE)
+            ->setCatComment('')
+            ->setLocked(0)
+            ->setParentResourceNode($parentResourceNodeId)
+            ->setResourceLinkArray($this->buildResourceLinkList($course, $session, $group))
+        ;
+
+        $this->categoryRepository->create($category);
+        $this->registerForumEventLog('new-forumcategory', 'forumcategory', (string) $category->getIid());
+
+        return $category;
     }
 
     private function getCategory(int $categoryId, Course $course, ?Session $session, ?CGroup $group): ?CForumCategory

@@ -12,7 +12,7 @@
                 {{ t("System update") }}
               </h1>
               <p class="mt-1 max-w-3xl text-body-2 text-gray-50">
-                {{ t("Verify, stage and apply Chamilo update files. Database migrations, Composer, Yarn and cache commands are not executed here.") }}
+                {{ t("Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps.") }}
               </p>
             </div>
           </div>
@@ -196,6 +196,38 @@
           </div>
         </dl>
       </div>
+
+      <div
+        v-if="availability"
+        class="mt-4 rounded-2xl border p-4"
+        :class="availabilityClass"
+      >
+        <div class="flex items-start gap-3">
+          <span class="mdi mt-0.5 text-xl" :class="availabilityIconClass" />
+          <div>
+            <h3 class="text-body-1 font-semibold">
+              {{ t("Update availability") }}
+            </h3>
+            <p class="mt-1 text-body-2">
+              {{ availability.message }}
+            </p>
+            <dl class="mt-3 grid gap-2 text-caption md:grid-cols-3">
+              <div>
+                <dt class="font-semibold">{{ t("Installed version") }}</dt>
+                <dd>{{ availability.installedVersion }}</dd>
+              </div>
+              <div>
+                <dt class="font-semibold">{{ t("Target version") }}</dt>
+                <dd>{{ availability.targetVersion }}</dd>
+              </div>
+              <div>
+                <dt class="font-semibold">{{ t("Next step") }}</dt>
+                <dd>{{ availability.nextStep }}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm">
@@ -284,7 +316,7 @@
 
       <div class="mt-4">
         <BaseButton
-          :disabled="isVerifying || !form.manifestSource"
+          :disabled="isVerifying || !canVerifyPackage"
           :is-loading="isVerifying"
           :label="isVerifying ? t('Verifying...') : t('Verify package')"
           icon="shield-check"
@@ -442,7 +474,7 @@
 
       <div class="mt-4 rounded-2xl border border-warning bg-support-2 p-3 text-caption text-warning">
         <span class="mdi mdi-alert-outline mr-1" />
-        {{ t("This step prepares a review only. The real file replacement will be implemented after lock, backup and rollback are validated.") }}
+        {{ t("This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection.") }}
       </div>
 
       <div class="mt-4">
@@ -1218,6 +1250,7 @@ const status = reactive({
   trustedPublicKeyFingerprint: "",
   allowUiPostApplyCommands: false,
   commandTimeout: 900,
+  csrfToken: "",
 })
 
 const form = reactive({
@@ -1235,9 +1268,11 @@ const form = reactive({
   confirmDatabaseBackup: false,
   databaseMigrationConfirmationText: "",
   postApplyRunConfirmationText: "",
+  csrfToken: "",
 })
 
 const manifest = ref(null)
+const availability = ref(null)
 const verification = ref(null)
 const preflight = ref(null)
 const staging = ref(null)
@@ -1339,6 +1374,50 @@ const manifestRows = computed(() => {
     { label: t("Package SHA-256"), value: manifest.value.packageSha256, mono: true },
     { label: t("Signature"), value: manifest.value.signatureType || t("Not configured") },
   ]
+})
+
+const availabilityClass = computed(() => {
+  if (!availability.value) {
+    return "border-gray-20 bg-support-2 text-gray-90"
+  }
+
+  if (availability.value.updateAvailable) {
+    return "border-success bg-support-2 text-success"
+  }
+
+  if (availability.value.downgrade) {
+    return "border-danger bg-white text-danger"
+  }
+
+  if (availability.value.sameVersion) {
+    return "border-warning bg-support-2 text-gray-90"
+  }
+
+  return "border-warning bg-support-2 text-gray-90"
+})
+
+const availabilityIconClass = computed(() => {
+  if (!availability.value) {
+    return "mdi-information"
+  }
+
+  if (availability.value.updateAvailable) {
+    return "mdi-update"
+  }
+
+  if (availability.value.downgrade) {
+    return "mdi-block-helper"
+  }
+
+  if (availability.value.sameVersion) {
+    return "mdi-check-circle"
+  }
+
+  return "mdi-alert-circle"
+})
+
+const canVerifyPackage = computed(() => {
+  return Boolean(form.manifestSource && (!availability.value || !availability.value.downgrade))
 })
 
 const formattedVerificationDetails = computed(() => {
@@ -1638,6 +1717,8 @@ onMounted(async () => {
     status.trustedPublicKeyFingerprint = data.trustedPublicKeyFingerprint || ""
     status.allowUiPostApplyCommands = Boolean(data.allowUiPostApplyCommands)
     status.commandTimeout = Number(data.commandTimeout || 900)
+    status.csrfToken = data.csrfToken || ""
+    form.csrfToken = data.csrfToken || ""
 
     applyUpdateEntryQuery()
 
@@ -1706,6 +1787,7 @@ function applyUpdateEntryQuery() {
 
 async function checkManifest() {
   errorMessage.value = ""
+  availability.value = null
   verification.value = null
   preflight.value = null
   staging.value = null
@@ -1716,11 +1798,12 @@ async function checkManifest() {
   isChecking.value = true
 
   try {
-    const data = await adminService.checkSystemUpdateManifest({
+    const data = await adminService.checkSystemUpdateManifest(withCsrfPayload({
       manifestSource: form.manifestSource,
-    })
+    }))
 
     manifest.value = data.manifest
+    availability.value = data.availability || null
   } catch (error) {
     errorMessage.value = getErrorMessage(error)
   } finally {
@@ -1758,10 +1841,10 @@ async function runPreflight() {
   isRunningPreflight.value = true
 
   try {
-    const data = await adminService.runSystemUpdatePreflight({
+    const data = await adminService.runSystemUpdatePreflight(withCsrfPayload({
       manifestSource: form.manifestSource,
       packagePath: status.allowLocalPaths ? form.packagePath || null : null,
-    })
+    }))
 
     manifest.value = data.manifest
     preflight.value = data
@@ -1846,9 +1929,9 @@ async function buildApplyPlan() {
   isPlanningApply.value = true
 
   try {
-    const data = await adminService.buildSystemUpdateApplyPlan({
+    const data = await adminService.buildSystemUpdateApplyPlan(withCsrfPayload({
       stagingPath: form.stagingPath,
-    })
+    }))
 
     applyPlan.value = data
     applyFilesResult.value = null
@@ -1890,12 +1973,12 @@ async function applyUpdateFiles() {
   startApplyProgressPolling()
 
   try {
-    const data = await adminService.applySystemUpdateFiles({
+    const data = await adminService.applySystemUpdateFiles(withCsrfPayload({
       stagingPath: form.stagingPath,
       confirmApply: form.confirmApply,
       confirmationText: form.confirmationText,
       operationId: applyOperationId.value,
-    })
+    }))
 
     applyFilesResult.value = data
     if (data.operationId) {
@@ -1924,9 +2007,9 @@ async function runPostApplyChecks() {
   isCheckingPostApply.value = true
 
   try {
-    const data = await adminService.runSystemUpdatePostApplyChecks({
+    const data = await adminService.runSystemUpdatePostApplyChecks(withCsrfPayload({
       stagingPath: form.stagingPath,
-    })
+    }))
 
     postApplyChecks.value = data
     migrationSafety.value = null
@@ -1962,9 +2045,9 @@ async function runMigrationSafetyChecks() {
   migrationSafety.value = null
 
   try {
-    const data = await adminService.runSystemUpdateMigrationSafetyChecks({
+    const data = await adminService.runSystemUpdateMigrationSafetyChecks(withCsrfPayload({
       stagingPath: form.stagingPath,
-    })
+    }))
 
     migrationSafety.value = data
     form.confirmDatabaseBackup = false
@@ -1998,7 +2081,7 @@ async function runPostApplyActions() {
   startPostApplyRunProgressPolling()
 
   try {
-    const data = await adminService.runSystemUpdatePostApplyActions({
+    const data = await adminService.runSystemUpdatePostApplyActions(withCsrfPayload({
       stagingPath: form.stagingPath,
       actions: form.selectedPostApplyActionKeys,
       confirmPostApplyRun: form.confirmPostApplyRun,
@@ -2007,7 +2090,7 @@ async function runPostApplyActions() {
       databaseMigrationConfirmationText: form.databaseMigrationConfirmationText,
       postApplyRunConfirmationText: form.postApplyRunConfirmationText,
       operationId: postApplyRunOperationId.value,
-    })
+    }))
 
     postApplyRunResult.value = data
     if (data.operationId) {
@@ -2017,17 +2100,90 @@ async function runPostApplyActions() {
   } catch (error) {
     const responseData = error?.response?.data || null
 
-    errorMessage.value = getErrorMessage(error)
-    postApplyRunResult.value = responseData?.postApplyRun
-      ? {
-          postApplyRun: responseData.postApplyRun,
-        }
-      : null
     await refreshPostApplyRunProgress()
+
+    const recoveredResult = buildRecoveredPostApplyRunResult(error, responseData)
+
+    if (recoveredResult) {
+      postApplyRunResult.value = recoveredResult
+      errorMessage.value = ""
+    } else {
+      errorMessage.value = getErrorMessage(error)
+      postApplyRunResult.value = responseData?.postApplyRun
+        ? {
+            postApplyRun: responseData.postApplyRun,
+          }
+        : null
+    }
   } finally {
     stopPostApplyRunProgressPolling()
     isRunningPostApplyActions.value = false
   }
+}
+
+function buildRecoveredPostApplyRunResult(error, responseData) {
+  if (responseData?.postApplyRun) {
+    return {
+      postApplyRun: responseData.postApplyRun,
+    }
+  }
+
+  if (!postApplyProgressCompletedSuccessfully()) {
+    return null
+  }
+
+  const httpError = getErrorMessage(error)
+  const warning = `${t("The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly.")} ${httpError}`
+
+  return {
+    postApplyRun: {
+      valid: true,
+      stagingPath: form.stagingPath,
+      metadataPath: null,
+      operationId: postApplyRunOperationId.value,
+      checks: [
+        {
+          key: "post_apply_operation_log",
+          status: "passed",
+          message: t("The operation log reports that post-apply actions completed successfully."),
+        },
+        {
+          key: "post_apply_http_response",
+          status: "warning",
+          message: t("The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."),
+          details: {
+            http_error: httpError,
+          },
+        },
+      ],
+      actions: [],
+      errors: [],
+      warnings: [warning],
+      details: {
+        recovered_from_operation_log: true,
+        http_error: httpError,
+        operation_id: postApplyRunOperationId.value,
+      },
+    },
+  }
+}
+
+function postApplyProgressCompletedSuccessfully() {
+  return postApplyRunProgressEvents.value.some((event) => {
+    if ("success" !== event.level) {
+      return false
+    }
+
+    if ("done" === event.step) {
+      return true
+    }
+
+    if ("post_apply_commands" === event.step) {
+      return String(event.message || "").toLowerCase().includes("completed successfully")
+    }
+
+    return false
+  })
 }
 
 function buildExecutablePostApplyActions(actions) {
@@ -2197,12 +2353,19 @@ function getOperationLevelClass(level) {
 }
 
 function buildUpdatePayload() {
-  return {
+  return withCsrfPayload({
     manifestSource: form.manifestSource,
     packagePath: status.allowLocalPaths ? form.packagePath || null : null,
     signaturePath: status.allowLocalPaths ? form.signaturePath || null : null,
     trustedPublicKey: showTrustedPublicKeyInput.value ? form.trustedPublicKey || null : null,
     skipSignature: status.allowSkipSignature && form.skipSignature,
+  })
+}
+
+function withCsrfPayload(payload = {}) {
+  return {
+    ...payload,
+    csrfToken: form.csrfToken,
   }
 }
 

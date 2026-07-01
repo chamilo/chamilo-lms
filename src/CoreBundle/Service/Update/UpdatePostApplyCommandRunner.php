@@ -468,10 +468,10 @@ final readonly class UpdatePostApplyCommandRunner
             'yarn_build' => [
                 'title' => 'Frontend assets',
                 'command' => ['yarn', 'build'],
-                'display_command' => 'NODE_OPTIONS="--max-old-space-size=8192" yarn build',
+                'display_command' => 'NODE_OPTIONS="--experimental-global-webcrypto --max-old-space-size=8192" yarn build',
                 'source_action' => 'frontend_build',
                 'environment' => [
-                    'NODE_OPTIONS' => '--max-old-space-size=8192',
+                    'NODE_OPTIONS' => '--experimental-global-webcrypto --max-old-space-size=8192',
                 ],
                 'advanced' => true,
             ],
@@ -510,12 +510,16 @@ final readonly class UpdatePostApplyCommandRunner
         $this->ensureDirectory($runtimeDataDirectory);
         $this->ensureDirectory($npmCacheDirectory);
 
+        $gitConfigPath = $runtimeConfigDirectory.'/gitconfig';
+        $this->writeIsolatedGitConfig($gitConfigPath);
+
         return array_merge(
             [
                 'HOME' => $runtimeHomeDirectory,
                 'XDG_CACHE_HOME' => $runtimeCacheDirectory,
                 'XDG_CONFIG_HOME' => $runtimeConfigDirectory,
                 'XDG_DATA_HOME' => $runtimeDataDirectory,
+                'GIT_CONFIG_GLOBAL' => $gitConfigPath,
                 'npm_config_cache' => $npmCacheDirectory,
             ],
             $this->getComposerEnvironment(),
@@ -665,6 +669,14 @@ final readonly class UpdatePostApplyCommandRunner
     {
         $selectedActionKeys = array_keys($selectedActions);
 
+        $permissionFixes = $this->normalizeExecutablePermissionsForSelectedActions($selectedActions, $operationId);
+        if ([] !== $permissionFixes) {
+            $details['normalized_executable_permissions'] = $permissionFixes;
+            $this->addCheck($checks, 'post_apply_executable_permissions', 'passed', 'Required post-apply executable permissions were normalized.', [
+                'paths' => $permissionFixes,
+            ]);
+        }
+
         if (isset($selectedActions['cache_clear'])) {
             $this->assertWritablePathForAction($this->projectDir.'/var/cache', $this->projectDir.'/var', 'cache_clear');
         }
@@ -733,6 +745,89 @@ final readonly class UpdatePostApplyCommandRunner
 
         if (!is_dir($parentDirectory) || !is_writable($parentDirectory)) {
             throw new RuntimeException(sprintf('Parent directory required by post-apply action "%s" is not writable: %s', $actionKey, $parentDirectory));
+        }
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $selectedActions
+     *
+     * @return string[]
+     */
+    private function normalizeExecutablePermissionsForSelectedActions(array $selectedActions, string $operationId): array
+    {
+        $paths = [];
+
+        if (isset($selectedActions['cache_clear']) || isset($selectedActions['doctrine_migrations'])) {
+            $paths[] = $this->projectDir.'/bin/console';
+        }
+
+        if (isset($selectedActions['composer_install'])) {
+            $paths[] = $this->projectDir.'/bin/console';
+            $paths[] = $this->projectDir.'/vendor/bin/requirements-checker';
+            $paths[] = $this->projectDir.'/vendor/symfony/requirements-checker/bin/requirements-checker';
+
+            foreach (glob($this->projectDir.'/vendor/bin/*') ?: [] as $path) {
+                $paths[] = $path;
+            }
+        }
+
+        if (isset($selectedActions['yarn_install']) || isset($selectedActions['yarn_build'])) {
+            foreach (glob($this->projectDir.'/node_modules/.bin/*') ?: [] as $path) {
+                $paths[] = $path;
+            }
+        }
+
+        $normalized = [];
+        foreach (array_values(array_unique($paths)) as $path) {
+            if (!is_file($path)) {
+                continue;
+            }
+
+            $realPath = realpath($path);
+            if (false === $realPath || !$this->isPathInside($realPath, $this->projectDir)) {
+                continue;
+            }
+
+            if (is_executable($realPath)) {
+                continue;
+            }
+
+            $permissions = fileperms($realPath);
+            if (false === $permissions) {
+                throw new RuntimeException('Unable to read permissions for required post-apply executable: '.$realPath);
+            }
+
+            $newPermissions = ($permissions & 0777) | 0110;
+            if (!chmod($realPath, $newPermissions)) {
+                throw new RuntimeException('Unable to mark required post-apply executable as executable: '.$realPath);
+            }
+
+            clearstatcache(true, $realPath);
+
+            if (!is_executable($realPath)) {
+                throw new RuntimeException('Required post-apply executable is still not executable after chmod: '.$realPath);
+            }
+
+            $relativePath = ltrim(substr($realPath, \strlen($this->projectDir)), '/');
+            $normalized[] = $relativePath;
+            $this->logOperation($operationId, 'info', 'post_apply_executable_permission', 'Executable permission was normalized.', [
+                'path' => $relativePath,
+            ]);
+        }
+
+        return $normalized;
+    }
+
+    private function writeIsolatedGitConfig(string $gitConfigPath): void
+    {
+        $safeProjectDir = str_replace(["\r", "\n"], '', $this->projectDir);
+        $content = "[safe]\n\tdirectory = ".$safeProjectDir."\n";
+
+        $directory = \dirname($gitConfigPath);
+        $this->ensureDirectory($directory);
+
+        if (false === file_put_contents($gitConfigPath, $content)) {
+            throw new RuntimeException('Unable to write isolated Git configuration for post-apply commands.');
         }
     }
 

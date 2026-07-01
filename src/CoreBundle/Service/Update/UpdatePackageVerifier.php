@@ -21,6 +21,7 @@ final readonly class UpdatePackageVerifier
 
     public function __construct(
         private UpdateArchiveInspector $archiveInspector,
+        private UpdateTrustedKeyring $trustedKeyring,
         MinisignSignatureVerifier $minisignSignatureVerifier,
     ) {
         $this->signatureVerifiers = [
@@ -65,6 +66,11 @@ final readonly class UpdatePackageVerifier
         if ($skipSignature) {
             $warnings[] = 'Signature verification was skipped by explicit command option.';
         } elseif ($manifest->requiresSignature()) {
+            $trustedPublicKey ??= $this->trustedKeyring->getPublicKeyForManifest($manifest);
+
+            $details['signature_key_id'] = $manifest->getSignatureKeyId();
+            $details['trusted_key_ids'] = $this->trustedKeyring->getTrustedKeyIds();
+
             $signatureResult = $this->verifySignature($packagePath, $manifest, $signaturePath, $trustedPublicKey);
 
             $details['signature'] = $signatureResult->getDetails();

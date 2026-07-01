@@ -43,7 +43,7 @@ final class UpdateVerifyPackageCommand extends Command
             ->addArgument('manifest', InputArgument::REQUIRED, 'HTTPS URL or local path to the update manifest JSON.')
             ->addOption('package-path', null, InputOption::VALUE_REQUIRED, 'Local update package path. If omitted, the package URL from the manifest is downloaded.')
             ->addOption('signature-path', null, InputOption::VALUE_REQUIRED, 'Local signature path. If omitted and the manifest defines a signature URL, it is downloaded.')
-            ->addOption('trusted-public-key', null, InputOption::VALUE_REQUIRED, 'Trusted public key for the configured signature verifier, e.g. Minisign public key. Defaults to CHAMILO_UPDATE_MINISIGN_PUBLIC_KEY when configured.')
+            ->addOption('trusted-public-key', null, InputOption::VALUE_REQUIRED, 'Trusted public key for the configured signature verifier, e.g. Minisign public key. Defaults to the trusted update keyring when omitted.')
             ->addOption('work-dir', null, InputOption::VALUE_REQUIRED, 'Directory used for downloaded update files.', 'var/update/downloads')
             ->addOption('skip-signature', null, InputOption::VALUE_NONE, 'Skip signature verification. Intended only for local development tests.')
             ->setHelp(

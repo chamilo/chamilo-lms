@@ -316,7 +316,7 @@ final readonly class UpdatePostApplyChecker
                 'description' => 'Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies.',
                 'commands' => [
                     'yarn install --frozen-lockfile',
-                    'NODE_OPTIONS="--max-old-space-size=8192" yarn build',
+                    'NODE_OPTIONS="--experimental-global-webcrypto --max-old-space-size=8192" yarn build',
                 ],
                 'required' => true,
                 'severity' => 'warning',

@@ -19,6 +19,7 @@ final readonly class UpdatePreflightChecker
 
     public function __construct(
         private KernelInterface $kernel,
+        private InstalledChamiloVersionProvider $installedVersionProvider,
     ) {}
 
     public function check(UpdateManifest $manifest, ?string $packagePath = null): UpdatePreflightResult
@@ -419,19 +420,7 @@ final readonly class UpdatePreflightChecker
 
     private function getInstalledVersion(): string
     {
-        foreach ([
-            $this->getInstalledVersionFromLegacyConfiguration(),
-            $this->getInstalledVersionFromComposerMetadata(),
-            $this->getInstalledVersionFromGitTag($this->getProjectDir()),
-        ] as $candidate) {
-            $version = $this->normalizeVersion((string) $candidate);
-
-            if (null !== $version) {
-                return $version;
-            }
-        }
-
-        return 'unknown';
+        return $this->installedVersionProvider->getInstalledVersion();
     }
 
     private function getInstalledVersionFromLegacyConfiguration(): ?string
@@ -532,7 +521,7 @@ final readonly class UpdatePreflightChecker
 
     private function isComparableVersion(string $version): bool
     {
-        return 1 === preg_match('/^\d+(?:\.\d+){1,3}(?:[-+][A-Za-z0-9.-]+)?$/', $version);
+        return $this->installedVersionProvider->isComparableVersion($version);
     }
 
     private function matchesVersionRequirement(string $version, string $requirement): ?bool

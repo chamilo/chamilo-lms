@@ -47,7 +47,7 @@ final class UpdateStagePackageCommand extends Command
             ->addArgument('manifest', InputArgument::REQUIRED, 'HTTPS URL or local path to the update manifest JSON.')
             ->addOption('package-path', null, InputOption::VALUE_REQUIRED, 'Local package path. If omitted, the package URL from the manifest is downloaded.')
             ->addOption('signature-path', null, InputOption::VALUE_REQUIRED, 'Local Minisign signature path. If omitted, the signature URL from the manifest is downloaded when needed.')
-            ->addOption('trusted-public-key', null, InputOption::VALUE_REQUIRED, 'Trusted Minisign public key used to verify the update package. Defaults to CHAMILO_UPDATE_MINISIGN_PUBLIC_KEY when configured.')
+            ->addOption('trusted-public-key', null, InputOption::VALUE_REQUIRED, 'Trusted Minisign public key used to verify the update package. Defaults to the trusted update keyring when omitted.')
             ->addOption('skip-signature', null, InputOption::VALUE_NONE, 'Skip signature verification. Only use this for local development tests.')
             ->setHelp(
                 <<<'HELP'

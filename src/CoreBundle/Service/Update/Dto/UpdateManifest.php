@@ -20,6 +20,7 @@ final readonly class UpdateManifest
         private string $packageSha256,
         private ?string $signatureType = null,
         private ?string $signatureUrl = null,
+        private ?string $signatureKeyId = null,
         private array $requirements = [],
     ) {}
 
@@ -62,6 +63,7 @@ final readonly class UpdateManifest
             $packageSha256,
             self::readOptionalString($signature, 'type'),
             self::readOptionalString($signature, 'url'),
+            self::readOptionalString($signature, 'key_id'),
             $requirements,
         );
     }
@@ -99,6 +101,11 @@ final readonly class UpdateManifest
     public function getSignatureUrl(): ?string
     {
         return $this->signatureUrl;
+    }
+
+    public function getSignatureKeyId(): ?string
+    {
+        return $this->signatureKeyId;
     }
 
     /**

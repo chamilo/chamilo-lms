@@ -10,14 +10,20 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class UpdateConfiguration
 {
-    private const ENV_ALLOW_LOCAL_PATHS = 'CHAMILO_UPDATE_ALLOW_LOCAL_PATHS';
-    private const ENV_ALLOW_SKIP_SIGNATURE = 'CHAMILO_UPDATE_ALLOW_SKIP_SIGNATURE';
-    private const ENV_MANIFEST_URL = 'CHAMILO_UPDATE_MANIFEST_URL';
-    private const ENV_MINISIGN_PUBLIC_KEY = 'CHAMILO_UPDATE_MINISIGN_PUBLIC_KEY';
-    private const ENV_DEBUG_SLOW_COPY_MS = 'CHAMILO_UPDATE_DEBUG_SLOW_COPY_MS';
-    private const ENV_COMMAND_TIMEOUT = 'CHAMILO_UPDATE_COMMAND_TIMEOUT';
+    public const OFFICIAL_MANIFEST_SOURCE = 'https://updates.chamilo.org/2.x/stable.json';
+
+    /**
+     * Internal development-only switch.
+     *
+     * Keep disabled in committed code. Enable locally only when testing local
+     * packages, unsigned packages or simulated update notices.
+     */
+    public const ENABLE_DEVELOPMENT_UPDATE_TOOLS = false;
+
     private const LOCAL_TEST_MANIFEST_SOURCE = '/tmp/chamilo-update-slow-manifest.json';
     private const LOCAL_TEST_PACKAGE_PATH = '/tmp/chamilo-update-slow.zip';
+    private const DEBUG_SLOW_COPY_MS = 0;
+    private const COMMAND_TIMEOUT_SECONDS = 900;
 
     public function __construct(
         #[Autowire(param: 'kernel.environment')]
@@ -26,17 +32,17 @@ final readonly class UpdateConfiguration
 
     public function getDefaultManifestSource(): ?string
     {
-        return $this->readStringEnv(self::ENV_MANIFEST_URL);
+        return self::OFFICIAL_MANIFEST_SOURCE;
     }
 
     public function getOfficialManifestSource(): ?string
     {
-        return $this->getDefaultManifestSource();
+        return self::OFFICIAL_MANIFEST_SOURCE;
     }
 
     public function getLocalTestManifestSource(): ?string
     {
-        if ($this->isProduction()) {
+        if (!self::ENABLE_DEVELOPMENT_UPDATE_TOOLS) {
             return null;
         }
 
@@ -45,16 +51,21 @@ final readonly class UpdateConfiguration
 
     public function getLocalTestPackagePath(): ?string
     {
-        if ($this->isProduction()) {
+        if (!self::ENABLE_DEVELOPMENT_UPDATE_TOOLS) {
             return null;
         }
 
         return self::LOCAL_TEST_PACKAGE_PATH;
     }
 
+    public function allowsDevelopmentUpdateTools(): bool
+    {
+        return self::ENABLE_DEVELOPMENT_UPDATE_TOOLS;
+    }
+
     public function getTrustedPublicKey(): ?string
     {
-        return $this->readStringEnv(self::ENV_MINISIGN_PUBLIC_KEY);
+        return null;
     }
 
     public function hasTrustedPublicKey(): bool
@@ -75,12 +86,12 @@ final readonly class UpdateConfiguration
 
     public function allowsLocalPaths(): bool
     {
-        return $this->readBooleanEnv(self::ENV_ALLOW_LOCAL_PATHS, !$this->isProduction());
+        return self::ENABLE_DEVELOPMENT_UPDATE_TOOLS;
     }
 
     public function allowsSkipSignature(): bool
     {
-        return $this->readBooleanEnv(self::ENV_ALLOW_SKIP_SIGNATURE, !$this->isProduction());
+        return self::ENABLE_DEVELOPMENT_UPDATE_TOOLS;
     }
 
     public function isProduction(): bool
@@ -90,65 +101,24 @@ final readonly class UpdateConfiguration
 
     public function getDebugSlowCopyMilliseconds(): int
     {
-        if ($this->isProduction()) {
+        if (!self::ENABLE_DEVELOPMENT_UPDATE_TOOLS) {
             return 0;
         }
 
-        return min($this->readIntegerEnv(self::ENV_DEBUG_SLOW_COPY_MS, 0), 5000);
+        return min(max(self::DEBUG_SLOW_COPY_MS, 0), 5000);
     }
 
     public function allowsUiPostApplyCommands(): bool
     {
-        return !$this->isProduction();
+        return true;
     }
 
     public function getCommandTimeoutSeconds(): int
     {
-        $timeout = $this->readIntegerEnv(self::ENV_COMMAND_TIMEOUT, 900);
-
-        if ($timeout < 60) {
+        if (self::COMMAND_TIMEOUT_SECONDS < 60) {
             return 60;
         }
 
-        return min($timeout, 7200);
-    }
-
-    private function readStringEnv(string $name): ?string
-    {
-        foreach ([$_ENV[$name] ?? null, $_SERVER[$name] ?? null, getenv($name)] as $value) {
-            if (!\is_string($value)) {
-                continue;
-            }
-
-            $value = trim($value);
-
-            if ('' !== $value) {
-                return $value;
-            }
-        }
-
-        return null;
-    }
-
-    private function readBooleanEnv(string $name, bool $default): bool
-    {
-        $value = $this->readStringEnv($name);
-
-        if (null === $value) {
-            return $default;
-        }
-
-        return \in_array(strtolower($value), ['1', 'true', 'yes', 'on'], true);
-    }
-
-    private function readIntegerEnv(string $name, int $default): int
-    {
-        $value = $this->readStringEnv($name);
-
-        if (null === $value || !ctype_digit($value)) {
-            return $default;
-        }
-
-        return max((int) $value, 0);
+        return min(self::COMMAND_TIMEOUT_SECONDS, 7200);
     }
 }

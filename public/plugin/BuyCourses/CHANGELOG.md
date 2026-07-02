@@ -48,6 +48,14 @@ service_sales_report.php, subscription_sales_report.php) showed the raw string
 core `get_lang` filter instead of `get_plugin_lang('BuyCoursesPlugin')` — this term
 was only ever defined in the plugin's own language files.
 
+Fix: the "Search" filter card on the same three sales report pages had its form
+elements (radio buttons, the "Order status" select, the Search button) touching the
+card's border with no internal padding, breaking the platform's 8-point spacing.
+The `formShell` wrapper div relied entirely on nested `[&_.form-group]:p-5`-style
+selectors for its padding, but Chamilo's `FormValidator` renders this form's fields
+inside `<div class="row mb-3">` wrappers, not `.form-group` — so that padding rule
+never matched anything. Added padding directly on the wrapper itself.
+
 Fix: the "Purchase history" table on `/my-services` now shows the purchase date and
 time (previously date only), and the downloadable invoice now shows both the
 purchase date and the invoice date side by side, since they can legitimately differ.

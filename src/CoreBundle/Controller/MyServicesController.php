@@ -124,6 +124,8 @@ class MyServicesController extends AbstractController
                 'amount' => (string) ($row['amount'] ?? ''),
                 'status' => (int) ($row['status'] ?? 0),
                 'receiptUrl' => $row['receipt_url'] ?? null,
+                'invoiceUrl' => $row['invoice_url'] ?? null,
+                'requestInvoiceUrl' => $row['request_invoice_url'] ?? null,
             ];
         }, $rows);
     }

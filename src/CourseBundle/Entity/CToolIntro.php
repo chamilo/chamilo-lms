@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CToolIntroStateProcessor;
+use Chamilo\CoreBundle\State\CToolIntroStateProvider;
 use Chamilo\CourseBundle\Repository\CToolIntroRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -113,6 +114,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['c_tool_intro:update'],
     ],
+    provider: CToolIntroStateProvider::class,
     processor: CToolIntroStateProcessor::class,
 )]
 #[ORM\Table(name: 'c_tool_intro')]

@@ -71,6 +71,7 @@ final class CToolIntroStateProcessor implements ProcessorInterface
                 $data = $existing;
             } else {
                 $data->setParent($course);
+                $data->addCourseLink($course, $session);
             }
         }
 

@@ -373,6 +373,16 @@
       container.style.display = isBusiness ? '' : 'none';
       field.disabled = !isBusiness;
     });
+
+    // Business buyers get a VAT invoice unconditionally (mandatory under EU/Belgian VAT
+    // rules), so the checkbox is forced on and locked; individuals keep their own choice.
+    var invoiceCheckbox = document.querySelector('[name="invoice_requested"]');
+    if (invoiceCheckbox) {
+      if (isBusiness) {
+        invoiceCheckbox.checked = true;
+      }
+      invoiceCheckbox.disabled = isBusiness;
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function () {

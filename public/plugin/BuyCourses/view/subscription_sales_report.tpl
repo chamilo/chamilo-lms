@@ -103,7 +103,7 @@
                     href="sales_report.php"
                     class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:bg-support-2 hover:text-primary"
             >
-                {{ 'CourseSessionBlock'|get_lang }}
+                {{ 'CourseSessionBlock'|get_plugin_lang('BuyCoursesPlugin') }}
             </a>
 
             {% if services_are_included %}

@@ -42,6 +42,12 @@ inconsistencies between them.
 Fix: an edge case in the course-creation purchase limit check and course/session
 purchase flow that could under- or over-count a user's already-purchased items.
 
+Fix: the "Courses/Sessions" tab on the sales report pages (sales_report.php,
+service_sales_report.php, subscription_sales_report.php) showed the raw string
+"CourseSessionBlock" instead of its translation, because the template called the
+core `get_lang` filter instead of `get_plugin_lang('BuyCoursesPlugin')` — this term
+was only ever defined in the plugin's own language files.
+
 Fix: the "Purchase history" table on `/my-services` now shows the purchase date and
 time (previously date only), and the downloadable invoice now shows both the
 purchase date and the invoice date side by side, since they can legitimately differ.

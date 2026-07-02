@@ -110,11 +110,14 @@ function refreshCStudioLpToolsForCurrentRoute() {
             removeCStudioEditorButtons();
         }
 
+        hideCStudioPreviewLpNavigationControls();
+
         return;
     }
 
     lastCStudioLpRouteState = nextState;
     cstudioProcessTeachdocIds(currentTeachdocLstIdsForCStudio);
+    hideCStudioPreviewLpNavigationControls();
 }
 
 function cstudioProcessTeachdocIds(teachdocLstIds) {
@@ -126,6 +129,7 @@ function cstudioProcessTeachdocIds(teachdocLstIds) {
 
     removeDuplicatedCStudioButtons();
     installCStudioPreviewBackButton(teachdocLstIds, 30);
+    hideCStudioPreviewLpNavigationControls();
 
     if (cstudioCanUseEditorButtons(teachdocLstIds)) {
         installCStudioCreateButton(30);
@@ -140,9 +144,68 @@ function cstudioCanUseEditorButtons(teachdocLstIds) {
 }
 
 function cstudioCanShowPreviewBackButton(teachdocLstIds) {
-    return cstudioTeachdocIdsCanEdit(teachdocLstIds)
+    var previewMarker = String(getParamValueForOelTools('cstudio_preview') || '').toLowerCase();
+
+    if (getParamValueForOelTools('action') != 'view'
+        || getParamValueForOelTools('teachdoc') != 'edit'
+        || cstudioGetPreviewLpId() <= 0
+        || ['1', 'true', 'yes'].indexOf(previewMarker) === -1
+    ) {
+        return false;
+    }
+
+    // This Back button is only for the preview launched from the CStudio editor.
+    // Normal Learning Path views can include teachdoc=edit in the URL, but they
+    // should keep the standard LP navigation without the CStudio Back shortcut.
+    return true;
+}
+
+function cstudioIsCStudioLearningPathContent() {
+    return getParamValueForOelTools('action') == 'view'
         && getParamValueForOelTools('teachdoc') == 'edit'
-        && getParamValueForOelTools('lp_id') != '';
+        && cstudioGetPreviewLpId() > 0;
+}
+
+function cstudioShouldHideLearningPathNavigation() {
+    return cstudioIsCStudioLearningPathContent();
+}
+
+function cstudioGetPreviewLpId() {
+    var lpId = parseInt(getParamValueForOelTools('lp_id'), 10);
+
+    if (!isNaN(lpId) && lpId > 0) {
+        return lpId;
+    }
+
+    lpId = parseInt(getParamValueForOelTools('idLudiLP'), 10);
+
+    return (!isNaN(lpId) && lpId > 0) ? lpId : 0;
+}
+
+function cstudioTranslateUiLabel(label) {
+    if (typeof window.returnTradTerm === 'function') {
+        return window.returnTradTerm(label);
+    }
+
+    return label;
+}
+
+function buildCStudioEditorRedirectUrl(lpId) {
+    var href = '/main/lp/lp_controller.php?action=add_item';
+    var cidQueryParams = getChamiloCidQueryParamsForCStudio();
+
+    if (cidQueryParams != '') {
+        if (cidQueryParams.charAt(0) != '&') {
+            href += '&' + cidQueryParams;
+        } else {
+            href += cidQueryParams;
+        }
+    }
+
+    href += '&lp_id=' + encodeURIComponent(lpId);
+    href += '&type=step&isStudentView=false&teachdoc=edit';
+
+    return href;
 }
 
 function cstudioTeachdocIdsCanEdit(teachdocLstIds) {
@@ -163,10 +226,196 @@ function removeDuplicatedCStudioButtons() {
     $('#cstudio-lp-create-button').slice(1).remove();
     $('#cstudio-preview-back-button').slice(1).remove();
     $('#cstudio-preview-back-style').slice(1).remove();
+    $('#cstudio-preview-loading').slice(1).remove();
+}
+
+function removeCStudioPreviewBackControls() {
+    $('#cstudio-preview-back-button').remove();
+    $('#cstudio-preview-back-style').remove();
+    $('#cstudio-preview-loading').remove();
+    $('body').removeClass('cstudio-preview-mode');
 }
 
 function removeCStudioEditorButtons() {
     $('#cstudio-lp-create-button').remove();
+}
+
+
+function hideCStudioPreviewLpNavigationControls() {
+    if (!cstudioShouldHideLearningPathNavigation()) {
+        $('body').removeClass('cstudio-lp-cstudio-content-mode');
+        return;
+    }
+
+    $('body').addClass('cstudio-lp-cstudio-content-mode');
+
+    var hideElementHard = function ($element) {
+        $element.css({
+            display: 'none',
+            visibility: 'hidden',
+            pointerEvents: 'none'
+        });
+    };
+
+    var hideNavigationParent = function ($element) {
+        var $parent = $element.parent();
+
+        for (var i = 0; i < 7 && $parent.length > 0; i++) {
+            if ($parent.is('body') || $parent.is('html')) {
+                return;
+            }
+
+            var parentElement = $parent.get(0);
+            var rect = parentElement && parentElement.getBoundingClientRect ? parentElement.getBoundingClientRect() : null;
+            var containsScormNavigation = $parent.find('#scorm-previous,#scorm-next,[data-lp-nav="previous"],[data-lp-nav="next"]').length > 0;
+            var isTopRightContainer = rect
+                && rect.top >= 0
+                && rect.top < 140
+                && rect.right > (window.innerWidth - 360)
+                && rect.width <= 360
+                && rect.height <= 160;
+            var hasOnlyLpNavigation = containsScormNavigation
+                && $parent.find('a,button').not('#scorm-previous,#scorm-next,[data-lp-nav="previous"],[data-lp-nav="next"],#cstudio-preview-back-button').length === 0;
+
+            if (containsScormNavigation && (isTopRightContainer || hasOnlyLpNavigation)) {
+                hideElementHard($parent);
+            }
+
+            if (containsScormNavigation && rect && (rect.width > 420 || rect.height > 180 || rect.top > 160)) {
+                return;
+            }
+
+            $parent = $parent.parent();
+        }
+    };
+
+    var hideSharedScormNavigationContainer = function () {
+        var previous = document.getElementById('scorm-previous');
+        var next = document.getElementById('scorm-next');
+
+        if (!previous || !next) {
+            return;
+        }
+
+        var previousParents = [];
+        var node = previous.parentElement;
+
+        while (node && node !== document.body && node !== document.documentElement) {
+            previousParents.push(node);
+            node = node.parentElement;
+        }
+
+        node = next.parentElement;
+
+        while (node && node !== document.body && node !== document.documentElement) {
+            if (previousParents.indexOf(node) !== -1) {
+                var $candidate = $(node);
+
+                for (var i = 0; i < 5 && $candidate.length > 0; i++) {
+                    if ($candidate.is('body') || $candidate.is('html')) {
+                        break;
+                    }
+
+                    var element = $candidate.get(0);
+                    var rect = element && element.getBoundingClientRect ? element.getBoundingClientRect() : null;
+                    var containsScormNavigation = $candidate.find('#scorm-previous,#scorm-next,[data-lp-nav="previous"],[data-lp-nav="next"]').length > 0;
+                    var isTopRightContainer = rect
+                        && rect.top >= 0
+                        && rect.top < 140
+                        && rect.right > (window.innerWidth - 360)
+                        && rect.width <= 360
+                        && rect.height <= 160;
+
+                    if (containsScormNavigation && isTopRightContainer) {
+                        hideElementHard($candidate);
+                    }
+
+                    if (!rect || rect.width > 420 || rect.height > 180 || rect.top > 160) {
+                        break;
+                    }
+
+                    $candidate = $candidate.parent();
+                }
+
+                return;
+            }
+
+            node = node.parentElement;
+        }
+    };
+
+    var hideControls = function () {
+        var selectors = [
+            '#scorm-previous',
+            '#scorm-next',
+            '[data-lp-nav="previous"]',
+            '[data-lp-nav="next"]',
+            '#lp_navigation',
+            '#lp-navigation',
+            '.lp-navigation',
+            '.learnpath-navigation',
+            '.lp-navigation-buttons',
+            '.lp-navigation-next',
+            '.lp-navigation-previous',
+            '[data-testid="lp-previous"]',
+            '[data-testid="lp-next"]',
+            '[aria-label="Previous"]',
+            '[aria-label="Next"]',
+            '[title="Previous"]',
+            '[title="Next"]',
+            '[aria-label="Anterior"]',
+            '[aria-label="Siguiente"]',
+            '[title="Anterior"]',
+            '[title="Siguiente"]'
+        ];
+
+        $(selectors.join(',')).not('#cstudio-preview-back-button').each(function () {
+            var $element = $(this);
+
+            hideElementHard($element);
+            hideNavigationParent($element);
+        });
+
+        hideSharedScormNavigationContainer();
+
+        $('a,button').not('#cstudio-preview-back-button').each(function () {
+            var element = this;
+            var $element = $(element);
+            var text = $element.text().replace(/\s+/g, '').trim();
+            var label = String($element.attr('aria-label') || $element.attr('title') || '').toLowerCase();
+            var classes = String($element.attr('class') || '').toLowerCase();
+            var rect = element.getBoundingClientRect ? element.getBoundingClientRect() : null;
+
+            if (!rect || rect.width <= 0 || rect.height <= 0) {
+                return;
+            }
+
+            var looksLikeArrow = ['<', '>', '‹', '›', '←', '→'].indexOf(text) !== -1
+                || label.indexOf('previous') !== -1
+                || label.indexOf('next') !== -1
+                || label.indexOf('anterior') !== -1
+                || label.indexOf('siguiente') !== -1
+                || classes.indexOf('previous') !== -1
+                || classes.indexOf('next') !== -1
+                || classes.indexOf('prev') !== -1;
+
+            var isTopRightLpControl = rect.top < 120
+                && rect.right > (window.innerWidth - 220)
+                && rect.width <= 90
+                && rect.height <= 90;
+
+            if (looksLikeArrow && isTopRightLpControl) {
+                hideElementHard($element);
+                hideNavigationParent($element);
+            }
+        });
+    };
+
+    hideControls();
+    setTimeout(hideControls, 100);
+    setTimeout(hideControls, 350);
+    setTimeout(hideControls, 800);
+    setTimeout(hideControls, 1500);
 }
 
 function installCStudioCreateButton(retries) {
@@ -250,16 +499,50 @@ function refreshCStudioCreateButtonUrl() {
     return true;
 }
 
+function showCStudioLpRedirectOverlay() {
+    var loadingLabel = cstudioTranslateUiLabel('Opening CStudio editor...');
+
+    $('#cstudio-lp-redirect-overlay').remove();
+    $('#cstudio-preview-back-button').remove();
+
+    var html = '';
+    html += '<div id="cstudio-lp-redirect-overlay" role="status" aria-live="polite">';
+    html += '<div class="cstudio-lp-redirect-card">';
+    html += '<img src="/plugin/CStudio/img/base/oel_tools.jpg" alt="CStudio" />';
+    html += '<div class="cstudio-lp-redirect-progress"><span></span></div>';
+    html += '<p>' + loadingLabel + '</p>';
+    html += '</div>';
+    html += '</div>';
+
+    if ($('#cstudio-lp-redirect-style').length == 0) {
+        var style = '';
+        style += '<style id="cstudio-lp-redirect-style">';
+        style += '#cstudio-lp-redirect-overlay{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#fff;font-family:Arial,sans-serif;color:#1f2937;}';
+        style += '#cstudio-lp-redirect-overlay .cstudio-lp-redirect-card{display:flex;flex-direction:column;align-items:center;gap:22px;min-width:320px;padding:32px 42px;border-radius:18px;background:#fff;}';
+        style += '#cstudio-lp-redirect-overlay img{max-width:260px;width:48vw;height:auto;}';
+        style += '#cstudio-lp-redirect-overlay p{margin:0;font-size:15px;font-weight:600;color:#1f2937;}';
+        style += '#cstudio-lp-redirect-overlay .cstudio-lp-redirect-progress{width:180px;height:6px;border-radius:999px;background:#d1d5db;overflow:hidden;}';
+        style += '#cstudio-lp-redirect-overlay .cstudio-lp-redirect-progress span{display:block;width:42%;height:100%;border-radius:999px;background:#2f80b7;animation:cstudioLpRedirectProgress 1s ease-in-out infinite;}';
+        style += '@keyframes cstudioLpRedirectProgress{0%{transform:translateX(-110%)}50%{transform:translateX(70%)}100%{transform:translateX(250%)}}';
+        style += '</style>';
+        $('head').append(style);
+    }
+
+    $('body').append(html);
+    $('#doc_form').empty();
+    $('#lp_sidebar').empty();
+}
+
 function installCStudioPreviewBackButton(teachdocLstIds, retries) {
     if (!cstudioCanShowPreviewBackButton(teachdocLstIds)) {
-        $('#cstudio-preview-back-button').remove();
-        $('#cstudio-preview-back-style').remove();
+        removeCStudioPreviewBackControls();
 
         return false;
     }
 
     if ($('#cstudio-preview-back-button').length > 0) {
         removeDuplicatedCStudioButtons();
+        hideCStudioPreviewLpNavigationControls();
 
         return true;
     }
@@ -274,18 +557,20 @@ function installCStudioPreviewBackButton(teachdocLstIds, retries) {
         return false;
     }
 
-    var lpId = parseInt(getParamValueForOelTools('lp_id'), 10);
+    var lpId = cstudioGetPreviewLpId();
 
-    if (isNaN(lpId) || lpId <= 0) {
+    if (lpId <= 0) {
         return false;
     }
 
-    var href = '/plugin/CStudio/oel_tools_teachdoc_link.php?action=redir&idLudiLP=' + encodeURIComponent(lpId);
-    var label = 'Back';
+    var href = buildCStudioEditorRedirectUrl(lpId);
+    var label = cstudioTranslateUiLabel('Back');
+    var loadingLabel = cstudioTranslateUiLabel('Opening CStudio editor...');
 
     var style = '';
     style += '<style id="cstudio-preview-back-style">';
-    style += '#cstudio-preview-back-button{position:fixed;top:14px;left:14px;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;background:#ffffff;color:#1f2937;border:1px solid #d1d5db;box-shadow:0 4px 14px rgba(0,0,0,.16);font:600 14px/1.2 Arial,sans-serif;text-decoration:none;}';
+    style += 'body.cstudio-preview-mode #scorm-previous,body.cstudio-preview-mode #scorm-next,body.cstudio-lp-cstudio-content-mode #scorm-previous,body.cstudio-lp-cstudio-content-mode #scorm-next,body.cstudio-preview-mode #lp_navigation,body.cstudio-preview-mode #lp-navigation,body.cstudio-preview-mode .lp-navigation,body.cstudio-preview-mode .learnpath-navigation,body.cstudio-preview-mode .lp-navigation-buttons,body.cstudio-preview-mode .lp-navigation-next,body.cstudio-preview-mode .lp-navigation-previous,body.cstudio-lp-cstudio-content-mode #lp_navigation,body.cstudio-lp-cstudio-content-mode #lp-navigation,body.cstudio-lp-cstudio-content-mode .lp-navigation,body.cstudio-lp-cstudio-content-mode .learnpath-navigation,body.cstudio-lp-cstudio-content-mode .lp-navigation-buttons,body.cstudio-lp-cstudio-content-mode .lp-navigation-next,body.cstudio-lp-cstudio-content-mode .lp-navigation-previous{display:none!important;visibility:hidden!important;pointer-events:none!important;}';
+    style += '#cstudio-preview-back-button{position:fixed;top:14px;right:20px;left:auto;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;background:#ffffff;color:#1f2937;border:1px solid #d1d5db;box-shadow:0 4px 14px rgba(0,0,0,.16);font:600 14px/1.2 Arial,sans-serif;text-decoration:none;}';
     style += '#cstudio-preview-back-button:hover{background:#f3f4f6;text-decoration:none;color:#111827;}';
     style += '#cstudio-preview-loading{position:fixed;inset:0;z-index:2147482999;display:none;align-items:center;justify-content:center;background:rgba(255,255,255,.72);font:600 15px/1.4 Arial,sans-serif;color:#111827;}';
     style += '#cstudio-preview-loading span{display:inline-flex;align-items:center;gap:10px;padding:14px 18px;border-radius:14px;background:#fff;border:1px solid #d1d5db;box-shadow:0 5px 18px rgba(0,0,0,.14);}';
@@ -294,8 +579,10 @@ function installCStudioPreviewBackButton(teachdocLstIds, retries) {
     style += '</style>';
 
     $('head').append(style);
+    $('body').addClass('cstudio-preview-mode');
     $('body').append('<a id="cstudio-preview-back-button" href="' + href + '" title="' + label + '" aria-label="' + label + '">‹ ' + label + '</a>');
-    $('body').append('<div id="cstudio-preview-loading"><span><i></i>Opening CStudio editor...</span></div>');
+    $('body').append('<div id="cstudio-preview-loading"><span><i></i>' + loadingLabel + '</span></div>');
+    hideCStudioPreviewLpNavigationControls();
 
     $('#cstudio-preview-back-button').on('click', function () {
         $('#cstudio-preview-loading').css('display', 'flex');
@@ -314,12 +601,22 @@ function installExtrasToolsOelTools(teachdocLstIds) {
 
     if (action == 'add_item' && lpId != '') {
         if (teachdocLstIds.indexOf(',' + lpId + ',') != -1) {
-            $('#doc_form').css('background-color','white').css('padding-top','50px').css('padding-bottom','70px').css('border-radius','20px').css('width','80%').css('margin-left','10%');
-            $('#doc_form').html('<center><img style="width:50%;" src="/plugin/CStudio/img/base/oel_tools.jpg" /><br><br><img style="width:128px;margin-top:20px;" src="/plugin/CStudio/img/loadsaveline.gif" /></center>');
-            $('#lp_sidebar').html('<center></center>');
+            showCStudioLpRedirectOverlay();
+
             setTimeout(function(){
-                window.location.href = '/plugin/CStudio/oel_tools_teachdoc_link.php?action=redir&idLudiLP=' + parseInt(lpId);
-            },2000);
+                var href = '/plugin/CStudio/oel_tools_teachdoc_link.php?action=redir&idLudiLP=' + parseInt(lpId);
+                var cidQueryParams = getChamiloCidQueryParamsForCStudio();
+
+                if (cidQueryParams != '') {
+                    if (cidQueryParams.charAt(0) != '&') {
+                        href += '&' + cidQueryParams;
+                    } else {
+                        href += cidQueryParams;
+                    }
+                }
+
+                window.location.href = href;
+            },120);
         }
     }
 

@@ -106,7 +106,13 @@ function cstudioGetFallbackTranslatedTerm(term) {
             'Learning paths list': 'Liste des parcours',
             'Clean data': 'Nettoyer les traces',
             'Create a browser-friendly web page that can be opened outside the CStudio editor.': 'Crée une page web consultable dans un navigateur en dehors de l’éditeur CStudio.',
-            'Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.': 'Nettoie les traces de progression enregistrées pour cet apprenant dans ce parcours CStudio. Cela ne supprime pas les pages ni le contenu du projet.'
+            'Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.': 'Nettoie les traces de progression enregistrées pour cet apprenant dans ce parcours CStudio. Cela ne supprime pas les pages ni le contenu du projet.',
+            'Language of the project': 'Langue du projet',
+            'The project language is used by CStudio content and defaults to the course language.': 'La langue du projet est utilisée par le contenu CStudio et reprend par défaut la langue du cours.',
+            'Automatic language translation': 'Traduction automatique',
+            'Enables CStudio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.': 'Active les outils de traduction automatique de CStudio pour ce projet lorsque les services de traduction sont configurés. La langue du projet sélectionnée est utilisée comme langue cible.',
+            'Progressive documents': 'Documents progressifs',
+            'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.': 'Affiche des choix de difficulté progressive dans le lecteur lorsque le contenu contient des niveaux progressifs. Les apprenants peuvent choisir le niveau adapté à leur progression.'
         },
         es: {
             'UI language': 'Idioma de la interfaz',
@@ -119,7 +125,13 @@ function cstudioGetFallbackTranslatedTerm(term) {
             'Learning paths list': 'Lista de lecciones',
             'Clean data': 'Limpiar trazas',
             'Create a browser-friendly web page that can be opened outside the CStudio editor.': 'Crea una página web compatible con navegador que se puede abrir fuera del editor CStudio.',
-            'Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.': 'Limpia las trazas de progreso guardadas del alumno para esta lección CStudio. No elimina páginas ni contenido del proyecto.'
+            'Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.': 'Limpia las trazas de progreso guardadas del alumno para esta lección CStudio. No elimina páginas ni contenido del proyecto.',
+            'Language of the project': 'Idioma del proyecto',
+            'The project language is used by CStudio content and defaults to the course language.': 'El idioma del proyecto se usa en el contenido CStudio y toma por defecto el idioma del curso.',
+            'Automatic language translation': 'Traducción automática',
+            'Enables CStudio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.': 'Activa las herramientas de traducción automática de CStudio para este proyecto cuando los servicios de traducción estén configurados. El idioma del proyecto seleccionado se usa como idioma de destino.',
+            'Progressive documents': 'Documentos progresivos',
+            'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.': 'Muestra opciones de dificultad progresiva en el reproductor cuando el contenido incluye niveles progresivos. Los alumnos pueden elegir el nivel que corresponda a su progreso.'
         }
     };
 
@@ -10087,37 +10099,74 @@ function cstudioGetLanguageNames(){
 }
 
 function cstudioGetAvailableProjectLocales(){
-    var available = (typeof cstudioAvailableLocales !== 'undefined') ? cstudioAvailableLocales : ['en_US'];
+    var names = cstudioGetLanguageNames();
+    var available = (typeof cstudioAvailableLocales !== 'undefined' && cstudioAvailableLocales && cstudioAvailableLocales.length)
+        ? cstudioAvailableLocales
+        : Object.keys(names);
     var locales = [];
     for (var i = 0; i < available.length; i++) {
-        var locale = String(available[i] || '').replace('-', '_');
-        if (locale !== '' && locales.indexOf(locale) === -1) {
+        var locale = cstudioNormalizeLocaleCandidate(available[i]);
+        if (locale !== '' && typeof names[locale] !== 'undefined' && locales.indexOf(locale) === -1) {
             locales.push(locale);
         }
     }
+
     if (locales.length === 0) {
-        locales.push('en_US');
+        locales = Object.keys(names);
     }
+
     return locales;
 }
 
-function cstudioCanonicalProjectLocale(value){
-    var locale = String(value || '').replace('-', '_');
+function cstudioNormalizeLocaleCandidate(value){
+    var locale = String(value || '').replace('-', '_').trim();
     if (locale === '') {
         return '';
     }
 
+    var lowerLocale = locale.toLowerCase();
     var aliases = {
         'en':'en_US',
+        'en_us':'en_US',
+        'english':'en_US',
         'fr':'fr_FR',
-        'es_ES':'es',
+        'fr_fr':'fr_FR',
+        'fr-fr':'fr_FR',
+        'french':'fr_FR',
+        'francais':'fr_FR',
+        'français':'fr_FR',
+        'es':'es',
+        'es_es':'es',
+        'spanish':'es',
+        'spanish latin america':'es',
         'pt':'pt_PT',
+        'pt_pt':'pt_PT',
+        'pt_br':'pt_BR',
         'zh':'zh_CN',
-        'no':'nn_NO'
+        'zh_cn':'zh_CN',
+        'zh_tw':'zh_TW',
+        'no':'nn_NO',
+        'nn_no':'nn_NO'
     };
 
-    if (typeof aliases[locale] !== 'undefined') {
-        locale = aliases[locale];
+    if (typeof aliases[lowerLocale] !== 'undefined') {
+        return aliases[lowerLocale];
+    }
+
+    var parts = locale.split('_');
+    if (parts.length > 1) {
+        locale = parts[0].toLowerCase() + '_' + parts.slice(1).join('_').toUpperCase();
+    } else {
+        locale = lowerLocale;
+    }
+
+    return locale;
+}
+
+function cstudioCanonicalProjectLocale(value){
+    var locale = cstudioNormalizeLocaleCandidate(value);
+    if (locale === '') {
+        return '';
     }
 
     var available = cstudioGetAvailableProjectLocales();
@@ -10150,6 +10199,24 @@ function cstudioGetDefaultProjectLanguage(){
     return cstudioCanonicalProjectLocale('en_US') || 'en_US';
 }
 
+function cstudioGetSavedOrDefaultProjectLanguage(value){
+    var rawValue = String(value || '').replace('-', '_').trim();
+    var courseDefault = cstudioGetDefaultProjectLanguage();
+
+    if (rawValue === '') {
+        return courseDefault;
+    }
+
+    // Older CStudio projects were often initialized with the legacy short English
+    // value even when the course language was not English. Treat only that legacy
+    // short value as "no explicit project language"; a saved en_US remains explicit.
+    if (rawValue.toLowerCase() === 'en' && courseDefault !== 'en_US') {
+        return courseDefault;
+    }
+
+    return cstudioCanonicalProjectLocale(rawValue) || courseDefault;
+}
+
 function cstudioBuildProjectLanguageSelect(){
     var names = cstudioGetLanguageNames();
     var locales = cstudioGetAvailableProjectLocales();
@@ -10167,9 +10234,9 @@ function cstudioBuildProjectLanguageSelect(){
         return a.label.localeCompare(b.label);
     });
 
-    var select = '<select name="projectLangSelect" id="projectLangSelect" style="padding:5px;" class="projectLangSelect" >';
+    var select = '<select name="projectLangSelect" id="projectLangSelect" style="padding:5px;max-width:310px;" class="projectLangSelect" title="' + cstudioEscapeHtml(cstudioTranslateTerm('Language of the project')) + '" >';
     for (var j = 0; j < options.length; j++) {
-        select += '<option value="' + options[j].code + '">' + options[j].label + '</option>';
+        select += '<option value="' + cstudioEscapeHtml(options[j].code) + '">' + cstudioEscapeHtml(options[j].label) + '</option>';
     }
     select += '</select>';
 
@@ -10268,16 +10335,18 @@ function displayGlobalParams(){
         bdDiv += '<input style="position:relative;width:300px;padding:5px;" id="messageNoOk" type="text" value="" />';
         bdDiv += '</div>';
 
-        bdDiv += '<div style="position:relative;margin:15px;" >';
+        bdDiv += '<div class="cstudio-options-field-row" style="position:relative;margin:15px;" >';
         bdDiv += '<span>&nbsp;&nbsp;<span class="trd" >Language of the project</span>&nbsp;:&nbsp;</span>';
         bdDiv += cstudioBuildProjectLanguageSelect();
+        bdDiv += '<div class="cstudio-option-help trd" style="margin-left:20px;margin-top:6px;font-size:12px;line-height:1.4;color:#667085;">The project language is used by CStudio content and defaults to the course language.</div>';
         bdDiv += '</div>';
         
         if (modeUIeol=='a') {
             bdDiv += addCheckOptions('Option Accessibility Tools','I');
         }
-        if (cstudioShowExperimentalTabs) {
-            bdDiv += addCheckOptions('Automatic language translation','G');
+        bdDiv += addCheckOptions('Automatic language translation','G', 'Enables CStudio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.');
+        if (modeUIeol=='a') {
+            bdDiv += addCheckOptions('Progressive documents','D', 'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.');
         }
         
         bdDiv += '<div class="bottomSaveParamsBloc" >';
@@ -10299,7 +10368,6 @@ function displayGlobalParams(){
         bdDiv += addCheckOptions('Option full screen on video','F');
         bdDiv += addCheckOptions('Disable full menu page on start','M');
         if (modeUIeol=='a') {
-            bdDiv += addCheckOptions('Progressive documents','D');
             bdDiv += addCheckOptions('Thumbnail window at bottom of screen','S');
         }
         
@@ -10517,7 +10585,7 @@ function loadOptGlobal(){
     }
 
     var langLST = parseTexte(getObjD[3]);
-    cstudioSetProjectLanguageValue(langLST);
+    cstudioSetProjectLanguageValue(cstudioGetSavedOrDefaultProjectLanguage(langLST));
     
 }
 
@@ -10694,17 +10762,23 @@ function uploadGameOverImage() {
 
 }
 
-function addCheckOptions(label,code){
+function addCheckOptions(label,code,helpText){
 
-    var bdDiv = '<div style="position:relative;margin-left:20px;';
-    bdDiv += 'width:440px;margin-bottom:4px;" >';
-    bdDiv += '<label style="margin-top:1px;" class="el-switch el-switch-green" >';
+    var translatedHelp = helpText ? cstudioTranslateTerm(helpText) : '';
+    var bdDiv = '<div class="cstudio-option-check-row" style="position:relative;margin-left:20px;';
+    bdDiv += 'width:440px;margin-bottom:' + (helpText ? '10px' : '4px') + ';" >';
+    bdDiv += '<label style="margin-top:1px;" class="el-switch el-switch-green" title="' + cstudioEscapeHtml(translatedHelp || cstudioTranslateTerm(label)) + '" >';
     bdDiv += '<input id="checkbox'+code+'" type="checkbox" name="switch" >';
     bdDiv += '<span class="el-switch-style"></span>';
     bdDiv += '</label>';
     bdDiv += '<div class="margin-r trd" ';
-    bdDiv += ' style="position:absolute;left:50px;top:0px;padding:5px;" >';
+    bdDiv += ' style="position:absolute;left:50px;top:0px;padding:5px;" title="' + cstudioEscapeHtml(translatedHelp || cstudioTranslateTerm(label)) + '" >';
     bdDiv += '&nbsp;'+label+'</div>';
+    if (helpText) {
+        bdDiv += '<div class="cstudio-option-help" style="margin-left:50px;margin-top:25px;padding-right:8px;font-size:12px;line-height:1.4;color:#667085;">';
+        bdDiv += cstudioEscapeHtml(translatedHelp);
+        bdDiv += '</div>';
+    }
     bdDiv += '</div>';
 
     return bdDiv;

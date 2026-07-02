@@ -64,6 +64,7 @@ class learnpathItem
     public $prereq_alert = '';
     public $prereqs = [];
     public $previous;
+    public ?float $progressMeasure = null;
     public $prevent_reinit = 1; // 0 =  multiple attempts   1 = one attempt
     public $seriousgame_mode;
     public $ref;
@@ -1904,6 +1905,7 @@ class learnpathItem
     {
         if (0 == $this->prevent_reinit) {
             $this->current_score = 0;
+            $this->progressMeasure = null;
             $this->current_start_time = time();
             // In this case, as we are opening the item, what is important to us
             // is the database status, in order to know if this item has already
@@ -2729,6 +2731,7 @@ class learnpathItem
             $this->current_start_time = 0;
             $this->current_stop_time = 0;
             $this->current_data = '';
+            $this->progressMeasure = null;
             $this->status = $this->possible_status[0];
             $this->interactions_count = 0;
             $this->interactions = [];
@@ -2885,6 +2888,17 @@ class learnpathItem
 
                             break;
 
+                        case 'progress':
+                            $this->set_progress_measure($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting progress_measure to '.$value,
+                                    0
+                                );
+                            }
+
+                            break;
+
                         case 'interactions':
                             break;
 
@@ -2962,6 +2976,42 @@ class learnpathItem
         }
 
         return false;
+    }
+
+    public function get_progress_measure(): ?float
+    {
+        return $this->progressMeasure;
+    }
+
+    public function set_progress_measure($progressMeasure): bool
+    {
+        if (null === $progressMeasure || '' === $progressMeasure || 'undefined' === $progressMeasure) {
+            $this->progressMeasure = null;
+
+            return true;
+        }
+
+        if (!is_numeric($progressMeasure)) {
+            return false;
+        }
+
+        $progressMeasure = (float) $progressMeasure;
+        if ($progressMeasure < 0 || $progressMeasure > 1) {
+            return false;
+        }
+
+        $this->progressMeasure = $progressMeasure;
+
+        return true;
+    }
+
+    public function get_progress_measure_sql_value(): string
+    {
+        if (null === $this->progressMeasure) {
+            return 'NULL';
+        }
+
+        return (string) $this->progressMeasure;
     }
 
     /**
@@ -3083,6 +3133,9 @@ class learnpathItem
             $this->db_item_view_id = $row['iid'];
             $this->attempt_id = $row['view_count'];
             $this->current_score = $row['score'];
+            $this->progressMeasure = array_key_exists('progress', $row) && null !== $row['progress']
+                ? (float) $row['progress']
+                : null;
             $this->current_data = $row['suspend_data'];
             $this->view_max_score = $row['max_score'];
             $this->status = $row['status'];
@@ -3747,6 +3800,7 @@ class learnpathItem
                 'total_time' => $this->get_total_time(),
                 'start_time' => $this->current_start_time,
                 'score' => $this->get_score(),
+                'progress' => $this->get_progress_measure(),
                 'status' => $this->get_status(false),
                 'max_score' => $this->get_max(),
                 'lp_item_id' => $this->db_id,
@@ -3782,6 +3836,7 @@ class learnpathItem
                 'total_time' => $this->get_total_time(),
                 'start_time' => $this->current_start_time,
                 'score' => $this->get_score(),
+                'progress' => $this->get_progress_measure(),
                 'status' => $this->get_status(false),
                 'max_score' => $this->get_max(),
                 'lp_item_id' => $this->db_id,
@@ -3802,6 +3857,7 @@ class learnpathItem
                 'total_time' => $this->get_total_time(),
                 'start_time' => $this->get_current_start_time(),
                 'score' => $this->get_score(),
+                'progress' => $this->get_progress_measure(),
                 'status' => $this->get_status(false),
                 'max_score' => $this->get_max(),
                 'suspend_data' => $this->current_data,
@@ -3827,6 +3883,7 @@ class learnpathItem
                 // scorm_update_time has already updated total_time in DB via scorm_init_time
                 $sql = "UPDATE $itemViewTable SET
                             score = ".$this->get_score().",
+                            progress = ".$this->get_progress_measure_sql_value().",
                             $my_status
                             max_score = '".$this->get_max()."',
                             suspend_data = $suspendData,
@@ -3840,6 +3897,7 @@ class learnpathItem
                             $total_time
                             start_time = ".$this->get_current_start_time().',
                             score = '.$this->get_score().",
+                            progress = ".$this->get_progress_measure_sql_value().",
                             $my_status
                             max_score = '".$this->get_max()."',
                             suspend_data = $suspendData,

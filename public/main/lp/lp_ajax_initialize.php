@@ -72,6 +72,8 @@ function initializeItem($lpId, $user_id, $view_id, $next_item, $startTime = 0)
      * -suspend_data
      */
     $myscore = $mylpi->get_score();
+    $myProgressMeasure = $mylpi->get_progress_measure();
+    $myProgressMeasureJs = null === $myProgressMeasure ? 'null' : json_encode((float) $myProgressMeasure);
     $mymax = $mylpi->get_max();
     if ('' === $mymax) {
         $mymax = "''";
@@ -111,6 +113,9 @@ function initializeItem($lpId, $user_id, $view_id, $next_item, $startTime = 0)
     $myobjectives = json_encode($phpobjectives);
     $return .=
             "olms.score=".$myscore.";".
+            "olms.progress_measure=".$myProgressMeasureJs.";".
+            "if (olms.lms_item_progress_measures) { olms.lms_item_progress_measures['i".$next_item."'] = ".$myProgressMeasureJs."; }".
+            "if (olms.lms_item_statuses) { olms.lms_item_statuses['i".$next_item."'] = '".$mylesson_status."'; }".
             "olms.max=".$mymax.";".
             "olms.min=".$mymin.";".
             "olms.lesson_status='".$mylesson_status."';".

@@ -1169,6 +1169,125 @@ class learnpath
     }
 
     /**
+     * Gets the IDs of items to count when calculating SCORM 2004 progress_measure.
+     * SCORM 2004 progress_measure applies to SCOs, so SCO items are preferred.
+     * If a package does not expose SCO types correctly, fall back to the existing
+     * non-chapter item count to avoid returning an empty denominator.
+     *
+     * @return int[]
+     */
+    private function getScormProgressMeasureItemIds(): array
+    {
+        $scoItemIds = [];
+        $fallbackItemIds = [];
+        $typeListNotToCount = self::getChapterTypes();
+
+        foreach ($this->ordered_items as $itemId) {
+            if (empty($itemId) || empty($this->items[$itemId]) || !is_object($this->items[$itemId])) {
+                continue;
+            }
+
+            $itemType = $this->items[$itemId]->get_type();
+            if (!in_array($itemType, $typeListNotToCount)) {
+                $fallbackItemIds[] = (int) $itemId;
+            }
+
+            if ('sco' === $itemType) {
+                $scoItemIds[] = (int) $itemId;
+            }
+        }
+
+        return !empty($scoItemIds) ? $scoItemIds : $fallbackItemIds;
+    }
+
+    public function getScormProgressMeasureBarValues(string $mode = '%'): ?array
+    {
+        if (CLp::SCORM_TYPE !== (int) $this->get_type()) {
+            return null;
+        }
+
+        $itemIds = $this->getScormProgressMeasureItemIds();
+        $totalItems = count($itemIds);
+        if (0 === $totalItems) {
+            return null;
+        }
+
+        $completedStatuses = [
+            'completed',
+            'passed',
+            'succeeded',
+            'browsed',
+            'failed',
+        ];
+
+        $hasProgressMeasure = false;
+        $progressSum = 0.0;
+
+        foreach ($itemIds as $itemId) {
+            $item = $this->items[$itemId];
+            $progressMeasure = $item->get_progress_measure();
+            if (null !== $progressMeasure) {
+                $hasProgressMeasure = true;
+                $progressSum += max(0.0, min(1.0, (float) $progressMeasure));
+
+                continue;
+            }
+
+            $status = (string) $item->get_status(false);
+            if (in_array($status, $completedStatuses, true)) {
+                $progressSum += 1.0;
+            }
+        }
+
+        if (!$hasProgressMeasure) {
+            return null;
+        }
+
+        if ('abs' === $mode) {
+            return [
+                round($progressSum, 2),
+                '/'.$totalItems,
+            ];
+        }
+
+        return [
+            number_format(($progressSum / $totalItems) * 100, 0),
+            '%',
+        ];
+    }
+
+    public function get_items_progress_measure_as_js($varname = 'olms.lms_item_progress_measures'): string
+    {
+        $toc = $varname.' = new Array();';
+        foreach ($this->ordered_items as $itemId) {
+            if (empty($itemId) || empty($this->items[$itemId]) || !is_object($this->items[$itemId])) {
+                continue;
+            }
+
+            $progressMeasure = $this->items[$itemId]->get_progress_measure();
+            $toc .= null === $progressMeasure
+                ? $varname."['i$itemId'] = null;"
+                : $varname."['i$itemId'] = ".json_encode((float) $progressMeasure).';';
+        }
+
+        return $toc;
+    }
+
+    public function get_items_status_as_js($varname = 'olms.lms_item_statuses'): string
+    {
+        $toc = $varname.' = new Array();';
+        foreach ($this->ordered_items as $itemId) {
+            if (empty($itemId) || empty($this->items[$itemId]) || !is_object($this->items[$itemId])) {
+                continue;
+            }
+
+            $toc .= $varname."['i$itemId'] = ".json_encode((string) $this->items[$itemId]->get_status(false)).';';
+        }
+
+        return $toc;
+    }
+
+    /**
      * Gets the total number of items available for viewing in this SCORM but without chapters.
      *
      * @return int The total no-chapters number of items
@@ -2180,6 +2299,16 @@ class learnpath
                 return [$percentage, $text];
             }
         }
+        $scormProgress = $this->getScormProgressMeasureBarValues($mode);
+        if (null !== $scormProgress) {
+            return $scormProgress;
+        }
+
+        $scormProgress = $this->getScormProgressMeasureBarValues($mode);
+        if (null !== $scormProgress) {
+            return $scormProgress;
+        }
+
         // otherwise just continue the normal processing of progress
         $total_items = $this->getTotalItemsCountWithoutDirs();
         $completeItems = $this->get_complete_items_count();

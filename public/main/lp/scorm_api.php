@@ -112,6 +112,10 @@ function APIobject() {
 // SCORM
 var API = new APIobject(); //for scorm 1.2
 var api = API;
+// SCORM 2004 content looks for API_1484_11 in the parent frames.
+// Keep the same backend implementation while exposing the standard object name.
+var API_1484_11 = API;
+var api_1484_11 = API_1484_11;
 // SCORM-specific Error codes
 var G_NoError = 0;
 var G_GeneralException = 101;
@@ -163,6 +167,7 @@ olms.scorm_variables = new Array(
     'cmi.completion_status',
     'cmi.core.session_time',
     'cmi.score.scaled',
+    'cmi.progress_measure',
     'cmi.success_status',
     'cmi.suspend_data',
     'cmi.core.exit',
@@ -179,6 +184,7 @@ olms.finishSignalReceived = 0;
 olms.statusSignalReceived = 0;
 // Strictly scorm variables
 olms.score=<?php echo $oItem->get_score(); ?>;
+olms.progress_measure = <?php echo json_encode($oItem->get_progress_measure()); ?>;
 olms.max='<?php echo $oItem->get_max(); ?>';
 olms.min='<?php echo $oItem->get_min(); ?>';
 olms.lesson_status='<?php echo $oItem->get_status(); ?>';
@@ -221,6 +227,8 @@ olms.lms_course_id = '<?php echo $oLP->get_course_int_id(); ?>';
 olms.lms_session_id = '<?php echo api_get_session_id(); ?>';
 olms.lms_course_code = '<?php echo api_get_course_id(); ?>';
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types'); ?>
+<?php echo $oLP->get_items_status_as_js('olms.lms_item_statuses'); ?>
+<?php echo $oLP->get_items_progress_measure_as_js('olms.lms_item_progress_measures'); ?>
 
 // Following definition of cmi.core.score.raw in SCORM 1.2, "LMS should
 // initialize this to an empty string ("") upon initial launch of a SCO. The
@@ -670,6 +678,8 @@ function LMSGetValue(param) {
     } else if(param=='cmi.student_demographics.last_name') {
         result=olms.userlname;
         // ---- cmi.core._children
+    } else if(param == 'cmi._children'){
+        result = 'completion_status,success_status,progress_measure,score,suspend_data,launch_data,learner_id,learner_name';
     } else if(param=='cmi.core._children' || param=='cmi.core_children'){
         result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
     } else if(param == 'cmi.core.entry'){
@@ -688,8 +698,8 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.session_time'){
         result='';
         olms.G_LastError = G_ElementIsWriteOnly;
-    } else if(param == 'cmi.core.lesson_status'){
-        // ---- cmi.core.lesson_status
+    } else if(param == 'cmi.core.lesson_status' || param == 'cmi.completion_status'){
+        // ---- cmi.core.lesson_status / cmi.completion_status
         if (olms.lesson_status != '') {
             result = olms.lesson_status;
         } else {
@@ -722,6 +732,11 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.score.min'){
         // ---- cmi.core.score.min
         result=olms.min;
+    } else if(param == 'cmi.progress_measure'){
+        // ---- cmi.progress_measure (SCORM 2004 partial support)
+        result = (olms.progress_measure === null || typeof olms.progress_measure === 'undefined')
+            ? ''
+            : '' + olms.progress_measure;
     } else if(param == 'cmi.core.score'){
         // ---- cmi.core.score -- non-standard item, provided as cmi.core.score.raw just in case
         result=olms.score;
@@ -893,12 +908,20 @@ function LMSSetValue(param, val) {
         return_value = 'true';
     } else if ( param == "cmi.core.lesson_status" ) {
         olms.lesson_status = val;
+        if (olms.lms_item_statuses) {
+            olms.lms_item_statuses['i' + olms.lms_item_id] = val;
+        }
         olms.updatable_vars_list['cmi.core.lesson_status'] = true;
         olms.statusSignalReceived = 1;
+        update_scorm_progress_measure_bar();
         return_value='true';
     } else if ( param == "cmi.completion_status" ) {
         olms.lesson_status = val;
+        if (olms.lms_item_statuses) {
+            olms.lms_item_statuses['i' + olms.lms_item_id] = val;
+        }
         olms.updatable_vars_list['cmi.completion_status']=true;
+        update_scorm_progress_measure_bar();
         return_value='true'; //1.3
     } else if ( param == "cmi.core.session_time" ) {
         olms.session_time = val;
@@ -911,6 +934,21 @@ function LMSSetValue(param, val) {
             return_value='true';
         } else {
             return_value='false';
+        }
+    } else if ( param == "cmi.progress_measure" ) {
+        var progressMeasure = parseFloat(val);
+        if (!isNaN(progressMeasure) && progressMeasure >= 0 && progressMeasure <= 1) {
+            olms.progress_measure = progressMeasure;
+            olms.updatable_vars_list['cmi.progress_measure'] = true;
+            if (olms.lms_item_progress_measures) {
+                olms.lms_item_progress_measures['i' + olms.lms_item_id] = progressMeasure;
+            }
+            update_scorm_progress_measure_bar();
+            return_value = 'true';
+        } else {
+            olms.G_LastError = G_IncorrectDataType;
+            olms.G_LastErrorString = G_IncorrectDataTypeMessage;
+            return_value = 'false';
         }
     } else if ( param == "cmi.success_status" ) {
         success_status = val;
@@ -1634,6 +1672,55 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
     return true;
 }
 
+function is_scorm_progress_completed_status(status) {
+    return status == 'completed' ||
+        status == 'passed' ||
+        status == 'succeeded' ||
+        status == 'browsed' ||
+        status == 'failed';
+}
+
+function update_scorm_progress_measure_bar() {
+    if (!olms.lms_item_types || !olms.lms_item_progress_measures) {
+        return false;
+    }
+
+    var total = 0;
+    var progress = 0;
+    var hasProgressMeasure = false;
+
+    for (var itemKey in olms.lms_item_types) {
+        if (!Object.prototype.hasOwnProperty.call(olms.lms_item_types, itemKey)) {
+            continue;
+        }
+
+        if (olms.lms_item_types[itemKey] != 'sco') {
+            continue;
+        }
+
+        total++;
+        var progressMeasure = parseFloat(olms.lms_item_progress_measures[itemKey]);
+        if (!isNaN(progressMeasure)) {
+            hasProgressMeasure = true;
+            progress += Math.max(0, Math.min(1, progressMeasure));
+            continue;
+        }
+
+        var itemStatus = olms.lms_item_statuses ? olms.lms_item_statuses[itemKey] : '';
+        if (is_scorm_progress_completed_status(itemStatus)) {
+            progress += 1;
+        }
+    }
+
+    if (!hasProgressMeasure || total == 0) {
+        return false;
+    }
+
+    update_progress_bar(progress, total, '%');
+
+    return true;
+}
+
 /**
  * Update the gamification values (number of stars and score)
  */
@@ -2135,6 +2222,8 @@ function xajax_save_item_scorm(
             params += '&loc='+olms.lesson_location;
         } else if (my_scorm_values[k]=='cmi.completion_status') {
         } else if (my_scorm_values[k]=='cmi.score.scaled') {
+        } else if (my_scorm_values[k]=='cmi.progress_measure') {
+            params += '&progress='+olms.progress_measure;
         } else if (my_scorm_values[k]=='cmi.suspend_data') {
             // params += '&suspend='+olms.suspend_data;
             // Fixes error when scorm sends text with "+" sign

@@ -25,6 +25,7 @@ class ScormApi
      * @param string $location             Lesson location
      * @param array  $interactions         Interactions array
      * @param string $core_exit            Core exit SCORM string
+     * @param float|null $progress          SCORM 2004 cmi.progress_measure
      * @param int    $sessionId            Session ID
      * @param int    $courseId             Course ID
      * @param int    $lmsFinish            Whether the call was issued from SCORM's LMSFinish()
@@ -49,6 +50,7 @@ class ScormApi
         $location = '',
         $interactions = [],
         $core_exit = 'none',
+        $progress = null,
         $sessionId = null,
         $courseId = null,
         $lmsFinish = 0,
@@ -69,7 +71,7 @@ class ScormApi
             error_log('--------------------------------------');
             error_log("item_id: $item_id - lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
             error_log("SCORE: $score - max:$max - min: $min - status:$status");
-            error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit");
+            error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit - progress: $progress");
             error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
             error_log("courseId: $courseId");
         }
@@ -152,6 +154,10 @@ class ScormApi
                 if ($debug > 1) {
                     error_log('Score not updated');
                 }
+            }
+
+            if (null !== $progress && '' !== $progress && 'undefined' !== $progress) {
+                $myLPI->set_progress_measure($progress);
             }
 
             $statusIsSet = false;
@@ -482,6 +488,10 @@ class ScormApi
             // If this object's JS status has not been updated by the SCORM API, update now.
             $return .= "olms.lesson_status='".$myStatus."';";
         }
+        $return .= "if (olms.lms_item_statuses) { olms.lms_item_statuses['i".$item_id."'] = '".$myStatus."'; }";
+        $progressMeasure = $myLPI->get_progress_measure();
+        $progressMeasureJs = null === $progressMeasure ? 'null' : json_encode((float) $progressMeasure);
+        $return .= "if (olms.lms_item_progress_measures) { olms.lms_item_progress_measures['i".$item_id."'] = ".$progressMeasureJs."; }";
         $return .= "if (typeof update_toc === 'function') { try { update_toc('".$myStatus."','".$item_id."'); } catch (e) {} }";
         $update_list = $myLP->get_update_queue();
 
@@ -502,6 +512,13 @@ class ScormApi
                     $maxScore = $myLPI->get_max();
                     $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
                 }
+                $progressBarSpecial = true;
+            }
+        }
+        if (!$progressBarSpecial) {
+            $scormProgress = $myLP->getScormProgressMeasureBarValues($myProgressMode);
+            if (null !== $scormProgress) {
+                $return .= "update_progress_bar('{$scormProgress[0]}', '100', '%');";
                 $progressBarSpecial = true;
             }
         }
@@ -715,6 +732,8 @@ class ScormApi
          * -suspend_data
          */
         $myscore = $mylpi->get_score();
+        $myProgressMeasure = $mylpi->get_progress_measure();
+        $myProgressMeasureJs = null === $myProgressMeasure ? 'null' : json_encode((float) $myProgressMeasure);
         $mymax = $mylpi->get_max();
         if ('' === $mymax) {
             $mymax = "''";
@@ -758,6 +777,9 @@ class ScormApi
          */
         $return .=
             "olms.score=".$myscore.";".
+            "olms.progress_measure=".$myProgressMeasureJs.";".
+            "if (olms.lms_item_progress_measures) { olms.lms_item_progress_measures['i".$new_item_id."'] = ".$myProgressMeasureJs."; }".
+            "if (olms.lms_item_statuses) { olms.lms_item_statuses['i".$new_item_id."'] = '".$mylesson_status."'; }".
             "olms.max=".$mymax.";".
             "olms.min=".$mymin.";".
             "olms.lesson_status='".$mylesson_status."';".
@@ -864,7 +886,14 @@ class ScormApi
                     update_toc('$mylesson_status','".$new_item_id."');
                 } catch (e) {}
             }
-            update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');
+            ";
+        $scormProgress = $mylp->getScormProgressMeasureBarValues($myprogress_mode);
+        if (null !== $scormProgress) {
+            $return .= "update_progress_bar('{$scormProgress[0]}', '100', '%');";
+        } else {
+            $return .= "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+        }
+        $return .= "
             $updateMinTime"
         ;
 

@@ -46,6 +46,7 @@ $result = ScormApi::saveItem(
     $_REQUEST['loc'] ?? null,
     $interactions,
     $_REQUEST['core_exit'] ?? '',
+    $_REQUEST['progress'] ?? null,
     !empty($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null,
     !empty($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : null,
     empty($_REQUEST['finish']) ? 0 : 1,

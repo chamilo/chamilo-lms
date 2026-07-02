@@ -35,6 +35,9 @@ function initializeCStudioLpTools() {
     }
 
     startCStudioLpRouteWatcher();
+    cstudioPolishLearningPathListMenuLabel();
+    setTimeout(cstudioPolishLearningPathListMenuLabel, 300);
+    setTimeout(cstudioPolishLearningPathListMenuLabel, 900);
 
     setTimeout(function(){processExtraPour();},100);
 }
@@ -111,6 +114,7 @@ function refreshCStudioLpToolsForCurrentRoute() {
         }
 
         hideCStudioPreviewLpNavigationControls();
+        cstudioPolishLearningPathListMenuLabel();
 
         return;
     }
@@ -118,6 +122,7 @@ function refreshCStudioLpToolsForCurrentRoute() {
     lastCStudioLpRouteState = nextState;
     cstudioProcessTeachdocIds(currentTeachdocLstIdsForCStudio);
     hideCStudioPreviewLpNavigationControls();
+    cstudioPolishLearningPathListMenuLabel();
 }
 
 function cstudioProcessTeachdocIds(teachdocLstIds) {
@@ -201,7 +206,33 @@ function cstudioGetPreviewLpId() {
 
 function cstudioTranslateUiLabel(label) {
     if (typeof window.returnTradTerm === 'function') {
-        return window.returnTradTerm(label);
+        var translatedLabel = window.returnTradTerm(label);
+        if (translatedLabel !== label) {
+            return translatedLabel;
+        }
+    }
+
+    var locale = String((window.langselectUI || document.documentElement.lang || navigator.language || 'en_US')).replace('-', '_');
+    var baseLocale = locale.split('_')[0];
+    var fallbackTranslations = {
+        fr: {
+            'Learning paths list': 'Liste des parcours',
+            'Opening CStudio editor...': 'Ouverture de l’éditeur CStudio...',
+            'Back': 'Retour'
+        },
+        es: {
+            'Learning paths list': 'Lista de lecciones',
+            'Opening CStudio editor...': 'Abriendo el editor CStudio...',
+            'Back': 'Volver'
+        }
+    };
+
+    if (fallbackTranslations[locale] && fallbackTranslations[locale][label]) {
+        return fallbackTranslations[locale][label];
+    }
+
+    if (fallbackTranslations[baseLocale] && fallbackTranslations[baseLocale][label]) {
+        return fallbackTranslations[baseLocale][label];
     }
 
     return label;
@@ -257,6 +288,113 @@ function removeCStudioEditorButtons() {
     $('#cstudio-lp-create-button').remove();
 }
 
+function cstudioBuildLearningPathListUrl() {
+    var cidQueryParams = getChamiloCidQueryParamsForCStudio();
+    var href = '/main/lp/lp_controller.php';
+
+    if (cidQueryParams !== '') {
+        href += '?' + cidQueryParams;
+    }
+
+    return href;
+}
+
+function cstudioSetSingleLearningPathListLabel($element, label) {
+    var lowerLabel = label.toLowerCase();
+    var labelWritten = false;
+
+    $element.find('.cstudio-lp-list-label').remove();
+
+    $element.contents().each(function () {
+        if (this.nodeType === 3) {
+            var value = String(this.nodeValue || '').replace(/\s+/g, ' ').trim();
+
+            if (value === '') {
+                return;
+            }
+
+            if (!labelWritten) {
+                this.nodeValue = ' ' + label;
+                labelWritten = true;
+                return;
+            }
+
+            this.nodeValue = '';
+            return;
+        }
+
+        if (this.nodeType !== 1) {
+            return;
+        }
+
+        var $child = $(this);
+
+        if ($child.is('i,svg,img') || $child.hasClass('mdi') || $child.hasClass('fa')) {
+            return;
+        }
+
+        if ($child.hasClass('sr-only') || $child.hasClass('visually-hidden')) {
+            $child.remove();
+            return;
+        }
+
+        var childText = $child.text().replace(/\s+/g, ' ').trim();
+
+        if (childText === '') {
+            return;
+        }
+
+        if (!labelWritten) {
+            $child.text(label);
+            labelWritten = true;
+            return;
+        }
+
+        if (childText.toLowerCase() === lowerLabel) {
+            $child.remove();
+        }
+    });
+
+    if (!labelWritten) {
+        $('<span/>', {
+            'class': 'cstudio-lp-list-label',
+            text: label
+        }).appendTo($element);
+    }
+}
+
+function cstudioPolishLearningPathListMenuLabel() {
+    if (window.location.pathname.indexOf('/main/lp/lp_controller.php') === -1) {
+        return;
+    }
+
+    var label = cstudioTranslateUiLabel('Learning paths list');
+    var listUrl = cstudioBuildLearningPathListUrl();
+    var selectors = [
+        '#navTabBar a[href*="action=return_to_course_homepage"][href*="redirectTo=lp_list"]',
+        '#navTabBar a[href*="action=return_to_course_homepage"][href*="redirectTo=course_home"]',
+        '.nav-tabs-bar a[href*="action=return_to_course_homepage"][href*="redirectTo=lp_list"]',
+        '.nav-tabs-bar a[href*="action=return_to_course_homepage"][href*="redirectTo=course_home"]',
+        '[data-lp-menu] a[href*="action=return_to_course_homepage"][href*="redirectTo=lp_list"]',
+        '[data-lp-menu] a[href*="action=return_to_course_homepage"][href*="redirectTo=course_home"]',
+        'a[href*="action=return_to_course_homepage"][href*="redirectTo=lp_list"]',
+        'button[data-action="return_to_course_homepage"][data-redirect-to="lp_list"]'
+    ];
+
+    $(selectors.join(',')).each(function () {
+        var $element = $(this);
+        var href = String($element.attr('href') || '');
+
+        if (href.indexOf('redirectTo=course_home') !== -1) {
+            $element.attr('href', listUrl);
+        }
+
+        $element.attr('title', label);
+        $element.attr('aria-label', label);
+
+        cstudioSetSingleLearningPathListLabel($element, label);
+    });
+}
 
 function hideCStudioPreviewLpNavigationControls() {
     if (!cstudioShouldHideLearningPathNavigation()) {

@@ -77,7 +77,9 @@ function cstudioNormalizeVisibleTerm(term) {
         'Import ...': 'Import...',
         'Export Project': 'Export project',
         'Import Project': 'Import project',
-        'Export to xApi Package': 'Export to xAPI package',
+        'Export to xApi Package': 'Create an xAPI package',
+        'Export to xAPI package': 'Create an xAPI package',
+        'Publish to the web': 'Create a web page',
         'Free page': 'Free access page',
         'Save context game and exercise resolutions': 'Save game context and resolved exercises',
         'White-quizz': 'White quiz',
@@ -86,6 +88,50 @@ function cstudioNormalizeVisibleTerm(term) {
     };
 
     return replacements[normalizedTerm] || term;
+}
+
+function cstudioGetFallbackTranslatedTerm(term) {
+    var normalizedTerm = String(term || '').replace(/\s+/g, ' ').trim();
+    var locale = String((typeof langselectUI !== 'undefined' ? langselectUI : 'en_US') || 'en_US').replace('-', '_');
+    var baseLocale = locale.split('_')[0];
+    var fallbackTranslations = {
+        fr: {
+            'UI language': 'Langue de l’interface',
+            'Export...': 'Exporter...',
+            'Import...': 'Importer...',
+            'Glossary': 'Glossaire',
+            'Help and pro services': 'Aide et services professionnels',
+            'Create an xAPI package': 'Créer un paquet xAPI',
+            'Create a web page': 'Créer une page web',
+            'Learning paths list': 'Liste des parcours',
+            'Clean data': 'Nettoyer les traces',
+            'Create a browser-friendly web page that can be opened outside the CStudio editor.': 'Crée une page web consultable dans un navigateur en dehors de l’éditeur CStudio.',
+            'Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.': 'Nettoie les traces de progression enregistrées pour cet apprenant dans ce parcours CStudio. Cela ne supprime pas les pages ni le contenu du projet.'
+        },
+        es: {
+            'UI language': 'Idioma de la interfaz',
+            'Export...': 'Exportar...',
+            'Import...': 'Importar...',
+            'Glossary': 'Glosario',
+            'Help and pro services': 'Ayuda y servicios profesionales',
+            'Create an xAPI package': 'Crear un paquete xAPI',
+            'Create a web page': 'Crear una página web',
+            'Learning paths list': 'Lista de lecciones',
+            'Clean data': 'Limpiar trazas',
+            'Create a browser-friendly web page that can be opened outside the CStudio editor.': 'Crea una página web compatible con navegador que se puede abrir fuera del editor CStudio.',
+            'Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.': 'Limpia las trazas de progreso guardadas del alumno para esta lección CStudio. No elimina páginas ni contenido del proyecto.'
+        }
+    };
+
+    if (fallbackTranslations[locale] && fallbackTranslations[locale][normalizedTerm]) {
+        return fallbackTranslations[locale][normalizedTerm];
+    }
+
+    if (fallbackTranslations[baseLocale] && fallbackTranslations[baseLocale][normalizedTerm]) {
+        return fallbackTranslations[baseLocale][normalizedTerm];
+    }
+
+    return term;
 }
 
 function cstudioTranslateTerm(term) {
@@ -103,6 +149,11 @@ function cstudioTranslateTerm(term) {
                 return translatedTerm;
             }
         }
+    }
+
+    var fallbackTranslatedTerm = cstudioGetFallbackTranslatedTerm(normalizedTerm);
+    if (fallbackTranslatedTerm !== normalizedTerm) {
+        return fallbackTranslatedTerm;
     }
 
     return normalizedTerm;
@@ -1569,10 +1620,10 @@ function getMenuTop(){
 	if (modeUIeol=='a') { // alpha version
 		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displayExportToPdf();" >Export to PDF</div>';
 	}
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportXapi();" >Export to xAPI package</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportXapi();" >Create an xAPI package</div>';
 	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportProject();" >Export project</div>';
 	if (modeUIeol=='a') {// alpha version
-		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubToTheWeb();" >Publish to the web</div>';
+		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubToTheWeb();" >Create a web page</div>';
 	}
 	h += '</div>';
 	
@@ -8939,7 +8990,7 @@ function getListUpdate(){
     b += "<ul>";
     b += '<li>New avatar image in littledialog</li>';
     b += '<li>New option Custom Display for a page</li>';
-    b += '<li>Make your content visible to anyone by publishing it to the web.</li>';
+    b += '<li>Create a browser-friendly web page that can be opened outside the CStudio editor.</li>';
     b += '<li>You can link to or embed your document.</li>';
     b += '<li>Accept pptx , odp and otp files in download action</li>';
     b += "</ul>";
@@ -9275,7 +9326,7 @@ function displaySubExportXapi(){
 		var bdDiv = '<div id="pageEditExportXapi" class="gjs-mdl-container" >';
 		bdDiv += '<div class="gjs-mdl-dialog-v2 gjs-one-bg gjs-two-color" style="max-width:575px;" >';
 		bdDiv += '<div class="gjs-mdl-header">';
-		bdDiv += '<div class="gjs-mdl-title trd ">Export to xApi package</div>';
+		bdDiv += '<div class="gjs-mdl-title trd ">Create an xAPI package</div>';
 		bdDiv += '<div class="gjs-mdl-btn-close" onClick="closeAllEditWindows();processScoExport=false;" data-close-modal="">⨯</div>';
 		bdDiv += '</div>';
 		
@@ -9553,14 +9604,14 @@ function displaySubToTheWeb(){
 		var bdDiv = '<div id="pageEditToTheWeb" class="gjs-mdl-container" >';
 		bdDiv += '<div class="gjs-mdl-dialog-v2 gjs-one-bg gjs-two-color" style="max-width:650px;" >';
 		bdDiv += '<div class="gjs-mdl-header">';
-		bdDiv += '<div class="gjs-mdl-title trd ">Publish to the web</div>';
+		bdDiv += '<div class="gjs-mdl-title trd ">Create a web page</div>';
 		bdDiv += '<div class="gjs-mdl-btn-close" onClick="closeAllEditWindows();processScoExport=false;" data-close-modal="">⨯</div>';
 		bdDiv += '</div>';
 		
 		bdDiv += '<div class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;font-size:16px;" >';
 
-		bdDiv += '<p class="trd" style="text-align:center;" >Make your content visible to anyone by publishing it to the web.</p>';
+		bdDiv += '<p class="trd" style="text-align:center;" >Create a browser-friendly web page that can be opened outside the CStudio editor.</p>';
 		
 		bdDiv += '<div class="progressExport progressExport3" style="display:none;" ><div class="pourcentExport" ></div></div>';
 		bdDiv += '<div class="logMsgLoadSco" ><br/></div>';

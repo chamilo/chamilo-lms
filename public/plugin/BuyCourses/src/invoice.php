@@ -229,7 +229,7 @@ $htmlText .= Display::table($header, $data, $attr);
 if ($hasVatData) {
     $htmlText .= '<br><h3>'.buycourses_invoice_label($plugin, 'FiscalInformation', 'Fiscal information').'</h3>';
     $htmlText .= '<table width="100%" class="table table-hover table-striped data_table">';
-    $htmlText .= '<tr><td><b>'.buycourses_invoice_label($plugin, 'VatTreatment', 'VAT treatment').'</b></td><td>'.buycourses_invoice_escape($vatTreatment).'</td></tr>';
+    //$htmlText .= '<tr><td><b>'.buycourses_invoice_label($plugin, 'VatTreatment', 'VAT treatment').'</b></td><td>'.buycourses_invoice_escape($vatTreatment).'</td></tr>';
     $htmlText .= '<tr><td><b>'.buycourses_invoice_label($plugin, 'VatRate', 'VAT rate').'</b></td><td>'.number_format($taxRate, 2).'%</td></tr>';
     $htmlText .= '<tr><td><b>'.buycourses_invoice_label($plugin, 'BuyerVatNumber', 'Buyer VAT number').'</b></td><td>'.buycourses_invoice_escape($buyerVatNumber).'</td></tr>';
     $htmlText .= '<tr><td><b>'.buycourses_invoice_label($plugin, 'BuyerVatValidation', 'Buyer VAT validation').'</b></td><td>'.buycourses_invoice_yes_no(isset($infoSale['buyer_vat_valid']) ? (null === $infoSale['buyer_vat_valid'] ? null : (int) $infoSale['buyer_vat_valid']) : null).'</td></tr>';

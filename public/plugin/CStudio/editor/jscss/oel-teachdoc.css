@@ -4505,3 +4505,34 @@ z-index : 10014;
 .teachdocbtnteach {
   cursor: pointer;
 }
+
+
+/* Keep the CStudio Quiz block visible and easy to find in the block panel. */
+.gjs-block.cstudio-quiz-block {
+  display: block !important;
+}
+
+.gjs-block.cstudio-quiz-block .gjs-block-label {
+  display: block !important;
+}
+
+/* Keep the first and last blocks reachable inside the GrapesJS block sidebar. */
+.gjs-pn-views-container {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+.gjs-pn-views-container .gjs-blocks-c,
+.gjs-pn-views-container .gjs-blocks-cs,
+.gjs-blocks-c,
+.gjs-blocks-cs {
+  box-sizing: border-box;
+  padding-top: 16px !important;
+  padding-bottom: 72px !important;
+  scroll-padding-top: 16px;
+  scroll-padding-bottom: 72px;
+}
+
+.gjs-pn-views-container .gjs-block {
+  flex-shrink: 0;
+}

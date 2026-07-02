@@ -37,6 +37,7 @@ $(document).ready(function(){
         cstudioHideExperimentalEditorOptions();
         cstudioCenterColorsWindow();
         cstudioPolishMediaAndButtonBlocks();
+        cstudioEnsureQuizBlockVisible();
         cstudioStartEditorUiEnhancements();
 	},200);
 
@@ -179,6 +180,7 @@ function cstudioStartEditorUiEnhancements() {
         cstudioHideExperimentalEditorOptions();
         cstudioCenterColorsWindow();
         cstudioPolishMediaAndButtonBlocks();
+        cstudioEnsureQuizBlockVisible();
         attempts++;
         if (attempts > 20) {
             clearInterval(interval);
@@ -205,6 +207,49 @@ function cstudioFindBlockByLabel(label) {
 
 function cstudioHideBlockByLabel(label) {
     cstudioFindBlockByLabel(label).hide().attr('aria-hidden', 'true');
+}
+
+function cstudioEnsureQuizBlockVisible() {
+    var quizBlocks = cstudioFindBlockByLabel('Quiz');
+
+    if (quizBlocks.length === 0) {
+        quizBlocks = $('.gjs-block').filter(function () {
+            var block = $(this);
+            var labelText = $.trim(block.find('.gjs-block-label').first().text()).toLowerCase();
+            var titleText = $.trim(String(block.attr('title') || '')).toLowerCase();
+            var html = String(block.html() || '').toLowerCase();
+
+            return labelText === 'quiz'
+                || titleText === 'quiz'
+                || html.indexOf('icon-cmq') !== -1
+                || html.indexOf('qcm') !== -1;
+        });
+    }
+
+    quizBlocks
+        .show()
+        .removeAttr('aria-hidden')
+        .addClass('cstudio-quiz-block')
+        .attr('title', cstudioTranslateTerm('Quiz'))
+        .attr('aria-label', cstudioTranslateTerm('Quiz'));
+
+    quizBlocks.find('.gjs-block-label').first().text(cstudioTranslateTerm('Quiz')).show();
+
+    var referenceBlock = cstudioFindBlockByLabel('Card').last();
+
+    if (referenceBlock.length === 0) {
+        referenceBlock = cstudioFindBlockByLabel('Button').last();
+    }
+
+    if (referenceBlock.length > 0 && quizBlocks.length > 0) {
+        quizBlocks.each(function () {
+            var block = $(this);
+
+            if (block.index() > referenceBlock.index() + 1) {
+                block.insertAfter(referenceBlock);
+            }
+        });
+    }
 }
 
 function cstudioPolishMediaAndButtonBlocks() {

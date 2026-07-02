@@ -3416,6 +3416,30 @@ class learnpathItem
                             error_log('Now calling to scorm_update_time()');
                         }
                         $this->scorm_update_time($totalSec);
+                    } elseif (preg_match(
+                        '/^P(?:(\d+(?:\.\d+)?)Y)?(?:(\d+(?:\.\d+)?)M)?(?:(\d+(?:\.\d+)?)D)?(?:T(?:(\d+(?:\.\d+)?)H)?(?:(\d+(?:\.\d+)?)M)?(?:(\d+(?:\.\d+)?)S)?)?$/i',
+                        $scorm_time,
+                        $res
+                    )) {
+                        $year = isset($res[1]) && '' !== $res[1] ? (float) $res[1] : 0.0;
+                        $month = isset($res[2]) && '' !== $res[2] ? (float) $res[2] : 0.0;
+                        $day = isset($res[3]) && '' !== $res[3] ? (float) $res[3] : 0.0;
+                        $hour = isset($res[4]) && '' !== $res[4] ? (float) $res[4] : 0.0;
+                        $min = isset($res[5]) && '' !== $res[5] ? (float) $res[5] : 0.0;
+                        $sec = isset($res[6]) && '' !== $res[6] ? (float) $res[6] : 0.0;
+                        $totalSec = (int) round(
+                            ($year * 31557600)
+                            + ($month * 2629800)
+                            + ($day * 86400)
+                            + ($hour * 3600)
+                            + ($min * 60)
+                            + $sec
+                        );
+                        if ($debug) {
+                            error_log("SCORM 2004 totalSec : $totalSec");
+                            error_log('Now calling to scorm_update_time()');
+                        }
+                        $this->scorm_update_time($totalSec);
                     }
 
                     break;

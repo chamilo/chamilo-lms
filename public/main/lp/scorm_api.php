@@ -160,17 +160,23 @@ olms.commit = false;
 // informative array helping to select variables to save, later on
 olms.scorm_variables = new Array(
     'cmi.core.score.raw',
+    'cmi.score.raw',
     'cmi.core.score.max',
+    'cmi.score.max',
     'cmi.core.score.min',
+    'cmi.score.min',
     'cmi.core.lesson_location',
+    'cmi.location',
     'cmi.core.lesson_status',
     'cmi.completion_status',
     'cmi.core.session_time',
+    'cmi.session_time',
     'cmi.score.scaled',
     'cmi.progress_measure',
     'cmi.success_status',
     'cmi.suspend_data',
     'cmi.core.exit',
+    'cmi.exit',
     'interactions'
 );
 
@@ -185,6 +191,8 @@ olms.statusSignalReceived = 0;
 // Strictly scorm variables
 olms.score=<?php echo $oItem->get_score(); ?>;
 olms.progress_measure = <?php echo json_encode($oItem->get_progress_measure()); ?>;
+olms.score_scaled = '';
+olms.learner_preference_language = '';
 olms.max='<?php echo $oItem->get_max(); ?>';
 olms.min='<?php echo $oItem->get_min(); ?>';
 olms.lesson_status='<?php echo $oItem->get_status(); ?>';
@@ -682,20 +690,20 @@ function LMSGetValue(param) {
         result = 'completion_status,success_status,progress_measure,score,suspend_data,launch_data,learner_id,learner_name';
     } else if(param=='cmi.core._children' || param=='cmi.core_children'){
         result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
-    } else if(param == 'cmi.core.entry'){
-        // ---- cmi.core.entry
-        if(olms.lms_item_core_exit=='none') {
-            result='ab-initio';
-        } else if(olms.lms_item_core_exit=='suspend') {
+    } else if(param == 'cmi.core.entry' || param == 'cmi.entry'){
+        // ---- cmi.core.entry / cmi.entry
+        if(olms.lms_item_core_exit=='suspend') {
             result='resume';
+        } else if(olms.lms_item_core_exit=='none' || olms.lms_item_core_exit=='') {
+            result='ab-initio';
         } else {
             result='';
         }
-    } else if(param == 'cmi.core.exit') {
-        // ---- cmi.core.exit
+    } else if(param == 'cmi.core.exit' || param == 'cmi.exit') {
+        // ---- cmi.core.exit / cmi.exit
         result='';
         olms.G_LastError = G_ElementIsWriteOnly;
-    } else if(param == 'cmi.core.session_time'){
+    } else if(param == 'cmi.core.session_time' || param == 'cmi.session_time'){
         result='';
         olms.G_LastError = G_ElementIsWriteOnly;
     } else if(param == 'cmi.core.lesson_status' || param == 'cmi.completion_status'){
@@ -714,24 +722,48 @@ function LMSGetValue(param) {
           $who = addslashes(trim($user['lastname']).', '.trim($user['firstname']));
           echo "result='$who';";
         ?>
-    } else if(param == 'cmi.core.lesson_location'){
-        // ---- cmi.core.lesson_location
+    } else if(param == 'cmi.core.lesson_location' || param == 'cmi.location'){
+        // ---- cmi.core.lesson_location / cmi.location
         result=olms.lesson_location;
-    } else if(param == 'cmi.core.total_time'){
-        // ---- cmi.core.total_time
+    } else if(param == 'cmi.core.total_time' || param == 'cmi.total_time'){
+        // ---- cmi.core.total_time / cmi.total_time
         result=olms.total_time;
+    } else if(param == 'cmi.mode'){
+        result='normal';
+    } else if(param == 'cmi.credit'){
+        result='credit';
     } else if(param == 'cmi.core.score._children'){
         // ---- cmi.core.score._children
         result='raw,min,max';
-    } else if(param == 'cmi.core.score.raw'){
-        // ---- cmi.core.score.raw
+    } else if(param == 'cmi.score._children'){
+        result='scaled,raw,min,max';
+    } else if(param == 'cmi.core.score.raw' || param == 'cmi.score.raw'){
+        // ---- cmi.core.score.raw / cmi.score.raw
         result=olms.score;
-    } else if(param == 'cmi.core.score.max'){
-        // ---- cmi.core.score.max
+    } else if(param == 'cmi.core.score.max' || param == 'cmi.score.max'){
+        // ---- cmi.core.score.max / cmi.score.max
         result=olms.max;
-    } else if(param == 'cmi.core.score.min'){
-        // ---- cmi.core.score.min
+    } else if(param == 'cmi.core.score.min' || param == 'cmi.score.min'){
+        // ---- cmi.core.score.min / cmi.score.min
         result=olms.min;
+    } else if(param == 'cmi.score.scaled'){
+        if (olms.score_scaled !== '') {
+            result=olms.score_scaled;
+        } else if (olms.score !== '' && olms.max > 0) {
+            result=''+(parseFloat(olms.score) / parseFloat(olms.max));
+        } else {
+            result='';
+        }
+    } else if(param == 'cmi.success_status'){
+        if (olms.lesson_status == 'passed') {
+            result='passed';
+        } else if (olms.lesson_status == 'failed') {
+            result='failed';
+        } else {
+            result='unknown';
+        }
+    } else if(param == 'cmi.learner_preference.language'){
+        result=olms.learner_preference_language;
     } else if(param == 'cmi.progress_measure'){
         // ---- cmi.progress_measure (SCORM 2004 partial support)
         result = (olms.progress_measure === null || typeof olms.progress_measure === 'undefined')
@@ -887,24 +919,24 @@ function LMSSetValue(param, val) {
     olms.G_LastErrorMessage = 'No error';
     return_value = 'false';
 
-    if (param == "cmi.core.score.raw") {
+    if (param == "cmi.core.score.raw" || param == "cmi.score.raw") {
         olms.score= val;
-        olms.updatable_vars_list['cmi.core.score.raw']=true;
+        olms.updatable_vars_list[param]=true;
         if (score_as_progress) {
             update_progress_bar(val, olms.max, '%');
         }
         return_value='true';
-    } else if ( param == "cmi.core.score.max") {
+    } else if ( param == "cmi.core.score.max" || param == "cmi.score.max") {
         olms.max = val;
-        olms.updatable_vars_list['cmi.core.score.max']=true;
+        olms.updatable_vars_list[param]=true;
         return_value='true';
-    } else if ( param == "cmi.core.score.min") {
+    } else if ( param == "cmi.core.score.min" || param == "cmi.score.min") {
         olms.min = val;
-        olms.updatable_vars_list['cmi.core.score.min']=true;
+        olms.updatable_vars_list[param]=true;
         return_value='true';
-    } else if ( param == "cmi.core.lesson_location" ) {
+    } else if ( param == "cmi.core.lesson_location" || param == "cmi.location" ) {
         olms.lesson_location = val;
-        olms.updatable_vars_list['cmi.core.lesson_location']=true;
+        olms.updatable_vars_list[param]=true;
         return_value = 'true';
     } else if ( param == "cmi.core.lesson_status" ) {
         olms.lesson_status = val;
@@ -923,13 +955,13 @@ function LMSSetValue(param, val) {
         olms.updatable_vars_list['cmi.completion_status']=true;
         update_scorm_progress_measure_bar();
         return_value='true'; //1.3
-    } else if ( param == "cmi.core.session_time" ) {
+    } else if ( param == "cmi.core.session_time" || param == "cmi.session_time" ) {
         olms.session_time = val;
-        olms.updatable_vars_list['cmi.core.session_time']=true;
+        olms.updatable_vars_list[param]=true;
         return_value='true';
     } else if ( param == "cmi.score.scaled") { //1.3
         if (val<=1 && val>=-1) {
-            olms.score = val ;
+            olms.score_scaled = val;
             olms.updatable_vars_list['cmi.score.scaled']=true;
             return_value='true';
         } else {
@@ -959,9 +991,12 @@ function LMSSetValue(param, val) {
         olms.updatable_vars_list['cmi.suspend_data'] = true;
         save_suspend_data_in_local(); // save to local storage if available
         return_value='true';
-    } else if ( param == "cmi.core.exit" ) {
+    } else if ( param == "cmi.core.exit" || param == "cmi.exit" ) {
         olms.lms_item_core_exit = val;
-        olms.updatable_vars_list['cmi.core.exit']=true;
+        olms.updatable_vars_list[param]=true;
+        return_value='true';
+    } else if ( param == "cmi.learner_preference.language" ) {
+        olms.learner_preference_language = val;
         return_value='true';
     } else if ( param == "cmi.core.student_id" ) {
         olms.G_LastError = G_ElementIsReadOnly;
@@ -2208,29 +2243,27 @@ function xajax_save_item_scorm(
     var my_scorm_values = new Array();
     my_scorm_values = process_scorm_values();
     for (k=0; k < my_scorm_values.length; k++) {
-        if (my_scorm_values[k]=='cmi.core.session_time') {
-            params += '&t='+olms.session_time;
-        } else if (my_scorm_values[k]=='cmi.core.lesson_status' && olms.lesson_status!='') {
-             params += '&status='+olms.lesson_status;
-        } else if (my_scorm_values[k]=='cmi.core.score.raw') {
-             params += '&s='+olms.score;
-        } else if (my_scorm_values[k]=='cmi.core.score.max') {
-            params += '&max='+olms.max;
-        } else if (my_scorm_values[k]=='cmi.core.score.min') {
-            params += '&min='+olms.min;
-        } else if (my_scorm_values[k]=='cmi.core.lesson_location') {
-            params += '&loc='+olms.lesson_location;
-        } else if (my_scorm_values[k]=='cmi.completion_status') {
+        if (my_scorm_values[k]=='cmi.core.session_time' || my_scorm_values[k]=='cmi.session_time') {
+            params += '&t='+encodeURIComponent(olms.session_time);
+        } else if ((my_scorm_values[k]=='cmi.core.lesson_status' || my_scorm_values[k]=='cmi.completion_status') && olms.lesson_status!='') {
+             params += '&status='+encodeURIComponent(olms.lesson_status);
+        } else if (my_scorm_values[k]=='cmi.core.score.raw' || my_scorm_values[k]=='cmi.score.raw') {
+             params += '&s='+encodeURIComponent(olms.score);
+        } else if (my_scorm_values[k]=='cmi.core.score.max' || my_scorm_values[k]=='cmi.score.max') {
+            params += '&max='+encodeURIComponent(olms.max);
+        } else if (my_scorm_values[k]=='cmi.core.score.min' || my_scorm_values[k]=='cmi.score.min') {
+            params += '&min='+encodeURIComponent(olms.min);
+        } else if (my_scorm_values[k]=='cmi.core.lesson_location' || my_scorm_values[k]=='cmi.location') {
+            params += '&loc='+encodeURIComponent(olms.lesson_location);
         } else if (my_scorm_values[k]=='cmi.score.scaled') {
         } else if (my_scorm_values[k]=='cmi.progress_measure') {
-            params += '&progress='+olms.progress_measure;
+            params += '&progress='+encodeURIComponent(olms.progress_measure);
         } else if (my_scorm_values[k]=='cmi.suspend_data') {
             // params += '&suspend='+olms.suspend_data;
             // Fixes error when scorm sends text with "+" sign
             params += '&suspend='+encodeURIComponent(olms.suspend_data);
-        } else if (my_scorm_values[k]=='cmi.completion_status') {
-        } else if (my_scorm_values[k]=='cmi.core.exit') {
-            params += '&core_exit='+olms.lms_item_core_exit;
+        } else if (my_scorm_values[k]=='cmi.core.exit' || my_scorm_values[k]=='cmi.exit') {
+            params += '&core_exit='+encodeURIComponent(olms.lms_item_core_exit);
         }
         if (my_scorm_values[k]=='interactions') {
             is_interactions='true';

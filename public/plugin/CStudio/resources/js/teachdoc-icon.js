@@ -166,8 +166,25 @@ function cstudioIsCStudioLearningPathContent() {
         && cstudioGetPreviewLpId() > 0;
 }
 
+function cstudioPageHasRenderedCStudioContent() {
+    if ($('.teachdocplugteach,.quizzcontentplug,.qcmbarre,.cstudio-quiz-check-button').length > 0) {
+        return true;
+    }
+
+    if ($('iframe[src*="/plugin/CStudio/"],iframe[src*="teachcs-"],iframe[src*="CStudio"],object[data*="teachcs-"],embed[src*="teachcs-"]').length > 0) {
+        return true;
+    }
+
+    return false;
+}
+
 function cstudioShouldHideLearningPathNavigation() {
-    return cstudioIsCStudioLearningPathContent();
+    if (cstudioIsCStudioLearningPathContent()) {
+        return true;
+    }
+
+    return window.location.pathname.indexOf('/main/lp/lp_controller.php') !== -1
+        && cstudioPageHasRenderedCStudioContent();
 }
 
 function cstudioGetPreviewLpId() {
@@ -352,6 +369,10 @@ function hideCStudioPreviewLpNavigationControls() {
             '[data-lp-nav="next"]',
             '#lp_navigation',
             '#lp-navigation',
+            '[data-lp-menu="nav"]',
+            '.lp-menu-nav',
+            '.lp-view-primary-nav',
+            '#control-top',
             '.lp-navigation',
             '.learnpath-navigation',
             '.lp-navigation-buttons',
@@ -569,7 +590,7 @@ function installCStudioPreviewBackButton(teachdocLstIds, retries) {
 
     var style = '';
     style += '<style id="cstudio-preview-back-style">';
-    style += 'body.cstudio-preview-mode #scorm-previous,body.cstudio-preview-mode #scorm-next,body.cstudio-lp-cstudio-content-mode #scorm-previous,body.cstudio-lp-cstudio-content-mode #scorm-next,body.cstudio-preview-mode #lp_navigation,body.cstudio-preview-mode #lp-navigation,body.cstudio-preview-mode .lp-navigation,body.cstudio-preview-mode .learnpath-navigation,body.cstudio-preview-mode .lp-navigation-buttons,body.cstudio-preview-mode .lp-navigation-next,body.cstudio-preview-mode .lp-navigation-previous,body.cstudio-lp-cstudio-content-mode #lp_navigation,body.cstudio-lp-cstudio-content-mode #lp-navigation,body.cstudio-lp-cstudio-content-mode .lp-navigation,body.cstudio-lp-cstudio-content-mode .learnpath-navigation,body.cstudio-lp-cstudio-content-mode .lp-navigation-buttons,body.cstudio-lp-cstudio-content-mode .lp-navigation-next,body.cstudio-lp-cstudio-content-mode .lp-navigation-previous{display:none!important;visibility:hidden!important;pointer-events:none!important;}';
+    style += 'body.cstudio-preview-mode #scorm-previous,body.cstudio-preview-mode #scorm-next,body.cstudio-lp-cstudio-content-mode #scorm-previous,body.cstudio-lp-cstudio-content-mode #scorm-next,body.cstudio-preview-mode #lp_navigation,body.cstudio-preview-mode #lp-navigation,body.cstudio-preview-mode [data-lp-menu="nav"],body.cstudio-preview-mode .lp-menu-nav,body.cstudio-preview-mode .lp-view-primary-nav,body.cstudio-preview-mode #control-top,body.cstudio-preview-mode .lp-navigation,body.cstudio-preview-mode .learnpath-navigation,body.cstudio-preview-mode .lp-navigation-buttons,body.cstudio-preview-mode .lp-navigation-next,body.cstudio-preview-mode .lp-navigation-previous,body.cstudio-lp-cstudio-content-mode #lp_navigation,body.cstudio-lp-cstudio-content-mode #lp-navigation,body.cstudio-lp-cstudio-content-mode [data-lp-menu="nav"],body.cstudio-lp-cstudio-content-mode .lp-menu-nav,body.cstudio-lp-cstudio-content-mode .lp-view-primary-nav,body.cstudio-lp-cstudio-content-mode #control-top,body.cstudio-lp-cstudio-content-mode .lp-navigation,body.cstudio-lp-cstudio-content-mode .learnpath-navigation,body.cstudio-lp-cstudio-content-mode .lp-navigation-buttons,body.cstudio-lp-cstudio-content-mode .lp-navigation-next,body.cstudio-lp-cstudio-content-mode .lp-navigation-previous{display:none!important;visibility:hidden!important;pointer-events:none!important;}';
     style += '#cstudio-preview-back-button{position:fixed;top:14px;right:20px;left:auto;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;background:#ffffff;color:#1f2937;border:1px solid #d1d5db;box-shadow:0 4px 14px rgba(0,0,0,.16);font:600 14px/1.2 Arial,sans-serif;text-decoration:none;}';
     style += '#cstudio-preview-back-button:hover{background:#f3f4f6;text-decoration:none;color:#111827;}';
     style += '#cstudio-preview-loading{position:fixed;inset:0;z-index:2147482999;display:none;align-items:center;justify-content:center;background:rgba(255,255,255,.72);font:600 15px/1.4 Arial,sans-serif;color:#111827;}';

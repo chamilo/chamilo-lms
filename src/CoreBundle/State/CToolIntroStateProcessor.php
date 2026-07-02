@@ -36,13 +36,13 @@ final class CToolIntroStateProcessor implements ProcessorInterface
     {
         \assert($data instanceof CToolIntro);
 
-        $course = $this->cidReqHelper->getCourseEntity();
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
 
         if (!$course instanceof Course) {
             throw new BadRequestHttpException('Course not found.');
         }
 
-        $session = $this->cidReqHelper->getSessionEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
 
         if ($operation instanceof Post) {
             $toolName = trim($data->getToolName());

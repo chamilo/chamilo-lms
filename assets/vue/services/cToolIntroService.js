@@ -36,8 +36,30 @@ async function findById(toolIntroId) {
   return await baseService.get(`/api/c_tool_intros/${toolIntroId}`)
 }
 
+/**
+ * Fetches a tool introduction by its IRI (e.g. "/api/c_tool_intros/8").
+ *
+ * @param {string} iri
+ * @returns {Promise<Object>}
+ */
+async function findByIri(iri) {
+  return await baseService.get(iri)
+}
+
+/**
+ * Updates a tool introduction (PUT). The target IRI is taken from the item's @id.
+ *
+ * @param {Object} item
+ * @returns {Promise<Object>}
+ */
+async function update(item) {
+  return baseService.put(item["@id"], item)
+}
+
 export default {
   findCourseHomeInro,
   addToolIntro,
   findById,
+  findByIri,
+  update,
 }

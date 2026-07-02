@@ -89,28 +89,24 @@ const displayedIntroText = computed(() => {
 })
 
 function normalizeIntroResponse(response) {
-  let data = response?.data || response || {}
+  const data = response?.data || response || {}
 
-  if (typeof data === "string") {
-    try {
-      data = JSON.parse(data)
-    } catch (error) {
-      console.error("Invalid tool introduction response:", data)
-      data = {}
-    }
-  }
+  // The API returns the course tool as an embedded JSON-LD resource, while the
+  // legacy read endpoint returns c_tool/cToolId. Bridge both to a single c_tool.
+  const courseToolIri = data.courseTool?.["@id"]
+  const cToolId = courseToolIri ? Number(courseToolIri.split("/").pop()) : data.cToolId || null
 
   return {
     ...data,
     c_tool: data.c_tool || {
-      iid: data.cToolId || null,
+      iid: cToolId,
       title: props.tool,
     },
   }
 }
 
 function getCourseToolId() {
-  return intro.value?.c_tool?.iid || intro.value?.cToolId || null
+  return intro.value?.c_tool?.iid || null
 }
 
 async function loadIntro() {
@@ -148,11 +144,8 @@ async function createEmptyIntroIfNeeded() {
   }
 
   const response = await cToolIntroService.addToolIntro(course.value.id, {
-    tool: props.tool,
+    toolName: props.tool,
     introText: intro.value?.introText || "",
-    sid: currentSessionId.value || 0,
-    // Course context derived server-side from the gated session course.
-    resourceLinkList: [{ visibility: "published" }],
   })
 
   intro.value = normalizeIntroResponse(response)

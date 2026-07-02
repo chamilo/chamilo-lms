@@ -10034,7 +10034,7 @@ function displayGlobalParams(){
         bdDiv += '<div class="cstudio-project-thumbnail-preview" title="Learning path thumbnail (click to change)" onClick="loadAnImage();">';
         bdDiv += '<img title="Learning path thumbnail (click to change)" onerror="this.src=\'img/classique/oel_back.jpg\';" id="imgshow" src="img/classique/oel_back.jpg" />';
         bdDiv += '</div>';
-        bdDiv += '<img class="cstudio-project-thumbnail-reset" title="Reset thumbnail" onClick="initProjectImage();" src="img/bross.png" />';
+        bdDiv += '<img class="cstudio-project-thumbnail-reset" title="Reset image" aria-label="Reset image" onClick="initProjectImage();" src="img/bross.png" />';
         bdDiv += '</div>';
         bdDiv += '</div>';
 

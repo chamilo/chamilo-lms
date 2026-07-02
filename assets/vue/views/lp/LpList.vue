@@ -447,6 +447,41 @@ const hasImageRF = (lp) => {
   return !!lp.firstResourceFile?.image
 }
 
+const firstNonEmptyString = (...values) => {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim() !== "") {
+      return value
+    }
+  }
+
+  return null
+}
+
+const resolveLpCoverUrl = (lp) => {
+  const explicitUrl = firstNonEmptyString(
+    lp.coverUrl,
+    lp.thumbnailUrl,
+    lp.thumbnail_url,
+    lp.imageUrl,
+    lp.image_url,
+    lp.assetUrl,
+    lp.asset_url,
+    lp.asset?.contentUrl,
+    lp.asset?.content_url,
+    lp.asset?.url,
+  )
+
+  if (explicitUrl) {
+    return withCidSid(explicitUrl)
+  }
+
+  if (hasImageRF(lp) && lp.contentUrl) {
+    return withCidSid(lp.contentUrl)
+  }
+
+  return null
+}
+
 const onExportPdf = (lp) => {
   if (!canExportPdf.value) {
     return
@@ -537,7 +572,7 @@ const load = async () => {
 
     items.value = raw.map((lp) => ({
       ...lp,
-      coverUrl: hasImageRF(lp) && lp.contentUrl ? withCidSid(lp.contentUrl) : null,
+      coverUrl: resolveLpCoverUrl(lp),
     }))
 
     await loadVisibilityFor(items.value.map((lp) => lp.iid))

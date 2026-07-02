@@ -38,7 +38,10 @@ $(document).ready(function(){
         cstudioCenterColorsWindow();
         cstudioPolishMediaAndButtonBlocks();
         cstudioEnsureQuizBlockVisible();
+        cstudioHideDuplicateImageFolderAssets();
+        cstudioApplyFinalVisibleTranslations();
         cstudioStartEditorUiEnhancements();
+        cstudioHideUnsupportedToolbarActions();
 	},200);
 
 	if (renderFromSvg!=''){
@@ -84,7 +87,8 @@ function cstudioNormalizeVisibleTerm(term) {
         'Save context game and exercise resolutions': 'Save game context and resolved exercises',
         'White-quizz': 'White quiz',
         'Yellow-contrast': 'Yellow contrast',
-        'Blue-contrast': 'Blue contrast'
+        'Blue-contrast': 'Blue contrast',
+        'Registrar': 'Save'
     };
 
     return replacements[normalizedTerm] || term;
@@ -103,6 +107,17 @@ function cstudioGetFallbackTranslatedTerm(term) {
             'Help and pro services': 'Aide et services professionnels',
             'Create an xAPI package': 'Créer un paquet xAPI',
             'Create a web page': 'Créer une page web',
+            'Image': 'Image',
+            'Audio': 'Audio',
+            'Version': 'Version',
+            'Title': 'Titre',
+            'Edition': 'Édition',
+            'Content': 'Contenu',
+            'Section': 'Section',
+            'File': 'Fichier',
+            'Add': 'Ajouter',
+            'Save': 'Enregistrer',
+            'Cancel': 'Annuler',
             'Free access page': 'Page en accès libre',
             'Learning paths list': 'Liste des parcours',
             'Clean data': 'Nettoyer les traces',
@@ -123,6 +138,17 @@ function cstudioGetFallbackTranslatedTerm(term) {
             'Help and pro services': 'Ayuda y servicios profesionales',
             'Create an xAPI package': 'Crear un paquete xAPI',
             'Create a web page': 'Crear una página web',
+            'Image': 'Imagen',
+            'Audio': 'Audio',
+            'Version': 'Versión',
+            'Title': 'Título',
+            'Edition': 'Edición',
+            'Content': 'Contenido',
+            'Section': 'Sección',
+            'File': 'Archivo',
+            'Add': 'Agregar',
+            'Save': 'Guardar',
+            'Cancel': 'Cancelar',
             'Free access page': 'Página de acceso libre',
             'Learning paths list': 'Lista de lecciones',
             'Clean data': 'Limpiar trazas',
@@ -252,6 +278,124 @@ function cstudioApplyTopToolbarTooltips() {
 }
 
 
+function cstudioHideUnsupportedToolbarActions() {
+    var blockedTerms = [
+        'import',
+        'open-import-template',
+        'download',
+        'upload',
+        'export-template',
+        'source-code',
+        'code',
+        'trash',
+        'delete',
+    ];
+
+    $('.gjs-pn-panel .gjs-pn-btn').each(function () {
+        var $button = $(this);
+        var raw = [
+            $button.attr('id'),
+            $button.attr('class'),
+            $button.attr('title'),
+            $button.attr('aria-label'),
+            $button.attr('data-tooltip'),
+            $button.attr('data-cstudio-tooltip'),
+            $button.attr('data-command'),
+            $button.attr('data-cmd'),
+            $button.attr('onclick'),
+            $button.text(),
+        ].join(' ').toLowerCase();
+
+        var keepTerms = ['save', 'layout', 'eye', 'fullscreen', 'undo', 'redo'];
+        var shouldKeep = keepTerms.some(function (term) {
+            return raw.indexOf(term) !== -1;
+        });
+
+        if (shouldKeep) {
+            return;
+        }
+
+        var shouldHide = blockedTerms.some(function (term) {
+            return raw.indexOf(term) !== -1;
+        });
+
+        if (!shouldHide && !$button.children().length && !$button.text().trim() && !$button.attr('data-cstudio-tooltip')) {
+            shouldHide = true;
+        }
+
+        if (!shouldHide) {
+            return;
+        }
+
+        $button
+            .attr('aria-hidden', 'true')
+            .attr('tabindex', '-1')
+            .addClass('cstudio-hidden-toolbar-action')
+            .hide();
+    });
+
+    setTimeout(function () {
+        $('.gjs-mdl-title').each(function () {
+            if ($(this).text().trim().toLowerCase() !== 'import') {
+                return;
+            }
+
+            var modal = $(this).closest('.gjs-mdl-dialog, .gjs-mdl-container');
+            if (modal.length && typeof editor !== 'undefined' && editor.Modal) {
+                editor.Modal.close();
+            }
+        });
+    }, 0);
+}
+
+
+function cstudioHasStoredMenu(menuHtml) {
+    return typeof menuHtml !== 'undefined'
+        && menuHtml !== null
+        && menuHtml !== ''
+        && menuHtml !== 'undefined';
+}
+
+function cstudioClearStoredMenu() {
+    if (typeof amplify === 'undefined' || !amplify.store) {
+        return;
+    }
+
+    amplify.store('menuHtmlInLocal' + idPageHtmlTop, null);
+    amplify.store('menuHtmlInLocal' + idPageHtmlTop + '_' + refIdPageLudi, null);
+}
+
+function cstudioHideDuplicateImageFolderAssets() {
+    $('.gjs-am-assets-cont .gjs-am-asset').each(function () {
+        var asset = $(this);
+        var html = String(asset.html() || '').toLowerCase();
+        var style = String(asset.attr('style') || '').toLowerCase();
+        var title = String(asset.attr('title') || '').toLowerCase();
+        var source = String(asset.find('img').attr('src') || '').toLowerCase();
+        var allContent = html + ' ' + style + ' ' + title + ' ' + source;
+
+        if (allContent.indexOf('folder') !== -1 && allContent.indexOf('chamiloimages') === -1) {
+            asset.hide().attr('aria-hidden', 'true');
+        }
+    });
+}
+
+function cstudioApplyFinalVisibleTranslations() {
+    $('.cstudio-title-label').text(cstudioTranslateTerm('Title'));
+    $('#inputAddSubPage').val(cstudioTranslateTerm('Add'));
+    $('.ludiButtonCancel').text(cstudioTranslateTerm('Cancel'));
+    $('.ludiButtonSaveMenu, .ludiButtonSave').each(function () {
+        $(this).text(cstudioTranslateTerm('Save')).attr('value', cstudioTranslateTerm('Save'));
+    });
+    $('.topmenuabout p').each(function () {
+        var text = $.trim($(this).text());
+        if (text.indexOf('Version:') === 0 || text.indexOf('Version :') === 0) {
+            $(this).text(cstudioTranslateTerm('Version') + ': ' + versionCS);
+        }
+    });
+}
+
+
 function cstudioHideExperimentalEditorOptions() {
     $('#tool-colors-paste, .tool-colors-paste').hide();
     $('.monotablist2, .monotablist3').hide();
@@ -281,6 +425,8 @@ function cstudioStartEditorUiEnhancements() {
         cstudioCenterColorsWindow();
         cstudioPolishMediaAndButtonBlocks();
         cstudioEnsureQuizBlockVisible();
+        cstudioHideDuplicateImageFolderAssets();
+        cstudioApplyFinalVisibleTranslations();
         attempts++;
         if (attempts > 20) {
             clearInterval(interval);
@@ -446,6 +592,7 @@ function cstudioFixVisibleEditorLabels() {
     });
 
     cstudioTranslateBlockLabels();
+    cstudioApplyFinalVisibleTranslations();
 }
 
 
@@ -1178,11 +1325,14 @@ function restyleLstImage(){
 	$('.gjs-am-close').css("display","none");
 
 	restyleLateral();
+	cstudioHideDuplicateImageFolderAssets();
 	setTimeout(function(){
 		restyleLateral();
+		cstudioHideDuplicateImageFolderAssets();
 	},10);
 	setTimeout(function(){
 		restyleLateral();
+		cstudioHideDuplicateImageFolderAssets();
 	},300);
 	
 	$('.gjs-am-preview').click(function(){
@@ -1665,7 +1815,7 @@ function getMenuTop(){
 	
 	h += '<div class="topmenuabout" >';
 	h += '<p>CS engine 2018 - 2025</p>';
-	h += '<p>Version: ' + versionCS;
+	h += '<p>' + cstudioTranslateTerm('Version') + ': ' + versionCS;
 	h += '<p><a target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></p>';
 	
 	h += '<a href="#" style="position:absolute;right:0px;bottom:0px;color:#E5E8E8;" onClick="displayDevAdminParams()" >...</a>';
@@ -1742,7 +1892,7 @@ function getMenuR(){
 	h += '<div class="ludimenuteachdoc" >';
 	
 	var loadM = amplify.store("menuHtmlInLocal" + idPageHtmlTop +'_'+refIdPageLudi);
-	if(loadM!=undefined||loadM!=''||loadM!='undefined'){
+	if(cstudioHasStoredMenu(loadM)){
 		h += loadM;
 	}else{
 		h += lstUlLoad;
@@ -1842,7 +1992,7 @@ function refreshMenu(refEditNode){
 
 	if (refEditNode==-1) {
 		var loadM = amplify.store("menuHtmlInLocal" + idPageHtmlTop+'_'+refIdPageLudi);
-		if(loadM!=undefined||loadM!=''||loadM!='undefined'){
+		if(cstudioHasStoredMenu(loadM)){
 			$delay = 500;
 		}
 	}
@@ -2155,6 +2305,7 @@ function upContextMenuSub(u){
 					$('.ludiEditMenuContext').css("top",parseInt(78 + (refPosiPageLudi * 35) - scrollTeachdoc)+"px");
 					$('#labelMenuLudi'+refIdPageLudi).css('color','black');
 					$('#labelMenuLudi'+refIdPageLudi).css('background','#F3E2A9');
+					cstudioClearStoredMenu();
 					refreshMenu(refIdPageLudi);
 				}else{
 					$('#labelMenuLudi'+refIdPageLudi).css('color','orange');
@@ -16856,6 +17007,7 @@ function pasteWindowsShow(fromevent){
 		$('.ludimenu').css("display","none");
 		$('#TeachDocPasteEditWindows').css("display","");
         traductAll();
+        cstudioFixVisibleEditorLabels();
 
 	}
 
@@ -17152,6 +17304,7 @@ function displaySubPageEdit(i){
 		$('#typenode3').attr('checked',false);
 		$('#typenode4').attr('checked',false);
 
+		cstudioFixVisibleEditorLabels();
 		$('#inputTitlePage').focus();
 	}
 

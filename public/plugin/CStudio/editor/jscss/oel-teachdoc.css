@@ -4457,101 +4457,31 @@ z-index : 10014;
     }
 }
 
-/* CStudio top toolbar alignment and tooltips */
-.gjs-pn-panel.gjs-pn-commands,
-.gjs-pn-commands {
-    box-sizing: border-box !important;
-    max-width: calc(100vw - 24px) !important;
-    right: 8px !important;
-    top: 4px !important;
-    height: 32px !important;
-    min-height: 32px !important;
-    max-height: 32px !important;
-    padding: 0 !important;
-    overflow: visible !important;
-    display: flex !important;
-    align-items: center !important;
-}
-
-.gjs-pn-commands .gjs-pn-buttons {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 6px !important;
-    height: 30px !important;
-    min-height: 30px !important;
-    max-height: 30px !important;
-    max-width: 100% !important;
-    padding: 0 8px !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
-    overflow: visible !important;
-}
-
-.gjs-pn-commands .gjs-pn-btn {
-    box-sizing: border-box !important;
-    flex: 0 0 24px !important;
-    width: 24px !important;
-    min-width: 24px !important;
-    height: 24px !important;
-    min-height: 24px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    line-height: 24px !important;
-    text-align: center !important;
-}
-
-.gjs-pn-commands .gjs-pn-btn::before {
-    line-height: 24px !important;
-}
-
-.gjs-pn-commands .gjs-pn-btn,
-.gjs-pn-commands .gjs-pn-btn::before {
-    font-size: 16px !important;
-}
-
-/* CStudio top toolbar compact alignment: keep commands inside the editor header */
-.gjs-pn-panel.gjs-pn-commands,
-.gjs-pn-commands {
-    transform: translateY(-8px) !important;
-    height: 28px !important;
-    min-height: 28px !important;
-    max-height: 28px !important;
-    line-height: 28px !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-}
-
-.gjs-pn-commands .gjs-pn-buttons {
-    height: 28px !important;
-    min-height: 28px !important;
-    max-height: 28px !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-}
-
-.gjs-pn-commands .gjs-pn-btn {
-    flex: 0 0 20px !important;
-    width: 20px !important;
-    min-width: 20px !important;
-    height: 20px !important;
-    min-height: 20px !important;
-    line-height: 20px !important;
-}
-
-.gjs-pn-commands .gjs-pn-btn,
-.gjs-pn-commands .gjs-pn-btn::before,
-.gjs-pn-commands .gjs-pn-btn svg,
-.gjs-pn-commands .gjs-pn-btn i {
-    font-size: 14px !important;
-    line-height: 20px !important;
-}
-
 /* Keep GrapesJS toolbar aligned inside the editor header. */
 .gjs-pn-panel {
-  padding: 2px;
+    padding: 2px;
+}
+
+/* Center CStudio Colors modal content. */
+.WinEditColorsTeach.cstudio-centered-colors-window,
+.WinEditColorsTeach {
+    text-align: center;
+}
+
+.WinEditColorsTeach .cstudio-centered-colors-panel,
+.WinEditColorsTeach .innerEditColorsTeach,
+.WinEditColorsTeach .innerEditQuizzTeach {
+    float: none;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 6px;
+    margin-right: 6px;
+    text-align: left;
+}
+
+.WinEditColorsTeach .colorCube {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

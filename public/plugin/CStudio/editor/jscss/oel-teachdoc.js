@@ -34,6 +34,8 @@ $(document).ready(function(){
 		traductAll();
         cstudioApplyEditorTooltips();
         cstudioFixVisibleEditorLabels();
+        cstudioHideExperimentalEditorOptions();
+        cstudioCenterColorsWindow();
         cstudioStartEditorUiEnhancements();
 	},200);
 
@@ -109,7 +111,7 @@ function cstudioApplyEditorTooltips() {
     cstudioSetElementTooltip('.fa-arrows-alt, .fa-expand, [class*="fa-arrows"], [class*="fa-expand"]', 'Toggle fullscreen');
     cstudioSetElementTooltip('.fa-undo, [class*="fa-undo"]', 'Undo');
     cstudioSetElementTooltip('.fa-repeat, .fa-redo, [class*="fa-repeat"], [class*="fa-redo"]', 'Redo');
-    cstudioSetElementTooltip('.cstudio-delete-page-action', 'Delete this page');
+    cstudioSetElementTooltip('.cstudio-delete-page-action, [onclick="deleteContextMenuSub();"]', 'Delete this page');
     cstudioSetElementTooltip('.uPIcon', 'Move page up');
     cstudioSetElementTooltip('.dowNIcon', 'Move page down');
     cstudioApplyTopToolbarTooltips();
@@ -147,11 +149,34 @@ function cstudioApplyTopToolbarTooltips() {
     });
 }
 
+
+function cstudioHideExperimentalEditorOptions() {
+    $('#tool-colors-paste, .tool-colors-paste').hide();
+    $('.monotablist2, .monotablist3').hide();
+    $('#allParamsArea2, #allParamsArea3').hide();
+
+    if (typeof startTab !== 'undefined' && startTab !== 1) {
+        displayParamsTab1();
+    }
+}
+
+function cstudioCenterColorsWindow() {
+    var $window = $('#WinEditColorsTeach');
+    if (!$window.length) {
+        return;
+    }
+
+    $window.addClass('cstudio-centered-colors-window');
+    $window.find('.innerEditColorsTeach, .innerEditQuizzTeach').addClass('cstudio-centered-colors-panel');
+}
+
 function cstudioStartEditorUiEnhancements() {
     var attempts = 0;
     var interval = setInterval(function () {
         cstudioApplyEditorTooltips();
         cstudioFixVisibleEditorLabels();
+        cstudioHideExperimentalEditorOptions();
+        cstudioCenterColorsWindow();
         attempts++;
         if (attempts > 20) {
             clearInterval(interval);
@@ -333,6 +358,8 @@ function restyleCadre(){
 
         cstudioApplyEditorTooltips();
         cstudioFixVisibleEditorLabels();
+        cstudioHideExperimentalEditorOptions();
+        cstudioCenterColorsWindow();
         cstudioStartEditorUiEnhancements();
 		
 		$("div[title='Interactive Map']").css("display","none").addClass("extraPluginRightPanel");
@@ -10133,6 +10160,8 @@ function displayGlobalParams(){
 		$('body').append(bdDiv);
 
 	}
+
+	cstudioHideExperimentalEditorOptions();
 
 	if ($("#pageEditGlobalParams").length==1) {
         windowEditorIsOpen = true;

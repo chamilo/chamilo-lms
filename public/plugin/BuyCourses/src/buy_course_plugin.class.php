@@ -73,6 +73,14 @@ class BuyCoursesPlugin extends Plugin
     public const SALE_STATUS_CANCELED = -1;
     public const SALE_STATUS_PENDING = 0;
     public const SALE_STATUS_COMPLETED = 1;
+    public const BUYER_TYPE_INDIVIDUAL = 0;
+    public const BUYER_TYPE_BUSINESS = 1;
+    // Values for the invoice table's "is_service" column: despite the legacy name it
+    // is not a strict boolean, it selects which *_sale table "sale_id" belongs to.
+    public const INVOICE_SOURCE_SALE = 0;
+    public const INVOICE_SOURCE_SERVICE = 1;
+    public const INVOICE_SOURCE_SUBSCRIPTION = 2;
+    public const INVOICE_REQUEST_WINDOW_MONTHS = 6;
     public const SERVICE_STATUS_PENDING = 0;
     public const SERVICE_STATUS_COMPLETED = 1;
     public const SERVICE_STATUS_CANCELLED = -1;
@@ -128,7 +136,7 @@ class BuyCoursesPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '7.5',
+            '7.6',
             '
                 Jose Angel Ruiz - NoSoloRed (original author) <br/>
                 Francis Gonzales and Yannick Warnier - BeezNest (integration) <br/>
@@ -727,6 +735,9 @@ class BuyCoursesPlugin extends Plugin
             'vat_treatment' => 'VARCHAR(128) DEFAULT NULL',
             'vat_rate' => 'DECIMAL(5,2) DEFAULT NULL',
             'vat_evidence_json' => 'LONGTEXT DEFAULT NULL',
+            'buyer_type' => 'TINYINT(1) DEFAULT 0',
+            'invoice_requested' => 'TINYINT(1) DEFAULT 0',
+            'gateway_transaction_id' => 'VARCHAR(255) DEFAULT NULL',
         ];
 
         foreach ($serviceSaleVatColumns as $field => $definition) {
@@ -1730,6 +1741,7 @@ class BuyCoursesPlugin extends Plugin
         );
 
         foreach ($sales as $sale) {
+            $hasInvoice = !empty($sale['invoice']);
             $history[] = [
                 'date' => (string) ($sale['date'] ?? ''),
                 'type' => (int) $sale['product_type'] === self::PRODUCT_TYPE_SESSION ? get_lang('Session') : get_lang('Course'),
@@ -1737,11 +1749,15 @@ class BuyCoursesPlugin extends Plugin
                 'reference' => (string) ($sale['reference'] ?? ''),
                 'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $this->getCurrency((int) $sale['currency_id'])['iso_code'] ?? ''),
                 'status' => (int) ($sale['status'] ?? 0),
-                'receipt_url' => !empty($sale['invoice']) ? $this->getInvoiceUrl((int) $sale['id'], 0) : null,
+                'receipt_url' => $this->getReceiptUrl((int) $sale['id'], self::INVOICE_SOURCE_SALE),
+                'invoice_url' => $hasInvoice ? $this->getInvoiceUrl((int) $sale['id'], self::INVOICE_SOURCE_SALE) : null,
+                'request_invoice_url' => (!$hasInvoice && $this->canRequestInvoiceForSale($sale))
+                    ? $this->getRequestInvoiceUrl((int) $sale['id'], self::INVOICE_SOURCE_SALE) : null,
             ];
         }
 
         foreach ($this->getServiceSales($userId) as $serviceSale) {
+            $hasInvoice = !empty($serviceSale['invoice']);
             $history[] = [
                 'date' => (string) ($serviceSale['buy_date'] ?? ''),
                 'type' => $this->get_lang('Service'),
@@ -1749,7 +1765,10 @@ class BuyCoursesPlugin extends Plugin
                 'reference' => (string) ($serviceSale['reference'] ?? ''),
                 'amount' => (string) ($serviceSale['service']['total_price'] ?? ''),
                 'status' => (int) ($serviceSale['status'] ?? 0),
-                'receipt_url' => !empty($serviceSale['invoice']) ? $this->getInvoiceUrl((int) $serviceSale['id'], 1) : null,
+                'receipt_url' => $this->getReceiptUrl((int) $serviceSale['id'], self::INVOICE_SOURCE_SERVICE),
+                'invoice_url' => $hasInvoice ? $this->getInvoiceUrl((int) $serviceSale['id'], self::INVOICE_SOURCE_SERVICE) : null,
+                'request_invoice_url' => (!$hasInvoice && $this->canRequestInvoiceForSale($serviceSale))
+                    ? $this->getRequestInvoiceUrl((int) $serviceSale['id'], self::INVOICE_SOURCE_SERVICE) : null,
             ];
         }
 
@@ -1763,6 +1782,42 @@ class BuyCoursesPlugin extends Plugin
     public function getInvoiceUrl(int $saleId, int $isService = 0): string
     {
         return api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/invoice.php?sale_id='.$saleId.'&is_service='.$isService;
+    }
+
+    /**
+     * URL for the always-available, non-fiscal purchase receipt (as opposed to the
+     * formal VAT invoice, which is only generated for business buyers or on request).
+     */
+    public function getReceiptUrl(int $saleId, int $isService = 0): string
+    {
+        return api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/receipt.php?sale_id='.$saleId.'&is_service='.$isService;
+    }
+
+    public function getRequestInvoiceUrl(int $saleId, int $isService = 0): string
+    {
+        return api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/request_invoice.php?sale_id='.$saleId.'&is_service='.$isService;
+    }
+
+    /**
+     * Whether a buyer can still self-serve request an invoice for a sale that didn't
+     * get one automatically (an individual who skipped the checkout checkbox). This is
+     * a business policy window, not a legal minimum, kept short to bound the admin
+     * overhead of late invoice requests.
+     */
+    public function canRequestInvoiceForSale(array $sale): bool
+    {
+        if ('true' !== $this->get('invoicing_enable')) {
+            return false;
+        }
+
+        $saleDate = (string) ($sale['date'] ?? $sale['buy_date'] ?? '');
+        if ('' === $saleDate) {
+            return false;
+        }
+
+        $windowStart = strtotime('-'.self::INVOICE_REQUEST_WINDOW_MONTHS.' months');
+
+        return strtotime($saleDate) >= $windowStart;
     }
 
     public function canUserAccessInvoice(int $saleId, int $isService = 0, ?int $userId = null): bool
@@ -3012,6 +3067,23 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Record the payment gateway's own transaction/charge id on a course or session
+     * sale, so receipts can show a real, gateway-searchable payment reference.
+     */
+    public function updateSaleGatewayTransactionId(int $saleId, string $transactionId): bool
+    {
+        if ($saleId <= 0 || '' === $transactionId) {
+            return false;
+        }
+
+        return false !== Database::update(
+            Database::get_main_table(self::TABLE_SALE),
+            ['gateway_transaction_id' => $transactionId],
+            ['id = ?' => $saleId]
+        );
+    }
+
+    /**
      * Get sale data by ID.
      *
      * @return array
@@ -3088,6 +3160,12 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getDataSaleInvoice(int $saleId, int $isService)
     {
+        if (self::INVOICE_SOURCE_SUBSCRIPTION === $isService) {
+            // Subscription sales already expose 'date' and 'user_id' as plain columns
+            // (unlike service sales), so no field remapping is needed here.
+            return $this->getSubscriptionSale($saleId);
+        }
+
         if ($isService) {
             $sale = $this->getServiceSale($saleId);
             $sale['reference'] = $sale['reference'];
@@ -3163,6 +3241,17 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Whether a completed sale must get its invoice generated immediately: mandatory
+     * for business buyers (EU/Belgian VAT invoicing rules apply unconditionally),
+     * optional for individuals who checked the "I want a VAT invoice" box at checkout.
+     */
+    private function saleNeedsImmediateInvoice(array $sale): bool
+    {
+        return self::BUYER_TYPE_BUSINESS === (int) ($sale['buyer_type'] ?? self::BUYER_TYPE_INDIVIDUAL)
+            || !empty($sale['invoice_requested']);
+    }
+
+    /**
      * Complete sale process. Update sale status to completed.
      *
      * @return bool
@@ -3199,7 +3288,7 @@ class BuyCoursesPlugin extends Plugin
 
         if ($saleIsCompleted) {
             $this->updateSaleStatus($sale['id'], self::SALE_STATUS_COMPLETED);
-            if ('true' === $this->get('invoicing_enable')) {
+            if ('true' === $this->get('invoicing_enable') && $this->saleNeedsImmediateInvoice($sale)) {
                 $this->setInvoice($sale['id']);
             }
         }
@@ -5091,6 +5180,7 @@ class BuyCoursesPlugin extends Plugin
             'gateway_checkout_session_id',
             'gateway_subscription_id',
             'gateway_last_event_id',
+            'gateway_transaction_id',
             'recurring_profile_id',
             'recurring_payment',
             'next_charge_date',
@@ -5274,8 +5364,8 @@ class BuyCoursesPlugin extends Plugin
             self::SERVICE_STATUS_COMPLETED
         );
 
-        if ('true' === $this->get('invoicing_enable')) {
-            $this->setInvoice($serviceSaleId, 1);
+        if ('true' === $this->get('invoicing_enable') && $this->saleNeedsImmediateInvoice($serviceSale)) {
+            $this->setInvoice($serviceSaleId, self::INVOICE_SOURCE_SERVICE);
         }
 
         $this->applyServiceBenefitsFromSale($serviceSaleId);
@@ -5945,6 +6035,7 @@ class BuyCoursesPlugin extends Plugin
             'buyer_business_name' => substr($businessName, 0, 255),
             'buyer_business_address' => $businessAddress,
             'vies_result' => is_array($data['vies_result'] ?? null) ? $data['vies_result'] : null,
+            'invoice_requested' => !empty($data['invoice_requested']),
         ];
     }
 
@@ -6408,6 +6499,8 @@ class BuyCoursesPlugin extends Plugin
             'vat_treatment' => $vat['vat_treatment']['treatment'] ?? 'pending_vat_calculation',
             'vat_rate' => $vat['vat_treatment']['vat_rate'] ?? null,
             'vat_evidence_json' => json_encode($vat['vat_evidence'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'buyer_type' => 'business' === $normalizedBuyer['buyer_type'] ? self::BUYER_TYPE_BUSINESS : self::BUYER_TYPE_INDIVIDUAL,
+            'invoice_requested' => !empty($normalizedBuyer['invoice_requested']) ? 1 : 0,
         ];
     }
 
@@ -7432,8 +7525,8 @@ class BuyCoursesPlugin extends Plugin
 
         if ($saleIsCompleted) {
             $this->updateSubscriptionSaleStatus($sale['id'], self::SALE_STATUS_COMPLETED);
-            if ('true' === $this->get('invoicing_enable')) {
-                $this->setInvoice($sale['id']);
+            if ('true' === $this->get('invoicing_enable') && $this->saleNeedsImmediateInvoice($sale)) {
+                $this->setInvoice($sale['id'], self::INVOICE_SOURCE_SUBSCRIPTION);
             }
         }
 

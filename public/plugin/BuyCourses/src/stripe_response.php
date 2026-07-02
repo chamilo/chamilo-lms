@@ -199,6 +199,11 @@ $completeCourseOrSessionSale = static function (mixed $checkoutSession) use ($pl
     $saleIsCompleted = $plugin->completeSale((int) $sale['id']);
     if ($saleIsCompleted) {
         $plugin->storePayouts((int) $sale['id']);
+
+        $paymentIntentId = trim((string) ($checkoutSession->payment_intent ?? ''));
+        if ('' !== $paymentIntentId) {
+            $plugin->updateSaleGatewayTransactionId((int) $sale['id'], $paymentIntentId);
+        }
     }
 
     $log('Course/session Stripe sale completed.', [
@@ -341,6 +346,11 @@ switch ($eventType) {
 
         if (null !== $customerId && '' !== $customerId) {
             $updateData['gateway_customer_id'] = $customerId;
+        }
+
+        $paymentIntentId = trim((string) ($object->payment_intent ?? $object->charge ?? ''));
+        if ('' !== $paymentIntentId) {
+            $updateData['gateway_transaction_id'] = $paymentIntentId;
         }
 
         $plugin->updateServiceSaleGatewayData($serviceSaleId, $updateData);

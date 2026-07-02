@@ -31,22 +31,7 @@ if ($saleId <= 0 || !$plugin->canUserAccessInvoice($saleId, $isService)) {
     api_not_allowed(true);
 }
 
-function buycourses_invoice_escape($value): string
-{
-    return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-}
-
-function buycourses_invoice_nl2br($value): string
-{
-    return nl2br(buycourses_invoice_escape($value));
-}
-
-function buycourses_invoice_label(BuyCoursesPlugin $plugin, string $key, string $fallback): string
-{
-    $label = $plugin->get_lang($key);
-
-    return empty($label) || $label === $key ? $fallback : $label;
-}
+require_once 'invoice_receipt_helpers.php';
 
 function buycourses_invoice_yes_no(?int $value): string
 {
@@ -71,15 +56,10 @@ $buyer = api_get_user_info((int) $infoSale['user_id']);
 $extraUserInfoData = UserManager::get_extra_user_data((int) $infoSale['user_id']);
 $infoInvoice = $plugin->getDataInvoice($saleId, $isService);
 if (empty($infoInvoice)) {
-    // Some service sales can be completed by asynchronous gateways/webhooks before
-    // an invoice row exists. Create it lazily here when invoicing is enabled and
-    // the current user is allowed to access this sale.
-    $plugin->setInvoice($saleId, $isService);
-    $infoInvoice = $plugin->getDataInvoice($saleId, $isService);
-}
-
-if (empty($infoInvoice)) {
-    api_not_allowed(true);
+    // Invoices are now generated eagerly at purchase time (or via the "request
+    // invoice" self-service flow) — if none exists yet, don't fabricate one here with
+    // today's date, since that would misrepresent when the invoice was actually issued.
+    api_not_allowed(true, $plugin->get_lang('InvoiceNotYetAvailable'));
 }
 
 $vatEvidence = [];
@@ -159,6 +139,8 @@ $htmlText .= '</table>';
 
 $htmlText .= '<br><br>';
 $htmlText .= '<p>';
+$htmlText .= buycourses_invoice_label($plugin, 'PurchaseDate', 'Purchase date').': <span style="font-weight:bold;">'
+    .api_convert_and_format_date($infoSale['date'], DATE_TIME_FORMAT_LONG_24H).'</span><br>';
 $htmlText .= $plugin->get_lang('InvoiceDate').': <span style="font-weight:bold;">'
     .api_convert_and_format_date($infoInvoice['date_invoice'], DATE_TIME_FORMAT_LONG_24H).'</span><br>';
 $htmlText .= $plugin->get_lang('InvoiceNumber').': <span style="font-weight:bold;">'

@@ -502,6 +502,13 @@ class PDF
             }
         }
 
+        // mPDF renders with onlyCoreFonts = true (see format_pdf()), which restricts it to
+        // CP1252/WinAnsi. Characters outside that repertoire silently become "?" — most
+        // commonly U+202F (narrow no-break space), which IntlDateFormatter inserts before
+        // AM/PM in formatted times. U+00A0 (regular NBSP) has the same visual effect and
+        // IS representable in CP1252, so swap it in before mPDF ever sees the string.
+        $document_html = str_replace("\u{202F}", "\u{00A0}", $document_html);
+
         @$this->pdf->WriteHTML($document_html);
         if ($disableFooter) {
             $this->pdf->SetHTMLFooter('');

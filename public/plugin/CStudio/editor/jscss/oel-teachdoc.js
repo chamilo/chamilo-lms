@@ -104,7 +104,7 @@ function cstudioSetElementTooltip(selector, label) {
 
 function cstudioApplyEditorTooltips() {
     cstudioSetElementTooltip('#btnsave, .fa-save, [class*="fa-save"]', 'Save');
-    cstudioSetElementTooltip('.fa-th-large, .fa-columns, [class*="fa-th-large"], [class*="fa-columns"]', 'Layout');
+    cstudioSetElementTooltip('.fa-th-large, .fa-columns, .fa-square, .fa-square-o, .fa-stop, [class*="fa-th-large"], [class*="fa-columns"], [class*="fa-square"], [class*="fa-stop"]', 'Layout');
     cstudioSetElementTooltip('.fa-eye, [class*="fa-eye"]', 'Hide menus');
     cstudioSetElementTooltip('.fa-arrows-alt, .fa-expand, [class*="fa-arrows"], [class*="fa-expand"]', 'Toggle fullscreen');
     cstudioSetElementTooltip('.fa-undo, [class*="fa-undo"]', 'Undo');
@@ -112,6 +112,39 @@ function cstudioApplyEditorTooltips() {
     cstudioSetElementTooltip('.cstudio-delete-page-action', 'Delete this page');
     cstudioSetElementTooltip('.uPIcon', 'Move page up');
     cstudioSetElementTooltip('.dowNIcon', 'Move page down');
+    cstudioApplyTopToolbarTooltips();
+}
+
+function cstudioApplyTopToolbarTooltips() {
+    var labels = ['Save', 'Layout', 'Hide menus', 'Toggle fullscreen', 'Undo', 'Redo'];
+    var $containers = $('.gjs-pn-commands .gjs-pn-buttons');
+
+    if (!$containers.length) {
+        var $saveButton = $('#btnsave, .gjs-pn-btn.fa-save').first();
+        if ($saveButton.length) {
+            $containers = $saveButton.closest('.gjs-pn-buttons');
+        }
+    }
+
+    $containers.each(function () {
+        var buttons = $(this).children('.gjs-pn-btn').toArray();
+
+        if (buttons.length < 5) {
+            return;
+        }
+
+        buttons.sort(function (first, second) {
+            return first.getBoundingClientRect().left - second.getBoundingClientRect().left;
+        });
+
+        for (var index = 0; index < labels.length && index < buttons.length; index++) {
+            var translatedLabel = cstudioTranslateTerm(labels[index]);
+            $(buttons[index])
+                .attr('title', translatedLabel)
+                .attr('aria-label', translatedLabel)
+                .attr('data-cstudio-tooltip', translatedLabel);
+        }
+    });
 }
 
 function cstudioStartEditorUiEnhancements() {
@@ -975,8 +1008,44 @@ var saveOCss = "";
 var saveEventG = false;
 var onRenderUpdate = false;
 var globalQuitAction = false;
+var cstudioPendingActionAfterSave = null;
 
 var alcLogs = "";
+
+function cstudioRunPendingActionAfterSave(){
+
+	if (typeof cstudioPendingActionAfterSave !== 'function') {
+		return false;
+	}
+
+	var pendingAction = cstudioPendingActionAfterSave;
+	cstudioPendingActionAfterSave = null;
+	setTimeout(function(){
+		pendingAction();
+	},250);
+
+	return true;
+
+}
+
+function cstudioClearPendingActionAfterSave(){
+
+	cstudioPendingActionAfterSave = null;
+
+}
+
+function cstudioSaveBeforeAction(action){
+
+	if (typeof action !== 'function') {
+		return;
+	}
+
+	cstudioPendingActionAfterSave = action;
+	$('#btnsave').css("display","none");
+	$('#loadsave').css("display","block");
+	saveSourceFrame(false,false,0);
+
+}
 
 
 function activeEventSave(){
@@ -1065,6 +1134,7 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 					$('#loadsave').css("display","none");
 				},200);
 				onlyOneUpdate = true;
+				cstudioRunPendingActionAfterSave();
 			}else{
 
 				$.ajax({
@@ -1103,6 +1173,9 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 										$('#loadsave').css("display","none");
 									}
 									onlyOneUpdate = true;
+									if (cstudioRunPendingActionAfterSave()) {
+										return;
+									}
 									if (loadFXObjectevent) {
 										var location = window.location.href;
 										location = location.replace("#page0","");
@@ -1114,6 +1187,7 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 								}
 							}
 						} else {
+							cstudioClearPendingActionAfterSave();
 							$('#logMsgLoad').css("display","block");
 							$('#logMsgLoad').html(data);
 							onlyOneUpdate = true;
@@ -1128,6 +1202,7 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 								saveSourceFrame(CreateRedirect,HaveRender,idNode);
 							},200);
 						} else {
+							cstudioClearPendingActionAfterSave();
 							$('#logMsgLoad').css("display","block");
 							$('#logMsgLoad').html(textStatus);
 							onlyOneUpdate = true;
@@ -1139,6 +1214,7 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 			}
 
 		}else{
+			cstudioClearPendingActionAfterSave();
 			$('#logMsgLoad').css("display","block");
 			$('#logMsgLoad').html("localStorage error !");
 			onlyOneUpdate = true;
@@ -9646,12 +9722,9 @@ function getCollectionsColorsThemes(){
 function changColor(t){
 	
 	var urlNc = 'index.php?action=edit&id='+ idPageHtml +'&changc=' + t + '&cotk=' + $('#cotk').val();
-    $('#btnsave').css("display","none");
-    $('#loadsave').css("display","block");
-    saveSourceFrame(false,false,0);
-    setTimeout(function(){
-        window.location.href = urlNc;
-    },1600);
+	cstudioSaveBeforeAction(function(){
+		window.location.href = urlNc;
+	});
 
 }
 
@@ -9682,12 +9755,9 @@ function getCollectionsQuizzThemes(){
 function changQuizzColor(t){
 	
 	var urlNc = 'index.php?action=edit&id='+ idPageHtml +'&changquizz=' + t + '&cotk=' + $('#cotk').val();
-    $('#btnsave').css("display","none");
-    $('#loadsave').css("display","block");
-    saveSourceFrame(false,false,0);
-    setTimeout(function(){
-        window.location.href = urlNc;
-    },1600);
+	cstudioSaveBeforeAction(function(){
+		window.location.href = urlNc;
+	});
 
 }
 
@@ -10267,6 +10337,14 @@ function getParamsGlobal() {
 }
 
 function saveParamsGlobal(){
+
+	cstudioSaveBeforeAction(function(){
+		cstudioSaveParamsGlobalAfterPageSave();
+	});
+
+}
+
+function cstudioSaveParamsGlobalAfterPageSave(){
 
     $('#allParamsArea').css("display","none");
     $('#allParamsArea2').css("display","none");
@@ -15717,17 +15795,13 @@ function selectLangUI(lg) {
 
 	closeAllEditWindows();
 
-	$('#btnsave').css("display","none");
-	$('#loadsave').css("display","block");
-	saveSourceFrame(false,false,0);
-
 	// The editor is generated by legacy JavaScript, so changing the language in
 	// place leaves many already-rendered controls with their previous text.
 	// Reload the editor after saving so all UI strings are rebuilt with the
 	// selected locale and the user does not have to refresh manually.
-	setTimeout(function(){
+	cstudioSaveBeforeAction(function(){
 		window.location.reload();
-	},1600);
+	});
 
 }
 

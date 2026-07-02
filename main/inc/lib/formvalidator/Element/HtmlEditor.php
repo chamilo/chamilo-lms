@@ -114,6 +114,16 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
     public function getValue(): ?string
     {
+        // In fullPage mode the editor renders a complete HTML document (e.g. a
+        // course document file). Event attributes such as onclick are legitimate
+        // there (interactive exercises, quizzes…) and must be preserved so that
+        // CKEditor does not silently drop them when loading the file.
+        // For regular inline editor fields (descriptions, announcements, etc.)
+        // the filter stays active to prevent stored XSS.
+        if ($this->editor && $this->editor->getConfigAttribute('fullPage') && api_is_allowed_to_edit()) {
+            return $this->_value;
+        }
+
         return RemoveOnAttributes::filter($this->_value);
     }
 }

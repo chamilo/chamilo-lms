@@ -111,7 +111,7 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
                         getCourseIdFromLp($lp_id),
                     );
                     $courseSysPage = $VDB->w_get_path(WEB_PATH).'main/lp/lp_controller.php?'.$cidReq;
-                    $courseSysPage .= '&gradebook=0&origin=&action=view&lp_id='.$lp_id.'&isStudentView=true&teachdoc=edit';
+                    $courseSysPage .= '&gradebook=0&origin=&action=view&lp_id='.$lp_id.'&isStudentView=true&teachdoc=edit&cstudio_preview=1';
                 }
 
                 echo $courseSysPage;

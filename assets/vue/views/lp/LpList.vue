@@ -163,6 +163,34 @@ const routeStudentViewFlag = computed(() => {
 const isStudentView = computed(() => routeStudentViewFlag.value ?? platformConfig.isStudentViewActive)
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
 
+function syncCStudioCreateButtonVisibility() {
+  const isEditorVisible = canEdit.value
+  const styleId = "cstudio-lp-student-view-style"
+  let style = document.getElementById(styleId)
+
+  if (!isEditorVisible) {
+    if (!style) {
+      style = document.createElement("style")
+      style.id = styleId
+      style.textContent = "#cstudio-lp-create-button{display:none!important;}"
+      document.head.appendChild(style)
+    }
+
+    document.querySelectorAll("#cstudio-lp-create-button").forEach((button) => button.remove())
+  } else if (style) {
+    style.remove()
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("chamilo:lp-student-view-changed", {
+      detail: {
+        isStudentView: isStudentView.value,
+        canEdit: isEditorVisible,
+      },
+    }),
+  )
+}
+
 const mLpList = ref(null)
 const mItems = computed(() => {
   const ctx = legacyContext.value
@@ -383,15 +411,30 @@ function syncStudentViewStateFromRoute() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   syncStudentViewStateFromRoute()
+
+  await nextTick()
+  syncCStudioCreateButtonVisibility()
 })
 
 watch(
   () => route.query?.isStudentView,
-  () => {
+  async () => {
     syncStudentViewStateFromRoute()
+
+    await nextTick()
+    syncCStudioCreateButtonVisibility()
   },
+)
+
+watch(
+  [canEdit, isStudentView],
+  async () => {
+    await nextTick()
+    syncCStudioCreateButtonVisibility()
+  },
+  { immediate: true },
 )
 
 const hasImageRF = (lp) => {
@@ -402,6 +445,41 @@ const hasImageRF = (lp) => {
   }
 
   return !!lp.firstResourceFile?.image
+}
+
+const firstNonEmptyString = (...values) => {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim() !== "") {
+      return value
+    }
+  }
+
+  return null
+}
+
+const resolveLpCoverUrl = (lp) => {
+  const explicitUrl = firstNonEmptyString(
+    lp.coverUrl,
+    lp.thumbnailUrl,
+    lp.thumbnail_url,
+    lp.imageUrl,
+    lp.image_url,
+    lp.assetUrl,
+    lp.asset_url,
+    lp.asset?.contentUrl,
+    lp.asset?.content_url,
+    lp.asset?.url,
+  )
+
+  if (explicitUrl) {
+    return withCidSid(explicitUrl)
+  }
+
+  if (hasImageRF(lp) && lp.contentUrl) {
+    return withCidSid(lp.contentUrl)
+  }
+
+  return null
 }
 
 const onExportPdf = (lp) => {
@@ -494,7 +572,7 @@ const load = async () => {
 
     items.value = raw.map((lp) => ({
       ...lp,
-      coverUrl: hasImageRF(lp) && lp.contentUrl ? withCidSid(lp.contentUrl) : null,
+      coverUrl: resolveLpCoverUrl(lp),
     }))
 
     await loadVisibilityFor(items.value.map((lp) => lp.iid))
@@ -511,6 +589,7 @@ onMounted(async () => {
   await nextTick()
 
   document.dispatchEvent(new CustomEvent(LP_LIST_LOADED))
+  syncCStudioCreateButtonVisibility()
 })
 
 /**

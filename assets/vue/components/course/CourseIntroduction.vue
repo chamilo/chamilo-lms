@@ -154,25 +154,16 @@ async function createEmptyIntroIfNeeded() {
 async function openEditor() {
   await createEmptyIntroIfNeeded()
 
-  const courseToolId = getCourseToolId()
-
-  if (!intro.value?.iid || !courseToolId) {
+  if (!intro.value?.iid) {
     console.error("Cannot open tool introduction editor.", intro.value)
     return
   }
 
   router.push({
     name: "ToolIntroUpdate",
-    params: {
-      id: `/api/c_tool_intros/${intro.value.iid}`,
-    },
     query: {
       cid: course.value.id,
       sid: currentSessionId.value || undefined,
-      tool: props.tool,
-      ctoolintroIid: intro.value.iid,
-      ctoolId: courseToolId,
-      parentResourceNodeId: course.value.resourceNode.id,
       id: `/api/c_tool_intros/${intro.value.iid}`,
     },
   })

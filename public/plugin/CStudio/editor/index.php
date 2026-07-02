@@ -18,6 +18,7 @@ echo "var userStatusCS = '?';";
 echo "var listPagesCS = '?';";
 echo "var renderFromSvg = '';";
 echo "var optionsGlobalPage = '';";
+echo "var cstudioUploadMaxFileSize = '".addslashes((string) ini_get('upload_max_filesize'))."';";
 echo "var lfIdent = '';";
 echo '</script>';
 

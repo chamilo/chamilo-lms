@@ -4485,3 +4485,23 @@ z-index : 10014;
     margin-left: auto;
     margin-right: auto;
 }
+
+/* CStudio media/button tool polish. */
+.cstudio-media-help {
+  clear: both;
+  margin-left: 70px;
+  padding-top: 6px;
+  color: #555;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.gjs-block[aria-hidden="true"] {
+  display: none !important;
+}
+
+.videoByLudi,
+.audioByLudi,
+.teachdocbtnteach {
+  cursor: pointer;
+}

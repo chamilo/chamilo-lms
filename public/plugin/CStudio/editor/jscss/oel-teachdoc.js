@@ -36,6 +36,7 @@ $(document).ready(function(){
         cstudioFixVisibleEditorLabels();
         cstudioHideExperimentalEditorOptions();
         cstudioCenterColorsWindow();
+        cstudioPolishMediaAndButtonBlocks();
         cstudioStartEditorUiEnhancements();
 	},200);
 
@@ -177,11 +178,58 @@ function cstudioStartEditorUiEnhancements() {
         cstudioFixVisibleEditorLabels();
         cstudioHideExperimentalEditorOptions();
         cstudioCenterColorsWindow();
+        cstudioPolishMediaAndButtonBlocks();
         attempts++;
         if (attempts > 20) {
             clearInterval(interval);
         }
     }, 500);
+}
+
+function cstudioFindBlockByLabel(label) {
+    var normalizedLabel = $.trim(String(label || '')).toLowerCase();
+    var matches = $();
+
+    $('.gjs-block').each(function () {
+        var block = $(this);
+        var labelText = $.trim(block.find('.gjs-block-label').first().text()).toLowerCase();
+        var titleText = $.trim(String(block.attr('title') || '')).toLowerCase();
+
+        if (labelText === normalizedLabel || titleText === normalizedLabel) {
+            matches = matches.add(block);
+        }
+    });
+
+    return matches;
+}
+
+function cstudioHideBlockByLabel(label) {
+    cstudioFindBlockByLabel(label).hide().attr('aria-hidden', 'true');
+}
+
+function cstudioPolishMediaAndButtonBlocks() {
+    // Button Bar is currently not configurable enough, so keep it hidden until its behavior is clarified.
+    cstudioHideBlockByLabel('Button Bar');
+
+    cstudioFindBlockByLabel('Video')
+        .attr('title', cstudioTranslateTerm('Insert video'))
+        .attr('aria-label', cstudioTranslateTerm('Insert video'));
+
+    cstudioFindBlockByLabel('Audio')
+        .attr('title', cstudioTranslateTerm('Insert audio'))
+        .attr('aria-label', cstudioTranslateTerm('Insert audio'));
+
+    cstudioFindBlockByLabel('Button')
+        .attr('title', cstudioTranslateTerm('Insert button'))
+        .attr('aria-label', cstudioTranslateTerm('Insert button'));
+}
+
+function cstudioGetUploadMaxSizeLabel() {
+    if (typeof cstudioUploadMaxFileSize !== 'undefined' && cstudioUploadMaxFileSize) {
+        return cstudioUploadMaxFileSize;
+    }
+
+    return cstudioTranslateTerm('platform upload limit');
 }
 
 function cstudioTranslateDefaultCheckAnswerLabel(label) {
@@ -775,10 +823,11 @@ function reloadVideosToGrap(iframeBody){
 		allVideos.each(function(index){
 			$(this).on("mouseup mouseover", function () {
 				var containDiv = $(this).parent();
-				if (containDiv.find('rapidselectorgrapvideo').length==0) {
+				if (containDiv.find('.rapidselectorgrapvideo').length==0) {
 					containDiv.css("position","relative");
 					var bdDiv = '<div class="rapidselectorgrapvideo" ';
-					bdDiv += ' onMouseDown="parent.displayEditButon(this);" ></div>';
+					bdDiv += ' title="' + parent.cstudioTranslateTerm('Edit video') + '" aria-label="' + parent.cstudioTranslateTerm('Edit video') + '" ';
+					bdDiv += ' onMouseDown="parent.displayEditButon(this);" ondblclick="parent.displayVideoEdit(this); return false;" ></div>';
 					containDiv.prepend(bdDiv);
 				}
 			});
@@ -2035,9 +2084,13 @@ function actionEditButon(){
 		var domObj = $(tmpObjDom);
 
 		if(domObj.hasClass("rapidselectorgrapvideo")){
-			//displayVideoEdit(tmpObjDom);
-			//actionFind = true;
-		}
+				var videoObj = domObj.closest('div').find('video').first();
+				if (videoObj.length) {
+					tmpObjDom = videoObj[0];
+					displayVideoEdit(tmpObjDom);
+					actionFind = true;
+				}
+			}
 		if(domObj.is("video")){
 			displayVideoEdit(tmpObjDom);
 			actionFind = true;
@@ -2977,6 +3030,7 @@ function displayAudioEdit(myObj){
 		bdDiv += '&nbsp;<input onClick="filterGlobalFiles=\'.mp3\';showFileManagerStudio2(23,\'inputAudioLink\',0);" ';
 		bdDiv += ' style="width:50px;" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave" type="button" value="..." />';
+		bdDiv += '<div class="cstudio-media-help">' + cstudioEscapeHtml(cstudioTranslateTerm('Accepted format: MP3. Maximum file size:')) + ' ' + cstudioEscapeHtml(cstudioGetUploadMaxSizeLabel()) + '</div>';
 		
 		bdDiv += '<br/>';
 		bdDiv += '<div style="padding:25px;text-align:right;" >';
@@ -3060,6 +3114,7 @@ function displayVideoEdit(myObj){
 		bdDiv += '<input id="inputVideoLink" type="text" value="http://" style="width:450px;font-size:12px;padding:5px;" />';
 		bdDiv += '&nbsp;<input onClick="filterGlobalFiles=\'.mp4\';showFileManagerStudio2(23,\'inputVideoLink\',0);" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave" type="button" value="..." />';
+		bdDiv += '<div class="cstudio-media-help">' + cstudioEscapeHtml(cstudioTranslateTerm('Accepted format: MP4. Maximum file size:')) + ' ' + cstudioEscapeHtml(cstudioGetUploadMaxSizeLabel()) + '</div>';
 		
 		bdDiv += '<br/>';
 		bdDiv += '<div style="padding:25px;text-align:right;" >';
@@ -5249,6 +5304,8 @@ var cssI = " style='position:absolute;cursor:pointer;background-image:url(\"img/
 //baseButton += '<div class="editRapidIcon" ' + cssI + ' onClick="parent.displayVideoEdit(this);" ></div>';
 
 var baseButton = '<video onMouseDown="parent.displayEditButon(this);" ';
+baseButton += ' ondblclick="parent.displayVideoEdit(this); return false;" ';
+baseButton += ' title="' + cstudioEscapeHtml(cstudioTranslateTerm('Double click to edit video')) + '" ';
 baseButton += ' oncontextmenu="return false;" class="videoByLudi" ';
 baseButton += ' datahref="video/oel-teachdoc.mp4" ';
 baseButton += ' controls  controlsList="nofullscreen nodownload" >';
@@ -5260,8 +5317,8 @@ baseButton += ' type="video/mp4" ></video>';
 //baseButton += '</div>';
 
 editor.BlockManager.add('VideoTeach',{
-	label: '',
-	attributes: {class: 'fa fa-text icon-action'},
+	label: 'Video',
+	attributes: {class: 'fa fa-text icon-action', title: 'Video'},
 	category: 'Basic',
 	content: {
 		content: baseButton,
@@ -5282,7 +5339,10 @@ editor.BlockManager.add('VideoTeach',{
 
 //baseButtonAudio += '<div class="editRapidIcon" ' + cssI + ' onClick="parent.displayAudioEdit(this);" ></div>';
 
-var baseButtonAudio = '<audio onMouseUp="parent.displayEditButon(this);" oncontextmenu="return false;" class="audioByLudi" ';
+var baseButtonAudio = '<audio onMouseUp="parent.displayEditButon(this);" ';
+baseButtonAudio += ' ondblclick="parent.displayAudioEdit(this); return false;" ';
+baseButtonAudio += ' title="' + cstudioEscapeHtml(cstudioTranslateTerm('Double click to edit audio')) + '" ';
+baseButtonAudio += ' oncontextmenu="return false;" class="audioByLudi" ';
 baseButtonAudio += ' datahref="audio/teachdoc-sample.mp3" ';
 baseButtonAudio += ' src="audio/teachdoc-sample.mp3" ';
 baseButtonAudio += ' controls controlsList="nodownload" ></audio>';
@@ -5292,7 +5352,7 @@ baseButtonAudio += ' controls controlsList="nodownload" ></audio>';
   
 editor.BlockManager.add('AudioTeach',{
 	label: 'Audio',
-	attributes: {class: 'fa fa-text icon-audio'},
+	attributes: {class: 'fa fa-text icon-audio', title: 'Audio'},
 	category: 'Basic',
 	content: {
 		content: baseButtonAudio,
@@ -5470,7 +5530,10 @@ editor.BlockManager.add('TxtTeach',{
 	}
 });
 var btnSrc = '<table class="teachdocbtnteach" ';
-btnSrc += 'onMouseDown="parent.displayEditButon(this);" style="width:100%;text-align:center;" >';
+btnSrc += 'onMouseDown="parent.displayEditButon(this);" ';
+btnSrc += 'ondblclick="parent.displayBtnEdit(this); return false;" ';
+btnSrc += 'title="' + cstudioEscapeHtml(cstudioTranslateTerm('Double click to edit button')) + '" ';
+btnSrc += 'style="width:100%;text-align:center;" >';
 btnSrc += '<tr><td style="text-align:center;padding:10px;width:100%;" >';
 
 btnSrc += '<a href="" class="btn-btnTeach btnteachblue" ';
@@ -5481,7 +5544,7 @@ btnSrc += '</td></tr></table>';
 
 editor.BlockManager.add('btnTeach',{
 	label: 'Button',
-	attributes: {class: 'fa fa-text icon-btnTeach'},
+	attributes: {class: 'fa fa-text icon-btnTeach', title: 'Button'},
 	category: 'Basic',
 	content: {
 		content: btnSrc,
@@ -5548,6 +5611,7 @@ contentT = {type : 'box',columns : 3,rows : 1};
 editor.BlockManager.add('buttonbar',{
 	label : 'Button Bar',
 	attributes : {
+		title : 'Button Bar',
 		class : 'fa fa-text icon-plugTeach',
         style : "background-image: url('icon/buttonbar.png');background-repeat:no-repeat;background-position:center center;"
 	},

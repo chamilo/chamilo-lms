@@ -357,6 +357,10 @@ switch ($action) {
                     Display::addFlash(
                         $plugin->getSubscriptionSuccessMessage($sale)
                     );
+
+                    if (!empty($cargo->id)) {
+                        $plugin->updateSaleGatewayTransactionId((int) $sale['id'], (string) $cargo->id);
+                    }
                 }
             }
 
@@ -541,6 +545,10 @@ switch ($action) {
                 ]);
                 break;
             }
+
+            $plugin->updateServiceSaleGatewayData($serviceSaleId, [
+                'gateway_transaction_id' => (string) $response['id'],
+            ]);
 
             unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id']);
 

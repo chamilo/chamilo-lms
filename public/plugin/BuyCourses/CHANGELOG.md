@@ -1,3 +1,98 @@
+v7.6 - 2026-07-02
+====
+Feature: VAT invoices are now generated automatically at the moment a sale, service
+sale, or subscription sale completes — mandatory and immediate for business buyers
+(EU/Belgian VAT rules require an invoice for every B2B sale), and optional for
+individual buyers via a new "I want a VAT invoice for this purchase" checkbox at
+checkout. Previously an invoice could be created much later, the first time someone
+happened to click "Download" on the receipt link, which made its invoice date
+unrelated to the actual purchase date.
+
+Feature: individual buyers who did not request an invoice at checkout can still
+request one afterwards from `/my-services`, within 6 months of the purchase date
+(`BuyCoursesPlugin::INVOICE_REQUEST_WINDOW_MONTHS`). The invoice is generated at the
+moment of the request, not backdated.
+
+Feature: every completed purchase (invoiced or not) now also gets a non-fiscal
+Receipt document (`receipt.php`), always available regardless of the invoicing
+setting, showing the VAT amount charged, the seller's VAT ID, the payment method,
+and the payment gateway's own transaction ID when available (captured from Stripe,
+PayPal, TPV Redsys, and Culqi; not available for Cecabank or bank transfer).
+
+Feature: services can now declare which AI course-creation features they grant
+access to (learning path generator, exercise generator, open-answers grader, tutor
+chatbot, task grader, content analyser, image generator, glossary terms generator),
+configurable per service and shown to the buyer on the catalog and confirmation
+pages.
+
+Feature: services can be duplicated from the admin list ("Copy" action), and the
+catalog can filter/group renewable services into monthly/yearly billing-cycle tabs.
+
+Fix: service purchase eligibility checks (`canCurrentUserBuyService()`) now
+correctly gate access when a service is restricted to specific users/courses.
+
+Fix: multilingual (multiple-language) HTML service descriptions are now filtered
+down to the visitor's language correctly instead of showing every language's block
+concatenated together.
+
+Fix: course/session/service checkout now goes through a single unified purchase
+page instead of three near-duplicate ones, fixing several navigation
+inconsistencies between them.
+
+Fix: an edge case in the course-creation purchase limit check and course/session
+purchase flow that could under- or over-count a user's already-purchased items.
+
+Fix: the "Courses/Sessions" tab on the sales report pages (sales_report.php,
+service_sales_report.php, subscription_sales_report.php) showed the raw string
+"CourseSessionBlock" instead of its translation, because the template called the
+core `get_lang` filter instead of `get_plugin_lang('BuyCoursesPlugin')` — this term
+was only ever defined in the plugin's own language files.
+
+Fix: the "Search" filter card on the same three sales report pages had its form
+elements (radio buttons, the "Order status" select, the Search button) touching the
+card's border with no internal padding, breaking the platform's 8-point spacing.
+The `formShell` wrapper div relied entirely on nested `[&_.form-group]:p-5`-style
+selectors for its padding, but Chamilo's `FormValidator` renders this form's fields
+inside `<div class="row mb-3">` wrappers, not `.form-group` — so that padding rule
+never matched anything. Added padding directly on the wrapper itself.
+
+Fix: the "Purchase history" table on `/my-services` now shows the purchase date and
+time (previously date only), and the downloadable invoice now shows both the
+purchase date and the invoice date side by side, since they can legitimately differ.
+
+Fix: subscription sale invoices no longer share the same internal identifier space
+as course/session sale invoices. `plugin_buycourses_invoices.is_service` is now a
+3-way discriminator (course/session, service, subscription) instead of a boolean;
+previously a subscription sale and a course/session sale with the same numeric id
+could resolve to the wrong invoice record.
+
+Fix: garbled `?` character appearing in PDF invoice/receipt times (e.g.
+"1:48?AM"). Root cause was in Chamilo core's PDF renderer (`PDF::content_to_pdf()`),
+which restricts output to CP1252/WinAnsi fonts and can't render the narrow
+no-break space some locales use before "AM"/"PM"; it's now normalized to a regular
+non-break space before rendering.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new `buyer_type`, `invoice_requested`, and
+`gateway_transaction_id` columns are added to the `plugin_buycourses_sale`,
+`plugin_buycourses_service_sale`, and `plugin_buycourses_subscription_rel_sale`
+tables, and the new `ai_course_features_json` column is added to
+`plugin_buycourses_services`. Either load
+[your-host]/plugin/BuyCourses/update.php in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_sale ADD buyer_type TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_sale ADD invoice_requested TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_sale ADD gateway_transaction_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD buyer_type TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_service_sale ADD invoice_requested TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_service_sale ADD gateway_transaction_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_subscription_rel_sale ADD buyer_type TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_subscription_rel_sale ADD invoice_requested TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_subscription_rel_sale ADD gateway_transaction_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_services ADD ai_course_features_json LONGTEXT DEFAULT NULL;
+```
+
 v7.5 - 2026-06-12
 ====
 Feature: per-country EU VAT now applies to course, session and subscription sales, not only

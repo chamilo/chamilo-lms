@@ -2067,6 +2067,8 @@
     "Reference": "Reference",
     "Amount": "Amount",
     "Receipt": "Receipt",
+    "Invoice": "Invoice",
+    "Request invoice": "Request invoice",
     "Unable to load your services right now.": "Unable to load your services right now.",
     "Auto billing enabled": "Auto billing enabled",
     "Auto billing suspended": "Auto billing suspended",

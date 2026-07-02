@@ -66,6 +66,11 @@ if ($signature === $signatureReceived) {
         $saleIsCompleted = $plugin->completeSale($sale['id']);
         if ($saleIsCompleted) {
             $plugin->storePayouts($sale['id']);
+
+            $authorisationCode = trim((string) $tpv->getParameter('Ds_AuthorisationCode'));
+            if ('' !== $authorisationCode) {
+                $plugin->updateSaleGatewayTransactionId((int) $sale['id'], $authorisationCode);
+            }
         }
     }
 }

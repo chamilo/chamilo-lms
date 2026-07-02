@@ -193,7 +193,7 @@
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Product") }}</th>
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Reference") }}</th>
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Amount") }}</th>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Receipt") }}</th>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Documents") }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-20">
@@ -201,12 +201,12 @@
                 v-for="purchase in purchaseHistory"
                 :key="getPurchaseKey(purchase)"
               >
-                <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ formatDate(purchase.date) }}</td>
+                <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ formatDateTime(purchase.date) }}</td>
                 <td class="whitespace-nowrap px-4 py-3 text-gray-90">{{ purchase.type || "—" }}</td>
                 <td class="px-4 py-3 text-gray-90">{{ purchase.productName || purchase.product_name || "—" }}</td>
                 <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ purchase.reference || "—" }}</td>
                 <td class="whitespace-nowrap px-4 py-3 font-medium text-gray-90">{{ purchase.amount || "—" }}</td>
-                <td class="whitespace-nowrap px-4 py-3">
+                <td class="whitespace-nowrap px-4 py-3 space-x-3">
                   <a
                     v-if="purchase.receiptUrl || purchase.receipt_url"
                     :href="purchase.receiptUrl || purchase.receipt_url"
@@ -214,12 +214,35 @@
                     rel="noopener noreferrer"
                     class="text-sm font-semibold text-primary transition hover:underline"
                   >
-                    {{ t("Download") }}
+                    {{ t("Receipt") }}
+                  </a>
+                  <a
+                    v-if="purchase.invoiceUrl || purchase.invoice_url"
+                    :href="purchase.invoiceUrl || purchase.invoice_url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-sm font-semibold text-primary transition hover:underline"
+                  >
+                    {{ t("Invoice") }}
+                  </a>
+                  <a
+                    v-else-if="purchase.requestInvoiceUrl || purchase.request_invoice_url"
+                    :href="purchase.requestInvoiceUrl || purchase.request_invoice_url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-sm font-semibold text-primary transition hover:underline"
+                  >
+                    {{ t("Request invoice") }}
                   </a>
                   <span
-                    v-else
+                    v-if="
+                      !(purchase.receiptUrl || purchase.receipt_url) &&
+                      !(purchase.invoiceUrl || purchase.invoice_url) &&
+                      !(purchase.requestInvoiceUrl || purchase.request_invoice_url)
+                    "
                     class="text-gray-50"
-                  >—</span>
+                    >—</span
+                  >
                 </td>
               </tr>
             </tbody>
@@ -304,6 +327,22 @@ function formatDate(dateValue) {
   const date = new Date(dateValue)
   if (Number.isNaN(date.getTime())) return String(dateValue).substring(0, 10)
   return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "2-digit", day: "2-digit" }).format(date)
+}
+
+// Used only for the purchase-history date column, which needs the time (h:i, no
+// seconds) to disambiguate purchases made on the same day. formatDate() above stays
+// date-only since it's also used for the unrelated "Valid until"/"Next charge" fields.
+function formatDateTime(dateValue) {
+  if (!dateValue) return "—"
+  const date = new Date(dateValue)
+  if (Number.isNaN(date.getTime())) return String(dateValue).substring(0, 10)
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date)
 }
 
 function getPlainText(value) {

@@ -65,12 +65,47 @@ function cstudioIsCheckboxChecked(id){
     return element ? element.checked : false;
 }
 
+function cstudioNormalizeVisibleTerm(term) {
+    var normalizedTerm = String(term || '').replace(/\s+/g, ' ').trim();
+    var replacements = {
+        'Quizz text': 'Quiz text',
+        'quizz text': 'Quiz text',
+        'Schema obj': 'Object schema',
+        'Help and services': 'Help and pro services',
+        'UI Language': 'UI language',
+        'Export ...': 'Export...',
+        'Import ...': 'Import...',
+        'Export Project': 'Export project',
+        'Import Project': 'Import project',
+        'Export to xApi Package': 'Export to xAPI package',
+        'Free page': 'Free access page',
+        'Save context game and exercise resolutions': 'Save game context and resolved exercises',
+        'White-quizz': 'White quiz',
+        'Yellow-contrast': 'Yellow contrast',
+        'Blue-contrast': 'Blue contrast'
+    };
+
+    return replacements[normalizedTerm] || term;
+}
+
 function cstudioTranslateTerm(term) {
+    var normalizedTerm = cstudioNormalizeVisibleTerm(term);
+
     if (typeof returnTradTerm === 'function') {
-        return returnTradTerm(term);
+        var translatedTerm = returnTradTerm(term);
+        if (translatedTerm !== term) {
+            return translatedTerm;
+        }
+
+        if (normalizedTerm !== term) {
+            translatedTerm = returnTradTerm(normalizedTerm);
+            if (translatedTerm !== normalizedTerm) {
+                return translatedTerm;
+            }
+        }
     }
 
-    return term;
+    return normalizedTerm;
 }
 
 function cstudioEscapeHtml(value) {
@@ -1520,9 +1555,9 @@ function getMenuTop(){
 
 	h += '<div class="topmenufile" >';
 	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();saveSourceFrame(false,false,0);" >Save</div>';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();showExportMenu();" >Export ...</div>';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();showImportMenu();" >Import ...</div>';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySelectLanguage();" >UI Language</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();showExportMenu();" >Export...</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();showImportMenu();" >Import...</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySelectLanguage();" >UI language</div>';
 	if (modeUIeol=='a') {// alpha version
 		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displayExportToManager(\'pdf\');" >Print</div>';
 	}
@@ -1534,15 +1569,15 @@ function getMenuTop(){
 	if (modeUIeol=='a') { // alpha version
 		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displayExportToPdf();" >Export to PDF</div>';
 	}
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportXapi();" >Export to xApi Package</div>';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportProject();" >Export Project</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportXapi();" >Export to xAPI package</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportProject();" >Export project</div>';
 	if (modeUIeol=='a') {// alpha version
 		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubToTheWeb();" >Publish to the web</div>';
 	}
 	h += '</div>';
 	
 	h += '<div class="topmenuimport" >';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubImportProject();" >Import Project</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubImportProject();" >Import project</div>';
 	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubImportProject();" >Extensions</div>';
 	h += '</div>';
 	
@@ -1565,8 +1600,8 @@ function getMenuTop(){
 	
 	h += '<div class="topmenuabout" >';
 	h += '<p>CS engine 2018 - 2025</p>';
-	h += '<p>Version : ' + versionCS;
-	h += '<p><a target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and services</a></p>';
+	h += '<p>Version: ' + versionCS;
+	h += '<p><a target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></p>';
 	
 	h += '<a href="#" style="position:absolute;right:0px;bottom:0px;color:#E5E8E8;" onClick="displayDevAdminParams()" >...</a>';
 	h += '</p>';
@@ -1661,7 +1696,7 @@ function getMenuR(){
 	
 	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:90px;padding:0px;margin:0 5px 0;" >';
 	h += '<input style="margin:0 5px 0 0;" type="radio" class=checkBehaviorWind id="Behavior0" name="behaviorPage" ></input>';
-	h += '<label class="trd" for="Behavior0">Free page</label>';
+	h += '<label class="trd" for="Behavior0">Free access page</label>';
 	h += '</p>';
 	
 	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:118px;padding:0px;margin:0 5px 0;" >';
@@ -7181,7 +7216,7 @@ var bCMQ = '<div class="row" style="position:relative;" id="i27td">';
 
 var baseRenderLUDIQcm = '<table class="qcmbarre" onMouseDown="parent.displayEditButon(this);" style="width:100%;" >';
 
-baseRenderLUDIQcm += '<tr><td colspan=2 style="padding:15px;" class=quizzTextqcm >'+returnTradTerm("Quizz text")+'</td></tr>';
+baseRenderLUDIQcm += '<tr><td colspan=2 style="padding:15px;" class=quizzTextqcm >'+cstudioTranslateTerm('Quizz text')+'</td></tr>';
 
 baseRenderLUDIQcm += '<tr class=quizzTextTr ><td class=quizzTextTd ><img class=checkboxqcm src="img/qcm/matgreen0.png" />';
 baseRenderLUDIQcm += '</td><td style="text-align:left;" >'+returnTradTerm("Answer 1")+'</td></tr>';
@@ -9867,17 +9902,17 @@ function changColor(t){
 function getCollectionsQuizzThemes(){
 
 	var bdDiv = '';
-	bdDiv += '<a title="White-quizz" onClick="changQuizzColor(\'white-quizz\');" ';
+	bdDiv += '<a title="White quiz" onClick="changQuizzColor(\'white-quizz\');" ';
 	bdDiv += ' class="colorCube" >';
 	bdDiv += '<img src="templates/quizztheme/white-quizz.png" />';
 	bdDiv += '</a>';
 	
-	bdDiv += '<a title="Yellow-contrast" onClick="changQuizzColor(\'yellow-contrast\');" ';
+	bdDiv += '<a title="Yellow contrast" onClick="changQuizzColor(\'yellow-contrast\');" ';
 	bdDiv += ' class="colorCube" >';
 	bdDiv += '<img src="templates/quizztheme/yellow-contrast.png" />';
 	bdDiv += '</a>';
 
-	bdDiv += '<a title="Blue-contrast" onClick="changQuizzColor(\'blue-contrast\');" ';
+	bdDiv += '<a title="Blue contrast" onClick="changQuizzColor(\'blue-contrast\');" ';
 	bdDiv += ' class="colorCube" >';
 	bdDiv += '<img src="templates/quizztheme/blue-contrast.png" />';
 	bdDiv += '</a>';
@@ -10254,7 +10289,7 @@ function displayGlobalParams(){
         bdDiv += '</table>';
         bdDiv += '</p>';
 
-        bdDiv += addCheckOptions('Save context game and exercise resolutions','P');
+        bdDiv += addCheckOptions('Save game context and resolved exercises','P');
         
         bdDiv += '<div class="bottomSaveParamsBloc" >';
 		bdDiv += '<input onClick="saveParamsGlobal()" ';
@@ -16086,10 +16121,12 @@ function traductAll() {
         if ($(this).parent().hasClass("gjs-block")) {
             var parentNode = $(this).parent();
             var txt1 = parentNode.attr("title");
-            var txt2 = returnTradTerm(txt1);
-            txt2 = txt2.replace(/&nbsp;/g, ' ');
-            if (txt1!=txt2) {
-               parentNode.attr("title",txt2);
+            if (txt1) {
+                var txt2 = cstudioTranslateTerm(txt1);
+                txt2 = txt2.replace(/&nbsp;/g, ' ');
+                if (txt1!=txt2) {
+                   parentNode.attr("title",txt2);
+                }
             }
         }
     });
@@ -16103,7 +16140,7 @@ function traductAll() {
             txt1 = $(this).attr("value");
             isBtn = 1;
         }
-        var txt2 = returnTradTerm(txt1);
+        var txt2 = cstudioTranslateTerm(txt1);
         if (txt1!=txt2) {
             if (isBtn==1) {
                 $(this).attr("value",txt2);
@@ -16118,7 +16155,7 @@ function traductAll() {
     $('.trd-title').each(function () {
         var label = $(this).attr('title');
         if (label) {
-            var translatedLabel = returnTradTerm(label);
+            var translatedLabel = cstudioTranslateTerm(label);
             $(this).attr('title', translatedLabel);
             $(this).attr('aria-label', translatedLabel);
         }

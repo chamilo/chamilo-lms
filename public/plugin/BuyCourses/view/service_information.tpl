@@ -66,7 +66,7 @@
             </div>
             <h1 class="bc-info-title">{{ service.name|e }}</h1>
             {% if service_description_html %}<div class="bc-info-description bc-translated-html">{{ service_description_html|raw }}</div>{% endif %}
-            {% if buyer_role_notice|default('') %}<div class="bc-info-notice"><em class="fa fa-info-circle"></em><span>{{ buyer_role_notice|e }}</span></div>{% endif %}
+            {% if buyer_role_notice|default('') %}<div class="bc-info-notice"><em class="mdi mdi-information-outline"></em><span>{{ buyer_role_notice|e }}</span></div>{% endif %}
             <div class="bc-info-stats">
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Price'|get_lang }}</div><div class="bc-info-stat__value">{{ total_price_formatted|e ?: '—' }}</div></div>
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Duration'|get_lang }}</div><div class="bc-info-stat__value">{{ duration_label|e }}</div></div>
@@ -90,7 +90,7 @@
                     <a href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}" class="bc-info-button bc-info-button--success" style="width: 100%; margin-top: 16px;">{{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                 {% else %}
                     <span class="bc-info-button bc-info-button--disabled" style="width: 100%; margin-top: 16px;">{{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}</span>
-                    {% if buyer_role_notice|default('') %}<div class="bc-info-notice"><em class="fa fa-info-circle"></em><span>{{ buyer_role_notice|e }}</span></div>{% endif %}
+                    {% if buyer_role_notice|default('') %}<div class="bc-info-notice"><em class="mdi mdi-information-outline"></em><span>{{ buyer_role_notice|e }}</span></div>{% endif %}
                 {% endif %}
             {% endif %}
         </aside>

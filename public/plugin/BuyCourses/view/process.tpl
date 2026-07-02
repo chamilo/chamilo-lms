@@ -34,7 +34,7 @@
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                         title="{{ 'Back'|get_lang }}"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -228,7 +228,7 @@
                                         href="{{ url('index') ~ 'main/social/profile.php?u=' ~ teacher.id }}"
                                         class="inline-flex items-center gap-2 rounded-full border border-gray-25 bg-white px-3 py-2 text-sm font-medium text-gray-90 transition hover:border-primary/30 hover:text-primary"
                                 >
-                                    <em class="fa fa-user"></em>
+                                    <em class="mdi mdi-account"></em>
                                     {{ teacher.name }}
                                 </a>
                                 {% endfor %}
@@ -246,7 +246,7 @@
 
                                 {% if session.dates.display %}
                                 <div class="inline-flex items-center gap-2 rounded-full bg-support-1 px-3 py-1 text-sm font-medium text-support-4">
-                                    <em class="fa fa-calendar"></em>
+                                    <em class="mdi mdi-calendar"></em>
                                     {{ session.dates.display }}
                                 </div>
                                 {% endif %}
@@ -274,7 +274,7 @@
                                 <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-1 text-primary">
-                                            <em class="fa fa-book"></em>
+                                            <em class="mdi mdi-book"></em>
                                         </div>
                                         <div class="min-w-0 flex-1 space-y-2">
                                             <div class="text-base font-semibold text-gray-90">
@@ -288,7 +288,7 @@
                                                         href="{{ url('index') ~ 'main/social/profile.php?u=' ~ coach.id }}"
                                                         class="inline-flex items-center gap-2 rounded-full border border-gray-25 bg-support-2 px-3 py-2 text-sm font-medium text-gray-90 transition hover:border-primary/30 hover:text-primary"
                                                 >
-                                                    <em class="fa fa-user"></em>
+                                                    <em class="mdi mdi-account"></em>
                                                     {{ coach.name }}
                                                 </a>
                                                 {% endfor %}

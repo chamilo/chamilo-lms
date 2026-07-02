@@ -246,7 +246,7 @@
                         href="{{ back_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -338,7 +338,7 @@
                                 {% for teacher in course.teachers %}
                                 <li class="flex items-center gap-2 text-sm text-gray-90">
                                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-support-2 text-primary">
-                                                    <em class="fa fa-user" aria-hidden="true"></em>
+                                                    <em class="mdi mdi-account" aria-hidden="true"></em>
                                                 </span>
                                     <a
                                             href="{{ url('index') ~ 'main/social/profile.php?u=' ~ teacher.id }}"
@@ -371,7 +371,7 @@
 
                             {% if session.dates is defined and session.dates.display %}
                             <p class="text-sm text-gray-50">
-                                <em class="fa fa-calendar fa-fw text-primary"></em>
+                                <em class="mdi mdi-calendar text-primary"></em>
                                 {{ session.dates.display }}
                             </p>
                             {% endif %}
@@ -393,7 +393,7 @@
                                 {% for itemCourse in session.courses %}
                                 <div class="rounded-2xl border border-gray-25 bg-white px-4 py-3">
                                     <p class="font-semibold text-gray-90">
-                                        <em class="fa fa-book text-primary" aria-hidden="true"></em>
+                                        <em class="mdi mdi-book text-primary" aria-hidden="true"></em>
                                         {{ itemCourse.title }}
                                     </p>
 
@@ -401,7 +401,7 @@
                                     <ul class="mt-2 space-y-1">
                                         {% for coach in itemCourse.coaches %}
                                         <li class="flex items-center gap-2 text-sm text-gray-50">
-                                            <em class="fa fa-user text-primary" aria-hidden="true"></em>
+                                            <em class="mdi mdi-account text-primary" aria-hidden="true"></em>
                                             <a
                                                     href="{{ url('index') ~ 'main/social/profile.php?u=' ~ coach.id }}"
                                                     class="transition hover:text-primary"

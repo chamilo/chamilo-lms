@@ -8728,6 +8728,15 @@ msgstr "Prikaži"
 msgid "My courses"
 msgstr "Moji predmeti"
 
+msgid "Shop"
+msgstr "Trgovina"
+
+msgid "Invoice"
+msgstr "Račun"
+
+msgid "Request invoice"
+msgstr "Zatraži račun"
+
 msgid "View my progress"
 msgstr "Pogled u moju statistiku"
 
@@ -36481,4 +36490,7 @@ msgstr "Moderirano"
 
 msgid "View threads"
 msgstr "Prikaži teme"
+
+msgid "No auth source"
+msgstr "No auth source"
 

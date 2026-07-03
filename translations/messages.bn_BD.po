@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ফর্মুলার নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ফর্মুলার উদাহরণ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":হ্যাঁ:কপিরাইট,, না:কপিরাইট নেই"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ফোল্ডার,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ফোল্ডার,, application/msword:MsWord,, application/octet-stream:অক্টেট স্ট্রিম,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":ব্যায়াম:ব্যায়াম,,      সিমুলেশন:সিমুলেশন,,      প্রশ্নপত্র:প্রশ্নপত্র,,      ডায়াগ্রাম:ডায়াগ্রাম,,      চিত্র:চিত্র,,      গ্রাফ:গ্রাফ,,      সূচিপত্র:সূচিপত্র,,      স্লাইড:স্লাইড,,      টেবিল:টেবিল,,      বর্ণনামূলক পাঠ্য:বর্ণনামূলক পাঠ্য,,      পরীক্ষা:পরীক্ষা,,      পরীক্ষণ:পরীক্ষণ,,      সমস্যার বিবৃতি:সমস্যার বিবৃতি,,      স্ব-মূল্যায়ন:স্ব-মূল্যায়ন,,      বক্তৃতা:বক্তৃতা"
@@ -8723,6 +8723,15 @@ msgstr "প্রদর্শন করুন"
 
 msgid "My courses"
 msgstr "আমার কোর্সসমূহ"
+
+msgid "Shop"
+msgstr "দোকান"
+
+msgid "Invoice"
+msgstr "চালান"
+
+msgid "Request invoice"
+msgstr "চালান অনুরোধ করুন"
 
 msgid "View my progress"
 msgstr "আমার অগ্রগতি দেখুন"
@@ -36476,4 +36485,7 @@ msgstr "মডারেটেড"
 
 msgid "View threads"
 msgstr "থ্রেড দেখুন"
+
+msgid "No auth source"
+msgstr "কোনো প্রমাণীকরণ উৎস নেই"
 

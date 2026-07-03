@@ -8728,6 +8728,15 @@ msgstr "Taispeáin"
 msgid "My courses"
 msgstr "Mo chúrsaí"
 
+msgid "Shop"
+msgstr "Siopa"
+
+msgid "Invoice"
+msgstr "Sonrasc"
+
+msgid "Request invoice"
+msgstr "Iarr sonrasc"
+
 msgid "View my progress"
 msgstr "Féach ar mo dhul chun cinn"
 
@@ -36480,4 +36489,7 @@ msgstr "Modhnaithe"
 
 msgid "View threads"
 msgstr "Snáitheanna a fheiceáil"
+
+msgid "No auth source"
+msgstr "Gan fhoinse fíordheimhnithe"
 

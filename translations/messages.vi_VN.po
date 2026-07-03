@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -8728,6 +8728,15 @@ msgstr "Hiển thị"
 
 msgid "My courses"
 msgstr "Danh mục khoá học"
+
+msgid "Shop"
+msgstr "Cửa hàng"
+
+msgid "Invoice"
+msgstr "Hóa đơn"
+
+msgid "Request invoice"
+msgstr "Yêu cầu hóa đơn"
 
 msgid "View my progress"
 msgstr "Xem thống kê"
@@ -36482,4 +36491,7 @@ msgstr "Được kiểm duyệt"
 
 msgid "View threads"
 msgstr "Xem chủ đề"
+
+msgid "No auth source"
+msgstr "Không có nguồn xác thực"
 

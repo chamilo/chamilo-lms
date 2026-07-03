@@ -8728,6 +8728,15 @@ msgstr "Parādīt"
 msgid "My courses"
 msgstr "Mani kursi"
 
+msgid "Shop"
+msgstr "Veikals"
+
+msgid "Invoice"
+msgstr "Rēķins"
+
+msgid "Request invoice"
+msgstr "Pieprasīt rēķinu"
+
 msgid "View my progress"
 msgstr "Statistika par manām darbībām kursos"
 
@@ -36481,4 +36490,7 @@ msgstr "Moderēts"
 
 msgid "View threads"
 msgstr "Skatīt tēmas"
+
+msgid "No auth source"
+msgstr "Nav autentifikācijas avota"
 

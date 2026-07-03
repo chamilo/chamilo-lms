@@ -8729,6 +8729,15 @@ msgstr "Montri"
 msgid "My courses"
 msgstr "miajn kursojn"
 
+msgid "Shop"
+msgstr "Butiko"
+
+msgid "Invoice"
+msgstr "Fakturo"
+
+msgid "Request invoice"
+msgstr "Peti fakturon"
+
 msgid "View my progress"
 msgstr "Montru la statistikon"
 
@@ -36482,4 +36491,7 @@ msgstr "Moderatita"
 
 msgid "View threads"
 msgstr "Vidi fadenojn"
+
+msgid "No auth source"
+msgstr "Neniu aŭtentikiga fonto"
 

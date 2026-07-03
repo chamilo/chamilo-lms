@@ -8724,6 +8724,15 @@ msgstr "Onyesha"
 msgid "My courses"
 msgstr "Kukosa zangu"
 
+msgid "Shop"
+msgstr "Duka"
+
+msgid "Invoice"
+msgstr "Ankara"
+
+msgid "Request invoice"
+msgstr "Omba ankara"
+
 msgid "View my progress"
 msgstr "Tazama maendeleo yangu"
 
@@ -36476,4 +36485,7 @@ msgstr "Imedhibitiwa"
 
 msgid "View threads"
 msgstr "Tazama nyuzi"
+
+msgid "No auth source"
+msgstr "Hakuna chanzo cha uthibitishaji"
 

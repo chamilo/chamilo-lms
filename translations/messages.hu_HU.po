@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -8726,6 +8726,15 @@ msgstr "Megmutat"
 
 msgid "My courses"
 msgstr "Kurzusaim"
+
+msgid "Shop"
+msgstr "Bolt"
+
+msgid "Invoice"
+msgstr "Számla"
+
+msgid "Request invoice"
+msgstr "Számla kérése"
 
 msgid "View my progress"
 msgstr "Statisztikáim megtekintése"
@@ -36480,4 +36489,7 @@ msgstr "Moderált"
 
 msgid "View threads"
 msgstr "Témák megtekintése"
+
+msgid "No auth source"
+msgstr "Nincs hitelesítési forrás"
 

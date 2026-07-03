@@ -8724,6 +8724,15 @@ msgstr "Muujin"
 msgid "My courses"
 msgstr "Koorsooyinkayga"
 
+msgid "Shop"
+msgstr "Dukaanka"
+
+msgid "Invoice"
+msgstr "Biil"
+
+msgid "Request invoice"
+msgstr "Codso biil"
+
 msgid "View my progress"
 msgstr "Muujin horumarkaaga"
 
@@ -36476,4 +36485,7 @@ msgstr "La dhex-dhexaajiyay"
 
 msgid "View threads"
 msgstr "Eeg mawduucyada"
+
+msgid "No auth source"
+msgstr "No auth source"
 

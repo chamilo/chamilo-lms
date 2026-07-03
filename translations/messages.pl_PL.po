@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Z poważaniem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Przykładowa formuła: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Przykładowy wzór: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Zakresy zmiennych"
@@ -8727,6 +8727,15 @@ msgstr "Pokaż"
 
 msgid "My courses"
 msgstr "Lista moich kursów"
+
+msgid "Shop"
+msgstr "Sklep"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Poproś o fakturę"
 
 msgid "View my progress"
 msgstr "Pokaż moje statystyki"
@@ -36486,4 +36495,7 @@ msgstr "Moderowany"
 
 msgid "View threads"
 msgstr "Wyświetl wątki"
+
+msgid "No auth source"
+msgstr "Brak źródła uwierzytelniania"
 

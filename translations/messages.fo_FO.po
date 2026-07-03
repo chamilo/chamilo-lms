@@ -8724,6 +8724,15 @@ msgstr "Vís"
 msgid "My courses"
 msgstr "Míni skeið"
 
+msgid "Shop"
+msgstr "Búð"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Biðja um faktura"
+
 msgid "View my progress"
 msgstr "Vís mítt frámistgongd"
 
@@ -36476,4 +36485,7 @@ msgstr "Umsit"
 
 msgid "View threads"
 msgstr "Vís tráðir"
+
+msgid "No auth source"
+msgstr "Onki samgildiskelda"
 

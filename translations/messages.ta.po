@@ -8728,6 +8728,15 @@ msgstr "காட்டு"
 msgid "My courses"
 msgstr "எனது பாடங்கள்"
 
+msgid "Shop"
+msgstr "கடை"
+
+msgid "Invoice"
+msgstr "இன்வாய்ஸ்"
+
+msgid "Request invoice"
+msgstr "இன்வாய்ஸ் கோரிக்கை"
+
 msgid "View my progress"
 msgstr "எனது முன்னேற்றத்தைப் பார்"
 
@@ -36480,4 +36489,7 @@ msgstr "மேற்பார்வை செய்யப்பட்டது"
 
 msgid "View threads"
 msgstr "நூல்களைக் காண்க"
+
+msgid "No auth source"
+msgstr "அங்கீகரிப்பு மூலம் இல்லை"
 

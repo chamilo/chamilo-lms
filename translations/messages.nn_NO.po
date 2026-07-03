@@ -8727,6 +8727,15 @@ msgstr "Vis"
 msgid "My courses"
 msgstr "Mine kurs"
 
+msgid "Shop"
+msgstr "Butikk"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Be om faktura"
+
 msgid "View my progress"
 msgstr "Vis min statistikk"
 
@@ -36480,4 +36489,7 @@ msgstr "Modererert"
 
 msgid "View threads"
 msgstr "Vis trådar"
+
+msgid "No auth source"
+msgstr "Ingen autentiseringskjelde"
 

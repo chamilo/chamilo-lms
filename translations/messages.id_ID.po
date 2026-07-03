@@ -8727,6 +8727,15 @@ msgstr "Tampilkan"
 msgid "My courses"
 msgstr "Daftar Mata Kuliah Ku"
 
+msgid "Shop"
+msgstr "Toko"
+
+msgid "Invoice"
+msgstr "Faktur"
+
+msgid "Request invoice"
+msgstr "Minta faktur"
+
 msgid "View my progress"
 msgstr "Lihat statistik Ku"
 
@@ -33908,7 +33917,7 @@ msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" wid
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jika ini pertama kali Anda menggunakan Chamilo, pastikan Anda memeriksa menu samping untuk menemukan jalan melalui banyak fiturnya. Jika Anda membutuhkan bantuan, Anda akan menemukan <a href=\"https://docs.chamilo.org\">dokumentasi resmi kami</a> dapat membantu untuk dokumentasi standar, sementara <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum online kami</a> dapat membantu berbagi ide dan menemukan jawaban dari pengguna Chamilo lainnya."
 
 msgid "Change password"
-msgstr "Change password"
+msgstr "Ubah kata sandi"
 
 msgid "Newest first"
 msgstr "Terbaru dulu"
@@ -35723,22 +35732,22 @@ msgid "The gradebook evaluation could not be linked"
 msgstr "Evaluasi buku nilai tidak dapat ditautkan"
 
 msgid "Survey questions"
-msgstr "Survey questions"
+msgstr "Pertanyaan survei"
 
 msgid "Back to survey list"
-msgstr "Back to survey list"
+msgstr "Kembali ke daftar survei"
 
 msgid "This survey already has answers. Question editing is disabled by configuration."
-msgstr "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Survei ini sudah memiliki jawaban. Pengeditan pertanyaan dinonaktifkan oleh konfigurasi."
 
 msgid "Choose the type of question you want to add."
-msgstr "Choose the type of question you want to add."
+msgstr "Pilih jenis pertanyaan yang ingin Anda tambahkan."
 
 msgid "The free text option is added automatically."
-msgstr "The free text option is added automatically."
+msgstr "Opsi teks bebas ditambahkan secara otomatis."
 
 msgid "No questions found"
-msgstr "No questions found"
+msgstr "Tidak ada pertanyaan ditemukan"
 
 msgid "Mandatory"
 msgstr "Wajib"
@@ -36480,4 +36489,7 @@ msgstr "Dimoderasi"
 
 msgid "View threads"
 msgstr "Lihat topik"
+
+msgid "No auth source"
+msgstr "Tidak ada sumber autentikasi"
 

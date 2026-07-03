@@ -102,6 +102,15 @@ as course/session sale invoices. `plugin_buycourses_invoices.is_service` is now 
 previously a subscription sale and a course/session sale with the same numeric id
 could resolve to the wrong invoice record.
 
+Change: the student-facing menu entry (sidebar, logged-out top nav, and the small
+badge at the top of `/my-services`) was renamed from "Buy courses" to "Shop", since
+the plugin now also sells services and subscriptions, not just courses/sessions.
+French, Spanish, German, and Dutch translations added; other locales fall back to
+the English label until the normal translation pipeline runs. The plugin's own
+admin-facing title ("Sell courses", used in the plugin settings page and legacy
+admin breadcrumbs) was intentionally left as-is — out of scope, but inconsistent
+with this new name if anyone wants to revisit it later.
+
 Fix: garbled `?` character appearing in PDF invoice/receipt times (e.g.
 "1:48?AM"). Root cause was in Chamilo core's PDF renderer (`PDF::content_to_pdf()`),
 which restricts output to CP1252/WinAnsi fonts and can't render the narrow

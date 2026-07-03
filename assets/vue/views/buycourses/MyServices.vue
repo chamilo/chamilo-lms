@@ -6,7 +6,7 @@
     <header class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm lg:p-8">
       <div class="space-y-3">
         <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
-          {{ t("Buy courses") }}
+          {{ t("Shop") }}
         </div>
         <div>
           <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">

@@ -136,7 +136,7 @@ export function useTopbarNotLoggedIn() {
 
     if (showBuyCoursesLink.value) {
       items.push({
-        label: t("Buy courses"),
+        label: t("Shop"),
         url: buyCoursesIndexPath.value,
       })
     }

@@ -11,12 +11,9 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import cToolIntroService from "../../services/cToolIntroService"
 import courseService from "../../services/courseService"
 import { filterTranslatedHtml } from "../../../js/translatehtml.js"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
 const props = defineProps({
-  isAllowedToEdit: {
-    type: Boolean,
-    required: true,
-  },
   tool: {
     type: String,
     default: "course_homepage",
@@ -40,6 +37,7 @@ const router = useRouter()
 const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
 const platformConfigStore = usePlatformConfig()
+const { isAllowedToEdit } = useIsAllowedToEdit()
 
 const intro = ref(null)
 const isLoading = ref(false)

@@ -161,10 +161,7 @@
 
       <div class="flex flex-col lg:flex-row gap-6">
         <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
-          <CourseIntroduction
-            ref="courseIntroEl"
-            :is-allowed-to-edit="isAllowedToEdit"
-          />
+          <CourseIntroduction ref="courseIntroEl" />
         </div>
         <div
           v-if="showCourseSequence"

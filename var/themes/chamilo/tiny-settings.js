@@ -636,7 +636,7 @@
 
     if (pluginNames.has("translatehtml")) {
       const editorBaseUrl = String(merged.base_url || base.base_url || BASE_URL_TINYMCE).replace(/\/$/, "")
-      localExternalPlugins.translatehtml = localExternalPlugins.translatehtml || editorBaseUrl + "/tinymce_plugins/translatehtml/plugin.js"
+      localExternalPlugins.translatehtml = editorBaseUrl + "/tinymce_plugins/translatehtml/plugin.js?v=buycourses_chamilo_iso_span_20260703_3"
     }
 
     merged.external_plugins = Object.assign({}, base.external_plugins || {}, localExternalPlugins)
@@ -651,7 +651,7 @@
       merged.toolbar = appendToolbarCommand(merged.toolbar || localConfig.toolbar || base.toolbar || "", "translatehtml")
       merged.extended_valid_elements = appendExtendedValidElements(
         merged.extended_valid_elements,
-        "span[lang|class|style]",
+        "span[lang|class|style],div[lang|class|style]",
       )
     }
 

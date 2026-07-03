@@ -86,6 +86,16 @@ Fix: the "Purchase history" table on `/my-services` now shows the purchase date 
 time (previously date only), and the downloadable invoice now shows both the
 purchase date and the invoice date side by side, since they can legitimately differ.
 
+Fix: the "Purchase history" table on `/my-services` no longer offers a Receipt,
+Invoice, or "Request invoice" link for a pending or cancelled sale — those only
+make sense once the sale is actually completed. This is now also enforced at the
+`receipt.php`/`invoice.php`/`request_invoice.php` endpoints themselves (not just
+hidden from the list), via a completed-status check added to
+`BuyCoursesPlugin::canUserAccessInvoice()` — so a bookmarked or guessed URL for a
+sale that was never completed (or later cancelled) is rejected even for platform
+admins, since a receipt/invoice for money never received doesn't make sense
+regardless of who's asking.
+
 Fix: subscription sale invoices no longer share the same internal identifier space
 as course/session sale invoices. `plugin_buycourses_invoices.is_service` is now a
 3-way discriminator (course/session, service, subscription) instead of a boolean;

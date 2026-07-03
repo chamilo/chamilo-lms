@@ -1741,7 +1741,8 @@ class BuyCoursesPlugin extends Plugin
         );
 
         foreach ($sales as $sale) {
-            $hasInvoice = !empty($sale['invoice']);
+            $isCompleted = self::SALE_STATUS_COMPLETED === (int) ($sale['status'] ?? 0);
+            $hasInvoice = $isCompleted && !empty($sale['invoice']);
             $history[] = [
                 'date' => (string) ($sale['date'] ?? ''),
                 'type' => (int) $sale['product_type'] === self::PRODUCT_TYPE_SESSION ? get_lang('Session') : get_lang('Course'),
@@ -1749,15 +1750,16 @@ class BuyCoursesPlugin extends Plugin
                 'reference' => (string) ($sale['reference'] ?? ''),
                 'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $this->getCurrency((int) $sale['currency_id'])['iso_code'] ?? ''),
                 'status' => (int) ($sale['status'] ?? 0),
-                'receipt_url' => $this->getReceiptUrl((int) $sale['id'], self::INVOICE_SOURCE_SALE),
+                'receipt_url' => $isCompleted ? $this->getReceiptUrl((int) $sale['id'], self::INVOICE_SOURCE_SALE) : null,
                 'invoice_url' => $hasInvoice ? $this->getInvoiceUrl((int) $sale['id'], self::INVOICE_SOURCE_SALE) : null,
-                'request_invoice_url' => (!$hasInvoice && $this->canRequestInvoiceForSale($sale))
+                'request_invoice_url' => ($isCompleted && !$hasInvoice && $this->canRequestInvoiceForSale($sale))
                     ? $this->getRequestInvoiceUrl((int) $sale['id'], self::INVOICE_SOURCE_SALE) : null,
             ];
         }
 
         foreach ($this->getServiceSales($userId) as $serviceSale) {
-            $hasInvoice = !empty($serviceSale['invoice']);
+            $isCompleted = self::SERVICE_STATUS_COMPLETED === (int) ($serviceSale['status'] ?? 0);
+            $hasInvoice = $isCompleted && !empty($serviceSale['invoice']);
             $history[] = [
                 'date' => (string) ($serviceSale['buy_date'] ?? ''),
                 'type' => $this->get_lang('Service'),
@@ -1765,9 +1767,9 @@ class BuyCoursesPlugin extends Plugin
                 'reference' => (string) ($serviceSale['reference'] ?? ''),
                 'amount' => (string) ($serviceSale['service']['total_price'] ?? ''),
                 'status' => (int) ($serviceSale['status'] ?? 0),
-                'receipt_url' => $this->getReceiptUrl((int) $serviceSale['id'], self::INVOICE_SOURCE_SERVICE),
+                'receipt_url' => $isCompleted ? $this->getReceiptUrl((int) $serviceSale['id'], self::INVOICE_SOURCE_SERVICE) : null,
                 'invoice_url' => $hasInvoice ? $this->getInvoiceUrl((int) $serviceSale['id'], self::INVOICE_SOURCE_SERVICE) : null,
-                'request_invoice_url' => (!$hasInvoice && $this->canRequestInvoiceForSale($serviceSale))
+                'request_invoice_url' => ($isCompleted && !$hasInvoice && $this->canRequestInvoiceForSale($serviceSale))
                     ? $this->getRequestInvoiceUrl((int) $serviceSale['id'], self::INVOICE_SOURCE_SERVICE) : null,
             ];
         }
@@ -1822,22 +1824,35 @@ class BuyCoursesPlugin extends Plugin
 
     public function canUserAccessInvoice(int $saleId, int $isService = 0, ?int $userId = null): bool
     {
-        $userId ??= api_get_user_id();
+        if ($saleId <= 0) {
+            return false;
+        }
+
+        $sale = $this->getDataSaleInvoice($saleId, $isService);
+        if (empty($sale) || !$this->isSaleCompleted($sale, $isService)) {
+            return false;
+        }
 
         if (api_is_platform_admin()) {
             return true;
         }
 
-        if ($userId <= 0 || $saleId <= 0) {
-            return false;
-        }
+        $userId ??= api_get_user_id();
 
-        $sale = $this->getDataSaleInvoice($saleId, $isService);
-        if (empty($sale)) {
-            return false;
-        }
+        return $userId > 0 && (int) ($sale['user_id'] ?? 0) === $userId;
+    }
 
-        return (int) ($sale['user_id'] ?? 0) === $userId;
+    /**
+     * Whether a sale (course/session, service, or subscription) has actually completed —
+     * a receipt or invoice only makes sense for money that was actually received.
+     */
+    private function isSaleCompleted(array $sale, int $isService): bool
+    {
+        $status = (int) ($sale['status'] ?? 0);
+
+        return self::INVOICE_SOURCE_SERVICE === $isService
+            ? self::SERVICE_STATUS_COMPLETED === $status
+            : self::SALE_STATUS_COMPLETED === $status;
     }
 
     /**

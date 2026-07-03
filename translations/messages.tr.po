@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Saygılarımızla"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formül örneği: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formül örneği: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Değişken aralıkları"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":evet:telif hakkı,, hayır:telif hakkı yok"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Klasör,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Klasör,, application\/msword:MsWord,, application\/octet-stream:Octet akışı,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":egzersiz:egzersiz,,      simülasyon:simülasyon,,      anket:anket,,      diyagram:diyagram,,      şekil:şekil,,      grafik:grafik,,      indeks:indeks,,      slayt:slayt,,      tablo:tablo,,      anlatı metni:anlatı metni,,      sınav:sınav,,      deney:deney,,      problem ifadesi:problem ifadesi,,      öz değerlendirme:öz değerlendirme,,      ders:ders"
@@ -8728,6 +8728,15 @@ msgstr "Göster"
 
 msgid "My courses"
 msgstr "Derslerim"
+
+msgid "Shop"
+msgstr "Mağaza"
+
+msgid "Invoice"
+msgstr "Fatura"
+
+msgid "Request invoice"
+msgstr "Fatura talep et"
 
 msgid "View my progress"
 msgstr "İstatistiklerimi Göster"
@@ -36482,4 +36491,7 @@ msgstr "Yönetimli"
 
 msgid "View threads"
 msgstr "Konuları görüntüle"
+
+msgid "No auth source"
+msgstr "Kimlik doğrulama kaynağı yok"
 

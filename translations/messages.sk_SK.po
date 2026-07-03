@@ -8737,6 +8737,15 @@ msgstr "Ukáž"
 msgid "My courses"
 msgstr "Moje kurzy"
 
+msgid "Shop"
+msgstr "Obchod"
+
+msgid "Invoice"
+msgstr "Faktúra"
+
+msgid "Request invoice"
+msgstr "Požiadať o faktúru"
+
 msgid "View my progress"
 msgstr "Pozrieť moju štatistiku"
 
@@ -36495,4 +36504,7 @@ msgstr "Moderované"
 
 msgid "View threads"
 msgstr "Zobraziť témy"
+
+msgid "No auth source"
+msgstr "Žiadny zdroj autentifikácie"
 

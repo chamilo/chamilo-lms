@@ -9,7 +9,6 @@ declare(strict_types=1);
  */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Throwable;
 
 $cidReset = true;
 
@@ -294,24 +293,6 @@ function styleBuyCoursesFormHtml(string $html): string
     return $result;
 }
 
-/**
- * Format a monetary amount without breaking the page when the sale has a missing or invalid ISO currency code.
- */
-function formatServiceSaleAmount(BuyCoursesPlugin $plugin, float $amount, mixed $isoCode): string
-{
-    $normalizedIsoCode = strtoupper(trim((string) $isoCode));
-
-    if ('' === $normalizedIsoCode) {
-        return number_format($amount, 2, '.', ',');
-    }
-
-    try {
-        return $plugin->getPriceWithCurrencyFromIsoCode($amount, $normalizedIsoCode);
-    } catch (Throwable) {
-        return number_format($amount, 2, '.', ',').' '.$normalizedIsoCode;
-    }
-}
-
 api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
@@ -352,6 +333,7 @@ $form->setDefaults([
 ]);
 
 $servicesSales = $plugin->getServiceSales(0, $selectedStatus);
+$paymentTypeLabels = $plugin->getPaymentTypes();
 
 foreach ($servicesSales as &$sale) {
     $sale['total_discount'] = '';
@@ -361,17 +343,16 @@ foreach ($servicesSales as &$sale) {
         $sale['lastname'] ?? ''
     );
     $sale['status_label'] = $saleStatuses[$sale['status']] ?? ($sale['status'] ?? '');
-    $sale['total_price'] = formatServiceSaleAmount(
-        $plugin,
+    $sale['payment_type_label'] = $paymentTypeLabels[(int) ($sale['payment_type'] ?? 0)] ?? '';
+    $sale['total_price'] = $plugin->formatSaleAmount(
         (float) ($sale['price'] ?? 0),
-        $sale['iso_code'] ?? null
+        $sale['service']['currency'] ?? null
     );
 
     if (0.0 !== (float) ($sale['discount_amount'] ?? 0)) {
-        $sale['total_discount'] = formatServiceSaleAmount(
-            $plugin,
+        $sale['total_discount'] = $plugin->formatSaleAmount(
             (float) ($sale['discount_amount'] ?? 0),
-            $sale['iso_code'] ?? null
+            $sale['service']['currency'] ?? null
         );
         $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
     }

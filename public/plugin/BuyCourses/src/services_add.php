@@ -400,6 +400,7 @@ function buycoursesBuildTranslatableHtmlEditorConfig(): array
 
     if ('true' === api_get_setting('editor.translate_html')) {
         $config['extraPlugins'] = 'translatehtml';
+        $config['extended_valid_elements'] = 'span[lang|class|style],div[lang|class|style]';
         $config['toolbar'] = 'undo redo | translatehtml | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | fontfamily fontsize | forecolor backcolor removeformat | link image media table | emoticons preview print code fullscreen | ltr rtl';
     }
 

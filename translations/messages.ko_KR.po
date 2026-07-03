@@ -8727,6 +8727,15 @@ msgstr "보여주기"
 msgid "My courses"
 msgstr "내 과정"
 
+msgid "Shop"
+msgstr "상점"
+
+msgid "Invoice"
+msgstr "청구서"
+
+msgid "Request invoice"
+msgstr "청구서 요청"
+
 msgid "View my progress"
 msgstr "내 통계정보 보기"
 
@@ -36480,4 +36489,7 @@ msgstr "중재됨"
 
 msgid "View threads"
 msgstr "스레드 보기"
+
+msgid "No auth source"
+msgstr "인증 소스 없음"
 

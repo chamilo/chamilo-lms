@@ -50,6 +50,14 @@ class CidReqListener
         'ROLE_CURRENT_COURSE_SESSION_TEACHER',
     ];
 
+    /**
+     * Routes that expose the course id through the {id} route parameter instead of a
+     * cid query param. For these, the course id is read from the route attributes.
+     */
+    private const ROUTES_WITH_COURSE_ID_PARAM = [
+        'chamilo_core_course_gettoolintro',
+    ];
+
     public function __construct(
         private readonly Environment $twig,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
@@ -112,6 +120,14 @@ class CidReqListener
 
         // Check if URL has cid value. Using Symfony request.
         $courseId = (int) $request->get('cid');
+
+        // Some course routes carry the course id as the {id} route parameter instead of
+        // a cid query param (e.g. chamilo_core_course_gettoolintro). Without this fallback
+        // the listener would find no cid and clear the whole course/session context.
+        if (empty($courseId) && \in_array($request->attributes->get('_route'), self::ROUTES_WITH_COURSE_ID_PARAM, true)) {
+            $courseId = (int) $request->attributes->get('id');
+        }
+
         $checker = $this->authorizationChecker;
 
         if (!empty($courseId)) {

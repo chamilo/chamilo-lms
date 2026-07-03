@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמה לנוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמה לנוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -8735,6 +8735,15 @@ msgstr "הצג"
 
 msgid "My courses"
 msgstr "הקורסים שלי"
+
+msgid "Shop"
+msgstr "חנות"
+
+msgid "Invoice"
+msgstr "חשבונית"
+
+msgid "Request invoice"
+msgstr "בקש חשבונית"
 
 msgid "View my progress"
 msgstr "ההתקדמות שלי"
@@ -36493,4 +36502,7 @@ msgstr "מבוקר"
 
 msgid "View threads"
 msgstr "הצג אשכולות"
+
+msgid "No auth source"
+msgstr "אין מקור אימות"
 

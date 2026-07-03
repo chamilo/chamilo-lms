@@ -349,12 +349,15 @@
           name="forum_title"
           required
         />
-        <BaseTextArea
-          id="forum-comment"
+        <BaseTinyEditor
           v-model="forumForm.comment"
-          :label="t('Description')"
+          :title="t('Description')"
+          editor-id="forum-comment"
+        />
+        <input
+          :value="forumForm.comment"
           name="forum_comment"
-          rows="5"
+          type="hidden"
         />
         <BaseSelect
           id="forum-category"
@@ -428,28 +431,88 @@
           />
         </div>
         <div class="grid gap-3 md:grid-cols-2">
-          <label class="flex flex-col gap-1 text-sm text-gray-700">
-            <span>{{ t('Publication date') }}</span>
-            <input
+          <div class="flex flex-col gap-1">
+            <BaseCalendar
               id="forum-start-time"
               v-model="forumForm.startTime"
-              class="rounded border border-gray-30 px-3 py-2 text-sm"
+              :label="t('Publication date')"
+              :show-time="true"
+            />
+            <input
+              :value="toApiDateTime(forumForm.startTime)"
               name="forum_start_time"
-              type="datetime-local"
+              type="hidden"
             />
             <span class="text-xs text-gray-500">{{ t('The forum will be visible starting from this date') }}</span>
-          </label>
-          <label class="flex flex-col gap-1 text-sm text-gray-700">
-            <span>{{ t('Closing date') }}</span>
-            <input
+          </div>
+          <div class="flex flex-col gap-1">
+            <BaseCalendar
               id="forum-end-time"
               v-model="forumForm.endTime"
-              class="rounded border border-gray-30 px-3 py-2 text-sm"
+              :label="t('Closing date')"
+              :show-time="true"
+            />
+            <input
+              :value="toApiDateTime(forumForm.endTime)"
               name="forum_end_time"
-              type="datetime-local"
+              type="hidden"
             />
             <span class="text-xs text-gray-500">{{ t('Once this date has passed, the forum will be closed') }}</span>
-          </label>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-gray-20 bg-gray-10 p-4">
+          <div class="flex flex-col gap-4 md:flex-row md:items-center">
+            <div class="flex h-24 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white">
+              <img
+                v-if="forumImagePreview"
+                :alt="forumForm.title || t('Forum image')"
+                :src="forumImagePreview"
+                class="h-full w-full object-cover"
+              />
+              <BaseIcon
+                v-else
+                icon="comment"
+                size="big"
+              />
+            </div>
+            <div class="flex flex-1 flex-col gap-2">
+              <div>
+                <h3 class="text-sm font-semibold text-gray-90">{{ t('Forum image') }}</h3>
+                <p class="text-xs text-gray-500">
+                  {{ t('This image replaces the default forum icon shown next to the forum title.') }}
+                </p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <BaseFileUpload
+                  :key="forumImageInputKey"
+                  :label="t('Select image')"
+                  accept="image/*"
+                  size="small"
+                  @fileSelected="selectForumImage"
+                />
+                <BaseButton
+                  v-if="forumImagePreview"
+                  :label="t('Remove image')"
+                  icon="delete"
+                  size="small"
+                  type="danger-text"
+                  @click="removeForumImage"
+                />
+              </div>
+              <input
+                :value="forumForm.imageFile?.name || ''"
+                name="forum_image"
+                type="hidden"
+              />
+              <p
+                v-if="forumForm.imageFile"
+                class="text-xs text-gray-500"
+              >
+                {{ t('Selected image') }}: {{ forumForm.imageFile.name }}
+              </p>
+            </div>
+          </div>
         </div>
       </form>
       <template #footer>
@@ -471,11 +534,14 @@ import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
+import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
+import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -513,6 +579,7 @@ const categories = ref([])
 const forums = ref([])
 const foldedCategoryIds = ref(new Set())
 const categoryLanguageFilter = ref("")
+const forumImageInputKey = ref(0)
 
 const categoryForm = reactive({
   id: null,
@@ -535,9 +602,13 @@ const forumForm = reactive({
   defaultView: "flat",
   useCurrentGroup: false,
   groupVisibility: "public",
-  startTime: "",
-  endTime: "",
+  startTime: null,
+  endTime: null,
   locked: false,
+  imageFile: null,
+  imageUrl: "",
+  imagePreviewUrl: "",
+  removeImage: false,
 })
 
 const parentId = computed(() => Number(route.params.node || 0))
@@ -600,10 +671,18 @@ const groupVisibilityOptions = computed(() => [
   { label: t("Private"), value: "private" },
 ])
 
-const categoryOptions = computed(() => [
-  { label: t("No category"), value: 0 },
-  ...categories.value.map((category) => ({ label: category.title, value: category.iid })),
-])
+const categoryOptions = computed(() => {
+  const options = categories.value.map((category) => ({ label: category.title, value: category.iid }))
+
+  return options.length ? options : [{ label: t("General"), value: 0 }]
+})
+const forumImagePreview = computed(() => {
+  if (forumForm.removeImage) {
+    return forumForm.imagePreviewUrl || ""
+  }
+
+  return forumForm.imagePreviewUrl || forumForm.imageUrl || ""
+})
 
 const categoryByIri = computed(() => {
   const byIri = new Map()
@@ -681,7 +760,6 @@ function isForumVisible(forum) {
   return true === forum.forumVisible || 1 === forum.forumVisible || "1" === String(forum.forumVisible)
 }
 
-
 function isCategoryFolded(category) {
   return canFoldCategories.value && foldedCategoryIds.value.has(Number(category?.iid || 0))
 }
@@ -726,10 +804,11 @@ function resetCategoryForm() {
 }
 
 function resetForumForm(category = null) {
+  revokeForumImagePreview()
   forumForm.id = null
   forumForm.title = ""
   forumForm.comment = ""
-  forumForm.categoryId = category?.iid || 0
+  forumForm.categoryId = category?.iid || categories.value[0]?.iid || 0
   forumForm.moderated = false
   forumForm.studentsCanEdit = false
   forumForm.requiresApproval = false
@@ -738,25 +817,25 @@ function resetForumForm(category = null) {
   forumForm.defaultView = defaultForumView.value
   forumForm.useCurrentGroup = Boolean(currentGroupId.value)
   forumForm.groupVisibility = "public"
-  forumForm.startTime = ""
-  forumForm.endTime = ""
+  forumForm.startTime = null
+  forumForm.endTime = null
   forumForm.locked = false
+  forumForm.imageFile = null
+  forumForm.imageUrl = ""
+  forumForm.imagePreviewUrl = ""
+  forumForm.removeImage = false
+  forumImageInputKey.value += 1
   forumFormSubmitted.value = false
 }
 
-function toDateTimeLocal(value) {
+function toDate(value) {
   if (!value) {
-    return ""
+    return null
   }
 
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) {
-    return ""
-  }
 
-  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-
-  return localDate.toISOString().slice(0, 16)
+  return Number.isNaN(date.getTime()) ? null : date
 }
 
 function toApiDateTime(value) {
@@ -764,7 +843,7 @@ function toApiDateTime(value) {
     return ""
   }
 
-  const date = new Date(value)
+  const date = value instanceof Date ? value : new Date(value)
 
   return Number.isNaN(date.getTime()) ? "" : date.toISOString()
 }
@@ -774,7 +853,42 @@ function hasInvalidForumDates() {
     return false
   }
 
-  return new Date(forumForm.startTime).getTime() >= new Date(forumForm.endTime).getTime()
+  return forumForm.startTime.getTime() >= forumForm.endTime.getTime()
+}
+
+function revokeForumImagePreview() {
+  if (forumForm.imagePreviewUrl) {
+    URL.revokeObjectURL(forumForm.imagePreviewUrl)
+  }
+}
+
+function selectForumImage(file) {
+  if (!file) {
+    return
+  }
+
+  const type = String(file.type || "").toLowerCase()
+  if (!type.startsWith("image/") || ["image/svg", "image/svg+xml"].includes(type)) {
+    notifications.showErrorNotification(t("Only image files are allowed."))
+
+    return
+  }
+
+  revokeForumImagePreview()
+  forumForm.imageFile = file
+  forumForm.imagePreviewUrl = URL.createObjectURL(file)
+  forumForm.removeImage = false
+}
+
+function removeForumImage() {
+  const hadStoredImage = Boolean(forumForm.imageUrl)
+
+  revokeForumImagePreview()
+  forumForm.imageFile = null
+  forumForm.imageUrl = ""
+  forumForm.imagePreviewUrl = ""
+  forumForm.removeImage = hadStoredImage
+  forumImageInputKey.value += 1
 }
 
 function openCreateCategoryDialog() {
@@ -810,9 +924,15 @@ function openEditForumDialog(forum) {
   forumForm.defaultView = forum.defaultView || "flat"
   forumForm.useCurrentGroup = Number(forum.forumOfGroup || 0) > 0
   forumForm.groupVisibility = forum.forumGroupPublicPrivate || "public"
-  forumForm.startTime = toDateTimeLocal(forum.startTime)
-  forumForm.endTime = toDateTimeLocal(forum.endTime)
+  revokeForumImagePreview()
+  forumForm.startTime = toDate(forum.startTime)
+  forumForm.endTime = toDate(forum.endTime)
   forumForm.locked = Boolean(Number(forum.locked || 0))
+  forumForm.imageFile = null
+  forumForm.imageUrl = String(forum.forumImage || "")
+  forumForm.imagePreviewUrl = ""
+  forumForm.removeImage = false
+  forumImageInputKey.value += 1
   forumFormSubmitted.value = false
   isForumDialogVisible.value = true
 }
@@ -920,14 +1040,16 @@ async function saveForum() {
 
   try {
     const isCreate = !forumForm.id
+    let savedForum = null
 
     if (forumForm.id) {
-      await forumService.updateForum(forumForm.id, baseQuery.value, payload)
-      notifications.showSuccessNotification(t("Forum updated"))
+      savedForum = await forumService.updateForum(forumForm.id, baseQuery.value, payload)
     } else {
-      await forumService.createForum(baseQuery.value, payload)
-      notifications.showSuccessNotification(t("Forum created"))
+      savedForum = await forumService.createForum(baseQuery.value, payload)
     }
+
+    await saveForumImageIfNeeded(Number(savedForum?.iid || forumForm.id || 0))
+    notifications.showSuccessNotification(isCreate ? t("Forum created") : t("Forum updated"))
 
     isForumDialogVisible.value = false
 
@@ -945,6 +1067,25 @@ async function saveForum() {
   } finally {
     isSavingForum.value = false
   }
+}
+
+async function saveForumImageIfNeeded(forumId) {
+  if (!forumId || (!forumForm.imageFile && !forumForm.removeImage)) {
+    return
+  }
+
+  const response = await forumService.uploadForumImage(forumId, baseQuery.value, {
+    csrfToken: csrfToken.value,
+    image: forumForm.imageFile,
+    removeImage: forumForm.removeImage,
+  })
+
+  revokeForumImagePreview()
+  forumForm.imageUrl = response?.forumImage || ""
+  forumForm.imageFile = null
+  forumForm.imagePreviewUrl = ""
+  forumForm.removeImage = false
+  forumImageInputKey.value += 1
 }
 
 function confirmDeleteCategory(category) {

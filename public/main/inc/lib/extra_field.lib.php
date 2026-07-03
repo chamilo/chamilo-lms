@@ -2947,7 +2947,8 @@ class ExtraField extends Model
         }
         if ('cn' === $oper || 'nc' === $oper || 'in' === $oper || 'ni' === $oper) {
             if (is_array($val)) {
-                $result = '"%'.implode(';', $val).'%"';
+                $escaped = array_map(static fn ($item) => Database::escape_string(trim($item)), $val);
+                $result = '"%'.implode(';', $escaped).'%"';
                 foreach ($val as $item) {
                     $item = Database::escape_string(trim($item));
                     $result .= ' '.$conditionBetweenOptions.' '.$col.' LIKE "%'.$item.'%"';

@@ -8728,6 +8728,15 @@ msgstr "ပြသပါ"
 msgid "My courses"
 msgstr "ကျွန်ုပ်၏သင်တန်းများ"
 
+msgid "Shop"
+msgstr "ဆိုင်"
+
+msgid "Invoice"
+msgstr "ငွေတောင်းခံလွှာ"
+
+msgid "Request invoice"
+msgstr "ငွေတောင်းခံလွှာ တောင်းဆိုရန်"
+
 msgid "View my progress"
 msgstr "ကျွန်ုပ်၏တိုးတက်မှုကို ကြည့်ရှုပါ"
 
@@ -36480,4 +36489,7 @@ msgstr "ထိန်းကျောင်းထားသည်"
 
 msgid "View threads"
 msgstr "ချည်မျှင်များကို ကြည့်ရှုရန်"
+
+msgid "No auth source"
+msgstr "အထောက်အထား အရင်းအမြစ် မရှိပါ"
 

@@ -4,6 +4,7 @@
     "Groups": "Grupet",
     "Sign in": "Hyr",
     "My courses": "Kursimet e mia",
+    "Shop": "Shop",
     "Start recording": "Fillo regjistrimin",
     "Stop recording": "Ndale regjistrimin",
     "Home": "Kreu",
@@ -2067,6 +2068,8 @@
     "Reference": "Referenca",
     "Amount": "Shuma",
     "Receipt": "Fatura",
+    "Invoice": "Invoice",
+    "Request invoice": "Request invoice",
     "Unable to load your services right now.": "Nuk mund t\u00eb ngarkohen sh\u00ebrbimet tuaja tani.",
     "Auto billing enabled": "Faturimi automatik i aktivizuar",
     "Auto billing suspended": "Faturimi automatik i pezulluar",
@@ -2389,5 +2392,8 @@
     "Search term is too short": "Termi i k\u00ebrkimit \u00ebsht\u00eb shum\u00eb i shkurt\u00ebr",
     "Could not search forums": "Nuk mund t\u00eb k\u00ebrkoheshin forumet",
     "Moderated": "I moderuar",
-    "View threads": "Shiko temat"
+    "View threads": "Shiko temat",
+    "Current": "Aktuale",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Numri maksimal i regjistrimeve t\u00eb lejuara. Lini n\u00eb 0 p\u00ebr ta mos e kufizuar."
 }

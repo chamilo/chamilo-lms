@@ -11,12 +11,9 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import cToolIntroService from "../../services/cToolIntroService"
 import courseService from "../../services/courseService"
 import { filterTranslatedHtml } from "../../../js/translatehtml.js"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
 const props = defineProps({
-  isAllowedToEdit: {
-    type: Boolean,
-    required: true,
-  },
   tool: {
     type: String,
     default: "course_homepage",
@@ -40,6 +37,7 @@ const router = useRouter()
 const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
 const platformConfigStore = usePlatformConfig()
+const { isAllowedToEdit } = useIsAllowedToEdit()
 
 const intro = ref(null)
 const isLoading = ref(false)
@@ -89,28 +87,24 @@ const displayedIntroText = computed(() => {
 })
 
 function normalizeIntroResponse(response) {
-  let data = response?.data || response || {}
+  const data = response?.data || response || {}
 
-  if (typeof data === "string") {
-    try {
-      data = JSON.parse(data)
-    } catch (error) {
-      console.error("Invalid tool introduction response:", data)
-      data = {}
-    }
-  }
+  // The API returns the course tool as an embedded JSON-LD resource, while the
+  // legacy read endpoint returns c_tool/cToolId. Bridge both to a single c_tool.
+  const courseToolIri = data.courseTool?.["@id"]
+  const cToolId = courseToolIri ? Number(courseToolIri.split("/").pop()) : data.cToolId || null
 
   return {
     ...data,
     c_tool: data.c_tool || {
-      iid: data.cToolId || null,
+      iid: cToolId,
       title: props.tool,
     },
   }
 }
 
 function getCourseToolId() {
-  return intro.value?.c_tool?.iid || intro.value?.cToolId || null
+  return intro.value?.c_tool?.iid || null
 }
 
 async function loadIntro() {
@@ -148,11 +142,8 @@ async function createEmptyIntroIfNeeded() {
   }
 
   const response = await cToolIntroService.addToolIntro(course.value.id, {
-    tool: props.tool,
+    toolName: props.tool,
     introText: intro.value?.introText || "",
-    sid: currentSessionId.value || 0,
-    // Course context derived server-side from the gated session course.
-    resourceLinkList: [{ visibility: "published" }],
   })
 
   intro.value = normalizeIntroResponse(response)
@@ -161,25 +152,16 @@ async function createEmptyIntroIfNeeded() {
 async function openEditor() {
   await createEmptyIntroIfNeeded()
 
-  const courseToolId = getCourseToolId()
-
-  if (!intro.value?.iid || !courseToolId) {
+  if (!intro.value?.iid) {
     console.error("Cannot open tool introduction editor.", intro.value)
     return
   }
 
   router.push({
     name: "ToolIntroUpdate",
-    params: {
-      id: `/api/c_tool_intros/${intro.value.iid}`,
-    },
     query: {
       cid: course.value.id,
       sid: currentSessionId.value || undefined,
-      tool: props.tool,
-      ctoolintroIid: intro.value.iid,
-      ctoolId: courseToolId,
-      parentResourceNodeId: course.value.resourceNode.id,
       id: `/api/c_tool_intros/${intro.value.iid}`,
     },
   })

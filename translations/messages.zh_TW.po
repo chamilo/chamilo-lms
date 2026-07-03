@@ -8729,6 +8729,15 @@ msgstr "顯示"
 msgid "My courses"
 msgstr "我的課程"
 
+msgid "Shop"
+msgstr "商店"
+
+msgid "Invoice"
+msgstr "發票"
+
+msgid "Request invoice"
+msgstr "索取發票"
+
 msgid "View my progress"
 msgstr "檢視狀態"
 
@@ -36482,4 +36491,7 @@ msgstr "已審核"
 
 msgid "View threads"
 msgstr "檢視討論串"
+
+msgid "No auth source"
+msgstr "無驗證來源"
 

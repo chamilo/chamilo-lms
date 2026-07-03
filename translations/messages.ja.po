@@ -8793,6 +8793,15 @@ msgstr "表示"
 msgid "My courses"
 msgstr "コース"
 
+msgid "Shop"
+msgstr "ショップ"
+
+msgid "Invoice"
+msgstr "請求書"
+
+msgid "Request invoice"
+msgstr "請求書をリクエスト"
+
 msgid "View my progress"
 msgstr "進行状況を表示"
 
@@ -36546,4 +36555,7 @@ msgstr "モデレート済み"
 
 msgid "View threads"
 msgstr "スレッドを表示"
+
+msgid "No auth source"
+msgstr "認証元なし"
 

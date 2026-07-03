@@ -736,6 +736,28 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
+     * Whether $targetUserId is followed by the HR manager $drhId through the UserRelUser
+     * RRHH relation. Native replacement for UserManager::is_user_followed_by_drh().
+     */
+    public function isUserFollowedByDrh(int $targetUserId, int $drhId): bool
+    {
+        $count = (int) $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(uru.id)')
+            ->from(UserRelUser::class, 'uru')
+            ->where('uru.user = :target')
+            ->andWhere('uru.friend = :drh')
+            ->andWhere('uru.relationType = :relationType')
+            ->setParameter('target', $targetUserId)
+            ->setParameter('drh', $drhId)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
      * Get number of users in URL.
      *
      * @return int

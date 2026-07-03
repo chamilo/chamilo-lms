@@ -8728,6 +8728,15 @@ msgstr "देखाउनुहोस्"
 msgid "My courses"
 msgstr "मेरा कोर्सहरू"
 
+msgid "Shop"
+msgstr "पसल"
+
+msgid "Invoice"
+msgstr "चलानी"
+
+msgid "Request invoice"
+msgstr "चलानी अनुरोध गर्नुहोस्"
+
 msgid "View my progress"
 msgstr "मेरो प्रगति हेर्नुहोस्"
 
@@ -36480,4 +36489,7 @@ msgstr "मध्यस्थ गरिएको"
 
 msgid "View threads"
 msgstr "थ्रेडहरू हेर्नुहोस्"
+
+msgid "No auth source"
+msgstr "कुनै प्रमाणीकरण स्रोत छैन"
 

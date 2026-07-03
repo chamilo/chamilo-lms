@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فرمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -8726,6 +8726,15 @@ msgstr "نشان دادن"
 
 msgid "My courses"
 msgstr "فهرست دروس من"
+
+msgid "Shop"
+msgstr "فروشگاه"
+
+msgid "Invoice"
+msgstr "فاکتور"
+
+msgid "Request invoice"
+msgstr "درخواست فاکتور"
 
 msgid "View my progress"
 msgstr "دیدن روند پیشرفت"
@@ -36480,4 +36489,7 @@ msgstr "مدیریت‌شده"
 
 msgid "View threads"
 msgstr "مشاهده موضوعات"
+
+msgid "No auth source"
+msgstr "بدون منبع احراز هویت"
 

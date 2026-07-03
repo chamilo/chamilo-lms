@@ -38,6 +38,7 @@ use Throwable;
 final readonly class SurveyInvitationProcessor implements ProcessorInterface
 {
     use SurveyPersonalitySupportTrait;
+    use SurveyCsrfTokenValidationTrait;
 
     public function __construct(
         private RequestStack $requestStack,
@@ -73,7 +74,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $survey = $this->surveyInvitationProvider->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
         $payload = $this->getPayload($request, $data);
-        $this->validateCsrfToken((string) ($payload['csrfToken'] ?? ''));
+        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, SurveyInvitationProvider::CSRF_TOKEN_ID, $payload);
         $additionalEmails = $this->normalizeStringList($payload['additionalEmails'] ?? []);
         if ([] !== $additionalEmails) {
             throw new BadRequestHttpException('External email invitations are not supported by the current survey invitation entity.');

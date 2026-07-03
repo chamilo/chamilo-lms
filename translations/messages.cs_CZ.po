@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autorské právo,, no:bez autorského práva"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Složka,, application/msword:MsWord,, application/octet-stream:Binární proud,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Složka,, application/msword:MsWord,, application/octet-stream:Datový proud,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cvičení,,      simulation:simulace,,      questionnaire:dotazník,,      diagram:diagram,,      figure:obrázek,,      graph:graf,,      index:index,,      slide:slide,,      table:tabulka,,      narrative text:narrativní text,,      exam:zkouška,,      experiment:experiment,,      problem statement:zadání problému,,      self assessment:sám sebehodnocení,,      lecture:přednáška"
@@ -8724,6 +8724,15 @@ msgstr "Ukaž"
 msgid "My courses"
 msgstr "Moje kurzy"
 
+msgid "Shop"
+msgstr "Obchod"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Požádat o fakturu"
+
 msgid "View my progress"
 msgstr "Zobraz mou statistiku"
 
@@ -14650,7 +14659,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povolit rozšířené panely nástrojů, když je WYSIWYG editor maximalizován"
 
 msgid "HTML Editor"
-msgstr "HTML editor"
+msgstr "HTML Editor"
 
 msgid "Go directly to the course after login"
 msgstr "Přejít přímo do kurzu po přihlášení"
@@ -26605,7 +26614,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurace připojení LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Pole definující hostitele a port pro LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Nastavit datum expirace při prvním přihlášení"
@@ -36476,4 +36485,7 @@ msgstr "Moderováno"
 
 msgid "View threads"
 msgstr "Zobrazit vlákna"
+
+msgid "No auth source"
+msgstr "Žádný zdroj ověření"
 

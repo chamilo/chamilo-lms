@@ -8724,6 +8724,15 @@ msgstr "ښکاره کول"
 msgid "My courses"
 msgstr "زما درسونه"
 
+msgid "Shop"
+msgstr "دکان"
+
+msgid "Invoice"
+msgstr "رسید"
+
+msgid "Request invoice"
+msgstr "د رسید غوښتنه"
+
 msgid "View my progress"
 msgstr "زما پرمختګ وګورئ"
 
@@ -36476,4 +36485,7 @@ msgstr "منظم شوی"
 
 msgid "View threads"
 msgstr "تارونه وګورئ"
+
+msgid "No auth source"
+msgstr "د تصدیق سرچینه نشته"
 

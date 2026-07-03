@@ -8738,6 +8738,15 @@ msgstr "Arata"
 msgid "My courses"
 msgstr "Cursurile mele"
 
+msgid "Shop"
+msgstr "Magazin"
+
+msgid "Invoice"
+msgstr "Factură"
+
+msgid "Request invoice"
+msgstr "Solicită factură"
+
 msgid "View my progress"
 msgstr "Vezi statisticile"
 
@@ -36496,4 +36505,7 @@ msgstr "Moderat"
 
 msgid "View threads"
 msgstr "Vizualizare subiecte"
+
+msgid "No auth source"
+msgstr "Nicio sursă de autentificare"
 

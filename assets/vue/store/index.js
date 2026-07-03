@@ -1,6 +1,5 @@
 import { createStore } from "vuex"
 import notifications from "./modules/notifications"
-import SecurityModule from "./security"
 
 export default createStore({
   plugins: [
@@ -8,6 +7,5 @@ export default createStore({
   ],
   modules: {
     notifications,
-    security: SecurityModule,
   },
 })

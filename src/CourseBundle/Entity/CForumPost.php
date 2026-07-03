@@ -25,6 +25,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\State\Forum\ForumPostActionProvider;
+use Chamilo\CoreBundle\State\Forum\ForumPostCreateStateProvider;
 use Chamilo\CoreBundle\State\Forum\ForumPostProcessor;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use DateTime;
@@ -90,9 +91,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             input: ForumPostWriteInput::class,
-            read: false,
-            name: 'create_forum_reply',
+            provider: ForumPostCreateStateProvider::class,
             processor: ForumPostProcessor::class,
+            deserialize: false,
+            read: true,
+            name: 'create_forum_reply',
         ),
         new Put(
             uriTemplate: '/forum_posts/{iid}/update',

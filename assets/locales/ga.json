@@ -4,6 +4,7 @@
     "Groups": "Gr\u00fapa\u00ed",
     "Sign in": "S\u00ednigh isteach",
     "My courses": "Mo ch\u00farsa\u00ed",
+    "Shop": "Shop",
     "Start recording": "Tosaigh ag taifeadadh",
     "Stop recording": "Stop taifeadadh",
     "Home": "Baile",
@@ -2067,6 +2068,8 @@
     "Reference": "Tagairt",
     "Amount": "M\u00e9id",
     "Receipt": "Admh\u00e1il",
+    "Invoice": "Invoice",
+    "Request invoice": "Request invoice",
     "Unable to load your services right now.": "N\u00ed f\u00e9idir do sheirbh\u00eds\u00ed a lucht\u00fa faoi l\u00e1thair.",
     "Auto billing enabled": "Bille\u00e1il uathoibr\u00edoch cumasaithe",
     "Auto billing suspended": "Bille\u00e1il uathoibr\u00edoch fionra\u00ed",
@@ -2389,5 +2392,8 @@
     "Search term is too short": "T\u00e1 an t\u00e9arma cuardaigh r\u00f3-ghearr",
     "Could not search forums": "N\u00edorbh fh\u00e9idir na f\u00f3raim a chuardach",
     "Moderated": "Modhnaithe",
-    "View threads": "Sn\u00e1itheanna a fheice\u00e1il"
+    "View threads": "Sn\u00e1itheanna a fheice\u00e1il",
+    "Current": "Reatha",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Uasmh\u00e9id s\u00ednti\u00fas. F\u00e1g ag 0 gan teorainn."
 }

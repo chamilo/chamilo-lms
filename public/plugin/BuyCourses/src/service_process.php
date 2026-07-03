@@ -261,6 +261,7 @@ $form->addSelect(
 $form->addText('buyer_vat_number', $plugin->get_lang('BuyerVatNumber'));
 $form->addText('buyer_business_name', $plugin->get_lang('BuyerBusinessName'));
 $form->addTextarea('buyer_business_address', $plugin->get_lang('BuyerBusinessAddress'));
+$form->addCheckBox('invoice_requested', null, $plugin->get_lang('RequestVatInvoice'));
 
 $form->setDefaults([
     'buyer_type' => 'individual',

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Mit freundlichen Grüßen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-Beispiel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formelbeispiel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablenbereiche"
@@ -2081,7 +2081,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:Copyright,, nein:kein Copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Ordner,, application/msword:MsWord,, application/octet-stream:Octet-Stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Ordner,, application\/msword:MsWord,, application\/octet-stream:Octet-Stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:Übung,,      simulation:Simulation,,      questionnaire:Fragebogen,,      diagram:Diagramm,,      figure:Figur,,      graph:Grafik,,      index:Index,,      slide:Folie,,      table:Tabelle,,      narrative text:Erzähltext,,      exam:Prüfung,,      experiment:Experiment,,      problem statement:Problemstellung,,      self assessment:Selbsteinschätzung,,      lecture:Vortrag"
@@ -8787,6 +8787,15 @@ msgstr "anzeigen"
 
 msgid "My courses"
 msgstr "Meine Kurse"
+
+msgid "Shop"
+msgstr "Shop"
+
+msgid "Invoice"
+msgstr "Rechnung"
+
+msgid "Request invoice"
+msgstr "Rechnung anfordern"
 
 msgid "View my progress"
 msgstr "Mein Fortschritt"
@@ -35965,7 +35974,7 @@ msgid "Amount"
 msgstr "Betrag"
 
 msgid "Receipt"
-msgstr "Rechnung"
+msgstr "Quittung"
 
 msgid "Unable to load your services right now."
 msgstr "Ihre Dienste können derzeit nicht geladen werden."
@@ -38048,4 +38057,7 @@ msgstr "Moderiert"
 
 msgid "View threads"
 msgstr "Themen anzeigen"
+
+msgid "No auth source"
+msgstr "Keine Authentifizierungsquelle"
 

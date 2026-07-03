@@ -35,3 +35,28 @@ Please note that updating Chamilo does *NOT* automatically update the plugins
 structure.
 
 You can find a history of changes in the [CHANGELOG.md file](../../plugin/BuyCourses/CHANGELOG.md)
+
+Design note: refunds vs. cancellations
+=======================================
+
+As of this writing, a sale can only reach "Cancelled" status *before* it is
+completed (an abandoned checkout, a declined payment, an admin voiding a still-pending
+manual bank transfer, etc.). There is no feature to cancel or refund a sale that has
+already completed. Because invoices and receipts are only generated at the moment a
+sale completes, a cancelled sale never had one to begin with — so hiding receipt/invoice
+access for cancelled sales (`BuyCoursesPlugin::canUserAccessInvoice()`) is correct today:
+there is nothing to hide, since nothing was ever issued.
+
+If a genuine refund feature (voiding a sale *after* completion) is ever added, do **not**
+extend that same "hide it" behaviour to refunded sales. At that point a real invoice or
+receipt already exists for money that really was received, and:
+
+- **Invoices** are legal, sequentially-numbered fiscal documents. They must stay fully
+  accessible even after a refund — the correct accounting mechanism is a **credit note**
+  (a new, separately-numbered document referencing and cancelling out the original), not
+  hiding or deleting the original. The buyer may also need the original for their own
+  bookkeeping regardless of the refund.
+- **Receipts** are not fiscal documents, so there's more latitude, but they should stay
+  accessible too, with the sale's status shown as "Refunded" rather than the document
+  being hidden or watermarked as invalid — the payment genuinely happened; only its
+  outcome changed later.

@@ -8737,6 +8737,15 @@ msgstr "Mostrar"
 msgid "My courses"
 msgstr "Meus cursos"
 
+msgid "Shop"
+msgstr "Loja"
+
+msgid "Invoice"
+msgstr "Fatura"
+
+msgid "Request invoice"
+msgstr "Solicitar fatura"
+
 msgid "View my progress"
 msgstr "Ver o meu progresso"
 
@@ -36495,4 +36504,7 @@ msgstr "Moderado"
 
 msgid "View threads"
 msgstr "Ver tópicos"
+
+msgid "No auth source"
+msgstr "Nenhuma fonte de autenticação"
 

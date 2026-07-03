@@ -37,7 +37,7 @@
                     href="service_information.php?service_id={{ service.id }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -104,7 +104,7 @@
                             <div class="grid gap-3 text-sm text-gray-50">
                                 <div class="flex items-start gap-3">
                                     <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                        <em class="fa fa-user"></em>
+                                        <em class="mdi mdi-account"></em>
                                     </span>
                                     <div>
                                         <div class="font-semibold text-gray-90">
@@ -117,7 +117,7 @@
                                 {% if service.tax_enable %}
                                     <div class="flex items-start gap-3">
                                         <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                            <em class="fa fa-percent"></em>
+                                            <em class="mdi mdi-percent"></em>
                                         </span>
                                         <div>
                                             <div class="font-semibold text-gray-90">
@@ -131,7 +131,7 @@
                                 {% if service.has_coupon %}
                                     <div class="flex items-start gap-3">
                                         <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                            <em class="fa fa-tag"></em>
+                                            <em class="mdi mdi-tag"></em>
                                         </span>
                                         <div>
                                             <div class="font-semibold text-gray-90">
@@ -373,6 +373,16 @@
       container.style.display = isBusiness ? '' : 'none';
       field.disabled = !isBusiness;
     });
+
+    // Business buyers get a VAT invoice unconditionally (mandatory under EU/Belgian VAT
+    // rules), so the checkbox is forced on and locked; individuals keep their own choice.
+    var invoiceCheckbox = document.querySelector('[name="invoice_requested"]');
+    if (invoiceCheckbox) {
+      if (isBusiness) {
+        invoiceCheckbox.checked = true;
+      }
+      invoiceCheckbox.disabled = isBusiness;
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function () {

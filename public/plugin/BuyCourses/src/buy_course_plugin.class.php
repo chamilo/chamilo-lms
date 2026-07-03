@@ -168,7 +168,7 @@ class BuyCoursesPlugin extends Plugin
     }
 
 
-    private function getCurrentLanguageTwoLetterIsoCode(): string
+    private function getCurrentLanguageIsoCode(): string
     {
         $language = '';
         $userInfo = api_get_user_info();
@@ -193,12 +193,7 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
-        $language = strtolower(str_replace('_', '-', trim($language)));
-        if (preg_match('/^[a-z]{2}/', $language, $matches)) {
-            return $matches[0];
-        }
-
-        return 'en';
+        return $this->normalizeServiceTranslationLanguageCode($language) ?: 'en_US';
     }
 
     public function filterServiceMultilingualHtml(string $html): string
@@ -235,7 +230,6 @@ class BuyCoursesPlugin extends Plugin
             return Security::remove_XSS($html);
         }
 
-        $targetLanguage = $this->getCurrentLanguageTwoLetterIsoCode();
         $availableLanguages = [];
 
         foreach ($nodes as $node) {
@@ -249,13 +243,7 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
-        $availableLanguages = array_values(array_unique($availableLanguages));
-
-        if (!in_array($targetLanguage, $availableLanguages, true)) {
-            $targetLanguage = in_array('en', $availableLanguages, true)
-                ? 'en'
-                : (string) ($availableLanguages[0] ?? 'en');
-        }
+        $targetLanguage = $this->resolveServiceTranslationTargetLanguage($availableLanguages);
 
         for ($i = $nodes->length - 1; $i >= 0; $i--) {
             $node = $nodes->item($i);
@@ -295,13 +283,52 @@ class BuyCoursesPlugin extends Plugin
 
     private function normalizeServiceTranslationLanguageCode(string $language): string
     {
-        $language = strtolower(str_replace('_', '-', trim($language)));
+        $language = trim(str_replace('-', '_', $language));
 
-        if (preg_match('/^[a-z]{2}/', $language, $matches)) {
-            return $matches[0];
+        if (preg_match('/^([a-z]{2})(?:_([a-z]{2}))?$/i', $language, $matches)) {
+            return strtolower((string) $matches[1]).(!empty($matches[2]) ? '_'.strtoupper((string) $matches[2]) : '');
         }
 
         return '';
+    }
+
+    private function resolveServiceTranslationTargetLanguage(array $availableLanguages): string
+    {
+        $availableLanguages = array_values(array_unique(array_filter($availableLanguages)));
+        if (empty($availableLanguages)) {
+            return $this->getCurrentLanguageIsoCode();
+        }
+
+        $targetLanguage = $this->getCurrentLanguageIsoCode();
+        if (in_array($targetLanguage, $availableLanguages, true)) {
+            return $targetLanguage;
+        }
+
+        $targetPrimaryLanguage = $this->getServiceTranslationPrimaryLanguageCode($targetLanguage);
+        foreach ($availableLanguages as $availableLanguage) {
+            if ($targetPrimaryLanguage === $this->getServiceTranslationPrimaryLanguageCode($availableLanguage)) {
+                return $availableLanguage;
+            }
+        }
+
+        foreach (['en_US', 'en'] as $fallbackLanguage) {
+            if (in_array($fallbackLanguage, $availableLanguages, true)) {
+                return $fallbackLanguage;
+            }
+        }
+
+        foreach ($availableLanguages as $availableLanguage) {
+            if ('en' === $this->getServiceTranslationPrimaryLanguageCode($availableLanguage)) {
+                return $availableLanguage;
+            }
+        }
+
+        return (string) ($availableLanguages[0] ?? $targetLanguage);
+    }
+
+    private function getServiceTranslationPrimaryLanguageCode(string $language): string
+    {
+        return strtolower(strtok(str_replace('-', '_', $language), '_') ?: $language);
     }
 
     private function removeEmptyServiceTranslationNodes(\DOMXPath $xpath): void
@@ -324,29 +351,27 @@ class BuyCoursesPlugin extends Plugin
 
     private function filterServiceMultilingualHtmlWithRegex(string $html): string
     {
-        $pattern = '/<(?P<tag>div|section|article|p|span)\b(?=[^>]*\blang\s*=\s*(["\'])([a-z]{2})(?:[-_][a-z]{2})?\2)(?=[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmce-translatehtml\b[^"\']*\4)[^>]*>(?P<content>.*?)<\/\k<tag>>/is';
+        $pattern = '/<(?P<tag>div|section|article|p|span)\b(?=[^>]*\blang\s*=\s*(["\'])([a-z]{2}(?:[-_][a-z]{2})?)\2)(?=[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmce-translatehtml\b[^"\']*\4)[^>]*>(?P<content>.*?)<\/\k<tag>>/is';
 
         if (!preg_match_all($pattern, $html, $matches, PREG_SET_ORDER)) {
             return Security::remove_XSS($html);
         }
 
-        $targetLanguage = $this->getCurrentLanguageTwoLetterIsoCode();
         $availableLanguages = [];
 
         foreach ($matches as $match) {
-            $availableLanguages[] = strtolower((string) $match[3]);
+            $nodeLanguage = $this->normalizeServiceTranslationLanguageCode((string) $match[3]);
+            if ('' !== $nodeLanguage) {
+                $availableLanguages[] = $nodeLanguage;
+            }
         }
 
-        if (!in_array($targetLanguage, $availableLanguages, true)) {
-            $targetLanguage = in_array('en', $availableLanguages, true)
-                ? 'en'
-                : (string) ($availableLanguages[0] ?? 'en');
-        }
+        $targetLanguage = $this->resolveServiceTranslationTargetLanguage($availableLanguages);
 
         $filteredHtml = preg_replace_callback(
             $pattern,
-            static function (array $match) use ($targetLanguage): string {
-                $nodeLanguage = strtolower((string) $match[3]);
+            function (array $match) use ($targetLanguage): string {
+                $nodeLanguage = $this->normalizeServiceTranslationLanguageCode((string) $match[3]);
 
                 if ($nodeLanguage !== $targetLanguage) {
                     return '';

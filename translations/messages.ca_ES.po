@@ -8737,6 +8737,15 @@ msgstr "Mostrar"
 msgid "My courses"
 msgstr "La meva llista de cursos"
 
+msgid "Shop"
+msgstr "Botiga"
+
+msgid "Invoice"
+msgstr "Factura"
+
+msgid "Request invoice"
+msgstr "Sol·licitar factura"
+
 msgid "View my progress"
 msgstr "Veure les meves estadístiques"
 
@@ -36495,4 +36504,7 @@ msgstr "Moderat"
 
 msgid "View threads"
 msgstr "Mostra els fils"
+
+msgid "No auth source"
+msgstr "Cap font d'autenticació"
 

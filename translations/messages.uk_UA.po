@@ -8724,6 +8724,15 @@ msgstr "Показати"
 msgid "My courses"
 msgstr "Мої курси"
 
+msgid "Shop"
+msgstr "Магазин"
+
+msgid "Invoice"
+msgstr "Рахунок"
+
+msgid "Request invoice"
+msgstr "Запросити рахунок"
+
 msgid "View my progress"
 msgstr "Переглянути мою статистику"
 
@@ -36476,4 +36485,7 @@ msgstr "Модерований"
 
 msgid "View threads"
 msgstr "Переглянути теми"
+
+msgid "No auth source"
+msgstr "Без джерела автентифікації"
 

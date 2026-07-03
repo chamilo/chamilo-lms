@@ -9484,6 +9484,15 @@ msgstr "ສະແດງ"
 msgid "My courses"
 msgstr "ຫຼັກສູດຂອງຂ້ອຍ"
 
+msgid "Shop"
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Request invoice"
+msgstr ""
+
 msgid "View my progress"
 msgstr "ເບິ່ງຄວາມຄືບໜ້າຂອງຂ້ອຍ"
 
@@ -38360,13 +38369,13 @@ msgid "The survey title is required."
 msgstr ""
 
 msgid "The survey has been saved successfully"
-msgstr ""
+msgstr "ການສຳຫຼວດໄດ້ຖືກບັນທຶກສຳເລັດແລ້ວ"
 
 msgid "Could not save survey configuration"
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກການຕັ້ງຄ່າການສຳຫຼວດໄດ້"
 
 msgid "Course users"
-msgstr ""
+msgstr "ຜູ້ໃຊ້ຫຼັກສູດ"
 
 msgid "Already invited"
 msgstr "ໄດ້ຖືກເຊີນແລ້ວ"
@@ -38826,4 +38835,7 @@ msgstr "ຄວບຄຸມ"
 
 msgid "View threads"
 msgstr "ເບິ່ງກະທູ້"
+
+msgid "No auth source"
+msgstr "ບໍ່ມີແຫຼ່ງການຢືນຢັນ"
 

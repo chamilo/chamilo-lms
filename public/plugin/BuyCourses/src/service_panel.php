@@ -68,7 +68,7 @@ foreach ($plugin->getActiveServicesForUser((int) $userInfo['user_id']) as $sale)
         'date_end' => !empty($sale['date_end'])
             ? api_format_date(api_get_local_time($sale['date_end']), DATE_TIME_FORMAT_LONG_24H)
             : '',
-        'image' => !empty($service['image']) ? (string) $service['image'] : Template::get_icon_path('session_default.png'),
+        'image' => !empty($service['image']) ? (string) $service['image'] : Display::get_icon_path('session_default.png'),
         'benefit_summaries' => $benefitSummaries,
         'receipt_url' => !empty($sale['invoice']) ? $plugin->getInvoiceUrl($saleId, 1) : null,
         'info_url' => $webPluginPath.'BuyCourses/src/service_information.php?service_id='.$serviceId.'&sale_id='.$saleId,

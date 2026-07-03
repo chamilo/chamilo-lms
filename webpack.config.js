@@ -15,7 +15,13 @@ const isProd = Encore.isProduction()
 Encore.setOutputPath("public/build/")
   .setManifestKeyPrefix("public/build/")
   .setPublicPath("/build")
-  .enableBuildNotifications()
+
+// Desktop build notifications are optional. Keep them disabled by default
+// because webpack-notifier pulls node-notifier, which is not compatible with
+// the ESM-only uuid package on newer Node.js versions and breaks the build.
+if (process.env.CHAMILO_WEBPACK_NOTIFICATIONS === "1") {
+  Encore.enableBuildNotifications()
+}
 
 // Clean output only in production to speed up development builds.
 if (isProd) {
@@ -166,67 +172,48 @@ class CopyUnhashedAssetsPlugin {
         return
       }
 
-      // Copy legacy_document.js without hash.
-      const legacyDocumentFile = fs.readdirSync(buildPath).find((f) => f.match(/^legacy_document\.[a-f0-9]+\.js$/))
-      if (legacyDocumentFile) {
-        fs.copyFileSync(path.join(buildPath, legacyDocumentFile), path.join(buildPath, "legacy_document.js"))
+      // Read each directory once and reuse the listing for every lookup below,
+      // instead of re-scanning the (large) build directory on every match.
+      const buildFiles = fs.readdirSync(buildPath)
+
+      // Copy the first file matching `pattern` in `dir` to `target`, dropping the content hash.
+      const copyUnhashed = (dir, files, pattern, target) => {
+        const match = files.find((f) => f.match(pattern))
+        if (match) {
+          fs.copyFileSync(path.join(dir, match), path.join(dir, target))
+        }
       }
 
+      // Copy legacy_document.js without hash.
+      copyUnhashed(buildPath, buildFiles, /^legacy_document\.[a-f0-9]+\.js$/, "legacy_document.js")
+
       // Copy legacy_exercise.js without hash.
-      const legacyExerciseFile = fs.readdirSync(buildPath).find((f) => f.match(/^legacy_exercise\.[a-f0-9]+\.js$/))
-      if (legacyExerciseFile) {
-        fs.copyFileSync(path.join(buildPath, legacyExerciseFile), path.join(buildPath, "legacy_exercise.js"))
-      }
+      copyUnhashed(buildPath, buildFiles, /^legacy_exercise\.[a-f0-9]+\.js$/, "legacy_exercise.js")
 
       // Do not copy runtime.js without hash.
       // A non-versioned runtime file can be cached and become desynchronized
       // from hashed chunks, causing ChunkLoadError ("missing") at runtime.
 
-      // Copy document.css without hash.
+      // Copy document.css and editor_content.css without hash.
       if (fs.existsSync(cssPath)) {
-        const documentCssFile = fs.readdirSync(cssPath).find((f) => f.match(/^document\.[a-f0-9]+\.css$/))
-        if (documentCssFile) {
-          fs.copyFileSync(path.join(cssPath, documentCssFile), path.join(cssPath, "document.css"))
-        }
-
-        const editorContentCssFile = fs.readdirSync(cssPath).find((f) => f.match(/^editor_content\.[a-f0-9]+\.css$/))
-        if (editorContentCssFile) {
-          fs.copyFileSync(path.join(cssPath, editorContentCssFile), path.join(cssPath, "editor_content.css"))
-        }
+        const cssFiles = fs.readdirSync(cssPath)
+        copyUnhashed(cssPath, cssFiles, /^document\.[a-f0-9]+\.css$/, "document.css")
+        copyUnhashed(cssPath, cssFiles, /^editor_content\.[a-f0-9]+\.css$/, "editor_content.css")
       }
 
-      // Copy legacy_framereadyloader.js without hash.
-      const frameReadyFile = fs.readdirSync(buildPath).find((f) => f.match(/^legacy_framereadyloader\.[a-f0-9]+\.js$/))
-      if (frameReadyFile) {
-        fs.copyFileSync(path.join(buildPath, frameReadyFile), path.join(buildPath, "legacy_framereadyloader.js"))
-      }
-
-      // Copy legacy_framereadyloader.css without hash.
-      const frameReadyCssFile = fs
-        .readdirSync(buildPath)
-        .find((f) => f.match(/^legacy_framereadyloader\.[a-f0-9]+\.css$/))
-      if (frameReadyCssFile) {
-        fs.copyFileSync(path.join(buildPath, frameReadyCssFile), path.join(buildPath, "legacy_framereadyloader.css"))
-      }
+      // Copy legacy_framereadyloader.js and .css without hash.
+      copyUnhashed(buildPath, buildFiles, /^legacy_framereadyloader\.[a-f0-9]+\.js$/, "legacy_framereadyloader.js")
+      copyUnhashed(buildPath, buildFiles, /^legacy_framereadyloader\.[a-f0-9]+\.css$/, "legacy_framereadyloader.css")
 
       // Keep unhashed qTip assets for legacy direct references.
       if (fs.existsSync(qtipDistPath)) {
-        const qtipFile = fs.readdirSync(qtipDistPath).find((f) => f.match(/^jquery\.qtip\.js$/))
-        if (qtipFile) {
-          fs.copyFileSync(path.join(qtipDistPath, qtipFile), path.join(qtipDistPath, "jquery.qtip.js"))
-        }
-
-        const qtipCssFile = fs.readdirSync(qtipDistPath).find((f) => f.match(/^jquery\.qtip\.css$/))
-        if (qtipCssFile) {
-          fs.copyFileSync(path.join(qtipDistPath, qtipCssFile), path.join(qtipDistPath, "jquery.qtip.css"))
-        }
+        const qtipFiles = fs.readdirSync(qtipDistPath)
+        copyUnhashed(qtipDistPath, qtipFiles, /^jquery\.qtip\.js$/, "jquery.qtip.js")
+        copyUnhashed(qtipDistPath, qtipFiles, /^jquery\.qtip\.css$/, "jquery.qtip.css")
       }
 
       // Copy glossary_auto.js without hash.
-      const glossaryFile = fs.readdirSync(buildPath).find((f) => f.match(/^glossary_auto\.[a-f0-9]+\.js$/))
-      if (glossaryFile) {
-        fs.copyFileSync(path.join(buildPath, glossaryFile), path.join(buildPath, "glossary_auto.js"))
-      }
+      copyUnhashed(buildPath, buildFiles, /^glossary_auto\.[a-f0-9]+\.js$/, "glossary_auto.js")
     })
   }
 }
@@ -244,6 +231,13 @@ config.output.chunkLoadingGlobal = "webpackChunkChamilo"
 // Enable persistent filesystem cache to speed up rebuilds.
 config.cache = {
   type: "filesystem",
+}
+
+// Use a lightweight source map in development to lower the build's memory peak.
+// The default ("inline-source-map") inlines full per-module maps and is the main
+// driver of "JavaScript heap out of memory" failures on smaller servers.
+if (!isProd) {
+  config.devtool = "eval-cheap-module-source-map"
 }
 
 module.exports = config

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Uzorak formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raspon varijabli"
@@ -8724,6 +8724,15 @@ msgstr "Prikaži"
 msgid "My courses"
 msgstr "Moji kursevi"
 
+msgid "Shop"
+msgstr "Prodavnica"
+
+msgid "Invoice"
+msgstr "Račun"
+
+msgid "Request invoice"
+msgstr "Zatraži račun"
+
 msgid "View my progress"
 msgstr "Pogledaj moj napredak"
 
@@ -8908,7 +8917,7 @@ msgid "Document"
 msgstr "Dokument"
 
 msgid "Portal Admin"
-msgstr "Portal Admin"
+msgstr "Administrator portala"
 
 msgid "none"
 msgstr "ništa"
@@ -17170,10 +17179,10 @@ msgid "Courses on the platform"
 msgstr "Kursevi na platformi"
 
 msgid "%s courses"
-msgstr "%s courses"
+msgstr "%s kurseva"
 
 msgid "%s sessions"
-msgstr "%s sessions"
+msgstr "%s sesija"
 
 msgid "Search by title or code"
 msgstr "Pretraga po naslovu ili kodu"
@@ -32119,7 +32128,7 @@ msgid "Moodle version"
 msgstr "Moodle verzija"
 
 msgid "Admin ID"
-msgstr "Admin ID"
+msgstr "ID administratora"
 
 msgid "Internal integer user id"
 msgstr "Unutarnji cjelobrojni ID korisnika"
@@ -34282,7 +34291,7 @@ msgid "Location"
 msgstr "Lokacija"
 
 msgid "Cloud link"
-msgstr "Cloud link"
+msgstr "Veza u oblaku"
 
 msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
 msgstr "Dodajte link ka cloud dokumentu, kao što su Google Drive ili Google Docs."
@@ -36476,4 +36485,7 @@ msgstr "Moderirano"
 
 msgid "View threads"
 msgstr "Prikaži teme"
+
+msgid "No auth source"
+msgstr "Nema izvora autentifikacije"
 

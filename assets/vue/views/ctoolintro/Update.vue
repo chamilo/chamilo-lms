@@ -6,85 +6,62 @@
     :errors="violations"
     :values="item"
   />
-  <Loading :visible="isLoading || deleteLoading" />
+  <Loading :visible="isLoading" />
 </template>
 
-<script>
-import { mapActions, mapGetters } from "vuex"
-import { mapFields } from "vuex-map-fields"
+<script setup>
+import { ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import ToolIntroForm from "../../components/ctoolintro/Form.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
-import UpdateMixin from "../../mixins/UpdateMixin"
-import { ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import useVuelidate from "@vuelidate/core"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import cToolIntroService from "../../services/cToolIntroService"
+import { useNotification } from "../../composables/notification"
 
-const servicePrefix = "ctoolintro"
+const route = useRoute()
+const router = useRouter()
+const notification = useNotification()
 
-export default {
-  name: "ToolIntroUpdate",
-  servicePrefix,
-  components: {
-    Loading,
-    Toolbar,
-    ToolIntroForm,
-  },
-  mixins: [UpdateMixin],
-  setup() {
-    const route = useRoute()
-    const router = useRouter()
-    const item = ref({})
+const updateForm = ref(null)
+const item = ref({})
+const isLoading = ref(false)
+const violations = ref(null)
 
-    let toolId = route.query.ctoolId
-    let ctoolintroId = route.query.ctoolintroIid
+// Only the intro text is editable; the IRI of the resource to update travels
+// as a query param (the route has no :id segment).
+const iri = decodeURIComponent(route.query.id)
+item.value["@id"] = iri
 
-    // Get the current intro text.
-    cToolIntroService
-      .findById(ctoolintroId)
-      .then((toolIntroInfo) => {
-        item.value["introText"] = toolIntroInfo.introText
-        item.value["parentResourceNodeId"] = Number(route.query.parentResourceNodeId)
-      })
-      .catch(function (error) {
-        console.error(error)
-      })
+// Load the current intro text.
+cToolIntroService
+  .findByIri(iri)
+  .then((toolIntroInfo) => {
+    item.value["introText"] = toolIntroInfo.introText
+  })
+  .catch(notification.showErrorNotification)
 
-    item.value["courseTool"] = "/api/c_tools/" + toolId
-    // Course context derived server-side from the gated session course.
-    item.value["resourceLinkList"] = [{ visibility: RESOURCE_LINK_PUBLISHED }]
+/**
+ * Validates the form and updates the tool introduction, navigating back on success.
+ */
+async function onSendForm() {
+  const form = updateForm.value
 
-    function onUpdated() {
-      router.go(-1)
-    }
+  form.v$.$touch()
 
-    return { v$: useVuelidate(), item, onUpdated }
-  },
-  computed: {
-    ...mapFields("ctoolintro", {
-      deleteLoading: "isLoading",
-      isLoading: "isLoading",
-      error: "error",
-      updated: "updated",
-      violations: "violations",
-    }),
-    ...mapGetters("ctoolintro", ["find"]),
-    ...mapGetters({
-      isCurrentTeacher: "security/isCurrentTeacher",
-    }),
-  },
-  methods: {
-    ...mapActions("ctoolintro", {
-      createReset: "resetCreate",
-      deleteItem: "del",
-      delReset: "resetDelete",
-      retrieve: "load",
-      update: "update",
-      updateWithFormData: "updateWithFormData",
-      updateReset: "resetUpdate",
-    }),
-  },
+  if (form.v$.$invalid) {
+    return
+  }
+
+  isLoading.value = true
+
+  try {
+    await cToolIntroService.update(form.v$.item.$model)
+    router.go(-1)
+  } catch (error) {
+    violations.value = error.response?.data?.violations ?? null
+    notification.showErrorNotification(error)
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>

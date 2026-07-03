@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "此致敬礼"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式示例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式示例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "变量范围"
@@ -8728,6 +8728,15 @@ msgstr "显示"
 
 msgid "My courses"
 msgstr "我的课程"
+
+msgid "Shop"
+msgstr "商店"
+
+msgid "Invoice"
+msgstr "发票"
+
+msgid "Request invoice"
+msgstr "申请发票"
 
 msgid "View my progress"
 msgstr "查看状态"
@@ -36482,4 +36491,7 @@ msgstr "已审核"
 
 msgid "View threads"
 msgstr "查看主题"
+
+msgid "No auth source"
+msgstr "无认证源"
 

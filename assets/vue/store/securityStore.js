@@ -63,11 +63,10 @@ export const useSecurityStore = defineStore("security", () => {
     return isCurrentCourseTeacher.value
   })
 
+  // Mirrors api_is_course_admin() (public/main/inc/lib/api.lib.php):
+  // platform admin OR session/course teacher of the current course.
   const isCourseAdmin = computed(() => {
     if (isAdmin.value) return true
-
-    // Student wins over teacher in the same course context
-    if (isCurrentCourseStudent.value) return false
 
     return isCurrentCourseSessionTeacher.value || isCurrentCourseTeacher.value
   })
@@ -110,6 +109,7 @@ export const useSecurityStore = defineStore("security", () => {
     isTeacher,
     isAdmin,
     isCurrentCourseStudent,
+    isCurrentCourseTeacher,
     isCurrentTeacher,
     isCourseAdmin,
     isSessionAdmin,

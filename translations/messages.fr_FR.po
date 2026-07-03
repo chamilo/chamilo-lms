@@ -8955,6 +8955,15 @@ msgstr "Afficher"
 msgid "My courses"
 msgstr "Mes cours"
 
+msgid "Shop"
+msgstr "Boutique"
+
+msgid "Invoice"
+msgstr "Facture"
+
+msgid "Request invoice"
+msgstr "Demander une facture"
+
 msgid "View my progress"
 msgstr "Mon parcours"
 
@@ -38365,3 +38374,4 @@ msgstr "Voir les fils de discussion"
 
 msgid "No auth source"
 msgstr "Pas d'auth source"
+

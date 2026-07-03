@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":نعم:حقوق الطبع والنشر,, لا:لا حقوق طبع ونشر"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:مجلد,, application/msword:MsWord,, application/octet-stream:تدفق ثماني,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:مجلد,, application\/msword:MsWord,, application\/octet-stream:تدفق ثماني,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":تمرين:تمرين,,      محاكاة:محاكاة,,      استبيان:استبيان,,      رسم تخطيطي:رسم تخطيطي,,      شكل:شكل,,      رسم بياني:رسم بياني,,      فهرس:فهرس,,      شريحة:شريحة,,      جدول:جدول,,      نص سردي:نص سردي,,      امتحان:امتحان,,      تجربة:تجربة,,      بيان المشكلة:بيان المشكلة,,      تقييم ذاتي:تقييم ذاتي,,      محاضرة:محاضرة"
@@ -8737,6 +8737,15 @@ msgstr "أظهر"
 
 msgid "My courses"
 msgstr "مقرراتي"
+
+msgid "Shop"
+msgstr "المتجر"
+
+msgid "Invoice"
+msgstr "الفاتورة"
+
+msgid "Request invoice"
+msgstr "طلب فاتورة"
 
 msgid "View my progress"
 msgstr "معاينة إحصائياتي"
@@ -36494,4 +36503,7 @@ msgstr "مُراجَع"
 
 msgid "View threads"
 msgstr "عرض المواضيع"
+
+msgid "No auth source"
+msgstr "لا يوجد مصدر مصادقة"
 

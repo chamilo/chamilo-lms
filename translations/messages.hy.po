@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ՝ sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -8727,6 +8727,15 @@ msgstr "Ցույց տալ"
 
 msgid "My courses"
 msgstr "Իմ դասընթացները"
+
+msgid "Shop"
+msgstr "Խանութ"
+
+msgid "Invoice"
+msgstr "Հաշիվ-ապրանքագիր"
+
+msgid "Request invoice"
+msgstr "Պահանջել հաշիվ-ապրանքագիր"
 
 msgid "View my progress"
 msgstr "Դիտել իմ առաջընթացը"
@@ -35603,7 +35612,7 @@ msgid "course_block_footer_right"
 msgstr "course_block_footer_right"
 
 msgid "Footer right"
-msgstr "Footer right"
+msgstr "Ստորագիր աջ"
 
 msgid "SetNotification"
 msgstr "SetNotification"
@@ -36480,4 +36489,7 @@ msgstr "Մոդերացված"
 
 msgid "View threads"
 msgstr "Դիտել թեմաները"
+
+msgid "No auth source"
+msgstr "Չկա նույնականացման աղբյուր"
 

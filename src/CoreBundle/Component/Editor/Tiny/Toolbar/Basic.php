@@ -93,7 +93,7 @@ class Basic extends Toolbar
             // 'ckeditor_wiris' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_wiris/plugin.js',
             // 'ckeditor_vimeo_embed' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_vimeo_embed/plugin.js',
             // 'scayt' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/scayt/plugin.js',
-            'translatehtml' => api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js',
+            'translatehtml' => api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js?v=buycourses_chamilo_iso_span_20260703_3',
         ];
 
         // Filter candidates by availability (core or external). Build external_plugins map as needed.

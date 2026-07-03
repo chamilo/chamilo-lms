@@ -385,12 +385,18 @@ class PDF
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
                 }
                 if (!empty($document_html)) {
-                    @$this->pdf->WriteHTML($document_html.$page_break);
+                    @$this->pdf->WriteHTML($document_html);
+                    if (!empty($page_break)) {
+                        $this->pdf->AddPage();
+                    }
                 }
             } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
                 // Images
                 $image = Display::img($file);
-                @$this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
+                @$this->pdf->WriteHTML('<html><body>'.$image.'</body></html>');
+                if (!empty($page_break)) {
+                    $this->pdf->AddPage();
+                }
             }
         }
         if (empty($pdf_name)) {

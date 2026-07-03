@@ -118,21 +118,6 @@ export default {
   /**
    * @param {number} courseId
    * @param {number=} sessionId
-   * @returns {Promise<{Object}>}
-   */
-  loadHomeIntro: async (courseId, sessionId = 0) => {
-    const { data } = await api.get(`/course/${courseId}/getToolIntro`, {
-      params: {
-        sid: sessionId,
-      },
-    })
-
-    return data
-  },
-
-  /**
-   * @param {number} courseId
-   * @param {number=} sessionId
    * @returns {Promise<Object>}
    */
   checkLegal: async (courseId, sessionId = 0) => {

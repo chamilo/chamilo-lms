@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\CToolIntroResolveProvider;
 use Chamilo\CoreBundle\State\CToolIntroStateProcessor;
 use Chamilo\CoreBundle\State\CToolIntroStateProvider;
 use Chamilo\CourseBundle\Repository\CToolIntroRepository;
@@ -32,6 +33,36 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
+        new Get(
+            uriTemplate: '/c_tool_intros/resolve',
+            normalizationContext: [
+                'groups' => ['c_tool_intro:resolve'],
+            ],
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            provider: CToolIntroResolveProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                    required: false,
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                    required: false,
+                ),
+                'tool' => new QueryParameter(
+                    schema: ['type' => 'string'],
+                    description: 'Course tool title (defaults to course_homepage)',
+                    required: false,
+                ),
+            ],
+        ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Put(
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
@@ -124,16 +155,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: SidFilter::class)]
 class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
-    #[Groups(['c_tool_intro:read'])]
+    #[Groups(['c_tool_intro:read', 'c_tool_intro:resolve'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
     #[Assert\NotNull]
-    #[Groups(['c_tool_intro:read', 'c_tool_intro:update', 'c_tool_intro:create'])]
+    #[Groups(['c_tool_intro:read', 'c_tool_intro:update', 'c_tool_intro:create', 'c_tool_intro:resolve'])]
     #[ORM\Column(name: 'intro_text', type: 'text', nullable: false)]
     protected string $introText;
+
+    /**
+     * Transient flag (not persisted): the active intro is inherited from the base
+     * course, and editing it inside a session should create a session-specific fork.
+     */
+    #[Groups(['c_tool_intro:resolve'])]
+    private bool $createInSession = false;
 
     #[Groups(['c_tool_intro:read'])]
     #[ORM\ManyToOne(targetEntity: CTool::class)]
@@ -189,6 +227,18 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
 
     public function setResourceName(string $name): self
     {
+        return $this;
+    }
+
+    public function isCreateInSession(): bool
+    {
+        return $this->createInSession;
+    }
+
+    public function setCreateInSession(bool $createInSession): self
+    {
+        $this->createInSession = $createInSession;
+
         return $this;
     }
 

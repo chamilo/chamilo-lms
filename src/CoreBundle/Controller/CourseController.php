@@ -19,7 +19,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
-use Chamilo\CoreBundle\Helpers\CourseLinkSessionHelper;
 use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -40,7 +39,6 @@ use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -961,164 +959,6 @@ class CourseController extends ToolBaseController
         return $this->render('@ChamiloCore/Course/welcome.html.twig', [
             'course' => $course,
         ]);
-    }
-
-    private function findIntroOfCourse(Course $course): ?CTool
-    {
-        $qb = $this->em->createQueryBuilder();
-
-        $query = $qb->select('ct')
-            ->from(CTool::class, 'ct')
-            ->where('ct.course = :c_id')
-            ->andWhere('ct.title = :title')
-            ->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->eq('ct.session', ':session_id'),
-                    $qb->expr()->isNull('ct.session')
-                )
-            )
-            ->setParameters([
-                'c_id' => $course->getId(),
-                'title' => 'course_homepage',
-                'session_id' => 0,
-            ])
-            ->getQuery()
-        ;
-
-        $results = $query->getResult();
-
-        return \count($results) > 0 ? $results[0] : null;
-    }
-
-    private function findCourseTool(Course $course, string $toolTitle, ?Session $session, EntityManagerInterface $em): ?CTool
-    {
-        return $em->getRepository(CTool::class)->findOneBy([
-            'title' => $toolTitle,
-            'course' => $course,
-            'session' => $session,
-        ]);
-    }
-
-    private function ensureCourseTool(
-        Course $course,
-        string $toolTitle,
-        ?Session $session,
-        EntityManagerInterface $em
-    ): ?CTool {
-        $existing = $this->findCourseTool($course, $toolTitle, $session, $em);
-
-        if ($existing) {
-            return $existing;
-        }
-
-        $toolEntity = $em->getRepository(Tool::class)->findOneBy(['title' => $toolTitle]);
-
-        if (!$toolEntity) {
-            return null;
-        }
-
-        $ctool = (new CTool())
-            ->setTool($toolEntity)
-            ->setTitle($toolTitle)
-            ->setCourse($course)
-            ->setPosition(1)
-            ->setParent($course)
-            ->setCreator($course->getCreator())
-            ->setSession($session)
-            ->addCourseLink($course)
-        ;
-
-        $em->persist($ctool);
-        $em->flush();
-
-        return $ctool;
-    }
-
-    #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
-    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em, CourseLinkSessionHelper $courseLinkSessionHelper): Response
-    {
-        // Reading a tool introduction requires access to the course. CourseVoter::VIEW
-        // grants course members (students/teachers), session users and anonymous users
-        // on public courses, while honoring course visibility and prerequisite locks.
-        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
-
-        $toolTitle = trim((string) $request->query->get('tool', 'course_homepage'));
-        if ('' === $toolTitle) {
-            $toolTitle = 'course_homepage';
-        }
-
-        $sessionId = (int) $request->query->get('sid', 0);
-
-        $session = null;
-        if ($sessionId > 0) {
-            $session = $em->getRepository(Session::class)->find($sessionId);
-        }
-
-        $ctoolintroRepo = $em->getRepository(CToolIntro::class);
-
-        $baseTool = $this->findCourseTool($course, $toolTitle, null, $em);
-        if (!$baseTool) {
-            $baseTool = $this->ensureCourseTool($course, $toolTitle, null, $em);
-        }
-
-        $baseIntro = null;
-        if ($baseTool) {
-            $baseIntro = $ctoolintroRepo->findOneBy(
-                ['courseTool' => $baseTool],
-                ['iid' => 'DESC']
-            );
-        }
-
-        $activeTool = $baseTool;
-        $activeIntro = $baseIntro;
-        $createInSession = false;
-
-        if ($session) {
-            $sessionTool = $this->findCourseTool($course, $toolTitle, $session, $em);
-
-            if (!$sessionTool) {
-                $sessionTool = $this->ensureCourseTool($course, $toolTitle, $session, $em);
-            }
-
-            if ($sessionTool) {
-                $activeTool = $sessionTool;
-
-                $sessionIntro = $ctoolintroRepo->findOneBy(
-                    ['courseTool' => $sessionTool],
-                    ['iid' => 'DESC']
-                );
-
-                if ($sessionIntro) {
-                    $activeIntro = $sessionIntro;
-                    $createInSession = false;
-                } else {
-                    $activeIntro = $baseIntro;
-                    $createInSession = true;
-                }
-            }
-        }
-
-        $responseData = [
-            'createInSession' => $createInSession,
-        ];
-
-        if ($activeTool) {
-            $responseData['cToolId'] = $activeTool->getIid();
-            $responseData['c_tool'] = [
-                'iid' => $activeTool->getIid(),
-                'title' => $activeTool->getTitle(),
-            ];
-        }
-
-        if ($activeIntro) {
-            $responseData['iid'] = $activeIntro->getIid();
-            $responseData['introText'] = $courseLinkSessionHelper->rewriteSessionForCourse(
-                (string) $activeIntro->getIntroText(),
-                (int) $course->getId()
-            );
-        }
-
-        return new JsonResponse($responseData);
     }
 
     #[Route('/check-enrollments', name: 'chamilo_core_check_enrollments', methods: ['GET'])]

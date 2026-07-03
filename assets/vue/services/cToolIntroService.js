@@ -1,12 +1,17 @@
 import baseService from "./baseService"
 
 /**
- * @param {number} cId
- * @param {Object} params
+ * Resolves the active tool introduction for the current course/session context.
+ *
+ * Returns the session-specific intro when it exists, otherwise the base intro
+ * flagged with `createInSession`, or an empty placeholder when none exists.
+ * cid/sid/gid are added automatically by the axios interceptor.
+ *
+ * @param {string} [tool="course_homepage"]
  * @returns {Promise<Object>}
  */
-async function findCourseHomeInro(cId, params) {
-  return await baseService.get(`/course/${cId}/getToolIntro`, params)
+async function findCourseHomeInro(tool = "course_homepage") {
+  return await baseService.get("/api/c_tool_intros/resolve", { tool })
 }
 
 /**

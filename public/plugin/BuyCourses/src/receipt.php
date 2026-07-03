@@ -55,7 +55,7 @@ $taxAmount = isset($infoSale['tax_amount']) && null !== $infoSale['tax_amount']
 $taxRate = isset($infoSale['vat_rate']) && null !== $infoSale['vat_rate']
     ? (float) $infoSale['vat_rate']
     : (float) ($infoSale['tax_perc'] ?? 0);
-$totalPrice = $plugin->getPriceWithCurrencyFromIsoCode((float) $infoSale['price'], $isoCode);
+$totalPrice = $plugin->formatSaleAmount((float) $infoSale['price'], $isoCode);
 
 $paymentTypeLabels = $plugin->getPaymentTypes();
 $paymentMethod = $paymentTypeLabels[(int) ($infoSale['payment_type'] ?? 0)] ?? buycourses_invoice_label($plugin, 'Unknown', 'Unknown');
@@ -129,8 +129,8 @@ $header = [
 $row = [
     buycourses_invoice_escape($infoSale['reference']),
     buycourses_invoice_escape($infoSale['product_name']),
-    $plugin->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode),
-    $plugin->getPriceWithCurrencyFromIsoCode($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)',
+    $plugin->formatSaleAmount($priceWithoutTax, $isoCode),
+    $plugin->formatSaleAmount($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)',
     $totalPrice,
 ];
 

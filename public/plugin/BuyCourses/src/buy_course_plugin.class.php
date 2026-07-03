@@ -2647,6 +2647,26 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Same as getPriceWithCurrencyFromIsoCode(), but tolerant of a missing or invalid ISO
+     * currency code: falls back to a bare formatted number instead of letting
+     * Symfony\Component\Intl\Currencies::getSymbol() throw for an unresolvable code.
+     */
+    public function formatSaleAmount(float $amount, ?string $isoCode): string
+    {
+        $normalizedIsoCode = strtoupper(trim((string) $isoCode));
+
+        if ('' === $normalizedIsoCode) {
+            return number_format($amount, 2, '.', ',');
+        }
+
+        try {
+            return $this->getPriceWithCurrencyFromIsoCode($amount, $normalizedIsoCode);
+        } catch (Throwable) {
+            return $normalizedIsoCode.' '.number_format($amount, 2, '.', ',');
+        }
+    }
+
+    /**
      * Get course info.
      *
      * @return array

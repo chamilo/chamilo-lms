@@ -170,7 +170,7 @@ $taxAmount = isset($infoSale['tax_amount']) && null !== $infoSale['tax_amount']
 $taxRate = isset($infoSale['vat_rate']) && null !== $infoSale['vat_rate']
     ? (float) $infoSale['vat_rate']
     : (float) ($infoSale['tax_perc'] ?? 0);
-$totalPrice = $plugin->getPriceWithCurrencyFromIsoCode((float) $infoSale['price'], $isoCode);
+$totalPrice = $plugin->formatSaleAmount((float) $infoSale['price'], $isoCode);
 
 $row = [
     buycourses_invoice_escape($infoSale['reference']),
@@ -178,8 +178,8 @@ $row = [
 ];
 
 if ($showTaxColumns) {
-    $row[] = $plugin->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode);
-    $row[] = $plugin->getPriceWithCurrencyFromIsoCode($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)';
+    $row[] = $plugin->formatSaleAmount($priceWithoutTax, $isoCode);
+    $row[] = $plugin->formatSaleAmount($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)';
     $row[] = $totalPrice;
 } else {
     $row[] = $totalPrice;

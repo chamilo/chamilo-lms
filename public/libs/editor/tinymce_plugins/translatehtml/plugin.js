@@ -1,22 +1,31 @@
 (function () {
   'use strict';
 
+  // Chamilo language ISO codes, not generic HTML language tags.
+  // Keep the list small and allow custom codes for installations with more languages.
   var languages = [
-    { code: 'en', label: 'English' },
-    { code: 'fr', label: 'Français' },
+    { code: 'en_US', label: 'English' },
+    { code: 'fr_FR', label: 'Français' },
     { code: 'es', label: 'Español' },
-    { code: 'pt', label: 'Português' },
     { code: 'de', label: 'Deutsch' },
+    { code: 'pt_BR', label: 'Português (Brasil)' },
     { code: 'it', label: 'Italiano' },
     { code: 'nl', label: 'Nederlands' }
   ];
 
   function normalizeLanguageCode(code) {
-    return String(code || '').trim().toLowerCase().substring(0, 2);
+    var normalizedCode = String(code || '').trim().replace(/-/g, '_');
+    var matches = normalizedCode.match(/^([a-z]{2})(?:_([a-z]{2}))?$/i);
+
+    if (!matches) {
+      return normalizedCode;
+    }
+
+    return String(matches[1]).toLowerCase() + (matches[2] ? '_' + String(matches[2]).toUpperCase() : '');
   }
 
   function isValidLanguageCode(code) {
-    return /^[a-z]{2}$/.test(String(code || ''));
+    return /^[a-z]{2}(?:_[A-Z]{2})?$/.test(String(code || ''));
   }
 
   function encodeHtml(value) {
@@ -46,20 +55,21 @@
     });
   }
 
-  function removeEmptyBlocks(container) {
-    var blocks = Array.prototype.slice.call(container.querySelectorAll('p, div'));
+  function unwrapBlockElements(container) {
+    var blocks = Array.prototype.slice.call(container.querySelectorAll('p, div, section, article'));
 
     blocks.forEach(function (block) {
-      if (block.querySelector('img, video, audio, iframe, table, ul, ol')) {
+      var parent = block.parentNode;
+
+      if (!parent) {
         return;
       }
 
-      var text = String(block.textContent || '').replace(/ /g, ' ').trim();
-      var html = String(block.innerHTML || '').replace(/&nbsp;/gi, '').replace(/<br\s*\/?\s*>/gi, '').trim();
-
-      if ('' === text && '' === html && block.parentNode) {
-        block.parentNode.removeChild(block);
+      while (block.firstChild) {
+        parent.insertBefore(block.firstChild, block);
       }
+
+      parent.removeChild(block);
     });
   }
 
@@ -68,21 +78,38 @@
     container.innerHTML = String(html || '');
 
     unwrapExistingTranslationBlocks(container);
-    removeEmptyBlocks(container);
+    unwrapBlockElements(container);
 
     return String(container.innerHTML || '').trim();
   }
 
   tinymce.PluginManager.add('translatehtml', function (editor) {
+    function getLanguages() {
+      var configuredLanguages = editor.getParam('translatehtml_languages');
+
+      if (Array.isArray(configuredLanguages) && configuredLanguages.length > 0) {
+        return configuredLanguages
+          .map(function (language) {
+            var code = normalizeLanguageCode(language.code || language.isocode || language.iso || '');
+            var label = String(language.label || language.name || code);
+
+            return code && isValidLanguageCode(code) ? { code: code, label: label } : null;
+          })
+          .filter(Boolean);
+      }
+
+      return languages;
+    }
+
     function notifyInvalidLanguage() {
       editor.notificationManager.open({
-        text: 'Please enter a two-letter language code, for example en, fr or es.',
+        text: 'Please enter a Chamilo language ISO code, for example en_US, fr_FR, es or de.',
         type: 'warning',
         timeout: 3000
       });
     }
 
-    function insertTranslatedBlock(languageCode) {
+    function insertTranslatedSpan(languageCode) {
       var code = normalizeLanguageCode(languageCode);
 
       if (!isValidLanguageCode(code)) {
@@ -93,22 +120,22 @@
       var selectedContent = cleanSelectedContent(editor.selection.getContent({ format: 'html' }));
 
       if (!selectedContent) {
-        selectedContent = '<p>' + encodeHtml('Translated content') + '</p>';
+        selectedContent = encodeHtml('Translated content');
       }
 
-      editor.insertContent('<div class="mce-translatehtml" lang="' + code + '">' + selectedContent + '</div>');
+      editor.insertContent('<span class="mce-translatehtml" lang="' + code + '">' + selectedContent + '</span>');
     }
 
     function openCustomLanguageDialog() {
       editor.windowManager.open({
-        title: 'Translated HTML block',
+        title: 'Translated HTML span',
         body: {
           type: 'panel',
           items: [
             {
               type: 'input',
               name: 'languageCode',
-              label: 'Language code'
+              label: 'Chamilo language ISO code'
             }
           ]
         },
@@ -124,7 +151,7 @@
           }
         ],
         initialData: {
-          languageCode: 'en'
+          languageCode: 'en_US'
         },
         onSubmit: function (api) {
           var data = api.getData();
@@ -135,22 +162,22 @@
             return;
           }
 
-          insertTranslatedBlock(code);
+          insertTranslatedSpan(code);
           api.close();
         }
       });
     }
 
     editor.ui.registry.addMenuButton('translatehtml', {
-      text: 'Lang',
-      tooltip: 'Insert translated HTML block',
+      text: 'Lang ISO',
+      tooltip: 'Insert translated HTML span with Chamilo ISO code',
       fetch: function (callback) {
-        var items = languages.map(function (language) {
+        var items = getLanguages().map(function (language) {
           return {
             type: 'menuitem',
             text: language.label + ' (' + language.code + ')',
             onAction: function () {
-              insertTranslatedBlock(language.code);
+              insertTranslatedSpan(language.code);
             }
           };
         });
@@ -161,7 +188,7 @@
 
         items.push({
           type: 'menuitem',
-          text: 'Custom language code...',
+          text: 'Custom Chamilo ISO code...',
           onAction: openCustomLanguageDialog
         });
 
@@ -172,7 +199,7 @@
     return {
       getMetadata: function () {
         return {
-          name: 'Chamilo translated HTML blocks',
+          name: 'Chamilo translated HTML ISO spans',
           url: 'https://chamilo.org'
         };
       }

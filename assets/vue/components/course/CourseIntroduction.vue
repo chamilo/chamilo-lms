@@ -9,7 +9,6 @@ import Skeleton from "primevue/skeleton"
 import { useCidReqStore } from "../../store/cidReq"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cToolIntroService from "../../services/cToolIntroService"
-import courseService from "../../services/courseService"
 import { filterTranslatedHtml } from "../../../js/translatehtml.js"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
@@ -116,16 +115,10 @@ async function loadIntro() {
   isLoading.value = true
 
   try {
-    let data = null
-
-    if (props.tool === "course_homepage") {
-      data = await courseService.loadHomeIntro(course.value.id, currentSessionId.value)
-    } else {
-      data = await cToolIntroService.findCourseHomeInro(course.value.id, {
-        sid: currentSessionId.value,
-        tool: props.tool,
-      })
-    }
+    const data = await cToolIntroService.findCourseHomeInro(course.value.id, {
+      sid: currentSessionId.value,
+      tool: props.tool,
+    })
 
     intro.value = normalizeIntroResponse(data)
   } catch (error) {

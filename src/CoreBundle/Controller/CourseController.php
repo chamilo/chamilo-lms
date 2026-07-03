@@ -46,6 +46,7 @@ use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
+use Chamilo\CourseBundle\Repository\CToolIntroRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\CourseBundle\Settings\SettingsFormFactory;
@@ -1035,8 +1036,14 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
-    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em, CourseLinkSessionHelper $courseLinkSessionHelper): Response
-    {
+    public function getToolIntro(
+        Request $request,
+        Course $course,
+        EntityManagerInterface $em,
+        CourseLinkSessionHelper $courseLinkSessionHelper,
+        CidReqHelper $cidReqHelper,
+        CToolIntroRepository $ctoolintroRepo,
+    ): Response {
         // Reading a tool introduction requires access to the course. CourseVoter::VIEW
         // grants course members (students/teachers), session users and anonymous users
         // on public courses, while honoring course visibility and prerequisite locks.
@@ -1047,14 +1054,7 @@ class CourseController extends ToolBaseController
             $toolTitle = 'course_homepage';
         }
 
-        $sessionId = (int) $request->query->get('sid', 0);
-
-        $session = null;
-        if ($sessionId > 0) {
-            $session = $em->getRepository(Session::class)->find($sessionId);
-        }
-
-        $ctoolintroRepo = $em->getRepository(CToolIntro::class);
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
         $baseTool = $this->findCourseTool($course, $toolTitle, null, $em);
         if (!$baseTool) {

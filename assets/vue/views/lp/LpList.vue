@@ -278,6 +278,36 @@ const items = ref([])
 const categories = ref([])
 const visibilityMap = ref({})
 
+/**
+ * Keeps categorized learning paths visible when a migrated legacy category
+ * exists in c_lp_category but does not yet have a resource node/link.
+ *
+ * The LP collection still serializes the embedded category (iid/title), while
+ * the category collection cannot return categories without resource metadata.
+ */
+function mergeCategoriesFromLearningPaths(apiCategories, learningPaths) {
+  const merged = new Map()
+
+  for (const category of Array.isArray(apiCategories) ? apiCategories : []) {
+    const categoryId = Number(category?.iid ?? 0)
+
+    if (categoryId > 0) {
+      merged.set(categoryId, category)
+    }
+  }
+
+  for (const lp of Array.isArray(learningPaths) ? learningPaths : []) {
+    const category = lp?.category
+    const categoryId = Number(category?.iid ?? 0)
+
+    if (categoryId > 0 && !merged.has(categoryId)) {
+      merged.set(categoryId, category)
+    }
+  }
+
+  return Array.from(merged.values())
+}
+
 function isTruthy(value) {
   return value === true || value === 1 || value === "1" || String(value).toLowerCase() === "true"
 }
@@ -559,7 +589,7 @@ const load = async () => {
   }
 
   try {
-    categories.value = await lpService.getLpCategories({
+    const apiCategories = await lpService.getLpCategories({
       cid: legacyContext.value.cid,
       sid: legacyContext.value.sid ?? 0,
     })
@@ -570,6 +600,7 @@ const load = async () => {
       pagination: false,
     })
 
+    categories.value = mergeCategoriesFromLearningPaths(apiCategories, raw)
     items.value = raw.map((lp) => ({
       ...lp,
       coverUrl: resolveLpCoverUrl(lp),
@@ -680,9 +711,28 @@ async function onReorderCategory(cat, ids) {
 }
 
 const fmt = new Intl.DateTimeFormat(undefined, { year: "numeric", month: "2-digit", day: "2-digit" })
+
+/**
+ * Formats legacy/migrated LP dates without aborting the complete list render
+ * when an API value is empty or cannot be converted to a finite Date.
+ */
+function formatLpDate(value) {
+  if (!value) {
+    return ""
+  }
+
+  const date = new Date(value)
+
+  if (!Number.isFinite(date.getTime())) {
+    return ""
+  }
+
+  return fmt.format(date)
+}
+
 const buildDates = (lp) => {
-  const s = lp.publishedOn ? fmt.format(new Date(lp.publishedOn)) : ""
-  const e = lp.expiredOn ? fmt.format(new Date(lp.expiredOn)) : ""
+  const s = formatLpDate(lp.publishedOn)
+  const e = formatLpDate(lp.expiredOn)
 
   if (!s && !e) {
     return t("No date")

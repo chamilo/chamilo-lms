@@ -29,7 +29,11 @@ $this_section = SECTION_COURSES;
 /* 	ACCESS RIGHTS  */
 api_protect_course_script(true);
 
+$requestedLearnpathId = (int) ($_REQUEST['learnpath_id'] ?? $_REQUEST['lp_id'] ?? 0);
 $origin = api_get_origin();
+if (empty($origin) && $requestedLearnpathId > 0) {
+    $origin = 'learnpath';
+}
 
 $ltiSession = Session::read('_ltiProvider');
 $ltiLaunchId = '';
@@ -145,6 +149,12 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeI
 $learnpath_id = $exercise_stat_info['orig_lp_id'] ?? 0;
 $learnpath_item_id = $exercise_stat_info['orig_lp_item_id'] ?? 0;
 $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'] ?? 0;
+if (empty($origin) && !empty($learnpath_id)) {
+    $origin = 'learnpath';
+    $showHeader = false;
+    $showFooter = false;
+    $showLearnPath = true;
+}
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
@@ -188,6 +198,7 @@ if ('embeddable' !== $origin) {
             'learnpath_id' => $learnpath_id,
             'learnpath_item_id' => $learnpath_item_id,
             'learnpath_item_view_id' => $learnpath_item_view_id,
+            'origin' => $origin,
         ]),
         'pencil',
         'info'
@@ -409,7 +420,7 @@ $template->assign('exe_id', $exeId);
 $template->assign('actions', $pageActions);
 $template->assign('content', $template->fetch($template->get_template('exercise/result.tpl')));
 
-if ('embeddable' === $origin) {
+if (in_array($origin, ['learnpath', 'embeddable'], true)) {
     $template->display_blank_template();
 } else {
     $template->display_one_col_template();

@@ -26,6 +26,299 @@ $courseInfo = api_get_course_info_by_id($courseId);
 $courseCode = $courseInfo['code'];
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
+if (!function_exists('ricky_rescue_get_final_exam_time_rules')) {
+    /**
+     * Ricky Rescue legal course timing rules for Final Exam access.
+     * Format: course code => [total course minutes, final exam minutes].
+     */
+    function ricky_rescue_get_final_exam_time_rules(): array
+    {
+        return [
+            '2120' => [2400, 60],
+            '2720' => [2400, 60],
+            '2770' => [2400, 60],
+            '1505' => [2400, 60],
+            '1810' => [2400, 60],
+            '2810' => [2400, 60],
+            '2811' => [2400, 60],
+            '2541' => [2400, 60],
+            '1740' => [1920, 60],
+            '17402021' => [1920, 60],
+            '1510' => [1920, 60],
+            '2521' => [1920, 60],
+            '2706' => [1920, 60],
+            '2741' => [720, 20],
+            '27412021' => [720, 20],
+            'NFPA' => [540, 120],
+            '9641' => [2400, 60],
+            '9516' => [2400, 60],
+            '1540' => [2400, 60],
+            '1302' => [1440, 60],
+            '1301' => [2400, 60],
+            '6742' => [2400, 60],
+            '6741' => [2400, 60],
+            'NFPA2018' => [540, 120],
+            'COURSEDELIVERY' => [1920, 60],
+            'COURSEDESIGN' => [720, 20],
+            'CROWDMANAGERTRAINING' => [120, 60],
+            '2111' => [2400, 60],
+            'AERIALDRIVEROPERATOR' => [1920, 60],
+            'NFPA2021' => [540, 120],
+            'RN3842' => [480, 60],
+            'NFPA2024' => [480, 240],
+        ];
+    }
+
+    function ricky_rescue_minutes_to_label(int $minutes): string
+    {
+        $minutes = max(0, $minutes);
+        $hours = intdiv($minutes, 60);
+        $remainingMinutes = $minutes % 60;
+
+        return sprintf('%02d hours %02d minutes', $hours, $remainingMinutes);
+    }
+
+    function ricky_rescue_is_final_exam_learnpath(?int $learnpathId): bool
+    {
+        if (empty($learnpathId)) {
+            return false;
+        }
+
+        $tableLp = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT title FROM $tableLp WHERE iid = ".(int) $learnpathId." LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return isset($row['title']) && 'Final Exam' === trim((string) $row['title']);
+    }
+
+    function ricky_rescue_get_fire_college_extra_field_id(): int
+    {
+        static $fieldId = null;
+
+        if (null !== $fieldId) {
+            return $fieldId;
+        }
+
+        $fieldId = 0;
+        $extraFieldTable = Database::get_main_table('extra_field');
+        $candidateVariables = [
+            'fcdice_or_acadis_student_id',
+            'firetraq_id',
+            'fire_traq_id',
+            'florida_state_fire_college_id',
+            'florida_fire_college_id',
+            'official_code',
+            'student_id',
+            'fsfc_id',
+        ];
+
+        foreach ($candidateVariables as $variable) {
+            $variable = Database::escape_string($variable);
+            $sql = "SELECT id FROM $extraFieldTable WHERE item_type = 1 AND variable = '$variable' LIMIT 1";
+            $result = Database::query($sql);
+            $row = Database::fetch_assoc($result);
+            if (!empty($row['id'])) {
+                $fieldId = (int) $row['id'];
+
+                return $fieldId;
+            }
+        }
+
+        // Legacy Ricky used field_id = 24 for this value. Keep it only as a compatibility fallback.
+        $sql = "SELECT id FROM $extraFieldTable WHERE id = 24 AND item_type = 1 LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+        if (!empty($row['id'])) {
+            $fieldId = (int) $row['id'];
+        }
+
+        return $fieldId;
+    }
+
+    function ricky_rescue_get_fire_college_id(int $userId): string
+    {
+        $fieldId = ricky_rescue_get_fire_college_extra_field_id();
+        if (empty($fieldId) || empty($userId)) {
+            return '';
+        }
+
+        $extraFieldValueTable = Database::get_main_table('extra_field_values');
+        $sql = "SELECT field_value FROM $extraFieldValueTable
+                WHERE item_id = ".(int) $userId." AND field_id = ".(int) $fieldId."
+                LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return isset($row['field_value']) ? trim((string) $row['field_value']) : '';
+    }
+
+    function ricky_rescue_save_fire_college_id(int $userId, string $studentId): bool
+    {
+        $fieldId = ricky_rescue_get_fire_college_extra_field_id();
+        if (empty($fieldId) || empty($userId)) {
+            return false;
+        }
+
+        $studentId = trim($studentId);
+        if ('NONE' !== $studentId && !preg_match('/^\d{3,}$/', $studentId)) {
+            return false;
+        }
+
+        $extraFieldValueTable = Database::get_main_table('extra_field_values');
+        $studentId = Database::escape_string($studentId);
+        $now = Database::escape_string(api_get_utc_datetime());
+        $sql = "SELECT id FROM $extraFieldValueTable
+                WHERE item_id = ".(int) $userId." AND field_id = ".(int) $fieldId."
+                LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        if (!empty($row['id'])) {
+            $sql = "UPDATE $extraFieldValueTable
+                    SET field_value = '$studentId', updated_at = '$now'
+                    WHERE id = ".(int) $row['id'];
+            Database::query($sql);
+
+            return true;
+        }
+
+        $sql = "INSERT INTO $extraFieldValueTable (field_id, field_value, item_id, created_at, updated_at)
+                VALUES (".(int) $fieldId.", '$studentId', ".(int) $userId.", '$now', '$now')";
+        Database::query($sql);
+
+        return true;
+    }
+
+    function ricky_rescue_render_fire_college_gate(bool $isCrowdManagerTraining): string
+    {
+        $html = '<br><br>'.Display::return_message(
+            'To ensure you receive credit for this course, your Florida State Fire College ID is required to take the final exam.',
+            'warning',
+            false
+        );
+
+        if ($isCrowdManagerTraining) {
+            $html .= '<p>Would you like your course completion submitted to the Florida Bureau of Fire Standards and Training?</p>';
+            $html .= '<p><button type="button" class="btn btn--primary btn-primary" onclick="rickyRescueUseFireCollegeId(true)">Yes</button> ';
+            $html .= '<button type="button" class="btn btn--plain btn-default" onclick="rickyRescueUseFireCollegeId(false)">No</button></p>';
+        }
+
+        $disabled = $isCrowdManagerTraining ? ' disabled="disabled"' : '';
+        $html .= '<p>Florida State Fire College ID: ';
+        $html .= '<input type="text" name="studentId" id="studentId" placeholder="Input Numbers Only" onkeypress="return rickyRescueIsNumberKey(event)"'.$disabled.'> ';
+        $html .= '<button type="button" class="btn btn--primary btn-primary" onclick="rickyRescueSaveFireCollegeId()">Save</button></p>';
+        $html .= '<div id="ricky-rescue-save-message"></div>';
+        $securityToken = json_encode(
+            Security::get_token(),
+            JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+        );
+        $html .= <<<JS
+<script>
+function rickyRescueIsNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
+}
+function rickyRescueUseFireCollegeId(useId) {
+    var studentId = jQuery('#studentId');
+    if (useId) {
+        studentId.prop('disabled', false).val('');
+        studentId.focus();
+        return;
+    }
+    studentId.prop('disabled', true).val('NONE');
+    rickyRescueSaveFireCollegeId();
+}
+function rickyRescueSaveFireCollegeId() {
+    var studentId = jQuery('#studentId').val();
+    if (studentId !== 'NONE' && !/^\d{3,}$/.test(studentId)) {
+        alert('Please enter FireTRAQ ID');
+        return false;
+    }
+    jQuery.ajax({
+        url: window.location.href,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            ricky_fire_college_id_save: 1,
+            student_id: studentId,
+            sec_token: {$securityToken}
+        },
+        success: function (response) {
+            if (response && response.success) {
+                jQuery('#ricky-rescue-save-message').html('<span class="text-success">Student ID saved successfully. Reloading...</span>');
+                window.setTimeout(function () { window.location.reload(); }, 1000);
+                return;
+            }
+            jQuery('#ricky-rescue-save-message').html('<span class="text-danger">Unable to save the Student ID.</span>');
+        },
+        error: function () {
+            jQuery('#ricky-rescue-save-message').html('<span class="text-danger">Unable to save the Student ID.</span>');
+        }
+    });
+    return false;
+}
+</script>
+JS;
+
+        return $html;
+    }
+
+    function ricky_rescue_get_final_exam_gate(
+        int $userId,
+        int $courseId,
+        string $courseCode,
+        int $sessionId,
+        ?int $learnpathId
+    ): array {
+        $rules = ricky_rescue_get_final_exam_time_rules();
+        if (!isset($rules[$courseCode]) || !ricky_rescue_is_final_exam_learnpath($learnpathId)) {
+            return ['allow_start' => true, 'html' => ''];
+        }
+
+        [$totalMinutes, $examMinutes] = $rules[$courseCode];
+        $requiredMinutes = max(0, (int) $totalMinutes - (int) $examMinutes);
+        $timeSpentSeconds = (int) Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
+        $timeSpentMinutes = (int) floor($timeSpentSeconds / 60);
+        $html = '';
+
+        if ($timeSpentMinutes < $requiredMinutes) {
+            $shortage = $requiredMinutes - $timeSpentMinutes;
+            $html .= Display::return_message(
+                'You have not met the minimum time requirement. You must spend an additional <strong>'.ricky_rescue_minutes_to_label($shortage).'</strong> reviewing course content. Please return to the course and reexamine the material.<br><br><strong>Please Note</strong>: This course is timed to ensure compliance with the standard set by your state/region certification agency.',
+                'warning',
+                false
+            );
+        }
+
+        $fireCollegeId = ricky_rescue_get_fire_college_id($userId);
+        if ('' === $fireCollegeId) {
+            $html .= ricky_rescue_render_fire_college_gate('CROWDMANAGERTRAINING' === $courseCode);
+        }
+
+        return [
+            'allow_start' => $timeSpentMinutes >= $requiredMinutes && '' !== $fireCollegeId,
+            'html' => $html,
+        ];
+    }
+}
+
+if (isset($_POST['ricky_fire_college_id_save'])) {
+    header('Content-Type: application/json; charset='.api_get_system_encoding());
+
+    if (!Security::check_token('post')) {
+        http_response_code(403);
+        echo json_encode(['success' => false]);
+        exit;
+    }
+
+    Security::clear_token();
+    $studentId = isset($_POST['student_id']) ? trim((string) $_POST['student_id']) : '';
+    $success = ricky_rescue_save_fire_college_id(api_get_user_id(), $studentId);
+    echo json_encode(['success' => $success]);
+    exit;
+}
+
 $objExercise = new Exercise($courseId);
 $result = $objExercise->read($exercise_id, true);
 
@@ -44,6 +337,9 @@ $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
 $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : null;
 $origin = api_get_origin();
+if (empty($origin) && !empty($learnpath_id)) {
+    $origin = 'learnpath';
+}
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
@@ -78,7 +374,9 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
-if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+$useBlankExerciseLayout = in_array($origin, ['learnpath', 'embeddable'], true);
+
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'], true)) {
     SessionManager::addFlashSessionReadOnly();
     Display::display_header();
 } else {
@@ -87,7 +385,13 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     body { background: none;}
     </style>
     ';
-    Display::display_reduced_header();
+
+    if ($useBlankExerciseLayout) {
+        ob_start();
+        Display::$legacyTemplate = '@ChamiloCore/Layout/blank.html.twig';
+    } else {
+        Display::display_reduced_header();
+    }
 }
 
 if ('mobileapp' === $origin) {
@@ -148,9 +452,14 @@ if ($time_control && !empty($exercise_stat_info['exe_id']) && !empty($clock_expi
     $time_left_check = api_strtotime($clock_expired_time, 'UTC') - time();
     if ($time_left_check <= 0) {
         $result_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'
-            . api_get_cidreq()
-            . '&show_headers=1&'
-            . http_build_query(['id' => $exercise_stat_info['exe_id']]);
+            .api_get_cidreq().'&'.http_build_query([
+                'id' => $exercise_stat_info['exe_id'],
+                'show_headers' => in_array($origin, ['learnpath', 'embeddable', 'mobileapp']) ? 0 : 1,
+                'origin' => $origin,
+                'learnpath_id' => $learnpath_id,
+                'learnpath_item_id' => $learnpath_item_id,
+                'learnpath_item_view_id' => $learnpathItemViewId,
+            ]);
         api_location($result_url);
     }
 }
@@ -168,7 +477,13 @@ if (isset($exercise_stat_info['exe_id'])) {
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
-    api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+    api_get_cidreq().'&'.http_build_query([
+        'exerciseId' => $objExercise->id,
+        'learnpath_id' => $learnpath_id,
+        'learnpath_item_id' => $learnpath_item_id,
+        'learnpath_item_view_id' => $learnpathItemViewId,
+        'origin' => $origin,
+    ]).$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
@@ -265,8 +580,14 @@ if (!empty($attempts)) {
 
         $score = ExerciseLib::show_score($attempt_result['score'], $attempt_result['max_score']);
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
-        $attempt_url .= api_get_cidreq().'&show_headers=1&';
-        $attempt_url .= http_build_query(['id' => $attempt_result['exe_id']]);
+        $attempt_url .= api_get_cidreq().'&'.http_build_query([
+            'id' => $attempt_result['exe_id'],
+            'show_headers' => in_array($origin, ['learnpath', 'embeddable', 'mobileapp']) ? 0 : 1,
+            'origin' => $origin,
+            'learnpath_id' => $learnpath_id,
+            'learnpath_item_id' => $learnpath_item_id,
+            'learnpath_item_view_id' => $learnpathItemViewId,
+        ]);
         $attempt_url .= $url_suffix;
 
         $attempt_link = Display::url(
@@ -462,21 +783,32 @@ $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
 );
 
 if (!empty($exercise_url_button) && !$isLimitReached) {
-    if ($quizCheckButtonEnabled) {
-        $html .= Display::div(
-            $btnCheck,
-            ['class' => 'exercise_overview_options']
-        );
-        $html .= '<br>';
-    }
-
-    $html .= Display::div(
-        Display::div(
-            $exercise_url_button,
-            ['class' => 'exercise_overview_options']
-        ),
-        ['class' => 'options']
+    $rickyRescueFinalExamGate = ricky_rescue_get_final_exam_gate(
+        api_get_user_id(),
+        $courseId,
+        $courseCode,
+        $sessionId,
+        $learnpath_id
     );
+    $html .= $rickyRescueFinalExamGate['html'];
+
+    if ($rickyRescueFinalExamGate['allow_start']) {
+        if ($quizCheckButtonEnabled) {
+            $html .= Display::div(
+                $btnCheck,
+                ['class' => 'exercise_overview_options']
+            );
+            $html .= '<br>';
+        }
+
+        $html .= Display::div(
+            Display::div(
+                $exercise_url_button,
+                ['class' => 'exercise_overview_options']
+            ),
+            ['class' => 'options']
+        );
+    }
 }
 
 if ($isLimitReached) {
@@ -573,4 +905,10 @@ if ($quizCheckButtonEnabled) {
 
 echo $html;
 
-Display::display_footer();
+if ($useBlankExerciseLayout) {
+    Display::display_footer();
+} elseif ('mobileapp' === $origin) {
+    Display::display_reduced_footer();
+} else {
+    Display::display_footer();
+}

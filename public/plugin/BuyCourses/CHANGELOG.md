@@ -74,6 +74,14 @@ for full, consistent coverage. Also fixed the price column silently losing its
 currency sign: the code read a `sale.iso_code` field that `getServiceSale()` never
 actually sets, so every amount fell back to a bare, currency-less number.
 
+Fix: `Template::get_icon_path()`, called as a fallback when a service/product has
+no image, does not exist on that class — this method has never existed, so any
+service or product sale without a custom image made the request that renders it
+throw a fatal error. Present in four places (`buycourses.ajax.php` twice,
+`service_panel.php`, `panel.ajax.php`); replaced with `Display::get_icon_path()`,
+the actual core helper (also wired up as Twig's `icon` filter) used everywhere
+else in Chamilo for this exact fallback.
+
 Fix: the "Purchase history" table on `/my-services` now shows the purchase date and
 time (previously date only), and the downloadable invoice now shows both the
 purchase date and the invoice date side by side, since they can legitimately differ.

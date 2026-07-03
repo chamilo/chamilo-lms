@@ -89,7 +89,7 @@ switch ($action) {
             $productImage = $productInfo['course_image_large'];
         } else {
             $productImage = ($productInfo['image'])
-                ?: Template::get_icon_path('session_default.png');
+                ?: Display::get_icon_path('session_default.png');
         }
 
         $userInfo = api_get_user_info($sale['user_id']);
@@ -705,7 +705,7 @@ switch ($action) {
 
         header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
-            'imageUrl' => (string) ($serviceSale['service']['image'] ?: Template::get_icon_path('session_default.png')),
+            'imageUrl' => (string) ($serviceSale['service']['image'] ?: Display::get_icon_path('session_default.png')),
             'imageAlt' => (string) $serviceSale['service']['name'],
             'sections' => [
                 ['title' => $plugin->get_lang('ServiceInformation'), 'rows' => $serviceRows],

@@ -56,6 +56,24 @@ selectors for its padding, but Chamilo's `FormValidator` renders this form's fie
 inside `<div class="row mb-3">` wrappers, not `.form-group` — so that padding rule
 never matched anything. Added padding directly on the wrapper itself.
 
+Feature: the "Info" button in service_sales_report.php's Actions column now shows
+much more: the buyer's name (linked to their admin profile), username, email,
+IP address (when recorded), full VAT/tax breakdown, seller VAT number, buyer
+VAT number/business name for business buyers, the payment method as text, and the
+payment gateway's transaction ID when available — the same information a receipt
+shows. The endpoint was rewritten to return structured JSON instead of an HTML
+string that the browser scraped back into plain text (a fragile round-trip that
+also silently mangled the "Service information"/"Sale information" section
+titles, since a `<legend>` closing tag wasn't one of the line-break markers the
+scraper looked for).
+
+Fix: the sales report tables showed the payment method as a raw integer for
+Stripe, TPV Redsys, and Cecabank sales (only PayPal/bank transfer/Culqi were
+mapped by hand in the template) — now uses `BuyCoursesPlugin::getPaymentTypes()`
+for full, consistent coverage. Also fixed the price column silently losing its
+currency sign: the code read a `sale.iso_code` field that `getServiceSale()` never
+actually sets, so every amount fell back to a bare, currency-less number.
+
 Fix: the "Purchase history" table on `/my-services` now shows the purchase date and
 time (previously date only), and the downloadable invoice now shows both the
 purchase date and the invoice date side by side, since they can legitimately differ.

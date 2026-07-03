@@ -197,16 +197,6 @@
 
                 <tbody class="divide-y divide-gray-25 bg-white">
                     {% for sale in sale_list %}
-                        {% if sale.payment_type == 1 %}
-                            {% set paymentMethodLabel = 'PayPal' %}
-                        {% elseif sale.payment_type == 2 %}
-                            {% set paymentMethodLabel = 'BankTransfer'|get_plugin_lang('BuyCoursesPlugin') %}
-                        {% elseif sale.payment_type == 3 %}
-                            {% set paymentMethodLabel = 'Culqi' %}
-                        {% else %}
-                            {% set paymentMethodLabel = sale.payment_type|default('') %}
-                        {% endif %}
-
                         <tr class="transition hover:bg-support-2" id="service-sale-row-{{ sale.id }}">
                             <td class="px-4 py-4 text-sm font-medium text-gray-90">
                                 {{ sale.reference|default('') }}
@@ -237,7 +227,7 @@
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
-                                {{ paymentMethodLabel }}
+                                {{ sale.payment_type_label|default('') }}
                             </td>
 
                             <td class="px-4 py-4 text-right text-sm font-semibold text-gray-90">
@@ -364,117 +354,54 @@
             .replaceAll("'", '&#039;')
     }
 
-    function cleanLegacyText(value) {
-        return String(value ?? '')
-            .replace(/\u00a0/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim()
-    }
-
-    function buildInfoRow(label, value) {
-        const safeLabel = escapeHtml(cleanLegacyText(label))
-        const safeValue = escapeHtml(cleanLegacyText(value) || '—')
+    function buildInfoRow(row) {
+        const safeLabel = escapeHtml(row.label)
+        const safeValue = escapeHtml(row.value || '—')
+        const valueHtml = row.url
+            ? `<a href="${escapeHtml(row.url)}" class="font-semibold text-primary hover:underline">${safeValue}</a>`
+            : safeValue
 
         return `
             <div class="grid gap-1 rounded-xl border border-gray-25 bg-support-2 px-4 py-3 sm:grid-cols-[180px_minmax(0,1fr)]">
                 <dt class="text-sm font-semibold text-gray-90">${safeLabel}</dt>
-                <dd class="text-sm text-gray-90 break-words">${safeValue}</dd>
+                <dd class="text-sm text-gray-90 break-words">${valueHtml}</dd>
             </div>
         `
     }
 
-    function buildInfoSection(title, rows) {
-        if (!rows.length) {
+    function buildInfoSection(section) {
+        if (!section.rows || !section.rows.length) {
             return ''
         }
 
         return `
             <section class="space-y-3">
                 <h4 class="text-sm font-semibold uppercase tracking-wide text-gray-50">
-                    ${escapeHtml(cleanLegacyText(title))}
+                    ${escapeHtml(section.title)}
                 </h4>
                 <dl class="space-y-3">
-                    ${rows.join('')}
+                    ${section.rows.map(buildInfoRow).join('')}
                 </dl>
             </section>
         `
     }
 
-    function normalizeServiceSaleInfoHtml(rawHtml) {
-        const parser = new DOMParser()
-        const parsed = parser.parseFromString(
-            `<div class="buycourses-service-sale-info-root">${rawHtml}</div>`,
-            'text/html'
-        )
-        const root = parsed.querySelector('.buycourses-service-sale-info-root')
-
-        if (!root) {
-            return `<div class="rounded-2xl border border-gray-25 bg-support-2 px-4 py-3 text-sm text-gray-90">${buyCoursesErrorLabel}</div>`
-        }
-
-        root.querySelectorAll('script, style, noscript').forEach((element) => {
-            element.remove()
-        })
-
-        root.querySelectorAll('form, button, input, select, textarea, .btn, .bc-action-buttons').forEach((element) => {
-            element.remove()
-        })
-
-        const image = root.querySelector('img')
-        let imageHtml = ''
-
-        if (image && image.getAttribute('src')) {
-            imageHtml = `
+    function buildServiceSaleInfoHtml(data) {
+        const imageHtml = data.imageUrl
+            ? `
                 <div class="overflow-hidden rounded-2xl border border-gray-25 bg-support-2">
                     <img
-                        src="${escapeHtml(image.getAttribute('src'))}"
-                        alt="${escapeHtml(image.getAttribute('alt') || 'Service image')}"
+                        src="${escapeHtml(data.imageUrl)}"
+                        alt="${escapeHtml(data.imageAlt || 'Service image')}"
                         class="h-auto w-full object-cover"
                     >
                 </div>
             `
-        }
+            : ''
 
-        root.querySelectorAll('img').forEach((element) => {
-            element.remove()
-        })
+        const sections = (data.sections || []).map(buildInfoSection).filter(Boolean)
 
-        let normalizedHtml = root.innerHTML
-
-        normalizedHtml = normalizedHtml
-            .replace(/<br\s*\/?>/gi, '\n')
-            .replace(/<\/p>/gi, '\n')
-            .replace(/<\/div>/gi, '\n')
-            .replace(/<\/li>/gi, '\n')
-            .replace(/<\/h[1-6]>/gi, '\n')
-
-        const textContainer = document.createElement('div')
-        textContainer.innerHTML = normalizedHtml
-
-        const lines = String(textContainer.textContent || '')
-            .split('\n')
-            .map((line) => cleanLegacyText(line))
-            .filter(Boolean)
-            .filter((line) => {
-                const lower = line.toLowerCase()
-
-                if (
-                    lower.includes('$.ajax') ||
-                    lower.includes('buycourses.ajax.php') ||
-                    lower.includes('function(') ||
-                    lower.includes('success: function') ||
-                    lower.includes('beforeSend') ||
-                    lower.includes('do not close this window') ||
-                    lower.includes('processing.') ||
-                    lower.includes('bc-action-buttons')
-                ) {
-                    return false
-                }
-
-                return true
-            })
-
-        if (!lines.length) {
+        if (!sections.length) {
             return `
                 <div class="space-y-4">
                     ${imageHtml}
@@ -484,44 +411,6 @@
                 </div>
             `
         }
-
-        const sections = []
-        let currentTitle = '{{ 'Info'|get_lang|e('js') }}'
-        let currentRows = []
-
-        function flushSection() {
-            const html = buildInfoSection(currentTitle, currentRows)
-            if (html) {
-                sections.push(html)
-            }
-            currentRows = []
-        }
-
-        lines.forEach((line) => {
-            const lowerLine = line.toLowerCase()
-
-            if (lowerLine === 'service information' || lowerLine === 'sale information') {
-                flushSection()
-                currentTitle = line
-                return
-            }
-
-            const separatorPosition = line.indexOf(':')
-            if (separatorPosition > -1) {
-                const label = line.slice(0, separatorPosition)
-                const value = line.slice(separatorPosition + 1)
-                currentRows.push(buildInfoRow(label, value))
-                return
-            }
-
-            currentRows.push(`
-                <div class="rounded-xl border border-gray-25 bg-support-2 px-4 py-3 text-sm text-gray-90">
-                    ${escapeHtml(line)}
-                </div>
-            `)
-        })
-
-        flushSection()
 
         return `
             <div class="space-y-4">
@@ -558,9 +447,9 @@
             },
             body: requestBody.toString(),
         })
-            .then((response) => response.text())
-            .then((html) => {
-                body.innerHTML = normalizeServiceSaleInfoHtml(html)
+            .then((response) => response.json())
+            .then((data) => {
+                body.innerHTML = buildServiceSaleInfoHtml(data)
             })
             .catch(() => {
                 body.innerHTML = '<div class="rounded-2xl border border-danger bg-support-6 px-4 py-3 text-sm text-gray-90">' + buyCoursesErrorLabel + '</div>'

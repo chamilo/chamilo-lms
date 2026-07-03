@@ -5089,6 +5089,7 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['buyer']['id'] = $buyer['user_id'];
         $servicesSale['buyer']['name'] = api_get_person_name($buyer['firstname'], $buyer['lastname']);
         $servicesSale['buyer']['username'] = $buyer['username'];
+        $servicesSale['buyer']['email'] = $buyer['email'] ?? '';
 
         return $servicesSale;
     }

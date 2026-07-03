@@ -308,7 +308,7 @@ function formatServiceSaleAmount(BuyCoursesPlugin $plugin, float $amount, mixed 
     try {
         return $plugin->getPriceWithCurrencyFromIsoCode($amount, $normalizedIsoCode);
     } catch (Throwable) {
-        return number_format($amount, 2, '.', ',').' '.$normalizedIsoCode;
+        return $normalizedIsoCode.' '.number_format($amount, 2, '.', ',');
     }
 }
 
@@ -352,6 +352,7 @@ $form->setDefaults([
 ]);
 
 $servicesSales = $plugin->getServiceSales(0, $selectedStatus);
+$paymentTypeLabels = $plugin->getPaymentTypes();
 
 foreach ($servicesSales as &$sale) {
     $sale['total_discount'] = '';
@@ -361,17 +362,18 @@ foreach ($servicesSales as &$sale) {
         $sale['lastname'] ?? ''
     );
     $sale['status_label'] = $saleStatuses[$sale['status']] ?? ($sale['status'] ?? '');
+    $sale['payment_type_label'] = $paymentTypeLabels[(int) ($sale['payment_type'] ?? 0)] ?? '';
     $sale['total_price'] = formatServiceSaleAmount(
         $plugin,
         (float) ($sale['price'] ?? 0),
-        $sale['iso_code'] ?? null
+        $sale['service']['currency'] ?? null
     );
 
     if (0.0 !== (float) ($sale['discount_amount'] ?? 0)) {
         $sale['total_discount'] = formatServiceSaleAmount(
             $plugin,
             (float) ($sale['discount_amount'] ?? 0),
-            $sale['iso_code'] ?? null
+            $sale['service']['currency'] ?? null
         );
         $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
     }

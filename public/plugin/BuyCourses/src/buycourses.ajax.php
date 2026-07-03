@@ -588,43 +588,36 @@ switch ($action) {
     case 'service_sale_info':
         $id = $httpRequest->request->getInt('id');
         $serviceSale = $plugin->getServiceSale($id);
-        $isAdmin = api_is_platform_admin();
         if (!$serviceSale) {
             break;
         }
 
-        $ajaxCallFile = $plugin->getPath('SRC').'buycourses.ajax.php';
-        $serviceImg = $serviceSale['service']['image'] ?: Template::get_icon_path('session_default.png');
-        $ajaxCallFileEscaped = bcEscapeHtml((string) $ajaxCallFile);
-        $serviceImgEscaped = bcEscapeHtml((string) $serviceImg);
-        $html = "<img class='img-responsive text-center' src='$serviceImgEscaped' alt='".bcEscapeHtml((string) $serviceSale['service']['name'])."'>";
-        $html .= '<br />';
-        $html .= "<legend>{$plugin->get_lang('ServiceInformation')}</legend>";
-        $html .= '<ul>';
-        $html .= '<li><b>'.$plugin->get_lang('ServiceName').':</b> '.bcEscapeHtml((string) $serviceSale['service']['name']).'</li> ';
-        $html .= '<li><b>'.$plugin->get_lang('Description').':</b> '.bcEscapeHtml((string) $serviceSale['service']['description']).'</li> ';
+        $globalParameters = $plugin->getGlobalParameters();
+        $paymentTypeLabels = $plugin->getPaymentTypes();
+
         $nodeType = $serviceSale['node_type'];
+        $nodeTypeLabel = '';
         $nodeName = '';
         switch ($nodeType) {
             case BuyCoursesPlugin::SERVICE_TYPE_USER:
-                $nodeType = get_lang('User');
+                $nodeTypeLabel = get_lang('User');
                 $user = api_get_user_entity($serviceSale['node_id']);
                 $nodeName = $user?->getFullNameWithUsername();
                 break;
             case BuyCoursesPlugin::SERVICE_TYPE_COURSE:
-                $nodeType = get_lang('Course');
+                $nodeTypeLabel = get_lang('Course');
 
                 /** @var Course $course */
                 $course = $em->find(Course::class, $serviceSale['node_id']);
                 $nodeName = $course?->getTitle();
                 break;
             case BuyCoursesPlugin::SERVICE_TYPE_SESSION:
-                $nodeType = get_lang('Session');
+                $nodeTypeLabel = get_lang('Session');
                 $session = api_get_session_entity($serviceSale['node_id']);
                 $nodeName = $session?->getTitle();
                 break;
             case BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM:
-                $nodeType = get_lang('TemplateTitleCertificate');
+                $nodeTypeLabel = get_lang('TemplateTitleCertificate');
 
                 /** @var CLp $lp */
                 $lp = $em->find(CLp::class, $serviceSale['node_id']);
@@ -632,71 +625,93 @@ switch ($action) {
                 break;
         }
 
-        if (!empty($nodeName)) {
-            $html .= '<li><b>'.$plugin->get_lang('AppliesTo').':</b> '.bcEscapeHtml((string) $nodeType).' - '.bcEscapeHtml((string) $nodeName).'</li> ';
-        }
-
-        $html .= '</ul>';
-        $html .= "<legend>{$plugin->get_lang('SaleInfo')}</legend>";
-        $html .= '<ul>';
-        $html .= '<li><b>'.$plugin->get_lang('BoughtBy').':</b> '.bcEscapeHtml((string) $serviceSale['buyer']['name']).'</li> ';
-        $html .= '<li><b>'.$plugin->get_lang('PurchaserUser').':</b> '.bcEscapeHtml((string) $serviceSale['buyer']['username']).'</li> ';
-        $html .= '<li><b>'.$plugin->get_lang('Total').':</b> '.bcEscapeHtml((string) $serviceSale['service']['total_price']).'</li> ';
-        $orderDate = api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG);
-        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.bcEscapeHtml((string) $orderDate).'</li> ';
-        $paymentType = match ($serviceSale['payment_type']) {
-            BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL => 'PayPal',
-            BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER => $plugin->get_lang('BankTransfer'),
-            BuyCoursesPlugin::PAYMENT_TYPE_CULQI => 'Culqi',
-            default => $serviceSale['payment_type'],
+        $status = (int) $serviceSale['status'];
+        $statusLabel = match ($status) {
+            BuyCoursesPlugin::SERVICE_STATUS_COMPLETED => $plugin->get_lang('Active'),
+            BuyCoursesPlugin::SERVICE_STATUS_PENDING => $plugin->get_lang('Pending'),
+            BuyCoursesPlugin::SERVICE_STATUS_CANCELLED => $plugin->get_lang('Cancelled'),
+            default => (string) $status,
         };
-        $html .= '<li><b>'.$plugin->get_lang('PaymentMethod').':</b> '.bcEscapeHtml((string) $paymentType).'</li> ';
-        $status = $serviceSale['status'];
-        $buttons = '';
-        if (BuyCoursesPlugin::SERVICE_STATUS_COMPLETED == $status) {
-            $status = $plugin->get_lang('Active');
-        } elseif (BuyCoursesPlugin::SERVICE_STATUS_PENDING == $status) {
-            $status = $plugin->get_lang('Pending');
-            if ($isAdmin) {
-                $buttons .= "<a id='".bcEscapeHtml((string) $serviceSale['id'])."' tag='service_sale_confirm' class='btn btn--success pull-left'>".$plugin->get_lang('ConfirmOrder')."</a>";
-                $buttons .= "<a id='".bcEscapeHtml((string) $serviceSale['id'])."' tag='service_sale_cancel' class='btn btn--danger pull-right'>".$plugin->get_lang('CancelOrder')."</a>";
-            }
-        } elseif (BuyCoursesPlugin::SERVICE_STATUS_CANCELLED == $status) {
-            $status = $plugin->get_lang('Cancelled');
-        }
-        $html .= '<li><b>'.$plugin->get_lang('Status').':</b> '.bcEscapeHtml((string) $status).'</li> ';
-        $html .= '</ul>';
-        $html .= '<br />';
-        $html .= "<div class='row'>";
-        $html .= "<div class='col-md-2'></div>";
-        $html .= "<div class='col-md-8 text-center'>";
-        $html .= "<div class='bc-action-buttons'>";
-        $html .= $buttons;
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= "<div class='col-md-2'></div>";
-        $html .= '<script>';
-        $html .= "$('.bc-action-buttons a').click(function() {";
-        $html .= "var id = $(this).attr('id');";
-        $html .= "var action = $(this).attr('tag');";
-        $html .= '$.ajax({';
-        $html .= "data: 'id='+id,";
-        $html .= "url: '$ajaxCallFileEscaped?a='+action,";
-        $html .= "type: 'POST',";
-        $html .= 'beforeSend: function() {';
-        $processingLoaderText = json_encode($plugin->get_lang('ProcessingDontCloseThisWindow'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-        $html .= "$('.bootbox-close-button').remove();";
-        $html .= "$('.btn--plain').attr('disabled', true);";
-        $html .= "$('.bc-action-buttons').html('<div class=\"wobblebar-loader\"></div><p>' + $processingLoaderText + '</p>');";
-        $html .= '},';
-        $html .= 'success: function(response) {';
-        $html .= "$('.bc-action-buttons').html(response);";
-        $html .= '},';
-        $html .= '});';
-        $html .= '});';
-        $html .= '</script>';
 
-        echo $html;
+        $isoCode = (string) ($serviceSale['service']['currency'] ?? '');
+        $priceWithoutTax = isset($serviceSale['price_without_tax']) && null !== $serviceSale['price_without_tax']
+            ? (float) $serviceSale['price_without_tax']
+            : (float) $serviceSale['price'];
+        $taxAmount = (float) ($serviceSale['tax_amount'] ?? 0);
+        $taxRate = isset($serviceSale['vat_rate']) && null !== $serviceSale['vat_rate']
+            ? (float) $serviceSale['vat_rate']
+            : (float) ($serviceSale['tax_perc'] ?? 0);
+
+        $buyerId = (int) ($serviceSale['buyer']['id'] ?? 0);
+        $buyerProfileUrl = $buyerId > 0
+            ? api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$buyerId
+            : null;
+
+        $buyerIp = trim((string) ($serviceSale['buyer_ip'] ?? ''));
+        $buyerVatNumber = trim((string) ($serviceSale['buyer_vat_number'] ?? ''));
+        $buyerBusinessName = trim((string) ($serviceSale['buyer_business_name'] ?? ''));
+        $sellerVatNumber = trim((string) ($globalParameters['seller_vat_number'] ?? ''));
+        $gatewayTransactionId = trim((string) ($serviceSale['gateway_transaction_id'] ?? ''));
+        $paymentMethodLabel = (string) ($paymentTypeLabels[(int) ($serviceSale['payment_type'] ?? 0)] ?? '');
+
+        $serviceRows = [
+            ['label' => $plugin->get_lang('ServiceName'), 'value' => (string) $serviceSale['service']['name']],
+            ['label' => $plugin->get_lang('Description'), 'value' => (string) $serviceSale['service']['description']],
+        ];
+
+        if (!empty($nodeName)) {
+            $serviceRows[] = ['label' => $plugin->get_lang('AppliesTo'), 'value' => $nodeTypeLabel.' - '.$nodeName];
+        }
+
+        $saleRows = [
+            ['label' => $plugin->get_lang('OrderReference'), 'value' => (string) ($serviceSale['reference'] ?? '')],
+            ['label' => $plugin->get_lang('BoughtBy'), 'value' => (string) ($serviceSale['buyer']['name'] ?? ''), 'url' => $buyerProfileUrl],
+            ['label' => $plugin->get_lang('PurchaserUser'), 'value' => (string) ($serviceSale['buyer']['username'] ?? '')],
+            ['label' => get_lang('Email'), 'value' => (string) ($serviceSale['buyer']['email'] ?? '')],
+        ];
+
+        if ('' !== $buyerIp) {
+            $saleRows[] = ['label' => $plugin->get_lang('BuyerIp'), 'value' => $buyerIp];
+        }
+
+        $saleRows[] = ['label' => $plugin->get_lang('OrderDate'), 'value' => (string) api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG)];
+
+        if ($taxAmount > 0.0 || $taxRate > 0.0) {
+            $saleRows[] = ['label' => $plugin->get_lang('Subtotal'), 'value' => $plugin->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode)];
+            $saleRows[] = ['label' => $plugin->get_lang('VAT'), 'value' => $plugin->getPriceWithCurrencyFromIsoCode($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)'];
+        }
+
+        $saleRows[] = ['label' => $plugin->get_lang('Total'), 'value' => (string) $serviceSale['service']['total_price']];
+
+        if ('' !== $sellerVatNumber) {
+            $saleRows[] = ['label' => $plugin->get_lang('SellerVatNumber'), 'value' => $sellerVatNumber];
+        }
+
+        if ('' !== $buyerVatNumber) {
+            $saleRows[] = ['label' => $plugin->get_lang('BuyerVatNumber'), 'value' => $buyerVatNumber];
+        }
+
+        if ('' !== $buyerBusinessName) {
+            $saleRows[] = ['label' => $plugin->get_lang('BuyerBusinessName'), 'value' => $buyerBusinessName];
+        }
+
+        $saleRows[] = ['label' => $plugin->get_lang('PaymentMethod'), 'value' => $paymentMethodLabel];
+
+        if ('' !== $gatewayTransactionId) {
+            $saleRows[] = ['label' => $plugin->get_lang('PaymentId'), 'value' => $gatewayTransactionId];
+        }
+
+        $saleRows[] = ['label' => $plugin->get_lang('Status'), 'value' => (string) $statusLabel];
+
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode([
+            'imageUrl' => (string) ($serviceSale['service']['image'] ?: Template::get_icon_path('session_default.png')),
+            'imageAlt' => (string) $serviceSale['service']['name'],
+            'sections' => [
+                ['title' => $plugin->get_lang('ServiceInformation'), 'rows' => $serviceRows],
+                ['title' => $plugin->get_lang('SaleInfo'), 'rows' => $saleRows],
+            ],
+        ], \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
 
         break;
 

@@ -94,10 +94,7 @@ async function loadIntro() {
   isLoading.value = true
 
   try {
-    intro.value = await cToolIntroService.findCourseHomeInro(course.value.id, {
-      sid: currentSessionId.value,
-      tool: props.tool,
-    })
+    intro.value = await cToolIntroService.findCourseHomeInro(props.tool)
   } catch (error) {
     console.error("Error loading tool introduction:", error)
     intro.value = null

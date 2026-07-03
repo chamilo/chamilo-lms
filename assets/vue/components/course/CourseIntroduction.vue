@@ -85,27 +85,6 @@ const displayedIntroText = computed(() => {
   return text
 })
 
-function normalizeIntroResponse(response) {
-  const data = response?.data || response || {}
-
-  // The API returns the course tool as an embedded JSON-LD resource, while the
-  // legacy read endpoint returns c_tool/cToolId. Bridge both to a single c_tool.
-  const courseToolIri = data.courseTool?.["@id"]
-  const cToolId = courseToolIri ? Number(courseToolIri.split("/").pop()) : data.cToolId || null
-
-  return {
-    ...data,
-    c_tool: data.c_tool || {
-      iid: cToolId,
-      title: props.tool,
-    },
-  }
-}
-
-function getCourseToolId() {
-  return intro.value?.c_tool?.iid || null
-}
-
 async function loadIntro() {
   if (!isEnabled.value || !course.value?.id) {
     intro.value = null
@@ -115,12 +94,10 @@ async function loadIntro() {
   isLoading.value = true
 
   try {
-    const data = await cToolIntroService.findCourseHomeInro(course.value.id, {
+    intro.value = await cToolIntroService.findCourseHomeInro(course.value.id, {
       sid: currentSessionId.value,
       tool: props.tool,
     })
-
-    intro.value = normalizeIntroResponse(data)
   } catch (error) {
     console.error("Error loading tool introduction:", error)
     intro.value = null
@@ -130,16 +107,17 @@ async function loadIntro() {
 }
 
 async function createEmptyIntroIfNeeded() {
-  if (intro.value?.iid && getCourseToolId()) {
+  // If an intro already exists for the CURRENT context, nothing to create. In a
+  // session, an intro inherited from the base course (createInSession) must be
+  // forked into a session-specific one before editing, so it does not short-circuit.
+  if (intro.value?.iid && !intro.value?.createInSession) {
     return
   }
 
-  const response = await cToolIntroService.addToolIntro(course.value.id, {
+  intro.value = await cToolIntroService.addToolIntro(course.value.id, {
     toolName: props.tool,
     introText: intro.value?.introText || "",
   })
-
-  intro.value = normalizeIntroResponse(response)
 }
 
 async function openEditor() {

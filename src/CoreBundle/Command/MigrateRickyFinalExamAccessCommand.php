@@ -4,15 +4,25 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V210;
+namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Connection;
 use JsonException;
 use RuntimeException;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
-final class Version20260703210000 extends AbstractMigrationChamilo
+#[AsCommand(
+    name: 'chamilo:migration:migrate-ricky-final-exam-access',
+    description: 'Migrate Ricky final-exam access rules and repair verified legacy references.'
+)]
+final class MigrateRickyFinalExamAccessCommand extends Command
 {
     private const EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
     private const USER_IDENTIFIER_FIELD_VARIABLE = 'fcdice_or_acadis_student_id';
@@ -64,7 +74,7 @@ final class Version20260703210000 extends AbstractMigrationChamilo
     /**
      * Legacy course-local exercise IDs used only to resolve ambiguous migrated
      * Final Exam resources. In Chamilo 1 these IDs were local to each course;
-     * the migration matches them against the migrated resource display order
+     * the command matches them against the migrated resource display order
      * and never stores them in runtime configuration.
      *
      * @var array<string, int>
@@ -82,46 +92,142 @@ final class Version20260703210000 extends AbstractMigrationChamilo
         'AERIALDRIVEROPERATOR' => 512,
     ];
 
-    public function getDescription(): string
+    public function __construct(private readonly Connection $connection)
     {
-        return 'Migrate Ricky final-exam rules and repair safely resolved final-exam references.';
+        parent::__construct();
     }
 
-    public function up(Schema $schema): void
+    protected function configure(): void
     {
+        $this
+            ->addOption(
+                'dry-run',
+                null,
+                InputOption::VALUE_NONE,
+                'Runs every validation and write inside a transaction that is rolled back.'
+            )
+            ->addOption(
+                'course-code',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Limits processing to one or more Ricky course codes.'
+            )
+        ;
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $io = new SymfonyStyle($input, $output);
+        $io->title('Migrate Ricky final-exam access rules');
+
+        $dryRun = (bool) $input->getOption('dry-run');
+        $requestedCodes = array_values(array_unique(array_filter(array_map(
+            static fn (mixed $value): string => trim((string) $value),
+            (array) $input->getOption('course-code')
+        ))));
+
+        $knownCodes = array_map('strval', array_keys(self::LEGACY_COURSE_RULES));
+        $unknownCodes = array_values(array_diff($requestedCodes, $knownCodes));
+        if ([] !== $unknownCodes) {
+            $io->error('Unknown Ricky course code(s): '.implode(', ', $unknownCodes));
+
+            return Command::INVALID;
+        }
+
+        if ($dryRun) {
+            $io->warning('Dry-run enabled. All database changes will be rolled back.');
+        }
+
+        $this->connection->beginTransaction();
+
+        try {
+            $summary = $this->migrate($io, $requestedCodes);
+
+            if ($dryRun) {
+                $this->connection->rollBack();
+            } else {
+                $this->connection->commit();
+            }
+        } catch (Throwable $exception) {
+            if ($this->connection->isTransactionActive()) {
+                $this->connection->rollBack();
+            }
+
+            $io->error($exception->getMessage());
+
+            return Command::FAILURE;
+        }
+
+        $io->success($dryRun ? 'Dry-run completed.' : 'Ricky final-exam migration completed.');
+        $io->definitionList(
+            ['Selected legacy rules' => $summary['legacy_rules']],
+            ['Configured rules' => $summary['configured']],
+            ['Already configured' => $summary['already_configured']],
+            ['Conflicting existing rules preserved' => $summary['conflicting_existing']],
+            ['Missing courses' => $summary['missing_course']],
+            ['Missing final-exam items' => $summary['missing_final_exam_item']],
+            ['Ambiguous final-exam items' => $summary['ambiguous_final_exam_item']],
+            ['Missing exercise targets' => $summary['missing_exercise_target']],
+            ['Ambiguous exercise targets' => $summary['ambiguous_exercise_target']],
+            ['Learning-path references repaired' => $summary['repaired_learning_path_items']],
+            ['Tracking rows repaired' => $summary['repaired_attempt_rows']]
+        );
+
+        return Command::SUCCESS;
+    }
+
+    /**
+     * @param list<string> $requestedCodes
+     *
+     * @return array<string, int>
+     */
+    private function migrate(SymfonyStyle $io, array $requestedCodes): array
+    {
+        $tableNames = array_map(
+            static fn (string $tableName): string => strtolower($tableName),
+            $this->connection->createSchemaManager()->listTableNames()
+        );
+
         foreach (['course', 'c_lp', 'c_lp_item', 'c_quiz', 'resource_link', 'extra_field', 'extra_field_values'] as $tableName) {
-            if (!$schema->hasTable($tableName)) {
+            if (!in_array(strtolower($tableName), $tableNames, true)) {
                 throw new RuntimeException("Required table '{$tableName}' is missing.");
             }
         }
 
         if (!$this->hasRickyUserIdentifierField()) {
-            $this->getLogger()->info('Ricky final-exam rule migration skipped: required user identifier field not found.', [
-                'field_variable' => self::USER_IDENTIFIER_FIELD_VARIABLE,
-            ]);
-
-            return;
+            throw new RuntimeException(sprintf(
+                'Required Ricky user identifier field "%s" was not found.',
+                self::USER_IDENTIFIER_FIELD_VARIABLE
+            ));
         }
 
-        $hasTracking = $schema->hasTable('track_e_exercises');
-        $hasGradebookLinks = $schema->hasTable('gradebook_link');
+        $hasTracking = in_array('track_e_exercises', $tableNames, true);
+        $hasGradebookLinks = in_array('gradebook_link', $tableNames, true);
         $fieldId = $this->getOrCreateExerciseRuleField();
-        $removedGeneratedValues = $this->removePreviouslyGeneratedRules($fieldId);
 
-        $configured = 0;
-        $alreadyConfigured = 0;
-        $conflictingExisting = 0;
-        $missingCourse = 0;
-        $missingFinalExamItem = 0;
-        $ambiguousFinalExamItem = 0;
-        $missingExerciseTarget = 0;
-        $ambiguousExerciseTarget = 0;
-        $repairedLearningPathItems = 0;
-        $repairedAttemptRows = 0;
+        $summary = [
+            'legacy_rules' => 0,
+            'configured' => 0,
+            'already_configured' => 0,
+            'conflicting_existing' => 0,
+            'missing_course' => 0,
+            'missing_final_exam_item' => 0,
+            'ambiguous_final_exam_item' => 0,
+            'missing_exercise_target' => 0,
+            'ambiguous_exercise_target' => 0,
+            'repaired_learning_path_items' => 0,
+            'repaired_attempt_rows' => 0,
+        ];
 
         foreach (self::LEGACY_COURSE_RULES as $courseCode => $legacyRule) {
             // PHP converts numeric-string array keys (for example, '2120') to integers.
             $courseCode = (string) $courseCode;
+
+            if ([] !== $requestedCodes && !in_array($courseCode, $requestedCodes, true)) {
+                continue;
+            }
+
+            ++$summary['legacy_rules'];
 
             $courseId = (int) $this->connection->fetchOne(
                 'SELECT id FROM course WHERE code = :code LIMIT 1',
@@ -129,8 +235,8 @@ final class Version20260703210000 extends AbstractMigrationChamilo
             );
 
             if ($courseId <= 0) {
-                ++$missingCourse;
-                $this->getLogger()->warning('Final-exam rule skipped: course code was not found.', [
+                ++$summary['missing_course'];
+                $this->writeWarning($io, 'Final-exam rule skipped: course code was not found.', [
                     'course_code' => $courseCode,
                 ]);
 
@@ -141,15 +247,15 @@ final class Version20260703210000 extends AbstractMigrationChamilo
             $finalExamItem = $this->selectFinalExamItem($finalExamItems);
             if (null === $finalExamItem) {
                 if ([] === $finalExamItems) {
-                    ++$missingFinalExamItem;
+                    ++$summary['missing_final_exam_item'];
                 } else {
-                    ++$ambiguousFinalExamItem;
+                    ++$summary['ambiguous_final_exam_item'];
                 }
 
-                $this->getLogger()->warning('Final-exam rule skipped: learning-path item could not be resolved safely.', [
+                $this->writeWarning($io, 'Final-exam rule skipped: learning-path item could not be resolved safely.', [
                     'course_id' => $courseId,
                     'course_code' => $courseCode,
-                    'candidates' => \count($finalExamItems),
+                    'candidates' => count($finalExamItems),
                 ]);
 
                 continue;
@@ -165,17 +271,17 @@ final class Version20260703210000 extends AbstractMigrationChamilo
             );
             if (null === $exercise) {
                 if ([] === $exerciseCandidates) {
-                    ++$missingExerciseTarget;
+                    ++$summary['missing_exercise_target'];
                 } else {
-                    ++$ambiguousExerciseTarget;
+                    ++$summary['ambiguous_exercise_target'];
                 }
 
-                $this->getLogger()->warning('Final-exam rule skipped: course exercise could not be resolved safely.', [
+                $this->writeWarning($io, 'Final-exam rule skipped: course exercise could not be resolved safely.', [
                     'course_id' => $courseId,
                     'course_code' => $courseCode,
                     'learning_path_id' => (int) $finalExamItem['learning_path_id'],
                     'learning_path_item_id' => (int) $finalExamItem['learning_path_item_id'],
-                    'exercise_candidates' => \count($exerciseCandidates),
+                    'exercise_candidates' => count($exerciseCandidates),
                 ]);
 
                 continue;
@@ -183,13 +289,14 @@ final class Version20260703210000 extends AbstractMigrationChamilo
 
             $exerciseId = (int) $exercise['exercise_id'];
             $referenceRepair = $this->repairFinalExamReferences(
+                $io,
                 $courseId,
                 $finalExamItem,
                 $exerciseId,
                 $hasTracking
             );
-            $repairedLearningPathItems += $referenceRepair['learning_path_items'];
-            $repairedAttemptRows += $referenceRepair['attempt_rows'];
+            $summary['repaired_learning_path_items'] += $referenceRepair['learning_path_items'];
+            $summary['repaired_attempt_rows'] += $referenceRepair['attempt_rows'];
 
             $courseDurationMinutes = $legacyRule['course_duration_minutes'];
             $finalExamMinutes = $legacyRule['final_exam_minutes'];
@@ -215,17 +322,17 @@ final class Version20260703210000 extends AbstractMigrationChamilo
             );
 
             if ([] !== $existingValues) {
-                if (1 === \count($existingValues) && $this->rulesMatch((string) $existingValues[0]['field_value'], $rule)) {
-                    ++$alreadyConfigured;
+                if (1 === count($existingValues) && $this->rulesMatch((string) $existingValues[0]['field_value'], $rule)) {
+                    ++$summary['already_configured'];
                 } else {
-                    ++$conflictingExisting;
-                    $this->getLogger()->warning('Final-exam rule skipped: existing exercise configuration was preserved.', [
+                    ++$summary['conflicting_existing'];
+                    $this->writeWarning($io, 'Final-exam rule skipped: existing exercise configuration was preserved.', [
                         'course_id' => $courseId,
                         'course_code' => $courseCode,
                         'learning_path_id' => (int) $finalExamItem['learning_path_id'],
                         'learning_path_item_id' => (int) $finalExamItem['learning_path_item_id'],
                         'exercise_id' => $exerciseId,
-                        'existing_values' => \count($existingValues),
+                        'existing_values' => count($existingValues),
                     ]);
                 }
 
@@ -242,9 +349,9 @@ final class Version20260703210000 extends AbstractMigrationChamilo
                 'comment' => null,
                 'asset_id' => null,
             ]);
-            ++$configured;
+            ++$summary['configured'];
 
-            $this->getLogger()->info('Configured Ricky final-exam access rule.', [
+            $this->writeInfo($io, 'Configured Ricky final-exam access rule.', [
                 'course_id' => $courseId,
                 'course_code' => $courseCode,
                 'learning_path_id' => (int) $finalExamItem['learning_path_id'],
@@ -255,27 +362,9 @@ final class Version20260703210000 extends AbstractMigrationChamilo
             ]);
         }
 
-        $this->getLogger()->info('Completed Ricky final-exam access rule migration.', [
-            'legacy_rules' => \count(self::LEGACY_COURSE_RULES),
-            'removed_previous_generated_values' => $removedGeneratedValues,
-            'configured' => $configured,
-            'already_configured' => $alreadyConfigured,
-            'conflicting_existing' => $conflictingExisting,
-            'missing_course' => $missingCourse,
-            'missing_final_exam_item' => $missingFinalExamItem,
-            'ambiguous_final_exam_item' => $ambiguousFinalExamItem,
-            'missing_exercise_target' => $missingExerciseTarget,
-            'ambiguous_exercise_target' => $ambiguousExerciseTarget,
-            'repaired_learning_path_items' => $repairedLearningPathItems,
-            'repaired_attempt_rows' => $repairedAttemptRows,
-        ]);
+        return $summary;
     }
 
-    public function down(Schema $schema): void
-    {
-        // Intentionally left empty.
-        // Removing these values would disable migrated legal final-exam access controls.
-    }
 
     private function hasRickyUserIdentifierField(): bool
     {
@@ -331,30 +420,7 @@ final class Version20260703210000 extends AbstractMigrationChamilo
         return (int) $this->connection->lastInsertId();
     }
 
-    private function removePreviouslyGeneratedRules(int $fieldId): int
-    {
-        $removed = 0;
-        $rows = $this->connection->fetchAllAssociative(
-            'SELECT id, field_value FROM extra_field_values WHERE field_id = :fieldId ORDER BY id',
-            ['fieldId' => $fieldId]
-        );
 
-        foreach ($rows as $row) {
-            try {
-                $value = json_decode((string) $row['field_value'], true, 512, JSON_THROW_ON_ERROR);
-            } catch (JsonException) {
-                continue;
-            }
-
-            if (!\is_array($value) || self::SOURCE !== ($value['source'] ?? null)) {
-                continue;
-            }
-
-            $removed += $this->connection->delete('extra_field_values', ['id' => (int) $row['id']]);
-        }
-
-        return $removed;
-    }
 
     /**
      * @return list<array<string, mixed>>
@@ -614,6 +680,7 @@ final class Version20260703210000 extends AbstractMigrationChamilo
      * @return array{learning_path_items: int, attempt_rows: int}
      */
     private function repairFinalExamReferences(
+        SymfonyStyle $io,
         int $courseId,
         array $finalExamItem,
         int $exerciseId,
@@ -628,7 +695,7 @@ final class Version20260703210000 extends AbstractMigrationChamilo
                 ['iid' => (int) $finalExamItem['learning_path_item_id']]
             );
 
-            $this->getLogger()->info('Repaired final-exam learning-path exercise reference.', [
+            $this->writeInfo($io, 'Repaired final-exam learning-path exercise reference.', [
                 'course_id' => $courseId,
                 'learning_path_id' => (int) $finalExamItem['learning_path_id'],
                 'learning_path_item_id' => (int) $finalExamItem['learning_path_item_id'],
@@ -656,7 +723,7 @@ final class Version20260703210000 extends AbstractMigrationChamilo
             );
 
             if ($attemptRepairs > 0) {
-                $this->getLogger()->info('Repaired migrated final-exam attempt references.', [
+                $this->writeInfo($io, 'Repaired migrated final-exam attempt references.', [
                     'course_id' => $courseId,
                     'learning_path_id' => (int) $finalExamItem['learning_path_id'],
                     'learning_path_item_id' => (int) $finalExamItem['learning_path_item_id'],
@@ -706,5 +773,31 @@ final class Version20260703210000 extends AbstractMigrationChamilo
         }
 
         return true;
+    }
+
+    /**
+     * @param array<string, mixed> $context
+     */
+    private function writeInfo(SymfonyStyle $io, string $message, array $context): void
+    {
+        $io->writeln(sprintf('<info>%s</info> %s', $message, $this->formatContext($context)));
+    }
+
+    /**
+     * @param array<string, mixed> $context
+     */
+    private function writeWarning(SymfonyStyle $io, string $message, array $context): void
+    {
+        $io->writeln(sprintf('<comment>%s</comment> %s', $message, $this->formatContext($context)));
+    }
+
+    /**
+     * @param array<string, mixed> $context
+     */
+    private function formatContext(array $context): string
+    {
+        $encoded = json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        return false === $encoded ? '{}' : $encoded;
     }
 }

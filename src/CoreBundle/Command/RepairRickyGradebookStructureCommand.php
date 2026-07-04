@@ -307,6 +307,44 @@ SQL;
             return null;
         }
         $bestIds = array_keys(array_filter($scores, static fn (int $score): bool => $score === (int) $bestScore));
+        if (1 === count($bestIds)) {
+            return (int) $bestIds[0];
+        }
+
+        return $this->resolveCategoryByCertificateHistory(array_map('intval', $bestIds));
+    }
+
+    /** @param list<int> $categoryIds */
+    private function resolveCategoryByCertificateHistory(array $categoryIds): ?int
+    {
+        if ([] === $categoryIds) {
+            return null;
+        }
+
+        $certificateCounts = array_fill_keys($categoryIds, 0);
+        $rows = $this->connection->executeQuery(
+            'SELECT cat_id AS category_id, COUNT(*) AS certificate_count FROM gradebook_certificate WHERE cat_id IN (:categoryIds) GROUP BY cat_id',
+            ['categoryIds' => $categoryIds],
+            ['categoryIds' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+        )->fetchAllAssociative();
+
+        foreach ($rows as $row) {
+            $categoryId = (int) $row['category_id'];
+            if (array_key_exists($categoryId, $certificateCounts)) {
+                $certificateCounts[$categoryId] = (int) $row['certificate_count'];
+            }
+        }
+
+        arsort($certificateCounts);
+        $bestCount = reset($certificateCounts);
+        if (false === $bestCount || (int) $bestCount <= 0) {
+            return null;
+        }
+
+        $bestIds = array_keys(array_filter(
+            $certificateCounts,
+            static fn (int $count): bool => $count === (int) $bestCount
+        ));
 
         return 1 === count($bestIds) ? (int) $bestIds[0] : null;
     }

@@ -757,6 +757,18 @@ class FlatViewDataGenerator
                     SCORE_DIV_SIMPLE_WITH_CUSTOM
                 );
                 $temp_score = Display::tip($real_score, $temp_score);
+
+                // Completion-rule exercise columns must show the raw exercise
+                // percentage. Their weighted contribution is already reflected
+                // in the TOTAL column and showing only that contribution here
+                // would hide the source result from teachers and learners.
+                if ($item instanceof ExerciseLink
+                    && $item->hasConfiguredCompletionTrackingIds()
+                    && isset($score[0], $score[1])
+                    && (float) $score[1] > 0
+                ) {
+                    $temp_score = $complete_score;
+                }
             /*} else {
                 $temp_score = $scoreDisplay->display_score(
                     $real_score,

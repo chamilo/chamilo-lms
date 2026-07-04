@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Exercise\FinalExamAccessRule;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -267,6 +268,35 @@ $plugin = Positioning::create();
 if ($plugin->isEnabled()) {
     if ($plugin->blockFinalExercise(api_get_user_id(), $objExercise->iId, api_get_course_int_id(), $sessionId)) {
         api_not_allowed(true);
+    }
+}
+
+if (!$is_allowedToEdit) {
+    $finalExamAccess = FinalExamAccessRule::evaluate(
+        api_get_user_id(),
+        $courseId,
+        $sessionId,
+        $exerciseId
+    );
+
+    if ($finalExamAccess['applies'] && !$finalExamAccess['allowed']) {
+        $overviewParams = ['exerciseId' => $exerciseId];
+        if ($learnpath_id > 0) {
+            $overviewParams['learnpath_id'] = $learnpath_id;
+        }
+        if ($learnpath_item_id > 0) {
+            $overviewParams['learnpath_item_id'] = $learnpath_item_id;
+        }
+        if ($learnpath_item_view_id > 0) {
+            $overviewParams['learnpath_item_view_id'] = $learnpath_item_view_id;
+        }
+        if (!empty($origin)) {
+            $overviewParams['origin'] = $origin;
+        }
+
+        $overviewUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.
+            api_get_cidreq().'&'.http_build_query($overviewParams);
+        api_location($overviewUrl);
     }
 }
 

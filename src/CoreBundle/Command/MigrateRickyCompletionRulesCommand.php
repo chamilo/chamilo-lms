@@ -42,17 +42,17 @@ final class MigrateRickyCompletionRulesCommand extends Command
             'exercises' => [
                 [
                     'legacy_id' => 17,
-                    'current_id' => null,
+                    'current_id' => 332,
                     'weight' => 20.0,
-                    'mapping_status' => 'candidate_display_order',
-                    'mapping_confidence' => 'low',
+                    'mapping_status' => 'verified_from_migrated_course_metadata',
+                    'mapping_confidence' => 'high',
                 ],
                 [
                     'legacy_id' => 22,
-                    'current_id' => null,
+                    'current_id' => 337,
                     'weight' => 30.0,
-                    'mapping_status' => 'candidate_display_order',
-                    'mapping_confidence' => 'low',
+                    'mapping_status' => 'verified_from_migrated_course_metadata',
+                    'mapping_confidence' => 'high',
                 ],
                 [
                     'legacy_id' => 745,
@@ -131,10 +131,10 @@ final class MigrateRickyCompletionRulesCommand extends Command
                 ],
                 [
                     'legacy_id' => 1,
-                    'current_id' => null,
+                    'current_id' => 156,
                     'weight' => 30.0,
-                    'mapping_status' => 'unresolved',
-                    'mapping_confidence' => 'none',
+                    'mapping_status' => 'resolved_from_course_sequence_anchor',
+                    'mapping_confidence' => 'high',
                 ],
                 [
                     'legacy_id' => 3,
@@ -578,10 +578,10 @@ final class MigrateRickyCompletionRulesCommand extends Command
             'exercises' => [
                 [
                     'legacy_id' => 25,
-                    'current_id' => null,
+                    'current_id' => 482,
                     'weight' => 20.0,
-                    'mapping_status' => 'candidate_display_order',
-                    'mapping_confidence' => 'low',
+                    'mapping_status' => 'verified_from_migrated_course_metadata',
+                    'mapping_confidence' => 'high',
                 ],
                 [
                     'legacy_id' => 484,
@@ -741,10 +741,10 @@ final class MigrateRickyCompletionRulesCommand extends Command
             'exercises' => [
                 [
                     'legacy_id' => 25,
-                    'current_id' => null,
+                    'current_id' => 373,
                     'weight' => 20.0,
-                    'mapping_status' => 'unresolved',
-                    'mapping_confidence' => 'none',
+                    'mapping_status' => 'resolved_from_course_sequence_anchor',
+                    'mapping_confidence' => 'high',
                 ],
                 [
                     'legacy_id' => 29,
@@ -1251,17 +1251,17 @@ final class MigrateRickyCompletionRulesCommand extends Command
             'exercises' => [
                 [
                     'legacy_id' => 1,
-                    'current_id' => null,
+                    'current_id' => 732,
                     'weight' => 20.0,
-                    'mapping_status' => 'candidate_display_order',
-                    'mapping_confidence' => 'low',
+                    'mapping_status' => 'verified_from_migrated_course_metadata',
+                    'mapping_confidence' => 'high',
                 ],
                 [
                     'legacy_id' => 2,
-                    'current_id' => null,
+                    'current_id' => 733,
                     'weight' => 20.0,
-                    'mapping_status' => 'candidate_display_order',
-                    'mapping_confidence' => 'low',
+                    'mapping_status' => 'verified_from_migrated_course_metadata',
+                    'mapping_confidence' => 'high',
                 ],
             ],
         ],
@@ -1280,17 +1280,17 @@ final class MigrateRickyCompletionRulesCommand extends Command
             'exercises' => [
                 [
                     'legacy_id' => 5,
-                    'current_id' => null,
+                    'current_id' => 740,
                     'weight' => 20.0,
-                    'mapping_status' => 'candidate_display_order',
-                    'mapping_confidence' => 'low',
+                    'mapping_status' => 'verified_from_migrated_course_metadata',
+                    'mapping_confidence' => 'high',
                 ],
                 [
                     'legacy_id' => 1,
-                    'current_id' => null,
+                    'current_id' => 736,
                     'weight' => 20.0,
-                    'mapping_status' => 'candidate_display_order',
-                    'mapping_confidence' => 'low',
+                    'mapping_status' => 'verified_from_migrated_course_metadata',
+                    'mapping_confidence' => 'high',
                 ],
             ],
         ],

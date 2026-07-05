@@ -512,6 +512,18 @@ class FlatViewDataGenerator
             );
 
             $evaluationsAdded = [];
+            $configuredEvaluation = null;
+            if (method_exists($this->category, 'getConfiguredCourseCompletionEvaluationForUser')) {
+                $candidateEvaluation = $this->category
+                    ->getConfiguredCourseCompletionEvaluationForUser((int) $user_id);
+
+                if (is_array($candidateEvaluation)
+                    && !empty($candidateEvaluation['supported'])
+                    && !empty($candidateEvaluation['complete'])
+                ) {
+                    $configuredEvaluation = $candidateEvaluation;
+                }
+            }
 
             // Case 1: root category with visible subcategories → one column per subcategory.
             if (0 == $parent_id && !empty($allcat)) {
@@ -591,7 +603,10 @@ class FlatViewDataGenerator
                     $items_count,
                     $items_start,
                     $show_all,
-                    $row
+                    $row,
+                    null,
+                    [],
+                    $configuredEvaluation
                 );
                 $item_value_total += $result['item_value_total'];
                 $evaluationsAdded = $result['evaluations_added'];
@@ -607,7 +622,8 @@ class FlatViewDataGenerator
                 $show_all,
                 $row,
                 $mainCategoryId,
-                $evaluationsAdded
+                $evaluationsAdded,
+                $configuredEvaluation
             );
 
             $item_total += $result['item_total'];
@@ -676,7 +692,8 @@ class FlatViewDataGenerator
         $show_all,
         &$row,
         $parentCategoryIdFilter = null,
-        $evaluationsAlreadyAdded = []
+        $evaluationsAlreadyAdded = [],
+        ?array $configuredEvaluation = null
     ) {
         // Generate actual data array
         $scoreDisplay = ScoreDisplay::instance();
@@ -708,7 +725,12 @@ class FlatViewDataGenerator
             }
 
             $evaluationsAdded[] = $item->get_id();
-            $score = $item->calc_score($user_id);
+            $configuredScore = $this->getConfiguredItemScore($item, $configuredEvaluation);
+            $usesConfiguredScore = null !== $configuredScore;
+            $score = $configuredScore;
+            if (null === $score) {
+                $score = $item->calc_score($user_id);
+            }
 
             $real_score = $score;
             $divide = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
@@ -758,12 +780,11 @@ class FlatViewDataGenerator
                 );
                 $temp_score = Display::tip($real_score, $temp_score);
 
-                // Completion-rule exercise columns must show the raw exercise
+                // Configured completion-rule columns must show the source
                 // percentage. Their weighted contribution is already reflected
                 // in the TOTAL column and showing only that contribution here
                 // would hide the source result from teachers and learners.
-                if ($item instanceof ExerciseLink
-                    && $item->hasConfiguredCompletionTrackingIds()
+                if ($usesConfiguredScore
                     && isset($score[0], $score[1])
                     && (float) $score[1] > 0
                 ) {
@@ -1120,6 +1141,90 @@ class FlatViewDataGenerator
     /**
      * Add columns heders according to gradebook_flatview_extrafields_columns conf setting.
      */
+    /**
+     * Return a score pair from the persisted completion rule for one gradebook item.
+     *
+     * Configured rules are the source of truth only when the course rule is complete.
+     * Courses without a complete rule keep the standard gradebook calculation.
+     *
+     * @param Evaluation|AbstractLink $item
+     *
+     * @return array{0: float|null, 1: float}|null
+     */
+    private function getConfiguredItemScore($item, ?array $configuredEvaluation): ?array
+    {
+        if (null === $configuredEvaluation || empty($configuredEvaluation['components'])) {
+            return null;
+        }
+
+        $componentType = null;
+        $resourceId = null;
+
+        if ($item instanceof Evaluation) {
+            $componentType = 'evaluation';
+            $resourceId = (int) $item->get_id();
+        } elseif ($item instanceof AbstractLink) {
+            $componentType = match ((int) $item->get_type()) {
+                LINK_FORUM_THREAD => 'forum',
+                LINK_STUDENTPUBLICATION => 'work',
+                LINK_EXERCISE => 'exercise',
+                default => null,
+            };
+
+            if (null !== $componentType && method_exists($item, 'get_ref_id')) {
+                $resourceId = (int) $item->get_ref_id();
+            }
+        }
+
+        if (null === $componentType || null === $resourceId || $resourceId <= 0) {
+            return null;
+        }
+
+        foreach ($configuredEvaluation['components'] as $component) {
+            if (!is_array($component) || $componentType !== ($component['type'] ?? null)) {
+                continue;
+            }
+
+            $mappedResourceId = (int) ($component['mapped_resource_id'] ?? 0);
+            if ($mappedResourceId <= 0) {
+                $mappedResourceId = (int) ($component['resource_id'] ?? 0);
+            }
+
+            if ($mappedResourceId !== $resourceId) {
+                continue;
+            }
+
+            $attempts = (int) ($component['attempts'] ?? 0);
+            if ($attempts <= 0) {
+                $max = 'forum' === $componentType
+                    ? (float) ($component['weight'] ?? 0.0)
+                    : (float) ($component['raw_max'] ?? 100.0);
+
+                return [null, $max > 0.0 ? $max : 100.0];
+            }
+
+            if ('forum' === $componentType) {
+                $weight = (float) ($component['weight'] ?? 0.0);
+                if ($weight <= 0.0) {
+                    return null;
+                }
+
+                return [(float) ($component['score'] ?? 0.0), $weight];
+            }
+
+            $rawScore = $component['raw_score'] ?? null;
+            if (null === $rawScore) {
+                return [null, (float) ($component['raw_max'] ?? 100.0)];
+            }
+
+            $rawMax = (float) ($component['raw_max'] ?? 100.0);
+
+            return [(float) $rawScore, $rawMax > 0.0 ? $rawMax : 100.0];
+        }
+
+        return null;
+    }
+
     private function addExtraFieldColumnsHeaders(array &$headers)
     {
         $extraFieldColumns = api_get_setting('gradebook.gradebook_flatview_extrafields_columns', true);

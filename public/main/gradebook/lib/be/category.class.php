@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -41,6 +42,8 @@ class Category implements GradebookItem
     private $gradeBooksToValidateInDependence;
     private $locked;
     private int $allowSkillsBySubcategory;
+    private static ?CourseCompletionRuleEvaluator $courseCompletionRuleEvaluator = null;
+    private static array $courseCompletionRuleEvaluationCache = [];
 
     /**
      * Consctructor.
@@ -817,6 +820,22 @@ class Category implements GradebookItem
      */
     public function is_certificate_available($user_id)
     {
+        $courseId = (int) $this->getCourseId();
+        $minimumScore = (float) ($this->getCertificateMinScore() ?? 0.0);
+        $configuredEvaluation = self::getConfiguredCourseCompletionEvaluation(
+            (int) $user_id,
+            $courseId,
+            (string) $this->get_course_code(),
+            $minimumScore,
+            (int) $this->get_session_id()
+        );
+
+        if (is_array($configuredEvaluation) && !empty($configuredEvaluation['supported'])) {
+            return !empty($configuredEvaluation['complete'])
+                && null !== $configuredEvaluation['score']
+                && (float) $configuredEvaluation['score'] >= $minimumScore;
+        }
+
         $score = $this->calc_score(
             $user_id,
             null,
@@ -856,6 +875,31 @@ class Category implements GradebookItem
         ?int $courseId = 0,
         ?int $session_id = null
     ): ?array {
+        $effectiveCourseId = !empty($courseId) ? (int) $courseId : (int) $this->getCourseId();
+        $effectiveSessionId = null === $session_id ? (int) $this->get_session_id() : (int) $session_id;
+
+        if (!empty($studentId)
+            && (null === $type || '' === $type)
+            && $this->is_course()
+            && $effectiveCourseId > 0
+        ) {
+            $configuredEvaluation = self::getConfiguredCourseCompletionEvaluation(
+                (int) $studentId,
+                $effectiveCourseId,
+                (string) $this->get_course_code(),
+                (float) ($this->getCertificateMinScore() ?? 0.0),
+                $effectiveSessionId
+            );
+
+            if (is_array($configuredEvaluation)
+                && !empty($configuredEvaluation['supported'])
+                && !empty($configuredEvaluation['complete'])
+                && null !== $configuredEvaluation['score']
+            ) {
+                return [(float) $configuredEvaluation['score'], 100.0];
+            }
+        }
+
         $key = 'category:'.$this->id.'student:'.(int) $studentId.'type:'.$type.'course:'.$courseId.'session:'.(int) $session_id;
         $useCache = ('true' === api_get_setting('gradebook.gradebook_use_apcu_cache'));
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;
@@ -2076,13 +2120,27 @@ class Category implements GradebookItem
         $catArr = Category::load($categoryId);
         $catObj = $catArr[0] ?? null;
 
+        $minCertificationScore = (float) $category->getCertifMinScore();
+        $configuredEvaluation = self::getConfiguredCourseCompletionEvaluation(
+            $user_id,
+            $courseId,
+            (string) $category->getCourse()->getCode(),
+            $minCertificationScore,
+            $sessionId
+        );
+
         $scoreForCertificate = 0.0;
-        if ($catObj) {
+        if (is_array($configuredEvaluation) && !empty($configuredEvaluation['supported'])) {
+            if (empty($configuredEvaluation['complete']) || null === $configuredEvaluation['score']) {
+                return false;
+            }
+
+            $scoreForCertificate = (float) $configuredEvaluation['score'];
+        } elseif ($catObj) {
             $scoreForCertificate = (float) self::calculateFlatViewTotalPercent($catObj, $user_id);
         }
 
         // Guard: never generate certificate OR award skills if the global certificate threshold is not met.
-        $minCertificationScore = (float) $category->getCertifMinScore();
         if ($minCertificationScore > 0.0 && $scoreForCertificate < $minCertificationScore) {
             return false;
         }
@@ -2419,6 +2477,24 @@ class Category implements GradebookItem
         ?int $courseId = null,
         ?int $sessionId = null
     ): bool {
+        $resolvedCourseId = $courseId ?? (int) $category->getCourse()->getId();
+        $resolvedSessionId = $sessionId
+            ?? ($category->getSession() ? (int) $category->getSession()->getId() : 0);
+        $minCertificateScore = (float) $category->getCertifMinScore();
+        $configuredEvaluation = self::getConfiguredCourseCompletionEvaluation(
+            $userId,
+            $resolvedCourseId,
+            (string) $category->getCourse()->getCode(),
+            $minCertificateScore,
+            $resolvedSessionId
+        );
+
+        if (is_array($configuredEvaluation) && !empty($configuredEvaluation['supported'])) {
+            return !empty($configuredEvaluation['complete'])
+                && null !== $configuredEvaluation['score']
+                && (float) $configuredEvaluation['score'] >= $minCertificateScore;
+        }
+
         $currentScore = self::getCurrentScore(
             $userId,
             $category,
@@ -2869,6 +2945,86 @@ class Category implements GradebookItem
         }
 
         return $targets;
+    }
+
+    /**
+     * Return the configured course-completion evaluation for one user.
+     *
+     * This method intentionally exposes only the generic persisted rule result.
+     * Courses without a complete configured rule keep the standard gradebook flow.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getConfiguredCourseCompletionEvaluationForUser(int $userId): ?array
+    {
+        if (!$this->is_course()) {
+            return null;
+        }
+
+        return self::getConfiguredCourseCompletionEvaluation(
+            $userId,
+            (int) $this->getCourseId(),
+            (string) $this->get_course_code(),
+            (float) ($this->getCertificateMinScore() ?? 0.0),
+            (int) $this->get_session_id()
+        );
+    }
+
+    /**
+     * Evaluate a configured course-completion rule once per request.
+     *
+     * @return array<string, mixed>|null
+     */
+    private static function getConfiguredCourseCompletionEvaluation(
+        int $userId,
+        int $courseId,
+        string $courseCode,
+        float $minimumScore,
+        int $sessionId
+    ): ?array {
+        if ($userId <= 0 || $courseId <= 0) {
+            return null;
+        }
+
+        $cacheKey = implode(':', [
+            $userId,
+            $courseId,
+            $sessionId,
+            number_format($minimumScore, 4, '.', ''),
+        ]);
+
+        if (array_key_exists($cacheKey, self::$courseCompletionRuleEvaluationCache)) {
+            return self::$courseCompletionRuleEvaluationCache[$cacheKey];
+        }
+
+        try {
+            if (null === self::$courseCompletionRuleEvaluator) {
+                self::$courseCompletionRuleEvaluator = new CourseCompletionRuleEvaluator(
+                    Container::getEntityManager()->getConnection()
+                );
+            }
+
+            $evaluation = self::$courseCompletionRuleEvaluator->evaluate(
+                $userId,
+                $courseId,
+                $courseCode,
+                $minimumScore,
+                $sessionId
+            );
+        } catch (\Throwable $exception) {
+            error_log(sprintf(
+                '[CourseCompletionRule] Could not evaluate course %d for user %d: %s',
+                $courseId,
+                $userId,
+                $exception->getMessage()
+            ));
+
+            return null;
+        }
+
+        self::$courseCompletionRuleEvaluationCache[$cacheKey] = $evaluation;
+
+        return $evaluation;
     }
 
     /**

@@ -603,9 +603,19 @@ INNER JOIN resource_link assignment_link
    AND assignment_link.group_id IS NULL
    AND assignment_link.user_id IS NULL
 WHERE submission.user_id = :userId
-  AND submission.active = 1
+  AND (
+      submission.active IN (0, 1)
+      OR (
+          submission.active = 2
+          AND submission.accepted = 1
+          AND submission.date_of_qualification IS NOT NULL
+      )
+  )
   AND submission.parent_id IN (:workIds)
-ORDER BY submission.parent_id, submission.iid
+ORDER BY
+    submission.parent_id,
+    CASE WHEN submission.active IN (0, 1) THEN 0 ELSE 1 END,
+    submission.iid
 SQL,
             ['courseId' => $courseId, 'userId' => $userId, 'workIds' => $workIds],
             ['workIds' => ArrayParameterType::INTEGER]

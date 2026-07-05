@@ -1342,24 +1342,27 @@ class GradebookUtils
                 continue;
             }
 
-            $path = $certificateInfo['pathCertificate'] ?? '';
-            $publish = $certificateInfo['publish'] ?? 0;
+            $path = (string) ($certificateInfo['pathCertificate'] ?? $certificateInfo['path_certificate'] ?? '');
+            $publish = (bool) ($certificateInfo['publish'] ?? false);
             $hash = pathinfo($path, PATHINFO_FILENAME);
+            $createdAt = $certificateInfo['createdAt'] ?? $certificateInfo['created_at'] ?? null;
 
+            if ($createdAt instanceof \DateTimeInterface) {
+                $createdAt = $createdAt->format('Y-m-d H:i:s');
+            }
+
+            $canAccessCertificate = $includeNonPublicCertificates || $publish || api_is_platform_admin();
             $link = '';
             $pdf = '';
-            if (api_is_platform_admin()) {
-                $publish = true;
-            }
-            if (!empty($hash) && $publish) {
-                $link = api_get_path(WEB_PATH) . "certificates/{$hash}.html";
+            if ('' !== $hash && $canAccessCertificate) {
+                $link = api_get_path(WEB_PATH)."certificates/{$hash}.html";
                 $pdf = api_get_path(WEB_PATH)."certificates/{$hash}.pdf";
             }
 
             $courseList[] = [
                 'course' => $courseInfo['title'],
-                'score' => $certificateInfo['scoreCertificate'],
-                'date' => api_format_date($certificateInfo['createdAt'], DATE_FORMAT_SHORT),
+                'score' => $certificateInfo['scoreCertificate'] ?? $certificateInfo['score_certificate'] ?? '',
+                'date' => $createdAt ? api_format_date($createdAt, DATE_FORMAT_SHORT) : '',
                 'link' => $link,
                 'pdf' => $pdf,
             ];
@@ -1435,13 +1438,27 @@ class GradebookUtils
                 if (empty($certificateInfo)) {
                     continue;
                 }
-                $hash = pathinfo($certificateInfo['path_certificate'], PATHINFO_FILENAME);
+                $path = (string) ($certificateInfo['pathCertificate'] ?? $certificateInfo['path_certificate'] ?? '');
+                $publish = (bool) ($certificateInfo['publish'] ?? false);
+                $hash = pathinfo($path, PATHINFO_FILENAME);
+                $createdAt = $certificateInfo['createdAt'] ?? $certificateInfo['created_at'] ?? null;
+
+                if ($createdAt instanceof \DateTimeInterface) {
+                    $createdAt = $createdAt->format('Y-m-d H:i:s');
+                }
+
+                $canAccessCertificate = $includeNonPublicCertificates || $publish || api_is_platform_admin();
+                $link = '';
+                if ('' !== $hash && $canAccessCertificate) {
+                    $link = api_get_path(WEB_PATH)."certificates/{$hash}.html";
+                }
+
                 $sessionList[] = [
                     'session' => $session['session_name'],
                     'course' => $course['title'],
-                    'score' => $certificateInfo['scoreCertificate'],
-                    'date' => api_format_date($certificateInfo['createdAt'], DATE_FORMAT_SHORT),
-                    'link' => api_get_path(WEB_PATH)."certificates/{$hash}.html",
+                    'score' => $certificateInfo['scoreCertificate'] ?? $certificateInfo['score_certificate'] ?? '',
+                    'date' => $createdAt ? api_format_date($createdAt, DATE_FORMAT_SHORT) : '',
+                    'link' => $link,
                 ];
             }
         }

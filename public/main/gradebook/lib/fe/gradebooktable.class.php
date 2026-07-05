@@ -71,6 +71,7 @@ class GradebookTable extends SortableTable
         $this->cats = $cats;
         $this->loadStats = $loadStats;
         $this->datagen = new GradebookDataGenerator($cats, $evals, $links);
+        $this->datagen->setCurrentCategory($currentcat);
         $this->datagen->exportToPdf = $this->exportToPdf;
         $this->datagen->preLoadDataKey = $this->getPreloadDataKey();
         $this->datagen->hidePercentage = ('true' === api_get_setting('gradebook.hide_gradebook_percentage_user_result'));
@@ -496,11 +497,17 @@ class GradebookTable extends SortableTable
                     }
 
                     if (empty($model)) {
-                        $data['best_score'][0] = $data['best_score'][0] ?? 0;
-                        $data['best_score'][1] = $data['best_score'][1] ?? 0;
+                        $currentBestScore = is_numeric($totalBest[0] ?? null) ? (float) $totalBest[0] : 0.0;
+                        $currentBestWeight = is_numeric($totalBest[1] ?? null) ? (float) $totalBest[1] : 0.0;
+                        $itemBestScore = is_numeric($data['best_score'][0] ?? null)
+                            ? (float) $data['best_score'][0]
+                            : 0.0;
+                        $itemBestWeight = is_numeric($data['best_score'][1] ?? null)
+                            ? (float) $data['best_score'][1]
+                            : 0.0;
                         $totalBest = [
-                            $scoredisplay->format_score($totalBest[0] + $data['best_score'][0]),
-                            $scoredisplay->format_score($totalBest[1] + $data['best_score'][1]),
+                            $currentBestScore + $itemBestScore,
+                            $currentBestWeight + $itemBestWeight,
                         ];
                         $totalAverage = [0, 0];
                         if (isset($data['average_score']) && !empty($data['average_score'])) {

@@ -441,24 +441,44 @@ JAVASCRIPT;
             $category = $catcourse[0];
             $main_weight = $category->get_weight();
             $scoredisplay = ScoreDisplay::instance();
-            $allevals = $category->get_evaluations($userId, true);
-            $alllinks = $category->get_links($userId, true);
-            $allEvalsLinks = array_merge($allevals, $alllinks);
-            $item_value_total = 0;
             $scoreinfo = null;
+            $configuredEvaluation = null;
 
-            for ($count = 0; $count < count($allEvalsLinks); $count++) {
-                $item = $allEvalsLinks[$count];
-                $score = $item->calc_score($userId);
-                if (!empty($score)) {
-                    $divide = 0 == $score[1] ? 1 : $score[1];
-                    $item_value = $score[0] / $divide * $item->get_weight();
-                    $item_value_total += $item_value;
+            if (method_exists($category, 'getConfiguredCourseCompletionEvaluationForUser')) {
+                $candidateEvaluation = $category->getConfiguredCourseCompletionEvaluationForUser((int) $userId);
+                if (is_array($candidateEvaluation)
+                    && !empty($candidateEvaluation['supported'])
+                    && !empty($candidateEvaluation['complete'])
+                    && is_numeric($candidateEvaluation['score'] ?? null)
+                ) {
+                    $configuredEvaluation = $candidateEvaluation;
                 }
             }
 
-            $item_total = $main_weight;
-            $total_score = [$item_value_total, $item_total];
+            if (null !== $configuredEvaluation) {
+                $total_score = [
+                    (float) $configuredEvaluation['score'],
+                    $main_weight > 0 ? (float) $main_weight : 100.0,
+                ];
+            } else {
+                $allevals = $category->get_evaluations($userId, true);
+                $alllinks = $category->get_links($userId, true);
+                $allEvalsLinks = array_merge($allevals, $alllinks);
+                $item_value_total = 0.0;
+
+                for ($count = 0; $count < count($allEvalsLinks); $count++) {
+                    $item = $allEvalsLinks[$count];
+                    $score = $item->calc_score($userId);
+                    if (!empty($score)) {
+                        $divide = 0 == $score[1] ? 1 : $score[1];
+                        $item_value = $score[0] / $divide * $item->get_weight();
+                        $item_value_total += $item_value;
+                    }
+                }
+
+                $total_score = [$item_value_total, $main_weight];
+            }
+
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
             if ('0' == !$catobj->get_id() && !isset($_GET['studentoverview']) && !isset($_GET['search'])) {

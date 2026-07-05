@@ -271,7 +271,102 @@ class DisplayGradebook
             $exportPdfUrl
         );
 
+        $searchPanelId = 'gradebook-flatview-search';
+        $hasActiveSearch = isset($_GET['search']) && '' !== trim((string) $_GET['search']);
+        $showSearchLabel = get_lang('Search');
+        $hideSearchLabel = get_lang('Hide search');
+        $searchToggleLabel = $hasActiveSearch ? $hideSearchLabel : $showSearchLabel;
+        $clearSearchUrl = api_get_self().'?'.api_get_cidreq().'&selectcat='.(int) $catobj->get_id();
+        $searchToggleUrl = $hasActiveSearch ? $clearSearchUrl : '#'.$searchPanelId;
+
+        $header .= '<a'
+            .' id="gradebook-search-toggle"'
+            .' href="'.htmlspecialchars($searchToggleUrl, ENT_QUOTES, 'UTF-8').'"'
+            .' aria-controls="'.$searchPanelId.'"'
+            .' aria-expanded="'.($hasActiveSearch ? 'true' : 'false').'"'
+            .' aria-label="'.htmlspecialchars($searchToggleLabel, ENT_QUOTES, 'UTF-8').'"'
+            .' title="'.htmlspecialchars($searchToggleLabel, ENT_QUOTES, 'UTF-8').'"'
+            .' data-search-active="'.($hasActiveSearch ? '1' : '0').'"'
+            .' data-show-label="'.htmlspecialchars($showSearchLabel, ENT_QUOTES, 'UTF-8').'"'
+            .' data-hide-label="'.htmlspecialchars($hideSearchLabel, ENT_QUOTES, 'UTF-8').'"'
+            .'>'
+            .Display::getMdiIcon(
+                ActionIcon::SEARCH,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                $searchToggleLabel
+            )
+            .'</a>';
+
         $header .= '</div>';
+        if (!empty($simple_search_form)) {
+            $header .= '<div'
+                .' id="'.$searchPanelId.'"'
+                .' class="q-card p-3 mb-4"'
+                .' role="search"'
+                .' style="max-width: 36rem;"'
+                .($hasActiveSearch ? '' : ' hidden')
+                .'>'
+                .$simple_search_form->toHtml()
+                .'</div>';
+
+            $header .= <<<'JAVASCRIPT'
+<script>
+(function () {
+    const toggle = document.getElementById('gradebook-search-toggle');
+    const panel = document.getElementById('gradebook-flatview-search');
+
+    if (!toggle || !panel) {
+        return;
+    }
+
+    const updateToggleState = function (expanded) {
+        const labelAttribute = expanded ? 'data-hide-label' : 'data-show-label';
+        const label = toggle.getAttribute(labelAttribute) || '';
+        const icon = toggle.querySelector('[title]');
+
+        toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        toggle.setAttribute('aria-label', label);
+        toggle.setAttribute('title', label);
+
+        if (icon) {
+            icon.setAttribute('title', label);
+        }
+    };
+
+    toggle.addEventListener('click', function (event) {
+        if ('1' === toggle.getAttribute('data-search-active')) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const expanded = 'true' === toggle.getAttribute('aria-expanded');
+        const input = panel.querySelector('input[name="keyword"]');
+
+        if (expanded) {
+            panel.setAttribute('hidden', 'hidden');
+            updateToggleState(false);
+
+            if (input) {
+                input.value = '';
+            }
+
+            return;
+        }
+
+        panel.removeAttribute('hidden');
+        updateToggleState(true);
+
+        if (input) {
+            input.focus();
+        }
+    });
+})();
+</script>
+JAVASCRIPT;
+        }
         echo $header;
     }
 

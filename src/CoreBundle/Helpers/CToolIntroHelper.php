@@ -74,7 +74,7 @@ final readonly class CToolIntroHelper
      * - otherwise the base intro flagged as createInSession, so editing forks it;
      * - a transient empty CToolIntro when none exists yet.
      */
-    public function resolveActiveIntro(Course $course, string $toolName, ?Session $session): CToolIntro
+    public function getCurrentIntro(Course $course, string $toolName, ?Session $session): CToolIntro
     {
         $introRepo = $this->entityManager->getRepository(CToolIntro::class);
 

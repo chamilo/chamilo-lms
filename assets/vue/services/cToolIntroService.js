@@ -11,7 +11,7 @@ import baseService from "./baseService"
  * @returns {Promise<Object>}
  */
 async function findCourseHomeInro(tool = "course_homepage") {
-  return await baseService.get("/api/c_tool_intros/resolve", { tool })
+  return await baseService.get("/api/c_tool_intros/current", { tool })
 }
 
 /**

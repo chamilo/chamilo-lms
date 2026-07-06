@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseLinkSessionHelper;
 use Chamilo\CoreBundle\Helpers\CToolIntroHelper;
 use Chamilo\CourseBundle\Entity\CToolIntro;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -26,13 +25,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  *
  * @template-implements ProviderInterface<CToolIntro>
  */
-final readonly class CToolIntroResolveProvider implements ProviderInterface
+final readonly class CToolIntroCurrentProvider implements ProviderInterface
 {
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private CToolIntroHelper $toolIntroHelper,
         private CourseLinkSessionHelper $courseLinkSessionHelper,
-        private RequestStack $requestStack,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): CToolIntro
@@ -44,12 +42,12 @@ final readonly class CToolIntroResolveProvider implements ProviderInterface
 
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
 
-        $toolName = trim((string) $this->requestStack->getCurrentRequest()?->query->get('tool', 'course_homepage'));
+        $toolName = trim((string) ($context['filters']['tool'] ?? 'course_homepage'));
         if ('' === $toolName) {
             $toolName = 'course_homepage';
         }
 
-        $intro = $this->toolIntroHelper->resolveActiveIntro($course, $toolName, $session);
+        $intro = $this->toolIntroHelper->getCurrentIntro($course, $toolName, $session);
 
         $intro->setIntroText(
             $this->courseLinkSessionHelper->rewriteSessionForCourse($intro->getIntroText(), (int) $course->getId())

@@ -83,8 +83,9 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                          WHERE original_name IN (:fileNames)
                          GROUP BY original_name
                      ) first_file ON first_file.first_resource_file_id = rf.id
-                     LEFT JOIN resource_link rl ON rl.resource_node_id = rf.resource_node_id
+                     INNER JOIN resource_link rl ON rl.resource_node_id = rf.resource_node_id
                      GROUP BY rf.original_name, rf.id
+                     HAVING MIN(rl.id) IS NOT NULL AND MIN(rl.id) > 0
                      ORDER BY rf.id',
                     ['fileNames' => array_keys($fileNames)],
                     ['fileNames' => ArrayParameterType::STRING]
@@ -92,8 +93,13 @@ final class Version20240515124400 extends AbstractMigrationChamilo
 
                 foreach ($matches as $match) {
                     $name = (string) $match['original_name'];
+                    $resourceLinkId = $match['resource_link_id'];
+                    // Skip NULL or zero values – they would violate the FK constraint.
+                    if (null === $resourceLinkId || 0 === (int) $resourceLinkId) {
+                        continue;
+                    }
                     if (!isset($linkByFileName[$name])) {
-                        $linkByFileName[$name] = (int) $match['resource_link_id'];
+                        $linkByFileName[$name] = (int) $resourceLinkId;
                     }
                 }
             }

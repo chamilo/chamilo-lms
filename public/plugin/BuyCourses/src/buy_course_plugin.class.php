@@ -10232,16 +10232,23 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Check whether subscribing the given users would exceed the BuyCourses hosting limit for this course.
+     * Check whether subscribing the given users would exceed the effective users-per-course
+     * limit for this course (an active BuyCourses hosting-limit subscription if any, otherwise
+     * the platform-wide "Global limit of users per course" setting).
      *
      * @param int[] $userIds
      */
     public function wouldCourseUserSubscriptionExceedHostingLimit(int $courseId, array $userIds): bool
     {
         $courseId = (int) $courseId;
-        $limit = $this->getActiveSubscriptionCourseHostingLimit($courseId);
 
-        if ($courseId <= 0 || null === $limit || $limit <= 0) {
+        if ($courseId <= 0) {
+            return false;
+        }
+
+        $limit = $this->getEffectiveUsersPerCourseLimitForCourse($courseId);
+
+        if ($limit <= 0) {
             return false;
         }
 

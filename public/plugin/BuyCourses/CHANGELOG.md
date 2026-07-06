@@ -151,6 +151,19 @@ or mislead the buyer about what they were being charged. Now built by the new
 `BuyCoursesPlugin::buildServiceSaleVatSummary()`, sourced entirely from the
 persisted sale record.
 
+Fix: `BuyCoursesCourseUserSubscriptionEventSubscriber::onCourseUserSubscriptionCheck()`
+(the only listener enforcing course-user-subscription limits when a teacher/admin
+subscribes a student via `CourseManager::subscribeUser()`) checked only
+`getActiveSubscriptionCourseHostingLimit()` — a limit tied to a course-creation
+BuyCourses subscription — and silently allowed the subscription whenever a course
+had none, ignoring the platform-wide "Global limit of users per course"
+(`platform.hosting_limit_users_per_course`) setting entirely for any ordinary
+course. Now uses `getEffectiveUsersPerCourseLimitForCourse()`, the same
+fallback-aware limit already used by `/main/user/user.php`'s UI warning and by
+`subscribe_user.php`/`course_user_import.php`'s own pre-checks. This also fixes
+the course-level CSV import (`user/user_import.php`), which had no pre-check of
+its own and relied entirely on this listener.
+
 ACTION REQUIRED for installations updated from an earlier version: run the update
 procedure (see below) so the new `buyer_type`, `invoice_requested`, and
 `gateway_transaction_id` columns are added to the `plugin_buycourses_sale`,

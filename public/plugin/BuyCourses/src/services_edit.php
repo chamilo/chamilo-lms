@@ -31,7 +31,10 @@ $globalSettingsParams = $plugin->getGlobalParameters();
 $defaultGlobalTax = (int) ($globalSettingsParams['global_tax_perc'] ?? 0);
 
 /** @var array<int, User> $users */
-$users = Container::getUserRepository()->findAll();
+$users = Container::getUserRepository()->findByRoleList(
+    ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_GLOBAL_ADMIN'],
+    ''
+);
 $userOptions = [];
 
 if (!empty($users)) {
@@ -57,6 +60,14 @@ $service = $plugin->getService($serviceId);
 if (empty($service)) {
     header('Location: list_service.php');
     exit;
+}
+
+$currentOwnerId = (int) ($service['owner_id'] ?? 0);
+if ($currentOwnerId > 0 && !isset($userOptions[$currentOwnerId])) {
+    $currentOwner = Container::getUserRepository()->find($currentOwnerId);
+    if (null !== $currentOwner) {
+        $userOptions[$currentOwnerId] = $currentOwner->getFullNameWithUsername();
+    }
 }
 
 $currentAppliesTo = isset($service['applies_to'])

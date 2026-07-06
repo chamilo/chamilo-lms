@@ -5030,6 +5030,38 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Build the price/tax summary for a service sale confirmation screen from the
+     * VAT already resolved for this buyer (resolveSaleVat(), stored on the sale
+     * itself), instead of recomputing it from the service's flat/global tax
+     * settings, which know nothing about the buyer's declared country.
+     */
+    public function buildServiceSaleVatSummary(array $serviceSale): array
+    {
+        $isoCode = (string) ($serviceSale['service']['currency'] ?? '');
+        $totalPrice = (float) ($serviceSale['price'] ?? 0);
+        $priceWithoutTax = null !== ($serviceSale['price_without_tax'] ?? null)
+            ? (float) $serviceSale['price_without_tax']
+            : $totalPrice;
+        $taxPerc = $serviceSale['tax_perc'] ?? null;
+        $taxAmount = (float) ($serviceSale['tax_amount'] ?? 0);
+        $discountAmount = (float) ($serviceSale['discount_amount'] ?? 0);
+        $globalParameters = $this->getGlobalParameters();
+
+        return [
+            'price_formatted' => $this->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode),
+            'tax_enable' => null !== $taxPerc,
+            'tax_name' => (string) ($globalParameters['tax_name'] ?? ''),
+            'tax_perc_show' => $taxPerc,
+            'tax_amount_formatted' => api_number_format($taxAmount, 2),
+            'total_price_formatted' => $this->getPriceWithCurrencyFromIsoCode($totalPrice, $isoCode),
+            'has_coupon' => $discountAmount > 0,
+            'discount_amount_formatted' => $discountAmount > 0
+                ? $this->getPriceWithCurrencyFromIsoCode($discountAmount, $isoCode)
+                : null,
+        ];
+    }
+
+    /**
      * Set the external recurring profile ID for a service sale.
      */
     public function updateRecurringProfileId(int $serviceSaleId, string $recurringProfileId): bool

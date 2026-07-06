@@ -19,7 +19,6 @@ require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
 $serviceSaleId = (int) Session::read('bc_service_sale_id');
-$couponId = (int) Session::read('bc_coupon_id');
 
 if (empty($serviceSaleId)) {
     api_not_allowed(true);
@@ -33,20 +32,8 @@ if (empty($serviceSale)) {
 
 $userInfo = api_get_user_info($serviceSale['buyer']['id']);
 
-if (!empty($couponId)) {
-    $coupon = $plugin->getCouponService($couponId, $serviceSale['service_id']);
-
-    if (!empty($coupon)) {
-        $serviceSale['item'] = $plugin->getService($serviceSale['service_id'], $coupon);
-    }
-}
-
-if (empty($serviceSale['item'])) {
-    $serviceSale['item'] = $plugin->getService($serviceSale['service_id']);
-}
-
 $service = $serviceSale['service'];
-$serviceItem = $serviceSale['item'];
+$serviceItem = $plugin->buildServiceSaleVatSummary($serviceSale);
 $currency = $plugin->getCurrency($serviceSale['currency_id']);
 $globalParameters = $plugin->getGlobalParameters();
 $terms = $globalParameters['terms_and_conditions'] ?? '';

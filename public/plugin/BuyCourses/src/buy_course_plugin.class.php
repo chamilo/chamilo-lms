@@ -9809,7 +9809,7 @@ class BuyCoursesPlugin extends Plugin
                 'type' => 'service',
                 'id' => $serviceId,
                 'label' => (string) ($service['name'] ?? ''),
-                'description' => trim(strip_tags((string) ($service['description'] ?? ''))),
+                'description' => $this->filterServiceMultilingualPlainText((string) ($service['description'] ?? '')),
                 'available' => $available,
                 'disabledReason' => $disabledReason,
                 'serviceId' => $serviceId,

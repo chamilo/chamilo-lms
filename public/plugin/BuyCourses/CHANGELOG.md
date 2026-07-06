@@ -117,6 +117,16 @@ which restricts output to CP1252/WinAnsi fonts and can't render the narrow
 no-break space some locales use before "AM"/"PM"; it's now normalized to a regular
 non-break space before rendering.
 
+Fix: the service options shown on the "Create a new course" page
+(`/resources/courses/new`) displayed every language block of a multilingual
+service description concatenated together, instead of just the visitor's
+language. `BuyCoursesPlugin::getDisplayedServiceCourseCreationOptionsForUser()`
+stripped the description's HTML tags directly, without first filtering it
+through `filterServiceMultilingualHtml()` like the service catalog and service
+information pages already did — now uses the existing
+`filterServiceMultilingualPlainText()` helper, which applies that same
+language filtering before stripping tags.
+
 ACTION REQUIRED for installations updated from an earlier version: run the update
 procedure (see below) so the new `buyer_type`, `invoice_requested`, and
 `gateway_transaction_id` columns are added to the `plugin_buycourses_sale`,

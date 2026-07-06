@@ -22,7 +22,10 @@ $globalSettingsParams = $plugin->getGlobalParameters();
 $defaultGlobalTax = (int) ($globalSettingsParams['global_tax_perc'] ?? 0);
 
 /** @var array<int, User> $users */
-$users = Container::getUserRepository()->findAll();
+$users = Container::getUserRepository()->findByRoleList(
+    ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_GLOBAL_ADMIN'],
+    ''
+);
 $userOptions = [];
 
 if (!empty($users)) {

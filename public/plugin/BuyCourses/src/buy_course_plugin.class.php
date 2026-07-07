@@ -10070,7 +10070,7 @@ class BuyCoursesPlugin extends Plugin
             $categoryEsc = Database::escape_string('ai_helpers');
 
             $result = Database::query(
-                "SELECT id FROM $table WHERE c_id = $courseId AND variable = '$featureEsc' LIMIT 1"
+                "SELECT 1 FROM $table WHERE c_id = $courseId AND variable = '$featureEsc' LIMIT 1"
             );
 
             if (false !== $result && Database::num_rows($result) > 0) {
@@ -10296,7 +10296,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Return the effective users-per-course limit for a course.
-     * A BuyCourses service selected for this course wins over the global fallback.
+     * A BuyCourses service explicitly linked to this course wins over the global fallback.
+     * A teacher's user-level service benefit must not extend to unrelated courses.
      * Zero means unlimited.
      */
     public function getEffectiveUsersPerCourseLimitForCourse(int $courseId): int
@@ -10306,20 +10307,7 @@ class BuyCoursesPlugin extends Plugin
             return max(0, $courseSpecificLimit);
         }
 
-        $limit = (int) api_get_setting('platform.hosting_limit_users_per_course');
-        $limit = max(0, $limit);
-
-        $managerIds = $this->getCourseManagerIdsForCourse($courseId);
-
-        foreach ($managerIds as $managerId) {
-            $serviceLimit = $this->getActiveHostingLimit($managerId);
-
-            if (null !== $serviceLimit && $serviceLimit > $limit) {
-                $limit = $serviceLimit;
-            }
-        }
-
-        return $limit;
+        return max(0, (int) api_get_setting('platform.hosting_limit_users_per_course'));
     }
 
     /**

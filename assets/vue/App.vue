@@ -324,20 +324,16 @@ api.interceptors.response.use(
 
 platformConfigurationStore.initialize()
 
-// i18n sync
-watch(
-  () => route.params,
-  () => {
-    const { appLocale } = useLocale()
-    if (appLocale?.value && locale.value !== appLocale.value) setLocale(appLocale.value)
-  },
-  { immediate: true },
-)
+// i18n sync — single writer. appLocale mirrors the server-side locale chain
+// (see useLocale) and reacts to store changes (platform config, user profile,
+// course context set/cleared by the router guards) on client-side navigation.
+// The boot locale comes from <html data-lang>, already resolved by the server.
+const { appLocale } = useLocale()
 
 watch(
-  () => securityStore.user?.language,
-  (lang) => {
-    if (lang && locale.value !== lang) setLocale(lang)
+  appLocale,
+  (newLocale) => {
+    if (newLocale && locale.value !== newLocale) setLocale(newLocale)
   },
   { immediate: true },
 )

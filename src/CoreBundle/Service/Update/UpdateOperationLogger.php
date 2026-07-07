@@ -12,8 +12,13 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Throwable;
 
+use const FILE_APPEND;
+use const FILE_IGNORE_NEW_LINES;
+use const FILE_SKIP_EMPTY_LINES;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
+use const LOCK_EX;
+use const PHP_EOL;
 
 final readonly class UpdateOperationLogger
 {

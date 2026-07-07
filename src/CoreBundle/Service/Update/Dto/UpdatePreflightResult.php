@@ -13,9 +13,9 @@ final readonly class UpdatePreflightResult
 {
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                        $errors
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
      */
     public function __construct(
         private bool $valid,
@@ -27,9 +27,9 @@ final readonly class UpdatePreflightResult
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                        $errors
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
      */
     public static function create(array $checks, array $errors = [], array $warnings = [], array $details = []): self
     {

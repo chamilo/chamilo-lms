@@ -13,10 +13,10 @@ final readonly class UpdatePostApplyCheckResult
 {
     /**
      * @param array<int, array{key: string, title: string, description: string, commands: string[], required: bool, severity: string}> $actions
-     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}>                          $checks
+     * @param string[]                                                                                                                 $errors
+     * @param string[]                                                                                                                 $warnings
+     * @param array<string, mixed>                                                                                                     $details
      */
     public function __construct(
         private bool $valid,
@@ -31,9 +31,9 @@ final readonly class UpdatePostApplyCheckResult
 
     /**
      * @param array<int, array{key: string, title: string, description: string, commands: string[], required: bool, severity: string}> $actions
-     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}>                          $checks
+     * @param string[]                                                                                                                 $warnings
+     * @param array<string, mixed>                                                                                                     $details
      */
     public static function success(string $stagingPath, string $metadataPath, array $actions, array $checks = [], array $warnings = [], array $details = []): self
     {
@@ -41,10 +41,10 @@ final readonly class UpdatePostApplyCheckResult
     }
 
     /**
-     * @param string[] $errors
+     * @param string[]                                                                                        $errors
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
      */
     public static function failure(array $errors, array $checks = [], array $warnings = [], array $details = []): self
     {

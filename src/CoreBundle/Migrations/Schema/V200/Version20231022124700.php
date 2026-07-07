@@ -29,7 +29,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
             $this->connection->executeStatement('SET SESSION interactive_timeout = 28800');
             $this->connection->executeStatement('SET SESSION net_read_timeout = 3600');
             $this->connection->executeStatement('SET SESSION net_write_timeout = 3600');
-        } catch (\Exception) {
+        } catch (Exception) {
             // Non-fatal: the server may not allow changing these session variables.
         }
 
@@ -90,7 +90,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
     {
         try {
             $fn();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if (str_contains($e->getMessage(), 'server has gone away') || str_contains($e->getMessage(), '2006')) {
                 $this->connection->close();
                 $this->connection->connect();
@@ -108,7 +108,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
     {
         try {
             $this->connection->executeQuery('SELECT 1');
-        } catch (\Exception) {
+        } catch (Exception) {
             $this->connection->close();
             $this->connection->connect();
         }

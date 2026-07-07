@@ -33,8 +33,8 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class SurveyQuestionProcessor implements ProcessorInterface
 {
-    use SurveyPersonalitySupportTrait;
     use SurveyCsrfTokenValidationTrait;
+    use SurveyPersonalitySupportTrait;
 
     /**
      * @var array<int, string>

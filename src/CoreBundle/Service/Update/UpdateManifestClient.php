@@ -11,6 +11,9 @@ use InvalidArgumentException;
 use JsonException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+use const JSON_THROW_ON_ERROR;
+use const PHP_URL_SCHEME;
+
 final readonly class UpdateManifestClient
 {
     public function __construct(

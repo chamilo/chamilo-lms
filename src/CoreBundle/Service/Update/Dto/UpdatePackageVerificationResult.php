@@ -7,12 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\Update\Dto;
 
 use Symfony\Component\DependencyInjection\Attribute\Exclude;
+
 #[Exclude]
 final readonly class UpdatePackageVerificationResult
 {
     /**
-     * @param string[] $errors
-     * @param string[] $warnings
+     * @param string[]             $errors
+     * @param string[]             $warnings
      * @param array<string, mixed> $details
      */
     public function __construct(
@@ -31,7 +32,7 @@ final readonly class UpdatePackageVerificationResult
     }
 
     /**
-     * @param string[] $errors
+     * @param string[]             $errors
      * @param array<string, mixed> $details
      */
     public static function failure(array $errors, array $details = [], array $warnings = []): self

@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\CoreBundle\Entity\Course;
@@ -222,6 +223,7 @@ $categories = $courseCategoryRepo->getCategoriesByCourseIdAndAccessUrlId($course
 $formOptionsArray = [];
 
 $enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
+$aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
 
 $courseVisibilityAdminsOnlySetting = api_get_setting('workflows.course_visibility_change_only_admin');
 $courseVisibilityAdminsOnly = \in_array($courseVisibilityAdminsOnlySetting, ['true', '1'], true);
@@ -502,6 +504,16 @@ $aiOptions = [
     'video_generator' => 'Enable video generator',
     'course_analyser' => 'Enable course analyser',
 ];
+
+$configurableAiOptions = [];
+
+if ($enableAiHelpers) {
+    foreach ($aiOptions as $key => $label) {
+        if ($aiFeatureAccessHelper->isFeatureConfigurableForCourse($key, $courseId)) {
+            $configurableAiOptions[$key] = $label;
+        }
+    }
+}
 
 // This global "Save settings" button belongs to the main course settings block
 $form->addButtonSave(get_lang('Save settings'), 'submit_save');
@@ -1400,14 +1412,12 @@ $form->addPanelOption(
 if ($enableAiHelpers) {
     $globalAiGroup = [];
 
-    foreach ($aiOptions as $key => $label) {
-        if (api_get_setting("ai_helpers.$key") === 'true') {
-            $aiGroup = [];
-            $aiGroup[] = $form->createElement('radio', $key, null, get_lang('Yes'), 'true');
-            $aiGroup[] = $form->createElement('radio', $key, null, get_lang('No'), 'false');
+    foreach ($configurableAiOptions as $key => $label) {
+        $aiGroup = [];
+        $aiGroup[] = $form->createElement('radio', $key, null, get_lang('Yes'), 'true');
+        $aiGroup[] = $form->createElement('radio', $key, null, get_lang('No'), 'false');
 
-            $globalAiGroup[get_lang($label)] = $aiGroup;
-        }
+        $globalAiGroup[get_lang($label)] = $aiGroup;
     }
 
     if (!empty($globalAiGroup)) {
@@ -1806,7 +1816,7 @@ $values['auto_launch_option'] = $defaultAutoLaunchOption;
 // AI helpers: api_get_course_setting() can also return -1 for new courses.
 // We want radios to default to "No" ("false") to avoid an empty state.
 if ($enableAiHelpers) {
-    foreach ($aiOptions as $key => $label) {
+    foreach ($configurableAiOptions as $key => $label) {
         $v = api_get_course_setting($key);
         $values[$key] = ('-1' === (string) $v || $v === null || $v === '') ? 'false' : (string) $v;
     }
@@ -2302,7 +2312,7 @@ if ($form->validate()) {
 
     // Persist AI helper per-course settings
     if ($enableAiHelpers) {
-        foreach ($aiOptions as $key => $label) {
+        foreach ($configurableAiOptions as $key => $label) {
             if (isset($updateValues[$key])) {
                 CourseManager::saveCourseConfigurationSetting($key, $updateValues[$key], api_get_course_int_id());
             }

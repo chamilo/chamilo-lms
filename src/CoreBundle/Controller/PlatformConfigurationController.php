@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use BuyCoursesPlugin;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
@@ -262,6 +263,7 @@ class PlatformConfigurationController extends AbstractController
         SettingsCourseManager $courseSettingsManager,
         CourseRepository $courseRepository,
         EntityManagerInterface $entityManager,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
         Request $request
     ): JsonResponse {
         $courseId = $request->query->get('cid');
@@ -305,12 +307,16 @@ class PlatformConfigurationController extends AbstractController
         ];
 
         foreach ($aiSettings as $variable) {
-            $value = $this->getCourseSettingValueByCategory(
-                $entityManager,
-                $courseId,
-                $variable,
-                'ai_helpers'
-            );
+            $value = 'false';
+
+            if ($aiFeatureAccessHelper->isFeatureConfigurableForCourse($variable, $courseId)) {
+                $value = $this->getCourseSettingValueByCategory(
+                    $entityManager,
+                    $courseId,
+                    $variable,
+                    'ai_helpers'
+                ) ?? 'false';
+            }
 
             $settingsByCategory['ai_helpers'][$variable] = $value;
 

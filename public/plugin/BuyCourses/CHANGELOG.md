@@ -1,6 +1,8 @@
 v7.6 - 2026-07-02
 ====
 
+Feature: AI feature settings now support `Yes`, `No`, and `Plugin-defined`. In plugin-defined mode, a course can display and use an AI feature only while it is linked to an active BuyCourses service that grants that specific feature. Existing Yes/No behavior remains unchanged.
+
 Fix: courses created with an active paid service now start with private visibility, and their teachers can change course visibility while the linked paid period remains active, even when the platform setting normally reserves visibility changes for administrators. Course subscription settings remain protected by the platform rule. Existing recurring expiration/reactivation processing continues to save and restore the teacher's latest visibility.
 
 Fix: standardized service duration output across catalog, detail and purchase screens through the translated `%s days` placeholder, replaced the raw `TabsDashboard` breadcrumb with the core `Shop` label, reused the core `More information` translation in course creation, separated standard-course counts from BuyCourses-linked courses, prevented a second purchase of an already active user service from both the detail page and direct checkout URL, and replaced the unknown tax percentage on service details with a translated `%s + tax` price notice.

@@ -10223,6 +10223,54 @@ class BuyCoursesPlugin extends Plugin
         return false !== $result && Database::num_rows($result) > 0;
     }
 
+    public function hasActiveAiCourseFeature(int $courseId, string $feature): bool
+    {
+        $courseId = (int) $courseId;
+        $features = $this->normalizeAiCourseFeatures([$feature]);
+
+        if ($courseId <= 0 || empty($features) || !$this->hasSubscriptionCourseInfrastructure()) {
+            return false;
+        }
+
+        $feature = $features[0];
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $serviceTable = Database::get_main_table(self::TABLE_SERVICES);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT sc.context_json, s.ai_course_features_json
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            INNER JOIN $serviceTable s ON s.id = sc.service_id
+            WHERE sc.course_id = $courseId
+              AND sc.status = 'active'
+              AND sc.deleted_at IS NULL
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND (ss.date_start IS NULL OR ss.date_start <= '$now')
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end >= '$now'
+            ORDER BY ss.date_end DESC, sc.id DESC";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return false;
+        }
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $context = json_decode((string) ($row['context_json'] ?? ''), true);
+            $hasStoredFeatures = is_array($context) && array_key_exists('ai_features', $context);
+            $activeFeatures = $hasStoredFeatures
+                ? $this->normalizeAiCourseFeatures($context['ai_features'])
+                : $this->normalizeAiCourseFeatures($row['ai_course_features_json'] ?? []);
+
+            if (in_array($feature, $activeFeatures, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Return the active BuyCourses hosting limit configured for a course created with a selected service.
      */

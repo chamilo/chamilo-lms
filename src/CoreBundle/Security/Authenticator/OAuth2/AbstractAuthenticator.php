@@ -11,11 +11,14 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use KnpU\OAuth2ClientBundle\Security\Exception\InvalidStateAuthenticationException;
 use League\OAuth2\Client\Token\AccessToken;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +33,8 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 
 abstract class AbstractAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
 {
+    private const STATE_RETRY_COOKIE_LIFETIME = 300;
+
     protected string $providerName = '';
 
     protected OAuth2ClientInterface $client;
@@ -41,6 +46,7 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
         protected readonly AuthenticationConfigHelper $authenticationConfigHelper,
         protected readonly AccessUrlHelper $accessUrlHelper,
         protected readonly EntityManagerInterface $entityManager,
+        protected readonly LoggerInterface $logger,
     ) {
         $this->client = $this->clientRegistry->getClient($this->providerName);
     }
@@ -75,28 +81,21 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $targetUrl = $this->router->generate('index');
+        $response = new RedirectResponse($this->router->generate('index'));
 
-        return new RedirectResponse($targetUrl);
+        if ($request->cookies->has($this->getStateRetryCookieName())) {
+            $response->headers->clearCookie($this->getStateRetryCookieName());
+        }
+
+        return $response;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        // On invalid OAuth2 state (session lost between redirect and callback), restart the
-        // auth flow silently. One auto-retry per provider; a second failure falls through to
-        // the normal error path so a broken session can't loop indefinitely.
-        if ($exception instanceof InvalidStateAuthenticationException && $request->hasSession()) {
-            $session = $request->getSession();
-            $retryKey = '_oauth2_state_retry_'.$this->providerName;
-
-            if (!$session->get($retryKey, false)) {
-                $session->set($retryKey, true);
-                $startRoute = 'chamilo.oauth2_'.$this->providerName.'_start';
-
-                return new RedirectResponse($this->router->generate($startRoute));
-            }
-
-            $session->remove($retryKey);
+        if ($exception instanceof InvalidStateAuthenticationException
+            && ($retryResponse = $this->createStateRetryResponse($request, $exception))
+        ) {
+            return $retryResponse;
         }
 
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
@@ -105,7 +104,72 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
             $request->getSession()->getFlashBag()->add('error', $message);
         }
 
-        return new RedirectResponse($this->router->generate('index'));
+        $response = new RedirectResponse($this->router->generate('index'));
+
+        if ($request->cookies->has($this->getStateRetryCookieName())) {
+            $response->headers->clearCookie($this->getStateRetryCookieName());
+        }
+
+        return $response;
+    }
+
+    /**
+     * On invalid OAuth2 state (session lost between the redirect and the callback), restart
+     * the auth flow transparently. The retry marker lives in its own short-lived cookie — not
+     * in the session, whose loss is precisely what triggers this failure — so a second
+     * consecutive failure always falls through to the normal error path instead of looping.
+     */
+    private function createStateRetryResponse(Request $request, AuthenticationException $exception): ?RedirectResponse
+    {
+        $cookieName = $this->getStateRetryCookieName();
+
+        // No session cookie in the callback request means the browser is not persisting
+        // cookies at all: the OAuth2 state can never survive the round trip, so retrying
+        // would only bounce against the provider indefinitely.
+        if (!$request->hasSession()
+            || !$request->cookies->has($request->getSession()->getName())
+            || $request->cookies->has($cookieName)
+        ) {
+            return null;
+        }
+
+        // The start route rejects disabled (403) or unconfigured (500) providers for the
+        // current access URL; show the normal error instead of redirecting into that.
+        try {
+            $providerParams = $this->authenticationConfigHelper->getOAuthProviderConfig($this->providerName);
+        } catch (InvalidArgumentException) {
+            return null;
+        }
+
+        if (!($providerParams['enabled'] ?? false)) {
+            return null;
+        }
+
+        $this->logger->warning(
+            'Invalid OAuth2 state for provider "{provider}": {error}. Restarting the auth flow (single retry).',
+            [
+                'provider' => $this->providerName,
+                'error' => strtr($exception->getMessageKey(), $exception->getMessageData()),
+            ]
+        );
+
+        $response = new RedirectResponse(
+            $this->router->generate('chamilo.oauth2_'.$this->providerName.'_start')
+        );
+        $response->headers->setCookie(
+            Cookie::create($cookieName)
+                ->withValue('1')
+                ->withExpires(time() + self::STATE_RETRY_COOKIE_LIFETIME)
+                ->withSecure($request->isSecure())
+                ->withSameSite(Cookie::SAMESITE_LAX)
+        );
+
+        return $response;
+    }
+
+    private function getStateRetryCookieName(): string
+    {
+        return 'oauth2_state_retry_'.$this->providerName;
     }
 
     /**

@@ -194,7 +194,7 @@ $data = [
     get_lang('Phone') => $user->getPhone(),
     get_lang('Course code') => $user->getOfficialCode(),
     //get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
-    get_lang('Status') => 1 === $user->getStatus() ? get_lang('Trainer') : get_lang('Learner'),
+    get_lang('Status') => api_get_status_langvars()[$user->getStatus()] ?? get_lang('Learner'),
 ];
 
 $params = [];

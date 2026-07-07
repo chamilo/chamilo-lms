@@ -142,7 +142,7 @@
                 :href="serviceOption.informationUrl"
                 @click.stop
               >
-                {{ t("More information") }}
+                {{ serviceOption.informationLabel || t("More information") }}
               </a>
             </div>
 

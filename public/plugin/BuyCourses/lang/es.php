@@ -510,6 +510,7 @@ $strings['SubscriptionsPageIntro'] = 'Configure qué productos ofrecen suscripci
 $strings['ServiceInfoOverview'] = 'Descripción general';
 $strings['ServiceInfoOverviewHelp'] = 'Revise los principales detalles del servicio antes de continuar con la compra.';
 $strings['ServiceInfoPriceLabel'] = 'Precio';
+$strings['ServicePricePlusTax'] = '%s + impuestos';
 $strings['ServiceInfoDurationLabel'] = 'Duración';
 $strings['ServiceInfoOwnerLabel'] = 'Propietario';
 $strings['ServiceInfoPurchaseReadiness'] = 'Estado de compra';

@@ -9617,6 +9617,40 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Count managed courses that are not linked to a BuyCourses service.
+     */
+    public function countStandardManagedCoursesByUser(int $userId): int
+    {
+        $userId = (int) $userId;
+        if ($userId <= 0) {
+            return 0;
+        }
+
+        if (!$this->hasSubscriptionCourseInfrastructure()) {
+            return $this->countManagedCoursesByUser($userId);
+        }
+
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+
+        $sql = "SELECT COUNT(DISTINCT cru.c_id) AS total
+            FROM $courseUserTable cru
+            LEFT JOIN $subscriptionCourseTable sc
+                ON sc.course_id = cru.c_id
+                AND sc.status <> 'deleted'
+                AND sc.deleted_at IS NULL
+            WHERE cru.user_id = $userId
+              AND cru.status = ".COURSEMANAGER."
+              AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+              AND sc.id IS NULL";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
      * Return the effective max courses limit for a user.
      * Active service benefit wins over the global setting.
      * Zero means unlimited.
@@ -9759,7 +9793,7 @@ class BuyCoursesPlugin extends Plugin
     public function getStandardCourseCreationOptionForUser(int $userId): array
     {
         $userId = (int) $userId;
-        $currentCount = $this->countManagedCoursesByUser($userId);
+        $currentCount = $this->countStandardManagedCoursesByUser($userId);
         $globalMaxCourses = max(0, (int) api_get_setting('platform.max_courses_per_user'));
         $hostingLimit = max(0, (int) api_get_setting('platform.hosting_limit_users_per_course'));
         $documentQuotaMb = max(0, (int) api_get_setting('document.default_document_quotum'));
@@ -9857,6 +9891,7 @@ class BuyCoursesPlugin extends Plugin
                 'currency' => $service['iso_code'] ?? null,
                 'buyUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.self::SERVICE_TYPE_USER,
                 'informationUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId,
+                'informationLabel' => get_lang('More information'),
             ];
         }
 

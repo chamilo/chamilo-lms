@@ -566,7 +566,7 @@
                         {% if item.duration_days == 0 %}
                         {{ 'NoLimit'|get_lang }}
                         {% else %}
-                        {{ item.duration_days }} {{ 'Days'|get_lang }}
+                        {{ 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(item.duration_days) }}
                         {% endif %}
                     </td>
 

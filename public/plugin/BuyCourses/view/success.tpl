@@ -12,7 +12,7 @@
     {% set appliesToLabel = 'TemplateTitleCertificate'|get_lang %}
 {% endif %}
 
-{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : service.duration_days ~ ' ' ~ 'Days'|get_lang %}
+{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.duration_days) %}
 
 <div class="mx-auto w-full max-w-screen-2xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">

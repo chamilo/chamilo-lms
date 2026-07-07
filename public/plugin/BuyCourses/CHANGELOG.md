@@ -1,5 +1,7 @@
 v7.6 - 2026-07-02
 ====
+
+Fix: standardized service duration output across catalog, detail and purchase screens through the translated `%s days` placeholder, replaced the raw `TabsDashboard` breadcrumb with the core `Shop` label, reused the core `More information` translation in course creation, separated standard-course counts from BuyCourses-linked courses, prevented a second purchase of an already active user service from both the detail page and direct checkout URL, and replaced the unknown tax percentage on service details with a translated `%s + tax` price notice.
 Feature: VAT invoices are now generated automatically at the moment a sale, service
 sale, or subscription sale completes — mandatory and immediate for business buyers
 (EU/Belgian VAT rules require an invoice for every B2B sale), and optional for

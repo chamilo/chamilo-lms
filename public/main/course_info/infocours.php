@@ -226,10 +226,37 @@ $enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
 $courseVisibilityAdminsOnlySetting = api_get_setting('workflows.course_visibility_change_only_admin');
 $courseVisibilityAdminsOnly = \in_array($courseVisibilityAdminsOnlySetting, ['true', '1'], true);
 
-// Teachers/course admins won't be able to change the visibility or subscription when this is enabled.
-// Platform admins can still change both options.
-$canChangeCourseVisibility = !$courseVisibilityAdminsOnly || api_is_platform_admin();
-$canChangeCourseSubscription = $canChangeCourseVisibility;
+$hasActiveBuyCoursesService = false;
+$buyCoursesPluginPath = api_get_path(SYS_PLUGIN_PATH).'BuyCourses/src/buy_course_plugin.class.php';
+
+if (is_file($buyCoursesPluginPath)) {
+    require_once $buyCoursesPluginPath;
+
+    if (class_exists('BuyCoursesPlugin')) {
+        try {
+            $buyCoursesPlugin = BuyCoursesPlugin::create();
+            $hasActiveBuyCoursesService = $buyCoursesPlugin->isEnabled()
+                && 'true' === $buyCoursesPlugin->get('include_services')
+                && $buyCoursesPlugin->hasActiveSubscriptionCourse($courseId);
+        } catch (Throwable $exception) {
+            error_log(
+                '[BuyCourses][CourseSettings] Unable to resolve active paid course status. course_id='.
+                $courseId.
+                ' error='.
+                $exception->getMessage()
+            );
+        }
+    }
+}
+
+// A teacher can manage the visibility of a course while its linked paid service is active,
+// even when the platform normally reserves visibility changes for administrators.
+$canChangeCourseVisibility = !$courseVisibilityAdminsOnly
+    || api_is_platform_admin()
+    || $hasActiveBuyCoursesService;
+
+// The paid-service exception applies only to visibility, not to course subscription settings.
+$canChangeCourseSubscription = !$courseVisibilityAdminsOnly || api_is_platform_admin();
 
 // Build the form
 $form = new FormValidator(
@@ -2100,8 +2127,8 @@ if ($form->validate()) {
         ? (int) $updateValues['visibility']
         : $courseEntity->getVisibility();
 
-    if ($courseVisibilityAdminsOnly && !api_is_platform_admin()) {
-        // Do not allow non-platform admins to change course visibility even if they tamper with the POST payload.
+    if (!$canChangeCourseVisibility) {
+        // Do not allow unauthorized visibility changes even if the POST payload is tampered with.
         $updateValues['visibility'] = (int) $courseEntity->getVisibility();
     }
 
@@ -2109,7 +2136,7 @@ if ($form->validate()) {
         ? (int) $updateValues['subscribe']
         : $courseEntity->getSubscribe();
 
-    if ($courseVisibilityAdminsOnly && !api_is_platform_admin()) {
+    if (!$canChangeCourseSubscription) {
         $updateValues['subscribe'] = (int) $courseEntity->getSubscribe();
     }
 

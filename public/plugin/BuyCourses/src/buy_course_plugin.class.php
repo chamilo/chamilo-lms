@@ -10189,6 +10189,41 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Check whether a course is linked to a currently active paid service.
+     *
+     * Cancellation of the next renewal does not disable the current paid period: the
+     * relation remains active until the sale end date.
+     */
+    public function hasActiveSubscriptionCourse(int $courseId): bool
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return false;
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT 1
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            WHERE sc.course_id = $courseId
+              AND sc.status = 'active'
+              AND sc.deleted_at IS NULL
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND (ss.date_start IS NULL OR ss.date_start <= '$now')
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end >= '$now'
+            LIMIT 1";
+
+        $result = Database::query($sql);
+
+        return false !== $result && Database::num_rows($result) > 0;
+    }
+
+    /**
      * Return the active BuyCourses hosting limit configured for a course created with a selected service.
      */
     public function getActiveSubscriptionCourseHostingLimit(int $courseId): ?int

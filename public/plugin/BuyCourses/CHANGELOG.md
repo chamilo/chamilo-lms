@@ -164,6 +164,13 @@ fallback-aware limit already used by `/main/user/user.php`'s UI warning and by
 the course-level CSV import (`user/user_import.php`), which had no pre-check of
 its own and relied entirely on this listener.
 
+Follow-up fix: `getEffectiveUsersPerCourseLimitForCourse()` no longer applies a
+teacher's user-level `buycourses_hosting_limit` benefit to every course managed by
+that teacher. Only a service subscription explicitly linked to the course through
+`plugin_buycourses_subscription_course` may override the global limit. Courses
+created before the service purchase, or otherwise not linked to that service,
+continue to use `platform.hosting_limit_users_per_course`.
+
 ACTION REQUIRED for installations updated from an earlier version: run the update
 procedure (see below) so the new `buyer_type`, `invoice_requested`, and
 `gateway_transaction_id` columns are added to the `plugin_buycourses_sale`,

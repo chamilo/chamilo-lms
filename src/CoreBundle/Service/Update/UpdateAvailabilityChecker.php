@@ -55,7 +55,7 @@ final readonly class UpdateAvailabilityChecker
 
         $compare = version_compare($targetVersion, $installedVersion);
 
-        if (0 < $compare) {
+        if ($compare > 0) {
             return new UpdateAvailabilityResult(
                 $installedVersion,
                 $targetVersion,

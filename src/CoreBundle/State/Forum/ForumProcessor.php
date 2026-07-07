@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Forum;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -17,7 +18,6 @@ use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,6 +30,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
+use const PATHINFO_EXTENSION;
 
 /**
  * @implements ProcessorInterface<mixed, CForum|JsonResponse>

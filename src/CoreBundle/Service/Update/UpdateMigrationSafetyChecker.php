@@ -19,6 +19,8 @@ use Throwable;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
+use const PATHINFO_FILENAME;
+use const PHP_EOL;
 
 final readonly class UpdateMigrationSafetyChecker
 {
@@ -27,7 +29,7 @@ final readonly class UpdateMigrationSafetyChecker
     private const BASELINE_OUTPUT_LIMIT = 30000;
 
     private const SUPPORTED_MIGRATION_PREFIX = 'src/CoreBundle/Migrations/Schema/V210/';
-    private const SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\\CoreBundle\\Migrations\\Schema\\V210\\';
+    private const SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\CoreBundle\Migrations\Schema\V210\\';
 
     public function __construct(
         private UpdateConfiguration $updateConfiguration,
@@ -539,7 +541,7 @@ final readonly class UpdateMigrationSafetyChecker
 
     /**
      * @param array<int, array{class: string, status: string}> $migrationRows
-     * @param string[] $stagedMigrationClasses
+     * @param string[]                                         $stagedMigrationClasses
      *
      * @return array<int, array{class: string, status: string}>
      */
@@ -551,6 +553,7 @@ final readonly class UpdateMigrationSafetyChecker
         foreach ($migrationRows as $row) {
             if ($migrationTarget === $row['class']) {
                 $foundTarget = true;
+
                 break;
             }
 
@@ -597,7 +600,7 @@ final readonly class UpdateMigrationSafetyChecker
                 'output' => $output,
             ];
 
-            $combinedOutput[] = sprintf(
+            $combinedOutput[] = \sprintf(
                 "## %s\nCommand: %s\nExit code: %d\n%s",
                 $migrationClass,
                 $displayCommand,
@@ -718,7 +721,7 @@ final readonly class UpdateMigrationSafetyChecker
             $class = $cells[0] ?? '';
             $status = $cells[1] ?? '';
 
-            if (!str_starts_with($class, 'Chamilo\\CoreBundle\\Migrations\\Schema\\')) {
+            if (!str_starts_with($class, 'Chamilo\CoreBundle\Migrations\Schema\\')) {
                 continue;
             }
 
@@ -738,12 +741,12 @@ final readonly class UpdateMigrationSafetyChecker
     {
         $migrations = [];
 
-        foreach (preg_split('/\\R/', $statusOutput) ?: [] as $line) {
+        foreach (preg_split('/\R/', $statusOutput) ?: [] as $line) {
             if (!str_contains($line, '>>')) {
                 continue;
             }
 
-            if (preg_match('/Chamilo\\\\CoreBundle\\\\Migrations\\\\Schema\\\\V(?:200|210)\\\\Version[0-9]+/', $line, $matches)) {
+            if (preg_match('/Chamilo\\\CoreBundle\\\Migrations\\\Schema\\\V(?:200|210)\\\Version[0-9]+/', $line, $matches)) {
                 $migrations[] = $matches[0];
             }
         }
@@ -762,9 +765,9 @@ final readonly class UpdateMigrationSafetyChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
-     * @param array<int, array{class: string, path: string, description: string, namespace?: string}> $migrations
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
+     * @param array<int, array{class: string, path: string, description: string, namespace?: string}>         $migrations
      */
     private function writeMetadata(
         string $stagingPath,
@@ -822,7 +825,7 @@ final readonly class UpdateMigrationSafetyChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param array<string, mixed> $details
+     * @param array<string, mixed>                                                                            $details
      */
     private function addCheck(array &$checks, string $key, string $status, string $message, array $details = []): void
     {

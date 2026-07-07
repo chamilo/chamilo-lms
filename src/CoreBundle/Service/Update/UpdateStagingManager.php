@@ -18,6 +18,7 @@ use ZipArchive;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
+use const PHP_EOL;
 
 final readonly class UpdateStagingManager
 {
@@ -177,7 +178,6 @@ final readonly class UpdateStagingManager
         }
     }
 
-
     /**
      * @return array<string, mixed>
      */
@@ -307,7 +307,7 @@ final readonly class UpdateStagingManager
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param array<string, mixed> $details
+     * @param array<string, mixed>                                                                            $details
      */
     private function addCheck(array &$checks, string $key, string $status, string $message, array $details = []): void
     {
@@ -344,6 +344,7 @@ final readonly class UpdateStagingManager
 
             if (is_dir($path) && !is_link($path)) {
                 $this->removeDirectory($path);
+
                 continue;
             }
 

@@ -18,6 +18,7 @@ use Throwable;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
+use const PHP_EOL;
 
 final readonly class UpdateFileApplier
 {
@@ -234,11 +235,6 @@ final readonly class UpdateFileApplier
         return $applyPlan;
     }
 
-
-    /**
-     * @param array<string, mixed> $details
-     */
-
     /**
      * @param array<string, mixed> $applyPlan
      */
@@ -267,11 +263,6 @@ final readonly class UpdateFileApplier
         return $realApplicationPath;
     }
 
-
-    /**
-     * @param array<string, mixed> $details
-     */
-
     /**
      * @param array<string, mixed> $applyPlan
      */
@@ -292,11 +283,6 @@ final readonly class UpdateFileApplier
 
         return $lockPath;
     }
-
-
-    /**
-     * @param array<string, mixed> $details
-     */
 
     /**
      * @param array<string, mixed> $applyPlan
@@ -554,9 +540,9 @@ final readonly class UpdateFileApplier
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
-     * @param string[] $errors
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
+     * @param string[]                                                                                        $errors
      */
     private function writeAuditFile(
         string $stagingPath,
@@ -685,7 +671,6 @@ final readonly class UpdateFileApplier
         $samples[] = $value;
     }
 
-
     /**
      * @param array<string, mixed> $details
      */
@@ -724,7 +709,7 @@ final readonly class UpdateFileApplier
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param array<string, mixed> $details
+     * @param array<string, mixed>                                                                            $details
      */
     private function addCheck(array &$checks, string $key, string $status, string $message, array $details = []): void
     {

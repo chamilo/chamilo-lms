@@ -91,7 +91,7 @@ final readonly class InstalledChamiloVersionProvider
 
             $version = $versionDetails[$key];
 
-            if ((\is_string($version) || \is_numeric($version)) && '' !== trim((string) $version)) {
+            if ((\is_string($version) || is_numeric($version)) && '' !== trim((string) $version)) {
                 return (string) $version;
             }
         }
@@ -106,7 +106,7 @@ final readonly class InstalledChamiloVersionProvider
         }
 
         try {
-            $version = \api_get_version();
+            $version = api_get_version();
 
             if (\is_string($version) && '' !== trim($version)) {
                 return $version;

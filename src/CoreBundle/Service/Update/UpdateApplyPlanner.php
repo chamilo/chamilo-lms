@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
+use const PHP_EOL;
 
 final readonly class UpdateApplyPlanner
 {
@@ -424,9 +425,9 @@ final readonly class UpdateApplyPlanner
     }
 
     /**
-     * @param array<string, mixed> $filePlan
+     * @param array<string, mixed>                                                                            $filePlan
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
+     * @param string[]                                                                                        $warnings
      */
     private function addFilePlanChecks(array $filePlan, array &$checks, array &$warnings): void
     {
@@ -624,7 +625,7 @@ final readonly class UpdateApplyPlanner
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param array<string, mixed> $details
+     * @param array<string, mixed>                                                                            $details
      */
     private function addCheck(array &$checks, string $key, string $status, string $message, array $details = []): void
     {

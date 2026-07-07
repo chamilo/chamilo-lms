@@ -64,7 +64,7 @@ final readonly class UpdateTrustedKeyring
             return null;
         }
 
-        if (1 === count($trustedKeys)) {
+        if (1 === \count($trustedKeys)) {
             $firstKey = reset($trustedKeys);
 
             return \is_array($firstKey) ? $firstKey['publicKey'] : null;

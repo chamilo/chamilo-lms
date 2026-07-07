@@ -13,9 +13,9 @@ final readonly class UpdateStagingResult
 {
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                        $errors
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
      */
     public function __construct(
         private bool $valid,
@@ -29,8 +29,8 @@ final readonly class UpdateStagingResult
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
      */
     public static function success(string $stagingPath, string $applicationPath, array $checks = [], array $warnings = [], array $details = []): self
     {
@@ -38,10 +38,10 @@ final readonly class UpdateStagingResult
     }
 
     /**
-     * @param string[] $errors
+     * @param string[]                                                                                        $errors
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
      */
     public static function failure(array $errors, array $checks = [], array $warnings = [], array $details = []): self
     {

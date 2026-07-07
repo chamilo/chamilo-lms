@@ -30,6 +30,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * @implements ProviderInterface<SurveyConfiguration>
  */

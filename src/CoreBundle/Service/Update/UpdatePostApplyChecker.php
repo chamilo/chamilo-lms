@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
+use const PHP_EOL;
 
 final readonly class UpdatePostApplyChecker
 {
@@ -426,9 +427,9 @@ final readonly class UpdatePostApplyChecker
 
     /**
      * @param array<int, array{key: string, title: string, description: string, commands: string[], required: bool, severity: string}> $actions
-     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}>                          $checks
+     * @param string[]                                                                                                                 $warnings
+     * @param array<string, mixed>                                                                                                     $details
      */
     private function writePostApplyMetadata(string $stagingPath, array $checks, array $warnings, array $details, array $actions): string
     {
@@ -529,7 +530,7 @@ final readonly class UpdatePostApplyChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param array<string, mixed> $details
+     * @param array<string, mixed>                                                                            $details
      */
     private function addCheck(array &$checks, string $key, string $status, string $message, array $details = []): void
     {

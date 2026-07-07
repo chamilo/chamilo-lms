@@ -16,10 +16,11 @@ use Throwable;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
+use const LOCK_EX;
 
 final readonly class UpdatePostApplyCommandRunner
 {
-    private const SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\\CoreBundle\\Migrations\\Schema\\V210\\';
+    private const SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\CoreBundle\Migrations\Schema\V210\\';
     private const METADATA_FILE_NAME = 'POST-APPLY-RUN-RESULT.json';
 
     private const ADVANCED_ACTION_KEYS = [
@@ -239,7 +240,7 @@ final readonly class UpdatePostApplyCommandRunner
             }
 
             if (\count($commandList) > 1) {
-                $this->logOperation($operationId, 'info', $key, sprintf('Running command %d of %d for %s.', $index + 1, \count($commandList), $title));
+                $this->logOperation($operationId, 'info', $key, \sprintf('Running command %d of %d for %s.', $index + 1, \count($commandList), $title));
             }
 
             $exitCode = $process->run(function (string $type, string $buffer) use ($operationId, $key, &$outputBuffer): void {
@@ -262,11 +263,7 @@ final readonly class UpdatePostApplyCommandRunner
                 'exit_code' => $exitCode,
             ]);
 
-            throw new RuntimeException(sprintf(
-                'Post-apply action "%s" failed with exit code %d.',
-                $title,
-                $exitCode
-            ));
+            throw new RuntimeException(\sprintf('Post-apply action "%s" failed with exit code %d.', $title, $exitCode));
         }
 
         $this->logOperation($operationId, 'success', $key, 'Post-apply action completed: '.$title, [
@@ -564,11 +561,10 @@ final readonly class UpdatePostApplyCommandRunner
         ];
     }
 
-
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
      *
      * @return string[]
      */
@@ -660,10 +656,10 @@ final readonly class UpdatePostApplyCommandRunner
     }
 
     /**
-     * @param array<string, array<string, mixed>> $selectedActions
+     * @param array<string, array<string, mixed>>                                                             $selectedActions
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                        $warnings
+     * @param array<string, mixed>                                                                            $details
      */
     private function validateExecutableActions(array $selectedActions, array &$checks, array &$warnings, array &$details, string $operationId): void
     {
@@ -737,14 +733,14 @@ final readonly class UpdatePostApplyCommandRunner
     {
         if (is_dir($path) || is_file($path)) {
             if (!is_writable($path)) {
-                throw new RuntimeException(sprintf('Path required by post-apply action "%s" is not writable: %s', $actionKey, $path));
+                throw new RuntimeException(\sprintf('Path required by post-apply action "%s" is not writable: %s', $actionKey, $path));
             }
 
             return;
         }
 
         if (!is_dir($parentDirectory) || !is_writable($parentDirectory)) {
-            throw new RuntimeException(sprintf('Parent directory required by post-apply action "%s" is not writable: %s', $actionKey, $parentDirectory));
+            throw new RuntimeException(\sprintf('Parent directory required by post-apply action "%s" is not writable: %s', $actionKey, $parentDirectory));
         }
     }
 
@@ -926,11 +922,11 @@ final readonly class UpdatePostApplyCommandRunner
     }
 
     /**
-     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}>                                               $checks
      * @param array<int, array{key: string, title: string, command: string, status: string, exitCode?: int|null, durationSeconds?: float, advanced?: bool}> $actions
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
-     * @param string[] $errors
+     * @param string[]                                                                                                                                      $warnings
+     * @param array<string, mixed>                                                                                                                          $details
+     * @param string[]                                                                                                                                      $errors
      */
     private function writeRunMetadata(
         string $stagingPath,

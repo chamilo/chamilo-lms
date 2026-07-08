@@ -739,24 +739,20 @@ function implode_with_key($glue, $array)
 /**
  * Transform the file size in a human readable format.
  *
- * @param int $file_size Size of the file in bytes
+ * Legacy shim: the real logic now lives in
+ * Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize(). This procedural wrapper is
+ * kept for the legacy callers and for the Twig "format_file_size" filter binding.
  *
- * @return string A human readable representation of the file size
+ * @param int|float|string $file_size Size of the file, expressed in the unit given by $unit
+ * @param string           $unit      Unit the $file_size value is already in: 'B', 'KB', 'MB' or 'GB'
+ * @param bool             $rtlCompat When true, the result is wrapped in a <bdi> element so the
+ *                                    LTR "number + Latin unit" run is isolated from surrounding RTL text
+ *
+ * @return string A human readable representation of the file size (e.g. "500 MB")
  */
-function format_file_size($file_size)
+function format_file_size($file_size, string $unit = 'B', bool $rtlCompat = false)
 {
-    $file_size = (int) $file_size;
-    if ($file_size >= 1073741824) {
-        $file_size = (round($file_size / 1073741824 * 100) / 100).'G';
-    } elseif ($file_size >= 1048576) {
-        $file_size = (round($file_size / 1048576 * 100) / 100).'M';
-    } elseif ($file_size >= 1024) {
-        $file_size = (round($file_size / 1024 * 100) / 100).'k';
-    } else {
-        $file_size = $file_size.'B';
-    }
-
-    return $file_size;
+    return \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize((int) $file_size, $unit, $rtlCompat);
 }
 
 /**

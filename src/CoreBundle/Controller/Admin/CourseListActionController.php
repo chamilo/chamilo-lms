@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Entity\CatalogueCourseRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
-use CourseManager;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Throwable;
 
 #[IsGranted('ROLE_ADMIN')]
 class CourseListActionController extends AbstractController
@@ -25,6 +26,7 @@ class CourseListActionController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly CourseHelper $courseHelper,
     ) {}
 
     #[Route('/admin/course-list-action', name: 'admin_course_list_action', methods: ['POST'])]
@@ -56,12 +58,14 @@ class CourseListActionController extends AbstractController
         $course = $this->em->getRepository(Course::class)->find($courseId);
 
         if ($course) {
-            $isDeleted = CourseManager::delete_course($course->getCode());
-
-            if ($isDeleted) {
-                $this->addFlash('success', 'The course has been deleted.');
-            } else {
-                $this->addFlash('error', 'Course not found.');
+            try {
+                if ($this->courseHelper->deleteCourse($course)) {
+                    $this->addFlash('success', 'The course has been deleted.');
+                } else {
+                    $this->addFlash('warning', 'The course is still used in other portals; it was removed from the current one but not deleted.');
+                }
+            } catch (Throwable $e) {
+                $this->addFlash('error', $e->getMessage());
             }
         }
 
@@ -82,10 +86,12 @@ class CourseListActionController extends AbstractController
         foreach ($courseIds as $courseId) {
             $course = $this->em->getRepository(Course::class)->find((int) $courseId);
             if ($course) {
-                $isDeleted = CourseManager::delete_course($course->getCode());
-
-                if ($isDeleted) {
-                    $deleted++;
+                try {
+                    if ($this->courseHelper->deleteCourse($course)) {
+                        $deleted++;
+                    }
+                } catch (Throwable $e) {
+                    $this->addFlash('error', $e->getMessage());
                 }
             }
         }

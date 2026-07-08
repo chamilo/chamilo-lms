@@ -509,6 +509,38 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Mark the BuyCourses course relation as deleted when Chamilo removes a course.
+     *
+     * The service sale is intentionally preserved as purchase history.
+     *
+     * @param int $courseId
+     */
+    public function doWhenDeletingCourse($courseId)
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return;
+        }
+
+        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $now = api_get_utc_datetime();
+
+        Database::update(
+            $table,
+            [
+                'status' => 'deleted',
+                'updated_at' => $now,
+                'deleted_at' => $now,
+                'last_action' => 'course_deleted',
+            ],
+            ['course_id = ?' => [$courseId]]
+        );
+
+        $this->clearFrozenEnrollmentsForCourse($courseId);
+    }
+
+    /**
      * This method creates the tables required to this plugin.
      *
      * @throws \Doctrine\DBAL\Exception
@@ -10616,6 +10648,68 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Return service labels for paid courses managed by the current user.
+     *
+     * @param int[] $courseIds
+     *
+     * @return array<int, array{serviceName: string}>
+     */
+    public function getManagedCourseServiceLabelsForUser(int $userId, array $courseIds): array
+    {
+        $userId = (int) $userId;
+        $courseIds = array_values(array_unique(array_filter(
+            array_map('intval', $courseIds),
+            static fn (int $courseId): bool => $courseId > 0
+        )));
+
+        if ($userId <= 0 || empty($courseIds) || !$this->hasSubscriptionCourseInfrastructure()) {
+            return [];
+        }
+
+        $courseIds = array_slice($courseIds, 0, 100);
+        $courseIdsSql = implode(',', $courseIds);
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT sc.course_id, s.name AS service_name
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $servicesTable s ON s.id = sc.service_id
+            INNER JOIN $courseTable c ON c.id = sc.course_id
+            INNER JOIN $courseUserTable cru
+                ON cru.c_id = sc.course_id
+                AND cru.user_id = $userId
+                AND cru.status = ".COURSEMANAGER."
+                AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+            WHERE sc.course_id IN ($courseIdsSql)
+              AND sc.status <> 'deleted'
+              AND sc.deleted_at IS NULL
+            ORDER BY sc.course_id ASC";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return [];
+        }
+
+        $labels = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $courseId = (int) ($row['course_id'] ?? 0);
+            $serviceName = trim((string) ($row['service_name'] ?? ''));
+
+            if ($courseId <= 0 || '' === $serviceName) {
+                continue;
+            }
+
+            $labels[$courseId] = [
+                'serviceName' => $serviceName,
+            ];
+        }
+
+        return $labels;
+    }
+
+    /**
      * Return the effective max courses limit for a user.
      * Active service benefit wins over the global setting.
      * Zero means unlimited.
@@ -10843,7 +10937,7 @@ class BuyCoursesPlugin extends Plugin
                 'type' => 'service',
                 'id' => $serviceId,
                 'label' => (string) ($service['name'] ?? ''),
-                'description' => $this->filterServiceMultilingualPlainText((string) ($service['description'] ?? '')),
+                'description' => $this->filterServiceMultilingualHtml((string) ($service['description'] ?? '')),
                 'available' => $available,
                 'disabledReason' => $disabledReason,
                 'serviceId' => $serviceId,
@@ -11055,11 +11149,14 @@ class BuyCoursesPlugin extends Plugin
             return 0;
         }
 
-        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
-        $sql = "SELECT COUNT(DISTINCT course_id) AS total
-            FROM $table
-            WHERE service_sale_id = $serviceSaleId
-              AND status <> 'deleted'";
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT COUNT(DISTINCT sc.course_id) AS total
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $courseTable c ON c.id = sc.course_id
+            WHERE sc.service_sale_id = $serviceSaleId
+              AND sc.status <> 'deleted'
+              AND sc.deleted_at IS NULL";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 

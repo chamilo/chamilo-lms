@@ -135,6 +135,15 @@ export default {
   },
 
   /**
+   * Returns BuyCourses service labels for courses managed by the current user.
+   * @param {number[]} courseIds
+   * @returns {Promise<Object>}
+   */
+  getBuyCoursesCourseServiceLabels: async (courseIds = []) => {
+    return await getBuyCoursesCourseServiceLabels(courseIds)
+  },
+
+  /**
    * Creates a new course with the provided data.
    * @param {Object} courseData - The data for the course to be created.
    * @returns {Promise<Object>} The server response after creating the course.
@@ -326,6 +335,26 @@ export default {
     const { data } = await api.get("/course/create-capability", config)
     return data
   },
+}
+
+
+export async function getBuyCoursesCourseServiceLabels(courseIds = []) {
+  const normalizedIds = [...new Set(courseIds.map((courseId) => Number(courseId) || 0).filter((courseId) => courseId > 0))].slice(
+    0,
+    100,
+  )
+
+  if (normalizedIds.length === 0) {
+    return {}
+  }
+
+  const { data } = await api.get("/plugin/BuyCourses/src/course_service_labels.php", {
+    params: {
+      course_ids: normalizedIds.join(","),
+    },
+  })
+
+  return data?.courses && typeof data.courses === "object" ? data.courses : {}
 }
 
 export async function getStickyCourses() {

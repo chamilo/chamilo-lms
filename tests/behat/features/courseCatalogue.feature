@@ -8,21 +8,18 @@ Feature: Course catalogue and extra fields
 
   Scenario: Create three courses for catalogue testing
     Given I am on "/main/admin/course_add.php"
-    And I wait for the page to be loaded
     When I fill in "title" with "testcourse"
     And I press "submit"
     And I wait for the page to be loaded
     Then I should see "testcourse"
 
     Given I am on "/main/admin/course_add.php"
-    And I wait for the page to be loaded
     When I fill in "title" with "grammarcourse"
     And I press "submit"
     And I wait for the page to be loaded
     Then I should see "grammarcourse"
 
     Given I am on "/main/admin/course_add.php"
-    And I wait for the page to be loaded
     When I fill in "title" with "grammartest"
     And I press "submit"
     And I wait for the page to be loaded
@@ -30,7 +27,6 @@ Feature: Course catalogue and extra fields
 
   Scenario: Search courses in catalogue by title
     Given I am on "/catalogue/courses"
-    And I wait for the page to be loaded
     When I fill in "search_catalogue" with "test"
     And I wait for the page to be loaded
     Then I should see "testcourse"
@@ -40,7 +36,6 @@ Feature: Course catalogue and extra fields
 
   Scenario: Search courses in catalogue by title (search "course")
     Given I am on "/catalogue/courses"
-    And I wait for the page to be loaded
     When I fill in "search_catalogue" with "course"
     And I wait for the page to be loaded
     Then I should see "testcourse"
@@ -49,7 +44,6 @@ Feature: Course catalogue and extra fields
 
   Scenario: Search courses in catalogue by title (search "course" via filters)
     Given I am on "/catalogue/courses"
-    And I wait for the page to be loaded
     Then I click the "span.pi-sliders-h" element
     And I wait for the page to be loaded
     When I fill in "search_by_title" with "course"
@@ -61,7 +55,6 @@ Feature: Course catalogue and extra fields
 
   Scenario: Search courses in catalogue by title (search "test" via filters)
     Given I am on "/catalogue/courses"
-    And I wait for the page to be loaded
     Then I click the "span.pi-sliders-h" element
     And I wait for the page to be loaded
     When I fill in "search_by_title" with "test"
@@ -74,7 +67,6 @@ Feature: Course catalogue and extra fields
 
   Scenario: Add an extra field "Duration" for courses
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I wait for the page to be loaded
     And I zoom out to maximum
@@ -95,7 +87,6 @@ Feature: Course catalogue and extra fields
 
   Scenario: Update course extra field value
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Course list"
     And I wait for the page to be loaded
@@ -108,7 +99,6 @@ Feature: Course catalogue and extra fields
 
   Scenario: Update catalogue settings to include extra field in search form
     Given I am on "/admin/settings/catalog"
-    And I wait for the page to be loaded
     When I fill in "form_course_catalog_settings" with "{\"extra_fields_in_search_form\":[\"duration\"]}"
     And I zoom out to maximum
     And I press "Save settings"
@@ -117,7 +107,6 @@ Feature: Course catalogue and extra fields
 
   Scenario: Search courses in catalogue by extra field (Duration = "22:22:22")
     Given I am on "/catalogue/courses"
-    And I wait for the page to be loaded
     Then I click the "span.pi-sliders-h" element
     And I wait for the page to be loaded
     When I fill in "extra_duration" with "22:22:22"

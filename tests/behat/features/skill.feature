@@ -7,7 +7,6 @@ Feature: Skills
   Scenario: Create a skill skill1
     Given I am a platform administrator
     And I am on "main/skills/skill_create.php"
-    And wait very long for the page to be loaded
     When I fill in the following:
       | title | skill1 |
       | short_code | s1 |
@@ -20,7 +19,6 @@ Feature: Skills
   Scenario: Create a second level skill
     Given I am a platform administrator
     And I am on "main/skills/skill_create.php"
-    And wait very long for the page to be loaded
     When I fill in the following:
       | title | skill11 |
       | short_code | s11 |
@@ -34,7 +32,6 @@ Feature: Skills
   Scenario: Create a skill skilldis
     Given I am a platform administrator
     And I am on "main/skills/skill_create.php"
-    And wait very long for the page to be loaded
     When I fill in the following:
       | title | skilldis |
       | short_code | sdis |
@@ -54,10 +51,8 @@ Feature: Skills
   Scenario: Disable a skill skilldis
     Given I am a platform administrator
     And I am on "main/skills/skill_list.php"
-    And wait for the page to be loaded
     Then I should see "skilldis"
     Then I am on "/main/skills/skill_list.php?id=4&action=disable"
-    And wait for the page to be loaded
     Then I should not see an error
 
 
@@ -70,10 +65,8 @@ Feature: Skills
   Scenario: Enable a skill skilldis
     Given I am a platform administrator
     And I am on "main/skills/skill_list.php"
-    And wait for the page to be loaded
     Then I should see "skilldis"
     Then I am on "/main/skills/skill_list.php?id=4&action=enable"
-    And wait for the page to be loaded
     Then I should not see an error
 
 
@@ -82,7 +75,6 @@ Feature: Skills
   Scenario: Update a skill skill1
     Given I am a platform administrator
     And I am on "main/skills/skill_list.php"
-    And wait for the page to be loaded
     Then I should see "skill1"
     Then I follow "Edit"
     And wait very long for the page to be loaded
@@ -108,7 +100,6 @@ Feature: Skills
   Scenario: Reassign skill11 to user 1
     Given I am a platform administrator
     And I am on "main/skills/assign.php?user=1"
-    And I wait for the page to be loaded
     When I select "skill11" from "skill"
     And wait very long for the page to be loaded
     Then I fill in the following:
@@ -122,7 +113,6 @@ Feature: Skills
   Scenario: View assigned skill skill11 to user 1
     Given I am a platform administrator
     And I am on "/badge/3/user/1"
-    And I wait for the page to be loaded
     Then I should see "Skill acquired"
     And I should see "John Doe"
 
@@ -132,7 +122,6 @@ Feature: Skills
   Scenario: Set a badge to a skill
     Given I am a platform administrator
     And I am on "main/skills/skill_list.php"
-    And wait for the page to be loaded
     Then I should see "skill11"
     Then I click the "i.mdi-shield-star" element
     And I wait for the page to be loaded

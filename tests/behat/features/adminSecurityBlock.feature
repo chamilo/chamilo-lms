@@ -5,11 +5,9 @@ Feature: Admin Security block navigation
 
   Background:
     Given I am a platform administrator
-    And I wait for the page to be loaded
 
   Scenario: Open Login attempts
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Login attempts"
     And I wait for the page to be loaded

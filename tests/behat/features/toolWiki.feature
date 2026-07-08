@@ -7,12 +7,10 @@ Feature: Wiki tool
 
   Background:
     Given I am a platform administrator
-    And I wait for the page to be loaded
 
 
   Scenario: Admin edits a wiki and sees the new content
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Wiki"
     And I wait for the page to be loaded

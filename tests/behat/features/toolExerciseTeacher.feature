@@ -4,12 +4,10 @@ Feature: Exercise tool
 
   Background:
     Given I am logged as "ywarnier"
-    And wait very long for the page to be loaded
 
 
   Scenario: Create a question category
     Given I am on "/main/exercise/tests_category.php?action=addcategory&cid=1"
-    And wait very long for the page to be loaded
     When I fill in the following:
       | category_name | Category 1 |
     And I fill in editor field "category_description" with "Category 1 description"
@@ -19,7 +17,6 @@ Feature: Exercise tool
 
   Scenario: Create a second question category
     Given I am on "/main/exercise/tests_category.php?action=addcategory&cid=1"
-    And wait very long for the page to be loaded
     When I fill in the following:
       | category_name | Category 2 |
     And I fill in editor field "category_description" with "Category 2 description"
@@ -29,7 +26,6 @@ Feature: Exercise tool
 
   Scenario: Create an exercise
     Given I am on "/main/exercise/exercise_admin.php?cid=1"
-    And wait very long for the page to be loaded
     And I press advanced settings
     When I fill in the following:
       | exercise_title | Exercise 1 |
@@ -39,8 +35,6 @@ Feature: Exercise tool
 
   Scenario: Edit an exercise
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
-    And I wait for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -54,7 +48,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Multiple choice" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -79,7 +72,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Multiple answer" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -105,7 +97,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Fill in blanks" to "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -121,7 +112,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Matching" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -141,7 +131,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Open" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -157,7 +146,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Oral expression" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -172,7 +160,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Exact answers combination" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -192,7 +179,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Unique answer with unknown" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -216,7 +202,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Multiple answer true/false/don't know" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -246,7 +231,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Combination true/false/don't-know" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -269,7 +253,6 @@ Feature: Exercise tool
 
   Scenario: Add question "Global multiple answer" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -298,17 +281,14 @@ Feature: Exercise tool
 
   Scenario: Duplicate exercise
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-disc" element
     And I confirm the popup
     And wait very long for the page to be loaded
     Then I should see "copied"
-    And wait very long for the page to be loaded
     And I should see "Exercise 1 - Copy"
 
   Scenario: Import exercise to test questions categories
     Given I am on "/main/exercise/upload_exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I should see "Import quiz from Excel"
     And I attach the file "/tests/fixtures/exercise.xls" to "upload_user_upload_quiz"
     When I press "Upload"
@@ -317,7 +297,6 @@ Feature: Exercise tool
 #
   Scenario: Import exercise from excel
     Given I am on "/main/exercise/upload_exercise.php?cid=1"
-    And wait very long for the page to be loaded
     Then I should see "Import quiz from Excel"
     Then I attach the file "/public/main/exercise/quiz_template.xls" to "upload_user_upload_quiz"
     And I press "Upload"
@@ -326,7 +305,6 @@ Feature: Exercise tool
 
   Scenario: Try exercise "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I follow "Start test"
@@ -396,14 +374,12 @@ Feature: Exercise tool
 
   Scenario: Check exercise result
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise 1"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
     And wait very long for the page to be loaded
     And I follow "Results and feedback"
     Then I should see "Learner score"
-    And wait very long for the page to be loaded
     And I check the "semantics" radio button
     And I press "Next question"
     And wait very long for the page to be loaded
@@ -422,7 +398,6 @@ Feature: Exercise tool
     And I select "A" from "choice_id_7_1"
     And I select "B" from "choice_id_7_2"
     And I select "C" from "choice_id_7_3"
-    And wait very long for the page to be loaded
     And I press "Next question"
     And wait very long for the page to be loaded
     And I check "1"
@@ -441,19 +416,14 @@ Feature: Exercise tool
 
   Scenario: Teacher looks at exercise results by categories
     Given I am on "/main/index/user_portal.php"
-    And wait very long for the page to be loaded
     And I am on "/sessions"
-    And wait very long for the page to be loaded
     Then I should see "Session Exercise"
-    And wait very long for the page to be loaded
     And I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I follow "Exercise for Behat test"
     And wait very long for the page to be loaded
     And I click the "i.mdi-chart-box" element
     And wait very long for the page to be loaded
     Then I should see "Learner score"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-checkbox-marked-circle-plus-outline" element
     And wait very long for the page to be loaded
     Then I should see "Score for the test: 190 / 190"
@@ -465,37 +435,29 @@ Feature: Exercise tool
       | Total         | 190 / 190      | 100%           |
   Scenario: Delete an exercise
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     And I confirm the popup
     Then I should not see "Exercise 1"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     And I confirm the popup
     Then I should not see "Exercise for Behat test"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     And I confirm the popup
     Then I should not see "IQ test"
 
   Scenario: Delete an exercise category
     Given I am on "/main/exercise/tests_category.php?cid=1"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     Then I should not see "Category 1"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     Then I should not see "Category 2"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     Then I should not see "Categoryname2"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     Then I should not see "Categoryname1"
 
   Scenario: Delete session
     Given I am on "/main/session/session_list.php?keyword=Session+Exercise"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     And I confirm the popup
     And wait for the page to be loaded

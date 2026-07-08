@@ -2,7 +2,6 @@ Feature: Login user
 
   Scenario: Login as admin user successfully
     Given I am on "/login"
-    And wait very long for the page to be loaded
     Then I should see "Sign in"
     When I fill in "admin" for "login"
     And I fill in "admin" for "password"

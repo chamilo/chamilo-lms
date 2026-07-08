@@ -7,7 +7,6 @@ Feature: Agenda tool
 
   Scenario: Create a personal event
     Given I am on "/main/calendar/agenda.php?action=add&type=personal"
-    And I wait for the page to be loaded
     When I fill in the following:
       | title | Event 1 |
     And I focus "date_range"
@@ -21,7 +20,6 @@ Feature: Agenda tool
 
   Scenario: Create an event inside course TEMP
     Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=1"
-    And I wait for the page to be loaded
     When I fill in the following:
       | title | Event in course |
     Then I fill in editor field "content" with "Description event"

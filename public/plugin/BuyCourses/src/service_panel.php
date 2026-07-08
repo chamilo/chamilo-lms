@@ -23,6 +23,11 @@ if (!$userInfo || !$includeServices) {
 
 $serviceTypes = $plugin->getServiceTypes();
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
+$csrfToken = (string) Security::get_existing_token();
+
+if ('' === $csrfToken) {
+    $csrfToken = (string) Security::get_token();
+}
 
 $activeServices = [];
 
@@ -33,27 +38,44 @@ foreach ($plugin->getActiveServicesForUser((int) $userInfo['user_id']) as $sale)
     $paymentType = (int) ($sale['payment_type'] ?? 0);
     $recurringPayment = (int) ($sale['recurring_payment'] ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED);
     $isRenewable = 1 === (int) ($service['renewable'] ?? 0);
+    $recurringGateway = strtolower(trim((string) ($sale['recurring_gateway'] ?? '')));
+    $recurringProfileId = trim((string) ($sale['recurring_profile_id'] ?? ''));
+    $gatewaySubscriptionId = trim((string) ($sale['gateway_subscription_id'] ?? ''));
+
+    if ('' === $recurringGateway) {
+        $recurringGateway = match ($paymentType) {
+            BuyCoursesPlugin::PAYMENT_TYPE_STRIPE => 'stripe',
+            BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL => 'paypal',
+            default => '',
+        };
+    }
+
     $isPayPalPayment = BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL === $paymentType;
+    $isCancellationAlreadyScheduled = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
+        || '' !== trim((string) ($sale['cancelled_at'] ?? ''));
 
     $canEnableRecurring = $isRenewable
         && $isPayPalPayment
         && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED !== $recurringPayment;
 
     $canCancelRecurring = $isRenewable
-        && $isPayPalPayment
+        && !$isCancellationAlreadyScheduled
         && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === $recurringPayment
-        && !empty($sale['recurring_profile_id']);
-
-    $recurringStatusLabel = match ($recurringPayment) {
-        BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED => 'Auto billing enabled',
-        BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED => 'Auto billing suspended',
-        BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED => 'Auto billing cancelled',
-        default => 'Auto billing disabled',
-    };
+        && in_array($recurringGateway, ['stripe', 'paypal'], true)
+        && ('' !== $recurringProfileId || '' !== $gatewaySubscriptionId);
 
     $benefitSummaries = array_values(array_filter(array_map(static function (array $benefit): ?string {
         return $benefit['active_summary'] ?? null;
     }, $sale['benefit_summaries'] ?? [])));
+
+    $plannedRenewalDate = trim((string) ($sale['next_charge_date'] ?? ''));
+    if ('' === $plannedRenewalDate) {
+        $plannedRenewalDate = trim((string) ($sale['date_end'] ?? ''));
+    }
+
+    $formattedRenewalDate = '' !== $plannedRenewalDate
+        ? api_format_date(api_get_local_time($plannedRenewalDate), DATE_TIME_FORMAT_LONG_24H)
+        : '—';
 
     $activeServices[] = [
         'id' => $saleId,
@@ -74,15 +96,25 @@ foreach ($plugin->getActiveServicesForUser((int) $userInfo['user_id']) as $sale)
         'info_url' => $webPluginPath.'BuyCourses/src/service_information.php?service_id='.$serviceId.'&sale_id='.$saleId,
         'is_renewable' => $isRenewable,
         'recurring_status' => $recurringPayment,
-        'recurring_status_label' => $recurringStatusLabel,
-        'next_charge_date' => !empty($sale['next_charge_date'])
-            ? api_format_date(api_get_local_time($sale['next_charge_date']), DATE_TIME_FORMAT_LONG_24H)
-            : '',
-        'recurring_profile_id' => (string) ($sale['recurring_profile_id'] ?? ''),
+        'recurring_status_label' => $plugin->getRecurringPaymentStatusLabel($recurringPayment),
+        'next_charge_date' => $formattedRenewalDate,
+        'renewal_date_label' => $isCancellationAlreadyScheduled
+            ? $plugin->get_lang('ServiceAccessUntil')
+            : $plugin->get_lang('NextRenewal'),
+        'recurring_profile_id' => $recurringProfileId,
         'can_enable_recurring' => $canEnableRecurring,
         'can_cancel_recurring' => $canCancelRecurring,
         'enable_recurring_url' => $webPluginPath.'BuyCourses/src/recurring_payment_process.php?action=enable_recurring_payment&order='.$saleId,
-        'cancel_recurring_url' => $webPluginPath.'BuyCourses/src/recurring_payment_process.php?action=cancel_recurring_payment&order='.$saleId,
+        'cancel_recurring_url' => $webPluginPath.'BuyCourses/src/recurring_payment_process.php',
+        'cancel_recurring_token' => $csrfToken,
+        'cancel_renewal_title' => $plugin->get_lang('CancelRenewalTitle'),
+        'cancel_renewal_message' => sprintf(
+            $plugin->get_lang('CancelRenewalConfirmation'),
+            $formattedRenewalDate,
+            12,
+            $formattedRenewalDate
+        ),
+        'cancel_renewal_label' => $plugin->get_lang('CancelRenewal'),
     ];
 }
 

@@ -422,9 +422,14 @@ switch ($eventType) {
 
         $serviceSale = $plugin->getServiceSaleFromGatewaySubscriptionId($subscriptionId);
         if (!empty($serviceSale)) {
+            $cancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
+            if ('' === $cancelledAt) {
+                $cancelledAt = api_get_utc_datetime();
+            }
+
             $plugin->updateServiceSaleGatewayData((int) $serviceSale['id'], [
                 'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED,
-                'cancelled_at' => api_get_utc_datetime(),
+                'cancelled_at' => $cancelledAt,
                 'recurring_gateway' => 'stripe',
                 'gateway_subscription_id' => $subscriptionId,
                 'recurring_profile_id' => $subscriptionId,

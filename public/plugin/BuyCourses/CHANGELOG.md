@@ -1,3 +1,4 @@
+Feature: renewable services can now schedule renewal cancellation from My Services with a detailed confirmation modal, Stripe cancel-at-period-end support, PayPal recurring profile cancellation, CSRF protection, idempotent local state, and continued access until the paid period ends.
 Fix: Stripe service upgrades now reuse an existing pending Checkout Session, reconcile an already-paid pending upgrade before creating another charge, replace only expired sessions, and use Stripe idempotency keys so repeated confirmation requests cannot create duplicate Checkout Sessions.
 UI: reorganized the service create and edit forms into clear sections for general information, pricing, recurring billing, publication, media, granted benefits, AI features, and destructive actions without changing submitted field names or service business logic.
 Fix: service plans now use the same stable creation order in the shop catalog and on the course creation page.

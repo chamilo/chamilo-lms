@@ -677,8 +677,8 @@ switch ($action) {
         $saleRows[] = ['label' => $plugin->get_lang('OrderDate'), 'value' => (string) api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG)];
 
         if ($taxAmount > 0.0 || $taxRate > 0.0) {
-            $saleRows[] = ['label' => $plugin->get_lang('Subtotal'), 'value' => $plugin->formatSaleAmount($priceWithoutTax, $isoCode)];
-            $saleRows[] = ['label' => $plugin->get_lang('VAT'), 'value' => $plugin->formatSaleAmount($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)'];
+            $saleRows[] = ['label' => $plugin->get_lang('Subtotal'), 'value' => $plugin->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode)];
+            $saleRows[] = ['label' => $plugin->get_lang('VAT'), 'value' => $plugin->getPriceWithCurrencyFromIsoCode($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)'];
         }
 
         $saleRows[] = ['label' => $plugin->get_lang('Total'), 'value' => (string) $serviceSale['service']['total_price']];

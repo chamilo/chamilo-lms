@@ -344,15 +344,15 @@ foreach ($servicesSales as &$sale) {
     );
     $sale['status_label'] = $saleStatuses[$sale['status']] ?? ($sale['status'] ?? '');
     $sale['payment_type_label'] = $paymentTypeLabels[(int) ($sale['payment_type'] ?? 0)] ?? '';
-    $sale['total_price'] = $plugin->formatSaleAmount(
+    $sale['total_price'] = $plugin->getPriceWithCurrencyFromIsoCode(
         (float) ($sale['price'] ?? 0),
-        $sale['service']['currency'] ?? null
+        (string) ($sale['service']['currency'] ?? '')
     );
 
     if (0.0 !== (float) ($sale['discount_amount'] ?? 0)) {
-        $sale['total_discount'] = $plugin->formatSaleAmount(
+        $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode(
             (float) ($sale['discount_amount'] ?? 0),
-            $sale['service']['currency'] ?? null
+            (string) ($sale['service']['currency'] ?? '')
         );
         $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
     }

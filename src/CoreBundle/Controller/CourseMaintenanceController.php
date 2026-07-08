@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
@@ -529,7 +530,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/delete', name: 'delete', methods: ['POST'])]
-    public function deleteCourse(int $node, Request $req): JsonResponse
+    public function deleteCourse(int $node, Request $req, EntityManagerInterface $em, CourseHelper $courseHelper): JsonResponse
     {
         // Basic permission gate (adjust roles to your policy if needed)
         if (
@@ -572,7 +573,18 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 return $this->jsonError('Course code confirmation mismatch', 400);
             }
 
-            CourseManager::delete_course($sysCode, $deleteDocs);
+            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            $course = $courseId > 0 ? $em->getRepository(CourseEntity::class)->find($courseId) : null;
+            if (!$course instanceof CourseEntity) {
+                return $this->jsonError('Course not found', 404);
+            }
+
+            if (!$courseHelper->deleteCourse($course, $deleteDocs)) {
+                return $this->json([
+                    'ok' => false,
+                    'message' => 'The course is still used in other portals; it was removed from the current one but not deleted.',
+                ]);
+            }
 
             // Best-effort cleanup
             try {
@@ -591,7 +603,6 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         } catch (Throwable $e) {
             return $this->json([
                 'error' => 'Failed to delete course: '.$e->getMessage(),
-                'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
             ], 500);
         }
     }

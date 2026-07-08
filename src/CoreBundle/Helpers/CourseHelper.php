@@ -1600,7 +1600,7 @@ class CourseHelper
         return $limits;
     }
 
-    public function deleteCourse(Course $course, bool $deleteExclusiveDocuments = false): void
+    public function deleteCourse(Course $course, bool $deleteExclusiveDocuments = false): bool
     {
         $em = $this->entityManager;
 
@@ -1624,11 +1624,13 @@ class CourseHelper
             $count = UrlManager::getCountUrlRelCourse($course->getId());
         }
 
+        // In a multi-URL portal the course may still be linked to other URLs.
+        // In that case it was only unsubscribed from the current URL, not deleted.
         if (0 !== $count) {
-            return;
+            return false;
         }
 
-        $groupCategories = GroupManager::get_categories($course, null);
+        $groupCategories = GroupManager::get_categories($course);
         if (!empty($groupCategories)) {
             foreach ($groupCategories as $category) {
                 GroupManager::delete_category($category['iid'], $course->getCode());
@@ -1756,6 +1758,8 @@ class CourseHelper
             api_get_user_id(),
             $course->getId()
         );
+
+        return true;
     }
 
     /**

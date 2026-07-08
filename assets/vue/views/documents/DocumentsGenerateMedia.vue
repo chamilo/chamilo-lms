@@ -235,6 +235,7 @@
           />
 
           <span
+            v-if="showPreviewAiGeneratedBadge"
             class="absolute bottom-2 right-2 rounded px-2 py-1 text-xs font-semibold shadow"
             style="background-color: rgba(15, 23, 42, 0.82); color: #fff"
           >
@@ -548,6 +549,12 @@ const canGenerate = computed(() => {
 })
 
 const hasGeneratedResult = computed(() => !!generatedResult.value)
+
+// Base64 images are resized locally and receive an embedded AI-generated watermark.
+// Keep the HTML preview badge only when no embedded image watermark is guaranteed.
+const showPreviewAiGeneratedBadge = computed(
+  () => selectedType.value !== "image" || !generatedResult.value?.is_base64,
+)
 
 const canAccept = computed(() => {
   if (!generatedResult.value) return false

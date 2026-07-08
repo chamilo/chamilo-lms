@@ -4,6 +4,18 @@ import { computed, ref } from "vue"
 import securityService from "../services/securityService"
 import { usePlatformConfig } from "./platformConfig"
 
+// Contextual ROLE_CURRENT_COURSE_* roles, mirroring User::CONTEXT_ROLES on the
+// backend. These are recomputed per course/session/group context and must never
+// leak across courses, so they are always replaced wholesale (see setContextRoles).
+const CONTEXT_ROLES = [
+  "ROLE_CURRENT_COURSE_TEACHER",
+  "ROLE_CURRENT_COURSE_STUDENT",
+  "ROLE_CURRENT_COURSE_SESSION_TEACHER",
+  "ROLE_CURRENT_COURSE_SESSION_STUDENT",
+  "ROLE_CURRENT_COURSE_GROUP_TEACHER",
+  "ROLE_CURRENT_COURSE_GROUP_STUDENT",
+]
+
 export const useSecurityStore = defineStore("security", () => {
   const user = ref(null)
   const isLoading = ref(true)
@@ -35,6 +47,28 @@ export const useSecurityStore = defineStore("security", () => {
     }
   }
 
+  /**
+   * Replaces all contextual ROLE_CURRENT_COURSE_* roles with the given set,
+   * leaving personal/global roles untouched. Pass an empty array to clear the
+   * course context (e.g. when leaving a course).
+   * @param {string[]} roles
+   */
+  const setContextRoles = (roles) => {
+    if (!user.value || !Array.isArray(user.value.roles)) return
+
+    const personalRoles = user.value.roles.filter((role) => !CONTEXT_ROLES.includes(role))
+    const contextRoles = (roles ?? []).filter((role) => CONTEXT_ROLES.includes(role))
+    const nextRoles = [...personalRoles, ...contextRoles]
+
+    // Skip the reactive reassignment when the resulting role set is unchanged.
+    const isUnchanged =
+      nextRoles.length === user.value.roles.length && nextRoles.every((role, index) => role === user.value.roles[index])
+
+    if (isUnchanged) return
+
+    user.value.roles = nextRoles
+  }
+
   const isStudent = computed(() => hasRole.value("ROLE_STUDENT"))
 
   const isStudentBoss = computed(() => hasRole.value("ROLE_STUDENT_BOSS"))
@@ -45,20 +79,24 @@ export const useSecurityStore = defineStore("security", () => {
 
   const isTeacher = computed(() => isAdmin.value || hasRole.value("ROLE_TEACHER"))
 
-  // Course-context roles (as provided by backend/session)
+  // Contextual ROLE_CURRENT_COURSE_* roles. These mirror the backend
+  // (CourseAccessResolver) for the current course/session/group and are kept in
+  // sync per navigation by the router's beforeResolve guard.
   const isCurrentCourseStudent = computed(() => hasRole.value("ROLE_CURRENT_COURSE_STUDENT"))
   const isCurrentCourseTeacher = computed(() => hasRole.value("ROLE_CURRENT_COURSE_TEACHER"))
+  const isCurrentCourseSessionStudent = computed(() => hasRole.value("ROLE_CURRENT_COURSE_SESSION_STUDENT"))
   const isCurrentCourseSessionTeacher = computed(() => hasRole.value("ROLE_CURRENT_COURSE_SESSION_TEACHER"))
+  const isCurrentCourseGroupStudent = computed(() => hasRole.value("ROLE_CURRENT_COURSE_GROUP_STUDENT"))
+  const isCurrentCourseGroupTeacher = computed(() => hasRole.value("ROLE_CURRENT_COURSE_GROUP_TEACHER"))
 
   /**
-   * If user has BOTH roles due to polluted roles, Student must win (UI safeguard).
+   * The backend grants a course teacher both STUDENT and TEACHER contextual
+   * roles, so teacher presence wins (matches api_is_course_admin). Suppressed
+   * while the student view is active.
    */
   const isCurrentTeacher = computed(() => {
     if (platformConfigStore.isStudentViewActive) return false
     if (isAdmin.value) return true
-
-    // Student wins over teacher in the same course context
-    if (isCurrentCourseStudent.value) return false
 
     return isCurrentCourseTeacher.value
   })
@@ -103,6 +141,7 @@ export const useSecurityStore = defineStore("security", () => {
     isAuthenticated,
     hasRole,
     removeRole,
+    setContextRoles,
     isStudent,
     isStudentBoss,
     isHRM,
@@ -110,6 +149,10 @@ export const useSecurityStore = defineStore("security", () => {
     isAdmin,
     isCurrentCourseStudent,
     isCurrentCourseTeacher,
+    isCurrentCourseSessionStudent,
+    isCurrentCourseSessionTeacher,
+    isCurrentCourseGroupStudent,
+    isCurrentCourseGroupTeacher,
     isCurrentTeacher,
     isCourseAdmin,
     isSessionAdmin,

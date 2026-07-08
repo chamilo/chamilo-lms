@@ -1,8 +1,26 @@
+v7.7 - 2026-07-08
+====
+
 Feature: renewable services can now schedule renewal cancellation from My Services with a detailed confirmation modal, Stripe cancel-at-period-end support, PayPal recurring profile cancellation, CSRF protection, idempotent local state, and continued access until the paid period ends.
 Fix: Stripe service upgrades now reuse an existing pending Checkout Session, reconcile an already-paid pending upgrade before creating another charge, replace only expired sessions, and use Stripe idempotency keys so repeated confirmation requests cannot create duplicate Checkout Sessions.
 UI: reorganized the service create and edit forms into clear sections for general information, pricing, recurring billing, publication, media, granted benefits, AI features, and destructive actions without changing submitted field names or service business logic.
 Fix: service plans now use the same stable creation order in the shop catalog and on the course creation page.
 Fix: upgrade actions are now also exposed on the BuyCourses landing page and on the course creation service cards.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new upsale and service-upgrade columns are added to
+the `plugin_buycourses_services` and `plugin_buycourses_service_sale` tables.
+Either load [your-host]/plugin/BuyCourses/update.php in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_services ADD upsale_from_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_from_sale_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_credit_amount DECIMAL(10,2) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD recurring_amount DECIMAL(10,2) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgraded_to_sale_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_completed_at DATETIME DEFAULT NULL;
+```
+
 v7.6 - 2026-07-02
 ====
 

@@ -5455,7 +5455,7 @@ class BuyCoursesPlugin extends Plugin
             'tax_enable' => null !== $taxPerc,
             'tax_name' => (string) ($globalParameters['tax_name'] ?? ''),
             'tax_perc_show' => $taxPerc,
-            'tax_amount_formatted' => api_number_format($taxAmount, 2),
+            'tax_amount_formatted' => $this->getPriceWithCurrencyFromIsoCode($taxAmount, $isoCode),
             'total_price_formatted' => $this->getPriceWithCurrencyFromIsoCode($totalPrice, $isoCode),
             'has_coupon' => $discountAmount > 0,
             'discount_amount_formatted' => $discountAmount > 0

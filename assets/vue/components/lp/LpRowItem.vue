@@ -57,16 +57,29 @@ const canDownloadScormPackage = computed(() => {
   return props.canExportScorm && type === 2
 })
 
+const isScormLearningPath = computed(() => {
+  const type = Number(
+    props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? props.lp?.lpTypeId ?? props.lp?.lp_type_id ?? 0,
+  )
+
+  return type === 2
+})
+
 const canCopyLearningPath = computed(() => {
   const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
 
   return props.canCopy && !isCStudioLearningPath.value && type !== 3 && (type !== 2 || props.canCopyScorm)
 })
 
+const routeStudentViewEnabled = computed(() =>
+  ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
+)
+
 const openUrl = computed(() =>
   lpService.buildRuntimeUrl(props.lp.iid, {
     ...props.legacyContext,
     isStudentView: "true",
+    temporaryStudentView: routeStudentViewEnabled.value ? undefined : "true",
   }),
 )
 
@@ -399,7 +412,7 @@ const itemActionsMobile = computed(() =>
     publishAction.value,
     ...(isCStudioLearningPath.value ? [] : [attemptModeAction.value]),
     viewModeMobileAction.value,
-    ...(securityStore.isAdmin && !isCStudioLearningPath.value ? [debugAction.value] : []),
+    ...(securityStore.isAdmin && isScormLearningPath.value ? [debugAction.value] : []),
     ...(props.canSeriousGame ? [seriousGameAction.value] : []),
     ...(props.canAutoLaunch ? [autoLaunchAction.value] : []),
     {
@@ -659,7 +672,7 @@ const itemActionsMobile = computed(() =>
                     <div class="my-1 border-t border-gray-25"></div>
 
                     <button
-                      v-if="securityStore.isAdmin && !isCStudioLearningPath"
+                      v-if="securityStore.isAdmin && isScormLearningPath"
                       :disabled="debugAction.disabled"
                       class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                       type="button"

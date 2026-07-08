@@ -31,7 +31,6 @@ final readonly class ScormRuntimeManager
     public const VERSION_12 = '1.2';
     public const VERSION_2004 = '2004';
 
-    private const PROGRESS_OBJECTIVE_ID = '__chamilo_progress_measure__';
     private const SCALED_SCORE_OBJECTIVE_ID = '__chamilo_scaled_score__';
     private const MAX_VALUE_LENGTH = 65535;
     private const MAX_PAYLOAD_LENGTH = 1048576;
@@ -121,6 +120,10 @@ final readonly class ScormRuntimeManager
      *     enabled: bool,
      *     version: string,
      *     itemViewId: int,
+     *     lpViewId: int,
+     *     userId: int,
+     *     lpType: int,
+     *     itemType: string,
      *     forceCommit: bool,
      *     debug: bool,
      *     values: array<string, string>
@@ -142,6 +145,10 @@ final readonly class ScormRuntimeManager
                 'enabled' => false,
                 'version' => '',
                 'itemViewId' => 0,
+                'lpViewId' => 0,
+                'userId' => 0,
+                'lpType' => 0,
+                'itemType' => '',
                 'forceCommit' => false,
                 'debug' => false,
                 'values' => [],
@@ -157,6 +164,10 @@ final readonly class ScormRuntimeManager
             'enabled' => true,
             'version' => $version,
             'itemViewId' => (int) $itemView->getIid(),
+            'lpViewId' => (int) $itemView->getView()->getIid(),
+            'userId' => (int) $user->getId(),
+            'lpType' => $lp->getLpType(),
+            'itemType' => (string) $item->getItemType(),
             'forceCommit' => $lp->getForceCommit(),
             'debug' => $lp->getDebug(),
             'values' => $values,
@@ -283,10 +294,7 @@ final readonly class ScormRuntimeManager
         $score = (float) $itemView->getScore();
         $maxScore = $this->getMaxScore($item, $itemView);
         $scaledScore = $maxScore > 0.0 ? max(-1.0, min(1.0, $score / $maxScore)) : 0.0;
-        $progressMeasure = $this->loadReservedObjectiveValue($itemView, self::PROGRESS_OBJECTIVE_ID);
-        if (null === $progressMeasure) {
-            $progressMeasure = 'completed' === $completionStatus ? 1.0 : 0.0;
-        }
+        $progressMeasure = $itemView->getProgress();
         $student = $this->getStudentData($user);
         $masteryScore = $item->getMasteryScore();
 
@@ -301,6 +309,7 @@ final readonly class ScormRuntimeManager
                 'launch_data',
                 'learner_id',
                 'learner_name',
+                'learner_preference',
                 'location',
                 'mode',
                 'objectives',
@@ -313,6 +322,8 @@ final readonly class ScormRuntimeManager
             ]),
             'cmi.learner_id' => $student['id'],
             'cmi.learner_name' => $student['name'],
+            'cmi.learner_preference._children' => 'language',
+            'cmi.learner_preference.language' => '',
             'cmi.location' => (string) ($itemView->getLessonLocation() ?? ''),
             'cmi.credit' => 'credit',
             'cmi.completion_status' => $completionStatus,
@@ -323,7 +334,7 @@ final readonly class ScormRuntimeManager
             'cmi.score.max' => $this->formatNumber($maxScore),
             'cmi.score.min' => $this->formatNumber((float) $item->getMinScore()),
             'cmi.score.scaled' => $this->formatNumber($scaledScore),
-            'cmi.progress_measure' => $this->formatNumber($progressMeasure),
+            'cmi.progress_measure' => null !== $progressMeasure ? $this->formatNumber($progressMeasure) : '',
             'cmi.total_time' => $this->formatScorm2004Duration((int) $itemView->getTotalTime()),
             'cmi.mode' => 'normal',
             'cmi.exit' => '',
@@ -501,14 +512,18 @@ final readonly class ScormRuntimeManager
         }
 
         if ($scorm2004) {
-            $progress = $this->nullableFloat($values['cmi.progress_measure'] ?? null);
-            if (null !== $progress) {
-                $this->saveReservedObjectiveValue(
-                    $itemView,
-                    self::PROGRESS_OBJECTIVE_ID,
-                    max(0.0, min(1.0, $progress)),
-                    $values['cmi.completion_status'] ?? 'unknown',
-                );
+            if (isset($values['cmi.progress_measure'])
+                && '' !== trim($values['cmi.progress_measure'])
+            ) {
+                $progress = $this->nullableFloat($values['cmi.progress_measure']);
+                if (null === $progress) {
+                    throw new RuntimeException('SCORM 2004 progress_measure must be numeric.');
+                }
+                if ($progress < 0.0 || $progress > 1.0) {
+                    throw new RuntimeException('SCORM 2004 progress_measure must be between 0 and 1.');
+                }
+
+                $itemView->setProgress($progress);
             }
             if (null !== $scaledScore) {
                 $this->saveReservedObjectiveValue(
@@ -636,17 +651,6 @@ final readonly class ScormRuntimeManager
             ->setScoreMin(0.0)
             ->setStatus(mb_substr($status, 0, 32))
         ;
-    }
-
-    private function loadReservedObjectiveValue(CLpItemView $itemView, string $objectiveId): ?float
-    {
-        /** @var CLpIvObjective|null $objective */
-        $objective = $this->entityManager->getRepository(CLpIvObjective::class)->findOneBy([
-            'lpIvId' => (int) $itemView->getIid(),
-            'objectiveId' => $objectiveId,
-        ]);
-
-        return $objective instanceof CLpIvObjective ? (float) $objective->getScoreRaw() : null;
     }
 
     /**

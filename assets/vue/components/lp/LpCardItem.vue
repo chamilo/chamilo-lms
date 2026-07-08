@@ -42,10 +42,15 @@ const routeCtx = computed(() => ({
   gid: Number(route.query?.gid ?? 0),
 }))
 
+const routeStudentViewEnabled = computed(() =>
+  ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
+)
+
 const openUrl = computed(() =>
   lpService.buildRuntimeUrl(props.lp.iid, {
     ...routeCtx.value,
     isStudentView: "true",
+    temporaryStudentView: routeStudentViewEnabled.value ? undefined : "true",
   }),
 )
 
@@ -54,6 +59,12 @@ const isCStudioLearningPath = computed(() => {
   const path = String(props.lp?.path ?? "").toLowerCase()
 
   return type === 2 && path.startsWith("teachcs-")
+})
+
+const isScormLearningPath = computed(() => {
+  const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
+
+  return type === 2
 })
 
 const cstudioEditorUrl = computed(() => {
@@ -477,7 +488,7 @@ const progressTextClass = computed(() =>
                 </div>
                 <div class="my-2 border-t border-gray-25"></div>
                 <button
-                  v-if="securityStore.isAdmin && !isCStudioLearningPath"
+                  v-if="securityStore.isAdmin && isScormLearningPath"
                   :disabled="!manageableInContext || !csrfToken"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                   type="button"
@@ -784,7 +795,7 @@ const progressTextClass = computed(() =>
                 </div>
                 <div class="my-2 border-t border-gray-25"></div>
                 <button
-                  v-if="securityStore.isAdmin && !isCStudioLearningPath"
+                  v-if="securityStore.isAdmin && isScormLearningPath"
                   :disabled="!manageableInContext || !csrfToken"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
                   type="button"

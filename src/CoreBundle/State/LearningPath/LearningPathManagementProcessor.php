@@ -344,6 +344,9 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
 
     private function toggleScormDebug(CLp $learningPath): void
     {
+        if (CLp::SCORM_TYPE !== $learningPath->getLpType()) {
+            throw new BadRequestHttpException('SCORM debug mode is only available for SCORM learning paths.');
+        }
         if (!$this->security->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedHttpException('Only platform administrators can change SCORM debug mode.');
         }

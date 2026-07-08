@@ -25,6 +25,25 @@
     </div>
 
     <template v-else-if="runtime">
+      <BaseButton
+        v-if="isCStudioPreview"
+        id="cstudio-preview-back-button"
+        :disabled="isReturningToCStudio"
+        :label="t('Back')"
+        icon="arrow-left"
+        type="black"
+        @click="returnToCStudio"
+      />
+
+      <div
+        v-if="isReturningToCStudio"
+        id="cstudio-preview-loading"
+        aria-live="polite"
+        role="status"
+      >
+        <span>{{ t("Loading") }}…</span>
+      </div>
+
       <nav
         v-if="!isImpressMode"
         :class="[
@@ -38,7 +57,7 @@
           :label="t('Options')"
           icon="menu"
           only-icon
-          type="plain"
+          type="primary-alternative"
           @click="menuOpen = !menuOpen"
         />
 
@@ -48,11 +67,12 @@
         >
           <a
             v-if="runtime.showHome"
-            :href="runtime.homeUrl"
+            :href="runtimeHomeUrl"
             class="lp-runtime-menu-link"
+            @click.prevent="leaveRuntime(runtimeHomeUrl)"
           >
             <BaseIcon
-              icon="home"
+              :icon="isCStudioContent ? 'learning-paths' : 'home'"
               size="small"
             />
             <span>{{ homeLabel }}</span>
@@ -62,6 +82,7 @@
             v-if="runtime.canEdit && runtime.showReporting"
             :href="runtime.reportingUrl"
             class="lp-runtime-menu-link"
+            @click.prevent="leaveRuntime(runtime.reportingUrl)"
           >
             <BaseIcon
               icon="tracking"
@@ -233,7 +254,7 @@
           :icon="tocCollapsed ? 'arrow-right' : 'arrow-left'"
           :label="tocCollapsed ? t('Expand') : t('Collapse')"
           only-icon
-          type="plain"
+          type="primary-alternative"
           @click="toggleToc"
         />
       </div>
@@ -243,7 +264,7 @@
         :class="['lp-runtime-content', { 'lp-runtime-content--impress': isImpressMode }]"
       >
         <div
-          v-if="!isImpressMode && !runtime.hideArrowNavigation"
+          v-if="!isImpressMode && !runtime.hideArrowNavigation && !isCStudioContent"
           class="lp-runtime-navigation"
         >
           <BaseButton
@@ -267,7 +288,7 @@
         </div>
 
         <a
-          v-if="!isImpressMode && progressValue >= 100 && runtime.nextLearningPathUrl"
+          v-if="!isImpressMode && !isCStudioContent && progressValue >= 100 && runtime.nextLearningPathUrl"
           :href="runtime.nextLearningPathUrl"
           :title="runtime.nextLearningPathTitle"
           class="lp-runtime-next-learning-path"
@@ -334,17 +355,21 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute, useRouter } from "vue-router"
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import LpImpressRuntime from "../../components/lp/LpImpressRuntime.vue"
 import { useNotification } from "../../composables/notification"
+import { usePlatformConfig } from "../../store/platformConfig"
 import lpService from "../../services/lpService"
+import permissionService from "../../services/permissionService"
+import platformConfigService from "../../services/platformConfigService"
 import { createScormRuntimeApi } from "../../services/scormRuntimeApi"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const platformConfig = usePlatformConfig()
 const { showErrorNotification } = useNotification()
 
 const runtime = ref(null)
@@ -352,6 +377,7 @@ const contentFrame = ref(null)
 const isLoading = ref(false)
 const isChangingItem = ref(false)
 const isSyncingRuntime = ref(false)
+const isReturningToCStudio = ref(false)
 const iframeLoading = ref(false)
 const iframeReloadKey = ref(0)
 const previewImageFailed = ref(false)
@@ -369,16 +395,51 @@ let trackingTimer = null
 let lastBeaconAt = 0
 let scormRuntimeContext = null
 let scormRuntimeKey = ""
+let restoreTeacherViewPromise = null
 
 const lpId = computed(() => Number(route.params.lpId || 0))
+const hasCStudioEditorContext = computed(() => String(route.query.teachdoc || "").toLowerCase() === "edit")
+const isCStudioContent = computed(() => Boolean(runtime.value?.isCStudioContent) || hasCStudioEditorContext.value)
+const isCStudioPreview = computed(() => {
+  const previewValue = String(route.query.cstudio_preview || "").toLowerCase()
+
+  return hasCStudioEditorContext.value && ["1", "true", "yes"].includes(previewValue)
+})
+const isTemporaryStudentView = computed(() => {
+  const temporaryValue = String(route.query.temporaryStudentView || "").toLowerCase()
+
+  return isCStudioPreview.value || ["1", "true", "yes", "on"].includes(temporaryValue)
+})
+const shouldRestoreTeacherView = computed(
+  () => isTemporaryStudentView.value && Boolean(runtime.value?.canEdit),
+)
 const contextParams = computed(() => ({
   cid: Number(route.query.cid || 0),
   sid: Number(route.query.sid || 0),
   gid: Number(route.query.gid || 0),
   gradebook: Number(route.query.gradebook || 0),
   origin: String(route.query.origin || "learnpath"),
-  isStudentView: String(route.query.isStudentView || "true"),
+  isStudentView: isCStudioPreview.value ? "true" : String(route.query.isStudentView || "true"),
 }))
+const cStudioEditorUrl = computed(() => {
+  if (!isCStudioPreview.value || lpId.value <= 0) {
+    return ""
+  }
+
+  const query = new URLSearchParams({
+    action: "redir",
+    idLudiLP: String(lpId.value),
+  })
+
+  for (const key of ["cid", "sid", "gid", "gradebook"]) {
+    const value = Number(contextParams.value[key] || 0)
+    if (value > 0) {
+      query.set(key, String(value))
+    }
+  }
+
+  return `/plugin/CStudio/oel_tools_teachdoc_link.php?${query.toString()}`
+})
 
 function exposeLegacyCidContext() {
   const query = new URLSearchParams()
@@ -444,6 +505,10 @@ const visibleItems = computed(() =>
   (runtime.value?.items || []).filter((item) => !hasCollapsedAncestor(item)),
 )
 const homeLabel = computed(() => {
+  if (isCStudioContent.value) {
+    return t("Learning paths")
+  }
+
   const labels = {
     0: "Course home",
     1: "Learning paths",
@@ -454,6 +519,9 @@ const homeLabel = computed(() => {
 
   return t(labels[Number(runtime.value?.returnLink || 0)] || "Course home")
 })
+const runtimeHomeUrl = computed(() =>
+  buildRuntimeExitUrl(isCStudioContent.value ? runtime.value?.listUrl : runtime.value?.homeUrl),
+)
 const editorQuery = computed(() =>
   Object.fromEntries(
     Object.entries({ ...route.query, isStudentView: "false" }).filter(([key]) => key !== "item_id"),
@@ -472,6 +540,75 @@ const settingsRoute = computed(() => ({
 
 function handlePreviewImageError() {
   previewImageFailed.value = true
+}
+
+function restoreTeacherViewAfterRuntime() {
+  if (!shouldRestoreTeacherView.value) {
+    return Promise.resolve()
+  }
+
+  if (restoreTeacherViewPromise) {
+    return restoreTeacherViewPromise
+  }
+
+  restoreTeacherViewPromise = (async () => {
+    try {
+      const configuration = await platformConfigService.list()
+      const sessionView = String(configuration?.studentview || "").toLowerCase()
+
+      if ("studentview" === sessionView) {
+        const nextView = await permissionService.toogleStudentView()
+        platformConfig.setStudentViewEnabled("studentview" === String(nextView || "").toLowerCase())
+
+        return
+      }
+
+      platformConfig.setStudentViewEnabled(false)
+    } catch (error) {
+      console.error("Unable to restore teacher view after leaving the learning path runtime.", error)
+      platformConfig.setStudentViewEnabled(false)
+    } finally {
+      restoreTeacherViewPromise = null
+    }
+  })()
+
+  return restoreTeacherViewPromise
+}
+
+async function leaveRuntime(url) {
+  const targetUrl = String(url || "")
+  if (!targetUrl) {
+    return
+  }
+
+  await flushScormRuntime("runtime-exit")
+  await restoreTeacherViewAfterRuntime()
+  window.location.assign(targetUrl)
+}
+
+function buildRuntimeExitUrl(value) {
+  const url = String(value || "")
+  if (!url || !shouldRestoreTeacherView.value) {
+    return url
+  }
+
+  try {
+    const target = new URL(url, window.location.origin)
+    target.searchParams.set("isStudentView", "false")
+    target.searchParams.delete("temporaryStudentView")
+    target.searchParams.delete("teachdoc")
+    target.searchParams.delete("cstudio_preview")
+
+    if (target.origin === window.location.origin) {
+      return `${target.pathname}${target.search}${target.hash}`
+    }
+
+    return target.toString()
+  } catch (error) {
+    console.warn("Unable to normalize the learning path exit URL.", error)
+
+    return url
+  }
 }
 
 function formatDuration(value) {
@@ -607,6 +744,9 @@ function clearScormRuntime() {
   if (window.API_1484_11 === scormRuntimeContext?.api2004) {
     delete window.API_1484_11
   }
+  if (window.api_1484_11 === scormRuntimeContext?.api2004) {
+    delete window.api_1484_11
+  }
 
   scormRuntimeContext?.destroy()
   scormRuntimeContext = null
@@ -644,6 +784,13 @@ function installScormRuntime(data, { forceRecreate = false } = {}) {
     initialValues: config.values || {},
     forceCommit: Boolean(config.forceCommit),
     debug: Boolean(config.debug),
+    lpId: lpId.value,
+    itemId,
+    itemViewId,
+    lpViewId: Number(config.lpViewId || 0),
+    userId: Number(config.userId || 0),
+    lpType: Number(config.lpType || 0),
+    itemType: String(config.itemType || ""),
     commit: async (payload) => {
       await lpService.commitScormRuntime(lpId.value, itemId, contextParams.value, {
         ...payload,
@@ -667,12 +814,26 @@ function installScormRuntime(data, { forceRecreate = false } = {}) {
 
   if (version === "2004") {
     window.API_1484_11 = scormRuntimeContext.api2004
+    window.api_1484_11 = scormRuntimeContext.api2004
     delete window.API
+    delete window.api
   } else {
     window.API = scormRuntimeContext.api12
     window.api = scormRuntimeContext.api12
     delete window.API_1484_11
+    delete window.api_1484_11
   }
+}
+
+async function returnToCStudio() {
+  if (isReturningToCStudio.value || !cStudioEditorUrl.value) {
+    return
+  }
+
+  isReturningToCStudio.value = true
+  await flushScormRuntime("cstudio-return")
+  await restoreTeacherViewAfterRuntime()
+  window.location.assign(cStudioEditorUrl.value)
 }
 
 function applyRuntime(data, { contentChanged = false } = {}) {
@@ -829,6 +990,8 @@ async function openItem(itemId) {
 function handleIframeLoad(event) {
   contentFrame.value = event?.target || contentFrame.value
   iframeLoading.value = false
+  scormRuntimeContext?.logLms("Content iframe load event starts", 2)
+  scormRuntimeContext?.logLms("Content type is SCO; skipping auto LMSInitialize()", 2)
   scheduleRuntimeRefresh()
 }
 
@@ -882,6 +1045,12 @@ function handlePageHide() {
   })
 }
 
+onBeforeRouteLeave(async (to) => {
+  if ("LpRuntime" !== to.name) {
+    await restoreTeacherViewAfterRuntime()
+  }
+})
+
 onMounted(() => {
   exposeLegacyCidContext()
   document.documentElement.classList.add("lp-runtime-document")
@@ -925,6 +1094,37 @@ body.lp-runtime-document {
 </style>
 
 <style scoped>
+#cstudio-preview-back-button {
+  position: fixed;
+  top: 14px;
+  right: 20px;
+  z-index: 2147483000;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 16%);
+  color: #111827 !important;
+}
+
+#cstudio-preview-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(255 255 255 / 72%);
+}
+
+#cstudio-preview-loading span {
+  padding: 14px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgb(0 0 0 / 14%);
+  font-weight: 600;
+}
+
 .lp-runtime-player {
   --lp-sidebar-width: 300px;
   --lp-sidebar-collapsed-width: 64px;

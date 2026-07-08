@@ -76,6 +76,9 @@ final class LearningPathRuntime
     public bool $hideArrowNavigation = false;
 
     #[Groups(['learning_path_runtime:read'])]
+    public bool $isCStudioContent = false;
+
+    #[Groups(['learning_path_runtime:read'])]
     public string $menuLocation = 'left';
 
     #[Groups(['learning_path_runtime:read'])]

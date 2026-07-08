@@ -65,6 +65,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private ResourceNodeRepository $resourceNodeRepository,
         private ScormRuntimeManager $scormRuntimeManager,
+        private LearningPathRuntimeProgressManager $progressManager,
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
     ) {}
@@ -173,7 +174,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
 
         $totalItems = \count($contentIds);
         $completedItems = \count(array_intersect($contentIds, $completedItemIds));
-        $progress = $totalItems > 0 ? (int) round(($completedItems * 100) / $totalItems) : 0;
+        $progress = $this->progressManager->calculateProgress($lp, $items, $itemViews);
         $requestedItemId = (int) ($context['runtime_item_id'] ?? 0);
         if ($requestedItemId <= 0) {
             $requestedItemId = $request->query->getInt('itemId');
@@ -196,6 +197,8 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $runtime->lpId = (int) $lp->getIid();
         $runtime->title = $this->plainTitle($lp->getTitle());
         $runtime->lpType = $lp->getLpType();
+        $runtime->isCStudioContent = CLp::SCORM_TYPE === $lp->getLpType()
+            && str_starts_with(strtolower($lp->getPath()), 'teachcs-');
         $displaySettings = $this->getDisplaySettings();
         $runtime->runtimeSupported = \in_array($lp->getLpType(), [CLp::LP_TYPE, CLp::SCORM_TYPE], true);
         $runtime->canManage = $canManage;
@@ -207,13 +210,18 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $runtime->hideToc = $lp->getHideTocFrame();
         $runtime->displayMode = $lp->getDefaultViewMod();
         $runtime->returnLink = (int) $this->settingsCourseManager->getCourseSettingValue('lp_return_link');
-        $runtime->homeUrl = $this->buildReturnUrl(
-            $runtime->returnLink,
-            $course,
-            $session,
-            $group,
-            $request,
-        );
+        $runtime->homeUrl = $runtime->isCStudioContent
+            ? $this->buildListUrl($course, $session, $group, $request)
+            : $this->buildReturnUrl(
+                $runtime->returnLink,
+                $course,
+                $session,
+                $group,
+                $request,
+            );
+        if ($runtime->isCStudioContent) {
+            $runtime->returnLink = 1;
+        }
         $runtime->showHome = $this->isTruthySetting(
             $this->settingsManager->getSetting('lp.allow_lp_return_link', true),
         );
@@ -228,7 +236,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $displaySettings,
             'navigation_in_the_middle',
         );
-        $runtime->hideArrowNavigation = $this->displaySettingEnabled(
+        $runtime->hideArrowNavigation = $runtime->isCStudioContent || $this->displaySettingEnabled(
             $displaySettings,
             'hide_lp_arrow_navigation',
         );
@@ -278,6 +286,9 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
                 $user,
             )
             : [];
+        if (isset($runtime->scorm['debug'])) {
+            $runtime->scorm['debug'] = true === $runtime->scorm['debug'] && $canEdit;
+        }
         $runtime->listUrl = $this->buildListUrl($course, $session, $group, $request);
         [$runtime->nextLearningPathUrl, $runtime->nextLearningPathTitle] = $this->buildNextLearningPathInfo(
             $lp,

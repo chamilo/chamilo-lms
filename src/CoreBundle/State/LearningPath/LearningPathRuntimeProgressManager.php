@@ -158,6 +158,31 @@ final readonly class LearningPathRuntimeProgressManager
         $this->completeParentSections($items, $latestViews, $view);
         $latestViews = $this->indexLatestItemViews($view);
 
+        $progress = $this->calculateProgress($lp, $items, $latestViews);
+        $view->setProgress($progress);
+        $this->entityManager->flush();
+
+        if ($previousProgress < 100 && 100 === $progress && null !== $view->getIid()) {
+            $this->eventDispatcher->dispatch(
+                new LearningPathEndedEvent(['lp_view_id' => (int) $view->getIid()]),
+                Events::LP_ENDED,
+            );
+        }
+
+        return $progress;
+    }
+
+    /**
+     * @param array<int, CLpItem>     $items
+     * @param array<int, CLpItemView> $latestViews
+     */
+    public function calculateProgress(CLp $lp, array $items, array $latestViews): int
+    {
+        $scormProgress = $this->calculateScormProgress($lp, $items, $latestViews);
+        if (null !== $scormProgress) {
+            return $scormProgress;
+        }
+
         $totalItems = 0;
         $completedItems = 0;
         foreach ($items as $item) {
@@ -173,18 +198,8 @@ final readonly class LearningPathRuntimeProgressManager
         }
 
         $progress = $totalItems > 0 ? (int) round(($completedItems * 100) / $totalItems) : 0;
-        $progress = max(0, min(100, $progress));
-        $view->setProgress($progress);
-        $this->entityManager->flush();
 
-        if ($previousProgress < 100 && 100 === $progress && null !== $view->getIid()) {
-            $this->eventDispatcher->dispatch(
-                new LearningPathEndedEvent(['lp_view_id' => (int) $view->getIid()]),
-                Events::LP_ENDED,
-            );
-        }
-
-        return $progress;
+        return max(0, min(100, $progress));
     }
 
     /** @return array<int, CLpItem> */
@@ -387,6 +402,63 @@ final readonly class LearningPathRuntimeProgressManager
         }
 
         return $depth;
+    }
+
+    /**
+     * @param array<int, CLpItem>     $items
+     * @param array<int, CLpItemView> $latestViews
+     */
+    private function calculateScormProgress(CLp $lp, array $items, array $latestViews): ?int
+    {
+        if (CLp::SCORM_TYPE !== $lp->getLpType()) {
+            return null;
+        }
+
+        $scormItems = [];
+        $fallbackItems = [];
+        foreach ($items as $item) {
+            $itemType = strtolower(trim($item->getItemType()));
+            if (!\in_array($itemType, ['root', 'dir'], true)) {
+                $fallbackItems[] = $item;
+            }
+            if ('sco' === $itemType) {
+                $scormItems[] = $item;
+            }
+        }
+
+        $progressItems = [] !== $scormItems ? $scormItems : $fallbackItems;
+        if ([] === $progressItems) {
+            return null;
+        }
+
+        $hasProgressMeasure = false;
+        $progressSum = 0.0;
+        foreach ($progressItems as $item) {
+            $itemView = $latestViews[(int) $item->getIid()] ?? null;
+            if (!$itemView instanceof CLpItemView) {
+                continue;
+            }
+
+            $progressMeasure = $itemView->getProgress();
+            if (null !== $progressMeasure) {
+                $hasProgressMeasure = true;
+                $progressSum += max(0.0, min(1.0, $progressMeasure));
+
+                continue;
+            }
+
+            if ($this->isCompletedStatus($itemView->getStatus())) {
+                $progressSum += 1.0;
+            }
+        }
+
+        if (!$hasProgressMeasure) {
+            return null;
+        }
+
+        $progress = (int) round(($progressSum / \count($progressItems)) * 100);
+
+        return max(0, min(100, $progress));
     }
 
     private function isCompletedStatus(string $status): bool

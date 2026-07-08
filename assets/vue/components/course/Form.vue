@@ -94,9 +94,10 @@
                 <p class="text-base font-semibold text-gray-90">
                   {{ serviceOption.label }}
                 </p>
-                <p class="mt-1 line-clamp-3 text-sm text-gray-50">
-                  {{ serviceOption.description || t("Use the benefits granted by this service.") }}
-                </p>
+                <div
+                  class="buycourses-service-description mt-1 text-sm text-gray-50"
+                  v-html="getSafeServiceDescription(serviceOption.description)"
+                />
               </div>
               <span
                 v-if="selectedCourseOptionType === 'service' && selectedBuyCoursesServiceSaleId === serviceOption.serviceSaleId"
@@ -261,6 +262,7 @@ import roomService from "../../services/roomService"
 import baseService from "../../services/baseService"
 import CourseCategorySelect from "../coursecategory/CourseCategorySelect.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const props = defineProps({
   values: {
@@ -464,6 +466,16 @@ function formatQuota(value) {
   return `${quota} MB`
 }
 
+function getSafeServiceDescription(description) {
+  const html = String(description || t("Use the benefits granted by this service."))
+
+  return sanitizeHtml(html, {
+    ALLOWED_TAGS: ["p", "br", "ul", "ol", "li", "strong", "em", "b", "i"],
+    ALLOWED_ATTR: [],
+    ALLOW_DATA_ATTR: false,
+  })
+}
+
 function getDisabledReasonLabel(reason) {
   if (reason === "service_not_purchased") {
     return t("You need to buy this service before using these benefits.")
@@ -635,3 +647,31 @@ const goBack = () => {
   router.go(-1)
 }
 </script>
+
+<style scoped>
+.buycourses-service-description :deep(p) {
+  margin: 0 0 0.5rem;
+}
+
+.buycourses-service-description :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.buycourses-service-description :deep(ul),
+.buycourses-service-description :deep(ol) {
+  margin: 0.5rem 0;
+  padding-inline-start: 1.25rem;
+}
+
+.buycourses-service-description :deep(ul) {
+  list-style-type: disc;
+}
+
+.buycourses-service-description :deep(ol) {
+  list-style-type: decimal;
+}
+
+.buycourses-service-description :deep(li) {
+  margin: 0.125rem 0;
+}
+</style>

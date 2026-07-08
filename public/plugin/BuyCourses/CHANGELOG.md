@@ -1,6 +1,10 @@
 v7.7 - 2026-07-08
 ====
 
+Feature: paid course cards on `/courses` now show the linked service name to the current course manager, including sticky course cards, without exposing sale or payment identifiers.
+Fix: service descriptions on `/resources/courses/new` now preserve safe paragraph and list formatting after multilingual filtering, with a second DOMPurify sanitization before rendering.
+Fix: permanently deleting a paid course now marks its BuyCourses relation as deleted, clears frozen-enrollment remnants, and service course counts also ignore missing or soft-deleted courses.
+
 Feature: renewable services can now schedule renewal cancellation from My Services with a detailed confirmation modal, Stripe cancel-at-period-end support, PayPal recurring profile cancellation, CSRF protection, idempotent local state, and continued access until the paid period ends.
 Fix: Stripe service upgrades now reuse an existing pending Checkout Session, reconcile an already-paid pending upgrade before creating another charge, replace only expired sessions, and use Stripe idempotency keys so repeated confirmation requests cannot create duplicate Checkout Sessions.
 UI: reorganized the service create and edit forms into clear sections for general information, pricing, recurring billing, publication, media, granted benefits, AI features, and destructive actions without changing submitted field names or service business logic.

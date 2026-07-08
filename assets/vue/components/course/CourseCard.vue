@@ -205,6 +205,20 @@
     </Card>
     <!-- Overlays -->
     <div class="absolute inset-x-0 top-0 z-50 aspect-video pointer-events-none">
+      <!-- Paid service ribbon -->
+      <div
+        v-if="showBuyCoursesServiceBanner"
+        class="absolute bottom-3 left-0 inline-flex max-w-[80%] items-center gap-2 rounded-r-full bg-primary px-4 py-2 pr-5 text-sm font-semibold text-white shadow-lg ring-1 ring-white/30 backdrop-blur-sm"
+        :title="buyCoursesServiceName"
+        :aria-label="buyCoursesServiceName"
+      >
+        <span
+          class="mdi mdi-diamond-stone text-base"
+          aria-hidden="true"
+        />
+        <span class="truncate">{{ buyCoursesServiceName }}</span>
+      </div>
+
       <!-- Certificate badge -->
       <div
         v-if="ui.showCertificate && ui.certificateAvailable"
@@ -657,6 +671,12 @@ watch(showNotifications, (open) => {
 const { getOriginalLanguageName, getLanguageName } = useLocale()
 
 const courseTitle = computed(() => String(props.course?.title ?? ""))
+const buyCoursesServiceName = computed(() =>
+  String(props.course?.buyCoursesServiceName ?? props.course?.buy_courses_service_name ?? "").trim(),
+)
+const showBuyCoursesServiceBanner = computed(
+  () => Boolean(buyCoursesServiceName.value) && !platformConfigStore.isStudentViewActive,
+)
 
 function extractNumericId(value) {
   if (typeof value === "number" && Number.isFinite(value)) return value

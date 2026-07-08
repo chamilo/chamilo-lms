@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
@@ -19,6 +20,7 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+$aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
 
 api_protect_course_script();
 $origin = api_get_origin();
@@ -346,8 +348,7 @@ foreach ($aiProviders as $providerConfig) {
 }
 $aiLearningHelperEnabled = (
     'document' === $itemType
-    && 'true' === api_get_setting('ai_helpers.enable_ai_helpers')
-    && 'true' === api_get_course_setting('content_analyser')
+    && $aiFeatureAccessHelper->isFeatureEnabledForCourse('content_analyser', api_get_course_int_id())
     && $hasAiTextProvider
 );
 

@@ -30,6 +30,9 @@ use Chamilo\CoreBundle\Entity\ExtraField;
  */
 class BuyCoursesPlugin extends Plugin
 {
+    private string $lastServiceSaleError = '';
+    private bool $lastServiceSaleWasReused = false;
+
     public const TABLE_PAYPAL = 'plugin_buycourses_paypal_account';
     public const TABLE_CURRENCY = 'plugin_buycourses_currency';
     public const TABLE_ITEM = 'plugin_buycourses_item';
@@ -704,6 +707,7 @@ class BuyCoursesPlugin extends Plugin
             'stripe_price_id' => 'VARCHAR(255) DEFAULT NULL',
             'display_on_course_creation_page' => 'TINYINT(1) NOT NULL DEFAULT 0',
             'ai_course_features_json' => 'LONGTEXT DEFAULT NULL',
+            'upsale_from_id' => 'INT UNSIGNED DEFAULT NULL',
         ];
 
         foreach ($recurringServiceColumns as $field => $definition) {
@@ -731,6 +735,24 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         foreach ($recurringServiceSaleColumns as $field => $definition) {
+            $res = Database::query("SHOW COLUMNS FROM $serviceSaleTable WHERE Field = '$field'");
+            if (0 === Database::num_rows($res)) {
+                $res = Database::query("ALTER TABLE $serviceSaleTable ADD $field $definition");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
+        }
+
+        $upgradeServiceSaleColumns = [
+            'upgrade_from_sale_id' => 'INT UNSIGNED DEFAULT NULL',
+            'upgrade_credit_amount' => 'DECIMAL(10,2) DEFAULT NULL',
+            'recurring_amount' => 'DECIMAL(10,2) DEFAULT NULL',
+            'upgraded_to_sale_id' => 'INT UNSIGNED DEFAULT NULL',
+            'upgrade_completed_at' => 'DATETIME DEFAULT NULL',
+        ];
+
+        foreach ($upgradeServiceSaleColumns as $field => $definition) {
             $res = Database::query("SHOW COLUMNS FROM $serviceSaleTable WHERE Field = '$field'");
             if (0 === Database::num_rows($res)) {
                 $res = Database::query("ALTER TABLE $serviceSaleTable ADD $field $definition");
@@ -4288,6 +4310,7 @@ class BuyCoursesPlugin extends Plugin
                 'stripe_price_id' => $service['stripe_price_id'],
                 'display_on_course_creation_page' => $service['display_on_course_creation_page'],
                 'ai_course_features_json' => $service['ai_course_features_json'],
+                'upsale_from_id' => $service['upsale_from_id'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
                 'visibility' => $service['visibility'],
@@ -4392,6 +4415,7 @@ class BuyCoursesPlugin extends Plugin
                 'stripe_price_id' => (string) ($service['stripe_price_id'] ?? ''),
                 'display_on_course_creation_page' => !empty($service['display_on_course_creation_page']) ? 1 : 0,
                 'ai_course_features_json' => (string) ($service['ai_course_features_json'] ?? ''),
+                'upsale_from_id' => null,
                 'applies_to' => isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE,
                 'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
                 'visibility' => !empty($service['visibility']) ? 1 : 0,
@@ -4532,6 +4556,7 @@ class BuyCoursesPlugin extends Plugin
                 'stripe_price_id' => $service['stripe_price_id'],
                 'display_on_course_creation_page' => $service['display_on_course_creation_page'],
                 'ai_course_features_json' => $service['ai_course_features_json'],
+                'upsale_from_id' => $service['upsale_from_id'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
                 'visibility' => $service['visibility'],
@@ -4573,6 +4598,9 @@ class BuyCoursesPlugin extends Plugin
             'ai_course_features_json' => $this->buildAiCourseFeaturesJson(
                 $this->getAiCourseFeaturesFromServiceData($service)
             ),
+            'upsale_from_id' => isset($service['upsale_from_id']) && (int) $service['upsale_from_id'] > 0
+                ? (int) $service['upsale_from_id']
+                : null,
             'applies_to' => $appliesTo,
             'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
             'visibility' => $visibility,
@@ -4772,6 +4800,318 @@ class BuyCoursesPlugin extends Plugin
         return $services;
     }
 
+    public function getServiceUpsaleOptions(int $excludeServiceId = 0): array
+    {
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $conditions = [
+            'where' => [
+                'applies_to = ?' => self::SERVICE_TYPE_USER,
+            ],
+            'ORDER' => 'name ASC, id ASC',
+        ];
+
+        $rows = Database::select('id, name', $servicesTable, $conditions);
+        $options = [
+            0 => get_lang('None'),
+        ];
+
+        foreach ($rows as $row) {
+            $serviceId = (int) ($row['id'] ?? 0);
+            if ($serviceId <= 0 || $serviceId === $excludeServiceId) {
+                continue;
+            }
+
+            $options[$serviceId] = (string) ($row['name'] ?? '');
+        }
+
+        return $options;
+    }
+
+    public function getServiceUpsaleValidationError(array $serviceData, int $targetServiceId = 0): ?string
+    {
+        $sourceServiceId = isset($serviceData['upsale_from_id']) ? (int) $serviceData['upsale_from_id'] : 0;
+        if ($sourceServiceId <= 0) {
+            return null;
+        }
+
+        if ($targetServiceId > 0 && $sourceServiceId === $targetServiceId) {
+            return $this->get_lang('UpsaleCannotReferenceSameService');
+        }
+
+        $sourceService = $this->getService($sourceServiceId);
+        if (empty($sourceService)) {
+            return $this->get_lang('UpsaleSourceServiceNotFound');
+        }
+
+        $targetAppliesTo = isset($serviceData['applies_to'])
+            ? (int) $serviceData['applies_to']
+            : self::SERVICE_TYPE_NONE;
+        if (self::SERVICE_TYPE_USER !== $targetAppliesTo
+            || self::SERVICE_TYPE_USER !== (int) ($sourceService['applies_to'] ?? self::SERVICE_TYPE_NONE)
+        ) {
+            return $this->get_lang('UpsaleOnlyForUserServices');
+        }
+
+        $targetPrice = isset($serviceData['price']) ? (float) $serviceData['price'] : 0.0;
+        $sourcePrice = (float) ($sourceService['service_price'] ?? $sourceService['price_without_discount'] ?? $sourceService['price'] ?? 0.0);
+        if ($targetPrice <= $sourcePrice) {
+            return $this->get_lang('UpsaleTargetPriceMustBeHigher');
+        }
+
+        $sourceRenewable = !empty($sourceService['renewable']);
+        $targetRenewable = !empty($serviceData['renewable']);
+        if ($sourceRenewable || $targetRenewable) {
+            if ($sourceRenewable !== $targetRenewable) {
+                return $this->get_lang('UpsaleRenewableModeMustMatch');
+            }
+
+            $sourceDuration = (int) ($sourceService['duration_days'] ?? 0);
+            $targetDuration = isset($serviceData['duration_days']) ? (int) $serviceData['duration_days'] : 0;
+            if ($sourceDuration !== $targetDuration) {
+                return $this->get_lang('UpsaleRecurringDurationMustMatch');
+            }
+        }
+
+        if ($targetServiceId > 0 && $this->wouldCreateServiceUpsaleCycle($targetServiceId, $sourceServiceId)) {
+            return $this->get_lang('UpsaleCycleNotAllowed');
+        }
+
+        return null;
+    }
+
+    private function wouldCreateServiceUpsaleCycle(int $targetServiceId, int $sourceServiceId): bool
+    {
+        $visited = [];
+        $currentServiceId = $sourceServiceId;
+
+        while ($currentServiceId > 0 && !isset($visited[$currentServiceId])) {
+            if ($currentServiceId === $targetServiceId) {
+                return true;
+            }
+
+            $visited[$currentServiceId] = true;
+            $service = $this->getService($currentServiceId);
+            if (empty($service)) {
+                return false;
+            }
+
+            $currentServiceId = (int) ($service['upsale_from_id'] ?? 0);
+        }
+
+        return false;
+    }
+
+    public function getCurrentUserServiceUpgradeOffer(int $targetServiceId, ?array $coupon = null): ?array
+    {
+        return $this->getServiceUpgradeOffer($targetServiceId, api_get_user_id(), $coupon);
+    }
+
+    public function getServiceUpgradeOffer(int $targetServiceId, int $buyerId, ?array $coupon = null): ?array
+    {
+        if ($targetServiceId <= 0 || $buyerId <= 0) {
+            return null;
+        }
+
+        $targetService = $this->getService($targetServiceId, $coupon);
+        $sourceServiceId = (int) ($targetService['upsale_from_id'] ?? 0);
+        if ($sourceServiceId <= 0) {
+            return null;
+        }
+
+        $nodeType = (int) ($targetService['applies_to'] ?? 0);
+        if (self::SERVICE_TYPE_USER !== $nodeType) {
+            return null;
+        }
+
+        if ($this->hasBlockingActiveServiceSale($buyerId, $targetServiceId, $nodeType, $buyerId)) {
+            return null;
+        }
+
+        $sourceSale = $this->getBestActiveServiceSaleForUpgrade(
+            $buyerId,
+            $sourceServiceId,
+            $nodeType,
+            $buyerId
+        );
+        if (null === $sourceSale) {
+            return null;
+        }
+
+        $periodStart = strtotime((string) ($sourceSale['date_start'] ?? $sourceSale['buy_date'] ?? ''));
+        $periodEnd = strtotime((string) ($sourceSale['date_end'] ?? ''));
+        $now = time();
+
+        if (false === $periodStart || false === $periodEnd || $periodEnd <= $now) {
+            return null;
+        }
+
+        $periodStart = min($periodStart, $now);
+        $periodSeconds = max(1, $periodEnd - $periodStart);
+        $remainingSeconds = max(0, $periodEnd - $now);
+        $remainingRatio = min(1.0, max(0.0, $remainingSeconds / $periodSeconds));
+
+        $sourcePriceWithoutTax = $this->getServiceSaleCurrentPeriodPriceWithoutTax($sourceSale);
+        $targetFullPriceWithoutTax = max(0.0, (float) ($targetService['price'] ?? 0));
+        $isoCode = (string) ($targetService['iso_code'] ?? '');
+        $sourceRecurringGateway = strtolower(trim((string) ($sourceSale['recurring_gateway'] ?? '')));
+        $sourceRecurringProfileId = trim(
+            (string) ($sourceSale['gateway_subscription_id'] ?? $sourceSale['recurring_profile_id'] ?? '')
+        );
+        $sourceRecurringEnabled = self::SERVICE_RECURRING_PAYMENT_ENABLED
+            === (int) ($sourceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED)
+            && '' !== $sourceRecurringProfileId;
+
+        $targetChargeBaseWithoutTax = $sourceRecurringEnabled
+            ? round($targetFullPriceWithoutTax * $remainingRatio, 2)
+            : $targetFullPriceWithoutTax;
+        $creditAmount = round($sourcePriceWithoutTax * $remainingRatio, 2);
+        $upgradePriceWithoutTax = round(
+            max(0.0, $targetChargeBaseWithoutTax - $creditAmount),
+            2
+        );
+
+        $requiredPaymentType = null;
+        if ($sourceRecurringEnabled) {
+            $requiredPaymentType = match ($sourceRecurringGateway) {
+                'stripe' => self::PAYMENT_TYPE_STRIPE,
+                'paypal' => self::PAYMENT_TYPE_PAYPAL,
+                default => null,
+            };
+        }
+
+        return [
+            'source_sale_id' => (int) $sourceSale['id'],
+            'source_service_id' => (int) ($sourceSale['service_id'] ?? 0),
+            'source_service_name' => (string) ($sourceSale['service']['name'] ?? $sourceSale['name'] ?? ''),
+            'source_date_end' => (string) ($sourceSale['date_end'] ?? ''),
+            'source_recurring_payment' => (int) ($sourceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED),
+            'source_recurring_gateway' => $sourceRecurringGateway,
+            'source_recurring_profile_id' => $sourceRecurringProfileId,
+            'source_recurring_enabled' => $sourceRecurringEnabled,
+            'required_payment_type' => $requiredPaymentType,
+            'remaining_days' => max(1, (int) ceil($remainingSeconds / 86400)),
+            'remaining_ratio' => $remainingRatio,
+            'credit_amount' => $creditAmount,
+            'credit_amount_formatted' => $this->getPriceWithCurrencyFromIsoCode($creditAmount, $isoCode),
+            'target_full_price_without_tax' => $targetFullPriceWithoutTax,
+            'target_full_price_without_tax_formatted' => $this->getPriceWithCurrencyFromIsoCode(
+                $targetFullPriceWithoutTax,
+                $isoCode
+            ),
+            'target_price_without_tax' => $targetChargeBaseWithoutTax,
+            'target_price_without_tax_formatted' => $this->getPriceWithCurrencyFromIsoCode(
+                $targetChargeBaseWithoutTax,
+                $isoCode
+            ),
+            'upgrade_price_without_tax' => $upgradePriceWithoutTax,
+            'upgrade_price_without_tax_formatted' => $this->getPriceWithCurrencyFromIsoCode(
+                $upgradePriceWithoutTax,
+                $isoCode
+            ),
+            'purchasable' => $upgradePriceWithoutTax > 0
+                && (!$sourceRecurringEnabled || null !== $requiredPaymentType),
+        ];
+    }
+
+    private function getBestActiveServiceSaleForUpgrade(
+        int $buyerId,
+        int $serviceId,
+        int $nodeType,
+        int $nodeId
+    ): ?array {
+        $sales = $this->getServiceSales($buyerId, self::SERVICE_STATUS_COMPLETED, $nodeType, $nodeId);
+        $bestSale = null;
+        $bestDateEnd = 0;
+
+        foreach ($sales as $sale) {
+            if ((int) ($sale['service_id'] ?? 0) !== $serviceId) {
+                continue;
+            }
+
+            if (!empty($sale['upgraded_to_sale_id'])) {
+                continue;
+            }
+
+            if (!$this->isServiceSaleBlockingForRepurchase($sale)) {
+                continue;
+            }
+
+            $dateEnd = strtotime((string) ($sale['date_end'] ?? '')) ?: 0;
+            if ($dateEnd > $bestDateEnd) {
+                $bestDateEnd = $dateEnd;
+                $bestSale = $sale;
+            }
+        }
+
+        return is_array($bestSale) ? $bestSale : null;
+    }
+
+    private function getServiceSaleCurrentPeriodPriceWithoutTax(array $serviceSale): float
+    {
+        $priceWithoutTax = null !== ($serviceSale['price_without_tax'] ?? null)
+            ? (float) $serviceSale['price_without_tax']
+            : max(
+                0.0,
+                (float) ($serviceSale['price'] ?? 0) - (float) ($serviceSale['tax_amount'] ?? 0)
+            );
+
+        if (empty($serviceSale['upgrade_from_sale_id'])) {
+            return max(0.0, $priceWithoutTax);
+        }
+
+        $recurringAmount = (float) ($serviceSale['recurring_amount'] ?? 0);
+        if ($recurringAmount > 0) {
+            $taxPerc = null !== ($serviceSale['tax_perc'] ?? null)
+                ? max(0.0, (float) $serviceSale['tax_perc'])
+                : 0.0;
+
+            return $taxPerc > 0
+                ? max(0.0, round($recurringAmount / (1 + ($taxPerc / 100)), 2))
+                : max(0.0, $recurringAmount);
+        }
+
+        return max(
+            0.0,
+            $priceWithoutTax + (float) ($serviceSale['upgrade_credit_amount'] ?? 0)
+        );
+    }
+
+    public function applyServiceUpgradeOfferToPricing(array &$service, ?array $upgradeOffer): void
+    {
+        if (null === $upgradeOffer) {
+            return;
+        }
+
+        $priceWithoutTax = max(0.0, (float) ($upgradeOffer['upgrade_price_without_tax'] ?? 0));
+        $service['upgrade_offer'] = $upgradeOffer;
+        $service['price'] = $priceWithoutTax;
+        $service['price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
+            $priceWithoutTax,
+            (string) ($service['iso_code'] ?? '')
+        );
+
+        $taxPerc = null !== ($service['tax_perc_show'] ?? null)
+            ? (float) $service['tax_perc_show']
+            : 0.0;
+        $taxAmount = !empty($service['tax_enable'])
+            ? round($priceWithoutTax * $taxPerc / 100, 2)
+            : 0.0;
+        $totalPrice = $priceWithoutTax + $taxAmount;
+
+        $service['tax_amount'] = $taxAmount;
+        $service['tax_amount_formatted'] = api_number_format($taxAmount, 2);
+        $service['total_price'] = $totalPrice;
+        $service['total_price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
+            $totalPrice,
+            (string) ($service['iso_code'] ?? '')
+        );
+    }
+
+    public function getLastServiceSaleError(): string
+    {
+        return $this->lastServiceSaleError;
+    }
+
     /**
      * List additional services.
      *
@@ -4891,6 +5231,62 @@ class BuyCoursesPlugin extends Plugin
         return false;
     }
 
+    private function getPendingServiceUpgradeSale(
+        int $buyerId,
+        int $targetServiceId,
+        int $sourceServiceSaleId,
+        int $nodeType,
+        int $nodeId
+    ): array {
+        if ($buyerId <= 0
+            || $targetServiceId <= 0
+            || $sourceServiceSaleId <= 0
+            || $nodeType <= 0
+            || $nodeId <= 0
+        ) {
+            return [];
+        }
+
+        $pendingSale = Database::select(
+            'MAX(id) AS id',
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            [
+                'WHERE' => [
+                    'buyer_id = ? AND service_id = ? AND upgrade_from_sale_id = ? AND node_type = ? AND node_id = ? AND status = ?' => [
+                        $buyerId,
+                        $targetServiceId,
+                        $sourceServiceSaleId,
+                        $nodeType,
+                        $nodeId,
+                        self::SERVICE_STATUS_PENDING,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if (empty($pendingSale['id'])) {
+            return [];
+        }
+
+        $serviceSale = $this->getServiceSale((int) $pendingSale['id']);
+        if (empty($serviceSale)) {
+            return [];
+        }
+
+        $dateEnd = trim((string) ($serviceSale['date_end'] ?? ''));
+        if ('' !== $dateEnd && strtotime($dateEnd) < time()) {
+            return [];
+        }
+
+        return $serviceSale;
+    }
+
+    public function wasLastServiceSaleReused(): bool
+    {
+        return $this->lastServiceSaleWasReused;
+    }
+
     /**
      * List services sales.
      *
@@ -4974,7 +5370,7 @@ class BuyCoursesPlugin extends Plugin
         $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id ";
 
         $servicesSale = Database::select(
-            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.renewable, s.total_charges, s.allow_trial, s.trial_period, s.trial_frequency, s.trial_total_charges, s.max_subscribers, s.subscription_behavior_json, s.stripe_price_id, s.applies_to, s.owner_id, s.visibility, s.image',
+            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.renewable, s.total_charges, s.allow_trial, s.trial_period, s.trial_frequency, s.trial_total_charges, s.max_subscribers, s.subscription_behavior_json, s.stripe_price_id, s.upsale_from_id, s.applies_to, s.owner_id, s.visibility, s.image',
             "$servicesSaleTable ss $innerJoins",
             $conditions,
             'first'
@@ -5014,6 +5410,7 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['service']['max_subscribers'] = (int) ($servicesSale['max_subscribers'] ?? 0);
         $servicesSale['service']['subscription_behavior_json'] = $servicesSale['subscription_behavior_json'] ?? '';
         $servicesSale['service']['stripe_price_id'] = $servicesSale['stripe_price_id'] ?? '';
+        $servicesSale['service']['upsale_from_id'] = isset($servicesSale['upsale_from_id']) ? (int) $servicesSale['upsale_from_id'] : null;
         $servicesSale['service']['applies_to'] = $servicesSale['applies_to'];
         $servicesSale['service']['owner']['id'] = $servicesSale['owner_id'];
         $servicesSale['service']['owner']['name'] = api_get_person_name($owner['firstname'], $owner['lastname']);
@@ -5045,7 +5442,13 @@ class BuyCoursesPlugin extends Plugin
         $taxPerc = $serviceSale['tax_perc'] ?? null;
         $taxAmount = (float) ($serviceSale['tax_amount'] ?? 0);
         $discountAmount = (float) ($serviceSale['discount_amount'] ?? 0);
+        $upgradeCreditAmount = (float) ($serviceSale['upgrade_credit_amount'] ?? 0);
+        $recurringAmount = (float) ($serviceSale['recurring_amount'] ?? 0);
+        $upgradeFromSaleId = (int) ($serviceSale['upgrade_from_sale_id'] ?? 0);
         $globalParameters = $this->getGlobalParameters();
+
+        $sourceSale = $upgradeFromSaleId > 0 ? $this->getServiceSale($upgradeFromSaleId) : [];
+        $targetPriceWithoutTax = $priceWithoutTax + $upgradeCreditAmount;
 
         return [
             'price_formatted' => $this->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode),
@@ -5057,6 +5460,17 @@ class BuyCoursesPlugin extends Plugin
             'has_coupon' => $discountAmount > 0,
             'discount_amount_formatted' => $discountAmount > 0
                 ? $this->getPriceWithCurrencyFromIsoCode($discountAmount, $isoCode)
+                : null,
+            'is_upgrade' => $upgradeFromSaleId > 0,
+            'upgrade_source_service_name' => (string) ($sourceSale['service']['name'] ?? ''),
+            'upgrade_credit_amount_formatted' => $upgradeCreditAmount > 0
+                ? $this->getPriceWithCurrencyFromIsoCode($upgradeCreditAmount, $isoCode)
+                : null,
+            'upgrade_target_price_formatted' => $upgradeFromSaleId > 0
+                ? $this->getPriceWithCurrencyFromIsoCode($targetPriceWithoutTax, $isoCode)
+                : null,
+            'recurring_amount_formatted' => $recurringAmount > 0
+                ? $this->getPriceWithCurrencyFromIsoCode($recurringAmount, $isoCode)
                 : null,
         ];
     }
@@ -5148,6 +5562,7 @@ class BuyCoursesPlugin extends Plugin
             'gateway_checkout_session_id',
             'gateway_subscription_id',
             'gateway_last_event_id',
+            'gateway_transaction_id',
             'recurring_profile_id',
             'recurring_payment',
             'next_charge_date',
@@ -5276,10 +5691,7 @@ class BuyCoursesPlugin extends Plugin
 
         $this->updateServiceSaleGatewayData($serviceSaleId, $metadata);
 
-        $completed = $this->completeServiceSale($serviceSaleId);
-        $this->applyServiceBenefitsFromSale($serviceSaleId);
-
-        return $completed;
+        return $this->completeServiceSale($serviceSaleId);
     }
 
     /**
@@ -5319,23 +5731,485 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function completeServiceSale(int $serviceSaleId)
+    public function completeServiceSale(int $serviceSaleId): bool
     {
+        $this->lastServiceSaleError = '';
         $serviceSale = $this->getServiceSale($serviceSaleId);
-        if (self::SERVICE_STATUS_COMPLETED == $serviceSale['status']) {
+
+        if (empty($serviceSale)) {
+            $this->lastServiceSaleError = $this->get_lang('ServiceSaleNotFound');
+
+            return false;
+        }
+
+        $isUpgrade = (int) ($serviceSale['upgrade_from_sale_id'] ?? 0) > 0;
+        $upgradeAlreadyCompleted = !empty($serviceSale['upgrade_completed_at']);
+
+        if (self::SERVICE_STATUS_COMPLETED === (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING)
+            && (!$isUpgrade || $upgradeAlreadyCompleted)
+        ) {
             return true;
         }
 
-        $this->updateServiceSaleStatus(
-            $serviceSaleId,
-            self::SERVICE_STATUS_COMPLETED
-        );
+        if ($isUpgrade) {
+            if (!$this->finalizeServiceUpgrade($serviceSaleId, $serviceSale)) {
+                return false;
+            }
+        } else {
+            $this->updateServiceSaleStatus(
+                $serviceSaleId,
+                self::SERVICE_STATUS_COMPLETED
+            );
+        }
 
         if ('true' === $this->get('invoicing_enable')) {
             $this->setInvoice($serviceSaleId, 1);
         }
 
         $this->applyServiceBenefitsFromSale($serviceSaleId);
+
+        if ($isUpgrade) {
+            $this->refreshAllBenefitPayloadsFromSales((int) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0));
+        }
+
+        return true;
+    }
+
+    private function finalizeServiceUpgrade(int $newServiceSaleId, array $newServiceSale): bool
+    {
+        $sourceServiceSaleId = (int) ($newServiceSale['upgrade_from_sale_id'] ?? 0);
+        if ($sourceServiceSaleId <= 0) {
+            return true;
+        }
+
+        $sourceServiceSale = $this->getServiceSale($sourceServiceSaleId);
+        if (empty($sourceServiceSale)) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradeSourceNoLongerAvailable');
+
+            return false;
+        }
+
+        $newBuyerId = (int) ($newServiceSale['buyer']['id'] ?? $newServiceSale['buyer_id'] ?? 0);
+        $sourceBuyerId = (int) ($sourceServiceSale['buyer']['id'] ?? $sourceServiceSale['buyer_id'] ?? 0);
+        $sourceServiceId = (int) ($sourceServiceSale['service_id'] ?? $sourceServiceSale['service']['id'] ?? 0);
+        $targetServiceId = (int) ($newServiceSale['service_id'] ?? $newServiceSale['service']['id'] ?? 0);
+        $targetSourceServiceId = (int) ($newServiceSale['service']['upsale_from_id'] ?? 0);
+        $alreadyUpgradedTo = (int) ($sourceServiceSale['upgraded_to_sale_id'] ?? 0);
+
+        if ($newBuyerId <= 0
+            || $newBuyerId !== $sourceBuyerId
+            || $sourceServiceId <= 0
+            || $sourceServiceId !== $targetSourceServiceId
+            || $targetServiceId <= 0
+            || ($alreadyUpgradedTo > 0 && $alreadyUpgradedTo !== $newServiceSaleId)
+        ) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradeSourceNoLongerAvailable');
+
+            return false;
+        }
+
+        if ($alreadyUpgradedTo === $newServiceSaleId && !empty($newServiceSale['upgrade_completed_at'])) {
+            return true;
+        }
+
+        if (self::SERVICE_STATUS_COMPLETED !== (int) ($sourceServiceSale['status'] ?? self::SERVICE_STATUS_PENDING)
+            || strtotime((string) ($sourceServiceSale['date_end'] ?? '')) < time()
+        ) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradeSourceNoLongerAvailable');
+
+            return false;
+        }
+
+        $recurringTransition = $this->transitionRecurringProfileForUpgrade(
+            $sourceServiceSale,
+            $newServiceSale
+        );
+
+        if (false === $recurringTransition) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradeRecurringTransitionFailed');
+
+            return false;
+        }
+
+        $now = api_get_utc_datetime();
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $connection = Database::getManager()->getConnection();
+
+        try {
+            $connection->beginTransaction();
+
+            $newServiceSaleForMigration = array_merge($newServiceSale, $recurringTransition);
+
+            if (!$this->migrateSubscriptionCoursesForUpgrade(
+                $sourceServiceSale,
+                $newServiceSaleForMigration,
+                $now
+            )) {
+                throw new RuntimeException('Could not migrate BuyCourses course subscriptions.');
+            }
+
+            $newSaleValues = [
+                'status' => self::SERVICE_STATUS_COMPLETED,
+                'upgrade_completed_at' => $now,
+            ];
+
+            foreach ($recurringTransition as $field => $value) {
+                $newSaleValues[$field] = $value;
+            }
+
+            if (false === Database::update(
+                $serviceSaleTable,
+                $newSaleValues,
+                ['id = ?' => $newServiceSaleId]
+            )) {
+                throw new RuntimeException('Could not complete the upgraded service sale.');
+            }
+
+            $sourceSaleValues = [
+                'status' => self::SERVICE_STATUS_CANCELLED,
+                'date_end' => $now,
+                'cancelled_at' => $now,
+                'upgraded_to_sale_id' => $newServiceSaleId,
+            ];
+
+            if ([] !== $recurringTransition) {
+                $sourceSaleValues['recurring_payment'] = self::SERVICE_RECURRING_PAYMENT_CANCELLED;
+                $sourceSaleValues['recurring_profile_id'] = null;
+                $sourceSaleValues['gateway_subscription_id'] = null;
+                $sourceSaleValues['next_charge_date'] = null;
+            }
+
+            if (false === Database::update(
+                $serviceSaleTable,
+                $sourceSaleValues,
+                ['id = ?' => $sourceServiceSaleId]
+            )) {
+                throw new RuntimeException('Could not close the previous service sale.');
+            }
+
+            $connection->commit();
+        } catch (Throwable $exception) {
+            if ($connection->getTransactionNestingLevel() > 0) {
+                $connection->rollBack();
+            }
+
+            error_log(
+                '[BuyCourses][Upgrade] Upgrade completion failed. new_sale_id='.
+                $newServiceSaleId.
+                ' source_sale_id='.
+                $sourceServiceSaleId.
+                ' error='.
+                $exception->getMessage()
+            );
+            $this->lastServiceSaleError = $this->get_lang('UpgradeCouldNotBeCompleted');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function transitionRecurringProfileForUpgrade(array $sourceServiceSale, array $newServiceSale): array|false
+    {
+        $profileId = trim((string) (
+            $sourceServiceSale['gateway_subscription_id']
+            ?? $sourceServiceSale['recurring_profile_id']
+            ?? ''
+        ));
+        $isRecurring = self::SERVICE_RECURRING_PAYMENT_ENABLED
+            === (int) ($sourceServiceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED)
+            && '' !== $profileId;
+
+        if (!$isRecurring) {
+            return [];
+        }
+
+        $gateway = strtolower(trim((string) ($sourceServiceSale['recurring_gateway'] ?? '')));
+
+        try {
+            return match ($gateway) {
+                'stripe' => $this->transitionStripeRecurringProfileForUpgrade(
+                    $profileId,
+                    $sourceServiceSale,
+                    $newServiceSale
+                ),
+                'paypal' => $this->transitionPayPalRecurringProfileForUpgrade(
+                    $profileId,
+                    $sourceServiceSale,
+                    $newServiceSale
+                ),
+                default => false,
+            };
+        } catch (Throwable $exception) {
+            error_log(
+                '[BuyCourses][Upgrade] Recurring profile transition failed. gateway='.
+                $gateway.
+                ' source_sale_id='.
+                (int) ($sourceServiceSale['id'] ?? 0).
+                ' error='.
+                $exception->getMessage()
+            );
+
+            return false;
+        }
+    }
+
+    private function transitionStripeRecurringProfileForUpgrade(
+        string $subscriptionId,
+        array $sourceServiceSale,
+        array $newServiceSale
+    ): array|false {
+        $stripeParams = $this->getStripeParams();
+        $secretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+        $targetService = $newServiceSale['service'] ?? [];
+        $recurringAmount = (float) ($newServiceSale['recurring_amount'] ?? 0);
+        $currency = $this->getCurrency((int) ($newServiceSale['currency_id'] ?? 0));
+        $currencyCode = strtolower(trim((string) ($currency['iso_code'] ?? '')));
+
+        if ('' === $secretKey || $recurringAmount <= 0 || '' === $currencyCode) {
+            return false;
+        }
+
+        \Stripe\Stripe::setApiKey($secretKey);
+        \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+
+        $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+        $subscriptionItem = $subscription->items->data[0] ?? null;
+        if (null === $subscriptionItem || empty($subscriptionItem->id)) {
+            return false;
+        }
+
+        $priceId = trim((string) ($targetService['stripe_price_id'] ?? ''));
+        if ('' === $priceId) {
+            $product = \Stripe\Product::create([
+                'name' => (string) ($targetService['name'] ?? 'BuyCourses service'),
+                'metadata' => [
+                    'source' => 'BuyCourses',
+                    'service_id' => (string) ($newServiceSale['service_id'] ?? 0),
+                ],
+            ]);
+            $interval = $this->getStripeRecurringInterval((int) ($targetService['duration_days'] ?? 0));
+            $price = \Stripe\Price::create([
+                'unit_amount' => (int) round($recurringAmount * 100),
+                'currency' => $currencyCode,
+                'product' => (string) $product->id,
+                'recurring' => $interval,
+                'metadata' => [
+                    'source' => 'BuyCourses',
+                    'service_id' => (string) ($newServiceSale['service_id'] ?? 0),
+                ],
+            ]);
+            $priceId = (string) $price->id;
+        }
+
+        $subscription = \Stripe\Subscription::update($subscriptionId, [
+            'items' => [[
+                'id' => (string) $subscriptionItem->id,
+                'price' => $priceId,
+            ]],
+            'proration_behavior' => 'none',
+            'metadata' => [
+                'source' => 'BuyCourses',
+                'sale_type' => 'service',
+                'service_sale_id' => (string) ($newServiceSale['id'] ?? 0),
+                'service_id' => (string) ($newServiceSale['service_id'] ?? 0),
+                'buyer_id' => (string) ($newServiceSale['buyer']['id'] ?? $newServiceSale['buyer_id'] ?? 0),
+            ],
+        ]);
+
+        $nextChargeDate = !empty($subscription->current_period_end)
+            ? gmdate('Y-m-d H:i:s', (int) $subscription->current_period_end)
+            : (string) ($sourceServiceSale['date_end'] ?? '');
+
+        return [
+            'recurring_gateway' => 'stripe',
+            'recurring_payment' => self::SERVICE_RECURRING_PAYMENT_ENABLED,
+            'recurring_profile_id' => $subscriptionId,
+            'gateway_subscription_id' => $subscriptionId,
+            'gateway_customer_id' => (string) ($subscription->customer ?? $sourceServiceSale['gateway_customer_id'] ?? ''),
+            'next_charge_date' => $nextChargeDate,
+            'date_end' => $nextChargeDate,
+        ];
+    }
+
+    private function transitionPayPalRecurringProfileForUpgrade(
+        string $profileId,
+        array $sourceServiceSale,
+        array $newServiceSale
+    ): array|false {
+        $paypalParams = $this->getPaypalParams();
+        $paypalUsername = trim((string) ($paypalParams['username'] ?? ''));
+        $paypalPassword = trim((string) ($paypalParams['password'] ?? ''));
+        $paypalSignature = trim((string) ($paypalParams['signature'] ?? ''));
+        $isSandbox = 1 === (int) ($paypalParams['sandbox'] ?? 0);
+        $recurringAmount = (float) ($newServiceSale['recurring_amount'] ?? 0);
+        $currency = $this->getCurrency((int) ($newServiceSale['currency_id'] ?? 0));
+        $currencyCode = strtoupper(trim((string) ($currency['iso_code'] ?? '')));
+
+        if ('' === $paypalUsername
+            || '' === $paypalPassword
+            || '' === $paypalSignature
+            || $recurringAmount <= 0
+            || '' === $currencyCode
+        ) {
+            return false;
+        }
+
+        require_once __DIR__.'/paypalfunctions.php';
+
+        global $API_Endpoint, $API_UserName, $API_Password, $API_Signature;
+        $API_UserName = $paypalUsername;
+        $API_Password = $paypalPassword;
+        $API_Signature = $paypalSignature;
+        $API_Endpoint = $isSandbox
+            ? 'https://api-3t.sandbox.paypal.com/nvp'
+            : 'https://api-3t.paypal.com/nvp';
+
+        $response = UpdateRecurringPaymentsProfile(
+            $profileId,
+            $recurringAmount,
+            $currencyCode,
+            (string) ($newServiceSale['service']['name'] ?? 'BuyCourses service')
+        );
+        $ack = strtoupper((string) ($response['ACK'] ?? ''));
+
+        if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
+            error_log(
+                '[BuyCourses][Upgrade] PayPal recurring profile update failed. profile_id='.
+                $profileId.
+                ' code='.
+                (string) ($response['L_ERRORCODE0'] ?? 'unknown').
+                ' message='.
+                (string) ($response['L_LONGMESSAGE0'] ?? 'unknown')
+            );
+
+            return false;
+        }
+
+        $nextChargeDate = (string) ($sourceServiceSale['date_end'] ?? '');
+
+        return [
+            'recurring_gateway' => 'paypal',
+            'recurring_payment' => self::SERVICE_RECURRING_PAYMENT_ENABLED,
+            'recurring_profile_id' => $profileId,
+            'gateway_subscription_id' => $profileId,
+            'next_charge_date' => $nextChargeDate,
+            'date_end' => $nextChargeDate,
+        ];
+    }
+
+    private function getStripeRecurringInterval(int $durationDays): array
+    {
+        $durationDays = max(1, $durationDays);
+
+        if ($durationDays >= 360) {
+            return [
+                'interval' => 'year',
+                'interval_count' => max(1, (int) round($durationDays / 365)),
+            ];
+        }
+
+        if ($durationDays >= 28) {
+            return [
+                'interval' => 'month',
+                'interval_count' => max(1, (int) round($durationDays / 30)),
+            ];
+        }
+
+        if ($durationDays >= 7) {
+            return [
+                'interval' => 'week',
+                'interval_count' => max(1, (int) round($durationDays / 7)),
+            ];
+        }
+
+        return [
+            'interval' => 'day',
+            'interval_count' => $durationDays,
+        ];
+    }
+
+    private function migrateSubscriptionCoursesForUpgrade(
+        array $sourceServiceSale,
+        array $newServiceSale,
+        string $upgradedAt
+    ): bool {
+        if (!$this->hasSubscriptionCourseInfrastructure()) {
+            return true;
+        }
+
+        $sourceServiceSaleId = (int) ($sourceServiceSale['id'] ?? 0);
+        $newServiceSaleId = (int) ($newServiceSale['id'] ?? 0);
+        $newServiceId = (int) ($newServiceSale['service_id'] ?? $newServiceSale['service']['id'] ?? 0);
+        if ($sourceServiceSaleId <= 0 || $newServiceSaleId <= 0 || $newServiceId <= 0) {
+            return false;
+        }
+
+        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $rows = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'service_sale_id = ?' => $sourceServiceSaleId,
+                ],
+            ]
+        );
+        $benefits = $this->getServiceCourseCreationBenefitValues($newServiceId);
+        $aiFeatures = $this->normalizeAiCourseFeatures($benefits['aiFeatures'] ?? []);
+
+        foreach ($rows as $row) {
+            $rowId = (int) ($row['id'] ?? 0);
+            $courseId = (int) ($row['course_id'] ?? 0);
+            if ($rowId <= 0 || $courseId <= 0) {
+                continue;
+            }
+
+            $context = json_decode((string) ($row['context_json'] ?? ''), true);
+            if (!is_array($context)) {
+                $context = [];
+            }
+
+            $context = array_merge($context, [
+                'service_sale_id' => $newServiceSaleId,
+                'service_id' => $newServiceId,
+                'service_name' => (string) ($newServiceSale['service']['name'] ?? ''),
+                'date_start' => (string) ($newServiceSale['date_start'] ?? ''),
+                'date_end' => (string) ($newServiceSale['date_end'] ?? ''),
+                'recurring_profile_id' => (string) (
+                    $newServiceSale['recurring_profile_id']
+                    ?? $sourceServiceSale['recurring_profile_id']
+                    ?? ''
+                ),
+                'max_courses_with_benefits' => max(0, (int) ($benefits['maxCourses'] ?? 0)),
+                'hosting_limit' => max(0, (int) ($benefits['hostingLimit'] ?? 0)),
+                'document_quota_mb' => max(0, (int) ($benefits['documentQuotaMb'] ?? 0)),
+                'ai_features' => $aiFeatures,
+                'status' => 'active',
+                'upgraded_from_service_sale_id' => $sourceServiceSaleId,
+                'upgraded_at' => $upgradedAt,
+            ]);
+
+            if (false === Database::update(
+                $table,
+                [
+                    'service_sale_id' => $newServiceSaleId,
+                    'service_id' => $newServiceId,
+                    'status' => 'active',
+                    'context_json' => json_encode(
+                        $context,
+                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                    ),
+                    'updated_at' => $upgradedAt,
+                    'last_action' => 'upgraded',
+                ],
+                ['id = ?' => $rowId]
+            )) {
+                return false;
+            }
+
+            $this->applyAiCourseFeatureSettingsToCourse($courseId, $aiFeatures);
+        }
 
         return true;
     }
@@ -5359,49 +6233,58 @@ class BuyCoursesPlugin extends Plugin
     ) {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
         $whereConditions = [
-            's.visibility <> ? ' => 0,
+            's.visibility <> 0',
         ];
 
         if (!empty($name)) {
-            $whereConditions['AND s.name LIKE %?%'] = $name;
+            $safeName = Database::escape_string($name);
+            $whereConditions[] = "s.name LIKE '%$safeName%'";
         }
 
-        if (!empty($min)) {
-            $whereConditions['AND s.price >= ?'] = $min;
+        if ($min > 0) {
+            $whereConditions[] = 's.price >= '.(int) $min;
         }
 
-        if (!empty($max)) {
-            $whereConditions['AND s.price <= ?'] = $max;
+        if ($max > 0) {
+            $whereConditions[] = 's.price <= '.(int) $max;
         }
 
-        if ('' == !$appliesTo) {
-            $whereConditions['AND s.applies_to = ?'] = $appliesTo;
+        if ('' !== (string) $appliesTo) {
+            $whereConditions[] = 's.applies_to = '.(int) $appliesTo;
         }
 
         if ('monthly' === $billingCycle) {
-            $whereConditions['AND s.duration_days > ?'] = 0;
-            $whereConditions['AND s.duration_days <= ?'] = 31;
+            $whereConditions[] = 's.duration_days > 0';
+            $whereConditions[] = 's.duration_days <= 31';
         } elseif ('yearly' === $billingCycle) {
-            $whereConditions['AND s.duration_days >= ?'] = 365;
+            $whereConditions[] = 's.duration_days >= 365';
         }
 
-        $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
-        $return = Database::select(
-            's.*',
-            "$servicesTable s $innerJoins",
-            ['WHERE' => $whereConditions, 'limit' => "$start, $end"],
-            $typeResult
-        );
+        $from = "$servicesTable s INNER JOIN $userTable u ON s.owner_id = u.id";
+        $where = implode(' AND ', $whereConditions);
 
         if ('count' === $typeResult) {
-            return $return;
+            $result = Database::query("SELECT COUNT(*) AS total FROM $from WHERE $where");
+            $row = Database::fetch_assoc($result);
+
+            return (int) ($row['total'] ?? 0);
         }
 
+        $start = max(0, $start);
+        $end = max(1, $end);
+        $result = Database::query(
+            "SELECT s.id FROM $from WHERE $where ORDER BY s.id ASC LIMIT $start, $end"
+        );
+
         $services = [];
-        foreach ($return as $index => $service) {
-            $services[$index] = $this->getService($service['id']);
+        while ($service = Database::fetch_assoc($result)) {
+            $serviceId = (int) ($service['id'] ?? 0);
+            if ($serviceId <= 0) {
+                continue;
+            }
+
+            $services[] = $this->getService($serviceId);
         }
 
         return $services;
@@ -6470,10 +7353,15 @@ class BuyCoursesPlugin extends Plugin
 
     public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null, array $vatBuyerData = []): int|bool
     {
+        $this->lastServiceSaleError = '';
+        $this->lastServiceSaleWasReused = false;
+
         if (!in_array(
             $paymentType,
             [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI, self::PAYMENT_TYPE_STRIPE]
         )) {
+            $this->lastServiceSaleError = $this->get_lang('InvalidPaymentMethod');
+
             return false;
         }
 
@@ -6481,6 +7369,8 @@ class BuyCoursesPlugin extends Plugin
         $service = $this->getService($serviceId);
 
         if (empty($service)) {
+            $this->lastServiceSaleError = $this->get_lang('ServiceNotFound');
+
             return false;
         }
 
@@ -6488,37 +7378,115 @@ class BuyCoursesPlugin extends Plugin
         $nodeId = (int) $infoSelect;
 
         if ($this->hasBlockingActiveServiceSale($userId, $serviceId, $nodeType, $nodeId)) {
+            $this->lastServiceSaleError = get_lang('Active service');
+
             return false;
         }
 
         $coupon = null;
-
-        if (null != $couponId) {
+        if (null !== $couponId) {
             $coupon = $this->getCouponService($couponId, $serviceId);
         }
 
-        $couponDiscount = 0;
-        $priceWithoutDiscount = 0;
-        if (null != $coupon) {
-            if (self::COUPON_DISCOUNT_TYPE_AMOUNT == $coupon['discount_type']) {
-                $couponDiscount = $coupon['discount_amount'];
-            } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE == $coupon['discount_type']) {
-                $couponDiscount = ($service['price'] * $coupon['discount_amount']) / 100;
+        $basePrice = max(0.0, (float) ($service['price'] ?? 0));
+        $couponDiscount = 0.0;
+        $priceWithoutDiscount = 0.0;
+
+        if (null !== $coupon) {
+            if (self::COUPON_DISCOUNT_TYPE_AMOUNT === (int) ($coupon['discount_type'] ?? 0)) {
+                $couponDiscount = (float) ($coupon['discount_amount'] ?? 0);
+            } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE === (int) ($coupon['discount_type'] ?? 0)) {
+                $couponDiscount = ($basePrice * (float) ($coupon['discount_amount'] ?? 0)) / 100;
             }
-            $priceWithoutDiscount = $service['price'];
+
+            $couponDiscount = min($basePrice, max(0.0, round($couponDiscount, 2)));
+            $priceWithoutDiscount = $basePrice;
         }
-        $service['price'] -= $couponDiscount;
+
+        $recurringPriceWithoutTax = round(max(0.0, $basePrice - $couponDiscount), 2);
+        $upgradeOffer = $this->getServiceUpgradeOffer($serviceId, $userId, $coupon);
+        $upgradeCreditAmount = 0.0;
+        $upgradeFromSaleId = null;
+
+        if (null !== $upgradeOffer) {
+            if (empty($upgradeOffer['purchasable'])) {
+                $this->lastServiceSaleError = $this->get_lang('UpgradePriceMustBePositive');
+
+                return false;
+            }
+
+            $requiredPaymentType = isset($upgradeOffer['required_payment_type'])
+                ? (int) $upgradeOffer['required_payment_type']
+                : 0;
+
+            if ($requiredPaymentType > 0 && $requiredPaymentType !== $paymentType) {
+                $this->lastServiceSaleError = $this->get_lang('UpgradeMustUseExistingPaymentGateway');
+
+                return false;
+            }
+
+            $upgradeCreditAmount = max(0.0, (float) ($upgradeOffer['credit_amount'] ?? 0));
+            $upgradeFromSaleId = (int) ($upgradeOffer['source_sale_id'] ?? 0);
+
+            $pendingUpgradeSale = $this->getPendingServiceUpgradeSale(
+                $userId,
+                $serviceId,
+                $upgradeFromSaleId,
+                $nodeType,
+                $nodeId
+            );
+
+            if (!empty($pendingUpgradeSale['id'])) {
+                $this->lastServiceSaleWasReused = true;
+
+                return (int) $pendingUpgradeSale['id'];
+            }
+        }
+
+        $firstChargePriceWithoutTax = null !== $upgradeOffer
+            ? round(max(0.0, (float) ($upgradeOffer['upgrade_price_without_tax'] ?? 0)), 2)
+            : $recurringPriceWithoutTax;
+
+        if ($firstChargePriceWithoutTax <= 0) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradePriceMustBePositive');
+
+            return false;
+        }
+
         $currency = $this->getSelectedCurrency();
         $globalParameters = $this->getGlobalParameters();
-
         $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
-        $vat = $this->resolveSaleVat(
-            (float) $service['price'],
+
+        $firstChargeVat = $this->resolveSaleVat(
+            $firstChargePriceWithoutTax,
             null === $service['tax_perc'] ? null : (int) $service['tax_perc'],
             self::TAX_APPLIES_TO_ONLY_SERVICES,
             $normalizedVatBuyerData,
             $globalParameters
         );
+        $recurringVat = $this->resolveSaleVat(
+            $recurringPriceWithoutTax,
+            null === $service['tax_perc'] ? null : (int) $service['tax_perc'],
+            self::TAX_APPLIES_TO_ONLY_SERVICES,
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
+
+        $now = api_get_utc_datetime();
+        $dateEnd = date_format(
+            date_add(
+                date_create($now),
+                date_interval_create_from_date_string($service['duration_days'].' days')
+            ),
+            'Y-m-d H:i:s'
+        );
+
+        if (null !== $upgradeOffer
+            && !empty($upgradeOffer['source_recurring_enabled'])
+            && !empty($upgradeOffer['source_date_end'])
+        ) {
+            $dateEnd = (string) $upgradeOffer['source_date_end'];
+        }
 
         $values = array_merge([
             'service_id' => $serviceId,
@@ -6528,28 +7496,25 @@ class BuyCoursesPlugin extends Plugin
                 $infoSelect
             ),
             'currency_id' => $currency['id'],
-            'price' => $vat['price'],
-            'price_without_tax' => $vat['price_without_tax'],
-            'tax_perc' => $vat['tax_perc'],
-            'tax_amount' => $vat['tax_amount'],
+            'price' => $firstChargeVat['price'],
+            'price_without_tax' => $firstChargeVat['price_without_tax'],
+            'tax_perc' => $firstChargeVat['tax_perc'],
+            'tax_amount' => $firstChargeVat['tax_amount'],
             'node_type' => $nodeType,
             'node_id' => $nodeId,
             'buyer_id' => $userId,
-            'buy_date' => api_get_utc_datetime(),
-            'date_start' => api_get_utc_datetime(),
-            'date_end' => date_format(
-                date_add(
-                    date_create(api_get_utc_datetime()),
-                    date_interval_create_from_date_string($service['duration_days'].' days')
-                ),
-                'Y-m-d H:i:s'
-            ),
+            'buy_date' => $now,
+            'date_start' => $now,
+            'date_end' => $dateEnd,
             'status' => self::SERVICE_STATUS_PENDING,
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
+            'upgrade_from_sale_id' => $upgradeFromSaleId,
+            'upgrade_credit_amount' => $upgradeCreditAmount > 0 ? $upgradeCreditAmount : null,
+            'recurring_amount' => !empty($service['renewable']) ? $recurringVat['price'] : null,
             'invoice' => 0,
-        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $firstChargeVat));
 
         $serviceSaleId = Database::insert(self::TABLE_SERVICES_SALE, $values);
 
@@ -9617,6 +10582,40 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Count managed courses that are not linked to a BuyCourses service.
+     */
+    public function countStandardManagedCoursesByUser(int $userId): int
+    {
+        $userId = (int) $userId;
+        if ($userId <= 0) {
+            return 0;
+        }
+
+        if (!$this->hasSubscriptionCourseInfrastructure()) {
+            return $this->countManagedCoursesByUser($userId);
+        }
+
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+
+        $sql = "SELECT COUNT(DISTINCT cru.c_id) AS total
+            FROM $courseUserTable cru
+            LEFT JOIN $subscriptionCourseTable sc
+                ON sc.course_id = cru.c_id
+                AND sc.status <> 'deleted'
+                AND sc.deleted_at IS NULL
+            WHERE cru.user_id = $userId
+              AND cru.status = ".COURSEMANAGER."
+              AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+              AND sc.id IS NULL";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
      * Return the effective max courses limit for a user.
      * Active service benefit wins over the global setting.
      * Zero means unlimited.
@@ -9759,7 +10758,7 @@ class BuyCoursesPlugin extends Plugin
     public function getStandardCourseCreationOptionForUser(int $userId): array
     {
         $userId = (int) $userId;
-        $currentCount = $this->countManagedCoursesByUser($userId);
+        $currentCount = $this->countStandardManagedCoursesByUser($userId);
         $globalMaxCourses = max(0, (int) api_get_setting('platform.max_courses_per_user'));
         $hostingLimit = max(0, (int) api_get_setting('platform.hosting_limit_users_per_course'));
         $documentQuotaMb = max(0, (int) api_get_setting('document.default_document_quotum'));
@@ -9804,7 +10803,7 @@ class BuyCoursesPlugin extends Plugin
                         1,
                     ],
                 ],
-                'ORDER' => 'name ASC, id ASC',
+                'ORDER' => 'id ASC',
             ]
         );
 
@@ -9827,6 +10826,9 @@ class BuyCoursesPlugin extends Plugin
                 : 0;
 
             $hasActiveSale = null !== $activeSale;
+            $upgradeOffer = !$hasActiveSale
+                ? $this->getServiceUpgradeOffer($serviceId, $userId)
+                : null;
             $availableByLimit = $benefits['maxCourses'] <= 0 || $usedCourses < $benefits['maxCourses'];
             $available = $hasActiveSale && $availableByLimit;
 
@@ -9855,8 +10857,19 @@ class BuyCoursesPlugin extends Plugin
                 'aiFeatureSummary' => $this->getAiCourseFeatureSummary($benefits['aiFeatures']),
                 'price' => $service['price_label'] ?? ($service['price_with_tax'] ?? ($service['price'] ?? null)),
                 'currency' => $service['iso_code'] ?? null,
-                'buyUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.self::SERVICE_TYPE_USER,
+                'isUpgrade' => null !== $upgradeOffer,
+                'buyLabel' => $this->get_lang(null !== $upgradeOffer ? 'Upgrade' : 'Buy'),
+                'upgradeFromServiceName' => null !== $upgradeOffer
+                    ? (string) ($upgradeOffer['source_service_name'] ?? '')
+                    : null,
+                'upgradePrice' => null !== $upgradeOffer
+                    ? (string) ($upgradeOffer['upgrade_price_without_tax_formatted'] ?? '')
+                    : null,
+                'buyUrl' => null !== $upgradeOffer && empty($upgradeOffer['purchasable'])
+                    ? null
+                    : api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.self::SERVICE_TYPE_USER,
                 'informationUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId,
+                'informationLabel' => get_lang('More information'),
             ];
         }
 
@@ -10151,6 +11164,89 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return $ids;
+    }
+
+    /**
+     * Check whether a course is linked to a currently active paid service.
+     *
+     * Cancellation of the next renewal does not disable the current paid period: the
+     * relation remains active until the sale end date.
+     */
+    public function hasActiveSubscriptionCourse(int $courseId): bool
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return false;
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT 1
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            WHERE sc.course_id = $courseId
+              AND sc.status = 'active'
+              AND sc.deleted_at IS NULL
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND (ss.date_start IS NULL OR ss.date_start <= '$now')
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end >= '$now'
+            LIMIT 1";
+
+        $result = Database::query($sql);
+
+        return false !== $result && Database::num_rows($result) > 0;
+    }
+
+    public function hasActiveAiCourseFeature(int $courseId, string $feature): bool
+    {
+        $courseId = (int) $courseId;
+        $features = $this->normalizeAiCourseFeatures([$feature]);
+
+        if ($courseId <= 0 || empty($features) || !$this->hasSubscriptionCourseInfrastructure()) {
+            return false;
+        }
+
+        $feature = $features[0];
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $serviceTable = Database::get_main_table(self::TABLE_SERVICES);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT sc.context_json, s.ai_course_features_json
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            INNER JOIN $serviceTable s ON s.id = sc.service_id
+            WHERE sc.course_id = $courseId
+              AND sc.status = 'active'
+              AND sc.deleted_at IS NULL
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND (ss.date_start IS NULL OR ss.date_start <= '$now')
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end >= '$now'
+            ORDER BY ss.date_end DESC, sc.id DESC";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return false;
+        }
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $context = json_decode((string) ($row['context_json'] ?? ''), true);
+            $hasStoredFeatures = is_array($context) && array_key_exists('ai_features', $context);
+            $activeFeatures = $hasStoredFeatures
+                ? $this->normalizeAiCourseFeatures($context['ai_features'])
+                : $this->normalizeAiCourseFeatures($row['ai_course_features_json'] ?? []);
+
+            if (in_array($feature, $activeFeatures, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -1,5 +1,18 @@
+Feature: renewable services can now schedule renewal cancellation from My Services with a detailed confirmation modal, Stripe cancel-at-period-end support, PayPal recurring profile cancellation, CSRF protection, idempotent local state, and continued access until the paid period ends.
+Fix: Stripe service upgrades now reuse an existing pending Checkout Session, reconcile an already-paid pending upgrade before creating another charge, replace only expired sessions, and use Stripe idempotency keys so repeated confirmation requests cannot create duplicate Checkout Sessions.
+UI: reorganized the service create and edit forms into clear sections for general information, pricing, recurring billing, publication, media, granted benefits, AI features, and destructive actions without changing submitted field names or service business logic.
+Fix: service plans now use the same stable creation order in the shop catalog and on the course creation page.
+Fix: upgrade actions are now also exposed on the BuyCourses landing page and on the course creation service cards.
 v7.6 - 2026-07-02
 ====
+
+Feature: services can now define an optional Upsale source service. Users with an active source service see an Upgrade action, receive a server-validated prorated credit for the unused period, and keep their linked courses and granted benefits on the upgraded service. Existing recurring Stripe profiles are moved to the target service after successful payment; unsupported or failed transitions leave the local source service unchanged.
+
+Feature: AI feature settings now support `Yes`, `No`, and `Plugin-defined`. In plugin-defined mode, a course can display and use an AI feature only while it is linked to an active BuyCourses service that grants that specific feature. Existing Yes/No behavior remains unchanged.
+
+Fix: courses created with an active paid service now start with private visibility, and their teachers can change course visibility while the linked paid period remains active, even when the platform setting normally reserves visibility changes for administrators. Course subscription settings remain protected by the platform rule. Existing recurring expiration/reactivation processing continues to save and restore the teacher's latest visibility.
+
+Fix: standardized service duration output across catalog, detail and purchase screens through the translated `%s days` placeholder, replaced the raw `TabsDashboard` breadcrumb with the core `Shop` label, reused the core `More information` translation in course creation, separated standard-course counts from BuyCourses-linked courses, prevented a second purchase of an already active user service from both the detail page and direct checkout URL, and replaced the unknown tax percentage on service details with a translated `%s + tax` price notice.
 Feature: VAT invoices are now generated automatically at the moment a sale, service
 sale, or subscription sale completes — mandatory and immediate for business buyers
 (EU/Belgian VAT rules require an invoice for every B2B sale), and optional for

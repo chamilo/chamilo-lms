@@ -18,12 +18,12 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -90,6 +90,7 @@ class AiController extends AbstractController
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly MessageHelper $messageHelper,
         private readonly AiDisclosureHelper $aiDisclosureHelper,
+        private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
     ) {}
 
     #[Route('/text_providers', name: 'chamilo_core_ai_text_providers', methods: ['GET'])]
@@ -700,7 +701,6 @@ class AiController extends AbstractController
         Request $request,
         int $courseId,
         CourseRepository $courseRepository,
-        SettingsManager $settingsManager,
         AiCourseAnalyzerService $courseAnalyzerService,
         CsrfTokenManagerInterface $csrfTokenManager,
     ): Response {
@@ -712,9 +712,7 @@ class AiController extends AbstractController
 
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
 
-        $enabled = $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.enable_ai_helpers', true))
-            && $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.course_analyser', true))
-            && $this->isAiFeatureEnabledForCourse('course_analyser', (int) $course->getId());
+        $enabled = $this->isAiFeatureEnabledForCourse('course_analyser', (int) $course->getId());
 
         $session = $this->getAiCourseAnalyzerSessionFromRequest($request);
         $providers = $this->aiProviderFactory->getProvidersForType('text');
@@ -3306,15 +3304,7 @@ class AiController extends AbstractController
 
     private function isAiFeatureEnabledForCourse(string $feature, int $courseId): bool
     {
-        if ($courseId <= 0) {
-            return false;
-        }
-
-        if ('true' !== (string) api_get_setting('ai_helpers.enable_ai_helpers')) {
-            return false;
-        }
-
-        return 'true' === (string) api_get_course_setting($feature, ['real_id' => $courseId], true);
+        return $this->aiFeatureAccessHelper->isFeatureEnabledForCourse($feature, $courseId);
     }
 
     private function buildAiFeatureDisabledResponse(): JsonResponse
@@ -3652,19 +3642,6 @@ class AiController extends AbstractController
         $session = $this->em->getRepository(Session::class)->find($sessionId);
 
         return $session instanceof Session ? $session : null;
-    }
-
-    private function isAiCourseAnalyzerSettingEnabled(mixed $value): bool
-    {
-        if (\is_bool($value)) {
-            return $value;
-        }
-
-        if (\is_int($value)) {
-            return 1 === $value;
-        }
-
-        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
     private function getCurrentUserId(): int

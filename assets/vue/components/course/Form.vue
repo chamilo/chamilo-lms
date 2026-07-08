@@ -134,7 +134,7 @@
                 :href="serviceOption.buyUrl"
                 @click.stop
               >
-                {{ t("Buy service") }}
+                {{ serviceOption.buyLabel || t("Buy service") }}
               </a>
               <a
                 v-if="serviceOption.informationUrl"
@@ -142,7 +142,7 @@
                 :href="serviceOption.informationUrl"
                 @click.stop
               >
-                {{ t("More information") }}
+                {{ serviceOption.informationLabel || t("More information") }}
               </a>
             </div>
 

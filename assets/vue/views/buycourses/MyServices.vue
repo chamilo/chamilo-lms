@@ -26,6 +26,13 @@
       {{ loadError }}
     </div>
 
+    <div
+      v-if="actionMessage"
+      class="rounded-2xl border border-success bg-support-3 px-5 py-4 text-body-2 text-gray-90"
+    >
+      {{ actionMessage }}
+    </div>
+
     <section class="space-y-4">
       <h2 class="text-xl font-semibold text-gray-90">
         {{ t("Active services") }}
@@ -82,10 +89,11 @@
                     {{ getRecurringPaymentStatusText(service) }}
                   </p>
                   <p
-                    v-if="service.nextChargeDate || service.next_charge_date"
+                    v-if="service.plannedRenewalDate || service.nextChargeDate || service.next_charge_date || service.dateEnd"
                     class="text-xs font-medium text-primary"
                   >
-                    {{ t("Next charge") }}: {{ formatDate(service.nextChargeDate || service.next_charge_date) }}
+                    {{ service.renewalDateLabel || t("Next charge") }}:
+                    {{ formatDate(service.plannedRenewalDate || service.nextChargeDate || service.next_charge_date || service.dateEnd) }}
                   </p>
                   <p
                     v-if="service.recurringProfileId || service.recurring_profile_id"
@@ -106,10 +114,11 @@
                   <button
                     v-if="service.canCancelRecurringPayment && service.cancelRecurringPaymentUrl"
                     type="button"
-                    class="inline-flex items-center justify-center rounded-xl border border-danger px-4 py-2 text-sm font-semibold text-danger transition hover:bg-danger hover:text-white"
-                    @click="goToCancelRecurringPayment(service.cancelRecurringPaymentUrl)"
+                    class="inline-flex items-center justify-center rounded-xl border border-danger px-4 py-2 text-sm font-semibold text-danger transition hover:bg-danger hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                    :disabled="isCancellingRenewal"
+                    @click="openCancelRenewalModal(service)"
                   >
-                    {{ t("Cancel auto billing") }}
+                    {{ service.cancelRenewalButtonLabel || t("Cancel renewal") }}
                   </button>
                 </div>
               </div>
@@ -251,6 +260,62 @@
       </div>
     </section>
   </div>
+
+  <Teleport to="body">
+    <div
+      v-if="cancelRenewalService"
+      class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 px-4 py-8"
+      role="presentation"
+      @click.self="closeCancelRenewalModal"
+    >
+      <section
+        class="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-xl sm:p-8"
+        role="dialog"
+        aria-modal="true"
+        :aria-labelledby="`cancel-renewal-title-${cancelRenewalService.id}`"
+      >
+        <div class="space-y-5">
+          <div class="space-y-2">
+            <h2
+              :id="`cancel-renewal-title-${cancelRenewalService.id}`"
+              class="text-xl font-semibold text-gray-90"
+            >
+              {{ cancelRenewalService.cancelRenewalTitle || cancelRenewalService.cancelRenewalButtonLabel }}
+            </h2>
+            <p class="text-body-2 leading-6 text-gray-50">
+              {{ cancelRenewalService.cancelRenewalMessage }}
+            </p>
+          </div>
+
+          <div
+            v-if="cancelRenewalError"
+            class="rounded-2xl border border-danger bg-support-6 px-4 py-3 text-sm text-danger"
+          >
+            {{ cancelRenewalError }}
+          </div>
+
+          <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-xl border border-gray-30 px-4 py-2 text-sm font-semibold text-gray-70 transition hover:bg-support-2 disabled:cursor-not-allowed disabled:opacity-50"
+              :disabled="isCancellingRenewal"
+              @click="closeCancelRenewalModal"
+            >
+              {{ cancelRenewalService.cancelRenewalDismissLabel || t("I changed my mind") }}
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-xl bg-danger px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              :disabled="isCancellingRenewal"
+              @click="confirmCancelRenewal"
+            >
+              {{ cancelRenewalService.cancelRenewalButtonLabel || t("Cancel renewal") }}
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
@@ -266,9 +331,13 @@ const platformConfigStore = usePlatformConfig()
 
 const isLoading = ref(false)
 const loadError = ref("")
+const actionMessage = ref("")
 const activeServices = ref([])
 const purchaseHistory = ref([])
 const hasResolvedPluginState = ref(false)
+const cancelRenewalService = ref(null)
+const cancelRenewalError = ref("")
+const isCancellingRenewal = ref(false)
 
 function normalizeBooleanFlag(value) {
   if (typeof value === "boolean") return value
@@ -383,9 +452,53 @@ function getRecurringPaymentStatusText(service) {
   return t("Auto billing disabled")
 }
 
-function goToCancelRecurringPayment(url) {
-  if (!url) return
-  if (!window.confirm(t("Cancel auto billing for this service?"))) return
-  window.location.assign(url)
+function openCancelRenewalModal(service) {
+  cancelRenewalError.value = ""
+  cancelRenewalService.value = service
+}
+
+function closeCancelRenewalModal() {
+  if (isCancellingRenewal.value) return
+  cancelRenewalError.value = ""
+  cancelRenewalService.value = null
+}
+
+async function confirmCancelRenewal() {
+  const service = cancelRenewalService.value
+  if (!service?.cancelRecurringPaymentUrl || !service?.cancelRecurringPaymentToken) return
+
+  isCancellingRenewal.value = true
+  cancelRenewalError.value = ""
+  actionMessage.value = ""
+
+  try {
+    const formData = new URLSearchParams()
+    formData.set("order", String(service.id))
+    formData.set("action", "cancel_recurring_payment")
+    formData.set("sec_token", service.cancelRecurringPaymentToken)
+
+    const response = await fetch(service.cancelRecurringPaymentUrl, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: formData.toString(),
+    })
+
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok || result?.success !== true) {
+      throw new Error(result?.message || t("Unable to cancel renewal right now."))
+    }
+
+    actionMessage.value = result.message || service.cancelRenewalButtonLabel
+    cancelRenewalService.value = null
+    await loadMyServicesData()
+  } catch (error) {
+    cancelRenewalError.value = error?.message || t("Unable to cancel renewal right now.")
+  } finally {
+    isCancellingRenewal.value = false
+  }
 }
 </script>

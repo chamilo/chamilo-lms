@@ -121,7 +121,7 @@
                             <td class="px-4 py-4 text-sm text-gray-90">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <span class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
-                                        {{ frequency.duration }} {{ 'Days'|get_lang }}
+                                        {{ 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(frequency.duration) }}
                                     </span>
                                     {% if frequency.in_use %}
                                         <span class="inline-flex items-center rounded-full bg-warning/10 px-3 py-1 text-xs font-semibold text-warning">

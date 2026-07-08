@@ -509,6 +509,19 @@
                                         </div>
                                     </div>
 
+                                    {% if service.is_upgrade|default(false) and service.upgrade_offer %}
+                                        <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
+                                            <div class="flex items-center gap-2 font-semibold text-primary">
+                                                <em class="mdi mdi-arrow-up-bold-circle-outline"></em>
+                                                {{ 'UpgradeFromService'|get_plugin_lang('BuyCoursesPlugin')|format(service.upgrade_offer.source_service_name|e) }}
+                                            </div>
+                                            <div class="mt-2 grid gap-1 text-xs text-gray-50">
+                                                <span>{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.upgrade_offer.remaining_days) }}</span>
+                                                <span>{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.upgrade_offer.credit_amount_formatted }}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
                                     <div class="flex flex-col gap-3">
                                         <a
                                             class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
@@ -541,15 +554,15 @@
                                                     class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                                     href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
                                                 >
-                                                    <em class="mdi mdi-cart-outline"></em>
-                                                    {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                    <em class="mdi {{ service.is_upgrade|default(false) ? 'mdi-arrow-up-bold-circle-outline' : 'mdi-cart-outline' }}"></em>
+                                                    {{ (service.is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
                                             {% else %}
                                             <span
                                                 class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
                                             >
                                                 <em class="mdi mdi-lock"></em>
-                                                {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                {{ (service.is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}
                                             </span>
                                             {% endif %}
                                         {% endif %}

@@ -12,7 +12,7 @@
     {% set appliesToLabel = 'TemplateTitleCertificate'|get_lang %}
 {% endif %}
 
-{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : service.duration_days ~ ' ' ~ 'Days'|get_lang %}
+{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.duration_days) %}
 
 <div class="mx-auto w-full max-w-screen-2xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
@@ -228,6 +228,31 @@
                     </div>
 
                     <div class="space-y-3">
+                        {% if service_item.is_upgrade|default(false) %}
+                            <div class="rounded-2xl border border-info/20 bg-support-2 p-4">
+                                <div class="text-sm font-semibold text-primary">{{ 'Upgrade'|get_plugin_lang('BuyCoursesPlugin') }}</div>
+                                <div class="mt-1 text-sm text-gray-50">{{ 'UpgradeFromService'|get_plugin_lang('BuyCoursesPlugin')|format(service_item.upgrade_source_service_name|e) }}</div>
+                            </div>
+                            {% if service_item.upgrade_target_price_formatted %}
+                                <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                    <span class="text-sm font-semibold text-gray-90">{{ 'UpgradeTargetProratedPrice'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                                    <span class="text-sm font-semibold text-gray-90">{{ service_item.upgrade_target_price_formatted }}</span>
+                                </div>
+                            {% endif %}
+                            {% if service_item.upgrade_credit_amount_formatted %}
+                                <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                    <span class="text-sm font-semibold text-gray-90">{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                                    <span class="text-sm font-semibold text-success">- {{ service_item.upgrade_credit_amount_formatted }}</span>
+                                </div>
+                            {% endif %}
+                            {% if service_item.recurring_amount_formatted %}
+                                <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                    <span class="text-sm font-semibold text-gray-90">{{ 'UpgradeNextRenewalPrice'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                                    <span class="text-sm font-semibold text-gray-90">{{ service_item.recurring_amount_formatted }}</span>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
                         {% if service_item.price_formatted is defined %}
                             <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
                                 <span class="text-sm font-semibold text-gray-90">
@@ -330,7 +355,7 @@
                                     class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                 >
                                     <em class="mdi mdi-check"></em>
-                                    {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    {{ (service_item.is_upgrade|default(false) ? 'ConfirmUpgrade' : 'ConfirmOrder')|get_plugin_lang('BuyCoursesPlugin') }}
                                 </button>
                             {% else %}
                                 <button
@@ -341,7 +366,7 @@
                                     class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                 >
                                     <em class="mdi mdi-check"></em>
-                                    {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    {{ (service_item.is_upgrade|default(false) ? 'ConfirmUpgrade' : 'ConfirmOrder')|get_plugin_lang('BuyCoursesPlugin') }}
                                 </button>
                             {% endif %}
 

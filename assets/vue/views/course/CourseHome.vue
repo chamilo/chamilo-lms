@@ -368,7 +368,7 @@ function isSettingEnabled(value) {
 const isAiCourseAnalyzerEnabled = computed(() => {
   return (
     isSettingEnabled(getSetting.value("ai_helpers.enable_ai_helpers")) &&
-    isSettingEnabled(getSetting.value("ai_helpers.course_analyser"))
+    courseSettingsStore.isSettingEnabled("course_analyser", "ai_helpers")
   )
 })
 

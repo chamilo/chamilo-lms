@@ -371,13 +371,14 @@ $extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSale
     ]);
 };
 
-$markRecurringStatus = static function (int $status, ?string $cancelledAt = null) use ($serviceSaleTable, $serviceSaleId): void {
+$markRecurringStatus = static function (int $status, ?string $cancelledAt = null) use ($sale, $serviceSaleTable, $serviceSaleId): void {
     $values = [
         'recurring_payment' => $status,
     ];
 
     if (null !== $cancelledAt) {
-        $values['cancelled_at'] = $cancelledAt;
+        $existingCancelledAt = trim((string) ($sale['cancelled_at'] ?? ''));
+        $values['cancelled_at'] = '' !== $existingCancelledAt ? $existingCancelledAt : $cancelledAt;
     }
 
     Database::update(

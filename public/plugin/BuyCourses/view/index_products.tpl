@@ -235,7 +235,11 @@
                     </div>
                     <div class="mt-2 grid gap-1 text-xs text-gray-50">
                         <span>{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.upgrade_offer.remaining_days) }}</span>
-                        <span>{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.upgrade_offer.credit_amount_formatted }}</span>
+                        <span>{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}: - {{ service.upgrade_offer.credit_amount_formatted }}</span>
+                        <span class="font-semibold text-gray-90">{{ 'UpgradePriceToday'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.upgrade_total_price_formatted }}</span>
+                        {% if service.upgrade_offer.source_recurring_enabled %}
+                            <span>{{ 'UpgradeNextRenewalPrice'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.display_price }}</span>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}

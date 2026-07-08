@@ -1,6 +1,9 @@
 v7.7 - 2026-07-08
 ====
 
+Fix: upgrade offers now keep the target service's normal price visible, show the unused source-service value as a separate prorated credit, and display the actual amount due today independently.
+Fix: an Upsale target may now have the same or a longer duration than its source service, while shorter target durations remain invalid.
+
 Feature: paid course cards on `/courses` now show the linked service name to the current course manager, including sticky course cards, without exposing sale or payment identifiers.
 Fix: service descriptions on `/resources/courses/new` now preserve safe paragraph and list formatting after multilingual filtering, with a second DOMPurify sanitization before rendering.
 Fix: permanently deleting a paid course now marks its BuyCourses relation as deleted, clears frozen-enrollment remnants, and service course counts also ignore missing or soft-deleted courses.

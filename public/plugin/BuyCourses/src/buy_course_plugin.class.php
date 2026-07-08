@@ -4890,18 +4890,16 @@ class BuyCoursesPlugin extends Plugin
             return $this->get_lang('UpsaleTargetPriceMustBeHigher');
         }
 
+        $sourceDuration = (int) ($sourceService['duration_days'] ?? 0);
+        $targetDuration = isset($serviceData['duration_days']) ? (int) $serviceData['duration_days'] : 0;
+        if ($targetDuration < $sourceDuration) {
+            return $this->get_lang('UpsaleTargetDurationMustNotBeShorter');
+        }
+
         $sourceRenewable = !empty($sourceService['renewable']);
         $targetRenewable = !empty($serviceData['renewable']);
-        if ($sourceRenewable || $targetRenewable) {
-            if ($sourceRenewable !== $targetRenewable) {
-                return $this->get_lang('UpsaleRenewableModeMustMatch');
-            }
-
-            $sourceDuration = (int) ($sourceService['duration_days'] ?? 0);
-            $targetDuration = isset($serviceData['duration_days']) ? (int) $serviceData['duration_days'] : 0;
-            if ($sourceDuration !== $targetDuration) {
-                return $this->get_lang('UpsaleRecurringDurationMustMatch');
-            }
+        if (($sourceRenewable || $targetRenewable) && $sourceRenewable !== $targetRenewable) {
+            return $this->get_lang('UpsaleRenewableModeMustMatch');
         }
 
         if ($targetServiceId > 0 && $this->wouldCreateServiceUpsaleCycle($targetServiceId, $sourceServiceId)) {
@@ -5114,28 +5112,31 @@ class BuyCoursesPlugin extends Plugin
             return;
         }
 
-        $priceWithoutTax = max(0.0, (float) ($upgradeOffer['upgrade_price_without_tax'] ?? 0));
-        $service['upgrade_offer'] = $upgradeOffer;
-        $service['price'] = $priceWithoutTax;
-        $service['price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-            $priceWithoutTax,
-            (string) ($service['iso_code'] ?? '')
-        );
-
+        $isoCode = (string) ($service['iso_code'] ?? '');
+        $upgradePriceWithoutTax = max(0.0, (float) ($upgradeOffer['upgrade_price_without_tax'] ?? 0));
         $taxPerc = null !== ($service['tax_perc_show'] ?? null)
             ? (float) $service['tax_perc_show']
             : 0.0;
-        $taxAmount = !empty($service['tax_enable'])
-            ? round($priceWithoutTax * $taxPerc / 100, 2)
+        $upgradeTaxAmount = !empty($service['tax_enable'])
+            ? round($upgradePriceWithoutTax * $taxPerc / 100, 2)
             : 0.0;
-        $totalPrice = $priceWithoutTax + $taxAmount;
+        $upgradeTotalPrice = $upgradePriceWithoutTax + $upgradeTaxAmount;
 
-        $service['tax_amount'] = $taxAmount;
-        $service['tax_amount_formatted'] = api_number_format($taxAmount, 2);
-        $service['total_price'] = $totalPrice;
-        $service['total_price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-            $totalPrice,
-            (string) ($service['iso_code'] ?? '')
+        $service['upgrade_offer'] = $upgradeOffer;
+        $service['upgrade_price_without_tax'] = $upgradePriceWithoutTax;
+        $service['upgrade_price_without_tax_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
+            $upgradePriceWithoutTax,
+            $isoCode
+        );
+        $service['upgrade_tax_amount'] = $upgradeTaxAmount;
+        $service['upgrade_tax_amount_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
+            $upgradeTaxAmount,
+            $isoCode
+        );
+        $service['upgrade_total_price'] = $upgradeTotalPrice;
+        $service['upgrade_total_price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
+            $upgradeTotalPrice,
+            $isoCode
         );
     }
 

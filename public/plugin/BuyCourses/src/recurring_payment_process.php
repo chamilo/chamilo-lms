@@ -185,7 +185,7 @@ switch ($action) {
         $totalCharges = max(0, (int) ($serviceSale['service']['total_charges'] ?? 0));
         $currency = $plugin->getCurrency((int) ($serviceSale['currency_id'] ?? 0));
         $currencyCode = strtoupper(trim((string) ($currency['iso_code'] ?? ($serviceSale['service']['currency'] ?? ''))));
-        $amount = (float) ($serviceSale['price'] ?? 0);
+        $amount = (float) ($serviceSale['recurring_amount'] ?? $serviceSale['price'] ?? 0);
         $description = (string) ($serviceSale['service']['name'] ?? 'Service');
         $reference = (string) ($serviceSale['reference'] ?? 'service-sale-'.$orderId);
         $buyerName = (string) ($serviceSale['buyer']['name'] ?? '');

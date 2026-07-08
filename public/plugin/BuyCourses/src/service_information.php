@@ -71,6 +71,13 @@ if ($saleId > 0) {
     }
 }
 
+$upgradeOffer = !$isPurchasedContext
+    ? $plugin->getCurrentUserServiceUpgradeOffer($serviceId)
+    : null;
+$plugin->applyServiceUpgradeOfferToPricing($service, $upgradeOffer);
+$service['upgrade_offer'] = $upgradeOffer;
+$service['is_upgrade'] = null !== $upgradeOffer;
+
 $serviceDetailsHtml = '';
 if (!empty($service['service_information'])) {
     $serviceDetailsHtml = $plugin->filterServiceMultilingualHtml((string) $service['service_information']);
@@ -110,7 +117,9 @@ if (!empty($service['description'])) {
 
 $canCurrentUserBuyService = $plugin->canCurrentUserBuyService($service);
 $hasBlockingSale = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
-$canBuyService = $canCurrentUserBuyService && !$hasBlockingSale;
+$canBuyService = $canCurrentUserBuyService
+    && !$hasBlockingSale
+    && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 $buyerRoleNotice = null;
 
 if (!$canCurrentUserBuyService && !$isPurchasedContext && !$hasBlockingSale) {
@@ -135,6 +144,8 @@ $template->assign('price_display', $priceDisplay);
 $template->assign('is_purchased_context', $isPurchasedContext);
 $template->assign('can_buy_service', $canBuyService);
 $template->assign('has_blocking_sale', $hasBlockingSale);
+$template->assign('upgrade_offer', $upgradeOffer);
+$template->assign('is_upgrade', null !== $upgradeOffer);
 $template->assign('buyer_role_notice', $buyerRoleNotice);
 $template->assign('back_url', $backUrl);
 

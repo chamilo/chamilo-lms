@@ -145,13 +145,21 @@ if (!api_is_platform_admin()) {
             }
             $selectedCurrencyIsoCode = (string) ($selectedCurrency['iso_code'] ?? '');
 
+            $canBuyServices = api_is_allowed_to_create_course();
+
             foreach ($serviceItems as &$service) {
                 $serviceId = (int) $service['id'];
                 $durationDays = (int) ($service['duration_days'] ?? 0);
                 $service['description'] = $plugin->filterServiceMultilingualHtml((string) ($service['description'] ?? ''));
                 $service['service_information'] = $plugin->filterServiceMultilingualHtml((string) ($service['service_information'] ?? ''));
+                $upgradeOffer = $plugin->getCurrentUserServiceUpgradeOffer($serviceId);
+                $plugin->applyServiceUpgradeOfferToPricing($service, $upgradeOffer);
+                $service['upgrade_offer'] = $upgradeOffer;
+                $service['is_upgrade'] = null !== $upgradeOffer;
                 $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
                 $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
+                $service['can_buy'] = $canBuyServices
+                    && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 
                 $isoCode = (string) ($service['iso_code'] ?? $selectedCurrencyIsoCode);
                 $priceValue = (float) ($service['total_price'] ?? 0);
@@ -173,7 +181,6 @@ if (!api_is_platform_admin()) {
             }
             unset($service);
 
-            $canBuyServices = api_is_allowed_to_create_course();
             if (!$canBuyServices) {
                 $buyerRoleNotice = $plugin->get_lang('ServicesOnlyForTeachers');
             }

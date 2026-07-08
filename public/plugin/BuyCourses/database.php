@@ -325,6 +325,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
     $servicesTable->addColumn('stripe_price_id', Types::STRING, ['length' => 255, 'notnull' => false]);
     $servicesTable->addColumn('display_on_course_creation_page', Types::BOOLEAN, ['default' => false]);
     $servicesTable->addColumn('ai_course_features_json', Types::TEXT, ['notnull' => false]);
+    $servicesTable->addColumn('upsale_from_id', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
     $servicesTable->addColumn('applies_to', Types::INTEGER);
     $servicesTable->addColumn('owner_id', Types::INTEGER);
     $servicesTable->addColumn('visibility', Types::INTEGER);
@@ -416,6 +417,19 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
         Types::DECIMAL,
         ['scale' => 2, 'notnull' => false]
     );
+    $servicesNodeTable->addColumn('upgrade_from_sale_id', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
+    $servicesNodeTable->addColumn(
+        'upgrade_credit_amount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
+    $servicesNodeTable->addColumn(
+        'recurring_amount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
+    $servicesNodeTable->addColumn('upgraded_to_sale_id', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
+    $servicesNodeTable->addColumn('upgrade_completed_at', Types::DATETIME_MUTABLE, ['notnull' => false]);
     $servicesNodeTable->setPrimaryKey(['id']);
     $servicesNodeTable->addForeignKeyConstraint(
         buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICES),

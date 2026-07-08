@@ -245,8 +245,15 @@ $completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use 
     }
 
     $plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
-    $plugin->completeServiceSale($serviceSaleId);
-    $plugin->applyServiceBenefitsFromSale($serviceSaleId);
+    if (!$plugin->completeServiceSale($serviceSaleId)) {
+        $log('Service Stripe checkout could not be completed.', [
+            'service_sale_id' => $serviceSaleId,
+            'checkout_session_id' => $checkoutSessionId,
+            'error' => $plugin->getLastServiceSaleError(),
+        ]);
+
+        return false;
+    }
 
     $completedServiceSale = $plugin->getServiceSale($serviceSaleId);
     $nextChargeDate = trim((string) ($completedServiceSale['date_end'] ?? ''));
@@ -271,8 +278,12 @@ $completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use 
 
 switch ($eventType) {
     case 'checkout.session.completed':
-        if (!$completeCourseOrSessionSale($object)) {
-            $completeServiceSaleFromCheckout($object);
+        if (!$completeCourseOrSessionSale($object) && !$completeServiceSaleFromCheckout($object)) {
+            $log('Stripe checkout event did not match or complete any sale.', [
+                'event_id' => $eventId,
+                'checkout_session_id' => (string) ($object->id ?? ''),
+            ]);
+            $respond('SERVICE_COMPLETION_FAILED', 500);
         }
         break;
 
@@ -325,12 +336,20 @@ switch ($eventType) {
 
         $customerId = isset($object->customer) ? (string) $object->customer : null;
 
-        $plugin->completeStripeRecurringServiceSale(
+        if (!$plugin->completeStripeRecurringServiceSale(
             $serviceSaleId,
             $subscriptionId,
             $customerId,
             $nextChargeDate
-        );
+        )) {
+            $log('Stripe recurring service sale could not be completed.', [
+                'service_sale_id' => $serviceSaleId,
+                'subscription_id' => $subscriptionId,
+                'event_id' => $eventId,
+                'error' => $plugin->getLastServiceSaleError(),
+            ]);
+            $respond('SERVICE_COMPLETION_FAILED', 500);
+        }
 
         $updateData = [
             'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,

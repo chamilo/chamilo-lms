@@ -13,6 +13,10 @@
 {% endif %}
 
 {% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.duration_days) %}
+{% set serviceBasePriceDisplay = service.price_formatted %}
+{% if service.tax_enable %}
+    {% set serviceBasePriceDisplay = 'ServicePricePlusTax'|get_plugin_lang('BuyCoursesPlugin')|format(service.price_formatted) %}
+{% endif %}
 
 <div class="mx-auto w-full max-w-screen-2xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
@@ -75,10 +79,10 @@
                             <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                                 <div class="rounded-2xl bg-support-2 p-4">
                                     <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
-                                        {{ 'Total'|get_plugin_lang('BuyCoursesPlugin') }}
+                                        {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </div>
                                     <div class="mt-2 text-xl font-semibold text-gray-90">
-                                        {{ service.total_price_formatted }}
+                                        {{ serviceBasePriceDisplay }}
                                     </div>
                                 </div>
 
@@ -156,10 +160,13 @@
                         <div class="min-w-0">
                             <h2 class="text-lg font-semibold text-gray-90">{{ 'Upgrade'|get_plugin_lang('BuyCoursesPlugin') }}</h2>
                             <p class="mt-1 text-sm text-gray-50">{{ 'UpgradeFromService'|get_plugin_lang('BuyCoursesPlugin')|format(upgrade_offer.source_service_name|e) }}</p>
-                            <dl class="mt-4 grid gap-3 sm:grid-cols-3">
+                            <dl class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                                 <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(upgrade_offer.remaining_days) }}</dt><dd class="mt-2 font-semibold text-gray-90">{{ upgrade_offer.source_date_end|e }}</dd></div>
-                                <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="mt-2 font-semibold text-gray-90">{{ upgrade_offer.credit_amount_formatted }}</dd></div>
-                                <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradePriceToday'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="mt-2 font-semibold text-primary">{{ service.total_price_formatted }}</dd></div>
+                                <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="mt-2 font-semibold text-success">- {{ upgrade_offer.credit_amount_formatted }}</dd></div>
+                                <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradePriceToday'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="mt-2 font-semibold text-primary">{{ service.upgrade_total_price_formatted }}</dd></div>
+                                {% if upgrade_offer.source_recurring_enabled %}
+                                    <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradeNextRenewalPrice'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="mt-2 font-semibold text-gray-90">{{ serviceBasePriceDisplay }}</dd></div>
+                                {% endif %}
                             </dl>
                         </div>
                     </div>
@@ -223,13 +230,24 @@
                             </span>
                         </div>
 
+                        {% if is_upgrade|default(false) and upgrade_offer %}
+                            <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                <span class="text-sm font-semibold text-gray-90">
+                                    {{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </span>
+                                <span class="text-sm font-semibold text-success">
+                                    - {{ upgrade_offer.credit_amount_formatted }}
+                                </span>
+                            </div>
+                        {% endif %}
+
                         {% if service.tax_enable %}
                             <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
                                 <span class="text-sm font-semibold text-gray-90">
                                     {{ service.tax_name }} ({{ service.tax_perc_show }}%)
                                 </span>
                                 <span class="text-sm font-semibold text-gray-90">
-                                    {{ service.tax_amount_formatted }}
+                                    {{ is_upgrade|default(false) ? service.upgrade_tax_amount_formatted : service.tax_amount_formatted }}
                                 </span>
                             </div>
                         {% endif %}
@@ -250,7 +268,7 @@
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin') }}
                             </span>
                             <span class="text-lg font-semibold text-white">
-                                {{ service.total_price_formatted }}
+                                {{ is_upgrade|default(false) ? service.upgrade_total_price_formatted : service.total_price_formatted }}
                             </span>
                         </div>
                     </div>

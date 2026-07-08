@@ -232,16 +232,20 @@ $selectedCurrencyIsoCode = (string) ($selectedCurrency['iso_code'] ?? '');
 
 foreach ($serviceList as &$service) {
     $isoCode = (string) ($service['iso_code'] ?? $selectedCurrencyIsoCode);
-    $priceValue = (float) ($service['total_price'] ?? 0);
+    $priceValue = (float) ($service['price'] ?? 0);
     $durationDays = (int) ($service['duration_days'] ?? 0);
 
-    if (!empty($service['total_price_formatted'])) {
-        $service['display_price'] = (string) $service['total_price_formatted'];
+    if (!empty($service['price_formatted'])) {
+        $basePriceFormatted = (string) $service['price_formatted'];
     } elseif ('' !== $isoCode) {
-        $service['display_price'] = $plugin->getPriceWithCurrencyFromIsoCode($priceValue, $isoCode);
+        $basePriceFormatted = $plugin->getPriceWithCurrencyFromIsoCode($priceValue, $isoCode);
     } else {
-        $service['display_price'] = number_format($priceValue, 2, '.', ',');
+        $basePriceFormatted = number_format($priceValue, 2, '.', ',');
     }
+
+    $service['display_price'] = !empty($service['tax_enable'])
+        ? sprintf($plugin->get_lang('ServicePricePlusTax'), $basePriceFormatted)
+        : $basePriceFormatted;
 
     $service['billing_cycle_label'] = $durationDays >= 365
         ? $plugin->get_lang('YearlyPlan')

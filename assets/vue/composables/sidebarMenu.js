@@ -486,7 +486,7 @@ export function useSidebarMenu() {
     if (showBuyCoursesMenuItem.value) {
       items.push({
         icon: "mdi mdi-cart-outline",
-        label: t("Buy courses"),
+        label: t("Shop"),
         url: buyCoursesIndexPath.value,
       })
     }

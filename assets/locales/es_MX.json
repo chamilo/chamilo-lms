@@ -4,6 +4,7 @@
     "Groups": "Grupos",
     "Sign in": "Iniciar sesi\u00f3n",
     "My courses": "Lista de mis cursos",
+    "Shop": "Shop",
     "Start recording": "Iniciar grabaci\u00f3n",
     "Stop recording": "Detener grabaci\u00f3n",
     "Home": "inicio",
@@ -2067,6 +2068,8 @@
     "Reference": "Referencia",
     "Amount": "Importe",
     "Receipt": "Recibo",
+    "Invoice": "Invoice",
+    "Request invoice": "Request invoice",
     "Unable to load your services right now.": "No se pueden cargar tus servicios en este momento.",
     "Auto billing enabled": "Facturaci\u00f3n autom\u00e1tica activada",
     "Auto billing suspended": "Facturaci\u00f3n autom\u00e1tica suspendida",
@@ -2389,5 +2392,8 @@
     "Search term is too short": "El t\u00e9rmino de b\u00fasqueda es demasiado corto",
     "Could not search forums": "No se pudo buscar en los foros",
     "Moderated": "Moderado",
-    "View threads": "Ver hilos"
+    "View threads": "Ver hilos",
+    "Current": "Actual",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "N\u00famero m\u00e1ximo de inscripciones permitidas. Deja en 0 para no limitarlo."
 }

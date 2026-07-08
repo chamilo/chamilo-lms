@@ -8729,6 +8729,15 @@ msgstr "Show"
 msgid "My courses"
 msgstr "My courses"
 
+msgid "Shop"
+msgstr "Shop"
+
+msgid "Invoice"
+msgstr "Invoice"
+
+msgid "Request invoice"
+msgstr "Request invoice"
+
 msgid "View my progress"
 msgstr "View my progress"
 

@@ -32,15 +32,15 @@
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           <button
             v-if="standardCourseOption"
-            class="rounded-2xl border p-4 text-left transition"
+            class="relative rounded-2xl border p-4 text-left transition"
             :class="getCourseOptionClasses(standardCourseOption)"
             type="button"
             :disabled="!standardCourseOption.available"
             @click="selectCourseOption('standard', null)"
           >
             <div class="flex items-start justify-between gap-3">
-              <div>
-                <p class="text-base font-semibold text-gray-90">
+              <div class="min-w-0 w-full">
+                <p class="pr-24 text-base font-semibold text-gray-90">
                   {{ standardCourseOption.label || t("Standard course") }}
                 </p>
                 <p class="mt-1 text-sm text-gray-50">
@@ -49,7 +49,7 @@
               </div>
               <span
                 v-if="selectedCourseOptionType === 'standard'"
-                class="rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-white"
+                class="pointer-events-none absolute right-4 top-4 z-10 whitespace-nowrap rounded-full bg-support-4 px-3 py-1 text-xs font-semibold text-white shadow-sm"
               >
                 {{ t("Selected") }}
               </span>
@@ -81,7 +81,7 @@
           <article
             v-for="serviceOption in serviceCourseOptions"
             :key="`service-${serviceOption.serviceId}`"
-            class="rounded-2xl border p-4 text-left transition"
+            class="relative rounded-2xl border p-4 text-left transition"
             :class="getCourseOptionClasses(serviceOption)"
             :role="serviceOption.available ? 'button' : null"
             :tabindex="serviceOption.available ? 0 : -1"
@@ -90,17 +90,18 @@
             @keydown.space.prevent="selectCourseOption('service', serviceOption.serviceSaleId)"
           >
             <div class="flex items-start justify-between gap-3">
-              <div>
-                <p class="text-base font-semibold text-gray-90">
+              <div class="min-w-0 w-full">
+                <p class="pr-24 text-base font-semibold text-gray-90">
                   {{ serviceOption.label }}
                 </p>
-                <p class="mt-1 line-clamp-3 text-sm text-gray-50">
-                  {{ serviceOption.description || t("Use the benefits granted by this service.") }}
-                </p>
+                <div
+                  class="buycourses-service-description mt-1 text-sm text-gray-50"
+                  v-html="getSafeServiceDescription(serviceOption.description)"
+                />
               </div>
               <span
                 v-if="selectedCourseOptionType === 'service' && selectedBuyCoursesServiceSaleId === serviceOption.serviceSaleId"
-                class="rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-white"
+                class="pointer-events-none absolute right-4 top-4 z-10 whitespace-nowrap rounded-full bg-support-4 px-3 py-1 text-xs font-semibold text-white shadow-sm"
               >
                 {{ t("Selected") }}
               </span>
@@ -134,7 +135,7 @@
                 :href="serviceOption.buyUrl"
                 @click.stop
               >
-                {{ t("Buy service") }}
+                {{ serviceOption.buyLabel || t("Buy service") }}
               </a>
               <a
                 v-if="serviceOption.informationUrl"
@@ -142,7 +143,7 @@
                 :href="serviceOption.informationUrl"
                 @click.stop
               >
-                {{ t("More information") }}
+                {{ serviceOption.informationLabel || t("More information") }}
               </a>
             </div>
 
@@ -261,6 +262,7 @@ import roomService from "../../services/roomService"
 import baseService from "../../services/baseService"
 import CourseCategorySelect from "../coursecategory/CourseCategorySelect.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const props = defineProps({
   values: {
@@ -464,6 +466,16 @@ function formatQuota(value) {
   return `${quota} MB`
 }
 
+function getSafeServiceDescription(description) {
+  const html = String(description || t("Use the benefits granted by this service."))
+
+  return sanitizeHtml(html, {
+    ALLOWED_TAGS: ["p", "br", "ul", "ol", "li", "strong", "em", "b", "i"],
+    ALLOWED_ATTR: [],
+    ALLOW_DATA_ATTR: false,
+  })
+}
+
 function getDisabledReasonLabel(reason) {
   if (reason === "service_not_purchased") {
     return t("You need to buy this service before using these benefits.")
@@ -635,3 +647,31 @@ const goBack = () => {
   router.go(-1)
 }
 </script>
+
+<style scoped>
+.buycourses-service-description :deep(p) {
+  margin: 0 0 0.5rem;
+}
+
+.buycourses-service-description :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.buycourses-service-description :deep(ul),
+.buycourses-service-description :deep(ol) {
+  margin: 0.5rem 0;
+  padding-inline-start: 1.25rem;
+}
+
+.buycourses-service-description :deep(ul) {
+  list-style-type: disc;
+}
+
+.buycourses-service-description :deep(ol) {
+  list-style-type: decimal;
+}
+
+.buycourses-service-description :deep(li) {
+  margin: 0.125rem 0;
+}
+</style>

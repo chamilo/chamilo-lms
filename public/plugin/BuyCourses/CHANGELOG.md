@@ -1,3 +1,232 @@
+v7.7 - 2026-07-08
+====
+
+Feature: paid course cards on `/courses` now show the linked service name to the current course manager, including sticky course cards, without exposing sale or payment identifiers.
+Fix: service descriptions on `/resources/courses/new` now preserve safe paragraph and list formatting after multilingual filtering, with a second DOMPurify sanitization before rendering.
+Fix: permanently deleting a paid course now marks its BuyCourses relation as deleted, clears frozen-enrollment remnants, and service course counts also ignore missing or soft-deleted courses.
+
+Feature: renewable services can now schedule renewal cancellation from My Services with a detailed confirmation modal, Stripe cancel-at-period-end support, PayPal recurring profile cancellation, CSRF protection, idempotent local state, and continued access until the paid period ends.
+Fix: Stripe service upgrades now reuse an existing pending Checkout Session, reconcile an already-paid pending upgrade before creating another charge, replace only expired sessions, and use Stripe idempotency keys so repeated confirmation requests cannot create duplicate Checkout Sessions.
+UI: reorganized the service create and edit forms into clear sections for general information, pricing, recurring billing, publication, media, granted benefits, AI features, and destructive actions without changing submitted field names or service business logic.
+Fix: service plans now use the same stable creation order in the shop catalog and on the course creation page.
+Fix: upgrade actions are now also exposed on the BuyCourses landing page and on the course creation service cards.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new upsale and service-upgrade columns are added to
+the `plugin_buycourses_services` and `plugin_buycourses_service_sale` tables.
+Either load [your-host]/plugin/BuyCourses/update.php in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_services ADD upsale_from_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_from_sale_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_credit_amount DECIMAL(10,2) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD recurring_amount DECIMAL(10,2) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgraded_to_sale_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_completed_at DATETIME DEFAULT NULL;
+```
+
+v7.6 - 2026-07-02
+====
+
+Feature: services can now define an optional Upsale source service. Users with an active source service see an Upgrade action, receive a server-validated prorated credit for the unused period, and keep their linked courses and granted benefits on the upgraded service. Existing recurring Stripe profiles are moved to the target service after successful payment; unsupported or failed transitions leave the local source service unchanged.
+
+Feature: AI feature settings now support `Yes`, `No`, and `Plugin-defined`. In plugin-defined mode, a course can display and use an AI feature only while it is linked to an active BuyCourses service that grants that specific feature. Existing Yes/No behavior remains unchanged.
+
+Fix: courses created with an active paid service now start with private visibility, and their teachers can change course visibility while the linked paid period remains active, even when the platform setting normally reserves visibility changes for administrators. Course subscription settings remain protected by the platform rule. Existing recurring expiration/reactivation processing continues to save and restore the teacher's latest visibility.
+
+Fix: standardized service duration output across catalog, detail and purchase screens through the translated `%s days` placeholder, replaced the raw `TabsDashboard` breadcrumb with the core `Shop` label, reused the core `More information` translation in course creation, separated standard-course counts from BuyCourses-linked courses, prevented a second purchase of an already active user service from both the detail page and direct checkout URL, and replaced the unknown tax percentage on service details with a translated `%s + tax` price notice.
+Feature: VAT invoices are now generated automatically at the moment a sale, service
+sale, or subscription sale completes — mandatory and immediate for business buyers
+(EU/Belgian VAT rules require an invoice for every B2B sale), and optional for
+individual buyers via a new "I want a VAT invoice for this purchase" checkbox at
+checkout. Previously an invoice could be created much later, the first time someone
+happened to click "Download" on the receipt link, which made its invoice date
+unrelated to the actual purchase date.
+
+Feature: individual buyers who did not request an invoice at checkout can still
+request one afterwards from `/my-services`, within 6 months of the purchase date
+(`BuyCoursesPlugin::INVOICE_REQUEST_WINDOW_MONTHS`). The invoice is generated at the
+moment of the request, not backdated.
+
+Feature: every completed purchase (invoiced or not) now also gets a non-fiscal
+Receipt document (`receipt.php`), always available regardless of the invoicing
+setting, showing the VAT amount charged, the seller's VAT ID, the payment method,
+and the payment gateway's own transaction ID when available (captured from Stripe,
+PayPal, TPV Redsys, and Culqi; not available for Cecabank or bank transfer).
+
+Feature: services can now declare which AI course-creation features they grant
+access to (learning path generator, exercise generator, open-answers grader, tutor
+chatbot, task grader, content analyser, image generator, glossary terms generator),
+configurable per service and shown to the buyer on the catalog and confirmation
+pages.
+
+Feature: services can be duplicated from the admin list ("Copy" action), and the
+catalog can filter/group renewable services into monthly/yearly billing-cycle tabs.
+
+Fix: service purchase eligibility checks (`canCurrentUserBuyService()`) now
+correctly gate access when a service is restricted to specific users/courses.
+
+Fix: multilingual (multiple-language) HTML service descriptions are now filtered
+down to the visitor's language correctly instead of showing every language's block
+concatenated together.
+
+Fix: course/session/service checkout now goes through a single unified purchase
+page instead of three near-duplicate ones, fixing several navigation
+inconsistencies between them.
+
+Fix: an edge case in the course-creation purchase limit check and course/session
+purchase flow that could under- or over-count a user's already-purchased items.
+
+Fix: the "Courses/Sessions" tab on the sales report pages (sales_report.php,
+service_sales_report.php, subscription_sales_report.php) showed the raw string
+"CourseSessionBlock" instead of its translation, because the template called the
+core `get_lang` filter instead of `get_plugin_lang('BuyCoursesPlugin')` — this term
+was only ever defined in the plugin's own language files.
+
+Fix: the "Search" filter card on the same three sales report pages had its form
+elements (radio buttons, the "Order status" select, the Search button) touching the
+card's border with no internal padding, breaking the platform's 8-point spacing.
+The `formShell` wrapper div relied entirely on nested `[&_.form-group]:p-5`-style
+selectors for its padding, but Chamilo's `FormValidator` renders this form's fields
+inside `<div class="row mb-3">` wrappers, not `.form-group` — so that padding rule
+never matched anything. Added padding directly on the wrapper itself.
+
+Feature: the "Info" button in service_sales_report.php's Actions column now shows
+much more: the buyer's name (linked to their admin profile), username, email,
+IP address (when recorded), full VAT/tax breakdown, seller VAT number, buyer
+VAT number/business name for business buyers, the payment method as text, and the
+payment gateway's transaction ID when available — the same information a receipt
+shows. The endpoint was rewritten to return structured JSON instead of an HTML
+string that the browser scraped back into plain text (a fragile round-trip that
+also silently mangled the "Service information"/"Sale information" section
+titles, since a `<legend>` closing tag wasn't one of the line-break markers the
+scraper looked for).
+
+Fix: the sales report tables showed the payment method as a raw integer for
+Stripe, TPV Redsys, and Cecabank sales (only PayPal/bank transfer/Culqi were
+mapped by hand in the template) — now uses `BuyCoursesPlugin::getPaymentTypes()`
+for full, consistent coverage. Also fixed the price column silently losing its
+currency sign: the code read a `sale.iso_code` field that `getServiceSale()` never
+actually sets, so every amount fell back to a bare, currency-less number.
+
+Fix: `Template::get_icon_path()`, called as a fallback when a service/product has
+no image, does not exist on that class — this method has never existed, so any
+service or product sale without a custom image made the request that renders it
+throw a fatal error. Present in four places (`buycourses.ajax.php` twice,
+`service_panel.php`, `panel.ajax.php`); replaced with `Display::get_icon_path()`,
+the actual core helper (also wired up as Twig's `icon` filter) used everywhere
+else in Chamilo for this exact fallback.
+
+Fix: the "Purchase history" table on `/my-services` now shows the purchase date and
+time (previously date only), and the downloadable invoice now shows both the
+purchase date and the invoice date side by side, since they can legitimately differ.
+
+Fix: the "Purchase history" table on `/my-services` no longer offers a Receipt,
+Invoice, or "Request invoice" link for a pending or cancelled sale — those only
+make sense once the sale is actually completed. This is now also enforced at the
+`receipt.php`/`invoice.php`/`request_invoice.php` endpoints themselves (not just
+hidden from the list), via a completed-status check added to
+`BuyCoursesPlugin::canUserAccessInvoice()` — so a bookmarked or guessed URL for a
+sale that was never completed (or later cancelled) is rejected even for platform
+admins, since a receipt/invoice for money never received doesn't make sense
+regardless of who's asking.
+
+Fix: subscription sale invoices no longer share the same internal identifier space
+as course/session sale invoices. `plugin_buycourses_invoices.is_service` is now a
+3-way discriminator (course/session, service, subscription) instead of a boolean;
+previously a subscription sale and a course/session sale with the same numeric id
+could resolve to the wrong invoice record.
+
+Change: the student-facing menu entry (sidebar, logged-out top nav, and the small
+badge at the top of `/my-services`) was renamed from "Buy courses" to "Shop", since
+the plugin now also sells services and subscriptions, not just courses/sessions.
+French, Spanish, German, and Dutch translations added; other locales fall back to
+the English label until the normal translation pipeline runs. The plugin's own
+admin-facing title ("Sell courses", used in the plugin settings page and legacy
+admin breadcrumbs) was intentionally left as-is — out of scope, but inconsistent
+with this new name if anyone wants to revisit it later.
+
+Fix: garbled `?` character appearing in PDF invoice/receipt times (e.g.
+"1:48?AM"). Root cause was in Chamilo core's PDF renderer (`PDF::content_to_pdf()`),
+which restricts output to CP1252/WinAnsi fonts and can't render the narrow
+no-break space some locales use before "AM"/"PM"; it's now normalized to a regular
+non-break space before rendering.
+
+Fix: the service options shown on the "Create a new course" page
+(`/resources/courses/new`) displayed every language block of a multilingual
+service description concatenated together, instead of just the visitor's
+language. `BuyCoursesPlugin::getDisplayedServiceCourseCreationOptionsForUser()`
+stripped the description's HTML tags directly, without first filtering it
+through `filterServiceMultilingualHtml()` like the service catalog and service
+information pages already did — now uses the existing
+`filterServiceMultilingualPlainText()` helper, which applies that same
+language filtering before stripping tags.
+
+Fix: the "Owner" select box on the service admin forms (`services_add.php`,
+`services_edit.php`) listed every platform user, including students, instead of
+only users who can plausibly own a service (teachers, session admins, and
+platform/global admins). Now built from
+`UserRepository::findByRoleList(['ROLE_TEACHER', 'ROLE_ADMIN',
+'ROLE_SESSION_MANAGER', 'ROLE_GLOBAL_ADMIN'], ...)`. On the edit form, a
+service's current owner is still shown/preserved even if their role no longer
+qualifies, so saving unrelated changes never silently reassigns ownership.
+
+Fix: the price summary shown on `service_process_confirm.php` (the "Confirm
+your purchase" step) displayed the seller's flat/default VAT rate (e.g. 21%)
+instead of the buyer's actual destination-country rate (e.g. 20% for France),
+even though the sale being paid for had already correctly resolved and stored
+the buyer-specific rate via `resolveSaleVat()`/`determineVatTreatment()`. The
+confirmation screen rebuilt its own "service_item" display data from a fresh,
+buyer-unaware `getService()`/`setPriceSettings()` call — which only knows the
+service's own tax override or the plugin's global tax percentage — instead of
+reading the rate already resolved for this buyer. The amount actually charged
+at the payment gateway was always correct (it reads the sale's `price` column
+directly); only the on-screen breakdown was wrong, which could still confuse
+or mislead the buyer about what they were being charged. Now built by the new
+`BuyCoursesPlugin::buildServiceSaleVatSummary()`, sourced entirely from the
+persisted sale record.
+
+Fix: `BuyCoursesCourseUserSubscriptionEventSubscriber::onCourseUserSubscriptionCheck()`
+(the only listener enforcing course-user-subscription limits when a teacher/admin
+subscribes a student via `CourseManager::subscribeUser()`) checked only
+`getActiveSubscriptionCourseHostingLimit()` — a limit tied to a course-creation
+BuyCourses subscription — and silently allowed the subscription whenever a course
+had none, ignoring the platform-wide "Global limit of users per course"
+(`platform.hosting_limit_users_per_course`) setting entirely for any ordinary
+course. Now uses `getEffectiveUsersPerCourseLimitForCourse()`, the same
+fallback-aware limit already used by `/main/user/user.php`'s UI warning and by
+`subscribe_user.php`/`course_user_import.php`'s own pre-checks. This also fixes
+the course-level CSV import (`user/user_import.php`), which had no pre-check of
+its own and relied entirely on this listener.
+
+Follow-up fix: `getEffectiveUsersPerCourseLimitForCourse()` no longer applies a
+teacher's user-level `buycourses_hosting_limit` benefit to every course managed by
+that teacher. Only a service subscription explicitly linked to the course through
+`plugin_buycourses_subscription_course` may override the global limit. Courses
+created before the service purchase, or otherwise not linked to that service,
+continue to use `platform.hosting_limit_users_per_course`.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new `buyer_type`, `invoice_requested`, and
+`gateway_transaction_id` columns are added to the `plugin_buycourses_sale`,
+`plugin_buycourses_service_sale`, and `plugin_buycourses_subscription_rel_sale`
+tables, and the new `ai_course_features_json` column is added to
+`plugin_buycourses_services`. Either load
+[your-host]/plugin/BuyCourses/update.php in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_sale ADD buyer_type TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_sale ADD invoice_requested TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_sale ADD gateway_transaction_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD buyer_type TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_service_sale ADD invoice_requested TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_service_sale ADD gateway_transaction_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_subscription_rel_sale ADD buyer_type TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_subscription_rel_sale ADD invoice_requested TINYINT(1) DEFAULT 0;
+ALTER TABLE plugin_buycourses_subscription_rel_sale ADD gateway_transaction_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_services ADD ai_course_features_json LONGTEXT DEFAULT NULL;
+```
+
 v7.5 - 2026-06-12
 ====
 Feature: per-country EU VAT now applies to course, session and subscription sales, not only

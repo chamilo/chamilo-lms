@@ -8724,6 +8724,15 @@ msgstr "ნაჩვენებია"
 msgid "My courses"
 msgstr "ჩემი კურსები"
 
+msgid "Shop"
+msgstr "მაღაზია"
+
+msgid "Invoice"
+msgstr "ინვოისი"
+
+msgid "Request invoice"
+msgstr "ინვოისის მოთხოვნა"
+
 msgid "View my progress"
 msgstr "ჩემი პროგრესის ნახვა"
 
@@ -36476,4 +36485,7 @@ msgstr "მოდერირებული"
 
 msgid "View threads"
 msgstr "თემების ნახვა"
+
+msgid "No auth source"
+msgstr "ავტორიზაციის წყარო არ არის"
 

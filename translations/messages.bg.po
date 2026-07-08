@@ -8729,6 +8729,15 @@ msgstr "Показване"
 msgid "My courses"
 msgstr "Моите курсове"
 
+msgid "Shop"
+msgstr "Магазин"
+
+msgid "Invoice"
+msgstr "Фактура"
+
+msgid "Request invoice"
+msgstr "Заявка за фактура"
+
 msgid "View my progress"
 msgstr "Преглед на моите посещения"
 
@@ -36482,4 +36491,7 @@ msgstr "Модериран"
 
 msgid "View threads"
 msgstr "Преглед на теми"
+
+msgid "No auth source"
+msgstr "Няма източник за удостоверяване"
 

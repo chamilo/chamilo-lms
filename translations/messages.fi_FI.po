@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -8728,6 +8728,15 @@ msgstr "Näytä"
 
 msgid "My courses"
 msgstr "Kurssini"
+
+msgid "Shop"
+msgstr "Kauppa"
+
+msgid "Invoice"
+msgstr "Lasku"
+
+msgid "Request invoice"
+msgstr "Pyydä lasku"
 
 msgid "View my progress"
 msgstr "Katso tilastojasi"
@@ -36482,4 +36491,7 @@ msgstr "Moderoitu"
 
 msgid "View threads"
 msgstr "Näytä ketjut"
+
+msgid "No auth source"
+msgstr "Ei todennuslähdettä"
 

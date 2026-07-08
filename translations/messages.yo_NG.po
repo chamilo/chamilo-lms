@@ -8724,6 +8724,15 @@ msgstr "Han"
 msgid "My courses"
 msgstr "Awọn ẹkọ mi"
 
+msgid "Shop"
+msgstr "Shop"
+
+msgid "Invoice"
+msgstr "Invoice"
+
+msgid "Request invoice"
+msgstr "Request invoice"
+
 msgid "View my progress"
 msgstr "Wo ilọsiwaju mi"
 
@@ -36476,4 +36485,7 @@ msgstr "Ti ṣàkóso"
 
 msgid "View threads"
 msgstr "Wo àwọn ìsọ̀rọ̀"
+
+msgid "No auth source"
+msgstr "No auth source"
 

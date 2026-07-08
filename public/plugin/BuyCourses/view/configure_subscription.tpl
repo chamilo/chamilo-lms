@@ -22,7 +22,7 @@
             </div>
 
             <a href="{{ back_url }}" class="{{ btnBack }}">
-                <em class="fa fa-arrow-left"></em>
+                <em class="mdi mdi-arrow-left"></em>
                 {{ 'Back'|get_lang }}
             </a>
         </div>
@@ -129,7 +129,7 @@
                                         <input type="hidden" name="duration" value="{{ subscription.duration }}">
 
                                         <button type="submit" class="{{ btnDanger }}">
-                                            <em class="fa fa-remove"></em>
+                                            <em class="mdi mdi-close"></em>
                                             {{ 'Delete'|get_lang }}
                                         </button>
                                     </form>

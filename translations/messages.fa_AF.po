@@ -8724,6 +8724,15 @@ msgstr "نمایش"
 msgid "My courses"
 msgstr "دوره‌های من"
 
+msgid "Shop"
+msgstr "فروشگاه"
+
+msgid "Invoice"
+msgstr "فاکتور"
+
+msgid "Request invoice"
+msgstr "درخواست فاکتور"
+
 msgid "View my progress"
 msgstr "مشاهده پیشرفت من"
 
@@ -36476,4 +36485,7 @@ msgstr "تعدیل‌شده"
 
 msgid "View threads"
 msgstr "مشاهده موضوعات"
+
+msgid "No auth source"
+msgstr "بدون منبع احراز هویت"
 

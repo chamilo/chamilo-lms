@@ -681,10 +681,11 @@ const groupVisibilityOptions = computed(() => [
   { label: t("Private"), value: "private" },
 ])
 
-const categoryOptions = computed(() => [
-  { label: t("No category"), value: 0 },
-  ...categories.value.map((category) => ({ label: category.title, value: category.iid })),
-])
+const categoryOptions = computed(() => {
+  const options = categories.value.map((category) => ({ label: category.title, value: category.iid }))
+
+  return options.length ? options : [{ label: t("General"), value: 0 }]
+})
 const forumImagePreview = computed(() => {
   if (forumForm.removeImage) {
     return forumForm.imagePreviewUrl || ""
@@ -802,7 +803,7 @@ function resetForumForm(category = null) {
   forumForm.id = null
   forumForm.title = ""
   forumForm.comment = ""
-  forumForm.categoryId = category?.iid || 0
+  forumForm.categoryId = category?.iid || categories.value[0]?.iid || 0
   forumForm.moderated = false
   forumForm.studentsCanEdit = false
   forumForm.requiresApproval = false

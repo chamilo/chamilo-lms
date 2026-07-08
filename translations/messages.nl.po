@@ -8770,6 +8770,15 @@ msgstr "Weergeven"
 msgid "My courses"
 msgstr "Mijn cursussen"
 
+msgid "Shop"
+msgstr "Winkel"
+
+msgid "Invoice"
+msgstr "Factuur"
+
+msgid "Request invoice"
+msgstr "Factuur aanvragen"
+
 msgid "View my progress"
 msgstr "Toon mijn statistieken"
 
@@ -38560,4 +38569,7 @@ msgstr "Gemodereerd"
 
 msgid "View threads"
 msgstr "Onderwerpen bekijken"
+
+msgid "No auth source"
+msgstr "No auth source"
 

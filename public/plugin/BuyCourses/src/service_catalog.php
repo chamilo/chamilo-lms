@@ -200,9 +200,14 @@ foreach ($serviceList as &$service) {
     $serviceId = (int) $service['id'];
     $service['description'] = $plugin->filterServiceMultilingualHtml((string) ($service['description'] ?? ''));
     $service['service_information'] = $plugin->filterServiceMultilingualHtml((string) ($service['service_information'] ?? ''));
+    $upgradeOffer = $plugin->getCurrentUserServiceUpgradeOffer($serviceId);
+    $plugin->applyServiceUpgradeOfferToPricing($service, $upgradeOffer);
+    $service['upgrade_offer'] = $upgradeOffer;
+    $service['is_upgrade'] = null !== $upgradeOffer;
     $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
     $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
-    $service['can_buy'] = $plugin->canCurrentUserBuyService($service);
+    $service['can_buy'] = $plugin->canCurrentUserBuyService($service)
+        && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 }
 unset($service);
 
@@ -308,7 +313,7 @@ if (api_is_platform_admin()) {
 } else {
     $interbreadcrumb[] = [
         'url' => $pluginIndexUrl,
-        'name' => get_lang('TabsDashboard'),
+        'name' => get_lang('Shop'),
     ];
 }
 

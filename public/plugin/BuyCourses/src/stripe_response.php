@@ -199,6 +199,11 @@ $completeCourseOrSessionSale = static function (mixed $checkoutSession) use ($pl
     $saleIsCompleted = $plugin->completeSale((int) $sale['id']);
     if ($saleIsCompleted) {
         $plugin->storePayouts((int) $sale['id']);
+
+        $paymentIntentId = trim((string) ($checkoutSession->payment_intent ?? ''));
+        if ('' !== $paymentIntentId) {
+            $plugin->updateSaleGatewayTransactionId((int) $sale['id'], $paymentIntentId);
+        }
     }
 
     $log('Course/session Stripe sale completed.', [
@@ -240,8 +245,15 @@ $completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use 
     }
 
     $plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
-    $plugin->completeServiceSale($serviceSaleId);
-    $plugin->applyServiceBenefitsFromSale($serviceSaleId);
+    if (!$plugin->completeServiceSale($serviceSaleId)) {
+        $log('Service Stripe checkout could not be completed.', [
+            'service_sale_id' => $serviceSaleId,
+            'checkout_session_id' => $checkoutSessionId,
+            'error' => $plugin->getLastServiceSaleError(),
+        ]);
+
+        return false;
+    }
 
     $completedServiceSale = $plugin->getServiceSale($serviceSaleId);
     $nextChargeDate = trim((string) ($completedServiceSale['date_end'] ?? ''));
@@ -266,8 +278,12 @@ $completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use 
 
 switch ($eventType) {
     case 'checkout.session.completed':
-        if (!$completeCourseOrSessionSale($object)) {
-            $completeServiceSaleFromCheckout($object);
+        if (!$completeCourseOrSessionSale($object) && !$completeServiceSaleFromCheckout($object)) {
+            $log('Stripe checkout event did not match or complete any sale.', [
+                'event_id' => $eventId,
+                'checkout_session_id' => (string) ($object->id ?? ''),
+            ]);
+            $respond('SERVICE_COMPLETION_FAILED', 500);
         }
         break;
 
@@ -320,12 +336,20 @@ switch ($eventType) {
 
         $customerId = isset($object->customer) ? (string) $object->customer : null;
 
-        $plugin->completeStripeRecurringServiceSale(
+        if (!$plugin->completeStripeRecurringServiceSale(
             $serviceSaleId,
             $subscriptionId,
             $customerId,
             $nextChargeDate
-        );
+        )) {
+            $log('Stripe recurring service sale could not be completed.', [
+                'service_sale_id' => $serviceSaleId,
+                'subscription_id' => $subscriptionId,
+                'event_id' => $eventId,
+                'error' => $plugin->getLastServiceSaleError(),
+            ]);
+            $respond('SERVICE_COMPLETION_FAILED', 500);
+        }
 
         $updateData = [
             'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
@@ -341,6 +365,11 @@ switch ($eventType) {
 
         if (null !== $customerId && '' !== $customerId) {
             $updateData['gateway_customer_id'] = $customerId;
+        }
+
+        $paymentIntentId = trim((string) ($object->payment_intent ?? $object->charge ?? ''));
+        if ('' !== $paymentIntentId) {
+            $updateData['gateway_transaction_id'] = $paymentIntentId;
         }
 
         $plugin->updateServiceSaleGatewayData($serviceSaleId, $updateData);
@@ -393,9 +422,14 @@ switch ($eventType) {
 
         $serviceSale = $plugin->getServiceSaleFromGatewaySubscriptionId($subscriptionId);
         if (!empty($serviceSale)) {
+            $cancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
+            if ('' === $cancelledAt) {
+                $cancelledAt = api_get_utc_datetime();
+            }
+
             $plugin->updateServiceSaleGatewayData((int) $serviceSale['id'], [
                 'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED,
-                'cancelled_at' => api_get_utc_datetime(),
+                'cancelled_at' => $cancelledAt,
                 'recurring_gateway' => 'stripe',
                 'gateway_subscription_id' => $subscriptionId,
                 'recurring_profile_id' => $subscriptionId,

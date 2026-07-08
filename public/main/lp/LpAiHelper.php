@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -14,9 +15,12 @@ class LpAiHelper
 
     public function aiHelperForm()
     {
-        if ('true' !== api_get_setting('ai_helpers.enable_ai_helpers') ||
-            'true' !== api_get_course_setting('learning_path_generator')
-        ) {
+        $aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
+
+        if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'learning_path_generator',
+            api_get_course_int_id()
+        )) {
             return false;
         }
 

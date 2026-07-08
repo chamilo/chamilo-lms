@@ -8730,6 +8730,15 @@ msgstr "Prikaži"
 msgid "My courses"
 msgstr "Moja lista kurseva"
 
+msgid "Shop"
+msgstr "Prodavnica"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Zatraži fakturu"
+
 msgid "View my progress"
 msgstr "Pogled na moje statistike"
 
@@ -35726,31 +35735,31 @@ msgid "The gradebook evaluation could not be linked"
 msgstr "Evaluacija dnevnika ocena nije mogla biti povezana"
 
 msgid "Survey questions"
-msgstr "Survey questions"
+msgstr "Pitanja ankete"
 
 msgid "Back to survey list"
-msgstr "Back to survey list"
+msgstr "Nazad na listu anketa"
 
 msgid "This survey already has answers. Question editing is disabled by configuration."
-msgstr "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Ova anketa već ima odgovore. Izmena pitanja je onemogućena konfiguracijom."
 
 msgid "Choose the type of question you want to add."
-msgstr "Choose the type of question you want to add."
+msgstr "Izaberite tip pitanja koje želite da dodate."
 
 msgid "The free text option is added automatically."
-msgstr "The free text option is added automatically."
+msgstr "Opcija slobodnog teksta se dodaje automatski."
 
 msgid "No questions found"
-msgstr "No questions found"
+msgstr "Nema pronađenih pitanja"
 
 msgid "Mandatory"
 msgstr "Mandatory"
 
 msgid "Unsupported question type"
-msgstr "Unsupported question type"
+msgstr "Nepodržani tip pitanja"
 
 msgid "You can use the tags {%s} and {%s} in the question."
-msgstr "You can use the tags {%s} and {%s} in the question."
+msgstr "Možete koristiti oznake {%s} i {%s} u pitanju."
 
 msgid "This question is shown conditionally while answering the survey."
 msgstr "Ovo pitanje se prikazuje uslovno prilikom popunjavanja ankete."
@@ -36483,4 +36492,7 @@ msgstr "Moderirano"
 
 msgid "View threads"
 msgstr "Prikaži teme"
+
+msgid "No auth source"
+msgstr "Nema izvora autentifikacije"
 

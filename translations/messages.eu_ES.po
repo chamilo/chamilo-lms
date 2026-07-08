@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula lagina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -8728,6 +8728,15 @@ msgstr "Erakutsi"
 
 msgid "My courses"
 msgstr "Nire ikastaroak"
+
+msgid "Shop"
+msgstr "Denda"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Eskatu faktura"
 
 msgid "View my progress"
 msgstr "Ikusi nire estatistikak"
@@ -36487,4 +36496,7 @@ msgstr "Moderatua"
 
 msgid "View threads"
 msgstr "Ikusi hariak"
+
+msgid "No auth source"
+msgstr "Ez dago autentifikazio iturririk"
 

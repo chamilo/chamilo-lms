@@ -53,41 +53,31 @@ import { usePlatformConfig } from "../store/platformConfig"
 import courseService from "../services/courseService"
 import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
 import { customVueTemplateEnabled } from "../config/env"
+import { resolveCourseIdFromRoute } from "../utils/courseContext"
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function resolveCourseId(to) {
-  if ("CourseHome" === to.name) {
-    return parseInt(to.params?.id ?? 0)
-  }
-
-  return parseInt(to.query?.cid ?? 0)
-}
-
-function normalizeInternalUrl(url) {
+// Parses an internal (same-origin) URL and appends the course context
+// (cid, and sid when present) without overriding params already there.
+// Returns an origin-relative URL, or null for external/malformed URLs —
+// the result is assigned to window.location.href, so rejecting foreign
+// origins here is the open-redirect defense.
+function appendCourseContext(url, courseId, sessionId) {
   if (!url || typeof url !== "string") {
     return null
   }
 
+  let parsedUrl
+
   try {
-    const parsedUrl = new URL(url, window.location.origin)
-
-    if (parsedUrl.origin !== window.location.origin) {
-      return null
-    }
-
-    return parsedUrl
-  } catch (error) {
+    parsedUrl = new URL(url, window.location.origin)
+  } catch {
     return null
   }
-}
 
-function appendCourseContext(url, courseId, sessionId) {
-  const parsedUrl = normalizeInternalUrl(url)
-
-  if (!parsedUrl) {
+  if (parsedUrl.origin !== window.location.origin) {
     return null
   }
 
@@ -586,7 +576,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  const cid = resolveCourseId(to)
+  const cid = resolveCourseIdFromRoute(to)
 
   if (!cid) {
     Object.keys(sessionStorage)
@@ -644,6 +634,18 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
+  // Course-context guard: routes flagged with requiresCourseContext need a cid
+  // (query param, or path param on CourseHome — see utils/courseContext.js).
+  // sid/gid stay optional. Blocking here, before beforeResolve, keeps the
+  // cidReq store from being fed a course-less context.
+  const requiresCourseContext = to.matched.some((record) => record.meta?.requiresCourseContext === true)
+
+  if (requiresCourseContext && !cid) {
+    next({ name: "Home", replace: true })
+
+    return
+  }
+
   // Feature-flag guard: platform.allow_my_files
   const requiresMyFiles = to.matched.some((record) => record.meta?.requiresMyFiles === true)
 
@@ -669,8 +671,9 @@ router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
   const securityStore = useSecurityStore()
 
-  const cid = resolveCourseId(to)
-  const sid = parseInt(to.query?.sid ?? 0)
+  const cid = resolveCourseIdFromRoute(to)
+  const sid = parseInt(to.query?.sid ?? 0) || 0
+  const gid = parseInt(to.query?.gid ?? 0) || 0
 
   if (cid) {
     await cidReqStore.setCourseAndSessionById(cid, sid)

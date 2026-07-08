@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
@@ -665,7 +666,8 @@ class StudentPublicationController extends AbstractController
     public function getAiTaskGraderDefaultPrompt(
         int $id,
         Request $request,
-        CStudentPublicationRepository $repo
+        CStudentPublicationRepository $repo,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
     ): JsonResponse {
         $submission = $repo->find($id);
         if (!$submission) {
@@ -674,6 +676,13 @@ class StudentPublicationController extends AbstractController
 
         // Only editors should request the prompt (same rule as grading).
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'task_grader',
+            $this->getCourseIdFromResourceNode($submission->getResourceNode())
+        )) {
+            return new JsonResponse(['error' => 'AI task grader is not enabled for this course.'], 403);
+        }
 
         $language = (string) ($request->query->get('language') ?? 'en');
 
@@ -686,7 +695,8 @@ class StudentPublicationController extends AbstractController
     public function aiTaskGradeCapabilities(
         int $id,
         CStudentPublicationRepository $repo,
-        ResourceNodeRepository $resourceNodeRepository
+        ResourceNodeRepository $resourceNodeRepository,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
     ): JsonResponse {
         $submission = $repo->find($id);
         if (!$submission) {
@@ -694,6 +704,16 @@ class StudentPublicationController extends AbstractController
         }
 
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'task_grader',
+            $this->getCourseIdFromResourceNode($submission->getResourceNode())
+        )) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'AI task grader is not enabled for this course.',
+            ], 403);
+        }
 
         $studentText = trim((string) ($submission->getDescription() ?? ''));
         $hasText = '' !== $this->toPlainText($studentText);
@@ -769,7 +789,8 @@ class StudentPublicationController extends AbstractController
         int $id,
         Request $request,
         CStudentPublicationRepository $repo,
-        AiTaskGraderService $aiTaskGraderService
+        AiTaskGraderService $aiTaskGraderService,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
     ): JsonResponse {
         $submission = $repo->find($id);
         if (!$submission) {
@@ -777,6 +798,16 @@ class StudentPublicationController extends AbstractController
         }
 
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'task_grader',
+            $this->getCourseIdFromResourceNode($submission->getResourceNode())
+        )) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'AI task grader is not enabled for this course.',
+            ], 403);
+        }
 
         $teacher = $this->getUser();
         if (!$teacher instanceof User) {
@@ -838,6 +869,18 @@ class StudentPublicationController extends AbstractController
         $name = preg_replace('/_+/', '_', $name);
 
         return trim($name, '_');
+    }
+
+    private function getCourseIdFromResourceNode(ResourceNode $resourceNode): int
+    {
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            $courseId = (int) ($resourceLink->getCourse()?->getId() ?? 0);
+            if ($courseId > 0) {
+                return $courseId;
+            }
+        }
+
+        return 0;
     }
 
     private function buildDefaultTaskGraderPrompt(CStudentPublication $submission, string $language): string

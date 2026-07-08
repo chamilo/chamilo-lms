@@ -202,6 +202,49 @@ if (isset($oLP)) {
 }
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$isCStudioEditorRedirect = 'add_item' === $action
+    && 'edit' === (string) ($_GET['teachdoc'] ?? '')
+    && !empty($_GET['lp_id']);
+if ($isCStudioEditorRedirect) {
+    $htmlHeadXtra[] = <<<'HTML'
+<script>
+document.documentElement.classList.add('cstudio-lp-redirecting');
+</script>
+<style id="cstudio-lp-redirect-early-style">
+html.cstudio-lp-redirecting body {
+    background: #fff !important;
+}
+html.cstudio-lp-redirecting body > * {
+    visibility: hidden !important;
+}
+html.cstudio-lp-redirecting body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 2147482998;
+    visibility: visible !important;
+    background: #fff;
+}
+html.cstudio-lp-redirecting body::after {
+    content: "Opening CStudio editor...";
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 2147482999;
+    visibility: visible !important;
+    transform: translate(-50%, -50%);
+    min-width: 250px;
+    padding: 72px 32px 28px;
+    border-radius: 18px;
+    background: #fff url('/plugin/CStudio/img/base/oel_tools.jpg') no-repeat center 22px / 150px auto;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, .10);
+    color: #1f2937;
+    font: 600 15px/1.4 Arial, sans-serif;
+    text-align: center;
+}
+</style>
+HTML;
+}
 $isBuildView = isset($_REQUEST['view']) && 'build' === $_REQUEST['view'];
 if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && 'upload' === $action && $nodeId > 0) {
     header('Location: '.$importUrl);

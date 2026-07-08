@@ -12,7 +12,7 @@
     {% set appliesToLabel = 'TemplateTitleCertificate'|get_lang %}
 {% endif %}
 
-{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : service.duration_days ~ ' ' ~ 'Days'|get_lang %}
+{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.duration_days) %}
 
 <div class="mx-auto w-full max-w-screen-2xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
@@ -37,7 +37,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -106,7 +106,7 @@
                             <div class="grid gap-3 text-sm text-gray-50">
                                 <div class="flex items-start gap-3">
                                     <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                        <em class="fa fa-user"></em>
+                                        <em class="mdi mdi-account"></em>
                                     </span>
                                     <div>
                                         <div class="font-semibold text-gray-90">{{ 'Buyer'|get_plugin_lang('BuyCoursesPlugin') }}</div>
@@ -116,7 +116,7 @@
 
                                 <div class="flex items-start gap-3">
                                     <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                        <em class="fa fa-calendar"></em>
+                                        <em class="mdi mdi-calendar"></em>
                                     </span>
                                     <div>
                                         <div class="font-semibold text-gray-90">{{ 'PurchaseDate'|get_plugin_lang('BuyCoursesPlugin') }}</div>
@@ -126,7 +126,7 @@
 
                                 <div class="flex items-start gap-3">
                                     <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                        <em class="fa fa-hashtag"></em>
+                                        <em class="mdi mdi-pound"></em>
                                     </span>
                                     <div>
                                         <div class="font-semibold text-gray-90">{{ 'Reference'|get_lang }}</div>
@@ -137,7 +137,7 @@
                                 {% if service.owner.name is defined %}
                                     <div class="flex items-start gap-3">
                                         <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                            <em class="fa fa-user-circle"></em>
+                                            <em class="mdi mdi-account-circle"></em>
                                         </span>
                                         <div>
                                             <div class="font-semibold text-gray-90">{{ 'Owner'|get_lang }}</div>
@@ -228,6 +228,31 @@
                     </div>
 
                     <div class="space-y-3">
+                        {% if service_item.is_upgrade|default(false) %}
+                            <div class="rounded-2xl border border-info/20 bg-support-2 p-4">
+                                <div class="text-sm font-semibold text-primary">{{ 'Upgrade'|get_plugin_lang('BuyCoursesPlugin') }}</div>
+                                <div class="mt-1 text-sm text-gray-50">{{ 'UpgradeFromService'|get_plugin_lang('BuyCoursesPlugin')|format(service_item.upgrade_source_service_name|e) }}</div>
+                            </div>
+                            {% if service_item.upgrade_target_price_formatted %}
+                                <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                    <span class="text-sm font-semibold text-gray-90">{{ 'UpgradeTargetProratedPrice'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                                    <span class="text-sm font-semibold text-gray-90">{{ service_item.upgrade_target_price_formatted }}</span>
+                                </div>
+                            {% endif %}
+                            {% if service_item.upgrade_credit_amount_formatted %}
+                                <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                    <span class="text-sm font-semibold text-gray-90">{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                                    <span class="text-sm font-semibold text-success">- {{ service_item.upgrade_credit_amount_formatted }}</span>
+                                </div>
+                            {% endif %}
+                            {% if service_item.recurring_amount_formatted %}
+                                <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                    <span class="text-sm font-semibold text-gray-90">{{ 'UpgradeNextRenewalPrice'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                                    <span class="text-sm font-semibold text-gray-90">{{ service_item.recurring_amount_formatted }}</span>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
                         {% if service_item.price_formatted is defined %}
                             <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
                                 <span class="text-sm font-semibold text-gray-90">
@@ -329,8 +354,8 @@
                                     id="confirm"
                                     class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                 >
-                                    <em class="fa fa-check fa-fw"></em>
-                                    {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    <em class="mdi mdi-check"></em>
+                                    {{ (service_item.is_upgrade|default(false) ? 'ConfirmUpgrade' : 'ConfirmOrder')|get_plugin_lang('BuyCoursesPlugin') }}
                                 </button>
                             {% else %}
                                 <button
@@ -340,8 +365,8 @@
                                     id="confirm"
                                     class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                 >
-                                    <em class="fa fa-check fa-fw"></em>
-                                    {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    <em class="mdi mdi-check"></em>
+                                    {{ (service_item.is_upgrade|default(false) ? 'ConfirmUpgrade' : 'ConfirmOrder')|get_plugin_lang('BuyCoursesPlugin') }}
                                 </button>
                             {% endif %}
 
@@ -352,7 +377,7 @@
                                 id="cancel"
                                 class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-danger px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2"
                             >
-                                <em class="fa fa-times fa-fw"></em>
+                                <em class="mdi mdi-close"></em>
                                 {{ 'CancelOrder'|get_plugin_lang('BuyCoursesPlugin') }}
                             </button>
                         </div>

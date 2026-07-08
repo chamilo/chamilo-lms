@@ -42,8 +42,8 @@ use Throwable;
  */
 final readonly class SurveyActionProcessor implements ProcessorInterface
 {
-    use SurveyPersonalitySupportTrait;
     use SurveyCsrfTokenValidationTrait;
+    use SurveyPersonalitySupportTrait;
 
     public const CSRF_TOKEN_ID = 'survey_action';
 

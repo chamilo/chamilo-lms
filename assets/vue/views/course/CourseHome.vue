@@ -153,10 +153,7 @@
 
       <div class="flex flex-col lg:flex-row gap-6">
         <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
-          <CourseIntroduction
-            ref="courseIntroEl"
-            :is-allowed-to-edit="isAllowedToEdit"
-          />
+          <CourseIntroduction ref="courseIntroEl" />
         </div>
         <div
           v-if="showCourseSequence"
@@ -394,7 +391,7 @@ function isSettingEnabled(value) {
 const isAiCourseAnalyzerEnabled = computed(() => {
   return (
     isSettingEnabled(getSetting.value("ai_helpers.enable_ai_helpers")) &&
-    isSettingEnabled(getSetting.value("ai_helpers.course_analyser"))
+    courseSettingsStore.isSettingEnabled("course_analyser", "ai_helpers")
   )
 })
 

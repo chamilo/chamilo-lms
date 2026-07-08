@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiSearchMediaTextProviderInterface;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use DateTimeImmutable;
 use Symfony\Component\Process\Process;
@@ -54,7 +54,7 @@ final class DocumentRawTextExtractor
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,
-        private readonly SettingsManager $settingsManager,
+        private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
         private readonly AiProviderFactory $aiProviderFactory,
     ) {}
 
@@ -151,7 +151,7 @@ final class DocumentRawTextExtractor
         string $ext,
         string $mediaType
     ): string {
-        if (!$this->isAiMediaExtractionEnabled()) {
+        if (!$this->isAiMediaExtractionEnabled($resourceNode)) {
             error_log('[Xapian] DocumentRawTextExtractor: AI media extraction disabled, ext='.$ext.', nodeId='.$resourceNode->getId());
 
             return '';
@@ -236,10 +236,18 @@ final class DocumentRawTextExtractor
         return '';
     }
 
-    private function isAiMediaExtractionEnabled(): bool
+    private function isAiMediaExtractionEnabled(ResourceNode $resourceNode): bool
     {
-        return 'true' === $this->settingsManager->getSetting('ai_helpers.enable_ai_helpers', true)
-            && 'true' === $this->settingsManager->getSetting('ai_helpers.content_analyser', true);
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            $course = $resourceLink->getCourse();
+            $courseId = (int) ($course?->getId() ?? 0);
+
+            if ($courseId > 0 && $this->aiFeatureAccessHelper->isFeatureEnabledForCourse('content_analyser', $courseId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function detectAiMediaType(string $ext, string $mimeType): ?string

@@ -2,6 +2,7 @@ export default {
   path: "/resources/document/:node/",
   meta: {
     requiresAuth: true,
+    requiresCourseContext: true,
     showBreadcrumb: true,
     tool: "document",
   },

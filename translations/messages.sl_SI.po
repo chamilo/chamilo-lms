@@ -8738,6 +8738,15 @@ msgstr "Prikaži"
 msgid "My courses"
 msgstr "Moji tečaji"
 
+msgid "Shop"
+msgstr "Trgovina"
+
+msgid "Invoice"
+msgstr "Račun"
+
+msgid "Request invoice"
+msgstr "Zahtevaj račun"
+
 msgid "View my progress"
 msgstr "Poglej moj napredek"
 
@@ -20324,7 +20333,7 @@ msgid "Start video call"
 msgstr "Zaženi video klic"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL videa"
 
 msgid "Insert a valid URL"
 msgstr "Vstavite veljaven URL"
@@ -30903,7 +30912,7 @@ msgid "Account locked until"
 msgstr "Račun zaklenjen do"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "URL Google Koledarja"
 
 msgid "User chat status"
 msgstr "Stanje klepeta uporabnika"
@@ -36496,4 +36505,7 @@ msgstr "Moderirano"
 
 msgid "View threads"
 msgstr "Ogled niti"
+
+msgid "No auth source"
+msgstr "Brez vira overjanja"
 

@@ -324,22 +324,28 @@ $reactivateCoursesForSubscriptionSale = static function (
     return ['found' => $found, 'reactivated' => $reactivated, 'errors' => $errors];
 };
 
-$extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSaleTable, $serviceSaleId, $durationDays, $profileId, $log, $reactivateCoursesForSubscriptionSale, $subscriptionCourseTable, $courseTable, $defaultActiveCourseVisibility, $decodeContext, $encodeContextForSql): void {
+$extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSaleTable, $serviceSaleId, $durationDays, $profileId, $txnId, $log, $reactivateCoursesForSubscriptionSale, $subscriptionCourseTable, $courseTable, $defaultActiveCourseVisibility, $decodeContext, $encodeContextForSql): void {
     $currentEnd = new DateTimeImmutable((string) ($saleRow['date_end'] ?? 'now'), new DateTimeZone('UTC'));
     $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
     $baseDate = $currentEnd > $now ? $currentEnd : $now;
     $newEnd = $baseDate->modify('+'.$durationDays.' days');
     $newEndSql = $newEnd->format('Y-m-d H:i:s');
 
+    $updateValues = [
+        'date_end' => $newEndSql,
+        'next_charge_date' => $newEndSql,
+        'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
+        'cancelled_at' => null,
+        'status' => BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
+    ];
+
+    if ('' !== $txnId) {
+        $updateValues['gateway_transaction_id'] = $txnId;
+    }
+
     Database::update(
         $serviceSaleTable,
-        [
-            'date_end' => $newEndSql,
-            'next_charge_date' => $newEndSql,
-            'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
-            'cancelled_at' => null,
-            'status' => BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
-        ],
+        $updateValues,
         ['id = ?' => $serviceSaleId]
     );
 
@@ -365,13 +371,14 @@ $extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSale
     ]);
 };
 
-$markRecurringStatus = static function (int $status, ?string $cancelledAt = null) use ($serviceSaleTable, $serviceSaleId): void {
+$markRecurringStatus = static function (int $status, ?string $cancelledAt = null) use ($sale, $serviceSaleTable, $serviceSaleId): void {
     $values = [
         'recurring_payment' => $status,
     ];
 
     if (null !== $cancelledAt) {
-        $values['cancelled_at'] = $cancelledAt;
+        $existingCancelledAt = trim((string) ($sale['cancelled_at'] ?? ''));
+        $values['cancelled_at'] = '' !== $existingCancelledAt ? $existingCancelledAt : $cancelledAt;
     }
 
     Database::update(

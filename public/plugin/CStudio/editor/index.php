@@ -18,6 +18,7 @@ echo "var userStatusCS = '?';";
 echo "var listPagesCS = '?';";
 echo "var renderFromSvg = '';";
 echo "var optionsGlobalPage = '';";
+echo "var cstudioUploadMaxFileSize = '".addslashes((string) ini_get('upload_max_filesize'))."';";
 echo "var lfIdent = '';";
 echo '</script>';
 
@@ -330,6 +331,7 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <link href="templates/styles/classic-ux.css?v=<?php echo $version; ?>" rel="stylesheet"/>
 
     <script src="dist/js/filestack-0.1.10.js?v=<?php echo $version; ?>"></script>
+    <script src="dist/js/grapes.js?v=<?php echo $version; ?>"></script>
     <script src="dist/js/grapesludi.js?v=<?php echo $version; ?>"></script>
     <script src="dist/grapesjs-preset-webpage.min.js?v=<?php echo $version; ?>"></script>
     <script src="jscss/jquery.js?v=<?php echo $version; ?>"></script>

@@ -8737,6 +8737,15 @@ msgstr "Εμφάνιση"
 msgid "My courses"
 msgstr "Τα μαθήματά μου"
 
+msgid "Shop"
+msgstr "Κατάστημα"
+
+msgid "Invoice"
+msgstr "Τιμολόγιο"
+
+msgid "Request invoice"
+msgstr "Αίτημα τιμολογίου"
+
 msgid "View my progress"
 msgstr "Προβολή των στατιστικών μου"
 
@@ -36495,4 +36504,7 @@ msgstr "Συντονισμένο"
 
 msgid "View threads"
 msgstr "Προβολή νημάτων"
+
+msgid "No auth source"
+msgstr "Καμία πηγή ελέγχου ταυτότητας"
 

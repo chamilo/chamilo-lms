@@ -8729,6 +8729,15 @@ msgstr "Amosar"
 msgid "My courses"
 msgstr "Los mios cursos"
 
+msgid "Shop"
+msgstr "Tienda"
+
+msgid "Invoice"
+msgstr "Factura"
+
+msgid "Request invoice"
+msgstr "Solicitar factura"
+
 msgid "View my progress"
 msgstr "Ver les mios estadístiques"
 
@@ -36482,4 +36491,7 @@ msgstr "Moderao"
 
 msgid "View threads"
 msgstr "Ver filos"
+
+msgid "No auth source"
+msgstr "Ensin fonte d'autenticación"
 

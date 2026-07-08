@@ -4,6 +4,7 @@
     "Groups": "Grupos",
     "Sign in": "Inscrever",
     "My courses": "Meus cursos",
+    "Shop": "Shop",
     "Start recording": "Comece a gravar",
     "Stop recording": "Parar a grava\u00e7\u00e3o",
     "Home": "Principal",
@@ -1434,6 +1435,7 @@
     "Images": "Imagens",
     "Media": "M\u00eddia",
     "Files": "Arquivos",
+    "Folder": "Pasta",
     "Folder name": "Nome da pasta",
     "Rename folder": "Renomear pasta",
     "New name": "Novo nome",
@@ -2066,6 +2068,8 @@
     "Reference": "Refer\u00eancia",
     "Amount": "Valor",
     "Receipt": "Recibo",
+    "Invoice": "Invoice",
+    "Request invoice": "Request invoice",
     "Unable to load your services right now.": "N\u00e3o foi poss\u00edvel carregar seus servi\u00e7os no momento.",
     "Auto billing enabled": "Cobran\u00e7a autom\u00e1tica ativada",
     "Auto billing suspended": "Cobran\u00e7a autom\u00e1tica suspensa",
@@ -2388,5 +2392,8 @@
     "Search term is too short": "O termo de pesquisa \u00e9 muito curto",
     "Could not search forums": "N\u00e3o foi poss\u00edvel pesquisar nos f\u00f3runs",
     "Moderated": "Moderado",
-    "View threads": "Ver t\u00f3picos"
+    "View threads": "Ver t\u00f3picos",
+    "Current": "Atual",
+    "No auth source": "No auth source",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "N\u00famero m\u00e1ximo de inscri\u00e7\u00f5es permitidas. Deixe em 0 para n\u00e3o limitar."
 }

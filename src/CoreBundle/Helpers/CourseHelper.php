@@ -175,6 +175,15 @@ class CourseHelper
 
         $this->assertCanCreateCourse($params);
 
+        // A course created with a validated BuyCourses service starts as private.
+        // Explicit visibility values remain respected for administrative/custom flows.
+        if (
+            !empty($params['buycourses_service_sale_id'])
+            && !array_key_exists('visibility', $params)
+        ) {
+            $params['visibility'] = Course::REGISTERED;
+        }
+
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $this->generateCourseCode($params['title']);
             $this->debugLog('createCourse:generatedWantedCode', ['wanted_code' => $params['wanted_code']]);

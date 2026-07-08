@@ -37,12 +37,19 @@
           required
         />
 
-        <BaseTinyEditor
-          v-model="form.text"
-          :help-text="formSubmitted && !hasMessage ? t('Message is required') : ''"
-          :title="t('Message')"
-          editor-id="forum-thread-message"
-        />
+        <div>
+          <BaseTinyEditor
+            v-model="form.text"
+            :title="t('Message')"
+            editor-id="forum-thread-message"
+          />
+          <p
+            v-if="formSubmitted && !hasMessage"
+            class="mt-1 text-sm font-medium text-red-700"
+          >
+            {{ t('Message is required') }}
+          </p>
+        </div>
 
         <BaseAdvancedSettingsButton v-model="advancedSettingsVisible">
           <div class="space-y-4">
@@ -100,18 +107,22 @@
                   <BaseInputText
                     id="forum-thread-grade-max"
                     v-model="form.threadQualifyMax"
+                    :error-text="t('Maximum score is required')"
                     :is-invalid="formSubmitted && form.gradebookEnabled && Number(form.threadQualifyMax) <= 0"
                     :label="t('Maximum score')"
                     name="numeric_calification"
+                    :required="form.gradebookEnabled"
                     type="number"
                   />
 
                   <BaseInputText
                     id="forum-thread-grade-weight"
                     v-model="form.threadWeight"
+                    :error-text="t('Weight is required')"
                     :is-invalid="formSubmitted && form.gradebookEnabled && Number(form.threadWeight) <= 0"
                     :label="t('Weight in Report')"
                     name="weight_calification"
+                    :required="form.gradebookEnabled"
                     type="number"
                   />
                 </div>
@@ -307,7 +318,9 @@ function stripTags(value) {
 }
 
 function isFormValid() {
-  if (!form.title.trim() || !hasMessage.value) {
+  const hasRequiredThreadFields = Boolean(form.title.trim() && hasMessage.value)
+
+  if (!hasRequiredThreadFields) {
     return false
   }
 

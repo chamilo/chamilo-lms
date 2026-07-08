@@ -122,6 +122,7 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
                         $contextParams['origin'] = $contextParams['origin'] ?? 'learnpath';
                         $contextParams['isStudentView'] = 'true';
                         $contextParams['teachdoc'] = 'edit';
+                        $contextParams['cstudio_preview'] = 1;
 
                         $courseSysPage = rtrim($VDB->w_get_path(WEB_PATH), '/')
                             .'/resources/lp/'.$courseNodeId.'/'.$lp_id.'/runtime?'

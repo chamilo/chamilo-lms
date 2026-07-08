@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State\Survey;
 
+use Stringable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -82,7 +83,7 @@ trait SurveyCsrfTokenValidationTrait
             return;
         }
 
-        if (!\is_scalar($token) && !$token instanceof \Stringable) {
+        if (!\is_scalar($token) && !$token instanceof Stringable) {
             return;
         }
 

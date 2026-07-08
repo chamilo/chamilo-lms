@@ -8724,6 +8724,15 @@ msgstr "दिखाएँ"
 msgid "My courses"
 msgstr "मेरे पाठ्यक्रम"
 
+msgid "Shop"
+msgstr "दुकान"
+
+msgid "Invoice"
+msgstr "चालान"
+
+msgid "Request invoice"
+msgstr "चालान का अनुरोध करें"
+
 msgid "View my progress"
 msgstr "मेरी प्रगति देखें"
 
@@ -35479,7 +35488,7 @@ msgid "%s results"
 msgstr "%s परिणाम"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>उदाहरण फॉर्म गतिविधि भरें : बॉडी मास इंडेक्स की गणना करें</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>आयु</strong></td>            <td width=\"75%\" style=\"\">[25] वर्ष</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>लिंग</strong></td>            <td style=\"\" text-align:=\"\">[M] (M या F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>वजन</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ऊंचाई</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>बॉडी मास इंडेक्स</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =वजन/आकार<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> विकिपीडिया लेख</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>फॉर्म गतिविधि भरने का उदाहरण : शरीर द्रव्यमान सूचकांक की गणना करें</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>आयु</strong></td>            <td width=\"75%\" style=\"\">[25] वर्ष</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>लिंग</strong></td>            <td style=\"\" text-align:=\"\">[M] (M या F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>वजन</strong></td>            <td style=\"\" text-align:=\"\">95 किग्रा</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ऊंचाई</strong></td>            <td style=\"vertical-align: top;\">1.81 मी</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>शरीर द्रव्यमान सूचकांक</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =वजन/आकार<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> विकिपीडिया लेख</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "हटाया गया"
@@ -36476,4 +36485,7 @@ msgstr "मॉडरेट किया गया"
 
 msgid "View threads"
 msgstr "थ्रेड देखें"
+
+msgid "No auth source"
+msgstr "कोई प्रमाणीकरण स्रोत नहीं"
 

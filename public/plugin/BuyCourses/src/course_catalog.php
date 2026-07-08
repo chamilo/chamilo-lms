@@ -100,7 +100,7 @@ if (api_is_platform_admin()) {
 } else {
     $interbreadcrumb[] = [
         'url' => $pluginIndexUrl,
-        'name' => get_lang('TabsDashboard'),
+        'name' => get_lang('Shop'),
     ];
 }
 

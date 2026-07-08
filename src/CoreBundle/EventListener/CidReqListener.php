@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
@@ -50,12 +51,21 @@ class CidReqListener
         'ROLE_CURRENT_COURSE_SESSION_TEACHER',
     ];
 
+    /**
+     * Routes that expose the course id through the {id} route parameter instead of a
+     * cid query param. For these, the course id is read from the route attributes.
+     */
+    private const ROUTES_WITH_COURSE_ID_PARAM = [
+        'chamilo_core_course_gettoolintro',
+    ];
+
     public function __construct(
         private readonly Environment $twig,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
         private readonly TokenStorageInterface $tokenStorage,
+        private readonly CourseFromRequestHelper $courseFromRequest,
     ) {}
 
     /**
@@ -110,22 +120,35 @@ class CidReqListener
         $course = null;
         $courseInfo = [];
 
-        // Check if URL has cid value. Using Symfony request.
-        $courseId = (int) $request->get('cid');
+        // Course reference from the URL: cid (id or code) or the legacy 1.11.x cidReq (code).
+        $courseReference = $this->courseFromRequest->getCourseReference($request);
+
+        // Some course routes carry the course id as the {id} route parameter instead of
+        // a cid query param (e.g. chamilo_core_course_gettoolintro). Without this fallback
+        // the listener would find no cid and clear the whole course/session context.
+        if (null === $courseReference && \in_array($request->attributes->get('_route'), self::ROUTES_WITH_COURSE_ID_PARAM, true)) {
+            $routeCourseId = (int) $request->attributes->get('id');
+            if ($routeCourseId > 0) {
+                $courseReference = (string) $routeCourseId;
+            }
+        }
+
         $checker = $this->authorizationChecker;
 
-        if (!empty($courseId)) {
+        if (null !== $courseReference) {
             if ($sessionHandler->has('course')) {
                 /** @var Course $courseFromSession */
                 $courseFromSession = $sessionHandler->get('course');
-                if ($courseFromSession instanceof Course && $courseId === $courseFromSession->getId()) {
+                if ($courseFromSession instanceof Course
+                    && ($courseReference === (string) $courseFromSession->getId() || $courseReference === $courseFromSession->getCode())
+                ) {
                     $course = $courseFromSession;
                     $courseInfo = (array) $sessionHandler->get('_course');
                 }
             }
 
             if (null === $course) {
-                $course = $this->entityManager->find(Course::class, $courseId);
+                $course = $this->courseFromRequest->resolveByReference($courseReference);
 
                 if (null === $course) {
                     throw new NotFoundHttpException($this->translator->trans('Course does not exist'));
@@ -168,7 +191,7 @@ class CidReqListener
                 return;
             }
 
-            $sessionId = (int) $request->get('sid');
+            $sessionId = $this->courseFromRequest->getSessionId($request) ?? 0;
 
             if (empty($sessionId)) {
                 $sessionHandler->remove('session_name');
@@ -199,7 +222,7 @@ class CidReqListener
             }
 
             // Group
-            $groupId = (int) $request->get('gid');
+            $groupId = $this->courseFromRequest->getGroupId($request) ?? 0;
 
             if (empty($groupId)) {
                 $sessionHandler->remove('gid');
@@ -265,7 +288,7 @@ class CidReqListener
 
         $sessionHandler = $request->getSession();
 
-        $courseId = (int) $request->get('cid');
+        $courseReference = $this->courseFromRequest->getCourseReference($request);
 
         if (\is_array($controllerList)
             && (
@@ -273,7 +296,7 @@ class CidReqListener
                 || $controllerList[0] instanceof EditorController
             )
         ) {
-            if (!empty($courseId)) {
+            if (null !== $courseReference) {
                 $controller = $controllerList[0];
                 $session = $sessionHandler->get('session');
                 $course = $sessionHandler->get('course');

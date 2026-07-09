@@ -760,6 +760,7 @@ class BuyCoursesPlugin extends Plugin
             'display_on_course_creation_page' => 'TINYINT(1) NOT NULL DEFAULT 0',
             'ai_course_features_json' => 'LONGTEXT DEFAULT NULL',
             'upsale_from_id' => 'INT UNSIGNED DEFAULT NULL',
+            'active' => 'TINYINT(1) NOT NULL DEFAULT 1',
         ];
 
         foreach ($recurringServiceColumns as $field => $definition) {
@@ -4511,6 +4512,7 @@ class BuyCoursesPlugin extends Plugin
                 'upsale_from_id' => $service['upsale_from_id'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
+                'active' => $service['active'],
                 'visibility' => $service['visibility'],
                 'image' => '',
                 'video_url' => $service['video_url'],
@@ -4616,6 +4618,7 @@ class BuyCoursesPlugin extends Plugin
                 'upsale_from_id' => null,
                 'applies_to' => isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE,
                 'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
+                'active' => 0,
                 'visibility' => !empty($service['visibility']) ? 1 : 0,
                 'image' => '',
                 'video_url' => (string) ($service['video_url'] ?? ''),
@@ -4757,6 +4760,7 @@ class BuyCoursesPlugin extends Plugin
                 'upsale_from_id' => $service['upsale_from_id'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
+                'active' => $service['active'],
                 'visibility' => $service['visibility'],
                 'image' => $service['image'],
                 'video_url' => $service['video_url'],
@@ -4773,6 +4777,9 @@ class BuyCoursesPlugin extends Plugin
     private function normalizeServicePayload(array $service, ?array $existingService = null): array
     {
         $appliesTo = isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE;
+        $active = array_key_exists('active', $service)
+            ? (!empty($service['active']) ? 1 : 0)
+            : (int) ($existingService['active'] ?? 1);
         $visibility = !empty($service['visibility']) ? 1 : 0;
 
         $payload = [
@@ -4801,6 +4808,7 @@ class BuyCoursesPlugin extends Plugin
                 : null,
             'applies_to' => $appliesTo,
             'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
+            'active' => $active,
             'visibility' => $visibility,
             'video_url' => trim((string) ($service['video_url'] ?? '')),
             'service_information' => (string) ($service['service_information'] ?? ''),
@@ -4970,6 +4978,11 @@ class BuyCoursesPlugin extends Plugin
         $service['benefit_configurations'] = $this->getServiceBenefitConfigurations($id);
 
         return $service;
+    }
+
+    public function isServiceActive(array $service): bool
+    {
+        return 1 === (int) ($service['active'] ?? 1);
     }
 
     /**
@@ -5243,6 +5256,10 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $targetService = $this->getService($targetServiceId, $coupon);
+        if (empty($targetService) || !$this->isServiceActive($targetService)) {
+            return null;
+        }
+
         $sourceServiceId = (int) ($targetService['upsale_from_id'] ?? 0);
         if ($sourceServiceId <= 0) {
             return null;
@@ -5703,7 +5720,7 @@ class BuyCoursesPlugin extends Plugin
         $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id ";
 
         $servicesSale = Database::select(
-            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.renewable, s.total_charges, s.allow_trial, s.trial_period, s.trial_frequency, s.trial_total_charges, s.max_subscribers, s.subscription_behavior_json, s.stripe_price_id, s.upsale_from_id, s.applies_to, s.owner_id, s.visibility, s.image',
+            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.renewable, s.total_charges, s.allow_trial, s.trial_period, s.trial_frequency, s.trial_total_charges, s.max_subscribers, s.subscription_behavior_json, s.stripe_price_id, s.upsale_from_id, s.applies_to, s.owner_id, s.active, s.visibility, s.image',
             "$servicesSaleTable ss $innerJoins",
             $conditions,
             'first'
@@ -5747,6 +5764,7 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['service']['applies_to'] = $servicesSale['applies_to'];
         $servicesSale['service']['owner']['id'] = $servicesSale['owner_id'];
         $servicesSale['service']['owner']['name'] = api_get_person_name($owner['firstname'], $owner['lastname']);
+        $servicesSale['service']['active'] = (int) ($servicesSale['active'] ?? 1);
         $servicesSale['service']['visibility'] = $servicesSale['visibility'];
         $servicesSale['service']['image'] = $this->getServiceImageUrl($servicesSale['image'] ?? null);
         $servicesSale['service']['date_start'] = $servicesSale['date_start'];
@@ -6684,6 +6702,7 @@ class BuyCoursesPlugin extends Plugin
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $whereConditions = [
+            's.active = 1',
             's.visibility <> 0',
         ];
 
@@ -6747,6 +6766,10 @@ class BuyCoursesPlugin extends Plugin
 
     public function canCurrentUserBuyService(array $service): bool
     {
+        if (!$this->isServiceActive($service)) {
+            return false;
+        }
+
         $appliesTo = (int) ($service['applies_to'] ?? 0);
 
         if (self::SERVICE_TYPE_USER === $appliesTo) {
@@ -7820,6 +7843,12 @@ class BuyCoursesPlugin extends Plugin
 
         if (empty($service)) {
             $this->lastServiceSaleError = $this->get_lang('ServiceNotFound');
+
+            return false;
+        }
+
+        if (!$this->isServiceActive($service)) {
+            $this->lastServiceSaleError = $this->get_lang('ServiceInactiveForPurchase');
 
             return false;
         }
@@ -11363,6 +11392,9 @@ class BuyCoursesPlugin extends Plugin
 
             $benefits = $this->getServiceCourseCreationBenefitValues($serviceId);
             $activeSale = $this->getBestActiveServiceSaleForCourseCreation($userId, $serviceId, $benefits['maxCourses']);
+            if (!$this->isServiceActive($service) && null === $activeSale) {
+                continue;
+            }
             $usedCourses = null !== $activeSale
                 ? $this->countCoursesLinkedToServiceSale((int) $activeSale['id'])
                 : 0;

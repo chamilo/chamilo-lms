@@ -131,6 +131,8 @@ $strings['InfoApiStepTwo'] = 'En el apartado <strong>Acceso API</strong>, dar cl
 $strings['InfoApiStepThree'] = 'En la opción 2, de Configuración de credenciales y permisos de API, dar clic en <strong>Ver firma de API</strong>. Copiar los datos de las credenciales en el formulario de configuración de este plugin';
 $strings['ErrorOccurred'] = '<strong>Ocurrio un error</strong>. Codigo: %s. Mensaje: %s. Por favor, contacta al administrador de la plataforma.';
 $strings['VisibleInCatalog'] = 'Visible en el catálogo';
+$strings['ActiveService'] = 'Activo';
+$strings['ActiveServiceHelp'] = 'Al desactivarlo, el servicio sigue disponible para administración y para las compras existentes, pero se oculta de la venta y no puede comprarse ni usarse como una nueva mejora.';
 $strings['Beneficiaries'] = 'Beneficiarios';
 $strings['AvailableCourse'] = 'Curso disponible';
 $strings['ShowOnCourseCatalog'] = 'Mostrar en el catálogo de cursos';
@@ -746,6 +748,7 @@ $strings['UpgradeCouldNotBeCompleted'] = 'No se pudo completar la mejora del ser
 $strings['ServiceSaleNotFound'] = 'No se encontró la venta del servicio.';
 $strings['InvalidPaymentMethod'] = 'El método de pago seleccionado no es válido.';
 $strings['ServiceNotFound'] = 'No se encontró el servicio seleccionado.';
+$strings['ServiceInactiveForPurchase'] = 'Este servicio no está activo y no se puede comprar.';
 $strings['ServiceInActiveUpsaleChainCannotBePurchased'] = 'Este servicio no se puede comprar mientras %s esté activo porque ambos servicios pertenecen a la misma ruta de mejora.';
 
 // Service sale audit.

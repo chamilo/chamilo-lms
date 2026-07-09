@@ -1,3 +1,18 @@
+v7.9 - 2026-07-09
+====
+
+Feature: services now have an independent Active state. Inactive services remain
+editable in administration, but are hidden from catalogs and new course-creation
+or upgrade offers, and direct checkout requests are rejected server-side. Existing
+completed purchases, recurring subscriptions, and their granted benefits continue
+working until their normal end date. Duplicated services start inactive so they can
+be reviewed before publication.
+
+ACTION REQUIRED for installations updated from an earlier version: load
+`[your-host]/plugin/BuyCourses/update.php` as a platform administrator so the new
+`plugin_buycourses_services.active` column is created. Existing services are marked
+active by default and existing sale records are not modified.
+
 v7.8 - 2026-07-09
 ====
 

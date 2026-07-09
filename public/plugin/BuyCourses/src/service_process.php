@@ -57,6 +57,19 @@ if (empty($serviceInfo) || empty($serviceInfo['id'])) {
     exit;
 }
 
+if (!$plugin->isServiceActive($serviceInfo)) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('ServiceInactiveForPurchase'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+    exit;
+}
+
 $purchaseUpsaleChainBlock = $plugin->getServicePurchaseUpsaleChainBlock($serviceId, $currentUserId);
 if (null !== $purchaseUpsaleChainBlock) {
     Display::addFlash(

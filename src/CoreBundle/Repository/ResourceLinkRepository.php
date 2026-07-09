@@ -25,7 +25,7 @@ use Gedmo\Sortable\Entity\Repository\SortableRepository;
 class ResourceLinkRepository extends SortableRepository
 {
     private array $toolList = [
-        'course_description' => '/main/course_description/index.php',
+        'course_description' => '/resources/course-description/%resource_node_id%/',
         'document' => '/resources/document/%resource_node_id%/',
         'learnpath' => '/main/lp/lp_controller.php',
         'link' => '/resources/links/%resource_node_id%/',

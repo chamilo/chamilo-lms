@@ -122,6 +122,7 @@ $formDefaultValues['max_subscribers'] = isset($service['max_subscribers']) ? (in
 $formDefaultValues['subscription_behavior_json'] = (string) ($service['subscription_behavior_json'] ?? '');
 $formDefaultValues['stripe_price_id'] = (string) ($service['stripe_price_id'] ?? '');
 $formDefaultValues['display_on_course_creation_page'] = !empty($service['display_on_course_creation_page']);
+$formDefaultValues['active'] = !array_key_exists('active', $service) || !empty($service['active']);
 $formDefaultValues['upsale_from_id'] = (int) ($service['upsale_from_id'] ?? 0);
 
 $form = new FormValidator(
@@ -228,6 +229,14 @@ $form->addSelect(
     'owner_id',
     get_lang('Owner'),
     $userOptions
+);
+$form->addCheckBox(
+    'active',
+    '',
+    $buildCheckboxContent(
+        $plugin->get_lang('ActiveService'),
+        $plugin->get_lang('ActiveServiceHelp')
+    )
 );
 $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
@@ -1084,6 +1093,7 @@ document.addEventListener('DOMContentLoaded', function () {
     moveField('subscription_behavior_json', recurring.body, {full: true});
     moveField('stripe_price_id', recurring.body, {full: true});
 
+    moveField('active', publishing.body, {full: true, compact: true});
     moveField('display_on_course_creation_page', publishing.body, {full: true, compact: true});
     moveCustomBlock('.buycourses-applies-to-card', publishing.body, true);
     moveField('owner_id', publishing.body);
@@ -1358,6 +1368,7 @@ function buycoursesBuildPostedServicePayload(int $serviceId, BuyCoursesPlugin $p
         'upsale_from_id' => isset($_POST['upsale_from_id']) ? (int) $_POST['upsale_from_id'] : 0,
         'applies_to' => isset($_POST['applies_to']) ? (int) $_POST['applies_to'] : BuyCoursesPlugin::SERVICE_TYPE_NONE,
         'owner_id' => isset($_POST['owner_id']) ? (int) $_POST['owner_id'] : 0,
+        'active' => isset($_POST['active']) ? 1 : 0,
         'visibility' => isset($_POST['visibility']) ? 1 : 0,
         'video_url' => trim((string) ($_POST['video_url'] ?? '')),
         'service_information' => (string) ($_POST['service_information'] ?? ''),

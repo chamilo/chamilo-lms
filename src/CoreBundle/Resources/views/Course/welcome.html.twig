@@ -24,7 +24,7 @@
                 <div class="item">
                     {{ 'tool_info.png' | icon(64, 'Add course description'|trans ) }}
                     <div class="caption">
-                        <a href="/main/course_description/index.php?{{ { 'cid': course.id}|url_encode }}" class="btn btn-outline-primary">
+                        <a href="/resources/course-description/{{ course.resourceNode.id }}/?{{ { 'cid': course.id, 'sid': 0, 'gid': 0}|url_encode }}" class="btn btn-outline-primary">
                             <em class="fa fa-info-circle"></em> {{'Add course description'|trans}}
                         </a>
                     </div>

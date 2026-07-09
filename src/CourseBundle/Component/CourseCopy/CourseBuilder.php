@@ -1748,7 +1748,7 @@ class CourseBuilder
         }
 
         $repo = Container::getCourseDescriptionRepository();
-        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, true);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -1764,10 +1764,12 @@ class CourseBuilder
             $title = (string) ($row->getTitle() ?? '');
             $html = (string) ($row->getContent() ?? '');
             $type = (int) $row->getDescriptionType();
+            $progress = (int) $row->getProgress();
+            $language = (string) ($row->getResourceNode()?->getLanguage()?->getIsocode() ?? '');
 
             $this->findAndSetDocumentsInText($html);
 
-            $export = new CourseDescription($iid, $title, $html, $type);
+            $export = new CourseDescription($iid, $title, $html, $type, $progress, $language);
             $this->course->add_resource($export);
         }
     }

@@ -17,7 +17,7 @@ class CourseDescription extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/course_description/index.php';
+        return '/resources/course-description/:nodeId/';
     }
 
     public function getIcon(): string

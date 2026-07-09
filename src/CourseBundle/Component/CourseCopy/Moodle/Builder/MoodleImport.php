@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\Course;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -249,7 +250,7 @@ class MoodleImport
                     $resources['course_descriptions'][$descId] = $this->mkLegacyItem('course_descriptions', $descId, [
                         'title'            => $title,
                         'content'          => $html,
-                        'description_type' => 1,
+                        'description_type' => CCourseDescription::TYPE_CUSTOM,
                         'progress'         => 0,
                         'source_id'        => $descId,
                     ]);

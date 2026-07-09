@@ -200,13 +200,18 @@ foreach ($serviceList as &$service) {
     $serviceId = (int) $service['id'];
     $service['description'] = $plugin->filterServiceMultilingualHtml((string) ($service['description'] ?? ''));
     $service['service_information'] = $plugin->filterServiceMultilingualHtml((string) ($service['service_information'] ?? ''));
-    $upgradeOffer = $plugin->getCurrentUserServiceUpgradeOffer($serviceId);
+    $purchaseUpsaleChainBlock = $plugin->getCurrentUserServicePurchaseUpsaleChainBlock($serviceId);
+    $upgradeOffer = null === $purchaseUpsaleChainBlock
+        ? $plugin->getCurrentUserServiceUpgradeOffer($serviceId)
+        : null;
     $plugin->applyServiceUpgradeOfferToPricing($service, $upgradeOffer);
     $service['upgrade_offer'] = $upgradeOffer;
     $service['is_upgrade'] = null !== $upgradeOffer;
+    $service['purchase_blocked_by_active_upsale_chain'] = null !== $purchaseUpsaleChainBlock;
     $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
     $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
     $service['can_buy'] = $plugin->canCurrentUserBuyService($service)
+        && null === $purchaseUpsaleChainBlock
         && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 }
 unset($service);
@@ -232,16 +237,20 @@ $selectedCurrencyIsoCode = (string) ($selectedCurrency['iso_code'] ?? '');
 
 foreach ($serviceList as &$service) {
     $isoCode = (string) ($service['iso_code'] ?? $selectedCurrencyIsoCode);
-    $priceValue = (float) ($service['total_price'] ?? 0);
+    $priceValue = (float) ($service['price'] ?? 0);
     $durationDays = (int) ($service['duration_days'] ?? 0);
 
-    if (!empty($service['total_price_formatted'])) {
-        $service['display_price'] = (string) $service['total_price_formatted'];
+    if (!empty($service['price_formatted'])) {
+        $basePriceFormatted = (string) $service['price_formatted'];
     } elseif ('' !== $isoCode) {
-        $service['display_price'] = $plugin->getPriceWithCurrencyFromIsoCode($priceValue, $isoCode);
+        $basePriceFormatted = $plugin->getPriceWithCurrencyFromIsoCode($priceValue, $isoCode);
     } else {
-        $service['display_price'] = number_format($priceValue, 2, '.', ',');
+        $basePriceFormatted = number_format($priceValue, 2, '.', ',');
     }
+
+    $service['display_price'] = !empty($service['tax_enable'])
+        ? sprintf($plugin->get_lang('ServicePricePlusTax'), $basePriceFormatted)
+        : $basePriceFormatted;
 
     $service['billing_cycle_label'] = $durationDays >= 365
         ? $plugin->get_lang('YearlyPlan')

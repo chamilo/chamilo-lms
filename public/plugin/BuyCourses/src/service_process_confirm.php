@@ -39,6 +39,30 @@ if ($currentUserId <= 0 || $currentUserId !== $saleBuyerId) {
 $userInfo = api_get_user_info($saleBuyerId);
 
 $service = $serviceSale['service'];
+$purchaseUpsaleChainBlock = $plugin->getServicePurchaseUpsaleChainBlock(
+    (int) ($service['id'] ?? 0),
+    $currentUserId
+);
+if (null !== $purchaseUpsaleChainBlock) {
+    if (BuyCoursesPlugin::SERVICE_STATUS_PENDING === (int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_PENDING)) {
+        $plugin->cancelServiceSale($serviceSaleId);
+    }
+
+    Session::erase('bc_service_sale_id');
+    Session::erase('bc_coupon_id');
+
+    Display::addFlash(
+        Display::return_message(
+            $plugin->formatServicePurchaseUpsaleChainBlockMessage($purchaseUpsaleChainBlock),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.(int) ($service['id'] ?? 0));
+    exit;
+}
+
 $upgradeSourceSaleId = (int) ($serviceSale['upgrade_from_sale_id'] ?? 0);
 $upgradeSourceSale = $upgradeSourceSaleId > 0
     ? $plugin->getServiceSale($upgradeSourceSaleId)

@@ -517,7 +517,11 @@
                                             </div>
                                             <div class="mt-2 grid gap-1 text-xs text-gray-50">
                                                 <span>{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.upgrade_offer.remaining_days) }}</span>
-                                                <span>{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.upgrade_offer.credit_amount_formatted }}</span>
+                                                <span>{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}: - {{ service.upgrade_offer.credit_amount_formatted }}</span>
+                                                <span class="font-semibold text-gray-90">{{ 'UpgradePriceToday'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.upgrade_total_price_formatted }}</span>
+                        {% if service.upgrade_offer.source_recurring_enabled %}
+                            <span>{{ 'UpgradeNextRenewalPrice'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.display_price }}</span>
+                        {% endif %}
                                             </div>
                                         </div>
                                     {% endif %}
@@ -557,7 +561,7 @@
                                                     <em class="mdi {{ service.is_upgrade|default(false) ? 'mdi-arrow-up-bold-circle-outline' : 'mdi-cart-outline' }}"></em>
                                                     {{ (service.is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
-                                            {% else %}
+                                            {% elseif not service.purchase_blocked_by_active_upsale_chain|default(false) %}
                                             <span
                                                 class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
                                             >

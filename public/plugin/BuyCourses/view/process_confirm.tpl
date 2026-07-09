@@ -235,7 +235,7 @@
                             </div>
                             {% if service_item.upgrade_target_price_formatted %}
                                 <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
-                                    <span class="text-sm font-semibold text-gray-90">{{ 'UpgradeTargetProratedPrice'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                                    <span class="text-sm font-semibold text-gray-90">{{ 'UpgradeServicePrice'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                                     <span class="text-sm font-semibold text-gray-90">{{ service_item.upgrade_target_price_formatted }}</span>
                                 </div>
                             {% endif %}
@@ -256,7 +256,7 @@
                         {% if service_item.price_formatted is defined %}
                             <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
                                 <span class="text-sm font-semibold text-gray-90">
-                                    {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    {{ (service_item.is_upgrade|default(false) ? 'UpgradePriceToday' : 'Price')|get_plugin_lang('BuyCoursesPlugin') }}
                                 </span>
                                 <span class="text-sm font-semibold text-gray-90">
                                     {{ service_item.price_formatted }}

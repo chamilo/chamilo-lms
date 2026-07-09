@@ -447,7 +447,7 @@ class Rest extends WebService
                         ]
                     ),
                     'icon' => $icon,
-                    'size' => format_file_size($document['size']),
+                    'size' => \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($document['size']),
                 ];
             }
         }

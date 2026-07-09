@@ -318,7 +318,7 @@ $form->addLabel(
     .'</span></span>('
     .sprintf(
         get_lang('Maximun file size: %s'),
-        format_file_size((int) api_get_setting('message_max_upload_filesize'))
+        \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize((int) api_get_setting('message_max_upload_filesize'))
     ).')'
 );
 

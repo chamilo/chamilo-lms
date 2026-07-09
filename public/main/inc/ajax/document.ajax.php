@@ -24,7 +24,7 @@ switch ($action) {
 
         $size = $repo->getFolderSize($courseId, $path);
 
-        echo format_file_size($size);
+        echo \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($size);
         break;
     case 'get_document_quota':
         // Getting the course quota
@@ -215,7 +215,7 @@ switch ($action) {
             $results[] = [
                 'name'       => api_htmlentities($doc->getTitle()),
                 'url'        => $repo->getResourceFileUrl($doc),
-                'size'       => format_file_size($filesize),
+                'size'       => \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($filesize),
                 'type'       => api_htmlentities($mimetype),
                 'result'     => Display::return_icon('accept.png', get_lang('Uploaded.')),
                 'lp_item_id' => $createdLpItemId,

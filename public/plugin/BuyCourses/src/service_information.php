@@ -71,7 +71,10 @@ if ($saleId > 0) {
     }
 }
 
-$upgradeOffer = !$isPurchasedContext
+$purchaseUpsaleChainBlock = !$isPurchasedContext
+    ? $plugin->getCurrentUserServicePurchaseUpsaleChainBlock($serviceId)
+    : null;
+$upgradeOffer = !$isPurchasedContext && null === $purchaseUpsaleChainBlock
     ? $plugin->getCurrentUserServiceUpgradeOffer($serviceId)
     : null;
 $plugin->applyServiceUpgradeOfferToPricing($service, $upgradeOffer);
@@ -119,8 +122,12 @@ $canCurrentUserBuyService = $plugin->canCurrentUserBuyService($service);
 $hasBlockingSale = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
 $canBuyService = $canCurrentUserBuyService
     && !$hasBlockingSale
+    && null === $purchaseUpsaleChainBlock
     && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 $buyerRoleNotice = null;
+$purchaseBlockNotice = null !== $purchaseUpsaleChainBlock
+    ? $plugin->formatServicePurchaseUpsaleChainBlockMessage($purchaseUpsaleChainBlock)
+    : null;
 
 if (!$canCurrentUserBuyService && !$isPurchasedContext && !$hasBlockingSale) {
     $buyerRoleNotice = $plugin->get_lang('ServicesOnlyForTeachers');
@@ -144,6 +151,8 @@ $template->assign('price_display', $priceDisplay);
 $template->assign('is_purchased_context', $isPurchasedContext);
 $template->assign('can_buy_service', $canBuyService);
 $template->assign('has_blocking_sale', $hasBlockingSale);
+$template->assign('purchase_blocked_by_active_upsale_chain', null !== $purchaseUpsaleChainBlock);
+$template->assign('purchase_block_notice', $purchaseBlockNotice);
 $template->assign('upgrade_offer', $upgradeOffer);
 $template->assign('is_upgrade', null !== $upgradeOffer);
 $template->assign('buyer_role_notice', $buyerRoleNotice);

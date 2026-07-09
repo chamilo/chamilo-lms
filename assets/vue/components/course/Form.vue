@@ -32,15 +32,15 @@
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           <button
             v-if="standardCourseOption"
-            class="rounded-2xl border p-4 text-left transition"
+            class="relative rounded-2xl border p-4 text-left transition"
             :class="getCourseOptionClasses(standardCourseOption)"
             type="button"
             :disabled="!standardCourseOption.available"
             @click="selectCourseOption('standard', null)"
           >
             <div class="flex items-start justify-between gap-3">
-              <div>
-                <p class="text-base font-semibold text-gray-90">
+              <div class="min-w-0 w-full">
+                <p class="pr-24 text-base font-semibold text-gray-90">
                   {{ standardCourseOption.label || t("Standard course") }}
                 </p>
                 <p class="mt-1 text-sm text-gray-50">
@@ -49,7 +49,7 @@
               </div>
               <span
                 v-if="selectedCourseOptionType === 'standard'"
-                class="rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-white"
+                class="pointer-events-none absolute right-4 top-4 z-10 whitespace-nowrap rounded-full bg-support-4 px-3 py-1 text-xs font-semibold text-white shadow-sm"
               >
                 {{ t("Selected") }}
               </span>
@@ -81,7 +81,7 @@
           <article
             v-for="serviceOption in serviceCourseOptions"
             :key="`service-${serviceOption.serviceId}`"
-            class="rounded-2xl border p-4 text-left transition"
+            class="relative rounded-2xl border p-4 text-left transition"
             :class="getCourseOptionClasses(serviceOption)"
             :role="serviceOption.available ? 'button' : null"
             :tabindex="serviceOption.available ? 0 : -1"
@@ -90,8 +90,8 @@
             @keydown.space.prevent="selectCourseOption('service', serviceOption.serviceSaleId)"
           >
             <div class="flex items-start justify-between gap-3">
-              <div>
-                <p class="text-base font-semibold text-gray-90">
+              <div class="min-w-0 w-full">
+                <p class="pr-24 text-base font-semibold text-gray-90">
                   {{ serviceOption.label }}
                 </p>
                 <div
@@ -101,7 +101,7 @@
               </div>
               <span
                 v-if="selectedCourseOptionType === 'service' && selectedBuyCoursesServiceSaleId === serviceOption.serviceSaleId"
-                class="rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-white"
+                class="pointer-events-none absolute right-4 top-4 z-10 whitespace-nowrap rounded-full bg-support-4 px-3 py-1 text-xs font-semibold text-white shadow-sm"
               >
                 {{ t("Selected") }}
               </span>
@@ -500,6 +500,14 @@ function selectDefaultCourseOption() {
 
   if (standardCourseOption.value?.available) {
     selectCourseOption("standard", null)
+    return
+  }
+
+  const preferredAvailableService = serviceCourseOptions.value.find(
+    (option) => option.available && option.preferredForCourseCreation,
+  )
+  if (preferredAvailableService) {
+    selectCourseOption("service", preferredAvailableService.serviceSaleId)
     return
   }
 

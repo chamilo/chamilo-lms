@@ -20,6 +20,24 @@
     </BaseToolbar>
 
     <div
+      v-if="successMessage"
+      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
+      role="status"
+      aria-live="polite"
+    >
+      {{ successMessage }}
+    </div>
+
+    <div
+      v-if="actionErrorMessage"
+      class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+      role="alert"
+      aria-live="assertive"
+    >
+      {{ actionErrorMessage }}
+    </div>
+
+    <div
       v-if="isLoading"
       class="rounded-xl border border-gray-20 bg-white p-6 text-center text-sm text-gray-600 shadow-sm"
       role="status"
@@ -82,6 +100,17 @@
               :route="getEditRoute(description)"
               :tooltip="t('Edit')"
             />
+            <BaseButton
+              v-if="canManage && description.canDelete"
+              icon="delete"
+              :is-loading="deletingId === description.iid"
+              :label="t('Delete')"
+              only-icon
+              size="small"
+              type="danger-text"
+              :tooltip="t('Delete')"
+              @click="confirmDelete(description)"
+            />
           </div>
         </template>
 
@@ -109,16 +138,22 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
 import courseDescriptionService from "../../services/courseDescriptionService"
 
 const { t } = useI18n()
 const route = useRoute()
+const { requireConfirmation } = useConfirmation()
 
 const descriptions = ref([])
 const isLoading = ref(false)
 const errorMessage = ref("")
+const actionErrorMessage = ref("")
+const successMessage = ref("")
 const canManage = ref(false)
 const types = ref([])
+const csrfToken = ref("")
+const deletingId = ref(null)
 
 const descriptionTypeLabels = {
   1: "Description",
@@ -216,15 +251,61 @@ function getEditRoute(description) {
   }
 }
 
+function getPlainTitle(description) {
+  const fallbackTitle = getDescriptionTypeLabel(description.descriptionType)
+  const title = String(description.title || fallbackTitle)
+
+  return title.replace(/<[^>]*>/g, "").trim() || fallbackTitle
+}
+
+function confirmDelete(description) {
+  const title = getPlainTitle(description)
+
+  requireConfirmation({
+    message: `${t("Are you sure you want to delete")} "${title}"?`,
+    accept: () => deleteDescription(description),
+  })
+}
+
+async function deleteDescription(description) {
+  if (deletingId.value !== null) {
+    return
+  }
+
+  deletingId.value = description.iid
+  actionErrorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    await courseDescriptionService.remove(
+      description.iid,
+      { csrfToken: csrfToken.value },
+      getContextParams(),
+    )
+
+    descriptions.value = descriptions.value.filter((item) => item.iid !== description.iid)
+    successMessage.value = t("Description has been deleted")
+  } catch (error) {
+    console.error("Error deleting course description", error)
+    actionErrorMessage.value =
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred")
+  } finally {
+    deletingId.value = null
+  }
+}
+
 async function loadDescriptions() {
   isLoading.value = true
   errorMessage.value = ""
+  actionErrorMessage.value = ""
+  successMessage.value = ""
 
   try {
     const response = await courseDescriptionService.getList(getContextParams())
     descriptions.value = Array.isArray(response.items) ? response.items : []
     canManage.value = Boolean(response.canManage)
     types.value = Array.isArray(response.types) ? response.types : []
+    csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading course descriptions", error)
     errorMessage.value =

@@ -21,6 +21,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseDescriptionList>
@@ -33,6 +34,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         private CCourseDescriptionRepository $courseDescriptionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -56,6 +58,9 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         $list->sessionId = null !== $session ? (int) $session->getId() : null;
         $list->canManage = $canManage;
         $list->studentView = $studentView;
+        $list->csrfToken = $canManage
+            ? (string) $this->csrfTokenManager->getToken(CourseDescriptionItemProvider::CSRF_TOKEN_ID)
+            : '';
         $list->types = $this->getTypes();
         $list->settings = $this->getSettings();
 
@@ -133,6 +138,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
             'language' => null !== $language ? $language->getIsocode() : null,
             'isInheritedFromCourse' => null !== $session && null === $sourceSession,
             'canEdit' => $this->canEditDescription($description, $course, $session),
+            'canDelete' => $this->canDeleteDescription($description, $course, $session),
         ];
     }
 
@@ -166,10 +172,28 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
     private function canEditDescription(CCourseDescription $description, Course $course, ?Session $session): bool
     {
-        if (!$this->canManage($course, $session)) {
+        if (!$this->canManage($course, $session) || !$this->belongsToExactContext($description, $course, $session)) {
             return false;
         }
 
+        $resourceNode = $description->getResourceNode();
+
+        return null !== $resourceNode && $this->security->isGranted('EDIT', $resourceNode);
+    }
+
+    private function canDeleteDescription(CCourseDescription $description, Course $course, ?Session $session): bool
+    {
+        if (!$this->canManage($course, $session) || !$this->belongsToExactContext($description, $course, $session)) {
+            return false;
+        }
+
+        $resourceNode = $description->getResourceNode();
+
+        return null !== $resourceNode && $this->security->isGranted('DELETE', $resourceNode);
+    }
+
+    private function belongsToExactContext(CCourseDescription $description, Course $course, ?Session $session): bool
+    {
         $resourceNode = $description->getResourceNode();
         if (null === $resourceNode) {
             return false;

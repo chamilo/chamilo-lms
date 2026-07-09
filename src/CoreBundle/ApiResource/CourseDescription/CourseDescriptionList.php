@@ -86,6 +86,9 @@ final class CourseDescriptionList
     #[Groups(['course_description_list:read'])]
     public bool $studentView = false;
 
+    #[Groups(['course_description_list:read'])]
+    public string $csrfToken = '';
+
     /**
      * @var array<int, array<string, mixed>>
      */

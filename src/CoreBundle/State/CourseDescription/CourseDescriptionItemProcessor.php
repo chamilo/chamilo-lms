@@ -60,7 +60,7 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
 
-        if (!$this->canManage($course, $session)) {
+        if ($this->isStudentView($request) || !$this->canManage($course, $session)) {
             throw new AccessDeniedHttpException('You are not allowed to manage course descriptions in this context.');
         }
 
@@ -187,6 +187,11 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
             throw new AccessDeniedHttpException('The requested course description does not belong to the current course context.');
         }
 
+        $resourceNode = $description->getResourceNode();
+        if (null === $resourceNode || !$this->security->isGranted('EDIT', $resourceNode)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this course description.');
+        }
+
         return $description;
     }
 
@@ -291,6 +296,19 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
         $value = $this->settingsManager->getSetting($name, true);
 
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function isStudentView(Request $request): bool
+    {
+        if ($request->query->has('isStudentView')) {
+            return $request->query->getBoolean('isStudentView');
+        }
+
+        if (!$request->hasSession()) {
+            return false;
+        }
+
+        return 'studentview' === $request->getSession()->get('studentview');
     }
 
     private function buildResponse(CCourseDescription $description): CourseDescriptionItem

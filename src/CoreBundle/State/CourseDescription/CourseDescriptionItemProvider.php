@@ -110,10 +110,12 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
 
-        if (!$this->canManage($course, $session)) {
+        if ($this->isStudentView($request) || !$this->canManage($course, $session)) {
             throw new AccessDeniedHttpException('You are not allowed to manage course descriptions in this context.');
         }
-        $descriptionId = $request->query->getInt('id');
+        $descriptionId = isset($uriVariables['iid'])
+            ? (int) $uriVariables['iid']
+            : $request->query->getInt('id');
         $descriptionType = $request->query->getInt('descriptionType');
 
         $description = null;
@@ -209,6 +211,11 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
 
         if (!$this->belongsToExactContext($description, $course, $session)) {
             throw new AccessDeniedHttpException('The requested course description does not belong to the current course context.');
+        }
+
+        $resourceNode = $description->getResourceNode();
+        if (null === $resourceNode || !$this->security->isGranted('EDIT', $resourceNode)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this course description.');
         }
 
         return $description;
@@ -322,6 +329,19 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         $value = $this->settingsManager->getSetting($name, true);
 
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function isStudentView(Request $request): bool
+    {
+        if ($request->query->has('isStudentView')) {
+            return $request->query->getBoolean('isStudentView');
+        }
+
+        if (!$request->hasSession()) {
+            return false;
+        }
+
+        return 'studentview' === $request->getSession()->get('studentview');
     }
 
     private function getResourceLanguage(CCourseDescription $description): string

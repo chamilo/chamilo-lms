@@ -8,11 +8,13 @@ namespace Chamilo\CoreBundle\ApiResource\CourseDescription;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
+use Chamilo\CoreBundle\State\CourseDescription\CourseDescriptionDeleteProcessor;
 use Chamilo\CoreBundle\State\CourseDescription\CourseDescriptionItemProcessor;
 use Chamilo\CoreBundle\State\CourseDescription\CourseDescriptionItemProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -67,6 +69,23 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'put_course_description',
             processor: CourseDescriptionItemProcessor::class,
+        ),
+        new Delete(
+            uriTemplate: '/course-description/{iid}',
+            requirements: ['iid' => '\\d+'],
+            openapi: new Operation(
+                summary: 'Delete a course description',
+                parameters: [
+                    new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                ],
+            ),
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            name: 'delete_course_description',
+            provider: CourseDescriptionItemProvider::class,
+            processor: CourseDescriptionDeleteProcessor::class,
         ),
     ],
     normalizationContext: ['groups' => ['course_description_item:read']],

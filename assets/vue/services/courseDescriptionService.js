@@ -22,4 +22,11 @@ export default {
   async update(iid, payload, params = {}) {
     return await baseService.put(`/api/course-description/${iid}`, payload, { params: cleanParams(params) })
   },
+
+  async remove(iid, payload, params = {}) {
+    return await baseService.delete(`/api/course-description/${iid}`, {
+      params: cleanParams(params),
+      data: payload,
+    })
+  },
 }

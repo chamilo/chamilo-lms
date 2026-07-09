@@ -18,7 +18,7 @@
       :attendances="attendances"
       :loading="isLoading"
       :total-records="totalAttendances"
-      :readonly="securityStore.isStudent || platformConfigStore.isStudentViewActive"
+      :readonly="readonly"
       @edit="redirectToEditAttendance"
       @view="toggleResourceLinkVisibility"
       @delete="confirmDeleteAttendance"
@@ -54,7 +54,10 @@ const route = useRoute()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 
-const readonly = computed(() => securityStore.isStudent || platformConfigStore.isStudentViewActive)
+// Editable only for users who can manage the current course (course/session
+// teacher or admin), matching CAttendance's write security. The student view
+// forces read-only even for them.
+const readonly = computed(() => !securityStore.isCourseAdmin || platformConfigStore.isStudentViewActive)
 
 const attendances = ref([])
 const isDeleteDialogVisible = ref(false)

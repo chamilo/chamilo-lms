@@ -52,7 +52,8 @@ import { useCourseSettings } from "../store/courseSettingStore"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import courseService from "../services/courseService"
-import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
+import { checkIsAllowedToEdit } from "../composables/userPermissions"
+import securityService from "../services/securityService"
 import { customVueTemplateEnabled } from "../config/env"
 import { resolveCourseIdFromRoute } from "../utils/courseContext"
 
@@ -137,7 +138,11 @@ async function resolveForumAutoLaunchUrl(courseId, sessionId, course) {
     console.error("[CourseHome] Failed to resolve forum tool URL", error)
   }
 
-  const courseResourceNodeUrl = buildForumToolUrlFromResourceNode({ resourceNode: course?.resourceNode }, courseId, sessionId)
+  const courseResourceNodeUrl = buildForumToolUrlFromResourceNode(
+    { resourceNode: course?.resourceNode },
+    courseId,
+    sessionId,
+  )
 
   if (courseResourceNodeUrl) {
     return courseResourceNodeUrl
@@ -505,7 +510,6 @@ const router = createRouter({
   ],
 })
 
-
 // ---------------------------------------------------------------------------
 // Route loading indicator
 // ---------------------------------------------------------------------------
@@ -668,6 +672,10 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
+// Tracks the last course context for which contextual roles were loaded, so we
+// skip the backend round-trip when navigating between tools of the same course.
+let lastCourseContextKey = null
+
 router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
   const securityStore = useSecurityStore()
@@ -676,33 +684,36 @@ router.beforeResolve(async (to) => {
   const sid = parseInt(to.query?.sid ?? 0) || 0
   const gid = parseInt(to.query?.gid ?? 0) || 0
 
-  if (cid) {
-    await cidReqStore.setCourseAndSessionById(cid, sid)
-
-    if (cidReqStore.session) {
-      const { isGeneralCoach, isCourseCoach } = useUserSessionSubscription()
-
-      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
-      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_STUDENT")
-
-      if (isGeneralCoach.value || isCourseCoach.value) {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_TEACHER")
-      } else {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")
-      }
-    } else {
-      const isTeacher = cidReqStore.course?.teachers?.some((userSubscription) => {
-        return 0 === userSubscription.relationType && userSubscription.user["@id"] === securityStore.user["@id"]
-      })
-
-      if (isTeacher) {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_TEACHER")
-      } else {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_STUDENT")
-      }
-    }
-  } else {
+  if (!cid) {
+    // Leaving the course context resets both the cid and the contextual roles,
+    // keeping the personal/global roles intact.
     cidReqStore.resetCid()
+    securityStore.setContextRoles([])
+    lastCourseContextKey = ""
+
+    return
+  }
+
+  await cidReqStore.setCourseAndSessionById(cid, sid)
+
+  // Skip the backend round-trip when navigating between tools of the same course.
+  const courseContextKey = `${cid}:${sid}:${gid}`
+
+  if (courseContextKey === lastCourseContextKey) {
+    return
+  }
+
+  lastCourseContextKey = courseContextKey
+
+  // The backend (CourseAccessResolver) is the single source of truth for the
+  // ROLE_CURRENT_COURSE_* roles; replace the contextual roles with its result.
+  try {
+    const roles = await securityService.getCourseContextRoles({ cid, sid, gid })
+
+    securityStore.setContextRoles(roles)
+  } catch (error) {
+    console.error("[Router] Failed to load course context roles", error)
+    securityStore.setContextRoles([])
   }
 })
 

@@ -5099,7 +5099,7 @@ function getAttachedFiles(
             $json['id'] = $row['iid'];
             $json['comment'] = $attachment->getComment();
             // Format file size
-            $json['size'] = format_file_size($attachment->getSize());
+            $json['size'] = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($attachment->getSize());
             // Check if $row is consistent
             if ($attachment) {
                 // Set result as success and bring delete URL

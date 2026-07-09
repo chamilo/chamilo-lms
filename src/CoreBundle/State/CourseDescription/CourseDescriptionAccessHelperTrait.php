@@ -8,9 +8,12 @@ namespace Chamilo\CoreBundle\State\CourseDescription;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
@@ -80,11 +83,21 @@ trait CourseDescriptionAccessHelperTrait
             return false;
         }
 
+        if ($this->isSessionAdminEditingAllowed($user, $settingsManager)) {
+            return true;
+        }
+
         $isCourseTeacher = $course->hasUserAsTeacher($user)
             || $this->hasDirectCourseTeacherRelation($entityManager, $user, $course);
 
         if (!$session instanceof Session) {
             return $isCourseTeacher;
+        }
+
+        if (Session::READ_ONLY === $session->getVisibility()
+            || $this->isCourseLockedInsideSessions($entityManager, $settingsManager, $course)
+        ) {
+            return false;
         }
 
         if (!$this->resolveCourseDescriptionEnabledValue(
@@ -98,6 +111,55 @@ trait CourseDescriptionAccessHelperTrait
             || $session->hasCourseCoachInCourse($user, $course)
             || $this->hasDirectSessionCourseCoachRelation($entityManager, $user, $course, $session)
             || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+    }
+
+    private function canReadCourseDescriptions(Security $security, SettingsManager $settingsManager): bool
+    {
+        $user = $security->getUser();
+
+        if ($security->isGranted('ROLE_ADMIN')
+            || $security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
+            || $security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+            || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+        ) {
+            return true;
+        }
+
+        return $user instanceof User && $this->isSessionAdminEditingAllowed($user, $settingsManager);
+    }
+
+    private function isSessionAdminEditingAllowed(User $user, SettingsManager $settingsManager): bool
+    {
+        return $user->isSessionAdmin()
+            && $this->resolveCourseDescriptionEnabledValue(
+                $settingsManager->getSetting('session.session_admins_edit_courses_content', true),
+            );
+    }
+
+    private function isCourseLockedInsideSessions(
+        EntityManagerInterface $entityManager,
+        SettingsManager $settingsManager,
+        Course $course,
+    ): bool {
+        if (!$this->resolveCourseDescriptionEnabledValue(
+            $settingsManager->getSetting('session.session_courses_read_only_mode', true),
+        )) {
+            return false;
+        }
+
+        $repository = $entityManager->getRepository(ExtraFieldValues::class);
+        if (!$repository instanceof ExtraFieldValuesRepository) {
+            return false;
+        }
+
+        $extraFieldValue = $repository->getValueByVariableAndItem(
+            'session_courses_read_only_mode',
+            (int) $course->getId(),
+            ExtraField::COURSE_FIELD_TYPE,
+        );
+
+        return $extraFieldValue instanceof ExtraFieldValues && !empty($extraFieldValue->getFieldValue());
     }
 
     private function hasDirectCourseTeacherRelation(

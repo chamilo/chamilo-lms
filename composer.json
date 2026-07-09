@@ -27,7 +27,6 @@
     "classmap": [
       "public/main/auth",
       "public/main/admin",
-      "public/main/course_description",
       "public/main/dropbox",
       "public/main/exercise",
       "public/main/gradebook/lib",

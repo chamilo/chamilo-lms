@@ -42,7 +42,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the course description tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/course_description/index.php?cid=1"
+    When I follow "Course description"
     And I wait for the page to be loaded
     Then I should not see an error
 

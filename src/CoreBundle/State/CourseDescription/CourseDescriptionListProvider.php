@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -51,6 +52,11 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
         $course = $this->getCourse($request);
         $this->assertCourseDescriptionToolEnabled($this->entityManager, $course);
+
+        if (!$this->canReadCourseDescriptions($this->security, $this->settingsManager)) {
+            throw new AccessDeniedHttpException('You are not allowed to view course descriptions in this context.');
+        }
+
         $session = $this->getSession($request);
         $studentView = $this->isStudentView($request);
         $canManage = !$studentView && $this->canManageCourseDescriptions(

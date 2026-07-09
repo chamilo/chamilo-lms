@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\ApiResource\CourseDescription\CourseDescriptionList;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,6 +32,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CCourseDescriptionRepository $courseDescriptionRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -46,16 +49,15 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $studentView = $this->isStudentView($request);
-        $canManage = !$studentView && (
-            $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-        );
+        $canManage = !$studentView && $this->canManage($course, $session);
 
         $list = new CourseDescriptionList();
         $list->courseId = (int) $course->getId();
         $list->sessionId = null !== $session ? (int) $session->getId() : null;
         $list->canManage = $canManage;
         $list->studentView = $studentView;
+        $list->types = $this->getTypes();
+        $list->settings = $this->getSettings();
 
         $descriptions = $this->courseDescriptionRepository->findAllInCourse($course, $session);
 
@@ -130,7 +132,92 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
             'sessionId' => null !== $sourceSession?->getId() ? (int) $sourceSession->getId() : null,
             'language' => null !== $language ? $language->getIsocode() : null,
             'isInheritedFromCourse' => null !== $session && null === $sourceSession,
+            'canEdit' => $this->canEditDescription($description, $course, $session),
         ];
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getTypes(): array
+    {
+        return [
+            ['value' => CCourseDescription::TYPE_DESCRIPTION, 'label' => 'Description', 'icon' => 'image-text'],
+            ['value' => CCourseDescription::TYPE_OBJECTIVES, 'label' => 'Objectives', 'icon' => 'flag-checkered'],
+            ['value' => CCourseDescription::TYPE_TOPICS, 'label' => 'Topics', 'icon' => 'table-of-contents'],
+            ['value' => CCourseDescription::TYPE_METHODOLOGY, 'label' => 'Methodology', 'icon' => 'strategy'],
+            ['value' => CCourseDescription::TYPE_COURSE_MATERIAL, 'label' => 'Course material', 'icon' => 'laptop'],
+            ['value' => CCourseDescription::TYPE_RESOURCES, 'label' => 'Resources', 'icon' => 'human-male-board'],
+            ['value' => CCourseDescription::TYPE_ASSESSMENT, 'label' => 'Assessment', 'icon' => 'order-bool-ascending-variant'],
+            ['value' => CCourseDescription::TYPE_CUSTOM, 'label' => 'Other', 'icon' => 'magic-staff'],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getSettings(): array
+    {
+        return [
+            'searchEnabled' => $this->isSettingEnabled('search.search_enabled'),
+            'saveTitlesAsHtml' => $this->isSettingEnabled('editor.save_titles_as_html'),
+        ];
+    }
+
+    private function canEditDescription(CCourseDescription $description, Course $course, ?Session $session): bool
+    {
+        if (!$this->canManage($course, $session)) {
+            return false;
+        }
+
+        $resourceNode = $description->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            if (!$link instanceof ResourceLink) {
+                continue;
+            }
+
+            $linkCourse = $link->getCourse();
+            $linkSession = $link->getSession();
+            $sameCourse = null !== $linkCourse && $linkCourse->getId() === $course->getId();
+            $sameSession = null === $session
+                ? null === $linkSession
+                : null !== $linkSession && $linkSession->getId() === $session->getId();
+
+            if ($sameCourse && $sameSession) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function canManage(Course $course, ?Session $session): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if (null === $session) {
+            return $course->hasUserAsTeacher($user);
+        }
+
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        $value = $this->settingsManager->getSetting($name, true);
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
     private function isStudentView(Request $request): bool

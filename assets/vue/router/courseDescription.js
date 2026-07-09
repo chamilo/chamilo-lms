@@ -17,5 +17,17 @@ export default {
       meta: { breadcrumb: "Course description" },
       component: () => import("../views/courseDescription/CourseDescriptionListView.vue"),
     },
+    {
+      name: "CourseDescriptionEdit",
+      path: "edit/:id?",
+      meta: { breadcrumb: "Edit" },
+      component: () => import("../views/courseDescription/CourseDescriptionFormView.vue"),
+    },
+    {
+      name: "CourseDescriptionAdd",
+      path: "add",
+      meta: { breadcrumb: "Add" },
+      component: () => import("../views/courseDescription/CourseDescriptionFormView.vue"),
+    },
   ],
 }

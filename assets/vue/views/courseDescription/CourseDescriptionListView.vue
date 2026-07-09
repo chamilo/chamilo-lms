@@ -1,5 +1,24 @@
 <template>
   <section class="space-y-6">
+    <BaseToolbar
+      v-if="canManage"
+      class="mb-4 border-b border-gray-25 bg-white"
+    >
+      <template #start>
+        <BaseButton
+          v-for="type in toolbarTypes"
+          :key="type.value"
+          :icon="type.icon"
+          :label="t(type.label)"
+          only-icon
+          size="large"
+          type="primary-text"
+          class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 !text-3xl"
+          :route="getToolbarRoute(type.value)"
+        />
+      </template>
+    </BaseToolbar>
+
     <div
       v-if="isLoading"
       class="rounded-xl border border-gray-20 bg-white p-6 text-center text-sm text-gray-600 shadow-sm"
@@ -53,6 +72,16 @@
               icon="sessions"
               size="small"
             />
+            <BaseButton
+              v-if="canManage && description.canEdit"
+              icon="pencil"
+              :label="t('Edit')"
+              only-icon
+              size="small"
+              type="secondary-text"
+              :route="getEditRoute(description)"
+              :tooltip="t('Edit')"
+            />
           </div>
         </template>
 
@@ -73,11 +102,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import courseDescriptionService from "../../services/courseDescriptionService"
 
 const { t } = useI18n()
@@ -86,6 +117,8 @@ const route = useRoute()
 const descriptions = ref([])
 const isLoading = ref(false)
 const errorMessage = ref("")
+const canManage = ref(false)
+const types = ref([])
 
 const descriptionTypeLabels = {
   1: "Description",
@@ -97,6 +130,18 @@ const descriptionTypeLabels = {
   7: "Assessment",
   8: "Other",
 }
+
+const toolbarTypes = computed(() => {
+  if (types.value.length > 0) {
+    return types.value
+  }
+
+  return Object.entries(descriptionTypeLabels).map(([value, label]) => ({
+    value: Number(value),
+    label,
+    icon: "information",
+  }))
+})
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -124,8 +169,51 @@ function getContextParams() {
   return params
 }
 
+function getRouteQuery(extraQuery = {}) {
+  return {
+    ...getContextParams(),
+    ...extraQuery,
+  }
+}
+
 function getDescriptionTypeLabel(descriptionType) {
   return t(descriptionTypeLabels[Number(descriptionType)] || "Other")
+}
+
+function getDescriptionByType(descriptionType) {
+  return descriptions.value.find((description) => Number(description.descriptionType) === Number(descriptionType))
+}
+
+function getToolbarRoute(descriptionType) {
+  const existingDescription = getDescriptionByType(descriptionType)
+
+  if (Number(descriptionType) === 8) {
+    return {
+      name: "CourseDescriptionAdd",
+      params: { node: route.params.node },
+      query: getRouteQuery({ descriptionType }),
+    }
+  }
+
+  return {
+    name: "CourseDescriptionEdit",
+    params: {
+      node: route.params.node,
+      id: existingDescription?.iid,
+    },
+    query: getRouteQuery({ descriptionType }),
+  }
+}
+
+function getEditRoute(description) {
+  return {
+    name: "CourseDescriptionEdit",
+    params: {
+      node: route.params.node,
+      id: description.iid,
+    },
+    query: getRouteQuery({ descriptionType: description.descriptionType }),
+  }
 }
 
 async function loadDescriptions() {
@@ -135,6 +223,8 @@ async function loadDescriptions() {
   try {
     const response = await courseDescriptionService.getList(getContextParams())
     descriptions.value = Array.isArray(response.items) ? response.items : []
+    canManage.value = Boolean(response.canManage)
+    types.value = Array.isArray(response.types) ? response.types : []
   } catch (error) {
     console.error("Error loading course descriptions", error)
     errorMessage.value =

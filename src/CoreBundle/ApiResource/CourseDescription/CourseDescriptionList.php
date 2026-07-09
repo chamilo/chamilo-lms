@@ -86,6 +86,18 @@ final class CourseDescriptionList
     #[Groups(['course_description_list:read'])]
     public bool $studentView = false;
 
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    #[Groups(['course_description_list:read'])]
+    public array $types = [];
+
+    /**
+     * @var array<string, mixed>
+     */
+    #[Groups(['course_description_list:read'])]
+    public array $settings = [];
+
     public function getId(): string
     {
         return $this->id;

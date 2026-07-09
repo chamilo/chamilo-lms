@@ -165,15 +165,15 @@ export const useSecurityStore = defineStore("security", () => {
   const isCurrentCourseGroupTeacher = computed(() => isGranted.value("ROLE_CURRENT_COURSE_GROUP_TEACHER"))
 
   /**
-   * The backend grants a course teacher both STUDENT and TEACHER contextual
-   * roles, so teacher presence wins (matches api_is_course_admin). Suppressed
-   * while the student view is active.
+   * Teacher of the current course context — base course OR session — mirroring
+   * api_is_course_admin() (public/main/inc/lib/api.lib.php), but suppressed while
+   * the student view is active. Equivalent to isCourseAdmin gated by the student view.
    */
   const isCurrentTeacher = computed(() => {
     if (platformConfigStore.isStudentViewActive) return false
     if (isAdmin.value) return true
 
-    return isCurrentCourseTeacher.value
+    return isCurrentCourseTeacher.value || isCurrentCourseSessionTeacher.value
   })
 
   // Mirrors api_is_course_admin() (public/main/inc/lib/api.lib.php):

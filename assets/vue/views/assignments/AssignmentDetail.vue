@@ -203,11 +203,7 @@ const notification = useNotification()
 const assignmentId = parseInt(route.params.id, 10)
 const fromLearnpath = route.query.origin === "learnpath"
 
-const isTeacherUI = computed(
-  () =>
-    (securityStore.isCurrentTeacher || securityStore.isCourseAdmin || securityStore.isAdmin) &&
-    !platformConfigStore.isStudentViewActive,
-)
+const isTeacherUI = computed(() => securityStore.isCurrentTeacher)
 
 const forceStudentView = computed(() => !isTeacherUI.value || platformConfigStore.isStudentViewActive)
 

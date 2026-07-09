@@ -328,6 +328,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
     $servicesTable->addColumn('upsale_from_id', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
     $servicesTable->addColumn('applies_to', Types::INTEGER);
     $servicesTable->addColumn('owner_id', Types::INTEGER);
+    $servicesTable->addColumn('active', Types::BOOLEAN, ['default' => true]);
     $servicesTable->addColumn('visibility', Types::INTEGER);
     $servicesTable->addColumn('video_url', Types::STRING);
     $servicesTable->addColumn('image', Types::STRING);

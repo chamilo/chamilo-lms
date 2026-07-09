@@ -81,6 +81,7 @@ $formDefaultValues = array_merge($plugin->buildBenefitFormDefaults(), [
     'upsale_from_id' => 0,
     'applies_to' => BuyCoursesPlugin::SERVICE_TYPE_USER,
     'owner_id' => api_get_user_id(),
+    'active' => true,
     'visibility' => true,
 ]);
 
@@ -189,6 +190,14 @@ $form->addSelect(
     get_lang('Owner'),
     $userOptions
 );
+$form->addCheckBox(
+    'active',
+    '',
+    $buildCheckboxContent(
+        $plugin->get_lang('ActiveService'),
+        $plugin->get_lang('ActiveServiceHelp')
+    )
+);
 $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
     'picture',
@@ -260,6 +269,10 @@ $form->setDefaults($formDefaultValues);
 
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $postedValues = $form->exportValues();
+    if (is_array($postedValues)) {
+        $postedValues['active'] = isset($_POST['active']) ? 1 : 0;
+    }
+
     if (!empty($postedValues) && is_array($postedValues)) {
         $form->setDefaults(array_replace($formDefaultValues, $postedValues));
     }
@@ -267,6 +280,8 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
+    $values['active'] = isset($_POST['active']) ? 1 : 0;
+
     foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
         $formField = $plugin->getAiCourseFeatureFormField((string) $feature);
         $values[$formField] = isset($_POST[$formField]) ? 1 : 0;
@@ -1089,6 +1104,7 @@ document.addEventListener('DOMContentLoaded', function () {
     moveField('subscription_behavior_json', recurring.body, {full: true});
     moveField('stripe_price_id', recurring.body, {full: true});
 
+    moveField('active', publishing.body, {full: true, compact: true});
     moveField('display_on_course_creation_page', publishing.body, {full: true, compact: true});
     moveCustomBlock('.buycourses-applies-to-card', publishing.body, true);
     moveField('owner_id', publishing.body);

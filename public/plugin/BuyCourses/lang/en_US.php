@@ -131,6 +131,8 @@ $strings['InfoApiStepTwo'] = 'In paragraph <strong>API access</strong>, click <s
 $strings['InfoApiStepThree'] = 'In Option 2 (Request API credentials to create your own API username and password), click the <strong>View API Signature</strong> link, and copy the credentials shown right into the BuyCourses plugin form';
 $strings['ErrorOccurred'] = '<strong>An error ocurred</strong>. Code: %s. Message: %s. Please contact to platform admin';
 $strings['VisibleInCatalog'] = 'Visible in catalog';
+$strings['ActiveService'] = 'Active';
+$strings['ActiveServiceHelp'] = 'When disabled, the service remains available for administration and existing purchases, but it is hidden from sales and cannot be purchased or used as a new upgrade.';
 $strings['Beneficiaries'] = 'Beneficiaries';
 $strings['AvailableCourse'] = 'Available course';
 $strings['ShowOnCourseCatalog'] = 'Show on course catalog';
@@ -746,6 +748,7 @@ $strings['UpgradeCouldNotBeCompleted'] = 'The service upgrade could not be compl
 $strings['ServiceSaleNotFound'] = 'The service sale could not be found.';
 $strings['InvalidPaymentMethod'] = 'The selected payment method is not valid.';
 $strings['ServiceNotFound'] = 'The selected service could not be found.';
+$strings['ServiceInactiveForPurchase'] = 'This service is not active and cannot be purchased.';
 $strings['ServiceInActiveUpsaleChainCannotBePurchased'] = 'This service cannot be purchased while %s is active because both services belong to the same upgrade path.';
 
 // Service sale audit.

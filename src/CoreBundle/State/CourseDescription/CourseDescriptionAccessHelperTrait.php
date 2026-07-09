@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,6 +30,15 @@ trait CourseDescriptionAccessHelperTrait
         }
 
         throw new AccessDeniedHttpException('The Course Description tool is disabled for this course.');
+    }
+
+    private function assertSessionBelongsToCourse(?Session $session, Course $course): void
+    {
+        if (!$session instanceof Session || $session->hasCourse($course)) {
+            return;
+        }
+
+        throw new AccessDeniedHttpException('The requested session does not contain the current course.');
     }
 
     private function isCourseDescriptionToolEnabled(EntityManagerInterface $entityManager, Course $course): bool
@@ -83,15 +93,15 @@ trait CourseDescriptionAccessHelperTrait
             return false;
         }
 
-        if ($this->isSessionAdminEditingAllowed($user, $settingsManager)) {
-            return true;
-        }
-
         $isCourseTeacher = $course->hasUserAsTeacher($user)
             || $this->hasDirectCourseTeacherRelation($entityManager, $user, $course);
 
         if (!$session instanceof Session) {
             return $isCourseTeacher;
+        }
+
+        if ($this->isSessionAdminEditingAllowed($user, $settingsManager)) {
+            return true;
         }
 
         if (Session::READ_ONLY === $session->getVisibility()
@@ -113,20 +123,37 @@ trait CourseDescriptionAccessHelperTrait
             || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
-    private function canReadCourseDescriptions(Security $security, SettingsManager $settingsManager): bool
-    {
-        $user = $security->getUser();
-
-        if ($security->isGranted('ROLE_ADMIN')
-            || $security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-            || $security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-        ) {
+    private function canReadCourseDescriptions(
+        Security $security,
+        SettingsManager $settingsManager,
+        Course $course,
+        ?Session $session,
+    ): bool {
+        if ($security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
-        return $user instanceof User && $this->isSessionAdminEditingAllowed($user, $settingsManager);
+        $user = $security->getUser();
+
+        if (!$user instanceof User) {
+            return null === $session
+                && $course->isPublic()
+                && '' === trim((string) $course->getRegistrationCode());
+        }
+
+        if ($security->isGranted('ROLE_HR') || $security->isGranted(CourseVoter::VIEW, $course)) {
+            return true;
+        }
+
+        return $session instanceof Session && $this->isSessionAdminReadingAllowed($user, $settingsManager);
+    }
+
+    private function isSessionAdminReadingAllowed(User $user, SettingsManager $settingsManager): bool
+    {
+        return $user->isSessionAdmin()
+            && $this->resolveCourseDescriptionEnabledValue(
+                $settingsManager->getSetting('session.session_admins_access_all_content', true),
+            );
     }
 
     private function isSessionAdminEditingAllowed(User $user, SettingsManager $settingsManager): bool

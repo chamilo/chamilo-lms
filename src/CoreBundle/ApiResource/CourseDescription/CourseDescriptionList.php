@@ -52,7 +52,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 ],
             ),
             provider: CourseDescriptionListProvider::class,
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
     ],
     normalizationContext: [

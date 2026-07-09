@@ -13,7 +13,7 @@
           only-icon
           size="large"
           type="primary-text"
-          class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 !text-3xl"
+          class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
           :route="getToolbarRoute(type.value)"
         />
       </template>

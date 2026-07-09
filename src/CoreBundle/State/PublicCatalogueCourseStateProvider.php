@@ -91,7 +91,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 
             /** @var CCourseDescription $description */
             foreach ($descriptions as $description) {
-                $title = trim((string) $description->getTitle());
+                $title = $this->sanitizeHtmlTitle((string) $description->getTitle());
                 $content = $this->normalizeHtmlContent((string) $description->getContent());
 
                 if ('' === $title && '' === $content) {
@@ -133,6 +133,15 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         $this->courseCatalogueHelper->addVisibilityCondition($qb, true);
 
         return $qb;
+    }
+
+    private function sanitizeHtmlTitle(string $title): string
+    {
+        if (\class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
+            return (string) \Security::remove_XSS($title, \COURSEMANAGERLOWSECURITY);
+        }
+
+        return htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     private function normalizeHtmlContent(string $content): string

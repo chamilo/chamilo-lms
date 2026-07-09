@@ -1,7 +1,6 @@
 export default {
   path: "/resources/course-description/:node/",
   meta: {
-    requiresAuth: true,
     requiresCourseContext: true,
     showBreadcrumb: true,
     tool: "course_description",
@@ -14,19 +13,19 @@ export default {
     {
       name: "CourseDescriptionList",
       path: "",
-      meta: { breadcrumb: "Course description" },
+      meta: { requiresAuth: false, breadcrumb: "Course description" },
       component: () => import("../views/courseDescription/CourseDescriptionListView.vue"),
     },
     {
       name: "CourseDescriptionEdit",
       path: "edit/:id?",
-      meta: { breadcrumb: "Edit" },
+      meta: { requiresAuth: true, breadcrumb: "Edit" },
       component: () => import("../views/courseDescription/CourseDescriptionFormView.vue"),
     },
     {
       name: "CourseDescriptionAdd",
       path: "add",
-      meta: { breadcrumb: "Add" },
+      meta: { requiresAuth: true, breadcrumb: "Add" },
       component: () => import("../views/courseDescription/CourseDescriptionFormView.vue"),
     },
   ],

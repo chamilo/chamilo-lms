@@ -52,12 +52,13 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
         $course = $this->getCourse($request);
         $this->assertCourseDescriptionToolEnabled($this->entityManager, $course);
+        $session = $this->getSession($request);
+        $this->assertSessionBelongsToCourse($session, $course);
 
-        if (!$this->canReadCourseDescriptions($this->security, $this->settingsManager)) {
+        if (!$this->canReadCourseDescriptions($this->security, $this->settingsManager, $course, $session)) {
             throw new AccessDeniedHttpException('You are not allowed to view course descriptions in this context.');
         }
 
-        $session = $this->getSession($request);
         $studentView = $this->isStudentView($request);
         $canManage = !$studentView && $this->canManageCourseDescriptions(
             $this->entityManager,
@@ -143,7 +144,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
         return [
             'iid' => (int) $description->getIid(),
-            'title' => (string) $description->getTitle(),
+            'title' => $this->sanitizeHtmlTitle((string) $description->getTitle()),
             'content' => (string) $description->getContent(),
             'descriptionType' => (int) $description->getDescriptionType(),
             'progress' => (int) $description->getProgress(),
@@ -154,6 +155,15 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
             'canEdit' => $this->canEditDescription($description, $course, $session),
             'canDelete' => $this->canDeleteDescription($description, $course, $session),
         ];
+    }
+
+    private function sanitizeHtmlTitle(string $title): string
+    {
+        if (\class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
+            return (string) \Security::remove_XSS($title, \COURSEMANAGERLOWSECURITY);
+        }
+
+        return htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

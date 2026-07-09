@@ -111,6 +111,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $this->assertCourseDescriptionToolEnabled($this->entityManager, $course);
         $session = $this->getSession($request);
+        $this->assertSessionBelongsToCourse($session, $course);
 
         if ($this->isStudentView($request) || !$this->canManageCourseDescriptions(
             $this->entityManager,

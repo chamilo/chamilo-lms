@@ -200,13 +200,18 @@ foreach ($serviceList as &$service) {
     $serviceId = (int) $service['id'];
     $service['description'] = $plugin->filterServiceMultilingualHtml((string) ($service['description'] ?? ''));
     $service['service_information'] = $plugin->filterServiceMultilingualHtml((string) ($service['service_information'] ?? ''));
-    $upgradeOffer = $plugin->getCurrentUserServiceUpgradeOffer($serviceId);
+    $purchaseUpsaleChainBlock = $plugin->getCurrentUserServicePurchaseUpsaleChainBlock($serviceId);
+    $upgradeOffer = null === $purchaseUpsaleChainBlock
+        ? $plugin->getCurrentUserServiceUpgradeOffer($serviceId)
+        : null;
     $plugin->applyServiceUpgradeOfferToPricing($service, $upgradeOffer);
     $service['upgrade_offer'] = $upgradeOffer;
     $service['is_upgrade'] = null !== $upgradeOffer;
+    $service['purchase_blocked_by_active_upsale_chain'] = null !== $purchaseUpsaleChainBlock;
     $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
     $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
     $service['can_buy'] = $plugin->canCurrentUserBuyService($service)
+        && null === $purchaseUpsaleChainBlock
         && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 }
 unset($service);

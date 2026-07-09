@@ -746,3 +746,4 @@ $strings['UpgradeCouldNotBeCompleted'] = 'No se pudo completar la mejora del ser
 $strings['ServiceSaleNotFound'] = 'No se encontró la venta del servicio.';
 $strings['InvalidPaymentMethod'] = 'El método de pago seleccionado no es válido.';
 $strings['ServiceNotFound'] = 'No se encontró el servicio seleccionado.';
+$strings['ServiceInActiveUpsaleChainCannotBePurchased'] = 'Este servicio no se puede comprar mientras %s esté activo porque ambos servicios pertenecen a la misma ruta de mejora.';

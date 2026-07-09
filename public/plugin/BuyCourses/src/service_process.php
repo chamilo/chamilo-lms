@@ -57,6 +57,20 @@ if (empty($serviceInfo) || empty($serviceInfo['id'])) {
     exit;
 }
 
+$purchaseUpsaleChainBlock = $plugin->getServicePurchaseUpsaleChainBlock($serviceId, $currentUserId);
+if (null !== $purchaseUpsaleChainBlock) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->formatServicePurchaseUpsaleChainBlockMessage($purchaseUpsaleChainBlock),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
+
 $upgradeOffer = $plugin->getCurrentUserServiceUpgradeOffer($serviceId, $coupon);
 $plugin->applyServiceUpgradeOfferToPricing($serviceInfo, $upgradeOffer);
 $serviceInfo['upgrade_offer'] = $upgradeOffer;

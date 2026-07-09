@@ -746,3 +746,4 @@ $strings['UpgradeCouldNotBeCompleted'] = 'La mise à niveau du service n\'a pas 
 $strings['ServiceSaleNotFound'] = 'La vente du service n\'a pas été trouvée.';
 $strings['InvalidPaymentMethod'] = 'Le mode de paiement sélectionné n\'est pas valide.';
 $strings['ServiceNotFound'] = 'Le service sélectionné n\'a pas été trouvé.';
+$strings['ServiceInActiveUpsaleChainCannotBePurchased'] = "Ce service ne peut pas être acheté tant que %s est actif, car les deux services appartiennent au même parcours de mise à niveau.";

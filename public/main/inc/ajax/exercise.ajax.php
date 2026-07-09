@@ -1246,7 +1246,7 @@ switch ($action) {
                     'name'     => api_htmlentities($originalName),
                     'asset_id' => (string) $node->getId(),
                     'url'      => $url,
-                    'size'     => isset($file['size']) ? format_file_size((int) $file['size']) : '',
+                    'size'     => isset($file['size']) ? \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize((int) $file['size']) : '',
                     'type'     => api_htmlentities($file['type'] ?? ''),
                     'result'   => Display::return_icon('accept.png', get_lang('Uploaded')),
                 ];

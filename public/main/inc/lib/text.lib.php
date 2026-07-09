@@ -737,25 +737,6 @@ function implode_with_key($glue, $array)
 }
 
 /**
- * Transform the file size in a human readable format.
- *
- * Legacy shim: the real logic now lives in
- * Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize(). This procedural wrapper is
- * kept for the legacy callers and for the Twig "format_file_size" filter binding.
- *
- * @param int|float|string $file_size Size of the file, expressed in the unit given by $unit
- * @param string           $unit      Unit the $file_size value is already in: 'B', 'KB', 'MB' or 'GB'
- * @param bool             $rtlCompat When true, the result is wrapped in a <bdi> element so the
- *                                    LTR "number + Latin unit" run is isolated from surrounding RTL text
- *
- * @return string A human readable representation of the file size (e.g. "500 MB")
- */
-function format_file_size($file_size, string $unit = 'B', bool $rtlCompat = false)
-{
-    return \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize((int) $file_size, $unit, $rtlCompat);
-}
-
-/**
  * Converts an string CLEANYO[admin][amann,acostea]
  * into an array:.
  *

@@ -308,7 +308,15 @@ provide("isCustomizing", isCustomizing)
 
 const courseItems = ref([])
 
-const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
+const routerTools = [
+  "document",
+  "link",
+  "glossary",
+  "agenda",
+  "student_publication",
+  "course_description",
+  "course_homepage",
+]
 const documentAutoLaunch = ref(0)
 const exerciseAutoLaunch = ref(0)
 const lpAutoLaunch = ref(0)

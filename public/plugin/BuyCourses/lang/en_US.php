@@ -746,3 +746,4 @@ $strings['UpgradeCouldNotBeCompleted'] = 'The service upgrade could not be compl
 $strings['ServiceSaleNotFound'] = 'The service sale could not be found.';
 $strings['InvalidPaymentMethod'] = 'The selected payment method is not valid.';
 $strings['ServiceNotFound'] = 'The selected service could not be found.';
+$strings['ServiceInActiveUpsaleChainCannotBePurchased'] = 'This service cannot be purchased while %s is active because both services belong to the same upgrade path.';

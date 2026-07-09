@@ -4931,6 +4931,101 @@ class BuyCoursesPlugin extends Plugin
         return false;
     }
 
+    private function isServiceUpsaleAncestorOf(int $ancestorServiceId, int $descendantServiceId): bool
+    {
+        if ($ancestorServiceId <= 0 || $descendantServiceId <= 0 || $ancestorServiceId === $descendantServiceId) {
+            return false;
+        }
+
+        $visited = [];
+        $currentServiceId = $descendantServiceId;
+
+        while ($currentServiceId > 0 && !isset($visited[$currentServiceId])) {
+            $visited[$currentServiceId] = true;
+            $service = $this->getService($currentServiceId);
+            if (empty($service)) {
+                return false;
+            }
+
+            $currentServiceId = (int) ($service['upsale_from_id'] ?? 0);
+            if ($currentServiceId === $ancestorServiceId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Return the active service that blocks buying another service in the same Upsale lineage.
+     *
+     * A direct child of the active service is not blocked because it is the valid next Upgrade.
+     */
+    public function getServicePurchaseUpsaleChainBlock(int $serviceId, int $buyerId): ?array
+    {
+        if ($serviceId <= 0 || $buyerId <= 0) {
+            return null;
+        }
+
+        $service = $this->getService($serviceId);
+        if (empty($service) || self::SERVICE_TYPE_USER !== (int) ($service['applies_to'] ?? self::SERVICE_TYPE_NONE)) {
+            return null;
+        }
+
+        foreach ($this->getActiveServicesForUser($buyerId) as $activeServiceSale) {
+            $activeServiceId = (int) ($activeServiceSale['service_id'] ?? 0);
+            $nodeType = (int) ($activeServiceSale['node_type'] ?? 0);
+            $nodeId = (int) ($activeServiceSale['node_id'] ?? 0);
+
+            if (self::SERVICE_TYPE_USER !== $nodeType
+                || $buyerId !== $nodeId
+                || $activeServiceId <= 0
+                || $activeServiceId === $serviceId
+            ) {
+                continue;
+            }
+
+            $candidateIsAncestor = $this->isServiceUpsaleAncestorOf($serviceId, $activeServiceId);
+            $candidateIsDescendant = $this->isServiceUpsaleAncestorOf($activeServiceId, $serviceId);
+
+            if (!$candidateIsAncestor && !$candidateIsDescendant) {
+                continue;
+            }
+
+            $isDirectUpgrade = $candidateIsDescendant
+                && $activeServiceId === (int) ($service['upsale_from_id'] ?? 0);
+            if ($isDirectUpgrade) {
+                continue;
+            }
+
+            return [
+                'active_sale_id' => (int) ($activeServiceSale['id'] ?? 0),
+                'active_service_id' => $activeServiceId,
+                'active_service_name' => (string) (
+                    $activeServiceSale['service']['name']
+                    ?? $activeServiceSale['name']
+                    ?? ''
+                ),
+                'relation' => $candidateIsAncestor ? 'ancestor' : 'indirect_descendant',
+            ];
+        }
+
+        return null;
+    }
+
+    public function getCurrentUserServicePurchaseUpsaleChainBlock(int $serviceId): ?array
+    {
+        return $this->getServicePurchaseUpsaleChainBlock($serviceId, api_get_user_id());
+    }
+
+    public function formatServicePurchaseUpsaleChainBlockMessage(array $block): string
+    {
+        return sprintf(
+            $this->get_lang('ServiceInActiveUpsaleChainCannotBePurchased'),
+            (string) ($block['active_service_name'] ?? '')
+        );
+    }
+
     public function getCurrentUserServiceUpgradeOffer(int $targetServiceId, ?array $coupon = null): ?array
     {
         return $this->getServiceUpgradeOffer($targetServiceId, api_get_user_id(), $coupon);
@@ -7409,6 +7504,15 @@ class BuyCoursesPlugin extends Plugin
 
         $nodeType = (int) ($service['applies_to'] ?? 0);
         $nodeId = (int) $infoSelect;
+
+        $purchaseUpsaleChainBlock = $this->getServicePurchaseUpsaleChainBlock($serviceId, $userId);
+        if (null !== $purchaseUpsaleChainBlock) {
+            $this->lastServiceSaleError = $this->formatServicePurchaseUpsaleChainBlockMessage(
+                $purchaseUpsaleChainBlock
+            );
+
+            return false;
+        }
 
         if ($this->hasBlockingActiveServiceSale($userId, $serviceId, $nodeType, $nodeId)) {
             $this->lastServiceSaleError = get_lang('Active service');
@@ -10921,14 +11025,17 @@ class BuyCoursesPlugin extends Plugin
                 : 0;
 
             $hasActiveSale = null !== $activeSale;
-            $upgradeOffer = !$hasActiveSale
+            $purchaseUpsaleChainBlock = !$hasActiveSale
+                ? $this->getServicePurchaseUpsaleChainBlock($serviceId, $userId)
+                : null;
+            $upgradeOffer = !$hasActiveSale && null === $purchaseUpsaleChainBlock
                 ? $this->getServiceUpgradeOffer($serviceId, $userId)
                 : null;
             $availableByLimit = $benefits['maxCourses'] <= 0 || $usedCourses < $benefits['maxCourses'];
             $available = $hasActiveSale && $availableByLimit;
 
             $disabledReason = null;
-            if (!$hasActiveSale) {
+            if (!$hasActiveSale && null === $purchaseUpsaleChainBlock) {
                 $disabledReason = 'service_not_purchased';
             } elseif (!$availableByLimit) {
                 $disabledReason = 'service_course_limit_reached';
@@ -10953,6 +11060,7 @@ class BuyCoursesPlugin extends Plugin
                 'price' => $service['price_label'] ?? ($service['price_with_tax'] ?? ($service['price'] ?? null)),
                 'currency' => $service['iso_code'] ?? null,
                 'isUpgrade' => null !== $upgradeOffer,
+                'purchaseBlockedByActiveUpsaleChain' => null !== $purchaseUpsaleChainBlock,
                 'buyLabel' => $this->get_lang(null !== $upgradeOffer ? 'Upgrade' : 'Buy'),
                 'upgradeFromServiceName' => null !== $upgradeOffer
                     ? (string) ($upgradeOffer['source_service_name'] ?? '')
@@ -10960,7 +11068,8 @@ class BuyCoursesPlugin extends Plugin
                 'upgradePrice' => null !== $upgradeOffer
                     ? (string) ($upgradeOffer['upgrade_price_without_tax_formatted'] ?? '')
                     : null,
-                'buyUrl' => null !== $upgradeOffer && empty($upgradeOffer['purchasable'])
+                'buyUrl' => null !== $purchaseUpsaleChainBlock
+                    || (null !== $upgradeOffer && empty($upgradeOffer['purchasable']))
                     ? null
                     : api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.self::SERVICE_TYPE_USER,
                 'informationUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId,

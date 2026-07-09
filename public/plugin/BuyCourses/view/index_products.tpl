@@ -275,7 +275,7 @@
                             <em class="mdi {{ service.is_upgrade|default(false) ? 'mdi-arrow-up-bold-circle-outline' : 'mdi-cart-outline' }}"></em>
                             {{ (service.is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}
                         </a>
-                    {% else %}
+                    {% elseif not service.purchase_blocked_by_active_upsale_chain|default(false) %}
                         <span class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50">
                             <em class="mdi mdi-lock"></em>
                             {{ (service.is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}

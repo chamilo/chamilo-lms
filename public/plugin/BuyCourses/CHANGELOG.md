@@ -1,6 +1,8 @@
 v7.7 - 2026-07-08
 ====
 
+Fix: services in the same recursive Upsale lineage as an active plan can no longer be purchased as independent services. The direct next Upgrade remains available, while lower plans and non-adjacent higher plans hide their purchase action and are also rejected by checkout endpoints.
+
 Fix: upgrade offers now keep the target service's normal price visible, show the unused source-service value as a separate prorated credit, and display the actual amount due today independently.
 Fix: an Upsale target may now have the same or a longer duration than its source service, while shorter target durations remain invalid.
 

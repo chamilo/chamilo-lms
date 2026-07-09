@@ -317,10 +317,12 @@ class Resource
                     $resourceArr = (array) $resource;
 
                     $newResource = new CourseDescription(
-                        $resourceArr['id'] ?? '',
+                        $resourceArr['id'] ?? ($resourceArr['source_id'] ?? ''),
                         $resourceArr['title'] ?? '',
                         $resourceArr['content'] ?? '',
-                        $resourceArr['description_type'] ?? ''
+                        $resourceArr['description_type'] ?? '',
+                        $resourceArr['progress'] ?? 0,
+                        $resourceArr['language'] ?? ''
                     );
 
                     // Preserve base Resource fields (if present).

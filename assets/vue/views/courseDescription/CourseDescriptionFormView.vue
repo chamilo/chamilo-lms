@@ -221,6 +221,10 @@ function getContextParams() {
     params.gid = gid
   }
 
+  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
+    params.isStudentView = getQueryValue(route.query.isStudentView)
+  }
+
   return params
 }
 
@@ -317,7 +321,14 @@ async function saveDescription() {
 onMounted(loadForm)
 
 watch(
-  () => [route.params.id, route.query.descriptionType, route.query.cid, route.query.sid, route.query.gid],
+  () => [
+    route.params.id,
+    route.query.descriptionType,
+    route.query.cid,
+    route.query.sid,
+    route.query.gid,
+    route.query.isStudentView,
+  ],
   loadForm,
 )
 </script>

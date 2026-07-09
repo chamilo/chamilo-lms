@@ -215,12 +215,15 @@ function getDescriptionTypeLabel(descriptionType) {
   return t(descriptionTypeLabels[Number(descriptionType)] || "Other")
 }
 
-function getDescriptionByType(descriptionType) {
-  return descriptions.value.find((description) => Number(description.descriptionType) === Number(descriptionType))
+function getOwnDescriptionByType(descriptionType) {
+  return descriptions.value.find(
+    (description) =>
+      Number(description.descriptionType) === Number(descriptionType) && !description.isInheritedFromCourse,
+  )
 }
 
 function getToolbarRoute(descriptionType) {
-  const existingDescription = getDescriptionByType(descriptionType)
+  const existingDescription = getOwnDescriptionByType(descriptionType)
 
   if (Number(descriptionType) === 8) {
     return {

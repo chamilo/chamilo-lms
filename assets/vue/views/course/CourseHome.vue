@@ -333,6 +333,20 @@ function isLearningPathTool(tool) {
   return tool?.title === "learnpath" || tool?.tool?.title === "learnpath"
 }
 
+function isCourseDescriptionTool(tool) {
+  return tool?.title === "course_description" || tool?.tool?.title === "course_description"
+}
+
+function isCourseDescriptionToolEnabled() {
+  const value = courseSettingsStore.getSetting("enabled", "course_description")
+
+  if (value === null || value === undefined || value === "") {
+    return true
+  }
+
+  return isSettingEnabled(value)
+}
+
 function shouldShowInvisibleLearningPathTool(tool) {
   return isLearningPathTool(tool) && "true" === getSetting.value("lp.show_invisible_lp_in_course_home")
 }
@@ -411,6 +425,10 @@ async function loadCourseTools(showSkeleton = true) {
     const regularTools = []
 
     normalizedTools.forEach((tool) => {
+      if (isCourseDescriptionTool(tool) && !isCourseDescriptionToolEnabled()) {
+        return
+      }
+
       if (tool.title === "tracking") {
         // Tracking/Reporting is shown as a dedicated icon in the header, not in the tools grid.
       } else if (tool.tool?.category === "admin") {

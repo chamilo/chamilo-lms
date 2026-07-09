@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -31,6 +30,8 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class CourseDescriptionItemProvider implements ProviderInterface
 {
+    use CourseDescriptionAccessHelperTrait;
+
     public const CSRF_TOKEN_ID = 'course_description_item';
 
     /**
@@ -108,9 +109,16 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         }
 
         $course = $this->getCourse($request);
+        $this->assertCourseDescriptionToolEnabled($this->entityManager, $course);
         $session = $this->getSession($request);
 
-        if ($this->isStudentView($request) || !$this->canManage($course, $session)) {
+        if ($this->isStudentView($request) || !$this->canManageCourseDescriptions(
+            $this->entityManager,
+            $this->security,
+            $this->settingsManager,
+            $course,
+            $session,
+        )) {
             throw new AccessDeniedHttpException('You are not allowed to manage course descriptions in this context.');
         }
         $descriptionId = isset($uriVariables['iid'])
@@ -152,24 +160,6 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         }
 
         return $item;
-    }
-
-    private function canManage(Course $course, ?Session $session): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            return false;
-        }
-
-        if (null === $session) {
-            return $course->hasUserAsTeacher($user);
-        }
-
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getCourse(Request $request): Course

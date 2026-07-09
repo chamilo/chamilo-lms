@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\ApiResource\CourseDescription\CourseDescriptionList;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -28,6 +27,8 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class CourseDescriptionListProvider implements ProviderInterface
 {
+    use CourseDescriptionAccessHelperTrait;
+
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
@@ -49,9 +50,16 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         }
 
         $course = $this->getCourse($request);
+        $this->assertCourseDescriptionToolEnabled($this->entityManager, $course);
         $session = $this->getSession($request);
         $studentView = $this->isStudentView($request);
-        $canManage = !$studentView && $this->canManage($course, $session);
+        $canManage = !$studentView && $this->canManageCourseDescriptions(
+            $this->entityManager,
+            $this->security,
+            $this->settingsManager,
+            $course,
+            $session,
+        );
 
         $list = new CourseDescriptionList();
         $list->courseId = (int) $course->getId();
@@ -172,7 +180,13 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
     private function canEditDescription(CCourseDescription $description, Course $course, ?Session $session): bool
     {
-        if (!$this->canManage($course, $session) || !$this->belongsToExactContext($description, $course, $session)) {
+        if (!$this->canManageCourseDescriptions(
+            $this->entityManager,
+            $this->security,
+            $this->settingsManager,
+            $course,
+            $session,
+        ) || !$this->belongsToExactContext($description, $course, $session)) {
             return false;
         }
 
@@ -183,7 +197,13 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
     private function canDeleteDescription(CCourseDescription $description, Course $course, ?Session $session): bool
     {
-        if (!$this->canManage($course, $session) || !$this->belongsToExactContext($description, $course, $session)) {
+        if (!$this->canManageCourseDescriptions(
+            $this->entityManager,
+            $this->security,
+            $this->settingsManager,
+            $course,
+            $session,
+        ) || !$this->belongsToExactContext($description, $course, $session)) {
             return false;
         }
 
@@ -217,24 +237,6 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         }
 
         return false;
-    }
-
-    private function canManage(Course $course, ?Session $session): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            return false;
-        }
-
-        if (null === $session) {
-            return $course->hasUserAsTeacher($user);
-        }
-
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function isSettingEnabled(string $name): bool

@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\ApiResource\CourseDescription\CourseDescriptionItem;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,11 +31,14 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterface
 {
+    use CourseDescriptionAccessHelperTrait;
+
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CCourseDescriptionRepository $courseDescriptionRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
@@ -51,9 +54,16 @@ final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterf
         }
 
         $course = $this->getCourse($request);
+        $this->assertCourseDescriptionToolEnabled($this->entityManager, $course);
         $session = $this->getSession($request);
 
-        if ($this->isStudentView($request) || !$this->canManage($course, $session)) {
+        if ($this->isStudentView($request) || !$this->canManageCourseDescriptions(
+            $this->entityManager,
+            $this->security,
+            $this->settingsManager,
+            $course,
+            $session,
+        )) {
             throw new AccessDeniedHttpException('You are not allowed to delete course descriptions in this context.');
         }
 
@@ -79,24 +89,6 @@ final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterf
         }
 
         $this->courseDescriptionRepository->delete($description);
-    }
-
-    private function canManage(Course $course, ?Session $session): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            return false;
-        }
-
-        if (null === $session) {
-            return $course->hasUserAsTeacher($user);
-        }
-
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getCourse(Request $request): Course

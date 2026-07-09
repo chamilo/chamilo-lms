@@ -614,7 +614,7 @@ router.beforeEach(async (to, from, next) => {
 
     if (wantsAdmin && wantsSessionAdmin) {
       // Route can be accessed by platform admins OR session admins
-      allowed = !!securityStore.isAdmin || !!securityStore.isSessionAdmin
+      allowed = securityStore.isGranted("ROLE_SESSION_MANAGER")
     } else if (wantsAdmin && wantsHR) {
       // Route can be accessed by platform admins OR HR users
       allowed = !!securityStore.isAdmin || !!securityStore.isHRM

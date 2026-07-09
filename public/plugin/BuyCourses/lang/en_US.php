@@ -747,3 +747,25 @@ $strings['ServiceSaleNotFound'] = 'The service sale could not be found.';
 $strings['InvalidPaymentMethod'] = 'The selected payment method is not valid.';
 $strings['ServiceNotFound'] = 'The selected service could not be found.';
 $strings['ServiceInActiveUpsaleChainCannotBePurchased'] = 'This service cannot be purchased while %s is active because both services belong to the same upgrade path.';
+
+// Service sale audit.
+$strings['AuditHistory'] = 'Audit history';
+$strings['NoAuditEntries'] = 'No audit entries have been recorded for this sale yet.';
+$strings['AuditActor'] = 'Actor';
+$strings['AuditSource'] = 'Source';
+$strings['AuditIpAddress'] = 'IP address';
+$strings['AuditData'] = 'Data';
+$strings['AuditSystemSubject'] = 'System';
+$strings['AuditSourceUser'] = 'User';
+$strings['AuditSourceAdmin'] = 'Administrator';
+$strings['AuditSourceGateway'] = 'Payment gateway';
+$strings['AuditSourceSystem'] = 'System';
+$strings['AuditActionServiceSaleCreated'] = 'Service order created';
+$strings['AuditActionServiceSaleCompleted'] = 'Service sale completed';
+$strings['AuditActionServiceSaleCancelled'] = 'Service sale cancelled';
+$strings['AuditActionServiceUpgradeCompleted'] = 'Service upgrade completed';
+$strings['AuditActionServiceReplacedByUpgrade'] = 'Service replaced by upgrade';
+$strings['AuditActionRenewalEnabled'] = 'Automatic renewal enabled';
+$strings['AuditActionRenewalCancelled'] = 'Automatic renewal cancelled';
+$strings['AuditActionRenewalPaymentSucceeded'] = 'Renewal payment completed';
+$strings['AuditActionRenewalPaymentFailed'] = 'Renewal payment failed';

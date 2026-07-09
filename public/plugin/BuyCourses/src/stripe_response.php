@@ -214,7 +214,7 @@ $completeCourseOrSessionSale = static function (mixed $checkoutSession) use ($pl
     return true;
 };
 
-$completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use ($plugin, $timestampToDateTime, $log): bool {
+$completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use ($plugin, $eventId, $eventType, $timestampToDateTime, $log): bool {
     $checkoutSessionId = (string) ($checkoutSession->id ?? '');
     if ('' === $checkoutSessionId) {
         return false;
@@ -245,7 +245,18 @@ $completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use 
     }
 
     $plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
-    if (!$plugin->completeServiceSale($serviceSaleId)) {
+    if (!$plugin->completeServiceSale(
+        $serviceSaleId,
+        BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+        null,
+        [
+            'gateway' => 'stripe',
+            'event_id' => $eventId,
+            'event_type' => $eventType,
+            'checkout_session_id' => $checkoutSessionId,
+            'subscription_id' => $subscriptionId,
+        ]
+    )) {
         $log('Service Stripe checkout could not be completed.', [
             'service_sale_id' => $serviceSaleId,
             'checkout_session_id' => $checkoutSessionId,
@@ -375,6 +386,23 @@ switch ($eventType) {
         $plugin->updateServiceSaleGatewayData($serviceSaleId, $updateData);
         $plugin->applyServiceBenefitsFromSale($serviceSaleId);
         $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
+        $plugin->recordAudit(
+            BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED,
+            BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+            $serviceSaleId,
+            [
+                'gateway' => 'stripe',
+                'event_id' => $eventId,
+                'event_type' => $eventType,
+                'subscription_id' => $subscriptionId,
+                'transaction_id' => $paymentIntentId,
+                'next_charge_date' => $nextChargeDate,
+                'amount_paid' => isset($object->amount_paid) ? ((float) $object->amount_paid / 100) : null,
+                'currency' => isset($object->currency) ? strtoupper((string) $object->currency) : null,
+            ],
+            null,
+            BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+        );
 
         $log('Stripe recurring invoice paid.', [
             'service_sale_id' => $serviceSaleId,
@@ -400,15 +428,38 @@ switch ($eventType) {
         }
 
         if (!empty($serviceSale)) {
-            $plugin->updateServiceSaleGatewayData((int) $serviceSale['id'], [
+            $serviceSaleId = (int) $serviceSale['id'];
+            if ($plugin->wasGatewayEventProcessed($serviceSaleId, $eventId)) {
+                $log('Duplicate Stripe invoice.payment_failed ignored.', [
+                    'service_sale_id' => $serviceSaleId,
+                    'event_id' => $eventId,
+                ]);
+                break;
+            }
+
+            $plugin->updateServiceSaleGatewayData($serviceSaleId, [
                 'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED,
                 'recurring_gateway' => 'stripe',
                 'gateway_subscription_id' => $subscriptionId,
                 'recurring_profile_id' => $subscriptionId,
             ]);
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_FAILED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $serviceSaleId,
+                [
+                    'gateway' => 'stripe',
+                    'event_id' => $eventId,
+                    'event_type' => $eventType,
+                    'subscription_id' => $subscriptionId,
+                ],
+                null,
+                BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+            );
+            $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
 
             $log('Stripe recurring invoice payment failed. Sale marked as suspended.', [
-                'service_sale_id' => (int) $serviceSale['id'],
+                'service_sale_id' => $serviceSaleId,
                 'subscription_id' => $subscriptionId,
             ]);
         }
@@ -422,21 +473,45 @@ switch ($eventType) {
 
         $serviceSale = $plugin->getServiceSaleFromGatewaySubscriptionId($subscriptionId);
         if (!empty($serviceSale)) {
+            $serviceSaleId = (int) $serviceSale['id'];
+            if ($plugin->wasGatewayEventProcessed($serviceSaleId, $eventId)) {
+                $log('Duplicate Stripe customer.subscription.deleted ignored.', [
+                    'service_sale_id' => $serviceSaleId,
+                    'event_id' => $eventId,
+                ]);
+                break;
+            }
+
             $cancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
             if ('' === $cancelledAt) {
                 $cancelledAt = api_get_utc_datetime();
             }
 
-            $plugin->updateServiceSaleGatewayData((int) $serviceSale['id'], [
+            $plugin->updateServiceSaleGatewayData($serviceSaleId, [
                 'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED,
                 'cancelled_at' => $cancelledAt,
                 'recurring_gateway' => 'stripe',
                 'gateway_subscription_id' => $subscriptionId,
                 'recurring_profile_id' => $subscriptionId,
             ]);
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $serviceSaleId,
+                [
+                    'gateway' => 'stripe',
+                    'event_id' => $eventId,
+                    'event_type' => $eventType,
+                    'subscription_id' => $subscriptionId,
+                    'cancelled_at' => $cancelledAt,
+                ],
+                null,
+                BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+            );
+            $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
 
             $log('Stripe subscription deleted.', [
-                'service_sale_id' => (int) $serviceSale['id'],
+                'service_sale_id' => $serviceSaleId,
                 'subscription_id' => $subscriptionId,
             ]);
         }

@@ -206,7 +206,19 @@ if (!function_exists('buycoursesCompleteStripeServiceCheckout')) {
             $plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
         }
 
-        if (!$plugin->completeServiceSale($serviceSaleId)) {
+        $saleBuyerId = (int) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0);
+        if (!$plugin->completeServiceSale(
+            $serviceSaleId,
+            BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+            $saleBuyerId > 0 ? $saleBuyerId : null,
+            [
+                'gateway' => 'stripe',
+                'checkout_session_id' => $checkoutSessionId,
+                'subscription_id' => $subscriptionId,
+                'transaction_id' => $paymentIntentId,
+                'trigger' => 'checkout_reconciliation',
+            ]
+        )) {
             return false;
         }
 

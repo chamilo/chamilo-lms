@@ -503,6 +503,14 @@ function selectDefaultCourseOption() {
     return
   }
 
+  const preferredAvailableService = serviceCourseOptions.value.find(
+    (option) => option.available && option.preferredForCourseCreation,
+  )
+  if (preferredAvailableService) {
+    selectCourseOption("service", preferredAvailableService.serviceSaleId)
+    return
+  }
+
   const firstAvailableService = serviceCourseOptions.value.find((option) => option.available)
   if (firstAvailableService) {
     selectCourseOption("service", firstAvailableService.serviceSaleId)

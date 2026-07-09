@@ -4957,6 +4957,52 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Return the highest active user-service sale from each Upsale chain.
+     *
+     * When multiple generations in the same chain are active, only the most
+     * advanced service is returned.
+     */
+    private function getHighestActiveUserServiceSales(int $buyerId): array
+    {
+        if ($buyerId <= 0) {
+            return [];
+        }
+
+        $activeServiceSales = array_values(array_filter(
+            $this->getActiveServicesForUser($buyerId),
+            static function (array $activeServiceSale) use ($buyerId): bool {
+                return self::SERVICE_TYPE_USER === (int) ($activeServiceSale['node_type'] ?? 0)
+                    && $buyerId === (int) ($activeServiceSale['node_id'] ?? 0)
+                    && (int) ($activeServiceSale['service_id'] ?? 0) > 0;
+            }
+        ));
+
+        $highestActiveServiceSales = [];
+        foreach ($activeServiceSales as $activeServiceSale) {
+            $activeServiceId = (int) ($activeServiceSale['service_id'] ?? 0);
+            $hasHigherActiveDescendant = false;
+
+            foreach ($activeServiceSales as $otherActiveServiceSale) {
+                $otherActiveServiceId = (int) ($otherActiveServiceSale['service_id'] ?? 0);
+                if ($otherActiveServiceId <= 0 || $otherActiveServiceId === $activeServiceId) {
+                    continue;
+                }
+
+                if ($this->isServiceUpsaleAncestorOf($activeServiceId, $otherActiveServiceId)) {
+                    $hasHigherActiveDescendant = true;
+                    break;
+                }
+            }
+
+            if (!$hasHigherActiveDescendant) {
+                $highestActiveServiceSales[] = $activeServiceSale;
+            }
+        }
+
+        return $highestActiveServiceSales;
+    }
+
+    /**
      * Return the active service that blocks buying another service in the same Upsale lineage.
      *
      * A direct child of the active service is not blocked because it is the valid next Upgrade.
@@ -4972,16 +5018,9 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        foreach ($this->getActiveServicesForUser($buyerId) as $activeServiceSale) {
+        foreach ($this->getHighestActiveUserServiceSales($buyerId) as $activeServiceSale) {
             $activeServiceId = (int) ($activeServiceSale['service_id'] ?? 0);
-            $nodeType = (int) ($activeServiceSale['node_type'] ?? 0);
-            $nodeId = (int) ($activeServiceSale['node_id'] ?? 0);
-
-            if (self::SERVICE_TYPE_USER !== $nodeType
-                || $buyerId !== $nodeId
-                || $activeServiceId <= 0
-                || $activeServiceId === $serviceId
-            ) {
+            if ($activeServiceId === $serviceId) {
                 continue;
             }
 
@@ -11006,6 +11045,14 @@ class BuyCoursesPlugin extends Plugin
             ]
         );
 
+        $preferredActiveServiceIds = [];
+        foreach ($this->getHighestActiveUserServiceSales($userId) as $preferredActiveServiceSale) {
+            $preferredServiceId = (int) ($preferredActiveServiceSale['service_id'] ?? 0);
+            if ($preferredServiceId > 0) {
+                $preferredActiveServiceIds[$preferredServiceId] = true;
+            }
+        }
+
         $options = [];
         foreach ($serviceIds as $serviceRow) {
             $serviceId = (int) ($serviceRow['id'] ?? 0);
@@ -11050,6 +11097,7 @@ class BuyCoursesPlugin extends Plugin
                 'disabledReason' => $disabledReason,
                 'serviceId' => $serviceId,
                 'serviceSaleId' => null !== $activeSale ? (int) $activeSale['id'] : null,
+                'preferredForCourseCreation' => $hasActiveSale && isset($preferredActiveServiceIds[$serviceId]),
                 'currentCourses' => $usedCourses,
                 'usedCourses' => $usedCourses,
                 'maxCourses' => $benefits['maxCourses'],

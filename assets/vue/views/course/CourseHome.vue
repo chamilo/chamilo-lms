@@ -308,7 +308,15 @@ provide("isCustomizing", isCustomizing)
 
 const courseItems = ref([])
 
-const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
+const routerTools = [
+  "document",
+  "link",
+  "glossary",
+  "agenda",
+  "student_publication",
+  "course_description",
+  "course_homepage",
+]
 const documentAutoLaunch = ref(0)
 const exerciseAutoLaunch = ref(0)
 const lpAutoLaunch = ref(0)
@@ -323,6 +331,20 @@ function getToolVisibility(tool) {
 
 function isLearningPathTool(tool) {
   return tool?.title === "learnpath" || tool?.tool?.title === "learnpath"
+}
+
+function isCourseDescriptionTool(tool) {
+  return tool?.title === "course_description" || tool?.tool?.title === "course_description"
+}
+
+function isCourseDescriptionToolEnabled() {
+  const value = courseSettingsStore.getSetting("enabled", "course_description")
+
+  if (value === null || value === undefined || value === "") {
+    return true
+  }
+
+  return isSettingEnabled(value)
 }
 
 function shouldShowInvisibleLearningPathTool(tool) {
@@ -403,6 +425,10 @@ async function loadCourseTools(showSkeleton = true) {
     const regularTools = []
 
     normalizedTools.forEach((tool) => {
+      if (isCourseDescriptionTool(tool) && !isCourseDescriptionToolEnabled()) {
+        return
+      }
+
       if (tool.title === "tracking") {
         // Tracking/Reporting is shown as a dedicated icon in the header, not in the tools grid.
       } else if (tool.tool?.category === "admin") {

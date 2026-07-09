@@ -602,9 +602,8 @@ onMounted(() => {
         <h3
           v-if="item.title"
           class="text-lg font-semibold"
-        >
-          {{ item.title }}
-        </h3>
+          v-html="item.title"
+        ></h3>
 
         <div
           v-if="item.content"

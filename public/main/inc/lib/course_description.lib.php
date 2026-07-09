@@ -36,26 +36,26 @@ class CourseDescription
      */
     public static function get_descriptions($course_id)
     {
-        $course_id = (int) $course_id;
-        // Get course code
-        $course_info = api_get_course_info_by_id($course_id);
-        if (!empty($course_info)) {
-            $course_id = $course_info['real_id'];
-        } else {
+        $course = api_get_course_entity((int) $course_id);
+        if (null === $course) {
             return [];
         }
-        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $sql = "SELECT * FROM $table";
-        $sql_result = Database::query($sql);
+
+        $descriptions = Container::getCourseDescriptionRepository()->findAllInCourse($course);
         $results = [];
-        while ($row = Database::fetch_array($sql_result)) {
+
+        foreach ($descriptions as $description) {
+            if (!$description instanceof CCourseDescription) {
+                continue;
+            }
+
             $desc_tmp = new CourseDescription();
-            $desc_tmp->set_id($row['iid']);
-            $desc_tmp->set_title($row['title']);
-            $desc_tmp->set_content($row['content']);
-            $desc_tmp->set_session_id($row['session_id']);
-            $desc_tmp->set_description_type($row['description_type']);
-            $desc_tmp->set_progress($row['progress']);
+            $desc_tmp->set_id($description->getIid());
+            $desc_tmp->set_title((string) $description->getTitle());
+            $desc_tmp->set_content((string) $description->getContent());
+            $desc_tmp->set_session_id(0);
+            $desc_tmp->set_description_type($description->getDescriptionType());
+            $desc_tmp->set_progress($description->getProgress());
             $results[] = $desc_tmp;
         }
 

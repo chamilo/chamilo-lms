@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradeModel;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -3024,6 +3025,7 @@ class CourseRestorer
 
         // Preload existing by type in SAME scope (session vs base)
         $existingByType = [];
+        $existingCustomByTitle = [];
         $existingTitles = [];
 
         try {
@@ -3048,11 +3050,16 @@ class CourseRestorer
                     $t = CCourseDescription::TYPE_DESCRIPTION;
                 }
 
-                if (!isset($existingByType[$t])) {
+                $ttl = trim((string) $e->getTitle());
+
+                if (CCourseDescription::TYPE_CUSTOM === $t) {
+                    if ('' !== $ttl && !isset($existingCustomByTitle[$ttl])) {
+                        $existingCustomByTitle[$ttl] = $e;
+                    }
+                } elseif (!isset($existingByType[$t])) {
                     $existingByType[$t] = $e;
                 }
 
-                $ttl = trim((string) $e->getTitle());
                 if ('' !== $ttl) {
                     $existingTitles[$ttl] = true;
                 }
@@ -3062,6 +3069,7 @@ class CourseRestorer
                 'error' => $e->getMessage(),
             ]);
             $existingByType = [];
+            $existingCustomByTitle = [];
             $existingTitles = [];
         }
 
@@ -3107,7 +3115,9 @@ class CourseRestorer
                 $progress = 0;
             }
 
-            $existing = $existingByType[$type] ?? null;
+            $existing = CCourseDescription::TYPE_CUSTOM === $type
+                ? ($existingCustomByTitle[$title] ?? null)
+                : ($existingByType[$type] ?? null);
 
             if ($existing instanceof CCourseDescription) {
                 if (1 === $policy) { // SKIP
@@ -3139,6 +3149,7 @@ class CourseRestorer
                     $existing->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
 
                     $em->persist($existing);
+                    $this->applyCourseDescriptionLanguage($existing, $cd, $em);
                     $em->flush();
 
                     $destIid = (int) $existing->getIid();
@@ -3204,10 +3215,18 @@ class CourseRestorer
             $em->persist($entity);
             $em->flush();
 
+            if ($this->applyCourseDescriptionLanguage($entity, $cd, $em)) {
+                $em->flush();
+            }
+
             $destIid = (int) $entity->getIid();
             $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
 
-            $existingByType[$type] = $entity;
+            if (CCourseDescription::TYPE_CUSTOM === $type) {
+                $existingCustomByTitle[$title] = $entity;
+            } else {
+                $existingByType[$type] = $entity;
+            }
 
             $this->dlog('restore_course_descriptions: created', [
                 'src_id' => $oldId,
@@ -3227,6 +3246,45 @@ class CourseRestorer
             'policy' => $policy,
             'session_id' => $sessionId,
         ]);
+    }
+
+    private function applyCourseDescriptionLanguage(
+        CCourseDescription $description,
+        object $source,
+        EntityManagerInterface $em
+    ): bool {
+        if (!property_exists($source, 'language')) {
+            return false;
+        }
+
+        $resourceNode = $description->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        $languageCode = trim((string) ($source->language ?? ''));
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $em->getRepository(Language::class)->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ]);
+
+            if (!$language instanceof Language) {
+                $this->dlog('restore_course_descriptions: language not found, keeping current value', [
+                    'src_id' => (int) ($source->source_id ?? 0),
+                    'language' => $languageCode,
+                ]);
+
+                return false;
+            }
+        }
+
+        $resourceNode->setLanguage($language);
+        $em->persist($resourceNode);
+
+        return true;
     }
 
     /**

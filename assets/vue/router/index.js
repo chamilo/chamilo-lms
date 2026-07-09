@@ -26,6 +26,7 @@ import assignments from "./assignments"
 import links from "./links"
 import forum from "./forum"
 import survey from "./survey"
+import courseDescription from "./courseDescription"
 import glossary from "./glossary"
 import attendance from "./attendance"
 import lpRoutes from "./lp"
@@ -481,6 +482,7 @@ const router = createRouter({
     links,
     forum,
     survey,
+    courseDescription,
     glossary,
     attendance,
     lpRoutes,

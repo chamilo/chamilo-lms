@@ -32,27 +32,29 @@ final class CourseDescriptionXapianIndexer
      */
     public function indexCourseDescription(CCourseDescription $description): ?int
     {
-        // Global feature toggle
+        $resourceNode = $description->getResourceNode();
+        if (!$resourceNode instanceof ResourceNode) {
+            return null;
+        }
+
+        // Global feature toggle.
         $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
         if ('true' !== $enabled) {
             return null;
         }
 
-        // Per-request flag set from the form
+        // An unchecked form option means the existing index must also be removed.
         if ($description->shouldSkipSearchIndex()) {
-            return null;
-        }
+            $this->deleteForResourceNodeId((int) $resourceNode->getId());
 
-        $resourceNode = $description->getResourceNode();
-        if (!$resourceNode instanceof ResourceNode) {
             return null;
         }
 
         // Resolve course & session
         [$courseId, $sessionId] = $this->resolveCourseAndSession($resourceNode);
 
-        $title = (string) ($description->getTitle() ?? '');
-        $body = (string) ($description->getContent() ?? '');
+        $title = $this->normalizeSearchText((string) ($description->getTitle() ?? ''));
+        $body = $this->normalizeSearchText((string) ($description->getContent() ?? ''));
         $content = trim($title.' '.$body);
 
         $fields = [
@@ -98,9 +100,13 @@ final class CourseDescriptionXapianIndexer
             }
         }
 
+        $languageIso = $this->resolveLanguageIso($resourceNode);
+
         try {
-            $docId = $this->xapianIndexService->indexDocument($fields, $terms);
-        } catch (Throwable) {
+            $docId = $this->xapianIndexService->indexDocument($fields, $terms, $languageIso);
+        } catch (Throwable $exception) {
+            error_log('[Xapian] Course description indexing failed: '.$exception->getMessage());
+
             return null;
         }
 
@@ -125,7 +131,16 @@ final class CourseDescriptionXapianIndexer
             return;
         }
 
-        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+        $this->deleteForResourceNodeId((int) $resourceNode->getId());
+    }
+
+    private function deleteForResourceNodeId(int $resourceNodeId): void
+    {
+        if ($resourceNodeId <= 0) {
+            return;
+        }
+
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, $resourceNodeId);
 
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
@@ -133,18 +148,39 @@ final class CourseDescriptionXapianIndexer
             ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
-        if (!$ref) {
+        if (!$ref instanceof SearchEngineRef) {
             return;
         }
 
         try {
             $this->xapianIndexService->deleteDocument($ref->getSearchDid());
-        } catch (Throwable) {
-            // Best-effort delete
+        } catch (Throwable $exception) {
+            error_log('[Xapian] Course description index deletion failed: '.$exception->getMessage());
         }
 
         $this->em->remove($ref);
         $this->em->flush();
+    }
+
+    private function normalizeSearchText(string $text): string
+    {
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = preg_replace('/<[^>]+>/u', ' ', $text) ?? $text;
+        $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+
+        return trim($text);
+    }
+
+    private function resolveLanguageIso(ResourceNode $resourceNode): ?string
+    {
+        $language = $resourceNode->getLanguage();
+        if (null === $language) {
+            return null;
+        }
+
+        $isoCode = trim((string) $language->getIsocode());
+
+        return '' !== $isoCode ? $isoCode : null;
     }
 
     /**

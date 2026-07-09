@@ -1,3 +1,17 @@
+v7.8 - 2026-07-09
+====
+
+Feature: added the plugin-owned `plugin_buycourses_audit` table to record service sale and recurring-subscription events with the acting user, action, related sale, source, UTC date/time, request IP address, and optional JSON context. The first audited events cover order creation, completion, administrative cancellation, service upgrades, renewal activation/cancellation, and successful or failed recurring payments from Stripe and PayPal.
+
+Feature: the service sale information modal now includes the audit history, showing who performed each action and whether it originated from a user, administrator, payment gateway, or system process.
+
+Fix: the service sales report now uses the real `buy_date` field for "Order date" instead of the nonexistent `date` field, which previously caused cancelled orders to appear with the current date whenever the page was refreshed.
+
+ACTION REQUIRED for installations updated from an earlier version: load
+`[your-host]/plugin/BuyCourses/update.php` as a platform administrator so the new
+`plugin_buycourses_audit` table is created. The update is idempotent and does not
+modify existing sale records.
+
 v7.7 - 2026-07-08
 ====
 

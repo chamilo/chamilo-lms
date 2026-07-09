@@ -223,7 +223,7 @@
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
-                                {{ sale.date|default('')|api_get_local_time }}
+                                {{ sale.buy_date|default('')|api_get_local_time }}
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
@@ -247,7 +247,7 @@
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
-                                {{ sale.complete_user_name|default('') }}
+                                {{ sale.username|default('') }}
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
@@ -354,17 +354,52 @@
             .replaceAll("'", '&#039;')
     }
 
+    function buildInfoDetails(details) {
+        return `
+            <dl class="mt-3 grid gap-2 sm:grid-cols-2">
+                ${details.map((detail) => `
+                    <div class="rounded-lg border border-gray-25 bg-white px-3 py-2.5">
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            ${escapeHtml(detail.label)}
+                        </dt>
+                        <dd class="mt-1 break-words text-sm text-gray-90">
+                            ${escapeHtml(detail.value || '—')}
+                        </dd>
+                    </div>
+                `).join('')}
+            </dl>
+        `
+    }
+
     function buildInfoRow(row) {
         const safeLabel = escapeHtml(row.label)
+
+        if (Array.isArray(row.details) && row.details.length) {
+            const metaHtml = row.meta
+                ? `<span class="text-xs font-medium text-gray-50">${escapeHtml(row.meta)}</span>`
+                : ''
+
+            return `
+                <div class="rounded-xl border border-gray-25 bg-support-2 px-4 py-3">
+                    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                        <dt class="text-sm font-semibold text-gray-90">${safeLabel}</dt>
+                        ${metaHtml}
+                    </div>
+                    <dd>${buildInfoDetails(row.details)}</dd>
+                </div>
+            `
+        }
+
         const safeValue = escapeHtml(row.value || '—')
         const valueHtml = row.url
             ? `<a href="${escapeHtml(row.url)}" class="font-semibold text-primary hover:underline">${safeValue}</a>`
             : safeValue
+        const valueClasses = row.multiline ? 'whitespace-pre-line leading-6' : ''
 
         return `
             <div class="grid gap-1 rounded-xl border border-gray-25 bg-support-2 px-4 py-3 sm:grid-cols-[180px_minmax(0,1fr)]">
                 <dt class="text-sm font-semibold text-gray-90">${safeLabel}</dt>
-                <dd class="text-sm text-gray-90 break-words">${valueHtml}</dd>
+                <dd class="break-words text-sm text-gray-90 ${valueClasses}">${valueHtml}</dd>
             </div>
         `
     }

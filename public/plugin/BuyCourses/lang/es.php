@@ -747,3 +747,25 @@ $strings['ServiceSaleNotFound'] = 'No se encontró la venta del servicio.';
 $strings['InvalidPaymentMethod'] = 'El método de pago seleccionado no es válido.';
 $strings['ServiceNotFound'] = 'No se encontró el servicio seleccionado.';
 $strings['ServiceInActiveUpsaleChainCannotBePurchased'] = 'Este servicio no se puede comprar mientras %s esté activo porque ambos servicios pertenecen a la misma ruta de mejora.';
+
+// Service sale audit.
+$strings['AuditHistory'] = 'Historial de auditoría';
+$strings['NoAuditEntries'] = 'Todavía no se han registrado eventos de auditoría para esta venta.';
+$strings['AuditActor'] = 'Actor';
+$strings['AuditSource'] = 'Origen';
+$strings['AuditIpAddress'] = 'Dirección IP';
+$strings['AuditData'] = 'Datos';
+$strings['AuditSystemSubject'] = 'Sistema';
+$strings['AuditSourceUser'] = 'Usuario';
+$strings['AuditSourceAdmin'] = 'Administrador';
+$strings['AuditSourceGateway'] = 'Pasarela de pago';
+$strings['AuditSourceSystem'] = 'Sistema';
+$strings['AuditActionServiceSaleCreated'] = 'Pedido de servicio creado';
+$strings['AuditActionServiceSaleCompleted'] = 'Venta de servicio completada';
+$strings['AuditActionServiceSaleCancelled'] = 'Venta de servicio anulada';
+$strings['AuditActionServiceUpgradeCompleted'] = 'Mejora de servicio completada';
+$strings['AuditActionServiceReplacedByUpgrade'] = 'Servicio reemplazado por una mejora';
+$strings['AuditActionRenewalEnabled'] = 'Renovación automática activada';
+$strings['AuditActionRenewalCancelled'] = 'Renovación automática cancelada';
+$strings['AuditActionRenewalPaymentSucceeded'] = 'Pago de renovación completado';
+$strings['AuditActionRenewalPaymentFailed'] = 'Pago de renovación fallido';

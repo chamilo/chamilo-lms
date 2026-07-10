@@ -92,6 +92,8 @@ class MyServicesController extends AbstractController
             $isSupportedCancellationGateway = in_array($recurringGateway, ['stripe', 'paypal'], true);
             $isCancellationAlreadyScheduled = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
                 || '' !== trim((string) ($row['cancelled_at'] ?? ''));
+            $saleEndTimestamp = !empty($row['date_end']) ? strtotime((string) $row['date_end']) : 0;
+            $isCurrentPeriodActive = $saleEndTimestamp > time();
 
             $canEnableRecurringPayment = $isRenewable
                 && $isPayPalPayment
@@ -102,6 +104,12 @@ class MyServicesController extends AbstractController
                 && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === $recurringPayment
                 && $hasRecurringReference
                 && $isSupportedCancellationGateway;
+
+            $canRestoreRecurringPayment = $isRenewable
+                && $isCurrentPeriodActive
+                && $isCancellationAlreadyScheduled
+                && 'stripe' === $recurringGateway
+                && $hasRecurringReference;
 
             $plannedRenewalDate = trim((string) ($row['next_charge_date'] ?? ''));
             if ('' === $plannedRenewalDate) {
@@ -139,6 +147,16 @@ class MyServicesController extends AbstractController
                     ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php'
                     : null,
                 'cancelRecurringPaymentToken' => $canCancelRecurringPayment ? $csrfToken : null,
+                'restoreRecurringPaymentUrl' => $canRestoreRecurringPayment
+                    ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php'
+                    : null,
+                'restoreRecurringPaymentToken' => $canRestoreRecurringPayment ? $csrfToken : null,
+                'canRestoreRecurringPayment' => $canRestoreRecurringPayment,
+                'restoreRenewalButtonLabel' => $plugin->get_lang('RestoreRenewal'),
+                'restoreRenewalMessage' => sprintf(
+                    $plugin->get_lang('RestoreRenewalConfirmation'),
+                    $formattedRenewalDate
+                ),
                 'cancelRenewalButtonLabel' => $plugin->get_lang('CancelRenewal'),
                 'cancelRenewalDismissLabel' => $plugin->get_lang('IChangedMyMind'),
                 'cancelRenewalTitle' => $plugin->get_lang('CancelRenewalTitle'),

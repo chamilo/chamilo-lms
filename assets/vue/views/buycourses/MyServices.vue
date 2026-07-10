@@ -112,10 +112,19 @@
                     {{ t("Enable auto billing") }}
                   </a>
                   <button
+                    v-if="service.canRestoreRecurringPayment && service.restoreRecurringPaymentUrl"
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                    :disabled="isCancellingRenewal || isRestoringRenewal"
+                    @click="confirmRestoreRenewal(service)"
+                  >
+                    {{ service.restoreRenewalButtonLabel || t("Restore renewal") }}
+                  </button>
+                  <button
                     v-if="service.canCancelRecurringPayment && service.cancelRecurringPaymentUrl"
                     type="button"
                     class="inline-flex items-center justify-center rounded-xl border border-danger px-4 py-2 text-sm font-semibold text-danger transition hover:bg-danger hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                    :disabled="isCancellingRenewal"
+                    :disabled="isCancellingRenewal || isRestoringRenewal"
                     @click="openCancelRenewalModal(service)"
                   >
                     {{ service.cancelRenewalButtonLabel || t("Cancel renewal") }}
@@ -338,6 +347,7 @@ const hasResolvedPluginState = ref(false)
 const cancelRenewalService = ref(null)
 const cancelRenewalError = ref("")
 const isCancellingRenewal = ref(false)
+const isRestoringRenewal = ref(false)
 
 function normalizeBooleanFlag(value) {
   if (typeof value === "boolean") return value
@@ -499,6 +509,46 @@ async function confirmCancelRenewal() {
     cancelRenewalError.value = error?.message || t("Unable to cancel renewal right now.")
   } finally {
     isCancellingRenewal.value = false
+  }
+}
+
+async function confirmRestoreRenewal(service) {
+  if (!service?.restoreRecurringPaymentUrl || !service?.restoreRecurringPaymentToken) return
+
+  const message = service.restoreRenewalMessage || t("Are you sure you want to restore automatic renewal?")
+  if (!window.confirm(message)) return
+
+  isRestoringRenewal.value = true
+  loadError.value = ""
+  actionMessage.value = ""
+
+  try {
+    const formData = new URLSearchParams()
+    formData.set("order", String(service.id))
+    formData.set("action", "restore_recurring_payment")
+    formData.set("sec_token", service.restoreRecurringPaymentToken)
+
+    const response = await fetch(service.restoreRecurringPaymentUrl, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: formData.toString(),
+    })
+
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok || result?.success !== true) {
+      throw new Error(result?.message || t("Unable to restore renewal right now."))
+    }
+
+    actionMessage.value = result.message || service.restoreRenewalButtonLabel
+    await loadMyServicesData()
+  } catch (error) {
+    loadError.value = error?.message || t("Unable to restore renewal right now.")
+  } finally {
+    isRestoringRenewal.value = false
   }
 }
 </script>

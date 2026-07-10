@@ -41,6 +41,8 @@ foreach ($plugin->getActiveServicesForUser((int) $userInfo['user_id']) as $sale)
     $recurringGateway = strtolower(trim((string) ($sale['recurring_gateway'] ?? '')));
     $recurringProfileId = trim((string) ($sale['recurring_profile_id'] ?? ''));
     $gatewaySubscriptionId = trim((string) ($sale['gateway_subscription_id'] ?? ''));
+    $saleEndTimestamp = !empty($sale['date_end']) ? strtotime((string) $sale['date_end']) : 0;
+    $isCurrentPeriodActive = $saleEndTimestamp > time();
 
     if ('' === $recurringGateway) {
         $recurringGateway = match ($paymentType) {
@@ -63,6 +65,12 @@ foreach ($plugin->getActiveServicesForUser((int) $userInfo['user_id']) as $sale)
         && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === $recurringPayment
         && in_array($recurringGateway, ['stripe', 'paypal'], true)
         && ('' !== $recurringProfileId || '' !== $gatewaySubscriptionId);
+
+    $canRestoreRecurring = $isRenewable
+        && $isCurrentPeriodActive
+        && $isCancellationAlreadyScheduled
+        && 'stripe' === $recurringGateway
+        && ('' !== $gatewaySubscriptionId || '' !== $recurringProfileId);
 
     $benefitSummaries = array_values(array_filter(array_map(static function (array $benefit): ?string {
         return $benefit['active_summary'] ?? null;
@@ -107,6 +115,14 @@ foreach ($plugin->getActiveServicesForUser((int) $userInfo['user_id']) as $sale)
         'enable_recurring_url' => $webPluginPath.'BuyCourses/src/recurring_payment_process.php?action=enable_recurring_payment&order='.$saleId,
         'cancel_recurring_url' => $webPluginPath.'BuyCourses/src/recurring_payment_process.php',
         'cancel_recurring_token' => $csrfToken,
+        'can_restore_recurring' => $canRestoreRecurring,
+        'restore_recurring_url' => $webPluginPath.'BuyCourses/src/recurring_payment_process.php',
+        'restore_recurring_token' => $csrfToken,
+        'restore_renewal_label' => $plugin->get_lang('RestoreRenewal'),
+        'restore_renewal_message' => sprintf(
+            $plugin->get_lang('RestoreRenewalConfirmation'),
+            $formattedRenewalDate
+        ),
         'cancel_renewal_title' => $plugin->get_lang('CancelRenewalTitle'),
         'cancel_renewal_message' => sprintf(
             $plugin->get_lang('CancelRenewalConfirmation'),

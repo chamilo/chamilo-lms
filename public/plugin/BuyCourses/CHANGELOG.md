@@ -1,3 +1,12 @@
+v7.10 - 2026-07-10
+=====
+
+Feature: users can now restore a previously cancelled Stripe renewal from My
+Services while the current paid service period is still active. The restore action
+removes Stripe's cancel-at-period-end flag, re-enables the local recurring payment
+state, clears the local cancellation marker, and records a `renewal_restored`
+audit entry.
+
 v7.9 - 2026-07-09
 ====
 

@@ -113,6 +113,14 @@
                                                 <button type="submit" class="bc-button bc-button--danger">{{ sale.cancel_renewal_label|e }}</button>
                                             </form>
                                         {% endif %}
+                                        {% if sale.can_restore_recurring %}
+                                            <form method="post" action="{{ sale.restore_recurring_url|e }}" onsubmit="return confirm('{{ sale.restore_renewal_message|e('js') }}');">
+                                                <input type="hidden" name="order" value="{{ sale.id }}">
+                                                <input type="hidden" name="action" value="restore_recurring_payment">
+                                                <input type="hidden" name="sec_token" value="{{ sale.restore_recurring_token|e('html_attr') }}">
+                                                <button type="submit" class="bc-button bc-button--primary">{{ sale.restore_renewal_label|e }}</button>
+                                            </form>
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endif %}

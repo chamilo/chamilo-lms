@@ -7,7 +7,7 @@ declare(strict_types=1);
 use ChamiloSession as Session;
 
 /**
- * Enable PayPal recurring billing or cancel renewal for a completed renewable service sale.
+ * Enable PayPal recurring billing, cancel renewal or restore renewal for a completed renewable service sale.
  */
 $cidReset = true;
 
@@ -61,6 +61,10 @@ $token = isset($_REQUEST['token']) ? trim((string) $_REQUEST['token']) : '';
 
 if ('disable_recurring_payment' === $action) {
     $action = 'cancel_recurring_payment';
+}
+
+if ('restore_renewal' === $action) {
+    $action = 'restore_recurring_payment';
 }
 
 if ($orderId <= 0 || '' === $action) {
@@ -259,6 +263,125 @@ switch ($action) {
         unset($_SESSION['TOKEN'], $_SESSION['payer_id']);
 
         $respondWithSuccess($plugin->get_lang('RecurringPaymentEnabledSuccessfully'));
+
+    case 'restore_recurring_payment':
+        if ('POST' !== strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'))) {
+            $respondWithError($plugin->get_lang('RestoreRenewalPostRequired'), 405);
+        }
+
+        if (!Security::check_token('post')) {
+            $respondWithError($plugin->get_lang('InvalidSecurityToken'), 403);
+        }
+
+        $recurringPayment = (int) ($serviceSale['recurring_payment'] ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED);
+        $isCancellationScheduled = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
+            || '' !== trim((string) ($serviceSale['cancelled_at'] ?? ''));
+
+        if (!$isCancellationScheduled) {
+            if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === $recurringPayment) {
+                $respondWithSuccess($plugin->get_lang('RecurringPaymentAlreadyEnabled'));
+            }
+
+            $respondWithError($plugin->get_lang('RenewalIsNotCancelled'));
+        }
+
+        $periodEndTimestamp = !empty($serviceSale['date_end']) ? strtotime((string) $serviceSale['date_end']) : 0;
+        if ($periodEndTimestamp <= time()) {
+            $respondWithError($plugin->get_lang('RestoreRenewalRequiresActiveService'));
+        }
+
+        $gateway = strtolower(trim((string) ($serviceSale['recurring_gateway'] ?? '')));
+        if ('' === $gateway) {
+            $gateway = match ((int) ($serviceSale['payment_type'] ?? 0)) {
+                BuyCoursesPlugin::PAYMENT_TYPE_STRIPE => 'stripe',
+                BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL => 'paypal',
+                default => '',
+            };
+        }
+
+        if ('stripe' !== $gateway) {
+            $respondWithError($plugin->get_lang('RestoreRenewalUnsupportedGateway'));
+        }
+
+        $subscriptionId = trim((string) ($serviceSale['gateway_subscription_id'] ?? $serviceSale['recurring_profile_id'] ?? ''));
+        $stripeParams = $plugin->getStripeParams();
+        $secretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+
+        if ('' === $subscriptionId || '' === $secretKey) {
+            $respondWithError($plugin->get_lang('StripeRestoreConfigurationMissing'));
+        }
+
+        $plannedRenewalDate = trim((string) ($serviceSale['next_charge_date'] ?? ''));
+        if ('' === $plannedRenewalDate) {
+            $plannedRenewalDate = trim((string) ($serviceSale['date_end'] ?? ''));
+        }
+
+        try {
+            \Stripe\Stripe::setApiKey($secretKey);
+            \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+
+            $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+            $subscriptionStatus = strtolower((string) ($subscription->status ?? ''));
+
+            if (in_array($subscriptionStatus, ['canceled', 'cancelled'], true)) {
+                $respondWithError($plugin->get_lang('RenewalCannotBeRestoredAfterGatewayCancellation'));
+            }
+
+            if (!empty($subscription->cancel_at_period_end)) {
+                $subscription = \Stripe\Subscription::update($subscriptionId, [
+                    'cancel_at_period_end' => false,
+                ]);
+            }
+
+            $periodEnd = (int) ($subscription->current_period_end ?? 0);
+            if ($periodEnd <= 0) {
+                $periodEnd = (int) ($subscription->items->data[0]->current_period_end ?? 0);
+            }
+
+            if ($periodEnd > 0) {
+                $plannedRenewalDate = gmdate('Y-m-d H:i:s', $periodEnd);
+            }
+
+            $gatewayData = [
+                'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
+                'cancelled_at' => null,
+                'recurring_gateway' => 'stripe',
+                'gateway_subscription_id' => $subscriptionId,
+                'recurring_profile_id' => $subscriptionId,
+            ];
+
+            if ('' !== $plannedRenewalDate) {
+                $gatewayData['next_charge_date'] = $plannedRenewalDate;
+                $gatewayData['date_end'] = $plannedRenewalDate;
+            }
+
+            if (!$plugin->updateServiceSaleGatewayData($orderId, $gatewayData)) {
+                $respondWithError($plugin->get_lang('RestoreRenewalGatewayFailed'));
+            }
+
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_RESTORED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $orderId,
+                [
+                    'gateway' => 'stripe',
+                    'subscription_id' => $subscriptionId,
+                    'planned_renewal_date' => $plannedRenewalDate,
+                    'cancel_at_period_end' => false,
+                ],
+                $currentUserId,
+                BuyCoursesPlugin::AUDIT_SOURCE_USER
+            );
+        } catch (Throwable $exception) {
+            error_log(
+                '[BuyCourses][Recurring] Stripe renewal restore failed for service sale '.$orderId.
+                ' MESSAGE='.$exception->getMessage()
+            );
+
+            $respondWithError($plugin->get_lang('RestoreRenewalGatewayFailed'));
+        }
+
+        $respondWithSuccess($plugin->get_lang('RenewalRestoredSuccessfully'));
 
     case 'cancel_recurring_payment':
         if ('POST' !== strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'))) {

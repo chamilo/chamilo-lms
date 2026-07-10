@@ -904,17 +904,20 @@ class learnpath
     public function delete_item($id)
     {
         $course_id = api_get_course_int_id();
+        $lpId = $this->get_id();
         $id = (int) $id;
         // TODO: Implement the resource removal.
-        if (empty($id) || empty($course_id)) {
+        if (empty($id) || empty($course_id) || empty($lpId)) {
             return false;
         }
 
         $repo = Container::getLpItemRepository();
         $item = $repo->find($id);
-        if (null === $item) {
+        if (null === $item || (int) $item->getLp()->getIid() !== $lpId) {
             return false;
         }
+
+        $searchDid = $item->getSearchDid();
 
         $em = Database::getManager();
         $repo->removeFromTree($item);
@@ -931,24 +934,20 @@ class learnpath
                 WHERE lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
         Database::query($sql);
 
-        // Remove from search engine if enabled.
-        if ('true' === api_get_setting('search_enabled')) {
-            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $row2 = Database::fetch_array($res);
+        // Remove the indexed document without querying the legacy search_engine_ref schema.
+        if ('true' === api_get_setting('search_enabled') && !empty($searchDid)) {
+            try {
                 $di = new ChamiloIndexer();
-                $di->remove_document($row2['search_did']);
+                $di->remove_document((int) $searchDid);
+            } catch (Throwable $exception) {
+                error_log(
+                    sprintf(
+                        '[Xapian] Failed to remove learning path item %d from the index: %s',
+                        $id,
+                        $exception->getMessage()
+                    )
+                );
             }
-            $sql = 'DELETE FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
-            Database::query($sql);
         }
     }
 

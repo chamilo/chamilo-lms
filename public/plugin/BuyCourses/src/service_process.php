@@ -421,11 +421,13 @@ if ('confirm_order' === $checkoutAction) {
         exit;
     }
 
+    $couponId = isset($formValues['c']) ? (int) $formValues['c'] : null;
+
     $serviceSaleId = $plugin->registerServiceSale(
         $serviceId,
         (int) $formValues['payment_type'],
         (int) $infoSelected,
-        $formValues['c'] ?? null,
+        $couponId,
         $formValues
     );
 
@@ -433,12 +435,12 @@ if ('confirm_order' === $checkoutAction) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
         $serviceSaleWasReused = $plugin->wasLastServiceSaleReused();
 
-        if (!$serviceSaleWasReused && isset($formValues['c'])) {
-            $couponSaleId = $plugin->registerCouponServiceSale($serviceSaleId, $formValues['c']);
+        if (!$serviceSaleWasReused && null !== $couponId) {
+            $couponSaleId = $plugin->registerCouponServiceSale($serviceSaleId, $couponId);
 
             if (false !== $couponSaleId) {
-                $plugin->updateCouponDelivered($formValues['c']);
-                $_SESSION['bc_coupon_id'] = $formValues['c'];
+                $plugin->updateCouponDelivered($couponId);
+                $_SESSION['bc_coupon_id'] = $couponId;
             }
         }
 

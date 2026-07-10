@@ -95,20 +95,12 @@ final class QuizXapianIndexer
 
         $existingDocId = $existingRef?->getSearchDid();
 
-        if (null !== $existingDocId) {
-            try {
-                $this->xapianIndexService->deleteDocument($existingDocId);
-                error_log('[Xapian] indexQuiz: deleted previous docId='.(string) $existingDocId);
-            } catch (Throwable $e) {
-                error_log(
-                    '[Xapian] indexQuiz: failed to delete previous docId='
-                    .(string) $existingDocId.' error='.$e->getMessage()
-                );
-            }
-        }
-
         try {
-            $docId = $this->xapianIndexService->indexDocument($fields, $terms);
+            $docId = $this->xapianIndexService->indexDocument(
+                $fields,
+                $terms,
+                replaceDocumentId: $existingDocId,
+            );
         } catch (Throwable $e) {
             error_log('[Xapian] indexQuiz: indexDocument() failed: '.$e->getMessage());
 

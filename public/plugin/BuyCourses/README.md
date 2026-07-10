@@ -36,6 +36,52 @@ structure.
 
 You can find a history of changes in the [CHANGELOG.md file](../../plugin/BuyCourses/CHANGELOG.md)
 
+Recurring services, webhooks and cron
+=====================================
+
+Stripe handles recurring card charges automatically through its own subscription
+system. Chamilo does not initiate the recurring charge from a cron job.
+
+For Stripe recurring services, configure the Stripe webhook endpoint to point to:
+
+```text
+https://YOUR-CHAMILO-DOMAIN/plugin/BuyCourses/src/stripe_response.php
+```
+
+The webhook must receive at least these events for service subscriptions:
+
+- `checkout.session.completed`
+- `invoice.paid`
+- `invoice.payment_failed`
+- `customer.subscription.deleted`
+
+When Stripe sends `invoice.paid`, Chamilo extends the service validity, updates
+service benefits and records the recurring payment audit entry. When Stripe sends
+`invoice.payment_failed` or `customer.subscription.deleted`, Chamilo updates the
+local recurring subscription status accordingly.
+
+PayPal recurring payments are updated through the PayPal IPN endpoint configured
+for the plugin.
+
+As a safety fallback, configure the recurring subscription processor to run once
+per day from the Chamilo project root. This command does not charge the customer;
+it only reconciles expired or renewed BuyCourses recurring service subscriptions
+and applies the local course closing/reactivation rules when needed.
+
+Test it first with:
+
+```bash
+php bin/console chamilo:buycourses:process-recurring-subscriptions --env=prod --dry-run
+```
+
+Example daily cron entry:
+
+```cron
+15 2 * * * cd /var/www/chamilo && /usr/bin/php bin/console chamilo:buycourses:process-recurring-subscriptions --env=prod >> var/log/buycourses-recurring.log 2>&1
+```
+
+Adjust `/var/www/chamilo` and `/usr/bin/php` to match your installation.
+
 Design note: refunds vs. cancellations
 =======================================
 

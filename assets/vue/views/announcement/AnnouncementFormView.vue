@@ -203,11 +203,35 @@
                   />
 
                   <BaseCheckbox
-                    v-if="form.sendToHrmAvailable"
+                    v-if="form.sendToHrmAvailable && !form.scheduleByDate"
                     id="announcement_send_to_hrm_users"
                     v-model="form.sendToHrmUsers"
                     :label="t('Send a copy to HR managers of selected students')"
                     name="sendToHrmUsers"
+                  />
+                </div>
+
+                <div
+                  v-if="form.scheduleAvailable && form.sendByEmail && !form.emailAlreadySent"
+                  class="space-y-3 rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
+                  <BaseCheckbox
+                    id="announcement_schedule_by_date"
+                    v-model="form.scheduleByDate"
+                    :label="t('Send notification at a specific date')"
+                    name="scheduleByDate"
+                  />
+
+                  <BaseInputText
+                    v-if="form.scheduleByDate"
+                    id="announcement_schedule_date"
+                    v-model="form.scheduleDate"
+                    :error-text="t('Required field')"
+                    :is-invalid="formSubmitted && !form.scheduleDate"
+                    :label="t('Date to send notification')"
+                    :min="form.scheduleMinimumDate"
+                    name="scheduleDate"
+                    type="date"
                   />
                 </div>
 
@@ -217,6 +241,43 @@
                   :label="t('Send a copy by email to myself.')"
                   name="sendCopyToSelf"
                 />
+              </div>
+
+              <div
+                v-if="form.calendarAvailable"
+                class="space-y-4 rounded-lg border border-gray-20 bg-white p-4"
+              >
+                <BaseCheckbox
+                  id="announcement_add_to_calendar"
+                  v-model="form.addToCalendar"
+                  :label="t('Add event in course calendar')"
+                  name="addToCalendar"
+                />
+
+                <div
+                  v-if="form.addToCalendar"
+                  class="space-y-4 pl-6"
+                >
+                  <div class="grid gap-4 md:grid-cols-2">
+                    <BaseCalendar
+                      id="announcement_event_start_date"
+                      v-model="form.eventStartDate"
+                      :is-invalid="formSubmitted && !form.eventStartDate"
+                      :label="t('Start date')"
+                      show-time
+                    />
+
+                    <BaseCalendar
+                      id="announcement_event_end_date"
+                      v-model="form.eventEndDate"
+                      :is-invalid="formSubmitted && !form.eventEndDate"
+                      :label="t('End date')"
+                      show-time
+                    />
+                  </div>
+
+                  <CalendarRemindersEditor v-model="form" />
+                </div>
               </div>
 
               <div
@@ -365,6 +426,7 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -374,6 +436,7 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import CalendarRemindersEditor from "../../components/ccalendarevent/CalendarRemindersEditor.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import announcementService from "../../services/announcementService"
 
@@ -421,6 +484,15 @@ const form = ref({
   sendToSessionsAvailable: false,
   sendToHrmAvailable: false,
   emailCsrfToken: "",
+  scheduleAvailable: false,
+  scheduleByDate: false,
+  scheduleDate: "",
+  scheduleMinimumDate: "",
+  calendarAvailable: false,
+  addToCalendar: false,
+  eventStartDate: null,
+  eventEndDate: null,
+  reminders: [],
   attachmentsEnabled: false,
   attachmentCsrfToken: "",
   attachments: [],
@@ -555,6 +627,20 @@ async function loadForm() {
       sendToSessionsAvailable: Boolean(response.sendToSessionsAvailable),
       sendToHrmAvailable: Boolean(response.sendToHrmAvailable),
       emailCsrfToken: response.emailCsrfToken || "",
+      scheduleAvailable: Boolean(response.scheduleAvailable),
+      scheduleByDate: Boolean(response.scheduleByDate),
+      scheduleDate: response.scheduleDate || "",
+      scheduleMinimumDate: response.scheduleMinimumDate || "",
+      calendarAvailable: Boolean(response.calendarAvailable),
+      addToCalendar: Boolean(response.addToCalendar),
+      eventStartDate: response.eventStartDate ? new Date(response.eventStartDate) : null,
+      eventEndDate: response.eventEndDate ? new Date(response.eventEndDate) : null,
+      reminders: Array.isArray(response.reminders)
+        ? response.reminders.map((reminder) => ({
+            count: Number(reminder.count || 0),
+            period: reminder.period || "i",
+          }))
+        : [],
       attachmentsEnabled: Boolean(response.attachmentsEnabled),
       attachmentCsrfToken: response.attachmentCsrfToken || "",
       attachments: Array.isArray(response.attachments) ? response.attachments : [],
@@ -567,7 +653,9 @@ async function loadForm() {
         form.value.sendByEmail ||
         form.value.sendCopyToSelf ||
         form.value.sendToUsersInSessions ||
-        form.value.sendToHrmUsers,
+        form.value.sendToHrmUsers ||
+        form.value.scheduleByDate ||
+        form.value.addToCalendar,
     )
     resetPreview()
   } catch (error) {
@@ -577,6 +665,41 @@ async function loadForm() {
   } finally {
     isLoading.value = false
   }
+}
+
+function normalizeDateTime(value) {
+  if (!value) {
+    return null
+  }
+
+  const date = value instanceof Date ? value : new Date(value)
+
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+function serializeDateTime(value) {
+  const date = normalizeDateTime(value)
+
+  return date ? date.toISOString() : null
+}
+
+function getCalendarDateValidationMessage() {
+  if (!form.value.addToCalendar) {
+    return ""
+  }
+
+  const startDate = normalizeDateTime(form.value.eventStartDate)
+  const endDate = normalizeDateTime(form.value.eventEndDate)
+
+  if (!startDate || !endDate) {
+    return t("Start date") + " / " + t("End date")
+  }
+
+  if (endDate <= startDate) {
+    return t("The end date must be after the start date.")
+  }
+
+  return ""
 }
 
 function buildPayload() {
@@ -589,15 +712,29 @@ function buildPayload() {
     sendToUsersInSessions: form.value.sendByEmail && form.value.sendToUsersInSessions,
     sendToHrmUsers: form.value.sendByEmail && form.value.sendToHrmUsers,
     sendCopyToSelf: form.value.sendCopyToSelf,
+    scheduleByDate: form.value.scheduleAvailable && form.value.scheduleByDate,
+    scheduleDate: form.value.scheduleByDate ? form.value.scheduleDate : "",
+    addToCalendar: form.value.calendarAvailable && form.value.addToCalendar,
+    eventStartDate: form.value.addToCalendar ? serializeDateTime(form.value.eventStartDate) : null,
+    eventEndDate: form.value.addToCalendar ? serializeDateTime(form.value.eventEndDate) : null,
+    reminders: form.value.addToCalendar
+      ? form.value.reminders.map((reminder) => ({
+          count: Number(reminder.count || 0),
+          period: reminder.period || "i",
+        }))
+      : [],
     csrfToken: form.value.csrfToken,
   }
 }
 
 function buildEmailPayload() {
+  const sendPrimaryNow =
+    form.value.sendByEmail && !form.value.emailAlreadySent && !form.value.scheduleByDate
+
   return {
-    sendByEmail: form.value.sendByEmail && !form.value.emailAlreadySent,
-    sendToUsersInSessions: form.value.sendByEmail && form.value.sendToUsersInSessions,
-    sendToHrmUsers: form.value.sendByEmail && form.value.sendToHrmUsers,
+    sendByEmail: sendPrimaryNow,
+    sendToUsersInSessions: sendPrimaryNow && form.value.sendToUsersInSessions,
+    sendToHrmUsers: sendPrimaryNow && form.value.sendToHrmUsers,
     sendCopyToSelf: form.value.sendCopyToSelf,
     csrfToken: form.value.emailCsrfToken,
   }
@@ -670,6 +807,14 @@ async function previewAnnouncement() {
     return
   }
 
+  const calendarValidationMessage = getCalendarDateValidationMessage()
+  if (calendarValidationMessage) {
+    resetPreview()
+    await showFormError(calendarValidationMessage)
+
+    return
+  }
+
   isPreviewing.value = true
 
   try {
@@ -710,6 +855,19 @@ async function saveAnnouncement() {
     return
   }
 
+  if (form.value.scheduleByDate && !form.value.scheduleDate) {
+    await showFormError(t("Date to send notification"))
+
+    return
+  }
+
+  const calendarValidationMessage = getCalendarDateValidationMessage()
+  if (calendarValidationMessage) {
+    await showFormError(calendarValidationMessage)
+
+    return
+  }
+
   if (!previewReady.value || !previewPayload.value) {
     await showFormError(t("Preview"))
 
@@ -719,12 +877,21 @@ async function saveAnnouncement() {
   isSaving.value = true
 
   try {
+    const wasNew = !form.value.id
     const response = form.value.id
       ? await announcementService.update(form.value.id, previewPayload.value, getContextParams())
       : await announcementService.create(previewPayload.value, getContextParams())
 
     const announcementId = Number(response?.id || form.value.id || 0)
     form.value.id = announcementId
+
+    if (wasNew && form.value.addToCalendar) {
+      form.value.calendarAvailable = false
+      form.value.addToCalendar = false
+      form.value.eventStartDate = null
+      form.value.eventEndDate = null
+      form.value.reminders = []
+    }
 
     if (form.value.attachmentsEnabled && attachmentFiles.value.length && announcementId > 0) {
       try {
@@ -752,7 +919,8 @@ async function saveAnnouncement() {
     }
 
     const shouldSendEmail =
-      (form.value.sendByEmail && !form.value.emailAlreadySent) || form.value.sendCopyToSelf
+      (form.value.sendByEmail && !form.value.emailAlreadySent && !form.value.scheduleByDate) ||
+      form.value.sendCopyToSelf
 
     if (shouldSendEmail && announcementId > 0) {
       try {
@@ -848,6 +1016,12 @@ watch(
     form.value.sendToUsersInSessions,
     form.value.sendToHrmUsers,
     form.value.sendCopyToSelf,
+    form.value.scheduleByDate,
+    form.value.scheduleDate,
+    form.value.addToCalendar,
+    form.value.eventStartDate,
+    form.value.eventEndDate,
+    form.value.reminders,
   ],
   resetPreview,
   { deep: true },
@@ -860,6 +1034,16 @@ watch(
 
     form.value.sendToUsersInSessions = false
     form.value.sendToHrmUsers = false
+    form.value.scheduleByDate = false
+  },
+)
+
+watch(
+  () => form.value.scheduleByDate,
+  (scheduleByDate) => {
+    if (scheduleByDate) {
+      form.value.sendToHrmUsers = false
+    }
   },
 )
 

@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,6 +42,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CAnnouncementRepository $announcementRepository,
         private AnnouncementRecipientResolver $recipientResolver,
+        private AnnouncementScheduleManager $scheduleManager,
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
@@ -102,6 +104,14 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
             $this->settingsManager->getSetting('announcement.announcements_hide_send_to_hrm_users', true),
         );
         $result->sendCopyToSelf = true;
+        $result->scheduleAvailable = $this->scheduleManager->isAvailable($session);
+        $result->scheduleMinimumDate = (new DateTimeImmutable('today'))->format('Y-m-d');
+        $result->scheduleDate = (new DateTimeImmutable('tomorrow'))->format('Y-m-d');
+        $result->calendarAvailable = !$announcement instanceof CAnnouncement;
+        if ($result->calendarAvailable) {
+            $result->eventStartDate = new \DateTime();
+            $result->eventEndDate = (new \DateTime())->modify('+1 hour');
+        }
         $result->attachmentsEnabled = !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.disable_announcement_attachment', true),
         );
@@ -123,6 +133,15 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
             $result->attachments = $this->normalizeAttachments($announcement, $course, $session, $group);
             $result->emailAlreadySent = true === $announcement->getEmailSent();
             $result->sendByEmail = !$result->emailAlreadySent;
+
+            if ($result->scheduleAvailable) {
+                $schedule = $this->scheduleManager->getValues($announcement);
+                $result->scheduleByDate = !$result->emailAlreadySent && $schedule['scheduleByDate'];
+                $result->scheduleDate = '' !== $schedule['scheduleDate']
+                    ? $schedule['scheduleDate']
+                    : $result->scheduleDate;
+                $result->sendToUsersInSessions = $schedule['sendToUsersInSessions'];
+            }
 
             return $result;
         }

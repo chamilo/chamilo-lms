@@ -15,6 +15,7 @@ use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Announcement\AnnouncementFormProcessor;
 use Chamilo\CoreBundle\State\Announcement\AnnouncementFormProvider;
+use DateTime;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
@@ -182,6 +183,36 @@ final class AnnouncementForm
 
     #[Groups(['announcement_form:read'])]
     public string $emailCsrfToken = '';
+
+    #[Groups(['announcement_form:read'])]
+    public bool $scheduleAvailable = false;
+
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public bool $scheduleByDate = false;
+
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public string $scheduleDate = '';
+
+    #[Groups(['announcement_form:read'])]
+    public string $scheduleMinimumDate = '';
+
+    #[Groups(['announcement_form:read'])]
+    public bool $calendarAvailable = false;
+
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public bool $addToCalendar = false;
+
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public ?DateTime $eventStartDate = null;
+
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public ?DateTime $eventEndDate = null;
+
+    /**
+     * @var array<int, array{count: int, period: string}>
+     */
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public array $reminders = [];
 
     #[Groups(['announcement_form:read'])]
     public bool $attachmentsEnabled = false;

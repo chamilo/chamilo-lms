@@ -23,6 +23,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Throwable;
 
 use const FILTER_VALIDATE_EMAIL;
+use const PHP_SAPI;
 
 final readonly class AnnouncementEmailSender
 {
@@ -242,16 +243,26 @@ final readonly class AnnouncementEmailSender
             $message,
             $deliveryType,
         );
-        $emailSent = $this->mailHelper->send(
-            $this->getRecipientName($recipient),
-            $recipient->getEmail(),
-            $subject,
-            $message,
-            null,
-            null,
-            $replyTo,
-            $attachments,
-        );
+        try {
+            $emailSent = $this->mailHelper->send(
+                $this->getRecipientName($recipient),
+                $recipient->getEmail(),
+                $subject,
+                $message,
+                null,
+                null,
+                $replyTo,
+                $attachments,
+            );
+        } catch (Throwable $throwable) {
+            $emailSent = false;
+            $this->logger->warning('Announcement external email delivery failed before the mail helper could return.', [
+                'announcement_id' => $announcement->getIid(),
+                'recipient_id' => $recipient->getId(),
+                'delivery_type' => $deliveryType,
+                'exception' => $throwable,
+            ]);
+        }
 
         return [
             'emailSent' => $emailSent,
@@ -466,13 +477,21 @@ final readonly class AnnouncementEmailSender
     ): string {
         $content = (string) $announcement->getContent();
 
-        if (\class_exists(\AnnouncementManager::class) && null !== $recipient->getId()) {
-            return (string) \AnnouncementManager::parseContent(
-                (int) $recipient->getId(),
-                $content,
-                $course->getCode(),
-                null !== $session ? (int) $session->getId() : 0,
-            );
+        if ('cli' !== PHP_SAPI && \class_exists(\AnnouncementManager::class) && null !== $recipient->getId()) {
+            try {
+                return (string) \AnnouncementManager::parseContent(
+                    (int) $recipient->getId(),
+                    $content,
+                    $course->getCode(),
+                    null !== $session ? (int) $session->getId() : 0,
+                );
+            } catch (Throwable $throwable) {
+                $this->logger->warning('Legacy announcement tag parsing failed; using the entity-based fallback.', [
+                    'announcement_id' => $announcement->getIid(),
+                    'recipient_id' => $recipient->getId(),
+                    'exception' => $throwable,
+                ]);
+            }
         }
 
         return $this->replaceCoreTags($content, $course, $session, $group, $recipient);

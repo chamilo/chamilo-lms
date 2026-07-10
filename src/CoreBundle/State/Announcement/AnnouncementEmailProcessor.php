@@ -43,6 +43,7 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
         private AnnouncementRecipientResolver $recipientResolver,
         private AnnouncementEmailRecipientResolver $emailRecipientResolver,
         private AnnouncementEmailSender $emailSender,
+        private AnnouncementScheduleManager $scheduleManager,
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
@@ -112,6 +113,15 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
 
         if ($data->sendByEmail && true === $announcement->getEmailSent()) {
             throw new BadRequestHttpException('This announcement has already been sent by email.');
+        }
+
+        if ($data->sendByEmail
+            && $this->scheduleManager->isAvailable($session)
+            && $this->scheduleManager->getValues($announcement)['scheduleByDate']
+        ) {
+            throw new BadRequestHttpException(
+                'This announcement is scheduled and cannot be sent before its delivery date.',
+            );
         }
 
         $sender = $this->security->getUser();

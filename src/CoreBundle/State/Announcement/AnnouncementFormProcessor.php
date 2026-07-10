@@ -18,7 +18,9 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
+use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +44,8 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         private CAnnouncementRepository $announcementRepository,
         private AnnouncementRecipientResolver $recipientResolver,
         private AnnouncementEmailRecipientResolver $emailRecipientResolver,
+        private AnnouncementScheduleManager $scheduleManager,
+        private CCalendarEventRepository $calendarEventRepository,
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
@@ -90,6 +94,8 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
             $group,
         );
         $this->validateEmailOptions($data, $session);
+        $this->validateScheduleOptions($data, $session);
+        $this->validateCalendarOptions($data, $operation);
 
         $sender = $this->security->getUser();
         if (!$sender instanceof User) {
@@ -168,6 +174,34 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $this->announcementRepository->update($announcement);
         $this->entityManager->refresh($announcement);
 
+        if ($this->scheduleManager->isAvailable($session)) {
+            $this->scheduleManager->save(
+                $announcement,
+                $data->scheduleByDate,
+                $data->scheduleByDate ? $data->scheduleDate : null,
+                $data->scheduleByDate && $data->sendToUsersInSessions,
+            );
+        }
+
+        if ($isNew && $data->addToCalendar) {
+            $eventStartDate = $data->eventStartDate;
+            $eventEndDate = $data->eventEndDate;
+            if (!$eventStartDate instanceof DateTime || !$eventEndDate instanceof DateTime) {
+                throw new BadRequestHttpException('Calendar event start and end dates are required.');
+            }
+
+            $this->calendarEventRepository->createFromAnnouncement(
+                $announcement,
+                $eventStartDate,
+                $eventEndDate,
+                $selection,
+                $course,
+                $session,
+                $group,
+                $this->normalizeReminders($data->reminders),
+            );
+        }
+
         $response = new AnnouncementForm();
         $response->id = $announcement->getIid();
         $response->title = $announcement->getTitle();
@@ -184,6 +218,15 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $response->sendCopyToSelf = $data->sendCopyToSelf;
         $response->emailAlreadySent = true === $announcement->getEmailSent();
         $response->emailCsrfToken = (string) $this->csrfTokenManager->getToken(AnnouncementEmailProcessor::CSRF_TOKEN_ID);
+        $response->scheduleAvailable = $this->scheduleManager->isAvailable($session);
+        $response->scheduleByDate = $data->scheduleByDate;
+        $response->scheduleDate = $data->scheduleDate;
+        $response->scheduleMinimumDate = (new DateTimeImmutable('today'))->format('Y-m-d');
+        $response->calendarAvailable = false;
+        $response->addToCalendar = $data->addToCalendar;
+        $response->eventStartDate = $data->eventStartDate;
+        $response->eventEndDate = $data->eventEndDate;
+        $response->reminders = $data->reminders;
 
         return $response;
     }
@@ -203,6 +246,98 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         )) {
             throw new AccessDeniedHttpException('Sending copies to HR managers is disabled.');
         }
+    }
+
+    private function validateScheduleOptions(AnnouncementForm $form, ?Session $session): void
+    {
+        if (!$form->scheduleByDate) {
+            return;
+        }
+
+        if (!$this->scheduleManager->isAvailable($session)) {
+            throw new AccessDeniedHttpException('Scheduled course announcements are disabled in this context.');
+        }
+
+        if (!$form->sendByEmail) {
+            throw new BadRequestHttpException('Email delivery must be enabled to schedule an announcement.');
+        }
+
+        if ($form->sendToHrmUsers) {
+            throw new BadRequestHttpException('HR manager copies are not available for scheduled announcements.');
+        }
+
+        if ($form->sendToUsersInSessions && !$this->scheduleManager->supportsSendToUsersInSessions()) {
+            throw new BadRequestHttpException(
+                'The course announcement extra field send_to_users_in_session is missing.',
+            );
+        }
+
+        $scheduleDate = DateTimeImmutable::createFromFormat('!Y-m-d', trim($form->scheduleDate));
+        $dateErrors = DateTimeImmutable::getLastErrors();
+        if (false === $scheduleDate || (
+            false !== $dateErrors
+            && (0 !== $dateErrors['warning_count'] || 0 !== $dateErrors['error_count'])
+        )) {
+            throw new BadRequestHttpException('A valid scheduled delivery date is required.');
+        }
+
+        if ($scheduleDate < new DateTimeImmutable('today')) {
+            throw new BadRequestHttpException('The scheduled delivery date cannot be in the past.');
+        }
+
+        $form->scheduleDate = $scheduleDate->format('Y-m-d');
+    }
+
+    private function validateCalendarOptions(AnnouncementForm $form, Operation $operation): void
+    {
+        if (!$form->addToCalendar) {
+            $form->eventStartDate = null;
+            $form->eventEndDate = null;
+            $form->reminders = [];
+
+            return;
+        }
+
+        if ($operation instanceof Put) {
+            throw new BadRequestHttpException('A calendar event can only be created with a new announcement.');
+        }
+
+        if (!$form->eventStartDate instanceof DateTime || !$form->eventEndDate instanceof DateTime) {
+            throw new BadRequestHttpException('Calendar event start and end dates are required.');
+        }
+
+        if ($form->eventEndDate <= $form->eventStartDate) {
+            throw new BadRequestHttpException('The calendar event end date must be after its start date.');
+        }
+
+        $this->normalizeReminders($form->reminders);
+    }
+
+    /**
+     * @param array<int, mixed> $reminders
+     *
+     * @return array<int, array{0: int, 1: string}>
+     */
+    private function normalizeReminders(array $reminders): array
+    {
+        $normalized = [];
+
+        foreach ($reminders as $reminder) {
+            if (!\is_array($reminder)) {
+                throw new BadRequestHttpException('A calendar reminder is invalid.');
+            }
+
+            $count = (int) ($reminder['count'] ?? -1);
+            $period = trim((string) ($reminder['period'] ?? ''));
+
+            if ($count < 0 || !\in_array($period, ['i', 'h', 'd', 'w'], true)) {
+                throw new BadRequestHttpException('A calendar reminder is invalid.');
+            }
+
+            $normalized[] = [$count, $period];
+        }
+
+        return $normalized;
     }
 
     private function getCourse(Request $request): Course

@@ -315,6 +315,7 @@ const routerTools = [
   "agenda",
   "student_publication",
   "course_description",
+  "announcement",
   "course_homepage",
 ]
 const documentAutoLaunch = ref(0)
@@ -339,6 +340,20 @@ function isCourseDescriptionTool(tool) {
 
 function isCourseDescriptionToolEnabled() {
   const value = courseSettingsStore.getSetting("enabled", "course_description")
+
+  if (value === null || value === undefined || value === "") {
+    return true
+  }
+
+  return isSettingEnabled(value)
+}
+
+function isAnnouncementTool(tool) {
+  return tool?.title === "announcement" || tool?.tool?.title === "announcement"
+}
+
+function isAnnouncementToolEnabled() {
+  const value = courseSettingsStore.getSetting("enabled", "announcement")
 
   if (value === null || value === undefined || value === "") {
     return true
@@ -426,6 +441,10 @@ async function loadCourseTools(showSkeleton = true) {
 
     normalizedTools.forEach((tool) => {
       if (isCourseDescriptionTool(tool) && !isCourseDescriptionToolEnabled()) {
+        return
+      }
+
+      if (isAnnouncementTool(tool) && !isAnnouncementToolEnabled()) {
         return
       }
 

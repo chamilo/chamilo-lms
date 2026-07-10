@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State\Announcement;
 
+use AnnouncementManager;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementItem;
@@ -27,6 +28,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
+use const DATE_ATOM;
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 /**
  * @implements ProviderInterface<AnnouncementItem>
@@ -109,6 +114,22 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
             $this->settingsManager->getSetting('announcement.hide_announcement_sent_to_users_info', true),
         );
 
+        $canEdit = $canManage
+            && (!$group instanceof CGroup || !$this->hasMultipleAnnouncementGroupTargets(
+                $announcement,
+                $course,
+                $session,
+            ))
+            && $this->canEditAnnouncement(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $announcement,
+                $course,
+                $session,
+                $group,
+            );
+
         $result = new AnnouncementItem();
         $result->id = $announcementId;
         $result->courseId = (int) $course->getId();
@@ -134,15 +155,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
             $group,
             $canViewRecipients,
             $result->attachmentsEnabled,
-            $canManage && $this->canEditAnnouncement(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $announcement,
-                $course,
-                $session,
-                $group,
-            ),
+            $canEdit,
         );
 
         return $result;
@@ -251,14 +264,14 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         Course $course,
         ?Session $session,
     ): string {
-        if (!\class_exists(\AnnouncementManager::class)) {
+        if (!class_exists(AnnouncementManager::class)) {
             return $content;
         }
 
         $user = $this->security->getUser();
         $userId = $user instanceof User ? (int) $user->getId() : 0;
 
-        return (string) \AnnouncementManager::parseContent(
+        return (string) AnnouncementManager::parseContent(
             $userId,
             $content,
             $course->getCode(),

@@ -23,6 +23,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+use const PHP_INT_MAX;
+
 trait AnnouncementAccessHelperTrait
 {
     private function assertAnnouncementToolEnabled(EntityManagerInterface $entityManager, Course $course): void
@@ -341,6 +343,24 @@ trait AnnouncementAccessHelperTrait
         }
 
         return $matches;
+    }
+
+    private function hasMultipleAnnouncementGroupTargets(
+        CAnnouncement $announcement,
+        Course $course,
+        ?Session $session,
+    ): bool {
+        $groupIds = [];
+        foreach ($this->getAnnouncementContextLinks($announcement, $course, $session, null) as $link) {
+            $linkedGroup = $link->getGroup();
+            if (!$linkedGroup instanceof CGroup || null === $linkedGroup->getIid()) {
+                continue;
+            }
+
+            $groupIds[(int) $linkedGroup->getIid()] = true;
+        }
+
+        return \count($groupIds) > 1;
     }
 
     /**

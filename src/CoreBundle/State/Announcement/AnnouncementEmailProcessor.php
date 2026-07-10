@@ -119,9 +119,7 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
             && $this->scheduleManager->isAvailable($session)
             && $this->scheduleManager->getValues($announcement)['scheduleByDate']
         ) {
-            throw new BadRequestHttpException(
-                'This announcement is scheduled and cannot be sent before its delivery date.',
-            );
+            throw new BadRequestHttpException('This announcement is scheduled and cannot be sent before its delivery date.');
         }
 
         $sender = $this->security->getUser();
@@ -252,6 +250,16 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
 
         if ([] === $this->recipientResolver->getScopedLinks($announcement, $course, $session, $group)) {
             throw new AccessDeniedHttpException('The requested announcement does not belong to the current course context.');
+        }
+
+        if ($group instanceof CGroup && $this->hasMultipleAnnouncementGroupTargets(
+            $announcement,
+            $course,
+            $session,
+        )) {
+            throw new AccessDeniedHttpException(
+                'This announcement targets several groups and cannot be emailed from one group.',
+            );
         }
 
         if (!$this->canEditAnnouncement(

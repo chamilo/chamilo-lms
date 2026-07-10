@@ -51,7 +51,7 @@ final readonly class AnnouncementAttachmentController
     #[Route(
         '/api/announcement/{announcementId}/attachment/{attachmentId}/download',
         name: 'announcement_attachment_download',
-        requirements: ['announcementId' => '\\d+', 'attachmentId' => '\\d+'],
+        requirements: ['announcementId' => '\d+', 'attachmentId' => '\d+'],
         methods: ['GET'],
     )]
     public function download(int $announcementId, int $attachmentId, Request $request): Response
@@ -92,7 +92,7 @@ final readonly class AnnouncementAttachmentController
     #[Route(
         '/api/announcement/{announcementId}/attachments',
         name: 'announcement_attachment_upload',
-        requirements: ['announcementId' => '\\d+'],
+        requirements: ['announcementId' => '\d+'],
         methods: ['POST'],
     )]
     public function upload(int $announcementId, Request $request): JsonResponse
@@ -107,6 +107,7 @@ final readonly class AnnouncementAttachmentController
         }
 
         $comment = mb_substr(trim((string) $request->request->get('comment', '')), 0, 10000);
+
         /** @var array<int, array{file: UploadedFile, filename: string}> $validatedFiles */
         $validatedFiles = [];
         foreach ($files as $file) {
@@ -167,7 +168,7 @@ final readonly class AnnouncementAttachmentController
     #[Route(
         '/api/announcement/{announcementId}/attachment/{attachmentId}',
         name: 'announcement_attachment_delete',
-        requirements: ['announcementId' => '\\d+', 'attachmentId' => '\\d+'],
+        requirements: ['announcementId' => '\d+', 'attachmentId' => '\d+'],
         methods: ['DELETE'],
     )]
     public function delete(int $announcementId, int $attachmentId, Request $request): JsonResponse
@@ -274,6 +275,16 @@ final readonly class AnnouncementAttachmentController
 
         if ([] === $this->getAnnouncementContextLinks($announcement, $course, $session, $group)) {
             throw new AccessDeniedHttpException('The requested announcement does not belong to the current course context.');
+        }
+
+        if ($group instanceof CGroup && $this->hasMultipleAnnouncementGroupTargets(
+            $announcement,
+            $course,
+            $session,
+        )) {
+            throw new AccessDeniedHttpException(
+                'This announcement targets several groups and its attachments cannot be managed from one group.',
+            );
         }
 
         if (!$this->canEditAnnouncement(

@@ -544,7 +544,7 @@ function getContextParams() {
     params.gid = gid
   }
 
-  for (const key of ["origin", "page", "isStudentView"]) {
+  for (const key of ["origin", "page", "isStudentView", "lp_id", "lp_item_id", "lp_view_id", "returnToLp", "embedded"]) {
     if (Object.prototype.hasOwnProperty.call(route.query, key)) {
       params[key] = getQueryValue(route.query[key])
     }

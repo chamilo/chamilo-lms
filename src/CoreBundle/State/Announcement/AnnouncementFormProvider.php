@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State\Announcement;
 
+use AnnouncementManager;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementForm;
@@ -18,6 +19,7 @@ use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -27,6 +29,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Tracking;
 
 /**
  * @implements ProviderInterface<AnnouncementForm>
@@ -109,8 +112,8 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $result->scheduleDate = (new DateTimeImmutable('tomorrow'))->format('Y-m-d');
         $result->calendarAvailable = true;
         $result->remindersAvailable = $this->areAgendaRemindersEnabled();
-        $result->eventStartDate = new \DateTime();
-        $result->eventEndDate = (new \DateTime())->modify('+1 hour');
+        $result->eventStartDate = new DateTime();
+        $result->eventEndDate = (new DateTime())->modify('+1 hour');
         $result->attachmentsEnabled = !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.disable_announcement_attachment', true),
         );
@@ -319,11 +322,11 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
      */
     private function getTags(): array
     {
-        if (!\class_exists(\AnnouncementManager::class)) {
+        if (!class_exists(AnnouncementManager::class)) {
             return [];
         }
 
-        $tags = \AnnouncementManager::getTags();
+        $tags = AnnouncementManager::getTags();
         if (!\is_array($tags)) {
             return [];
         }
@@ -345,7 +348,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $inactiveUserId = $request->query->getInt('remind_inactive');
         if ($inactiveUserId > 0) {
             $recipientValues[] = 'USER:'.$inactiveUserId;
-        } elseif ($request->query->getBoolean('remindallinactives') && \class_exists(\Tracking::class)) {
+        } elseif ($request->query->getBoolean('remindallinactives') && class_exists(Tracking::class)) {
             $sinceValue = trim((string) $request->query->get('since', '6'));
             if ('never' === $sinceValue) {
                 $never = true;
@@ -356,7 +359,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
                 $trackingSince = $since;
             }
 
-            $inactiveUsers = \Tracking::getInactiveStudentsInCourse(
+            $inactiveUsers = Tracking::getInactiveStudentsInCourse(
                 (int) $course->getId(),
                 $trackingSince,
                 null !== $session ? (int) $session->getId() : 0,
@@ -386,7 +389,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
 
         $siteName = $course->getTitle();
         if (\function_exists('api_get_setting')) {
-            $configuredSiteName = trim((string) \api_get_setting('siteName'));
+            $configuredSiteName = trim((string) api_get_setting('siteName'));
             if ('' !== $configuredSiteName) {
                 $siteName = $configuredSiteName;
             }
@@ -412,13 +415,13 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
             return false;
         }
 
-        return true === \api_get_configuration_value('agenda_reminders');
+        return true === api_get_configuration_value('agenda_reminders');
     }
 
     private function translate(string $message): string
     {
         if (\function_exists('get_lang')) {
-            return (string) \get_lang($message);
+            return (string) get_lang($message);
         }
 
         return $message;

@@ -2165,8 +2165,18 @@ class Tracking
                             $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                             $icon = null;
                             if (api_is_allowed_to_edit()) {
-                                $url = api_get_path(WEB_CODE_PATH).
-                                    'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
+                                $courseEntity = api_get_course_entity((int) $courseInfo['real_id']);
+                                $courseResourceNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
+                                if ($courseResourceNodeId > 0) {
+                                    $url = api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/add?'.http_build_query([
+                                        'cid' => (int) $courseInfo['real_id'],
+                                        'sid' => (int) $sessionId,
+                                        'remind_inactive' => (int) $student_id,
+                                    ]);
+                                } else {
+                                    $url = api_get_path(WEB_CODE_PATH).
+                                        'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
+                                }
                                 $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
                                   '.Display::getMdiIcon(
                                         StateIcon::WARNING,

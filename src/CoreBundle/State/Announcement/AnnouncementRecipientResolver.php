@@ -628,7 +628,7 @@ final readonly class AnnouncementRecipientResolver
     private function translate(string $message): string
     {
         if (\function_exists('get_lang')) {
-            return (string) \get_lang($message);
+            return (string) get_lang($message);
         }
 
         return $message;

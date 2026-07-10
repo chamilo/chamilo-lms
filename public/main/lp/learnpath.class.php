@@ -9229,6 +9229,45 @@ document.addEventListener("DOMContentLoaded", function () {
         return $path.'?'.http_build_query($query);
     }
 
+    private static function buildVueAnnouncementLearningPathUrl(
+        int $courseId,
+        int $sessionId,
+        int $learningPathId,
+        int $learningPathItemId,
+        int $learningPathViewId,
+        int $announcementId
+    ): string {
+        if ($courseId <= 0 || $announcementId <= 0) {
+            return '';
+        }
+
+        $em = Database::getManager();
+        $course = $em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return '';
+        }
+
+        $courseResourceNodeId = (int) $course->getResourceNode()->getId();
+        if ($courseResourceNodeId <= 0) {
+            return '';
+        }
+
+        $query = [
+            'cid' => $courseId,
+            'sid' => $sessionId,
+            'gid' => api_get_group_id(),
+            'origin' => 'learnpath',
+            'lp_id' => $learningPathId,
+            'lp_item_id' => $learningPathItemId,
+            'lp_view_id' => $learningPathViewId,
+            'returnToLp' => 1,
+            'embedded' => 1,
+            'isStudentView' => 'true',
+        ];
+
+        return api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/view/'.$announcementId.'?'.http_build_query($query);
+    }
+
     private static function buildVueSurveyLearningPathUrl(
         int $courseId,
         int $sessionId,
@@ -9300,6 +9339,19 @@ document.addEventListener("DOMContentLoaded", function () {
             case TOOL_CALENDAR_EVENT:
                 return $main_dir_path.'calendar/agenda.php?agenda_id='.$id.'&'.$extraParams;
             case TOOL_ANNOUNCEMENT:
+                $announcementUrl = self::buildVueAnnouncementLearningPathUrl(
+                    (int) $course_id,
+                    $session_id,
+                    $learningPathId,
+                    $id_in_path,
+                    $lpViewId,
+                    (int) $id
+                );
+
+                if ('' !== $announcementUrl) {
+                    return $announcementUrl;
+                }
+
                 return $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
             case TOOL_LINK:
                 $linkInfo = Link::getLinkInfo($id);

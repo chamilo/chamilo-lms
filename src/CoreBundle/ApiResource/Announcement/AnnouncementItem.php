@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/announcement/{id}',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             name: 'get_announcement_item',
             openapi: new Operation(
                 parameters: [

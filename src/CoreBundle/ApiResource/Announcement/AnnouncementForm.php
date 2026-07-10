@@ -74,7 +74,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Put(
             uriTemplate: '/announcement/{id}',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             openapi: new Operation(
                 summary: 'Update an announcement',
                 parameters: [

@@ -139,13 +139,7 @@ final readonly class AnnouncementScheduleManager
 
     private function findScheduleField(string $variable): ?ExtraField
     {
-        $field = $this->extraFieldRepository->findByVariable(ExtraField::COURSE_ANNOUNCEMENT, $variable);
-        if ($field instanceof ExtraField || self::SEND_TO_SESSIONS_VARIABLE !== $variable) {
-            return $field;
-        }
-
-        // Compatibility with upgraded databases where this legacy field was created as a session field.
-        return $this->extraFieldRepository->findByVariable(ExtraField::SESSION_FIELD_TYPE, $variable);
+        return $this->extraFieldRepository->findByVariable(ExtraField::COURSE_ANNOUNCEMENT, $variable);
     }
 
     private function removeScheduleValues(int $announcementId): void

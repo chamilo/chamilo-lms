@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/announcement/{id}/visibility',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             openapi: new Operation(
                 summary: 'Change announcement visibility',
                 parameters: [
@@ -38,7 +38,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/announcement/{id}/move',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             openapi: new Operation(
                 summary: 'Move an announcement',
                 parameters: [
@@ -57,7 +57,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/announcement/{id}/delete',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             openapi: new Operation(
                 summary: 'Delete an announcement',
                 parameters: [

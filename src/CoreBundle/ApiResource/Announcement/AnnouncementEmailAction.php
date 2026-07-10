@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/announcement/{id}/send-email',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             openapi: new Operation(
                 summary: 'Send an announcement by email',
                 parameters: [

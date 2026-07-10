@@ -31,6 +31,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const COURSEMANAGERLOWSECURITY;
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * @implements ProcessorInterface<AnnouncementForm, AnnouncementForm>
  */
@@ -270,9 +274,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         }
 
         if ($form->sendToUsersInSessions && !$this->scheduleManager->supportsSendToUsersInSessions()) {
-            throw new BadRequestHttpException(
-                'The course announcement extra field send_to_users_in_session is missing.',
-            );
+            throw new BadRequestHttpException('The course announcement extra field send_to_users_in_session is missing.');
         }
 
         $scheduleDate = DateTimeImmutable::createFromFormat('!Y-m-d', trim($form->scheduleDate));
@@ -436,7 +438,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
             return false;
         }
 
-        return true === \api_get_configuration_value('agenda_reminders');
+        return true === api_get_configuration_value('agenda_reminders');
     }
 
     private function validateCsrfToken(string $token): void
@@ -454,8 +456,8 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
     private function sanitizeContent(string $content): string
     {
         $content = trim($content);
-        if (\class_exists(\Security::class) && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($content, \COURSEMANAGERLOWSECURITY);
+        if (class_exists(\Security::class) && \defined('COURSEMANAGERLOWSECURITY')) {
+            return (string) \Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
         }
 
         return $content;

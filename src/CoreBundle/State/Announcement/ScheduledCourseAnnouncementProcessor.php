@@ -179,7 +179,7 @@ final readonly class ScheduledCourseAnnouncementProcessor
                 if ($debug) {
                     if ($alsoInternalMessage) {
                         $io->writeln(
-                            sprintf(
+                            \sprintf(
                                 'Debug: Scheduled course announcement #%d has %d internal message(s) available '.
                                 '(%d created in this run), but no external email was delivered.',
                                 $announcementId,
@@ -218,6 +218,7 @@ final readonly class ScheduledCourseAnnouncementProcessor
             }
 
             $this->entityManager->clear();
+
             throw $throwable;
         }
     }

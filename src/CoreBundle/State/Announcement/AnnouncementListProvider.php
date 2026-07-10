@@ -26,6 +26,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const DATE_ATOM;
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * @implements ProviderInterface<AnnouncementList>
  */
@@ -270,6 +274,21 @@ final readonly class AnnouncementListProvider implements ProviderInterface
         $resourceNode = $announcement->getResourceNode();
         $creator = $resourceNode?->getCreator();
         $title = trim(html_entity_decode(strip_tags($announcement->getTitle()), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $canEdit = $canManage
+            && (!$group instanceof CGroup || !$this->hasMultipleAnnouncementGroupTargets(
+                $announcement,
+                $course,
+                $session,
+            ))
+            && $this->canEditAnnouncement(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $announcement,
+                $course,
+                $session,
+                $group,
+            );
 
         return [
             'id' => (int) $announcement->getIid(),
@@ -286,33 +305,9 @@ final readonly class AnnouncementListProvider implements ProviderInterface
             'attachmentCount' => $announcement->getAttachments()->count(),
             'visibility' => $this->getAnnouncementVisibility($contextLinks),
             'displayOrder' => $this->getAnnouncementDisplayOrder($contextLinks),
-            'canEdit' => $canManage && $this->canEditAnnouncement(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $announcement,
-                $course,
-                $session,
-                $group,
-            ),
-            'canDelete' => $canManage && $this->canEditAnnouncement(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $announcement,
-                $course,
-                $session,
-                $group,
-            ),
-            'canChangeVisibility' => $canManage && $this->canEditAnnouncement(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $announcement,
-                $course,
-                $session,
-                $group,
-            ),
+            'canEdit' => $canEdit,
+            'canDelete' => $canEdit,
+            'canChangeVisibility' => $canEdit,
         ];
     }
 }

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State\Announcement;
 
+use AnnouncementManager;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -22,6 +23,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Throwable;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 use const FILTER_VALIDATE_EMAIL;
 use const PHP_SAPI;
 
@@ -37,7 +40,7 @@ final readonly class AnnouncementEmailSender
     ) {}
 
     /**
-     * @param array<int, User> $primaryRecipients
+     * @param array<int, User>                                              $primaryRecipients
      * @param array<int, array{user: User, relatedUsers: array<int, User>}> $hrmCopies
      *
      * @return array{
@@ -231,7 +234,7 @@ final readonly class AnnouncementEmailSender
     /**
      * Optionally store the Chamilo internal message before attempting SMTP delivery.
      *
-     * @param array<string, array{mail: string, name: string}> $replyTo
+     * @param array<string, array{mail: string, name: string}>    $replyTo
      * @param array<int, array{stream: string, filename: string}> $attachments
      *
      * @return array{emailSent: bool, internalMessageAvailable: bool, internalMessageCreated: bool}
@@ -302,17 +305,22 @@ final readonly class AnnouncementEmailSender
             return ['available' => false, 'created' => false];
         }
 
-        $internalMessage = $message.\sprintf(
-            "\n<!-- chamilo-announcement-email announcement=%d recipient=%d delivery=%s -->",
+        $marker = \sprintf(
+            'chamilo-announcement-email announcement=%d recipient=%d delivery=%s',
             (int) $announcement->getIid(),
             (int) $recipient->getId(),
             $deliveryType,
         );
-        $existingMessage = $this->messageRepository->findOneBy([
-            'sender' => $sender,
-            'title' => $subject,
-            'content' => $internalMessage,
-        ]);
+        $internalMessage = $message."\n<!-- ".$marker.' -->';
+        $existingMessage = $this->messageRepository->createQueryBuilder('message')
+            ->andWhere('message.sender = :sender')
+            ->andWhere('message.content LIKE :marker')
+            ->setParameter('sender', $sender)
+            ->setParameter('marker', '%'.$marker.'%')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
 
         if (null !== $existingMessage) {
             return ['available' => true, 'created' => false];
@@ -493,9 +501,9 @@ final readonly class AnnouncementEmailSender
     ): string {
         $content = (string) $announcement->getContent();
 
-        if ('cli' !== PHP_SAPI && \class_exists(\AnnouncementManager::class) && null !== $recipient->getId()) {
+        if ('cli' !== PHP_SAPI && class_exists(AnnouncementManager::class) && null !== $recipient->getId()) {
             try {
-                return (string) \AnnouncementManager::parseContent(
+                return (string) AnnouncementManager::parseContent(
                     (int) $recipient->getId(),
                     $content,
                     $course->getCode(),

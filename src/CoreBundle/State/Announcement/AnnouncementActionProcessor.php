@@ -269,6 +269,16 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('The requested announcement does not belong to the current course context.');
         }
 
+        if ($group instanceof CGroup && $this->hasMultipleAnnouncementGroupTargets(
+            $announcement,
+            $course,
+            $session,
+        )) {
+            throw new AccessDeniedHttpException(
+                'This announcement targets several groups and cannot be managed from one group.',
+            );
+        }
+
         if (!$this->canEditAnnouncement(
             $this->entityManager,
             $this->security,
@@ -340,6 +350,7 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
         foreach ($entries as $index => $entry) {
             if ($entry['announcement']->getIid() === $announcement->getIid()) {
                 $currentIndex = $index;
+
                 break;
             }
         }

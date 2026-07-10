@@ -95,6 +95,13 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $result->languages = $this->getLanguages();
         $result->tags = $this->getTags();
         $result->recipients = ['everyone'];
+        $result->sendByEmail = true;
+        $result->emailCsrfToken = (string) $this->csrfTokenManager->getToken(AnnouncementEmailProcessor::CSRF_TOKEN_ID);
+        $result->sendToSessionsAvailable = !$session instanceof Session;
+        $result->sendToHrmAvailable = !$this->isSettingEnabled(
+            $this->settingsManager->getSetting('announcement.announcements_hide_send_to_hrm_users', true),
+        );
+        $result->sendCopyToSelf = true;
         $result->attachmentsEnabled = !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.disable_announcement_attachment', true),
         );
@@ -114,6 +121,8 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
                 $group,
             );
             $result->attachments = $this->normalizeAttachments($announcement, $course, $session, $group);
+            $result->emailAlreadySent = true === $announcement->getEmailSent();
+            $result->sendByEmail = !$result->emailAlreadySent;
 
             return $result;
         }
@@ -355,6 +364,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
             $session,
             $group,
         );
+        $form->sendByEmail = true;
 
         $siteName = $course->getTitle();
         if (\function_exists('api_get_setting')) {

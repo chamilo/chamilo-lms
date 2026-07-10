@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementForm;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -40,6 +41,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         private EntityManagerInterface $entityManager,
         private CAnnouncementRepository $announcementRepository,
         private AnnouncementRecipientResolver $recipientResolver,
+        private AnnouncementEmailRecipientResolver $emailRecipientResolver,
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
@@ -87,16 +89,26 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
             $session,
             $group,
         );
+        $this->validateEmailOptions($data, $session);
+
+        $sender = $this->security->getUser();
+        if (!$sender instanceof User) {
+            throw new AccessDeniedHttpException('An authenticated user is required.');
+        }
 
         if ('post_announcement_preview' === $operation->getName()) {
             $response = new AnnouncementForm();
             $response->csrfToken = (string) $this->csrfTokenManager->getToken(AnnouncementFormProvider::CSRF_TOKEN_ID);
             $response->recipients = $selection;
-            $response->previewRecipients = $this->recipientResolver->getPreviewLabels(
+            $response->previewRecipients = $this->emailRecipientResolver->getPreviewLabels(
                 $selection,
                 $course,
                 $session,
                 $group,
+                $data->sendByEmail && $data->sendToUsersInSessions,
+                $data->sendByEmail && $data->sendToHrmUsers,
+                $data->sendCopyToSelf,
+                $sender,
             );
 
             return $response;
@@ -121,6 +133,10 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         }
 
         $isNew = !$announcement instanceof CAnnouncement;
+        if (!$isNew && $data->sendByEmail && true === $announcement->getEmailSent()) {
+            throw new BadRequestHttpException('This announcement has already been sent by email.');
+        }
+
         if ($isNew) {
             $announcement = (new CAnnouncement())
                 ->setParent($course)
@@ -162,8 +178,31 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $response->canEdit = true;
         $response->isNew = false;
         $response->groupContext = $group instanceof CGroup;
+        $response->sendByEmail = $data->sendByEmail;
+        $response->sendToUsersInSessions = $data->sendToUsersInSessions;
+        $response->sendToHrmUsers = $data->sendToHrmUsers;
+        $response->sendCopyToSelf = $data->sendCopyToSelf;
+        $response->emailAlreadySent = true === $announcement->getEmailSent();
+        $response->emailCsrfToken = (string) $this->csrfTokenManager->getToken(AnnouncementEmailProcessor::CSRF_TOKEN_ID);
 
         return $response;
+    }
+
+    private function validateEmailOptions(AnnouncementForm $form, ?Session $session): void
+    {
+        if (!$form->sendByEmail && ($form->sendToUsersInSessions || $form->sendToHrmUsers)) {
+            throw new BadRequestHttpException('Additional recipients require email delivery to be enabled.');
+        }
+
+        if ($form->sendToUsersInSessions && $session instanceof Session) {
+            throw new BadRequestHttpException('Users from all sessions can only be selected from the base course.');
+        }
+
+        if ($form->sendToHrmUsers && $this->isSettingEnabled(
+            $this->settingsManager->getSetting('announcement.announcements_hide_send_to_hrm_users', true),
+        )) {
+            throw new AccessDeniedHttpException('Sending copies to HR managers is disabled.');
+        }
     }
 
     private function getCourse(Request $request): Course

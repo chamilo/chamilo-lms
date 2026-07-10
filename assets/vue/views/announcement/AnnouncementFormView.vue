@@ -52,6 +52,22 @@
         <span>{{ formErrorMessage }}</span>
       </div>
 
+      <div
+        v-if="formWarningMessage"
+        ref="formWarningRef"
+        class="flex items-start gap-3 whitespace-pre-line rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800 shadow-sm"
+        role="alert"
+        aria-live="assertive"
+        tabindex="-1"
+      >
+        <BaseIcon
+          class="mt-0.5 shrink-0"
+          icon="alert"
+          size="small"
+        />
+        <span>{{ formWarningMessage }}</span>
+      </div>
+
       <BaseCard>
         <template #title>
           <div class="flex items-center gap-2">
@@ -141,10 +157,7 @@
             :title="t('Description')"
           />
 
-          <BaseAdvancedSettingsButton
-            v-if="hasAdvancedSettings"
-            v-model="showAdvancedSettings"
-          >
+          <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
             <div class="space-y-5">
               <BaseSelect
                 v-if="form.languages.length > 2"
@@ -156,6 +169,55 @@
                 option-value="value"
                 :options="form.languages"
               />
+
+              <div class="space-y-3 rounded-lg border border-gray-20 bg-white p-4">
+                <p class="text-sm font-semibold text-gray-90">
+                  {{ t("Email") }}
+                </p>
+
+                <p
+                  v-if="form.emailAlreadySent"
+                  class="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-800"
+                >
+                  {{ t("This announcement has already been sent by email.") }}
+                </p>
+
+                <BaseCheckbox
+                  v-else
+                  id="announcement_send_by_email"
+                  v-model="form.sendByEmail"
+                  :label="t('Send this announcement by email to selected groups/users')"
+                  name="sendByEmail"
+                />
+
+                <div
+                  v-if="form.sendByEmail && !form.emailAlreadySent"
+                  class="space-y-3 pl-6"
+                >
+                  <BaseCheckbox
+                    v-if="form.sendToSessionsAvailable"
+                    id="announcement_send_to_users_in_sessions"
+                    v-model="form.sendToUsersInSessions"
+                    :label="t('Send to users in all sessions of this course')"
+                    name="sendToUsersInSessions"
+                  />
+
+                  <BaseCheckbox
+                    v-if="form.sendToHrmAvailable"
+                    id="announcement_send_to_hrm_users"
+                    v-model="form.sendToHrmUsers"
+                    :label="t('Send a copy to HR managers of selected students')"
+                    name="sendToHrmUsers"
+                  />
+                </div>
+
+                <BaseCheckbox
+                  id="announcement_send_copy_to_self"
+                  v-model="form.sendCopyToSelf"
+                  :label="t('Send a copy by email to myself.')"
+                  name="sendCopyToSelf"
+                />
+              </div>
 
               <div
                 v-if="form.attachmentsEnabled"
@@ -170,6 +232,7 @@
                   </label>
                   <input
                     id="announcement_attachments"
+                    ref="attachmentInputRef"
                     class="block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm text-gray-700 file:mr-3 file:rounded-md file:border-0 file:bg-gray-20 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-gray-90 hover:file:bg-gray-25"
                     multiple
                     name="attachments[]"
@@ -303,6 +366,7 @@ import { useRoute, useRouter } from "vue-router"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue"
@@ -324,13 +388,16 @@ const isPreviewing = ref(false)
 const formSubmitted = ref(false)
 const loadErrorMessage = ref("")
 const formErrorMessage = ref("")
+const formWarningMessage = ref("")
 const formErrorRef = ref(null)
+const formWarningRef = ref(null)
 const previewRecipients = ref([])
 const previewReady = ref(false)
 const previewPayload = ref(null)
 const showAdvancedSettings = ref(false)
 const selectedClassId = ref(null)
 const attachmentFiles = ref([])
+const attachmentInputRef = ref(null)
 const fileComment = ref("")
 const deletingAttachmentId = ref(0)
 
@@ -346,6 +413,14 @@ const form = ref({
   classLabel: "",
   languages: [],
   tags: [],
+  sendByEmail: true,
+  sendToUsersInSessions: false,
+  sendToHrmUsers: false,
+  sendCopyToSelf: true,
+  emailAlreadySent: false,
+  sendToSessionsAvailable: false,
+  sendToHrmAvailable: false,
+  emailCsrfToken: "",
   attachmentsEnabled: false,
   attachmentCsrfToken: "",
   attachments: [],
@@ -362,10 +437,6 @@ const listRoute = computed(() => ({
   params: { node: route.params.node },
   query: getContextParams(),
 }))
-
-const hasAdvancedSettings = computed(
-  () => form.value.languages.length > 2 || form.value.attachmentsEnabled || form.value.attachments.length > 0,
-)
 
 const recipientOptions = computed(() => {
   const selectedClass = form.value.classes.find((item) => Number(item.id) === Number(selectedClassId.value || 0))
@@ -460,6 +531,7 @@ async function loadForm() {
   isLoading.value = true
   loadErrorMessage.value = ""
   formErrorMessage.value = ""
+  formWarningMessage.value = ""
 
   try {
     const response = await announcementService.getForm(getFormParams())
@@ -475,13 +547,28 @@ async function loadForm() {
       classLabel: response.classLabel || "",
       languages: Array.isArray(response.languages) ? response.languages : [],
       tags: Array.isArray(response.tags) ? response.tags : [],
+      sendByEmail: Boolean(response.sendByEmail),
+      sendToUsersInSessions: Boolean(response.sendToUsersInSessions),
+      sendToHrmUsers: Boolean(response.sendToHrmUsers),
+      sendCopyToSelf: Boolean(response.sendCopyToSelf),
+      emailAlreadySent: Boolean(response.emailAlreadySent),
+      sendToSessionsAvailable: Boolean(response.sendToSessionsAvailable),
+      sendToHrmAvailable: Boolean(response.sendToHrmAvailable),
+      emailCsrfToken: response.emailCsrfToken || "",
       attachmentsEnabled: Boolean(response.attachmentsEnabled),
       attachmentCsrfToken: response.attachmentCsrfToken || "",
       attachments: Array.isArray(response.attachments) ? response.attachments : [],
     }
     attachmentFiles.value = []
     fileComment.value = ""
-    showAdvancedSettings.value = Boolean(form.value.language || form.value.attachments.length)
+    showAdvancedSettings.value = Boolean(
+      form.value.language ||
+        form.value.attachments.length ||
+        form.value.sendByEmail ||
+        form.value.sendCopyToSelf ||
+        form.value.sendToUsersInSessions ||
+        form.value.sendToHrmUsers,
+    )
     resetPreview()
   } catch (error) {
     console.error("Error loading announcement form", error)
@@ -498,19 +585,83 @@ function buildPayload() {
     content: form.value.content,
     language: form.value.language,
     recipients: form.value.recipients,
+    sendByEmail: form.value.sendByEmail && !form.value.emailAlreadySent,
+    sendToUsersInSessions: form.value.sendByEmail && form.value.sendToUsersInSessions,
+    sendToHrmUsers: form.value.sendByEmail && form.value.sendToHrmUsers,
+    sendCopyToSelf: form.value.sendCopyToSelf,
     csrfToken: form.value.csrfToken,
+  }
+}
+
+function buildEmailPayload() {
+  return {
+    sendByEmail: form.value.sendByEmail && !form.value.emailAlreadySent,
+    sendToUsersInSessions: form.value.sendByEmail && form.value.sendToUsersInSessions,
+    sendToHrmUsers: form.value.sendByEmail && form.value.sendToHrmUsers,
+    sendCopyToSelf: form.value.sendCopyToSelf,
+    csrfToken: form.value.emailCsrfToken,
+  }
+}
+
+function formatEmailDeliveryWarning(response, fallbackMessage) {
+  const lines = [response?.message || fallbackMessage]
+  const internalMessageCount = Number(response?.internalMessageCount || 0)
+  const internalMessageCreatedCount = Number(response?.internalMessageCreatedCount || 0)
+  const internalMessageFailedCount = Number(response?.internalMessageFailedCount || 0)
+  const failedRecipients = Array.isArray(response?.failedRecipients) ? response.failedRecipients : []
+
+  if (internalMessageCount > 0) {
+    lines.push(`${t("Internal messages available")}: ${internalMessageCount}`)
+  }
+
+  if (internalMessageCreatedCount > 0) {
+    lines.push(`${t("Internal messages created now")}: ${internalMessageCreatedCount}`)
+  }
+
+  if (internalMessageFailedCount > 0) {
+    lines.push(`${t("Internal message failures")}: ${internalMessageFailedCount}`)
+  }
+
+  if (failedRecipients.length) {
+    lines.push(`${t("Failed email recipients")}: ${failedRecipients.join(", ")}`)
+  }
+
+  return lines.join("\n")
+}
+
+function clearSelectedAttachments() {
+  attachmentFiles.value = []
+  fileComment.value = ""
+  if (attachmentInputRef.value) {
+    attachmentInputRef.value.value = ""
+  }
+}
+
+function blurActiveElement() {
+  if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur()
   }
 }
 
 async function showFormError(message) {
   formErrorMessage.value = message
   await nextTick()
+  blurActiveElement()
   formErrorRef.value?.scrollIntoView({ behavior: "smooth", block: "center" })
   formErrorRef.value?.focus({ preventScroll: true })
 }
 
+async function showFormWarning(message) {
+  formWarningMessage.value = message
+  await nextTick()
+  blurActiveElement()
+  formWarningRef.value?.scrollIntoView({ behavior: "smooth", block: "center" })
+  formWarningRef.value?.focus({ preventScroll: true })
+}
+
 async function previewAnnouncement() {
   formErrorMessage.value = ""
+  formWarningMessage.value = ""
 
   if (selectedClassId.value && form.value.recipients.length === 0) {
     resetPreview()
@@ -551,6 +702,7 @@ async function previewAnnouncement() {
 async function saveAnnouncement() {
   formSubmitted.value = true
   formErrorMessage.value = ""
+  formWarningMessage.value = ""
 
   if (!form.value.title.trim() || !String(form.value.content || "").replace(/<[^>]*>/g, "").trim()) {
     await showFormError(t("Please fill all required fields"))
@@ -576,18 +728,69 @@ async function saveAnnouncement() {
 
     if (form.value.attachmentsEnabled && attachmentFiles.value.length && announcementId > 0) {
       try {
-        await announcementService.uploadAttachments(
+        const uploadResponse = await announcementService.uploadAttachments(
           announcementId,
           attachmentFiles.value,
           fileComment.value,
           form.value.attachmentCsrfToken,
           getContextParams(),
         )
+        const uploadedAttachments = Array.isArray(uploadResponse?.attachments) ? uploadResponse.attachments : []
+        form.value.attachments = [...form.value.attachments, ...uploadedAttachments]
+        clearSelectedAttachments()
       } catch (error) {
         console.error("Error uploading announcement attachments", error)
-        await showFormError(
-          error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred"),
+        await showFormWarning(
+          error?.response?.data?.detail ||
+            error?.response?.data?.["hydra:description"] ||
+            t("The announcement was saved, but an attachment could not be uploaded."),
         )
+        resetPreview()
+
+        return
+      }
+    }
+
+    const shouldSendEmail =
+      (form.value.sendByEmail && !form.value.emailAlreadySent) || form.value.sendCopyToSelf
+
+    if (shouldSendEmail && announcementId > 0) {
+      try {
+        const emailResponse = await announcementService.sendEmail(
+          announcementId,
+          buildEmailPayload(),
+          getContextParams(),
+        )
+
+        form.value.emailAlreadySent = Boolean(emailResponse?.emailSent)
+        if (form.value.emailAlreadySent) {
+          form.value.sendByEmail = false
+          form.value.sendToUsersInSessions = false
+          form.value.sendToHrmUsers = false
+        }
+        if (emailResponse?.copySent) {
+          form.value.sendCopyToSelf = false
+        }
+
+        if (!emailResponse?.success) {
+          await showFormWarning(
+            formatEmailDeliveryWarning(
+              emailResponse,
+              t("The announcement was saved, but no email could be delivered."),
+            ),
+          )
+          resetPreview()
+
+          return
+        }
+      } catch (error) {
+        console.error("Error sending announcement email", error)
+        await showFormWarning(
+          error?.response?.data?.detail ||
+            error?.response?.data?.["hydra:description"] ||
+            t("The announcement was saved, but email delivery failed."),
+        )
+        resetPreview()
 
         return
       }
@@ -636,9 +839,28 @@ async function deleteAttachment(attachment) {
 }
 
 watch(
-  () => [form.value.title, form.value.content, form.value.language, form.value.recipients],
+  () => [
+    form.value.title,
+    form.value.content,
+    form.value.language,
+    form.value.recipients,
+    form.value.sendByEmail,
+    form.value.sendToUsersInSessions,
+    form.value.sendToHrmUsers,
+    form.value.sendCopyToSelf,
+  ],
   resetPreview,
   { deep: true },
+)
+
+watch(
+  () => form.value.sendByEmail,
+  (sendByEmail) => {
+    if (sendByEmail) return
+
+    form.value.sendToUsersInSessions = false
+    form.value.sendToHrmUsers = false
+  },
 )
 
 watch(

@@ -159,6 +159,30 @@ final class AnnouncementForm
     #[Groups(['announcement_form:read'])]
     public array $previewRecipients = [];
 
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public bool $sendByEmail = false;
+
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public bool $sendToUsersInSessions = false;
+
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public bool $sendToHrmUsers = false;
+
+    #[Groups(['announcement_form:read', 'announcement_form:write'])]
+    public bool $sendCopyToSelf = true;
+
+    #[Groups(['announcement_form:read'])]
+    public bool $emailAlreadySent = false;
+
+    #[Groups(['announcement_form:read'])]
+    public bool $sendToSessionsAvailable = false;
+
+    #[Groups(['announcement_form:read'])]
+    public bool $sendToHrmAvailable = false;
+
+    #[Groups(['announcement_form:read'])]
+    public string $emailCsrfToken = '';
+
     #[Groups(['announcement_form:read'])]
     public bool $attachmentsEnabled = false;
 

@@ -80,6 +80,12 @@ export default {
     )
   },
 
+  async sendEmail(id, payload, params = {}) {
+    return await baseService.post(`/api/announcement/${id}/send-email`, payload, {}, {
+      params: cleanParams(params),
+    })
+  },
+
   async uploadAttachments(id, files, comment, csrfToken, params = {}) {
     const formData = new FormData()
     files.forEach((file) => formData.append("files[]", file))

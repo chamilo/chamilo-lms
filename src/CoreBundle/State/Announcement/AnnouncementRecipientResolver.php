@@ -156,6 +156,52 @@ final readonly class AnnouncementRecipientResolver
     /**
      * @param array<int, string> $selection
      *
+     * @return array<int, User>
+     */
+    public function resolveUsers(
+        array $selection,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): array {
+        $availableUsers = $this->getAvailableUsers($course, $session, $group);
+        $availableGroups = $this->getAvailableGroups($course, $session, $group);
+        $resolvedUsers = [];
+
+        if (\in_array('everyone', $selection, true)) {
+            return $availableUsers;
+        }
+
+        foreach ($selection as $recipient) {
+            [$type, $rawId] = explode(':', $recipient, 2);
+            $id = (int) $rawId;
+
+            if ('USER' === $type && isset($availableUsers[$id])) {
+                $resolvedUsers[$id] = $availableUsers[$id];
+
+                continue;
+            }
+
+            if ('GROUP' !== $type || !isset($availableGroups[$id])) {
+                continue;
+            }
+
+            foreach ($availableGroups[$id]->getMembers() as $member) {
+                $user = $member->getUser();
+                if (!$user instanceof User || User::ACTIVE !== $user->getActive() || null === $user->getId()) {
+                    continue;
+                }
+
+                $resolvedUsers[(int) $user->getId()] = $user;
+            }
+        }
+
+        return $resolvedUsers;
+    }
+
+    /**
+     * @param array<int, string> $selection
+     *
      * @return array<int, string>
      */
     public function getPreviewLabels(
@@ -164,38 +210,7 @@ final readonly class AnnouncementRecipientResolver
         ?Session $session,
         ?CGroup $group,
     ): array {
-        $availableUsers = $this->getAvailableUsers($course, $session, $group);
-        $availableGroups = $this->getAvailableGroups($course, $session, $group);
-        $previewUsers = [];
-
-        if (\in_array('everyone', $selection, true)) {
-            $previewUsers = $availableUsers;
-        } else {
-            foreach ($selection as $recipient) {
-                [$type, $rawId] = explode(':', $recipient, 2);
-                $id = (int) $rawId;
-
-                if ('USER' === $type && isset($availableUsers[$id])) {
-                    $previewUsers[$id] = $availableUsers[$id];
-
-                    continue;
-                }
-
-                if ('GROUP' !== $type || !isset($availableGroups[$id])) {
-                    continue;
-                }
-
-                foreach ($availableGroups[$id]->getMembers() as $member) {
-                    $user = $member->getUser();
-                    if (!$user instanceof User || User::ACTIVE !== $user->getActive() || null === $user->getId()) {
-                        continue;
-                    }
-
-                    $previewUsers[(int) $user->getId()] = $user;
-                }
-            }
-        }
-
+        $previewUsers = $this->resolveUsers($selection, $course, $session, $group);
         $labels = array_map(
             fn (User $user): string => $this->formatUserLabel($user),
             array_values($previewUsers),

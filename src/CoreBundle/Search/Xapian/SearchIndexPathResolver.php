@@ -18,6 +18,18 @@ final class SearchIndexPathResolver
     ) {}
 
     /**
+     * Returns the configured absolute directory where the Xapian index is stored.
+     *
+     * This method intentionally does not create the directory. It is used by
+     * maintenance commands that need to inspect, move or rebuild the index
+     * before opening it.
+     */
+    public function getConfiguredIndexDir(): string
+    {
+        return $this->indexDir;
+    }
+
+    /**
      * Returns the absolute directory where the Xapian index is stored.
      * Ensures that the directory exists on disk.
      */

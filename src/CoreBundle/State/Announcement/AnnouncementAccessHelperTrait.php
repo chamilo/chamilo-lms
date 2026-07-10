@@ -218,6 +218,43 @@ trait AnnouncementAccessHelperTrait
         return false;
     }
 
+    private function canEditAnnouncement(
+        EntityManagerInterface $entityManager,
+        Security $security,
+        SettingsManager $settingsManager,
+        CAnnouncement $announcement,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): bool {
+        if (!$this->canManageAnnouncements(
+            $entityManager,
+            $security,
+            $settingsManager,
+            $course,
+            $session,
+            $group,
+        )) {
+            return false;
+        }
+
+        if ($security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        $resourceNode = $announcement->getResourceNode();
+        if (null !== $resourceNode && $security->isGranted('EDIT', $resourceNode)) {
+            return true;
+        }
+
+        $user = $security->getUser();
+        $creator = $resourceNode?->getCreator();
+
+        return $user instanceof User
+            && $creator instanceof User
+            && $creator->getId() === $user->getId();
+    }
+
     /**
      * @return array<int, ResourceLink>
      */
@@ -247,8 +284,7 @@ trait AnnouncementAccessHelperTrait
                 ? null === $linkSession
                 : null !== $linkSession && $linkSession->getId() === $session->getId();
             $sameGroup = null === $group
-                ? null === $linkGroup
-                : null !== $linkGroup && $linkGroup->getIid() === $group->getIid();
+                || (null !== $linkGroup && $linkGroup->getIid() === $group->getIid());
 
             if ($sameCourse && $sameSession && $sameGroup) {
                 $matches[] = $link;
@@ -285,13 +321,28 @@ trait AnnouncementAccessHelperTrait
             }
 
             $linkedUser = $link->getUser();
-            if (null === $linkedUser) {
-                return true;
+            $linkedGroup = $link->getGroup();
+
+            if ($linkedUser instanceof User) {
+                if ($user instanceof User && $linkedUser->getId() === $user->getId()) {
+                    return true;
+                }
+
+                continue;
             }
 
-            if ($user instanceof User && $linkedUser->getId() === $user->getId()) {
-                return true;
+            if ($linkedGroup instanceof CGroup) {
+                if ($user instanceof User && (
+                    $linkedGroup->hasMember($user)
+                    || $linkedGroup->hasTutor($user)
+                )) {
+                    return true;
+                }
+
+                continue;
             }
+
+            return true;
         }
 
         if (!$user instanceof User

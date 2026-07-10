@@ -31,5 +31,23 @@ export default {
       },
       component: () => import("../views/announcement/AnnouncementDetailView.vue"),
     },
+    {
+      name: "AnnouncementAdd",
+      path: "add",
+      meta: {
+        requiresAuth: true,
+        breadcrumb: "Add an announcement",
+      },
+      component: () => import("../views/announcement/AnnouncementFormView.vue"),
+    },
+    {
+      name: "AnnouncementEdit",
+      path: "edit/:id",
+      meta: {
+        requiresAuth: true,
+        breadcrumb: "Edit announcement",
+      },
+      component: () => import("../views/announcement/AnnouncementFormView.vue"),
+    },
   ],
 }

@@ -121,6 +121,15 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
             $session,
             $group,
             $canViewRecipients,
+            $canManage && $this->canEditAnnouncement(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $announcement,
+                $course,
+                $session,
+                $group,
+            ),
         );
 
         return $result;
@@ -183,6 +192,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         ?Session $session,
         ?CGroup $group,
         bool $canViewRecipients,
+        bool $canEdit,
     ): array {
         $resourceNode = $announcement->getResourceNode();
         $creator = $resourceNode?->getCreator();
@@ -210,6 +220,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
             'language' => $resourceNode?->getLanguage()?->getIsocode(),
             'attachments' => $this->normalizeAttachments($announcement, $course, $session, $group),
             'recipients' => $canViewRecipients ? $this->normalizeRecipients($contextLinks) : null,
+            'canEdit' => $canEdit,
         ];
     }
 

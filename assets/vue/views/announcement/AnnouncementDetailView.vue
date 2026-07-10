@@ -11,6 +11,16 @@
           :tooltip="t('Back')"
           type="primary-text"
         />
+        <BaseButton
+          v-if="announcement?.canEdit"
+          icon="edit"
+          :label="t('Edit')"
+          only-icon
+          :route="editRoute"
+          size="large"
+          :tooltip="t('Edit')"
+          type="secondary-text"
+        />
       </template>
     </BaseToolbar>
 
@@ -218,6 +228,15 @@ function getContextParams() {
 const listRoute = computed(() => ({
   name: "AnnouncementList",
   params: { node: route.params.node },
+  query: getContextParams(),
+}))
+
+const editRoute = computed(() => ({
+  name: "AnnouncementEdit",
+  params: {
+    node: route.params.node,
+    id: route.params.id,
+  },
   query: getContextParams(),
 }))
 

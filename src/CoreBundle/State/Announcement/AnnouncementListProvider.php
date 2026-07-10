@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,15 +87,27 @@ final readonly class AnnouncementListProvider implements ProviderInterface
         $result->canManage = $canManage;
         $result->studentView = $studentView;
 
-        $queryBuilder = $this->announcementRepository->getResourcesByCourse(
-            $course,
-            $session,
-            $group,
-            null,
-            false,
-            false,
-            false,
-        );
+        $queryBuilder = $this->announcementRepository->getResources();
+        $queryBuilder
+            ->andWhere('links.course = :course')
+            ->setParameter('course', (int) $course->getId(), Types::INTEGER)
+        ;
+
+        if ($session instanceof Session) {
+            $queryBuilder
+                ->andWhere('links.session = :session')
+                ->setParameter('session', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('links.session IS NULL');
+        }
+
+        if ($group instanceof CGroup) {
+            $queryBuilder
+                ->andWhere('links.group = :group')
+                ->setParameter('group', (int) $group->getIid(), Types::INTEGER)
+            ;
+        }
 
         $announcements = $queryBuilder->getQuery()->getResult();
         $itemsById = [];
@@ -121,7 +134,14 @@ final readonly class AnnouncementListProvider implements ProviderInterface
                 continue;
             }
 
-            $item = $this->normalizeAnnouncement($announcement, $contextLinks);
+            $item = $this->normalizeAnnouncement(
+                $announcement,
+                $contextLinks,
+                $course,
+                $session,
+                $group,
+                $canManage,
+            );
             $itemsById[$announcementId] = $item;
 
             $creator = $announcement->getResourceNode()?->getCreator();
@@ -214,8 +234,14 @@ final readonly class AnnouncementListProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeAnnouncement(CAnnouncement $announcement, array $contextLinks): array
-    {
+    private function normalizeAnnouncement(
+        CAnnouncement $announcement,
+        array $contextLinks,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        bool $canManage,
+    ): array {
         $resourceNode = $announcement->getResourceNode();
         $creator = $resourceNode?->getCreator();
         $title = trim(html_entity_decode(strip_tags($announcement->getTitle()), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
@@ -235,6 +261,15 @@ final readonly class AnnouncementListProvider implements ProviderInterface
             'attachmentCount' => $announcement->getAttachments()->count(),
             'visibility' => $this->getAnnouncementVisibility($contextLinks),
             'displayOrder' => $this->getAnnouncementDisplayOrder($contextLinks),
+            'canEdit' => $canManage && $this->canEditAnnouncement(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $announcement,
+                $course,
+                $session,
+                $group,
+            ),
         ];
     }
 }

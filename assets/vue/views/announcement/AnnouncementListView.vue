@@ -38,7 +38,7 @@
         <BaseButton
           icon="announcement"
           :label="t('Add an announcement')"
-          :to-url="legacyCreateUrl"
+          :route="addRoute"
           type="success"
         />
       </div>
@@ -53,49 +53,86 @@
     </template>
 
     <template v-else>
-      <BaseToolbar v-if="canManage">
+      <BaseToolbar>
         <template #start>
-          <BaseButton
-            icon="announcement"
-            :label="t('Add an announcement')"
-            only-icon
-            size="large"
-            :to-url="legacyCreateUrl"
-            type="success"
-          />
+          <div class="flex items-center gap-2">
+            <BaseButton
+              v-if="canManage"
+              icon="announcement"
+              :label="t('Add an announcement')"
+              only-icon
+              size="large"
+              :route="addRoute"
+              type="success"
+            />
+
+            <BaseButton
+              :icon="isSearchVisible ? 'close' : 'search'"
+              :label="isSearchVisible ? t('Cancel') : t('Search')"
+              only-icon
+              size="large"
+              type="primary"
+              @click="toggleSearch"
+            />
+          </div>
         </template>
       </BaseToolbar>
 
       <form
-        class="flex flex-col gap-4 md:flex-row md:items-end"
+        v-if="isSearchVisible"
+        class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
         @submit.prevent="applyFilters"
       >
-        <BaseInputText
-          id="announcement-title-filter"
-          v-model="pendingTitleFilter"
-          class="w-full md:flex-1"
-          :label="t('Title')"
-          name="announcement_title_filter"
-        />
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div class="min-w-0">
+            <BaseInputText
+              id="announcement-title-filter"
+              v-model="pendingTitleFilter"
+              class="w-full"
+              :label="t('Title')"
+              name="announcement_title_filter"
+            />
+          </div>
 
-        <BaseSelect
-          id="announcement-author-filter"
-          v-model="pendingAuthorFilter"
-          :allow-clear="true"
-          class="w-full md:flex-1"
-          :label="t('Users')"
-          name="announcement_author_filter"
-          option-label="label"
-          option-value="id"
-          :options="authors"
-        />
+          <div class="min-w-0">
+            <BaseSelect
+              id="announcement-author-filter"
+              v-model="pendingAuthorFilter"
+              :allow-clear="true"
+              class="w-full"
+              :label="t('Users')"
+              name="announcement_author_filter"
+              option-label="label"
+              option-value="id"
+              :options="authors"
+            />
+          </div>
+        </div>
 
-        <BaseButton
-          icon="search"
-          is-submit
-          :label="t('Search')"
-          type="primary"
-        />
+        <div class="mt-4 flex flex-wrap justify-end gap-2">
+          <BaseButton
+            icon="search"
+            is-submit
+            :label="t('Search')"
+            type="primary"
+          />
+
+          <BaseButton
+            v-if="hasActiveFilters"
+            icon="close"
+            :label="t('Clear')"
+            type="secondary"
+            @click="clearFilters"
+          />
+
+          <BaseButton
+            v-else
+            icon="close"
+            :label="t('Cancel')"
+            type="plain"
+            @click="toggleSearch"
+          />
+        </div>
       </form>
 
       <BaseTable
@@ -161,17 +198,29 @@
           </template>
         </Column>
 
-        <Column :header="t('Detail')">
+        <Column :header="t('Actions')">
           <template #body="{ data }">
-            <BaseButton
-              icon="eye-on"
-              :label="t('View')"
-              only-icon
-              :route="getDetailRoute(data)"
-              size="small"
-              :tooltip="t('View')"
-              type="primary-text"
-            />
+            <div class="flex items-center gap-2">
+              <BaseButton
+                icon="eye-on"
+                :label="t('View')"
+                only-icon
+                :route="getDetailRoute(data)"
+                size="small"
+                :tooltip="t('View')"
+                type="primary-text"
+              />
+              <BaseButton
+                v-if="data.canEdit"
+                icon="edit"
+                :label="t('Edit')"
+                only-icon
+                :route="getEditRoute(data)"
+                size="small"
+                :tooltip="t('Edit')"
+                type="secondary-text"
+              />
+            </div>
           </template>
         </Column>
       </BaseTable>
@@ -200,10 +249,13 @@ const authors = ref([])
 const canManage = ref(false)
 const isLoading = ref(false)
 const errorMessage = ref("")
+const isSearchVisible = ref(false)
 const pendingTitleFilter = ref("")
 const pendingAuthorFilter = ref("")
 const titleFilter = ref("")
 const authorFilter = ref("")
+
+const hasActiveFilters = computed(() => titleFilter.value.trim() !== "" || Number(authorFilter.value || 0) > 0)
 
 const filteredAnnouncements = computed(() => {
   const normalizedTitle = titleFilter.value.trim().toLocaleLowerCase()
@@ -219,25 +271,17 @@ const filteredAnnouncements = computed(() => {
   })
 })
 
-const legacyCreateUrl = computed(() => {
-  const params = new URLSearchParams()
-  params.set("action", "add")
-
-  for (const key of ["cid", "sid", "gid", "origin", "page", "remind_inactive", "remindallinactives"]) {
-    const value = getQueryValue(route.query[key])
-    if (value !== undefined && value !== null && value !== "" && Number(value) !== 0) {
-      params.set(key, String(value))
-    }
-  }
-
-  return `/main/announcements/announcements.php?${params.toString()}`
-})
+const addRoute = computed(() => ({
+  name: "AnnouncementAdd",
+  params: { node: route.params.node },
+  query: getContextParams(["remind_inactive", "remindallinactives", "since"]),
+}))
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
 }
 
-function getContextParams() {
+function getContextParams(extraKeys = []) {
   const params = {
     cid: getQueryValue(route.query.cid),
   }
@@ -252,7 +296,7 @@ function getContextParams() {
     params.gid = gid
   }
 
-  for (const key of ["origin", "page", "isStudentView"]) {
+  for (const key of ["origin", "page", "isStudentView", ...extraKeys]) {
     if (Object.prototype.hasOwnProperty.call(route.query, key)) {
       params[key] = getQueryValue(route.query[key])
     }
@@ -264,6 +308,17 @@ function getContextParams() {
 function getDetailRoute(announcement) {
   return {
     name: "AnnouncementDetail",
+    params: {
+      node: route.params.node,
+      id: announcement.id,
+    },
+    query: getContextParams(),
+  }
+}
+
+function getEditRoute(announcement) {
+  return {
+    name: "AnnouncementEdit",
     params: {
       node: route.params.node,
       id: announcement.id,
@@ -288,9 +343,21 @@ function formatDate(value) {
   }).format(date)
 }
 
+function toggleSearch() {
+  isSearchVisible.value = !isSearchVisible.value
+}
+
 function applyFilters() {
   titleFilter.value = pendingTitleFilter.value
   authorFilter.value = pendingAuthorFilter.value
+  isSearchVisible.value = false
+}
+
+function clearFilters() {
+  pendingTitleFilter.value = ""
+  pendingAuthorFilter.value = ""
+  titleFilter.value = ""
+  authorFilter.value = ""
 }
 
 async function loadAnnouncements() {

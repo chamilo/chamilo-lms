@@ -14,4 +14,20 @@ export default {
   async getItem(id, params = {}) {
     return await baseService.get(`/api/announcement/${id}`, cleanParams(params))
   },
+
+  async getForm(params = {}) {
+    return await baseService.get("/api/announcement/form", cleanParams(params))
+  },
+
+  async preview(payload, params = {}) {
+    return await baseService.post("/api/announcement/preview", payload, {}, { params: cleanParams(params) })
+  },
+
+  async create(payload, params = {}) {
+    return await baseService.post("/api/announcement", payload, {}, { params: cleanParams(params) })
+  },
+
+  async update(id, payload, params = {}) {
+    return await baseService.put(`/api/announcement/${id}`, payload, { params: cleanParams(params) })
+  },
 }

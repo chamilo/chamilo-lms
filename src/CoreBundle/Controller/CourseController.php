@@ -818,12 +818,16 @@ class CourseController extends ToolBaseController
 
         $user = $this->userHelper->getCurrent();
 
+        if (!$this->isGranted(CourseVoter::VIEW, $course)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $fieldsRepo = $em->getRepository(ExtraField::class);
 
         /** @var TagRepository $tagRepo */
         $tagRepo = $em->getRepository(Tag::class);
 
-        $courseDescriptions = $courseDescriptionRepository->getResourcesByCourse($course)->getQuery()->getResult();
+        $courseDescriptions = $courseDescriptionRepository->findAllInCourseForCatalogue($course);
 
         $courseValues = new ExtraFieldValue('course');
 
@@ -837,7 +841,7 @@ class CourseController extends ToolBaseController
                 'complete_name' => UserManager::formatUserFullName($teacher),
                 'image' => $illustrationRepository->getIllustrationUrl($teacher),
                 'diploma' => $teacher->getDiplomas(),
-                'openarea' => $teacher->getOpenarea(),
+                'openarea' => $this->sanitizeCourseAboutHtml((string) $teacher->getOpenarea()),
             ];
 
             $teachersData[] = $userData;
@@ -857,10 +861,21 @@ class CourseController extends ToolBaseController
         $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = '';
         $courseMaterial = $courseResources = $courseAssessment = '';
         $courseCustom = [];
+        $descriptionSections = [];
+
         foreach ($courseDescriptions as $descriptionTool) {
+            if (!$descriptionTool instanceof CCourseDescription) {
+                continue;
+            }
+
+            $section = $this->buildCourseAboutDescriptionSection($descriptionTool);
+            if (null !== $section) {
+                $descriptionSections[] = $section;
+            }
+
             switch ($descriptionTool->getDescriptionType()) {
                 case CCourseDescription::TYPE_DESCRIPTION:
-                    $courseDescription = $descriptionTool->getContent();
+                    $courseDescription = $section['content'] ?? '';
 
                     break;
 
@@ -901,6 +916,10 @@ class CourseController extends ToolBaseController
             }
         }
 
+        if ('' === $courseDescription && [] !== $descriptionSections) {
+            $courseDescription = (string) ($descriptionSections[0]['content'] ?? '');
+        }
+
         $topics = [
             'objectives' => $courseObjectives,
             'topics' => $courseTopics,
@@ -924,6 +943,7 @@ class CourseController extends ToolBaseController
         $params = [
             'course' => $course,
             'description' => $courseDescription,
+            'description_sections' => $descriptionSections,
             'image' => $image,
             'syllabus' => $topics,
             'tags' => $courseTags,
@@ -941,16 +961,51 @@ class CourseController extends ToolBaseController
             'allow_subscribe' => $allowSubscribe,
         ];
 
-        $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
+        $metaInfo = '<meta property="og:url" content="'.htmlspecialchars($urlCourse, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
         $metaInfo .= '<meta property="og:type" content="website" />';
-        $metaInfo .= '<meta property="og:title" content="'.$course->getTitle().'" />';
-        $metaInfo .= '<meta property="og:description" content="'.strip_tags($courseDescription).'" />';
-        $metaInfo .= '<meta property="og:image" content="'.$image.'" />';
+        $metaInfo .= '<meta property="og:title" content="'.htmlspecialchars($course->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
+        $metaInfo .= '<meta property="og:description" content="'.htmlspecialchars(strip_tags($courseDescription), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
+        $metaInfo .= '<meta property="og:image" content="'.htmlspecialchars($image, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
 
         $htmlHeadXtra[] = $metaInfo;
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
         return $this->render('@ChamiloCore/Course/about.html.twig', $params);
+    }
+
+    private function buildCourseAboutDescriptionSection(CCourseDescription $description): ?array
+    {
+        $title = trim(strip_tags((string) $description->getTitle()));
+        $content = $this->sanitizeCourseAboutHtml((string) $description->getContent());
+
+        if ('' === $title && '' === strip_tags($content)) {
+            return null;
+        }
+
+        return [
+            'iid' => $description->getIid(),
+            'title' => $title,
+            'content' => $content,
+            'type' => $description->getDescriptionType(),
+            'progress' => $description->getProgress(),
+        ];
+    }
+
+    private function sanitizeCourseAboutHtml(string $content): string
+    {
+        $content = trim($content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        if (\class_exists('Security')) {
+            $userStatus = \defined('STUDENT') ? \STUDENT : null;
+
+            return (string) \Security::remove_XSS($content, $userStatus);
+        }
+
+        return $content;
     }
 
     #[Route('/{id}/welcome', name: 'chamilo_core_course_welcome')]

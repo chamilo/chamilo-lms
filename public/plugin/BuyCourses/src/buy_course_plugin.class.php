@@ -101,6 +101,7 @@ class BuyCoursesPlugin extends Plugin
     public const AUDIT_ACTION_SERVICE_REPLACED_BY_UPGRADE = 'service_replaced_by_upgrade';
     public const AUDIT_ACTION_RENEWAL_ENABLED = 'renewal_enabled';
     public const AUDIT_ACTION_RENEWAL_CANCELLED = 'renewal_cancelled';
+    public const AUDIT_ACTION_RENEWAL_RESTORED = 'renewal_restored';
     public const AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED = 'renewal_payment_succeeded';
     public const AUDIT_ACTION_RENEWAL_PAYMENT_FAILED = 'renewal_payment_failed';
 
@@ -1190,6 +1191,7 @@ class BuyCoursesPlugin extends Plugin
             self::AUDIT_ACTION_SERVICE_REPLACED_BY_UPGRADE => $this->get_lang('AuditActionServiceReplacedByUpgrade'),
             self::AUDIT_ACTION_RENEWAL_ENABLED => $this->get_lang('AuditActionRenewalEnabled'),
             self::AUDIT_ACTION_RENEWAL_CANCELLED => $this->get_lang('AuditActionRenewalCancelled'),
+            self::AUDIT_ACTION_RENEWAL_RESTORED => $this->get_lang('AuditActionRenewalRestored'),
             self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED => $this->get_lang('AuditActionRenewalPaymentSucceeded'),
             self::AUDIT_ACTION_RENEWAL_PAYMENT_FAILED => $this->get_lang('AuditActionRenewalPaymentFailed'),
             default => $action,

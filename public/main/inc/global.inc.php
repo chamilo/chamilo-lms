@@ -143,7 +143,10 @@ if ($isCli) {
             throw $exception;
         }
 
-        error_log($exception->getTraceAsString());
+        // Do not pollute the error log with expected client errors (403/404 from CidReqListener, voters, etc.)
+        if (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {
+            error_log($exception->getTraceAsString());
+        }
 
         $event = new ExceptionEvent(
             $kernel,

@@ -161,7 +161,7 @@
                             <h2 class="text-lg font-semibold text-gray-90">{{ 'Upgrade'|get_plugin_lang('BuyCoursesPlugin') }}</h2>
                             <p class="mt-1 text-sm text-gray-50">{{ 'UpgradeFromService'|get_plugin_lang('BuyCoursesPlugin')|format(upgrade_offer.source_service_name|e) }}</p>
                             <dl class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                                <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(upgrade_offer.remaining_days) }}</dt><dd class="mt-2 font-semibold text-gray-90">{{ upgrade_offer.source_date_end|e }}</dd></div>
+                                <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(upgrade_offer.remaining_days) }}</dt><dd class="mt-2 font-semibold text-gray-90">{{ upgrade_offer.source_date_end_formatted|e }}</dd></div>
                                 <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="mt-2 font-semibold text-success">- {{ upgrade_offer.credit_amount_formatted }}</dd></div>
                                 <div class="rounded-2xl bg-white p-4"><dt class="text-xs font-semibold uppercase text-gray-50">{{ 'UpgradePriceToday'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="mt-2 font-semibold text-primary">{{ service.upgrade_total_price_formatted }}</dd></div>
                                 {% if upgrade_offer.source_recurring_enabled %}

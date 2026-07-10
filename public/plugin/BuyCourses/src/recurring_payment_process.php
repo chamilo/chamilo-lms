@@ -231,7 +231,7 @@ switch ($action) {
             );
         }
 
-        $plugin->updateServiceSaleGatewayData(
+        if ($plugin->updateServiceSaleGatewayData(
             $orderId,
             [
                 'recurring_gateway' => 'paypal',
@@ -239,7 +239,20 @@ switch ($action) {
                 'recurring_profile_id' => $newProfileId,
                 'next_charge_date' => $billingStart->format('Y-m-d H:i:s'),
             ]
-        );
+        )) {
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_ENABLED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $orderId,
+                [
+                    'gateway' => 'paypal',
+                    'profile_id' => $newProfileId,
+                    'next_charge_date' => $billingStart->format('Y-m-d H:i:s'),
+                ],
+                $currentUserId,
+                BuyCoursesPlugin::AUDIT_SOURCE_USER
+            );
+        }
 
         Session::erase('bc_recurring_service_sale_id');
         Session::erase('bc_recurring_action');
@@ -326,7 +339,23 @@ switch ($action) {
                     $gatewayData['date_end'] = $plannedRenewalDate;
                 }
 
-                $plugin->updateServiceSaleGatewayData($orderId, $gatewayData);
+                if (!$plugin->updateServiceSaleGatewayData($orderId, $gatewayData)) {
+                    $respondWithError($plugin->get_lang('CancelRenewalGatewayFailed'));
+                }
+
+                $plugin->recordAudit(
+                    BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED,
+                    BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                    $orderId,
+                    [
+                        'gateway' => 'stripe',
+                        'subscription_id' => $subscriptionId,
+                        'planned_renewal_date' => $plannedRenewalDate,
+                        'cancel_at_period_end' => true,
+                    ],
+                    $currentUserId,
+                    BuyCoursesPlugin::AUDIT_SOURCE_USER
+                );
             } catch (Throwable $exception) {
                 error_log(
                     '[BuyCourses][Recurring] Stripe cancellation failed for service sale '.$orderId.
@@ -383,7 +412,22 @@ switch ($action) {
                 $gatewayData['next_charge_date'] = $plannedRenewalDate;
             }
 
-            $plugin->updateServiceSaleGatewayData($orderId, $gatewayData);
+            if (!$plugin->updateServiceSaleGatewayData($orderId, $gatewayData)) {
+                $respondWithError($plugin->get_lang('CancelRenewalGatewayFailed'));
+            }
+
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $orderId,
+                [
+                    'gateway' => 'paypal',
+                    'profile_id' => $profileId,
+                    'planned_renewal_date' => $plannedRenewalDate,
+                ],
+                $currentUserId,
+                BuyCoursesPlugin::AUDIT_SOURCE_USER
+            );
 
             $respondWithSuccess($plugin->get_lang('RenewalCancelledSuccessfully'));
         }

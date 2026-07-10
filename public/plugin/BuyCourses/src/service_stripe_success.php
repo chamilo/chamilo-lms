@@ -76,7 +76,18 @@ if ($serviceSaleId > 0 && '' !== $checkoutSessionId && $currentUserId > 0) {
                         }
 
                         $plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
-                        if ($plugin->completeServiceSale($serviceSaleId)) {
+                        if ($plugin->completeServiceSale(
+                            $serviceSaleId,
+                            BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+                            $currentUserId,
+                            [
+                                'gateway' => 'stripe',
+                                'checkout_session_id' => $checkoutSessionId,
+                                'subscription_id' => $subscriptionId,
+                                'transaction_id' => $paymentIntentId,
+                                'trigger' => 'checkout_return',
+                            ]
+                        )) {
                             $completedServiceSale = $plugin->getServiceSale($serviceSaleId);
                             $nextChargeDate = trim((string) ($completedServiceSale['date_end'] ?? ''));
 

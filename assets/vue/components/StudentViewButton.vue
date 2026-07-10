@@ -53,7 +53,7 @@ const showButton = computed(
   () =>
     securityStore.isAuthenticated &&
     cidReqStore.course &&
-    (securityStore.isCourseAdmin || securityStore.isAdmin || isCoach.value) &&
+    (securityStore.isCourseAdmin || isCoach.value) &&
     platformConfigStore.getSetting("course.student_view_enabled") === "true",
 )
 </script>

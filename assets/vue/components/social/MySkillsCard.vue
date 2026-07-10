@@ -126,9 +126,9 @@ const skills = ref([])
 const user = inject("social-user")
 
 const securityStore = useSecurityStore()
-const { isAdmin, isHRM, isSessionAdmin } = storeToRefs(securityStore)
+const { isHRM } = storeToRefs(securityStore)
 
-const canSeeSkillWheel = computed(() => isAdmin.value || isHRM.value || isSessionAdmin.value)
+const canSeeSkillWheel = computed(() => securityStore.isGranted("ROLE_SESSION_MANAGER") || isHRM.value)
 const defaultBadge = "/img/icons/32/badges-default.png"
 const skillsRankingUrl = computed(() => "/skill/ranking")
 

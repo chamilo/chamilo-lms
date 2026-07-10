@@ -71,10 +71,19 @@ if ($saleId > 0) {
     }
 }
 
-$purchaseUpsaleChainBlock = !$isPurchasedContext
+$isServiceActive = $plugin->isServiceActive($service);
+if (!$isServiceActive && !$isPurchasedContext && !api_is_platform_admin()) {
+    $renderPageMessage(
+        $plugin->get_lang('ServiceNotFound'),
+        $plugin->get_lang('ServiceInactiveForPurchase'),
+        404
+    );
+}
+
+$purchaseUpsaleChainBlock = $isServiceActive && !$isPurchasedContext
     ? $plugin->getCurrentUserServicePurchaseUpsaleChainBlock($serviceId)
     : null;
-$upgradeOffer = !$isPurchasedContext && null === $purchaseUpsaleChainBlock
+$upgradeOffer = $isServiceActive && !$isPurchasedContext && null === $purchaseUpsaleChainBlock
     ? $plugin->getCurrentUserServiceUpgradeOffer($serviceId)
     : null;
 $plugin->applyServiceUpgradeOfferToPricing($service, $upgradeOffer);
@@ -125,11 +134,13 @@ $canBuyService = $canCurrentUserBuyService
     && null === $purchaseUpsaleChainBlock
     && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 $buyerRoleNotice = null;
-$purchaseBlockNotice = null !== $purchaseUpsaleChainBlock
-    ? $plugin->formatServicePurchaseUpsaleChainBlockMessage($purchaseUpsaleChainBlock)
-    : null;
+$purchaseBlockNotice = !$isServiceActive
+    ? $plugin->get_lang('ServiceInactiveForPurchase')
+    : (null !== $purchaseUpsaleChainBlock
+        ? $plugin->formatServicePurchaseUpsaleChainBlockMessage($purchaseUpsaleChainBlock)
+        : null);
 
-if (!$canCurrentUserBuyService && !$isPurchasedContext && !$hasBlockingSale) {
+if ($isServiceActive && !$canCurrentUserBuyService && !$isPurchasedContext && !$hasBlockingSale) {
     $buyerRoleNotice = $plugin->get_lang('ServicesOnlyForTeachers');
 }
 

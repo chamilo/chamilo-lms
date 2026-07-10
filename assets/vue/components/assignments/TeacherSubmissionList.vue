@@ -320,7 +320,7 @@ const taskGraderEnabled = computed(() => {
 
 const canUseAiTaskGrader = computed(() => {
   // Only teachers/admins and not in student view
-  const canEdit = !!(securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isAdmin)
+  const canEdit = !!(securityStore.isTeacher || securityStore.isCourseAdmin)
   const notStudentView = !platform.isStudentViewActive
   return !!(canEdit && notStudentView && aiHelpersEnabled.value && taskGraderEnabled.value)
 })

@@ -564,9 +564,7 @@ const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 
-const isTeacherUser = computed(
-  () => securityStore.isAdmin || securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isHRM,
-)
+const isTeacherUser = computed(() => securityStore.isGranted("ROLE_TEACHER") || securityStore.isCourseAdmin)
 const isTeacherUI = computed(() => isTeacherUser.value && !platformConfigStore.isStudentViewActive)
 const isStudentUI = computed(() => !isTeacherUser.value || platformConfigStore.isStudentViewActive)
 

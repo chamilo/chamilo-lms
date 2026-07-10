@@ -328,6 +328,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
     $servicesTable->addColumn('upsale_from_id', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
     $servicesTable->addColumn('applies_to', Types::INTEGER);
     $servicesTable->addColumn('owner_id', Types::INTEGER);
+    $servicesTable->addColumn('active', Types::BOOLEAN, ['default' => true]);
     $servicesTable->addColumn('visibility', Types::INTEGER);
     $servicesTable->addColumn('video_url', Types::STRING);
     $servicesTable->addColumn('image', Types::STRING);
@@ -437,6 +438,28 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
         ['id'],
         ['onDelete' => 'CASCADE']
     );
+}
+
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_AUDIT))) {
+    $auditTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_AUDIT));
+    $auditTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $auditTable->addColumn('subject_user_id', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
+    $auditTable->addColumn('action', Types::STRING, ['length' => 64]);
+    $auditTable->addColumn('object_type', Types::STRING, ['length' => 64]);
+    $auditTable->addColumn('object_id', Types::INTEGER, ['unsigned' => true]);
+    $auditTable->addColumn('source', Types::STRING, ['length' => 32]);
+    $auditTable->addColumn('created_at', Types::DATETIME_MUTABLE);
+    $auditTable->addColumn('ip_address', Types::STRING, ['length' => 45, 'notnull' => false]);
+    $auditTable->addColumn('data_json', Types::TEXT, ['notnull' => false]);
+    $auditTable->setPrimaryKey(['id']);
+    $auditTable->addIndex(['subject_user_id'], 'idx_buycourses_audit_subject');
+    $auditTable->addIndex(['action'], 'idx_buycourses_audit_action');
+    $auditTable->addIndex(['object_type', 'object_id'], 'idx_buycourses_audit_object');
+    $auditTable->addIndex(['created_at'], 'idx_buycourses_audit_created_at');
 }
 
 if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_CULQI))) {

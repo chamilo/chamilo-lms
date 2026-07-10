@@ -338,10 +338,10 @@ $paymentTypeLabels = $plugin->getPaymentTypes();
 foreach ($servicesSales as &$sale) {
     $sale['total_discount'] = '';
     $sale['coupon_code'] = '';
-    $sale['complete_user_name'] = api_get_person_name(
-        $sale['firstname'] ?? '',
-        $sale['lastname'] ?? ''
-    );
+    $sale['service_name'] = (string) ($sale['service']['name'] ?? $sale['name'] ?? '');
+    $sale['complete_user_name'] = (string) ($sale['buyer']['name'] ?? '');
+    $sale['username'] = (string) ($sale['buyer']['username'] ?? '');
+    $sale['email'] = (string) ($sale['buyer']['email'] ?? '');
     $sale['status_label'] = $saleStatuses[$sale['status']] ?? ($sale['status'] ?? '');
     $sale['payment_type_label'] = $paymentTypeLabels[(int) ($sale['payment_type'] ?? 0)] ?? '';
     $sale['total_price'] = $plugin->getPriceWithCurrencyFromIsoCode(
@@ -367,6 +367,7 @@ if ('' !== $searchUser) {
         static function (array $sale) use ($normalizedSearch): bool {
             $haystacks = [
                 (string) ($sale['complete_user_name'] ?? ''),
+                (string) ($sale['username'] ?? ''),
                 (string) ($sale['email'] ?? ''),
                 (string) ($sale['service_name'] ?? ''),
                 (string) ($sale['reference'] ?? ''),

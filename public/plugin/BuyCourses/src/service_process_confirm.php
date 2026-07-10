@@ -39,6 +39,33 @@ if ($currentUserId <= 0 || $currentUserId !== $saleBuyerId) {
 $userInfo = api_get_user_info($saleBuyerId);
 
 $service = $serviceSale['service'];
+if (!$plugin->isServiceActive($service)) {
+    if (BuyCoursesPlugin::SERVICE_STATUS_PENDING === (int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_PENDING)) {
+        $plugin->cancelServiceSale(
+            $serviceSaleId,
+            BuyCoursesPlugin::AUDIT_SOURCE_SYSTEM,
+            $currentUserId,
+            [
+                'trigger' => 'inactive_service_checkout',
+            ]
+        );
+    }
+
+    Session::erase('bc_service_sale_id');
+    Session::erase('bc_coupon_id');
+
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('ServiceInactiveForPurchase'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+    exit;
+}
+
 $purchaseUpsaleChainBlock = $plugin->getServicePurchaseUpsaleChainBlock(
     (int) ($service['id'] ?? 0),
     $currentUserId
@@ -206,7 +233,19 @@ if (!function_exists('buycoursesCompleteStripeServiceCheckout')) {
             $plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
         }
 
-        if (!$plugin->completeServiceSale($serviceSaleId)) {
+        $saleBuyerId = (int) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0);
+        if (!$plugin->completeServiceSale(
+            $serviceSaleId,
+            BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+            $saleBuyerId > 0 ? $saleBuyerId : null,
+            [
+                'gateway' => 'stripe',
+                'checkout_session_id' => $checkoutSessionId,
+                'subscription_id' => $subscriptionId,
+                'transaction_id' => $paymentIntentId,
+                'trigger' => 'checkout_reconciliation',
+            ]
+        )) {
             return false;
         }
 

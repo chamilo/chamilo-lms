@@ -122,7 +122,15 @@ class IndexController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_TEACHER')) {
+        // Teachers and coaches of the current course may toggle too. The contextual
+        // roles are resolved from the cid/sid query params by CidReqListener +
+        // CourseContextRoleListener; ROLE_ADMIN reaches them through the role
+        // hierarchy, so platform admins are covered as well.
+        if (
+            !$this->isGranted('ROLE_ADMIN')
+            && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            && !$this->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+        ) {
             throw $this->createAccessDeniedException();
         }
 

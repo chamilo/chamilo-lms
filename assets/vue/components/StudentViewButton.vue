@@ -33,7 +33,10 @@ const studentViewState = computed({
     let isEnabled
 
     try {
-      const response = await permissionService.toogleStudentView()
+      const response = await permissionService.toogleStudentView({
+        cid: cidReqStore.course?.id,
+        sid: cidReqStore.session?.id,
+      })
 
       isEnabled = response.toLowerCase() === "studentview"
     } catch (e) {

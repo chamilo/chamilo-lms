@@ -235,6 +235,22 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $response->eventEndDate = $data->eventEndDate;
         $response->reminders = $data->reminders;
 
+        $trackingDetails = ['save'];
+        if ($data->scheduleByDate) {
+            $trackingDetails[] = 'scheduled';
+        }
+        if ($data->addToCalendar) {
+            $trackingDetails[] = 'calendar';
+        }
+
+        $this->registerAnnouncementEventLog(
+            $isNew ? 'add' : 'modify',
+            $course,
+            $session,
+            (int) $announcement->getIid(),
+            details: implode(';', $trackingDetails),
+        );
+
         return $response;
     }
 

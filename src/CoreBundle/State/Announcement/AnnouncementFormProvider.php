@@ -145,10 +145,13 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
                 $result->sendToUsersInSessions = $schedule['sendToUsersInSessions'];
             }
 
+            $this->registerAnnouncementEventLog('modify', $course, $session, $announcementId, details: 'form');
+
             return $result;
         }
 
         $this->applyReminderDefaults($result, $request, $course, $session, $group);
+        $this->registerAnnouncementEventLog('add', $course, $session, details: 'form');
 
         return $result;
     }

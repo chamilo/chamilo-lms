@@ -79,6 +79,13 @@ final readonly class AnnouncementAttachmentController
         );
 
         $mimeType = $attachment->getResourceNode()?->getFirstResourceFile()?->getMimeType();
+        $this->registerAnnouncementEventLog(
+            'download_attachment',
+            $course,
+            $session,
+            $announcementId,
+            $attachmentId,
+        );
 
         return new Response($content, Response::HTTP_OK, [
             'Content-Disposition' => $disposition,
@@ -160,6 +167,14 @@ final readonly class AnnouncementAttachmentController
             $created[] = $this->normalizeAttachment($announcement, $attachment, $course, $session, $group);
         }
 
+        $this->registerAnnouncementEventLog(
+            'upload_attachment',
+            $course,
+            $session,
+            $announcementId,
+            details: (string) \count($created),
+        );
+
         return new JsonResponse([
             'attachments' => $created,
         ], Response::HTTP_CREATED);
@@ -187,6 +202,13 @@ final readonly class AnnouncementAttachmentController
             $this->entityManager->remove($attachment);
         }
         $this->entityManager->flush();
+        $this->registerAnnouncementEventLog(
+            'delete_attachment',
+            $course,
+            $session,
+            $announcementId,
+            $attachmentId,
+        );
 
         return new JsonResponse([
             'success' => true,

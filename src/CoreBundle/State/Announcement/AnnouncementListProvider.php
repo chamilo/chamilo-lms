@@ -210,6 +210,8 @@ final readonly class AnnouncementListProvider implements ProviderInterface
         $result->authors = $authors;
         $result->totalItems = \count($items);
 
+        $this->registerAnnouncementEventLog('list', $course, $session);
+
         return $result;
     }
 

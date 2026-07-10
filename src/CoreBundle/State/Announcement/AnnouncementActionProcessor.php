@@ -106,6 +106,13 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
                 $this->entityManager->flush();
                 $result->id = (int) $announcement->getIid();
                 $result->affectedIds = [(int) $announcement->getIid()];
+                $this->registerAnnouncementEventLog(
+                    'set_visibility',
+                    $course,
+                    $session,
+                    (int) $announcement->getIid(),
+                    details: ResourceLink::VISIBILITY_PUBLISHED === $visibility ? 'visible' : 'invisible',
+                );
 
                 return $result;
 
@@ -123,6 +130,13 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
                 $this->moveAnnouncement($announcement, $course, $session, $group, $data->direction);
                 $result->id = (int) $announcement->getIid();
                 $result->affectedIds = [(int) $announcement->getIid()];
+                $this->registerAnnouncementEventLog(
+                    'move',
+                    $course,
+                    $session,
+                    (int) $announcement->getIid(),
+                    details: $data->direction,
+                );
 
                 return $result;
 
@@ -139,6 +153,7 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
                 $this->normalizeDisplayOrder($course, $session, $group);
                 $result->id = $announcementId;
                 $result->affectedIds = [$announcementId];
+                $this->registerAnnouncementEventLog('delete', $course, $session, $announcementId);
 
                 return $result;
 
@@ -159,6 +174,13 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
                 $this->entityManager->flush();
                 $this->normalizeDisplayOrder($course, $session, $group);
                 $result->affectedIds = $ids;
+                $this->registerAnnouncementEventLog(
+                    'delete',
+                    $course,
+                    $session,
+                    details: 'selected',
+                    info: implode(',', $ids),
+                );
 
                 return $result;
 
@@ -198,6 +220,12 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
                 }
                 $this->entityManager->flush();
                 $result->affectedIds = $affectedIds;
+                $this->registerAnnouncementEventLog(
+                    'delete_all',
+                    $course,
+                    $session,
+                    details: (string) \count($affectedIds),
+                );
 
                 return $result;
         }

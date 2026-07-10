@@ -534,6 +534,44 @@ trait AnnouncementAccessHelperTrait
             || \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
+    /**
+     * Keep the legacy track_e_access_complete action log for the Vue/API tool.
+     * Tracking failures must never block an announcement request.
+     */
+    private function registerAnnouncementEventLog(
+        string $action,
+        Course $course,
+        ?Session $session = null,
+        int $announcementId = 0,
+        int $detailId = 0,
+        string $details = '',
+        string $info = '',
+    ): void {
+        if (!class_exists(\Event::class)) {
+            return;
+        }
+
+        $logInfo = [
+            'tool' => \defined('TOOL_ANNOUNCEMENT') ? \constant('TOOL_ANNOUNCEMENT') : 'announcement',
+            'tool_id' => max(0, $announcementId),
+            'tool_id_detail' => max(0, $detailId),
+            'action' => mb_substr(trim($action), 0, 255),
+            'action_details' => mb_substr(trim($details), 0, 255),
+            'c_id' => (int) $course->getId(),
+            'session_id' => (int) ($session?->getId() ?? 0),
+        ];
+
+        if ('' !== $info) {
+            $logInfo['info'] = $info;
+        }
+
+        try {
+            \Event::registerLog($logInfo);
+        } catch (\Throwable) {
+            // Tracking must never break announcement actions.
+        }
+    }
+
     private function isStudentView(Request $request): bool
     {
         if ($request->query->has('isStudentView')) {

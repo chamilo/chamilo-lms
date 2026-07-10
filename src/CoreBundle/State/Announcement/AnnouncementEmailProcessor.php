@@ -185,6 +185,22 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
         $result->success = 0 === $failedCount && $sentCount > 0;
         $result->message = $this->buildResultMessage($result);
 
+        $status = $result->success ? 'success' : ($result->partial ? 'partial' : 'failed');
+        $this->registerAnnouncementEventLog(
+            'send_email',
+            $course,
+            $session,
+            (int) $announcement->getIid(),
+            details: $status,
+            info: sprintf(
+                'sent=%d;failed=%d;internal=%d;internal_created=%d',
+                $result->sentCount,
+                $result->failedCount,
+                $result->internalMessageCount,
+                $result->internalMessageCreatedCount,
+            ),
+        );
+
         return $result;
     }
 

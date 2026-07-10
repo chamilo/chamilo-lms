@@ -158,6 +158,8 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
             $canEdit,
         );
 
+        $this->registerAnnouncementEventLog('view', $course, $session, $announcementId);
+
         return $result;
     }
 

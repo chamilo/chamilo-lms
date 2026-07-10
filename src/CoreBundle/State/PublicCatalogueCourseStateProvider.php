@@ -158,6 +158,18 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             $content = $matches[1];
         }
 
-        return trim($content);
+        $content = trim($content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        if (\class_exists('Security')) {
+            $userStatus = \defined('STUDENT') ? \STUDENT : null;
+
+            return (string) \Security::remove_XSS($content, $userStatus);
+        }
+
+        return $content;
     }
 }

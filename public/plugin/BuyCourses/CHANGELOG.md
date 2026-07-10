@@ -8,10 +8,14 @@ completed purchases, recurring subscriptions, and their granted benefits continu
 working until their normal end date. Duplicated services start inactive so they can
 be reviewed before publication.
 
-ACTION REQUIRED for installations updated from an earlier version: load
-`[your-host]/plugin/BuyCourses/update.php` as a platform administrator so the new
-`plugin_buycourses_services.active` column is created. Existing services are marked
-active by default and existing sale records are not modified.
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new `plugin_buycourses_services.active` column is
+created. Existing services are marked active by default and existing sale records
+are not modified. Either load `[your-host]/plugin/BuyCourses/update.php` in your
+browser as a platform administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_services ADD active TINYINT(1) NOT NULL DEFAULT 1;
+```
 
 v7.8 - 2026-07-09
 ====
@@ -22,10 +26,29 @@ Feature: the service sale information modal now includes the audit history, show
 
 Fix: the service sales report now uses the real `buy_date` field for "Order date" instead of the nonexistent `date` field, which previously caused cancelled orders to appear with the current date whenever the page was refreshed.
 
-ACTION REQUIRED for installations updated from an earlier version: load
-`[your-host]/plugin/BuyCourses/update.php` as a platform administrator so the new
-`plugin_buycourses_audit` table is created. The update is idempotent and does not
-modify existing sale records.
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new `plugin_buycourses_audit` table is created. The
+update is idempotent and does not modify existing sale records. Either load
+`[your-host]/plugin/BuyCourses/update.php` in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+CREATE TABLE IF NOT EXISTS plugin_buycourses_audit (
+    id int unsigned NOT NULL AUTO_INCREMENT,
+    subject_user_id int unsigned NULL,
+    action varchar(64) NOT NULL,
+    object_type varchar(64) NOT NULL,
+    object_id int unsigned NOT NULL,
+    source varchar(32) NOT NULL,
+    created_at datetime NOT NULL,
+    ip_address varchar(45) NULL,
+    data_json longtext NULL,
+    PRIMARY KEY (id),
+    KEY idx_buycourses_audit_subject (subject_user_id),
+    KEY idx_buycourses_audit_action (action),
+    KEY idx_buycourses_audit_object (object_type, object_id),
+    KEY idx_buycourses_audit_created_at (created_at)
+);
+```
 
 v7.7 - 2026-07-08
 ====

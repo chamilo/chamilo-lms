@@ -92,18 +92,15 @@ final class CourseDescriptionXapianIndexer
 
         $existingDocId = $existingRef?->getSearchDid();
 
-        if (null !== $existingDocId) {
-            try {
-                $this->xapianIndexService->deleteDocument($existingDocId);
-            } catch (Throwable) {
-                // Best-effort delete
-            }
-        }
-
         $languageIso = $this->resolveLanguageIso($resourceNode);
 
         try {
-            $docId = $this->xapianIndexService->indexDocument($fields, $terms, $languageIso);
+            $docId = $this->xapianIndexService->indexDocument(
+                $fields,
+                $terms,
+                $languageIso,
+                replaceDocumentId: $existingDocId,
+            );
         } catch (Throwable $exception) {
             error_log('[Xapian] Course description indexing failed: '.$exception->getMessage());
 

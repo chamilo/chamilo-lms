@@ -63,6 +63,7 @@ final class XapianIndexService
      * @param string[]            $terms             Optional list of additional terms to add to the document
      * @param string|null         $language          Language used for stemming (defaults to english)
      * @param array<string,mixed> $fieldValuesByCode Fielded values, e.g. ['k' => '...', 't' => '...']
+     * @param int|null            $replaceDocumentId Existing Xapian document id to replace atomically
      *
      * @return int The Xapian internal document id
      *
@@ -72,7 +73,8 @@ final class XapianIndexService
         array $fields,
         array $terms = [],
         ?string $language = null,
-        array $fieldValuesByCode = [] // e.g. ['t'=>'...', 'd'=>'...', 'k'=>'...']
+        array $fieldValuesByCode = [], // e.g. ['t'=>'...', 'd'=>'...', 'k'=>'...']
+        ?int $replaceDocumentId = null,
     ): int {
         if (!class_exists(XapianWritableDatabase::class)) {
             throw new RuntimeException('Xapian PHP extension is not loaded.');
@@ -153,10 +155,18 @@ final class XapianIndexService
         $doc->set_data(serialize($fields));
 
         try {
-            $docId = $db->add_document($doc);
+            if (null !== $replaceDocumentId && $replaceDocumentId > 0) {
+                $db->replace_document($replaceDocumentId, $doc);
+                $docId = $replaceDocumentId;
+                $operation = 'replaced';
+            } else {
+                $docId = $db->add_document($doc);
+                $operation = 'added';
+            }
+
             $db->flush();
 
-            error_log('[Xapian] indexDocument: added docId='.$docId);
+            error_log('[Xapian] indexDocument: '.$operation.' docId='.$docId);
 
             return $docId;
         } catch (Throwable $e) {

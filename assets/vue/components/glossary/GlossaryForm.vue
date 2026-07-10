@@ -99,7 +99,7 @@ const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISH
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canShowAiToggle = computed(() => {
-  const isAdmin = !!(securityStore.isAdmin || securityStore.isPlatformAdmin || securityStore.isSuperAdmin)
+  const isAdmin = securityStore.isAdmin
   const isTeacher = !!(securityStore.isCurrentTeacher || securityStore.isTeacher)
   return isAdmin || isTeacher || isAllowedToEdit.value
 })

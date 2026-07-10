@@ -94,16 +94,12 @@ final class LpXapianIndexer
 
         $existingDocId = $existingRef?->getSearchDid();
 
-        if (null !== $existingDocId) {
-            try {
-                $this->xapianIndexService->deleteDocument($existingDocId);
-            } catch (Throwable) {
-                // Best-effort delete: ignore errors
-            }
-        }
-
         try {
-            $docId = $this->xapianIndexService->indexDocument($fields, $terms);
+            $docId = $this->xapianIndexService->indexDocument(
+                $fields,
+                $terms,
+                replaceDocumentId: $existingDocId,
+            );
         } catch (Throwable) {
             return null;
         }

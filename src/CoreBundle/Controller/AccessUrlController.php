@@ -87,6 +87,12 @@ class AccessUrlController extends AbstractController
                 } else {
                     $accessUrl->addUser($user);
                     $this->em->persist($accessUrl);
+
+                    $firstAuthSource = $user->getAuthSources()->first();
+                    if ($firstAuthSource && 0 === $user->getAuthSourcesByUrl($accessUrl)->count()) {
+                        $user->addAuthSourceByAuthentication($firstAuthSource->getAuthentication(), $accessUrl);
+                    }
+
                     $report[] = $this->formatReport('check-circle', "Line %s: user '%s' successfully assigned to '%s'.", [$lineNumber, $username, $url]);
                 }
             }

@@ -17,6 +17,11 @@ export function useLocale() {
 
   const appLocale = ref(document.documentElement.dataset.lang)
 
+  // Client-side mirror of LocaleSubscriber::getCurrentLanguage() so that
+  // entering/leaving a course without a full page load resolves the same locale
+  // the server would. Browser Accept-Language and the ?_locale session override
+  // are server-side only: they are already baked into <html data-lang> at boot
+  // and self-correct on the next full page load.
   const localeList = computed(() => {
     const list = {}
 
@@ -25,14 +30,16 @@ export function useLocale() {
 
     let courseLang = null
 
-    if (
-      courseSettingsStore.getSetting("show_course_in_user_language") === "1" &&
-      securityStore.user &&
-      securityStore.user.locale
-    ) {
-      courseLang = securityStore.user.locale
-    } else if (cidReqStore.course) {
-      courseLang = cidReqStore.course.courseLanguage
+    if (cidReqStore.course) {
+      if (
+        courseSettingsStore.getSetting("show_course_in_user_language") === "1" &&
+        securityStore.user &&
+        securityStore.user.locale
+      ) {
+        courseLang = securityStore.user.locale
+      } else {
+        courseLang = cidReqStore.course.courseLanguage
+      }
     }
 
     list["course_lang"] = courseLang
@@ -43,6 +50,7 @@ export function useLocale() {
   watch(
     localeList,
     (newLocaleList) => {
+      // 1) Honor the configured language_priority_1..4 settings, like the server.
       const priorityList = ["language_priority_1", "language_priority_2", "language_priority_3", "language_priority_4"]
 
       for (const priority of priorityList) {
@@ -51,8 +59,23 @@ export function useLocale() {
         if (setting && newLocaleList[setting]) {
           appLocale.value = newLocaleList[setting]
 
-          break
+          return
         }
+      }
+
+      // 2) No priority matched: same fallback as the server — last non-empty
+      // wins, so course_lang > user_profil_lang > platform_lang. When nothing
+      // is known yet (stores still loading) keep the server-provided locale.
+      let candidate = null
+
+      for (const key of ["platform_lang", "user_profil_lang", "course_lang"]) {
+        if (newLocaleList[key]) {
+          candidate = newLocaleList[key]
+        }
+      }
+
+      if (candidate) {
+        appLocale.value = candidate
       }
     },
     { immediate: true },

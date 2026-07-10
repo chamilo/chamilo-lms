@@ -86,7 +86,7 @@
             <div class="bc-summary-row"><span>{{ 'Price'|get_lang }}</span><span class="bc-summary-pill">{{ price_display|e ?: '—' }}</span></div>
             {% if is_upgrade|default(false) and upgrade_offer %}
                 <div class="bc-summary-box"><div class="bc-summary-box__label">{{ 'UpgradeCurrentService'|get_plugin_lang('BuyCoursesPlugin') }}</div><div class="bc-summary-box__value">{{ upgrade_offer.source_service_name|e }}</div></div>
-                <div class="bc-summary-box"><div class="bc-summary-box__label">{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(upgrade_offer.remaining_days) }}</div><div class="bc-summary-box__value">{{ upgrade_offer.source_date_end|e }}</div></div>
+                <div class="bc-summary-box"><div class="bc-summary-box__label">{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(upgrade_offer.remaining_days) }}</div><div class="bc-summary-box__value">{{ upgrade_offer.source_date_end_formatted|e }}</div></div>
                 <div class="bc-summary-box"><div class="bc-summary-box__label">{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}</div><div class="bc-summary-box__value">- {{ upgrade_offer.credit_amount_formatted|e }}</div></div>
                 <div class="bc-summary-box"><div class="bc-summary-box__label">{{ 'UpgradePriceToday'|get_plugin_lang('BuyCoursesPlugin') }}</div><div class="bc-summary-box__value">{{ service.upgrade_total_price_formatted|e }}</div></div>
                 {% if upgrade_offer.source_recurring_enabled %}

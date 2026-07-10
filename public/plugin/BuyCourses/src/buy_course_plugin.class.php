@@ -5284,17 +5284,31 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        $periodStart = strtotime((string) ($sourceSale['date_start'] ?? $sourceSale['buy_date'] ?? ''));
-        $periodEnd = strtotime((string) ($sourceSale['date_end'] ?? ''));
-        $now = time();
+        $dateStartRaw = (string) ($sourceSale['date_start'] ?? $sourceSale['buy_date'] ?? '');
+        $dateEndRaw = (string) ($sourceSale['date_end'] ?? '');
 
-        if (false === $periodStart || false === $periodEnd || $periodEnd <= $now) {
+        try {
+            $periodStartDt = $dateStartRaw !== ''
+                ? new DateTime($dateStartRaw, new DateTimeZone('UTC'))
+                : null;
+            $periodEndDt = $dateEndRaw !== ''
+                ? new DateTime($dateEndRaw, new DateTimeZone('UTC'))
+                : null;
+            $nowDt = new DateTime('now', new DateTimeZone('UTC'));
+        } catch (Exception) {
             return null;
         }
 
-        $periodStart = min($periodStart, $now);
-        $periodSeconds = max(1, $periodEnd - $periodStart);
-        $remainingSeconds = max(0, $periodEnd - $now);
+        if (null === $periodStartDt || null === $periodEndDt || $periodEndDt <= $nowDt) {
+            return null;
+        }
+
+        $periodStartTs = min($periodStartDt->getTimestamp(), $nowDt->getTimestamp());
+        $periodEndTs = $periodEndDt->getTimestamp();
+        $nowTs = $nowDt->getTimestamp();
+
+        $periodSeconds = max(1, $periodEndTs - $periodStartTs);
+        $remainingSeconds = max(0, $periodEndTs - $nowTs);
         $remainingRatio = min(1.0, max(0.0, $remainingSeconds / $periodSeconds));
 
         $sourcePriceWithoutTax = $this->getServiceSaleCurrentPeriodPriceWithoutTax($sourceSale);
@@ -5326,11 +5340,16 @@ class BuyCoursesPlugin extends Plugin
             };
         }
 
+        $sourceDateEndFormatted = $dateEndRaw
+            ? api_format_date(api_get_local_time($dateEndRaw, null, 'UTC'), DATE_TIME_FORMAT_LONG_24H)
+            : '';
+
         return [
             'source_sale_id' => (int) $sourceSale['id'],
             'source_service_id' => (int) ($sourceSale['service_id'] ?? 0),
             'source_service_name' => (string) ($sourceSale['service']['name'] ?? $sourceSale['name'] ?? ''),
-            'source_date_end' => (string) ($sourceSale['date_end'] ?? ''),
+            'source_date_end' => $dateEndRaw,
+            'source_date_end_formatted' => $sourceDateEndFormatted,
             'source_recurring_payment' => (int) ($sourceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED),
             'source_recurring_gateway' => $sourceRecurringGateway,
             'source_recurring_profile_id' => $sourceRecurringProfileId,
@@ -5383,9 +5402,18 @@ class BuyCoursesPlugin extends Plugin
                 continue;
             }
 
-            $dateEnd = strtotime((string) ($sale['date_end'] ?? '')) ?: 0;
-            if ($dateEnd > $bestDateEnd) {
-                $bestDateEnd = $dateEnd;
+            $dateEndTs = 0;
+            $dateEndRawForSort = (string) ($sale['date_end'] ?? '');
+            if ('' !== $dateEndRawForSort) {
+                try {
+                    $dt = new DateTime($dateEndRawForSort, new DateTimeZone('UTC'));
+                    $dateEndTs = $dt->getTimestamp();
+                } catch (Exception) {
+                    $dateEndTs = 0;
+                }
+            }
+            if ($dateEndTs > $bestDateEnd) {
+                $bestDateEnd = $dateEndTs;
                 $bestSale = $sale;
             }
         }
@@ -7961,13 +7989,10 @@ class BuyCoursesPlugin extends Plugin
         );
 
         $now = api_get_utc_datetime();
-        $dateEnd = date_format(
-            date_add(
-                date_create($now),
-                date_interval_create_from_date_string($service['duration_days'].' days')
-            ),
-            'Y-m-d H:i:s'
-        );
+        $startDt = new DateTime($now, new DateTimeZone('UTC'));
+        $interval = new DateInterval('P'.(int) $service['duration_days'].'D');
+        $endDt = $startDt->add($interval);
+        $dateEnd = $endDt->format('Y-m-d H:i:s');
 
         if (null !== $upgradeOffer
             && !empty($upgradeOffer['source_recurring_enabled'])
@@ -10188,12 +10213,12 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCoupon(int $couponId, ?int $productType = null, ?int $productId = null): array
+    private function getDataCoupon(int $couponId, ?int $productType = null, ?int $productId = null): ?array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
         if (null == $productType || null == $productId) {
-            return Database::select(
+            $coupon = Database::select(
                 ['*'],
                 $couponTable,
                 [
@@ -10203,6 +10228,8 @@ class BuyCoursesPlugin extends Plugin
                 ],
                 'first'
             );
+
+            return empty($coupon) ? null : $coupon;
         }
 
         $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
@@ -10214,7 +10241,7 @@ class BuyCoursesPlugin extends Plugin
                 on ci.coupon_id = c.id
         ";
 
-        return Database::select(
+        $coupon = Database::select(
             ['c.*'],
             $couponFrom,
             [
@@ -10228,6 +10255,8 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
+        return empty($coupon) ? null : $coupon;
     }
 
     /**
@@ -10239,14 +10268,14 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponByCode(string $couponCode, ?int $productType = null, ?int $productId = null)
+    private function getDataCouponByCode(string $couponCode, ?int $productType = null, ?int $productId = null): ?array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
         $dtmNow = api_get_utc_datetime();
 
         if (null == $productType || null == $productId) {
-            return Database::select(
+            $coupon = Database::select(
                 ['*'],
                 $couponTable,
                 [
@@ -10256,6 +10285,8 @@ class BuyCoursesPlugin extends Plugin
                 ],
                 'first'
             );
+
+            return empty($coupon) ? null : $coupon;
         }
 
         $couponFrom = "
@@ -10264,7 +10295,7 @@ class BuyCoursesPlugin extends Plugin
                 on ci.coupon_id = c.id
         ";
 
-        return Database::select(
+        $coupon = Database::select(
             ['c.*'],
             $couponFrom,
             [
@@ -10278,6 +10309,8 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
+        return empty($coupon) ? null : $coupon;
     }
 
     /**
@@ -10288,7 +10321,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponService(int $couponId, int $serviceId): array
+    private function getDataCouponService(int $couponId, int $serviceId): ?array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
@@ -10300,7 +10333,7 @@ class BuyCoursesPlugin extends Plugin
                 on cs.coupon_id = c.id
         ";
 
-        return Database::select(
+        $coupon = Database::select(
             ['c.*'],
             $couponFrom,
             [
@@ -10313,6 +10346,8 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
+        return empty($coupon) ? null : $coupon;
     }
 
     /**
@@ -10323,7 +10358,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponServiceByCode(string $couponCode, int $serviceId): array
+    private function getDataCouponServiceByCode(string $couponCode, int $serviceId): ?array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
@@ -10335,7 +10370,7 @@ class BuyCoursesPlugin extends Plugin
                 on cs.coupon_id = c.id
         ";
 
-        return Database::select(
+        $coupon = Database::select(
             ['c.*'],
             $couponFrom,
             [
@@ -10348,6 +10383,8 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
+        return empty($coupon) ? null : $coupon;
     }
 
     /**

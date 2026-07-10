@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<AnnouncementList>
@@ -38,6 +39,7 @@ final readonly class AnnouncementListProvider implements ProviderInterface
         private CAnnouncementRepository $announcementRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -86,6 +88,18 @@ final readonly class AnnouncementListProvider implements ProviderInterface
         $result->groupId = $group?->getIid();
         $result->canManage = $canManage;
         $result->studentView = $studentView;
+        $result->canDeleteAll = $canManage && $this->canDeleteAllAnnouncements(
+            $this->security,
+            $this->settingsManager,
+            $course,
+            $session,
+            $group,
+        ) && !$this->isSettingEnabled(
+            $this->settingsManager->getSetting('announcement.disable_delete_all_announcements', true),
+        );
+        $result->csrfToken = $canManage
+            ? (string) $this->csrfTokenManager->getToken(AnnouncementActionProcessor::CSRF_TOKEN_ID)
+            : '';
 
         $queryBuilder = $this->announcementRepository->getResources();
         $queryBuilder
@@ -164,9 +178,20 @@ final readonly class AnnouncementListProvider implements ProviderInterface
                     return $orderComparison;
                 }
 
-                return strcmp((string) $right['updatedAt'], (string) $left['updatedAt']);
+                $updatedComparison = strcmp((string) $right['updatedAt'], (string) $left['updatedAt']);
+                if (0 !== $updatedComparison) {
+                    return $updatedComparison;
+                }
+
+                return ((int) $right['id']) <=> ((int) $left['id']);
             },
         );
+
+        foreach ($items as $index => &$item) {
+            $item['canMoveUp'] = true === ($item['canEdit'] ?? false) && $index > 0;
+            $item['canMoveDown'] = true === ($item['canEdit'] ?? false) && $index < \count($items) - 1;
+        }
+        unset($item);
 
         $authors = array_values($authorsById);
         usort(
@@ -262,6 +287,24 @@ final readonly class AnnouncementListProvider implements ProviderInterface
             'visibility' => $this->getAnnouncementVisibility($contextLinks),
             'displayOrder' => $this->getAnnouncementDisplayOrder($contextLinks),
             'canEdit' => $canManage && $this->canEditAnnouncement(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $announcement,
+                $course,
+                $session,
+                $group,
+            ),
+            'canDelete' => $canManage && $this->canEditAnnouncement(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $announcement,
+                $course,
+                $session,
+                $group,
+            ),
+            'canChangeVisibility' => $canManage && $this->canEditAnnouncement(
                 $this->entityManager,
                 $this->security,
                 $this->settingsManager,

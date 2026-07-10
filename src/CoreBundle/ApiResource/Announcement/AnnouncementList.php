@@ -94,6 +94,12 @@ final class AnnouncementList
     #[Groups(['announcement_list:read'])]
     public bool $studentView = false;
 
+    #[Groups(['announcement_list:read'])]
+    public bool $canDeleteAll = false;
+
+    #[Groups(['announcement_list:read'])]
+    public string $csrfToken = '';
+
     public function getId(): string
     {
         return $this->id;

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Announcement;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementItem;
+use Chamilo\CoreBundle\Controller\AnnouncementAttachmentController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<AnnouncementItem>
@@ -39,6 +41,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         private CAnnouncementRepository $announcementRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -114,6 +117,15 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         $result->canManage = $canManage;
         $result->canViewRecipients = $canViewRecipients;
         $result->studentView = $studentView;
+        $result->attachmentsEnabled = !$this->isSettingEnabled(
+            $this->settingsManager->getSetting('announcement.disable_announcement_attachment', true),
+        );
+        $result->csrfToken = $canManage
+            ? (string) $this->csrfTokenManager->getToken(AnnouncementActionProcessor::CSRF_TOKEN_ID)
+            : '';
+        $result->attachmentCsrfToken = $canManage && $result->attachmentsEnabled
+            ? (string) $this->csrfTokenManager->getToken(AnnouncementAttachmentController::CSRF_TOKEN_ID)
+            : '';
         $result->item = $this->normalizeAnnouncement(
             $announcement,
             $contextLinks,
@@ -121,6 +133,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
             $session,
             $group,
             $canViewRecipients,
+            $result->attachmentsEnabled,
             $canManage && $this->canEditAnnouncement(
                 $this->entityManager,
                 $this->security,
@@ -192,6 +205,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         ?Session $session,
         ?CGroup $group,
         bool $canViewRecipients,
+        bool $attachmentsEnabled,
         bool $canEdit,
     ): array {
         $resourceNode = $announcement->getResourceNode();
@@ -218,9 +232,17 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
             'visibility' => $this->getAnnouncementVisibility($contextLinks),
             'displayOrder' => $this->getAnnouncementDisplayOrder($contextLinks),
             'language' => $resourceNode?->getLanguage()?->getIsocode(),
-            'attachments' => $this->normalizeAttachments($announcement, $course, $session, $group),
+            'attachments' => $this->normalizeAttachments(
+                $announcement,
+                $course,
+                $session,
+                $group,
+                $attachmentsEnabled && $canEdit,
+            ),
             'recipients' => $canViewRecipients ? $this->normalizeRecipients($contextLinks) : null,
             'canEdit' => $canEdit,
+            'canDelete' => $canEdit,
+            'canChangeVisibility' => $canEdit,
         ];
     }
 
@@ -252,6 +274,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         Course $course,
         ?Session $session,
         ?CGroup $group,
+        bool $canDelete,
     ): array {
         $contextQuery = [
             'cid' => (int) $course->getId(),
@@ -284,6 +307,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
                 'comment' => (string) $attachment->getComment(),
                 'size' => (int) $attachment->getSize(),
                 'downloadUrl' => $downloadUrl,
+                'canDelete' => $canDelete,
             ];
         }
 

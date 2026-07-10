@@ -1,6 +1,14 @@
 <template>
   <section class="space-y-4">
     <div
+      v-if="successMessage"
+      class="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700"
+      role="status"
+    >
+      {{ successMessage }}
+    </div>
+
+    <div
       v-if="errorMessage"
       class="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
       role="alert"
@@ -55,13 +63,13 @@
     <template v-else>
       <BaseToolbar>
         <template #start>
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <BaseButton
               v-if="canManage"
               icon="announcement"
               :label="t('Add an announcement')"
               only-icon
-              size="large"
+              size="normal"
               :route="addRoute"
               type="success"
             />
@@ -70,9 +78,35 @@
               :icon="isSearchVisible ? 'close' : 'search'"
               :label="isSearchVisible ? t('Cancel') : t('Search')"
               only-icon
-              size="large"
+              size="normal"
               type="primary"
               @click="toggleSearch"
+            />
+
+            <BaseButton
+              v-if="selectedEditableIds.length"
+              icon="delete"
+              :disabled="hasRowActionInProgress"
+              :is-loading="isManaging"
+              :label="t('Delete')"
+              only-icon
+              size="normal"
+              :tooltip="t('Delete')"
+              type="danger"
+              @click="confirmDeleteSelected"
+            />
+
+            <BaseButton
+              v-else-if="canDeleteAll"
+              icon="delete-forever"
+              :disabled="hasRowActionInProgress"
+              :is-loading="isManaging"
+              :label="t('Delete all')"
+              only-icon
+              size="normal"
+              :tooltip="t('Delete all')"
+              type="danger"
+              @click="confirmDeleteAll"
             />
           </div>
         </template>
@@ -136,11 +170,17 @@
       </form>
 
       <BaseTable
+        v-model:selected-items="selectedAnnouncements"
         data-key="id"
         :text-for-empty="t('There are no announcements.')"
         :total-items="filteredAnnouncements.length"
         :values="filteredAnnouncements"
       >
+        <Column
+          v-if="canManage"
+          selection-mode="multiple"
+        />
+
         <Column
           field="title"
           :header="t('Title')"
@@ -168,12 +208,6 @@
                 :tooltip="t('Attachments')"
               />
 
-              <BaseIcon
-                v-if="canManage && Number(data.visibility) !== 2"
-                icon="eye-off"
-                size="small"
-                :tooltip="t('Invisible')"
-              />
             </div>
           </template>
         </Column>
@@ -200,16 +234,7 @@
 
         <Column :header="t('Actions')">
           <template #body="{ data }">
-            <div class="flex items-center gap-2">
-              <BaseButton
-                icon="eye-on"
-                :label="t('View')"
-                only-icon
-                :route="getDetailRoute(data)"
-                size="small"
-                :tooltip="t('View')"
-                type="primary-text"
-              />
+            <div class="flex items-center gap-1">
               <BaseButton
                 v-if="data.canEdit"
                 icon="edit"
@@ -219,6 +244,58 @@
                 size="small"
                 :tooltip="t('Edit')"
                 type="secondary-text"
+              />
+
+              <BaseButton
+                v-if="data.canChangeVisibility"
+                :icon="Number(data.visibility) === 2 ? 'eye-on' : 'eye-off'"
+                :disabled="isManaging || hasRowActionInProgress"
+                :is-loading="isActionLoading(data.id)"
+                :label="Number(data.visibility) === 2 ? t('Visible') : t('Invisible')"
+                only-icon
+                size="small"
+                :tooltip="Number(data.visibility) === 2 ? t('Visible') : t('Invisible')"
+                type="secondary-text"
+                @click="changeVisibility(data)"
+              />
+
+              <BaseButton
+                v-if="data.canMoveUp"
+                icon="arrow-up"
+                :disabled="isManaging || hasRowActionInProgress"
+                :is-loading="isActionLoading(data.id)"
+                :label="t('Move up')"
+                only-icon
+                size="small"
+                :tooltip="t('Move up')"
+                type="secondary-text"
+                @click="moveAnnouncement(data, 'up')"
+              />
+
+              <BaseButton
+                v-if="data.canMoveDown"
+                icon="arrow-down"
+                :disabled="isManaging || hasRowActionInProgress"
+                :is-loading="isActionLoading(data.id)"
+                :label="t('Move down')"
+                only-icon
+                size="small"
+                :tooltip="t('Move down')"
+                type="secondary-text"
+                @click="moveAnnouncement(data, 'down')"
+              />
+
+              <BaseButton
+                v-if="data.canDelete"
+                icon="delete"
+                :disabled="isManaging || hasRowActionInProgress"
+                :is-loading="isActionLoading(data.id)"
+                :label="t('Delete')"
+                only-icon
+                size="small"
+                :tooltip="t('Delete')"
+                type="danger-text"
+                @click="confirmDeleteOne(data)"
               />
             </div>
           </template>
@@ -239,16 +316,24 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
 import announcementService from "../../services/announcementService"
 
 const { t, locale } = useI18n()
 const route = useRoute()
+const { requireConfirmation } = useConfirmation()
 
 const announcements = ref([])
 const authors = ref([])
+const selectedAnnouncements = ref([])
 const canManage = ref(false)
+const canDeleteAll = ref(false)
+const csrfToken = ref("")
 const isLoading = ref(false)
+const isManaging = ref(false)
+const actionLoadingIds = ref(new Set())
 const errorMessage = ref("")
+const successMessage = ref("")
 const isSearchVisible = ref(false)
 const pendingTitleFilter = ref("")
 const pendingAuthorFilter = ref("")
@@ -256,6 +341,7 @@ const titleFilter = ref("")
 const authorFilter = ref("")
 
 const hasActiveFilters = computed(() => titleFilter.value.trim() !== "" || Number(authorFilter.value || 0) > 0)
+const hasRowActionInProgress = computed(() => actionLoadingIds.value.size > 0)
 
 const filteredAnnouncements = computed(() => {
   const normalizedTitle = titleFilter.value.trim().toLocaleLowerCase()
@@ -270,6 +356,10 @@ const filteredAnnouncements = computed(() => {
     return matchesTitle && matchesAuthor
   })
 })
+
+const selectedEditableIds = computed(() =>
+  selectedAnnouncements.value.filter((item) => item?.canDelete).map((item) => Number(item.id)),
+)
 
 const addRoute = computed(() => ({
   name: "AnnouncementAdd",
@@ -360,22 +450,131 @@ function clearFilters() {
   authorFilter.value = ""
 }
 
+function getErrorMessage(error) {
+  return error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred")
+}
+
+function isActionLoading(id) {
+  return actionLoadingIds.value.has(Number(id))
+}
+
+async function runRowAction(id, callback, message = "") {
+  const next = new Set(actionLoadingIds.value)
+  next.add(Number(id))
+  actionLoadingIds.value = next
+  errorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    await callback()
+    successMessage.value = message
+    await loadAnnouncements()
+  } catch (error) {
+    console.error("Error managing announcement", error)
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    const updated = new Set(actionLoadingIds.value)
+    updated.delete(Number(id))
+    actionLoadingIds.value = updated
+  }
+}
+
+async function changeVisibility(announcement) {
+  const visibility = Number(announcement.visibility) === 2 ? 0 : 2
+  await runRowAction(
+    announcement.id,
+    () => announcementService.changeVisibility(announcement.id, visibility, csrfToken.value, getContextParams()),
+    t("The visibility has been changed."),
+  )
+}
+
+async function moveAnnouncement(announcement, direction) {
+  await runRowAction(
+    announcement.id,
+    () => announcementService.move(announcement.id, direction, csrfToken.value, getContextParams()),
+  )
+}
+
+function confirmDeleteOne(announcement) {
+  requireConfirmation({
+    message: t("Are you sure you want to delete this item?"),
+    accept: () =>
+      runRowAction(
+        announcement.id,
+        () => announcementService.deleteOne(announcement.id, csrfToken.value, getContextParams()),
+        t("Announcement has been deleted"),
+      ),
+  })
+}
+
+function confirmDeleteSelected() {
+  requireConfirmation({
+    message: t("Are you sure you want to delete the selected items?"),
+    accept: deleteSelected,
+  })
+}
+
+async function deleteSelected() {
+  isManaging.value = true
+  errorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    await announcementService.deleteSelected(selectedEditableIds.value, csrfToken.value, getContextParams())
+    successMessage.value = t("Announcement has been deleted")
+    await loadAnnouncements()
+  } catch (error) {
+    console.error("Error deleting selected announcements", error)
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    isManaging.value = false
+  }
+}
+
+function confirmDeleteAll() {
+  requireConfirmation({
+    message: t("Are you sure you want to delete all items?"),
+    accept: deleteAll,
+  })
+}
+
+async function deleteAll() {
+  isManaging.value = true
+  errorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    await announcementService.deleteAll(csrfToken.value, getContextParams())
+    successMessage.value = t("Announcement has been deleted")
+    await loadAnnouncements()
+  } catch (error) {
+    console.error("Error deleting all announcements", error)
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    isManaging.value = false
+  }
+}
+
 async function loadAnnouncements() {
   isLoading.value = true
   errorMessage.value = ""
   announcements.value = []
   authors.value = []
+  selectedAnnouncements.value = []
   canManage.value = false
+  canDeleteAll.value = false
+  csrfToken.value = ""
 
   try {
     const response = await announcementService.getList(getContextParams())
     announcements.value = Array.isArray(response.items) ? response.items : []
     authors.value = Array.isArray(response.authors) ? response.authors : []
     canManage.value = Boolean(response.canManage)
+    canDeleteAll.value = Boolean(response.canDeleteAll)
+    csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading announcements", error)
-    errorMessage.value =
-      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred")
+    errorMessage.value = getErrorMessage(error)
   } finally {
     isLoading.value = false
   }

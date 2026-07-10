@@ -2,27 +2,62 @@
   <section class="space-y-6">
     <BaseToolbar class="mb-4 border-b border-gray-25 bg-white">
       <template #start>
-        <BaseButton
-          icon="back"
-          :label="t('Back')"
-          only-icon
-          :route="listRoute"
-          size="large"
-          :tooltip="t('Back')"
-          type="primary-text"
-        />
-        <BaseButton
-          v-if="announcement?.canEdit"
-          icon="edit"
-          :label="t('Edit')"
-          only-icon
-          :route="editRoute"
-          size="large"
-          :tooltip="t('Edit')"
-          type="secondary-text"
-        />
+        <div class="flex flex-wrap items-center gap-2">
+          <BaseButton
+            icon="back"
+            :label="t('Back')"
+            only-icon
+            :route="listRoute"
+            size="normal"
+            :tooltip="t('Back')"
+            type="primary-text"
+          />
+
+          <BaseButton
+            v-if="announcement?.canEdit"
+            icon="edit"
+            :label="t('Edit')"
+            only-icon
+            :route="editRoute"
+            size="normal"
+            :tooltip="t('Edit')"
+            type="secondary-text"
+          />
+
+          <BaseButton
+            v-if="announcement?.canChangeVisibility"
+            :icon="Number(announcement.visibility) === 2 ? 'eye-on' : 'eye-off'"
+            :is-loading="isManaging"
+            :label="Number(announcement.visibility) === 2 ? t('Visible') : t('Invisible')"
+            only-icon
+            size="normal"
+            :tooltip="Number(announcement.visibility) === 2 ? t('Visible') : t('Invisible')"
+            type="secondary-text"
+            @click="changeVisibility"
+          />
+
+          <BaseButton
+            v-if="announcement?.canDelete"
+            icon="delete"
+            :is-loading="isManaging"
+            :label="t('Delete')"
+            only-icon
+            size="normal"
+            :tooltip="t('Delete')"
+            type="danger-text"
+            @click="confirmDeleteAnnouncement"
+          />
+        </div>
       </template>
     </BaseToolbar>
+
+    <div
+      v-if="successMessage"
+      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
+      role="status"
+    >
+      {{ successMessage }}
+    </div>
 
     <div
       v-if="isLoading"
@@ -117,10 +152,22 @@
             </span>
             <span
               v-if="attachment.comment"
-              class="w-full text-sm text-gray-600 md:w-auto"
+              class="min-w-0 flex-1 text-sm text-gray-600"
             >
               {{ attachment.comment }}
             </span>
+
+            <BaseButton
+              v-if="attachment.canDelete && attachmentsEnabled"
+              icon="delete"
+              :is-loading="deletingAttachmentId === Number(attachment.id)"
+              :label="t('Delete')"
+              only-icon
+              size="small"
+              :tooltip="t('Delete')"
+              type="danger-text"
+              @click="confirmDeleteAttachment(attachment)"
+            />
           </li>
         </ul>
       </div>
@@ -181,21 +228,30 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
 import announcementService from "../../services/announcementService"
 
 const { t, locale } = useI18n()
 const route = useRoute()
+const router = useRouter()
+const { requireConfirmation } = useConfirmation()
 
 const announcement = ref(null)
 const canManage = ref(false)
 const canViewRecipients = ref(false)
+const attachmentsEnabled = ref(false)
+const csrfToken = ref("")
+const attachmentCsrfToken = ref("")
 const isLoading = ref(false)
+const isManaging = ref(false)
+const deletingAttachmentId = ref(0)
 const errorMessage = ref("")
+const successMessage = ref("")
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -269,6 +325,90 @@ function formatFileSize(value) {
   return `${new Intl.NumberFormat(locale.value, { maximumFractionDigits: 1 }).format(normalized)} ${units[unitIndex]}`
 }
 
+function getErrorMessage(error) {
+  return error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred")
+}
+
+async function changeVisibility() {
+  if (!announcement.value) return
+
+  isManaging.value = true
+  errorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    const visibility = Number(announcement.value.visibility) === 2 ? 0 : 2
+    await announcementService.changeVisibility(
+      announcement.value.id,
+      visibility,
+      csrfToken.value,
+      getContextParams(),
+    )
+    successMessage.value = t("The visibility has been changed.")
+    await loadAnnouncement()
+  } catch (error) {
+    console.error("Error changing announcement visibility", error)
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    isManaging.value = false
+  }
+}
+
+function confirmDeleteAnnouncement() {
+  requireConfirmation({
+    message: t("Are you sure you want to delete this item?"),
+    accept: deleteAnnouncement,
+  })
+}
+
+async function deleteAnnouncement() {
+  if (!announcement.value) return
+
+  isManaging.value = true
+  errorMessage.value = ""
+
+  try {
+    await announcementService.deleteOne(announcement.value.id, csrfToken.value, getContextParams())
+    await router.push(listRoute.value)
+  } catch (error) {
+    console.error("Error deleting announcement", error)
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    isManaging.value = false
+  }
+}
+
+function confirmDeleteAttachment(attachment) {
+  requireConfirmation({
+    message: t("Are you sure you want to delete this item?"),
+    accept: () => deleteAttachment(attachment),
+  })
+}
+
+async function deleteAttachment(attachment) {
+  if (!announcement.value) return
+
+  deletingAttachmentId.value = Number(attachment.id)
+  errorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    await announcementService.deleteAttachment(
+      announcement.value.id,
+      attachment.id,
+      attachmentCsrfToken.value,
+      getContextParams(),
+    )
+    successMessage.value = t("Attachment has been deleted")
+    await loadAnnouncement()
+  } catch (error) {
+    console.error("Error deleting announcement attachment", error)
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    deletingAttachmentId.value = 0
+  }
+}
+
 async function loadAnnouncement() {
   const id = Number(route.params.id || 0)
   if (id <= 0) {
@@ -286,11 +426,13 @@ async function loadAnnouncement() {
     announcement.value = response.item || null
     canManage.value = Boolean(response.canManage)
     canViewRecipients.value = Boolean(response.canViewRecipients)
+    attachmentsEnabled.value = Boolean(response.attachmentsEnabled)
+    csrfToken.value = response.csrfToken || ""
+    attachmentCsrfToken.value = response.attachmentCsrfToken || ""
   } catch (error) {
     console.error("Error loading announcement", error)
     announcement.value = null
-    errorMessage.value =
-      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred")
+    errorMessage.value = getErrorMessage(error)
   } finally {
     isLoading.value = false
   }

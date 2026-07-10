@@ -55,7 +55,7 @@ trait AnnouncementAccessHelperTrait
         }
 
         foreach ($resourceNode->getResourceLinks() as $link) {
-            if (!$link instanceof ResourceLink) {
+            if (!$link instanceof ResourceLink || null !== $link->getDeletedAt()) {
                 continue;
             }
 
@@ -218,6 +218,55 @@ trait AnnouncementAccessHelperTrait
         return false;
     }
 
+    private function canDeleteAllAnnouncements(
+        Security $security,
+        SettingsManager $settingsManager,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): bool {
+        if ($group instanceof CGroup) {
+            return false;
+        }
+
+        if ($security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        $user = $security->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($course->hasUserAsTeacher($user)) {
+            return true;
+        }
+
+        if (!$session instanceof Session) {
+            return false;
+        }
+
+        if ($user->isSessionAdmin() && $this->isSettingEnabled(
+            $settingsManager->getSetting('session.session_admins_edit_courses_content', true),
+        )) {
+            return true;
+        }
+
+        if ($security->isGranted('ROLE_HR') && $this->isSettingEnabled(
+            $settingsManager->getSetting('session.drh_can_access_all_session_content', true),
+        )) {
+            return true;
+        }
+
+        return $this->isSettingEnabled(
+            $settingsManager->getSetting('announcement.allow_coach_to_edit_announcements', true),
+        ) && (
+            $session->hasUserAsGeneralCoach($user)
+            || $session->hasCourseCoachInCourse($user, $course)
+            || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+        );
+    }
+
     private function canEditAnnouncement(
         EntityManagerInterface $entityManager,
         Security $security,
@@ -271,7 +320,7 @@ trait AnnouncementAccessHelperTrait
 
         $matches = [];
         foreach ($resourceNode->getResourceLinks() as $link) {
-            if (!$link instanceof ResourceLink) {
+            if (!$link instanceof ResourceLink || null !== $link->getDeletedAt()) {
                 continue;
             }
 

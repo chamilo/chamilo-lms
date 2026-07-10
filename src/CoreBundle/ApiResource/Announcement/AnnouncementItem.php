@@ -96,6 +96,15 @@ final class AnnouncementItem
     #[Groups(['announcement_item:read'])]
     public bool $studentView = false;
 
+    #[Groups(['announcement_item:read'])]
+    public bool $attachmentsEnabled = false;
+
+    #[Groups(['announcement_item:read'])]
+    public string $csrfToken = '';
+
+    #[Groups(['announcement_item:read'])]
+    public string $attachmentCsrfToken = '';
+
     public function getId(): int
     {
         return $this->id;

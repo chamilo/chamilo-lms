@@ -64,49 +64,35 @@
         </template>
 
         <div class="space-y-4">
-          <div>
-            <BaseButton
-              icon="join-group"
-              :label="t('Choose recipients')"
-              type="plain"
-              @click="showRecipients = !showRecipients"
-            />
+          <BaseSelect
+            v-if="form.classes.length"
+            id="announcement_class"
+            v-model="selectedClassId"
+            :allow-clear="true"
+            :label="form.classLabel || t('Classes')"
+            name="announcement_class"
+            option-label="label"
+            option-value="id"
+            :options="form.classes"
+            @change="applyClassRecipients"
+          />
 
-            <div
-              v-if="showRecipients"
-              class="mt-3 space-y-4 rounded-lg border border-gray-25 bg-gray-10 p-4"
-            >
-              <BaseSelect
-                v-if="form.classes.length"
-                id="announcement_class"
-                v-model="selectedClassId"
-                :allow-clear="true"
-                :label="form.classLabel || t('Classes')"
-                name="announcement_class"
-                option-label="label"
-                option-value="id"
-                :options="form.classes"
-                @change="applyClassRecipients"
-              />
-
-              <BaseMultiSelect
-                input-id="announcement_recipients"
-                :error-text="t('Required field')"
-                :is-invalid="formSubmitted && form.recipients.length === 0"
-                :label="t('Recipients')"
-                :model-value="form.recipients"
-                option-label="label"
-                option-value="value"
-                :options="recipientOptions"
-                @update:model-value="updateRecipients"
-              />
-              <input
-                name="recipients"
-                type="hidden"
-                :value="form.recipients.join(',')"
-              />
-            </div>
-          </div>
+          <BaseMultiSelect
+            input-id="announcement_recipients"
+            :error-text="t('Required field')"
+            :is-invalid="formSubmitted && form.recipients.length === 0"
+            :label="t('Recipients')"
+            :model-value="form.recipients"
+            option-label="label"
+            option-value="value"
+            :options="recipientOptions"
+            @update:model-value="updateRecipients"
+          />
+          <input
+            name="recipients"
+            type="hidden"
+            :value="form.recipients.join(',')"
+          />
 
           <BaseInputText
             id="announcement_subject"
@@ -119,18 +105,14 @@
             required
           />
 
-          <div>
-            <BaseButton
-              icon="tag-outline"
-              :label="t('Tags')"
-              type="plain"
-              @click="showTags = !showTags"
-            />
-
-            <div
-              v-if="showTags"
-              class="mt-3 rounded-lg border border-gray-25 bg-gray-10 p-4"
-            >
+          <details
+            v-if="form.tags.length"
+            class="rounded-lg border border-gray-20 bg-gray-10 px-4 py-3"
+          >
+            <summary class="cursor-pointer text-sm font-semibold text-primary">
+              {{ t("Tags") }}
+            </summary>
+            <div class="mt-3">
               <p class="mb-3 text-sm text-gray-600">
                 {{
                   t(
@@ -148,7 +130,7 @@
                 </code>
               </div>
             </div>
-          </div>
+          </details>
 
           <BaseTinyEditor
             v-model="form.content"
@@ -160,56 +142,145 @@
           />
 
           <BaseAdvancedSettingsButton
-            v-if="form.languages.length > 2"
+            v-if="hasAdvancedSettings"
             v-model="showAdvancedSettings"
           >
-            <BaseSelect
-              id="resource_language"
-              v-model="form.language"
-              :label="t('Language')"
-              name="language"
-              option-label="label"
-              option-value="value"
-              :options="form.languages"
-            />
+            <div class="space-y-5">
+              <BaseSelect
+                v-if="form.languages.length > 2"
+                id="resource_language"
+                v-model="form.language"
+                :label="t('Language')"
+                name="language"
+                option-label="label"
+                option-value="value"
+                :options="form.languages"
+              />
+
+              <div
+                v-if="form.attachmentsEnabled"
+                class="space-y-3"
+              >
+                <div>
+                  <label
+                    class="mb-2 block text-sm font-semibold text-gray-90"
+                    for="announcement_attachments"
+                  >
+                    {{ t("Add attachment") }}
+                  </label>
+                  <input
+                    id="announcement_attachments"
+                    class="block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm text-gray-700 file:mr-3 file:rounded-md file:border-0 file:bg-gray-20 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-gray-90 hover:file:bg-gray-25"
+                    multiple
+                    name="attachments[]"
+                    type="file"
+                    @change="handleAttachmentFiles"
+                  />
+                </div>
+
+                <ul
+                  v-if="attachmentFiles.length"
+                  class="space-y-1 text-sm text-gray-600"
+                >
+                  <li
+                    v-for="file in attachmentFiles"
+                    :key="`${file.name}-${file.size}-${file.lastModified}`"
+                    class="flex items-center gap-2"
+                  >
+                    <BaseIcon
+                      icon="attachment"
+                      size="small"
+                    />
+                    <span class="break-all">{{ file.name }}</span>
+                  </li>
+                </ul>
+
+                <BaseTextArea
+                  v-if="attachmentFiles.length"
+                  id="announcement_file_comment"
+                  v-model="fileComment"
+                  :label="t('File comment')"
+                  name="file_comment"
+                  rows="3"
+                />
+
+                <div v-if="form.attachments.length">
+                  <p class="mb-2 text-sm font-semibold text-gray-90">
+                    {{ t("Attachments") }}
+                  </p>
+                  <ul class="space-y-2">
+                    <li
+                      v-for="attachment in form.attachments"
+                      :key="attachment.id"
+                      class="flex flex-wrap items-center gap-2 rounded-lg border border-gray-20 bg-white px-3 py-2"
+                    >
+                      <BaseIcon
+                        icon="attachment"
+                        size="small"
+                      />
+                      <a
+                        class="font-medium text-primary hover:underline"
+                        :href="attachment.downloadUrl"
+                      >
+                        {{ attachment.filename }}
+                      </a>
+                      <span
+                        v-if="attachment.comment"
+                        class="min-w-0 flex-1 text-sm text-gray-600"
+                      >
+                        {{ attachment.comment }}
+                      </span>
+                      <BaseButton
+                        icon="delete"
+                        :is-loading="deletingAttachmentId === Number(attachment.id)"
+                        :label="t('Delete')"
+                        only-icon
+                        size="small"
+                        :tooltip="t('Delete')"
+                        type="danger-text"
+                        @click="confirmDeleteAttachment(attachment)"
+                      />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </BaseAdvancedSettingsButton>
         </div>
       </BaseCard>
 
-      <div class="space-y-3 rounded-lg border border-gray-20 bg-white p-4">
-        <BaseButton
-          icon="eye-on"
-          :is-loading="isPreviewing"
-          :label="t('Preview')"
-          name="preview"
-          type="plain"
-          @click="previewAnnouncement"
-        />
-
-        <div
-          v-if="previewRecipients.length"
-          class="rounded-lg bg-gray-10 p-4"
-        >
-          <p class="mb-2 font-semibold text-gray-90">
-            {{ t("Announcement will be sent to") }}
-          </p>
-          <ul class="list-disc space-y-1 pl-6 text-sm text-gray-700">
-            <li
-              v-for="recipient in previewRecipients"
-              :key="recipient"
-            >
-              {{ recipient }}
-            </li>
-          </ul>
-        </div>
+      <div
+        v-if="previewRecipients.length"
+        class="rounded-lg border border-gray-20 bg-gray-10 p-4"
+      >
+        <p class="mb-2 font-semibold text-gray-90">
+          {{ t("Announcement will be sent to") }}
+        </p>
+        <ul class="list-disc space-y-1 pl-6 text-sm text-gray-700">
+          <li
+            v-for="recipient in previewRecipients"
+            :key="recipient"
+          >
+            {{ recipient }}
+          </li>
+        </ul>
       </div>
 
-      <div class="flex flex-wrap justify-end gap-2">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-20 pt-4">
         <BaseButton
           icon="back"
           :label="t('Cancel')"
           :route="listRoute"
           type="plain"
+        />
+        <BaseButton
+          icon="eye-on"
+          :disabled="isSaving"
+          :is-loading="isPreviewing"
+          :label="t('Preview')"
+          name="preview"
+          type="secondary-text"
+          @click="previewAnnouncement"
         />
         <BaseButton
           v-if="previewReady"
@@ -236,13 +307,16 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
+import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
 import announcementService from "../../services/announcementService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -254,10 +328,11 @@ const formErrorRef = ref(null)
 const previewRecipients = ref([])
 const previewReady = ref(false)
 const previewPayload = ref(null)
-const showRecipients = ref(false)
-const showTags = ref(false)
 const showAdvancedSettings = ref(false)
 const selectedClassId = ref(null)
+const attachmentFiles = ref([])
+const fileComment = ref("")
+const deletingAttachmentId = ref(0)
 
 const form = ref({
   id: null,
@@ -271,6 +346,9 @@ const form = ref({
   classLabel: "",
   languages: [],
   tags: [],
+  attachmentsEnabled: false,
+  attachmentCsrfToken: "",
+  attachments: [],
 })
 
 const editorConfig = {
@@ -284,6 +362,10 @@ const listRoute = computed(() => ({
   params: { node: route.params.node },
   query: getContextParams(),
 }))
+
+const hasAdvancedSettings = computed(
+  () => form.value.languages.length > 2 || form.value.attachmentsEnabled || form.value.attachments.length > 0,
+)
 
 const recipientOptions = computed(() => {
   const selectedClass = form.value.classes.find((item) => Number(item.id) === Number(selectedClassId.value || 0))
@@ -362,7 +444,10 @@ function applyClassRecipients() {
   }
 
   form.value.recipients = Array.isArray(selectedClass.recipientValues) ? [...selectedClass.recipientValues] : []
-  showRecipients.value = true
+}
+
+function handleAttachmentFiles(event) {
+  attachmentFiles.value = Array.from(event?.target?.files || [])
 }
 
 function resetPreview() {
@@ -390,9 +475,13 @@ async function loadForm() {
       classLabel: response.classLabel || "",
       languages: Array.isArray(response.languages) ? response.languages : [],
       tags: Array.isArray(response.tags) ? response.tags : [],
+      attachmentsEnabled: Boolean(response.attachmentsEnabled),
+      attachmentCsrfToken: response.attachmentCsrfToken || "",
+      attachments: Array.isArray(response.attachments) ? response.attachments : [],
     }
-    showRecipients.value = form.value.recipients.length !== 1 || form.value.recipients[0] !== "everyone"
-    showAdvancedSettings.value = Boolean(form.value.language)
+    attachmentFiles.value = []
+    fileComment.value = ""
+    showAdvancedSettings.value = Boolean(form.value.language || form.value.attachments.length)
     resetPreview()
   } catch (error) {
     console.error("Error loading announcement form", error)
@@ -478,10 +567,30 @@ async function saveAnnouncement() {
   isSaving.value = true
 
   try {
-    if (form.value.id) {
-      await announcementService.update(form.value.id, previewPayload.value, getContextParams())
-    } else {
-      await announcementService.create(previewPayload.value, getContextParams())
+    const response = form.value.id
+      ? await announcementService.update(form.value.id, previewPayload.value, getContextParams())
+      : await announcementService.create(previewPayload.value, getContextParams())
+
+    const announcementId = Number(response?.id || form.value.id || 0)
+    form.value.id = announcementId
+
+    if (form.value.attachmentsEnabled && attachmentFiles.value.length && announcementId > 0) {
+      try {
+        await announcementService.uploadAttachments(
+          announcementId,
+          attachmentFiles.value,
+          fileComment.value,
+          form.value.attachmentCsrfToken,
+          getContextParams(),
+        )
+      } catch (error) {
+        console.error("Error uploading announcement attachments", error)
+        await showFormError(
+          error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred"),
+        )
+
+        return
+      }
     }
 
     await router.push(listRoute.value)
@@ -492,6 +601,37 @@ async function saveAnnouncement() {
     )
   } finally {
     isSaving.value = false
+  }
+}
+
+function confirmDeleteAttachment(attachment) {
+  requireConfirmation({
+    message: t("Are you sure you want to delete this item?"),
+    accept: () => deleteAttachment(attachment),
+  })
+}
+
+async function deleteAttachment(attachment) {
+  if (!form.value.id) return
+
+  deletingAttachmentId.value = Number(attachment.id)
+  formErrorMessage.value = ""
+
+  try {
+    await announcementService.deleteAttachment(
+      form.value.id,
+      attachment.id,
+      form.value.attachmentCsrfToken,
+      getContextParams(),
+    )
+    form.value.attachments = form.value.attachments.filter((item) => Number(item.id) !== Number(attachment.id))
+  } catch (error) {
+    console.error("Error deleting announcement attachment", error)
+    await showFormError(
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred"),
+    )
+  } finally {
+    deletingAttachmentId.value = 0
   }
 }
 

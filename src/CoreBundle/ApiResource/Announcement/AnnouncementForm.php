@@ -159,6 +159,18 @@ final class AnnouncementForm
     #[Groups(['announcement_form:read'])]
     public array $previewRecipients = [];
 
+    #[Groups(['announcement_form:read'])]
+    public bool $attachmentsEnabled = false;
+
+    #[Groups(['announcement_form:read'])]
+    public string $attachmentCsrfToken = '';
+
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    #[Groups(['announcement_form:read'])]
+    public array $attachments = [];
+
     public function getId(): ?int
     {
         return $this->id;

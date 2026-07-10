@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\State\Announcement;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementForm;
+use Chamilo\CoreBundle\Controller\AnnouncementAttachmentController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -93,6 +95,12 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $result->languages = $this->getLanguages();
         $result->tags = $this->getTags();
         $result->recipients = ['everyone'];
+        $result->attachmentsEnabled = !$this->isSettingEnabled(
+            $this->settingsManager->getSetting('announcement.disable_announcement_attachment', true),
+        );
+        $result->attachmentCsrfToken = $result->attachmentsEnabled
+            ? (string) $this->csrfTokenManager->getToken(AnnouncementAttachmentController::CSRF_TOKEN_ID)
+            : '';
 
         if ($announcement instanceof CAnnouncement) {
             $result->id = $announcementId;
@@ -105,6 +113,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
                 $session,
                 $group,
             );
+            $result->attachments = $this->normalizeAttachments($announcement, $course, $session, $group);
 
             return $result;
         }
@@ -195,6 +204,46 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         }
 
         return $announcement;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeAttachments(
+        CAnnouncement $announcement,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): array {
+        $query = ['cid' => (int) $course->getId()];
+        if ($session instanceof Session && null !== $session->getId()) {
+            $query['sid'] = (int) $session->getId();
+        }
+        if ($group instanceof CGroup && null !== $group->getIid()) {
+            $query['gid'] = (int) $group->getIid();
+        }
+
+        $attachments = [];
+        foreach ($announcement->getAttachments() as $attachment) {
+            if (!$attachment instanceof CAnnouncementAttachment || null === $attachment->getIid()) {
+                continue;
+            }
+
+            $attachments[] = [
+                'id' => (int) $attachment->getIid(),
+                'filename' => $attachment->getFilename(),
+                'comment' => (string) $attachment->getComment(),
+                'size' => (int) $attachment->getSize(),
+                'downloadUrl' => \sprintf(
+                    '/api/announcement/%d/attachment/%d/download?%s',
+                    (int) $announcement->getIid(),
+                    (int) $attachment->getIid(),
+                    http_build_query($query),
+                ),
+            ];
+        }
+
+        return $attachments;
     }
 
     private function getClassLabel(?Session $session): string

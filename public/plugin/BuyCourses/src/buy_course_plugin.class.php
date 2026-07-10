@@ -10213,12 +10213,12 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCoupon(int $couponId, ?int $productType = null, ?int $productId = null): array
+    private function getDataCoupon(int $couponId, ?int $productType = null, ?int $productId = null): ?array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
         if (null == $productType || null == $productId) {
-            return Database::select(
+            $coupon = Database::select(
                 ['*'],
                 $couponTable,
                 [
@@ -10228,6 +10228,8 @@ class BuyCoursesPlugin extends Plugin
                 ],
                 'first'
             );
+
+            return empty($coupon) ? null : $coupon;
         }
 
         $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
@@ -10239,7 +10241,7 @@ class BuyCoursesPlugin extends Plugin
                 on ci.coupon_id = c.id
         ";
 
-        return Database::select(
+        $coupon = Database::select(
             ['c.*'],
             $couponFrom,
             [
@@ -10253,6 +10255,8 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
+        return empty($coupon) ? null : $coupon;
     }
 
     /**
@@ -10264,14 +10268,14 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponByCode(string $couponCode, ?int $productType = null, ?int $productId = null)
+    private function getDataCouponByCode(string $couponCode, ?int $productType = null, ?int $productId = null): ?array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
         $dtmNow = api_get_utc_datetime();
 
         if (null == $productType || null == $productId) {
-            return Database::select(
+            $coupon = Database::select(
                 ['*'],
                 $couponTable,
                 [
@@ -10281,6 +10285,8 @@ class BuyCoursesPlugin extends Plugin
                 ],
                 'first'
             );
+
+            return empty($coupon) ? null : $coupon;
         }
 
         $couponFrom = "
@@ -10289,7 +10295,7 @@ class BuyCoursesPlugin extends Plugin
                 on ci.coupon_id = c.id
         ";
 
-        return Database::select(
+        $coupon = Database::select(
             ['c.*'],
             $couponFrom,
             [
@@ -10303,6 +10309,8 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
+        return empty($coupon) ? null : $coupon;
     }
 
     /**
@@ -10313,7 +10321,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponService(int $couponId, int $serviceId): array
+    private function getDataCouponService(int $couponId, int $serviceId): ?array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
@@ -10325,7 +10333,7 @@ class BuyCoursesPlugin extends Plugin
                 on cs.coupon_id = c.id
         ";
 
-        return Database::select(
+        $coupon = Database::select(
             ['c.*'],
             $couponFrom,
             [
@@ -10338,6 +10346,8 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
+        return empty($coupon) ? null : $coupon;
     }
 
     /**
@@ -10348,7 +10358,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponServiceByCode(string $couponCode, int $serviceId): array
+    private function getDataCouponServiceByCode(string $couponCode, int $serviceId): ?array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
@@ -10360,7 +10370,7 @@ class BuyCoursesPlugin extends Plugin
                 on cs.coupon_id = c.id
         ";
 
-        return Database::select(
+        $coupon = Database::select(
             ['c.*'],
             $couponFrom,
             [
@@ -10373,6 +10383,8 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
+        return empty($coupon) ? null : $coupon;
     }
 
     /**

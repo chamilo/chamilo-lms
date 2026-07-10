@@ -43,8 +43,7 @@ class SendScheduledAnnouncementsCommand extends Command
                 'also-internal-message',
                 null,
                 InputOption::VALUE_NONE,
-                'Retained for compatibility. Course scheduled announcements always store internal messages '.
-                'before email delivery.'
+                'If set, an internal message will also be created for each recipient.'
             )
         ;
     }
@@ -58,6 +57,7 @@ class SendScheduledAnnouncementsCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
         $debug = (bool) $input->getOption('debug');
+        $alsoInternalMessage = (bool) $input->getOption('also-internal-message');
 
         $urlList = $this->accessUrlRepository->findAll();
 
@@ -88,6 +88,7 @@ class SendScheduledAnnouncementsCommand extends Command
                     $urlId,
                     $debug,
                     $io,
+                    $alsoInternalMessage,
                 );
                 $io->writeln('Course scheduled announcements sent: '.$courseMessagesSent);
             } catch (Throwable $throwable) {

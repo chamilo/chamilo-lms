@@ -276,7 +276,10 @@
                     />
                   </div>
 
-                  <CalendarRemindersEditor v-model="form" />
+                  <CalendarRemindersEditor
+                    v-if="form.remindersAvailable"
+                    v-model="form"
+                  />
                 </div>
               </div>
 
@@ -489,6 +492,7 @@ const form = ref({
   scheduleDate: "",
   scheduleMinimumDate: "",
   calendarAvailable: false,
+  remindersAvailable: false,
   addToCalendar: false,
   eventStartDate: null,
   eventEndDate: null,
@@ -632,6 +636,7 @@ async function loadForm() {
       scheduleDate: response.scheduleDate || "",
       scheduleMinimumDate: response.scheduleMinimumDate || "",
       calendarAvailable: Boolean(response.calendarAvailable),
+      remindersAvailable: Boolean(response.remindersAvailable),
       addToCalendar: Boolean(response.addToCalendar),
       eventStartDate: response.eventStartDate ? new Date(response.eventStartDate) : null,
       eventEndDate: response.eventEndDate ? new Date(response.eventEndDate) : null,
@@ -717,7 +722,7 @@ function buildPayload() {
     addToCalendar: form.value.calendarAvailable && form.value.addToCalendar,
     eventStartDate: form.value.addToCalendar ? serializeDateTime(form.value.eventStartDate) : null,
     eventEndDate: form.value.addToCalendar ? serializeDateTime(form.value.eventEndDate) : null,
-    reminders: form.value.addToCalendar
+    reminders: form.value.addToCalendar && form.value.remindersAvailable
       ? form.value.reminders.map((reminder) => ({
           count: Number(reminder.count || 0),
           period: reminder.period || "i",
@@ -877,7 +882,6 @@ async function saveAnnouncement() {
   isSaving.value = true
 
   try {
-    const wasNew = !form.value.id
     const response = form.value.id
       ? await announcementService.update(form.value.id, previewPayload.value, getContextParams())
       : await announcementService.create(previewPayload.value, getContextParams())
@@ -885,8 +889,9 @@ async function saveAnnouncement() {
     const announcementId = Number(response?.id || form.value.id || 0)
     form.value.id = announcementId
 
-    if (wasNew && form.value.addToCalendar) {
-      form.value.calendarAvailable = false
+    if (form.value.addToCalendar) {
+      form.value.calendarAvailable = Boolean(response?.calendarAvailable ?? true)
+      form.value.remindersAvailable = Boolean(response?.remindersAvailable)
       form.value.addToCalendar = false
       form.value.eventStartDate = null
       form.value.eventEndDate = null

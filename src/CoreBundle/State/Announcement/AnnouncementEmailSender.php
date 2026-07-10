@@ -60,6 +60,7 @@ final readonly class AnnouncementEmailSender
         array $hrmCopies,
         bool $sendPrimary,
         bool $sendCopyToSelf,
+        bool $storeInternalMessages = true,
     ): array {
         $attachments = $this->buildAttachments($announcement);
         $subject = $course->getTitle().' - '.$announcement->getTitle();
@@ -89,16 +90,19 @@ final readonly class AnnouncementEmailSender
                     $replyTo,
                     $attachments,
                     'primary',
+                    $storeInternalMessages,
                 );
 
-                if ($delivery['internalMessageAvailable']) {
-                    $internalMessageKeys['primary-'.$recipientId] = true;
-                } else {
-                    $internalMessageFailedCount++;
-                }
+                if ($storeInternalMessages) {
+                    if ($delivery['internalMessageAvailable']) {
+                        $internalMessageKeys['primary-'.$recipientId] = true;
+                    } else {
+                        $internalMessageFailedCount++;
+                    }
 
-                if ($delivery['internalMessageCreated']) {
-                    $internalMessageCreatedCount++;
+                    if ($delivery['internalMessageCreated']) {
+                        $internalMessageCreatedCount++;
+                    }
                 }
 
                 if ($delivery['emailSent']) {
@@ -133,16 +137,19 @@ final readonly class AnnouncementEmailSender
                     $replyTo,
                     $attachments,
                     'hrm',
+                    $storeInternalMessages,
                 );
 
-                if ($delivery['internalMessageAvailable']) {
-                    $internalMessageKeys['hrm-'.$hrmId] = true;
-                } else {
-                    $internalMessageFailedCount++;
-                }
+                if ($storeInternalMessages) {
+                    if ($delivery['internalMessageAvailable']) {
+                        $internalMessageKeys['hrm-'.$hrmId] = true;
+                    } else {
+                        $internalMessageFailedCount++;
+                    }
 
-                if ($delivery['internalMessageCreated']) {
-                    $internalMessageCreatedCount++;
+                    if ($delivery['internalMessageCreated']) {
+                        $internalMessageCreatedCount++;
+                    }
                 }
 
                 if ($delivery['emailSent']) {
@@ -173,18 +180,21 @@ final readonly class AnnouncementEmailSender
                     $replyTo,
                     $attachments,
                     'self',
+                    $storeInternalMessages,
                 );
                 $copySent = $delivery['emailSent'];
                 $copyWasAdditional = $copySent;
 
-                if ($delivery['internalMessageAvailable']) {
-                    $internalMessageKeys['self-'.$senderId] = true;
-                } else {
-                    $internalMessageFailedCount++;
-                }
+                if ($storeInternalMessages) {
+                    if ($delivery['internalMessageAvailable']) {
+                        $internalMessageKeys['self-'.$senderId] = true;
+                    } else {
+                        $internalMessageFailedCount++;
+                    }
 
-                if ($delivery['internalMessageCreated']) {
-                    $internalMessageCreatedCount++;
+                    if ($delivery['internalMessageCreated']) {
+                        $internalMessageCreatedCount++;
+                    }
                 }
 
                 if (!$copySent) {
@@ -204,6 +214,7 @@ final readonly class AnnouncementEmailSender
             'internal_message_count' => \count($internalMessageKeys),
             'internal_message_created_count' => $internalMessageCreatedCount,
             'internal_message_failed_count' => $internalMessageFailedCount,
+            'store_internal_messages' => $storeInternalMessages,
         ]);
 
         return [
@@ -218,7 +229,7 @@ final readonly class AnnouncementEmailSender
     }
 
     /**
-     * Store the Chamilo internal message before attempting SMTP delivery.
+     * Optionally store the Chamilo internal message before attempting SMTP delivery.
      *
      * @param array<string, array{mail: string, name: string}> $replyTo
      * @param array<int, array{stream: string, filename: string}> $attachments
@@ -234,15 +245,20 @@ final readonly class AnnouncementEmailSender
         array $replyTo,
         array $attachments,
         string $deliveryType,
+        bool $storeInternalMessages,
     ): array {
-        $internalMessage = $this->storeInternalMessage(
-            $announcement,
-            $recipient,
-            $sender,
-            $subject,
-            $message,
-            $deliveryType,
-        );
+        $internalMessage = ['available' => false, 'created' => false];
+        if ($storeInternalMessages) {
+            $internalMessage = $this->storeInternalMessage(
+                $announcement,
+                $recipient,
+                $sender,
+                $subject,
+                $message,
+                $deliveryType,
+            );
+        }
+
         try {
             $emailSent = $this->mailHelper->send(
                 $this->getRecipientName($recipient),

@@ -199,6 +199,9 @@ final class AnnouncementForm
     #[Groups(['announcement_form:read'])]
     public bool $calendarAvailable = false;
 
+    #[Groups(['announcement_form:read'])]
+    public bool $remindersAvailable = false;
+
     #[Groups(['announcement_form:read', 'announcement_form:write'])]
     public bool $addToCalendar = false;
 

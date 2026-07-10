@@ -107,11 +107,10 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $result->scheduleAvailable = $this->scheduleManager->isAvailable($session);
         $result->scheduleMinimumDate = (new DateTimeImmutable('today'))->format('Y-m-d');
         $result->scheduleDate = (new DateTimeImmutable('tomorrow'))->format('Y-m-d');
-        $result->calendarAvailable = !$announcement instanceof CAnnouncement;
-        if ($result->calendarAvailable) {
-            $result->eventStartDate = new \DateTime();
-            $result->eventEndDate = (new \DateTime())->modify('+1 hour');
-        }
+        $result->calendarAvailable = true;
+        $result->remindersAvailable = $this->areAgendaRemindersEnabled();
+        $result->eventStartDate = new \DateTime();
+        $result->eventEndDate = (new \DateTime())->modify('+1 hour');
         $result->attachmentsEnabled = !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.disable_announcement_attachment', true),
         );
@@ -405,6 +404,15 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
             $siteName,
             $since,
         );
+    }
+
+    private function areAgendaRemindersEnabled(): bool
+    {
+        if (!\function_exists('api_get_configuration_value')) {
+            return false;
+        }
+
+        return true === \api_get_configuration_value('agenda_reminders');
     }
 
     private function translate(string $message): string

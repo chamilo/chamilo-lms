@@ -28,8 +28,12 @@ final readonly class ScheduledCourseAnnouncementProcessor
         private AnnouncementEmailSender $emailSender,
     ) {}
 
-    public function sendPendingMessages(int $accessUrlId, bool $debug, SymfonyStyle $io): int
-    {
+    public function sendPendingMessages(
+        int $accessUrlId,
+        bool $debug,
+        SymfonyStyle $io,
+        bool $alsoInternalMessage = false,
+    ): int {
         $connection = $this->entityManager->getConnection();
         if (!$this->isEnabled($connection, $accessUrlId)) {
             if ($debug) {
@@ -47,6 +51,7 @@ final readonly class ScheduledCourseAnnouncementProcessor
                 $accessUrlId,
                 $debug,
                 $io,
+                $alsoInternalMessage,
             );
         }
 
@@ -59,6 +64,7 @@ final readonly class ScheduledCourseAnnouncementProcessor
         int $accessUrlId,
         bool $debug,
         SymfonyStyle $io,
+        bool $alsoInternalMessage,
     ): int {
         $connection->beginTransaction();
 
@@ -166,19 +172,27 @@ final readonly class ScheduledCourseAnnouncementProcessor
                 [],
                 true,
                 false,
+                $alsoInternalMessage,
             );
 
             if ($delivery['primarySentCount'] <= 0) {
                 if ($debug) {
-                    $io->writeln(
-                        sprintf(
-                            'Debug: Scheduled course announcement #%d has %d internal message(s) available '.
-                            '(%d created in this run), but no external email was delivered.',
-                            $announcementId,
-                            $delivery['internalMessageCount'],
-                            $delivery['internalMessageCreatedCount'],
-                        ),
-                    );
+                    if ($alsoInternalMessage) {
+                        $io->writeln(
+                            sprintf(
+                                'Debug: Scheduled course announcement #%d has %d internal message(s) available '.
+                                '(%d created in this run), but no external email was delivered.',
+                                $announcementId,
+                                $delivery['internalMessageCount'],
+                                $delivery['internalMessageCreatedCount'],
+                            ),
+                        );
+                    } else {
+                        $io->writeln(
+                            'Debug: Scheduled course announcement #'.$announcementId.
+                            ' could not be delivered by external email.',
+                        );
+                    }
                 }
                 $connection->commit();
 

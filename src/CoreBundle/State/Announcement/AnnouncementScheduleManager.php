@@ -38,7 +38,7 @@ final readonly class AnnouncementScheduleManager
 
     public function supportsSendToUsersInSessions(): bool
     {
-        return $this->findCourseAnnouncementField(self::SEND_TO_SESSIONS_VARIABLE) instanceof ExtraField;
+        return $this->findScheduleField(self::SEND_TO_SESSIONS_VARIABLE) instanceof ExtraField;
     }
 
     /**
@@ -80,16 +80,22 @@ final readonly class AnnouncementScheduleManager
             throw new RuntimeException('The announcement must be persisted before its schedule is saved.');
         }
 
+        if (!$scheduleByDate) {
+            $this->removeScheduleValues($announcementId);
+
+            return;
+        }
+
         $values = [
-            self::SEND_AT_DATE_VARIABLE => $scheduleByDate ? '1' : '0',
-            self::DATE_TO_SEND_VARIABLE => $scheduleByDate ? trim((string) $scheduleDate) : '',
+            self::SEND_AT_DATE_VARIABLE => '1',
+            self::DATE_TO_SEND_VARIABLE => trim((string) $scheduleDate),
             self::SEND_TO_SESSIONS_VARIABLE => $sendToUsersInSessions ? '1' : '0',
         ];
 
         foreach ($values as $variable => $value) {
-            $field = $this->findCourseAnnouncementField($variable);
+            $field = $this->findScheduleField($variable);
             if (!$field instanceof ExtraField) {
-                // Old databases can miss the course-announcement definition for this optional flag.
+                // Older databases can miss the optional all-sessions flag.
                 if (self::SEND_TO_SESSIONS_VARIABLE === $variable && '0' === $value) {
                     continue;
                 }
@@ -118,7 +124,7 @@ final readonly class AnnouncementScheduleManager
 
     private function getValue(int $announcementId, string $variable): ?string
     {
-        $field = $this->findCourseAnnouncementField($variable);
+        $field = $this->findScheduleField($variable);
         if (!$field instanceof ExtraField) {
             return null;
         }
@@ -131,9 +137,40 @@ final readonly class AnnouncementScheduleManager
         return $storedValue instanceof ExtraFieldValues ? $storedValue->getFieldValue() : null;
     }
 
-    private function findCourseAnnouncementField(string $variable): ?ExtraField
+    private function findScheduleField(string $variable): ?ExtraField
     {
-        return $this->extraFieldRepository->findByVariable(ExtraField::COURSE_ANNOUNCEMENT, $variable);
+        $field = $this->extraFieldRepository->findByVariable(ExtraField::COURSE_ANNOUNCEMENT, $variable);
+        if ($field instanceof ExtraField || self::SEND_TO_SESSIONS_VARIABLE !== $variable) {
+            return $field;
+        }
+
+        // Compatibility with upgraded databases where this legacy field was created as a session field.
+        return $this->extraFieldRepository->findByVariable(ExtraField::SESSION_FIELD_TYPE, $variable);
+    }
+
+    private function removeScheduleValues(int $announcementId): void
+    {
+        foreach ([
+            self::SEND_AT_DATE_VARIABLE,
+            self::DATE_TO_SEND_VARIABLE,
+            self::SEND_TO_SESSIONS_VARIABLE,
+        ] as $variable) {
+            $field = $this->findScheduleField($variable);
+            if (!$field instanceof ExtraField) {
+                continue;
+            }
+
+            $storedValue = $this->extraFieldValuesRepository->findOneBy([
+                'field' => $field,
+                'itemId' => $announcementId,
+            ]);
+
+            if ($storedValue instanceof ExtraFieldValues) {
+                $this->entityManager->remove($storedValue);
+            }
+        }
+
+        $this->entityManager->flush();
     }
 
     private function toBoolean(mixed $value): bool

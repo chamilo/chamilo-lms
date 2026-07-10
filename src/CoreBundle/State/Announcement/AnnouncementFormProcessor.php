@@ -43,6 +43,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         private EntityManagerInterface $entityManager,
         private CAnnouncementRepository $announcementRepository,
         private AnnouncementRecipientResolver $recipientResolver,
+        private AnnouncementOrderManager $orderManager,
         private AnnouncementEmailRecipientResolver $emailRecipientResolver,
         private AnnouncementScheduleManager $scheduleManager,
         private CCalendarEventRepository $calendarEventRepository,
@@ -95,7 +96,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         );
         $this->validateEmailOptions($data, $session);
         $this->validateScheduleOptions($data, $session);
-        $this->validateCalendarOptions($data, $operation);
+        $this->validateCalendarOptions($data);
 
         $sender = $this->security->getUser();
         if (!$sender instanceof User) {
@@ -173,6 +174,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $this->applyResourceLanguage($announcement, $language);
         $this->announcementRepository->update($announcement);
         $this->entityManager->refresh($announcement);
+        $this->orderManager->normalize($course, $session, $group);
 
         if ($this->scheduleManager->isAvailable($session)) {
             $this->scheduleManager->save(
@@ -183,7 +185,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
             );
         }
 
-        if ($isNew && $data->addToCalendar) {
+        if ($data->addToCalendar) {
             $eventStartDate = $data->eventStartDate;
             $eventEndDate = $data->eventEndDate;
             if (!$eventStartDate instanceof DateTime || !$eventEndDate instanceof DateTime) {
@@ -198,7 +200,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
                 $course,
                 $session,
                 $group,
-                $this->normalizeReminders($data->reminders),
+                $this->areAgendaRemindersEnabled() ? $this->normalizeReminders($data->reminders) : [],
             );
         }
 
@@ -222,8 +224,9 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $response->scheduleByDate = $data->scheduleByDate;
         $response->scheduleDate = $data->scheduleDate;
         $response->scheduleMinimumDate = (new DateTimeImmutable('today'))->format('Y-m-d');
-        $response->calendarAvailable = false;
-        $response->addToCalendar = $data->addToCalendar;
+        $response->calendarAvailable = true;
+        $response->remindersAvailable = $this->areAgendaRemindersEnabled();
+        $response->addToCalendar = false;
         $response->eventStartDate = $data->eventStartDate;
         $response->eventEndDate = $data->eventEndDate;
         $response->reminders = $data->reminders;
@@ -288,7 +291,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $form->scheduleDate = $scheduleDate->format('Y-m-d');
     }
 
-    private function validateCalendarOptions(AnnouncementForm $form, Operation $operation): void
+    private function validateCalendarOptions(AnnouncementForm $form): void
     {
         if (!$form->addToCalendar) {
             $form->eventStartDate = null;
@@ -298,16 +301,16 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
             return;
         }
 
-        if ($operation instanceof Put) {
-            throw new BadRequestHttpException('A calendar event can only be created with a new announcement.');
-        }
-
         if (!$form->eventStartDate instanceof DateTime || !$form->eventEndDate instanceof DateTime) {
             throw new BadRequestHttpException('Calendar event start and end dates are required.');
         }
 
         if ($form->eventEndDate <= $form->eventStartDate) {
             throw new BadRequestHttpException('The calendar event end date must be after its start date.');
+        }
+
+        if (!$this->areAgendaRemindersEnabled() && [] !== $form->reminders) {
+            throw new AccessDeniedHttpException('Calendar reminders are disabled.');
         }
 
         $this->normalizeReminders($form->reminders);
@@ -425,6 +428,15 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         }
 
         return $announcement;
+    }
+
+    private function areAgendaRemindersEnabled(): bool
+    {
+        if (!\function_exists('api_get_configuration_value')) {
+            return false;
+        }
+
+        return true === \api_get_configuration_value('agenda_reminders');
     }
 
     private function validateCsrfToken(string $token): void

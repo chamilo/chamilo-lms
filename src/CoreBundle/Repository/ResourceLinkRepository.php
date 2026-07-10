@@ -30,7 +30,7 @@ class ResourceLinkRepository extends SortableRepository
         'learnpath' => '/main/lp/lp_controller.php',
         'link' => '/resources/links/%resource_node_id%/',
         'quiz' => '/main/exercise/exercise.php',
-        'announcement' => '/main/announcements/announcements.php',
+        'announcement' => '/resources/announcement/%resource_node_id%/',
         'glossary' => '/resources/glossary/%resource_node_id%/',
         'attendance' => '/main/attendance/index.php',
         'course_progress' => '/main/course_progress/index.php',

@@ -904,17 +904,20 @@ class learnpath
     public function delete_item($id)
     {
         $course_id = api_get_course_int_id();
+        $lpId = $this->get_id();
         $id = (int) $id;
         // TODO: Implement the resource removal.
-        if (empty($id) || empty($course_id)) {
+        if (empty($id) || empty($course_id) || empty($lpId)) {
             return false;
         }
 
         $repo = Container::getLpItemRepository();
         $item = $repo->find($id);
-        if (null === $item) {
+        if (null === $item || (int) $item->getLp()->getIid() !== $lpId) {
             return false;
         }
+
+        $searchDid = $item->getSearchDid();
 
         $em = Database::getManager();
         $repo->removeFromTree($item);
@@ -931,24 +934,20 @@ class learnpath
                 WHERE lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
         Database::query($sql);
 
-        // Remove from search engine if enabled.
-        if ('true' === api_get_setting('search_enabled')) {
-            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $row2 = Database::fetch_array($res);
+        // Remove the indexed document without querying the legacy search_engine_ref schema.
+        if ('true' === api_get_setting('search_enabled') && !empty($searchDid)) {
+            try {
                 $di = new ChamiloIndexer();
-                $di->remove_document($row2['search_did']);
+                $di->remove_document((int) $searchDid);
+            } catch (Throwable $exception) {
+                error_log(
+                    sprintf(
+                        '[Xapian] Failed to remove learning path item %d from the index: %s',
+                        $id,
+                        $exception->getMessage()
+                    )
+                );
             }
-            $sql = 'DELETE FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
-            Database::query($sql);
         }
     }
 
@@ -9229,6 +9228,45 @@ document.addEventListener("DOMContentLoaded", function () {
         return $path.'?'.http_build_query($query);
     }
 
+    private static function buildVueAnnouncementLearningPathUrl(
+        int $courseId,
+        int $sessionId,
+        int $learningPathId,
+        int $learningPathItemId,
+        int $learningPathViewId,
+        int $announcementId
+    ): string {
+        if ($courseId <= 0 || $announcementId <= 0) {
+            return '';
+        }
+
+        $em = Database::getManager();
+        $course = $em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return '';
+        }
+
+        $courseResourceNodeId = (int) $course->getResourceNode()->getId();
+        if ($courseResourceNodeId <= 0) {
+            return '';
+        }
+
+        $query = [
+            'cid' => $courseId,
+            'sid' => $sessionId,
+            'gid' => api_get_group_id(),
+            'origin' => 'learnpath',
+            'lp_id' => $learningPathId,
+            'lp_item_id' => $learningPathItemId,
+            'lp_view_id' => $learningPathViewId,
+            'returnToLp' => 1,
+            'embedded' => 1,
+            'isStudentView' => 'true',
+        ];
+
+        return api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/view/'.$announcementId.'?'.http_build_query($query);
+    }
+
     private static function buildVueSurveyLearningPathUrl(
         int $courseId,
         int $sessionId,
@@ -9300,6 +9338,19 @@ document.addEventListener("DOMContentLoaded", function () {
             case TOOL_CALENDAR_EVENT:
                 return $main_dir_path.'calendar/agenda.php?agenda_id='.$id.'&'.$extraParams;
             case TOOL_ANNOUNCEMENT:
+                $announcementUrl = self::buildVueAnnouncementLearningPathUrl(
+                    (int) $course_id,
+                    $session_id,
+                    $learningPathId,
+                    $id_in_path,
+                    $lpViewId,
+                    (int) $id
+                );
+
+                if ('' !== $announcementUrl) {
+                    return $announcementUrl;
+                }
+
                 return $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
             case TOOL_LINK:
                 $linkInfo = Link::getLinkInfo($id);

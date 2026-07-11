@@ -7,6 +7,7 @@
       :is-invalid="recordError !== ''"
       :label="t('Enter filename here')"
       class="max-w-full self-center mb-4 w-60"
+      name="recordName"
     />
 
     <audio
@@ -104,8 +105,9 @@ const saveAudio = async () => {
   }
 
   try {
-    await documentsService.createWithFormData(data)
-    emit("document-saved")
+    const response = await documentsService.createWithFormData(data)
+    const document = response && "function" === typeof response.json ? await response.json() : response
+    emit("document-saved", document)
   } catch (error) {
     emit("document-not-saved", error)
   }

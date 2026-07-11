@@ -214,6 +214,7 @@ $formData = [
     'discount_type' => (string) ((int) ($coupon['discount_type'] ?? 0)),
     'discount_type_label' => (string) ($discountTypes[(int) ($coupon['discount_type'] ?? 0)] ?? ''),
     'discount_amount' => (string) ($coupon['discount_amount'] ?? '0'),
+    'times_applied' => (string) ((int) ($coupon['times_applied'] ?? 0)),
     'date_start_input' => formatConfiguredCouponDateTimeInput((string) ($coupon['valid_start'] ?? '')),
     'date_end_input' => formatConfiguredCouponDateTimeInput((string) ($coupon['valid_end'] ?? '')),
     'active' => !empty($coupon['active']),
@@ -239,6 +240,7 @@ $csrfToken = (string) $_SESSION[$csrfSessionKey];
 
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $formData['active'] = isset($_POST['active']);
+    $formData['times_applied'] = trim((string) ($_POST['times_applied'] ?? '0'));
     $formData['date_start_input'] = trim((string) ($_POST['date_start'] ?? $formData['date_start_input']));
     $formData['date_end_input'] = trim((string) ($_POST['date_end'] ?? $formData['date_end_input']));
     $formData['courses'] = sanitizeConfiguredCouponSelectedIds($_POST['courses'] ?? [], $courses);
@@ -271,6 +273,16 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         $hasError = true;
     }
 
+    $timesApplied = (int) $formData['times_applied'];
+    if ($timesApplied < 0) {
+        $messages[] = Display::return_message(
+            $plugin->get_lang('CouponTimesAppliedMustBeZeroOrGreater'),
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
     $validStart = normalizeConfiguredCouponDateTime($formData['date_start_input']);
     $validEnd = normalizeConfiguredCouponDateTime($formData['date_end_input']);
 
@@ -297,6 +309,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     if (!$hasError) {
         $couponToUpdate = $coupon;
         $couponToUpdate['id'] = $couponId;
+        $couponToUpdate['times_applied'] = $timesApplied;
         $couponToUpdate['valid_start'] = (string) $validStart;
         $couponToUpdate['valid_end'] = (string) $validEnd;
         $couponToUpdate['active'] = $formData['active'] ? 1 : 0;

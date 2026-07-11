@@ -783,3 +783,8 @@ $strings['AuditActionRenewalCancelled'] = 'Automatic renewal cancelled';
 $strings['AuditActionRenewalRestored'] = 'Automatic renewal restored';
 $strings['AuditActionRenewalPaymentSucceeded'] = 'Renewal payment completed';
 $strings['AuditActionRenewalPaymentFailed'] = 'Renewal payment failed';
+
+$strings['CouponTimesApplied'] = 'Times applied';
+$strings['CouponTimesAppliedHelp'] = 'Number of paid service periods that can use this coupon. Use 0 for unlimited applications.';
+$strings['CouponTimesAppliedUnlimited'] = 'Unlimited';
+$strings['CouponTimesAppliedMustBeZeroOrGreater'] = 'Times applied must be zero or greater.';

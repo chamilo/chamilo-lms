@@ -727,6 +727,9 @@ switch ($serviceSale['payment_type']) {
                     (int) $serviceSale['id'].
                     '-checkout-'.
                     substr(hash('sha256', $checkoutAttemptSeed), 0, 24);
+                $serviceSaleCouponUsage = $plugin->getServiceSaleCouponUsage((int) $serviceSale['id']);
+                $couponTimesApplied = max(0, (int) ($serviceSaleCouponUsage['times_applied'] ?? 0));
+                $useLimitedRecurringCoupon = $couponTimesApplied > 1 && $upgradeSourceSaleId <= 0;
                 $successUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_stripe_success.php?service_sale_id='.(int) $serviceSale['id'].'&session_id={CHECKOUT_SESSION_ID}';
                 $cancelUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_stripe_cancel.php?service_sale_id='.(int) $serviceSale['id'];
 
@@ -743,6 +746,8 @@ switch ($serviceSale['payment_type']) {
                         'service_id' => (string) $serviceSale['service_id'],
                         'buyer_id' => (string) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0),
                         'upgrade_from_sale_id' => (string) $upgradeSourceSaleId,
+                        'coupon_id' => (string) ((int) ($serviceSaleCouponUsage['id'] ?? 0)),
+                        'coupon_times_applied' => (string) $couponTimesApplied,
                     ],
                 ];
 
@@ -792,12 +797,17 @@ switch ($serviceSale['payment_type']) {
                                 [
                                     'amount_off' => $initialDiscountInCents,
                                     'currency' => $currencyCode,
-                                    'duration' => 'once',
-                                    'name' => $plugin->get_lang('UpgradeProratedCredit'),
+                                    'duration' => $useLimitedRecurringCoupon ? 'forever' : 'once',
+                                    'name' => '' !== trim((string) ($serviceSaleCouponUsage['code'] ?? ''))
+                                        ? (string) $serviceSaleCouponUsage['code']
+                                        : $plugin->get_lang('UpgradeProratedCredit'),
                                     'metadata' => [
                                         'source' => 'BuyCourses',
                                         'service_sale_id' => (string) $serviceSale['id'],
                                         'upgrade_from_sale_id' => (string) $upgradeSourceSaleId,
+                                        'coupon_id' => (string) ((int) ($serviceSaleCouponUsage['id'] ?? 0)),
+                                        'coupon_times_applied' => (string) $couponTimesApplied,
+                                        'limited_recurring_coupon' => $useLimitedRecurringCoupon ? '1' : '0',
                                     ],
                                 ],
                                 [
@@ -809,7 +819,7 @@ switch ($serviceSale['payment_type']) {
                             ]];
                         } catch (Throwable $exception) {
                             error_log(
-                                '[BuyCourses][Stripe] Upgrade coupon creation failed for service sale '.
+                                '[BuyCourses][Stripe] Checkout discount creation failed for service sale '.
                                 (int) $serviceSale['id'].
                                 ': '.
                                 $exception->getMessage()
@@ -836,6 +846,8 @@ switch ($serviceSale['payment_type']) {
                             'service_id' => (string) $serviceSale['service_id'],
                             'buyer_id' => (string) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0),
                             'upgrade_from_sale_id' => (string) $upgradeSourceSaleId,
+                            'coupon_id' => (string) ((int) ($serviceSaleCouponUsage['id'] ?? 0)),
+                            'coupon_times_applied' => (string) $couponTimesApplied,
                             'vat_treatment' => (string) ($serviceSale['vat_treatment'] ?? ''),
                             'vat_rate' => (string) ($serviceSale['vat_rate'] ?? ''),
                             'tax_amount' => (string) ($serviceSale['tax_amount'] ?? ''),

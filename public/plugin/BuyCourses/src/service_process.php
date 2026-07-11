@@ -46,8 +46,23 @@ $queryString = 'i='.$serviceId.'&t='.$type.$additionalQueryString;
 $coupon = null;
 
 if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
-    $couponCode = trim((string) $_REQUEST['c']);
-    $coupon = $plugin->getCouponServiceByCode($couponCode, $serviceId);
+    $couponValue = trim((string) $_REQUEST['c']);
+    $coupon = ctype_digit($couponValue)
+        ? $plugin->getCouponService((int) $couponValue, $serviceId)
+        : $plugin->getCouponServiceByCode($couponValue, $serviceId);
+
+    if (empty($coupon) || empty($coupon['id'])) {
+        Display::addFlash(
+            Display::return_message(
+                $plugin->get_lang('CouponNotValid'),
+                'warning',
+                false
+            )
+        );
+
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.$type);
+        exit;
+    }
 }
 
 $serviceInfo = $plugin->getService($serviceId, $coupon);

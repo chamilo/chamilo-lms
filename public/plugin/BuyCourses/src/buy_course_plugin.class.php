@@ -859,6 +859,24 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
+        $couponTable = Database::get_main_table(self::TABLE_COUPON);
+        $res = Database::query("SHOW COLUMNS FROM $couponTable WHERE Field = 'times_applied'");
+        if (0 === Database::num_rows($res)) {
+            $res = Database::query("ALTER TABLE $couponTable ADD times_applied INT UNSIGNED NOT NULL DEFAULT 0");
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
+
+        $couponServiceSaleTable = Database::get_main_table(self::TABLE_COUPON_SERVICE_SALE);
+        $res = Database::query("SHOW COLUMNS FROM $couponServiceSaleTable WHERE Field = 'applied_count'");
+        if (0 === Database::num_rows($res)) {
+            $res = Database::query("ALTER TABLE $couponServiceSaleTable ADD applied_count INT UNSIGNED NOT NULL DEFAULT 1");
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
+
         $table = Database::get_main_table(self::TABLE_INVOICE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
@@ -900,6 +918,7 @@ class BuyCoursesPlugin extends Plugin
             code varchar(255) NOT NULL,
             discount_type int unsigned NOT NULL,
             discount_amount decimal(10, 2) NOT NULL,
+            times_applied int unsigned NOT NULL DEFAULT 0,
             valid_start datetime NOT NULL,
             valid_end datetime NOT NULL,
             delivered varchar(255) NOT NULL,
@@ -997,6 +1016,7 @@ class BuyCoursesPlugin extends Plugin
             id int unsigned NOT NULL AUTO_INCREMENT,
             coupon_id int unsigned NOT NULL,
             service_sale_id int unsigned NOT NULL,
+            applied_count int unsigned NOT NULL DEFAULT 1,
             PRIMARY KEY (id)
         )";
         Database::query($sql);
@@ -5309,6 +5329,10 @@ class BuyCoursesPlugin extends Plugin
         $sourceRecurringEnabled = self::SERVICE_RECURRING_PAYMENT_ENABLED
             === (int) ($sourceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED)
             && '' !== $sourceRecurringProfileId;
+        $sourceDateEnd = (string) ($sourceSale['date_end'] ?? '');
+        $sourceDateEndFormatted = '' !== $sourceDateEnd
+            ? api_format_date(api_get_local_time($sourceDateEnd), DATE_TIME_FORMAT_LONG_24H)
+            : '';
 
         $targetChargeBaseWithoutTax = $sourceRecurringEnabled
             ? round($targetFullPriceWithoutTax * $remainingRatio, 2)
@@ -5332,7 +5356,8 @@ class BuyCoursesPlugin extends Plugin
             'source_sale_id' => (int) $sourceSale['id'],
             'source_service_id' => (int) ($sourceSale['service_id'] ?? 0),
             'source_service_name' => (string) ($sourceSale['service']['name'] ?? $sourceSale['name'] ?? ''),
-            'source_date_end' => (string) ($sourceSale['date_end'] ?? ''),
+            'source_date_end' => $sourceDateEnd,
+            'source_date_end_formatted' => $sourceDateEndFormatted,
             'source_recurring_payment' => (int) ($sourceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED),
             'source_recurring_gateway' => $sourceRecurringGateway,
             'source_recurring_profile_id' => $sourceRecurringProfileId,
@@ -7893,7 +7918,11 @@ class BuyCoursesPlugin extends Plugin
             $priceWithoutDiscount = $basePrice;
         }
 
-        $recurringPriceWithoutTax = round(max(0.0, $basePrice - $couponDiscount), 2);
+        $couponTimesApplied = null !== $coupon ? max(0, (int) ($coupon['times_applied'] ?? 0)) : 0;
+        $limitedRecurringCoupon = !empty($service['renewable']) && $couponTimesApplied > 0;
+        $recurringPriceWithoutTax = $limitedRecurringCoupon
+            ? round($basePrice, 2)
+            : round(max(0.0, $basePrice - $couponDiscount), 2);
         $upgradeOffer = $this->getServiceUpgradeOffer($serviceId, $userId, $coupon);
         $upgradeCreditAmount = 0.0;
         $upgradeFromSaleId = null;
@@ -7935,7 +7964,7 @@ class BuyCoursesPlugin extends Plugin
 
         $firstChargePriceWithoutTax = null !== $upgradeOffer
             ? round(max(0.0, (float) ($upgradeOffer['upgrade_price_without_tax'] ?? 0)), 2)
-            : $recurringPriceWithoutTax;
+            : round(max(0.0, $basePrice - $couponDiscount), 2);
 
         if ($firstChargePriceWithoutTax <= 0) {
             $this->lastServiceSaleError = $this->get_lang('UpgradePriceMustBePositive');
@@ -8337,7 +8366,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerCouponServiceSale(int $saleId, int $couponId): bool
     {
-        $sale = $this->getSale($saleId);
+        $sale = $this->getServiceSale($saleId);
 
         if (empty($sale)) {
             return false;
@@ -8346,6 +8375,7 @@ class BuyCoursesPlugin extends Plugin
         $values = [
             'coupon_id' => $couponId,
             'service_sale_id' => $saleId,
+            'applied_count' => 1,
         ];
 
         return Database::insert(self::TABLE_COUPON_SERVICE_SALE, $values) > 0;
@@ -8546,6 +8576,61 @@ class BuyCoursesPlugin extends Plugin
     public function getCouponServiceByCode(string $couponCode, int $serviceId)
     {
         return $this->getDataCouponServiceByCode($couponCode, $serviceId);
+    }
+
+    public function getServiceSaleCouponUsage(int $serviceSaleId): array
+    {
+        if ($serviceSaleId <= 0) {
+            return [];
+        }
+
+        $couponTable = Database::get_main_table(self::TABLE_COUPON);
+        $couponServiceSaleTable = Database::get_main_table(self::TABLE_COUPON_SERVICE_SALE);
+
+        $couponFrom = "
+            $couponTable c
+            INNER JOIN $couponServiceSaleTable cs
+                ON c.id = cs.coupon_id
+        ";
+
+        $coupon = Database::select(
+            [
+                'c.*',
+                'cs.id AS coupon_service_sale_id',
+                'cs.applied_count',
+            ],
+            $couponFrom,
+            [
+                'where' => [
+                    'cs.service_sale_id = ? ' => $serviceSaleId,
+                ],
+            ],
+            'first'
+        );
+
+        return is_array($coupon) ? $coupon : [];
+    }
+
+    public function incrementServiceSaleCouponAppliedCount(int $serviceSaleId): int
+    {
+        $coupon = $this->getServiceSaleCouponUsage($serviceSaleId);
+        $couponServiceSaleId = (int) ($coupon['coupon_service_sale_id'] ?? 0);
+
+        if ($couponServiceSaleId <= 0) {
+            return 0;
+        }
+
+        $appliedCount = max(0, (int) ($coupon['applied_count'] ?? 0)) + 1;
+
+        Database::update(
+            self::TABLE_COUPON_SERVICE_SALE,
+            [
+                'applied_count' => $appliedCount,
+            ],
+            ['id = ?' => $couponServiceSaleId]
+        );
+
+        return $appliedCount;
     }
 
     /**
@@ -10381,6 +10466,7 @@ class BuyCoursesPlugin extends Plugin
         $values = [
             'valid_start' => $coupon['valid_start'],
             'valid_end' => $coupon['valid_end'],
+            'times_applied' => max(0, (int) ($coupon['times_applied'] ?? 0)),
             'active' => $coupon['active'],
         ];
 
@@ -10413,6 +10499,7 @@ class BuyCoursesPlugin extends Plugin
             'code' => (string) $coupon['code'],
             'discount_type' => (int) $coupon['discount_type'],
             'discount_amount' => $coupon['discount_amount'],
+            'times_applied' => max(0, (int) ($coupon['times_applied'] ?? 0)),
             'valid_start' => $coupon['valid_start'],
             'valid_end' => $coupon['valid_end'],
             'delivered' => 0,

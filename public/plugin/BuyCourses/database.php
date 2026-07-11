@@ -547,6 +547,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_C
     $couponTable->addColumn('valid_start', Types::DATETIME_MUTABLE);
     $couponTable->addColumn('valid_end', Types::DATETIME_MUTABLE);
     $couponTable->addColumn('delivered', Types::INTEGER);
+    $couponTable->addColumn('times_applied', Types::INTEGER, ['default' => 0]);
     $couponTable->addColumn('active', Types::BOOLEAN);
     $couponTable->setPrimaryKey(['id']);
 }
@@ -659,6 +660,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_C
     );
     $couponSaleTable->addColumn('coupon_id', Types::INTEGER);
     $couponSaleTable->addColumn('service_sale_id', Types::INTEGER);
+    $couponSaleTable->addColumn('applied_count', Types::INTEGER, ['default' => 1]);
     $couponSaleTable->setPrimaryKey(['id']);
 }
 

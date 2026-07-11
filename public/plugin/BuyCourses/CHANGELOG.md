@@ -1,3 +1,29 @@
+v7.11 - 2026-07-10
+=====
+
+Feature: coupons now include a "Times applied" option. A value of 0 keeps the
+current unlimited behaviour, while a positive value limits how many paid service
+periods can receive the discount.
+
+Feature: Stripe recurring service purchases with limited coupons now keep the
+subscription at the regular recurring price and use a Stripe discount while the
+configured number of applications remains. After the limit is reached, the Stripe
+subscription discount is removed without changing the subscription itself.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure so the new `plugin_buycourses_coupon.times_applied` and
+`plugin_buycourses_coupon_rel_service_sale.applied_count` columns are created.
+Existing coupons keep unlimited behaviour by default. Either load
+`[your-host]/plugin/BuyCourses/update.php` in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_coupon
+    ADD times_applied INT UNSIGNED NOT NULL DEFAULT 0;
+
+ALTER TABLE plugin_buycourses_coupon_rel_service_sale
+    ADD applied_count INT UNSIGNED NOT NULL DEFAULT 1;
+```
+
 v7.10 - 2026-07-10
 =====
 

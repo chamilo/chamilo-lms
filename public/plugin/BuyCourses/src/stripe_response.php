@@ -38,6 +38,49 @@ $log = static function (string $message, array $context = []): void {
     error_log('[BuyCourses][Stripe] '.$message.$suffix);
 };
 
+$deleteStripeSubscriptionDiscount = static function (string $subscriptionId, string $secretKey): array {
+    if ('' === $subscriptionId || '' === $secretKey) {
+        return [false, 'Missing subscription ID or Stripe secret key.'];
+    }
+
+    if (!function_exists('curl_init')) {
+        return [false, 'PHP cURL extension is not available.'];
+    }
+
+    $url = 'https://api.stripe.com/v1/subscriptions/'.rawurlencode($subscriptionId).'/discount';
+    $curl = curl_init($url);
+
+    if (false === $curl) {
+        return [false, 'Could not initialize cURL.'];
+    }
+
+    curl_setopt_array($curl, [
+        CURLOPT_CUSTOMREQUEST => 'DELETE',
+        CURLOPT_USERPWD => $secretKey.':',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+    ]);
+
+    $response = curl_exec($curl);
+    $error = curl_error($curl);
+    $httpCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if (false === $response) {
+        return [false, '' !== $error ? $error : 'Unknown cURL error.'];
+    }
+
+    $decoded = json_decode((string) $response, true);
+
+    if ($httpCode >= 200 && $httpCode < 300) {
+        return [true, $decoded ?: []];
+    }
+
+    $message = $decoded['error']['message'] ?? $response;
+
+    return [false, $message];
+};
+
 if ('' === $payload || '' === $signatureHeader || '' === $endpointSecret) {
     $log('Webhook rejected because payload, signature or endpoint secret is missing.');
     $respond('BAD_REQUEST', 400);
@@ -403,6 +446,54 @@ switch ($eventType) {
             null,
             BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
         );
+
+        $billingReason = strtolower(trim((string) ($object->billing_reason ?? '')));
+        if ('subscription_create' !== $billingReason) {
+            $couponUsage = $plugin->getServiceSaleCouponUsage($serviceSaleId);
+            $couponTimesApplied = max(0, (int) ($couponUsage['times_applied'] ?? 0));
+
+            if ($couponTimesApplied > 0) {
+                $currentAppliedCount = max(0, (int) ($couponUsage['applied_count'] ?? 0));
+
+                if ($currentAppliedCount < $couponTimesApplied) {
+                    $appliedCount = $plugin->incrementServiceSaleCouponAppliedCount($serviceSaleId);
+
+                    if ($appliedCount >= $couponTimesApplied) {
+                        $stripeSecretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+
+                        if ('' !== $stripeSecretKey && '' !== $subscriptionId) {
+                            try {
+                                \Stripe\Stripe::setApiKey($stripeSecretKey);
+                                \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+                                [$discountDeleted, $discountDeleteResult] = $deleteStripeSubscriptionDiscount(
+                                    $subscriptionId,
+                                    $stripeSecretKey
+                                );
+
+                                if (!$discountDeleted) {
+                                    throw new RuntimeException((string) $discountDeleteResult);
+                                }
+
+                                $log('Stripe limited coupon discount removed after reaching its application limit.', [
+                                    'service_sale_id' => $serviceSaleId,
+                                    'subscription_id' => $subscriptionId,
+                                    'coupon_id' => (int) ($couponUsage['id'] ?? 0),
+                                    'applied_count' => $appliedCount,
+                                    'times_applied' => $couponTimesApplied,
+                                ]);
+                            } catch (Throwable $exception) {
+                                $log('Stripe limited coupon discount could not be removed.', [
+                                    'service_sale_id' => $serviceSaleId,
+                                    'subscription_id' => $subscriptionId,
+                                    'coupon_id' => (int) ($couponUsage['id'] ?? 0),
+                                    'error' => $exception->getMessage(),
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         $log('Stripe recurring invoice paid.', [
             'service_sale_id' => $serviceSaleId,

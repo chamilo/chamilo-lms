@@ -52,6 +52,7 @@ use CourseManager;
 use Database;
 use DateTimeInterface;
 use Display;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Event;
@@ -1240,6 +1241,14 @@ class CourseController extends ToolBaseController
                     'courseId' => $course->getId(),
                 ]);
             }
+        } catch (\InvalidArgumentException $exception) {
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $exception->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (RuntimeException $exception) {
             return new JsonResponse(
                 [
@@ -1248,23 +1257,20 @@ class CourseController extends ToolBaseController
                 ],
                 Response::HTTP_FORBIDDEN
             );
-        } catch (Throwable $exception) {
-            error_log(
-                '[course.create] throwable='.
-                $exception::class.
-                ' message='.$exception->getMessage().
-                ' file='.$exception->getFile().
-                ' line='.(string) $exception->getLine().
-                ' peak='.memory_get_peak_usage(true)
-            );
+        } catch (UniqueConstraintViolationException $exception) {
+            if ($this->isCourseCodeUniqueConstraintViolation($exception)) {
+                return new JsonResponse(
+                    [
+                        'success' => false,
+                        'message' => $this->getDuplicateCourseCreationMessage($wantedCode, $translator),
+                    ],
+                    Response::HTTP_CONFLICT
+                );
+            }
 
-            return new JsonResponse(
-                [
-                    'success' => false,
-                    'message' => $translator->trans('An error occurred while creating the course.'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return $this->createCourseCreationServerErrorResponse($exception, $translator);
+        } catch (Throwable $exception) {
+            return $this->createCourseCreationServerErrorResponse($exception, $translator);
         }
 
         return new JsonResponse(
@@ -1273,6 +1279,46 @@ class CourseController extends ToolBaseController
                 'message' => $translator->trans('An error occurred while creating the course.'),
             ],
             Response::HTTP_BAD_REQUEST
+        );
+    }
+
+    private function isCourseCodeUniqueConstraintViolation(UniqueConstraintViolationException $exception): bool
+    {
+        $message = $exception->getMessage();
+
+        return str_contains($message, 'UNIQ_169E6FB977153098')
+            || str_contains($message, "for key 'code'")
+            || str_contains($message, 'for key "code"');
+    }
+
+    private function getDuplicateCourseCreationMessage(?string $wantedCode, TranslatorInterface $translator): string
+    {
+        if (null !== $wantedCode && '' !== trim($wantedCode)) {
+            return $translator->trans('This course code already exists, please choose another code.');
+        }
+
+        return $translator->trans('This course title already exists, please choose another title.');
+    }
+
+    private function createCourseCreationServerErrorResponse(
+        Throwable $exception,
+        TranslatorInterface $translator
+    ): JsonResponse {
+        error_log(
+            '[course.create] throwable='.
+            $exception::class.
+            ' message='.$exception->getMessage().
+            ' file='.$exception->getFile().
+            ' line='.(string) $exception->getLine().
+            ' peak='.memory_get_peak_usage(true)
+        );
+
+        return new JsonResponse(
+            [
+                'success' => false,
+                'message' => $translator->trans('An error occurred while creating the course.'),
+            ],
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
     }
 

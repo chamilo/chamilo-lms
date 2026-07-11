@@ -184,15 +184,23 @@ class CourseHelper
             $params['visibility'] = Course::REGISTERED;
         }
 
+        $wantedCodeWasGeneratedFromTitle = false;
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $this->generateCourseCode($params['title']);
+            $wantedCodeWasGeneratedFromTitle = true;
             $this->debugLog('createCourse:generatedWantedCode', ['wanted_code' => $params['wanted_code']]);
         }
 
         if ($this->courseRepository->courseCodeExists($params['wanted_code'])) {
             $this->debugLog('createCourse:duplicateCode', ['wanted_code' => $params['wanted_code']]);
 
-            throw new Exception('The course code already exists: '.$params['wanted_code']);
+            throw new InvalidArgumentException(
+                $this->translator->trans(
+                    $wantedCodeWasGeneratedFromTitle
+                        ? 'This course title already exists, please choose another title.'
+                        : 'This course code already exists, please choose another code.'
+                )
+            );
         }
 
         $keys = $this->defineCourseKeys($params['wanted_code']);

@@ -57,7 +57,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Put(
             uriTemplate: '/course-description/{iid}',
-            requirements: ['iid' => '\\d+'],
+            requirements: ['iid' => '\d+'],
             openapi: new Operation(
                 summary: 'Update a course description',
                 parameters: [
@@ -75,7 +75,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Delete(
             uriTemplate: '/course-description/{iid}',
-            requirements: ['iid' => '\\d+'],
+            requirements: ['iid' => '\d+'],
             openapi: new Operation(
                 summary: 'Delete a course description',
                 parameters: [

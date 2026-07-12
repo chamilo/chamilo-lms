@@ -26,6 +26,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const JSON_THROW_ON_ERROR;
+
 /**
  * @implements ProcessorInterface<CourseDescriptionItem, void>
  */

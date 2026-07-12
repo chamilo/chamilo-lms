@@ -192,7 +192,7 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
             $session,
             (int) $announcement->getIid(),
             details: $status,
-            info: sprintf(
+            info: \sprintf(
                 'sent=%d;failed=%d;internal=%d;internal_created=%d',
                 $result->sentCount,
                 $result->failedCount,
@@ -273,9 +273,7 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
             $course,
             $session,
         )) {
-            throw new AccessDeniedHttpException(
-                'This announcement targets several groups and cannot be emailed from one group.',
-            );
+            throw new AccessDeniedHttpException('This announcement targets several groups and cannot be emailed from one group.');
         }
 
         if (!$this->canEditAnnouncement(

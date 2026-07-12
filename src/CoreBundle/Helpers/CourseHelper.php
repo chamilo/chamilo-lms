@@ -179,7 +179,7 @@ class CourseHelper
         // Explicit visibility values remain respected for administrative/custom flows.
         if (
             !empty($params['buycourses_service_sale_id'])
-            && !array_key_exists('visibility', $params)
+            && !\array_key_exists('visibility', $params)
         ) {
             $params['visibility'] = Course::REGISTERED;
         }
@@ -194,13 +194,7 @@ class CourseHelper
         if ($this->courseRepository->courseCodeExists($params['wanted_code'])) {
             $this->debugLog('createCourse:duplicateCode', ['wanted_code' => $params['wanted_code']]);
 
-            throw new InvalidArgumentException(
-                $this->translator->trans(
-                    $wantedCodeWasGeneratedFromTitle
-                        ? 'This course title already exists, please choose another title.'
-                        : 'This course code already exists, please choose another code.'
-                )
-            );
+            throw new InvalidArgumentException($this->translator->trans($wantedCodeWasGeneratedFromTitle ? 'This course title already exists, please choose another title.' : 'This course code already exists, please choose another code.'));
         }
 
         $keys = $this->defineCourseKeys($params['wanted_code']);

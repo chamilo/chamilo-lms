@@ -108,6 +108,7 @@ class TrackingCourseLog
                 rl.created_at    AS col6,
                 rl.visibility    AS col7,
                 rn.title         AS document_title,
+                rn.parent_id     AS parent_resource_node_id,
                 rt.title         AS resource_type_title,
                 creator.id       AS user_id,
                 creator.username AS col3,
@@ -188,7 +189,10 @@ class TrackingCourseLog
             $displayRow['col7']                = (int) $row['col7']; // visibility
             $displayRow['user_id']             = isset($row['user_id']) ? (int) $row['user_id'] : 0;
             $displayRow['col3']                = $row['col3']; // username
-            $displayRow['document_title']      = $row['document_title'] ?? '';
+            $displayRow['document_title'] = $row['document_title'] ?? '';
+            $displayRow['parent_resource_node_id'] = isset($row['parent_resource_node_id'])
+                ? (int) $row['parent_resource_node_id']
+                : 0;
             $displayRow['resource_type_title'] = $row['resource_type_title'];
             $displayRow['session_name']        = $row['session_name'] ?? '';
             $displayRow['coach_username']      = $row['coach_username'] ?? '';
@@ -234,7 +238,19 @@ class TrackingCourseLog
             $displayRow[4] = $ip;
 
             // Column 5: Document title.
-            $displayRow[5] = Security::remove_XSS($displayRow['document_title']);
+            $documentTitle = Security::remove_XSS($displayRow['document_title']);
+            if ('thematic' === $legacyTool && $displayRow['parent_resource_node_id'] > 0) {
+                $courseProgressQuery = [
+                    'cid' => $courseId,
+                    'sid' => (int) $sessionId,
+                    'gid' => 0,
+                ];
+                $courseProgressUrl = api_get_path(WEB_PATH).
+                    'resources/course-progress/'.$displayRow['parent_resource_node_id'].'/?'.
+                    http_build_query($courseProgressQuery);
+                $documentTitle = Display::url($documentTitle, $courseProgressUrl);
+            }
+            $displayRow[5] = $documentTitle;
 
             // Column 6: Date.
             $displayRow[6] = api_convert_and_format_date(

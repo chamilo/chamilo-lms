@@ -33,7 +33,7 @@ class ResourceLinkRepository extends SortableRepository
         'announcement' => '/resources/announcement/%resource_node_id%/',
         'glossary' => '/resources/glossary/%resource_node_id%/',
         'attendance' => '/main/attendance/index.php',
-        'course_progress' => '/main/course_progress/index.php',
+        'course_progress' => '/resources/course-progress/%resource_node_id%/',
         'agenda' => '/resources/ccalendarevent',
         'forum' => '/main/forum/index.php',
         'student_publication' => '/resources/assignment/%resource_node_id%',

@@ -413,10 +413,23 @@ function get_courses($from, $limit, $column, $direction)
             $tematic_advance = $thematic->get_total_average_of_thematic_advances($course, $session);
             $tematicAdvanceProgress = '-';
             if (!empty($tematic_advance)) {
-                $tematicAdvanceProgress = '<a
-                    title="'.get_lang('Go to thematic advance').'"
-                    href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cid='.$courseId.'&sid='.$sessionId.'">'.
-                    $tematic_advance.'%</a>';
+                $tematicAdvanceProgress = $tematic_advance.'%';
+                $courseResourceNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+                if ($courseResourceNodeId > 0) {
+                    $courseProgressQuery = [
+                        'cid' => $courseId,
+                        'sid' => (int) $sessionId,
+                        'gid' => 0,
+                    ];
+                    $courseProgressUrl = api_get_path(WEB_PATH).
+                        'resources/course-progress/'.$courseResourceNodeId.'/?'.
+                        http_build_query($courseProgressQuery);
+                    $tematicAdvanceProgress = '<a
+                        title="'.get_lang('Go to thematic advance').'"
+                        href="'.$courseProgressUrl.'">'.
+                        $tematic_advance.'%</a>';
+                }
             }
 
             $courseIcon = '<a

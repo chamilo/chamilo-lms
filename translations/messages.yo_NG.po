@@ -1575,8 +1575,8 @@ msgstr "Ṣe o da ṣinṣin pe o fẹ pa awọn igbesẹ wọnyi nu?"
 msgid "Authoring tool"
 msgstr "Ohun elo onkọwe"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Failu SCORM tabi AICC lati gbe soke"
+msgid "SCORM file to upload"
+msgstr "Failu SCORM lati gbe soke"
 
 msgid "Course location"
 msgstr "Ipo ẹkọ"

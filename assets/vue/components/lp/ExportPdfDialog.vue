@@ -2,7 +2,6 @@
 import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import lpService from "../../services/lpService"
-import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 
@@ -11,6 +10,7 @@ const props = defineProps({
   lpId: { type: Number, required: true },
   cid: { type: [Number, String], default: 0 },
   sid: { type: [Number, String], default: 0 },
+  gid: { type: [Number, String], default: 0 },
 })
 
 const emit = defineEmits(["close"])
@@ -46,19 +46,13 @@ async function fetchExportables() {
   selected.value = new Set()
 
   try {
-    const cidNum = Number(props.cid || 0)
-    const sidNum = Number(props.sid || 0)
-    const params = { a: "get_lp_export_items", lp_id: String(props.lpId) }
-    if (cidNum) params.cid = String(cidNum)
-    if (sidNum) params.sid = String(sidNum)
-
-    const res = await baseService.getRaw("/main/inc/ajax/lp.ajax.php", {
-      params,
-      headers: { "X-Requested-With": "XMLHttpRequest" },
+    const data = await lpService.getContentPdfItems(props.lpId, {
+      cid: Number(props.cid || 0),
+      sid: Number(props.sid || 0),
+      gid: Number(props.gid || 0),
     })
-    const data = res.data ?? {}
 
-    const arr = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : []
+    const arr = Array.isArray(data?.items) ? data.items : []
     const norm = arr
       .map((x) => ({ id: Number(x.id ?? x.iid ?? 0), title: String(x.title ?? "") }))
       .filter((x) => x.id > 0)
@@ -75,14 +69,15 @@ async function fetchExportables() {
 
 function exportNow() {
   if (selected.value.size === 0) return
-  const cidNum = Number(props.cid || 0)
-  const sidNum = Number(props.sid || 0)
-
-  window.location.href = lpService.buildLegacyActionUrl(props.lpId, "export_to_pdf", {
-    cid: cidNum || undefined,
-    sid: sidNum || undefined,
-    params: { items: Array.from(selected.value).join(",") },
-  })
+  window.location.href = lpService.buildContentPdfUrl(
+    props.lpId,
+    {
+      cid: Number(props.cid || 0),
+      sid: Number(props.sid || 0),
+      gid: Number(props.gid || 0),
+    },
+    Array.from(selected.value),
+  )
   emit("close")
 }
 

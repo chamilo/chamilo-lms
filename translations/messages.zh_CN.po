@@ -1580,7 +1580,7 @@ msgstr "你肯定要取消这些步骤吗？"
 msgid "Authoring tool"
 msgstr "原始"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "需要上传的文件"
 
 msgid "Course location"

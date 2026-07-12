@@ -1575,8 +1575,8 @@ msgstr "क्या आप निश्चित हैं कि आप इन
 msgid "Authoring tool"
 msgstr "लेखन उपकरण"
 
-msgid "SCORM or AICC file to upload"
-msgstr "अपलोड करने के लिए SCORM या AICC फ़ाइल"
+msgid "SCORM file to upload"
+msgstr "अपलोड करने के लिए SCORM फ़ाइल"
 
 msgid "Course location"
 msgstr "कोर्स स्थान"

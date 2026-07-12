@@ -1580,8 +1580,8 @@ msgstr "Oletko varma että haluat poistaa nämä vaiheet?"
 msgid "Authoring tool"
 msgstr "Muokkaustyökalu"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Lähetettävä SCORM tai AICC -tiedosto"
+msgid "SCORM file to upload"
+msgstr "Lähetettävä SCORM -tiedosto"
 
 msgid "Course location"
 msgstr "Kurssin sijainti"

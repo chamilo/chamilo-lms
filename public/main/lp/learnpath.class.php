@@ -1533,7 +1533,7 @@ class learnpath
     }
 
     /**
-     * Returns the package type ('scorm','aicc','scorm2004','ppt'...).
+     * Returns the package type ('scorm','scorm2004','ppt'...).
      *
      * Generally, the package provided is in the form of a zip file, so the function
      * has been written to test a zip file. If not a zip, the function will return the
@@ -1542,7 +1542,7 @@ class learnpath
      * @param string $filePath the path to the file
      * @param string $file_name the original name of the file
      *
-     * @return string 'scorm','aicc','scorm2004','error-empty-package'
+     * @return string 'scorm','scorm2004','error-empty-package'
      *                if the package is empty, or '' if the package cannot be recognized
      */
     public static function getPackageType($filePath, $file_name)
@@ -1568,10 +1568,6 @@ class learnpath
         $zipContentArray = $zipFile->getEntries();
         $package_type = '';
         $manifest = '';
-        $aicc_match_crs = 0;
-        $aicc_match_au = 0;
-        $aicc_match_des = 0;
-        $aicc_match_cst = 0;
         $countItems = 0;
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         if ($zipContentArray) {
@@ -1585,41 +1581,11 @@ class learnpath
                         $manifest = $fileName; // Just the relative directory inside scorm/
                         $package_type = 'scorm';
                         break; // Exit the foreach loop.
-                    } elseif (
-                        preg_match('/aicc\//i', $fileName) ||
-                        in_array(
-                            strtolower(pathinfo($fileName, PATHINFO_EXTENSION)),
-                            ['crs', 'au', 'des', 'cst']
-                        )
-                    ) {
-                        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-                        switch ($ext) {
-                            case 'crs':
-                                $aicc_match_crs = 1;
-                                break;
-                            case 'au':
-                                $aicc_match_au = 1;
-                                break;
-                            case 'des':
-                                $aicc_match_des = 1;
-                                break;
-                            case 'cst':
-                                $aicc_match_cst = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
                     } else {
                         $package_type = '';
                     }
                 }
             }
-        }
-
-        if (empty($package_type) && 4 == ($aicc_match_crs + $aicc_match_au + $aicc_match_des + $aicc_match_cst)) {
-            // If found an aicc directory... (!= false means it cannot be false (error) or 0 (no match)).
-            $package_type = 'aicc';
         }
 
         // Try with chamilo course builder

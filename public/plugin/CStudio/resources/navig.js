@@ -62,26 +62,17 @@ function buildCStudioEditUrl(parentUrl, mainUrl, lpId, fallbackUrl){
         return '';
     }
 
-    var query = '?action=add_item';
+    var query = '?action=redir';
     var sourceUrls = [parentUrl, fallbackUrl || ''];
-    var cid = getCStudioQueryParamFromUrls(sourceUrls, 'cid');
 
-    if (cid === '') {
-        return '';
-    }
-
-    query = appendCStudioQueryParam(query, 'cid', cid);
-    query = appendCStudioQueryParam(query, 'lp_id', String(parsedLpId));
+    query = appendCStudioQueryParam(query, 'idLudiLP', String(parsedLpId));
+    query = appendCStudioQueryParam(query, 'first', '1');
+    query = appendCStudioQueryParam(query, 'cid', getCStudioQueryParamFromUrls(sourceUrls, 'cid'));
     query = appendCStudioQueryParam(query, 'sid', getCStudioQueryParamFromUrls(sourceUrls, 'sid', '0'));
     query = appendCStudioQueryParam(query, 'gid', getCStudioQueryParamFromUrls(sourceUrls, 'gid', '0'));
     query = appendCStudioQueryParam(query, 'gradebook', getCStudioQueryParamFromUrls(sourceUrls, 'gradebook', '0'));
-    query = appendCStudioQueryParam(query, 'origin', getCStudioQueryParamFromUrls(sourceUrls, 'origin'));
-    query = appendCStudioQueryParam(query, 'node', getCStudioQueryParamFromUrls(sourceUrls, 'node'));
-    query = appendCStudioQueryParam(query, 'type', getCStudioQueryParamFromUrls(sourceUrls, 'type', 'step'));
-    query = appendCStudioQueryParam(query, 'isStudentView', 'false');
-    query = appendCStudioQueryParam(query, 'teachdoc', 'edit');
 
-    return mainUrl + 'main/lp/lp_controller.php' + query;
+    return mainUrl + 'plugin/CStudio/oel_tools_teachdoc_link.php' + query;
 }
 
 function getCStudioAccessibleDocuments(){

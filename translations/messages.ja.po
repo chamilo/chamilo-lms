@@ -1644,8 +1644,8 @@ msgstr "これらのステップを削除してもよろしいですか？"
 msgid "Authoring tool"
 msgstr "オーサリングツール"
 
-msgid "SCORM or AICC file to upload"
-msgstr "アップロードするSCORMまたはAICCファイル"
+msgid "SCORM file to upload"
+msgstr "アップロードするSCORMファイル"
 
 msgid "Course location"
 msgstr "コースの場所"

@@ -1579,8 +1579,8 @@ msgstr "Jūs tiešām vēlaties dzēst šos soļus?"
 msgid "Authoring tool"
 msgstr "Autora izstrādes instruments"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM vai AICC fails augšupielādēšanai"
+msgid "SCORM file to upload"
+msgstr "SCORM fails augšupielādēšanai"
 
 msgid "Course location"
 msgstr "Kursa atrašanās vieta"

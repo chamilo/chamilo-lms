@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CLp;
 
 class LpAiHelper
 {
@@ -255,7 +256,8 @@ class LpAiHelper
         array $lpData,
         string $courseCode,
         bool $aiAssisted = false,
-        ?string $aiProvider = null
+        ?string $aiProvider = null,
+        ?CLp $existingLearningPath = null
     ): array {
         if (!isset($lpData['topic'])) {
             return ['success' => false, 'text' => 'Error: Topic not set in AI response.'];
@@ -267,15 +269,18 @@ class LpAiHelper
         $ai = $this->getAiDisclosureHelper();
         $aiEnabled = $aiAssisted && $ai instanceof AiDisclosureHelper && $ai->isDisclosureEnabled();
 
-        $lp = learnpath::add_lp(
-            $courseCode,
-            $lpData['topic'],
-            '',
-            'chamilo',
-            'manual'
-        );
+        $lp = $existingLearningPath;
+        if (!$lp instanceof CLp) {
+            $lp = learnpath::add_lp(
+                $courseCode,
+                $lpData['topic'],
+                '',
+                'chamilo',
+                'manual'
+            );
+        }
 
-        if (null === $lp || empty($lp->getIid())) {
+        if (!$lp instanceof CLp || empty($lp->getIid())) {
             return ['success' => false, 'text' => 'Failed to create Learning Path.'];
         }
 

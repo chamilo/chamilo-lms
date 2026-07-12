@@ -757,7 +757,11 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
         $lpStructure = $this->requestChatCompletion($tableOfContentsPrompt, 'learnpath', 'text');
         if (!$lpStructure) {
-            return ['success' => false, 'message' => 'Failed to generate course structure.'];
+            return ['success' => false, 'message' => 'OpenAI failed to generate the course structure.'];
+        }
+
+        if (str_starts_with($lpStructure, 'Error:')) {
+            return ['success' => false, 'message' => trim(substr($lpStructure, 6))];
         }
 
         $lpItems = [];

@@ -1575,8 +1575,8 @@ msgstr "Ma hubtaa in aad rabto in aad tirtirto tallaabooyinkan?"
 msgid "Authoring tool"
 msgstr "Qalabka qorista"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Faylka SCORM ama AICC ee la soo dejinayo"
+msgid "SCORM file to upload"
+msgstr "Faylka SCORM ee la soo dejinayo"
 
 msgid "Course location"
 msgstr "Goobta koorsada"

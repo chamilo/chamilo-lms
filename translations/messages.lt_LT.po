@@ -1580,7 +1580,7 @@ msgstr "Ar tikrai norite ištrinti šiuos žingsnius?"
 msgid "Authoring tool"
 msgstr "Originalus"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Failas įkrovimui"
 
 msgid "Course location"

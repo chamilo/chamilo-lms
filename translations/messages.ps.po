@@ -1575,8 +1575,8 @@ msgstr "آیا تاسو ډاډه یاست چې دا ګامونه غواړئ پا
 msgid "Authoring tool"
 msgstr "لیکلو وسیلې"
 
-msgid "SCORM or AICC file to upload"
-msgstr "د بار پورته کولو لپاره SCORM یا AICC فایل"
+msgid "SCORM file to upload"
+msgstr "د بار پورته کولو لپاره SCORM فایل"
 
 msgid "Course location"
 msgstr "د کورس ځای"

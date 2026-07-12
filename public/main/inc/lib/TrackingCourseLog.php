@@ -655,7 +655,7 @@ class TrackingCourseLog
             }
 
             $injectExtraFields = $conditions['inject_extra_fields'] ?? 1;
-            $injectExtraFields = rtrim($injectExtraFields, ', ');
+            $injectExtraFields = rtrim((string) $injectExtraFields, ', ');
             if (false === $getCount) {
                 $select .= " , $injectExtraFields";
             }

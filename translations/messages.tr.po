@@ -1580,8 +1580,8 @@ msgstr "Bu adımları silmek istediğnizden emin misiniz?"
 msgid "Authoring tool"
 msgstr "Yönetim Aracı"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Yüklenecek SCORM veya AICC dosyası"
+msgid "SCORM file to upload"
+msgstr "Yüklenecek SCORM dosyası"
 
 msgid "Course location"
 msgstr "Ders konumu"

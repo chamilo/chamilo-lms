@@ -1579,8 +1579,8 @@ msgstr "An bhfuil tú cinnte gur mhaith leat na céimeanna seo a scriosadh?"
 msgid "Authoring tool"
 msgstr "Uirlis údaráis"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Comhad SCORM nó AICC le huaslódáil"
+msgid "SCORM file to upload"
+msgstr "Comhad SCORM le huaslódáil"
 
 msgid "Course location"
 msgstr "Suíomh an chúrsa"

@@ -1589,8 +1589,8 @@ msgstr "Sei sicuro di voler eliminare questi elementi?"
 msgid "Authoring tool"
 msgstr "Provenienza"
 
-msgid "SCORM or AICC file to upload"
-msgstr "File SCORM o AICC da caricare"
+msgid "SCORM file to upload"
+msgstr "File SCORM da caricare"
 
 msgid "Course location"
 msgstr "Stato del contenuto"

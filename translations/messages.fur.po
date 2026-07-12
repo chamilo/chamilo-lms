@@ -1575,8 +1575,8 @@ msgstr "Si jê sigur che vuêsi scancelâ cheste passi?"
 msgid "Authoring tool"
 msgstr "Strument di autoria"
 
-msgid "SCORM or AICC file to upload"
-msgstr "File SCORM o AICC da cjarjelâ"
+msgid "SCORM file to upload"
+msgstr "File SCORM da cjarjelâ"
 
 msgid "Course location"
 msgstr "Posizion dal curs"

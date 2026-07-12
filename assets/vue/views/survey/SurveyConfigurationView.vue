@@ -501,6 +501,10 @@ function getContextParams(extra = {}) {
     type: getQueryValue(route.query.type),
     returnToLp: getQueryValue(route.query.returnToLp),
     isStudentView: getQueryValue(route.query.isStudentView),
+    parent: getQueryValue(route.query.parent),
+    node: getQueryValue(route.query.node),
+    gradebook: getQueryValue(route.query.gradebook),
+    lpTool: getQueryValue(route.query.lpTool),
     ...extra,
   })
 }
@@ -531,32 +535,21 @@ const isLearningPathContext = computed(() => {
   return getQueryValue(route.query.origin) === "learnpath" && learningPathId.value > 0
 })
 
-function buildLearningPathQuery(extra = {}) {
-  const query = new URLSearchParams()
+function buildLearningPathBuilderRoute() {
+  const query = getContextParams()
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
 
-  query.set("action", extra.action || "add_item")
-  query.set("type", extra.type || "step")
-  query.set("lp_id", String(learningPathId.value))
-
-  for (const key of ["cid", "sid", "gid"]) {
-    const value = getQueryValue(route.query[key])
-
-    if (String(value) !== "") {
-      query.set(key, String(value))
-    }
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(getQueryValue(route.query.node) || route.params.node || 0),
+      lpId: learningPathId.value,
+    },
+    query,
   }
-
-  query.set("isStudentView", "false")
-
-  if (extra.surveyId) {
-    query.set("survey_id", String(extra.surveyId))
-  }
-
-  return query.toString()
-}
-
-function buildLearningPathAddItemUrl() {
-  return `/main/lp/lp_controller.php?${buildLearningPathQuery()}`
 }
 
 function buildLearningPathQuestionsRoute(surveyId) {
@@ -571,7 +564,7 @@ function buildLearningPathQuestionsRoute(surveyId) {
 }
 
 function goToLearningPathAddItem() {
-  window.location.href = buildLearningPathAddItemUrl()
+  return router.push(buildLearningPathBuilderRoute())
 }
 
 function buildQuestionsRoute() {
@@ -799,6 +792,12 @@ async function submitForm() {
 
     questionUrl.value = saved.questionUrl || questionUrl.value
     csrfToken.value = saved.csrfToken || csrfToken.value
+
+    if (isEditMode.value && isLearningPathContext.value) {
+      await router.push(buildLearningPathBuilderRoute())
+
+      return
+    }
 
     if (!isEditMode.value && saved.surveyId) {
       if (isLearningPathContext.value) {

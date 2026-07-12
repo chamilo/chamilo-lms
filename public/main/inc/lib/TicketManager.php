@@ -2543,8 +2543,11 @@ class TicketManager
 
         $allowRoleList = self::getAllowedRolesFromProject($projectId);
 
-        // Check if a role was set to the project.
-        // Project 1 is considered the default and is accessible to all users
+        // Roles allowed for this project are read from the ticket.ticket_project_user_roles
+        // platform setting (Configuration > Ticket). When that setting is empty (the default)
+        // or has no entry for this project, no non-admin role is granted and only ROLE_ADMIN
+        // (checked above) can access it — so an admin must populate that setting to open the
+        // project to teachers, students, etc.
         if (!empty($allowRoleList)) {
             $result = false;
             foreach ($allowRoleList as $role) {

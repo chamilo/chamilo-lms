@@ -1589,8 +1589,8 @@ msgstr "هل أنت متأكد من أنك تريد حذف هذه الخطوات
 msgid "Authoring tool"
 msgstr "الأصل"
 
-msgid "SCORM or AICC file to upload"
-msgstr "  للتحميل SCORM أو AICC ملف"
+msgid "SCORM file to upload"
+msgstr "  للتحميل SCORM ملف"
 
 msgid "Course location"
 msgstr "مكان المقرر"

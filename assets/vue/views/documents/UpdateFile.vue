@@ -131,6 +131,31 @@ const {
 
 const updateForm = ref(null)
 const aiAssistedFlag = ref(false)
+const hasReturnedToLearningPath = ref(false)
+
+const learningPathId = computed(() => Number(route.query.lp_id || 0))
+const isLearningPathContext = computed(
+  () => "learnpath" === String(route.query.origin || "").toLowerCase() && learningPathId.value > 0,
+)
+
+function buildLearningPathBuilderRoute() {
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
+  delete query.id
+  delete query.filetype
+
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: learningPathId.value,
+    },
+    query,
+  }
+}
 
 const isSearchEnabled = computed(() => "false" !== platformConfigStore.getSetting("search.search_enabled"))
 
@@ -169,6 +194,11 @@ watch(updated, (val) => {
   }
 
   updateForm.value?.clearEditorDrafts?.()
+
+  if (isLearningPathContext.value && !hasReturnedToLearningPath.value) {
+    hasReturnedToLearningPath.value = true
+    router.push(buildLearningPathBuilderRoute())
+  }
 })
 
 onMounted(() => {
@@ -181,7 +211,11 @@ onMounted(() => {
 })
 
 function handleBack() {
-  router.back()
+  if (isLearningPathContext.value) {
+    return router.push(buildLearningPathBuilderRoute())
+  }
+
+  return router.back()
 }
 
 function normalizeBoolean(value) {

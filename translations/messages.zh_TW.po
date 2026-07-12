@@ -1580,8 +1580,8 @@ msgstr "你真的要刪除這節課嗎？"
 msgid "Authoring tool"
 msgstr "原本"
 
-msgid "SCORM or AICC file to upload"
-msgstr "上傳 SCORM 或 AICC 檔案"
+msgid "SCORM file to upload"
+msgstr "上傳 SCORM 檔案"
 
 msgid "Course location"
 msgstr "課程位置"

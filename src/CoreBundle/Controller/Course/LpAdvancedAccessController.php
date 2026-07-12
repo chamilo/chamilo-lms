@@ -10,10 +10,13 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
+use Chamilo\CourseBundle\Entity\CLpRelUserGroup;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -23,6 +26,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 #[Route('/resources/lp/{lpId}/advanced-access')]
@@ -33,6 +38,8 @@ final class LpAdvancedAccessController extends AbstractController
         int $lpId,
         Request $request,
         EntityManagerInterface $entityManager,
+        SettingsManager $settingsManager,
+        CsrfTokenManagerInterface $csrfTokenManager,
     ): JsonResponse {
         $context = $this->resolveContext($lpId, $request, $entityManager);
         if (!$context['valid']) {
@@ -50,6 +57,8 @@ final class LpAdvancedAccessController extends AbstractController
 
         $this->denyAccessUnlessGranted('EDIT', $course);
 
+        $allowUserGroups = $this->settingEnabled($settingsManager, 'lp.allow_lp_subscription_to_usergroups');
+
         return $this->json([
             'lp' => [
                 'id' => $lp->getIid(),
@@ -66,6 +75,11 @@ final class LpAdvancedAccessController extends AbstractController
             ] : null,
             'users' => $this->getUsers($entityManager, $course, $lp, $session),
             'groups' => $this->getGroups($entityManager, $course, $lp, $session),
+            'allowUserGroups' => $allowUserGroups,
+            'userGroups' => $allowUserGroups
+                ? $this->getUserGroups($entityManager, $course, $lp, $session)
+                : [],
+            'csrfToken' => $csrfTokenManager->getToken('learning_path_advanced_access')->getValue(),
         ]);
     }
 
@@ -291,6 +305,93 @@ final class LpAdvancedAccessController extends AbstractController
         return $this->json(['success' => true]);
     }
 
+    #[Route('/usergroups', name: 'chamilo_core_lp_advanced_access_save_usergroups', methods: ['POST'])]
+    public function saveUserGroups(
+        int $lpId,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SettingsManager $settingsManager,
+        CsrfTokenManagerInterface $csrfTokenManager,
+    ): JsonResponse {
+        $context = $this->resolveContext($lpId, $request, $entityManager);
+        if (!$context['valid']) {
+            return $this->json(['error' => $context['error']], $context['status']);
+        }
+
+        /** @var Course $course */
+        $course = $context['course'];
+
+        /** @var CLp $lp */
+        $lp = $context['lp'];
+
+        /** @var Session|null $session */
+        $session = $context['session'];
+
+        $this->denyAccessUnlessGranted('EDIT', $course);
+
+        if (!$this->settingEnabled($settingsManager, 'lp.allow_lp_subscription_to_usergroups')) {
+            return $this->json(['error' => 'Learning path subscriptions for classes are disabled.'], 403);
+        }
+
+        $payload = $this->decodePayload($request);
+        $csrfToken = new CsrfToken(
+            'learning_path_advanced_access',
+            (string) ($payload['csrfToken'] ?? ''),
+        );
+        if (!$csrfTokenManager->isTokenValid($csrfToken)) {
+            return $this->json(['error' => 'Invalid CSRF token.'], 403);
+        }
+
+        $selectedIds = $this->normalizeIds($payload['selectedUserGroupIds'] ?? []);
+        $allowedUserGroups = $this->getAllowedUserGroups($entityManager, $course);
+        if ([] !== array_diff($selectedIds, array_keys($allowedUserGroups))) {
+            return $this->json(['error' => 'A selected class is outside the current course context.'], 403);
+        }
+
+        $existingRelations = $this->getUserGroupRelations($entityManager, $course, $lp, $session);
+        $existingByUserGroupId = [];
+        foreach ($existingRelations as $relation) {
+            $userGroup = $relation->getUserGroup();
+            if ($userGroup instanceof Usergroup && null !== $userGroup->getId()) {
+                $existingByUserGroupId[(int) $userGroup->getId()] = $relation;
+            }
+        }
+
+        foreach ($existingByUserGroupId as $userGroupId => $relation) {
+            if (!\in_array($userGroupId, $selectedIds, true)) {
+                $entityManager->remove($relation);
+            }
+        }
+
+        foreach ($selectedIds as $userGroupId) {
+            if (isset($existingByUserGroupId[$userGroupId])) {
+                continue;
+            }
+
+            $userGroup = $allowedUserGroups[$userGroupId] ?? null;
+            if (!$userGroup instanceof Usergroup) {
+                continue;
+            }
+
+            $relation = (new CLpRelUserGroup())
+                ->setCourse($course)
+                ->setLp($lp)
+                ->setUserGroup($userGroup)
+                ->setCreatedAt(new DateTime())
+            ;
+
+            if ($session instanceof Session) {
+                $relation->setSession($session);
+            }
+
+            $entityManager->persist($relation);
+        }
+
+        $entityManager->flush();
+
+        return $this->json(['success' => true]);
+    }
+
     #[Route('/clear-dates', name: 'chamilo_core_lp_advanced_access_clear_dates', methods: ['POST'])]
     public function clearDates(
         int $lpId,
@@ -424,6 +525,103 @@ final class LpAdvancedAccessController extends AbstractController
         }
 
         return (int) $qb->getQuery()->getSingleScalarResult() > 0;
+    }
+
+    /**
+     * @return list<array{id: int, title: string, selected: bool}>
+     */
+    private function getUserGroups(
+        EntityManagerInterface $entityManager,
+        Course $course,
+        CLp $lp,
+        ?Session $session,
+    ): array {
+        $allowedUserGroups = $this->getAllowedUserGroups($entityManager, $course);
+        $selectedIds = [];
+        foreach ($this->getUserGroupRelations($entityManager, $course, $lp, $session) as $relation) {
+            $userGroup = $relation->getUserGroup();
+            if ($userGroup instanceof Usergroup && null !== $userGroup->getId()) {
+                $selectedIds[] = (int) $userGroup->getId();
+            }
+        }
+
+        $rows = [];
+        foreach ($allowedUserGroups as $userGroup) {
+            $userGroupId = (int) $userGroup->getId();
+            $rows[] = [
+                'id' => $userGroupId,
+                'title' => $userGroup->getTitle(),
+                'selected' => \in_array($userGroupId, $selectedIds, true),
+            ];
+        }
+
+        return $rows;
+    }
+
+    /** @return array<int, Usergroup> */
+    private function getAllowedUserGroups(EntityManagerInterface $entityManager, Course $course): array
+    {
+        /** @var list<Usergroup> $userGroups */
+        $userGroups = $entityManager->createQueryBuilder()
+            ->select('DISTINCT userGroup')
+            ->from(Usergroup::class, 'userGroup')
+            ->innerJoin('userGroup.courses', 'courseRelation')
+            ->where('IDENTITY(courseRelation.course) = :courseId')
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->orderBy('userGroup.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $result = [];
+        foreach ($userGroups as $userGroup) {
+            if (null !== $userGroup->getId()) {
+                $result[(int) $userGroup->getId()] = $userGroup;
+            }
+        }
+
+        return $result;
+    }
+
+    /** @return list<CLpRelUserGroup> */
+    private function getUserGroupRelations(
+        EntityManagerInterface $entityManager,
+        Course $course,
+        CLp $lp,
+        ?Session $session,
+    ): array {
+        $criteria = [
+            'course' => $course,
+            'lp' => $lp,
+            'session' => $session,
+        ];
+
+        /** @var list<CLpRelUserGroup> $relations */
+        $relations = $entityManager->getRepository(CLpRelUserGroup::class)->findBy($criteria);
+
+        return $relations;
+    }
+
+    /** @return list<int> */
+    private function normalizeIds(mixed $values): array
+    {
+        if (!\is_array($values)) {
+            return [];
+        }
+
+        $ids = array_map(static fn (mixed $value): int => (int) $value, $values);
+        $ids = array_filter($ids, static fn (int $value): bool => $value > 0);
+
+        return array_values(array_unique($ids));
+    }
+
+    private function settingEnabled(SettingsManager $settingsManager, string $name): bool
+    {
+        return \in_array(
+            strtolower(trim((string) $settingsManager->getSetting($name))),
+            ['1', 'true', 'yes', 'on'],
+            true,
+        );
     }
 
     /**

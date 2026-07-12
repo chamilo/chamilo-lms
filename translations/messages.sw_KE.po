@@ -1575,8 +1575,8 @@ msgstr "Je, una uhakika unataka kufuta hatua hizi?"
 msgid "Authoring tool"
 msgstr "Zana ya kuandika"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Faili la SCORM au AICC la kupakia"
+msgid "SCORM file to upload"
+msgstr "Faili la SCORM la kupakia"
 
 msgid "Course location"
 msgstr "Mahali pa kozi"

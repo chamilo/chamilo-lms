@@ -1635,8 +1635,8 @@ msgstr "Sind Sie sicher, dass Sie diese Schritte löschen möchen?"
 msgid "Authoring tool"
 msgstr "Autoren-Werkzeug"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCROM oder AICC-Datei zum Upload"
+msgid "SCORM file to upload"
+msgstr "SCROM-Datei zum Upload"
 
 msgid "Course location"
 msgstr "Herkunft des Lernpfads"

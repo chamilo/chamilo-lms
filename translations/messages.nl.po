@@ -1606,7 +1606,7 @@ msgstr "Bent u zeker dat u deze stappen wil verwijderen?"
 msgid "Authoring tool"
 msgstr "Oorsprong"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Te uploaden bestand"
 
 msgid "Course location"

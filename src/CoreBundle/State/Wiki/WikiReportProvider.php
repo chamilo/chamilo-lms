@@ -351,7 +351,6 @@ final readonly class WikiReportProvider implements ProviderInterface
         return $reports;
     }
 
-
     /**
      * @param array<int, CWiki> $versions
      *

@@ -176,6 +176,15 @@ final class WikiPage
     public bool $canDelete = false;
 
     #[Groups(['wiki_page:read'])]
+    public bool $canExportPdf = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canExportToDocuments = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canPrint = false;
+
+    #[Groups(['wiki_page:read'])]
     public string $managementCsrfToken = '';
 
     #[Groups(['wiki_page:read'])]

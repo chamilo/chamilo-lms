@@ -17,8 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class CWikiCategoryRepository extends ServiceEntityRepository
 {
-    use NonResourceRepository;
     use NestedTreeRepositoryTrait;
+    use NonResourceRepository;
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -49,9 +49,7 @@ final class CWikiCategoryRepository extends ServiceEntityRepository
         }
 
         /** @var array<int, CWikiCategory> $categories */
-        $categories = $queryBuilder->getQuery()->getResult();
-
-        return $categories;
+        return $queryBuilder->getQuery()->getResult();
     }
 
     public function findOneInContext(int $categoryId, Course $course, ?Session $session = null): ?CWikiCategory
@@ -113,8 +111,6 @@ final class CWikiCategoryRepository extends ServiceEntityRepository
         }
 
         /** @var array<int, CWikiCategory> $categories */
-        $categories = $queryBuilder->getQuery()->getResult();
-
-        return $categories;
+        return $queryBuilder->getQuery()->getResult();
     }
 }

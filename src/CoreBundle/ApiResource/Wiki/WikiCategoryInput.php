@@ -40,7 +40,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Put(
             uriTemplate: '/wiki/categories/{categoryId}',
-            requirements: ['categoryId' => '\\d+'],
+            requirements: ['categoryId' => '\d+'],
             openapi: new Operation(
                 summary: 'Update a Wiki category',
                 parameters: [
@@ -61,7 +61,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/wiki/categories/{categoryId}/delete',
-            requirements: ['categoryId' => '\\d+'],
+            requirements: ['categoryId' => '\d+'],
             openapi: new Operation(
                 summary: 'Delete a Wiki category and its descendants',
                 parameters: [

@@ -1,5 +1,6 @@
 <?php
-/* For license terms, see /license.txt */
+
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
 
@@ -12,37 +13,22 @@ use const ENT_SUBSTITUTE;
 use const PHP_EOL;
 
 /**
- * WikiExport — exports legacy CWiki pages as Moodle "wiki" activities.
- * - Writes activities/wiki_{moduleId}/{wiki.xml,module.xml,inforef.xml,...}
- * - One Chamilo wiki page => one Moodle wiki activity (single subwiki + single page + version #1).
- * - Keeps the same auxiliary XMLs consistency as LabelExport (module.xml, inforef.xml, etc.).
+ * Exports all Chamilo Wiki logical pages and their complete version history
+ * as one Moodle Wiki activity.
  */
 final class WikiExport extends ActivityExport
 {
-    /**
-     * Export a single Wiki activity.
-     *
-     * @param int    $activityId Source page identifier (we try pageId, iid, or array key)
-     * @param string $exportDir  Root temp export directory
-     * @param int    $moduleId   Module id used in directory name (usually = $activityId)
-     * @param int    $sectionId  Resolved course section (0 = General)
-     */
     public function export(int $activityId, string $exportDir, int $moduleId, int $sectionId): void
     {
         $wikiDir = $this->prepareActivityDirectory($exportDir, 'wiki', $moduleId);
-
         $data = $this->getData($activityId, $sectionId);
         if (null === $data) {
-            // Nothing to export
             return;
         }
 
-        // Primary XMLs
-        $this->createWikiXml($data, $wikiDir);     // activities/wiki_{id}/wiki.xml
-        $this->createModuleXml($data, $wikiDir);   // activities/wiki_{id}/module.xml
-        $this->createInforefXml($data, $wikiDir);  // activities/wiki_{id}/inforef.xml
-
-        // Optional auxiliaries to keep structure consistent with other exporters
+        $this->createWikiXml($data, $wikiDir);
+        $this->createModuleXml($data, $wikiDir);
+        $this->createInforefXml($data, $wikiDir);
         $this->createFiltersXml($data, $wikiDir);
         $this->createGradesXml($data, $wikiDir);
         $this->createGradeHistoryXml($data, $wikiDir);
@@ -54,163 +40,181 @@ final class WikiExport extends ActivityExport
     }
 
     /**
-     * Build wiki payload from legacy "wiki" bucket (CWiki).
-     *
-     * Returns a structure with:
-     * - id, moduleid, modulename='wiki', sectionid, sectionnumber
-     * - name (title), intro (empty), introformat=1 (HTML)
-     * - wikimode ('collaborative'), defaultformat ('html'), forceformat=1
-     * - firstpagetitle, timecreated, timemodified
-     * - pages[]: one page with versions[0]
+     * @return array<string, mixed>|null
      */
     public function getData(int $activityId, int $sectionId): ?array
     {
-        $bag =
-            $this->course->resources[\defined('RESOURCE_WIKI') ? RESOURCE_WIKI : 'wiki']
+        $bag = $this->course->resources[\defined('RESOURCE_WIKI') ? RESOURCE_WIKI : 'wiki']
             ?? $this->course->resources['wiki']
             ?? [];
-
-        if (empty($bag) || !\is_array($bag)) {
+        if (!\is_array($bag) || [] === $bag) {
             return null;
         }
 
-        $pages  = [];
-        $users  = [];
-        $firstTitle = null;
-
-        foreach ($bag as $key => $wrap) {
-            if (!\is_object($wrap)) { continue; }
-            $p = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
-
-            $pid = (int)($p->pageId ?? $p->iid ?? $key ?? 0);
-            if ($pid <= 0) { continue; }
-
-            $title = trim((string)($p->title ?? 'Wiki page '.$pid));
-            if ($title === '') { $title = 'Wiki page '.$pid; }
-            $rawHtml  = (string)($p->content ?? '');
-            $content  = $this->normalizeContent($rawHtml);
-
-            $userId   = (int)($p->userId ?? 0);
-            $created  = $this->toTimestamp((string)($p->dtime ?? ''), time());
-            $modified = $created;
-
-            $pages[] = [
-                'id'            => $pid,
-                'title'         => $title,
-                'content'       => $content,
-                'contentformat' => 'html',
-                'version'       => 1,
-                'timecreated'   => $created,
-                'timemodified'  => $modified,
-                'userid'        => $userId,
-            ];
-
-            if ($userId > 0) { $users[$userId] = true; }
-            if (null === $firstTitle) { $firstTitle = $title; }
+        $normalizedPages = (new WikiVersionCollectionNormalizer())->normalize($bag);
+        if ([] === $normalizedPages) {
+            return null;
         }
 
-        if (empty($pages)) {
+        $pages = [];
+        $users = [];
+        $firstTitle = null;
+        $earliest = time();
+        $latestTime = 0;
+
+        foreach ($normalizedPages as $normalizedPage) {
+            $versions = [];
+            foreach ($normalizedPage['versions'] as $versionData) {
+                $timestamp = $this->toTimestamp((string) $versionData['timestamp'], time());
+                $content = $this->normalizeContent((string) $versionData['content']);
+                if ('' === trim($content)) {
+                    $content = '<p></p>';
+                }
+                $userId = (int) $versionData['userid'];
+                if ($userId > 0) {
+                    $users[$userId] = true;
+                }
+                $versions[] = [
+                    'id' => (int) $versionData['id'],
+                    'content' => $content,
+                    'contentformat' => 'html',
+                    'version' => (int) $versionData['version'],
+                    'timecreated' => $timestamp,
+                    'userid' => $userId,
+                ];
+                $earliest = min($earliest, $timestamp);
+                $latestTime = max($latestTime, $timestamp);
+            }
+
+            if ([] === $versions) {
+                continue;
+            }
+
+            $firstVersion = $versions[0];
+            $latestVersion = $versions[array_key_last($versions)];
+            $title = trim((string) $normalizedPage['title']);
+            if ('' === $title) {
+                $title = 'Wiki page '.(int) $normalizedPage['id'];
+            }
+            if ('index' === (string) $normalizedPage['reflink']) {
+                $firstTitle = $title;
+            } elseif (null === $firstTitle) {
+                $firstTitle = $title;
+            }
+
+            $pages[] = [
+                'id' => (int) $normalizedPage['id'],
+                'title' => $title,
+                'userid' => (int) $latestVersion['userid'],
+                'cachedcontent' => (string) $latestVersion['content'],
+                'timecreated' => (int) $firstVersion['timecreated'],
+                'timemodified' => (int) $latestVersion['timecreated'],
+                'firstversionid' => (int) $firstVersion['id'],
+                'versions' => $versions,
+            ];
+        }
+
+        if ([] === $pages) {
             return null;
         }
 
         return [
-            'id'            => $activityId,
-            'moduleid'      => $activityId,
-            'modulename'    => 'wiki',
-            'sectionid'     => $sectionId,
+            'id' => $activityId,
+            'moduleid' => $activityId,
+            'modulename' => 'wiki',
+            'sectionid' => $sectionId,
             'sectionnumber' => $sectionId,
-            'name'          => 'Wiki',
-            'intro'         => '',
-            'introformat'   => 1,
-            'timemodified'  => max(array_column($pages, 'timemodified')),
-            'editbegin'     => 0,
-            'editend'       => 0,
-
-            'wikimode'        => 'collaborative',
-            'defaultformat'   => 'html',
-            'forceformat'     => 1,
-            'firstpagetitle'  => $firstTitle ?? 'Home',
-            'timecreated'     => min(array_column($pages, 'timecreated')),
-            'timemodified2'   => max(array_column($pages, 'timemodified')),
-
-            'pages'           => $pages,
-            'userids'         => array_keys($users),
+            'name' => 'Wiki',
+            'intro' => '',
+            'introformat' => 1,
+            'timemodified' => $latestTime > 0 ? $latestTime : time(),
+            'editbegin' => 0,
+            'editend' => 0,
+            'wikimode' => 'collaborative',
+            'defaultformat' => 'html',
+            'forceformat' => 1,
+            'firstpagetitle' => $firstTitle ?? 'Home',
+            'timecreated' => $earliest,
+            'timemodified2' => $latestTime > 0 ? $latestTime : time(),
+            'pages' => $pages,
+            'users' => array_keys($users),
         ];
     }
 
     /**
-     * Write activities/wiki_{id}/wiki.xml
-     * NOTE: We ensure non-null <cachedcontent> and present <userid> at <page> level
-     * to satisfy Moodle restore expectations (mdl_wiki_pages.userid and cachedcontent NOT NULL).
+     * @param array<string, mixed> $data
      */
-    private function createWikiXml(array $d, string $dir): void
+    private function createWikiXml(array $data, string $directory): void
     {
-        $admin = MoodleExport::getAdminUserData();
-        $adminId = (int)($admin['id'] ?? 2);
-        if ($adminId <= 0) { $adminId = 2; }
+        $adminId = (int) (MoodleExport::getAdminUserData()['id'] ?? 2);
+        if ($adminId <= 0) {
+            $adminId = 2;
+        }
 
-        $xml  = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<activity id="'.(int)$d['id'].'" moduleid="'.(int)$d['moduleid'].'" modulename="wiki" contextid="'.(int)($this->course->info['real_id'] ?? 0).'">'.PHP_EOL;
-        $xml .= '  <wiki id="'.(int)$d['id'].'">'.PHP_EOL;
-        $xml .= '    <name>'.$this->h($d['name']).'</name>'.PHP_EOL;
-        $xml .= '    <intro><![CDATA['.$d['intro'].']]></intro>'.PHP_EOL;
-        $xml .= '    <introformat>'.(int)($d['introformat'] ?? 1).'</introformat>'.PHP_EOL;
-        $xml .= '    <wikimode>'.$this->h((string)$d['wikimode']).'</wikimode>'.PHP_EOL;
-        $xml .= '    <defaultformat>'.$this->h((string)$d['defaultformat']).'</defaultformat>'.PHP_EOL;
-        $xml .= '    <forceformat>'.(int)$d['forceformat'].'</forceformat>'.PHP_EOL;
-        $xml .= '    <firstpagetitle>'.$this->h((string)$d['firstpagetitle']).'</firstpagetitle>'.PHP_EOL;
-        $xml .= '    <timecreated>'.(int)$d['timecreated'].'</timecreated>'.PHP_EOL;
-        $xml .= '    <timemodified>'.(int)$d['timemodified2'].'</timemodified>'.PHP_EOL;
-        $xml .= '    <editbegin>'.(int)($d['editbegin'] ?? 0).'</editbegin>'.PHP_EOL;
-        $xml .= '    <editend>'.(int)($d['editend'] ?? 0).'</editend>'.PHP_EOL;
-
-        // single subwiki (no groups/users)
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xml .= '<activity id="'.(int) $data['id'].'" moduleid="'.(int) $data['moduleid'].'" modulename="wiki" contextid="'.(int) ($this->course->info['real_id'] ?? 0).'">'.PHP_EOL;
+        $xml .= '  <wiki id="'.(int) $data['id'].'">'.PHP_EOL;
+        $xml .= '    <name>'.$this->h((string) $data['name']).'</name>'.PHP_EOL;
+        $xml .= '    <intro><![CDATA['.(string) $data['intro'].']]></intro>'.PHP_EOL;
+        $xml .= '    <introformat>'.(int) $data['introformat'].'</introformat>'.PHP_EOL;
+        $xml .= '    <wikimode>'.$this->h((string) $data['wikimode']).'</wikimode>'.PHP_EOL;
+        $xml .= '    <defaultformat>'.$this->h((string) $data['defaultformat']).'</defaultformat>'.PHP_EOL;
+        $xml .= '    <forceformat>'.(int) $data['forceformat'].'</forceformat>'.PHP_EOL;
+        $xml .= '    <firstpagetitle>'.$this->h((string) $data['firstpagetitle']).'</firstpagetitle>'.PHP_EOL;
+        $xml .= '    <timecreated>'.(int) $data['timecreated'].'</timecreated>'.PHP_EOL;
+        $xml .= '    <timemodified>'.(int) $data['timemodified2'].'</timemodified>'.PHP_EOL;
+        $xml .= '    <editbegin>'.(int) $data['editbegin'].'</editbegin>'.PHP_EOL;
+        $xml .= '    <editend>'.(int) $data['editend'].'</editend>'.PHP_EOL;
         $xml .= '    <subwikis>'.PHP_EOL;
         $xml .= '      <subwiki id="1">'.PHP_EOL;
         $xml .= '        <groupid>0</groupid>'.PHP_EOL;
         $xml .= '        <userid>0</userid>'.PHP_EOL;
-
-        // pages
         $xml .= '        <pages>'.PHP_EOL;
-        foreach ($d['pages'] as $i => $p) {
-            $pid = (int)$p['id'];
-            $pageUserId = (int)($p['userid'] ?? 0);
-            if ($pageUserId <= 0) { $pageUserId = $adminId; } // fallback user id
 
-            // Ensure non-empty cachedcontent; Moodle expects NOT NULL.
-            $pageHtml = trim((string)($p['content'] ?? ''));
-            if ($pageHtml === '') { $pageHtml = '<p></p>'; }
+        foreach ($data['pages'] as $page) {
+            $pageUserId = (int) ($page['userid'] ?? 0);
+            if ($pageUserId <= 0) {
+                $pageUserId = $adminId;
+            }
+            $cachedContent = trim((string) ($page['cachedcontent'] ?? ''));
+            if ('' === $cachedContent) {
+                $cachedContent = '<p></p>';
+            }
 
-            $xml .= '          <page id="'.$pid.'">'.PHP_EOL;
-            $xml .= '            <title>'.$this->h((string)$p['title']).'</title>'.PHP_EOL;
-            $xml .= '            <userid>'.$pageUserId.'</userid>'.PHP_EOL; // <-- new: page-level userid
-            $xml .= '            <cachedcontent><![CDATA['.$pageHtml.']]></cachedcontent>'.PHP_EOL; // <-- not NULL
-            $xml .= '            <timecreated>'.(int)$p['timecreated'].'</timecreated>'.PHP_EOL;
-            $xml .= '            <timemodified>'.(int)$p['timemodified'].'</timemodified>'.PHP_EOL;
-            $xml .= '            <firstversionid>'.$pid.'</firstversionid>'.PHP_EOL;
-
-            // one version
+            $xml .= '          <page id="'.(int) $page['id'].'">'.PHP_EOL;
+            $xml .= '            <title>'.$this->h((string) $page['title']).'</title>'.PHP_EOL;
+            $xml .= '            <userid>'.$pageUserId.'</userid>'.PHP_EOL;
+            $xml .= '            <cachedcontent><![CDATA['.$cachedContent.']]></cachedcontent>'.PHP_EOL;
+            $xml .= '            <timecreated>'.(int) $page['timecreated'].'</timecreated>'.PHP_EOL;
+            $xml .= '            <timemodified>'.(int) $page['timemodified'].'</timemodified>'.PHP_EOL;
+            $xml .= '            <firstversionid>'.(int) $page['firstversionid'].'</firstversionid>'.PHP_EOL;
             $xml .= '            <versions>'.PHP_EOL;
-            $xml .= '              <version id="'.$pid.'">'.PHP_EOL;
-            $xml .= '                <content><![CDATA['.$pageHtml.']]></content>'.PHP_EOL;
-            $xml .= '                <contentformat>'.$this->h((string)$p['contentformat']).'</contentformat>'.PHP_EOL;
-            $xml .= '                <version>'.(int)$p['version'].'</version>'.PHP_EOL;
-            $xml .= '                <timecreated>'.(int)$p['timecreated'].'</timecreated>'.PHP_EOL;
-            $xml .= '                <userid>'.$pageUserId.'</userid>'.PHP_EOL;
-            $xml .= '              </version>'.PHP_EOL;
-            $xml .= '            </versions>'.PHP_EOL;
 
+            foreach ($page['versions'] as $version) {
+                $versionUserId = (int) ($version['userid'] ?? 0);
+                if ($versionUserId <= 0) {
+                    $versionUserId = $adminId;
+                }
+                $xml .= '              <version id="'.(int) $version['id'].'">'.PHP_EOL;
+                $xml .= '                <content><![CDATA['.(string) $version['content'].']]></content>'.PHP_EOL;
+                $xml .= '                <contentformat>'.$this->h((string) $version['contentformat']).'</contentformat>'.PHP_EOL;
+                $xml .= '                <version>'.(int) $version['version'].'</version>'.PHP_EOL;
+                $xml .= '                <timecreated>'.(int) $version['timecreated'].'</timecreated>'.PHP_EOL;
+                $xml .= '                <userid>'.$versionUserId.'</userid>'.PHP_EOL;
+                $xml .= '              </version>'.PHP_EOL;
+            }
+
+            $xml .= '            </versions>'.PHP_EOL;
             $xml .= '          </page>'.PHP_EOL;
         }
-        $xml .= '        </pages>'.PHP_EOL;
 
+        $xml .= '        </pages>'.PHP_EOL;
         $xml .= '      </subwiki>'.PHP_EOL;
         $xml .= '    </subwikis>'.PHP_EOL;
-
         $xml .= '  </wiki>'.PHP_EOL;
         $xml .= '</activity>';
 
-        $this->createXmlFile('wiki', $xml, $dir);
+        $this->createXmlFile('wiki', $xml, $directory);
     }
 
     /** Normalize HTML like LabelExport: rewrite /document/... to @@PLUGINFILE@@/<file>. */

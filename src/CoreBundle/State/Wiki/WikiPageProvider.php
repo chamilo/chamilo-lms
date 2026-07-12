@@ -204,6 +204,12 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->canChangeVisibility = $canManage && $isExactContextPage;
         $page->canChangeProtection = $canManage && $isExactContextPage;
         $page->canDelete = $canManage && $isExactContextPage;
+        $page->canPrint = true;
+        $page->canExportPdf = $canManage || $this->resolveWikiBoolean(
+            $this->settingsManager->getSetting('document.students_export2pdf', true),
+            true,
+        );
+        $page->canExportToDocuments = $canManage;
         $page->canSubscribe = $canManage;
         $currentUser = $this->security->getUser();
         $isWorkOwner = $currentUser instanceof User
@@ -350,11 +356,11 @@ final readonly class WikiPageProvider implements ProviderInterface
             $page->assignmentClosed = null !== $endAt && $now > $endAt && !$page->delayedSubmit;
         }
         $page->wordCount = $this->renderer->wordCount($sanitizedContent);
-        $page->hits = (int) $latest->getHits();
         $page->visible = 1 === $latest->getVisibility();
         $page->editLocked = 1 === $latest->getEditlock();
 
         $this->registerPageView($latest);
+        $page->hits = (int) $latest->getHits();
 
         return $page;
     }

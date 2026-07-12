@@ -163,6 +163,38 @@
             @click="changeSubscription"
           />
           <BaseButton
+            v-if="wikiPage.canExportPdf"
+            icon="file-pdf"
+            :is-loading="isExportingPdf"
+            :label="t('Export to PDF')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            @click="downloadPdf"
+          />
+          <BaseButton
+            v-if="wikiPage.canExportToDocuments"
+            icon="file-export"
+            :is-loading="isExportingToDocuments"
+            :label="t('Export to Documents')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            @click="exportToDocuments"
+          />
+          <BaseButton
+            v-if="wikiPage.canPrint"
+            icon="file-text"
+            :label="t('Print')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            @click="printPage"
+          />
+          <BaseButton
             v-if="wikiPage.canDelete"
             icon="delete"
             :is-loading="isManaging"
@@ -424,6 +456,8 @@ const { requireConfirmation } = useConfirmation();
 
 const isLoading = ref(false);
 const isManaging = ref(false);
+const isExportingPdf = ref(false);
+const isExportingToDocuments = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
 const wikiPage = reactive(createEmptyPage());
@@ -494,6 +528,9 @@ function createEmptyPage() {
     canSubscribe: false,
     canDiscuss: false,
     canDelete: false,
+    canExportPdf: false,
+    canExportToDocuments: false,
+    canPrint: false,
     categoriesEnabled: false,
     canManageCategories: false,
     canManageSettings: false,
@@ -775,6 +812,130 @@ async function deletePage() {
   } finally {
     isManaging.value = false;
   }
+}
+
+function getApiError(error) {
+  return (
+    error?.response?.data?.detail ||
+    error?.response?.data?.["hydra:description"] ||
+    error?.response?.data?.error ||
+    t("An error occurred")
+  );
+}
+
+function getDownloadFilename(response, fallback) {
+  const disposition = String(response?.headers?.["content-disposition"] || "");
+  const encodedMatch = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+
+  if (encodedMatch?.[1]) {
+    try {
+      return decodeURIComponent(encodedMatch[1].replace(/^"|"$/g, ""));
+    } catch {
+      return fallback;
+    }
+  }
+
+  const basicMatch = disposition.match(/filename="?([^";]+)"?/i);
+
+  return basicMatch?.[1] || fallback;
+}
+
+function triggerBlobDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function downloadPdf() {
+  isExportingPdf.value = true;
+  errorMessage.value = "";
+
+  try {
+    const response = await wikiService.downloadPagePdf(
+      Number(wikiPage.pageId),
+      getContextParams(),
+    );
+    const filename = getDownloadFilename(response, "wiki-page.pdf");
+    triggerBlobDownload(response.data, filename);
+  } catch (error) {
+    console.error("Error exporting Wiki page to PDF", error);
+    errorMessage.value = getApiError(error);
+  } finally {
+    isExportingPdf.value = false;
+  }
+}
+
+async function exportToDocuments() {
+  isExportingToDocuments.value = true;
+  errorMessage.value = "";
+  successMessage.value = "";
+
+  try {
+    await wikiService.exportPageToDocuments(
+      Number(wikiPage.pageId),
+      getContextParams(),
+      wikiPage.managementCsrfToken,
+    );
+    successMessage.value = t("The page has been exported to the document tool");
+  } catch (error) {
+    console.error("Error exporting Wiki page to Documents", error);
+    errorMessage.value = getApiError(error);
+  } finally {
+    isExportingToDocuments.value = false;
+  }
+}
+
+function escapeHtml(value) {
+  const element = document.createElement("div");
+  element.textContent = String(value || "");
+
+  return element.innerHTML;
+}
+
+function printPage() {
+  const printWindow = window.open("", "_blank", "width=900,height=700");
+
+  if (!printWindow) {
+    errorMessage.value = t("The print window could not be opened");
+    return;
+  }
+
+  const title = escapeHtml(wikiPage.title || t("Wiki"));
+  const content = wikiPage.content || `<p>${escapeHtml(t("No content"))}</p>`;
+  const documentHtml = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${title}</title>
+  <style>
+    @page { margin: 16mm; }
+    body { margin: 0; color: #222; font-family: Arial, Helvetica, sans-serif; font-size: 12pt; line-height: 1.45; }
+    h1 { margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px solid #d9d9d9; font-size: 21pt; }
+    img, video, svg { max-width: 100%; height: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 5px; border: 1px solid #d9d9d9; vertical-align: top; }
+    pre, code { white-space: pre-wrap; overflow-wrap: anywhere; }
+    a { color: #145f8c; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <main><h1>${title}</h1><div>${content}</div></main>
+</body>
+</html>`;
+
+  printWindow.document.open();
+  printWindow.document.write(documentHtml);
+  printWindow.document.close();
+  window.setTimeout(() => {
+    printWindow.focus();
+    printWindow.print();
+  }, 250);
 }
 
 async function loadPage() {

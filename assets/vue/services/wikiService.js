@@ -192,6 +192,20 @@ export default {
     );
   },
 
+  async downloadPagePdf(pageId, params = {}) {
+    return await baseService.getRaw(
+      buildUrl(`/api/wiki/page/${pageId}/export.pdf`, params),
+      { responseType: "blob" },
+    );
+  },
+
+  async exportPageToDocuments(pageId, params = {}, csrfToken = "") {
+    return await baseService.post(
+      buildUrl(`/api/wiki/page/${pageId}/export/document`, params),
+      { csrfToken },
+    );
+  },
+
   async deleteContext(params = {}, csrfToken = "") {
     return await baseService.post(
       buildUrl("/api/wiki/context/delete", params),

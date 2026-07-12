@@ -27,6 +27,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const COURSEMANAGERLOWSECURITY;
+
 /**
  * @implements ProcessorInterface<CourseDescriptionItem, CourseDescriptionItem>
  */
@@ -247,8 +249,8 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
 
     private function sanitizeContent(string $content): string
     {
-        if (\class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($content, \COURSEMANAGERLOWSECURITY);
+        if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
+            return (string) \Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
         }
 
         return $content;

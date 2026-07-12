@@ -19,9 +19,11 @@ use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
+use Event;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Throwable;
 
 use const PHP_INT_MAX;
 
@@ -547,7 +549,7 @@ trait AnnouncementAccessHelperTrait
         string $details = '',
         string $info = '',
     ): void {
-        if (!class_exists(\Event::class)) {
+        if (!class_exists(Event::class)) {
             return;
         }
 
@@ -566,8 +568,8 @@ trait AnnouncementAccessHelperTrait
         }
 
         try {
-            \Event::registerLog($logInfo);
-        } catch (\Throwable) {
+            Event::registerLog($logInfo);
+        } catch (Throwable) {
             // Tracking must never break announcement actions.
         }
     }

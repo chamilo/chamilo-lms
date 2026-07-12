@@ -23,6 +23,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const COURSEMANAGERLOWSECURITY;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+
 /**
  * @implements ProviderInterface<CourseDescriptionList>
  */
@@ -159,8 +163,8 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
     private function sanitizeHtmlTitle(string $title): string
     {
-        if (\class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($title, \COURSEMANAGERLOWSECURITY);
+        if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
+            return (string) \Security::remove_XSS($title, COURSEMANAGERLOWSECURITY);
         }
 
         return htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');

@@ -22,8 +22,14 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use const COURSEMANAGERLOWSECURITY;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const STUDENT;
 
 /**
  * @implements ProviderInterface<Course>
@@ -137,8 +143,8 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 
     private function sanitizeHtmlTitle(string $title): string
     {
-        if (\class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($title, \COURSEMANAGERLOWSECURITY);
+        if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
+            return (string) Security::remove_XSS($title, COURSEMANAGERLOWSECURITY);
         }
 
         return htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -164,10 +170,10 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             return '';
         }
 
-        if (\class_exists('Security')) {
-            $userStatus = \defined('STUDENT') ? \STUDENT : null;
+        if (class_exists('Security')) {
+            $userStatus = \defined('STUDENT') ? STUDENT : null;
 
-            return (string) \Security::remove_XSS($content, $userStatus);
+            return (string) Security::remove_XSS($content, $userStatus);
         }
 
         return $content;

@@ -31,6 +31,8 @@ use Symfony\Component\Process\Process;
 use Throwable;
 use XapianWritableDatabase;
 
+use const DIRECTORY_SEPARATOR;
+
 #[AsCommand(
     name: 'chamilo:search:xapian:rebuild',
     description: 'Rebuild the Xapian search index from existing course resources.',
@@ -285,13 +287,7 @@ HELP
             }
 
             if ($newRefs !== $indexed) {
-                throw new RuntimeException(
-                    \sprintf(
-                        'Xapian rebuild stopped: indexed resources (%d) do not match search_engine_ref rows (%d).',
-                        $indexed,
-                        $newRefs
-                    )
-                );
+                throw new RuntimeException(\sprintf('Xapian rebuild stopped: indexed resources (%d) do not match search_engine_ref rows (%d).', $indexed, $newRefs));
             }
 
             $connection->commit();
@@ -385,7 +381,7 @@ HELP
             throw new RuntimeException('The configured Xapian index path exists and is a file: '.$indexDir);
         }
 
-        $parentDir = dirname($indexDir);
+        $parentDir = \dirname($indexDir);
         if ('' === $parentDir || DIRECTORY_SEPARATOR === $parentDir || $parentDir === $indexDir) {
             throw new RuntimeException('Unsafe Xapian index parent directory configuration.');
         }
@@ -394,7 +390,7 @@ HELP
     private function prepareFreshIndexDirectory(string $indexDir): ?string
     {
         $indexDir = rtrim($indexDir, DIRECTORY_SEPARATOR);
-        $parentDir = dirname($indexDir);
+        $parentDir = \dirname($indexDir);
 
         if (!is_dir($parentDir) && !@mkdir($parentDir, 0775, true) && !is_dir($parentDir)) {
             throw new RuntimeException('Unable to create Xapian index parent directory: '.$parentDir);

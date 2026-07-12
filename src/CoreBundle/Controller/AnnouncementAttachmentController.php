@@ -304,9 +304,7 @@ final readonly class AnnouncementAttachmentController
             $course,
             $session,
         )) {
-            throw new AccessDeniedHttpException(
-                'This announcement targets several groups and its attachments cannot be managed from one group.',
-            );
+            throw new AccessDeniedHttpException('This announcement targets several groups and its attachments cannot be managed from one group.');
         }
 
         if (!$this->canEditAnnouncement(

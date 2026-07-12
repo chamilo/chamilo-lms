@@ -302,9 +302,7 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
             $course,
             $session,
         )) {
-            throw new AccessDeniedHttpException(
-                'This announcement targets several groups and cannot be managed from one group.',
-            );
+            throw new AccessDeniedHttpException('This announcement targets several groups and cannot be managed from one group.');
         }
 
         if (!$this->canEditAnnouncement(

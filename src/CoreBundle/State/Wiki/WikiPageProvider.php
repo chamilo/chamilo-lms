@@ -167,7 +167,6 @@ final readonly class WikiPageProvider implements ProviderInterface
                 false,
             ),
         ];
-        $page->legacyUrl = $this->buildLegacyUrl($courseId, $sessionId, $groupId, $reflink);
 
         if (!$first instanceof CWiki || null === $first->getPageId()) {
             $page->title = $this->renderer->displayTitle($reflink);
@@ -363,25 +362,6 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->hits = (int) $latest->getHits();
 
         return $page;
-    }
-
-    private function buildLegacyUrl(int $courseId, int $sessionId, int $groupId, string $reflink): string
-    {
-        $query = [
-            'cid' => $courseId,
-            'action' => 'showpage',
-            'title' => $reflink,
-        ];
-
-        if ($sessionId > 0) {
-            $query['sid'] = $sessionId;
-        }
-
-        if ($groupId > 0) {
-            $query['gid'] = $groupId;
-        }
-
-        return '/main/wiki/index.php?'.http_build_query($query);
     }
 
     private function registerToolAccess(): void

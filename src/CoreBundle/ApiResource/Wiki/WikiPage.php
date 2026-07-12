@@ -211,9 +211,6 @@ final class WikiPage
     #[Groups(['wiki_page:read'])]
     public bool $canManageSettings = false;
 
-    #[Groups(['wiki_page:read'])]
-    public string $legacyUrl = '';
-
     /**
      * @var array<string, bool>
      */

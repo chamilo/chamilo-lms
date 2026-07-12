@@ -205,16 +205,6 @@
             class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
             @click="confirmDeletePage"
           />
-          <BaseButton
-            v-if="wikiPage.legacyUrl"
-            icon="link-external"
-            :label="t('Wiki')"
-            only-icon
-            size="large"
-            type="primary-text"
-            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
-            :to-url="wikiPage.legacyUrl"
-          />
         </div>
       </template>
     </BaseToolbar>
@@ -536,7 +526,6 @@ function createEmptyPage() {
     canManageSettings: false,
     categories: [],
     managementCsrfToken: "",
-    legacyUrl: "",
   };
 }
 

@@ -1268,6 +1268,8 @@ class SessionManager
         $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $course = api_get_course_info_by_id($courseId);
+        $courseEntity = api_get_course_entity((int) $course['real_id']);
+        $wikiNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
         $where = " WHERE c_id = '%s' AND s.status = ".Session::STUDENT;
 
         $limit = null;
@@ -1418,6 +1420,19 @@ class SessionManager
             $getAllSessions
         );
 
+        $wikiQuery = [
+            'cid' => (int) $course['real_id'],
+            'report' => 'statistics',
+        ];
+        if ($sessionId > 0) {
+            $wikiQuery['sid'] = $sessionId;
+        }
+        $linkWiki = '%s';
+        if ($wikiNodeId > 0) {
+            $linkWiki = '<a href="'.api_get_path(WEB_PATH).'resources/wiki/'.$wikiNodeId.'/reports?'.
+                http_build_query($wikiQuery).'"> %s </a>';
+        }
+
         //process table info
         foreach ($users as $user) {
             //Course description
@@ -1536,7 +1551,6 @@ class SessionManager
             $link = '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$user[0].'&details=true&course='.$course['code'].'&sid='.$sessionId.'"> %s </a>';
             $linkForum = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
             $linkWork = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
-            $linkWiki = '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'&action=statistics"> %s </a>';
             $linkSurvey = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
 
             $table[] = [

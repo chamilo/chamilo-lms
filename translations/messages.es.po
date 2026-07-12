@@ -9449,10 +9449,10 @@ msgid "Send email"
 msgstr "Enviar email"
 
 msgid "Subject"
-msgstr "Título del anuncio"
+msgstr "Asunto"
 
 msgid "E-mail content"
-msgstr "Contenido del Email"
+msgstr "Contenido del correo"
 
 msgid "Comments"
 msgstr "Comentarios"

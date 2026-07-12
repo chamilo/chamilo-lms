@@ -44,6 +44,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
+        private WikiAssignmentService $assignmentService,
     ) {}
 
     /**
@@ -194,6 +195,17 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         $form->canManage = $canManage;
         $form->requiresLock = $exactPage instanceof CWiki;
         $form->progressOptions = $this->getProgressOptions();
+        $form->canConfigureAssignment = $canManage && 'index' !== ($sourcePage?->getReflink() ?? $reflink);
+
+        $currentUser = $this->security->getUser();
+        if ($form->isNew && $form->canConfigureAssignment && $currentUser instanceof User) {
+            $form->assignmentTargetCount = $this->assignmentService->countTargetUsers(
+                $course,
+                $session,
+                $group,
+                $currentUser,
+            );
+        }
         $form->settings = [
             'forcePasteAsPlainText' => $this->isPlatformSettingEnabled('editor.force_wiki_paste_as_plain_text'),
             'htmlPurifierEnabled' => $this->isPlatformSettingEnabled('editor.htmlpurifier_wiki'),
@@ -216,6 +228,24 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             $form->version = (int) ($exactPage?->getVersion() ?? 0);
             $form->baseVersion = $form->version;
             $form->assignment = $sourcePage->getAssignment();
+            $form->createAssignment = false;
+
+            $configuration = null !== $sourcePage->getPageId()
+                ? $this->entityManager->getRepository(CWikiConf::class)->findOneBy([
+                    'cId' => $courseId,
+                    'pageId' => (int) $sourcePage->getPageId(),
+                ])
+                : null;
+            $this->assignmentService->populateFormConfiguration(
+                $form,
+                $configuration instanceof CWikiConf ? $configuration : null,
+            );
+            if ('' !== trim($form->task)) {
+                $form->task = $this->renderer->sanitizeContent($form->task, $strictHtmlFiltering);
+            }
+
+            $owner = $this->entityManager->getRepository(User::class)->find($sourcePage->getUserId());
+            $form->assignmentOwnerName = $owner instanceof User ? $owner->getFullName() : '';
         } else {
             $form->reflink = $reflink;
             $form->title = '' === $reflink

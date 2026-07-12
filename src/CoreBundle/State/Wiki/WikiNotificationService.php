@@ -20,6 +20,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+use const ENT_QUOTES;
+
 final readonly class WikiNotificationService
 {
     public function __construct(
@@ -213,6 +215,6 @@ final readonly class WikiNotificationService
             return $message;
         }
 
-        return (string) \get_lang($message);
+        return (string) get_lang($message);
     }
 }

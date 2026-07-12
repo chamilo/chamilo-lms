@@ -153,7 +153,7 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
             ->setReflink($selected->getReflink())
             ->setTitle($selected->getTitle())
             ->setContent($selected->getContent())
-            ->setUserId((int) $user->getId())
+            ->setUserId(2 === $latest->getAssignment() ? $latest->getUserId() : (int) $user->getId())
             ->setGroupId($groupId)
             ->setDtime($now)
             ->setAddlock($latest->getAddlock())

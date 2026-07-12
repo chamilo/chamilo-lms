@@ -10,9 +10,12 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageForm;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
@@ -52,6 +55,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiNotificationService $notificationService,
+        private WikiAssignmentService $assignmentService,
     ) {}
 
     /**
@@ -103,9 +107,9 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             $session,
             $group,
         );
-
-        $latest = null;
         $isUpdate = $operation instanceof Put;
+        $latest = null;
+        $templatePage = null;
 
         if ($isUpdate) {
             $pageId = isset($uriVariables['pageId']) ? (int) $uriVariables['pageId'] : 0;
@@ -139,6 +143,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             }
 
             $this->assertVersionAndLock($latest, $data->baseVersion, $user, $canManage);
+            $templatePage = $latest;
         }
 
         $title = $isUpdate && $latest instanceof CWiki
@@ -179,19 +184,72 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             if ($this->wikiRepository->reflinkExistsInContext($courseId, $reflink, $groupId, $sessionId)) {
                 throw new ConflictHttpException('A Wiki page with the same title already exists.');
             }
+
+            if ($sessionId > 0) {
+                $firstTemplate = $this->wikiRepository->findFirstVersionInContext(
+                    $courseId,
+                    $reflink,
+                    $groupId,
+                    0,
+                );
+
+                if ($firstTemplate instanceof CWiki && null !== $firstTemplate->getPageId()) {
+                    $templatePage = $this->wikiRepository->findLatestVersionInContext(
+                        $courseId,
+                        (int) $firstTemplate->getPageId(),
+                        $groupId,
+                        0,
+                    );
+
+                    if ($templatePage instanceof CWiki) {
+                        $this->assertWikiPageVisible($this->security, $templatePage, $canManage);
+                    }
+                }
+            }
         }
 
         $progress = $this->normalizeProgress($data->progress);
         $content = $this->sanitizeContent($data->content);
+        $comment = trim(strip_tags($data->comment));
+        $this->prepareAssignmentConfiguration($data, $canManage, $reflink);
 
         if ($latest instanceof CWiki) {
             $this->assertAssignmentConstraints($latest, $courseId, $content);
         }
 
-        $comment = trim(strip_tags($data->comment));
+        if (!$isUpdate && $data->createAssignment) {
+            if (!$canManage) {
+                throw new AccessDeniedHttpException('Only Wiki managers can create an assignment workflow.');
+            }
+
+            if ('index' === $reflink) {
+                throw new BadRequestHttpException('The Wiki homepage cannot be converted into an assignment workflow.');
+            }
+
+            return $this->createAssignment(
+                $data,
+                $course,
+                $session,
+                $group,
+                $user,
+                $title,
+                $reflink,
+                $content,
+                $comment,
+                $progress,
+                (string) ($request->getClientIp() ?? ''),
+                $canManage,
+            );
+        }
+
         $now = new DateTime('now', new DateTimeZone('UTC'));
         $version = $latest instanceof CWiki ? ((int) $latest->getVersion()) + 1 : 1;
         $pageId = $latest instanceof CWiki && null !== $latest->getPageId() ? (int) $latest->getPageId() : 0;
+        $source = $latest instanceof CWiki ? $latest : $templatePage;
+        $assignment = $source instanceof CWiki ? $source->getAssignment() : 0;
+        $ownerId = 2 === $assignment && $source instanceof CWiki
+            ? $source->getUserId()
+            : (int) $user->getId();
 
         $wiki = new CWiki();
         $wiki
@@ -200,23 +258,23 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             ->setReflink($reflink)
             ->setTitle($title)
             ->setContent($content)
-            ->setUserId((int) $user->getId())
+            ->setUserId($ownerId)
             ->setGroupId($groupId)
             ->setDtime($now)
-            ->setAddlock($latest instanceof CWiki ? $latest->getAddlock() : 1)
-            ->setEditlock($latest instanceof CWiki ? $latest->getEditlock() : 0)
-            ->setVisibility($latest instanceof CWiki ? $latest->getVisibility() : 1)
-            ->setAddlockDisc($latest instanceof CWiki ? $latest->getAddlockDisc() : 1)
-            ->setVisibilityDisc($latest instanceof CWiki ? $latest->getVisibilityDisc() : 1)
-            ->setRatinglockDisc($latest instanceof CWiki ? $latest->getRatinglockDisc() : 1)
-            ->setAssignment($latest instanceof CWiki ? $latest->getAssignment() : 0)
+            ->setAddlock($source instanceof CWiki ? $source->getAddlock() : 1)
+            ->setEditlock($source instanceof CWiki ? $source->getEditlock() : 0)
+            ->setVisibility($source instanceof CWiki ? $source->getVisibility() : 1)
+            ->setAddlockDisc($source instanceof CWiki ? $source->getAddlockDisc() : 1)
+            ->setVisibilityDisc($source instanceof CWiki ? $source->getVisibilityDisc() : 1)
+            ->setRatinglockDisc($source instanceof CWiki ? $source->getRatinglockDisc() : 1)
+            ->setAssignment($assignment)
             ->setComment($comment)
             ->setProgress((string) ($progress / 10))
-            ->setScore($latest instanceof CWiki ? (int) $latest->getScore() : 0)
+            ->setScore($source instanceof CWiki ? (int) $source->getScore() : 0)
             ->setVersion($version)
             ->setIsEditing(0)
             ->setTimeEdit(null)
-            ->setHits($latest instanceof CWiki ? (int) $latest->getHits() : 0)
+            ->setHits($source instanceof CWiki ? (int) $source->getHits() : 0)
             ->setLinksto($this->renderer->serializeInternalReflinks($content))
             ->setTag('')
             ->setUserIp((string) ($request->getClientIp() ?? ''))
@@ -226,8 +284,8 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         ;
         $wiki->setCreator($user);
 
-        if ($latest instanceof CWiki) {
-            foreach ($latest->getCategories() as $category) {
+        if ($source instanceof CWiki) {
+            foreach ($source->getCategories() as $category) {
                 $wiki->addCategory($category);
             }
         }
@@ -253,8 +311,12 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
 
             $languageCode = $canManage && 'index' !== $reflink
                 ? trim($data->language)
-                : $this->getResourceLanguage($latest);
+                : $this->getResourceLanguage($source);
             $this->applyResourceLanguage($wiki, $languageCode);
+
+            if ($canManage && 'index' !== $reflink) {
+                $this->assignmentService->saveConfiguration($data, $wiki, $courseId);
+            }
 
             $this->entityManager->flush();
             $connection->commit();
@@ -273,6 +335,67 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             !$isUpdate,
         );
 
+        return $this->createResponse($wiki, $progress, $canManage, $data);
+    }
+
+    private function createAssignment(
+        WikiPageForm $data,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        User $teacher,
+        string $title,
+        string $reflink,
+        string $content,
+        string $comment,
+        int $progress,
+        string $clientIp,
+        bool $canManage,
+    ): WikiPageForm {
+        $connection = $this->entityManager->getConnection();
+        $connection->beginTransaction();
+
+        try {
+            $result = $this->assignmentService->createAssignmentPages(
+                $data,
+                $course,
+                $session,
+                $group,
+                $teacher,
+                $title,
+                $reflink,
+                $content,
+                $comment,
+                $progress,
+                $clientIp,
+            );
+            $connection->commit();
+        } catch (Throwable $throwable) {
+            $connection->rollBack();
+
+            throw $throwable;
+        }
+
+        foreach ($result['createdPages'] as $createdPage) {
+            $this->notificationService->notifyPageSaved(
+                $createdPage,
+                $course,
+                $session,
+                $group,
+                $teacher,
+                true,
+            );
+        }
+
+        return $this->createResponse($result['teacherPage'], $progress, $canManage, $data);
+    }
+
+    private function createResponse(
+        CWiki $wiki,
+        int $progress,
+        bool $canManage,
+        WikiPageForm $source,
+    ): WikiPageForm {
         $response = new WikiPageForm();
         $response->iid = null !== $wiki->getIid() ? (int) $wiki->getIid() : null;
         $response->pageId = null !== $wiki->getPageId() ? (int) $wiki->getPageId() : null;
@@ -282,16 +405,56 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         $response->comment = $wiki->getComment();
         $response->progress = $progress;
         $response->language = $this->getResourceLanguage($wiki);
-        $response->baseVersion = $version;
-        $response->version = $version;
+        $response->baseVersion = (int) $wiki->getVersion();
+        $response->version = (int) $wiki->getVersion();
         $response->assignment = $wiki->getAssignment();
+        $response->createAssignment = false;
         $response->isNew = false;
         $response->canManage = $canManage;
+        $response->task = $source->task;
+        $response->feedback1 = $source->feedback1;
+        $response->feedback2 = $source->feedback2;
+        $response->feedback3 = $source->feedback3;
+        $response->feedbackProgress1 = $source->feedbackProgress1;
+        $response->feedbackProgress2 = $source->feedbackProgress2;
+        $response->feedbackProgress3 = $source->feedbackProgress3;
+        $response->startDate = $source->startDate;
+        $response->endDate = $source->endDate;
+        $response->delayedSubmit = $source->delayedSubmit;
+        $response->maxWords = $source->maxWords;
+        $response->maxVersions = $source->maxVersions;
 
         return $response;
     }
 
-    private function assertAssignmentConstraints(CWiki $wiki, int $courseId, ?string $content): void
+    private function prepareAssignmentConfiguration(WikiPageForm $data, bool $canManage, string $reflink): void
+    {
+        if (!$canManage || 'index' === $reflink) {
+            $data->createAssignment = false;
+            $data->task = '';
+            $data->feedback1 = '';
+            $data->feedback2 = '';
+            $data->feedback3 = '';
+            $data->feedbackProgress1 = 0;
+            $data->feedbackProgress2 = 0;
+            $data->feedbackProgress3 = 0;
+            $data->startDate = null;
+            $data->endDate = null;
+            $data->delayedSubmit = false;
+            $data->maxWords = 0;
+            $data->maxVersions = 0;
+
+            return;
+        }
+
+        $data->task = $this->sanitizeOptionalContent($data->task);
+        $data->feedback1 = trim(strip_tags($data->feedback1));
+        $data->feedback2 = trim(strip_tags($data->feedback2));
+        $data->feedback3 = trim(strip_tags($data->feedback3));
+        $this->assignmentService->validateConfiguration($data);
+    }
+
+    private function assertAssignmentConstraints(CWiki $wiki, int $courseId, string $content): void
     {
         $pageId = $wiki->getPageId();
         if (null === $pageId) {
@@ -325,7 +488,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             throw new ConflictHttpException('The maximum number of Wiki versions has been reached.');
         }
 
-        if (null !== $content
+        if (null !== $configuration->getMaxText()
             && $configuration->getMaxText() > 0
             && $this->renderer->wordCount($content) > $configuration->getMaxText()
         ) {
@@ -363,6 +526,11 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         }
 
         return $progress;
+    }
+
+    private function sanitizeOptionalContent(string $content): string
+    {
+        return '' === trim($content) ? '' : $this->sanitizeContent($content);
     }
 
     private function sanitizeContent(string $content): string

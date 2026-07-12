@@ -154,6 +154,54 @@ final class WikiPageForm
     #[Groups(['wiki_page_form:read'])]
     public int $assignment = 0;
 
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public bool $createAssignment = false;
+
+    #[Groups(['wiki_page_form:read'])]
+    public bool $canConfigureAssignment = false;
+
+    #[Groups(['wiki_page_form:read'])]
+    public int $assignmentTargetCount = 0;
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public string $task = '';
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public string $feedback1 = '';
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public string $feedback2 = '';
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public string $feedback3 = '';
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public int $feedbackProgress1 = 0;
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public int $feedbackProgress2 = 0;
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public int $feedbackProgress3 = 0;
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public ?string $startDate = null;
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public ?string $endDate = null;
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public bool $delayedSubmit = false;
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public int $maxWords = 0;
+
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public int $maxVersions = 0;
+
+    #[Groups(['wiki_page_form:read'])]
+    public string $assignmentOwnerName = '';
+
     #[Groups(['wiki_page_form:read'])]
     public bool $isNew = true;
 

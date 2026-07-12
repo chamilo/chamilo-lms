@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/wiki/page/{pageId}/discussion/visibility',
-            requirements: ['pageId' => '\\d+'],
+            requirements: ['pageId' => '\d+'],
             openapi: new Operation(
                 summary: 'Show or hide one Wiki page discussion',
                 parameters: [
@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/wiki/page/{pageId}/discussion/commenting',
-            requirements: ['pageId' => '\\d+'],
+            requirements: ['pageId' => '\d+'],
             openapi: new Operation(
                 summary: 'Allow or block comments in one Wiki page discussion',
                 parameters: [
@@ -59,7 +59,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/wiki/page/{pageId}/discussion/rating',
-            requirements: ['pageId' => '\\d+'],
+            requirements: ['pageId' => '\d+'],
             openapi: new Operation(
                 summary: 'Allow or block ratings in one Wiki page discussion',
                 parameters: [
@@ -79,7 +79,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/wiki/page/{pageId}/discussion/subscription',
-            requirements: ['pageId' => '\\d+'],
+            requirements: ['pageId' => '\d+'],
             openapi: new Operation(
                 summary: 'Subscribe or unsubscribe from one Wiki page discussion',
                 parameters: [

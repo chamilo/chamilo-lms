@@ -191,8 +191,8 @@ final readonly class WikiDiscussionProvider implements ProviderInterface
         $discussion->csrfToken = $canComment || $canManage || $canSubscribe
             ? (string) $this->csrfTokenManager->getToken(WikiDiscussion::CSRF_TOKEN_ID)
             : '';
-        $discussion->commentCount = count($items);
-        $discussion->scoredCommentCount = count($ratings);
+        $discussion->commentCount = \count($items);
+        $discussion->scoredCommentCount = \count($ratings);
         $discussion->averageRating = $this->scoreCalculator->average($ratings);
         $discussion->comments = $items;
 

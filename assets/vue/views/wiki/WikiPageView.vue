@@ -204,6 +204,87 @@
         }}
       </div>
 
+      <div
+        v-if="wikiPage.assignmentNotStarted"
+        class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800"
+        role="status"
+      >
+        {{ t("The Wiki assignment has not started yet.") }}
+      </div>
+
+      <div
+        v-if="wikiPage.assignmentClosed"
+        class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+        role="status"
+      >
+        {{ t("The Wiki assignment deadline has passed.") }}
+      </div>
+
+      <div
+        v-else-if="wikiPage.assignmentLate"
+        class="rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800"
+        role="status"
+      >
+        {{
+          t(
+            "The Wiki assignment deadline has passed, but delayed submission is allowed.",
+          )
+        }}
+      </div>
+
+      <BaseCard v-if="wikiPage.hasTask">
+        <template #title>
+          <div class="flex items-center gap-2">
+            <BaseIcon icon="file-text" size="small" />
+            <span>{{ t("Description of the assignment") }}</span>
+          </div>
+        </template>
+
+        <div
+          class="break-words text-gray-90 [&_a]:font-medium [&_img]:max-w-full [&_table]:max-w-full"
+          @click="handleContentClick"
+          v-html="wikiPage.task"
+        ></div>
+
+        <template #footer>
+          <div class="grid gap-2 text-sm text-gray-600 md:grid-cols-2">
+            <span v-if="formattedAssignmentStart">
+              {{ t("Start date") }}: {{ formattedAssignmentStart }}
+            </span>
+            <span v-if="formattedAssignmentEnd">
+              {{ t("End date") }}: {{ formattedAssignmentEnd }}
+            </span>
+            <span>
+              {{ t("Allow delayed sending") }}:
+              {{ wikiPage.delayedSubmit ? t("Yes") : t("No") }}
+            </span>
+            <span v-if="Number(wikiPage.maxWords) > 0">
+              {{ t("Maximum number of words") }}: {{ wikiPage.maxWords }}
+            </span>
+            <span v-if="Number(wikiPage.maxVersions) > 0">
+              {{ t("Maximum number of versions") }}: {{ wikiPage.maxVersions }}
+            </span>
+            <span
+              v-if="
+                Number(wikiPage.assignment) === 2 &&
+                wikiPage.assignmentOwnerName
+              "
+            >
+              {{ t("Learner") }}: {{ wikiPage.assignmentOwnerName }}
+            </span>
+          </div>
+        </template>
+      </BaseCard>
+
+      <div
+        v-if="wikiPage.feedback"
+        class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
+        role="status"
+      >
+        <p class="font-semibold">{{ t("Feedback") }}</p>
+        <p class="mt-1 whitespace-pre-line">{{ wikiPage.feedback }}</p>
+      </div>
+
       <BaseCard>
         <template #title>
           <div class="flex min-w-0 items-center gap-2">
@@ -315,6 +396,23 @@ const formattedUpdatedAt = computed(() => {
   return Number.isNaN(date.getTime()) ? "" : date.toLocaleString();
 });
 
+const formattedAssignmentStart = computed(() =>
+  formatDateTime(wikiPage.assignmentStartDate),
+);
+const formattedAssignmentEnd = computed(() =>
+  formatDateTime(wikiPage.assignmentEndDate),
+);
+
+function formatDateTime(value) {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+
+  return Number.isNaN(date.getTime()) ? "" : date.toLocaleString();
+}
+
 function createEmptyPage() {
   return {
     pageId: null,
@@ -324,6 +422,17 @@ function createEmptyPage() {
     content: "",
     assignment: 0,
     hasTask: false,
+    task: "",
+    feedback: "",
+    assignmentOwnerName: "",
+    assignmentStartDate: null,
+    assignmentEndDate: null,
+    delayedSubmit: false,
+    maxWords: 0,
+    maxVersions: 0,
+    assignmentNotStarted: false,
+    assignmentLate: false,
+    assignmentClosed: false,
     progress: 0,
     score: null,
     wordCount: 0,

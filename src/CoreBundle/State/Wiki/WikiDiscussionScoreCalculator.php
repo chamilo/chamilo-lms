@@ -42,6 +42,6 @@ final class WikiDiscussionScoreCalculator
             return 0.0;
         }
 
-        return round(array_sum($normalized) / count($normalized), 2);
+        return round(array_sum($normalized) / \count($normalized), 2);
     }
 }

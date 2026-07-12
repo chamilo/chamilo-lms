@@ -98,6 +98,39 @@ final class WikiPage
     public bool $hasTask = false;
 
     #[Groups(['wiki_page:read'])]
+    public string $task = '';
+
+    #[Groups(['wiki_page:read'])]
+    public string $feedback = '';
+
+    #[Groups(['wiki_page:read'])]
+    public string $assignmentOwnerName = '';
+
+    #[Groups(['wiki_page:read'])]
+    public ?string $assignmentStartDate = null;
+
+    #[Groups(['wiki_page:read'])]
+    public ?string $assignmentEndDate = null;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $delayedSubmit = false;
+
+    #[Groups(['wiki_page:read'])]
+    public int $maxWords = 0;
+
+    #[Groups(['wiki_page:read'])]
+    public int $maxVersions = 0;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $assignmentNotStarted = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $assignmentLate = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $assignmentClosed = false;
+
+    #[Groups(['wiki_page:read'])]
     public int $progress = 0;
 
     #[Groups(['wiki_page:read'])]

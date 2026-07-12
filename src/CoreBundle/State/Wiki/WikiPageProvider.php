@@ -44,6 +44,7 @@ final readonly class WikiPageProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
+        private WikiAssignmentFeedbackResolver $feedbackResolver,
     ) {}
 
     /**
@@ -273,9 +274,48 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->authorId = $author instanceof User ? (int) $author->getId() : $latest->getUserId();
         $page->authorName = $author instanceof User ? $author->getFullName() : '';
         $page->assignment = $latest->getAssignment();
-        $page->hasTask = $configuration instanceof CWikiConf && '' !== trim((string) $configuration->getTask());
         $page->progress = $this->renderer->normalizeStoredProgress($latest->getProgress());
         $page->score = $latest->getScore();
+        $page->assignmentOwnerName = $author instanceof User ? $author->getFullName() : '';
+
+        if ($configuration instanceof CWikiConf) {
+            $task = trim((string) $configuration->getTask());
+            $page->hasTask = '' !== $task;
+            $page->assignmentStartDate = $configuration->getStartdateAssig()?->format(DATE_ATOM);
+            $page->assignmentEndDate = $configuration->getEnddateAssig()?->format(DATE_ATOM);
+            $page->delayedSubmit = 1 === $configuration->getDelayedsubmit();
+            $page->maxWords = max(0, (int) $configuration->getMaxText());
+            $page->maxVersions = max(0, (int) $configuration->getMaxVersion());
+            $page->feedback = $this->feedbackResolver->resolve($configuration, $page->progress);
+
+            if ('' !== $task) {
+                $sanitizedTask = $this->renderer->sanitizeContent($task, $strictFiltering);
+                $taskReflinks = $this->renderer->extractInternalReflinks($sanitizedTask);
+                $taskExistingReflinks = $this->wikiRepository->findExistingReflinks(
+                    $courseId,
+                    $taskReflinks,
+                    $groupId,
+                    $sessionId,
+                );
+                $page->task = $this->renderer->renderInternalLinks(
+                    $sanitizedTask,
+                    $taskExistingReflinks,
+                    $nodeId,
+                    [
+                        'cid' => $courseId,
+                        'sid' => $sessionId,
+                        'gid' => $groupId,
+                    ],
+                );
+            }
+
+            $now = time();
+            $startAt = $configuration->getStartdateAssig()?->getTimestamp();
+            $endAt = $configuration->getEnddateAssig()?->getTimestamp();
+            $page->assignmentNotStarted = null !== $startAt && $now < $startAt;
+            $page->assignmentLate = null !== $endAt && $now > $endAt && $page->delayedSubmit;
+            $page->assignmentClosed = null !== $endAt && $now > $endAt && !$page->delayedSubmit;
+        }
         $page->wordCount = $this->renderer->wordCount($sanitizedContent);
         $page->hits = (int) $latest->getHits();
         $page->visible = 1 === $latest->getVisibility();

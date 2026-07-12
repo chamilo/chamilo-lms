@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/wiki/page/{pageId}/discussion',
-            requirements: ['pageId' => '\\d+'],
+            requirements: ['pageId' => '\d+'],
             openapi: new Operation(
                 summary: 'Read the discussion for one logical Wiki page',
                 parameters: [
@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/wiki/page/{pageId}/discussion',
-            requirements: ['pageId' => '\\d+'],
+            requirements: ['pageId' => '\d+'],
             openapi: new Operation(
                 summary: 'Add a comment to one logical Wiki page discussion',
                 parameters: [

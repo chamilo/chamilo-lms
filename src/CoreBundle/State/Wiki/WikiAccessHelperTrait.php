@@ -303,6 +303,10 @@ trait WikiAccessHelperTrait
             return false;
         }
 
+        if (1 === $wiki->getAssignment()) {
+            return false;
+        }
+
         if (2 === $wiki->getAssignment()) {
             return $wiki->getUserId() === (int) $user->getId();
         }

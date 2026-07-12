@@ -147,9 +147,17 @@ class FeatureContext extends MinkContext
         //$this->visit('/logout');
         $this->visit('/login');
         $this->waitForThePageToBeLoaded();
-        $this->fillField('login', $username);
-        $this->fillField('password', $username);
-        $this->pressButton('Sign in');
+
+        // Some themes (e.g. the custom sidebar template) render a second,
+        // hidden copy of the login form with the same field ids inside a
+        // collapsed sidebar menu. Scope to the visible form in the main
+        // content area so fillField()/click() don't hit the hidden one.
+        $page = $this->getSession()->getPage();
+        $loginForm = $page->find('css', '.app-main .login-section') ?: $page;
+
+        $loginForm->fillField('login', $username);
+        $loginForm->fillField('password', $username);
+        $loginForm->find('css', 'button[type="submit"]')->click();
         $this->waitForThePageToBeLoaded();
         //$this->waitForThePageToBeLoaded();
     }

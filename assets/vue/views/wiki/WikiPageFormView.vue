@@ -312,11 +312,7 @@ async function acquireLock() {
     return
   }
 
-  const response = await wikiService.acquireLock(
-    form.value.pageId,
-    getContextParams(),
-    form.value.csrfToken,
-  )
+  const response = await wikiService.acquireLock(form.value.pageId, getContextParams(), form.value.csrfToken)
   form.value.lockAcquired = Boolean(response.lockAcquired)
 }
 

@@ -288,11 +288,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         $lockOwner = $this->entityManager->getRepository(User::class)->find($lockOwnerId);
         $lockOwnerName = $lockOwner instanceof User ? $lockOwner->getFullName() : '';
 
-        throw new ConflictHttpException(
-            '' !== $lockOwnerName
-                ? 'This Wiki page is currently being edited by '.$lockOwnerName.'.'
-                : 'This Wiki page is currently being edited by another user.',
-        );
+        throw new ConflictHttpException('' !== $lockOwnerName ? 'This Wiki page is currently being edited by '.$lockOwnerName.'.' : 'This Wiki page is currently being edited by another user.');
     }
 
     private function isLockExpired(CWiki $wiki): bool

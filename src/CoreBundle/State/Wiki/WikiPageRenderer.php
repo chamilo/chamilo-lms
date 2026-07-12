@@ -133,7 +133,7 @@ final class WikiPageRenderer
         return null === $rendered ? $content : $rendered;
     }
 
-    public function normalizeStoredProgress(string|int|null $progress): int
+    public function normalizeStoredProgress(int|string|null $progress): int
     {
         $value = max(0, (int) $progress);
 

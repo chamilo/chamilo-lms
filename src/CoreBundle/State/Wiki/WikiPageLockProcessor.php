@@ -141,11 +141,7 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
             $lockOwner = $this->entityManager->getRepository(User::class)->find($lockOwnerId);
             $lockOwnerName = $lockOwner instanceof User ? $lockOwner->getFullName() : '';
 
-            throw new ConflictHttpException(
-                '' !== $lockOwnerName
-                    ? 'This Wiki page is currently being edited by '.$lockOwnerName.'.'
-                    : 'This Wiki page is currently being edited by another user.',
-            );
+            throw new ConflictHttpException('' !== $lockOwnerName ? 'This Wiki page is currently being edited by '.$lockOwnerName.'.' : 'This Wiki page is currently being edited by another user.');
         }
 
         $wiki

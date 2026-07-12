@@ -32,20 +32,59 @@
             class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
             :route="getEditRoute()"
           />
+          <BaseButton
+            icon="list"
+            :label="t('All pages')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getReportRoute('all')"
+          />
+          <BaseButton
+            icon="refresh"
+            :label="t('Latest changes')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getReportRoute('recent')"
+          />
+          <BaseButton
+            icon="search"
+            :label="t('Search')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getReportRoute('search')"
+          />
         </div>
       </template>
 
       <template #end>
-        <BaseButton
-          v-if="wikiPage.legacyUrl"
-          icon="link-external"
-          :label="t('Wiki')"
-          only-icon
-          size="large"
-          type="primary-text"
-          class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
-          :to-url="wikiPage.legacyUrl"
-        />
+        <div class="flex items-center gap-2">
+          <BaseButton
+            v-if="wikiPage.exists"
+            icon="information"
+            :label="t('What links here')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getReportRoute('backlinks', { target: wikiPage.reflink })"
+          />
+          <BaseButton
+            v-if="wikiPage.legacyUrl"
+            icon="link-external"
+            :label="t('Wiki')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :to-url="wikiPage.legacyUrl"
+          />
+        </div>
       </template>
     </BaseToolbar>
 
@@ -260,6 +299,18 @@ function getCreateRoute(reflink = "") {
     name: "WikiPageCreate",
     params: { node: route.params.node },
     query,
+  }
+}
+
+function getReportRoute(report, extraQuery = {}) {
+  return {
+    name: "WikiReports",
+    params: { node: route.params.node },
+    query: {
+      ...getSharedQuery(),
+      report,
+      ...extraQuery,
+    },
   }
 }
 

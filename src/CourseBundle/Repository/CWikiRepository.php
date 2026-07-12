@@ -189,4 +189,71 @@ final class CWikiRepository extends ResourceRepository
             $rows,
         ));
     }
+
+    /**
+     * @return array<int, CWiki>
+     */
+    public function findVersionsInContext(
+        int $courseId,
+        int $groupId,
+        int $sessionId,
+        bool $includeHidden,
+    ): array {
+        $queryBuilder = $this->createQueryBuilder('w')
+            ->andWhere('w.cId = :courseId')
+            ->andWhere('COALESCE(w.groupId, 0) = :groupId')
+            ->andWhere('COALESCE(w.sessionId, 0) = :sessionId')
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('groupId', $groupId, Types::INTEGER)
+            ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ->orderBy('w.dtime', 'DESC')
+            ->addOrderBy('w.iid', 'DESC')
+        ;
+
+        if (!$includeHidden) {
+            $queryBuilder->andWhere('w.visibility = 1');
+        }
+
+        /** @var array<int, CWiki> */
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @return array<int, CWiki>
+     */
+    public function findLatestVersionsInContext(
+        int $courseId,
+        int $groupId,
+        int $sessionId,
+        bool $includeHidden,
+    ): array {
+        $subquery = $this->getEntityManager()->createQueryBuilder()
+            ->select('MAX(w2.version)')
+            ->from(CWiki::class, 'w2')
+            ->andWhere('w2.cId = :courseId')
+            ->andWhere('w2.reflink = w.reflink')
+            ->andWhere('COALESCE(w2.groupId, 0) = :groupId')
+            ->andWhere('COALESCE(w2.sessionId, 0) = :sessionId')
+        ;
+
+        $queryBuilder = $this->createQueryBuilder('w')
+            ->andWhere('w.cId = :courseId')
+            ->andWhere('COALESCE(w.groupId, 0) = :groupId')
+            ->andWhere('COALESCE(w.sessionId, 0) = :sessionId')
+            ->andWhere('w.version = ('.$subquery->getDQL().')')
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('groupId', $groupId, Types::INTEGER)
+            ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ->orderBy('w.title', 'ASC')
+            ->addOrderBy('w.iid', 'ASC')
+        ;
+
+        if (!$includeHidden) {
+            $queryBuilder->andWhere('w.visibility = 1');
+        }
+
+        /** @var array<int, CWiki> */
+        return $queryBuilder->getQuery()->getResult();
+    }
+
 }

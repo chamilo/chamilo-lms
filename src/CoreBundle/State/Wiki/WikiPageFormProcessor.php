@@ -327,9 +327,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
     {
         $currentVersion = (int) $wiki->getVersion();
         if ($baseVersion <= 0 || $baseVersion !== $currentVersion) {
-            throw new ConflictHttpException(
-                'This Wiki page was modified by another user. Reload the editor before saving.',
-            );
+            throw new ConflictHttpException('This Wiki page was modified by another user. Reload the editor before saving.');
         }
 
         if ($canManage) {

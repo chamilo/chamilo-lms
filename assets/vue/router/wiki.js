@@ -29,5 +29,11 @@ export default {
       meta: { requiresAuth: true, breadcrumb: "Edit page" },
       component: () => import("../views/wiki/WikiPageFormView.vue"),
     },
+    {
+      name: "WikiReports",
+      path: "reports",
+      meta: { requiresAuth: true, breadcrumb: "Wiki reports" },
+      component: () => import("../views/wiki/WikiReportView.vue"),
+    },
   ],
 }

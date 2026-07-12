@@ -21,6 +21,10 @@ export default {
     return await baseService.get("/api/wiki/form", cleanParams(params))
   },
 
+  async getReport(params = {}) {
+    return await baseService.get("/api/wiki/report", cleanParams(params))
+  },
+
   async createPage(params = {}, payload = {}) {
     return await baseService.post(buildUrl("/api/wiki/page", params), payload)
   },

@@ -1580,7 +1580,7 @@ msgstr "Cheqaqchu munanki kay imaymanakunata mañuchiyta ?"
 msgid "Authoring tool"
 msgstr "Paqariynin"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Khipu apachinapaq"
 
 msgid "Course location"

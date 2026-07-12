@@ -1669,7 +1669,7 @@ msgstr "Êtes-vous certain de vouloir supprimer ces étapes ?"
 msgid "Authoring tool"
 msgstr "Origine"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Fichier à envoyer"
 
 msgid "Course location"

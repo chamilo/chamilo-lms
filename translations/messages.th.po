@@ -1580,8 +1580,8 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 msgid "Authoring tool"
 msgstr "เครื่องมือสร้างเนื้อหา"
 
-msgid "SCORM or AICC file to upload"
-msgstr "ไฟล์ SCORM หรือ AICC ที่จะอัปโหลด"
+msgid "SCORM file to upload"
+msgstr "ไฟล์ SCORM ที่จะอัปโหลด"
 
 msgid "Course location"
 msgstr "ตำแหน่งรายวิชา"

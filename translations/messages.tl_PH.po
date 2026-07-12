@@ -1575,8 +1575,8 @@ msgstr "Sigurado ka bang gusto mong burahin ang mga hakbang na ito?"
 msgid "Authoring tool"
 msgstr "Pambuong-guhit na tool"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM o AICC file na i-upload"
+msgid "SCORM file to upload"
+msgstr "SCORM file na i-upload"
 
 msgid "Course location"
 msgstr "Lokasyon ng kurso"

@@ -1580,8 +1580,8 @@ msgstr "Bạn có chắc chắn muốn xóa các bước này không?"
 msgid "Authoring tool"
 msgstr "Công cụ soạn thảo"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Tệp SCORM hoặc AICC để tải lên"
+msgid "SCORM file to upload"
+msgstr "Tệp SCORM để tải lên"
 
 msgid "Course location"
 msgstr "Vị trí khóa học"

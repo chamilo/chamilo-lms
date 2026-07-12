@@ -1579,8 +1579,8 @@ msgstr "Na pewno chcesz usunąć te kroki?"
 msgid "Authoring tool"
 msgstr "Narzędzie autorskie"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Plik SCORM lub AICC do wysłania"
+msgid "SCORM file to upload"
+msgstr "Plik SCORM do wysłania"
 
 msgid "Course location"
 msgstr "Lokalizacja kursu"

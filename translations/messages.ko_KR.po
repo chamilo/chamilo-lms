@@ -1578,8 +1578,8 @@ msgstr "이 단계를 삭제하시겠습니까?"
 msgid "Authoring tool"
 msgstr "저작 도구"
 
-msgid "SCORM or AICC file to upload"
-msgstr "업로드할 SCORM 또는 AICC 파일"
+msgid "SCORM file to upload"
+msgstr "업로드할 SCORM 파일"
 
 msgid "Course location"
 msgstr "강의 위치"

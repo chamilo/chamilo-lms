@@ -1588,8 +1588,8 @@ msgstr "Naozaj chcete zmazať tieto etapy?"
 msgid "Authoring tool"
 msgstr "Pôvod"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM alebo AICC súbor na načítanie"
+msgid "SCORM file to upload"
+msgstr "SCORM súbor na načítanie"
 
 msgid "Course location"
 msgstr "Umiestnenie kurzu"

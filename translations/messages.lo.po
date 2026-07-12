@@ -1704,8 +1704,8 @@ msgid "Authoring tool"
 msgstr "ເຄື່ອງມືສ້າງ"
 
 #, fuzzy
-msgid "SCORM or AICC file to upload"
-msgstr "ໄຟລ໌ SCORM ຫຼື AICC ທີ່ຈະອັບໂຫຼດ"
+msgid "SCORM file to upload"
+msgstr "ໄຟລ໌ SCORM ທີ່ຈະອັບໂຫຼດ"
 
 #, fuzzy
 msgid "Course location"

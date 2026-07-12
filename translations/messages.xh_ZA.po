@@ -1575,8 +1575,8 @@ msgstr "Uqinisekile ukuba ufuna ukucima ezi nyathelo?"
 msgid "Authoring tool"
 msgstr "Isixhobo sokubhala"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Ifayile yeSCORM okanye AICC ukulayisha"
+msgid "SCORM file to upload"
+msgstr "Ifayile yeSCORM ukulayisha"
 
 msgid "Course location"
 msgstr "Indawo yekhosi"

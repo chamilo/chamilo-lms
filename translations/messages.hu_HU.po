@@ -1578,7 +1578,7 @@ msgstr "Biztos, hogy törölni kívánja ezeket a lépéseket?"
 msgid "Authoring tool"
 msgstr "Számazási hely"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Feltöltendő állomány"
 
 msgid "Course location"

@@ -1578,8 +1578,8 @@ msgstr "Adakah anda pasti mahu memadam langkah-langkah ini?"
 msgid "Authoring tool"
 msgstr "Alat pembuatan"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Fail SCORM atau AICC untuk dimuat naik"
+msgid "SCORM file to upload"
+msgstr "Fail SCORM untuk dimuat naik"
 
 msgid "Course location"
 msgstr "Lokasi kursus"

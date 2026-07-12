@@ -1575,8 +1575,8 @@ msgstr "Sètz segur que vol escartar aquestas etapas ?"
 msgid "Authoring tool"
 msgstr "Auter d'autor"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Fichièr SCORM o AICC a telecargar"
+msgid "SCORM file to upload"
+msgstr "Fichièr SCORM a telecargar"
 
 msgid "Course location"
 msgstr "Emplaçament del curs"

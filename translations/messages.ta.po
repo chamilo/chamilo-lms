@@ -1579,8 +1579,8 @@ msgstr "இந்த படிகளை நீக்க விரும்பு
 msgid "Authoring tool"
 msgstr "ஆசிரியர் கருவி"
 
-msgid "SCORM or AICC file to upload"
-msgstr "ஏற்ற SCORM அல்லது AICC கோப்பு"
+msgid "SCORM file to upload"
+msgstr "ஏற்ற SCORM கோப்பு"
 
 msgid "Course location"
 msgstr "பாடநிலை இடம்"

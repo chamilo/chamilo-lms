@@ -1588,7 +1588,7 @@ msgstr "Você tem certeza que deseja excluir estas etapas?"
 msgid "Authoring tool"
 msgstr "Origem"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Arquivo para envio"
 
 msgid "Course location"

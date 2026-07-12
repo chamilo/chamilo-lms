@@ -1579,8 +1579,8 @@ msgstr "A jeni të sigurt që dëshironi të fshini këto hapa?"
 msgid "Authoring tool"
 msgstr "Mjet krijimi"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Kartelë SCORM ose AICC për ngarkim"
+msgid "SCORM file to upload"
+msgstr "Kartelë SCORM për ngarkim"
 
 msgid "Course location"
 msgstr "Vendndodhja e kursit"

@@ -1580,8 +1580,8 @@ msgstr "Är du säker på att du vill radera stegen?"
 msgid "Authoring tool"
 msgstr "Författarverktyg"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM- eller AICC-paket att ladda upp"
+msgid "SCORM file to upload"
+msgstr "SCORM-paket att ladda upp"
 
 msgid "Course location"
 msgstr "Kursplacering"

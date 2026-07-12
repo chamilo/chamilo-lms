@@ -1581,8 +1581,8 @@ msgstr "Da li ste sigurni da želite da obrišete ove korake?"
 msgid "Authoring tool"
 msgstr "Alat za kreiranje"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM ili AICC datoteka za otpremanje"
+msgid "SCORM file to upload"
+msgstr "SCORM datoteka za otpremanje"
 
 msgid "Course location"
 msgstr "Lokacija kursa"

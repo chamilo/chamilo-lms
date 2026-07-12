@@ -399,6 +399,15 @@
                 :route="getEditRoute(slotProps.data)"
               />
               <BaseButton
+                v-if="Number(slotProps.data.pageId) > 0"
+                icon="restore"
+                :label="t('History')"
+                only-icon
+                size="small"
+                type="primary-text"
+                :route="getHistoryRoute(slotProps.data)"
+              />
+              <BaseButton
                 icon="information"
                 :label="t('What links here')"
                 only-icon
@@ -595,10 +604,15 @@ const showPageTable = computed(() =>
   (!isSearchReport.value || Boolean(reportData.search)),
 )
 const showAuthorColumn = computed(() => ["all", "recent", "search", "backlinks"].includes(reportData.report))
-const showDateColumn = computed(() => ["all", "recent", "search", "backlinks", "user-contributions"].includes(reportData.report))
+const showDateColumn = computed(() =>
+  ["all", "recent", "search", "backlinks", "user-contributions"].includes(reportData.report),
+)
 const showChangeColumn = computed(() => "recent" === reportData.report)
 const showVersionColumn = computed(
-  () => "recent" === reportData.report || isUserContributionReport.value || (isSearchReport.value && reportData.allVersions),
+  () =>
+    "recent" === reportData.report ||
+    isUserContributionReport.value ||
+    (isSearchReport.value && reportData.allVersions),
 )
 
 const reportHeading = computed(() => {
@@ -850,6 +864,17 @@ function getCreateRoute(reflink = "") {
 function getEditRoute(item) {
   return {
     name: "WikiPageEdit",
+    params: {
+      node: route.params.node,
+      pageId: item.pageId,
+    },
+    query: getSharedQuery(),
+  }
+}
+
+function getHistoryRoute(item) {
+  return {
+    name: "WikiPageHistory",
     params: {
       node: route.params.node,
       pageId: item.pageId,

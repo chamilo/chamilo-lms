@@ -35,5 +35,11 @@ export default {
       meta: { requiresAuth: true, breadcrumb: "Wiki reports" },
       component: () => import("../views/wiki/WikiReportView.vue"),
     },
+    {
+      name: "WikiPageHistory",
+      path: "history/:pageId(\\d+)",
+      meta: { requiresAuth: true, breadcrumb: "History" },
+      component: () => import("../views/wiki/WikiPageHistoryView.vue"),
+    },
   ],
 }

@@ -256,4 +256,54 @@ final class CWikiRepository extends ResourceRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * @return array<int, CWiki>
+     */
+    public function findPageVersionsInContext(
+        int $courseId,
+        int $pageId,
+        int $groupId,
+        int $sessionId,
+    ): array {
+        $queryBuilder = $this->createQueryBuilder('w')
+            ->andWhere('w.cId = :courseId')
+            ->andWhere('w.pageId = :pageId')
+            ->andWhere('COALESCE(w.groupId, 0) = :groupId')
+            ->andWhere('COALESCE(w.sessionId, 0) = :sessionId')
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('pageId', $pageId, Types::INTEGER)
+            ->setParameter('groupId', $groupId, Types::INTEGER)
+            ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ->orderBy('w.version', 'DESC')
+            ->addOrderBy('w.iid', 'DESC')
+        ;
+
+        /** @var array<int, CWiki> */
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findPageVersionByIidInContext(
+        int $courseId,
+        int $pageId,
+        int $versionIid,
+        int $groupId,
+        int $sessionId,
+    ): ?CWiki {
+        $queryBuilder = $this->createQueryBuilder('w')
+            ->andWhere('w.iid = :versionIid')
+            ->andWhere('w.cId = :courseId')
+            ->andWhere('w.pageId = :pageId')
+            ->andWhere('COALESCE(w.groupId, 0) = :groupId')
+            ->andWhere('COALESCE(w.sessionId, 0) = :sessionId')
+            ->setParameter('versionIid', $versionIid, Types::INTEGER)
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('pageId', $pageId, Types::INTEGER)
+            ->setParameter('groupId', $groupId, Types::INTEGER)
+            ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ->setMaxResults(1)
+        ;
+
+        /** @var CWiki|null */
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

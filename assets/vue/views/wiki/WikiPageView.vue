@@ -65,6 +65,16 @@
       <template #end>
         <div class="flex items-center gap-2">
           <BaseButton
+            v-if="wikiPage.exists && Number(wikiPage.pageId) > 0"
+            icon="restore"
+            :label="t('History')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getHistoryRoute()"
+          />
+          <BaseButton
             v-if="wikiPage.exists"
             icon="information"
             :label="t('What links here')"
@@ -311,6 +321,17 @@ function getReportRoute(report, extraQuery = {}) {
       report,
       ...extraQuery,
     },
+  }
+}
+
+function getHistoryRoute() {
+  return {
+    name: "WikiPageHistory",
+    params: {
+      node: route.params.node,
+      pageId: wikiPage.pageId,
+    },
+    query: getSharedQuery(),
   }
 }
 

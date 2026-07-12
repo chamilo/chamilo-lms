@@ -25,6 +25,10 @@ export default {
     return await baseService.get("/api/wiki/report", cleanParams(params))
   },
 
+  async getHistory(pageId, params = {}) {
+    return await baseService.get(`/api/wiki/page/${pageId}/history`, cleanParams(params))
+  },
+
   async createPage(params = {}, payload = {}) {
     return await baseService.post(buildUrl("/api/wiki/page", params), payload)
   },
@@ -39,5 +43,9 @@ export default {
 
   async releaseLock(pageId, params = {}, csrfToken = "") {
     return await baseService.post(buildUrl(`/api/wiki/page/${pageId}/unlock`, params), { csrfToken })
+  },
+
+  async restoreVersion(pageId, versionIid, params = {}, csrfToken = "") {
+    return await baseService.post(buildUrl(`/api/wiki/page/${pageId}/restore`, params), { csrfToken, versionIid })
   },
 }

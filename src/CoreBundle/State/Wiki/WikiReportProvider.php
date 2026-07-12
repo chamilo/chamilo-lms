@@ -224,7 +224,7 @@ final readonly class WikiReportProvider implements ProviderInterface
         $report->sortBy = $sortBy;
         $report->sortOrder = $sortOrder;
         $report->totalItems = \count($items);
-        $report->items = array_slice(
+        $report->items = \array_slice(
             $items,
             ($report->page - 1) * $report->itemsPerPage,
             $report->itemsPerPage,
@@ -421,8 +421,8 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $versions
-     * @param array<int, int> $taskPageIds
-     * @param array<int, User> $users
+     * @param array<int, int>  $taskPageIds
+     * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
      */
@@ -455,8 +455,8 @@ final readonly class WikiReportProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, int> $taskPageIds
-     * @param array<int, User> $users
+     * @param array<int, int>  $taskPageIds
+     * @param array<int, User>  $users
      *
      * @return array<string, mixed>
      */
@@ -519,8 +519,8 @@ final readonly class WikiReportProvider implements ProviderInterface
     /**
      * @param array<int, CWiki> $latestVersions
      * @param array<int, CWiki> $allVersions
-     * @param array<int, int> $taskPageIds
-     * @param array<int, User> $users
+     * @param array<int, int>  $taskPageIds
+     * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
      */
@@ -589,8 +589,8 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $latestVersions
-     * @param array<int, int> $taskPageIds
-     * @param array<int, User> $users
+     * @param array<int, int>  $taskPageIds
+     * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
      */
@@ -633,7 +633,7 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $versions
-     * @param array<int, User> $users
+     * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
      */
@@ -663,8 +663,8 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $versions
-     * @param array<int, int> $taskPageIds
-     * @param array<int, User> $users
+     * @param array<int, int>  $taskPageIds
+     * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
      */
@@ -704,7 +704,7 @@ final readonly class WikiReportProvider implements ProviderInterface
     /**
      * @param array<int, CWiki> $versions
      * @param array<int, CWiki> $latestVersions
-     * @param array<int, int> $taskPageIds
+     * @param array<int, int>   $taskPageIds
      *
      * @return array<int, array<string, mixed>>
      */
@@ -735,7 +735,7 @@ final readonly class WikiReportProvider implements ProviderInterface
     /**
      * @param array<int, CWiki> $versions
      * @param array<int, CWiki> $latestVersions
-     * @param array<int, int> $taskPageIds
+     * @param array<int, int>   $taskPageIds
      *
      * @return array<int, array<string, mixed>>
      */
@@ -762,7 +762,7 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $latestVersions
-     * @param array<int, int> $taskPageIds
+     * @param array<int, int>   $taskPageIds
      *
      * @return array<int, array<string, mixed>>
      */
@@ -798,7 +798,7 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $latestVersions
-     * @param array<int, int> $taskPageIds
+     * @param array<int, int>   $taskPageIds
      *
      * @return array<int, array<string, mixed>>
      */
@@ -860,7 +860,7 @@ final readonly class WikiReportProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, int> $taskPageIds
+     * @param array<int, int>   $taskPageIds
      *
      * @return array<string, mixed>
      */
@@ -882,7 +882,7 @@ final readonly class WikiReportProvider implements ProviderInterface
     /**
      * @param array<int, CWiki> $versions
      * @param array<int, CWiki> $latestVersions
-     * @param array<int, int> $taskPageIds
+     * @param array<int, int>   $taskPageIds
      *
      * @return array<string, mixed>
      */
@@ -1061,7 +1061,7 @@ final readonly class WikiReportProvider implements ProviderInterface
             $leftValue = $left[$sortBy] ?? null;
             $rightValue = $right[$sortBy] ?? null;
 
-            if (\is_numeric($leftValue) && \is_numeric($rightValue)) {
+            if (is_numeric($leftValue) && is_numeric($rightValue)) {
                 $result = (float) $leftValue <=> (float) $rightValue;
             } else {
                 $result = strnatcasecmp((string) $leftValue, (string) $rightValue);

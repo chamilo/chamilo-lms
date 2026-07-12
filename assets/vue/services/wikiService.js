@@ -35,6 +35,20 @@ export default {
     );
   },
 
+  async getDiscussion(pageId, params = {}) {
+    return await baseService.get(
+      `/api/wiki/page/${pageId}/discussion`,
+      cleanParams(params),
+    );
+  },
+
+  async addDiscussionComment(pageId, params = {}, payload = {}) {
+    return await baseService.post(
+      buildUrl(`/api/wiki/page/${pageId}/discussion`, params),
+      payload,
+    );
+  },
+
   async createPage(params = {}, payload = {}) {
     return await baseService.post(buildUrl("/api/wiki/page", params), payload);
   },
@@ -105,6 +119,39 @@ export default {
   async setContextSubscription(enabled, params = {}, csrfToken = "") {
     return await baseService.post(
       buildUrl("/api/wiki/context/subscription", params),
+      { csrfToken, enabled },
+    );
+  },
+
+  async setDiscussionVisibility(pageId, enabled, params = {}, csrfToken = "") {
+    return await baseService.post(
+      buildUrl(`/api/wiki/page/${pageId}/discussion/visibility`, params),
+      { csrfToken, enabled },
+    );
+  },
+
+  async setDiscussionCommenting(pageId, enabled, params = {}, csrfToken = "") {
+    return await baseService.post(
+      buildUrl(`/api/wiki/page/${pageId}/discussion/commenting`, params),
+      { csrfToken, enabled },
+    );
+  },
+
+  async setDiscussionRating(pageId, enabled, params = {}, csrfToken = "") {
+    return await baseService.post(
+      buildUrl(`/api/wiki/page/${pageId}/discussion/rating`, params),
+      { csrfToken, enabled },
+    );
+  },
+
+  async setDiscussionSubscription(
+    pageId,
+    enabled,
+    params = {},
+    csrfToken = "",
+  ) {
+    return await baseService.post(
+      buildUrl(`/api/wiki/page/${pageId}/discussion/subscription`, params),
       { csrfToken, enabled },
     );
   },

@@ -75,6 +75,16 @@
             :route="getHistoryRoute()"
           />
           <BaseButton
+            v-if="wikiPage.canDiscuss && Number(wikiPage.pageId) > 0"
+            icon="comment"
+            :label="t('Discussion')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getDiscussionRoute()"
+          />
+          <BaseButton
             v-if="wikiPage.exists"
             icon="information"
             :label="t('What links here')"
@@ -331,6 +341,7 @@ function createEmptyPage() {
     canChangeProtection: false,
     canChangeAddLock: false,
     canSubscribe: false,
+    canDiscuss: false,
     canDelete: false,
     managementCsrfToken: "",
     legacyUrl: "",
@@ -411,6 +422,17 @@ function getReportRoute(report, extraQuery = {}) {
 function getHistoryRoute() {
   return {
     name: "WikiPageHistory",
+    params: {
+      node: route.params.node,
+      pageId: wikiPage.pageId,
+    },
+    query: getSharedQuery(),
+  };
+}
+
+function getDiscussionRoute() {
+  return {
+    name: "WikiDiscussion",
     params: {
       node: route.params.node,
       pageId: wikiPage.pageId,

@@ -61,6 +61,33 @@ final readonly class WikiNotificationService
         $this->sendNotifications($course, $session, $group, $actor, $watchers, $body);
     }
 
+    public function notifyDiscussionComment(
+        CWiki $wiki,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        User $actor,
+    ): void {
+        if (1 !== $wiki->getVisibilityDisc()) {
+            return;
+        }
+
+        $courseId = (int) $course->getId();
+        $sessionId = null !== $session ? (int) $session->getId() : 0;
+        $groupId = null !== $group?->getIid() ? (int) $group->getIid() : 0;
+        $watchers = $this->getWatcherUserIds(
+            $courseId,
+            $sessionId,
+            $groupId,
+            'watchdisc:'.$wiki->getReflink(),
+        );
+        $body = $this->translate('New comment in the discussion of the page').' <strong>'
+            .htmlspecialchars($wiki->getTitle(), ENT_QUOTES, 'UTF-8').'</strong> '
+            .$this->translate('Wiki');
+
+        $this->sendNotifications($course, $session, $group, $actor, $watchers, $body);
+    }
+
     /**
      * @param array<int, int> $watcherUserIds
      */

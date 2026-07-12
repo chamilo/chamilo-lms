@@ -137,6 +137,9 @@ final class WikiPage
     public bool $canSubscribe = false;
 
     #[Groups(['wiki_page:read'])]
+    public bool $canDiscuss = false;
+
+    #[Groups(['wiki_page:read'])]
     public bool $canDelete = false;
 
     #[Groups(['wiki_page:read'])]

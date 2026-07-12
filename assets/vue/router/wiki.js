@@ -41,5 +41,11 @@ export default {
       meta: { requiresAuth: true, breadcrumb: "History" },
       component: () => import("../views/wiki/WikiPageHistoryView.vue"),
     },
+    {
+      name: "WikiDiscussion",
+      path: "discussion/:pageId(\\d+)",
+      meta: { requiresAuth: true, breadcrumb: "Discussion" },
+      component: () => import("../views/wiki/WikiDiscussionView.vue"),
+    },
   ],
-}
+};

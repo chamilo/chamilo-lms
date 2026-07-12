@@ -190,6 +190,12 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->canDelete = $canManage && $isExactContextPage;
         $page->canSubscribe = $canManage;
         $currentUser = $this->security->getUser();
+        $isWorkOwner = $currentUser instanceof User
+            && 2 === $latest->getAssignment()
+            && $latest->getUserId() === (int) $currentUser->getId();
+        $page->canDiscuss = $isExactContextPage
+            && (null === $session || $canManage)
+            && (1 === $latest->getVisibilityDisc() || $canManage || $isWorkOwner);
         $subscription = null;
         if ($currentUser instanceof User) {
             $subscription = $this->entityManager->getRepository(CWikiMailcue::class)->createQueryBuilder('m')

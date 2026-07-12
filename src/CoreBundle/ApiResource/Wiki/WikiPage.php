@@ -116,7 +116,31 @@ final class WikiPage
     public bool $editLocked = false;
 
     #[Groups(['wiki_page:read'])]
+    public bool $addLocked = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $subscribed = false;
+
+    #[Groups(['wiki_page:read'])]
     public bool $canManage = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canChangeVisibility = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canChangeProtection = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canChangeAddLock = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canSubscribe = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canDelete = false;
+
+    #[Groups(['wiki_page:read'])]
+    public string $managementCsrfToken = '';
 
     #[Groups(['wiki_page:read'])]
     public bool $canCreate = false;

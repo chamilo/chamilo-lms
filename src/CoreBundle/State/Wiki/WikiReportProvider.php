@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State\Wiki;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageAction;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiReport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
@@ -17,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Entity\CWikiConf;
+use Chamilo\CourseBundle\Entity\CWikiMailcue;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\ArrayParameterType;
@@ -27,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const DATE_ATOM;
 
@@ -58,6 +61,7 @@ final readonly class WikiReportProvider implements ProviderInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
     ) {}
 
@@ -132,6 +136,20 @@ final readonly class WikiReportProvider implements ProviderInterface
         $report->title = $this->getReportTitle($reportName);
         $report->canManage = $canManage;
         $report->canCreate = $canCreate;
+        $currentUser = $this->security->getUser();
+        $report->canDeleteWiki = $canManage && [] !== $allVersions;
+        $report->canSubscribeAll = $canManage;
+        $report->allChangesSubscribed = $canManage
+            && $currentUser instanceof User
+            && $this->hasContextSubscription(
+                $courseId,
+                $sessionId,
+                $groupId,
+                (int) $currentUser->getId(),
+            );
+        $report->managementCsrfToken = $canManage
+            ? (string) $this->csrfTokenManager->getToken(WikiPageAction::CSRF_TOKEN_ID)
+            : '';
         $report->studentView = $studentView;
         $report->availableReports = $this->getAvailableReports($canManage);
         $report->categories = $this->getCategories($course, $session);
@@ -231,6 +249,31 @@ final readonly class WikiReportProvider implements ProviderInterface
         );
 
         return $report;
+    }
+
+    private function hasContextSubscription(
+        int $courseId,
+        int $sessionId,
+        int $groupId,
+        int $userId,
+    ): bool {
+        $subscription = $this->entityManager->getRepository(CWikiMailcue::class)->createQueryBuilder('m')
+            ->andWhere('m.cId = :courseId')
+            ->andWhere('COALESCE(m.groupId, 0) = :groupId')
+            ->andWhere('COALESCE(m.sessionId, 0) = :sessionId')
+            ->andWhere('m.userId = :userId')
+            ->andWhere('m.type = :type')
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('groupId', $groupId, Types::INTEGER)
+            ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ->setParameter('userId', $userId, Types::INTEGER)
+            ->setParameter('type', 'wiki', Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $subscription instanceof CWikiMailcue;
     }
 
     private function getReportName(Request $request): string
@@ -421,7 +464,7 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $versions
-     * @param array<int, int>  $taskPageIds
+     * @param array<int, int>   $taskPageIds
      * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
@@ -456,7 +499,7 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, int>  $taskPageIds
-     * @param array<int, User>  $users
+     * @param array<int, User> $users
      *
      * @return array<string, mixed>
      */
@@ -519,7 +562,7 @@ final readonly class WikiReportProvider implements ProviderInterface
     /**
      * @param array<int, CWiki> $latestVersions
      * @param array<int, CWiki> $allVersions
-     * @param array<int, int>  $taskPageIds
+     * @param array<int, int>   $taskPageIds
      * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
@@ -589,7 +632,7 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $latestVersions
-     * @param array<int, int>  $taskPageIds
+     * @param array<int, int>   $taskPageIds
      * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
@@ -663,7 +706,7 @@ final readonly class WikiReportProvider implements ProviderInterface
 
     /**
      * @param array<int, CWiki> $versions
-     * @param array<int, int>  $taskPageIds
+     * @param array<int, int>   $taskPageIds
      * @param array<int, User>  $users
      *
      * @return array<int, array<string, mixed>>
@@ -860,7 +903,7 @@ final readonly class WikiReportProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, int>   $taskPageIds
+     * @param array<int, int> $taskPageIds
      *
      * @return array<string, mixed>
      */

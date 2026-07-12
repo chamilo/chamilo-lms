@@ -46,6 +46,7 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
+        private WikiNotificationService $notificationService,
     ) {}
 
     /**
@@ -208,6 +209,15 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
             throw $throwable;
         }
 
+        $this->notificationService->notifyPageSaved(
+            $wiki,
+            $course,
+            $session,
+            $group,
+            $user,
+            false,
+        );
+
         $response = new WikiPageHistory();
         $response->pageId = $pageId;
         $response->courseId = $courseId;
@@ -242,11 +252,7 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         $lockOwner = $this->entityManager->getRepository(User::class)->find($lockOwnerId);
         $lockOwnerName = $lockOwner instanceof User ? $lockOwner->getFullName() : '';
 
-        throw new ConflictHttpException(
-            '' !== $lockOwnerName
-                ? 'This Wiki page is currently being edited by '.$lockOwnerName.'.'
-                : 'This Wiki page is currently being edited by another user.',
-        );
+        throw new ConflictHttpException('' !== $lockOwnerName ? 'This Wiki page is currently being edited by '.$lockOwnerName.'.' : 'This Wiki page is currently being edited by another user.');
     }
 
     private function isLockExpired(CWiki $wiki): bool

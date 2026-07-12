@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/wiki/page/{pageId}/history',
-            requirements: ['pageId' => '\\d+'],
+            requirements: ['pageId' => '\d+'],
             openapi: new Operation(
                 summary: 'Read Wiki page versions and optional differences',
                 parameters: [
@@ -48,7 +48,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/wiki/page/{pageId}/restore',
-            requirements: ['pageId' => '\\d+'],
+            requirements: ['pageId' => '\d+'],
             openapi: new Operation(
                 summary: 'Restore a historical Wiki page version as a new version',
                 parameters: [

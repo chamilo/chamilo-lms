@@ -79,6 +79,18 @@ final class WikiReport
     public bool $canCreate = false;
 
     #[Groups(['wiki_report:read'])]
+    public bool $canDeleteWiki = false;
+
+    #[Groups(['wiki_report:read'])]
+    public bool $canSubscribeAll = false;
+
+    #[Groups(['wiki_report:read'])]
+    public bool $allChangesSubscribed = false;
+
+    #[Groups(['wiki_report:read'])]
+    public string $managementCsrfToken = '';
+
+    #[Groups(['wiki_report:read'])]
     public bool $studentView = false;
 
     #[Groups(['wiki_report:read'])]

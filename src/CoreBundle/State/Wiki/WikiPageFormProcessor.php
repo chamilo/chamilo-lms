@@ -51,6 +51,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
+        private WikiNotificationService $notificationService,
     ) {}
 
     /**
@@ -262,6 +263,15 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
 
             throw $throwable;
         }
+
+        $this->notificationService->notifyPageSaved(
+            $wiki,
+            $course,
+            $session,
+            $group,
+            $user,
+            !$isUpdate,
+        );
 
         $response = new WikiPageForm();
         $response->iid = null !== $wiki->getIid() ? (int) $wiki->getIid() : null;

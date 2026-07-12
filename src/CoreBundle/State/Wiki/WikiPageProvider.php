@@ -9,11 +9,14 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPage;
+use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageAction;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
+use Chamilo\CourseBundle\Entity\CWikiMailcue;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -21,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const DATE_ATOM;
@@ -38,6 +42,7 @@ final readonly class WikiPageProvider implements ProviderInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
     ) {}
 
@@ -99,6 +104,12 @@ final readonly class WikiPageProvider implements ProviderInterface
         }
 
         $addLock = $this->wikiRepository->findContextAddLock($courseId, $groupId, $sessionId);
+        $contextHasPages = $canManage && [] !== $this->wikiRepository->findVersionsInContext(
+            $courseId,
+            $groupId,
+            $sessionId,
+            true,
+        );
         $canCreateAnyPage = !$studentView && $this->canCreateWikiPage(
             $this->entityManager,
             $this->security,
@@ -120,6 +131,11 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->isInheritedFromCourse = $sessionId > 0 && 0 === $sourceSessionId;
         $page->canManage = $canManage;
         $page->canCreate = $canCreateAnyPage;
+        $page->addLocked = 0 === $addLock;
+        $page->canChangeAddLock = $canManage && $contextHasPages;
+        $page->managementCsrfToken = $canManage
+            ? (string) $this->csrfTokenManager->getToken(WikiPageAction::CSRF_TOKEN_ID)
+            : '';
         $page->studentView = $studentView;
         $page->settings = [
             'categoriesEnabled' => $this->isWikiCourseSettingEnabled(
@@ -169,6 +185,30 @@ final readonly class WikiPageProvider implements ProviderInterface
         $this->assertWikiPageVisible($this->security, $latest, $canManage);
 
         $isExactContextPage = $sourceSessionId === $sessionId;
+        $page->canChangeVisibility = $canManage && $isExactContextPage;
+        $page->canChangeProtection = $canManage && $isExactContextPage;
+        $page->canDelete = $canManage && $isExactContextPage;
+        $page->canSubscribe = $canManage;
+        $currentUser = $this->security->getUser();
+        $subscription = null;
+        if ($currentUser instanceof User) {
+            $subscription = $this->entityManager->getRepository(CWikiMailcue::class)->createQueryBuilder('m')
+                ->andWhere('m.cId = :courseId')
+                ->andWhere('COALESCE(m.groupId, 0) = :groupId')
+                ->andWhere('COALESCE(m.sessionId, 0) = :sessionId')
+                ->andWhere('m.userId = :userId')
+                ->andWhere('m.type = :type')
+                ->setParameter('courseId', $courseId, Types::INTEGER)
+                ->setParameter('groupId', $groupId, Types::INTEGER)
+                ->setParameter('sessionId', $sessionId, Types::INTEGER)
+                ->setParameter('userId', (int) $currentUser->getId(), Types::INTEGER)
+                ->setParameter('type', 'watch:'.$latest->getReflink(), Types::STRING)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        }
+        $page->subscribed = $subscription instanceof CWikiMailcue;
         $page->canEdit = !$studentView && (
             $isExactContextPage
                 ? $this->canEditWikiPage(

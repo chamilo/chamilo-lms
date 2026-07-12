@@ -1,47 +1,51 @@
-Feature: Thematic tool
+Feature: Course progress tool
 
   Background:
     Given I am a platform administrator
 
-  Scenario: Create
+  Scenario: Create a thematic section
     Given I am on "/main/course_progress/index.php?cid=1&action=thematic_add"
     And I wait for the page to be loaded
     Then I fill in the following:
       | title | Thematic 1 |
-    Then I fill in editor field "content" with "Description for thematic"
-    And I press "submit"
+    And I fill in editor field "course_progress_thematic_content" with "Description for thematic"
+    And I press "save"
     And I wait for the page to be loaded
     Then I should see "Thematic 1"
 
-  Scenario: Read and add Thematic plan
+  Scenario: Read and update the thematic plan
     Given I am on "/main/course_progress/index.php?cid=1"
     And I wait for the page to be loaded
     Then I should see "Thematic 1"
-    Then I follow "Edit thematic section"
+    When I click the "a[title='Thematic plan']" element
     And I wait for the page to be loaded
-    Then I should see "Title"
-    Then I fill in the following:
+    Then I should see "Thematic plan"
+    And I fill in the following:
       | title[1] | Objective |
-    Then I fill in editor field "description1" with "Objective 1"
-    And I press "submit"
+    And I fill in editor field "course_progress_plan_description_1" with "Objective 1"
+    And I press "save"
     And I wait for the page to be loaded
     Then I should see "Objective 1"
 
-  Scenario: Update
-    Given I am on "/main/course_progress/index.php?cid=1&action=thematic_edit&thematic_id=1"
+  Scenario: Update a thematic section
+    Given I am on "/main/course_progress/index.php?cid=1"
+    And I wait for the page to be loaded
+    Then I should see "Thematic 1"
+    When I click the "a[title='Edit']" element
     And I wait for the page to be loaded
     Then I should see "Edit thematic section"
-    Then I fill in the following:
+    And I fill in the following:
       | title | Thematic 1 edited |
-    Then I fill in editor field "content" with "Description edited"
-    Then I press "submit"
+    And I fill in editor field "course_progress_thematic_content" with "Description edited"
+    And I press "save"
     And I wait for the page to be loaded
     Then I should see "Thematic 1 edited"
 
-  Scenario: Delete
-    Given I am on "/main/course_progress/index.php?cid=1&"
+  Scenario: Delete a thematic section
+    Given I am on "/main/course_progress/index.php?cid=1"
     And I wait for the page to be loaded
     Then I should see "Thematic 1 edited"
-    Then I click the "i.mdi-delete" element
-    Then I confirm the popup
+    When I click the "button[aria-label='Delete']" element
+    And I confirm the popup
+    And I wait for the page to be loaded
     Then I should not see "Thematic 1 edited"

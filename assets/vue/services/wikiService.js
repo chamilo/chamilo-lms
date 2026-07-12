@@ -28,6 +28,42 @@ export default {
     return await baseService.get("/api/wiki/report", cleanParams(params));
   },
 
+  async getCategories(params = {}) {
+    return await baseService.get("/api/wiki/categories", cleanParams(params));
+  },
+
+  async getSettings(params = {}) {
+    return await baseService.get("/api/wiki/settings", cleanParams(params));
+  },
+
+  async updateSettings(params = {}, payload = {}) {
+    return await baseService.post(
+      buildUrl("/api/wiki/settings", params),
+      payload,
+    );
+  },
+
+  async createCategory(params = {}, payload = {}) {
+    return await baseService.post(
+      buildUrl("/api/wiki/categories", params),
+      payload,
+    );
+  },
+
+  async updateCategory(categoryId, params = {}, payload = {}) {
+    return await baseService.put(
+      buildUrl(`/api/wiki/categories/${categoryId}`, params),
+      payload,
+    );
+  },
+
+  async deleteCategory(categoryId, params = {}, csrfToken = "") {
+    return await baseService.post(
+      buildUrl(`/api/wiki/categories/${categoryId}/delete`, params),
+      { csrfToken },
+    );
+  },
+
   async getHistory(pageId, params = {}) {
     return await baseService.get(
       `/api/wiki/page/${pageId}/history`,

@@ -45,6 +45,7 @@ final readonly class WikiPageProvider implements ProviderInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiAssignmentFeedbackResolver $feedbackResolver,
+        private WikiCategoryService $categoryService,
     ) {}
 
     /**
@@ -138,13 +139,27 @@ final readonly class WikiPageProvider implements ProviderInterface
             ? (string) $this->csrfTokenManager->getToken(WikiPageAction::CSRF_TOKEN_ID)
             : '';
         $page->studentView = $studentView;
-        $page->settings = [
-            'categoriesEnabled' => $this->isWikiCourseSettingEnabled(
+        $categoriesEnabled = $this->isWikiCourseSettingEnabled(
+            $this->entityManager,
+            $course,
+            'wiki_categories_enabled',
+            false,
+        );
+        $page->categoriesEnabled = $categoriesEnabled;
+        $page->canManageSettings = !$studentView
+            && $this->canManageWikiCourseSettings($this->security, $course);
+        $page->canManageCategories = $categoriesEnabled
+            && !$studentView
+            && $this->canManageWikiContext(
                 $this->entityManager,
+                $this->security,
+                $this->settingsManager,
                 $course,
-                'wiki_categories_enabled',
-                false,
-            ),
+                $session,
+                null,
+            );
+        $page->settings = [
+            'categoriesEnabled' => $categoriesEnabled,
             'strictHtmlFiltering' => $this->isWikiCourseSettingEnabled(
                 $this->entityManager,
                 $course,
@@ -277,6 +292,24 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->progress = $this->renderer->normalizeStoredProgress($latest->getProgress());
         $page->score = $latest->getScore();
         $page->assignmentOwnerName = $author instanceof User ? $author->getFullName() : '';
+        if ($categoriesEnabled) {
+            $selectedCategoryIds = array_fill_keys(
+                $this->categoryService->getSelectedIds($latest, $course, $session),
+                true,
+            );
+
+            foreach ($latest->getCategories() as $category) {
+                if (null === $category->getId() || !isset($selectedCategoryIds[(int) $category->getId()])) {
+                    continue;
+                }
+
+                $page->categories[] = [
+                    'id' => (int) $category->getId(),
+                    'title' => $category->getTitle(),
+                    'pathTitle' => $this->categoryService->getPathTitle($category),
+                ];
+            }
+        }
 
         if ($configuration instanceof CWikiConf) {
             $task = trim((string) $configuration->getTask());

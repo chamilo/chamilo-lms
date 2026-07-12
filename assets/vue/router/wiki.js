@@ -36,6 +36,18 @@ export default {
       component: () => import("../views/wiki/WikiReportView.vue"),
     },
     {
+      name: "WikiCategories",
+      path: "categories",
+      meta: { requiresAuth: true, breadcrumb: "Categories" },
+      component: () => import("../views/wiki/WikiCategoryView.vue"),
+    },
+    {
+      name: "WikiSettings",
+      path: "settings",
+      meta: { requiresAuth: true, breadcrumb: "Wiki settings" },
+      component: () => import("../views/wiki/WikiSettingsView.vue"),
+    },
+    {
       name: "WikiPageHistory",
       path: "history/:pageId(\\d+)",
       meta: { requiresAuth: true, breadcrumb: "History" },

@@ -45,6 +45,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiAssignmentService $assignmentService,
+        private WikiCategoryService $categoryService,
     ) {}
 
     /**
@@ -187,6 +188,12 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             'wiki_html_strict_filtering',
             false,
         );
+        $categoriesEnabled = $this->isWikiCourseSettingEnabled(
+            $this->entityManager,
+            $course,
+            'wiki_categories_enabled',
+            false,
+        );
 
         $form = new WikiPageForm();
         $form->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
@@ -196,6 +203,18 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         $form->requiresLock = $exactPage instanceof CWiki;
         $form->progressOptions = $this->getProgressOptions();
         $form->canConfigureAssignment = $canManage && 'index' !== ($sourcePage?->getReflink() ?? $reflink);
+        $form->categoriesEnabled = $categoriesEnabled;
+        $form->canManageCategories = $categoriesEnabled
+            && !$this->isWikiStudentView($request)
+            && $this->canManageWikiContext(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $course,
+                $session,
+                null,
+            );
+        $form->categories = $categoriesEnabled ? $this->categoryService->getOptions($course, $session) : [];
 
         $currentUser = $this->security->getUser();
         if ($form->isNew && $form->canConfigureAssignment && $currentUser instanceof User) {
@@ -210,6 +229,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             'forcePasteAsPlainText' => $this->isPlatformSettingEnabled('editor.force_wiki_paste_as_plain_text'),
             'htmlPurifierEnabled' => $this->isPlatformSettingEnabled('editor.htmlpurifier_wiki'),
             'strictHtmlFiltering' => $strictHtmlFiltering,
+            'categoriesEnabled' => $categoriesEnabled,
         ];
 
         if ($sourcePage instanceof CWiki) {
@@ -229,6 +249,9 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             $form->baseVersion = $form->version;
             $form->assignment = $sourcePage->getAssignment();
             $form->createAssignment = false;
+            $form->categoryIds = $categoriesEnabled
+                ? $this->categoryService->getSelectedIds($sourcePage, $course, $session)
+                : [];
 
             $configuration = null !== $sourcePage->getPageId()
                 ? $this->entityManager->getRepository(CWikiConf::class)->findOneBy([

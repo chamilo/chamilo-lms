@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use DateTime;
@@ -56,6 +57,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         private WikiPageRenderer $renderer,
         private WikiNotificationService $notificationService,
         private WikiAssignmentService $assignmentService,
+        private WikiCategoryService $categoryService,
     ) {}
 
     /**
@@ -212,6 +214,18 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         $content = $this->sanitizeContent($data->content);
         $comment = trim(strip_tags($data->comment));
         $this->prepareAssignmentConfiguration($data, $canManage, $reflink);
+        $categoriesEnabled = $this->isWikiCourseSettingEnabled(
+            $this->entityManager,
+            $course,
+            'wiki_categories_enabled',
+            false,
+        );
+        if (!$categoriesEnabled && [] !== $data->categoryIds) {
+            throw new AccessDeniedHttpException('Wiki categories are disabled for this course.');
+        }
+        $categories = $categoriesEnabled
+            ? $this->categoryService->resolveCategories($data->categoryIds, $course, $session)
+            : [];
 
         if ($latest instanceof CWiki) {
             $this->assertAssignmentConstraints($latest, $courseId, $content);
@@ -239,6 +253,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
                 $progress,
                 (string) ($request->getClientIp() ?? ''),
                 $canManage,
+                $categories,
             );
         }
 
@@ -284,11 +299,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         ;
         $wiki->setCreator($user);
 
-        if ($source instanceof CWiki) {
-            foreach ($source->getCategories() as $category) {
-                $wiki->addCategory($category);
-            }
-        }
+        $this->categoryService->applyCategories($wiki, $categories);
 
         $connection = $this->entityManager->getConnection();
         $connection->beginTransaction();
@@ -351,6 +362,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         int $progress,
         string $clientIp,
         bool $canManage,
+        array $categories,
     ): WikiPageForm {
         $connection = $this->entityManager->getConnection();
         $connection->beginTransaction();
@@ -368,6 +380,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
                 $comment,
                 $progress,
                 $clientIp,
+                $categories,
             );
             $connection->commit();
         } catch (Throwable $throwable) {
@@ -423,6 +436,12 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         $response->delayedSubmit = $source->delayedSubmit;
         $response->maxWords = $source->maxWords;
         $response->maxVersions = $source->maxVersions;
+        $response->categoriesEnabled = $source->categoriesEnabled;
+        $response->categories = $source->categories;
+        $response->categoryIds = array_values(array_map(
+            static fn (CWikiCategory $category): int => (int) $category->getId(),
+            $wiki->getCategories()->toArray(),
+        ));
 
         return $response;
     }

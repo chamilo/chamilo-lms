@@ -63,6 +63,7 @@ final readonly class WikiReportProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
+        private WikiCategoryService $categoryService,
     ) {}
 
     /**
@@ -150,9 +151,26 @@ final readonly class WikiReportProvider implements ProviderInterface
         $report->managementCsrfToken = $canManage
             ? (string) $this->csrfTokenManager->getToken(WikiPageAction::CSRF_TOKEN_ID)
             : '';
+        $categoriesEnabled = $this->isWikiCourseSettingEnabled(
+            $this->entityManager,
+            $course,
+            'wiki_categories_enabled',
+            false,
+        );
         $report->studentView = $studentView;
+        $report->categoriesEnabled = $categoriesEnabled;
+        $report->canManageCategories = $categoriesEnabled
+            && !$studentView
+            && $this->canManageWikiContext(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $course,
+                $session,
+                null,
+            );
         $report->availableReports = $this->getAvailableReports($canManage);
-        $report->categories = $this->getCategories($course, $session);
+        $report->categories = $categoriesEnabled ? $this->categoryService->getOptions($course, $session) : [];
         $report->page = max(1, $request->query->getInt('page', 1));
         $report->itemsPerPage = min(
             self::MAX_ITEMS_PER_PAGE,
@@ -333,39 +351,6 @@ final readonly class WikiReportProvider implements ProviderInterface
         return $reports;
     }
 
-    /**
-     * @return array<int, array{id:int, title:string}>
-     */
-    private function getCategories(Course $course, ?Session $session): array
-    {
-        if (!$this->isWikiCourseSettingEnabled(
-            $this->entityManager,
-            $course,
-            'wiki_categories_enabled',
-            false,
-        )) {
-            return [];
-        }
-
-        $categories = $this->entityManager->getRepository(CWikiCategory::class)->findBy(
-            ['course' => $course, 'session' => $session],
-            ['lft' => 'ASC'],
-        );
-        $result = [];
-
-        foreach ($categories as $category) {
-            if (!$category instanceof CWikiCategory || null === $category->getId()) {
-                continue;
-            }
-
-            $result[] = [
-                'id' => (int) $category->getId(),
-                'title' => $category->getTitle(),
-            ];
-        }
-
-        return $result;
-    }
 
     /**
      * @param array<int, CWiki> $versions
@@ -437,7 +422,7 @@ final readonly class WikiReportProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, array{id:int, title:string}> $categories
+     * @param array<int, array{id:int, title:string, label:string, pathTitle:string, parentId:?int, level:int}> $categories
      *
      * @return array<int, int>
      */
@@ -525,6 +510,7 @@ final readonly class WikiReportProvider implements ProviderInterface
             $categories[] = [
                 'id' => (int) $category->getId(),
                 'title' => $category->getTitle(),
+                'pathTitle' => $this->categoryService->getPathTitle($category),
             ];
         }
 
@@ -578,11 +564,11 @@ final readonly class WikiReportProvider implements ProviderInterface
         ?CGroup $group,
         bool $studentView,
     ): array {
-        if ('' === $report->search) {
+        if ('' === $report->search && [] === $report->categoryIds) {
             return [];
         }
 
-        if (mb_strlen($report->search) < 3) {
+        if ('' !== $report->search && mb_strlen($report->search) < 3) {
             throw new BadRequestHttpException('The Wiki search term must contain at least 3 characters.');
         }
 
@@ -591,12 +577,14 @@ final readonly class WikiReportProvider implements ProviderInterface
         $matches = array_values(array_filter(
             $versions,
             static function (CWiki $wiki) use ($needle, $report): bool {
-                $titleMatches = str_contains(mb_strtolower($wiki->getTitle()), $needle);
-                $contentMatches = $report->searchContent
-                    && str_contains(mb_strtolower($wiki->getContent()), $needle);
+                if ('' !== $needle) {
+                    $titleMatches = str_contains(mb_strtolower($wiki->getTitle()), $needle);
+                    $contentMatches = $report->searchContent
+                        && str_contains(mb_strtolower($wiki->getContent()), $needle);
 
-                if (!$titleMatches && !$contentMatches) {
-                    return false;
+                    if (!$titleMatches && !$contentMatches) {
+                        return false;
+                    }
                 }
 
                 if ([] === $report->categoryIds) {

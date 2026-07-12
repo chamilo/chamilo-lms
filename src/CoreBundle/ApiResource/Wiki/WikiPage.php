@@ -187,6 +187,21 @@ final class WikiPage
     #[Groups(['wiki_page:read'])]
     public bool $studentView = false;
 
+    /**
+     * @var array<int, array{id:int, title:string, pathTitle:string}>
+     */
+    #[Groups(['wiki_page:read'])]
+    public array $categories = [];
+
+    #[Groups(['wiki_page:read'])]
+    public bool $categoriesEnabled = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canManageCategories = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canManageSettings = false;
+
     #[Groups(['wiki_page:read'])]
     public string $legacyUrl = '';
 

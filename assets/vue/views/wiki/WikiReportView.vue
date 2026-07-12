@@ -59,6 +59,16 @@
             class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
             :route="getReportRoute('statistics')"
           />
+          <BaseButton
+            v-if="reportData.canManageCategories"
+            icon="folder-generic"
+            :label="t('Manage categories')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getCategoryRoute()"
+          />
         </div>
       </template>
 
@@ -182,7 +192,7 @@
                 input-id="wiki_search_categories"
                 :label="t('Categories')"
                 :model-value="searchForm.categoryIds"
-                option-label="title"
+                option-label="label"
                 option-value="id"
                 :options="reportData.categories"
                 @update:model-value="updateSearchCategories"
@@ -220,7 +230,9 @@
       </BaseCard>
 
       <div
-        v-if="isSearchReport && !reportData.search"
+        v-if="
+          isSearchReport && !reportData.search && !reportData.categoryIds.length
+        "
         class="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-800"
         role="status"
       >
@@ -347,16 +359,23 @@
               >
                 {{ slotProps.data.title }}
               </router-link>
-              <span
-                v-if="slotProps.data.categories?.length"
-                class="text-xs text-gray-500"
+              <div
+                v-if="
+                  reportData.categoriesEnabled &&
+                  slotProps.data.categories?.length
+                "
+                class="flex flex-wrap gap-1"
               >
-                {{
-                  slotProps.data.categories
-                    .map((category) => category.title)
-                    .join(", ")
-                }}
-              </span>
+                <router-link
+                  v-for="category in slotProps.data.categories"
+                  :key="category.id"
+                  class="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-xs font-medium text-primary hover:bg-primary/10"
+                  :title="category.pathTitle || category.title"
+                  :to="getCategorySearchRoute(category.id)"
+                >
+                  {{ category.title }}
+                </router-link>
+              </div>
             </div>
           </template>
         </Column>
@@ -645,7 +664,9 @@ const showPageTable = computed(
     ["all", "recent", "search", "backlinks", "user-contributions"].includes(
       reportData.report,
     ) &&
-    (!isSearchReport.value || Boolean(reportData.search)),
+    (!isSearchReport.value ||
+      Boolean(reportData.search) ||
+      reportData.categoryIds.length > 0),
 );
 const showAuthorColumn = computed(() =>
   ["all", "recent", "search", "backlinks"].includes(reportData.report),
@@ -887,6 +908,8 @@ function createEmptyReport() {
     canDeleteWiki: false,
     canSubscribeAll: false,
     allChangesSubscribed: false,
+    categoriesEnabled: false,
+    canManageCategories: false,
     managementCsrfToken: "",
     page: 1,
     itemsPerPage: 20,
@@ -1029,6 +1052,21 @@ function getReportRoute(report, extraQuery = {}) {
       ...extraQuery,
     },
   };
+}
+
+function getCategoryRoute() {
+  return {
+    name: "WikiCategories",
+    params: { node: route.params.node },
+    query: getSharedQuery(),
+  };
+}
+
+function getCategorySearchRoute(categoryId) {
+  return getReportRoute("search", {
+    categoryIds: Number(categoryId),
+    page: 1,
+  });
 }
 
 function getBacklinkRoute(reflink) {

@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
+use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use DateTime;
 use DateTimeImmutable;
@@ -132,6 +133,8 @@ final readonly class WikiAssignmentService
     }
 
     /**
+     * @param array<int, CWikiCategory> $categories
+     *
      * @return array{teacherPage:CWiki, createdPages:array<int, CWiki>}
      */
     public function createAssignmentPages(
@@ -146,6 +149,7 @@ final readonly class WikiAssignmentService
         string $comment,
         int $progress,
         string $clientIp,
+        array $categories,
     ): array {
         $courseId = (int) $course->getId();
         $sessionId = null !== $session ? (int) $session->getId() : 0;
@@ -180,7 +184,7 @@ final readonly class WikiAssignmentService
                 .'<p>[['.$teacherReflink.'|Access teacher page]]</p>'
                 .'<p>&nbsp;</p>';
 
-            $createdPages[] = $this->createPage(
+            $studentPage = $this->createPage(
                 $course,
                 $session,
                 $group,
@@ -197,6 +201,8 @@ final readonly class WikiAssignmentService
                 $contextAddLock,
                 $clientIp,
             );
+            $this->applyCategories($studentPage, $categories);
+            $createdPages[] = $studentPage;
         }
 
         $teacherContent = '<h2>Assignment proposed by the trainer</h2>'
@@ -221,6 +227,7 @@ final readonly class WikiAssignmentService
             $contextAddLock,
             $clientIp,
         );
+        $this->applyCategories($teacherPage, $categories);
         $createdPages[] = $teacherPage;
 
         $this->entityManager->flush();
@@ -385,6 +392,16 @@ final readonly class WikiAssignmentService
         $this->entityManager->persist($wiki);
 
         return $wiki;
+    }
+
+    /**
+     * @param array<int, CWikiCategory> $categories
+     */
+    private function applyCategories(CWiki $wiki, array $categories): void
+    {
+        foreach ($categories as $category) {
+            $wiki->addCategory($category);
+        }
     }
 
     private function assignmentReflink(string $baseReflink, int $userId): string

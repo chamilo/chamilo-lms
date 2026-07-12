@@ -156,6 +156,53 @@
             :options="form.progressOptions"
           />
 
+          <div v-if="form.categoriesEnabled" class="space-y-3">
+            <div
+              v-if="form.categories.length"
+              class="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-end"
+            >
+              <BaseMultiSelect
+                input-id="wiki_page_categories"
+                :label="t('Categories')"
+                :model-value="form.categoryIds"
+                name="categories"
+                option-label="label"
+                option-value="id"
+                :options="form.categories"
+                @update:model-value="updateCategories"
+              />
+              <BaseButton
+                v-if="form.canManageCategories"
+                icon="folder-generic"
+                :label="t('Manage categories')"
+                only-icon
+                size="small"
+                type="primary-text"
+                :route="getCategoryRoute()"
+              />
+            </div>
+
+            <div
+              v-else
+              class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-800"
+              role="status"
+            >
+              <span>{{ t("No Wiki categories are available yet.") }}</span>
+              <BaseButton
+                v-if="form.canManageCategories"
+                icon="folder-plus"
+                :label="t('Manage categories')"
+                type="primary"
+                :route="getCategoryRoute()"
+              />
+            </div>
+            <input
+              name="categoryIds"
+              type="hidden"
+              :value="form.categoryIds.join(',')"
+            />
+          </div>
+
           <BaseAdvancedSettingsButton
             v-if="showAdvancedSection"
             v-model="showAdvancedSettings"
@@ -360,6 +407,7 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue";
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue";
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue";
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue";
+import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue";
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue";
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue";
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue";
@@ -430,6 +478,10 @@ function createEmptyForm() {
     isNew: true,
     isInheritedFromCourse: false,
     canManage: false,
+    categoriesEnabled: false,
+    canManageCategories: false,
+    categoryIds: [],
+    categories: [],
     requiresLock: false,
     lockAcquired: false,
     lockTimeoutMinutes: 20,
@@ -480,6 +532,23 @@ function getFormParams() {
   }
 
   return params;
+}
+
+function getCategoryRoute() {
+  const query = { ...getContextParams() };
+  delete query.node;
+
+  return {
+    name: "WikiCategories",
+    params: { node: route.params.node },
+    query,
+  };
+}
+
+function updateCategories(value) {
+  form.value.categoryIds = Array.isArray(value)
+    ? value.map(Number).filter((categoryId) => categoryId > 0)
+    : [];
 }
 
 function getPageRoute(reflink = "index") {
@@ -614,6 +683,12 @@ async function loadForm() {
         ? response.progressOptions
         : [],
       languages: Array.isArray(response.languages) ? response.languages : [],
+      categoryIds: Array.isArray(response.categoryIds)
+        ? response.categoryIds
+            .map(Number)
+            .filter((categoryId) => categoryId > 0)
+        : [],
+      categories: Array.isArray(response.categories) ? response.categories : [],
     };
     startDateValue.value = parseDate(response.startDate);
     endDateValue.value = parseDate(response.endDate);
@@ -724,6 +799,11 @@ async function savePage() {
     delayedSubmit: Boolean(form.value.delayedSubmit),
     maxWords: Math.max(0, Number(form.value.maxWords || 0)),
     maxVersions: Math.max(0, Number(form.value.maxVersions || 0)),
+    categoryIds: Array.isArray(form.value.categoryIds)
+      ? form.value.categoryIds
+          .map(Number)
+          .filter((categoryId) => categoryId > 0)
+      : [],
   };
 
   try {

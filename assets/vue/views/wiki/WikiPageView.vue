@@ -59,6 +59,26 @@
             class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
             :route="getReportRoute('search')"
           />
+          <BaseButton
+            v-if="wikiPage.canManageCategories"
+            icon="folder-generic"
+            :label="t('Manage categories')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getCategoryRoute()"
+          />
+          <BaseButton
+            v-if="wikiPage.canManageSettings"
+            icon="settings"
+            :label="t('Wiki settings')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getSettingsRoute()"
+          />
         </div>
       </template>
 
@@ -343,20 +363,42 @@
         <template #footer>
           <div
             v-if="wikiPage.exists"
-            class="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-gray-20 pt-4 text-sm text-gray-600"
+            class="space-y-3 border-t border-gray-20 pt-4"
           >
-            <span>{{ t("Progress") }}: {{ wikiPage.progress }}%</span>
-            <span>{{ t("Rating") }}: {{ wikiPage.score ?? 0 }}</span>
-            <span>{{ t("Words") }}: {{ wikiPage.wordCount }}</span>
-            <span v-if="wikiPage.version"
-              >{{ t("Version") }}: {{ wikiPage.version }}</span
+            <div
+              v-if="wikiPage.categories?.length"
+              class="flex flex-wrap items-center gap-2"
             >
-            <span v-if="wikiPage.authorName"
-              >{{ t("Author") }}: {{ wikiPage.authorName }}</span
+              <span class="text-sm font-medium text-gray-700">
+                {{ t("Categories") }}:
+              </span>
+              <router-link
+                v-for="category in wikiPage.categories"
+                :key="category.id"
+                class="rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/10"
+                :title="category.pathTitle || category.title"
+                :to="getCategorySearchRoute(category.id)"
+              >
+                {{ category.title }}
+              </router-link>
+            </div>
+
+            <div
+              class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600"
             >
-            <span v-if="formattedUpdatedAt"
-              >{{ t("Updated at") }}: {{ formattedUpdatedAt }}</span
-            >
+              <span>{{ t("Progress") }}: {{ wikiPage.progress }}%</span>
+              <span>{{ t("Rating") }}: {{ wikiPage.score ?? 0 }}</span>
+              <span>{{ t("Words") }}: {{ wikiPage.wordCount }}</span>
+              <span v-if="wikiPage.version"
+                >{{ t("Version") }}: {{ wikiPage.version }}</span
+              >
+              <span v-if="wikiPage.authorName"
+                >{{ t("Author") }}: {{ wikiPage.authorName }}</span
+              >
+              <span v-if="formattedUpdatedAt"
+                >{{ t("Updated at") }}: {{ formattedUpdatedAt }}</span
+              >
+            </div>
           </div>
         </template>
       </BaseCard>
@@ -452,6 +494,10 @@ function createEmptyPage() {
     canSubscribe: false,
     canDiscuss: false,
     canDelete: false,
+    categoriesEnabled: false,
+    canManageCategories: false,
+    canManageSettings: false,
+    categories: [],
     managementCsrfToken: "",
     legacyUrl: "",
   };
@@ -526,6 +572,29 @@ function getReportRoute(report, extraQuery = {}) {
       ...extraQuery,
     },
   };
+}
+
+function getCategoryRoute() {
+  return {
+    name: "WikiCategories",
+    params: { node: route.params.node },
+    query: getSharedQuery(),
+  };
+}
+
+function getSettingsRoute() {
+  return {
+    name: "WikiSettings",
+    params: { node: route.params.node },
+    query: getSharedQuery(),
+  };
+}
+
+function getCategorySearchRoute(categoryId) {
+  return getReportRoute("search", {
+    categoryIds: Number(categoryId),
+    page: 1,
+  });
 }
 
 function getHistoryRoute() {

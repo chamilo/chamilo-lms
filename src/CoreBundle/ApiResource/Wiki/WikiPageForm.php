@@ -142,6 +142,24 @@ final class WikiPageForm
     #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
     public string $language = '';
 
+    /**
+     * @var array<int, int>
+     */
+    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
+    public array $categoryIds = [];
+
+    /**
+     * @var array<int, array{id:int, title:string, label:string, pathTitle:string, parentId:?int, level:int}>
+     */
+    #[Groups(['wiki_page_form:read'])]
+    public array $categories = [];
+
+    #[Groups(['wiki_page_form:read'])]
+    public bool $categoriesEnabled = false;
+
+    #[Groups(['wiki_page_form:read'])]
+    public bool $canManageCategories = false;
+
     #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
     public string $csrfToken = '';
 

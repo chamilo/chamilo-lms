@@ -94,6 +94,12 @@ final class WikiReport
     public bool $studentView = false;
 
     #[Groups(['wiki_report:read'])]
+    public bool $categoriesEnabled = false;
+
+    #[Groups(['wiki_report:read'])]
+    public bool $canManageCategories = false;
+
+    #[Groups(['wiki_report:read'])]
     public int $page = 1;
 
     #[Groups(['wiki_report:read'])]
@@ -157,7 +163,7 @@ final class WikiReport
     public array $availableReports = [];
 
     /**
-     * @var array<int, array{id:int, title:string}>
+     * @var array<int, array{id:int, title:string, label:string, pathTitle:string, parentId:?int, level:int}>
      */
     #[Groups(['wiki_report:read'])]
     public array $categories = [];

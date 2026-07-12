@@ -184,6 +184,21 @@ trait WikiAccessHelperTrait
         };
     }
 
+    private function canManageWikiCourseSettings(Security $security, Course $course): bool
+    {
+        if ($security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        $user = $security->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        return $course->hasUserAsTeacher($user)
+            || $security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+    }
+
     private function canManageWikiContext(
         EntityManagerInterface $entityManager,
         Security $security,

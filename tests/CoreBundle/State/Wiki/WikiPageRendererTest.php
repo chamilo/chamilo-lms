@@ -46,13 +46,34 @@ final class WikiPageRendererTest extends TestCase
             ],
         );
 
+        self::assertStringContainsString('data-wiki-exists="1"', $content);
         self::assertStringContainsString('data-wiki-reflink="existing_page"', $content);
+        self::assertStringContainsString('data-wiki-exists="0"', $content);
         self::assertStringContainsString('data-wiki-reflink="missing_page"', $content);
         self::assertStringContainsString(
             '/resources/wiki/42/?cid=7&amp;title=existing_page&amp;sid=8&amp;gid=9',
             $content,
         );
         self::assertStringContainsString('text-red-500', $content);
+    }
+
+    public function testSerializesInternalReflinksForLegacyStorage(): void
+    {
+        self::assertSame(
+            'first_page second_page ',
+            $this->renderer->serializeInternalReflinks(
+                '[[First Page]] [[Second Page|Second]] [[First Page]]',
+            ),
+        );
+    }
+
+    public function testNormalizesStoredProgressValues(): void
+    {
+        self::assertSame(0, $this->renderer->normalizeStoredProgress(null));
+        self::assertSame(40, $this->renderer->normalizeStoredProgress('4'));
+        self::assertSame(100, $this->renderer->normalizeStoredProgress('10'));
+        self::assertSame(50, $this->renderer->normalizeStoredProgress('50'));
+        self::assertSame(100, $this->renderer->normalizeStoredProgress('120'));
     }
 
     public function testCountsWordsFromHtmlContent(): void

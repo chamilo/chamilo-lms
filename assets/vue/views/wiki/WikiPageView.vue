@@ -2,15 +2,37 @@
   <section class="space-y-6">
     <BaseToolbar class="border-b border-gray-25 bg-white">
       <template #start>
-        <BaseButton
-          icon="home"
-          :label="t('Home')"
-          only-icon
-          size="large"
-          type="primary-text"
-          class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
-          :route="getWikiRoute('index')"
-        />
+        <div class="flex items-center gap-2">
+          <BaseButton
+            icon="home"
+            :label="t('Home')"
+            only-icon
+            size="large"
+            type="primary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getWikiRoute('index')"
+          />
+          <BaseButton
+            v-if="wikiPage.canCreate"
+            icon="plus"
+            :label="t('Add new page')"
+            only-icon
+            size="large"
+            type="success-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getCreateRoute()"
+          />
+          <BaseButton
+            v-if="wikiPage.canEdit"
+            icon="edit"
+            :label="t('Edit page')"
+            only-icon
+            size="large"
+            type="secondary-text"
+            class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
+            :route="getEditRoute()"
+          />
+        </div>
       </template>
 
       <template #end>
@@ -44,6 +66,14 @@
     </div>
 
     <template v-else>
+      <div
+        v-if="wikiPage.isInheritedFromCourse"
+        class="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-800"
+        role="status"
+      >
+        {{ t("This page comes from the base course. Saving it will create a version for the current session.") }}
+      </div>
+
       <BaseCard>
         <template #title>
           <div class="flex min-w-0 items-center gap-2">
@@ -152,6 +182,7 @@ const formattedUpdatedAt = computed(() => {
 
 function createEmptyPage() {
   return {
+    pageId: null,
     reflink: "index",
     exists: false,
     title: "",
@@ -167,6 +198,8 @@ function createEmptyPage() {
     visible: true,
     editLocked: false,
     isInheritedFromCourse: false,
+    canCreate: false,
+    canEdit: false,
     legacyUrl: "",
   }
 }
@@ -175,34 +208,9 @@ function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
 }
 
-function getContextParams() {
-  const params = {
-    cid: Number(getQueryValue(route.query.cid) || 0),
-    node: Number(route.params.node || 0),
-    title: String(getQueryValue(route.query.title) || "index"),
-  }
-  const sid = Number(getQueryValue(route.query.sid) || 0)
-  const gid = Number(getQueryValue(route.query.gid) || 0)
-
-  if (sid > 0) {
-    params.sid = sid
-  }
-
-  if (gid > 0) {
-    params.gid = gid
-  }
-
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
-
-  return params
-}
-
-function getWikiRoute(reflink) {
+function getSharedQuery() {
   const query = {
     cid: getQueryValue(route.query.cid),
-    title: reflink,
   }
   const sid = Number(getQueryValue(route.query.sid) || 0)
   const gid = Number(getQueryValue(route.query.gid) || 0)
@@ -219,11 +227,55 @@ function getWikiRoute(reflink) {
     query.isStudentView = getQueryValue(route.query.isStudentView)
   }
 
+  return query
+}
+
+function getContextParams() {
+  return {
+    ...getSharedQuery(),
+    node: Number(route.params.node || 0),
+    title: String(getQueryValue(route.query.title) || "index"),
+  }
+}
+
+function getWikiRoute(reflink) {
   return {
     name: "WikiPage",
     params: { node: route.params.node },
+    query: {
+      ...getSharedQuery(),
+      title: reflink,
+    },
+  }
+}
+
+function getCreateRoute(reflink = "") {
+  const query = getSharedQuery()
+
+  if (reflink) {
+    query.title = reflink
+  }
+
+  return {
+    name: "WikiPageCreate",
+    params: { node: route.params.node },
     query,
   }
+}
+
+function getEditRoute() {
+  if (wikiPage.exists && !wikiPage.isInheritedFromCourse && Number(wikiPage.pageId) > 0) {
+    return {
+      name: "WikiPageEdit",
+      params: {
+        node: route.params.node,
+        pageId: wikiPage.pageId,
+      },
+      query: getSharedQuery(),
+    }
+  }
+
+  return getCreateRoute(wikiPage.reflink)
 }
 
 function handleContentClick(event) {
@@ -240,6 +292,12 @@ function handleContentClick(event) {
   }
 
   event.preventDefault()
+
+  if ("0" === target.dataset.wikiExists && wikiPage.canCreate) {
+    router.push(getCreateRoute(reflink))
+    return
+  }
+
   router.push(getWikiRoute(reflink))
 }
 

@@ -17,5 +17,17 @@ export default {
       meta: { requiresAuth: true, breadcrumb: "Wiki" },
       component: () => import("../views/wiki/WikiPageView.vue"),
     },
+    {
+      name: "WikiPageCreate",
+      path: "new",
+      meta: { requiresAuth: true, breadcrumb: "Add new page" },
+      component: () => import("../views/wiki/WikiPageFormView.vue"),
+    },
+    {
+      name: "WikiPageEdit",
+      path: "edit/:pageId(\\d+)",
+      meta: { requiresAuth: true, breadcrumb: "Edit page" },
+      component: () => import("../views/wiki/WikiPageFormView.vue"),
+    },
   ],
 }

@@ -119,6 +119,12 @@ final class WikiPage
     public bool $canManage = false;
 
     #[Groups(['wiki_page:read'])]
+    public bool $canCreate = false;
+
+    #[Groups(['wiki_page:read'])]
+    public bool $canEdit = false;
+
+    #[Groups(['wiki_page:read'])]
     public bool $studentView = false;
 
     #[Groups(['wiki_page:read'])]

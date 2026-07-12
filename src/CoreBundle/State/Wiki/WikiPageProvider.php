@@ -9,11 +9,8 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPage;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
@@ -25,6 +22,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Throwable;
+
+use const DATE_ATOM;
 
 /**
  * @implements ProviderInterface<WikiPage>
@@ -53,11 +52,12 @@ final readonly class WikiPageProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
+        $course = $this->getWikiCourse($this->entityManager, $request);
         $this->assertWikiToolEnabled($this->entityManager, $course);
-        $session = $this->getSession($request);
+        $nodeId = $this->assertWikiRouteNode($course, $request);
+        $session = $this->getWikiSession($this->entityManager, $request);
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($request);
+        $group = $this->getWikiGroup($this->entityManager, $request);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {
@@ -65,11 +65,6 @@ final readonly class WikiPageProvider implements ProviderInterface
         }
 
         $this->registerToolAccess();
-
-        $nodeId = $request->query->getInt('node');
-        if ($nodeId <= 0) {
-            throw new BadRequestHttpException('A valid Wiki route node is required.');
-        }
 
         $studentView = $this->isWikiStudentView($request);
         $canManage = !$studentView && $this->canManageWikiContext(
@@ -103,6 +98,18 @@ final readonly class WikiPageProvider implements ProviderInterface
             );
         }
 
+        $addLock = $this->wikiRepository->findContextAddLock($courseId, $groupId, $sessionId);
+        $canCreateAnyPage = !$studentView && $this->canCreateWikiPage(
+            $this->entityManager,
+            $this->security,
+            $this->settingsManager,
+            $course,
+            $session,
+            $group,
+            'new_page',
+            $addLock,
+        );
+
         $page = new WikiPage();
         $page->courseId = $courseId;
         $page->sessionId = $sessionId > 0 ? $sessionId : null;
@@ -112,6 +119,7 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->sourceSessionId = $sourceSessionId > 0 ? $sourceSessionId : null;
         $page->isInheritedFromCourse = $sessionId > 0 && 0 === $sourceSessionId;
         $page->canManage = $canManage;
+        $page->canCreate = $canCreateAnyPage;
         $page->studentView = $studentView;
         $page->settings = [
             'categoriesEnabled' => $this->isWikiCourseSettingEnabled(
@@ -131,6 +139,16 @@ final readonly class WikiPageProvider implements ProviderInterface
 
         if (!$first instanceof CWiki || null === $first->getPageId()) {
             $page->title = $this->renderer->displayTitle($reflink);
+            $page->canEdit = !$studentView && $this->canCreateWikiPage(
+                $this->entityManager,
+                $this->security,
+                $this->settingsManager,
+                $course,
+                $session,
+                $group,
+                $reflink,
+                $addLock,
+            );
 
             return $page;
         }
@@ -148,7 +166,31 @@ final readonly class WikiPageProvider implements ProviderInterface
             return $page;
         }
 
-        $this->assertPageVisible($latest, $canManage);
+        $this->assertWikiPageVisible($this->security, $latest, $canManage);
+
+        $isExactContextPage = $sourceSessionId === $sessionId;
+        $page->canEdit = !$studentView && (
+            $isExactContextPage
+                ? $this->canEditWikiPage(
+                    $this->entityManager,
+                    $this->security,
+                    $this->settingsManager,
+                    $course,
+                    $session,
+                    $group,
+                    $latest,
+                )
+                : $this->canCreateWikiPage(
+                    $this->entityManager,
+                    $this->security,
+                    $this->settingsManager,
+                    $course,
+                    $session,
+                    $group,
+                    $reflink,
+                    $addLock,
+                )
+        );
 
         $strictFiltering = true === ($page->settings['strictHtmlFiltering'] ?? false);
         $sanitizedContent = $this->renderer->sanitizeContent($latest->getContent(), $strictFiltering);
@@ -186,7 +228,7 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->authorName = $author instanceof User ? $author->getFullName() : '';
         $page->assignment = $latest->getAssignment();
         $page->hasTask = $configuration instanceof CWikiConf && '' !== trim((string) $configuration->getTask());
-        $page->progress = ((int) $latest->getProgress()) * 10;
+        $page->progress = $this->renderer->normalizeStoredProgress($latest->getProgress());
         $page->score = $latest->getScore();
         $page->wordCount = $this->renderer->wordCount($sanitizedContent);
         $page->hits = (int) $latest->getHits();
@@ -196,69 +238,6 @@ final readonly class WikiPageProvider implements ProviderInterface
         $this->registerPageView($latest);
 
         return $page;
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
-    }
-
-    private function getGroup(Request $request): ?CGroup
-    {
-        $groupId = $request->query->getInt('gid');
-        if ($groupId <= 0) {
-            return null;
-        }
-
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new BadRequestHttpException('The requested group was not found.');
-        }
-
-        return $group;
-    }
-
-    private function assertPageVisible(CWiki $wiki, bool $canManage): void
-    {
-        if (1 === $wiki->getVisibility() || $canManage) {
-            return;
-        }
-
-        $user = $this->security->getUser();
-        if (2 === $wiki->getAssignment()
-            && 0 === $wiki->getVisibility()
-            && $user instanceof User
-            && $wiki->getUserId() === $user->getId()
-        ) {
-            return;
-        }
-
-        throw new AccessDeniedHttpException('This Wiki page is not visible in the current context.');
     }
 
     private function buildLegacyUrl(int $courseId, int $sessionId, int $groupId, string $reflink): string
@@ -279,7 +258,6 @@ final readonly class WikiPageProvider implements ProviderInterface
 
         return '/main/wiki/index.php?'.http_build_query($query);
     }
-
 
     private function registerToolAccess(): void
     {

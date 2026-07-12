@@ -6,9 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State\Wiki;
 
+use Security;
+
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
+use const PREG_SPLIT_NO_EMPTY;
 
 final class WikiPageRenderer
 {
@@ -19,7 +22,7 @@ final class WikiPageRenderer
         }
 
         $normalized = $this->normalizeToken($raw);
-        $homeLabel = function_exists('get_lang') ? (string) get_lang('Home') : 'Home';
+        $homeLabel = \function_exists('get_lang') ? (string) get_lang('Home') : 'Home';
         $aliases = array_filter([
             'index',
             $this->normalizeToken($homeLabel),
@@ -31,7 +34,7 @@ final class WikiPageRenderer
     public function displayTitle(string $reflink, ?string $storedTitle = null): string
     {
         if ('index' === $reflink) {
-            return function_exists('get_lang') ? (string) get_lang('Home') : 'Home';
+            return \function_exists('get_lang') ? (string) get_lang('Home') : 'Home';
         }
 
         if (null !== $storedTitle && '' !== trim($storedTitle)) {
@@ -43,12 +46,12 @@ final class WikiPageRenderer
 
     public function sanitizeContent(string $content, bool $strictFiltering): string
     {
-        if (class_exists('Security')) {
+        if (class_exists(Security::class)) {
             if ($strictFiltering && \defined('COURSEMANAGERLOWSECURITY')) {
-                return (string) \Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
+                return (string) Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
             }
 
-            return (string) \Security::remove_XSS($content);
+            return (string) Security::remove_XSS($content);
         }
 
         return htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -56,8 +59,8 @@ final class WikiPageRenderer
 
     public function sanitizeTitle(string $title): string
     {
-        if (class_exists('Security')) {
-            return trim(html_entity_decode(strip_tags((string) \Security::remove_XSS($title)), ENT_QUOTES, 'UTF-8'));
+        if (class_exists(Security::class)) {
+            return trim(html_entity_decode(strip_tags((string) Security::remove_XSS($title)), ENT_QUOTES, 'UTF-8'));
         }
 
         return trim(strip_tags($title));
@@ -110,13 +113,15 @@ final class WikiPageRenderer
                 }
 
                 $url = '/resources/wiki/'.$nodeId.'/?'.http_build_query($query);
-                $class = isset($existing[$reflink])
+                $exists = isset($existing[$reflink]);
+                $class = $exists
                     ? 'wiki-internal-link text-primary hover:underline'
                     : 'wiki-internal-link text-red-500 hover:underline';
 
-                return sprintf(
-                    '<a class="%s" data-wiki-reflink="%s" href="%s">%s</a>',
+                return \sprintf(
+                    '<a class="%s" data-wiki-exists="%s" data-wiki-reflink="%s" href="%s">%s</a>',
                     $class,
+                    $exists ? '1' : '0',
                     htmlspecialchars($reflink, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
                     htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
                     htmlspecialchars($label, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
@@ -126,6 +131,17 @@ final class WikiPageRenderer
         );
 
         return null === $rendered ? $content : $rendered;
+    }
+
+    public function normalizeStoredProgress(string|int|null $progress): int
+    {
+        $value = max(0, (int) $progress);
+
+        if ($value <= 10) {
+            return min(100, $value * 10);
+        }
+
+        return min(100, $value);
     }
 
     public function wordCount(string $content): int
@@ -163,11 +179,25 @@ final class WikiPageRenderer
         return array_values($reflinks);
     }
 
+    public function serializeInternalReflinks(string $content): string
+    {
+        $reflinks = $this->extractInternalReflinks($content);
+
+        if ([] === $reflinks) {
+            return '';
+        }
+
+        return implode('', array_map(
+            static fn (string $reflink): string => $reflink.' ',
+            $reflinks,
+        ));
+    }
+
     private function normalizeToken(string $value): string
     {
         $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
         $value = strip_tags(trim($value));
-        $value = function_exists('mb_strtolower') ? mb_strtolower($value) : strtolower($value);
+        $value = \function_exists('mb_strtolower') ? mb_strtolower($value) : strtolower($value);
         $value = str_replace(' ', '_', $value);
         $normalized = preg_replace('/_+/', '_', $value);
 

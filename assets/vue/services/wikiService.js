@@ -6,8 +6,34 @@ function cleanParams(params = {}) {
   )
 }
 
+function buildUrl(path, params = {}) {
+  const query = new URLSearchParams(cleanParams(params)).toString()
+
+  return query ? `${path}?${query}` : path
+}
+
 export default {
   async getPage(params = {}) {
     return await baseService.get("/api/wiki/page", cleanParams(params))
+  },
+
+  async getForm(params = {}) {
+    return await baseService.get("/api/wiki/form", cleanParams(params))
+  },
+
+  async createPage(params = {}, payload = {}) {
+    return await baseService.post(buildUrl("/api/wiki/page", params), payload)
+  },
+
+  async updatePage(pageId, params = {}, payload = {}) {
+    return await baseService.put(buildUrl(`/api/wiki/page/${pageId}`, params), payload)
+  },
+
+  async acquireLock(pageId, params = {}, csrfToken = "") {
+    return await baseService.post(buildUrl(`/api/wiki/page/${pageId}/lock`, params), { csrfToken })
+  },
+
+  async releaseLock(pageId, params = {}, csrfToken = "") {
+    return await baseService.post(buildUrl(`/api/wiki/page/${pageId}/unlock`, params), { csrfToken })
   },
 }

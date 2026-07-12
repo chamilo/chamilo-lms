@@ -27,25 +27,29 @@ final class CWikiRepository extends ResourceRepository
      */
     public function countEditsByUser(int $courseId, ?int $groupId, ?int $sessionId): array
     {
-        $qb = $this->createQueryBuilder('w')
+        $queryBuilder = $this->createQueryBuilder('w')
             ->select('w.userId AS userId, w.userIp AS userIp, COUNT(w.iid) AS numEdits')
-            ->where('w.cId = :cId')
-            ->setParameter('cId', $courseId)
+            ->where('w.cId = :courseId')
+            ->setParameter('courseId', $courseId, Types::INTEGER)
         ;
 
-        // Group filter
         if (null !== $groupId) {
-            $qb->andWhere('w.groupId = :gid')->setParameter('gid', $groupId);
+            $queryBuilder
+                ->andWhere('w.groupId = :groupId')
+                ->setParameter('groupId', $groupId, Types::INTEGER)
+            ;
         }
 
-        // Session filter
         if (null !== $sessionId) {
-            $qb->andWhere('w.sessionId = :sid')->setParameter('sid', $sessionId);
+            $queryBuilder
+                ->andWhere('w.sessionId = :sessionId')
+                ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ;
         }
 
-        return $qb
+        return $queryBuilder
             ->groupBy('w.userId, w.userIp')
-            ->orderBy('numEdits', 'DESC')
+            ->orderBy('COUNT(w.iid)', 'DESC')
             ->getQuery()
             ->getArrayResult()
         ;
@@ -71,10 +75,8 @@ final class CWikiRepository extends ResourceRepository
             ->setMaxResults(1)
         ;
 
-        /** @var CWiki|null $wiki */
-        $wiki = $queryBuilder->getQuery()->getOneOrNullResult();
-
-        return $wiki;
+        /** @var CWiki|null */
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     public function findLatestVersionInContext(
@@ -97,10 +99,52 @@ final class CWikiRepository extends ResourceRepository
             ->setMaxResults(1)
         ;
 
-        /** @var CWiki|null $wiki */
-        $wiki = $queryBuilder->getQuery()->getOneOrNullResult();
+        /** @var CWiki|null */
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 
-        return $wiki;
+    public function reflinkExistsInContext(
+        int $courseId,
+        string $reflink,
+        int $groupId,
+        int $sessionId,
+    ): bool {
+        $count = $this->createQueryBuilder('w')
+            ->select('COUNT(w.iid)')
+            ->andWhere('w.cId = :courseId')
+            ->andWhere('w.reflink = :reflink')
+            ->andWhere('COALESCE(w.groupId, 0) = :groupId')
+            ->andWhere('COALESCE(w.sessionId, 0) = :sessionId')
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('reflink', $reflink, Types::STRING)
+            ->setParameter('groupId', $groupId, Types::INTEGER)
+            ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return (int) $count > 0;
+    }
+
+    public function findContextAddLock(int $courseId, int $groupId, int $sessionId): int
+    {
+        $queryBuilder = $this->createQueryBuilder('w')
+            ->select('w.addlock AS addlock')
+            ->andWhere('w.cId = :courseId')
+            ->andWhere('COALESCE(w.groupId, 0) = :groupId')
+            ->andWhere('COALESCE(w.sessionId, 0) = :sessionId')
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('groupId', $groupId, Types::INTEGER)
+            ->setParameter('sessionId', $sessionId, Types::INTEGER)
+            ->orderBy('w.version', 'ASC')
+            ->addOrderBy('w.iid', 'ASC')
+            ->setMaxResults(1)
+        ;
+
+        /** @var array{addlock:int|string}|null $row */
+        $row = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return null === $row ? 1 : (int) $row['addlock'];
     }
 
     /**

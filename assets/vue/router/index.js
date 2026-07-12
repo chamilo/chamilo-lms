@@ -27,6 +27,7 @@ import links from "./links"
 import forum from "./forum"
 import survey from "./survey"
 import courseDescription from "./courseDescription"
+import wiki from "./wiki"
 import courseProgress from "./courseProgress"
 import announcement from "./announcement"
 import glossary from "./glossary"
@@ -486,6 +487,7 @@ const router = createRouter({
     forum,
     survey,
     courseDescription,
+    wiki,
     courseProgress,
     announcement,
     glossary,

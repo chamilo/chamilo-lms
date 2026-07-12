@@ -780,6 +780,31 @@ class CourseController extends ToolBaseController
         SettingsFormFactory $formFactory
     ): Response {
         $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        $manager->setCourse($course);
+
+        if ('wiki' === $namespace) {
+            $user = $this->userHelper->getCurrent();
+            $canManageWikiSettings = $this->isGranted('ROLE_ADMIN')
+                || ($user instanceof User && (
+                    $course->hasUserAsTeacher($user)
+                    || $this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+                ));
+
+            if (!$canManageWikiSettings) {
+                throw $this->createAccessDeniedException('You are not allowed to manage Wiki settings.');
+            }
+
+            if ($request->isMethod(Request::METHOD_GET)) {
+                $nodeId = $course->getResourceNode()?->getId();
+                if (null !== $nodeId) {
+                    return $this->redirect(\sprintf(
+                        '/resources/wiki/%d/settings?cid=%d',
+                        $nodeId,
+                        $course->getId(),
+                    ));
+                }
+            }
+        }
 
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);
@@ -793,7 +818,6 @@ class CourseController extends ToolBaseController
             $messageType = 'success';
 
             try {
-                $manager->setCourse($course);
                 $manager->save($form->getData());
                 $message = $this->trans('Update');
             } catch (ValidatorException $validatorException) {

@@ -14,6 +14,9 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\EntityManagerInterface;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * Handles Xapian indexing for course descriptions.
  */

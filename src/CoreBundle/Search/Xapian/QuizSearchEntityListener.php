@@ -55,5 +55,4 @@ final class QuizSearchEntityListener
             );
         }
     }
-
 }

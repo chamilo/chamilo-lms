@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Controller;
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Psr\Log\LoggerInterface;
+use Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,10 +39,10 @@ class MyServicesController extends AbstractController
         try {
             $plugin = BuyCoursesPlugin::create();
             $userId = $user->getId();
-            $csrfToken = (string) \Security::get_existing_token();
+            $csrfToken = (string) Security::get_existing_token();
 
             if ('' === $csrfToken) {
-                $csrfToken = (string) \Security::get_token();
+                $csrfToken = (string) Security::get_token();
             }
 
             return new JsonResponse([
@@ -89,7 +90,7 @@ class MyServicesController extends AbstractController
 
             $isPayPalPayment = BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL === $paymentType;
             $hasRecurringReference = '' !== $gatewaySubscriptionId || '' !== $recurringProfileId;
-            $isSupportedCancellationGateway = in_array($recurringGateway, ['stripe', 'paypal'], true);
+            $isSupportedCancellationGateway = \in_array($recurringGateway, ['stripe', 'paypal'], true);
             $isCancellationAlreadyScheduled = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
                 || '' !== trim((string) ($row['cancelled_at'] ?? ''));
             $saleEndTimestamp = !empty($row['date_end']) ? strtotime((string) $row['date_end']) : 0;
@@ -153,14 +154,14 @@ class MyServicesController extends AbstractController
                 'restoreRecurringPaymentToken' => $canRestoreRecurringPayment ? $csrfToken : null,
                 'canRestoreRecurringPayment' => $canRestoreRecurringPayment,
                 'restoreRenewalButtonLabel' => $plugin->get_lang('RestoreRenewal'),
-                'restoreRenewalMessage' => sprintf(
+                'restoreRenewalMessage' => \sprintf(
                     $plugin->get_lang('RestoreRenewalConfirmation'),
                     $formattedRenewalDate
                 ),
                 'cancelRenewalButtonLabel' => $plugin->get_lang('CancelRenewal'),
                 'cancelRenewalDismissLabel' => $plugin->get_lang('IChangedMyMind'),
                 'cancelRenewalTitle' => $plugin->get_lang('CancelRenewalTitle'),
-                'cancelRenewalMessage' => sprintf(
+                'cancelRenewalMessage' => \sprintf(
                     $plugin->get_lang('CancelRenewalConfirmation'),
                     $formattedRenewalDate,
                     12,

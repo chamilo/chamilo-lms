@@ -112,7 +112,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the course progress tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/course_progress/index.php?cid=1"
+    When I follow "Course progress"
     And I wait for the page to be loaded
     Then I should not see an error
 

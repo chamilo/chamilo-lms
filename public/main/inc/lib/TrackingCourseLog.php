@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
@@ -14,10 +16,10 @@ class TrackingCourseLog
     public static function countItemResources(): mixed
     {
         $sessionId = api_get_session_id();
-        $courseId  = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
-        $tableUser         = Database::get_main_table(TABLE_MAIN_USER);
-        $tableSession      = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $tableResourceLink = Database::get_main_table('resource_link');
         $tableResourceNode = Database::get_main_table('resource_node');
         $tableResourceType = Database::get_main_table('resource_type');
@@ -35,7 +37,7 @@ class TrackingCourseLog
             'thematic_advance',
             'thematic_plan',
         ];
-        $typesList = "'" . implode("','", $allowedTypes) . "'";
+        $typesList = "'".implode("','", $allowedTypes)."'";
 
         $sql = "SELECT COUNT(*) AS total_number_of_items
             FROM $tableResourceLink rl
@@ -71,20 +73,25 @@ class TrackingCourseLog
 
     /**
      * Retrieves resource log data using resource_link/resource_node.
+     *
+     * @param mixed $from
+     * @param mixed $numberOfItems
+     * @param mixed $column
+     * @param mixed $direction
      */
     public static function getItemResourcesData($from, $numberOfItems, $column, $direction): array
     {
         $sessionId = api_get_session_id();
-        $courseId  = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
-        $tableUser         = Database::get_main_table(TABLE_MAIN_USER);
-        $tableSession      = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tableSessionUser  = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tableSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tableResourceLink = Database::get_main_table('resource_link');
         $tableResourceNode = Database::get_main_table('resource_node');
         $tableResourceType = Database::get_main_table('resource_type');
 
-        $column    = (int) $column;
+        $column = (int) $column;
         $direction = strtolower(trim((string) $direction));
         $direction = in_array($direction, ['asc', 'desc'], true) ? $direction : 'asc';
 
@@ -101,13 +108,14 @@ class TrackingCourseLog
             'thematic_advance',
             'thematic_plan',
         ];
-        $typesList = "'" . implode("','", $allowedTypes) . "'";
+        $typesList = "'".implode("','", $allowedTypes)."'";
 
         $sql = "SELECT
                 rl.id            AS ref,
                 rl.created_at    AS col6,
                 rl.visibility    AS col7,
                 rn.title         AS document_title,
+                rn.parent_id     AS parent_resource_node_id,
                 rt.title         AS resource_type_title,
                 creator.id       AS user_id,
                 creator.username AS col3,
@@ -144,19 +152,28 @@ class TrackingCourseLog
         switch ($column) {
             case 0: // Tool
                 $orderBy = 'rt.title';
+
                 break;
+
             case 2: // Session
                 $orderBy = 's.title';
+
                 break;
+
             case 3: // Username
                 $orderBy = 'creator.username';
+
                 break;
+
             case 5: // Document
                 $orderBy = 'rn.title';
+
                 break;
+
             case 6: // Date
             default:
                 $orderBy = 'rl.created_at';
+
                 break;
         }
 
@@ -168,7 +185,7 @@ class TrackingCourseLog
             $sql .= " LIMIT $from, $numberOfItems";
         }
 
-        $res       = Database::query($sql);
+        $res = Database::query($sql);
         $resources = [];
 
         while ($row = Database::fetch_array($res)) {
@@ -183,17 +200,20 @@ class TrackingCourseLog
             $displayRow = [];
 
             // Internal legacy columns used by CSV/XLS export.
-            $displayRow['ref']                 = (int) $row['ref'];
-            $displayRow['col6']                = $row['col6']; // created_at
-            $displayRow['col7']                = (int) $row['col7']; // visibility
-            $displayRow['user_id']             = isset($row['user_id']) ? (int) $row['user_id'] : 0;
-            $displayRow['col3']                = $row['col3']; // username
-            $displayRow['document_title']      = $row['document_title'] ?? '';
+            $displayRow['ref'] = (int) $row['ref'];
+            $displayRow['col6'] = $row['col6']; // created_at
+            $displayRow['col7'] = (int) $row['col7']; // visibility
+            $displayRow['user_id'] = isset($row['user_id']) ? (int) $row['user_id'] : 0;
+            $displayRow['col3'] = $row['col3']; // username
+            $displayRow['document_title'] = $row['document_title'] ?? '';
+            $displayRow['parent_resource_node_id'] = isset($row['parent_resource_node_id'])
+                ? (int) $row['parent_resource_node_id']
+                : 0;
             $displayRow['resource_type_title'] = $row['resource_type_title'];
-            $displayRow['session_name']        = $row['session_name'] ?? '';
-            $displayRow['coach_username']      = $row['coach_username'] ?? '';
-            $displayRow['col0']                = $legacyTool;
-            $displayRow['col1']                = 'Created';
+            $displayRow['session_name'] = $row['session_name'] ?? '';
+            $displayRow['coach_username'] = $row['coach_username'] ?? '';
+            $displayRow['col0'] = $legacyTool;
+            $displayRow['col1'] = 'Created';
 
             // Column 0: Tool.
             $displayRow[0] = get_lang('Tool'.api_ucfirst($legacyTool));
@@ -214,9 +234,9 @@ class TrackingCourseLog
             // Column 3: Username (linked to profile).
             $displayRow[3] = '';
             if (!empty($displayRow['col3']) && !empty($displayRow['user_id'])) {
-                $userInfo          = api_get_user_info($displayRow['user_id']);
+                $userInfo = api_get_user_info($displayRow['user_id']);
                 $displayRow['col3'] = Display::url($displayRow['col3'], $userInfo['profile_url']);
-                $displayRow[3]      = $displayRow['col3'];
+                $displayRow[3] = $displayRow['col3'];
             }
 
             // Column 4: IP address.
@@ -234,7 +254,19 @@ class TrackingCourseLog
             $displayRow[4] = $ip;
 
             // Column 5: Document title.
-            $displayRow[5] = Security::remove_XSS($displayRow['document_title']);
+            $documentTitle = Security::remove_XSS($displayRow['document_title']);
+            if ('thematic' === $legacyTool && $displayRow['parent_resource_node_id'] > 0) {
+                $courseProgressQuery = [
+                    'cid' => $courseId,
+                    'sid' => (int) $sessionId,
+                    'gid' => 0,
+                ];
+                $courseProgressUrl = api_get_path(WEB_PATH).
+                    'resources/course-progress/'.$displayRow['parent_resource_node_id'].'/?'.
+                    http_build_query($courseProgressQuery);
+                $documentTitle = Display::url($documentTitle, $courseProgressUrl);
+            }
+            $displayRow[5] = $documentTitle;
 
             // Column 6: Date.
             $displayRow[6] = api_convert_and_format_date(
@@ -262,54 +294,75 @@ class TrackingCourseLog
                 $tableName = TABLE_DOCUMENT;
                 $linkTool = 'document/document.php';
                 $idTool = 'id';
+
                 break;
+
             case 'learnpath':
                 $tableName = TABLE_LP_MAIN;
                 $linkTool = 'lp/lp_controller.php';
                 $idTool = 'id';
+
                 break;
+
             case 'quiz':
                 $tableName = TABLE_QUIZ_TEST;
                 $linkTool = 'exercise/exercise.php';
                 $idTool = 'iid';
+
                 break;
+
             case 'glossary':
                 $tableName = TABLE_GLOSSARY;
                 $linkTool = 'glossary/index.php';
                 $idTool = 'glossary_id';
+
                 break;
+
             case 'link':
                 $tableName = TABLE_LINK;
                 $linkTool = 'link/link.php';
                 $idTool = 'id';
+
                 break;
+
             case 'course_description':
                 $tableName = TABLE_COURSE_DESCRIPTION;
                 $linkTool = 'course_description/';
                 $idTool = 'id';
+
                 break;
+
             case 'announcement':
                 $tableName = TABLE_ANNOUNCEMENT;
                 $linkTool = 'announcements/announcements.php';
                 $idTool = 'id';
+
                 break;
+
             case 'thematic':
                 $tableName = TABLE_THEMATIC;
                 $linkTool = 'course_progress/index.php';
                 $idTool = 'id';
+
                 break;
+
             case 'thematic_advance':
                 $tableName = TABLE_THEMATIC_ADVANCE;
                 $linkTool = 'course_progress/index.php';
                 $idTool = 'id';
+
                 break;
+
             case 'thematic_plan':
                 $tableName = TABLE_THEMATIC_PLAN;
                 $linkTool = 'course_progress/index.php';
                 $idTool = 'id';
+
                 break;
+
             default:
                 $tableName = $tool;
+
                 break;
         }
 
@@ -322,6 +375,8 @@ class TrackingCourseLog
 
     /**
      * Displays additional profile fields, excluding specific fields if provided.
+     *
+     * @param null|mixed $formAction
      */
     public static function displayAdditionalProfileFields(array $exclude = [], $formAction = null): string
     {
@@ -345,7 +400,7 @@ class TrackingCourseLog
                 continue;
             }
             // show only extra fields that are visible + and can be filtered, added by J.Montoya
-            if ($field[6] == 1 && $field[8] == 1) {
+            if (1 == $field[6] && 1 == $field[8]) {
                 if (isset($_GET['additional_profile_field']) && in_array($field[0], $_GET['additional_profile_field'])) {
                     $selected = 'selected="selected"';
                 } else {
@@ -360,10 +415,10 @@ class TrackingCourseLog
 
         // the form elements for the $_GET parameters (because the form is passed through GET
         foreach ($_GET as $key => $value) {
-            if ($key != 'additional_profile_field') {
+            if ('additional_profile_field' != $key) {
                 $return .= '<input type="hidden" name="'.Security::remove_XSS($key).'" value="'.Security::remove_XSS(
-                        $value
-                    ).'" />';
+                    $value
+                ).'" />';
             }
         }
         // the submit button
@@ -383,8 +438,8 @@ class TrackingCourseLog
      * It gets the information of all the users so that it can be displayed
      * in the sortable table or in the csv or xls export.
      *
-     * @param int $fieldId field id
-     * @param array $users list of user ids
+     * @param int   $fieldId field id
+     * @param array $users   list of user ids
      *
      * @author     Julio Montoya <gugli100@gmail.com>
      *
@@ -401,7 +456,7 @@ class TrackingCourseLog
         $resultExtraField = UserManager::get_extra_field_information($fieldId);
         $return = [];
         if (!empty($users)) {
-            if ($resultExtraField['field_type'] == UserManager::USER_FIELD_TYPE_TAG) {
+            if (UserManager::USER_FIELD_TYPE_TAG == $resultExtraField['field_type']) {
                 foreach ($users as $user_id) {
                     $userResult = UserManager::get_user_tags($user_id, $fieldId);
                     $tagList = [];
@@ -426,15 +481,15 @@ class TrackingCourseLog
                         ON (f.id = v.field_id)
                         WHERE
                             f.extra_field_type = $extraFieldType AND
-                            v.field_id=".intval($fieldId)." AND
+                            v.field_id=".(int) $fieldId." AND
                             user.user_id IN ($users)";
 
                 $result = Database::query($sql);
                 while ($row = Database::fetch_array($result)) {
                     // get option value for field type double select by id
                     if (!empty($row['value'])) {
-                        if ($resultExtraField['field_type'] ==
-                            ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                        if (ExtraField::FIELD_TYPE_DOUBLE_SELECT ==
+                            $resultExtraField['field_type']
                         ) {
                             $idDoubleSelect = explode(';', $row['value']);
                             if (is_array($idDoubleSelect)) {
@@ -444,7 +499,7 @@ class TrackingCourseLog
                             }
                         }
 
-                        if ($resultExtraField['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                        if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $resultExtraField['field_type']) {
                             $parsedValue = explode('::', $row['value']);
 
                             if ($parsedValue) {
@@ -455,7 +510,7 @@ class TrackingCourseLog
                             }
                         }
 
-                        if ($resultExtraField['field_type'] == ExtraField::FIELD_TYPE_TRIPLE_SELECT) {
+                        if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $resultExtraField['field_type']) {
                             [$level1, $level2, $level3] = explode(';', $row['value']);
 
                             $row['value'] = $resultExtraField['options'][$level1]['display_text'].' / ';
@@ -485,17 +540,10 @@ class TrackingCourseLog
     /**
      * Get data for users list in sortable with pagination.
      *
-     * @param int         $from
-     * @param int         $numberOfItems
-     * @param int         $column
-     * @param string      $direction
-     * @param array       $conditions
-     * @param bool        $exerciseToCheckConfig
-     * @param bool        $displaySessionInfo
-     * @param string|null $courseCode
-     * @param int|null    $sessionId
-     * @param bool        $exportCsv
-     * @param array       $userIds
+     * @param int    $from
+     * @param int    $numberOfItems
+     * @param int    $column
+     * @param string $direction
      *
      * @return array
      */
@@ -513,17 +561,17 @@ class TrackingCourseLog
         array $userIds = []
     ) {
         $includeInvitedUsers = $conditions['include_invited_users'] ?? false;
-        $getCount            = $conditions['get_count'] ?? false;
+        $getCount = $conditions['get_count'] ?? false;
 
-        $csvContent     = [];
-        $tblUser        = Database::get_main_table(TABLE_MAIN_USER);
-        $tblUrlRelUser  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $accessUrlId    = api_get_current_access_url_id();
+        $csvContent = [];
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlId = api_get_current_access_url_id();
 
         // ---------------------------------------------------------------------
         // Resolve course / session context if not explicitly provided
         // ---------------------------------------------------------------------
-        if ($sessionId === null) {
+        if (null === $sessionId) {
             $sessionId = (int) api_get_session_id();
         }
 
@@ -538,14 +586,14 @@ class TrackingCourseLog
             return [];
         }
 
-        $courseId   = (int) $courseInfo['real_id'];
+        $courseId = (int) $courseInfo['real_id'];
         $courseCode = $courseInfo['code'] ?? $courseCode;
 
         // ---------------------------------------------------------------------
         // Build user filter (single user vs list of users)
         // ---------------------------------------------------------------------
         if (!empty($userIds) && is_array($userIds)) {
-            $userIds      = array_map('intval', $userIds);
+            $userIds = array_map('intval', $userIds);
             $conditionUser = ' WHERE user.id IN ('.implode(',', $userIds).') ';
         } else {
             $conditionUser = ' WHERE user.id = '.(int) $userIds.' ';
@@ -553,7 +601,7 @@ class TrackingCourseLog
 
         // Simple keyword filter
         if (!empty($_GET['user_keyword'])) {
-            $keyword       = trim(Database::escape_string($_GET['user_keyword']));
+            $keyword = trim(Database::escape_string($_GET['user_keyword']));
             $conditionUser .= " AND (
                 user.firstname LIKE '%".$keyword."%' OR
                 user.lastname  LIKE '%".$keyword."%'  OR
@@ -563,10 +611,10 @@ class TrackingCourseLog
         }
 
         // Multiple URL restriction
-        $urlTable     = '';
+        $urlTable = '';
         $urlCondition = '';
         if (api_is_multiple_url_enabled()) {
-            $urlTable     = " INNER JOIN $tblUrlRelUser AS url_users ON (user.id = url_users.user_id)";
+            $urlTable = " INNER JOIN $tblUrlRelUser AS url_users ON (user.id = url_users.user_id)";
             $urlCondition = " AND access_url_id = '$accessUrlId'";
         }
 
@@ -593,7 +641,7 @@ class TrackingCourseLog
 
         // Extra joins / where from conditions (classes, extra fields, etc.)
         $sqlInjectJoins = '';
-        $where          = 'AND 1 = 1 ';
+        $where = 'AND 1 = 1 ';
         $sqlInjectWhere = '';
         if (!empty($conditions)) {
             if (isset($conditions['inject_joins'])) {
@@ -632,8 +680,8 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column        = (int) $column;
-        $from          = (int) $from;
+        $column = (int) $column;
+        $from = (int) $from;
         $numberOfItems = (int) $numberOfItems;
 
         if ($getCount) {
@@ -656,13 +704,13 @@ class TrackingCourseLog
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from, $numberOfItems";
 
-        $res   = Database::query($sql);
+        $res = Database::query($sql);
         $users = [];
 
         // ---------------------------------------------------------------------
         // Course data required for progress / scores
         // ---------------------------------------------------------------------
-        $totalSurveys  = 0;
+        $totalSurveys = 0;
         $totalExercises = ExerciseLib::get_all_exercises(
             $courseInfo,
             $sessionId
@@ -672,7 +720,7 @@ class TrackingCourseLog
         $surveyUserList = [];
         if (empty($sessionId)) {
             $courseCodeForSurvey = $courseCode;
-            $surveyList          = [];
+            $surveyList = [];
 
             if (!empty($courseCodeForSurvey)) {
                 $surveyList = SurveyManager::get_surveys($courseCodeForSurvey);
@@ -753,9 +801,9 @@ class TrackingCourseLog
         // Main per-user loop
         // ---------------------------------------------------------------------
         while ($user = Database::fetch_array($res, 'ASSOC')) {
-            $userIdList[]          = $user['user_id'];
+            $userIdList[] = $user['user_id'];
             $user['official_code'] = $user['col0'];
-            $user['username']      = $user['col3'];
+            $user['username'] = $user['col3'];
 
             $user['time'] = api_time_to_hms(
                 Tracking::get_time_spent_on_the_course(
@@ -879,13 +927,13 @@ class TrackingCourseLog
             );
 
             if ($exportCsv) {
-                $user['first_connection']       = !empty($user['first_connection'])
+                $user['first_connection'] = !empty($user['first_connection'])
                     ? api_get_local_time($user['first_connection'])
                     : '-';
-                $user['last_connection']        = !empty($user['last_connection'])
+                $user['last_connection'] = !empty($user['last_connection'])
                     ? api_get_local_time($user['last_connection'])
                     : '-';
-                $user['lp_finalization_date']   = !empty($user['lp_finalization_date'])
+                $user['lp_finalization_date'] = !empty($user['lp_finalization_date'])
                     ? api_get_local_time($user['lp_finalization_date'])
                     : '-';
                 $user['quiz_finalization_date'] = !empty($user['quiz_finalization_date'])
@@ -931,28 +979,28 @@ class TrackingCourseLog
             // -------------------------------------------------------------
             $userRow = [];
             if ($displaySessionInfo && !empty($sessionId)) {
-                $sessionInfo                   = api_get_session_info($sessionId);
-                $userRow['session_name']       = $sessionInfo['name'];
-                $userRow['session_startdate']  = $sessionInfo['access_start_date'];
-                $userRow['session_enddate']    = $sessionInfo['access_end_date'];
-                $userRow['course_name']        = $courseInfo['name'];
+                $sessionInfo = api_get_session_info($sessionId);
+                $userRow['session_name'] = $sessionInfo['name'];
+                $userRow['session_startdate'] = $sessionInfo['access_start_date'];
+                $userRow['session_enddate'] = $sessionInfo['access_end_date'];
+                $userRow['course_name'] = $courseInfo['name'];
             }
 
             $userRow['official_code'] = $user['official_code'];
             if ($sortByFirstName) {
                 $userRow['firstname'] = $user['col2'];
-                $userRow['lastname']  = $user['col1'];
+                $userRow['lastname'] = $user['col1'];
             } else {
-                $userRow['lastname']  = $user['col1'];
+                $userRow['lastname'] = $user['col1'];
                 $userRow['firstname'] = $user['col2'];
             }
-            $userRow['username']                     = $user['username'];
-            $userRow['time']                         = $user['time'];
-            $userRow['average_progress']             = $user['average_progress'];
-            $userRow['exercise_progress']            = $user['exercise_progress'];
-            $userRow['exercise_average_best_attempt']= $user['exercise_average_best_attempt'];
-            $userRow['student_score']                = $user['student_score'];
-            $userRow['student_score_best']           = $user['student_score_best'];
+            $userRow['username'] = $user['username'];
+            $userRow['time'] = $user['time'];
+            $userRow['average_progress'] = $user['average_progress'];
+            $userRow['exercise_progress'] = $user['exercise_progress'];
+            $userRow['exercise_average_best_attempt'] = $user['exercise_average_best_attempt'];
+            $userRow['student_score'] = $user['student_score'];
+            $userRow['student_score_best'] = $user['student_score_best'];
 
             if (!empty($exerciseResults)) {
                 foreach ($exerciseResults as $exerciseId => $bestResult) {
@@ -961,7 +1009,7 @@ class TrackingCourseLog
             }
 
             $userRow['count_assignments'] = $user['count_assignments'];
-            $userRow['count_messages']    = $user['count_messages'];
+            $userRow['count_messages'] = $user['count_messages'];
 
             $userGroupManager = new UserGroupModel();
             if ($exportCsv) {
@@ -979,25 +1027,25 @@ class TrackingCourseLog
             if (empty($sessionId)) {
                 $userRow['survey'] = $user['survey'];
             } else {
-                $userSession              = SessionManager::getUserSession($user['user_id'], $sessionId);
+                $userSession = SessionManager::getUserSession($user['user_id'], $sessionId);
                 $userRow['registered_at'] = '';
                 if ($userSession) {
                     $userRow['registered_at'] = api_get_local_time($userSession['registered_at']);
                 }
             }
 
-            $userRow['first_connection']      = $user['first_connection'];
-            $userRow['last_connection']       = $user['last_connection'];
-            $userRow['lp_finalization_date']  = $user['lp_finalization_date'];
-            $userRow['quiz_finalization_date']= $user['quiz_finalization_date'];
+            $userRow['first_connection'] = $user['first_connection'];
+            $userRow['last_connection'] = $user['last_connection'];
+            $userRow['lp_finalization_date'] = $user['lp_finalization_date'];
+            $userRow['quiz_finalization_date'] = $user['quiz_finalization_date'];
 
             // Extra profile fields selected by the teacher
             if (isset($_GET['additional_profile_field'])) {
-                $data          = Session::read('additional_user_profile_info');
+                $data = Session::read('additional_user_profile_info');
                 $extraFieldInfo = Session::read('extra_field_info');
 
                 foreach ($_GET['additional_profile_field'] as $fieldId) {
-                    if (isset($data[$fieldId]) && isset($data[$fieldId][$user['user_id']])) {
+                    if (isset($data[$fieldId], $data[$fieldId][$user['user_id']])) {
                         if (is_array($data[$fieldId][$user['user_id']])) {
                             $userRow[$extraFieldInfo[$fieldId]['variable']] = implode(
                                 ', ',
@@ -1012,7 +1060,7 @@ class TrackingCourseLog
                 }
             }
 
-            $data                  = Session::read('default_additional_user_profile_info');
+            $data = Session::read('default_additional_user_profile_info');
             $defaultExtraFieldInfo = Session::read('default_extra_field_info');
             if (!empty($defaultExtraFieldInfo) && !empty($data)) {
                 foreach ($data as $key => $val) {
@@ -1031,7 +1079,7 @@ class TrackingCourseLog
                 }
             }
 
-            if (api_get_setting('show_email_addresses') === 'true') {
+            if ('true' === api_get_setting('show_email_addresses')) {
                 $userRow['email'] = $user['col4'];
             }
 
@@ -1060,6 +1108,11 @@ class TrackingCourseLog
 
     /**
      * Get data for users list in sortable with pagination.
+     *
+     * @param mixed $from
+     * @param mixed $numberOfItems
+     * @param mixed $column
+     * @param mixed $direction
      */
     public static function getTotalTimeReport(
         $from,
@@ -1078,22 +1131,22 @@ class TrackingCourseLog
         // get all users data from a course for sortable with limit
         if (is_array($user_ids)) {
             $user_ids = array_map('intval', $user_ids);
-            $conditionUser = " WHERE user.user_id IN (".implode(',', $user_ids).") ";
+            $conditionUser = ' WHERE user.user_id IN ('.implode(',', $user_ids).') ';
         } else {
-            $user_ids = intval($user_ids);
+            $user_ids = (int) $user_ids;
             $conditionUser = " WHERE user.user_id = $user_ids ";
         }
 
         $urlTable = null;
         $urlCondition = null;
         if (api_is_multiple_url_enabled()) {
-            $urlTable = ", ".$tblUrlRelUser." as url_users";
+            $urlTable = ', '.$tblUrlRelUser.' as url_users';
             $urlCondition = " AND user.user_id = url_users.user_id AND access_url_id='$accessUrlId'";
         }
 
         $invitedUsersCondition = '';
         if (!$includeInvitedUsers) {
-            $invitedUsersCondition = " AND user.status != ".INVITEE;
+            $invitedUsersCondition = ' AND user.status != '.INVITEE;
         }
 
         $sql = "SELECT  user.user_id as user_id,
@@ -1158,7 +1211,7 @@ class TrackingCourseLog
                 $user['user_id'],
                 $courseInfo,
                 $session_id,
-                $export_csv === false
+                false === $export_csv
             );
 
             $user['link'] = '<center>
@@ -1169,7 +1222,7 @@ class TrackingCourseLog
 
             // store columns in array $users
             $userRow = [];
-            $userRow['official_code'] = $user['official_code']; //0
+            $userRow['official_code'] = $user['official_code']; // 0
             if ($sortByFirstName) {
                 $userRow['firstname'] = $user['firstname'];
                 $userRow['lastname'] = $user['lastname'];
@@ -1189,7 +1242,6 @@ class TrackingCourseLog
 
         return $users;
     }
-
 
     /**
      * Returns the latest document downloads for a learner in the current course context.
@@ -1429,7 +1481,7 @@ class TrackingCourseLog
     public static function getCourseConnectedUsersSince(
         int $courseId,
         int $sessionId,
-        \DateTimeInterface $since,
+        DateTimeInterface $since,
         array $userIds = [],
         int $limit = 500
     ): array {
@@ -1516,7 +1568,7 @@ class TrackingCourseLog
         array $students,
         int $courseId,
         int $sessionId,
-        \DateTimeInterface $since
+        DateTimeInterface $since
     ): array {
         $studentRows = [];
         $studentIds = [];
@@ -1590,7 +1642,7 @@ class TrackingCourseLog
     public static function getCourseResourceUsageSummarySince(
         int $courseId,
         int $sessionId,
-        \DateTimeInterface $since,
+        DateTimeInterface $since,
         int $limit = 100
     ): array {
         $courseId = (int) $courseId;
@@ -1622,7 +1674,7 @@ class TrackingCourseLog
     public static function countCourseConnectedUsersSince(
         int $courseId,
         int $sessionId,
-        \DateTimeInterface $since,
+        DateTimeInterface $since,
         array $userIds = []
     ): int {
         $courseId = (int) $courseId;
@@ -1665,7 +1717,6 @@ class TrackingCourseLog
         return ' AND '.$field.' IN ('.implode(',', $ids).')';
     }
 
-
     /**
      * Determines the remaining actions for a session and returns a string with the results.
      */
@@ -1675,58 +1726,58 @@ class TrackingCourseLog
         bool $showExtended = false
     ): string {
         // Keep all course/session params consistent across tabs
-        $cidReq      = api_get_cidreq(true, false);
-        $cidQuery    = $cidReq ? ('?'.$cidReq) : '';
+        $cidReq = api_get_cidreq(true, false);
+        $cidQuery = $cidReq ? ('?'.$cidReq) : '';
         $webCodePath = api_get_path(WEB_CODE_PATH);
 
         $items = [
             'users' => [
-                'icon'  => ToolIcon::MEMBER,
+                'icon' => ToolIcon::MEMBER,
                 'label' => get_lang('Report on learners'),
-                'url'   => 'courseLog.php'.$cidQuery,
+                'url' => 'courseLog.php'.$cidQuery,
             ],
             'activity' => [
-                'icon'  => ToolIcon::TRACKING,
+                'icon' => ToolIcon::TRACKING,
                 'label' => get_lang('Course activity statistics'),
-                'url'   => $webCodePath.'tracking/course_activity_statistics.php'.$cidQuery,
+                'url' => $webCodePath.'tracking/course_activity_statistics.php'.$cidQuery,
             ],
             'groups' => [
-                'icon'  => ToolIcon::GROUP,
+                'icon' => ToolIcon::GROUP,
                 'label' => get_lang('Group reporting'),
-                'url'   => 'course_log_groups.php'.$cidQuery,
+                'url' => 'course_log_groups.php'.$cidQuery,
             ],
             'resources' => [
-                'icon'  => ToolIcon::DOCUMENT,
+                'icon' => ToolIcon::DOCUMENT,
                 'label' => get_lang('Report on resources'),
-                'url'   => 'course_log_resources.php'.$cidQuery,
+                'url' => 'course_log_resources.php'.$cidQuery,
             ],
             'courses' => [
-                'icon'  => ToolIcon::COURSE,
+                'icon' => ToolIcon::COURSE,
                 'label' => get_lang('Course report'),
-                'url'   => 'course_log_tools.php'.$cidQuery,
+                'url' => 'course_log_tools.php'.$cidQuery,
             ],
             'exams' => [
-                'icon'  => ToolIcon::QUIZ,
+                'icon' => ToolIcon::QUIZ,
                 'label' => get_lang('Exam tracking'),
-                'url'   => $webCodePath.'tracking/exams.php'.$cidQuery,
+                'url' => $webCodePath.'tracking/exams.php'.$cidQuery,
             ],
             'logs' => [
-                'icon'  => ToolIcon::SECURITY,
+                'icon' => ToolIcon::SECURITY,
                 'label' => get_lang('Audit report'),
-                'url'   => $webCodePath.'tracking/course_log_events.php'.$cidQuery,
+                'url' => $webCodePath.'tracking/course_log_events.php'.$cidQuery,
             ],
             'lp' => [
-                'icon'  => ToolIcon::LP,
+                'icon' => ToolIcon::LP,
                 'label' => get_lang('Learning paths generic stats'),
-                'url'   => $webCodePath.'tracking/lp_report.php'.$cidQuery,
+                'url' => $webCodePath.'tracking/lp_report.php'.$cidQuery,
             ],
         ];
 
         if (!empty($sessionId)) {
             $items['attendance'] = [
-                'icon'  => ToolIcon::ATTENDANCE,
+                'icon' => ToolIcon::ATTENDANCE,
                 'label' => get_lang('Logins'),
-                'url'   => $webCodePath.'attendance/index.php'.$cidQuery.'&action=calendar_logins',
+                'url' => $webCodePath.'attendance/index.php'.$cidQuery.'&action=calendar_logins',
             ];
         }
 
@@ -1840,16 +1891,16 @@ class TrackingCourseLog
     private static function mapResourceTypeTitleToLegacyTool(string $title): ?string
     {
         static $map = [
-            'files'               => 'document',
-            'lps'                 => 'learnpath',
-            'exercises'           => 'quiz',
-            'glossaries'          => 'glossary',
-            'links'               => 'link',
+            'files' => 'document',
+            'lps' => 'learnpath',
+            'exercises' => 'quiz',
+            'glossaries' => 'glossary',
+            'links' => 'link',
             'course_descriptions' => 'course_description',
-            'announcements'       => 'announcement',
-            'thematics'           => 'thematic',
-            'thematic_advance'    => 'thematic_advance',
-            'thematic_plan'       => 'thematic_plan',
+            'announcements' => 'announcement',
+            'thematics' => 'thematic',
+            'thematic_advance' => 'thematic_advance',
+            'thematic_plan' => 'thematic_plan',
         ];
 
         $title = trim($title);

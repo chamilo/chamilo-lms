@@ -60,6 +60,7 @@ use Exercise;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
 use IntlDateFormatter;
+use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -75,6 +76,9 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use UserManager;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -627,7 +631,16 @@ class CourseController extends ToolBaseController
             ];
         }
 
-        $thematicUrl = '/main/course_progress/index.php?cid='.$course->getId().'&sid='.$this->getSessionId().'&action=thematic_details';
+        $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+        $thematicUrl = null;
+
+        if ($courseNodeId > 0) {
+            $thematicUrl = '/resources/course-progress/'.$courseNodeId.'/?'.http_build_query([
+                'cid' => (int) $course->getId(),
+                'sid' => $this->getSessionId(),
+            ]);
+        }
+
         $thematicScoreRaw = $thematicRepository->calculateTotalAverageForCourse($course, $sessionEntity);
         $thematicScore = $thematicScoreRaw.'%';
 
@@ -1000,7 +1013,7 @@ class CourseController extends ToolBaseController
             return '';
         }
 
-        if (\class_exists('Security')) {
+        if (class_exists('Security')) {
             $userStatus = \defined('STUDENT') ? \STUDENT : null;
 
             return (string) \Security::remove_XSS($content, $userStatus);
@@ -1241,7 +1254,7 @@ class CourseController extends ToolBaseController
                     'courseId' => $course->getId(),
                 ]);
             }
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             return new JsonResponse(
                 [
                     'success' => false,

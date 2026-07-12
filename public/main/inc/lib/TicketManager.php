@@ -466,19 +466,19 @@ class TicketManager
                 '<table>
                         <tr>
                             <td width="100px"><b>'.get_lang('User').'</b></td>
-                            <td width="400px">'.$currentUserInfo['complete_name'].'</td>
+                            <td width="400px">'.($currentUserInfo['complete_name'] ?? '').'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Username').'</b></td>
-                            <td width="400px">'.$currentUserInfo['username'].'</td>
+                            <td width="400px">'.($currentUserInfo['username'] ?? '').'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('E-mail').'</b></td>
-                            <td width="400px">'.$currentUserInfo['email'].'</td>
+                            <td width="400px">'.($currentUserInfo['email'] ?? '').'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Phone').'</b></td>
-                            <td width="400px">'.$currentUserInfo['phone'].'</td>
+                            <td width="400px">'.($currentUserInfo['phone'] ?? '').'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Date').'</b></td>
@@ -1299,8 +1299,8 @@ class TicketManager
                 }
 
                 $userInfo = api_get_user_info($row['sys_insert_user_id']);
-                $row['user_url'] = '<a href="'.api_get_path(WEB_PATH).'main/admin/user_information.php?user_id='.$userInfo['user_id'].'">
-                '.$userInfo['complete_name'].'</a>';
+                $row['user_url'] = '<a href="'.api_get_path(WEB_PATH).'main/admin/user_information.php?user_id='.($userInfo['user_id'] ?? '').'">
+                '.($userInfo['complete_name'] ?? '').'</a>';
                 $ticket['user'] = $userInfo;
                 $ticket['ticket'] = $row;
             }

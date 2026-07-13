@@ -168,6 +168,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceFile = null;
         if ($resourceFileId) {
             $resourceFile = $this->resourceFileRepository->find($resourceFileId);
+
+            // The selected file must belong to the resource node in the path; otherwise the
+            // resourceFileId parameter is an IDOR oracle for arbitrary resource files.
+            if ($resourceFile instanceof ResourceFile
+                && $resourceFile->getResourceNode()?->getId() !== $resourceNode->getId()
+            ) {
+                throw new FileNotFoundException($this->trans('Resource file not found for the given resource node'));
+            }
         }
 
         $resourceFile ??= $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);

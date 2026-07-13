@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Serializer;
 
+use ArrayObject;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
@@ -32,7 +33,7 @@ final class StudentPublicationCommentAiAssistedNormalizer implements NormalizerA
         return $data instanceof CStudentPublicationComment;
     }
 
-    public function normalize($object, ?string $format = null, array $context = [])
+    public function normalize($object, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 

@@ -46,13 +46,21 @@ const routeStudentViewEnabled = computed(() =>
   ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
 )
 
-const openUrl = computed(() =>
-  lpService.buildRuntimeUrl(props.lp.iid, {
-    ...routeCtx.value,
-    isStudentView: "true",
-    temporaryStudentView: routeStudentViewEnabled.value ? undefined : "true",
-  }),
-)
+const openRoute = computed(() => ({
+  name: "LpRuntime",
+  params: {
+    node: Number(routeCtx.value.node || route.params.node || 0),
+    lpId: Number(props.lp.iid || 0),
+  },
+  query: Object.fromEntries(
+    Object.entries({
+      ...routeCtx.value,
+      node: undefined,
+      isStudentView: "true",
+      temporaryStudentView: routeStudentViewEnabled.value ? undefined : "true",
+    }).filter(([, value]) => value !== undefined && value !== null && value !== ""),
+  ),
+}))
 
 const isCStudioLearningPath = computed(() => {
   const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
@@ -103,7 +111,9 @@ const updateScormRoute = computed(() => ({
 }))
 
 const buildRoute = computed(() =>
-  isCStudioLearningPath.value ? null : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
+  isScormLearningPath.value
+    ? null
+    : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
 )
 
 const buildUrl = computed(() => (isCStudioLearningPath.value ? cstudioEditorUrl.value : null))
@@ -413,7 +423,7 @@ const progressTextClass = computed(() =>
         <div class="flex-1">
           <BaseAppLink
             :title="t('Open')"
-            :url="openUrl"
+            :to="openRoute"
             class="lp-panel__title"
           >
             {{ lp.title || t("Learning path title here") }}
@@ -637,6 +647,7 @@ const progressTextClass = computed(() =>
         class="ml-auto flex items-center gap-2"
       >
         <BaseButton
+          v-if="!isScormLearningPath || isCStudioLearningPath"
           :disabled="!manageableInContext"
           :label="t('Edit learnpath')"
           :route="buildRoute"
@@ -858,7 +869,7 @@ const progressTextClass = computed(() =>
 
           <BaseButton
             :label="t('Open')"
-            :to-url="openUrl"
+            :route="openRoute"
             icon="link-external"
             only-icon
             size="small"

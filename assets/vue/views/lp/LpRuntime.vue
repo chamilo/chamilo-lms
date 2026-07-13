@@ -78,21 +78,21 @@
             <span>{{ homeLabel }}</span>
           </a>
 
-          <a
+          <button
             v-if="runtime.canEdit && runtime.showReporting"
-            :href="runtime.reportingUrl"
             class="lp-runtime-menu-link"
-            @click.prevent="leaveRuntime(runtime.reportingUrl)"
+            type="button"
+            @click="openRuntimeReporting"
           >
             <BaseIcon
               icon="tracking"
               size="small"
             />
             <span>{{ t("Reporting") }}</span>
-          </a>
+          </button>
 
           <router-link
-            v-if="runtime.canEdit"
+            v-if="runtime.canEdit && Number(runtime.lpType || 0) !== 2"
             :to="builderRoute"
             class="lp-runtime-menu-link"
           >
@@ -575,6 +575,17 @@ function restoreTeacherViewAfterRuntime() {
   return restoreTeacherViewPromise
 }
 
+async function openRuntimeReporting() {
+  const targetUrl = String(runtime.value?.reportingUrl || "")
+  if (!targetUrl) {
+    return
+  }
+
+  await flushScormRuntime("runtime-reporting")
+  await restoreTeacherViewAfterRuntime()
+  await router.push(targetUrl)
+}
+
 async function leaveRuntime(url) {
   const targetUrl = String(url || "")
   if (!targetUrl) {
@@ -630,7 +641,7 @@ function itemIcon(itemType) {
     video: "file-video",
     readout_text: "file-text",
     final_item: "file-text",
-    quiz: "check",
+    quiz: "multiple-marked",
     link: "link",
     student_publication: "file-upload",
     assignments: "file-upload",

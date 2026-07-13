@@ -5,6 +5,7 @@ import { useRoute, useRouter } from "vue-router"
 import lpService from "../../services/lpService"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -81,6 +82,18 @@ const filteredUserGroups = computed(() => {
 
 const selectedUser = computed(() => users.value.find((user) => Number(user.id) === Number(selectedUserId.value)) || null)
 const selectedGroup = computed(() => groups.value.find((group) => Number(group.id) === Number(selectedGroupId.value)) || null)
+const startDateModel = computed({
+  get: () => parseCalendarDate(form.value.startDate),
+  set: (value) => {
+    form.value.startDate = formatCalendarDate(value)
+  },
+})
+const endDateModel = computed({
+  get: () => parseCalendarDate(form.value.endDate),
+  set: (value) => {
+    form.value.endDate = formatCalendarDate(value)
+  },
+})
 
 const dateRangeError = computed(() => {
   if (form.value.isOpenWithoutDate || !form.value.startDate || !form.value.endDate) {
@@ -103,6 +116,27 @@ function normalizeSearch(value) {
   return String(value || "")
     .trim()
     .toLocaleLowerCase()
+}
+
+function parseCalendarDate(value) {
+  const normalized = String(value || "").trim()
+  if (!normalized) {
+    return null
+  }
+
+  const parsed = new Date(normalized)
+
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+function formatCalendarDate(value) {
+  if (!(value instanceof Date) || Number.isNaN(value.getTime())) {
+    return ""
+  }
+
+  const pad = (part) => String(part).padStart(2, "0")
+
+  return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`
 }
 
 function userFullName(user) {
@@ -449,25 +483,21 @@ onMounted(loadData)
         </div>
 
         <div class="grid gap-4 md:grid-cols-3">
-          <label class="flex flex-col gap-2 text-sm font-semibold text-gray-90">
-            {{ t("Start date") }}
-            <input
-              v-model="form.startDate"
-              :disabled="form.isOpenWithoutDate"
-              class="rounded-xl border border-gray-30 bg-white px-3 py-2 text-sm text-gray-90 disabled:bg-gray-15 disabled:text-gray-50"
-              type="datetime-local"
-            />
-          </label>
+          <BaseCalendar
+            id="lp-advanced-access-start-date"
+            v-model="startDateModel"
+            :disabled="form.isOpenWithoutDate"
+            :label="t('Start date')"
+            show-time
+          />
 
-          <label class="flex flex-col gap-2 text-sm font-semibold text-gray-90">
-            {{ t("End date") }}
-            <input
-              v-model="form.endDate"
-              :disabled="form.isOpenWithoutDate"
-              class="rounded-xl border border-gray-30 bg-white px-3 py-2 text-sm text-gray-90 disabled:bg-gray-15 disabled:text-gray-50"
-              type="datetime-local"
-            />
-          </label>
+          <BaseCalendar
+            id="lp-advanced-access-end-date"
+            v-model="endDateModel"
+            :disabled="form.isOpenWithoutDate"
+            :label="t('End date')"
+            show-time
+          />
 
           <label class="flex items-center gap-2 pt-7 text-sm font-semibold text-gray-90">
             <input
@@ -542,11 +572,11 @@ onMounted(loadData)
             </div>
             <div class="flex justify-end gap-2">
               <BaseButton
-                :label="t('Edit')"
-                icon="edit"
+                :label="user.individualRestriction ? t('Edit') : t('Add')"
+                :icon="user.individualRestriction ? 'edit' : 'add'"
                 only-icon
                 size="small"
-                type="secondary"
+                :type="user.individualRestriction ? 'secondary' : 'success'"
                 @click="selectUser(user)"
               />
               <BaseButton
@@ -592,11 +622,11 @@ onMounted(loadData)
 
               <div class="flex gap-2">
                 <BaseButton
-                  :label="t('Edit')"
-                  icon="edit"
+                  :label="group.restriction ? t('Edit') : t('Add')"
+                  :icon="group.restriction ? 'edit' : 'add'"
                   only-icon
                   size="small"
-                  type="secondary"
+                  :type="group.restriction ? 'secondary' : 'success'"
                   @click="selectGroup(group)"
                 />
                 <BaseButton

@@ -62,12 +62,6 @@ final readonly class LearningPathRuntimeRestartProcessor implements ProcessorInt
             throw new BadRequestHttpException('This learning path runtime is not supported by the Vue player yet.');
         }
 
-        if ($this->canManageLearningPaths($this->security)
-            && !$this->isStudentViewRequest($this->requestStack)
-        ) {
-            throw new AccessDeniedHttpException('Author view does not create learning path attempts.');
-        }
-
         $course = $this->getContextCourse($this->entityManager, $request);
         $session = $this->getContextSession($this->entityManager, $request, $course);
         $lp = $this->lpRepository->find($lpId);

@@ -99,7 +99,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $this->assertRuntimeAccess($lp, $course, $session, $group, $user, $canEdit);
 
         $items = $this->getLearningPathItems($lp);
-        $latestView = $canManage ? null : $this->findLatestView($lp, $course, $session, $user);
+        $latestView = $this->findLatestView($lp, $course, $session, $user);
         $itemViewRows = $this->getItemViewRows($latestView);
         $itemViews = $this->indexLatestItemViews($itemViewRows);
         $itemsById = [];
@@ -229,7 +229,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $runtime->showHome = $this->isTruthySetting(
             $this->settingsManager->getSetting('lp.allow_lp_return_link', true),
         );
-        $runtime->reportingUrl = $this->buildReportingUrl($lp, $course, $session, $group, $request);
+        $runtime->reportingUrl = $this->buildReportingUrl($lp, $course, $session, $group, $request, $user);
         $runtime->showReporting = $canEdit
             && $this->displaySettingEnabled($displaySettings, 'show_reporting_icon', true);
         $runtime->showToolbarByDefault = $this->displaySettingEnabled(
@@ -1239,13 +1239,18 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         ?Session $session,
         ?CGroup $group,
         Request $request,
+        User $user,
     ): string {
         $params = $this->buildContextParams($course, $session, $group, $request);
-        $params['isStudentView'] = 'false';
+        $params['isStudentView'] = $request->query->getString('isStudentView', 'false');
+        $params['self'] = 1;
+        $params['showTeachers'] = 1;
+        $params['studentId'] = (int) $user->getId();
+        $params['returnItemId'] = $params['item_id'] ?? 0;
         $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
 
         return $this->appendQuery(
-            '/resources/lp/'.$courseNodeId.'/'.(int) $lp->getIid().'/reporting',
+            '/resources/lp/'.$courseNodeId.'/'.(int) $lp->getIid().'/reporting/self',
             $params,
         );
     }

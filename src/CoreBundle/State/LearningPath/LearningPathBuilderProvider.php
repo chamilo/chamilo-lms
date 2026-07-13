@@ -100,6 +100,15 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         $result->canManageStructure = CLp::LP_TYPE === $lp->getLpType();
         $result->titleAsHtml = $this->settingEnabled('editor.save_titles_as_html');
         $result->csrfToken = $this->csrfTokenManager->getToken(self::ACTION_TOKEN_INTENTION)->getValue();
+
+        $documentsRoot = $this->documentRepository->ensureCourseDocumentsRootNode($course);
+        $learningPathFolder = $this->documentRepository->ensureLearningPathDocumentFolder(
+            $course,
+            $session,
+            $lp,
+            $group,
+        );
+
         $documents = [];
         foreach ($this->findContextResources(CDocument::class, $course, $session, $group) as $resource) {
             if ($resource instanceof CDocument) {
@@ -108,8 +117,9 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         }
         $result->items = $this->buildTree($lpId, $course, $session, $group, $documents);
         $result->resources = $this->buildResources($course, $session, $group, $documents);
-        $documentsRoot = $this->documentRepository->getCourseDocumentsRootNode($course);
-        $result->documentsRootNodeId = (int) ($documentsRoot?->getId() ?? 0);
+        $result->documentsRootNodeId = (int) $documentsRoot->getId();
+        $result->defaultDocumentParentNodeId = (int) $learningPathFolder->getId();
+        $result->courseLanguage = trim((string) $course->getCourseLanguage());
         $result->searchEnabled = $this->settingEnabled('search.search_enabled');
         $result->certificate = $this->buildCertificate($lp, $course, $session, $group);
         $result->bulkAuthorPrice = $this->buildBulkAuthorPrice($lpId);

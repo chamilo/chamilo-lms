@@ -1,33 +1,32 @@
 Feature: Portfolio tool
-  In order to use the portfolio tool
-  The teachers should be able to create portfolio items and comments
+  In order to document learning evidence
+  As a course participant
+  I should be able to use Portfolio without opening legacy pages
 
-
-  Scenario: Create a portfolio item
+  Scenario: Create a portfolio item in the Vue interface
     Given I am a platform administrator
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I zoom out to maximum
-    Then I follow "Portfolio"
-    And wait for the page to be loaded
-    Then I follow "Add"
-    And wait for the page to be loaded
-    Then I fill in the following:
-      | add_portfolio_title | PF1  |
-    And I fill in editor field "content" with "Hello"
-    And I press "add_portfolio_submit"
-    And wait for the page to be loaded
-    Then I should see "PF1"
+    When I follow "Portfolio"
+    And I wait for the page to be loaded
+    And I follow "Add"
+    And I wait for the page to be loaded
+    And I fill in editor field "portfolio_title" with "Modern portfolio evidence"
+    And I fill in editor field "portfolio_content" with "Evidence created from the Vue Portfolio form"
+    And I press "save"
+    And I wait for the page to be loaded
+    Then I should see "Modern portfolio evidence"
 
-
- # Scenario: Add a new comment (example, commented as requested)
- #   Given I am a platform administrator
- #   And I am on course "TEMP" homepage
- #   And I wait for the page to be loaded
- #   And I zoom out to maximum
- #   Then I follow "Portfolio"
- #   And wait for the page to be loaded
- #   Then I follow "AddNewComment"
- #   And wait for the page to be loaded
- #   # Further steps to fill and submit the comment would go here
- #   # Then I should see "Your comment text"
+  Scenario: Add a comment in the Vue interface
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    When I follow "Portfolio"
+    And I wait for the page to be loaded
+    And I follow "Modern portfolio evidence"
+    And I wait for the page to be loaded
+    And I press "Add a new comment"
+    And I fill in editor field "portfolio_comment_content" with "Comment created from the Vue Portfolio dialog"
+    And I press "Save"
+    And I wait for the page to be loaded
+    Then I should see "Comment created from the Vue Portfolio dialog"

@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: PortfolioCommentRepository::class)]
 #[ORM\Table(name: 'portfolio_comment')]
 class PortfolioComment extends AbstractResource implements ResourceInterface, Stringable
 {

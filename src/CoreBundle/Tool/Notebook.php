@@ -22,7 +22,7 @@ class Notebook extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/notebook/index.php';
+        return '/resources/notebook/:nodeId/';
     }
 
     public function getCategory(): string

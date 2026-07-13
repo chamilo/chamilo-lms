@@ -1093,7 +1093,7 @@ class Rest extends WebService
         $values = ['note_title' => $title, 'note_comment' => $text];
         $sessionId = $this->session ? $this->session->getId() : 0;
 
-        $noteBookId = NotebookManager::save_note(
+        $noteBookId = NotebookManager::saveNote(
             $values,
             $this->user->getId(),
             $this->course->getId(),

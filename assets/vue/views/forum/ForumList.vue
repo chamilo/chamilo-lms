@@ -332,6 +332,7 @@
 
     <BaseDialog
       v-model:is-visible="isForumDialogVisible"
+      :show-close-button="!shouldReturnToLearningPathAfterForumSave"
       :title="forumForm.id ? t('Edit forum') : t('Add forum')"
       header-icon="add-topic"
     >

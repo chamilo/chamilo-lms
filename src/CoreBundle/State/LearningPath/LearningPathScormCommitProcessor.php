@@ -79,12 +79,6 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
             throw new BadRequestHttpException('The current item is not an active SCORM SCO.');
         }
 
-        if ($this->canManageLearningPaths($this->security)
-            && !$this->isStudentViewRequest($this->requestStack)
-        ) {
-            throw new AccessDeniedHttpException('Author preview does not accept learner tracking.');
-        }
-
         $course = $this->getContextCourse($this->entityManager, $request);
         $session = $this->getContextSession($this->entityManager, $request, $course);
         $lp = $this->lpRepository->find($lpId);

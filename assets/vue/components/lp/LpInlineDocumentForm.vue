@@ -17,7 +17,7 @@ const props = defineProps({
   documentFolderOptions: { type: Array, default: () => [] },
   lpParentOptions: { type: Array, default: () => [] },
   defaultDocumentParentId: { type: Number, default: 0 },
-  defaultLpParentId: { type: [Number, null], default: null },
+  defaultLpParentId: { type: [Number, null], default: 0 },
   searchEnabled: { type: Boolean, default: false },
 })
 
@@ -33,7 +33,7 @@ const form = reactive({
   title: "",
   content: "",
   documentParentId: props.defaultDocumentParentId || null,
-  lpParentId: props.defaultLpParentId,
+  lpParentId: Number(props.defaultLpParentId ?? 0),
   exportAllowed: true,
   indexDocumentContent: props.searchEnabled,
 })
@@ -53,7 +53,7 @@ watch(
 watch(
   () => props.defaultLpParentId,
   (value) => {
-    form.lpParentId = value || null
+    form.lpParentId = Number(value ?? 0)
   },
 )
 

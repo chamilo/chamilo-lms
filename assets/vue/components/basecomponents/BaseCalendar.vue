@@ -94,6 +94,11 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   isInvalid: {
     type: Boolean,
     required: false,
@@ -218,6 +223,7 @@ const onCancelClick = () => {
         ref="datepickerRef"
         v-model="internalValue"
         :date-format="dateFormat"
+        :disabled="disabled"
         :inline="showInline"
         :input-id="id"
         :invalid="isInvalid"

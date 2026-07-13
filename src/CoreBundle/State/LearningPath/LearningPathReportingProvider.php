@@ -78,9 +78,26 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         $lp = $this->getLearningPath($uriVariables);
         $this->getEditableResourceLink($lp, $course, $session, $group, $this->security);
 
+        $selfMode = $request->query->getBoolean('self');
         $showTeachers = $request->query->getBoolean('showTeachers');
         $groupFilter = trim((string) $request->query->get('groupFilter', ''));
-        $users = $this->getUsersForContext($lp, $course, $session, $request);
+        $currentUser = $this->security->getUser();
+        if ($selfMode) {
+            if (!$currentUser instanceof User || null === $currentUser->getId()) {
+                throw new AccessDeniedHttpException('Authentication is required.');
+            }
+
+            $users = [
+                (int) $currentUser->getId() => [
+                    'user' => $currentUser,
+                    'role' => 'teacher',
+                ],
+            ];
+            $showTeachers = true;
+            $groupFilter = '';
+        } else {
+            $users = $this->getUsersForContext($lp, $course, $session, $request);
+        }
         $metrics = $this->getMetrics($lp, $course, $session, array_keys($users));
         $groupNames = $this->getCourseGroupNames(array_keys($users), $course);
         $classNames = $this->getClassNames(array_keys($users));
@@ -128,7 +145,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
             ),
         );
 
-        $studentId = $request->query->getInt('studentId');
+        $studentId = $selfMode && $currentUser instanceof User
+            ? (int) $currentUser->getId()
+            : $request->query->getInt('studentId');
         if ($studentId > 0) {
             if (!isset($users[$studentId])) {
                 throw new AccessDeniedHttpException('The requested learner is outside this learning path context.');

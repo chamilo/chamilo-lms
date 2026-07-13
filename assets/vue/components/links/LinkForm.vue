@@ -314,6 +314,10 @@ watch(selectedFile, (file, oldFile) => {
 })
 
 onMounted(() => {
+  if (!props.linkId && isLearningPathContext.value) {
+    formData.language = String(route.query.language || "").trim()
+  }
+
   fetchCategories()
   fetchLink()
 })

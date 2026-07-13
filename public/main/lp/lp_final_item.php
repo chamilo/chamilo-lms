@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -19,21 +21,23 @@ $current_course_tool = TOOL_GRADEBOOK;
 api_protect_course_script(true);
 
 $courseCode = api_get_course_id();
-$courseId   = api_get_course_int_id();
-$userId     = api_get_user_id();
-$sessionId  = api_get_session_id();
-$id         = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$lpId       = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
+$courseId = api_get_course_int_id();
+$userId = api_get_user_id();
+$sessionId = api_get_session_id();
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 
 // This page can only be shown from inside a learning path.
 if ($id <= 0 || $lpId <= 0) {
     echo Display::return_message(get_lang('The file was not found'));
+
     exit;
 }
 
 $lpEntity = api_get_lp_entity($lpId);
 if (!$lpEntity instanceof CLp) {
     echo Display::return_message(get_lang('The file was not found'));
+
     exit;
 }
 
@@ -43,12 +47,17 @@ $groupEntity = api_get_group_entity(api_get_group_id());
 $resourceNode = $lpEntity->getResourceNode();
 $resourceLink = $resourceNode?->getResourceLinkByContext($courseEntity, $sessionEntity, $groupEntity);
 
-if (!$resourceLink && $sessionEntity && !$groupEntity) {
+if (!$resourceLink && $groupEntity && $sessionEntity) {
+    $resourceLink = $resourceNode?->getResourceLinkByContext($courseEntity, $sessionEntity);
+}
+
+if (!$resourceLink && ($sessionEntity || $groupEntity)) {
     $resourceLink = $resourceNode?->getResourceLinkByContext($courseEntity);
 }
 
 if (!$resourceLink || (!api_is_allowed_to_edit() && !$resourceLink->isPublished())) {
     echo Display::return_message(get_lang('The file was not found'));
+
     exit;
 }
 
@@ -60,11 +69,12 @@ $finalItem = $lpItemRepo->findOneBy([
 
 if (!$finalItem instanceof CLpItem || (int) $finalItem->getIid() !== $id) {
     echo Display::return_message(get_lang('The file was not found'));
+
     exit;
 }
 
 // Certificate and Skills Premium with Service check
-$plugin  = BuyCoursesPlugin::create();
+$plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled() && $plugin->get('include_services');
 
 if ($checker) {
@@ -89,6 +99,7 @@ if ($checker) {
         );
         $tpl->assign('content', $content);
         $tpl->display_blank_template();
+
         exit;
     }
 }
@@ -107,11 +118,11 @@ if (isset($lp->items[$currentItemId])) {
     $status = $lp->items[$currentItemId]->get_status();
     $isFinalDone = in_array($status, ['completed', 'passed', 'succeeded'], true);
 }
-$countAdj     = max(0, $count    - ($isFinalThere ? 1 : 0));
-$completedAdj = max(0, $completed - ($isFinalDone  ? 1 : 0));
-$diff         = $countAdj - $completedAdj;
+$countAdj = max(0, $count - ($isFinalThere ? 1 : 0));
+$completedAdj = max(0, $completed - ($isFinalDone ? 1 : 0));
+$diff = $countAdj - $completedAdj;
 $accessGranted = false;
-if ($diff === 0 || ($diff === 1 && (('incomplete' === $currentItemStatus) || ('not attempted' === $currentItemStatus)))) {
+if (0 === $diff || (1 === $diff && (('incomplete' === $currentItemStatus) || ('not attempted' === $currentItemStatus)))) {
     if ($lp->prerequisites_match($currentItemId)) {
         $accessGranted = true;
     }
@@ -127,7 +138,7 @@ if (!$accessGranted) {
     $finalHtml = '';
 } else {
     $downloadBlock = '';
-    $badgeBlock    = '';
+    $badgeBlock = '';
     $gbRepo = Container::getGradeBookCategoryRepository();
 
     // Resolve GradebookCategory using lp_item.ref when item_type = final_item.
@@ -137,10 +148,10 @@ if (!$accessGranted) {
     if (!empty($finalItem) && method_exists($finalItem, 'getRef')) {
         try {
             $refRaw = trim((string) $finalItem->getRef());
-            if ($refRaw !== '' && $refRaw !== '0') {
+            if ('' !== $refRaw && '0' !== $refRaw) {
                 $categoryIdFromRef = (int) $refRaw;
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[LP_FINAL] Unable to read lp_item.ref for final_item: '.$e->getMessage());
         }
     }
@@ -154,7 +165,7 @@ if (!$accessGranted) {
 
         // Safety check: ensure the referenced category belongs to the same course/session context.
         if ($gbCat && $courseEntity) {
-            $catCourse  = $gbCat->getCourse();
+            $catCourse = $gbCat->getCourse();
             $catSession = $gbCat->getSession();
 
             // If course does not match, discard this category and let the fallback logic handle it.
@@ -173,14 +184,14 @@ if (!$accessGranted) {
     if (!$gbCat && $courseEntity) {
         if ($sessionEntity) {
             $gbCat = $gbRepo->findOneBy([
-                'course'  => $courseEntity,
+                'course' => $courseEntity,
                 'session' => $sessionEntity,
             ]);
         }
 
         if (!$gbCat) {
             $gbCat = $gbRepo->findOneBy([
-                'course'  => $courseEntity,
+                'course' => $courseEntity,
                 'session' => null,
             ]);
         }
@@ -226,9 +237,9 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
         return '';
     }
 
-    $em           = Database::getManager();
+    $em = Database::getManager();
     $skillRelUser = new SkillRelUserModel();
-    $userSkills   = $skillRelUser->getUserSkills($userId, $courseId, $sessionId);
+    $userSkills = $skillRelUser->getUserSkills($userId, $courseId, $sessionId);
 
     if (empty($userSkills)) {
         return '';
@@ -252,8 +263,8 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
         }
 
         $skillId = (int) $skill->getId();
-        $title   = (string) $skill->getTitle();
-        $desc    = (string) $skill->getDescription();
+        $title = (string) $skill->getTitle();
+        $desc = (string) $skill->getDescription();
         $iconUrl = (string) SkillModel::getWebIconPath($skill);
 
         $shareUrl = api_get_path(WEB_PATH)."badge/$skillId/user/$userId";
@@ -270,7 +281,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
         $twUrl = 'https://twitter.com/intent/tweet?text='.rawurlencode($tweetText).'&url='.rawurlencode($shareUrl);
 
         $safeTitle = Security::remove_XSS($title);
-        $safeDesc  = Security::remove_XSS($desc);
+        $safeDesc = Security::remove_XSS($desc);
 
         $items .= "
             <div class='py-6 border-b border-gray-20 last:border-b-0'>
@@ -278,8 +289,8 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
 
                     <div class='sm:col-span-3 flex justify-center sm:justify-start'>
                         <img
-                            src='".htmlspecialchars($iconUrl, ENT_QUOTES)."'
-                            alt='".htmlspecialchars($title, ENT_QUOTES)."'
+                            src='".htmlspecialchars($iconUrl, \ENT_QUOTES)."'
+                            alt='".htmlspecialchars($title, \ENT_QUOTES)."'
                             loading='lazy'
                             width='140'
                             height='140'
@@ -298,7 +309,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
 
                         <div class='mt-3 flex items-center gap-3'>
                             <a
-                                href='".htmlspecialchars($fbUrl, ENT_QUOTES)."'
+                                href='".htmlspecialchars($fbUrl, \ENT_QUOTES)."'
                                 target='_blank'
                                 rel='noopener noreferrer'
                                 class='inline-flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-gray-25 bg-white hover:bg-gray-15'
@@ -311,7 +322,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
                             </a>
 
                             <a
-                                href='".htmlspecialchars($twUrl, ENT_QUOTES)."'
+                                href='".htmlspecialchars($twUrl, \ENT_QUOTES)."'
                                 target='_blank'
                                 rel='noopener noreferrer'
                                 class='inline-flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-gray-25 bg-white hover:bg-gray-15'
@@ -330,7 +341,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
         ";
     }
 
-    if ($items === '') {
+    if ('' === $items) {
         return '';
     }
 
@@ -373,13 +384,13 @@ function getSkillIdsForGradebookCategory(int $categoryId): array
                     $ids[] = (int) $row;
                 }
             }
-        } elseif (is_string($rows) && trim($rows) !== '') {
+        } elseif (is_string($rows) && '' !== trim($rows)) {
             $parts = preg_split('/\s*,\s*/', trim($rows)) ?: [];
             foreach ($parts as $p) {
                 $ids[] = (int) $p;
             }
         }
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         return [];
     }
 
@@ -400,7 +411,7 @@ function renderFinalItemDocument(CLpItem $finalItem, string $certificateBlock, s
 
     try {
         $document = $docRepo->find($documentId);
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         error_log('[LP_FINAL] document lookup error: '.$e->getMessage());
 
         return '';
@@ -412,12 +423,13 @@ function renderFinalItemDocument(CLpItem $finalItem, string $certificateBlock, s
 
     try {
         $content = $docRepo->getResourceFileContent($document);
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         error_log('[LP_FINAL] read doc error: '.$e->getMessage());
+
         return '';
     }
 
-    $hasCert  = str_contains($content, '((certificate))');
+    $hasCert = str_contains($content, '((certificate))');
     $hasSkill = str_contains($content, '((skill))');
 
     if ($hasCert) {

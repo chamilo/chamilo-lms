@@ -26,6 +26,9 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * @extends ResourceRepository<CDocument>
  */
@@ -90,7 +93,7 @@ final class CDocumentRepository extends ResourceRepository
 
     /**
      * Register the original SCORM ZIP under:
-     *   <course root> / Learning paths / SCORM - {lp_id} - {lp_title} / {lp_title}.zip
+     *   Documents / Learning paths / SCORM - {lp_id} - {lp_title} / {lp_title}.zip
      */
     public function registerScormZip(
         Course $course,
@@ -101,7 +104,7 @@ final class CDocumentRepository extends ResourceRepository
     ): void {
         $em = $this->em();
 
-        // Ensure "Learning paths" directly under the course resource node
+        // Ensure "Learning paths" under the course Documents root.
         $lpTop = $this->ensureLearningPathSystemFolder($course, $session, $group);
 
         // Subfolder per LP
@@ -140,6 +143,11 @@ final class CDocumentRepository extends ResourceRepository
         }
 
         $parents = [$courseRoot];
+        $documentsRoot = $this->getCourseDocumentsRootNode($course);
+        if ($documentsRoot instanceof ResourceNode) {
+            $parents[(int) $documentsRoot->getId()] = $documentsRoot;
+        }
+
         $learningPathFolderTitles = array_values(array_unique(array_filter([
             \function_exists('get_lang') ? get_lang('Learning paths') : null,
             \function_exists('get_lang') ? get_lang('Learning path') : null,
@@ -147,10 +155,12 @@ final class CDocumentRepository extends ResourceRepository
             'Learning path',
         ])));
 
-        foreach ($learningPathFolderTitles as $folderTitle) {
-            $learningPathsFolder = $this->findChildNodeByTitle($courseRoot, $folderTitle);
-            if ($learningPathsFolder instanceof ResourceNode) {
-                $parents[(int) $learningPathsFolder->getId()] = $learningPathsFolder;
+        foreach (array_values($parents) as $parent) {
+            foreach ($learningPathFolderTitles as $folderTitle) {
+                $learningPathsFolder = $this->findChildNodeByTitle($parent, $folderTitle);
+                if ($learningPathsFolder instanceof ResourceNode) {
+                    $parents[(int) $learningPathsFolder->getId()] = $learningPathsFolder;
+                }
             }
         }
 
@@ -212,20 +222,26 @@ final class CDocumentRepository extends ResourceRepository
         $prefix = \sprintf('SCORM - %d - ', $lp->getIid());
 
         $courseRoot = $course->getResourceNode();
-        if ($courseRoot) {
-            // SCORM folder directly under course root
-            if ($this->tryDeleteFirstFolderByTitlePrefix($courseRoot, $prefix)) {
-                $em->flush();
-
-                return;
+        if ($courseRoot instanceof ResourceNode) {
+            $parents = [$courseRoot];
+            $documentsRoot = $this->getCourseDocumentsRootNode($course);
+            if ($documentsRoot instanceof ResourceNode) {
+                $parents[] = $documentsRoot;
             }
 
-            // Or under "Learning paths"
-            $lpTop = $this->findChildNodeByTitle($courseRoot, 'Learning paths');
-            if ($lpTop && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
-                $em->flush();
+            foreach ($parents as $parent) {
+                if ($this->tryDeleteFirstFolderByTitlePrefix($parent, $prefix)) {
+                    $em->flush();
 
-                return;
+                    return;
+                }
+
+                $lpTop = $this->findChildNodeByTitle($parent, 'Learning paths');
+                if ($lpTop instanceof ResourceNode && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
+                    $em->flush();
+
+                    return;
+                }
             }
         }
     }
@@ -465,20 +481,15 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * Ensure "Learning paths" exists directly under the course resource node.
-     * Links are created for course (and optional session) context.
+     * Ensure "Learning paths" exists under the course Documents root.
+     * Links are created for course (and optional session/group) context.
      */
     public function ensureLearningPathSystemFolder(
         Course $course,
         ?Session $session = null,
         ?CGroup $group = null,
     ): ResourceNode {
-        $courseRoot = $course->getResourceNode();
-        if (!$courseRoot instanceof ResourceNode) {
-            throw new RuntimeException('Course has no ResourceNode root.');
-        }
-
-        // Try common i18n variants first
+        $documentsRoot = $this->ensureCourseDocumentsRootNode($course);
         $candidates = array_values(array_unique(array_filter([
             \function_exists('get_lang') ? get_lang('Learning paths') : null,
             \function_exists('get_lang') ? get_lang('Learning path') : null,
@@ -487,16 +498,39 @@ final class CDocumentRepository extends ResourceRepository
         ])));
 
         foreach ($candidates as $title) {
-            if ($child = $this->findChildNodeByTitle($courseRoot, $title)) {
+            $child = $this->findChildNodeByTitle($documentsRoot, $title);
+            if ($child instanceof ResourceNode) {
                 return $child;
             }
         }
 
-        // Create "Learning paths" directly under the course root
         return $this->ensureFolder(
             $course,
-            $courseRoot,
+            $documentsRoot,
             'Learning paths',
+            ResourceLink::VISIBILITY_DRAFT,
+            $session,
+            $group,
+        );
+    }
+
+    /**
+     * Ensure the legacy-compatible folder dedicated to one learning path exists.
+     */
+    public function ensureLearningPathDocumentFolder(
+        Course $course,
+        ?Session $session,
+        CLp $lp,
+        ?CGroup $group = null,
+    ): ResourceNode {
+        $learningPathsFolder = $this->ensureLearningPathSystemFolder($course, $session, $group);
+        $title = $this->safeTitle(html_entity_decode(strip_tags($lp->getTitle()), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $title = mb_substr($title, 0, 80);
+
+        return $this->ensureFolder(
+            $course,
+            $learningPathsFolder,
+            '' !== $title ? $title : \sprintf('Learning path %d', (int) $lp->getIid()),
             ResourceLink::VISIBILITY_DRAFT,
             $session,
             $group,

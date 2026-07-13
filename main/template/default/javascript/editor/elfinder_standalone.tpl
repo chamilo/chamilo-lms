@@ -5,6 +5,7 @@
 
 <!-- elFinder JS (REQUIRED) -->
 <script type="text/javascript" src="{{ finderFolder }}js/elfinder.full.js"></script>
+<script type="text/javascript" src="{{ _p.web_lib ~ 'elfinder/csrf_fallback.js' }}"></script>
 
 <!-- elFinder translation (OPTIONAL) -->
 {{ elfinder_translation_file }}

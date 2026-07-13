@@ -1718,6 +1718,7 @@ abstract class Question
 
             echo '<!-- elFinder JS (REQUIRED) -->';
             echo '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
+            echo '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'elfinder/csrf_fallback.js"></script>';
 
             echo '<!-- elFinder translation (OPTIONAL) -->';
             $language = 'en';

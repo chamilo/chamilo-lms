@@ -28,6 +28,7 @@ import forum from "./forum"
 import survey from "./survey"
 import courseDescription from "./courseDescription"
 import notebook from "./notebook"
+import portfolio from "./portfolio"
 import wiki from "./wiki"
 import courseProgress from "./courseProgress"
 import announcement from "./announcement"
@@ -478,6 +479,7 @@ const router = createRouter({
       },
     },
     fileManagerRoutes,
+    ...portfolio,
     socialNetworkRoutes,
     catalogue,
     adminRoutes,

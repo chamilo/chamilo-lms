@@ -39,6 +39,7 @@ class ResourceLinkRepository extends SortableRepository
         'student_publication' => '/resources/assignment/%resource_node_id%',
         'survey' => '/resources/survey/%resource_node_id%/',
         'notebook' => '/resources/notebook/%resource_node_id%/',
+        'portfolio' => '/resources/portfolio/%resource_node_id%/',
     ];
 
     public function __construct(EntityManagerInterface $em)
@@ -70,6 +71,10 @@ class ResourceLinkRepository extends SortableRepository
         );
 
         foreach ($links as $link) {
+            if (!$link->getUser() instanceof User) {
+                continue;
+            }
+
             $this->remove($link); // soft delete
             $this->remove($link); // hard delete
         }

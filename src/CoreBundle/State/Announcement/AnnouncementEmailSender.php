@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
+use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -313,9 +314,9 @@ final readonly class AnnouncementEmailSender
         );
         $internalMessage = $message."\n<!-- ".$marker.' -->';
         $existingMessage = $this->messageRepository->createQueryBuilder('message')
-            ->andWhere('message.sender = :sender')
+            ->andWhere('IDENTITY(message.sender) = :senderId')
             ->andWhere('message.content LIKE :marker')
-            ->setParameter('sender', $sender)
+            ->setParameter('senderId', (int) $sender->getId(), Types::INTEGER)
             ->setParameter('marker', '%'.$marker.'%')
             ->setMaxResults(1)
             ->getQuery()

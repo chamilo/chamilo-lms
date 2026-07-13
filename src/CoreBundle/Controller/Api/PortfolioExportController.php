@@ -64,7 +64,7 @@ final class PortfolioExportController extends AbstractController
         $html = $this->buildExportHtml($owner, $course, $session, $items, $comments);
 
         $pdf = new Mpdf([
-            'tempDir' => \sys_get_temp_dir(),
+            'tempDir' => sys_get_temp_dir(),
             'mode' => 'utf-8',
             'format' => 'A4',
         ]);
@@ -89,14 +89,15 @@ final class PortfolioExportController extends AbstractController
     public function zip(Request $request): BinaryFileResponse
     {
         [$owner, $course, $session, $items, $comments] = $this->resolveExport($request);
-        $tempPath = \tempnam(\sys_get_temp_dir(), 'chamilo_portfolio_');
+        $tempPath = tempnam(sys_get_temp_dir(), 'chamilo_portfolio_');
         if (false === $tempPath) {
             throw new RuntimeException('The Portfolio ZIP file could not be created.');
         }
 
         $zip = new ZipArchive();
         if (true !== $zip->open($tempPath, ZipArchive::OVERWRITE)) {
-            @\unlink($tempPath);
+            @unlink($tempPath);
+
             throw new RuntimeException('The Portfolio ZIP archive could not be opened.');
         }
 
@@ -188,7 +189,7 @@ final class PortfolioExportController extends AbstractController
 
         /** @var array<int, Portfolio> $candidateItems */
         $candidateItems = $qb->getQuery()->getResult();
-        $items = \array_values(\array_filter(
+        $items = array_values(array_filter(
             $candidateItems,
             fn (Portfolio $item): bool => $this->canViewPortfolioItem(
                 $item,
@@ -229,7 +230,7 @@ final class PortfolioExportController extends AbstractController
 
         /** @var array<int, PortfolioComment> $candidateComments */
         $candidateComments = $commentsQuery->getQuery()->getResult();
-        $comments = \array_values(\array_filter(
+        $comments = array_values(array_filter(
             $candidateComments,
             fn (PortfolioComment $comment): bool => $this->canViewPortfolioItem(
                 $comment->getItem(),
@@ -305,14 +306,14 @@ final class PortfolioExportController extends AbstractController
             $metadata .= ' · '.$this->escape($category);
         }
 
-        return '<article><h3>'.$this->escape(\strip_tags($item->getTitle())).'</h3>'
+        return '<article><h3>'.$this->escape(strip_tags($item->getTitle())).'</h3>'
             .'<div class="meta">'.$metadata.'</div>'
             .'<div class="content">'.$this->sanitizePortfolioHtml($item->getContent()).'</div></article>';
     }
 
     private function buildCommentHtml(PortfolioComment $comment): string
     {
-        return '<article><h3>'.$this->escape(\strip_tags($comment->getItem()->getTitle())).'</h3>'
+        return '<article><h3>'.$this->escape(strip_tags($comment->getItem()->getTitle())).'</h3>'
             .'<div class="meta">'.$comment->getDate()->format('Y-m-d H:i:s').'</div>'
             .'<div class="content">'.$this->sanitizePortfolioHtml($comment->getContent()).'</div></article>';
     }
@@ -326,6 +327,7 @@ final class PortfolioExportController extends AbstractController
             if (!$attachment instanceof ResourceFile) {
                 continue;
             }
+
             try {
                 $storagePath = $this->resourceNodeRepository->getFilename($attachment);
                 if (null === $storagePath || !$this->resourceNodeRepository->getFileSystem()->fileExists($storagePath)) {
@@ -349,14 +351,14 @@ final class PortfolioExportController extends AbstractController
 
     private function safeFilename(string $value): string
     {
-        $value = \preg_replace('/[^A-Za-z0-9._-]+/u', '_', \trim($value)) ?? 'portfolio';
+        $value = preg_replace('/[^A-Za-z0-9._-]+/u', '_', trim($value)) ?? 'portfolio';
 
-        return '' !== $value ? \trim($value, '._-') : 'portfolio';
+        return '' !== $value ? trim($value, '._-') : 'portfolio';
     }
 
     private function escape(string $value): string
     {
-        return \htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     private function dispatchDownloaded(User $owner): void

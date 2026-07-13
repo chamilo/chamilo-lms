@@ -156,15 +156,15 @@ final readonly class PortfolioListProvider implements ProviderInterface
             );
         }
 
-        $itemIds = \array_values(\array_filter(\array_map(
+        $itemIds = array_values(array_filter(array_map(
             static fn (Portfolio $item): int => (int) ($item->getId() ?? 0),
             $items,
         )));
-        $commentSearchItemIds = \array_values(\array_filter(\array_map(
+        $commentSearchItemIds = array_values(array_filter(array_map(
             static fn (Portfolio $item): int => (int) ($item->getId() ?? 0),
             $commentSearchItems,
         )));
-        $allCommentItemIds = \array_values(\array_unique(\array_merge($itemIds, $commentSearchItemIds)));
+        $allCommentItemIds = array_values(array_unique(array_merge($itemIds, $commentSearchItemIds)));
         $tagsByItem = $this->loadTagsByItem($itemIds);
         $commentsByItem = $this->loadVisibleCommentsByItem(
             $allCommentItemIds,
@@ -266,7 +266,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
         /** @var array<int, Portfolio> $candidates */
         $candidates = $queryBuilder->getQuery()->getResult();
 
-        return \array_values(\array_filter(
+        return array_values(array_filter(
             $candidates,
             fn (Portfolio $item): bool => $this->canViewPortfolioItem(
                 $item,
@@ -406,21 +406,21 @@ final readonly class PortfolioListProvider implements ProviderInterface
             $order = 'chronological';
         }
 
-        $date = \trim($request->query->getString('date'));
+        $date = trim($request->query->getString('date'));
         if ('' !== $date && !DateTimeImmutable::createFromFormat('!Y-m-d', $date, new DateTimeZone('UTC'))) {
             $date = '';
         }
 
         return [
             'date' => $date,
-            'text' => \mb_substr(\trim($request->query->getString('text')), 0, 255),
-            'tags' => \array_values($tags),
-            'categoryId' => \max(0, $request->query->getInt('categoryId')),
-            'subCategoryIds' => \mb_substr(\trim($request->query->getString('subCategoryIds')), 0, 1000),
+            'text' => mb_substr(trim($request->query->getString('text')), 0, 255),
+            'tags' => array_values($tags),
+            'categoryId' => max(0, $request->query->getInt('categoryId')),
+            'subCategoryIds' => mb_substr(trim($request->query->getString('subCategoryIds')), 0, 1000),
             'order' => $order,
             'highlighted' => $request->query->getBoolean('highlighted')
                 || $request->query->has('list_highlighted'),
-            'user' => \max(0, $request->query->getInt('user')),
+            'user' => max(0, $request->query->getInt('user')),
         ];
     }
 
@@ -447,19 +447,19 @@ final readonly class PortfolioListProvider implements ProviderInterface
         }
 
         if ('all' === $subCategoryIds) {
-            return \array_merge([$categoryId], $childIds);
+            return array_merge([$categoryId], $childIds);
         }
 
         if ('' === $subCategoryIds) {
             return [$categoryId];
         }
 
-        $requestedChildIds = \array_values(\array_unique(\array_filter(\array_map(
-            static fn (string $value): int => (int) \trim($value),
-            \explode(',', $subCategoryIds),
+        $requestedChildIds = array_values(array_unique(array_filter(array_map(
+            static fn (string $value): int => (int) trim($value),
+            explode(',', $subCategoryIds),
         ), static fn (int $value): bool => $value > 0)));
 
-        return \array_merge([$categoryId], \array_values(\array_intersect($childIds, $requestedChildIds)));
+        return array_merge([$categoryId], array_values(array_intersect($childIds, $requestedChildIds)));
     }
 
     /**
@@ -579,11 +579,11 @@ final readonly class PortfolioListProvider implements ProviderInterface
         $creator = $node->getCreator();
         $isOwner = $creator instanceof User && $creator->getId() === $currentUser->getId();
         $itemId = (int) $item->getId();
-        $latestComments = \array_slice(\array_reverse($comments), 0, 3);
+        $latestComments = \array_slice(array_reverse($comments), 0, 3);
 
         return [
             'id' => $itemId,
-            'title' => \trim(\strip_tags($item->getTitle())),
+            'title' => trim(strip_tags($item->getTitle())),
             'content' => $this->sanitizePortfolioHtml($item->getContent()),
             'excerpt' => $this->portfolioExcerpt($item->getContent()),
             'createdAt' => $this->formatPortfolioDate($node->getCreatedAt()),
@@ -598,7 +598,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
             'isHighlighted' => $item->isHighlighted(),
             'score' => $item->getScore(),
             'commentsCount' => \count($comments),
-            'lastComments' => \array_map(
+            'lastComments' => array_map(
                 fn (PortfolioComment $comment): array => $this->normalizeCommentSummary($comment),
                 $latestComments,
             ),
@@ -666,7 +666,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
             ['title' => 'ASC'],
         );
 
-        return \array_values(\array_map(
+        return array_values(array_map(
             fn (PortfolioCategory $category): array => [
                 'id' => (int) $category->getId(),
                 'label' => $category->getTitle(),
@@ -697,7 +697,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
             ->getResult()
         ;
 
-        return \array_values(\array_map(
+        return array_values(array_map(
             static fn (Tag $tag): array => [
                 'id' => (int) $tag->getId(),
                 'label' => $tag->getTag(),
@@ -723,18 +723,18 @@ final readonly class PortfolioListProvider implements ProviderInterface
             $authors[(int) $creator->getId()] = $this->normalizePortfolioUser($creator);
         }
 
-        \uasort($authors, static fn (array $left, array $right): int => \strcasecmp(
+        uasort($authors, static fn (array $left, array $right): int => strcasecmp(
             (string) ($left['fullName'] ?? ''),
             (string) ($right['fullName'] ?? ''),
         ));
 
-        return \array_values($authors);
+        return array_values($authors);
     }
 
     /**
-     * @param array<int, Portfolio>                         $items
-     * @param array<int, array<int, PortfolioComment>>     $commentsByItem
-     * @param array<string, mixed>                         $filters
+     * @param array<int, Portfolio>                    $items
+     * @param array<int, array<int, PortfolioComment>> $commentsByItem
+     * @param array<string, mixed>                     $filters
      *
      * @return array<int, array<string, mixed>>
      */
@@ -747,7 +747,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
         $minimumDate = '' !== $filters['date']
             ? DateTimeImmutable::createFromFormat('!Y-m-d', $filters['date'], new DateTimeZone('UTC'))
             : null;
-        $searchText = \mb_strtolower($filters['text']);
+        $searchText = mb_strtolower($filters['text']);
         $matches = [];
 
         foreach ($items as $item) {
@@ -757,7 +757,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
                 }
 
                 if ('' !== $searchText
-                    && !\str_contains(\mb_strtolower(\strip_tags($comment->getContent())), $searchText)
+                    && !str_contains(mb_strtolower(strip_tags($comment->getContent())), $searchText)
                 ) {
                     continue;
                 }
@@ -765,7 +765,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
                 $matches[] = [
                     'id' => (int) $comment->getId(),
                     'itemId' => (int) $item->getId(),
-                    'itemTitle' => \trim(\strip_tags($item->getTitle())),
+                    'itemTitle' => trim(strip_tags($item->getTitle())),
                     'author' => $this->normalizePortfolioUser($comment->getResourceNode()->getCreator()),
                     'date' => $this->formatPortfolioDate($comment->getDate()),
                     'excerpt' => $this->portfolioExcerpt($comment->getContent(), 290),
@@ -773,7 +773,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
             }
         }
 
-        \usort($matches, static fn (array $left, array $right): int => \strcmp(
+        usort($matches, static fn (array $left, array $right): int => strcmp(
             (string) ($right['date'] ?? ''),
             (string) ($left['date'] ?? ''),
         ));
@@ -787,6 +787,6 @@ final readonly class PortfolioListProvider implements ProviderInterface
             return 0;
         }
 
-        return \max(0, (int) \api_get_course_setting($variable, \api_get_course_info($course->getCode())));
+        return max(0, (int) api_get_course_setting($variable, api_get_course_info($course->getCode())));
     }
 }

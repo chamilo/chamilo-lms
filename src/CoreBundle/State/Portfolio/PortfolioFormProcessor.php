@@ -129,9 +129,9 @@ final readonly class PortfolioFormProcessor implements ProcessorInterface
         $titleAsHtml = $this->portfolioBoolean(
             $this->settingsManager->getSetting('editor.save_titles_as_html', true),
         );
-        $title = $titleAsHtml ? $this->sanitizePortfolioHtml($title) : \trim(\strip_tags($title));
+        $title = $titleAsHtml ? $this->sanitizePortfolioHtml($title) : trim(strip_tags($title));
         $content = $this->sanitizePortfolioHtml((string) ($payload['content'] ?? ''));
-        if ('' === \trim(\strip_tags($title)) || '' === \trim(\strip_tags($content))) {
+        if ('' === trim(strip_tags($title)) || '' === trim(strip_tags($content))) {
             throw new BadRequestHttpException('Portfolio title and content are required.');
         }
 
@@ -202,7 +202,7 @@ final readonly class PortfolioFormProcessor implements ProcessorInterface
             );
 
             $descriptions = \is_array($payload['attachmentDescriptions'] ?? null)
-                ? \array_map('strval', $payload['attachmentDescriptions'])
+                ? array_map('strval', $payload['attachmentDescriptions'])
                 : [];
             $this->storePortfolioAttachments(
                 $request,
@@ -257,21 +257,21 @@ final readonly class PortfolioFormProcessor implements ProcessorInterface
     ): void {
         if (!$course instanceof Course
             || !\function_exists('api_get_course_setting')
-            || 1 !== (int) \api_get_course_setting('email_alert_teachers_new_post', \api_get_course_info($course->getCode()))
-            || !\class_exists(MessageManager::class)
+            || 1 !== (int) api_get_course_setting('email_alert_teachers_new_post', api_get_course_info($course->getCode()))
+            || !class_exists(MessageManager::class)
         ) {
             return;
         }
 
         try {
-            if ($session instanceof Session && \class_exists(SessionManager::class)) {
-                $recipientIds = \array_values(SessionManager::getCoachesByCourseSession(
+            if ($session instanceof Session && class_exists(SessionManager::class)) {
+                $recipientIds = array_values(SessionManager::getCoachesByCourseSession(
                     (int) $session->getId(),
                     (int) $course->getId(),
                 ));
                 $courseTitle = $course->getTitle().' ('.$session->getTitle().')';
-            } elseif (\class_exists(CourseManager::class)) {
-                $recipientIds = \array_keys(CourseManager::get_teacher_list_from_course_code($course->getCode()));
+            } elseif (class_exists(CourseManager::class)) {
+                $recipientIds = array_keys(CourseManager::get_teacher_list_from_course_code($course->getCode()));
                 $courseTitle = $course->getTitle();
             } else {
                 return;
@@ -281,7 +281,7 @@ final readonly class PortfolioFormProcessor implements ProcessorInterface
                 .'/item/'.(int) $item->getId().'?cid='.(int) $course->getId()
                 .($session instanceof Session ? '&sid='.(int) $session->getId() : '');
             $url = \function_exists('api_get_path') && \defined('WEB_PATH')
-                ? \rtrim((string) \api_get_path(WEB_PATH), '/').$path
+                ? rtrim((string) api_get_path(WEB_PATH), '/').$path
                 : $path;
             $subject = \sprintf('[Portfolio] New post in course %s', $courseTitle);
             $content = \sprintf(

@@ -72,7 +72,7 @@ final readonly class PortfolioManagementProvider implements ProviderInterface
 
         /** @var array<int, PortfolioCategory> $categories */
         $categories = $this->entityManager->getRepository(PortfolioCategory::class)->findBy([], ['title' => 'ASC']);
-        $result->categories = \array_map(static fn (PortfolioCategory $category): array => [
+        $result->categories = array_map(static fn (PortfolioCategory $category): array => [
             'id' => (int) $category->getId(),
             'title' => $category->getTitle(),
             'description' => (string) $category->getDescription(),
@@ -94,7 +94,7 @@ final readonly class PortfolioManagementProvider implements ProviderInterface
                     'count' => $tag->getCount(),
                 ];
             }
-            \usort($result->tags, static fn (array $a, array $b): int => \strcasecmp($a['title'], $b['title']));
+            usort($result->tags, static fn (array $a, array $b): int => strcasecmp($a['title'], $b['title']));
         }
 
         return $result;

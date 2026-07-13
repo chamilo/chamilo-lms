@@ -170,7 +170,7 @@ final readonly class PortfolioCommentFormProcessor implements ProcessorInterface
             }
 
             $content = $this->sanitizePortfolioHtml((string) ($payload['content'] ?? ''));
-            if ('' === \trim(\strip_tags($content))) {
+            if ('' === trim(strip_tags($content))) {
                 throw new BadRequestHttpException('Portfolio comment content is required.');
             }
             $comment->setContent($content);
@@ -194,7 +194,7 @@ final readonly class PortfolioCommentFormProcessor implements ProcessorInterface
             }
 
             $descriptions = \is_array($payload['attachmentDescriptions'] ?? null)
-                ? \array_map('strval', $payload['attachmentDescriptions'])
+                ? array_map('strval', $payload['attachmentDescriptions'])
                 : [];
             $this->storePortfolioAttachments(
                 $request,
@@ -236,13 +236,13 @@ final readonly class PortfolioCommentFormProcessor implements ProcessorInterface
     private function notifyPortfolioComment(PortfolioComment $comment): void
     {
         try {
-            if (!\class_exists(PortfolioNotifier::class) && \function_exists('api_get_path') && \defined('SYS_CODE_PATH')) {
-                $path = \api_get_path(SYS_CODE_PATH).'inc/lib/PortfolioNotifier.php';
-                if (\is_file($path)) {
+            if (!class_exists(PortfolioNotifier::class) && \function_exists('api_get_path') && \defined('SYS_CODE_PATH')) {
+                $path = api_get_path(SYS_CODE_PATH).'inc/lib/PortfolioNotifier.php';
+                if (is_file($path)) {
                     require_once $path;
                 }
             }
-            if (\class_exists(PortfolioNotifier::class)) {
+            if (class_exists(PortfolioNotifier::class)) {
                 PortfolioNotifier::notifyTeachersAndAuthor($comment);
             }
         } catch (Throwable) {

@@ -74,7 +74,7 @@ final readonly class PortfolioManagementProcessor implements ProcessorInterface
                 if (!$this->security->isGranted('ROLE_ADMIN')) {
                     throw new AccessDeniedHttpException('Only an administrator can manage Portfolio categories.');
                 }
-                $title = \trim(\strip_tags($data->title));
+                $title = trim(strip_tags($data->title));
                 if ('' === $title) {
                     throw new BadRequestHttpException('A Portfolio category title is required.');
                 }
@@ -130,7 +130,7 @@ final readonly class PortfolioManagementProcessor implements ProcessorInterface
                 if (!$canManageTags || !$course instanceof Course) {
                     throw new AccessDeniedHttpException('Only a course teacher can manage Portfolio tags.');
                 }
-                $title = \trim(\strip_tags($data->title));
+                $title = trim(strip_tags($data->title));
                 if ('' === $title) {
                     throw new BadRequestHttpException('A Portfolio tag name is required.');
                 }

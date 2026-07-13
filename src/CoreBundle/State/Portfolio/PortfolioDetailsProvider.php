@@ -119,7 +119,7 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
             $node = $item->getResourceNode();
             $result->items[] = [
                 'id' => (int) $item->getId(),
-                'title' => \trim(\strip_tags($item->getTitle())),
+                'title' => trim(strip_tags($item->getTitle())),
                 'createdAt' => $this->formatPortfolioDate($node->getCreatedAt()),
                 'updatedAt' => $this->formatPortfolioDate($node->getUpdatedAt()),
                 'category' => $item->getCategory()?->getTitle() ?? '',
@@ -133,7 +133,7 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
             $result->comments[] = [
                 'id' => (int) $comment->getId(),
                 'itemId' => (int) $comment->getItem()->getId(),
-                'itemTitle' => \trim(\strip_tags($comment->getItem()->getTitle())),
+                'itemTitle' => trim(strip_tags($comment->getItem()->getTitle())),
                 'excerpt' => $this->portfolioExcerpt($comment->getContent(), 240),
                 'date' => $this->formatPortfolioDate($comment->getDate()),
                 'score' => $comment->getScore(),
@@ -185,7 +185,7 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
         /** @var array<int, Portfolio> $items */
         $items = $qb->getQuery()->getResult();
 
-        return \array_values(\array_filter($items, fn (Portfolio $item): bool => $this->canViewPortfolioItem(
+        return array_values(array_filter($items, fn (Portfolio $item): bool => $this->canViewPortfolioItem(
             $item,
             $currentUser,
             $course,
@@ -237,7 +237,7 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
         /** @var array<int, PortfolioComment> $comments */
         $comments = $qb->getQuery()->getResult();
 
-        return \array_values(\array_filter(
+        return array_values(array_filter(
             $comments,
             fn (PortfolioComment $comment): bool => $this->canViewPortfolioItem(
                 $comment->getItem(),
@@ -263,7 +263,7 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
      */
     private function loadCourseOwners(Course $course, ?Session $session): array
     {
-        if (!\class_exists(CourseManager::class)) {
+        if (!class_exists(CourseManager::class)) {
             return [];
         }
         $rows = CourseManager::get_user_list_from_course_code(
@@ -291,7 +291,7 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
                 $result[] = $this->normalizePortfolioUser($user);
             }
         }
-        \usort($result, static fn (array $a, array $b): int => \strcasecmp($a['fullName'], $b['fullName']));
+        usort($result, static fn (array $a, array $b): int => strcasecmp($a['fullName'], $b['fullName']));
 
         return $result;
     }
@@ -302,6 +302,6 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
             return 0;
         }
 
-        return \max(0, (int) \api_get_course_setting($variable, \api_get_course_info($course->getCode())));
+        return max(0, (int) api_get_course_setting($variable, api_get_course_info($course->getCode())));
     }
 }

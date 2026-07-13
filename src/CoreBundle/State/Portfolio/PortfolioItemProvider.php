@@ -176,7 +176,7 @@ final readonly class PortfolioItemProvider implements ProviderInterface
         $result->recipientOptions = $course instanceof Course ? $this->loadCourseUsers($course, $session) : [];
         $result->item = [
             'id' => $itemId,
-            'title' => \trim(\strip_tags($item->getTitle())),
+            'title' => trim(strip_tags($item->getTitle())),
             'content' => $this->sanitizePortfolioHtml($item->getContent()),
             'createdAt' => $this->formatPortfolioDate($node->getCreatedAt()),
             'updatedAt' => $node->getUpdatedAt() > $node->getCreatedAt()
@@ -255,7 +255,7 @@ final readonly class PortfolioItemProvider implements ProviderInterface
             ->getResult()
         ;
 
-        return \array_values(\array_filter(
+        return array_values(array_filter(
             $comments,
             fn (PortfolioComment $comment): bool => $this->canViewPortfolioComment(
                 $comment,
@@ -391,7 +391,7 @@ final readonly class PortfolioItemProvider implements ProviderInterface
      */
     private function loadCommentTemplates(User $user): array
     {
-        return \array_values(\array_map(
+        return array_values(array_map(
             static fn (PortfolioComment $comment): array => [
                 'id' => (int) $comment->getId(),
                 'content' => $comment->getContent(),
@@ -405,7 +405,7 @@ final readonly class PortfolioItemProvider implements ProviderInterface
      */
     private function loadCourseUsers(Course $course, ?Session $session): array
     {
-        if (!\class_exists(CourseManager::class)) {
+        if (!class_exists(CourseManager::class)) {
             return [];
         }
 
@@ -434,7 +434,7 @@ final readonly class PortfolioItemProvider implements ProviderInterface
                 $users[] = $this->normalizePortfolioUser($user);
             }
         }
-        \usort($users, static fn (array $left, array $right): int => \strcasecmp(
+        usort($users, static fn (array $left, array $right): int => strcasecmp(
             (string) ($left['fullName'] ?? ''),
             (string) ($right['fullName'] ?? ''),
         ));
@@ -448,6 +448,6 @@ final readonly class PortfolioItemProvider implements ProviderInterface
             return 0;
         }
 
-        return \max(0, (int) \api_get_course_setting($variable, \api_get_course_info($course->getCode())));
+        return max(0, (int) api_get_course_setting($variable, api_get_course_info($course->getCode())));
     }
 }

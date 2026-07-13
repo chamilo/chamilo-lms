@@ -26,13 +26,16 @@ use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Doctrine\ORM\EntityManagerInterface;
 use JsonException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
+
+use const JSON_THROW_ON_ERROR;
 
 trait PortfolioWriteHelperTrait
 {
@@ -44,9 +47,9 @@ trait PortfolioWriteHelperTrait
     private function getPortfolioPayload(Request $request): array
     {
         $raw = $request->request->get('payload');
-        if (\is_string($raw) && '' !== \trim($raw)) {
+        if (\is_string($raw) && '' !== trim($raw)) {
             try {
-                $decoded = \json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+                $decoded = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
             } catch (JsonException $exception) {
                 throw new BadRequestHttpException('The portfolio payload is not valid JSON.', $exception);
             }
@@ -61,7 +64,7 @@ trait PortfolioWriteHelperTrait
         if ('json' === $request->getContentTypeFormat()) {
             try {
                 $decoded = $request->toArray();
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 throw new BadRequestHttpException('The portfolio payload is not valid JSON.', $exception);
             }
 
@@ -147,7 +150,7 @@ trait PortfolioWriteHelperTrait
      */
     private function normalizePortfolioIds(array $values): array
     {
-        return \array_values(\array_unique(\array_filter(\array_map(
+        return array_values(array_unique(array_filter(array_map(
             static fn (mixed $value): int => (int) $value,
             $values,
         ), static fn (int $value): bool => $value > 0)));
@@ -242,7 +245,7 @@ trait PortfolioWriteHelperTrait
 
             $value = $submitted[(string) $field->getId()] ?? $submitted[$field->getVariable()] ?? null;
             if (\is_array($value)) {
-                $value = \implode(';', \array_map('strval', $value));
+                $value = implode(';', array_map('strval', $value));
             } elseif (\is_bool($value)) {
                 $value = $value ? '1' : '0';
             } elseif (null !== $value && !\is_scalar($value)) {
@@ -268,7 +271,7 @@ trait PortfolioWriteHelperTrait
             throw new BadRequestHttpException('Only PNG, JPG or GIF images are allowed.');
         }
 
-        $safeName = \preg_replace('/[^A-Za-z0-9._-]+/', '_', $file->getClientOriginalName()) ?: 'file';
+        $safeName = preg_replace('/[^A-Za-z0-9._-]+/', '_', $file->getClientOriginalName()) ?: 'file';
         $asset = (new Asset())
             ->setCategory(Asset::EXTRA_FIELD)
             ->setTitle($field->getValueType().'_'.(int) $item->getId().'_'.$safeName)
@@ -353,7 +356,7 @@ trait PortfolioWriteHelperTrait
     private function storePortfolioAttachments(
         Request $request,
         AbstractResource $resource,
-        PortfolioRepository|PortfolioCommentRepository $repository,
+        PortfolioCommentRepository|PortfolioRepository $repository,
         UploadFilenamePolicy $uploadFilenamePolicy,
         array $descriptions = [],
     ): void {
@@ -407,17 +410,17 @@ trait PortfolioWriteHelperTrait
             return false;
         }
 
-        return 1 === (int) \api_get_course_setting(
+        return 1 === (int) api_get_course_setting(
             $variable,
-            \api_get_course_info($course->getCode()),
+            api_get_course_info($course->getCode()),
         );
     }
 
     private function resolvePortfolioMaxScore(Course $course): float
     {
-        $courseInfo = \function_exists('api_get_course_info') ? \api_get_course_info($course->getCode()) : [];
+        $courseInfo = \function_exists('api_get_course_info') ? api_get_course_info($course->getCode()) : [];
         $maxScore = \function_exists('api_get_course_setting')
-            ? (float) \api_get_course_setting('portfolio_max_score', $courseInfo)
+            ? (float) api_get_course_setting('portfolio_max_score', $courseInfo)
             : 0.0;
 
         return $maxScore > 0 ? $maxScore : 100.0;

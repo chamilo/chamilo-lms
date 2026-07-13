@@ -205,7 +205,7 @@ final readonly class PortfolioCommentActionProcessor implements ProcessorInterfa
                 }
                 $title = $this->sanitizePortfolioHtml($data->title);
                 $content = $this->sanitizePortfolioHtml($data->content);
-                if ('' === \trim(\strip_tags($title))) {
+                if ('' === trim(strip_tags($title))) {
                     throw new BadRequestHttpException('A title is required for copied Portfolio comments.');
                 }
                 foreach ($studentIds as $studentId) {

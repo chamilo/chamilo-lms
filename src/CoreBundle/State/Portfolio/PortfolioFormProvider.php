@@ -152,13 +152,14 @@ final readonly class PortfolioFormProvider implements ProviderInterface
     private function loadCategories(): array
     {
         $criteria = $this->security->isGranted('ROLE_ADMIN') ? [] : ['isVisible' => true];
+
         /** @var array<int, PortfolioCategory> $categories */
         $categories = $this->entityManager->getRepository(PortfolioCategory::class)->findBy(
             $criteria,
             ['title' => 'ASC'],
         );
 
-        return \array_map(static fn (PortfolioCategory $category): array => [
+        return array_map(static fn (PortfolioCategory $category): array => [
             'id' => (int) $category->getId(),
             'label' => $category->getTitle(),
             'description' => (string) $category->getDescription(),
@@ -174,7 +175,7 @@ final readonly class PortfolioFormProvider implements ProviderInterface
         /** @var array<int, Portfolio> $templates */
         $templates = $this->portfolioRepository->findTemplates($user, $course, $session);
 
-        return \array_map(static fn (Portfolio $template): array => [
+        return array_map(static fn (Portfolio $template): array => [
             'id' => (int) $template->getId(),
             'title' => $template->getTitle(),
             'content' => $template->getContent(),
@@ -196,9 +197,9 @@ final readonly class PortfolioFormProvider implements ProviderInterface
             $tag = $relation->getTag();
             $rows[(int) $tag->getId()] = ['id' => (int) $tag->getId(), 'label' => $tag->getTag()];
         }
-        \uasort($rows, static fn (array $a, array $b): int => \strcasecmp($a['label'], $b['label']));
+        uasort($rows, static fn (array $a, array $b): int => strcasecmp($a['label'], $b['label']));
 
-        return \array_values($rows);
+        return array_values($rows);
     }
 
     /**
@@ -218,11 +219,11 @@ final readonly class PortfolioFormProvider implements ProviderInterface
             }
             $options = [];
             foreach ($field->getOptions() as $option) {
-                $id = \method_exists($option, 'getId') ? (int) $option->getId() : 0;
-                $label = \method_exists($option, 'getDisplayText')
+                $id = method_exists($option, 'getId') ? (int) $option->getId() : 0;
+                $label = method_exists($option, 'getDisplayText')
                     ? (string) $option->getDisplayText()
-                    : (\method_exists($option, 'getOptionValue') ? (string) $option->getOptionValue() : (string) $id);
-                $value = \method_exists($option, 'getOptionValue') ? (string) $option->getOptionValue() : (string) $id;
+                    : (method_exists($option, 'getOptionValue') ? (string) $option->getOptionValue() : (string) $id);
+                $value = method_exists($option, 'getOptionValue') ? (string) $option->getOptionValue() : (string) $id;
                 $options[] = ['value' => $value, 'label' => $label];
             }
             $stored = $item instanceof Portfolio && null !== $item->getId()
@@ -251,7 +252,7 @@ final readonly class PortfolioFormProvider implements ProviderInterface
      */
     private function loadCourseUsers(Course $course, ?Session $session): array
     {
-        if (!\class_exists(CourseManager::class)) {
+        if (!class_exists(CourseManager::class)) {
             return [];
         }
 
@@ -276,9 +277,9 @@ final readonly class PortfolioFormProvider implements ProviderInterface
             if ($id <= 0) {
                 continue;
             }
-            $name = \trim((string) ($row['complete_name'] ?? $row['fullname'] ?? ''));
+            $name = trim((string) ($row['complete_name'] ?? $row['fullname'] ?? ''));
             if ('' === $name) {
-                $name = \trim((string) ($row['firstname'] ?? '').' '.(string) ($row['lastname'] ?? ''));
+                $name = trim((string) ($row['firstname'] ?? '').' '.(string) ($row['lastname'] ?? ''));
             }
             $result[$id] = [
                 'id' => $id,
@@ -287,9 +288,9 @@ final readonly class PortfolioFormProvider implements ProviderInterface
                 'username' => (string) ($row['username'] ?? ''),
             ];
         }
-        \uasort($result, static fn (array $a, array $b): int => \strcasecmp($a['label'], $b['label']));
+        uasort($result, static fn (array $a, array $b): int => strcasecmp($a['label'], $b['label']));
 
-        return \array_values($result);
+        return array_values($result);
     }
 
     /**
@@ -314,7 +315,7 @@ final readonly class PortfolioFormProvider implements ProviderInterface
             $ids[] = (int) $link->getUser()->getId();
         }
 
-        return \array_values(\array_unique($ids));
+        return array_values(array_unique($ids));
     }
 
     /**
@@ -337,7 +338,7 @@ final readonly class PortfolioFormProvider implements ProviderInterface
             ->getResult()
         ;
 
-        return \array_values(\array_filter(\array_map(
+        return array_values(array_filter(array_map(
             static fn (ExtraFieldRelTag $relation): int => (int) ($relation->getTag()?->getId() ?? 0),
             $relations,
         )));

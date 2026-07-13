@@ -31,6 +31,7 @@ use UserManager;
 
 use const COURSEMANAGERLOWSECURITY;
 use const DATE_ATOM;
+use const ENT_HTML5;
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
 
@@ -361,7 +362,7 @@ trait PortfolioAccessHelperTrait
         }
 
         $imageUrl = '';
-        if (\class_exists(UserManager::class)) {
+        if (class_exists(UserManager::class)) {
             try {
                 $imageUrl = (string) UserManager::getUserPicture((int) $user->getId());
             } catch (Throwable) {
@@ -379,7 +380,7 @@ trait PortfolioAccessHelperTrait
 
     private function sanitizePortfolioHtml(string $content): string
     {
-        if (\class_exists(LegacySecurity::class)) {
+        if (class_exists(LegacySecurity::class)) {
             if (\defined('COURSEMANAGERLOWSECURITY')) {
                 return (string) LegacySecurity::remove_XSS($content, COURSEMANAGERLOWSECURITY);
             }
@@ -387,23 +388,23 @@ trait PortfolioAccessHelperTrait
             return (string) LegacySecurity::remove_XSS($content);
         }
 
-        return \htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        return htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     private function portfolioExcerpt(string $content, int $length = 380): string
     {
-        $plain = \html_entity_decode(
-            \strip_tags($content),
+        $plain = html_entity_decode(
+            strip_tags($content),
             ENT_QUOTES | ENT_HTML5,
             'UTF-8',
         );
-        $plain = \trim(\preg_replace('/\s+/u', ' ', $plain) ?? '');
+        $plain = trim(preg_replace('/\s+/u', ' ', $plain) ?? '');
 
-        if (\mb_strlen($plain) <= $length) {
+        if (mb_strlen($plain) <= $length) {
             return $plain;
         }
 
-        return \rtrim(\mb_substr($plain, 0, $length - 1)).'…';
+        return rtrim(mb_substr($plain, 0, $length - 1)).'…';
     }
 
     /**
@@ -471,7 +472,7 @@ trait PortfolioAccessHelperTrait
             $ids[] = (int) $user->getId();
         }
 
-        return \array_values(\array_unique($ids));
+        return array_values(array_unique($ids));
     }
 
     /**
@@ -517,7 +518,7 @@ trait PortfolioAccessHelperTrait
             return 1 === $value;
         }
 
-        return \in_array(\strtolower(\trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
     private function formatPortfolioDate(?DateTimeInterface $date): ?string
@@ -527,7 +528,7 @@ trait PortfolioAccessHelperTrait
 
     private function registerPortfolioToolAccess(): void
     {
-        if (!\class_exists(Event::class) || !\defined('TOOL_PORTFOLIO')) {
+        if (!class_exists(Event::class) || !\defined('TOOL_PORTFOLIO')) {
             return;
         }
 

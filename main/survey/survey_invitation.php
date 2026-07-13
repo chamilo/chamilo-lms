@@ -109,6 +109,11 @@ echo ' <span class="badge badge-default">'.$unasnweredCount.'</span>';
 echo '</a></li>';
 echo '</ul>';
 
+if (api_get_configuration_value('survey_hide_invited_tables_list')) {
+    Display::display_footer();
+    exit;
+}
+
 // Table header
 echo '<table class="table table-hover table-striped data_table" style="margin-top: 5px;">';
 echo '	<tr>';

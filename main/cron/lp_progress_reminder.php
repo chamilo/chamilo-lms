@@ -272,7 +272,8 @@ function getCourseUsers($courseId, $checkSession = false)
             WHERE
                 scu.c_id = $courseId AND
                 (lpv.progress < 100 OR lpv.progress is null) AND
-                lp.id IN($lpItemsString)";
+                lp.id IN($lpItemsString) AND
+                (lp.expired_on IS NULL OR lp.expired_on > NOW())";
     } else {
         $sql = "SELECT
                 cu.user_id,
@@ -286,7 +287,8 @@ function getCourseUsers($courseId, $checkSession = false)
             WHERE
                 cu.c_id = $courseId AND
                 (lpv.progress < 100 OR lpv.progress is null) AND
-                lp.id IN($lpItemsString)";
+                lp.id IN($lpItemsString) AND
+                (lp.expired_on IS NULL OR lp.expired_on > NOW())";
     }
 
     $rs = Database::query($sql);

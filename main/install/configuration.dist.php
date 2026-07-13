@@ -689,6 +689,8 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //$_configuration['survey_additional_teacher_modify_actions'] = [];
 // Allow show answers in anonymous surveys
 //$_configuration['survey_anonymous_show_answered'] = false;
+// Hide the user list table on survey invitation tracking pages (answered/unanswered/invited)
+//$_configuration['survey_hide_invited_tables_list'] = false;
 // ------
 
 // Allow career diagram, requires a DB change:

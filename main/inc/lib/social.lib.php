@@ -2088,6 +2088,10 @@ class SocialManager extends UserManager
         if (strpos($link, "://") === false && substr($link, 0, 1) != "/") {
             $link = "http://".$link;
         }
+        // Defense in depth: reject URLs targeting internal/reserved hosts before fetching (SSRF, CWE-918).
+        if (!self::isUrlSafe($link)) {
+            return false;
+        }
         $graph = OpenGraph::fetch($link);
         $link = parse_url($link);
         $host = $link['host'] ? strtoupper($link['host']) : $link['path'];

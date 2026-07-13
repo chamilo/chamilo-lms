@@ -48,28 +48,96 @@ class OpenGraph implements Iterator
    * @return OpenGraph
    */
     static public function fetch($URI) {
-        $curl = curl_init($URI);
+        $url = $URI;
+        $maxRedirects = 3;
 
-        curl_setopt($curl, CURLOPT_FAILONERROR, true);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
-        curl_setopt($curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
-        curl_setopt($curl, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] ?? 'Chamilo');
+        // Follow redirects manually so every hop is re-validated against internal
+        // hosts and the resolved IP is pinned, preventing SSRF via redirects and
+        // DNS rebinding (TOCTOU). See CVE-2026-31941 / GHSA-q74c-mx8x-489h.
+        for ($hop = 0; $hop <= $maxRedirects; $hop++) {
+            $safe = self::resolveSafeTarget($url);
+            if (false === $safe) {
+                return false;
+            }
 
-        $response = curl_exec($curl);
+            $curl = curl_init($url);
 
-        curl_close($curl);
+            curl_setopt($curl, CURLOPT_FAILONERROR, true);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] ?? 'Chamilo');
+            // Pin the validated IP so curl connects exactly there and does not
+            // re-resolve the hostname (closes the DNS rebinding TOCTOU).
+            curl_setopt($curl, CURLOPT_RESOLVE, array($safe['host'].':'.$safe['port'].':'.$safe['ip']));
 
-        if (!empty($response)) {
-            return self::_parse($response);
-        } else {
+            $response = curl_exec($curl);
+            $httpCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            $redirectUrl = curl_getinfo($curl, CURLINFO_REDIRECT_URL);
+
+            curl_close($curl);
+
+            if (in_array($httpCode, array(301, 302, 303, 307, 308), true) && !empty($redirectUrl)) {
+                // Re-validate the next hop on the following loop iteration.
+                $url = $redirectUrl;
+                continue;
+            }
+
+            if (!empty($response)) {
+                return self::_parse($response);
+            }
+
             return false;
         }
+
+        // Too many redirects.
+        return false;
+    }
+
+  /**
+   * Validates that a URL targets a public host and returns the resolved
+   * IP/host/port to pin for the connection, or false when it is unsafe.
+   *
+   * Blocks non-HTTP schemes, unresolvable hosts and private/reserved IP
+   * ranges to prevent SSRF (CWE-918).
+   *
+   * @param $url
+   * @return array|false
+   */
+    static private function resolveSafeTarget($url) {
+        $parsed = parse_url($url);
+
+        if (!isset($parsed['scheme']) || !in_array($parsed['scheme'], array('http', 'https'), true)) {
+            return false;
+        }
+
+        $host = isset($parsed['host']) ? $parsed['host'] : '';
+        if (empty($host)) {
+            return false;
+        }
+
+        $ip = gethostbyname($host);
+        if ($ip === $host) {
+            // DNS resolution failed (or a bare IP literal, which we also reject).
+            return false;
+        }
+
+        if (false === filter_var(
+            $ip,
+            FILTER_VALIDATE_IP,
+            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+        )) {
+            return false;
+        }
+
+        $port = isset($parsed['port'])
+            ? (int) $parsed['port']
+            : ('https' === $parsed['scheme'] ? 443 : 80);
+
+        return array('host' => $host, 'port' => $port, 'ip' => $ip);
     }
 
   /**

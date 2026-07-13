@@ -2818,9 +2818,9 @@ JAVASCRIPT;
         }
         if ('cn' === $oper || 'nc' === $oper || 'in' === $oper || 'ni' === $oper) {
             if (is_array($val)) {
-                $result = '"%'.implode(';', $val).'%"';
-                foreach ($val as $item) {
-                    $item = trim($item);
+                $escaped = array_map(static fn ($item) => Database::escape_string(trim($item)), $val);
+                $result = '"%'.implode(';', $escaped).'%"';
+                foreach ($escaped as $item) {
                     $result .= ' '.$conditionBetweenOptions.' '.$col.' LIKE "%'.$item.'%"';
                 }
                 $val = $result;

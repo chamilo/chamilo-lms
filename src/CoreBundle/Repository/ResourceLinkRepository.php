@@ -38,7 +38,7 @@ class ResourceLinkRepository extends SortableRepository
         'forum' => '/main/forum/index.php',
         'student_publication' => '/resources/assignment/%resource_node_id%',
         'survey' => '/resources/survey/%resource_node_id%/',
-        'notebook' => '/main/notebook/index.php',
+        'notebook' => '/resources/notebook/%resource_node_id%/',
     ];
 
     public function __construct(EntityManagerInterface $em)

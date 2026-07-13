@@ -210,20 +210,31 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
 
     private function getLanguageOptions(): array
     {
-        $options = [['label' => $this->translator->trans('No specific language'), 'value' => '']];
-        $languages = $this->languageRepository->findBy(['available' => true], ['englishName' => 'ASC']);
+        $languageOptions = [];
+        $languages = $this->languageRepository->findBy(['available' => true]);
 
         foreach ($languages as $language) {
             if (!$language instanceof Language) {
                 continue;
             }
-            $options[] = [
+            $languageOptions[] = [
                 'label' => $language->getOriginalName() ?: $language->getEnglishName(),
                 'value' => $language->getIsocode(),
             ];
         }
 
-        return $options;
+        usort(
+            $languageOptions,
+            static fn (array $left, array $right): int => strnatcasecmp(
+                (string) $left['label'],
+                (string) $right['label'],
+            ),
+        );
+
+        return [
+            ['label' => $this->translator->trans('No specific language'), 'value' => ''],
+            ...$languageOptions,
+        ];
     }
 
     private function getLearningPathOptions(Course $course, ?Session $session, ?CGroup $group, CLp $current): array

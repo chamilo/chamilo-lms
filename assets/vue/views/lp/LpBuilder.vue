@@ -162,6 +162,7 @@ const learningPathQuery = computed(() => ({
   parent: selectedSectionId.value || route.query.parent || "",
   isStudentView: "false",
   lpTool: activeTool.value,
+  language: String(builder.value?.courseLanguage || ""),
 }))
 
 onMounted(async () => {
@@ -467,7 +468,6 @@ async function onStructureChanged() {
       csrfToken: builder.value.csrfToken,
     })
     showSuccessNotification(t("Updated"))
-    await loadBuilder()
   } catch (error) {
     showErrorNotification(error)
     await loadBuilder()
@@ -746,7 +746,7 @@ function goBack() {
               :certificate="builder?.certificate || {}"
               :context="context"
               :csrf-token="builder?.csrfToken || ''"
-              :documents-root-node-id="Number(builder?.documentsRootNodeId || 0)"
+              :documents-root-node-id="Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)"
               :lp-id="lpId"
               @saved="handleCertificateSaved"
             />
@@ -777,7 +777,7 @@ function goBack() {
               :audio-items="resources.audio?.items || []"
               :context="context"
               :csrf-token="builder?.csrfToken || ''"
-              :documents-root-node-id="Number(builder?.documentsRootNodeId || 0)"
+              :documents-root-node-id="Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)"
               :item="selectedItem"
               :lp-id="lpId"
               @saved="handleAudioSaved"
@@ -837,8 +837,8 @@ function goBack() {
               <LpInlineDocumentForm
                 v-else-if="activeDocumentAction === 'create'"
                 :context="context"
-                :default-document-parent-id="Number(builder?.documentsRootNodeId || 0)"
-                :default-lp-parent-id="selectedSectionId"
+                :default-document-parent-id="Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)"
+                :default-lp-parent-id="selectedSectionId ?? 0"
                 :document-folder-options="documentFolderOptions"
                 :lp-parent-options="sectionParentOptions"
                 :search-enabled="Boolean(builder?.searchEnabled)"
@@ -848,7 +848,7 @@ function goBack() {
               <LpInlineDocumentUpload
                 v-else
                 :context="context"
-                :default-document-parent-id="Number(builder?.documentsRootNodeId || 0)"
+                :default-document-parent-id="Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)"
                 :document-folder-options="documentFolderOptions"
                 :file-kind="activeDocumentTab"
                 :lp-parent-id="selectedSectionId"

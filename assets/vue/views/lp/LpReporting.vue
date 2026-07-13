@@ -28,6 +28,9 @@ const deleteExerciseAttempts = ref(false)
 const selectedStudentId = ref(Number(route.query.studentId || 0))
 const showAllAttempts = ref(false)
 
+const selfMode = computed(
+  () => route.name === "LpRuntimeReporting" || ["1", "true", "yes", "on"].includes(String(route.query.self || "").toLowerCase()),
+)
 const lpId = computed(() => Number(route.params.lpId || 0))
 const contextParams = computed(() => ({
   cid: Number(route.query.cid || 0),
@@ -53,8 +56,9 @@ const reportingPdfUrl = computed(() => lpService.buildReportingPdfUrl(lpId.value
 function reportingParams(studentId = selectedStudentId.value) {
   const params = {
     ...contextParams.value,
-    groupFilter: groupFilter.value || undefined,
-    showTeachers: showTeachers.value ? 1 : 0,
+    groupFilter: selfMode.value ? undefined : groupFilter.value || undefined,
+    self: selfMode.value ? 1 : undefined,
+    showTeachers: selfMode.value || showTeachers.value ? 1 : 0,
   }
 
   if (studentId > 0) {
@@ -70,8 +74,9 @@ function syncRouteQuery(studentId = selectedStudentId.value) {
     cid: contextParams.value.cid || undefined,
     sid: contextParams.value.sid || undefined,
     gid: contextParams.value.gid || undefined,
-    groupFilter: groupFilter.value || undefined,
-    showTeachers: showTeachers.value ? 1 : undefined,
+    groupFilter: selfMode.value ? undefined : groupFilter.value || undefined,
+    self: selfMode.value ? 1 : undefined,
+    showTeachers: selfMode.value || showTeachers.value ? 1 : undefined,
     studentId: studentId > 0 ? studentId : undefined,
   }
 
@@ -195,6 +200,25 @@ async function recalculateUser(userId) {
 }
 
 function goBack() {
+  if (selfMode.value) {
+    router.push({
+      name: "LpRuntime",
+      params: {
+        node: route.params.node,
+        lpId: lpId.value,
+      },
+      query: {
+        ...contextParams.value,
+        gradebook: route.query.gradebook || undefined,
+        isStudentView: route.query.isStudentView || "false",
+        item_id: Number(route.query.returnItemId || 0) || undefined,
+        origin: "learnpath",
+      },
+    })
+
+    return
+  }
+
   router.push({
     name: "LpList",
     params: { node: route.params.node },
@@ -374,7 +398,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
           type="primary-text"
         />
         <BaseButton
-          v-if="hasLearners"
+          v-if="hasLearners && !selfMode"
           :disabled="isResetting"
           :is-loading="isResetting"
           :label="t('Clean')"
@@ -401,7 +425,10 @@ onMounted(() => loadReporting(selectedStudentId.value))
       {{ errorMessage }}
     </div>
 
-    <div class="lp-report-no-print flex flex-col gap-4 rounded-xl border border-gray-25 bg-white p-4 shadow-sm">
+    <div
+      v-if="!selfMode"
+      class="lp-report-no-print flex flex-col gap-4 rounded-xl border border-gray-25 bg-white p-4 shadow-sm"
+    >
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div class="flex min-w-0 flex-1 flex-col gap-4 md:flex-row md:items-end">
           <BaseSelect
@@ -436,7 +463,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
       </div>
     </div>
 
-    <div>
+    <div v-if="!selfMode">
       <BaseTable
         :is-loading="isLoading"
         :text-for-empty="t('No user added')"
@@ -584,6 +611,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
             @click="exportLearnerCsv"
           />
           <BaseButton
+            v-if="!selfMode"
             :label="t('Close')"
             icon="close"
             only-icon

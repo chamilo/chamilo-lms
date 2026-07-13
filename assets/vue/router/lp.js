@@ -48,6 +48,17 @@ export default {
       meta: { breadcrumb: "Edit learnpath" },
     },
     {
+      name: "LpRuntimeReporting",
+      path: ":lpId(\\d+)/reporting/self",
+      component: () => import("../views/lp/LpReporting.vue"),
+      meta: {
+        breadcrumb: "",
+        emptyLayout: true,
+        hideGlobalUi: true,
+        showBreadcrumb: false,
+      },
+    },
+    {
       name: "LpReporting",
       path: ":lpId(\\d+)/reporting",
       component: () => import("../views/lp/LpReporting.vue"),

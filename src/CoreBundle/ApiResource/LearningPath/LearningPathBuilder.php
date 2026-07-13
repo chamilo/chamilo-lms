@@ -61,6 +61,12 @@ final class LearningPathBuilder
     public int $documentsRootNodeId = 0;
 
     #[Groups(['learning_path_builder:read'])]
+    public int $defaultDocumentParentNodeId = 0;
+
+    #[Groups(['learning_path_builder:read'])]
+    public string $courseLanguage = '';
+
+    #[Groups(['learning_path_builder:read'])]
     public bool $searchEnabled = false;
 
     /**

@@ -64,12 +64,6 @@ final readonly class LearningPathRuntimeSyncProcessor implements ProcessorInterf
             throw new AccessDeniedHttpException('The learning path item is not available.');
         }
 
-        if ($this->canManageLearningPaths($this->security)
-            && !$this->isStudentViewRequest($this->requestStack)
-        ) {
-            return;
-        }
-
         $course = $this->getContextCourse($this->entityManager, $request);
         $session = $this->getContextSession($this->entityManager, $request, $course);
         $lp = $this->lpRepository->find($lpId);

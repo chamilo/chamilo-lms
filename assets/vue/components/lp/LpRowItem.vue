@@ -75,13 +75,21 @@ const routeStudentViewEnabled = computed(() =>
   ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
 )
 
-const openUrl = computed(() =>
-  lpService.buildRuntimeUrl(props.lp.iid, {
-    ...props.legacyContext,
-    isStudentView: "true",
-    temporaryStudentView: routeStudentViewEnabled.value ? undefined : "true",
-  }),
-)
+const openRoute = computed(() => ({
+  name: "LpRuntime",
+  params: {
+    node: Number(props.legacyContext.node || route.params.node || 0),
+    lpId: Number(props.lp.iid || 0),
+  },
+  query: Object.fromEntries(
+    Object.entries({
+      ...props.legacyContext,
+      node: undefined,
+      isStudentView: "true",
+      temporaryStudentView: routeStudentViewEnabled.value ? undefined : "true",
+    }).filter(([, value]) => value !== undefined && value !== null && value !== ""),
+  ),
+}))
 
 const isCStudioLearningPath = computed(() => {
   const type = Number(props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? 0)
@@ -112,7 +120,9 @@ const cstudioEditorUrl = computed(() => {
 })
 
 const editLearningPathRoute = computed(() =>
-  isCStudioLearningPath.value ? null : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
+  isScormLearningPath.value
+    ? null
+    : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
 )
 
 const editLearningPathUrl = computed(() => (isCStudioLearningPath.value ? cstudioEditorUrl.value : null))
@@ -325,7 +335,7 @@ const buttonActions = computed(() =>
       route: editLearningPathRoute.value,
       toUrl: editLearningPathUrl.value,
       disabled: !manageableInContext.value,
-      visible: true,
+      visible: !isScormLearningPath.value || isCStudioLearningPath.value,
     },
     {
       label: t("Reports"),
@@ -553,7 +563,7 @@ const itemActionsMobile = computed(() =>
         <div class="lp-panel__info">
           <BaseAppLink
             :title="t('Open')"
-            :url="openUrl"
+            :to="openRoute"
             class="lp-panel__title"
           >
             {{ lp.title || t("Learning path title here") }}
@@ -777,7 +787,7 @@ const itemActionsMobile = computed(() =>
 
             <BaseButton
               :label="t('Open')"
-              :to-url="openUrl"
+              :route="openRoute"
               icon="link-external"
               only-icon
               size="small"

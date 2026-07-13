@@ -98,8 +98,7 @@ final class CDocumentRepository extends ResourceRepository
         CLp $lp,
         UploadedFile $zip,
         ?CGroup $group = null,
-    ): void
-    {
+    ): void {
         $em = $this->em();
 
         // Ensure "Learning paths" directly under the course resource node
@@ -473,8 +472,7 @@ final class CDocumentRepository extends ResourceRepository
         Course $course,
         ?Session $session = null,
         ?CGroup $group = null,
-    ): ResourceNode
-    {
+    ): ResourceNode {
         $courseRoot = $course->getResourceNode();
         if (!$courseRoot instanceof ResourceNode) {
             throw new RuntimeException('Course has no ResourceNode root.');

@@ -56,7 +56,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Put(
             uriTemplate: '/notebook/{iid}',
-            requirements: ['iid' => '\\d+'],
+            requirements: ['iid' => '\d+'],
             openapi: new Operation(
                 summary: 'Update a personal notebook entry',
                 parameters: [
@@ -74,7 +74,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Delete(
             uriTemplate: '/notebook/{iid}',
-            requirements: ['iid' => '\\d+'],
+            requirements: ['iid' => '\d+'],
             openapi: new Operation(
                 summary: 'Delete a personal notebook entry',
                 parameters: [

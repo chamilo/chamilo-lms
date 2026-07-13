@@ -358,8 +358,7 @@ final class ForumProcessor implements ProcessorInterface
         ?Session $session,
         ?CGroup $group,
         ?CLp $learningPath = null,
-    ): void
-    {
+    ): void {
         $startTime = $this->getUtcDateTimeOrNull($payload['startTime'] ?? null);
         $endTime = $this->getUtcDateTimeOrNull($payload['endTime'] ?? null);
         if (null !== $startTime && null !== $endTime && $startTime >= $endTime) {
@@ -395,8 +394,7 @@ final class ForumProcessor implements ProcessorInterface
         CForum $forum,
         ?CLp $learningPath,
         int $parentItemId,
-    ): void
-    {
+    ): void {
         if (!$learningPath instanceof CLp) {
             return;
         }
@@ -445,8 +443,7 @@ final class ForumProcessor implements ProcessorInterface
         CLp $learningPath,
         int $parentItemId,
         CLpItem $rootItem,
-    ): CLpItem
-    {
+    ): CLpItem {
         if ($parentItemId <= 0) {
             return $rootItem;
         }

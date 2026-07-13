@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/learning_paths/{lpId}/runtime/restart',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             read: false,
             output: false,
             status: Response::HTTP_NO_CONTENT,

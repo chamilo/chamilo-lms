@@ -20,14 +20,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/learning_paths/{lpId}/reporting',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             name: 'get_learning_path_reporting',
             provider: LearningPathReportingProvider::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
         new Post(
             uriTemplate: '/learning_paths/{lpId}/reporting/recalculate',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             read: false,
             status: Response::HTTP_NO_CONTENT,
             input: LearningPathReportingRecalculateInput::class,
@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/learning_paths/{lpId}/reporting/reset',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             read: false,
             status: Response::HTTP_NO_CONTENT,
             input: LearningPathReportingResetInput::class,
@@ -88,15 +88,21 @@ final class LearningPathReporting
     #[Groups(['learning_path_reporting:read'])]
     public string $groupFilter = '';
 
-    /** @var array<int, array{label: string, value: string}> */
+    /**
+     * @var array<int, array{label: string, value: string}>
+     */
     #[Groups(['learning_path_reporting:read'])]
     public array $groupOptions = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['learning_path_reporting:read'])]
     public array $learners = [];
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['learning_path_reporting:read'])]
     public array $detail = [];
 

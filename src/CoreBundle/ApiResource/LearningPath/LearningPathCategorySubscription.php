@@ -19,13 +19,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/learning_path_categories/{categoryId}/subscriptions',
-            requirements: ['categoryId' => '\\d+'],
+            requirements: ['categoryId' => '\d+'],
             provider: LearningPathCategorySubscriptionProvider::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
         new Put(
             uriTemplate: '/learning_path_categories/{categoryId}/subscriptions',
-            requirements: ['categoryId' => '\\d+'],
+            requirements: ['categoryId' => '\d+'],
             read: false,
             output: false,
             status: Response::HTTP_NO_CONTENT,
@@ -51,34 +51,48 @@ final class LearningPathCategorySubscription
     #[Groups(['lp_category_subscription:read'])]
     public string $csrfToken = '';
 
-    /** @var array<int, array{id: int, title: string}> */
+    /**
+     * @var array<int, array{id: int, title: string}>
+     */
     #[Groups(['lp_category_subscription:read'])]
     public array $users = [];
 
-    /** @var array<int, int> */
+    /**
+     * @var array<int, int>
+     */
     #[Groups(['lp_category_subscription:read'])]
     public array $selectedUserIds = [];
 
-    /** @var array<int, array{id: int, title: string}> */
+    /**
+     * @var array<int, array{id: int, title: string}>
+     */
     #[Groups(['lp_category_subscription:read'])]
     public array $groups = [];
 
-    /** @var array<int, int> */
+    /**
+     * @var array<int, int>
+     */
     #[Groups(['lp_category_subscription:read'])]
     public array $selectedGroupIds = [];
 
-    /** @var array<int, array{id: int, title: string}> */
+    /**
+     * @var array<int, array{id: int, title: string}>
+     */
     #[Groups(['lp_category_subscription:read'])]
     public array $userGroups = [];
 
-    /** @var array<int, int> */
+    /**
+     * @var array<int, int>
+     */
     #[Groups(['lp_category_subscription:read'])]
     public array $selectedUserGroupIds = [];
 
     #[Groups(['lp_category_subscription:write'])]
     public string $section = '';
 
-    /** @var array<int, int|string> */
+    /**
+     * @var array<int, int|string>
+     */
     #[Groups(['lp_category_subscription:write'])]
     public array $selectedIds = [];
 

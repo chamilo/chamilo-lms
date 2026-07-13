@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
+use LpAiHelper;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -85,7 +86,7 @@ final readonly class LearningPathAiGeneratorProcessor implements ProcessorInterf
         try {
             require_once api_get_path(SYS_CODE_PATH).'lp/LpAiHelper.php';
 
-            $helper = new \LpAiHelper();
+            $helper = new LpAiHelper();
             $result = $helper->createLearningPathFromAI(
                 $lpData,
                 $course->getCode(),
@@ -100,10 +101,7 @@ final readonly class LearningPathAiGeneratorProcessor implements ProcessorInterf
         }
 
         if (true !== ($result['success'] ?? false) || (int) ($result['lp_id'] ?? 0) <= 0) {
-            throw new HttpException(
-                500,
-                (string) ($result['text'] ?? 'Error creating learning path'),
-            );
+            throw new HttpException(500, (string) ($result['text'] ?? 'Error creating learning path'));
         }
 
         $response = new LearningPathAiGenerator();

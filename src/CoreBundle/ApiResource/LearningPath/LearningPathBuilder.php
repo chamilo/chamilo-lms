@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/learning_paths/{lpId}/builder',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             name: 'get_learning_path_builder',
             provider: LearningPathBuilderProvider::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
@@ -45,11 +45,15 @@ final class LearningPathBuilder
     #[Groups(['learning_path_builder:read'])]
     public string $csrfToken = '';
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['learning_path_builder:read'])]
     public array $items = [];
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['learning_path_builder:read'])]
     public array $resources = [];
 
@@ -59,11 +63,15 @@ final class LearningPathBuilder
     #[Groups(['learning_path_builder:read'])]
     public bool $searchEnabled = false;
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['learning_path_builder:read'])]
     public array $certificate = [];
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['learning_path_builder:read'])]
     public array $bulkAuthorPrice = [];
 

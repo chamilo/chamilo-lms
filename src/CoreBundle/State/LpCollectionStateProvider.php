@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\State;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathCollectionProvider;
 
 /**
- * @deprecated Use LearningPathCollectionProvider from the LearningPath state namespace.
+ * @deprecated use LearningPathCollectionProvider from the LearningPath state namespace
  */
-final readonly class LpCollectionStateProvider extends LearningPathCollectionProvider
-{
-}
+final readonly class LpCollectionStateProvider extends LearningPathCollectionProvider {}

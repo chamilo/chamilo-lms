@@ -558,7 +558,9 @@ final class LpAdvancedAccessController extends AbstractController
         return $rows;
     }
 
-    /** @return array<int, Usergroup> */
+    /**
+     * @return array<int, Usergroup>
+     */
     private function getAllowedUserGroups(EntityManagerInterface $entityManager, Course $course): array
     {
         /** @var list<Usergroup> $userGroups */
@@ -583,7 +585,9 @@ final class LpAdvancedAccessController extends AbstractController
         return $result;
     }
 
-    /** @return list<CLpRelUserGroup> */
+    /**
+     * @return list<CLpRelUserGroup>
+     */
     private function getUserGroupRelations(
         EntityManagerInterface $entityManager,
         Course $course,
@@ -597,12 +601,12 @@ final class LpAdvancedAccessController extends AbstractController
         ];
 
         /** @var list<CLpRelUserGroup> $relations */
-        $relations = $entityManager->getRepository(CLpRelUserGroup::class)->findBy($criteria);
-
-        return $relations;
+        return $entityManager->getRepository(CLpRelUserGroup::class)->findBy($criteria);
     }
 
-    /** @return list<int> */
+    /**
+     * @return list<int>
+     */
     private function normalizeIds(mixed $values): array
     {
         if (!\is_array($values)) {

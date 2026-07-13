@@ -43,6 +43,10 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
+
 /** @implements ProviderInterface<LearningPathBuilder> */
 final readonly class LearningPathBuilderProvider implements ProviderInterface
 {
@@ -144,8 +148,9 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             }
 
             foreach ($this->getAudioDocumentReferences($document) as $reference) {
-                if (!array_key_exists($reference, $audioDocumentsByReference)) {
+                if (!\array_key_exists($reference, $audioDocumentsByReference)) {
                     $audioDocumentsByReference[$reference] = $document;
+
                     continue;
                 }
 
@@ -269,6 +274,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             $parentId = $rows[$itemId]['parentId'];
             if (\is_int($parentId) && isset($rows[$parentId])) {
                 $rows[$parentId]['children'][] = &$rows[$itemId];
+
                 continue;
             }
 
@@ -367,7 +373,9 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         return $definitionsByItem;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function buildBulkAuthorPrice(int $lpId): array
     {
         $result = [
@@ -565,7 +573,9 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         };
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function buildCertificate(CLp $lp, Course $course, ?Session $session, ?CGroup $group): array
     {
         $finalItem = $this->lpItemRepository->createQueryBuilder('item')
@@ -673,12 +683,14 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
 
             if ('folder' === $fileType) {
                 $folderRows[] = $row;
+
                 continue;
             }
 
             if ('video' === $fileType) {
                 $row['resourceType'] = 'video';
                 $videoRows[] = $row;
+
                 continue;
             }
 
@@ -769,7 +781,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             }
             $row = $this->resourceRow($resource, 'survey');
             $row['questionCount'] = $resource->getQuestions()->count();
-            $row['canAdd'] = 0 < $row['questionCount'];
+            $row['canAdd'] = $row['questionCount'] > 0;
             $surveys[] = $row;
         }
 
@@ -812,6 +824,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             $parentResourceNodeId = (int) ($rows[$index]['parentResourceNodeId'] ?? 0);
             if ($parentResourceNodeId > 0 && isset($rowsByNode[$parentResourceNodeId])) {
                 $rowsByNode[$parentResourceNodeId]['children'][] = &$rows[$index];
+
                 continue;
             }
 
@@ -884,12 +897,12 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         }
 
         /** @var AbstractResource[] $resources */
-        $resources = $queryBuilder->getQuery()->getResult();
-
-        return $resources;
+        return $queryBuilder->getQuery()->getResult();
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function resourceRow(AbstractResource $resource, string $resourceType): array
     {
         $id = match (true) {
@@ -921,7 +934,9 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         ];
     }
 
-    /** @return string[] */
+    /**
+     * @return string[]
+     */
     private function getAudioDocumentReferences(CDocument $document): array
     {
         $resourceNode = $document->getResourceNode();
@@ -936,7 +951,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         $fullPath = str_replace('\\', '/', trim($document->getFullPath()));
         $segments = array_values(array_filter(explode('/', trim($fullPath, '/')), static fn (string $part): bool => '' !== $part));
         foreach (array_keys($segments) as $index) {
-            $relativePath = implode('/', array_slice($segments, $index));
+            $relativePath = implode('/', \array_slice($segments, $index));
             $references[] = $relativePath;
             $references[] = '/'.$relativePath;
             $references[] = 'document/'.$relativePath;

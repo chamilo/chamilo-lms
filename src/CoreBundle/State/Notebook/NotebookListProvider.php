@@ -26,9 +26,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
+use const DATE_ATOM;
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
-use const DATE_ATOM;
 
 /**
  * @implements ProviderInterface<NotebookList>

@@ -119,7 +119,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         }
     }
 
-    /** @param array<string, mixed> $uriVariables */
+    /**
+     * @param array<string, mixed> $uriVariables
+     */
     private function getLearningPath(array $uriVariables): CLp
     {
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
@@ -135,7 +137,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         return $lp;
     }
 
-    /** @param array<int, int|string> $values @return array<int, int> */
+    /**
+     * @param array<int, int|string> $values @return array<int, int>
+     */
     private function normalizeIds(array $values): array
     {
         $ids = [];
@@ -151,7 +155,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         return array_values(array_unique($ids));
     }
 
-    /** @param array<int, int> $userIds @return array<int, int> */
+    /**
+     * @param array<int, int> $userIds @return array<int, int>
+     */
     private function getViewIds(CLp $lp, Course $course, ?Session $session, array $userIds): array
     {
         $qb = $this->entityManager->createQueryBuilder()
@@ -169,7 +175,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         return array_map('intval', $qb->getQuery()->getSingleColumnResult());
     }
 
-    /** @param array<int, int> $viewIds @return array<int, int> */
+    /**
+     * @param array<int, int> $viewIds @return array<int, int>
+     */
     private function getItemViewIds(array $viewIds): array
     {
         return array_map('intval', $this->entityManager->createQueryBuilder()
@@ -181,7 +189,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
             ->getSingleColumnResult());
     }
 
-    /** @param array<int, int> $itemViewIds */
+    /**
+     * @param array<int, int> $itemViewIds
+     */
     private function deleteInteractions(array $itemViewIds): void
     {
         $this->entityManager->createQueryBuilder()
@@ -193,7 +203,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         ;
     }
 
-    /** @param array<int, int> $itemViewIds */
+    /**
+     * @param array<int, int> $itemViewIds
+     */
     private function deleteObjectives(array $itemViewIds): void
     {
         $this->entityManager->createQueryBuilder()
@@ -205,7 +217,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         ;
     }
 
-    /** @param array<int, int> $viewIds */
+    /**
+     * @param array<int, int> $viewIds
+     */
     private function deleteItemViews(array $viewIds): void
     {
         $this->entityManager->createQueryBuilder()
@@ -217,7 +231,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         ;
     }
 
-    /** @param array<int, int> $viewIds */
+    /**
+     * @param array<int, int> $viewIds
+     */
     private function deleteViews(array $viewIds): void
     {
         $this->entityManager->createQueryBuilder()
@@ -229,7 +245,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         ;
     }
 
-    /** @param array<int, int> $userIds */
+    /**
+     * @param array<int, int> $userIds
+     */
     private function detachExerciseAttempts(CLp $lp, Course $course, ?Session $session, array $userIds): void
     {
         $qb = $this->entityManager->createQueryBuilder()
@@ -248,7 +266,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         $qb->getQuery()->execute();
     }
 
-    /** @param array<int, int> $userIds */
+    /**
+     * @param array<int, int> $userIds
+     */
     private function deleteAccessCompletion(CLp $lp, Course $course, ?Session $session, array $userIds): void
     {
         $this->entityManager->getConnection()->executeStatement(
@@ -275,7 +295,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         );
     }
 
-    /** @param array<int, int> $userIds */
+    /**
+     * @param array<int, int> $userIds
+     */
     private function deleteExerciseAttempts(CLp $lp, Course $course, ?Session $session, array $userIds): void
     {
         $qb = $this->entityManager->createQueryBuilder()

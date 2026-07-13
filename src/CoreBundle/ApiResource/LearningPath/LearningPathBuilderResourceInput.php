@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/learning_paths/{lpId}/builder/resources',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             read: false,
             name: 'add_learning_path_builder_resource',
             processor: LearningPathBuilderMutationProcessor::class,

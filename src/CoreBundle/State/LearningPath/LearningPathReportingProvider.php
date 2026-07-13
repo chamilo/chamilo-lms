@@ -164,7 +164,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         );
     }
 
-    /** @param array<string, mixed> $uriVariables */
+    /**
+     * @param array<string, mixed> $uriVariables
+     */
     private function getLearningPath(array $uriVariables): CLp
     {
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
@@ -229,7 +231,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         );
     }
 
-    /** @return array<int, array{user: User, role: string}> */
+    /**
+     * @return array<int, array{user: User, role: string}>
+     */
     private function getLearningPathSubscribers(CLp $lp, Course $course, ?Session $session): array
     {
         $qb = $this->entityManager->createQueryBuilder()
@@ -285,7 +289,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $users;
     }
 
-    /** @return array<int, array{user: User, role: string}> */
+    /**
+     * @return array<int, array{user: User, role: string}>
+     */
     private function getCourseStudents(Course $course, ?Session $session): array
     {
         $users = [];
@@ -319,7 +325,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $users;
     }
 
-    /** @return array<int, array{user: User, role: string}> */
+    /**
+     * @return array<int, array{user: User, role: string}>
+     */
     private function getCourseTeachers(Course $course, ?Session $session): array
     {
         $users = [];
@@ -353,7 +361,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $users;
     }
 
-    /** @return array<int, int> */
+    /**
+     * @return array<int, int>
+     */
     private function getFilterUserIds(string $filter, Course $course): array
     {
         [$type, $rawId] = array_pad(explode(':', $filter, 2), 2, '');
@@ -502,7 +512,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, CLpItemView>     $attempts
+     * @param array<int, CLpItemView>    $attempts
      * @param array<int, TrackEExercise> $exerciseAttempts
      */
     private function calculateScore(CLp $lp, array $attempts, array $exerciseAttempts): ?float
@@ -584,7 +594,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $result;
     }
 
-    /** @param array<int, int> $viewIds @return array<int, CLpItemView> */
+    /**
+     * @param array<int, int> $viewIds @return array<int, CLpItemView>
+     */
     private function getItemViews(array $viewIds): array
     {
         if ([] === $viewIds) {
@@ -630,6 +642,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
             ->orderBy('view.viewCount', 'DESC')
         ;
         $this->applySessionCondition($viewsQb, 'view.session', $session);
+
         /** @var array<int, CLpView> $views */
         $views = $viewsQb->getQuery()->getResult();
         $viewIds = array_values(array_filter(array_map(static fn (CLpView $view): int => (int) $view->getIid(), $views)));
@@ -721,7 +734,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         ];
     }
 
-    /** @param array<int, int> $itemViewIds @return array<int, array<int, array<string, mixed>>> */
+    /**
+     * @param array<int, int> $itemViewIds @return array<int, array<int, array<string, mixed>>>
+     */
     private function getInteractions(array $itemViewIds): array
     {
         if ([] === $itemViewIds) {
@@ -754,7 +769,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $result;
     }
 
-    /** @param array<int, int> $itemViewIds @return array<int, array<int, array<string, mixed>>> */
+    /**
+     * @param array<int, int> $itemViewIds @return array<int, array<int, array<string, mixed>>>
+     */
     private function getObjectives(array $itemViewIds): array
     {
         if ([] === $itemViewIds) {
@@ -811,6 +828,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
             ->orderBy('exercise.exeDate', 'DESC')
         ;
         $this->applySessionCondition($qb, 'exercise.session', $session);
+
         /** @var array<int, TrackEExercise> $rows */
         $rows = $qb->getQuery()->getResult();
         $result = [];
@@ -824,10 +842,13 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<int, array{label: string, value: string}> */
+    /**
+     * @return array<int, array{label: string, value: string}>
+     */
     private function getGroupOptions(Course $course, ?Session $session, bool $allowUserGroups): array
     {
         $options = [];
+
         /** @var array<int, CGroup> $groups */
         $groups = $this->groupRepository->getResourcesByCourse($course, $session)->getQuery()->getResult();
         foreach ($groups as $group) {
@@ -858,7 +879,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $options;
     }
 
-    /** @param array<int, int> $userIds @return array<int, array<int, string>> */
+    /**
+     * @param array<int, int> $userIds @return array<int, array<int, string>>
+     */
     private function getCourseGroupNames(array $userIds, Course $course): array
     {
         if ([] === $userIds) {
@@ -885,7 +908,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $result;
     }
 
-    /** @param array<int, int> $userIds @return array<int, array<int, string>> */
+    /**
+     * @param array<int, int> $userIds @return array<int, array<int, string>>
+     */
     private function getClassNames(array $userIds): array
     {
         if ([] === $userIds || !$this->settingEnabled('lp.allow_lp_subscription_to_usergroups')) {
@@ -910,7 +935,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $result;
     }
 
-    /** @param array<int, int> $userIds @return array<int, int> */
+    /**
+     * @param array<int, int> $userIds @return array<int, int>
+     */
     private function getAccessCompletionTimes(
         CLp $lp,
         Course $course,
@@ -1005,7 +1032,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         ;
     }
 
-    /** @return array{timeSeconds: int, progress: int, score: float|null, lastConnection: int|null} */
+    /**
+     * @return array{timeSeconds: int, progress: int, score: float|null, lastConnection: int|null}
+     */
     private function emptyMetrics(): array
     {
         return [

@@ -92,7 +92,9 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         return $result;
     }
 
-    /** @param array<string, mixed> $uriVariables */
+    /**
+     * @param array<string, mixed> $uriVariables
+     */
     private function getCategory(array $uriVariables): CLpCategory
     {
         $categoryId = (int) ($uriVariables['categoryId'] ?? 0);
@@ -155,7 +157,9 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
-    /** @return array<int, array{id: int, title: string}> */
+    /**
+     * @return array<int, array{id: int, title: string}>
+     */
     private function getUserOptions(Course $course, ?Session $session): array
     {
         $users = [];
@@ -194,7 +198,9 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         return $options;
     }
 
-    /** @return array<int, int> */
+    /**
+     * @return array<int, int>
+     */
     private function getSelectedUserIds(CLpCategory $category): array
     {
         $ids = [];
@@ -210,7 +216,9 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         return array_values(array_unique($ids));
     }
 
-    /** @return array<int, array{id: int, title: string}> */
+    /**
+     * @return array<int, array{id: int, title: string}>
+     */
     private function getGroupOptions(Course $course, ?Session $session): array
     {
         /** @var array<int, CGroup> $groups */
@@ -229,7 +237,9 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         return $options;
     }
 
-    /** @return array<int, int> */
+    /**
+     * @return array<int, int>
+     */
     private function getSelectedGroupIds(CLpCategory $category, Course $course, ?Session $session): array
     {
         $ids = [];
@@ -249,7 +259,9 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         return array_values(array_unique($ids));
     }
 
-    /** @return array<int, array{id: int, title: string}> */
+    /**
+     * @return array<int, array{id: int, title: string}>
+     */
     private function getUserGroupOptions(Course $course): array
     {
         /** @var array<int, Usergroup> $groups */
@@ -275,7 +287,9 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         return $options;
     }
 
-    /** @return array<int, int> */
+    /**
+     * @return array<int, int>
+     */
     private function getSelectedUserGroupIds(CLpCategory $category, Course $course, ?Session $session): array
     {
         $parameters = [

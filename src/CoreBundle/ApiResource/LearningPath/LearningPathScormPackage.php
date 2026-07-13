@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Controller\Api\LearningPathScormPackageAction;
     operations: [
         new Get(
             uriTemplate: '/learning_paths/{lpId}/scorm/package',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             controller: LearningPathScormPackageAction::class,
             openapi: new Operation(
                 summary: 'Download the original package of a SCORM learning path',
@@ -26,6 +26,4 @@ use Chamilo\CoreBundle\Controller\Api\LearningPathScormPackageAction;
         ),
     ],
 )]
-final class LearningPathScormPackage
-{
-}
+final class LearningPathScormPackage {}

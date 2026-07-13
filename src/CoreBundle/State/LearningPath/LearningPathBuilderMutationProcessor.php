@@ -57,12 +57,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const FILTER_VALIDATE_BOOLEAN;
+use const PATHINFO_EXTENSION;
+
 /** @implements ProcessorInterface<object, object|null> */
 final readonly class LearningPathBuilderMutationProcessor implements ProcessorInterface
 {
     use LearningPathStateHelperTrait;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private const AUDIO_EXTENSIONS = ['aac', 'm4a', 'mp3', 'ogg', 'wav', 'webm'];
 
     private const FILE_EXTRA_FIELD_TYPES = [
@@ -86,7 +93,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
      * @param array<string, mixed> $uriVariables
      * @param array<string, mixed> $context
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): object|null
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?object
     {
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
@@ -296,7 +303,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         }
 
         $this->touchLearningPath($lp);
-        if ([] !== $data->extraFields || 0 < $request->files->count()) {
+        if ([] !== $data->extraFields || $request->files->count() > 0) {
             $this->saveItemExtraFields($itemId, $data->extraFields, $request);
         }
         $this->entityManager->flush();
@@ -346,7 +353,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             if ('' === $audioPath) {
                 throw new BadRequestHttpException('The selected audio document has no storage path.');
             }
-            if (250 < \strlen($audioPath)) {
+            if (\strlen($audioPath) > 250) {
                 throw new BadRequestHttpException('The selected audio document path is too long.');
             }
 
@@ -408,9 +415,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
                     $maxScore = max(0.0, $maxScore);
                 }
                 if ($maxScore < $minScore) {
-                    throw new BadRequestHttpException(
-                        'The maximum prerequisite score must be greater than or equal to the minimum score.'
-                    );
+                    throw new BadRequestHttpException('The maximum prerequisite score must be greater than or equal to the minimum score.');
                 }
             } else {
                 $minScore = 0.0;
@@ -685,6 +690,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             $connection->commit();
         } catch (Throwable $throwable) {
             $connection->rollBack();
+
             throw $throwable;
         }
 
@@ -778,7 +784,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         $data->lpId = (int) ($payload['lpId'] ?? 0);
         $data->title = (string) ($payload['title'] ?? '');
         $data->parentId = isset($payload['parentId']) ? (int) $payload['parentId'] : null;
-        $data->content = array_key_exists('content', $payload) && null !== $payload['content']
+        $data->content = \array_key_exists('content', $payload) && null !== $payload['content']
             ? (string) $payload['content']
             : null;
         $data->exportAllowed = filter_var($payload['exportAllowed'] ?? false, FILTER_VALIDATE_BOOLEAN);
@@ -814,7 +820,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             ->getQuery()
             ->getResult()
         ;
-        if (count($items) !== count($itemIds)) {
+        if (\count($items) !== \count($itemIds)) {
             throw new BadRequestHttpException('One or more learning path items are invalid.');
         }
 
@@ -871,9 +877,10 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
                 static fn (array $row): int => (int) ($row['itemId'] ?? 0),
                 $allowedAuthorRows,
             )));
+
             /** @var User[] $authors */
             $authors = $this->entityManager->getRepository(User::class)->findBy(['id' => $authorIds]);
-            if (count($allowedAuthorIds) !== count($authorIds) || count($authors) !== count($authorIds)) {
+            if (\count($allowedAuthorIds) !== \count($authorIds) || \count($authors) !== \count($authorIds)) {
                 throw new BadRequestHttpException('One or more selected authors are invalid.');
             }
         }
@@ -896,7 +903,9 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         return $data;
     }
 
-    /** @param array<array-key, mixed> $submitted */
+    /**
+     * @param array<array-key, mixed> $submitted
+     */
     private function saveItemExtraFields(int $itemId, array $submitted, Request $request): void
     {
         foreach ($this->extraFieldRepository->getExtraFields(ExtraField::LP_ITEM_FIELD_TYPE) as $field) {
@@ -1120,7 +1129,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
 
     /**
      * @param array<int, array{id?: mixed, parentId?: mixed}> $order
-     * @param array<int, CLpItem>                            $items
+     * @param array<int, CLpItem>                             $items
      *
      * @return array<int, array{id:int, parentId:int|null}>
      */
@@ -1193,7 +1202,9 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         return $normalized;
     }
 
-    /** @return array<int, CLpItem> */
+    /**
+     * @return array<int, CLpItem>
+     */
     private function getItemsById(CLp $lp): array
     {
         /** @var CLpItem[] $items */
@@ -1224,6 +1235,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         foreach ($items as $item) {
             if ('final_item' === $item->getItemType()) {
                 $finalItem = $item;
+
                 continue;
             }
             $orderedItems[] = $item;

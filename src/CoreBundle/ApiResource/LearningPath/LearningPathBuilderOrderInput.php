@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/learning_paths/{lpId}/builder/reorder',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             read: false,
             name: 'reorder_learning_path_builder_items',
             processor: LearningPathBuilderMutationProcessor::class,
@@ -32,7 +32,9 @@ final class LearningPathBuilderOrderInput
     #[Groups(['learning_path_builder_order:read'])]
     public ?int $lpId = null;
 
-    /** @var array<int, array{id:int, parentId:int|null}> */
+    /**
+     * @var array<int, array{id:int, parentId:int|null}>
+     */
     #[Groups(['learning_path_builder_order:write'])]
     public array $order = [];
 

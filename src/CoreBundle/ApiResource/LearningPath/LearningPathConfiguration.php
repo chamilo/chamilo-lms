@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Get(
             uriTemplate: '/learning_paths/{id}/configuration',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             name: 'get_learning_path_configuration',
             provider: LearningPathConfigurationProvider::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
@@ -38,7 +38,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/learning_paths/{id}/configuration',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             name: 'update_learning_path_configuration',
             controller: LearningPathConfigurationAction::class,
             processor: LearningPathConfigurationProcessor::class,
@@ -153,39 +153,57 @@ final class LearningPathConfiguration
     #[Groups(['lp_configuration:read'])]
     public ?string $imageUrl = null;
 
-    /** @var array<int, array{label:string, value:int|null}> */
+    /**
+     * @var array<int, array{label:string, value:int|null}>
+     */
     #[Groups(['lp_configuration:read'])]
     public array $categoryOptions = [];
 
-    /** @var array<int, array{label:string, value:string}> */
+    /**
+     * @var array<int, array{label:string, value:string}>
+     */
     #[Groups(['lp_configuration:read'])]
     public array $languageOptions = [];
 
-    /** @var array<int, array{label:string, value:string}> */
+    /**
+     * @var array<int, array{label:string, value:string}>
+     */
     #[Groups(['lp_configuration:read'])]
     public array $themeOptions = [];
 
-    /** @var array<int, array{label:string, value:int}> */
+    /**
+     * @var array<int, array{label:string, value:int}>
+     */
     #[Groups(['lp_configuration:read'])]
     public array $prerequisiteOptions = [];
 
-    /** @var array<int, array{label:string, value:int}> */
+    /**
+     * @var array<int, array{label:string, value:int}>
+     */
     #[Groups(['lp_configuration:read'])]
     public array $nextLpOptions = [];
 
-    /** @var array<int, array{label:string, value:string}> */
+    /**
+     * @var array<int, array{label:string, value:string}>
+     */
     #[Groups(['lp_configuration:read'])]
     public array $iconOptions = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['lp_configuration:read'])]
     public array $extraFields = [];
 
-    /** @var array<int, array{label:string, value:int}> */
+    /**
+     * @var array<int, array{label:string, value:int}>
+     */
     #[Groups(['lp_configuration:read'])]
     public array $skillOptions = [];
 
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     #[Groups(['lp_configuration:read'])]
     public array $skillIds = [];
 

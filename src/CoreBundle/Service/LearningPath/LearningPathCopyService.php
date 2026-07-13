@@ -211,6 +211,7 @@ final readonly class LearningPathCopyService
             $prerequisite = trim((string) $sourceItem->getPrerequisite());
             if ('' === $prerequisite || !ctype_digit($prerequisite) || (int) $prerequisite <= 0) {
                 $copiedItem->setPrerequisite($prerequisite);
+
                 continue;
             }
 
@@ -282,6 +283,7 @@ final readonly class LearningPathCopyService
         foreach ($items as $item) {
             if ('root' === $item->getItemType()) {
                 $root = $item;
+
                 continue;
             }
 
@@ -317,8 +319,8 @@ final readonly class LearningPathCopyService
     }
 
     /**
-     * @param array<int, CLpItem[]>    $childrenByParent
-     * @param array<string, CLpItem>   $index
+     * @param array<int, CLpItem[]>  $childrenByParent
+     * @param array<string, CLpItem> $index
      */
     private function indexItemChildren(
         int $parentId,
@@ -337,5 +339,4 @@ final readonly class LearningPathCopyService
             $this->indexItemChildren($childId, $path, $childrenByParent, $index);
         }
     }
-
 }

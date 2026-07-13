@@ -28,6 +28,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Attribute\Route;
 
+use const PATHINFO_EXTENSION;
+use const PHP_SESSION_ACTIVE;
+
 final class LearningPathScormContentController extends AbstractController
 {
     use LearningPathStateHelperTrait;
@@ -36,11 +39,11 @@ final class LearningPathScormContentController extends AbstractController
         '/learning-path/scorm/{cid}/{sid}/{gid}/{lpId}/{itemId}/{path}',
         name: 'chamilo_core_learning_path_scorm_content',
         requirements: [
-            'cid' => '\\d+',
-            'sid' => '\\d+',
-            'gid' => '\\d+',
-            'lpId' => '\\d+',
-            'itemId' => '\\d+',
+            'cid' => '\d+',
+            'sid' => '\d+',
+            'gid' => '\d+',
+            'lpId' => '\d+',
+            'itemId' => '\d+',
             'path' => '.+',
         ],
         methods: ['GET'],

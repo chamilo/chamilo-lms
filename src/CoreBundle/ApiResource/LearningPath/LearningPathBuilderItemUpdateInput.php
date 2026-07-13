@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Put(
             uriTemplate: '/learning_path_builder_items/{itemId}',
-            requirements: ['itemId' => '\\d+'],
+            requirements: ['itemId' => '\d+'],
             read: false,
             output: false,
             status: Response::HTTP_NO_CONTENT,
@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/learning_path_builder_items/{itemId}/edit',
-            requirements: ['itemId' => '\\d+'],
+            requirements: ['itemId' => '\d+'],
             controller: LearningPathBuilderItemAction::class,
             read: false,
             deserialize: false,
@@ -64,7 +64,9 @@ final class LearningPathBuilderItemUpdateInput
     #[Groups(['learning_path_builder_item_update:read', 'learning_path_builder_item_update:write'])]
     public bool $exportAllowed = false;
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['learning_path_builder_item_update:read', 'learning_path_builder_item_update:write'])]
     public array $extraFields = [];
 

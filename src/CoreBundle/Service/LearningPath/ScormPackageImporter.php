@@ -31,6 +31,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 use ZipArchive;
 
+use const LOCK_EX;
+use const LOCK_NB;
+use const LOCK_UN;
+use const PATHINFO_EXTENSION;
+use const PATHINFO_FILENAME;
+
 final readonly class ScormPackageImporter
 {
     private const MAX_ARCHIVE_ENTRIES = 20000;
@@ -120,6 +126,7 @@ final readonly class ScormPackageImporter
                 );
 
                 $archiveCopy = $this->createUploadedCopy($backupPath, $originalName);
+
                 try {
                     $this->documentRepository->registerScormZip($course, $session, $lp, $archiveCopy, $group);
                 } finally {
@@ -196,9 +203,7 @@ final readonly class ScormPackageImporter
         if ('' === $expectedName
             || $this->normalizePackageBaseName($expectedName) !== $this->normalizePackageBaseName($originalName)
         ) {
-            throw new RuntimeException(
-                'The uploaded ZIP file name must match the original SCORM package name.',
-            );
+            throw new RuntimeException('The uploaded ZIP file name must match the original SCORM package name.');
         }
 
         $inspection = $this->inspectArchive($packagePath);
@@ -262,6 +267,7 @@ final readonly class ScormPackageImporter
         $zipBackupPath = tempnam(sys_get_temp_dir(), 'chamilo_scorm_update_');
         if (false === $zipBackupPath) {
             $this->releaseUpdateLock($lockHandle);
+
             throw new RuntimeException('The original SCORM ZIP package could not be backed up.');
         }
 
@@ -457,18 +463,14 @@ final readonly class ScormPackageImporter
         }
 
         if ('' !== $learningPathReference) {
-            throw new RuntimeException(
-                'The uploaded SCORM package does not contain the original organization.',
-            );
+            throw new RuntimeException('The uploaded SCORM package does not contain the original organization.');
         }
 
         if (1 === \count($manifest['organizations'])) {
             return $manifest['organizations'][0];
         }
 
-        throw new RuntimeException(
-            'The uploaded SCORM package does not contain the original organization.',
-        );
+        throw new RuntimeException('The uploaded SCORM package does not contain the original organization.');
     }
 
     /**
@@ -481,15 +483,13 @@ final readonly class ScormPackageImporter
             : ScormRuntimeManager::VERSION_12;
 
         if ($currentVersion !== (string) ($manifest['version'] ?? '')) {
-            throw new RuntimeException(
-                'The updated package must use the same SCORM version as the current learning path.',
-            );
+            throw new RuntimeException('The updated package must use the same SCORM version as the current learning path.');
         }
     }
 
     /**
      * @param array{identifier: string, title: string, items: array<int, array<string, mixed>>} $organization
-     * @param array<string, array{href: string, scormType: string}>                              $resources
+     * @param array<string, array{href: string, scormType: string}>                             $resources
      */
     private function assertUpdateStructure(CLp $learningPath, array $organization, array $resources): void
     {
@@ -504,9 +504,7 @@ final readonly class ScormPackageImporter
 
             $reference = trim($item->getRef());
             if ('' === $reference || isset($existingItems[$reference])) {
-                throw new RuntimeException(
-                    'The current SCORM learning path does not have a safely updateable item structure.',
-                );
+                throw new RuntimeException('The current SCORM learning path does not have a safely updateable item structure.');
             }
 
             $parent = $item->getParent();
@@ -523,9 +521,7 @@ final readonly class ScormPackageImporter
         }
 
         if (\count($existingItems) !== \count($manifestItems)) {
-            throw new RuntimeException(
-                'The uploaded SCORM manifest changes the learning path structure. Import it as a new package instead.',
-            );
+            throw new RuntimeException('The uploaded SCORM manifest changes the learning path structure. Import it as a new package instead.');
         }
 
         foreach ($existingItems as $reference => $existingItem) {
@@ -535,16 +531,14 @@ final readonly class ScormPackageImporter
                 || $existingItem['type'] !== $manifestItem['type']
                 || $existingItem['parent'] !== $manifestItem['parent']
             ) {
-                throw new RuntimeException(
-                    'The uploaded SCORM manifest changes the learning path structure. Import it as a new package instead.',
-                );
+                throw new RuntimeException('The uploaded SCORM manifest changes the learning path structure. Import it as a new package instead.');
             }
         }
     }
 
     /**
-     * @param array<int, array<string, mixed>>                      $items
-     * @param array<string, array{href: string, scormType: string}> $resources
+     * @param array<int, array<string, mixed>>                                 $items
+     * @param array<string, array{href: string, scormType: string}>            $resources
      * @param array<string, array{path: string, type: string, parent: string}> $result
      */
     private function flattenManifestItems(
@@ -720,19 +714,18 @@ final readonly class ScormPackageImporter
 
             usort(
                 $manifestCandidates,
-                static fn (array $left, array $right): int =>
-                    substr_count($left['name'], '/') <=> substr_count($right['name'], '/'),
+                static fn (array $left, array $right): int => substr_count($left['name'], '/') <=> substr_count($right['name'], '/'),
             );
             $manifestPath = $manifestCandidates[0]['name'];
             $manifestXml = $archive->getFromName($manifestCandidates[0]['archiveName']);
             if (false === $manifestXml || '' === trim($manifestXml)) {
                 throw new RuntimeException('The SCORM manifest could not be read.');
             }
-            if (strlen($manifestXml) > self::MAX_MANIFEST_SIZE) {
+            if (\strlen($manifestXml) > self::MAX_MANIFEST_SIZE) {
                 throw new RuntimeException('The SCORM manifest is too large.');
             }
 
-            $manifestDirectory = dirname($manifestPath);
+            $manifestDirectory = \dirname($manifestPath);
             if ('.' === $manifestDirectory) {
                 $manifestDirectory = '';
             }
@@ -789,7 +782,7 @@ final readonly class ScormPackageImporter
     }
 
     /**
-     * @param array<string, mixed>                                                    $manifest
+     * @param array<string, mixed>                                                  $manifest
      * @param array<int, array{name: string, archiveName: string, directory: bool}> $entries
      */
     private function validateManifestResources(
@@ -797,8 +790,7 @@ final readonly class ScormPackageImporter
         array $entries,
         string $manifestDirectory,
         string $contentProximity,
-    ): void
-    {
+    ): void {
         $entryMap = [];
         foreach ($entries as $entry) {
             if (!$entry['directory']) {
@@ -813,9 +805,7 @@ final readonly class ScormPackageImporter
             }
             if ($this->isRemoteResource($href)) {
                 if ('remote' !== $contentProximity) {
-                    throw new RuntimeException(
-                        'The SCORM manifest contains a remote resource but the package is configured as local.',
-                    );
+                    throw new RuntimeException('The SCORM manifest contains a remote resource but the package is configured as local.');
                 }
 
                 continue;
@@ -824,9 +814,7 @@ final readonly class ScormPackageImporter
             $path = '' !== $manifestDirectory ? $manifestDirectory.'/'.$href : $href;
             $path = $this->normalizeArchiveEntry($path);
             if (!isset($entryMap[$path])) {
-                throw new RuntimeException(
-                    'A resource declared in imsmanifest.xml is missing from the package: '.$href,
-                );
+                throw new RuntimeException('A resource declared in imsmanifest.xml is missing from the package: '.$href);
             }
         }
     }
@@ -901,10 +889,11 @@ final readonly class ScormPackageImporter
                     if (!$filesystem->directoryExists($target)) {
                         $filesystem->createDirectory($target);
                     }
+
                     continue;
                 }
 
-                $parent = dirname($target);
+                $parent = \dirname($target);
                 if (!$filesystem->directoryExists($parent)) {
                     $filesystem->createDirectory($parent);
                 }
@@ -924,6 +913,7 @@ final readonly class ScormPackageImporter
             if ($filesystem->directoryExists($destination)) {
                 $filesystem->deleteDirectory($destination);
             }
+
             throw $exception;
         } finally {
             $archive->close();
@@ -932,7 +922,7 @@ final readonly class ScormPackageImporter
 
     /**
      * @param array{identifier: string, title: string, items: array<int, array<string, mixed>>} $organization
-     * @param array<string, array{href: string, scormType: string}>                              $resources
+     * @param array<string, array{href: string, scormType: string}>                             $resources
      */
     private function createLearningPath(
         Course $course,
@@ -1010,8 +1000,8 @@ final readonly class ScormPackageImporter
     }
 
     /**
-     * @param array<int, array<string, mixed>>                         $manifestItems
-     * @param array<string, array{href: string, scormType: string}>    $resources
+     * @param array<int, array<string, mixed>>                      $manifestItems
+     * @param array<string, array{href: string, scormType: string}> $resources
      */
     private function createItems(
         CLp $lp,

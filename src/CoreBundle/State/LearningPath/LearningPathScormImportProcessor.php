@@ -39,8 +39,7 @@ final readonly class LearningPathScormImportProcessor implements ProcessorInterf
         Operation $operation,
         array $uriVariables = [],
         array $context = [],
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
             throw new BadRequestHttpException('Request is missing.');

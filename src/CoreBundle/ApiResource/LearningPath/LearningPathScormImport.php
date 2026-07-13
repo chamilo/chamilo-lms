@@ -56,6 +56,4 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormImportProcessor;
         ),
     ],
 )]
-final class LearningPathScormImport
-{
-}
+final class LearningPathScormImport {}

@@ -108,9 +108,7 @@ final readonly class LearningPathCategoryReorderProcessor implements ProcessorIn
         sort($sortedOrderedIds);
 
         if ($sortedExpectedIds !== $sortedOrderedIds) {
-            throw new BadRequestHttpException(
-                'The order must contain every learning path category from the current context and no others.'
-            );
+            throw new BadRequestHttpException('The order must contain every learning path category from the current context and no others.');
         }
 
         $linksByCategoryId = [];

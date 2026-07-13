@@ -90,7 +90,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         $this->entityManager->flush();
     }
 
-    /** @param array<string, mixed> $uriVariables */
+    /**
+     * @param array<string, mixed> $uriVariables
+     */
     private function getCategory(array $uriVariables): CLpCategory
     {
         $categoryId = (int) ($uriVariables['categoryId'] ?? 0);
@@ -293,7 +295,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         }
     }
 
-    /** @return array<int, User> */
+    /**
+     * @return array<int, User>
+     */
     private function getAllowedUsers(Course $course, ?Session $session): array
     {
         $users = [];
@@ -321,7 +325,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         return $users;
     }
 
-    /** @return array<int, CGroup> */
+    /**
+     * @return array<int, CGroup>
+     */
     private function getAllowedGroups(Course $course, ?Session $session): array
     {
         /** @var array<int, CGroup> $groups */
@@ -336,7 +342,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         return $map;
     }
 
-    /** @return array<int, Usergroup> */
+    /**
+     * @return array<int, Usergroup>
+     */
     private function getAllowedUserGroups(Course $course): array
     {
         /** @var array<int, Usergroup> $groups */
@@ -371,7 +379,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         }
     }
 
-    /** @return array<int, int> */
+    /**
+     * @return array<int, int>
+     */
     private function getSelectedUserGroupIds(CLpCategory $category, Course $course, ?Session $session): array
     {
         [$sessionCondition, $parameters, $types] = $this->getUserGroupRelationContext($category, $course, $session);
@@ -387,7 +397,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         return array_values(array_unique(array_map('intval', $ids)));
     }
 
-    /** @param array<int, int> $ids */
+    /**
+     * @param array<int, int> $ids
+     */
     private function deleteUserGroupRelations(
         CLpCategory $category,
         Course $course,
@@ -413,7 +425,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         );
     }
 
-    /** @param array<int, int> $ids */
+    /**
+     * @param array<int, int> $ids
+     */
     private function insertUserGroupRelations(
         CLpCategory $category,
         Course $course,

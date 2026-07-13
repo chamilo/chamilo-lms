@@ -16,8 +16,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Service\LearningPath\ScormRuntimeManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -46,6 +46,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
 
 /** @implements ProviderInterface<LearningPathRuntime> */
 final readonly class LearningPathRuntimeProvider implements ProviderInterface
@@ -382,12 +386,14 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         }
 
         $prerequisiteView = $this->findLatestView($prerequisiteLp, $course, $session, $user);
-        if (!$prerequisiteView instanceof CLpView || 100 > (int) $prerequisiteView->getProgress()) {
+        if (!$prerequisiteView instanceof CLpView || (int) $prerequisiteView->getProgress() < 100) {
             throw new AccessDeniedHttpException('The learning path prerequisite is not completed.');
         }
     }
 
-    /** @return array<int, CLpItem> */
+    /**
+     * @return array<int, CLpItem>
+     */
     private function getLearningPathItems(CLp $lp): array
     {
         /** @var array<int, CLpItem> $items */
@@ -487,7 +493,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
     private function findLatestView(CLp $lp, Course $course, ?Session $session, User $user): ?CLpView
     {
         /** @var CLpView|null $view */
-        $view = $this->entityManager->getRepository(CLpView::class)->findOneBy(
+        return $this->entityManager->getRepository(CLpView::class)->findOneBy(
             [
                 'lp' => $lp,
                 'course' => $course,
@@ -499,11 +505,11 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
                 'iid' => 'DESC',
             ],
         );
-
-        return $view;
     }
 
-    /** @return array<int, CLpItemView> */
+    /**
+     * @return array<int, CLpItemView>
+     */
     private function getItemViewRows(?CLpView $view): array
     {
         if (!$view instanceof CLpView) {
@@ -511,12 +517,10 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         }
 
         /** @var array<int, CLpItemView> $rows */
-        $rows = $this->entityManager->getRepository(CLpItemView::class)->findBy(
+        return $this->entityManager->getRepository(CLpItemView::class)->findBy(
             ['view' => $view],
             ['viewCount' => 'DESC', 'iid' => 'DESC'],
         );
-
-        return $rows;
     }
 
     /**
@@ -637,7 +641,9 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         return $score >= $minScore && $score <= $maxScore;
     }
 
-    /** @param array<int, CLpItem> $itemsById */
+    /**
+     * @param array<int, CLpItem> $itemsById
+     */
     private function resolvePrerequisiteItemId(string $prerequisite, array $itemsById): int
     {
         if (ctype_digit($prerequisite)) {
@@ -711,6 +717,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $candidateId = $contentIds[$position] ?? 0;
             if ($availabilityById[$candidateId] ?? false) {
                 $previousId = $candidateId;
+
                 break;
             }
         }
@@ -721,6 +728,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $candidateId = $contentIds[$position] ?? 0;
             if ($availabilityById[$candidateId] ?? false) {
                 $nextId = $candidateId;
+
                 break;
             }
         }
@@ -884,7 +892,9 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         return '';
     }
 
-    /** @return array{0:string, 1:string} */
+    /**
+     * @return array{0:string, 1:string}
+     */
     private function buildItemAudio(
         CLpItem $item,
         Course $course,
@@ -960,7 +970,9 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         return ['', ''];
     }
 
-    /** @return string[] */
+    /**
+     * @return string[]
+     */
     private function getAudioDocumentReferences(CDocument $document): array
     {
         $resourceNode = $document->getResourceNode();
@@ -978,7 +990,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             static fn (string $part): bool => '' !== $part,
         ));
         foreach (array_keys($segments) as $index) {
-            $relativePath = implode('/', array_slice($segments, $index));
+            $relativePath = implode('/', \array_slice($segments, $index));
             $references[] = $relativePath;
             $references[] = '/'.$relativePath;
             $references[] = 'document/'.$relativePath;
@@ -1020,7 +1032,9 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         return \in_array($extension, self::AUDIO_EXTENSIONS, true);
     }
 
-    /** @param class-string<AbstractResource> $entityClass */
+    /**
+     * @param class-string<AbstractResource> $entityClass
+     */
     private function findContextResource(
         string $entityClass,
         int $resourceId,
@@ -1062,7 +1076,9 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         return $this->appendQuery('/main/lp/lp_controller.php', $params);
     }
 
-    /** @return array<string, int|string> */
+    /**
+     * @return array<string, int|string>
+     */
     private function buildContextParams(
         Course $course,
         ?Session $session,
@@ -1079,13 +1095,17 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         ];
     }
 
-    /** @param array<string, int|string> $params */
+    /**
+     * @param array<string, int|string> $params
+     */
     private function appendQuery(string $path, array $params): string
     {
         return $path.'?'.http_build_query($params);
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function getDisplaySettings(): array
     {
         $settings = $this->settingsManager->getSetting('lp.lp_view_settings', true);
@@ -1098,13 +1118,15 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         return \is_array($display) ? $display : [];
     }
 
-    /** @param array<string, mixed> $displaySettings */
+    /**
+     * @param array<string, mixed> $displaySettings
+     */
     private function displaySettingEnabled(
         array $displaySettings,
         string $name,
         bool $default = false,
     ): bool {
-        if (!array_key_exists($name, $displaySettings)) {
+        if (!\array_key_exists($name, $displaySettings)) {
             return $default;
         }
 
@@ -1149,7 +1171,9 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         };
     }
 
-    /** @return array{0: string, 1: string} */
+    /**
+     * @return array{0: string, 1: string}
+     */
     private function buildNextLearningPathInfo(
         CLp $lp,
         Course $course,

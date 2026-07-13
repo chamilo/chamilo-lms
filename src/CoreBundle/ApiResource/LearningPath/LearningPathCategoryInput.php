@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/learning_path_categories/{id}/manage-action',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             read: false,
             output: false,
             status: Response::HTTP_NO_CONTENT,
@@ -34,7 +34,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Put(
             uriTemplate: '/learning_path_categories/{id}/manage',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             output: false,
             status: Response::HTTP_NO_CONTENT,
             processor: LearningPathCategoryMutationProcessor::class,

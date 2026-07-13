@@ -29,6 +29,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const PATHINFO_EXTENSION;
+use const PHP_SESSION_ACTIVE;
+
 #[AsController]
 final readonly class LearningPathScormPackageAction
 {

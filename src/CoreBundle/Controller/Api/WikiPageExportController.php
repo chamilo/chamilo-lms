@@ -33,6 +33,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use const PHP_SESSION_ACTIVE;
+
 #[IsGranted('ROLE_USER')]
 final class WikiPageExportController extends AbstractController
 {

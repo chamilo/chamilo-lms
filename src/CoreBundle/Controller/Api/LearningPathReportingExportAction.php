@@ -23,6 +23,10 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const PHP_SESSION_ACTIVE;
+
 #[IsGranted('ROLE_USER')]
 final class LearningPathReportingExportAction extends AbstractController
 {
@@ -36,7 +40,7 @@ final class LearningPathReportingExportAction extends AbstractController
     #[Route(
         '/api/learning_paths/{lpId}/reporting.pdf',
         name: 'api_learning_path_reporting_pdf',
-        requirements: ['lpId' => '\\d+'],
+        requirements: ['lpId' => '\d+'],
         methods: ['GET'],
     )]
     public function __invoke(int $lpId): Response
@@ -158,16 +162,18 @@ final class LearningPathReportingExportAction extends AbstractController
         return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
-    /** @return array<int, string> */
+    /**
+     * @return array<int, string>
+     */
     private function normalizeStringList(mixed $value): array
     {
-        if (!is_array($value)) {
+        if (!\is_array($value)) {
             return [];
         }
 
         $result = [];
         foreach ($value as $item) {
-            if (is_scalar($item)) {
+            if (\is_scalar($item)) {
                 $result[] = (string) $item;
             }
         }
@@ -182,7 +188,7 @@ final class LearningPathReportingExportAction extends AbstractController
         $minutes = intdiv($totalSeconds % 3600, 60);
         $seconds = $totalSeconds % 60;
 
-        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        return \sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
     }
 
     private function formatPercentage(mixed $value): string

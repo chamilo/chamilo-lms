@@ -48,18 +48,20 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
+use const FILTER_VALIDATE_BOOLEAN;
 use const JSON_THROW_ON_ERROR;
 
 /** @implements ProcessorInterface<mixed, LearningPathConfiguration> */
 final readonly class LearningPathConfigurationProcessor implements ProcessorInterface
 {
-    private const VIEW_MODES = ['fullscreen', 'embedded', 'embedframe', 'impress'];
-
     use LearningPathStateHelperTrait;
+    private const VIEW_MODES = ['fullscreen', 'embedded', 'embedframe', 'impress'];
 
     private const ITEM_TYPE_LEARNING_PATH = 4;
 
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     private const FILE_EXTRA_FIELD_TYPES = [
         ExtraField::FIELD_TYPE_FILE_IMAGE,
         ExtraField::FIELD_TYPE_FILE,
@@ -98,7 +100,7 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         $session = $this->getContextSession($this->entityManager, $request, $course);
         $group = $this->getContextGroup($this->entityManager, $request, $course);
         $lpId = (int) ($uriVariables['id'] ?? 0);
-        $isEdit = 0 < $lpId;
+        $isEdit = $lpId > 0;
 
         $lp = $isEdit ? $this->lpRepository->find($lpId) : new CLp();
         if (!$lp instanceof CLp) {
@@ -160,7 +162,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         return $result;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function getPayload(Request $request): array
     {
         $raw = $request->request->get('payload');
@@ -239,7 +243,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         }
     }
 
-    /** @param array<string, mixed> $payload */
+    /**
+     * @param array<string, mixed> $payload
+     */
     private function applyDates(CLp $lp, array $payload): void
     {
         $lp->setPublishedOn($this->payloadBoolean($payload, 'activateStartDate', true)
@@ -250,7 +256,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
             : null);
     }
 
-    /** @param array<string, mixed> $payload */
+    /**
+     * @param array<string, mixed> $payload
+     */
     private function applySubscriptionAndScormOptions(CLp $lp, array $payload, bool $isEdit): void
     {
         $lp->setAccumulateScormTime($this->payloadBoolean($payload, 'accumulateScormTime', false) ? 1 : 0);
@@ -262,7 +270,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         }
     }
 
-    /** @param array<string, mixed> $payload */
+    /**
+     * @param array<string, mixed> $payload
+     */
     private function applyEditConfiguration(
         CLp $lp,
         array $payload,
@@ -331,7 +341,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         return $candidateId;
     }
 
-    /** @param array<string, mixed> $payload */
+    /**
+     * @param array<string, mixed> $payload
+     */
     private function saveExtraFields(CLp $lp, array $payload, Request $request, bool $isEdit): void
     {
         $lpId = (int) $lp->getIid();
@@ -449,7 +461,7 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
             return;
         }
         $skillIds = \is_array($rawSkillIds)
-            ? array_values(array_unique(array_filter(array_map(static fn (mixed $id): int => (int) $id, $rawSkillIds), static fn (int $id): bool => 0 < $id)))
+            ? array_values(array_unique(array_filter(array_map(static fn (mixed $id): int => (int) $id, $rawSkillIds), static fn (int $id): bool => $id > 0)))
             : [];
         $allowed = [];
         foreach ($this->entityManager->getRepository(SkillRelCourse::class)->findBy([
@@ -495,7 +507,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         }
     }
 
-    /** @param array<string, mixed> $payload */
+    /**
+     * @param array<string, mixed> $payload
+     */
     private function applyPreviewImage(CLp $lp, array $payload, Request $request): void
     {
         $resourceNode = $lp->getResourceNode();
@@ -519,7 +533,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         $this->lpRepository->addFile($lp, $file);
     }
 
-    /** @param array<string, mixed> $payload */
+    /**
+     * @param array<string, mixed> $payload
+     */
     private function applySearchIndex(CLp $lp, array $payload): void
     {
         if (!$this->settingEnabled('search.search_enabled')) {
@@ -664,7 +680,9 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         }
     }
 
-    /** @param array<string, mixed> $payload */
+    /**
+     * @param array<string, mixed> $payload
+     */
     private function payloadBoolean(array $payload, string $key, bool $default): bool
     {
         if (!\array_key_exists($key, $payload)) {

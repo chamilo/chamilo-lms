@@ -9,6 +9,10 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const PREG_SPLIT_NO_EMPTY;
+
 final readonly class WikiPageExportService
 {
     public function __construct(
@@ -133,7 +137,7 @@ CSS;
             return 'wiki-page';
         }
 
-        if (function_exists('mb_substr')) {
+        if (\function_exists('mb_substr')) {
             return mb_substr($normalized, 0, 120);
         }
 

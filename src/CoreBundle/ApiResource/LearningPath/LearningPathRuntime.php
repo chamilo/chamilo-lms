@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/learning_paths/{lpId}/runtime',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             name: 'get_learning_path_runtime',
             provider: LearningPathRuntimeProvider::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT') or is_granted('ROLE_CURRENT_COURSE_GROUP_STUDENT')",
@@ -159,11 +159,15 @@ final class LearningPathRuntime
     #[Groups(['learning_path_runtime:read'])]
     public string $csrfToken = '';
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['learning_path_runtime:read'])]
     public array $scorm = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['learning_path_runtime:read'])]
     public array $items = [];
 

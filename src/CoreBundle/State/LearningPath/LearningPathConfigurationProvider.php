@@ -39,6 +39,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const DATE_ATOM;
+
 /** @implements ProviderInterface<LearningPathConfiguration> */
 final readonly class LearningPathConfigurationProvider implements ProviderInterface
 {
@@ -78,7 +80,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
 
         $lpId = (int) ($uriVariables['id'] ?? 0);
         $lp = null;
-        if (0 < $lpId) {
+        if ($lpId > 0) {
             $lp = $this->lpRepository->find($lpId);
             if (!$lp instanceof CLp) {
                 throw new NotFoundHttpException('Learning path not found.');
@@ -115,7 +117,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         $result->titleAsHtml = $this->settingEnabled('editor.save_titles_as_html');
         $result->categoryOptions = $this->getCategoryOptions($course, $session, $group);
         $result->languageOptions = $this->getLanguageOptions();
-        $result->showLanguage = 2 < \count($result->languageOptions);
+        $result->showLanguage = \count($result->languageOptions) > 2;
         $result->showSubscribeUsers = $this->allowsLearningPathSubscriptions();
         $result->showUseMaxScore = $lp instanceof CLp && $this->security->isGranted('ROLE_ADMIN');
         $result->showSearchIndex = $lp instanceof CLp && $this->settingEnabled('search.search_enabled');
@@ -421,7 +423,8 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
     {
         return $this->extraFieldValuesRepository
             ->getValueByVariableAndItem($variable, $lpId, ExtraField::LP_FIELD_TYPE)
-            ?->getFieldValue() ?? '';
+            ?->getFieldValue() ?? ''
+        ;
     }
 
     private function getExtraFieldBooleanValue(string $variable, int $lpId): bool

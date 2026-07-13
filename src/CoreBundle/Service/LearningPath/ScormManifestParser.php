@@ -12,6 +12,10 @@ use DOMNode;
 use DOMXPath;
 use RuntimeException;
 
+use const LIBXML_COMPACT;
+use const LIBXML_NOBLANKS;
+use const LIBXML_NONET;
+
 final class ScormManifestParser
 {
     /**
@@ -103,7 +107,9 @@ final class ScormManifestParser
         ];
     }
 
-    /** @return array<string, array{href: string, scormType: string}> */
+    /**
+     * @return array<string, array{href: string, scormType: string}>
+     */
     private function parseResources(DOMXPath $xpath): array
     {
         $resources = [];
@@ -127,6 +133,7 @@ final class ScormManifestParser
             foreach ($resourceNode->attributes ?? [] as $attribute) {
                 if ('scormtype' === strtolower((string) $attribute->localName)) {
                     $scormType = strtolower(trim((string) $attribute->nodeValue));
+
                     break;
                 }
             }
@@ -144,7 +151,9 @@ final class ScormManifestParser
         return $resources;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function parseItem(DOMElement $itemNode): array
     {
         $children = [];

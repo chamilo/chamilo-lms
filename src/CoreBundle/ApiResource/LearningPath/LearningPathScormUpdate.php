@@ -18,7 +18,7 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormUpdateProcessor;
     operations: [
         new Post(
             uriTemplate: '/learning_paths/{lpId}/scorm/update',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             controller: LearningPathScormUpdateAction::class,
             processor: LearningPathScormUpdateProcessor::class,
             openapi: new Operation(
@@ -49,6 +49,4 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormUpdateProcessor;
         ),
     ],
 )]
-final class LearningPathScormUpdate
-{
-}
+final class LearningPathScormUpdate {}

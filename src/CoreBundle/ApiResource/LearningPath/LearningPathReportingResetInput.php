@@ -10,7 +10,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 final class LearningPathReportingResetInput
 {
-    /** @var array<int, int|string> */
+    /**
+     * @var array<int, int|string>
+     */
     #[Groups(['learning_path_reporting_reset:write'])]
     public array $userIds = [];
 

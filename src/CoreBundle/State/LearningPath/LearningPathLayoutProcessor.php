@@ -52,9 +52,7 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
         $group = $this->getContextGroup($this->entityManager, $request, $course);
 
         if (null !== $session || null !== $group) {
-            throw new AccessDeniedHttpException(
-                'Learning path category layout can only be changed in the base course context.'
-            );
+            throw new AccessDeniedHttpException('Learning path category layout can only be changed in the base course context.');
         }
 
         $categoryRows = $data->categories;

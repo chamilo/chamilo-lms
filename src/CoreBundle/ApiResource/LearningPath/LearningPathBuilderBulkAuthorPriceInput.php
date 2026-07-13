@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/learning_paths/{lpId}/builder/author-price',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             read: false,
             output: false,
             status: Response::HTTP_NO_CONTENT,
@@ -35,11 +35,15 @@ final class LearningPathBuilderBulkAuthorPriceInput
     #[Groups(['learning_path_builder_author_price:read'])]
     public ?int $lpId = null;
 
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     #[Groups(['learning_path_builder_author_price:write'])]
     public array $itemIds = [];
 
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     #[Groups(['learning_path_builder_author_price:write'])]
     public array $authorIds = [];
 

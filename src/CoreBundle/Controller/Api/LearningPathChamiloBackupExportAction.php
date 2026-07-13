@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathStateHelperTrait;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -27,7 +28,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use RuntimeException;
+
+use const PHP_SESSION_ACTIVE;
 
 #[IsGranted('ROLE_USER')]
 final class LearningPathChamiloBackupExportAction extends AbstractController
@@ -45,7 +47,7 @@ final class LearningPathChamiloBackupExportAction extends AbstractController
     #[Route(
         '/api/learning_paths/{lpId}/chamilo-backup.zip',
         name: 'api_learning_path_chamilo_backup',
-        requirements: ['lpId' => '\\d+'],
+        requirements: ['lpId' => '\d+'],
         methods: ['GET'],
     )]
     public function __invoke(int $lpId, Request $request): BinaryFileResponse
@@ -89,14 +91,10 @@ final class LearningPathChamiloBackupExportAction extends AbstractController
         } catch (LearningPathBackupResourceException $exception) {
             throw new UnprocessableEntityHttpException($exception->getMessage(), $exception);
         } catch (RuntimeException $exception) {
-            throw new HttpException(
-                500,
-                'The Chamilo learning path backup could not be generated.',
-                $exception,
-            );
+            throw new HttpException(500, 'The Chamilo learning path backup could not be generated.', $exception);
         }
 
-        $filename = sprintf('learning-path-%d-%s.zip', $lpId, date('Ymd-His'));
+        $filename = \sprintf('learning-path-%d-%s.zip', $lpId, date('Ymd-His'));
 
         $response = new BinaryFileResponse($archivePath);
         $response->headers->set('Cache-Control', 'private, no-store, max-age=0');

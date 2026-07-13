@@ -230,7 +230,9 @@ final readonly class ScormRuntimeManager
         $this->entityManager->flush();
     }
 
-    /** @return array<string, string> */
+    /**
+     * @return array<string, string>
+     */
     private function buildScorm12Values(CLpItem $item, CLpItemView $itemView, User $user): array
     {
         $status = $this->normalizeStatus((string) $itemView->getStatus());
@@ -285,7 +287,9 @@ final readonly class ScormRuntimeManager
         return $this->appendInteractionAndObjectiveValues($values, $itemView, false);
     }
 
-    /** @return array<string, string> */
+    /**
+     * @return array<string, string>
+     */
     private function buildScorm2004Values(CLpItem $item, CLpItemView $itemView, User $user): array
     {
         $status = $this->normalizeStatus((string) $itemView->getStatus());
@@ -365,6 +369,7 @@ final readonly class ScormRuntimeManager
         bool $scorm2004,
     ): array {
         $itemViewId = (int) $itemView->getIid();
+
         /** @var array<int, CLpIvInteraction> $interactions */
         $interactions = $this->entityManager->getRepository(CLpIvInteraction::class)->findBy(
             ['lpIvId' => $itemViewId],
@@ -629,6 +634,7 @@ final readonly class ScormRuntimeManager
         string $status,
     ): void {
         $itemViewId = (int) $itemView->getIid();
+
         /** @var CLpIvObjective|null $objective */
         $objective = $this->entityManager->getRepository(CLpIvObjective::class)->findOneBy([
             'lpIvId' => $itemViewId,
@@ -666,7 +672,7 @@ final readonly class ScormRuntimeManager
                 continue;
             }
 
-            $suffix = substr($key, strlen($prefix));
+            $suffix = substr($key, \strlen($prefix));
             if (!preg_match('/^(\d+)\.(.+)$/', $suffix, $matches)) {
                 continue;
             }
@@ -697,10 +703,10 @@ final readonly class ScormRuntimeManager
             }
 
             $stringValue = null === $value ? '' : (string) $value;
-            if (strlen($stringValue) > self::MAX_VALUE_LENGTH) {
+            if (\strlen($stringValue) > self::MAX_VALUE_LENGTH) {
                 throw new RuntimeException('A SCORM runtime value is too large.');
             }
-            $totalLength += strlen($key) + strlen($stringValue);
+            $totalLength += \strlen($key) + \strlen($stringValue);
             if ($totalLength > self::MAX_PAYLOAD_LENGTH) {
                 throw new RuntimeException('The SCORM runtime payload is too large.');
             }
@@ -711,7 +717,9 @@ final readonly class ScormRuntimeManager
         return $normalized;
     }
 
-    /** @return array{id: string, name: string} */
+    /**
+     * @return array{id: string, name: string}
+     */
     private function getStudentData(User $user): array
     {
         $useUsername = $this->isTruthy(
@@ -773,7 +781,9 @@ final readonly class ScormRuntimeManager
         };
     }
 
-    /** @param array<int, string> $changedKeys */
+    /**
+     * @param array<int, string> $changedKeys
+     */
     private function normalizeChangedKeys(array $changedKeys): array
     {
         $normalized = [];
@@ -846,7 +856,7 @@ final readonly class ScormRuntimeManager
         $minutes = intdiv($seconds % 3600, 60);
         $remaining = $seconds % 60;
 
-        return sprintf('%02d:%02d:%02d', $hours, $minutes, $remaining);
+        return \sprintf('%02d:%02d:%02d', $hours, $minutes, $remaining);
     }
 
     private function formatScorm2004Duration(int $seconds): string
@@ -906,7 +916,9 @@ final readonly class ScormRuntimeManager
         return implode('/', $segments);
     }
 
-    /** @param array<string, scalar> $query */
+    /**
+     * @param array<string, scalar> $query
+     */
     private function appendQuery(string $url, array $query): string
     {
         $query = array_filter(
@@ -943,7 +955,9 @@ final readonly class ScormRuntimeManager
         return $this->appendQuery($url, $safeQuery);
     }
 
-    /** @param array<int, string> $values */
+    /**
+     * @param array<int, string> $values
+     */
     private function encodeStringList(array $values): string
     {
         try {
@@ -953,7 +967,9 @@ final readonly class ScormRuntimeManager
         }
     }
 
-    /** @return array<int, string> */
+    /**
+     * @return array<int, string>
+     */
     private function decodeStringList(string $value): array
     {
         try {

@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/learning_path_builder_items/{itemId}/delete',
-            requirements: ['itemId' => '\\d+'],
+            requirements: ['itemId' => '\d+'],
             read: false,
             name: 'delete_learning_path_builder_item',
             processor: LearningPathBuilderMutationProcessor::class,

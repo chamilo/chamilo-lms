@@ -8,6 +8,4 @@ namespace Chamilo\CoreBundle\Service\LearningPath;
 
 use RuntimeException;
 
-final class LearningPathBackupEmptyException extends RuntimeException
-{
-}
+final class LearningPathBackupEmptyException extends RuntimeException {}

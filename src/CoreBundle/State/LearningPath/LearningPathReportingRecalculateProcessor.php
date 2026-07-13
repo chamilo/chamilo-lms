@@ -174,7 +174,9 @@ final readonly class LearningPathReportingRecalculateProcessor implements Proces
         }
     }
 
-    /** @param array<string, mixed> $uriVariables */
+    /**
+     * @param array<string, mixed> $uriVariables
+     */
     private function getLearningPath(array $uriVariables): CLp
     {
         $lpId = (int) ($uriVariables['lpId'] ?? 0);

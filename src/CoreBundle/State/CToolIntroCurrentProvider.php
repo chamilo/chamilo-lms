@@ -19,6 +19,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+
 /**
  * Resolves the active course-tool introduction for the current course/session
  * context (replacing the legacy CourseController::getToolIntro action).

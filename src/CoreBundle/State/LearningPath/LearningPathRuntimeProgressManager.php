@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State\LearningPath;
 
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
-use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -74,7 +74,7 @@ final readonly class LearningPathRuntimeProgressManager
         }
 
         /** @var CLpItemView|null $itemView */
-        $itemView = $this->entityManager->getRepository(CLpItemView::class)->findOneBy(
+        return $this->entityManager->getRepository(CLpItemView::class)->findOneBy(
             [
                 'item' => $itemEntity,
                 'view' => $view,
@@ -84,8 +84,6 @@ final readonly class LearningPathRuntimeProgressManager
                 'iid' => 'DESC',
             ],
         );
-
-        return $itemView;
     }
 
     public function getNextItemAttempt(CLpView $view, CLpItem|int $item): int
@@ -202,19 +200,21 @@ final readonly class LearningPathRuntimeProgressManager
         return max(0, min(100, $progress));
     }
 
-    /** @return array<int, CLpItem> */
+    /**
+     * @return array<int, CLpItem>
+     */
     private function getItems(CLp $lp): array
     {
         /** @var array<int, CLpItem> $items */
-        $items = $this->lpItemRepository->findBy(
+        return $this->lpItemRepository->findBy(
             ['lp' => $lp],
             ['displayOrder' => 'ASC', 'iid' => 'ASC'],
         );
-
-        return $items;
     }
 
-    /** @return array<int, CLpItemView> */
+    /**
+     * @return array<int, CLpItemView>
+     */
     private function indexLatestItemViews(CLpView $view): array
     {
         /** @var array<int, CLpItemView> $rows */
@@ -234,7 +234,9 @@ final readonly class LearningPathRuntimeProgressManager
         return $latest;
     }
 
-    /** @param array<int, CLpItemView> $latestViews */
+    /**
+     * @param array<int, CLpItemView> $latestViews
+     */
     private function synchronizeExerciseItemViews(CLpView $view, array $latestViews): void
     {
         $quizItemViews = [];
@@ -358,6 +360,7 @@ final readonly class LearningPathRuntimeProgressManager
                 $childView = $latestViews[(int) $child->getIid()] ?? null;
                 if (!$childView instanceof CLpItemView || !$this->isCompletedStatus($childView->getStatus())) {
                     $allCompleted = false;
+
                     break;
                 }
             }

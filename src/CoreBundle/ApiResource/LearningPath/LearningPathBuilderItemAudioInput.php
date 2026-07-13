@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Put(
             uriTemplate: '/learning_path_builder_items/{itemId}/audio',
-            requirements: ['itemId' => '\\d+'],
+            requirements: ['itemId' => '\d+'],
             read: false,
             output: false,
             status: Response::HTTP_NO_CONTENT,

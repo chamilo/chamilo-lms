@@ -139,6 +139,7 @@ final readonly class WikiPageExportProcessor implements ProcessorInterface
         }
 
         $fileName = $export['filename'].'.html';
+
         try {
             if (false === file_put_contents($tempFile, $export['document'])) {
                 throw new RuntimeException('Failed to write the Wiki export file.');

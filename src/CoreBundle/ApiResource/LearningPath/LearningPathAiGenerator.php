@@ -40,14 +40,18 @@ final class LearningPathAiGenerator
     #[Groups(['learning_path_ai_generator:read'])]
     public string $language = 'en';
 
-    /** @var array<int, array{label: string, value: string}> */
+    /**
+     * @var array<int, array{label: string, value: string}>
+     */
     #[Groups(['learning_path_ai_generator:read'])]
     public array $providers = [];
 
     #[Groups(['learning_path_ai_generator:read', 'learning_path_ai_generator:write'])]
     public string $csrfToken = '';
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['learning_path_ai_generator:write'])]
     public array $lpData = [];
 

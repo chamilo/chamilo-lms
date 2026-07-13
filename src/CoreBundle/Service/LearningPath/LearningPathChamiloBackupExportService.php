@@ -27,6 +27,10 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Throwable;
 
+use const DIRECTORY_SEPARATOR;
+use const LOCK_EX;
+use const PATHINFO_EXTENSION;
+
 final class LearningPathChamiloBackupExportService
 {
     public function __construct(
@@ -250,11 +254,13 @@ final class LearningPathChamiloBackupExportService
                 case 'final_item':
                 case 'video':
                     $documents[$resourceId] = $resourceId;
+
                     break;
 
                 case 'quiz':
                 case 'exercise':
                     $quizzes[$resourceId] = $resourceId;
+
                     break;
 
                 case 'thread':
@@ -271,6 +277,7 @@ final class LearningPathChamiloBackupExportService
                             $forumCategories[$categoryId] = $categoryId;
                         }
                     }
+
                     break;
 
                 case 'forum':
@@ -282,17 +289,20 @@ final class LearningPathChamiloBackupExportService
                             $forumCategories[$categoryId] = $categoryId;
                         }
                     }
+
                     break;
 
                 case 'link':
                 case 'weblink':
                 case 'url':
                     $links[$resourceId] = $resourceId;
+
                     break;
 
                 case 'student_publication':
                 case 'work':
                     $works[$resourceId] = $resourceId;
+
                     break;
             }
         }
@@ -406,6 +416,7 @@ final class LearningPathChamiloBackupExportService
             $document = $this->entityManager->getRepository(CDocument::class)->find($documentId);
             if (!$document instanceof CDocument) {
                 $this->logSkippedDocument($documentId, '', 'document entity was not found');
+
                 continue;
             }
 
@@ -415,12 +426,14 @@ final class LearningPathChamiloBackupExportService
             if ($isFolder) {
                 $this->filesystem->mkdir($targetPath, 0775);
                 $keptResources[] = $resource;
+
                 continue;
             }
 
             $resourceNode = $document->getResourceNode();
             if (!$resourceNode instanceof ResourceNode) {
                 $this->logSkippedDocument($documentId, (string) $document->getTitle(), 'resource node is missing');
+
                 continue;
             }
 
@@ -432,12 +445,13 @@ final class LearningPathChamiloBackupExportService
                 $targetStream = fopen($targetPath, 'wb');
                 if (false === $targetStream) {
                     fclose($sourceStream);
-                    throw new RuntimeException(sprintf('Document %d could not be staged.', $documentId));
+
+                    throw new RuntimeException(\sprintf('Document %d could not be staged.', $documentId));
                 }
 
                 try {
                     if (false === stream_copy_to_stream($sourceStream, $targetStream)) {
-                        throw new RuntimeException(sprintf('Document %d could not be copied.', $documentId));
+                        throw new RuntimeException(\sprintf('Document %d could not be copied.', $documentId));
                     }
                 } finally {
                     fclose($sourceStream);
@@ -453,10 +467,10 @@ final class LearningPathChamiloBackupExportService
             $fallbackContent = $this->getDocumentFallbackContent($document);
             if ($this->isTextDocument($document) && '' !== trim($fallbackContent)) {
                 if (false === file_put_contents($targetPath, $fallbackContent, LOCK_EX)) {
-                    throw new RuntimeException(sprintf('Document %d fallback content could not be staged.', $documentId));
+                    throw new RuntimeException(\sprintf('Document %d fallback content could not be staged.', $documentId));
                 }
 
-                error_log(sprintf(
+                error_log(\sprintf(
                     '[LearningPathBackup] Used ResourceNode content fallback for document %d.',
                     $documentId,
                 ));
@@ -566,7 +580,6 @@ final class LearningPathChamiloBackupExportService
         return false;
     }
 
-
     /**
      * @param array{documents: list<int>, quizzes: list<int>, threads: list<int>, forums: list<int>, forumCategories: list<int>, links: list<int>, works: list<int>} $dependencies
      */
@@ -587,7 +600,7 @@ final class LearningPathChamiloBackupExportService
         string $reason,
         string $expectedFile = '',
     ): void {
-        $message = sprintf(
+        $message = \sprintf(
             '[LearningPathBackup] Skipped document %d "%s" because %s.',
             $documentId,
             $title,
@@ -595,13 +608,15 @@ final class LearningPathChamiloBackupExportService
         );
 
         if ('' !== trim($expectedFile)) {
-            $message .= sprintf(' Expected file: %s.', $expectedFile);
+            $message .= \sprintf(' Expected file: %s.', $expectedFile);
         }
 
         error_log($message);
     }
 
-    /** @return list<ResourceFile> */
+    /**
+     * @return list<ResourceFile>
+     */
     private function getResourceFileCandidates(ResourceNode $resourceNode): array
     {
         $candidates = [];
@@ -647,7 +662,9 @@ final class LearningPathChamiloBackupExportService
         return '';
     }
 
-    /** @return list<CourseCopyDocument> */
+    /**
+     * @return list<CourseCopyDocument>
+     */
     private function getDocumentResources(CourseBuilder $builder): array
     {
         $resources = $builder->course->resources[RESOURCE_DOCUMENT] ?? [];

@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/learning_paths/{lpId}/runtime/scorm/commit',
-            requirements: ['lpId' => '\\d+'],
+            requirements: ['lpId' => '\d+'],
             read: false,
             output: false,
             status: Response::HTTP_NO_CONTENT,
@@ -42,11 +42,15 @@ final class LearningPathScormCommitInput
     #[Groups(['learning_path_scorm_commit:write'])]
     public string $version = '';
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['learning_path_scorm_commit:write'])]
     public array $values = [];
 
-    /** @var array<int, string> */
+    /**
+     * @var array<int, string>
+     */
     #[Groups(['learning_path_scorm_commit:write'])]
     public array $changedKeys = [];
 

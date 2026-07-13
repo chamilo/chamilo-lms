@@ -40,6 +40,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use const PHP_SESSION_ACTIVE;
+
 #[IsGranted('ROLE_USER')]
 final class LearningPathContentPdfAction extends AbstractController
 {
@@ -59,7 +61,7 @@ final class LearningPathContentPdfAction extends AbstractController
     #[Route(
         '/api/learning_paths/{lpId}/content-pdf/items',
         name: 'api_learning_path_content_pdf_items',
-        requirements: ['lpId' => '\\d+'],
+        requirements: ['lpId' => '\d+'],
         methods: ['GET'],
     )]
     public function items(int $lpId, Request $request): JsonResponse
@@ -77,7 +79,7 @@ final class LearningPathContentPdfAction extends AbstractController
     #[Route(
         '/api/learning_paths/{lpId}/content.pdf',
         name: 'api_learning_path_content_pdf',
-        requirements: ['lpId' => '\\d+'],
+        requirements: ['lpId' => '\d+'],
         methods: ['GET'],
     )]
     public function pdf(int $lpId, Request $request): Response
@@ -185,7 +187,9 @@ final class LearningPathContentPdfAction extends AbstractController
         return [$lp, $course, $session, $group];
     }
 
-    /** @return list<int> */
+    /**
+     * @return list<int>
+     */
     private function parseSelectedItemIds(string $value): array
     {
         if ('' === trim($value)) {

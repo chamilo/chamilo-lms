@@ -18,13 +18,22 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
+use Doctrine\DBAL\Types\Types;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use Doctrine\DBAL\Types\Types;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Mime\MimeTypes;
 use Throwable;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const FILTER_VALIDATE_INT;
+use const LIBXML_HTML_NODEFDTD;
+use const LIBXML_HTML_NOIMPLIED;
+use const PATHINFO_EXTENSION;
+use const PHP_URL_PATH;
 
 final readonly class LearningPathContentPdfService
 {
@@ -132,11 +141,13 @@ final readonly class LearningPathContentPdfService
         return $html;
     }
 
-    /** @return list<CLpItem> */
+    /**
+     * @return list<CLpItem>
+     */
     private function getOrderedItems(CLp $lp): array
     {
         /** @var list<CLpItem> $items */
-        $items = $this->lpItemRepository->createQueryBuilder('item')
+        return $this->lpItemRepository->createQueryBuilder('item')
             ->andWhere('item.lp = :lpId')
             ->andWhere('item.itemType != :rootType')
             ->andWhere('item.exportAllowed = :exportAllowed')
@@ -148,8 +159,6 @@ final readonly class LearningPathContentPdfService
             ->getQuery()
             ->getResult()
         ;
-
-        return $items;
     }
 
     private function canResolveItem(
@@ -170,7 +179,9 @@ final readonly class LearningPathContentPdfService
         return null !== $this->resolveItemBlock($lp, $item, $course, $session, $group);
     }
 
-    /** @return array{kind: string, title: string, content: string}|null */
+    /**
+     * @return array{kind: string, title: string, content: string}|null
+     */
     private function resolveItemBlock(
         CLp $lp,
         CLpItem $item,
@@ -199,7 +210,9 @@ final readonly class LearningPathContentPdfService
         return $this->resolveScormBlock($lp, $item, $title);
     }
 
-    /** @return array{kind: string, title: string, content: string}|null */
+    /**
+     * @return array{kind: string, title: string, content: string}|null
+     */
     private function resolveDocumentBlock(
         CLpItem $item,
         Course $course,
@@ -258,7 +271,9 @@ final readonly class LearningPathContentPdfService
         ];
     }
 
-    /** @return array{kind: string, title: string, content: string}|null */
+    /**
+     * @return array{kind: string, title: string, content: string}|null
+     */
     private function resolveScormBlock(CLp $lp, CLpItem $item, string $title): ?array
     {
         if (CLp::SCORM_TYPE !== $lp->getLpType()) {
@@ -332,7 +347,7 @@ final readonly class LearningPathContentPdfService
             return $html;
         }
 
-        $directory = trim(str_replace('\\', '/', dirname($htmlPath)), '.');
+        $directory = trim(str_replace('\\', '/', \dirname($htmlPath)), '.');
         $images = $dom->getElementsByTagName('img');
         foreach ($images as $image) {
             if (!$image instanceof DOMElement) {
@@ -356,6 +371,7 @@ final readonly class LearningPathContentPdfService
             $relative = $this->normalizeRelativePath(('' !== $directory ? $directory.'/' : '').$pathOnly);
             if ('' === $relative) {
                 $image->removeAttribute('src');
+
                 continue;
             }
 
@@ -364,12 +380,14 @@ final readonly class LearningPathContentPdfService
                 $filesystem = $this->assetRepository->getFileSystem();
                 if (!$filesystem->fileExists($assetPath)) {
                     $image->removeAttribute('src');
+
                     continue;
                 }
 
                 $extension = strtolower((string) pathinfo($relative, PATHINFO_EXTENSION));
                 if (!\in_array($extension, self::IMAGE_EXTENSIONS, true)) {
                     $image->removeAttribute('src');
+
                     continue;
                 }
 
@@ -417,10 +435,12 @@ final readonly class LearningPathContentPdfService
                     $value = trim($attribute->value);
                     if (str_starts_with($name, 'on') || \in_array($name, ['srcdoc', 'formaction'], true)) {
                         $attributesToRemove[] = $attribute->name;
+
                         continue;
                     }
                     if ('style' === $name && 1 === preg_match('/(?:expression|javascript:|url\s*\()/i', $value)) {
                         $attributesToRemove[] = $attribute->name;
+
                         continue;
                     }
                     if (\in_array($name, ['href', 'src'], true) && !$this->isSafeUri($value, 'src' === $name)) {
@@ -498,6 +518,7 @@ final readonly class LearningPathContentPdfService
             }
             if ('..' === $segment) {
                 array_pop($segments);
+
                 continue;
             }
             $segments[] = $segment;

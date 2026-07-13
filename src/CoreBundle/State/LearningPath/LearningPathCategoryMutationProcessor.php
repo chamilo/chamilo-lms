@@ -53,7 +53,7 @@ final readonly class LearningPathCategoryMutationProcessor implements ProcessorI
         $session = $this->getContextSession($this->entityManager, $request, $course);
         $group = $this->getContextGroup($this->entityManager, $request, $course);
         $categoryId = (int) ($uriVariables['id'] ?? 0);
-        $category = 0 < $categoryId ? $this->entityManager->getRepository(CLpCategory::class)->find($categoryId) : new CLpCategory();
+        $category = $categoryId > 0 ? $this->entityManager->getRepository(CLpCategory::class)->find($categoryId) : new CLpCategory();
         if (!$category instanceof CLpCategory) {
             throw new NotFoundHttpException('Learning path category not found.');
         }
@@ -61,7 +61,7 @@ final readonly class LearningPathCategoryMutationProcessor implements ProcessorI
             throw new BadRequestHttpException('Learning path category data is required.');
         }
         $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
-        if (0 < $categoryId) {
+        if ($categoryId > 0) {
             $this->assertExactCategoryContext($category, $course, $session, $group);
 
             if ('' !== $data->action) {

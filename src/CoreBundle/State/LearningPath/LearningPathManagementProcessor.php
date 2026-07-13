@@ -120,26 +120,32 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
 
             case self::ACTION_TOGGLE_PUBLISH:
                 $this->togglePublish($learningPath, $course, $session);
+
                 break;
 
             case self::ACTION_SWITCH_ATTEMPT_MODE:
                 $this->switchAttemptMode($learningPath);
+
                 break;
 
             case self::ACTION_SWITCH_VIEW_MODE:
                 $this->switchViewMode($learningPath);
+
                 break;
 
             case self::ACTION_SWITCH_SCORM_DEBUG:
                 $this->toggleScormDebug($learningPath);
+
                 break;
 
             case self::ACTION_TOGGLE_SERIOUS_GAME:
                 $this->toggleSeriousGame($learningPath);
+
                 break;
 
             case self::ACTION_TOGGLE_AUTO_LAUNCH:
                 $this->toggleAutoLaunch($learningPath, $course, $session, $data->enabled);
+
                 break;
 
             default:
@@ -207,6 +213,7 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
                     && null === $resourceLink->getDeletedAt()
                 ) {
                     $hasOtherActiveLinks = true;
+
                     break;
                 }
             }

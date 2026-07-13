@@ -26,8 +26,8 @@ trait ResourceControllerTrait
 
     public function getRepositoryFromRequest(Request $request): ResourceRepository
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
+        $tool = $request->attributes->get('tool');
+        $type = $request->attributes->get('type');
 
         return $this->getRepository($tool, $type);
     }
@@ -62,9 +62,9 @@ trait ResourceControllerTrait
 
     public function getResourceParams(Request $request): array
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $id = (int) $request->get('id');
+        $tool = $request->attributes->get('tool');
+        $type = $request->attributes->get('type');
+        $id = (int) $request->attributes->get('id');
 
         $courseId = null;
         $sessionId = null;
@@ -86,7 +86,7 @@ trait ResourceControllerTrait
 
     protected function getParentResourceNode(Request $request): ResourceNode
     {
-        $parentNodeId = $request->get('id');
+        $parentNodeId = $request->attributes->get('id');
 
         $parentResourceNode = null;
         if (empty($parentNodeId)) {

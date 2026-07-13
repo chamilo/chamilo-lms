@@ -173,14 +173,14 @@ final class ChatController extends AbstractController
             $convRepo
         );
 
-        $action = (string) $request->get('action', 'track');
+        $action = (string) $request->query->get('action', $request->request->get('action', 'track'));
         $json = ['status' => false];
 
         // Read friend once (used by both legacy and AI paths)
-        $friend = (int) $request->get('friend', 0);
+        $friend = (int) $request->query->get('friend', $request->request->get('friend', 0));
 
         // Optional provider for AI tutor
-        $aiProvider = trim((string) $request->get('ai_provider', ''));
+        $aiProvider = trim((string) $request->query->get('ai_provider', $request->request->get('ai_provider', '')));
 
         try {
             switch ($action) {
@@ -199,7 +199,7 @@ final class ChatController extends AbstractController
                     $chat->disconnectInactiveUsers();
 
                     $newUsersOnline = $chat->countUsersOnline();
-                    $oldUsersOnline = (int) $request->get('users_online', 0);
+                    $oldUsersOnline = (int) $request->query->get('users_online', $request->request->get('users_online', 0));
 
                     if (AiTutorChatService::FRIEND_AI === $friend) {
                         // AI Tutor conversation (private per user)
@@ -236,7 +236,7 @@ final class ChatController extends AbstractController
                     break;
 
                 case 'preview':
-                    $msg = (string) $request->get('message', '');
+                    $msg = (string) $request->query->get('message', $request->request->get('message', ''));
                     $json = ['status' => true, 'data' => ['message' => CourseChatUtils::prepareMessage($msg)]];
 
                     break;
@@ -258,7 +258,7 @@ final class ChatController extends AbstractController
                     break;
 
                 case 'write':
-                    $msg = (string) $request->get('message', '');
+                    $msg = (string) $request->query->get('message', $request->request->get('message', ''));
 
                     if (AiTutorChatService::FRIEND_AI === $friend) {
                         $ok = $aiTutorChatService->handleUserMessage($userId, $course, $session, $aiProvider, $msg);

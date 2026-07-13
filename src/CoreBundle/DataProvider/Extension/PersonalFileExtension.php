@@ -61,7 +61,7 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
         }
 
         $request = $this->requestStack->getCurrentRequest();
-        $isShared = 1 === (int) $request->get('shared');
+        $isShared = 1 === (int) $request->query->get('shared');
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder

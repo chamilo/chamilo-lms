@@ -442,7 +442,7 @@ final class DocumentXapianIndexer
         }
 
         // Standard multipart parsed array: searchFieldValues[t]=...
-        $fromForm = $req->get('searchFieldValues');
+        $fromForm = $req->request->all()['searchFieldValues'] ?? null;
         if (\is_array($fromForm)) {
             $out = [];
             foreach ($fromForm as $k => $v) {

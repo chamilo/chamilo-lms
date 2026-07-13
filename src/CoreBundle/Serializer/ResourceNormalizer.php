@@ -43,19 +43,19 @@ final class ResourceNormalizer implements NormalizerInterface, NormalizerAwareIn
         $groupId = 0;
 
         if ($request) {
-            $getFile = $request->get('getFile');
-            $courseId = (int) $request->get('cid');
+            $getFile = $request->query->get('getFile');
+            $courseId = (int) $request->query->get('cid');
             if (empty($courseId)) {
                 // Try with cid from session
                 $courseId = (int) $request->getSession()->get('cid');
             }
 
-            $sessionId = (int) $request->get('sid');
+            $sessionId = (int) $request->query->get('sid');
             if (empty($sessionId)) {
                 $sessionId = (int) $request->getSession()->get('sid');
             }
 
-            $groupId = (int) $request->get('gid');
+            $groupId = (int) $request->query->get('gid');
             if (empty($groupId)) {
                 $groupId = (int) $request->getSession()->get('gid');
             }

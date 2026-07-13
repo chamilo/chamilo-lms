@@ -250,10 +250,10 @@ class BaseResourceFileAction
             }
         } else {
             $contentData = $request->request->all();
-            $title = $request->get('title');
-            $rawParent = $request->get('parentResourceNodeId');
+            $title = $request->request->get('title');
+            $rawParent = $request->request->get('parentResourceNodeId');
             $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
-            $resourceLinkList = $request->get('resourceLinkList', []);
+            $resourceLinkList = ($request->request->get('resourceLinkList') ?? []);
             if (!empty($resourceLinkList)) {
                 $resourceLinkList = !str_contains($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
                 if (empty($resourceLinkList)) {
@@ -292,10 +292,10 @@ class BaseResourceFileAction
         string $fileExistsOption = '',
         ?TranslatorInterface $translator = null
     ): array {
-        $title = $request->get('comment', '');
-        $rawParent = $request->get('parentResourceNodeId');
+        $title = $request->request->get('comment', '');
+        $rawParent = $request->request->get('parentResourceNodeId');
         $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
-        $fileType = $request->get('filetype');
+        $fileType = $request->request->get('filetype');
         $uploadedFile = null;
 
         if (empty($fileType)) {
@@ -343,12 +343,12 @@ class BaseResourceFileAction
             $fileType = $contentData['filetype'] ?? '';
             $resourceLinkList = $contentData['resourceLinkList'] ?? [];
         } else {
-            $title = $request->get('title');
-            $comment = $request->get('comment');
-            $rawParent = $request->get('parentResourceNodeId');
+            $title = $request->request->get('title');
+            $comment = $request->request->get('comment');
+            $rawParent = $request->request->get('parentResourceNodeId');
             $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
-            $fileType = $request->get('filetype');
-            $resourceLinkList = $request->get('resourceLinkList', []);
+            $fileType = $request->request->get('filetype');
+            $resourceLinkList = ($request->request->get('resourceLinkList') ?? []);
             if (!empty($resourceLinkList)) {
                 $resourceLinkList = !str_contains($resourceLinkList, '[')
                     ? json_decode('['.$resourceLinkList.']', true)
@@ -555,11 +555,11 @@ class BaseResourceFileAction
         ?CourseHelper $courseHelper = null,
         ?array $resourceLinkListOverride = null
     ): array {
-        $rawParent = $request->get('parentResourceNodeId');
+        $rawParent = $request->request->get('parentResourceNodeId');
         $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
 
-        $fileType = $request->get('filetype');
-        $resourceLinkList = $request->get('resourceLinkList', []);
+        $fileType = $request->request->get('filetype');
+        $resourceLinkList = ($request->request->get('resourceLinkList') ?? []);
         if (!empty($resourceLinkList)) {
             if (\is_string($resourceLinkList)) {
                 $resourceLinkList = !str_contains($resourceLinkList, '[')
@@ -656,7 +656,7 @@ class BaseResourceFileAction
                 }
             }
         } else {
-            $title = $request->get('title');
+            $title = $request->request->get('title');
             $content = $request->request->get('contentFile');
 
             if ($request->request->has('comment')) {
@@ -666,7 +666,7 @@ class BaseResourceFileAction
 
             // Keep compatibility with form requests
             if ($request->query->has('parentResourceNodeId') || $request->request->has('parentResourceNodeId')) {
-                $rawParent = $request->get('parentResourceNodeId');
+                $rawParent = $request->request->get('parentResourceNodeId');
                 $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
             }
         }

@@ -78,7 +78,7 @@ final class ResourceNodeDocumentSearchEntityListener
             return true;
         }
 
-        $raw = $req->get('indexDocumentContent');
+        $raw = $req->request->get('indexDocumentContent');
 
         // Not present => default index
         if (null === $raw) {

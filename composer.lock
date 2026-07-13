@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1172895651281fc18231f3233629a479",
+    "content-hash": "e9d122a8a41b87cf0f4243e04280b2c1",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -1095,31 +1095,31 @@
         },
         {
             "name": "chamilo/settings-bundle",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/chamilo/SyliusSettingsBundle.git",
-                "reference": "6209ce6243a1ab098bd539a47b52234fd747c5cc"
+                "url": "https://github.com/AngelFQC/SyliusSettingsBundle.git",
+                "reference": "31ccd4bef879522907332e9073702e776eeeed9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/SyliusSettingsBundle/zipball/6209ce6243a1ab098bd539a47b52234fd747c5cc",
-                "reference": "6209ce6243a1ab098bd539a47b52234fd747c5cc",
+                "url": "https://api.github.com/repos/AngelFQC/SyliusSettingsBundle/zipball/31ccd4bef879522907332e9073702e776eeeed9c",
+                "reference": "31ccd4bef879522907332e9073702e776eeeed9c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^1.0|^2.0",
                 "doctrine/orm": "~2.5|^3.0",
                 "php": "^7.4 || ^8.0",
-                "symfony/config": "^4.0|^5.0|^6.0",
-                "symfony/dependency-injection": "^4.0|^5.0|^6.0",
-                "symfony/event-dispatcher": "^4.0|^5.0|^6.0",
-                "symfony/form": "^4.0|^5.0|^6.0",
-                "symfony/framework-bundle": "^4.0|^5.0|^6.0",
-                "symfony/options-resolver": "^4.0|^5.0|^6.0",
-                "symfony/twig-bridge": "^4.0|^5.0|^6.0",
-                "symfony/validator": "^4.0|^5.0|^6.0",
-                "symfony/yaml": "^4.0|^5.0|^6.0"
+                "symfony/config": "^4.0|^5.0|^6.0|^7.0",
+                "symfony/dependency-injection": "^4.0|^5.0|^6.0|^7.0",
+                "symfony/event-dispatcher": "^4.0|^5.0|^6.0|^7.0",
+                "symfony/form": "^4.0|^5.0|^6.0|^7.0",
+                "symfony/framework-bundle": "^4.0|^5.0|^6.0|^7.0",
+                "symfony/options-resolver": "^4.0|^5.0|^6.0|^7.0",
+                "symfony/twig-bridge": "^4.0|^5.0|^6.0|^7.0",
+                "symfony/validator": "^4.0|^5.0|^6.0|^7.0",
+                "symfony/yaml": "^4.0|^5.0|^6.0|^7.0"
             },
             "require-dev": {
                 "phpspec/phpspec": "^7.0",
@@ -1137,7 +1137,17 @@
                     "Sylius\\Bundle\\SettingsBundle\\": "src/Bundle/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Sylius\\Bundle\\SettingsBundle\\spec\\": "spec/"
+                }
+            },
+            "scripts": {
+                "analyse": [
+                    "@php vendor/bin/ecs check src",
+                    "@php vendor/bin/phpstan analyse"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1158,17 +1168,17 @@
             "description": "Settings system for Symfony applications, editable via web user interface.",
             "homepage": "http://sylius.org",
             "keywords": [
-                "Settings",
                 "config",
                 "configuration",
                 "ecommerce",
+                "settings",
                 "shop",
                 "webshop"
             ],
             "support": {
-                "source": "https://github.com/chamilo/SyliusSettingsBundle/tree/v1.3.0"
+                "source": "https://github.com/AngelFQC/SyliusSettingsBundle/tree/v1.4.0"
             },
-            "time": "2024-04-10T17:19:01+00:00"
+            "time": "2026-07-13T23:11:20+00:00"
         },
         {
             "name": "clue/graph",

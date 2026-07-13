@@ -8,11 +8,11 @@ namespace Chamilo\CoreBundle\Serializer;
 
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final class DocumentAiAssistedNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
+final class DocumentAiAssistedNormalizer implements NormalizerAwareInterface, NormalizerInterface
 {
     use NormalizerAwareTrait;
 
@@ -54,5 +54,10 @@ final class DocumentAiAssistedNormalizer implements ContextAwareNormalizerInterf
         $data['ai_assisted'] = $this->aiDisclosureHelper->isDisclosureEnabled() && $raw;
 
         return $data;
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [CDocument::class => false];
     }
 }

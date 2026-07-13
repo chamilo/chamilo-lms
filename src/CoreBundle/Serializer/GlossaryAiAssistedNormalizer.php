@@ -8,11 +8,11 @@ namespace Chamilo\CoreBundle\Serializer;
 
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CourseBundle\Entity\CGlossary;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final class GlossaryAiAssistedNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
+final class GlossaryAiAssistedNormalizer implements NormalizerAwareInterface, NormalizerInterface
 {
     use NormalizerAwareTrait;
 
@@ -54,5 +54,10 @@ final class GlossaryAiAssistedNormalizer implements ContextAwareNormalizerInterf
         $data['ai_assisted'] = $this->aiDisclosureHelper->isDisclosureEnabled() && (bool) $raw;
 
         return $data;
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [CGlossary::class => false];
     }
 }

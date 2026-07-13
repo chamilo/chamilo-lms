@@ -164,5 +164,5 @@
     "follow-redirects": ">=1.16.0"
   },
   "license": "GPL-3.0",
-  "packageManager": "yarn@4.15.0"
+  "packageManager": "yarn@4.17.1"
 }

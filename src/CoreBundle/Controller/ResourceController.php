@@ -575,6 +575,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $this->json(['error' => 'Variant not found'], Response::HTTP_NOT_FOUND);
         }
 
+        $resourceNode = $variant->getResourceNode();
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException();
+        }
+
+        // Require edit permission on the owning resource node (admins pass via ROLE_ADMIN).
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        // Only genuine access-URL variants may be removed here, never a primary resource file.
+        if (null === $variant->getAccessUrl()) {
+            throw new NotFoundHttpException();
+        }
+
         $em->remove($variant);
         $em->flush();
 

@@ -50,6 +50,8 @@ class IndexController extends BaseController
     #[Route('/resources/wiki/{vueRouting}', name: 'resources_wiki_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/course-progress/{vueRouting}', name: 'resources_course_progress_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/announcement/{vueRouting}', name: 'resources_announcement_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/tickets', name: 'tickets_vue_entrypoint', methods: ['GET'])]
+    #[Route('/tickets/{vueRouting}', name: 'tickets_vue_nested_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/survey/pending', name: 'survey_pending_vue_entrypoint', methods: ['GET'])]
     #[Route('/resources/accessurl/{id}/delete', name: 'access_url_delete', methods: ['GET'])]
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]

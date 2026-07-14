@@ -18,6 +18,15 @@ framework:
     php_errors:
         log: true
     serializer: {enable_attributes: true}
+
+    # UUIDs are generated statically as v4 (e.g. ResourceNode::$uuid), never through the
+    # UuidFactory service, so these versions only pin the Symfony 7 defaults to silence the
+    # deprecation about implicit uid config. default = 4 to match Uuid::v4(); the time-based
+    # factory is unused here and pinned to the Symfony 7 default (7).
+    uid:
+        default_uuid_version: 4
+        time_based_uuid_version: 7
+
     trusted_proxies: '%env(TRUSTED_PROXIES)%'
     trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
 

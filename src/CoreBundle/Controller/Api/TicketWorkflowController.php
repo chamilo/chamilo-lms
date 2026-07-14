@@ -20,6 +20,9 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use const FILTER_NULL_ON_FAILURE;
+use const FILTER_VALIDATE_BOOLEAN;
+
 #[AsController]
 final readonly class TicketWorkflowController
 {
@@ -51,7 +54,7 @@ final readonly class TicketWorkflowController
     #[Route(
         '/api/ticket/{id}/reply',
         name: 'ticket_reply',
-        requirements: ['id' => '\\d+'],
+        requirements: ['id' => '\d+'],
         methods: ['POST'],
     )]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -76,7 +79,7 @@ final readonly class TicketWorkflowController
     #[Route(
         '/api/ticket/{id}/subscribe',
         name: 'ticket_subscribe',
-        requirements: ['id' => '\\d+'],
+        requirements: ['id' => '\d+'],
         methods: ['POST'],
     )]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -96,7 +99,7 @@ final readonly class TicketWorkflowController
     #[Route(
         '/api/ticket/{id}/unsubscribe',
         name: 'ticket_unsubscribe',
-        requirements: ['id' => '\\d+'],
+        requirements: ['id' => '\d+'],
         methods: ['POST'],
     )]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -116,7 +119,7 @@ final readonly class TicketWorkflowController
     #[Route(
         '/api/ticket/{id}/close',
         name: 'ticket_close',
-        requirements: ['id' => '\\d+'],
+        requirements: ['id' => '\d+'],
         methods: ['POST'],
     )]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -133,6 +136,40 @@ final readonly class TicketWorkflowController
         ]);
     }
 
+    #[Route(
+        '/api/ticket/{id}/confirmation',
+        name: 'ticket_confirmation_response',
+        requirements: ['id' => '\d+'],
+        methods: ['POST'],
+    )]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function respondToConfirmation(int $id, Request $request): JsonResponse
+    {
+        $data = $this->getRequestData($request);
+        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
+
+        if (!\array_key_exists('confirmed', $data)) {
+            throw new BadRequestHttpException('The confirmation response is required.');
+        }
+
+        $confirmed = filter_var($data['confirmed'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if (null === $confirmed) {
+            throw new BadRequestHttpException('The confirmation response must be a boolean value.');
+        }
+
+        $ticket = $this->workflowService->getTicketForCurrentAccessUrl($id);
+        $this->workflowService->respondToConfirmation(
+            $ticket,
+            $this->getAuthenticatedUser(),
+            $confirmed,
+        );
+
+        return new JsonResponse([
+            'confirmed' => $confirmed,
+            'message' => get_lang('Saved.'),
+        ]);
+    }
+
     #[Route('/api/ticket/user-options', name: 'ticket_user_options', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     public function userOptions(Request $request): JsonResponse
@@ -144,7 +181,9 @@ final readonly class TicketWorkflowController
         ]);
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function getRequestData(Request $request): array
     {
         if (str_contains((string) $request->headers->get('Content-Type'), 'application/json')) {
@@ -159,7 +198,9 @@ final readonly class TicketWorkflowController
         return $request->request->all();
     }
 
-    /** @return array<int, UploadedFile> */
+    /**
+     * @return array<int, UploadedFile>
+     */
     private function getUploadedFiles(Request $request): array
     {
         $files = [];
@@ -169,7 +210,6 @@ final readonly class TicketWorkflowController
     }
 
     /**
-     * @param mixed $value
      * @param array<int, UploadedFile> $files
      */
     private function collectUploadedFiles(mixed $value, array &$files): void

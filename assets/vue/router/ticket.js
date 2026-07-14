@@ -28,6 +28,16 @@ export default {
       component: () => import("../views/ticket/TicketCreateView.vue"),
     },
     {
+      name: "TicketSettings",
+      path: "settings",
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+        breadcrumb: "Settings",
+      },
+      component: () => import("../views/ticket/TicketSettingsView.vue"),
+    },
+    {
       name: "TicketDetail",
       path: ":id(\\d+)",
       meta: {

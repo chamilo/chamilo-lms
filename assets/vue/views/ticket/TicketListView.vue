@@ -16,7 +16,7 @@
             :label="t('Settings')"
             only-icon
             size="normal"
-            to-url="/main/ticket/settings.php"
+            :route="{ name: 'TicketSettings' }"
             type="secondary"
           />
         </template>
@@ -65,11 +65,22 @@
 
             <BaseButton
               v-if="isAdmin"
+              icon="folder-backup"
+              :is-loading="isClosingOldTickets"
+              :label="t('Close old tickets')"
+              only-icon
+              size="normal"
+              type="secondary"
+              @click="confirmCloseOldTickets"
+            />
+
+            <BaseButton
+              v-if="isAdmin"
               icon="settings"
               :label="t('Settings')"
               only-icon
               size="normal"
-              to-url="/main/ticket/settings.php"
+              :route="{ name: 'TicketSettings', query: { project_id: String(selectedProjectId || '') } }"
               type="secondary"
             />
           </div>
@@ -81,7 +92,7 @@
         class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
         @submit.prevent="applyFilters"
       >
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-end">
           <BaseSelect
             id="ticket-project-filter"
             v-model="pendingFilters.projectId"
@@ -158,23 +169,27 @@
             :options="assigneeOptions"
           />
 
-          <BaseInputText
-            id="ticket-start-date-filter"
-            v-model="pendingFilters.startDate"
-            class="w-full"
-            :label="t('Created')"
-            name="ticket_start_date"
-            type="date"
-          />
+          <div class="w-full self-start">
+            <BaseInputText
+              id="ticket-start-date-filter"
+              v-model="pendingFilters.startDate"
+              class="w-full"
+              :label="t('Created')"
+              name="ticket_start_date"
+              type="date"
+            />
+          </div>
 
-          <BaseInputText
-            id="ticket-end-date-filter"
-            v-model="pendingFilters.endDate"
-            class="w-full"
-            :label="t('Until')"
-            name="ticket_end_date"
-            type="date"
-          />
+          <div class="w-full self-start">
+            <BaseInputText
+              id="ticket-end-date-filter"
+              v-model="pendingFilters.endDate"
+              class="w-full"
+              :label="t('Until')"
+              name="ticket_end_date"
+              type="date"
+            />
+          </div>
         </div>
 
         <div class="mt-4 flex flex-wrap justify-end gap-2">
@@ -344,11 +359,15 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 import ticketService from "../../services/ticketService"
 
 const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { requireConfirmation } = useConfirmation()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 
 const tickets = ref([])
 const projects = ref([])
@@ -362,12 +381,14 @@ const currentPage = ref(1)
 const sortField = ref("id")
 const sortOrder = ref(-1)
 const isLoading = ref(false)
+const isClosingOldTickets = ref(false)
 const errorMessage = ref("")
 const isSearchVisible = ref(false)
 const isAdmin = ref(false)
 const canViewAll = ref(false)
 const canCreate = ref(false)
 const selectedProjectId = ref(0)
+const csrfToken = ref("")
 
 const emptyFilters = () => ({
   projectId: Number(route.query.project_id || 0) || null,
@@ -396,50 +417,28 @@ const assigneeOptions = computed(() => [
 const hasActiveFilters = computed(() =>
   Boolean(
     filters.keyword ||
-      filters.categoryId ||
-      filters.statusId ||
-      filters.priorityId ||
-      filters.assignedUserId !== null ||
-      filters.course ||
-      filters.startDate ||
-      filters.endDate,
-  ),
-)
-
-
-const exportUrl = computed(() => {
-  const params = new URLSearchParams({
-    action: "export",
-    project_id: String(selectedProjectId.value),
-  })
-
-  if (filters.keyword) {
-    params.set("keyword", filters.keyword)
-    params.set("submit_simple", "1")
-  }
-
-  const hasAdvancedFilters =
     filters.categoryId ||
     filters.statusId ||
     filters.priorityId ||
     filters.assignedUserId !== null ||
     filters.course ||
     filters.startDate ||
-    filters.endDate
+    filters.endDate,
+  ),
+)
 
-  if (hasAdvancedFilters) {
-    params.set("submit_advanced", "1")
-  }
+const exportUrl = computed(() => {
+  const params = new URLSearchParams({ projectId: String(selectedProjectId.value) })
+  if (filters.keyword) params.set("keyword", filters.keyword)
+  if (filters.categoryId) params.set("categoryId", String(filters.categoryId))
+  if (filters.statusId) params.set("statusId", String(filters.statusId))
+  if (filters.priorityId) params.set("priorityId", String(filters.priorityId))
+  if (filters.assignedUserId !== null) params.set("assignedUserId", String(filters.assignedUserId))
+  if (filters.course) params.set("course", filters.course)
+  if (filters.startDate) params.set("startDate", filters.startDate)
+  if (filters.endDate) params.set("endDate", filters.endDate)
 
-  if (filters.categoryId) params.set("keyword_category", String(filters.categoryId))
-  if (filters.statusId) params.set("keyword_status", String(filters.statusId))
-  if (filters.priorityId) params.set("keyword_priority", String(filters.priorityId))
-  if (filters.assignedUserId !== null) params.set("keyword_assigned_to", String(filters.assignedUserId))
-  if (filters.course) params.set("keyword_course", filters.course)
-  if (filters.startDate) params.set("keyword_start_date_start", formatLegacyDate(filters.startDate))
-  if (filters.endDate) params.set("keyword_start_date_end", formatLegacyDate(filters.endDate))
-
-  return `/main/ticket/tickets.php?${params.toString()}`
+  return `/api/ticket/admin/export?${params.toString()}`
 })
 
 onMounted(loadTickets)
@@ -476,6 +475,7 @@ async function loadTickets() {
     canViewAll.value = Boolean(response.canViewAll)
     canCreate.value = Boolean(response.canCreate)
     selectedProjectId.value = Number(response.projectId || 0)
+    csrfToken.value = response.csrfToken || ""
 
     if (!filters.projectId && selectedProjectId.value) {
       filters.projectId = selectedProjectId.value
@@ -556,13 +556,35 @@ function syncRouteQuery() {
   router.replace({ name: "TicketList", query })
 }
 
-function formatLegacyDate(value) {
-  const parts = String(value || "").split("-")
-  if (parts.length !== 3) {
-    return String(value || "")
-  }
+function confirmCloseOldTickets() {
+  requireConfirmation({
+    message: t("Close tickets older than seven days?"),
+    accept: closeOldTickets,
+  })
+}
 
-  return `${parts[2]}/${parts[1]}/${parts[0]}`
+async function closeOldTickets() {
+  if (isClosingOldTickets.value) return
+  isClosingOldTickets.value = true
+  try {
+    const response = await ticketService.closeOldTickets(csrfToken.value)
+    showSuccessNotification(`${response.message || t("Update successful")} (${Number(response.count || 0)})`)
+    await loadTickets()
+  } catch (error) {
+    console.error("[TicketList] Failed to close old tickets", error)
+    showErrorNotification(getErrorMessage(error))
+  } finally {
+    isClosingOldTickets.value = false
+  }
+}
+
+function getErrorMessage(error) {
+  return (
+    error?.response?.data?.detail ||
+    error?.response?.data?.error ||
+    error?.response?.data?.["hydra:description"] ||
+    t("An error occurred")
+  )
 }
 
 function formatDate(value) {

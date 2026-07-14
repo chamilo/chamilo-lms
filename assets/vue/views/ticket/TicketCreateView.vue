@@ -152,23 +152,15 @@
             :options="formData.sources"
           />
 
-          <div class="field">
-            <FloatLabel variant="on">
-              <AutoComplete
-                id="ticket-assignee"
-                v-model="selectedAssignee"
-                data-key="id"
-                :dropdown="true"
-                :force-selection="true"
-                input-id="ticket-assignee-input"
-                name="assigned_user"
-                option-label="label"
-                :suggestions="assigneeSuggestions"
-                @complete="searchAssignees"
-              />
-              <label for="ticket-assignee-input">{{ t("Assign") }}</label>
-            </FloatLabel>
-          </div>
+          <BaseAutocomplete
+            id="ticket-assignee"
+            v-model="selectedAssignee"
+            class="w-full"
+            :label="t('Assign')"
+            name="assigned_user"
+            option-label="label"
+            :search="searchAssignees"
+          />
         </template>
       </div>
 
@@ -194,7 +186,7 @@
             icon="plus"
             :label="t('Add one more file')"
             size="small"
-            type="success"
+            type="primary-text"
             @click="addUploadSlot"
           />
         </div>
@@ -246,8 +238,7 @@
 import { computed, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
-import AutoComplete from "primevue/autocomplete"
-import FloatLabel from "primevue/floatlabel"
+import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
@@ -268,7 +259,6 @@ const isSubmitting = ref(false)
 const formSubmitted = ref(false)
 const errorMessage = ref("")
 const selectedAssignee = ref(null)
-const assigneeSuggestions = ref([])
 const uploadSlots = ref([{ id: 1, file: null }])
 let nextUploadId = 2
 
@@ -339,13 +329,13 @@ async function changeSession() {
   await loadForm({ preserveValues: true })
 }
 
-async function searchAssignees(event) {
+async function searchAssignees(query) {
   try {
-    const response = await ticketService.searchUsers(event.query || "")
-    assigneeSuggestions.value = Array.isArray(response.items) ? response.items : []
+    const response = await ticketService.searchUsers(query || "")
+    return Array.isArray(response.items) ? response.items : []
   } catch (error) {
     console.error("[TicketCreate] Failed to search assignees", error)
-    assigneeSuggestions.value = []
+    return []
   }
 }
 
@@ -367,7 +357,12 @@ function selectFile(index, file) {
 
 async function submitForm() {
   formSubmitted.value = true
-  if (!form.categoryId || !form.subject.trim() || !hasMessageContent.value || (courseIsRequired.value && !form.courseId)) {
+  if (
+    !form.categoryId ||
+    !form.subject.trim() ||
+    !hasMessageContent.value ||
+    (courseIsRequired.value && !form.courseId)
+  ) {
     return
   }
 
@@ -406,7 +401,9 @@ async function submitForm() {
 }
 
 function stripHtml(value) {
-  return String(value || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ")
+  return String(value || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
 }
 
 function formatFileSize(bytes) {

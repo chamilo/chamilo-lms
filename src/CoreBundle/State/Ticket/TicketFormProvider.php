@@ -111,7 +111,9 @@ final readonly class TicketFormProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<int, TicketProject> */
+    /**
+     * @return array<int, TicketProject>
+     */
     private function getProjects(AccessUrl $accessUrl): array
     {
         $repository = $this->entityManager->getRepository(TicketProject::class);
@@ -127,7 +129,9 @@ final readonly class TicketFormProvider implements ProviderInterface
         ));
     }
 
-    /** @param array<int, TicketProject> $projects */
+    /**
+     * @param array<int, TicketProject> $projects
+     */
     private function resolveProject(array $projects, int $requestedProjectId): ?TicketProject
     {
         if ([] === $projects) {
@@ -153,7 +157,9 @@ final readonly class TicketFormProvider implements ProviderInterface
         throw new BadRequestHttpException('The requested ticket project is not available for this access URL.');
     }
 
-    /** @return array<int, array{id: int, label: string, description: string|null, courseRequired: bool}> */
+    /**
+     * @return array<int, array{id: int, label: string, description: string|null, courseRequired: bool}>
+     */
     private function getCategories(TicketProject $project): array
     {
         $rows = $this->entityManager
@@ -191,7 +197,9 @@ final readonly class TicketFormProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @return array<int, array{id: int, label: string, code: string}>
+     */
     private function getStatuses(AccessUrl $accessUrl): array
     {
         $repository = $this->entityManager->getRepository(TicketStatus::class);
@@ -217,7 +225,9 @@ final readonly class TicketFormProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @return array<int, array{id: int, label: string, code: string}>
+     */
     private function getPriorities(AccessUrl $accessUrl): array
     {
         $repository = $this->entityManager->getRepository(TicketPriority::class);
@@ -243,7 +253,9 @@ final readonly class TicketFormProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<int, array{id: string, label: string}> */
+    /**
+     * @return array<int, array{id: string, label: string}>
+     */
     private function getSources(bool $isAdmin): array
     {
         $sources = [
@@ -261,7 +273,9 @@ final readonly class TicketFormProvider implements ProviderInterface
         return $sources;
     }
 
-    /** @return array<int, array{id: int, label: string}> */
+    /**
+     * @return array<int, array{id: int, label: string}>
+     */
     private function getSessions(int $userId, int $accessUrlId, bool $isAdmin): array
     {
         if ($isAdmin) {
@@ -364,7 +378,7 @@ final readonly class TicketFormProvider implements ProviderInterface
             return [];
         }
 
-        if (!$isAdmin && !in_array($sessionId, array_column($sessions, 'id'), true)) {
+        if (!$isAdmin && !\in_array($sessionId, array_column($sessions, 'id'), true)) {
             throw new BadRequestHttpException('The requested session is not available to the authenticated user.');
         }
 

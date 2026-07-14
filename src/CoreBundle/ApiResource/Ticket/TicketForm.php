@@ -49,31 +49,45 @@ final class TicketForm
     #[Groups(['ticket_form:read'])]
     public string $id = 'ticket_form';
 
-    /** @var array<int, array{id: int, title: string, description: string|null}> */
+    /**
+     * @var array<int, array{id: int, title: string, description: string|null}>
+     */
     #[Groups(['ticket_form:read'])]
     public array $projects = [];
 
-    /** @var array<int, array{id: int, label: string, description: string|null, courseRequired: bool}> */
+    /**
+     * @var array<int, array{id: int, label: string, description: string|null, courseRequired: bool}>
+     */
     #[Groups(['ticket_form:read'])]
     public array $categories = [];
 
-    /** @var array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @var array<int, array{id: int, label: string, code: string}>
+     */
     #[Groups(['ticket_form:read'])]
     public array $statuses = [];
 
-    /** @var array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @var array<int, array{id: int, label: string, code: string}>
+     */
     #[Groups(['ticket_form:read'])]
     public array $priorities = [];
 
-    /** @var array<int, array{id: string, label: string}> */
+    /**
+     * @var array<int, array{id: string, label: string}>
+     */
     #[Groups(['ticket_form:read'])]
     public array $sources = [];
 
-    /** @var array<int, array{id: int, label: string}> */
+    /**
+     * @var array<int, array{id: int, label: string}>
+     */
     #[Groups(['ticket_form:read'])]
     public array $sessions = [];
 
-    /** @var array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @var array<int, array{id: int, label: string, code: string}>
+     */
     #[Groups(['ticket_form:read'])]
     public array $courses = [];
 

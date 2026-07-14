@@ -34,12 +34,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
+use const DATE_ATOM;
 
 /**
  * @implements ProviderInterface<TicketDetail>
  */
 final readonly class TicketDetailProvider implements ProviderInterface
 {
+    private const STATUS_UNCONFIRMED_ID = 3;
     private const STATUS_CLOSED_ID = 4;
 
     public function __construct(
@@ -103,6 +105,8 @@ final readonly class TicketDetailProvider implements ProviderInterface
             || (($isCreator || $isAssignee) && self::STATUS_CLOSED_ID !== (int) $row['statusId']);
         $result->canClose = $isAdmin || $isCreator || $isAssignee;
         $result->canManage = $isAdmin;
+        $result->confirmationPending = self::STATUS_UNCONFIRMED_ID === (int) $row['statusId'];
+        $result->canConfirm = $isCreator && $result->confirmationPending;
         $result->isSubscribed = $this->ticketRelUserRepository->isUserSubscribedToTicket($user, $ticketEntity);
         $result->showLearningPathInfo = 'true' === $this->settingsManager->getSetting(
             'lp.ticket_lp_quiz_info_add',
@@ -123,7 +127,9 @@ final readonly class TicketDetailProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<string, mixed>|null */
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getTicketRow(int $ticketId, int $accessUrlId): ?array
     {
         $row = $this->entityManager->createQueryBuilder()
@@ -184,6 +190,7 @@ final readonly class TicketDetailProvider implements ProviderInterface
 
     /**
      * @param array<string, mixed> $row
+     *
      * @return array<string, mixed>
      */
     private function normalizeTicket(array $row): array
@@ -269,7 +276,9 @@ final readonly class TicketDetailProvider implements ProviderInterface
         ];
     }
 
-    /** @return array<int, array<string, mixed>> */
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     private function getMessages(Ticket $ticket): array
     {
         $ticketId = (int) $ticket->getId();
@@ -327,7 +336,9 @@ final readonly class TicketDetailProvider implements ProviderInterface
         return $messages;
     }
 
-    /** @return array<int, array<int, array{id: int, filename: string, size: int, url: string}>> */
+    /**
+     * @return array<int, array<int, array{id: int, filename: string, size: int, url: string}>>
+     */
     private function getAttachmentsByMessage(Ticket $ticket): array
     {
         $attachments = $this->attachmentRepository->findBy(['ticket' => $ticket]);
@@ -350,7 +361,9 @@ final readonly class TicketDetailProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @return array<int, array{id: int, label: string, code: string}>
+     */
     private function getStatusOptions(AccessUrl $accessUrl): array
     {
         $repository = $this->entityManager->getRepository(TicketStatus::class);
@@ -373,7 +386,9 @@ final readonly class TicketDetailProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @return array<int, array{id: int, label: string, code: string}>
+     */
     private function getPriorityOptions(AccessUrl $accessUrl): array
     {
         $repository = $this->entityManager->getRepository(TicketPriority::class);
@@ -396,7 +411,9 @@ final readonly class TicketDetailProvider implements ProviderInterface
         return $result;
     }
 
-    /** @return array<int, array<string, mixed>> */
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     private function getAssignmentHistory(int $ticketId): array
     {
         $rows = $this->entityManager->createQueryBuilder()
@@ -413,7 +430,7 @@ final readonly class TicketDetailProvider implements ProviderInterface
                 'actor.lastname AS actorLastname',
             ])
             ->from(TicketAssignedLog::class, 'log')
-            ->innerJoin('log.user', 'assigned')
+            ->leftJoin('log.user', 'assigned')
             ->leftJoin(User::class, 'actor', Join::WITH, 'actor.id = log.insertUserId')
             ->andWhere('IDENTITY(log.ticket) = :ticketId')
             ->setParameter('ticketId', $ticketId, Types::INTEGER)
@@ -427,7 +444,7 @@ final readonly class TicketDetailProvider implements ProviderInterface
             $result[] = [
                 'id' => (int) $row['id'],
                 'assignedAt' => $this->formatDate($row['assignedAt'] ?? null),
-                'assignee' => [
+                'assignee' => null !== $row['assignedId'] ? [
                     'id' => (int) $row['assignedId'],
                     'username' => (string) ($row['assignedUsername'] ?? ''),
                     'fullName' => $this->buildUserLabel([
@@ -435,7 +452,7 @@ final readonly class TicketDetailProvider implements ProviderInterface
                         'lastname' => $row['assignedLastname'] ?? '',
                         'username' => $row['assignedUsername'] ?? '',
                     ]),
-                ],
+                ] : null,
                 'actor' => null !== $row['actorId'] ? [
                     'id' => (int) $row['actorId'],
                     'username' => (string) ($row['actorUsername'] ?? ''),
@@ -451,7 +468,9 @@ final readonly class TicketDetailProvider implements ProviderInterface
         return $result;
     }
 
-    /** @param array<string, mixed> $row */
+    /**
+     * @param array<string, mixed> $row
+     */
     private function buildUserLabel(array $row): string
     {
         $fullName = trim((string) ($row['firstname'] ?? '').' '.(string) ($row['lastname'] ?? ''));

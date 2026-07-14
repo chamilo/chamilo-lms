@@ -168,9 +168,7 @@
       </article>
 
       <section class="space-y-4">
-        <h2 class="text-xl font-semibold text-gray-90">
-          {{ t("Message") }} ({{ detail.messages.length }})
-        </h2>
+        <h2 class="text-xl font-semibold text-gray-90">{{ t("Message") }} ({{ detail.messages.length }})</h2>
 
         <article
           v-for="message in detail.messages"
@@ -236,6 +234,42 @@
         </article>
       </section>
 
+      <section
+        v-if="detail.confirmationPending && detail.canConfirm"
+        class="rounded-xl border border-blue-200 bg-blue-50 p-5"
+        aria-labelledby="ticket-confirmation-title"
+      >
+        <h2
+          id="ticket-confirmation-title"
+          class="text-lg font-semibold text-gray-90"
+        >
+          {{ t("Was this answer satisfactory?") }}
+        </h2>
+        <p class="mt-2 text-sm text-gray-700">
+          {{ t("If you are certain, the ticket will be closed.") }}
+        </p>
+        <div class="mt-3 flex flex-wrap items-center gap-2">
+          <BaseButton
+            icon="check"
+            :disabled="isConfirmationLoading"
+            :is-loading="isConfirmationLoading && pendingConfirmationValue === true"
+            :label="t('Yes')"
+            size="small"
+            type="success-text"
+            @click="confirmReporterResponse(true)"
+          />
+          <BaseButton
+            icon="close"
+            :disabled="isConfirmationLoading"
+            :is-loading="isConfirmationLoading && pendingConfirmationValue === false"
+            :label="t('No')"
+            size="small"
+            type="danger-text"
+            @click="confirmReporterResponse(false)"
+          />
+        </div>
+      </section>
+
       <form
         v-if="detail.canReply"
         class="space-y-6 rounded-xl border border-gray-20 bg-white p-6 shadow-sm"
@@ -267,29 +301,27 @@
             :options="detail.priorities"
           />
 
-          <div class="field min-w-0">
-            <FloatLabel
-              class="block w-full"
-              variant="on"
-            >
-              <AutoComplete
-                id="ticket-reply-assignee"
-                v-model="selectedAssignee"
-                class="w-full"
-                data-key="id"
-                :dropdown="true"
-                fluid
-                :force-selection="true"
-                :show-clear="true"
-                input-id="ticket-reply-assignee-input"
-                name="assigned_user"
-                option-label="label"
-                :suggestions="assigneeSuggestions"
-                @complete="searchAssignees"
-              />
-              <label for="ticket-reply-assignee-input">{{ t("Assigned to") }}</label>
-            </FloatLabel>
-          </div>
+          <BaseAutocomplete
+            id="ticket-reply-assignee"
+            v-model="selectedAssignee"
+            class="w-full"
+            :label="t('Assigned to')"
+            name="assigned_user"
+            option-label="label"
+            :search="searchAssignees"
+          />
+        </div>
+
+        <div
+          v-if="detail.canManage && !detail.confirmationPending"
+          class="rounded-lg border border-gray-20 px-4 py-3"
+        >
+          <BaseCheckbox
+            id="ticket-reply-request-confirmation"
+            v-model="reply.requestConfirmation"
+            :label="t('Request confirmation')"
+            name="request_confirmation"
+          />
         </div>
 
         <BaseInputText
@@ -319,7 +351,7 @@
               icon="plus"
               :label="t('Add one more file')"
               size="small"
-              type="success"
+              type="primary-text"
               @click="addUploadSlot"
             />
           </div>
@@ -387,7 +419,7 @@
             class="rounded-lg border border-gray-20 p-3"
           >
             <p class="font-medium text-gray-90">
-              {{ item.assignee.fullName || item.assignee.username }}
+              {{ item.assignee?.fullName || item.assignee?.username || t("Unassigned") }}
             </p>
             <p class="mt-1 text-sm text-gray-600">
               {{ formatDate(item.assignedAt) }} ·
@@ -401,12 +433,12 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
-import AutoComplete from "primevue/autocomplete"
-import FloatLabel from "primevue/floatlabel"
+import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -427,10 +459,12 @@ const detail = ref(null)
 const isLoading = ref(false)
 const isSubmitting = ref(false)
 const isActionLoading = ref(false)
+const isConfirmationLoading = ref(false)
+const pendingConfirmationValue = ref(null)
+const statusBeforeConfirmation = ref(null)
 const errorMessage = ref("")
 const historyVisible = ref(false)
 const selectedAssignee = ref(null)
-const assigneeSuggestions = ref([])
 const uploadSlots = ref([{ id: 1, file: null }])
 let nextUploadId = 2
 
@@ -439,12 +473,36 @@ const reply = reactive({
   content: "",
   statusId: null,
   priorityId: null,
+  requestConfirmation: false,
+})
+
+const unconfirmedStatusId = computed(() => {
+  const status = detail.value?.statuses?.find((item) => String(item.code) === "3" || Number(item.id) === 3)
+
+  return Number(status?.id || 0) || null
 })
 
 const listQuery = computed(() => {
   const projectId = detail.value?.ticket?.project?.id
   return projectId ? { project_id: String(projectId) } : {}
 })
+
+watch(
+  () => reply.requestConfirmation,
+  (requestConfirmation) => {
+    if (requestConfirmation && unconfirmedStatusId.value) {
+      statusBeforeConfirmation.value = reply.statusId
+      reply.statusId = unconfirmedStatusId.value
+
+      return
+    }
+
+    if (!requestConfirmation && statusBeforeConfirmation.value && reply.statusId === unconfirmedStatusId.value) {
+      reply.statusId = statusBeforeConfirmation.value
+    }
+    statusBeforeConfirmation.value = null
+  },
+)
 
 onMounted(loadDetail)
 
@@ -464,6 +522,8 @@ async function loadDetail() {
     reply.content = ""
     reply.statusId = Number(detail.value.ticket.status?.id || 0) || null
     reply.priorityId = Number(detail.value.ticket.priority?.id || 0) || null
+    statusBeforeConfirmation.value = null
+    reply.requestConfirmation = false
     selectedAssignee.value = detail.value.ticket.assignee
       ? {
           id: detail.value.ticket.assignee.id,
@@ -526,13 +586,45 @@ async function closeTicket() {
   }
 }
 
-async function searchAssignees(event) {
+function confirmReporterResponse(confirmed) {
+  const message = confirmed
+    ? `${t("Are you sure")}: ${t("Yes")}. ${t("If you are certain, the ticket will be closed.")}`
+    : `${t("Are you sure")}: ${t("No")}`
+
+  requireConfirmation({
+    message,
+    accept: () => respondToConfirmation(confirmed),
+  })
+}
+
+async function respondToConfirmation(confirmed) {
+  if (!detail.value || isConfirmationLoading.value) {
+    return
+  }
+
+  isConfirmationLoading.value = true
+  pendingConfirmationValue.value = confirmed
+
   try {
-    const response = await ticketService.searchUsers(event.query || "")
-    assigneeSuggestions.value = Array.isArray(response.items) ? response.items : []
+    const response = await ticketService.respondToConfirmation(detail.value.id, confirmed, detail.value.csrfToken)
+    showSuccessNotification(response.message || t("Saved."))
+    await loadDetail()
+  } catch (error) {
+    console.error("[TicketDetail] Failed to answer confirmation request", error)
+    showErrorNotification(error)
+  } finally {
+    isConfirmationLoading.value = false
+    pendingConfirmationValue.value = null
+  }
+}
+
+async function searchAssignees(query) {
+  try {
+    const response = await ticketService.searchUsers(query || "")
+    return Array.isArray(response.items) ? response.items : []
   } catch (error) {
     console.error("[TicketDetail] Failed to search assignees", error)
-    assigneeSuggestions.value = []
+    return []
   }
 }
 
@@ -565,6 +657,7 @@ async function submitReply() {
     payload.append("statusId", String(reply.statusId || 0))
     payload.append("priorityId", String(reply.priorityId || 0))
     payload.append("assignedUserId", String(selectedAssignee.value?.id || 0))
+    payload.append("requestConfirmation", reply.requestConfirmation ? "1" : "0")
     uploadSlots.value.forEach((slot) => {
       if (slot.file) {
         payload.append("attachments[]", slot.file)

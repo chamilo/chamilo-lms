@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/ticket/{id}',
-            requirements: ['id' => '\\d+'],
+            requirements: ['id' => '\d+'],
             name: 'get_ticket_detail',
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             provider: TicketDetailProvider::class,
@@ -30,23 +30,33 @@ final class TicketDetail
     #[Groups(['ticket_detail:read'])]
     public int $id = 0;
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['ticket_detail:read'])]
     public array $ticket = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['ticket_detail:read'])]
     public array $messages = [];
 
-    /** @var array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @var array<int, array{id: int, label: string, code: string}>
+     */
     #[Groups(['ticket_detail:read'])]
     public array $statuses = [];
 
-    /** @var array<int, array{id: int, label: string, code: string}> */
+    /**
+     * @var array<int, array{id: int, label: string, code: string}>
+     */
     #[Groups(['ticket_detail:read'])]
     public array $priorities = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['ticket_detail:read'])]
     public array $assignmentHistory = [];
 
@@ -61,6 +71,12 @@ final class TicketDetail
 
     #[Groups(['ticket_detail:read'])]
     public bool $canManage = false;
+
+    #[Groups(['ticket_detail:read'])]
+    public bool $confirmationPending = false;
+
+    #[Groups(['ticket_detail:read'])]
+    public bool $canConfirm = false;
 
     #[Groups(['ticket_detail:read'])]
     public bool $isSubscribed = false;

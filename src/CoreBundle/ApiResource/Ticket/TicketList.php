@@ -183,6 +183,9 @@ final class TicketList
     #[Groups(['ticket_list:read'])]
     public bool $canCreate = false;
 
+    #[Groups(['ticket_list:read'])]
+    public string $csrfToken = '';
+
     public function getId(): string
     {
         return $this->id;

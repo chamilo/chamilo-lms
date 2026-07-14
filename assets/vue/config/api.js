@@ -124,4 +124,28 @@ instance.interceptors.request.use((config) => {
   return config
 })
 
+// RFC 7807 compatibility. API Platform 4 returns errors as
+// application/problem+json ("detail"/"title") instead of the Hydra format
+// ("hydra:description"/"hydra:title"). Expose the legacy Hydra keys from the
+// RFC 7807 fields so existing error handling keeps working regardless of which
+// format the backend sends.
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const data = error?.response?.data
+
+    if (data && "object" === typeof data) {
+      if (undefined === data["hydra:description"] && undefined !== data.detail) {
+        data["hydra:description"] = data.detail
+      }
+
+      if (undefined === data["hydra:title"] && undefined !== data.title) {
+        data["hydra:title"] = data.title
+      }
+    }
+
+    return Promise.reject(error)
+  },
+)
+
 export default instance

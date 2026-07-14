@@ -33,6 +33,9 @@ api_platform:
     messenger: true
     defaults:
         pagination_client_items_per_page: true
+        extra_properties:
+            # Return API errors as RFC 7807 (application/problem+json), which is the API Platform 4 default.
+            rfc_7807_compliant_errors: true
         cache_headers:
             # Automatically generate etags for API responses.
             etag: true

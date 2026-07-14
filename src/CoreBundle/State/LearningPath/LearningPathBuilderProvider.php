@@ -97,7 +97,9 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         $result->lpId = (int) $lp->getIid();
         $result->title = $this->plainTitle($lp->getTitle());
         $result->lpType = $lp->getLpType();
-        $result->canManageStructure = CLp::LP_TYPE === $lp->getLpType();
+        $result->canManageStructure = CLp::LP_TYPE === $lp->getLpType()
+            || (CLp::SCORM_TYPE === $lp->getLpType()
+                && !str_starts_with(strtolower($lp->getPath()), 'teachcs-'));
         $result->titleAsHtml = $this->settingEnabled('editor.save_titles_as_html');
         $result->csrfToken = $this->csrfTokenManager->getToken(self::ACTION_TOKEN_INTENTION)->getValue();
 

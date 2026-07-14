@@ -75,6 +75,15 @@ const routeStudentViewEnabled = computed(() =>
   ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
 )
 
+const managementQuery = computed(() =>
+  Object.fromEntries(
+    Object.entries(route.query).filter(
+      ([key, value]) =>
+        ["cid", "sid", "gid", "gradebook"].includes(key) && value !== undefined && value !== null && value !== "",
+    ),
+  ),
+)
+
 const openRoute = computed(() => ({
   name: "LpRuntime",
   params: {
@@ -120,9 +129,9 @@ const cstudioEditorUrl = computed(() => {
 })
 
 const editLearningPathRoute = computed(() =>
-  isScormLearningPath.value
+  isCStudioLearningPath.value
     ? null
-    : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
+    : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: managementQuery.value },
 )
 
 const editLearningPathUrl = computed(() => (isCStudioLearningPath.value ? cstudioEditorUrl.value : null))
@@ -136,11 +145,10 @@ const exportScormUrl = computed(() =>
   }),
 )
 
-
 const updateScormRoute = computed(() => ({
   name: "LpScormUpdate",
   params: { lpId: props.lp.iid },
-  query: route.query,
+  query: managementQuery.value,
 }))
 
 const isLpSubscriptionMode = computed(() => Number(props.lp?.subscribeUsers ?? props.lp?.subscribe_users ?? 0) === 1)
@@ -206,12 +214,13 @@ const attemptModeAction = computed(() => {
 
 const viewModeAction = computed(() => {
   const mode = String(props.lp?.defaultViewMod || "embedded")
-  const value = {
-    fullscreen: "fullscreen",
-    embedded: "embedded",
-    embedframe: "external embed",
-    impress: "Impress",
-  }[mode] || "embedded"
+  const value =
+    {
+      fullscreen: "fullscreen",
+      embedded: "embedded",
+      embedframe: "external embed",
+      impress: "Impress",
+    }[mode] || "embedded"
 
   return {
     label: t("Current view mode"),
@@ -236,14 +245,11 @@ const seriousGameAction = computed(() => ({
 
 const autoLaunchAction = computed(() => ({
   label:
-    Number(props.lp?.autolaunch) === 1
-      ? t("Disable learning path auto-launch")
-      : t("Enable learning path auto-launch"),
+    Number(props.lp?.autolaunch) === 1 ? t("Disable learning path auto-launch") : t("Enable learning path auto-launch"),
   icon: Number(props.lp?.autolaunch) === 1 ? "autolunch" : "autolunch-off",
   disabled: !props.csrfToken || !manageableInContext.value,
   command: () => onManage("toggle_auto_launch", { enabled: Number(props.lp?.autolaunch) !== 1 }),
 }))
-
 
 const advancedAccessUrl = computed(() => {
   const search = new URLSearchParams()
@@ -335,12 +341,12 @@ const buttonActions = computed(() =>
       route: editLearningPathRoute.value,
       toUrl: editLearningPathUrl.value,
       disabled: !manageableInContext.value,
-      visible: !isScormLearningPath.value || isCStudioLearningPath.value,
+      visible: true,
     },
     {
       label: t("Reports"),
       icon: "tracking",
-      route: { name: "LpReporting", params: { lpId: props.lp.iid }, query: route.query },
+      route: { name: "LpReporting", params: { lpId: props.lp.iid }, query: managementQuery.value },
       disabled: !manageableInContext.value,
       visible: true,
     },
@@ -361,7 +367,7 @@ const buttonActions = computed(() =>
     {
       label: t("Settings"),
       icon: "cog",
-      route: { name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query },
+      route: { name: "LpSettings", params: { lpId: props.lp.iid }, query: managementQuery.value },
       disabled: !manageableInContext.value,
       visible: true,
     },
@@ -432,7 +438,11 @@ const itemActionsMobile = computed(() =>
       visible: isLpSubscriptionMode.value,
     },
     { label: t("Export as SCORM"), url: exportScormUrl.value, visible: canDownloadScormPackage.value },
-    { label: t("Export to Chamilo format"), command: () => emit("export-chamilo", props.lp), visible: props.canExportChamilo },
+    {
+      label: t("Export to Chamilo format"),
+      command: () => emit("export-chamilo", props.lp),
+      visible: props.canExportChamilo,
+    },
     {
       label: t("Update SCORM"),
       visible: canUpdateScorm.value && !isCStudioLearningPath.value,
@@ -447,8 +457,7 @@ const itemActionsMobile = computed(() =>
     {
       label: t("Settings"),
       disabled: !manageableInContext.value,
-      command: () =>
-        router.push({ name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query }),
+      command: () => router.push({ name: "LpSettings", params: { lpId: props.lp.iid }, query: managementQuery.value }),
     },
     {
       label: t("Copy"),
@@ -459,7 +468,6 @@ const itemActionsMobile = computed(() =>
     { label: t("Delete"), command: onDelete, disabled: !manageableInContext.value },
   ].filter((item) => item.visible !== false),
 )
-
 </script>
 
 <template>
@@ -649,7 +657,9 @@ const itemActionsMobile = computed(() =>
                   />
                 </template>
                 <template #menu>
-                  <div class="min-w-[18rem] overflow-hidden rounded-xl border border-gray-25 bg-white py-1 text-body-2 shadow-xl">
+                  <div
+                    class="min-w-[18rem] overflow-hidden rounded-xl border border-gray-25 bg-white py-1 text-body-2 shadow-xl"
+                  >
                     <button
                       :disabled="publishAction.disabled"
                       class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"

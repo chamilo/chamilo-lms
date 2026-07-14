@@ -92,7 +92,7 @@
           </button>
 
           <router-link
-            v-if="runtime.canEdit && Number(runtime.lpType || 0) !== 2"
+            v-if="runtime.canEdit && !isCStudioContent"
             :to="builderRoute"
             class="lp-runtime-menu-link"
           >
@@ -156,9 +156,7 @@
               class="lp-runtime-progress-track"
               max="100"
             />
-            <div class="lp-runtime-progress-label">
-              {{ progressValue }}% {{ t("Complete") }}
-            </div>
+            <div class="lp-runtime-progress-label">{{ progressValue }}% {{ t("Complete") }}</div>
 
             <div
               v-if="runtime.minimumTime > 0"
@@ -242,7 +240,6 @@
             </template>
           </div>
         </div>
-
       </aside>
 
       <div
@@ -261,10 +258,16 @@
 
       <main
         id="learning_path_right_zone"
-        :class="['lp-runtime-content', { 'lp-runtime-content--impress': isImpressMode }]"
+        :class="[
+          'lp-runtime-content',
+          {
+            'lp-runtime-content--impress': isImpressMode,
+            'lp-runtime-content--reporting': isReportingMode,
+          },
+        ]"
       >
         <div
-          v-if="!isImpressMode && !runtime.hideArrowNavigation && !isCStudioContent"
+          v-if="!isReportingMode && !isImpressMode && !runtime.hideArrowNavigation && !isCStudioContent"
           class="lp-runtime-navigation"
         >
           <BaseButton
@@ -288,7 +291,13 @@
         </div>
 
         <a
-          v-if="!isImpressMode && !isCStudioContent && progressValue >= 100 && runtime.nextLearningPathUrl"
+          v-if="
+            !isReportingMode &&
+            !isImpressMode &&
+            !isCStudioContent &&
+            progressValue >= 100 &&
+            runtime.nextLearningPathUrl
+          "
           :href="runtime.nextLearningPathUrl"
           :title="runtime.nextLearningPathTitle"
           class="lp-runtime-next-learning-path"
@@ -301,7 +310,7 @@
         </a>
 
         <div
-          v-if="runtime.audioUrl"
+          v-if="!isReportingMode && runtime.audioUrl"
           class="lp-runtime-audio"
         >
           <audio
@@ -314,8 +323,14 @@
           />
         </div>
 
+        <LpReporting
+          v-if="isReportingMode"
+          embedded
+          @close="closeRuntimeReporting"
+        />
+
         <LpImpressRuntime
-          v-if="isImpressMode"
+          v-else-if="isImpressMode"
           :iframe-loading="iframeLoading"
           :iframe-reload-key="iframeReloadKey"
           :is-changing-item="isChangingItem"
@@ -337,9 +352,7 @@
           <iframe
             v-if="runtime.contentUrl"
             ref="contentFrame"
-            :key="
-              `${runtime.currentItemId}-${runtime.scorm?.itemViewId || runtime.currentItemAttempt}-${iframeReloadKey}`
-            "
+            :key="`${runtime.currentItemId}-${runtime.scorm?.itemViewId || runtime.currentItemAttempt}-${iframeReloadKey}`"
             :src="runtime.contentUrl"
             :title="currentItem?.title || runtime.title"
             allowfullscreen
@@ -359,6 +372,7 @@ import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import LpImpressRuntime from "../../components/lp/LpImpressRuntime.vue"
+import LpReporting from "./LpReporting.vue"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
 import lpService from "../../services/lpService"
@@ -405,13 +419,9 @@ const isCStudioPreview = computed(() => {
 
   return hasCStudioEditorContext.value && ["1", "true", "yes"].includes(previewValue)
 })
-const isTemporaryStudentView = computed(() => {
-  const temporaryValue = String(route.query.temporaryStudentView || "").toLowerCase()
-
-  return isCStudioPreview.value || ["1", "true", "yes", "on"].includes(temporaryValue)
-})
-const shouldRestoreTeacherView = computed(
-  () => isTemporaryStudentView.value && Boolean(runtime.value?.canEdit),
+const shouldRestoreTeacherView = computed(() => Boolean(runtime.value?.canEdit))
+const isReportingMode = computed(() =>
+  ["1", "true", "yes", "on"].includes(String(route.query.reporting || "").toLowerCase()),
 )
 const contextParams = computed(() => ({
   cid: Number(route.query.cid || 0),
@@ -501,9 +511,7 @@ const elapsedSinceLoad = computed(() => Math.max(0, Math.floor((clockTick.value 
 const displayedTotalTime = computed(() => Math.max(0, Number(runtime.value?.totalTime || 0) + elapsedSinceLoad.value))
 const formattedTotalTime = computed(() => formatDuration(displayedTotalTime.value))
 const formattedMinimumTime = computed(() => formatDuration(Number(runtime.value?.minimumTime || 0)))
-const visibleItems = computed(() =>
-  (runtime.value?.items || []).filter((item) => !hasCollapsedAncestor(item)),
-)
+const visibleItems = computed(() => (runtime.value?.items || []).filter((item) => !hasCollapsedAncestor(item)))
 const homeLabel = computed(() => {
   if (isCStudioContent.value) {
     return t("Learning paths")
@@ -522,11 +530,15 @@ const homeLabel = computed(() => {
 const runtimeHomeUrl = computed(() =>
   buildRuntimeExitUrl(isCStudioContent.value ? runtime.value?.listUrl : runtime.value?.homeUrl),
 )
-const editorQuery = computed(() =>
-  Object.fromEntries(
-    Object.entries({ ...route.query, isStudentView: "false" }).filter(([key]) => key !== "item_id"),
+const editorQuery = computed(() => ({
+  ...Object.fromEntries(
+    Object.entries(route.query).filter(
+      ([key, value]) =>
+        ["cid", "sid", "gid", "gradebook"].includes(key) && value !== undefined && value !== null && value !== "",
+    ),
   ),
-)
+  isStudentView: "false",
+}))
 const builderRoute = computed(() => ({
   name: "LpBuilder",
   params: { node: route.params.node, lpId: route.params.lpId },
@@ -576,14 +588,38 @@ function restoreTeacherViewAfterRuntime() {
 }
 
 async function openRuntimeReporting() {
-  const targetUrl = String(runtime.value?.reportingUrl || "")
-  if (!targetUrl) {
+  if (!runtime.value?.showReporting) {
     return
   }
 
   await flushScormRuntime("runtime-reporting")
-  await restoreTeacherViewAfterRuntime()
-  await router.push(targetUrl)
+  contentFrame.value = null
+  iframeLoading.value = false
+
+  await router.replace({
+    name: "LpRuntime",
+    params: route.params,
+    query: {
+      ...route.query,
+      reporting: 1,
+      returnItemId: Number(runtime.value.currentItemId || route.query.item_id || 0) || undefined,
+    },
+  })
+}
+
+async function closeRuntimeReporting() {
+  const query = { ...route.query }
+  for (const key of ["reporting", "self", "returnItemId", "studentId", "groupFilter", "showTeachers"]) {
+    delete query[key]
+  }
+
+  query.item_id = Number(runtime.value?.currentItemId || route.query.item_id || 0) || undefined
+
+  await router.replace({
+    name: "LpRuntime",
+    params: route.params,
+    query,
+  })
 }
 
 async function leaveRuntime(url) {
@@ -887,6 +923,7 @@ async function fetchRuntime(itemId = 0) {
 async function syncRuntimeState() {
   if (
     !runtime.value?.csrfToken ||
+    isReportingMode.value ||
     isChangingItem.value ||
     isSyncingRuntime.value ||
     impressActiveIsSection.value ||
@@ -983,10 +1020,15 @@ async function openItem(itemId) {
       allowNewAttempt: true,
       csrfToken: runtime.value.csrfToken,
     })
+    const query = { ...route.query, item_id: id }
+    for (const key of ["reporting", "self", "returnItemId", "studentId", "groupFilter", "showTeachers"]) {
+      delete query[key]
+    }
+
     await router.replace({
       name: "LpRuntime",
       params: route.params,
-      query: { ...route.query, item_id: id },
+      query,
     })
     const data = await fetchRuntime(id)
     applyRuntime(data, { contentChanged: true })
@@ -1174,7 +1216,10 @@ body.lp-runtime-document {
   overflow: visible;
   border-right: 1px solid #e4e9ed;
   background: #ffffff;
-  transition: width 180ms ease, min-width 180ms ease, flex-basis 180ms ease;
+  transition:
+    width 180ms ease,
+    min-width 180ms ease,
+    flex-basis 180ms ease;
 }
 
 .lp-view-collapsed .lp-runtime-sidebar {
@@ -1355,7 +1400,10 @@ body.lp-runtime-document {
   min-height: 44px;
   padding: 0 18px 0 20px;
   border-left: 4px solid transparent;
-  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  transition:
+    background 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
 }
 
 .lp-runtime-item:not(:disabled) {
@@ -1468,6 +1516,11 @@ body.lp-runtime-document {
 #learning_path_main.lp-runtime-player.lp-view-collapsed #learning_path_right_zone.lp-runtime-content {
   margin-left: 0 !important;
   padding-left: 34px !important;
+}
+
+.lp-runtime-content--reporting,
+#learning_path_main.lp-runtime-player #learning_path_right_zone.lp-runtime-content--reporting {
+  overflow-y: auto !important;
 }
 
 .lp-runtime-content--impress,

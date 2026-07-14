@@ -121,8 +121,11 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         if ($data instanceof LearningPathBuilderBulkAuthorPriceInput) {
             return $this->updateBulkAuthorPrice($data, $lp);
         }
-        if (CLp::LP_TYPE !== $lp->getLpType()) {
-            throw new BadRequestHttpException('The structure of an imported learning path cannot be changed here.');
+        $canManageStructure = CLp::LP_TYPE === $lp->getLpType()
+            || (CLp::SCORM_TYPE === $lp->getLpType()
+                && !str_starts_with(strtolower($lp->getPath()), 'teachcs-'));
+        if (!$canManageStructure) {
+            throw new BadRequestHttpException('The structure of this imported learning path cannot be changed here.');
         }
 
         $root = $this->lpItemRepository->getRootItem($lpId);

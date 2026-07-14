@@ -754,11 +754,10 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $params['type'] = 'step';
         $type = strtolower(trim($item->getItemType()));
 
-        if (CLp::SCORM_TYPE === $item->getLp()->getLpType()) {
+        if (CLp::SCORM_TYPE === $item->getLp()->getLpType()
+            && \in_array($type, ['sco', 'asset'], true)
+        ) {
             if ('sco' === $type && !$itemView instanceof CLpItemView) {
-                return '';
-            }
-            if (!\in_array($type, ['sco', 'asset'], true)) {
                 return '';
             }
 
@@ -1249,8 +1248,10 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $params['returnItemId'] = $params['item_id'] ?? 0;
         $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
 
+        $params['reporting'] = 1;
+
         return $this->appendQuery(
-            '/resources/lp/'.$courseNodeId.'/'.(int) $lp->getIid().'/reporting/self',
+            '/resources/lp/'.$courseNodeId.'/'.(int) $lp->getIid().'/runtime',
             $params,
         );
     }

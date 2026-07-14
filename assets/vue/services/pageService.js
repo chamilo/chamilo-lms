@@ -45,8 +45,7 @@ async function postPage(params) {
  * @returns {Promise<Object>}
  */
 async function updatePage(iri, params) {
-  const { data } = await api.put(iri, params)
-  return data
+  return await baseService.patch(iri, params)
 }
 
 /**

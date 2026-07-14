@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener;
@@ -27,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
         new Put(security: "is_granted('EDIT', object)"),
-        new Delete(security: "is_granted('DELETE', object)"),
+        new Patch(security: "is_granted('EDIT', object)"), new Delete(security: "is_granted('DELETE', object)"),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
     normalizationContext: ['groups' => ['skill_rel_user:read']],

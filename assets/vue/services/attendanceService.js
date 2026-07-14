@@ -66,7 +66,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated attendance list.
    */
   updateAttendance: async (attendanceId, data) => {
-    return await baseService.put(`/api/attendances/${attendanceId}`, data)
+    return await baseService.patch(`/api/attendances/${attendanceId}`, data)
   },
 
   /**

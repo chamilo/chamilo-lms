@@ -636,7 +636,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-ticket-system',
-            'url' => '/main/ticket/tickets.php',
+            'url' => '/tickets',
             'label' => $this->translator->trans('Tickets'),
         ];
 

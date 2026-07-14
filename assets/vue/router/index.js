@@ -32,6 +32,7 @@ import portfolio from "./portfolio"
 import wiki from "./wiki"
 import courseProgress from "./courseProgress"
 import announcement from "./announcement"
+import ticket from "./ticket"
 import glossary from "./glossary"
 import attendance from "./attendance"
 import lpRoutes from "./lp"
@@ -494,6 +495,7 @@ const router = createRouter({
     wiki,
     courseProgress,
     announcement,
+    ticket,
     glossary,
     attendance,
     lpRoutes,

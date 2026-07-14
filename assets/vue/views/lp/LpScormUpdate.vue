@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-col gap-6">
-    <SectionHeader :title="t('Update SCORM')" />
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Update SCORM')"
+    />
 
     <form
       class="flex max-w-3xl flex-col gap-6"
@@ -14,7 +17,9 @@
           @file-selected="packageFile = $event"
         />
         <small class="text-gray-50">{{ t("Upload") }} SCORM (.zip)</small>
-        <small class="text-gray-50">{{ t("You must upload a zip file with the same name as the original SCORM file.") }}</small>
+        <small class="text-gray-50">{{
+          t("You must upload a zip file with the same name as the original SCORM file.")
+        }}</small>
       </div>
 
       <div class="flex items-center gap-4">
@@ -61,7 +66,6 @@ const csrfToken = ref("")
 const saving = ref(false)
 
 const learningPathId = computed(() => Number(route.params.lpId ?? 0))
-
 
 const contextParams = computed(() => ({
   cid: Number(course.value?.id ?? route.query?.cid ?? 0),

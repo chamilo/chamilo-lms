@@ -16,6 +16,8 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 $_in_course = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/learnpathItem.class.php';
+require_once __DIR__.'/learnpath.class.php';
 
 $current_course_tool = TOOL_GRADEBOOK;
 api_protect_course_script(true);
@@ -73,38 +75,7 @@ if (!$finalItem instanceof CLpItem || (int) $finalItem->getIid() !== $id) {
     exit;
 }
 
-// Certificate and Skills Premium with Service check
-$plugin = BuyCoursesPlugin::create();
-$checker = $plugin->isEnabled() && $plugin->get('include_services');
-
-if ($checker) {
-    $userServiceSale = $plugin->getServiceSales(
-        $userId,
-        BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
-        BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM,
-        $lpId
-    );
-
-    if (empty($userServiceSale)) {
-        // Instance a new template : No page tittle, No header, No footer
-        $tpl = new Template(null, false, false);
-        $url = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php';
-        $content = sprintf(
-            Display::return_message(
-                get_lang('If you want to get the certificate and/or skills associated with this course, you need to buy the certificate service. You can go to the services catalog by clicking this link: %s'),
-                'normal',
-                false
-            ),
-            '<a href="'.$url.'">'.$url.'</a>'
-        );
-        $tpl->assign('content', $content);
-        $tpl->display_blank_template();
-
-        exit;
-    }
-}
-
-$lp = new Learnpath($lpEntity, [], $userId);
+$lp = new learnpath($lpEntity, api_get_course_info(), $userId);
 
 $count = $lp->getTotalItemsCountWithoutDirs();
 $completed = $lp->get_complete_items_count(true);
@@ -121,11 +92,14 @@ if (isset($lp->items[$currentItemId])) {
 $countAdj = max(0, $count - ($isFinalThere ? 1 : 0));
 $completedAdj = max(0, $completed - ($isFinalDone ? 1 : 0));
 $diff = $countAdj - $completedAdj;
-$accessGranted = false;
-if (0 === $diff || (1 === $diff && (('incomplete' === $currentItemStatus) || ('not attempted' === $currentItemStatus)))) {
-    if ($lp->prerequisites_match($currentItemId)) {
-        $accessGranted = true;
-    }
+$teacherCanBypassPrerequisites = api_is_allowed_to_edit()
+    && lpFinalItemSettingEnabled(api_get_setting('lp.allow_teachers_to_access_blocked_lp_by_prerequisite', true));
+$accessGranted = $teacherCanBypassPrerequisites;
+if (!$accessGranted
+    && (0 === $diff || (1 === $diff && (('incomplete' === $currentItemStatus) || ('not attempted' === $currentItemStatus))))
+    && $lp->prerequisites_match($currentItemId)
+) {
+    $accessGranted = true;
 }
 $lp->save_last();
 unset($lp, $currentItem);
@@ -404,7 +378,7 @@ function renderFinalItemDocument(CLpItem $finalItem, string $certificateBlock, s
 {
     $documentId = (int) $finalItem->getPath();
     if ($documentId <= 0) {
-        return '';
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
     }
 
     $docRepo = Container::getDocumentRepository();
@@ -414,11 +388,11 @@ function renderFinalItemDocument(CLpItem $finalItem, string $certificateBlock, s
     } catch (Throwable $e) {
         error_log('[LP_FINAL] document lookup error: '.$e->getMessage());
 
-        return '';
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
     }
 
     if (!$document) {
-        return '';
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
     }
 
     try {
@@ -426,7 +400,11 @@ function renderFinalItemDocument(CLpItem $finalItem, string $certificateBlock, s
     } catch (Throwable $e) {
         error_log('[LP_FINAL] read doc error: '.$e->getMessage());
 
-        return '';
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
+    }
+
+    if ('' === trim($content)) {
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
     }
 
     $hasCert = str_contains($content, '((certificate))');
@@ -440,4 +418,34 @@ function renderFinalItemDocument(CLpItem $finalItem, string $certificateBlock, s
     }
 
     return $content;
+}
+
+/**
+ * Render the built-in final-item template when the stored document is unavailable.
+ */
+function renderFinalItemTemplate(string $certificateBlock, string $badgeBlock): string
+{
+    $templatePath = __DIR__.'/final_item_template/template.html';
+    $content = is_readable($templatePath) ? file_get_contents($templatePath) : false;
+    if (false === $content) {
+        return $certificateBlock.$badgeBlock;
+    }
+
+    return str_replace(
+        ['((certificate))', '((skill))'],
+        [$certificateBlock, $badgeBlock],
+        $content
+    );
+}
+
+/**
+ * Normalize legacy boolean settings.
+ */
+function lpFinalItemSettingEnabled(mixed $value): bool
+{
+    if (is_bool($value)) {
+        return $value;
+    }
+
+    return in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
 }

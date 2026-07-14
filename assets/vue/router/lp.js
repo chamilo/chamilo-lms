@@ -50,7 +50,16 @@ export default {
     {
       name: "LpRuntimeReporting",
       path: ":lpId(\\d+)/reporting/self",
-      component: () => import("../views/lp/LpReporting.vue"),
+      redirect: (to) => ({
+        name: "LpRuntime",
+        params: to.params,
+        query: {
+          ...to.query,
+          reporting: "1",
+          self: "1",
+          showTeachers: to.query.showTeachers || "1",
+        },
+      }),
       meta: {
         breadcrumb: "",
         emptyLayout: true,

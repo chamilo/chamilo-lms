@@ -80,8 +80,12 @@ const filteredUserGroups = computed(() => {
   return userGroups.value.filter((userGroup) => normalizeSearch(userGroup.title).includes(query))
 })
 
-const selectedUser = computed(() => users.value.find((user) => Number(user.id) === Number(selectedUserId.value)) || null)
-const selectedGroup = computed(() => groups.value.find((group) => Number(group.id) === Number(selectedGroupId.value)) || null)
+const selectedUser = computed(
+  () => users.value.find((user) => Number(user.id) === Number(selectedUserId.value)) || null,
+)
+const selectedGroup = computed(
+  () => groups.value.find((group) => Number(group.id) === Number(selectedGroupId.value)) || null,
+)
 const startDateModel = computed({
   get: () => parseCalendarDate(form.value.startDate),
   set: (value) => {
@@ -110,7 +114,9 @@ const dateRangeError = computed(() => {
   return startDate > endDate ? t("The end date must be after the start date.") : ""
 })
 
-const canSaveRestriction = computed(() => Boolean(selectedUser.value || selectedGroup.value) && !dateRangeError.value && !isSaving.value)
+const canSaveRestriction = computed(
+  () => Boolean(selectedUser.value || selectedGroup.value) && !dateRangeError.value && !isSaving.value,
+)
 
 function normalizeSearch(value) {
   return String(value || "")
@@ -347,7 +353,10 @@ onMounted(loadData)
 
 <template>
   <div class="flex flex-col gap-6">
-    <SectionHeader :title="t('Advanced learning path access')">
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Advanced learning path access')"
+    >
       <BaseButton
         :label="t('Back to learning paths')"
         icon="back"
@@ -472,7 +481,13 @@ onMounted(loadData)
 
       <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
         <h2 class="mb-4 text-lg font-bold text-gray-90">
-          {{ selectedUser ? t("Edit user restriction") : selectedGroup ? t("Edit group restriction") : t("Select a user or group") }}
+          {{
+            selectedUser
+              ? t("Edit user restriction")
+              : selectedGroup
+                ? t("Edit group restriction")
+                : t("Select a user or group")
+          }}
         </h2>
 
         <div
@@ -538,7 +553,9 @@ onMounted(loadData)
         </div>
 
         <div class="overflow-hidden rounded-xl border border-gray-25">
-          <div class="hidden grid-cols-[minmax(0,1.4fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto] gap-3 border-b border-gray-25 bg-gray-15 px-4 py-3 text-sm font-bold text-gray-70 md:grid">
+          <div
+            class="hidden grid-cols-[minmax(0,1.4fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto] gap-3 border-b border-gray-25 bg-gray-15 px-4 py-3 text-sm font-bold text-gray-70 md:grid"
+          >
             <div>{{ t("Name") }}</div>
             <div>{{ t("Email") }}</div>
             <div>{{ t("Groups") }}</div>
@@ -573,7 +590,7 @@ onMounted(loadData)
             <div class="flex justify-end gap-2">
               <BaseButton
                 :label="user.individualRestriction ? t('Edit') : t('Add')"
-                :icon="user.individualRestriction ? 'edit' : 'add'"
+                :icon="user.individualRestriction ? 'edit' : 'plus'"
                 only-icon
                 size="small"
                 :type="user.individualRestriction ? 'secondary' : 'success'"
@@ -612,9 +629,7 @@ onMounted(loadData)
             <div class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="font-bold text-gray-90">{{ group.title }}</h3>
-                <p class="text-sm text-gray-60">
-                  {{ group.membersCount }} {{ t("members") }}
-                </p>
+                <p class="text-sm text-gray-60">{{ group.membersCount }} {{ t("members") }}</p>
                 <p class="mt-2 text-sm text-gray-70">
                   {{ formatRestriction(group.restriction) }}
                 </p>
@@ -623,7 +638,7 @@ onMounted(loadData)
               <div class="flex gap-2">
                 <BaseButton
                   :label="group.restriction ? t('Edit') : t('Add')"
-                  :icon="group.restriction ? 'edit' : 'add'"
+                  :icon="group.restriction ? 'edit' : 'plus'"
                   only-icon
                   size="small"
                   :type="group.restriction ? 'secondary' : 'success'"

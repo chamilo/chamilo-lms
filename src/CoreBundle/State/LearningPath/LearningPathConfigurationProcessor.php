@@ -143,7 +143,6 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
 
         if ($isEdit) {
             $this->applyPreviewImage($lp, $payload, $request);
-            $this->applySearchIndex($lp, $payload);
         } else {
             $this->eventDispatcher->dispatch(
                 new LearningPathCreatedEvent(['lp' => $lp]),
@@ -151,6 +150,7 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
             );
         }
 
+        $this->applySearchIndex($lp, $payload);
         $this->entityManager->flush();
 
         $result = new LearningPathConfiguration();

@@ -36410,16 +36410,3 @@ msgstr ""
 
 msgid "No auth source"
 msgstr ""
-
-msgid "Project"
-msgstr ""
-
-msgid "Close old tickets"
-msgstr ""
-
-msgid "Close tickets older than seven days?"
-msgstr ""
-
-
-msgid "Assignment history"
-msgstr ""

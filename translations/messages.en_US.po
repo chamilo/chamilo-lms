@@ -36493,16 +36493,3 @@ msgstr "View threads"
 
 msgid "No auth source"
 msgstr "No auth source"
-
-msgid "Project"
-msgstr "Project"
-
-msgid "Close old tickets"
-msgstr "Close old tickets"
-
-msgid "Close tickets older than seven days?"
-msgstr "Close tickets older than seven days?"
-
-
-msgid "Assignment history"
-msgstr "Assignment history"

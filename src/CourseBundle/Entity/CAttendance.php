@@ -42,7 +42,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             ),
             security: "is_granted('EDIT', object.resourceNode)",
             name: 'toggle_visibility',
-            processor: CAttendanceStateProcessor::class
+            processor: CAttendanceStateProcessor::class,
+            deserialize: false
         ),
         new Put(
             uriTemplate: '/attendances/{iid}/soft_delete',
@@ -51,7 +52,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             ),
             security: "is_granted('EDIT', object.resourceNode)",
             name: 'soft_delete',
-            processor: CAttendanceStateProcessor::class
+            processor: CAttendanceStateProcessor::class,
+            deserialize: false
         ),
         new Delete(
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",

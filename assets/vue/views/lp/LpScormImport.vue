@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-col gap-6">
-    <SectionHeader :title="t('Import')" />
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Import')"
+    />
 
     <form
       class="flex max-w-3xl flex-col gap-6"

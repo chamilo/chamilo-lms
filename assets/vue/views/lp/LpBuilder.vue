@@ -129,7 +129,6 @@ const previewUrl = computed(() =>
   }),
 )
 
-
 const newTestUrl = computed(() => {
   const search = new URLSearchParams({
     cid: String(context.value.cid),
@@ -238,9 +237,32 @@ function selectItem(id) {
   }
 }
 
+function buildExerciseEditUrl(item) {
+  const search = new URLSearchParams({
+    cid: String(context.value.cid),
+    sid: String(context.value.sid),
+    gid: String(context.value.gid),
+    modifyExercise: "yes",
+    exerciseId: String(Number(item?.resourceId || 0)),
+    origin: "learnpath",
+    lp_id: String(lpId.value),
+    lp_item_id: String(Number(item?.id || 0)),
+    node: String(nodeId.value),
+    returnToLp: "1",
+    gradebook: String(Number(route.query.gradebook || 0)),
+  })
+
+  return `/main/exercise/exercise_admin.php?${search.toString()}`
+}
+
 function openItemEditor(id) {
   const item = findItem(tree.value, id)
   if (!item) {
+    return
+  }
+
+  if (item.itemType === "quiz" && Number(item.resourceId || 0) > 0) {
+    window.location.assign(buildExerciseEditUrl(item))
     return
   }
 
@@ -313,7 +335,11 @@ function buildParentOptions(excludedItemId) {
 
 async function createSection() {
   formSubmitted.value = true
-  if (!String(sectionForm.title || "").replace(/<[^>]*>/g, "").trim()) {
+  if (
+    !String(sectionForm.title || "")
+      .replace(/<[^>]*>/g, "")
+      .trim()
+  ) {
     showErrorNotification(t("Title is required"))
     return
   }
@@ -430,6 +456,13 @@ async function addResources(resourceItems, parentId = selectedSectionId.value, e
 
 async function handleItemSaved(itemId) {
   selectedId.value = Number(itemId || selectedId.value)
+  panelMode.value = ""
+  await loadBuilder(false)
+}
+
+async function handleQuickTestCreated(result) {
+  selectedId.value = Number(result?.itemId || 0)
+  activeTool.value = "tests"
   panelMode.value = ""
   await loadBuilder(false)
 }
@@ -555,6 +588,16 @@ function selectDocumentList(tab) {
   activeDocumentAction.value = "list"
 }
 
+function resetBuilderSelection() {
+  selectedId.value = 0
+  panelMode.value = ""
+}
+
+function selectDocumentAction(action) {
+  panelMode.value = ""
+  activeDocumentAction.value = action
+}
+
 async function handleInlineDocumentCreated({ resource, parentId, exportAllowed }) {
   await addResource(resource, parentId, exportAllowed)
   activeDocumentAction.value = "list"
@@ -645,7 +688,7 @@ function goBack() {
             <button
               class="w-full border-l-4 border-secondary px-3 py-2 text-left text-body-1 font-semibold text-gray-90"
               type="button"
-              @click="selectedId = 0; panelMode = ''"
+              @click="resetBuilderSelection"
             >
               {{ builder?.title || t("Learning path") }}
             </button>
@@ -746,19 +789,24 @@ function goBack() {
               :certificate="builder?.certificate || {}"
               :context="context"
               :csrf-token="builder?.csrfToken || ''"
-              :documents-root-node-id="Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)"
+              :documents-root-node-id="
+                Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)
+              "
               :lp-id="lpId"
               @saved="handleCertificateSaved"
             />
 
             <LpBuilderItemForm
               v-else-if="panelMode === 'edit' && selectedItem"
+              :ai-quick-test-enabled="Boolean(builder?.aiQuickTestEnabled)"
+              :ai-quick-test-providers="builder?.aiQuickTestProviders || []"
               :context="context"
               :csrf-token="builder?.csrfToken || ''"
               :item="selectedItem"
               :lp-id="lpId"
               :parent-options="selectedParentOptions"
               :title-as-html="Boolean(builder?.titleAsHtml)"
+              @quick-test-created="handleQuickTestCreated"
               @saved="handleItemSaved"
             />
 
@@ -777,7 +825,9 @@ function goBack() {
               :audio-items="resources.audio?.items || []"
               :context="context"
               :csrf-token="builder?.csrfToken || ''"
-              :documents-root-node-id="Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)"
+              :documents-root-node-id="
+                Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)
+              "
               :item="selectedItem"
               :lp-id="lpId"
               @saved="handleAudioSaved"
@@ -809,13 +859,13 @@ function goBack() {
                   :label="t('Create a new document')"
                   icon="file-add"
                   :type="activeDocumentAction === 'create' ? 'primary' : 'success-text'"
-                  @click="panelMode = ''; activeDocumentAction = 'create'"
+                  @click="selectDocumentAction('create')"
                 />
                 <BaseButton
                   :label="t('Upload')"
                   icon="file-upload"
                   :type="activeDocumentAction === 'upload' ? 'primary' : 'success-text'"
-                  @click="panelMode = ''; activeDocumentAction = 'upload'"
+                  @click="selectDocumentAction('upload')"
                 />
               </div>
 
@@ -837,7 +887,9 @@ function goBack() {
               <LpInlineDocumentForm
                 v-else-if="activeDocumentAction === 'create'"
                 :context="context"
-                :default-document-parent-id="Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)"
+                :default-document-parent-id="
+                  Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)
+                "
                 :default-lp-parent-id="selectedSectionId ?? 0"
                 :document-folder-options="documentFolderOptions"
                 :lp-parent-options="sectionParentOptions"
@@ -848,7 +900,9 @@ function goBack() {
               <LpInlineDocumentUpload
                 v-else
                 :context="context"
-                :default-document-parent-id="Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)"
+                :default-document-parent-id="
+                  Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)
+                "
                 :document-folder-options="documentFolderOptions"
                 :file-kind="activeDocumentTab"
                 :lp-parent-id="selectedSectionId"
@@ -1021,7 +1075,6 @@ function goBack() {
         </BaseCard>
       </div>
     </div>
-
   </div>
 </template>
 <style scoped>

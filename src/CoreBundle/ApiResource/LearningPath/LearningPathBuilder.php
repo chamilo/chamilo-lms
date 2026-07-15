@@ -69,6 +69,15 @@ final class LearningPathBuilder
     #[Groups(['learning_path_builder:read'])]
     public bool $searchEnabled = false;
 
+    #[Groups(['learning_path_builder:read'])]
+    public bool $aiQuickTestEnabled = false;
+
+    /**
+     * @var array<int, array{label: string, value: string}>
+     */
+    #[Groups(['learning_path_builder:read'])]
+    public array $aiQuickTestProviders = [];
+
     /**
      * @var array<string, mixed>
      */

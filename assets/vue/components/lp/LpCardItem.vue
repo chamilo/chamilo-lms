@@ -46,6 +46,15 @@ const routeStudentViewEnabled = computed(() =>
   ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
 )
 
+const managementQuery = computed(() =>
+  Object.fromEntries(
+    Object.entries(route.query).filter(
+      ([key, value]) =>
+        ["cid", "sid", "gid", "gradebook"].includes(key) && value !== undefined && value !== null && value !== "",
+    ),
+  ),
+)
+
 const openRoute = computed(() => ({
   name: "LpRuntime",
   params: {
@@ -99,21 +108,25 @@ const cstudioEditorUrl = computed(() => {
 const reportingRoute = computed(() => ({
   name: "LpReporting",
   params: { lpId: props.lp.iid },
-  query: route.query,
+  query: managementQuery.value,
 }))
 
-const settingsRoute = computed(() => ({ name: "LpSettings", params: { lpId: props.lp.iid }, query: route.query }))
+const settingsRoute = computed(() => ({
+  name: "LpSettings",
+  params: { lpId: props.lp.iid },
+  query: managementQuery.value,
+}))
 
 const updateScormRoute = computed(() => ({
   name: "LpScormUpdate",
   params: { lpId: props.lp.iid },
-  query: route.query,
+  query: managementQuery.value,
 }))
 
 const buildRoute = computed(() =>
-  isScormLearningPath.value
+  isCStudioLearningPath.value
     ? null
-    : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: route.query },
+    : { name: "LpBuilder", params: { lpId: props.lp.iid }, query: managementQuery.value },
 )
 
 const buildUrl = computed(() => (isCStudioLearningPath.value ? cstudioEditorUrl.value : null))
@@ -126,7 +139,6 @@ const exportScormUrl = computed(() =>
     node: routeCtx.value.node || undefined,
   }),
 )
-
 
 const isLpSubscriptionMode = computed(() => Number(props.lp?.subscribeUsers ?? props.lp?.subscribe_users ?? 0) === 1)
 
@@ -209,12 +221,13 @@ const attemptModeAction = computed(() => {
 
 const viewModeAction = computed(() => {
   const mode = String(props.lp?.defaultViewMod || "embedded")
-  const value = {
-    fullscreen: "fullscreen",
-    embedded: "embedded",
-    embedframe: "external embed",
-    impress: "Impress",
-  }[mode] || "embedded"
+  const value =
+    {
+      fullscreen: "fullscreen",
+      embedded: "embedded",
+      embedframe: "external embed",
+      impress: "Impress",
+    }[mode] || "embedded"
 
   return {
     label: t("Current view mode"),
@@ -234,9 +247,7 @@ const seriousGameAction = computed(() => ({
 
 const autoLaunchAction = computed(() => ({
   label:
-    Number(props.lp?.autolaunch) === 1
-      ? t("Disable learning path auto-launch")
-      : t("Enable learning path auto-launch"),
+    Number(props.lp?.autolaunch) === 1 ? t("Disable learning path auto-launch") : t("Enable learning path auto-launch"),
   icon: Number(props.lp?.autolaunch) === 1 ? "autolunch" : "autolunch-off",
   disabled: !props.csrfToken || !manageableInContext.value,
   command: () => onManage("toggle_auto_launch", { enabled: Number(props.lp?.autolaunch) !== 1 }),
@@ -647,7 +658,6 @@ const progressTextClass = computed(() =>
         class="ml-auto flex items-center gap-2"
       >
         <BaseButton
-          v-if="!isScormLearningPath || isCStudioLearningPath"
           :disabled="!manageableInContext"
           :label="t('Edit learnpath')"
           :route="buildRoute"

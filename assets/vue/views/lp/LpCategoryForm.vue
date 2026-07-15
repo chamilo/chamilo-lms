@@ -1,11 +1,33 @@
 <template>
   <div class="flex max-w-2xl flex-col gap-6">
-    <SectionHeader :title="isEdit ? t('Edit category') : t('Add a category')" />
-    <form class="flex flex-col gap-6" @submit.prevent="save">
-      <BaseInputText id="lp-category-title" v-model="title" name="title" :label="t('Title')" required />
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="isEdit ? t('Edit category') : t('Add a category')"
+    />
+    <form
+      class="flex flex-col gap-6"
+      @submit.prevent="save"
+    >
+      <BaseInputText
+        id="lp-category-title"
+        v-model="title"
+        name="title"
+        :label="t('Title')"
+        required
+      />
       <div class="flex justify-end gap-2">
-        <BaseButton :label="t('Cancel')" type="plain" @click="cancel" />
-        <BaseButton :disabled="saving" :label="t('Save')" icon="content-save" type="success" is-submit />
+        <BaseButton
+          :label="t('Cancel')"
+          type="plain"
+          @click="cancel"
+        />
+        <BaseButton
+          :disabled="saving"
+          :label="t('Save')"
+          icon="content-save"
+          type="success"
+          is-submit
+        />
       </div>
     </form>
   </div>
@@ -33,7 +55,11 @@ const saving = ref(false)
 const actionToken = ref("")
 const categoryId = computed(() => Number(route.params.categoryId || 0))
 const isEdit = computed(() => categoryId.value > 0)
-const context = computed(() => ({ cid: course.value?.id, sid: session.value?.id ?? 0, gid: Number(route.query.gid ?? 0) }))
+const context = computed(() => ({
+  cid: course.value?.id,
+  sid: session.value?.id ?? 0,
+  gid: Number(route.query.gid ?? 0),
+}))
 
 onMounted(async () => {
   try {

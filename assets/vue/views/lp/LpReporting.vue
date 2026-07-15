@@ -11,6 +11,14 @@ import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import lpService from "../../services/lpService"
 
+const props = defineProps({
+  embedded: {
+    type: Boolean,
+    default: false,
+  },
+})
+const emit = defineEmits(["close"])
+
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
@@ -29,7 +37,10 @@ const selectedStudentId = ref(Number(route.query.studentId || 0))
 const showAllAttempts = ref(false)
 
 const selfMode = computed(
-  () => route.name === "LpRuntimeReporting" || ["1", "true", "yes", "on"].includes(String(route.query.self || "").toLowerCase()),
+  () =>
+    props.embedded ||
+    route.name === "LpRuntimeReporting" ||
+    ["1", "true", "yes", "on"].includes(String(route.query.self || "").toLowerCase()),
 )
 const lpId = computed(() => Number(route.params.lpId || 0))
 const contextParams = computed(() => ({
@@ -200,6 +211,12 @@ async function recalculateUser(userId) {
 }
 
 function goBack() {
+  if (props.embedded) {
+    emit("close")
+
+    return
+  }
+
   if (selfMode.value) {
     router.push({
       name: "LpRuntime",
@@ -377,8 +394,16 @@ onMounted(() => loadReporting(selectedStudentId.value))
 </script>
 
 <template>
-  <section class="flex flex-col gap-6">
-    <SectionHeader :title="t('Learner score')">
+  <section
+    :class="[
+      'flex flex-col gap-6',
+      { 'min-h-full rounded-lg border border-gray-25 bg-white p-5 lg:p-7': embedded },
+    ]"
+  >
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Learner score')"
+    >
       <div class="lp-report-no-print flex flex-wrap items-center justify-end gap-1">
         <BaseButton
           :label="t('Back')"

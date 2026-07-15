@@ -222,6 +222,14 @@ const getBuilder = async (lpId, params) =>
 const createBuilderSection = async (lpId, params, payload) =>
   await baseService.post(`/api/learning_paths/${lpId}/builder/sections`, payload, {}, { params: cleanParams(params) })
 
+const generateBuilderQuickTest = async (lpId, itemId, params, payload) =>
+  await baseService.post(
+    `/api/learning_path_builder_items/${itemId}/quick-test`,
+    { ...payload, lpId },
+    {},
+    { params: cleanParams(params) },
+  )
+
 const updateBuilderItem = async (lpId, itemId, params, payload, extraFiles = {}) => {
   const formData = new FormData()
   formData.append("payload", JSON.stringify({ ...payload, lpId }))
@@ -460,6 +468,7 @@ export default {
   saveConfiguration,
   getBuilder,
   createBuilderSection,
+  generateBuilderQuickTest,
   updateBuilderItem,
   deleteBuilderItem,
   reorderBuilderItems,

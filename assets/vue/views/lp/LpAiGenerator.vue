@@ -1,6 +1,9 @@
 <template>
   <div class="flex w-full flex-col gap-6">
-    <SectionHeader :title="t('AI generator')" />
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('AI generator')"
+    />
 
     <div
       v-if="loading"
@@ -48,9 +51,7 @@
               <h2 class="text-lg font-semibold text-gray-90">
                 {{ t("AI learning path generator") }}
               </h2>
-              <span class="text-sm text-gray-50">
-                {{ t("Language") }}: {{ configuration.language }}
-              </span>
+              <span class="text-sm text-gray-50"> {{ t("Language") }}: {{ configuration.language }} </span>
             </div>
           </div>
 

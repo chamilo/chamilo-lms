@@ -2,19 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 /**
- * This script lists the necessary variables that allow the installation
- * system to know in which version is the current Chamilo install. This
- * script should be overwritten with each upgrade of Chamilo. It is not
- * required from any other process of Chamilo than the installation or upgrade.
- * It also helps for automatic packaging of unstable versions.
+ * This compatibility entry point exposes the Chamilo release metadata to the
+ * installation and upgrade processes. The canonical metadata is stored at the
+ * project root because the public install directory can be removed safely.
  */
 
-return [
-    'new_version' => '2.1.0',
-    'new_version_status' => 'stable',
-    'new_version_last_id' => '1',
-    'new_version_stable' => true,
-    'new_version_major' => false,
-    'software_name' => 'Chamilo',
-    'software_url' => 'https://chamilo.org/',
-];
+return require dirname(__DIR__, 3).'/version.php';

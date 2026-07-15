@@ -120,7 +120,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         $result->showLanguage = \count($result->languageOptions) > 2;
         $result->showSubscribeUsers = $this->allowsLearningPathSubscriptions();
         $result->showUseMaxScore = $lp instanceof CLp && $this->security->isGranted('ROLE_ADMIN');
-        $result->showSearchIndex = $lp instanceof CLp && $this->settingEnabled('search.search_enabled');
+        $result->showSearchIndex = $this->settingEnabled('search.search_enabled');
         $result->searchIndexEnabled = true;
         $result->showFlow = $lp instanceof CLp && $this->settingEnabled('lp.lp_enable_flow');
         $result->showMinimumTime = $lp instanceof CLp && $this->minimumTimeAvailable((int) $course->getId(), $session?->getId());

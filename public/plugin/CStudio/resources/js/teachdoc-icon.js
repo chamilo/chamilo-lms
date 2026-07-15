@@ -148,6 +148,22 @@ function cstudioCanUseEditorButtons(teachdocLstIds) {
     return cstudioTeachdocIdsCanEdit(teachdocLstIds) && !cstudioIsStudentViewActive();
 }
 
+function cstudioIsLearningPathListRoute() {
+    var path = String(window.location.pathname || '').replace(/\/+$/, '');
+
+    if (/\/resources\/lp\/\d+$/.test(path)) {
+        return true;
+    }
+
+    if (!path.endsWith('/main/lp/lp_controller.php')) {
+        return false;
+    }
+
+    var action = String(getParamValueForOelTools('action') || '').toLowerCase();
+
+    return action === '' || action === 'list';
+}
+
 function cstudioCanShowPreviewBackButton(teachdocLstIds) {
     var previewMarker = String(getParamValueForOelTools('cstudio_preview') || '').toLowerCase();
 
@@ -578,6 +594,12 @@ function hideCStudioPreviewLpNavigationControls() {
 }
 
 function installCStudioCreateButton(retries) {
+    if (!cstudioIsLearningPathListRoute()) {
+        removeCStudioEditorButtons();
+
+        return false;
+    }
+
     if (!cstudioCanUseEditorButtons(currentTeachdocLstIdsForCStudio)) {
         removeCStudioEditorButtons();
 

@@ -1,6 +1,18 @@
 <template>
   <div class="flex w-full flex-col gap-6">
-    <SectionHeader :title="isEdit ? t('Settings') : t('Create new learning path')" />
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="isEdit ? t('Settings') : t('Create new learning path')"
+    >
+      <BaseButton
+        :disabled="saving"
+        :label="t('Back')"
+        icon="back"
+        only-icon
+        type="primary-text"
+        @click="cancel"
+      />
+    </SectionHeader>
 
     <div
       v-if="loading"
@@ -90,6 +102,14 @@
             option-value="value"
           />
 
+          <BaseCheckbox
+            v-if="form.showSearchIndex"
+            id="lp-search-index"
+            v-model="form.searchIndexEnabled"
+            name="searchIndexEnabled"
+            :label="t('Include this learning path in the global search results')"
+          />
+
           <div
             v-if="!isEdit"
             class="flex flex-col gap-1"
@@ -175,14 +195,6 @@
                 <small class="text-gray-50">{{ t("Trainer picture will resize if needed") }}</small>
               </div>
             </div>
-
-            <BaseCheckbox
-              v-if="form.showSearchIndex"
-              id="lp-search-index"
-              v-model="form.searchIndexEnabled"
-              name="searchIndexEnabled"
-              :label="t('Include this learning path in the global search results')"
-            />
 
             <BaseSelect
               id="lp-prerequisite"
@@ -392,7 +404,7 @@ const FIELD_MULTI_SELECT = 5
 const FIELD_TAG = 10
 
 const createIntroductionKey =
-  '<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.'
+  "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left."
 
 const { t } = useI18n()
 const route = useRoute()
@@ -410,6 +422,14 @@ const extraFiles = reactive({})
 const extraFieldValues = reactive({})
 const lpId = computed(() => Number(route.params.lpId || 0))
 const isEdit = computed(() => lpId.value > 0)
+const managementQuery = computed(() =>
+  Object.fromEntries(
+    Object.entries(route.query).filter(
+      ([key, value]) =>
+        ["cid", "sid", "gid", "gradebook"].includes(key) && value !== undefined && value !== null && value !== "",
+    ),
+  ),
+)
 
 const form = reactive({
   id: null,
@@ -521,7 +541,11 @@ function initializeExtraFields(fields) {
       return
     }
     if ([FIELD_MULTI_SELECT, FIELD_TAG].includes(field.valueType)) {
-      extraFieldValues[field.id] = Array.isArray(value) ? value : String(value || "").split(";").filter(Boolean)
+      extraFieldValues[field.id] = Array.isArray(value)
+        ? value
+        : String(value || "")
+            .split(";")
+            .filter(Boolean)
       return
     }
     extraFieldValues[field.id] = value ?? ""
@@ -529,7 +553,11 @@ function initializeExtraFields(fields) {
 }
 
 async function save() {
-  if (!String(form.title || "").replace(/<[^>]*>/g, "").trim()) {
+  if (
+    !String(form.title || "")
+      .replace(/<[^>]*>/g, "")
+      .trim()
+  ) {
     showErrorNotification(t("Title is required"))
     return
   }
@@ -543,7 +571,7 @@ async function save() {
     await router.push({
       name: "LpBuilder",
       params: { lpId: savedId },
-      query: route.query,
+      query: managementQuery.value,
     })
   } catch (error) {
     showErrorNotification(error)
@@ -599,7 +627,7 @@ function onExtraFileSelected(fieldId, file) {
 }
 
 function cancel() {
-  router.push({ name: "LpList", query: route.query })
+  router.push({ name: "LpList", query: managementQuery.value })
 }
 
 function parseExtraFieldDate(valueType, value) {

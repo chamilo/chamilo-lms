@@ -1,6 +1,9 @@
 <template>
   <div class="lp-list">
-    <SectionHeader :title="t('Learning paths')">
+    <SectionHeader
+      :show-student-view-button="true"
+      :title="t('Learning paths')"
+    >
       <BaseButton
         v-if="canEdit"
         :label="t('More actions')"
@@ -84,7 +87,7 @@
                 :ringDash="ringDash"
                 :ringValue="ringValue"
                 @export-chamilo="onExportChamilo"
-              @export-pdf="onExportPdf"
+                @export-pdf="onExportPdf"
                 @management-changed="load"
                 @visibility-changed="load"
               />
@@ -215,6 +218,14 @@ const routeStudentViewFlag = computed(() => {
 })
 const isStudentView = computed(() => routeStudentViewFlag.value ?? platformConfig.isStudentViewActive)
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
+const managementQuery = computed(() =>
+  Object.fromEntries(
+    Object.entries(route.query).filter(
+      ([key, value]) =>
+        ["cid", "sid", "gid", "gradebook"].includes(key) && value !== undefined && value !== null && value !== "",
+    ),
+  ),
+)
 
 function syncCStudioCreateButtonVisibility() {
   const isEditorVisible = canEdit.value
@@ -253,18 +264,26 @@ const mItems = computed(() => {
   }
 
   return [
-    { label: t("Create new learning path"), command: () => router.push({ name: "LpCreate", query: route.query }) },
+    {
+      label: t("Create new learning path"),
+      command: () => router.push({ name: "LpCreate", query: managementQuery.value }),
+    },
     ...(canUseAi.value
       ? [
           {
             label: t("AI learning path generator"),
-            command: () => router.push({ name: "LpAiGenerator", query: route.query }),
+            command: () => router.push({ name: "LpAiGenerator", query: managementQuery.value }),
           },
         ]
       : []),
-    { label: t("Import"), command: () => router.push({ name: "LpScormImport", query: route.query }) },
+    { label: t("Import"), command: () => router.push({ name: "LpScormImport", query: managementQuery.value }) },
     ...(canAddCategory.value
-      ? [{ label: t("Add a category"), command: () => router.push({ name: "LpCategoryCreate", query: route.query }) }]
+      ? [
+          {
+            label: t("Add a category"),
+            command: () => router.push({ name: "LpCategoryCreate", query: managementQuery.value }),
+          },
+        ]
       : []),
   ]
 })
@@ -381,7 +400,7 @@ const canExportChamilo = computed(
 // A static :to-url binding can render before the store resolves, producing a
 // link without cid that the legacy controller rejects as "Not allowed".
 const goCreateLp = () => {
-  router.push({ name: "LpCreate", query: route.query })
+  router.push({ name: "LpCreate", query: managementQuery.value })
 }
 
 const canAutoLaunch = computed(() => {
@@ -556,7 +575,7 @@ watch(
   () => route.query?.isStudentView,
   async () => {
     syncStudentViewStateFromRoute()
-
+    await load(false)
     await nextTick()
     syncCStudioCreateButtonVisibility()
   },
@@ -903,9 +922,7 @@ async function queueLayoutSave() {
 }
 
 async function onLearningPathDragEnd(event) {
-  const didMove =
-    event?.from !== event?.to ||
-    Number(event?.oldIndex ?? -1) !== Number(event?.newIndex ?? -1)
+  const didMove = event?.from !== event?.to || Number(event?.oldIndex ?? -1) !== Number(event?.newIndex ?? -1)
 
   if (didMove) {
     await queueLayoutSave()
@@ -960,5 +977,4 @@ watch(
     })
   },
 )
-
 </script>

@@ -25,14 +25,18 @@ const props = defineProps({
   item: { type: Object, required: true },
   lpId: { type: Number, required: true },
   parentOptions: { type: Array, required: true },
+  aiQuickTestEnabled: { type: Boolean, default: false },
+  aiQuickTestProviders: { type: Array, default: () => [] },
   titleAsHtml: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(["saved"])
+const emit = defineEmits(["quick-test-created", "saved"])
 const { t } = useI18n()
 const { showErrorNotification, showSuccessNotification } = useNotification()
 
 const saving = ref(false)
+const generatingQuickTest = ref(false)
+const quickTestProvider = ref("")
 const formSubmitted = ref(false)
 const contentEditorId = "lp-builder-item-content"
 const contentEditor = ref(null)
@@ -47,6 +51,19 @@ const form = reactive({
 
 const hasValidTitle = computed(() => Boolean(String(form.title || "").replace(/<[^>]*>/g, "").trim()))
 const canEditContent = computed(() => Boolean(props.item?.editableContent))
+const quickTestProviderOptions = computed(() =>
+  (Array.isArray(props.aiQuickTestProviders) ? props.aiQuickTestProviders : []).filter(
+    (provider) => String(provider?.value || "").trim() !== "",
+  ),
+)
+const canGenerateQuickTest = computed(
+  () =>
+    props.aiQuickTestEnabled &&
+    quickTestProviderOptions.value.length > 0 &&
+    props.item?.itemType === "document" &&
+    Boolean(props.item?.editableContent) &&
+    Number(props.item?.resourceId || 0) > 0,
+)
 const showExportAllowed = computed(() => Boolean(props.item?.exportConfigurable))
 const saveLabel = computed(() => {
   if ("dir" === props.item?.itemType) {
@@ -82,6 +99,19 @@ watch(
     formSubmitted.value = false
   },
   { immediate: true, deep: true },
+)
+
+watch(
+  quickTestProviderOptions,
+  (providers) => {
+    const selectedStillExists = providers.some(
+      (provider) => String(provider.value) === quickTestProvider.value,
+    )
+    if (!selectedStillExists) {
+      quickTestProvider.value = String(providers[0]?.value || "")
+    }
+  },
+  { immediate: true },
 )
 
 function getCurrentEditorContent() {
@@ -161,10 +191,10 @@ function toLocalDateTime(date) {
   return `${toLocalDate(date)} ${hours}:${minutes}`
 }
 
-async function saveItem() {
+async function persistItem({ notify = true, emitSaved = true } = {}) {
   formSubmitted.value = true
   if (!hasValidTitle.value) {
-    return
+    return false
   }
 
   if (canEditContent.value) {
@@ -187,12 +217,56 @@ async function saveItem() {
       },
       extraFieldFiles,
     )
-    showSuccessNotification(t("Updated"))
-    emit("saved", Number(props.item.id))
+
+    if (notify) {
+      showSuccessNotification(t("Updated"))
+    }
+    if (emitSaved) {
+      emit("saved", Number(props.item.id))
+    }
+
+    return true
+  } catch (error) {
+    showErrorNotification(error)
+
+    return false
+  } finally {
+    saving.value = false
+  }
+}
+
+async function saveItem() {
+  await persistItem()
+}
+
+async function generateQuickTest() {
+  if (!canGenerateQuickTest.value || generatingQuickTest.value || saving.value) {
+    return
+  }
+
+  generatingQuickTest.value = true
+  try {
+    const saved = await persistItem({ notify: false, emitSaved: false })
+    if (!saved) {
+      return
+    }
+
+    const created = await lpService.generateBuilderQuickTest(
+      props.lpId,
+      Number(props.item.id),
+      props.context,
+      {
+        csrfToken: props.csrfToken,
+        provider: quickTestProvider.value,
+      },
+    )
+
+    showSuccessNotification(t("Added"))
+    emit("quick-test-created", created)
   } catch (error) {
     showErrorNotification(error)
   } finally {
-    saving.value = false
+    generatingQuickTest.value = false
   }
 }
 </script>
@@ -241,6 +315,35 @@ async function saveItem() {
       :model-value="String(item.resourceUrl || '')"
       name="url"
     />
+
+    <div
+      v-if="canGenerateQuickTest"
+      class="rounded-lg border border-gray-20 bg-gray-5 p-3"
+    >
+      <BaseSelect
+        v-if="quickTestProviderOptions.length > 1"
+        id="lp-builder-quick-test-provider"
+        v-model="quickTestProvider"
+        :disabled="saving || generatingQuickTest"
+        :label="t('AI provider')"
+        :options="quickTestProviderOptions"
+        name="ai_provider"
+        option-label="label"
+        option-value="value"
+      />
+
+      <BaseButton
+        :disabled="saving || generatingQuickTest"
+        :is-loading="generatingQuickTest"
+        :label="t('Generate a quick test on this topic')"
+        icon="robot"
+        type="primary-text"
+        @click="generateQuickTest"
+      />
+      <p class="mt-1 text-body-2 text-gray-50">
+        {{ t("The saved document content will be sent to an AI model for processing.") }}
+      </p>
+    </div>
 
     <BaseTinyEditor
       v-if="canEditContent"

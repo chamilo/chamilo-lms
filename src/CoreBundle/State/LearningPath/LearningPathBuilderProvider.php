@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State\LearningPath;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathBuilder;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
@@ -17,6 +18,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -67,6 +69,8 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         private CDocumentRepository $documentRepository,
         private ExtraFieldRepository $extraFieldRepository,
         private ResourceNodeRepository $resourceNodeRepository,
+        private AiFeatureAccessHelper $aiFeatureAccessHelper,
+        private AiProviderFactory $aiProviderFactory,
     ) {}
 
     /**
@@ -123,10 +127,58 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         $result->defaultDocumentParentNodeId = (int) $learningPathFolder->getId();
         $result->courseLanguage = trim((string) $course->getCourseLanguage());
         $result->searchEnabled = $this->settingEnabled('search.search_enabled');
+        $aiQuickTestFeatureEnabled = $this->aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'exercise_generator',
+            (int) $course->getId(),
+        );
+        $result->aiQuickTestProviders = $aiQuickTestFeatureEnabled
+            ? $this->getAiQuickTestProviderOptions()
+            : [];
+        $result->aiQuickTestEnabled = [] !== $result->aiQuickTestProviders;
         $result->certificate = $this->buildCertificate($lp, $course, $session, $group);
         $result->bulkAuthorPrice = $this->buildBulkAuthorPrice($lpId);
 
         return $result;
+    }
+
+    /**
+     * @return array<int, array{label: string, value: string}>
+     */
+    private function getAiQuickTestProviderOptions(): array
+    {
+        $configured = $this->settingsManager->getSetting('ai_helpers.ai_providers', true);
+        if (\is_string($configured)) {
+            $decoded = json_decode($configured, true);
+            $configured = \is_array($decoded) ? $decoded : [];
+        }
+        if (!\is_array($configured)) {
+            $configured = [];
+        }
+
+        $options = [];
+        foreach ($this->aiProviderFactory->getProvidersForType('text') as $providerName) {
+            $providerName = trim((string) $providerName);
+            if ('' === $providerName) {
+                continue;
+            }
+
+            $providerConfig = $configured[$providerName] ?? [];
+            $model = '';
+            if (\is_array($providerConfig)) {
+                if (isset($providerConfig['text']) && \is_array($providerConfig['text'])) {
+                    $model = trim((string) ($providerConfig['text']['model'] ?? ''));
+                } else {
+                    $model = trim((string) ($providerConfig['model'] ?? ''));
+                }
+            }
+
+            $options[] = [
+                'label' => '' !== $model ? $providerName.' ('.$model.')' : $providerName,
+                'value' => $providerName,
+            ];
+        }
+
+        return $options;
     }
 
     /**

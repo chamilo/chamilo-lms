@@ -57,8 +57,7 @@ final readonly class LearningPathQuickTestService
         CDocument $document,
         string $sourceTitle,
         string $requestedProvider = '',
-    ): array
-    {
+    ): array {
         if (!$this->isAvailable($course)) {
             throw new AccessDeniedHttpException('AI exercise generation is disabled in this course.');
         }
@@ -177,8 +176,7 @@ final readonly class LearningPathQuickTestService
         string $language,
         string $requestMarker,
         ?string $previousOutput = null,
-    ): string
-    {
+    ): string {
         $systemPrompt = <<<'PROMPT'
 Return only valid Aiken plain text. Generate exactly two independent multiple-choice questions, each with four non-empty options labelled A. through D. and exactly one line in the form ANSWER: X. Do not use Markdown, code fences, numbering, explanations, headings, or introductory text. Never refer to the source document.
 PROMPT;
@@ -282,7 +280,7 @@ PROMPT;
             ;
 
             $safeTitle = mb_substr($this->oneLine($documentTitle), 0, 200);
-            $safeAudit = sprintf(
+            $safeAudit = \sprintf(
                 'LP quick test from saved document; title=%s; content_sha256=%s; content_length=%d',
                 '' !== $safeTitle ? $safeTitle : 'Untitled document',
                 hash('sha256', $plainText),
@@ -467,7 +465,9 @@ PROMPT;
     private function loadAikenImporter(): void
     {
         $basePath = api_get_path(SYS_CODE_PATH).'exercise/export/aiken/';
+
         require_once $basePath.'aiken_import.inc.php';
+
         require_once $basePath.'aiken_classes.php';
     }
 

@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/learning_path_builder_items/{itemId}/quick-test',
-            requirements: ['itemId' => '\\d+'],
+            requirements: ['itemId' => '\d+'],
             read: false,
             name: 'create_learning_path_builder_quick_test',
             processor: LearningPathQuickTestProcessor::class,

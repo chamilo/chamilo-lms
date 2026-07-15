@@ -139,6 +139,7 @@ final readonly class LearningPathQuickTestProcessor implements ProcessorInterfac
             $this->entityManager->persist($quizLink);
 
             $sourceOrder = (int) $sourceItem->getDisplayOrder();
+
             /** @var CLpItem[] $followingItems */
             $followingItems = $this->lpItemRepository->createQueryBuilder('item')
                 ->andWhere('item.lp = :lpId')

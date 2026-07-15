@@ -3578,6 +3578,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Configuration data to connect with external AI services.',
                 ],
                 [
+                    'name' => 'wysiwyg_translation_all_languages',
+                    'title' => 'Allow AI translation to all active languages in WYSIWYG editors',
+                    'comment' => 'Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'learning_path_generator',
                     'title' => 'Learning paths generator',
                     'comment' => 'Generates personalized learning paths using AI suggestions.',

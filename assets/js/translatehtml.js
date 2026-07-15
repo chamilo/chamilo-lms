@@ -55,7 +55,7 @@ function hideMatches(matches) {
 function showMatches(matches) {
   matches.forEach(function (el) {
     el.classList.remove("hidden")
-    el.style.display = "inline"
+    el.style.display = el.tagName.toLowerCase() === "span" ? "inline" : "block"
   })
 }
 

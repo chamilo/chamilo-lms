@@ -20,6 +20,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
             ->setDefaults([
                 'enable_ai_helpers' => 'false',
                 'ai_providers' => '',
+                'wysiwyg_translation_all_languages' => 'false',
                 'learning_path_generator' => 'false',
                 'exercise_generator' => 'false',
                 'open_answers_grader' => 'false',
@@ -46,6 +47,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
                     'style' => 'font-family: monospace;',
                 ],
             ])
+            ->add('wysiwyg_translation_all_languages', YesNoType::class)
         ;
 
         $featureChoices = [

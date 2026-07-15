@@ -62,6 +62,8 @@ const props = defineProps({
   useFileManager: { type: Boolean, default: false },
   // When true, includes TinyMCE "fullpage" plugin/button.
   fullPage: { type: Boolean, default: true },
+  // Keep translate_html enabled by default, but allow language-specific editors to opt out.
+  enableTranslateHtml: { type: Boolean, default: true },
 })
 
 /* Derived UI flags */
@@ -383,7 +385,7 @@ const editorFeatureFlags = computed(() => ({
 }))
 
 const translateHtmlEnabled = computed(() => {
-  return toBool(platformConfigStore.getSetting("editor.translate_html"))
+  return props.enableTranslateHtml && toBool(platformConfigStore.getSetting("editor.translate_html"))
 })
 
 const enableUploadImageInEditor = computed(() => {

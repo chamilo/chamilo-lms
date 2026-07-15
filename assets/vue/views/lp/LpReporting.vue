@@ -466,7 +466,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
     <div v-if="!selfMode">
       <BaseTable
         :is-loading="isLoading"
-        :text-for-empty="t('No user added')"
+        :text-for-empty="t('No users added yet.')"
         :total-items="report?.learners?.length || 0"
         :values="report?.learners || []"
         data-key="id"

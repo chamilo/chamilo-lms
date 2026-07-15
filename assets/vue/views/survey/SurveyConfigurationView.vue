@@ -155,7 +155,7 @@
             v-model="form.availableUntil"
             :error-text="t('Invalid date')"
             :is-invalid="isAvailableUntilInvalid"
-            :label="requiredLabel(t('End Date'))"
+            :label="requiredLabel(t('End date'))"
             :show-time="true"
           />
         </div>

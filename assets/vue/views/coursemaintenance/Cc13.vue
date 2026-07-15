@@ -41,7 +41,7 @@
               v-if="scope === 'selected'"
               class="mt-1 text-xs text-gray-500"
             >
-              {{ t("{n} selected", { n: selectedCount }) }}
+              {{ t("{0} selected", [selectedCount]) }}
             </p>
           </div>
 
@@ -162,7 +162,7 @@
                           v-if="kids(cat).length"
                           class="ml-2 text-xs text-gray-500"
                         >
-                          ({{ t("contains {n} items", { n: kids(cat).length }) }})
+                          ({{ t("contains {0} items", [kids(cat).length]) }})
                         </span>
                       </div>
 

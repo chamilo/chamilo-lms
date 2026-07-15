@@ -161,7 +161,7 @@
             class="mdi mdi-loading mdi-spin"
             aria-hidden="true"
           ></i>
-          {{ t("Checking push subscription...") }}
+          {{ t("Checking push subscription") }}
         </p>
 
         <div
@@ -178,7 +178,7 @@
               </div>
 
               <p class="mt-2 text-caption font-semibold text-gray-90">
-                {{ t("You're subscribed to push notifications in this browser.") }}
+                {{ t("You're subscribed to push notifications in this browser") }}
               </p>
               <BaseButton
                 :label="t('Unsubscribe')"
@@ -219,7 +219,7 @@
               </div>
 
               <p class="mt-2 text-caption text-gray-90">
-                {{ t("Push notifications are not enabled in this browser.") }}
+                {{ t("Push notifications are not enabled in this browser") }}
               </p>
               <BaseButton
                 :label="t('Enable notifications')"

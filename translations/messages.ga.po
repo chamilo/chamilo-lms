@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -36492,4 +36492,853 @@ msgstr "Snáitheanna a fheiceáil"
 
 msgid "No auth source"
 msgstr "Gan fhoinse fíordheimhnithe"
+
+msgid "You must add at least one question"
+msgstr "Caithfidh tú ceist amháin ar a laghad a chur leis"
+
+msgid "Advanced actions"
+msgstr "Gníomhartha casta"
+
+msgid "Application path"
+msgstr "Conair an fheidhmchláir"
+
+msgid "Apply files details"
+msgstr "Cuir sonraí na gcomhad i bhfeidhm"
+
+msgid "Apply plan details"
+msgstr "Cuir sonraí an phlean i bhfeidhm"
+
+msgid "Apply plan failed"
+msgstr "Theip ar phlean a chur i bhfeidhm"
+
+msgid "Apply plan ready"
+msgstr "Plean réidh le cur i bhfeidhm"
+
+msgid "Apply preparation"
+msgstr "Ullmhúchán a chur i bhfeidhm"
+
+msgid "Apply staged files"
+msgstr "Cuir comhaid stáitseáilte i bhfeidhm"
+
+msgid "Applying files..."
+msgstr "Comhaid á gcur i bhfeidhm..."
+
+msgid "Audit file"
+msgstr "Comhad iniúchta"
+
+msgid "Backup directory"
+msgstr "Eolaire cúltaca"
+
+msgid "Baseline clean"
+msgstr "Bunlíne glan"
+
+msgid "Baseline warnings"
+msgstr "Rabhaidh bunlíne"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Tóg plean sábháilte cur i bhfeidhm ón bpacáiste stáitseáilte. Ní dhéanann sé seo ach comhaid, ceadanna, conair chúltaca agus stádas glais a sheiceáil. Ní chuireann sé comhaid in ionad."
+
+msgid "Build production frontend assets."
+msgstr "Tóg sócmhainní tosaigh táirgeachta."
+
+msgid "Building plan..."
+msgstr "Plean á thógáil..."
+
+msgid "Channel"
+msgstr "Cainéal"
+
+msgid "Check"
+msgstr "Seiceáil"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Seiceáil le haghaidh nuashonruithe Chamilo atá ar fáil, fíoraigh pacáistí, stáitseáil comhaid agus rith céimeanna rialaithe iar-nuashonraithe."
+
+msgid "Check manifest"
+msgstr "Seiceáil an fhorléiriú"
+
+msgid "Checking post-apply actions..."
+msgstr "Gníomhartha iar-chur i bhfeidhm á seiceáil..."
+
+msgid "Checking..."
+msgstr "Á sheiceáil..."
+
+msgid "Composer install"
+msgstr "Suiteáil Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Is féidir le gníomhartha Composer, Yarn agus imirce bunachar sonraí spleáchais, sócmhainní ginte nó an bunachar sonraí a mhodhnú. Ná roghnaigh iad ach tar éis cúltacaí agus ceadanna a dheimhniú."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Cumraigh CHAMILO_UPDATE_MANIFEST_URL ar an bhfreastalaí nó cuir URL forléiriú HTTPS ar fáil."
+
+msgid "Configured"
+msgstr "Cumraithe"
+
+msgid "Current migration"
+msgstr "Imirce reatha"
+
+msgid "Database baseline"
+msgstr "Bunlíne bunachair sonraí"
+
+msgid "Database migration safety review"
+msgstr "Athbhreithniú sábháilteachta imirce bunachair sonraí"
+
+msgid "Database migrations"
+msgstr "Imirce bunachair sonraí"
+
+msgid "Development mode"
+msgstr "Mód forbartha"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ná cumasaigh é seo mura ndearnadh athbhreithniú ar chúltaca an nuashonraithe agus ar cheadanna an fhreastalaí."
+
+msgid "Doctrine dry-run command"
+msgstr "Ordú triail-tirim Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Thuairiscigh Doctrine rabhaidh stairiúla bunlíne. Ní dhéanfaidh an nuashonraitheoir ach imirceanna V210 stáitseáilte a fhorghníomhú tar éis deimhnithe sainráite."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Ní dhéanfaidh Doctrine ach na himirceanna V210 stáitseáilte a fhorghníomhú go sainráite tar éis don athbhreithniú sábháilteachta pas a fháil."
+
+msgid "Dry-run exit code"
+msgstr "Cód scortha triail-rith"
+
+msgid "Executed unavailable migrations"
+msgstr "Imirceanna neamhfhorghníomhaithe forghníomhaithe"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Bain an pacáiste nuashonraithe fíoraithe amach go dtí eolaire stáitse le haghaidh iniúchta. Ní athraíonn sé seo comhaid, ní ritheann sé imirceanna, ná ní mionathraíonn sé an bunachar sonraí."
+
+msgid "File apply available"
+msgstr "Comhad iarratais ar fáil"
+
+msgid "Files to replace"
+msgstr "Comhaid le hathsholáthar"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Deimhním go bhfuil cúltaca bunachair sonraí ann agus gur fíoraíodh é sular ritheadh na himirceanna."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Tuigim gur féidir le gníomhartha casta spleáchais, sócmhainní ginte nó an bunachar sonraí a mhodhnú."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Tuigim go n-athróidh sé seo comhaid i suiteáil Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Tuigim go rithfidh sé seo orduithe nuashonraithe ar an bhfreastalaí."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Suiteáil spleáchais an chéadtaobh sula ndéantar sócmhainní a atógáil."
+
+msgid "Installed version"
+msgstr "Leagan suiteáilte"
+
+msgid "Latest migration"
+msgstr "Imirce is déanaí"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Fág cosáin an phacáiste agus an tsínithe folamh chun iad a íoslódáil ó URLanna fíoraithe an fhorléaráis. Níl cosáin áitiúla ar fáil ach amháin le haghaidh tástálacha forbartha."
+
+msgid "Live command log"
+msgstr "Log ordaithe beo"
+
+msgid "Live update log"
+msgstr "Log nuashonraithe beo"
+
+msgid "Local test options"
+msgstr "Roghanna tástála áitiúla"
+
+msgid "Local test update notice link"
+msgstr "Nasc fógra nuashonraithe tástála áitiúil"
+
+msgid "Local update notice simulation"
+msgstr "Ionsamhlú fógra nuashonraithe áitiúil"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Níl ionsamhlú fógra nuashonraithe áitiúil ar fáil ach amháin i mód forbartha."
+
+msgid "Manifest"
+msgstr "Forléargas"
+
+msgid "Manifest source"
+msgstr "Foinse an fhorléaráis"
+
+msgid "Migration safety details"
+msgstr "Sonraí sábháilteachta imirce"
+
+msgid "Migration safety review failed"
+msgstr "Theip ar athbhreithniú sábháilteachta imirce"
+
+msgid "Migration safety review ready"
+msgstr "Athbhreithniú sábháilteachta imirce réidh"
+
+msgid "Migration target"
+msgstr "Sprioc imirce"
+
+msgid "New files"
+msgstr "Comhaid nua"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Imirceanna nua a thuairiscigh Doctrine"
+
+msgid "Next migration"
+msgstr "An chéad imirce eile"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Níor tuairiscíodh aon imirce neamhfhorghníomhaithe forghníomhaithe."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Níl aon URL oifigiúil forléaráis cumraithe fós. Úsáid URL HTTPS nó cosán áitiúil le haghaidh tástálacha forbartha."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Níor braitheadh aon imirce ar feitheamh roimh sprioc an nuashonraithe stáitse."
+
+msgid "Not configured"
+msgstr "Gan chumrú"
+
+msgid "Not detected"
+msgstr "Gan bhrath"
+
+msgid "Official Chamilo update channel"
+msgstr "Cainéal nuashonraithe oifigiúil Chamilo"
+
+msgid "Package SHA-256"
+msgstr "Pacáiste SHA-256"
+
+msgid "Package URL"
+msgstr "URL an phacáiste"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Íoslódálfar comhaid an phacáiste agus an tsínithe ón bhforléargas. Tá cosáin áitiúla díchumasaithe sa timpeallacht seo."
+
+msgid "Package path"
+msgstr "Cosán an phacáiste"
+
+msgid "Package staged successfully"
+msgstr "Pacáiste stáitse go rathúil"
+
+msgid "Package staging failed"
+msgstr "Theip ar stáitse an phacáiste"
+
+msgid "Package verification"
+msgstr "Fíorú an phacáiste"
+
+msgid "Package verification failed"
+msgstr "Theip ar fhíorú an phacáiste"
+
+msgid "Package verified successfully"
+msgstr "Pacáiste fíoraithe go rathúil"
+
+msgid "Pending migrations before this update"
+msgstr "Imirceanna ar feitheamh roimh an nuashonrú seo"
+
+msgid "Planned backup path"
+msgstr "Cosán cúltaca pleanáilte"
+
+msgid "Post-apply actions completed"
+msgstr "Gníomhartha iar-iarratais críochnaithe"
+
+msgid "Post-apply actions failed"
+msgstr "Theip ar ghníomhartha iar-iarratais"
+
+msgid "Post-apply actions ready"
+msgstr "Gníomhartha iar-iarratais réidh"
+
+msgid "Post-apply checks"
+msgstr "Seiceálacha iar-iarratais"
+
+msgid "Post-apply checks failed"
+msgstr "Theip ar sheiceálacha iar-iarratais"
+
+msgid "Post-apply details"
+msgstr "Sonraí iar-fheidhmithe"
+
+msgid "Post-apply run details"
+msgstr "Sonraí rith iar-fheidhmithe"
+
+msgid "Preflight checks"
+msgstr "Seiceálacha réamh-eitilte"
+
+msgid "Preflight checks completed"
+msgstr "Seiceálacha réamh-eitilte críochnaithe"
+
+msgid "Preflight checks failed"
+msgstr "Theip ar na seiceálacha réamh-eitilte"
+
+msgid "Preflight details"
+msgstr "Sonraí réamh-eitilte"
+
+msgid "Prepare staging"
+msgstr "Ullmhaigh an stáitse"
+
+msgid "Preparing staging..."
+msgstr "Ag ullmhú an stáitse..."
+
+msgid "Production mode"
+msgstr "Mód táirgthe"
+
+msgid "Released at"
+msgstr "Scaoileadh ag"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Ionadaigh comhaid Chamilo ón bpacáiste stáitse ag úsáid an phlean feidhmithe athbhreithnithe. Ní ritheann sé imirceanna bunachar sonraí, Composer, Yarn ná orduithe taisce."
+
+msgid "Review apply plan"
+msgstr "Athbhreithnigh an plean feidhmithe"
+
+msgid "Review database migrations"
+msgstr "Athbhreithnigh imirceanna bunachar sonraí"
+
+msgid "Review post-apply actions"
+msgstr "Athbhreithnigh gníomhartha iar-fheidhmithe"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Athbhreithnigh orduithe láimhe molta tar éis comhaid an nuashonraithe a fheidhmiú. Ní ritheann an chéim seo Composer, Yarn, imirceanna ná orduithe taisce."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Athbhreithnigh imirceanna Doctrine stáitse agus aschur triail-rith sula rithtear imirceanna bunachar sonraí."
+
+msgid "Reviewing database migrations..."
+msgstr "Ag athbhreithniú imirceanna bunachar sonraí..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Rith agus pasáil an t-athbhreithniú sábháilteachta imirce sula ndéantar imirceanna bunachar sonraí."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Rith seiceálacha timpeallachta roimh aon chéim feidhmithe nuashonraithe amach anseo. Ní athraíonn sé seo comhaid ná an bunachar sonraí."
+
+msgid "Run post-apply actions"
+msgstr "Rith gníomhartha iar-fheidhmithe"
+
+msgid "Run preflight checks"
+msgstr "Rith seiceálacha réamh-eitilte"
+
+msgid "Run selected post-apply actions"
+msgstr "Rith gníomhartha iar-fheidhmithe roghnaithe"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Rith orduithe iar-fheidhmithe roghnaithe ón bhfreastalaí ag úsáid liosta ceadaithe rialaithe. Ní ghlactar le horduithe bhlaosc saincheaptha."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Rith na horduithe seo de láimh ón bhfreastalaí tar éis toradh an nuashonraithe comhaid agus na gcúltacaí a dheimhniú."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Tá rith gníomhartha iar-fheidhmithe ón gcomhéadan díchumasaithe i mód táirgthe."
+
+msgid "Running post-apply actions..."
+msgstr "Ag rith gníomhartha iar-fheidhmithe..."
+
+msgid "Safe actions"
+msgstr "Gníomhartha sábháilte"
+
+msgid "Signature path"
+msgstr "Conair an tsínithe"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Ní féidir fíorú sínithe a scipeáil sa timpeallacht seo."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Scipeáil fíorú sínithe do thástálacha forbartha áitiúla"
+
+msgid "Staged file application failed"
+msgstr "Theip ar fheidhmiú na gcomhad stáitse"
+
+msgid "Staged files applied successfully"
+msgstr "D’éirigh le feidhmiú na gcomhad stáitse"
+
+msgid "Staging details"
+msgstr "Sonraí stáitse"
+
+msgid "Staging directory"
+msgstr "Eolaire stáitse"
+
+msgid "Staging extraction"
+msgstr "Eastóscadh stáitse"
+
+msgid "Symfony cache clear"
+msgstr "Glanadh taisce Symfony"
+
+msgid "System update"
+msgstr "Nuashonrú córais"
+
+msgid "Target version"
+msgstr "Spiroch spriocthe"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Tá URL an fhorógra oifigiúil réamh-líonta. Is féidir leat é a athrú go forógra HTTPS eile más gá."
+
+msgid "The database migration baseline is clean."
+msgstr "Tá bunlíne imirce an bhunachair sonraí glan."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Theip ar an bhfreagra HTTP deiridh tar éis don oibríocht a bheith críochnaithe. De ghnáth is de bharr ceadanna taisce am-rith nó atosú freastalaí gréasáin le linn an iarratais is cúis leis seo."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Tuairiscíonn an log oibríochta gur éirigh le gníomhartha iar-fheidhmithe a chríochnú."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "D’éirigh leis na horduithe iar-fheidhmithe roghnaithe, ach theip ar an bhfreagra HTTP deiridh. Athnuaigh an leathanach agus fíoraigh ceadanna taisce am-rith má ní luchtaíonn an leathanach i gceart."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Ní chruthaíonn ná ní athchóiríonn an nuashonraitheoir cúltacaí bunachair sonraí."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Tá na gníomhartha seo sábháilte le rith ón gcomhéadan tar éis toradh an nuashonraithe a athbhreithniú."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Is féidir leis na horduithe seo spleáchais, sócmhainní ginte, taisce nó an bunachar sonraí a mhodhnú. Deimhnigh cúltacaí sula leanann tú ar aghaidh."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Athraíonn an gníomh seo comhaid i suiteáil Chamilo. Cinntigh go ndearnadh athbhreithniú ar an bplean feidhmithe agus go bhfuil cúltacaí cumasaithe sula leanann tú ar aghaidh."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Déanann an iontráil forbartha seo fógra nuashonraithe Chamilo.org sa todhchaí a insamhladh ag úsáid conairí pacáiste tástála áitiúla."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Osclaíodh an scáileán seo ó fhógra nuashonraithe oifigiúil, ach níl foinse fhorógra oifigiúil cumraithe fós."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Osclaíodh an scáileán seo ó fhógra nuashonraithe. Ní thosaítear ach an seiceáil fhorógra go huathoibríoch."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ullmhaíonn an chéim seo athbhreithniú amháin. Tarlaíonn athsholáthar comhaid níos déanaí sa chéim Comhaid stáitse a chur i bhfeidhm, le cosaint frithdhúnta, cúltaca agus ais-rolla."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Ní chruthaíonn an nuashonraitheoir seo cúltaca bunachar sonraí. Cruthaigh agus fíoraigh cúltaca sula rithfidh tú imirceanna."
+
+msgid "Trusted public key"
+msgstr "Eochair phoiblí iontaofa"
+
+msgid "Trusted signing key"
+msgstr "Eochair shínithe iontaofa"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Clóscríobh APPLY UPDATE FILES chun deimhniú"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Clóscríobh RUN DATABASE MIGRATIONS chun imirceanna bunachar sonraí a dheimhniú"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Clóscríobh RUN POST UPDATE ACTIONS chun deimhniú"
+
+msgid "Unknown update notice source."
+msgstr "Foinse fógra nuashonraithe anaithnid."
+
+msgid "Update availability"
+msgstr "Infhaighteacht nuashonraithe"
+
+msgid "Update directory"
+msgstr "Eolaire nuashonraithe"
+
+msgid "Update lock path"
+msgstr "Conair frithdhúnta nuashonraithe"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Úsáid an t-eolaire stáitse a ghintear sa chéim roimhe seo. Ní ghlacann an t-inneall ach le heolairí laistigh de var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Úsáid an nasc seo chun fógra nuashonraithe Chamilo.org sa todhchaí a insamhladh le linn tástálacha forbartha."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Úsáid é seo amháin le haghaidh tástálacha forbartha áitiúla. Caithfidh nuashonruithe táirgeachta an eochair atá cumraithe ag an bhfreastalaí a úsáid."
+
+msgid "Verification details"
+msgstr "Sonraí fíoraithe"
+
+msgid "Verify package"
+msgstr "Fíoraigh an pacáiste"
+
+msgid "Verifying..."
+msgstr "Á fhíorú..."
+
+msgid "Waiting for command progress events..."
+msgstr "Ag fanacht le himeachtaí dul chun cinn an ordaithe..."
+
+msgid "Waiting for update progress events..."
+msgstr "Ag fanacht le himeachtaí dul chun cinn an nuashonraithe..."
+
+msgid "Yarn build"
+msgstr "Tógáil Yarn"
+
+msgid "Yarn install"
+msgstr "Suiteáil Yarn"
+
+msgid "A comment is required"
+msgstr "Tá trácht ag teastáil"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Tá bunachar sonraí leis an ainm céanna ann cheana. Má tá táblaí ann, scriosfar iad; má tá sé folamh, athúsáidfear é."
+
+msgid "AI generated"
+msgstr "Ginte ag AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Cuir ceist amháin ar a laghad leis sula bhfillfidh tú ar an gconair foghlama."
+
+msgid "Add attachments"
+msgstr "Cuir iatáin leis"
+
+msgid "Additional fields"
+msgstr "Réimsí breise"
+
+msgid "Allow comments"
+msgstr "Ceadaigh tráchtanna"
+
+msgid "Allow new pages"
+msgstr "Ceadaigh leathanaigh nua"
+
+msgid "Allow ratings"
+msgstr "Ceadaigh rátálacha"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "An bhfuil tú cinnte gur mian leat gach mír a scriosadh?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "An bhfuil tú cinnte gur mian leat athnuachan uathoibríoch a athbhunú?"
+
+msgid "Attachment has been deleted"
+msgstr "Scriosadh an iatán"
+
+msgid "Backup file"
+msgstr "Comhad cúltaca"
+
+msgid "Block comments"
+msgstr "Cuir bac ar thráchtanna"
+
+msgid "Block new pages"
+msgstr "Cuir bac ar leathanaigh nua"
+
+msgid "Block ratings"
+msgstr "Cuir bac ar rátálacha"
+
+msgid "Cancel renewal"
+msgstr "Cealaigh athnuachan"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Bainfear naisc chatagóirí ó leathanaigh Wiki %s."
+
+msgid "Change"
+msgstr "Athraigh"
+
+msgid "Clear group"
+msgstr "Glan an grúpa"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Cliceáil clib chun é a chur isteach san eagarthóir. Cuirfear na sealbhóirí áite seo ina n-ionad nuair a ghintear an teastas."
+
+msgid "Comment added"
+msgstr "Cuireadh trácht leis"
+
+msgid "Comment is required"
+msgstr "Tá trácht ag teastáil"
+
+msgid "Comment score"
+msgstr "Scór tráchta"
+
+msgid "Compare selected versions line by line"
+msgstr "Déan comparáid idir na leaganacha roghnaithe líne ar líne"
+
+msgid "Compare selected versions word by word"
+msgstr "Déan comparáid idir na leaganacha roghnaithe focal ar fhocal"
+
+msgid "Compare versions"
+msgstr "Déan comparáid idir leaganacha"
+
+msgid "Copy completed"
+msgstr "Cóipeáil críochnaithe"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Cruthaigh leathanaigh oibre Wiki aonair do na foghlaimeoirí"
+
+msgid "Current view mode"
+msgstr "Mód amhairc reatha"
+
+msgid "Delete Wiki"
+msgstr "Scrios Wiki"
+
+msgid "Delete page"
+msgstr "Scrios leathanach"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Ní mholtar leathanach baile an Wiki a scriosadh. Is féidir é a athchruthú níos déanaí."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Má dhéantar an Wiki a dhíchumasú, cuirfear deireadh le gnáthleathanaigh agus gníomhartha Wiki. Fanfaidh an leathanach socruithe seo ar fáil do mhúinteoirí an chúrsa."
+
+msgid "Discussion"
+msgstr "Plé"
+
+msgid "Edit Comment"
+msgstr "Cuir Trácht in Eagar"
+
+msgid "Edit page"
+msgstr "Cuir leathanach in eagar"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Caithfidh an dáta deiridh a bheith tar éis nó cothrom leis an dáta éaga"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Iontráil téarma cuardaigh chun leathanaigh Wiki a aimsiú"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Caithfidh an dáta éaga a bheith roimh nó cothrom leis an dáta deiridh"
+
+msgid "Failed email recipients"
+msgstr "Faighteoirí ríomhphoist ar theip orthu"
+
+msgid "Finish and return to learning path"
+msgstr "Críochnaigh agus fill ar an gconair foghlama"
+
+msgid "Forum image"
+msgstr "Íomhá an fhóraim"
+
+msgid "Hide discussion"
+msgstr "Folaigh an plé"
+
+msgid "Hide page"
+msgstr "Folaigh an leathanach"
+
+msgid "I changed my mind"
+msgstr "D'athraigh mé mo mheon"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Mura bhfuil sé ticáilte, fanfaidh na comhaid sin ar fáil do riarthóir an ardáin tríd an uirlis 'Eolas comhaid'."
+
+msgid "Internal message failures"
+msgstr "Teipeanna teachtaireachtaí inmheánacha"
+
+msgid "Internal messages available"
+msgstr "Teachtaireachtaí inmheánacha ar fáil"
+
+msgid "Internal messages created now"
+msgstr "Teachtaireachtaí inmheánacha cruthaithe anois"
+
+msgid "Item score"
+msgstr "Scór an mhíre"
+
+msgid "Last post"
+msgstr "An post is déanaí"
+
+msgid "Lock page"
+msgstr "Cuir glas ar an leathanach"
+
+msgid "Manage categories"
+msgstr "Bainistigh catagóirí"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Marcáil an doiciméad seo mar chúnamh AI. Úsáid é nuair a cruthaíodh nó nuair a athraíodh an t-ábhar go suntasach le huirlisí AI."
+
+msgid "Maximum score is required"
+msgstr "Tá scór uasta ag teastáil"
+
+msgid "Metric"
+msgstr "Méadrach"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Tá tráchtanna nua blocáilte sa phlé seo"
+
+msgid "No Wiki categories are available yet."
+msgstr "Níl aon chatagóirí Wiki ar fáil fós."
+
+msgid "No categories found"
+msgstr "Níor aimsíodh aon chatagóirí"
+
+msgid "No content"
+msgstr "Gan ábhar"
+
+msgid "No parent category"
+msgstr "Gan chatagóir mháthair"
+
+msgid "Number of comments scored"
+msgstr "Líon na dtráchtaí a scóráladh"
+
+msgid "Old version"
+msgstr "Seánleagan"
+
+msgid "Only image files are allowed."
+msgstr "Ní cheadaítear ach comhaid íomhá."
+
+msgid "Please fill all required fields"
+msgstr "Líon gach réimse riachtanach"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Ginfear ceisteanna le háitsealbhóirí ranga nó mac léinn do ranganna nó grúpaí an chúrsa: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Tá rátálacha blocáilte sa phlé seo"
+
+msgid "Remove image"
+msgstr "Bain an íomhá"
+
+msgid "Restore renewal"
+msgstr "Athchóirigh an athnuachan"
+
+msgid "Restore version"
+msgstr "Athchóirigh an leagan"
+
+msgid "Search in"
+msgstr "Cuardaigh i"
+
+msgid "Select group"
+msgstr "Roghnaigh grúpa"
+
+msgid "Select image"
+msgstr "Roghnaigh íomhá"
+
+msgid "Selected image"
+msgstr "Íomhá roghnaithe"
+
+msgid "Show discussion"
+msgstr "Taispeáin an plé"
+
+msgid "Show page"
+msgstr "Taispeáin an leathanach"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Níl cead scríofa ag roinnt comhad nó fillteán. Chun Chamilo a shuiteáil, ní mór duit a gceadanna a athrú ar dtús (ag úsáid CHMOD). Léigh an"
+
+msgid "Subcategories"
+msgstr "Fo-chatagóirí"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Tapáil ar chlé nó ar dheis chun nascleanúint a dhéanamh"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Tá spriocdháta an tasc Wiki thart, ach ceadaítear aighneacht mhoillithe."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Tá spriocdháta an tasc Wiki thart."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Níl tús curtha le tasc Wiki fós."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Caithfear an glas eagarthóireachta leathanach Wiki a chur i bhfeidhm sula sábhálfar."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Sábháladh an fógra, ach níorbh fhéidir ceangaltán a uaslódáil."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Sábháladh an fógra, ach theip ar sheachadadh ríomhphoist."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Sábháladh an fógra, ach níorbh fhéidir aon ríomhphost a sheachadadh."
+
+msgid "The category has been created"
+msgstr "Cruthaíodh an chatagóir"
+
+msgid "The category has been deleted"
+msgstr "Scriosadh an chatagóir"
+
+msgid "The category has been updated"
+msgstr "Nuashonraíodh an chatagóir"
+
+msgid "The end date is invalid"
+msgstr "Tá an dáta deiridh neamhbhailí"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Caithfidh líon uasta na leaganacha a bheith ina slánuimhir neamhdhiúltach"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Caithfidh líon uasta na bhfocal a bheith ina slánuimhir neamhdhiúltach"
+
+msgid "The print window could not be opened"
+msgstr "Níorbh fhéidir an fhuinneog priontála a oscailt"
+
+msgid "The start date is invalid"
+msgstr "Tá an dáta tosaigh neamhbhailí"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Baineann na socruithe seo leis an gcúrsa ar fad, lena n-áirítear a sheisiúin agus a ghrúpaí."
+
+msgid "This announcement has already been sent by email."
+msgstr "Tá an fógra seo seolta cheana féin trí ríomhphost."
+
+msgid "This discussion is hidden from learners"
+msgstr "Tá an plé seo folaithe ó fhoghlaimeoirí"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Ligeann an uirlis ghiniúna AI seo duit íomhánna agus físeáin ghearra a chruthú chun do chúrsa a léiriú. Trí mhíniú (i dtéacs) a thabhairt ar an méid atá uait sa chuid leid, tabharfaidh tú na heilimintí riachtanacha don mhúnla AI chun íomhá nó físeán a ghiniúint. Bí foighneach. Tógfaidh an múnla AI roinnt ama agus ginfidh sé toradh éigin, a bhféadfá a bheith ag iarraidh a choinneáil trí na meáin a shábháil i d’fhillteán doiciméad, agus ansin iad a leabú laistigh de dhoiciméad HTML. Níl gach múnla AI comhionann ó thaobh luais nó cáilíochta de. D’fhéadfadh an múnla AI leid mhodhnaithe a thabhairt duit freisin, ar léiriú níos mionsonraithe é ar d’iarratas. Is féidir leat an leid mhodhnaithe sin a úsáid ansin chun d’iarratas a fhíneáil. Bí ar an eolas go bhféadfadh an uirlis seo, go háirithe maidir le físeáin, costais shuntasacha a ghiniúint do d’eagraíocht, fiú má shocraíonn tú gan na meáin ghinte a shábháil. Úsáid í dá réir sin. Má bhíonn deacrachtaí agat an rud atá á lorg agat a fháil, caith roinnt ama ag déanamh taighde ar chleasanna leidithe ar líne don mhúnla AI atá ar fáil agat."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Baineann an stair seo leis an mbunchúrsa. Tá athchóiriú ar fáil tar éis leagan seisiúin a chruthú."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Cuireann an íomhá seo ionad an deilbhín fóraim réamhshocraithe a thaispeántar in aice le teideal an fhóraim."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Tagann an leathanach seo ón mbunchúrsa. Má shábháiltear é, cruthófar leagan don seisiún reatha."
+
+msgid "This will also delete %s subcategories."
+msgstr "Scriosfaidh sé seo %s fochatagóir freisin."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Cruthóidh sé seo leathanaigh oibre aonair do %s foghlaimeoir."
+
+msgid "Thread history"
+msgstr "Stair an tsnáithe"
+
+msgid "Title and content"
+msgstr "Teideal agus ábhar"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Ní féidir an ceart athnuachana a chealú faoi láthair."
+
+msgid "Unable to restore renewal right now."
+msgstr "Ní féidir an ceart athnuachana a athchóiriú faoi láthair."
+
+msgid "Unlock page"
+msgstr "Díghlasáil leathanach"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Úsáid [[Leathanach]] nó [[Leathanach|Téacs infheicthe]] chun naisc Wiki inmheánacha a chruthú."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Úsáid barra spáis nó eochracha saighde chun nascleanúint a dhéanamh"
+
+msgid "View version"
+msgstr "Féach ar an leagan"
+
+msgid "Visible only to teachers"
+msgstr "Infheicthe do mhúinteoirí amháin"
+
+msgid "Weight is required"
+msgstr "Tá meáchan riachtanach"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Tá catagóirí Wiki díchumasaithe don chúrsa seo."
+
+msgid "Wiki categories enabled"
+msgstr "Catagóirí Wiki cumasaithe"
+
+msgid "Wiki html strict filtering"
+msgstr "Scagadh dian HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Socruithe Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Nuashonraíodh socruithe Wiki"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Tá tú ag féachaint ar leagan stairiúil den leathanach seo"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Is féidir leat comhad amháin nó níos mó a cheangal leis an bhfreagra seo."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Is féidir leat an leathanach tasc seo a chur in eagar, ach ní athrófar leathanaigh oibre na bhfoghlaimeoirí."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Is féidir leat na clibeanna {{class_name}} agus {{student_full_name}} a úsáid sa cheist."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Tá 20 nóiméad agat chun an leathanach seo a chur in eagar sula rachaidh an glas eagarthóireachta in éag."
+
+msgid "by"
+msgstr "ag"
+
+msgid "required"
+msgstr "riachtanach"
 

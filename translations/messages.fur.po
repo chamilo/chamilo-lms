@@ -36489,3 +36489,852 @@ msgstr "Viôt i threads"
 msgid "No auth source"
 msgstr "Nissune sorzint di autenticazion"
 
+msgid "You must add at least one question"
+msgstr "Tu scugnis zontâ almancul une domande"
+
+msgid "Advanced actions"
+msgstr "Azions avanzadis"
+
+msgid "Application path"
+msgstr "Percors de aplicazion"
+
+msgid "Apply files details"
+msgstr "Apliche detais dai files"
+
+msgid "Apply plan details"
+msgstr "Apliche detais dal plan"
+
+msgid "Apply plan failed"
+msgstr "Aplicazion dal plan falide"
+
+msgid "Apply plan ready"
+msgstr "Aplicazion dal plan pronte"
+
+msgid "Apply preparation"
+msgstr "Preparazion de aplicazion"
+
+msgid "Apply staged files"
+msgstr "Apliche files stadiais"
+
+msgid "Applying files..."
+msgstr "Aplicazion dai files..."
+
+msgid "Audit file"
+msgstr "Audit dal file"
+
+msgid "Backup directory"
+msgstr "Directory di backup"
+
+msgid "Baseline clean"
+msgstr "Baseline net"
+
+msgid "Baseline warnings"
+msgstr "Baseline avîs"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Cree un plan di aplicazion sigûr dal pachet stadiais. Al controle dome files, permès, percors di backup e stât di bloc. Nol rimplaç files."
+
+msgid "Build production frontend assets."
+msgstr "Cree assets frontend di produzion."
+
+msgid "Building plan..."
+msgstr "Creazion dal plan..."
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Check"
+msgstr "Controle"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Controle i agjornaments disponibii di Chamilo, verifie i pachets, stade i files e eseguì i passaçs controlâts dopo l'agjornament."
+
+msgid "Check manifest"
+msgstr "Controle manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Daûr a controlâ lis azions dopo l'aplicazion..."
+
+msgid "Checking..."
+msgstr "Daûr a controlâ..."
+
+msgid "Composer install"
+msgstr "Instalazion Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Lis azions di Composer, Yarn e migrazion de base di dâts a puedin modificâ dipendencis, assets gjenerâts o la base di dâts. Selezione lis dome dopo vê confermât i backup e i permès."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configure CHAMILO_UPDATE_MANIFEST_URL sul servidôr o inserìs un URL HTTPS dal manifest."
+
+msgid "Configured"
+msgstr "Configurât"
+
+msgid "Current migration"
+msgstr "Migrazion atuâl"
+
+msgid "Database baseline"
+msgstr "Baseline de base di dâts"
+
+msgid "Database migration safety review"
+msgstr "Verifiche di sigurece de migrazion de base di dâts"
+
+msgid "Database migrations"
+msgstr "Migrazions de base di dâts"
+
+msgid "Development mode"
+msgstr "Modalitât di svilup"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "No abilitâ chest se no son stâts verificâts il backup dal inzornament e i permès dal servidôr."
+
+msgid "Doctrine dry-run command"
+msgstr "Comant Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine à segnalât avertiments sul baseline storic. L'inzornadôr eseguirà dome lis migrazions V210 stadis dopo une conferme esplicite."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine eseguirà dome lis migrazions V210 stadis esplicitamentri dopo che la verifiche di sigurece passe."
+
+msgid "Dry-run exit code"
+msgstr "Codiç di jessude dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Migrazions no disponibilis eseguìdis"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Estrai il pachet di inzornament verificât intune cartele di staging par ispezion. Chest no rimplaç i files, no eseguìs migrazions e no modifiche la base di dâts."
+
+msgid "File apply available"
+msgstr "Aplicazion dai files disponibile"
+
+msgid "Files to replace"
+msgstr "Files di rimplaçâ"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Confermi che al esist un backup de base di dâts e che al è stât verificât prime di eseguî lis migrazions."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Capìs che lis azions avanzadis a puedin modificâ dipendencis, assets gjenerâts o la base di dâts."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Capìs che chest rimplaçarà i files de instalazion di Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Capìs che chest eseguirà comants di inzornament sul servidôr."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instale lis dipendencis frontend prime di tornâ a costruî i assets."
+
+msgid "Installed version"
+msgstr "Version instalade"
+
+msgid "Latest migration"
+msgstr "Ultime migrazion"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Lasse vueits i percors dal pachet e de firme par discjariâju dai URL dal manifest verificâts. I percors locâi a son disponibii dome par provis di svilup."
+
+msgid "Live command log"
+msgstr "Regjistri dai comants in direte"
+
+msgid "Live update log"
+msgstr "Regjistri dal inzornament in direte"
+
+msgid "Local test options"
+msgstr "Opzions di prove locâl"
+
+msgid "Local test update notice link"
+msgstr "Colegament al avîs di inzornament di prove locâl"
+
+msgid "Local update notice simulation"
+msgstr "Simulazion dal avîs di inzornament locâl"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "La simulazion dal avîs di inzornament locâl e je disponibile dome in modalitât di svilup."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Sorgjint dal manifest"
+
+msgid "Migration safety details"
+msgstr "Detais de verifiche di sigurece de migrazion"
+
+msgid "Migration safety review failed"
+msgstr "Verifiche di sigurece de migrazion falide"
+
+msgid "Migration safety review ready"
+msgstr "Verifiche di sigurece de migrazion pronte"
+
+msgid "Migration target"
+msgstr "Obietîf de migrazion"
+
+msgid "New files"
+msgstr "Gnûfs files"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Gnovis migrazions segnaladis di Doctrine"
+
+msgid "Next migration"
+msgstr "Prossime migrazion"
+
+msgid "No executed unavailable migration was reported."
+msgstr "No è stade segnalade nissune migrazion no disponibile eseguide."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Nissun URL uficiâl dal manifest al è ancjemò configurât. Dopre un URL HTTPS o un percors locâl pes provis di svilup."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "No è stade rilevade nissune migrazion in spiete prime dal obietîf di inzornament stadî."
+
+msgid "Not configured"
+msgstr "No configurât"
+
+msgid "Not detected"
+msgstr "No rilevât"
+
+msgid "Official Chamilo update channel"
+msgstr "Canâl uficiâl di inzornament di Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 dal pachet"
+
+msgid "Package URL"
+msgstr "URL dal pachet"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "I files dal pachet e de firme a saran discjariâts dal manifest. I percors locâi a son disabilitâts in chest ambient."
+
+msgid "Package path"
+msgstr "Percors dal pachet"
+
+msgid "Package staged successfully"
+msgstr "Pachet preparât cun sucès"
+
+msgid "Package staging failed"
+msgstr "Preparazion dal pachet falide"
+
+msgid "Package verification"
+msgstr "Verifiche dal pachet"
+
+msgid "Package verification failed"
+msgstr "Verifiche dal pachet falide"
+
+msgid "Package verified successfully"
+msgstr "Pachet verificât cun sucès"
+
+msgid "Pending migrations before this update"
+msgstr "Migrazions in spiete prime di chest inzornament"
+
+msgid "Planned backup path"
+msgstr "Percors dal backup planificât"
+
+msgid "Post-apply actions completed"
+msgstr "Azions dopo l'aplicazion completadis"
+
+msgid "Post-apply actions failed"
+msgstr "Azions dopo l'aplicazion falidis"
+
+msgid "Post-apply actions ready"
+msgstr "Azions dopo l'aplicazion prontis"
+
+msgid "Post-apply checks"
+msgstr "Verifichis dopo l'aplicazion"
+
+msgid "Post-apply checks failed"
+msgstr "Verifichis dopo l'aplicazion falidis"
+
+msgid "Post-apply details"
+msgstr "Detais dopo l'aplicazion"
+
+msgid "Post-apply run details"
+msgstr "Detais di esecuzion dopo l'aplicazion"
+
+msgid "Preflight checks"
+msgstr "Verifichis preliminars"
+
+msgid "Preflight checks completed"
+msgstr "Verifichis preliminars completadis"
+
+msgid "Preflight checks failed"
+msgstr "Verifichis preliminars falidis"
+
+msgid "Preflight details"
+msgstr "Detais preliminars"
+
+msgid "Prepare staging"
+msgstr "Preparâ la preparazion"
+
+msgid "Preparing staging..."
+msgstr "Daûr a preparâ la preparazion..."
+
+msgid "Production mode"
+msgstr "Modalitât di produzion"
+
+msgid "Released at"
+msgstr "Publicât a"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Sostituî i files di Chamilo dal pachet preparât doprant il plan di aplicazion revisionât. Chest no eseguìs migrazions dal database, Composer, Yarn o comands di cache."
+
+msgid "Review apply plan"
+msgstr "Rivedi il plan di aplicazion"
+
+msgid "Review database migrations"
+msgstr "Rivedi lis migrazions dal database"
+
+msgid "Review post-apply actions"
+msgstr "Rivedi lis azions dopo l'aplicazion"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Rivedi i comands manuâi consejâts dopo l'aplicazion dai files di inzornament. Chest passa no eseguìs Composer, Yarn, migrazions o comands di cache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Rivedi lis migrazions Doctrine preparadis e la jessude dal dry-run prime di eseguî lis migrazions dal database."
+
+msgid "Reviewing database migrations..."
+msgstr "Daûr a rivedi lis migrazions dal database..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Eseguìs e passe la revision di sigurece des migrazions prime di eseguî lis migrazions dal database."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Eseguìs lis verifichis di ambient prime di cualsisei prossim passa di aplicazion dal inzornament. Chest no modifiche files o il database."
+
+msgid "Run post-apply actions"
+msgstr "Eseguìs azions dopo l'aplicazion"
+
+msgid "Run preflight checks"
+msgstr "Eseguìs verifichis preliminars"
+
+msgid "Run selected post-apply actions"
+msgstr "Eseguìs azions dopo l'aplicazion selezionadis"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Eseguìs i comands dopo l'aplicazion selezionâts dal servidôr doprant une liste di permet controllade. No si acetin comands di shell personalizâts."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Eseguìs chescj comands a man dal servidôr dopo vê confermât il risultât dal inzornament dai files e i backups."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "L'esecuzion des azions dopo l'aplicazion de interface utent e je disabilitade in modalitât di produzion."
+
+msgid "Running post-apply actions..."
+msgstr "Daûr a eseguî lis azions dopo l'aplicazion..."
+
+msgid "Safe actions"
+msgstr "Azions sigure"
+
+msgid "Signature path"
+msgstr "Percors de firme"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "La verifiche de firme no pues jessi saltade in chest ambient."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Salte la verifiche de firme pai test di disvilup locâl"
+
+msgid "Staged file application failed"
+msgstr "Aplicazion dai files preparâts falide"
+
+msgid "Staged files applied successfully"
+msgstr "Files preparâts aplicâts cun sucès"
+
+msgid "Staging details"
+msgstr "Detais de preparazion"
+
+msgid "Staging directory"
+msgstr "Directory di preparazion"
+
+msgid "Staging extraction"
+msgstr "Estrazion de preparazion"
+
+msgid "Symfony cache clear"
+msgstr "Netisie Symfony"
+
+msgid "System update"
+msgstr "Inzornament dal sisteme"
+
+msgid "Target version"
+msgstr "Version destinazion"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "L'URL dal manifest uficiâl configurât al è za precompilât. Tu puedis modificâlu cuntun altri manifest HTTPS se al covente."
+
+msgid "The database migration baseline is clean."
+msgstr "La baseline de migrazion de base di dâts e je nete."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "La rispueste HTTP finâl e je falide dopo che la operazion e je stade completade. Di solit al è dovût a permès de cache di runtime o a un riavìo dal servidôr web dilunc la richieste."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Il regjistri de operazion al mostre che lis azions dopo l'aplicazion a son stadis completadis cun sucès."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "I comants dopo l'aplicazion selezionâts a son stadis completadis cun sucès, ma la rispueste HTTP finâl e je falide. Ricjame la pagjine e verifiche i permès de cache di runtime se la pagjine no si cjame coretamentri."
+
+msgid "The updater does not create or restore database backups."
+msgstr "L'inzornadôr nol cree ni ripristine backup de base di dâts."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Chestis azions a son siguris di eseguî de UI dopo vê rivist il risultât dal inzornament."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Chescj comants a puedin modificâ dipendencis, assets gjenerâts, cache o la base di dâts. Conferme i backup prime di continuâ."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Cheste azion e modifiche file te instalazion di Chamilo. Siguriti che il plan di aplicazion al sedi stât rivist e che i backup a sedin abilitâts prime di continuâ."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Chest element di disvilup al simule il avîs di inzornament futûr di Chamilo.org doprant percors di pachets di prove locâi."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Cheste videade e je stade vierte di un avîs di inzornament uficiâl, ma nissun sorzint uficiâl dal manifest al è ancjemò configurât."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Cheste videade e je stade vierte di un avîs di inzornament. Dome il control dal manifest al è iniziât in automatic."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Chest passaç al prepare dome une revision. La sostituzion dai file e sucêt plui tart tal passaç Apliche file in staging, cun bloc, backup e protezion di ripristinament."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Chest inzornadôr nol cree un backup de base di dâts. Cree e verifiche un backup prime di eseguî lis migrazions."
+
+msgid "Trusted public key"
+msgstr "Clâf publiche fidade"
+
+msgid "Trusted signing key"
+msgstr "Clâf di firme fidade"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Scrîf APPLY UPDATE FILES par confermâ"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Scrîf RUN DATABASE MIGRATIONS par confermâ lis migrazions de base di dâts"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Scrîf RUN POST UPDATE ACTIONS par confermâ"
+
+msgid "Unknown update notice source."
+msgstr "Sorzint dal avîs di inzornament no cognossude."
+
+msgid "Update availability"
+msgstr "Disponibilitât dal inzornament"
+
+msgid "Update directory"
+msgstr "Directory dal inzornament"
+
+msgid "Update lock path"
+msgstr "Percors dal bloc dal inzornament"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Dopre la directory di staging gjenerade dal passaç precedent. Il backend al acete dome directory dentri var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Dopre chest colegament par simulâ l'avîs di inzornament futûr di Chamilo.org dilunc i provis di disvilup."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Dopre chest dome pai provis locâi di disvilup. I inzornaments di produzion a scugnin doprâ la clâf configurade dal servidôr."
+
+msgid "Verification details"
+msgstr "Detais di verifiche"
+
+msgid "Verify package"
+msgstr "Verifiche pachet"
+
+msgid "Verifying..."
+msgstr "Daûr a verificâ..."
+
+msgid "Waiting for command progress events..."
+msgstr "In spiete dai events di avanzament dal comant..."
+
+msgid "Waiting for update progress events..."
+msgstr "In spiete dai events di avanzament dal inzornament..."
+
+msgid "Yarn build"
+msgstr "Build Yarn"
+
+msgid "Yarn install"
+msgstr "Installazion Yarn"
+
+msgid "A comment is required"
+msgstr "Al covente un coment"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Une base di dâts cul stes non e esist zà. Se e conten tabelis, a saran eliminadis; se e je vueide, e sarà doprade di gnûf."
+
+msgid "AI generated"
+msgstr "Gjenerât di IA"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Zonte almancul une domande prime di tornâ al percors di aprendiment."
+
+msgid "Add attachments"
+msgstr "Zonte alegâts"
+
+msgid "Additional fields"
+msgstr "Camps adizionâi"
+
+msgid "Allow comments"
+msgstr "Permet coments"
+
+msgid "Allow new pages"
+msgstr "Permet pagjinis gnovis"
+
+msgid "Allow ratings"
+msgstr "Permet valutazions"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Sêstu sigûr di volê eliminâ ducj i elements?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Sêstu sigûr di volê ripristinâ il rinovament automatic?"
+
+msgid "Attachment has been deleted"
+msgstr "L'alegât al è stât eliminât"
+
+msgid "Backup file"
+msgstr "File di backup"
+
+msgid "Block comments"
+msgstr "Bloche coments"
+
+msgid "Block new pages"
+msgstr "Bloche pagjinis gnovis"
+
+msgid "Block ratings"
+msgstr "Bloche valutazions"
+
+msgid "Cancel renewal"
+msgstr "Anule rinovament"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "I colegaments di categorie a saran gjavâts des pagjinis %s dal Wiki."
+
+msgid "Change"
+msgstr "Cambie"
+
+msgid "Clear group"
+msgstr "Nete grup"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Cliccje une etichete par inserîle tal editôr. Chescj segnapuest a saran sostituîts cuant che si gjenerarà il certificât."
+
+msgid "Comment added"
+msgstr "Coment zontât"
+
+msgid "Comment is required"
+msgstr "Il coment al è obligatori"
+
+msgid "Comment score"
+msgstr "Puntegje dal coment"
+
+msgid "Compare selected versions line by line"
+msgstr "Confronte lis versions selezionadis rie par rie"
+
+msgid "Compare selected versions word by word"
+msgstr "Confronte lis versions selezionadis per peraule"
+
+msgid "Compare versions"
+msgstr "Confronte versions"
+
+msgid "Copy completed"
+msgstr "Copie completade"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Cree pagjinis individuâls di lavôr Wiki pai discolârs"
+
+msgid "Current view mode"
+msgstr "Modalitât di visualizazion atuâl"
+
+msgid "Delete Wiki"
+msgstr "Elimine Wiki"
+
+msgid "Delete page"
+msgstr "Elimine pagjine"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "No si consee di eliminâ la pagjine iniziâl dal Wiki. Tu puedis tornâ a creâle plui indevant."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Disabilitant il Wiki si blocin lis pagjinis e lis azions normâls dal Wiki. Cheste pagjine di impostazions e reste disponibile pai insegnants dal cors."
+
+msgid "Discussion"
+msgstr "Discussion"
+
+msgid "Edit Comment"
+msgstr "Modifiche coment"
+
+msgid "Edit page"
+msgstr "Modifiche pagjine"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "La date di fin al à di jessi dopo o uguâl a chê di scjadence"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Inserìs un tiermin di ricercje par cjatâ pagjinis dal Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "La date di scjadence e à di jessi prime o uguâl a chê di fin"
+
+msgid "Failed email recipients"
+msgstr "Destinataris di e-mail falîts"
+
+msgid "Finish and return to learning path"
+msgstr "Finìs e torne al percors di aprendiment"
+
+msgid "Forum image"
+msgstr "Imagjin dal forum"
+
+msgid "Hide discussion"
+msgstr "Plate discussion"
+
+msgid "Hide page"
+msgstr "Plate pagjine"
+
+msgid "I changed my mind"
+msgstr "O ai cambiât ideis"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Se no si segne, chei files a restaran disponibii pal aministradôr de plateforme midiant dal strument 'Informazions sui files'."
+
+msgid "Internal message failures"
+msgstr "Erôrs dai messaçs internis"
+
+msgid "Internal messages available"
+msgstr "Messaçs internis disponibii"
+
+msgid "Internal messages created now"
+msgstr "Messaçs internis creâts cumò"
+
+msgid "Item score"
+msgstr "Puntegje dal element"
+
+msgid "Last post"
+msgstr "Ultin post"
+
+msgid "Lock page"
+msgstr "Bloche pagjine"
+
+msgid "Manage categories"
+msgstr "Gjestìs categoriis"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Segne chest document come assistît di IA. Dopre chel cuant che il contignût al è stât creât o modificât in maniere significatîve cun struments di IA."
+
+msgid "Maximum score is required"
+msgstr "La puntegjis massime e je obligatorie"
+
+msgid "Metric"
+msgstr "Metrie"
+
+msgid "New comments are blocked in this discussion"
+msgstr "I gnûfs coments a son blocâts in cheste discussion"
+
+msgid "No Wiki categories are available yet."
+msgstr "No son ancjemò disponibii categoriis dal Wiki."
+
+msgid "No categories found"
+msgstr "Nissune categorie cjatade"
+
+msgid "No content"
+msgstr "Nissun contignût"
+
+msgid "No parent category"
+msgstr "Nissune categorie gjenitôr"
+
+msgid "Number of comments scored"
+msgstr "Numar di coments valutâts"
+
+msgid "Old version"
+msgstr "Version vecje"
+
+msgid "Only image files are allowed."
+msgstr "A son permetudis dome i files di imagjins."
+
+msgid "Please fill all required fields"
+msgstr "Par plasê, completâ ducj i cjamps obligatoris"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Lis domandis cun segnapuestis di classe o student a saran gjeneradis pes classis o grups dal cors: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Lis valutazions a son blocadis in cheste discussion"
+
+msgid "Remove image"
+msgstr "Gjave imagjin"
+
+msgid "Restore renewal"
+msgstr "Ripristine rinovament"
+
+msgid "Restore version"
+msgstr "Ripristine version"
+
+msgid "Search in"
+msgstr "Cîr in"
+
+msgid "Select group"
+msgstr "Selezione grup"
+
+msgid "Select image"
+msgstr "Selezione imagjin"
+
+msgid "Selected image"
+msgstr "Imagjin selezionade"
+
+msgid "Show discussion"
+msgstr "Mostre discussion"
+
+msgid "Show page"
+msgstr "Mostre pagjine"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Cualchi file o cartel no à permès di scriture. Par podê instalâ Chamilo al covente prime cambiâ i lôr permès (doprant CHMOD). Par plasê, lei il"
+
+msgid "Subcategories"
+msgstr "Sotcategoriis"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Toche a çampe o a diestre par navigâ"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Il tiermin di consegne dal Wiki al è scjadût, ma la consegne ritardade e je permetude."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Il tiermin di consegne dal Wiki al è scjadût."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Il compit dal Wiki nol è ancjemò scomençât."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Il bloc de modifiche de pagjine Wiki al è necessari prime di salvâ."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "L'avis al è stât salvât, ma no si è podût cjariâ un alegât."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "L'avis al è stât salvât, ma la consegne de email e je falide."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "L'avis al è stât salvât, ma no si è podût spedî nissune email."
+
+msgid "The category has been created"
+msgstr "La categorie e je stade creade"
+
+msgid "The category has been deleted"
+msgstr "La categorie e je stade eliminade"
+
+msgid "The category has been updated"
+msgstr "La categorie e je stade inzornade"
+
+msgid "The end date is invalid"
+msgstr "La date di fin al è invalide"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Il numar massim di versions al à di jessi un intîr no negatîf"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Il numar massim di peraulis al à di jessi un intîr no negatîf"
+
+msgid "The print window could not be opened"
+msgstr "No si è podût vierzi la finestre di stampe"
+
+msgid "The start date is invalid"
+msgstr "La date di inizi al è invalide"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Chescj impuestazions a valin pal cors intîr, includûts lis sôs sessions e grups."
+
+msgid "This announcement has already been sent by email."
+msgstr "Chest avîs al è za stât mandât par email."
+
+msgid "This discussion is hidden from learners"
+msgstr "Cheste discussion e je platade pai students"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Chest strument di IA gjenerative ti permet di creâ imagjins e videos curts par illustrâ il to cors. Spiegant (in test) ce che tu vuelis tal cjamp dal prompt, tu darâs al model di IA configurât i elements necessaris par gjenerâ une imagjin o un video. Par plasê, sei pazient. Il model di IA al cjaparà un pôc di timp e al produssarà un risultât, che tu podarâs tignî salvant il file tal to cjarpêt di documents e dopo inserîlu intun document HTML. No ducj i models di IA a son compagns in velocitât o cualitât. Il model di IA al podarès ancje dâti un prompt modificât, che al è une interpretazion plui detaiade de tô richieste. Tu puedis doprâ chest prompt modificât par afinâ la tô richieste. Ten cont che chest strument, in particolâr pai videos, al podarès gjenerâ costs considerabii pe tô organizazion, ancje se tu decidis di no salvâ il file gjenerât. Dopril cun judizi. Se tu âs dificoltâts a otignî ce che tu ciris, par plasê, passe un pôc di timp a cirî trucs di prompting in rêt pal model di IA a tô disposizion."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Cheste storie e aparten al cors di base. Il ripristinament al è disponibil dopo vê creât une version di session."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Cheste imagjin e rimplaçhe la icone predefinide dal forum mostrade dongje dal titul dal forum."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Cheste pagjine e ven dal cors di base. Salvantle, e crearà une version pe session atuâl."
+
+msgid "This will also delete %s subcategories."
+msgstr "Chest al eliminarà ancje %s sotcategoriis."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Chest al crearà pagjinis di lavôr individuâls par %s students."
+
+msgid "Thread history"
+msgstr "Storie dal thread"
+
+msgid "Title and content"
+msgstr "Titul e contignût"
+
+msgid "Unable to cancel renewal right now."
+msgstr "No si pues anulâ il rinovament in chest moment."
+
+msgid "Unable to restore renewal right now."
+msgstr "No si pues ripristinâ il rinovament in chest moment."
+
+msgid "Unlock page"
+msgstr "Sblocâ pagjine"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Dopre [[Pagjine]] o [[Pagjine|Test visibil]] par creâ colegaments interni Wiki."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Dopre la sbare di spazi o i tascj des frecis par navigâ"
+
+msgid "View version"
+msgstr "Viôt version"
+
+msgid "Visible only to teachers"
+msgstr "Visibil dome pai professôrs"
+
+msgid "Weight is required"
+msgstr "Il pês al è obligatori"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Lis categoriis dal Wiki a son disabilitadis par chest cors."
+
+msgid "Wiki categories enabled"
+msgstr "Categoriis dal Wiki abilitadis"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtradure strete HTML dal Wiki"
+
+msgid "Wiki settings"
+msgstr "Impostazions dal Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Impostazions dal Wiki inzornadis"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Tu stâs viodint une version storiche di cheste pagjine"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Tu puedis zontâ un o plui files a cheste rispueste."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Tu puedis modificâ cheste pagjine di assegnazion, ma lis pagjinis di lavôr dai students no saran modificadis."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Tu puedis doprâ i tags {{class_name}} e {{student_full_name}} te domande."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Tu âs 20 minûts par modificâ cheste pagjine prime che la blocadure di modifiche scjadi."
+
+msgid "by"
+msgstr "di"
+
+msgid "required"
+msgstr "obligatori"
+

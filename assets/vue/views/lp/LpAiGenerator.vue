@@ -307,9 +307,7 @@ const questionsInvalid = computed(
 const providerInvalid = computed(
   () => formSubmitted.value && configuration.providers.length > 1 && form.provider === "",
 )
-const questionsError = computed(() =>
-  t("Number of questions limited to a maximum of %d").replace("%d", "5"),
-)
+const questionsError = computed(() => t("Number of questions limited to a maximum of {0}", [5]))
 
 onMounted(loadConfiguration)
 

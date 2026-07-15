@@ -36508,3 +36508,852 @@ msgstr "Προβολή νημάτων"
 msgid "No auth source"
 msgstr "Καμία πηγή ελέγχου ταυτότητας"
 
+msgid "You must add at least one question"
+msgstr "Πρέπει να προσθέσετε τουλάχιστον μία ερώτηση"
+
+msgid "Advanced actions"
+msgstr "Προηγμένες ενέργειες"
+
+msgid "Application path"
+msgstr "Διαδρομή εφαρμογής"
+
+msgid "Apply files details"
+msgstr "Εφαρμογή λεπτομερειών αρχείων"
+
+msgid "Apply plan details"
+msgstr "Εφαρμογή λεπτομερειών σχεδίου"
+
+msgid "Apply plan failed"
+msgstr "Αποτυχία εφαρμογής σχεδίου"
+
+msgid "Apply plan ready"
+msgstr "Εφαρμογή σχεδίου έτοιμη"
+
+msgid "Apply preparation"
+msgstr "Εφαρμογή προετοιμασίας"
+
+msgid "Apply staged files"
+msgstr "Εφαρμογή σταδιακών αρχείων"
+
+msgid "Applying files..."
+msgstr "Εφαρμογή αρχείων..."
+
+msgid "Audit file"
+msgstr "Αρχείο ελέγχου"
+
+msgid "Backup directory"
+msgstr "Κατάλογος αντιγράφων ασφαλείας"
+
+msgid "Baseline clean"
+msgstr "Καθαρή γραμμή βάσης"
+
+msgid "Baseline warnings"
+msgstr "Προειδοποιήσεις γραμμής βάσης"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Δημιουργία ασφαλούς σχεδίου εφαρμογής από το σταδιακό πακέτο. Ελέγχει μόνο αρχεία, δικαιώματα, διαδρομή αντιγράφων ασφαλείας και κατάσταση κλειδώματος. Δεν αντικαθιστά αρχεία."
+
+msgid "Build production frontend assets."
+msgstr "Δημιουργία στοιχείων διεπαφής παραγωγής."
+
+msgid "Building plan..."
+msgstr "Δημιουργία σχεδίου..."
+
+msgid "Channel"
+msgstr "Κανάλι"
+
+msgid "Check"
+msgstr "Έλεγχος"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Έλεγχος διαθέσιμων ενημερώσεων Chamilo, επαλήθευση πακέτων, σταδιακή τοποθέτηση αρχείων και εκτέλεση ελεγχόμενων βημάτων μετά την ενημέρωση."
+
+msgid "Check manifest"
+msgstr "Έλεγχος manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Έλεγχος ενεργειών μετά την εφαρμογή..."
+
+msgid "Checking..."
+msgstr "Έλεγχος..."
+
+msgid "Composer install"
+msgstr "Εγκατάσταση Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Οι ενέργειες Composer, Yarn και μετανάστευσης βάσης δεδομένων μπορούν να τροποποιήσουν εξαρτήσεις, παραγόμενα στοιχεία ή τη βάση δεδομένων. Επιλέξτε τις μόνο αφού επιβεβαιώσετε αντίγραφα ασφαλείας και δικαιώματα."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Ρυθμίστε το CHAMILO_UPDATE_MANIFEST_URL στον διακομιστή ή δώστε ένα HTTPS URL manifest."
+
+msgid "Configured"
+msgstr "Ρυθμισμένο"
+
+msgid "Current migration"
+msgstr "Τρέχουσα μετανάστευση"
+
+msgid "Database baseline"
+msgstr "Γραμμή βάσης βάσης δεδομένων"
+
+msgid "Database migration safety review"
+msgstr "Έλεγχος ασφάλειας μετανάστευσης βάσης δεδομένων"
+
+msgid "Database migrations"
+msgstr "Μεταναστεύσεις βάσης δεδομένων"
+
+msgid "Development mode"
+msgstr "Λειτουργία ανάπτυξης"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Μην το ενεργοποιήσετε εκτός αν έχει ελεγχθεί το αντίγραφο ασφαλείας της ενημέρωσης και τα δικαιώματα του διακομιστή."
+
+msgid "Doctrine dry-run command"
+msgstr "Εντολή δοκιμής Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Το Doctrine ανέφερε προειδοποιήσεις ιστορικού baseline. Το πρόγραμμα ενημέρωσης θα εκτελέσει μόνο τις σταδιακές μεταναστεύσεις V210 μετά από ρητή επιβεβαίωση."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Το Doctrine θα εκτελέσει μόνο τις σταδιακές μεταναστεύσεις V210 ρητά μετά την επιτυχή αναθεώρηση ασφαλείας."
+
+msgid "Dry-run exit code"
+msgstr "Κωδικός εξόδου δοκιμής"
+
+msgid "Executed unavailable migrations"
+msgstr "Εκτελέστηκαν μη διαθέσιμες μεταναστεύσεις"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Εξαγάγετε το επαληθευμένο πακέτο ενημέρωσης σε έναν κατάλογο σταδιοποίησης για έλεγχο. Αυτό δεν αντικαθιστά αρχεία, δεν εκτελεί μεταναστεύσεις ούτε τροποποιεί τη βάση δεδομένων."
+
+msgid "File apply available"
+msgstr "Εφαρμογή αρχείων διαθέσιμη"
+
+msgid "Files to replace"
+msgstr "Αρχεία προς αντικατάσταση"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Επιβεβαιώνω ότι υπάρχει αντίγραφο ασφαλείας της βάσης δεδομένων και επαληθεύτηκε πριν από την εκτέλεση των μεταναστεύσεων."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Κατανοώ ότι οι προηγμένες ενέργειες μπορούν να τροποποιήσουν εξαρτήσεις, παραγόμενα στοιχεία ή τη βάση δεδομένων."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Κατανοώ ότι αυτό θα αντικαταστήσει αρχεία στην εγκατάσταση του Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Κατανοώ ότι αυτό θα εκτελέσει εντολές ενημέρωσης στον διακομιστή."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Εγκαταστήστε τις εξαρτήσεις frontend πριν από την ανακατασκευή των στοιχείων."
+
+msgid "Installed version"
+msgstr "Εγκατεστημένη έκδοση"
+
+msgid "Latest migration"
+msgstr "Τελευταία μετανάστευση"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Αφήστε τα μονοπάτια του πακέτου και της υπογραφής κενά για να τα κατεβάσετε από τις επαληθευμένες διευθύνσεις URL του manifest. Τα τοπικά μονοπάτια είναι διαθέσιμα μόνο για δοκιμές ανάπτυξης."
+
+msgid "Live command log"
+msgstr "Ζωντανό αρχείο καταγραφής εντολών"
+
+msgid "Live update log"
+msgstr "Ζωντανό αρχείο καταγραφής ενημέρωσης"
+
+msgid "Local test options"
+msgstr "Επιλογές τοπικής δοκιμής"
+
+msgid "Local test update notice link"
+msgstr "Σύνδεσμος ειδοποίησης τοπικής δοκιμής ενημέρωσης"
+
+msgid "Local update notice simulation"
+msgstr "Προσομοίωση τοπικής ειδοποίησης ενημέρωσης"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Η προσομοίωση τοπικής ειδοποίησης ενημέρωσης είναι διαθέσιμη μόνο σε λειτουργία ανάπτυξης."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Πηγή manifest"
+
+msgid "Migration safety details"
+msgstr "Λεπτομέρειες ελέγχου ασφαλείας μεταναστεύσεων"
+
+msgid "Migration safety review failed"
+msgstr "Ο έλεγχος ασφαλείας μεταναστεύσεων απέτυχε"
+
+msgid "Migration safety review ready"
+msgstr "Ο έλεγχος ασφαλείας μεταναστεύσεων είναι έτοιμος"
+
+msgid "Migration target"
+msgstr "Στόχος μετανάστευσης"
+
+msgid "New files"
+msgstr "Νέα αρχεία"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Νέες μεταναστεύσεις που αναφέρθηκαν από το Doctrine"
+
+msgid "Next migration"
+msgstr "Επόμενη μετανάστευση"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Δεν αναφέρθηκε καμία μη διαθέσιμη μετανάστευση που εκτελέστηκε."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Δεν έχει ρυθμιστεί ακόμη επίσημη διεύθυνση URL manifest. Χρησιμοποιήστε HTTPS URL ή τοπικό μονοπάτι για δοκιμές ανάπτυξης."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Δεν εντοπίστηκε εκκρεμής μετανάστευση πριν από τον σταδιακό στόχο ενημέρωσης."
+
+msgid "Not configured"
+msgstr "Δεν έχει ρυθμιστεί"
+
+msgid "Not detected"
+msgstr "Δεν εντοπίστηκε"
+
+msgid "Official Chamilo update channel"
+msgstr "Επίσημο κανάλι ενημέρωσης Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 πακέτου"
+
+msgid "Package URL"
+msgstr "URL πακέτου"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Τα αρχεία πακέτου και υπογραφής θα ληφθούν από το manifest. Τα τοπικά μονοπάτια είναι απενεργοποιημένα σε αυτό το περιβάλλον."
+
+msgid "Package path"
+msgstr "Μονοπάτι πακέτου"
+
+msgid "Package staged successfully"
+msgstr "Το πακέτο σταδιοποιήθηκε με επιτυχία"
+
+msgid "Package staging failed"
+msgstr "Η σταδιοποίηση του πακέτου απέτυχε"
+
+msgid "Package verification"
+msgstr "Επαλήθευση πακέτου"
+
+msgid "Package verification failed"
+msgstr "Η επαλήθευση του πακέτου απέτυχε"
+
+msgid "Package verified successfully"
+msgstr "Το πακέτο επαληθεύτηκε με επιτυχία"
+
+msgid "Pending migrations before this update"
+msgstr "Εκκρεμείς μεταναστεύσεις πριν από αυτήν την ενημέρωση"
+
+msgid "Planned backup path"
+msgstr "Προγραμματισμένο μονοπάτι αντιγράφου ασφαλείας"
+
+msgid "Post-apply actions completed"
+msgstr "Οι ενέργειες μετά την εφαρμογή ολοκληρώθηκαν"
+
+msgid "Post-apply actions failed"
+msgstr "Οι ενέργειες μετά την εφαρμογή απέτυχαν"
+
+msgid "Post-apply actions ready"
+msgstr "Οι ενέργειες μετά την εφαρμογή είναι έτοιμες"
+
+msgid "Post-apply checks"
+msgstr "Έλεγχοι μετά την εφαρμογή"
+
+msgid "Post-apply checks failed"
+msgstr "Οι έλεγχοι μετά την εφαρμογή απέτυχαν"
+
+msgid "Post-apply details"
+msgstr "Λεπτομέρειες μετά την εφαρμογή"
+
+msgid "Post-apply run details"
+msgstr "Λεπτομέρειες εκτέλεσης μετά την εφαρμογή"
+
+msgid "Preflight checks"
+msgstr "Έλεγχοι προετοιμασίας"
+
+msgid "Preflight checks completed"
+msgstr "Οι έλεγχοι προετοιμασίας ολοκληρώθηκαν"
+
+msgid "Preflight checks failed"
+msgstr "Οι έλεγχοι προετοιμασίας απέτυχαν"
+
+msgid "Preflight details"
+msgstr "Λεπτομέρειες προετοιμασίας"
+
+msgid "Prepare staging"
+msgstr "Προετοιμασία σταδίου"
+
+msgid "Preparing staging..."
+msgstr "Προετοιμασία σταδίου..."
+
+msgid "Production mode"
+msgstr "Λειτουργία παραγωγής"
+
+msgid "Released at"
+msgstr "Κυκλοφόρησε στις"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Αντικατάσταση αρχείων Chamilo από το πακέτο σταδίου χρησιμοποιώντας το ελεγμένο σχέδιο εφαρμογής. Αυτό δεν εκτελεί μετεγκαταστάσεις βάσης δεδομένων, Composer, Yarn ή εντολές προσωρινής μνήμης."
+
+msgid "Review apply plan"
+msgstr "Έλεγχος σχεδίου εφαρμογής"
+
+msgid "Review database migrations"
+msgstr "Έλεγχος μετεγκαταστάσεων βάσης δεδομένων"
+
+msgid "Review post-apply actions"
+msgstr "Έλεγχος ενεργειών μετά την εφαρμογή"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Έλεγχος προτεινόμενων χειροκίνητων εντολών μετά την εφαρμογή αρχείων ενημέρωσης. Αυτό το βήμα δεν εκτελεί Composer, Yarn, μετεγκαταστάσεις ή εντολές προσωρινής μνήμης."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Έλεγχος μετεγκαταστάσεων Doctrine σταδίου και εξόδου δοκιμαστικής εκτέλεσης πριν από την εκτέλεση μετεγκαταστάσεων βάσης δεδομένων."
+
+msgid "Reviewing database migrations..."
+msgstr "Έλεγχος μετεγκαταστάσεων βάσης δεδομένων..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Εκτέλεση και επιτυχής ολοκλήρωση του ελέγχου ασφάλειας μετεγκατάστασης πριν από την εκτέλεση μετεγκαταστάσεων βάσης δεδομένων."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Εκτέλεση ελέγχων περιβάλλοντος πριν από οποιοδήποτε μελλοντικό βήμα εφαρμογής ενημέρωσης. Αυτό δεν τροποποιεί αρχεία ή τη βάση δεδομένων."
+
+msgid "Run post-apply actions"
+msgstr "Εκτέλεση ενεργειών μετά την εφαρμογή"
+
+msgid "Run preflight checks"
+msgstr "Εκτέλεση ελέγχων προετοιμασίας"
+
+msgid "Run selected post-apply actions"
+msgstr "Εκτέλεση επιλεγμένων ενεργειών μετά την εφαρμογή"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Εκτέλεση επιλεγμένων εντολών μετά την εφαρμογή από τον διακομιστή χρησιμοποιώντας ελεγχόμενη λίστα επιτρεπόμενων. Δεν γίνονται δεκτές προσαρμοσμένες εντολές κελύφους."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Εκτέλεση αυτών των εντολών χειροκίνητα από τον διακομιστή μετά την επιβεβαίωση του αποτελέσματος ενημέρωσης αρχείων και των αντιγράφων ασφαλείας."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Η εκτέλεση ενεργειών μετά την εφαρμογή από το περιβάλλον χρήστη είναι απενεργοποιημένη σε λειτουργία παραγωγής."
+
+msgid "Running post-apply actions..."
+msgstr "Εκτέλεση ενεργειών μετά την εφαρμογή..."
+
+msgid "Safe actions"
+msgstr "Ασφαλείς ενέργειες"
+
+msgid "Signature path"
+msgstr "Διαδρομή υπογραφής"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Η επαλήθευση υπογραφής δεν μπορεί να παραλειφθεί σε αυτό το περιβάλλον."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Παράλειψη επαλήθευσης υπογραφής για δοκιμές τοπικής ανάπτυξης"
+
+msgid "Staged file application failed"
+msgstr "Η εφαρμογή αρχείων σταδίου απέτυχε"
+
+msgid "Staged files applied successfully"
+msgstr "Τα αρχεία σταδίου εφαρμόστηκαν με επιτυχία"
+
+msgid "Staging details"
+msgstr "Λεπτομέρειες σταδίου"
+
+msgid "Staging directory"
+msgstr "Κατάλογος σταδίου"
+
+msgid "Staging extraction"
+msgstr "Εξαγωγή σταδίου"
+
+msgid "Symfony cache clear"
+msgstr "Εκκαθάριση προσωρινής μνήμης Symfony"
+
+msgid "System update"
+msgstr "Ενημέρωση συστήματος"
+
+msgid "Target version"
+msgstr "Έκδοση προορισμού"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Το ρυθμισμένο επίσημο URL δήλωσης είναι προ-συμπληρωμένο. Μπορείτε να το αλλάξετε σε άλλη δήλωση HTTPS εάν χρειάζεται."
+
+msgid "The database migration baseline is clean."
+msgstr "Η γραμμή βάσης μετεγκατάστασης βάσης δεδομένων είναι καθαρή."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Η τελική απόκριση HTTP απέτυχε μετά την ολοκλήρωση της λειτουργίας. Αυτό συνήθως προκαλείται από δικαιώματα προσωρινής μνήμης χρόνου εκτέλεσης ή επανεκκίνηση διακομιστή ιστού κατά τη διάρκεια του αιτήματος."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Η αναφορά καταγραφής λειτουργίας δείχνει ότι οι ενέργειες μετά την εφαρμογή ολοκληρώθηκαν με επιτυχία."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Οι επιλεγμένες εντολές μετά την εφαρμογή ολοκληρώθηκαν με επιτυχία, αλλά η τελική απόκριση HTTP απέτυχε. Ανανεώστε τη σελίδα και επαληθεύστε τα δικαιώματα προσωρινής μνήμης χρόνου εκτέλεσης εάν η σελίδα δεν φορτώνεται σωστά."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Το πρόγραμμα ενημέρωσης δεν δημιουργεί ή δεν επαναφέρει αντίγραφα ασφαλείας βάσης δεδομένων."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Αυτές οι ενέργειες είναι ασφαλές να εκτελεστούν από το περιβάλλον χρήστη μετά τον έλεγχο του αποτελέσματος ενημέρωσης."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Αυτές οι εντολές μπορούν να τροποποιήσουν εξαρτήσεις, παραγόμενα στοιχεία, προσωρινή μνήμη ή τη βάση δεδομένων. Επιβεβαιώστε τα αντίγραφα ασφαλείας πριν συνεχίσετε."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Αυτή η ενέργεια τροποποιεί αρχεία στην εγκατάσταση του Chamilo. Βεβαιωθείτε ότι το σχέδιο εφαρμογής έχει ελεγχθεί και ότι τα αντίγραφα ασφαλείας είναι ενεργοποιημένα πριν συνεχίσετε."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Αυτή η καταχώριση ανάπτυξης προσομοιώνει τη μελλοντική ειδοποίηση ενημέρωσης του Chamilo.org χρησιμοποιώντας τοπικές διαδρομές δοκιμαστικού πακέτου."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Αυτή η οθόνη άνοιξε από επίσημη ειδοποίηση ενημέρωσης, αλλά δεν έχει διαμορφωθεί ακόμη επίσημη πηγή δήλωσης."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Αυτή η οθόνη άνοιξε από ειδοποίηση ενημέρωσης. Μόνο ο έλεγχος της δήλωσης ξεκινά αυτόματα."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Αυτό το βήμα προετοιμάζει μόνο μια αναθεώρηση. Η αντικατάσταση αρχείων γίνεται αργότερα στο βήμα Εφαρμογή αρχείων σταδίου, με κλείδωμα, αντίγραφο ασφαλείας και προστασία επαναφοράς."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Αυτός ο ενημερωτής δεν δημιουργεί αντίγραφο ασφαλείας της βάσης δεδομένων. Δημιουργήστε και επαληθεύστε ένα αντίγραφο ασφαλείας πριν εκτελέσετε μεταναστεύσεις."
+
+msgid "Trusted public key"
+msgstr "Έμπιστο δημόσιο κλειδί"
+
+msgid "Trusted signing key"
+msgstr "Έμπιστο κλειδί υπογραφής"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Πληκτρολογήστε APPLY UPDATE FILES για επιβεβαίωση"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Πληκτρολογήστε RUN DATABASE MIGRATIONS για επιβεβαίωση των μεταναστεύσεων βάσης δεδομένων"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Πληκτρολογήστε RUN POST UPDATE ACTIONS για επιβεβαίωση"
+
+msgid "Unknown update notice source."
+msgstr "Άγνωστη πηγή ειδοποίησης ενημέρωσης."
+
+msgid "Update availability"
+msgstr "Διαθεσιμότητα ενημέρωσης"
+
+msgid "Update directory"
+msgstr "Κατάλογος ενημέρωσης"
+
+msgid "Update lock path"
+msgstr "Διαδρομή κλειδώματος ενημέρωσης"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Χρησιμοποιήστε τον κατάλογο σταδιοποίησης που δημιουργήθηκε από το προηγούμενο βήμα. Το σύστημα υποστήριξης δέχεται μόνο καταλόγους μέσα στο var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Χρησιμοποιήστε αυτόν τον σύνδεσμο για να προσομοιώσετε τη μελλοντική ειδοποίηση ενημέρωσης του Chamilo.org κατά τη διάρκεια δοκιμών ανάπτυξης."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Χρησιμοποιήστε το μόνο για τοπικές δοκιμές ανάπτυξης. Οι ενημερώσεις παραγωγής πρέπει να χρησιμοποιούν το κλειδί που έχει διαμορφωθεί στον διακομιστή."
+
+msgid "Verification details"
+msgstr "Λεπτομέρειες επαλήθευσης"
+
+msgid "Verify package"
+msgstr "Επαλήθευση πακέτου"
+
+msgid "Verifying..."
+msgstr "Γίνεται επαλήθευση..."
+
+msgid "Waiting for command progress events..."
+msgstr "Αναμονή για συμβάντα προόδου εντολής..."
+
+msgid "Waiting for update progress events..."
+msgstr "Αναμονή για συμβάντα προόδου ενημέρωσης..."
+
+msgid "Yarn build"
+msgstr "Δημιουργία Yarn"
+
+msgid "Yarn install"
+msgstr "Εγκατάσταση Yarn"
+
+msgid "A comment is required"
+msgstr "Απαιτείται σχόλιο"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Μια βάση δεδομένων με το ίδιο όνομα υπάρχει ήδη. Αν περιέχει πίνακες, θα διαγραφούν· αν είναι κενή, θα επαναχρησιμοποιηθεί."
+
+msgid "AI generated"
+msgstr "Δημιουργήθηκε από AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Προσθέστε τουλάχιστον μία ερώτηση πριν επιστρέψετε στη διαδρομή μάθησης."
+
+msgid "Add attachments"
+msgstr "Προσθήκη συνημμένων"
+
+msgid "Additional fields"
+msgstr "Πρόσθετα πεδία"
+
+msgid "Allow comments"
+msgstr "Να επιτρέπονται σχόλια"
+
+msgid "Allow new pages"
+msgstr "Να επιτρέπονται νέες σελίδες"
+
+msgid "Allow ratings"
+msgstr "Να επιτρέπονται αξιολογήσεις"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε όλα τα στοιχεία;"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Είστε βέβαιοι ότι θέλετε να επαναφέρετε την αυτόματη ανανέωση;"
+
+msgid "Attachment has been deleted"
+msgstr "Το συνημμένο διαγράφηκε"
+
+msgid "Backup file"
+msgstr "Αρχείο αντιγράφου ασφαλείας"
+
+msgid "Block comments"
+msgstr "Αποκλεισμός σχολίων"
+
+msgid "Block new pages"
+msgstr "Αποκλεισμός νέων σελίδων"
+
+msgid "Block ratings"
+msgstr "Αποκλεισμός αξιολογήσεων"
+
+msgid "Cancel renewal"
+msgstr "Ακύρωση ανανέωσης"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Οι σύνδεσμοι κατηγορίας θα αφαιρεθούν από τις σελίδες Wiki του %s."
+
+msgid "Change"
+msgstr "Αλλαγή"
+
+msgid "Clear group"
+msgstr "Εκκαθάριση ομάδας"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Κάντε κλικ σε μια ετικέτα για να την εισαγάγετε στον επεξεργαστή. Αυτά τα σύμβολα κράτησης θέσης θα αντικατασταθούν κατά τη δημιουργία του πιστοποιητικού."
+
+msgid "Comment added"
+msgstr "Το σχόλιο προστέθηκε"
+
+msgid "Comment is required"
+msgstr "Απαιτείται σχόλιο"
+
+msgid "Comment score"
+msgstr "Βαθμολογία σχολίου"
+
+msgid "Compare selected versions line by line"
+msgstr "Σύγκριση επιλεγμένων εκδόσεων γραμμή προς γραμμή"
+
+msgid "Compare selected versions word by word"
+msgstr "Σύγκριση επιλεγμένων εκδόσεων λέξη προς λέξη"
+
+msgid "Compare versions"
+msgstr "Σύγκριση εκδόσεων"
+
+msgid "Copy completed"
+msgstr "Η αντιγραφή ολοκληρώθηκε"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Δημιουργία ατομικών σελίδων Wiki για τους εκπαιδευόμενους"
+
+msgid "Current view mode"
+msgstr "Τρέχουσα λειτουργία προβολής"
+
+msgid "Delete Wiki"
+msgstr "Διαγραφή Wiki"
+
+msgid "Delete page"
+msgstr "Διαγραφή σελίδας"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Η διαγραφή της αρχικής σελίδας του Wiki δεν συνιστάται. Μπορείτε να την αναδημιουργήσετε αργότερα."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Η απενεργοποίηση του Wiki μπλοκάρει τις κανονικές σελίδες και ενέργειες του Wiki. Αυτή η σελίδα ρυθμίσεων παραμένει διαθέσιμη στους εκπαιδευτές του μαθήματος."
+
+msgid "Discussion"
+msgstr "Συζήτηση"
+
+msgid "Edit Comment"
+msgstr "Επεξεργασία σχολίου"
+
+msgid "Edit page"
+msgstr "Επεξεργασία σελίδας"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Η ημερομηνία λήξης πρέπει να είναι μετά ή ίση με την ημερομηνία λήξης"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Εισαγάγετε έναν όρο αναζήτησης για να βρείτε σελίδες Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Η ημερομηνία λήξης πρέπει να είναι πριν ή ίση με την ημερομηνία λήξης"
+
+msgid "Failed email recipients"
+msgstr "Αποτυχημένοι παραλήπτες email"
+
+msgid "Finish and return to learning path"
+msgstr "Ολοκλήρωση και επιστροφή στη διαδρομή μάθησης"
+
+msgid "Forum image"
+msgstr "Εικόνα φόρουμ"
+
+msgid "Hide discussion"
+msgstr "Απόκρυψη συζήτησης"
+
+msgid "Hide page"
+msgstr "Απόκρυψη σελίδας"
+
+msgid "I changed my mind"
+msgstr "Άλλαξα γνώμη"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Εάν δεν επιλεγεί, αυτά τα αρχεία θα παραμείνουν διαθέσιμα στον διαχειριστή της πλατφόρμας μέσω του εργαλείου «Πληροφορίες αρχείου»."
+
+msgid "Internal message failures"
+msgstr "Αποτυχίες εσωτερικών μηνυμάτων"
+
+msgid "Internal messages available"
+msgstr "Διαθέσιμα εσωτερικά μηνύματα"
+
+msgid "Internal messages created now"
+msgstr "Εσωτερικά μηνύματα που δημιουργήθηκαν τώρα"
+
+msgid "Item score"
+msgstr "Βαθμός στοιχείου"
+
+msgid "Last post"
+msgstr "Τελευταία δημοσίευση"
+
+msgid "Lock page"
+msgstr "Κλείδωμα σελίδας"
+
+msgid "Manage categories"
+msgstr "Διαχείριση κατηγοριών"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Σημειώνει αυτό το έγγραφο ως υποβοηθούμενο από ΤΝ. Χρησιμοποιήστε το όταν το περιεχόμενο δημιουργήθηκε ή τροποποιήθηκε σημαντικά με εργαλεία ΤΝ."
+
+msgid "Maximum score is required"
+msgstr "Απαιτείται η μέγιστη βαθμολογία"
+
+msgid "Metric"
+msgstr "Μετρική"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Τα νέα σχόλια είναι μπλοκαρισμένα σε αυτή τη συζήτηση"
+
+msgid "No Wiki categories are available yet."
+msgstr "Δεν υπάρχουν ακόμη διαθέσιμες κατηγορίες Wiki."
+
+msgid "No categories found"
+msgstr "Δεν βρέθηκαν κατηγορίες"
+
+msgid "No content"
+msgstr "Χωρίς περιεχόμενο"
+
+msgid "No parent category"
+msgstr "Χωρίς γονική κατηγορία"
+
+msgid "Number of comments scored"
+msgstr "Αριθμός σχολίων που βαθμολογήθηκαν"
+
+msgid "Old version"
+msgstr "Παλιά έκδοση"
+
+msgid "Only image files are allowed."
+msgstr "Επιτρέπονται μόνο αρχεία εικόνας."
+
+msgid "Please fill all required fields"
+msgstr "Παρακαλώ συμπληρώστε όλα τα απαιτούμενα πεδία"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Ερωτήσεις με σύμβολα κράτησης θέσης τάξης ή μαθητή θα δημιουργηθούν για τάξεις ή ομάδες μαθήματος: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Οι αξιολογήσεις είναι μπλοκαρισμένες σε αυτή τη συζήτηση"
+
+msgid "Remove image"
+msgstr "Αφαίρεση εικόνας"
+
+msgid "Restore renewal"
+msgstr "Επαναφορά ανανέωσης"
+
+msgid "Restore version"
+msgstr "Επαναφορά έκδοσης"
+
+msgid "Search in"
+msgstr "Αναζήτηση σε"
+
+msgid "Select group"
+msgstr "Επιλογή ομάδας"
+
+msgid "Select image"
+msgstr "Επιλογή εικόνας"
+
+msgid "Selected image"
+msgstr "Επιλεγμένη εικόνα"
+
+msgid "Show discussion"
+msgstr "Εμφάνιση συζήτησης"
+
+msgid "Show page"
+msgstr "Εμφάνιση σελίδας"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Ορισμένα αρχεία ή φάκελοι δεν έχουν δικαιώματα εγγραφής. Για να μπορέσετε να εγκαταστήσετε το Chamilo, πρέπει πρώτα να αλλάξετε τα δικαιώματά τους (χρησιμοποιώντας CHMOD). Διαβάστε το"
+
+msgid "Subcategories"
+msgstr "Υποκατηγορίες"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Πατήστε αριστερά ή δεξιά για πλοήγηση"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Η προθεσμία της εργασίας Wiki έχει παρέλθει, αλλά επιτρέπεται η καθυστερημένη υποβολή."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Η προθεσμία της εργασίας Wiki έχει παρέλθει."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Η εργασίας Wiki δεν έχει ξεκινήσει ακόμη."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Απαιτείται κλείδωμα επεξεργασίας της σελίδας Wiki πριν την αποθήκευση."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Η ανακοίνωση αποθηκεύτηκε, αλλά δεν ήταν δυνατή η μεταφόρτωση ενός συνημμένου."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Η ανακοίνωση αποθηκεύτηκε, αλλά η αποστολή email απέτυχε."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Η ανακοίνωση αποθηκεύτηκε, αλλά δεν ήταν δυνατή η αποστολή email."
+
+msgid "The category has been created"
+msgstr "Η κατηγορία δημιουργήθηκε"
+
+msgid "The category has been deleted"
+msgstr "Η κατηγορία διαγράφηκε"
+
+msgid "The category has been updated"
+msgstr "Η κατηγορία ενημερώθηκε"
+
+msgid "The end date is invalid"
+msgstr "Η ημερομηνία λήξης δεν είναι έγκυρη"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Ο μέγιστος αριθμός εκδόσεων πρέπει να είναι μη αρνητικός ακέραιος"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Ο μέγιστος αριθμός λέξεων πρέπει να είναι μη αρνητικός ακέραιος"
+
+msgid "The print window could not be opened"
+msgstr "Δεν ήταν δυνατό το άνοιγμα του παραθύρου εκτύπωσης"
+
+msgid "The start date is invalid"
+msgstr "Η ημερομηνία έναρξης δεν είναι έγκυρη"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Αυτές οι ρυθμίσεις ισχύουν για όλο το μάθημα, συμπεριλαμβανομένων των συνεδριών και των ομάδων του."
+
+msgid "This announcement has already been sent by email."
+msgstr "Αυτή η ανακοίνωση έχει ήδη αποσταλεί μέσω email."
+
+msgid "This discussion is hidden from learners"
+msgstr "Αυτή η συζήτηση είναι κρυφή από τους εκπαιδευόμενους"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Αυτό το εργαλείο γενετικής τεχνητής νοημοσύνης σας επιτρέπει να δημιουργείτε εικόνες και σύντομα βίντεο για να εικονογραφήσετε το μάθημά σας. Εξηγώντας (σε κείμενο) τι θέλετε στην ενότητα προτροπής, θα δώσετε στο ρυθμισμένο μοντέλο τεχνητής νοημοσύνης τα απαραίτητα στοιχεία για να δημιουργήσει μια εικόνα ή ένα βίντεο. Παρακαλούμε να είστε υπομονετικοί. Το μοντέλο τεχνητής νοημοσύνης θα χρειαστεί λίγο χρόνο και θα δημιουργήσει κάποιο αποτέλεσμα, το οποίο ίσως θελήσετε να διατηρήσετε αποθηκεύοντάς το στον φάκελο εγγράφων σας και στη συνέχεια ενσωματώνοντάς το σε ένα έγγραφο HTML. Δεν είναι όλα τα μοντέλα τεχνητής νοημοσύνης ίσα όσον αφορά την ταχύτητα ή την ποιότητα. Το μοντέλο τεχνητής νοημοσύνης μπορεί επίσης να σας δώσει μια τροποποιημένη προτροπή, η οποία είναι μια πιο λεπτομερής ερμηνεία του αιτήματός σας. Στη συνέχεια μπορείτε να χρησιμοποιήσετε αυτήν την τροποποιημένη προτροπή για να βελτιώσετε το αίτημά σας. Λάβετε υπόψη ότι αυτό το εργαλείο, ιδιαίτερα για βίντεο, μπορεί να δημιουργήσει σημαντικό κόστος για τον οργανισμό σας, ακόμη και αν αποφασίσετε να μην αποθηκεύσετε τα παραγόμενα μέσα. Χρησιμοποιήστε το αναλόγως. Αν αντιμετωπίζετε δυσκολίες να βρείτε αυτό που ψάχνετε, αφιερώστε λίγο χρόνο για να ερευνήσετε τεχνικές προτροπής στο διαδίκτυο για το μοντέλο τεχνητής νοημοσύνης που έχετε στη διάθεσή σας."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Αυτό το ιστορικό ανήκει στο βασικό μάθημα. Η επαναφορά είναι διαθέσιμη μετά τη δημιουργία έκδοσης συνεδρίας."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Αυτή η εικόνα αντικαθιστά το προεπιλεγμένο εικονίδιο φόρουμ που εμφανίζεται δίπλα στον τίτλο του φόρουμ."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Αυτή η σελίδα προέρχεται από το βασικό μάθημα. Η αποθήκευσή της θα δημιουργήσει μια έκδοση για την τρέχουσα συνεδρία."
+
+msgid "This will also delete %s subcategories."
+msgstr "Αυτό θα διαγράψει επίσης %s υποκατηγορίες."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Αυτό θα δημιουργήσει ξεχωριστές σελίδες εργασίας για %s εκπαιδευόμενους."
+
+msgid "Thread history"
+msgstr "Ιστορικό νήματος"
+
+msgid "Title and content"
+msgstr "Τίτλος και περιεχόμενο"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Δεν είναι δυνατή η ακύρωση της ανανέωσης αυτή τη στιγμή."
+
+msgid "Unable to restore renewal right now."
+msgstr "Δεν είναι δυνατή η επαναφορά της ανανέωσης αυτή τη στιγμή."
+
+msgid "Unlock page"
+msgstr "Ξεκλείδωμα σελίδας"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Χρησιμοποιήστε [[Σελίδα]] ή [[Σελίδα|Ορατό κείμενο]] για να δημιουργήσετε εσωτερικούς συνδέσμους Wiki."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Χρησιμοποιήστε το πλήκτρο διαστήματος ή τα βέλη για πλοήγηση"
+
+msgid "View version"
+msgstr "Προβολή έκδοσης"
+
+msgid "Visible only to teachers"
+msgstr "Ορατό μόνο σε εκπαιδευτές"
+
+msgid "Weight is required"
+msgstr "Απαιτείται βάρος"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Οι κατηγορίες Wiki είναι απενεργοποιημένες για αυτό το μάθημα."
+
+msgid "Wiki categories enabled"
+msgstr "Κατηγορίες Wiki ενεργοποιημένες"
+
+msgid "Wiki html strict filtering"
+msgstr "Αυστηρό φιλτράρισμα HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Ρυθμίσεις Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Οι ρυθμίσεις Wiki ενημερώθηκαν"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Βλέπετε μια ιστορική έκδοση αυτής της σελίδας"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Μπορείτε να επισυνάψετε ένα ή περισσότερα αρχεία σε αυτήν την απάντηση."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Μπορείτε να επεξεργαστείτε αυτήν τη σελίδα εργασίας, αλλά οι σελίδες εργασίας των εκπαιδευομένων δεν θα τροποποιηθούν."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Μπορείτε να χρησιμοποιήσετε τις ετικέτες {{class_name}} και {{student_full_name}} στην ερώτηση."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Έχετε 20 λεπτά για να επεξεργαστείτε αυτήν τη σελίδα πριν λήξει το κλείδωμα επεξεργασίας."
+
+msgid "by"
+msgstr "από"
+
+msgid "required"
+msgstr "υποχρεωτικό"
+

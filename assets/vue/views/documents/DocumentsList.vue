@@ -1249,7 +1249,7 @@ async function forceDeleteItem() {
     triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error deleting documents forcibly:", error)
-    notification.showErrorNotification(t("Error deleting document(s)."))
+    notification.showErrorNotification(t("Error deleting document(s)"))
   }
 }
 
@@ -1762,10 +1762,10 @@ const deleteDocumentTemplate = async (documentId) => {
   try {
     await documentsService.deleteDocumentTemplate(documentId)
     triggerTableLoad()
-    notification.showSuccessNotification(t("Template successfully deleted."))
+    notification.showSuccessNotification(t("Template successfully deleted"))
   } catch (error) {
     console.error("[Documents] Error deleting template:", error)
-    notification.showErrorNotification(t("Error deleting the template."))
+    notification.showErrorNotification(t("Error deleting the template"))
   }
 }
 
@@ -1790,7 +1790,7 @@ const submitTemplateForm = async () => {
   submitted.value = true
 
   if (!templateFormData.value.title || !selectedFile.value) {
-    notification.showErrorNotification(t("The title and thumbnail are required."))
+    notification.showErrorNotification(t("The title and thumbnail are required"))
     return
   }
 
@@ -1803,14 +1803,14 @@ const submitTemplateForm = async () => {
 
     await documentsService.createDocumentTemplate(formData)
 
-    notification.showSuccessNotification(t("Template created successfully."))
+    notification.showSuccessNotification(t("Template created successfully"))
     templateFormData.value.title = ""
     selectedFile.value = null
     showTemplateFormModal.value = false
     triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error submitting template form:", error)
-    notification.showErrorNotification(t("Error submitting the form."))
+    notification.showErrorNotification(t("Error submitting the form"))
   }
 }
 

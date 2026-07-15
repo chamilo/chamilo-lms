@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavan esimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -36494,4 +36494,853 @@ msgstr "Näytä ketjut"
 
 msgid "No auth source"
 msgstr "Ei todennuslähdettä"
+
+msgid "You must add at least one question"
+msgstr "Sinun on lisättävä vähintään yksi kysymys"
+
+msgid "Advanced actions"
+msgstr "Lisätoiminnot"
+
+msgid "Application path"
+msgstr "Sovelluksen polku"
+
+msgid "Apply files details"
+msgstr "Käytä tiedostojen tietoja"
+
+msgid "Apply plan details"
+msgstr "Käytä suunnitelman tietoja"
+
+msgid "Apply plan failed"
+msgstr "Suunnitelman käyttö epäonnistui"
+
+msgid "Apply plan ready"
+msgstr "Suunnitelma valmis käyttöön"
+
+msgid "Apply preparation"
+msgstr "Valmistelun käyttö"
+
+msgid "Apply staged files"
+msgstr "Käytä vaiheistetut tiedostot"
+
+msgid "Applying files..."
+msgstr "Käytetään tiedostoja..."
+
+msgid "Audit file"
+msgstr "Tarkastus tiedosto"
+
+msgid "Backup directory"
+msgstr "Varmuuskopiohakemisto"
+
+msgid "Baseline clean"
+msgstr "Perustason puhdistus"
+
+msgid "Baseline warnings"
+msgstr "Perustason varoitukset"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Luo turvallinen käyttöönottosuunnitelma vaiheistetusta paketista. Tämä tarkistaa vain tiedostot, käyttöoikeudet, varmuuskopiointipolun ja lukitustilan. Se ei korvaa tiedostoja."
+
+msgid "Build production frontend assets."
+msgstr "Rakenna tuotannon käyttöliittymän resurssit."
+
+msgid "Building plan..."
+msgstr "Rakennetaan suunnitelmaa..."
+
+msgid "Channel"
+msgstr "Kanava"
+
+msgid "Check"
+msgstr "Tarkista"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Tarkista saatavilla olevat Chamilo-päivitykset, vahvista paketit, vaiheista tiedostot ja suorita hallitut päivityksen jälkeiset vaiheet."
+
+msgid "Check manifest"
+msgstr "Tarkista manifesti"
+
+msgid "Checking post-apply actions..."
+msgstr "Tarkistetaan käyttöönottotoimia..."
+
+msgid "Checking..."
+msgstr "Tarkistetaan..."
+
+msgid "Composer install"
+msgstr "Composer-asennus"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer-, Yarn- ja tietokannan siirtotoiminnot voivat muuttaa riippuvuuksia, luotuja resursseja tai tietokantaa. Valitse ne vasta kun olet vahvistanut varmuuskopiot ja käyttöoikeudet."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Määritä CHAMILO_UPDATE_MANIFEST_URL palvelimella tai anna HTTPS-manifestin URL."
+
+msgid "Configured"
+msgstr "Määritetty"
+
+msgid "Current migration"
+msgstr "Nykyinen siirto"
+
+msgid "Database baseline"
+msgstr "Tietokannan perustaso"
+
+msgid "Database migration safety review"
+msgstr "Tietokannan siirron turvallisuustarkistus"
+
+msgid "Database migrations"
+msgstr "Tietokannan siirrot"
+
+msgid "Development mode"
+msgstr "Kehitystila"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Älä ota tätä käyttöön, ellei päivityksen varmuuskopiota ja palvelimen käyttöoikeuksia ole tarkistettu."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine dry-run -komento"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine ilmoitti historiallisen perustason varoituksia. Päivittäjä suorittaa vain vaiheistetut V210-siirrot nimenomaisen vahvistuksen jälkeen."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine suorittaa vain vaiheistetut V210-migraatiot turvallisuustarkistuksen läpäisyn jälkeen."
+
+msgid "Dry-run exit code"
+msgstr "Kokeilusuorituksen paluukoodi"
+
+msgid "Executed unavailable migrations"
+msgstr "Suoritetut käytettävissä olemattomat migraatiot"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Pura varmennettu päivityspaketti tarkistushakemistoon. Tämä ei korvaa tiedostoja, suorita migraatioita tai muokkaa tietokantaa."
+
+msgid "File apply available"
+msgstr "Tiedosto sovellettavissa"
+
+msgid "Files to replace"
+msgstr "Korvattavat tiedostot"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Vahvistan, että tietokannan varmuuskopio on olemassa ja se on tarkistettu ennen migraatioiden suorittamista."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Ymmärrän, että edistyneet toiminnot voivat muokata riippuvuuksia, luotuja resursseja tai tietokantaa."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Ymmärrän, että tämä korvaa tiedostoja Chamilo-asennuksessa."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Ymmärrän, että tämä suorittaa päivityskomentoja palvelimella."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Asenna käyttöliittymän riippuvuudet ennen resurssien uudelleenrakentamista."
+
+msgid "Installed version"
+msgstr "Asennettu versio"
+
+msgid "Latest migration"
+msgstr "Viimeisin migraatio"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Jätä paketin ja allekirjoituksen polut tyhjiksi ladataksesi ne varmennetuista manifestin URL-osoitteista. Paikalliset polut ovat käytettävissä vain kehitystesteissä."
+
+msgid "Live command log"
+msgstr "Reaaliaikainen komentoloki"
+
+msgid "Live update log"
+msgstr "Reaaliaikainen päivitysloki"
+
+msgid "Local test options"
+msgstr "Paikalliset testiasetukset"
+
+msgid "Local test update notice link"
+msgstr "Paikallisen testipäivityksen ilmoituslinkki"
+
+msgid "Local update notice simulation"
+msgstr "Paikallisen päivitysilmoituksen simulointi"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Paikallisen päivitysilmoituksen simulointi on käytettävissä vain kehitystilassa."
+
+msgid "Manifest"
+msgstr "Manifesti"
+
+msgid "Manifest source"
+msgstr "Manifestin lähde"
+
+msgid "Migration safety details"
+msgstr "Migraation turvallisuustiedot"
+
+msgid "Migration safety review failed"
+msgstr "Migraation turvallisuustarkistus epäonnistui"
+
+msgid "Migration safety review ready"
+msgstr "Migraation turvallisuustarkistus valmis"
+
+msgid "Migration target"
+msgstr "Migraation kohde"
+
+msgid "New files"
+msgstr "Uudet tiedostot"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine ilmoitti uusista migraatioista"
+
+msgid "Next migration"
+msgstr "Seuraava migraatio"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Käytettävissä olevia migraatioita ei raportoitu."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Virallista manifestin URL-osoitetta ei ole vielä määritetty. Käytä HTTPS-URL-osoitetta tai paikallista polkua kehitystesteissä."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Odottavia migraatioita ei havaittu ennen vaiheistettua päivityskohdetta."
+
+msgid "Not configured"
+msgstr "Ei määritetty"
+
+msgid "Not detected"
+msgstr "Ei havaittu"
+
+msgid "Official Chamilo update channel"
+msgstr "Virallinen Chamilo-päivityskanava"
+
+msgid "Package SHA-256"
+msgstr "Paketin SHA-256"
+
+msgid "Package URL"
+msgstr "Paketin URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Paketti- ja allekirjoitustiedostot ladataan manifestista. Paikalliset polut on poistettu käytöstä tässä ympäristössä."
+
+msgid "Package path"
+msgstr "Paketin polku"
+
+msgid "Package staged successfully"
+msgstr "Paketti vaiheistettu onnistuneesti"
+
+msgid "Package staging failed"
+msgstr "Paketin vaiheistus epäonnistui"
+
+msgid "Package verification"
+msgstr "Paketin varmennus"
+
+msgid "Package verification failed"
+msgstr "Paketin varmennus epäonnistui"
+
+msgid "Package verified successfully"
+msgstr "Paketti varmennettu onnistuneesti"
+
+msgid "Pending migrations before this update"
+msgstr "Odottavat migraatiot ennen tätä päivitystä"
+
+msgid "Planned backup path"
+msgstr "Suunniteltu varmuuskopion polku"
+
+msgid "Post-apply actions completed"
+msgstr "Jälkikäteen suoritettavat toiminnot valmiit"
+
+msgid "Post-apply actions failed"
+msgstr "Jälkikäteen suoritettavat toiminnot epäonnistuivat"
+
+msgid "Post-apply actions ready"
+msgstr "Jälkikäteen suoritettavat toiminnot valmiit"
+
+msgid "Post-apply checks"
+msgstr "Jälkikäteen suoritettavat tarkistukset"
+
+msgid "Post-apply checks failed"
+msgstr "Jälkikäteen suoritettujen tarkistusten epäonnistuminen"
+
+msgid "Post-apply details"
+msgstr "Jälkikäteen suoritettujen tarkistusten tiedot"
+
+msgid "Post-apply run details"
+msgstr "Jälkikäteen suoritettujen tarkistusten ajo-tiedot"
+
+msgid "Preflight checks"
+msgstr "Ennakkotarkistukset"
+
+msgid "Preflight checks completed"
+msgstr "Ennakkotarkistukset suoritettu"
+
+msgid "Preflight checks failed"
+msgstr "Ennakkotarkistukset epäonnistuivat"
+
+msgid "Preflight details"
+msgstr "Ennakkotarkistusten tiedot"
+
+msgid "Prepare staging"
+msgstr "Valmistele testausympäristö"
+
+msgid "Preparing staging..."
+msgstr "Valmistellaan testausympäristöä..."
+
+msgid "Production mode"
+msgstr "Tuotantotila"
+
+msgid "Released at"
+msgstr "Julkaistu"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Korvaa Chamilon tiedostot testausympäristön paketista tarkistetun käyttöönottosuunnitelman mukaisesti. Tämä ei suorita tietokannan migraatioita, Composeria, Yarnia tai välimuistin komentoja."
+
+msgid "Review apply plan"
+msgstr "Tarkista käyttöönottosuunnitelma"
+
+msgid "Review database migrations"
+msgstr "Tarkista tietokannan migraatiot"
+
+msgid "Review post-apply actions"
+msgstr "Tarkista jälkikäteen suoritettavat toiminnot"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Tarkista suositellut manuaaliset komennot päivitystiedostojen käyttöönoton jälkeen. Tämä vaihe ei suorita Composeria, Yarnia, migraatioita tai välimuistin komentoja."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Tarkista vaiheistetut Doctrine-migraatiot ja kuiva-ajon tuloste ennen tietokannan migraatioiden suorittamista."
+
+msgid "Reviewing database migrations..."
+msgstr "Tarkistetaan tietokannan migraatioita..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Suorita migraation turvallisuustarkistus ennen tietokannan migraatioiden suorittamista."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Suorita ympäristötarkistukset ennen tulevia päivityksen käyttöönottovaiheita. Tämä ei muokkaa tiedostoja tai tietokantaa."
+
+msgid "Run post-apply actions"
+msgstr "Suorita jälkikäteen suoritettavat toiminnot"
+
+msgid "Run preflight checks"
+msgstr "Suorita ennakkotarkistukset"
+
+msgid "Run selected post-apply actions"
+msgstr "Suorita valitut jälkikäteen suoritettavat toiminnot"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Suorita valitut jälkikäteen suoritettavat komennot palvelimelta hallitun sallittujen listan avulla. Mukautettuja komentorivikomentoja ei hyväksytä."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Suorita nämä komennot manuaalisesti palvelimelta vahvistettuasi tiedostopäivityksen tuloksen ja varmuuskopiot."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Jälkikäteen suoritettavien toimintojen suorittaminen käyttöliittymästä on poistettu käytöstä tuotantotilassa."
+
+msgid "Running post-apply actions..."
+msgstr "Suoritetaan jälkikäteen suoritettavia toimintoja..."
+
+msgid "Safe actions"
+msgstr "Turvalliset toiminnot"
+
+msgid "Signature path"
+msgstr "Allekirjoituksen polku"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Allekirjoituksen tarkistusta ei voi ohittaa tässä ympäristössä."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Ohita allekirjoituksen tarkistus paikallisissa kehitystesteissä"
+
+msgid "Staged file application failed"
+msgstr "Testausympäristön tiedostojen käyttöönotto epäonnistui"
+
+msgid "Staged files applied successfully"
+msgstr "Testausympäristön tiedostot otettu käyttöön onnistuneesti"
+
+msgid "Staging details"
+msgstr "Testausympäristön tiedot"
+
+msgid "Staging directory"
+msgstr "Testausympäristön hakemisto"
+
+msgid "Staging extraction"
+msgstr "Testausympäristön purkaminen"
+
+msgid "Symfony cache clear"
+msgstr "Symfony-välimuistin tyhjennys"
+
+msgid "System update"
+msgstr "Järjestelmäpäivitys"
+
+msgid "Target version"
+msgstr "Kohdeversio"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Määritetty virallinen manifestin URL on esitäytetty. Voit tarvittaessa muuttaa sen toiseen HTTPS-manifestiin."
+
+msgid "The database migration baseline is clean."
+msgstr "Tietokannan migraation perusviiva on puhdas."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Lopullinen HTTP-vastaus epäonnistui toiminnon päätyttyä. Tämä johtuu yleensä ajonaikaisista välimuistin käyttöoikeuksista tai web-palvelimen uudelleenkäynnistyksestä pyynnön aikana."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Toimintoloki ilmoittaa, että jälkikäteen suoritettavat toiminnot suoritettiin onnistuneesti."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Valitut jälkikäteen suoritettavat komennot suoritettiin onnistuneesti, mutta lopullinen HTTP-vastaus epäonnistui. Päivitä sivu ja tarkista ajonaikaiset välimuistin käyttöoikeudet, jos sivu ei lataudu oikein."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Päivitysohjelma ei luo tai palauta tietokannan varmuuskopioita."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Nämä toiminnot on turvallista suorittaa käyttöliittymästä päivitystuloksen tarkistamisen jälkeen."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Nämä komennot voivat muokata riippuvuuksia, luotuja resursseja, välimuistia tai tietokantaa. Vahvista varmuuskopiot ennen jatkamista."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Tämä toiminto muokkaa Chamilon asennuksen tiedostoja. Varmista, että käyttöönottosuunnitelma on tarkistettu ja varmuuskopiot ovat käytössä ennen jatkamista."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Tämä kehitystietue simuloi tulevaa Chamilo.org-päivitysilmoitusta paikallisten testipakettien polkujen avulla."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Tämä näyttö avattiin virallisesta päivitysilmoituksesta, mutta virallista manifestin lähdettä ei ole vielä määritetty."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Tämä näyttö avattiin päivitysilmoituksesta. Vain manifestin tarkistus käynnistyy automaattisesti."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Tämä vaihe valmistelee vain tarkistuksen. Tiedostojen korvaus tapahtuu myöhemmin Käytä vaiheistetut tiedostot -vaiheessa lukitus-, varmuuskopiointi- ja palautussuojauksella."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Tämä päivitysohjelma ei luo tietokannan varmuuskopiota. Luo ja tarkista varmuuskopio ennen migraatioiden suorittamista."
+
+msgid "Trusted public key"
+msgstr "Luotettu julkinen avain"
+
+msgid "Trusted signing key"
+msgstr "Luotettu allekirjoitusavain"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Kirjoita APPLY UPDATE FILES vahvistaaksesi"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Kirjoita RUN DATABASE MIGRATIONS vahvistaaksesi tietokantamigraatiot"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Kirjoita RUN POST UPDATE ACTIONS vahvistaaksesi"
+
+msgid "Unknown update notice source."
+msgstr "Tuntematon päivitysilmoituksen lähde."
+
+msgid "Update availability"
+msgstr "Päivityksen saatavuus"
+
+msgid "Update directory"
+msgstr "Päivityshakemisto"
+
+msgid "Update lock path"
+msgstr "Päivityksen lukituspolku"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Käytä edellisen vaiheen luomaa vaiheistushakemistoa. Taustajärjestelmä hyväksyy vain hakemistot polussa var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Käytä tätä linkkiä simuloidaksesi tulevaa Chamilo.org-päivitysilmoitusta kehitystesteissä."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Käytä tätä vain paikallisiin kehitystesteihin. Tuotantopäivityksissä on käytettävä palvelimen määrittämää avainta."
+
+msgid "Verification details"
+msgstr "Vahvistuksen tiedot"
+
+msgid "Verify package"
+msgstr "Vahvista paketti"
+
+msgid "Verifying..."
+msgstr "Vahvistetaan..."
+
+msgid "Waiting for command progress events..."
+msgstr "Odotetaan komentoprosessin tapahtumia..."
+
+msgid "Waiting for update progress events..."
+msgstr "Odotetaan päivityksen edistymistapahtumia..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Kommentti vaaditaan"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Tietokanta samalla nimellä on jo olemassa. Jos se sisältää tauluja, ne poistetaan; jos se on tyhjä, se käytetään uudelleen."
+
+msgid "AI generated"
+msgstr "Tekoälyn luoma"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Lisää vähintään yksi kysymys ennen oppimispolulle palaamista."
+
+msgid "Add attachments"
+msgstr "Lisää liitteitä"
+
+msgid "Additional fields"
+msgstr "Lisäkentät"
+
+msgid "Allow comments"
+msgstr "Salli kommentit"
+
+msgid "Allow new pages"
+msgstr "Salli uudet sivut"
+
+msgid "Allow ratings"
+msgstr "Salli arviot"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Haluatko varmasti poistaa kaikki kohteet?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Haluatko varmasti palauttaa automaattisen uusimisen?"
+
+msgid "Attachment has been deleted"
+msgstr "Liite on poistettu"
+
+msgid "Backup file"
+msgstr "Varmuuskopiotiedosto"
+
+msgid "Block comments"
+msgstr "Estä kommentit"
+
+msgid "Block new pages"
+msgstr "Estä uudet sivut"
+
+msgid "Block ratings"
+msgstr "Estä arviot"
+
+msgid "Cancel renewal"
+msgstr "Peruuta uusiminen"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Kategorialinkit poistetaan %s Wiki-sivulta."
+
+msgid "Change"
+msgstr "Muuta"
+
+msgid "Clear group"
+msgstr "Tyhjennä ryhmä"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Napsauta tunnistetta lisätäksesi sen editoriin. Nämä paikkamerkit korvataan varmennetta luotaessa."
+
+msgid "Comment added"
+msgstr "Kommentti lisätty"
+
+msgid "Comment is required"
+msgstr "Kommentti vaaditaan"
+
+msgid "Comment score"
+msgstr "Kommentin pistemäärä"
+
+msgid "Compare selected versions line by line"
+msgstr "Vertaa valittuja versioita rivi riviltä"
+
+msgid "Compare selected versions word by word"
+msgstr "Vertaa valittuja versioita sana sanalta"
+
+msgid "Compare versions"
+msgstr "Vertaa versioita"
+
+msgid "Copy completed"
+msgstr "Kopiointi valmis"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Luo yksittäiset wikisivut oppijoille"
+
+msgid "Current view mode"
+msgstr "Nykyinen näkymätila"
+
+msgid "Delete Wiki"
+msgstr "Poista wiki"
+
+msgid "Delete page"
+msgstr "Poista sivu"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Wikin etusivun poistamista ei suositella. Voit luoda sen myöhemmin uudelleen."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Wikin poistaminen käytöstä estää normaalit wikisivut ja -toiminnot. Tämä asetussivu on edelleen käytettävissä kurssin opettajille."
+
+msgid "Discussion"
+msgstr "Keskustelu"
+
+msgid "Edit Comment"
+msgstr "Muokkaa kommenttia"
+
+msgid "Edit page"
+msgstr "Muokkaa sivua"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Päättymispäivän on oltava päättymispäivän jälkeen tai sama kuin se"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Kirjoita hakusana wikisivujen etsimiseen"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Päättymispäivän on oltava päättymispäivän jälkeen tai sama kuin se"
+
+msgid "Failed email recipients"
+msgstr "Epäonnistuneet sähköpostin vastaanottajat"
+
+msgid "Finish and return to learning path"
+msgstr "Viimeistele ja palaa oppimispolulle"
+
+msgid "Forum image"
+msgstr "Keskustelualueen kuva"
+
+msgid "Hide discussion"
+msgstr "Piilota keskustelu"
+
+msgid "Hide page"
+msgstr "Piilota sivu"
+
+msgid "I changed my mind"
+msgstr "Muutin mieltäni"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Jos tätä ei ole valittu, tiedostot pysyvät alustan ylläpitäjän käytettävissä 'Tiedostotiedot'-työkalun kautta."
+
+msgid "Internal message failures"
+msgstr "Sisäisten viestien virheet"
+
+msgid "Internal messages available"
+msgstr "Sisäiset viestit käytettävissä"
+
+msgid "Internal messages created now"
+msgstr "Sisäiset viestit luotu nyt"
+
+msgid "Item score"
+msgstr "Kohteen pisteet"
+
+msgid "Last post"
+msgstr "Viimeisin viesti"
+
+msgid "Lock page"
+msgstr "Lukitse sivu"
+
+msgid "Manage categories"
+msgstr "Hallitse kategorioita"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Merkitsee tämän asiakirjan tekoälyn avustamaksi. Käytä tätä, kun sisältö on luotu tai merkittävästi muokattu tekoälytyökaluilla."
+
+msgid "Maximum score is required"
+msgstr "Enimmäispisteet vaaditaan"
+
+msgid "Metric"
+msgstr "Mittari"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Uudet kommentit on estetty tässä keskustelussa"
+
+msgid "No Wiki categories are available yet."
+msgstr "Wiki-kategorioita ei ole vielä käytettävissä."
+
+msgid "No categories found"
+msgstr "Kategorioita ei löytynyt"
+
+msgid "No content"
+msgstr "Ei sisältöä"
+
+msgid "No parent category"
+msgstr "Ei yläkategoriaa"
+
+msgid "Number of comments scored"
+msgstr "Pisteytettyjen kommenttien määrä"
+
+msgid "Old version"
+msgstr "Vanha versio"
+
+msgid "Only image files are allowed."
+msgstr "Vain kuvatiedostot ovat sallittuja."
+
+msgid "Please fill all required fields"
+msgstr "Täytä kaikki pakolliset kentät"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Kysymykset, joissa on luokka- tai opiskelijapaikkamerkit, luodaan kurssin luokille tai ryhmille: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Arvioinnit on estetty tässä keskustelussa"
+
+msgid "Remove image"
+msgstr "Poista kuva"
+
+msgid "Restore renewal"
+msgstr "Palauta uusiminen"
+
+msgid "Restore version"
+msgstr "Palauta versio"
+
+msgid "Search in"
+msgstr "Haku kohteessa"
+
+msgid "Select group"
+msgstr "Valitse ryhmä"
+
+msgid "Select image"
+msgstr "Valitse kuva"
+
+msgid "Selected image"
+msgstr "Valittu kuva"
+
+msgid "Show discussion"
+msgstr "Näytä keskustelu"
+
+msgid "Show page"
+msgstr "Näytä sivu"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Joillakin tiedostoilla tai kansioilla ei ole kirjoitusoikeuksia. Jotta Chamilo voidaan asentaa, sinun on ensin muutettava niiden oikeudet (CHMOD). Lue"
+
+msgid "Subcategories"
+msgstr "Alakategoriat"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Siirry vasemmalle tai oikealle napauttamalla"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki-tehtävän määräaika on umpeutunut, mutta myöhäinen palautus on sallittu."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki-tehtävän määräaika on umpeutunut."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki-tehtävä ei ole vielä alkanut."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Wiki-sivun muokkauslukitus vaaditaan ennen tallentamista."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Ilmoitus tallennettiin, mutta liitettä ei voitu ladata."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Ilmoitus tallennettiin, mutta sähköpostin lähetys epäonnistui."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Ilmoitus tallennettiin, mutta sähköpostia ei voitu toimittaa."
+
+msgid "The category has been created"
+msgstr "Kategoria on luotu"
+
+msgid "The category has been deleted"
+msgstr "Kategoria on poistettu"
+
+msgid "The category has been updated"
+msgstr "Kategoria on päivitetty"
+
+msgid "The end date is invalid"
+msgstr "Lopetuspäivämäärä on virheellinen"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Versioiden enimmäismäärän on oltava ei-negatiivinen kokonaisluku"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Sanojen enimmäismäärän on oltava ei-negatiivinen kokonaisluku"
+
+msgid "The print window could not be opened"
+msgstr "Tulostusikkunaa ei voitu avata"
+
+msgid "The start date is invalid"
+msgstr "Aloituspäivämäärä on virheellinen"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Nämä asetukset koskevat koko kurssia, mukaan lukien sen istunnot ja ryhmät."
+
+msgid "This announcement has already been sent by email."
+msgstr "Tämä ilmoitus on jo lähetetty sähköpostitse."
+
+msgid "This discussion is hidden from learners"
+msgstr "Tämä keskustelu on piilotettu oppijoilta"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Tämän generatiivisen tekoälytyökalun avulla voit luoda kuvia ja lyhyitä videoita kurssisi havainnollistamiseksi. Selittämällä (tekstillä) mitä haluat kehotteessa, annat määritetylle tekoälymallille tarvittavat elementit kuvan tai videon luomiseen. Ole kärsivällinen. Tekoälymalli vie jonkin aikaa ja tuottaa tuloksen, jonka haluat ehkä säilyttää tallentamalla median asiakirjakansioosi ja upottamalla sen sitten HTML-asiakirjaan. Kaikki tekoälymallit eivät ole yhtä nopeita tai laadukkaita. Tekoälymalli saattaa myös antaa muokatun kehotteen, joka on yksityiskohtaisempi tulkinta pyynnöstäsi. Voit sitten käyttää tätä muokattua kehotetta pyyntösi hienosäätämiseen. Huomaa, että tämä työkalu, erityisesti videot, saattaa aiheuttaa organisaatiollesi huomattavia kustannuksia, vaikka et päättäisikään tallentaa luotua mediaa. Käytä sitä sen mukaisesti. Jos sinulla on vaikeuksia saada haluamaasi tulosta, käytä aikaa kehotteiden vinkkien tutkimiseen verkossa käytettävissäsi olevan tekoälymallin osalta."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Tämä historia kuuluu peruskurssille. Palautus on käytettävissä istuntoversion luomisen jälkeen."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Tämä kuva korvaa foorumin oletuskuvakkeen, joka näkyy foorumin otsikon vieressä."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Tämä sivu tulee peruskurssilta. Tallentaminen luo version nykyiselle istunnolle."
+
+msgid "This will also delete %s subcategories."
+msgstr "Tämä poistaa myös %s alakategoriaa."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Tämä luo yksittäiset työtehtäväsivut %s oppijalle."
+
+msgid "Thread history"
+msgstr "Ketjun historia"
+
+msgid "Title and content"
+msgstr "Otsikko ja sisältö"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Uusimisoikeutta ei voi peruuttaa juuri nyt."
+
+msgid "Unable to restore renewal right now."
+msgstr "Uusimisoikeutta ei voi palauttaa juuri nyt."
+
+msgid "Unlock page"
+msgstr "Avaa sivun lukitus"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Käytä [[Sivu]] tai [[Sivu|Näkyvä teksti]] sisäisten Wiki-linkkien luomiseen."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Käytä välilyöntiä tai nuolinäppäimiä navigointiin"
+
+msgid "View version"
+msgstr "Näytä versio"
+
+msgid "Visible only to teachers"
+msgstr "Näkyvissä vain opettajille"
+
+msgid "Weight is required"
+msgstr "Painoarvo vaaditaan"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki-kategoriat on poistettu käytöstä tällä kurssilla."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki-kategoriat käytössä"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki HTML-tiukka suodatus"
+
+msgid "Wiki settings"
+msgstr "Wiki-asetukset"
+
+msgid "Wiki settings updated"
+msgstr "Wiki-asetukset päivitetty"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Tarkastelet tämän sivun historiallista versiota"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Voit liittää tähän vastaukseen yhden tai useamman tiedoston."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Voit muokata tätä tehtäväsivua, mutta oppijoiden työtehtäväsivuja ei muuteta."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Voit käyttää kysymyksessä tunnisteita {{class_name}} ja {{student_full_name}}."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Sinulla on 20 minuuttia aikaa muokata tätä sivua ennen kuin muokkauslukitus vanhenee."
+
+msgid "by"
+msgstr "tekijä"
+
+msgid "required"
+msgstr "pakollinen"
 

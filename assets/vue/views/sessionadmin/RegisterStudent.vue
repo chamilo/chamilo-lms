@@ -152,7 +152,7 @@
         v-else-if="searchAttempted"
         severity="error"
       >
-        {{ t("User not found.") }}
+        {{ t("User not found") }}
       </Message>
     </div>
 
@@ -388,7 +388,7 @@ async function sendCourseTo(user) {
     showSuccessNotification(`${t("Course sent to")} ${user.email}`)
   } catch (e) {
     console.error(e)
-    showErrorNotification(t("An error occurred while sending the course."))
+    showErrorNotification(t("An error occurred while sending the course"))
   }
 }
 

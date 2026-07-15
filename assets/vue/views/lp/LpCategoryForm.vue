@@ -1,6 +1,6 @@
 <template>
   <div class="flex max-w-2xl flex-col gap-6">
-    <SectionHeader :title="isEdit ? t('Edit category') : t('Add category')" />
+    <SectionHeader :title="isEdit ? t('Edit category') : t('Add a category')" />
     <form class="flex flex-col gap-6" @submit.prevent="save">
       <BaseInputText id="lp-category-title" v-model="title" name="title" :label="t('Title')" required />
       <div class="flex justify-end gap-2">

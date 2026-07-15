@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמה לנוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמה לנוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -36505,4 +36505,853 @@ msgstr "הצג אשכולות"
 
 msgid "No auth source"
 msgstr "אין מקור אימות"
+
+msgid "You must add at least one question"
+msgstr "עליך להוסיף לפחות שאלה אחת"
+
+msgid "Advanced actions"
+msgstr "פעולות מתקדמות"
+
+msgid "Application path"
+msgstr "נתיב היישום"
+
+msgid "Apply files details"
+msgstr "החל פרטי קבצים"
+
+msgid "Apply plan details"
+msgstr "החל פרטי תוכנית"
+
+msgid "Apply plan failed"
+msgstr "החלת התוכנית נכשלה"
+
+msgid "Apply plan ready"
+msgstr "החלת התוכנית מוכנה"
+
+msgid "Apply preparation"
+msgstr "החל הכנה"
+
+msgid "Apply staged files"
+msgstr "החל קבצים שהועלו"
+
+msgid "Applying files..."
+msgstr "מחיל קבצים..."
+
+msgid "Audit file"
+msgstr "בדוק קובץ"
+
+msgid "Backup directory"
+msgstr "ספריית גיבוי"
+
+msgid "Baseline clean"
+msgstr "בסיס נקי"
+
+msgid "Baseline warnings"
+msgstr "אזהרות בסיס"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "בנה תוכנית החלה בטוחה מהחבילה שהועלתה. פעולה זו בודקת רק קבצים, הרשאות, נתיב גיבוי וסטטוס נעילה. היא אינה מחליפה קבצים."
+
+msgid "Build production frontend assets."
+msgstr "בנה נכסי קצה קדמי לייצור."
+
+msgid "Building plan..."
+msgstr "בונה תוכנית..."
+
+msgid "Channel"
+msgstr "ערוץ"
+
+msgid "Check"
+msgstr "בדוק"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "בדוק עדכונים זמינים של Chamilo, אמת חבילות, העלה קבצים והפעל שלבי עדכון מבוקרים."
+
+msgid "Check manifest"
+msgstr "בדוק מניפסט"
+
+msgid "Checking post-apply actions..."
+msgstr "בודק פעולות לאחר החלה..."
+
+msgid "Checking..."
+msgstr "בודק..."
+
+msgid "Composer install"
+msgstr "התקנת Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "פעולות Composer, Yarn והעברת מסד נתונים עלולות לשנות תלויות, נכסים שנוצרו או את מסד הנתונים. בחר אותן רק לאחר אישור גיבויים והרשאות."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "הגדר CHAMILO_UPDATE_MANIFEST_URL בשרת או ספק כתובת URL של מניפסט HTTPS."
+
+msgid "Configured"
+msgstr "מוגדר"
+
+msgid "Current migration"
+msgstr "העברה נוכחית"
+
+msgid "Database baseline"
+msgstr "בסיס מסד נתונים"
+
+msgid "Database migration safety review"
+msgstr "סקירת בטיחות העברת מסד נתונים"
+
+msgid "Database migrations"
+msgstr "העברות מסד נתונים"
+
+msgid "Development mode"
+msgstr "מצב פיתוח"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "אל תפעיל זאת אלא אם כן גיבוי העדכון והרשאות השרת נבדקו."
+
+msgid "Doctrine dry-run command"
+msgstr "פקודת Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine דיווח על אזהרות בסיס היסטוריות. המעדכן עדיין יבצע רק העברות V210 שהועלו לאחר אישור מפורש."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine יבצע רק את מיגרציות V210 המתוזמנות לאחר אישור בדיקת הבטיחות."
+
+msgid "Dry-run exit code"
+msgstr "קוד יציאה של הרצה יבשה"
+
+msgid "Executed unavailable migrations"
+msgstr "מיגרציות לא זמינות שבוצעו"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "חלץ את חבילת העדכון המאומתת לספריית ביניים לבדיקה. פעולה זו אינה מחליפה קבצים, מריצה מיגרציות או משנה את מסד הנתונים."
+
+msgid "File apply available"
+msgstr "קובץ זמין להחלה"
+
+msgid "Files to replace"
+msgstr "קבצים להחלפה"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "אני מאשר שקיים גיבוי של מסד הנתונים ואומת לפני הרצת המיגרציות."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "אני מבין שפעולות מתקדמות עלולות לשנות תלויות, נכסים שנוצרו או את מסד הנתונים."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "אני מבין שפעולה זו תחליף קבצים בהתקנת Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "אני מבין שפעולה זו תריץ פקודות עדכון בשרת."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "התקן תלויות קצה-קדמי לפני בנייה מחדש של הנכסים."
+
+msgid "Installed version"
+msgstr "גרסה מותקנת"
+
+msgid "Latest migration"
+msgstr "מיגרציה אחרונה"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "השאר את נתיבי החבילה והחתימה ריקים כדי להורידם מכתובות ה-URL המאומתות של המניפסט. נתיבים מקומיים זמינים רק לבדיקות פיתוח."
+
+msgid "Live command log"
+msgstr "יומן פקודות חי"
+
+msgid "Live update log"
+msgstr "יומן עדכון חי"
+
+msgid "Local test options"
+msgstr "אפשרויות בדיקה מקומית"
+
+msgid "Local test update notice link"
+msgstr "קישור להודעת עדכון לבדיקה מקומית"
+
+msgid "Local update notice simulation"
+msgstr "סימולציית הודעת עדכון מקומית"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "סימולציית הודעת עדכון מקומית זמינה רק במצב פיתוח."
+
+msgid "Manifest"
+msgstr "מניפסט"
+
+msgid "Manifest source"
+msgstr "מקור המניפסט"
+
+msgid "Migration safety details"
+msgstr "פרטי בדיקת בטיחות מיגרציה"
+
+msgid "Migration safety review failed"
+msgstr "בדיקת בטיחות מיגרציה נכשלה"
+
+msgid "Migration safety review ready"
+msgstr "בדיקת בטיחות מיגרציה מוכנה"
+
+msgid "Migration target"
+msgstr "יעד מיגרציה"
+
+msgid "New files"
+msgstr "קבצים חדשים"
+
+msgid "New migrations reported by Doctrine"
+msgstr "מיגרציות חדשות שדווחו על ידי Doctrine"
+
+msgid "Next migration"
+msgstr "המיגרציה הבאה"
+
+msgid "No executed unavailable migration was reported."
+msgstr "לא דווחה מיגרציה לא זמינה שבוצעה."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "לא הוגדר עדיין כתובת URL רשמית של מניפסט. השתמש בכתובת HTTPS או בנתיב מקומי לבדיקות פיתוח."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "לא זוהתה מיגרציה ממתינה לפני יעד העדכון המתוזמן."
+
+msgid "Not configured"
+msgstr "לא מוגדר"
+
+msgid "Not detected"
+msgstr "לא זוהה"
+
+msgid "Official Chamilo update channel"
+msgstr "ערוץ עדכון רשמי של Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 של החבילה"
+
+msgid "Package URL"
+msgstr "כתובת URL של החבילה"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "קובצי החבילה והחתימה יורדו מהמניפסט. נתיבים מקומיים מושבתים בסביבה זו."
+
+msgid "Package path"
+msgstr "נתיב החבילה"
+
+msgid "Package staged successfully"
+msgstr "החבילה הועברה לספריית ביניים בהצלחה"
+
+msgid "Package staging failed"
+msgstr "העברת החבילה לספריית ביניים נכשלה"
+
+msgid "Package verification"
+msgstr "אימות החבילה"
+
+msgid "Package verification failed"
+msgstr "אימות החבילה נכשל"
+
+msgid "Package verified successfully"
+msgstr "החבילה אומתה בהצלחה"
+
+msgid "Pending migrations before this update"
+msgstr "מיגרציות ממתינות לפני עדכון זה"
+
+msgid "Planned backup path"
+msgstr "נתיב גיבוי מתוכנן"
+
+msgid "Post-apply actions completed"
+msgstr "פעולות לאחר החלה הושלמו"
+
+msgid "Post-apply actions failed"
+msgstr "פעולות לאחר החלה נכשלו"
+
+msgid "Post-apply actions ready"
+msgstr "פעולות לאחר החלה מוכנות"
+
+msgid "Post-apply checks"
+msgstr "בדיקות לאחר החלה"
+
+msgid "Post-apply checks failed"
+msgstr "בדיקות לאחר ההחלה נכשלו"
+
+msgid "Post-apply details"
+msgstr "פרטים לאחר ההחלה"
+
+msgid "Post-apply run details"
+msgstr "פרטי הרצה לאחר ההחלה"
+
+msgid "Preflight checks"
+msgstr "בדיקות מקדימות"
+
+msgid "Preflight checks completed"
+msgstr "בדיקות מקדימות הושלמו"
+
+msgid "Preflight checks failed"
+msgstr "בדיקות מקדימות נכשלו"
+
+msgid "Preflight details"
+msgstr "פרטי בדיקות מקדימות"
+
+msgid "Prepare staging"
+msgstr "הכנת סביבת ביניים"
+
+msgid "Preparing staging..."
+msgstr "מכין סביבת ביניים..."
+
+msgid "Production mode"
+msgstr "מצב ייצור"
+
+msgid "Released at"
+msgstr "שוחרר ב־"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "החלף קובצי Chamilo מחבילת הביניים שנבדקה באמצעות תוכנית ההחלה. פעולה זו אינה מריצה מיגרציות מסד נתונים, Composer, Yarn או פקודות מטמון."
+
+msgid "Review apply plan"
+msgstr "סקור תוכנית החלה"
+
+msgid "Review database migrations"
+msgstr "סקור מיגרציות מסד נתונים"
+
+msgid "Review post-apply actions"
+msgstr "סקור פעולות לאחר ההחלה"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "סקור פקודות ידניות מומלצות לאחר החלת קובצי העדכון. שלב זה אינו מריץ Composer, Yarn, מיגרציות או פקודות מטמון."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "סקור מיגרציות Doctrine מסביבת הביניים ופלט הרצה יבשה לפני הרצת מיגרציות מסד הנתונים."
+
+msgid "Reviewing database migrations..."
+msgstr "סוקר מיגרציות מסד נתונים..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "הרץ ועבור את סקירת הבטיחות של המיגרציה לפני ביצוע מיגרציות מסד הנתונים."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "הרץ בדיקות סביבה לפני כל שלב עתידי של החלת עדכון. פעולה זו אינה משנה קבצים או את מסד הנתונים."
+
+msgid "Run post-apply actions"
+msgstr "הרץ פעולות לאחר ההחלה"
+
+msgid "Run preflight checks"
+msgstr "הרץ בדיקות מקדימות"
+
+msgid "Run selected post-apply actions"
+msgstr "הרץ פעולות נבחרות לאחר ההחלה"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "הרץ פקודות נבחרות לאחר ההחלה מהשרת באמצעות רשימת היתרים מבוקרת. לא מתקבלות פקודות מעטפת מותאמות אישית."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "הרץ פקודות אלה ידנית מהשרת לאחר אישור תוצאת עדכון הקבצים והגיבויים."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "הרצת פעולות לאחר ההחלה מהממשק מושבתת במצב ייצור."
+
+msgid "Running post-apply actions..."
+msgstr "מריץ פעולות לאחר ההחלה..."
+
+msgid "Safe actions"
+msgstr "פעולות בטוחות"
+
+msgid "Signature path"
+msgstr "נתיב חתימה"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "לא ניתן לדלג על אימות החתימה בסביבה זו."
+
+msgid "Skip signature verification for local development tests"
+msgstr "דלג על אימות החתימה לבדיקות פיתוח מקומיות"
+
+msgid "Staged file application failed"
+msgstr "החלת קבצי הביניים נכשלה"
+
+msgid "Staged files applied successfully"
+msgstr "קבצי הביניים הוחלו בהצלחה"
+
+msgid "Staging details"
+msgstr "פרטי סביבת ביניים"
+
+msgid "Staging directory"
+msgstr "תיקיית סביבת ביניים"
+
+msgid "Staging extraction"
+msgstr "חילוץ סביבת ביניים"
+
+msgid "Symfony cache clear"
+msgstr "ניקוי מטמון Symfony"
+
+msgid "System update"
+msgstr "עדכון מערכת"
+
+msgid "Target version"
+msgstr "גרסת יעד"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "כתובת ה־URL הרשמית של המניפסט מוגדרת מראש. ניתן לשנותה למניפסט HTTPS אחר במידת הצורך."
+
+msgid "The database migration baseline is clean."
+msgstr "קו הבסיס של מיגרציית מסד הנתונים נקי."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "תגובת ה־HTTP הסופית נכשלה לאחר השלמת הפעולה. בדרך כלל נגרם עקב הרשאות מטמון זמן ריצה או הפעלה מחדש של שרת האינטרנט במהלך הבקשה."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "יומן הפעולה מדווח כי פעולות לאחר ההחלה הושלמו בהצלחה."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "פקודות לאחר ההחלה שנבחרו הושלמו בהצלחה, אך תגובת ה־HTTP הסופית נכשלה. רענן את הדף ובדוק הרשאות מטמון זמן ריצה אם הדף אינו נטען כראוי."
+
+msgid "The updater does not create or restore database backups."
+msgstr "תוכנית העדכון אינה יוצרת או משחזרת גיבויי מסד נתונים."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "פעולות אלה בטוחות להרצה מהממשק לאחר סקירת תוצאת העדכון."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "פקודות אלה עשויות לשנות תלויות, נכסים שנוצרו, מטמון או מסד הנתונים. אשר גיבויים לפני המשך."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "פעולה זו משנה קבצים בהתקנת Chamilo. ודא שתוכנית ההחלה נסקרה ושהגיבויים מופעלים לפני המשך."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "רשומת פיתוח זו מדמה את הודעת העדכון העתידית של Chamilo.org באמצעות נתיבי חבילות בדיקה מקומיות."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "מסך זה נפתח מהודעת עדכון רשמית, אך טרם הוגדר מקור מניפסט רשמי."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "מסך זה נפתח מהודעת עדכון. רק בדיקת המניפסט מופעלת אוטומטית."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "שלב זה מכין סקירה בלבד. החלפת הקבצים מתבצעת מאוחר יותר בשלב החלת הקבצים המבוימים, עם נעילה, גיבוי והגנת גלגול לאחור."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "מעדכן זה אינו יוצר גיבוי של מסד הנתונים. יש ליצור ולאמת גיבוי לפני הרצת המיגרציות."
+
+msgid "Trusted public key"
+msgstr "מפתח ציבורי מהימן"
+
+msgid "Trusted signing key"
+msgstr "מפתח חתימה מהימן"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "הקלד APPLY UPDATE FILES לאישור"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "הקלד RUN DATABASE MIGRATIONS לאישור מיגרציות מסד הנתונים"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "הקלד RUN POST UPDATE ACTIONS לאישור"
+
+msgid "Unknown update notice source."
+msgstr "מקור הודעת העדכון אינו ידוע."
+
+msgid "Update availability"
+msgstr "זמינות עדכון"
+
+msgid "Update directory"
+msgstr "ספריית עדכון"
+
+msgid "Update lock path"
+msgstr "נתיב נעילת עדכון"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "השתמש בספריית הבימוי שנוצרה על ידי השלב הקודם. המערכת מקבלת רק ספריות בתוך var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "השתמש בקישור זה כדי לדמות את הודעת העדכון העתידית של Chamilo.org במהלך בדיקות פיתוח."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "השתמש באפשרות זו רק לבדיקות פיתוח מקומיות. עדכונים בסביבת ייצור חייבים להשתמש במפתח שהוגדר בשרת."
+
+msgid "Verification details"
+msgstr "פרטי אימות"
+
+msgid "Verify package"
+msgstr "אימות חבילה"
+
+msgid "Verifying..."
+msgstr "מאמת..."
+
+msgid "Waiting for command progress events..."
+msgstr "ממתין לאירועי התקדמות פקודה..."
+
+msgid "Waiting for update progress events..."
+msgstr "ממתין לאירועי התקדמות עדכון..."
+
+msgid "Yarn build"
+msgstr "בניית Yarn"
+
+msgid "Yarn install"
+msgstr "התקנת Yarn"
+
+msgid "A comment is required"
+msgstr "נדרשת הערה"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "מסד נתונים בעל שם זהה כבר קיים. אם הוא מכיל טבלאות, הן יימחקו; אם הוא ריק, הוא ייעשה שימוש חוזר."
+
+msgid "AI generated"
+msgstr "נוצר על ידי בינה מלאכותית"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "הוסף לפחות שאלה אחת לפני החזרה לנתיב הלמידה."
+
+msgid "Add attachments"
+msgstr "הוסף קבצים מצורפים"
+
+msgid "Additional fields"
+msgstr "שדות נוספים"
+
+msgid "Allow comments"
+msgstr "אפשר הערות"
+
+msgid "Allow new pages"
+msgstr "אפשר דפים חדשים"
+
+msgid "Allow ratings"
+msgstr "אפשר דירוגים"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "האם אתה בטוח שברצונך למחוק את כל הפריטים?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "האם אתה בטוח שברצונך לשחזר חידוש אוטומטי?"
+
+msgid "Attachment has been deleted"
+msgstr "הקובץ המצורף נמחק"
+
+msgid "Backup file"
+msgstr "קובץ גיבוי"
+
+msgid "Block comments"
+msgstr "חסום הערות"
+
+msgid "Block new pages"
+msgstr "חסום דפים חדשים"
+
+msgid "Block ratings"
+msgstr "חסום דירוגים"
+
+msgid "Cancel renewal"
+msgstr "בטל חידוש"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "קישורי הקטגוריה יוסרו מדפי הוויקי של %s."
+
+msgid "Change"
+msgstr "שנה"
+
+msgid "Clear group"
+msgstr "נקה קבוצה"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "לחץ על תג כדי להכניסו לעורך. ממלאי מקום אלה יוחלפו בעת יצירת התעודה."
+
+msgid "Comment added"
+msgstr "ההערה נוספה"
+
+msgid "Comment is required"
+msgstr "נדרשת הערה"
+
+msgid "Comment score"
+msgstr "ציון הערה"
+
+msgid "Compare selected versions line by line"
+msgstr "השווה גרסאות נבחרות שורה אחר שורה"
+
+msgid "Compare selected versions word by word"
+msgstr "השווה גרסאות נבחרות מילה אחר מילה"
+
+msgid "Compare versions"
+msgstr "השווה גרסאות"
+
+msgid "Copy completed"
+msgstr "ההעתקה הושלמה"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "צור דפי ויקי נפרדים ללומדים"
+
+msgid "Current view mode"
+msgstr "מצב תצוגה נוכחי"
+
+msgid "Delete Wiki"
+msgstr "מחק ויקי"
+
+msgid "Delete page"
+msgstr "מחק דף"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "מחיקת דף הבית של הוויקי אינה מומלצת. ניתן ליצור אותו מחדש מאוחר יותר."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "השבתת הוויקי חוסמת דפי ויקי ופעולות רגילות. דף ההגדרות נשאר זמין למורי הקורס."
+
+msgid "Discussion"
+msgstr "דיון"
+
+msgid "Edit Comment"
+msgstr "ערוך הערה"
+
+msgid "Edit page"
+msgstr "ערוך דף"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "תאריך הסיום חייב להיות אחרי או שווה לתאריך התפוגה"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "הזן מונח חיפוש כדי למצוא דפי ויקי"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "תאריך התפוגה חייב להיות לפני או שווה לתאריך הסיום"
+
+msgid "Failed email recipients"
+msgstr "נמעני דוא\"ל שנכשלו"
+
+msgid "Finish and return to learning path"
+msgstr "סיים וחזור לנתיב הלמידה"
+
+msgid "Forum image"
+msgstr "תמונת פורום"
+
+msgid "Hide discussion"
+msgstr "הסתר דיון"
+
+msgid "Hide page"
+msgstr "הסתר דף"
+
+msgid "I changed my mind"
+msgstr "שיניתי את דעתי"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "אם לא מסומן, הקבצים יישארו זמינים למנהל הפלטפורמה דרך כלי 'מידע על קבצים'."
+
+msgid "Internal message failures"
+msgstr "כשלי הודעות פנימיות"
+
+msgid "Internal messages available"
+msgstr "הודעות פנימיות זמינות"
+
+msgid "Internal messages created now"
+msgstr "הודעות פנימיות שנוצרו כעת"
+
+msgid "Item score"
+msgstr "ציון פריט"
+
+msgid "Last post"
+msgstr "פוסט אחרון"
+
+msgid "Lock page"
+msgstr "נעל דף"
+
+msgid "Manage categories"
+msgstr "נהל קטגוריות"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "מסמן מסמך זה כמסייע AI. השתמש בו כאשר התוכן נוצר או שונה באופן משמעותי באמצעות כלי AI."
+
+msgid "Maximum score is required"
+msgstr "נדרש ציון מקסימלי"
+
+msgid "Metric"
+msgstr "מדד"
+
+msgid "New comments are blocked in this discussion"
+msgstr "הערות חדשות חסומות בדיון זה"
+
+msgid "No Wiki categories are available yet."
+msgstr "אין קטגוריות ויקי זמינות עדיין."
+
+msgid "No categories found"
+msgstr "לא נמצאו קטגוריות"
+
+msgid "No content"
+msgstr "אין תוכן"
+
+msgid "No parent category"
+msgstr "אין קטגוריית אב"
+
+msgid "Number of comments scored"
+msgstr "מספר ההערות שקיבלו ציון"
+
+msgid "Old version"
+msgstr "גרסה ישנה"
+
+msgid "Only image files are allowed."
+msgstr "רק קובצי תמונה מותרים."
+
+msgid "Please fill all required fields"
+msgstr "אנא מלא את כל השדות הנדרשים"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "שאלות עם מצייני מקום של כיתה או תלמיד ייווצרו עבור כיתות או קבוצות בקורס: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "הדירוגים חסומים בדיון זה"
+
+msgid "Remove image"
+msgstr "הסר תמונה"
+
+msgid "Restore renewal"
+msgstr "שחזר חידוש"
+
+msgid "Restore version"
+msgstr "שחזר גרסה"
+
+msgid "Search in"
+msgstr "חפש ב"
+
+msgid "Select group"
+msgstr "בחר קבוצה"
+
+msgid "Select image"
+msgstr "בחר תמונה"
+
+msgid "Selected image"
+msgstr "תמונה נבחרת"
+
+msgid "Show discussion"
+msgstr "הצג דיון"
+
+msgid "Show page"
+msgstr "הצג דף"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "לחלק מהקבצים או התיקיות אין הרשאות כתיבה. כדי להתקין את Chamilo יש לשנות תחילה את ההרשאות שלהם (באמצעות CHMOD). אנא קרא את"
+
+msgid "Subcategories"
+msgstr "קטגוריות משנה"
+
+msgid "Tap on the left or right to navigate"
+msgstr "הקש על הצד השמאלי או הימני כדי לנווט"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "מועד ההגשה של משימת הוויקי חלף, אך מותר להגיש באיחור."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "מועד ההגשה של משימת הוויקי חלף."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "משימת הוויקי טרם החלה."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "נדרש לנעול את עמוד הוויקי לפני השמירה."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "ההודעה נשמרה, אך לא ניתן היה להעלות קובץ מצורף."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "ההודעה נשמרה, אך שליחת הדוא\"ל נכשלה."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "ההודעה נשמרה, אך לא ניתן היה לשלוח דוא\"ל."
+
+msgid "The category has been created"
+msgstr "הקטגוריה נוצרה"
+
+msgid "The category has been deleted"
+msgstr "הקטגוריה נמחקה"
+
+msgid "The category has been updated"
+msgstr "הקטגוריה עודכנה"
+
+msgid "The end date is invalid"
+msgstr "תאריך הסיום אינו תקין"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "המספר המרבי של גרסאות חייב להיות מספר שלם שאינו שלילי"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "המספר המרבי של מילים חייב להיות מספר שלם שאינו שלילי"
+
+msgid "The print window could not be opened"
+msgstr "לא ניתן לפתוח את חלון ההדפסה"
+
+msgid "The start date is invalid"
+msgstr "תאריך ההתחלה אינו תקין"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "הגדרות אלו חלות על כל הקורס, כולל הסשנים והקבוצות שלו."
+
+msgid "This announcement has already been sent by email."
+msgstr "הודעה זו כבר נשלחה בדוא\"ל."
+
+msgid "This discussion is hidden from learners"
+msgstr "דיון זה מוסתר מהלומדים"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "כלי בינה מלאכותית זה מאפשר לך ליצור תמונות וסרטונים קצרים להמחשת הקורס. על ידי הסבר (בטקסט) של מה שאתה רוצה בחלק ההנחיה, תספק למודל הבינה המלאכותית המוגדר את הרכיבים הדרושים ליצירת תמונה או סרטון. אנא התאזר בסבלנות. מודל הבינה המלאכותית יידרש זמן מה וייצר תוצאה, אותה תוכל לשמור בתיקיית המסמכים שלך ואז לשבץ בתוך מסמך HTML. לא כל מודלי הבינה המלאכותית שווים במהירותם או באיכותם. מודל הבינה המלאכותית עשוי גם לספק לך הנחיה שונה, שהיא פרשנות מפורטת יותר של בקשתך. תוכל להשתמש בהנחיה זו כדי לכוונן את בקשתך. שים לב שכלי זה, במיוחד לסרטונים, עלול לגרום לעלויות ניכרות לארגון שלך, גם אם תחליט שלא לשמור את המדיה שנוצרה. אנא השתמש בו בהתאם. אם נתקלת בקשיים להשיג את התוצאה הרצויה, הקדש זמן לחיפוש טיפים להנחיות באינטרנט עבור מודל הבינה המלאכותית העומד לרשותך."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "היסטוריה זו שייכת לקורס הבסיסי. שחזור זמין לאחר יצירת גרסת סשן."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "תמונה זו מחליפה את סמל הפורום המוגדר כברירת מחדל המוצג לצד כותרת הפורום."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "עמוד זה מגיע מהקורס הבסיסי. שמירתו תיצור גרסה עבור הסשן הנוכחי."
+
+msgid "This will also delete %s subcategories."
+msgstr "פעולה זו תמחק גם %s קטגוריות משנה."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "פעולה זו תיצור עמודי עבודה אישיים עבור %s לומדים."
+
+msgid "Thread history"
+msgstr "היסטוריית שרשור"
+
+msgid "Title and content"
+msgstr "כותרת ותוכן"
+
+msgid "Unable to cancel renewal right now."
+msgstr "לא ניתן לבטל את זכות החידוש כעת."
+
+msgid "Unable to restore renewal right now."
+msgstr "לא ניתן לשחזר את זכות החידוש כעת."
+
+msgid "Unlock page"
+msgstr "בטל נעילת עמוד"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "השתמש ב[[עמוד]] או ב[[עמוד|טקסט גלוי]] ליצירת קישורים פנימיים בוויקי."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "השתמש בסרגל הרווח או במקשי החצים כדי לנווט"
+
+msgid "View version"
+msgstr "הצג גרסה"
+
+msgid "Visible only to teachers"
+msgstr "גלוי למורים בלבד"
+
+msgid "Weight is required"
+msgstr "נדרש משקל"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "קטגוריות הוויקי מושבתות עבור קורס זה."
+
+msgid "Wiki categories enabled"
+msgstr "קטגוריות הוויקי מופעלות"
+
+msgid "Wiki html strict filtering"
+msgstr "סינון HTML קפדני בוויקי"
+
+msgid "Wiki settings"
+msgstr "הגדרות ויקי"
+
+msgid "Wiki settings updated"
+msgstr "הגדרות הוויקי עודכנו"
+
+msgid "You are viewing a historical version of this page"
+msgstr "אתה צופה בגרסה היסטורית של עמוד זה"
+
+msgid "You can attach one or more files to this reply."
+msgstr "ניתן לצרף קובץ אחד או יותר לתשובה זו."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "ניתן לערוך את עמוד המשימה הזה, אך עמודי העבודה של הלומדים לא יושפעו."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "ניתן להשתמש בתגיות {{class_name}} ו-{{student_full_name}} בשאלה."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "יש לך 20 דקות לערוך עמוד זה לפני שתוקף נעילת העריכה יפוג."
+
+msgid "by"
+msgstr "מאת"
+
+msgid "required"
+msgstr "חובה"
 

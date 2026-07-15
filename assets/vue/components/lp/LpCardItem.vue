@@ -638,7 +638,7 @@ const progressTextClass = computed(() =>
           </div>
         </div>
         <span class="text-caption text-gray-50">
-          {{ ringValue(lp.progress) === 100 ? t("Completed") : t("Progress") }}
+          {{ ringValue(lp.progress) === 100 ? t("Complete") : t("Progress") }}
         </span>
       </div>
 

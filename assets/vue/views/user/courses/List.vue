@@ -42,7 +42,7 @@
           <span
             class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-700"
           ></span>
-          <span>{{ t("Loading more courses...") }}</span>
+          <span>{{ t("Loading more courses") }}</span>
         </div>
 
         <div ref="lastCourseRef"></div>

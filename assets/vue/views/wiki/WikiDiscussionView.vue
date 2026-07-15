@@ -284,7 +284,7 @@
         </div>
 
         <div v-else class="py-8 text-center text-sm italic text-gray-500">
-          {{ t("No comments") }}
+          {{ t("No comments yet.") }}
         </div>
       </BaseCard>
     </template>

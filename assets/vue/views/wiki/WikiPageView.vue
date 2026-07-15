@@ -177,7 +177,7 @@
             v-if="wikiPage.canExportToDocuments"
             icon="file-export"
             :is-loading="isExportingToDocuments"
-            :label="t('Export to Documents')"
+            :label="t('Export to documents')"
             only-icon
             size="large"
             type="primary-text"

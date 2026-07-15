@@ -491,6 +491,6 @@ function btnFinishOnClick() {
 }
 
 function btnSupportOnClick() {
-  alert(t("Please contact support with the error details."))
+  alert(t("Please contact support with the error details"))
 }
 </script>

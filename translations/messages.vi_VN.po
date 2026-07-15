@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -36494,4 +36494,853 @@ msgstr "Xem chủ đề"
 
 msgid "No auth source"
 msgstr "Không có nguồn xác thực"
+
+msgid "You must add at least one question"
+msgstr "Bạn phải thêm ít nhất một câu hỏi"
+
+msgid "Advanced actions"
+msgstr "Hành động nâng cao"
+
+msgid "Application path"
+msgstr "Đường dẫn ứng dụng"
+
+msgid "Apply files details"
+msgstr "Áp dụng chi tiết tệp"
+
+msgid "Apply plan details"
+msgstr "Áp dụng chi tiết kế hoạch"
+
+msgid "Apply plan failed"
+msgstr "Áp dụng kế hoạch thất bại"
+
+msgid "Apply plan ready"
+msgstr "Áp dụng kế hoạch sẵn sàng"
+
+msgid "Apply preparation"
+msgstr "Áp dụng chuẩn bị"
+
+msgid "Apply staged files"
+msgstr "Áp dụng tệp đã chuẩn bị"
+
+msgid "Applying files..."
+msgstr "Đang áp dụng tệp..."
+
+msgid "Audit file"
+msgstr "Kiểm tra tệp"
+
+msgid "Backup directory"
+msgstr "Thư mục sao lưu"
+
+msgid "Baseline clean"
+msgstr "Baseline sạch"
+
+msgid "Baseline warnings"
+msgstr "Cảnh báo baseline"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Tạo kế hoạch áp dụng an toàn từ gói đã chuẩn bị. Chỉ kiểm tra tệp, quyền, đường dẫn sao lưu và trạng thái khóa. Không thay thế tệp."
+
+msgid "Build production frontend assets."
+msgstr "Xây dựng tài sản giao diện sản xuất."
+
+msgid "Building plan..."
+msgstr "Đang xây dựng kế hoạch..."
+
+msgid "Channel"
+msgstr "Kênh"
+
+msgid "Check"
+msgstr "Kiểm tra"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Kiểm tra cập nhật Chamilo khả dụng, xác minh gói, chuẩn bị tệp và chạy các bước sau cập nhật có kiểm soát."
+
+msgid "Check manifest"
+msgstr "Kiểm tra manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Đang kiểm tra hành động sau áp dụng..."
+
+msgid "Checking..."
+msgstr "Đang kiểm tra..."
+
+msgid "Composer install"
+msgstr "Cài đặt Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Hành động Composer, Yarn và di chuyển cơ sở dữ liệu có thể thay đổi phụ thuộc, tài sản được tạo hoặc cơ sở dữ liệu. Chỉ chọn sau khi xác nhận sao lưu và quyền."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Cấu hình CHAMILO_UPDATE_MANIFEST_URL trên máy chủ hoặc cung cấp URL manifest HTTPS."
+
+msgid "Configured"
+msgstr "Đã cấu hình"
+
+msgid "Current migration"
+msgstr "Di chuyển hiện tại"
+
+msgid "Database baseline"
+msgstr "Baseline cơ sở dữ liệu"
+
+msgid "Database migration safety review"
+msgstr "Đánh giá an toàn di chuyển cơ sở dữ liệu"
+
+msgid "Database migrations"
+msgstr "Di chuyển cơ sở dữ liệu"
+
+msgid "Development mode"
+msgstr "Chế độ phát triển"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Không bật trừ khi sao lưu cập nhật và quyền máy chủ đã được xem xét."
+
+msgid "Doctrine dry-run command"
+msgstr "Lệnh Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine đã báo cáo cảnh báo baseline lịch sử. Trình cập nhật vẫn sẽ chỉ thực thi các migration V210 đã được dàn xếp sau khi có xác nhận rõ ràng."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine sẽ chỉ thực thi các migration V210 đã được dàn xếp sau khi quá trình xem xét an toàn hoàn tất."
+
+msgid "Dry-run exit code"
+msgstr "Mã thoát dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Đã thực thi các migration không khả dụng"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Giải nén gói cập nhật đã xác minh vào thư mục dàn xếp để kiểm tra. Thao tác này không thay thế tệp, chạy migration hay sửa đổi cơ sở dữ liệu."
+
+msgid "File apply available"
+msgstr "Tệp áp dụng khả dụng"
+
+msgid "Files to replace"
+msgstr "Tệp cần thay thế"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Tôi xác nhận đã có bản sao lưu cơ sở dữ liệu và đã được kiểm tra trước khi chạy migration."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Tôi hiểu rằng các hành động nâng cao có thể thay đổi các phụ thuộc, tài nguyên đã tạo hoặc cơ sở dữ liệu."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Tôi hiểu điều này sẽ thay thế các tệp trong cài đặt Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Tôi hiểu điều này sẽ chạy các lệnh cập nhật trên máy chủ."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Cài đặt các phụ thuộc frontend trước khi xây dựng lại tài nguyên."
+
+msgid "Installed version"
+msgstr "Phiên bản đã cài đặt"
+
+msgid "Latest migration"
+msgstr "Migration mới nhất"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Để trống đường dẫn gói và chữ ký để tải chúng từ URL manifest đã xác minh. Đường dẫn cục bộ chỉ khả dụng cho kiểm thử phát triển."
+
+msgid "Live command log"
+msgstr "Nhật ký lệnh trực tiếp"
+
+msgid "Live update log"
+msgstr "Nhật ký cập nhật trực tiếp"
+
+msgid "Local test options"
+msgstr "Tùy chọn kiểm thử cục bộ"
+
+msgid "Local test update notice link"
+msgstr "Liên kết thông báo cập nhật kiểm thử cục bộ"
+
+msgid "Local update notice simulation"
+msgstr "Mô phỏng thông báo cập nhật cục bộ"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Mô phỏng thông báo cập nhật cục bộ chỉ khả dụng ở chế độ phát triển."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Nguồn manifest"
+
+msgid "Migration safety details"
+msgstr "Chi tiết xem xét an toàn migration"
+
+msgid "Migration safety review failed"
+msgstr "Xem xét an toàn migration thất bại"
+
+msgid "Migration safety review ready"
+msgstr "Xem xét an toàn migration sẵn sàng"
+
+msgid "Migration target"
+msgstr "Migration mục tiêu"
+
+msgid "New files"
+msgstr "Tệp mới"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Migration mới được Doctrine báo cáo"
+
+msgid "Next migration"
+msgstr "Migration tiếp theo"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Không có migration không khả dụng nào được báo cáo."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Chưa cấu hình URL manifest chính thức. Sử dụng URL HTTPS hoặc đường dẫn cục bộ cho kiểm thử phát triển."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Không phát hiện migration đang chờ trước mục tiêu cập nhật đã dàn xếp."
+
+msgid "Not configured"
+msgstr "Chưa cấu hình"
+
+msgid "Not detected"
+msgstr "Không phát hiện"
+
+msgid "Official Chamilo update channel"
+msgstr "Kênh cập nhật Chamilo chính thức"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 của gói"
+
+msgid "Package URL"
+msgstr "URL gói"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Các tệp gói và chữ ký sẽ được tải từ manifest. Đường dẫn cục bộ bị vô hiệu hóa trong môi trường này."
+
+msgid "Package path"
+msgstr "Đường dẫn gói"
+
+msgid "Package staged successfully"
+msgstr "Gói đã được dàn xếp thành công"
+
+msgid "Package staging failed"
+msgstr "Dàn xếp gói thất bại"
+
+msgid "Package verification"
+msgstr "Xác minh gói"
+
+msgid "Package verification failed"
+msgstr "Xác minh gói thất bại"
+
+msgid "Package verified successfully"
+msgstr "Gói đã được xác minh thành công"
+
+msgid "Pending migrations before this update"
+msgstr "Migration đang chờ trước bản cập nhật này"
+
+msgid "Planned backup path"
+msgstr "Đường dẫn sao lưu dự kiến"
+
+msgid "Post-apply actions completed"
+msgstr "Hành động sau áp dụng đã hoàn tất"
+
+msgid "Post-apply actions failed"
+msgstr "Hành động sau áp dụng thất bại"
+
+msgid "Post-apply actions ready"
+msgstr "Hành động sau áp dụng đã sẵn sàng"
+
+msgid "Post-apply checks"
+msgstr "Kiểm tra sau áp dụng"
+
+msgid "Post-apply checks failed"
+msgstr "Kiểm tra sau áp dụng thất bại"
+
+msgid "Post-apply details"
+msgstr "Chi tiết sau áp dụng"
+
+msgid "Post-apply run details"
+msgstr "Chi tiết chạy sau áp dụng"
+
+msgid "Preflight checks"
+msgstr "Kiểm tra trước áp dụng"
+
+msgid "Preflight checks completed"
+msgstr "Kiểm tra trước áp dụng hoàn tất"
+
+msgid "Preflight checks failed"
+msgstr "Kiểm tra trước áp dụng thất bại"
+
+msgid "Preflight details"
+msgstr "Chi tiết trước áp dụng"
+
+msgid "Prepare staging"
+msgstr "Chuẩn bị môi trường thử nghiệm"
+
+msgid "Preparing staging..."
+msgstr "Đang chuẩn bị môi trường thử nghiệm..."
+
+msgid "Production mode"
+msgstr "Chế độ sản xuất"
+
+msgid "Released at"
+msgstr "Phát hành lúc"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Thay thế các tệp Chamilo từ gói đã chuẩn bị theo kế hoạch áp dụng đã xem xét. Bước này không chạy di trú cơ sở dữ liệu, Composer, Yarn hay lệnh xóa bộ nhớ đệm."
+
+msgid "Review apply plan"
+msgstr "Xem xét kế hoạch áp dụng"
+
+msgid "Review database migrations"
+msgstr "Xem xét di trú cơ sở dữ liệu"
+
+msgid "Review post-apply actions"
+msgstr "Xem xét hành động sau áp dụng"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Xem xét các lệnh thủ công được khuyến nghị sau khi áp dụng tệp cập nhật. Bước này không chạy Composer, Yarn, di trú hay lệnh xóa bộ nhớ đệm."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Xem xét di trú Doctrine đã chuẩn bị và kết quả chạy thử trước khi thực hiện di trú cơ sở dữ liệu."
+
+msgid "Reviewing database migrations..."
+msgstr "Đang xem xét di trú cơ sở dữ liệu..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Chạy và vượt qua đánh giá an toàn di trú trước khi thực hiện di trú cơ sở dữ liệu."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Chạy kiểm tra môi trường trước bất kỳ bước áp dụng cập nhật nào. Bước này không sửa đổi tệp hay cơ sở dữ liệu."
+
+msgid "Run post-apply actions"
+msgstr "Chạy hành động sau áp dụng"
+
+msgid "Run preflight checks"
+msgstr "Chạy kiểm tra trước áp dụng"
+
+msgid "Run selected post-apply actions"
+msgstr "Chạy các hành động sau áp dụng đã chọn"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Chạy các lệnh sau áp dụng đã chọn từ máy chủ bằng danh sách cho phép được kiểm soát. Không chấp nhận lệnh shell tùy chỉnh."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Chạy các lệnh này thủ công từ máy chủ sau khi xác nhận kết quả cập nhật tệp và sao lưu."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Chạy hành động sau áp dụng từ giao diện người dùng bị vô hiệu hóa ở chế độ sản xuất."
+
+msgid "Running post-apply actions..."
+msgstr "Đang chạy hành động sau áp dụng..."
+
+msgid "Safe actions"
+msgstr "Hành động an toàn"
+
+msgid "Signature path"
+msgstr "Đường dẫn chữ ký"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Không thể bỏ qua xác minh chữ ký trong môi trường này."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Bỏ qua xác minh chữ ký cho kiểm thử phát triển cục bộ"
+
+msgid "Staged file application failed"
+msgstr "Áp dụng tệp đã chuẩn bị thất bại"
+
+msgid "Staged files applied successfully"
+msgstr "Áp dụng tệp đã chuẩn bị thành công"
+
+msgid "Staging details"
+msgstr "Chi tiết môi trường thử nghiệm"
+
+msgid "Staging directory"
+msgstr "Thư mục môi trường thử nghiệm"
+
+msgid "Staging extraction"
+msgstr "Giải nén môi trường thử nghiệm"
+
+msgid "Symfony cache clear"
+msgstr "Xóa bộ nhớ đệm Symfony"
+
+msgid "System update"
+msgstr "Cập nhật hệ thống"
+
+msgid "Target version"
+msgstr "Phiên bản đích"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL manifest chính thức đã cấu hình được điền sẵn. Bạn có thể thay đổi sang manifest HTTPS khác nếu cần."
+
+msgid "The database migration baseline is clean."
+msgstr "Đường cơ sở di trú cơ sở dữ liệu đã sạch."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Phản hồi HTTP cuối cùng thất bại sau khi thao tác hoàn tất. Điều này thường do quyền bộ nhớ đệm runtime hoặc máy chủ web khởi động lại trong quá trình yêu cầu."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Nhật ký thao tác báo cáo rằng các hành động sau áp dụng đã hoàn tất thành công."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Các lệnh sau áp dụng đã chọn đã hoàn tất thành công, nhưng phản hồi HTTP cuối cùng thất bại. Làm mới trang và kiểm tra quyền bộ nhớ đệm runtime nếu trang không tải đúng."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Công cụ cập nhật không tạo hay khôi phục bản sao lưu cơ sở dữ liệu."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Các hành động này an toàn để chạy từ giao diện người dùng sau khi xem xét kết quả cập nhật."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Các lệnh này có thể sửa đổi phụ thuộc, tài sản được tạo, bộ nhớ đệm hoặc cơ sở dữ liệu. Xác nhận sao lưu trước khi tiếp tục."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Hành động này sửa đổi tệp trong cài đặt Chamilo. Đảm bảo kế hoạch áp dụng đã được xem xét và sao lưu được bật trước khi tiếp tục."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Mục nhập phát triển này mô phỏng thông báo cập nhật Chamilo.org trong tương lai bằng cách sử dụng các đường dẫn gói thử nghiệm cục bộ."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Màn hình này được mở từ thông báo cập nhật chính thức, nhưng chưa có nguồn manifest chính thức nào được cấu hình."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Màn hình này được mở từ thông báo cập nhật. Chỉ kiểm tra manifest được bắt đầu tự động."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Bước này chỉ chuẩn bị để xem xét. Việc thay thế tệp diễn ra sau trong bước Áp dụng tệp đã chuẩn bị, với khóa, sao lưu và bảo vệ khôi phục."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Trình cập nhật này không tạo bản sao lưu cơ sở dữ liệu. Hãy tạo và xác minh bản sao lưu trước khi chạy di chuyển."
+
+msgid "Trusted public key"
+msgstr "Khóa công khai đáng tin cậy"
+
+msgid "Trusted signing key"
+msgstr "Khóa ký đáng tin cậy"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Nhập APPLY UPDATE FILES để xác nhận"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Nhập RUN DATABASE MIGRATIONS để xác nhận di chuyển cơ sở dữ liệu"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Nhập RUN POST UPDATE ACTIONS để xác nhận"
+
+msgid "Unknown update notice source."
+msgstr "Nguồn thông báo cập nhật không xác định."
+
+msgid "Update availability"
+msgstr "Khả dụng cập nhật"
+
+msgid "Update directory"
+msgstr "Thư mục cập nhật"
+
+msgid "Update lock path"
+msgstr "Đường dẫn khóa cập nhật"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Sử dụng thư mục staging được tạo bởi bước trước. Backend chỉ chấp nhận các thư mục bên trong var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Sử dụng liên kết này để mô phỏng thông báo cập nhật Chamilo.org trong tương lai trong quá trình kiểm thử phát triển."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Chỉ sử dụng cho kiểm thử phát triển cục bộ. Các cập nhật production phải sử dụng khóa được cấu hình trên máy chủ."
+
+msgid "Verification details"
+msgstr "Chi tiết xác minh"
+
+msgid "Verify package"
+msgstr "Xác minh gói"
+
+msgid "Verifying..."
+msgstr "Đang xác minh..."
+
+msgid "Waiting for command progress events..."
+msgstr "Đang chờ sự kiện tiến trình lệnh..."
+
+msgid "Waiting for update progress events..."
+msgstr "Đang chờ sự kiện tiến trình cập nhật..."
+
+msgid "Yarn build"
+msgstr "Xây dựng Yarn"
+
+msgid "Yarn install"
+msgstr "Cài đặt Yarn"
+
+msgid "A comment is required"
+msgstr "Yêu cầu một nhận xét"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Một cơ sở dữ liệu cùng tên đã tồn tại. Nếu nó chứa bảng, chúng sẽ bị xóa; nếu trống, nó sẽ được tái sử dụng."
+
+msgid "AI generated"
+msgstr "Được tạo bởi AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Thêm ít nhất một câu hỏi trước khi quay lại lộ trình học tập."
+
+msgid "Add attachments"
+msgstr "Thêm tệp đính kèm"
+
+msgid "Additional fields"
+msgstr "Trường bổ sung"
+
+msgid "Allow comments"
+msgstr "Cho phép nhận xét"
+
+msgid "Allow new pages"
+msgstr "Cho phép trang mới"
+
+msgid "Allow ratings"
+msgstr "Cho phép đánh giá"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Bạn có chắc chắn muốn xóa tất cả các mục không?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Bạn có chắc chắn muốn khôi phục gia hạn tự động không?"
+
+msgid "Attachment has been deleted"
+msgstr "Tệp đính kèm đã bị xóa"
+
+msgid "Backup file"
+msgstr "Tệp sao lưu"
+
+msgid "Block comments"
+msgstr "Chặn nhận xét"
+
+msgid "Block new pages"
+msgstr "Chặn trang mới"
+
+msgid "Block ratings"
+msgstr "Chặn đánh giá"
+
+msgid "Cancel renewal"
+msgstr "Hủy gia hạn"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Liên kết danh mục sẽ bị xóa khỏi %s trang Wiki."
+
+msgid "Change"
+msgstr "Thay đổi"
+
+msgid "Clear group"
+msgstr "Xóa nhóm"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Nhấp vào một thẻ để chèn nó vào trình soạn thảo. Các placeholder này sẽ được thay thế khi tạo chứng chỉ."
+
+msgid "Comment added"
+msgstr "Đã thêm nhận xét"
+
+msgid "Comment is required"
+msgstr "Yêu cầu nhận xét"
+
+msgid "Comment score"
+msgstr "Điểm nhận xét"
+
+msgid "Compare selected versions line by line"
+msgstr "So sánh các phiên bản đã chọn theo từng dòng"
+
+msgid "Compare selected versions word by word"
+msgstr "So sánh các phiên bản đã chọn theo từng từ"
+
+msgid "Compare versions"
+msgstr "So sánh các phiên bản"
+
+msgid "Copy completed"
+msgstr "Sao chép hoàn tất"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Tạo trang Wiki cá nhân cho người học"
+
+msgid "Current view mode"
+msgstr "Chế độ xem hiện tại"
+
+msgid "Delete Wiki"
+msgstr "Xóa Wiki"
+
+msgid "Delete page"
+msgstr "Xóa trang"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Không nên xóa trang chủ Wiki. Bạn có thể tạo lại sau."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Vô hiệu hóa Wiki sẽ chặn các trang và hành động Wiki thông thường. Trang cài đặt này vẫn khả dụng cho giáo viên khóa học."
+
+msgid "Discussion"
+msgstr "Thảo luận"
+
+msgid "Edit Comment"
+msgstr "Chỉnh sửa nhận xét"
+
+msgid "Edit page"
+msgstr "Chỉnh sửa trang"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Ngày kết thúc phải sau hoặc bằng ngày hết hạn"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Nhập từ khóa tìm kiếm để tìm trang Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Ngày hết hạn phải trước hoặc bằng ngày kết thúc"
+
+msgid "Failed email recipients"
+msgstr "Người nhận email thất bại"
+
+msgid "Finish and return to learning path"
+msgstr "Hoàn tất và quay lại lộ trình học tập"
+
+msgid "Forum image"
+msgstr "Hình ảnh diễn đàn"
+
+msgid "Hide discussion"
+msgstr "Ẩn thảo luận"
+
+msgid "Hide page"
+msgstr "Ẩn trang"
+
+msgid "I changed my mind"
+msgstr "Tôi đã thay đổi ý định"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Nếu không chọn, các tệp này vẫn khả dụng cho quản trị viên nền tảng qua công cụ 'Thông tin tệp'."
+
+msgid "Internal message failures"
+msgstr "Lỗi tin nhắn nội bộ"
+
+msgid "Internal messages available"
+msgstr "Tin nhắn nội bộ khả dụng"
+
+msgid "Internal messages created now"
+msgstr "Tin nhắn nội bộ được tạo ngay bây giờ"
+
+msgid "Item score"
+msgstr "Điểm mục"
+
+msgid "Last post"
+msgstr "Bài đăng cuối cùng"
+
+msgid "Lock page"
+msgstr "Khóa trang"
+
+msgid "Manage categories"
+msgstr "Quản lý danh mục"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Đánh dấu tài liệu này là hỗ trợ AI. Sử dụng khi nội dung được tạo hoặc sửa đổi đáng kể bằng công cụ AI."
+
+msgid "Maximum score is required"
+msgstr "Điểm tối đa là bắt buộc"
+
+msgid "Metric"
+msgstr "Chỉ số"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Bình luận mới bị chặn trong thảo luận này"
+
+msgid "No Wiki categories are available yet."
+msgstr "Chưa có danh mục Wiki nào."
+
+msgid "No categories found"
+msgstr "Không tìm thấy danh mục"
+
+msgid "No content"
+msgstr "Không có nội dung"
+
+msgid "No parent category"
+msgstr "Không có danh mục cha"
+
+msgid "Number of comments scored"
+msgstr "Số lượng nhận xét được chấm điểm"
+
+msgid "Old version"
+msgstr "Phiên bản cũ"
+
+msgid "Only image files are allowed."
+msgstr "Chỉ cho phép tệp hình ảnh."
+
+msgid "Please fill all required fields"
+msgstr "Vui lòng điền đầy đủ các trường bắt buộc"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Các câu hỏi có chỗ trống cho lớp hoặc sinh viên sẽ được tạo cho các lớp hoặc nhóm khóa học: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Đánh giá bị chặn trong thảo luận này"
+
+msgid "Remove image"
+msgstr "Xóa hình ảnh"
+
+msgid "Restore renewal"
+msgstr "Khôi phục gia hạn"
+
+msgid "Restore version"
+msgstr "Khôi phục phiên bản"
+
+msgid "Search in"
+msgstr "Tìm kiếm trong"
+
+msgid "Select group"
+msgstr "Chọn nhóm"
+
+msgid "Select image"
+msgstr "Chọn hình ảnh"
+
+msgid "Selected image"
+msgstr "Hình ảnh đã chọn"
+
+msgid "Show discussion"
+msgstr "Hiển thị thảo luận"
+
+msgid "Show page"
+msgstr "Hiển thị trang"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Một số tệp hoặc thư mục không có quyền ghi. Để cài đặt Chamilo, trước tiên bạn cần thay đổi quyền của chúng (sử dụng CHMOD). Vui lòng đọc"
+
+msgid "Subcategories"
+msgstr "Danh mục con"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Nhấn bên trái hoặc bên phải để điều hướng"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Hạn nộp bài tập Wiki đã qua, nhưng vẫn cho phép nộp muộn."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Hạn nộp bài tập Wiki đã qua."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Bài tập Wiki chưa bắt đầu."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Yêu cầu khóa chỉnh sửa trang Wiki trước khi lưu."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Thông báo đã được lưu, nhưng không thể tải lên tệp đính kèm."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Thông báo đã được lưu, nhưng gửi email thất bại."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Thông báo đã được lưu, nhưng không thể gửi email."
+
+msgid "The category has been created"
+msgstr "Danh mục đã được tạo"
+
+msgid "The category has been deleted"
+msgstr "Danh mục đã bị xóa"
+
+msgid "The category has been updated"
+msgstr "Danh mục đã được cập nhật"
+
+msgid "The end date is invalid"
+msgstr "Ngày kết thúc không hợp lệ"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Số phiên bản tối đa phải là số nguyên không âm"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Số từ tối đa phải là số nguyên không âm"
+
+msgid "The print window could not be opened"
+msgstr "Không thể mở cửa sổ in"
+
+msgid "The start date is invalid"
+msgstr "Ngày bắt đầu không hợp lệ"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Các thiết lập này áp dụng cho toàn bộ khóa học, bao gồm các phiên và nhóm của nó."
+
+msgid "This announcement has already been sent by email."
+msgstr "Thông báo này đã được gửi qua email."
+
+msgid "This discussion is hidden from learners"
+msgstr "Cuộc thảo luận này bị ẩn với người học"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Công cụ AI tạo sinh này cho phép bạn tạo hình ảnh và video ngắn để minh họa khóa học. Bằng cách giải thích (bằng văn bản) những gì bạn muốn trong phần nhắc lệnh, bạn sẽ cung cấp cho mô hình AI đã cấu hình các yếu tố cần thiết để tạo hình ảnh hoặc video. Vui lòng kiên nhẫn. Mô hình AI sẽ mất một chút thời gian và tạo ra một số kết quả, mà bạn có thể muốn giữ lại bằng cách lưu phương tiện vào thư mục tài liệu của mình, sau đó nhúng vào tài liệu HTML. Không phải tất cả mô hình AI đều ngang nhau về tốc độ hoặc chất lượng. Mô hình AI cũng có thể cung cấp cho bạn một nhắc lệnh đã chỉnh sửa, là cách diễn giải chi tiết hơn yêu cầu của bạn. Sau đó, bạn có thể sử dụng nhắc lệnh đã chỉnh sửa này để tinh chỉnh yêu cầu của mình. Xin lưu ý rằng công cụ này, đặc biệt đối với video, có thể tạo ra chi phí đáng kể cho tổ chức của bạn, ngay cả khi bạn quyết định không lưu phương tiện đã tạo. Vui lòng sử dụng nó một cách phù hợp. Nếu bạn gặp vấn đề khi đạt được những gì bạn đang tìm kiếm, vui lòng dành thời gian để nghiên cứu các mẹo nhắc lệnh trực tuyến cho mô hình AI mà bạn có."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Lịch sử này thuộc về khóa học cơ sở. Khôi phục có sẵn sau khi tạo phiên bản cho phiên."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Hình ảnh này thay thế biểu tượng diễn đàn mặc định hiển thị bên cạnh tiêu đề diễn đàn."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Trang này đến từ khóa học cơ sở. Lưu nó sẽ tạo phiên bản cho phiên hiện tại."
+
+msgid "This will also delete %s subcategories."
+msgstr "Thao tác này cũng sẽ xóa %s danh mục con."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Thao tác này sẽ tạo trang bài tập cá nhân cho %s người học."
+
+msgid "Thread history"
+msgstr "Lịch sử chủ đề"
+
+msgid "Title and content"
+msgstr "Tiêu đề và nội dung"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Không thể hủy quyền gia hạn ngay bây giờ."
+
+msgid "Unable to restore renewal right now."
+msgstr "Không thể khôi phục quyền gia hạn ngay bây giờ."
+
+msgid "Unlock page"
+msgstr "Mở khóa trang"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Sử dụng [[Trang]] hoặc [[Trang|Văn bản hiển thị]] để tạo liên kết Wiki nội bộ."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Sử dụng phím cách hoặc phím mũi tên để điều hướng"
+
+msgid "View version"
+msgstr "Xem phiên bản"
+
+msgid "Visible only to teachers"
+msgstr "Chỉ hiển thị cho giáo viên"
+
+msgid "Weight is required"
+msgstr "Trọng số là bắt buộc"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Danh mục Wiki bị vô hiệu hóa cho khóa học này."
+
+msgid "Wiki categories enabled"
+msgstr "Danh mục Wiki đã được kích hoạt"
+
+msgid "Wiki html strict filtering"
+msgstr "Lọc nghiêm ngặt HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Cài đặt Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Cài đặt Wiki đã được cập nhật"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Bạn đang xem phiên bản lịch sử của trang này"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Bạn có thể đính kèm một hoặc nhiều tệp vào phản hồi này."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Bạn có thể chỉnh sửa trang bài tập này, nhưng các trang bài tập của người học sẽ không bị thay đổi."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Bạn có thể sử dụng các thẻ {{class_name}} và {{student_full_name}} trong câu hỏi."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Bạn có 20 phút để chỉnh sửa trang này trước khi khóa chỉnh sửa hết hạn."
+
+msgid "by"
+msgstr "bởi"
+
+msgid "required"
+msgstr "bắt buộc"
 

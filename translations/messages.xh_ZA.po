@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:akukho copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Ifolda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:umsebenzi,,      simulation:ukwenza okufana,,      questionnaire:ufuzo,,      diagram:umzobo,,      figure:umfanekiso,,      graph:grafu,,      index:isazisi,,      slide:isilayidi,,      table:thebhule,,      narrative text:umbhalo obalasele,,      exam:oviwo,,      experiment:uphando,,      problem statement:ingxelo yengxaki,,      self assessment:ukuzivavanya,,      lecture:intetho"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifom yomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -8731,7 +8731,7 @@ msgid "Invoice"
 msgstr "Invoice"
 
 msgid "Request invoice"
-msgstr "Request invoice"
+msgstr "Cela i-invoice"
 
 msgid "View my progress"
 msgstr "Jonga inkqubela yam"
@@ -34816,16 +34816,16 @@ msgid "Corporate learning analytics report."
 msgstr "Ingxelo yohlalutyo lokufunda lwekorporasi."
 
 msgid "Course learners tracking report."
-msgstr "Course learners tracking report."
+msgstr "Ingxelo yokulandelela abafundi bekhosi."
 
 msgid "Course activity statistics with connected and inactive users."
-msgstr "Course activity statistics with connected and inactive users."
+msgstr "Izibalo zomsebenzi wekhosi kunye nabasebenzisi abaqhagamshelweyo nabangasebenziyo."
 
 msgid "Detailed tracking report for a learner inside a course."
-msgstr "Detailed tracking report for a learner inside a course."
+msgstr "Ingxelo yokulandelela eneenkcukacha yomfundi ngaphakathi kwikhosi."
 
 msgid "Course gradebook overview."
-msgstr "Course gradebook overview."
+msgstr "Isishwankathelo se-gradebook yekhosi."
 
 msgid "Gradebook statistics"
 msgstr "Iinkcukacha zeGradebook"
@@ -35488,7 +35488,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifom yomsebenzi : balela iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku leWikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifom yomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -35737,13 +35737,13 @@ msgid "This survey already has answers. Question editing is disabled by configur
 msgstr "Olu phando sele luneempendulo. Ukuhlela umbuzo kucinyiwe ngokwemimiselo."
 
 msgid "Choose the type of question you want to add."
-msgstr ""
+msgstr "Khetha uhlobo lombuzo ofuna ukuwufaka."
 
 msgid "The free text option is added automatically."
-msgstr ""
+msgstr "The free text option is added automatically."
 
 msgid "No questions found"
-msgstr ""
+msgstr "No questions found"
 
 msgid "Mandatory"
 msgstr "Kunyanzeliswe"
@@ -36346,146 +36346,995 @@ msgid "Forum created"
 msgstr "Ifowamu yenziwe"
 
 msgid "Could not save forum"
-msgstr ""
+msgstr "Could not save forum"
 
 msgid "Are you sure you want to delete this forum category?"
-msgstr ""
+msgstr "Are you sure you want to delete this forum category?"
 
 msgid "Could not delete forum category"
-msgstr ""
+msgstr "Could not delete forum category"
 
 msgid "Are you sure you want to delete this forum?"
-msgstr ""
+msgstr "Are you sure you want to delete this forum?"
 
 msgid "Could not delete forum"
-msgstr ""
+msgstr "Ayikwazanga kucima iforamu"
 
 msgid "Forum category unlocked"
-msgstr ""
+msgstr "Udidi lweforamu luvuliwe"
 
 msgid "Forum category locked"
-msgstr ""
+msgstr "Udidi lweforamu lutshixiwe"
 
 msgid "Could not update forum category"
-msgstr ""
+msgstr "Ayikwazanga kuhlaziya udidi lweforamu"
 
 msgid "Forum category shown"
-msgstr ""
+msgstr "Udidi lweforamu lubonisiwe"
 
 msgid "Forum category hidden"
-msgstr ""
+msgstr "Udidi lweforamu lufihliwe"
 
 msgid "Forum unlocked"
-msgstr ""
+msgstr "Ifarumu ivuliwe"
 
 msgid "Forum locked"
-msgstr ""
+msgstr "Ifarumu itshixiwe"
 
 msgid "Could not update forum"
-msgstr ""
+msgstr "Ayikwazanga kuhlaziya iforamu"
 
 msgid "Forum shown"
-msgstr ""
+msgstr "Ifarumu ibonisiwe"
 
 msgid "Forum hidden"
-msgstr ""
+msgstr "Ifarumu ifihliwe"
 
 msgid "Forum notifications enabled"
-msgstr ""
+msgstr "Izaziso zeforamu zivuliwe"
 
 msgid "Forum notifications disabled"
-msgstr ""
+msgstr "Izaziso zeforamu zivaliwe"
 
 msgid "Could not update forum notification"
-msgstr ""
+msgstr "Ayikwazanga kuhlaziya isaziso seforamu"
 
 msgid "Forum category moved"
-msgstr ""
+msgstr "Udidi lweforamu lufudusiwe"
 
 msgid "Could not move forum category"
-msgstr ""
+msgstr "Ayikwazanga kufudusa udidi lweforamu"
 
 msgid "Forum moved"
-msgstr ""
+msgstr "Ifarumu ifudusiwe"
 
 msgid "Could not move forum"
-msgstr ""
+msgstr "Ayikwazanga kufudusa iforamu"
 
 msgid "Back to forums"
-msgstr ""
+msgstr "Buyela kwiiforamu"
 
 msgid "New thread"
-msgstr ""
+msgstr "Intambo entsha"
 
 msgid "No threads found"
-msgstr ""
+msgstr "Akukho zintambo zifunyenweyo"
 
 msgid "Sticky"
-msgstr ""
+msgstr "Inamathele"
 
 msgid "Graded"
-msgstr ""
+msgstr "Kuhlawulwe"
 
 msgid "Grade peers"
-msgstr ""
+msgstr "Hlawula oontanga"
 
 msgid "Move thread"
-msgstr ""
+msgstr "Fudusa intambo"
 
 msgid "Target forum"
-msgstr ""
+msgstr "Iforamu ekujoliswe kuyo"
 
 msgid "Target forum is required"
-msgstr ""
+msgstr "Iforamu ekujoliswe kuyo iyafuneka"
 
 msgid "Students"
-msgstr ""
+msgstr "Abafundi"
 
 msgid "No students found"
-msgstr ""
+msgstr "Akukho bafundi bafunyenweyo"
 
 msgid "No peers available to grade."
-msgstr ""
+msgstr "Akukho bantanga bafumanekayo ukuba bahlawule."
 
 msgid "Qualified"
-msgstr ""
+msgstr "Uqeqeshiwe"
 
 msgid "Not qualified"
-msgstr ""
+msgstr "Akafundiswanga"
 
 msgid "Could not retrieve thread grading"
-msgstr ""
+msgstr "Ayikwazanga kufumana ukuhlawulwa kwentambo"
 
 msgid "Thread grading updated"
-msgstr ""
+msgstr "Ukuhlawulwa kwentambo kuhlaziyiwe"
 
 msgid "Could not update thread grading"
-msgstr ""
+msgstr "Ayikwazanga kuhlaziya ukuhlawulwa kwentambo"
 
 msgid "Thread score saved"
-msgstr ""
+msgstr "Inqaku lentambo ligciniwe"
 
 msgid "Could not save thread score"
-msgstr ""
+msgstr "Ayikwazanga kugcina inqaku lentambo"
 
 msgid "Could not move thread"
-msgstr ""
+msgstr "Ayikwazanga kufudusa intambo"
 
 msgid "Thread updated"
-msgstr ""
+msgstr "Intambo ihlaziyiwe"
 
 msgid "Search term is too short"
-msgstr ""
+msgstr "Igama lokukhangela lifutshane kakhulu"
 
 msgid "Could not search forums"
-msgstr ""
+msgstr "Ayikwazanga kufuna iiforamu"
 
 msgid "Moderated"
-msgstr ""
+msgstr "Ilawulwa"
 
 msgid "View threads"
-msgstr ""
+msgstr "Jonga iintambo"
 
 msgid "No auth source"
 msgstr "Akukho mthombo wokuqinisekisa"
+
+msgid "You must add at least one question"
+msgstr "Kufuneka wongeze ubuncinane umbuzo omnye"
+
+msgid "Advanced actions"
+msgstr "Izenzo eziphambili"
+
+msgid "Application path"
+msgstr "Indlela yokufaka"
+
+msgid "Apply files details"
+msgstr "Faka iinkcukacha zeefayili"
+
+msgid "Apply plan details"
+msgstr "Faka iinkcukacha zeplani"
+
+msgid "Apply plan failed"
+msgstr "Ukufaka iplani kusilele"
+
+msgid "Apply plan ready"
+msgstr "Ukufaka iplani kulungile"
+
+msgid "Apply preparation"
+msgstr "Faka isicelo sokulungiselela"
+
+msgid "Apply staged files"
+msgstr "Faka iifayili ezilungiselelweyo"
+
+msgid "Applying files..."
+msgstr "Kufakwa iifayili..."
+
+msgid "Audit file"
+msgstr "Faka isicelo sefayili"
+
+msgid "Backup directory"
+msgstr "Uvimba weefayili"
+
+msgid "Baseline clean"
+msgstr "Isiseko esicocekileyo"
+
+msgid "Baseline warnings"
+msgstr "Izilumkiso zesisiseko"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Yakha isicwangciso sokufaka esikhuselekileyo kwipakethe elungiselelweyo. Oku kujonga kuphela iifayili, iimvume, indlela yokugcina kunye nesimo sokutshixa. Ayitshintshi iifayili."
+
+msgid "Build production frontend assets."
+msgstr "Yakha ii-asethi zangaphambili zokuvelisa."
+
+msgid "Building plan..."
+msgstr "Kuyakhiwa isicwangciso..."
+
+msgid "Channel"
+msgstr "Ijelo"
+
+msgid "Check"
+msgstr "Jonga"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Jonga iinguqulelo ezikhoyo zeChamilo, qinisekisa iipakethe, lungiselela iifayili kwaye uqhube amanyathelo okulandela uhlaziyo olulawulwayo."
+
+msgid "Check manifest"
+msgstr "Jonga i-manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Kujongwa izenzo zokulandela ukufaka..."
+
+msgid "Checking..."
+msgstr "Kuyajongwa..."
+
+msgid "Composer install"
+msgstr "Ukuhlohla kweComposer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Izenzo zeComposer, Yarn kunye nokufuduswa kwedatha zinokutshintsha iimfuno, ii-asethi ezivelisiweyo okanye idatha. Zikhethe kuphela emva kokuqinisekisa iikopi zogcino kunye neemvume."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Misela i-CHAMILO_UPDATE_MANIFEST_URL kwiseva okanye nikezela nge-URL ye-manifest ye-HTTPS."
+
+msgid "Configured"
+msgstr "Imiselwe"
+
+msgid "Current migration"
+msgstr "Ukufuduswa kwangoku"
+
+msgid "Database baseline"
+msgstr "Isiseko sedatha"
+
+msgid "Database migration safety review"
+msgstr "Uhlolisiso lokhuseleko lokufuduswa kwedatha"
+
+msgid "Database migrations"
+msgstr "Ukufuduswa kwedatha"
+
+msgid "Development mode"
+msgstr "Imo yophuhliso"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Musa ukuyenza isebenze ngaphandle kokuba ukugcinwa kohlaziyo kunye neemvume zeseva ziye zahlolisiswa."
+
+msgid "Doctrine dry-run command"
+msgstr "Umyalelo we-Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "I-Doctrine ibike izilumkiso zesisiseko esingaphambili. Umhlaziyi uya kuqhuba kuphela ukufuduswa kwe-V210 okulungiselelweyo emva kokuqinisekiswa ngokucacileyo."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "I-Doctrine iya kuqhuba kuphela ukufuduswa kwe-V210 okulungiselelweyo ngokucacileyo emva kokuba uhlolisiso lokhuseleko luphumelele."
+
+msgid "Dry-run exit code"
+msgstr "Ikhowudi yokuphuma kwe-dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Kwenziwe ukufuduswa okungafumanekiyo"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Khupha ipakethe yohlaziyo eqinisekisiweyo kwisikhombisi sokulungiselela ukuze ihlolisiswe. Oku akutshintshi iifayili, aqhube ukufuduswa, okanye aguqule idatha."
+
+msgid "File apply available"
+msgstr "Ukufaka kwefayili kuyafumaneka"
+
+msgid "Files to replace"
+msgstr "Iifayili eziza kutshintshwa"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Ndiyaqinisekisa ukuba ikopi yedatha ikhona kwaye yaqinisekiswa ngaphambi kokuba kuqhutywe ukufuduswa."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Ndiyaqonda ukuba izenzo eziphambili zinokutshintsha iimfuno, ii-asethi ezivelisiweyo okanye idatha."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Ndiyaqonda ukuba oku kuza kutshintsha iifayili kufakelo lweChamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Ndiyaqonda ukuba oku kuza kuqhuba imiyalelo yohlaziyo kwiseva."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Faka iimfuno zangaphambili ngaphambi kokuba wakhe ii-asethi kwakhona."
+
+msgid "Installed version"
+msgstr "Inguqulelo efakelweyo"
+
+msgid "Latest migration"
+msgstr "Ukufuduswa kwamva"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Shiya iindlela zepakethe kunye nesignali zingenanto ukuze uzikhuphele kwii-URL ze-manifest eziqinisekisiweyo. Iindlela zalapha zifumaneka kuphela kwiimvavanyo zophuhliso."
+
+msgid "Live command log"
+msgstr "Ingxelo yomyalelo ophilayo"
+
+msgid "Live update log"
+msgstr "Ingxelo yohlaziyo oluphilayo"
+
+msgid "Local test options"
+msgstr "Iinketho zovavanyo lwasekhaya"
+
+msgid "Local test update notice link"
+msgstr "Ikhonkco lesaziso sohlaziyo lwasekhaya"
+
+msgid "Local update notice simulation"
+msgstr "Ukulinganisa isaziso sohlaziyo lwasekhaya"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Ukulinganisa isaziso sohlaziyo lwasekhaya kufumaneka kuphela kwimo yophuhliso."
+
+msgid "Manifest"
+msgstr "I-manifest"
+
+msgid "Manifest source"
+msgstr "Imvelaphi ye-manifest"
+
+msgid "Migration safety details"
+msgstr "Iinkcukacha zokhuseleko lokufuduka"
+
+msgid "Migration safety review failed"
+msgstr "Uhlolo lokhuseleko lokufuduka aluphumelelanga"
+
+msgid "Migration safety review ready"
+msgstr "Uhlolo lokhuseleko lokufuduka lulungile"
+
+msgid "Migration target"
+msgstr "Indawo ekujoliswe kuyo yokufuduka"
+
+msgid "New files"
+msgstr "Iifayili ezintsha"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Iifuduko ezintsha ezichazwe yi-Doctrine"
+
+msgid "Next migration"
+msgstr "Ifuduko elilandelayo"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Akukho fuduko elingafumanekiyo elenziweyo elichaziweyo."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Akukho URL yomboniso esemthethweni ekuqwalaselweyo okwangoku. Sebenzisa i-URL ye-HTTPS okanye indlela yendawo yokuvavanya."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Akukho fuduko elilindelekileyo elifunyenweyo phambi kwendawo ekujoliswe kuyo yohlaziyo."
+
+msgid "Not configured"
+msgstr "Ayimiselwanga"
+
+msgid "Not detected"
+msgstr "Ayifunyenwanga"
+
+msgid "Official Chamilo update channel"
+msgstr "Isiteshi sohlaziyo esisemthethweni se-Chamilo"
+
+msgid "Package SHA-256"
+msgstr "I-Package SHA-256"
+
+msgid "Package URL"
+msgstr "I-Package URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Iifayili zepakethe kunye nesignali ziya kukhutshelwa kumfanekiso. Iindlela zendawo zivaliwe kule meko."
+
+msgid "Package path"
+msgstr "Indlela yephakethe"
+
+msgid "Package staged successfully"
+msgstr "Iphakethe lifakwe ngempumelelo"
+
+msgid "Package staging failed"
+msgstr "Ukufakwa kwephakethe kuhlulekile"
+
+msgid "Package verification"
+msgstr "Ukuqinisekiswa kwephakethe"
+
+msgid "Package verification failed"
+msgstr "Ukuqinisekiswa kwephakethe kuhlulekile"
+
+msgid "Package verified successfully"
+msgstr "Iphakethe liqinisekiswe ngempumelelo"
+
+msgid "Pending migrations before this update"
+msgstr "Iifuduko ezilindelekileyo phambi kolu hlaziyo"
+
+msgid "Planned backup path"
+msgstr "Indlela yogcino olucwangcisiweyo"
+
+msgid "Post-apply actions completed"
+msgstr "Izenzo zasemva kokufaka zigqityiwe"
+
+msgid "Post-apply actions failed"
+msgstr "Izenzo zasemva kokufaka zihlulekile"
+
+msgid "Post-apply actions ready"
+msgstr "Izenzo zasemva kokufaka zilungile"
+
+msgid "Post-apply checks"
+msgstr "Iitsheki zasemva kokufaka"
+
+msgid "Post-apply checks failed"
+msgstr "Iitsheki zasemva kokufaka zihlulekile"
+
+msgid "Post-apply details"
+msgstr "Iinkcukacha zasemva kokufaka"
+
+msgid "Post-apply run details"
+msgstr "Iinkcukacha zokusebenza kwasemva kokufaka"
+
+msgid "Preflight checks"
+msgstr "Iitsheki zangaphambi kokufaka"
+
+msgid "Preflight checks completed"
+msgstr "Iitsheki zangaphambi kokufaka zigqityiwe"
+
+msgid "Preflight checks failed"
+msgstr "Iitsheki zangaphambi kokufaka zihlulekile"
+
+msgid "Preflight details"
+msgstr "Iinkcukacha zangaphambi kokufaka"
+
+msgid "Prepare staging"
+msgstr "Lungiselela ukufaka"
+
+msgid "Preparing staging..."
+msgstr "Kulungiselelwa ukufaka..."
+
+msgid "Production mode"
+msgstr "Imo yemveliso"
+
+msgid "Released at"
+msgstr "Ikhutshwe ngo"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Faka iifayili ze-Chamilo ezivela kwiphakethe elifakiweyo usebenzisa isicwangciso sokufaka esihloliweyo. Oku akusebenzi iifuduko zedatha, i-Composer, i-Yarn okanye imiyalelo yecache."
+
+msgid "Review apply plan"
+msgstr "Hlola isicwangciso sokufaka"
+
+msgid "Review database migrations"
+msgstr "Hlola iifuduko zedatha"
+
+msgid "Review post-apply actions"
+msgstr "Hlola izenzo zasemva kokufaka"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Hlola imiyalelo yezandla ezicetyiswayo emva kokufaka iifayili zohlaziyo. Eli nyathelo alisebenzi i-Composer, i-Yarn, iifuduko okanye imiyalelo yecache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Hlola iifuduko ze-Doctrine ezifakiweyo kunye nesiphumo sokuvavanya ngaphambi kokusebenza kweefuduko zedatha."
+
+msgid "Reviewing database migrations..."
+msgstr "Kuhlolwa iifuduko zedatha..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Sebenzisa kwaye uphumelele uhlolo lokhuseleko lokufuduka ngaphambi kokusebenza kweefuduko zedatha."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Sebenzisa iitsheki zemo ngaphambi kwalo naliphi na inyathelo lokufaka uhlaziyo. Oku akutshintshi iifayili okanye idatha."
+
+msgid "Run post-apply actions"
+msgstr "Sebenzisa izenzo zasemva kokufaka"
+
+msgid "Run preflight checks"
+msgstr "Sebenzisa iitsheki zangaphambi kokufaka"
+
+msgid "Run selected post-apply actions"
+msgstr "Qhuba izenzo ezikhethiweyo emva kokufaka"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Qhuba imiyalelo ekhethiweyo emva kokufaka ukusuka kwiseva usebenzisa uluhlu oluvumelekileyo. Akukho miyalelo yeshalangubo eyenziwe ngokwezifiso eyamkelwayo."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Qhuba le miyalelo ngesandla ukusuka kwiseva emva kokuqinisekisa isiphumo sokuhlaziywa kwefayili kunye nogcino."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Ukuqhuba izenzo emva kokufaka ukusuka kwi-UI kucinyiwe kwimodi yemveliso."
+
+msgid "Running post-apply actions..."
+msgstr "Kuqhutywa izenzo emva kokufaka..."
+
+msgid "Safe actions"
+msgstr "Izenzo ezikhuselekileyo"
+
+msgid "Signature path"
+msgstr "Indlela yotyikityo"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Ukuqinisekiswa kotyikityo akunakutsitswa kule meko."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Tsiba ukuqinisekiswa kotyikityo kuvavanyo lophuhliso lwendawo"
+
+msgid "Staged file application failed"
+msgstr "Ukusetyenziswa kwefayili ezilungiselelweyo kusilele"
+
+msgid "Staged files applied successfully"
+msgstr "Iifayili ezilungiselelweyo zisetyenziswe ngempumelelo"
+
+msgid "Staging details"
+msgstr "Iinkcukacha zokulungiselela"
+
+msgid "Staging directory"
+msgstr "Uvimba wokulungiselela"
+
+msgid "Staging extraction"
+msgstr "Ukukhutshwa kokulungiselela"
+
+msgid "Symfony cache clear"
+msgstr "Ukucima i-cache ye-Symfony"
+
+msgid "System update"
+msgstr "Uhlaziyo lwesistim"
+
+msgid "Target version"
+msgstr "Uguqulelo olujoliswe kulo"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "I-URL yomboniso osemthethweni oqwalaselweyo ifakwe ngaphambili. Ungayitshintsha ibe yenye i-manifest ye-HTTPS ukuba kuyafuneka."
+
+msgid "The database migration baseline is clean."
+msgstr "Isiseko sokufuduka kwedatha sicacile."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Impendulo yokugqibela ye-HTTP isilele emva kokugqitywa komsebenzi. Oku kudla ngokubangelwa ziimvume ze-cache yexesha lokusebenza okanye ukuqalisa kwakhona kwe-web server ngexesha lesicelo."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "I-log yomsebenzi ibika ukuba izenzo emva kokufaka zigqitywe ngempumelelo."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Imiyalelo ekhethiweyo emva kokufaka igqitywe ngempumelelo, kodwa impendulo yokugqibela ye-HTTP isilele. Hlaziya iphepha kwaye uqinisekise iimvume ze-cache yexesha lokusebenza ukuba iphepha alilayishi ngokuchanekileyo."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Isihlaziyi asenzi okanye asibuyiseli ugcino lwedatha."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ezi zenzo zikhuselekile ukuqhutywa kwi-UI emva kokuphonononga isiphumo sohlaziyo."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Le miyalelo inokuguqula iimfuno, ii-asethi ezenziweyo, i-cache okanye idatha. Qinisekisa ugcino ngaphambi kokuqhubeka."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Esi senzo siguqula iifayili kufakelo lwe-Chamilo. Qinisekisa ukuba isicwangciso sokufaka siye sahlolwa kwaye ugcino luvuliwe ngaphambi kokuqhubeka."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Eli ngeniso lophuhliso lilinganisa isaziso sohlaziyo lwe-Chamilo.org esizayo sisebenzisa iindlela zepakethe yovavanyo lwendawo."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Esi sikrini sivulwe ukusuka kwisaziso sohlaziyo olusemthethweni, kodwa akukho mthombo womboniso osemthethweni oqwalaselweyo okwangoku."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Esi sikrini sivulwe ukusuka kwisaziso sohlaziyo. Kuphela ukujongwa komboniso kuqalwa ngokuzenzekelayo."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Eli nyathelo lilungiselela ukuphonononga kuphela. Ukutshintshwa kwefayili kwenzeka kamva kwinyathelo lokuSebenzisa iifayili ezilungiselelweyo, ngokutshixwa, ugcino kunye nokukhuselwa kokubuyisela."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Esi sihlaziyi asenzi ugcino lwedatha. Yenza kwaye uqinisekise ugcino ngaphambi kokuqhuba ukufuduka."
+
+msgid "Trusted public key"
+msgstr "Isitshixo sikawonke-wonke esithembekileyo"
+
+msgid "Trusted signing key"
+msgstr "Isitshixo sokutyikitya esithembekileyo"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Chwetheza APPLY UPDATE FILES ukuqinisekisa"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Chwetheza RUN DATABASE MIGRATIONS ukuqinisekisa ukufuduka kwedatha"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Chwetheza RUN POST UPDATE ACTIONS ukuqinisekisa"
+
+msgid "Unknown update notice source."
+msgstr "Umthombo wesaziso sohlaziyo ongaziwayo."
+
+msgid "Update availability"
+msgstr "Ukufumaneka kohlaziyo"
+
+msgid "Update directory"
+msgstr "Uvimba wohlaziyo"
+
+msgid "Update lock path"
+msgstr "Indlela yokutshixa kohlaziyo"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Sebenzisa uvimba wokulungiselela owenziwe linyathelo elidlulileyo. I-backend yamkela kuphela iivimba ezingaphakathi kwe-var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Sebenzisa eli khonkco ukulinganisa isaziso sohlaziyo lwe-Chamilo.org oluzayo ngexesha lovavanyo lophuhliso."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Sebenzisa oku kuphela kuvavanyo lophuhliso lwendawo. Uhlaziyo lwemveliso kufuneka lusebenzise isitshixo esiqwalaselwe yiseva."
+
+msgid "Verification details"
+msgstr "Iinkcukacha zokuqinisekisa"
+
+msgid "Verify package"
+msgstr "Qinisekisa ipakethe"
+
+msgid "Verifying..."
+msgstr "Kuqinisekiswa..."
+
+msgid "Waiting for command progress events..."
+msgstr "Kulindelwe iziganeko zenkqubela phambili yomyalelo..."
+
+msgid "Waiting for update progress events..."
+msgstr "Kulindelwe iziganeko zenkqubela phambili yohlaziyo..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Kufuneka izimvo"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Idatabase enegama elifanayo sele ikhona. Ukuba iqulethe iitafile, ziya kucinywa; ukuba ayinanto, iya kuphinda isetyenziswe."
+
+msgid "AI generated"
+msgstr "Kwenziwe yi-AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Yongeza ubuncinane umbuzo omnye phambi kokubuyela kwindlela yokufunda."
+
+msgid "Add attachments"
+msgstr "Yongeza iziqhoboshelo"
+
+msgid "Additional fields"
+msgstr "Imimandla eyongezelelweyo"
+
+msgid "Allow comments"
+msgstr "Vumela izimvo"
+
+msgid "Allow new pages"
+msgstr "Vumela amaphepha amatsha"
+
+msgid "Allow ratings"
+msgstr "Vumela iireyithingi"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Uqinisekile ufuna ukucima zonke izinto?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Uqinisekile ufuna ukubuyisela ukuhlaziywa ngokuzenzekelayo?"
+
+msgid "Attachment has been deleted"
+msgstr "Isiqhoboshelo sicinyiwe"
+
+msgid "Backup file"
+msgstr "Ifayile yogcino"
+
+msgid "Block comments"
+msgstr "Thintela izimvo"
+
+msgid "Block new pages"
+msgstr "Thintela amaphepha amatsha"
+
+msgid "Block ratings"
+msgstr "Thintela iireyithingi"
+
+msgid "Cancel renewal"
+msgstr "Rhoxisa ukuhlaziywa"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Iilinki zekhethegori ziya kususwa kumaphepha e-Wiki e-%s."
+
+msgid "Change"
+msgstr "Tshintsha"
+
+msgid "Clear group"
+msgstr "Sula iqela"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Cofa ithegi ukuyifaka kumhleli. Ezi zibambi ziya kutshintshwa xa kusenziwa isatifikethi."
+
+msgid "Comment added"
+msgstr "Izimvo zongezwe"
+
+msgid "Comment is required"
+msgstr "Izimvo ziyafuneka"
+
+msgid "Comment score"
+msgstr "Inqaku lezimvo"
+
+msgid "Compare selected versions line by line"
+msgstr "Thelekisa iinguqulelo ezikhethiweyo ngomgca ngomgca"
+
+msgid "Compare selected versions word by word"
+msgstr "Thelekisa iinguqulelo ezikhethiweyo ngegama ngegama"
+
+msgid "Compare versions"
+msgstr "Thelekisa iinguqulelo"
+
+msgid "Copy completed"
+msgstr "Ukukopa kugqityiwe"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Yenza amaphepha e-Wiki omsebenzi ngamnye wabafundi"
+
+msgid "Current view mode"
+msgstr "Imo yokujonga yangoku"
+
+msgid "Delete Wiki"
+msgstr "Cima i-Wiki"
+
+msgid "Delete page"
+msgstr "Cima iphepha"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Ukucima iphepha lasekhaya le-Wiki akucetyiswa. Ungalidala kwakhona kamva."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Ukukhubaza i-Wiki kuthintela amaphepha kunye nezenzo eziqhelekileyo ze-Wiki. Eli phepha lezicwangciso lihlala lifumaneka kootitshala bekhosi."
+
+msgid "Discussion"
+msgstr "Ingxoxo"
+
+msgid "Edit Comment"
+msgstr "Hlela izimvo"
+
+msgid "Edit page"
+msgstr "Hlela iphepha"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Umhla wokuphela kufuneka ube semva okanye olingana nomhla wokuphelelwa"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Ngenisa igama lokukhangela ukufumana amaphepha e-Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Umhla wokuphelelwa kufuneka ube phambi okanye olingana nomhla wokuphela"
+
+msgid "Failed email recipients"
+msgstr "Abamkeli be-imeyile abaphumelelanga"
+
+msgid "Finish and return to learning path"
+msgstr "Gqibezela kwaye ubuyele kwindlela yokufunda"
+
+msgid "Forum image"
+msgstr "Umfanekiso weforam"
+
+msgid "Hide discussion"
+msgstr "Fihla ingxoxo"
+
+msgid "Hide page"
+msgstr "Fihla iphepha"
+
+msgid "I changed my mind"
+msgstr "Nditshintshile ingqondo yam"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Ukuba akukho khethiweyo, ezo fayile ziya kuhlala zifumaneka kumlawuli weqonga ngesixhobo 'Ulwazi lwefayile'."
+
+msgid "Internal message failures"
+msgstr "Iimpazamo zemiyalezo yangaphakathi"
+
+msgid "Internal messages available"
+msgstr "Imiyalezo yangaphakathi iyafumaneka"
+
+msgid "Internal messages created now"
+msgstr "Imiyalezo yangaphakathi yenziwe ngoku"
+
+msgid "Item score"
+msgstr "Inqaku lezinto"
+
+msgid "Last post"
+msgstr "Iposi yokugqibela"
+
+msgid "Lock page"
+msgstr "Tshixa iphepha"
+
+msgid "Manage categories"
+msgstr "Lawula iindidi"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Phawula olu xwebhu njengoluncediso lwe-AI. Yisebenzise xa umxholo wadalwa okanye watshintshwa kakhulu ngezixhobo ze-AI."
+
+msgid "Maximum score is required"
+msgstr "Inqaku eliphezulu liyafuneka"
+
+msgid "Metric"
+msgstr "Imetric"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Iingxelo ezintsha zivaliwe kule ngxoxo"
+
+msgid "No Wiki categories are available yet."
+msgstr "Akukho zindidi zeWiki ezifumanekayo okwangoku."
+
+msgid "No categories found"
+msgstr "Akukho zindidi zifunyenweyo"
+
+msgid "No content"
+msgstr "Akukho mxholo"
+
+msgid "No parent category"
+msgstr "Akukho ndidi yomzali"
+
+msgid "Number of comments scored"
+msgstr "Inani leengxelo ezinikwe amanqaku"
+
+msgid "Old version"
+msgstr "Inguqulelo endala"
+
+msgid "Only image files are allowed."
+msgstr "Kuvumelekile iifayili zemifanekiso kuphela."
+
+msgid "Please fill all required fields"
+msgstr "Nceda uzalise onke amasimi afunekayo"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Imibuzo enezibambeli zeklasi okanye zomfundi iya kuveliswa kwiiklasi okanye amaqela ekhosi: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Iireyithingi zivaliwe kule ngxoxo"
+
+msgid "Remove image"
+msgstr "Susa umfanekiso"
+
+msgid "Restore renewal"
+msgstr "Buyisela ukuhlaziywa"
+
+msgid "Restore version"
+msgstr "Buyisela inguqulelo"
+
+msgid "Search in"
+msgstr "Khangela ngaphakathi"
+
+msgid "Select group"
+msgstr "Khetha iqela"
+
+msgid "Select image"
+msgstr "Khetha umfanekiso"
+
+msgid "Selected image"
+msgstr "Umfanekiso okhethiweyo"
+
+msgid "Show discussion"
+msgstr "Bonisa ingxoxo"
+
+msgid "Show page"
+msgstr "Bonisa iphepha"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Ezinye iifayili okanye iifolda azinayo imvume yokubhala. Ukuze ukwazi ukufaka i-Chamilo kufuneka uqale utshintshe iimvume zazo (ngokusebenzisa i-CHMOD). Nceda ufunde i"
+
+msgid "Subcategories"
+msgstr "Iindidi ezingaphantsi"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Cofa ngasekhohlo okanye ngasekunene ukuze uhambise"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Ixesha lokugqibela le-Wiki lidlulile, kodwa ukuhanjiswa okulibazisekileyo kuvumelekile."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Ixesha lokugqibela le-Wiki lidlulile."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "I-Wiki ayikaqali."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Ukutshixwa kohlelo lwephepha le-Wiki kuyafuneka ngaphambi kokugcina."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Isaziso sigciniwe, kodwa isiqhoboshelo asikwazanga kufakwa."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Isaziso sigciniwe, kodwa ukuthunyelwa kwe-imeyile kusilele."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Isaziso sigciniwe, kodwa akukho imeyile inokuthunyelwa."
+
+msgid "The category has been created"
+msgstr "Indidi yenziwe"
+
+msgid "The category has been deleted"
+msgstr "Indidi icinyiwe"
+
+msgid "The category has been updated"
+msgstr "Indidi ihlaziyiwe"
+
+msgid "The end date is invalid"
+msgstr "Umhla wokugqibela awusebenzi"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Inani eliphezulu leenguqulelo kufuneka libe linani elingenanto elingelona elibi"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Inani eliphezulu lamagama kufuneka libe linani elingenanto elingelona elibi"
+
+msgid "The print window could not be opened"
+msgstr "Ifestile yokuprinta ayikwazanga kuvulwa"
+
+msgid "The start date is invalid"
+msgstr "Umhla wokuqala awusebenzi"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Ezi zicwangciso zisebenza kwikhosi yonke, kuquka iiseshoni namaqela ayo."
+
+msgid "This announcement has already been sent by email."
+msgstr "Esi saziso sele sithunyelwe nge-imeyile."
+
+msgid "This discussion is hidden from learners"
+msgstr "Le ngxoxo ifihliwe kubafundi"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Esi sixhobo se-AI esivelisayo sikuvumela ukuba wenze imifanekiso kunye neevidiyo ezimfutshane ukubonisa ikhosi yakho. Ngokucacisa (ngokubhaliweyo) into oyifunayo kwicandelo le-prompt, uya kunika imodeli ye-AI emiselweyo izinto eziyimfuneko ukuvelisa umfanekiso okanye ividiyo. Nceda ube nomonde. Imodeli ye-AI iya kuthatha ixesha elithile ize ivelise isiphumo, esinokufuna ukusigcina ngokugcina imidiya kwifolda yakho yamaxwebhu, uze uyifake ngaphakathi kuxwebhu lwe-HTML. Ayizizo zonke iimodeli ze-AI ezilinganayo ngokwesantya okanye umgangatho. Imodeli ye-AI inokukunika iprompt eguquliweyo, etoliko oluneenkcukacha ngakumbi lesicelo sakho. Ungayisebenzisa le prompt eguquliweyo ukulungisa isicelo sakho. Nceda uqaphele ukuba esi sixhobo, ngakumbi kwiividiyo, sinokudala iindleko ezinkulu kwiziko lakho, nokuba ugqiba ukungagcini imidiya evelisiweyo. Nceda usisebenzise ngokufanelekileyo. Ukuba unengxaki yokufumana into oyifunayo, nceda uthathe ixesha lokuphanda amaqhinga e-prompt kwi-intanethi ngemodeli ye-AI onayo."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Le mbali yeyekhosi esisiseko. Ukubuyisela kuyafumaneka emva kokudala inguqulelo yeseshoni."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Lo mfanekiso uthatha indawo yesithunzi seforamu esingabonakaliyo esiboniswa ecaleni kwesihloko seforamu."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Eli phepha livela kwikhosi esisiseko. Ukugcina kuya kudala inguqulelo yeseshoni yangoku."
+
+msgid "This will also delete %s subcategories."
+msgstr "Oku kuya kucima nezigaba ezingaphantsi %s."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Oku kuya kudala amaphepha omsebenzi ngamnye kubafundi abangama-%s."
+
+msgid "Thread history"
+msgstr "Imbali yomsonto"
+
+msgid "Title and content"
+msgstr "Isihloko nomxholo"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Ayikwazi ukucima ilungelo lokuhlaziya ngoku."
+
+msgid "Unable to restore renewal right now."
+msgstr "Ayikwazi ukubuyisela ilungelo lokuhlaziya ngoku."
+
+msgid "Unlock page"
+msgstr "Vula iphepha"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Sebenzisa [[Iphepha]] okanye [[Iphepha|Umbhalo obonakalayo]] ukwenza iilinki zeWiki zangaphakathi."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Sebenzisa isithuba okanye amaqhosha etrowa ukuhamba"
+
+msgid "View version"
+msgstr "Jonga inguqulelo"
+
+msgid "Visible only to teachers"
+msgstr "Ibonakala kootitshala kuphela"
+
+msgid "Weight is required"
+msgstr "Umlinganiselo uyafuneka"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Izigaba zeWiki zikhutshisiwe kweli khosi."
+
+msgid "Wiki categories enabled"
+msgstr "Izigaba zeWiki zivuliwe"
+
+msgid "Wiki html strict filtering"
+msgstr "Ukuhluzwa ngokungqongqo kwe-HTML yeWiki"
+
+msgid "Wiki settings"
+msgstr "Iisetingi zeWiki"
+
+msgid "Wiki settings updated"
+msgstr "Iisetingi zeWiki zihlaziyiwe"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Ujonga inguqulelo yembali yeli phepha"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Ungafaka ifayile enye okanye ezingaphezulu kule mpendulo."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Ungahlela eli phepha lomsebenzi, kodwa amaphepha omsebenzi wabafundi akayi kuguqulwa."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Ungasebenzisa iithegi {{class_name}} kunye {{student_full_name}} kumbuzo."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Unemizuzu engama-20 yokuhlela eli phepha ngaphambi kokuba isitshixo sokuhlela siphele."
+
+msgid "by"
+msgstr "ngu"
+
+msgid "required"
+msgstr "kufuneka"
 

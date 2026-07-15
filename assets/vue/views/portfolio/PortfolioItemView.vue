@@ -484,7 +484,7 @@ const editRoute = computed(() => ({
   query: contextParams(),
 }))
 const commentDialogTitle = computed(() => {
-  if (commentForm.id) return t("Edit comment")
+  if (commentForm.id) return t("Edit Comment")
   if (commentForm.parentId) return t("Reply")
   return t("Add a new comment")
 })

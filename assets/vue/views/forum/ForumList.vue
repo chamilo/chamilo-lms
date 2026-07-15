@@ -5,7 +5,7 @@
     <BaseToolbar class="mb-4">
       <BaseButton
         v-if="isAllowedToEdit"
-        :label="t('Add category')"
+        :label="t('Add a category')"
         icon="folder-plus"
         only-icon
         size="small"
@@ -68,7 +68,7 @@
         class="mt-4 flex flex-wrap justify-center gap-2"
       >
         <BaseButton
-          :label="t('Add category')"
+          :label="t('Add a category')"
           icon="folder-plus"
           type="success"
           @click="openCreateCategoryDialog"
@@ -279,7 +279,7 @@
 
     <BaseDialog
       v-model:is-visible="isCategoryDialogVisible"
-      :title="categoryForm.id ? t('Edit category') : t('Add category')"
+      :title="categoryForm.id ? t('Edit category') : t('Add a category')"
       header-icon="folder-plus"
     >
       <form

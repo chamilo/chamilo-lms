@@ -106,11 +106,11 @@
         <h5 v-text="sessionState.sessionAsEvent.title" />
         <p
           v-show="sessionState.sessionAsEvent.start"
-          v-text="t('From %s', [abbreviatedDatetime(sessionState.sessionAsEvent.start)])"
+          v-text="t('From {0}', [abbreviatedDatetime(sessionState.sessionAsEvent.start)])"
         />
         <p
           v-show="sessionState.sessionAsEvent.end"
-          v-text="t('Until %s', [abbreviatedDatetime(sessionState.sessionAsEvent.end)])"
+          v-text="t('Until {0}', [abbreviatedDatetime(sessionState.sessionAsEvent.end)])"
         />
       </div>
 

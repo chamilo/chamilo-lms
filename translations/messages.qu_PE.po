@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Qillqay ruwana: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Qhawana ruq'una: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpet,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -36493,5 +36493,854 @@ msgid "View threads"
 msgstr "Qillqasqakunata qhaway"
 
 msgid "No auth source"
-msgstr "No auth source"
+msgstr "Mana qayllay qallariy"
+
+msgid "You must add at least one question"
+msgstr "Huk tapukuyta yapay qallariy"
+
+msgid "Advanced actions"
+msgstr "Qhaway ruwanakuna"
+
+msgid "Application path"
+msgstr "Aplicación ñan"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Apply plan failed"
+
+msgid "Apply plan ready"
+msgstr "Apply plan ready"
+
+msgid "Apply preparation"
+msgstr "Apply preparation"
+
+msgid "Apply staged files"
+msgstr "Apply staged files"
+
+msgid "Applying files..."
+msgstr "Applying files..."
+
+msgid "Audit file"
+msgstr "Audit file"
+
+msgid "Backup directory"
+msgstr "Backup directory"
+
+msgid "Baseline clean"
+msgstr "Baseline clean"
+
+msgid "Baseline warnings"
+msgstr "Baseline warnings"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+
+msgid "Build production frontend assets."
+msgstr "Build production frontend assets."
+
+msgid "Building plan..."
+msgstr "Building plan..."
+
+msgid "Channel"
+msgstr "Channel"
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+
+msgid "Check manifest"
+msgstr "Check manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Checking post-apply actions..."
+
+msgid "Checking..."
+msgstr "Checking..."
+
+msgid "Composer install"
+msgstr "Composer install"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+
+msgid "Configured"
+msgstr "Qhawasqa"
+
+msgid "Current migration"
+msgstr "Kunan migración"
+
+msgid "Database baseline"
+msgstr "Base de datos qallariy"
+
+msgid "Database migration safety review"
+msgstr "Base de datos migración qhawana"
+
+msgid "Database migrations"
+msgstr "Base de datos migraciones"
+
+msgid "Development mode"
+msgstr "Desarrollo modo"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ama kayta qallariy mana qhawasqa backup y servidor permisos kanchu."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine dry-run kamay"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine qhawasqa qallariy yuyaykuna. Updater V210 migraciones qhawasqa qhipa ruwanqa."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine V210 migraciones qhawasqa qhipa ruwanqa."
+
+msgid "Dry-run exit code"
+msgstr "Dry-run lluqsiy código"
+
+msgid "Executed unavailable migrations"
+msgstr "Mana ruwasqa migraciones"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Qhawasqa actualización paquete staging yuyayman churay. Kay mana archivos, migraciones, base de datos ruwan."
+
+msgid "File apply available"
+msgstr "Archivo ruwana"
+
+msgid "Files to replace"
+msgstr "Archivos reemplazana"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Yuyaykuni base de datos backup kachkan y qhawasqa kachkan migraciones qhipa."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Yuyaykuni avanzado ruwanakuna dependencias, assets, base de datos ruwanan."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Yuyaykuni kay Chamilo instalación archivos reemplazanqa."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Yuyaykuni kay servidor actualización kamaykuna ruwanqa."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Frontend dependencias qallariy assets ruwana qhipa."
+
+msgid "Installed version"
+msgstr "Instalado versión"
+
+msgid "Latest migration"
+msgstr "Qhipa migración"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Paquete y firma ñan churay mana qhawasqa manifest URLmanta chaskiy. Local ñan desarrollo pruebaspaq."
+
+msgid "Live command log"
+msgstr "Kamay qillqa"
+
+msgid "Live update log"
+msgstr "Actualización qillqa"
+
+msgid "Local test options"
+msgstr "Local prueba opciones"
+
+msgid "Local test update notice link"
+msgstr "Local prueba actualización yuyay ñan"
+
+msgid "Local update notice simulation"
+msgstr "Local actualización yuyay"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Local actualización yuyay desarrollo modo qallariy."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Manifest fuente"
+
+msgid "Migration safety details"
+msgstr "Migración qhawana imaymana"
+
+msgid "Migration safety review failed"
+msgstr "Migración qhawana mana atipan"
+
+msgid "Migration safety review ready"
+msgstr "Migración qhawana listu"
+
+msgid "Migration target"
+msgstr "Migración objetivo"
+
+msgid "New files"
+msgstr "Musuq archivos"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine musuq migraciones"
+
+msgid "Next migration"
+msgstr "Qhipa migración"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Mana ruwasqa migración mana qhawasqa."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Mana oficial manifest URL qhawasqa. HTTPS URL o local ñan desarrollo pruebaspaq."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Mana qhipa migración qhawasqa actualización objetivo qhipa."
+
+msgid "Not configured"
+msgstr "Mana qhawasqa"
+
+msgid "Not detected"
+msgstr "Mana tarisqa"
+
+msgid "Official Chamilo update channel"
+msgstr "Oficial Chamilo actualización canal"
+
+msgid "Package SHA-256"
+msgstr "Paquete SHA-256"
+
+msgid "Package URL"
+msgstr "Paquete URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Paquete y firma manifestmanta chaskinqa. Local ñan kay entorno qallariy."
+
+msgid "Package path"
+msgstr "Paquete ñan"
+
+msgid "Package staged successfully"
+msgstr "Paquete staging atipan"
+
+msgid "Package staging failed"
+msgstr "Paquete staging mana atipan"
+
+msgid "Package verification"
+msgstr "Paqeteta qhawariy"
+
+msgid "Package verification failed"
+msgstr "Paqete qhawariy pantasqa"
+
+msgid "Package verified successfully"
+msgstr "Paqete allinta qhawarisqa"
+
+msgid "Pending migrations before this update"
+msgstr "Kay qhipaqman ñawpaq migracionkuna"
+
+msgid "Planned backup path"
+msgstr "Planificado backup ñan"
+
+msgid "Post-apply actions completed"
+msgstr "Qhipaq ruwanakuna tukusqa"
+
+msgid "Post-apply actions failed"
+msgstr "Qhipaq ruwanakuna pantasqa"
+
+msgid "Post-apply actions ready"
+msgstr "Qhipaq ruwanakuna listu"
+
+msgid "Post-apply checks"
+msgstr "Qhipaq ruwanakuna qhawariy"
+
+msgid "Post-apply checks failed"
+msgstr "Qhipaq ruwanakuna qhawariy pantasqa"
+
+msgid "Post-apply details"
+msgstr "Qhipaq ruwanakuna qhawariy"
+
+msgid "Post-apply run details"
+msgstr "Qhipaq ruwanakuna qhawariy"
+
+msgid "Preflight checks"
+msgstr "Ñawpaq qhawariykuna"
+
+msgid "Preflight checks completed"
+msgstr "Ñawpaq qhawariykuna tukusqa"
+
+msgid "Preflight checks failed"
+msgstr "Ñawpaq qhawariykuna pantasqa"
+
+msgid "Preflight details"
+msgstr "Ñawpaq qhawariykuna"
+
+msgid "Prepare staging"
+msgstr "Preparación qhawariy"
+
+msgid "Preparing staging..."
+msgstr "Preparación qhawariy..."
+
+msgid "Production mode"
+msgstr "Producción ñan"
+
+msgid "Released at"
+msgstr "Qhipaqpi qallariy"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Chamilo archivos qhawarisqa paqeteta qhawariy, qhawarisqa ruwanakunata qhawariy. Kay mana base de datos migracionta, Composer, Yarn ni cache ruwanakunata ruwan."
+
+msgid "Review apply plan"
+msgstr "Ruwanakuna qhawariy"
+
+msgid "Review database migrations"
+msgstr "Base de datos migracionkuna qhawariy"
+
+msgid "Review post-apply actions"
+msgstr "Qhipaq ruwanakuna qhawariy"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Qhipaq ruwanakuna qhawariy, qhawarisqa ruwanakunata qhawariy. Kay mana Composer, Yarn, migracionkuna ni cache ruwanakunata ruwan."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Staged Doctrine migracionkuna qhawariy, base de datos migracionkuna qhawariy ñawpaqta."
+
+msgid "Reviewing database migrations..."
+msgstr "Base de datos migracionkuna qhawariy..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Base de datos migracionkuna qhawariy ñawpaqta, qhawarisqa ruwanakunata qhawariy."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Ñawpaq qhawariykuna ruwan, qhipaq qhawariykuna ruwan ñawpaqta. Kay mana archivos ni base de datos ruwan."
+
+msgid "Run post-apply actions"
+msgstr "Qhipaq ruwanakuna ruwan"
+
+msgid "Run preflight checks"
+msgstr "Ñawpaq qhawariykuna ruwan"
+
+msgid "Run selected post-apply actions"
+msgstr "Qhipaq ruwanakuna ruwan"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Qhipaq ruwanakuna ruwan, qhawarisqa ruwanakunata qhawariy. Mana qhawarisqa ruwanakunata ruwan."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Kay ruwanakunata qhawariy, qhawarisqa ruwanakunata qhawariy ñawpaqta."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Qhipaq ruwanakuna ruwan UIpi mana ruwan producción ñanpi."
+
+msgid "Running post-apply actions..."
+msgstr "Qhipaq ruwanakuna ruwan..."
+
+msgid "Safe actions"
+msgstr "Seguro ruwanakuna"
+
+msgid "Signature path"
+msgstr "Firma ñan"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Firma qhawariy mana qhawariy kay ambiente."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Firma qhawariy qhawariy local desarrollo pruebas"
+
+msgid "Staged file application failed"
+msgstr "Staged archivos ruwan pantasqa"
+
+msgid "Staged files applied successfully"
+msgstr "Staged archivos ruwan allinta"
+
+msgid "Staging details"
+msgstr "Staging qhawariy"
+
+msgid "Staging directory"
+msgstr "Staging directorio"
+
+msgid "Staging extraction"
+msgstr "Staging extracción"
+
+msgid "Symfony cache clear"
+msgstr "Symfony cache qhawariy"
+
+msgid "System update"
+msgstr "Sistema qhipaqman"
+
+msgid "Target version"
+msgstr "Objetivo versión"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Configurado oficial manifest URL qhawariy. Kay HTTPS manifest qhawariy qhipaqta."
+
+msgid "The database migration baseline is clean."
+msgstr "Base de datos migracion baseline limpio."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Qhipa HTTP kutichiyqa ruwanapi tukusqamanta qhipaqmi pantarqan. Kayqa sapa kuti runapi cache permisos nisqawan icha web server qallariypi mañakuy ruwasqa kachkan."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Ruway qillqay nisqaqa apply qhipa ruwanakuna allin ruwasqa kasqanta willan."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Akllasqa apply qhipa kamachikuykuna allin ruwasqa kanku, ichaqa qhipa HTTP kutichiy pantarqan. Qhawayta musuqchay qhipaqta, ruwanapi cache permisos nisqata qhawariy mana allin qhaway kachkaptinqa."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Kay musuqchayqa mana willañawi qhipakunata ruwan icha kutichinchu."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Kay ruwanakunaqa UI nisqamanta ruwanapaq allin kanku, musuqchay ruwasqata qhawarispa."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Kay kamachikuykunaqa dependencias, ruwasqa qallariykuna, cache icha willañawita hukchayta atin. Qhipakunata ruwaspa qhawariy ñawpaqta."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Kay ruwayqa Chamilo churaypi willañawikunata hukchan. Apply plan qhawarisqa kasqanta, qhipakuna ruwasqa kasqanta qhawariy ñawpaqta."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Kay ruwanapi yaykuyqa Chamilo.org musuqchay willayta ruwanapaq yuyaychayta ruwan, local qhawariy qhipakunawan."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Kay qhawayqa oficial musuqchay willaymanta kicharisqa kachkan, ichaqa mana oficial manifest qallariy ruwasqa kachkanraq."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Kay qhawayqa musuqchay willaymanta kicharisqa kachkan. Manifest qhawariyqa qallariypi kikinmanta qallarin."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Kay t'aqapiqa qhawariylla ruwasqa kachkan. Willañawi hukchayqa Apply staged files t'aqapi ruwasqa kachkan, qhaway, qhipakuna ruway, kutichiy amachaywan."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Kay musuqchayqa mana willañawi qhipakunata ruwan. Qhipakunata ruway, qhawariy migrations ruwaspa."
+
+msgid "Trusted public key"
+msgstr "Allin qhaway public key"
+
+msgid "Trusted signing key"
+msgstr "Allin qhaway signing key"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "APPLY UPDATE FILES nisqata qillqay yuyaychanapaq"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "RUN DATABASE MIGRATIONS nisqata qillqay willañawi migrations yuyaychanapaq"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "RUN POST UPDATE ACTIONS nisqata qillqay yuyaychanapaq"
+
+msgid "Unknown update notice source."
+msgstr "Mana riqsisqa musuqchay willay qallariy."
+
+msgid "Update availability"
+msgstr "Musuqchay kaynin"
+
+msgid "Update directory"
+msgstr "Musuqchay willañawi"
+
+msgid "Update lock path"
+msgstr "Musuqchay qhaway ñan"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Ñawpaq t'aqapi ruwasqa staging willañawita llamk'achiy. Backend nisqaqa var/update/staging ukhupi willañawikunallata chaskikun."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Kay t'inkita llamk'achiy Chamilo.org musuqchay willayta ruwanapaq yuyaychay qhawariykunapi."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Kayta qhawariy ruwanapi qhawariykunapaqlla. Producción musuqchaykunaqa servidor ruwasqa key nisqata llamk'achin."
+
+msgid "Verification details"
+msgstr "Qhawariy imaymana"
+
+msgid "Verify package"
+msgstr "Qhipa qhawariy"
+
+msgid "Verifying..."
+msgstr "Qhawarichkasqa..."
+
+msgid "Waiting for command progress events..."
+msgstr "Kamachikuy ñawpaq ruwanakunata suyaspa..."
+
+msgid "Waiting for update progress events..."
+msgstr "Musuqchay ñawpaq ruwanakunata suyaspa..."
+
+msgid "Yarn build"
+msgstr "Yarn ruway"
+
+msgid "Yarn install"
+msgstr "Yarn churay"
+
+msgid "A comment is required"
+msgstr "Comentario ruwanam kachkan"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Kay sutiyuq willañawiqa kachkanña. Tablas kachkaptinqa qullusqa kanqa; ch'usaq kachkaptinqa musuqmanta llamk'achisqa kanqa."
+
+msgid "AI generated"
+msgstr "AI ruwasqa"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Yachay ñanman kutispa huk tapukuyta yapay."
+
+msgid "Add attachments"
+msgstr "Qhipakunata yapay"
+
+msgid "Additional fields"
+msgstr "Yapa chakrakuna"
+
+msgid "Allow comments"
+msgstr "Comentariokunata saqiy"
+
+msgid "Allow new pages"
+msgstr "Musuq p'anqakunata saqiy"
+
+msgid "Allow ratings"
+msgstr "Chaninchaykunata saqiy"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "¿Imaymana imakunata qullunayki yuyaychankichu?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "¿Musuqmanta kawsarichiyta saqiy yuyaychankichu?"
+
+msgid "Attachment has been deleted"
+msgstr "Qhipa qullusqa kachkan"
+
+msgid "Backup file"
+msgstr "Qhipa willañawi"
+
+msgid "Block comments"
+msgstr "Comentariokunata hark'ay"
+
+msgid "Block new pages"
+msgstr "Musuq p'anqakunata hark'ay"
+
+msgid "Block ratings"
+msgstr "Chaninchaykunata hark'ay"
+
+msgid "Cancel renewal"
+msgstr "Kawsarichiyta qulluy"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Qatipay t'inkikuna %s Wiki p'anqakunamanta qullusqa kanqa."
+
+msgid "Change"
+msgstr "Hukchay"
+
+msgid "Clear group"
+msgstr "Grupo ch'uyay"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Etiquetata ñit'iy editorpi churayta atiy. Kay chayraq willakuykuna certificadota ruwaspa tikrachikunqa."
+
+msgid "Comment added"
+msgstr "Comentario yapasqa"
+
+msgid "Comment is required"
+msgstr "Comentario ruwanam"
+
+msgid "Comment score"
+msgstr "Comentario yupay"
+
+msgid "Compare selected versions line by line"
+msgstr "Akllasqa versionkunata siq'ikunapi qhaway"
+
+msgid "Compare selected versions word by word"
+msgstr "Akllasqa versionkunata simikunapi qhaway"
+
+msgid "Compare versions"
+msgstr "Versionkunata qhaway"
+
+msgid "Copy completed"
+msgstr "Kupia tukusqa"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Yachakuqkunapaq sapalla Wiki ruwanakunata ruway"
+
+msgid "Current view mode"
+msgstr "Kunan qhaway ñan"
+
+msgid "Delete Wiki"
+msgstr "Wiki qulluy"
+
+msgid "Delete page"
+msgstr "P'anqata qulluy"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Wiki qallariy p'anqata qulluy mana allinchu. Qhipaqpi kutichiyta atinki."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Wiki mana atichisqaqa normal Wiki p'anqakunatawan ruwanakunata hark'an. Kay churay p'anqa yachachiqkunapaq qhipaqpi kachkan."
+
+msgid "Discussion"
+msgstr "Rimay"
+
+msgid "Edit Comment"
+msgstr "Comentariota qelqay"
+
+msgid "Edit page"
+msgstr "P'anqata qelqay"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Puchukay p'unchaw tukuy p'unchawmanta qhipaqpi kachun"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Wiki p'anqakunata mask'anapaq rimayta qillqay"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Puchukay p'unchaw tukuy p'unchawmanta ñawpaqpi kachun"
+
+msgid "Failed email recipients"
+msgstr "Email mana chaskisqakuna"
+
+msgid "Finish and return to learning path"
+msgstr "Tukuy yachay ñanta kutiy"
+
+msgid "Forum image"
+msgstr "Foro rikch'a"
+
+msgid "Hide discussion"
+msgstr "Rimayta pakay"
+
+msgid "Hide page"
+msgstr "P'anqata pakay"
+
+msgid "I changed my mind"
+msgstr "Yuyayta tikrachini"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Mana akllasqaqa, kay willañiqikuna 'Willay willakuypi' ruwanawan kamachiqpaq qhipaqpi kachkanqa."
+
+msgid "Internal message failures"
+msgstr "Ukhu willaykuna pantasqa"
+
+msgid "Internal messages available"
+msgstr "Ukhu willaykuna kachkan"
+
+msgid "Internal messages created now"
+msgstr "Ukhu willaykuna kunan ruwachisqa"
+
+msgid "Item score"
+msgstr "Imayuq yupay"
+
+msgid "Last post"
+msgstr "Qhipaq qillqa"
+
+msgid "Lock page"
+msgstr "P'anqata wichq'ay"
+
+msgid "Manage categories"
+msgstr "Katiguriyakunata kamachiy"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Kay willañiqi AI yanapaywan ruwachisqa kasqanta qillqay. Willay AI ruwanakunawan ruwachisqa utaq ancha tikrachisqa kaptinqa kayta llamk'achiy."
+
+msgid "Maximum score is required"
+msgstr "Aswan yupay ruwanam"
+
+msgid "Metric"
+msgstr "Yupay"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Kay rimaypi musuq comentariokuna hark'asqa"
+
+msgid "No Wiki categories are available yet."
+msgstr "Wiki katiguriyakuna manaraq kachkanchu."
+
+msgid "No categories found"
+msgstr "Katiguriyakuna mana tarisqachu"
+
+msgid "No content"
+msgstr "Ima willaykuna mana kachkanchu"
+
+msgid "No parent category"
+msgstr "Yaya katiguriya mana kachkanchu"
+
+msgid "Number of comments scored"
+msgstr "Comentariokuna yupasqa yupay"
+
+msgid "Old version"
+msgstr "Ñawpaq version"
+
+msgid "Only image files are allowed."
+msgstr "Rikch'a willañiqikunaqa allinlla."
+
+msgid "Please fill all required fields"
+msgstr "Ama hina kaspa, llapan ruwanam qillqakunata hunt'ay"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Yachay wasi qutukuna utaq huñukuna %s: kay tapukuna yachay wasi qutukuna utaq huñukuna ruwachikunqa"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Kay rimaypi yupaykuna hark'asqa"
+
+msgid "Remove image"
+msgstr "Rikch'ata qichuy"
+
+msgid "Restore renewal"
+msgstr "Qhipaqman kutichiy"
+
+msgid "Restore version"
+msgstr "Qhipaqman kutichiy"
+
+msgid "Search in"
+msgstr "Kaypi maskay"
+
+msgid "Select group"
+msgstr "Huñuta akllay"
+
+msgid "Select image"
+msgstr "Rikch'ata akllay"
+
+msgid "Selected image"
+msgstr "Akllasqa rikch'a"
+
+msgid "Show discussion"
+msgstr "Rimayta qhaway"
+
+msgid "Show page"
+msgstr "P'anqata qhaway"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Wakin willañiqikuna icha qarqanakuna qillqaypaq atiywan mana kanchu. Chamilo nisqata churayta atiytaq, ñawpaqta atiykuna (CHMOD nisqawan) tikrachina. Ama hina kaspa kayta ñawpaqta ñawinchay"
+
+msgid "Subcategories"
+msgstr "Sut'ichasqakuna"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Lluq'i icha paña ladopi ñit'iy purinapaq"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki ruwanapaq p'unchawqa pasasqaña, ichataq qhipaqman apayqa saqillasqaña."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki ruwanapaq p'unchawqa pasasqaña."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki ruwanaqa manaraq qallarisqachu."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Wiki p'anqata allichaytaq, ñawpaqta wichq'ay kachun."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Willayqa allichasqaña, ichataq yapasqa willañiqi mana cargakunchu."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Willayqa allichasqaña, ichataq correo electrónico mana apachikunchu."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Willayqa allichasqaña, ichataq mana correo electrónico apachikunchu."
+
+msgid "The category has been created"
+msgstr "Sut'ichasqaqa kamarisqaña"
+
+msgid "The category has been deleted"
+msgstr "Sut'ichasqaqa qullusqaña"
+
+msgid "The category has been updated"
+msgstr "Sut'ichasqaqa musuqchasqaña"
+
+msgid "The end date is invalid"
+msgstr "P'unchaw puchukayqa mana allinchu"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Qhipaqkunap yupayqa mana qhipaq yupay kanan"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Simikunap yupayqa mana qhipaq yupay kanan"
+
+msgid "The print window could not be opened"
+msgstr "Imprenta qhawanaqa mana kicharikunchu"
+
+msgid "The start date is invalid"
+msgstr "Qallariy p'unchawqa mana allinchu"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Kay allinchaykuna yachachinaq tukuy ruwanankunapaqmi, sesionkuna, huñukuna ima."
+
+msgid "This announcement has already been sent by email."
+msgstr "Kay willayqa ña correo electrónico nisqawan apachisqaña."
+
+msgid "This discussion is hidden from learners"
+msgstr "Kay rimayqa yachaqkunamanta pakasqaña"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Kay generativo AI nisqa yanapaqqa rikch'akuna, pisi videokunata ruwanapaqmi. Qillqasqa nisqapi imata munanki nispa willay, AI nisqa qallariyqa rikch'a icha video ruwanapaqmi. Ama utqayta suyay. AI nisqa qallariyqa pisi tiempota qhawaspa ruwanqa, chay ruwasqata willañiqikuna qarqanapi allichayta atinki, chaymanta HTML qillqapi churayta atinki. Mana tukuy AI nisqa qallariykuna utqaylla icha allin ruwanqachu. AI nisqa qallariyqa musuqchasqa willayta qowasqayki, chay willayqa ruwanaykimanta aswan qhawasqa kanqa. Chay musuqchasqa willayta qhawaspa ruwanaykita allichayta atinki. Kay yanapaqqa, videokunapaqqa, qullqiykiqpi aswan gastota ruwanman, mana allichayta munaspapis. Ama hina kaspa, allinta qhawaspa ruway. Mana imata tarispaykiqa, internetpi AI nisqa qallariymanta ruwanapaq yuyaykunata maskay."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Kay yuyayqa yachachina qallariymanta. Qhipaqman kutichiyqa sesión qhipaqta ruwaspa atikunqa."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Kay rikch'aqa foro qhawanapi rikch'ata tikrachinqa."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Kay p'anqaqa yachachina qallariymanta. Allichayqa sesión qhipaqta ruwanqa."
+
+msgid "This will also delete %s subcategories."
+msgstr "Kayqa %s sut'ichasqakunatapas qullunqa."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Kayqa %s yachaqkunapaq sapalla ruwana p'anqakunata ruwanqa."
+
+msgid "Thread history"
+msgstr "Rimay yuyay"
+
+msgid "Title and content"
+msgstr "Sut'i, samiq"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Qhipaqman kutichiyqa kunan mana atikunchu."
+
+msgid "Unable to restore renewal right now."
+msgstr "Qhipaqman kutichiyqa kunan mana atikunchu."
+
+msgid "Unlock page"
+msgstr "P'anqata kichay"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "[[P'anqa]] icha [[P'anqa|Qhawasqa qillqa]] nisqata Wiki ukhu waskhakunata ruwanapaq qhawachiy."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Espacio icha flechakunawan puriy"
+
+msgid "View version"
+msgstr "Qhipaqta qhaway"
+
+msgid "Visible only to teachers"
+msgstr "Yachachiqkunallapaq"
+
+msgid "Weight is required"
+msgstr "Llasayqa muchusqa"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki sut'ichasqakunaqa kay yachachinapi mana atichasqachu."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki sut'ichasqakuna atichasqa"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki html qhawanapaq"
+
+msgid "Wiki settings"
+msgstr "Wiki allinchaykuna"
+
+msgid "Wiki settings updated"
+msgstr "Wiki allinchaykuna musuqchasqaña"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Kay p'anqamanta ñawpaq ruwasqa qhawasqayki"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Kay kutichiyta huk utaq achka willañiqikunata yapayta atinki."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Kay ruway p'anqata allinchayta atinki, ichataq yachakuqkunap ruwasqanku p'anqakuna mana hukchasqachu kanqa."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Tapuyllapi {{class_name}} hinaspa {{student_full_name}} nisqakunata llamk'achiyta atinki."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Kay p'anqata allinchaypaq 20 minutoyki kan, allinchaypaq qhawayqa puchukanqam."
+
+msgid "by"
+msgstr "kaymanta"
+
+msgid "required"
+msgstr "mi"
 

@@ -2419,6 +2419,6 @@ function getCheckStatusIconClass(status) {
 }
 
 function getErrorMessage(error) {
-  return error?.response?.data?.error || error?.message || t("An unexpected error occurred")
+  return error?.response?.data?.error || error?.message || t("An unexpected error occurred.")
 }
 </script>

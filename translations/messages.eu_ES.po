@@ -36500,3 +36500,852 @@ msgstr "Ikusi hariak"
 msgid "No auth source"
 msgstr "Ez dago autentifikazio iturririk"
 
+msgid "You must add at least one question"
+msgstr "Gutxienez galdera bat gehitu behar duzu"
+
+msgid "Advanced actions"
+msgstr "Ekintza aurreratuak"
+
+msgid "Application path"
+msgstr "Aplikazioaren bidea"
+
+msgid "Apply files details"
+msgstr "Aplikatu fitxategien xehetasunak"
+
+msgid "Apply plan details"
+msgstr "Aplikatu planaren xehetasunak"
+
+msgid "Apply plan failed"
+msgstr "Planaren aplikazioak huts egin du"
+
+msgid "Apply plan ready"
+msgstr "Planaren aplikazioa prest"
+
+msgid "Apply preparation"
+msgstr "Aplikazioaren prestaketa"
+
+msgid "Apply staged files"
+msgstr "Aplikatu fitxategi eszenifikatuak"
+
+msgid "Applying files..."
+msgstr "Fitxategiak aplikatzen..."
+
+msgid "Audit file"
+msgstr "Ikuskaritza-fitxategia"
+
+msgid "Backup directory"
+msgstr "Babeskopia-direktorioa"
+
+msgid "Baseline clean"
+msgstr "Oinarri garbia"
+
+msgid "Baseline warnings"
+msgstr "Oinarri-abisuak"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Eraiki aplikazio-plan seguru bat eszenifikatutako paketeatik. Honek fitxategiak, baimenak, babeskopia-bidea eta blokeo-egoera soilik egiaztatzen ditu. Ez ditu fitxategiak ordezkatzen."
+
+msgid "Build production frontend assets."
+msgstr "Eraiki ekoizpen-frontend aktiboak."
+
+msgid "Building plan..."
+msgstr "Plana eraikitzen..."
+
+msgid "Channel"
+msgstr "Kanala"
+
+msgid "Check"
+msgstr "Egiaztatu"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Egiaztatu Chamiloren eguneratze eskuragarriak, paketeak egiaztatu, fitxategiak eszenifikatu eta kontrolatutako eguneratze-ondoko urratsak exekutatu."
+
+msgid "Check manifest"
+msgstr "Egiaztatu manifestua"
+
+msgid "Checking post-apply actions..."
+msgstr "Aplikazio-ondoko ekintzak egiaztatzen..."
+
+msgid "Checking..."
+msgstr "Egiaztatzen..."
+
+msgid "Composer install"
+msgstr "Composer instalazioa"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn eta datu-basearen migrazio-ekintzek mendekotasunak, sortutako aktiboak edo datu-basea alda ditzakete. Hautatu hauek babeskopiak eta baimenak berretsi ondoren soilik."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfiguratu CHAMILO_UPDATE_MANIFEST_URL zerbitzarian edo eman HTTPS manifestuaren URL bat."
+
+msgid "Configured"
+msgstr "Konfiguratuta"
+
+msgid "Current migration"
+msgstr "Uneko migrazioa"
+
+msgid "Database baseline"
+msgstr "Datu-basearen oinarri-lerroa"
+
+msgid "Database migration safety review"
+msgstr "Datu-basearen migrazioaren segurtasun-berrikuspena"
+
+msgid "Database migrations"
+msgstr "Datu-basearen migrazioak"
+
+msgid "Development mode"
+msgstr "Garapen modua"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ez gaitu hau eguneratze-babeskopia eta zerbitzariaren baimenak berrikusi ez badira."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine lehor-exekuzio komandoa"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrinek oinarri-lerro historikoaren abisuak jakinarazi ditu. Eguneratzaileak V210 migrazio eszenifikatuak soilik exekutatuko ditu berrespen esplizituaren ondoren."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrinek V210 migrazio eszenifikatuak soilik exekutatuko ditu segurtasun-berrikuspena gainditu ondoren esplizituki."
+
+msgid "Dry-run exit code"
+msgstr "Lehor-exekuzioaren irteera-kodea"
+
+msgid "Executed unavailable migrations"
+msgstr "Exekutatutako migrazio erabilgaitzak"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Egiaztatutako eguneratze-paketea ateratzen du ikuskatzeko eszenifikazio-direktorio batean. Honek ez ditu fitxategiak ordezten, migrazioak exekutatzen edo datu-basea aldatzen."
+
+msgid "File apply available"
+msgstr "Fitxategi aplikazioa eskuragarri"
+
+msgid "Files to replace"
+msgstr "Ordeztu beharreko fitxategiak"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Berresten dut datu-basearen babeskopia existitzen dela eta migrazioak exekutatu aurretik egiaztatu dela."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Ulertzen dut ekintza aurreratuek mendekotasunak, sortutako aktiboak edo datu-basea alda ditzaketela."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Ulertzen dut honek Chamilo instalazioko fitxategiak ordeztuko dituela."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Ulertzen dut honek eguneratze-komandoak exekutatuko dituela zerbitzarian."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instalatu frontend mendekotasunak aktiboak berreraiki aurretik."
+
+msgid "Installed version"
+msgstr "Instalatutako bertsioa"
+
+msgid "Latest migration"
+msgstr "Azken migrazioa"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Utzi pakete eta sinadura bideak hutsik manifestu URL egiaztatuetatik deskargatzeko. Bide lokalak garapen-probetarako soilik daude eskuragarri."
+
+msgid "Live command log"
+msgstr "Komandoen egunkari bizia"
+
+msgid "Live update log"
+msgstr "Eguneratze-egunkari bizia"
+
+msgid "Local test options"
+msgstr "Proba lokalaren aukerak"
+
+msgid "Local test update notice link"
+msgstr "Proba lokalaren eguneratze-abisuaren esteka"
+
+msgid "Local update notice simulation"
+msgstr "Proba lokalaren eguneratze-abisuaren simulazioa"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Proba lokalaren eguneratze-abisuaren simulazioa garapen moduan soilik dago eskuragarri."
+
+msgid "Manifest"
+msgstr "Manifestua"
+
+msgid "Manifest source"
+msgstr "Manifestuaren iturria"
+
+msgid "Migration safety details"
+msgstr "Migrazioaren segurtasun-xehetasunak"
+
+msgid "Migration safety review failed"
+msgstr "Migrazioaren segurtasun-berrikuspenak huts egin du"
+
+msgid "Migration safety review ready"
+msgstr "Migrazioaren segurtasun-berrikuspena prest"
+
+msgid "Migration target"
+msgstr "Migrazio-helburua"
+
+msgid "New files"
+msgstr "Fitxategi berriak"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrinek jakinarazitako migrazio berriak"
+
+msgid "Next migration"
+msgstr "Hurrengo migrazioa"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Ez da exekutatutako migrazio erabilgaitzik jakinarazi."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Ez da manifestu URL ofizialik konfiguratu oraindik. Erabili HTTPS URL bat edo bide lokal bat garapen-probetarako."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Ez da migrazio zintzilikatzerik detektatu eszenifikatutako eguneratze-helburuaren aurretik."
+
+msgid "Not configured"
+msgstr "Ez dago konfiguratuta"
+
+msgid "Not detected"
+msgstr "Ez da detektatu"
+
+msgid "Official Chamilo update channel"
+msgstr "Chamilo eguneratze-kanal ofiziala"
+
+msgid "Package SHA-256"
+msgstr "Paketearen SHA-256"
+
+msgid "Package URL"
+msgstr "Paketearen URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Pakete eta sinadura fitxategiak manifestutik deskargatuko dira. Bide lokalak desgaituta daude ingurune honetan."
+
+msgid "Package path"
+msgstr "Paketearen bidea"
+
+msgid "Package staged successfully"
+msgstr "Paketea ongi prestatu da"
+
+msgid "Package staging failed"
+msgstr "Paketearen prestaketa huts egin du"
+
+msgid "Package verification"
+msgstr "Paketearen egiaztapena"
+
+msgid "Package verification failed"
+msgstr "Paketearen egiaztapenak huts egin du"
+
+msgid "Package verified successfully"
+msgstr "Paketea ongi egiaztatu da"
+
+msgid "Pending migrations before this update"
+msgstr "Eguneraketa hau baino lehen egiteko migrazioak"
+
+msgid "Planned backup path"
+msgstr "Planifikatutako babeskopiaren bidea"
+
+msgid "Post-apply actions completed"
+msgstr "Aplikatu ondorengo ekintzak osatu dira"
+
+msgid "Post-apply actions failed"
+msgstr "Aplikatu ondorengo ekintzek huts egin dute"
+
+msgid "Post-apply actions ready"
+msgstr "Aplikatu ondorengo ekintzak prest"
+
+msgid "Post-apply checks"
+msgstr "Aplikatu ondorengo egiaztapenak"
+
+msgid "Post-apply checks failed"
+msgstr "Aplikatu ondorengo egiaztapenek huts egin dute"
+
+msgid "Post-apply details"
+msgstr "Aplikatu ondorengo xehetasunak"
+
+msgid "Post-apply run details"
+msgstr "Aplikatu ondorengo exekuzioaren xehetasunak"
+
+msgid "Preflight checks"
+msgstr "Aurretiazko egiaztapenak"
+
+msgid "Preflight checks completed"
+msgstr "Aurretiazko egiaztapenak osatu dira"
+
+msgid "Preflight checks failed"
+msgstr "Aurretiazko egiaztapenek huts egin dute"
+
+msgid "Preflight details"
+msgstr "Aurretiazko xehetasunak"
+
+msgid "Prepare staging"
+msgstr "Prestaketa prestatu"
+
+msgid "Preparing staging..."
+msgstr "Prestaketa prestatzen..."
+
+msgid "Production mode"
+msgstr "Ekoizpen modua"
+
+msgid "Released at"
+msgstr "Argitaratze-data"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Ordezkatu Chamilo fitxategiak prestatutako paketetik, berrikusitako aplikazio-planaren arabera. Honek ez ditu datu-baseko migrazioak, Composer, Yarn edo cache komandoak exekutatzen."
+
+msgid "Review apply plan"
+msgstr "Aplikazio-plana berrikusi"
+
+msgid "Review database migrations"
+msgstr "Datu-baseko migrazioak berrikusi"
+
+msgid "Review post-apply actions"
+msgstr "Aplikatu ondorengo ekintzak berrikusi"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Berrikusi gomendatutako eskuzko komandoak eguneraketa-fitxategiak aplikatu ondoren. Urrats honek ez ditu Composer, Yarn, migrazioak edo cache komandoak exekutatzen."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Berrikusi Doctrine migrazioak eta lehorrera exekuzioaren irteera datu-baseko migrazioak exekutatu aurretik."
+
+msgid "Reviewing database migrations..."
+msgstr "Datu-baseko migrazioak berrikusten..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Exekutatu eta gainditu migrazio-segurtasunaren berrikuspena datu-baseko migrazioak exekutatu aurretik."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Exekutatu ingurumen-egiaztapenak etorkizuneko edozein eguneraketa aplikatu aurretik. Honek ez ditu fitxategiak edo datu-basea aldatzen."
+
+msgid "Run post-apply actions"
+msgstr "Aplikatu ondorengo ekintzak exekutatu"
+
+msgid "Run preflight checks"
+msgstr "Aurretiazko egiaztapenak exekutatu"
+
+msgid "Run selected post-apply actions"
+msgstr "Hautatutako aplikatu ondorengo ekintzak exekutatu"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Exekutatu hautatutako aplikatu ondorengo komandoak zerbitzaritik kontrolatutako baimen-zerrenda erabiliz. Ez dira onartzen pertsonalizatutako shell komandoak."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Exekutatu komando hauek eskuz zerbitzaritik fitxategien eguneraketaren emaitza eta babeskopiak berretsi ondoren."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "UI-tik aplikatu ondorengo ekintzak exekutatzea desgaituta dago ekoizpen moduan."
+
+msgid "Running post-apply actions..."
+msgstr "Aplikatu ondorengo ekintzak exekutatzen..."
+
+msgid "Safe actions"
+msgstr "Ekintza seguruak"
+
+msgid "Signature path"
+msgstr "Sinaduraren bidea"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Sinadura-egiaztapena ezin da saltatu ingurune honetan."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Saltatu sinadura-egiaztapena garapen lokaleko probetarako"
+
+msgid "Staged file application failed"
+msgstr "Prestatutako fitxategien aplikazioak huts egin du"
+
+msgid "Staged files applied successfully"
+msgstr "Prestatutako fitxategiak ongi aplikatu dira"
+
+msgid "Staging details"
+msgstr "Prestaketa-xehetasunak"
+
+msgid "Staging directory"
+msgstr "Prestaketa-direktorioa"
+
+msgid "Staging extraction"
+msgstr "Prestaketaren erauzketa"
+
+msgid "Symfony cache clear"
+msgstr "Symfony cachearen garbiketa"
+
+msgid "System update"
+msgstr "Sistemaren eguneraketa"
+
+msgid "Target version"
+msgstr "Helburuko bertsioa"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Konfiguratutako manifestu ofizialaren URLa aurrez beteta dago. Behar izanez gero, beste HTTPS manifestu batera alda dezakezu."
+
+msgid "The database migration baseline is clean."
+msgstr "Datu-basearen migrazioaren oinarria garbi dago."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Eragiketa amaitu ondoren, azken HTTP erantzunak huts egin du. Normalean, exekuzio-cachearen baimenek edo web-zerbitzariaren berrabiarazte batek eragiten dute eskaera egin bitartean."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Eragiketaren erregistroak adierazten du aplikatu ondorengo ekintzak ongi burutu direla."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Aukeratutako aplikatu ondorengo komandoek ongi burutu dira, baina azken HTTP erantzunak huts egin du. Berritu orria eta egiaztatu exekuzio-cachearen baimenak orria ez bada ongi kargatzen."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Eguneratzaileak ez du datu-baseen babeskopiarik sortzen edo leheneratzen."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ekintza hauek seguruak dira eguneratze-emaitza berrikusi ondoren UI-tik exekutatzeko."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Komando hauek mendekotasunak, sortutako aktiboak, cachea edo datu-basea alda ditzakete. Jarraitu aurretik, egin babeskopiak."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ekintza honek Chamilo instalazioko fitxategiak aldatzen ditu. Jarraitu aurretik, ziurtatu aplikazio-plana berrikusi dela eta babeskopiak gaituta daudela."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Sarrera garatzaile honek Chamilo.org-en etorkizuneko eguneratze-abisua simulatzen du tokiko proba-paketeen bideak erabiliz."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Pantaila hau eguneratze-abisu ofizial batetik ireki da, baina oraindik ez da manifestu-iturri ofizialik konfiguratu."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Pantaila hau eguneratze-abisu batetik ireki da. Manifestuaren egiaztapena bakarrik abiarazten da automatikoki."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Urrats honek berrikuspen bat prestatzen du soilik. Fitxategien ordezkapena geroago gertatzen da Fitxategi eszenifikatuak aplikatu urratsean, blokeo, babeskopia eta atzera-egite babesarekin."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Eguneratzaile honek ez du datu-baseen babeskopiarik sortzen. Sortu eta egiaztatu babeskopia bat migrazioak exekutatu aurretik."
+
+msgid "Trusted public key"
+msgstr "Gako publiko fidagarria"
+
+msgid "Trusted signing key"
+msgstr "Sinadura-gako fidagarria"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Idatzi APPLY UPDATE FILES berresteko"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Idatzi RUN DATABASE MIGRATIONS datu-basearen migrazioak berresteko"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Idatzi RUN POST UPDATE ACTIONS berresteko"
+
+msgid "Unknown update notice source."
+msgstr "Eguneratze-abisuaren iturri ezezaguna."
+
+msgid "Update availability"
+msgstr "Eguneratze eskuragarritasuna"
+
+msgid "Update directory"
+msgstr "Eguneratze-direktorioa"
+
+msgid "Update lock path"
+msgstr "Eguneratze-blokeoaren bidea"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Aurreko urratsak sortutako eszenifikazio-direktorioa erabili. Backend-ak soilik onartzen ditu var/update/staging barruko direktorioak."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Erabili esteka hau Chamilo.org-en etorkizuneko eguneratze-abisua simulatzeko garapen-probetan."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Erabili hau soilik tokiko garapen-probetarako. Ekoizpen-eguneratzeek zerbitzariak konfiguratutako gakoa erabili behar dute."
+
+msgid "Verification details"
+msgstr "Egiaztapen-xehetasunak"
+
+msgid "Verify package"
+msgstr "Paketea egiaztatu"
+
+msgid "Verifying..."
+msgstr "Egiaztatzen..."
+
+msgid "Waiting for command progress events..."
+msgstr "Komandoen aurrerapen-gertaeren zain..."
+
+msgid "Waiting for update progress events..."
+msgstr "Eguneratze-aurrerapen-gertaeren zain..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Iruzkin bat behar da"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Izen bereko datu-base bat dagoeneko existitzen da. Taulak baditu, ezabatu egingo dira; hutsik badago, berrerabiliko da."
+
+msgid "AI generated"
+msgstr "IAk sortua"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Gehitu gutxienez galdera bat ikaskuntza-bidera itzuli aurretik."
+
+msgid "Add attachments"
+msgstr "Gehitu eranskinak"
+
+msgid "Additional fields"
+msgstr "Eremu gehigarriak"
+
+msgid "Allow comments"
+msgstr "Iruzkinak onartu"
+
+msgid "Allow new pages"
+msgstr "Orri berriak onartu"
+
+msgid "Allow ratings"
+msgstr "Balorazioak onartu"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Ziur al zaude elementu guztiak ezabatu nahi dituzula?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Ziur al zaude berritze automatikoa berrezarri nahi duzula?"
+
+msgid "Attachment has been deleted"
+msgstr "Eranskina ezabatu da"
+
+msgid "Backup file"
+msgstr "Babeskopia-fitxategia"
+
+msgid "Block comments"
+msgstr "Iruzkinak blokeatu"
+
+msgid "Block new pages"
+msgstr "Orri berriak blokeatu"
+
+msgid "Block ratings"
+msgstr "Balorazioak blokeatu"
+
+msgid "Cancel renewal"
+msgstr "Utzi berritzea"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Kategoria-estekak %s Wiki orritatik kenduko dira."
+
+msgid "Change"
+msgstr "Aldatu"
+
+msgid "Clear group"
+msgstr "Garbitu taldea"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Egin klik etiketa batean editorean txertatzeko. Leku-marka hauek ziurtagiria sortzean ordezkatuko dira."
+
+msgid "Comment added"
+msgstr "Iruzkina gehitu da"
+
+msgid "Comment is required"
+msgstr "Iruzkina beharrezkoa da"
+
+msgid "Comment score"
+msgstr "Iruzkinaren puntuazioa"
+
+msgid "Compare selected versions line by line"
+msgstr "Alderatu hautatutako bertsioak lerroz lerro"
+
+msgid "Compare selected versions word by word"
+msgstr "Alderatu hautatutako bertsioak hitzez hitz"
+
+msgid "Compare versions"
+msgstr "Alderatu bertsioak"
+
+msgid "Copy completed"
+msgstr "Kopia osatu da"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Sortu banakako Wiki lan-orriak ikasleentzat"
+
+msgid "Current view mode"
+msgstr "Uneko ikuspegi modua"
+
+msgid "Delete Wiki"
+msgstr "Ezabatu Wiki"
+
+msgid "Delete page"
+msgstr "Ezabatu orria"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Ez da gomendagarria Wiki hasiera-orria ezabatzea. Berriro sor dezakezu geroago."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Wiki desgaitzeak Wiki orri eta ekintza normalak blokeatzen ditu. Ezarpen-orri hau ikastaro-irakasleentzat eskuragarri jarraituko da."
+
+msgid "Discussion"
+msgstr "Eztabaida"
+
+msgid "Edit Comment"
+msgstr "Editatu iruzkina"
+
+msgid "Edit page"
+msgstr "Editatu orria"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Amaiera-datak iraungitze-data baino geroago edo berdin izan behar du"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Sartu bilaketa-termino bat Wiki orriak aurkitzeko"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Iraungitze-datak amaiera-data baino lehenago edo berdin izan behar du"
+
+msgid "Failed email recipients"
+msgstr "Posta elektronikoaren hartzaile hutsak"
+
+msgid "Finish and return to learning path"
+msgstr "Amaitu eta itzuli ikaskuntza-bidera"
+
+msgid "Forum image"
+msgstr "Foro-irudia"
+
+msgid "Hide discussion"
+msgstr "Ezkutatu eztabaida"
+
+msgid "Hide page"
+msgstr "Ezkutatu orria"
+
+msgid "I changed my mind"
+msgstr "Iritzia aldatu dut"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Hautatu ez bada, fitxategi horiek plataformako administratzailearentzat eskuragarri jarraituko dira 'Fitxategi-informazioa' tresnaren bidez."
+
+msgid "Internal message failures"
+msgstr "Barne-mezuen hutsegiteak"
+
+msgid "Internal messages available"
+msgstr "Barne-mezuak eskuragarri"
+
+msgid "Internal messages created now"
+msgstr "Barne-mezuak orain sortu dira"
+
+msgid "Item score"
+msgstr "Elementuaren puntuazioa"
+
+msgid "Last post"
+msgstr "Azken mezua"
+
+msgid "Lock page"
+msgstr "Blokeatu orria"
+
+msgid "Manage categories"
+msgstr "Kudeatu kategoriak"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Dokumentu hau IA lagunduta markatzen du. Erabili edukia IA tresnekin sortu edo nabarmen aldatu denean."
+
+msgid "Maximum score is required"
+msgstr "Gehieneko puntuazioa beharrezkoa da"
+
+msgid "Metric"
+msgstr "Metrika"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Iruzkin berriak blokeatuta daude eztabaida honetan"
+
+msgid "No Wiki categories are available yet."
+msgstr "Ez dago Wiki kategoririk eskuragarri oraindik."
+
+msgid "No categories found"
+msgstr "Ez da kategoriarik aurkitu"
+
+msgid "No content"
+msgstr "Ez dago edukirik"
+
+msgid "No parent category"
+msgstr "Ez dago kategoria gurasorik"
+
+msgid "Number of comments scored"
+msgstr "Puntuatutako iruzkinen kopurua"
+
+msgid "Old version"
+msgstr "Bertsio zaharra"
+
+msgid "Only image files are allowed."
+msgstr "Irudi-fitxategiak soilik onartzen dira."
+
+msgid "Please fill all required fields"
+msgstr "Bete eremu guztiak beharrezkoak"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Galdera klase edo ikasle leku-markekin sortuko dira ikastaro-klase edo taldeetarako: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Balorazioak blokeatuta daude eztabaida honetan"
+
+msgid "Remove image"
+msgstr "Kendu irudia"
+
+msgid "Restore renewal"
+msgstr "Berrezarri berritzea"
+
+msgid "Restore version"
+msgstr "Berrezarri bertsioa"
+
+msgid "Search in"
+msgstr "Bilatu hemen"
+
+msgid "Select group"
+msgstr "Hautatu taldea"
+
+msgid "Select image"
+msgstr "Hautatu irudia"
+
+msgid "Selected image"
+msgstr "Hautatutako irudia"
+
+msgid "Show discussion"
+msgstr "Erakutsi eztabaida"
+
+msgid "Show page"
+msgstr "Erakutsi orria"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Fitxategi edo karpetetako batzuek ez dute idazteko baimenik. Chamilo instalatu ahal izateko, lehenik baimenak aldatu behar dituzu (CHMOD erabiliz). Irakurri"
+
+msgid "Subcategories"
+msgstr "Azpikategoriak"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Sakatu ezkerrean edo eskuinean nabigatzeko"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki lanaren epea amaitu da, baina atzeratutako bidalketa onartzen da."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki lanaren epea amaitu da."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki lana ez da oraindik hasi."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Wiki orriaren edizio-blokeoa beharrezkoa da gorde aurretik."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Iragarkia gorde da, baina eranskina ezin izan da kargatu."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Iragarkia gorde da, baina posta elektronikoaren bidalketak huts egin du."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Iragarkia gorde da, baina ezin izan da posta elektronikorik bidali."
+
+msgid "The category has been created"
+msgstr "Kategoria sortu da"
+
+msgid "The category has been deleted"
+msgstr "Kategoria ezabatu da"
+
+msgid "The category has been updated"
+msgstr "Kategoria eguneratu da"
+
+msgid "The end date is invalid"
+msgstr "Amaiera-data ez da baliozkoa"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Bertsio kopuru maximoak zenbaki oso ez-negatiboa izan behar du"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Hitz kopuru maximoak zenbaki oso ez-negatiboa izan behar du"
+
+msgid "The print window could not be opened"
+msgstr "Ezin izan da inprimatzeko leihoa ireki"
+
+msgid "The start date is invalid"
+msgstr "Hasiera-data ez da baliozkoa"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Ezarpen hauek ikastaro osoari aplikatzen zaizkio, bere saioak eta taldeak barne."
+
+msgid "This announcement has already been sent by email."
+msgstr "Iragarki hau dagoeneko bidali da posta elektroniko bidez."
+
+msgid "This discussion is hidden from learners"
+msgstr "Eztabaida hau ezkutuan dago ikasleentzat"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Adimen artifizial sortzaileko tresna honek zure ikastaroa ilustratzeko irudiak eta bideo laburrak sortzeko aukera ematen dizu. Zer nahi duzun testu bidez azalduz (gonbite atalean), AI eredu konfiguratutakoari irudi edo bideo bat sortzeko beharrezko elementuak emango dizkiozu. Izan pazientzia. AI ereduak denbora beharko du eta emaitza bat sortuko du, eta agian nahi izango duzu multimedia zure dokumentuen karpetan gordez gorde eta gero HTML dokumentu batean txertatzea. Ez dira AI eredu guztiak berdinak abiadura edo kalitateari dagokionez. AI ereduak gonbite aldatu bat ere eman diezazuke, zure eskaeraren interpretazio zehatzagoa dena. Gonbite aldatu hori erabil dezakezu zure eskaera doitzeko. Kontuan izan tresna honek, batez ere bideoetarako, kostu handiak sor ditzakeela zure erakundearentzat, sortutako multimedia gordetzea erabakitzen ez baduzu ere. Erabili dagokion moduan. Bilatzen ari zaren emaitza lortzeko arazoak badituzu, hartu denbora linean gonbite-trukak ikertzeko zure esku dagoen AI eredurako."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Historia hau oinarrizko ikastaroari dagokio. Berrezarpena saio-bertsio bat sortu ondoren dago eskuragarri."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Irudi honek foro-izenburuaren ondoan erakusten den foro-ikono lehenetsia ordezkatzen du."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Orri hau oinarrizko ikastaroaren jatorria du. Gordetzean uneko saiorako bertsio bat sortuko du."
+
+msgid "This will also delete %s subcategories."
+msgstr "Honek %s azpikategoria ere ezabatuko ditu."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Honek lan-orri indibidualak sortuko ditu %s ikaslerentzat."
+
+msgid "Thread history"
+msgstr "Hari-historia"
+
+msgid "Title and content"
+msgstr "Izenburua eta edukia"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Ezin da berritzea bertan behera utzi une honetan."
+
+msgid "Unable to restore renewal right now."
+msgstr "Ezin da berritzea berrezarri une honetan."
+
+msgid "Unlock page"
+msgstr "Desblokeatu orria"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Erabili [[Orria]] edo [[Orria|Testu ikusgai]] Wiki barruko estekak sortzeko."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Erabili zuriune-barra edo gezi-teklak nabigatzeko"
+
+msgid "View version"
+msgstr "Ikusi bertsioa"
+
+msgid "Visible only to teachers"
+msgstr "Irakasleentzat soilik ikusgai"
+
+msgid "Weight is required"
+msgstr "Pisua beharrezkoa da"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki kategoriak desgaituta daude ikastaro honetarako."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki kategoriak gaituta"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki HTML iragazketa zorrotza"
+
+msgid "Wiki settings"
+msgstr "Wiki ezarpenak"
+
+msgid "Wiki settings updated"
+msgstr "Wiki ezarpenak eguneratu dira"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Orri honen bertsio historikoa ikusten ari zara"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Erantzun honi fitxategi bat edo gehiago erantsi ditzakezu."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Zereginen orri hau editatu dezakezu, baina ikasleen lan-orriak ez dira aldatuko."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Galderan {{class_name}} eta {{student_full_name}} etiketak erabil ditzakezu."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "20 minutu dituzu orri hau editatzeko, editatzeko blokeoa iraungi aurretik."
+
+msgid "by"
+msgstr "egilea"
+
+msgid "required"
+msgstr "beharrezkoa"
+

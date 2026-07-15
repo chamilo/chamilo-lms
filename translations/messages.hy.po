@@ -36493,3 +36493,852 @@ msgstr "Դիտել թեմաները"
 msgid "No auth source"
 msgstr "Չկա նույնականացման աղբյուր"
 
+msgid "You must add at least one question"
+msgstr "Դուք պետք է ավելացնեք առնվազն մեկ հարց"
+
+msgid "Advanced actions"
+msgstr "Ընդլայնված գործողություններ"
+
+msgid "Application path"
+msgstr "Հավելվածի ուղի"
+
+msgid "Apply files details"
+msgstr "Կիրառել ֆայլերի մանրամասները"
+
+msgid "Apply plan details"
+msgstr "Կիրառել պլանի մանրամասները"
+
+msgid "Apply plan failed"
+msgstr "Պլանի կիրառումը ձախողվեց"
+
+msgid "Apply plan ready"
+msgstr "Պլանը պատրաստ է կիրառման"
+
+msgid "Apply preparation"
+msgstr "Կիրառման նախապատրաստում"
+
+msgid "Apply staged files"
+msgstr "Կիրառել փուլավորված ֆայլերը"
+
+msgid "Applying files..."
+msgstr "Ֆայլերի կիրառում..."
+
+msgid "Audit file"
+msgstr "Աուդիտի ֆայլ"
+
+msgid "Backup directory"
+msgstr "Պահուստավորման գրացուցակ"
+
+msgid "Baseline clean"
+msgstr "Հիմնական մաքրում"
+
+msgid "Baseline warnings"
+msgstr "Հիմնական նախազգուշացումներ"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Կառուցել անվտանգ կիրառման պլան փուլավորված փաթեթից։ Սա ստուգում է միայն ֆայլերը, թույլտվությունները, պահուստավորման ուղին և կողպման կարգավիճակը։ Այն չի փոխարինում ֆայլերը։"
+
+msgid "Build production frontend assets."
+msgstr "Կառուցել արտադրական ճակատային ակտիվներ։"
+
+msgid "Building plan..."
+msgstr "Պլանի կառուցում..."
+
+msgid "Channel"
+msgstr "Ալիք"
+
+msgid "Check"
+msgstr "Ստուգել"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Ստուգել Chamilo-ի հասանելի թարմացումները, ստուգել փաթեթները, փուլավորել ֆայլերը և կատարել վերահսկվող թարմացումից հետո քայլեր։"
+
+msgid "Check manifest"
+msgstr "Ստուգել մանիֆեստը"
+
+msgid "Checking post-apply actions..."
+msgstr "Կիրառումից հետո գործողությունների ստուգում..."
+
+msgid "Checking..."
+msgstr "Ստուգում..."
+
+msgid "Composer install"
+msgstr "Composer-ի տեղադրում"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn և տվյալների բազայի միգրացիայի գործողությունները կարող են փոփոխել կախվածությունները, ստեղծված ակտիվները կամ տվյալների բազան։ Ընտրեք դրանք միայն պահուստավորման և թույլտվությունների հաստատումից հետո։"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Կարգավորեք CHAMILO_UPDATE_MANIFEST_URL սերվերում կամ տրամադրեք HTTPS մանիֆեստի URL։"
+
+msgid "Configured"
+msgstr "Կարգավորված"
+
+msgid "Current migration"
+msgstr "Ընթացիկ միգրացիա"
+
+msgid "Database baseline"
+msgstr "Տվյալների բազայի ելակետ"
+
+msgid "Database migration safety review"
+msgstr "Տվյալների բազայի միգրացիայի անվտանգության ստուգում"
+
+msgid "Database migrations"
+msgstr "Տվյալների բազայի միգրացիաներ"
+
+msgid "Development mode"
+msgstr "Մշակման ռեժիմ"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Մի միացրեք սա, եթե չեն ստուգվել թարմացման կրկնօրինակը և սերվերի թույլտվությունները։"
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine-ի փորձնական գործարկման հրաման"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine-ը հայտնաբերել է պատմական ելակետի նախազգուշացումներ։ Թարմացնողը կկատարի միայն V210 փուլային միգրացիաները հստակ հաստատումից հետո։"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine-ը կկատարի միայն V210 փուլային միգրացիաները անվտանգության ստուգումն անցնելուց հետո։"
+
+msgid "Dry-run exit code"
+msgstr "Փորձնական գործարկման ելքային կոդ"
+
+msgid "Executed unavailable migrations"
+msgstr "Կատարված անհասանելի միգրացիաներ"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Ստուգված թարմացման փաթեթը հանեք ժամանակավոր գրացուցակում ստուգման համար։ Սա չի փոխարինում ֆայլերը, չի գործարկում միգրացիաներ կամ չի փոխում տվյալների բազան։"
+
+msgid "File apply available"
+msgstr "Ֆայլի կիրառումը հասանելի է"
+
+msgid "Files to replace"
+msgstr "Փոխարինվող ֆայլեր"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Հաստատում եմ, որ տվյալների բազայի կրկնօրինակը գոյություն ունի և ստուգվել է միգրացիաները գործարկելուց առաջ։"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Հասկանում եմ, որ առաջադեմ գործողությունները կարող են փոխել կախվածությունները, ստեղծված ակտիվները կամ տվյալների բազան։"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Հասկանում եմ, որ սա կփոխարինի ֆայլերը Chamilo-ի տեղադրման մեջ։"
+
+msgid "I understand this will run update commands on the server."
+msgstr "Հասկանում եմ, որ սա կգործարկի թարմացման հրամաններ սերվերում։"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Տեղադրեք frontend կախվածությունները ակտիվները վերակառուցելուց առաջ։"
+
+msgid "Installed version"
+msgstr "Տեղադրված տարբերակ"
+
+msgid "Latest migration"
+msgstr "Վերջին միգրացիա"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Թողեք փաթեթի և ստորագրության ուղիները դատարկ՝ դրանք ստանալու համար ստուգված մանիֆեստի URL-ներից։ Տեղական ուղիները հասանելի են միայն մշակման թեստերի համար։"
+
+msgid "Live command log"
+msgstr "Հրամանների կենդանի գրանցամատյան"
+
+msgid "Live update log"
+msgstr "Թարմացման կենդանի գրանցամատյան"
+
+msgid "Local test options"
+msgstr "Տեղական թեստավորման ընտրանքներ"
+
+msgid "Local test update notice link"
+msgstr "Տեղական թեստավորման թարմացման ծանուցման հղում"
+
+msgid "Local update notice simulation"
+msgstr "Տեղական թարմացման ծանուցման սիմուլյացիա"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Տեղական թարմացման ծանուցման սիմուլյացիան հասանելի է միայն մշակման ռեժիմում։"
+
+msgid "Manifest"
+msgstr "Մանիֆեստ"
+
+msgid "Manifest source"
+msgstr "Մանիֆեստի աղբյուր"
+
+msgid "Migration safety details"
+msgstr "Միգրացիայի անվտանգության մանրամասներ"
+
+msgid "Migration safety review failed"
+msgstr "Միգրացիայի անվտանգության ստուգումը ձախողվեց"
+
+msgid "Migration safety review ready"
+msgstr "Միգրացիայի անվտանգության ստուգումը պատրաստ է"
+
+msgid "Migration target"
+msgstr "Միգրացիայի նպատակ"
+
+msgid "New files"
+msgstr "Նոր ֆայլեր"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine-ի կողմից հայտնաբերված նոր միգրացիաներ"
+
+msgid "Next migration"
+msgstr "Հաջորդ միգրացիա"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Չի հայտնաբերվել կատարված անհասանելի միգրացիա։"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Պաշտոնական մանիֆեստի URL դեռ կարգավորված չէ։ Օգտագործեք HTTPS URL կամ տեղական ուղի մշակման թեստերի համար։"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Չի հայտնաբերվել սպասվող միգրացիա փուլային թարմացման նպատակից առաջ։"
+
+msgid "Not configured"
+msgstr "Կարգավորված չէ"
+
+msgid "Not detected"
+msgstr "Չի հայտնաբերվել"
+
+msgid "Official Chamilo update channel"
+msgstr "Պաշտոնական Chamilo թարմացման ալիք"
+
+msgid "Package SHA-256"
+msgstr "Փաթեթի SHA-256"
+
+msgid "Package URL"
+msgstr "Փաթեթի URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Փաթեթը և ստորագրությունը կներբեռնվեն մանիֆեստից։ Տեղական ուղիները անջատված են այս միջավայրում։"
+
+msgid "Package path"
+msgstr "Փաթեթի ուղի"
+
+msgid "Package staged successfully"
+msgstr "Փաթեթը հաջողությամբ տեղադրվեց ժամանակավոր գրացուցակում"
+
+msgid "Package staging failed"
+msgstr "Փաթեթի պատրաստումը ձախողվեց"
+
+msgid "Package verification"
+msgstr "Փաթեթի ստուգում"
+
+msgid "Package verification failed"
+msgstr "Փաթեթի ստուգումը ձախողվեց"
+
+msgid "Package verified successfully"
+msgstr "Փաթեթը հաջողությամբ ստուգվեց"
+
+msgid "Pending migrations before this update"
+msgstr "Տվյալ թարմացումից առաջ սպասվող միգրացիաներ"
+
+msgid "Planned backup path"
+msgstr "Պլանավորված պահուստավորման ուղի"
+
+msgid "Post-apply actions completed"
+msgstr "Կիրառումից հետո գործողություններն ավարտվեցին"
+
+msgid "Post-apply actions failed"
+msgstr "Կիրառումից հետո գործողությունները ձախողվեցին"
+
+msgid "Post-apply actions ready"
+msgstr "Կիրառումից հետո գործողությունները պատրաստ են"
+
+msgid "Post-apply checks"
+msgstr "Կիրառումից հետո ստուգումներ"
+
+msgid "Post-apply checks failed"
+msgstr "Կիրառումից հետո ստուգումները ձախողվեցին"
+
+msgid "Post-apply details"
+msgstr "Կիրառումից հետո մանրամասներ"
+
+msgid "Post-apply run details"
+msgstr "Կիրառումից հետո գործարկման մանրամասներ"
+
+msgid "Preflight checks"
+msgstr "Նախնական ստուգումներ"
+
+msgid "Preflight checks completed"
+msgstr "Նախնական ստուգումներն ավարտվեցին"
+
+msgid "Preflight checks failed"
+msgstr "Նախնական ստուգումները ձախողվեցին"
+
+msgid "Preflight details"
+msgstr "Նախնական մանրամասներ"
+
+msgid "Prepare staging"
+msgstr "Պատրաստել փուլավորումը"
+
+msgid "Preparing staging..."
+msgstr "Փուլավորումը պատրաստվում է..."
+
+msgid "Production mode"
+msgstr "Արտադրական ռեժիմ"
+
+msgid "Released at"
+msgstr "Թողարկվել է"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Փոխարինել Chamilo-ի ֆայլերը փուլավորված փաթեթից՝ օգտագործելով վերանայված կիրառման պլանը: Սա չի գործարկում տվյալների բազայի միգրացիաներ, Composer, Yarn կամ քեշի հրամաններ:"
+
+msgid "Review apply plan"
+msgstr "Վերանայել կիրառման պլանը"
+
+msgid "Review database migrations"
+msgstr "Վերանայել տվյալների բազայի միգրացիաները"
+
+msgid "Review post-apply actions"
+msgstr "Վերանայել կիրառումից հետո գործողությունները"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Վերանայել առաջարկվող ձեռքով հրամանները թարմացման ֆայլերը կիրառելուց հետո: Այս քայլը չի գործարկում Composer, Yarn, միգրացիաներ կամ քեշի հրամաններ:"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Վերանայել փուլավորված Doctrine միգրացիաները և չոր գործարկման արդյունքը մինչ տվյալների բազայի միգրացիաների գործարկումը:"
+
+msgid "Reviewing database migrations..."
+msgstr "Տվյալների բազայի միգրացիաները վերանայվում են..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Գործարկել և անցնել միգրացիայի անվտանգության վերանայումը մինչ տվյալների բազայի միգրացիաների կատարումը:"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Գործարկել միջավայրի ստուգումները մինչև թարմացման կիրառման ցանկացած հետագա քայլ: Սա չի փոփոխում ֆայլերը կամ տվյալների բազան:"
+
+msgid "Run post-apply actions"
+msgstr "Գործարկել կիրառումից հետո գործողությունները"
+
+msgid "Run preflight checks"
+msgstr "Գործարկել նախնական ստուգումները"
+
+msgid "Run selected post-apply actions"
+msgstr "Գործարկել ընտրված կիրառումից հետո գործողությունները"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Գործարկել ընտրված կիրառումից հետո հրամանները սերվերից՝ օգտագործելով վերահսկվող թույլատրելի ցուցակ: Պատվերով shell հրամաններ չեն ընդունվում:"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Գործարկել այս հրամանները ձեռքով սերվերից՝ հաստատելով ֆայլերի թարմացման արդյունքը և պահուստները:"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Արտադրական ռեժիմում UI-ից կիրառումից հետո գործողությունների գործարկումն անջատված է:"
+
+msgid "Running post-apply actions..."
+msgstr "Կիրառումից հետո գործողությունները գործարկվում են..."
+
+msgid "Safe actions"
+msgstr "Անվտանգ գործողություններ"
+
+msgid "Signature path"
+msgstr "Ստորագրության ուղի"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Այս միջավայրում ստորագրության ստուգումը չի կարող բաց թողնվել:"
+
+msgid "Skip signature verification for local development tests"
+msgstr "Բաց թողնել ստորագրության ստուգումը տեղական մշակման թեստերի համար"
+
+msgid "Staged file application failed"
+msgstr "Փուլավորված ֆայլերի կիրառումը ձախողվեց"
+
+msgid "Staged files applied successfully"
+msgstr "Փուլավորված ֆայլերը հաջողությամբ կիրառվեցին"
+
+msgid "Staging details"
+msgstr "Փուլավորման մանրամասներ"
+
+msgid "Staging directory"
+msgstr "Փուլավորման գրացուցակ"
+
+msgid "Staging extraction"
+msgstr "Փուլավորման արդյունահանում"
+
+msgid "Symfony cache clear"
+msgstr "Symfony քեշի մաքրում"
+
+msgid "System update"
+msgstr "Համակարգի թարմացում"
+
+msgid "Target version"
+msgstr "Թիրախային տարբերակ"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Կազմաձևված պաշտոնական մանիֆեստի URL-ը նախապես լրացված է: Անհրաժեշտության դեպքում կարող եք փոխել այն մեկ այլ HTTPS մանիֆեստի:"
+
+msgid "The database migration baseline is clean."
+msgstr "Տվյալների բազայի միգրացիայի ելակետը մաքուր է։"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Գործողության ավարտից հետո վերջնական HTTP պատասխանը ձախողվեց։ Սա սովորաբար պայմանավորված է գործարկման քեշի թույլտվություններով կամ վեբ սերվերի վերագործարկմամբ հարցման ընթացքում։"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Գործողության մատյանում նշվում է, որ կիրառումից հետո գործողություններն ավարտվել են հաջողությամբ։"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Ընտրված կիրառումից հետո հրամաններն ավարտվել են հաջողությամբ, սակայն վերջնական HTTP պատասխանը ձախողվեց։ Թարմացրեք էջը և ստուգեք գործարկման քեշի թույլտվությունները, եթե էջը ճիշտ չի բեռնվում։"
+
+msgid "The updater does not create or restore database backups."
+msgstr "Թարմացնիչը չի ստեղծում կամ վերականգնում տվյալների բազայի կրկնօրինակներ։"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Այս գործողությունները անվտանգ են UI-ից գործարկելու համար թարմացման արդյունքը վերանայելուց հետո։"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Այս հրամանները կարող են փոփոխել կախվածությունները, ստեղծված ակտիվները, քեշը կամ տվյալների բազան։ Շարունակելուց առաջ հաստատեք կրկնօրինակները։"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Այս գործողությունը փոփոխում է ֆայլերը Chamilo-ի տեղադրման մեջ։ Շարունակելուց առաջ համոզվեք, որ կիրառման պլանը վերանայվել է և կրկնօրինակները միացված են։"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Այս մշակման գրառումը նմանակում է ապագա Chamilo.org թարմացման ծանուցումը՝ օգտագործելով տեղական փորձարկման փաթեթների ուղիները։"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Այս էկրանը բացվել է պաշտոնական թարմացման ծանուցումից, սակայն պաշտոնական մանիֆեստի աղբյուրը դեռ կազմաձևված չէ։"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Այս էկրանը բացվել է թարմացման ծանուցումից։ Ավտոմատ կերպով սկսվում է միայն մանիֆեստի ստուգումը։"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Այս քայլը պատրաստում է միայն վերանայում։ Ֆայլերի փոխարինումը տեղի կունենա ավելի ուշ՝ «Կիրառել փուլավորված ֆայլեր» քայլում՝ կողպեքի, կրկնօրինակման և հետադարձ պաշտպանությամբ։"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Այս թարմացնիչը չի ստեղծում տվյալների բազայի կրկնօրինակ։ Միգրացիաները գործարկելուց առաջ ստեղծեք և ստուգեք կրկնօրինակը։"
+
+msgid "Trusted public key"
+msgstr "Վստահելի հանրային բանալի"
+
+msgid "Trusted signing key"
+msgstr "Վստահելի ստորագրման բանալի"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Հաստատելու համար մուտքագրեք APPLY UPDATE FILES"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Տվյալների բազայի միգրացիաները հաստատելու համար մուտքագրեք RUN DATABASE MIGRATIONS"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Հաստատելու համար մուտքագրեք RUN POST UPDATE ACTIONS"
+
+msgid "Unknown update notice source."
+msgstr "Թարմացման ծանուցման անհայտ աղբյուր։"
+
+msgid "Update availability"
+msgstr "Թարմացման հասանելիություն"
+
+msgid "Update directory"
+msgstr "Թարմացման գրացուցակ"
+
+msgid "Update lock path"
+msgstr "Թարմացման կողպեքի ուղի"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Օգտագործեք նախորդ քայլի կողմից ստեղծված փուլավորման գրացուցակը։ Հետին պլանը ընդունում է միայն var/update/staging-ի ներսում գտնվող գրացուցակներ։"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Օգտագործեք այս հղումը՝ մշակման փորձարկումների ընթացքում ապագա Chamilo.org թարմացման ծանուցումը նմանակելու համար։"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Օգտագործեք սա միայն տեղական մշակման փորձարկումների համար։ Արտադրական թարմացումները պետք է օգտագործեն սերվերի կողմից կազմաձևված բանալին։"
+
+msgid "Verification details"
+msgstr "Ստուգման մանրամասներ"
+
+msgid "Verify package"
+msgstr "Ստուգել փաթեթը"
+
+msgid "Verifying..."
+msgstr "Ստուգվում է..."
+
+msgid "Waiting for command progress events..."
+msgstr "Սպասում է հրամանի առաջընթացի իրադարձություններին..."
+
+msgid "Waiting for update progress events..."
+msgstr "Սպասում է թարմացման առաջընթացի իրադարձություններին..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Պահանջվում է մեկնաբանություն"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Նույն անունով տվյալների բազա արդեն գոյություն ունի։ Եթե այն պարունակում է աղյուսակներ, դրանք կջնջվեն; եթե դատարկ է, այն կվերօգտագործվի։"
+
+msgid "AI generated"
+msgstr "AI-ով ստեղծված"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Ուսումնական ուղուն վերադառնալուց առաջ ավելացրեք առնվազն մեկ հարց։"
+
+msgid "Add attachments"
+msgstr "Ավելացնել կցորդներ"
+
+msgid "Additional fields"
+msgstr "Լրացուցիչ դաշտեր"
+
+msgid "Allow comments"
+msgstr "Թույլատրել մեկնաբանություններ"
+
+msgid "Allow new pages"
+msgstr "Թույլատրել նոր էջեր"
+
+msgid "Allow ratings"
+msgstr "Թույլատրել գնահատականներ"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք ջնջել բոլոր տարրերը։"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք վերականգնել ավտոմատ թարմացումը։"
+
+msgid "Attachment has been deleted"
+msgstr "Կցորդը ջնջվել է"
+
+msgid "Backup file"
+msgstr "Կրկնօրինակման ֆայլ"
+
+msgid "Block comments"
+msgstr "Արգելափակել մեկնաբանությունները"
+
+msgid "Block new pages"
+msgstr "Արգելափակել նոր էջերը"
+
+msgid "Block ratings"
+msgstr "Արգելափակել գնահատականները"
+
+msgid "Cancel renewal"
+msgstr "Չեղարկել թարմացումը"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Կատեգորիայի հղումները կհեռացվեն %s Wiki էջերից։"
+
+msgid "Change"
+msgstr "Փոխել"
+
+msgid "Clear group"
+msgstr "Մաքրել խումբը"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Սեղմեք պիտակի վրա՝ այն խմբագրիչում տեղադրելու համար: Այս տեղապահները կփոխարինվեն վկայականը ստեղծելիս:"
+
+msgid "Comment added"
+msgstr "Մեկնաբանությունն ավելացվեց"
+
+msgid "Comment is required"
+msgstr "Մեկնաբանությունը պարտադիր է"
+
+msgid "Comment score"
+msgstr "Մեկնաբանության գնահատական"
+
+msgid "Compare selected versions line by line"
+msgstr "Համեմատել ընտրված տարբերակները տող առ տող"
+
+msgid "Compare selected versions word by word"
+msgstr "Համեմատել ընտրված տարբերակները բառ առ բառ"
+
+msgid "Compare versions"
+msgstr "Համեմատել տարբերակները"
+
+msgid "Copy completed"
+msgstr "Պատճենումն ավարտվեց"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Ստեղծել անհատական Wiki էջեր սովորողների համար"
+
+msgid "Current view mode"
+msgstr "Ընթացիկ դիտման ռեժիմ"
+
+msgid "Delete Wiki"
+msgstr "Ջնջել Wiki-ն"
+
+msgid "Delete page"
+msgstr "Ջնջել էջը"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Wiki-ի գլխավոր էջի ջնջումը խորհուրդ չի տրվում: Դուք կարող եք այն վերստեղծել ավելի ուշ:"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Wiki-ի անջատումը կանգնեցնում է Wiki-ի սովորական էջերն ու գործողությունները: Այս կարգավորումների էջը մնում է հասանելի դասընթացի դասախոսներին:"
+
+msgid "Discussion"
+msgstr "Քննարկում"
+
+msgid "Edit Comment"
+msgstr "Խմբագրել մեկնաբանությունը"
+
+msgid "Edit page"
+msgstr "Խմբագրել էջը"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Ավարտի ամսաթիվը պետք է լինի ժամկետի ավարտի ամսաթվից հետո կամ հավասար դրան"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Մուտքագրեք որոնման բառ՝ Wiki էջեր գտնելու համար"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Ժամկետի ավարտի ամսաթիվը պետք է լինի ավարտի ամսաթվից առաջ կամ հավասար դրան"
+
+msgid "Failed email recipients"
+msgstr "Էլ. փոստի ձախողված ստացողներ"
+
+msgid "Finish and return to learning path"
+msgstr "Ավարտել և վերադառնալ ուսումնական ուղի"
+
+msgid "Forum image"
+msgstr "Ֆորումի պատկեր"
+
+msgid "Hide discussion"
+msgstr "Թաքցնել քննարկումը"
+
+msgid "Hide page"
+msgstr "Թաքցնել էջը"
+
+msgid "I changed my mind"
+msgstr "Ես փոխեցի իմ կարծիքը"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Եթե չնշվի, այդ ֆայլերը կմնան հասանելի հարթակի ադմինիստրատորին «Ֆայլի տեղեկություն» գործիքի միջոցով:"
+
+msgid "Internal message failures"
+msgstr "Ներքին հաղորդագրությունների ձախողումներ"
+
+msgid "Internal messages available"
+msgstr "Ներքին հաղորդագրություններ հասանելի"
+
+msgid "Internal messages created now"
+msgstr "Ներքին հաղորդագրություններ ստեղծված հիմա"
+
+msgid "Item score"
+msgstr "Տարրի գնահատական"
+
+msgid "Last post"
+msgstr "Վերջին գրառումը"
+
+msgid "Lock page"
+msgstr "Կողպել էջը"
+
+msgid "Manage categories"
+msgstr "Կառավարել կատեգորիաները"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Նշում է այս փաստաթուղթը որպես AI-ի օգնությամբ ստեղծված: Օգտագործեք այն, երբ բովանդակությունը ստեղծվել կամ զգալիորեն փոփոխվել է AI գործիքներով:"
+
+msgid "Maximum score is required"
+msgstr "Առավելագույն գնահատականը պարտադիր է"
+
+msgid "Metric"
+msgstr "Չափանիշ"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Այս քննարկումում նոր մեկնաբանություններն արգելափակված են"
+
+msgid "No Wiki categories are available yet."
+msgstr "Wiki կատեգորիաներ դեռ հասանելի չեն:"
+
+msgid "No categories found"
+msgstr "Կատեգորիաներ չեն գտնվել"
+
+msgid "No content"
+msgstr "Բովանդակություն չկա"
+
+msgid "No parent category"
+msgstr "Ծնող կատեգորիա չկա"
+
+msgid "Number of comments scored"
+msgstr "Գնահատված մեկնաբանությունների քանակը"
+
+msgid "Old version"
+msgstr "Հին տարբերակ"
+
+msgid "Only image files are allowed."
+msgstr "Թույլատրվում են միայն պատկերային ֆայլեր:"
+
+msgid "Please fill all required fields"
+msgstr "Խնդրում ենք լրացնել բոլոր պարտադիր դաշտերը"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Դասարանային կամ ուսանողական տեղապահներով հարցերը կստեղծվեն դասընթացի դասարանների կամ խմբերի համար՝ %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Այս քննարկումում գնահատումներն արգելափակված են"
+
+msgid "Remove image"
+msgstr "Հեռացնել պատկերը"
+
+msgid "Restore renewal"
+msgstr "Վերականգնել թարմացումը"
+
+msgid "Restore version"
+msgstr "Վերականգնել տարբերակը"
+
+msgid "Search in"
+msgstr "Որոնել"
+
+msgid "Select group"
+msgstr "Ընտրել խումբ"
+
+msgid "Select image"
+msgstr "Ընտրել պատկեր"
+
+msgid "Selected image"
+msgstr "Ընտրված պատկեր"
+
+msgid "Show discussion"
+msgstr "Ցույց տալ քննարկումը"
+
+msgid "Show page"
+msgstr "Ցույց տալ էջը"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Որոշ ֆայլեր կամ թղթապանակներ չունեն գրելու թույլտվություն: Chamilo-ն տեղադրելու համար նախ պետք է փոխել դրանց թույլտվությունները (օգտագործելով CHMOD): Խնդրում ենք կարդալ"
+
+msgid "Subcategories"
+msgstr "Ենթակատեգորիաներ"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Նավիգացիայի համար սեղմեք ձախ կամ աջ կողմում"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Վիքի առաջադրանքի վերջնաժամկետն անցել է, սակայն ուշ ներկայացումը թույլատրվում է:"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Վիքի առաջադրանքի վերջնաժամկետն անցել է:"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Վիքի առաջադրանքը դեռ չի սկսվել:"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Վիքի էջի խմբագրման կողպեքը պահանջվում է պահպանելուց առաջ:"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Հայտարարությունը պահպանվել է, սակայն հավելվածը չի կարող վերբեռնվել:"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Հայտարարությունը պահպանվել է, սակայն էլփոստի առաքումը ձախողվել է:"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Հայտարարությունը պահպանվել է, սակայն էլփոստ չի կարող առաքվել:"
+
+msgid "The category has been created"
+msgstr "Կատեգորիան ստեղծվել է"
+
+msgid "The category has been deleted"
+msgstr "Կատեգորիան ջնջվել է"
+
+msgid "The category has been updated"
+msgstr "Կատեգորիան թարմացվել է"
+
+msgid "The end date is invalid"
+msgstr "Ավարտի ամսաթիվը անվավեր է"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Տարբերակների առավելագույն քանակը պետք է լինի ոչ բացասական ամբողջ թիվ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Բառերի առավելագույն քանակը պետք է լինի ոչ բացասական ամբողջ թիվ"
+
+msgid "The print window could not be opened"
+msgstr "Տպագրության պատուհանը չի կարող բացվել"
+
+msgid "The start date is invalid"
+msgstr "Սկզբի ամսաթիվը անվավեր է"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Այս կարգավորումները վերաբերում են ամբողջ դասընթացին, ներառյալ դրա սեսիաները և խմբերը:"
+
+msgid "This announcement has already been sent by email."
+msgstr "Այս հայտարարությունն արդեն ուղարկվել է էլփոստով:"
+
+msgid "This discussion is hidden from learners"
+msgstr "Այս քննարկումը թաքցված է սովորողներից"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Այս գեներատիվ AI գործիքը թույլ է տալիս ստեղծել պատկերներ և կարճ տեսանյութեր՝ ձեր դասընթացը պատկերազարդելու համար: Տեքստով բացատրելով, թե ինչ եք ուզում հուշման բաժնում, դուք կտրամադրեք կազմաձևված AI մոդելին անհրաժեշտ տարրերը պատկեր կամ տեսանյութ ստեղծելու համար: Խնդրում ենք համբերատար լինել: AI մոդելը որոշ ժամանակ կպահանջի և կստեղծի որոշ արդյունք, որը դուք կարող եք պահել՝ պահպանելով մեդիան ձեր փաստաթղթերի թղթապանակում, այնուհետև ներդնելով HTML փաստաթղթի մեջ: Ոչ բոլոր AI մոդելներն են հավասար արագության կամ որակի առումով: AI մոդելը կարող է նաև ձեզ տրամադրել փոփոխված հուշում, որը ձեր հարցման ավելի մանրամասն մեկնաբանությունն է: Այնուհետև կարող եք օգտագործել այս փոփոխված հուշումը ձեր հարցումը ճշգրտելու համար: Խնդրում ենք հաշվի առնել, որ այս գործիքը, մասնավորապես տեսանյութերի համար, կարող է զգալի ծախսեր առաջացնել ձեր կազմակերպության համար, նույնիսկ եթե որոշեք չպահպանել ստեղծված մեդիան: Խնդրում ենք օգտագործել այն համապատասխանաբար: Եթե խնդիրներ ունեք ձեր փնտրածը ստանալու հարցում, խնդրում ենք որոշ ժամանակ ծախսել առցանց հետազոտել հուշման հնարքները ձեր տրամադրության տակ գտնվող AI մոդելի համար:"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Այս պատմությունը պատկանում է հիմնական դասընթացին: Վերականգնումը հասանելի է սեսիայի տարբերակ ստեղծելուց հետո:"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Այս պատկերը փոխարինում է ֆորումի լռելյայն պատկերակին, որը ցուցադրվում է ֆորումի վերնագրի կողքին:"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Այս էջը գալիս է հիմնական դասընթացից: Այն պահպանելը կստեղծի տարբերակ ընթացիկ սեսիայի համար:"
+
+msgid "This will also delete %s subcategories."
+msgstr "Սա նաև կջնջի %s ենթակատեգորիաներ:"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Սա կստեղծի անհատական աշխատանքային էջեր %s սովորողների համար:"
+
+msgid "Thread history"
+msgstr "Թեմայի պատմություն"
+
+msgid "Title and content"
+msgstr "Վերնագիր և բովանդակություն"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Չհաջողվեց չեղարկել թարմացումը հենց հիմա:"
+
+msgid "Unable to restore renewal right now."
+msgstr "Չհաջողվեց վերականգնել թարմացումը հենց հիմա:"
+
+msgid "Unlock page"
+msgstr "Բացել էջի կողպեքը"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Օգտագործեք [[Էջ]] կամ [[Էջ|Տեսանելի տեքստ]] ներքին Վիքի հղումներ ստեղծելու համար:"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Օգտագործեք բացատի ստեղնը կամ սլաքների ստեղները նավիգացիայի համար"
+
+msgid "View version"
+msgstr "Դիտել տարբերակը"
+
+msgid "Visible only to teachers"
+msgstr "Տեսանելի միայն ուսուցիչների համար"
+
+msgid "Weight is required"
+msgstr "Կշիռը պարտադիր է"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Վիքի կատեգորիաները անջատված են այս դասընթացի համար:"
+
+msgid "Wiki categories enabled"
+msgstr "Վիքի կատեգորիաները միացված են"
+
+msgid "Wiki html strict filtering"
+msgstr "Վիքի html խիստ զտում"
+
+msgid "Wiki settings"
+msgstr "Վիքի կարգավորումներ"
+
+msgid "Wiki settings updated"
+msgstr "Վիքիի կարգավորումները թարմացվեցին"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Դուք դիտում եք այս էջի պատմական տարբերակը"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Դուք կարող եք կցել մեկ կամ մի քանի ֆայլ այս պատասխանին։"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Դուք կարող եք խմբագրել այս առաջադրանքի էջը, սակայն սովորողների աշխատանքի էջերը չեն փոփոխվի։"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Դուք կարող եք օգտագործել {{class_name}} և {{student_full_name}} պիտակները հարցում։"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Դուք ունեք 20 րոպե այս էջը խմբագրելու համար, մինչև խմբագրման կողպեքը ժամկետանա։"
+
+msgid "by"
+msgstr "ըստ"
+
+msgid "required"
+msgstr "պարտադիր"
+

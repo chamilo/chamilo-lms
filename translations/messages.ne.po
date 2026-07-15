@@ -36493,3 +36493,852 @@ msgstr "थ्रेडहरू हेर्नुहोस्"
 msgid "No auth source"
 msgstr "कुनै प्रमाणीकरण स्रोत छैन"
 
+msgid "You must add at least one question"
+msgstr "तपाईंले कम्तिमा एउटा प्रश्न थप्नुपर्छ"
+
+msgid "Advanced actions"
+msgstr "उन्नत कार्यहरू"
+
+msgid "Application path"
+msgstr "अनुप्रयोग पथ"
+
+msgid "Apply files details"
+msgstr "फाइल विवरणहरू लागू गर्नुहोस्"
+
+msgid "Apply plan details"
+msgstr "योजना विवरणहरू लागू गर्नुहोस्"
+
+msgid "Apply plan failed"
+msgstr "योजना लागू गर्न असफल"
+
+msgid "Apply plan ready"
+msgstr "योजना लागू गर्न तयार"
+
+msgid "Apply preparation"
+msgstr "तयारी लागू गर्नुहोस्"
+
+msgid "Apply staged files"
+msgstr "स्टेज गरिएका फाइलहरू लागू गर्नुहोस्"
+
+msgid "Applying files..."
+msgstr "फाइलहरू लागू गर्दै..."
+
+msgid "Audit file"
+msgstr "अडिट फाइल"
+
+msgid "Backup directory"
+msgstr "ब्याकअप डाइरेक्टरी"
+
+msgid "Baseline clean"
+msgstr "बेसलाइन सफा"
+
+msgid "Baseline warnings"
+msgstr "बेसलाइन चेतावनीहरू"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "स्टेज गरिएको प्याकेजबाट सुरक्षित लागू योजना बनाउनुहोस्। यसले केवल फाइलहरू, अनुमतिहरू, ब्याकअप पथ र लक स्थिति जाँच गर्दछ। यसले फाइलहरू प्रतिस्थापन गर्दैन।"
+
+msgid "Build production frontend assets."
+msgstr "उत्पादन फ्रन्टएन्ड सम्पत्तिहरू निर्माण गर्नुहोस्।"
+
+msgid "Building plan..."
+msgstr "योजना निर्माण गर्दै..."
+
+msgid "Channel"
+msgstr "च्यानल"
+
+msgid "Check"
+msgstr "जाँच गर्नुहोस्"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "उपलब्ध Chamilo अद्यावधिकहरू जाँच गर्नुहोस्, प्याकेजहरू प्रमाणित गर्नुहोस्, फाइलहरू स्टेज गर्नुहोस् र नियन्त्रित अद्यावधिक-पछिका चरणहरू चलाउनुहोस्।"
+
+msgid "Check manifest"
+msgstr "म्यानिफेस्ट जाँच गर्नुहोस्"
+
+msgid "Checking post-apply actions..."
+msgstr "लागू-पछिका कार्यहरू जाँच गर्दै..."
+
+msgid "Checking..."
+msgstr "जाँच गर्दै..."
+
+msgid "Composer install"
+msgstr "Composer स्थापना"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn र डाटाबेस माइग्रेसन कार्यहरूले निर्भरताहरू, उत्पन्न सम्पत्तिहरू वा डाटाबेस परिवर्तन गर्न सक्छन्। तिनीहरूलाई ब्याकअप र अनुमतिहरू पुष्टि गरेपछि मात्र चयन गर्नुहोस्।"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "सर्भरमा CHAMILO_UPDATE_MANIFEST_URL कन्फिगर गर्नुहोस् वा HTTPS म्यानिफेस्ट URL प्रदान गर्नुहोस्।"
+
+msgid "Configured"
+msgstr "कन्फिगर गरिएको"
+
+msgid "Current migration"
+msgstr "हालको माइग्रेसन"
+
+msgid "Database baseline"
+msgstr "डाटाबेस बेसलाइन"
+
+msgid "Database migration safety review"
+msgstr "डाटाबेस माइग्रेसन सुरक्षा समीक्षा"
+
+msgid "Database migrations"
+msgstr "डाटाबेस माइग्रेसनहरू"
+
+msgid "Development mode"
+msgstr "विकास मोड"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "अद्यावधिक ब्याकअप र सर्भर अनुमतिहरू समीक्षा नभएसम्म यो सक्षम नगर्नुहोस्।"
+
+msgid "Doctrine dry-run command"
+msgstr "डक्ट्रीन ड्राई-रन आदेश"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "डक्ट्रीनले ऐतिहासिक आधाररेखा चेतावनीहरू रिपोर्ट गरेको छ। अद्यावधिककर्ताले स्पष्ट पुष्टि पछि मात्र चरणबद्ध V210 माइग्रेसनहरू कार्यान्वयन गर्नेछ।"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "डक्ट्रीनले सुरक्षा समीक्षा पास भएपछि मात्र चरणबद्ध V210 माइग्रेसनहरू स्पष्ट रूपमा कार्यान्वयन गर्नेछ।"
+
+msgid "Dry-run exit code"
+msgstr "ड्राई-रन निकास कोड"
+
+msgid "Executed unavailable migrations"
+msgstr "उपलब्ध नभएका माइग्रेसनहरू कार्यान्वयन गरियो"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "निरीक्षणका लागि प्रमाणित अद्यावधिक प्याकेजलाई स्टेजिङ डाइरेक्टरीमा निकाल्नुहोस्। यसले फाइलहरू प्रतिस्थापन गर्दैन, माइग्रेसन चलाउँदैन वा डाटाबेस परिमार्जन गर्दैन।"
+
+msgid "File apply available"
+msgstr "फाइल लागू उपलब्ध"
+
+msgid "Files to replace"
+msgstr "प्रतिस्थापन गर्नुपर्ने फाइलहरू"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "माइग्रेसनहरू चलाउनुअघि डाटाबेस ब्याकअप अवस्थित छ र प्रमाणित गरिएको छ भनी म पुष्टि गर्दछु।"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "उन्नत कार्यहरूले निर्भरताहरू, उत्पन्न सम्पत्तिहरू वा डाटाबेस परिमार्जन गर्न सक्छ भनी म बुझ्दछु।"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "यसले चामिलो स्थापनामा फाइलहरू प्रतिस्थापन गर्नेछ भनी म बुझ्दछु।"
+
+msgid "I understand this will run update commands on the server."
+msgstr "यसले सर्भरमा अद्यावधिक आदेशहरू चलाउनेछ भनी म बुझ्दछु।"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "सम्पत्तिहरू पुनर्निर्माण गर्नुअघि फ्रन्टएन्ड निर्भरताहरू स्थापना गर्नुहोस्।"
+
+msgid "Installed version"
+msgstr "स्थापित संस्करण"
+
+msgid "Latest migration"
+msgstr "पछिल्लो माइग्रेसन"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "प्याकेज र हस्ताक्षर मार्गहरू खाली छोड्नुहोस् ताकि तिनीहरू प्रमाणित म्यानिफेस्ट URL हरूबाट डाउनलोड होस्। स्थानीय मार्गहरू विकास परीक्षणका लागि मात्र उपलब्ध छन्।"
+
+msgid "Live command log"
+msgstr "लाइभ आदेश लग"
+
+msgid "Live update log"
+msgstr "लाइभ अद्यावधिक लग"
+
+msgid "Local test options"
+msgstr "स्थानीय परीक्षण विकल्पहरू"
+
+msgid "Local test update notice link"
+msgstr "स्थानीय परीक्षण अद्यावधिक सूचना लिङ्क"
+
+msgid "Local update notice simulation"
+msgstr "स्थानीय अद्यावधिक सूचना सिमुलेशन"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "स्थानीय अद्यावधिक सूचना सिमुलेशन विकास मोडमा मात्र उपलब्ध छ।"
+
+msgid "Manifest"
+msgstr "म्यानिफेस्ट"
+
+msgid "Manifest source"
+msgstr "म्यानिफेस्ट स्रोत"
+
+msgid "Migration safety details"
+msgstr "माइग्रेसन सुरक्षा विवरणहरू"
+
+msgid "Migration safety review failed"
+msgstr "माइग्रेसन सुरक्षा समीक्षा असफल भयो"
+
+msgid "Migration safety review ready"
+msgstr "माइग्रेसन सुरक्षा समीक्षा तयार छ"
+
+msgid "Migration target"
+msgstr "माइग्रेसन लक्ष्य"
+
+msgid "New files"
+msgstr "नयाँ फाइलहरू"
+
+msgid "New migrations reported by Doctrine"
+msgstr "डक्ट्रीनद्वारा रिपोर्ट गरिएका नयाँ माइग्रेसनहरू"
+
+msgid "Next migration"
+msgstr "अर्को माइग्रेसन"
+
+msgid "No executed unavailable migration was reported."
+msgstr "कुनै पनि कार्यान्वयन नगरिएको अनुपलब्ध माइग्रेसन रिपोर्ट गरिएको थिएन।"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "अहिलेसम्म कुनै आधिकारिक म्यानिफेस्ट URL कन्फिगर गरिएको छैन। विकास परीक्षणका लागि HTTPS URL वा स्थानीय मार्ग प्रयोग गर्नुहोस्।"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "चरणबद्ध अद्यावधिक लक्ष्यअघि कुनै पनि पेन्डिङ माइग्रेसन पत्ता लागेन।"
+
+msgid "Not configured"
+msgstr "कन्फिगर गरिएको छैन"
+
+msgid "Not detected"
+msgstr "पत्ता लागेन"
+
+msgid "Official Chamilo update channel"
+msgstr "आधिकारिक चामिलो अद्यावधिक च्यानल"
+
+msgid "Package SHA-256"
+msgstr "प्याकेज SHA-256"
+
+msgid "Package URL"
+msgstr "प्याकेज URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "प्याकेज र हस्ताक्षर फाइलहरू म्यानिफेस्टबाट डाउनलोड गरिनेछ। यस वातावरणमा स्थानीय मार्गहरू असक्षम छन्।"
+
+msgid "Package path"
+msgstr "प्याकेज मार्ग"
+
+msgid "Package staged successfully"
+msgstr "प्याकेज सफलतापूर्वक स्टेज गरियो"
+
+msgid "Package staging failed"
+msgstr "प्याकेज स्टेजिङ असफल भयो"
+
+msgid "Package verification"
+msgstr "प्याकेज प्रमाणीकरण"
+
+msgid "Package verification failed"
+msgstr "प्याकेज प्रमाणीकरण असफल भयो"
+
+msgid "Package verified successfully"
+msgstr "प्याकेज सफलतापूर्वक प्रमाणित गरियो"
+
+msgid "Pending migrations before this update"
+msgstr "यो अद्यावधिक गर्नुअघि बाँकी माइग्रेसनहरू"
+
+msgid "Planned backup path"
+msgstr "योजनाबद्ध ब्याकअप मार्ग"
+
+msgid "Post-apply actions completed"
+msgstr "पोस्ट-एप्लाई कार्यहरू सम्पन्न"
+
+msgid "Post-apply actions failed"
+msgstr "पोस्ट-एप्लाई कार्यहरू असफल"
+
+msgid "Post-apply actions ready"
+msgstr "पोस्ट-एप्लाई कार्यहरू तयार"
+
+msgid "Post-apply checks"
+msgstr "पोस्ट-एप्लाई जाँचहरू"
+
+msgid "Post-apply checks failed"
+msgstr "पोस्ट-एप्लाई जाँचहरू असफल"
+
+msgid "Post-apply details"
+msgstr "पोस्ट-एप्लाई विवरणहरू"
+
+msgid "Post-apply run details"
+msgstr "पोस्ट-एप्लाई रन विवरणहरू"
+
+msgid "Preflight checks"
+msgstr "प्रीफ्लाइट जाँचहरू"
+
+msgid "Preflight checks completed"
+msgstr "प्रीफ्लाइट जाँचहरू सम्पन्न"
+
+msgid "Preflight checks failed"
+msgstr "प्रीफ्लाइट जाँचहरू असफल"
+
+msgid "Preflight details"
+msgstr "प्रीफ्लाइट विवरणहरू"
+
+msgid "Prepare staging"
+msgstr "स्टेजिङ तयार गर्नुहोस्"
+
+msgid "Preparing staging..."
+msgstr "स्टेजिङ तयार गर्दै..."
+
+msgid "Production mode"
+msgstr "उत्पादन मोड"
+
+msgid "Released at"
+msgstr "रिलिज गरिएको मिति"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "समीक्षा गरिएको एप्लाई योजना प्रयोग गरेर स्टेज्ड प्याकेजबाट चामिलो फाइलहरू प्रतिस्थापन गर्नुहोस्। यसले डाटाबेस माइग्रेसन, कम्पोजर, यार्न वा क्यास आदेशहरू चलाउँदैन।"
+
+msgid "Review apply plan"
+msgstr "एप्लाई योजना समीक्षा गर्नुहोस्"
+
+msgid "Review database migrations"
+msgstr "डाटाबेस माइग्रेसन समीक्षा गर्नुहोस्"
+
+msgid "Review post-apply actions"
+msgstr "पोस्ट-एप्लाई कार्यहरू समीक्षा गर्नुहोस्"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "अद्यावधिक फाइलहरू लागू गरेपछि सिफारिस गरिएका म्यानुअल आदेशहरू समीक्षा गर्नुहोस्। यस चरणले कम्पोजर, यार्न, माइग्रेसन वा क्यास आदेशहरू चलाउँदैन।"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "डाटाबेस माइग्रेसन चलाउनुअघि स्टेज्ड डक्ट्रीन माइग्रेसन र ड्राई-रन आउटपुट समीक्षा गर्नुहोस्।"
+
+msgid "Reviewing database migrations..."
+msgstr "डाटाबेस माइग्रेसन समीक्षा गर्दै..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "डाटाबेस माइग्रेसन कार्यान्वयन गर्नुअघि माइग्रेसन सुरक्षा समीक्षा चलाउनुहोस् र पास गर्नुहोस्।"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "कुनै पनि भविष्यको अद्यावधिक एप्लिकेसन चरण अघि वातावरण जाँचहरू चलाउनुहोस्। यसले फाइल वा डाटाबेस परिमार्जन गर्दैन।"
+
+msgid "Run post-apply actions"
+msgstr "पोस्ट-एप्लाई कार्यहरू चलाउनुहोस्"
+
+msgid "Run preflight checks"
+msgstr "प्रीफ्लाइट जाँचहरू चलाउनुहोस्"
+
+msgid "Run selected post-apply actions"
+msgstr "चयन गरिएका पोस्ट-एप्लाई कार्यहरू चलाउनुहोस्"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "नियन्त्रित अनुमति सूची प्रयोग गरेर सर्भरबाट चयन गरिएका पोस्ट-एप्लाई आदेशहरू चलाउनुहोस्। कुनै पनि अनुकूलन शेल आदेश स्वीकार गरिँदैन।"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "फाइल अद्यावधिक परिणाम र ब्याकअपहरू पुष्टि गरेपछि सर्भरबाट यी आदेशहरू म्यानुअल रूपमा चलाउनुहोस्।"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "उत्पादन मोडमा UI बाट पोस्ट-एप्लाई कार्यहरू चलाउन असक्षम गरिएको छ।"
+
+msgid "Running post-apply actions..."
+msgstr "पोस्ट-एप्लाई कार्यहरू चलाउँदै..."
+
+msgid "Safe actions"
+msgstr "सुरक्षित कार्यहरू"
+
+msgid "Signature path"
+msgstr "हस्ताक्षर मार्ग"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "यो वातावरणमा हस्ताक्षर प्रमाणीकरण छोड्न सकिँदैन।"
+
+msgid "Skip signature verification for local development tests"
+msgstr "स्थानीय विकास परीक्षणका लागि हस्ताक्षर प्रमाणीकरण छोड्नुहोस्"
+
+msgid "Staged file application failed"
+msgstr "स्टेज्ड फाइल एप्लिकेसन असफल"
+
+msgid "Staged files applied successfully"
+msgstr "स्टेज्ड फाइलहरू सफलतापूर्वक लागू गरियो"
+
+msgid "Staging details"
+msgstr "स्टेजिङ विवरणहरू"
+
+msgid "Staging directory"
+msgstr "स्टेजिङ डाइरेक्टरी"
+
+msgid "Staging extraction"
+msgstr "स्टेजिङ एक्स्ट्र्याक्सन"
+
+msgid "Symfony cache clear"
+msgstr "सिम्फोनी क्यास खाली गर्नुहोस्"
+
+msgid "System update"
+msgstr "प्रणाली अद्यावधिक"
+
+msgid "Target version"
+msgstr "लक्ष्य संस्करण"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "कन्फिगर गरिएको आधिकारिक म्यानिफेस्ट URL पूर्वपूरित छ। आवश्यक परेमा तपाईं यसलाई अर्को HTTPS म्यानिफेस्टमा परिवर्तन गर्न सक्नुहुन्छ।"
+
+msgid "The database migration baseline is clean."
+msgstr "डाटाबेस माइग्रेसन बेसलाइन सफा छ।"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "कार्य सम्पन्न भएपछि अन्तिम HTTP प्रतिक्रिया असफल भयो। यो सामान्यतया रनटाइम क्यास अनुमतिहरू वा अनुरोधको क्रममा वेब सर्भर रिस्टार्टको कारणले हुन्छ।"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "अपरेशन लगले पोस्ट-एप्लाई कार्यहरू सफलतापूर्वक सम्पन्न भएको रिपोर्ट गर्दछ।"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "चयन गरिएका पोस्ट-एप्लाई आदेशहरू सफलतापूर्वक सम्पन्न भए, तर अन्तिम HTTP प्रतिक्रिया असफल भयो। पृष्ठ पुनः लोड गर्नुहोस् र यदि पृष्ठ सही रूपमा लोड नभएमा रनटाइम क्यास अनुमतिहरू प्रमाणित गर्नुहोस्।"
+
+msgid "The updater does not create or restore database backups."
+msgstr "अपडेटरले डाटाबेस ब्याकअप सिर्जना वा पुनर्स्थापना गर्दैन।"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "यी कार्यहरू अपडेट परिणाम समीक्षा गरेपछि UI बाट चलाउन सुरक्षित छन्।"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "यी आदेशहरूले निर्भरता, उत्पन्न सम्पत्ति, क्यास वा डाटाबेस परिमार्जन गर्न सक्छन्। जारी राख्नुअघि ब्याकअप पुष्टि गर्नुहोस्।"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "यो कार्यले चामिलो स्थापनामा फाइलहरू परिमार्जन गर्छ। जारी राख्नुअघि लागू योजना समीक्षा गरिएको र ब्याकअप सक्षम गरिएको सुनिश्चित गर्नुहोस्।"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "यो विकास प्रविष्टिले स्थानीय परीक्षण प्याकेज मार्गहरू प्रयोग गरी भविष्यको चामिलो.ओर्ग अपडेट सूचना अनुकरण गर्छ।"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "यो स्क्रिन आधिकारिक अपडेट सूचनाबाट खोलिएको थियो, तर अहिलेसम्म कुनै आधिकारिक म्यानिफेस्ट स्रोत कन्फिगर गरिएको छैन।"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "यो स्क्रिन अपडेट सूचनाबाट खोलिएको थियो। केवल म्यानिफेस्ट जाँच स्वतः सुरु हुन्छ।"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "यो चरणले समीक्षा मात्र तयार पार्छ। फाइल प्रतिस्थापन पछि लागू स्टेज गरिएका फाइलहरू चरणमा हुन्छ, लक, ब्याकअप र रोलब्याक सुरक्षा सहित।"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "यो अपडेटरले डाटाबेस ब्याकअप सिर्जना गर्दैन। माइग्रेसन चलाउनुअघि ब्याकअप सिर्जना र प्रमाणित गर्नुहोस्।"
+
+msgid "Trusted public key"
+msgstr "विश्वसनीय सार्वजनिक कुञ्जी"
+
+msgid "Trusted signing key"
+msgstr "विश्वसनीय हस्ताक्षर कुञ्जी"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "पुष्टि गर्न APPLY UPDATE FILES टाइप गर्नुहोस्"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "डाटाबेस माइग्रेसन पुष्टि गर्न RUN DATABASE MIGRATIONS टाइप गर्नुहोस्"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "पुष्टि गर्न RUN POST UPDATE ACTIONS टाइप गर्नुहोस्"
+
+msgid "Unknown update notice source."
+msgstr "अज्ञात अपडेट सूचना स्रोत।"
+
+msgid "Update availability"
+msgstr "अपडेट उपलब्धता"
+
+msgid "Update directory"
+msgstr "अपडेट डाइरेक्टरी"
+
+msgid "Update lock path"
+msgstr "अपडेट लक मार्ग"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "अघिल्लो चरणद्वारा उत्पन्न स्टेजिङ डाइरेक्टरी प्रयोग गर्नुहोस्। ब्याकएन्डले var/update/staging भित्रका डाइरेक्टरीहरू मात्र स्वीकार गर्छ।"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "विकास परीक्षणहरूको क्रममा भविष्यको चामिलो.ओर्ग अपडेट सूचना अनुकरण गर्न यो लिङ्क प्रयोग गर्नुहोस्।"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "यो केवल स्थानीय विकास परीक्षणका लागि प्रयोग गर्नुहोस्। उत्पादन अपडेटहरूले सर्भर कन्फिगर गरिएको कुञ्जी प्रयोग गर्नुपर्छ।"
+
+msgid "Verification details"
+msgstr "प्रमाणीकरण विवरणहरू"
+
+msgid "Verify package"
+msgstr "प्याकेज प्रमाणित गर्नुहोस्"
+
+msgid "Verifying..."
+msgstr "प्रमाणित गर्दै..."
+
+msgid "Waiting for command progress events..."
+msgstr "आदेश प्रगति घटनाहरूको प्रतीक्षा गर्दै..."
+
+msgid "Waiting for update progress events..."
+msgstr "अपडेट प्रगति घटनाहरूको प्रतीक्षा गर्दै..."
+
+msgid "Yarn build"
+msgstr "यार्न बिल्ड"
+
+msgid "Yarn install"
+msgstr "यार्न इनस्टल"
+
+msgid "A comment is required"
+msgstr "टिप्पणी आवश्यक छ"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "उही नामको डाटाबेस पहिले नै अवस्थित छ। यदि यसमा तालिकाहरू छन् भने तिनीहरू मेटिनेछन्; यदि खाली छ भने पुन: प्रयोग गरिनेछ।"
+
+msgid "AI generated"
+msgstr "AI उत्पन्न"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "सिकाइ मार्गमा फर्कनुअघि कम्तीमा एउटा प्रश्न थप्नुहोस्।"
+
+msgid "Add attachments"
+msgstr "एट्याचमेन्टहरू थप्नुहोस्"
+
+msgid "Additional fields"
+msgstr "अतिरिक्त क्षेत्रहरू"
+
+msgid "Allow comments"
+msgstr "टिप्पणी अनुमति दिनुहोस्"
+
+msgid "Allow new pages"
+msgstr "नयाँ पृष्ठहरू अनुमति दिनुहोस्"
+
+msgid "Allow ratings"
+msgstr "रेटिङ अनुमति दिनुहोस्"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "के तपाईं सबै वस्तुहरू मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "के तपाईं स्वचालित नवीकरण पुनर्स्थापना गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Attachment has been deleted"
+msgstr "एट्याचमेन्ट मेटिएको छ"
+
+msgid "Backup file"
+msgstr "ब्याकअप फाइल"
+
+msgid "Block comments"
+msgstr "टिप्पणी ब्लक गर्नुहोस्"
+
+msgid "Block new pages"
+msgstr "नयाँ पृष्ठहरू ब्लक गर्नुहोस्"
+
+msgid "Block ratings"
+msgstr "रेटिङ ब्लक गर्नुहोस्"
+
+msgid "Cancel renewal"
+msgstr "नवीकरण रद्द गर्नुहोस्"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "कोटि लिङ्कहरू %s विकि पृष्ठहरूबाट हटाइनेछ।"
+
+msgid "Change"
+msgstr "परिवर्तन गर्नुहोस्"
+
+msgid "Clear group"
+msgstr "समूह खाली गर्नुहोस्"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "सम्पादकमा घुसाउन ट्यागमा क्लिक गर्नुहोस्। यी प्लेसहोल्डरहरू प्रमाणपत्र उत्पन्न गर्दा प्रतिस्थापन हुनेछन्।"
+
+msgid "Comment added"
+msgstr "टिप्पणी थपियो"
+
+msgid "Comment is required"
+msgstr "टिप्पणी आवश्यक छ"
+
+msgid "Comment score"
+msgstr "टिप्पणी स्कोर"
+
+msgid "Compare selected versions line by line"
+msgstr "चयन गरिएका संस्करणहरू लाइन अनुसार तुलना गर्नुहोस्"
+
+msgid "Compare selected versions word by word"
+msgstr "चयन गरिएका संस्करणहरू शब्द अनुसार तुलना गर्नुहोस्"
+
+msgid "Compare versions"
+msgstr "संस्करणहरू तुलना गर्नुहोस्"
+
+msgid "Copy completed"
+msgstr "प्रतिलिपि सम्पन्न भयो"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "सिकारुहरूका लागि व्यक्तिगत विकि कार्य पृष्ठहरू सिर्जना गर्नुहोस्"
+
+msgid "Current view mode"
+msgstr "हालको दृश्य मोड"
+
+msgid "Delete Wiki"
+msgstr "विकि मेटाउनुहोस्"
+
+msgid "Delete page"
+msgstr "पृष्ठ मेटाउनुहोस्"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "विकि गृहपृष्ठ मेटाउन सिफारिस गरिँदैन। तपाईं पछि यसलाई पुनः सिर्जना गर्न सक्नुहुन्छ।"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "विकि असक्षम गर्दा सामान्य विकि पृष्ठहरू र कार्यहरू अवरुद्ध हुन्छन्। यो सेटिङ्स पृष्ठ पाठ्यक्रम शिक्षकहरूलाई उपलब्ध रहन्छ।"
+
+msgid "Discussion"
+msgstr "छलफल"
+
+msgid "Edit Comment"
+msgstr "टिप्पणी सम्पादन गर्नुहोस्"
+
+msgid "Edit page"
+msgstr "पृष्ठ सम्पादन गर्नुहोस्"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "समाप्ति मिति म्याद सकिने मितिभन्दा पछि वा बराबर हुनुपर्छ"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "विकि पृष्ठहरू खोज्न खोज शब्द प्रविष्ट गर्नुहोस्"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "म्याद सकिने मिति समाप्ति मितिभन्दा अघि वा बराबर हुनुपर्छ"
+
+msgid "Failed email recipients"
+msgstr "असफल इमेल प्राप्तकर्ताहरू"
+
+msgid "Finish and return to learning path"
+msgstr "समाप्त गर्नुहोस् र सिकाइ मार्गमा फर्कनुहोस्"
+
+msgid "Forum image"
+msgstr "फोरम छवि"
+
+msgid "Hide discussion"
+msgstr "छलफल लुकाउनुहोस्"
+
+msgid "Hide page"
+msgstr "पृष्ठ लुकाउनुहोस्"
+
+msgid "I changed my mind"
+msgstr "मैले मेरो विचार परिवर्तन गरेँ"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "यदि चेक नगरेमा, ती फाइलहरू 'फाइल जानकारी' उपकरण मार्फत प्लेटफर्म प्रशासकलाई उपलब्ध रहनेछन्।"
+
+msgid "Internal message failures"
+msgstr "आन्तरिक सन्देश असफलताहरू"
+
+msgid "Internal messages available"
+msgstr "आन्तरिक सन्देशहरू उपलब्ध"
+
+msgid "Internal messages created now"
+msgstr "आन्तरिक सन्देशहरू अहिले सिर्जना गरिए"
+
+msgid "Item score"
+msgstr "वस्तु स्कोर"
+
+msgid "Last post"
+msgstr "अन्तिम पोस्ट"
+
+msgid "Lock page"
+msgstr "पृष्ठ लक गर्नुहोस्"
+
+msgid "Manage categories"
+msgstr "कोटिहरू व्यवस्थापन गर्नुहोस्"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "यो कागजातलाई एआई-सहायता प्राप्तको रूपमा चिन्ह लगाउनुहोस्। सामग्री एआई उपकरणहरूसँग सिर्जना वा उल्लेखनीय रूपमा परिमार्जन गरिएको बेला प्रयोग गर्नुहोस्।"
+
+msgid "Maximum score is required"
+msgstr "अधिकतम स्कोर आवश्यक छ"
+
+msgid "Metric"
+msgstr "मेट्रिक"
+
+msgid "New comments are blocked in this discussion"
+msgstr "यस छलफलमा नयाँ टिप्पणीहरू अवरुद्ध छन्"
+
+msgid "No Wiki categories are available yet."
+msgstr "अहिले कुनै विकि कोटिहरू उपलब्ध छैनन्।"
+
+msgid "No categories found"
+msgstr "कुनै कोटि फेला परेन"
+
+msgid "No content"
+msgstr "कुनै सामग्री छैन"
+
+msgid "No parent category"
+msgstr "कुनै अभिभावक कोटि छैन"
+
+msgid "Number of comments scored"
+msgstr "स्कोर गरिएका टिप्पणीहरूको संख्या"
+
+msgid "Old version"
+msgstr "पुरानो संस्करण"
+
+msgid "Only image files are allowed."
+msgstr "केवल छवि फाइलहरूलाई अनुमति दिइएको छ।"
+
+msgid "Please fill all required fields"
+msgstr "कृपया सबै आवश्यक फिल्डहरू भर्नुहोस्"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "कक्षा वा विद्यार्थी प्लेसहोल्डर भएका प्रश्नहरू पाठ्यक्रम कक्षा वा समूहहरूका लागि उत्पन्न गरिनेछ: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "यस छलफलमा रेटिङहरू अवरुद्ध छन्"
+
+msgid "Remove image"
+msgstr "छवि हटाउनुहोस्"
+
+msgid "Restore renewal"
+msgstr "नवीकरण पुनर्स्थापना गर्नुहोस्"
+
+msgid "Restore version"
+msgstr "संस्करण पुनर्स्थापना गर्नुहोस्"
+
+msgid "Search in"
+msgstr "मा खोज्नुहोस्"
+
+msgid "Select group"
+msgstr "समूह चयन गर्नुहोस्"
+
+msgid "Select image"
+msgstr "छवि चयन गर्नुहोस्"
+
+msgid "Selected image"
+msgstr "चयन गरिएको छवि"
+
+msgid "Show discussion"
+msgstr "छलफल देखाउनुहोस्"
+
+msgid "Show page"
+msgstr "पृष्ठ देखाउनुहोस्"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "केही फाइल वा फोल्डरहरूमा लेख्ने अनुमति छैन। चामिलो स्थापना गर्न सक्षम हुन तपाईंले पहिले तिनीहरूको अनुमति परिवर्तन गर्नुपर्छ (CHMOD प्रयोग गरेर)। कृपया पढ्नुहोस्"
+
+msgid "Subcategories"
+msgstr "उपश्रेणीहरू"
+
+msgid "Tap on the left or right to navigate"
+msgstr "नेभिगेट गर्न बायाँ वा दायाँ ट्याप गर्नुहोस्"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "विकी असाइनमेन्टको समयसीमा सकिएको छ, तर ढिलो बुझाउन अनुमति दिइएको छ।"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "विकी असाइनमेन्टको समयसीमा सकिएको छ।"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "विकी असाइनमेन्ट अझै सुरु भएको छैन।"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "सेभ गर्नुअघि विकि पृष्ठ सम्पादन लक आवश्यक छ।"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "घोषणा सेभ गरियो, तर एउटा संलग्नक अपलोड गर्न सकिएन।"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "घोषणा सेभ गरियो, तर इमेल डेलिभरी असफल भयो।"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "घोषणा सेभ गरियो, तर कुनै पनि इमेल डेलिभर गर्न सकिएन।"
+
+msgid "The category has been created"
+msgstr "श्रेणी सिर्जना गरिएको छ"
+
+msgid "The category has been deleted"
+msgstr "श्रेणी मेटाइएको छ"
+
+msgid "The category has been updated"
+msgstr "श्रेणी अद्यावधिक गरिएको छ"
+
+msgid "The end date is invalid"
+msgstr "अन्त्य मिति अमान्य छ"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "संस्करणको अधिकतम संख्या गैर-ऋणात्मक पूर्णांक हुनुपर्छ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "शब्दहरूको अधिकतम संख्या गैर-ऋणात्मक पूर्णांक हुनुपर्छ"
+
+msgid "The print window could not be opened"
+msgstr "प्रिन्ट विन्डो खोल्न सकिएन"
+
+msgid "The start date is invalid"
+msgstr "सुरु मिति अमान्य छ"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "यी सेटिङहरू सम्पूर्ण कोर्समा लागू हुन्छन्, यसका सत्रहरू र समूहहरू सहित।"
+
+msgid "This announcement has already been sent by email."
+msgstr "यो घोषणा पहिले नै इमेलद्वारा पठाइसकिएको छ।"
+
+msgid "This discussion is hidden from learners"
+msgstr "यो छलफल शिक्षार्थीहरूबाट लुकाइएको छ"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "यो जेनेरेटिभ एआई उपकरणले तपाईंको कोर्सलाई चित्रण गर्न छविहरू र छोटो भिडियोहरू सिर्जना गर्न अनुमति दिन्छ। प्रॉम्प्ट खण्डमा (पाठमा) तपाईंले के चाहनुहुन्छ भनेर व्याख्या गरेर, तपाईंले कन्फिगर गरिएको एआई मोडेललाई छवि वा भिडियो उत्पन्न गर्न आवश्यक तत्वहरू दिनुहुनेछ। कृपया धैर्य गर्नुहोस्। एआई मोडेलले केही समय लिनेछ र केही नतिजा उत्पन्न गर्नेछ, जुन तपाईंले आफ्नो कागजात फोल्डरमा मिडिया सेभ गरेर राख्न चाहनुहुनेछ, र त्यसपछि एचटीएमएल कागजातभित्र इम्बेड गर्नुहुनेछ। सबै एआई मोडेलहरू गति वा गुणस्तरको हिसाबले समान हुँदैनन्। एआई मोडेलले तपाईंलाई संशोधित प्रॉम्प्ट पनि दिन सक्छ, जुन तपाईंको अनुरोधको थप विस्तृत व्याख्या हो। त्यसपछि तपाईंले आफ्नो अनुरोधलाई फाइनट्यून गर्न यो संशोधित प्रॉम्प्ट प्रयोग गर्न सक्नुहुन्छ। कृपया ध्यान दिनुहोस् कि यो उपकरण, विशेष गरी भिडियोहरूको लागि, तपाईंले उत्पन्न गरिएको मिडिया सेभ नगर्ने निर्णय गरे पनि तपाईंको संस्थालाई उल्लेखनीय लागत उत्पन्न गर्न सक्छ। कृपया यसलाई त्यही अनुसार प्रयोग गर्नुहोस्। यदि तपाईंले खोजिरहनुभएको कुरा प्राप्त गर्न समस्या छ भने, कृपया आफूसँग उपलब्ध एआई मोडेलको लागि अनलाइन प्रॉम्प्टिङ ट्रिक्स अनुसन्धान गर्न केही समय लिनुहोस्।"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "यो इतिहास आधार कोर्सको हो। सत्र संस्करण सिर्जना गरेपछि पुनर्स्थापना उपलब्ध हुन्छ।"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "यो छविले फोरम शीर्षकको छेउमा देखाइएको पूर्वनिर्धारित फोरम आइकन प्रतिस्थापन गर्छ।"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "यो पृष्ठ आधार कोर्सबाट आएको हो। यसलाई सेभ गर्दा हालको सत्रको लागि संस्करण सिर्जना हुनेछ।"
+
+msgid "This will also delete %s subcategories."
+msgstr "यसले %s उपश्रेणीहरू पनि मेटाउनेछ।"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "यसले %s शिक्षार्थीहरूको लागि व्यक्तिगत कार्य पृष्ठहरू सिर्जना गर्नेछ।"
+
+msgid "Thread history"
+msgstr "थ्रेड इतिहास"
+
+msgid "Title and content"
+msgstr "शीर्षक र सामग्री"
+
+msgid "Unable to cancel renewal right now."
+msgstr "अहिले नवीकरण अधिकार रद्द गर्न सकिएन।"
+
+msgid "Unable to restore renewal right now."
+msgstr "अहिले नवीकरण अधिकार पुनर्स्थापना गर्न सकिएन।"
+
+msgid "Unlock page"
+msgstr "पृष्ठ अनलक गर्नुहोस्"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "आन्तरिक विकि लिङ्कहरू सिर्जना गर्न [[Page]] वा [[Page|Visible text]] प्रयोग गर्नुहोस्।"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "नेभिगेट गर्न स्पेसबार वा एरो कुञ्जीहरू प्रयोग गर्नुहोस्"
+
+msgid "View version"
+msgstr "संस्करण हेर्नुहोस्"
+
+msgid "Visible only to teachers"
+msgstr "शिक्षकहरूलाई मात्र दृश्यमान"
+
+msgid "Weight is required"
+msgstr "तौल आवश्यक छ"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "यस कोर्सको लागि विकि श्रेणीहरू असक्षम छन्।"
+
+msgid "Wiki categories enabled"
+msgstr "विकी श्रेणीहरू सक्षम गरिएको"
+
+msgid "Wiki html strict filtering"
+msgstr "विकी एचटीएमएल कडा फिल्टरिङ"
+
+msgid "Wiki settings"
+msgstr "विकी सेटिङहरू"
+
+msgid "Wiki settings updated"
+msgstr "विकी सेटिङहरू अद्यावधिक गरियो"
+
+msgid "You are viewing a historical version of this page"
+msgstr "तपाईं यस पृष्ठको ऐतिहासिक संस्करण हेर्दै हुनुहुन्छ"
+
+msgid "You can attach one or more files to this reply."
+msgstr "तपाईं यस जवाफमा एक वा बढी फाइलहरू संलग्न गर्न सक्नुहुन्छ।"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "तपाईं यस असाइनमेन्ट पृष्ठ सम्पादन गर्न सक्नुहुन्छ, तर शिक्षार्थी कार्य पृष्ठहरू परिमार्जन गरिने छैनन्।"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "तपाईं प्रश्नमा {{class_name}} र {{student_full_name}} ट्यागहरू प्रयोग गर्न सक्नुहुन्छ।"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "सम्पादन लक समाप्त हुनुअघि तपाईंसँग यो पृष्ठ सम्पादन गर्न २० मिनेट बाँकी छ।"
+
+msgid "by"
+msgstr "द्वारा"
+
+msgid "required"
+msgstr "आवश्यक"
+

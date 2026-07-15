@@ -264,7 +264,7 @@ const mItems = computed(() => {
       : []),
     { label: t("Import"), command: () => router.push({ name: "LpScormImport", query: route.query }) },
     ...(canAddCategory.value
-      ? [{ label: t("Add category"), command: () => router.push({ name: "LpCategoryCreate", query: route.query }) }]
+      ? [{ label: t("Add a category"), command: () => router.push({ name: "LpCategoryCreate", query: route.query }) }]
       : []),
   ]
 })

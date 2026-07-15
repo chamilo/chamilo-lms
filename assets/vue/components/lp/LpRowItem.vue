@@ -718,7 +718,7 @@ const itemActionsMobile = computed(() =>
 
           <div class="lp-panel__progress">
             <span class="lp-panel__progress-label">
-              {{ ringValue(lp.progress) === 100 ? t("Completed") : t("Progress") }}
+              {{ ringValue(lp.progress) === 100 ? t("Complete") : t("Progress") }}
             </span>
             <div class="lp-panel__progress-ring">
               <svg
@@ -797,7 +797,7 @@ const itemActionsMobile = computed(() =>
 
           <div class="lp-panel__student-progress flex items-center gap-2 shrink-0">
             <span class="lp-panel__progress-label">
-              {{ ringValue(lp.progress) === 100 ? t("Completed") : t("Progress") }}
+              {{ ringValue(lp.progress) === 100 ? t("Complete") : t("Progress") }}
             </span>
             <div class="lp-panel__progress-ring">
               <svg

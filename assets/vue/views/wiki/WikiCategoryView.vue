@@ -76,7 +76,7 @@
                 size="normal"
               />
               <span>
-                {{ editingCategoryId ? t("Edit category") : t("Add category") }}
+                {{ editingCategoryId ? t("Edit category") : t("Add a category") }}
               </span>
             </div>
           </template>

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ফর্মুলার উদাহরণ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ফর্মুলা নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -36488,4 +36488,853 @@ msgstr "থ্রেড দেখুন"
 
 msgid "No auth source"
 msgstr "কোনো প্রমাণীকরণ উৎস নেই"
+
+msgid "You must add at least one question"
+msgstr "আপনাকে অন্তত একটি প্রশ্ন যোগ করতে হবে"
+
+msgid "Advanced actions"
+msgstr "উন্নত কার্যক্রম"
+
+msgid "Application path"
+msgstr "অ্যাপ্লিকেশন পাথ"
+
+msgid "Apply files details"
+msgstr "ফাইলের বিবরণ প্রয়োগ করুন"
+
+msgid "Apply plan details"
+msgstr "প্ল্যানের বিবরণ প্রয়োগ করুন"
+
+msgid "Apply plan failed"
+msgstr "প্ল্যান প্রয়োগ ব্যর্থ হয়েছে"
+
+msgid "Apply plan ready"
+msgstr "প্ল্যান প্রয়োগ প্রস্তুত"
+
+msgid "Apply preparation"
+msgstr "প্রস্তুতি প্রয়োগ করুন"
+
+msgid "Apply staged files"
+msgstr "স্টেজড ফাইল প্রয়োগ করুন"
+
+msgid "Applying files..."
+msgstr "ফাইল প্রয়োগ করা হচ্ছে..."
+
+msgid "Audit file"
+msgstr "ফাইল অডিট করুন"
+
+msgid "Backup directory"
+msgstr "ব্যাকআপ ডিরেক্টরি"
+
+msgid "Baseline clean"
+msgstr "বেসলাইন পরিষ্কার"
+
+msgid "Baseline warnings"
+msgstr "বেসলাইন সতর্কতা"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "স্টেজড প্যাকেজ থেকে একটি নিরাপদ প্রয়োগ প্ল্যান তৈরি করুন। এটি শুধুমাত্র ফাইল, অনুমতি, ব্যাকআপ পাথ এবং লক স্ট্যাটাস পরীক্ষা করে। এটি ফাইল প্রতিস্থাপন করে না।"
+
+msgid "Build production frontend assets."
+msgstr "প্রোডাকশন ফ্রন্টএন্ড অ্যাসেট তৈরি করুন।"
+
+msgid "Building plan..."
+msgstr "প্ল্যান তৈরি করা হচ্ছে..."
+
+msgid "Channel"
+msgstr "চ্যানেল"
+
+msgid "Check"
+msgstr "পরীক্ষা করুন"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "উপলব্ধ Chamilo আপডেট পরীক্ষা করুন, প্যাকেজ যাচাই করুন, ফাইল স্টেজ করুন এবং নিয়ন্ত্রিত পোস্ট-আপডেট ধাপ চালান।"
+
+msgid "Check manifest"
+msgstr "ম্যানিফেস্ট পরীক্ষা করুন"
+
+msgid "Checking post-apply actions..."
+msgstr "পোস্ট-অ্যাপ্লাই অ্যাকশন পরীক্ষা করা হচ্ছে..."
+
+msgid "Checking..."
+msgstr "পরীক্ষা করা হচ্ছে..."
+
+msgid "Composer install"
+msgstr "Composer ইনস্টল"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn এবং ডাটাবেস মাইগ্রেশন অ্যাকশন নির্ভরতা, তৈরি করা অ্যাসেট বা ডাটাবেস পরিবর্তন করতে পারে। শুধুমাত্র ব্যাকআপ এবং অনুমতি নিশ্চিত করার পরে এগুলি নির্বাচন করুন।"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "সার্ভারে CHAMILO_UPDATE_MANIFEST_URL কনফিগার করুন অথবা একটি HTTPS ম্যানিফেস্ট URL প্রদান করুন।"
+
+msgid "Configured"
+msgstr "কনফিগার করা হয়েছে"
+
+msgid "Current migration"
+msgstr "বর্তমান মাইগ্রেশন"
+
+msgid "Database baseline"
+msgstr "ডাটাবেস বেসলাইন"
+
+msgid "Database migration safety review"
+msgstr "ডাটাবেস মাইগ্রেশন নিরাপত্তা পর্যালোচনা"
+
+msgid "Database migrations"
+msgstr "ডাটাবেস মাইগ্রেশন"
+
+msgid "Development mode"
+msgstr "ডেভেলপমেন্ট মোড"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "আপডেট ব্যাকআপ এবং সার্ভার অনুমতি পর্যালোচনা না করা পর্যন্ত এটি সক্রিয় করবেন না।"
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine ড্রাই-রান কমান্ড"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine ঐতিহাসিক বেসলাইন সতর্কতা রিপোর্ট করেছে। আপডেটার শুধুমাত্র স্পষ্ট নিশ্চিতকরণের পরে স্টেজড V210 মাইগ্রেশন চালাবে।"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "নিরাপত্তা পর্যালোচনা পাস হওয়ার পর Doctrine শুধুমাত্র স্টেজড V210 মাইগ্রেশনগুলো স্পষ্টভাবে কার্যকর করবে।"
+
+msgid "Dry-run exit code"
+msgstr "ড্রাই-রান এক্সিট কোড"
+
+msgid "Executed unavailable migrations"
+msgstr "অনুপলব্ধ মাইগ্রেশন কার্যকর করা হয়েছে"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "যাচাইকৃত আপডেট প্যাকেজটি পরিদর্শনের জন্য একটি স্টেজিং ডিরেক্টরিতে এক্সট্র্যাক্ট করুন। এটি ফাইল প্রতিস্থাপন করে না, মাইগ্রেশন চালায় না বা ডাটাবেস পরিবর্তন করে না।"
+
+msgid "File apply available"
+msgstr "ফাইল প্রয়োগ উপলব্ধ"
+
+msgid "Files to replace"
+msgstr "প্রতিস্থাপনের জন্য ফাইল"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "আমি নিশ্চিত করছি যে মাইগ্রেশন চালানোর আগে একটি ডাটাবেস ব্যাকআপ বিদ্যমান এবং যাচাই করা হয়েছে।"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "আমি বুঝতে পেরেছি যে অ্যাডভান্সড অ্যাকশনগুলো ডিপেন্ডেন্সি, জেনারেটেড অ্যাসেট বা ডাটাবেস পরিবর্তন করতে পারে।"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "আমি বুঝতে পেরেছি যে এটি Chamilo ইনস্টলেশনে ফাইল প্রতিস্থাপন করবে।"
+
+msgid "I understand this will run update commands on the server."
+msgstr "আমি বুঝতে পেরেছি যে এটি সার্ভারে আপডেট কমান্ড চালাবে।"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "অ্যাসেট পুনর্নির্মাণের আগে ফ্রন্টএন্ড ডিপেন্ডেন্সি ইনস্টল করুন।"
+
+msgid "Installed version"
+msgstr "ইনস্টলকৃত সংস্করণ"
+
+msgid "Latest migration"
+msgstr "সর্বশেষ মাইগ্রেশন"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "যাচাইকৃত ম্যানিফেস্ট URL থেকে ডাউনলোড করতে প্যাকেজ এবং সিগনেচার পাথ খালি রাখুন। লোকাল পাথ শুধুমাত্র ডেভেলপমেন্ট টেস্টের জন্য উপলব্ধ।"
+
+msgid "Live command log"
+msgstr "লাইভ কমান্ড লগ"
+
+msgid "Live update log"
+msgstr "লাইভ আপডেট লগ"
+
+msgid "Local test options"
+msgstr "লোকাল টেস্ট অপশন"
+
+msgid "Local test update notice link"
+msgstr "লোকাল টেস্ট আপডেট নোটিশ লিংক"
+
+msgid "Local update notice simulation"
+msgstr "লোকাল আপডেট নোটিশ সিমুলেশন"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "লোকাল আপডেট নোটিশ সিমুলেশন শুধুমাত্র ডেভেলপমেন্ট মোডে উপলব্ধ।"
+
+msgid "Manifest"
+msgstr "ম্যানিফেস্ট"
+
+msgid "Manifest source"
+msgstr "ম্যানিফেস্ট সোর্স"
+
+msgid "Migration safety details"
+msgstr "মাইগ্রেশন নিরাপত্তা বিবরণ"
+
+msgid "Migration safety review failed"
+msgstr "মাইগ্রেশন নিরাপত্তা পর্যালোচনা ব্যর্থ হয়েছে"
+
+msgid "Migration safety review ready"
+msgstr "মাইগ্রেশন নিরাপত্তা পর্যালোচনা প্রস্তুত"
+
+msgid "Migration target"
+msgstr "মাইগ্রেশন টার্গেট"
+
+msgid "New files"
+msgstr "নতুন ফাইল"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine দ্বারা রিপোর্টকৃত নতুন মাইগ্রেশন"
+
+msgid "Next migration"
+msgstr "পরবর্তী মাইগ্রেশন"
+
+msgid "No executed unavailable migration was reported."
+msgstr "কোনো কার্যকরকৃত অনুপলব্ধ মাইগ্রেশন রিপোর্ট করা হয়নি।"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "কোনো অফিসিয়াল ম্যানিফেস্ট URL এখনো কনফিগার করা হয়নি। ডেভেলপমেন্ট টেস্টের জন্য একটি HTTPS URL বা লোকাল পাথ ব্যবহার করুন।"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "স্টেজড আপডেট টার্গেটের আগে কোনো পেন্ডিং মাইগ্রেশন সনাক্ত করা হয়নি।"
+
+msgid "Not configured"
+msgstr "কনফিগার করা হয়নি"
+
+msgid "Not detected"
+msgstr "সনাক্ত করা হয়নি"
+
+msgid "Official Chamilo update channel"
+msgstr "অফিসিয়াল Chamilo আপডেট চ্যানেল"
+
+msgid "Package SHA-256"
+msgstr "প্যাকেজ SHA-256"
+
+msgid "Package URL"
+msgstr "প্যাকেজ URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "প্যাকেজ এবং সিগনেচার ফাইল ম্যানিফেস্ট থেকে ডাউনলোড করা হবে। এই পরিবেশে লোকাল পাথ নিষ্ক্রিয় করা হয়েছে।"
+
+msgid "Package path"
+msgstr "প্যাকেজ পাথ"
+
+msgid "Package staged successfully"
+msgstr "প্যাকেজ সফলভাবে স্টেজ করা হয়েছে"
+
+msgid "Package staging failed"
+msgstr "প্যাকেজ স্টেজিং ব্যর্থ হয়েছে"
+
+msgid "Package verification"
+msgstr "প্যাকেজ যাচাইকরণ"
+
+msgid "Package verification failed"
+msgstr "প্যাকেজ যাচাইকরণ ব্যর্থ হয়েছে"
+
+msgid "Package verified successfully"
+msgstr "প্যাকেজ সফলভাবে যাচাই করা হয়েছে"
+
+msgid "Pending migrations before this update"
+msgstr "এই আপডেটের আগে পেন্ডিং মাইগ্রেশন"
+
+msgid "Planned backup path"
+msgstr "পরিকল্পিত ব্যাকআপ পাথ"
+
+msgid "Post-apply actions completed"
+msgstr "পোস্ট-অ্যাপ্লাই অ্যাকশন সম্পন্ন হয়েছে"
+
+msgid "Post-apply actions failed"
+msgstr "পোস্ট-অ্যাপ্লাই অ্যাকশন ব্যর্থ হয়েছে"
+
+msgid "Post-apply actions ready"
+msgstr "পোস্ট-অ্যাপ্লাই অ্যাকশন প্রস্তুত"
+
+msgid "Post-apply checks"
+msgstr "পোস্ট-অ্যাপ্লাই চেক"
+
+msgid "Post-apply checks failed"
+msgstr "পোস্ট-অ্যাপ্লাই চেক ব্যর্থ হয়েছে"
+
+msgid "Post-apply details"
+msgstr "পোস্ট-অ্যাপ্লাই বিবরণ"
+
+msgid "Post-apply run details"
+msgstr "পোস্ট-অ্যাপ্লাই রান বিবরণ"
+
+msgid "Preflight checks"
+msgstr "প্রিফ্লাইট চেক"
+
+msgid "Preflight checks completed"
+msgstr "প্রিফ্লাইট চেক সম্পন্ন হয়েছে"
+
+msgid "Preflight checks failed"
+msgstr "প্রিফ্লাইট চেক ব্যর্থ হয়েছে"
+
+msgid "Preflight details"
+msgstr "প্রিফ্লাইট বিবরণ"
+
+msgid "Prepare staging"
+msgstr "স্টেজিং প্রস্তুত করুন"
+
+msgid "Preparing staging..."
+msgstr "স্টেজিং প্রস্তুত করা হচ্ছে..."
+
+msgid "Production mode"
+msgstr "প্রোডাকশন মোড"
+
+msgid "Released at"
+msgstr "রিলিজের সময়"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "রিভিউ করা অ্যাপ্লাই প্ল্যান ব্যবহার করে স্টেজড প্যাকেজ থেকে চামিলো ফাইল প্রতিস্থাপন করুন। এটি ডাটাবেস মাইগ্রেশন, কম্পোজার, ইয়ার্ন বা ক্যাশ কমান্ড চালায় না।"
+
+msgid "Review apply plan"
+msgstr "অ্যাপ্লাই প্ল্যান রিভিউ করুন"
+
+msgid "Review database migrations"
+msgstr "ডাটাবেস মাইগ্রেশন রিভিউ করুন"
+
+msgid "Review post-apply actions"
+msgstr "পোস্ট-অ্যাপ্লাই অ্যাকশন রিভিউ করুন"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "আপডেট ফাইল প্রয়োগের পর সুপারিশকৃত ম্যানুয়াল কমান্ড রিভিউ করুন। এই ধাপে কম্পোজার, ইয়ার্ন, মাইগ্রেশন বা ক্যাশ কমান্ড চালানো হয় না।"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "ডাটাবেস মাইগ্রেশন চালানোর আগে স্টেজড ডকট্রিন মাইগ্রেশন এবং ড্রাই-রান আউটপুট রিভিউ করুন।"
+
+msgid "Reviewing database migrations..."
+msgstr "ডাটাবেস মাইগ্রেশন রিভিউ করা হচ্ছে..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "ডাটাবেস মাইগ্রেশন চালানোর আগে মাইগ্রেশন নিরাপত্তা রিভিউ চালান এবং পাস করুন।"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "ভবিষ্যতের যেকোনো আপডেট অ্যাপ্লিকেশন ধাপের আগে এনভায়রনমেন্ট চেক চালান। এটি ফাইল বা ডাটাবেস পরিবর্তন করে না।"
+
+msgid "Run post-apply actions"
+msgstr "পোস্ট-অ্যাপ্লাই অ্যাকশন চালান"
+
+msgid "Run preflight checks"
+msgstr "প্রিফ্লাইট চেক চালান"
+
+msgid "Run selected post-apply actions"
+msgstr "নির্বাচিত পোস্ট-অ্যাপ্লাই অ্যাকশন চালান"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "নিয়ন্ত্রিত অনুমোদিত তালিকা ব্যবহার করে সার্ভার থেকে নির্বাচিত পোস্ট-অ্যাপ্লাই কমান্ড চালান। কোনো কাস্টম শেল কমান্ড গ্রহণ করা হয় না।"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "ফাইল আপডেটের ফলাফল এবং ব্যাকআপ নিশ্চিত করার পর সার্ভার থেকে এই কমান্ডগুলো ম্যানুয়ালি চালান।"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "প্রোডাকশন মোডে UI থেকে পোস্ট-অ্যাপ্লাই অ্যাকশন চালানো নিষ্ক্রিয় করা হয়েছে।"
+
+msgid "Running post-apply actions..."
+msgstr "পোস্ট-অ্যাপ্লাই অ্যাকশন চালানো হচ্ছে..."
+
+msgid "Safe actions"
+msgstr "নিরাপদ অ্যাকশন"
+
+msgid "Signature path"
+msgstr "স্বাক্ষরের পথ"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "এই এনভায়রনমেন্টে স্বাক্ষর যাচাইকরণ এড়ানো যাবে না।"
+
+msgid "Skip signature verification for local development tests"
+msgstr "লোকাল ডেভেলপমেন্ট টেস্টের জন্য স্বাক্ষর যাচাইকরণ এড়িয়ে যান"
+
+msgid "Staged file application failed"
+msgstr "স্টেজড ফাইল অ্যাপ্লিকেশন ব্যর্থ হয়েছে"
+
+msgid "Staged files applied successfully"
+msgstr "স্টেজড ফাইল সফলভাবে অ্যাপ্লাই করা হয়েছে"
+
+msgid "Staging details"
+msgstr "স্টেজিং বিবরণ"
+
+msgid "Staging directory"
+msgstr "স্টেজিং ডিরেক্টরি"
+
+msgid "Staging extraction"
+msgstr "স্টেজিং এক্সট্র্যাকশন"
+
+msgid "Symfony cache clear"
+msgstr "সিমফনি ক্যাশ ক্লিয়ার"
+
+msgid "System update"
+msgstr "সিস্টেম আপডেট"
+
+msgid "Target version"
+msgstr "টার্গেট ভার্সন"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "কনফিগার করা অফিসিয়াল ম্যানিফেস্ট URL পূর্বপূরণ করা হয়েছে। প্রয়োজনে এটি অন্য কোনো HTTPS ম্যানিফেস্টে পরিবর্তন করা যাবে।"
+
+msgid "The database migration baseline is clean."
+msgstr "ডাটাবেস মাইগ্রেশন বেসলাইন পরিষ্কার।"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "অপারেশন সম্পন্ন হওয়ার পর চূড়ান্ত HTTP রেসপন্স ব্যর্থ হয়েছে। এটি সাধারণত রানটাইম ক্যাশ অনুমতি বা অনুরোধের সময় ওয়েব সার্ভার রিস্টার্টের কারণে হয়।"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "অপারেশন লগ রিপোর্ট করে যে পোস্ট-অ্যাপ্লাই অ্যাকশন সফলভাবে সম্পন্ন হয়েছে।"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "নির্বাচিত পোস্ট-অ্যাপ্লাই কমান্ড সফলভাবে সম্পন্ন হয়েছে, কিন্তু চূড়ান্ত HTTP রেসপন্স ব্যর্থ হয়েছে। পৃষ্ঠা সঠিকভাবে লোড না হলে পৃষ্ঠা রিফ্রেশ করুন এবং রানটাইম ক্যাশ অনুমতি যাচাই করুন।"
+
+msgid "The updater does not create or restore database backups."
+msgstr "আপডেটার ডাটাবেস ব্যাকআপ তৈরি বা পুনরুদ্ধার করে না।"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "আপডেটের ফলাফল রিভিউ করার পর UI থেকে এই অ্যাকশনগুলো চালানো নিরাপদ।"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "এই কমান্ডগুলো ডিপেন্ডেন্সি, জেনারেটেড অ্যাসেট, ক্যাশ বা ডাটাবেস পরিবর্তন করতে পারে। চালিয়ে যাওয়ার আগে ব্যাকআপ নিশ্চিত করুন।"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "এই অ্যাকশন চামিলো ইনস্টলেশনে ফাইল পরিবর্তন করে। চালিয়ে যাওয়ার আগে অ্যাপ্লাই প্ল্যান রিভিউ করা হয়েছে এবং ব্যাকআপ সক্রিয় আছে কিনা নিশ্চিত করুন।"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "এই ডেভেলপমেন্ট এন্ট্রি লোকাল টেস্ট প্যাকেজ পাথ ব্যবহার করে ভবিষ্যতের চামিলো.অর্গ আপডেট নোটিশ সিমুলেট করে।"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "এই স্ক্রিনটি একটি অফিসিয়াল আপডেট নোটিশ থেকে খোলা হয়েছে, কিন্তু এখনো কোনো অফিসিয়াল ম্যানিফেস্ট সোর্স কনফিগার করা হয়নি।"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "এই স্ক্রিনটি একটি আপডেট নোটিশ থেকে খোলা হয়েছে। শুধুমাত্র ম্যানিফেস্ট চেক স্বয়ংক্রিয়ভাবে শুরু হয়।"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "এই ধাপটি শুধুমাত্র পর্যালোচনা প্রস্তুত করে। ফাইল প্রতিস্থাপন পরবর্তীতে Apply staged files ধাপে লক, ব্যাকআপ এবং রোলব্যাক সুরক্ষাসহ সম্পন্ন হয়।"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "এই আপডেটার ডাটাবেস ব্যাকআপ তৈরি করে না। মাইগ্রেশন চালানোর আগে একটি ব্যাকআপ তৈরি করে যাচাই করুন।"
+
+msgid "Trusted public key"
+msgstr "বিশ্বস্ত পাবলিক কী"
+
+msgid "Trusted signing key"
+msgstr "বিশ্বস্ত সাইনিং কী"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "নিশ্চিত করতে APPLY UPDATE FILES টাইপ করুন"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "ডাটাবেস মাইগ্রেশন নিশ্চিত করতে RUN DATABASE MIGRATIONS টাইপ করুন"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "নিশ্চিত করতে RUN POST UPDATE ACTIONS টাইপ করুন"
+
+msgid "Unknown update notice source."
+msgstr "আপডেট নোটিশের উৎস অজানা।"
+
+msgid "Update availability"
+msgstr "আপডেট উপলব্ধতা"
+
+msgid "Update directory"
+msgstr "আপডেট ডিরেক্টরি"
+
+msgid "Update lock path"
+msgstr "আপডেট লক পাথ"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "পূর্ববর্তী ধাপ দ্বারা তৈরি স্টেজিং ডিরেক্টরি ব্যবহার করুন। ব্যাকএন্ড শুধুমাত্র var/update/staging-এর ভিতরের ডিরেক্টরি গ্রহণ করে।"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "ডেভেলপমেন্ট টেস্টের সময় ভবিষ্যতের Chamilo.org আপডেট নোটিশ সিমুলেট করতে এই লিংকটি ব্যবহার করুন।"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "এটি শুধুমাত্র স্থানীয় ডেভেলপমেন্ট টেস্টের জন্য ব্যবহার করুন। প্রোডাকশন আপডেট অবশ্যই সার্ভার কনফিগার করা কী ব্যবহার করবে।"
+
+msgid "Verification details"
+msgstr "যাচাইকরণের বিবরণ"
+
+msgid "Verify package"
+msgstr "প্যাকেজ যাচাই করুন"
+
+msgid "Verifying..."
+msgstr "যাচাই করা হচ্ছে..."
+
+msgid "Waiting for command progress events..."
+msgstr "কমান্ড প্রোগ্রেস ইভেন্টের জন্য অপেক্ষা করা হচ্ছে..."
+
+msgid "Waiting for update progress events..."
+msgstr "আপডেট প্রোগ্রেস ইভেন্টের জন্য অপেক্ষা করা হচ্ছে..."
+
+msgid "Yarn build"
+msgstr "Yarn বিল্ড"
+
+msgid "Yarn install"
+msgstr "Yarn ইনস্টল"
+
+msgid "A comment is required"
+msgstr "একটি মন্তব্য প্রয়োজন"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "একই নামের একটি ডাটাবেস ইতিমধ্যে বিদ্যমান। এতে টেবিল থাকলে সেগুলো মুছে ফেলা হবে; খালি থাকলে পুনরায় ব্যবহার করা হবে।"
+
+msgid "AI generated"
+msgstr "AI দ্বারা তৈরি"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "লার্নিং পাথে ফিরে যাওয়ার আগে অন্তত একটি প্রশ্ন যোগ করুন।"
+
+msgid "Add attachments"
+msgstr "অ্যাটাচমেন্ট যোগ করুন"
+
+msgid "Additional fields"
+msgstr "অতিরিক্ত ফিল্ড"
+
+msgid "Allow comments"
+msgstr "মন্তব্য অনুমোদন করুন"
+
+msgid "Allow new pages"
+msgstr "নতুন পেজ অনুমোদন করুন"
+
+msgid "Allow ratings"
+msgstr "রেটিং অনুমোদন করুন"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "আপনি কি নিশ্চিতভাবে সব আইটেম মুছে ফেলতে চান?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "আপনি কি নিশ্চিতভাবে স্বয়ংক্রিয় নবায়ন পুনরায় চালু করতে চান?"
+
+msgid "Attachment has been deleted"
+msgstr "অ্যাটাচমেন্ট মুছে ফেলা হয়েছে"
+
+msgid "Backup file"
+msgstr "ব্যাকআপ ফাইল"
+
+msgid "Block comments"
+msgstr "মন্তব্য ব্লক করুন"
+
+msgid "Block new pages"
+msgstr "নতুন পেজ ব্লক করুন"
+
+msgid "Block ratings"
+msgstr "রেটিং ব্লক করুন"
+
+msgid "Cancel renewal"
+msgstr "নবায়ন বাতিল করুন"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "ক্যাটাগরি লিংক %s উইকি পেজ থেকে সরানো হবে।"
+
+msgid "Change"
+msgstr "পরিবর্তন করুন"
+
+msgid "Clear group"
+msgstr "গ্রুপ পরিষ্কার করুন"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "এডিটরে ট্যাগ ঢোকাতে একটি ট্যাগে ক্লিক করুন। সার্টিফিকেট তৈরির সময় এই প্লেসহোল্ডারগুলো প্রতিস্থাপিত হবে।"
+
+msgid "Comment added"
+msgstr "মন্তব্য যোগ করা হয়েছে"
+
+msgid "Comment is required"
+msgstr "মন্তব্য প্রয়োজন"
+
+msgid "Comment score"
+msgstr "মন্তব্য স্কোর"
+
+msgid "Compare selected versions line by line"
+msgstr "নির্বাচিত সংস্করণগুলো লাইন অনুসারে তুলনা করুন"
+
+msgid "Compare selected versions word by word"
+msgstr "নির্বাচিত সংস্করণগুলো শব্দ অনুসারে তুলনা করুন"
+
+msgid "Compare versions"
+msgstr "সংস্করণ তুলনা করুন"
+
+msgid "Copy completed"
+msgstr "কপি সম্পন্ন হয়েছে"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "শিক্ষার্থীদের জন্য পৃথক উইকি কাজের পৃষ্ঠা তৈরি করুন"
+
+msgid "Current view mode"
+msgstr "বর্তমান ভিউ মোড"
+
+msgid "Delete Wiki"
+msgstr "উইকি মুছে ফেলুন"
+
+msgid "Delete page"
+msgstr "পৃষ্ঠা মুছে ফেলুন"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "উইকির হোমপেজ মুছে ফেলা সুপারিশ করা হয় না। আপনি পরে এটি পুনরায় তৈরি করতে পারেন।"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "উইকি নিষ্ক্রিয় করলে স্বাভাবিক উইকি পৃষ্ঠা এবং কার্যক্রম বন্ধ হয়ে যায়। এই সেটিংস পৃষ্ঠাটি কোর্স শিক্ষকদের জন্য উপলব্ধ থাকে।"
+
+msgid "Discussion"
+msgstr "আলোচনা"
+
+msgid "Edit Comment"
+msgstr "মন্তব্য সম্পাদনা করুন"
+
+msgid "Edit page"
+msgstr "পৃষ্ঠা সম্পাদনা করুন"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "সমাপ্তির তারিখ মেয়াদ শেষের তারিখের পরে বা সমান হতে হবে"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "উইকি পৃষ্ঠা খুঁজতে একটি অনুসন্ধান শব্দ লিখুন"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "মেয়াদ শেষের তারিখ সমাপ্তির তারিখের আগে বা সমান হতে হবে"
+
+msgid "Failed email recipients"
+msgstr "ব্যর্থ ইমেইল প্রাপক"
+
+msgid "Finish and return to learning path"
+msgstr "সম্পন্ন করুন এবং শিক্ষণ পথে ফিরে যান"
+
+msgid "Forum image"
+msgstr "ফোরামের ছবি"
+
+msgid "Hide discussion"
+msgstr "আলোচনা লুকান"
+
+msgid "Hide page"
+msgstr "পৃষ্ঠা লুকান"
+
+msgid "I changed my mind"
+msgstr "আমি মত বদলেছি"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "যদি চেক না করা থাকে, তাহলে সেই ফাইলগুলি 'ফাইল তথ্য' টুলের মাধ্যমে প্ল্যাটফর্ম প্রশাসকের কাছে উপলব্ধ থাকবে।"
+
+msgid "Internal message failures"
+msgstr "অভ্যন্তরীণ বার্তা ব্যর্থতা"
+
+msgid "Internal messages available"
+msgstr "অভ্যন্তরীণ বার্তা উপলব্ধ"
+
+msgid "Internal messages created now"
+msgstr "অভ্যন্তরীণ বার্তা এখন তৈরি করা হয়েছে"
+
+msgid "Item score"
+msgstr "আইটেম স্কোর"
+
+msgid "Last post"
+msgstr "সর্বশেষ পোস্ট"
+
+msgid "Lock page"
+msgstr "পৃষ্ঠা লক করুন"
+
+msgid "Manage categories"
+msgstr "বিভাগ পরিচালনা করুন"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "এই নথিটিকে AI-সহায়তাপ্রাপ্ত হিসেবে চিহ্নিত করুন। যখন বিষয়বস্তু AI টুল দিয়ে তৈরি বা উল্লেখযোগ্যভাবে পরিবর্তন করা হয় তখন এটি ব্যবহার করুন।"
+
+msgid "Maximum score is required"
+msgstr "সর্বোচ্চ স্কোর প্রয়োজন"
+
+msgid "Metric"
+msgstr "মেট্রিক"
+
+msgid "New comments are blocked in this discussion"
+msgstr "এই আলোচনায় নতুন মন্তব্য ব্লক করা হয়েছে"
+
+msgid "No Wiki categories are available yet."
+msgstr "এখনো কোনো উইকি বিভাগ উপলব্ধ নেই।"
+
+msgid "No categories found"
+msgstr "কোনো বিভাগ পাওয়া যায়নি"
+
+msgid "No content"
+msgstr "কোনো বিষয়বস্তু নেই"
+
+msgid "No parent category"
+msgstr "কোনো প্যারেন্ট বিভাগ নেই"
+
+msgid "Number of comments scored"
+msgstr "স্কোর করা মন্তব্যের সংখ্যা"
+
+msgid "Old version"
+msgstr "পুরনো সংস্করণ"
+
+msgid "Only image files are allowed."
+msgstr "শুধুমাত্র ছবির ফাইল অনুমোদিত।"
+
+msgid "Please fill all required fields"
+msgstr "সব প্রয়োজনীয় ক্ষেত্র পূরণ করুন"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "ক্লাস বা ছাত্র প্লেসহোল্ডারযুক্ত প্রশ্নগুলি কোর্স ক্লাস বা গ্রুপের জন্য তৈরি করা হবে: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "এই আলোচনায় রেটিং ব্লক করা হয়েছে"
+
+msgid "Remove image"
+msgstr "ছবি সরান"
+
+msgid "Restore renewal"
+msgstr "নবায়ন পুনরুদ্ধার করুন"
+
+msgid "Restore version"
+msgstr "সংস্করণ পুনরুদ্ধার করুন"
+
+msgid "Search in"
+msgstr "অনুসন্ধান করুন"
+
+msgid "Select group"
+msgstr "গ্রুপ নির্বাচন করুন"
+
+msgid "Select image"
+msgstr "ছবি নির্বাচন করুন"
+
+msgid "Selected image"
+msgstr "নির্বাচিত ছবি"
+
+msgid "Show discussion"
+msgstr "আলোচনা দেখান"
+
+msgid "Show page"
+msgstr "পৃষ্ঠা দেখান"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "কিছু ফাইল বা ফোল্ডারে লেখার অনুমতি নেই। চামিলো ইনস্টল করতে প্রথমে তাদের অনুমতি পরিবর্তন করতে হবে (CHMOD ব্যবহার করে)। অনুগ্রহ করে পড়ুন"
+
+msgid "Subcategories"
+msgstr "উপবিভাগসমূহ"
+
+msgid "Tap on the left or right to navigate"
+msgstr "নেভিগেট করতে বাম বা ডানে ট্যাপ করুন"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "উইকি অ্যাসাইনমেন্টের সময়সীমা অতিক্রান্ত হয়েছে, তবে বিলম্বিত জমা দেওয়ার অনুমতি রয়েছে।"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "উইকি অ্যাসাইনমেন্টের সময়সীমা অতিক্রান্ত হয়েছে।"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "উইকি অ্যাসাইনমেন্ট এখনো শুরু হয়নি।"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "সংরক্ষণের আগে উইকি পৃষ্ঠা সম্পাদনা লক প্রয়োজন।"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "ঘোষণাটি সংরক্ষিত হয়েছে, কিন্তু সংযুক্তি আপলোড করা যায়নি।"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "ঘোষণাটি সংরক্ষিত হয়েছে, কিন্তু ইমেইল পাঠানো যায়নি।"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "ঘোষণাটি সংরক্ষিত হয়েছে, কিন্তু কোনো ইমেইল পাঠানো যায়নি।"
+
+msgid "The category has been created"
+msgstr "বিভাগটি তৈরি করা হয়েছে"
+
+msgid "The category has been deleted"
+msgstr "বিভাগটি মুছে ফেলা হয়েছে"
+
+msgid "The category has been updated"
+msgstr "বিভাগটি আপডেট করা হয়েছে"
+
+msgid "The end date is invalid"
+msgstr "শেষের তারিখটি অবৈধ"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "সর্বোচ্চ সংখ্যক সংস্করণ অবশ্যই অ-ঋণাত্মক পূর্ণসংখ্যা হতে হবে"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "সর্বোচ্চ সংখ্যক শব্দ অবশ্যই অ-ঋণাত্মক পূর্ণসংখ্যা হতে হবে"
+
+msgid "The print window could not be opened"
+msgstr "প্রিন্ট উইন্ডো খোলা যায়নি"
+
+msgid "The start date is invalid"
+msgstr "শুরুর তারিখটি অবৈধ"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "এই সেটিংস সম্পূর্ণ কোর্সের জন্য প্রযোজ্য, এর সেশন ও গ্রুপসহ।"
+
+msgid "This announcement has already been sent by email."
+msgstr "এই ঘোষণাটি ইতিমধ্যে ইমেইলে পাঠানো হয়েছে।"
+
+msgid "This discussion is hidden from learners"
+msgstr "এই আলোচনাটি শিক্ষার্থীদের কাছ থেকে লুকানো আছে"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "এই জেনারেটিভ এআই টুলটি আপনাকে আপনার কোর্স চিত্রিত করার জন্য ছবি ও সংক্ষিপ্ত ভিডিও তৈরি করতে সাহায্য করে। প্রম্পট অংশে (টেক্সটে) আপনি যা চান তা ব্যাখ্যা করে আপনি কনফিগার করা এআই মডেলকে ছবি বা ভিডিও তৈরির জন্য প্রয়োজনীয় উপাদান দিবেন। অনুগ্রহ করে ধৈর্য ধরুন। এআই মডেল কিছু সময় নিয়ে ফলাফল তৈরি করবে, যা আপনি আপনার ডকুমেন্টস ফোল্ডারে সংরক্ষণ করে পরে একটি এইচটিএমএল ডকুমেন্টে এম্বেড করতে পারেন। সব এআই মডেল গতি বা গুণমানের দিক থেকে সমান নয়। এআই মডেল আপনাকে একটি পরিবর্তিত প্রম্পটও দিতে পারে, যা আপনার অনুরোধের আরও বিস্তারিত ব্যাখ্যা। তারপর আপনি এই পরিবর্তিত প্রম্পট ব্যবহার করে আপনার অনুরোধ আরও সূক্ষ্ম করতে পারেন। অনুগ্রহ করে সচেতন থাকুন যে এই টুল, বিশেষ করে ভিডিওর জন্য, আপনার সংস্থার জন্য উল্লেখযোগ্য খরচ তৈরি করতে পারে, এমনকি আপনি তৈরি করা মিডিয়া সংরক্ষণ না করলেও। অনুগ্রহ করে সেই অনুযায়ী ব্যবহার করুন। আপনি যা খুঁজছেন তা না পেলে, অনুগ্রহ করে আপনার কাছে থাকা এআই মডেলের জন্য প্রম্পটিং ট্রিকস অনলাইনে গবেষণা করুন।"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "এই ইতিহাসটি বেস কোর্সের। সেশন সংস্করণ তৈরির পর রিস্টোর করা যাবে।"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "এই ছবিটি ফোরাম শিরোনামের পাশে দেখানো ডিফল্ট ফোরাম আইকন প্রতিস্থাপন করে।"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "এই পৃষ্ঠাটি বেস কোর্স থেকে এসেছে। এটি সংরক্ষণ করলে বর্তমান সেশনের জন্য একটি সংস্করণ তৈরি হবে।"
+
+msgid "This will also delete %s subcategories."
+msgstr "এটি %sটি উপবিভাগও মুছে ফেলবে।"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "এটি %s জন শিক্ষার্থীর জন্য পৃথক কাজের পৃষ্ঠা তৈরি করবে।"
+
+msgid "Thread history"
+msgstr "থ্রেড ইতিহাস"
+
+msgid "Title and content"
+msgstr "শিরোনাম ও বিষয়বস্তু"
+
+msgid "Unable to cancel renewal right now."
+msgstr "এখনই নবায়ন অধিকার বাতিল করা যাচ্ছে না।"
+
+msgid "Unable to restore renewal right now."
+msgstr "এখনই নবায়ন অধিকার পুনরুদ্ধার করা যাচ্ছে না।"
+
+msgid "Unlock page"
+msgstr "পৃষ্ঠা আনলক করুন"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "অভ্যন্তরীণ উইকি লিংক তৈরি করতে [[Page]] বা [[Page|দৃশ্যমান টেক্সট]] ব্যবহার করুন।"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "নেভিগেট করতে স্পেসবার বা অ্যারো কী ব্যবহার করুন"
+
+msgid "View version"
+msgstr "সংস্করণ দেখুন"
+
+msgid "Visible only to teachers"
+msgstr "শুধুমাত্র শিক্ষকদের জন্য দৃশ্যমান"
+
+msgid "Weight is required"
+msgstr "ওজন প্রয়োজন"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "এই কোর্সের জন্য উইকি বিভাগ নিষ্ক্রিয় করা হয়েছে।"
+
+msgid "Wiki categories enabled"
+msgstr "উইকি বিভাগ সক্রিয় করা হয়েছে"
+
+msgid "Wiki html strict filtering"
+msgstr "উইকি এইচটিএমএল কড়া ফিল্টারিং"
+
+msgid "Wiki settings"
+msgstr "উইকি সেটিংস"
+
+msgid "Wiki settings updated"
+msgstr "উইকি সেটিংস আপডেট করা হয়েছে"
+
+msgid "You are viewing a historical version of this page"
+msgstr "আপনি এই পৃষ্ঠার একটি ঐতিহাসিক সংস্করণ দেখছেন"
+
+msgid "You can attach one or more files to this reply."
+msgstr "আপনি এই উত্তরের সাথে এক বা একাধিক ফাইল সংযুক্ত করতে পারেন।"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "আপনি এই অ্যাসাইনমেন্ট পৃষ্ঠা সম্পাদনা করতে পারেন, কিন্তু শিক্ষার্থীদের কাজের পৃষ্ঠা পরিবর্তন করা হবে না।"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "আপনি প্রশ্নে {{class_name}} এবং {{student_full_name}} ট্যাগ ব্যবহার করতে পারেন।"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "সম্পাদনা লক মেয়াদ শেষ হওয়ার আগে আপনার কাছে এই পৃষ্ঠা সম্পাদনা করার জন্য ২০ মিনিট সময় আছে।"
+
+msgid "by"
+msgstr "দ্বারা"
+
+msgid "required"
+msgstr "প্রয়োজনীয়"
 

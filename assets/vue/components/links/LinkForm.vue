@@ -80,7 +80,7 @@
               height: 350,
               hideUploadButton: true,
               autoOpenFileEditor: true,
-              note: t('Click the image to crop it (1:1 ratio, 120x120 px recommended).'),
+              note: t('Click the image to crop it (1:1 ratio, 120x120 px recommended)'),
             }"
           />
 

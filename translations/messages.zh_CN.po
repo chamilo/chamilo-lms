@@ -36495,3 +36495,852 @@ msgstr "查看主题"
 msgid "No auth source"
 msgstr "无认证源"
 
+msgid "You must add at least one question"
+msgstr "您必须至少添加一个问题"
+
+msgid "Advanced actions"
+msgstr "高级操作"
+
+msgid "Application path"
+msgstr "应用程序路径"
+
+msgid "Apply files details"
+msgstr "应用文件详情"
+
+msgid "Apply plan details"
+msgstr "应用计划详情"
+
+msgid "Apply plan failed"
+msgstr "应用计划失败"
+
+msgid "Apply plan ready"
+msgstr "应用计划就绪"
+
+msgid "Apply preparation"
+msgstr "应用准备"
+
+msgid "Apply staged files"
+msgstr "应用暂存文件"
+
+msgid "Applying files..."
+msgstr "正在应用文件..."
+
+msgid "Audit file"
+msgstr "审核文件"
+
+msgid "Backup directory"
+msgstr "备份目录"
+
+msgid "Baseline clean"
+msgstr "基线清理"
+
+msgid "Baseline warnings"
+msgstr "基线警告"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "根据暂存包生成安全的应用计划。此操作仅检查文件、权限、备份路径和锁定状态，不会替换文件。"
+
+msgid "Build production frontend assets."
+msgstr "构建生产环境前端资源。"
+
+msgid "Building plan..."
+msgstr "正在生成计划..."
+
+msgid "Channel"
+msgstr "通道"
+
+msgid "Check"
+msgstr "检查"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "检查可用的 Chamilo 更新，验证软件包，暂存文件并执行受控的更新后步骤。"
+
+msgid "Check manifest"
+msgstr "检查清单"
+
+msgid "Checking post-apply actions..."
+msgstr "正在检查应用后操作..."
+
+msgid "Checking..."
+msgstr "正在检查..."
+
+msgid "Composer install"
+msgstr "Composer 安装"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer、Yarn 和数据库迁移操作可能会修改依赖、生成资源或数据库。仅在确认备份和权限后选择这些操作。"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "在服务器上配置 CHAMILO_UPDATE_MANIFEST_URL 或提供 HTTPS 清单 URL。"
+
+msgid "Configured"
+msgstr "已配置"
+
+msgid "Current migration"
+msgstr "当前迁移"
+
+msgid "Database baseline"
+msgstr "数据库基线"
+
+msgid "Database migration safety review"
+msgstr "数据库迁移安全审查"
+
+msgid "Database migrations"
+msgstr "数据库迁移"
+
+msgid "Development mode"
+msgstr "开发模式"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "除非已审查更新备份和服务器权限，否则请勿启用。"
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine 试运行命令"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine 报告了历史基线警告。更新程序仍将在明确确认后仅执行已暂存的 V210 迁移。"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine 将在安全审查通过后，仅执行已明确暂存的 V210 迁移。"
+
+msgid "Dry-run exit code"
+msgstr "试运行退出代码"
+
+msgid "Executed unavailable migrations"
+msgstr "已执行不可用迁移"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "将已验证的更新包解压到暂存目录以供检查。这不会替换文件、运行迁移或修改数据库。"
+
+msgid "File apply available"
+msgstr "文件应用可用"
+
+msgid "Files to replace"
+msgstr "待替换文件"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "我确认在运行迁移前已存在并验证了数据库备份。"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "我理解高级操作可能会修改依赖项、生成资源或数据库。"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "我理解这将替换 Chamilo 安装中的文件。"
+
+msgid "I understand this will run update commands on the server."
+msgstr "我理解这将在服务器上运行更新命令。"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "在重新构建资源前安装前端依赖。"
+
+msgid "Installed version"
+msgstr "已安装版本"
+
+msgid "Latest migration"
+msgstr "最新迁移"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "将已验证的更新包和签名路径留空以从已验证的清单 URL 下载。仅在开发测试时使用本地路径。"
+
+msgid "Live command log"
+msgstr "实时命令日志"
+
+msgid "Live update log"
+msgstr "实时更新日志"
+
+msgid "Local test options"
+msgstr "本地测试选项"
+
+msgid "Local test update notice link"
+msgstr "本地测试更新通知链接"
+
+msgid "Local update notice simulation"
+msgstr "本地更新通知模拟"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "本地更新通知模拟仅在开发模式下可用。"
+
+msgid "Manifest"
+msgstr "清单"
+
+msgid "Manifest source"
+msgstr "清单来源"
+
+msgid "Migration safety details"
+msgstr "迁移安全详情"
+
+msgid "Migration safety review failed"
+msgstr "迁移安全审查失败"
+
+msgid "Migration safety review ready"
+msgstr "迁移安全审查就绪"
+
+msgid "Migration target"
+msgstr "迁移目标"
+
+msgid "New files"
+msgstr "新文件"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine 报告的新迁移"
+
+msgid "Next migration"
+msgstr "下一迁移"
+
+msgid "No executed unavailable migration was reported."
+msgstr "未报告已执行的不可用迁移。"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "尚未配置官方清单 URL。请使用 HTTPS URL 或本地路径进行开发测试。"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "在暂存更新目标之前未检测到待处理的迁移。"
+
+msgid "Not configured"
+msgstr "未配置"
+
+msgid "Not detected"
+msgstr "未检测到"
+
+msgid "Official Chamilo update channel"
+msgstr "官方 Chamilo 更新通道"
+
+msgid "Package SHA-256"
+msgstr "软件包 SHA-256"
+
+msgid "Package URL"
+msgstr "软件包 URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "软件包和签名文件将从清单下载。此环境中已禁用本地路径。"
+
+msgid "Package path"
+msgstr "软件包路径"
+
+msgid "Package staged successfully"
+msgstr "软件包暂存成功"
+
+msgid "Package staging failed"
+msgstr "软件包暂存失败"
+
+msgid "Package verification"
+msgstr "软件包验证"
+
+msgid "Package verification failed"
+msgstr "软件包验证失败"
+
+msgid "Package verified successfully"
+msgstr "软件包验证成功"
+
+msgid "Pending migrations before this update"
+msgstr "此更新前的待处理迁移"
+
+msgid "Planned backup path"
+msgstr "计划的备份路径"
+
+msgid "Post-apply actions completed"
+msgstr "应用后操作已完成"
+
+msgid "Post-apply actions failed"
+msgstr "应用后操作失败"
+
+msgid "Post-apply actions ready"
+msgstr "应用后操作就绪"
+
+msgid "Post-apply checks"
+msgstr "应用后检查"
+
+msgid "Post-apply checks failed"
+msgstr "应用后检查失败"
+
+msgid "Post-apply details"
+msgstr "应用后详情"
+
+msgid "Post-apply run details"
+msgstr "应用后运行详情"
+
+msgid "Preflight checks"
+msgstr "预检"
+
+msgid "Preflight checks completed"
+msgstr "预检已完成"
+
+msgid "Preflight checks failed"
+msgstr "预检失败"
+
+msgid "Preflight details"
+msgstr "预检详情"
+
+msgid "Prepare staging"
+msgstr "准备暂存"
+
+msgid "Preparing staging..."
+msgstr "正在准备暂存..."
+
+msgid "Production mode"
+msgstr "生产模式"
+
+msgid "Released at"
+msgstr "发布于"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "使用已审核的应用计划替换暂存包中的 Chamilo 文件。此操作不会运行数据库迁移、Composer、Yarn 或缓存命令。"
+
+msgid "Review apply plan"
+msgstr "审核应用计划"
+
+msgid "Review database migrations"
+msgstr "审核数据库迁移"
+
+msgid "Review post-apply actions"
+msgstr "审核应用后操作"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "应用更新文件后，审核推荐的手动命令。此步骤不会运行 Composer、Yarn、迁移或缓存命令。"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "在运行数据库迁移前，审核暂存的 Doctrine 迁移及 dry-run 输出。"
+
+msgid "Reviewing database migrations..."
+msgstr "正在审核数据库迁移..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "在执行数据库迁移前，运行并通过迁移安全审核。"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "在任何未来的更新应用步骤前运行环境检查。此操作不会修改文件或数据库。"
+
+msgid "Run post-apply actions"
+msgstr "运行应用后操作"
+
+msgid "Run preflight checks"
+msgstr "运行预检"
+
+msgid "Run selected post-apply actions"
+msgstr "运行选定的应用后操作"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "使用受控白名单从服务器运行选定的应用后命令。不接受自定义 shell 命令。"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "在确认文件更新结果和备份后，从服务器手动运行这些命令。"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "在生产模式下禁用从 UI 运行应用后操作。"
+
+msgid "Running post-apply actions..."
+msgstr "正在运行应用后操作..."
+
+msgid "Safe actions"
+msgstr "安全操作"
+
+msgid "Signature path"
+msgstr "签名路径"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "在此环境中无法跳过签名验证。"
+
+msgid "Skip signature verification for local development tests"
+msgstr "为本地开发测试跳过签名验证"
+
+msgid "Staged file application failed"
+msgstr "暂存文件应用失败"
+
+msgid "Staged files applied successfully"
+msgstr "暂存文件应用成功"
+
+msgid "Staging details"
+msgstr "暂存详情"
+
+msgid "Staging directory"
+msgstr "暂存目录"
+
+msgid "Staging extraction"
+msgstr "暂存解压"
+
+msgid "Symfony cache clear"
+msgstr "Symfony 缓存清除"
+
+msgid "System update"
+msgstr "系统更新"
+
+msgid "Target version"
+msgstr "目标版本"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "已预填配置的官方清单 URL。如有需要，您可将其更改为其他 HTTPS 清单。"
+
+msgid "The database migration baseline is clean."
+msgstr "数据库迁移基线干净。"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "操作完成后最终 HTTP 响应失败。这通常由运行时缓存权限或请求期间 Web 服务器重启导致。"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "操作日志显示应用后操作已成功完成。"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "选定的应用后命令已成功完成，但最终 HTTP 响应失败。如果页面无法正确加载，请刷新页面并检查运行时缓存权限。"
+
+msgid "The updater does not create or restore database backups."
+msgstr "更新程序不会创建或恢复数据库备份。"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "这些操作在查看更新结果后可安全地从界面运行。"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "这些命令可能会修改依赖项、生成资源、缓存或数据库。继续操作前请确认已备份。"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "此操作将修改 Chamilo 安装目录中的文件。继续操作前请确保已审核应用计划并启用备份。"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "此开发条目使用本地测试包路径模拟未来的 Chamilo.org 更新通知。"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "此屏幕由官方更新通知打开，但尚未配置官方清单源。"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "此屏幕由更新通知打开。仅自动启动清单检查。"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "此步骤仅准备审核。文件替换将在稍后的“应用暂存文件”步骤中进行，并提供锁定、备份和回滚保护。"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "此更新程序不会创建数据库备份。运行迁移前请创建并验证备份。"
+
+msgid "Trusted public key"
+msgstr "受信任的公钥"
+
+msgid "Trusted signing key"
+msgstr "受信任的签名密钥"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "输入 APPLY UPDATE FILES 以确认"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "输入 RUN DATABASE MIGRATIONS 以确认数据库迁移"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "输入 RUN POST UPDATE ACTIONS 以确认"
+
+msgid "Unknown update notice source."
+msgstr "未知的更新通知来源。"
+
+msgid "Update availability"
+msgstr "更新可用性"
+
+msgid "Update directory"
+msgstr "更新目录"
+
+msgid "Update lock path"
+msgstr "更新锁定路径"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "使用上一步生成的暂存目录。后端仅接受 var/update/staging 内的目录。"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "使用此链接可在开发测试期间模拟未来的 Chamilo.org 更新通知。"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "仅用于本地开发测试。生产环境更新必须使用服务器配置的密钥。"
+
+msgid "Verification details"
+msgstr "验证详情"
+
+msgid "Verify package"
+msgstr "验证软件包"
+
+msgid "Verifying..."
+msgstr "正在验证..."
+
+msgid "Waiting for command progress events..."
+msgstr "等待命令进度事件..."
+
+msgid "Waiting for update progress events..."
+msgstr "等待更新进度事件..."
+
+msgid "Yarn build"
+msgstr "Yarn 构建"
+
+msgid "Yarn install"
+msgstr "Yarn 安装"
+
+msgid "A comment is required"
+msgstr "必须填写评论"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "已存在同名数据库。如果其中包含表，这些表将被删除；如果为空，则会被复用。"
+
+msgid "AI generated"
+msgstr "AI 生成"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "返回学习路径前请至少添加一个问题。"
+
+msgid "Add attachments"
+msgstr "添加附件"
+
+msgid "Additional fields"
+msgstr "附加字段"
+
+msgid "Allow comments"
+msgstr "允许评论"
+
+msgid "Allow new pages"
+msgstr "允许新建页面"
+
+msgid "Allow ratings"
+msgstr "允许评分"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "确定要删除所有项目吗？"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "确定要恢复自动续订吗？"
+
+msgid "Attachment has been deleted"
+msgstr "附件已删除"
+
+msgid "Backup file"
+msgstr "备份文件"
+
+msgid "Block comments"
+msgstr "屏蔽评论"
+
+msgid "Block new pages"
+msgstr "屏蔽新建页面"
+
+msgid "Block ratings"
+msgstr "屏蔽评分"
+
+msgid "Cancel renewal"
+msgstr "取消续订"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "分类链接将从 %s 个 Wiki 页面中移除。"
+
+msgid "Change"
+msgstr "更改"
+
+msgid "Clear group"
+msgstr "清除群组"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "点击标签将其插入编辑器。这些占位符将在生成证书时被替换。"
+
+msgid "Comment added"
+msgstr "评论已添加"
+
+msgid "Comment is required"
+msgstr "评论为必填项"
+
+msgid "Comment score"
+msgstr "评论得分"
+
+msgid "Compare selected versions line by line"
+msgstr "逐行比较所选版本"
+
+msgid "Compare selected versions word by word"
+msgstr "逐词比较所选版本"
+
+msgid "Compare versions"
+msgstr "比较版本"
+
+msgid "Copy completed"
+msgstr "复制完成"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "为学习者创建个人 Wiki 工作页"
+
+msgid "Current view mode"
+msgstr "当前视图模式"
+
+msgid "Delete Wiki"
+msgstr "删除 Wiki"
+
+msgid "Delete page"
+msgstr "删除页面"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "不建议删除 Wiki 首页。您可以稍后重新创建。"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "禁用 Wiki 将阻止正常 Wiki 页面和操作。此设置页仍可供课程教师使用。"
+
+msgid "Discussion"
+msgstr "讨论"
+
+msgid "Edit Comment"
+msgstr "编辑评论"
+
+msgid "Edit page"
+msgstr "编辑页面"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "结束日期必须晚于或等于到期日期"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "输入搜索词以查找 Wiki 页面"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "到期日期必须早于或等于结束日期"
+
+msgid "Failed email recipients"
+msgstr "邮件发送失败的收件人"
+
+msgid "Finish and return to learning path"
+msgstr "完成并返回学习路径"
+
+msgid "Forum image"
+msgstr "论坛图片"
+
+msgid "Hide discussion"
+msgstr "隐藏讨论"
+
+msgid "Hide page"
+msgstr "隐藏页面"
+
+msgid "I changed my mind"
+msgstr "我改变主意了"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "若不勾选，这些文件仍可通过“文件信息”工具供平台管理员使用。"
+
+msgid "Internal message failures"
+msgstr "内部消息失败"
+
+msgid "Internal messages available"
+msgstr "内部消息可用"
+
+msgid "Internal messages created now"
+msgstr "内部消息已创建"
+
+msgid "Item score"
+msgstr "项目得分"
+
+msgid "Last post"
+msgstr "最后发帖"
+
+msgid "Lock page"
+msgstr "锁定页面"
+
+msgid "Manage categories"
+msgstr "管理分类"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "将此文档标记为 AI 辅助内容。用于内容由 AI 工具创建或显著修改的情况。"
+
+msgid "Maximum score is required"
+msgstr "最高分必填"
+
+msgid "Metric"
+msgstr "指标"
+
+msgid "New comments are blocked in this discussion"
+msgstr "此讨论中已禁止新评论"
+
+msgid "No Wiki categories are available yet."
+msgstr "尚无可用的 Wiki 分类。"
+
+msgid "No categories found"
+msgstr "未找到分类"
+
+msgid "No content"
+msgstr "无内容"
+
+msgid "No parent category"
+msgstr "无父分类"
+
+msgid "Number of comments scored"
+msgstr "已评分的评论数量"
+
+msgid "Old version"
+msgstr "旧版本"
+
+msgid "Only image files are allowed."
+msgstr "仅允许图片文件。"
+
+msgid "Please fill all required fields"
+msgstr "请填写所有必填字段"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "包含班级或学生占位符的问题将为课程班级或小组生成：%s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "此讨论中已禁止评分"
+
+msgid "Remove image"
+msgstr "移除图片"
+
+msgid "Restore renewal"
+msgstr "恢复续订"
+
+msgid "Restore version"
+msgstr "恢复版本"
+
+msgid "Search in"
+msgstr "搜索范围"
+
+msgid "Select group"
+msgstr "选择小组"
+
+msgid "Select image"
+msgstr "选择图片"
+
+msgid "Selected image"
+msgstr "已选图片"
+
+msgid "Show discussion"
+msgstr "显示讨论"
+
+msgid "Show page"
+msgstr "显示页面"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "部分文件或文件夹没有写入权限。要安装 Chamilo，您必须先更改其权限（使用 CHMOD）。请阅读"
+
+msgid "Subcategories"
+msgstr "子类别"
+
+msgid "Tap on the left or right to navigate"
+msgstr "点击左侧或右侧进行导航"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki 作业截止日期已过，但允许延迟提交。"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki 作业截止日期已过。"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki 作业尚未开始。"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "保存前需要锁定 Wiki 页面编辑。"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "公告已保存，但附件无法上传。"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "公告已保存，但邮件发送失败。"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "公告已保存，但无法发送任何邮件。"
+
+msgid "The category has been created"
+msgstr "类别已创建"
+
+msgid "The category has been deleted"
+msgstr "类别已删除"
+
+msgid "The category has been updated"
+msgstr "类别已更新"
+
+msgid "The end date is invalid"
+msgstr "结束日期无效"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "最大版本数必须是非负整数"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "最大字数必须是非负整数"
+
+msgid "The print window could not be opened"
+msgstr "无法打开打印窗口"
+
+msgid "The start date is invalid"
+msgstr "开始日期无效"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "这些设置适用于整个课程，包括其会话和小组。"
+
+msgid "This announcement has already been sent by email."
+msgstr "此公告已通过邮件发送。"
+
+msgid "This discussion is hidden from learners"
+msgstr "此讨论对学习者隐藏"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "此生成式 AI 工具可帮助您创建图片和短视频来展示课程。通过在提示部分（文本）说明您想要的内容，您将为配置的 AI 模型提供生成图片或视频所需的元素。请耐心等待。AI 模型需要一些时间生成结果，您可能希望将媒体保存到文档文件夹中，然后嵌入 HTML 文档。并非所有 AI 模型在速度或质量上都相同。AI 模型也可能给您一个修改后的提示，这是对您请求的更详细解释。然后您可以使用此修改后的提示来微调请求。请注意，此工具（尤其是视频）可能会给您的组织带来相当大的成本，即使您决定不保存生成的媒体。请合理使用。如果您无法获得想要的结果，请花些时间在线研究可用的 AI 模型的提示技巧。"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "此历史记录属于基础课程。创建会话版本后即可恢复。"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "此图片将替换论坛标题旁显示的默认论坛图标。"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "此页面来自基础课程。保存后将为当前会话创建版本。"
+
+msgid "This will also delete %s subcategories."
+msgstr "这也将删除 %s 个子类别。"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "这将为 %s 名学习者创建单独的工作页面。"
+
+msgid "Thread history"
+msgstr "主题历史"
+
+msgid "Title and content"
+msgstr "标题和内容"
+
+msgid "Unable to cancel renewal right now."
+msgstr "目前无法取消续订权限。"
+
+msgid "Unable to restore renewal right now."
+msgstr "目前无法恢复续订权限。"
+
+msgid "Unlock page"
+msgstr "解锁页面"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "使用 [[Page]] 或 [[Page|可见文本]] 创建内部 Wiki 链接。"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "使用空格键或方向键进行导航"
+
+msgid "View version"
+msgstr "查看版本"
+
+msgid "Visible only to teachers"
+msgstr "仅对教师可见"
+
+msgid "Weight is required"
+msgstr "权重为必填项"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "此课程已禁用 Wiki 类别。"
+
+msgid "Wiki categories enabled"
+msgstr "已启用 Wiki 类别"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki HTML 严格过滤"
+
+msgid "Wiki settings"
+msgstr "Wiki 设置"
+
+msgid "Wiki settings updated"
+msgstr "Wiki 设置已更新"
+
+msgid "You are viewing a historical version of this page"
+msgstr "您正在查看此页面的历史版本"
+
+msgid "You can attach one or more files to this reply."
+msgstr "您可以为此回复附加一个或多个文件。"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "您可以编辑此作业页面，但学习者的工作页面不会被修改。"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "您可以在问题中使用标签 {{class_name}} 和 {{student_full_name}}。"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "您有 20 分钟的时间编辑此页面，之后编辑锁定将失效。"
+
+msgid "by"
+msgstr "作者"
+
+msgid "required"
+msgstr "必填"
+

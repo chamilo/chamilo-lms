@@ -36410,3 +36410,852 @@ msgstr ""
 
 msgid "No auth source"
 msgstr ""
+
+msgid "You must add at least one question"
+msgstr ""
+
+msgid "Advanced actions"
+msgstr ""
+
+msgid "Application path"
+msgstr ""
+
+msgid "Apply files details"
+msgstr ""
+
+msgid "Apply plan details"
+msgstr ""
+
+msgid "Apply plan failed"
+msgstr ""
+
+msgid "Apply plan ready"
+msgstr ""
+
+msgid "Apply preparation"
+msgstr ""
+
+msgid "Apply staged files"
+msgstr ""
+
+msgid "Applying files..."
+msgstr ""
+
+msgid "Audit file"
+msgstr ""
+
+msgid "Backup directory"
+msgstr ""
+
+msgid "Baseline clean"
+msgstr ""
+
+msgid "Baseline warnings"
+msgstr ""
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr ""
+
+msgid "Build production frontend assets."
+msgstr ""
+
+msgid "Building plan..."
+msgstr ""
+
+msgid "Channel"
+msgstr ""
+
+msgid "Check"
+msgstr ""
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr ""
+
+msgid "Check manifest"
+msgstr ""
+
+msgid "Checking post-apply actions..."
+msgstr ""
+
+msgid "Checking..."
+msgstr ""
+
+msgid "Composer install"
+msgstr ""
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr ""
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr ""
+
+msgid "Configured"
+msgstr ""
+
+msgid "Current migration"
+msgstr ""
+
+msgid "Database baseline"
+msgstr ""
+
+msgid "Database migration safety review"
+msgstr ""
+
+msgid "Database migrations"
+msgstr ""
+
+msgid "Development mode"
+msgstr ""
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr ""
+
+msgid "Doctrine dry-run command"
+msgstr ""
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr ""
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr ""
+
+msgid "Dry-run exit code"
+msgstr ""
+
+msgid "Executed unavailable migrations"
+msgstr ""
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr ""
+
+msgid "File apply available"
+msgstr ""
+
+msgid "Files to replace"
+msgstr ""
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr ""
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr ""
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr ""
+
+msgid "I understand this will run update commands on the server."
+msgstr ""
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr ""
+
+msgid "Installed version"
+msgstr ""
+
+msgid "Latest migration"
+msgstr ""
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr ""
+
+msgid "Live command log"
+msgstr ""
+
+msgid "Live update log"
+msgstr ""
+
+msgid "Local test options"
+msgstr ""
+
+msgid "Local test update notice link"
+msgstr ""
+
+msgid "Local update notice simulation"
+msgstr ""
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr ""
+
+msgid "Manifest"
+msgstr ""
+
+msgid "Manifest source"
+msgstr ""
+
+msgid "Migration safety details"
+msgstr ""
+
+msgid "Migration safety review failed"
+msgstr ""
+
+msgid "Migration safety review ready"
+msgstr ""
+
+msgid "Migration target"
+msgstr ""
+
+msgid "New files"
+msgstr ""
+
+msgid "New migrations reported by Doctrine"
+msgstr ""
+
+msgid "Next migration"
+msgstr ""
+
+msgid "No executed unavailable migration was reported."
+msgstr ""
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr ""
+
+msgid "No pending migration was detected before the staged update target."
+msgstr ""
+
+msgid "Not configured"
+msgstr ""
+
+msgid "Not detected"
+msgstr ""
+
+msgid "Official Chamilo update channel"
+msgstr ""
+
+msgid "Package SHA-256"
+msgstr ""
+
+msgid "Package URL"
+msgstr ""
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr ""
+
+msgid "Package path"
+msgstr ""
+
+msgid "Package staged successfully"
+msgstr ""
+
+msgid "Package staging failed"
+msgstr ""
+
+msgid "Package verification"
+msgstr ""
+
+msgid "Package verification failed"
+msgstr ""
+
+msgid "Package verified successfully"
+msgstr ""
+
+msgid "Pending migrations before this update"
+msgstr ""
+
+msgid "Planned backup path"
+msgstr ""
+
+msgid "Post-apply actions completed"
+msgstr ""
+
+msgid "Post-apply actions failed"
+msgstr ""
+
+msgid "Post-apply actions ready"
+msgstr ""
+
+msgid "Post-apply checks"
+msgstr ""
+
+msgid "Post-apply checks failed"
+msgstr ""
+
+msgid "Post-apply details"
+msgstr ""
+
+msgid "Post-apply run details"
+msgstr ""
+
+msgid "Preflight checks"
+msgstr ""
+
+msgid "Preflight checks completed"
+msgstr ""
+
+msgid "Preflight checks failed"
+msgstr ""
+
+msgid "Preflight details"
+msgstr ""
+
+msgid "Prepare staging"
+msgstr ""
+
+msgid "Preparing staging..."
+msgstr ""
+
+msgid "Production mode"
+msgstr ""
+
+msgid "Released at"
+msgstr ""
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr ""
+
+msgid "Review apply plan"
+msgstr ""
+
+msgid "Review database migrations"
+msgstr ""
+
+msgid "Review post-apply actions"
+msgstr ""
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr ""
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr ""
+
+msgid "Reviewing database migrations..."
+msgstr ""
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr ""
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr ""
+
+msgid "Run post-apply actions"
+msgstr ""
+
+msgid "Run preflight checks"
+msgstr ""
+
+msgid "Run selected post-apply actions"
+msgstr ""
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr ""
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr ""
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr ""
+
+msgid "Running post-apply actions..."
+msgstr ""
+
+msgid "Safe actions"
+msgstr ""
+
+msgid "Signature path"
+msgstr ""
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr ""
+
+msgid "Skip signature verification for local development tests"
+msgstr ""
+
+msgid "Staged file application failed"
+msgstr ""
+
+msgid "Staged files applied successfully"
+msgstr ""
+
+msgid "Staging details"
+msgstr ""
+
+msgid "Staging directory"
+msgstr ""
+
+msgid "Staging extraction"
+msgstr ""
+
+msgid "Symfony cache clear"
+msgstr ""
+
+msgid "System update"
+msgstr ""
+
+msgid "Target version"
+msgstr ""
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr ""
+
+msgid "The database migration baseline is clean."
+msgstr ""
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr ""
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr ""
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr ""
+
+msgid "The updater does not create or restore database backups."
+msgstr ""
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr ""
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr ""
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr ""
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr ""
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr ""
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr ""
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr ""
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr ""
+
+msgid "Trusted public key"
+msgstr ""
+
+msgid "Trusted signing key"
+msgstr ""
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr ""
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr ""
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr ""
+
+msgid "Unknown update notice source."
+msgstr ""
+
+msgid "Update availability"
+msgstr ""
+
+msgid "Update directory"
+msgstr ""
+
+msgid "Update lock path"
+msgstr ""
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr ""
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr ""
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr ""
+
+msgid "Verification details"
+msgstr ""
+
+msgid "Verify package"
+msgstr ""
+
+msgid "Verifying..."
+msgstr ""
+
+msgid "Waiting for command progress events..."
+msgstr ""
+
+msgid "Waiting for update progress events..."
+msgstr ""
+
+msgid "Yarn build"
+msgstr ""
+
+msgid "Yarn install"
+msgstr ""
+
+msgid "A comment is required"
+msgstr ""
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr ""
+
+msgid "AI generated"
+msgstr ""
+
+msgid "Add at least one question before returning to the learning path."
+msgstr ""
+
+msgid "Add attachments"
+msgstr ""
+
+msgid "Additional fields"
+msgstr ""
+
+msgid "Allow comments"
+msgstr ""
+
+msgid "Allow new pages"
+msgstr ""
+
+msgid "Allow ratings"
+msgstr ""
+
+msgid "Are you sure you want to delete all items?"
+msgstr ""
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr ""
+
+msgid "Attachment has been deleted"
+msgstr ""
+
+msgid "Backup file"
+msgstr ""
+
+msgid "Block comments"
+msgstr ""
+
+msgid "Block new pages"
+msgstr ""
+
+msgid "Block ratings"
+msgstr ""
+
+msgid "Cancel renewal"
+msgstr ""
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Clear group"
+msgstr ""
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr ""
+
+msgid "Comment added"
+msgstr ""
+
+msgid "Comment is required"
+msgstr ""
+
+msgid "Comment score"
+msgstr ""
+
+msgid "Compare selected versions line by line"
+msgstr ""
+
+msgid "Compare selected versions word by word"
+msgstr ""
+
+msgid "Compare versions"
+msgstr ""
+
+msgid "Copy completed"
+msgstr ""
+
+msgid "Create individual Wiki work pages for learners"
+msgstr ""
+
+msgid "Current view mode"
+msgstr ""
+
+msgid "Delete Wiki"
+msgstr ""
+
+msgid "Delete page"
+msgstr ""
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr ""
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr ""
+
+msgid "Discussion"
+msgstr ""
+
+msgid "Edit Comment"
+msgstr ""
+
+msgid "Edit page"
+msgstr ""
+
+msgid "End date must be after or equal to expiration date"
+msgstr ""
+
+msgid "Enter a search term to find Wiki pages"
+msgstr ""
+
+msgid "Expiration date must be before or equal to end date"
+msgstr ""
+
+msgid "Failed email recipients"
+msgstr ""
+
+msgid "Finish and return to learning path"
+msgstr ""
+
+msgid "Forum image"
+msgstr ""
+
+msgid "Hide discussion"
+msgstr ""
+
+msgid "Hide page"
+msgstr ""
+
+msgid "I changed my mind"
+msgstr ""
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr ""
+
+msgid "Internal message failures"
+msgstr ""
+
+msgid "Internal messages available"
+msgstr ""
+
+msgid "Internal messages created now"
+msgstr ""
+
+msgid "Item score"
+msgstr ""
+
+msgid "Last post"
+msgstr ""
+
+msgid "Lock page"
+msgstr ""
+
+msgid "Manage categories"
+msgstr ""
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr ""
+
+msgid "Maximum score is required"
+msgstr ""
+
+msgid "Metric"
+msgstr ""
+
+msgid "New comments are blocked in this discussion"
+msgstr ""
+
+msgid "No Wiki categories are available yet."
+msgstr ""
+
+msgid "No categories found"
+msgstr ""
+
+msgid "No content"
+msgstr ""
+
+msgid "No parent category"
+msgstr ""
+
+msgid "Number of comments scored"
+msgstr ""
+
+msgid "Old version"
+msgstr ""
+
+msgid "Only image files are allowed."
+msgstr ""
+
+msgid "Please fill all required fields"
+msgstr ""
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr ""
+
+msgid "Ratings are blocked in this discussion"
+msgstr ""
+
+msgid "Remove image"
+msgstr ""
+
+msgid "Restore renewal"
+msgstr ""
+
+msgid "Restore version"
+msgstr ""
+
+msgid "Search in"
+msgstr ""
+
+msgid "Select group"
+msgstr ""
+
+msgid "Select image"
+msgstr ""
+
+msgid "Selected image"
+msgstr ""
+
+msgid "Show discussion"
+msgstr ""
+
+msgid "Show page"
+msgstr ""
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr ""
+
+msgid "Subcategories"
+msgstr ""
+
+msgid "Tap on the left or right to navigate"
+msgstr ""
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr ""
+
+msgid "The Wiki assignment deadline has passed."
+msgstr ""
+
+msgid "The Wiki assignment has not started yet."
+msgstr ""
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr ""
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr ""
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr ""
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr ""
+
+msgid "The category has been created"
+msgstr ""
+
+msgid "The category has been deleted"
+msgstr ""
+
+msgid "The category has been updated"
+msgstr ""
+
+msgid "The end date is invalid"
+msgstr ""
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr ""
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr ""
+
+msgid "The print window could not be opened"
+msgstr ""
+
+msgid "The start date is invalid"
+msgstr ""
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr ""
+
+msgid "This announcement has already been sent by email."
+msgstr ""
+
+msgid "This discussion is hidden from learners"
+msgstr ""
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr ""
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr ""
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr ""
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr ""
+
+msgid "This will also delete %s subcategories."
+msgstr ""
+
+msgid "This will create individual work pages for %s learners."
+msgstr ""
+
+msgid "Thread history"
+msgstr ""
+
+msgid "Title and content"
+msgstr ""
+
+msgid "Unable to cancel renewal right now."
+msgstr ""
+
+msgid "Unable to restore renewal right now."
+msgstr ""
+
+msgid "Unlock page"
+msgstr ""
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr ""
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr ""
+
+msgid "View version"
+msgstr ""
+
+msgid "Visible only to teachers"
+msgstr ""
+
+msgid "Weight is required"
+msgstr ""
+
+msgid "Wiki categories are disabled for this course."
+msgstr ""
+
+msgid "Wiki categories enabled"
+msgstr ""
+
+msgid "Wiki html strict filtering"
+msgstr ""
+
+msgid "Wiki settings"
+msgstr ""
+
+msgid "Wiki settings updated"
+msgstr ""
+
+msgid "You are viewing a historical version of this page"
+msgstr ""
+
+msgid "You can attach one or more files to this reply."
+msgstr ""
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr ""
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr ""
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr ""
+
+msgid "by"
+msgstr ""
+
+msgid "required"
+msgstr ""

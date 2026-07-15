@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "З повагою"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Зразок формули: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Зразок формули: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Діапазони змінних"
@@ -36488,4 +36488,853 @@ msgstr "Переглянути теми"
 
 msgid "No auth source"
 msgstr "Без джерела автентифікації"
+
+msgid "You must add at least one question"
+msgstr "Ви повинні додати принаймні одне запитання"
+
+msgid "Advanced actions"
+msgstr "Розширені дії"
+
+msgid "Application path"
+msgstr "Шлях до застосунку"
+
+msgid "Apply files details"
+msgstr "Застосувати деталі файлів"
+
+msgid "Apply plan details"
+msgstr "Застосувати деталі плану"
+
+msgid "Apply plan failed"
+msgstr "Не вдалося застосувати план"
+
+msgid "Apply plan ready"
+msgstr "План готовий до застосування"
+
+msgid "Apply preparation"
+msgstr "Підготовка до застосування"
+
+msgid "Apply staged files"
+msgstr "Застосувати підготовлені файли"
+
+msgid "Applying files..."
+msgstr "Застосування файлів..."
+
+msgid "Audit file"
+msgstr "Аудит файлу"
+
+msgid "Backup directory"
+msgstr "Каталог резервних копій"
+
+msgid "Baseline clean"
+msgstr "Базова чистота"
+
+msgid "Baseline warnings"
+msgstr "Базові попередження"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Створити безпечний план застосування з підготовленого пакета. Це лише перевіряє файли, дозволи, шлях резервного копіювання та статус блокування. Файли не замінюються."
+
+msgid "Build production frontend assets."
+msgstr "Зібрати фронтенд-ресурси для продакшену."
+
+msgid "Building plan..."
+msgstr "Створення плану..."
+
+msgid "Channel"
+msgstr "Канал"
+
+msgid "Check"
+msgstr "Перевірити"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Перевірити наявність оновлень Chamilo, верифікувати пакети, підготувати файли та виконати контрольовані кроки після оновлення."
+
+msgid "Check manifest"
+msgstr "Перевірити маніфест"
+
+msgid "Checking post-apply actions..."
+msgstr "Перевірка дій після застосування..."
+
+msgid "Checking..."
+msgstr "Перевірка..."
+
+msgid "Composer install"
+msgstr "Встановлення Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Дії Composer, Yarn та міграції бази даних можуть змінювати залежності, згенеровані ресурси або базу даних. Вибирайте їх лише після підтвердження резервних копій та дозволів."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Налаштуйте CHAMILO_UPDATE_MANIFEST_URL на сервері або вкажіть HTTPS-адресу маніфесту."
+
+msgid "Configured"
+msgstr "Налаштовано"
+
+msgid "Current migration"
+msgstr "Поточна міграція"
+
+msgid "Database baseline"
+msgstr "Базова база даних"
+
+msgid "Database migration safety review"
+msgstr "Перевірка безпеки міграції бази даних"
+
+msgid "Database migrations"
+msgstr "Міграції бази даних"
+
+msgid "Development mode"
+msgstr "Режим розробки"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Не вмикайте, доки не перевірено резервну копію оновлення та права доступу сервера."
+
+msgid "Doctrine dry-run command"
+msgstr "Команда Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine виявив попередження щодо історичного baseline. Оновлювач усе одно виконає лише поетапні міграції V210 після явного підтвердження."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine виконає лише поетапні міграції V210 явно після проходження перевірки безпеки."
+
+msgid "Dry-run exit code"
+msgstr "Код завершення dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Виконані недоступні міграції"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Розпакуйте перевірений пакет оновлення в каталог проміжного зберігання для перевірки. Це не замінює файли, не запускає міграції та не змінює базу даних."
+
+msgid "File apply available"
+msgstr "Доступне застосування файлів"
+
+msgid "Files to replace"
+msgstr "Файли для заміни"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Підтверджую, що резервна копія бази даних існує та була перевірена перед запуском міграцій."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Розумію, що розширені дії можуть змінювати залежності, згенеровані ресурси або базу даних."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Розумію, що це замінить файли в інсталяції Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Розумію, що це запустить команди оновлення на сервері."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Встановіть залежності фронтенду перед перебудовою ресурсів."
+
+msgid "Installed version"
+msgstr "Встановлена версія"
+
+msgid "Latest migration"
+msgstr "Остання міграція"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Залиште шляхи до пакета та підпису порожніми, щоб завантажити їх із перевірених URL маніфесту. Локальні шляхи доступні лише для тестів розробки."
+
+msgid "Live command log"
+msgstr "Журнал команд у реальному часі"
+
+msgid "Live update log"
+msgstr "Журнал оновлення в реальному часі"
+
+msgid "Local test options"
+msgstr "Параметри локального тестування"
+
+msgid "Local test update notice link"
+msgstr "Посилання на сповіщення про локальне тестування оновлення"
+
+msgid "Local update notice simulation"
+msgstr "Симуляція локального сповіщення про оновлення"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Симуляція локального сповіщення про оновлення доступна лише в режимі розробки."
+
+msgid "Manifest"
+msgstr "Маніфест"
+
+msgid "Manifest source"
+msgstr "Джерело маніфесту"
+
+msgid "Migration safety details"
+msgstr "Деталі перевірки безпеки міграцій"
+
+msgid "Migration safety review failed"
+msgstr "Перевірка безпеки міграцій не пройдена"
+
+msgid "Migration safety review ready"
+msgstr "Перевірка безпеки міграцій готова"
+
+msgid "Migration target"
+msgstr "Ціль міграції"
+
+msgid "New files"
+msgstr "Нові файли"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Нові міграції, виявлені Doctrine"
+
+msgid "Next migration"
+msgstr "Наступна міграція"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Не виявлено жодної виконаної недоступної міграції."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Офіційний URL маніфесту ще не налаштовано. Використовуйте HTTPS-URL або локальний шлях для тестів розробки."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Перед поетапною ціллю оновлення не виявлено жодної незавершеної міграції."
+
+msgid "Not configured"
+msgstr "Не налаштовано"
+
+msgid "Not detected"
+msgstr "Не виявлено"
+
+msgid "Official Chamilo update channel"
+msgstr "Офіційний канал оновлень Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 пакета"
+
+msgid "Package URL"
+msgstr "URL пакета"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Файли пакета та підпису буде завантажено з маніфесту. Локальні шляхи в цьому середовищі вимкнено."
+
+msgid "Package path"
+msgstr "Шлях до пакета"
+
+msgid "Package staged successfully"
+msgstr "Пакет успішно розміщено в проміжному сховищі"
+
+msgid "Package staging failed"
+msgstr "Не вдалося розмістити пакет у проміжному сховищі"
+
+msgid "Package verification"
+msgstr "Перевірка пакета"
+
+msgid "Package verification failed"
+msgstr "Перевірка пакета не вдалася"
+
+msgid "Package verified successfully"
+msgstr "Пакет успішно перевірено"
+
+msgid "Pending migrations before this update"
+msgstr "Незавершені міграції перед цим оновленням"
+
+msgid "Planned backup path"
+msgstr "Запланований шлях резервної копії"
+
+msgid "Post-apply actions completed"
+msgstr "Дії після застосування виконано"
+
+msgid "Post-apply actions failed"
+msgstr "Дії після застосування не вдалися"
+
+msgid "Post-apply actions ready"
+msgstr "Дії після застосування готові"
+
+msgid "Post-apply checks"
+msgstr "Перевірки після застосування"
+
+msgid "Post-apply checks failed"
+msgstr "Перевірки після застосування не вдалися"
+
+msgid "Post-apply details"
+msgstr "Деталі після застосування"
+
+msgid "Post-apply run details"
+msgstr "Деталі виконання після застосування"
+
+msgid "Preflight checks"
+msgstr "Попередні перевірки"
+
+msgid "Preflight checks completed"
+msgstr "Попередні перевірки виконано"
+
+msgid "Preflight checks failed"
+msgstr "Попередні перевірки не вдалися"
+
+msgid "Preflight details"
+msgstr "Деталі попередніх перевірок"
+
+msgid "Prepare staging"
+msgstr "Підготовка проміжного середовища"
+
+msgid "Preparing staging..."
+msgstr "Підготовка проміжного середовища..."
+
+msgid "Production mode"
+msgstr "Режим продакшн"
+
+msgid "Released at"
+msgstr "Випущено"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Замінити файли Chamilo з проміжного пакета за допомогою переглянутого плану застосування. Це не запускає міграції бази даних, Composer, Yarn або команди кешу."
+
+msgid "Review apply plan"
+msgstr "Переглянути план застосування"
+
+msgid "Review database migrations"
+msgstr "Переглянути міграції бази даних"
+
+msgid "Review post-apply actions"
+msgstr "Переглянути дії після застосування"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Переглянути рекомендовані команди вручну після застосування файлів оновлення. Цей крок не запускає Composer, Yarn, міграції або команди кешу."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Переглянути міграції Doctrine та результат сухого запуску перед виконанням міграцій бази даних."
+
+msgid "Reviewing database migrations..."
+msgstr "Перегляд міграцій бази даних..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Виконати та пройти перевірку безпеки міграцій перед запуском міграцій бази даних."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Виконати перевірки середовища перед будь-яким наступним кроком застосування оновлення. Це не змінює файли чи базу даних."
+
+msgid "Run post-apply actions"
+msgstr "Виконати дії після застосування"
+
+msgid "Run preflight checks"
+msgstr "Виконати попередні перевірки"
+
+msgid "Run selected post-apply actions"
+msgstr "Виконати вибрані дії після застосування"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Виконати вибрані команди після застосування з сервера за допомогою контрольованого списку дозволених. Користувацькі shell-команди не приймаються."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Виконати ці команди вручну з сервера після підтвердження результату оновлення файлів та резервних копій."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Виконання дій після застосування з інтерфейсу вимкнено в режимі продакшн."
+
+msgid "Running post-apply actions..."
+msgstr "Виконання дій після застосування..."
+
+msgid "Safe actions"
+msgstr "Безпечні дії"
+
+msgid "Signature path"
+msgstr "Шлях до підпису"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Перевірку підпису не можна пропустити в цьому середовищі."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Пропустити перевірку підпису для локальних тестів розробки"
+
+msgid "Staged file application failed"
+msgstr "Застосування файлів з проміжного середовища не вдалося"
+
+msgid "Staged files applied successfully"
+msgstr "Файли з проміжного середовища успішно застосовано"
+
+msgid "Staging details"
+msgstr "Деталі проміжного середовища"
+
+msgid "Staging directory"
+msgstr "Каталог проміжного середовища"
+
+msgid "Staging extraction"
+msgstr "Розпакування проміжного середовища"
+
+msgid "Symfony cache clear"
+msgstr "Очищення кешу Symfony"
+
+msgid "System update"
+msgstr "Оновлення системи"
+
+msgid "Target version"
+msgstr "Цільова версія"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Налаштовану URL-адресу офіційного маніфесту заповнено автоматично. За потреби ви можете змінити її на інший HTTPS-маніфест."
+
+msgid "The database migration baseline is clean."
+msgstr "Базова лінія міграцій бази даних чиста."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Остаточна HTTP-відповідь не вдалася після завершення операції. Зазвичай це спричинено правами доступу до кешу виконання або перезапуском веб-сервера під час запиту."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Журнал операцій повідомляє, що дії після застосування виконано успішно."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Вибрані команди після застосування виконано успішно, але остаточна HTTP-відповідь не вдалася. Оновіть сторінку та перевірте права доступу до кешу виконання, якщо сторінка не завантажується правильно."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Засіб оновлення не створює та не відновлює резервні копії бази даних."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ці дії безпечно виконувати з інтерфейсу після перегляду результату оновлення."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Ці команди можуть змінювати залежності, згенеровані ресурси, кеш або базу даних. Підтвердіть наявність резервних копій перед продовженням."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ця дія змінює файли в інсталяції Chamilo. Переконайтеся, що план застосування переглянуто та резервні копії увімкнено перед продовженням."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Цей запис розробки імітує майбутнє повідомлення про оновлення Chamilo.org з використанням локальних тестових шляхів пакетів."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Цей екран відкрито з офіційного повідомлення про оновлення, але офіційне джерело маніфесту ще не налаштовано."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Цей екран відкрито з повідомлення про оновлення. Автоматично запускається лише перевірка маніфесту."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Цей крок готує лише перегляд. Заміна файлів відбудеться пізніше на кроці «Застосувати підготовлені файли» із блокуванням, резервуванням та захистом відкату."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Цей оновлювач не створює резервну копію бази даних. Створіть і перевірте резервну копію перед запуском міграцій."
+
+msgid "Trusted public key"
+msgstr "Довірений відкритий ключ"
+
+msgid "Trusted signing key"
+msgstr "Довірений ключ підпису"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Введіть APPLY UPDATE FILES для підтвердження"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Введіть RUN DATABASE MIGRATIONS для підтвердження міграцій бази даних"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Введіть RUN POST UPDATE ACTIONS для підтвердження"
+
+msgid "Unknown update notice source."
+msgstr "Невідоме джерело повідомлення про оновлення."
+
+msgid "Update availability"
+msgstr "Доступність оновлення"
+
+msgid "Update directory"
+msgstr "Каталог оновлення"
+
+msgid "Update lock path"
+msgstr "Шлях блокування оновлення"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Використовуйте каталог підготовки, створений на попередньому кроці. Бекенд приймає лише каталоги всередині var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Використовуйте це посилання для імітації майбутнього повідомлення про оновлення Chamilo.org під час тестів розробки."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Використовуйте це лише для локальних тестів розробки. Оновлення у продакшені мають використовувати ключ, налаштований на сервері."
+
+msgid "Verification details"
+msgstr "Деталі перевірки"
+
+msgid "Verify package"
+msgstr "Перевірити пакет"
+
+msgid "Verifying..."
+msgstr "Перевірка..."
+
+msgid "Waiting for command progress events..."
+msgstr "Очікування подій прогресу команди..."
+
+msgid "Waiting for update progress events..."
+msgstr "Очікування подій прогресу оновлення..."
+
+msgid "Yarn build"
+msgstr "Збірка Yarn"
+
+msgid "Yarn install"
+msgstr "Встановлення Yarn"
+
+msgid "A comment is required"
+msgstr "Потрібен коментар"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "База даних з такою назвою вже існує. Якщо вона містить таблиці, їх буде видалено; якщо порожня — буде повторно використана."
+
+msgid "AI generated"
+msgstr "Згенеровано ШІ"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Додайте принаймні одне запитання перед поверненням до навчального шляху."
+
+msgid "Add attachments"
+msgstr "Додати вкладення"
+
+msgid "Additional fields"
+msgstr "Додаткові поля"
+
+msgid "Allow comments"
+msgstr "Дозволити коментарі"
+
+msgid "Allow new pages"
+msgstr "Дозволити нові сторінки"
+
+msgid "Allow ratings"
+msgstr "Дозволити рейтинги"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Ви впевнені, що хочете видалити всі елементи?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Ви впевнені, що хочете відновити автоматичне поновлення?"
+
+msgid "Attachment has been deleted"
+msgstr "Вкладення видалено"
+
+msgid "Backup file"
+msgstr "Файл резервної копії"
+
+msgid "Block comments"
+msgstr "Заблокувати коментарі"
+
+msgid "Block new pages"
+msgstr "Заблокувати нові сторінки"
+
+msgid "Block ratings"
+msgstr "Заблокувати рейтинги"
+
+msgid "Cancel renewal"
+msgstr "Скасувати поновлення"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Посилання категорії буде видалено зі сторінок Wiki %s."
+
+msgid "Change"
+msgstr "Змінити"
+
+msgid "Clear group"
+msgstr "Очистити групу"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Натисніть тег, щоб вставити його в редактор. Ці заповнювачі буде замінено під час створення сертифіката."
+
+msgid "Comment added"
+msgstr "Коментар додано"
+
+msgid "Comment is required"
+msgstr "Потрібен коментар"
+
+msgid "Comment score"
+msgstr "Оцінка коментаря"
+
+msgid "Compare selected versions line by line"
+msgstr "Порівняти вибрані версії рядок за рядком"
+
+msgid "Compare selected versions word by word"
+msgstr "Порівняти вибрані версії слово за словом"
+
+msgid "Compare versions"
+msgstr "Порівняти версії"
+
+msgid "Copy completed"
+msgstr "Копіювання завершено"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Створити окремі сторінки Wiki для учасників"
+
+msgid "Current view mode"
+msgstr "Поточний режим перегляду"
+
+msgid "Delete Wiki"
+msgstr "Видалити Wiki"
+
+msgid "Delete page"
+msgstr "Видалити сторінку"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Видаляти головну сторінку Wiki не рекомендується. Ви зможете створити її пізніше."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Вимкнення Wiki блокує звичайні сторінки та дії Wiki. Ця сторінка налаштувань залишається доступною для викладачів курсу."
+
+msgid "Discussion"
+msgstr "Обговорення"
+
+msgid "Edit Comment"
+msgstr "Редагувати коментар"
+
+msgid "Edit page"
+msgstr "Редагувати сторінку"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Дата завершення має бути після або дорівнювати даті закінчення терміну"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Введіть пошуковий запит, щоб знайти сторінки Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Дата закінчення терміну має бути до або дорівнювати даті завершення"
+
+msgid "Failed email recipients"
+msgstr "Неотримані одержувачі електронної пошти"
+
+msgid "Finish and return to learning path"
+msgstr "Завершити та повернутися до навчального шляху"
+
+msgid "Forum image"
+msgstr "Зображення форуму"
+
+msgid "Hide discussion"
+msgstr "Приховати обговорення"
+
+msgid "Hide page"
+msgstr "Приховати сторінку"
+
+msgid "I changed my mind"
+msgstr "Я передумав(-ла)"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Якщо не позначено, ці файли залишаться доступними для адміністратора платформи через інструмент «Інформація про файл»."
+
+msgid "Internal message failures"
+msgstr "Помилки внутрішніх повідомлень"
+
+msgid "Internal messages available"
+msgstr "Доступні внутрішні повідомлення"
+
+msgid "Internal messages created now"
+msgstr "Створені внутрішні повідомлення"
+
+msgid "Item score"
+msgstr "Оцінка елемента"
+
+msgid "Last post"
+msgstr "Останнє повідомлення"
+
+msgid "Lock page"
+msgstr "Заблокувати сторінку"
+
+msgid "Manage categories"
+msgstr "Керувати категоріями"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Позначити цей документ як створений за допомогою ШІ. Використовуйте, коли вміст створено або суттєво змінено за допомогою інструментів ШІ."
+
+msgid "Maximum score is required"
+msgstr "Максимальна оцінка є обов’язковою"
+
+msgid "Metric"
+msgstr "Метрика"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Нові коментарі в цьому обговоренні заблоковано"
+
+msgid "No Wiki categories are available yet."
+msgstr "Категорії Wiki ще недоступні."
+
+msgid "No categories found"
+msgstr "Категорії не знайдено"
+
+msgid "No content"
+msgstr "Немає вмісту"
+
+msgid "No parent category"
+msgstr "Немає батьківської категорії"
+
+msgid "Number of comments scored"
+msgstr "Кількість оцінених коментарів"
+
+msgid "Old version"
+msgstr "Стара версія"
+
+msgid "Only image files are allowed."
+msgstr "Дозволено лише файли зображень."
+
+msgid "Please fill all required fields"
+msgstr "Будь ласка, заповніть усі обов’язкові поля"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Питання з плейсхолдерами класу або студента буде згенеровано для класів або груп курсу: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Оцінювання в цьому обговоренні заблоковано"
+
+msgid "Remove image"
+msgstr "Видалити зображення"
+
+msgid "Restore renewal"
+msgstr "Відновити поновлення"
+
+msgid "Restore version"
+msgstr "Відновити версію"
+
+msgid "Search in"
+msgstr "Шукати в"
+
+msgid "Select group"
+msgstr "Вибрати групу"
+
+msgid "Select image"
+msgstr "Вибрати зображення"
+
+msgid "Selected image"
+msgstr "Вибране зображення"
+
+msgid "Show discussion"
+msgstr "Показати обговорення"
+
+msgid "Show page"
+msgstr "Показати сторінку"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Деякі файли або папки не мають дозволу на запис. Щоб встановити Chamilo, спочатку змініть їхні дозволи (використовуючи CHMOD). Будь ласка, прочитайте"
+
+msgid "Subcategories"
+msgstr "Підкатегорії"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Натисніть ліворуч або праворуч для навігації"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Термін здачі завдання Wiki минув, але запізніле подання дозволено."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Термін здачі завдання Wiki минув."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Завдання Wiki ще не розпочалося."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Перед збереженням потрібно заблокувати редагування сторінки Wiki."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Оголошення збережено, але вкладення не вдалося завантажити."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Оголошення збережено, але доставка електронною поштою не вдалася."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Оголошення збережено, але жодне повідомлення не вдалося доставити."
+
+msgid "The category has been created"
+msgstr "Категорію створено"
+
+msgid "The category has been deleted"
+msgstr "Категорію видалено"
+
+msgid "The category has been updated"
+msgstr "Категорію оновлено"
+
+msgid "The end date is invalid"
+msgstr "Недійсна дата завершення"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Максимальна кількість версій має бути невід’ємним цілим числом"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Максимальна кількість слів має бути невід’ємним цілим числом"
+
+msgid "The print window could not be opened"
+msgstr "Не вдалося відкрити вікно друку"
+
+msgid "The start date is invalid"
+msgstr "Недійсна дата початку"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Ці налаштування застосовуються до всього курсу, включно з його сесіями та групами."
+
+msgid "This announcement has already been sent by email."
+msgstr "Це оголошення вже надіслано електронною поштою."
+
+msgid "This discussion is hidden from learners"
+msgstr "Це обговорення приховано від слухачів"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Цей інструмент генеративного ШІ дозволяє створювати зображення та короткі відео для ілюстрації вашого курсу. Пояснюючи (текстом) те, що ви хочете в розділі запиту, ви надасте налаштованій моделі ШІ елементи, необхідні для генерації зображення або відео. Будь ласка, будьте терплячі. Моделі ШІ знадобиться деякий час для генерації результату, який ви можете зберегти, додавши медіа до папки документів, а потім вставити в HTML-документ. Не всі моделі ШІ однакові за швидкістю чи якістю. Модель ШІ також може надати вам модифікований запит, який є детальнішою інтерпретацією вашого запиту. Потім ви можете використати цей модифікований запит для уточнення запиту. Будь ласка, майте на увазі, що цей інструмент, особливо для відео, може спричинити значні витрати для вашої організації, навіть якщо ви вирішите не зберігати згенероване медіа. Використовуйте його відповідно. Якщо у вас виникають проблеми з отриманням бажаного результату, будь ласка, витратьте час на пошук підказок щодо запитів в Інтернеті для доступної вам моделі ШІ."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ця історія належить базовому курсу. Відновлення доступне після створення версії для сесії."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Це зображення замінює стандартну піктограму форуму, що відображається поруч із назвою форуму."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Ця сторінка походить із базового курсу. Її збереження створить версію для поточної сесії."
+
+msgid "This will also delete %s subcategories."
+msgstr "Це також видалить %s підкатегорій."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Це створить окремі робочі сторінки для %s слухачів."
+
+msgid "Thread history"
+msgstr "Історія обговорення"
+
+msgid "Title and content"
+msgstr "Заголовок і зміст"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Наразі неможливо скасувати поновлення."
+
+msgid "Unable to restore renewal right now."
+msgstr "Наразі неможливо відновити право на поновлення."
+
+msgid "Unlock page"
+msgstr "Розблокувати сторінку"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Використовуйте [[Сторінка]] або [[Сторінка|Видимий текст]] для створення внутрішніх посилань Wiki."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Використовуйте пробіл або клавіші зі стрілками для навігації"
+
+msgid "View version"
+msgstr "Переглянути версію"
+
+msgid "Visible only to teachers"
+msgstr "Видимо лише викладачам"
+
+msgid "Weight is required"
+msgstr "Вага є обов’язковою"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Категорії Wiki вимкнено для цього курсу."
+
+msgid "Wiki categories enabled"
+msgstr "Категорії Wiki увімкнено"
+
+msgid "Wiki html strict filtering"
+msgstr "Суворе фільтрування HTML у Wiki"
+
+msgid "Wiki settings"
+msgstr "Налаштування Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Налаштування Wiki оновлено"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Ви переглядаєте історичну версію цієї сторінки"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Ви можете прикріпити один або кілька файлів до цієї відповіді."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Ви можете редагувати цю сторінку завдання, але робочі сторінки слухачів не будуть змінені."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Ви можете використовувати теги {{class_name}} та {{student_full_name}} у запитанні."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "У вас є 20 хвилин на редагування цієї сторінки до закінчення терміну блокування редагування."
+
+msgid "by"
+msgstr "від"
+
+msgid "required"
+msgstr "обов’язково"
 

@@ -284,7 +284,7 @@
           :closable="false"
           severity="warning"
         >
-          {{ t("Warning! The installer has detected an existing Chamilo platform on your system.") }}
+          {{ t("Warning! The installer has detected an existing Chamilo platform on your system") }}
         </Message>
       </div>
 
@@ -293,7 +293,7 @@
           class="text-error"
           v-html="
             t(
-              'Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>.',
+              'Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>',
             )
           "
         />

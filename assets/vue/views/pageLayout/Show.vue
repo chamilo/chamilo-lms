@@ -28,7 +28,7 @@
       v-else
       class="text-gray-600"
     >
-      {{ t("Loading layout...") }}
+      {{ t("Loading layout") }}
     </p>
   </div>
 </template>

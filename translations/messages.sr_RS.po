@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -4144,7 +4144,7 @@ msgid "MySql Client"
 msgstr "MySql klijent"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -4351,7 +4351,7 @@ msgid "Production Server"
 msgstr "Produkcioni server"
 
 msgid "Test Server"
-msgstr "Test Server"
+msgstr "Test server"
 
 msgid "Who's Online"
 msgstr "Ko je Online"
@@ -36495,4 +36495,853 @@ msgstr "Prikaži teme"
 
 msgid "No auth source"
 msgstr "Nema izvora autentifikacije"
+
+msgid "You must add at least one question"
+msgstr "You must add at least one question"
+
+msgid "Advanced actions"
+msgstr "Advanced actions"
+
+msgid "Application path"
+msgstr "Application path"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Apply plan failed"
+
+msgid "Apply plan ready"
+msgstr "Apply plan ready"
+
+msgid "Apply preparation"
+msgstr "Apply preparation"
+
+msgid "Apply staged files"
+msgstr "Apply staged files"
+
+msgid "Applying files..."
+msgstr "Primena datoteka..."
+
+msgid "Audit file"
+msgstr "Revizija datoteke"
+
+msgid "Backup directory"
+msgstr "Direktorijum za rezervnu kopiju"
+
+msgid "Baseline clean"
+msgstr "Osnovna čista verzija"
+
+msgid "Baseline warnings"
+msgstr "Upozorenja osnovne verzije"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Kreiraj bezbedan plan primene iz pripremljenog paketa. Ovo proverava samo datoteke, dozvole, putanju rezervne kopije i status zaključavanja. Ne zamenjuje datoteke."
+
+msgid "Build production frontend assets."
+msgstr "Izgradi produkcione frontend resurse."
+
+msgid "Building plan..."
+msgstr "Izrada plana..."
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Check"
+msgstr "Proveri"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Proveri dostupna ažuriranja Chamilo-a, verifikuj pakete, pripremi datoteke i pokreni kontrolisane korake nakon ažuriranja."
+
+msgid "Check manifest"
+msgstr "Proveri manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Provera radnji nakon primene..."
+
+msgid "Checking..."
+msgstr "Proveravanje..."
+
+msgid "Composer install"
+msgstr "Composer instalacija"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn i radnje migracije baze podataka mogu izmeniti zavisnosti, generisane resurse ili bazu podataka. Izaberite ih samo nakon potvrde rezervnih kopija i dozvola."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Podesite CHAMILO_UPDATE_MANIFEST_URL na serveru ili navedite HTTPS URL manifesta."
+
+msgid "Configured"
+msgstr "Podešeno"
+
+msgid "Current migration"
+msgstr "Trenutna migracija"
+
+msgid "Database baseline"
+msgstr "Osnovna verzija baze podataka"
+
+msgid "Database migration safety review"
+msgstr "Pregled bezbednosti migracije baze podataka"
+
+msgid "Database migrations"
+msgstr "Migracije baze podataka"
+
+msgid "Development mode"
+msgstr "Režim razvoja"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ne omogućavajte ovo osim ako nisu pregledane rezervna kopija ažuriranja i dozvole servera."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine komanda za suvo pokretanje"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine je prijavio upozorenja osnovne verzije. Ažuriranje će i dalje izvršiti samo pripremljene V210 migracije nakon eksplicitne potvrde."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine će izvršiti samo pripremljene V210 migracije eksplicitno nakon što pregled bezbednosti prođe."
+
+msgid "Dry-run exit code"
+msgstr "Izlazni kod suvog pokretanja"
+
+msgid "Executed unavailable migrations"
+msgstr "Izvršene nedostupne migracije"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Raspakuj verifikovani paket ažuriranja u direktorijum za pripremu radi pregleda. Ovo ne zamenjuje datoteke, ne pokreće migracije niti menja bazu podataka."
+
+msgid "File apply available"
+msgstr "Dostupna primena datoteka"
+
+msgid "Files to replace"
+msgstr "Datoteke za zamenu"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Potvrđujem da postoji rezervna kopija baze podataka i da je verifikovana pre pokretanja migracija."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Razumem da napredne radnje mogu izmeniti zavisnosti, generisane resurse ili bazu podataka."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Razumem da će ovo zameniti datoteke u Chamilo instalaciji."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Razumem da će ovo pokrenuti komande ažuriranja na serveru."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instaliraj frontend zavisnosti pre ponovne izgradnje resursa."
+
+msgid "Installed version"
+msgstr "Instalirana verzija"
+
+msgid "Latest migration"
+msgstr "Najnovija migracija"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Ostavite putanje paketa i potpisa prazne da biste ih preuzeli sa verifikovanih URL-ova manifesta. Lokalne putanje su dostupne samo za testove razvoja."
+
+msgid "Live command log"
+msgstr "Dnevnik komandi uživo"
+
+msgid "Live update log"
+msgstr "Dnevnik ažuriranja uživo"
+
+msgid "Local test options"
+msgstr "Lokalne opcije testiranja"
+
+msgid "Local test update notice link"
+msgstr "Lokalna veza obaveštenja o testnom ažuriranju"
+
+msgid "Local update notice simulation"
+msgstr "Simulacija lokalnog obaveštenja o ažuriranju"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simulacija lokalnog obaveštenja o ažuriranju dostupna je samo u režimu razvoja."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Izvor manifesta"
+
+msgid "Migration safety details"
+msgstr "Detalji bezbednosti migracije"
+
+msgid "Migration safety review failed"
+msgstr "Pregled bezbednosti migracije nije uspeo"
+
+msgid "Migration safety review ready"
+msgstr "Pregled bezbednosti migracije spreman"
+
+msgid "Migration target"
+msgstr "Cilj migracije"
+
+msgid "New files"
+msgstr "Nove datoteke"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Nove migracije koje je prijavio Doctrine"
+
+msgid "Next migration"
+msgstr "Sledeća migracija"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Nije prijavljena nijedna izvršena nedostupna migracija."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Još nije konfigurisana zvanična URL adresa manifesta. Koristite HTTPS URL ili lokalnu putanju za razvojne testove."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Nije otkrivena nijedna migracija na čekanju pre odabranog cilja ažuriranja."
+
+msgid "Not configured"
+msgstr "Nije konfigurisano"
+
+msgid "Not detected"
+msgstr "Nije otkriveno"
+
+msgid "Official Chamilo update channel"
+msgstr "Zvanični kanal ažuriranja Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 paketa"
+
+msgid "Package URL"
+msgstr "URL paketa"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Datoteke paketa i potpisa biće preuzete sa manifesta. Lokalne putanje su onemogućene u ovom okruženju."
+
+msgid "Package path"
+msgstr "Putanja paketa"
+
+msgid "Package staged successfully"
+msgstr "Paket je uspešno pripremljen"
+
+msgid "Package staging failed"
+msgstr "Priprema paketa nije uspela"
+
+msgid "Package verification"
+msgstr "Verifikacija paketa"
+
+msgid "Package verification failed"
+msgstr "Verifikacija paketa nije uspela"
+
+msgid "Package verified successfully"
+msgstr "Paket je uspešno verifikovan"
+
+msgid "Pending migrations before this update"
+msgstr "Migracije na čekanju pre ovog ažuriranja"
+
+msgid "Planned backup path"
+msgstr "Planirana putanja rezervne kopije"
+
+msgid "Post-apply actions completed"
+msgstr "Radnje nakon primene završene"
+
+msgid "Post-apply actions failed"
+msgstr "Radnje nakon primene nisu uspele"
+
+msgid "Post-apply actions ready"
+msgstr "Radnje nakon primene spremne"
+
+msgid "Post-apply checks"
+msgstr "Provere nakon primene"
+
+msgid "Post-apply checks failed"
+msgstr "Provere nakon primene nisu uspele"
+
+msgid "Post-apply details"
+msgstr "Detalji nakon primene"
+
+msgid "Post-apply run details"
+msgstr "Detalji pokretanja nakon primene"
+
+msgid "Preflight checks"
+msgstr "Provere pre primene"
+
+msgid "Preflight checks completed"
+msgstr "Provere pre primene završene"
+
+msgid "Preflight checks failed"
+msgstr "Provere pre primene nisu uspele"
+
+msgid "Preflight details"
+msgstr "Detalji pre primene"
+
+msgid "Prepare staging"
+msgstr "Pripremi pripremu"
+
+msgid "Preparing staging..."
+msgstr "Priprema pripreme..."
+
+msgid "Production mode"
+msgstr "Režim produkcije"
+
+msgid "Released at"
+msgstr "Objavljeno"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Zamenite Chamilo datoteke iz pripremljenog paketa koristeći pregledani plan primene. Ovo ne pokreće migracije baze podataka, Composer, Yarn ili komande za keš."
+
+msgid "Review apply plan"
+msgstr "Pregledaj plan primene"
+
+msgid "Review database migrations"
+msgstr "Pregledaj migracije baze podataka"
+
+msgid "Review post-apply actions"
+msgstr "Pregledaj radnje nakon primene"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Pregledajte preporučene ručne komande nakon primene datoteka ažuriranja. Ovaj korak ne pokreće Composer, Yarn, migracije ili komande za keš."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Pregledajte Doctrine migracije u pripremi i izlaz suvog pokretanja pre pokretanja migracija baze podataka."
+
+msgid "Reviewing database migrations..."
+msgstr "Pregledavanje migracija baze podataka..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Pokrenite i prođite pregled bezbednosti migracije pre izvršavanja migracija baze podataka."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Pokrenite provere okruženja pre bilo kog budućeg koraka primene ažuriranja. Ovo ne menja datoteke niti bazu podataka."
+
+msgid "Run post-apply actions"
+msgstr "Pokreni radnje nakon primene"
+
+msgid "Run preflight checks"
+msgstr "Pokreni provere pre primene"
+
+msgid "Run selected post-apply actions"
+msgstr "Pokreni odabrane radnje nakon primene"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Pokrenite odabrane komande nakon primene sa servera koristeći kontrolisanu listu dozvoljenih. Prilagođene shell komande nisu prihvaćene."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Pokrenite ove komande ručno sa servera nakon potvrde rezultata ažuriranja fajlova i rezervnih kopija."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Pokretanje post-apply akcija iz korisničkog interfejsa je onemogućeno u produkcionom režimu."
+
+msgid "Running post-apply actions..."
+msgstr "Pokretanje post-apply akcija..."
+
+msgid "Safe actions"
+msgstr "Bezbedne akcije"
+
+msgid "Signature path"
+msgstr "Putanja potpisa"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Proveru potpisa nije moguće preskočiti u ovom okruženju."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Preskoči proveru potpisa za lokalne razvojne testove"
+
+msgid "Staged file application failed"
+msgstr "Primena pripremljenih fajlova nije uspela"
+
+msgid "Staged files applied successfully"
+msgstr "Pripremljeni fajlovi su uspešno primenjeni"
+
+msgid "Staging details"
+msgstr "Detalji pripreme"
+
+msgid "Staging directory"
+msgstr "Direktorijum za pripremu"
+
+msgid "Staging extraction"
+msgstr "Ekstrakcija pripreme"
+
+msgid "Symfony cache clear"
+msgstr "Brisanje Symfony keša"
+
+msgid "System update"
+msgstr "Ažuriranje sistema"
+
+msgid "Target version"
+msgstr "Ciljna verzija"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Konfigurisani zvanični URL manifesta je unapred popunjen. Možete ga promeniti na drugi HTTPS manifest po potrebi."
+
+msgid "The database migration baseline is clean."
+msgstr "Osnovna linija migracije baze podataka je čista."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Završni HTTP odgovor nije uspeo nakon završetka operacije. Ovo je obično uzrokovano dozvolama za keš u runtime-u ili restartom veb servera tokom zahteva."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Dnevnik operacija prijavljuje da su post-apply akcije uspešno završene."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Izabrane post-apply komande su uspešno završene, ali završni HTTP odgovor nije uspeo. Osvežite stranicu i proverite dozvole za keš u runtime-u ako se stranica ne učita ispravno."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Ovaj alat za ažuriranje ne kreira niti vraća rezervne kopije baze podataka."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ove akcije su bezbedne za pokretanje iz korisničkog interfejsa nakon pregleda rezultata ažuriranja."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Ove komande mogu izmeniti zavisnosti, generisane resurse, keš ili bazu podataka. Potvrdite rezervne kopije pre nastavka."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ova akcija menja fajlove u Chamilo instalaciji. Uverite se da je plan primene pregledan i da su rezervne kopije omogućene pre nastavka."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Ovaj razvojni unos simulira buduće obaveštenje o ažuriranju sa Chamilo.org koristeći lokalne testne putanje paketa."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Ovaj ekran je otvoren iz zvaničnog obaveštenja o ažuriranju, ali zvanični izvor manifesta još nije konfigurisan."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Ovaj ekran je otvoren iz obaveštenja o ažuriranju. Samo provera manifesta se pokreće automatski."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ovaj korak priprema samo pregled. Zamena fajlova se dešava kasnije u koraku Primeni pripremljene fajlove, sa zaključavanjem, rezervnom kopijom i zaštitom od povratka."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Ovaj alat za ažuriranje ne kreira rezervnu kopiju baze podataka. Kreirajte i proverite rezervnu kopiju pre pokretanja migracija."
+
+msgid "Trusted public key"
+msgstr "Pouzdani javni ključ"
+
+msgid "Trusted signing key"
+msgstr "Pouzdani ključ za potpisivanje"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Unesite PRIMENI AŽURIRANJE FAJLOVA da biste potvrdili"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Unesite POKRENI MIGRACIJE BAZE PODATAKA da biste potvrdili migracije baze podataka"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Unesite POKRENI POST-UPDATE AKCIJE da biste potvrdili"
+
+msgid "Unknown update notice source."
+msgstr "Nepoznat izvor obaveštenja o ažuriranju."
+
+msgid "Update availability"
+msgstr "Dostupnost ažuriranja"
+
+msgid "Update directory"
+msgstr "Direktorijum ažuriranja"
+
+msgid "Update lock path"
+msgstr "Putanja zaključavanja ažuriranja"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Koristite direktorijum za pripremu generisan prethodnim korakom. Pozadina prihvata samo direktorijume unutar var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Koristite ovaj link da simulirate buduće obaveštenje o ažuriranju sa Chamilo.org tokom razvojnih testova."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Koristite ovo samo za lokalne razvojne testove. Ažuriranja u produkciji moraju koristiti ključ konfigurisani na serveru."
+
+msgid "Verification details"
+msgstr "Detalji provere"
+
+msgid "Verify package"
+msgstr "Proveri paket"
+
+msgid "Verifying..."
+msgstr "Proveravanje..."
+
+msgid "Waiting for command progress events..."
+msgstr "Čekanje na događaje napretka komande..."
+
+msgid "Waiting for update progress events..."
+msgstr "Čekanje na događaje napretka ažuriranja..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Komentar je obavezan"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Baza podataka sa istim imenom već postoji. Ako sadrži tabele, one će biti obrisane; ako je prazna, biće ponovo upotrebljena."
+
+msgid "AI generated"
+msgstr "Generisano veštačkom inteligencijom"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Dodajte barem jedno pitanje pre nego što se vratite na put učenja."
+
+msgid "Add attachments"
+msgstr "Dodaj priloge"
+
+msgid "Additional fields"
+msgstr "Dodatna polja"
+
+msgid "Allow comments"
+msgstr "Dozvoli komentare"
+
+msgid "Allow new pages"
+msgstr "Dozvoli nove stranice"
+
+msgid "Allow ratings"
+msgstr "Dozvoli ocenjivanje"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Da li ste sigurni da želite da izbrišete sve stavke?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Da li ste sigurni da želite da vratite automatsko obnavljanje?"
+
+msgid "Attachment has been deleted"
+msgstr "Prilog je izbrisan"
+
+msgid "Backup file"
+msgstr "Rezervna datoteka"
+
+msgid "Block comments"
+msgstr "Blokiraj komentare"
+
+msgid "Block new pages"
+msgstr "Blokiraj nove stranice"
+
+msgid "Block ratings"
+msgstr "Blokiraj ocenjivanje"
+
+msgid "Cancel renewal"
+msgstr "Otkaži obnavljanje"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Linkovi kategorija biće uklonjeni sa %s Wiki stranica."
+
+msgid "Change"
+msgstr "Promeni"
+
+msgid "Clear group"
+msgstr "Očisti grupu"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Kliknite na oznaku da biste je ubacili u uređivač. Ovi čuvari mesta biće zamenjeni prilikom generisanja sertifikata."
+
+msgid "Comment added"
+msgstr "Komentar dodat"
+
+msgid "Comment is required"
+msgstr "Komentar je obavezan"
+
+msgid "Comment score"
+msgstr "Ocena komentara"
+
+msgid "Compare selected versions line by line"
+msgstr "Uporedi izabrane verzije red po red"
+
+msgid "Compare selected versions word by word"
+msgstr "Uporedi izabrane verzije reč po reč"
+
+msgid "Compare versions"
+msgstr "Uporedi verzije"
+
+msgid "Copy completed"
+msgstr "Kopiranje završeno"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Kreiraj individualne Wiki radne stranice za polaznike"
+
+msgid "Current view mode"
+msgstr "Trenutni režim prikaza"
+
+msgid "Delete Wiki"
+msgstr "Izbriši Wiki"
+
+msgid "Delete page"
+msgstr "Izbriši stranicu"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Brisanje početne Wiki stranice nije preporučljivo. Kasnije je možete ponovo kreirati."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Isključivanje Wiki-ja blokira normalne Wiki stranice i radnje. Ova stranica sa podešavanjima ostaje dostupna nastavnicima kursa."
+
+msgid "Discussion"
+msgstr "Diskusija"
+
+msgid "Edit Comment"
+msgstr "Izmeni komentar"
+
+msgid "Edit page"
+msgstr "Izmeni stranicu"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Datum završetka mora biti posle ili jednak datumu isteka"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Unesite pojam za pretragu da biste pronašli Wiki stranice"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Datum isteka mora biti pre ili jednak datumu završetka"
+
+msgid "Failed email recipients"
+msgstr "Neuspešni primaoci e-pošte"
+
+msgid "Finish and return to learning path"
+msgstr "Završi i vrati se na put učenja"
+
+msgid "Forum image"
+msgstr "Slika foruma"
+
+msgid "Hide discussion"
+msgstr "Sakrij diskusiju"
+
+msgid "Hide page"
+msgstr "Sakrij stranicu"
+
+msgid "I changed my mind"
+msgstr "Predomislio sam se"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Ako nije označeno, te datoteke će ostati dostupne administratoru platforme putem alatke 'Informacije o datoteci'."
+
+msgid "Internal message failures"
+msgstr "Neuspesi internih poruka"
+
+msgid "Internal messages available"
+msgstr "Interni poruke dostupne"
+
+msgid "Internal messages created now"
+msgstr "Interni poruke kreirane sada"
+
+msgid "Item score"
+msgstr "Ocena stavke"
+
+msgid "Last post"
+msgstr "Poslednja objava"
+
+msgid "Lock page"
+msgstr "Zaključaj stranicu"
+
+msgid "Manage categories"
+msgstr "Upravljaj kategorijama"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Označi ovaj dokument kao kreiran uz pomoć veštačke inteligencije. Koristite kada je sadržaj kreiran ili značajno izmenjen pomoću AI alata."
+
+msgid "Maximum score is required"
+msgstr "Maksimalni broj poena je obavezan"
+
+msgid "Metric"
+msgstr "Metrika"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Novi komentari su blokirani u ovoj diskusiji"
+
+msgid "No Wiki categories are available yet."
+msgstr "Još nema dostupnih Wiki kategorija."
+
+msgid "No categories found"
+msgstr "Nema pronađenih kategorija"
+
+msgid "No content"
+msgstr "Nema sadržaja"
+
+msgid "No parent category"
+msgstr "Nema nadređene kategorije"
+
+msgid "Number of comments scored"
+msgstr "Broj ocenjenih komentara"
+
+msgid "Old version"
+msgstr "Stara verzija"
+
+msgid "Only image files are allowed."
+msgstr "Dozvoljeni su samo slikovni fajlovi."
+
+msgid "Please fill all required fields"
+msgstr "Popunite sva obavezna polja"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Pitanja sa čuvarima mesta za razred ili studenta biće generisana za razrede ili grupe kursa: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Ocene su blokirane u ovoj diskusiji"
+
+msgid "Remove image"
+msgstr "Ukloni sliku"
+
+msgid "Restore renewal"
+msgstr "Obnovi obnovu"
+
+msgid "Restore version"
+msgstr "Obnovi verziju"
+
+msgid "Search in"
+msgstr "Pretraži u"
+
+msgid "Select group"
+msgstr "Izaberi grupu"
+
+msgid "Select image"
+msgstr "Izaberi sliku"
+
+msgid "Selected image"
+msgstr "Izabrana slika"
+
+msgid "Show discussion"
+msgstr "Prikaži diskusiju"
+
+msgid "Show page"
+msgstr "Prikaži stranicu"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Neki fajlovi ili direktorijumi nemaju dozvolu za pisanje. Da biste mogli da instalirate Chamilo, prvo morate promeniti njihove dozvole (koristeći CHMOD). Molimo pročitajte"
+
+msgid "Subcategories"
+msgstr "Potkategorije"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Dodirnite levo ili desno za navigaciju"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Rok za Wiki zadatak je istekao, ali je dozvoljeno kasnije predavanje."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Rok za Wiki zadatak je istekao."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki zadatak još nije počeo."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Zaključavanje Wiki stranice je obavezno pre čuvanja."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Objava je sačuvana, ali prilog nije mogao biti otpremljen."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Objava je sačuvana, ali dostava e-pošte nije uspela."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Objava je sačuvana, ali nijedna e-pošta nije mogla biti dostavljena."
+
+msgid "The category has been created"
+msgstr "Kategorija je kreirana"
+
+msgid "The category has been deleted"
+msgstr "Kategorija je obrisana"
+
+msgid "The category has been updated"
+msgstr "Kategorija je ažurirana"
+
+msgid "The end date is invalid"
+msgstr "Datum završetka je nevažeći"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Maksimalni broj verzija mora biti nenegativan ceo broj"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Maksimalni broj reči mora biti nenegativan ceo broj"
+
+msgid "The print window could not be opened"
+msgstr "Prozor za štampu nije mogao biti otvoren"
+
+msgid "The start date is invalid"
+msgstr "Datum početka je nevažeći"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Ove postavke važe za ceo kurs, uključujući njegove sesije i grupe."
+
+msgid "This announcement has already been sent by email."
+msgstr "Ova objava je već poslata e-poštom."
+
+msgid "This discussion is hidden from learners"
+msgstr "Ova diskusija je sakrivena od polaznika"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Ovaj generativni AI alat omogućava vam kreiranje slika i kratkih video snimaka za ilustraciju vašeg kursa. Objašnjavajući (tekstom) šta želite u odeljku za prompt, daćete konfigurisanom AI modelu elemente potrebne za generisanje slike ili videa. Budite strpljivi. AI modelu će trebati neko vreme da generiše rezultat, koji možda želite da sačuvate u fascikli dokumenata, a zatim ugradite u HTML dokument. Nisu svi AI modeli jednaki u pogledu brzine ili kvaliteta. AI model vam može dati i izmenjeni prompt, koji je detaljnija interpretacija vašeg zahteva. Zatim možete koristiti ovaj izmenjeni prompt za fino podešavanje zahteva. Imajte na umu da ovaj alat, posebno za video snimke, može generisati znatne troškove za vašu organizaciju, čak i ako odlučite da ne sačuvate generisani medij. Koristite ga u skladu s tim. Ako imate problema da dobijete ono što tražite, odvojite vreme da istražite trikove za promptovanje na internetu za AI model koji imate na raspolaganju."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ova istorija pripada osnovnom kursu. Obnova je dostupna nakon kreiranja verzije sesije."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Ova slika zamenjuje podrazumevanu ikonu foruma prikazanu pored naslova foruma."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Ova stranica potiče iz osnovnog kursa. Čuvanje će kreirati verziju za trenutnu sesiju."
+
+msgid "This will also delete %s subcategories."
+msgstr "Ovo će takođe izbrisati %s potkategorija."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Ovo će kreirati pojedinačne stranice zadataka za %s polaznika."
+
+msgid "Thread history"
+msgstr "Istorija teme"
+
+msgid "Title and content"
+msgstr "Naslov i sadržaj"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Trenutno nije moguće otkazati obnovu."
+
+msgid "Unable to restore renewal right now."
+msgstr "Trenutno nije moguće vratiti obnovu."
+
+msgid "Unlock page"
+msgstr "Otključaj stranicu"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Koristite [[Stranica]] ili [[Stranica|Vidljiv tekst]] za kreiranje unutrašnjih Wiki veza."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Koristite razmaknicu ili tastere sa strelicama za navigaciju"
+
+msgid "View version"
+msgstr "Prikaži verziju"
+
+msgid "Visible only to teachers"
+msgstr "Vidljivo samo nastavnicima"
+
+msgid "Weight is required"
+msgstr "Težina je obavezna"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki kategorije su onemogućene za ovaj kurs."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki kategorije omogućene"
+
+msgid "Wiki html strict filtering"
+msgstr "Strogo HTML filtriranje na Wikiju"
+
+msgid "Wiki settings"
+msgstr "Wiki podešavanja"
+
+msgid "Wiki settings updated"
+msgstr "Wiki podešavanja ažurirana"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Pregledate istorijsku verziju ove stranice"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Možete priložiti jednu ili više datoteka uz ovaj odgovor."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Možete urediti ovu stranicu zadatka, ali stranice rada polaznika neće biti izmenjene."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Možete koristiti oznake {{class_name}} i {{student_full_name}} u pitanju."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Imate 20 minuta da uredite ovu stranicu pre nego što istekne zaključavanje uređivanja."
+
+msgid "by"
+msgstr "od"
+
+msgid "required"
+msgstr "obavezno"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Pagarbiai"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulės pavyzdys: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulės pavyzdys: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kintamųjų ribos"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Aplankas,, application/msword:MsWord,, application/octet-stream:Aštuonių bitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Aplankas,, application\/msword:MsWord,, application\/octet-stream:Aštuonių bitų srautas,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -36493,4 +36493,853 @@ msgstr "Peržiūrėti temas"
 
 msgid "No auth source"
 msgstr "Nėra autentifikacijos šaltinio"
+
+msgid "You must add at least one question"
+msgstr "Turite pridėti bent vieną klausimą"
+
+msgid "Advanced actions"
+msgstr "Išplėstiniai veiksmai"
+
+msgid "Application path"
+msgstr "Programos kelias"
+
+msgid "Apply files details"
+msgstr "Taikyti failų detales"
+
+msgid "Apply plan details"
+msgstr "Taikyti plano detales"
+
+msgid "Apply plan failed"
+msgstr "Plano taikymas nepavyko"
+
+msgid "Apply plan ready"
+msgstr "Plano taikymas paruoštas"
+
+msgid "Apply preparation"
+msgstr "Taikyti paruošimą"
+
+msgid "Apply staged files"
+msgstr "Taikyti paruoštus failus"
+
+msgid "Applying files..."
+msgstr "Taikomi failai..."
+
+msgid "Audit file"
+msgstr "Audituoti failą"
+
+msgid "Backup directory"
+msgstr "Atsarginės kopijos katalogas"
+
+msgid "Baseline clean"
+msgstr "Bazinė švari"
+
+msgid "Baseline warnings"
+msgstr "Bazinės įspėjimai"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Sukurti saugų taikymo planą iš paruošto paketo. Tai tik patikrina failus, leidimus, atsarginės kopijos kelią ir užrakto būseną. Tai nepakeičia failų."
+
+msgid "Build production frontend assets."
+msgstr "Kurti gamybos sąsajos išteklius."
+
+msgid "Building plan..."
+msgstr "Kuriamas planas..."
+
+msgid "Channel"
+msgstr "Kanalas"
+
+msgid "Check"
+msgstr "Tikrinti"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Tikrinti, ar yra prieinamų Chamilo atnaujinimų, patikrinti paketus, paruošti failus ir vykdyti kontroliuojamus po atnaujinimo veiksmus."
+
+msgid "Check manifest"
+msgstr "Tikrinti manifestą"
+
+msgid "Checking post-apply actions..."
+msgstr "Tikrinami veiksmai po taikymo..."
+
+msgid "Checking..."
+msgstr "Tikrinama..."
+
+msgid "Composer install"
+msgstr "Composer diegimas"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn ir duomenų bazės migracijos veiksmai gali pakeisti priklausomybes, sukurtus išteklius arba duomenų bazę. Pasirinkite juos tik patvirtinę atsargines kopijas ir leidimus."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfigūruokite CHAMILO_UPDATE_MANIFEST_URL serveryje arba pateikite HTTPS manifesto URL."
+
+msgid "Configured"
+msgstr "Konfigūruota"
+
+msgid "Current migration"
+msgstr "Dabartinė migracija"
+
+msgid "Database baseline"
+msgstr "Duomenų bazės bazinė linija"
+
+msgid "Database migration safety review"
+msgstr "Duomenų bazės migracijos saugos peržiūra"
+
+msgid "Database migrations"
+msgstr "Duomenų bazės migracijos"
+
+msgid "Development mode"
+msgstr "Kūrimo režimas"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Įgalinkite tik jei peržiūrėta atsarginė duomenų bazės kopija ir serverio leidimai."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine bandomoji komanda"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine pranešė apie istorinius bazinius įspėjimus. Atnaujinimas vis tiek vykdys tik paruoštas V210 migracijas po aiškaus patvirtinimo."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine vykdys tik paruoštas V210 migracijas aiškiai po saugos peržiūros patvirtinimo."
+
+msgid "Dry-run exit code"
+msgstr "Bandomosios komandos išėjimo kodas"
+
+msgid "Executed unavailable migrations"
+msgstr "Vykdytos neprieinamos migracijos"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Išskleiskite patvirtintą atnaujinimo paketą į paruošimo katalogą patikrinimui. Tai nepakeičia failų, nevykdo migracijų ir nemodifikuoja duomenų bazės."
+
+msgid "File apply available"
+msgstr "Failo taikymas galimas"
+
+msgid "Files to replace"
+msgstr "Failai, kuriuos reikia pakeisti"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Patvirtinu, kad duomenų bazės atsarginė kopija egzistuoja ir buvo patikrinta prieš vykdant migracijas."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Suprantu, kad išplėstiniai veiksmai gali pakeisti priklausomybes, sukurtus išteklius ar duomenų bazę."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Suprantu, kad tai pakeis failus Chamilo diegime."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Suprantu, kad tai vykdys atnaujinimo komandas serveryje."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Įdiekite frontend priklausomybes prieš atstatant išteklius."
+
+msgid "Installed version"
+msgstr "Įdiegta versija"
+
+msgid "Latest migration"
+msgstr "Naujausia migracija"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Palikite paketo ir parašo kelius tuščius, kad juos atsisiųstumėte iš patvirtintų manifestų URL. Vietiniai keliai galimi tik kūrimo testams."
+
+msgid "Live command log"
+msgstr "Tiesioginis komandų žurnalas"
+
+msgid "Live update log"
+msgstr "Tiesioginis atnaujinimo žurnalas"
+
+msgid "Local test options"
+msgstr "Vietinio testavimo parinktys"
+
+msgid "Local test update notice link"
+msgstr "Vietinio testavimo atnaujinimo pranešimo nuoroda"
+
+msgid "Local update notice simulation"
+msgstr "Vietinio atnaujinimo pranešimo modeliavimas"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Vietinio atnaujinimo pranešimo modeliavimas galimas tik kūrimo režimu."
+
+msgid "Manifest"
+msgstr "Manifestas"
+
+msgid "Manifest source"
+msgstr "Manifesto šaltinis"
+
+msgid "Migration safety details"
+msgstr "Migracijos saugos detalės"
+
+msgid "Migration safety review failed"
+msgstr "Migracijos saugos peržiūra nepavyko"
+
+msgid "Migration safety review ready"
+msgstr "Migracijos saugos peržiūra paruošta"
+
+msgid "Migration target"
+msgstr "Migracijos tikslas"
+
+msgid "New files"
+msgstr "Nauji failai"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Naujos migracijos, apie kurias pranešė Doctrine"
+
+msgid "Next migration"
+msgstr "Kita migracija"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Nebuvo pranešta apie vykdytą neprieinamą migraciją."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Dar nesukonfigūruotas oficialus manifesto URL. Naudokite HTTPS URL arba vietinį kelią kūrimo testams."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Nebuvo aptikta laukiančių migracijų prieš paruoštą atnaujinimo tikslą."
+
+msgid "Not configured"
+msgstr "Nesukonfigūruota"
+
+msgid "Not detected"
+msgstr "Neaptikta"
+
+msgid "Official Chamilo update channel"
+msgstr "Oficialus Chamilo atnaujinimo kanalas"
+
+msgid "Package SHA-256"
+msgstr "Paketo SHA-256"
+
+msgid "Package URL"
+msgstr "Paketo URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Paketo ir parašo failai bus atsisiųsti iš manifesto. Vietiniai keliai šiame aplinkoje išjungti."
+
+msgid "Package path"
+msgstr "Paketo kelias"
+
+msgid "Package staged successfully"
+msgstr "Paketas paruoštas sėkmingai"
+
+msgid "Package staging failed"
+msgstr "Paketo paruošimas nepavyko"
+
+msgid "Package verification"
+msgstr "Paketo patikrinimas"
+
+msgid "Package verification failed"
+msgstr "Paketo patikrinimas nepavyko"
+
+msgid "Package verified successfully"
+msgstr "Paketas patikrintas sėkmingai"
+
+msgid "Pending migrations before this update"
+msgstr "Laukiančios migracijos prieš šį atnaujinimą"
+
+msgid "Planned backup path"
+msgstr "Planuojamas atsarginės kopijos kelias"
+
+msgid "Post-apply actions completed"
+msgstr "Veiksmai po taikymo baigti"
+
+msgid "Post-apply actions failed"
+msgstr "Veiksmai po taikymo nepavyko"
+
+msgid "Post-apply actions ready"
+msgstr "Veiksmai po taikymo paruošti"
+
+msgid "Post-apply checks"
+msgstr "Veiksmai po taikymo"
+
+msgid "Post-apply checks failed"
+msgstr "Veiksmai po taikymo nepavyko"
+
+msgid "Post-apply details"
+msgstr "Veiksmų po taikymo detalės"
+
+msgid "Post-apply run details"
+msgstr "Veiksmų po taikymo vykdymo detalės"
+
+msgid "Preflight checks"
+msgstr "Išankstiniai patikrinimai"
+
+msgid "Preflight checks completed"
+msgstr "Išankstiniai patikrinimai baigti"
+
+msgid "Preflight checks failed"
+msgstr "Išankstiniai patikrinimai nepavyko"
+
+msgid "Preflight details"
+msgstr "Išankstinių patikrinimų detalės"
+
+msgid "Prepare staging"
+msgstr "Paruošti parengiamąją aplinką"
+
+msgid "Preparing staging..."
+msgstr "Ruošiama parengiamoji aplinka..."
+
+msgid "Production mode"
+msgstr "Gamybos režimas"
+
+msgid "Released at"
+msgstr "Išleista"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Pakeisti Chamilo failus iš parengto paketo naudojant peržiūrėtą taikymo planą. Tai nevykdo duomenų bazės migracijų, Composer, Yarn ar podėlio komandų."
+
+msgid "Review apply plan"
+msgstr "Peržiūrėti taikymo planą"
+
+msgid "Review database migrations"
+msgstr "Peržiūrėti duomenų bazės migracijas"
+
+msgid "Review post-apply actions"
+msgstr "Peržiūrėti veiksmus po taikymo"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Peržiūrėti rekomenduojamas rankines komandas po atnaujinimo failų taikymo. Šis žingsnis nevykdo Composer, Yarn, migracijų ar podėlio komandų."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Peržiūrėti parengtas Doctrine migracijas ir sausosios eigos išvestį prieš vykdant duomenų bazės migracijas."
+
+msgid "Reviewing database migrations..."
+msgstr "Peržiūrimos duomenų bazės migracijos..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Prieš vykdant duomenų bazės migracijas atlikti migracijos saugumo peržiūrą."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Prieš bet kurį būsimą atnaujinimo taikymo žingsnį atlikti aplinkos patikrinimus. Tai nemodifikuoja failų ar duomenų bazės."
+
+msgid "Run post-apply actions"
+msgstr "Vykdyti veiksmus po taikymo"
+
+msgid "Run preflight checks"
+msgstr "Vykdyti išankstinius patikrinimus"
+
+msgid "Run selected post-apply actions"
+msgstr "Vykdyti pasirinktus veiksmus po taikymo"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Vykdyti pasirinktas komandas po taikymo iš serverio naudojant kontroliuojamą leidžiamų komandų sąrašą. Pasirinktinių komandų apvalkale nepriimama."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Vykdyti šias komandas rankiniu būdu iš serverio patvirtinus failų atnaujinimo rezultatą ir atsargines kopijas."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Veiksmų po taikymo vykdymas per vartotojo sąsają gamybos režimu išjungtas."
+
+msgid "Running post-apply actions..."
+msgstr "Vykdomi veiksmai po taikymo..."
+
+msgid "Safe actions"
+msgstr "Saugūs veiksmai"
+
+msgid "Signature path"
+msgstr "Parašo kelias"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Parašo tikrinimo šiame aplinkoje praleisti negalima."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Vietiniams kūrimo testams praleisti parašo tikrinimą"
+
+msgid "Staged file application failed"
+msgstr "Parengtų failų taikymas nepavyko"
+
+msgid "Staged files applied successfully"
+msgstr "Parengti failai sėkmingai pritaikyti"
+
+msgid "Staging details"
+msgstr "Parengiamosios aplinkos detalės"
+
+msgid "Staging directory"
+msgstr "Parengiamosios aplinkos katalogas"
+
+msgid "Staging extraction"
+msgstr "Parengiamosios aplinkos išskleidimas"
+
+msgid "Symfony cache clear"
+msgstr "Symfony podėlio išvalymas"
+
+msgid "System update"
+msgstr "Sistemos atnaujinimas"
+
+msgid "Target version"
+msgstr "Tikslinė versija"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Nustatytas oficialus manifestų URL yra iš anksto užpildytas. Jei reikia, galite jį pakeisti kitu HTTPS manifestu."
+
+msgid "The database migration baseline is clean."
+msgstr "Duomenų bazės migracijos pradinė būsena švari."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Galutinis HTTP atsakymas nepavyko po operacijos užbaigimo. Tai dažniausiai sukelia vykdymo laiko podėlio leidimai arba žiniatinklio serverio paleidimas iš naujo užklausos metu."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Operacijų žurnale nurodoma, kad veiksmai po taikymo sėkmingai baigti."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Pasirinktos komandos po taikymo sėkmingai baigtos, tačiau galutinis HTTP atsakymas nepavyko. Atnaujinkite puslapį ir patikrinkite vykdymo laiko podėlio leidimus, jei puslapis neįkeliamas tinkamai."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Atnaujinimo programa nekuria ir neatkuria duomenų bazės atsarginių kopijų."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Šiuos veiksmus galima saugiai vykdyti iš vartotojo sąsajos peržiūrėjus atnaujinimo rezultatą."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Šios komandos gali pakeisti priklausomybes, sukurtus išteklius, podėlį arba duomenų bazę. Prieš tęsiant patvirtinkite atsargines kopijas."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Šis veiksmas modifikuoja Chamilo diegimo failus. Prieš tęsiant įsitikinkite, kad taikymo planas buvo peržiūrėtas ir atsarginės kopijos įjungtos."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Šis kūrimo įrašas imituoja būsimą Chamilo.org atnaujinimo pranešimą naudojant vietinius bandomuosius paketo kelius."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Šis ekranas atidarytas iš oficialaus atnaujinimo pranešimo, tačiau oficialus manifestų šaltinis dar nesukonfigūruotas."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Šis ekranas atidarytas iš atnaujinimo pranešimo. Automatiškai paleidžiamas tik manifesto patikrinimas."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Šis žingsnis paruošia tik peržiūrą. Failų pakeitimas vyksta vėliau taikant etapinius failus, su užraktu, atsargine kopija ir atkūrimo apsauga."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Šis atnaujintojas nekuria duomenų bazės atsarginės kopijos. Prieš vykdant migracijas sukurkite ir patikrinkite atsarginę kopiją."
+
+msgid "Trusted public key"
+msgstr "Patikimas viešasis raktas"
+
+msgid "Trusted signing key"
+msgstr "Patikimas pasirašymo raktas"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Įveskite APPLY UPDATE FILES patvirtinimui"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Įveskite RUN DATABASE MIGRATIONS duomenų bazės migracijoms patvirtinti"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Įveskite RUN POST UPDATE ACTIONS patvirtinimui"
+
+msgid "Unknown update notice source."
+msgstr "Nežinomas atnaujinimo pranešimo šaltinis."
+
+msgid "Update availability"
+msgstr "Atnaujinimo prieinamumas"
+
+msgid "Update directory"
+msgstr "Atnaujinimo katalogas"
+
+msgid "Update lock path"
+msgstr "Atnaujinimo užrakto kelias"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Naudokite ankstesnio žingsnio sugeneruotą etapinį katalogą. Backend priima tik katalogus viduje var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Naudokite šią nuorodą būsimam Chamilo.org atnaujinimo pranešimui imituoti kūrimo testų metu."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Naudokite tai tik vietiniams kūrimo testams. Gamybos atnaujinimams turi būti naudojamas serveryje sukonfigūruotas raktas."
+
+msgid "Verification details"
+msgstr "Patvirtinimo detalės"
+
+msgid "Verify package"
+msgstr "Patikrinti paketą"
+
+msgid "Verifying..."
+msgstr "Tikrinama..."
+
+msgid "Waiting for command progress events..."
+msgstr "Laukiama komandos eigos įvykių..."
+
+msgid "Waiting for update progress events..."
+msgstr "Laukiama atnaujinimo eigos įvykių..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Reikalingas komentaras"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Duomenų bazė tokiu pačiu pavadinimu jau egzistuoja. Jei joje yra lentelių, jos bus ištrintos; jei tuščia, bus panaudota iš naujo."
+
+msgid "AI generated"
+msgstr "Sukurta DI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Prieš grįžtant į mokymosi kelią pridėkite bent vieną klausimą."
+
+msgid "Add attachments"
+msgstr "Pridėti priedus"
+
+msgid "Additional fields"
+msgstr "Papildomi laukai"
+
+msgid "Allow comments"
+msgstr "Leisti komentarus"
+
+msgid "Allow new pages"
+msgstr "Leisti naujus puslapius"
+
+msgid "Allow ratings"
+msgstr "Leisti vertinimus"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Ar tikrai norite ištrinti visus elementus?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Ar tikrai norite atkurti automatinį atnaujinimą?"
+
+msgid "Attachment has been deleted"
+msgstr "Priedas ištrintas"
+
+msgid "Backup file"
+msgstr "Atsarginis failas"
+
+msgid "Block comments"
+msgstr "Blokuoti komentarus"
+
+msgid "Block new pages"
+msgstr "Blokuoti naujus puslapius"
+
+msgid "Block ratings"
+msgstr "Blokuoti vertinimus"
+
+msgid "Cancel renewal"
+msgstr "Atšaukti atnaujinimą"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Kategorijų nuorodos bus pašalintos iš %s Wiki puslapių."
+
+msgid "Change"
+msgstr "Keisti"
+
+msgid "Clear group"
+msgstr "Išvalyti grupę"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Spustelėkite žymą, kad įterptumėte ją į redaktorių. Šie pakaitalai bus pakeisti generuojant sertifikatą."
+
+msgid "Comment added"
+msgstr "Komentaras pridėtas"
+
+msgid "Comment is required"
+msgstr "Reikalingas komentaras"
+
+msgid "Comment score"
+msgstr "Komentaro įvertis"
+
+msgid "Compare selected versions line by line"
+msgstr "Palyginti pasirinktas versijas eilutė po eilutės"
+
+msgid "Compare selected versions word by word"
+msgstr "Palyginti pasirinktas versijas žodis po žodžio"
+
+msgid "Compare versions"
+msgstr "Palyginti versijas"
+
+msgid "Copy completed"
+msgstr "Kopijavimas baigtas"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Sukurti individualius Wiki puslapius besimokantiesiems"
+
+msgid "Current view mode"
+msgstr "Dabartinis peržiūros režimas"
+
+msgid "Delete Wiki"
+msgstr "Ištrinti Wiki"
+
+msgid "Delete page"
+msgstr "Ištrinti puslapį"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Wiki pagrindinio puslapio trynimas nerekomenduojamas. Galėsite jį sukurti vėliau."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Išjungus Wiki, blokuojami įprasti Wiki puslapiai ir veiksmai. Šis nustatymų puslapis lieka prieinamas kurso dėstytojams."
+
+msgid "Discussion"
+msgstr "Diskusija"
+
+msgid "Edit Comment"
+msgstr "Redaguoti komentarą"
+
+msgid "Edit page"
+msgstr "Redaguoti puslapį"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Pabaigos data turi būti po arba lygi galiojimo pabaigos datai"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Įveskite paieškos terminą, kad rastumėte Wiki puslapius"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Galiojimo pabaigos data turi būti prieš arba lygi pabaigos datai"
+
+msgid "Failed email recipients"
+msgstr "Nepavyko išsiųsti el. laiškų gavėjams"
+
+msgid "Finish and return to learning path"
+msgstr "Baigti ir grįžti į mokymosi kelią"
+
+msgid "Forum image"
+msgstr "Forumo paveikslėlis"
+
+msgid "Hide discussion"
+msgstr "Slėpti diskusiją"
+
+msgid "Hide page"
+msgstr "Slėpti puslapį"
+
+msgid "I changed my mind"
+msgstr "Persigalvojau"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Jei nepažymėta, šie failai liks prieinami platformos administratoriui per „Failų informacijos“ įrankį."
+
+msgid "Internal message failures"
+msgstr "Vidiniai pranešimų gedimai"
+
+msgid "Internal messages available"
+msgstr "Galimi vidiniai pranešimai"
+
+msgid "Internal messages created now"
+msgstr "Dabar sukurti vidiniai pranešimai"
+
+msgid "Item score"
+msgstr "Elemento įvertis"
+
+msgid "Last post"
+msgstr "Paskutinis įrašas"
+
+msgid "Lock page"
+msgstr "Užrakinti puslapį"
+
+msgid "Manage categories"
+msgstr "Tvarkyti kategorijas"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Pažymėti šį dokumentą kaip sukurtą naudojant DI. Naudokite, kai turinys buvo sukurtas arba reikšmingai pakeistas naudojant DI įrankius."
+
+msgid "Maximum score is required"
+msgstr "Būtina nurodyti maksimalų įvertį"
+
+msgid "Metric"
+msgstr "Metrika"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Nauji komentarai šioje diskusijoje užblokuoti"
+
+msgid "No Wiki categories are available yet."
+msgstr "Wiki kategorijų dar nėra."
+
+msgid "No categories found"
+msgstr "Kategorijų nerasta"
+
+msgid "No content"
+msgstr "Nėra turinio"
+
+msgid "No parent category"
+msgstr "Nėra pirminės kategorijos"
+
+msgid "Number of comments scored"
+msgstr "Įvertintų komentarų skaičius"
+
+msgid "Old version"
+msgstr "Sena versija"
+
+msgid "Only image files are allowed."
+msgstr "Leidžiami tik paveikslėlių failai."
+
+msgid "Please fill all required fields"
+msgstr "Užpildykite visus privalomus laukus"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Klausimai su klasės arba studento vietos žymėmis bus sugeneruoti kurso klasėms arba grupėms: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Vertinimai šioje diskusijoje užblokuoti"
+
+msgid "Remove image"
+msgstr "Pašalinti paveikslėlį"
+
+msgid "Restore renewal"
+msgstr "Atkurti atnaujinimą"
+
+msgid "Restore version"
+msgstr "Atkurti versiją"
+
+msgid "Search in"
+msgstr "Ieškoti"
+
+msgid "Select group"
+msgstr "Pasirinkti grupę"
+
+msgid "Select image"
+msgstr "Pasirinkti paveikslėlį"
+
+msgid "Selected image"
+msgstr "Pasirinktas paveikslėlis"
+
+msgid "Show discussion"
+msgstr "Rodyti diskusiją"
+
+msgid "Show page"
+msgstr "Rodyti puslapį"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Kai kurie failai ar aplankai neturi rašymo teisių. Norėdami įdiegti Chamilo, pirmiausia turite pakeisti jų teises (naudodami CHMOD). Skaitykite"
+
+msgid "Subcategories"
+msgstr "Subkategorijos"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Bakstelėkite kairėje arba dešinėje, kad naršytumėte"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki užduoties terminas pasibaigė, bet vėluojantis pateikimas leidžiamas."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki užduoties terminas pasibaigė."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki užduotis dar neprasidėjo."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Prieš išsaugojant būtina užrakinti Wiki puslapio redagavimą."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Pranešimas išsaugotas, bet priedo įkelti nepavyko."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Pranešimas išsaugotas, bet nepavyko pristatyti el. paštu."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Pranešimas išsaugotas, bet el. laiškas nebuvo pristatytas."
+
+msgid "The category has been created"
+msgstr "Kategorija sukurta"
+
+msgid "The category has been deleted"
+msgstr "Kategorija ištrinta"
+
+msgid "The category has been updated"
+msgstr "Kategorija atnaujinta"
+
+msgid "The end date is invalid"
+msgstr "Pabaigos data neteisinga"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Maksimalus versijų skaičius turi būti neneigiamas sveikasis skaičius"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Maksimalus žodžių skaičius turi būti neneigiamas sveikasis skaičius"
+
+msgid "The print window could not be opened"
+msgstr "Nepavyko atidaryti spausdinimo lango"
+
+msgid "The start date is invalid"
+msgstr "Pradžios data neteisinga"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Šie nustatymai taikomi visam kursui, įskaitant jo sesijas ir grupes."
+
+msgid "This announcement has already been sent by email."
+msgstr "Šis pranešimas jau buvo išsiųstas el. paštu."
+
+msgid "This discussion is hidden from learners"
+msgstr "Ši diskusija paslėpta nuo besimokančiųjų"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Šis generatyvinio DI įrankis leidžia kurti paveikslėlius ir trumpus vaizdo įrašus, kad iliustruotumėte savo kursą. Paaiškindami (tekstiniu būdu), ko norite, užklausos skiltyje, pateiksite sukonfigūruotam DI modeliui elementus, būtinus paveikslėliui ar vaizdo įrašui sugeneruoti. Būkite kantrūs. DI modelis užtruks ir sugeneruos rezultatą, kurį galbūt norėsite išsaugoti dokumentų aplanke, o tada įterpti į HTML dokumentą. Ne visi DI modeliai yra vienodi greičio ar kokybės atžvilgiu. DI modelis taip pat gali pateikti modifikuotą užklausą, kuri yra detalesnė jūsų prašymo interpretacija. Tada galite naudoti šią modifikuotą užklausą savo prašymui patikslinti. Atminkite, kad šis įrankis, ypač vaizdo įrašams, gali sukelti nemažų išlaidų jūsų organizacijai, net jei nuspręsite neišsaugoti sugeneruotos medijos. Naudokite jį atsakingai. Jei kyla sunkumų gaunant norimą rezultatą, skirkite laiko paieškoti užklausų gudrybių internete DI modeliui, kurį turite."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ši istorija priklauso baziniam kursui. Atkūrimas galimas sukūrus sesijos versiją."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Šis paveikslėlis pakeičia numatytąją forumo piktogramą, rodomą šalia forumo pavadinimo."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Šis puslapis yra iš bazinio kurso. Išsaugojus jį bus sukurta versija dabartinei sesijai."
+
+msgid "This will also delete %s subcategories."
+msgstr "Tai taip pat ištrins %s subkategorijas."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Tai sukurs individualius darbų puslapius %s besimokantiesiems."
+
+msgid "Thread history"
+msgstr "Gijos istorija"
+
+msgid "Title and content"
+msgstr "Pavadinimas ir turinys"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Šiuo metu negalima atšaukti atnaujinimo teisės."
+
+msgid "Unable to restore renewal right now."
+msgstr "Šiuo metu negalima atkurti atnaujinimo teisės."
+
+msgid "Unlock page"
+msgstr "Atrakinti puslapį"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Naudokite [[Puslapis]] arba [[Puslapis|Matomas tekstas]], kad sukurtumėte vidines Wiki nuorodas."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Naršymui naudokite tarpo klavišą arba rodyklių klavišus"
+
+msgid "View version"
+msgstr "Peržiūrėti versiją"
+
+msgid "Visible only to teachers"
+msgstr "Matoma tik dėstytojams"
+
+msgid "Weight is required"
+msgstr "Svoris yra privalomas"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki kategorijos šiame kurse išjungtos."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki kategorijos įjungtos"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki griežtas HTML filtravimas"
+
+msgid "Wiki settings"
+msgstr "Wiki nustatymai"
+
+msgid "Wiki settings updated"
+msgstr "Wiki nustatymai atnaujinti"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Jūs peržiūrite istorinę šio puslapio versiją"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Galite pridėti vieną ar daugiau failų prie šio atsakymo."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Galite redaguoti šį užduoties puslapį, bet besimokančiųjų darbų puslapiai nebus keičiami."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Galite naudoti žymes {{class_name}} ir {{student_full_name}} klausime."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Turite 20 minučių redaguoti šį puslapį, kol baigsis redagavimo užraktas."
+
+msgid "by"
+msgstr "autorius"
+
+msgid "required"
+msgstr "privalomas"
 

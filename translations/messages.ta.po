@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:அடைவு,, application/msword:MsWord,, application/octet-stream:ஆக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:அடைவு,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -36492,4 +36492,853 @@ msgstr "நூல்களைக் காண்க"
 
 msgid "No auth source"
 msgstr "அங்கீகரிப்பு மூலம் இல்லை"
+
+msgid "You must add at least one question"
+msgstr "நீங்கள் குறைந்தபட்சம் ஒரு கேள்வியைச் சேர்க்க வேண்டும்"
+
+msgid "Advanced actions"
+msgstr "மேம்பட்ட செயல்கள்"
+
+msgid "Application path"
+msgstr "பயன்பாட்டு பாதை"
+
+msgid "Apply files details"
+msgstr "கோப்பு விவரங்களைப் பயன்படுத்து"
+
+msgid "Apply plan details"
+msgstr "திட்ட விவரங்களைப் பயன்படுத்து"
+
+msgid "Apply plan failed"
+msgstr "திட்டத்தைப் பயன்படுத்த முடியவில்லை"
+
+msgid "Apply plan ready"
+msgstr "திட்டம் பயன்படுத்த தயார்"
+
+msgid "Apply preparation"
+msgstr "தயாரிப்பைப் பயன்படுத்து"
+
+msgid "Apply staged files"
+msgstr "நிலைப்படுத்தப்பட்ட கோப்புகளைப் பயன்படுத்து"
+
+msgid "Applying files..."
+msgstr "கோப்புகளைப் பயன்படுத்துகிறது..."
+
+msgid "Audit file"
+msgstr "கோப்பைத் தணிக்கை செய்"
+
+msgid "Backup directory"
+msgstr "காப்பு அடைவு"
+
+msgid "Baseline clean"
+msgstr "அடிப்படை தூய்மை"
+
+msgid "Baseline warnings"
+msgstr "அடிப்படை எச்சரிக்கைகள்"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பிலிருந்து பாதுகாப்பான பயன்பாட்டுத் திட்டத்தை உருவாக்கவும். இது கோப்புகள், அனுமதிகள், காப்புப் பாதை மற்றும் பூட்டு நிலையை மட்டுமே சரிபார்க்கும். இது கோப்புகளை மாற்றாது."
+
+msgid "Build production frontend assets."
+msgstr "உற்பத்தி முன்பக்க சொத்துக்களை உருவாக்கவும்."
+
+msgid "Building plan..."
+msgstr "திட்டத்தை உருவாக்குகிறது..."
+
+msgid "Channel"
+msgstr "சேனல்"
+
+msgid "Check"
+msgstr "சரிபார்"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "கிடைக்கக்கூடிய Chamilo புதுப்பிப்புகளைச் சரிபார்க்கவும், தொகுப்புகளைச் சரிபார்க்கவும், கோப்புகளை நிலைப்படுத்தவும் மற்றும் கட்டுப்படுத்தப்பட்ட புதுப்பிப்புக்குப் பிந்தைய படிகளை இயக்கவும்."
+
+msgid "Check manifest"
+msgstr "மேனிஃபெஸ்டைச் சரிபார்"
+
+msgid "Checking post-apply actions..."
+msgstr "பயன்பாட்டுக்குப் பிந்தைய செயல்களைச் சரிபார்க்கிறது..."
+
+msgid "Checking..."
+msgstr "சரிபார்க்கிறது..."
+
+msgid "Composer install"
+msgstr "Composer நிறுவல்"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn மற்றும் தரவுத்தள இடம்பெயர்வு செயல்கள் சார்புகள், உருவாக்கப்பட்ட சொத்துகள் அல்லது தரவுத்தளத்தை மாற்றலாம். காப்புப்பிரதிகள் மற்றும் அனுமதிகளை உறுதிப்படுத்திய பின்னரே அவற்றைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "சேவையகத்தில் CHAMILO_UPDATE_MANIFEST_URL ஐ உள்ளமைக்கவும் அல்லது HTTPS மேனிஃபெஸ்ட் URL ஐ வழங்கவும்."
+
+msgid "Configured"
+msgstr "உள்ளமைக்கப்பட்டது"
+
+msgid "Current migration"
+msgstr "தற்போதைய இடம்பெயர்வு"
+
+msgid "Database baseline"
+msgstr "தரவுத்தள அடிப்படை"
+
+msgid "Database migration safety review"
+msgstr "தரவுத்தள இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு"
+
+msgid "Database migrations"
+msgstr "தரவுத்தள இடம்பெயர்வுகள்"
+
+msgid "Development mode"
+msgstr "மேம்பாட்டு பயன்முறை"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "புதுப்பிப்பு காப்புப்பிரதி மற்றும் சேவையக அனுமதிகள் மதிப்பாய்வு செய்யப்படாத வரை இதை இயக்க வேண்டாம்."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine உலர்-இயக்க கட்டளை"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine வரலாற்று அடிப்படை எச்சரிக்கைகளைப் புகாரளித்தது. உறுதிப்படுத்தலுக்குப் பிறகு புதுப்பிப்பு V210 இடம்பெயர்வுகளை மட்டுமே செயல்படுத்தும்."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "பாதுகாப்பு மதிப்பாய்வு தேர்ச்சி பெற்ற பிறகு Doctrine V210 இடம்பெயர்வுகளை மட்டுமே செயல்படுத்தும்."
+
+msgid "Dry-run exit code"
+msgstr "உலர்-இயக்க வெளியேற்றக் குறியீடு"
+
+msgid "Executed unavailable migrations"
+msgstr "கிடைக்காத இடம்பெயர்வுகள் செயல்படுத்தப்பட்டன"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "சரிபார்க்கப்பட்ட புதுப்பிப்பு தொகுப்பை ஆய்வுக்காக ஒரு இடைநிலை கோப்பகத்தில் பிரித்தெடுக்கவும். இது கோப்புகளை மாற்றாது, இடம்பெயர்வுகளை இயக்காது அல்லது தரவுத்தளத்தை மாற்றாது."
+
+msgid "File apply available"
+msgstr "கோப்பு பயன்பாடு கிடைக்கிறது"
+
+msgid "Files to replace"
+msgstr "மாற்ற வேண்டிய கோப்புகள்"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "இடம்பெயர்வுகளை இயக்குவதற்கு முன் தரவுத்தள காப்புப்பிரதி உள்ளது மற்றும் சரிபார்க்கப்பட்டது என்பதை உறுதிப்படுத்துகிறேன்."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "மேம்பட்ட செயல்கள் சார்புகள், உருவாக்கப்பட்ட சொத்துகள் அல்லது தரவுத்தளத்தை மாற்றக்கூடும் என்பதை புரிந்துகொள்கிறேன்."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "இது Chamilo நிறுவலில் உள்ள கோப்புகளை மாற்றும் என்பதை புரிந்துகொள்கிறேன்."
+
+msgid "I understand this will run update commands on the server."
+msgstr "இது சேவையகத்தில் புதுப்பிப்பு கட்டளைகளை இயக்கும் என்பதை புரிந்துகொள்கிறேன்."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "சொத்துகளை மீண்டும் உருவாக்குவதற்கு முன் முன்பக்க சார்புகளை நிறுவவும்."
+
+msgid "Installed version"
+msgstr "நிறுவப்பட்ட பதிப்பு"
+
+msgid "Latest migration"
+msgstr "சமீபத்திய இடம்பெயர்வு"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "சரிபார்க்கப்பட்ட வெளிப்படுத்தல் URLகளிலிருந்து அவற்றைப் பதிவிறக்க கட்டுப்பாட்டு மற்றும் கையொப்பப் பாதைகளை காலியாக விடவும். உள்ளூர் பாதைகள் மேம்பாட்டு சோதனைகளுக்கு மட்டுமே கிடைக்கும்."
+
+msgid "Live command log"
+msgstr "நேரடி கட்டளை பதிவு"
+
+msgid "Live update log"
+msgstr "நேரடி புதுப்பிப்பு பதிவு"
+
+msgid "Local test options"
+msgstr "உள்ளூர் சோதனை விருப்பங்கள்"
+
+msgid "Local test update notice link"
+msgstr "உள்ளூர் சோதனை புதுப்பிப்பு அறிவிப்பு இணைப்பு"
+
+msgid "Local update notice simulation"
+msgstr "உள்ளூர் புதுப்பிப்பு அறிவிப்பு உருவகப்படுத்தல்"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "உள்ளூர் புதுப்பிப்பு அறிவிப்பு உருவகப்படுத்தல் மேம்பாட்டு பயன்முறையில் மட்டுமே கிடைக்கும்."
+
+msgid "Manifest"
+msgstr "வெளிப்படுத்தல்"
+
+msgid "Manifest source"
+msgstr "வெளிப்படுத்தல் மூலம்"
+
+msgid "Migration safety details"
+msgstr "இடம்பெயர்வு பாதுகாப்பு விவரங்கள்"
+
+msgid "Migration safety review failed"
+msgstr "இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு தோல்வியடைந்தது"
+
+msgid "Migration safety review ready"
+msgstr "இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு தயாராக உள்ளது"
+
+msgid "Migration target"
+msgstr "இடம்பெயர்வு இலக்கு"
+
+msgid "New files"
+msgstr "புதிய கோப்புகள்"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine புகாரளித்த புதிய இடம்பெயர்வுகள்"
+
+msgid "Next migration"
+msgstr "அடுத்த இடம்பெயர்வு"
+
+msgid "No executed unavailable migration was reported."
+msgstr "கிடைக்காத இடம்பெயர்வு எதுவும் புகாரளிக்கப்படவில்லை."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "இன்னும் அதிகாரப்பூர்வ வெளிப்படுத்தல் URL உள்ளமைக்கப்படவில்லை. HTTPS URL அல்லது மேம்பாட்டு சோதனைகளுக்கு உள்ளூர் பாதையைப் பயன்படுத்தவும்."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "இடைநிலை புதுப்பிப்பு இலக்குக்கு முன் நிலுவையில் உள்ள இடம்பெயர்வு எதுவும் கண்டறியப்படவில்லை."
+
+msgid "Not configured"
+msgstr "உள்ளமைக்கப்படவில்லை"
+
+msgid "Not detected"
+msgstr "கண்டறியப்படவில்லை"
+
+msgid "Official Chamilo update channel"
+msgstr "அதிகாரப்பூர்வ Chamilo புதுப்பிப்பு சேனல்"
+
+msgid "Package SHA-256"
+msgstr "தொகுப்பு SHA-256"
+
+msgid "Package URL"
+msgstr "தொகுப்பு URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "தொகுப்பு மற்றும் கையொப்பக் கோப்புகள் வெளிப்படுத்தலிலிருந்து பதிவிறக்கப்படும். இந்த சூழலில் உள்ளூர் பாதைகள் முடக்கப்பட்டுள்ளன."
+
+msgid "Package path"
+msgstr "தொகுப்பு பாதை"
+
+msgid "Package staged successfully"
+msgstr "தொகுப்பு வெற்றிகரமாக இடைநிலைப்படுத்தப்பட்டது"
+
+msgid "Package staging failed"
+msgstr "தொகுப்பு இடைநிலைப்படுத்தல் தோல்வியடைந்தது"
+
+msgid "Package verification"
+msgstr "தொகுப்பு சரிபார்ப்பு"
+
+msgid "Package verification failed"
+msgstr "தொகுப்பு சரிபார்ப்பு தோல்வியடைந்தது"
+
+msgid "Package verified successfully"
+msgstr "தொகுப்பு வெற்றிகரமாக சரிபார்க்கப்பட்டது"
+
+msgid "Pending migrations before this update"
+msgstr "இந்த புதுப்பிப்புக்கு முன் நிலுவையில் உள்ள இடம்பெயர்வுகள்"
+
+msgid "Planned backup path"
+msgstr "திட்டமிடப்பட்ட காப்புப்பிரதி பாதை"
+
+msgid "Post-apply actions completed"
+msgstr "பிந்தைய பயன்பாட்டு செயல்கள் முடிந்தன"
+
+msgid "Post-apply actions failed"
+msgstr "பிந்தைய பயன்பாட்டு செயல்கள் தோல்வியடைந்தன"
+
+msgid "Post-apply actions ready"
+msgstr "பிந்தைய பயன்பாட்டு செயல்கள் தயார்"
+
+msgid "Post-apply checks"
+msgstr "பிந்தைய பயன்பாட்டு சோதனைகள்"
+
+msgid "Post-apply checks failed"
+msgstr "பிந்தைய பயன்பாட்டு சோதனைகள் தோல்வியடைந்தன"
+
+msgid "Post-apply details"
+msgstr "பிந்தைய பயன்பாட்டு விவரங்கள்"
+
+msgid "Post-apply run details"
+msgstr "பிந்தைய பயன்பாட்டு இயக்க விவரங்கள்"
+
+msgid "Preflight checks"
+msgstr "முன் பறக்கும் சோதனைகள்"
+
+msgid "Preflight checks completed"
+msgstr "முன் பறக்கும் சோதனைகள் முடிந்தன"
+
+msgid "Preflight checks failed"
+msgstr "முன் பறக்கும் சோதனைகள் தோல்வியடைந்தன"
+
+msgid "Preflight details"
+msgstr "முன் பறக்கும் விவரங்கள்"
+
+msgid "Prepare staging"
+msgstr "நிலைப்படுத்தலை தயார் செய்"
+
+msgid "Preparing staging..."
+msgstr "நிலைப்படுத்தல் தயாராகிறது..."
+
+msgid "Production mode"
+msgstr "உற்பத்தி பயன்முறை"
+
+msgid "Released at"
+msgstr "வெளியிடப்பட்டது"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "மதிப்பாய்வு செய்யப்பட்ட பயன்பாட்டுத் திட்டத்தைப் பயன்படுத்தி நிலைப்படுத்தப்பட்ட தொகுப்பிலிருந்து சாமிலோ கோப்புகளை மாற்றவும். இது தரவுத்தள இடம்பெயர்வுகள், காம்போசர், யார்ன் அல்லது கேச் கட்டளைகளை இயக்காது."
+
+msgid "Review apply plan"
+msgstr "பயன்பாட்டுத் திட்டத்தை மதிப்பாய்வு செய்"
+
+msgid "Review database migrations"
+msgstr "தரவுத்தள இடம்பெயர்வுகளை மதிப்பாய்வு செய்"
+
+msgid "Review post-apply actions"
+msgstr "பிந்தைய பயன்பாட்டு செயல்களை மதிப்பாய்வு செய்"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "புதுப்பிப்பு கோப்புகளைப் பயன்படுத்திய பிறகு பரிந்துரைக்கப்பட்ட கைமுறை கட்டளைகளை மதிப்பாய்வு செய். இந்தப் படி காம்போசர், யார்ன், இடம்பெயர்வுகள் அல்லது கேச் கட்டளைகளை இயக்காது."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "தரவுத்தள இடம்பெயர்வுகளை இயக்குவதற்கு முன் நிலைப்படுத்தப்பட்ட டாக்ட்ரின் இடம்பெயர்வுகள் மற்றும் உலர்-இயக்க வெளியீட்டை மதிப்பாய்வு செய்."
+
+msgid "Reviewing database migrations..."
+msgstr "தரவுத்தள இடம்பெயர்வுகள் மதிப்பாய்வு செய்யப்படுகின்றன..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "தரவுத்தள இடம்பெயர்வுகளை இயக்குவதற்கு முன் இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வை இயக்கி தேர்ச்சி பெறவும்."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "எதிர்கால புதுப்பிப்பு பயன்பாட்டுப் படிக்கு முன் சுற்றுச்சூழல் சோதனைகளை இயக்கவும். இது கோப்புகள் அல்லது தரவுத்தளத்தை மாற்றாது."
+
+msgid "Run post-apply actions"
+msgstr "பிந்தைய பயன்பாட்டு செயல்களை இயக்கு"
+
+msgid "Run preflight checks"
+msgstr "முன் பறக்கும் சோதனைகளை இயக்கு"
+
+msgid "Run selected post-apply actions"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பிந்தைய பயன்பாட்டு செயல்களை இயக்கு"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "கட்டுப்படுத்தப்பட்ட அனுமதிப்பட்டியலைப் பயன்படுத்தி சேவையகத்திலிருந்து தேர்ந்தெடுக்கப்பட்ட பிந்தைய பயன்பாட்டு கட்டளைகளை இயக்கவும். தனிப்பயன் ஷெல் கட்டளைகள் ஏற்றுக்கொள்ளப்படாது."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "கோப்பு புதுப்பிப்பு முடிவு மற்றும் காப்புப்பிரதிகளை உறுதிப்படுத்திய பிறகு இந்த கட்டளைகளை சேவையகத்திலிருந்து கைமுறையாக இயக்கவும்."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "உற்பத்தி பயன்முறையில் UI இலிருந்து பிந்தைய பயன்பாட்டு செயல்களை இயக்குவது முடக்கப்பட்டுள்ளது."
+
+msgid "Running post-apply actions..."
+msgstr "பிந்தைய பயன்பாட்டு செயல்கள் இயக்கப்படுகின்றன..."
+
+msgid "Safe actions"
+msgstr "பாதுகாப்பான செயல்கள்"
+
+msgid "Signature path"
+msgstr "கையொப்பப் பாதை"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "இந்த சூழலில் கையொப்ப சரிபார்ப்பைத் தவிர்க்க முடியாது."
+
+msgid "Skip signature verification for local development tests"
+msgstr "உள்ளூர் மேம்பாட்டு சோதனைகளுக்காக கையொப்ப சரிபார்ப்பைத் தவிர்"
+
+msgid "Staged file application failed"
+msgstr "நிலைப்படுத்தப்பட்ட கோப்பு பயன்பாடு தோல்வியடைந்தது"
+
+msgid "Staged files applied successfully"
+msgstr "நிலைப்படுத்தப்பட்ட கோப்புகள் வெற்றிகரமாகப் பயன்படுத்தப்பட்டன"
+
+msgid "Staging details"
+msgstr "நிலைப்படுத்தல் விவரங்கள்"
+
+msgid "Staging directory"
+msgstr "நிலைப்படுத்தல் அடைவு"
+
+msgid "Staging extraction"
+msgstr "நிலைப்படுத்தல் பிரித்தெடுப்பு"
+
+msgid "Symfony cache clear"
+msgstr "சிம்போனி கேச் தெளிவு"
+
+msgid "System update"
+msgstr "கணினி புதுப்பிப்பு"
+
+msgid "Target version"
+msgstr "இலக்கு பதிப்பு"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "உள்ளமைக்கப்பட்ட அதிகாரப்பூர்வ மேனிஃபெஸ்ட் URL முன்பே நிரப்பப்பட்டுள்ளது. தேவைப்பட்டால் அதை மற்றொரு HTTPS மேனிஃபெஸ்ட்டிற்கு மாற்றலாம்."
+
+msgid "The database migration baseline is clean."
+msgstr "தரவுத்தள இடம்பெயர்வு அடிப்படை சுத்தமாக உள்ளது."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "செயல்பாடு முடிந்த பிறகு இறுதி HTTP பதில் தோல்வியடைந்தது. இது பொதுவாக இயக்க நேர கேச் அனுமதிகள் அல்லது கோரிக்கையின் போது வலை சேவையக மறுதொடக்கத்தால் ஏற்படுகிறது."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "செயல்பாட்டு பதிவு பிந்தைய பயன்பாட்டு செயல்கள் வெற்றிகரமாக முடிந்ததாகத் தெரிவிக்கிறது."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "தேர்ந்தெடுக்கப்பட்ட பிந்தைய பயன்பாட்டு கட்டளைகள் வெற்றிகரமாக முடிந்தன, ஆனால் இறுதி HTTP பதில் தோல்வியடைந்தது. பக்கம் சரியாக ஏற்றப்படாவிட்டால் பக்கத்தைப் புதுப்பித்து இயக்க நேர கேச் அனுமதிகளைச் சரிபார்க்கவும்."
+
+msgid "The updater does not create or restore database backups."
+msgstr "புதுப்பிப்பு கருவி தரவுத்தள காப்புப்பிரதிகளை உருவாக்கவோ மீட்டெடுக்கவோ செய்யாது."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "புதுப்பிப்பு முடிவை மதிப்பாய்வு செய்த பிறகு UI இலிருந்து இயக்க இந்த செயல்கள் பாதுகாப்பானவை."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "இந்தக் கட்டளைகள் சார்புகள், உருவாக்கப்பட்ட சொத்துக்கள், தற்காலிகச் சேமிப்பு அல்லது தரவுத்தளத்தை மாற்றலாம். தொடர்வதற்கு முன் காப்புப்பிரதிகளை உறுதிப்படுத்தவும்."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "இந்தச் செயல் சாமிலோ நிறுவலில் உள்ள கோப்புகளை மாற்றுகிறது. தொடர்வதற்கு முன் பயன்படுத்தும் திட்டம் மதிப்பாய்வு செய்யப்பட்டு காப்புப்பிரதிகள் இயக்கப்பட்டுள்ளதை உறுதிப்படுத்தவும்."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "இந்த மேம்பாட்டு உள்ளீடு உள்ளூர் சோதனை தொகுப்பு பாதைகளைப் பயன்படுத்தி எதிர்கால சாமிலோ.org புதுப்பிப்பு அறிவிப்பை உருவகப்படுத்துகிறது."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "இந்தத் திரை அதிகாரப்பூர்வ புதுப்பிப்பு அறிவிப்பிலிருந்து திறக்கப்பட்டது, ஆனால் அதிகாரப்பூர்வ வெளிப்படுத்தல் மூலம் இன்னும் கட்டமைக்கப்படவில்லை."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "இந்தத் திரை ஒரு புதுப்பிப்பு அறிவிப்பிலிருந்து திறக்கப்பட்டது. வெளிப்படுத்தல் சரிபார்ப்பு மட்டும் தானாகத் தொடங்கப்படுகிறது."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "இந்தப் படி மதிப்பாய்வை மட்டும் தயாரிக்கிறது. கோப்பு மாற்றீடு பின்னர் பயன்படுத்தும் கட்டத்தில் பூட்டு, காப்புப்பிரதி மற்றும் மீட்டெடுப்பு பாதுகாப்புடன் நடைபெறும்."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "இந்தப் புதுப்பிப்பு கருவி தரவுத்தள காப்புப்பிரதியை உருவாக்காது. இடம்பெயர்வுகளை இயக்குவதற்கு முன் காப்புப்பிரதியை உருவாக்கி சரிபார்க்கவும்."
+
+msgid "Trusted public key"
+msgstr "நம்பகமான பொது விசை"
+
+msgid "Trusted signing key"
+msgstr "நம்பகமான கையொப்ப விசை"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "உறுதிப்படுத்த %s புதுப்பிப்பு கோப்புகளைப் பயன்படுத்தவும்"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "தரவுத்தள இடம்பெயர்வுகளை உறுதிப்படுத்த %s தரவுத்தள இடம்பெயர்வுகளை இயக்கவும்"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "உறுதிப்படுத்த %s புதுப்பிப்புக்குப் பிந்தைய செயல்களை இயக்கவும்"
+
+msgid "Unknown update notice source."
+msgstr "தெரியாத புதுப்பிப்பு அறிவிப்பு மூலம்."
+
+msgid "Update availability"
+msgstr "புதுப்பிப்பு கிடைப்பு"
+
+msgid "Update directory"
+msgstr "புதுப்பிப்பு அடைவு"
+
+msgid "Update lock path"
+msgstr "புதுப்பிப்பு பூட்டு பாதை"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "முந்தைய படியால் உருவாக்கப்பட்ட நிலைப்படுத்தல் அடைவைப் பயன்படுத்தவும். பின்புலம் var/update/staging உள்ளே உள்ள அடைவுகளை மட்டுமே ஏற்றுக்கொள்கிறது."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "மேம்பாட்டுச் சோதனைகளின் போது எதிர்கால சாமிலோ.org புதுப்பிப்பு அறிவிப்பை உருவகப்படுத்த இந்த இணைப்பைப் பயன்படுத்தவும்."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "இதை உள்ளூர் மேம்பாட்டுச் சோதனைகளுக்கு மட்டுமே பயன்படுத்தவும். உற்பத்தி புதுப்பிப்புகள் சேவையகத்தில் கட்டமைக்கப்பட்ட விசையைப் பயன்படுத்த வேண்டும்."
+
+msgid "Verification details"
+msgstr "சரிபார்ப்பு விவரங்கள்"
+
+msgid "Verify package"
+msgstr "தொகுப்பைச் சரிபார்க்கவும்"
+
+msgid "Verifying..."
+msgstr "சரிபார்க்கிறது..."
+
+msgid "Waiting for command progress events..."
+msgstr "கட்டளை முன்னேற்ற நிகழ்வுகளுக்காகக் காத்திருக்கிறது..."
+
+msgid "Waiting for update progress events..."
+msgstr "புதுப்பிப்பு முன்னேற்ற நிகழ்வுகளுக்காகக் காத்திருக்கிறது..."
+
+msgid "Yarn build"
+msgstr "Yarn உருவாக்கம்"
+
+msgid "Yarn install"
+msgstr "Yarn நிறுவல்"
+
+msgid "A comment is required"
+msgstr "கருத்து தேவை"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "இதே பெயரில் ஒரு தரவுத்தளம் ஏற்கனவே உள்ளது. அதில் அட்டவணைகள் இருந்தால் அவை நீக்கப்படும்; அது காலியாக இருந்தால் மீண்டும் பயன்படுத்தப்படும்."
+
+msgid "AI generated"
+msgstr "AI உருவாக்கியது"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "கற்றல் பாதைக்குத் திரும்புவதற்கு முன் குறைந்தது ஒரு கேள்வியைச் சேர்க்கவும்."
+
+msgid "Add attachments"
+msgstr "இணைப்புகளைச் சேர்க்கவும்"
+
+msgid "Additional fields"
+msgstr "கூடுதல் புலங்கள்"
+
+msgid "Allow comments"
+msgstr "கருத்துகளை அனுமதிக்கவும்"
+
+msgid "Allow new pages"
+msgstr "புதிய பக்கங்களை அனுமதிக்கவும்"
+
+msgid "Allow ratings"
+msgstr "மதிப்பீடுகளை அனுமதிக்கவும்"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "அனைத்து உருப்படிகளையும் நீக்க விரும்புகிறீர்களா?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "தானியங்கி புதுப்பிப்பை மீட்டமைக்க விரும்புகிறீர்களா?"
+
+msgid "Attachment has been deleted"
+msgstr "இணைப்பு நீக்கப்பட்டது"
+
+msgid "Backup file"
+msgstr "காப்புப்பிரதி கோப்பு"
+
+msgid "Block comments"
+msgstr "கருத்துகளைத் தடுக்கவும்"
+
+msgid "Block new pages"
+msgstr "புதிய பக்கங்களைத் தடுக்கவும்"
+
+msgid "Block ratings"
+msgstr "மதிப்பீடுகளைத் தடுக்கவும்"
+
+msgid "Cancel renewal"
+msgstr "புதுப்பிப்பை ரத்து செய்யவும்"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "%s விக்கி பக்கங்களிலிருந்து வகை இணைப்புகள் நீக்கப்படும்."
+
+msgid "Change"
+msgstr "மாற்றவும்"
+
+msgid "Clear group"
+msgstr "குழுவை அழிக்கவும்"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "எடிட்டரில் செருக ஒரு குறிச்சொல்லைச் சொடுக்கவும். சான்றிதழை உருவாக்கும் போது இந்த இடப்பிடிப்புகள் மாற்றப்படும்."
+
+msgid "Comment added"
+msgstr "கருத்து சேர்க்கப்பட்டது"
+
+msgid "Comment is required"
+msgstr "கருத்து தேவை"
+
+msgid "Comment score"
+msgstr "கருத்து மதிப்பெண்"
+
+msgid "Compare selected versions line by line"
+msgstr "தேர்ந்தெடுத்த பதிப்புகளை வரி வரியாக ஒப்பிடு"
+
+msgid "Compare selected versions word by word"
+msgstr "தேர்ந்தெடுத்த பதிப்புகளை சொல் சொல்லாக ஒப்பிடு"
+
+msgid "Compare versions"
+msgstr "பதிப்புகளை ஒப்பிடு"
+
+msgid "Copy completed"
+msgstr "நகலெடுப்பு முடிந்தது"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "கற்பவர்களுக்கான தனிப்பட்ட விக்கி பணிப் பக்கங்களை உருவாக்கு"
+
+msgid "Current view mode"
+msgstr "தற்போதைய பார்வை பயன்முறை"
+
+msgid "Delete Wiki"
+msgstr "விக்கியை நீக்கு"
+
+msgid "Delete page"
+msgstr "பக்கத்தை நீக்கு"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "விக்கி முகப்புப் பக்கத்தை நீக்குவது பரிந்துரைக்கப்படவில்லை. பின்னர் அதை மீண்டும் உருவாக்கலாம்."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "விக்கியை முடக்குவது சாதாரண விக்கி பக்கங்களையும் செயல்களையும் தடுக்கும். இந்த அமைப்புகள் பக்கம் பாடத்திட்ட ஆசிரியர்களுக்கு கிடைக்கும்."
+
+msgid "Discussion"
+msgstr "விவாதம்"
+
+msgid "Edit Comment"
+msgstr "கருத்தைத் திருத்து"
+
+msgid "Edit page"
+msgstr "பக்கத்தைத் திருத்து"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "முடிவு தேதி காலாவதி தேதிக்குப் பிறகு அல்லது அதற்குச் சமமாக இருக்க வேண்டும்"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "விக்கி பக்கங்களைக் கண்டறிய தேடல் சொல்லை உள்ளிடவும்"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "காலாவதி தேதி முடிவு தேதிக்கு முன் அல்லது அதற்குச் சமமாக இருக்க வேண்டும்"
+
+msgid "Failed email recipients"
+msgstr "மின்னஞ்சல் பெறுநர்கள் தோல்வியடைந்தனர்"
+
+msgid "Finish and return to learning path"
+msgstr "முடித்து கற்றல் பாதைக்குத் திரும்பு"
+
+msgid "Forum image"
+msgstr "கருத்துக் குழு படம்"
+
+msgid "Hide discussion"
+msgstr "விவாதத்தை மறை"
+
+msgid "Hide page"
+msgstr "பக்கத்தை மறை"
+
+msgid "I changed my mind"
+msgstr "எனது முடிவை மாற்றிக்கொண்டேன்"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "தேர்வுநீக்கப்பட்டால், அந்தக் கோப்புகள் 'கோப்பு தகவல்' கருவி மூலம் தள நிர்வாகிக்கு கிடைக்கும்."
+
+msgid "Internal message failures"
+msgstr "உள் செய்தி தோல்விகள்"
+
+msgid "Internal messages available"
+msgstr "உள் செய்திகள் கிடைக்கின்றன"
+
+msgid "Internal messages created now"
+msgstr "உள் செய்திகள் இப்போது உருவாக்கப்பட்டன"
+
+msgid "Item score"
+msgstr "உருப்படி மதிப்பெண்"
+
+msgid "Last post"
+msgstr "கடைசி பதிவு"
+
+msgid "Lock page"
+msgstr "பக்கத்தைப் பூட்டு"
+
+msgid "Manage categories"
+msgstr "வகைகளை நிர்வகி"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "இந்த ஆவணத்தை AI உதவியுடன் உருவாக்கப்பட்டதாகக் குறிக்கிறது. உள்ளடக்கம் AI கருவிகளால் உருவாக்கப்பட்ட அல்லது கணிசமாக மாற்றப்பட்டபோது இதைப் பயன்படுத்தவும்."
+
+msgid "Maximum score is required"
+msgstr "அதிகபட்ச மதிப்பெண் தேவை"
+
+msgid "Metric"
+msgstr "அளவீடு"
+
+msgid "New comments are blocked in this discussion"
+msgstr "இந்த விவாதத்தில் புதிய கருத்துகள் தடுக்கப்பட்டுள்ளன"
+
+msgid "No Wiki categories are available yet."
+msgstr "விக்கி வகைகள் இன்னும் கிடைக்கவில்லை."
+
+msgid "No categories found"
+msgstr "வகைகள் எதுவும் கிடைக்கவில்லை"
+
+msgid "No content"
+msgstr "உள்ளடக்கம் இல்லை"
+
+msgid "No parent category"
+msgstr "பெற்றோர் வகை இல்லை"
+
+msgid "Number of comments scored"
+msgstr "மதிப்பிடப்பட்ட கருத்துகளின் எண்ணிக்கை"
+
+msgid "Old version"
+msgstr "பழைய பதிப்பு"
+
+msgid "Only image files are allowed."
+msgstr "படக் கோப்புகள் மட்டுமே அனுமதிக்கப்படும்."
+
+msgid "Please fill all required fields"
+msgstr "அனைத்து தேவையான புலங்களையும் நிரப்பவும்"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "வகுப்பு அல்லது மாணவர் இடப்பெயர்ப்புகள் உள்ள கேள்விகள் பாட வகுப்புகள் அல்லது குழுக்களுக்காக உருவாக்கப்படும்: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "இந்த விவாதத்தில் மதிப்பீடுகள் தடுக்கப்பட்டுள்ளன"
+
+msgid "Remove image"
+msgstr "படத்தை அகற்று"
+
+msgid "Restore renewal"
+msgstr "புதுப்பித்தலை மீட்டெடு"
+
+msgid "Restore version"
+msgstr "பதிப்பை மீட்டெடு"
+
+msgid "Search in"
+msgstr "தேடு இல்"
+
+msgid "Select group"
+msgstr "குழுவைத் தேர்ந்தெடு"
+
+msgid "Select image"
+msgstr "படத்தைத் தேர்ந்தெடு"
+
+msgid "Selected image"
+msgstr "தேர்ந்தெடுக்கப்பட்ட படம்"
+
+msgid "Show discussion"
+msgstr "விவாதத்தைக் காட்டு"
+
+msgid "Show page"
+msgstr "பக்கத்தைக் காட்டு"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "சில கோப்புகள் அல்லது கோப்புறைகளுக்கு எழுத அனுமதி இல்லை. சாமிலோவை நிறுவ, முதலில் அவற்றின் அனுமதிகளை மாற்ற வேண்டும் (CHMOD பயன்படுத்தி). தயவுசெய்து படிக்கவும்"
+
+msgid "Subcategories"
+msgstr "துணைப்பிரிவுகள்"
+
+msgid "Tap on the left or right to navigate"
+msgstr "வழிசெலுத்த இடது அல்லது வலதுபுறத்தில் தட்டவும்"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "விக்கி பணி காலக்கெடு கடந்துவிட்டது, ஆனால் தாமதமான சமர்ப்பணம் அனுமதிக்கப்படுகிறது."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "விக்கி பணி காலக்கெடு கடந்துவிட்டது."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "விக்கி பணி இன்னும் தொடங்கவில்லை."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "சேமிக்கும் முன் விக்கி பக்க திருத்தப் பூட்டு தேவை."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "அறிவிப்பு சேமிக்கப்பட்டது, ஆனால் இணைப்பைப் பதிவேற்ற முடியவில்லை."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "அறிவிப்பு சேமிக்கப்பட்டது, ஆனால் மின்னஞ்சல் வழங்கல் தோல்வியடைந்தது."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "அறிவிப்பு சேமிக்கப்பட்டது, ஆனால் எந்த மின்னஞ்சலும் வழங்க முடியவில்லை."
+
+msgid "The category has been created"
+msgstr "வகை உருவாக்கப்பட்டது"
+
+msgid "The category has been deleted"
+msgstr "வகை நீக்கப்பட்டது"
+
+msgid "The category has been updated"
+msgstr "வகை புதுப்பிக்கப்பட்டது"
+
+msgid "The end date is invalid"
+msgstr "முடிவு தேதி தவறானது"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "அதிகபட்ச பதிப்புகளின் எண்ணிக்கை எதிர்மறையற்ற முழு எண்ணாக இருக்க வேண்டும்"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "அதிகபட்ச சொற்களின் எண்ணிக்கை எதிர்மறையற்ற முழு எண்ணாக இருக்க வேண்டும்"
+
+msgid "The print window could not be opened"
+msgstr "அச்சு சாளரத்தைத் திறக்க முடியவில்லை"
+
+msgid "The start date is invalid"
+msgstr "தொடக்க தேதி தவறானது"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "இந்த அமைப்புகள் அமர்வுகள் மற்றும் குழுக்கள் உட்பட முழு பாடத்திற்கும் பொருந்தும்."
+
+msgid "This announcement has already been sent by email."
+msgstr "இந்த அறிவிப்பு ஏற்கனவே மின்னஞ்சல் மூலம் அனுப்பப்பட்டது."
+
+msgid "This discussion is hidden from learners"
+msgstr "இந்த விவாதம் கற்பவர்களிடமிருந்து மறைக்கப்பட்டுள்ளது"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "இந்த உருவாக்க AI கருவி உங்கள் பாடத்தை விளக்குவதற்கு படங்கள் மற்றும் குறுகிய காணொளிகளை உருவாக்க உங்களை அனுமதிக்கிறது. நீங்கள் விரும்புவதை (உரையில்) விளக்கும் பகுதியில் விளக்குவதன் மூலம், நீங்கள் உள்ளமைக்கப்பட்ட AI மாதிரிக்கு படம் அல்லது காணொளியை உருவாக்கத் தேவையான கூறுகளை வழங்குவீர்கள். தயவுசெய்து பொறுமையாக இருங்கள். AI மாதிரி சிறிது நேரம் எடுக்கும் மற்றும் சில முடிவை உருவாக்கும், அதை உங்கள் ஆவணங்கள் கோப்புறையில் சேமித்து, பின்னர் HTML ஆவணத்தில் உட்பொதிக்க விரும்பலாம். அனைத்து AI மாதிரிகளும் வேகம் அல்லது தரத்தில் சமமாக இல்லை. AI மாதிரி உங்களுக்கு மாற்றியமைக்கப்பட்ட விளக்கத்தையும் வழங்கலாம், இது உங்கள் கோரிக்கையின் விரிவான விளக்கமாகும். பின்னர் உங்கள் கோரிக்கையைச் செம்மைப்படுத்த இந்த மாற்றியமைக்கப்பட்ட விளக்கத்தைப் பயன்படுத்தலாம். இந்த கருவி, குறிப்பாக காணொளிகளுக்கு, நீங்கள் உருவாக்கப்பட்ட ஊடகத்தைச் சேமிக்க முடிவு செய்தாலும் கூட உங்கள் அமைப்புக்கு கணிசமான செலவுகளை உருவாக்கக்கூடும் என்பதை அறிந்து கொள்ளுங்கள். அதன்படி அதைப் பயன்படுத்தவும். நீங்கள் தேடுவதைப் பெறுவதில் சிக்கல்கள் இருந்தால், உங்கள் வசம் உள்ள AI மாதிரிக்கான விளக்க தந்திரங்களை ஆன்லைனில் ஆராய்ச்சி செய்ய சிறிது நேரம் ஒதுக்கவும்."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "இந்த வரலாறு அடிப்படை பாடத்திற்கு சொந்தமானது. அமர்வு பதிப்பை உருவாக்கிய பிறகு மீட்டமைப்பு கிடைக்கும்."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "இந்த படம் மன்ற தலைப்புக்கு அடுத்து காட்டப்படும் இயல்புநிலை மன்ற ஐகானை மாற்றுகிறது."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "இந்த பக்கம் அடிப்படை பாடத்திலிருந்து வருகிறது. அதைச் சேமிப்பது தற்போதைய அமர்வுக்கான பதிப்பை உருவாக்கும்."
+
+msgid "This will also delete %s subcategories."
+msgstr "இது %s துணைப்பிரிவுகளையும் நீக்கும்."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "இது %s கற்பவர்களுக்கான தனிப்பட்ட பணிப் பக்கங்களை உருவாக்கும்."
+
+msgid "Thread history"
+msgstr "நூல் வரலாறு"
+
+msgid "Title and content"
+msgstr "தலைப்பு மற்றும் உள்ளடக்கம்"
+
+msgid "Unable to cancel renewal right now."
+msgstr "இப்போது புதுப்பிப்பு உரிமையை ரத்து செய்ய முடியவில்லை."
+
+msgid "Unable to restore renewal right now."
+msgstr "இப்போது புதுப்பிப்பு உரிமையை மீட்டமைக்க முடியவில்லை."
+
+msgid "Unlock page"
+msgstr "பக்கத்தைத் திறக்கவும்"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "உள் விக்கி இணைப்புகளை உருவாக்க [[Page]] அல்லது [[Page|தெரியும் உரை]] ஐப் பயன்படுத்தவும்."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "வழிசெலுத்த இடைவெளிப்பட்டி அல்லது அம்புக்குறி விசைகளைப் பயன்படுத்தவும்"
+
+msgid "View version"
+msgstr "பதிப்பைக் காண்க"
+
+msgid "Visible only to teachers"
+msgstr "ஆசிரியர்களுக்கு மட்டும் தெரியும்"
+
+msgid "Weight is required"
+msgstr "எடை தேவை"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "இந்த பாடத்திற்கு விக்கி வகைகள் முடக்கப்பட்டுள்ளன."
+
+msgid "Wiki categories enabled"
+msgstr "விக்கி வகைகள் இயக்கப்பட்டன"
+
+msgid "Wiki html strict filtering"
+msgstr "விக்கி html கடுமையான வடிகட்டல்"
+
+msgid "Wiki settings"
+msgstr "விக்கி அமைப்புகள்"
+
+msgid "Wiki settings updated"
+msgstr "விக்கி அமைப்புகள் புதுப்பிக்கப்பட்டன"
+
+msgid "You are viewing a historical version of this page"
+msgstr "நீங்கள் இந்த பக்கத்தின் வரலாற்று பதிப்பைப் பார்க்கிறீர்கள்"
+
+msgid "You can attach one or more files to this reply."
+msgstr "இந்த பதிலுடன் ஒன்று அல்லது அதற்கு மேற்பட்ட கோப்புகளை இணைக்கலாம்."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "இந்த பணிப் பக்கத்தை நீங்கள் திருத்தலாம், ஆனால் கற்பவர் பணிப் பக்கங்கள் மாற்றப்படாது."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "கேள்வியில் {{class_name}} மற்றும் {{student_full_name}} குறிச்சொற்களைப் பயன்படுத்தலாம்."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "திருத்தப் பூட்டு காலாவதியாகும் முன் இந்த பக்கத்தைத் திருத்த உங்களுக்கு 20 நிமிடங்கள் உள்ளன."
+
+msgid "by"
+msgstr "மூலம்"
+
+msgid "required"
+msgstr "தேவை"
 

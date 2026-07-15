@@ -61,7 +61,7 @@
         <p
           v-html="
             t(
-              'By filling this form, you agree that the editor of Chamilo, the %s company, registered in Belgium, and/or members of its network of partners (exclusively Chamilo services providers) might occasionally send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flows, with a thorough respect of your time and your privacy.',
+              'By filling this form, you agree that the editor of Chamilo, the {0} company, registered in Belgium, and/or members of its network of partners (exclusively Chamilo services providers) might occasionally send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flows, with a thorough respect of your time and your privacy.',
               [
                 'BeezNest Belgium'
               ]

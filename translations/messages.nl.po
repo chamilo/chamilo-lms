@@ -38573,3 +38573,852 @@ msgstr "Onderwerpen bekijken"
 msgid "No auth source"
 msgstr "No auth source"
 
+msgid "You must add at least one question"
+msgstr "U moet minstens één vraag toevoegen"
+
+msgid "Advanced actions"
+msgstr "Geavanceerde acties"
+
+msgid "Application path"
+msgstr "Applicatiepad"
+
+msgid "Apply files details"
+msgstr "Bestandsdetails toepassen"
+
+msgid "Apply plan details"
+msgstr "Plandetails toepassen"
+
+msgid "Apply plan failed"
+msgstr "Plan toepassen mislukt"
+
+msgid "Apply plan ready"
+msgstr "Plan toepassen gereed"
+
+msgid "Apply preparation"
+msgstr "Voorbereiding toepassen"
+
+msgid "Apply staged files"
+msgstr "Gefaseerde bestanden toepassen"
+
+msgid "Applying files..."
+msgstr "Bestanden toepassen..."
+
+msgid "Audit file"
+msgstr "Auditbestand"
+
+msgid "Backup directory"
+msgstr "Back-upmap"
+
+msgid "Baseline clean"
+msgstr "Basislijn schoon"
+
+msgid "Baseline warnings"
+msgstr "Basislijnwaarschuwingen"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Bouw een veilig toepassingsplan vanuit het gefaseerde pakket. Dit controleert alleen bestanden, machtigingen, back-uppad en vergrendelingsstatus. Het vervangt geen bestanden."
+
+msgid "Build production frontend assets."
+msgstr "Productie-frontendassets bouwen."
+
+msgid "Building plan..."
+msgstr "Plan bouwen..."
+
+msgid "Channel"
+msgstr "Kanaal"
+
+msgid "Check"
+msgstr "Controleren"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Controleer op beschikbare Chamilo-updates, verifieer pakketten, faseer bestanden en voer gecontroleerde stappen na de update uit."
+
+msgid "Check manifest"
+msgstr "Manifest controleren"
+
+msgid "Checking post-apply actions..."
+msgstr "Controle van acties na toepassen..."
+
+msgid "Checking..."
+msgstr "Controleren..."
+
+msgid "Composer install"
+msgstr "Composer installeren"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer-, Yarn- en database-migratieacties kunnen afhankelijkheden, gegenereerde assets of de database wijzigen. Selecteer ze alleen na bevestiging van back-ups en machtigingen."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configureer CHAMILO_UPDATE_MANIFEST_URL op de server of geef een HTTPS-manifest-URL op."
+
+msgid "Configured"
+msgstr "Geconfigureerd"
+
+msgid "Current migration"
+msgstr "Huidige migratie"
+
+msgid "Database baseline"
+msgstr "Databasebasislijn"
+
+msgid "Database migration safety review"
+msgstr "Veiligheidscontrole database-migratie"
+
+msgid "Database migrations"
+msgstr "Database-migraties"
+
+msgid "Development mode"
+msgstr "Ontwikkelingsmodus"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Schakel dit alleen in als de back-up van de update en de servermachtigingen zijn gecontroleerd."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine dry-run-opdracht"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine meldde historische basislijnwaarschuwingen. De updater voert alleen gefaseerde V210-migraties uit na expliciete bevestiging."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine voert alleen de gefaseerde V210-migraties uit na expliciete bevestiging wanneer de veiligheidscontrole is geslaagd."
+
+msgid "Dry-run exit code"
+msgstr "Dry-run-afsluitcode"
+
+msgid "Executed unavailable migrations"
+msgstr "Niet-beschikbare migraties uitgevoerd"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Pak het geverifieerde updatepakket uit in een stagingmap voor inspectie. Dit vervangt geen bestanden, voert geen migraties uit en wijzigt de database niet."
+
+msgid "File apply available"
+msgstr "Bestandstoepassing beschikbaar"
+
+msgid "Files to replace"
+msgstr "Te vervangen bestanden"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Ik bevestig dat er een databaseback-up bestaat en is gecontroleerd voordat de migraties worden uitgevoerd."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Ik begrijp dat geavanceerde acties afhankelijkheden, gegenereerde assets of de database kunnen wijzigen."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Ik begrijp dat dit bestanden in de Chamilo-installatie zal vervangen."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Ik begrijp dat dit updateopdrachten op de server zal uitvoeren."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Installeer frontend-afhankelijkheden voordat assets opnieuw worden gebouwd."
+
+msgid "Installed version"
+msgstr "Geïnstalleerde versie"
+
+msgid "Latest migration"
+msgstr "Laatste migratie"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Laat pakket- en handtekeningenpaden leeg om ze te downloaden van de geverifieerde manifest-URL's. Lokale paden zijn alleen beschikbaar voor ontwikkelingstests."
+
+msgid "Live command log"
+msgstr "Live-opdrachtlogboek"
+
+msgid "Live update log"
+msgstr "Live-updatelogboek"
+
+msgid "Local test options"
+msgstr "Lokale testopties"
+
+msgid "Local test update notice link"
+msgstr "Link naar lokale testupdate-melding"
+
+msgid "Local update notice simulation"
+msgstr "Simulatie lokale updatemelding"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simulatie van lokale updatemelding is alleen beschikbaar in ontwikkelingsmodus."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Manifestbron"
+
+msgid "Migration safety details"
+msgstr "Details migratieveiligheid"
+
+msgid "Migration safety review failed"
+msgstr "Beoordeling migratieveiligheid mislukt"
+
+msgid "Migration safety review ready"
+msgstr "Beoordeling migratieveiligheid gereed"
+
+msgid "Migration target"
+msgstr "Migratiedoel"
+
+msgid "New files"
+msgstr "Nieuwe bestanden"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Nieuwe migraties gerapporteerd door Doctrine"
+
+msgid "Next migration"
+msgstr "Volgende migratie"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Geen uitgevoerde niet-beschikbare migratie gerapporteerd."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Er is nog geen officiële manifest-URL geconfigureerd. Gebruik een HTTPS-URL of een lokaal pad voor ontwikkelingstests."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Geen wachtende migratie gedetecteerd vóór het gefaseerde updat doel."
+
+msgid "Not configured"
+msgstr "Niet geconfigureerd"
+
+msgid "Not detected"
+msgstr "Niet gedetecteerd"
+
+msgid "Official Chamilo update channel"
+msgstr "Officieel Chamilo-updatekanaal"
+
+msgid "Package SHA-256"
+msgstr "Pakket-SHA-256"
+
+msgid "Package URL"
+msgstr "Pakket-URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Pakket- en handtekeningsbestanden worden gedownload uit het manifest. Lokale paden zijn uitgeschakeld in deze omgeving."
+
+msgid "Package path"
+msgstr "Pakketpad"
+
+msgid "Package staged successfully"
+msgstr "Pakket succesvol gefaseerd"
+
+msgid "Package staging failed"
+msgstr "Faseerpakket mislukt"
+
+msgid "Package verification"
+msgstr "Pakketverificatie"
+
+msgid "Package verification failed"
+msgstr "Pakketverificatie mislukt"
+
+msgid "Package verified successfully"
+msgstr "Pakket succesvol geverifieerd"
+
+msgid "Pending migrations before this update"
+msgstr "Wachtende migraties vóór deze update"
+
+msgid "Planned backup path"
+msgstr "Gepland back-uppad"
+
+msgid "Post-apply actions completed"
+msgstr "Post-apply-acties voltooid"
+
+msgid "Post-apply actions failed"
+msgstr "Post-apply-acties mislukt"
+
+msgid "Post-apply actions ready"
+msgstr "Post-apply-acties gereed"
+
+msgid "Post-apply checks"
+msgstr "Post-apply-controles"
+
+msgid "Post-apply checks failed"
+msgstr "Post-apply-controles mislukt"
+
+msgid "Post-apply details"
+msgstr "Post-apply-details"
+
+msgid "Post-apply run details"
+msgstr "Post-apply-uitvoeringsdetails"
+
+msgid "Preflight checks"
+msgstr "Preflight-controles"
+
+msgid "Preflight checks completed"
+msgstr "Preflight-controles voltooid"
+
+msgid "Preflight checks failed"
+msgstr "Preflight-controles mislukt"
+
+msgid "Preflight details"
+msgstr "Preflight-details"
+
+msgid "Prepare staging"
+msgstr "Staging voorbereiden"
+
+msgid "Preparing staging..."
+msgstr "Staging voorbereiden..."
+
+msgid "Production mode"
+msgstr "Productiemodus"
+
+msgid "Released at"
+msgstr "Uitgebracht op"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Vervang Chamilo-bestanden uit het gefaseerde pakket met het beoordeelde apply-plan. Dit voert geen databasemigraties, Composer-, Yarn- of cache-opdrachten uit."
+
+msgid "Review apply plan"
+msgstr "Apply-plan beoordelen"
+
+msgid "Review database migrations"
+msgstr "Databasemigraties beoordelen"
+
+msgid "Review post-apply actions"
+msgstr "Post-apply-acties beoordelen"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Beoordeel aanbevolen handmatige opdrachten na het toepassen van updatebestanden. Deze stap voert geen Composer-, Yarn-, migratie- of cache-opdrachten uit."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Bekijk de voorbereide Doctrine-migraties en de dry-run-uitvoer voordat u database-migraties uitvoert."
+
+msgid "Reviewing database migrations..."
+msgstr "Database-migraties controleren..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Voer de migratieveiligheidscontrole uit en sla deze goedkeuring voordat u database-migraties uitvoert."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Voer omgevingscontroles uit vóór elke toekomstige update. Dit wijzigt geen bestanden of de database."
+
+msgid "Run post-apply actions"
+msgstr "Post-apply-acties uitvoeren"
+
+msgid "Run preflight checks"
+msgstr "Preflight-controles uitvoeren"
+
+msgid "Run selected post-apply actions"
+msgstr "Geselecteerde post-apply-acties uitvoeren"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Voer geselecteerde post-apply-commando's uit vanaf de server met een gecontroleerde allowlist. Aangepaste shell-commando's worden niet geaccepteerd."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Voer deze commando's handmatig uit vanaf de server nadat u het resultaat van de bestandsupdate en de back-ups hebt bevestigd."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Het uitvoeren van post-apply-acties via de UI is uitgeschakeld in productie-modus."
+
+msgid "Running post-apply actions..."
+msgstr "Post-apply-acties uitvoeren..."
+
+msgid "Safe actions"
+msgstr "Veilige acties"
+
+msgid "Signature path"
+msgstr "Handtekeningpad"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Handtekeningverificatie kan in deze omgeving niet worden overgeslagen."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Handtekeningverificatie overslaan voor lokale ontwikkelingstests"
+
+msgid "Staged file application failed"
+msgstr "Toepassen van voorbereide bestanden mislukt"
+
+msgid "Staged files applied successfully"
+msgstr "Voorbereide bestanden succesvol toegepast"
+
+msgid "Staging details"
+msgstr "Staging-details"
+
+msgid "Staging directory"
+msgstr "Staging-map"
+
+msgid "Staging extraction"
+msgstr "Staging-extractie"
+
+msgid "Symfony cache clear"
+msgstr "Symfony-cache wissen"
+
+msgid "System update"
+msgstr "Systeemupdate"
+
+msgid "Target version"
+msgstr "Doelversie"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "De geconfigureerde officiële manifest-URL is al ingevuld. U kunt deze indien nodig wijzigen naar een andere HTTPS-manifest."
+
+msgid "The database migration baseline is clean."
+msgstr "De database-migratiebaseline is schoon."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "De uiteindelijke HTTP-reactie is mislukt nadat de bewerking was voltooid. Dit wordt meestal veroorzaakt door runtime-cache-machtigingen of een webserver-herstart tijdens het verzoek."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Het bewerkingslogboek meldt dat de post-apply-acties succesvol zijn voltooid."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "De geselecteerde post-apply-commando's zijn succesvol voltooid, maar de uiteindelijke HTTP-reactie is mislukt. Vernieuw de pagina en controleer de runtime-cache-machtigingen als de pagina niet correct laadt."
+
+msgid "The updater does not create or restore database backups."
+msgstr "De updater maakt of herstelt geen database-back-ups."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Deze acties kunnen veilig via de UI worden uitgevoerd nadat u het updateresultaat hebt beoordeeld."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Deze commando's kunnen afhankelijkheden, gegenereerde assets, cache of de database wijzigen. Bevestig back-ups voordat u verdergaat."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Deze actie wijzigt bestanden in de Chamilo-installatie. Zorg ervoor dat het apply-plan is beoordeeld en back-ups zijn ingeschakeld voordat u verdergaat."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Deze ontwikkelingsinvoer simuleert de toekomstige Chamilo.org-updatekennisgeving met lokale testpakketpaden."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Dit scherm is geopend vanuit een officiële updatekennisgeving, maar er is nog geen officiële manifestbron geconfigureerd."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Dit scherm is geopend vanuit een updatekennisgeving. Alleen de manifestcontrole wordt automatisch gestart."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Deze stap bereidt alleen een controle voor. Bestandsvervanging gebeurt later in de stap 'Voorbereide bestanden toepassen', met lock, back-up en rollback-bescherming."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Deze updater maakt geen database-back-up. Maak en controleer een back-up voordat u migraties uitvoert."
+
+msgid "Trusted public key"
+msgstr "Vertrouwde publieke sleutel"
+
+msgid "Trusted signing key"
+msgstr "Vertrouwde ondertekeningssleutel"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Typ APPLY UPDATE FILES om te bevestigen"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Typ RUN DATABASE MIGRATIONS om database-migraties te bevestigen"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Typ RUN POST UPDATE ACTIONS om te bevestigen"
+
+msgid "Unknown update notice source."
+msgstr "Onbekende bron van updatekennisgeving."
+
+msgid "Update availability"
+msgstr "Updatebeschikbaarheid"
+
+msgid "Update directory"
+msgstr "Updatemap"
+
+msgid "Update lock path"
+msgstr "Update-lockpad"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Gebruik de staging-map die door de vorige stap is gegenereerd. De backend accepteert alleen mappen binnen var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Gebruik deze link om de toekomstige Chamilo.org-updatekennisgeving te simuleren tijdens ontwikkelingstests."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Gebruik dit alleen voor lokale ontwikkelingstests. Productie-updates moeten de op de server geconfigureerde sleutel gebruiken."
+
+msgid "Verification details"
+msgstr "Verificatiedetails"
+
+msgid "Verify package"
+msgstr "Pakket verifiëren"
+
+msgid "Verifying..."
+msgstr "Verifiëren..."
+
+msgid "Waiting for command progress events..."
+msgstr "Wachten op voortgangsgebeurtenissen van commando..."
+
+msgid "Waiting for update progress events..."
+msgstr "Wachten op voortgangsgebeurtenissen van update..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Een opmerking is vereist"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Een database met dezelfde naam bestaat al. Als deze tabellen bevat, worden ze verwijderd; als ze leeg is, wordt ze hergebruikt."
+
+msgid "AI generated"
+msgstr "AI gegenereerd"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Voeg minstens één vraag toe voordat u terugkeert naar het leerpad."
+
+msgid "Add attachments"
+msgstr "Bijlagen toevoegen"
+
+msgid "Additional fields"
+msgstr "Extra velden"
+
+msgid "Allow comments"
+msgstr "Opmerkingen toestaan"
+
+msgid "Allow new pages"
+msgstr "Nieuwe pagina's toestaan"
+
+msgid "Allow ratings"
+msgstr "Beoordelingen toestaan"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Weet u zeker dat u alle items wilt verwijderen?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Weet u zeker dat u automatische verlenging wilt herstellen?"
+
+msgid "Attachment has been deleted"
+msgstr "Bijlage is verwijderd"
+
+msgid "Backup file"
+msgstr "Back-upbestand"
+
+msgid "Block comments"
+msgstr "Opmerkingen blokkeren"
+
+msgid "Block new pages"
+msgstr "Nieuwe pagina's blokkeren"
+
+msgid "Block ratings"
+msgstr "Beoordelingen blokkeren"
+
+msgid "Cancel renewal"
+msgstr "Verlenging annuleren"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Categorielinks worden verwijderd van %s Wiki-pagina's."
+
+msgid "Change"
+msgstr "Wijzigen"
+
+msgid "Clear group"
+msgstr "Groep wissen"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Klik op een tag om deze in de editor in te voegen. Deze placeholders worden vervangen bij het genereren van het certificaat."
+
+msgid "Comment added"
+msgstr "Opmerking toegevoegd"
+
+msgid "Comment is required"
+msgstr "Opmerking is vereist"
+
+msgid "Comment score"
+msgstr "Opmerkingsscore"
+
+msgid "Compare selected versions line by line"
+msgstr "Geselecteerde versies regel voor regel vergelijken"
+
+msgid "Compare selected versions word by word"
+msgstr "Geselecteerde versies woord voor woord vergelijken"
+
+msgid "Compare versions"
+msgstr "Versies vergelijken"
+
+msgid "Copy completed"
+msgstr "Kopiëren voltooid"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Individuele Wiki-werkpagina's maken voor leerlingen"
+
+msgid "Current view mode"
+msgstr "Huidige weergavemodus"
+
+msgid "Delete Wiki"
+msgstr "Wiki verwijderen"
+
+msgid "Delete page"
+msgstr "Pagina verwijderen"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Het verwijderen van de Wiki-startpagina wordt niet aanbevolen. U kunt deze later opnieuw aanmaken."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Het uitschakelen van Wiki blokkeert normale Wiki-pagina's en -acties. Deze instellingenpagina blijft beschikbaar voor cursusdocenten."
+
+msgid "Discussion"
+msgstr "Discussie"
+
+msgid "Edit Comment"
+msgstr "Opmerking bewerken"
+
+msgid "Edit page"
+msgstr "Pagina bewerken"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Einddatum moet na of gelijk aan de vervaldatum zijn"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Voer een zoekterm in om Wiki-pagina's te vinden"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Vervaldatum moet voor of gelijk aan de einddatum zijn"
+
+msgid "Failed email recipients"
+msgstr "Mislukte e-mailontvangers"
+
+msgid "Finish and return to learning path"
+msgstr "Voltooien en terugkeren naar leerpad"
+
+msgid "Forum image"
+msgstr "Forumafbeelding"
+
+msgid "Hide discussion"
+msgstr "Discussie verbergen"
+
+msgid "Hide page"
+msgstr "Pagina verbergen"
+
+msgid "I changed my mind"
+msgstr "Ik heb me bedacht"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Indien niet aangevinkt, blijven deze bestanden beschikbaar voor de platformbeheerder via de tool 'Bestandsinformatie'."
+
+msgid "Internal message failures"
+msgstr "Interne berichtfouten"
+
+msgid "Internal messages available"
+msgstr "Interne berichten beschikbaar"
+
+msgid "Internal messages created now"
+msgstr "Interne berichten nu aangemaakt"
+
+msgid "Item score"
+msgstr "Itemscore"
+
+msgid "Last post"
+msgstr "Laatste bericht"
+
+msgid "Lock page"
+msgstr "Pagina vergrendelen"
+
+msgid "Manage categories"
+msgstr "Categorieën beheren"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Markeer dit document als AI-ondersteund. Gebruik dit wanneer de inhoud is gemaakt of significant is gewijzigd met AI-tools."
+
+msgid "Maximum score is required"
+msgstr "Maximale score is vereist"
+
+msgid "Metric"
+msgstr "Metriek"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Nieuwe reacties zijn geblokkeerd in deze discussie"
+
+msgid "No Wiki categories are available yet."
+msgstr "Er zijn nog geen Wiki-categorieën beschikbaar."
+
+msgid "No categories found"
+msgstr "Geen categorieën gevonden"
+
+msgid "No content"
+msgstr "Geen inhoud"
+
+msgid "No parent category"
+msgstr "Geen bovenliggende categorie"
+
+msgid "Number of comments scored"
+msgstr "Aantal beoordeelde reacties"
+
+msgid "Old version"
+msgstr "Oude versie"
+
+msgid "Only image files are allowed."
+msgstr "Alleen afbeeldingsbestanden zijn toegestaan."
+
+msgid "Please fill all required fields"
+msgstr "Vul alle verplichte velden in"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Vragen met klas- of studentplaatshouders worden gegenereerd voor cursusklassen of groepen: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Beoordelingen zijn geblokkeerd in deze discussie"
+
+msgid "Remove image"
+msgstr "Afbeelding verwijderen"
+
+msgid "Restore renewal"
+msgstr "Vernieuwing herstellen"
+
+msgid "Restore version"
+msgstr "Versie herstellen"
+
+msgid "Search in"
+msgstr "Zoeken in"
+
+msgid "Select group"
+msgstr "Groep selecteren"
+
+msgid "Select image"
+msgstr "Afbeelding selecteren"
+
+msgid "Selected image"
+msgstr "Geselecteerde afbeelding"
+
+msgid "Show discussion"
+msgstr "Discussie tonen"
+
+msgid "Show page"
+msgstr "Pagina tonen"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Sommige bestanden of mappen hebben geen schrijfrechten. Om Chamilo te kunnen installeren, moet u eerst hun rechten wijzigen (met CHMOD). Lees de"
+
+msgid "Subcategories"
+msgstr "Subcategorieën"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Tik links of rechts om te navigeren"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "De deadline voor de Wiki-opdracht is verstreken, maar uitgestelde indiening is toegestaan."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "De deadline voor de Wiki-opdracht is verstreken."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "De Wiki-opdracht is nog niet gestart."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "De vergrendeling van de Wiki-pagina is vereist voordat u kunt opslaan."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "De aankondiging is opgeslagen, maar een bijlage kon niet worden geüpload."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "De aankondiging is opgeslagen, maar de e-maillevering is mislukt."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "De aankondiging is opgeslagen, maar er kon geen e-mail worden bezorgd."
+
+msgid "The category has been created"
+msgstr "De categorie is aangemaakt"
+
+msgid "The category has been deleted"
+msgstr "De categorie is verwijderd"
+
+msgid "The category has been updated"
+msgstr "De categorie is bijgewerkt"
+
+msgid "The end date is invalid"
+msgstr "De einddatum is ongeldig"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Het maximum aantal versies moet een niet-negatief geheel getal zijn"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Het maximum aantal woorden moet een niet-negatief geheel getal zijn"
+
+msgid "The print window could not be opened"
+msgstr "Het afdrukvenster kon niet worden geopend"
+
+msgid "The start date is invalid"
+msgstr "De startdatum is ongeldig"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Deze instellingen gelden voor de hele cursus, inclusief de sessies en groepen."
+
+msgid "This announcement has already been sent by email."
+msgstr "Deze aankondiging is al per e-mail verzonden."
+
+msgid "This discussion is hidden from learners"
+msgstr "Deze discussie is verborgen voor cursisten"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Deze generatieve AI-tool laat u afbeeldingen en korte video's maken om uw cursus te illustreren. Door (in tekst) uit te leggen wat u wilt in het prompt-gedeelte, geeft u het geconfigureerde AI-model de elementen die nodig zijn om een afbeelding of video te genereren. Wees geduldig. Het AI-model heeft enige tijd nodig en genereert een resultaat, dat u mogelijk wilt bewaren door de media op te slaan in uw documentenmap en vervolgens in te voegen in een HTML-document. Niet alle AI-modellen zijn gelijk qua snelheid of kwaliteit. Het AI-model kan u ook een aangepaste prompt geven, die een gedetailleerdere interpretatie is van uw verzoek. U kunt deze aangepaste prompt vervolgens gebruiken om uw verzoek te verfijnen. Houd er rekening mee dat deze tool, met name voor video's, aanzienlijke kosten kan veroorzaken voor uw organisatie, zelfs als u besluit de gegenereerde media niet op te slaan. Gebruik de tool daarom op de juiste manier. Als u problemen ondervindt om te krijgen wat u zoekt, neem dan de tijd om online prompt-trucs te onderzoeken voor het AI-model dat u tot uw beschikking heeft."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Deze geschiedenis behoort tot de basiscursus. Herstellen is beschikbaar na het aanmaken van een sessieversie."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Deze afbeelding vervangt het standaard forumicoon dat naast de forumtitel wordt getoond."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Deze pagina komt uit de basiscursus. Opslaan maakt een versie voor de huidige sessie."
+
+msgid "This will also delete %s subcategories."
+msgstr "Hierdoor worden ook %s subcategorieën verwijderd."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Hierdoor worden individuele werkpagina's aangemaakt voor %s cursisten."
+
+msgid "Thread history"
+msgstr "Threadgeschiedenis"
+
+msgid "Title and content"
+msgstr "Titel en inhoud"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Kan de verlenging op dit moment niet annuleren."
+
+msgid "Unable to restore renewal right now."
+msgstr "Kan de verlenging op dit moment niet herstellen."
+
+msgid "Unlock page"
+msgstr "Pagina ontgrendelen"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Gebruik [[Pagina]] of [[Pagina|Zichtbare tekst]] om interne Wiki-links te maken."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Gebruik de spatiebalk of pijltjestoetsen om te navigeren"
+
+msgid "View version"
+msgstr "Versie bekijken"
+
+msgid "Visible only to teachers"
+msgstr "Alleen zichtbaar voor docenten"
+
+msgid "Weight is required"
+msgstr "Gewicht is verplicht"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki-categorieën zijn uitgeschakeld voor deze cursus."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki-categorieën ingeschakeld"
+
+msgid "Wiki html strict filtering"
+msgstr "Strikte HTML-filtering voor Wiki"
+
+msgid "Wiki settings"
+msgstr "Wiki-instellingen"
+
+msgid "Wiki settings updated"
+msgstr "Wiki-instellingen bijgewerkt"
+
+msgid "You are viewing a historical version of this page"
+msgstr "U bekijkt een historische versie van deze pagina"
+
+msgid "You can attach one or more files to this reply."
+msgstr "U kunt een of meer bestanden aan dit antwoord toevoegen."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "U kunt deze opdrachtpagina bewerken, maar de werkpagina's van cursisten worden niet gewijzigd."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "U kunt de tags {{class_name}} en {{student_full_name}} in de vraag gebruiken."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "U heeft 20 minuten om deze pagina te bewerken voordat de bewerkingsvergrendeling verloopt."
+
+msgid "by"
+msgstr "door"
+
+msgid "required"
+msgstr "verplicht"
+

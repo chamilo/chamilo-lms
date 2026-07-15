@@ -36495,3 +36495,852 @@ msgstr "Konuları görüntüle"
 msgid "No auth source"
 msgstr "Kimlik doğrulama kaynağı yok"
 
+msgid "You must add at least one question"
+msgstr "En az bir soru eklemelisiniz"
+
+msgid "Advanced actions"
+msgstr "Gelişmiş eylemler"
+
+msgid "Application path"
+msgstr "Uygulama yolu"
+
+msgid "Apply files details"
+msgstr "Dosya ayrıntılarını uygula"
+
+msgid "Apply plan details"
+msgstr "Plan ayrıntılarını uygula"
+
+msgid "Apply plan failed"
+msgstr "Plan uygulama başarısız"
+
+msgid "Apply plan ready"
+msgstr "Plan uygulama hazır"
+
+msgid "Apply preparation"
+msgstr "Hazırlığı uygula"
+
+msgid "Apply staged files"
+msgstr "Hazırlanan dosyaları uygula"
+
+msgid "Applying files..."
+msgstr "Dosyalar uygulanıyor..."
+
+msgid "Audit file"
+msgstr "Dosyayı denetle"
+
+msgid "Backup directory"
+msgstr "Yedekleme dizini"
+
+msgid "Baseline clean"
+msgstr "Temel temiz"
+
+msgid "Baseline warnings"
+msgstr "Temel uyarılar"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Hazırlanan paketten güvenli bir uygulama planı oluştur. Bu yalnızca dosyaları, izinleri, yedekleme yolunu ve kilit durumunu denetler. Dosyaları değiştirmez."
+
+msgid "Build production frontend assets."
+msgstr "Üretim ön yüz varlıklarını oluştur."
+
+msgid "Building plan..."
+msgstr "Plan oluşturuluyor..."
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Check"
+msgstr "Denetle"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Kullanılabilir Chamilo güncellemelerini denetle, paketleri doğrula, dosyaları hazırla ve kontrollü güncelleme sonrası adımları çalıştır."
+
+msgid "Check manifest"
+msgstr "Manifest dosyasını denetle"
+
+msgid "Checking post-apply actions..."
+msgstr "Uygulama sonrası eylemler denetleniyor..."
+
+msgid "Checking..."
+msgstr "Denetleniyor..."
+
+msgid "Composer install"
+msgstr "Composer yükle"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn ve veritabanı taşıma eylemleri bağımlılıkları, oluşturulan varlıkları veya veritabanını değiştirebilir. Bunları yalnızca yedeklemeleri ve izinleri doğruladıktan sonra seçin."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Sunucuda CHAMILO_UPDATE_MANIFEST_URL ayarlayın veya bir HTTPS manifest URL'si sağlayın."
+
+msgid "Configured"
+msgstr "Yapılandırıldı"
+
+msgid "Current migration"
+msgstr "Geçerli taşıma"
+
+msgid "Database baseline"
+msgstr "Veritabanı temeli"
+
+msgid "Database migration safety review"
+msgstr "Veritabanı taşıma güvenlik incelemesi"
+
+msgid "Database migrations"
+msgstr "Veritabanı taşımaları"
+
+msgid "Development mode"
+msgstr "Geliştirme modu"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Güncelleme yedeklemesi ve sunucu izinleri incelenmedikçe bunu etkinleştirmeyin."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine kuru çalıştırma komutu"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine geçmiş temel uyarıları bildirdi. Güncelleyici, açık onaydan sonra yalnızca hazırlanan V210 taşımalarını yürütecektir."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine, güvenlik incelemesi geçtikten sonra yalnızca açıkça hazırlanan V210 taşımalarını yürütecektir."
+
+msgid "Dry-run exit code"
+msgstr "Kuru çalıştırma çıkış kodu"
+
+msgid "Executed unavailable migrations"
+msgstr "Uygulanamayan göçler yürütüldü"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Doğrulanmış güncelleme paketini inceleme için hazırlık dizinine çıkar. Bu işlem dosyaları değiştirmez, göçleri çalıştırmaz veya veritabanını değiştirmez."
+
+msgid "File apply available"
+msgstr "Dosya uygulama mevcut"
+
+msgid "Files to replace"
+msgstr "Değiştirilecek dosyalar"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Göçleri çalıştırmadan önce bir veritabanı yedeğinin mevcut olduğunu ve doğrulandığını onaylıyorum."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Gelişmiş eylemlerin bağımlılıkları, oluşturulan varlıkları veya veritabanını değiştirebileceğini anlıyorum."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Bunun Chamilo kurulumundaki dosyaları değiştireceğini anlıyorum."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Bunun sunucu üzerinde güncelleme komutlarını çalıştıracağını anlıyorum."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Varlıkları yeniden oluşturmadan önce ön uç bağımlılıklarını yükleyin."
+
+msgid "Installed version"
+msgstr "Yüklü sürüm"
+
+msgid "Latest migration"
+msgstr "Son göç"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Paket ve imza yollarını boş bırakarak bunları doğrulanmış bildirim URL'lerinden indirin. Yerel yollar yalnızca geliştirme testleri için kullanılabilir."
+
+msgid "Live command log"
+msgstr "Canlı komut günlüğü"
+
+msgid "Live update log"
+msgstr "Canlı güncelleme günlüğü"
+
+msgid "Local test options"
+msgstr "Yerel test seçenekleri"
+
+msgid "Local test update notice link"
+msgstr "Yerel test güncelleme bildirim bağlantısı"
+
+msgid "Local update notice simulation"
+msgstr "Yerel güncelleme bildirimi simülasyonu"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Yerel güncelleme bildirimi simülasyonu yalnızca geliştirme modunda kullanılabilir."
+
+msgid "Manifest"
+msgstr "Bildirim"
+
+msgid "Manifest source"
+msgstr "Bildirim kaynağı"
+
+msgid "Migration safety details"
+msgstr "Göç güvenlik ayrıntıları"
+
+msgid "Migration safety review failed"
+msgstr "Göç güvenlik incelemesi başarısız oldu"
+
+msgid "Migration safety review ready"
+msgstr "Göç güvenlik incelemesi hazır"
+
+msgid "Migration target"
+msgstr "Göç hedefi"
+
+msgid "New files"
+msgstr "Yeni dosyalar"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine tarafından bildirilen yeni göçler"
+
+msgid "Next migration"
+msgstr "Sonraki göç"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Uygulanamayan hiçbir göç bildirilmedi."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Henüz resmi bir bildirim URL'si yapılandırılmadı. Geliştirme testleri için bir HTTPS URL'si veya yerel bir yol kullanın."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Hazırlanan güncelleme hedefinden önce bekleyen hiçbir göç algılanmadı."
+
+msgid "Not configured"
+msgstr "Yapılandırılmadı"
+
+msgid "Not detected"
+msgstr "Algılanmadı"
+
+msgid "Official Chamilo update channel"
+msgstr "Resmi Chamilo güncelleme kanalı"
+
+msgid "Package SHA-256"
+msgstr "Paket SHA-256"
+
+msgid "Package URL"
+msgstr "Paket URL'si"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Paket ve imza dosyaları bildirimden indirilecektir. Yerel yollar bu ortamda devre dışıdır."
+
+msgid "Package path"
+msgstr "Paket yolu"
+
+msgid "Package staged successfully"
+msgstr "Paket başarıyla hazırlandı"
+
+msgid "Package staging failed"
+msgstr "Paket hazırlama başarısız oldu"
+
+msgid "Package verification"
+msgstr "Paket doğrulama"
+
+msgid "Package verification failed"
+msgstr "Paket doğrulama başarısız oldu"
+
+msgid "Package verified successfully"
+msgstr "Paket başarıyla doğrulandı"
+
+msgid "Pending migrations before this update"
+msgstr "Bu güncellemeden önceki bekleyen göçler"
+
+msgid "Planned backup path"
+msgstr "Planlanan yedekleme yolu"
+
+msgid "Post-apply actions completed"
+msgstr "Uygulama sonrası eylemler tamamlandı"
+
+msgid "Post-apply actions failed"
+msgstr "Uygulama sonrası eylemler başarısız oldu"
+
+msgid "Post-apply actions ready"
+msgstr "Uygulama sonrası eylemler hazır"
+
+msgid "Post-apply checks"
+msgstr "Uygulama sonrası kontroller"
+
+msgid "Post-apply checks failed"
+msgstr "Uygulama sonrası kontroller başarısız oldu"
+
+msgid "Post-apply details"
+msgstr "Uygulama sonrası ayrıntılar"
+
+msgid "Post-apply run details"
+msgstr "Uygulama sonrası çalıştırma ayrıntıları"
+
+msgid "Preflight checks"
+msgstr "Ön kontrol"
+
+msgid "Preflight checks completed"
+msgstr "Ön kontroller tamamlandı"
+
+msgid "Preflight checks failed"
+msgstr "Ön kontroller başarısız oldu"
+
+msgid "Preflight details"
+msgstr "Ön kontrol ayrıntıları"
+
+msgid "Prepare staging"
+msgstr "Hazırlık ortamını hazırla"
+
+msgid "Preparing staging..."
+msgstr "Hazırlık ortamı hazırlanıyor..."
+
+msgid "Production mode"
+msgstr "Üretim modu"
+
+msgid "Released at"
+msgstr "Yayınlanma tarihi"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "İncelenmiş uygulama planını kullanarak hazırlık paketinden Chamilo dosyalarını değiştirin. Bu işlem veritabanı göçlerini, Composer, Yarn veya önbellek komutlarını çalıştırmaz."
+
+msgid "Review apply plan"
+msgstr "Uygulama planını incele"
+
+msgid "Review database migrations"
+msgstr "Veritabanı göçlerini incele"
+
+msgid "Review post-apply actions"
+msgstr "Uygulama sonrası işlemleri incele"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Güncelleme dosyalarını uyguladıktan sonra önerilen el ile komutları inceleyin. Bu adım Composer, Yarn, göç veya önbellek komutlarını çalıştırmaz."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Veritabanı göçlerini çalıştırmadan önce hazırlanmış Doctrine göçlerini ve kuru çalıştırma çıktısını inceleyin."
+
+msgid "Reviewing database migrations..."
+msgstr "Veritabanı göçleri inceleniyor..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Veritabanı göçlerini çalıştırmadan önce göç güvenlik incelemesini çalıştırın ve geçin."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Herhangi bir gelecek güncelleme uygulama adımından önce ortam kontrollerini çalıştırın. Bu işlem dosyaları veya veritabanını değiştirmez."
+
+msgid "Run post-apply actions"
+msgstr "Uygulama sonrası işlemleri çalıştır"
+
+msgid "Run preflight checks"
+msgstr "Ön kontrolleri çalıştır"
+
+msgid "Run selected post-apply actions"
+msgstr "Seçilen uygulama sonrası işlemleri çalıştır"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Seçilen uygulama sonrası komutları sunucudan kontrollü bir izin listesi kullanarak çalıştırın. Özel kabuk komutları kabul edilmez."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Dosya güncelleme sonucunu ve yedekleri doğruladıktan sonra bu komutları sunucudan el ile çalıştırın."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Üretim modunda kullanıcı arayüzünden uygulama sonrası işlemlerin çalıştırılması devre dışıdır."
+
+msgid "Running post-apply actions..."
+msgstr "Uygulama sonrası işlemler çalıştırılıyor..."
+
+msgid "Safe actions"
+msgstr "Güvenli işlemler"
+
+msgid "Signature path"
+msgstr "İmza yolu"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Bu ortamda imza doğrulama atlanamaz."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Yerel geliştirme testleri için imza doğrulamasını atla"
+
+msgid "Staged file application failed"
+msgstr "Hazırlık dosyası uygulama başarısız oldu"
+
+msgid "Staged files applied successfully"
+msgstr "Hazırlık dosyaları başarıyla uygulandı"
+
+msgid "Staging details"
+msgstr "Hazırlık ayrıntıları"
+
+msgid "Staging directory"
+msgstr "Hazırlık dizini"
+
+msgid "Staging extraction"
+msgstr "Hazırlık çıkarma"
+
+msgid "Symfony cache clear"
+msgstr "Symfony önbellek temizleme"
+
+msgid "System update"
+msgstr "Sistem güncellemesi"
+
+msgid "Target version"
+msgstr "Hedef sürüm"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Yapılandırılmış resmi bildirim URL'si önceden doldurulmuştur. Gerekirse başka bir HTTPS bildirimine değiştirebilirsiniz."
+
+msgid "The database migration baseline is clean."
+msgstr "Veritabanı göç taban çizgisi temiz."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "İşlem tamamlandıktan sonra son HTTP yanıtı başarısız oldu. Bu genellikle çalışma zamanı önbellek izinleri veya istek sırasında bir web sunucusu yeniden başlatılmasından kaynaklanır."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "İşlem günlüğü, uygulama sonrası işlemlerin başarıyla tamamlandığını bildiriyor."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Seçilen uygulama sonrası komutlar başarıyla tamamlandı, ancak son HTTP yanıtı başarısız oldu. Sayfa doğru yüklenmiyorsa sayfayı yenileyin ve çalışma zamanı önbellek izinlerini doğrulayın."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Güncelleyici veritabanı yedekleri oluşturmaz veya geri yüklemez."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Bu işlemler, güncelleme sonucunu inceledikten sonra kullanıcı arayüzünden çalıştırılabilir."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Bu komutlar bağımlılıkları, oluşturulan varlıkları, önbelleği veya veritabanını değiştirebilir. Devam etmeden önce yedekleri doğrulayın."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Bu işlem Chamilo kurulumundaki dosyaları değiştirir. Devam etmeden önce uygulama planının incelendiğinden ve yedeklerin etkinleştirildiğinden emin olun."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Bu geliştirme girişi, yerel test paket yollarını kullanarak gelecekteki Chamilo.org güncelleme bildirimini simüle eder."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Bu ekran resmi bir güncelleme bildiriminden açıldı, ancak henüz resmi bir bildirim kaynağı yapılandırılmadı."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Bu ekran bir güncelleme bildiriminden açıldı. Yalnızca bildirim denetimi otomatik olarak başlatılır."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Bu adım yalnızca bir inceleme hazırlar. Dosya değiştirme, kilit, yedek ve geri alma koruması ile Uygula hazırlık dosyaları adımında daha sonra gerçekleşir."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Bu güncelleyici bir veritabanı yedeği oluşturmaz. Geçişleri çalıştırmadan önce bir yedek oluşturun ve doğrulayın."
+
+msgid "Trusted public key"
+msgstr "Güvenilen açık anahtar"
+
+msgid "Trusted signing key"
+msgstr "Güvenilen imzalama anahtarı"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Onaylamak için APPLY UPDATE FILES yazın"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Veritabanı geçişlerini onaylamak için RUN DATABASE MIGRATIONS yazın"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Onaylamak için RUN POST UPDATE ACTIONS yazın"
+
+msgid "Unknown update notice source."
+msgstr "Bilinmeyen güncelleme bildirimi kaynağı."
+
+msgid "Update availability"
+msgstr "Güncelleme kullanılabilirliği"
+
+msgid "Update directory"
+msgstr "Güncelleme dizini"
+
+msgid "Update lock path"
+msgstr "Güncelleme kilidi yolu"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Önceki adım tarafından oluşturulan hazırlama dizinini kullanın. Arka uç yalnızca var/update/staging içindeki dizinleri kabul eder."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Geliştirme testleri sırasında gelecekteki Chamilo.org güncelleme bildirimini simüle etmek için bu bağlantıyı kullanın."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Bunu yalnızca yerel geliştirme testleri için kullanın. Üretim güncellemeleri yapılandırılmış sunucu anahtarını kullanmalıdır."
+
+msgid "Verification details"
+msgstr "Doğrulama ayrıntıları"
+
+msgid "Verify package"
+msgstr "Paketi doğrula"
+
+msgid "Verifying..."
+msgstr "Doğrulanıyor..."
+
+msgid "Waiting for command progress events..."
+msgstr "Komut ilerleme olayları bekleniyor..."
+
+msgid "Waiting for update progress events..."
+msgstr "Güncelleme ilerleme olayları bekleniyor..."
+
+msgid "Yarn build"
+msgstr "Yarn derlemesi"
+
+msgid "Yarn install"
+msgstr "Yarn kurulumu"
+
+msgid "A comment is required"
+msgstr "Yorum gerekli"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Aynı ada sahip bir veritabanı zaten var. Tablolar içeriyorsa silinecek; boşsa yeniden kullanılacaktır."
+
+msgid "AI generated"
+msgstr "Yapay zeka tarafından oluşturuldu"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Öğrenme yoluna dönmeden önce en az bir soru ekleyin."
+
+msgid "Add attachments"
+msgstr "Ekler ekle"
+
+msgid "Additional fields"
+msgstr "Ek alanlar"
+
+msgid "Allow comments"
+msgstr "Yorumlara izin ver"
+
+msgid "Allow new pages"
+msgstr "Yeni sayfalara izin ver"
+
+msgid "Allow ratings"
+msgstr "Derecelendirmelere izin ver"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Tüm öğeleri silmek istediğinizden emin misiniz?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Otomatik yenilemeyi geri yüklemek istediğinizden emin misiniz?"
+
+msgid "Attachment has been deleted"
+msgstr "Ek silindi"
+
+msgid "Backup file"
+msgstr "Yedek dosyası"
+
+msgid "Block comments"
+msgstr "Yorumları engelle"
+
+msgid "Block new pages"
+msgstr "Yeni sayfaları engelle"
+
+msgid "Block ratings"
+msgstr "Derecelendirmeleri engelle"
+
+msgid "Cancel renewal"
+msgstr "Yenilemeyi iptal et"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Kategori bağlantıları %s Wiki sayfasından kaldırılacak."
+
+msgid "Change"
+msgstr "Değiştir"
+
+msgid "Clear group"
+msgstr "Grubu temizle"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Bir etikete tıklayarak düzenleyiciye ekleyin. Bu yer tutucular sertifika oluşturulurken değiştirilecektir."
+
+msgid "Comment added"
+msgstr "Yorum eklendi"
+
+msgid "Comment is required"
+msgstr "Yorum gerekli"
+
+msgid "Comment score"
+msgstr "Yorum puanı"
+
+msgid "Compare selected versions line by line"
+msgstr "Seçilen sürümleri satır satır karşılaştır"
+
+msgid "Compare selected versions word by word"
+msgstr "Seçilen sürümleri kelime kelime karşılaştır"
+
+msgid "Compare versions"
+msgstr "Sürümleri karşılaştır"
+
+msgid "Copy completed"
+msgstr "Kopyalama tamamlandı"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Öğrenciler için bireysel Wiki çalışma sayfaları oluştur"
+
+msgid "Current view mode"
+msgstr "Geçerli görünüm modu"
+
+msgid "Delete Wiki"
+msgstr "Wiki'yi Sil"
+
+msgid "Delete page"
+msgstr "Sayfayı Sil"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Wiki ana sayfasını silmek önerilmez. Daha sonra yeniden oluşturabilirsiniz."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Wiki'yi devre dışı bırakmak normal Wiki sayfalarını ve eylemlerini engeller. Bu ayarlar sayfası kurs öğretmenleri için erişilebilir kalır."
+
+msgid "Discussion"
+msgstr "Tartışma"
+
+msgid "Edit Comment"
+msgstr "Yorumu Düzenle"
+
+msgid "Edit page"
+msgstr "Sayfayı Düzenle"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Bitiş tarihi, son kullanma tarihinden sonra veya ona eşit olmalıdır"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Wiki sayfalarını bulmak için bir arama terimi girin"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Son kullanma tarihi, bitiş tarihinden önce veya ona eşit olmalıdır"
+
+msgid "Failed email recipients"
+msgstr "Başarısız e-posta alıcıları"
+
+msgid "Finish and return to learning path"
+msgstr "Bitir ve öğrenme yoluna dön"
+
+msgid "Forum image"
+msgstr "Forum görseli"
+
+msgid "Hide discussion"
+msgstr "Tartışmayı gizle"
+
+msgid "Hide page"
+msgstr "Sayfayı gizle"
+
+msgid "I changed my mind"
+msgstr "Fikrimi değiştirdim"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "İşaretlenmezse, bu dosyalar platform yöneticisi tarafından 'Dosya bilgisi' aracı üzerinden erişilebilir kalır."
+
+msgid "Internal message failures"
+msgstr "Dahili mesaj hataları"
+
+msgid "Internal messages available"
+msgstr "Dahili mesajlar mevcut"
+
+msgid "Internal messages created now"
+msgstr "Şimdi oluşturulan dahili mesajlar"
+
+msgid "Item score"
+msgstr "Öğe puanı"
+
+msgid "Last post"
+msgstr "Son gönderi"
+
+msgid "Lock page"
+msgstr "Sayfayı kilitle"
+
+msgid "Manage categories"
+msgstr "Kategorileri yönet"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Bu belgeyi yapay zekâ destekli olarak işaretler. İçerik yapay zekâ araçlarıyla oluşturulduğunda veya önemli ölçüde değiştirildiğinde kullanın."
+
+msgid "Maximum score is required"
+msgstr "Maksimum puan gereklidir"
+
+msgid "Metric"
+msgstr "Metrik"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Bu tartışmada yeni yorumlar engellenmiştir"
+
+msgid "No Wiki categories are available yet."
+msgstr "Henüz Wiki kategorisi mevcut değil."
+
+msgid "No categories found"
+msgstr "Kategori bulunamadı"
+
+msgid "No content"
+msgstr "İçerik yok"
+
+msgid "No parent category"
+msgstr "Üst kategori yok"
+
+msgid "Number of comments scored"
+msgstr "Puanlanan yorum sayısı"
+
+msgid "Old version"
+msgstr "Eski sürüm"
+
+msgid "Only image files are allowed."
+msgstr "Yalnızca görsel dosyalarına izin verilir."
+
+msgid "Please fill all required fields"
+msgstr "Lütfen tüm gerekli alanları doldurun"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Sınıf veya öğrenci yer tutucuları içeren sorular, kurs sınıfları veya grupları için oluşturulacaktır: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Bu tartışmada derecelendirmeler engellenmiştir"
+
+msgid "Remove image"
+msgstr "Görseli kaldır"
+
+msgid "Restore renewal"
+msgstr "Yenilemeyi geri yükle"
+
+msgid "Restore version"
+msgstr "Sürümü geri yükle"
+
+msgid "Search in"
+msgstr "Şunun içinde ara"
+
+msgid "Select group"
+msgstr "Grup seç"
+
+msgid "Select image"
+msgstr "Görsel seç"
+
+msgid "Selected image"
+msgstr "Seçilen görsel"
+
+msgid "Show discussion"
+msgstr "Tartışmayı göster"
+
+msgid "Show page"
+msgstr "Sayfayı göster"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Bazı dosya veya klasörlerin yazma izni yok. Chamilo'yu kurabilmek için önce bunların izinlerini değiştirmelisiniz (CHMOD kullanarak). Lütfen okuyun"
+
+msgid "Subcategories"
+msgstr "Alt kategoriler"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Gezinmek için sola veya sağa dokunun"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki ödev teslim tarihi geçti, ancak gecikmeli teslimata izin veriliyor."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki ödev teslim tarihi geçti."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki ödevi henüz başlamadı."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Kaydetmeden önce Wiki sayfası düzenleme kilidi gereklidir."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Duyuru kaydedildi, ancak bir ek dosya yüklenemedi."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Duyuru kaydedildi, ancak e-posta gönderimi başarısız oldu."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Duyuru kaydedildi, ancak hiçbir e-posta gönderilemedi."
+
+msgid "The category has been created"
+msgstr "Kategori oluşturuldu"
+
+msgid "The category has been deleted"
+msgstr "Kategori silindi"
+
+msgid "The category has been updated"
+msgstr "Kategori güncellendi"
+
+msgid "The end date is invalid"
+msgstr "Bitiş tarihi geçersiz"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Maksimum sürüm sayısı negatif olmayan bir tam sayı olmalıdır"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Maksimum kelime sayısı negatif olmayan bir tam sayı olmalıdır"
+
+msgid "The print window could not be opened"
+msgstr "Yazdırma penceresi açılamadı"
+
+msgid "The start date is invalid"
+msgstr "Başlangıç tarihi geçersiz"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Bu ayarlar, oturumlar ve gruplar dahil olmak üzere tüm derse uygulanır."
+
+msgid "This announcement has already been sent by email."
+msgstr "Bu duyuru zaten e-posta ile gönderildi."
+
+msgid "This discussion is hidden from learners"
+msgstr "Bu tartışma öğrencilerden gizlendi"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Bu üretken yapay zeka aracı, dersinizi görselleştirmek için resimler ve kısa videolar oluşturmanıza olanak tanır. İstem bölümünde (metin olarak) ne istediğinizi açıklayarak, yapılandırılmış yapay zeka modeline bir resim veya video oluşturmak için gerekli unsurları sağlamış olursunuz. Lütfen sabırlı olun. Yapay zeka modeli biraz zaman alacak ve bir sonuç üretecektir; bu sonucu, medyayı belgeler klasörünüze kaydedip ardından bir HTML belgesine gömerek saklamak isteyebilirsiniz. Tüm yapay zeka modelleri hız veya kalite açısından eşit değildir. Yapay zeka modeli size ayrıca, isteğinizin daha ayrıntılı bir yorumu olan değiştirilmiş bir istem de sunabilir. Bu değiştirilmiş istemi isteğinizi ince ayarlamak için kullanabilirsiniz. Lütfen bu aracın, özellikle videolar için, oluşturulan medyayı kaydetmemeye karar verseniz bile kurumunuza önemli maliyetler getirebileceğinin farkında olun. Buna göre kullanın. Aradığınızı elde edemiyorsanız, lütfen elinizdeki yapay zeka modeli için çevrimiçi olarak istem ipuçlarını araştırmak için biraz zaman ayırın."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Bu geçmiş temel derse aittir. Geri yükleme, bir oturum sürümü oluşturulduktan sonra kullanılabilir."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Bu resim, forum başlığının yanında gösterilen varsayılan forum simgesini değiştirir."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Bu sayfa temel dersten gelir. Kaydetmek, geçerli oturum için bir sürüm oluşturacaktır."
+
+msgid "This will also delete %s subcategories."
+msgstr "Bu işlem ayrıca %s alt kategoriyi silecektir."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Bu işlem %s öğrenci için ayrı çalışma sayfaları oluşturacaktır."
+
+msgid "Thread history"
+msgstr "Konu geçmişi"
+
+msgid "Title and content"
+msgstr "Başlık ve içerik"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Yenileme hakkı şu anda iptal edilemiyor."
+
+msgid "Unable to restore renewal right now."
+msgstr "Yenileme hakkı şu anda geri yüklenemiyor."
+
+msgid "Unlock page"
+msgstr "Sayfa kilidini aç"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Dahili Wiki bağlantıları oluşturmak için [[Sayfa]] veya [[Sayfa|Görünür metin]] kullanın."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Gezinmek için boşluk çubuğunu veya ok tuşlarını kullanın"
+
+msgid "View version"
+msgstr "Sürümü görüntüle"
+
+msgid "Visible only to teachers"
+msgstr "Yalnızca öğretmenlere görünür"
+
+msgid "Weight is required"
+msgstr "Ağırlık gereklidir"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki kategorileri bu ders için devre dışı bırakıldı."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki kategorileri etkinleştirildi"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki html katı filtreleme"
+
+msgid "Wiki settings"
+msgstr "Wiki ayarları"
+
+msgid "Wiki settings updated"
+msgstr "Wiki ayarları güncellendi"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Bu sayfanın geçmiş bir sürümünü görüntülüyorsunuz"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Bu yanıta bir veya daha fazla dosya ekleyebilirsiniz."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Bu ödev sayfasını düzenleyebilirsiniz, ancak öğrenci çalışma sayfaları değiştirilmeyecektir."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Soru içinde {{class_name}} ve {{student_full_name}} etiketlerini kullanabilirsiniz."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Düzenleme kilidi sona ermeden önce bu sayfayı düzenlemek için 20 dakikanız var."
+
+msgid "by"
+msgstr "tarafından"
+
+msgid "required"
+msgstr "zorunlu"
+

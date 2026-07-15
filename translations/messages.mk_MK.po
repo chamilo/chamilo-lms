@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":да:авторски права,, не:не авторски права"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Октетен тек,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Папка,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:вежба,, simulation:симулација,, questionnaire:прашалник,, diagram:дијаграм,, figure:фигура,, graph:графикон,, index:индекс,, slide:слајд,, table:табела,, narrative text:раскажувачки текст,, exam:испит,, experiment:експеримент,, problem statement:проблематично тврдење,, self assessment:самооценување,, lecture:лектира"
@@ -36492,4 +36492,853 @@ msgstr "Прикажи теми"
 
 msgid "No auth source"
 msgstr "Нема извор на автентикација"
+
+msgid "You must add at least one question"
+msgstr "Мора да додадете барем едно прашање"
+
+msgid "Advanced actions"
+msgstr "Напредни дејства"
+
+msgid "Application path"
+msgstr "Патека на апликацијата"
+
+msgid "Apply files details"
+msgstr "Примени детали за датотеки"
+
+msgid "Apply plan details"
+msgstr "Примени детали за план"
+
+msgid "Apply plan failed"
+msgstr "Примената на планот не успеа"
+
+msgid "Apply plan ready"
+msgstr "Планот е подготвен за примена"
+
+msgid "Apply preparation"
+msgstr "Примена на подготовка"
+
+msgid "Apply staged files"
+msgstr "Примени подготвени датотеки"
+
+msgid "Applying files..."
+msgstr "Се применуваат датотеки..."
+
+msgid "Audit file"
+msgstr "Ревизија на датотека"
+
+msgid "Backup directory"
+msgstr "Директориум за резервна копија"
+
+msgid "Baseline clean"
+msgstr "Основна чистота"
+
+msgid "Baseline warnings"
+msgstr "Основни предупредувања"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Изгради безбеден план за примена од подготвениот пакет. Ова само проверува датотеки, дозволи, патека за резервна копија и статус на заклучување. Не заменува датотеки."
+
+msgid "Build production frontend assets."
+msgstr "Изгради производствени предни ресурси."
+
+msgid "Building plan..."
+msgstr "Се гради план..."
+
+msgid "Channel"
+msgstr "Канал"
+
+msgid "Check"
+msgstr "Провери"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Провери за достапни ажурирања на Chamilo, верифицирај пакети, подготви датотеки и изврши контролирани чекори по ажурирањето."
+
+msgid "Check manifest"
+msgstr "Провери манифест"
+
+msgid "Checking post-apply actions..."
+msgstr "Се проверуваат дејства по примената..."
+
+msgid "Checking..."
+msgstr "Се проверува..."
+
+msgid "Composer install"
+msgstr "Composer install"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Дејствата на Composer, Yarn и миграцијата на базата на податоци можат да ги изменат зависностите, генерираните ресурси или базата на податоци. Изберете ги само откако ќе ги потврдите резервните копии и дозволите."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Конфигурирајте CHAMILO_UPDATE_MANIFEST_URL на серверот или обезбедете HTTPS URL за манифест."
+
+msgid "Configured"
+msgstr "Конфигурирано"
+
+msgid "Current migration"
+msgstr "Тековна миграција"
+
+msgid "Database baseline"
+msgstr "Основна линија на базата на податоци"
+
+msgid "Database migration safety review"
+msgstr "Преглед на безбедноста на миграцијата на базата на податоци"
+
+msgid "Database migrations"
+msgstr "Миграции на базата на податоци"
+
+msgid "Development mode"
+msgstr "Режим за развој"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Не овозможувајте го ова освен ако не е прегледана резервната копија на ажурирањето и дозволите на серверот."
+
+msgid "Doctrine dry-run command"
+msgstr "Команда за суво извршување на Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine пријави предупредувања за историската основна линија. Ажурирачот ќе изврши само подготвени V210 миграции по експлицитна потврда."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine ќе изврши само подготвените V210 миграции експлицитно откако прегледот на безбедноста ќе помине."
+
+msgid "Dry-run exit code"
+msgstr "Излезен код на суво извршување"
+
+msgid "Executed unavailable migrations"
+msgstr "Извршени недостапни миграции"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Извлечете го верифицираниот пакет за ажурирање во привремен директориум за проверка. Ова не заменува датотеки, не извршува миграции ниту ја менува базата на податоци."
+
+msgid "File apply available"
+msgstr "Достапно за примена на датотеки"
+
+msgid "Files to replace"
+msgstr "Датотеки за замена"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Потврдувам дека постои резервна копија на базата на податоци и е верифицирана пред извршувањето на миграциите."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Разбирам дека напредните дејства можат да ги изменат зависностите, генерираните ресурси или базата на податоци."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Разбирам дека ова ќе ги замени датотеките во инсталацијата на Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Разбирам дека ова ќе изврши команди за ажурирање на серверот."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Инсталирајте ги зависностите на предниот дел пред повторното градење на ресурсите."
+
+msgid "Installed version"
+msgstr "Инсталирана верзија"
+
+msgid "Latest migration"
+msgstr "Најнова миграција"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Оставете ги патеките на пакетот и потписот празни за да ги преземете од верифицираните URL-адреси на манифестот. Локалните патеки се достапни само за тестови во развој."
+
+msgid "Live command log"
+msgstr "Дневник на живи команди"
+
+msgid "Live update log"
+msgstr "Дневник на живо ажурирање"
+
+msgid "Local test options"
+msgstr "Локални опции за тестирање"
+
+msgid "Local test update notice link"
+msgstr "Локална врска за симулација на известување за ажурирање"
+
+msgid "Local update notice simulation"
+msgstr "Локална симулација на известување за ажурирање"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Локалната симулација на известување за ажурирање е достапна само во режим за развој."
+
+msgid "Manifest"
+msgstr "Манифест"
+
+msgid "Manifest source"
+msgstr "Извор на манифестот"
+
+msgid "Migration safety details"
+msgstr "Детали за безбедноста на миграцијата"
+
+msgid "Migration safety review failed"
+msgstr "Прегледот на безбедноста на миграцијата не успеа"
+
+msgid "Migration safety review ready"
+msgstr "Прегледот на безбедноста на миграцијата е подготвен"
+
+msgid "Migration target"
+msgstr "Цел на миграцијата"
+
+msgid "New files"
+msgstr "Нови датотеки"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Нови миграции пријавени од Doctrine"
+
+msgid "Next migration"
+msgstr "Следна миграција"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Не е пријавена извршена недостапна миграција."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Сè уште не е конфигуриран официјален URL на манифест. Користете HTTPS URL или локална патека за тестови во развој."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Не е откриена чекање миграција пред подготвената цел за ажурирање."
+
+msgid "Not configured"
+msgstr "Не е конфигурирано"
+
+msgid "Not detected"
+msgstr "Не е откриено"
+
+msgid "Official Chamilo update channel"
+msgstr "Официјален канал за ажурирање на Chamilo"
+
+msgid "Package SHA-256"
+msgstr "Пакет SHA-256"
+
+msgid "Package URL"
+msgstr "URL на пакетот"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Пакетот и датотеките со потпис ќе бидат преземени од манифестот. Локалните патеки се оневозможени во оваа околина."
+
+msgid "Package path"
+msgstr "Патека на пакетот"
+
+msgid "Package staged successfully"
+msgstr "Пакетот е успешно подготвен"
+
+msgid "Package staging failed"
+msgstr "Подготовката на пакетот не успеа"
+
+msgid "Package verification"
+msgstr "Верификација на пакетот"
+
+msgid "Package verification failed"
+msgstr "Проверката на пакетот не успеа"
+
+msgid "Package verified successfully"
+msgstr "Пакетот е успешно верификуван"
+
+msgid "Pending migrations before this update"
+msgstr "Чекаат миграции пред оваа надградба"
+
+msgid "Planned backup path"
+msgstr "Планирана патека за резервна копија"
+
+msgid "Post-apply actions completed"
+msgstr "Дејствата по примената се завршени"
+
+msgid "Post-apply actions failed"
+msgstr "Дејствата по примената не успеаја"
+
+msgid "Post-apply actions ready"
+msgstr "Дејствата по примената се подготвени"
+
+msgid "Post-apply checks"
+msgstr "Проверки по примената"
+
+msgid "Post-apply checks failed"
+msgstr "Проверките по примената не успеаја"
+
+msgid "Post-apply details"
+msgstr "Детали по примената"
+
+msgid "Post-apply run details"
+msgstr "Детали за извршувањето по примената"
+
+msgid "Preflight checks"
+msgstr "Прелиминарни проверки"
+
+msgid "Preflight checks completed"
+msgstr "Прелиминарните проверки се завршени"
+
+msgid "Preflight checks failed"
+msgstr "Прелиминарните проверки не успеаја"
+
+msgid "Preflight details"
+msgstr "Детали за прелиминарните проверки"
+
+msgid "Prepare staging"
+msgstr "Подготви подготвителна средина"
+
+msgid "Preparing staging..."
+msgstr "Се подготвува подготвителна средина..."
+
+msgid "Production mode"
+msgstr "Продукциски режим"
+
+msgid "Released at"
+msgstr "Објавено на"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Замени ги датотеките на Chamilo од подготвениот пакет користејќи го прегледаниот план за примена. Ова не ги извршува миграциите на базата на податоци, Composer, Yarn или командите за кеш."
+
+msgid "Review apply plan"
+msgstr "Прегледај план за примена"
+
+msgid "Review database migrations"
+msgstr "Прегледај миграции на базата на податоци"
+
+msgid "Review post-apply actions"
+msgstr "Прегледај дејства по примената"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Прегледај ги препорачаните рачни команди по примената на датотеките за надградба. Овој чекор не ги извршува Composer, Yarn, миграциите или командите за кеш."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Прегледај ги Doctrine миграциите и излезот од суво извршување пред да ги извршиш миграциите на базата на податоци."
+
+msgid "Reviewing database migrations..."
+msgstr "Се прегледуваат миграциите на базата на податоци..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Изврши и помини ја безбедносната проверка на миграциите пред да ги извршиш миграциите на базата на податоци."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Изврши проверки на околината пред кој било иден чекор за примена на надградбата. Ова не ги менува датотеките или базата на податоци."
+
+msgid "Run post-apply actions"
+msgstr "Изврши дејства по примената"
+
+msgid "Run preflight checks"
+msgstr "Изврши прелиминарни проверки"
+
+msgid "Run selected post-apply actions"
+msgstr "Изврши избрани дејства по примената"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Изврши ги избраните команди по примената од серверот користејќи контролирана дозволена листа. Не се прифаќаат прилагодени shell команди."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Изврши ги овие команди рачно од серверот откако ќе го потврдиш резултатот од ажурирањето на датотеките и резервните копии."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Извршувањето на дејствата по примената преку корисничкиот интерфејс е оневозможено во продукциски режим."
+
+msgid "Running post-apply actions..."
+msgstr "Се извршуваат дејствата по примената..."
+
+msgid "Safe actions"
+msgstr "Безбедни дејства"
+
+msgid "Signature path"
+msgstr "Патека на потписот"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Верификацијата на потписот не може да се прескокне во оваа околина."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Прескокни верификација на потписот за локални развојни тестови"
+
+msgid "Staged file application failed"
+msgstr "Примената на подготвените датотеки не успеа"
+
+msgid "Staged files applied successfully"
+msgstr "Подготвените датотеки се успешно применети"
+
+msgid "Staging details"
+msgstr "Детали за подготвителната средина"
+
+msgid "Staging directory"
+msgstr "Директориум за подготвителна средина"
+
+msgid "Staging extraction"
+msgstr "Екстракција на подготвителната средина"
+
+msgid "Symfony cache clear"
+msgstr "Чистење на Symfony кеш"
+
+msgid "System update"
+msgstr "Надградба на системот"
+
+msgid "Target version"
+msgstr "Целна верзија"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Конфигурираниот официјален URL на манифестот е претпополнет. Можете да го промените во друг HTTPS манифест доколку е потребно."
+
+msgid "The database migration baseline is clean."
+msgstr "Основната линија на миграциите на базата на податоци е чиста."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Финалниот HTTP одговор не успеа откако операцијата заврши. Ова обично е предизвикано од дозволи за кеш во време на извршување или рестартирање на веб-серверот за време на барањето."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Извештајот за операциите покажува дека пост-апликативните дејства се завршени успешно."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Избраните пост-апликативни команди се завршени успешно, но конечниот HTTP одговор не успеа. Освежете ја страницата и проверете ги дозволите за кеш ако страницата не се вчитува правилно."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Ажурирачот не создава ниту враќа резервни копии на базата на податоци."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Овие дејства се безбедни за извршување од интерфејсот по прегледување на резултатот од ажурирањето."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Овие команди можат да ги изменат зависностите, генерираните ресурси, кешот или базата на податоци. Потврдете резервни копии пред да продолжите."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ова дејство ги менува датотеките во инсталацијата на Chamilo. Проверете дали планот за примена е прегледан и резервните копии се овозможени пред да продолжите."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Овој развоен запис симулира идно известување за ажурирање на Chamilo.org користејќи локални патеки за тест-пакети."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Овој екран е отворен од официјално известување за ажурирање, но сè уште не е конфигуриран официјален извор на манифест."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Овој екран е отворен од известување за ажурирање. Автоматски се започнува само проверката на манифестот."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Овој чекор подготвува само преглед. Замената на датотеки се случува подоцна во чекорот Примени подготвени датотеки, со заклучување, резервна копија и заштита од враќање."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Овој ажурирач не создава резервна копија на базата на податоци. Создадете и проверете резервна копија пред да ги извршите миграциите."
+
+msgid "Trusted public key"
+msgstr "Доверлив јавен клуч"
+
+msgid "Trusted signing key"
+msgstr "Доверлив потписен клуч"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Внесете APPLY UPDATE FILES за потврда"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Внесете RUN DATABASE MIGRATIONS за потврда на миграциите на базата на податоци"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Внесете RUN POST UPDATE ACTIONS за потврда"
+
+msgid "Unknown update notice source."
+msgstr "Непознат извор на известување за ажурирање."
+
+msgid "Update availability"
+msgstr "Достапност на ажурирање"
+
+msgid "Update directory"
+msgstr "Директориум за ажурирање"
+
+msgid "Update lock path"
+msgstr "Патека на заклучување за ажурирање"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Користете го подготвениот директориум генериран од претходниот чекор. Backend-от прифаќа само директориуми во var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Користете ја оваа врска за да симулирате идно известување за ажурирање на Chamilo.org за време на развојни тестови."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Користете го ова само за локални развојни тестови. Продукциските ажурирања мора да го користат клучот конфигуриран на серверот."
+
+msgid "Verification details"
+msgstr "Детали за верификација"
+
+msgid "Verify package"
+msgstr "Верификувај пакет"
+
+msgid "Verifying..."
+msgstr "Се верификува..."
+
+msgid "Waiting for command progress events..."
+msgstr "Се чекаат настани за напредокот на командата..."
+
+msgid "Waiting for update progress events..."
+msgstr "Се чекаат настани за напредокот на ажурирањето..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Потребен е коментар"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "База на податоци со истото име веќе постои. Ако содржи табели, тие ќе бидат избришани; ако е празна, ќе биде повторно употребена."
+
+msgid "AI generated"
+msgstr "Генерирано со AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Додадете барем едно прашање пред да се вратите на патеката за учење."
+
+msgid "Add attachments"
+msgstr "Додадете прилози"
+
+msgid "Additional fields"
+msgstr "Дополнителни полиња"
+
+msgid "Allow comments"
+msgstr "Дозволи коментари"
+
+msgid "Allow new pages"
+msgstr "Дозволи нови страници"
+
+msgid "Allow ratings"
+msgstr "Дозволи оценки"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Дали сте сигурни дека сакате да ги избришете сите ставки?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Дали сте сигурни дека сакате да ја вратите автоматската обнова?"
+
+msgid "Attachment has been deleted"
+msgstr "Прилогот е избришан"
+
+msgid "Backup file"
+msgstr "Резервна датотека"
+
+msgid "Block comments"
+msgstr "Блокирај коментари"
+
+msgid "Block new pages"
+msgstr "Блокирај нови страници"
+
+msgid "Block ratings"
+msgstr "Блокирај оценки"
+
+msgid "Cancel renewal"
+msgstr "Откажи обнова"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Врските на категоријата ќе бидат отстранети од %s Wiki страници."
+
+msgid "Change"
+msgstr "Промени"
+
+msgid "Clear group"
+msgstr "Исчисти група"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Кликнете на ознака за да ја вметнете во уредувачот. Овие ознаки ќе бидат заменети при генерирање на сертификатот."
+
+msgid "Comment added"
+msgstr "Коментарот е додаден"
+
+msgid "Comment is required"
+msgstr "Коментарот е задолжителен"
+
+msgid "Comment score"
+msgstr "Оценка на коментар"
+
+msgid "Compare selected versions line by line"
+msgstr "Спореди избрани верзии ред по ред"
+
+msgid "Compare selected versions word by word"
+msgstr "Спореди избрани верзии збор по збор"
+
+msgid "Compare versions"
+msgstr "Спореди верзии"
+
+msgid "Copy completed"
+msgstr "Копирањето е завршено"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Создај индивидуални Wiki страници за учесници"
+
+msgid "Current view mode"
+msgstr "Тековен режим на преглед"
+
+msgid "Delete Wiki"
+msgstr "Избриши Wiki"
+
+msgid "Delete page"
+msgstr "Избриши страница"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Бришењето на насловната Wiki страница не е препорачливо. Можете да ја создадете повторно подоцна."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Оневозможувањето на Wiki ги блокира нормалните Wiki страници и дејства. Оваа страница со поставки останува достапна за наставниците на курсот."
+
+msgid "Discussion"
+msgstr "Дискусија"
+
+msgid "Edit Comment"
+msgstr "Уреди коментар"
+
+msgid "Edit page"
+msgstr "Уреди страница"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Крајниот датум мора да биде по или еднаков на датумот на истекување"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Внесете термин за пребарување за да најдете Wiki страници"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Датумот на истекување мора да биде пред или еднаков на крајниот датум"
+
+msgid "Failed email recipients"
+msgstr "Неуспешни примачи на е-пошта"
+
+msgid "Finish and return to learning path"
+msgstr "Заврши и врати се на патеката за учење"
+
+msgid "Forum image"
+msgstr "Слика на форум"
+
+msgid "Hide discussion"
+msgstr "Скриј дискусија"
+
+msgid "Hide page"
+msgstr "Скриј страница"
+
+msgid "I changed my mind"
+msgstr "Се предомислив"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Ако не е избрано, овие датотеки ќе останат достапни за администраторот на платформата преку алатката „Информации за датотеки“."
+
+msgid "Internal message failures"
+msgstr "Неуспеси на внатрешни пораки"
+
+msgid "Internal messages available"
+msgstr "Достапни внатрешни пораки"
+
+msgid "Internal messages created now"
+msgstr "Создадени внатрешни пораки сега"
+
+msgid "Item score"
+msgstr "Оценка на ставка"
+
+msgid "Last post"
+msgstr "Последна објава"
+
+msgid "Lock page"
+msgstr "Заклучи страница"
+
+msgid "Manage categories"
+msgstr "Управувај со категории"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Означи го овој документ како поддржан од вештачка интелигенција. Користете го кога содржината е создадена или значително изменета со алатки за вештачка интелигенција."
+
+msgid "Maximum score is required"
+msgstr "Максималната оценка е задолжителна"
+
+msgid "Metric"
+msgstr "Метрика"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Новите коментари се блокирани во оваа дискусија"
+
+msgid "No Wiki categories are available yet."
+msgstr "Сè уште нема достапни Wiki категории."
+
+msgid "No categories found"
+msgstr "Не се пронајдени категории"
+
+msgid "No content"
+msgstr "Нема содржина"
+
+msgid "No parent category"
+msgstr "Нема надредена категорија"
+
+msgid "Number of comments scored"
+msgstr "Број на оценети коментари"
+
+msgid "Old version"
+msgstr "Стара верзија"
+
+msgid "Only image files are allowed."
+msgstr "Дозволени се само сликовни датотеки."
+
+msgid "Please fill all required fields"
+msgstr "Ве молиме пополнете ги сите задолжителни полиња"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Прашањата со ознаки за класа или студент ќе бидат генерирани за класите или групите на курсот: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Оценувањата се блокирани во оваа дискусија"
+
+msgid "Remove image"
+msgstr "Отстрани слика"
+
+msgid "Restore renewal"
+msgstr "Врати обновување"
+
+msgid "Restore version"
+msgstr "Врати верзија"
+
+msgid "Search in"
+msgstr "Пребарај во"
+
+msgid "Select group"
+msgstr "Избери група"
+
+msgid "Select image"
+msgstr "Избери слика"
+
+msgid "Selected image"
+msgstr "Избрана слика"
+
+msgid "Show discussion"
+msgstr "Прикажи дискусија"
+
+msgid "Show page"
+msgstr "Прикажи страница"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Некои датотеки или папки немаат дозвола за запишување. За да можете да го инсталирате Chamilo, прво треба да ги промените нивните дозволи (користејќи CHMOD). Ве молиме прочитајте го"
+
+msgid "Subcategories"
+msgstr "Подкатегории"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Допрете лево или десно за навигација"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Рокот за предавање на Wiki-задачата помина, но е дозволено доцна предавање."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Рокот за предавање на Wiki-задачата помина."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki-задачата сè уште не е започната."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Потребно е заклучување на уредувањето на Wiki-страницата пред зачувување."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Соопштението е зачувано, но прилогот не можеше да се прикачи."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Соопштението е зачувано, но испораката по е-пошта не успеа."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Соопштението е зачувано, но не можеше да се испрати е-пошта."
+
+msgid "The category has been created"
+msgstr "Категоријата е создадена"
+
+msgid "The category has been deleted"
+msgstr "Категоријата е избришана"
+
+msgid "The category has been updated"
+msgstr "Категоријата е ажурирана"
+
+msgid "The end date is invalid"
+msgstr "Крајниот датум е неважечки"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Максималниот број на верзии мора да биде ненегативен цел број"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Максималниот број на зборови мора да биде ненегативен цел број"
+
+msgid "The print window could not be opened"
+msgstr "Прозорецот за печатење не можеше да се отвори"
+
+msgid "The start date is invalid"
+msgstr "Почетниот датум е неважечки"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Овие поставки важат за целиот курс, вклучувајќи ги неговите сесии и групи."
+
+msgid "This announcement has already been sent by email."
+msgstr "Ова соопштение веќе е испратено по е-пошта."
+
+msgid "This discussion is hidden from learners"
+msgstr "Оваа дискусија е скриена од учесниците"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Оваа алатка за генеративна вештачка интелигенција ви овозможува да создавате слики и кратки видеа за да го илустрирате вашиот курс. Со објаснување (во текст) што сакате во делот за упатство, ќе му ги дадете на конфигурираниот модел на ВИ елементите потребни за генерирање слика или видео. Ве молиме бидете трпеливи. Моделот на ВИ ќе потрае некое време и ќе генерира резултат, кој можеби ќе сакате да го зачувате во вашата папка со документи, а потоа да го вметнете во HTML-документ. Не сите модели на ВИ се еднакви во однос на брзината или квалитетот. Моделот на ВИ може да ви даде и изменето упатство, кое е подетално толкување на вашето барање. Потоа можете да го користите ова изменето упатство за да го усовршите вашето барање. Имајте предвид дека оваа алатка, особено за видеа, може да генерира значителни трошоци за вашата организација, дури и ако одлучите да не го зачувате генерираниот медиум. Користете ја соодветно. Ако имате проблеми да го добиете она што го барате, одвојте време да истражите трикови за упатства онлајн за моделот на ВИ што ви е на располагање."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Оваа историја припаѓа на основниот курс. Враќањето е достапно откако ќе се создаде верзија за сесијата."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Оваа слика ја заменува стандардната икона на форумот прикажана до насловот на форумот."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Оваа страница доаѓа од основниот курс. Нејзиното зачувување ќе создаде верзија за тековната сесија."
+
+msgid "This will also delete %s subcategories."
+msgstr "Ова ќе ги избрише и %s подкатегории."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Ова ќе создаде индивидуални работни страници за %s учесници."
+
+msgid "Thread history"
+msgstr "Историја на темата"
+
+msgid "Title and content"
+msgstr "Наслов и содржина"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Не може да се откаже обновувањето во моментов."
+
+msgid "Unable to restore renewal right now."
+msgstr "Не може да се врати обновувањето во моментов."
+
+msgid "Unlock page"
+msgstr "Отклучи страница"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Користете [[Страница]] или [[Страница|Видлив текст]] за да создадете внатрешни Wiki-врски."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Користете празно место или стрелки за навигација"
+
+msgid "View version"
+msgstr "Прикажи верзија"
+
+msgid "Visible only to teachers"
+msgstr "Видливо само за наставници"
+
+msgid "Weight is required"
+msgstr "Тежината е задолжителна"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki-категориите се оневозможени за овој курс."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki-категориите се овозможени"
+
+msgid "Wiki html strict filtering"
+msgstr "Строго HTML-филтрирање за Wiki"
+
+msgid "Wiki settings"
+msgstr "Wiki-поставки"
+
+msgid "Wiki settings updated"
+msgstr "Wiki-поставките се ажурирани"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Гледате историска верзија на оваа страница"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Можете да прикачите една или повеќе датотеки на овој одговор."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Можете да ја уредувате оваа страница со задача, но страниците со работата на учениците нема да бидат изменети."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Можете да ги користите ознаките {{class_name}} и {{student_full_name}} во прашањето."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Имате 20 минути за да ја уредите оваа страница пред да истече заклучувањето за уредување."
+
+msgid "by"
+msgstr "од"
+
+msgid "required"
+msgstr "задолжително"
 

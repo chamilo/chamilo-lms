@@ -71,7 +71,7 @@
       class="flex justify-center items-center h-64"
     >
       <div class="loader"></div>
-      <span class="ml-4 text-lg text-primary">{{ t("Loading attendance data...") }}</span>
+      <span class="ml-4 text-lg text-primary">{{ t("Loading attendance data") }}</span>
     </div>
 
     <!-- Student UI -->
@@ -93,7 +93,7 @@
           v-if="filteredDates.length === 0"
           class="p-4 mb-4 text-yellow-900 bg-yellow-100 border border-yellow-300 rounded"
         >
-          {{ t("No attendance assigned yet.") }}
+          {{ t("No attendance assigned yet") }}
         </div>
 
         <div
@@ -162,7 +162,7 @@
         >
           {{
             t(
-              "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.",
+              "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons",
             )
           }}
         </div>
@@ -171,7 +171,7 @@
           <p>
             {{
               t(
-                "The attendance calendar allows you to register attendance lists (one per real session the students need to attend).",
+                "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)",
               )
             }}
           </p>
@@ -256,7 +256,7 @@
                         />
                         <span>{{
                           t(
-                            "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.",
+                            "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons",
                           )
                         }}</span>
                         <BaseButton
@@ -335,7 +335,7 @@
                     colspan="100"
                     class="text-center text-gray-500 border border-gray-25 py-6"
                   >
-                    {{ t("No attendance data for today.") }}
+                    {{ t("No attendance data for today") }}
                   </td>
                 </tr>
                 <template v-else>
@@ -669,7 +669,7 @@ const saveAttendanceSheet = async () => {
   if (!canEdit.value) return
 
   if (!attendanceData.value || Object.keys(attendanceData.value).length === 0) {
-    alert(t("No attendance data to save."))
+    alert(t("No attendance data to save"))
     return
   }
 

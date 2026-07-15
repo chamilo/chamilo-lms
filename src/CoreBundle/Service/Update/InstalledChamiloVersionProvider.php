@@ -12,6 +12,17 @@ use Throwable;
 
 final readonly class InstalledChamiloVersionProvider
 {
+    private const VERSION_FILES = [
+        '/version.php',
+        '/public/main/install/version.php',
+    ];
+
+    private const VERSION_KEYS = [
+        'new_version',
+        'system_version',
+        'version',
+    ];
+
     public function __construct(
         private KernelInterface $kernel,
     ) {}
@@ -19,7 +30,7 @@ final readonly class InstalledChamiloVersionProvider
     public function getInstalledVersion(): string
     {
         foreach ([
-            $this->getInstalledVersionFromVersionFile(),
+            $this->extractVersion($this->getVersionDetails()),
             $this->getInstalledVersionFromLegacyConfiguration(),
             $this->getInstalledVersionFromComposerMetadata(),
             $this->getInstalledVersionFromGitTag($this->getProjectDir()),
@@ -34,6 +45,22 @@ final readonly class InstalledChamiloVersionProvider
         return 'unknown';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public function getVersionDetails(): array
+    {
+        foreach (self::VERSION_FILES as $relativePath) {
+            $versionDetails = $this->loadVersionDetails($this->getProjectDir().$relativePath);
+
+            if (null !== $this->extractVersion($versionDetails)) {
+                return $versionDetails;
+            }
+        }
+
+        return [];
+    }
+
     public function isComparableVersion(string $version): bool
     {
         return 1 === preg_match('/^\d+(?:\.\d+){1,3}(?:[-+][A-Za-z0-9.-]+)?$/', $version);
@@ -42,8 +69,14 @@ final readonly class InstalledChamiloVersionProvider
     public function normalizeVersion(string $version): ?string
     {
         $version = trim($version);
+        $normalizedCandidate = strtolower($version);
 
-        if ('' === $version) {
+        if (
+            '' === $version
+            || '1.0.0+no-version-set' === $normalizedCandidate
+            || '1.0.0.0' === $normalizedCandidate
+            || str_starts_with($normalizedCandidate, 'dev-')
+        ) {
             return null;
         }
 
@@ -59,32 +92,12 @@ final readonly class InstalledChamiloVersionProvider
         return rtrim($this->kernel->getProjectDir(), '/');
     }
 
-    private function getInstalledVersionFromVersionFile(): ?string
+    /**
+     * @param array<string, mixed> $versionDetails
+     */
+    private function extractVersion(array $versionDetails): ?string
     {
-        $versionFile = $this->getProjectDir().'/public/main/install/version.php';
-
-        if (!is_file($versionFile) || !is_readable($versionFile)) {
-            return null;
-        }
-
-        $bufferLevel = ob_get_level();
-        ob_start();
-
-        try {
-            $versionDetails = include $versionFile;
-        } catch (Throwable) {
-            $this->cleanOutputBuffer($bufferLevel);
-
-            return null;
-        }
-
-        $this->cleanOutputBuffer($bufferLevel);
-
-        if (!\is_array($versionDetails)) {
-            return null;
-        }
-
-        foreach (['new_version', 'system_version', 'version'] as $key) {
+        foreach (self::VERSION_KEYS as $key) {
             if (!isset($versionDetails[$key])) {
                 continue;
             }
@@ -97,6 +110,31 @@ final readonly class InstalledChamiloVersionProvider
         }
 
         return null;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function loadVersionDetails(string $versionFile): array
+    {
+        if (!is_file($versionFile) || !is_readable($versionFile)) {
+            return [];
+        }
+
+        $bufferLevel = ob_get_level();
+        ob_start();
+
+        try {
+            $versionDetails = include $versionFile;
+        } catch (Throwable) {
+            $this->cleanOutputBuffer($bufferLevel);
+
+            return [];
+        }
+
+        $this->cleanOutputBuffer($bufferLevel);
+
+        return \is_array($versionDetails) ? $versionDetails : [];
     }
 
     private function getInstalledVersionFromLegacyConfiguration(): ?string

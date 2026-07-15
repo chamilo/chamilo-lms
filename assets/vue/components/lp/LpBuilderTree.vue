@@ -32,6 +32,25 @@ const itemsModel = computed({
   set: (value) => emit("update:items", value),
 })
 
+function iconFor(item) {
+  if (item?.isSection) {
+    return "folder-generic"
+  }
+
+  const icons = {
+    document: "file-text",
+    video: "file-video",
+    quiz: "multiple-marked",
+    link: "link",
+    student_publication: "inbox",
+    forum: "comment",
+    thread: "comment",
+    survey: "form-dropdown",
+  }
+
+  return icons[String(item?.itemType || "")] || "file-text"
+}
+
 function canMove(event) {
   return !event.draggedContext?.element?.isFinal
 }
@@ -123,7 +142,9 @@ async function handleStructureChanged() {
       <div>
         <div
           class="rounded-lg border px-2 py-2 transition"
-          :class="selectedId === element.id ? 'border-primary bg-primary/5' : 'border-gray-20 bg-white hover:bg-gray-10'"
+          :class="
+            selectedId === element.id ? 'border-primary bg-primary/5' : 'border-gray-20 bg-white hover:bg-gray-10'
+          "
         >
           <div class="flex items-center gap-2">
             <button
@@ -144,7 +165,7 @@ async function handleStructureChanged() {
             />
 
             <BaseIcon
-              :icon="element.isSection ? 'folder-generic' : 'file-text'"
+              :icon="iconFor(element)"
               size="small"
             />
 
@@ -216,7 +237,11 @@ async function handleStructureChanged() {
       <div
         v-if="canManage"
         class="lp-builder-drop-zone mt-2 flex min-h-14 items-center justify-center rounded-lg border border-dashed px-3 py-4 text-center text-body-2 transition"
-        :class="externalDropActive ? 'border-primary bg-primary/10 text-primary' : 'border-support-3 bg-support-1 text-support-5 hover:border-primary hover:bg-primary/5'"
+        :class="
+          externalDropActive
+            ? 'border-primary bg-primary/10 text-primary'
+            : 'border-support-3 bg-support-1 text-support-5 hover:border-primary hover:bg-primary/5'
+        "
         @dragenter="handleExternalDragOver"
         @dragleave="handleExternalDragLeave"
         @dragover="handleExternalDragOver"

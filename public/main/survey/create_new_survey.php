@@ -236,8 +236,8 @@ $form->setRequired($endDateElement);
 
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $visibleResults = [
-    SURVEY_VISIBLE_TUTOR => get_lang('Coach'),
-    SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('Coach and student'),
+    SURVEY_VISIBLE_TUTOR => get_lang('Tutor'),
+    SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('Tutor and student'),
     SURVEY_VISIBLE_PUBLIC => get_lang('Everyone'),
 ];
 

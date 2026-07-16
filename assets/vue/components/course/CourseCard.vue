@@ -816,7 +816,7 @@ const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions && courseIri) {
     return props.session.courseCoachesSubscriptions
       .filter((srcru) => srcru.course?.["@id"] === courseIri)
-      .map((srcru) => normalizeTeacher(srcru.user, "Coach"))
+      .map((srcru) => normalizeTeacher(srcru.user, "Tutor"))
       .filter(Boolean)
   }
 
@@ -830,7 +830,7 @@ const teachers = computed(() => {
             id: node?.id,
             ...node?.user,
           },
-          isTutor ? "Coach" : "Teacher",
+          isTutor ? "Tutor" : "Teacher",
         )
       })
       .filter(Boolean)

@@ -330,7 +330,7 @@ class CourseDescription
         $question[3] = get_lang('How does the course progress? Where should the learner pay special care? Are there identifiable problems in understanding different areas? How much time should one dedicate to the different areas of the course?');
         $question[4] = get_lang('What methods and activities help achieve the objectives of the course?  What would the schedule be?');
         $question[5] = get_lang('Is there a course book, a collection of papers, a bibliography, a list of links on the internet?');
-        $question[6] = get_lang('Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available.');
+        $question[6] = get_lang('Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available.');
         $question[7] = get_lang('How will learners be assessed? Are there strategies to develop in order to master the topic?');
         //$question[8]= get_lang('What is the current progress you have reached with your learners inside your course? How much do you think is remaining in comparison to the complete program?');
 

@@ -71,7 +71,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         CCourseDescription::TYPE_TOPICS => 'How does the course progress? Where should the learner pay special care? Are there identifiable problems in understanding different areas? How much time should one dedicate to the different areas of the course?',
         CCourseDescription::TYPE_METHODOLOGY => 'What methods and activities help achieve the objectives of the course?  What would the schedule be?',
         CCourseDescription::TYPE_COURSE_MATERIAL => 'Is there a course book, a collection of papers, a bibliography, a list of links on the internet?',
-        CCourseDescription::TYPE_RESOURCES => 'Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available.',
+        CCourseDescription::TYPE_RESOURCES => 'Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available.',
         CCourseDescription::TYPE_ASSESSMENT => 'How will learners be assessed? Are there strategies to develop in order to master the topic?',
     ];
 

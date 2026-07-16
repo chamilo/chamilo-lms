@@ -2735,7 +2735,7 @@ final class WikiManager
 
             $isTutor  = $groupInfo && GroupManager::is_tutor_of_group($uid, $groupInfo);
             $isMember = $groupInfo && GroupManager::is_subscribed($uid, $groupInfo);
-            $status   = ($isTutor && $isMember) ? get_lang('Coach and group member')
+            $status   = ($isTutor && $isMember) ? get_lang('Tutor and group member')
                 : ($isTutor ? get_lang('Group tutor') : ' ');
 
             if ($assignmentType === 1) {

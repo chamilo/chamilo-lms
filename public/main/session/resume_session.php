@@ -153,7 +153,7 @@ $courseListToShow = Display::page_subheader(get_lang('Course list').$url);
 $courseListToShow .= '<table id="session-list-course" class="table table-hover data_table">
 <tr>
   <th width="35%">'.get_lang('Course title').'</th>
-  <th width="30%">'.get_lang('Course coach').'</th>
+  <th width="30%">'.get_lang('Course tutor').'</th>
   <th width="10%">'.get_lang('Users number').'</th>
   <th width="25%">'.get_lang('Detail').'</th>
 </tr>';
@@ -262,7 +262,7 @@ if (0 === $session->getNbrCourses()) {
             $codePath."tracking/courseLog.php?sid=$sessionId&cid={$courseId}$orig_param&hide_course_breadcrumb=1"
         );
         $courseItem .= Display::url(
-            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, 22, get_lang('Edit coach')),
+            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, 22, get_lang('Edit tutor')),
             $codePath."session/session_course_edit.php?id_session=$sessionId&page=resume_session.php&course_code={$courseCode}$orig_param"
         );
 

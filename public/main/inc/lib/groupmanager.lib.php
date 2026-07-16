@@ -3105,7 +3105,7 @@ class GroupManager
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_SMALL,
-                get_lang('Coaches')
+                get_lang('Tutors')
             ).'</a>',
         ];
 
@@ -3126,7 +3126,7 @@ class GroupManager
         $users = self::getTutors($group);
         if (!empty($users)) {
             $content .= '<ul>';
-            $content .= "<li>".Display::tag('h4', get_lang('Coaches'))."</li><ul>";
+            $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
             foreach ($users as $user) {
                 $userInfo = api_get_user_info($user['user_id']);
                 $content .= '<li title="'.$userInfo['username'].'">'.
@@ -3428,13 +3428,13 @@ class GroupManager
 
             $tabs['tutor'] = [
                 'href' => sprintf($urlBase, 'tutor_settings.php'),
-                'label' => get_lang('Coaches'),
+                'label' => get_lang('Tutors'),
                 'icon' => Display::getMdiIcon(
                     'human-male-board',
                     'ch-tool-icon',
                     null,
                     ICON_SIZE_SMALL,
-                    get_lang('Coaches')
+                    get_lang('Tutors')
                 ),
             ];
         } else {

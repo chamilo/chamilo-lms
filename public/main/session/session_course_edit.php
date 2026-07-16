@@ -172,9 +172,9 @@ foreach ($coaches as $enreg) {
     }
 }
 
-$form->addSelect('id_coach', get_lang('Coach name'), $options, ['multiple' => 'multiple']);
+$form->addSelect('id_coach', get_lang('Tutor name'), $options, ['multiple' => 'multiple']);
 $form->addHidden('formSent', 1);
-$form->addButtonSave(get_lang('Assign coach'));
+$form->addButtonSave(get_lang('Assign tutor'));
 $form->setDefaults(['id_coach' => $selected]);
 $form->display();
 

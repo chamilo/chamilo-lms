@@ -5388,8 +5388,8 @@ class SessionManager
 
             $displayAccessStartDate = $enreg['DisplayStartDate'] ?? $enreg['DateStart'];
             $displayAccessEndDate = $enreg['DisplayEndDate'] ?? $enreg['DateEnd'];
-            $coachAccessStartDate = $enreg['CoachStartDate'] ?? $enreg['DateStart'];
-            $coachAccessEndDate = $enreg['CoachEndDate'] ?? $enreg['DateEnd'];
+            $coachAccessStartDate = $enreg['TutorStartDate'] ?? $enreg['CoachStartDate'] ?? $enreg['DateStart'];
+            $coachAccessEndDate = $enreg['TutorEndDate'] ?? $enreg['CoachEndDate'] ?? $enreg['DateEnd'];
             $dateStart = date('Y-m-d H:i:s', strtotime(trim($enreg['DateStart'])));
             $displayAccessStartDate = date('Y-m-d H:i:s', strtotime(trim($displayAccessStartDate)));
             $coachAccessStartDate = date('Y-m-d H:i:s', strtotime(trim($coachAccessStartDate)));
@@ -5437,11 +5437,12 @@ class SessionManager
                 $extraParams['session_category_id'] = $session_category_id;
             }
 
-            // Searching a general coach.
-            if (!empty($enreg['Coach'])) {
-                $coach_id = UserManager::get_user_id_from_username($enreg['Coach']);
+            // Searching a general tutor.
+            $tutorUsername = $enreg['Tutor'] ?? $enreg['Coach'] ?? '';
+            if (!empty($tutorUsername)) {
+                $coach_id = UserManager::get_user_id_from_username($tutorUsername);
                 if (false === $coach_id) {
-                    // If the coach-user does not exist - I'm the coach.
+                    // If the tutor user does not exist, use the default user.
                     $coach_id = $defaultUserId;
                 }
             } else {
@@ -5459,7 +5460,7 @@ class SessionManager
             $deleteOnlyCourseCoaches = false;
             if (1 == count($courses)) {
                 if ($logger) {
-                    $logger->debug('Only one course delete old coach list');
+                    $logger->debug('Only one course: delete the old tutor list');
                 }
                 $deleteOnlyCourseCoaches = true;
             }
@@ -5925,7 +5926,7 @@ class SessionManager
                                     );
 
                                     if ($debug) {
-                                        $logger->debug("Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                        $logger->debug("Adding course tutor: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                     }
                                     $savedCoaches[] = $coach_id;
                                 } else {
@@ -6014,7 +6015,7 @@ class SessionManager
                                 );
 
                                 if ($debug) {
-                                    $logger->debug("Add coach #$teacherToAdd to course $courseId and session $session_id");
+                                    $logger->debug("Add tutor #$teacherToAdd to course $courseId and session $session_id");
                                 }
 
                                 $userCourseCategory = '';
@@ -6206,7 +6207,7 @@ class SessionManager
                                         );
 
                                         if ($debug) {
-                                            $logger->debug("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                            $logger->debug("Sessions - Adding course tutor: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                         }
                                         $savedCoaches[] = $coach_id;
                                     } else {
@@ -6388,7 +6389,8 @@ class SessionManager
         if (isset($root->Session)) {
             foreach ($root->Session as $nodeSession) {
                 $sessionName = trim(api_utf8_decode($nodeSession->SessionName));
-                $coachUsername = trim(api_utf8_decode($nodeSession->Coach));
+                $tutorNode = isset($nodeSession->Tutor) ? $nodeSession->Tutor : $nodeSession->Coach;
+                $coachUsername = trim(api_utf8_decode((string) $tutorNode));
                 $coachId = UserManager::get_user_id_from_username($coachUsername) ?: $defaultUserId;
                 $dateStart = api_utf8_decode($nodeSession->DateStart);
                 $dateEnd = api_utf8_decode($nodeSession->DateEnd);
@@ -6495,7 +6497,8 @@ class SessionManager
                             'nbr_users' => 0,
                             'position' => 0,
                         ]);
-                        $courseCoachUsernames = explode(',', $nodeCourse->Coach);
+                        $tutorNode = isset($nodeCourse->Tutor) ? $nodeCourse->Tutor : $nodeCourse->Coach;
+                        $courseCoachUsernames = explode(',', (string) $tutorNode);
                         foreach ($courseCoachUsernames as $coachUname) {
                             $coachId = UserManager::get_user_id_from_username(trim($coachUname));
                             if ($coachId) {
@@ -7052,7 +7055,7 @@ class SessionManager
     }
 
     /**
-     * Assign coaches of a session(s) as teachers to a given course (or courses).
+     * Assign tutors of a session(s) as teachers to a given course (or courses).
      *
      * @param array A list of session IDs
      * @param array A list of course IDs
@@ -7091,7 +7094,7 @@ class SessionManager
             foreach ($result as $courseCode => $data) {
                 $url = api_get_course_url($courseCode);
                 $htmlResult .= sprintf(
-                    get_lang('Coaches subscribed as teachers in course %s'),
+                    get_lang('Tutors subscribed as teachers in course %s'),
                     Display::url($courseCode, $url, ['target' => '_blank'])
                 );
                 foreach ($data as $sessionId => $coachList) {
@@ -8533,7 +8536,7 @@ class SessionManager
         if (!api_is_platform_admin() && api_is_teacher()) {
             $form->addSelectFromCollection(
                 'coach_username',
-                [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                 [api_get_user_entity()],
                 [
                     'id' => 'coach_username',
@@ -8583,7 +8586,7 @@ class SessionManager
 
                 $form->addSelect(
                     'coach_username',
-                    [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                    [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                     $coachesOptions,
                     [
                         'id' => 'coach_username',
@@ -8602,7 +8605,7 @@ class SessionManager
 
                 $form->addSelectAjax(
                     'coach_username',
-                    [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                    [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                     $coaches,
                     [
                         'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_general_coach',
@@ -8759,8 +8762,8 @@ class SessionManager
         $form->addDateTimePicker(
             'coach_access_start_date',
             [
-                get_lang('Access start date for coaches'),
-                get_lang('Date on which the session is made available to coaches, so they can prepare it before the students get connected'),
+                get_lang('Access start date for tutors'),
+                get_lang('Date on which the session is made available to tutors, so they can prepare it before the students get connected'),
             ],
             ['id' => 'coach_access_start_date']
         );
@@ -8768,8 +8771,8 @@ class SessionManager
         $form->addDateTimePicker(
             'coach_access_end_date',
             [
-                get_lang('Access end date for coaches'),
-                get_lang('Date on which the session is closed to coaches. The additional delay will allow them to export all relevant tracking information'),
+                get_lang('Access end date for tutors'),
+                get_lang('Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information'),
             ],
             ['id' => 'coach_access_end_date']
         );
@@ -9347,7 +9350,7 @@ class SessionManager
                     get_lang('Title'),
                     get_lang('Start date to display'),
                     get_lang('End date to display'),
-                    get_lang('Coach'),
+                    get_lang('Tutor'),
                     get_lang('Status'),
                     get_lang('Visibility'),
                     get_lang('Course title'),

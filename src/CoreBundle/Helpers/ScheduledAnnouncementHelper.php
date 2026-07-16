@@ -85,7 +85,7 @@ class ScheduledAnnouncementHelper
 
                 if (empty($sessionRelUsers) || 0 === $generalCoaches->count()) {
                     if ($debug) {
-                        error_log("No users or general coaches found for session ID: $sessionId");
+                        error_log("No users or general tutors found for session ID: $sessionId");
                     }
 
                     continue;
@@ -93,7 +93,7 @@ class ScheduledAnnouncementHelper
 
                 $coachId = $generalCoaches->first()->getId();
                 if ($debug) {
-                    error_log("Coach ID: $coachId");
+                    error_log("Tutor ID: $coachId");
                 }
 
                 $coachList = [];
@@ -165,7 +165,7 @@ class ScheduledAnnouncementHelper
                 $coachMessage = $this->buildCoachMessage($announcement, $generalCoaches, $message);
                 foreach ($coachList as $courseCoach) {
                     if ($debug) {
-                        error_log('Sending email to coach ID: '.$courseCoach->getId());
+                        error_log('Sending email to tutor ID: '.$courseCoach->getId());
                     }
                     $this->sendEmail($courseCoach->getId(), $subject, $coachMessage, $coachId);
                 }
@@ -229,6 +229,9 @@ class ScheduledAnnouncementHelper
         $tags = [
             '((session_name))' => $session->getTitle(),
             '((session_start_date))' => $startTime,
+            '((general_tutor))' => implode(' - ', $generalCoachName),
+            '((general_tutor_email))' => implode(' - ', $generalCoachEmail),
+            // Legacy aliases kept for existing scheduled announcements.
             '((general_coach))' => implode(' - ', $generalCoachName),
             '((general_coach_email))' => implode(' - ', $generalCoachEmail),
             '((session_end_date))' => $endTime,
@@ -258,8 +261,8 @@ class ScheduledAnnouncementHelper
         }
 
         $coachMessageIntro = \count($generalCoaches) > 1
-            ? $this->translator->trans('You are receiving a copy because you are one of the course coaches')
-            : $this->translator->trans('You are receiving a copy because you are the course coach');
+            ? $this->translator->trans('You are receiving a copy because you are one of the course tutors')
+            : $this->translator->trans('You are receiving a copy because you are the course tutor');
 
         $coachMessage = $coachMessageIntro.': '.implode(', ', $coachNames);
 
@@ -275,7 +278,7 @@ class ScheduledAnnouncementHelper
         $coach = $this->em->getRepository(User::class)->find($coachId);
 
         if (!$user || !$coach) {
-            throw new Exception('User or coach not found.');
+            throw new Exception('User or tutor not found.');
         }
 
         $this->messageHelper->sendMessageSimple(

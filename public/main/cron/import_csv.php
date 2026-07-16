@@ -2118,7 +2118,7 @@ class ImportCsv
                         $this->extraFieldIdNameList['session']
                     );
 
-                    $coachUserName = isset($session['Coach']) ? $session['Coach'] : null;
+                    $coachUserName = $session['Tutor'] ?? $session['Coach'] ?? null;
                     $categoryId = isset($session['category_id']) ? $session['category_id'] : null;
 
                     // 2014-06-30
@@ -2263,7 +2263,7 @@ class ImportCsv
                         $this->logger->addInfo("Session #$sessionId: Courses added: '".implode(', ', $courseList)."'");
 
                         if (empty($courseListWithCoach)) {
-                            $this->logger->addInfo("No users/coaches to update");
+                            $this->logger->addInfo("No users/tutors to update");
                             continue;
                         }
 
@@ -2287,7 +2287,7 @@ class ImportCsv
                                     }
                                 }
 
-                                $this->logger->addInfo("Session #$sessionId: course '$courseCode' coaches added: '".implode(', ', $coachList)."'");
+                                $this->logger->addInfo("Session #$sessionId: course '$courseCode' tutors added: '".implode(', ', $coachList)."'");
 
                                 SessionManager::updateCoaches(
                                     $sessionId,
@@ -2296,7 +2296,7 @@ class ImportCsv
                                     true
                                 );
                             } else {
-                                $this->logger->addInfo("No coaches added");
+                                $this->logger->addInfo("No tutors added");
                             }
 
                             // Students

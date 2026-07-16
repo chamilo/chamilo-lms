@@ -392,7 +392,7 @@ class CourseHelper
             $message .= $this->translator->trans('Category').': '.$category->getCode()."\n";
         }
 
-        $message .= $this->translator->trans('Coach').': '.$course->getTutorName()."\n";
+        $message .= $this->translator->trans('Tutor').': '.$course->getTutorName()."\n";
         $message .= $this->translator->trans('Language').': '.$course->getCourseLanguage();
 
         $email = (new Email())

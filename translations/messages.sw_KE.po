@@ -1575,8 +1575,8 @@ msgstr "Je, una uhakika unataka kufuta hatua hizi?"
 msgid "Authoring tool"
 msgstr "Zana ya kuandika"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Faili la SCORM au AICC la kupakia"
+msgid "SCORM file to upload"
+msgstr "Faili la SCORM la kupakia"
 
 msgid "Course location"
 msgstr "Mahali pa kozi"
@@ -8723,6 +8723,15 @@ msgstr "Onyesha"
 
 msgid "My courses"
 msgstr "Kukosa zangu"
+
+msgid "Shop"
+msgstr "Duka"
+
+msgid "Invoice"
+msgstr "Ankara"
+
+msgid "Request invoice"
+msgstr "Omba ankara"
 
 msgid "View my progress"
 msgstr "Tazama maendeleo yangu"
@@ -36476,4 +36485,856 @@ msgstr "Imedhibitiwa"
 
 msgid "View threads"
 msgstr "Tazama nyuzi"
+
+msgid "No auth source"
+msgstr "Hakuna chanzo cha uthibitishaji"
+
+msgid "You must add at least one question"
+msgstr "Lazima uongeze angalau swali moja"
+
+msgid "Advanced actions"
+msgstr "Vitendo vya juu"
+
+msgid "Application path"
+msgstr "Njia ya programu"
+
+msgid "Apply files details"
+msgstr "Tekeleza maelezo ya faili"
+
+msgid "Apply plan details"
+msgstr "Tekeleza maelezo ya mpango"
+
+msgid "Apply plan failed"
+msgstr "Tekeleza mpango imeshindwa"
+
+msgid "Apply plan ready"
+msgstr "Tekeleza mpango tayari"
+
+msgid "Apply preparation"
+msgstr "Tekeleza maandalizi"
+
+msgid "Apply staged files"
+msgstr "Tekeleza faili zilizohifadhiwa"
+
+msgid "Applying files..."
+msgstr "Inatekeleza faili..."
+
+msgid "Audit file"
+msgstr "Kagua faili"
+
+msgid "Backup directory"
+msgstr "Saraka ya nakala rudufu"
+
+msgid "Baseline clean"
+msgstr "Msingi safi"
+
+msgid "Baseline warnings"
+msgstr "Onyo za msingi"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Jenga mpango salama wa utekelezaji kutoka kifurushi kilichohifadhiwa. Hii inakagua faili pekee, ruhusa, njia ya nakala rudufu na hali ya kufunga. Haibadilishi faili."
+
+msgid "Build production frontend assets."
+msgstr "Jenga mali za mbele za uzalishaji."
+
+msgid "Building plan..."
+msgstr "Inajenga mpango..."
+
+msgid "Channel"
+msgstr "Kituo"
+
+msgid "Check"
+msgstr "Angalia"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Angalia masasisho yanayopatikana ya Chamilo, thibitisha vifurushi, hifadhi faili na tekeleza hatua za baada ya sasisho zinazodhibitiwa."
+
+msgid "Check manifest"
+msgstr "Angalia orodha"
+
+msgid "Checking post-apply actions..."
+msgstr "Inakagua vitendo vya baada ya utekelezaji..."
+
+msgid "Checking..."
+msgstr "Inakagua..."
+
+msgid "Composer install"
+msgstr "Sakinisha Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Vitendo vya Composer, Yarn na uhamishaji wa hifadhidata vinaweza kubadilisha tegemezi, mali zilizotengenezwa au hifadhidata. Chagua tu baada ya kuthibitisha nakala rudufu na ruhusa."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Sanidi CHAMILO_UPDATE_MANIFEST_URL kwenye seva au toa URL ya orodha ya HTTPS."
+
+msgid "Configured"
+msgstr "Imesanidiwa"
+
+msgid "Current migration"
+msgstr "Uhamishaji wa sasa"
+
+msgid "Database baseline"
+msgstr "Msingi wa hifadhidata"
+
+msgid "Database migration safety review"
+msgstr "Ukaguzi wa usalama wa uhamishaji wa hifadhidata"
+
+msgid "Database migrations"
+msgstr "Uhamishaji wa hifadhidata"
+
+msgid "Development mode"
+msgstr "Hali ya maendeleo"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Usiwezeshe hii isipokuwa nakala rudufu ya sasisho na ruhusa za seva zimekaguliwa."
+
+msgid "Doctrine dry-run command"
+msgstr "Amri ya Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine iliripoti onyo za msingi wa kihistoria. Kisasisishaji kitatekeleza uhamishaji wa V210 uliohifadhiwa pekee baada ya uthibitisho wa wazi."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine itatekeleza uhamishaji wa V210 uliohifadhiwa pekee baada ya ukaguzi wa usalama kupita."
+
+msgid "Dry-run exit code"
+msgstr "Msimbo wa kutoka wa dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Uhamishaji usiopatikana uliotekelezwa"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Chambua kifurushi cha sasisho kilichothibitishwa kwenye saraka ya hatua ya kati kwa ajili ya ukaguzi. Hii haibadilishi faili, haitekelezi uhamishaji, wala haibadilishi hifadhidata."
+
+msgid "File apply available"
+msgstr "Utumiaji wa faili unapatikana"
+
+msgid "Files to replace"
+msgstr "Faili za kubadilishwa"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Ninathibitisha kuwa nakala rudufu ya hifadhidata ipo na ilithibitishwa kabla ya kuendesha uhamishaji."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Ninaelewa kuwa vitendo vya hali ya juu vinaweza kubadilisha tegemezi, mali zilizotengenezwa au hifadhidata."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Ninaelewa kuwa hii itabadilisha faili kwenye usakinishaji wa Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Ninaelewa kuwa hii itaendesha amri za sasisho kwenye seva."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Sakinisha tegemezi za mbele kabla ya kujenga upya mali."
+
+msgid "Installed version"
+msgstr "Toleo lililosakinishwa"
+
+msgid "Latest migration"
+msgstr "Uhamishaji wa hivi karibuni"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Acha njia za kifurushi na saini tupu ili kuzipakua kutoka URL za orodha zilizothibitishwa. Njia za ndani zinapatikana kwa majaribio ya maendeleo pekee."
+
+msgid "Live command log"
+msgstr "Kumbukumbu ya amri inayoendelea"
+
+msgid "Live update log"
+msgstr "Kumbukumbu ya sasisho inayoendelea"
+
+msgid "Local test options"
+msgstr "Chaguzi za majaribio ya ndani"
+
+msgid "Local test update notice link"
+msgstr "Kiungo cha taarifa ya sasisho la majaribio ya ndani"
+
+msgid "Local update notice simulation"
+msgstr "Uigaji wa taarifa ya sasisho la ndani"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Uigaji wa taarifa ya sasisho la ndani unapatikana katika hali ya maendeleo pekee."
+
+msgid "Manifest"
+msgstr "Orodha"
+
+msgid "Manifest source"
+msgstr "Chanzo cha orodha"
+
+msgid "Migration safety details"
+msgstr "Maelezo ya usalama wa uhamishaji"
+
+msgid "Migration safety review failed"
+msgstr "Uhakiki wa usalama wa uhamishaji umeshindwa"
+
+msgid "Migration safety review ready"
+msgstr "Uhakiki wa usalama wa uhamishaji uko tayari"
+
+msgid "Migration target"
+msgstr "Lengo la uhamishaji"
+
+msgid "New files"
+msgstr "Faili mpya"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Uhamishaji mpya ulioripotiwa na Doctrine"
+
+msgid "Next migration"
+msgstr "Uhamishaji unaofuata"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Hakuna uhamishaji usiopatikana ulioripotiwa."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Hakuna URL rasmi ya manifest iliyosanidiwa bado. Tumia URL ya HTTPS au njia ya ndani kwa ajili ya majaribio ya maendeleo."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Hakuna uhamishaji unaosubiri uliotambuliwa kabla ya lengo la sasisho lililopangwa."
+
+msgid "Not configured"
+msgstr "Haijasanidiwa"
+
+msgid "Not detected"
+msgstr "Haijatambuliwa"
+
+msgid "Official Chamilo update channel"
+msgstr "Kituo rasmi cha sasisho cha Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 ya kifurushi"
+
+msgid "Package URL"
+msgstr "URL ya kifurushi"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Faili za kifurushi na saini zitapakuliwa kutoka kwa manifest. Njia za ndani zimelemazwa katika mazingira haya."
+
+msgid "Package path"
+msgstr "Njia ya kifurushi"
+
+msgid "Package staged successfully"
+msgstr "Kifurushi kimepangwa kwa mafanikio"
+
+msgid "Package staging failed"
+msgstr "Kupanga kifurushi kumeshindwa"
+
+msgid "Package verification"
+msgstr "Uthibitishaji wa kifurushi"
+
+msgid "Package verification failed"
+msgstr "Uthibitishaji wa kifurushi umeshindwa"
+
+msgid "Package verified successfully"
+msgstr "Kifurushi kimethibitishwa kwa mafanikio"
+
+msgid "Pending migrations before this update"
+msgstr "Uhamishaji unaosubiri kabla ya sasisho hili"
+
+msgid "Planned backup path"
+msgstr "Njia iliyopangwa ya nakala rudufu"
+
+msgid "Post-apply actions completed"
+msgstr "Vitendo vya baada ya kutumia vimekamilika"
+
+msgid "Post-apply actions failed"
+msgstr "Vitendo vya baada ya kutumia vimeshindwa"
+
+msgid "Post-apply actions ready"
+msgstr "Vitendo vya baada ya kutumia viko tayari"
+
+msgid "Post-apply checks"
+msgstr "Ukaguzi wa baada ya kutumia"
+
+msgid "Post-apply checks failed"
+msgstr "Ukaguzi wa baada ya kutumia umeshindwa"
+
+msgid "Post-apply details"
+msgstr "Maelezo ya baada ya kutumia"
+
+msgid "Post-apply run details"
+msgstr "Maelezo ya utekelezaji wa baada ya kutumia"
+
+msgid "Preflight checks"
+msgstr "Ukaguzi wa awali"
+
+msgid "Preflight checks completed"
+msgstr "Ukaguzi wa awali umekamilika"
+
+msgid "Preflight checks failed"
+msgstr "Ukaguzi wa awali umeshindwa"
+
+msgid "Preflight details"
+msgstr "Maelezo ya awali"
+
+msgid "Prepare staging"
+msgstr "Tayarisha upangaji"
+
+msgid "Preparing staging..."
+msgstr "Inatayarisha upangaji..."
+
+msgid "Production mode"
+msgstr "Hali ya uzalishaji"
+
+msgid "Released at"
+msgstr "Ilitolewa tarehe"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Badilisha faili za Chamilo kutoka kwa kifurushi kilichopangwa kwa kutumia mpango wa utekelezaji uliohakikiwa. Hii haitekelezi uhamishaji wa hifadhidata, Composer, Yarn au amri za kache."
+
+msgid "Review apply plan"
+msgstr "Kagua mpango wa utekelezaji"
+
+msgid "Review database migrations"
+msgstr "Kagua uhamishaji wa hifadhidata"
+
+msgid "Review post-apply actions"
+msgstr "Kagua vitendo vya baada ya kutumia"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Kagua amri za mwongozo zinazopendekezwa baada ya kutumia faili za sasisho. Hatua hii haitekelezi Composer, Yarn, uhamishaji au amri za kache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Kagua uhamishaji wa Doctrine uliopangwa na matokeo ya majaribio kavu kabla ya kutekeleza uhamishaji wa hifadhidata."
+
+msgid "Reviewing database migrations..."
+msgstr "Inakagua uhamishaji wa hifadhidata..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Tekeleza na upitishe uhakiki wa usalama wa uhamishaji kabla ya kutekeleza uhamishaji wa hifadhidata."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Tekeleza ukaguzi wa mazingira kabla ya hatua yoyote ya baadaye ya utumiaji wa sasisho. Hii haibadilishi faili au hifadhidata."
+
+msgid "Run post-apply actions"
+msgstr "Tekeleza vitendo vya baada ya kutumia"
+
+msgid "Run preflight checks"
+msgstr "Tekeleza ukaguzi wa awali"
+
+msgid "Run selected post-apply actions"
+msgstr "Tekeleza vitendo vya baada ya kutumia vilivyochaguliwa"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Tekeleza amri za baada ya kutumia zilizochaguliwa kutoka kwa seva kwa kutumia orodha ya kuruhusiwa iliyodhibitiwa. Hakuna amri za ganda za kawaida zinazokubaliwa."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Tekeleza amri hizi mwenyewe kutoka kwa seva baada ya kuthibitisha matokeo ya kusasisha faili na nakala rudufu."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Kutendekeza vitendo vya baada ya kutumia kutoka kwa UI kumezimwa katika hali ya uzalishaji."
+
+msgid "Running post-apply actions..."
+msgstr "Inatekeleza vitendo vya baada ya kutumia..."
+
+msgid "Safe actions"
+msgstr "Vitendo salama"
+
+msgid "Signature path"
+msgstr "Njia ya saini"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Uthibitishaji wa saini hauwezi kurukwa katika mazingira haya."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Ruka uthibitishaji wa saini kwa ajili ya majaribio ya maendeleo ya ndani"
+
+msgid "Staged file application failed"
+msgstr "Utumiaji wa faili zilizotayarishwa umeshindwa"
+
+msgid "Staged files applied successfully"
+msgstr "Faili zilizotayarishwa zimetumika kwa mafanikio"
+
+msgid "Staging details"
+msgstr "Maelezo ya utayarishaji"
+
+msgid "Staging directory"
+msgstr "Saraka ya utayarishaji"
+
+msgid "Staging extraction"
+msgstr "Uchimbaji wa utayarishaji"
+
+msgid "Symfony cache clear"
+msgstr "Kusafisha kashe ya Symfony"
+
+msgid "System update"
+msgstr "Sasisho la mfumo"
+
+msgid "Target version"
+msgstr "Toleo lengwa"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL ya manifesti rasmi iliyosanidiwa imejaa mapema. Unaweza kuibadilisha kuwa manifesti nyingine ya HTTPS ikiwa inahitajika."
+
+msgid "The database migration baseline is clean."
+msgstr "Msingi wa uhamishaji wa hifadhidata ni safi."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Jibu la mwisho la HTTP lilishindwa baada ya operesheni kukamilika. Hii kwa kawaida husababishwa na ruhusa za kashe wakati wa utekelezaji au kuwasha upya seva ya wavuti wakati wa ombi."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Logi ya operesheni inaripoti kwamba vitendo vya baada ya kutumia vimekamilika kwa mafanikio."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Amri za baada ya kutumia zilizochaguliwa zimekamilika kwa mafanikio, lakini jibu la mwisho la HTTP lilishindwa. Onyesha upya ukurasa na thibitisha ruhusa za kashe wakati wa utekelezaji ikiwa ukurasa haujapakia vizuri."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Kisasisishaji hakitengenezi wala kurejesha nakala rudufu za hifadhidata."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Vitendo hivi ni salama kutekelezwa kutoka kwa UI baada ya kukagua matokeo ya sasisho."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Amri hizi zinaweza kubadilisha tegemezi, mali zilizotengenezwa, kashe au hifadhidata. Thibitisha nakala rudufu kabla ya kuendelea."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Kitendo hiki kinabadilisha faili katika usakinishaji wa Chamilo. Hakikisha mpango wa utumiaji umekaguliwa na nakala rudufu zimewezeshwa kabla ya kuendelea."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Ingizo hili la maendeleo huiga taarifa ya sasisho ya Chamilo.org ya baadaye kwa kutumia njia za kifurushi cha majaribio za ndani."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Skrini hii ilifunguliwa kutoka kwa taarifa rasmi ya sasisho, lakini hakuna chanzo cha manifesti rasmi kilichosanidiwa bado."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Skrini hii ilifunguliwa kutoka kwa taarifa ya sasisho. Ukaguzi wa manifesti pekee ndio unaoanzishwa kiotomatiki."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Hatua hii inatayarisha ukaguzi pekee. Kubadilisha faili hutokea baadaye katika hatua ya Tumia faili zilizotayarishwa, pamoja na kufuli, nakala rudufu na ulinzi wa kurejesha."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Kisasisishaji hiki hakitengenezi nakala rudufu ya hifadhidata. Tengeneza na thibitisha nakala rudufu kabla ya kuendesha uhamishaji."
+
+msgid "Trusted public key"
+msgstr "Ufunguo wa umma unaoaminika"
+
+msgid "Trusted signing key"
+msgstr "Ufunguo wa kusaini unaoaminika"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Andika APPLY UPDATE FILES ili kuthibitisha"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Andika RUN DATABASE MIGRATIONS ili kuthibitisha uhamishaji wa hifadhidata"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Andika RUN POST UPDATE ACTIONS ili kuthibitisha"
+
+msgid "Unknown update notice source."
+msgstr "Chanzo cha taarifa ya sasisho hakijulikani."
+
+msgid "Update availability"
+msgstr "Upatikanaji wa sasisho"
+
+msgid "Update directory"
+msgstr "Saraka ya sasisho"
+
+msgid "Update lock path"
+msgstr "Njia ya kufuli ya sasisho"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Tumia saraka ya utayarishaji iliyotengenezwa na hatua iliyotangulia. Seva inakubali saraka ndani ya var/update/staging pekee."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Tumia kiungo hiki kuiga taarifa ya sasisho ya Chamilo.org ya baadaye wakati wa majaribio ya maendeleo."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Tumia hii kwa ajili ya majaribio ya maendeleo ya ndani pekee. Masasisho ya uzalishaji lazima yatumie ufunguo uliosanidiwa na seva."
+
+msgid "Verification details"
+msgstr "Maelezo ya uthibitishaji"
+
+msgid "Verify package"
+msgstr "Thibitisha kifurushi"
+
+msgid "Verifying..."
+msgstr "Inathibitisha..."
+
+msgid "Waiting for command progress events..."
+msgstr "Inasubiri matukio ya maendeleo ya amri..."
+
+msgid "Waiting for update progress events..."
+msgstr "Inasubiri matukio ya maendeleo ya sasisho..."
+
+msgid "Yarn build"
+msgstr "Ujenzi wa Yarn"
+
+msgid "Yarn install"
+msgstr "Usakinishaji wa Yarn"
+
+msgid "A comment is required"
+msgstr "Maoni yanahitajika"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Tayari kuna hifadhidata yenye jina lile lile. Ikiwa ina majedwali, yatafutwa; ikiwa ni tupu, itatumika tena."
+
+msgid "AI generated"
+msgstr "Imetengenezwa na AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Ongeza angalau swali moja kabla ya kurudi kwenye njia ya kujifunza."
+
+msgid "Add attachments"
+msgstr "Ongeza viambatanisho"
+
+msgid "Additional fields"
+msgstr "Viwanja vya ziada"
+
+msgid "Allow comments"
+msgstr "Ruhusu maoni"
+
+msgid "Allow new pages"
+msgstr "Ruhusu kurasa mpya"
+
+msgid "Allow ratings"
+msgstr "Ruhusu ukadiriaji"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Je, una uhakika unataka kufuta vitu vyote?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Je, una uhakika unataka kurejesha upya wa kiotomatiki?"
+
+msgid "Attachment has been deleted"
+msgstr "Kiambatanisho kimefutwa"
+
+msgid "Backup file"
+msgstr "Faili la nakala rudufu"
+
+msgid "Block comments"
+msgstr "Zuia maoni"
+
+msgid "Block new pages"
+msgstr "Zuia kurasa mpya"
+
+msgid "Block ratings"
+msgstr "Zuia ukadiriaji"
+
+msgid "Cancel renewal"
+msgstr "Ghairi upya"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Viungo vya kategoria vitaondolewa kutoka kurasa za Wiki %s."
+
+msgid "Change"
+msgstr "Badilisha"
+
+msgid "Clear group"
+msgstr "Futa kikundi"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Bofya lebo ili kuiingiza kwenye kihariri. Vifaa hivi vya kushika nafasi vitabadilishwa wakati wa kutengeneza cheti."
+
+msgid "Comment added"
+msgstr "Maoni yameongezwa"
+
+msgid "Comment is required"
+msgstr "Maoni yanahitajika"
+
+msgid "Comment score"
+msgstr "Alama ya maoni"
+
+msgid "Compare selected versions line by line"
+msgstr "Linganisha matoleo yaliyochaguliwa mstari kwa mstari"
+
+msgid "Compare selected versions word by word"
+msgstr "Linganisha matoleo yaliyochaguliwa neno kwa neno"
+
+msgid "Compare versions"
+msgstr "Linganisha matoleo"
+
+msgid "Copy completed"
+msgstr "Kunakili kumekamilika"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Unda kurasa za kazi za Wiki za mtu binafsi kwa wanafunzi"
+
+msgid "Current view mode"
+msgstr "Hali ya mwonekano wa sasa"
+
+msgid "Delete Wiki"
+msgstr "Futa Wiki"
+
+msgid "Delete page"
+msgstr "Futa ukurasa"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Kufuta ukurasa wa nyumbani wa Wiki hakupendekezwi. Unaweza kuutengeneza tena baadaye."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Kuzima Wiki kunazuia kurasa na vitendo vya kawaida vya Wiki. Ukurasa huu wa mipangilio unabaki kupatikana kwa walimu wa kozi."
+
+msgid "Discussion"
+msgstr "Majadiliano"
+
+msgid "Edit Comment"
+msgstr "Hariri Maoni"
+
+msgid "Edit page"
+msgstr "Hariri ukurasa"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Tarehe ya mwisho lazima iwe baada ya au sawa na tarehe ya kumalizika"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Weka neno la kutafuta ili kupata kurasa za Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Tarehe ya kumalizika lazima iwe kabla ya au sawa na tarehe ya mwisho"
+
+msgid "Failed email recipients"
+msgstr "Wapokeaji barua pepe walioshindwa"
+
+msgid "Finish and return to learning path"
+msgstr "Maliza na urudi kwenye njia ya kujifunza"
+
+msgid "Forum image"
+msgstr "Picha ya jukwaa"
+
+msgid "Hide discussion"
+msgstr "Ficha majadiliano"
+
+msgid "Hide page"
+msgstr "Ficha ukurasa"
+
+msgid "I changed my mind"
+msgstr "Nimebadilisha mawazo yangu"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Ikiwa haijachaguliwa, faili hizo zitabaki kupatikana kwa msimamizi wa jukwaa kupitia zana ya 'Maelezo ya faili'."
+
+msgid "Internal message failures"
+msgstr "Kushindwa kwa ujumbe wa ndani"
+
+msgid "Internal messages available"
+msgstr "Ujumbe wa ndani unapatikana"
+
+msgid "Internal messages created now"
+msgstr "Ujumbe wa ndani umetengenezwa sasa"
+
+msgid "Item score"
+msgstr "Alama ya kipengee"
+
+msgid "Last post"
+msgstr "Chapisho la mwisho"
+
+msgid "Lock page"
+msgstr "Funga ukurasa"
+
+msgid "Manage categories"
+msgstr "Dhibiti kategoria"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Weka alama kwenye hati hii kama iliyosaidiwa na AI. Tumia wakati maudhui yalipotengenezwa au kubadilishwa kwa kiasi kikubwa kwa kutumia zana za AI."
+
+msgid "Maximum score is required"
+msgstr "Alama ya juu zaidi inahitajika"
+
+msgid "Metric"
+msgstr "Kipimo"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Maoni mapya yamezuiwa katika mjadala huu"
+
+msgid "No Wiki categories are available yet."
+msgstr "Hakuna kategoria za Wiki zinazopatikana bado."
+
+msgid "No categories found"
+msgstr "Hakuna kategoria zilizopatikana"
+
+msgid "No content"
+msgstr "Hakuna maudhui"
+
+msgid "No parent category"
+msgstr "Hakuna kategoria kuu"
+
+msgid "Number of comments scored"
+msgstr "Idadi ya maoni yaliyopimwa"
+
+msgid "Old version"
+msgstr "Toleo la zamani"
+
+msgid "Only image files are allowed."
+msgstr "Faili za picha pekee ndizo zinazoruhusiwa."
+
+msgid "Please fill all required fields"
+msgstr "Tafadhali jaza sehemu zote zinazohitajika"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Maswali yenye vishikio vya darasa au mwanafunzi yatatolewa kwa madarasa au vikundi vya kozi: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Ukadiriaji umezuiwa katika mjadala huu"
+
+msgid "Remove image"
+msgstr "Ondoa picha"
+
+msgid "Restore renewal"
+msgstr "Rejesha upya"
+
+msgid "Restore version"
+msgstr "Rejesha toleo"
+
+msgid "Search in"
+msgstr "Tafuta katika"
+
+msgid "Select group"
+msgstr "Chagua kikundi"
+
+msgid "Select image"
+msgstr "Chagua picha"
+
+msgid "Selected image"
+msgstr "Picha iliyochaguliwa"
+
+msgid "Show discussion"
+msgstr "Onyesha mjadala"
+
+msgid "Show page"
+msgstr "Onyesha ukurasa"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Baadhi ya faili au folda hazina ruhusa ya kuandika. Ili uweze kusakinisha Chamilo, lazima kwanza ubadilishe ruhusa zao (kwa kutumia CHMOD). Tafadhali soma"
+
+msgid "Subcategories"
+msgstr "Vikategoria vidogo"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Gusa upande wa kushoto au kulia ili kusogeza"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Muda wa mwisho wa kazi ya Wiki umepita, lakini uwasilishaji uliochelewa unaruhusiwa."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Muda wa mwisho wa kazi ya Wiki umepita."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Kazi ya Wiki haijaanza bado."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Kufunga uhariri wa ukurasa wa Wiki kunahitajika kabla ya kuhifadhi."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Tangazo limehifadhiwa, lakini kiambatisho hakikuweza kupakiwa."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Tangazo limehifadhiwa, lakini utoaji wa barua pepe umeshindwa."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Tangazo limehifadhiwa, lakini hakuna barua pepe iliyoweza kutumwa."
+
+msgid "The category has been created"
+msgstr "Kategoria imeundwa"
+
+msgid "The category has been deleted"
+msgstr "Kategoria imefutwa"
+
+msgid "The category has been updated"
+msgstr "Kategoria imesasishwa"
+
+msgid "The end date is invalid"
+msgstr "Tarehe ya mwisho si halali"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Idadi ya juu zaidi ya matoleo lazima iwe nambari kamili isiyo hasi"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Idadi ya juu zaidi ya maneno lazima iwe nambari kamili isiyo hasi"
+
+msgid "The print window could not be opened"
+msgstr "Dirisha la kuchapisha halikuweza kufunguliwa"
+
+msgid "The start date is invalid"
+msgstr "Tarehe ya kuanza si halali"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Mipangilio hii inatumika kwa kozi nzima, ikijumuisha vipindi na vikundi vyake."
+
+msgid "This announcement has already been sent by email."
+msgstr "Tangazo hili tayari limetumwa kwa barua pepe."
+
+msgid "This discussion is hidden from learners"
+msgstr "Mjadala huu umefichwa kutoka kwa wanafunzi"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Zana hii ya AI inayozalisha inakuruhusu kuunda picha na video fupi ili kuonyesha kozi yako. Kwa kuelezea (kwa maandishi) unachotaka katika sehemu ya maelekezo, utampa mfano wa AI uliowekwa vipengele muhimu ili kutengeneza picha au video. Tafadhali kuwa na subira. Mfano wa AI utachukua muda na kutoa matokeo, ambayo unaweza kutaka kuhifadhi kwa kuyahifadhi kwenye folda ya nyaraka zako, na kisha kuyajumuisha ndani ya hati ya HTML. Sio mifano yote ya AI inayolingana katika kasi au ubora. Mfano wa AI pia unaweza kukupa maelekezo yaliyobadilishwa, ambayo ni tafsiri ya kina zaidi ya ombi lako. Kisha unaweza kutumia maelekezo haya yaliyobadilishwa kuboresha ombi lako. Tafadhali fahamu kuwa zana hii, hasa kwa video, inaweza kutoa gharama kubwa kwa shirika lako, hata kama utaamua kutohifadhi midia iliyotengenezwa. Tafadhali itumie ipasavyo. Ikiwa una matatizo kupata unachotafuta, tafadhali chukua muda kutafiti mbinu za maelekezo mtandaoni kwa mfano wa AI ulio nao."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Historia hii ni ya kozi ya msingi. Kurejesha kunapatikana baada ya kuunda toleo la kipindi."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Picha hii inachukua nafasi ya aikoni chaguomsingi ya jukwaa inayoonyeshwa karibu na kichwa cha jukwaa."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Ukurasa huu unatoka kwenye kozi ya msingi. Kuuhifadhi kutatengeneza toleo la kipindi cha sasa."
+
+msgid "This will also delete %s subcategories."
+msgstr "Hii pia itafuta kategoria ndogo %s."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Hii itatengeneza kurasa za kazi za kibinafsi kwa wanafunzi %s."
+
+msgid "Thread history"
+msgstr "Historia ya uzi"
+
+msgid "Title and content"
+msgstr "Kichwa na maudhui"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Haiwezekani kubatilisha upya haki sasa hivi."
+
+msgid "Unable to restore renewal right now."
+msgstr "Haiwezekani kurejesha upya haki sasa hivi."
+
+msgid "Unlock page"
+msgstr "Fungua ukurasa"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Tumia [[Ukurasa]] au [[Ukurasa|Maandishi yanayoonekana]] kutengeneza viungo vya ndani vya Wiki."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Tumia kitufe cha nafasi au vitufe vya mishale kusogeza"
+
+msgid "View version"
+msgstr "Tazama toleo"
+
+msgid "Visible only to teachers"
+msgstr "Inaonekana kwa walimu pekee"
+
+msgid "Weight is required"
+msgstr "Uzito unahitajika"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Kategoria za Wiki zimezimwa kwa kozi hii."
+
+msgid "Wiki categories enabled"
+msgstr "Kategoria za Wiki zimewezeshwa"
+
+msgid "Wiki html strict filtering"
+msgstr "Kuchujwa kali kwa html ya Wiki"
+
+msgid "Wiki settings"
+msgstr "Mipangilio ya Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Mipangilio ya Wiki imesasishwa"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Unaangalia toleo la kihistoria la ukurasa huu"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Unaweza kuambatanisha faili moja au zaidi kwenye jibu hili."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Unaweza kuhariri ukurasa huu wa kazi, lakini kurasa za kazi za wanafunzi hazitabadilishwa."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Unaweza kutumia lebo {{class_name}} na {{student_full_name}} katika swali."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Una dakika 20 kuhariri ukurasa huu kabla ya kufuli ya kuhariri kumalizika."
+
+msgid "by"
+msgstr "na"
+
+msgid "required"
+msgstr "inahitajika"
 

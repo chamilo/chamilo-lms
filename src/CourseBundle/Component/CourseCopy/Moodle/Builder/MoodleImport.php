@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\Course;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -249,7 +250,7 @@ class MoodleImport
                     $resources['course_descriptions'][$descId] = $this->mkLegacyItem('course_descriptions', $descId, [
                         'title'            => $title,
                         'content'          => $html,
-                        'description_type' => 1,
+                        'description_type' => CCourseDescription::TYPE_CUSTOM,
                         'progress'         => 0,
                         'source_id'        => $descId,
                     ]);
@@ -4628,119 +4629,122 @@ class MoodleImport
      */
     private function readWikiModuleFull(string $xmlPath): array
     {
-        $doc = $this->loadXml($xmlPath);
-        $xp  = new DOMXPath($doc);
-
-        // Module meta
-        $activity = $xp->query('/activity')->item(0);
+        $document = $this->loadXml($xmlPath);
+        $xpath = new DOMXPath($document);
+        $activity = $xpath->query('/activity')->item(0);
         $moduleId = (int) ($activity?->getAttribute('moduleid') ?? 0);
-
-        $nameNode = $xp->query('//wiki/name')->item(0);
-        $name = (string) ($nameNode?->nodeValue ?? 'Wiki');
-
-        // Some exports put sectionid on <activity>; default 0
-        $sectionId = (int) ($xp->query('/activity')->item(0)?->getAttribute('contextid') ?? 0);
-
+        $name = (string) ($xpath->query('//wiki/name')->item(0)?->nodeValue ?? 'Wiki');
+        $sectionId = (int) ($activity?->getAttribute('contextid') ?? 0);
         $pages = [];
-        foreach ($xp->query('//wiki/subwikis/subwiki/pages/page') as $node) {
-            /** @var DOMElement $node */
-            $pid   = (int) ($node->getAttribute('id') ?: 0);
-            $title = (string) ($node->getElementsByTagName('title')->item(0)?->nodeValue ?? ('Wiki page '.$pid));
-            $uid   = (int) ($node->getElementsByTagName('userid')->item(0)?->nodeValue ?? 0);
 
-            $timeCreated  = (int) ($node->getElementsByTagName('timecreated')->item(0)?->nodeValue ?? time());
-            $timeModified = (int) ($node->getElementsByTagName('timemodified')->item(0)?->nodeValue ?? $timeCreated);
+        foreach ($xpath->query('//wiki/subwikis/subwiki/pages/page') as $pageNode) {
+            if (!$pageNode instanceof DOMElement) {
+                continue;
+            }
 
-            // Prefer cachedcontent; fallback to the last <versions>/<version>/content
-            $cached = $node->getElementsByTagName('cachedcontent')->item(0)?->nodeValue ?? '';
-            $content = (string) $cached;
-            $version = 1;
+            $pageId = (int) ($pageNode->getAttribute('id') ?: 0);
+            if ($pageId <= 0) {
+                continue;
+            }
+            $title = (string) ($pageNode->getElementsByTagName('title')->item(0)?->nodeValue ?? ('Wiki page '.$pageId));
+            $pageUserId = (int) ($pageNode->getElementsByTagName('userid')->item(0)?->nodeValue ?? 0);
+            $timeCreated = (int) ($pageNode->getElementsByTagName('timecreated')->item(0)?->nodeValue ?? time());
+            $timeModified = (int) ($pageNode->getElementsByTagName('timemodified')->item(0)?->nodeValue ?? $timeCreated);
+            $cachedContent = (string) ($pageNode->getElementsByTagName('cachedcontent')->item(0)?->nodeValue ?? '');
+            $versionsElement = $pageNode->getElementsByTagName('versions')->item(0);
+            $hasVersions = false;
 
-            $versionsEl = $node->getElementsByTagName('versions')->item(0);
-            if ($versionsEl instanceof DOMElement) {
-                $versNodes = $versionsEl->getElementsByTagName('version');
-                if ($versNodes->length > 0) {
-                    $last = $versNodes->item($versNodes->length - 1);
-                    $vHtml = $last?->getElementsByTagName('content')->item(0)?->nodeValue ?? '';
-                    $vNum  = (int) ($last?->getElementsByTagName('version')->item(0)?->nodeValue ?? 1);
-                    if (trim((string) $vHtml) !== '') {
-                        $content = (string) $vHtml;
+            if ($versionsElement instanceof DOMElement) {
+                foreach ($versionsElement->getElementsByTagName('version') as $versionNode) {
+                    if (!$versionNode instanceof DOMElement) {
+                        continue;
                     }
-                    if ($vNum > 0) {
-                        $version = $vNum;
+                    $hasVersions = true;
+                    $versionNumber = max(1, (int) ($versionNode->getElementsByTagName('version')->item(0)?->nodeValue ?? 1));
+                    $versionTime = (int) ($versionNode->getElementsByTagName('timecreated')->item(0)?->nodeValue ?? $timeModified);
+                    $versionUserId = (int) ($versionNode->getElementsByTagName('userid')->item(0)?->nodeValue ?? $pageUserId);
+                    $content = (string) ($versionNode->getElementsByTagName('content')->item(0)?->nodeValue ?? '');
+                    if ('' === trim($content)) {
+                        $content = $cachedContent;
                     }
+
+                    $pages[] = [
+                        'id' => $pageId,
+                        'version_id' => (int) ($versionNode->getAttribute('id') ?: 0),
+                        'title' => $title,
+                        'content' => $content,
+                        'contentformat' => 'html',
+                        'version' => $versionNumber,
+                        'timecreated' => $timeCreated,
+                        'timemodified' => $versionTime,
+                        'userid' => $versionUserId,
+                        'reflink' => $this->slugify($title),
+                    ];
                 }
             }
 
-            $pages[] = [
-                'id'            => $pid,
-                'title'         => $title,
-                'content'       => $content,
-                'contentformat' => 'html',
-                'version'       => $version,
-                'timecreated'   => $timeCreated,
-                'timemodified'  => $timeModified,
-                'userid'        => $uid,
-                'reflink'       => $this->slugify($title),
-            ];
+            if (!$hasVersions) {
+                $pages[] = [
+                    'id' => $pageId,
+                    'version_id' => 0,
+                    'title' => $title,
+                    'content' => $cachedContent,
+                    'contentformat' => 'html',
+                    'version' => 1,
+                    'timecreated' => $timeCreated,
+                    'timemodified' => $timeModified,
+                    'userid' => $pageUserId,
+                    'reflink' => $this->slugify($title),
+                ];
+            }
         }
 
-        // Stable order
-        usort($pages, fn(array $a, array $b) => $a['id'] <=> $b['id']);
+        usort(
+            $pages,
+            static fn (array $left, array $right): int => [
+                $left['id'],
+                $left['version'],
+                $left['version_id'],
+            ] <=> [
+                $right['id'],
+                $right['version'],
+                $right['version_id'],
+            ],
+        );
 
-        $hasIndex = false;
+        $homePageId = null;
+        $homeCandidates = array_fill_keys(array_map(
+            fn (string $candidate): string => $this->slugify($candidate),
+            ['index', 'home', 'homepage', 'home-page', 'main-page', 'inicio', 'portada'],
+        ), true);
         foreach ($pages as $page) {
-            if ('index' === (string) ($page['reflink'] ?? '')) {
-                $hasIndex = true;
+            if (isset($homeCandidates[(string) $page['reflink']])) {
+                $homePageId = (int) $page['id'];
                 break;
             }
         }
-
-        if (!$hasIndex && !empty($pages)) {
-            $homeCandidates = [
-                'index',
-                'home',
-                'homepage',
-                'home-page',
-                'main-page',
-                'inicio',
-                'portada',
-            ];
-
-            $homeCandidateMap = [];
-            foreach ($homeCandidates as $candidate) {
-                $homeCandidateMap[$this->slugify($candidate)] = true;
-            }
-
-            $promoted = false;
-
+        if (null === $homePageId && [] !== $pages) {
+            $homePageId = (int) $pages[0]['id'];
+        }
+        if (null !== $homePageId) {
             foreach ($pages as &$page) {
-                $ref = (string) ($page['reflink'] ?? '');
-                $ttl = $this->slugify((string) ($page['title'] ?? ''));
-
-                if (isset($homeCandidateMap[$ref]) || isset($homeCandidateMap[$ttl])) {
+                if ((int) $page['id'] === $homePageId) {
                     $page['reflink'] = 'index';
-                    $promoted = true;
-                    break;
                 }
             }
             unset($page);
-
-            // Fallback: if no recognizable home alias exists, use the first page as home.
-            if (!$promoted) {
-                $pages[0]['reflink'] = 'index';
-            }
         }
 
         return [
             [
-                'moduleid'  => $moduleId,
+                'moduleid' => $moduleId,
                 'sectionid' => $sectionId,
-                'name'      => $name,
+                'name' => $name,
             ],
             $pages,
         ];
     }
+
 
     private function rewritePluginfileBasic(string $html, string $context): string
     {

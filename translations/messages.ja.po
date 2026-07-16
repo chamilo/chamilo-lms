@@ -1644,8 +1644,8 @@ msgstr "これらのステップを削除してもよろしいですか？"
 msgid "Authoring tool"
 msgstr "オーサリングツール"
 
-msgid "SCORM or AICC file to upload"
-msgstr "アップロードするSCORMまたはAICCファイル"
+msgid "SCORM file to upload"
+msgstr "アップロードするSCORMファイル"
 
 msgid "Course location"
 msgstr "コースの場所"
@@ -8792,6 +8792,15 @@ msgstr "表示"
 
 msgid "My courses"
 msgstr "コース"
+
+msgid "Shop"
+msgstr "ショップ"
+
+msgid "Invoice"
+msgstr "請求書"
+
+msgid "Request invoice"
+msgstr "請求書をリクエスト"
 
 msgid "View my progress"
 msgstr "進行状況を表示"
@@ -36546,4 +36555,856 @@ msgstr "モデレート済み"
 
 msgid "View threads"
 msgstr "スレッドを表示"
+
+msgid "No auth source"
+msgstr "認証元なし"
+
+msgid "You must add at least one question"
+msgstr "少なくとも1つの質問を追加してください"
+
+msgid "Advanced actions"
+msgstr "高度な操作"
+
+msgid "Application path"
+msgstr "アプリケーションパス"
+
+msgid "Apply files details"
+msgstr "ファイルの詳細を適用"
+
+msgid "Apply plan details"
+msgstr "プランの詳細を適用"
+
+msgid "Apply plan failed"
+msgstr "プランの適用に失敗しました"
+
+msgid "Apply plan ready"
+msgstr "プランの適用準備完了"
+
+msgid "Apply preparation"
+msgstr "準備の適用"
+
+msgid "Apply staged files"
+msgstr "ステージング済みファイルを適用"
+
+msgid "Applying files..."
+msgstr "ファイルを適用中..."
+
+msgid "Audit file"
+msgstr "ファイルの監査"
+
+msgid "Backup directory"
+msgstr "バックアップディレクトリ"
+
+msgid "Baseline clean"
+msgstr "ベースラインのクリーン"
+
+msgid "Baseline warnings"
+msgstr "ベースラインの警告"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "ステージング済みパッケージから安全な適用プランを作成します。ファイル、権限、バックアップパスおよびロック状態のみを確認します。ファイルの置換は行いません。"
+
+msgid "Build production frontend assets."
+msgstr "本番用フロントエンドアセットをビルドします。"
+
+msgid "Building plan..."
+msgstr "プランを作成中..."
+
+msgid "Channel"
+msgstr "チャネル"
+
+msgid "Check"
+msgstr "確認"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "利用可能な Chamilo の更新を確認し、パッケージを検証し、ファイルをステージングして、制御された更新後ステップを実行します。"
+
+msgid "Check manifest"
+msgstr "マニフェストの確認"
+
+msgid "Checking post-apply actions..."
+msgstr "適用後アクションを確認中..."
+
+msgid "Checking..."
+msgstr "確認中..."
+
+msgid "Composer install"
+msgstr "Composer インストール"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer、Yarn およびデータベースマイグレーションの操作は、依存関係、生成されたアセットまたはデータベースを変更する可能性があります。バックアップと権限を確認した後でのみ選択してください。"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "サーバーで CHAMILO_UPDATE_MANIFEST_URL を設定するか、HTTPS のマニフェスト URL を指定してください。"
+
+msgid "Configured"
+msgstr "設定済み"
+
+msgid "Current migration"
+msgstr "現在のマイグレーション"
+
+msgid "Database baseline"
+msgstr "データベースベースライン"
+
+msgid "Database migration safety review"
+msgstr "データベース移行の安全確認"
+
+msgid "Database migrations"
+msgstr "データベース移行"
+
+msgid "Development mode"
+msgstr "開発モード"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "更新バックアップとサーバー権限を確認済みの場合以外は有効にしないでください。"
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine ドライランコマンド"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine が過去のベースライン警告を報告しました。アップデーターは明示的な確認後にステージ済みの V210 移行のみを実行します。"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine は安全確認が完了した後に明示的にステージ済みの V210 移行のみを実行します。"
+
+msgid "Dry-run exit code"
+msgstr "ドライラン終了コード"
+
+msgid "Executed unavailable migrations"
+msgstr "実行不可の移行を実行しました"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "検証済みの更新パッケージを検査用ステージングディレクトリに展開します。ファイルの置き換え、移行の実行、データベースの変更は行いません。"
+
+msgid "File apply available"
+msgstr "ファイル適用可能"
+
+msgid "Files to replace"
+msgstr "置き換えるファイル"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "移行を実行する前にデータベースのバックアップが存在し、検証済みであることを確認します。"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "高度な操作により依存関係、生成済みアセット、またはデータベースが変更される可能性があることを理解しています。"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Chamilo インストール内のファイルが置き換えられることを理解しています。"
+
+msgid "I understand this will run update commands on the server."
+msgstr "サーバーで更新コマンドが実行されることを理解しています。"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "アセットを再構築する前にフロントエンドの依存関係をインストールしてください。"
+
+msgid "Installed version"
+msgstr "インストール済みバージョン"
+
+msgid "Latest migration"
+msgstr "最新の移行"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "パッケージと署名のパスを空欄にすると、検証済みのマニフェスト URL からダウンロードされます。ローカルパスは開発テストでのみ利用可能です。"
+
+msgid "Live command log"
+msgstr "ライブコマンドログ"
+
+msgid "Live update log"
+msgstr "ライブ更新ログ"
+
+msgid "Local test options"
+msgstr "ローカルテストオプション"
+
+msgid "Local test update notice link"
+msgstr "ローカルテスト更新通知リンク"
+
+msgid "Local update notice simulation"
+msgstr "ローカル更新通知のシミュレーション"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "ローカル更新通知のシミュレーションは開発モードでのみ利用可能です。"
+
+msgid "Manifest"
+msgstr "マニフェスト"
+
+msgid "Manifest source"
+msgstr "マニフェストソース"
+
+msgid "Migration safety details"
+msgstr "移行安全性の詳細"
+
+msgid "Migration safety review failed"
+msgstr "移行安全確認に失敗しました"
+
+msgid "Migration safety review ready"
+msgstr "移行安全確認の準備完了"
+
+msgid "Migration target"
+msgstr "移行ターゲット"
+
+msgid "New files"
+msgstr "新規ファイル"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine が報告した新規移行"
+
+msgid "Next migration"
+msgstr "次の移行"
+
+msgid "No executed unavailable migration was reported."
+msgstr "実行不可の移行は報告されませんでした。"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "公式マニフェスト URL がまだ設定されていません。HTTPS URL または開発テスト用のローカルパスを使用してください。"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "ステージ済み更新ターゲットの前に保留中の移行は検出されませんでした。"
+
+msgid "Not configured"
+msgstr "未設定"
+
+msgid "Not detected"
+msgstr "未検出"
+
+msgid "Official Chamilo update channel"
+msgstr "公式 Chamilo 更新チャネル"
+
+msgid "Package SHA-256"
+msgstr "パッケージ SHA-256"
+
+msgid "Package URL"
+msgstr "パッケージ URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "パッケージと署名ファイルはマニフェストからダウンロードされます。この環境ではローカルパスは無効です。"
+
+msgid "Package path"
+msgstr "パッケージパス"
+
+msgid "Package staged successfully"
+msgstr "パッケージのステージングに成功しました"
+
+msgid "Package staging failed"
+msgstr "パッケージのステージングに失敗しました"
+
+msgid "Package verification"
+msgstr "パッケージ検証"
+
+msgid "Package verification failed"
+msgstr "パッケージ検証に失敗しました"
+
+msgid "Package verified successfully"
+msgstr "パッケージ検証に成功しました"
+
+msgid "Pending migrations before this update"
+msgstr "この更新前の保留中のマイグレーション"
+
+msgid "Planned backup path"
+msgstr "計画済みのバックアップパス"
+
+msgid "Post-apply actions completed"
+msgstr "適用後アクションが完了しました"
+
+msgid "Post-apply actions failed"
+msgstr "適用後アクションが失敗しました"
+
+msgid "Post-apply actions ready"
+msgstr "適用後アクションの準備完了"
+
+msgid "Post-apply checks"
+msgstr "適用後チェック"
+
+msgid "Post-apply checks failed"
+msgstr "適用後チェックが失敗しました"
+
+msgid "Post-apply details"
+msgstr "適用後詳細"
+
+msgid "Post-apply run details"
+msgstr "適用後実行の詳細"
+
+msgid "Preflight checks"
+msgstr "事前チェック"
+
+msgid "Preflight checks completed"
+msgstr "事前チェックが完了しました"
+
+msgid "Preflight checks failed"
+msgstr "事前チェックが失敗しました"
+
+msgid "Preflight details"
+msgstr "事前チェックの詳細"
+
+msgid "Prepare staging"
+msgstr "ステージングの準備"
+
+msgid "Preparing staging..."
+msgstr "ステージングを準備しています..."
+
+msgid "Production mode"
+msgstr "本番モード"
+
+msgid "Released at"
+msgstr "リリース日時"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "レビュー済みの適用計画を使用して、ステージング済みパッケージから Chamilo ファイルを置き換えます。データベースマイグレーション、Composer、Yarn、キャッシュコマンドは実行されません。"
+
+msgid "Review apply plan"
+msgstr "適用計画の確認"
+
+msgid "Review database migrations"
+msgstr "データベースマイグレーションの確認"
+
+msgid "Review post-apply actions"
+msgstr "適用後アクションの確認"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "更新ファイル適用後の推奨手動コマンドを確認します。この手順では Composer、Yarn、マイグレーション、キャッシュコマンドは実行されません。"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "データベースマイグレーションを実行する前に、ステージング済みの Doctrine マイグレーションとドライランの出力を確認します。"
+
+msgid "Reviewing database migrations..."
+msgstr "データベースマイグレーションを確認しています..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "データベースマイグレーションを実行する前に、マイグレーション安全確認を実行して合格してください。"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "今後の更新適用ステップの前に環境チェックを実行します。ファイルやデータベースは変更されません。"
+
+msgid "Run post-apply actions"
+msgstr "適用後アクションの実行"
+
+msgid "Run preflight checks"
+msgstr "事前チェックの実行"
+
+msgid "Run selected post-apply actions"
+msgstr "選択した適用後アクションの実行"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "許可リストで制御されたサーバーから選択した適用後コマンドを実行します。カスタムシェルコマンドは受け付けられません。"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "ファイル更新結果とバックアップを確認した後、サーバーからこれらのコマンドを手動で実行してください。"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "本番モードでは UI からの適用後アクションの実行は無効です。"
+
+msgid "Running post-apply actions..."
+msgstr "適用後アクションを実行しています..."
+
+msgid "Safe actions"
+msgstr "安全なアクション"
+
+msgid "Signature path"
+msgstr "署名パス"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "この環境では署名検証をスキップできません。"
+
+msgid "Skip signature verification for local development tests"
+msgstr "ローカル開発テスト用に署名検証をスキップ"
+
+msgid "Staged file application failed"
+msgstr "ステージング済みファイルの適用に失敗しました"
+
+msgid "Staged files applied successfully"
+msgstr "ステージング済みファイルが正常に適用されました"
+
+msgid "Staging details"
+msgstr "ステージングの詳細"
+
+msgid "Staging directory"
+msgstr "ステージングディレクトリ"
+
+msgid "Staging extraction"
+msgstr "ステージングの展開"
+
+msgid "Symfony cache clear"
+msgstr "Symfony キャッシュのクリア"
+
+msgid "System update"
+msgstr "システム更新"
+
+msgid "Target version"
+msgstr "対象バージョン"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "設定済みの公式マニフェスト URL が事前入力されています。必要に応じて別の HTTPS マニフェストに変更できます。"
+
+msgid "The database migration baseline is clean."
+msgstr "データベースマイグレーションのベースラインは正常です。"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "操作完了後に最終 HTTP 応答が失敗しました。通常、ランタイムキャッシュの権限またはリクエスト中の Web サーバー再起動が原因です。"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "操作ログは、適用後アクションが正常に完了したことを示しています。"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "選択した適用後コマンドは正常に完了しましたが、最終 HTTP 応答が失敗しました。ページが正しく読み込まれない場合は、ページを更新してランタイムキャッシュの権限を確認してください。"
+
+msgid "The updater does not create or restore database backups."
+msgstr "アップデーターはデータベースのバックアップを作成または復元しません。"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "これらの操作は、更新結果を確認した後、UI から安全に実行できます。"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "これらのコマンドは依存関係、生成済みアセット、キャッシュ、またはデータベースを変更する可能性があります。続行する前にバックアップを確認してください。"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "この操作は Chamilo インストール内のファイルを変更します。続行する前に適用計画を確認し、バックアップを有効にしてください。"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "この開発用エントリは、ローカルのテストパッケージパスを使用して将来の Chamilo.org 更新通知をシミュレートします。"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "この画面は公式更新通知から開かれましたが、公式マニフェストソースはまだ設定されていません。"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "この画面は更新通知から開かれました。マニフェストのチェックのみが自動的に開始されます。"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "このステップは確認のみを準備します。ファイルの置き換えは、後で「ステージング済みファイルの適用」ステップでロック、バックアップ、ロールバック保護付きで実行されます。"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "このアップデーターはデータベースのバックアップを作成しません。マイグレーションを実行する前にバックアップを作成して確認してください。"
+
+msgid "Trusted public key"
+msgstr "信頼された公開鍵"
+
+msgid "Trusted signing key"
+msgstr "信頼された署名鍵"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "確認のため「APPLY UPDATE FILES」と入力してください"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "データベースマイグレーションを確認するため「RUN DATABASE MIGRATIONS」と入力してください"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "確認のため「RUN POST UPDATE ACTIONS」と入力してください"
+
+msgid "Unknown update notice source."
+msgstr "不明な更新通知ソースです。"
+
+msgid "Update availability"
+msgstr "更新の可用性"
+
+msgid "Update directory"
+msgstr "更新ディレクトリ"
+
+msgid "Update lock path"
+msgstr "更新ロックパス"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "前のステップで生成されたステージングディレクトリを使用します。バックエンドは var/update/staging 内のディレクトリのみを受け付けます。"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "開発テスト中に将来の Chamilo.org 更新通知をシミュレートするには、このリンクを使用してください。"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "これはローカル開発テスト専用です。本番更新ではサーバーに設定された鍵を使用してください。"
+
+msgid "Verification details"
+msgstr "検証の詳細"
+
+msgid "Verify package"
+msgstr "パッケージの検証"
+
+msgid "Verifying..."
+msgstr "検証中..."
+
+msgid "Waiting for command progress events..."
+msgstr "コマンドの進捗イベントを待機中..."
+
+msgid "Waiting for update progress events..."
+msgstr "更新の進捗イベントを待機中..."
+
+msgid "Yarn build"
+msgstr "Yarn ビルド"
+
+msgid "Yarn install"
+msgstr "Yarn インストール"
+
+msgid "A comment is required"
+msgstr "コメントが必要です"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "同じ名前のデータベースが既に存在します。テーブルが含まれている場合は削除され、空の場合は再利用されます。"
+
+msgid "AI generated"
+msgstr "AI 生成"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "学習パスに戻る前に少なくとも 1 つの質問を追加してください。"
+
+msgid "Add attachments"
+msgstr "添付ファイルを追加"
+
+msgid "Additional fields"
+msgstr "追加フィールド"
+
+msgid "Allow comments"
+msgstr "コメントを許可"
+
+msgid "Allow new pages"
+msgstr "新規ページを許可"
+
+msgid "Allow ratings"
+msgstr "評価を許可"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "すべての項目を削除してもよろしいですか？"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "自動更新を復元してもよろしいですか？"
+
+msgid "Attachment has been deleted"
+msgstr "添付ファイルが削除されました"
+
+msgid "Backup file"
+msgstr "バックアップファイル"
+
+msgid "Block comments"
+msgstr "コメントをブロック"
+
+msgid "Block new pages"
+msgstr "新規ページをブロック"
+
+msgid "Block ratings"
+msgstr "評価をブロック"
+
+msgid "Cancel renewal"
+msgstr "更新をキャンセル"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "カテゴリリンクは %s Wiki ページから削除されます。"
+
+msgid "Change"
+msgstr "変更"
+
+msgid "Clear group"
+msgstr "グループをクリア"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "タグをクリックしてエディタに挿入します。これらのプレースホルダーは、証明書生成時に置き換えられます。"
+
+msgid "Comment added"
+msgstr "コメントが追加されました"
+
+msgid "Comment is required"
+msgstr "コメントは必須です"
+
+msgid "Comment score"
+msgstr "コメントの評価"
+
+msgid "Compare selected versions line by line"
+msgstr "選択したバージョンを1行ずつ比較"
+
+msgid "Compare selected versions word by word"
+msgstr "選択したバージョンを単語ごとに比較"
+
+msgid "Compare versions"
+msgstr "バージョンを比較"
+
+msgid "Copy completed"
+msgstr "コピーが完了しました"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "学習者ごとに個別のWiki作業ページを作成"
+
+msgid "Current view mode"
+msgstr "現在の表示モード"
+
+msgid "Delete Wiki"
+msgstr "Wikiを削除"
+
+msgid "Delete page"
+msgstr "ページを削除"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Wikiのホームページを削除することは推奨されません。後で再作成できます。"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Wikiを無効にすると、通常のWikiページと操作がブロックされます。この設定ページはコース担当者から引き続き利用できます。"
+
+msgid "Discussion"
+msgstr "ディスカッション"
+
+msgid "Edit Comment"
+msgstr "コメントを編集"
+
+msgid "Edit page"
+msgstr "ページを編集"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "終了日は有効期限以降または同日である必要があります"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Wikiページを検索するためのキーワードを入力"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "有効期限は終了日以前または同日である必要があります"
+
+msgid "Failed email recipients"
+msgstr "メール送信に失敗した宛先"
+
+msgid "Finish and return to learning path"
+msgstr "完了して学習パスに戻る"
+
+msgid "Forum image"
+msgstr "フォーラム画像"
+
+msgid "Hide discussion"
+msgstr "ディスカッションを非表示"
+
+msgid "Hide page"
+msgstr "ページを非表示"
+
+msgid "I changed my mind"
+msgstr "気が変わりました"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "チェックを外した場合、これらのファイルは「ファイル情報」ツールを通じてプラットフォーム管理者が引き続き利用できます。"
+
+msgid "Internal message failures"
+msgstr "内部メッセージの送信失敗"
+
+msgid "Internal messages available"
+msgstr "利用可能な内部メッセージ"
+
+msgid "Internal messages created now"
+msgstr "作成済みの内部メッセージ"
+
+msgid "Item score"
+msgstr "項目の評価"
+
+msgid "Last post"
+msgstr "最新の投稿"
+
+msgid "Lock page"
+msgstr "ページをロック"
+
+msgid "Manage categories"
+msgstr "カテゴリを管理"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "このドキュメントをAI支援としてマークします。内容がAIツールで作成または大幅に変更された場合に使用してください。"
+
+msgid "Maximum score is required"
+msgstr "最大評価は必須です"
+
+msgid "Metric"
+msgstr "指標"
+
+msgid "New comments are blocked in this discussion"
+msgstr "このディスカッションでは新しいコメントがブロックされています"
+
+msgid "No Wiki categories are available yet."
+msgstr "Wikiカテゴリはまだありません。"
+
+msgid "No categories found"
+msgstr "カテゴリが見つかりません"
+
+msgid "No content"
+msgstr "コンテンツがありません"
+
+msgid "No parent category"
+msgstr "親カテゴリがありません"
+
+msgid "Number of comments scored"
+msgstr "評価済みコメント数"
+
+msgid "Old version"
+msgstr "旧バージョン"
+
+msgid "Only image files are allowed."
+msgstr "画像ファイルのみ許可されています。"
+
+msgid "Please fill all required fields"
+msgstr "必須項目をすべて入力してください"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "クラスまたは学生のプレースホルダー付きの問題は、コースのクラスまたはグループ用に生成されます: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "このディスカッションでは評価がブロックされています"
+
+msgid "Remove image"
+msgstr "画像を削除"
+
+msgid "Restore renewal"
+msgstr "更新を復元"
+
+msgid "Restore version"
+msgstr "バージョンを復元"
+
+msgid "Search in"
+msgstr "検索対象"
+
+msgid "Select group"
+msgstr "グループを選択"
+
+msgid "Select image"
+msgstr "画像を選択"
+
+msgid "Selected image"
+msgstr "選択した画像"
+
+msgid "Show discussion"
+msgstr "ディスカッションを表示"
+
+msgid "Show page"
+msgstr "ページを表示"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "一部のファイルまたはフォルダに書き込み権限がありません。Chamiloをインストールするには、まずそれらの権限を変更（CHMODを使用）する必要があります。詳細は"
+
+msgid "Subcategories"
+msgstr "サブカテゴリ"
+
+msgid "Tap on the left or right to navigate"
+msgstr "左右をタップして移動"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki課題の期限が過ぎましたが、遅延提出が許可されています。"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki課題の期限が過ぎました。"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki課題はまだ開始されていません。"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "保存する前にWikiページの編集ロックが必要です。"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "お知らせは保存されましたが、添付ファイルをアップロードできませんでした。"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "お知らせは保存されましたが、メール配信に失敗しました。"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "お知らせは保存されましたが、メールを配信できませんでした。"
+
+msgid "The category has been created"
+msgstr "カテゴリが作成されました"
+
+msgid "The category has been deleted"
+msgstr "カテゴリが削除されました"
+
+msgid "The category has been updated"
+msgstr "カテゴリが更新されました"
+
+msgid "The end date is invalid"
+msgstr "終了日が無効です"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "最大バージョン数は0以上の整数である必要があります"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "最大単語数は0以上の整数である必要があります"
+
+msgid "The print window could not be opened"
+msgstr "印刷ウィンドウを開けませんでした"
+
+msgid "The start date is invalid"
+msgstr "開始日が無効です"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "これらの設定は、セッションやグループを含むコース全体に適用されます。"
+
+msgid "This announcement has already been sent by email."
+msgstr "このお知らせはすでにメールで送信されています。"
+
+msgid "This discussion is hidden from learners"
+msgstr "このディスカッションは学習者から非表示になっています"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "この生成AIツールを使用すると、コースを説明するための画像や短い動画を作成できます。プロンプト欄に（テキストで）作成したい内容を説明すると、設定されたAIモデルに画像や動画を生成するために必要な要素が与えられます。しばらくお待ちください。AIモデルは処理に時間がかかり、結果を生成します。生成されたメディアをドキュメントフォルダに保存し、HTMLドキュメントに埋め込むことをお勧めします。すべてのAIモデルが速度や品質で同等ではありません。AIモデルはリクエストのより詳細な解釈である修正プロンプトを返す場合もあります。その修正プロンプトを使用してリクエストを微調整できます。特に動画の場合、このツールは生成されたメディアを保存しない場合でも、組織に相当なコストが発生する可能性があることに注意してください。適切に使用してください。希望する結果が得られない場合は、利用可能なAIモデルに関するプロンプトのコツをオンラインで調査してください。"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "この履歴はベースコースに属しています。セッションバージョンを作成した後に復元が可能です。"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "この画像は、フォーラムタイトルの横に表示されるデフォルトのフォーラムアイコンを置き換えます。"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "このページはベースコースから来ています。保存すると現在のセッション用のバージョンが作成されます。"
+
+msgid "This will also delete %s subcategories."
+msgstr "これにより%s個のサブカテゴリも削除されます。"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "これにより%s人の学習者用の個別課題ページが作成されます。"
+
+msgid "Thread history"
+msgstr "スレッド履歴"
+
+msgid "Title and content"
+msgstr "タイトルと内容"
+
+msgid "Unable to cancel renewal right now."
+msgstr "今すぐ更新権をキャンセルできません。"
+
+msgid "Unable to restore renewal right now."
+msgstr "今すぐ更新権を復元できません。"
+
+msgid "Unlock page"
+msgstr "ページのロックを解除"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "内部Wikiリンクを作成するには[[ページ]]または[[ページ|表示テキスト]]を使用してください。"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "スペースバーまたは矢印キーを使用して移動"
+
+msgid "View version"
+msgstr "バージョンを表示"
+
+msgid "Visible only to teachers"
+msgstr "教師のみ表示"
+
+msgid "Weight is required"
+msgstr "重み付けは必須です"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "このコースではWikiカテゴリが無効になっています。"
+
+msgid "Wiki categories enabled"
+msgstr "Wikiカテゴリが有効"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki HTML厳密フィルタリング"
+
+msgid "Wiki settings"
+msgstr "Wiki設定"
+
+msgid "Wiki settings updated"
+msgstr "Wiki設定が更新されました"
+
+msgid "You are viewing a historical version of this page"
+msgstr "このページの履歴バージョンを表示しています"
+
+msgid "You can attach one or more files to this reply."
+msgstr "この返信に1つ以上のファイルを添付できます。"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "この課題ページを編集できますが、学習者の課題ページは変更されません。"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "{{class_name}} と {{student_full_name}} のタグを質問で使用できます。"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "編集ロックが期限切れになるまで、このページを編集する時間は20分です。"
+
+msgid "by"
+msgstr "作成者"
+
+msgid "required"
+msgstr "必須"
 

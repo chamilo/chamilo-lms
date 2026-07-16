@@ -277,7 +277,7 @@
 
     <!-- STEP 4: Done -->
     <section v-if="step === 4">
-      <CMInfo :title="t('Copy completed.')" />
+      <CMInfo :title="t('Copy completed')" />
     </section>
 
     <CMLoader v-if="loading" />
@@ -420,7 +420,7 @@ async function doCopy() {
     }
 
     const res = await svc.copyFromCourse(node.value, payload)
-    notice.value = res.message || t("Copy completed.")
+    notice.value = res.message || t("Copy completed")
     step.value = 4
 
     if (res.redirectUrl) {

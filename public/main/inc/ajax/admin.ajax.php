@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\BranchSyncRepository;
+use Chamilo\CoreBundle\Service\Update\InstalledChamiloVersionProvider;
 use GuzzleHttp\Client;
 use League\Flysystem\Filesystem;
 
@@ -18,6 +19,7 @@ switch ($action) {
     case 'update_changeable_setting':
         $url_id = api_get_current_access_url_id();
         $platformAdmin = api_is_platform_admin();
+
         // Close the session as we don't need it any further
         session_write_close();
 
@@ -25,12 +27,14 @@ switch ($action) {
             if (isset($_GET['id']) && !empty($_GET['id'])) {
                 $params = ['variable = ? ' => [$_GET['id']]];
                 $data = api_get_settings_params($params);
+
                 if (!empty($data)) {
                     foreach ($data as $item) {
                         $params = ['id' => $item['id'], 'access_url_changeable' => $_GET['changeable']];
                         api_set_setting_simple($params);
                     }
                 }
+
                 echo '1';
             }
         }
@@ -38,11 +42,13 @@ switch ($action) {
     case 'version':
         // Close the session as we don't need it any further
         session_write_close();
+
         echo version_check();
         break;
     case 'get_extra_content':
         // Close the session as we don't need it any further
         session_write_close();
+
         $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 
         if (empty($blockName)) {
@@ -51,6 +57,7 @@ switch ($action) {
 
         /** @var Filesystem $fileSystem */
         $fileSystem = Container::$container->get('home_filesystem');
+
         $dir = 'admin/';
 
         if (api_is_multiple_url_enabled()) {
@@ -69,20 +76,25 @@ switch ($action) {
         if ($fileSystem->has($filePath)) {
             echo $fileSystem->read($dir.$blockName.'_extra.html');
         }
-
         break;
     case 'get_latest_news':
         session_write_close();
+
         try {
             $json = getLatestNews();
             $data = json_decode($json, true);
-            echo Security::remove_XSS($data['text'] ?? '', COURSEMANAGER);
+            $latestNews = Security::remove_XSS($data['text'] ?? '', COURSEMANAGER);
+
+            echo appendLocalSystemUpdateNotice($latestNews);
         } catch (\Throwable $e) {
-            echo Security::remove_XSS(get_lang('Could not load latest news at this time.'), COURSEMANAGER);
+            echo appendLocalSystemUpdateNotice(
+                Security::remove_XSS(get_lang('Could not load latest news at this time.'), COURSEMANAGER)
+            );
         }
         break;
     case 'get_support':
         session_write_close();
+
         try {
             $json = getProSupport();
             $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
@@ -114,6 +126,7 @@ function version_check()
 
     // The site has not been registered yet.
     $return = '';
+
     if ('false' == $row['selected_value']) {
         check_system_version();
     } else {
@@ -151,26 +164,28 @@ function check_system_version()
     try {
         $client = new GuzzleHttp\Client();
         $res = $client->request('GET', $url, $options);
+
         if ('200' == $res->getStatusCode() || '301' == $res->getStatusCode()) {
             $urlValidated = true;
         }
     } catch (Exception $e) {
     }
 
-    // the chamilo version of your installation
-    $system_version = '';
+    // The installed version must remain available after the install directory is removed.
+    /** @var InstalledChamiloVersionProvider $installedVersionProvider */
+    $installedVersionProvider = Container::$container->get(InstalledChamiloVersionProvider::class);
+    $system_version = $installedVersionProvider->getInstalledVersion();
+    $versionDetails = $installedVersionProvider->getVersionDetails();
     $versionStatus = '';
-    $versionFile =__DIR__.'/../../install/version.php';
-    if (is_file($versionFile)) {
-        $versionDetails = include($versionFile);
-        $system_version = trim($versionDetails['new_version']);
-        if (!empty($versionDetails['new_version_status']) &&  $versionDetails['new_version_status'] != 'stable') {
-            $versionLastId = '';
-            if (!empty($versionDetails['new_version_last_id'])) {
-                $versionLastId = ' '.$versionDetails['new_version_last_id'];
-            }
-            $versionStatus = ' ('.$versionDetails['new_version_status'].$versionLastId.')';
+
+    if (!empty($versionDetails['new_version_status']) && $versionDetails['new_version_status'] != 'stable') {
+        $versionLastId = '';
+
+        if (!empty($versionDetails['new_version_last_id'])) {
+            $versionLastId = ' '.$versionDetails['new_version_last_id'];
         }
+
+        $versionStatus = ' ('.$versionDetails['new_version_status'].$versionLastId.')';
     }
 
     if ($urlValidated) {
@@ -179,6 +194,7 @@ function check_system_version()
 
         // The number of users
         $number_of_users = Statistics::countUsers();
+
         $number_of_active_users = Statistics::countUsers(
             null,
             null,
@@ -188,14 +204,18 @@ function check_system_version()
 
         // The number of sessions
         $number_of_sessions = SessionManager::count_sessions(api_get_current_access_url_id());
+
         $packager = api_get_env_variable('PACKAGER', 'chamilo');
 
         $uniqueId = '';
         $entityManager = Database::getManager();
+
         /** @var BranchSyncRepository $repository */
         $repository = $entityManager->getRepository(BranchSync::class);
+
         /** @var BranchSync $branch */
         $branch = $repository->getTopBranch();
+
         if (is_a($branch, BranchSync::class)) {
             $uniqueId = $branch->getUniqueId();
         }
@@ -203,19 +223,26 @@ function check_system_version()
         $data = [
             'url' => api_get_path(WEB_PATH),
             'campus' => api_get_setting('siteName'),
-            'contact' => api_get_setting('emailAdministrator'), // the admin's e-mail, with the only purpose of being able to contact admins to inform about critical security issues
+            // the admin's e-mail, with the only purpose of being able to contact admins to inform about critical security issues
+            'contact' => api_get_setting('emailAdministrator'),
             'version' => $system_version,
-            'numberofcourses' => $number_of_courses, // to sum up into non-personal statistics - see https://version.chamilo.org/stats/
-            'numberofusers' => $number_of_users, // to sum up into non-personal statistics
-            'numberofactiveusers' => $number_of_active_users, // to sum up into non-personal statistics
+            // to sum up into non-personal statistics - see https://version.chamilo.org/stats/
+            'numberofcourses' => $number_of_courses,
+            // to sum up into non-personal statistics
+            'numberofusers' => $number_of_users,
+            // to sum up into non-personal statistics
+            'numberofactiveusers' => $number_of_active_users,
             'numberofsessions' => $number_of_sessions,
-            //The donotlistcampus setting recovery should be improved to make
+            // The donotlistcampus setting recovery should be improved to make
             // it true by default - this does not affect numbers counting
             'donotlistcampus' => api_get_setting('donotlistcampus'),
             'organisation' => api_get_setting('Institution'),
-            'language' => api_get_setting('platformLanguage'), //helps us know the spread of language usage for campuses, by main language
-            'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'), //not sure this is necessary...
-            'ip' => $_SERVER['REMOTE_ADDR'], //the admin's IP address, with the only purpose of trying to geolocate portals around the globe to draw a map
+            // helps us know the spread of language usage for campuses, by main language
+            'language' => api_get_setting('platformLanguage'),
+            // not sure this is necessary...
+            'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'),
+            // the admin's IP address, with the only purpose of trying to geolocate portals around the globe to draw a map
+            'ip' => $_SERVER['REMOTE_ADDR'],
             // Reference to the packager system or provider through which
             // Chamilo is installed/downloaded. Packagers can change this in
             // the default config file (main/install/configuration.dist.php)
@@ -227,12 +254,16 @@ function check_system_version()
         $version = null;
         $client = new GuzzleHttp\Client();
         $url .= '?';
+
         foreach ($data as $k => $v) {
             $url .= urlencode($k).'='.urlencode($v).'&';
         }
+
         $res = $client->request('GET', $url, $options);
+
         if ('200' == $res->getStatusCode()) {
             $versionData = $res->getHeader('X-Chamilo-Version');
+
             if (isset($versionData[0])) {
                 $version = trim($versionData[0]);
             }
@@ -241,8 +272,8 @@ function check_system_version()
         if (version_compare($system_version, $version, '<')) {
             $output = '<span style="color:red">'.
                 get_lang('Your version is not up-to-date').'<br />'.
-                get_lang('The latest version is').' <b>Chamilo '.$version.'</b>.  <br />'.
-                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>.  <br />'.
+                get_lang('The latest version is').' <b>Chamilo '.$version.'</b>. <br />'.
+                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>. <br />'.
                 str_replace(
                     'https://chamilo.org/download',
                     '<a href="https://chamilo.org/download">https://chamilo.org/download</a>',
@@ -252,8 +283,8 @@ function check_system_version()
         } else {
             $output = '<span style="color:green">'.
                 get_lang('Your version is up-to-date').'<br />'.
-                get_lang('The latest version is').' <b>Chamilo '.$version.'</b>.  <br />'.
-                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>.  <br />'.
+                get_lang('The latest version is').' <b>Chamilo '.$version.'</b>. <br />'.
+                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>. <br />'.
                 '</span>';
         }
 
@@ -275,16 +306,17 @@ function check_system_version()
 function getLatestNews(): string
 {
     $url = 'https://version.chamilo.org/c/news/latest.php';
-
     $client = new Client([
-        'verify'      => false,
-        'timeout'     => 6,
+        'verify' => false,
+        'timeout' => 6,
         'http_errors' => false,
-        'headers'     => ['Accept' => 'application/json'],
+        'headers' => ['Accept' => 'application/json'],
     ]);
-
     $lang = str_replace('-', '_', (string) api_get_language_isocode());
-    if ($lang === '' ) { $lang = 'en_US'; }
+
+    if ($lang === '') {
+        $lang = 'en_US';
+    }
 
     $response = $client->request('GET', $url, [
         'query' => ['language' => $lang],
@@ -298,6 +330,38 @@ function getLatestNews(): string
 }
 
 /**
+ * Appends a local update notice link for development tests.
+ */
+function appendLocalSystemUpdateNotice(string $html): string
+{
+    $environment = (string) api_get_env_variable('APP_ENV', 'prod');
+
+    if (!in_array($environment, ['dev', 'test'], true)) {
+        return $html;
+    }
+
+    $updateUrl = api_get_path(WEB_PATH).'admin/system-update?'.http_build_query([
+        'source' => 'local-test',
+        'check' => '1',
+    ]);
+    $safeUpdateUrl = htmlspecialchars($updateUrl, ENT_QUOTES, 'UTF-8');
+
+    return $html.'
+        <div style="margin-top: 1rem; padding: 0.75rem; border: 1px solid #2563eb; border-radius: 0.5rem; background: #eff6ff;">
+            <div style="font-weight: 600; color: #1e3a8a; margin-bottom: 0.35rem;">
+                Test update available
+            </div>
+            <div style="color: #1e40af; margin-bottom: 0.6rem;">
+                A local update package is available for testing the new update workflow.
+            </div>
+            <a href="'.$safeUpdateUrl.'" style="display: inline-block; padding: 0.45rem 0.8rem; border-radius: 0.35rem; background: #2563eb; color: #ffffff; text-decoration: none; font-weight: 600;">
+                Review test update
+            </a>
+        </div>
+    ';
+}
+
+/**
  * Display the latest support services block.
  *
  * @throws \GuzzleHttp\Exception\GuzzleException
@@ -308,14 +372,12 @@ function getLatestNews(): string
 function getProSupport(): string
 {
     $url = 'https://version.chamilo.org/c/support/latest.php';
-
     $client = new Client([
-        'verify'      => false,
-        'timeout'     => 6,
+        'verify' => false,
+        'timeout' => 6,
         'http_errors' => false,
-        'headers'     => ['Accept' => 'application/json'],
+        'headers' => ['Accept' => 'application/json'],
     ]);
-
     $lang = str_replace('-', '_', (string) api_get_language_isocode() ?: 'en_US');
 
     $response = $client->request('GET', $url, [

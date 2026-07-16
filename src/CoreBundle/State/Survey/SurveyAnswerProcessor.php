@@ -30,9 +30,9 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class SurveyAnswerProcessor implements ProcessorInterface
 {
+    use SurveyCsrfTokenValidationTrait;
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
-    use SurveyCsrfTokenValidationTrait;
 
     public function __construct(
         private RequestStack $requestStack,

@@ -144,9 +144,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                                             'type' => 'object',
                                             'properties' => [
                                                 'visibility' => ['type' => 'integer'],
-                                                'cid' => ['type' => 'integer'],
-                                                'gid' => ['type' => 'integer'],
-                                                'sid' => ['type' => 'integer'],
                                             ],
                                         ],
                                     ],
@@ -161,6 +158,23 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                    required: false,
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                    required: false,
+                ),
+            ],
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
             deserialize: false

@@ -12,7 +12,7 @@
     {% set appliesToLabel = 'TemplateTitleCertificate'|get_lang %}
 {% endif %}
 
-{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : service.duration_days ~ ' ' ~ 'Days'|get_lang %}
+{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.duration_days) %}
 
 <div class="mx-auto w-full max-w-screen-2xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
@@ -37,7 +37,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -104,7 +104,7 @@
                             <div class="grid gap-3 text-sm text-gray-50">
                                 <div class="flex items-start gap-3">
                                     <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                        <em class="fa fa-user"></em>
+                                        <em class="mdi mdi-account"></em>
                                     </span>
                                     <div>
                                         <div class="font-semibold text-gray-90">{{ 'Buyer'|get_lang }}</div>
@@ -114,7 +114,7 @@
 
                                 <div class="flex items-start gap-3">
                                     <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                        <em class="fa fa-envelope"></em>
+                                        <em class="mdi mdi-email"></em>
                                     </span>
                                     <div>
                                         <div class="font-semibold text-gray-90">{{ 'EmailAddress'|get_lang }}</div>
@@ -124,7 +124,7 @@
 
                                 <div class="flex items-start gap-3">
                                     <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                        <em class="fa fa-hashtag"></em>
+                                        <em class="mdi mdi-pound"></em>
                                     </span>
                                     <div>
                                         <div class="font-semibold text-gray-90">{{ 'Reference'|get_lang }}</div>
@@ -135,7 +135,7 @@
                                 {% if service.owner.name is defined %}
                                     <div class="flex items-start gap-3">
                                         <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
-                                            <em class="fa fa-user-circle"></em>
+                                            <em class="mdi mdi-account-circle"></em>
                                         </span>
                                         <div>
                                             <div class="font-semibold text-gray-90">{{ 'Owner'|get_lang }}</div>
@@ -211,7 +211,7 @@
                             value="confirm"
                             class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-check fa-fw"></em>
+                            <em class="mdi mdi-check"></em>
                             {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
                         </button>
 
@@ -221,7 +221,7 @@
                             value="cancel"
                             class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-danger px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-times fa-fw"></em>
+                            <em class="mdi mdi-close"></em>
                             {{ 'CancelOrder'|get_plugin_lang('BuyCoursesPlugin') }}
                         </button>
                     </div>

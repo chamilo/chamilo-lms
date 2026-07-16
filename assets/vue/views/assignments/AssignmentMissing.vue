@@ -63,7 +63,7 @@
       v-else
       class="text-gray-500"
     >
-      {{ t("No missing submissions found for this assignment or data is not available.") }}
+      {{ t("No missing submissions found for this assignment or data is not available") }}
     </div>
   </div>
 </template>
@@ -120,9 +120,9 @@ async function sendEmailToAll() {
       ...(sid && { sid }),
       ...(gid && { gid }),
     })
-    notification.showSuccessNotification(t("Email sent to all unsubmitted users."))
+    notification.showSuccessNotification(t("Email sent to all unsubmitted users"))
   } catch (error) {
-    notification.showErrorNotification(t("Failed to send email."))
+    notification.showErrorNotification(t("Failed to send email"))
   }
 }
 </script>

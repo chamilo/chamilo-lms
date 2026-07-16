@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradeModel;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -59,10 +60,13 @@ use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Entity\CWikiConf;
+use Chamilo\CourseBundle\Entity\CWikiDiscuss;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
+use Chamilo\CourseBundle\Repository\CWikiCategoryRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use CourseManager;
 use Database;
@@ -3024,6 +3028,7 @@ class CourseRestorer
 
         // Preload existing by type in SAME scope (session vs base)
         $existingByType = [];
+        $existingCustomByTitle = [];
         $existingTitles = [];
 
         try {
@@ -3048,11 +3053,16 @@ class CourseRestorer
                     $t = CCourseDescription::TYPE_DESCRIPTION;
                 }
 
-                if (!isset($existingByType[$t])) {
+                $ttl = trim((string) $e->getTitle());
+
+                if (CCourseDescription::TYPE_CUSTOM === $t) {
+                    if ('' !== $ttl && !isset($existingCustomByTitle[$ttl])) {
+                        $existingCustomByTitle[$ttl] = $e;
+                    }
+                } elseif (!isset($existingByType[$t])) {
                     $existingByType[$t] = $e;
                 }
 
-                $ttl = trim((string) $e->getTitle());
                 if ('' !== $ttl) {
                     $existingTitles[$ttl] = true;
                 }
@@ -3062,6 +3072,7 @@ class CourseRestorer
                 'error' => $e->getMessage(),
             ]);
             $existingByType = [];
+            $existingCustomByTitle = [];
             $existingTitles = [];
         }
 
@@ -3107,7 +3118,9 @@ class CourseRestorer
                 $progress = 0;
             }
 
-            $existing = $existingByType[$type] ?? null;
+            $existing = CCourseDescription::TYPE_CUSTOM === $type
+                ? ($existingCustomByTitle[$title] ?? null)
+                : ($existingByType[$type] ?? null);
 
             if ($existing instanceof CCourseDescription) {
                 if (1 === $policy) { // SKIP
@@ -3139,6 +3152,7 @@ class CourseRestorer
                     $existing->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
 
                     $em->persist($existing);
+                    $this->applyCourseDescriptionLanguage($existing, $cd, $em);
                     $em->flush();
 
                     $destIid = (int) $existing->getIid();
@@ -3204,10 +3218,18 @@ class CourseRestorer
             $em->persist($entity);
             $em->flush();
 
+            if ($this->applyCourseDescriptionLanguage($entity, $cd, $em)) {
+                $em->flush();
+            }
+
             $destIid = (int) $entity->getIid();
             $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
 
-            $existingByType[$type] = $entity;
+            if (CCourseDescription::TYPE_CUSTOM === $type) {
+                $existingCustomByTitle[$title] = $entity;
+            } else {
+                $existingByType[$type] = $entity;
+            }
 
             $this->dlog('restore_course_descriptions: created', [
                 'src_id' => $oldId,
@@ -3227,6 +3249,45 @@ class CourseRestorer
             'policy' => $policy,
             'session_id' => $sessionId,
         ]);
+    }
+
+    private function applyCourseDescriptionLanguage(
+        CCourseDescription $description,
+        object $source,
+        EntityManagerInterface $em
+    ): bool {
+        if (!property_exists($source, 'language')) {
+            return false;
+        }
+
+        $resourceNode = $description->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        $languageCode = trim((string) ($source->language ?? ''));
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $em->getRepository(Language::class)->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ]);
+
+            if (!$language instanceof Language) {
+                $this->dlog('restore_course_descriptions: language not found, keeping current value', [
+                    'src_id' => (int) ($source->source_id ?? 0),
+                    'language' => $languageCode,
+                ]);
+
+                return false;
+            }
+        }
+
+        $resourceNode->setLanguage($language);
+        $em->persist($resourceNode);
+
+        return true;
     }
 
     /**
@@ -5970,6 +6031,12 @@ class CourseRestorer
         /** @var ObjectRepository $confRepo */
         $confRepo = $em->getRepository(CWikiConf::class);
 
+        /** @var CWikiCategoryRepository $categoryRepo */
+        $categoryRepo = $em->getRepository(CWikiCategory::class);
+
+        /** @var ObjectRepository $discussionRepo */
+        $discussionRepo = $em->getRepository(CWikiDiscuss::class);
+
         /** @var CourseEntity|null $courseEntity */
         $courseEntity = api_get_course_entity($this->destination_course_id);
         if (!$courseEntity instanceof CourseEntity) {
@@ -5989,6 +6056,11 @@ class CourseRestorer
         $logicalPageIdMap = [];
         $basePageIdCache = [];
         $confCreatedForPage = [];
+        $startedSourcePages = [];
+        $destinationReflinks = [];
+        $skippedSourcePages = [];
+        $categoryPathCache = [];
+        $discussionsRestoredForPage = [];
 
         $this->dlog('restore_wiki: begin', [
             'count' => count($bag),
@@ -6024,6 +6096,69 @@ class CourseRestorer
             $basePageIdCache[$key] = $basePid;
 
             return $basePid;
+        };
+
+        $findOrCreateCategory = function (array $path) use (
+            $categoryRepo,
+            $courseEntity,
+            $sessionEntity,
+            $em,
+            $sid,
+            &$categoryPathCache,
+        ): ?CWikiCategory {
+            $parent = null;
+            foreach ($path as $node) {
+                $node = \is_object($node) ? (array) $node : $node;
+                if (!\is_array($node)) {
+                    continue;
+                }
+
+                $title = trim((string) ($node['title'] ?? ''));
+                if ('' === $title) {
+                    continue;
+                }
+
+                $parentId = (int) ($parent?->getId() ?? 0);
+                $cacheKey = $sid.'|'.$parentId.'|'.mb_strtolower($title);
+                if (isset($categoryPathCache[$cacheKey])) {
+                    $parent = $categoryPathCache[$cacheKey];
+                    continue;
+                }
+
+                $qb = $categoryRepo->createQueryBuilder('category')
+                    ->andWhere('category.course = :course')
+                    ->andWhere('category.title = :title')
+                    ->setParameter('course', $courseEntity)
+                    ->setParameter('title', $title)
+                    ->setMaxResults(1);
+                if ($sessionEntity instanceof SessionEntity) {
+                    $qb->andWhere('category.session = :session')->setParameter('session', $sessionEntity);
+                } else {
+                    $qb->andWhere('category.session IS NULL');
+                }
+                if ($parent instanceof CWikiCategory) {
+                    $qb->andWhere('category.parent = :parent')->setParameter('parent', $parent);
+                } else {
+                    $qb->andWhere('category.parent IS NULL');
+                }
+
+                /** @var CWikiCategory|null $category */
+                $category = $qb->getQuery()->getOneOrNullResult();
+                if (!$category instanceof CWikiCategory) {
+                    $category = new CWikiCategory();
+                    $category->setCourse($courseEntity);
+                    $category->setSession($sessionEntity);
+                    $category->setTitle($title);
+                    $category->setParent($parent);
+                    $em->persist($category);
+                    $em->flush();
+                }
+
+                $categoryPathCache[$cacheKey] = $category;
+                $parent = $category;
+            }
+
+            return $parent;
         };
 
         foreach ($bag as $legacyId => $res) {
@@ -6090,6 +6225,13 @@ class CourseRestorer
                     $reflink = $titleSlug;
                 }
 
+                $sourceLogicalKey = $srcPageId.'|'.$groupId;
+                if (isset($destinationReflinks[$sourceLogicalKey])) {
+                    $reflink = $destinationReflinks[$sourceLogicalKey];
+                }
+                if (isset($skippedSourcePages[$sourceLogicalKey])) {
+                    continue;
+                }
                 $logicalKey = $reflink.'|'.$groupId;
 
                 $qbExists = $repo->createQueryBuilder('w')
@@ -6106,9 +6248,10 @@ class CourseRestorer
 
                 $exists = (bool) $qbExists->getQuery()->getOneOrNullResult();
 
-                if ($exists) {
+                if ($exists && !isset($startedSourcePages[$sourceLogicalKey])) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
+                            $skippedSourcePages[$sourceLogicalKey] = true;
                             $qbLast = $repo->createQueryBuilder('w')
                                 ->andWhere('w.cId = :cid')->setParameter('cid', $cid)
                                 ->andWhere('w.reflink = :r')->setParameter('r', $reflink)
@@ -6173,6 +6316,7 @@ class CourseRestorer
                             $rawTitle = $baseTitle.' ('.$i.')';
                             $logicalKey = $reflink.'|'.$groupId;
 
+                            $destinationReflinks[$sourceLogicalKey] = $reflink;
                             $this->dlog('restore_wiki: renamed', [
                                 'reflink' => $reflink,
                                 'title' => $rawTitle,
@@ -6192,8 +6336,23 @@ class CourseRestorer
                                 $qbAll->andWhere('COALESCE(w.sessionId,0) = 0');
                             }
 
-                            foreach ($qbAll->getQuery()->getResult() as $old) {
-                                $em->remove($old);
+                            /** @var CWiki[] $oldVersions */
+                            $oldVersions = $qbAll->getQuery()->getResult();
+                            $oldPageIds = [];
+                            foreach ($oldVersions as $oldVersion) {
+                                $oldPageId = (int) ($oldVersion->getPageId() ?? 0);
+                                if ($oldPageId > 0) {
+                                    $oldPageIds[$oldPageId] = $oldPageId;
+                                }
+                                $em->remove($oldVersion);
+                            }
+                            foreach ($oldPageIds as $oldPageId) {
+                                foreach ($confRepo->findBy(['cId' => $cid, 'pageId' => $oldPageId]) as $oldConf) {
+                                    $em->remove($oldConf);
+                                }
+                                foreach ($discussionRepo->findBy(['cId' => $cid, 'publicationId' => $oldPageId]) as $oldDiscussion) {
+                                    $em->remove($oldDiscussion);
+                                }
                             }
                             $em->flush();
 
@@ -6281,6 +6440,19 @@ class CourseRestorer
                 }
 
                 $wiki->setPageId($destPageId);
+                $categoryPaths = $src->category_paths ?? $res->category_paths ?? [];
+                if (\is_array($categoryPaths)) {
+                    foreach ($categoryPaths as $categoryPath) {
+                        $categoryPath = \is_object($categoryPath) ? (array) $categoryPath : $categoryPath;
+                        if (!\is_array($categoryPath)) {
+                            continue;
+                        }
+                        $category = $findOrCreateCategory($categoryPath);
+                        if ($category instanceof CWikiCategory) {
+                            $wiki->addCategory($category);
+                        }
+                    }
+                }
                 $em->flush();
 
                 if (!isset($confCreatedForPage[$destPageId])) {
@@ -6328,6 +6500,33 @@ class CourseRestorer
                     $confCreatedForPage[$destPageId] = true;
                 }
 
+                $discussions = $src->discussions ?? $res->discussions ?? [];
+                if (!isset($discussionsRestoredForPage[$sourceLogicalKey]) && \is_array($discussions)) {
+                    foreach ($discussions as $discussionData) {
+                        $discussionData = \is_object($discussionData) ? (array) $discussionData : $discussionData;
+                        if (!\is_array($discussionData)) {
+                            continue;
+                        }
+
+                        $discussion = new CWikiDiscuss();
+                        $discussion->setCId($cid);
+                        $discussion->setPublicationId($destPageId);
+                        $discussion->setUsercId((int) ($discussionData['user_id'] ?? api_get_user_id()));
+                        $discussion->setComment((string) ($discussionData['comment'] ?? ''));
+                        $discussion->setPScore((string) ($discussionData['score'] ?? '-'));
+                        try {
+                            $discussion->setDtime(new DateTime((string) ($discussionData['dtime'] ?? 'now')));
+                        } catch (Throwable) {
+                            $discussion->setDtime(new DateTime('now', new DateTimeZone('UTC')));
+                        }
+                        $em->persist($discussion);
+                    }
+                    $em->flush();
+                    $discussionsRestoredForPage[$sourceLogicalKey] = true;
+                }
+
+                $startedSourcePages[$sourceLogicalKey] = true;
+                $destinationReflinks[$sourceLogicalKey] = $reflink;
                 $destWikiIid = (int) ($wiki->getIid() ?? 0);
 
                 $this->course->resources[$bucketKey][$legacyId] ??= new stdClass();

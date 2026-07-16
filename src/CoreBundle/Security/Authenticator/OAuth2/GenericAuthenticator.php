@@ -23,6 +23,7 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GenericResourceOwner;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\ArrayAccessorTrait;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -44,6 +45,7 @@ class GenericAuthenticator extends AbstractAuthenticator
         AuthenticationConfigHelper $authenticationConfigHelper,
         AccessUrlHelper $urlHelper,
         EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
         protected readonly ExtraFieldRepository $extraFieldRepository,
         protected readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         protected readonly AccessUrlRepository $accessUrlRepository,
@@ -55,6 +57,7 @@ class GenericAuthenticator extends AbstractAuthenticator
             $authenticationConfigHelper,
             $urlHelper,
             $entityManager,
+            $logger,
         );
     }
 

@@ -109,8 +109,8 @@
                 {% set actionLabel = 'View'|trans %}
 
                 {% if not isStale and isCourseDescResult %}
-                    {% if courseId is not empty %}
-                        {% set openUrl = app.request.basePath ~ '/main/course_description/index.php?cid=' ~ courseId ~ '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~ '&gid=0&gradebook=0&origin=' %}
+                    {% if courseRootNodeId is not empty and courseId is not empty %}
+                        {% set openUrl = app.request.basePath ~ '/resources/course-description/' ~ courseRootNodeId ~ '/?cid=' ~ courseId ~ '&sid=' ~ resolvedSid ~ '&gid=0' %}
                     {% endif %}
                 {% elseif isLpResult %}
                     {% if courseId is not empty and lpId is not empty %}
@@ -208,7 +208,7 @@
                                     {% if openUrl and isAccessible %}
                                         <a
                                             href="{{ openUrl }}"
-                                            class="inline-flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 py-2 font-semibold text-white hover:bg-orange-600"
+                                            class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 font-semibold text-white hover:bg-primary/90"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >

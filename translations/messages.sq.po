@@ -1579,8 +1579,8 @@ msgstr "A jeni të sigurt që dëshironi të fshini këto hapa?"
 msgid "Authoring tool"
 msgstr "Mjet krijimi"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Kartelë SCORM ose AICC për ngarkim"
+msgid "SCORM file to upload"
+msgstr "Kartelë SCORM për ngarkim"
 
 msgid "Course location"
 msgstr "Vendndodhja e kursit"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:të drejtat e autorit,, no:pa të drejtat e autorit"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ushtrim,,      simulation:simulim,,      questionnaire:pyetësor,,      diagram:diagramë,,      figure:figurë,,      graph:grafik,,      index:indeks,,      slide:slide,,      table:tabelë,,      narrative text:tekst narrativ,,      exam:provim,,      experiment:eksperiment,,      problem statement:përmbajtja e problemit,,      self assessment:vëtëvlerësim,,      lecture:ligjëratë"
@@ -8727,6 +8727,15 @@ msgstr "Shfaq"
 
 msgid "My courses"
 msgstr "Kursimet e mia"
+
+msgid "Shop"
+msgstr "Dyqan"
+
+msgid "Invoice"
+msgstr "Fatura"
+
+msgid "Request invoice"
+msgstr "Kërko faturë"
 
 msgid "View my progress"
 msgstr "Shih përparimin tim"
@@ -36480,4 +36489,856 @@ msgstr "I moderuar"
 
 msgid "View threads"
 msgstr "Shiko temat"
+
+msgid "No auth source"
+msgstr "No auth source"
+
+msgid "You must add at least one question"
+msgstr "You must add at least one question"
+
+msgid "Advanced actions"
+msgstr "Advanced actions"
+
+msgid "Application path"
+msgstr "Application path"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Apply plan failed"
+
+msgid "Apply plan ready"
+msgstr "Apply plan ready"
+
+msgid "Apply preparation"
+msgstr "Apply preparation"
+
+msgid "Apply staged files"
+msgstr "Apply staged files"
+
+msgid "Applying files..."
+msgstr "Applying files..."
+
+msgid "Audit file"
+msgstr "Audit file"
+
+msgid "Backup directory"
+msgstr "Backup directory"
+
+msgid "Baseline clean"
+msgstr "Baseline clean"
+
+msgid "Baseline warnings"
+msgstr "Baseline warnings"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+
+msgid "Build production frontend assets."
+msgstr "Build production frontend assets."
+
+msgid "Building plan..."
+msgstr "Building plan..."
+
+msgid "Channel"
+msgstr "Channel"
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+
+msgid "Check manifest"
+msgstr "Check manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Checking post-apply actions..."
+
+msgid "Checking..."
+msgstr "Po kontrollohet..."
+
+msgid "Composer install"
+msgstr "Instalimi i Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Veprimet e Composer, Yarn dhe migrimit të bazës së të dhënave mund të ndryshojnë varësitë, asetet e gjeneruara ose bazën e të dhënave. Zgjidhini ato vetëm pasi të keni konfirmuar kopjet rezervë dhe lejet."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfiguro CHAMILO_UPDATE_MANIFEST_URL në server ose siguro një URL manifesti HTTPS."
+
+msgid "Configured"
+msgstr "I konfiguruar"
+
+msgid "Current migration"
+msgstr "Migrimi aktual"
+
+msgid "Database baseline"
+msgstr "Baza e të dhënave bazë"
+
+msgid "Database migration safety review"
+msgstr "Rishikimi i sigurisë së migrimit të bazës së të dhënave"
+
+msgid "Database migrations"
+msgstr "Migrimet e bazës së të dhënave"
+
+msgid "Development mode"
+msgstr "Mënyra zhvillimi"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Mos e aktivizo këtë nëse nuk janë rishikuar kopja rezervë e përditësimit dhe lejet e serverit."
+
+msgid "Doctrine dry-run command"
+msgstr "Komanda e provës së Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine raportoi paralajmërime për bazën historike. Përditësuesi do të ekzekutojë vetëm migrimet e skeduara V210 pas konfirmimit të qartë."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine do të ekzekutojë vetëm migrimet e skeduara V210 në mënyrë të qartë pas kalimit të rishikimit të sigurisë."
+
+msgid "Dry-run exit code"
+msgstr "Kodi i daljes së provës"
+
+msgid "Executed unavailable migrations"
+msgstr "Migrime të ekzekutuara të padisponueshme"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Nxirr paketën e verifikuar të përditësimit në një drejtori skenike për inspektim. Kjo nuk zëvendëson skedarë, nuk ekzekuton migrime ose nuk ndryshon bazën e të dhënave."
+
+msgid "File apply available"
+msgstr "Aplikimi i skedarëve i disponueshëm"
+
+msgid "Files to replace"
+msgstr "Skedarë për zëvendësim"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Konfirmoj që ekziston një kopje rezervë e bazës së të dhënave dhe është verifikuar para ekzekutimit të migrimeve."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Kuptoj që veprimet e avancuara mund të ndryshojnë varësitë, asetet e gjeneruara ose bazën e të dhënave."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Kuptoj që kjo do të zëvendësojë skedarët në instalimin e Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Kuptoj që kjo do të ekzekutojë komanda përditësimi në server."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instalo varësitë e ndërfaqes së përdoruesit para rindërtimit të aseteve."
+
+msgid "Installed version"
+msgstr "Versioni i instaluar"
+
+msgid "Latest migration"
+msgstr "Migrimi i fundit"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Lëre bosh rrugët e paketës dhe nënshkrimit për t'i shkarkuar ato nga URL-të e verifikuara të manifestit. Rrugët lokale janë të disponueshme vetëm për teste zhvillimi."
+
+msgid "Live command log"
+msgstr "Regjistri i komandave live"
+
+msgid "Live update log"
+msgstr "Regjistri i përditësimit live"
+
+msgid "Local test options"
+msgstr "Opsionet e testit lokal"
+
+msgid "Local test update notice link"
+msgstr "Lidhja e njoftimit të përditësimit të testit lokal"
+
+msgid "Local update notice simulation"
+msgstr "Simulimi i njoftimit të përditësimit lokal"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simulimi i njoftimit të përditësimit lokal është i disponueshëm vetëm në mënyrën e zhvillimit."
+
+msgid "Manifest"
+msgstr "Manifesti"
+
+msgid "Manifest source"
+msgstr "Burimi i manifestit"
+
+msgid "Migration safety details"
+msgstr "Detajet e sigurisë së migrimit"
+
+msgid "Migration safety review failed"
+msgstr "Rishikimi i sigurisë së migrimit dështoi"
+
+msgid "Migration safety review ready"
+msgstr "Rishikimi i sigurisë së migrimit gati"
+
+msgid "Migration target"
+msgstr "Objektivi i migrimit"
+
+msgid "New files"
+msgstr "Skedarë të rinj"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Migrime të reja të raportuara nga Doctrine"
+
+msgid "Next migration"
+msgstr "Migrimi tjetër"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Asnjë migrim i padisponueshëm i ekzekutuar nuk u raportua."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Asnjë URL zyrtare e manifestit nuk është konfiguruar ende. Përdor një URL HTTPS ose një rrugë lokale për teste zhvillimi."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Asnjë migrim në pritje nuk u zbulua para objektivit të përditësimit të skeduar."
+
+msgid "Not configured"
+msgstr "I pakonfiguruar"
+
+msgid "Not detected"
+msgstr "I pazbuluar"
+
+msgid "Official Chamilo update channel"
+msgstr "Kanali zyrtar i përditësimit të Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 i paketës"
+
+msgid "Package URL"
+msgstr "URL e paketës"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Skedarët e paketës dhe nënshkrimit do të shkarkohen nga manifesti. Rrugët lokale janë të çaktivizuara në këtë mjedis."
+
+msgid "Package path"
+msgstr "Rrugë e paketës"
+
+msgid "Package staged successfully"
+msgstr "Paketa u vendos me sukses"
+
+msgid "Package staging failed"
+msgstr "Vendosja e paketës dështoi"
+
+msgid "Package verification"
+msgstr "Verifikimi i paketës"
+
+msgid "Package verification failed"
+msgstr "Verifikimi i paketës dështoi"
+
+msgid "Package verified successfully"
+msgstr "Paketa u verifikua me sukses"
+
+msgid "Pending migrations before this update"
+msgstr "Migrimet në pritje para këtij përditësimi"
+
+msgid "Planned backup path"
+msgstr "Rrugë e planifikuar e rezervës"
+
+msgid "Post-apply actions completed"
+msgstr "Veprimet pas zbatimit u përfunduan"
+
+msgid "Post-apply actions failed"
+msgstr "Veprimet pas zbatimit dështuan"
+
+msgid "Post-apply actions ready"
+msgstr "Veprimet pas zbatimit janë gati"
+
+msgid "Post-apply checks"
+msgstr "Kontrollet pas zbatimit"
+
+msgid "Post-apply checks failed"
+msgstr "Kontrollet pas zbatimit dështuan"
+
+msgid "Post-apply details"
+msgstr "Detajet pas zbatimit"
+
+msgid "Post-apply run details"
+msgstr "Detajet e ekzekutimit pas zbatimit"
+
+msgid "Preflight checks"
+msgstr "Kontrollet paraprake"
+
+msgid "Preflight checks completed"
+msgstr "Kontrollet paraprake u përfunduan"
+
+msgid "Preflight checks failed"
+msgstr "Kontrollet paraprake dështuan"
+
+msgid "Preflight details"
+msgstr "Detajet paraprake"
+
+msgid "Prepare staging"
+msgstr "Përgatitja e vendosjes"
+
+msgid "Preparing staging..."
+msgstr "Po përgatitet vendosja..."
+
+msgid "Production mode"
+msgstr "Mënyra e prodhimit"
+
+msgid "Released at"
+msgstr "Lëshuar më"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Zëvendëso skedarët e Chamilo nga paketa e vendosur duke përdorur planin e rishikuar të zbatimit. Kjo nuk ekzekuton migrimet e bazës së të dhënave, Composer, Yarn ose komandat e cache-it."
+
+msgid "Review apply plan"
+msgstr "Rishiko planin e zbatimit"
+
+msgid "Review database migrations"
+msgstr "Rishiko migrimet e bazës së të dhënave"
+
+msgid "Review post-apply actions"
+msgstr "Rishiko veprimet pas zbatimit"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Rishiko komandat manuale të rekomanduara pas zbatimit të skedarëve të përditësimit. Ky hap nuk ekzekuton Composer, Yarn, migrimet ose komandat e cache-it."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Rishiko migrimet e Doctrine të vendosura dhe daljen e ekzekutimit të thatë para ekzekutimit të migrimeve të bazës së të dhënave."
+
+msgid "Reviewing database migrations..."
+msgstr "Po rishikohen migrimet e bazës së të dhënave..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Ekzekuto dhe kaloni rishikimin e sigurisë së migrimeve para ekzekutimit të migrimeve të bazës së të dhënave."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Ekzekuto kontrollet e mjedisit para çdo hapi të ardhshëm të zbatimit të përditësimit. Kjo nuk ndryshon skedarët ose bazën e të dhënave."
+
+msgid "Run post-apply actions"
+msgstr "Ekzekuto veprimet pas zbatimit"
+
+msgid "Run preflight checks"
+msgstr "Ekzekuto kontrollet paraprake"
+
+msgid "Run selected post-apply actions"
+msgstr "Ekzekuto veprimet e zgjedhura pas zbatimit"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Ekzekuto komandat e zgjedhura pas zbatimit nga serveri duke përdorur një listë të lejuar të kontrolluar. Nuk pranohen komanda të personalizuara shell."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Ekzekuto këto komanda manualisht nga serveri pas konfirmimit të rezultatit të përditësimit të skedarëve dhe rezervave."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Ekzekutimi i veprimeve pas zbatimit nga ndërfaqja është i çaktivizuar në mënyrën e prodhimit."
+
+msgid "Running post-apply actions..."
+msgstr "Po ekzekutohen veprimet pas zbatimit..."
+
+msgid "Safe actions"
+msgstr "Veprime të sigurta"
+
+msgid "Signature path"
+msgstr "Rrugë e nënshkrimit"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Verifikimi i nënshkrimit nuk mund të anashkalohet në këtë mjedis."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Anashkalo verifikimin e nënshkrimit për testet e zhvillimit lokal"
+
+msgid "Staged file application failed"
+msgstr "Zbatimi i skedarëve të vendosur dështoi"
+
+msgid "Staged files applied successfully"
+msgstr "Skedarët e vendosur u zbatuan me sukses"
+
+msgid "Staging details"
+msgstr "Detajet e vendosjes"
+
+msgid "Staging directory"
+msgstr "Direktoria e vendosjes"
+
+msgid "Staging extraction"
+msgstr "Nxjerrja e vendosjes"
+
+msgid "Symfony cache clear"
+msgstr "Pastrimi i cache-it të Symfony"
+
+msgid "System update"
+msgstr "Përditësimi i sistemit"
+
+msgid "Target version"
+msgstr "Versioni i synuar"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL-ja e manifestit zyrtar të konfiguruar është e paracaktuar. Mund ta ndryshoni në një manifest tjetër HTTPS nëse është e nevojshme."
+
+msgid "The database migration baseline is clean."
+msgstr "Baza e migrimit të bazës së të dhënave është e pastër."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Përgjigja përfundimtare HTTP dështoi pas përfundimit të operacionit. Kjo zakonisht shkaktohet nga lejet e cache-it në kohë reale ose nga një rinisje e serverit web gjatë kërkesës."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Regjistri i operacionit raporton se veprimet pas zbatimit u përfunduan me sukses."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Komandat e zgjedhura pas zbatimit u përfunduan me sukses, por përgjigja përfundimtare HTTP dështoi. Rifreskoni faqen dhe verifikoni lejet e cache-it në kohë reale nëse faqja nuk ngarkohet siç duhet."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Përditësuesi nuk krijon ose rivendos kopje rezervë të bazës së të dhënave."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Këto veprime janë të sigurta për t'u ekzekutuar nga ndërfaqja pas shqyrtimit të rezultatit të përditësimit."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Këto komanda mund të ndryshojnë varësitë, asetet e gjeneruara, cache-in ose bazën e të dhënave. Konfirmoni kopjet rezervë para se të vazhdoni."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ky veprim ndryshon skedarët në instalimin e Chamilo. Sigurohuni që plani i zbatimit të jetë shqyrtuar dhe kopjet rezervë të jenë të aktivizuara para se të vazhdoni."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Ky hyrje zhvillimi simulon njoftimin e ardhshëm të përditësimit të Chamilo.org duke përdorur rrugët lokale të paketave të testit."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Kjo ekran u hap nga një njoftim zyrtar përditësimi, por ende nuk është konfiguruar asnjë burim zyrtar manifesti."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Kjo ekran u hap nga një njoftim përditësimi. Vetëm kontrolli i manifestit fillon automatikisht."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ky hap përgatit vetëm një shqyrtim. Zëvendësimi i skedarëve ndodh më vonë në hapin Zbatoni skedarët e skenës, me mbrojtje kyçi, kopje rezervë dhe kthim mbrapsht."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Ky përditësues nuk krijon një kopje rezervë të bazës së të dhënave. Krijoni dhe verifikoni një kopje rezervë para se të ekzekutoni migrimet."
+
+msgid "Trusted public key"
+msgstr "Çelës publik i besuar"
+
+msgid "Trusted signing key"
+msgstr "Çelës nënshkrimi i besuar"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Shkruani APPLY UPDATE FILES për të konfirmuar"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Shkruani RUN DATABASE MIGRATIONS për të konfirmuar migrimet e bazës së të dhënave"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Shkruani RUN POST UPDATE ACTIONS për të konfirmuar"
+
+msgid "Unknown update notice source."
+msgstr "Burim i panjohur njoftimi përditësimi."
+
+msgid "Update availability"
+msgstr "Disponueshmëria e përditësimit"
+
+msgid "Update directory"
+msgstr "Direktoria e përditësimit"
+
+msgid "Update lock path"
+msgstr "Rrugë kyçi përditësimi"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Përdorni direktorinë e skenës të gjeneruar nga hapi i mëparshëm. Backend-i pranon vetëm direktori brenda var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Përdorni këtë lidhje për të simuluar njoftimin e ardhshëm të përditësimit të Chamilo.org gjatë testeve të zhvillimit."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Përdorni këtë vetëm për teste zhvillimi lokale. Përditësimet e prodhimit duhet të përdorin çelësin e konfiguruar të serverit."
+
+msgid "Verification details"
+msgstr "Detajet e verifikimit"
+
+msgid "Verify package"
+msgstr "Verifiko paketën"
+
+msgid "Verifying..."
+msgstr "Duke verifikuar..."
+
+msgid "Waiting for command progress events..."
+msgstr "Duke pritur për ngjarjet e progresit të komandës..."
+
+msgid "Waiting for update progress events..."
+msgstr "Duke pritur për ngjarjet e progresit të përditësimit..."
+
+msgid "Yarn build"
+msgstr "Ndërtimi me Yarn"
+
+msgid "Yarn install"
+msgstr "Instalimi me Yarn"
+
+msgid "A comment is required"
+msgstr "Kërkohet një koment"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Një bazë të dhënash me të njëjtin emër ekziston tashmë. Nëse përmban tabela, ato do të fshihen; nëse është bosh, do të ripërdoret."
+
+msgid "AI generated"
+msgstr "I gjeneruar nga AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Shtoni të paktën një pyetje para se të ktheheni te rruga e të mësuarit."
+
+msgid "Add attachments"
+msgstr "Shtoni bashkëngjitje"
+
+msgid "Additional fields"
+msgstr "Fusha shtesë"
+
+msgid "Allow comments"
+msgstr "Lejo komentet"
+
+msgid "Allow new pages"
+msgstr "Lejo faqe të reja"
+
+msgid "Allow ratings"
+msgstr "Lejo vlerësimet"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Jeni të sigurt që dëshironi të fshini të gjitha elementët?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Jeni të sigurt që dëshironi të rivendosni rinovimin automatik?"
+
+msgid "Attachment has been deleted"
+msgstr "Bashkëngjitja është fshirë"
+
+msgid "Backup file"
+msgstr "Skedari i kopjes rezervë"
+
+msgid "Block comments"
+msgstr "Blloko komentet"
+
+msgid "Block new pages"
+msgstr "Blloko faqe të reja"
+
+msgid "Block ratings"
+msgstr "Blloko vlerësimet"
+
+msgid "Cancel renewal"
+msgstr "Anulo rinovimin"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Lidhjet e kategorisë do të hiqen nga faqet Wiki të %s."
+
+msgid "Change"
+msgstr "Ndrysho"
+
+msgid "Clear group"
+msgstr "Pastro grupin"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Kliko një etiketë për ta futur në redaktues. Këto vendmbajtëse do të zëvendësohen kur të krijohet certifikata."
+
+msgid "Comment added"
+msgstr "Komenti u shtua"
+
+msgid "Comment is required"
+msgstr "Komenti është i detyrueshëm"
+
+msgid "Comment score"
+msgstr "Vlerësimi i komentit"
+
+msgid "Compare selected versions line by line"
+msgstr "Krahaso versionet e zgjedhura rresht për rresht"
+
+msgid "Compare selected versions word by word"
+msgstr "Krahaso versionet e zgjedhura fjalë për fjalë"
+
+msgid "Compare versions"
+msgstr "Krahaso versionet"
+
+msgid "Copy completed"
+msgstr "Kopjimi u përfundua"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Krijo faqe pune Wiki individuale për nxënësit"
+
+msgid "Current view mode"
+msgstr "Mënyra aktuale e shikimit"
+
+msgid "Delete Wiki"
+msgstr "Fshi Wiki"
+
+msgid "Delete page"
+msgstr "Fshi faqen"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Fshirja e faqes kryesore të Wiki nuk rekomandohet. Mund ta rikrijoni më vonë."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Çaktivizimi i Wiki bllokon faqet dhe veprimet normale të Wiki. Kjo faqe cilësimesh mbetet e disponueshme për mësuesit e kursit."
+
+msgid "Discussion"
+msgstr "Diskutim"
+
+msgid "Edit Comment"
+msgstr "Ndrysho komentin"
+
+msgid "Edit page"
+msgstr "Ndrysho faqen"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Data e përfundimit duhet të jetë pas ose e barabartë me datën e skadimit"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Shkruaj një term kërkimi për të gjetur faqet Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Data e skadimit duhet të jetë para ose e barabartë me datën e përfundimit"
+
+msgid "Failed email recipients"
+msgstr "Marrësit e dështuara të emailit"
+
+msgid "Finish and return to learning path"
+msgstr "Përfundo dhe kthehu te rruga e të mësuarit"
+
+msgid "Forum image"
+msgstr "Imazhi i forumit"
+
+msgid "Hide discussion"
+msgstr "Fshih diskutimin"
+
+msgid "Hide page"
+msgstr "Fshih faqen"
+
+msgid "I changed my mind"
+msgstr "Ndryshova mendje"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Nëse nuk është zgjedhur, këto skedarë do të mbeten të disponueshëm për administratorin e platformës përmes mjetit 'Informacioni i skedarit'."
+
+msgid "Internal message failures"
+msgstr "Dështime të mesazheve të brendshme"
+
+msgid "Internal messages available"
+msgstr "Mesazhet e brendshme të disponueshme"
+
+msgid "Internal messages created now"
+msgstr "Mesazhet e brendshme të krijuara tani"
+
+msgid "Item score"
+msgstr "Pikët e elementit"
+
+msgid "Last post"
+msgstr "Postimi i fundit"
+
+msgid "Lock page"
+msgstr "Blloko faqen"
+
+msgid "Manage categories"
+msgstr "Menaxho kategoritë"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Shënon këtë dokument si të asistuar nga AI. Përdoreni kur përmbajtja është krijuar ose ndryshuar ndjeshëm me mjete AI."
+
+msgid "Maximum score is required"
+msgstr "Pikët maksimale janë të detyrueshme"
+
+msgid "Metric"
+msgstr "Metrikë"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Komentet e reja janë bllokuar në këtë diskutim"
+
+msgid "No Wiki categories are available yet."
+msgstr "Nuk ka ende kategori Wiki të disponueshme."
+
+msgid "No categories found"
+msgstr "Nuk u gjetën kategori"
+
+msgid "No content"
+msgstr "Asnjë përmbajtje"
+
+msgid "No parent category"
+msgstr "Asnjë kategori prind"
+
+msgid "Number of comments scored"
+msgstr "Numri i komenteve të vlerësuara"
+
+msgid "Old version"
+msgstr "Versioni i vjetër"
+
+msgid "Only image files are allowed."
+msgstr "Lejohen vetëm skedarë imazhi."
+
+msgid "Please fill all required fields"
+msgstr "Ju lutemi plotësoni të gjitha fushat e kërkuara"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Pyetjet me vendmbajtëse klase ose studenti do të gjenerohen për klasat ose grupet e kursit: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Vlerësimet janë bllokuar në këtë diskutim"
+
+msgid "Remove image"
+msgstr "Hiq imazhin"
+
+msgid "Restore renewal"
+msgstr "Rivendos rinovimin"
+
+msgid "Restore version"
+msgstr "Rivendos versionin"
+
+msgid "Search in"
+msgstr "Kërko në"
+
+msgid "Select group"
+msgstr "Zgjidh grupin"
+
+msgid "Select image"
+msgstr "Zgjidh imazhin"
+
+msgid "Selected image"
+msgstr "Imazhi i zgjedhur"
+
+msgid "Show discussion"
+msgstr "Shfaq diskutimin"
+
+msgid "Show page"
+msgstr "Shfaq faqen"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Disa skedarë ose dosje nuk kanë leje shkrimi. Për të instaluar Chamilo duhet të ndryshoni fillimisht lejet e tyre (duke përdorur CHMOD). Ju lutemi lexoni"
+
+msgid "Subcategories"
+msgstr "Nënkategoritë"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Prekni majtas ose djathtas për të lundruar"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Afati i detyrës Wiki ka skaduar, por lejohet dorëzimi me vonesë."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Afati i detyrës Wiki ka skaduar."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Detyra Wiki nuk ka filluar ende."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Bllokimi i redaktimit të faqes Wiki kërkohet para ruajtjes."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Njoftimi u ruajt, por një bashkëngjitje nuk mund të ngarkohej."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Njoftimi u ruajt, por dërgimi me email dështoi."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Njoftimi u ruajt, por asnjë email nuk mund të dorëzohej."
+
+msgid "The category has been created"
+msgstr "Kategoria është krijuar"
+
+msgid "The category has been deleted"
+msgstr "Kategoria është fshirë"
+
+msgid "The category has been updated"
+msgstr "Kategoria është përditësuar"
+
+msgid "The end date is invalid"
+msgstr "Data e përfundimit është e pavlefshme"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Numri maksimal i versioneve duhet të jetë një numër i plotë jo negativ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Numri maksimal i fjalëve duhet të jetë një numër i plotë jo negativ"
+
+msgid "The print window could not be opened"
+msgstr "Dritarja e printimit nuk mund të hapet"
+
+msgid "The start date is invalid"
+msgstr "Data e fillimit është e pavlefshme"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Këto cilësime zbatohen për të gjithë kursin, përfshirë sesionet dhe grupet e tij."
+
+msgid "This announcement has already been sent by email."
+msgstr "Ky njoftim është dërguar tashmë me email."
+
+msgid "This discussion is hidden from learners"
+msgstr "Ky diskutim është i fshehur nga nxënësit"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Ky mjet i AI gjenerues ju lejon të krijoni imazhe dhe video të shkurtra për të ilustruar kursin tuaj. Duke shpjeguar (në tekst) atë që dëshironi në seksionin e kërkesës, do t'i jepni modelit të konfiguruar të AI elementët e nevojshëm për të gjeneruar një imazh ose video. Ju lutemi të jeni të durueshëm. Modeli i AI do të marrë pak kohë dhe do të gjenerojë një rezultat, të cilin mund të dëshironi ta mbani duke ruajtur median në dosjen tuaj të dokumenteve, dhe më pas ta futni brenda një dokumenti HTML. Jo të gjitha modelet e AI janë të barabarta për sa i përket shpejtësisë ose cilësisë. Modeli i AI mund t'ju japë gjithashtu një kërkesë të modifikuar, e cila është një interpretim më i detajuar i kërkesës suaj. Më pas mund ta përdorni këtë kërkesë të modifikuar për të përmirësuar kërkesën tuaj. Ju lutemi të jeni të vetëdijshëm se ky mjet, veçanërisht për videot, mund të gjenerojë kosto të konsiderueshme për organizatën tuaj, edhe nëse vendosni të mos ruani median e gjeneruar. Ju lutemi ta përdorni atë në përputhje me rrethanat. Nëse keni probleme për të marrë atë që po kërkoni, ju lutemi të merrni pak kohë për të kërkuar truket e kërkesave në internet për modelin e AI në dispozicionin tuaj."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ky historik i përket kursit bazë. Rivendosja është e disponueshme pas krijimit të një versioni sesioni."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Ky imazh zëvendëson ikonën e paracaktuar të forumit që shfaqet pranë titullit të forumit."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Kjo faqe vjen nga kursi bazë. Ruajtja e saj do të krijojë një version për sesionin aktual."
+
+msgid "This will also delete %s subcategories."
+msgstr "Kjo do të fshijë gjithashtu %s nënkategori."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Kjo do të krijojë faqe pune individuale për %s nxënës."
+
+msgid "Thread history"
+msgstr "Historiku i temës"
+
+msgid "Title and content"
+msgstr "Titulli dhe përmbajtja"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Nuk mund të anulohet rinovimi tani."
+
+msgid "Unable to restore renewal right now."
+msgstr "Nuk mund të rivendoset rinovimi tani."
+
+msgid "Unlock page"
+msgstr "Zhblloko faqen"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Përdorni [[Faqe]] ose [[Faqe|Tekst i dukshëm]] për të krijuar lidhje të brendshme Wiki."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Përdorni tastin e hapësirës ose tastet e shigjetave për të lundruar"
+
+msgid "View version"
+msgstr "Shih versionin"
+
+msgid "Visible only to teachers"
+msgstr "I dukshëm vetëm për mësuesit"
+
+msgid "Weight is required"
+msgstr "Pesha është e kërkuar"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Kategoritë Wiki janë të çaktivizuara për këtë kurs."
+
+msgid "Wiki categories enabled"
+msgstr "Kategoritë e Wiki-s të aktivizuara"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtrimi strikt HTML i Wiki-s"
+
+msgid "Wiki settings"
+msgstr "Cilësimet e Wiki-s"
+
+msgid "Wiki settings updated"
+msgstr "Cilësimet e Wiki-s u përditësuan"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Po shihni një version historik të kësaj faqeje"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Mund të bashkëngjitni një ose më shumë skedarë në këtë përgjigje."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Mund të redaktoni këtë faqe detyre, por faqet e punës së nxënësve nuk do të ndryshohen."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Mund të përdorni etiketat {{class_name}} dhe {{student_full_name}} në pyetje."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Keni 20 minuta për të redaktuar këtë faqe para se të skadojë bllokimi i redaktimit."
+
+msgid "by"
+msgstr "nga"
+
+msgid "required"
+msgstr "i detyrueshëm"
 

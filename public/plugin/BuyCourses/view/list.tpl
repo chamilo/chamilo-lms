@@ -30,7 +30,7 @@
                             href="{{ back_url }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                         >
-                            <em class="fa fa-arrow-left fa-fw"></em>
+                            <em class="mdi mdi-arrow-left"></em>
                             {{ 'Back'|get_lang }}
                         </a>
                     {% endif %}
@@ -40,7 +40,7 @@
                             href="{{ url('index') ~ 'plugin/BuyCourses/src/services_add.php' }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-cart-plus fa-fw"></em>
+                            <em class="mdi mdi-cart-plus"></em>
                             {{ 'NewService'|get_plugin_lang('BuyCoursesPlugin') }}
                         </a>
                     {% endif %}
@@ -163,12 +163,12 @@
                     <td class="px-6 py-4 text-center">
                         {% if item.buyCourseData %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
-                                            <em class="fa fa-check fa-fw"></em>
+                                            <em class="mdi mdi-check"></em>
                                             {{ 'Yes'|get_lang }}
                                         </span>
                         {% else %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-gray-20 px-3 py-1 text-xs font-semibold text-gray-50">
-                                            <em class="fa fa-times fa-fw"></em>
+                                            <em class="mdi mdi-close"></em>
                                             {{ 'No'|get_lang }}
                                         </span>
                         {% endif %}
@@ -197,7 +197,7 @@
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type': product_type_course}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-wrench fa-fw"></em>
+                            <em class="mdi mdi-wrench"></em>
                             {{ 'Configure'|get_lang }}
                         </a>
                     </td>
@@ -364,12 +364,12 @@
                     <td class="px-6 py-4 text-center">
                         {% if item.buyCourseData %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
-                                            <em class="fa fa-check fa-fw"></em>
+                                            <em class="mdi mdi-check"></em>
                                             {{ 'Yes'|get_lang }}
                                         </span>
                         {% else %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-gray-20 px-3 py-1 text-xs font-semibold text-gray-50">
-                                            <em class="fa fa-times fa-fw"></em>
+                                            <em class="mdi mdi-close"></em>
                                             {{ 'No'|get_lang }}
                                         </span>
                         {% endif %}
@@ -398,7 +398,7 @@
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-wrench fa-fw"></em>
+                            <em class="mdi mdi-wrench"></em>
                             {{ 'Configure'|get_lang }}
                         </a>
                     </td>
@@ -533,6 +533,9 @@
                         {{ 'Duration'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        {{ 'ActiveService'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </th>
+                    <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
@@ -566,19 +569,33 @@
                         {% if item.duration_days == 0 %}
                         {{ 'NoLimit'|get_lang }}
                         {% else %}
-                        {{ item.duration_days }} {{ 'Days'|get_lang }}
+                        {{ 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(item.duration_days) }}
+                        {% endif %}
+                    </td>
+
+                    <td class="px-6 py-4 text-center">
+                        {% if item.active is not defined or item.active == 1 %}
+                        <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
+                            <em class="mdi mdi-check"></em>
+                            {{ 'Yes'|get_lang }}
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-2 rounded-full bg-warning/10 px-3 py-1 text-xs font-semibold text-warning">
+                            <em class="mdi mdi-pause-circle-outline"></em>
+                            {{ 'No'|get_lang }}
+                        </span>
                         {% endif %}
                     </td>
 
                     <td class="px-6 py-4 text-center">
                         {% if item.visibility == 1 %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
-                                            <em class="fa fa-check fa-fw"></em>
+                                            <em class="mdi mdi-check"></em>
                                             {{ 'Yes'|get_lang }}
                                         </span>
                         {% else %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-gray-20 px-3 py-1 text-xs font-semibold text-gray-50">
-                                            <em class="fa fa-times fa-fw"></em>
+                                            <em class="mdi mdi-close"></em>
                                             {{ 'No'|get_lang }}
                                         </span>
                         {% endif %}
@@ -608,7 +625,7 @@
                                     href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode }}"
                                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                             >
-                                <em class="fa fa-wrench fa-fw"></em>
+                                <em class="mdi mdi-wrench"></em>
                                 {{ 'Edit'|get_lang }}
                             </a>
 
@@ -624,7 +641,7 @@
                                         type="submit"
                                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 shadow-sm transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                                 >
-                                    <em class="fa fa-copy fa-fw"></em>
+                                    <em class="mdi mdi-content-copy"></em>
                                     {{ 'Copy'|get_lang }}
                                 </button>
                             </form>
@@ -638,7 +655,7 @@
                                     data-success-label="{{ 'ServiceLinkCopied'|get_plugin_lang('BuyCoursesPlugin')|e('html_attr') }}"
                                     data-error-message="{{ 'ServiceLinkCopyFailed'|get_plugin_lang('BuyCoursesPlugin')|e('html_attr') }}"
                             >
-                                <em class="fa fa-link fa-fw"></em>
+                                <em class="mdi mdi-link"></em>
                                 <span>{{ 'CopyServiceLink'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                             </button>
                         </div>
@@ -646,7 +663,7 @@
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="{{ tax_enable and (tax_applies_to == 1 or tax_applies_to == 4) ? 8 : 7 }}" class="px-6 py-10 text-center text-sm text-gray-50">
+                    <td colspan="{{ tax_enable and (tax_applies_to == 1 or tax_applies_to == 4) ? 9 : 8 }}" class="px-6 py-10 text-center text-sm text-gray-50">
                         {{ 'NoResults'|get_lang }}
                     </td>
                 </tr>

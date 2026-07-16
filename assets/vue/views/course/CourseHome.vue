@@ -128,22 +128,14 @@
         v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
         class="text-sm text-gray-600"
       >
-        {{
-          t(
-            "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
-          )
-        }}
+        {{ exerciseAutoLaunchMessage }}
       </p>
 
       <p
         v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
         class="text-sm text-gray-600"
       >
-        {{
-          t(
-            "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
-          )
-        }}
+        {{ lpAutoLaunchMessage }}
       </p>
 
       <p
@@ -161,10 +153,7 @@
 
       <div class="flex flex-col lg:flex-row gap-6">
         <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
-          <CourseIntroduction
-            ref="courseIntroEl"
-            :is-allowed-to-edit="isAllowedToEdit"
-          />
+          <CourseIntroduction ref="courseIntroEl" />
         </div>
         <div
           v-if="showCourseSequence"
@@ -312,11 +301,42 @@ provide("isCustomizing", isCustomizing)
 const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
-const documentAutoLaunch = ref(0)
-const exerciseAutoLaunch = ref(0)
-const lpAutoLaunch = ref(0)
-const forumAutoLaunch = ref(0)
 const courseSettingsStore = useCourseSettings()
+
+function getCourseSettingInt(variable) {
+  return parseInt(courseSettingsStore.getSetting(variable), 10) || 0
+}
+
+const documentAutoLaunch = computed(() => getCourseSettingInt("enable_document_auto_launch"))
+const exerciseAutoLaunch = computed(() => getCourseSettingInt("enable_exercise_auto_launch"))
+const lpAutoLaunch = computed(() => getCourseSettingInt("enable_lp_auto_launch"))
+const forumAutoLaunch = computed(() => getCourseSettingInt("enable_forum_auto_launch"))
+
+const exerciseAutoLaunchMessage = computed(() => {
+  if (exerciseAutoLaunch.value === 2) {
+    return [
+      t("The exercises auto-launch feature configuration is enabled"),
+      t("Redirect to the exercises list"),
+    ].join(" ")
+  }
+
+  return t(
+    "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
+  )
+})
+
+const lpAutoLaunchMessage = computed(() => {
+  if (lpAutoLaunch.value === 2) {
+    return [
+      t("The learning path auto-launch setting is ON"),
+      t("Redirect to the learning paths list"),
+    ].join(" ")
+  }
+
+  return t(
+    "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
+  )
+})
 
 const TOOL_VISIBILITY_VISIBLE = 2
 
@@ -334,6 +354,34 @@ function getToolVisibility(tool) {
 
 function isLearningPathTool(tool) {
   return tool?.title === "learnpath" || tool?.tool?.title === "learnpath"
+}
+
+function isCourseDescriptionTool(tool) {
+  return tool?.title === "course_description" || tool?.tool?.title === "course_description"
+}
+
+function isCourseDescriptionToolEnabled() {
+  const value = courseSettingsStore.getSetting("enabled", "course_description")
+
+  if (value === null || value === undefined || value === "") {
+    return true
+  }
+
+  return isSettingEnabled(value)
+}
+
+function isAnnouncementTool(tool) {
+  return tool?.title === "announcement" || tool?.tool?.title === "announcement"
+}
+
+function isAnnouncementToolEnabled() {
+  const value = courseSettingsStore.getSetting("enabled", "announcement")
+
+  if (value === null || value === undefined || value === "") {
+    return true
+  }
+
+  return isSettingEnabled(value)
 }
 
 function shouldShowInvisibleLearningPathTool(tool) {
@@ -379,7 +427,7 @@ function isSettingEnabled(value) {
 const isAiCourseAnalyzerEnabled = computed(() => {
   return (
     isSettingEnabled(getSetting.value("ai_helpers.enable_ai_helpers")) &&
-    isSettingEnabled(getSetting.value("ai_helpers.course_analyser"))
+    courseSettingsStore.isSettingEnabled("course_analyser", "ai_helpers")
   )
 })
 
@@ -410,6 +458,14 @@ async function loadCourseTools(showSkeleton = true) {
     const regularTools = []
 
     normalizedTools.forEach((tool) => {
+      if (isCourseDescriptionTool(tool) && !isCourseDescriptionToolEnabled()) {
+        return
+      }
+
+      if (isAnnouncementTool(tool) && !isAnnouncementToolEnabled()) {
+        return
+      }
+
       if (tool.title === "tracking") {
         // Tracking/Reporting is shown as a dedicated icon in the header, not in the tools grid.
       } else if (tool.tool?.category === "admin") {
@@ -570,10 +626,6 @@ const showCourseSequence = computed(() => {
 onMounted(() => {
   enforceCourseLegalAgreement()
 
-  documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
-  exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
-  lpAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
-  forumAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
 })
 
 watch(

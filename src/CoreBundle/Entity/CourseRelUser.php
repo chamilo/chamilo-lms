@@ -32,14 +32,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') or is_granted('ROLE_SESSION_MANAGER') or object.getUser() == user"
+            security: "is_granted('VIEW', object)"
         ),
         new GetCollection(
             provider: CourseRelUserCollectionStateProvider::class
         ),
         new Post(
             security: "is_granted('ROLE_USER')",
-            securityPostDenormalize: 'object.getUser() == user',
+            securityPostDenormalize: "is_granted('CREATE', object)",
             processor: CourseRelUserStateProcessor::class
         ),
         new GetCollection(

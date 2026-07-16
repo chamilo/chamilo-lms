@@ -36,11 +36,17 @@
       ref="legacyContainer"
     />
 
-    <PluginRegion region="content_bottom" />
-    <PluginRegion region="pre_footer" />
+    <PluginRegion
+      v-if="!hideGlobalUi"
+      region="content_bottom"
+    />
+    <PluginRegion
+      v-if="!hideGlobalUi"
+      region="pre_footer"
+    />
 
     <ConfirmDialog />
-    <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
+    <AccessUrlChooser v-if="!showAccessUrlChosserLayout && !hideGlobalUi" />
 
     <!-- Do not show docked chat in embedded contexts (iframes/pickers/dialogs) -->
     <DockedChat v-if="showGlobalChat" />
@@ -195,6 +201,8 @@ const showAccessUrlChosserLayout = computed(
   () => securityStore.isAuthenticated && !securityStore.isAdmin && accessUrlChooserVisible.value,
 )
 
+const hideGlobalUi = computed(() => Boolean(route.meta.hideGlobalUi))
+
 // ---- Embedded context detection (iframe/dialog/picker) ----
 const queryParams = computed(() => new URLSearchParams(window.location.search))
 
@@ -263,7 +271,7 @@ const isLearnpathEmbeddedRoute = computed(() => {
 })
 
 const layout = computed(() => {
-  if (showAccessUrlChosserLayout.value) {
+  if (showAccessUrlChosserLayout.value && !hideGlobalUi.value) {
     return AccessUrlChooserLayout
   }
 
@@ -356,20 +364,16 @@ api.interceptors.response.use(
 
 platformConfigurationStore.initialize()
 
-// i18n sync
-watch(
-  () => route.params,
-  () => {
-    const { appLocale } = useLocale()
-    if (appLocale?.value && locale.value !== appLocale.value) setLocale(appLocale.value)
-  },
-  { immediate: true },
-)
+// i18n sync — single writer. appLocale mirrors the server-side locale chain
+// (see useLocale) and reacts to store changes (platform config, user profile,
+// course context set/cleared by the router guards) on client-side navigation.
+// The boot locale comes from <html data-lang>, already resolved by the server.
+const { appLocale } = useLocale()
 
 watch(
-  () => securityStore.user?.language,
-  (lang) => {
-    if (lang && locale.value !== lang) setLocale(lang)
+  appLocale,
+  (newLocale) => {
+    if (newLocale && locale.value !== newLocale) setLocale(newLocale)
   },
   { immediate: true },
 )
@@ -439,7 +443,7 @@ const allowGlobalChat = computed(() => {
 
 const showGlobalChat = computed(() => {
   // Do not render global chat when the app is embedded (iframe/dialog/picker).
-  return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value
+  return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value && !hideGlobalUi.value
 })
 
 watch(

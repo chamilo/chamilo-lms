@@ -9,7 +9,6 @@ declare(strict_types=1);
  */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Throwable;
 
 $cidReset = true;
 
@@ -294,24 +293,6 @@ function styleBuyCoursesFormHtml(string $html): string
     return $result;
 }
 
-/**
- * Format a monetary amount without breaking the page when the sale has a missing or invalid ISO currency code.
- */
-function formatServiceSaleAmount(BuyCoursesPlugin $plugin, float $amount, mixed $isoCode): string
-{
-    $normalizedIsoCode = strtoupper(trim((string) $isoCode));
-
-    if ('' === $normalizedIsoCode) {
-        return number_format($amount, 2, '.', ',');
-    }
-
-    try {
-        return $plugin->getPriceWithCurrencyFromIsoCode($amount, $normalizedIsoCode);
-    } catch (Throwable) {
-        return number_format($amount, 2, '.', ',').' '.$normalizedIsoCode;
-    }
-}
-
 api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
@@ -352,26 +333,26 @@ $form->setDefaults([
 ]);
 
 $servicesSales = $plugin->getServiceSales(0, $selectedStatus);
+$paymentTypeLabels = $plugin->getPaymentTypes();
 
 foreach ($servicesSales as &$sale) {
     $sale['total_discount'] = '';
     $sale['coupon_code'] = '';
-    $sale['complete_user_name'] = api_get_person_name(
-        $sale['firstname'] ?? '',
-        $sale['lastname'] ?? ''
-    );
+    $sale['service_name'] = (string) ($sale['service']['name'] ?? $sale['name'] ?? '');
+    $sale['complete_user_name'] = (string) ($sale['buyer']['name'] ?? '');
+    $sale['username'] = (string) ($sale['buyer']['username'] ?? '');
+    $sale['email'] = (string) ($sale['buyer']['email'] ?? '');
     $sale['status_label'] = $saleStatuses[$sale['status']] ?? ($sale['status'] ?? '');
-    $sale['total_price'] = formatServiceSaleAmount(
-        $plugin,
+    $sale['payment_type_label'] = $paymentTypeLabels[(int) ($sale['payment_type'] ?? 0)] ?? '';
+    $sale['total_price'] = $plugin->getPriceWithCurrencyFromIsoCode(
         (float) ($sale['price'] ?? 0),
-        $sale['iso_code'] ?? null
+        (string) ($sale['service']['currency'] ?? '')
     );
 
     if (0.0 !== (float) ($sale['discount_amount'] ?? 0)) {
-        $sale['total_discount'] = formatServiceSaleAmount(
-            $plugin,
+        $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode(
             (float) ($sale['discount_amount'] ?? 0),
-            $sale['iso_code'] ?? null
+            (string) ($sale['service']['currency'] ?? '')
         );
         $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
     }
@@ -386,6 +367,7 @@ if ('' !== $searchUser) {
         static function (array $sale) use ($normalizedSearch): bool {
             $haystacks = [
                 (string) ($sale['complete_user_name'] ?? ''),
+                (string) ($sale['username'] ?? ''),
                 (string) ($sale['email'] ?? ''),
                 (string) ($sale['service_name'] ?? ''),
                 (string) ($sale['reference'] ?? ''),

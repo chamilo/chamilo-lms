@@ -26,6 +26,9 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * @extends ResourceRepository<CDocument>
  */
@@ -90,14 +93,19 @@ final class CDocumentRepository extends ResourceRepository
 
     /**
      * Register the original SCORM ZIP under:
-     *   <course root> / Learning paths / SCORM - {lp_id} - {lp_title} / {lp_title}.zip
+     *   Documents / Learning paths / SCORM - {lp_id} - {lp_title} / {lp_title}.zip
      */
-    public function registerScormZip(Course $course, ?Session $session, CLp $lp, UploadedFile $zip): void
-    {
+    public function registerScormZip(
+        Course $course,
+        ?Session $session,
+        CLp $lp,
+        UploadedFile $zip,
+        ?CGroup $group = null,
+    ): void {
         $em = $this->em();
 
-        // Ensure "Learning paths" directly under the course resource node
-        $lpTop = $this->ensureLearningPathSystemFolder($course, $session);
+        // Ensure "Learning paths" under the course Documents root.
+        $lpTop = $this->ensureLearningPathSystemFolder($course, $session, $group);
 
         // Subfolder per LP
         $lpFolderTitle = \sprintf('SCORM - %d - %s', $lp->getIid(), $this->safeTitle($lp->getTitle()));
@@ -106,7 +114,8 @@ final class CDocumentRepository extends ResourceRepository
             $lpTop,
             $lpFolderTitle,
             ResourceLink::VISIBILITY_DRAFT,
-            $session
+            $session,
+            $group,
         );
 
         // ZIP file under the LP folder
@@ -116,10 +125,92 @@ final class CDocumentRepository extends ResourceRepository
             $zip,
             \sprintf('SCORM ZIP for LP #%d', $lp->getIid()),
             ResourceLink::VISIBILITY_DRAFT,
-            $session
+            $session,
+            $group,
         );
 
         $em->flush();
+    }
+
+    /**
+     * Find the draft ZIP document registered for a SCORM Learning Path.
+     */
+    public function findScormZipDocument(Course $course, CLp $lp): ?CDocument
+    {
+        $courseRoot = $course->getResourceNode();
+        if (!$courseRoot instanceof ResourceNode) {
+            return null;
+        }
+
+        $parents = [$courseRoot];
+        $documentsRoot = $this->getCourseDocumentsRootNode($course);
+        if ($documentsRoot instanceof ResourceNode) {
+            $parents[(int) $documentsRoot->getId()] = $documentsRoot;
+        }
+
+        $learningPathFolderTitles = array_values(array_unique(array_filter([
+            \function_exists('get_lang') ? get_lang('Learning paths') : null,
+            \function_exists('get_lang') ? get_lang('Learning path') : null,
+            'Learning paths',
+            'Learning path',
+        ])));
+
+        foreach (array_values($parents) as $parent) {
+            foreach ($learningPathFolderTitles as $folderTitle) {
+                $learningPathsFolder = $this->findChildNodeByTitle($parent, $folderTitle);
+                if ($learningPathsFolder instanceof ResourceNode) {
+                    $parents[(int) $learningPathsFolder->getId()] = $learningPathsFolder;
+                }
+            }
+        }
+
+        $prefix = \sprintf('SCORM - %d - ', $lp->getIid());
+        $em = $this->em();
+
+        foreach ($parents as $parent) {
+            $folderQuery = $em->createQueryBuilder()
+                ->select('rn')
+                ->from(ResourceNode::class, 'rn')
+                ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
+                ->where('rn.parent = :parent')
+                ->andWhere('rn.title LIKE :prefix')
+                ->andWhere('d.filetype = :folderType')
+                ->setParameters([
+                    'parent' => $parent,
+                    'prefix' => $prefix.'%',
+                    'folderType' => 'folder',
+                ])
+                ->setMaxResults(1)
+            ;
+
+            /** @var ResourceNode|null $folder */
+            $folder = $folderQuery->getQuery()->getOneOrNullResult();
+            if (!$folder instanceof ResourceNode) {
+                continue;
+            }
+
+            $documentQuery = $em->createQueryBuilder()
+                ->select('d')
+                ->from(CDocument::class, 'd')
+                ->innerJoin('d.resourceNode', 'rn')
+                ->where('rn.parent = :folder')
+                ->andWhere('d.filetype = :fileType')
+                ->setParameters([
+                    'folder' => $folder,
+                    'fileType' => 'file',
+                ])
+                ->orderBy('d.iid', 'DESC')
+                ->setMaxResults(1)
+            ;
+
+            /** @var CDocument|null $document */
+            $document = $documentQuery->getQuery()->getOneOrNullResult();
+            if ($document instanceof CDocument) {
+                return $document;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -131,20 +222,26 @@ final class CDocumentRepository extends ResourceRepository
         $prefix = \sprintf('SCORM - %d - ', $lp->getIid());
 
         $courseRoot = $course->getResourceNode();
-        if ($courseRoot) {
-            // SCORM folder directly under course root
-            if ($this->tryDeleteFirstFolderByTitlePrefix($courseRoot, $prefix)) {
-                $em->flush();
-
-                return;
+        if ($courseRoot instanceof ResourceNode) {
+            $parents = [$courseRoot];
+            $documentsRoot = $this->getCourseDocumentsRootNode($course);
+            if ($documentsRoot instanceof ResourceNode) {
+                $parents[] = $documentsRoot;
             }
 
-            // Or under "Learning paths"
-            $lpTop = $this->findChildNodeByTitle($courseRoot, 'Learning paths');
-            if ($lpTop && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
-                $em->flush();
+            foreach ($parents as $parent) {
+                if ($this->tryDeleteFirstFolderByTitlePrefix($parent, $prefix)) {
+                    $em->flush();
 
-                return;
+                    return;
+                }
+
+                $lpTop = $this->findChildNodeByTitle($parent, 'Learning paths');
+                if ($lpTop instanceof ResourceNode && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
+                    $em->flush();
+
+                    return;
+                }
             }
         }
     }
@@ -280,7 +377,8 @@ final class CDocumentRepository extends ResourceRepository
         ResourceNode $parent,
         string $folderTitle,
         int $visibility = ResourceLink::VISIBILITY_DRAFT,
-        ?Session $session = null
+        ?Session $session = null,
+        ?CGroup $group = null,
     ): ResourceNode {
         try {
             if ($child = $this->findChildNodeByTitle($parent, $folderTitle)) {
@@ -289,8 +387,6 @@ final class CDocumentRepository extends ResourceRepository
 
             /** @var User|null $user */
             $user = api_get_user_entity();
-            $creatorId = $user?->getId();
-
             $doc = new CDocument();
             $doc->setTitle($folderTitle);
             $doc->setFiletype('folder');
@@ -302,6 +398,9 @@ final class CDocumentRepository extends ResourceRepository
             ];
             if ($session && method_exists($session, 'getId')) {
                 $link['sid'] = $session->getId();
+            }
+            if ($group instanceof CGroup) {
+                $link['gid'] = $group->getIid();
             }
             $doc->setResourceLinkArray([$link]);
 
@@ -331,7 +430,8 @@ final class CDocumentRepository extends ResourceRepository
         UploadedFile $uploaded,
         string $comment,
         int $visibility,
-        ?Session $session = null
+        ?Session $session = null,
+        ?CGroup $group = null,
     ): ResourceNode {
         /** @var User|null $user */
         $user = api_get_user_entity();
@@ -350,6 +450,9 @@ final class CDocumentRepository extends ResourceRepository
         ];
         if ($session && method_exists($session, 'getId')) {
             $link['sid'] = $session->getId();
+        }
+        if ($group instanceof CGroup) {
+            $link['gid'] = $group->getIid();
         }
         $doc->setResourceLinkArray([$link]);
 
@@ -378,17 +481,15 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * Ensure "Learning paths" exists directly under the course resource node.
-     * Links are created for course (and optional session) context.
+     * Ensure "Learning paths" exists under the course Documents root.
+     * Links are created for course (and optional session/group) context.
      */
-    public function ensureLearningPathSystemFolder(Course $course, ?Session $session = null): ResourceNode
-    {
-        $courseRoot = $course->getResourceNode();
-        if (!$courseRoot instanceof ResourceNode) {
-            throw new RuntimeException('Course has no ResourceNode root.');
-        }
-
-        // Try common i18n variants first
+    public function ensureLearningPathSystemFolder(
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null,
+    ): ResourceNode {
+        $documentsRoot = $this->ensureCourseDocumentsRootNode($course);
         $candidates = array_values(array_unique(array_filter([
             \function_exists('get_lang') ? get_lang('Learning paths') : null,
             \function_exists('get_lang') ? get_lang('Learning path') : null,
@@ -397,18 +498,42 @@ final class CDocumentRepository extends ResourceRepository
         ])));
 
         foreach ($candidates as $title) {
-            if ($child = $this->findChildNodeByTitle($courseRoot, $title)) {
+            $child = $this->findChildNodeByTitle($documentsRoot, $title);
+            if ($child instanceof ResourceNode) {
                 return $child;
             }
         }
 
-        // Create "Learning paths" directly under the course root
         return $this->ensureFolder(
             $course,
-            $courseRoot,
+            $documentsRoot,
             'Learning paths',
             ResourceLink::VISIBILITY_DRAFT,
-            $session
+            $session,
+            $group,
+        );
+    }
+
+    /**
+     * Ensure the legacy-compatible folder dedicated to one learning path exists.
+     */
+    public function ensureLearningPathDocumentFolder(
+        Course $course,
+        ?Session $session,
+        CLp $lp,
+        ?CGroup $group = null,
+    ): ResourceNode {
+        $learningPathsFolder = $this->ensureLearningPathSystemFolder($course, $session, $group);
+        $title = $this->safeTitle(html_entity_decode(strip_tags($lp->getTitle()), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $title = mb_substr($title, 0, 80);
+
+        return $this->ensureFolder(
+            $course,
+            $learningPathsFolder,
+            '' !== $title ? $title : \sprintf('Learning path %d', (int) $lp->getIid()),
+            ResourceLink::VISIBILITY_DRAFT,
+            $session,
+            $group,
         );
     }
 

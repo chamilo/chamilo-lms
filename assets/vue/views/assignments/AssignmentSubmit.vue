@@ -37,7 +37,7 @@
         v-model="text"
         class="w-full border rounded p-2"
         rows="10"
-        :placeholder="t('Write your answer here...')"
+        :placeholder="t('Write your answer here')"
       />
       <BaseButton
         :label="t('Submit')"
@@ -88,7 +88,7 @@
           v-model="text"
           class="w-full border rounded p-2"
           rows="8"
-          :placeholder="t('Write your answer here...')"
+          :placeholder="t('Write your answer here')"
         />
       </div>
 

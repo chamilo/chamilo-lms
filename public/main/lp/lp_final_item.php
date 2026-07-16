@@ -1,99 +1,105 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 
 /**
- * LP Final Item: muestra certificado y skills al completar el LP.
+ * Learning Path final item: displays certificates and skills after completion.
  */
 $_in_course = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/learnpathItem.class.php';
+require_once __DIR__.'/learnpath.class.php';
 
 $current_course_tool = TOOL_GRADEBOOK;
 api_protect_course_script(true);
 
 $courseCode = api_get_course_id();
-$courseId   = api_get_course_int_id();
-$userId     = api_get_user_id();
-$sessionId  = api_get_session_id();
-$id         = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$lpId       = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
+$courseId = api_get_course_int_id();
+$userId = api_get_user_id();
+$sessionId = api_get_session_id();
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 
-// This page can only be shown from inside a learning path
-if (!$id && !$lpId) {
+// This page can only be shown from inside a learning path.
+if ($id <= 0 || $lpId <= 0) {
     echo Display::return_message(get_lang('The file was not found'));
+
     exit;
 }
 
-// Certificate and Skills Premium with Service check
-$plugin  = BuyCoursesPlugin::create();
-$checker = $plugin->isEnabled() && $plugin->get('include_services');
-
-if ($checker) {
-    $userServiceSale = $plugin->getServiceSales(
-        $userId,
-        BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
-        BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM,
-        $lpId
-    );
-
-    if (empty($userServiceSale)) {
-        // Instance a new template : No page tittle, No header, No footer
-        $tpl = new Template(null, false, false);
-        $url = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php';
-        $content = sprintf(
-            Display::return_message(
-                get_lang('If you want to get the certificate and/or skills associated with this course, you need to buy the certificate service. You can go to the services catalog by clicking this link: %s'),
-                'normal',
-                false
-            ),
-            '<a href="'.$url.'">'.$url.'</a>'
-        );
-        $tpl->assign('content', $content);
-        $tpl->display_blank_template();
-        exit;
-    }
-}
-
 $lpEntity = api_get_lp_entity($lpId);
-$lp       = new Learnpath($lpEntity, [], $userId);
+if (!$lpEntity instanceof CLp) {
+    echo Display::return_message(get_lang('The file was not found'));
 
-$count              = $lp->getTotalItemsCountWithoutDirs();
-$completed          = $lp->get_complete_items_count(true);
-$currentItemId      = $lp->get_current_item_id();
-$currentItem        = $lp->items[$currentItemId] ?? null;
-$currentItemStatus  = $currentItem ? $currentItem->get_status() : 'not attempted';
-
-$lpItemRepo   = Container::getLpItemRepository();
-$isFinalThere = false;
-$isFinalDone  = false;
-$finalItem    = null;
-
-try {
-    $finalItem = $lpItemRepo->findOneBy(['lp' => $lpEntity, 'itemType' => TOOL_LP_FINAL_ITEM]);
-    if ($finalItem) {
-        $isFinalThere = true;
-        $fid = $finalItem->getIid();
-        if (isset($lp->items[$fid])) {
-            $st = $lp->items[$fid]->get_status();
-            $isFinalDone = in_array($st, ['completed','passed','succeeded'], true);
-        }
-    }
-} catch (\Throwable $e) {
-    error_log('[LP_FINAL] final_item lookup error: '.$e->getMessage());
+    exit;
 }
-$countAdj     = max(0, $count    - ($isFinalThere ? 1 : 0));
-$completedAdj = max(0, $completed - ($isFinalDone  ? 1 : 0));
-$diff         = $countAdj - $completedAdj;
-$accessGranted = false;
-if ($diff === 0 || ($diff === 1 && (('incomplete' === $currentItemStatus) || ('not attempted' === $currentItemStatus)))) {
-    if ($lp->prerequisites_match($currentItemId)) {
-        $accessGranted = true;
-    }
+
+$courseEntity = api_get_course_entity();
+$sessionEntity = api_get_session_entity();
+$groupEntity = api_get_group_entity(api_get_group_id());
+$resourceNode = $lpEntity->getResourceNode();
+$resourceLink = $resourceNode?->getResourceLinkByContext($courseEntity, $sessionEntity, $groupEntity);
+
+if (!$resourceLink && $groupEntity && $sessionEntity) {
+    $resourceLink = $resourceNode?->getResourceLinkByContext($courseEntity, $sessionEntity);
+}
+
+if (!$resourceLink && ($sessionEntity || $groupEntity)) {
+    $resourceLink = $resourceNode?->getResourceLinkByContext($courseEntity);
+}
+
+if (!$resourceLink || (!api_is_allowed_to_edit() && !$resourceLink->isPublished())) {
+    echo Display::return_message(get_lang('The file was not found'));
+
+    exit;
+}
+
+$lpItemRepo = Container::getLpItemRepository();
+$finalItem = $lpItemRepo->findOneBy([
+    'lp' => $lpEntity,
+    'itemType' => TOOL_LP_FINAL_ITEM,
+]);
+
+if (!$finalItem instanceof CLpItem || (int) $finalItem->getIid() !== $id) {
+    echo Display::return_message(get_lang('The file was not found'));
+
+    exit;
+}
+
+$lp = new learnpath($lpEntity, api_get_course_info(), $userId);
+
+$count = $lp->getTotalItemsCountWithoutDirs();
+$completed = $lp->get_complete_items_count(true);
+$currentItemId = (int) $finalItem->getIid();
+$currentItem = $lp->items[$currentItemId] ?? null;
+$currentItemStatus = $currentItem ? $currentItem->get_status() : 'not attempted';
+
+$isFinalThere = true;
+$isFinalDone = false;
+if (isset($lp->items[$currentItemId])) {
+    $status = $lp->items[$currentItemId]->get_status();
+    $isFinalDone = in_array($status, ['completed', 'passed', 'succeeded'], true);
+}
+$countAdj = max(0, $count - ($isFinalThere ? 1 : 0));
+$completedAdj = max(0, $completed - ($isFinalDone ? 1 : 0));
+$diff = $countAdj - $completedAdj;
+$teacherCanBypassPrerequisites = api_is_allowed_to_edit()
+    && lpFinalItemSettingEnabled(api_get_setting('lp.allow_teachers_to_access_blocked_lp_by_prerequisite', true));
+$accessGranted = $teacherCanBypassPrerequisites;
+if (!$accessGranted
+    && (0 === $diff || (1 === $diff && (('incomplete' === $currentItemStatus) || ('not attempted' === $currentItemStatus))))
+    && $lp->prerequisites_match($currentItemId)
+) {
+    $accessGranted = true;
 }
 $lp->save_last();
 unset($lp, $currentItem);
@@ -106,10 +112,8 @@ if (!$accessGranted) {
     $finalHtml = '';
 } else {
     $downloadBlock = '';
-    $badgeBlock    = '';
-    $gbRepo        = Container::getGradeBookCategoryRepository();
-    $courseEntity  = api_get_course_entity();
-    $sessionEntity = api_get_session_entity();
+    $badgeBlock = '';
+    $gbRepo = Container::getGradeBookCategoryRepository();
 
     // Resolve GradebookCategory using lp_item.ref when item_type = final_item.
     // We store the gradebook category id in c_lp_item.ref (string).
@@ -118,10 +122,10 @@ if (!$accessGranted) {
     if (!empty($finalItem) && method_exists($finalItem, 'getRef')) {
         try {
             $refRaw = trim((string) $finalItem->getRef());
-            if ($refRaw !== '' && $refRaw !== '0') {
+            if ('' !== $refRaw && '0' !== $refRaw) {
                 $categoryIdFromRef = (int) $refRaw;
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[LP_FINAL] Unable to read lp_item.ref for final_item: '.$e->getMessage());
         }
     }
@@ -135,7 +139,7 @@ if (!$accessGranted) {
 
         // Safety check: ensure the referenced category belongs to the same course/session context.
         if ($gbCat && $courseEntity) {
-            $catCourse  = $gbCat->getCourse();
+            $catCourse = $gbCat->getCourse();
             $catSession = $gbCat->getSession();
 
             // If course does not match, discard this category and let the fallback logic handle it.
@@ -154,14 +158,14 @@ if (!$accessGranted) {
     if (!$gbCat && $courseEntity) {
         if ($sessionEntity) {
             $gbCat = $gbRepo->findOneBy([
-                'course'  => $courseEntity,
+                'course' => $courseEntity,
                 'session' => $sessionEntity,
             ]);
         }
 
         if (!$gbCat) {
             $gbCat = $gbRepo->findOneBy([
-                'course'  => $courseEntity,
+                'course' => $courseEntity,
                 'session' => null,
             ]);
         }
@@ -185,7 +189,7 @@ if (!$accessGranted) {
     }
 
     // Replace ((certificate)) and ((skill)) tokens in the final-item document.
-    $finalHtml = renderFinalItemDocument($id, $downloadBlock, $badgeBlock);
+    $finalHtml = renderFinalItemDocument($finalItem, $downloadBlock, $badgeBlock);
 }
 
 $tpl = new Template(null, false, false);
@@ -207,9 +211,9 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
         return '';
     }
 
-    $em           = Database::getManager();
+    $em = Database::getManager();
     $skillRelUser = new SkillRelUserModel();
-    $userSkills   = $skillRelUser->getUserSkills($userId, $courseId, $sessionId);
+    $userSkills = $skillRelUser->getUserSkills($userId, $courseId, $sessionId);
 
     if (empty($userSkills)) {
         return '';
@@ -233,8 +237,8 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
         }
 
         $skillId = (int) $skill->getId();
-        $title   = (string) $skill->getTitle();
-        $desc    = (string) $skill->getDescription();
+        $title = (string) $skill->getTitle();
+        $desc = (string) $skill->getDescription();
         $iconUrl = (string) SkillModel::getWebIconPath($skill);
 
         $shareUrl = api_get_path(WEB_PATH)."badge/$skillId/user/$userId";
@@ -251,7 +255,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
         $twUrl = 'https://twitter.com/intent/tweet?text='.rawurlencode($tweetText).'&url='.rawurlencode($shareUrl);
 
         $safeTitle = Security::remove_XSS($title);
-        $safeDesc  = Security::remove_XSS($desc);
+        $safeDesc = Security::remove_XSS($desc);
 
         $items .= "
             <div class='py-6 border-b border-gray-20 last:border-b-0'>
@@ -259,8 +263,8 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
 
                     <div class='sm:col-span-3 flex justify-center sm:justify-start'>
                         <img
-                            src='".htmlspecialchars($iconUrl, ENT_QUOTES)."'
-                            alt='".htmlspecialchars($title, ENT_QUOTES)."'
+                            src='".htmlspecialchars($iconUrl, \ENT_QUOTES)."'
+                            alt='".htmlspecialchars($title, \ENT_QUOTES)."'
                             loading='lazy'
                             width='140'
                             height='140'
@@ -279,7 +283,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
 
                         <div class='mt-3 flex items-center gap-3'>
                             <a
-                                href='".htmlspecialchars($fbUrl, ENT_QUOTES)."'
+                                href='".htmlspecialchars($fbUrl, \ENT_QUOTES)."'
                                 target='_blank'
                                 rel='noopener noreferrer'
                                 class='inline-flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-gray-25 bg-white hover:bg-gray-15'
@@ -292,7 +296,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
                             </a>
 
                             <a
-                                href='".htmlspecialchars($twUrl, ENT_QUOTES)."'
+                                href='".htmlspecialchars($twUrl, \ENT_QUOTES)."'
                                 target='_blank'
                                 rel='noopener noreferrer'
                                 class='inline-flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-gray-25 bg-white hover:bg-gray-15'
@@ -311,7 +315,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int 
         ";
     }
 
-    if ($items === '') {
+    if ('' === $items) {
         return '';
     }
 
@@ -354,13 +358,13 @@ function getSkillIdsForGradebookCategory(int $categoryId): array
                     $ids[] = (int) $row;
                 }
             }
-        } elseif (is_string($rows) && trim($rows) !== '') {
+        } elseif (is_string($rows) && '' !== trim($rows)) {
             $parts = preg_split('/\s*,\s*/', trim($rows)) ?: [];
             foreach ($parts as $p) {
                 $ids[] = (int) $p;
             }
         }
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         return [];
     }
 
@@ -370,45 +374,40 @@ function getSkillIdsForGradebookCategory(int $categoryId): array
 /**
  * Render the Learning Path final-item document.
  */
-function renderFinalItemDocument(int $lpItemOrDocId, string $certificateBlock, string $badgeBlock): string
+function renderFinalItemDocument(CLpItem $finalItem, string $certificateBlock, string $badgeBlock): string
 {
-    $docRepo    = Container::getDocumentRepository();
-    $lpItemRepo = Container::getLpItemRepository();
+    $documentId = (int) $finalItem->getPath();
+    if ($documentId <= 0) {
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
+    }
 
-    $document = null;
+    $docRepo = Container::getDocumentRepository();
 
-    // First, try to use the id directly as a document iid.
     try {
-        $document = $docRepo->find($lpItemOrDocId);
-    } catch (\Throwable $e) {
-        // Silence here, we will try the LP item fallback below.
-    }
+        $document = $docRepo->find($documentId);
+    } catch (Throwable $e) {
+        error_log('[LP_FINAL] document lookup error: '.$e->getMessage());
 
-    // If not a document iid, try resolving from the LP item path.
-    if (!$document) {
-        try {
-            $lpItem = $lpItemRepo->find($lpItemOrDocId);
-            if ($lpItem) {
-                // In our case, lp_item.path stores the document iid as string.
-                $document = $docRepo->find((int) $lpItem->getPath());
-            }
-        } catch (\Throwable $e) {
-            // As a last resort, fail quietly and return empty content.
-        }
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
     }
 
     if (!$document) {
-        return '';
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
     }
 
     try {
         $content = $docRepo->getResourceFileContent($document);
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         error_log('[LP_FINAL] read doc error: '.$e->getMessage());
-        return '';
+
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
     }
 
-    $hasCert  = str_contains($content, '((certificate))');
+    if ('' === trim($content)) {
+        return renderFinalItemTemplate($certificateBlock, $badgeBlock);
+    }
+
+    $hasCert = str_contains($content, '((certificate))');
     $hasSkill = str_contains($content, '((skill))');
 
     if ($hasCert) {
@@ -419,4 +418,34 @@ function renderFinalItemDocument(int $lpItemOrDocId, string $certificateBlock, s
     }
 
     return $content;
+}
+
+/**
+ * Render the built-in final-item template when the stored document is unavailable.
+ */
+function renderFinalItemTemplate(string $certificateBlock, string $badgeBlock): string
+{
+    $templatePath = __DIR__.'/final_item_template/template.html';
+    $content = is_readable($templatePath) ? file_get_contents($templatePath) : false;
+    if (false === $content) {
+        return $certificateBlock.$badgeBlock;
+    }
+
+    return str_replace(
+        ['((certificate))', '((skill))'],
+        [$certificateBlock, $badgeBlock],
+        $content
+    );
+}
+
+/**
+ * Normalize legacy boolean settings.
+ */
+function lpFinalItemSettingEnabled(mixed $value): bool
+{
+    if (is_bool($value)) {
+        return $value;
+    }
+
+    return in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
 }

@@ -123,7 +123,7 @@
             <template v-if="loading">{{ t("Loading...") }}</template>
             <template v-else>
               <span v-if="viewMode === 'posts'">
-                {{ t("Showing {n} posts", { n: total }) }}
+                {{ t("Showing {0} posts", [total]) }}
                 <span
                   v-if="dateFilter"
                   class="text-gray-400"
@@ -132,7 +132,7 @@
                 </span>
               </span>
               <span v-else>
-                {{ t("Showing {n} tasks", { n: tasksFiltered.length }) }}
+                {{ t("Showing {0} tasks", [tasksFiltered.length]) }}
               </span>
             </template>
           </div>
@@ -205,7 +205,7 @@
                   <div class="text-sm mt-2 text-gray-700">{{ row.excerpt }}</div>
                 </div>
                 <div class="text-xs text-gray-500 text-right">
-                  <div>{{ t("{0} comments", [row.comments]) }}</div>
+                  <div>{{ t("{0} comment(s)", [row.comments]) }}</div>
                   <div class="mt-1 flex items-center gap-1 justify-end">
                     <i class="mdi mdi-star text-amber-500"></i>
                     <span>{{ (ratings[row.id]?.average ?? 0).toFixed(1) }}</span>
@@ -217,7 +217,7 @@
 
           <div class="p-3 border-t flex items-center justify-between">
             <div class="text-xs text-gray-500">
-              {{ t("Page {p} of {pages}", { p: page, pages }) }}
+              {{ t("Page {0} of {1}", [page, pages]) }}
             </div>
             <div class="flex gap-2">
               <BaseButton

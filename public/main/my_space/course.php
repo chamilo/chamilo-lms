@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 ob_start();
 $cidReset = true;
@@ -80,9 +83,9 @@ if (api_is_platform_admin(true, true)) {
             $user_id = (int) $_GET['user_id'];
             $user_info = api_get_user_info($user_id);
             $title = get_lang('Courses assigned to').' '.api_get_person_name(
-                    $user_info['firstname'],
-                    $user_info['lastname']
-                );
+                $user_info['firstname'],
+                $user_info['lastname']
+            );
             $courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
             $title = get_lang('Your courses');
@@ -187,7 +190,7 @@ if (api_is_platform_admin(true, true)) {
         $menu_items[] = $questionTabs;
 
         if (api_can_login_as($user_id)) {
-            $loginAsToken = Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue();
+            $loginAsToken = Container::$container->get(CsrfTokenManagerInterface::class)->getToken('login_as')->getValue();
             $menu_items[] = '<a href="'.
                 api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$user_id.'&sec_token='.urlencode($loginAsToken).'">'.
                 Display::getMdiIcon(
@@ -413,21 +416,34 @@ function get_courses($from, $limit, $column, $direction)
             $tematic_advance = $thematic->get_total_average_of_thematic_advances($course, $session);
             $tematicAdvanceProgress = '-';
             if (!empty($tematic_advance)) {
-                $tematicAdvanceProgress = '<a
-                    title="'.get_lang('Go to thematic advance').'"
-                    href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cid='.$courseId.'&sid='.$sessionId.'">'.
-                    $tematic_advance.'%</a>';
+                $tematicAdvanceProgress = $tematic_advance.'%';
+                $courseResourceNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+                if ($courseResourceNodeId > 0) {
+                    $courseProgressQuery = [
+                        'cid' => $courseId,
+                        'sid' => (int) $sessionId,
+                        'gid' => 0,
+                    ];
+                    $courseProgressUrl = api_get_path(WEB_PATH).
+                        'resources/course-progress/'.$courseResourceNodeId.'/?'.
+                        http_build_query($courseProgressQuery);
+                    $tematicAdvanceProgress = '<a
+                        title="'.get_lang('Go to thematic advance').'"
+                        href="'.$courseProgressUrl.'">'.
+                        $tematic_advance.'%</a>';
+                }
             }
 
             $courseIcon = '<a
                 href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cid='.$courseId.'&sid='.$sessionId.'">
                 '.Display::getMdiIcon(
-                    ActionIcon::VIEW_DETAILS,
-                    'ch-tool-icon',
-                    null,
-                    ICON_SIZE_SMALL,
-                    get_lang('Details')
-                ).'
+                ActionIcon::VIEW_DETAILS,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Details')
+            ).'
               </a>';
 
             $title = Display::url(
@@ -453,12 +469,12 @@ function get_courses($from, $limit, $column, $direction)
             $courseList[] = [
                 $title,
                 $countStudents,
-                is_null($avgTimeSpentInCourse) ? '-' : $avgTimeSpentInCourse,
+                null === $avgTimeSpentInCourse ? '-' : $avgTimeSpentInCourse,
                 $tematicAdvanceProgress,
-                is_null($avgProgressInCourse) ? '-' : $avgProgressInCourse.'%',
-                is_null($avgScoreInCourse) ? '-' : $avgScoreInCourse,
-                is_null($messagesInCourse) ? '-' : $messagesInCourse,
-                is_null($assignmentsInCourse) ? '-' : $assignmentsInCourse,
+                null === $avgProgressInCourse ? '-' : $avgProgressInCourse.'%',
+                null === $avgScoreInCourse ? '-' : $avgScoreInCourse,
+                null === $messagesInCourse ? '-' : $messagesInCourse,
+                null === $assignmentsInCourse ? '-' : $assignmentsInCourse,
                 $attendanceLink,
                 $courseIcon,
             ];
@@ -546,12 +562,12 @@ echo '  <div class="flex flex-col gap-3">';
 if (!empty($toolbar) || !empty($importLink)) {
     echo '      <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">';
     echo '          <div class="flex flex-wrap items-center gap-2">';
-    echo                $toolbar;
+    echo $toolbar;
     echo '          </div>';
 
     if (!empty($importLink)) {
         echo '      <div class="text-sm md:text-right">';
-        echo            $importLink;
+        echo $importLink;
         echo '      </div>';
     }
 
@@ -559,7 +575,7 @@ if (!empty($toolbar) || !empty($importLink)) {
 }
 
 echo '      <div class="space-y-1">';
-echo            Display::page_subheader($pageTitle);
+echo Display::page_subheader($pageTitle);
 echo '      </div>';
 echo '  </div>';
 

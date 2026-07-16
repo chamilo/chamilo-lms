@@ -30,4 +30,21 @@ class TicketCategoryRelUser
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getCategory(): TicketCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(TicketCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
 }

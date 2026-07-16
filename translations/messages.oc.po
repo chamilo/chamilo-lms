@@ -1575,8 +1575,8 @@ msgstr "Sètz segur que vol escartar aquestas etapas ?"
 msgid "Authoring tool"
 msgstr "Auter d'autor"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Fichièr SCORM o AICC a telecargar"
+msgid "SCORM file to upload"
+msgstr "Fichièr SCORM a telecargar"
 
 msgid "Course location"
 msgstr "Emplaçament del curs"
@@ -8723,6 +8723,15 @@ msgstr "Mostrar"
 
 msgid "My courses"
 msgstr "Ma lista de cors"
+
+msgid "Shop"
+msgstr "Botiga"
+
+msgid "Invoice"
+msgstr "Factura"
+
+msgid "Request invoice"
+msgstr "Demandar una factura"
 
 msgid "View my progress"
 msgstr "Veire meis estadisticas"
@@ -35479,7 +35488,7 @@ msgid "%s results"
 msgstr "%s resultats"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemple de rempliment del formulari : calcular l’indèx de massa corporala</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Atge</strong></td>            <td width=\"75%\" style=\"\">[25] ans</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sexe</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pès</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Talha</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indèx de massa corporala</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Pès/Talha<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Article de Wikipèdia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemple d'activitat de formulari : calcular l'índex de massa corporal</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edat</strong></td>            <td width=\"75%\" style=\"\">[25] ans</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sexe</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pès</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Talha</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indèx de massa corporal</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Pès/Talha<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Article de Wikipèdia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Suprimit"
@@ -36476,4 +36485,856 @@ msgstr "Moderat"
 
 msgid "View threads"
 msgstr "Veire los fils"
+
+msgid "No auth source"
+msgstr "Pas cap de font d'autentificacion"
+
+msgid "You must add at least one question"
+msgstr "Vos cal apondre almens una question"
+
+msgid "Advanced actions"
+msgstr "Accions avançadas"
+
+msgid "Application path"
+msgstr "Camin de l'aplicacion"
+
+msgid "Apply files details"
+msgstr "Aplicar los detalhs dels fichièrs"
+
+msgid "Apply plan details"
+msgstr "Aplicar los detalhs del plan"
+
+msgid "Apply plan failed"
+msgstr "L'aplicacion del plan a fracassat"
+
+msgid "Apply plan ready"
+msgstr "Plan aplicat prèst"
+
+msgid "Apply preparation"
+msgstr "Preparacion d'aplicacion"
+
+msgid "Apply staged files"
+msgstr "Aplicar los fichièrs en espèra"
+
+msgid "Applying files..."
+msgstr "Aplicacion dels fichièrs..."
+
+msgid "Audit file"
+msgstr "Fichièr d'audit"
+
+msgid "Backup directory"
+msgstr "Repertòri de salvament"
+
+msgid "Baseline clean"
+msgstr "Netejat de basa"
+
+msgid "Baseline warnings"
+msgstr "Avertiments de basa"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Construire un plan d'aplicacion segur a partir del paquet en espèri. Aquò verifica pas que los fichièrs, las permissions, lo camin de salvament e l'estat del verrolhatge. Remplaça pas los fichièrs."
+
+msgid "Build production frontend assets."
+msgstr "Construire los assets frontend de produccion."
+
+msgid "Building plan..."
+msgstr "Construccion del plan..."
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Check"
+msgstr "Verificar"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Verificar las mesas a jorn disponiblas de Chamilo, verificar los paquets, plaçar los fichièrs e executar las etapas contrarotladas aprèp mesa a jorn."
+
+msgid "Check manifest"
+msgstr "Verificar lo manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Verificacion de las accions aprèp aplicacion..."
+
+msgid "Checking..."
+msgstr "Verificacion..."
+
+msgid "Composer install"
+msgstr "Installacion Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Las accions Composer, Yarn e de migracion de basa de donadas pòdon modificar las dependéncias, los assets generats o la basa de donadas. Seleccionatz-los pas qu'aprèp aver confirmat los salvaments e las permissions."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configurar CHAMILO_UPDATE_MANIFEST_URL sul servidor o provesir una URL HTTPS de manifest."
+
+msgid "Configured"
+msgstr "Configurat"
+
+msgid "Current migration"
+msgstr "Migracion actuala"
+
+msgid "Database baseline"
+msgstr "Referéncia de basa de donadas"
+
+msgid "Database migration safety review"
+msgstr "Revision de seguretat de la migracion de basa de donadas"
+
+msgid "Database migrations"
+msgstr "Migrations de basa de donadas"
+
+msgid "Development mode"
+msgstr "Mòde desvolopament"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Activatz pas aquò que se lo salvament de mesa a jorn e las permissions del servidor son estats verificats."
+
+msgid "Doctrine dry-run command"
+msgstr "Comanda Doctrine en simulacion"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine a senhalat d'avertiments de referéncia istorica. L'aisina de mesa a jorn executarà pas que las migracions V210 en espèri aprèp confirmacion explicita."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine executarà pas que las migracions V210 en espèri explicitament aprèp que la revision de seguretat siá passada."
+
+msgid "Dry-run exit code"
+msgstr "Còde de sortida de simulacion"
+
+msgid "Executed unavailable migrations"
+msgstr "Migrations indisponiblas executadas"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Extraire lo paquet de mesa a jorn verificat dins un repertòri d'espèri per inspeccion. Aquò remplaça pas los fichièrs, executa pas de migracions ni modifica la basa de donadas."
+
+msgid "File apply available"
+msgstr "Aplicacion de fichièrs disponibla"
+
+msgid "Files to replace"
+msgstr "Fichièrs de remplaçar"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Confirmi qu'un salvament de basa de donadas existís e es estat verificat abans d'executar las migracions."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Compreni que las accions avançadas pòdon modificar las dependéncias, los assets generats o la basa de donadas."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Compreni qu'aquò remplaçarà los fichièrs dins l'installacion de Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Compreni qu'aquò executarà de comandas de mesa a jorn sul servidor."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Installar las dependéncias frontend abans de reconstruire los assets."
+
+msgid "Installed version"
+msgstr "Version installada"
+
+msgid "Latest migration"
+msgstr "Darrièra migracion"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Daissar los camins del paquet e de la signatura voids per los telecargar dempuèi las URLs de manifest verificadas. Los camins locals son pas disponibles que pels tèsts de desvolopament."
+
+msgid "Live command log"
+msgstr "Jornal de comandas en dirècte"
+
+msgid "Live update log"
+msgstr "Jornal de mesa a jorn en dirècte"
+
+msgid "Local test options"
+msgstr "Opcions de tèst local"
+
+msgid "Local test update notice link"
+msgstr "Ligam de simulacion d'avís de mesa a jorn local"
+
+msgid "Local update notice simulation"
+msgstr "Simulacion d'avís de mesa a jorn local"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "La simulacion d'avís de mesa a jorn local es pas disponibla que en mòde desvolopament."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Font del manifest"
+
+msgid "Migration safety details"
+msgstr "Detalhs de seguretat de la migracion"
+
+msgid "Migration safety review failed"
+msgstr "Revision de seguretat de la migracion fracassada"
+
+msgid "Migration safety review ready"
+msgstr "Revision de seguretat de la migracion prèsta"
+
+msgid "Migration target"
+msgstr "Cibla de migracion"
+
+msgid "New files"
+msgstr "Fichièrs novèls"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Novèlas migracions senhaladas per Doctrine"
+
+msgid "Next migration"
+msgstr "Prochana migracion"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Cap de migracion indisponibla executada es pas estada senhalada."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Cap d'URL oficial del manifest es pas encara configurada. Utilizatz una URL HTTPS o un camin local pels tèsts de desvolopament."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Cap de migracion en espèra es pas estada detectada abans la cibla de mesa a jorn en espèra."
+
+msgid "Not configured"
+msgstr "Pas configurat"
+
+msgid "Not detected"
+msgstr "Pas detectat"
+
+msgid "Official Chamilo update channel"
+msgstr "Canal oficial de mesa a jorn de Chamilo"
+
+msgid "Package SHA-256"
+msgstr "Emprenta SHA-256 del paquet"
+
+msgid "Package URL"
+msgstr "URL del paquet"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Los fichièrs del paquet e de la signatura seràn telecargats dempuèi lo manifest. Los camins locals son desactivats dins aqueste environament."
+
+msgid "Package path"
+msgstr "Camin del paquet"
+
+msgid "Package staged successfully"
+msgstr "Paquet mes en espèra amb succès"
+
+msgid "Package staging failed"
+msgstr "Fracàs de la mesa en espèra del paquet"
+
+msgid "Package verification"
+msgstr "Verificacion del paquet"
+
+msgid "Package verification failed"
+msgstr "Verificacion del paquet fracassada"
+
+msgid "Package verified successfully"
+msgstr "Paquet verificat amb succès"
+
+msgid "Pending migrations before this update"
+msgstr "Migracions en espèra abans aquesta mesa a jorn"
+
+msgid "Planned backup path"
+msgstr "Camin de salvament previst"
+
+msgid "Post-apply actions completed"
+msgstr "Accions aprèp aplicacion acabadas"
+
+msgid "Post-apply actions failed"
+msgstr "Accions aprèp aplicacion fracassadas"
+
+msgid "Post-apply actions ready"
+msgstr "Accions aprèp aplicacion prèstas"
+
+msgid "Post-apply checks"
+msgstr "Verificacions aprèp aplicacion"
+
+msgid "Post-apply checks failed"
+msgstr "Verificacions aprèp aplicacion fracassadas"
+
+msgid "Post-apply details"
+msgstr "Detalhs aprèp aplicacion"
+
+msgid "Post-apply run details"
+msgstr "Detalhs d'execucion aprèp aplicacion"
+
+msgid "Preflight checks"
+msgstr "Verificacions prealablas"
+
+msgid "Preflight checks completed"
+msgstr "Verificacions prealablas acabadas"
+
+msgid "Preflight checks failed"
+msgstr "Verificacions prealablas fracassadas"
+
+msgid "Preflight details"
+msgstr "Detalhs prealablas"
+
+msgid "Prepare staging"
+msgstr "Preparar la mesa en espèra"
+
+msgid "Preparing staging..."
+msgstr "Preparacion de la mesa en espèra..."
+
+msgid "Production mode"
+msgstr "Mòde produccion"
+
+msgid "Released at"
+msgstr "Publicat lo"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Remplaçar los fichièrs de Chamilo a partir del paquet mes en espèra en utilizant lo plan d'aplicacion revisat. Aquò executa pas las migracions de basa de donadas, Composer, Yarn o las comandas de cache."
+
+msgid "Review apply plan"
+msgstr "Revisar lo plan d'aplicacion"
+
+msgid "Review database migrations"
+msgstr "Revisar las migracions de basa de donadas"
+
+msgid "Review post-apply actions"
+msgstr "Revisar las accions aprèp aplicacion"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Revisar las comandas manualas recomandadas aprèp l'aplicacion dels fichièrs de mesa a jorn. Aquesta etapa executa pas Composer, Yarn, las migracions o las comandas de cache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Revisar las migracions Doctrine en espèra e la sortida de simulacion abans d'executar las migracions de basa de donadas."
+
+msgid "Reviewing database migrations..."
+msgstr "Revision de las migracions de basa de donadas..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Executar e passar la revision de seguretat de las migracions abans d'executar las migracions de basa de donadas."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Executar las verificacions d'environament abans tota etapa futura d'aplicacion de mesa a jorn. Aquò modifica pas los fichièrs ni la basa de donadas."
+
+msgid "Run post-apply actions"
+msgstr "Executar las accions aprèp aplicacion"
+
+msgid "Run preflight checks"
+msgstr "Executar las verificacions prealablas"
+
+msgid "Run selected post-apply actions"
+msgstr "Executar las accions aprèp aplicacion seleccionadas"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Executar las comandas aprèp aplicacion seleccionadas dempuèi lo servidor en utilizant una lista blanca contrarotlada. Cap de comanda shell personalizada es pas acceptada."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Executar aquestas comandas manualament dempuèi lo servidor aprèp aver confirmat lo resultat de la mesa a jorn dels fichièrs e los salvaments."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "L'execucion de las accions aprèp aplicacion dempuèi l'interfàcia es desactivada en mòde produccion."
+
+msgid "Running post-apply actions..."
+msgstr "Execucion de las accions aprèp aplicacion..."
+
+msgid "Safe actions"
+msgstr "Accions seguras"
+
+msgid "Signature path"
+msgstr "Camin de la signatura"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "La verificacion de la signatura pòt pas èsser sautada dins aqueste environament."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Sautar la verificacion de la signatura pels tèsts de desvolopament local"
+
+msgid "Staged file application failed"
+msgstr "L'aplicacion dels fichièrs en preparacion a fracassat"
+
+msgid "Staged files applied successfully"
+msgstr "Los fichièrs en preparacion son estats aplicats amb succès"
+
+msgid "Staging details"
+msgstr "Detalhs de la preparacion"
+
+msgid "Staging directory"
+msgstr "Repertòri de preparacion"
+
+msgid "Staging extraction"
+msgstr "Extraccion de la preparacion"
+
+msgid "Symfony cache clear"
+msgstr "Netejatge del cache Symfony"
+
+msgid "System update"
+msgstr "Mesa a jorn del sistèma"
+
+msgid "Target version"
+msgstr "Version cibla"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "L'URL del manifest oficial configurat es pre-remplit. La podètz cambiar per un autre manifest HTTPS se necessari."
+
+msgid "The database migration baseline is clean."
+msgstr "La linha de basa de migracion de la basa de donadas es neta."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "La responsa HTTP finala a fracassat aprèp que l'operacion siá acabada. Aquò es generalament causat per de permissions de cache a l'execucion o un reaviament del servidor web pendent la requèsta."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Lo jornal de l'operacion indica que las accions aprèp aplicacion son estadas acabadas amb succès."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Las comandas aprèp aplicacion seleccionadas son estadas acabadas amb succès, mas la responsa HTTP finala a fracassat. Refrescats la pagina e verificatz las permissions de cache a l'execucion se la pagina se carga pas corrèctament."
+
+msgid "The updater does not create or restore database backups."
+msgstr "L'aisina de mesa a jorn crea pas ni restaura de salvaments de la basa de donadas."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Aquestas accions son seguras d'executar dempuèi l'interfàcia aprèp aver verificat lo resultat de la mesa a jorn."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Aquestas comandas pòdon modificar las dependéncias, los assets generats, lo cache o la basa de donadas. Confirmatz los salvaments abans de contunhar."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Aquesta accion modifica de fichièrs dins l'installacion de Chamilo. Asseguratz-vos qu'èra estat revisat lo plan d'aplicacion e que los salvaments son activats abans de contunhar."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Aquesta entrada de desvolopament simula l'anóncia de mesa a jorn futura de Chamilo.org en utilizant de camins de paquets de tèst locals."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Aqueste ecran es estat dobèrt dempuèi una anóncia de mesa a jorn oficiala, mas cap de font de manifest oficial es pas encara configurada."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Aqueste ecran es estat dobèrt dempuèi una anóncia de mesa a jorn. Sola la verificacion del manifest es aviada automaticament."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Aquesta etapa prepara una revision sonque. Lo remplaçament dels fichièrs se fa mai tard dins l'etapa Aplicar los fichièrs en preparacion, amb verrolhatge, salvament e proteccion de retorn."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Aquesta aisina de mesa a jorn crea pas de salvament de la basa de donadas. Creatz e verificatz un salvament abans d'executar las migracions."
+
+msgid "Trusted public key"
+msgstr "Clau publica de fisança"
+
+msgid "Trusted signing key"
+msgstr "Clau de signatura de fisança"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Picatz APPLY UPDATE FILES per confirmar"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Picatz RUN DATABASE MIGRATIONS per confirmar las migracions de la basa de donadas"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Picatz RUN POST UPDATE ACTIONS per confirmar"
+
+msgid "Unknown update notice source."
+msgstr "Font d'anóncia de mesa a jorn desconeguda."
+
+msgid "Update availability"
+msgstr "Disponibilitat de la mesa a jorn"
+
+msgid "Update directory"
+msgstr "Repertòri de mesa a jorn"
+
+msgid "Update lock path"
+msgstr "Camin de verrolhatge de la mesa a jorn"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Utilizatz lo repertòri de preparacion generat per l'etapa precedenta. Lo backend accèpta pas que de repertòris dins var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Utilizatz aqueste ligam per simular l'anóncia de mesa a jorn futura de Chamilo.org pendent los tèsts de desvolopament."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Utilizatz aquò sonque pels tèsts de desvolopament local. Las mesas a jorn de produccion devon utilizar la clau configurada sul servidor."
+
+msgid "Verification details"
+msgstr "Detalhs de verificacion"
+
+msgid "Verify package"
+msgstr "Verificar lo paquet"
+
+msgid "Verifying..."
+msgstr "Verificacion en cors..."
+
+msgid "Waiting for command progress events..."
+msgstr "En espèra dels eveniments de progression de la comanda..."
+
+msgid "Waiting for update progress events..."
+msgstr "En espèra dels eveniments de progression de la mesa a jorn..."
+
+msgid "Yarn build"
+msgstr "Construccion Yarn"
+
+msgid "Yarn install"
+msgstr "Installacion Yarn"
+
+msgid "A comment is required"
+msgstr "Un comentari es requesit"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Una basa de donadas amb lo meteis nom existís ja. Se conten de taulas, seràn suprimidas ; se es voida, serà reutilizada."
+
+msgid "AI generated"
+msgstr "Generat per IA"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Apondètz al mens una question abans de tornar al camin d'aprendissatge."
+
+msgid "Add attachments"
+msgstr "Apondre de pèças juntas"
+
+msgid "Additional fields"
+msgstr "Camps suplementaris"
+
+msgid "Allow comments"
+msgstr "Permetre los comentaris"
+
+msgid "Allow new pages"
+msgstr "Permetre de paginas novèlas"
+
+msgid "Allow ratings"
+msgstr "Permetre las evaluacions"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Sètz segur que volètz suprimir totes los elements ?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Sètz segur que volètz restablir lo renovèlament automatic ?"
+
+msgid "Attachment has been deleted"
+msgstr "La pèça junta es estada suprimida"
+
+msgid "Backup file"
+msgstr "Fichièr de salvament"
+
+msgid "Block comments"
+msgstr "Blocar los comentaris"
+
+msgid "Block new pages"
+msgstr "Blocar las paginas novèlas"
+
+msgid "Block ratings"
+msgstr "Blocar las evaluacions"
+
+msgid "Cancel renewal"
+msgstr "Anullar lo renovèlament"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Los ligams de categoria seràn suprimits de las paginas Wiki %s."
+
+msgid "Change"
+msgstr "Cambiar"
+
+msgid "Clear group"
+msgstr "Escafar lo grop"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Clicatz sus una etiqueta per l'inserir dins l'editor. Aquestes espacis reservats seràn remplaçats al moment de la generacion del certificat."
+
+msgid "Comment added"
+msgstr "Comentari apondut"
+
+msgid "Comment is required"
+msgstr "Un comentari es requesit"
+
+msgid "Comment score"
+msgstr "Nòta del comentari"
+
+msgid "Compare selected versions line by line"
+msgstr "Comparar las versions seleccionadas linha per linha"
+
+msgid "Compare selected versions word by word"
+msgstr "Comparar las versions seleccionadas mot per mot"
+
+msgid "Compare versions"
+msgstr "Comparar las versions"
+
+msgid "Copy completed"
+msgstr "Còpia acabada"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Crear de paginas de trabalh Wiki individualas pels aprendents"
+
+msgid "Current view mode"
+msgstr "Mòde de visualizacion actual"
+
+msgid "Delete Wiki"
+msgstr "Suprimir lo Wiki"
+
+msgid "Delete page"
+msgstr "Suprimir la pagina"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Suprimir la pagina d'acuèlh del Wiki es pas recomandat. La podètz tornar crear mai tard."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Desactivar lo Wiki blòca las paginas e las accions normalas del Wiki. Aquesta pagina de paramètres demòra disponibla als professors del cors."
+
+msgid "Discussion"
+msgstr "Discussion"
+
+msgid "Edit Comment"
+msgstr "Modificar lo comentari"
+
+msgid "Edit page"
+msgstr "Modificar la pagina"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "La data de fin deu èsser posteriora o egala a la data d'expiracion"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Entratz un tèrme de recèrca per trobar de paginas Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "La data d'expiracion deu èsser anteriora o egala a la data de fin"
+
+msgid "Failed email recipients"
+msgstr "Destinataris del corrièr electronic en fracàs"
+
+msgid "Finish and return to learning path"
+msgstr "Acabar e tornar al camin d'aprendissatge"
+
+msgid "Forum image"
+msgstr "Imatge del fòrum"
+
+msgid "Hide discussion"
+msgstr "Amagar la discussion"
+
+msgid "Hide page"
+msgstr "Amagar la pagina"
+
+msgid "I changed my mind"
+msgstr "Ai cambiat d'idèa"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Se es pas marcat, aqueles fichièrs demoraràn disponibles per l'administrator de la plataforma via l'aisina « Informacions suls fichièrs »."
+
+msgid "Internal message failures"
+msgstr "Fracasses dels messatges intèrnes"
+
+msgid "Internal messages available"
+msgstr "Messatges intèrnes disponibles"
+
+msgid "Internal messages created now"
+msgstr "Messatges intèrnes creats ara"
+
+msgid "Item score"
+msgstr "Nòta de l'element"
+
+msgid "Last post"
+msgstr "Darrièr messatge"
+
+msgid "Lock page"
+msgstr "Verrolhar la pagina"
+
+msgid "Manage categories"
+msgstr "Gerir las categorias"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Marca aqueste document coma assistit per l'IA. Utilizatz-lo quand lo contengut es estat creat o modificat de manièra significativa amb d'aisinas d'IA."
+
+msgid "Maximum score is required"
+msgstr "Una nòta maximala es requesida"
+
+msgid "Metric"
+msgstr "Metrica"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Los comentaris novèls son blocats dins aquesta discussion"
+
+msgid "No Wiki categories are available yet."
+msgstr "Cap de categoria Wiki es pas encara disponibla."
+
+msgid "No categories found"
+msgstr "Cap de categoria pas trobada"
+
+msgid "No content"
+msgstr "Cap de contengut"
+
+msgid "No parent category"
+msgstr "Cap de categoria parenta"
+
+msgid "Number of comments scored"
+msgstr "Nombre de comentaris notats"
+
+msgid "Old version"
+msgstr "Anciana version"
+
+msgid "Only image files are allowed."
+msgstr "Sols los fichièrs imatge son autorizats."
+
+msgid "Please fill all required fields"
+msgstr "Mercé de completar totes los camps obligatòris"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Las questions amb de substitucions de classa o d'estudiant seràn generadas per las classas o los grops del cors : %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Las nòtas son blocadas dins aquesta discussion"
+
+msgid "Remove image"
+msgstr "Suprimir l'imatge"
+
+msgid "Restore renewal"
+msgstr "Restablir lo renovèlament"
+
+msgid "Restore version"
+msgstr "Restablir la version"
+
+msgid "Search in"
+msgstr "Recercar dins"
+
+msgid "Select group"
+msgstr "Seleccionar un grop"
+
+msgid "Select image"
+msgstr "Seleccionar un imatge"
+
+msgid "Selected image"
+msgstr "Imatge seleccionat"
+
+msgid "Show discussion"
+msgstr "Afichar la discussion"
+
+msgid "Show page"
+msgstr "Afichar la pagina"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Certans fichièrs o repertòris an pas lo drech d'escritura. Per poder installar Chamilo, vos cal d'en primièr cambiar lors permissions (en utilizant CHMOD). Mercé de legir la"
+
+msgid "Subcategories"
+msgstr "Soscategorias"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Tocatz a esquèrra o a drecha per navegar"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Lo termini de rendicion del trabalh Wiki es passat, mas lo retard es autorizat."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Lo termini de rendicion del trabalh Wiki es passat."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Lo trabalh Wiki a pas encara començat."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Lo verrolhatge d'edicion de la pagina Wiki es requesit abans l'enregistrament."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "L'anóncia es estada enregistrada, mas una pèça junta a pas pogut èsser mandada."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "L'anóncia es estada enregistrada, mas lo mandadís per corrièr electronic a fracassat."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "L'anóncia es estada enregistrada, mas cap de corrièr electronic a pas pogut èsser mandat."
+
+msgid "The category has been created"
+msgstr "La categoria es estada creada"
+
+msgid "The category has been deleted"
+msgstr "La categoria es estada suprimida"
+
+msgid "The category has been updated"
+msgstr "La categoria es estada mesa a jorn"
+
+msgid "The end date is invalid"
+msgstr "La data de fin es invalida"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Lo nombre maximum de versions deu èsser un nombre entièr non negatiu"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Lo nombre maximum de mots deu èsser un nombre entièr non negatiu"
+
+msgid "The print window could not be opened"
+msgstr "La fenèstra d'impression a pas pogut èsser dobèrta"
+
+msgid "The start date is invalid"
+msgstr "La data de començament es invalida"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Aquestes paramètres s'aplican a l'ensemble del cors, inclús sas sessions e grops."
+
+msgid "This announcement has already been sent by email."
+msgstr "Aquesta anóncia es ja estada mandada per corrièr electronic."
+
+msgid "This discussion is hidden from learners"
+msgstr "Aquesta discussion es amagada als aprendents"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Aquesta aisina d'IA generativa vos permet de crear d'imatges e de cortas vidèos per illustrar vòstre cors. En explicant (en tèxte) çò que volètz dins la seccion de la demanda, balhatz al modèl d'IA configurat los elements necessaris per generar un imatge o una vidèo. Mercé de pacificar. Lo modèl d'IA prendrà un pauc de temps e generarà un resultat, que podètz voler conservar en enregistrant lo mèdia dins vòstre repertòri de documents, puèi l'incrustar dins un document HTML. Totes los modèls d'IA son pas egals en tèrmes de velocitat o de qualitat. Lo modèl d'IA vos pòt tanben balhar una demanda modificada, qu'es una interpretacion mai detalhada de vòstra requèsta. Podètz alara utilizar aquesta demanda modificada per afinar vòstra demanda. Mercé de notar que aquesta aisina, en particular per las vidèos, pòt generar de còsts considerables per vòstra organizacion, quitament se decidètz de pas enregistrar lo mèdia generat. Mercé de l'utilizar en consequéncia. Se encontratz de dificultats per obténer çò que cercatz, mercé de prendre un pauc de temps per recercar de trucs de demanda en linha pel modèl d'IA a vòstra disposicion."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Aqueste istorial aparten al cors de basa. Lo restabliment es disponible aprèp la creacion d'una version de session."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Aqueste imatge remplaça l'icòna de fòrum per defaut afichada al costat del títol del fòrum."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Aquesta pagina ven del cors de basa. L'enregistrament crearà una version per la session actuala."
+
+msgid "This will also delete %s subcategories."
+msgstr "Aquò suprimirà tanben %s soscategorias."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Aquò crearà de paginas de trabalh individualas per %s aprendents."
+
+msgid "Thread history"
+msgstr "Istorial del fial"
+
+msgid "Title and content"
+msgstr "Títol e contengut"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Impossible d'anullar lo renovèlament pel moment."
+
+msgid "Unable to restore renewal right now."
+msgstr "Impossible de restablir lo drech de renovacion ara."
+
+msgid "Unlock page"
+msgstr "Desblocar la pagina"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Utilizar [[Page]] o [[Page|Text visible]] per crear de ligams Wiki intèrnes."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Utilizar la barra d’espaci o las tòcas de sagetas per navegar"
+
+msgid "View version"
+msgstr "Veire la version"
+
+msgid "Visible only to teachers"
+msgstr "Visible sonque pels professors"
+
+msgid "Weight is required"
+msgstr "Lo pes es obligatòri"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Las categorias Wiki son desactivadas per aqueste cors."
+
+msgid "Wiki categories enabled"
+msgstr "Categorias Wiki activadas"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtratge estricte HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Paramètres Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Paramètres Wiki actualizats"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Sètz a veire una version istorica d'aquesta pagina"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Podètz juntar un o mai fichièrs a aquesta responsa."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Podètz modificar aquesta pagina de trabalh, mas las paginas de trabalh dels estudiants seràn pas modificadas."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Podètz utilizar las balisas {{class_name}} e {{student_full_name}} dins la question."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Avètz 20 minutas per modificar aquesta pagina abans qu'expire lo verrolhatge d'edicion."
+
+msgid "by"
+msgstr "per"
+
+msgid "required"
+msgstr "obligatòri"
 

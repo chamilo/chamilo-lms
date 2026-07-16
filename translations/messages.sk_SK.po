@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukážka vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorka vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -1588,8 +1588,8 @@ msgstr "Naozaj chcete zmazať tieto etapy?"
 msgid "Authoring tool"
 msgstr "Pôvod"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM alebo AICC súbor na načítanie"
+msgid "SCORM file to upload"
+msgstr "SCORM súbor na načítanie"
 
 msgid "Course location"
 msgstr "Umiestnenie kurzu"
@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":áno:ochrana autorských práv,, nie:bez ochrany autorských práv"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Priečinok,, application/msword:MsWord,, application/octet-stream:Binárny prúd,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Priečinok,, application\/msword:MsWord,, application\/octet-stream:Binárny prúd,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cvičenie,,      simulation:simulácia,,      questionnaire:dotazník,,      diagram:diagram,,      figure:obrázok,,      graph:graf,,      index:index,,      slide:slide,,      table:tabuľka,,      narrative text:narratívny text,,      exam:skúška,,      experiment:experiment,,      problem statement:popis problému,,      self assessment:samoocenenie,,      lecture:prednáška"
@@ -8736,6 +8736,15 @@ msgstr "Ukáž"
 
 msgid "My courses"
 msgstr "Moje kurzy"
+
+msgid "Shop"
+msgstr "Obchod"
+
+msgid "Invoice"
+msgstr "Faktúra"
+
+msgid "Request invoice"
+msgstr "Požiadať o faktúru"
 
 msgid "View my progress"
 msgstr "Pozrieť moju štatistiku"
@@ -36495,4 +36504,856 @@ msgstr "Moderované"
 
 msgid "View threads"
 msgstr "Zobraziť témy"
+
+msgid "No auth source"
+msgstr "Žiadny zdroj autentifikácie"
+
+msgid "You must add at least one question"
+msgstr "Musíte pridať aspoň jednu otázku"
+
+msgid "Advanced actions"
+msgstr "Rozšírené akcie"
+
+msgid "Application path"
+msgstr "Cesta aplikácie"
+
+msgid "Apply files details"
+msgstr "Aplikovať podrobnosti súborov"
+
+msgid "Apply plan details"
+msgstr "Aplikovať podrobnosti plánu"
+
+msgid "Apply plan failed"
+msgstr "Aplikácia plánu zlyhala"
+
+msgid "Apply plan ready"
+msgstr "Aplikácia plánu pripravená"
+
+msgid "Apply preparation"
+msgstr "Aplikovať prípravu"
+
+msgid "Apply staged files"
+msgstr "Aplikovať pripravené súbory"
+
+msgid "Applying files..."
+msgstr "Aplikujú sa súbory..."
+
+msgid "Audit file"
+msgstr "Auditovať súbor"
+
+msgid "Backup directory"
+msgstr "Záložný adresár"
+
+msgid "Baseline clean"
+msgstr "Základné vyčistenie"
+
+msgid "Baseline warnings"
+msgstr "Základné upozornenia"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Vytvoriť bezpečný plán aplikácie z pripraveného balíka. Kontrolujú sa iba súbory, oprávnenia, záložná cesta a stav zámku. Nenahrádza súbory."
+
+msgid "Build production frontend assets."
+msgstr "Vytvoriť produkčné frontendové assety."
+
+msgid "Building plan..."
+msgstr "Vytvára sa plán..."
+
+msgid "Channel"
+msgstr "Kanál"
+
+msgid "Check"
+msgstr "Skontrolovať"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Skontrolovať dostupné aktualizácie Chamilo, overiť balíčky, pripraviť súbory a spustiť kontrolované kroky po aktualizácii."
+
+msgid "Check manifest"
+msgstr "Skontrolovať manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Kontrola akcií po aplikácii..."
+
+msgid "Checking..."
+msgstr "Kontrola..."
+
+msgid "Composer install"
+msgstr "Composer install"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Akcie Composer, Yarn a migrácie databázy môžu upraviť závislosti, vygenerované assety alebo databázu. Vyberte ich až po potvrdení záloh a oprávnení."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Nastavte CHAMILO_UPDATE_MANIFEST_URL na serveri alebo zadajte HTTPS URL manifestu."
+
+msgid "Configured"
+msgstr "Nakonfigurované"
+
+msgid "Current migration"
+msgstr "Aktuálna migrácia"
+
+msgid "Database baseline"
+msgstr "Základná verzia databázy"
+
+msgid "Database migration safety review"
+msgstr "Kontrola bezpečnosti migrácie databázy"
+
+msgid "Database migrations"
+msgstr "Migrácie databázy"
+
+msgid "Development mode"
+msgstr "Vývojový režim"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Nepovoľte, pokiaľ nebola skontrolovaná záloha aktualizácie a oprávnenia servera."
+
+msgid "Doctrine dry-run command"
+msgstr "Príkaz Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine hlásil varovania základnej verzie histórie. Aktualizátor spustí len pripravené migrácie V210 po explicitnom potvrdení."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine vykoná len pripravené migrácie V210 explicitne po úspešnej kontrole bezpečnosti."
+
+msgid "Dry-run exit code"
+msgstr "Návratový kód dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Vykonané nedostupné migrácie"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Rozbaliť overený aktualizačný balíček do prípravného adresára na kontrolu. Toto nenahradí súbory, nespustí migrácie ani neupraví databázu."
+
+msgid "File apply available"
+msgstr "Aplikácia súborov dostupná"
+
+msgid "Files to replace"
+msgstr "Súbory na nahradenie"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Potvrdzujem, že záloha databázy existuje a bola overená pred spustením migrácií."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Rozumiem, že pokročilé akcie môžu upraviť závislosti, vygenerované assety alebo databázu."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Rozumiem, že toto nahradí súbory v inštalácii Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Rozumiem, že toto spustí aktualizačné príkazy na serveri."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Nainštalovať závislosti frontendu pred opätovným zostavením assetov."
+
+msgid "Installed version"
+msgstr "Nainštalovaná verzia"
+
+msgid "Latest migration"
+msgstr "Posledná migrácia"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Nechajte cesty k balíčku a podpisu prázdne, aby sa stiahli z overených URL manifestu. Lokálne cesty sú dostupné len pre vývojové testy."
+
+msgid "Live command log"
+msgstr "Živý záznam príkazov"
+
+msgid "Live update log"
+msgstr "Živý záznam aktualizácie"
+
+msgid "Local test options"
+msgstr "Možnosti lokálneho testu"
+
+msgid "Local test update notice link"
+msgstr "Odkaz na lokálne testovacie oznámenie aktualizácie"
+
+msgid "Local update notice simulation"
+msgstr "Simulácia lokálneho oznámenia aktualizácie"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simulácia lokálneho oznámenia aktualizácie je dostupná len vo vývojovom režime."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Zdroj manifestu"
+
+msgid "Migration safety details"
+msgstr "Podrobnosti kontroly bezpečnosti migrácie"
+
+msgid "Migration safety review failed"
+msgstr "Kontrola bezpečnosti migrácie zlyhala"
+
+msgid "Migration safety review ready"
+msgstr "Kontrola bezpečnosti migrácie pripravená"
+
+msgid "Migration target"
+msgstr "Cieľ migrácie"
+
+msgid "New files"
+msgstr "Nové súbory"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Nové migrácie hlásené Doctrine"
+
+msgid "Next migration"
+msgstr "Ďalšia migrácia"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Nebola hlásená žiadna vykonaná nedostupná migrácia."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Zatiaľ nie je nakonfigurovaná žiadna oficiálna URL manifestu. Použite HTTPS URL alebo lokálnu cestu pre vývojové testy."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Pred cieľom pripraveného update nebola zistená žiadna čakajúca migrácia."
+
+msgid "Not configured"
+msgstr "Nenakonfigurované"
+
+msgid "Not detected"
+msgstr "Nezistené"
+
+msgid "Official Chamilo update channel"
+msgstr "Oficiálny aktualizačný kanál Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 balíka"
+
+msgid "Package URL"
+msgstr "URL balíka"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Súbory balíka a podpisu sa stiahnu z manifestu. Lokálne cesty sú v tomto prostredí zakázané."
+
+msgid "Package path"
+msgstr "Cesta k balíku"
+
+msgid "Package staged successfully"
+msgstr "Balík bol úspešne pripravený"
+
+msgid "Package staging failed"
+msgstr "Príprava balíka zlyhala"
+
+msgid "Package verification"
+msgstr "Overenie balíka"
+
+msgid "Package verification failed"
+msgstr "Overenie balíka zlyhalo"
+
+msgid "Package verified successfully"
+msgstr "Balík bol úspešne overený"
+
+msgid "Pending migrations before this update"
+msgstr "Čakajúce migrácie pred touto aktualizáciou"
+
+msgid "Planned backup path"
+msgstr "Plánovaná cesta zálohy"
+
+msgid "Post-apply actions completed"
+msgstr "Akcie po aplikovaní dokončené"
+
+msgid "Post-apply actions failed"
+msgstr "Akcie po aplikovaní zlyhali"
+
+msgid "Post-apply actions ready"
+msgstr "Akcie po aplikovaní pripravené"
+
+msgid "Post-apply checks"
+msgstr "Kontroly po aplikovaní"
+
+msgid "Post-apply checks failed"
+msgstr "Kontroly po aplikovaní zlyhali"
+
+msgid "Post-apply details"
+msgstr "Podrobnosti po aplikovaní"
+
+msgid "Post-apply run details"
+msgstr "Podrobnosti spustenia po aplikovaní"
+
+msgid "Preflight checks"
+msgstr "Predbežné kontroly"
+
+msgid "Preflight checks completed"
+msgstr "Predbežné kontroly dokončené"
+
+msgid "Preflight checks failed"
+msgstr "Predbežné kontroly zlyhali"
+
+msgid "Preflight details"
+msgstr "Podrobnosti predbežných kontrol"
+
+msgid "Prepare staging"
+msgstr "Pripraviť staging"
+
+msgid "Preparing staging..."
+msgstr "Pripravuje sa staging..."
+
+msgid "Production mode"
+msgstr "Produkčný režim"
+
+msgid "Released at"
+msgstr "Vydané"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Nahradiť súbory Chamilo zo pripraveného balíka podľa skontrolovaného plánu aplikovania. Tento krok nespúšťa databázové migrácie, Composer, Yarn ani príkazy na vyčistenie vyrovnávacej pamäte."
+
+msgid "Review apply plan"
+msgstr "Skontrolovať plán aplikovania"
+
+msgid "Review database migrations"
+msgstr "Skontrolovať databázové migrácie"
+
+msgid "Review post-apply actions"
+msgstr "Skontrolovať akcie po aplikovaní"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Skontrolovať odporúčané manuálne príkazy po aplikovaní aktualizačných súborov. Tento krok nespúšťa Composer, Yarn, migrácie ani príkazy na vyčistenie vyrovnávacej pamäte."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Skontrolovať pripravené Doctrine migrácie a výstup suchého behu pred spustením databázových migrácií."
+
+msgid "Reviewing database migrations..."
+msgstr "Kontrolujú sa databázové migrácie..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Spustiť a absolvovať kontrolu bezpečnosti migrácií pred vykonaním databázových migrácií."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Spustiť kontroly prostredia pred akýmkoľvek ďalším krokom aplikovania aktualizácie. Tento krok nemení súbory ani databázu."
+
+msgid "Run post-apply actions"
+msgstr "Spustiť akcie po aplikovaní"
+
+msgid "Run preflight checks"
+msgstr "Spustiť predbežné kontroly"
+
+msgid "Run selected post-apply actions"
+msgstr "Spustiť vybrané akcie po aplikovaní"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Spustiť vybrané akcie po aplikovaní zo servera pomocou kontrolovaného zoznamu povolených príkazov. Vlastné shellové príkazy nie sú akceptované."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Spustiť tieto príkazy manuálne zo servera po potvrdení výsledku aktualizácie súborov a záloh."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Spúšťanie akcií po aplikovaní z používateľského rozhrania je v produkčnom režime zakázané."
+
+msgid "Running post-apply actions..."
+msgstr "Spúšťajú sa akcie po aplikovaní..."
+
+msgid "Safe actions"
+msgstr "Bezpečné akcie"
+
+msgid "Signature path"
+msgstr "Cesta k podpisu"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Overenie podpisu nie je možné v tomto prostredí preskočiť."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Preskočiť overenie podpisu pre lokálne vývojové testy"
+
+msgid "Staged file application failed"
+msgstr "Aplikovanie pripravených súborov zlyhalo"
+
+msgid "Staged files applied successfully"
+msgstr "Pripravené súbory boli úspešne aplikované"
+
+msgid "Staging details"
+msgstr "Podrobnosti stagingu"
+
+msgid "Staging directory"
+msgstr "Pracovný adresár"
+
+msgid "Staging extraction"
+msgstr "Rozbalenie pracovného adresára"
+
+msgid "Symfony cache clear"
+msgstr "Vymazanie Symfony cache"
+
+msgid "System update"
+msgstr "Aktualizácia systému"
+
+msgid "Target version"
+msgstr "Cieľová verzia"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Predvolená je nakonfigurovaná oficiálna URL manifestu. V prípade potreby ju môžete zmeniť na inú HTTPS adresu manifestu."
+
+msgid "The database migration baseline is clean."
+msgstr "Základná migrácia databázy je čistá."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Finálna HTTP odpoveď zlyhala po dokončení operácie. Zvyčajne je to spôsobené oprávneniami runtime cache alebo reštartom webového servera počas požiadavky."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Protokol operácie uvádza, že akcie po aplikácii boli úspešne dokončené."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Vybrané príkazy po aplikácii boli úspešne dokončené, ale finálna HTTP odpoveď zlyhala. Obnovte stránku a overte oprávnenia runtime cache, ak sa stránka nenačítava správne."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Aktualizátor nevytvára ani neobnovuje zálohy databázy."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Tieto akcie je možné bezpečne spustiť z používateľského rozhrania po kontrole výsledku aktualizácie."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Tieto príkazy môžu upraviť závislosti, vygenerované prostriedky, cache alebo databázu. Pred pokračovaním overte zálohy."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Táto akcia upravuje súbory v inštalácii Chamilo. Pred pokračovaním sa uistite, že plán aplikácie bol skontrolovaný a zálohy sú povolené."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Tento vývojový záznam simuluje budúce oznámenie o aktualizácii Chamilo.org pomocou lokálnych testovacích ciest balíkov."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Táto obrazovka bola otvorená z oficiálneho oznámenia o aktualizácii, ale zatiaľ nie je nakonfigurovaný žiadny oficiálny zdroj manifestu."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Táto obrazovka bola otvorená z oznámenia o aktualizácii. Automaticky sa spustí iba kontrola manifestu."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Tento krok pripravuje iba kontrolu. Nahradenie súborov sa uskutoční neskôr v kroku Aplikovať pripravené súbory s uzamknutím, zálohou a ochranou proti návratu."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Tento aktualizátor nevytvára zálohu databázy. Pred spustením migrácií vytvorte a overte zálohu."
+
+msgid "Trusted public key"
+msgstr "Dôveryhodný verejný kľúč"
+
+msgid "Trusted signing key"
+msgstr "Dôveryhodný podpisový kľúč"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Na potvrdenie zadajte APPLY UPDATE FILES"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Na potvrdenie migrácií databázy zadajte RUN DATABASE MIGRATIONS"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Na potvrdenie zadajte RUN POST UPDATE ACTIONS"
+
+msgid "Unknown update notice source."
+msgstr "Neznámy zdroj oznámenia o aktualizácii."
+
+msgid "Update availability"
+msgstr "Dostupnosť aktualizácie"
+
+msgid "Update directory"
+msgstr "Adresár aktualizácie"
+
+msgid "Update lock path"
+msgstr "Cesta zámku aktualizácie"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Použite pracovný adresár vytvorený v predchádzajúcom kroku. Backend akceptuje iba adresáre vo vnútri var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Tento odkaz použite na simuláciu budúceho oznámenia o aktualizácii Chamilo.org počas vývojových testov."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Použite iba pre lokálne vývojové testy. Produkčné aktualizácie musia používať kľúč nakonfigurovaný na serveri."
+
+msgid "Verification details"
+msgstr "Podrobnosti overenia"
+
+msgid "Verify package"
+msgstr "Overiť balík"
+
+msgid "Verifying..."
+msgstr "Overovanie..."
+
+msgid "Waiting for command progress events..."
+msgstr "Čaká sa na udalosti priebehu príkazu..."
+
+msgid "Waiting for update progress events..."
+msgstr "Čaká sa na udalosti priebehu aktualizácie..."
+
+msgid "Yarn build"
+msgstr "Zostavenie Yarn"
+
+msgid "Yarn install"
+msgstr "Inštalácia Yarn"
+
+msgid "A comment is required"
+msgstr "Komentár je povinný"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Databáza s rovnakým názvom už existuje. Ak obsahuje tabuľky, budú odstránené; ak je prázdna, bude znovu použitá."
+
+msgid "AI generated"
+msgstr "Vygenerované AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Pred návratom do vzdelávacej cesty pridajte aspoň jednu otázku."
+
+msgid "Add attachments"
+msgstr "Pridať prílohy"
+
+msgid "Additional fields"
+msgstr "Ďalšie polia"
+
+msgid "Allow comments"
+msgstr "Povoliť komentáre"
+
+msgid "Allow new pages"
+msgstr "Povoliť nové stránky"
+
+msgid "Allow ratings"
+msgstr "Povoliť hodnotenia"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Naozaj chcete odstrániť všetky položky?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Naozaj chcete obnoviť automatické obnovovanie?"
+
+msgid "Attachment has been deleted"
+msgstr "Príloha bola odstránená"
+
+msgid "Backup file"
+msgstr "Záložný súbor"
+
+msgid "Block comments"
+msgstr "Blokovať komentáre"
+
+msgid "Block new pages"
+msgstr "Blokovať nové stránky"
+
+msgid "Block ratings"
+msgstr "Blokovať hodnotenia"
+
+msgid "Cancel renewal"
+msgstr "Zrušiť obnovenie"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Odkazy kategórie budú odstránené z %s Wiki stránok."
+
+msgid "Change"
+msgstr "Zmeniť"
+
+msgid "Clear group"
+msgstr "Vymazať skupinu"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Kliknutím na značku ju vložíte do editora. Tieto zástupné symboly budú nahradené pri generovaní certifikátu."
+
+msgid "Comment added"
+msgstr "Komentár pridaný"
+
+msgid "Comment is required"
+msgstr "Komentár je povinný"
+
+msgid "Comment score"
+msgstr "Skóre komentára"
+
+msgid "Compare selected versions line by line"
+msgstr "Porovnať vybrané verzie riadok po riadku"
+
+msgid "Compare selected versions word by word"
+msgstr "Porovnať vybrané verzie slovo po slove"
+
+msgid "Compare versions"
+msgstr "Porovnať verzie"
+
+msgid "Copy completed"
+msgstr "Kopírovanie dokončené"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Vytvoriť individuálne Wiki pracovné stránky pre študentov"
+
+msgid "Current view mode"
+msgstr "Aktuálny režim zobrazenia"
+
+msgid "Delete Wiki"
+msgstr "Odstrániť Wiki"
+
+msgid "Delete page"
+msgstr "Odstrániť stránku"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Odstránenie domovskej stránky Wiki sa neodporúča. Môžete ju neskôr znova vytvoriť."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Zakázanie Wiki blokuje bežné Wiki stránky a akcie. Táto stránka nastavení zostáva dostupná pre učiteľov kurzu."
+
+msgid "Discussion"
+msgstr "Diskusia"
+
+msgid "Edit Comment"
+msgstr "Upraviť komentár"
+
+msgid "Edit page"
+msgstr "Upraviť stránku"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Dátum ukončenia musí byť po dátume vypršania platnosti alebo rovný"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Zadajte hľadaný výraz na nájdenie Wiki stránok"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Dátum vypršania platnosti musí byť pred dátumom ukončenia alebo rovný"
+
+msgid "Failed email recipients"
+msgstr "Neúspešní príjemcovia e-mailu"
+
+msgid "Finish and return to learning path"
+msgstr "Dokončiť a vrátiť sa do vzdelávacej cesty"
+
+msgid "Forum image"
+msgstr "Obrázok fóra"
+
+msgid "Hide discussion"
+msgstr "Skryť diskusiu"
+
+msgid "Hide page"
+msgstr "Skryť stránku"
+
+msgid "I changed my mind"
+msgstr "Rozmyslel som si to"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Ak nie je začiarknuté, tieto súbory zostanú dostupné pre správcu platformy prostredníctvom nástroja „Informácie o súbore“."
+
+msgid "Internal message failures"
+msgstr "Zlyhania interných správ"
+
+msgid "Internal messages available"
+msgstr "Interné správy dostupné"
+
+msgid "Internal messages created now"
+msgstr "Interné správy vytvorené teraz"
+
+msgid "Item score"
+msgstr "Skóre položky"
+
+msgid "Last post"
+msgstr "Posledný príspevok"
+
+msgid "Lock page"
+msgstr "Zamknúť stránku"
+
+msgid "Manage categories"
+msgstr "Spravovať kategórie"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Označiť tento dokument ako vytvorený s pomocou AI. Použite, keď bol obsah vytvorený alebo výrazne upravený pomocou nástrojov AI."
+
+msgid "Maximum score is required"
+msgstr "Maximálne skóre je povinné"
+
+msgid "Metric"
+msgstr "Metrika"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Nové komentáre sú v tejto diskusii blokované"
+
+msgid "No Wiki categories are available yet."
+msgstr "Zatiaľ nie sú dostupné žiadne Wiki kategórie."
+
+msgid "No categories found"
+msgstr "Nenašli sa žiadne kategórie"
+
+msgid "No content"
+msgstr "Žiadny obsah"
+
+msgid "No parent category"
+msgstr "Žiadna nadradená kategória"
+
+msgid "Number of comments scored"
+msgstr "Počet hodnotených komentárov"
+
+msgid "Old version"
+msgstr "Stará verzia"
+
+msgid "Only image files are allowed."
+msgstr "Sú povolené len obrazové súbory."
+
+msgid "Please fill all required fields"
+msgstr "Vyplňte všetky povinné polia"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Otázky s zástupnými symbolmi triedy alebo študenta budú vygenerované pre triedy alebo skupiny kurzu: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Hodnotenia sú v tejto diskusii zablokované"
+
+msgid "Remove image"
+msgstr "Odstrániť obrázok"
+
+msgid "Restore renewal"
+msgstr "Obnoviť obnovenie"
+
+msgid "Restore version"
+msgstr "Obnoviť verziu"
+
+msgid "Search in"
+msgstr "Hľadať v"
+
+msgid "Select group"
+msgstr "Vybrať skupinu"
+
+msgid "Select image"
+msgstr "Vybrať obrázok"
+
+msgid "Selected image"
+msgstr "Vybraný obrázok"
+
+msgid "Show discussion"
+msgstr "Zobraziť diskusiu"
+
+msgid "Show page"
+msgstr "Zobraziť stránku"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Niektoré súbory alebo priečinky nemajú oprávnenie na zápis. Aby ste mohli nainštalovať Chamilo, musíte najprv zmeniť ich oprávnenia (pomocou CHMOD). Prečítajte si prosím"
+
+msgid "Subcategories"
+msgstr "Podkategórie"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Klepnite vľavo alebo vpravo pre navigáciu"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Termín odovzdania Wiki úlohy uplynul, ale oneskorené odovzdanie je povolené."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Termín odovzdania Wiki úlohy uplynul."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki úloha ešte nezačala."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Pred uložením je potrebné uzamknúť úpravu Wiki stránky."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Oznámenie bolo uložené, ale prílohu sa nepodarilo nahrať."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Oznámenie bolo uložené, ale doručenie e-mailu zlyhalo."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Oznámenie bolo uložené, ale žiadny e-mail nebolo možné doručiť."
+
+msgid "The category has been created"
+msgstr "Kategória bola vytvorená"
+
+msgid "The category has been deleted"
+msgstr "Kategória bola odstránená"
+
+msgid "The category has been updated"
+msgstr "Kategória bola aktualizovaná"
+
+msgid "The end date is invalid"
+msgstr "Koncový dátum je neplatný"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Maximálny počet verzií musí byť nezáporné celé číslo"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Maximálny počet slov musí byť nezáporné celé číslo"
+
+msgid "The print window could not be opened"
+msgstr "Okno tlače sa nepodarilo otvoriť"
+
+msgid "The start date is invalid"
+msgstr "Počiatočný dátum je neplatný"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Tieto nastavenia platia pre celý kurz vrátane jeho relácií a skupín."
+
+msgid "This announcement has already been sent by email."
+msgstr "Toto oznámenie už bolo odoslané e-mailom."
+
+msgid "This discussion is hidden from learners"
+msgstr "Táto diskusia je pre študentov skrytá"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Tento nástroj generatívnej AI vám umožňuje vytvárať obrázky a krátke videá na ilustráciu vášho kurzu. Vysvetlením (textom) toho, čo chcete v sekcii výzvy, poskytnete nakonfigurovanému modelu AI prvky potrebné na vygenerovanie obrázka alebo videa. Buďte trpezliví. Model AI bude potrebovať určitý čas a vygeneruje výsledok, ktorý si možno budete chcieť ponechať uložením média do vášho priečinka dokumentov a následným vložením do HTML dokumentu. Nie všetky modely AI sú rovnaké z hľadiska rýchlosti alebo kvality. Model AI vám môže tiež poskytnúť upravenú výzvu, ktorá je podrobnejšou interpretáciou vašej požiadavky. Túto upravenú výzvu potom môžete použiť na doladenie vašej požiadavky. Uvedomte si, že tento nástroj, najmä pri videách, môže pre vašu organizáciu generovať značné náklady, aj keď sa rozhodnete vygenerované médiá neuložiť. Používajte ho zodpovedne. Ak máte problémy s dosiahnutím toho, čo hľadáte, venujte čas online vyhľadávaniu trikov na tvorbu výziev pre model AI, ktorý máte k dispozícii."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Táto história patrí základnému kurzu. Obnovenie je dostupné po vytvorení verzie relácie."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Tento obrázok nahrádza predvolenú ikonu fóra zobrazenú vedľa názvu fóra."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Táto stránka pochádza zo základného kurzu. Jej uložením sa vytvorí verzia pre aktuálnu reláciu."
+
+msgid "This will also delete %s subcategories."
+msgstr "Týmto sa tiež odstráni %s podkategórií."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Týmto sa vytvoria individuálne pracovné stránky pre %s študentov."
+
+msgid "Thread history"
+msgstr "História vlákna"
+
+msgid "Title and content"
+msgstr "Názov a obsah"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Momentálne nie je možné zrušiť právo na obnovenie."
+
+msgid "Unable to restore renewal right now."
+msgstr "Momentálne nie je možné obnoviť právo na obnovenie."
+
+msgid "Unlock page"
+msgstr "Odomknúť stránku"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Použite [[Stránka]] alebo [[Stránka|Viditeľný text]] na vytvorenie interných Wiki odkazov."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Na navigáciu použite medzerník alebo klávesy so šípkami"
+
+msgid "View version"
+msgstr "Zobraziť verziu"
+
+msgid "Visible only to teachers"
+msgstr "Viditeľné iba pre učiteľov"
+
+msgid "Weight is required"
+msgstr "Hodnota je povinná"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki kategórie sú pre tento kurz zakázané."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki kategórie povolené"
+
+msgid "Wiki html strict filtering"
+msgstr "Prísne HTML filtrovanie Wiki"
+
+msgid "Wiki settings"
+msgstr "Nastavenia Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Nastavenia Wiki aktualizované"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Prezeráte historickú verziu tejto stránky"
+
+msgid "You can attach one or more files to this reply."
+msgstr "K tejto odpovedi môžete pripojiť jeden alebo viac súborov."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Túto stránku úlohy môžete upravovať, ale stránky práce študentov nebudú upravené."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "V otázke môžete použiť značky {{class_name}} a {{student_full_name}}."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Na úpravu tejto stránky máte 20 minút, kým vyprší zámok úprav."
+
+msgid "by"
+msgstr "od"
+
+msgid "required"
+msgstr "povinné"
 

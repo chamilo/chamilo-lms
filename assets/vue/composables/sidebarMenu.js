@@ -222,8 +222,8 @@ export function useSidebarMenu() {
   const rawShowCatalogue = platformConfigStore.getSetting("catalog.show_courses_sessions")
   const showCatalogue = Number(rawShowCatalogue)
   const isAnonymous = !securityStore.isAuthenticated
-  const isPrivilegedUser =
-    securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+  // ROLE_TEACHER covers admin and HR through the hierarchy; ROLE_SESSION_MANAGER covers session admins.
+  const isPrivilegedUser = securityStore.isGranted("ROLE_TEACHER") || securityStore.isGranted("ROLE_SESSION_MANAGER")
 
   const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
   const searchCourseConfig = computed(() => platformConfigStore.plugins?.searchcourse || {})
@@ -486,7 +486,7 @@ export function useSidebarMenu() {
     if (showBuyCoursesMenuItem.value) {
       items.push({
         icon: "mdi mdi-cart-outline",
-        label: t("Buy courses"),
+        label: t("Shop"),
         url: buyCoursesIndexPath.value,
       })
     }
@@ -537,7 +537,7 @@ export function useSidebarMenu() {
     if (isMenuTabEnabled("reporting")) {
       const subItems = []
 
-      if (securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin) {
+      if (securityStore.isGranted("ROLE_TEACHER") || securityStore.isGranted("ROLE_SESSION_MANAGER")) {
         subItems.push({
           label: securityStore.isHRM ? t("Course sessions") : t("Reporting"),
           url: "/main/my_space/" + (securityStore.isHRM ? "session.php" : "index.php"),
@@ -634,8 +634,7 @@ export function useSidebarMenu() {
     }
 
     {
-      const roles = securityStore.user?.roles || []
-      const isQuestionManager = securityStore.isAdmin || roles.includes("ROLE_QUESTION_MANAGER")
+      const isQuestionManager = securityStore.isGranted("ROLE_QUESTION_MANAGER")
 
       if (isQuestionManager && isMenuTabEnabled("question_manager")) {
         const questionAdminItems = [
@@ -656,7 +655,7 @@ export function useSidebarMenu() {
       }
     }
 
-    if (isMenuTabEnabled("session_admin") && (securityStore.isAdmin || securityStore.isSessionAdmin)) {
+    if (isMenuTabEnabled("session_admin") && securityStore.isGranted("ROLE_SESSION_MANAGER")) {
       const sessionAdminItems = [
         {
           label: t("Dashboard"),
@@ -699,7 +698,7 @@ export function useSidebarMenu() {
     }
 
     if (isMenuTabEnabled("platform_administration")) {
-      if (securityStore.isAdmin || securityStore.isSessionAdmin) {
+      if (securityStore.isGranted("ROLE_SESSION_MANAGER")) {
         const adminItems = [
           { label: t("Administration"), route: { name: "AdminIndex" } },
           ...(securityStore.isSessionAdmin &&

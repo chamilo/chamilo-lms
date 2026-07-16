@@ -22,7 +22,7 @@
                         href="{{ back_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -30,7 +30,7 @@
                         href="{{ new_coupon_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                 >
-                    <em class="fa fa-plus fa-fw"></em>
+                    <em class="mdi mdi-plus"></em>
                     {{ 'CouponAdd'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
             </div>
@@ -103,7 +103,7 @@
                             type="submit"
                             class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                     >
-                        <em class="fa fa-filter fa-fw"></em>
+                        <em class="mdi mdi-filter"></em>
                         {{ 'Search'|get_lang }}
                     </button>
 
@@ -111,7 +111,7 @@
                             href="{{ app.request.pathInfo }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                     >
-                        <em class="fa fa-eraser fa-fw"></em>
+                        <em class="mdi mdi-eraser"></em>
                         {{ 'Reset'|get_lang }}
                     </a>
                 </div>
@@ -200,7 +200,7 @@
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_coupon.php?' ~ {'id': coupon.id}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"
                         >
-                            <em class="fa fa-wrench fa-fw"></em>
+                            <em class="mdi mdi-wrench"></em>
                             {{ 'Configure'|get_lang }}
                         </a>
                     </td>
@@ -210,7 +210,7 @@
                     <td colspan="7" class="px-4 py-10 text-center">
                         <div class="mx-auto max-w-md space-y-2">
                             <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                                <em class="fa fa-ticket text-xl"></em>
+                                <em class="mdi mdi-ticket text-xl"></em>
                             </div>
                             <h3 class="text-lg font-semibold text-gray-90">
                                 {{ 'NoResults'|get_lang }}

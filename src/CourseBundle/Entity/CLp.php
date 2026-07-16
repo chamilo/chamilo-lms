@@ -12,18 +12,22 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ArrayObject;
+use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathLayoutInput;
 use Chamilo\CoreBundle\Controller\Api\CreateCLpAction;
-use Chamilo\CoreBundle\Controller\Api\LpReorderController;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Filter\SidFilter;
-use Chamilo\CoreBundle\State\LpCollectionStateProvider;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathCollectionProvider;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathLayoutProcessor;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathReorderProcessor;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathVisibilityProcessor;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -69,10 +73,18 @@ use Symfony\Component\Validator\Constraints as Assert;
             ),
             paginationClientEnabled: true,
             name: 'get_lp_collection_with_progress',
-            provider: LpCollectionStateProvider::class,
+            provider: LearningPathCollectionProvider::class,
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Put(
+            uriTemplate: '/learning_paths/{iid}/toggle-visibility',
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            validate: false,
+            name: 'toggle_learning_path_visibility',
+            processor: LearningPathVisibilityProcessor::class,
+        ),
         new Post(
             controller: CreateCLpAction::class,
             openapi: new Operation(
@@ -104,27 +116,25 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             uriTemplate: '/learning_paths/reorder',
             status: 204,
-            controller: LpReorderController::class,
             openapi: new Operation(
-                summary: 'Reorder learning paths within a course',
-                description: 'Sets the display order of all learning paths in a course by providing their IDs in the desired order.',
+                summary: 'Reorder learning paths within the current course context',
+                description: 'Sets the display order for the learning paths in the current course, session and group context.',
                 requestBody: new RequestBody(
-                    description: 'Ordered list of learning path IDs and the course context',
+                    description: 'Ordered learning path IDs, optional category and CSRF token',
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
                                 'properties' => [
-                                    'courseId' => ['type' => 'integer', 'description' => 'Course identifier'],
                                     'order' => [
                                         'type' => 'array',
                                         'items' => ['type' => 'integer'],
                                         'description' => 'Ordered list of learning path IDs',
                                     ],
-                                    'sid' => ['type' => 'integer', 'description' => 'Session identifier (optional)'],
-                                    'categoryId' => ['type' => 'integer', 'description' => 'Category identifier to scope the reorder (optional)'],
+                                    'categoryId' => ['type' => 'integer', 'description' => 'Category identifier (optional)'],
+                                    'csrfToken' => ['type' => 'string'],
                                 ],
-                                'required' => ['courseId', 'order'],
+                                'required' => ['order', 'csrfToken'],
                             ],
                         ],
                     ]),
@@ -133,7 +143,55 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             read: false,
             deserialize: false,
-            name: 'lp_reorder'
+            name: 'lp_reorder',
+            processor: LearningPathReorderProcessor::class,
+        ),
+        new Post(
+            uriTemplate: '/learning_paths/layout',
+            status: 204,
+            openapi: new Operation(
+                summary: 'Save the complete learning path category layout',
+                description: 'Atomically persists category order, learning path order and category assignment in the base course context.',
+                requestBody: new RequestBody(
+                    description: 'Complete category layout, uncategorized learning paths and CSRF token',
+                    content: new ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'categories' => [
+                                        'type' => 'array',
+                                        'items' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'id' => ['type' => 'integer'],
+                                                'learningPathIds' => [
+                                                    'type' => 'array',
+                                                    'items' => ['type' => 'integer'],
+                                                ],
+                                            ],
+                                            'required' => ['id', 'learningPathIds'],
+                                        ],
+                                    ],
+                                    'uncategorized' => [
+                                        'type' => 'array',
+                                        'items' => ['type' => 'integer'],
+                                    ],
+                                    'csrfToken' => ['type' => 'string'],
+                                ],
+                                'required' => ['categories', 'uncategorized', 'csrfToken'],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')",
+            input: LearningPathLayoutInput::class,
+            read: false,
+            validate: false,
+            denormalizationContext: ['groups' => ['lp:layout']],
+            name: 'lp_layout_update',
+            processor: LearningPathLayoutProcessor::class,
         ),
     ],
     normalizationContext: [
@@ -154,6 +212,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 {
     public const LP_TYPE = 1;
     public const SCORM_TYPE = 2;
+    public const AICC_TYPE = 3;
 
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -187,6 +246,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected bool $forceCommit;
 
     #[ORM\Column(name: 'default_view_mod', type: 'string', length: 32, nullable: false, options: ['default' => 'embedded'])]
+    #[Groups(['lp:read'])]
     protected string $defaultViewMod;
 
     #[ORM\Column(name: 'default_encoding', type: 'string', length: 32, nullable: false, options: ['default' => 'UTF-8'])]
@@ -209,6 +269,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected string $jsLib;
 
     #[ORM\Column(name: 'debug', type: 'boolean', nullable: false)]
+    #[Groups(['lp:read'])]
     protected bool $debug;
 
     #[Assert\NotBlank]
@@ -227,6 +288,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected bool $hideTocFrame;
 
     #[ORM\Column(name: 'seriousgame_mode', type: 'boolean', nullable: false)]
+    #[Groups(['lp:read'])]
     protected bool $seriousgameMode;
 
     #[ORM\Column(name: 'use_max_score', type: 'integer', nullable: false, options: ['default' => 1])]
@@ -306,6 +368,12 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[Groups(['lp:read'])]
     #[SerializedName('visible')]
     private ?bool $visible = null;
+
+    #[Groups(['lp:read'])]
+    private bool $publishedOnCourseHome = false;
+
+    #[Groups(['lp:read'])]
+    private bool $manageableInContext = false;
 
     public function __construct()
     {
@@ -691,6 +759,13 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this->maxAttempts;
     }
 
+    public function setMaxAttempts(int $maxAttempts): self
+    {
+        $this->maxAttempts = $maxAttempts;
+
+        return $this;
+    }
+
     public function getNextLpId(): int
     {
         return $this->nextLpId;
@@ -826,6 +901,26 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     public function setVisible(?bool $visible): void
     {
         $this->visible = $visible;
+    }
+
+    public function isPublishedOnCourseHome(): bool
+    {
+        return $this->publishedOnCourseHome;
+    }
+
+    public function setPublishedOnCourseHome(bool $publishedOnCourseHome): void
+    {
+        $this->publishedOnCourseHome = $publishedOnCourseHome;
+    }
+
+    public function isManageableInContext(): bool
+    {
+        return $this->manageableInContext;
+    }
+
+    public function setManageableInContext(bool $manageableInContext): void
+    {
+        $this->manageableInContext = $manageableInContext;
     }
 
     public function getResourceIdentifier(): int|Uuid

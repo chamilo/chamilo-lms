@@ -904,17 +904,20 @@ class learnpath
     public function delete_item($id)
     {
         $course_id = api_get_course_int_id();
+        $lpId = $this->get_id();
         $id = (int) $id;
         // TODO: Implement the resource removal.
-        if (empty($id) || empty($course_id)) {
+        if (empty($id) || empty($course_id) || empty($lpId)) {
             return false;
         }
 
         $repo = Container::getLpItemRepository();
         $item = $repo->find($id);
-        if (null === $item) {
+        if (null === $item || (int) $item->getLp()->getIid() !== $lpId) {
             return false;
         }
+
+        $searchDid = $item->getSearchDid();
 
         $em = Database::getManager();
         $repo->removeFromTree($item);
@@ -931,24 +934,20 @@ class learnpath
                 WHERE lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
         Database::query($sql);
 
-        // Remove from search engine if enabled.
-        if ('true' === api_get_setting('search_enabled')) {
-            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $row2 = Database::fetch_array($res);
+        // Remove the indexed document without querying the legacy search_engine_ref schema.
+        if ('true' === api_get_setting('search_enabled') && !empty($searchDid)) {
+            try {
                 $di = new ChamiloIndexer();
-                $di->remove_document($row2['search_did']);
+                $di->remove_document((int) $searchDid);
+            } catch (Throwable $exception) {
+                error_log(
+                    sprintf(
+                        '[Xapian] Failed to remove learning path item %d from the index: %s',
+                        $id,
+                        $exception->getMessage()
+                    )
+                );
             }
-            $sql = 'DELETE FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
-            Database::query($sql);
         }
     }
 
@@ -1534,7 +1533,7 @@ class learnpath
     }
 
     /**
-     * Returns the package type ('scorm','aicc','scorm2004','ppt'...).
+     * Returns the package type ('scorm','scorm2004','ppt'...).
      *
      * Generally, the package provided is in the form of a zip file, so the function
      * has been written to test a zip file. If not a zip, the function will return the
@@ -1543,7 +1542,7 @@ class learnpath
      * @param string $filePath the path to the file
      * @param string $file_name the original name of the file
      *
-     * @return string 'scorm','aicc','scorm2004','error-empty-package'
+     * @return string 'scorm','scorm2004','error-empty-package'
      *                if the package is empty, or '' if the package cannot be recognized
      */
     public static function getPackageType($filePath, $file_name)
@@ -1569,10 +1568,6 @@ class learnpath
         $zipContentArray = $zipFile->getEntries();
         $package_type = '';
         $manifest = '';
-        $aicc_match_crs = 0;
-        $aicc_match_au = 0;
-        $aicc_match_des = 0;
-        $aicc_match_cst = 0;
         $countItems = 0;
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         if ($zipContentArray) {
@@ -1586,41 +1581,11 @@ class learnpath
                         $manifest = $fileName; // Just the relative directory inside scorm/
                         $package_type = 'scorm';
                         break; // Exit the foreach loop.
-                    } elseif (
-                        preg_match('/aicc\//i', $fileName) ||
-                        in_array(
-                            strtolower(pathinfo($fileName, PATHINFO_EXTENSION)),
-                            ['crs', 'au', 'des', 'cst']
-                        )
-                    ) {
-                        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-                        switch ($ext) {
-                            case 'crs':
-                                $aicc_match_crs = 1;
-                                break;
-                            case 'au':
-                                $aicc_match_au = 1;
-                                break;
-                            case 'des':
-                                $aicc_match_des = 1;
-                                break;
-                            case 'cst':
-                                $aicc_match_cst = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
                     } else {
                         $package_type = '';
                     }
                 }
             }
-        }
-
-        if (empty($package_type) && 4 == ($aicc_match_crs + $aicc_match_au + $aicc_match_des + $aicc_match_cst)) {
-            // If found an aicc directory... (!= false means it cannot be false (error) or 0 (no match)).
-            $package_type = 'aicc';
         }
 
         // Try with chamilo course builder
@@ -9244,6 +9209,45 @@ document.addEventListener("DOMContentLoaded", function () {
         return $path.'?'.http_build_query($query);
     }
 
+    private static function buildVueAnnouncementLearningPathUrl(
+        int $courseId,
+        int $sessionId,
+        int $learningPathId,
+        int $learningPathItemId,
+        int $learningPathViewId,
+        int $announcementId
+    ): string {
+        if ($courseId <= 0 || $announcementId <= 0) {
+            return '';
+        }
+
+        $em = Database::getManager();
+        $course = $em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return '';
+        }
+
+        $courseResourceNodeId = (int) $course->getResourceNode()->getId();
+        if ($courseResourceNodeId <= 0) {
+            return '';
+        }
+
+        $query = [
+            'cid' => $courseId,
+            'sid' => $sessionId,
+            'gid' => api_get_group_id(),
+            'origin' => 'learnpath',
+            'lp_id' => $learningPathId,
+            'lp_item_id' => $learningPathItemId,
+            'lp_view_id' => $learningPathViewId,
+            'returnToLp' => 1,
+            'embedded' => 1,
+            'isStudentView' => 'true',
+        ];
+
+        return api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/view/'.$announcementId.'?'.http_build_query($query);
+    }
+
     private static function buildVueSurveyLearningPathUrl(
         int $courseId,
         int $sessionId,
@@ -9315,6 +9319,19 @@ document.addEventListener("DOMContentLoaded", function () {
             case TOOL_CALENDAR_EVENT:
                 return $main_dir_path.'calendar/agenda.php?agenda_id='.$id.'&'.$extraParams;
             case TOOL_ANNOUNCEMENT:
+                $announcementUrl = self::buildVueAnnouncementLearningPathUrl(
+                    (int) $course_id,
+                    $session_id,
+                    $learningPathId,
+                    $id_in_path,
+                    $lpViewId,
+                    (int) $id
+                );
+
+                if ('' !== $announcementUrl) {
+                    return $announcementUrl;
+                }
+
                 return $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
             case TOOL_LINK:
                 $linkInfo = Link::getLinkInfo($id);

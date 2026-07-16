@@ -22,7 +22,7 @@
       >
         {{
           t(
-            "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR.",
+            "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR",
           )
         }}
       </Message>
@@ -202,6 +202,7 @@
                           :help-text="section.helpText"
                           :title="section.title"
                           :editor-id="`terms_section_${section.type}`"
+                          :enable-translate-html="false"
                         />
                       </div>
 
@@ -237,6 +238,80 @@
               />
             </Dialog>
 
+            <Dialog
+              v-model:visible="translationDialogVisible"
+              :header="t('Translate with AI')"
+              :modal="true"
+              :style="{ width: 'min(680px, 92vw)' }"
+            >
+              <div class="space-y-4">
+                <Message
+                  :closable="false"
+                  severity="warn"
+                >
+                  {{
+                    t(
+                      "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it.",
+                    )
+                  }}
+                </Message>
+
+                <BaseSelect
+                  id="terms-ai-target-language"
+                  v-model="translationTargetLanguage"
+                  name="target_language"
+                  :label="t('Target language')"
+                  :options="targetLanguageOptions"
+                  option-value="value"
+                  option-label="label"
+                  :placeholder="t('Please select a language')"
+                />
+
+                <BaseSelect
+                  id="terms-ai-provider"
+                  v-model="translationProvider"
+                  name="ai_provider"
+                  :label="t('AI provider')"
+                  :options="aiTranslationConfiguration.providers"
+                  option-value="value"
+                  option-label="label"
+                  :placeholder="t('Please select a provider')"
+                />
+
+                <Message
+                  v-if="selectedTargetLanguageOption?.latestVersion"
+                  :closable="false"
+                  severity="warn"
+                >
+                  {{
+                    t(
+                      "A saved version already exists for the target language. Saving this proposal will create a new version.",
+                    )
+                  }}
+                </Message>
+              </div>
+
+              <template #footer>
+                <BaseButton
+                  id="terms-ai-cancel"
+                  :label="t('Cancel')"
+                  icon="close"
+                  type="secondary"
+                  :disabled="isTranslating"
+                  @click="translationDialogVisible = false"
+                />
+                <BaseButton
+                  id="terms-ai-generate"
+                  :label="t('Generate translation')"
+                  icon="robot"
+                  type="primary"
+                  :disabled="!translationTargetLanguage || !translationProvider || isTranslating"
+                  :is-loading="isTranslating"
+                  @click="generateAiTranslation"
+                />
+              </template>
+            </Dialog>
+
             <!-- Sticky actions -->
             <div class="sticky bottom-0 z-10">
               <div
@@ -248,6 +323,15 @@
                   type="secondary"
                   :disabled="isLoading"
                   @click="backToList"
+                />
+                <BaseButton
+                  v-if="aiTranslationConfiguration.enabled"
+                  id="terms-ai-translate"
+                  icon="robot"
+                  :label="t('Translate with AI')"
+                  type="primary"
+                  :disabled="!canTranslateWithAi"
+                  @click="openAiTranslationDialog"
                 />
                 <BaseButton
                   icon="search"
@@ -273,7 +357,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, watch } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Message from "primevue/message"
@@ -289,10 +373,12 @@ import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 
 import languageService from "../../services/languageService"
 import legalService from "../../services/legalService"
+import { useNotification } from "../../composables/notification"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { t } = useI18n()
 const router = useRouter()
+const { showErrorNotification, showSuccessNotification, showWarningNotification } = useNotification()
 
 const languages = ref([])
 const selectedLanguage = ref(null)
@@ -308,6 +394,17 @@ const previewContent = ref("")
 const activeIndex = ref(0)
 const mountedEditorIndexes = ref(new Set([0]))
 const isSaving = ref(false)
+const isApplyingTranslation = ref(false)
+const isTranslating = ref(false)
+const translationDialogVisible = ref(false)
+const translationTargetLanguage = ref(null)
+const translationProvider = ref("")
+const aiTranslationConfiguration = ref({
+  enabled: false,
+  languages: [],
+  providers: [],
+  csrfToken: "",
+})
 
 const buildEmptySections = () => {
   const sections = {}
@@ -370,6 +467,29 @@ const filledCount = computed(() => {
   return sectionsDefinition.value.filter((s) => isSectionFilled(s.type)).length
 })
 
+const targetLanguageOptions = computed(() => {
+  const sourceLanguageId = Number(selectedLanguage.value || 0)
+
+  return aiTranslationConfiguration.value.languages.filter(
+    (language) => Number(language.value) !== sourceLanguageId,
+  )
+})
+
+const selectedTargetLanguageOption = computed(() =>
+  targetLanguageOptions.value.find((language) => Number(language.value) === Number(translationTargetLanguage.value)),
+)
+
+const canTranslateWithAi = computed(
+  () =>
+    aiTranslationConfiguration.value.enabled &&
+    aiTranslationConfiguration.value.providers.length > 0 &&
+    targetLanguageOptions.value.length > 0 &&
+    filledCount.value > 0 &&
+    !isLoading.value &&
+    !isSaving.value &&
+    !isTranslating.value,
+)
+
 const onTabOpen = (e) => {
   const idx = Number(e.index)
   if (!Number.isNaN(idx)) {
@@ -388,6 +508,87 @@ const focusSection = (idx, type) => {
     const el = document.getElementById(`terms-section-${type}`)
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" })
   })
+}
+
+const loadAiTranslationConfiguration = async () => {
+  try {
+    const configuration = await legalService.getAiTranslationConfiguration()
+    aiTranslationConfiguration.value = {
+      enabled: Boolean(configuration?.enabled),
+      languages: Array.isArray(configuration?.languages) ? configuration.languages : [],
+      providers: Array.isArray(configuration?.providers) ? configuration.providers : [],
+      csrfToken: String(configuration?.csrfToken || ""),
+    }
+
+    translationProvider.value = String(aiTranslationConfiguration.value.providers[0]?.value || "")
+  } catch (error) {
+    console.error("Error loading AI translation configuration:", error)
+    aiTranslationConfiguration.value = {
+      enabled: false,
+      languages: [],
+      providers: [],
+      csrfToken: "",
+    }
+  }
+}
+
+const openAiTranslationDialog = () => {
+  if (filledCount.value <= 0) {
+    showWarningNotification(t("At least one terms and conditions section must contain text."))
+
+    return
+  }
+  if (targetLanguageOptions.value.length <= 0) {
+    showWarningNotification(t("No active target languages are available."))
+
+    return
+  }
+
+  translationTargetLanguage.value = Number(targetLanguageOptions.value[0].value)
+  translationProvider.value = String(aiTranslationConfiguration.value.providers[0]?.value || "")
+  translationDialogVisible.value = true
+}
+
+const generateAiTranslation = async () => {
+  if (!selectedLanguage.value || !translationTargetLanguage.value || !translationProvider.value) return
+  if (isTranslating.value) return
+
+  isTranslating.value = true
+
+  try {
+    const response = await legalService.translateTermsWithAi({
+      sourceLanguageId: Number(selectedLanguage.value),
+      targetLanguageId: Number(translationTargetLanguage.value),
+      provider: translationProvider.value,
+      sections: termData.value.sections ?? buildEmptySections(),
+      csrfToken: aiTranslationConfiguration.value.csrfToken,
+    })
+
+    const translatedSections = {
+      ...buildEmptySections(),
+      ...(response?.sections || {}),
+    }
+
+    isApplyingTranslation.value = true
+    selectedLanguage.value = Number(response?.targetLanguageId || translationTargetLanguage.value)
+    await nextTick()
+
+    termData.value = {
+      changes: "",
+      sections: translatedSections,
+    }
+    loadedVersion.value = null
+    termsLoaded.value = true
+    activeIndex.value = 0
+    mountedEditorIndexes.value = new Set([0])
+    translationDialogVisible.value = false
+    showSuccessNotification(t("Generated successfully. Review the preview and save when ready."))
+  } catch (error) {
+    showErrorNotification(error)
+  } finally {
+    isApplyingTranslation.value = false
+    isTranslating.value = false
+  }
 }
 
 const loadTermsByLanguage = async () => {
@@ -477,6 +678,8 @@ function backToList() {
 }
 
 watch(selectedLanguage, () => {
+  if (isApplyingTranslation.value) return
+
   termsLoaded.value = false
   loadedVersion.value = null
   termData.value = { changes: "", sections: buildEmptySections() }
@@ -484,6 +687,8 @@ watch(selectedLanguage, () => {
   mountedEditorIndexes.value = new Set([0])
 })
 onMounted(async () => {
+  await loadAiTranslationConfiguration()
+
   try {
     const response = await languageService.findAll()
     if (!response.ok) throw new Error("Failed to load languages.")

@@ -1580,8 +1580,8 @@ msgstr "Är du säker på att du vill radera stegen?"
 msgid "Authoring tool"
 msgstr "Författarverktyg"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM- eller AICC-paket att ladda upp"
+msgid "SCORM file to upload"
+msgstr "SCORM-paket att ladda upp"
 
 msgid "Course location"
 msgstr "Kursplacering"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:copyright,, nej:ingen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Mapp,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
@@ -8729,6 +8729,15 @@ msgstr "Visa"
 msgid "My courses"
 msgstr "Mina kurser"
 
+msgid "Shop"
+msgstr "Butik"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Begär faktura"
+
 msgid "View my progress"
 msgstr "Visa min statistik"
 
@@ -9528,7 +9537,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Filuppladdning misslyckades: Filtypen är inte tillåten"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID-URL"
 
 msgid "The file is too big to upload."
 msgstr "Filen är för stor för att laddas upp!"
@@ -15057,7 +15066,7 @@ msgid "Install Chamilo"
 msgstr "Installera Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo-URL"
 
 msgid "You have no session in your sessions history"
 msgstr "Du har inga sessioner i din sessionshistorik"
@@ -30889,7 +30898,7 @@ msgid "Account locked until"
 msgstr "Konto låst till"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "Google Calendar-URL"
 
 msgid "User chat status"
 msgstr "Användarens chattstatus"
@@ -35485,7 +35494,7 @@ msgid "%s results"
 msgstr "%s resultat"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsformulär : beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vikt/Längd<sup>2</sup> (Se <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsformulär: beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Borttagen"
@@ -36482,4 +36491,856 @@ msgstr "Modererad"
 
 msgid "View threads"
 msgstr "Visa trådar"
+
+msgid "No auth source"
+msgstr "Ingen autentiseringskälla"
+
+msgid "You must add at least one question"
+msgstr "Du måste lägga till minst en fråga"
+
+msgid "Advanced actions"
+msgstr "Avancerade åtgärder"
+
+msgid "Application path"
+msgstr "Applikationssökväg"
+
+msgid "Apply files details"
+msgstr "Tillämpa fildetaljer"
+
+msgid "Apply plan details"
+msgstr "Tillämpa plandetaljer"
+
+msgid "Apply plan failed"
+msgstr "Tillämpa plan misslyckades"
+
+msgid "Apply plan ready"
+msgstr "Tillämpa plan klar"
+
+msgid "Apply preparation"
+msgstr "Tillämpa förberedelse"
+
+msgid "Apply staged files"
+msgstr "Tillämpa iscensatta filer"
+
+msgid "Applying files..."
+msgstr "Tillämpar filer..."
+
+msgid "Audit file"
+msgstr "Granska fil"
+
+msgid "Backup directory"
+msgstr "Säkerhetskopieringskatalog"
+
+msgid "Baseline clean"
+msgstr "Baseline clean"
+
+msgid "Baseline warnings"
+msgstr "Baseline warnings"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Skapa en säker tillämpningsplan från det iscensatta paketet. Detta kontrollerar endast filer, behörigheter, säkerhetskopieringssökväg och låsstatus. Det ersätter inte filer."
+
+msgid "Build production frontend assets."
+msgstr "Bygg produktionsfrontend-tillgångar."
+
+msgid "Building plan..."
+msgstr "Bygger plan..."
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Check"
+msgstr "Kontrollera"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Sök efter tillgängliga Chamilo-uppdateringar, verifiera paket, iscensätt filer och kör kontrollerade steg efter uppdateringen."
+
+msgid "Check manifest"
+msgstr "Kontrollera manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Kontrollerar åtgärder efter tillämpning..."
+
+msgid "Checking..."
+msgstr "Kontrollerar..."
+
+msgid "Composer install"
+msgstr "Composer install"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer-, Yarn- och databas-migreringsåtgärder kan ändra beroenden, genererade tillgångar eller databasen. Välj dem endast efter att ha bekräftat säkerhetskopior och behörigheter."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfigurera CHAMILO_UPDATE_MANIFEST_URL på servern eller ange en HTTPS-manifest-URL."
+
+msgid "Configured"
+msgstr "Konfigurerad"
+
+msgid "Current migration"
+msgstr "Aktuell migrering"
+
+msgid "Database baseline"
+msgstr "Databas-baslinje"
+
+msgid "Database migration safety review"
+msgstr "Säkerhetsgranskning av databas-migrering"
+
+msgid "Database migrations"
+msgstr "Databasmigreringar"
+
+msgid "Development mode"
+msgstr "Utvecklingsläge"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Aktivera inte detta om inte uppdateringens säkerhetskopia och serverbehörigheter har granskats."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine dry-run-kommando"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine rapporterade historiska baslinjevarningar. Uppdateraren kommer fortfarande endast att köra etappvisa V210-migreringar efter explicit bekräftelse."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine kommer endast att köra de etappvisa V210-migreringarna explicit efter att säkerhetsgranskningen har godkänts."
+
+msgid "Dry-run exit code"
+msgstr "Dry-run-avslutningskod"
+
+msgid "Executed unavailable migrations"
+msgstr "Körda otillgängliga migreringar"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Extrahera det verifierade uppdateringspaketet till en staging-katalog för inspektion. Detta ersätter inte filer, kör inte migreringar eller ändrar databasen."
+
+msgid "File apply available"
+msgstr "Filapplicering tillgänglig"
+
+msgid "Files to replace"
+msgstr "Filer att ersätta"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Jag bekräftar att en databassäkerhetskopia finns och har verifierats innan migreringar körs."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Jag förstår att avancerade åtgärder kan ändra beroenden, genererade tillgångar eller databasen."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Jag förstår att detta kommer att ersätta filer i Chamilo-installationen."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Jag förstår att detta kommer att köra uppdateringskommandon på servern."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Installera frontend-beroenden innan tillgångar byggs om."
+
+msgid "Installed version"
+msgstr "Installerad version"
+
+msgid "Latest migration"
+msgstr "Senaste migrering"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Lämna paket- och signaturvägar tomma för att ladda ner dem från de verifierade manifest-URL:erna. Lokala sökvägar är endast tillgängliga för utvecklingstester."
+
+msgid "Live command log"
+msgstr "Live-kommandologg"
+
+msgid "Live update log"
+msgstr "Live-uppdateringslogg"
+
+msgid "Local test options"
+msgstr "Lokala testalternativ"
+
+msgid "Local test update notice link"
+msgstr "Lokal testuppdateringsmeddelandelänk"
+
+msgid "Local update notice simulation"
+msgstr "Lokal uppdateringsmeddelandesimulering"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Lokal uppdateringsmeddelandesimulering är endast tillgänglig i utvecklingsläge."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Manifestkälla"
+
+msgid "Migration safety details"
+msgstr "Migreringssäkerhetsdetaljer"
+
+msgid "Migration safety review failed"
+msgstr "Migreringssäkerhetsgranskning misslyckades"
+
+msgid "Migration safety review ready"
+msgstr "Migreringssäkerhetsgranskning redo"
+
+msgid "Migration target"
+msgstr "Migreringsmål"
+
+msgid "New files"
+msgstr "Nya filer"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Nya migreringar rapporterade av Doctrine"
+
+msgid "Next migration"
+msgstr "Nästa migrering"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Ingen körd otillgänglig migrering rapporterades."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Ingen officiell manifest-URL är konfigurerad ännu. Använd en HTTPS-URL eller en lokal sökväg för utvecklingstester."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Ingen väntande migrering upptäcktes före det etappvisa uppdateringsmålet."
+
+msgid "Not configured"
+msgstr "Inte konfigurerad"
+
+msgid "Not detected"
+msgstr "Inte upptäckt"
+
+msgid "Official Chamilo update channel"
+msgstr "Officiell Chamilo-uppdateringskanal"
+
+msgid "Package SHA-256"
+msgstr "Paket-SHA-256"
+
+msgid "Package URL"
+msgstr "Paket-URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Paket- och signaturfiler kommer att laddas ner från manifestet. Lokala sökvägar är inaktiverade i denna miljö."
+
+msgid "Package path"
+msgstr "Paketsökväg"
+
+msgid "Package staged successfully"
+msgstr "Paketet har förberetts"
+
+msgid "Package staging failed"
+msgstr "Förberedelse av paket misslyckades"
+
+msgid "Package verification"
+msgstr "Paketverifiering"
+
+msgid "Package verification failed"
+msgstr "Paketverifiering misslyckades"
+
+msgid "Package verified successfully"
+msgstr "Paketet har verifierats"
+
+msgid "Pending migrations before this update"
+msgstr "Väntande migreringar före denna uppdatering"
+
+msgid "Planned backup path"
+msgstr "Planerad sökväg för säkerhetskopia"
+
+msgid "Post-apply actions completed"
+msgstr "Åtgärder efter tillämpning slutförda"
+
+msgid "Post-apply actions failed"
+msgstr "Åtgärder efter tillämpning misslyckades"
+
+msgid "Post-apply actions ready"
+msgstr "Åtgärder efter tillämpning klara"
+
+msgid "Post-apply checks"
+msgstr "Kontroller efter tillämpning"
+
+msgid "Post-apply checks failed"
+msgstr "Kontroller efter tillämpning misslyckades"
+
+msgid "Post-apply details"
+msgstr "Detaljer efter tillämpning"
+
+msgid "Post-apply run details"
+msgstr "Körningsdetaljer efter tillämpning"
+
+msgid "Preflight checks"
+msgstr "Kontroller före tillämpning"
+
+msgid "Preflight checks completed"
+msgstr "Kontroller före tillämpning slutförda"
+
+msgid "Preflight checks failed"
+msgstr "Kontroller före tillämpning misslyckades"
+
+msgid "Preflight details"
+msgstr "Detaljer före tillämpning"
+
+msgid "Prepare staging"
+msgstr "Förbered förberedelse"
+
+msgid "Preparing staging..."
+msgstr "Förbereder förberedelse..."
+
+msgid "Production mode"
+msgstr "Produktionsläge"
+
+msgid "Released at"
+msgstr "Släppt den"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Ersätt Chamilo-filer från det förberedda paketet med den granskade tillämpningsplanen. Detta kör inte databas-migreringar, Composer, Yarn eller cache-kommandon."
+
+msgid "Review apply plan"
+msgstr "Granska tillämpningsplan"
+
+msgid "Review database migrations"
+msgstr "Granska databas-migreringar"
+
+msgid "Review post-apply actions"
+msgstr "Granska åtgärder efter tillämpning"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Granska rekommenderade manuella kommandon efter att uppdateringsfilerna har tillämpats. Detta steg kör inte Composer, Yarn, migreringar eller cache-kommandon."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Granska förberedda Doctrine-migreringar och torrkörningsutdata innan databas-migreringar körs."
+
+msgid "Reviewing database migrations..."
+msgstr "Granskar databas-migreringar..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Kör och godkänn migreringssäkerhetsgranskningen innan databas-migreringar utförs."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Kör miljökontroller före något framtida uppdateringssteg. Detta ändrar inte filer eller databasen."
+
+msgid "Run post-apply actions"
+msgstr "Kör åtgärder efter tillämpning"
+
+msgid "Run preflight checks"
+msgstr "Kör kontroller före tillämpning"
+
+msgid "Run selected post-apply actions"
+msgstr "Kör valda åtgärder efter tillämpning"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Kör valda kommandon efter tillämpning från servern med en kontrollerad tillåtelselista. Inga anpassade shell-kommandon accepteras."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Kör dessa kommandon manuellt från servern efter att ha bekräftat resultatet av filuppdateringen och säkerhetskopiorna."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Att köra åtgärder efter tillämpning från gränssnittet är inaktiverat i produktionsläge."
+
+msgid "Running post-apply actions..."
+msgstr "Kör åtgärder efter tillämpning..."
+
+msgid "Safe actions"
+msgstr "Säkra åtgärder"
+
+msgid "Signature path"
+msgstr "Signatursökväg"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Signaturverifiering kan inte hoppas över i denna miljö."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Hoppa över signaturverifiering för lokala utvecklingstester"
+
+msgid "Staged file application failed"
+msgstr "Tillämpning av förberedda filer misslyckades"
+
+msgid "Staged files applied successfully"
+msgstr "Förberedda filer har tillämpats"
+
+msgid "Staging details"
+msgstr "Förberedelsedetaljer"
+
+msgid "Staging directory"
+msgstr "Förberedelsemapp"
+
+msgid "Staging extraction"
+msgstr "Extrahering av förberedelse"
+
+msgid "Symfony cache clear"
+msgstr "Rensa Symfony-cache"
+
+msgid "System update"
+msgstr "Systemuppdatering"
+
+msgid "Target version"
+msgstr "Målversion"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Den konfigurerade officiella manifest-URL:en är förifylld. Du kan ändra den till ett annat HTTPS-manifest vid behov."
+
+msgid "The database migration baseline is clean."
+msgstr "Databasmigreringens baslinje är ren."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Det slutliga HTTP-svaret misslyckades efter att åtgärden slutförts. Detta orsakas vanligtvis av behörigheter för runtime-cache eller en omstart av webbservern under begäran."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Åtgärdsloggen visar att åtgärderna efter tillämpning slutfördes framgångsrikt."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "De valda åtgärderna efter tillämpning slutfördes framgångsrikt, men det slutliga HTTP-svaret misslyckades. Uppdatera sidan och kontrollera behörigheterna för runtime-cache om sidan inte laddas korrekt."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Uppdateraren skapar eller återställer inte databassäkerhetskopior."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Dessa åtgärder är säkra att köra från användargränssnittet efter granskning av uppdateringsresultatet."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Dessa kommandon kan ändra beroenden, genererade tillgångar, cache eller databasen. Bekräfta säkerhetskopior innan du fortsätter."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Denna åtgärd ändrar filer i Chamilo-installationen. Se till att tillämpningsplanen har granskats och att säkerhetskopior är aktiverade innan du fortsätter."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Denna utvecklingsinmatning simulerar det framtida uppdateringsmeddelandet från Chamilo.org med lokala testpaketsökvägar."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Denna skärm öppnades från ett officiellt uppdateringsmeddelande, men ingen officiell manifestkälla är konfigurerad ännu."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Denna skärm öppnades från ett uppdateringsmeddelande. Endast manifestkontrollen startas automatiskt."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Detta steg förbereder endast en granskning. Filersättning sker senare i steget Tillämpa mellanlagrade filer, med lås, säkerhetskopiering och återställningsskydd."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Denna uppdaterare skapar inte en databassäkerhetskopia. Skapa och verifiera en säkerhetskopia innan du kör migreringar."
+
+msgid "Trusted public key"
+msgstr "Betrodd publik nyckel"
+
+msgid "Trusted signing key"
+msgstr "Betrodd signeringsnyckel"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Skriv TILLÄMPA UPPDATERINGSFILER för att bekräfta"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Skriv KÖR DATABASMIGRERINGAR för att bekräfta databasmigreringar"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Skriv KÖR ÅTGÄRDER EFTER UPPDATERING för att bekräfta"
+
+msgid "Unknown update notice source."
+msgstr "Okänd källa för uppdateringsmeddelande."
+
+msgid "Update availability"
+msgstr "Uppdateringstillgänglighet"
+
+msgid "Update directory"
+msgstr "Uppdateringskatalog"
+
+msgid "Update lock path"
+msgstr "Sökväg för uppdateringslås"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Använd mellanlagringskatalogen som skapades i föregående steg. Backend accepterar endast kataloger inuti var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Använd denna länk för att simulera det framtida uppdateringsmeddelandet från Chamilo.org under utvecklingstester."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Använd detta endast för lokala utvecklingstester. Produktionsuppdateringar måste använda serverns konfigurerade nyckel."
+
+msgid "Verification details"
+msgstr "Verifieringsdetaljer"
+
+msgid "Verify package"
+msgstr "Verifiera paket"
+
+msgid "Verifying..."
+msgstr "Verifierar..."
+
+msgid "Waiting for command progress events..."
+msgstr "Väntar på kommandoförloppshändelser..."
+
+msgid "Waiting for update progress events..."
+msgstr "Väntar på uppdateringsförloppshändelser..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "En kommentar krävs"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "En databas med samma namn finns redan. Om den innehåller tabeller kommer de att raderas; om den är tom kommer den att återanvändas."
+
+msgid "AI generated"
+msgstr "AI-genererad"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Lägg till minst en fråga innan du återvänder till inlärningsvägen."
+
+msgid "Add attachments"
+msgstr "Lägg till bilagor"
+
+msgid "Additional fields"
+msgstr "Ytterligare fält"
+
+msgid "Allow comments"
+msgstr "Tillåt kommentarer"
+
+msgid "Allow new pages"
+msgstr "Tillåt nya sidor"
+
+msgid "Allow ratings"
+msgstr "Tillåt betyg"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Är du säker på att du vill ta bort alla objekt?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Är du säker på att du vill återställa automatisk förnyelse?"
+
+msgid "Attachment has been deleted"
+msgstr "Bilagan har tagits bort"
+
+msgid "Backup file"
+msgstr "Säkerhetskopieringsfil"
+
+msgid "Block comments"
+msgstr "Blockera kommentarer"
+
+msgid "Block new pages"
+msgstr "Blockera nya sidor"
+
+msgid "Block ratings"
+msgstr "Blockera betyg"
+
+msgid "Cancel renewal"
+msgstr "Avbryt förnyelse"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Kategorilänkar kommer att tas bort från %s Wiki-sidor."
+
+msgid "Change"
+msgstr "Ändra"
+
+msgid "Clear group"
+msgstr "Rensa grupp"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Klicka på en tagg för att infoga den i redigeraren. Dessa platshållare ersätts när certifikatet genereras."
+
+msgid "Comment added"
+msgstr "Kommentar tillagd"
+
+msgid "Comment is required"
+msgstr "Kommentar krävs"
+
+msgid "Comment score"
+msgstr "Kommentarpoäng"
+
+msgid "Compare selected versions line by line"
+msgstr "Jämför valda versioner rad för rad"
+
+msgid "Compare selected versions word by word"
+msgstr "Jämför valda versioner ord för ord"
+
+msgid "Compare versions"
+msgstr "Jämför versioner"
+
+msgid "Copy completed"
+msgstr "Kopiering slutförd"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Skapa individuella Wiki-arbetssidor för deltagare"
+
+msgid "Current view mode"
+msgstr "Aktuell visningsläge"
+
+msgid "Delete Wiki"
+msgstr "Ta bort Wiki"
+
+msgid "Delete page"
+msgstr "Ta bort sida"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Att ta bort Wiki-startsidan rekommenderas inte. Du kan återskapa den senare."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Inaktivering av Wiki blockerar normala Wiki-sidor och åtgärder. Den här inställningssidan förblir tillgänglig för kurslärare."
+
+msgid "Discussion"
+msgstr "Diskussion"
+
+msgid "Edit Comment"
+msgstr "Redigera kommentar"
+
+msgid "Edit page"
+msgstr "Redigera sida"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Slutdatum måste vara efter eller samma som utgångsdatum"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Ange en sökterm för att hitta Wiki-sidor"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Utgångsdatum måste vara före eller samma som slutdatum"
+
+msgid "Failed email recipients"
+msgstr "Misslyckade e-postmottagare"
+
+msgid "Finish and return to learning path"
+msgstr "Avsluta och återgå till inlärningsväg"
+
+msgid "Forum image"
+msgstr "Forum-bild"
+
+msgid "Hide discussion"
+msgstr "Dölj diskussion"
+
+msgid "Hide page"
+msgstr "Dölj sida"
+
+msgid "I changed my mind"
+msgstr "Jag ändrade mig"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Om inte markerad kommer dessa filer att förbli tillgängliga för plattformsadministratören via verktyget 'Filinformation'."
+
+msgid "Internal message failures"
+msgstr "Interna meddelandefel"
+
+msgid "Internal messages available"
+msgstr "Interna meddelanden tillgängliga"
+
+msgid "Internal messages created now"
+msgstr "Interna meddelanden skapade nu"
+
+msgid "Item score"
+msgstr "Objektpoäng"
+
+msgid "Last post"
+msgstr "Senaste inlägg"
+
+msgid "Lock page"
+msgstr "Lås sida"
+
+msgid "Manage categories"
+msgstr "Hantera kategorier"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Markerar detta dokument som AI-assisterat. Använd när innehållet skapats eller väsentligt ändrats med AI-verktyg."
+
+msgid "Maximum score is required"
+msgstr "Maximal poäng krävs"
+
+msgid "Metric"
+msgstr "Mätvärde"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Nya kommentarer är blockerade i denna diskussion"
+
+msgid "No Wiki categories are available yet."
+msgstr "Inga Wiki-kategorier är tillgängliga ännu."
+
+msgid "No categories found"
+msgstr "Inga kategorier hittades"
+
+msgid "No content"
+msgstr "Inget innehåll"
+
+msgid "No parent category"
+msgstr "Ingen överordnad kategori"
+
+msgid "Number of comments scored"
+msgstr "Antal poängsatta kommentarer"
+
+msgid "Old version"
+msgstr "Gammal version"
+
+msgid "Only image files are allowed."
+msgstr "Endast bildfiler är tillåtna."
+
+msgid "Please fill all required fields"
+msgstr "Vänligen fyll i alla obligatoriska fält"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Frågor med klass- eller studentplatshållare kommer att genereras för kursklasser eller grupper: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Betyg är blockerade i den här diskussionen"
+
+msgid "Remove image"
+msgstr "Ta bort bild"
+
+msgid "Restore renewal"
+msgstr "Återställ förnyelse"
+
+msgid "Restore version"
+msgstr "Återställ version"
+
+msgid "Search in"
+msgstr "Sök i"
+
+msgid "Select group"
+msgstr "Välj grupp"
+
+msgid "Select image"
+msgstr "Välj bild"
+
+msgid "Selected image"
+msgstr "Vald bild"
+
+msgid "Show discussion"
+msgstr "Visa diskussion"
+
+msgid "Show page"
+msgstr "Visa sida"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Vissa filer eller mappar saknar skrivrättigheter. För att kunna installera Chamilo måste du först ändra deras behörigheter (med CHMOD). Läs"
+
+msgid "Subcategories"
+msgstr "Underkategorier"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Tryck till vänster eller höger för att navigera"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Inlämningsfristen för Wiki-uppgiften har passerat, men försenad inlämning är tillåten."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Inlämningsfristen för Wiki-uppgiften har passerat."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki-uppgiften har inte startat ännu."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Låsning av Wiki-sidans redigering krävs innan sparning."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Meddelandet sparades, men en bilaga kunde inte laddas upp."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Meddelandet sparades, men e-postleverans misslyckades."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Meddelandet sparades, men ingen e-post kunde levereras."
+
+msgid "The category has been created"
+msgstr "Kategorin har skapats"
+
+msgid "The category has been deleted"
+msgstr "Kategorin har tagits bort"
+
+msgid "The category has been updated"
+msgstr "Kategorin har uppdaterats"
+
+msgid "The end date is invalid"
+msgstr "Slutdatumet är ogiltigt"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Maximalt antal versioner måste vara ett icke-negativt heltal"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Maximalt antal ord måste vara ett icke-negativt heltal"
+
+msgid "The print window could not be opened"
+msgstr "Utskriftsfönstret kunde inte öppnas"
+
+msgid "The start date is invalid"
+msgstr "Startdatumet är ogiltigt"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Dessa inställningar gäller för hela kursen, inklusive dess sessioner och grupper."
+
+msgid "This announcement has already been sent by email."
+msgstr "Detta meddelande har redan skickats via e-post."
+
+msgid "This discussion is hidden from learners"
+msgstr "Den här diskussionen är dold för deltagare"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Detta generativa AI-verktyg låter dig skapa bilder och korta videor för att illustrera din kurs. Genom att förklara (i text) vad du vill ha i promptavsnittet ger du den konfigurerade AI-modellen de nödvändiga elementen för att generera en bild eller video. Var tålmodig. AI-modellen tar viss tid och genererar ett resultat som du kanske vill behålla genom att spara mediet i din dokumentmapp och sedan bädda in det i ett HTML-dokument. Alla AI-modeller är inte lika när det gäller hastighet eller kvalitet. AI-modellen kan också ge dig en modifierad prompt som är en mer detaljerad tolkning av din begäran. Du kan sedan använda denna modifierade prompt för att finjustera din begäran. Var medveten om att detta verktyg, särskilt för videor, kan generera betydande kostnader för din organisation även om du väljer att inte spara det genererade mediet. Använd det därför på lämpligt sätt. Om du har problem med att få det du söker, ta dig tid att undersöka prompttekniker online för den AI-modell du har tillgång till."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Denna historik tillhör baskursen. Återställning är tillgänglig efter att en sessionsversion har skapats."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Denna bild ersätter standardforumikonen som visas bredvid forumtiteln."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Denna sida kommer från baskursen. Att spara den skapar en version för den aktuella sessionen."
+
+msgid "This will also delete %s subcategories."
+msgstr "Detta kommer också att ta bort %s underkategorier."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Detta kommer att skapa individuella arbetssidor för %s deltagare."
+
+msgid "Thread history"
+msgstr "Trådhistorik"
+
+msgid "Title and content"
+msgstr "Rubrik och innehåll"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Kan inte avbryta förnyelse just nu."
+
+msgid "Unable to restore renewal right now."
+msgstr "Kan inte återställa förnyelse just nu."
+
+msgid "Unlock page"
+msgstr "Lås upp sida"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Använd [[Sida]] eller [[Sida|Synlig text]] för att skapa interna Wiki-länkar."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Använd blanksteg eller piltangenter för att navigera"
+
+msgid "View version"
+msgstr "Visa version"
+
+msgid "Visible only to teachers"
+msgstr "Synlig endast för lärare"
+
+msgid "Weight is required"
+msgstr "Vikt krävs"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki-kategorier är inaktiverade för denna kurs."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki-kategorier aktiverade"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki html strikt filtrering"
+
+msgid "Wiki settings"
+msgstr "Wiki-inställningar"
+
+msgid "Wiki settings updated"
+msgstr "Wiki-inställningar uppdaterade"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Du visar en historisk version av denna sida"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Du kan bifoga en eller flera filer till detta svar."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Du kan redigera denna uppgiftssida, men elevsidor kommer inte att ändras."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Du kan använda taggarna {{class_name}} och {{student_full_name}} i frågan."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Du har 20 minuter på dig att redigera denna sida innan redigeringslåset upphör."
+
+msgid "by"
+msgstr "av"
+
+msgid "required"
+msgstr "obligatorisk"
 

@@ -467,8 +467,19 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
 
     public function addCategory(CWikiCategory $category): self
     {
-        $category->addWikiPage($this);
-        $this->categories->add($category);
+        if (!$this->categories->contains($category)) {
+            $category->addWikiPage($this);
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(CWikiCategory $category): self
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeWikiPage($this);
+        }
 
         return $this;
     }

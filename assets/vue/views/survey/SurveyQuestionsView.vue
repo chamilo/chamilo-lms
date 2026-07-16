@@ -22,6 +22,7 @@
         <BaseButton
           v-if="isLearningPathContext"
           :disabled="questions.length === 0"
+          :is-loading="isFinishingLearningPath"
           :label="t('Finish and return to learning path')"
           icon="check"
           type="success"
@@ -438,7 +439,7 @@
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -448,10 +449,12 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import lpService from "../../services/lpService"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const { requireConfirmation } = useConfirmation()
 
 const survey = ref({})
@@ -463,6 +466,7 @@ const canEdit = ref(false)
 const hasAnswers = ref(false)
 const isLoading = ref(false)
 const isSaving = ref(false)
+const isFinishingLearningPath = ref(false)
 const isFormVisible = ref(false)
 const isEditing = ref(false)
 const errorMessage = ref("")
@@ -585,11 +589,18 @@ function getContextParams(extra = {}) {
     type: getQueryValue(route.query.type),
     returnToLp: getQueryValue(route.query.returnToLp),
     isStudentView: getQueryValue(route.query.isStudentView),
+    parent: getQueryValue(route.query.parent),
+    node: getQueryValue(route.query.node),
+    gradebook: getQueryValue(route.query.gradebook),
+    lpTool: getQueryValue(route.query.lpTool),
     ...extra,
   })
 }
 
 const learningPathId = computed(() => Number(getQueryValue(route.query.lp_id) || 0))
+const learningPathItemId = computed(() =>
+  Number(getQueryValue(route.query.lpItemId || route.query.lp_item_id) || 0),
+)
 
 const isLearningPathContext = computed(() => {
   return getQueryValue(route.query.origin) === "learnpath" && learningPathId.value > 0
@@ -630,40 +641,56 @@ function buildConfigureRoute() {
   }
 }
 
-function buildLearningPathQuery(extra = {}) {
-  const query = new URLSearchParams()
+function buildLearningPathBuilderRoute() {
+  const query = getContextParams()
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
 
-  query.set("action", extra.action || "add_item")
-  query.set("type", extra.type || "step")
-  query.set("lp_id", String(learningPathId.value))
-
-  for (const key of ["cid", "sid", "gid"]) {
-    const value = getQueryValue(route.query[key])
-
-    if (String(value) !== "") {
-      query.set(key, String(value))
-    }
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(getQueryValue(route.query.node) || route.params.node || 0),
+      lpId: learningPathId.value,
+    },
+    query,
   }
-
-  query.set("isStudentView", "false")
-
-  if (extra.surveyId) {
-    query.set("survey_id", String(extra.surveyId))
-  }
-
-  return query.toString()
 }
 
-function buildLearningPathAddSurveyUrl() {
-  return `/main/lp/lp_controller.php?${buildLearningPathQuery({ type: "survey", surveyId: surveyId.value })}`
-}
-
-function finishLearningPathSurvey() {
-  if (!isLearningPathContext.value || questions.value.length === 0) {
+async function finishLearningPathSurvey() {
+  if (!isLearningPathContext.value || questions.value.length === 0 || isFinishingLearningPath.value) {
     return
   }
 
-  window.location.href = buildLearningPathAddSurveyUrl()
+  isFinishingLearningPath.value = true
+  errorMessage.value = ""
+
+  try {
+    if (learningPathItemId.value <= 0) {
+      const context = {
+        cid: Number(getQueryValue(route.query.cid) || 0),
+        sid: Number(getQueryValue(route.query.sid) || 0),
+        gid: Number(getQueryValue(route.query.gid) || 0),
+      }
+      const builder = await lpService.getBuilder(learningPathId.value, context)
+
+      await lpService.addBuilderResource(learningPathId.value, context, {
+        resourceType: "survey",
+        resourceId: surveyId.value,
+        parentId: Number(getQueryValue(route.query.parent) || 0) || null,
+        exportAllowed: false,
+        csrfToken: builder.csrfToken,
+      })
+    }
+
+    await router.push(buildLearningPathBuilderRoute())
+  } catch (error) {
+    console.error("Error adding survey to learning path", error)
+    errorMessage.value = error?.response?.data?.detail || t("An error occurred. Please try again.")
+  } finally {
+    isFinishingLearningPath.value = false
+  }
 }
 
 function translateOptions(items) {

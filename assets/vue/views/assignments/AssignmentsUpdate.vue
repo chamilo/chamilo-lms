@@ -53,6 +53,27 @@ function extractNumericId(idOrIri) {
 const assignmentIdRaw = route.params.id
 const assignmentId = extractNumericId(assignmentIdRaw)
 
+const learningPathId = Number(route.query.lp_id || 0)
+const isLearningPathContext =
+  "learnpath" === String(route.query.origin || "").toLowerCase() && learningPathId > 0
+
+function buildLearningPathBuilderRoute() {
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
+
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: learningPathId,
+    },
+    query,
+  }
+}
+
 function buildCidParams() {
   return {
     cid,
@@ -87,6 +108,10 @@ async function onSubmit(publicationStudent) {
 }
 
 function goBack() {
+  if (isLearningPathContext) {
+    return router.push(buildLearningPathBuilderRoute())
+  }
+
   if (route.query.from === "AssignmentDetail") {
     router.push({
       name: "AssignmentDetail",

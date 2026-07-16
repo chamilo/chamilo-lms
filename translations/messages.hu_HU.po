@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -1578,7 +1578,7 @@ msgstr "Biztos, hogy törölni kívánja ezeket a lépéseket?"
 msgid "Authoring tool"
 msgstr "Számazási hely"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Feltöltendő állomány"
 
 msgid "Course location"
@@ -8726,6 +8726,15 @@ msgstr "Megmutat"
 
 msgid "My courses"
 msgstr "Kurzusaim"
+
+msgid "Shop"
+msgstr "Bolt"
+
+msgid "Invoice"
+msgstr "Számla"
+
+msgid "Request invoice"
+msgstr "Számla kérése"
 
 msgid "View my progress"
 msgstr "Statisztikáim megtekintése"
@@ -36480,4 +36489,856 @@ msgstr "Moderált"
 
 msgid "View threads"
 msgstr "Témák megtekintése"
+
+msgid "No auth source"
+msgstr "Nincs hitelesítési forrás"
+
+msgid "You must add at least one question"
+msgstr "Legalább egy kérdést hozzá kell adnia"
+
+msgid "Advanced actions"
+msgstr "Speciális műveletek"
+
+msgid "Application path"
+msgstr "Alkalmazás elérési út"
+
+msgid "Apply files details"
+msgstr "Fájl részletek alkalmazása"
+
+msgid "Apply plan details"
+msgstr "Terv részletek alkalmazása"
+
+msgid "Apply plan failed"
+msgstr "Terv alkalmazása sikertelen"
+
+msgid "Apply plan ready"
+msgstr "Terv alkalmazása kész"
+
+msgid "Apply preparation"
+msgstr "Előkészítés alkalmazása"
+
+msgid "Apply staged files"
+msgstr "Lépcsőzetes fájlok alkalmazása"
+
+msgid "Applying files..."
+msgstr "Fájlok alkalmazása..."
+
+msgid "Audit file"
+msgstr "Naplófájl"
+
+msgid "Backup directory"
+msgstr "Biztonsági mentés könyvtára"
+
+msgid "Baseline clean"
+msgstr "Alapvonal tisztítása"
+
+msgid "Baseline warnings"
+msgstr "Alapvonal figyelmeztetések"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Biztonságos alkalmazási terv készítése a lépcsőzetes csomagból. Ez csak a fájlokat, jogosultságokat, biztonsági mentési útvonalat és zárolási állapotot ellenőrzi. Nem cserél fájlokat."
+
+msgid "Build production frontend assets."
+msgstr "Éles frontend eszközök építése."
+
+msgid "Building plan..."
+msgstr "Terv építése..."
+
+msgid "Channel"
+msgstr "Csatorna"
+
+msgid "Check"
+msgstr "Ellenőrzés"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Elérhető Chamilo frissítések keresése, csomagok ellenőrzése, fájlok lépcsőzetes elhelyezése és vezérelt frissítés utáni lépések futtatása."
+
+msgid "Check manifest"
+msgstr "Manifest ellenőrzése"
+
+msgid "Checking post-apply actions..."
+msgstr "Frissítés utáni műveletek ellenőrzése..."
+
+msgid "Checking..."
+msgstr "Ellenőrzés..."
+
+msgid "Composer install"
+msgstr "Composer telepítés"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "A Composer, Yarn és adatbázis-migrációs műveletek módosíthatják a függőségeket, a generált eszközöket vagy az adatbázist. Csak a biztonsági mentések és jogosultságok megerősítése után válassza ki őket."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Állítsa be a CHAMILO_UPDATE_MANIFEST_URL-t a szerveren vagy adjon meg egy HTTPS manifest URL-t."
+
+msgid "Configured"
+msgstr "Beállítva"
+
+msgid "Current migration"
+msgstr "Aktuális migráció"
+
+msgid "Database baseline"
+msgstr "Adatbázis alapvonal"
+
+msgid "Database migration safety review"
+msgstr "Adatbázis-migráció biztonsági áttekintése"
+
+msgid "Database migrations"
+msgstr "Adatbázis-migrációk"
+
+msgid "Development mode"
+msgstr "Fejlesztői mód"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ne engedélyezze ezt, hacsak az update biztonsági mentést és a szerver jogosultságokat nem ellenőrizte."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine dry-run parancs"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "A Doctrine történelmi alapvonal figyelmeztetéseket jelentett. A frissítő csak a V210 migrációkat hajtja végre explicit megerősítés után."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "A Doctrine csak a V210 migrációkat hajtja végre explicit módon, miután a biztonsági ellenőrzés sikeres."
+
+msgid "Dry-run exit code"
+msgstr "Dry-run kilépési kód"
+
+msgid "Executed unavailable migrations"
+msgstr "Végrehajtott nem elérhető migrációk"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Kivonatolja az ellenőrzött frissítési csomagot egy átmeneti könyvtárba ellenőrzés céljából. Ez nem cserél fájlokat, nem futtat migrációkat és nem módosítja az adatbázist."
+
+msgid "File apply available"
+msgstr "Fájl alkalmazása elérhető"
+
+msgid "Files to replace"
+msgstr "Cserélendő fájlok"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Megerősítem, hogy létezik adatbázis-mentés és az ellenőrzésre került a migrációk futtatása előtt."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Megértem, hogy a speciális műveletek módosíthatják a függőségeket, a generált eszközöket vagy az adatbázist."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Megértem, hogy ez cserélni fogja a fájlokat a Chamilo telepítésben."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Megértem, hogy ez frissítési parancsokat futtat a szerveren."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Telepítse a frontend függőségeket az eszközök újragenerálása előtt."
+
+msgid "Installed version"
+msgstr "Telepített verzió"
+
+msgid "Latest migration"
+msgstr "Legutóbbi migráció"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Hagyja üresen a csomag- és aláírás-útvonalakat, hogy letöltse azokat az ellenőrzött manifest URL-ekről. Helyi útvonalak csak fejlesztői tesztekhez érhetők el."
+
+msgid "Live command log"
+msgstr "Élő parancsnapló"
+
+msgid "Live update log"
+msgstr "Élő frissítési napló"
+
+msgid "Local test options"
+msgstr "Helyi tesztbeállítások"
+
+msgid "Local test update notice link"
+msgstr "Helyi teszt frissítési értesítés hivatkozás"
+
+msgid "Local update notice simulation"
+msgstr "Helyi frissítési értesítés szimuláció"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "A helyi frissítési értesítés szimulációja csak fejlesztői módban érhető el."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Manifest forrása"
+
+msgid "Migration safety details"
+msgstr "Migráció biztonsági részletei"
+
+msgid "Migration safety review failed"
+msgstr "Migráció biztonsági ellenőrzése sikertelen"
+
+msgid "Migration safety review ready"
+msgstr "Migráció biztonsági ellenőrzése kész"
+
+msgid "Migration target"
+msgstr "Migráció célpontja"
+
+msgid "New files"
+msgstr "Új fájlok"
+
+msgid "New migrations reported by Doctrine"
+msgstr "A Doctrine által jelentett új migrációk"
+
+msgid "Next migration"
+msgstr "Következő migráció"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Nem jelentettek végrehajtott nem elérhető migrációt."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Még nincs hivatalos manifest URL beállítva. Használjon HTTPS URL-t vagy helyi útvonalat fejlesztői tesztekhez."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Nem észlelt függőben lévő migrációt a szakaszos frissítési cél előtt."
+
+msgid "Not configured"
+msgstr "Nincs beállítva"
+
+msgid "Not detected"
+msgstr "Nem észlelt"
+
+msgid "Official Chamilo update channel"
+msgstr "Hivatalos Chamilo frissítési csatorna"
+
+msgid "Package SHA-256"
+msgstr "Csomag SHA-256"
+
+msgid "Package URL"
+msgstr "Csomag URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "A csomag- és aláírásfájlok a manifestből lesznek letöltve. Helyi útvonalak le vannak tiltva ebben a környezetben."
+
+msgid "Package path"
+msgstr "Csomag útvonala"
+
+msgid "Package staged successfully"
+msgstr "Csomag sikeresen átmenetileg tárolva"
+
+msgid "Package staging failed"
+msgstr "Csomag átmeneti tárolása sikertelen"
+
+msgid "Package verification"
+msgstr "Csomag ellenőrzése"
+
+msgid "Package verification failed"
+msgstr "Csomag ellenőrzése sikertelen"
+
+msgid "Package verified successfully"
+msgstr "Csomag sikeresen ellenőrizve"
+
+msgid "Pending migrations before this update"
+msgstr "Függőben lévő migrációk a frissítés előtt"
+
+msgid "Planned backup path"
+msgstr "Tervezett biztonsági mentés útvonala"
+
+msgid "Post-apply actions completed"
+msgstr "Utólagos műveletek befejezve"
+
+msgid "Post-apply actions failed"
+msgstr "Utólagos műveletek sikertelenek"
+
+msgid "Post-apply actions ready"
+msgstr "Utólagos műveletek készen állnak"
+
+msgid "Post-apply checks"
+msgstr "Utólagos ellenőrzések"
+
+msgid "Post-apply checks failed"
+msgstr "Utólagos ellenőrzések sikertelenek"
+
+msgid "Post-apply details"
+msgstr "Utólagos részletek"
+
+msgid "Post-apply run details"
+msgstr "Utólagos futtatás részletei"
+
+msgid "Preflight checks"
+msgstr "Előzetes ellenőrzések"
+
+msgid "Preflight checks completed"
+msgstr "Előzetes ellenőrzések befejezve"
+
+msgid "Preflight checks failed"
+msgstr "Előzetes ellenőrzések sikertelenek"
+
+msgid "Preflight details"
+msgstr "Előzetes részletek"
+
+msgid "Prepare staging"
+msgstr "Átmeneti környezet előkészítése"
+
+msgid "Preparing staging..."
+msgstr "Átmeneti környezet előkészítése..."
+
+msgid "Production mode"
+msgstr "Éles mód"
+
+msgid "Released at"
+msgstr "Kiadás dátuma"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "A Chamilo fájlok cseréje az átmeneti csomagból a felülvizsgált alkalmazási terv alapján. Ez nem futtat adatbázis-migrációkat, Composer, Yarn vagy gyorsítótár-parancsokat."
+
+msgid "Review apply plan"
+msgstr "Alkalmazási terv áttekintése"
+
+msgid "Review database migrations"
+msgstr "Adatbázis-migrációk áttekintése"
+
+msgid "Review post-apply actions"
+msgstr "Utólagos műveletek áttekintése"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "A frissítési fájlok alkalmazása utáni ajánlott kézi parancsok áttekintése. Ez a lépés nem futtat Composer, Yarn, migrációs vagy gyorsítótár-parancsokat."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "A beállított Doctrine-migrációk és a szárazfutás kimenetének áttekintése az adatbázis-migrációk futtatása előtt."
+
+msgid "Reviewing database migrations..."
+msgstr "Adatbázis-migrációk áttekintése..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Futtassa és teljesítse a migrációs biztonsági áttekintést az adatbázis-migrációk végrehajtása előtt."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Környezeti ellenőrzések futtatása a jövőbeli frissítési lépések előtt. Ez nem módosít fájlokat vagy az adatbázist."
+
+msgid "Run post-apply actions"
+msgstr "Utólagos műveletek futtatása"
+
+msgid "Run preflight checks"
+msgstr "Előzetes ellenőrzések futtatása"
+
+msgid "Run selected post-apply actions"
+msgstr "Kiválasztott utólagos műveletek futtatása"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "A kiválasztott utólagos parancsok futtatása a szerverről egy vezérelt engedélyezési listával. Egyéni shell-parancsok nem fogadhatók el."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Futtassa ezeket a parancsokat kézileg a szerverről a fájlfrissítés eredményének és a biztonsági mentéseknek a megerősítése után."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Az utólagos műveletek futtatása a felületen le van tiltva éles módban."
+
+msgid "Running post-apply actions..."
+msgstr "Utólagos műveletek futtatása..."
+
+msgid "Safe actions"
+msgstr "Biztonságos műveletek"
+
+msgid "Signature path"
+msgstr "Aláírás útvonala"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Az aláírás-ellenőrzés nem hagyható ki ebben a környezetben."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Aláírás-ellenőrzés kihagyása helyi fejlesztői tesztekhez"
+
+msgid "Staged file application failed"
+msgstr "Átmeneti fájlok alkalmazása sikertelen"
+
+msgid "Staged files applied successfully"
+msgstr "Átmeneti fájlok sikeresen alkalmazva"
+
+msgid "Staging details"
+msgstr "Átmeneti részletek"
+
+msgid "Staging directory"
+msgstr "Átmeneti könyvtár"
+
+msgid "Staging extraction"
+msgstr "Átmeneti kicsomagolás"
+
+msgid "Symfony cache clear"
+msgstr "Symfony gyorsítótár törlése"
+
+msgid "System update"
+msgstr "Rendszerfrissítés"
+
+msgid "Target version"
+msgstr "Cél verzió"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "A beállított hivatalos jegyzék URL előre ki van töltve. Szükség esetén módosíthatja egy másik HTTPS jegyzékre."
+
+msgid "The database migration baseline is clean."
+msgstr "Az adatbázis-migráció alapvonala tiszta."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "A végső HTTP-válasz a művelet befejezése után sikertelen volt. Ezt általában futásidejű gyorsítótár-engedélyek vagy a webszerver újraindítása okozza a kérés során."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "A műveleti napló szerint az utólagos műveletek sikeresen befejeződtek."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "A kiválasztott utólagos parancsok sikeresen befejeződtek, de a végső HTTP-válasz sikertelen volt. Frissítse az oldalt, és ellenőrizze a futásidejű gyorsítótár-engedélyeket, ha az oldal nem töltődik be megfelelően."
+
+msgid "The updater does not create or restore database backups."
+msgstr "A frissítő nem hoz létre vagy állít vissza adatbázis-biztonsági mentéseket."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ezek a műveletek biztonságosan futtathatók a felhasználói felületen az eredmények áttekintése után."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Ezek a parancsok módosíthatják a függőségeket, a generált erőforrásokat, a gyorsítótárat vagy az adatbázist. A folytatás előtt készítsen biztonsági másolatot."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ez a művelet módosítja a Chamilo telepítés fájljait. A folytatás előtt ellenőrizze a végrehajtási tervet és győződjön meg róla, hogy a biztonsági mentés engedélyezve van."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Ez a fejlesztői bejegyzés a jövőbeli Chamilo.org frissítési értesítést szimulálja helyi tesztcsomag-útvonalak használatával."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Ez a képernyő hivatalos frissítési értesítésből lett megnyitva, de még nincs hivatalos manifesztforrás beállítva."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Ez a képernyő frissítési értesítésből lett megnyitva. Csak a manifeszt-ellenőrzés indul el automatikusan."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ez a lépés csak áttekintést készít elő. A fájlcserére később kerül sor a „Staging fájlok alkalmazása” lépésben, zárolással, biztonsági mentéssel és visszaállítási védelemmel."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Ez a frissítő nem hoz létre adatbázis-mentést. A migrációk futtatása előtt készítsen és ellenőrizzen biztonsági másolatot."
+
+msgid "Trusted public key"
+msgstr "Megbízható nyilvános kulcs"
+
+msgid "Trusted signing key"
+msgstr "Megbízható aláíró kulcs"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "A megerősítéshez írja be: FRISSÍTÉSI FÁJLOK ALKALMAZÁSA"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Az adatbázis-migráció megerősítéséhez írja be: ADATBÁZIS-MIGRÁCIÓK FUTTATÁSA"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "A megerősítéshez írja be: FRISSÍTÉS UTÁNI MŰVELETEK FUTTATÁSA"
+
+msgid "Unknown update notice source."
+msgstr "Ismeretlen frissítési értesítés forrása."
+
+msgid "Update availability"
+msgstr "Frissítés elérhetősége"
+
+msgid "Update directory"
+msgstr "Frissítési könyvtár"
+
+msgid "Update lock path"
+msgstr "Frissítési zárolás útvonala"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Használja az előző lépés által létrehozott staging könyvtárat. A háttérrendszer csak a var/update/staging könyvtárakon belüli könyvtárakat fogadja el."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Ezzel a hivatkozással szimulálhatja a jövőbeli Chamilo.org frissítési értesítést fejlesztői tesztek során."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Ezt csak helyi fejlesztői tesztekhez használja. Éles frissítésekhez a szerveren konfigurált kulcsot kell használni."
+
+msgid "Verification details"
+msgstr "Ellenőrzés részletei"
+
+msgid "Verify package"
+msgstr "Csomag ellenőrzése"
+
+msgid "Verifying..."
+msgstr "Ellenőrzés folyamatban..."
+
+msgid "Waiting for command progress events..."
+msgstr "Várakozás a parancs előrehaladási eseményeire..."
+
+msgid "Waiting for update progress events..."
+msgstr "Várakozás a frissítés előrehaladási eseményeire..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Megjegyzés megadása kötelező"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Már létezik ilyen nevű adatbázis. Ha tartalmaz táblákat, azok törlődnek; ha üres, újra felhasználásra kerül."
+
+msgid "AI generated"
+msgstr "AI által generált"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Legalább egy kérdést adjon meg, mielőtt visszatér a tanulási útvonalhoz."
+
+msgid "Add attachments"
+msgstr "Mellékletek hozzáadása"
+
+msgid "Additional fields"
+msgstr "További mezők"
+
+msgid "Allow comments"
+msgstr "Megjegyzések engedélyezése"
+
+msgid "Allow new pages"
+msgstr "Új oldalak engedélyezése"
+
+msgid "Allow ratings"
+msgstr "Értékelések engedélyezése"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Biztosan töröl minden elemet?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Biztosan visszaállítja az automatikus megújítást?"
+
+msgid "Attachment has been deleted"
+msgstr "A melléklet törölve lett"
+
+msgid "Backup file"
+msgstr "Biztonsági mentés fájlja"
+
+msgid "Block comments"
+msgstr "Megjegyzések blokkolása"
+
+msgid "Block new pages"
+msgstr "Új oldalak blokkolása"
+
+msgid "Block ratings"
+msgstr "Értékelések blokkolása"
+
+msgid "Cancel renewal"
+msgstr "Megújítás lemondása"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "A kategóriahivatkozások eltávolításra kerülnek a(z) %s Wiki oldalakról."
+
+msgid "Change"
+msgstr "Módosítás"
+
+msgid "Clear group"
+msgstr "Csoport törlése"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Kattintson egy címkére a szerkesztőbe való beszúráshoz. Ezek a helyőrzők a tanúsítvány generálásakor lesznek lecserélve."
+
+msgid "Comment added"
+msgstr "Megjegyzés hozzáadva"
+
+msgid "Comment is required"
+msgstr "Megjegyzés megadása kötelező"
+
+msgid "Comment score"
+msgstr "Megjegyzés pontszáma"
+
+msgid "Compare selected versions line by line"
+msgstr "Kiválasztott verziók összehasonlítása soronként"
+
+msgid "Compare selected versions word by word"
+msgstr "Kiválasztott verziók összehasonlítása szónként"
+
+msgid "Compare versions"
+msgstr "Verziók összehasonlítása"
+
+msgid "Copy completed"
+msgstr "Másolás befejezve"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Egyéni Wiki-munkalapok létrehozása a tanulók számára"
+
+msgid "Current view mode"
+msgstr "Jelenlegi nézetmód"
+
+msgid "Delete Wiki"
+msgstr "Wiki törlése"
+
+msgid "Delete page"
+msgstr "Oldal törlése"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "A Wiki kezdőlapjának törlése nem ajánlott. Később újra létrehozhatja."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "A Wiki letiltása megakadályozza a normál Wiki-oldalak és műveletek használatát. Ez a beállítási oldal továbbra is elérhető a kurzus oktatói számára."
+
+msgid "Discussion"
+msgstr "Megbeszélés"
+
+msgid "Edit Comment"
+msgstr "Megjegyzés szerkesztése"
+
+msgid "Edit page"
+msgstr "Oldal szerkesztése"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "A befejezési dátumnak a lejárati dátum után vagy azzal egyenlőnek kell lennie"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Adjon meg egy keresési kifejezést a Wiki-oldalak kereséséhez"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "A lejárati dátumnak a befejezési dátum előtt vagy azzal egyenlőnek kell lennie"
+
+msgid "Failed email recipients"
+msgstr "Sikertelen e-mail-címzettek"
+
+msgid "Finish and return to learning path"
+msgstr "Befejezés és visszatérés a tanulási útvonalhoz"
+
+msgid "Forum image"
+msgstr "Fórumkép"
+
+msgid "Hide discussion"
+msgstr "Megbeszélés elrejtése"
+
+msgid "Hide page"
+msgstr "Oldal elrejtése"
+
+msgid "I changed my mind"
+msgstr "Meggondoltam magam"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Ha nincs bejelölve, ezek a fájlok továbbra is elérhetők lesznek a platform adminisztrátora számára a „Fájlinformáció” eszközön keresztül."
+
+msgid "Internal message failures"
+msgstr "Belső üzenetküldési hibák"
+
+msgid "Internal messages available"
+msgstr "Belső üzenetek elérhetők"
+
+msgid "Internal messages created now"
+msgstr "Most létrehozott belső üzenetek"
+
+msgid "Item score"
+msgstr "Elem pontszáma"
+
+msgid "Last post"
+msgstr "Legutóbbi bejegyzés"
+
+msgid "Lock page"
+msgstr "Oldal zárolása"
+
+msgid "Manage categories"
+msgstr "Kategóriák kezelése"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Megjelöli ezt a dokumentumot AI-támogatottként. Akkor használja, ha a tartalmat AI-eszközökkel hozták létre vagy jelentősen módosították."
+
+msgid "Maximum score is required"
+msgstr "A maximális pontszám megadása kötelező"
+
+msgid "Metric"
+msgstr "Metrika"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Ebben a megbeszélésben az új megjegyzések le vannak tiltva"
+
+msgid "No Wiki categories are available yet."
+msgstr "Még nincsenek elérhető Wiki-kategóriák."
+
+msgid "No categories found"
+msgstr "Nem található kategória"
+
+msgid "No content"
+msgstr "Nincs tartalom"
+
+msgid "No parent category"
+msgstr "Nincs szülő kategória"
+
+msgid "Number of comments scored"
+msgstr "Pontozott megjegyzések száma"
+
+msgid "Old version"
+msgstr "Régi verzió"
+
+msgid "Only image files are allowed."
+msgstr "Csak képfájlok engedélyezettek."
+
+msgid "Please fill all required fields"
+msgstr "Kérjük, töltse ki az összes kötelező mezőt"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Az osztály- vagy tanulói helyőrzőket tartalmazó kérdések a kurzus osztályai vagy csoportjai számára lesznek generálva: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Ebben a megbeszélésben az értékelések le vannak tiltva"
+
+msgid "Remove image"
+msgstr "Kép eltávolítása"
+
+msgid "Restore renewal"
+msgstr "Megújítás visszaállítása"
+
+msgid "Restore version"
+msgstr "Verzió visszaállítása"
+
+msgid "Search in"
+msgstr "Keresés ebben"
+
+msgid "Select group"
+msgstr "Csoport kiválasztása"
+
+msgid "Select image"
+msgstr "Kép kiválasztása"
+
+msgid "Selected image"
+msgstr "Kiválasztott kép"
+
+msgid "Show discussion"
+msgstr "Beszélgetés megjelenítése"
+
+msgid "Show page"
+msgstr "Oldal megjelenítése"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Néhány fájl vagy mappa nem rendelkezik írási jogosultsággal. A Chamilo telepítéséhez először módosítsa a jogosultságokat (CHMOD használatával). Kérjük, olvassa el a"
+
+msgid "Subcategories"
+msgstr "Alkategóriák"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Kattintson balra vagy jobbra a navigáláshoz"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "A Wiki feladat határideje lejárt, de késedelmes beküldés engedélyezett."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "A Wiki feladat határideje lejárt."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "A Wiki feladat még nem kezdődött el."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "A Wiki oldal szerkesztési zárolása szükséges a mentés előtt."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "A közlemény mentésre került, de a mellékletet nem sikerült feltölteni."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "A közlemény mentésre került, de az e-mail küldése sikertelen volt."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "A közlemény mentésre került, de nem sikerült e-mailt kézbesíteni."
+
+msgid "The category has been created"
+msgstr "A kategória létrehozva"
+
+msgid "The category has been deleted"
+msgstr "A kategória törölve"
+
+msgid "The category has been updated"
+msgstr "A kategória frissítve"
+
+msgid "The end date is invalid"
+msgstr "A befejezési dátum érvénytelen"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "A verziók maximális száma nem negatív egész szám kell legyen"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "A szavak maximális száma nem negatív egész szám kell legyen"
+
+msgid "The print window could not be opened"
+msgstr "A nyomtatási ablakot nem sikerült megnyitni"
+
+msgid "The start date is invalid"
+msgstr "A kezdési dátum érvénytelen"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Ezek a beállítások az egész kurzusra vonatkoznak, beleértve a munkameneteit és csoportjait."
+
+msgid "This announcement has already been sent by email."
+msgstr "Ezt a közleményt már elküldték e-mailben."
+
+msgid "This discussion is hidden from learners"
+msgstr "Ez a beszélgetés rejtve van a tanulók elől"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Ez a generatív AI eszköz lehetővé teszi képek és rövid videók létrehozását a kurzus illusztrálásához. A prompt mezőben (szövegesen) elmagyarázva, mit szeretne, megadja a beállított AI modellnek a szükséges elemeket egy kép vagy videó generálásához. Kérjük, legyen türelmes. Az AI modellnek időbe telik az eredmény előállítása, amelyet érdemes lehet megőrizni a dokumentumok mappába mentéssel, majd egy HTML dokumentumba beágyazni. Nem minden AI modell egyforma sebesség vagy minőség szempontjából. Az AI modell módosított promptot is adhat, amely a kérés részletesebb értelmezése. Ezt a módosított promptot használhatja a kérés finomhangolásához. Kérjük, vegye figyelembe, hogy ez az eszköz, különösen videók esetén, jelentős költségeket okozhat a szervezetének, még akkor is, ha úgy dönt, hogy nem menti a generált médiát. Ennek megfelelően használja. Ha problémái vannak a kívánt eredmény elérésével, szánjon időt az online prompt trükkök kutatására az Ön rendelkezésére álló AI modellhez."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ez az előzmény az alapszintű kurzushoz tartozik. A visszaállítás csak munkamenet-verzió létrehozása után érhető el."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Ez a kép helyettesíti az alapértelmezett fórum ikont, amely a fórum címe mellett jelenik meg."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Ez az oldal az alapszintű kurzusból származik. Mentése verziót hoz létre az aktuális munkamenethez."
+
+msgid "This will also delete %s subcategories."
+msgstr "Ez a művelet %s alkategóriát is törölni fog."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Ez %s tanuló számára hoz létre egyéni munkalapokat."
+
+msgid "Thread history"
+msgstr "Szál előzményei"
+
+msgid "Title and content"
+msgstr "Cím és tartalom"
+
+msgid "Unable to cancel renewal right now."
+msgstr "A megújítási jogot jelenleg nem lehet visszavonni."
+
+msgid "Unable to restore renewal right now."
+msgstr "A megújítási jogot jelenleg nem lehet visszaállítani."
+
+msgid "Unlock page"
+msgstr "Oldal feloldása"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Használja a [[Page]] vagy [[Page|Látható szöveg]] formátumot belső Wiki hivatkozások létrehozásához."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Használja a szóköz vagy nyíl billentyűket a navigáláshoz"
+
+msgid "View version"
+msgstr "Verzió megtekintése"
+
+msgid "Visible only to teachers"
+msgstr "Csak tanároknak látható"
+
+msgid "Weight is required"
+msgstr "A súly megadása kötelező"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "A Wiki kategóriák le vannak tiltva ehhez a kurzushoz."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki kategóriák engedélyezve"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki HTML szigorú szűrés"
+
+msgid "Wiki settings"
+msgstr "Wiki beállítások"
+
+msgid "Wiki settings updated"
+msgstr "Wiki beállítások frissítve"
+
+msgid "You are viewing a historical version of this page"
+msgstr "A lap előzményverzióját tekinti meg"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Egy vagy több fájlt csatolhat ehhez a válaszhoz."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Szerkesztheti ezt a feladatlapot, de a tanulói munkalapok nem módosulnak."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Használhatja a {{class_name}} és {{student_full_name}} címkéket a kérdésben."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "20 perc áll rendelkezésére a szerkesztéshez, mielőtt a szerkesztési zárolás lejár."
+
+msgid "by"
+msgstr "által"
+
+msgid "required"
+msgstr "kötelező"
 

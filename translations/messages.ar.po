@@ -1589,8 +1589,8 @@ msgstr "هل أنت متأكد من أنك تريد حذف هذه الخطوات
 msgid "Authoring tool"
 msgstr "الأصل"
 
-msgid "SCORM or AICC file to upload"
-msgstr "  للتحميل SCORM أو AICC ملف"
+msgid "SCORM file to upload"
+msgstr "  للتحميل SCORM ملف"
 
 msgid "Course location"
 msgstr "مكان المقرر"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":نعم:حقوق الطبع والنشر,, لا:لا حقوق طبع ونشر"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:مجلد,, application/msword:MsWord,, application/octet-stream:تدفق ثماني,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:مجلد,, application\/msword:MsWord,, application\/octet-stream:تدفق ثماني,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":تمرين:تمرين,,      محاكاة:محاكاة,,      استبيان:استبيان,,      رسم تخطيطي:رسم تخطيطي,,      شكل:شكل,,      رسم بياني:رسم بياني,,      فهرس:فهرس,,      شريحة:شريحة,,      جدول:جدول,,      نص سردي:نص سردي,,      امتحان:امتحان,,      تجربة:تجربة,,      بيان المشكلة:بيان المشكلة,,      تقييم ذاتي:تقييم ذاتي,,      محاضرة:محاضرة"
@@ -8737,6 +8737,15 @@ msgstr "أظهر"
 
 msgid "My courses"
 msgstr "مقرراتي"
+
+msgid "Shop"
+msgstr "المتجر"
+
+msgid "Invoice"
+msgstr "الفاتورة"
+
+msgid "Request invoice"
+msgstr "طلب فاتورة"
 
 msgid "View my progress"
 msgstr "معاينة إحصائياتي"
@@ -36494,4 +36503,856 @@ msgstr "مُراجَع"
 
 msgid "View threads"
 msgstr "عرض المواضيع"
+
+msgid "No auth source"
+msgstr "لا يوجد مصدر مصادقة"
+
+msgid "You must add at least one question"
+msgstr "يجب إضافة سؤال واحد على الأقل"
+
+msgid "Advanced actions"
+msgstr "إجراءات متقدمة"
+
+msgid "Application path"
+msgstr "مسار التطبيق"
+
+msgid "Apply files details"
+msgstr "تطبيق تفاصيل الملفات"
+
+msgid "Apply plan details"
+msgstr "تطبيق تفاصيل الخطة"
+
+msgid "Apply plan failed"
+msgstr "فشل تطبيق الخطة"
+
+msgid "Apply plan ready"
+msgstr "الخطة جاهزة للتطبيق"
+
+msgid "Apply preparation"
+msgstr "تطبيق التحضير"
+
+msgid "Apply staged files"
+msgstr "تطبيق الملفات المرحلية"
+
+msgid "Applying files..."
+msgstr "جارٍ تطبيق الملفات..."
+
+msgid "Audit file"
+msgstr "تدقيق الملف"
+
+msgid "Backup directory"
+msgstr "دليل النسخ الاحتياطي"
+
+msgid "Baseline clean"
+msgstr "تنظيف خط الأساس"
+
+msgid "Baseline warnings"
+msgstr "تحذيرات خط الأساس"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "إنشاء خطة تطبيق آمنة من الحزمة المرحلية. يتحقق هذا فقط من الملفات والأذونات ومسار النسخ الاحتياطي وحالة القفل. لا يستبدل الملفات."
+
+msgid "Build production frontend assets."
+msgstr "بناء أصول واجهة الإنتاج."
+
+msgid "Building plan..."
+msgstr "جارٍ إنشاء الخطة..."
+
+msgid "Channel"
+msgstr "القناة"
+
+msgid "Check"
+msgstr "تحقق"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "التحقق من توفر تحديثات Chamilo، والتحقق من الحزم، وتهيئة الملفات، وتنفيذ خطوات ما بعد التحديث المتحكم بها."
+
+msgid "Check manifest"
+msgstr "التحقق من البيان"
+
+msgid "Checking post-apply actions..."
+msgstr "جارٍ التحقق من إجراءات ما بعد التطبيق..."
+
+msgid "Checking..."
+msgstr "جارٍ التحقق..."
+
+msgid "Composer install"
+msgstr "تثبيت Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "يمكن لإجراءات Composer وYarn وترحيل قاعدة البيانات تعديل التبعيات أو الأصول المُنشأة أو قاعدة البيانات. حددها فقط بعد التأكد من النسخ الاحتياطية والأذونات."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "قم بتهيئة CHAMILO_UPDATE_MANIFEST_URL على الخادم أو قدم عنوان URL لبيان HTTPS."
+
+msgid "Configured"
+msgstr "مُهيأ"
+
+msgid "Current migration"
+msgstr "الترحيل الحالي"
+
+msgid "Database baseline"
+msgstr "خط أساس قاعدة البيانات"
+
+msgid "Database migration safety review"
+msgstr "مراجعة سلامة ترحيل قاعدة البيانات"
+
+msgid "Database migrations"
+msgstr "ترحيلات قاعدة البيانات"
+
+msgid "Development mode"
+msgstr "وضع التطوير"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "لا تُفعّل هذا إلا بعد مراجعة نسخة التحديث الاحتياطية وأذونات الخادم."
+
+msgid "Doctrine dry-run command"
+msgstr "أمر Doctrine التجريبي"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "أبلغ Doctrine عن تحذيرات تاريخية في خط الأساس. سيظل المحدث ينفذ فقط ترحيلات V210 المرحلية بعد التأكيد الصريح."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "سينفذ Doctrine فقط ترحيلات V210 المرحلية صراحةً بعد اجتياز مراجعة السلامة."
+
+msgid "Dry-run exit code"
+msgstr "رمز الخروج للتشغيل التجريبي"
+
+msgid "Executed unavailable migrations"
+msgstr "تم تنفيذ ترحيلات غير متاحة"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "استخراج حزمة التحديث المعتمدة إلى دليل مرحلي للفحص. لا يستبدل هذا الملفات أو يشغل الترحيلات أو يعدل قاعدة البيانات."
+
+msgid "File apply available"
+msgstr "تطبيق الملفات متاح"
+
+msgid "Files to replace"
+msgstr "الملفات المراد استبدالها"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "أؤكد أن نسخة احتياطية لقاعدة البيانات موجودة وتم التحقق منها قبل تشغيل الترحيلات."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "أفهم أن الإجراءات المتقدمة قد تعدل التبعيات أو الأصول المُنشأة أو قاعدة البيانات."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "أفهم أن هذا سيستبدل الملفات في تثبيت Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "أفهم أن هذا سيشغل أوامر التحديث على الخادم."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "تثبيت تبعيات الواجهة الأمامية قبل إعادة بناء الأصول."
+
+msgid "Installed version"
+msgstr "الإصدار المثبت"
+
+msgid "Latest migration"
+msgstr "أحدث ترحيل"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "اترك مسارات الحزمة والتوقيع فارغة لتنزيلها من عناوين URL للبيان المعتمد. المسارات المحلية متاحة فقط لاختبارات التطوير."
+
+msgid "Live command log"
+msgstr "سجل الأوامر المباشر"
+
+msgid "Live update log"
+msgstr "سجل التحديث المباشر"
+
+msgid "Local test options"
+msgstr "خيارات الاختبار المحلي"
+
+msgid "Local test update notice link"
+msgstr "رابط إشعار التحديث المحلي للاختبار"
+
+msgid "Local update notice simulation"
+msgstr "محاكاة إشعار التحديث المحلي"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "محاكاة إشعار التحديث المحلي متاحة فقط في وضع التطوير."
+
+msgid "Manifest"
+msgstr "البيان"
+
+msgid "Manifest source"
+msgstr "مصدر البيان"
+
+msgid "Migration safety details"
+msgstr "تفاصيل سلامة الترحيل"
+
+msgid "Migration safety review failed"
+msgstr "فشل مراجعة سلامة الترحيل"
+
+msgid "Migration safety review ready"
+msgstr "مراجعة سلامة الترحيل جاهزة"
+
+msgid "Migration target"
+msgstr "هدف الترحيل"
+
+msgid "New files"
+msgstr "ملفات جديدة"
+
+msgid "New migrations reported by Doctrine"
+msgstr "ترحيلات جديدة أبلغ عنها Doctrine"
+
+msgid "Next migration"
+msgstr "الترحيل التالي"
+
+msgid "No executed unavailable migration was reported."
+msgstr "لم يُبلغ عن أي ترحيل غير متاح منفذ."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "لم يتم تكوين عنوان URL رسمي للبيان بعد. استخدم عنوان URL ببروتوكول HTTPS أو مسارًا محليًا لاختبارات التطوير."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "لم يُكتشف أي ترحيل معلق قبل هدف التحديث المرحلي."
+
+msgid "Not configured"
+msgstr "غير مُكوَّن"
+
+msgid "Not detected"
+msgstr "غير مُكتشف"
+
+msgid "Official Chamilo update channel"
+msgstr "قناة التحديث الرسمية لـ Chamilo"
+
+msgid "Package SHA-256"
+msgstr "تجزئة SHA-256 للحزمة"
+
+msgid "Package URL"
+msgstr "عنوان URL للحزمة"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "سيتم تنزيل ملفات الحزمة والتوقيع من البيان. المسارات المحلية معطّلة في هذه البيئة."
+
+msgid "Package path"
+msgstr "مسار الحزمة"
+
+msgid "Package staged successfully"
+msgstr "تم تخزين الحزمة بنجاح"
+
+msgid "Package staging failed"
+msgstr "فشل تخزين الحزمة"
+
+msgid "Package verification"
+msgstr "التحقق من الحزمة"
+
+msgid "Package verification failed"
+msgstr "فشل التحقق من الحزمة"
+
+msgid "Package verified successfully"
+msgstr "تم التحقق من الحزمة بنجاح"
+
+msgid "Pending migrations before this update"
+msgstr "الترحيلات المعلقة قبل هذا التحديث"
+
+msgid "Planned backup path"
+msgstr "مسار النسخة الاحتياطية المخطط"
+
+msgid "Post-apply actions completed"
+msgstr "اكتملت إجراءات ما بعد التطبيق"
+
+msgid "Post-apply actions failed"
+msgstr "فشلت إجراءات ما بعد التطبيق"
+
+msgid "Post-apply actions ready"
+msgstr "إجراءات ما بعد التطبيق جاهزة"
+
+msgid "Post-apply checks"
+msgstr "فحوصات ما بعد التطبيق"
+
+msgid "Post-apply checks failed"
+msgstr "فشلت فحوصات ما بعد التطبيق"
+
+msgid "Post-apply details"
+msgstr "تفاصيل ما بعد التطبيق"
+
+msgid "Post-apply run details"
+msgstr "تفاصيل تشغيل ما بعد التطبيق"
+
+msgid "Preflight checks"
+msgstr "فحوصات ما قبل التشغيل"
+
+msgid "Preflight checks completed"
+msgstr "اكتملت فحوصات ما قبل التشغيل"
+
+msgid "Preflight checks failed"
+msgstr "فشلت فحوصات ما قبل الإطلاق"
+
+msgid "Preflight details"
+msgstr "تفاصيل ما قبل الإطلاق"
+
+msgid "Prepare staging"
+msgstr "إعداد بيئة الاختبار"
+
+msgid "Preparing staging..."
+msgstr "جارٍ إعداد بيئة الاختبار..."
+
+msgid "Production mode"
+msgstr "وضع الإنتاج"
+
+msgid "Released at"
+msgstr "صدر في"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "استبدال ملفات شاميلو من الحزمة المرحلية باستخدام خطة التطبيق المراجعة. لا يشغل هذا عمليات ترحيل قاعدة البيانات أو Composer أو Yarn أو أوامر التخزين المؤقت."
+
+msgid "Review apply plan"
+msgstr "مراجعة خطة التطبيق"
+
+msgid "Review database migrations"
+msgstr "مراجعة ترحيلات قاعدة البيانات"
+
+msgid "Review post-apply actions"
+msgstr "مراجعة إجراءات ما بعد التطبيق"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "مراجعة الإجراءات اليدوية الموصى بها بعد تطبيق ملفات التحديث. لا تشغل هذه الخطوة Composer أو Yarn أو الترحيلات أو أوامر التخزين المؤقت."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "مراجعة ترحيلات Doctrine المرحلية ونتائج التشغيل الجاف قبل تشغيل ترحيلات قاعدة البيانات."
+
+msgid "Reviewing database migrations..."
+msgstr "جارٍ مراجعة ترحيلات قاعدة البيانات..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "تشغيل واجتياز مراجعة سلامة الترحيل قبل تنفيذ ترحيلات قاعدة البيانات."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "تشغيل فحوصات البيئة قبل أي خطوة مستقبلية لتطبيق التحديث. لا يعدل هذا الملفات أو قاعدة البيانات."
+
+msgid "Run post-apply actions"
+msgstr "تشغيل إجراءات ما بعد التطبيق"
+
+msgid "Run preflight checks"
+msgstr "تشغيل فحوصات ما قبل الإطلاق"
+
+msgid "Run selected post-apply actions"
+msgstr "تشغيل إجراءات ما بعد التطبيق المحددة"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "تشغيل أوامر ما بعد التطبيق المحددة من الخادم باستخدام قائمة مسموح بها محكومة. لا تُقبل أوامر الصدفة المخصصة."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "تشغيل هذه الأوامر يدويًا من الخادم بعد تأكيد نتيجة تحديث الملفات والنسخ الاحتياطية."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "تشغيل إجراءات ما بعد التطبيق من واجهة المستخدم معطل في وضع الإنتاج."
+
+msgid "Running post-apply actions..."
+msgstr "جارٍ تشغيل إجراءات ما بعد التطبيق..."
+
+msgid "Safe actions"
+msgstr "إجراءات آمنة"
+
+msgid "Signature path"
+msgstr "مسار التوقيع"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "لا يمكن تخطي التحقق من التوقيع في هذه البيئة."
+
+msgid "Skip signature verification for local development tests"
+msgstr "تخطي التحقق من التوقيع لاختبارات التطوير المحلية"
+
+msgid "Staged file application failed"
+msgstr "فشل تطبيق الملفات المرحلية"
+
+msgid "Staged files applied successfully"
+msgstr "تم تطبيق الملفات المرحلية بنجاح"
+
+msgid "Staging details"
+msgstr "تفاصيل بيئة الاختبار"
+
+msgid "Staging directory"
+msgstr "دليل بيئة الاختبار"
+
+msgid "Staging extraction"
+msgstr "استخراج بيئة الاختبار"
+
+msgid "Symfony cache clear"
+msgstr "مسح ذاكرة التخزين المؤقت لـ Symfony"
+
+msgid "System update"
+msgstr "تحديث النظام"
+
+msgid "Target version"
+msgstr "الإصدار المستهدف"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "تم تعبئة عنوان URL الرسمي للبيان المكون مسبقًا. يمكنك تغييره إلى بيان HTTPS آخر إذا لزم الأمر."
+
+msgid "The database migration baseline is clean."
+msgstr "خط أساس ترحيل قاعدة البيانات نظيف."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "فشل الرد النهائي لـ HTTP بعد اكتمال العملية. عادةً ما يكون السبب أذونات ذاكرة التخزين المؤقت أثناء التشغيل أو إعادة تشغيل خادم الويب أثناء الطلب."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "يشير سجل العمليات إلى أن إجراءات ما بعد التطبيق اكتملت بنجاح."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "اكتملت أوامر ما بعد التطبيق المحددة بنجاح، لكن فشل الرد النهائي لـ HTTP. قم بتحديث الصفحة والتحقق من أذونات ذاكرة التخزين المؤقت أثناء التشغيل إذا لم يتم تحميل الصفحة بشكل صحيح."
+
+msgid "The updater does not create or restore database backups."
+msgstr "لا ينشئ المحدث نسخًا احتياطية لقاعدة البيانات أو يستعيدها."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "هذه الإجراءات آمنة للتشغيل من واجهة المستخدم بعد مراجعة نتيجة التحديث."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "يمكن لهذه الأوامر تعديل التبعيات أو الأصول المُنشأة أو ذاكرة التخزين المؤقت أو قاعدة البيانات. تأكد من النسخ الاحتياطية قبل المتابعة."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "يعدل هذا الإجراء الملفات في تثبيت شاميلو. تأكد من مراجعة خطة التطبيق وتمكين النسخ الاحتياطية قبل المتابعة."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "يحاكي هذا الإدخال التطويري إشعار تحديث Chamilo.org المستقبلي باستخدام مسارات حزم الاختبار المحلية."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "تم فتح هذه الشاشة من إشعار تحديث رسمي، لكن لم يتم تكوين مصدر بيان رسمي بعد."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "تم فتح هذه الشاشة من إشعار تحديث. يتم بدء فحص البيان فقط تلقائيًا."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "تُعد هذه الخطوة مراجعة فقط. يحدث استبدال الملفات لاحقًا في خطوة تطبيق الملفات المرحلية، مع حماية القفل والنسخ الاحتياطي والتراجع."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "لا ينشئ هذا المحدث نسخة احتياطية لقاعدة البيانات. أنشئ وتحقق من نسخة احتياطية قبل تشغيل الترحيلات."
+
+msgid "Trusted public key"
+msgstr "المفتاح العام الموثوق"
+
+msgid "Trusted signing key"
+msgstr "مفتاح التوقيع الموثوق"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "اكتب APPLY UPDATE FILES للتأكيد"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "اكتب RUN DATABASE MIGRATIONS لتأكيد ترحيل قاعدة البيانات"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "اكتب RUN POST UPDATE ACTIONS للتأكيد"
+
+msgid "Unknown update notice source."
+msgstr "مصدر إشعار التحديث غير معروف."
+
+msgid "Update availability"
+msgstr "توفر التحديث"
+
+msgid "Update directory"
+msgstr "دليل التحديث"
+
+msgid "Update lock path"
+msgstr "مسار قفل التحديث"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "استخدم دليل التهيئة الذي تم إنشاؤه في الخطوة السابقة. يقبل الخلفية فقط الأدلة داخل var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "استخدم هذا الرابط لمحاكاة إشعار تحديث Chamilo.org المستقبلي أثناء اختبارات التطوير."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "استخدم هذا فقط لاختبارات التطوير المحلية. يجب أن تستخدم تحديثات الإنتاج مفتاح الخادم المُعد."
+
+msgid "Verification details"
+msgstr "تفاصيل التحقق"
+
+msgid "Verify package"
+msgstr "التحقق من الحزمة"
+
+msgid "Verifying..."
+msgstr "جارٍ التحقق..."
+
+msgid "Waiting for command progress events..."
+msgstr "في انتظار أحداث تقدم الأمر..."
+
+msgid "Waiting for update progress events..."
+msgstr "في انتظار أحداث تقدم التحديث..."
+
+msgid "Yarn build"
+msgstr "بناء Yarn"
+
+msgid "Yarn install"
+msgstr "تثبيت Yarn"
+
+msgid "A comment is required"
+msgstr "التعليق مطلوب"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "توجد قاعدة بيانات بنفس الاسم بالفعل. إذا كانت تحتوي على جداول، فسيتم حذفها؛ وإذا كانت فارغة، فسيتم إعادة استخدامها."
+
+msgid "AI generated"
+msgstr "مُنشأ بالذكاء الاصطناعي"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "أضف سؤالاً واحداً على الأقل قبل العودة إلى مسار التعلم."
+
+msgid "Add attachments"
+msgstr "إضافة مرفقات"
+
+msgid "Additional fields"
+msgstr "حقول إضافية"
+
+msgid "Allow comments"
+msgstr "السماح بالتعليقات"
+
+msgid "Allow new pages"
+msgstr "السماح بصفحات جديدة"
+
+msgid "Allow ratings"
+msgstr "السماح بالتقييمات"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "هل أنت متأكد أنك تريد حذف جميع العناصر؟"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "هل أنت متأكد أنك تريد استعادة التجديد التلقائي؟"
+
+msgid "Attachment has been deleted"
+msgstr "تم حذف المرفق"
+
+msgid "Backup file"
+msgstr "ملف النسخ الاحتياطي"
+
+msgid "Block comments"
+msgstr "حظر التعليقات"
+
+msgid "Block new pages"
+msgstr "حظر الصفحات الجديدة"
+
+msgid "Block ratings"
+msgstr "حظر التقييمات"
+
+msgid "Cancel renewal"
+msgstr "إلغاء التجديد"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "ستتم إزالة روابط الفئة من صفحات %s Wiki."
+
+msgid "Change"
+msgstr "تغيير"
+
+msgid "Clear group"
+msgstr "مسح المجموعة"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "انقر على وسم لإدراجه في المحرر. سيتم استبدال هذه العناصر النائبة عند إنشاء الشهادة."
+
+msgid "Comment added"
+msgstr "تمت إضافة التعليق"
+
+msgid "Comment is required"
+msgstr "التعليق مطلوب"
+
+msgid "Comment score"
+msgstr "درجة التعليق"
+
+msgid "Compare selected versions line by line"
+msgstr "مقارنة الإصدارات المحددة سطراً بسطر"
+
+msgid "Compare selected versions word by word"
+msgstr "مقارنة الإصدارات المحددة كلمة بكلمة"
+
+msgid "Compare versions"
+msgstr "مقارنة الإصدارات"
+
+msgid "Copy completed"
+msgstr "اكتملت النسخ"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "إنشاء صفحات عمل Wiki فردية للمتعلمين"
+
+msgid "Current view mode"
+msgstr "وضع العرض الحالي"
+
+msgid "Delete Wiki"
+msgstr "حذف Wiki"
+
+msgid "Delete page"
+msgstr "حذف الصفحة"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "لا يُنصح بحذف الصفحة الرئيسية لـ Wiki. يمكنك إعادة إنشائها لاحقاً."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "تعطيل كتل الويكي يمنع صفحات وإجراءات الويكي العادية. تبقى صفحة الإعدادات هذه متاحة لمدرسي المقرر."
+
+msgid "Discussion"
+msgstr "مناقشة"
+
+msgid "Edit Comment"
+msgstr "تعديل التعليق"
+
+msgid "Edit page"
+msgstr "تعديل الصفحة"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "يجب أن يكون تاريخ الانتهاء بعد أو مساوياً لتاريخ انتهاء الصلاحية"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "أدخل مصطلح بحث للعثور على صفحات الويكي"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "يجب أن يكون تاريخ انتهاء الصلاحية قبل أو مساوياً لتاريخ الانتهاء"
+
+msgid "Failed email recipients"
+msgstr "المستلمون الذين فشل إرسال البريد الإلكتروني إليهم"
+
+msgid "Finish and return to learning path"
+msgstr "إنهاء والعودة إلى مسار التعلم"
+
+msgid "Forum image"
+msgstr "صورة المنتدى"
+
+msgid "Hide discussion"
+msgstr "إخفاء المناقشة"
+
+msgid "Hide page"
+msgstr "إخفاء الصفحة"
+
+msgid "I changed my mind"
+msgstr "لقد غيرت رأيي"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "إذا لم يتم تحديده، ستبقى هذه الملفات متاحة لمدير المنصة من خلال أداة 'معلومات الملف'."
+
+msgid "Internal message failures"
+msgstr "فشل الرسائل الداخلية"
+
+msgid "Internal messages available"
+msgstr "الرسائل الداخلية المتاحة"
+
+msgid "Internal messages created now"
+msgstr "الرسائل الداخلية المنشأة الآن"
+
+msgid "Item score"
+msgstr "درجة العنصر"
+
+msgid "Last post"
+msgstr "آخر مشاركة"
+
+msgid "Lock page"
+msgstr "قفل الصفحة"
+
+msgid "Manage categories"
+msgstr "إدارة الفئات"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "يُعلّم هذا المستند بأنه مُساعد بالذكاء الاصطناعي. استخدمه عند إنشاء المحتوى أو تعديله بشكل كبير باستخدام أدوات الذكاء الاصطناعي."
+
+msgid "Maximum score is required"
+msgstr "الدرجة القصوى مطلوبة"
+
+msgid "Metric"
+msgstr "مقياس"
+
+msgid "New comments are blocked in this discussion"
+msgstr "تم حظر التعليقات الجديدة في هذه المناقشة"
+
+msgid "No Wiki categories are available yet."
+msgstr "لا توجد فئات ويكي متاحة بعد."
+
+msgid "No categories found"
+msgstr "لم يتم العثور على فئات"
+
+msgid "No content"
+msgstr "لا يوجد محتوى"
+
+msgid "No parent category"
+msgstr "لا توجد فئة أصلية"
+
+msgid "Number of comments scored"
+msgstr "عدد التعليقات المُقيَّمة"
+
+msgid "Old version"
+msgstr "الإصدار القديم"
+
+msgid "Only image files are allowed."
+msgstr "يُسمح فقط بملفات الصور."
+
+msgid "Please fill all required fields"
+msgstr "يرجى ملء جميع الحقول المطلوبة"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "سيتم إنشاء الأسئلة التي تحتوي على عناصر نائبة للفصل أو الطالب لفصول أو مجموعات المقرر: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "تم حظر التقييمات في هذه المناقشة"
+
+msgid "Remove image"
+msgstr "إزالة الصورة"
+
+msgid "Restore renewal"
+msgstr "استعادة التجديد"
+
+msgid "Restore version"
+msgstr "استعادة الإصدار"
+
+msgid "Search in"
+msgstr "بحث في"
+
+msgid "Select group"
+msgstr "اختر مجموعة"
+
+msgid "Select image"
+msgstr "اختر صورة"
+
+msgid "Selected image"
+msgstr "الصورة المحددة"
+
+msgid "Show discussion"
+msgstr "إظهار المناقشة"
+
+msgid "Show page"
+msgstr "إظهار الصفحة"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "بعض الملفات أو المجلدات لا تملك صلاحية الكتابة. لتتمكن من تثبيت شاميلو، يجب عليك أولاً تغيير صلاحياتها (باستخدام CHMOD). يرجى قراءة"
+
+msgid "Subcategories"
+msgstr "الفئات الفرعية"
+
+msgid "Tap on the left or right to navigate"
+msgstr "انقر على اليسار أو اليمين للتنقل"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "انتهت مهلة تسليم مهمة الويكي، لكن يُسمح بالتسليم المتأخر."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "انتهت مهلة تسليم مهمة الويكي."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "لم تبدأ مهمة الويكي بعد."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "يجب قفل صفحة الويكي قبل الحفظ."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "تم حفظ الإعلان، لكن تعذر تحميل المرفق."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "تم حفظ الإعلان، لكن فشل إرسال البريد الإلكتروني."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "تم حفظ الإعلان، لكن لم يتم إرسال أي بريد إلكتروني."
+
+msgid "The category has been created"
+msgstr "تم إنشاء الفئة"
+
+msgid "The category has been deleted"
+msgstr "تم حذف الفئة"
+
+msgid "The category has been updated"
+msgstr "تم تحديث الفئة"
+
+msgid "The end date is invalid"
+msgstr "تاريخ الانتهاء غير صالح"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "يجب أن يكون الحد الأقصى لعدد الإصدارات عددًا صحيحًا غير سالب"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "يجب أن يكون الحد الأقصى لعدد الكلمات عددًا صحيحًا غير سالب"
+
+msgid "The print window could not be opened"
+msgstr "تعذر فتح نافذة الطباعة"
+
+msgid "The start date is invalid"
+msgstr "تاريخ البدء غير صالح"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "تنطبق هذه الإعدادات على الدورة بأكملها، بما في ذلك جلساتها ومجموعاتها."
+
+msgid "This announcement has already been sent by email."
+msgstr "تم إرسال هذا الإعلان بالبريد الإلكتروني مسبقًا."
+
+msgid "This discussion is hidden from learners"
+msgstr "هذه المناقشة مخفية عن المتعلمين"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "تتيح لك أداة الذكاء الاصطناعي التوليدي هذه إنشاء صور ومقاطع فيديو قصيرة لتوضيح دورتك. من خلال شرح (نصيًا) ما تريده في قسم الطلب، ستزود نموذج الذكاء الاصطناعي المُعد بالعناصر اللازمة لإنشاء صورة أو فيديو. يُرجى التحلي بالصبر. سيستغرق نموذج الذكاء الاصطناعي بعض الوقت لإنشاء نتيجة، قد ترغب في الاحتفاظ بها بحفظ الوسائط في مجلد مستنداتك، ثم تضمينها داخل مستند HTML. ليست جميع نماذج الذكاء الاصطناعي متساوية من حيث السرعة أو الجودة. قد يقدم لك نموذج الذكاء الاصطناعي أيضًا طلبًا معدلاً، وهو تفسير أكثر تفصيلاً لطلبك. يمكنك بعد ذلك استخدام هذا الطلب المعدل لتحسين طلبك. يُرجى العلم بأن هذه الأداة، خاصةً لمقاطع الفيديو، قد تُكلف مؤسستك تكاليف كبيرة، حتى لو قررت عدم حفظ الوسائط المُنشأة. يُرجى استخدامها وفقًا لذلك. إذا واجهت صعوبة في الحصول على ما تبحث عنه، يُرجى تخصيص بعض الوقت للبحث عن حيل الطلب عبر الإنترنت لنموذج الذكاء الاصطناعي المتاح لديك."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "ينتمي هذا السجل إلى الدورة الأساسية. الاستعادة متاحة بعد إنشاء إصدار للجلسة."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "تحل هذه الصورة محل أيقونة المنتدى الافتراضية المعروضة بجانب عنوان المنتدى."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "تأتي هذه الصفحة من الدورة الأساسية. سيؤدي حفظها إلى إنشاء إصدار للجلسة الحالية."
+
+msgid "This will also delete %s subcategories."
+msgstr "سيؤدي هذا أيضًا إلى حذف %s فئات فرعية."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "سيؤدي هذا إلى إنشاء صفحات عمل فردية لـ %s متعلمًا."
+
+msgid "Thread history"
+msgstr "سجل الموضوع"
+
+msgid "Title and content"
+msgstr "العنوان والمحتوى"
+
+msgid "Unable to cancel renewal right now."
+msgstr "تعذر إلغاء التجديد حاليًا."
+
+msgid "Unable to restore renewal right now."
+msgstr "تعذر استعادة التجديد حاليًا."
+
+msgid "Unlock page"
+msgstr "إلغاء قفل الصفحة"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "استخدم [[Page]] أو [[Page|نص مرئي]] لإنشاء روابط ويكي داخلية."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "استخدم شريط المسافة أو مفاتيح الأسهم للتنقل"
+
+msgid "View version"
+msgstr "عرض الإصدار"
+
+msgid "Visible only to teachers"
+msgstr "مرئي للمعلمين فقط"
+
+msgid "Weight is required"
+msgstr "الوزن مطلوب"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "فئات الويكي معطلة لهذه الدورة."
+
+msgid "Wiki categories enabled"
+msgstr "تم تفعيل فئات الويكي"
+
+msgid "Wiki html strict filtering"
+msgstr "تصفية HTML صارمة للويكي"
+
+msgid "Wiki settings"
+msgstr "إعدادات الويكي"
+
+msgid "Wiki settings updated"
+msgstr "تم تحديث إعدادات الويكي"
+
+msgid "You are viewing a historical version of this page"
+msgstr "أنت تعرض إصدارًا تاريخيًا من هذه الصفحة"
+
+msgid "You can attach one or more files to this reply."
+msgstr "يمكنك إرفاق ملف واحد أو أكثر بهذا الرد."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "يمكنك تعديل صفحة المهمة هذه، لكن صفحات عمل المتعلمين لن تُعدل."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "يمكنك استخدام الوسمين {{class_name}} و {{student_full_name}} في السؤال."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "لديك 20 دقيقة لتعديل هذه الصفحة قبل انتهاء صلاحية قفل التعديل."
+
+msgid "by"
+msgstr "بواسطة"
+
+msgid "required"
+msgstr "مطلوب"
 

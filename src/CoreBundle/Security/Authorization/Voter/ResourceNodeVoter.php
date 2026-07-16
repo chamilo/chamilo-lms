@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -54,6 +55,7 @@ class ResourceNodeVoter extends Voter
         private EntityManagerInterface $entityManager,
         private PageHelper $pageHelper,
         private readonly ResourceAclHelper $resourceAclHelper,
+        private readonly CourseFromRequestHelper $courseFromRequest,
     ) {}
 
     public static function getReaderMask(): int
@@ -231,9 +233,12 @@ class ResourceNodeVoter extends Voter
         $isFromLearningPath = false;
 
         if (null !== $request) {
-            $courseId = (int) $request->get('cid');
-            $sessionId = (int) $request->get('sid');
-            $groupId = (int) $request->get('gid');
+            // Context from the request URL (cid/sid/gid or their 1.11.x forms).
+            // A course referenced by code returns null here and flows through the
+            // session fallback below, already resolved by CidReqListener.
+            $courseId = $this->courseFromRequest->getCourseId($request) ?? 0;
+            $sessionId = $this->courseFromRequest->getSessionId($request) ?? 0;
+            $groupId = $this->courseFromRequest->getGroupId($request) ?? 0;
 
             // Detect learning path context from request parameters.
             $lpId = $request->query->getInt('lp_id', 0);

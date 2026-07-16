@@ -20,9 +20,13 @@ $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();
 $globalSettingsParams = $plugin->getGlobalParameters();
 $defaultGlobalTax = (int) ($globalSettingsParams['global_tax_perc'] ?? 0);
+$upsaleOptions = $plugin->getServiceUpsaleOptions();
 
 /** @var array<int, User> $users */
-$users = Container::getUserRepository()->findAll();
+$users = Container::getUserRepository()->findByRoleList(
+    ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_GLOBAL_ADMIN'],
+    ''
+);
 $userOptions = [];
 
 if (!empty($users)) {
@@ -46,6 +50,20 @@ $interbreadcrumb[] = [
 
 $translatableHtmlEditorConfig = buycoursesBuildTranslatableHtmlEditorConfig();
 
+$buildCheckboxContent = static function (string $title, string $description = ''): string {
+    $title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
+
+    $content = '<span class="buycourses-checkbox-copy">'.
+        '<span class="buycourses-checkbox-copy__title">'.$title.'</span>';
+
+    if ('' !== $description) {
+        $content .= '<span class="buycourses-checkbox-copy__description">'.$description.'</span>';
+    }
+
+    return $content.'</span>';
+};
+
 $formDefaultValues = array_merge($plugin->buildBenefitFormDefaults(), [
     'price' => 0,
     'tax_perc' => $defaultGlobalTax,
@@ -60,8 +78,10 @@ $formDefaultValues = array_merge($plugin->buildBenefitFormDefaults(), [
     'subscription_behavior_json' => '',
     'stripe_price_id' => '',
     'display_on_course_creation_page' => false,
+    'upsale_from_id' => 0,
     'applies_to' => BuyCoursesPlugin::SERVICE_TYPE_USER,
     'owner_id' => api_get_user_id(),
+    'active' => true,
     'visibility' => true,
 ]);
 
@@ -91,9 +111,15 @@ $form->addElement(
     [$plugin->get_lang('Duration'), null, get_lang('Days')],
     ['step' => 1]
 );
+$form->addSelect(
+    'upsale_from_id',
+    [$plugin->get_lang('Upsale'), $plugin->get_lang('UpsaleHelp')],
+    $upsaleOptions
+);
 
-$form->addHtml('<div class="buycourses-recurring-section">');
-$form->addHeader($plugin->get_lang('RecurringPayments'));
+$form->addHtml(
+    '<div class="buycourses-fallback-section-heading">'.$plugin->get_lang('RecurringPayments').'</div>'
+);
 $form->addCheckBox('renewable', $plugin->get_lang('RenewableService'));
 $form->addElement(
     'number',
@@ -142,14 +168,16 @@ $form->addText(
 );
 $form->addCheckBox(
     'display_on_course_creation_page',
-    $plugin->get_lang('DisplayServiceOnCourseCreationPage'),
-    $plugin->get_lang('DisplayServiceOnCourseCreationPageHelp')
+    '',
+    $buildCheckboxContent(
+        $plugin->get_lang('DisplayServiceOnCourseCreationPage'),
+        $plugin->get_lang('DisplayServiceOnCourseCreationPageHelp')
+    )
 );
-$form->addHtml('</div>');
 
 $form->addHidden('applies_to', (string) BuyCoursesPlugin::SERVICE_TYPE_USER);
 $form->addHtml(
-    '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
+    '<div class="buycourses-applies-to-card rounded-2xl border border-gray-20 bg-support-2 p-4">'.
     '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AppliesTo').'</div>'.
     '<div class="mt-2 text-body-2 font-medium text-gray-90">'.get_lang('User').'</div>'.
     '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('ServiceTypeFixedToUser').'</div>'.
@@ -162,6 +190,14 @@ $form->addSelect(
     get_lang('Owner'),
     $userOptions
 );
+$form->addCheckBox(
+    'active',
+    '',
+    $buildCheckboxContent(
+        $plugin->get_lang('ActiveService'),
+        $plugin->get_lang('ActiveServiceHelp')
+    )
+);
 $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
     'picture',
@@ -171,8 +207,9 @@ $form->addFile(
 $form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false, false, $translatableHtmlEditorConfig);
 
-$form->addHtml('<div class="buycourses-benefits-section">');
-$form->addHeader($plugin->get_lang('GrantedBenefits'));
+$form->addHtml(
+    '<div class="buycourses-fallback-section-heading">'.$plugin->get_lang('GrantedBenefits').'</div>'
+);
 $form->addElement(
     'number',
     'benefit_max_courses',
@@ -205,7 +242,7 @@ $form->addElement(
 );
 
 $form->addHtml(
-    '<div class="mt-4 rounded-2xl border border-gray-20 bg-support-2 p-4">'.
+    '<div class="buycourses-ai-intro mt-4 rounded-2xl border border-gray-20 bg-support-2 p-4">'.
     '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AiCourseFeaturesGranted').'</div>'.
     '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('AiCourseFeaturesGrantedHelp').'</div>'.
     '</div>'
@@ -219,17 +256,23 @@ foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
 
     $form->addCheckBox(
         $plugin->getAiCourseFeatureFormField((string) $feature),
-        (string) ($definition['title'] ?? $feature),
-        $description
+        '',
+        $buildCheckboxContent(
+            (string) ($definition['title'] ?? $feature),
+            $description
+        )
     );
 }
-$form->addHtml('</div>');
 
 $form->addButtonSave(get_lang('Add'));
 $form->setDefaults($formDefaultValues);
 
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $postedValues = $form->exportValues();
+    if (is_array($postedValues)) {
+        $postedValues['active'] = isset($_POST['active']) ? 1 : 0;
+    }
+
     if (!empty($postedValues) && is_array($postedValues)) {
         $form->setDefaults(array_replace($formDefaultValues, $postedValues));
     }
@@ -237,6 +280,8 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
+    $values['active'] = isset($_POST['active']) ? 1 : 0;
+
     foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
         $formField = $plugin->getAiCourseFeatureFormField((string) $feature);
         $values[$formField] = isset($_POST[$formField]) ? 1 : 0;
@@ -297,6 +342,7 @@ function buycoursesBuildServiceFormShell(
     $safePageTitle = htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8');
     $safePluginTitle = htmlspecialchars($pluginTitle, ENT_QUOTES, 'UTF-8');
     $safeSubtitle = htmlspecialchars($subtitle, ENT_QUOTES, 'UTF-8');
+    $safeFormSubtitle = htmlspecialchars($plugin->get_lang('ServiceFormSubtitle'), ENT_QUOTES, 'UTF-8');
     $safeBackUrl = htmlspecialchars($backUrl, ENT_QUOTES, 'UTF-8');
     $safeCurrencyCode = htmlspecialchars($currencyCode, ENT_QUOTES, 'UTF-8');
 
@@ -319,7 +365,7 @@ function buycoursesBuildServiceFormShell(
         HTML;
     }
 
-    $enhancerScript = buycoursesBuildServiceFormEnhancerScript();
+    $enhancerScript = buycoursesBuildServiceFormEnhancerScript($plugin);
 
     return <<<HTML
         <div class="buycourses-service-shell mx-auto w-full space-y-6 px-4 pb-10">
@@ -378,7 +424,7 @@ function buycoursesBuildServiceFormShell(
                     <div class="border-b border-gray-20 px-6 py-5 lg:px-8">
                         <h2 class="text-body-1 font-semibold text-gray-90">{$plugin->get_lang('ServiceFormTitle')}</h2>
                         <p class="mt-1 text-body-2 text-gray-50">
-                            {$plugin->get_lang('ServiceFormSubtitle')}
+                            {$safeFormSubtitle}
                         </p>
                     </div>
                     <div class="px-6 py-6 lg:px-8">
@@ -400,6 +446,7 @@ function buycoursesBuildTranslatableHtmlEditorConfig(): array
 
     if ('true' === api_get_setting('editor.translate_html')) {
         $config['extraPlugins'] = 'translatehtml';
+        $config['extended_valid_elements'] = 'span[lang|class|style],div[lang|class|style]';
         $config['toolbar'] = 'undo redo | translatehtml | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | fontfamily fontsize | forecolor backcolor removeformat | link image media table | emoticons preview print code fullscreen | ltr rtl';
     }
 
@@ -455,17 +502,369 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
         }
     }
 
+    $upsaleError = $plugin->getServiceUpsaleValidationError($values);
+    if (null !== $upsaleError) {
+        $errors[] = $upsaleError;
+    }
+
     return $errors;
 }
 
 /**
  * Build the form enhancer script.
  */
-function buycoursesBuildServiceFormEnhancerScript(): string
+function buycoursesBuildServiceFormEnhancerScript(BuyCoursesPlugin $plugin): string
 {
-    return <<<'HTML'
+    $labels = [
+        'generalTitle' => $plugin->get_lang('ServiceGeneralSectionTitle'),
+        'generalHelp' => $plugin->get_lang('ServiceGeneralSectionHelp'),
+        'pricingTitle' => $plugin->get_lang('ServicePricingSectionTitle'),
+        'pricingHelp' => $plugin->get_lang('ServicePricingSectionHelp'),
+        'recurringTitle' => $plugin->get_lang('RecurringPayments'),
+        'recurringHelp' => $plugin->get_lang('ServiceRecurringSectionHelp'),
+        'publishingTitle' => $plugin->get_lang('ServicePublishingSectionTitle'),
+        'publishingHelp' => $plugin->get_lang('ServicePublishingSectionHelp'),
+        'mediaTitle' => $plugin->get_lang('ServiceMediaSectionTitle'),
+        'mediaHelp' => $plugin->get_lang('ServiceMediaSectionHelp'),
+        'benefitsTitle' => $plugin->get_lang('GrantedBenefits'),
+        'benefitsHelp' => $plugin->get_lang('ServiceBenefitsSectionHelp'),
+        'aiTitle' => $plugin->get_lang('AiCourseFeaturesGranted'),
+        'aiHelp' => $plugin->get_lang('AiCourseFeaturesGrantedHelp'),
+        'dangerTitle' => $plugin->get_lang('ServiceDangerZoneTitle'),
+        'dangerHelp' => $plugin->get_lang('ServiceDangerZoneHelp'),
+    ];
+
+    $aiFieldNames = [];
+    foreach (array_keys($plugin->getAiCourseFeatureDefinitions()) as $feature) {
+        $aiFieldNames[] = $plugin->getAiCourseFeatureFormField((string) $feature);
+    }
+
+    $labelsJson = json_encode(
+        $labels,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    );
+    $aiFieldNamesJson = json_encode(
+        $aiFieldNames,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    );
+
+    return <<<HTML
+<style>
+.buycourses-service-shell .buycourses-form-layout {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.buycourses-service-shell .buycourses-form-section {
+    overflow: hidden;
+    border: 1px solid #dfe5ec;
+    border-radius: 1.25rem;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.buycourses-service-shell .buycourses-form-section__header {
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid #e8edf3;
+    background: #f8fafc;
+}
+
+.buycourses-service-shell .buycourses-form-section__title {
+    margin: 0;
+    color: #1f2937;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.buycourses-service-shell .buycourses-form-section__help {
+    margin: 0.3rem 0 0;
+    color: #64748b;
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+.buycourses-service-shell .buycourses-form-section__body,
+.buycourses-service-shell .buycourses-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
+    padding: 1.25rem;
+}
+
+.buycourses-service-shell .buycourses-form-grid--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.buycourses-service-shell .buycourses-form-field {
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.buycourses-service-shell .buycourses-form-field.row {
+    display: block;
+}
+
+.buycourses-service-shell .buycourses-form-field > [class*="col-"] {
+    width: 100%;
+    max-width: none;
+    padding-right: 0;
+    padding-left: 0;
+    flex: 0 0 100%;
+}
+
+.buycourses-service-shell .buycourses-form-field--full {
+    grid-column: 1 / -1;
+}
+
+.buycourses-service-shell .buycourses-form-field--compact {
+    padding: 1rem !important;
+    border: 1px solid #e5eaf0;
+    border-radius: 1rem;
+    background: #fbfcfe;
+}
+
+.buycourses-service-shell .buycourses-form-field--compact .checkbox,
+.buycourses-service-shell .buycourses-form-field--compact .radio {
+    margin: 0;
+}
+
+.buycourses-service-shell .buycourses-label,
+.buycourses-service-shell .buycourses-form-field > label,
+.buycourses-service-shell .buycourses-form-field .control-label,
+.buycourses-service-shell .buycourses-form-field .col-form-label {
+    display: block;
+    margin: 0 0 0.45rem;
+    color: #1d6fa5;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: left !important;
+}
+
+.buycourses-service-shell .buycourses-control {
+    width: 100% !important;
+    min-height: 2.85rem;
+    border: 1px solid #cfd8e3 !important;
+    border-radius: 0.9rem !important;
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.buycourses-service-shell textarea.buycourses-control {
+    min-height: 8rem;
+    padding: 0.8rem 0.95rem !important;
+}
+
+.buycourses-service-shell .buycourses-control:focus {
+    border-color: #2f80b9 !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 3px rgba(47, 128, 185, 0.15) !important;
+}
+
+.buycourses-service-shell .buycourses-editor {
+    overflow: hidden;
+    border: 1px solid #cfd8e3;
+    border-radius: 0.9rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.buycourses-service-shell .buycourses-help,
+.buycourses-service-shell .help-block,
+.buycourses-service-shell .form-text,
+.buycourses-service-shell .text-muted,
+.buycourses-service-shell .comment {
+    display: block;
+    margin-top: 0.4rem;
+    color: #64748b !important;
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+.buycourses-service-shell .buycourses-check-row {
+    display: block;
+    margin: 0;
+}
+
+.buycourses-service-shell .buycourses-check-row > label,
+.buycourses-service-shell .buycourses-check-row .checkbox > label,
+.buycourses-service-shell .buycourses-check-row .radio > label,
+.buycourses-service-shell .buycourses-form-field--compact .checkbox > label,
+.buycourses-service-shell .buycourses-form-field--compact .radio > label {
+    display: flex !important;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 0 !important;
+    color: #1f2937 !important;
+    font-weight: 600;
+    line-height: 1.45;
+    cursor: pointer;
+}
+
+.buycourses-service-shell .buycourses-check-row input[type="checkbox"],
+.buycourses-service-shell .buycourses-check-row input[type="radio"],
+.buycourses-service-shell .buycourses-form-field--compact .checkbox input[type="checkbox"],
+.buycourses-service-shell .buycourses-form-field--compact .radio input[type="radio"] {
+    margin: 0.2rem 0 0 !important;
+    flex: 0 0 auto;
+}
+
+.buycourses-service-shell .buycourses-empty-label {
+    display: none !important;
+}
+
+.buycourses-service-shell .buycourses-checkbox-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.buycourses-service-shell .buycourses-checkbox-copy__title {
+    color: #1d6fa5;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.buycourses-service-shell .buycourses-checkbox-copy__description {
+    color: #334155;
+    font-size: 0.84rem;
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+.buycourses-service-shell .buycourses-ai-block {
+    grid-column: 1 / -1;
+    overflow: hidden;
+    margin-top: 0.25rem;
+    border: 1px solid #dfe5ec;
+    border-radius: 1rem;
+    background: #fbfcfe;
+}
+
+.buycourses-service-shell .buycourses-ai-block__header {
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid #e8edf3;
+    background: #f3f7fb;
+}
+
+.buycourses-service-shell .buycourses-ai-block__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    padding: 1rem;
+}
+
+.buycourses-service-shell .buycourses-ai-block__grid .buycourses-form-field {
+    padding: 0.9rem !important;
+    border: 1px solid #e5eaf0;
+    border-radius: 0.9rem;
+    background: #ffffff;
+}
+
+.buycourses-service-shell .buycourses-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid #dfe5ec;
+    border-radius: 1.25rem;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.buycourses-service-shell .buycourses-action-button {
+    display: inline-flex !important;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.7rem 1.15rem !important;
+    border: 0 !important;
+    border-radius: 0.85rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.buycourses-service-shell .buycourses-action-button--primary {
+    background: #2f80b9 !important;
+    color: #ffffff !important;
+}
+
+.buycourses-service-shell .buycourses-action-button--secondary {
+    border: 1px solid #2f80b9 !important;
+    background: #ffffff !important;
+    color: #1d6fa5 !important;
+}
+
+.buycourses-service-shell .buycourses-action-button--danger {
+    background: #dc3545 !important;
+    color: #ffffff !important;
+}
+
+.buycourses-service-shell .buycourses-action-button:hover {
+    opacity: 0.9;
+}
+
+.buycourses-service-shell .buycourses-danger-zone {
+    border-color: #f2c7cc;
+}
+
+.buycourses-service-shell .buycourses-danger-zone .buycourses-form-section__header {
+    border-bottom-color: #f2c7cc;
+    background: #fff7f8;
+}
+
+.buycourses-service-shell .buycourses-danger-zone .buycourses-form-section__title {
+    color: #b42332;
+}
+
+.buycourses-service-shell .buycourses-danger-zone__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+}
+
+.buycourses-service-shell .buycourses-applies-to-card {
+    height: 100%;
+}
+
+.buycourses-service-shell .buycourses-fallback-section-heading,
+.buycourses-service-shell .buycourses-ai-intro {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .buycourses-service-shell .buycourses-form-section__body,
+    .buycourses-service-shell .buycourses-form-grid,
+    .buycourses-service-shell .buycourses-form-grid--three,
+    .buycourses-service-shell .buycourses-ai-block__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .buycourses-service-shell .buycourses-danger-zone__body {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .buycourses-service-shell .buycourses-action-button {
+        width: 100%;
+    }
+}
+</style>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const labels = {$labelsJson};
+    const aiFieldNames = {$aiFieldNamesJson};
     const shell = document.querySelector('.buycourses-service-shell');
     if (!shell) {
         return;
@@ -478,35 +877,130 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const richFieldNames = ['description', 'service_information'];
 
-    function styleStandardField(field) {
+    function findField(name) {
+        return form.querySelector('[name="' + name + '"]:not([type="hidden"])')
+            || form.querySelector('[name="' + name + '"]');
+    }
+
+    function findFieldRow(element) {
+        if (!element) {
+            return null;
+        }
+
+        const structuredRow = element.closest('.form-group.row, .row.mb-3');
+        if (structuredRow) {
+            return structuredRow;
+        }
+
+        const formGroup = element.closest('.form-group');
+        if (formGroup) {
+            const parentStructuredRow = formGroup.parentElement
+                ? formGroup.parentElement.closest('.form-group.row, .row.mb-3')
+                : null;
+
+            return parentStructuredRow || formGroup;
+        }
+
+        return element.closest('tr')
+            || element.closest('.field')
+            || element.parentElement;
+    }
+
+    function findCustomBlock(element) {
+        if (!element) {
+            return null;
+        }
+
+        const row = element.closest('.form-group.row, .row.mb-3')
+            || element.closest('.form-group')
+            || element.closest('tr');
+
+        return row || element;
+    }
+
+    function createSection(title, help, extraClass) {
+        const section = document.createElement('section');
+        section.className = 'buycourses-form-section' + (extraClass ? ' ' + extraClass : '');
+
+        const header = document.createElement('div');
+        header.className = 'buycourses-form-section__header';
+
+        const heading = document.createElement('h3');
+        heading.className = 'buycourses-form-section__title';
+        heading.textContent = title;
+        header.appendChild(heading);
+
+        if (help) {
+            const description = document.createElement('p');
+            description.className = 'buycourses-form-section__help';
+            description.textContent = help;
+            header.appendChild(description);
+        }
+
+        const body = document.createElement('div');
+        body.className = 'buycourses-form-section__body';
+
+        section.appendChild(header);
+        section.appendChild(body);
+
+        return {section: section, body: body};
+    }
+
+    function moveField(name, destination, options) {
+        const field = findField(name);
+        if (!field) {
+            return null;
+        }
+
+        const row = findFieldRow(field);
+        if (!row || row === form || row.dataset.buycoursesMoved === '1') {
+            return null;
+        }
+
+        row.dataset.buycoursesMoved = '1';
+        row.classList.add('buycourses-form-field');
+
+        if (options && options.full) {
+            row.classList.add('buycourses-form-field--full');
+        }
+
+        if (options && options.compact) {
+            row.classList.add('buycourses-form-field--compact');
+        }
+
+        destination.appendChild(row);
+
+        return row;
+    }
+
+    function moveCustomBlock(selector, destination, full) {
+        const element = form.querySelector(selector);
+        if (!element) {
+            return null;
+        }
+
+        const block = findCustomBlock(element);
+        if (!block || block === form || block.dataset.buycoursesMoved === '1') {
+            return null;
+        }
+
+        block.dataset.buycoursesMoved = '1';
+        block.classList.add('buycourses-form-field');
+        if (full) {
+            block.classList.add('buycourses-form-field--full');
+        }
+
+        destination.appendChild(block);
+
+        return block;
+    }
+
+    function styleControl(field) {
         if (field.classList.contains('select2-search__field')) {
             return;
         }
 
-        field.classList.add(
-            'mt-2',
-            'block',
-            'w-full',
-            'rounded-2xl',
-            'border',
-            'border-gray-25',
-            'bg-white',
-            'px-4',
-            'py-3',
-            'text-body-2',
-            'text-gray-90',
-            'shadow-sm',
-            'transition',
-            'placeholder:text-gray-50',
-            'focus:border-primary',
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-primary/20'
-        );
-    }
-
-    function findFieldRow(element) {
-        return element.closest('.form-group, .row, fieldset, td, .col-md-9, .col-sm-9, .col-lg-9') || element.parentElement;
+        field.classList.add('buycourses-control');
     }
 
     function findRichEditorNode(row, textarea) {
@@ -519,7 +1013,6 @@ document.addEventListener('DOMContentLoaded', function () {
             '.cke',
             '.cke_chrome',
             '.ck-editor',
-            '.ck',
             '.ql-toolbar',
             '.ql-container',
             '.fr-box',
@@ -532,11 +1025,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const nodes = Array.from(row.querySelectorAll(selectors.join(', ')));
 
-        return nodes.find((node) => node !== textarea && !textarea.contains(node)) || null;
+        return nodes.find(function (node) {
+            return node !== textarea && !textarea.contains(node);
+        }) || null;
     }
 
     function hideEditorSourceTextarea(fieldName) {
-        const textarea = form.querySelector(`textarea[name="${fieldName}"]`);
+        const textarea = form.querySelector('textarea[name="' + fieldName + '"]');
         if (!textarea) {
             return;
         }
@@ -561,94 +1056,146 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function syncRichEditorsVisibility() {
-        richFieldNames.forEach((fieldName) => {
+        richFieldNames.forEach(function (fieldName) {
             hideEditorSourceTextarea(fieldName);
         });
     }
 
-    form.classList.add('space-y-8');
+    const layoutHost = form.querySelector(':scope > fieldset') || form;
+    const layout = document.createElement('div');
+    layout.className = 'buycourses-form-layout';
 
-    shell.querySelectorAll('.form_required').forEach((requiredText) => {
-        requiredText.classList.add('text-body-2', 'font-semibold', 'text-primary');
+    const directLegend = layoutHost.querySelector(':scope > legend');
+    if (directLegend) {
+        directLegend.insertAdjacentElement('afterend', layout);
+    } else {
+        layoutHost.prepend(layout);
+    }
+
+    const general = createSection(labels.generalTitle, labels.generalHelp, 'buycourses-general-section');
+    const pricing = createSection(labels.pricingTitle, labels.pricingHelp, 'buycourses-pricing-section');
+    const recurring = createSection(labels.recurringTitle, labels.recurringHelp, 'buycourses-recurring-section');
+    const publishing = createSection(labels.publishingTitle, labels.publishingHelp, 'buycourses-publishing-section');
+    const media = createSection(labels.mediaTitle, labels.mediaHelp, 'buycourses-media-section');
+    const benefits = createSection(labels.benefitsTitle, labels.benefitsHelp, 'buycourses-benefits-section');
+
+    layout.appendChild(general.section);
+    layout.appendChild(pricing.section);
+    layout.appendChild(recurring.section);
+    layout.appendChild(publishing.section);
+    layout.appendChild(media.section);
+    layout.appendChild(benefits.section);
+
+    moveField('name', general.body, {full: true});
+    moveField('description', general.body, {full: true});
+
+    moveField('price', pricing.body);
+    moveField('tax_perc', pricing.body);
+    moveField('duration_days', pricing.body);
+    moveField('upsale_from_id', pricing.body);
+
+    moveField('renewable', recurring.body, {compact: true});
+    moveField('total_charges', recurring.body);
+    moveField('allow_trial', recurring.body, {compact: true});
+    moveField('trial_period', recurring.body);
+    moveField('trial_frequency', recurring.body);
+    moveField('trial_total_charges', recurring.body);
+    moveField('max_subscribers', recurring.body);
+    moveField('subscription_behavior_json', recurring.body, {full: true});
+    moveField('stripe_price_id', recurring.body, {full: true});
+
+    moveField('active', publishing.body, {full: true, compact: true});
+    moveField('display_on_course_creation_page', publishing.body, {full: true, compact: true});
+    moveCustomBlock('.buycourses-applies-to-card', publishing.body, true);
+    moveField('owner_id', publishing.body);
+    moveField('visibility', publishing.body, {compact: true});
+
+    moveField('picture', media.body, {full: true});
+    moveField('video_url', media.body, {full: true});
+    moveField('service_information', media.body, {full: true});
+
+    benefits.body.classList.add('buycourses-form-grid--three');
+    moveField('benefit_max_courses', benefits.body);
+    moveField('benefit_hosting_limit', benefits.body);
+    moveField('benefit_document_quota', benefits.body);
+
+    const aiBlock = document.createElement('div');
+    aiBlock.className = 'buycourses-ai-block';
+
+    const aiHeader = document.createElement('div');
+    aiHeader.className = 'buycourses-ai-block__header';
+
+    const aiTitle = document.createElement('h4');
+    aiTitle.className = 'buycourses-form-section__title';
+    aiTitle.textContent = labels.aiTitle;
+    aiHeader.appendChild(aiTitle);
+
+    if (labels.aiHelp) {
+        const aiHelp = document.createElement('p');
+        aiHelp.className = 'buycourses-form-section__help';
+        aiHelp.textContent = labels.aiHelp;
+        aiHeader.appendChild(aiHelp);
+    }
+
+    const aiGrid = document.createElement('div');
+    aiGrid.className = 'buycourses-ai-block__grid';
+
+    aiBlock.appendChild(aiHeader);
+    aiBlock.appendChild(aiGrid);
+    benefits.body.appendChild(aiBlock);
+
+    aiFieldNames.forEach(function (fieldName) {
+        moveField(fieldName, aiGrid, {compact: true});
     });
 
-    shell.querySelectorAll('.alert, .warning-message').forEach((alertBox) => {
-        alertBox.classList.add(
-            'mb-6',
-            'rounded-2xl',
-            'border',
-            'border-warning',
-            'bg-support-6',
-            'px-4',
-            'py-3',
-            'text-body-2',
-            'text-gray-90'
-        );
+    form.querySelectorAll('.buycourses-fallback-section-heading, .buycourses-ai-intro').forEach(function (element) {
+        const block = findCustomBlock(element);
+        if (block && block !== form && block !== layoutHost && !block.contains(layout)) {
+            block.remove();
+        }
     });
 
-    shell.querySelectorAll('.form-group, .row, fieldset').forEach((block) => {
-        block.classList.add('space-y-2');
+    shell.querySelectorAll('.form_required').forEach(function (requiredText) {
+        requiredText.style.color = '#b42332';
+        requiredText.style.fontWeight = '700';
     });
 
-    shell.querySelectorAll('fieldset').forEach((fieldset) => {
-        fieldset.classList.remove('border', 'border-0');
-        fieldset.classList.add('rounded-2xl', 'border', 'border-gray-20', 'bg-support-2', 'p-4');
+    shell.querySelectorAll('.alert, .warning-message').forEach(function (alertBox) {
+        alertBox.style.borderRadius = '0.9rem';
     });
 
-    shell.querySelectorAll('label, .form-label, .col-form-label, legend').forEach((label) => {
-        label.classList.add('mb-2', 'block', 'text-body-2', 'font-semibold', 'text-primary');
+    shell.querySelectorAll('label, .form-label, .col-form-label, legend').forEach(function (label) {
+        label.classList.add('buycourses-label');
     });
 
-    shell.querySelectorAll('input[type="text"], input[type="number"], input[type="url"], select').forEach((field) => {
-        styleStandardField(field);
+    shell.querySelectorAll('.buycourses-form-field > label.col-form-label').forEach(function (label) {
+        if ('' === label.textContent.trim()) {
+            label.classList.add('buycourses-empty-label');
+        }
     });
 
-    shell.querySelectorAll('textarea').forEach((field) => {
+    shell.querySelectorAll('input[type="text"], input[type="number"], input[type="url"], select, textarea').forEach(function (field) {
         if (richFieldNames.includes(field.name)) {
             return;
         }
 
-        styleStandardField(field);
+        styleControl(field);
     });
 
-    shell.querySelectorAll('input[type="file"]').forEach((field) => {
-        field.classList.add(
-            'mt-2',
-            'block',
-            'w-full',
-            'rounded-2xl',
-            'border',
-            'border-gray-25',
-            'bg-white',
-            'px-4',
-            'py-3',
-            'text-body-2',
-            'text-gray-90',
-            'shadow-sm'
-        );
+    shell.querySelectorAll('input[type="file"]').forEach(function (field) {
+        field.classList.add('buycourses-control');
     });
 
-    shell.querySelectorAll('.checkbox, .radio').forEach((item) => {
-        item.classList.add('flex', 'items-center', 'gap-3', 'py-1');
+    shell.querySelectorAll('.checkbox, .radio').forEach(function (item) {
+        item.classList.add('buycourses-check-row');
     });
 
-    shell.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach((field) => {
-        field.classList.add('cursor-pointer', 'align-middle');
-
-        const wrapper = field.closest('.checkbox, .radio');
-        if (wrapper) {
-            wrapper.querySelectorAll('label').forEach((label) => {
-                label.classList.add('mb-0', 'cursor-pointer', 'text-body-2', 'font-medium', 'text-gray-90');
-            });
-        }
+    shell.querySelectorAll('.tox-tinymce, .cke, .cke_chrome, .ck-editor, .ql-toolbar, .ql-container, .fr-box, .jodit-container, .sun-editor, .note-editor').forEach(function (editor) {
+        editor.classList.add('buycourses-editor');
     });
 
-    shell.querySelectorAll('.tox-tinymce, .cke, .cke_chrome, .ck-editor, .ql-toolbar, .ql-container, .fr-box, .jodit-container, .sun-editor, .note-editor').forEach((editor) => {
-        editor.classList.add('mt-2', 'overflow-hidden', 'rounded-2xl', 'border', 'border-gray-25', 'shadow-sm');
-    });
-
-    shell.querySelectorAll('.help-block, .form-text, .text-muted, .comment').forEach((helpText) => {
-        helpText.classList.add('mt-2', 'text-caption', 'text-gray-50');
+    shell.querySelectorAll('.help-block, .form-text, .text-muted, .comment').forEach(function (helpText) {
+        helpText.classList.add('buycourses-help');
     });
 
     syncRichEditorsVisibility();
@@ -665,142 +1212,86 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        let appliesToValue = appliesToField.value
+        let appliesToValue = appliesToField.value;
 
         if (appliesToRadios.length > 0) {
-            const selectedRadio = form.querySelector('input[name="applies_to"][type="radio"]:checked')
-            appliesToValue = selectedRadio ? selectedRadio.value : appliesToValue
+            const selectedRadio = form.querySelector('input[name="applies_to"][type="radio"]:checked');
+            appliesToValue = selectedRadio ? selectedRadio.value : appliesToValue;
         }
 
-        const isUserService = '1' === String(appliesToValue)
+        const isUserService = '1' === String(appliesToValue);
+        benefitsSection.hidden = !isUserService;
 
-        benefitsSection.classList.toggle('hidden', !isUserService)
-
-        benefitsSection.querySelectorAll('input, select, textarea').forEach((field) => {
-            field.disabled = !isUserService
-        })
+        benefitsSection.querySelectorAll('input, select, textarea').forEach(function (field) {
+            field.disabled = !isUserService;
+        });
     }
 
-    appliesToRadios.forEach((radio) => {
-        radio.addEventListener('change', toggleBenefitsSection)
-    })
+    appliesToRadios.forEach(function (radio) {
+        radio.addEventListener('change', toggleBenefitsSection);
+    });
 
-    toggleBenefitsSection()
+    toggleBenefitsSection();
 
     const fileInput = form.querySelector('input[type="file"][name="picture"], input[type="file"]');
-    const cropButton = Array.from(form.querySelectorAll('button, .btn, input[type="button"], input[type="submit"]')).find((element) => {
-        const text = (element.textContent || element.value || '').toLowerCase();
-        return text.includes('crop your picture');
-    });
-    const hasCropDataInput = form.querySelector('input[name="picture_crop_result"], input[name="picture_crop_image_base_64"]');
+    const cropGroup = form.querySelector('#picture-form-group');
+    const cropButton = form.querySelector('[name="cropButton"], #picture_crop_button');
 
-    if (fileInput && cropButton) {
+    if (fileInput && cropGroup) {
         const imageRow = findFieldRow(fileInput);
 
-        const actionsWrap = document.createElement('div');
-        actionsWrap.className = 'mt-3 flex items-center gap-3 buycourses-image-actions';
+        cropGroup.classList.add('buycourses-form-field', 'buycourses-form-field--full');
 
-        cropButton.classList.remove('btn', 'btn-primary', 'btn-default');
-        cropButton.classList.add(
-            'inline-flex',
-            'items-center',
-            'justify-center',
-            'rounded-2xl',
-            'bg-primary',
-            'px-5',
-            'py-3',
-            'text-body-2',
-            'font-semibold',
-            'text-white',
-            'shadow-sm',
-            'transition',
-            'hover:opacity-90',
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-primary/20',
-            'focus:ring-offset-2'
-        );
-
-        actionsWrap.appendChild(cropButton);
-
-        if (imageRow) {
-            imageRow.appendChild(actionsWrap);
+        if (imageRow && imageRow.parentElement) {
+            imageRow.insertAdjacentElement('afterend', cropGroup);
         }
-
-        function shouldShowCropButton() {
-            const hasSelectedFile = !!(fileInput.files && fileInput.files.length > 0);
-            const hasExistingCropData = !!(hasCropDataInput && hasCropDataInput.value && hasCropDataInput.value.trim() !== '');
-            actionsWrap.classList.toggle('hidden', !(hasSelectedFile || hasExistingCropData));
-        }
-
-        fileInput.addEventListener('change', shouldShowCropButton);
-        shouldShowCropButton();
     }
 
-    const buttons = Array.from(shell.querySelectorAll('input[type="submit"], button, .btn')).filter((button) => button.closest('form'));
+    if (cropButton) {
+        cropButton.classList.add('buycourses-action-button', 'buycourses-action-button--secondary');
+    }
 
-    buttons.forEach((button) => {
-        const label = (button.textContent || button.value || '').toLowerCase();
-        const isDelete = button.name === 'delete_service' || label.includes('delete');
-        const isCrop = label.includes('crop your picture');
-
-        if (isCrop) {
-            return;
-        }
-
-        button.classList.remove('btn', 'btn-primary', 'btn-default', 'btn-danger', 'btn-outline-danger');
-        button.classList.add(
-            'inline-flex',
-            'items-center',
-            'justify-center',
-            'rounded-2xl',
-            'px-5',
-            'py-3',
-            'text-body-2',
-            'font-semibold',
-            'shadow-sm',
-            'transition',
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-offset-2'
-        );
-
-        if (isDelete) {
-            button.classList.add(
-                'bg-danger',
-                'text-danger-button-text',
-                'hover:opacity-90',
-                'focus:ring-danger/20'
-            );
-        } else {
-            button.classList.add(
-                'bg-primary',
-                'text-white',
-                'hover:opacity-90',
-                'focus:ring-primary/20'
-            );
-        }
+    const submitButtons = Array.from(form.querySelectorAll('button[type="submit"], input[type="submit"]'));
+    const deleteButton = submitButtons.find(function (button) {
+        return button.name === 'delete_service';
+    });
+    const primaryButtons = submitButtons.filter(function (button) {
+        return button !== deleteButton;
     });
 
-    const deleteButton = buttons.find((button) => button.name === 'delete_service');
-    const primaryButtons = buttons.filter((button) => {
-        const label = (button.textContent || button.value || '').toLowerCase();
-        return button.name !== 'delete_service' && !label.includes('crop your picture');
+    primaryButtons.forEach(function (button) {
+        button.classList.add('buycourses-action-button', 'buycourses-action-button--primary');
     });
 
     if (primaryButtons.length > 0) {
-        const primaryRow = document.createElement('div');
-        primaryRow.className = 'mt-8 flex flex-wrap items-center justify-end gap-3';
-        primaryButtons.forEach((button) => primaryRow.appendChild(button));
-        form.appendChild(primaryRow);
+        const actions = document.createElement('div');
+        actions.className = 'buycourses-actions';
+        primaryButtons.forEach(function (button) {
+            actions.appendChild(button);
+        });
+        layout.appendChild(actions);
     }
 
     if (deleteButton) {
-        const deleteRow = document.createElement('div');
-        deleteRow.className = 'mt-3 flex flex-wrap items-center justify-end gap-3';
-        deleteRow.appendChild(deleteButton);
-        form.appendChild(deleteRow);
+        deleteButton.classList.add('buycourses-action-button', 'buycourses-action-button--danger');
+
+        const danger = createSection(labels.dangerTitle, labels.dangerHelp, 'buycourses-danger-zone');
+        danger.body.className = 'buycourses-danger-zone__body';
+        danger.body.appendChild(deleteButton);
+        layout.appendChild(danger.section);
     }
+
+    form.querySelectorAll('.form-group, .row.mb-3').forEach(function (row) {
+        if (row.dataset.buycoursesMoved === '1') {
+            return;
+        }
+
+        const hasVisibleControl = row.querySelector('input:not([type="hidden"]), select, textarea, button, a');
+        const hasVisibleText = row.textContent.trim() !== '';
+        if (!hasVisibleControl && !hasVisibleText && !row.contains(layout)) {
+            row.remove();
+        }
+    });
 });
 </script>
 HTML;

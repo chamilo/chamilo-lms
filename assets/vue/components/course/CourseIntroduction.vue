@@ -9,14 +9,10 @@ import Skeleton from "primevue/skeleton"
 import { useCidReqStore } from "../../store/cidReq"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cToolIntroService from "../../services/cToolIntroService"
-import courseService from "../../services/courseService"
 import { filterTranslatedHtml } from "../../../js/translatehtml.js"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
 const props = defineProps({
-  isAllowedToEdit: {
-    type: Boolean,
-    required: true,
-  },
   tool: {
     type: String,
     default: "course_homepage",
@@ -40,6 +36,7 @@ const router = useRouter()
 const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
 const platformConfigStore = usePlatformConfig()
+const { isAllowedToEdit } = useIsAllowedToEdit()
 
 const intro = ref(null)
 const isLoading = ref(false)
@@ -81,37 +78,12 @@ const displayedIntroText = computed(() => {
     return null
   }
 
-  if (platformConfigStore.getSetting("editor.translate_html") === "true") {
+  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
     return filterTranslatedHtml(text, window.user?.locale)
   }
 
   return text
 })
-
-function normalizeIntroResponse(response) {
-  let data = response?.data || response || {}
-
-  if (typeof data === "string") {
-    try {
-      data = JSON.parse(data)
-    } catch (error) {
-      console.error("Invalid tool introduction response:", data)
-      data = {}
-    }
-  }
-
-  return {
-    ...data,
-    c_tool: data.c_tool || {
-      iid: data.cToolId || null,
-      title: props.tool,
-    },
-  }
-}
-
-function getCourseToolId() {
-  return intro.value?.c_tool?.iid || intro.value?.cToolId || null
-}
 
 async function loadIntro() {
   if (!isEnabled.value || !course.value?.id) {
@@ -122,18 +94,7 @@ async function loadIntro() {
   isLoading.value = true
 
   try {
-    let data = null
-
-    if (props.tool === "course_homepage") {
-      data = await courseService.loadHomeIntro(course.value.id, currentSessionId.value)
-    } else {
-      data = await cToolIntroService.findCourseHomeInro(course.value.id, {
-        sid: currentSessionId.value,
-        tool: props.tool,
-      })
-    }
-
-    intro.value = normalizeIntroResponse(data)
+    intro.value = await cToolIntroService.findCourseHomeInro(props.tool)
   } catch (error) {
     console.error("Error loading tool introduction:", error)
     intro.value = null
@@ -143,43 +104,32 @@ async function loadIntro() {
 }
 
 async function createEmptyIntroIfNeeded() {
-  if (intro.value?.iid && getCourseToolId()) {
+  // If an intro already exists for the CURRENT context, nothing to create. In a
+  // session, an intro inherited from the base course (createInSession) must be
+  // forked into a session-specific one before editing, so it does not short-circuit.
+  if (intro.value?.iid && !intro.value?.createInSession) {
     return
   }
 
-  const response = await cToolIntroService.addToolIntro(course.value.id, {
-    tool: props.tool,
+  intro.value = await cToolIntroService.addToolIntro(course.value.id, {
+    toolName: props.tool,
     introText: intro.value?.introText || "",
-    sid: currentSessionId.value || 0,
-    // Course context derived server-side from the gated session course.
-    resourceLinkList: [{ visibility: "published" }],
   })
-
-  intro.value = normalizeIntroResponse(response)
 }
 
 async function openEditor() {
   await createEmptyIntroIfNeeded()
 
-  const courseToolId = getCourseToolId()
-
-  if (!intro.value?.iid || !courseToolId) {
+  if (!intro.value?.iid) {
     console.error("Cannot open tool introduction editor.", intro.value)
     return
   }
 
   router.push({
     name: "ToolIntroUpdate",
-    params: {
-      id: `/api/c_tool_intros/${intro.value.iid}`,
-    },
     query: {
       cid: course.value.id,
       sid: currentSessionId.value || undefined,
-      tool: props.tool,
-      ctoolintroIid: intro.value.iid,
-      ctoolId: courseToolId,
-      parentResourceNodeId: course.value.resourceNode.id,
       id: `/api/c_tool_intros/${intro.value.iid}`,
     },
   })

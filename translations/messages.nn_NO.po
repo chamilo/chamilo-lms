@@ -1578,8 +1578,8 @@ msgstr "Er du sikker på at du vil slette desse trinna?"
 msgid "Authoring tool"
 msgstr "Forfattarverktøy"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM- eller AICC-fil å lasta opp"
+msgid "SCORM file to upload"
+msgstr "SCORM-fil å lasta opp"
 
 msgid "Course location"
 msgstr "Kurslokasjon"
@@ -8726,6 +8726,15 @@ msgstr "Vis"
 
 msgid "My courses"
 msgstr "Mine kurs"
+
+msgid "Shop"
+msgstr "Butikk"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Be om faktura"
 
 msgid "View my progress"
 msgstr "Vis min statistikk"
@@ -36480,4 +36489,856 @@ msgstr "Modererert"
 
 msgid "View threads"
 msgstr "Vis trådar"
+
+msgid "No auth source"
+msgstr "Ingen autentiseringskjelde"
+
+msgid "You must add at least one question"
+msgstr "Du må leggje til minst éitt spørsmål"
+
+msgid "Advanced actions"
+msgstr "Avanserte handlingar"
+
+msgid "Application path"
+msgstr "Applikasjonssti"
+
+msgid "Apply files details"
+msgstr "Bruk fildetaljar"
+
+msgid "Apply plan details"
+msgstr "Bruk plandetaljar"
+
+msgid "Apply plan failed"
+msgstr "Bruk plan mislukkast"
+
+msgid "Apply plan ready"
+msgstr "Bruk plan klar"
+
+msgid "Apply preparation"
+msgstr "Bruk førebuing"
+
+msgid "Apply staged files"
+msgstr "Bruk mellomstegsfiler"
+
+msgid "Applying files..."
+msgstr "Brukar filer..."
+
+msgid "Audit file"
+msgstr "Revider fil"
+
+msgid "Backup directory"
+msgstr "Sikkerheitskopi-mappe"
+
+msgid "Baseline clean"
+msgstr "Grunnlinje rein"
+
+msgid "Baseline warnings"
+msgstr "Grunnlinje åtvaringar"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Bygg ein trygg brukingsplan frå den mellomlagra pakken. Dette sjekkar berre filer, løyve, sikkerheitskopisti og låsestatus. Det erstattar ikkje filer."
+
+msgid "Build production frontend assets."
+msgstr "Bygg produksjons-frontend-ressursar."
+
+msgid "Building plan..."
+msgstr "Byggjer plan..."
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Check"
+msgstr "Sjekk"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Sjekk etter tilgjengelege Chamilo-oppdateringar, verifiser pakkar, mellomlagra filer og køyr kontrollerte steg etter oppdatering."
+
+msgid "Check manifest"
+msgstr "Sjekk manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Kontrollerer etter-påføringshandlingar..."
+
+msgid "Checking..."
+msgstr "Kontrollerer..."
+
+msgid "Composer install"
+msgstr "Composer-installasjon"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer-, Yarn- og database-migreringshandlingar kan endre avhengnader, genererte ressursar eller databasen. Vel berre desse etter å ha stadfesta sikkerheitskopiar og rettar."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfigurer CHAMILO_UPDATE_MANIFEST_URL på tenaren eller oppgje ein HTTPS-manifest-URL."
+
+msgid "Configured"
+msgstr "Konfigurert"
+
+msgid "Current migration"
+msgstr "Gjeldande migrering"
+
+msgid "Database baseline"
+msgstr "Databasegrunnlinje"
+
+msgid "Database migration safety review"
+msgstr "Sikkerheitsgjennomgang av databasemigrering"
+
+msgid "Database migrations"
+msgstr "Databasemigreringar"
+
+msgid "Development mode"
+msgstr "Utviklingsmodus"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ikkje aktiver dette med mindre sikkerheitskopien og tenarrettane er gjennomgått."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine dry-run-kommando"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine rapporterte historiske grunnlinjeåtvaringar. Oppdateraren vil framleis berre utføre V210-migreringar etter eksplisitt stadfesting."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine vil berre utføre dei stadfesta V210-migreringane eksplisitt etter at sikkerheitsgjennomgangen er godkjend."
+
+msgid "Dry-run exit code"
+msgstr "Dry-run-avslutningskode"
+
+msgid "Executed unavailable migrations"
+msgstr "Utførte utilgjengelege migreringar"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Pakk ut den verifiserte oppdateringspakka i ei mellombels mappe for inspeksjon. Dette erstattar ikkje filer, køyrer ikkje migreringar eller endrar databasen."
+
+msgid "File apply available"
+msgstr "Filpåføring tilgjengeleg"
+
+msgid "Files to replace"
+msgstr "Filer som skal erstattast"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Eg stadfestar at ein database-sikkerheitskopi eksisterer og er verifisert før migreringar køyrast."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Eg forstår at avanserte handlingar kan endre avhengnader, genererte ressursar eller databasen."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Eg forstår at dette vil erstatte filer i Chamilo-installasjonen."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Eg forstår at dette vil køyre oppdateringskommandoar på tenaren."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Installer frontend-avhengnader før du byggjer ressursar på nytt."
+
+msgid "Installed version"
+msgstr "Installert versjon"
+
+msgid "Latest migration"
+msgstr "Siste migrering"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Lat pakkestiar og signaturstiar vere tomme for å laste dei ned frå dei verifiserte manifest-URL-ane. Lokale stiar er berre tilgjengelege for utviklingstestar."
+
+msgid "Live command log"
+msgstr "Direkte kommandologg"
+
+msgid "Live update log"
+msgstr "Direkte oppdateringslogg"
+
+msgid "Local test options"
+msgstr "Lokale testinnstillingar"
+
+msgid "Local test update notice link"
+msgstr "Lenke til lokal testoppdateringsvarsling"
+
+msgid "Local update notice simulation"
+msgstr "Simulering av lokal oppdateringsvarsling"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simulering av lokal oppdateringsvarsling er berre tilgjengeleg i utviklingsmodus."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Manifestkjelde"
+
+msgid "Migration safety details"
+msgstr "Detaljar om migreringssikkerheit"
+
+msgid "Migration safety review failed"
+msgstr "Sikkerheitsgjennomgang av migrering mislukkast"
+
+msgid "Migration safety review ready"
+msgstr "Sikkerheitsgjennomgang av migrering klar"
+
+msgid "Migration target"
+msgstr "Migreringsmål"
+
+msgid "New files"
+msgstr "Nye filer"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Nye migreringar rapportert av Doctrine"
+
+msgid "Next migration"
+msgstr "Neste migrering"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Ingen utilgjengelege migreringar vart rapporterte."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Ingen offisiell manifest-URL er konfigurert enno. Bruk ein HTTPS-URL eller ein lokal sti for utviklingstestar."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Ingen ventande migrering vart oppdaga før det stadfesta oppdateringsmålet."
+
+msgid "Not configured"
+msgstr "Ikkje konfigurert"
+
+msgid "Not detected"
+msgstr "Ikkje oppdaga"
+
+msgid "Official Chamilo update channel"
+msgstr "Offisiell Chamilo-oppdateringskanal"
+
+msgid "Package SHA-256"
+msgstr "Pakke-SHA-256"
+
+msgid "Package URL"
+msgstr "Pakkelenke"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Pakke- og signaturfiler vert lasta ned frå manifestet. Lokale stiar er deaktiverte i dette miljøet."
+
+msgid "Package path"
+msgstr "Pakkesti"
+
+msgid "Package staged successfully"
+msgstr "Pakken vart klargjort"
+
+msgid "Package staging failed"
+msgstr "Klargjering av pakke feila"
+
+msgid "Package verification"
+msgstr "Pakkeverifisering"
+
+msgid "Package verification failed"
+msgstr "Pakkeverifisering feila"
+
+msgid "Package verified successfully"
+msgstr "Pakken vart verifisert"
+
+msgid "Pending migrations before this update"
+msgstr "Ventande migreringar før denne oppdateringa"
+
+msgid "Planned backup path"
+msgstr "Planlagd tryggingskopisti"
+
+msgid "Post-apply actions completed"
+msgstr "Handlingar etter oppdatering fullført"
+
+msgid "Post-apply actions failed"
+msgstr "Handlingar etter oppdatering feila"
+
+msgid "Post-apply actions ready"
+msgstr "Handlingar etter oppdatering klare"
+
+msgid "Post-apply checks"
+msgstr "Kontrollar etter oppdatering"
+
+msgid "Post-apply checks failed"
+msgstr "Kontrollar etter oppdatering feila"
+
+msgid "Post-apply details"
+msgstr "Detaljar etter oppdatering"
+
+msgid "Post-apply run details"
+msgstr "Detaljar om køyring etter oppdatering"
+
+msgid "Preflight checks"
+msgstr "Førekontrollar"
+
+msgid "Preflight checks completed"
+msgstr "Førekontrollar fullført"
+
+msgid "Preflight checks failed"
+msgstr "Førekontrollar feila"
+
+msgid "Preflight details"
+msgstr "Detaljar om førekontrollar"
+
+msgid "Prepare staging"
+msgstr "Klargjer staging"
+
+msgid "Preparing staging..."
+msgstr "Klargjer staging…"
+
+msgid "Production mode"
+msgstr "Produksjonsmodus"
+
+msgid "Released at"
+msgstr "Gjeve ut"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Byt ut Chamilo-filer frå den klargjorde pakken ved hjelp av den gjennomgåtte oppdateringsplanen. Dette køyrer ikkje databasemigreringar, Composer, Yarn eller cache-kommandoar."
+
+msgid "Review apply plan"
+msgstr "Gå gjennom oppdateringsplan"
+
+msgid "Review database migrations"
+msgstr "Gå gjennom databasemigreringar"
+
+msgid "Review post-apply actions"
+msgstr "Gå gjennom handlingar etter oppdatering"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Gå gjennom tilrådde manuelle kommandoar etter at oppdateringsfilene er brukte. Dette steget køyrer ikkje Composer, Yarn, migreringar eller cache-kommandoar."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Gå gjennom klargjorde Doctrine-migreringar og dry-run-resultat før databasemigreringar vert køyrde."
+
+msgid "Reviewing database migrations..."
+msgstr "Går gjennom databasemigreringar…"
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Køyr og godkjenn tryggingsgjennomgangen av migreringar før databasemigreringar vert utførte."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Køyr miljøkontrollar før eventuelle framtidige oppdateringssteg. Dette endrar ikkje filer eller databasen."
+
+msgid "Run post-apply actions"
+msgstr "Køyr handlingar etter oppdatering"
+
+msgid "Run preflight checks"
+msgstr "Køyr førekontrollar"
+
+msgid "Run selected post-apply actions"
+msgstr "Køyr valde handlingar etter oppdatering"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Køyr valde handlingar etter oppdatering frå tenaren ved hjelp av ei kontrollert tillatsliste. Ingen tilpassa skallkommandoar vert godtekne."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Køyr desse kommandoane manuelt frå tenaren etter å ha stadfesta resultatet av filoppdateringa og tryggingskopiane."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Å køyre handlingar etter oppdatering frå grensesnittet er deaktivert i produksjonsmodus."
+
+msgid "Running post-apply actions..."
+msgstr "Køyrer handlingar etter oppdatering…"
+
+msgid "Safe actions"
+msgstr "Trygge handlingar"
+
+msgid "Signature path"
+msgstr "Signatursti"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Signaturverifisering kan ikkje hoppast over i dette miljøet."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Hopp over signaturverifisering for lokale utviklingstestar"
+
+msgid "Staged file application failed"
+msgstr "Bruk av klargjorde filer feila"
+
+msgid "Staged files applied successfully"
+msgstr "Klargjorde filer vart brukte"
+
+msgid "Staging details"
+msgstr "Staging-detaljar"
+
+msgid "Staging directory"
+msgstr "Staging-mappe"
+
+msgid "Staging extraction"
+msgstr "Staging-ekstraksjon"
+
+msgid "Symfony cache clear"
+msgstr "Tøm Symfony-cache"
+
+msgid "System update"
+msgstr "Systemoppdatering"
+
+msgid "Target version"
+msgstr "Målversjon"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Den konfigurerte offisielle manifest-URL-en er førehandsutfylt. Du kan endre henne til ein annan HTTPS-manifest om nødvendig."
+
+msgid "The database migration baseline is clean."
+msgstr "Database-migrasjonsgrunnlaget er reint."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Den endelege HTTP-responsen mislukkast etter at operasjonen var fullført. Dette skuldast vanlegvis rettar på runtime-cache eller omstart av webserveren under førespurnaden."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Operasjonsloggen viser at handlingar etter påføring vart fullførte."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Dei valde handlingane etter påføring vart fullførte, men den endelege HTTP-responsen mislukkast. Oppdater sida og kontroller rettar på runtime-cache om sida ikkje lastar rett."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Oppdateraren opprettar eller gjenopprettar ikkje databasekopiar."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Desse handlingane er trygge å køyre frå grensesnittet etter gjennomgang av oppdateringsresultatet."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Desse kommandoane kan endre avhengigheiter, genererte ressursar, cache eller databasen. Stadfest kopiar før du held fram."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Denne handlinga endrar filer i Chamilo-installasjonen. Forsikra deg om at påføringsplanen er gjennomgått og at kopiar er aktiverte før du held fram."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Denne utviklingsoppføringa simulerer framtidig Chamilo.org-oppdateringsvarsel ved hjelp av lokale testpakkestiar."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Denne skjermen vart opna frå eit offisielt oppdateringsvarsel, men ingen offisiell manifestkjelde er enno konfigurert."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Denne skjermen vart opna frå eit oppdateringsvarsel. Berre manifestkontrollen startar automatisk."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Dette steget førebur berre ei gjennomgang. Filutskifting skjer seinare i steget Bruk mellombelse filer, med låsing, kopi og rull-tilbake-beskyttelse."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Denne oppdateraren opprettar ikkje ein databasekopi. Opprett og verifiser ein kopi før du køyrer migrasjonar."
+
+msgid "Trusted public key"
+msgstr "Tilliten offentleg nøkkel"
+
+msgid "Trusted signing key"
+msgstr "Tilliten signeringsnøkkel"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Skriv APPLY UPDATE FILES for å stadfeste"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Skriv RUN DATABASE MIGRATIONS for å stadfeste databasemigrasjonar"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Skriv RUN POST UPDATE ACTIONS for å stadfeste"
+
+msgid "Unknown update notice source."
+msgstr "Ukjend kjelde for oppdateringsvarsel."
+
+msgid "Update availability"
+msgstr "Oppdateringstilgjenge"
+
+msgid "Update directory"
+msgstr "Oppdateringskatalog"
+
+msgid "Update lock path"
+msgstr "Oppdateringslås-sti"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Bruk mellombelskatalogen som vart generert av førre steg. Bakenden godtek berre katalogar inne i var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Bruk denne lenkja for å simulere framtidig Chamilo.org-oppdateringsvarsel under utviklingstestar."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Bruk dette berre for lokale utviklingstestar. Produksjonsoppdateringar må nytte den serverkonfigurerte nøkkelen."
+
+msgid "Verification details"
+msgstr "Verifiseringsdetaljar"
+
+msgid "Verify package"
+msgstr "Verifiser pakke"
+
+msgid "Verifying..."
+msgstr "Verifiserer..."
+
+msgid "Waiting for command progress events..."
+msgstr "Ventar på framdrifts-hendingar for kommando..."
+
+msgid "Waiting for update progress events..."
+msgstr "Ventar på framdrifts-hendingar for oppdatering..."
+
+msgid "Yarn build"
+msgstr "Yarn-bygg"
+
+msgid "Yarn install"
+msgstr "Yarn-installasjon"
+
+msgid "A comment is required"
+msgstr "Ein kommentar er påkravd"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Ein database med same namn finst allereie. Dersom han inneheld tabellar, vert dei sletta; dersom han er tom, vert han brukt på nytt."
+
+msgid "AI generated"
+msgstr "AI-generert"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Legg til minst eitt spørsmål før du går tilbake til læringsstien."
+
+msgid "Add attachments"
+msgstr "Legg til vedlegg"
+
+msgid "Additional fields"
+msgstr "Tilleggsfelt"
+
+msgid "Allow comments"
+msgstr "Tillat kommentarar"
+
+msgid "Allow new pages"
+msgstr "Tillat nye sider"
+
+msgid "Allow ratings"
+msgstr "Tillat vurderingar"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Er du sikker på at du vil slette alle element?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Er du sikker på at du vil gjenopprette automatisk fornying?"
+
+msgid "Attachment has been deleted"
+msgstr "Vedlegg er sletta"
+
+msgid "Backup file"
+msgstr "Sikkerheitskopi-fil"
+
+msgid "Block comments"
+msgstr "Blokker kommentarar"
+
+msgid "Block new pages"
+msgstr "Blokker nye sider"
+
+msgid "Block ratings"
+msgstr "Blokker vurderingar"
+
+msgid "Cancel renewal"
+msgstr "Avbryt fornying"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Kategorilenkjer vert fjerna frå %s Wikisider."
+
+msgid "Change"
+msgstr "Endre"
+
+msgid "Clear group"
+msgstr "Tøm gruppe"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Klikk på ein merkelapp for å setje han inn i redigeraren. Desse plasshaldarane vert erstatta når sertifikatet vert generert."
+
+msgid "Comment added"
+msgstr "Kommentar lagt til"
+
+msgid "Comment is required"
+msgstr "Kommentar er påkravd"
+
+msgid "Comment score"
+msgstr "Kommentarpoeng"
+
+msgid "Compare selected versions line by line"
+msgstr "Samanlikn valde versjonar linje for linje"
+
+msgid "Compare selected versions word by word"
+msgstr "Samanlikn valde versjonar ord for ord"
+
+msgid "Compare versions"
+msgstr "Samanlikn versjonar"
+
+msgid "Copy completed"
+msgstr "Kopiering fullført"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Opprett individuelle Wikiarbeidssider for studentar"
+
+msgid "Current view mode"
+msgstr "Gjeldande visingsmodus"
+
+msgid "Delete Wiki"
+msgstr "Slett Wiki"
+
+msgid "Delete page"
+msgstr "Slett side"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Det vert ikkje tilrådd å slette Wikisida. Du kan opprette ho på nytt seinare."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Deaktivering av Wiki blokkerer normale Wikisider og handlingar. Denne innstillingssida er framleis tilgjengeleg for kurslærarar."
+
+msgid "Discussion"
+msgstr "Diskusjon"
+
+msgid "Edit Comment"
+msgstr "Rediger kommentar"
+
+msgid "Edit page"
+msgstr "Rediger side"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Sluttdato må vere etter eller lik utløpsdato"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Skriv inn eit søkjeord for å finne Wikisider"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Utløpsdato må vere før eller lik sluttdato"
+
+msgid "Failed email recipients"
+msgstr "E-postmottakarar som feila"
+
+msgid "Finish and return to learning path"
+msgstr "Fullfør og gå tilbake til læringssti"
+
+msgid "Forum image"
+msgstr "Forum bilete"
+
+msgid "Hide discussion"
+msgstr "Gøym diskusjon"
+
+msgid "Hide page"
+msgstr "Gøym side"
+
+msgid "I changed my mind"
+msgstr "Eg har ombestemt meg"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Viss ikkje merka, vil desse filene framleis vere tilgjengelege for plattformadministratoren via verktøyet «Filinformasjon»."
+
+msgid "Internal message failures"
+msgstr "Interne meldingar som feila"
+
+msgid "Internal messages available"
+msgstr "Interne meldingar tilgjengelege"
+
+msgid "Internal messages created now"
+msgstr "Interne meldingar oppretta no"
+
+msgid "Item score"
+msgstr "Elementpoeng"
+
+msgid "Last post"
+msgstr "Siste innlegg"
+
+msgid "Lock page"
+msgstr "Lås side"
+
+msgid "Manage categories"
+msgstr "Handter kategoriar"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Merk dette dokumentet som AI-assistert. Bruk det når innhaldet vart oppretta eller vesentleg endra med AI-verktøy."
+
+msgid "Maximum score is required"
+msgstr "Maksimal poengsum er påkravd"
+
+msgid "Metric"
+msgstr "Mål"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Nye kommentarar er blokkerte i denne diskusjonen"
+
+msgid "No Wiki categories are available yet."
+msgstr "Ingen Wikikategoriar er tilgjengelege enno."
+
+msgid "No categories found"
+msgstr "Ingen kategoriar funne"
+
+msgid "No content"
+msgstr "Ingen innhald"
+
+msgid "No parent category"
+msgstr "Ingen foreldrekategori"
+
+msgid "Number of comments scored"
+msgstr "Tal på kommentarar som er vurderte"
+
+msgid "Old version"
+msgstr "Gamal versjon"
+
+msgid "Only image files are allowed."
+msgstr "Berre biletfiler er tillatne."
+
+msgid "Please fill all required fields"
+msgstr "Fyll ut alle obligatoriske felt"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Spørsmål med klasse- eller studentplasshaldarar vert genererte for kursklassar eller grupper: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Vurderingar er blokkerte i denne diskusjonen"
+
+msgid "Remove image"
+msgstr "Fjern bilete"
+
+msgid "Restore renewal"
+msgstr "Gjenopprett fornying"
+
+msgid "Restore version"
+msgstr "Gjenopprett versjon"
+
+msgid "Search in"
+msgstr "Søk i"
+
+msgid "Select group"
+msgstr "Vel gruppe"
+
+msgid "Select image"
+msgstr "Vel bilete"
+
+msgid "Selected image"
+msgstr "Valt bilete"
+
+msgid "Show discussion"
+msgstr "Vis diskusjon"
+
+msgid "Show page"
+msgstr "Vis side"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Nokre filer eller mapper har ikkje skrivetilgang. For å kunne installere Chamilo må du først endre løyva deira (ved hjelp av CHMOD). Les"
+
+msgid "Subcategories"
+msgstr "Underkategoriar"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Trykk til venstre eller høgre for å navigere"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Fristen for Wiki-oppgåva er passert, men forseinka innlevering er tillate."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Fristen for Wiki-oppgåva er passert."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki-oppgåva har ikkje starta enno."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Låsing av Wiki-sida er påkravd før lagring."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Kunngjeringa vart lagra, men eit vedlegg kunne ikkje lastast opp."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Kunngjeringa vart lagra, men e-postlevering mislukkast."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Kunngjeringa vart lagra, men ingen e-post kunne leverast."
+
+msgid "The category has been created"
+msgstr "Kategorien er oppretta"
+
+msgid "The category has been deleted"
+msgstr "Kategorien er sletta"
+
+msgid "The category has been updated"
+msgstr "Kategorien er oppdatert"
+
+msgid "The end date is invalid"
+msgstr "Sluttdatoen er ugyldig"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Maksimalt tal på versjonar må vere eit ikkje-negativt heiltal"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Maksimalt tal på ord må vere eit ikkje-negativt heiltal"
+
+msgid "The print window could not be opened"
+msgstr "Utskriftsvindauget kunne ikkje opnast"
+
+msgid "The start date is invalid"
+msgstr "Startdatoen er ugyldig"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Desse innstillingane gjeld for heile kurset, inkludert øktene og gruppene."
+
+msgid "This announcement has already been sent by email."
+msgstr "Denne kunngjeringa er allereie sendt via e-post."
+
+msgid "This discussion is hidden from learners"
+msgstr "Denne diskusjonen er skjult for studentar"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Dette generative AI-verktøyet lèt deg lage bilete og korte videoar for å illustrere kurset ditt. Ved å forklare (i tekst) kva du ønskjer i prompt-delen, gjev du den konfigurerte AI-modellen elementa som trengst for å generere eit bilete eller ein video. Ver tålmodig. AI-modellen vil bruke noko tid og generere eit resultat, som du kanskje ønskjer å behalde ved å lagre mediaet i dokumentmappa di, og deretter bygge inn i eit HTML-dokument. Ikkje alle AI-modellar er like når det gjeld fart eller kvalitet. AI-modellen kan også gje deg ein endra prompt, som er ei meir detaljert tolking av førespurnaden din. Du kan deretter bruke denne endra prompten til å finjustere førespurnaden din. Ver merksam på at dette verktøyet, særleg for videoar, kan generere betydelege kostnader for organisasjonen din, sjølv om du vel å ikkje lagre det genererte mediaet. Bruk det deretter. Dersom du har vanskar med å få det du leitar etter, bruk gjerne tid på å undersøke prompting-triks på nettet for AI-modellen du har tilgjengeleg."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Denne historikken tilhøyrer grunnkurset. Gjenoppretting er tilgjengeleg etter at ein øktversjon er oppretta."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Dette biletet erstattar standard forumikonet som vert vist ved sida av forumtittelen."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Denne sida kjem frå grunnkurset. Lagring av ho vil opprette ein versjon for den gjeldande økta."
+
+msgid "This will also delete %s subcategories."
+msgstr "Dette vil også slette %s underkategoriar."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Dette vil opprette individuelle arbeidsider for %s studentar."
+
+msgid "Thread history"
+msgstr "Trådhistorikk"
+
+msgid "Title and content"
+msgstr "Tittel og innhald"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Kan ikkje avbryte fornying no."
+
+msgid "Unable to restore renewal right now."
+msgstr "Kan ikkje gjenopprette fornying no."
+
+msgid "Unlock page"
+msgstr "Lås opp side"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Bruk [[Side]] eller [[Side|Synleg tekst]] for å opprette interne Wiki-lenker."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Bruk mellomromstast eller piltastar for å navigere"
+
+msgid "View version"
+msgstr "Vis versjon"
+
+msgid "Visible only to teachers"
+msgstr "Synleg berre for lærarar"
+
+msgid "Weight is required"
+msgstr "Vekt er påkravd"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wikikategoriar er slått av for dette kurset."
+
+msgid "Wiki categories enabled"
+msgstr "Wikikategoriar er slått på"
+
+msgid "Wiki html strict filtering"
+msgstr "Streng HTML-filtrering i wiki"
+
+msgid "Wiki settings"
+msgstr "Wiki-innstillingar"
+
+msgid "Wiki settings updated"
+msgstr "Wiki-innstillingar oppdaterte"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Du ser på ein historisk versjon av denne sida"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Du kan leggje ved éin eller fleire filer til dette svaret."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Du kan redigere denne oppgåvesida, men elevarbeidssider vert ikkje endra."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Du kan bruke taggane {{class_name}} og {{student_full_name}} i spørsmålet."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Du har 20 minutt på å redigere denne sida før redigeringslåsen går ut."
+
+msgid "by"
+msgstr "av"
+
+msgid "required"
+msgstr "påkrevd"
 

@@ -8,9 +8,9 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use BuyCoursesPlugin;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
-use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -37,7 +37,6 @@ class PlatformConfigurationController extends AbstractController
     use ControllerTrait;
 
     public function __construct(
-        private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
     ) {}
@@ -229,17 +228,9 @@ class PlatformConfigurationController extends AbstractController
 
             $user = $this->userHelper->getCurrent();
 
-            $configuration['settings']['ticket.show_link_ticket_notification'] = 'false';
-
-            if (!empty($user)) {
-                $userIsAllowedInProject = $this->ticketProjectHelper->userIsAllowInProject(1);
-
-                if ($userIsAllowedInProject
-                    && 'true' === $settingsManager->getSetting('ticket.show_link_ticket_notification')
-                ) {
-                    $configuration['settings']['ticket.show_link_ticket_notification'] = 'true';
-                }
-            }
+            $configuration['settings']['ticket.show_link_ticket_notification'] = $settingsManager->getSetting(
+                'ticket.show_link_ticket_notification'
+            );
 
             $configuration['plugins']['bbb'] = [
                 'show_global_conference_link' => Bbb::showGlobalConferenceLink([
@@ -262,6 +253,7 @@ class PlatformConfigurationController extends AbstractController
         SettingsCourseManager $courseSettingsManager,
         CourseRepository $courseRepository,
         EntityManagerInterface $entityManager,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
         Request $request
     ): JsonResponse {
         $courseId = $request->query->get('cid');
@@ -305,12 +297,16 @@ class PlatformConfigurationController extends AbstractController
         ];
 
         foreach ($aiSettings as $variable) {
-            $value = $this->getCourseSettingValueByCategory(
-                $entityManager,
-                $courseId,
-                $variable,
-                'ai_helpers'
-            );
+            $value = 'false';
+
+            if ($aiFeatureAccessHelper->isFeatureConfigurableForCourse($variable, $courseId)) {
+                $value = $this->getCourseSettingValueByCategory(
+                    $entityManager,
+                    $courseId,
+                    $variable,
+                    'ai_helpers'
+                ) ?? 'false';
+            }
 
             $settingsByCategory['ai_helpers'][$variable] = $value;
 

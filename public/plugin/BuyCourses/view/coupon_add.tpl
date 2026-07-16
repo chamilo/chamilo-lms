@@ -36,7 +36,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -165,6 +165,24 @@
                         {% if currency_iso %}
                             <div class="text-sm text-gray-50">{{ currency_iso }}</div>
                         {% endif %}
+                    </div>
+
+                    <div class="w-full max-w-lg space-y-2">
+                        <label for="coupon-times-applied" class="block text-sm font-semibold text-gray-90">
+                            {{ 'CouponTimesApplied'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </label>
+                        <input
+                            id="coupon-times-applied"
+                            name="times_applied"
+                            type="number"
+                            min="0"
+                            step="1"
+                            value="{{ data.times_applied|default('0')|e('html_attr') }}"
+                            class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
+                        >
+                        <div class="text-sm text-gray-50">
+                            {{ 'CouponTimesAppliedHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </div>
                     </div>
 
                     <div class="grid gap-4 lg:grid-cols-2">
@@ -411,7 +429,7 @@
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2 {{ submit_disabled ? 'opacity-50 cursor-not-allowed' : '' }}"
                         {{ submit_disabled ? 'disabled' : '' }}
                     >
-                        <em class="fa fa-check fa-fw"></em>
+                        <em class="mdi mdi-check"></em>
                         {{ submitLabel }}
                     </button>
                 </div>

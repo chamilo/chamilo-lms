@@ -116,6 +116,10 @@ async function submit() {
     }
 
     const res = await svc.deleteCourse(node.value, payload)
+    if (res.ok === false) {
+      error.value = res.message || t("Failed to delete course.")
+      return
+    }
     notice.value = res.message || t("Course deleted successfully.")
     if (res.redirectUrl) {
       window.location.href = res.redirectUrl

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Taos-puso"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Halimbawa ng formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Halimbawa ng pormula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mga saklaw ng variable"
@@ -1575,8 +1575,8 @@ msgstr "Sigurado ka bang gusto mong burahin ang mga hakbang na ito?"
 msgid "Authoring tool"
 msgstr "Pambuong-guhit na tool"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM o AICC file na i-upload"
+msgid "SCORM file to upload"
+msgstr "SCORM file na i-upload"
 
 msgid "Course location"
 msgstr "Lokasyon ng kurso"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight\/Size<sup>2</sup> (Cf.<a href=\"http:\/\/en.wikipedia.org\/wiki\/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -8723,6 +8723,15 @@ msgstr "Ipakita"
 
 msgid "My courses"
 msgstr "Aking Mga Kurso"
+
+msgid "Shop"
+msgstr "Shop"
+
+msgid "Invoice"
+msgstr "Invoice"
+
+msgid "Request invoice"
+msgstr "Request invoice"
 
 msgid "View my progress"
 msgstr "Tingan aking progreso"
@@ -14485,7 +14494,7 @@ msgid "dari"
 msgstr "dari"
 
 msgid "dutch corporate"
-msgstr "Dutch corporate"
+msgstr "kumpanya ng Olandes"
 
 msgid "english for organisations"
 msgstr "english para sa mga organisasyon"
@@ -14650,7 +14659,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "I-activate ang extended button bars kapag maximized ang WYSIWYG editor"
 
 msgid "HTML Editor"
-msgstr "HTML Editor"
+msgstr "Editor ng HTML"
 
 msgid "Go directly to the course after login"
 msgstr "Direktang pumunta sa kurso matapos ang login"
@@ -15052,7 +15061,7 @@ msgid "Install Chamilo"
 msgstr "I-install ang Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "URL ng Chamilo"
 
 msgid "You have no session in your sessions history"
 msgstr "Wala kang session sa iyong history ng mga session"
@@ -15361,7 +15370,7 @@ msgid "This extension must be loaded."
 msgstr "Dapat i-load ang extension na ito."
 
 msgid "MySQL protocol"
-msgstr "MySQL protocol"
+msgstr "Protokol ng MySQL"
 
 msgid "MySQL server host"
 msgstr "Host ng MySQL server"
@@ -15553,7 +15562,7 @@ msgid "Import exercises Qti2"
 msgstr "I-import ang mga pagsasanay Qti2"
 
 msgid "ISO code"
-msgstr "ISO code"
+msgstr "Kodigo ng ISO"
 
 msgid "The sub-language of this language has been added"
 msgstr "Nadagdag na ang sub-wika ng wikang ito"
@@ -15709,7 +15718,7 @@ msgid "Attended"
 msgstr "Dumalo"
 
 msgid "IP address"
-msgstr "IP address"
+msgstr "Address ng IP"
 
 msgid "Only skills that were not registered were imported"
 msgstr "Ang mga skill na hindi nirehistro lamang ang na-import"
@@ -16480,7 +16489,7 @@ msgid "Total number of assignments"
 msgstr "Kabuuang bilang ng mga takdang-aralin"
 
 msgid "Test server mode"
-msgstr "Test server mode"
+msgstr "Mode ng test server"
 
 msgid "Page execution time was"
 msgstr "Oras ng pag-execute ng pahina ay"
@@ -16870,7 +16879,7 @@ msgid "Choose whether you want to enable the BigBlueButton videoconference tool.
 msgstr "Pumili kung nais mong paganahin ang BigBlueButton videoconference tool. Kapag pinagana, ito ay lalabas bilang karagdagang course tool sa homepage ng lahat ng kurso, at ang mga guro ay makakapag-launch ng conference anumang oras. Ang mga mag-aaral ay hindi makakapag-launch ng conference, maaari lamang sumali. Kung wala kang BigBlueButton server, pakikalmahan mong <a href=\"http:\/\/bigbluebutton.org\/\" target=\"_blank\">mag-set up ng isa</a> o magtanong sa <a href=\"http:\/\/www.chamilo.org\/en\/providers\" target=\"_blank\">mga opisyal na provider ng Chamilo</a> para sa quote."
 
 msgid "BigBlueButton server host"
-msgstr "BigBlueButton server host"
+msgstr "Host ng BigBlueButton server"
 
 msgid "This is the name of the server where your BigBlueButton server is running. Might be <i>localhost</i>, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com)."
 msgstr "Ito ang pangalan ng server kung saan tumatakbo ang iyong BigBlueButton server. Maaaring <i>localhost</i>, isang IP address (hal. 192.168.13.54) o isang domain name (hal. my.video.com)."
@@ -20119,7 +20128,7 @@ msgid "When enabled, and when using the WSCertificatesList webservice, this opti
 msgstr "Kapag pinagana, at kapag gumagamit ng WSCertificatesList webservice, sisiguraduhin ng opsyon na ito na nabuo na ang lahat ng certificates ng users kung nakamit nila ang sapat na score sa lahat ng items na tinukoy sa gradebooks para sa lahat ng courses at sessions (maaaring gumamit ito ng malaking processing resources sa server mo)."
 
 msgid "OpenBadges backpack URL"
-msgstr "OpenBadges backpack URL"
+msgstr "URL ng OpenBadges backpack"
 
 msgid "The URL of the OpenBadges backpack server that will be used by default for all users wanting to export their badges. This defaults to the open and free Mozilla Foundation backpack repository: https://backpack.openbadges.org/"
 msgstr "Ang URL ng OpenBadges backpack server na gagamitin sa default para sa lahat ng users na nais mag-export ng kanilang badges. Ito ay default sa open at free Mozilla Foundation backpack repository: https://backpack.openbadges.org/"
@@ -25660,7 +25669,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "Paganahin ang mga player renderer para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch media"
+msgstr "Paganahin ang mga player renderer para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -26605,7 +26614,7 @@ msgid "LDAP connection configuration"
 msgstr "Kombigurasyon ng koneksyon ng LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array na tumutukoy sa host at port para sa LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Itakda ang expiration date sa unang login"
@@ -26617,7 +26626,7 @@ msgid "Selective display of roles"
 msgstr "Piliin ang pagpapakita ng mga role"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Isang array ng role => true/false na tumutukoy kung ipapakita o itatago ang role.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Mga opsyon sa pagpapakita ng mga role"
@@ -28189,7 +28198,7 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Nag-expire ang session. Ire-redirect sa login…"
 
 msgid "Super admin"
-msgstr "Super Admin"
+msgstr "Super admin"
 
 msgid "Global admin"
 msgstr "Global na Admin"
@@ -31366,7 +31375,7 @@ msgid "No members found."
 msgstr "Walang natagpuang miyembro."
 
 msgid "Health check"
-msgstr "Health check"
+msgstr "Pagsusuri sa Kalusugan"
 
 msgid "Export to CC 1.3"
 msgstr "I-export sa CC 1.3"
@@ -31801,7 +31810,7 @@ msgid "Show JSON Template"
 msgstr "Ipakita ang JSON Template"
 
 msgid "JSON Template"
-msgstr "JSON Template"
+msgstr "Template ng JSON"
 
 msgid "Installing Xapian bindings"
 msgstr "Pag-install ng Xapian bindings"
@@ -32113,7 +32122,7 @@ msgid "Selected items will be the only ones included in the exported file."
 msgstr "Ang mga napiling item lamang ang isasama sa na-export na file."
 
 msgid "Moodle export"
-msgstr "Moodle export"
+msgstr "Pag-export sa Moodle"
 
 msgid "Moodle version"
 msgstr "Bersyon ng Moodle"
@@ -32182,7 +32191,7 @@ msgid "Allowed file formats: %s"
 msgstr "Pinapayagang mga format ng file: %s"
 
 msgid "File manager"
-msgstr "File manager"
+msgstr "Tagapamahala ng File"
 
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Hindi pinapayagang uri ng file. Pinapayagang mga extension: %s"
@@ -34342,7 +34351,7 @@ msgid "You cannot create more courses right now."
 msgstr "Hindi ka na makakagawa pa ng mga kurso sa ngayon."
 
 msgid "AI analyzer"
-msgstr "AI analyzer"
+msgstr "Tagasuri ng AI"
 
 msgid "Expand all"
 msgstr "I-expand lahat"
@@ -34426,7 +34435,7 @@ msgid "The following errors occurred during import:"
 msgstr "Ang mga sumusunod na error ang naganap habang nag-i-import:"
 
 msgid "CSV file"
-msgstr "CSV file"
+msgstr "Talaksan ng CSV"
 
 msgid "Remove user from all group-related entities if not in the list"
 msgstr "Alisin ang user sa lahat ng entity na may kaugnayan sa grupo kung wala sa listahan"
@@ -35479,7 +35488,7 @@ msgid "%s results"
 msgstr "%s resulta"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng pagpuno sa form na aktibidad: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Tingnan ang <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Natanggal"
@@ -36476,4 +36485,856 @@ msgstr "Naka-moderate"
 
 msgid "View threads"
 msgstr "Tingnan ang mga thread"
+
+msgid "No auth source"
+msgstr "No auth source"
+
+msgid "You must add at least one question"
+msgstr "You must add at least one question"
+
+msgid "Advanced actions"
+msgstr "Advanced actions"
+
+msgid "Application path"
+msgstr "Application path"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Apply plan failed"
+
+msgid "Apply plan ready"
+msgstr "Apply plan ready"
+
+msgid "Apply preparation"
+msgstr "Apply preparation"
+
+msgid "Apply staged files"
+msgstr "Apply staged files"
+
+msgid "Applying files..."
+msgstr "Applying files..."
+
+msgid "Audit file"
+msgstr "Audit file"
+
+msgid "Backup directory"
+msgstr "Backup directory"
+
+msgid "Baseline clean"
+msgstr "Baseline clean"
+
+msgid "Baseline warnings"
+msgstr "Baseline warnings"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+
+msgid "Build production frontend assets."
+msgstr "Build production frontend assets."
+
+msgid "Building plan..."
+msgstr "Building plan..."
+
+msgid "Channel"
+msgstr "Channel"
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+
+msgid "Check manifest"
+msgstr "Check manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Checking post-apply actions..."
+
+msgid "Checking..."
+msgstr "Checking..."
+
+msgid "Composer install"
+msgstr "Composer install"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "I-configure ang CHAMILO_UPDATE_MANIFEST_URL sa server o magbigay ng HTTPS manifest URL."
+
+msgid "Configured"
+msgstr "Na-configure na"
+
+msgid "Current migration"
+msgstr "Kasalukuyang migration"
+
+msgid "Database baseline"
+msgstr "Baseline ng database"
+
+msgid "Database migration safety review"
+msgstr "Pagsusuri sa kaligtasan ng database migration"
+
+msgid "Database migrations"
+msgstr "Database migrations"
+
+msgid "Development mode"
+msgstr "Development mode"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Huwag itong paganahin maliban kung nasuri na ang backup ng update at mga pahintulot sa server."
+
+msgid "Doctrine dry-run command"
+msgstr "Utos ng Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Nag-ulat ang Doctrine ng mga babala sa historical baseline. Isasagawa pa rin ng updater ang mga staged V210 migrations pagkatapos ng malinaw na kumpirmasyon."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Isasagawa lamang ng Doctrine ang mga staged V210 migrations pagkatapos na makapasa ang pagsusuri sa kaligtasan."
+
+msgid "Dry-run exit code"
+msgstr "Exit code ng dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Isinagawa ang mga unavailable migrations"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "I-extract ang napatunayang update package sa isang staging directory para sa inspeksyon. Hindi nito papalitan ang mga file, tatakbo ang migrations, o babaguhin ang database."
+
+msgid "File apply available"
+msgstr "File apply available"
+
+msgid "Files to replace"
+msgstr "Mga file na papalitan"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Kinukumpirma ko na mayroong database backup at na-verify ito bago patakbuhin ang migrations."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Nauunawaan ko na ang mga advanced na aksyon ay maaaring baguhin ang dependencies, generated assets o ang database."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Nauunawaan ko na papalitan nito ang mga file sa pag-install ng Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Nauunawaan ko na patatakbuhin nito ang mga update command sa server."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "I-install ang frontend dependencies bago muling buuin ang assets."
+
+msgid "Installed version"
+msgstr "Naka-install na bersyon"
+
+msgid "Latest migration"
+msgstr "Pinakabagong migration"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Iwanang walang laman ang mga landas ng package at signature upang i-download ang mga ito mula sa mga verified manifest URL. Ang mga lokal na landas ay magagamit lamang para sa development tests."
+
+msgid "Live command log"
+msgstr "Live command log"
+
+msgid "Live update log"
+msgstr "Live update log"
+
+msgid "Local test options"
+msgstr "Mga lokal na opsyon sa pagsubok"
+
+msgid "Local test update notice link"
+msgstr "Link ng local test update notice"
+
+msgid "Local update notice simulation"
+msgstr "Local update notice simulation"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Available lamang ang local update notice simulation sa development mode."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Pinagmulan ng manifest"
+
+msgid "Migration safety details"
+msgstr "Mga detalye ng migration safety"
+
+msgid "Migration safety review failed"
+msgstr "Nabigo ang pagsusuri sa migration safety"
+
+msgid "Migration safety review ready"
+msgstr "Handa na ang pagsusuri sa migration safety"
+
+msgid "Migration target"
+msgstr "Migration target"
+
+msgid "New files"
+msgstr "Mga bagong file"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Mga bagong migration na iniulat ng Doctrine"
+
+msgid "Next migration"
+msgstr "Susunod na migration"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Walang unavailable migration na naiulat na isinagawa."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Wala pang opisyal na manifest URL na na-configure. Gumamit ng HTTPS URL o lokal na landas para sa development tests."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Walang nakitang pending migration bago ang staged update target."
+
+msgid "Not configured"
+msgstr "Hindi na-configure"
+
+msgid "Not detected"
+msgstr "Hindi natukoy"
+
+msgid "Official Chamilo update channel"
+msgstr "Opisyal na update channel ng Chamilo"
+
+msgid "Package SHA-256"
+msgstr "Package SHA-256"
+
+msgid "Package URL"
+msgstr "Package URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "I-download ang package at signature files mula sa manifest. Hindi pinapayagan ang mga lokal na landas sa kapaligirang ito."
+
+msgid "Package path"
+msgstr "Landas ng package"
+
+msgid "Package staged successfully"
+msgstr "Matagumpay na na-stage ang package"
+
+msgid "Package staging failed"
+msgstr "Nabigo ang paghahanda ng package"
+
+msgid "Package verification"
+msgstr "Pagpapatunay ng package"
+
+msgid "Package verification failed"
+msgstr "Nabigo ang pagpapatunay ng package"
+
+msgid "Package verified successfully"
+msgstr "Matagumpay na napatunayan ang package"
+
+msgid "Pending migrations before this update"
+msgstr "Mga migration na nakabinbin bago ang update na ito"
+
+msgid "Planned backup path"
+msgstr "Planadong landas ng backup"
+
+msgid "Post-apply actions completed"
+msgstr "Natapos ang mga aksyon pagkatapos ng paglalapat"
+
+msgid "Post-apply actions failed"
+msgstr "Nabigo ang mga aksyon pagkatapos ng paglalapat"
+
+msgid "Post-apply actions ready"
+msgstr "Handa na ang mga aksyon pagkatapos ng paglalapat"
+
+msgid "Post-apply checks"
+msgstr "Mga pagsusuri pagkatapos ng paglalapat"
+
+msgid "Post-apply checks failed"
+msgstr "Nabigo ang mga pagsusuri pagkatapos ng paglalapat"
+
+msgid "Post-apply details"
+msgstr "Mga detalye pagkatapos ng paglalapat"
+
+msgid "Post-apply run details"
+msgstr "Mga detalye ng pagpapatakbo pagkatapos ng paglalapat"
+
+msgid "Preflight checks"
+msgstr "Mga pagsusuri bago ang paglalapat"
+
+msgid "Preflight checks completed"
+msgstr "Natapos ang mga pagsusuri bago ang paglalapat"
+
+msgid "Preflight checks failed"
+msgstr "Nabigo ang mga pagsusuri bago ang paglalapat"
+
+msgid "Preflight details"
+msgstr "Mga detalye bago ang paglalapat"
+
+msgid "Prepare staging"
+msgstr "Ihanda ang staging"
+
+msgid "Preparing staging..."
+msgstr "Inihahanda ang staging..."
+
+msgid "Production mode"
+msgstr "Mode ng produksyon"
+
+msgid "Released at"
+msgstr "Inilabas noong"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Palitan ang mga file ng Chamilo mula sa na-staging na package gamit ang nasuring plan ng paglalapat. Hindi nito pinapatakbo ang mga migration ng database, Composer, Yarn o mga utos ng cache."
+
+msgid "Review apply plan"
+msgstr "Suriin ang plan ng paglalapat"
+
+msgid "Review database migrations"
+msgstr "Suriin ang mga migration ng database"
+
+msgid "Review post-apply actions"
+msgstr "Suriin ang mga aksyon pagkatapos ng paglalapat"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Suriin ang inirerekomendang mga utos na manual pagkatapos maglapat ng mga file ng update. Hindi nito pinapatakbo ang Composer, Yarn, migrations o mga utos ng cache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Suriin ang mga migration ng Doctrine na na-staging at ang dry-run na output bago patakbuhin ang mga migration ng database."
+
+msgid "Reviewing database migrations..."
+msgstr "Sinusuri ang mga migration ng database..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Patakbuhin at ipasa ang pagsusuri sa kaligtasan ng migration bago isagawa ang mga migration ng database."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Patakbuhin ang mga pagsusuri sa kapaligiran bago ang anumang hakbang sa paglalapat ng update sa hinaharap. Hindi nito binabago ang mga file o ang database."
+
+msgid "Run post-apply actions"
+msgstr "Patakbuhin ang mga aksyon pagkatapos ng paglalapat"
+
+msgid "Run preflight checks"
+msgstr "Patakbuhin ang mga pagsusuri bago ang paglalapat"
+
+msgid "Run selected post-apply actions"
+msgstr "Patakbuhin ang mga piling aksyon pagkatapos ng paglalapat"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Patakbuhin ang mga piling utos pagkatapos ng paglalapat mula sa server gamit ang kontroladong allowlist. Walang tinatanggap na custom na shell commands."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Patakbuhin ang mga utos na ito nang mano-mano mula sa server pagkatapos kumpirmahin ang resulta ng pag-update ng file at ang mga backup."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Naka-disable ang pagpapatakbo ng mga aksyon pagkatapos ng paglalapat mula sa UI sa mode ng produksyon."
+
+msgid "Running post-apply actions..."
+msgstr "Pinapatakbo ang mga aksyon pagkatapos ng paglalapat..."
+
+msgid "Safe actions"
+msgstr "Mga ligtas na aksyon"
+
+msgid "Signature path"
+msgstr "Landas ng signature"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Hindi maaaring laktawan ang pagpapatunay ng signature sa kapaligirang ito."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Laktawan ang pagpapatunay ng signature para sa mga pagsusuri sa lokal na development"
+
+msgid "Staged file application failed"
+msgstr "Nabigo ang paglalapat ng mga na-staging na file"
+
+msgid "Staged files applied successfully"
+msgstr "Matagumpay na nailapat ang mga na-staging na file"
+
+msgid "Staging details"
+msgstr "Mga detalye ng staging"
+
+msgid "Staging directory"
+msgstr "Direktoryo ng staging"
+
+msgid "Staging extraction"
+msgstr "Pagkuha mula sa staging"
+
+msgid "Symfony cache clear"
+msgstr "Pag-clear ng Symfony cache"
+
+msgid "System update"
+msgstr "Update ng system"
+
+msgid "Target version"
+msgstr "Target na bersyon"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Ang naka-configure na opisyal na URL ng manifest ay paunang napunan. Maaari mo itong baguhin sa ibang HTTPS manifest kung kinakailangan."
+
+msgid "The database migration baseline is clean."
+msgstr "Malinis ang baseline ng paglilipat ng database."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Nabigo ang huling tugon ng HTTP matapos makumpleto ang operasyon. Karaniwang sanhi nito ay ang mga pahintulot sa runtime cache o pag-restart ng web server habang isinasagawa ang kahilingan."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Iniulat ng log ng operasyon na matagumpay na nakumpleto ang mga aksyon pagkatapos ng paglalapat."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Matagumpay na nakumpleto ang mga napiling utos pagkatapos ng paglalapat, ngunit nabigo ang huling tugon ng HTTP. I-refresh ang pahina at tingnan ang mga pahintulot sa runtime cache kung hindi tama ang pag-load ng pahina."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Hindi gumagawa o nagre-restore ng mga backup ng database ang updater."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ligtas na patakbuhin ang mga aksyong ito mula sa UI pagkatapos suriin ang resulta ng update."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Maaaring baguhin ng mga utos na ito ang mga dependency, nabuong assets, cache o database. Kumpirmahin ang mga backup bago magpatuloy."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Binabago ng aksyong ito ang mga file sa pag-install ng Chamilo. Tiyaking nasuri ang apply plan at naka-enable ang mga backup bago magpatuloy."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Ginagaya ng entry na ito sa development ang hinaharap na abiso ng update mula sa Chamilo.org gamit ang mga lokal na landas ng test package."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Binuksan ang screen na ito mula sa opisyal na abiso ng update, ngunit wala pang naka-configure na opisyal na pinagmulan ng manifest."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Binuksan ang screen na ito mula sa abiso ng update. Tanging ang pagsusuri ng manifest ang awtomatikong sinisimulan."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Inihahanda lamang ng hakbang na ito ang pagsusuri. Ang pagpapalit ng file ay mangyayari sa susunod na hakbang na Apply staged files, kasama ang lock, backup at proteksyon sa rollback."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Hindi gumagawa ng backup ng database ang updater na ito. Gumawa at i-verify ng backup bago patakbuhin ang mga migration."
+
+msgid "Trusted public key"
+msgstr "Pinagkakatiwalaang pampublikong key"
+
+msgid "Trusted signing key"
+msgstr "Pinagkakatiwalaang signing key"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "I-type ang APPLY UPDATE FILES upang kumpirmahin"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "I-type ang RUN DATABASE MIGRATIONS upang kumpirmahin ang mga migration ng database"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "I-type ang RUN POST UPDATE ACTIONS upang kumpirmahin"
+
+msgid "Unknown update notice source."
+msgstr "Hindi kilalang pinagmulan ng abiso ng update."
+
+msgid "Update availability"
+msgstr "Availability ng update"
+
+msgid "Update directory"
+msgstr "Update directory"
+
+msgid "Update lock path"
+msgstr "Update lock path"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Gamitin ang staging directory na ginawa ng nakaraang hakbang. Tanging mga directory sa loob ng var/update/staging ang tinatanggap ng backend."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Gamitin ang link na ito upang gayahin ang hinaharap na abiso ng update mula sa Chamilo.org sa panahon ng mga development test."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Gamitin lamang ito para sa mga lokal na development test. Dapat gamitin ng mga production update ang key na naka-configure sa server."
+
+msgid "Verification details"
+msgstr "Mga detalye ng pag-verify"
+
+msgid "Verify package"
+msgstr "I-verify ang package"
+
+msgid "Verifying..."
+msgstr "Nagve-verify..."
+
+msgid "Waiting for command progress events..."
+msgstr "Naghihintay ng mga kaganapan sa progreso ng utos..."
+
+msgid "Waiting for update progress events..."
+msgstr "Naghihintay ng mga kaganapan sa progreso ng update..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "Kinakailangan ang komento"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Mayroon nang database na may parehong pangalan. Kung naglalaman ito ng mga talahanayan, ito ay tatanggalin; kung walang laman, ito ay muling gagamitin."
+
+msgid "AI generated"
+msgstr "Gawa ng AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Magdagdag ng hindi bababa sa isang tanong bago bumalik sa learning path."
+
+msgid "Add attachments"
+msgstr "Magdagdag ng mga attachment"
+
+msgid "Additional fields"
+msgstr "Karagdagang mga field"
+
+msgid "Allow comments"
+msgstr "Pahintulutan ang mga komento"
+
+msgid "Allow new pages"
+msgstr "Pahintulutan ang mga bagong pahina"
+
+msgid "Allow ratings"
+msgstr "Pahintulutan ang mga rating"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Sigurado ka bang nais mong tanggalin ang lahat ng item?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Sigurado ka bang nais mong ibalik ang awtomatikong pag-renew?"
+
+msgid "Attachment has been deleted"
+msgstr "Natanggal na ang attachment"
+
+msgid "Backup file"
+msgstr "Backup file"
+
+msgid "Block comments"
+msgstr "Harangan ang mga komento"
+
+msgid "Block new pages"
+msgstr "Harangan ang mga bagong pahina"
+
+msgid "Block ratings"
+msgstr "Harangan ang mga rating"
+
+msgid "Cancel renewal"
+msgstr "Kanselahin ang pag-renew"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Aalisin ang mga link ng kategorya mula sa %s pahina ng Wiki."
+
+msgid "Change"
+msgstr "Baguhin"
+
+msgid "Clear group"
+msgstr "Linisin ang grupo"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "I-click ang isang tag upang ilagay ito sa editor. Ang mga placeholder na ito ay papalitan kapag ginagawa ang sertipiko."
+
+msgid "Comment added"
+msgstr "Naidagdag ang komento"
+
+msgid "Comment is required"
+msgstr "Kinakailangan ang komento"
+
+msgid "Comment score"
+msgstr "Marka ng komento"
+
+msgid "Compare selected versions line by line"
+msgstr "Ihambing ang mga napiling bersyon ayon sa linya"
+
+msgid "Compare selected versions word by word"
+msgstr "Ihambing ang mga napiling bersyon ayon sa salita"
+
+msgid "Compare versions"
+msgstr "Ihambing ang mga bersyon"
+
+msgid "Copy completed"
+msgstr "Kumpleto na ang kopya"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Gumawa ng indibidwal na pahina ng Wiki para sa mga mag-aaral"
+
+msgid "Current view mode"
+msgstr "Kasalukuyang mode ng pagtingin"
+
+msgid "Delete Wiki"
+msgstr "Tanggalin ang Wiki"
+
+msgid "Delete page"
+msgstr "Tanggalin ang pahina"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Hindi inirerekomenda ang pagtanggal ng homepage ng Wiki. Maaari mo itong likhain muli mamaya."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Kapag hindi pinagana ang Wiki, nahaharangan ang normal na mga pahina at aksyon ng Wiki. Nananatiling available ang pahinang ito ng mga setting para sa mga guro ng kurso."
+
+msgid "Discussion"
+msgstr "Talakayan"
+
+msgid "Edit Comment"
+msgstr "I-edit ang Komento"
+
+msgid "Edit page"
+msgstr "I-edit ang pahina"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Ang petsa ng pagtatapos ay dapat pagkatapos o katumbas ng petsa ng pag-expire"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Maglagay ng termino sa paghahanap upang mahanap ang mga pahina ng Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Ang petsa ng pag-expire ay dapat bago o katumbas ng petsa ng pagtatapos"
+
+msgid "Failed email recipients"
+msgstr "Nabigong mga tatanggap ng email"
+
+msgid "Finish and return to learning path"
+msgstr "Tapusin at bumalik sa learning path"
+
+msgid "Forum image"
+msgstr "Larawan ng forum"
+
+msgid "Hide discussion"
+msgstr "Itago ang talakayan"
+
+msgid "Hide page"
+msgstr "Itago ang pahina"
+
+msgid "I changed my mind"
+msgstr "Nabago ang isipan ko"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Kung hindi ito pipiliin, mananatiling available ang mga file na ito sa administrator ng platform sa pamamagitan ng tool na 'File information'."
+
+msgid "Internal message failures"
+msgstr "Mga pagkabigo ng internal message"
+
+msgid "Internal messages available"
+msgstr "Available na internal messages"
+
+msgid "Internal messages created now"
+msgstr "Nalikha na ngayon ang internal messages"
+
+msgid "Item score"
+msgstr "Marka ng item"
+
+msgid "Last post"
+msgstr "Huling post"
+
+msgid "Lock page"
+msgstr "I-lock ang pahina"
+
+msgid "Manage categories"
+msgstr "Pamahalaan ang mga kategorya"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Markahan ang dokumentong ito bilang tinulungan ng AI. Gamitin ito kapag ang nilalaman ay nilikha o malaki ang pagbabago gamit ang mga tool ng AI."
+
+msgid "Maximum score is required"
+msgstr "Kinakailangan ang maximum na marka"
+
+msgid "Metric"
+msgstr "Metric"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Naka-block ang mga bagong komento sa talakayang ito"
+
+msgid "No Wiki categories are available yet."
+msgstr "Wala pang available na kategorya ng Wiki."
+
+msgid "No categories found"
+msgstr "Walang nahanap na kategorya"
+
+msgid "No content"
+msgstr "Walang nilalaman"
+
+msgid "No parent category"
+msgstr "Walang parent category"
+
+msgid "Number of comments scored"
+msgstr "Bilang ng mga komento na may marka"
+
+msgid "Old version"
+msgstr "Lumang bersyon"
+
+msgid "Only image files are allowed."
+msgstr "Tanging mga image file lamang ang pinapayagan."
+
+msgid "Please fill all required fields"
+msgstr "Mangyaring punan ang lahat ng kinakailangang field"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Ang mga tanong na may class o student placeholder ay gagawin para sa mga klase o grupo ng kurso: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Naka-block ang mga rating sa talakayang ito"
+
+msgid "Remove image"
+msgstr "Alisin ang larawan"
+
+msgid "Restore renewal"
+msgstr "Ibalik ang pag-renew"
+
+msgid "Restore version"
+msgstr "Ibalik ang bersyon"
+
+msgid "Search in"
+msgstr "Hanapin sa"
+
+msgid "Select group"
+msgstr "Pumili ng pangkat"
+
+msgid "Select image"
+msgstr "Pumili ng larawan"
+
+msgid "Selected image"
+msgstr "Napiling larawan"
+
+msgid "Show discussion"
+msgstr "Ipakita ang talakayan"
+
+msgid "Show page"
+msgstr "Ipakita ang pahina"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Ang ilang mga file o folder ay walang pahintulot sa pagsulat. Upang mai-install ang Chamilo, kailangan mo munang baguhin ang kanilang mga pahintulot (gamit ang CHMOD). Pakibasa ang"
+
+msgid "Subcategories"
+msgstr "Mga subkategorya"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Pindutin ang kaliwa o kanan upang mag-navigate"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Lumipas na ang takdang oras ng Wiki assignment, ngunit pinapayagan ang huling pagsumite."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Lumipas na ang takdang oras ng Wiki assignment."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Hindi pa nagsisimula ang Wiki assignment."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Kinakailangan ang pag-lock ng pag-edit ng Wiki page bago i-save."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Na-save ang anunsyo, ngunit hindi ma-upload ang attachment."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Na-save ang anunsyo, ngunit nabigo ang paghahatid ng email."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Na-save ang anunsyo, ngunit walang email na naipadala."
+
+msgid "The category has been created"
+msgstr "Nalikha ang kategorya"
+
+msgid "The category has been deleted"
+msgstr "Nabura ang kategorya"
+
+msgid "The category has been updated"
+msgstr "Na-update ang kategorya"
+
+msgid "The end date is invalid"
+msgstr "Di-wasto ang petsa ng pagtatapos"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Ang pinakamataas na bilang ng mga bersyon ay dapat na isang hindi negatibong integer"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Ang pinakamataas na bilang ng mga salita ay dapat na isang hindi negatibong integer"
+
+msgid "The print window could not be opened"
+msgstr "Hindi mabuksan ang window ng pag-print"
+
+msgid "The start date is invalid"
+msgstr "Di-wasto ang petsa ng pagsisimula"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Ang mga setting na ito ay nalalapat sa buong kurso, kasama ang mga session at pangkat nito."
+
+msgid "This announcement has already been sent by email."
+msgstr "Naipadala na sa email ang anunsyong ito."
+
+msgid "This discussion is hidden from learners"
+msgstr "Nakatago ang talakayang ito sa mga mag-aaral"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Ang generative AI tool na ito ay nagbibigay-daan sa iyo na lumikha ng mga larawan at maikling video upang ilarawan ang iyong kurso. Sa pamamagitan ng pagpapaliwanag (sa teksto) kung ano ang gusto mo sa seksyon ng prompt, bibigyan mo ang naka-configure na AI model ng mga elemento na kinakailangan upang makabuo ng larawan o video. Maging mapagpasensya. Magtatagal ang AI model at gagawa ng resulta, na maaaring gusto mong itago sa pamamagitan ng pag-save ng media sa iyong documents folder, at pagkatapos ay i-embed sa loob ng HTML document. Hindi pantay ang lahat ng AI model sa bilis o kalidad. Maaaring bigyan ka rin ng AI model ng binagong prompt, na mas detalyadong interpretasyon ng iyong kahilingan. Maaari mong gamitin ang binagong prompt na ito upang i-finetune ang iyong kahilingan. Mangyaring tandaan na ang tool na ito, lalo na para sa mga video, ay maaaring makabuo ng malaking gastos para sa iyong organisasyon, kahit na magpasya kang hindi i-save ang nabuong media. Gamitin ito nang naaangkop. Kung mayroon kang mga isyu sa pagkuha ng hinahanap mo, mangyaring maglaan ng oras upang magsaliksik ng mga prompting tricks online para sa AI model na mayroon ka."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ang kasaysayang ito ay pag-aari ng base course. Magagamit ang pag-restore pagkatapos gumawa ng session version."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Pinapalitan ng larawang ito ang default na forum icon na ipinapakita sa tabi ng pamagat ng forum."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Ang pahinang ito ay nagmumula sa base course. Ang pag-save nito ay lilikha ng bersyon para sa kasalukuyang session."
+
+msgid "This will also delete %s subcategories."
+msgstr "Buburahin din nito ang %s subkategorya."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Lilikha ito ng mga indibidwal na work page para sa %s mag-aaral."
+
+msgid "Thread history"
+msgstr "Kasaysayan ng thread"
+
+msgid "Title and content"
+msgstr "Pamagat at nilalaman"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Hindi makansela ang pag-renew sa ngayon."
+
+msgid "Unable to restore renewal right now."
+msgstr "Hindi maibalik ang pag-renew sa ngayon."
+
+msgid "Unlock page"
+msgstr "I-unlock ang pahina"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Gamitin ang [[Page]] o [[Page|Visible text]] upang lumikha ng mga internal Wiki link."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Gamitin ang spacebar o arrow keys upang mag-navigate"
+
+msgid "View version"
+msgstr "Tingnan ang bersyon"
+
+msgid "Visible only to teachers"
+msgstr "Makikita lamang ng mga guro"
+
+msgid "Weight is required"
+msgstr "Kinakailangan ang weight"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Naka-disable ang Wiki categories para sa kursong ito."
+
+msgid "Wiki categories enabled"
+msgstr "Naka-enable ang Wiki categories"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki html strict filtering"
+
+msgid "Wiki settings"
+msgstr "Mga setting ng Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Na-update ang mga setting ng Wiki"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Tinitingnan mo ang isang makasaysayang bersyon ng pahinang ito"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Maaari kang mag-attach ng isa o higit pang mga file sa sagot na ito."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Maaari mong i-edit ang pahinang ito ng takdang-aralin, ngunit hindi babaguhin ang mga pahina ng gawain ng mga mag-aaral."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Maaari mong gamitin ang mga tag na {{class_name}} at {{student_full_name}} sa tanong."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Mayroon kang 20 minuto para i-edit ang pahinang ito bago mag-expire ang kandado sa pag-edit."
+
+msgid "by"
+msgstr "ni"
+
+msgid "required"
+msgstr "kinakailangan"
 

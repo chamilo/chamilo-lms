@@ -36,9 +36,9 @@ use Throwable;
  */
 final readonly class SurveyConfigurationProcessor implements ProcessorInterface
 {
+    use SurveyCsrfTokenValidationTrait;
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
-    use SurveyCsrfTokenValidationTrait;
 
     private const VISIBLE_TUTOR = 0;
     private const VISIBLE_TUTOR_STUDENT = 1;

@@ -636,7 +636,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-ticket-system',
-            'url' => '/main/ticket/tickets.php',
+            'url' => '/tickets',
             'label' => $this->translator->trans('Tickets'),
         ];
 
@@ -661,6 +661,12 @@ class IndexBlocksController extends BaseController
             'url' => '/main/admin/system_status.php',
             'label' => $this->translator->trans('System status'),
         ];
+        $items[] = [
+            'class' => 'item-system-update',
+            'route' => ['name' => 'AdminSystemUpdate'],
+            'label' => $this->translator->trans('System update'),
+        ];
+
         if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
             $items[] = [
                 'class' => 'item-data-filler',

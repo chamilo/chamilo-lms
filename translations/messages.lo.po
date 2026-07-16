@@ -372,7 +372,7 @@ msgid "Sincerely"
 msgstr "ດ້ວຍຄວາມຈິງໃຈ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ຕົວอย่างສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ຕົວຢ່າງສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ຊ່ວງຂອງຕົວປ່ຽນ"
@@ -1704,8 +1704,8 @@ msgid "Authoring tool"
 msgstr "ເຄື່ອງມືສ້າງ"
 
 #, fuzzy
-msgid "SCORM or AICC file to upload"
-msgstr "ໄຟລ໌ SCORM ຫຼື AICC ທີ່ຈະອັບໂຫຼດ"
+msgid "SCORM file to upload"
+msgstr "ໄຟລ໌ SCORM ທີ່ຈະອັບໂຫຼດ"
 
 #, fuzzy
 msgid "Course location"
@@ -2186,7 +2186,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ແມ່ນ:ມີລິຂະສິດ,, ບໍ່:ບໍ່ມີລິຂະສິດ"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ໂຟລເດີ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":ບົດເຝິກຫັດ:ບົດເຝິກຫັດ,,      ຈຳລອງ:ຈຳລອງ,,      ແບບສອບຖາມ:ແບບສອບຖາມ,,      ແຜນວາດ:ແຜນວາດ,,      ຮູບ:ຮູບ,,      ກຣາຟ:ກຣາຟ,,      ດັດຊະນີ:ດັດຊະນີ,,      ສະໄລ້:ສະໄລ້,,      ຕາຕະລາງ:ຕາຕະລາງ,,      ຂໍ້ຄວາມບັນຍາຍ:ຂໍ້ຄວາມບັນຍາຍ,,      ສອບເສັງ:ສອບເສັງ,,      ທົດລອງ:ທົດລອງ,,      ບັນຫາ:ບັນຫາ,,      ປະເມີນຕົນເອງ:ປະເມີນຕົນເອງ,,      ບັນຍາຍ:ບັນຍາຍ"
@@ -9484,6 +9484,15 @@ msgstr "ສະແດງ"
 msgid "My courses"
 msgstr "ຫຼັກສູດຂອງຂ້ອຍ"
 
+msgid "Shop"
+msgstr "ຮ້ານຄ້າ"
+
+msgid "Invoice"
+msgstr "ໃບເກັບເງິນ"
+
+msgid "Request invoice"
+msgstr "ຂໍໃບເກັບເງິນ"
+
 msgid "View my progress"
 msgstr "ເບິ່ງຄວາມຄືບໜ້າຂອງຂ້ອຍ"
 
@@ -10548,7 +10557,7 @@ msgid "Select a file"
 msgstr "ເລືອກໄຟລ໌"
 
 msgid "Select a file to insert into the editor."
-msgstr ""
+msgstr "ເລືອກໄຟລ໌ເພື່ອໃສ່ໃນຕົວແກ້ໄຂ."
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "ຄຳເຕືອນ - ໄຟລ໌ FAQ, ທີ່ຢູ່ໃນໄດເຣັກທໍຣີ /home/ ຂອງພໍທັນຂອງທ່ານ, ບໍ່ສາມາດຂຽນທັບໄດ້. ຂໍ້ຄວາມຂອງທ່ານຈະບໍ່ຖືກບັນທຶກຈົນກວ່າສິດໃນການເຂົ້າເຖິງໄຟລ໌ຈະຖືກປ່ຽນແປງ."
@@ -17279,7 +17288,7 @@ msgid "Item"
 msgstr "ລາຍການ"
 
 msgid "Items"
-msgstr ""
+msgstr "ລາຍການ"
 
 msgid "Configure Dashboard Plugin"
 msgstr "ຕັ້ງຄ່າປລັກອິນກະດານຄວບຄຸມ"
@@ -17454,13 +17463,13 @@ msgid "Create child skill"
 msgstr "ສ້າງທັກສະຍ່ອຍ"
 
 msgid "This skill can be obtained through:"
-msgstr ""
+msgstr "ທັກສະນີ້ສາມາດໄດ້ຮັບຜ່ານ:"
 
 msgid "No course currently allows you to obtain this skill."
-msgstr ""
+msgstr "ບໍ່ມີຫຼັກສູດໃດທີ່ອະນຸຍາດໃຫ້ທ່ານໄດ້ຮັບທັກສະນີ້ໃນປັດຈຸບັນ."
 
 msgid "Add skill to search profile"
-msgstr ""
+msgstr "ເພີ່ມທັກສະໃສ່ໂປຣໄຟລ໌ການຄົ້ນຫາ"
 
 #, fuzzy
 msgid "Search profile matches"
@@ -18644,16 +18653,16 @@ msgid "Courses in group"
 msgstr "ລາຍວິຊາໃນກຸ່ມ"
 
 msgid "Courses on the platform"
-msgstr ""
+msgstr "ຫຼັກສູດໃນແພລດຟອມ"
 
 msgid "%s courses"
-msgstr ""
+msgstr "%s ຫຼັກສູດ"
 
 msgid "%s sessions"
-msgstr ""
+msgstr "%s ພາກການສຶກສາ"
 
 msgid "Search by title or code"
-msgstr ""
+msgstr "ຄົ້ນຫາຕາມຫົວຂໍ້ ຫຼື ລະຫັດ"
 
 msgid "Users in group"
 msgstr "ຜູ້ໃຊ້ໃນກຸ່ມ"
@@ -33974,55 +33983,55 @@ msgid "Define redirection per profile after login using a JSON object like {\"ST
 msgstr "ກຳນົດການຊີ້ນຳຕາມໂປຣໄຟล์ຫຼັງເຂົ້າສູ່ລະບົບໂດຍໃຊ້ອຸບເຈັກ JSON ເຊັ່ນ {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
 
 msgid "Hide legal accept checkbox in Terms and Conditions page"
-msgstr ""
+msgstr "ເຊື່ອງກ່ອງເຄື່ອງໝາຍຍອມຮັບກົດໝາຍໃນໜ້າເງື່ອນໄຂ ແລະ ຂໍ້ກຳນົດ"
 
 msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
-msgstr ""
+msgstr "ຖ້າຕັ້ງເປັນ true, ຈະເອົາກ່ອງເຄື່ອງໝາຍ \"ຂ້ອຍໄດ້ອ່ານ ແລະ ຍອມຮັບ\" ອອກຈາກການໄຫຼຂອງໜ້າເງື່ອນໄຂ ແລະ ຂໍ້ກຳນົດ."
 
 msgid "Array defining host and port for the LDAP server."
-msgstr ""
+msgstr "ອາເຣທີ່ກຳນົດໂຮສ ແລະ ພອດສຳລັບເຊີເວີ LDAP."
 
 msgid "Enable 2FA"
-msgstr ""
+msgstr "ເປີດໃຊ້ 2FA"
 
 msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
-msgstr ""
+msgstr "ເພີ່ມຊ່ອງໃນໜ້າອັບເດດລະຫັດຜ່ານເພື່ອເປີດໃຊ້ 2FA ໂດຍໃຊ້ແອັບພິລິເຄຊັນ TOTP. ເມື່ອປິດໃຊ້ງານທົ່ວໂລກ, ຜູ້ໃຊ້ຈະບໍ່ເຫັນຊ່ອງ 2FA ແລະ ຈະບໍ່ຖືກຮ້ອງຂໍ 2FA ເມື່ອເຂົ້າສູ່ລະບົບ, ເຖິງແມ່ນວ່າພວກເຂົາເຄີຍເປີດໃຊ້ມາກ່ອນແລ້ວກໍຕາມ."
 
 msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
-msgstr ""
+msgstr "ບາງຄຸນສົມບັດຂອງ Chamilo ຈະເຊື່ອມຕໍ່ກັບພາຍນອກຈາກເຊີເວີ. ຕົວຢ່າງເພື່ອກວດສອບວ່າເນື້ອຫາພາຍນອກມີຢູ່ເມື່ອສ້າງລິ້ງຄ໌ ຫຼື ສະແດງໜ້າທີ່ຝັງໃນເສັ້ນທາງການຮຽນ. ຖ້າເຊີເວີ Chamilo ຂອງທ່ານໃຊ້ພຣອກຊີເພື່ອອອກຈາກເຄືອຂ່າຍ, ນີ້ຈະເປັນບ່ອນທີ່ຈະຕັ້ງຄ່າ."
 
 msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
-msgstr ""
+msgstr "ເປີດ ຫຼື ປິດການລົງທະບຽນອັດຕະໂນມັດເມື່ອກຳນົດເວລາຫຼັກສູດໝົດອາຍຸ. ວຽກ cron ທີ່ກ່ຽວຂ້ອງກໍຕ້ອງຖືກເປີດໃຊ້ງານເຊັ່ນກັນ."
 
 msgid "Show remaining days in My Sessions"
-msgstr ""
+msgstr "ສະແດງຈຳນວນວັນທີ່ເຫຼືອໃນ \"ພາກການສຶກສາຂອງຂ້ອຍ\""
 
 msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
-msgstr ""
+msgstr "ຖ້າເປີດໃຊ້, ວັນທີ່ພາກການສຶກສາໃນໜ້າ \"ພາກການສຶກສາຂອງຂ້ອຍ\" ຈະຖືກແທນທີ່ດ້ວຍຈຳນວນວັນທີ່ເຫຼືອ."
 
 msgid "Show \"Pending surveys\" in menu"
-msgstr ""
+msgstr "ສະແດງ \"ແບບສອບຖາມທີ່ຍັງຄ້າງ\" ໃນເມນູ"
 
 msgid "Display a menu item that lets users access their pending surveys."
-msgstr ""
+msgstr "ສະແດງລາຍການເມນູທີ່ອະນຸຍາດໃຫ້ຜູ້ໃຊ້ເຂົ້າເຖິງແບບສອບຖາມທີ່ຍັງຄ້າງຂອງພວກເຂົາ."
 
 msgid "Disclose AI assistance"
-msgstr ""
+msgstr "ເປີດເຜີຍການຊ່ວຍເຫຼືອຈາກ AI"
 
 msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
-msgstr ""
+msgstr "ສະແດງແທັກໃນເນື້ອຫາ ຫຼື ຄຳຕອບທີ່ຖືກສ້າງ ຫຼື ຮ່ວມສ້າງໂດຍລະບົບ AI ໃດໆ, ເພື່ອສະແດງໃຫ້ຜູ້ໃຊ້ຮູ້ວ່າເນື້ອຫານັ້ນຖືກສ້າງຂຶ້ນດ້ວຍການຊ່ວຍເຫຼືອຂອງລະບົບ AI. ລາຍລະອຽດກ່ຽວກັບລະບົບ AI ທີ່ໃຊ້ໃນແຕ່ລະກໍລະນີຈະຖືກເກັບໄວ້ໃນຖານຂໍ້ມູນເພື່ອການກວດສອບ, ແຕ່ຜູ້ໃຊ້ສຸດທ້າຍບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໂດຍກົງ."
 
 msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
-msgstr ""
+msgstr "ການຕັ້ງຄ່າ JSON ສຳລັບລາຍການຫຼັກສູດ: ການຕັ້ງຄ່າລິ້ງຄ໌, ຕົວກອງ, ຕົວເລືອກການຈັດລຽງ, ແລະ ອື່ນໆ."
 
 msgid "Session Catalog Settings"
-msgstr ""
+msgstr "ການຕັ້ງຄ່າລາຍການພາກການສຶກສາ"
 
 msgid "JSON configuration for session catalog: filters and display options."
-msgstr ""
+msgstr "ການຕັ້ງຄ່າ JSON ສຳລັບລາຍການພາກການສຶກສາ: ຕົວກອງ ແລະ ຕົວເລືອກການສະແດງ."
 
 msgid "Show Course Descriptions"
-msgstr ""
+msgstr "ສະແດງຄຳອະທິບາຍຫຼັກສູດ"
 
 msgid "Display course descriptions within the catalog listing."
 msgstr ""
@@ -36371,13 +36380,13 @@ msgid "No specific language"
 msgstr ""
 
 msgid "Source Chamilo version"
-msgstr ""
+msgstr "ສະບັບ Chamilo ຕົ້ນສະບັບ"
 
 msgid "Exporting..."
-msgstr ""
+msgstr "ກຳລັງສົ່ງອອກ..."
 
 msgid "Autosaved drafts available"
-msgstr ""
+msgstr "ມີຮ່າງບັນທຶກອັດຕະໂນມັດ"
 
 msgid "Hide drafts"
 msgstr "ເຊື່ອງຮ່າງ"
@@ -36530,154 +36539,154 @@ msgid "Item Details"
 msgstr "ລາຍລະອຽດລາຍການ"
 
 msgid "Open File"
-msgstr ""
+msgstr "ເປີດໄຟລ໌"
 
 msgid "Selection"
-msgstr ""
+msgstr "ການເລືອກ"
 
 msgid "Remove selection context"
-msgstr ""
+msgstr "ລຶບບໍລິບົດການເລືອກ"
 
 msgid "Source document"
-msgstr ""
+msgstr "ເອກະສານຕົ້ນສະບັບ"
 
 msgid "Use the current course context"
-msgstr ""
+msgstr "ໃຊ້ບໍລິບົດຫຼັກສູດປັດຈຸບັນ"
 
 msgid "Loading documents..."
-msgstr ""
+msgstr "ກຳລັງໂຫຼດເອກະສານ..."
 
 msgid "No compatible PDF or TXT document was found in this course."
-msgstr ""
+msgstr "ບໍ່ພົບເອກະສານ PDF ຫຼື TXT ທີ່ເຂົ້າກັນໄດ້ໃນຫຼັກສູດນີ້."
 
 msgid "Select a PDF or TXT document to generate terms only from that document."
-msgstr ""
+msgstr "ເລືອກເອກະສານ PDF ຫຼື TXT ເພື່ອສ້າງຄຳສັບຈາກເອກະສານນັ້ນເທົ່ານັ້ນ."
 
 msgid "Confidentiality warning"
-msgstr ""
+msgstr "ຄຳເຕືອນກ່ຽວກັບຄວາມລັບ"
 
 msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
-msgstr ""
+msgstr "ເມື່ອເລືອກເອກະສານແລ້ວ ຂໍ້ຄວາມຈະຖືກຄົງທີ່ ເພື່ອໃຫ້ການສ້າງໃຊ້ເນື້ອຫາຂອງເອກະສານນັ້ນເທົ່ານັ້ນ."
 
 msgid "No document-processing AI providers available."
-msgstr ""
+msgstr "ບໍ່ມີຜູ້ໃຫ້ບໍລິການ AI ສຳລັບປະມວນຜົນເອກະສານ."
 
 msgid "Failed to save signature. Please try again."
-msgstr ""
+msgstr "ບັນທຶກລາຍເຊັນບໍ່ສຳເລັດ. ກະລຸນາລອງໃໝ່."
 
 msgid "Select and move"
-msgstr ""
+msgstr "ເລືອກ ແລະ ຍ້າຍ"
 
 msgid "Freehand"
-msgstr ""
+msgstr "ມືເສລີ"
 
 msgid "Stroke"
-msgstr ""
+msgstr "ເສັ້ນ"
 
 msgid "Fill"
-msgstr ""
+msgstr "ຕື່ມສີ"
 
 msgid "Import SVG"
-msgstr ""
+msgstr "ນຳເຂົ້າ SVG"
 
 msgid "Import image"
-msgstr ""
+msgstr "ນຳເຂົ້າຮູບພາບ"
 
 msgid "Click the drawing area to place this text"
-msgstr ""
+msgstr "ຄລິກພື້ນທີ່ແຕ້ມເພື່ອວາງຂໍ້ຄວາມນີ້"
 
 msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
-msgstr ""
+msgstr "ແຕ້ມ SVG ໃໝ່, ນຳເຂົ້າ SVG ທີ່ມີຢູ່ ຫຼື ຝັງຮູບພາບ ແລ້ວບັນທຶກເປັນເອກະສານທີ່ນຳໃຊ້ຄືນໄດ້."
 
 msgid "Use Select and move to reposition or resize elements added in this editor."
-msgstr ""
+msgstr "ໃຊ້ ເລືອກ ແລະ ຍ້າຍ ເພື່ອປັບຕຳແໜ່ງ ຫຼື ປັບຂະໜາດອົງປະກອບທີ່ເພີ່ມໃນຕົວແກ້ໄຂນີ້."
 
 msgid "Stroke width"
-msgstr ""
+msgstr "ຄວາມໜາເສັ້ນ"
 
 msgid "Transparent fill"
-msgstr ""
+msgstr "ຕື່ມໂປ່ງໃສ"
 
 msgid "Invalid id"
-msgstr ""
+msgstr "ID ບໍ່ຖືກຕ້ອງ"
 
 msgid "Unable to load the drawing"
-msgstr ""
+msgstr "ບໍ່ສາມາດໂຫຼດການແຕ້ມໄດ້"
 
 msgid "Only PNG, JPG, WEBP or GIF images are supported."
-msgstr ""
+msgstr "ຮອງຮັບພາບ PNG, JPG, WEBP ຫຼື GIF ເທົ່ານັ້ນ."
 
 msgid "Unable to read the image file."
-msgstr ""
+msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ຮູບພາບໄດ້."
 
 msgid "Only SVG files are supported."
-msgstr ""
+msgstr "ຮອງຮັບໄຟລ໌ SVG ເທົ່ານັ້ນ."
 
 msgid "The SVG file is empty or invalid."
-msgstr ""
+msgstr "ໄຟລ໌ SVG ຫວ່າງເປົ່າ ຫຼື ບໍ່ຖືກຕ້ອງ."
 
 msgid "Unable to read the SVG file."
-msgstr ""
+msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ SVG ໄດ້."
 
 msgid "The drawing is empty or invalid."
-msgstr ""
+msgstr "ການແຕ້ມຫວ່າງເປົ່າ ຫຼື ບໍ່ຖືກຕ້ອງ."
 
 msgid "Unable to save the drawing"
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກການແຕ້ມໄດ້"
 
 msgid "Information about AI-assisted documents"
-msgstr ""
+msgstr "ຂໍ້ມູນກ່ຽວກັບເອກະສານທີ່ຊ່ວຍດ້ວຍ AI"
 
 msgid "Location"
-msgstr ""
+msgstr "ທີ່ຕັ້ງ"
 
 msgid "Cloud link"
-msgstr ""
+msgstr "ລິ້ງຄລາວ"
 
 msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
-msgstr ""
+msgstr "ເພີ່ມລິ້ງໄປຫາເອກະສານຄລາວ ເຊັ່ນ Google Drive ຫຼື Google Docs."
 
 msgid "Add cloud link"
-msgstr ""
+msgstr "ເພີ່ມລິ້ງຄລາວ"
 
 msgid "Document title"
-msgstr ""
+msgstr "ຊື່ເອກະສານ"
 
 msgid "Document options change how uploaded files are processed after saving."
-msgstr ""
+msgstr "ຕົວເລືອກເອກະສານປ່ຽນແປງວິທີການປະມວນຜົນໄຟລ໌ທີ່ອັບໂຫຼດຫຼັງຈາກບັນທຶກ."
 
 msgid "Information about uncompressing zip files"
-msgstr ""
+msgstr "ຂໍ້ມູນກ່ຽວກັບການບີບໄຟລ໌ zip"
 
 msgid "When enabled, ZIP files are extracted into the current document folder after upload."
-msgstr ""
+msgstr "ເມື່ອເປີດໃຊ້ ໄຟລ໌ ZIP ຈະຖືກສະກັດອອກໄປຍັງໂຟລເດີເອກະສານປັດຈຸບັນຫຼັງອັບໂຫຼດ."
 
 msgid "The title is required."
-msgstr ""
+msgstr "ຕ້ອງມີຊື່."
 
 msgid "The URL is required."
-msgstr ""
+msgstr "ຕ້ອງມີ URL."
 
 msgid "The destination folder is missing."
-msgstr ""
+msgstr "ບໍ່ພົບໂຟລເດີປາຍທາງ."
 
 msgid "Unable to create cloud link."
-msgstr ""
+msgstr "ບໍ່ສາມາດສ້າງລິ້ງຄລາວໄດ້."
 
 msgid "Copy to My Files"
-msgstr ""
+msgstr "ສຳເນົາໄປຫາໄຟລ໌ຂອງຂ້ອຍ"
 
 msgid "Used space"
-msgstr ""
+msgstr "ພື້ນທີ່ທີ່ໃຊ້"
 
 msgid "Available space"
-msgstr ""
+msgstr "ພື້ນທີ່ທີ່ມີຢູ່"
 
 msgid "Available percentage"
-msgstr ""
+msgstr "ເປີເຊັນທີ່ມີຢູ່"
 
 msgid "Cloud links cannot be downloaded."
-msgstr ""
+msgstr "ບໍ່ສາມາດດາວໂຫຼດລິ້ງຄລາວໄດ້."
 
 msgid "Could not copy the file to My Files"
 msgstr "ບໍ່ສາມາດສຳເນົາໄຟລ໌ໄປຍັງໄຟລ໌ຂອງຂ້ອຍໄດ້"
@@ -37430,145 +37439,145 @@ msgid "Report permission categories"
 msgstr "ບົດລາຍງານປະເພດການອະນຸຍາດ"
 
 msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
-msgstr ""
+msgstr "ບັນຊີນີ້ລາຍຊື່ໜ້າລາຍງານທີ່ຮູ້ຈັກ, ໝວດໝູ່, URL ມາດຕະຖານ, URL ເກົ່າ ແລະ ບົດບາດຜູ້ຊົມທີ່ຄາດຫວັງ. URL ມາດຕະຖານບັງຄັບໃຊ້ແມທຣິກບົດບາດລາຍງານທີ່ເອກະສານໄວ້."
 
 msgid "reports"
-msgstr ""
+msgstr "ລາຍງານ"
 
 msgid "Canonical URL"
-msgstr ""
+msgstr "URL ມາດຕະຖານ"
 
 msgid "Legacy URL"
-msgstr ""
+msgstr "URL ເກົ່າ"
 
 msgid "Permission category"
-msgstr ""
+msgstr "ໝວດໝູ່ການອະນຸຍາດ"
 
 msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
-msgstr ""
+msgstr "ແມທຣິກນີ້ເອກະສານບົດບາດຜູ້ຊົມທີ່ຄາດຫວັງສຳລັບແຕ່ລະລາຍງານ ແລະ ຖືກບັງຄັບໃຊ້ໂດຍຈຸດເຂົ້າລາຍງານມາດຕະຖານ."
 
 msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
-msgstr ""
+msgstr "ກະແຈເຫຼົ່ານີ້ຈັດກຸ່ມລາຍງານຕາມຂອບເຂດການເຂົ້າເຖິງ ແລະ ຖືກໃຊ້ໂດຍບັນຊີລາຍງານ. ພາຍຫຼັງສາມາດຈັດແຜນຕໍ່ກັບການອະນຸຍາດລະອຽດຂອງແພລດຟອມໄດ້."
 
 msgid "Permission"
-msgstr ""
+msgstr "ການອະນຸຍາດ"
 
 msgid "Clear active session"
-msgstr ""
+msgstr "ລຶບລ້າງເຊດຊັນທີ່ກຳລັງໃຊ້ງານ"
 
 msgid "Are you sure you want to clear this user active session?"
-msgstr ""
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລ້າງເຊດຊັນທີ່ກຳລັງໃຊ້ງານຂອງຜູ້ໃຊ້ນີ້?"
 
 msgid "Preview shown without course context. Some course-specific data may be unavailable."
-msgstr ""
+msgstr "ການສະແດງຕົວຢ່າງໂດຍບໍ່ມີບໍລິບົດຫຼັກສູດ. ຂໍ້ມູນບາງຢ່າງທີ່ສະເພາະຫຼັກສູດອາດບໍ່ມີຢູ່."
 
 msgid "Preview is not available for this question."
-msgstr ""
+msgstr "ບໍ່ມີການສະແດງຕົວຢ່າງສຳລັບຄຳຖາມນີ້."
 
 msgid "Edition is not allowed without a course context."
-msgstr ""
+msgstr "ບໍ່ອະນຸຍາດໃຫ້ແກ້ໄຂໂດຍບໍ່ມີບໍລິບົດຫຼັກສູດ."
 
 msgid "This plugin does not use regions."
-msgstr ""
+msgstr "ປລັກອິນນີ້ບໍ່ໃຊ້ພື້ນທີ່."
 
 msgid "No plugins with regions were found."
-msgstr ""
+msgstr "ບໍ່ພົບປລັກອິນທີ່ມີພື້ນທີ່."
 
 msgid "Freemium"
-msgstr ""
+msgstr "Freemium"
 
 msgid "Commercial service"
-msgstr ""
+msgstr "ບໍລິການການຄ້າ"
 
 msgid "Commercial"
-msgstr ""
+msgstr "ການຄ້າ"
 
 msgid "100% free"
-msgstr ""
+msgstr "ຟຣີ 100%"
 
 msgid "Displayed above the public login form."
-msgstr ""
+msgstr "ສະແດງຂ້າງເທິງແບບຟອມເຂົ້າສູ່ລະບົບສາທາລະນະ."
 
 msgid "Displayed below the public login form."
-msgstr ""
+msgstr "ສະແດງຂ້າງລຸ່ມແບບຟອມເຂົ້າສູ່ລະບົບສາທາລະນະ."
 
 msgid "Displayed before the footer area."
-msgstr ""
+msgstr "ສະແດງກ່ອນພື້ນທີ່ສ່ວນທ້າຍ."
 
 msgid "Displayed in the left footer column."
-msgstr ""
+msgstr "ສະແດງໃນຖັນສ່ວນທ້າຍດ້ານຊ້າຍ."
 
 msgid "Displayed in the center footer column."
-msgstr ""
+msgstr "ສະແດງໃນຖັນສ່ວນທ້າຍດ້ານກາງ."
 
 msgid "Displayed in the right footer column."
-msgstr ""
+msgstr "ສະແດງໃນຖັນສ່ວນທ້າຍດ້ານຂວາ."
 
 msgid "Showing all plugins."
-msgstr ""
+msgstr "ກຳລັງສະແດງປລັກອິນທັງໝົດ."
 
 msgid "Some plugins are still pending functional verification."
-msgstr ""
+msgstr "ປລັກອິນບາງອັນຍັງລໍຖ້າການກວດສອບການເຮັດວຽກ."
 
 msgid "Show verified plugins only"
-msgstr ""
+msgstr "ສະແດງປລັກອິນທີ່ຜ່ານການກວດສອບເທົ່ານັ້ນ"
 
 msgid "Showing verified plugins only."
-msgstr ""
+msgstr "ກຳລັງສະແດງປລັກອິນທີ່ຜ່ານການກວດສອບເທົ່ານັ້ນ."
 
 msgid "Pending plugins are temporarily hidden until they are adapted and tested."
-msgstr ""
+msgstr "ປລັກອິນທີ່ລໍຖ້າຖືກເຊື່ອງຊົ່ວຄາວຈົນກວ່າຈະຖືກດັດປັບ ແລະ ທົດສອບ."
 
 msgid "Show all plugins"
-msgstr ""
+msgstr "ສະແດງປລັກອິນທັງໝົດ"
 
 msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
-msgstr ""
+msgstr "ປລັກອິນທາງການ ແລະ ຟຣີ ຖືກລາຍຊື່ແຍກຕ່າງຫາກຈາກປລັກອິນທີ່ອາດຂຶ້ນກັບບໍລິການການຄ້າ ແລະ ການສະເໜີແບບເສຍເງິນ."
 
 msgid "Included free plugins"
-msgstr ""
+msgstr "ປລັກອິນຟຣີທີ່ລວມຢູ່"
 
 msgid "Commercial and freemium plugins"
-msgstr ""
+msgstr "ປລັກອິນການຄ້າ ແລະ ເຟຣີມຽມ"
 
 msgid "All plugins"
-msgstr ""
+msgstr "ປລັກອິນທັງໝົດ"
 
 msgid "No plugins were found for this category."
-msgstr ""
+msgstr "ບໍ່ພົບປລັກອິນສຳລັບໝວດໝູ່ນີ້."
 
 msgid "Search plugins"
-msgstr ""
+msgstr "ຄົ້ນຫາປລັກອິນ"
 
 msgid "Search by name or description"
-msgstr ""
+msgstr "ຄົ້ນຫາຕາມຊື່ ຫຼື ລາຍລະອຽດ"
 
 msgid "Advanced filters"
-msgstr ""
+msgstr "ຕົວກອງຂັ້ນສູງ"
 
 msgid "All statuses"
-msgstr ""
+msgstr "ສະຖານະທັງໝົດ"
 
 msgid "All sources"
-msgstr ""
+msgstr "ແຫຼ່ງທັງໝົດ"
 
 msgid "All types"
-msgstr ""
+msgstr "ປະເພດທັງໝົດ"
 
 msgid "Installed plugins are shown first"
-msgstr ""
+msgstr "ປລັກອິນທີ່ຕິດຕັ້ງແລ້ວຖືກສະແດງກ່ອນ"
 
 msgid "No plugins match the current filters."
-msgstr ""
+msgstr "ບໍ່ມີປລັກອິນທີ່ກົງກັບຕົວກອງປັດຈຸບັນ."
 
 msgid "Try clearing the search or changing the filters."
-msgstr ""
+msgstr "ລອງລຶບລ້າງການຄົ້ນຫາ ຫຼື ປ່ຽນຕົວກອງ."
 
 msgid "README"
-msgstr ""
+msgstr "README"
 
 msgid "Invalid security token"
-msgstr ""
+msgstr "ໂທເຄັນຄວາມປອດໄພບໍ່ຖືກຕ້ອງ"
 
 msgid "Please select a destination session"
 msgstr ""
@@ -37721,154 +37730,154 @@ msgid "%s %% of learners"
 msgstr ""
 
 msgid "Connections"
-msgstr ""
+msgstr "ການເຊື່ອມຕໍ່"
 
 msgid "Total connections"
-msgstr ""
+msgstr "ການເຊື່ອມຕໍ່ທັງໝົດ"
 
 msgid "Downloaded documents"
-msgstr ""
+msgstr "ເອກະສານທີ່ດາວໂຫຼດ"
 
 msgid "List of documents downloaded by this learner in this course."
-msgstr ""
+msgstr "ລາຍຊື່ເອກະສານທີ່ນັກຮຽນນີ້ດາວໂຫຼດໃນຫຼັກສູດນີ້."
 
 msgid "Forum topics"
-msgstr ""
+msgstr "ຫົວຂໍ້ຟໍຣັມ"
 
 msgid "Forum topics opened by this learner in this course."
-msgstr ""
+msgstr "ຫົວຂໍ້ຟໍຣັມທີ່ນັກຮຽນນີ້ເປີດໃນຫຼັກສູດນີ້."
 
 msgid "Forum posts"
-msgstr ""
+msgstr "ຂໍ້ຄວາມຟໍຣັມ"
 
 msgid "Forum posts written by this learner in this course."
-msgstr ""
+msgstr "ຂໍ້ຄວາມຟໍຣັມທີ່ນັກຮຽນນີ້ຂຽນໃນຫຼັກສູດນີ້."
 
 msgid "Course connections"
-msgstr ""
+msgstr "ການເຊື່ອມຕໍ່ຫຼັກສູດ"
 
 msgid "Connection history for this learner in this course."
-msgstr ""
+msgstr "ປະຫວັດການເຊື່ອມຕໍ່ຂອງນັກຮຽນນີ້ໃນຫຼັກສູດນີ້."
 
 msgid "Resources used"
-msgstr ""
+msgstr "ຊັບພະຍາກອນທີ່ໃຊ້"
 
 msgid "Latest tools or resources used by this learner in this course."
-msgstr ""
+msgstr "ເຄື່ອງມື ຫຼື ຊັບພະຍາກອນຫຼ້າສຸດທີ່ນັກຮຽນນີ້ໃຊ້ໃນຫຼັກສູດນີ້."
 
 msgid "Logout date"
-msgstr ""
+msgstr "ວັນທີອອກຈາກລະບົບ"
 
 msgid "Imported Aiken quiz"
-msgstr ""
+msgstr "ນຳເຂົ້າແບບທົດສອບ Aiken"
 
 msgid "Only supported documents will be listed here."
-msgstr ""
+msgstr "ມີພຽງເອກະສານທີ່ຮອງຮັບເທົ່ານັ້ນທີ່ຈະຖືກລາຍຊື່ທີ່ນີ້."
 
 msgid "Generated Aiken content"
-msgstr ""
+msgstr "ເນື້ອຫາ Aiken ທີ່ສ້າງ"
 
 msgid "Review the generated content before importing it as a new exercise."
-msgstr ""
+msgstr "ກວດສອບເນື້ອຫາທີ່ສ້າງກ່ອນນຳເຂົ້າເປັນແບບຝຶກຫັດໃໝ່."
 
 msgid "No documents available."
-msgstr ""
+msgstr "ບໍ່ມີເອກະສານ."
 
 msgid "yperbolic arctangent:\\t\\tarctanh(x)"
-msgstr ""
+msgstr "ອາກຕັງເຈນໄຮເປີໂບລິກ:\\t\\tarctanh(x)"
 
 msgid "Exercise"
-msgstr ""
+msgstr "ແບບຝຶກຫັດ"
 
 msgid "OfficialCode"
-msgstr ""
+msgstr "ລະຫັດທາງການ"
 
 msgid "FirstName"
-msgstr ""
+msgstr "ຊື່"
 
 msgid "LastName"
-msgstr ""
+msgstr "ນາມສະກຸນ"
 
 msgid "LoginName"
-msgstr ""
+msgstr "ຊື່ເຂົ້າໃຊ້ລະບົບ"
 
 msgid "MinMinute"
-msgstr ""
+msgstr "ນາທີຕ່ຳສຸດ"
 
 msgid "StartDate"
-msgstr ""
+msgstr "ວັນທີເລີ່ມ"
 
 msgid "EndDate"
-msgstr ""
+msgstr "ວັນທີສິ້ນສຸດ"
 
 msgid "CorrectionDate"
-msgstr ""
+msgstr "ວັນທີແກ້ໄຂ"
 
 msgid "NotValidated"
-msgstr ""
+msgstr "ບໍ່ໄດ້ຮັບການຢັ້ງຢືນ"
 
 msgid "PendingAttempts"
-msgstr ""
+msgstr "ການພະຍາຍາມທີ່ຍັງຄ້າງ"
 
 msgid "List of pending test attempts across your courses."
-msgstr ""
+msgstr "ລາຍຊື່ການພະຍາຍາມທົດສອບທີ່ຍັງຄ້າງໃນຫຼັກສູດຂອງທ່ານ."
 
 msgid "User ID"
-msgstr ""
+msgstr "ID ຜູ້ໃຊ້"
 
 msgid "QuestionType"
-msgstr ""
+msgstr "ປະເພດຄຳຖາມ"
 
 msgid "QuestionsWithNoAutomaticCorrection"
-msgstr ""
+msgstr "ຄຳຖາມທີ່ບໍ່ມີການແກ້ໄຂອັດຕະໂນມັດ"
 
 msgid "There are no pending tests."
-msgstr ""
+msgstr "ບໍ່ມີການທົດສອບທີ່ຍັງຄ້າງ."
 
 msgid "%s results"
-msgstr ""
+msgstr "%s ຜົນໄດ້ຮັບ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr ""
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ຕົວຢ່າງການກະທຳການຕື່ມແບບຟອມ: ຄຳນວນດັດຊະນີມວນສານ</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ອາຍຸ</strong></td>            <td width=\"75%\" style=\"\">[25] ປີ</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ເພດ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ຫຼື F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ນ້ຳໜັກ</strong></td>            <td style=\"\" text-align:=\"\">95 ກິໂລກຣາມ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ຄວາມສູງ</strong></td>            <td style=\"vertical-align: top;\">1.81 ແມັດ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ດັດຊະນີມວນສານ</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =ນ້ຳໜັກ/ຂະໜາດ<sup>2</sup> (ເບິ່ງ<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ບົດຄວາມ Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
-msgstr ""
+msgstr "ຖືກລຶບ"
 
 msgid "NoUsersInTheList"
-msgstr ""
+msgstr "NoUsersInTheList"
 
 msgid "Are you sure?"
-msgstr ""
+msgstr "ທ່ານແນ່ໃຈບໍ?"
 
 msgid "NoResultsAvailable"
-msgstr ""
+msgstr "NoResultsAvailable"
 
 msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
-msgstr ""
+msgstr "ນຳເຂົ້າກຸ່ມຈາກໄຟລ໌ CSV ແລະ ເລືອກລຶບລາຍການທີ່ບໍ່ມີໃນໄຟລ໌."
 
 msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
-msgstr ""
+msgstr "ໃຊ້ຕົວເລືອກນີ້ຢ່າງລະມັດລະວັງ ເພາະລາຍການທີ່ບໍ່ມີໃນ CSV ອາດຖືກລຶບໃນຂະນະນຳເຂົ້າ."
 
 msgid "Upload a CSV file with the group data you want to import."
-msgstr ""
+msgstr "ອັບໂຫຼດໄຟລ໌ CSV ທີ່ມີຂໍ້ມູນກຸ່ມທີ່ທ່ານຕ້ອງການນຳເຂົ້າ."
 
 msgid "You can download the example file to use the expected format."
-msgstr ""
+msgstr "ທ່ານສາມາດດາວໂຫຼດໄຟລ໌ຕົວຢ່າງເພື່ອໃຊ້ຮູບແບບທີ່ຄາດຫວັງ."
 
 msgid "If you enable deletion, items not present in the file may be removed."
-msgstr ""
+msgstr "ຖ້າເປີດໃຊ້ການລຶບ, ລາຍການທີ່ບໍ່ມີໃນໄຟລ໌ອາດຖືກລຶບ."
 
 msgid "The CSV file is mandatory to start the import."
-msgstr ""
+msgstr "ໄຟລ໌ CSV ແມ່ນຈຳເປັນເພື່ອເລີ່ມການນຳເຂົ້າ."
 
 msgid "Please select at least one class."
-msgstr ""
+msgstr "ກາລຸນາເລືອກຢ່າງໜ້ອຍໜຶ່ງຫ້ອງຮຽນ."
 
 msgid "Define the properties for each group before creating them."
-msgstr ""
+msgstr "ກຳນົດຄຸນສົມບັດສຳລັບແຕ່ລະກຸ່ມກ່ອນສ້າງ."
 
 msgid "Apply the first row values"
-msgstr ""
+msgstr "ນຳໃຊ້ຄ່າແຖວທຳອິດ"
 
 msgid "Create groups manually or generate them from the classes subscribed to this course."
 msgstr ""
@@ -38021,13 +38030,13 @@ msgid "Signature saved successfully"
 msgstr ""
 
 msgid "Invalid request payload."
-msgstr ""
+msgstr "ຂໍ້ມູນຄຳຂໍບໍ່ຖືກຕ້ອງ."
 
 msgid "Authentication required."
-msgstr ""
+msgstr "ຕ້ອງການການຢືນຢັນຕົວຕົນ."
 
 msgid "The course title is required."
-msgstr ""
+msgstr "ຕ້ອງມີຫົວຂໍ້ຫຼັກສູດ."
 
 msgid "Only trainers and administrators can create courses."
 msgstr "ມີພຽງແຕ່ຜູ້ຝຶກອົບຮົມ ແລະ ຜູ້ເບິ່ງແຍງລະບົບເທົ່ານັ້ນທີ່ສາມາດສ້າງຫຼັກສູດໄດ້."
@@ -38069,304 +38078,304 @@ msgid "The gradebook evaluation could not be linked"
 msgstr "ບໍ່ສາມາດເຊື່ອມຕໍ່ການປະເມີນຜົນບັນຊີຄະແນນໄດ້"
 
 msgid "Survey questions"
-msgstr ""
+msgstr "ຄຳຖາມແບບສຳຫຼວດ"
 
 msgid "Back to survey list"
-msgstr ""
+msgstr "ກັບໄປຫາລາຍການແບບສຳຫຼວດ"
 
 msgid "This survey already has answers. Question editing is disabled by configuration."
-msgstr ""
+msgstr "ແບບສຳຫຼວດນີ້ມີຄຳຕອບແລ້ວ. ການແກ້ໄຂຄຳຖາມຖືກປິດໃຊ້ງານໂດຍການຕັ້ງຄ່າ."
 
 msgid "Choose the type of question you want to add."
-msgstr ""
+msgstr "ເລືອກປະເພດຄຳຖາມທີ່ທ່ານຕ້ອງການເພີ່ມ."
 
 msgid "The free text option is added automatically."
-msgstr ""
+msgstr "ຕົວເລືອກຂໍ້ຄວາມເສລີຈະຖືກເພີ່ມໂດຍອັດຕະໂນມັດ."
 
 msgid "No questions found"
-msgstr ""
+msgstr "ບໍ່ພົບຄຳຖາມ"
 
 msgid "Mandatory"
-msgstr ""
+msgstr "ບັງຄັບ"
 
 msgid "Unsupported question type"
-msgstr ""
+msgstr "ປະເພດຄຳຖາມບໍ່ຮອງຮັບ"
 
 msgid "You can use the tags {%s} and {%s} in the question."
-msgstr ""
+msgstr "ທ່ານສາມາດໃຊ້ແທັກ {%s} ແລະ {%s} ໃນຄຳຖາມໄດ້."
 
 msgid "This question is shown conditionally while answering the survey."
-msgstr ""
+msgstr "ຄຳຖາມນີ້ສະແດງແບບມີເງື່ອນໄຂໃນຂະນະຕອບແບບສຳຫຼວດ."
 
 msgid "The percentage options from 1 to 100 are generated automatically."
-msgstr ""
+msgstr "ຕົວເລືອກເປີເຊັນຕ໌ຈາກ 1 ຫາ 100 ຖືກສ້າງໂດຍອັດຕະໂນມັດ."
 
 msgid "Could not load survey questions"
-msgstr ""
+msgstr "ບໍ່ສາມາດໂຫຼດຄຳຖາມແບບສຳຫຼວດໄດ້"
 
 msgid "The question text is required."
-msgstr ""
+msgstr "ຕ້ອງມີຂໍ້ຄວາມຄຳຖາມ."
 
 msgid "The maximum score is required."
-msgstr ""
+msgstr "ຕ້ອງມີຄະແນນສູງສຸດ."
 
 msgid "Please select a parent option."
-msgstr ""
+msgstr "ກາລຸນາເລືອກຕົວເລືອກຫຼັກ."
 
 msgid "Please fill all answer options."
-msgstr ""
+msgstr "ກາລຸນາຕື່ມຕົວເລືອກຄຳຕອບທັງໝົດ."
 
 msgid "QuestionUpdated"
-msgstr ""
+msgstr "QuestionUpdated"
 
 msgid "Could not save survey question"
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກຄຳຖາມແບບສຳຫຼວດໄດ້"
 
 msgid "Could not delete survey question"
-msgstr ""
+msgstr "ບໍ່ສາມາດລຶບຄຳຖາມແບບສຳຫຼວດໄດ້"
 
 msgid "Could not move survey question"
-msgstr ""
+msgstr "ບໍ່ສາມາດຍ້າຍຄຳຖາມແບບສຳຫຼວດໄດ້"
 
 msgid "Could not copy survey question"
-msgstr ""
+msgstr "ບໍ່ສາມາດສຳເນົາຄຳຖາມແບບສຳຫຼວດໄດ້"
 
 msgid "Hide search"
-msgstr ""
+msgstr "ເຊື່ອງການຊອກຫາ"
 
 msgid "Showing results for: %s"
-msgstr ""
+msgstr "ກຳລັງສະແດງຜົນສຳລັບ: %s"
 
 msgid "Search by survey title, code or description."
-msgstr ""
+msgstr "ຊອກຫາຕາມຫົວຂໍ້, ລະຫັດ ຫຼື ລາຍລະອຽດແບບສຳຫຼວດ."
 
 msgid "Search surveys"
-msgstr ""
+msgstr "ຊອກຫາແບບສຳຫຼວດ"
 
 msgid "%s surveys selected"
-msgstr ""
+msgstr "ເລືອກແບບສຳຫຼວດ %s ແລ້ວ"
 
 msgid "Clear selection"
-msgstr ""
+msgstr "ລຶບລ້າງການເລືອກ"
 
 msgid "No surveys found"
-msgstr ""
+msgstr "ບໍ່ພົບແບບສຳຫຼວດ"
 
 msgid "Unsupported"
-msgstr ""
+msgstr "ບໍ່ຮອງຮັບ"
 
 msgid "Could not load surveys"
-msgstr ""
+msgstr "ບໍ່ສາມາດໂຫຼດແບບສຳຫຼວດໄດ້"
 
 msgid "Delete selected surveys"
-msgstr ""
+msgstr "ລຶບແບບສຳຫຼວດທີ່ເລືອກ"
 
 msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
-msgstr ""
+msgstr "ແບບສຳຫຼວດທີ່ເລືອກ ແລະ ຄຳຖາມຂອງພວກມັນຈະຖືກລຶບ. ການກະທຳນີ້ບໍ່ສາມາດຍົກເລີກໄດ້."
 
 msgid "Could not delete selected surveys"
-msgstr ""
+msgstr "ບໍ່ສາມາດລຶບແບບສຳຫຼວດທີ່ເລືອກໄດ້"
 
 msgid "Survey action"
-msgstr ""
+msgstr "ການກະທຳແບບສຳຫຼວດ"
 
 msgid "A copy of this survey will be created: %s"
-msgstr ""
+msgstr "ຈະສ້າງສຳເນົາຂອງແບບສຳຫຼວດນີ້: %s"
 
 msgid "All answers and invitations will be deleted for this survey: %s"
-msgstr ""
+msgstr "ຄຳຕອບ ແລະ ການເຊີນທັງໝົດຈະຖືກລຶບສຳລັບແບບສຳຫຼວດນີ້: %s"
 
 msgid "Generated multiplied questions will be removed from this survey: %s"
-msgstr ""
+msgstr "ຄຳຖາມທີ່ສ້າງແບບຄູນແລ້ວຈະຖືກລຶບອອກຈາກແບບສຳຫຼວດນີ້: %s"
 
 msgid "This survey will be published for the linked group tutors: %s"
-msgstr ""
+msgstr "ແບບສຳຫຼວດນີ້ຈະຖືກເຜີຍແຜ່ໃຫ້ກັບຜູ້ສອນຂອງກຸ່ມທີ່ເຊື່ອມໂຍງ: %s"
 
 msgid "This survey and its questions will be deleted: %s"
-msgstr ""
+msgstr "ແບບສຳຫຼວດນີ້ ແລະ ຄຳຖາມຂອງມັນຈະຖືກລຶບ: %s"
 
 msgid "Could not complete survey action"
-msgstr ""
+msgstr "ບໍ່ສາມາດສຳເລັດການກະທຳແບບສຳຫຼວດໄດ້"
 
 msgid "Not started"
-msgstr ""
+msgstr "ຍັງບໍ່ເລີ່ມ"
 
 msgid "Meeting polls let invited users select the dates when they are available."
-msgstr ""
+msgstr "ການສຳຫຼວດການປະຊຸມໃຫ້ຜູ້ໃຊ້ທີ່ຖືກເຊີນເລືອກວັນທີ່ພວກເຂົາສາມາດໄດ້."
 
 msgid "Back to surveys"
-msgstr ""
+msgstr "ກັບໄປຫາແບບສຳຫຼວດ"
 
 msgid "Edit meeting poll"
-msgstr ""
+msgstr "ແກ້ໄຂການສຳຫຼວດການປະຊຸມ"
 
 msgid "View meeting poll"
-msgstr ""
+msgstr "ເບິ່ງການສຳຫຼວດການປະຊຸມ"
 
 msgid "Basic information"
-msgstr ""
+msgstr "ຂໍ້ມູນພື້ນຖານ"
 
 msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
-msgstr ""
+msgstr "ນີ້ຈະສ້າງແບບສຳຫຼວດປະເພດການສຳຫຼວດການປະຊຸມ. ຄຳຕອບ ແລະ ການເຊີນຈະຖືກຈັດການແຍກຕ່າງຫາກ."
 
 msgid "Availability"
-msgstr ""
+msgstr "ຄວາມພ້ອມ"
 
 msgid "Meeting dates"
-msgstr ""
+msgstr "ວັນທີ່ປະຊຸມ"
 
 msgid "Meeting poll"
-msgstr ""
+msgstr "ການສຳຫຼວດການປະຊຸມ"
 
 msgid "My availability"
-msgstr ""
+msgstr "ຄວາມພ້ອມຂອງຂ້ອຍ"
 
 msgid "Meeting poll results"
-msgstr ""
+msgstr "ຜົນການສຳຫຼວດການປະຊຸມ"
 
 msgid "No invitations found"
-msgstr ""
+msgstr "ບໍ່ພົບການເຊີນ"
 
 msgid "available"
-msgstr ""
+msgstr "ພ້ອມ"
 
 msgid "Could not load meeting poll"
-msgstr ""
+msgstr "ບໍ່ສາມາດໂຫຼດການສຳຫຼວດການປະຊຸມ"
 
 msgid "Please complete the required fields"
-msgstr ""
+msgstr "ກາລຸນາຕື່ມຂໍ້ມູນທີ່ຕ້ອງການ"
 
 msgid "Could not save meeting poll"
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກການສຳຫຼວດການປະຊຸມ"
 
 msgid "Could not save meeting availability"
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກຄວາມພ້ອມການປະຊຸມ"
 
 msgid "Copy this survey to another course or session"
-msgstr ""
+msgstr "ສຳເນົາແບບສຳຫຼວດນີ້ໄປຫຼັກສູດ ຫຼື ພາກຮຽນອື່ນ"
 
 msgid "The survey will be copied without answers or invitations."
-msgstr ""
+msgstr "ແບບສຳຫຼວດຈະຖືກສຳເນົາໂດຍບໍ່ມີຄຳຕອບ ຫຼື ການເຊີນ."
 
 msgid "No target courses found"
-msgstr ""
+msgstr "ບໍ່ພົບຫຼັກສູດເປົ້າໝາຍ"
 
 msgid "Search by course title, course code or session name."
-msgstr ""
+msgstr "ຄົ້ນຫາຕາມຊື່ຫຼັກສູດ, ລະຫັດຫຼັກສູດ ຫຼື ຊື່ພາກຮຽນ."
 
 msgid "Use Duplicate survey when you want a copy in the same course."
-msgstr ""
+msgstr "ໃຊ້ ສຳເນົາແບບສຳຫຼວດ ເມື່ອຕ້ອງການສຳເນົາໃນຫຼັກສູດດຽວກັນ."
 
 msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
-msgstr ""
+msgstr "ຄຳຖາມ ແລະ ຕົວເລືອກຈະຖືກສຳເນົາ. ຄຳຕອບ, ການເຊີນ ແລະ ບົດລາຍງານຈະຄົງຢູ່ໃນແບບສຳຫຼວດຕົ້ນສະບັບເທົ່ານັ້ນ."
 
 msgid "Selected target"
-msgstr ""
+msgstr "ເປົ້າໝາຍທີ່ເລືອກ"
 
 msgid "Could not load copy form"
-msgstr ""
+msgstr "ບໍ່ສາມາດໂຫຼດແບບຟອມສຳເນົາ"
 
 msgid "The survey will be copied to: %s"
-msgstr ""
+msgstr "ແບບສຳຫຼວດຈະຖືກສຳເນົາໄປຫາ: %s"
 
 msgid "Survey copied."
-msgstr ""
+msgstr "ສຳເນົາແບບສຳຫຼວດແລ້ວ."
 
 msgid "Could not copy survey"
-msgstr ""
+msgstr "ບໍ່ສາມາດສຳເນົາແບບສຳຫຼວດ"
 
 msgid "Answer survey"
-msgstr ""
+msgstr "ຕອບແບບສຳຫຼວດ"
 
 msgid "Preview mode does not save answers."
-msgstr ""
+msgstr "ໂໝດສະແດງຕົວຢ່າງບໍ່ບັນທຶກຄຳຕອບ."
 
 msgid "Survey completed"
-msgstr ""
+msgstr "ສຳເລັດແບບສຳຫຼວດ"
 
 msgid "Thank you for answering the survey."
-msgstr ""
+msgstr "ຂອບໃຈສຳລັບການຕອບແບບສຳຫຼວດ."
 
 msgid "Profile information"
-msgstr ""
+msgstr "ຂໍ້ມູນໂປຣໄຟລ໌"
 
 msgid "Please review the requested profile fields before answering the survey."
-msgstr ""
+msgstr "ກາລຸນາກວດສອບຊ່ອງຂໍ້ມູນໂປຣໄຟລ໌ທີ່ຮ້ອງຂໍກ່ອນຕອບແບບສຳຫຼວດ."
 
 msgid "This profile field is read-only."
-msgstr ""
+msgstr "ຊ່ອງຂໍ້ມູນໂປຣໄຟລ໌ນີ້ອ່ານໄດ້ຢ່າງດຽວ."
 
 msgid "You already filled this survey."
-msgstr ""
+msgstr "ທ່ານໄດ້ຕອບແບບສຳຫຼວດນີ້ແລ້ວ."
 
 msgid "Please specify"
-msgstr ""
+msgstr "ກາລຸນາລະບຸ"
 
 msgid "This question type is not supported in the modern survey view."
-msgstr ""
+msgstr "ປະເພດຄຳຖາມນີ້ບໍ່ຮອງຮັບໃນການເບິ່ງແບບສຳຫຼວດທັນສະໄໝ."
 
 msgid "Preview only"
-msgstr ""
+msgstr "ເບິ່ງຕົວຢ່າງເທົ່ານັ້ນ"
 
 msgid "Submit answers"
-msgstr ""
+msgstr "ສົ່ງຄຳຕອບ"
 
 msgid "Could not load survey"
-msgstr ""
+msgstr "ບໍ່ສາມາດໂຫຼດແບບສຳຫຼວດ"
 
 msgid "Please complete the required profile fields."
-msgstr ""
+msgstr "ກາລຸນາຕື່ມຊ່ອງຂໍ້ມູນໂປຣໄຟລ໌ທີ່ຕ້ອງການ."
 
 msgid "Please answer all mandatory questions."
-msgstr ""
+msgstr "ກາລຸນາຕອບຄຳຖາມທີ່ຕ້ອງການທັງໝົດ."
 
 msgid "Could not save survey answers"
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກຄຳຕອບແບບສຳຫຼວດ"
 
 msgid "Configure the main survey information before managing questions and invitations."
-msgstr ""
+msgstr "ກຳນົດຂໍ້ມູນຫຼັກຂອງແບບສຳຫຼວດກ່ອນຈັດການຄຳຖາມ ແລະ ການເຊີນ."
 
 msgid "The survey code cannot be changed after creation."
-msgstr ""
+msgstr "ລະຫັດແບບສຳຫຼວດບໍ່ສາມາດປ່ຽນແປງຫຼັງຈາກສ້າງແລ້ວ."
 
 msgid "Survey behavior"
-msgstr ""
+msgstr "ພຶດຕິກຳແບບສຳຫຼວດ"
 
 msgid "Use 0 for no time limit."
-msgstr ""
+msgstr "ໃຊ້ 0 ສຳລັບບໍ່ມີຂີດຈຳກັດເວລາ."
 
 msgid "Survey messages"
-msgstr ""
+msgstr "ຂໍ້ຄວາມແບບສຳຫຼວດ"
 
 msgid "Profile fields selected here will be shown before the survey questions."
-msgstr ""
+msgstr "ຊ່ອງຂໍ້ມູນໂປຣໄຟລ໌ທີ່ເລືອກທີ່ນີ້ຈະສະແດງກ່ອນຄຳຖາມແບບສຳຫຼວດ."
 
 msgid "No profile fields are currently available."
-msgstr ""
+msgstr "ບໍ່ມີຊ່ອງຂໍ້ມູນໂປຣໄຟລ໌ທີ່ໃຊ້ໄດ້ໃນປັດຈຸບັນ."
 
 msgid "Profile field selection is available only for non-anonymous surveys."
-msgstr ""
+msgstr "ການເລືອກຊ່ອງຂໍ້ມູນໂປຣໄຟລ໌ມີໃຫ້ໃຊ້ສະເພາະແບບສຳຫຼວດທີ່ບໍ່ປິດບັງຕົວຕົນ."
 
 msgid "Skill linkage will be migrated in a dedicated batch."
-msgstr ""
+msgstr "ການເຊື່ອມໂຍງທັກສະຈະຖືກຍ້າຍໄປໃນຊຸດທີ່ອຸທິດ."
 
 msgid "Could not load survey configuration"
-msgstr ""
+msgstr "ບໍ່ສາມາດໂຫຼດການກຳນົດຄ່າແບບສຳຫຼວດ"
 
 msgid "The survey code is required."
-msgstr ""
+msgstr "ຕ້ອງການລະຫັດແບບສຳຫຼວດ."
 
 msgid "The survey title is required."
-msgstr ""
+msgstr "ຕ້ອງການຊື່ແບບສຳຫຼວດ."
 
 msgid "The survey has been saved successfully"
-msgstr ""
+msgstr "ການສຳຫຼວດໄດ້ຖືກບັນທຶກສຳເລັດແລ້ວ"
 
 msgid "Could not save survey configuration"
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກການຕັ້ງຄ່າການສຳຫຼວດໄດ້"
 
 msgid "Course users"
-msgstr ""
+msgstr "ຜູ້ໃຊ້ຫຼັກສູດ"
 
 msgid "Already invited"
 msgstr "ໄດ້ຖືກເຊີນແລ້ວ"
@@ -38826,4 +38835,856 @@ msgstr "ຄວບຄຸມ"
 
 msgid "View threads"
 msgstr "ເບິ່ງກະທູ້"
+
+msgid "No auth source"
+msgstr "ບໍ່ມີແຫຼ່ງການຢືນຢັນ"
+
+msgid "You must add at least one question"
+msgstr "ທ່ານຕ້ອງເພີ່ມຢ່າງໜ້ອຍໜຶ່ງຄຳຖາມ"
+
+msgid "Advanced actions"
+msgstr ""
+
+msgid "Application path"
+msgstr ""
+
+msgid "Apply files details"
+msgstr ""
+
+msgid "Apply plan details"
+msgstr ""
+
+msgid "Apply plan failed"
+msgstr ""
+
+msgid "Apply plan ready"
+msgstr ""
+
+msgid "Apply preparation"
+msgstr ""
+
+msgid "Apply staged files"
+msgstr ""
+
+msgid "Applying files..."
+msgstr ""
+
+msgid "Audit file"
+msgstr ""
+
+msgid "Backup directory"
+msgstr ""
+
+msgid "Baseline clean"
+msgstr ""
+
+msgid "Baseline warnings"
+msgstr ""
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr ""
+
+msgid "Build production frontend assets."
+msgstr ""
+
+msgid "Building plan..."
+msgstr ""
+
+msgid "Channel"
+msgstr ""
+
+msgid "Check"
+msgstr ""
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr ""
+
+msgid "Check manifest"
+msgstr ""
+
+msgid "Checking post-apply actions..."
+msgstr ""
+
+msgid "Checking..."
+msgstr ""
+
+msgid "Composer install"
+msgstr ""
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr ""
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr ""
+
+msgid "Configured"
+msgstr ""
+
+msgid "Current migration"
+msgstr ""
+
+msgid "Database baseline"
+msgstr ""
+
+msgid "Database migration safety review"
+msgstr ""
+
+msgid "Database migrations"
+msgstr ""
+
+msgid "Development mode"
+msgstr ""
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr ""
+
+msgid "Doctrine dry-run command"
+msgstr ""
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr ""
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr ""
+
+msgid "Dry-run exit code"
+msgstr ""
+
+msgid "Executed unavailable migrations"
+msgstr ""
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr ""
+
+msgid "File apply available"
+msgstr ""
+
+msgid "Files to replace"
+msgstr ""
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr ""
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr ""
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr ""
+
+msgid "I understand this will run update commands on the server."
+msgstr ""
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr ""
+
+msgid "Installed version"
+msgstr ""
+
+msgid "Latest migration"
+msgstr ""
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr ""
+
+msgid "Live command log"
+msgstr ""
+
+msgid "Live update log"
+msgstr ""
+
+msgid "Local test options"
+msgstr ""
+
+msgid "Local test update notice link"
+msgstr ""
+
+msgid "Local update notice simulation"
+msgstr ""
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr ""
+
+msgid "Manifest"
+msgstr ""
+
+msgid "Manifest source"
+msgstr ""
+
+msgid "Migration safety details"
+msgstr ""
+
+msgid "Migration safety review failed"
+msgstr ""
+
+msgid "Migration safety review ready"
+msgstr ""
+
+msgid "Migration target"
+msgstr ""
+
+msgid "New files"
+msgstr ""
+
+msgid "New migrations reported by Doctrine"
+msgstr ""
+
+msgid "Next migration"
+msgstr ""
+
+msgid "No executed unavailable migration was reported."
+msgstr ""
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr ""
+
+msgid "No pending migration was detected before the staged update target."
+msgstr ""
+
+msgid "Not configured"
+msgstr ""
+
+msgid "Not detected"
+msgstr ""
+
+msgid "Official Chamilo update channel"
+msgstr ""
+
+msgid "Package SHA-256"
+msgstr ""
+
+msgid "Package URL"
+msgstr ""
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr ""
+
+msgid "Package path"
+msgstr ""
+
+msgid "Package staged successfully"
+msgstr ""
+
+msgid "Package staging failed"
+msgstr ""
+
+msgid "Package verification"
+msgstr ""
+
+msgid "Package verification failed"
+msgstr ""
+
+msgid "Package verified successfully"
+msgstr ""
+
+msgid "Pending migrations before this update"
+msgstr ""
+
+msgid "Planned backup path"
+msgstr ""
+
+msgid "Post-apply actions completed"
+msgstr ""
+
+msgid "Post-apply actions failed"
+msgstr ""
+
+msgid "Post-apply actions ready"
+msgstr ""
+
+msgid "Post-apply checks"
+msgstr ""
+
+msgid "Post-apply checks failed"
+msgstr ""
+
+msgid "Post-apply details"
+msgstr ""
+
+msgid "Post-apply run details"
+msgstr ""
+
+msgid "Preflight checks"
+msgstr ""
+
+msgid "Preflight checks completed"
+msgstr ""
+
+msgid "Preflight checks failed"
+msgstr ""
+
+msgid "Preflight details"
+msgstr ""
+
+msgid "Prepare staging"
+msgstr ""
+
+msgid "Preparing staging..."
+msgstr ""
+
+msgid "Production mode"
+msgstr ""
+
+msgid "Released at"
+msgstr ""
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr ""
+
+msgid "Review apply plan"
+msgstr ""
+
+msgid "Review database migrations"
+msgstr ""
+
+msgid "Review post-apply actions"
+msgstr ""
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr ""
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr ""
+
+msgid "Reviewing database migrations..."
+msgstr ""
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr ""
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr ""
+
+msgid "Run post-apply actions"
+msgstr ""
+
+msgid "Run preflight checks"
+msgstr ""
+
+msgid "Run selected post-apply actions"
+msgstr ""
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr ""
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr ""
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr ""
+
+msgid "Running post-apply actions..."
+msgstr ""
+
+msgid "Safe actions"
+msgstr ""
+
+msgid "Signature path"
+msgstr ""
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr ""
+
+msgid "Skip signature verification for local development tests"
+msgstr ""
+
+msgid "Staged file application failed"
+msgstr ""
+
+msgid "Staged files applied successfully"
+msgstr ""
+
+msgid "Staging details"
+msgstr ""
+
+msgid "Staging directory"
+msgstr ""
+
+msgid "Staging extraction"
+msgstr ""
+
+msgid "Symfony cache clear"
+msgstr ""
+
+msgid "System update"
+msgstr ""
+
+msgid "Target version"
+msgstr ""
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr ""
+
+msgid "The database migration baseline is clean."
+msgstr ""
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr ""
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr ""
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr ""
+
+msgid "The updater does not create or restore database backups."
+msgstr ""
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr ""
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr ""
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr ""
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr ""
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr ""
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr ""
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr ""
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr ""
+
+msgid "Trusted public key"
+msgstr ""
+
+msgid "Trusted signing key"
+msgstr ""
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr ""
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr ""
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr ""
+
+msgid "Unknown update notice source."
+msgstr ""
+
+msgid "Update availability"
+msgstr ""
+
+msgid "Update directory"
+msgstr ""
+
+msgid "Update lock path"
+msgstr ""
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr ""
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr ""
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr ""
+
+msgid "Verification details"
+msgstr ""
+
+msgid "Verify package"
+msgstr "ກວດສອບແພັກເກັດ"
+
+msgid "Verifying..."
+msgstr "ກຳລັງກວດສອບ..."
+
+msgid "Waiting for command progress events..."
+msgstr "ກຳລັງລໍຖ້າເຫດການຄວາມຄືບໜ້າຄຳສັ່ງ..."
+
+msgid "Waiting for update progress events..."
+msgstr "ກຳລັງລໍຖ້າເຫດການຄວາມຄືບໜ້າການອັບເດດ..."
+
+msgid "Yarn build"
+msgstr "ການສ້າງ Yarn"
+
+msgid "Yarn install"
+msgstr "ການຕິດຕັ້ງ Yarn"
+
+msgid "A comment is required"
+msgstr "ຕ້ອງການຄຳເຫັນ"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "ຖານຂໍ້ມູນທີ່ມີຊື່ດຽວກັນນີ້ມີຢູ່ແລ້ວ. ຖ້າມັນມີຕາຕະລາງ, ຕາຕະລາງເຫຼົ່ານັ້ນຈະຖືກລຶບ; ຖ້າມັນວ່າງເປົ່າ, ມັນຈະຖືກນຳໃຊ້ຄືນໃໝ່."
+
+msgid "AI generated"
+msgstr "ສ້າງໂດຍ AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "ເພີ່ມຄຳຖາມຢ່າງໜ້ອຍໜຶ່ງຄຳກ່ອນທີ່ຈະກັບໄປສູ່ເສັ້ນທາງການຮຽນ."
+
+msgid "Add attachments"
+msgstr "ເພີ່ມໄຟລ໌ແນບ"
+
+msgid "Additional fields"
+msgstr "ຊ່ອງຂໍ້ມູນເພີ່ມເຕີມ"
+
+msgid "Allow comments"
+msgstr "ອະນຸຍາດຄຳເຫັນ"
+
+msgid "Allow new pages"
+msgstr "ອະນຸຍາດໜ້າໃໝ່"
+
+msgid "Allow ratings"
+msgstr "ອະນຸຍາດການໃຫ້ຄະແນນ"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການທັງໝົດ?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການເປີດການຕໍ່ອາຍຸອັດຕະໂນມັດຄືນໃໝ່?"
+
+msgid "Attachment has been deleted"
+msgstr "ໄຟລ໌ແນບຖືກລຶບແລ້ວ"
+
+msgid "Backup file"
+msgstr "ໄຟລ໌ສຳຮອງ"
+
+msgid "Block comments"
+msgstr "ບລັອກຄຳເຫັນ"
+
+msgid "Block new pages"
+msgstr "ບລັອກໜ້າໃໝ່"
+
+msgid "Block ratings"
+msgstr "ບລັອກການໃຫ້ຄະແນນ"
+
+msgid "Cancel renewal"
+msgstr "ຍົກເລີກການຕໍ່ອາຍຸ"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "ລິ້ງປະເພດຈະຖືກລຶບອອກຈາກໜ້າ Wiki %s."
+
+msgid "Change"
+msgstr "ປ່ຽນແປງ"
+
+msgid "Clear group"
+msgstr "ລ້າງກຸ່ມ"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "ຄລິກແທັກເພື່ອໃສ່ລົງໃນຕົວແກ້ໄຂ. ຕົວຖືທີ່ນີ້ຈະຖືກແທນທີ່ເມື່ອສ້າງໃບຢັ້ງຢືນ."
+
+msgid "Comment added"
+msgstr "ເພີ່ມຄຳເຫັນແລ້ວ"
+
+msgid "Comment is required"
+msgstr "ຕ້ອງການຄຳເຫັນ"
+
+msgid "Comment score"
+msgstr "ຄະແນນຄຳເຫັນ"
+
+msgid "Compare selected versions line by line"
+msgstr "ປຽບທຽບເວີຊັນທີ່ເລືອກແບບແຖວຕໍ່ແຖວ"
+
+msgid "Compare selected versions word by word"
+msgstr "ປຽບທຽບເວີຊັນທີ່ເລືອກແບບຄຳຕໍ່ຄຳ"
+
+msgid "Compare versions"
+msgstr "ປຽບທຽບເວີຊັນ"
+
+msgid "Copy completed"
+msgstr "ການສຳເນົາສຳເລັດແລ້ວ"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "ສ້າງໜ້າວຽກ Wiki ສ່ວນບຸກຄົນສຳລັບຜູ້ຮຽນ"
+
+msgid "Current view mode"
+msgstr "ໂໝດເບິ່ງປັດຈຸບັນ"
+
+msgid "Delete Wiki"
+msgstr "ລຶບ Wiki"
+
+msgid "Delete page"
+msgstr "ລຶບໜ້າ"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "ການລຶບໜ້າຫຼັກ Wiki ບໍ່ແນະນຳ. ທ່ານສາມາດສ້າງຄືນໃໝ່ໄດ້ໃນພາຍຫຼັງ."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "ການປິດໃຊ້ງານ Wiki ຈະບລັອກໜ້າ Wiki ແລະການກະທຳປົກກະຕິ. ໜ້າການຕັ້ງຄ່ານີ້ຍັງມີໃຫ້ຄູສອນຂອງຫຼັກສູດໃຊ້ໄດ້."
+
+msgid "Discussion"
+msgstr "ການສົນທະນາ"
+
+msgid "Edit Comment"
+msgstr "ແກ້ໄຂຄຳເຫັນ"
+
+msgid "Edit page"
+msgstr "ແກ້ໄຂໜ້າ"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "ວັນທີສິ້ນສຸດຕ້ອງຢູ່ຫຼັງຫຼືເທົ່າກັບວັນທີໝົດອາຍຸ"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "ປ້ອນຄຳຄົ້ນຫາເພື່ອຊອກຫາໜ້າ Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "ວັນທີໝົດອາຍຸຕ້ອງຢູ່ກ່ອນຫຼືເທົ່າກັບວັນທີສິ້ນສຸດ"
+
+msgid "Failed email recipients"
+msgstr "ຜູ້ຮັບອີເມວທີ່ລົ້ມເຫຼວ"
+
+msgid "Finish and return to learning path"
+msgstr "ສຳເລັດແລະກັບໄປສູ່ເສັ້ນທາງການຮຽນ"
+
+msgid "Forum image"
+msgstr "ຮູບພາບຟໍຣັມ"
+
+msgid "Hide discussion"
+msgstr "ເຊື່ອງການສົນທະນາ"
+
+msgid "Hide page"
+msgstr "ເຊື່ອງໜ້າ"
+
+msgid "I changed my mind"
+msgstr "ຂ້ອຍປ່ຽນໃຈ"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "ຖ້າບໍ່ໄດ້ເລືອກ, ໄຟລ໌ເຫຼົ່ານັ້ນຈະຍັງສາມາດໃຊ້ໄດ້ໂດຍຜູ້ເບິ່ງແຍງລະບົບຜ່ານເຄື່ອງມື 'ຂໍ້ມູນໄຟລ໌'."
+
+msgid "Internal message failures"
+msgstr "ຂໍ້ຄວາມພາຍໃນລົ້ມເຫຼວ"
+
+msgid "Internal messages available"
+msgstr "ຂໍ້ຄວາມພາຍໃນທີ່ມີໃຫ້ໃຊ້"
+
+msgid "Internal messages created now"
+msgstr "ຂໍ້ຄວາມພາຍໃນທີ່ສ້າງໃໝ່"
+
+msgid "Item score"
+msgstr "ຄະແນນລາຍການ"
+
+msgid "Last post"
+msgstr "ໂພສລ້າສຸດ"
+
+msgid "Lock page"
+msgstr "ລັອກໜ້າ"
+
+msgid "Manage categories"
+msgstr "ຈັດການປະເພດ"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "ໝາຍເອກະສານນີ້ວ່າໄດ້ຮັບການຊ່ວຍເຫຼືອຈາກ AI. ໃຊ້ເມື່ອເນື້ອຫາຖືກສ້າງຂຶ້ນຫຼືແກ້ໄຂຢ່າງສຳຄັນດ້ວຍເຄື່ອງມື AI."
+
+msgid "Maximum score is required"
+msgstr "ຕ້ອງການຄະແນນສູງສຸດ"
+
+msgid "Metric"
+msgstr "ຕົວຊີ້ວັດ"
+
+msgid "New comments are blocked in this discussion"
+msgstr "ຄຳເຫັນໃໝ່ຖືກບລັອກໃນການສົນທະນານີ້"
+
+msgid "No Wiki categories are available yet."
+msgstr "ຍັງບໍ່ມີປະເພດ Wiki ໃຫ້ໃຊ້."
+
+msgid "No categories found"
+msgstr "ບໍ່ພົບປະເພດ"
+
+msgid "No content"
+msgstr "ບໍ່ມີເນື້ອຫາ"
+
+msgid "No parent category"
+msgstr "ບໍ່ມີປະເພດຫຼັກ"
+
+msgid "Number of comments scored"
+msgstr "ຈຳນວນຄຳເຫັນທີ່ໄດ້ຄະແນນ"
+
+msgid "Old version"
+msgstr "ເວີຊັນເກົ່າ"
+
+msgid "Only image files are allowed."
+msgstr "ອະນຸຍາດໃຫ້ໃຊ້ໄດ້ພຽງໄຟລ໌ຮູບພາບເທົ່ານັ້ນ."
+
+msgid "Please fill all required fields"
+msgstr "ກະລຸນາຕື່ມຂໍ້ມູນທຸກຊ່ອງທີ່ຕ້ອງການ"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "ຄຳຖາມທີ່ມີຕົວຢ່າງຫ້ອງຮຽນ ຫຼື ນັກຮຽນຈະຖືກສ້າງສຳລັບຫ້ອງຮຽນ ຫຼື ກຸ່ມຂອງຫຼັກສູດ: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "ການໃຫ້ຄະແນນຖືກບລັອກໃນການສົນທະນານີ້"
+
+msgid "Remove image"
+msgstr "ລຶບຮູບພາບ"
+
+msgid "Restore renewal"
+msgstr "ກູ້ຄືນການຕໍ່ອາຍຸ"
+
+msgid "Restore version"
+msgstr "ກູ້ຄືນເວີຊັນ"
+
+msgid "Search in"
+msgstr "ຊອກຫາໃນ"
+
+msgid "Select group"
+msgstr "ເລືອກກຸ່ມ"
+
+msgid "Select image"
+msgstr "ເລືອກຮູບພາບ"
+
+msgid "Selected image"
+msgstr "ຮູບພາບທີ່ເລືອກ"
+
+msgid "Show discussion"
+msgstr "ສະແດງການສົນທະນາ"
+
+msgid "Show page"
+msgstr "ສະແດງໜ້າ"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "ໄຟລ໌ ຫຼື ໂຟລເດີບາງອັນບໍ່ມີສິດຂຽນ. ເພື່ອຕິດຕັ້ງ Chamilo ທ່ານຕ້ອງປ່ຽນສິດຂອງພວກມັນກ່ອນ (ໂດຍໃຊ້ CHMOD). ກະລຸນາອ່ານ"
+
+msgid "Subcategories"
+msgstr "ປະເພດຍ່ອຍ"
+
+msgid "Tap on the left or right to navigate"
+msgstr "ແຕະດ້ານຊ້າຍ ຫຼື ຂວາເພື່ອນຳທາງ"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "ກຳນົດເວລາສົ່ງວຽກ Wiki ໄດ້ຜ່ານໄປແລ້ວ, ແຕ່ອະນຸຍາດໃຫ້ສົ່ງຊ້າໄດ້."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "ກຳນົດເວລາສົ່ງວຽກ Wiki ໄດ້ຜ່ານໄປແລ້ວ."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "ວຽກ Wiki ຍັງບໍ່ໄດ້ເລີ່ມ."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "ຕ້ອງລັອກການແກ້ໄຂໜ້າ Wiki ກ່ອນບັນທຶກ."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "ການປະກາດຖືກບັນທຶກແລ້ວ, ແຕ່ບໍ່ສາມາດອັບໂຫຼດໄຟລ໌ແນບໄດ້."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "ການປະກາດຖືກບັນທຶກແລ້ວ, ແຕ່ການສົ່ງອີເມວລົ້ມເຫຼວ."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "ການປະກາດຖືກບັນທຶກແລ້ວ, ແຕ່ບໍ່ສາມາດສົ່ງອີເມວໄດ້."
+
+msgid "The category has been created"
+msgstr "ປະເພດຖືກສ້າງແລ້ວ"
+
+msgid "The category has been deleted"
+msgstr "ປະເພດຖືກລຶບແລ້ວ"
+
+msgid "The category has been updated"
+msgstr "ປະເພດຖືກອັບເດດແລ້ວ"
+
+msgid "The end date is invalid"
+msgstr "ວັນທີສິ້ນສຸດບໍ່ຖືກຕ້ອງ"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "ຈຳນວນເວີຊັນສູງສຸດຕ້ອງເປັນຈຳນວນເຕັມທີ່ບໍ່ຕິດລົບ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "ຈຳນວນຄຳສູງສຸດຕ້ອງເປັນຈຳນວນເຕັມທີ່ບໍ່ຕິດລົບ"
+
+msgid "The print window could not be opened"
+msgstr "ບໍ່ສາມາດເປີດໜ້າຕ່າງການພິມໄດ້"
+
+msgid "The start date is invalid"
+msgstr ""
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr ""
+
+msgid "This announcement has already been sent by email."
+msgstr ""
+
+msgid "This discussion is hidden from learners"
+msgstr ""
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr ""
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr ""
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr ""
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr ""
+
+msgid "This will also delete %s subcategories."
+msgstr ""
+
+msgid "This will create individual work pages for %s learners."
+msgstr ""
+
+msgid "Thread history"
+msgstr ""
+
+msgid "Title and content"
+msgstr ""
+
+msgid "Unable to cancel renewal right now."
+msgstr ""
+
+msgid "Unable to restore renewal right now."
+msgstr ""
+
+msgid "Unlock page"
+msgstr ""
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr ""
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr ""
+
+msgid "View version"
+msgstr ""
+
+msgid "Visible only to teachers"
+msgstr ""
+
+msgid "Weight is required"
+msgstr ""
+
+msgid "Wiki categories are disabled for this course."
+msgstr ""
+
+msgid "Wiki categories enabled"
+msgstr ""
+
+msgid "Wiki html strict filtering"
+msgstr ""
+
+msgid "Wiki settings"
+msgstr ""
+
+msgid "Wiki settings updated"
+msgstr ""
+
+msgid "You are viewing a historical version of this page"
+msgstr ""
+
+msgid "You can attach one or more files to this reply."
+msgstr ""
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr ""
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr ""
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr ""
+
+msgid "by"
+msgstr ""
+
+msgid "required"
+msgstr ""
 

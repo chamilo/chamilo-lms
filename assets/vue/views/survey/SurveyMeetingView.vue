@@ -145,7 +145,7 @@
             v-model="form.availableUntil"
             :error-text="t('Invalid date')"
             :is-invalid="formSubmitted && !form.availableUntil"
-            :label="t('End Date')"
+            :label="t('End date')"
             :show-time="true"
           />
         </div>
@@ -202,7 +202,7 @@
                 v-model="slot.end"
                 :error-text="t('Invalid date')"
                 :is-invalid="formSubmitted && !slot.end"
-                :label="t('End Date')"
+                :label="t('End date')"
                 :show-time="true"
               />
             </div>
@@ -591,7 +591,7 @@ async function saveMeeting() {
     const surveyId = isCreateMode.value ? null : Number(route.params.surveyId)
     const response = await surveyService.saveSurveyMeeting(payload, getContextParams(), surveyId)
     meeting.value = response
-    successMessage.value = response.message ? t(response.message) : t("Saved.")
+    successMessage.value = response.message ? t(response.message) : t("Saved")
 
     if (isCreateMode.value && response.surveyId) {
       await router.replace({
@@ -630,7 +630,7 @@ async function submitAvailability() {
     )
     meeting.value = response
     selectedSlots.value = Array.isArray(response.selectedSlots) ? [...response.selectedSlots] : []
-    successMessage.value = response.message ? t(response.message) : t("Saved.")
+    successMessage.value = response.message ? t(response.message) : t("Saved")
   } catch (error) {
     console.error("Error saving meeting availability", error)
     errorMessage.value = error?.response?.data?.["hydra:description"] || t("Could not save meeting availability")

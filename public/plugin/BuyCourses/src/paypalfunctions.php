@@ -234,6 +234,34 @@ function CreateRecurringPaymentsProfile(
 }
 
 /**
+ * Update the recurring amount of an existing PayPal profile.
+ */
+function UpdateRecurringPaymentsProfile(
+    string $profileId,
+    float $amount,
+    string $currencyCode,
+    string $description = ''
+) {
+    if ('' === trim($profileId) || $amount <= 0 || '' === trim($currencyCode)) {
+        return [
+            'ACK' => 'FAILURE',
+            'L_ERRORCODE0' => 'LOCAL1003',
+            'L_LONGMESSAGE0' => 'Missing recurring profile data for UpdateRecurringPaymentsProfile.',
+        ];
+    }
+
+    $nvpstr = '&PROFILEID='.urlencode($profileId);
+    $nvpstr .= '&AMT='.urlencode(number_format($amount, 2, '.', ''));
+    $nvpstr .= '&CURRENCYCODE='.urlencode(strtoupper($currencyCode));
+
+    if ('' !== trim($description)) {
+        $nvpstr .= '&DESC='.urlencode($description);
+    }
+
+    return hash_call('UpdateRecurringPaymentsProfile', $nvpstr);
+}
+
+/**
  * Update the status of an existing PayPal recurring payments profile.
  */
 function ManageRecurringPaymentsProfileStatus(string $profileId, string $action, string $note = '')

@@ -2516,6 +2516,8 @@ class CourseManager
      *                                         only used in this course.
      *
      * @return bool
+     *
+     * @deprecated use CourseHelper::deleteCourse() instead
      */
     public static function delete_course($code, bool $deleteExclusiveDocuments = false)
     {

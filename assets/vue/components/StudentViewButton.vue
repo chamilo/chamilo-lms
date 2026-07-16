@@ -33,7 +33,10 @@ const studentViewState = computed({
     let isEnabled
 
     try {
-      const response = await permissionService.toogleStudentView()
+      const response = await permissionService.toogleStudentView({
+        cid: cidReqStore.course?.id,
+        sid: cidReqStore.session?.id,
+      })
 
       isEnabled = response.toLowerCase() === "studentview"
     } catch (e) {
@@ -53,7 +56,7 @@ const showButton = computed(
   () =>
     securityStore.isAuthenticated &&
     cidReqStore.course &&
-    (securityStore.isCourseAdmin || securityStore.isAdmin || isCoach.value) &&
+    (securityStore.isCourseAdmin || isCoach.value) &&
     platformConfigStore.getSetting("course.student_view_enabled") === "true",
 )
 </script>

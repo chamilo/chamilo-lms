@@ -1580,8 +1580,8 @@ msgstr "Er du sikker på, at du vil slette disse trin?"
 msgid "Authoring tool"
 msgstr "Oprindelig"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM eller AICC fil, der skal uploades"
+msgid "SCORM file to upload"
+msgstr "SCORM fil, der skal uploades"
 
 msgid "Course location"
 msgstr "Kursussidens placering"
@@ -3249,7 +3249,7 @@ msgid "Surname of the Administrator"
 msgstr "Administrator efternavn"
 
 msgid "Administrator login"
-msgstr "Administrator login"
+msgstr "Administratorlogin"
 
 msgid "Your portal name"
 msgstr "Dit universitets navn"
@@ -4143,7 +4143,7 @@ msgid "MySql Client"
 msgstr "MySql Klient"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySql-server"
 
 msgid "Owner"
 msgstr "Ejer"
@@ -7533,7 +7533,7 @@ msgid "Clear the chat"
 msgstr "Ryd listen"
 
 msgid "Session banner"
-msgstr "Session banner"
+msgstr "Sessionsbanner"
 
 msgid "Short description"
 msgstr "Kort beskrivelse"
@@ -8729,6 +8729,15 @@ msgstr "Vis"
 msgid "My courses"
 msgstr "Min kursusoversigt"
 
+msgid "Shop"
+msgstr "Butik"
+
+msgid "Invoice"
+msgstr "Faktura"
+
+msgid "Request invoice"
+msgstr "Anmod om faktura"
+
 msgid "View my progress"
 msgstr "Se mine statistikker"
 
@@ -9528,7 +9537,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Upload af fil lykkedes ikke: Filtnavnet eller filtypen kan ikke anvendes"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID-URL"
 
 msgid "The file is too big to upload."
 msgstr "Filen fylder for meget og kan ikke uploades!"
@@ -14691,7 +14700,7 @@ msgid "Chamilo homepage"
 msgstr "Chamilo forsiden"
 
 msgid "Chamilo forum"
-msgstr "Chamilo forum"
+msgstr "Chamilo-forum"
 
 msgid "Chamilo extensions"
 msgstr "Chamilo udvidelser"
@@ -15057,7 +15066,7 @@ msgid "Install Chamilo"
 msgstr "Installer Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo-URL"
 
 msgid "You have no session in your sessions history"
 msgstr "Du har ingen sessioner i din sessionhistorik"
@@ -19851,7 +19860,7 @@ msgid "The system was unable to log you in. Please contact your administrator."
 msgstr "Systemet kunne ikke logge dig ind. Kontakt venligst din administrator."
 
 msgid "Shibboleth Login"
-msgstr "Shibboleth Login"
+msgstr "Shibboleth-login"
 
 msgid "New status"
 msgstr "Ny status"
@@ -20310,7 +20319,7 @@ msgid "Start video call"
 msgstr "Start videokal"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "Video-URL"
 
 msgid "Insert a valid URL"
 msgstr "Indsæt en gyldig URL"
@@ -35485,7 +35494,7 @@ msgid "%s results"
 msgstr "%s resultater"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Eksempel på udfyldning af formularaktivitet: beregn Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Alder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Køn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vægt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Højde</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vægt/Højde<sup>2</sup> (Se <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Fjernet"
@@ -36482,4 +36491,856 @@ msgstr "Modereret"
 
 msgid "View threads"
 msgstr "Vis tråde"
+
+msgid "No auth source"
+msgstr "Ingen godkendelseskilde"
+
+msgid "You must add at least one question"
+msgstr "Du skal tilføje mindst ét spørgsmål"
+
+msgid "Advanced actions"
+msgstr "Advanced actions"
+
+msgid "Application path"
+msgstr "Application path"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Apply plan failed"
+
+msgid "Apply plan ready"
+msgstr "Apply plan ready"
+
+msgid "Apply preparation"
+msgstr "Apply preparation"
+
+msgid "Apply staged files"
+msgstr "Anvend stagede filer"
+
+msgid "Applying files..."
+msgstr "Anvender filer..."
+
+msgid "Audit file"
+msgstr "Revider fil"
+
+msgid "Backup directory"
+msgstr "Backup-mappe"
+
+msgid "Baseline clean"
+msgstr "Baseline ren"
+
+msgid "Baseline warnings"
+msgstr "Baseline-advarsler"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Opret en sikker anvendelsesplan fra den stagede pakke. Dette kontrollerer kun filer, tilladelser, backup-sti og låsestatus. Det erstatter ikke filer."
+
+msgid "Build production frontend assets."
+msgstr "Byg frontend-aktiver til produktion."
+
+msgid "Building plan..."
+msgstr "Opretter plan..."
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Check"
+msgstr "Tjek"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Tjek efter tilgængelige Chamilo-opdateringer, verificér pakker, stage filer og kør kontrollerede efter-opdateringstrin."
+
+msgid "Check manifest"
+msgstr "Tjek manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Kontrollerer efter-anvendelseshandlinger..."
+
+msgid "Checking..."
+msgstr "Kontrollerer..."
+
+msgid "Composer install"
+msgstr "Composer-installation"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer-, Yarn- og databasemigreringshandlinger kan ændre afhængigheder, genererede aktiver eller databasen. Vælg dem kun efter bekræftelse af backups og tilladelser."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfigurer CHAMILO_UPDATE_MANIFEST_URL på serveren eller angiv en HTTPS-manifest-URL."
+
+msgid "Configured"
+msgstr "Konfigureret"
+
+msgid "Current migration"
+msgstr "Aktuel migrering"
+
+msgid "Database baseline"
+msgstr "Databasebaseline"
+
+msgid "Database migration safety review"
+msgstr "Sikkerhedsgennemgang af databasemigrering"
+
+msgid "Database migrations"
+msgstr "Databasemigreringer"
+
+msgid "Development mode"
+msgstr "Udviklingstilstand"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Aktivér ikke dette, medmindre backup af opdateringen og servertilladelser er gennemgået."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine dry-run-kommando"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine rapporterede historiske baseline-advarsler. Opdateringsværktøjet vil stadig kun udføre stagede V210-migreringer efter eksplicit bekræftelse."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine vil kun udføre de stagede V210-migreringer eksplicit efter sikkerhedsgennemgangen er bestået."
+
+msgid "Dry-run exit code"
+msgstr "Dry-run-afslutningskode"
+
+msgid "Executed unavailable migrations"
+msgstr "Udførte utilgængelige migreringer"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Udpak den verificerede opdateringspakke til en staging-mappe til inspektion. Dette erstatter ikke filer, kører ikke migreringer eller ændrer databasen."
+
+msgid "File apply available"
+msgstr "Fil-anvendelse tilgængelig"
+
+msgid "Files to replace"
+msgstr "Filer der skal erstattes"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Jeg bekræfter, at en databasebackup findes og er verificeret, før migreringer køres."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Jeg forstår, at avancerede handlinger kan ændre afhængigheder, genererede aktiver eller databasen."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Jeg forstår, at dette vil erstatte filer i Chamilo-installationen."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Jeg forstår, at dette vil køre opdateringskommandoer på serveren."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Installer frontend-afhængigheder, før aktiver genopbygges."
+
+msgid "Installed version"
+msgstr "Installeret version"
+
+msgid "Latest migration"
+msgstr "Seneste migrering"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Lad pakke- og signaturstier være tomme for at downloade dem fra de verificerede manifest-URL'er. Lokale stier er kun tilgængelige til udviklingstests."
+
+msgid "Live command log"
+msgstr "Live kommandolog"
+
+msgid "Live update log"
+msgstr "Live opdateringslog"
+
+msgid "Local test options"
+msgstr "Lokale testindstillinger"
+
+msgid "Local test update notice link"
+msgstr "Lokalt testopdateringsnotis-link"
+
+msgid "Local update notice simulation"
+msgstr "Lokal opdateringsnotissimulering"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Lokal opdateringsnotissimulering er kun tilgængelig i udviklingstilstand."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Manifestkilde"
+
+msgid "Migration safety details"
+msgstr "Migreringssikkerhedsdetaljer"
+
+msgid "Migration safety review failed"
+msgstr "Migrationssikkerhedsgennemgang mislykkedes"
+
+msgid "Migration safety review ready"
+msgstr "Migrationssikkerhedsgennemgang klar"
+
+msgid "Migration target"
+msgstr "Migrationsmål"
+
+msgid "New files"
+msgstr "Nye filer"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Nye migrationer rapporteret af Doctrine"
+
+msgid "Next migration"
+msgstr "Næste migration"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Ingen udførte utilgængelige migrationer blev rapporteret."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Ingen officiel manifest-URL er konfigureret endnu. Brug en HTTPS-URL eller en lokal sti til udviklingstests."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Ingen ventende migrationer blev registreret før det planlagte opdateringsmål."
+
+msgid "Not configured"
+msgstr "Ikke konfigureret"
+
+msgid "Not detected"
+msgstr "Ikke registreret"
+
+msgid "Official Chamilo update channel"
+msgstr "Officiel Chamilo-opdateringskanal"
+
+msgid "Package SHA-256"
+msgstr "Pakke-SHA-256"
+
+msgid "Package URL"
+msgstr "Pakke-URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Pakke- og signaturfiler vil blive downloadet fra manifestet. Lokale stier er deaktiveret i dette miljø."
+
+msgid "Package path"
+msgstr "Pakkesti"
+
+msgid "Package staged successfully"
+msgstr "Pakke klargjort med succes"
+
+msgid "Package staging failed"
+msgstr "Pakke-klargøring mislykkedes"
+
+msgid "Package verification"
+msgstr "Pakkeverificering"
+
+msgid "Package verification failed"
+msgstr "Pakkeverificering mislykkedes"
+
+msgid "Package verified successfully"
+msgstr "Pakke verificeret med succes"
+
+msgid "Pending migrations before this update"
+msgstr "Ventende migrationer før denne opdatering"
+
+msgid "Planned backup path"
+msgstr "Planlagt backup-sti"
+
+msgid "Post-apply actions completed"
+msgstr "Handlinger efter anvendelse fuldført"
+
+msgid "Post-apply actions failed"
+msgstr "Handlinger efter anvendelse mislykkedes"
+
+msgid "Post-apply actions ready"
+msgstr "Handlinger efter anvendelse klar"
+
+msgid "Post-apply checks"
+msgstr "Handlinger efter anvendelse"
+
+msgid "Post-apply checks failed"
+msgstr "Handlinger efter anvendelse mislykkedes"
+
+msgid "Post-apply details"
+msgstr "Detaljer efter anvendelse"
+
+msgid "Post-apply run details"
+msgstr "Kørselsdetaljer efter anvendelse"
+
+msgid "Preflight checks"
+msgstr "Forhåndskontroller"
+
+msgid "Preflight checks completed"
+msgstr "Forhåndskontroller fuldført"
+
+msgid "Preflight checks failed"
+msgstr "Forhåndskontroller mislykkedes"
+
+msgid "Preflight details"
+msgstr "Forhåndsdetaljer"
+
+msgid "Prepare staging"
+msgstr "Forbered klargøring"
+
+msgid "Preparing staging..."
+msgstr "Forbereder klargøring..."
+
+msgid "Production mode"
+msgstr "Produktionsmiljø"
+
+msgid "Released at"
+msgstr "Udgivet den"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Erstat Chamilo-filer fra den klargjorte pakke ved hjælp af den gennemgåede anvendelsesplan. Dette kører ikke databasemigrationer, Composer, Yarn eller cache-kommandoer."
+
+msgid "Review apply plan"
+msgstr "Gennemgå anvendelsesplan"
+
+msgid "Review database migrations"
+msgstr "Gennemgå databasemigrationer"
+
+msgid "Review post-apply actions"
+msgstr "Gennemgå handlinger efter anvendelse"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Gennemgå anbefalede manuelle kommandoer efter anvendelse af opdateringsfiler. Dette trin kører ikke Composer, Yarn, migrationer eller cache-kommandoer."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Gennemgå klargjorte Doctrine-migrationer og dry-run-output før kørsel af databasemigrationer."
+
+msgid "Reviewing database migrations..."
+msgstr "Gennemgår databasemigrationer..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Kør og godkend migrationssikkerhedsgennemgangen før udførelse af databasemigrationer."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Kør miljøkontroller før ethvert fremtidigt opdateringstrin. Dette ændrer ikke filer eller databasen."
+
+msgid "Run post-apply actions"
+msgstr "Kør handlinger efter anvendelse"
+
+msgid "Run preflight checks"
+msgstr "Kør forhåndskontroller"
+
+msgid "Run selected post-apply actions"
+msgstr "Kør valgte handlinger efter anvendelse"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Kør valgte post-apply-kommandoer fra serveren ved hjælp af en kontrolleret tilladelsesliste. Brugerdefinerede shell-kommandoer accepteres ikke."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Kør disse kommandoer manuelt fra serveren efter bekræftelse af filopdateringsresultatet og sikkerhedskopier."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Kørsel af post-apply-handlinger fra brugergrænsefladen er deaktiveret i produktionsmiljø."
+
+msgid "Running post-apply actions..."
+msgstr "Kører post-apply-handlinger..."
+
+msgid "Safe actions"
+msgstr "Sikre handlinger"
+
+msgid "Signature path"
+msgstr "Signatursti"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Signaturverifikation kan ikke springes over i dette miljø."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Spring signaturverifikation over for lokale udviklingstests"
+
+msgid "Staged file application failed"
+msgstr "Anvendelse af stagede filer mislykkedes"
+
+msgid "Staged files applied successfully"
+msgstr "Stagede filer anvendt med succes"
+
+msgid "Staging details"
+msgstr "Staging-detaljer"
+
+msgid "Staging directory"
+msgstr "Staging-mappe"
+
+msgid "Staging extraction"
+msgstr "Staging-udpakning"
+
+msgid "Symfony cache clear"
+msgstr "Symfony cache-rensning"
+
+msgid "System update"
+msgstr "Systemopdatering"
+
+msgid "Target version"
+msgstr "Målversion"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Den konfigurerede officielle manifest-URL er forudfyldt. Du kan ændre den til et andet HTTPS-manifest, hvis nødvendigt."
+
+msgid "The database migration baseline is clean."
+msgstr "Database-migreringsbaseline er ren."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Den endelige HTTP-svar mislykkedes efter operationen var fuldført. Dette skyldes normalt tilladelser til runtime-cache eller en webserver-genstart under anmodningen."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Operationsloggen viser, at post-apply-handlinger blev fuldført med succes."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "De valgte post-apply-kommandoer blev fuldført med succes, men det endelige HTTP-svar mislykkedes. Opdater siden og kontroller tilladelser til runtime-cache, hvis siden ikke indlæses korrekt."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Opdateringsværktøjet opretter eller gendanner ikke databasesikkerhedskopier."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Disse handlinger er sikre at køre fra brugergrænsefladen efter gennemgang af opdateringsresultatet."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Disse kommandoer kan ændre afhængigheder, genererede aktiver, cache eller databasen. Bekræft sikkerhedskopier, før du fortsætter."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Denne handling ændrer filer i Chamilo-installationen. Sørg for, at anvendelsesplanen er gennemgået, og at sikkerhedskopier er aktiveret, før du fortsætter."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Denne udviklingsindgang simulerer den fremtidige Chamilo.org-opdateringsmeddelelse ved hjælp af lokale testpakke-stier."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Denne skærm blev åbnet fra en officiel opdateringsmeddelelse, men ingen officiel manifestkilde er konfigureret endnu."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Denne skærm blev åbnet fra en opdateringsmeddelelse. Kun manifestkontrollen startes automatisk."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Dette trin forbereder kun en gennemgang. Filudskiftning sker senere i trinnet Anvend stagede filer med lås, backup og rollback-beskyttelse."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Denne opdatering opretter ikke en databasesikkerhedskopi. Opret og verificer en sikkerhedskopi, før du kører migreringer."
+
+msgid "Trusted public key"
+msgstr "Betroet offentlig nøgle"
+
+msgid "Trusted signing key"
+msgstr "Betroet signeringsnøgle"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Skriv APPLY UPDATE FILES for at bekræfte"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Skriv RUN DATABASE MIGRATIONS for at bekræfte databasemigreringer"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Skriv RUN POST UPDATE ACTIONS for at bekræfte"
+
+msgid "Unknown update notice source."
+msgstr "Ukendt kilde til opdateringsmeddelelse."
+
+msgid "Update availability"
+msgstr "Opdateringstilgængelighed"
+
+msgid "Update directory"
+msgstr "Opdateringsmappe"
+
+msgid "Update lock path"
+msgstr "Opdateringslås-sti"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Brug staging-mappen genereret af det forrige trin. Backend accepterer kun mapper inde i var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Brug dette link til at simulere den fremtidige Chamilo.org-opdateringsmeddelelse under udviklingstests."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Brug kun dette til lokale udviklingstests. Produktionsopdateringer skal bruge den serverkonfigurerede nøgle."
+
+msgid "Verification details"
+msgstr "Verifikationsdetaljer"
+
+msgid "Verify package"
+msgstr "Verificer pakke"
+
+msgid "Verifying..."
+msgstr "Verificerer..."
+
+msgid "Waiting for command progress events..."
+msgstr "Venter på kommando-fremdriftsbegivenheder..."
+
+msgid "Waiting for update progress events..."
+msgstr "Venter på opdaterings-fremdriftsbegivenheder..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "En kommentar er påkrævet"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "En database med samme navn findes allerede. Hvis den indeholder tabeller, vil de blive slettet; hvis den er tom, vil den blive genbrugt."
+
+msgid "AI generated"
+msgstr "AI-genereret"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Tilføj mindst ét spørgsmål, før du vender tilbage til læringsstien."
+
+msgid "Add attachments"
+msgstr "Tilføj vedhæftninger"
+
+msgid "Additional fields"
+msgstr "Yderligere felter"
+
+msgid "Allow comments"
+msgstr "Tillad kommentarer"
+
+msgid "Allow new pages"
+msgstr "Tillad nye sider"
+
+msgid "Allow ratings"
+msgstr "Tillad vurderinger"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Er du sikker på, at du vil slette alle elementer?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Er du sikker på, at du vil genaktivere automatisk fornyelse?"
+
+msgid "Attachment has been deleted"
+msgstr "Vedhæftning er blevet slettet"
+
+msgid "Backup file"
+msgstr "Backup-fil"
+
+msgid "Block comments"
+msgstr "Bloker kommentarer"
+
+msgid "Block new pages"
+msgstr "Bloker nye sider"
+
+msgid "Block ratings"
+msgstr "Bloker vurderinger"
+
+msgid "Cancel renewal"
+msgstr "Annullér fornyelse"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Kategorilinks vil blive fjernet fra %s Wiki-sider."
+
+msgid "Change"
+msgstr "Skift"
+
+msgid "Clear group"
+msgstr "Ryd gruppe"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Klik på et tag for at indsætte det i editoren. Disse pladsholdere vil blive erstattet, når certifikatet genereres."
+
+msgid "Comment added"
+msgstr "Kommentar tilføjet"
+
+msgid "Comment is required"
+msgstr "Kommentar er påkrævet"
+
+msgid "Comment score"
+msgstr "Kommentarscore"
+
+msgid "Compare selected versions line by line"
+msgstr "Sammenlign valgte versioner linje for linje"
+
+msgid "Compare selected versions word by word"
+msgstr "Sammenlign valgte versioner ord for ord"
+
+msgid "Compare versions"
+msgstr "Sammenlign versioner"
+
+msgid "Copy completed"
+msgstr "Kopiering fuldført"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Opret individuelle Wiki-arbejdssider til kursister"
+
+msgid "Current view mode"
+msgstr "Aktuel visningstilstand"
+
+msgid "Delete Wiki"
+msgstr "Slet Wiki"
+
+msgid "Delete page"
+msgstr "Slet side"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Det anbefales ikke at slette Wiki-hjemmesiden. Du kan genskabe den senere."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Deaktivering af Wiki blokerer normale Wiki-sider og handlinger. Denne indstillingsside forbliver tilgængelig for kursusundervisere."
+
+msgid "Discussion"
+msgstr "Diskussion"
+
+msgid "Edit Comment"
+msgstr "Redigér kommentar"
+
+msgid "Edit page"
+msgstr "Redigér side"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Slutdato skal være efter eller lig med udløbsdato"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Indtast et søgeord for at finde Wiki-sider"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Udløbsdato skal være før eller lig med slutdato"
+
+msgid "Failed email recipients"
+msgstr "Fejlede e-mail-modtagere"
+
+msgid "Finish and return to learning path"
+msgstr "Afslut og vend tilbage til læringsstien"
+
+msgid "Forum image"
+msgstr "Forum-billede"
+
+msgid "Hide discussion"
+msgstr "Skjul diskussion"
+
+msgid "Hide page"
+msgstr "Skjul side"
+
+msgid "I changed my mind"
+msgstr "Jeg har skiftet mening"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Hvis ikke markeret, vil disse filer forblive tilgængelige for platformadministratoren via værktøjet 'Filinformation'."
+
+msgid "Internal message failures"
+msgstr "Interne meddelelsesfejl"
+
+msgid "Internal messages available"
+msgstr "Interne meddelelser tilgængelige"
+
+msgid "Internal messages created now"
+msgstr "Interne meddelelser oprettet nu"
+
+msgid "Item score"
+msgstr "Elementscore"
+
+msgid "Last post"
+msgstr "Seneste indlæg"
+
+msgid "Lock page"
+msgstr "Lås side"
+
+msgid "Manage categories"
+msgstr "Administrer kategorier"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Markerer dette dokument som AI-assisteret. Brug det, når indholdet er oprettet eller væsentligt ændret med AI-værktøjer."
+
+msgid "Maximum score is required"
+msgstr "Maksimumscore er påkrævet"
+
+msgid "Metric"
+msgstr "Metrisk"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Nye kommentarer er blokeret i denne diskussion"
+
+msgid "No Wiki categories are available yet."
+msgstr "Ingen Wiki-kategorier er tilgængelige endnu."
+
+msgid "No categories found"
+msgstr "Ingen kategorier fundet"
+
+msgid "No content"
+msgstr "Intet indhold"
+
+msgid "No parent category"
+msgstr "Ingen overordnet kategori"
+
+msgid "Number of comments scored"
+msgstr "Antal scorede kommentarer"
+
+msgid "Old version"
+msgstr "Gammel version"
+
+msgid "Only image files are allowed."
+msgstr "Kun billedfiler er tilladt."
+
+msgid "Please fill all required fields"
+msgstr "Udfyld venligst alle påkrævede felter"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Spørgsmål med klasse- eller elevpladsholdere vil blive genereret til kursusklasser eller grupper: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Bedømmelser er blokeret i denne diskussion"
+
+msgid "Remove image"
+msgstr "Fjern billede"
+
+msgid "Restore renewal"
+msgstr "Gendan fornyelse"
+
+msgid "Restore version"
+msgstr "Gendan version"
+
+msgid "Search in"
+msgstr "Søg i"
+
+msgid "Select group"
+msgstr "Vælg gruppe"
+
+msgid "Select image"
+msgstr "Vælg billede"
+
+msgid "Selected image"
+msgstr "Valgt billede"
+
+msgid "Show discussion"
+msgstr "Vis diskussion"
+
+msgid "Show page"
+msgstr "Vis side"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Nogle filer eller mapper har ikke skriverettigheder. For at kunne installere Chamilo skal du først ændre deres tilladelser (ved hjælp af CHMOD). Læs venligst"
+
+msgid "Subcategories"
+msgstr "Underkategorier"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Tryk til venstre eller højre for at navigere"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki-opgavens deadline er overskredet, men forsinket aflevering er tilladt."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki-opgavens deadline er overskredet."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki-opgaven er ikke startet endnu."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Wiki-sidens redigeringslås er påkrævet før gemning."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Meddelelsen blev gemt, men en vedhæftning kunne ikke uploades."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Meddelelsen blev gemt, men e-mail-levering mislykkedes."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Meddelelsen blev gemt, men ingen e-mail kunne leveres."
+
+msgid "The category has been created"
+msgstr "Kategorien er blevet oprettet"
+
+msgid "The category has been deleted"
+msgstr "Kategorien er blevet slettet"
+
+msgid "The category has been updated"
+msgstr "Kategorien er blevet opdateret"
+
+msgid "The end date is invalid"
+msgstr "Slutdatoen er ugyldig"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Det maksimale antal versioner skal være et ikke-negativt heltal"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Det maksimale antal ord skal være et ikke-negativt heltal"
+
+msgid "The print window could not be opened"
+msgstr "Udskriftsvinduet kunne ikke åbnes"
+
+msgid "The start date is invalid"
+msgstr "Startdatoen er ugyldig"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Disse indstillinger gælder for hele kurset, inklusive dets sessioner og grupper."
+
+msgid "This announcement has already been sent by email."
+msgstr "Denne meddelelse er allerede blevet sendt via e-mail."
+
+msgid "This discussion is hidden from learners"
+msgstr "Denne diskussion er skjult for kursister"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Dette generative AI-værktøj giver dig mulighed for at oprette billeder og korte videoer til at illustrere dit kursus. Ved at forklare (i tekst) hvad du ønsker i prompt-sektionen, giver du den konfigurerede AI-model de nødvendige elementer til at generere et billede eller en video. Vær tålmodig. AI-modellen vil tage noget tid og generere et resultat, som du måske vil beholde ved at gemme mediet i din dokumentmappe og derefter indlejre det i et HTML-dokument. Ikke alle AI-modeller er ens med hensyn til hastighed eller kvalitet. AI-modellen kan også give dig en modificeret prompt, som er en mere detaljeret fortolkning af din anmodning. Du kan derefter bruge denne modificerede prompt til at finjustere din anmodning. Vær opmærksom på, at dette værktøj, især for videoer, kan generere betydelige omkostninger for din organisation, selv hvis du beslutter dig for ikke at gemme det genererede medie. Brug det derfor hensigtsmæssigt. Hvis du har problemer med at opnå det, du søger, så brug lidt tid på at undersøge prompting-tricks online for den AI-model, du har til rådighed."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Denne historik tilhører basiskurset. Gendannelse er tilgængelig efter oprettelse af en sessionsversion."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Dette billede erstatter standardforumikonet, der vises ved siden af forumtitlen."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Denne side kommer fra basiskurset. Hvis du gemmer den, oprettes en version til den aktuelle session."
+
+msgid "This will also delete %s subcategories."
+msgstr "Dette vil også slette %s underkategorier."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Dette vil oprette individuelle opgavesider til %s deltagere."
+
+msgid "Thread history"
+msgstr "Trådhistorik"
+
+msgid "Title and content"
+msgstr "Titel og indhold"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Kan ikke annullere fornyelse lige nu."
+
+msgid "Unable to restore renewal right now."
+msgstr "Kan ikke gendanne fornyelse lige nu."
+
+msgid "Unlock page"
+msgstr "Lås side op"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Brug [[Side]] eller [[Side|Synlig tekst]] til at oprette interne Wiki-links."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Brug mellemrumstasten eller piletasterne til at navigere"
+
+msgid "View version"
+msgstr "Vis version"
+
+msgid "Visible only to teachers"
+msgstr "Synlig kun for undervisere"
+
+msgid "Weight is required"
+msgstr "Vægt er påkrævet"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki-kategorier er deaktiveret for dette kursus."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki-kategorier aktiveret"
+
+msgid "Wiki html strict filtering"
+msgstr "Streng HTML-filtrering i Wiki"
+
+msgid "Wiki settings"
+msgstr "Wiki-indstillinger"
+
+msgid "Wiki settings updated"
+msgstr "Wiki-indstillinger opdateret"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Du ser en historisk version af denne side"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Du kan vedhæfte en eller flere filer til dette svar."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Du kan redigere denne opgaveside, men deltagernes opgavesider vil ikke blive ændret."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Du kan bruge tags {{class_name}} og {{student_full_name}} i spørgsmålet."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Du har 20 minutter til at redigere denne side, før redigeringslåsen udløber."
+
+msgid "by"
+msgstr "af"
+
+msgid "required"
+msgstr "påkrævet"
 

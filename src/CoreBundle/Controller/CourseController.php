@@ -30,8 +30,6 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -41,7 +39,6 @@ use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -55,6 +52,7 @@ use CourseManager;
 use Database;
 use DateTimeInterface;
 use Display;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Event;
@@ -62,6 +60,7 @@ use Exercise;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
 use IntlDateFormatter;
+use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -77,6 +76,9 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use UserManager;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -629,7 +631,16 @@ class CourseController extends ToolBaseController
             ];
         }
 
-        $thematicUrl = '/main/course_progress/index.php?cid='.$course->getId().'&sid='.$this->getSessionId().'&action=thematic_details';
+        $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+        $thematicUrl = null;
+
+        if ($courseNodeId > 0) {
+            $thematicUrl = '/resources/course-progress/'.$courseNodeId.'/?'.http_build_query([
+                'cid' => (int) $course->getId(),
+                'sid' => $this->getSessionId(),
+            ]);
+        }
+
         $thematicScoreRaw = $thematicRepository->calculateTotalAverageForCourse($course, $sessionEntity);
         $thematicScore = $thematicScoreRaw.'%';
 
@@ -777,6 +788,31 @@ class CourseController extends ToolBaseController
         SettingsFormFactory $formFactory
     ): Response {
         $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        $manager->setCourse($course);
+
+        if ('wiki' === $namespace) {
+            $user = $this->userHelper->getCurrent();
+            $canManageWikiSettings = $this->isGranted('ROLE_ADMIN')
+                || ($user instanceof User && (
+                    $course->hasUserAsTeacher($user)
+                    || $this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+                ));
+
+            if (!$canManageWikiSettings) {
+                throw $this->createAccessDeniedException('You are not allowed to manage Wiki settings.');
+            }
+
+            if ($request->isMethod(Request::METHOD_GET)) {
+                $nodeId = $course->getResourceNode()?->getId();
+                if (null !== $nodeId) {
+                    return $this->redirect(\sprintf(
+                        '/resources/wiki/%d/settings?cid=%d',
+                        $nodeId,
+                        $course->getId(),
+                    ));
+                }
+            }
+        }
 
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);
@@ -790,7 +826,6 @@ class CourseController extends ToolBaseController
             $messageType = 'success';
 
             try {
-                $manager->setCourse($course);
                 $manager->save($form->getData());
                 $message = $this->trans('Update');
             } catch (ValidatorException $validatorException) {
@@ -829,12 +864,16 @@ class CourseController extends ToolBaseController
 
         $user = $this->userHelper->getCurrent();
 
+        if (!$this->isGranted(CourseVoter::VIEW, $course)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $fieldsRepo = $em->getRepository(ExtraField::class);
 
         /** @var TagRepository $tagRepo */
         $tagRepo = $em->getRepository(Tag::class);
 
-        $courseDescriptions = $courseDescriptionRepository->getResourcesByCourse($course)->getQuery()->getResult();
+        $courseDescriptions = $courseDescriptionRepository->findAllInCourseForCatalogue($course);
 
         $courseValues = new ExtraFieldValue('course');
 
@@ -848,7 +887,7 @@ class CourseController extends ToolBaseController
                 'complete_name' => UserManager::formatUserFullName($teacher),
                 'image' => $illustrationRepository->getIllustrationUrl($teacher),
                 'diploma' => $teacher->getDiplomas(),
-                'openarea' => $teacher->getOpenarea(),
+                'openarea' => $this->sanitizeCourseAboutHtml((string) $teacher->getOpenarea()),
             ];
 
             $teachersData[] = $userData;
@@ -868,10 +907,21 @@ class CourseController extends ToolBaseController
         $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = '';
         $courseMaterial = $courseResources = $courseAssessment = '';
         $courseCustom = [];
+        $descriptionSections = [];
+
         foreach ($courseDescriptions as $descriptionTool) {
+            if (!$descriptionTool instanceof CCourseDescription) {
+                continue;
+            }
+
+            $section = $this->buildCourseAboutDescriptionSection($descriptionTool);
+            if (null !== $section) {
+                $descriptionSections[] = $section;
+            }
+
             switch ($descriptionTool->getDescriptionType()) {
                 case CCourseDescription::TYPE_DESCRIPTION:
-                    $courseDescription = $descriptionTool->getContent();
+                    $courseDescription = $section['content'] ?? '';
 
                     break;
 
@@ -912,6 +962,10 @@ class CourseController extends ToolBaseController
             }
         }
 
+        if ('' === $courseDescription && [] !== $descriptionSections) {
+            $courseDescription = (string) ($descriptionSections[0]['content'] ?? '');
+        }
+
         $topics = [
             'objectives' => $courseObjectives,
             'topics' => $courseTopics,
@@ -935,6 +989,7 @@ class CourseController extends ToolBaseController
         $params = [
             'course' => $course,
             'description' => $courseDescription,
+            'description_sections' => $descriptionSections,
             'image' => $image,
             'syllabus' => $topics,
             'tags' => $courseTags,
@@ -952,16 +1007,51 @@ class CourseController extends ToolBaseController
             'allow_subscribe' => $allowSubscribe,
         ];
 
-        $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
+        $metaInfo = '<meta property="og:url" content="'.htmlspecialchars($urlCourse, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
         $metaInfo .= '<meta property="og:type" content="website" />';
-        $metaInfo .= '<meta property="og:title" content="'.$course->getTitle().'" />';
-        $metaInfo .= '<meta property="og:description" content="'.strip_tags($courseDescription).'" />';
-        $metaInfo .= '<meta property="og:image" content="'.$image.'" />';
+        $metaInfo .= '<meta property="og:title" content="'.htmlspecialchars($course->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
+        $metaInfo .= '<meta property="og:description" content="'.htmlspecialchars(strip_tags($courseDescription), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
+        $metaInfo .= '<meta property="og:image" content="'.htmlspecialchars($image, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
 
         $htmlHeadXtra[] = $metaInfo;
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
         return $this->render('@ChamiloCore/Course/about.html.twig', $params);
+    }
+
+    private function buildCourseAboutDescriptionSection(CCourseDescription $description): ?array
+    {
+        $title = trim(strip_tags((string) $description->getTitle()));
+        $content = $this->sanitizeCourseAboutHtml((string) $description->getContent());
+
+        if ('' === $title && '' === strip_tags($content)) {
+            return null;
+        }
+
+        return [
+            'iid' => $description->getIid(),
+            'title' => $title,
+            'content' => $content,
+            'type' => $description->getDescriptionType(),
+            'progress' => $description->getProgress(),
+        ];
+    }
+
+    private function sanitizeCourseAboutHtml(string $content): string
+    {
+        $content = trim($content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        if (class_exists('Security')) {
+            $userStatus = \defined('STUDENT') ? \STUDENT : null;
+
+            return (string) \Security::remove_XSS($content, $userStatus);
+        }
+
+        return $content;
     }
 
     #[Route('/{id}/welcome', name: 'chamilo_core_course_welcome')]
@@ -970,252 +1060,6 @@ class CourseController extends ToolBaseController
         return $this->render('@ChamiloCore/Course/welcome.html.twig', [
             'course' => $course,
         ]);
-    }
-
-    private function findIntroOfCourse(Course $course): ?CTool
-    {
-        $qb = $this->em->createQueryBuilder();
-
-        $query = $qb->select('ct')
-            ->from(CTool::class, 'ct')
-            ->where('ct.course = :c_id')
-            ->andWhere('ct.title = :title')
-            ->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->eq('ct.session', ':session_id'),
-                    $qb->expr()->isNull('ct.session')
-                )
-            )
-            ->setParameters([
-                'c_id' => $course->getId(),
-                'title' => 'course_homepage',
-                'session_id' => 0,
-            ])
-            ->getQuery()
-        ;
-
-        $results = $query->getResult();
-
-        return \count($results) > 0 ? $results[0] : null;
-    }
-
-    private function findCourseTool(Course $course, string $toolTitle, ?Session $session, EntityManagerInterface $em): ?CTool
-    {
-        return $em->getRepository(CTool::class)->findOneBy([
-            'title' => $toolTitle,
-            'course' => $course,
-            'session' => $session,
-        ]);
-    }
-
-    private function ensureCourseTool(
-        Course $course,
-        string $toolTitle,
-        ?Session $session,
-        EntityManagerInterface $em
-    ): ?CTool {
-        $existing = $this->findCourseTool($course, $toolTitle, $session, $em);
-
-        if ($existing) {
-            return $existing;
-        }
-
-        $toolEntity = $em->getRepository(Tool::class)->findOneBy(['title' => $toolTitle]);
-
-        if (!$toolEntity) {
-            return null;
-        }
-
-        $ctool = (new CTool())
-            ->setTool($toolEntity)
-            ->setTitle($toolTitle)
-            ->setCourse($course)
-            ->setPosition(1)
-            ->setParent($course)
-            ->setCreator($course->getCreator())
-            ->setSession($session)
-            ->addCourseLink($course)
-        ;
-
-        $em->persist($ctool);
-        $em->flush();
-
-        return $ctool;
-    }
-
-    #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
-    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
-    {
-        // Reading a tool introduction requires access to the course. CourseVoter::VIEW
-        // grants course members (students/teachers), session users and anonymous users
-        // on public courses, while honoring course visibility and prerequisite locks.
-        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
-
-        $toolTitle = trim((string) $request->query->get('tool', 'course_homepage'));
-        if ('' === $toolTitle) {
-            $toolTitle = 'course_homepage';
-        }
-
-        $sessionId = (int) $request->query->get('sid', 0);
-
-        $session = null;
-        if ($sessionId > 0) {
-            $session = $em->getRepository(Session::class)->find($sessionId);
-        }
-
-        $ctoolintroRepo = $em->getRepository(CToolIntro::class);
-
-        $baseTool = $this->findCourseTool($course, $toolTitle, null, $em);
-        if (!$baseTool) {
-            $baseTool = $this->ensureCourseTool($course, $toolTitle, null, $em);
-        }
-
-        $baseIntro = null;
-        if ($baseTool) {
-            $baseIntro = $ctoolintroRepo->findOneBy(
-                ['courseTool' => $baseTool],
-                ['iid' => 'DESC']
-            );
-        }
-
-        $activeTool = $baseTool;
-        $activeIntro = $baseIntro;
-        $createInSession = false;
-
-        if ($session) {
-            $sessionTool = $this->findCourseTool($course, $toolTitle, $session, $em);
-
-            if (!$sessionTool) {
-                $sessionTool = $this->ensureCourseTool($course, $toolTitle, $session, $em);
-            }
-
-            if ($sessionTool) {
-                $activeTool = $sessionTool;
-
-                $sessionIntro = $ctoolintroRepo->findOneBy(
-                    ['courseTool' => $sessionTool],
-                    ['iid' => 'DESC']
-                );
-
-                if ($sessionIntro) {
-                    $activeIntro = $sessionIntro;
-                    $createInSession = false;
-                } else {
-                    $activeIntro = $baseIntro;
-                    $createInSession = true;
-                }
-            }
-        }
-
-        $responseData = [
-            'createInSession' => $createInSession,
-        ];
-
-        if ($activeTool) {
-            $responseData['cToolId'] = $activeTool->getIid();
-            $responseData['c_tool'] = [
-                'iid' => $activeTool->getIid(),
-                'title' => $activeTool->getTitle(),
-            ];
-        }
-
-        if ($activeIntro) {
-            $responseData['iid'] = $activeIntro->getIid();
-            $responseData['introText'] = $activeIntro->getIntroText();
-        }
-
-        return new JsonResponse($responseData);
-    }
-
-    #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
-    public function addToolIntro(
-        Request $request,
-        Course $course,
-        EntityManagerInterface $em,
-        CourseAccessResolver $courseAccessResolver,
-    ): Response {
-        $data = json_decode($request->getContent());
-
-        $toolTitle = trim((string) ($data->tool ?? 'course_homepage'));
-        if ('' === $toolTitle) {
-            $toolTitle = 'course_homepage';
-        }
-
-        $sessionId = $data->sid ?? ($data->resourceLinkList[0]->sid ?? 0);
-        $introText = $data->introText ?? null;
-
-        $session = $sessionId ? $em->getRepository(Session::class)->find($sessionId) : null;
-
-        // Writing a tool introduction is teacher-only. The contextual course
-        // roles are unavailable here (cid travels in the body, not the query, so
-        // CidReqListener cannot resolve them), so resolve them directly from the
-        // course/session objects with CourseAccessResolver — the same source of
-        // truth CourseContextRoleListener uses — keeping this gate consistent with
-        // the CToolIntro API write operations. Admins are allowed separately, as
-        // the resolver does not grant them course roles.
-        $user = $this->getUser();
-        $courseRoles = $user instanceof User
-            ? $courseAccessResolver->resolveCourseRoles($user, $course, $session)
-            : [];
-
-        $canManage = $this->isGranted('ROLE_ADMIN')
-            || \in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER, $courseRoles, true)
-            || \in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER, $courseRoles, true);
-
-        if (!$canManage) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $ctoolintroRepo = $em->getRepository(CToolIntro::class);
-
-        $ctoolSession = $this->findCourseTool($course, $toolTitle, $session, $em);
-
-        if (!$ctoolSession) {
-            $ctoolSession = $this->ensureCourseTool($course, $toolTitle, $session, $em);
-        }
-
-        if (!$ctoolSession) {
-            return new JsonResponse([
-                'status' => 'error',
-                'message' => 'Course tool not found.',
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        $ctoolIntro = $ctoolintroRepo->findOneBy(['courseTool' => $ctoolSession]);
-        if (!$ctoolIntro) {
-            $ctoolIntro = (new CToolIntro())
-                ->setCourseTool($ctoolSession)
-                ->setIntroText($introText ?? '')
-                ->setParent($course)
-            ;
-
-            $em->persist($ctoolIntro);
-            $em->flush();
-
-            return new JsonResponse([
-                'status' => 'created',
-                'cToolId' => $ctoolSession->getIid(),
-                'iid' => $ctoolIntro->getIid(),
-                'introIid' => $ctoolIntro->getIid(),
-                'introText' => $ctoolIntro->getIntroText(),
-            ]);
-        }
-
-        if (null !== $introText) {
-            $ctoolIntro->setIntroText($introText);
-            $em->persist($ctoolIntro);
-            $em->flush();
-
-            return new JsonResponse([
-                'status' => 'updated',
-                'cToolId' => $ctoolSession->getIid(),
-                'iid' => $ctoolIntro->getIid(),
-                'introIid' => $ctoolIntro->getIid(),
-                'introText' => $ctoolIntro->getIntroText(),
-            ]);
-        }
-
-        return new JsonResponse(['status' => 'no_action']);
     }
 
     #[Route('/check-enrollments', name: 'chamilo_core_check_enrollments', methods: ['GET'])]
@@ -1442,6 +1286,14 @@ class CourseController extends ToolBaseController
                     'courseId' => $course->getId(),
                 ]);
             }
+        } catch (InvalidArgumentException $exception) {
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $exception->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (RuntimeException $exception) {
             return new JsonResponse(
                 [
@@ -1450,23 +1302,20 @@ class CourseController extends ToolBaseController
                 ],
                 Response::HTTP_FORBIDDEN
             );
-        } catch (Throwable $exception) {
-            error_log(
-                '[course.create] throwable='.
-                $exception::class.
-                ' message='.$exception->getMessage().
-                ' file='.$exception->getFile().
-                ' line='.(string) $exception->getLine().
-                ' peak='.memory_get_peak_usage(true)
-            );
+        } catch (UniqueConstraintViolationException $exception) {
+            if ($this->isCourseCodeUniqueConstraintViolation($exception)) {
+                return new JsonResponse(
+                    [
+                        'success' => false,
+                        'message' => $this->getDuplicateCourseCreationMessage($wantedCode, $translator),
+                    ],
+                    Response::HTTP_CONFLICT
+                );
+            }
 
-            return new JsonResponse(
-                [
-                    'success' => false,
-                    'message' => $translator->trans('An error occurred while creating the course.'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return $this->createCourseCreationServerErrorResponse($exception, $translator);
+        } catch (Throwable $exception) {
+            return $this->createCourseCreationServerErrorResponse($exception, $translator);
         }
 
         return new JsonResponse(
@@ -1475,6 +1324,46 @@ class CourseController extends ToolBaseController
                 'message' => $translator->trans('An error occurred while creating the course.'),
             ],
             Response::HTTP_BAD_REQUEST
+        );
+    }
+
+    private function isCourseCodeUniqueConstraintViolation(UniqueConstraintViolationException $exception): bool
+    {
+        $message = $exception->getMessage();
+
+        return str_contains($message, 'UNIQ_169E6FB977153098')
+            || str_contains($message, "for key 'code'")
+            || str_contains($message, 'for key "code"');
+    }
+
+    private function getDuplicateCourseCreationMessage(?string $wantedCode, TranslatorInterface $translator): string
+    {
+        if (null !== $wantedCode && '' !== trim($wantedCode)) {
+            return $translator->trans('This course code already exists, please choose another code.');
+        }
+
+        return $translator->trans('This course title already exists, please choose another title.');
+    }
+
+    private function createCourseCreationServerErrorResponse(
+        Throwable $exception,
+        TranslatorInterface $translator
+    ): JsonResponse {
+        error_log(
+            '[course.create] throwable='.
+            $exception::class.
+            ' message='.$exception->getMessage().
+            ' file='.$exception->getFile().
+            ' line='.(string) $exception->getLine().
+            ' peak='.memory_get_peak_usage(true)
+        );
+
+        return new JsonResponse(
+            [
+                'success' => false,
+                'message' => $translator->trans('An error occurred while creating the course.'),
+            ],
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
     }
 

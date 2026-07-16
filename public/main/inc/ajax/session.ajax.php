@@ -339,7 +339,7 @@ switch ($action) {
                     $row = [];
                     $row[] = DocumentManager::build_document_icon_tag($documentData['filetype'], $documentData['path']);
                     $row[] = Display::url($documentData['title'], $downloadUrl);
-                    $row[] = format_file_size($documentData['size']);
+                    $row[] = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($documentData['size']);
                     $row[] = date_to_str_ago($documentData['lastedit_date']).PHP_EOL
                         .'<div class="muted"><small>'
                         .api_get_local_time($documentData['lastedit_date'])

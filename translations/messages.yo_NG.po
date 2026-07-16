@@ -1575,8 +1575,8 @@ msgstr "Ṣe o da ṣinṣin pe o fẹ pa awọn igbesẹ wọnyi nu?"
 msgid "Authoring tool"
 msgstr "Ohun elo onkọwe"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Failu SCORM tabi AICC lati gbe soke"
+msgid "SCORM file to upload"
+msgstr "Failu SCORM lati gbe soke"
 
 msgid "Course location"
 msgstr "Ipo ẹkọ"
@@ -8723,6 +8723,15 @@ msgstr "Han"
 
 msgid "My courses"
 msgstr "Awọn ẹkọ mi"
+
+msgid "Shop"
+msgstr "Shop"
+
+msgid "Invoice"
+msgstr "Invoice"
+
+msgid "Request invoice"
+msgstr "Béèrè ìwé-ìṣirò"
 
 msgid "View my progress"
 msgstr "Wo ilọsiwaju mi"
@@ -36476,4 +36485,856 @@ msgstr "Ti ṣàkóso"
 
 msgid "View threads"
 msgstr "Wo àwọn ìsọ̀rọ̀"
+
+msgid "No auth source"
+msgstr "No auth source"
+
+msgid "You must add at least one question"
+msgstr "You must add at least one question"
+
+msgid "Advanced actions"
+msgstr "Advanced actions"
+
+msgid "Application path"
+msgstr "Application path"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Ìtọ́lẹ̀ ètò kùnà"
+
+msgid "Apply plan ready"
+msgstr "Ìtọ́lẹ̀ ètò ṣetán"
+
+msgid "Apply preparation"
+msgstr "Ìmúrasílẹ̀ ìtọ́lẹ̀"
+
+msgid "Apply staged files"
+msgstr "Ìtọ́lẹ̀ àwọn fáìlì tí a ṣètò"
+
+msgid "Applying files..."
+msgstr "Ń tẹ́ fáìlì..."
+
+msgid "Audit file"
+msgstr "Fáìlì àyẹ̀wò"
+
+msgid "Backup directory"
+msgstr "Àpò àfidí"
+
+msgid "Baseline clean"
+msgstr "Ìbẹ̀rẹ̀ tó mọ́"
+
+msgid "Baseline warnings"
+msgstr "Ìkìlọ̀ ìbẹ̀rẹ̀"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Ṣẹ̀dá ètò ìtọ́lẹ̀ tó ní ààbò láti inú àpò tí a ṣètò. Èyí máa ṣàyẹ̀wò fáìlì nìkan, àṣẹ, ọ̀nà àfidí àti ipò títì. Kò ní rọ́pò fáìlì."
+
+msgid "Build production frontend assets."
+msgstr "Kọ́ àwọn ohun-ìní ojú-ìwájú ìmúlò."
+
+msgid "Building plan..."
+msgstr "Ń ṣẹ̀dá ètò..."
+
+msgid "Channel"
+msgstr "Ìkànnì"
+
+msgid "Check"
+msgstr "Ṣàyẹ̀wò"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Ṣàyẹ̀wò àwọn ìtúntun Chamilo tó wà, ṣàrídájọ́ àwọn àpò, ṣètò fáìlì àti ṣiṣẹ́ àwọn ìgbésẹ̀ lẹ́yìn ìtúntun tí a ṣàkóso."
+
+msgid "Check manifest"
+msgstr "Ṣàyẹ̀wò àkọsílẹ̀"
+
+msgid "Checking post-apply actions..."
+msgstr "Ń ṣàyẹ̀wò àwọn ìgbésẹ̀ lẹ́yìn ìtọ́lẹ̀..."
+
+msgid "Checking..."
+msgstr "Ń ṣàyẹ̀wò..."
+
+msgid "Composer install"
+msgstr "Ìfiṣẹ́ Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Àwọn ìgbésẹ̀ Composer, Yarn àti ìyípadà ibùdó lè yí àwọn ìsopọ̀, àwọn ohun-ìní tí a ṣẹ̀dá tàbí ibùdó padà. Yan wọn nìkan lẹ́yìn tí o bá ti fọwọ́sí àwọn àfidí àti àṣẹ."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Ṣètò CHAMILO_UPDATE_MANIFEST_URL lórí ẹ̀rọ tàbí pèsè URL àkọsílẹ̀ HTTPS kan."
+
+msgid "Configured"
+msgstr "Ti ṣètò"
+
+msgid "Current migration"
+msgstr "Ìyípadà lọ́wọ́lọ́wọ́"
+
+msgid "Database baseline"
+msgstr "Ìbẹ̀rẹ̀ ibùdó"
+
+msgid "Database migration safety review"
+msgstr "Àyẹ̀wò ààbò ìyípadà ibùdó"
+
+msgid "Database migrations"
+msgstr "Àwọn ìyípadà ibùdó"
+
+msgid "Development mode"
+msgstr "Ìṣiṣẹ́ ìdàgbàsókè"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Má ṣe tan èyí àyàfi tí o bá ti ṣàyẹ̀wò àfidí ìtúntun àti àṣẹ ẹ̀rọ."
+
+msgid "Doctrine dry-run command"
+msgstr "Àṣẹ Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine ti ròyìn àwọn ìkìlọ̀ ìbẹ̀rẹ̀ ìtàn. Olùtúntun yóò ṣiṣẹ́ àwọn ìyípadà V210 tí a ṣètò nìkan lẹ́yìn ìfọwọ́sí ní gbangba."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine yóò ṣiṣẹ́ àwọn ìyípadà V210 tí a ṣètò nìkan lẹ́yìn tí àyẹ̀wò ààbò bá kọjá."
+
+msgid "Dry-run exit code"
+msgstr "Kóòdù ìjáde dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Àwọn ìyípadà tí a ṣiṣẹ́ tí kò sí"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Yọ àpò ìtúntun tí a ti fọwọ́sí sí àpò ìdúró fún àyẹ̀wò. Èyí kò ní rọ́pò fáìlì, ṣiṣẹ́ ìyípadà tàbí yí ibùdó padà."
+
+msgid "File apply available"
+msgstr "Ìtọ́lẹ̀ fáìlì tó wà"
+
+msgid "Files to replace"
+msgstr "Àwọn fáìlì láti rọ́pò"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Mo fọwọ́sí pé àfidí ibùdó kan wà tí a sì ti ṣàrídájọ́ ṣáájú ṣiṣẹ́ ìyípadà."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Mo lóye pé àwọn ìgbésẹ̀ onítìpá lè yí àwọn ìsopọ̀, àwọn ohun-ìní tí a ṣẹ̀dá tàbí ibùdó padà."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Mo lóye pé èyí yóò rọ́pò fáìlì nínú ìṣàfilọ́lẹ̀ Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Mo lóye pé èyí yóò ṣiṣẹ́ àwọn àṣẹ ìtúntun lórí ẹ̀rọ."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Fi àwọn ìsopọ̀ ojú-ìwájú sílẹ̀ ṣáájú kíkọ àwọn ohun-ìní padà."
+
+msgid "Installed version"
+msgstr "Ẹ̀yà tí a fi sílẹ̀"
+
+msgid "Latest migration"
+msgstr "Ìyípadà tuntun"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Fi àwọn ọ̀nà àpò àti ìbùdó sílẹ̀ ní òfìfo láti gba wọn láti àwọn URL àkọsílẹ̀ tí a fọwọ́sí. Àwọn ọ̀nà àdúgbò wà fún àwọn ìdánwò ìdàgbàsókè nìkan."
+
+msgid "Live command log"
+msgstr "Àkọsílẹ̀ àṣẹ lọ́wọ́lọ́wọ́"
+
+msgid "Live update log"
+msgstr "Àkọsílẹ̀ ìtúntun lọ́wọ́lọ́wọ́"
+
+msgid "Local test options"
+msgstr "Àwọn àṣàyàn ìdánwò àdúgbò"
+
+msgid "Local test update notice link"
+msgstr "Ìjápọ̀ ìsọfúnni ìtúntun àdúgbò"
+
+msgid "Local update notice simulation"
+msgstr "Ìdàgbàsókè ìsọfúnni ìtúntun àdúgbò"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Ìdàgbàsókè ìsọfúnni ìtúntun àdúgbò wà nìkan ní ìṣiṣẹ́ ìdàgbàsókè."
+
+msgid "Manifest"
+msgstr "Ìtàn"
+
+msgid "Manifest source"
+msgstr "Orísun ìtàn"
+
+msgid "Migration safety details"
+msgstr "Àwọn àlàyé ààbò ìṣípò"
+
+msgid "Migration safety review failed"
+msgstr "Àyẹ̀wò ààbò ìṣípò kùnà"
+
+msgid "Migration safety review ready"
+msgstr "Àyẹ̀wò ààbò ìṣípò ṣetán"
+
+msgid "Migration target"
+msgstr "Ìbẹ̀rẹ̀ ìṣípò"
+
+msgid "New files"
+msgstr "Àwọn fáìlì tuntun"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Àwọn ìṣípò tuntun tí Doctrine ṣàlàyé"
+
+msgid "Next migration"
+msgstr "Ìṣípò tó ń bọ̀"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Kò sí ìṣípò tí a ṣe tí kò sí ní ìwà tí a ṣàlàyé."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Kò sí URL ìtàn ìṣèdá tí a ṣètò síbẹ̀. Lo URL HTTPS tàbí ọ̀nà agbègbè fún àwọn ìdánwò ìdàgbàsókè."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Kò sí ìṣípò tí ó dúró tí a rí ṣáájú ìbẹ̀rẹ̀ ìṣèdà tí a ṣètò."
+
+msgid "Not configured"
+msgstr "Kò sí ìṣètò"
+
+msgid "Not detected"
+msgstr "Kò rí"
+
+msgid "Official Chamilo update channel"
+msgstr "Ìkànnì ìsọdọ̀mọ Chamilo"
+
+msgid "Package SHA-256"
+msgstr "Package SHA-256"
+
+msgid "Package URL"
+msgstr "Package URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Àwọn fáìlì package àti ìbùdó yóò jẹ́ gbígbà láti inú ìtàn. Àwọn ọ̀nà agbègbè ti dí ní àyíká yìí."
+
+msgid "Package path"
+msgstr "Ọ̀nà package"
+
+msgid "Package staged successfully"
+msgstr "Package ti ṣètò láìṣe àṣìṣe"
+
+msgid "Package staging failed"
+msgstr "Ìṣètò package kùnà"
+
+msgid "Package verification"
+msgstr "Ìdájọ́ package"
+
+msgid "Package verification failed"
+msgstr "Ìdájọ́ package kùnà"
+
+msgid "Package verified successfully"
+msgstr "Ìdájọ́ package ṣe láìṣe àṣìṣe"
+
+msgid "Pending migrations before this update"
+msgstr "Àwọn ìṣípò tí ó dúró ṣáájú ìsọdọ̀mọ yìí"
+
+msgid "Planned backup path"
+msgstr "Ọ̀nà àbọ̀ tí a ṣètò"
+
+msgid "Post-apply actions completed"
+msgstr "Àwọn ìgbésẹ̀ lẹ́yìn ìlò parí"
+
+msgid "Post-apply actions failed"
+msgstr "Àwọn ìgbésẹ̀ lẹ́yìn ìlò kùnà"
+
+msgid "Post-apply actions ready"
+msgstr "Àwọn ìgbésẹ̀ lẹ́yìn ìlò ṣetán"
+
+msgid "Post-apply checks"
+msgstr "Àwọn àyẹ̀wò lẹ́yìn ìlò"
+
+msgid "Post-apply checks failed"
+msgstr "Àwọn àyẹ̀wò lẹ́yìn ìlò kùnà"
+
+msgid "Post-apply details"
+msgstr "Àwọn àlàyé lẹ́yìn ìlò"
+
+msgid "Post-apply run details"
+msgstr "Àwọn àlàyé ìṣiṣẹ́ lẹ́yìn ìlò"
+
+msgid "Preflight checks"
+msgstr "Àwọn àyẹ̀wò ìṣàájú"
+
+msgid "Preflight checks completed"
+msgstr "Àwọn àyẹ̀wò ìṣàájú parí"
+
+msgid "Preflight checks failed"
+msgstr "Àwọn àyẹ̀wò ìṣàájú kùnà"
+
+msgid "Preflight details"
+msgstr "Àwọn àlàyé ìṣàájú"
+
+msgid "Prepare staging"
+msgstr "Múra ìṣètò"
+
+msgid "Preparing staging..."
+msgstr "Ń múra ìṣètò..."
+
+msgid "Production mode"
+msgstr "Ìṣiṣẹ́ ìmúlò"
+
+msgid "Released at"
+msgstr "Ti tú sílẹ̀ ní"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Rọ́pò àwọn fáìlì Chamilo láti inú package tí a ṣètò nípasẹ̀ ètò ìlò tí a ṣàgbéyẹ̀wò. Èyí kò ṣiṣẹ́ àwọn ìṣípò ibùdó, Composer, Yarn tàbí àwọn àṣẹ cache."
+
+msgid "Review apply plan"
+msgstr "Ṣàgbéyẹ̀wò ètò ìlò"
+
+msgid "Review database migrations"
+msgstr "Ṣàgbéyẹ̀wò àwọn ìṣípò ibùdó"
+
+msgid "Review post-apply actions"
+msgstr "Ṣàgbéyẹ̀wò àwọn ìgbésẹ̀ lẹ́yìn ìlò"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Ṣàgbéyẹ̀wò àwọn àṣẹ afọwọ́ṣe tí a dámọ̀ràn lẹ́yìn ìlò àwọn fáìlì ìsọdọ̀mọ. Ìgbésẹ̀ yìí kò ṣiṣẹ́ Composer, Yarn, ìṣípò tàbí àwọn àṣẹ cache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Ṣàgbéyẹ̀wò àwọn ìṣípò Doctrine tí a ṣètò àti ìjáde ìdánwò ṣáájú ṣiṣẹ́ àwọn ìṣípò ibùdó."
+
+msgid "Reviewing database migrations..."
+msgstr "Ń ṣàgbéyẹ̀wò àwọn ìṣípò ibùdó..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Ṣiṣẹ́ àti kí o kọjá àyẹ̀wò ààbò ìṣípò ṣáájú ṣiṣẹ́ àwọn ìṣípò ibùdó."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Ṣiṣẹ́ àti kí o kọjá àwọn àyẹ̀wò àyíká ṣáájú ìgbésẹ̀ ìlò ìsọdọ̀mọ èyíkéyìí ní ọjọ́ iwájú. Èyí kò yí àwọn fáìlì tàbí ibùdó padà."
+
+msgid "Run post-apply actions"
+msgstr "Ṣiṣẹ́ àwọn ìgbésẹ̀ lẹ́yìn ìmúṣe"
+
+msgid "Run preflight checks"
+msgstr "Ṣiṣẹ́ àwọn àyẹ̀wò ṣáájú ìrìn-àjò"
+
+msgid "Run selected post-apply actions"
+msgstr "Ṣiṣẹ́ àwọn ìgbésẹ̀ lẹ́yìn ìmúṣe tí a yàn"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Ṣiṣẹ́ àwọn àṣẹ lẹ́yìn ìmúṣe tí a yàn láti ẹ̀rọ pẹ̀lú àkójọpọ̀ ìfọwọ́sí. Kò gba àṣẹ shell àdáni."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Ṣiṣẹ́ àwọn àṣẹ wọ̀nyí pẹ̀lú ọwọ́ láti ẹ̀rọ lẹ́yìn ìfidájọ́ àbájáde ìmúdójútó fáìlì àti àwọn àfipamọ́."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Ṣiṣẹ́ àwọn ìgbésẹ̀ lẹ́yìn ìmúṣe láti UI ti dí ní ipo ìmúlò."
+
+msgid "Running post-apply actions..."
+msgstr "Ń ṣiṣẹ́ àwọn ìgbésẹ̀ lẹ́yìn ìmúṣe..."
+
+msgid "Safe actions"
+msgstr "Àwọn ìgbésẹ̀ ààbò"
+
+msgid "Signature path"
+msgstr "Ọ̀nà ìbùdó ìbẹ̀rẹ̀"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "A kò lè fo ìfidájọ́ ìbẹ̀rẹ̀ ní àyíká yìí."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Fo ìfidájọ́ ìbẹ̀rẹ̀ fún àwọn ìdánwò ìdàgbàsókè agbègbè"
+
+msgid "Staged file application failed"
+msgstr "Ìmúṣe fáìlì tí a ṣètò kùnà"
+
+msgid "Staged files applied successfully"
+msgstr "Àwọn fáìlì tí a ṣètò ti múṣe láìṣe àṣìṣe"
+
+msgid "Staging details"
+msgstr "Àwọn àlàyé ìṣètò"
+
+msgid "Staging directory"
+msgstr "Àpò ìṣètò"
+
+msgid "Staging extraction"
+msgstr "Ìtúsí ìṣètò"
+
+msgid "Symfony cache clear"
+msgstr "Ìparẹ́ cache Symfony"
+
+msgid "System update"
+msgstr "Ìmúdójútó ètò"
+
+msgid "Target version"
+msgstr "Ẹ̀yà àfojúsùn"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL ìfilọ́lẹ̀ ìbẹ̀rẹ̀ tí a ṣètò ti wà tẹ́lẹ̀. O lè yí padà sí HTTPS ìfilọ́lẹ̀ mìíràn bí ó bá yẹ."
+
+msgid "The database migration baseline is clean."
+msgstr "Ìbẹ̀rẹ̀ ìyípadà ibùdó data mọ́."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Èsì HTTP ìkẹyìn kùnà lẹ́yìn tí iṣẹ́ ti parí. Èyí sábà máa ń ṣẹlẹ̀ nítorí àwọn ìyàǹfún cache àti tàbí ìtún bẹ̀rẹ̀ ẹ̀rọ ayélujára nígbà ìbéèrè."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Àkọsílẹ̀ ìgbésẹ̀ sọ pé àwọn ìgbésẹ̀ lẹ́yìn ìmúṣe ti parí láìṣe àṣìṣe."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Àwọn àṣẹ lẹ́yìn ìmúṣe tí a yàn ti parí láìṣe àṣìṣe, ṣùgbọ́n èsì HTTP ìkẹyìn kùnà. Tún ṣe ojú-ìwé náà àti ṣàyẹ̀wò àwọn ìyàǹfún cache bí ojú-ìwé kò bá ṣi dáadáa."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Olùmúdójútó kò ṣẹ̀dá tàbí dá àwọn àfipamọ́ ibùdó data padà."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Àwọn ìgbésẹ̀ wọ̀nyí wà láàbò láti ṣiṣẹ́ láti UI lẹ́yìn àyẹ̀wò àbájáde ìmúdójútó."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Àwọn àṣẹ wọ̀nyí lè yí àwọn ìbáṣepọ̀, àwọn ohun-ìní tí a ṣẹ̀dá, cache tàbí ibùdó data padà. Fi àwọn àfipamọ́ hàn ṣáájú kí o tó tẹ̀síwájú."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ìgbésẹ̀ yìí yí àwọn fáìlì nínú ìfidájọ́ Chamilo padà. Rí i dájú pé a ti ṣàyẹ̀wò ètò ìmúṣe àti pé àwọn àfipamọ́ ti wà ṣáájú kí o tó tẹ̀síwájú."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Ìtìbẹ̀rẹ̀ ìdàgbàsókè yìí ṣe àfarawé ìkéde ìmúdójútó Chamilo.org ọjọ́ iwájú nípa lílo àwọn ọ̀nà àkójọpọ̀ ìdánwò agbègbè."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Ojú-ìwé yìí ti ṣí láti ìkéde ìmúdójútó ìbẹ̀rẹ̀, ṣùgbọ́n kò tí ì ṣètò orísun ìfilọ́lẹ̀ ìbẹ̀rẹ̀."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Ojú-ìwé yìí ti ṣí láti ìkéde ìmúdójútó. Ìyẹ̀wò ìfilọ́lẹ̀ nìkan ni a bẹ̀rẹ̀ ní àìfọwọ́yí."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ìgbésẹ̀ yìí ṣe ìmúratí àyẹ̀wò nìkan. Rirọ́pò fáìlì máa ṣẹlẹ̀ nígbà tí a bá dé ìgbésẹ̀ Fáìlì tí a ṣètò, pẹ̀lú ìtìpa, àfipamọ́ àti ààbò ìpadàsẹ́yìn."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Olùmúdójútó yìí kò ṣẹ̀dá àfipamọ́ ibùdó data. Ṣẹ̀dá àti ṣàyẹ̀wò àfipamọ́ ṣáájú kí o tó ṣiṣẹ́ àwọn ìyípadà."
+
+msgid "Trusted public key"
+msgstr "Kóòdù ìbẹ̀rẹ̀ tí a gbẹ́kẹ̀lé"
+
+msgid "Trusted signing key"
+msgstr "Kóòdù ìbẹ̀rẹ̀ tí a gbẹ́kẹ̀lé"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Tẹ APPLY UPDATE FILES láti fìdájọ́"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Tẹ RUN DATABASE MIGRATIONS láti fìdájọ́ àwọn ìyípadà ibùdó data"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Tẹ RUN POST UPDATE ACTIONS láti fìdájọ́"
+
+msgid "Unknown update notice source."
+msgstr "Orísun ìkéde ìmúdójútó tí a kò mọ̀."
+
+msgid "Update availability"
+msgstr "Ìwàláàyè ìmúdójútó"
+
+msgid "Update directory"
+msgstr "Àpò ìmúdójútó"
+
+msgid "Update lock path"
+msgstr "Ọ̀nà ìtìpa ìmúdójútó"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Lo àpò ìṣètò tí a ṣẹ̀dá ní ìgbésẹ̀ tó kọjá. Ẹ̀yìn nìkan gba àwọn àpò nínú var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Lo ìjápọ̀ yìí láti ṣe àfarawé ìkéde ìmúdójútó Chamilo.org ọjọ́ iwájú nígbà ìdánwò ìdàgbàsókè."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Lo èyí fún àwọn ìdánwò ìdàgbàsókè agbègbè nìkan. Àwọn ìmúdójútó ìmúlò gbọdọ̀ lo kóòdù tí a ṣètò ní ẹ̀rọ."
+
+msgid "Verification details"
+msgstr "Àwọn àlàyé ìfidájọ́"
+
+msgid "Verify package"
+msgstr "Ṣàyẹ̀wò àkójọpọ̀"
+
+msgid "Verifying..."
+msgstr "Ń ṣàyẹ̀wò..."
+
+msgid "Waiting for command progress events..."
+msgstr "Ń dúró de àwọn ìṣẹ̀lẹ̀ ìtẹ̀síwájú àṣẹ..."
+
+msgid "Waiting for update progress events..."
+msgstr "Ń dúró de àwọn ìṣẹ̀lẹ̀ ìtẹ̀síwájú ìmúdójútó..."
+
+msgid "Yarn build"
+msgstr "Ìkọ́ Yarn"
+
+msgid "Yarn install"
+msgstr "Ìfiṣẹ́ Yarn"
+
+msgid "A comment is required"
+msgstr "Ìdáhùn kan ni a nílò"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Ìpamọ́ kan pẹ̀lú orúkọ kan náà ti wà tẹ́lẹ̀. Bí ó bá ní àwọn tábù, wọn yóò parun; bí ó bá ṣòfìfo, a óò tún lò ó."
+
+msgid "AI generated"
+msgstr "AI ṣe"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Fi ìbéèrè kan kéré pẹ̀lú ṣáájú kí o tó padà sí ọ̀nà ìkẹ́kọ̀ọ́."
+
+msgid "Add attachments"
+msgstr "Fi àfikún àwọn àmúlùmálà"
+
+msgid "Additional fields"
+msgstr "Àwọn ààyè àfikún"
+
+msgid "Allow comments"
+msgstr "Gba àwọn ìdáhùn"
+
+msgid "Allow new pages"
+msgstr "Gba àwọn ojú-ìwé tuntun"
+
+msgid "Allow ratings"
+msgstr "Gba àwọn ìdájọ́"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Ṣe ó dá ọ lójú pé o fẹ́ parun gbogbo àwọn ohun kan?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Ṣe ó dá ọ lójú pé o fẹ́ mú ìtúnṣe aládàá padà?"
+
+msgid "Attachment has been deleted"
+msgstr "Àmúlùmálà ti parun"
+
+msgid "Backup file"
+msgstr "Fáìlì àbọ̀"
+
+msgid "Block comments"
+msgstr "Dẹ́kun àwọn ìdáhùn"
+
+msgid "Block new pages"
+msgstr "Dẹ́kun àwọn ojú-ìwé tuntun"
+
+msgid "Block ratings"
+msgstr "Dẹ́kun àwọn ìdájọ́"
+
+msgid "Cancel renewal"
+msgstr "Fagilé ìtúnṣe"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Àwọn ìsopọ̀ ẹ̀ka yóò yọkuro láti àwọn ojú-ìwé Wiki %s."
+
+msgid "Change"
+msgstr "Yípadà"
+
+msgid "Clear group"
+msgstr "Pa ẹgbẹ́ rẹ́"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Tẹ àmì kan láti fi sii sinu olootu. Àwọn ààyè wọ̀nyí yóò yí padà nígbà tí a bá ń ṣe ìwé-ẹ̀rí."
+
+msgid "Comment added"
+msgstr "Ìdáhùn ti fi kun"
+
+msgid "Comment is required"
+msgstr "Ìdáhùn ni a nílò"
+
+msgid "Comment score"
+msgstr "Ìwọ̀n ìdáhùn"
+
+msgid "Compare selected versions line by line"
+msgstr "Fi àwọn ẹ̀yà tí a yàn wé lẹ́sẹẹsẹ"
+
+msgid "Compare selected versions word by word"
+msgstr "Fi àwọn ẹ̀yà tí a yàn wé lẹ́sẹẹsẹ nípa ọ̀rọ̀"
+
+msgid "Compare versions"
+msgstr "Fi àwọn ẹ̀yà wé"
+
+msgid "Copy completed"
+msgstr "Ìdàkọ́ parí"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Ṣẹda àwọn ojú-ìwé iṣẹ́ Wiki ẹni kọ̀ọ̀kan fún àwọn akẹ́kọ̀ọ́"
+
+msgid "Current view mode"
+msgstr "Ìwòye lọ́wọ́lọ́wọ́"
+
+msgid "Delete Wiki"
+msgstr "Parun Wiki"
+
+msgid "Delete page"
+msgstr "Parun ojú-ìwé"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Pípàrùn ojú-ìwé ilé Wiki kò ní ìṣeduro. O lè tún ṣẹda rẹ̀ nígbà mííràn."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Dídá Wiki dúró máa dá àwọn ojú-ìwé Wiki déédéé àti àwọn ìgbésẹ̀ dúró. Ojú-ìwé àwọn ààtò yìí ṣì wà fún àwọn olùkọ́ ẹ̀kọ́."
+
+msgid "Discussion"
+msgstr "Ìjíròrò"
+
+msgid "Edit Comment"
+msgstr "Ṣàtúnṣe Ìdáhùn"
+
+msgid "Edit page"
+msgstr "Ṣàtúnṣe ojú-ìwé"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Ọjọ́ ìparí gbọdọ̀ wà lẹ́yìn tàbí bá ọjọ́ ìparí dọ́gba"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Tẹ ọ̀rọ̀ ìwádìí kan láti rí àwọn ojú-ìwé Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Ọjọ́ ìparí gbọdọ̀ wà ṣáájú tàbí bá ọjọ́ ìparí dọ́gba"
+
+msgid "Failed email recipients"
+msgstr "Àwọn olùgbà í-meèlì tí kò ṣàṣeyọrí"
+
+msgid "Finish and return to learning path"
+msgstr "Parí kí o sì padà sí ọ̀nà ìkẹ́kọ̀ọ́"
+
+msgid "Forum image"
+msgstr "Àwòrán fóórọ̀mù"
+
+msgid "Hide discussion"
+msgstr "Fi ìjíròrò pamọ́"
+
+msgid "Hide page"
+msgstr "Fi ojú-ìwé pamọ́"
+
+msgid "I changed my mind"
+msgstr "Mo yí èrò mi padà"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Bí a kò bá ṣàyẹ̀wo, àwọn fáìlì wọ̀nyí yóò wà ní ìmọ́lẹ̀ fún olùṣàkóso pẹpẹ nípasẹ̀ irinṣẹ́ 'Ìsọfúnni fáìlì'."
+
+msgid "Internal message failures"
+msgstr "Àwọn ìkùnà ìránṣẹ́ inú"
+
+msgid "Internal messages available"
+msgstr "Ìfiránṣẹ́ inú tó wà nílẹ̀"
+
+msgid "Internal messages created now"
+msgstr "Ìfiránṣẹ́ inú tí a ṣẹ̀ṣẹ̀ dá"
+
+msgid "Item score"
+msgstr "Dókùmẹ́ntì ìwọ̀n"
+
+msgid "Last post"
+msgstr "Ìfiránṣẹ́ tó kẹ́yìn"
+
+msgid "Lock page"
+msgstr "Ti ojú-ewé"
+
+msgid "Manage categories"
+msgstr "Ṣàkóso àwọn ẹ̀ka"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Ṣààmì ìwé yìí gẹ́gẹ́ bí ìrànlọ́wọ́ AI. Lo èyí nígbà tí a dá àkóónú tàbí ṣàtúnṣe rẹ̀ pẹ̀lú àwọn irinṣẹ́ AI."
+
+msgid "Maximum score is required"
+msgstr "Ìwọ̀n tó pọ̀jù ni a nílò"
+
+msgid "Metric"
+msgstr "Ìwọ̀n"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Àwọn ìdáhùn tuntun ti dí ní ìjíròrò yìí"
+
+msgid "No Wiki categories are available yet."
+msgstr "Kò sí àwọn ẹ̀ka Wiki tí ó wà nílẹ̀ báyìí."
+
+msgid "No categories found"
+msgstr "Kò rí àwọn ẹ̀ka kankan"
+
+msgid "No content"
+msgstr "Kò sí àkóónú"
+
+msgid "No parent category"
+msgstr "Kò sí ẹ̀ka òbí"
+
+msgid "Number of comments scored"
+msgstr "Iye àwọn ìdáhùn tí a ṣàyẹ̀wò"
+
+msgid "Old version"
+msgstr "Ẹ̀yà àtọ́ka"
+
+msgid "Only image files are allowed."
+msgstr "Àwọn fáìlì àwòrán nìkan ni a gbà."
+
+msgid "Please fill all required fields"
+msgstr "Jọ̀wọ́ fọwọ́ sí gbogbo àwọn ààyè tí a nílò"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Àwọn ìbéèrè pẹ̀lú àwọn àyè kíláàsì tàbí akẹ́kọ̀ọ́ ni a óò ṣẹ̀dá fún àwọn kíláàsì tàbí ẹgbẹ́ ẹ̀kọ́: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Àwọn ìwọ̀n ti dí ní ìjíròrò yìí"
+
+msgid "Remove image"
+msgstr "Yọ àwòrán kúrò"
+
+msgid "Restore renewal"
+msgstr "Padà sí ìtúnṣe"
+
+msgid "Restore version"
+msgstr "Padà sí ẹ̀yà"
+
+msgid "Search in"
+msgstr "Wá nínú"
+
+msgid "Select group"
+msgstr "Yan ẹgbẹ́"
+
+msgid "Select image"
+msgstr "Yan àwòrán"
+
+msgid "Selected image"
+msgstr "Àwòrán tí a yàn"
+
+msgid "Show discussion"
+msgstr "Ṣàfihàn ìjíròrò"
+
+msgid "Show page"
+msgstr "Ṣàfihàn ojú-ewé"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Àwọn fáìlì tàbí àwọn foldà kan kò ní ìyọ̀ǹda ìkọ̀wé. Láti lè fi Chamilo sílẹ̀, o gbọ́dọ̀ yí ìyọ̀ǹda wọn padà ní àkọ́kọ́ (nípa lílo CHMOD). Jọ̀wọ́ ka"
+
+msgid "Subcategories"
+msgstr "Àwọn ẹ̀ka abẹ́"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Tẹ ní apá òsì tàbí òtún láti lọ"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Àkókò ìfàsẹ́hìn Wiki ti kọjá, ṣùgbọ́n a gbà láàyè ìfàsẹ́hìn tí ó pẹ́."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Àkókò ìfàsẹ́hìn Wiki ti kọjá."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Ìfàsẹ́hìn Wiki kò tíì bẹ̀rẹ̀."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Ìtìpa àtúnṣe ojú-ewé Wiki ni a nílò ṣáájú kí a tó fi pamọ́."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "A ti fi ìkéde pamọ́, ṣùgbọ́n kò ṣeé ṣe láti gbé àfikún kan sọ́tọ̀."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "A ti fi ìkéde pamọ́, ṣùgbọ́n ìfìrànṣẹ́ í-meèlì kò ṣàṣeyọrí."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "A ti fi ìkéde pamọ́, ṣùgbọ́n kò sí í-meèlì tí a lè fi ránṣẹ́."
+
+msgid "The category has been created"
+msgstr "A ti dá ẹ̀ka náà"
+
+msgid "The category has been deleted"
+msgstr "A ti pa ẹ̀ka náà rẹ́"
+
+msgid "The category has been updated"
+msgstr "A ti ṣàtúnṣe ẹ̀ka náà"
+
+msgid "The end date is invalid"
+msgstr "Ọjọ́ ìparí kò tọ́"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Iye àwọn ẹ̀yà tó pọ̀jù gbọ́dọ̀ jẹ́ nọ́ńbà aláìní-rere"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Iye àwọn ọ̀rọ̀ tó pọ̀jù gbọ́dọ̀ jẹ́ nọ́ńbà aláìní-rere"
+
+msgid "The print window could not be opened"
+msgstr "Kò ṣeé ṣe láti ṣí fèrèsé ìtẹ̀jáde"
+
+msgid "The start date is invalid"
+msgstr "Ọjọ́ ìbẹ̀rẹ̀ kò tọ́"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Àwọn ààtò wọ̀nyí kan sí gbogbo ẹ̀kọ́, pẹ̀lú àwọn ìgbà rẹ̀ àti àwọn ẹgbẹ́ rẹ̀."
+
+msgid "This announcement has already been sent by email."
+msgstr "A ti fi ìkéde yìí ránṣẹ́ nípasẹ̀ í-meèlì tẹ́lẹ̀."
+
+msgid "This discussion is hidden from learners"
+msgstr "A ti fi ìjíròrò yìí pamọ́ kúrò lọ́wọ́ àwọn akẹ́kọ̀ọ́"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Irinsẹ́ AI yìí fún ọ láàyè láti ṣẹda àwòrán àti fídíò kúkúrú láti ṣe àpẹẹrẹ fún ẹ̀kọ́ rẹ. Nípa ṣíṣàlàyé (ní ọ̀rọ̀) ohun tí o fẹ́ nínú abala ìtọ́sọ́nà, o máa fún awoṣe AI tí a ṣètò ní àwọn ohun tí ó ṣe pàtàkì láti ṣẹda àwòrán tàbí fídíò. Jọ̀ọ́ ṣe sùúrù. Awoṣe AI yóò gba àkókò díẹ̀ láti ṣẹda àbájáde, èyí tí o lè fẹ́ tọ́jú nípàṣẹ̀ fífipamọ́ mídíà náà sínú fáìlì àwọn ìwé rẹ, kí o sì fi sínú ìwé HTML. Kì í ṣe gbogbo awoṣe AI ni ó dọ́gba ní ìyára tàbí dídára. Awoṣe AI lè tún fún ọ ní ìtọ́sọ́nà tí a ṣàtúnṣe, èyí tí ó jẹ́ ìtumọ̀ alákọsílẹ̀ díẹ̀ sí i ti ìbéèrè rẹ. O lè lo ìtọ́sọ́nà tí a ṣàtúnṣe yìí láti ṣàtúnṣe ìbéèrè rẹ. Jọ̀ọ́ mọ̀ pé irinsẹ́ yìí, ní pàtàkì fún àwọn fídíò, lè fa ìnáwó púpọ̀ fún àjọ rẹ, bí ó tilẹ̀ jẹ́ pé o pinnu láti má ṣe tọ́jú mídíà tí a ṣẹda. Jọ̀ọ́ lo ó ní ìbámu pẹ̀lú èyí. Bí o bá ní ìṣòro láti gba ohun tí o ń wá, jọ̀ọ́ lo àkókò díẹ̀ láti ṣe ìwádìí àwọn ọgbọ́n ìtọ́sọ́nà lórí ayélujára fún awoṣe AI tí o ní."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ìtàn yìí jẹ́ ti ẹ̀kọ́ ìpìlẹ̀. Ìmúpadà wà lẹ́yìn tí a bá ṣẹda ẹ̀yà ìpàdé."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Àwòrán yìí máa rọ́pò ààmì fóórọ̀ àìbáyẹ tí a ṣàfihàn lẹ́gbẹ̀ẹ́ àkọ́lé fóórọ̀."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Ojú-ìwé yìí wá láti ẹ̀kọ́ ìpìlẹ̀. Fífipamọ́ rẹ̀ yóò ṣẹda ẹ̀yà fún ìpàdé lọ́wọ́lọ́wọ́."
+
+msgid "This will also delete %s subcategories."
+msgstr "Èyí yóò tún pa %s àwọn abala kéékèèké rẹ̀ rẹ́."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Èyí yóò ṣẹda àwọn ojú-ìwé iṣẹ́ ẹ̀yà kọ̀ọ̀kan fún %s akẹ́kọ̀ọ́."
+
+msgid "Thread history"
+msgstr "Ìtàn ìtẹ̀lé"
+
+msgid "Title and content"
+msgstr "Àkọ́lé àti àkóónú"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Kò ṣeé ṣe láti fagilé ìtúnṣe báàyí."
+
+msgid "Unable to restore renewal right now."
+msgstr "Kò ṣeé ṣe láti múpadà ìtúnṣe báàyí."
+
+msgid "Unlock page"
+msgstr "Ṣí ìwé"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Lo [[Ojú-ìwé]] tàbí [[Ojú-ìwé|Ọ̀rọ̀ tó hàn]] láti ṣẹda àwọn ìjápọ̀ Wiki inú."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Lo bọ́tínì ààyè tàbí bọtínì ìtọ́sọ́nà láti lọ kiri"
+
+msgid "View version"
+msgstr "Wo ẹ̀yà"
+
+msgid "Visible only to teachers"
+msgstr "Hàn fún àwọn olùkọ́ nìkan"
+
+msgid "Weight is required"
+msgstr "Ìwọ̀n jẹ́ dandan"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Àwọn abala Wiki ti di dí fún ẹ̀kọ́ yìí."
+
+msgid "Wiki categories enabled"
+msgstr "Àwọn abala Wiki ti di gbà láàyè"
+
+msgid "Wiki html strict filtering"
+msgstr "Ìfọ̀rọ̀wérọ̀ Wiki html tó muna"
+
+msgid "Wiki settings"
+msgstr "Àwọn ètò Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Àwọn ètò Wiki ti di títúnṣe"
+
+msgid "You are viewing a historical version of this page"
+msgstr "O ń wo ẹ̀yà ìtàn ti ojú-ìwé yìí"
+
+msgid "You can attach one or more files to this reply."
+msgstr "O lè so fáìlì kan tàbí púpọ̀ mọ́ ìdáhùn yìí."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "O lè ṣàtúnṣe ojú-ìwé iṣẹ́ yìí, ṣùgbọ́n àwọn ojú-ìwé iṣẹ́ akẹ́kọ̀ọ́ kò ní yí padà."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "O lè lo àwọn àmì {{class_name}} àti {{student_full_name}} nínú ìbéèrè náà."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "O ní ìṣẹ́jú 20 láti ṣàtúnṣe ojú-ìwé yìí kí ìtìpa àtúnṣe tó pari."
+
+msgid "by"
+msgstr "nípasẹ̀"
+
+msgid "required"
+msgstr "dandan"
 

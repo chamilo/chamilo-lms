@@ -1575,8 +1575,8 @@ msgstr "آیا مطمئن هستید که می‌خواهید این مراحل 
 msgid "Authoring tool"
 msgstr "ابزار نویسندگی"
 
-msgid "SCORM or AICC file to upload"
-msgstr "فایل SCORM یا AICC برای بارگذاری"
+msgid "SCORM file to upload"
+msgstr "فایل SCORM برای بارگذاری"
 
 msgid "Course location"
 msgstr "موقعیت دوره"
@@ -8723,6 +8723,15 @@ msgstr "نمایش"
 
 msgid "My courses"
 msgstr "دوره‌های من"
+
+msgid "Shop"
+msgstr "فروشگاه"
+
+msgid "Invoice"
+msgstr "فاکتور"
+
+msgid "Request invoice"
+msgstr "درخواست فاکتور"
 
 msgid "View my progress"
 msgstr "مشاهده پیشرفت من"
@@ -36476,4 +36485,856 @@ msgstr "تعدیل‌شده"
 
 msgid "View threads"
 msgstr "مشاهده موضوعات"
+
+msgid "No auth source"
+msgstr "بدون منبع احراز هویت"
+
+msgid "You must add at least one question"
+msgstr "باید حداقل یک سوال اضافه کنید"
+
+msgid "Advanced actions"
+msgstr "اقدامات پیشرفته"
+
+msgid "Application path"
+msgstr "مسیر برنامه"
+
+msgid "Apply files details"
+msgstr "اعمال جزئیات فایل‌ها"
+
+msgid "Apply plan details"
+msgstr "اعمال جزئیات برنامه"
+
+msgid "Apply plan failed"
+msgstr "اعمال برنامه ناموفق بود"
+
+msgid "Apply plan ready"
+msgstr "اعمال برنامه آماده است"
+
+msgid "Apply preparation"
+msgstr "اعمال آماده‌سازی"
+
+msgid "Apply staged files"
+msgstr "اعمال فایل‌های مرحله‌بندی‌شده"
+
+msgid "Applying files..."
+msgstr "در حال اعمال فایل‌ها..."
+
+msgid "Audit file"
+msgstr "بررسی فایل"
+
+msgid "Backup directory"
+msgstr "پوشه پشتیبان"
+
+msgid "Baseline clean"
+msgstr "پاک‌سازی مبنا"
+
+msgid "Baseline warnings"
+msgstr "هشدارهای مبنا"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "ساخت برنامه اعمال امن از بسته مرحله‌بندی‌شده. این فقط فایل‌ها، مجوزها، مسیر پشتیبان و وضعیت قفل را بررسی می‌کند. فایل‌ها را جایگزین نمی‌کند."
+
+msgid "Build production frontend assets."
+msgstr "ساخت دارایی‌های فرانت‌اند تولید."
+
+msgid "Building plan..."
+msgstr "در حال ساخت برنامه..."
+
+msgid "Channel"
+msgstr "کانال"
+
+msgid "Check"
+msgstr "بررسی"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "بررسی به‌روزرسانی‌های موجود شامیلو، تأیید بسته‌ها، مرحله‌بندی فایل‌ها و اجرای مراحل کنترل‌شده پس از به‌روزرسانی."
+
+msgid "Check manifest"
+msgstr "بررسی مانیفست"
+
+msgid "Checking post-apply actions..."
+msgstr "در حال بررسی اقدامات پس از اعمال..."
+
+msgid "Checking..."
+msgstr "در حال بررسی..."
+
+msgid "Composer install"
+msgstr "نصب Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "اقدامات Composer، Yarn و مهاجرت پایگاه داده می‌توانند وابستگی‌ها، دارایی‌های تولیدشده یا پایگاه داده را تغییر دهند. فقط پس از تأیید پشتیبان‌ها و مجوزها آن‌ها را انتخاب کنید."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "CHAMILO_UPDATE_MANIFEST_URL را روی سرور پیکربندی کنید یا یک URL مانیفست HTTPS ارائه دهید."
+
+msgid "Configured"
+msgstr "پیکربندی‌شده"
+
+msgid "Current migration"
+msgstr "مهاجرت فعلی"
+
+msgid "Database baseline"
+msgstr "مبنای پایگاه داده"
+
+msgid "Database migration safety review"
+msgstr "بررسی ایمنی مهاجرت پایگاه داده"
+
+msgid "Database migrations"
+msgstr "مهاجرت‌های پایگاه داده"
+
+msgid "Development mode"
+msgstr "حالت توسعه"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "این را فعال نکنید مگر اینکه پشتیبان به‌روزرسانی و مجوزهای سرور بررسی شده باشند."
+
+msgid "Doctrine dry-run command"
+msgstr "دستور Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine هشدارهای مبنای تاریخی را گزارش داد. به‌روزرسان فقط مهاجرت‌های V210 مرحله‌بندی‌شده را پس از تأیید صریح اجرا خواهد کرد."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine فقط مهاجرت‌های V210 مرحله‌بندی‌شده را پس از گذراندن بررسی ایمنی به‌صورت صریح اجرا خواهد کرد."
+
+msgid "Dry-run exit code"
+msgstr "کد خروج dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "مهاجرت‌های در دسترس اجرا شد"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "استخراج بسته به‌روزرسانی تأییدشده در یک پوشه مرحله‌بندی برای بازرسی. این فایل‌ها را جایگزین نمی‌کند، مهاجرت‌ها را اجرا نمی‌کند یا پایگاه داده را تغییر نمی‌دهد."
+
+msgid "File apply available"
+msgstr "اعمال فایل در دسترس است"
+
+msgid "Files to replace"
+msgstr "فایل‌های جایگزین"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "تأیید می‌کنم که یک پشتیبان پایگاه داده وجود دارد و قبل از اجرای مهاجرت‌ها تأیید شده است."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "درک می‌کنم که اقدامات پیشرفته می‌توانند وابستگی‌ها، دارایی‌های تولیدشده یا پایگاه داده را تغییر دهند."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "درک می‌کنم که این کار فایل‌ها را در نصب شامیلو جایگزین خواهد کرد."
+
+msgid "I understand this will run update commands on the server."
+msgstr "درک می‌کنم که این کار دستورات به‌روزرسانی را روی سرور اجرا خواهد کرد."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "وابستگی‌های فرانت‌اند را قبل از بازسازی دارایی‌ها نصب کنید."
+
+msgid "Installed version"
+msgstr "نسخه نصب‌شده"
+
+msgid "Latest migration"
+msgstr "آخرین مهاجرت"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "مسیرهای بسته و امضا را خالی بگذارید تا از نشانی‌های تأییدشده مانیفست دانلود شوند. مسیرهای محلی فقط برای آزمون‌های توسعه در دسترس هستند."
+
+msgid "Live command log"
+msgstr "گزارش زنده فرمان"
+
+msgid "Live update log"
+msgstr "گزارش زنده به‌روزرسانی"
+
+msgid "Local test options"
+msgstr "گزینه‌های آزمون محلی"
+
+msgid "Local test update notice link"
+msgstr "پیوند اعلان به‌روزرسانی آزمون محلی"
+
+msgid "Local update notice simulation"
+msgstr "شبیه‌سازی اعلان به‌روزرسانی محلی"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "شبیه‌سازی اعلان به‌روزرسانی محلی فقط در حالت توسعه در دسترس است."
+
+msgid "Manifest"
+msgstr "مانیفست"
+
+msgid "Manifest source"
+msgstr "منبع مانیفست"
+
+msgid "Migration safety details"
+msgstr "جزئیات ایمنی مهاجرت"
+
+msgid "Migration safety review failed"
+msgstr "بررسی ایمنی مهاجرت ناموفق بود"
+
+msgid "Migration safety review ready"
+msgstr "بررسی ایمنی مهاجرت آماده است"
+
+msgid "Migration target"
+msgstr "هدف مهاجرت"
+
+msgid "New files"
+msgstr "پرونده‌های جدید"
+
+msgid "New migrations reported by Doctrine"
+msgstr "مهاجرت‌های جدید گزارش‌شده توسط Doctrine"
+
+msgid "Next migration"
+msgstr "مهاجرت بعدی"
+
+msgid "No executed unavailable migration was reported."
+msgstr "هیچ مهاجرت ناموجود اجرا‌شده‌ای گزارش نشده است."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "هنوز هیچ نشانی مانیفست رسمی پیکربندی نشده است. از یک نشانی HTTPS یا مسیر محلی برای آزمون‌های توسعه استفاده کنید."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "هیچ مهاجرت در حال انتظاری پیش از هدف به‌روزرسانی مرحله‌ای شناسایی نشد."
+
+msgid "Not configured"
+msgstr "پیکربندی‌نشده"
+
+msgid "Not detected"
+msgstr "شناسایی‌نشده"
+
+msgid "Official Chamilo update channel"
+msgstr "کانال رسمی به‌روزرسانی Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 بسته"
+
+msgid "Package URL"
+msgstr "نشانی بسته"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "پرونده‌های بسته و امضا از مانیفست دانلود خواهند شد. مسیرهای محلی در این محیط غیرفعال هستند."
+
+msgid "Package path"
+msgstr "مسیر بسته"
+
+msgid "Package staged successfully"
+msgstr "بسته با موفقیت مرحله‌بندی شد"
+
+msgid "Package staging failed"
+msgstr "مرحله‌بندی بسته ناموفق بود"
+
+msgid "Package verification"
+msgstr "تأیید بسته"
+
+msgid "Package verification failed"
+msgstr "تأیید بسته ناموفق بود"
+
+msgid "Package verified successfully"
+msgstr "بسته با موفقیت تأیید شد"
+
+msgid "Pending migrations before this update"
+msgstr "مهاجرت‌های در حال انتظار پیش از این به‌روزرسانی"
+
+msgid "Planned backup path"
+msgstr "مسیر پشتیبان‌گیری برنامه‌ریزی‌شده"
+
+msgid "Post-apply actions completed"
+msgstr "اقدامات پس از اعمال تکمیل شد"
+
+msgid "Post-apply actions failed"
+msgstr "اقدامات پس از اعمال ناموفق بود"
+
+msgid "Post-apply actions ready"
+msgstr "اقدامات پس از اعمال آماده است"
+
+msgid "Post-apply checks"
+msgstr "بررسی‌های پس از اعمال"
+
+msgid "Post-apply checks failed"
+msgstr "بررسی‌های پس از اعمال ناموفق بود"
+
+msgid "Post-apply details"
+msgstr "جزئیات پس از اعمال"
+
+msgid "Post-apply run details"
+msgstr "جزئیات اجرای پس از اعمال"
+
+msgid "Preflight checks"
+msgstr "بررسی‌های پیش‌پرواز"
+
+msgid "Preflight checks completed"
+msgstr "بررسی‌های پیش‌پرواز تکمیل شد"
+
+msgid "Preflight checks failed"
+msgstr "بررسی‌های پیش‌پرواز ناموفق بود"
+
+msgid "Preflight details"
+msgstr "جزئیات پیش‌پرواز"
+
+msgid "Prepare staging"
+msgstr "آماده‌سازی مرحله‌بندی"
+
+msgid "Preparing staging..."
+msgstr "در حال آماده‌سازی مرحله‌بندی..."
+
+msgid "Production mode"
+msgstr "حالت تولید"
+
+msgid "Released at"
+msgstr "منتشرشده در"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "جایگزینی فایل‌های چامی‌لو از بسته مرحله‌بندی‌شده با استفاده از برنامه اعمال بررسی‌شده. این کار مهاجرت‌های پایگاه‌داده، Composer، Yarn یا دستورات کش را اجرا نمی‌کند."
+
+msgid "Review apply plan"
+msgstr "بررسی برنامه اعمال"
+
+msgid "Review database migrations"
+msgstr "بررسی مهاجرت‌های پایگاه‌داده"
+
+msgid "Review post-apply actions"
+msgstr "بررسی اقدامات پس از اعمال"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "بررسی دستورات دستی توصیه‌شده پس از اعمال فایل‌های به‌روزرسانی. این مرحله Composer، Yarn، مهاجرت‌ها یا دستورات کش را اجرا نمی‌کند."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "بررسی مهاجرت‌های Doctrine مرحله‌بندی‌شده و خروجی dry-run پیش از اجرای مهاجرت‌های پایگاه‌داده."
+
+msgid "Reviewing database migrations..."
+msgstr "در حال بررسی مهاجرت‌های پایگاه‌داده..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "اجرای بررسی ایمنی مهاجرت پیش از اجرای مهاجرت‌های پایگاه‌داده."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "اجرای بررسی‌های محیطی پیش از هر مرحله آتی اعمال به‌روزرسانی. این کار فایل‌ها یا پایگاه‌داده را تغییر نمی‌دهد."
+
+msgid "Run post-apply actions"
+msgstr "اجرای اقدامات پس از اعمال"
+
+msgid "Run preflight checks"
+msgstr "اجرای بررسی‌های پیش‌پرواز"
+
+msgid "Run selected post-apply actions"
+msgstr "اجرای اقدامات پس از اعمال انتخاب‌شده"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "اجرای دستورات پس از اعمال انتخاب‌شده از سرور با استفاده از فهرست مجاز کنترل‌شده. هیچ دستور شل سفارشی پذیرفته نمی‌شود."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "اجرای دستی این دستورات از سرور پس از تأیید نتیجه به‌روزرسانی فایل و پشتیبان‌ها."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "اجرای اقدامات پس از اعمال از رابط کاربری در حالت تولید غیرفعال است."
+
+msgid "Running post-apply actions..."
+msgstr "در حال اجرای اقدامات پس از اعمال..."
+
+msgid "Safe actions"
+msgstr "اقدامات ایمن"
+
+msgid "Signature path"
+msgstr "مسیر امضا"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "در این محیط نمی‌توان تأیید امضا را نادیده گرفت."
+
+msgid "Skip signature verification for local development tests"
+msgstr "نادیده‌گرفتن تأیید امضا برای آزمون‌های توسعه محلی"
+
+msgid "Staged file application failed"
+msgstr "اعمال فایل مرحله‌بندی‌شده ناموفق بود"
+
+msgid "Staged files applied successfully"
+msgstr "فایل‌های مرحله‌بندی‌شده با موفقیت اعمال شدند"
+
+msgid "Staging details"
+msgstr "جزئیات مرحله‌بندی"
+
+msgid "Staging directory"
+msgstr "دایرکتوری مرحله‌بندی"
+
+msgid "Staging extraction"
+msgstr "استخراج مرحله‌بندی"
+
+msgid "Symfony cache clear"
+msgstr "پاک‌سازی کش Symfony"
+
+msgid "System update"
+msgstr "به‌روزرسانی سیستم"
+
+msgid "Target version"
+msgstr "نسخه هدف"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "آدرس manifest رسمی پیکربندی‌شده از پیش پر شده است. در صورت نیاز می‌توانید آن را به manifest HTTPS دیگری تغییر دهید."
+
+msgid "The database migration baseline is clean."
+msgstr "خط پایه مهاجرت پایگاه‌داده تمیز است."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "پاسخ HTTP نهایی پس از تکمیل عملیات ناموفق بود. این معمولاً ناشی از مجوزهای کش زمان اجرا یا راه‌اندازی مجدد وب‌سرور در حین درخواست است."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "گزارش لاگ عملیات نشان می‌دهد که اقدامات پس از اعمال با موفقیت تکمیل شدند."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "دستورات پس از اعمال انتخاب‌شده با موفقیت تکمیل شدند، اما پاسخ HTTP نهایی ناموفق بود. صفحه را تازه‌سازی کنید و در صورت بارگذاری نادرست صفحه، مجوزهای کش زمان اجرا را بررسی کنید."
+
+msgid "The updater does not create or restore database backups."
+msgstr "به‌روزرسانی‌کننده پشتیبان‌های پایگاه‌داده را ایجاد یا بازیابی نمی‌کند."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "اجرای این اقدامات از رابط کاربری پس از بررسی نتیجه به‌روزرسانی ایمن است."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "این دستورات می‌توانند وابستگی‌ها، دارایی‌های تولیدشده، کش یا پایگاه‌داده را تغییر دهند. پیش از ادامه، پشتیبان‌ها را تأیید کنید."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "این اقدام فایل‌ها را در نصب چامی‌لو تغییر می‌دهد. پیش از ادامه مطمئن شوید که برنامه اعمال بررسی شده و پشتیبان‌ها فعال هستند."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "این ورودی توسعه، اعلان به‌روزرسانی آینده Chamilo.org را با استفاده از مسیرهای بسته آزمایشی محلی شبیه‌سازی می‌کند."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "این صفحه از یک اعلان به‌روزرسانی رسمی باز شده است، اما هنوز منبع manifest رسمی پیکربندی نشده است."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "این صفحه از یک اعلان به‌روزرسانی باز شده است. فقط بررسی manifest به‌صورت خودکار شروع می‌شود."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "این مرحله فقط یک بررسی آماده می‌کند. جایگزینی فایل‌ها بعداً در مرحله اعمال فایل‌های مرحله‌بندی‌شده، با قفل، پشتیبان و حفاظت از بازگشت انجام می‌شود."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "این به‌روزرسانی‌کننده پشتیبان پایگاه‌داده ایجاد نمی‌کند. پیش از اجرای مهاجرت‌ها، پشتیبان ایجاد و تأیید کنید."
+
+msgid "Trusted public key"
+msgstr "کلید عمومی معتبر"
+
+msgid "Trusted signing key"
+msgstr "کلید امضای معتبر"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "برای تأیید، APPLY UPDATE FILES را تایپ کنید"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "برای تأیید مهاجرت‌های پایگاه‌داده، RUN DATABASE MIGRATIONS را تایپ کنید"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "برای تأیید، RUN POST UPDATE ACTIONS را تایپ کنید"
+
+msgid "Unknown update notice source."
+msgstr "منبع اعلان به‌روزرسانی ناشناخته است."
+
+msgid "Update availability"
+msgstr "در دسترس بودن به‌روزرسانی"
+
+msgid "Update directory"
+msgstr "دایرکتوری به‌روزرسانی"
+
+msgid "Update lock path"
+msgstr "به‌روزرسانی مسیر قفل"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "از پوشه مرحله‌ای ایجاد شده توسط مرحله قبلی استفاده کنید. بک‌اند فقط پوشه‌های داخل var/update/staging را می‌پذیرد."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "از این پیوند برای شبیه‌سازی اعلان به‌روزرسانی آینده Chamilo.org در طول آزمایش‌های توسعه استفاده کنید."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "این گزینه فقط برای آزمایش‌های توسعه محلی استفاده شود. به‌روزرسانی‌های تولیدی باید از کلید پیکربندی‌شده سرور استفاده کنند."
+
+msgid "Verification details"
+msgstr "جزئیات تأیید"
+
+msgid "Verify package"
+msgstr "تأیید بسته"
+
+msgid "Verifying..."
+msgstr "در حال تأیید..."
+
+msgid "Waiting for command progress events..."
+msgstr "در انتظار رویدادهای پیشرفت فرمان..."
+
+msgid "Waiting for update progress events..."
+msgstr "در انتظار رویدادهای پیشرفت به‌روزرسانی..."
+
+msgid "Yarn build"
+msgstr "ساخت Yarn"
+
+msgid "Yarn install"
+msgstr "نصب Yarn"
+
+msgid "A comment is required"
+msgstr "نظر الزامی است"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "پایگاه داده‌ای با همین نام از قبل وجود دارد. اگر حاوی جدول باشد، حذف خواهند شد؛ اگر خالی باشد، دوباره استفاده خواهد شد."
+
+msgid "AI generated"
+msgstr "تولید شده توسط هوش مصنوعی"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "پیش از بازگشت به مسیر یادگیری، حداقل یک سؤال اضافه کنید."
+
+msgid "Add attachments"
+msgstr "افزودن پیوست‌ها"
+
+msgid "Additional fields"
+msgstr "فیلدهای اضافی"
+
+msgid "Allow comments"
+msgstr "اجازه نظرات"
+
+msgid "Allow new pages"
+msgstr "اجازه صفحات جدید"
+
+msgid "Allow ratings"
+msgstr "اجازه امتیازدهی"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "آیا مطمئن هستید که می‌خواهید همه موارد را حذف کنید؟"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "آیا مطمئن هستید که می‌خواهید تمدید خودکار را بازیابی کنید؟"
+
+msgid "Attachment has been deleted"
+msgstr "پیوست حذف شد"
+
+msgid "Backup file"
+msgstr "پرونده پشتیبان"
+
+msgid "Block comments"
+msgstr "مسدود کردن نظرات"
+
+msgid "Block new pages"
+msgstr "مسدود کردن صفحات جدید"
+
+msgid "Block ratings"
+msgstr "مسدود کردن امتیازدهی"
+
+msgid "Cancel renewal"
+msgstr "لغو تمدید"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "پیوندهای دسته‌بندی از صفحات ویکی %s حذف خواهند شد."
+
+msgid "Change"
+msgstr "تغییر"
+
+msgid "Clear group"
+msgstr "پاک کردن گروه"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "برای درج تگ در ویرایشگر، روی آن کلیک کنید. این نگهدارنده‌ها هنگام تولید گواهی جایگزین خواهند شد."
+
+msgid "Comment added"
+msgstr "نظر اضافه شد"
+
+msgid "Comment is required"
+msgstr "نظر الزامی است"
+
+msgid "Comment score"
+msgstr "امتیاز نظر"
+
+msgid "Compare selected versions line by line"
+msgstr "مقایسه نسخه‌های انتخاب‌شده خط به خط"
+
+msgid "Compare selected versions word by word"
+msgstr "مقایسه نسخه‌های انتخاب‌شده کلمه به کلمه"
+
+msgid "Compare versions"
+msgstr "مقایسه نسخه‌ها"
+
+msgid "Copy completed"
+msgstr "کپی کامل شد"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "ایجاد صفحات کاری فردی ویکی برای یادگیرندگان"
+
+msgid "Current view mode"
+msgstr "حالت نمای فعلی"
+
+msgid "Delete Wiki"
+msgstr "حذف ویکی"
+
+msgid "Delete page"
+msgstr "حذف صفحه"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "حذف صفحه اصلی ویکی توصیه نمی‌شود. بعداً می‌توانید آن را دوباره بسازید."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "غیرفعال کردن ویکی صفحات و اقدامات عادی ویکی را مسدود می‌کند. این صفحه تنظیمات برای معلمان دوره در دسترس باقی می‌ماند."
+
+msgid "Discussion"
+msgstr "بحث"
+
+msgid "Edit Comment"
+msgstr "ویرایش نظر"
+
+msgid "Edit page"
+msgstr "ویرایش صفحه"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "تاریخ پایان باید بعد از یا برابر با تاریخ انقضا باشد"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "یک عبارت جستجو وارد کنید تا صفحات ویکی را پیدا کنید"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "تاریخ انقضا باید قبل یا برابر با تاریخ پایان باشد"
+
+msgid "Failed email recipients"
+msgstr "گیرندگان ایمیل ناموفق"
+
+msgid "Finish and return to learning path"
+msgstr "پایان و بازگشت به مسیر یادگیری"
+
+msgid "Forum image"
+msgstr "تصویر انجمن"
+
+msgid "Hide discussion"
+msgstr "پنهان کردن بحث"
+
+msgid "Hide page"
+msgstr "پنهان کردن صفحه"
+
+msgid "I changed my mind"
+msgstr "نظرم را تغییر دادم"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "اگر انتخاب نشود، این فایل‌ها از طریق ابزار «اطلاعات فایل» برای مدیر پلتفرم در دسترس باقی خواهند ماند."
+
+msgid "Internal message failures"
+msgstr "شکست‌های پیام داخلی"
+
+msgid "Internal messages available"
+msgstr "پیام‌های داخلی موجود"
+
+msgid "Internal messages created now"
+msgstr "پیام‌های داخلی ایجاد شده اکنون"
+
+msgid "Item score"
+msgstr "امتیاز مورد"
+
+msgid "Last post"
+msgstr "آخرین پست"
+
+msgid "Lock page"
+msgstr "قفل کردن صفحه"
+
+msgid "Manage categories"
+msgstr "مدیریت دسته‌ها"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "این سند را به‌عنوان کمک‌شده با هوش مصنوعی علامت‌گذاری کنید. زمانی استفاده کنید که محتوا با ابزارهای هوش مصنوعی ایجاد یا به‌طور قابل توجهی تغییر کرده باشد."
+
+msgid "Maximum score is required"
+msgstr "حداکثر امتیاز الزامی است"
+
+msgid "Metric"
+msgstr "متریک"
+
+msgid "New comments are blocked in this discussion"
+msgstr "نظرات جدید در این بحث مسدود شده‌اند"
+
+msgid "No Wiki categories are available yet."
+msgstr "هنوز هیچ دسته‌بندی ویکی در دسترس نیست."
+
+msgid "No categories found"
+msgstr "هیچ دسته‌بندی یافت نشد"
+
+msgid "No content"
+msgstr "بدون محتوا"
+
+msgid "No parent category"
+msgstr "بدون دسته‌بندی والد"
+
+msgid "Number of comments scored"
+msgstr "تعداد نظرات امتیازدهی‌شده"
+
+msgid "Old version"
+msgstr "نسخه قدیمی"
+
+msgid "Only image files are allowed."
+msgstr "فقط فایل‌های تصویری مجاز هستند."
+
+msgid "Please fill all required fields"
+msgstr "لطفاً تمام فیلدهای الزامی را پر کنید"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "سؤالاتی که دارای جانشین‌ساز کلاس یا دانشجو هستند، برای کلاس‌ها یا گروه‌های دوره تولید خواهند شد: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "امتیازدهی در این بحث مسدود شده است"
+
+msgid "Remove image"
+msgstr "حذف تصویر"
+
+msgid "Restore renewal"
+msgstr "بازگرداندن تمدید"
+
+msgid "Restore version"
+msgstr "بازگرداندن نسخه"
+
+msgid "Search in"
+msgstr "جستجو در"
+
+msgid "Select group"
+msgstr "انتخاب گروه"
+
+msgid "Select image"
+msgstr "انتخاب تصویر"
+
+msgid "Selected image"
+msgstr "تصویر انتخاب‌شده"
+
+msgid "Show discussion"
+msgstr "نمایش بحث"
+
+msgid "Show page"
+msgstr "نمایش صفحه"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "برخی فایل‌ها یا پوشه‌ها مجوز نوشتن ندارند. برای نصب Chamilo ابتدا باید مجوزهای آن‌ها را تغییر دهید (با استفاده از CHMOD). لطفاً"
+
+msgid "Subcategories"
+msgstr "زیر‌دسته‌ها"
+
+msgid "Tap on the left or right to navigate"
+msgstr "برای پیمایش، روی چپ یا راست ضربه بزنید"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "مهلت تکلیف ویکی گذشته است، اما ارسال با تأخیر مجاز است."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "مهلت تکلیف ویکی گذشته است."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "تکلیف ویکی هنوز شروع نشده است."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "قفل ویرایش صفحه ویکی قبل از ذخیره‌سازی الزامی است."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "اعلامیه ذخیره شد، اما پیوست بارگذاری نشد."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "اعلامیه ذخیره شد، اما تحویل ایمیل ناموفق بود."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "اعلامیه ذخیره شد، اما هیچ ایمیلی تحویل داده نشد."
+
+msgid "The category has been created"
+msgstr "دسته‌بندی ایجاد شد"
+
+msgid "The category has been deleted"
+msgstr "دسته‌بندی حذف شد"
+
+msgid "The category has been updated"
+msgstr "دسته‌بندی به‌روزرسانی شد"
+
+msgid "The end date is invalid"
+msgstr "تاریخ پایان نامعتبر است"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "حداکثر تعداد نسخه‌ها باید یک عدد صحیح غیرمنفی باشد"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "حداکثر تعداد کلمات باید یک عدد صحیح غیرمنفی باشد"
+
+msgid "The print window could not be opened"
+msgstr "پنجره چاپ باز نشد"
+
+msgid "The start date is invalid"
+msgstr "تاریخ شروع نامعتبر است"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "این تنظیمات برای کل دوره اعمال می‌شود، از جمله جلسات و گروه‌های آن."
+
+msgid "This announcement has already been sent by email."
+msgstr "این اعلامیه قبلاً از طریق ایمیل ارسال شده است."
+
+msgid "This discussion is hidden from learners"
+msgstr "این بحث از یادگیرندگان پنهان است"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "این ابزار هوش مصنوعی مولد به شما امکان می‌دهد تصاویر و ویدیوهای کوتاهی برای توضیح دوره خود بسازید. با توضیح (به صورت متنی) آنچه در بخش درخواست می‌خواهید، عناصر لازم را به مدل هوش مصنوعی پیکربندی‌شده ارائه می‌دهید تا تصویر یا ویدیو تولید کند. لطفاً صبور باشید. مدل هوش مصنوعی مدتی زمان می‌برد و نتیجه‌ای تولید می‌کند که ممکن است بخواهید با ذخیره رسانه در پوشه اسناد خود آن را نگه دارید و سپس در یک سند HTML جاسازی کنید. همه مدل‌های هوش مصنوعی از نظر سرعت یا کیفیت برابر نیستند. مدل هوش مصنوعی ممکن است یک درخواست اصلاح‌شده به شما بدهد که تفسیر دقیق‌تری از درخواست شماست. سپس می‌توانید از این درخواست اصلاح‌شده برای تنظیم دقیق‌تر درخواست خود استفاده کنید. لطفاً توجه داشته باشید که این ابزار، به‌ویژه برای ویدیوها، ممکن است هزینه‌های قابل توجهی برای سازمان شما ایجاد کند، حتی اگر تصمیم بگیرید رسانه تولیدشده را ذخیره نکنید. لطفاً از آن به‌طور مناسب استفاده کنید. اگر در به‌دست‌آوردن آنچه به دنبال آن هستید مشکل دارید، لطفاً مدتی وقت بگذارید و ترفندهای درخواست‌دهی را به‌صورت آنلاین برای مدل هوش مصنوعی در دسترس خود جستجو کنید."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "این تاریخچه متعلق به دوره پایه است. بازیابی پس از ایجاد نسخه جلسه در دسترس است."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "این تصویر جایگزین نماد پیش‌فرض انجمن می‌شود که در کنار عنوان انجمن نمایش داده می‌شود."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "این صفحه از دوره پایه می‌آید. ذخیره آن نسخه‌ای برای جلسه فعلی ایجاد می‌کند."
+
+msgid "This will also delete %s subcategories."
+msgstr "این کار همچنین %s زیرمجموعه را حذف خواهد کرد."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "این کار صفحات کاری جداگانه‌ای برای %s یادگیرنده ایجاد خواهد کرد."
+
+msgid "Thread history"
+msgstr "تاریخچه موضوع"
+
+msgid "Title and content"
+msgstr "عنوان و محتوا"
+
+msgid "Unable to cancel renewal right now."
+msgstr "در حال حاضر امکان لغو حق تمدید وجود ندارد."
+
+msgid "Unable to restore renewal right now."
+msgstr "در حال حاضر امکان بازگرداندن حق تمدید وجود ندارد."
+
+msgid "Unlock page"
+msgstr "باز کردن قفل صفحه"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "از [[صفحه]] یا [[صفحه|متن قابل مشاهده]] برای ایجاد پیوندهای داخلی ویکی استفاده کنید."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "از نوار فاصله یا کلیدهای جهت‌دار برای پیمایش استفاده کنید"
+
+msgid "View version"
+msgstr "مشاهده نسخه"
+
+msgid "Visible only to teachers"
+msgstr "فقط برای معلمان قابل مشاهده است"
+
+msgid "Weight is required"
+msgstr "وزن الزامی است"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "دسته‌بندی‌های ویکی برای این دوره غیرفعال هستند."
+
+msgid "Wiki categories enabled"
+msgstr "دسته‌بندی‌های ویکی فعال شد"
+
+msgid "Wiki html strict filtering"
+msgstr "فیلتر سخت‌گیرانه HTML ویکی"
+
+msgid "Wiki settings"
+msgstr "تنظیمات ویکی"
+
+msgid "Wiki settings updated"
+msgstr "تنظیمات ویکی به‌روزرسانی شد"
+
+msgid "You are viewing a historical version of this page"
+msgstr "شما در حال مشاهده نسخه تاریخی این صفحه هستید"
+
+msgid "You can attach one or more files to this reply."
+msgstr "می‌توانید یک یا چند فایل را به این پاسخ پیوست کنید."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "می‌توانید این صفحه تکلیف را ویرایش کنید، اما صفحات کاری یادگیرندگان تغییر نخواهند کرد."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "می‌توانید از برچسب‌های {{class_name}} و {{student_full_name}} در سؤال استفاده کنید."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "۲۰ دقیقه فرصت دارید تا این صفحه را ویرایش کنید قبل از اینکه قفل ویرایش منقضی شود."
+
+msgid "by"
+msgstr "توسط"
+
+msgid "required"
+msgstr "الزامی"
 

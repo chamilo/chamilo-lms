@@ -115,6 +115,7 @@ function getLanguageName(string $code): string {
         'ja'    => 'Japanese',
         'ka_GE' => 'Georgian',
         'ko_KR' => 'Korean',
+	'lo'    => 'Lao',
         'lt_LT' => 'Lithuanian',
         'lv_LV' => 'Latvian',
         'mk_MK' => 'Macedonian',
@@ -823,7 +824,7 @@ foreach ($langCodes as $lang) {
     $entryIndex = 0;
 
     // Helper to write current state to disk (used on success AND on failure)
-    $writeCurrentState = function () use (
+    $writeCurrentState = function (?Throwable $error = null) use (
         &$targetTranslations,
         &$keepRawSingular,
         $baseEntries,
@@ -832,10 +833,15 @@ foreach ($langCodes as $lang) {
         $lang
     ) {
         $newContent = buildTargetPoContent($baseEntries, $targetParsed, $targetTranslations, $keepRawSingular);
-        if (file_put_contents($targetFile, $newContent) !== false) {
-            eprintln("[{$lang}] Partial translation file successfully written after error.", true);
-        } else {
+        if (file_put_contents($targetFile, $newContent) === false) {
             eprintln("[{$lang}] WARNING: Failed to write partial file!", true);
+            return;
+        }
+
+        if ($error !== null) {
+            eprintln("[{$lang}] Partial translation file successfully written after error: ".$error->getMessage(), true);
+        } else {
+            eprintln("[{$lang}] Translation file written successfully.", true);
         }
     };
 
@@ -1021,7 +1027,7 @@ foreach ($langCodes as $lang) {
         // Any unexpected fatal error outside batch processing
         eprintln("[{$lang}] FATAL ERROR: ".$fatal->getMessage(), true);
         eprintln("[{$lang}] Attempting to save partial progress...", true);
-        $writeCurrentState();
+        $writeCurrentState($fatal);
         throw $fatal; // re-throw so you know something went very wrong
     }
 }

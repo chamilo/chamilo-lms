@@ -1,11 +1,15 @@
 <template>
   <div class="flex flex-col gap-4">
-    <h2
-      v-if="roomTitle"
-      class="text-xl font-semibold"
-    >
-      {{ branchTitle ? `${branchTitle} - ${roomTitle}` : roomTitle }}
-    </h2>
+    <div v-if="roomTitle">
+      <h2 class="text-xl font-semibold">
+        {{ branchTitle ? `${branchTitle} - ${roomTitle}` : roomTitle }}
+      </h2>
+      <p class="text-sm text-gray-600">
+        <span v-if="floorNumber !== null">{{ t("Floor") }}: {{ floorNumber }}</span>
+        <span v-if="floorNumber !== null && capacity !== null"> · </span>
+        <span v-if="capacity !== null">{{ t("Capacity") }}: {{ capacity }}</span>
+      </p>
+    </div>
     <FullCalendar
       ref="cal"
       :options="calendarOptions"
@@ -34,12 +38,16 @@ const roomId = route.params.id
 const cal = ref(null)
 const roomTitle = ref(null)
 const branchTitle = ref(null)
+const floorNumber = ref(null)
+const capacity = ref(null)
 
 onMounted(async () => {
   try {
     const info = await roomService.getInfo(roomId)
     roomTitle.value = info.title
     branchTitle.value = info.branchTitle
+    floorNumber.value = info.floorNumber ?? null
+    capacity.value = info.capacity ?? null
   } catch (e) {
     console.error("Failed to load room info", e)
   }

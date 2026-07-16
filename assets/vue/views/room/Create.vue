@@ -25,6 +25,8 @@ const item = ref({
   title: "",
   description: "",
   branch: null,
+  floorNumber: null,
+  capacity: null,
 })
 const isLoading = ref(false)
 

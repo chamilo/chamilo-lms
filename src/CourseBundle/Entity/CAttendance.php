@@ -18,9 +18,11 @@ use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CAttendanceStateProcessor;
+use Chamilo\CoreBundle\State\RoomAssignmentStateProcessor;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -82,11 +84,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             denormalizationContext: ['groups' => ['attendance:write']],
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
-            validationContext: ['groups' => ['Default']]
+            validationContext: ['groups' => ['Default']],
+            processor: RoomAssignmentStateProcessor::class,
         ),
         new Put(
             denormalizationContext: ['groups' => ['attendance:write']],
-            security: "is_granted('EDIT', object.resourceNode)"
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: RoomAssignmentStateProcessor::class,
         ),
     ],
     normalizationContext: [
@@ -144,6 +148,11 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     #[ORM\Column(name: 'require_unique', type: 'boolean', options: ['default' => false])]
     #[Groups(['attendance:read', 'attendance:write'])]
     protected bool $requireUnique = false;
+
+    #[ORM\ManyToOne(targetEntity: Room::class)]
+    #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Groups(['attendance:read', 'attendance:write'])]
+    protected ?Room $room = null;
 
     /**
      * @var Collection|CAttendanceCalendar[]
@@ -350,6 +359,33 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
         $this->results = $results;
 
         return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): self
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public static function formatRoomData(?Room $room): ?array
+    {
+        if (null === $room) {
+            return null;
+        }
+
+        return [
+            'id' => $room->getId(),
+            'title' => $room->getTitle(),
+            'branchTitle' => $room->getBranch()?->getTitle(),
+            'floorNumber' => $room->getFloorNumber(),
+            'capacity' => $room->getCapacity(),
+        ];
     }
 
     public function isRequireUnique(): bool

@@ -95,7 +95,7 @@ final class DocumentSearchEntityListener
         }
 
         // indexDocumentContent may come from form-data, query or JSON body
-        $raw = $currentRequest->get('indexDocumentContent');
+        $raw = $currentRequest->query->get('indexDocumentContent', $currentRequest->request->get('indexDocumentContent'));
 
         // If not present, keep legacy behavior (index)
         if (null === $raw) {

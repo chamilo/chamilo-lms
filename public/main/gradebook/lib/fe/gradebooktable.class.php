@@ -1077,20 +1077,21 @@ class GradebookTable extends SortableTable
             $ySize = 500;
             $pChart = new pImage($xSize, $ySize, $dataSet);
 
-            // Set visual options: disable antialiasing, draw border and title
+            // Set visual options: disable antialiasing, configure the font, draw border and title
+            $fontPath = api_get_path(SYS_FONTS_PATH).'Harmattan/Harmattan-Regular.ttf';
             $pChart->Antialias = false;
+            $pChart->setFontProperties([
+                'FontName' => $fontPath,
+                'FontSize' => 10,
+            ]);
             $pChart->drawRectangle(0, 0, $xSize - 1, $ySize - 1, ["R" => 0, "G" => 0, "B" => 0]);
             $pChart->drawText(80, 16, get_lang('Results and feedback'), [
                 "FontSize" => 11,
                 "Align" => TEXT_ALIGN_BOTTOMMIDDLE,
             ]);
 
-            // Define graph area and font properties
+            // Define graph area
             $pChart->setGraphArea(50, 30, $xSize - 50, $ySize - 70);
-            $pChart->setFontProperties([
-                'FontName' => api_get_path(SYS_FONTS_PATH).'Harmattan/Harmattan-Regular.ttf',
-                'FontSize' => 10,
-            ]);
 
             // Draw axes and data
             $pChart->drawScale([
@@ -1133,7 +1134,8 @@ class GradebookTable extends SortableTable
 
             // Cache the chart to avoid regenerating the same image
             $myCache = new pCache(['CacheFolder' => rtrim($cachePath, '/')]);
-            $chartHash = $myCache->getHash($dataSet);
+            $cacheMarker = 'gradebook-result-chart-harmattan-v2-'.api_get_language_isocode();
+            $chartHash = $myCache->getHash($dataSet, $cacheMarker);
             $imgSysPath = $cachePath.$chartHash;
 
             $myCache->writeToCache($chartHash, $pChart);

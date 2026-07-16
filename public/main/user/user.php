@@ -609,7 +609,7 @@ if (isset($origin) && 'learnpath' === $origin) {
     Display::display_header($tool_name, 'User');
 }
 
-Display::display_introduction_section(TOOL_USER, 'left');
+Display::display_introduction_section(TOOL_USER);
 $actions = '';
 $selectedTab = 1;
 

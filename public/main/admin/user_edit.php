@@ -614,7 +614,7 @@ if ($form->validate()) {
                 }
 
                 if (!empty($coachSessions)) {
-                    $conflicts[] = get_lang('User is general coach in some sessions');
+                    $conflicts[] = get_lang('User is general tutor in some sessions');
                 }
 
                 if (!empty($adminSessions)) {

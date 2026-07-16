@@ -1373,7 +1373,7 @@ switch ($report) {
             $table->setCellContents($row, 1, $averageUser);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('Average number of sessions per general session coach'));
+            $table->setCellContents($row, 0, get_lang('Average number of sessions per general session tutor'));
             $table->setCellContents($row, 1, $averageCoach);
             $row++;
 

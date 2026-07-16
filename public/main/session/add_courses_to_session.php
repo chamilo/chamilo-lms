@@ -56,7 +56,7 @@ $form->addCheckBox('copy_evaluation', '', get_lang('Import gradebook from base c
 $form->addCheckBox(
     'import_teachers_as_course_coach',
     '',
-    get_lang('Import course teachers as course coach in the session')
+    get_lang('Import course teachers as course tutors in the session')
 );
 $form->addCheckBox(
     'import_assignments',

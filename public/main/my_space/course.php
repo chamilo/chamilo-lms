@@ -35,7 +35,7 @@ if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' == $_GET['type']) {
-    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Coaches')];
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'student' == $_GET['type']) {
@@ -330,7 +330,7 @@ function get_courses($from, $limit, $column, $direction)
     }
 
     if (false == $drhLoaded) {
-        // General coach can see all reports.
+        // General tutor can see all reports.
         if ($session && $session->hasUserAsGeneralCoach(api_get_user_entity())) {
             $courseList = SessionManager::getCoursesInSession($session->getId());
             $courses = [];

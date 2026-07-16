@@ -778,7 +778,7 @@ if (!empty($teacherList) || !empty($coaches) || !empty($sessionLinks)) {
 
         // Coaches list
         if (!empty($coaches)) {
-            $html .= '<div class="course-log-card__subsection-title">'.get_lang('Coaches').'</div>';
+            $html .= '<div class="course-log-card__subsection-title">'.get_lang('Tutors').'</div>';
             $html .= $coaches;
         }
 

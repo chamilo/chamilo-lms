@@ -118,7 +118,15 @@
                 @change="(e) => onStudentAttendanceChange(date.id, e.target.checked)"
               />
             </template>
-            <span>{{ formatAttendanceDate(date.dateTime) }}</span>
+            <div class="flex flex-col">
+              <span>{{ formatAttendanceDate(date.dateTime) }}</span>
+              <span
+                v-if="date.effectiveRoom"
+                class="text-xs text-gray-600"
+              >
+                {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
+              </span>
+            </div>
           </div>
           <div class="flex gap-2">
             <BaseButton
@@ -284,6 +292,13 @@
                           class="text-xs text-gray-600 mt-1"
                         >
                           {{ t("{0} min", [date.duration]) }}
+                        </span>
+
+                        <span
+                          v-if="date.effectiveRoom"
+                          class="text-xs text-gray-600 mt-1"
+                        >
+                          {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
                         </span>
 
                         <div
@@ -557,7 +572,29 @@ const route = useRoute()
 const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
 
 const formatAttendanceDate = (dateTimeStr) => abbreviatedDatetime(dateTimeStr) || dateTimeStr
+const formatRoom = (room) => {
+  if (!room) return ""
+  return [room.branchTitle, room.title].filter(Boolean).join(" — ")
+}
 const { sid, cid, gid } = getCourseContext()
+
+const getAttendanceRequestContext = () => {
+  const context = {}
+
+  if (cid) {
+    context.cid = Number(cid)
+  }
+
+  if (sid) {
+    context.sid = Number(sid)
+  }
+
+  if (gid) {
+    context.gid = Number(gid)
+  }
+
+  return context
+}
 const isLoading = ref(true)
 const attendanceTitle = ref("")
 const securityStore = useSecurityStore()
@@ -568,15 +605,17 @@ const isTeacherUser = computed(() => securityStore.isGranted("ROLE_TEACHER") || 
 const isTeacherUI = computed(() => isTeacherUser.value && !platformConfigStore.isStudentViewActive)
 const isStudentUI = computed(() => !isTeacherUser.value || platformConfigStore.isStudentViewActive)
 
-function onStudentViewChange() {
+async function loadAttendanceDataForCurrentMode() {
   if (isStudentUI.value) {
-    fetchStudentAttendanceData(route.params.id)
-  } else {
-    fetchFullAttendanceData(route.params.id)
-  }
-}
+    attendanceSheetUsers.value = []
+    await fetchStudentAttendanceData(route.params.id)
 
-watch(() => platformConfigStore.isStudentViewActive, onStudentViewChange)
+    return
+  }
+
+  await fetchFullAttendanceData(route.params.id)
+  await fetchAttendanceSheetUsers(route.params.id)
+}
 
 const currentUserId = computed(() => securityStore.user?.id)
 
@@ -769,7 +808,7 @@ const fetchAttendanceSheetUsers = async (attendanceId) => {
 const fetchFullAttendanceData = async (attendanceId) => {
   isLoading.value = true
   try {
-    const data = await attendanceService.getFullAttendanceData(attendanceId)
+    const data = await attendanceService.getFullAttendanceData(attendanceId, getAttendanceRequestContext())
     attendanceDates.value = data.attendanceDates
     attendanceData.value = data.attendanceData
     comments.value = data.commentData || {}
@@ -784,7 +823,7 @@ const fetchFullAttendanceData = async (attendanceId) => {
 const fetchStudentAttendanceData = async (attendanceId) => {
   isLoading.value = true
   try {
-    const data = await attendanceService.getStudentAttendanceData(attendanceId)
+    const data = await attendanceService.getStudentAttendanceData(attendanceId, getAttendanceRequestContext())
     attendanceDates.value = data.attendanceDates
     attendanceData.value = data.attendanceData
     comments.value = data.commentData || {}
@@ -800,7 +839,7 @@ const fetchAttendanceTitle = async () => {
   try {
     isLoading.value = true
     const attendanceId = route.params.id
-    const response = await attendanceService.getAttendance(attendanceId)
+    const response = await attendanceService.getAttendance(attendanceId, getAttendanceRequestContext())
     attendanceTitle.value = response.title || t("Unknown attendance")
   } catch (error) {
     console.error("Error fetching attendance title:", error)
@@ -884,14 +923,7 @@ const toggleLock = (dateId) => {
 onMounted(async () => {
   await fetchAttendanceTitle()
 
-  // Fetch data based on UI mode
-  if (isStudentUI.value) {
-    await fetchStudentAttendanceData(route.params.id)
-  } else {
-    await fetchFullAttendanceData(route.params.id)
-  }
-
-  await fetchAttendanceSheetUsers(route.params.id)
+  await loadAttendanceDataForCurrentMode()
   initializeColumnLocks(attendanceDates.value)
   updateAvailableFilters()
 
@@ -899,11 +931,7 @@ onMounted(async () => {
     selectedFilter.value = "today"
     filterAttendanceSheets()
   } else {
-    const userId = currentUserId.value
-    filteredDates.value = attendanceDates.value.filter(
-      (d) =>
-        attendanceData.value[`${userId}-${d.id}`] !== undefined && attendanceData.value[`${userId}-${d.id}`] !== null,
-    )
+    filteredDates.value = attendanceDates.value
   }
 })
 
@@ -911,13 +939,15 @@ onMounted(async () => {
 watch(
   () => platformConfigStore.isStudentViewActive,
   async () => {
-    if (isStudentUI.value) {
-      await fetchStudentAttendanceData(route.params.id)
-    } else {
-      await fetchFullAttendanceData(route.params.id)
-    }
+    await loadAttendanceDataForCurrentMode()
     updateAvailableFilters()
-    filterAttendanceSheets()
+
+    if (isTeacherUI.value) {
+      selectedFilter.value = "today"
+      filterAttendanceSheets()
+    } else {
+      filteredDates.value = attendanceDates.value
+    }
   },
 )
 

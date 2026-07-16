@@ -29,6 +29,23 @@
       option-value="id"
     />
 
+    <BaseInputNumber
+      id="item_floor_number"
+      v-model="v$.item.floorNumber.$model"
+      :error-text="v$.item.floorNumber.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.floorNumber.$error"
+      :label="t('Floor number')"
+    />
+
+    <BaseInputNumber
+      id="item_capacity"
+      v-model="v$.item.capacity.$model"
+      :error-text="v$.item.capacity.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.capacity.$error"
+      :label="t('Capacity')"
+      :min="1"
+    />
+
     <div class="mt-4">
       <button
         type="button"
@@ -90,9 +107,10 @@
 <script setup>
 import { computed, onMounted, ref, watch, nextTick } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
+import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import useVuelidate from "@vuelidate/core"
-import { required, maxLength, helpers } from "@vuelidate/validators"
+import { required, maxLength, helpers, integer, minValue } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import baseService from "../../services/baseService"
 
@@ -129,6 +147,8 @@ const validations = {
     title: { required, maxLength: maxLength(255) },
     description: { maxLength: maxLength(2000) },
     branch: { required },
+    floorNumber: { integer },
+    capacity: { integer, minValue: minValue(1) },
     geolocation: { maxLength: maxLength(255) },
     ip: { maxLength: maxLength(45) },
     ipMask: { maxLength: maxLength(6), ipMaskFormat },

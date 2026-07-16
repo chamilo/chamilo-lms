@@ -55,6 +55,13 @@
       :min="1"
     />
 
+    <BaseSelect
+      id="attendance_calendar_room"
+      v-model="formData.room"
+      :label="t('Room')"
+      :options="roomOptions"
+    />
+
     <!-- Group -->
     <BaseSelect
       v-model="formData.group"
@@ -86,6 +93,7 @@ import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { DateTime } from "luxon"
 import attendanceService from "../../services/attendanceService"
+import roomService from "../../services/roomService"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
@@ -118,6 +126,7 @@ const formData = reactive({
   repeatDays: 0,
   group: "",
   duration: 60,
+  room: null,
 })
 
 const repeatTypeOptions = [
@@ -129,6 +138,7 @@ const repeatTypeOptions = [
 ]
 
 const groupOptions = ref([])
+const roomOptions = ref([])
 
 const pad2 = (n) => String(n).padStart(2, "0")
 
@@ -345,6 +355,7 @@ const submitForm = async (event) => {
     repeatDays: formData.repeatType === "every-x-days" ? formData.repeatDays : null,
     group: formData.group ? parseInt(formData.group, 10) : null,
     duration: formData.duration,
+    room: formData.room || null,
   }
 
   try {
@@ -363,5 +374,20 @@ const loadGroups = async () => {
   }
 }
 
-onMounted(loadGroups)
+const loadRooms = async () => {
+  try {
+    roomOptions.value = await roomService.getOptions({
+      includeDefault: true,
+      defaultLabel: t("Use attendance default room"),
+      floorLabel: t("Floor"),
+      capacityLabel: t("Capacity"),
+    })
+  } catch (error) {
+    console.error("[Attendance] Error loading rooms:", error)
+  }
+}
+
+onMounted(async () => {
+  await Promise.all([loadGroups(), loadRooms()])
+})
 </script>

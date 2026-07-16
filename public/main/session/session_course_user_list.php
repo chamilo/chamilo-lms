@@ -3,86 +3,85 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-$session = api_get_session_entity($id_session);
+$userTable = Database::get_main_table(TABLE_MAIN_USER);
+$courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+$sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+$sessionRelCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$sessionRelCourseRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$session = api_get_session_entity($sessionId);
 SessionManager::protectSession($session);
 
-if (empty($id_session)) {
+if (empty($sessionId)) {
     api_not_allowed();
 }
 
-$course_code = Database::escape_string(trim($_GET['course_code']));
-$courseInfo = api_get_course_info($course_code);
-$courseId = $courseInfo['real_id'];
+$courseCode = isset($_GET['course_code']) ? trim((string) $_GET['course_code']) : '';
+$courseInfo = api_get_course_info($courseCode);
 
-$page = isset($_GET['page']) ? (int) $_GET['page'] : null;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$default_sort = api_sort_by_first_name() ? 'firstname' : 'lastname';
-$sort = isset($_GET['sort']) && in_array($_GET['sort'], ['lastname', 'firstname', 'username'])
-    ? $_GET['sort']
-    : $default_sort;
-$idChecked = isset($_GET['idChecked']) && is_array($_GET['idChecked'])
-    ? $_GET['idChecked']
-    : (isset($_POST['idChecked'])
-    && is_array($_POST['idChecked']) ? $_POST['idChecked'] : null);
-$direction = isset($_GET['direction']) && in_array($_GET['direction'], ['desc', 'asc'])
-    ? $_GET['direction']
-    : 'desc';
-
-if (is_array($idChecked)) {
-    $my_temp = [];
-    foreach ($idChecked as $id) {
-        // forcing the intval
-        $my_temp[] = (int) $id;
-    }
-    $idChecked = $my_temp;
+if (empty($courseInfo)) {
+    api_not_allowed(true);
 }
 
-$sql = "SELECT s.title, c.title
-        FROM $tbl_session_rel_course src
-		INNER JOIN $tbl_session s ON s.id = src.session_id
-		INNER JOIN $tbl_course c ON c.id = src.c_id
-		WHERE src.session_id='$id_session' AND src.c_id='$courseId' ";
+$courseId = (int) $courseInfo['real_id'];
+$page = max(0, isset($_GET['page']) ? (int) $_GET['page'] : 0);
+$action = $_REQUEST['action'] ?? null;
+$defaultSort = api_sort_by_first_name() ? 'firstname' : 'lastname';
+$sort = isset($_GET['sort']) && in_array($_GET['sort'], ['lastname', 'firstname', 'username'], true)
+    ? $_GET['sort']
+    : $defaultSort;
+$queryDirection = isset($_GET['direction']) && in_array($_GET['direction'], ['desc', 'asc'], true)
+    ? $_GET['direction']
+    : 'asc';
+$nextDirection = 'asc' === $queryDirection ? 'desc' : 'asc';
+$checkedIds = isset($_GET['idChecked']) && is_array($_GET['idChecked'])
+    ? $_GET['idChecked']
+    : ((isset($_POST['idChecked']) && is_array($_POST['idChecked'])) ? $_POST['idChecked'] : []);
+$checkedIds = array_values(array_unique(array_filter(array_map('intval', $checkedIds))));
 
+$sql = "SELECT s.title, c.title
+        FROM $sessionRelCourseTable src
+        INNER JOIN $sessionTable s ON s.id = src.session_id
+        INNER JOIN $courseTable c ON c.id = src.c_id
+        WHERE src.session_id = $sessionId
+          AND src.c_id = $courseId";
 $result = Database::query($sql);
-if (!list($session_name, $course_title) = Database::fetch_row($result)) {
-    header('Location: session_course_list.php?id_session='.$id_session);
-    exit();
+
+if (!list($sessionTitle, $courseTitle) = Database::fetch_row($result)) {
+    header('Location: session_course_list.php?id_session='.$sessionId);
+    exit;
 }
 
 switch ($action) {
     case 'delete':
-        if (is_array($idChecked) && count($idChecked) > 0) {
-            foreach ($idChecked as $userId) {
-                SessionManager::unSubscribeUserFromCourseSession($userId, $courseId, $id_session);
-            }
-        } else {
-            SessionManager::unSubscribeUserFromCourseSession($idChecked, $courseId, $id_session);
+        foreach ($checkedIds as $userId) {
+            SessionManager::unSubscribeUserFromCourseSession($userId, $courseId, $sessionId);
         }
-        header('Location: '.api_get_self()
-            .'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
-        exit();
-        break;
+
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
+        header(
+            'Location: '.api_get_self()
+            .'?id_session='.$sessionId
+            .'&course_code='.urlencode($courseCode)
+            .'&sort='.$sort
+        );
+        exit;
+
     case 'add':
-        $usersToAdd = is_array($idChecked) ? $idChecked : [$idChecked];
+        $usersToAdd = $checkedIds;
 
         if (SessionManager::isCourseUserSubscriptionLimitedToSessionUsers()) {
-            $usersToAdd = SessionManager::filterUsersSubscribedToSession(
-                (int) $id_session,
-                $usersToAdd
-            );
+            $usersToAdd = SessionManager::filterUsersSubscribedToSession($sessionId, $usersToAdd);
 
             if (empty($usersToAdd)) {
                 Display::addFlash(
@@ -94,20 +93,23 @@ switch ($action) {
 
                 header(
                     'Location: '.api_get_self()
-                    .'?id_session='.$id_session
-                    .'&course_code='.urlencode($course_code)
+                    .'?id_session='.$sessionId
+                    .'&course_code='.urlencode($courseCode)
                     .'&sort='.$sort
                 );
                 exit;
             }
         }
 
-        SessionManager::subscribe_users_to_session_course($usersToAdd, $id_session, $course_code);
+        if (!empty($usersToAdd)) {
+            SessionManager::subscribe_users_to_session_course($usersToAdd, $sessionId, $courseCode);
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
+        }
 
         header(
             'Location: '.api_get_self()
-            .'?id_session='.$id_session
-            .'&course_code='.urlencode($course_code)
+            .'?id_session='.$sessionId
+            .'&course_code='.urlencode($courseCode)
             .'&sort='.$sort
         );
         exit;
@@ -115,182 +117,142 @@ switch ($action) {
 
 $limit = 20;
 $from = $page * $limit;
-$is_western_name_order = api_is_western_name_order();
+$isWesternNameOrder = api_is_western_name_order();
+$accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$accessUrlId = api_get_current_access_url_id();
 
-$urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-$urlId = api_get_current_access_url_id();
+$sql = "SELECT DISTINCT
+            u.id AS user_id, "
+        .($isWesternNameOrder ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname')
+        .", u.username, scru.user_id AS is_subscribed
+        FROM $sessionRelUserTable s
+        INNER JOIN $userTable u ON u.id = s.user_id
+        INNER JOIN $accessUrlRelUserTable url ON url.user_id = u.id
+        LEFT JOIN $sessionRelCourseRelUserTable scru
+            ON s.session_id = scru.session_id
+            AND s.user_id = scru.user_id
+            AND scru.c_id = $courseId
+        WHERE s.session_id = $sessionId
+          AND url.access_url_id = $accessUrlId
+        ORDER BY `$sort` $queryDirection
+        LIMIT $from, ".($limit + 1);
+$result = Database::query($sql);
+$userRows = Database::store_result($result);
+$hasNextPage = count($userRows) > $limit;
+$userRows = array_slice($userRows, 0, $limit);
 
-$sql = "
-    SELECT DISTINCT u.id as user_id,"
-        .($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname')
-        .", u.username, scru.user_id as is_subscribed
-    FROM $tbl_session_rel_user s
-    INNER JOIN $tbl_user u
-    ON (u.id = s.user_id)
-    INNER JOIN $urlTable url
-    ON (url.user_id = u.id)
-    LEFT JOIN $tbl_session_rel_course_rel_user scru
-        ON (s.session_id = scru.session_id AND s.user_id = scru.user_id AND scru.c_id = $courseId)
-    WHERE
-        s.session_id = $id_session AND
-        url.access_url_id = $urlId
-    ORDER BY `$sort` $direction
-    LIMIT $from,".($limit + 1);
+$toolName = get_lang('Users');
+$sessionListUrl = '/admin/session-list';
+$sessionOverviewUrl = 'resume_session.php?id_session='.$sessionId;
+$courseListUrl = 'session_course_list.php?id_session='.$sessionId;
+$courseHomeUrl = api_get_course_url($courseId, $sessionId);
+$selfUrl = api_get_self().'?id_session='.$sessionId.'&course_code='.urlencode($courseCode);
 
-if ('desc' === $direction) {
-    $direction = 'asc';
+$interbreadcrumb[] = ['url' => $sessionListUrl, 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => $sessionOverviewUrl, 'name' => get_lang('Session overview')];
+$interbreadcrumb[] = ['url' => $courseListUrl, 'name' => get_lang('Courses in this session')];
+$interbreadcrumb[] = ['url' => $courseHomeUrl, 'name' => api_htmlentities($courseTitle, ENT_QUOTES)];
+
+Display::display_header($toolName);
+
+$toolbarActions = '<div class="flex items-center gap-3">';
+$toolbarActions .= '<a href="'.$courseListUrl.'" class="inline-flex items-center" aria-label="'.api_htmlentities(get_lang('Back'), ENT_QUOTES).'">'
+    .Display::getMdiIcon('arrow-left', 'ch-tool-icon-gradient', null, 32, get_lang('Back')).'</a>';
+$toolbarActions .= '<a href="'.$sessionOverviewUrl.'" class="inline-flex items-center" aria-label="'.api_htmlentities(get_lang('Session overview'), ENT_QUOTES).'">'
+    .Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon-gradient', null, 32, get_lang('Session overview')).'</a>';
+$toolbarActions .= '<a href="'.$courseHomeUrl.'" class="inline-flex items-center" aria-label="'.api_htmlentities(get_lang('Course'), ENT_QUOTES).'">'
+    .Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon-gradient', null, 32, get_lang('Course')).'</a>';
+$toolbarActions .= '</div>';
+
+echo '<div class="mx-auto w-full space-y-4 p-4">';
+echo '  <div class="rounded-lg border border-gray-30 bg-white p-4 shadow-sm">';
+echo '    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">';
+echo '      <div class="min-w-0">';
+echo '        <h1 class="text-xl font-semibold text-gray-90">'.api_htmlentities($toolName, ENT_QUOTES).'</h1>';
+echo '        <p class="mt-1 text-sm text-gray-50">'.api_htmlentities($sessionTitle.' — '.$courseTitle, ENT_QUOTES).'</p>';
+echo '      </div>';
+echo        $toolbarActions;
+echo '    </div>';
+echo '  </div>';
+
+echo '<form method="post" action="'.$selfUrl.'&sort='.$sort.'&direction='.$queryDirection.'" class="space-y-4" onsubmit="return confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\');">';
+echo '  <div class="overflow-hidden rounded-lg border border-gray-30 bg-white shadow-sm">';
+echo '    <div class="overflow-x-auto">';
+echo '      <table class="min-w-full divide-y divide-gray-20 text-sm">';
+echo '        <thead class="bg-gray-10 text-left text-gray-70">';
+echo '          <tr>';
+echo '            <th class="w-12 px-4 py-3"><span class="sr-only">'.get_lang('Select').'</span></th>';
+
+$firstNameHeader = '<a class="hover:underline" href="'.$selfUrl.'&sort=firstname&direction='.$nextDirection.'">'.get_lang('First name').'</a>';
+$lastNameHeader = '<a class="hover:underline" href="'.$selfUrl.'&sort=lastname&direction='.$nextDirection.'">'.get_lang('Last name').'</a>';
+
+if ($isWesternNameOrder) {
+    echo '        <th class="px-4 py-3 font-semibold">'.$firstNameHeader.'</th>';
+    echo '        <th class="px-4 py-3 font-semibold">'.$lastNameHeader.'</th>';
 } else {
-    $direction = 'desc';
+    echo '        <th class="px-4 py-3 font-semibold">'.$lastNameHeader.'</th>';
+    echo '        <th class="px-4 py-3 font-semibold">'.$firstNameHeader.'</th>';
 }
 
-$result = Database::query($sql);
-$users = Database::store_result($result);
-$nbr_results = count($users);
-$tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
+echo '            <th class="px-4 py-3 font-semibold"><a class="hover:underline" href="'.$selfUrl.'&sort=username&direction='.$nextDirection.'">'.get_lang('Login').'</a></th>';
+echo '            <th class="px-4 py-3 font-semibold text-right">'.get_lang('Detail').'</th>';
+echo '          </tr>';
+echo '        </thead>';
+echo '        <tbody class="divide-y divide-gray-20 bg-white">';
 
-$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
-$interbreadcrumb[] = [
-    'url' => "resume_session.php?id_session=".$id_session,
-    'name' => get_lang('Session overview'),
-];
+if (empty($userRows)) {
+    echo '      <tr><td colspan="5" class="px-4 py-10 text-center text-sm text-gray-50">'.get_lang('No user').'</td></tr>';
+} else {
+    foreach ($userRows as $userRow) {
+        $userId = (int) $userRow['user_id'];
+        $rowAction = !empty($userRow['is_subscribed']) ? 'delete' : 'add';
+        $rowActionLabel = 'delete' === $rowAction ? get_lang('Delete') : get_lang('Add');
+        $rowActionIcon = 'delete' === $rowAction ? ActionIcon::DELETE : ActionIcon::ADD;
+        $rowActionUrl = $selfUrl.'&sort='.$sort.'&direction='.$queryDirection.'&action='.$rowAction.'&idChecked[]='.$userId;
 
-Display::display_header($tool_name);
-echo Display::page_header($tool_name);
-?>
-    <form method="post"
-          action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>"
-          onsubmit="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
-        <div align="right">
-            <?php
-            if ($page) {
-                ?>
-                <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page
-                    - 1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous'); ?></a>
-                <?php
-            } else {
-                echo get_lang('Previous');
-            }
-            ?>
-            |
-            <?php
-            if ($nbr_results > $limit) {
-                ?>
-                <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page
-                    + 1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next'); ?></a>
-                <?php
-            } else {
-                echo get_lang('Next');
-            }
-            ?>
-        </div>
-        <br/>
-        <table class="data_table" width="100%">
-            <tr>
-                <th>&nbsp;</th>
-                <?php if ($is_western_name_order) {
-                ?>
-                    <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>">
-                            <?php echo get_lang('First name'); ?></a>
-                    </th>
-                    <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>">
-                            <?php echo get_lang('Last name'); ?></a>
-                    </th>
-                <?php
-            } else {
-                ?>
-                    <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>">
-                            <?php echo get_lang('Last name'); ?></a>
-                    </th>
-                    <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>">
-                            <?php echo get_lang('First name'); ?></a>
-                    </th>
-                <?php
-            } ?>
-                <th>
-                    <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username&direction=<?php echo urlencode($direction); ?>">
-                        <?php echo get_lang('Login'); ?></a>
-                </th>
-                <th><?php echo get_lang('Detail'); ?></th>
-            </tr>
-            <?php
-            $i = 0;
-            foreach ($users as $key => $enreg) {
-                if ($key == $limit) {
-                    break;
-                } ?>
-                <tr class="<?php echo $i ? 'row_odd' : 'row_even'; ?>">
-                    <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['user_id']; ?>"></td>
-                    <?php if ($is_western_name_order) {
-                    ?>
-                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES); ?></td>
-                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES); ?></td>
-                    <?php
-                } else {
-                    ?>
-                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES); ?></td>
-                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES); ?></td>
-                    <?php
-                } ?>
-                    <td><?php echo api_htmlentities($enreg['username'], ENT_QUOTES); ?></td>
-                    <td>
-                        <?php if ($enreg['is_subscribed']) {
-                    ?>
-                            <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>"
-                               onclick="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
-                                <?php echo Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')); ?>
-                            </a>
-                        <?php
-                } else {
-                    ?>
-                            <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=add&idChecked[]=<?php echo $enreg['user_id']; ?>"
-                               onclick="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
-                                <?php echo Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add')); ?>
-                            </a>
-                        <?php
-                } ?>
+        echo '  <tr class="hover:bg-gray-10">';
+        echo '    <td class="px-4 py-3 align-middle"><input class="rounded border-gray-30" type="checkbox" name="idChecked[]" value="'.$userId.'"></td>';
 
-                    </td>
-                </tr>
-                <?php
-                $i = $i ? 0 : 1;
-            }
-            unset($users);
-            ?>
-        </table>
-        <br/>
-        <div align="left">
-            <?php
-            if ($page) {
-                ?>
-                <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page
-                    - 1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous'); ?></a>
-                <?php
-            } else {
-                echo get_lang('Previous');
-            }
-            ?>
-            |
-            <?php
-            if ($nbr_results > $limit) {
-                ?>
-                <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page
-                    + 1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next'); ?></a>
-                <?php
-            } else {
-                echo get_lang('Next');
-            }
-            ?>
-        </div>
-        <br/>
-        <select name="action">
-            <option value="delete"><?php echo get_lang('Unsubscribe selected users from session'); ?></option>
-            <option value="add"><?php echo get_lang('Add a user'); ?></option>
-        </select>
-        <button class="save" type="submit"> <?php echo get_lang('Validate'); ?></button>
-    </form>
-<?php
+        if ($isWesternNameOrder) {
+            echo '  <td class="px-4 py-3 align-middle text-gray-90">'.api_htmlentities($userRow['firstname'], ENT_QUOTES).'</td>';
+            echo '  <td class="px-4 py-3 align-middle text-gray-90">'.api_htmlentities($userRow['lastname'], ENT_QUOTES).'</td>';
+        } else {
+            echo '  <td class="px-4 py-3 align-middle text-gray-90">'.api_htmlentities($userRow['lastname'], ENT_QUOTES).'</td>';
+            echo '  <td class="px-4 py-3 align-middle text-gray-90">'.api_htmlentities($userRow['firstname'], ENT_QUOTES).'</td>';
+        }
+
+        echo '    <td class="px-4 py-3 align-middle text-gray-70">'.api_htmlentities($userRow['username'], ENT_QUOTES).'</td>';
+        echo '    <td class="px-4 py-3 align-middle text-right"><a href="'.$rowActionUrl.'" aria-label="'.api_htmlentities($rowActionLabel, ENT_QUOTES).'" onclick="return confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\');">'.Display::getMdiIcon($rowActionIcon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $rowActionLabel).'</a></td>';
+        echo '  </tr>';
+    }
+}
+
+echo '        </tbody>';
+echo '      </table>';
+echo '    </div>';
+echo '    <div class="flex flex-col gap-3 border-t border-gray-20 bg-gray-10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">';
+echo '      <div class="flex flex-col gap-2 sm:flex-row sm:items-center">';
+echo '        <select name="action" class="rounded-md border border-gray-30 bg-white px-3 py-2 text-sm text-gray-90">';
+echo '          <option value="delete">'.get_lang('Unsubscribe selected users from session').'</option>';
+echo '          <option value="add">'.get_lang('Add a user').'</option>';
+echo '        </select>';
+echo '        <button class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90" type="submit">'.get_lang('Validate').'</button>';
+echo '      </div>';
+echo '      <div class="flex items-center justify-end gap-3 text-sm">';
+if ($page > 0) {
+    echo '    <a class="font-medium text-primary hover:underline" href="'.$selfUrl.'&sort='.$sort.'&direction='.$queryDirection.'&page='.($page - 1).'">'.get_lang('Previous').'</a>';
+} else {
+    echo '    <span class="text-gray-40">'.get_lang('Previous').'</span>';
+}
+if ($hasNextPage) {
+    echo '    <a class="font-medium text-primary hover:underline" href="'.$selfUrl.'&sort='.$sort.'&direction='.$queryDirection.'&page='.($page + 1).'">'.get_lang('Next').'</a>';
+} else {
+    echo '    <span class="text-gray-40">'.get_lang('Next').'</span>';
+}
+echo '      </div>';
+echo '    </div>';
+echo '  </div>';
+echo '</form>';
+echo '</div>';
+
 Display::display_footer();

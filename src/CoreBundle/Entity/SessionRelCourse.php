@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\State\RoomAssignmentStateProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -22,9 +23,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"),
-        new Put(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
         new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Post(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
         new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('DELETE', object)"),
     ],
     normalizationContext: [
@@ -61,6 +62,11 @@ class SessionRelCourse
 
     #[ORM\Column(name: 'nbr_users', type: 'integer')]
     protected int $nbrUsers;
+
+    #[Groups(['session_rel_course:read', 'session_rel_course:write', 'session:read'])]
+    #[ORM\ManyToOne(targetEntity: Room::class)]
+    #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Room $room = null;
 
     public function __construct()
     {
@@ -105,6 +111,18 @@ class SessionRelCourse
     public function setNbrUsers(int $nbrUsers): self
     {
         $this->nbrUsers = $nbrUsers;
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): self
+    {
+        $this->room = $room;
 
         return $this;
     }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceResultComment;
 use DateTime;
@@ -122,6 +123,12 @@ final class CAttendanceCalendarRepository extends ResourceRepository
     public function findAttendanceWithData(int $attendanceId): array
     {
         $calendars = $this->createQueryBuilder('calendar')
+            ->addSelect('attendance', 'calendarRoom', 'calendarBranch', 'attendanceRoom', 'attendanceBranch')
+            ->innerJoin('calendar.attendance', 'attendance')
+            ->leftJoin('calendar.room', 'calendarRoom')
+            ->leftJoin('calendarRoom.branch', 'calendarBranch')
+            ->leftJoin('attendance.room', 'attendanceRoom')
+            ->leftJoin('attendanceRoom.branch', 'attendanceBranch')
             ->andWhere('calendar.attendance = :attendanceId')
             ->setParameter('attendanceId', $attendanceId)
             ->orderBy('calendar.dateTime', 'ASC')
@@ -134,6 +141,8 @@ final class CAttendanceCalendarRepository extends ResourceRepository
                 'id' => $calendar->getIid(),
                 'dateTime' => $calendar->getDateTime()->format('Y-m-d\TH:i:s\Z'),
                 'done' => true === $calendar->getDoneAttendance(),
+                'duration' => $calendar->getDuration(),
+                'effectiveRoom' => CAttendance::formatRoomData($calendar->getEffectiveRoom()),
             ];
         }, $calendars);
 

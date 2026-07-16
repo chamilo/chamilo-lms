@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Repository\BranchSyncRepository;
+use Chamilo\CoreBundle\State\BranchSyncStateProcessor;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,19 +34,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['branch:list']],
         ),
         new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('VIEW', object)",
             normalizationContext: ['groups' => ['branch:read']],
         ),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: ['groups' => ['branch:write']],
+            processor: BranchSyncStateProcessor::class,
         ),
         new Put(
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
             denormalizationContext: ['groups' => ['branch:write']],
+            processor: BranchSyncStateProcessor::class,
         ),
         new Delete(
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') and is_granted('DELETE', object)",
         ),
     ],
 )]
@@ -63,7 +66,7 @@ class BranchSync
 
     #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
-    protected AccessUrl $url;
+    protected ?AccessUrl $url = null;
 
     #[Groups(['branch:read'])]
     #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
@@ -622,12 +625,12 @@ class BranchSync
         return $this;
     }
 
-    public function getUrl(): AccessUrl
+    public function getUrl(): ?AccessUrl
     {
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): self
+    public function setUrl(?AccessUrl $url): self
     {
         $this->url = $url;
 

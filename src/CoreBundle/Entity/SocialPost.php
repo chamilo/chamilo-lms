@@ -110,7 +110,7 @@ class SocialPost
     protected string $content;
 
     #[Groups(['social_post:write', 'social_post:read'])]
-    #[Assert\Choice([
+    #[Assert\Choice(choices: [
         self::TYPE_WALL_POST,
         self::TYPE_WALL_COMMENT,
         self::TYPE_GROUP_MESSAGE,
@@ -119,7 +119,7 @@ class SocialPost
     #[ORM\Column(type: 'smallint')]
     protected int $type;
 
-    #[Assert\Choice([self::STATUS_SENT, self::STATUS_DELETED], message: 'Choose a status.')]
+    #[Assert\Choice(choices: [self::STATUS_SENT, self::STATUS_DELETED], message: 'Choose a status.')]
     #[ORM\Column(type: 'smallint')]
     protected int $status;
 

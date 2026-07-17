@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
@@ -43,6 +42,7 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
+        private NotebookWriteProtection $writeProtection,
         private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
@@ -88,7 +88,7 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('Notebook is read-only in this context.');
         }
 
-        $this->validateCsrfToken($data->csrfToken);
+        $this->writeProtection->assertWriteAllowed($data->csrfToken);
 
         $title = trim(strip_tags($data->title));
         if ('' === $title) {
@@ -140,12 +140,6 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
         return $this->buildResponse($note);
     }
 
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(NotebookItemProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
-    }
 
     private function sanitizeNotebookContent(string $content): string
     {

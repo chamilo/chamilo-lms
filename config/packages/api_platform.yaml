@@ -55,8 +55,6 @@ api_platform:
     serializer:
         hydra_prefix: true
 
-    keep_legacy_inflector: false
-
     graphql:
         graphiql:
             enabled: false

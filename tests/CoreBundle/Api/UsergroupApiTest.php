@@ -35,7 +35,10 @@ class UsergroupApiTest extends AbstractApiTest
             '/api/usergroups/'.$group->getId().'/messages'
         );
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        // Anonymous requests carry no JWT, so the security layer returns 401
+        // (Unauthorized), not 403 (Forbidden) — the latter is for authenticated
+        // non-members (see testNonMemberIsForbidden).
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testNonMemberIsForbidden(): void

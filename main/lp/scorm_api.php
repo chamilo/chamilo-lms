@@ -1196,41 +1196,51 @@ function addListeners(){
         logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
-        //addEvent(window, 'unload', lms_save_asset,false);
-        $(window).on('unload', function(e){
-            lms_save_asset();
-            logit_lms('Unload call', 3);
+        //visibilitychange covers tab switches/minimizing and fires before unload
+        //everywhere; pagehide is the bfcache-safe fallback for actual teardown
+        document.addEventListener('visibilitychange', function (e) {
+            if (document.visibilityState === 'hidden') {
+                lms_save_asset();
+                logit_lms('visibilitychange (hidden) call', 3);
+            }
         });
-        logit_lms('Added event listener lms_save_asset() on window unload', 3);
+        window.addEventListener('pagehide', function (e) {
+            lms_save_asset();
+            logit_lms('pagehide call', 3);
+        });
+        logit_lms('Added event listener lms_save_asset() on visibilitychange/pagehide', 3);
     }
 
     if (olms.lms_item_type=='sco') {
-        //window.addEventListener('beforeunload', lastCall);
+        //beforeunload is kept only to warn the user before leaving; the actual
+        //commit moved to visibilitychange/pagehide (see above) since Blink
+        //browsers disable the back/forward cache for any page with an unload listener
         window.addEventListener('beforeunload', function (e) {
             var preventsBeforeUnload = <?php echo (int) api_get_configuration_value('lp_prevents_beforeunload'); ?>;
 
             if (preventsBeforeUnload) {
                 e.preventDefault();
-            }
-
-            console.log('beforeunload');
-            lastCall();
-            logit_lms('beforeunload called', 3);
-
-            if (preventsBeforeUnload) {
                 e.returnValue = 'true';
             } else {
                 delete e['returnValue'];
             }
         });
 
-        $(window).on('unload', function(e) {
-            console.log('unload');
+        document.addEventListener('visibilitychange', function (e) {
+            if (document.visibilityState === 'hidden') {
+                console.log('visibilitychange');
+                savedata(olms.lms_item_id);
+                logit_lms('visibilitychange (hidden) called', 3);
+                lastCall();
+            }
+        });
+        window.addEventListener('pagehide', function (e) {
+            console.log('pagehide');
             savedata(olms.lms_item_id);
-            logit_lms('unload called', 3);
+            logit_lms('pagehide called', 3);
             lastCall();
         });
-        logit_lms('Added unload savedata() on window unload', 3);
+        logit_lms('Added savedata()/lastCall() on visibilitychange/pagehide', 3);
     }
     logit_lms('Quitting addListeners()');
 }

@@ -33,7 +33,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @implements ProviderInterface<array<int, array<string, mixed>>|ForumThreadsByForum>
+ * @implements ProviderInterface<ForumThreadsByForum>
  */
 final class ForumThreadCollectionStateProvider implements ProviderInterface
 {

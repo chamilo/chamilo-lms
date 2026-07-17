@@ -103,7 +103,6 @@ final class PartialSearchOrFilter extends AbstractFilter
     {
         return [
             'search' => [
-                'property' => null,
                 'type' => 'string',
                 'required' => false,
                 'description' => 'Search OR/LIKE across configured fields and scopes results to the current portal when multi-URL is enabled.',

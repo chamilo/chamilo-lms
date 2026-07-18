@@ -67,9 +67,11 @@ final readonly class ScormPackageImporter
         string $contentMaker,
         bool $allowHtaccess,
     ): array {
+        $this->assertValidUploadedPackage($package);
+
         $packagePath = $package->getPathname();
         $originalName = trim($package->getClientOriginalName());
-        if (!$package->isValid() || '' === $packagePath || !is_file($packagePath)) {
+        if ('' === $packagePath || !is_file($packagePath)) {
             throw new RuntimeException('The uploaded package is not valid.');
         }
         if ('zip' !== strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION))) {
@@ -187,9 +189,11 @@ final readonly class ScormPackageImporter
             throw new RuntimeException('The SCORM learning path does not have an updateable package asset.');
         }
 
+        $this->assertValidUploadedPackage($package);
+
         $packagePath = $package->getPathname();
         $originalName = trim($package->getClientOriginalName());
-        if (!$package->isValid() || '' === $packagePath || !is_file($packagePath)) {
+        if ('' === $packagePath || !is_file($packagePath)) {
             throw new RuntimeException('The uploaded package is not valid.');
         }
         if ('zip' !== strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION))) {
@@ -822,6 +826,19 @@ final readonly class ScormPackageImporter
     private function isRemoteResource(string $href): bool
     {
         return 1 === preg_match('#^https?://#i', $href);
+    }
+
+    private function assertValidUploadedPackage(UploadedFile $package): void
+    {
+        if ($package->isValid()) {
+            return;
+        }
+
+        if (\UPLOAD_ERR_INI_SIZE === $package->getError()) {
+            throw new RuntimeException($package->getErrorMessage());
+        }
+
+        throw new RuntimeException('The uploaded package is not valid.');
     }
 
     private function createAsset(string $sourcePath, string $originalName): Asset

@@ -165,6 +165,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
         $resourceFile = null;
         if ($resourceFileId) {
             $resourceFile = $this->resourceFileRepository->find($resourceFileId);

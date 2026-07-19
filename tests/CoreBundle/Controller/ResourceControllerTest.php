@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Tests\ChamiloTestTrait;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ResourceControllerTest extends WebTestCase
@@ -162,6 +163,90 @@ class ResourceControllerTest extends WebTestCase
         $url = '/r/document/files/'.$id.'/view';
         $client->request('GET', $url, ['filter' => 'resource_show_preview']);
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testViewActionWithJwtAuthentication(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $course = $this->createCourse('JWT view');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('jwt view document')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+        $documentRepo->addFileFromString($document, 'JWT view content', 'text/plain', 'jwt-view.txt', true);
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $uuid = $document->getResourceNode()->getUuid()->toRfc4122();
+
+        $jwtManager = self::getContainer()->get(JWTTokenManagerInterface::class);
+        $jwt = $jwtManager->create($admin);
+
+        $client->request(
+            'GET',
+            '/r/document/files/'.$uuid.'/view?cid='.$course->getId(),
+            server: ['HTTP_AUTHORIZATION' => 'Bearer '.$jwt]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'text/plain; charset=UTF-8');
+    }
+
+    public function testDownloadActionWithJwtAuthentication(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $course = $this->createCourse('JWT download');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('jwt download document')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+        $documentRepo->addFileFromString(
+            $document,
+            'JWT download content',
+            'text/plain',
+            'jwt-download.txt',
+            true
+        );
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $uuid = $document->getResourceNode()->getUuid()->toRfc4122();
+
+        $jwtManager = self::getContainer()->get(JWTTokenManagerInterface::class);
+        $jwt = $jwtManager->create($admin);
+
+        $client->request(
+            'GET',
+            '/r/document/files/'.$uuid.'/download?cid='.$course->getId(),
+            server: ['HTTP_AUTHORIZATION' => 'Bearer '.$jwt]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'text/plain; charset=UTF-8');
+        self::assertStringContainsString(
+            'attachment;',
+            (string) $client->getResponse()->headers->get('content-disposition')
+        );
     }
 
     public function testLinkAction(): void

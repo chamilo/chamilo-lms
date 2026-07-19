@@ -624,6 +624,8 @@ function float_format($number, $flag = 1, $decimalPoint = '.', $thousandsSeparat
     $flag = (int) $flag;
 
     if (is_numeric($number)) {
+        $number = (float) $number;
+
         if (!$number) {
             $result = (2 == $flag ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
         } else {

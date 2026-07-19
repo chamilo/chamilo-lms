@@ -480,6 +480,7 @@ final readonly class SurveyListProvider implements ProviderInterface
             'unsupportedReason' => $isUnsupportedPersonality ? $this->getUnsupportedPersonalitySurveyMessage() : '',
             'answerUrl' => $this->buildAnswerUrl($survey, $invitation, $course, $session),
             'invitationCode' => $invitation->getInvitationCode(),
+            'invitationLpItemId' => (int) $invitation->getLpItemId(),
             'invitationAnswered' => $isAnswered,
         ];
     }

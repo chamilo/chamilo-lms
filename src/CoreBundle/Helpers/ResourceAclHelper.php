@@ -97,6 +97,19 @@ readonly class ResourceAclHelper
         $roles = $user instanceof UserInterface ? $user->getRoles() : [];
 
         foreach ($roles as $role) {
+            // init() only ever registers a small fixed set of resource-permission
+            // roles (ROLE_USER, ROLE_STUDENT, ROLE_CURRENT_COURSE_TEACHER, ...).
+            // $user->getRoles() returns the user's FULL Symfony role set, which
+            // for an admin using "Login as" also includes roles like
+            // ROLE_SESSION_MANAGER, ROLE_PREVIOUS_ADMIN or ROLE_ALLOWED_TO_SWITCH -
+            // none of which the ACL knows about. Laminas throws
+            // InvalidArgumentException for any role it hasn't registered, so
+            // without this guard a single unrelated role crashes the whole
+            // permission check instead of just being irrelevant to it.
+            if (!$acl->hasRole($role)) {
+                continue;
+            }
+
             if ($acl->isAllowed($role, $resourceLink->getId(), $askedMask)) {
                 return true;
             }

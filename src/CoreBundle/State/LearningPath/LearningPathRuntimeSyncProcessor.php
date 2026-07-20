@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<LearningPathRuntimeSyncInput, void> */
 final readonly class LearningPathRuntimeSyncProcessor implements ProcessorInterface
@@ -31,7 +30,7 @@ final readonly class LearningPathRuntimeSyncProcessor implements ProcessorInterf
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
+        private LearningPathRuntimeWriteProtection $writeProtection,
         private LearningPathRuntimeProvider $runtimeProvider,
         private LearningPathRuntimeProgressManager $progressManager,
         private CLpRepository $lpRepository,
@@ -48,7 +47,7 @@ final readonly class LearningPathRuntimeSyncProcessor implements ProcessorInterf
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
+        $this->writeProtection->assertWriteAllowed($data->csrfToken);
 
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
         if ($lpId <= 0) {

@@ -1,0 +1,180 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="space-y-6">
+        <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
+            <h1 class="m-0 text-2xl font-semibold text-gray-90">
+                {{ 'File integrity'|trans }}
+            </h1>
+
+            <p class="mt-2 text-body-2 text-gray-50">
+                {{ 'This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions.'|trans }}
+            </p>
+        </div>
+
+        {% if not is_global_admin %}
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4 text-gray-90">
+                {{ 'You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator.'|trans }}
+            </div>
+        {% endif %}
+
+        {% if is_snoozed %}
+            <div class="rounded-2xl border border-warning bg-support-2 p-4 text-gray-90">
+                {{ 'Alerting is currently paused for maintenance. It will automatically resume at %date%.'|trans({'%date%': snooze_until|date('Y-m-d H:i:s')}) }}
+            </div>
+        {% endif %}
+
+        <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
+            {% if report is null %}
+                <p class="m-0 text-body-2 text-gray-50">
+                    {{ 'No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan.'|trans }}
+                </p>
+            {% else %}
+                <p class="m-0 text-body-2 text-gray-50">
+                    {{ 'Last scan'|trans }}: <strong>{{ report.at|date('Y-m-d H:i:s') }}</strong>
+                    &middot; {{ 'Files scanned'|trans }}: <strong>{{ report.scannedCount }}</strong>
+                </p>
+
+                {% if report.establishedBaseline %}
+                    <div class="mt-3 rounded-2xl border border-success bg-support-2 p-3 text-gray-90">
+                        {{ 'No baseline existed yet: this scan established one. Changes will be reported starting from the next scan.'|trans }}
+                    </div>
+                {% elseif not (report.added|length) and not (report.modified|length) and not (report.deleted|length) %}
+                    <div class="mt-3 rounded-2xl border border-success bg-support-2 p-3 text-gray-90">
+                        {{ 'No changes detected since the baseline.'|trans }}
+                    </div>
+                {% endif %}
+
+                {% if report.gitConfigChanged %}
+                    <div class="mt-3 rounded-2xl border border-danger bg-support-2 p-3 font-semibold text-gray-90">
+                        {{ 'The Git remote configuration (.git/config) has changed. Verify this was expected.'|trans }}
+                    </div>
+                {% endif %}
+
+                {% if report.scanIncomplete %}
+                    <div class="mt-3 rounded-2xl border border-warning bg-support-2 p-3 text-gray-90">
+                        {{ 'The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial.'|trans }}
+                    </div>
+                {% endif %}
+
+                {% if report.truncated %}
+                    <div class="mt-3 rounded-2xl border border-warning bg-support-2 p-3 text-gray-90">
+                        {{ 'Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list.'|trans }}
+                    </div>
+                {% endif %}
+
+                {% if report.unreadable|length %}
+                    <div class="mt-3 rounded-2xl border border-warning bg-support-2 p-3 text-gray-90">
+                        {{ '%count% file(s) could not be read (permissions) and were skipped.'|trans({'%count%': report.unreadable|length}) }}
+                    </div>
+                {% endif %}
+
+                {% set fileCategories = [
+                    {'key': 'added', 'label': 'Added'|trans, 'badge': 'bg-blue-100 text-blue-700'},
+                    {'key': 'modified', 'label': 'Modified'|trans, 'badge': 'bg-red-100 text-red-700'},
+                    {'key': 'deleted', 'label': 'Deleted'|trans, 'badge': 'bg-gray-100 text-gray-700'},
+                ] %}
+                {% for category in fileCategories %}
+                    {% set items = attribute(report, category.key) %}
+                    {% if items|length %}
+                        <div class="mt-4">
+                            <h2 class="m-0 text-body-1 font-semibold text-gray-90">
+                                <span class="rounded-full px-2 py-1 text-caption {{ category.badge }}">{{ category.label }}</span>
+                                ({{ attribute(report, category.key ~ 'Count') }})
+                            </h2>
+
+                            <ul class="mt-2 max-h-64 overflow-auto rounded-2xl border border-gray-25 bg-white p-3 text-caption text-gray-90">
+                                {% for path in items|keys %}
+                                    <li>{{ path }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        {% if is_global_admin %}
+            <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
+                <h2 class="m-0 mb-3 text-body-1 font-semibold text-gray-90">
+                    {{ 'Actions'|trans }}
+                </h2>
+
+                <div class="flex flex-wrap gap-2">
+                    <form method="post" action="{{ path('admin_security_file_integrity_action') }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="action" value="scan">
+                        <button
+                                type="submit"
+                                class="btn btn--primary inline-flex items-center gap-2 rounded-lg px-4 py-2 text-white"
+                                title="{{ 'Run a scan now'|trans }}"
+                        >
+                            <span class="mdi mdi-shield-search" aria-hidden="true"></span>
+                            <span>{{ 'Run a scan now'|trans }}</span>
+                        </button>
+                    </form>
+
+                    <form method="post" action="{{ path('admin_security_file_integrity_action') }}" class="flex flex-wrap items-end gap-2">
+                        <input type="hidden" name="_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="action" value="pause">
+                        <div>
+                            <label for="file-integrity-pause-password" class="mb-1 block text-caption text-gray-50">
+                                {{ 'Your password'|trans }}
+                            </label>
+                            <input
+                                    type="password"
+                                    id="file-integrity-pause-password"
+                                    name="admin_password"
+                                    class="rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90"
+                                    autocomplete="current-password"
+                                    required
+                            >
+                        </div>
+                        <button
+                                type="submit"
+                                class="btn btn--secondary inline-flex items-center gap-2 rounded-lg px-4 py-2 text-white"
+                                title="{{ 'Pause alerting for 1 hour (for maintenance)'|trans }}"
+                        >
+                            <span class="mdi mdi-pause-circle-outline" aria-hidden="true"></span>
+                            <span>{{ 'Pause for 1 hour'|trans }}</span>
+                        </button>
+                    </form>
+
+                    <form method="post" action="{{ path('admin_security_file_integrity_action') }}" class="flex flex-wrap items-end gap-2">
+                        <input type="hidden" name="_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="action" value="rebaseline">
+                        <div>
+                            <label for="file-integrity-rebaseline-password" class="mb-1 block text-caption text-gray-50">
+                                {{ 'Your password'|trans }}
+                            </label>
+                            <input
+                                    type="password"
+                                    id="file-integrity-rebaseline-password"
+                                    name="admin_password"
+                                    class="rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90"
+                                    autocomplete="current-password"
+                                    required
+                            >
+                        </div>
+                        <button
+                                type="submit"
+                                class="btn btn--danger inline-flex items-center gap-2 rounded-lg px-4 py-2 text-white"
+                                title="{{ 'Trust the current file tree as the new baseline'|trans }}"
+                                onclick="return confirm('{{ 'This will trust every current file as correct, including any unreviewed change. Continue?'|trans|e('js') }}');"
+                        >
+                            <span class="mdi mdi-shield-refresh-outline" aria-hidden="true"></span>
+                            <span>{{ 'Establish new baseline'|trans }}</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        <p class="text-caption text-gray-50">
+            {{ 'Schedule the scan from a system crontab, for example'|trans }}:
+            <code class="rounded bg-support-2 px-1 py-0.5">0 3 * * *  cd {{ project_dir|default('/var/www/chamilo') }} && php bin/console app:file-integrity:scan</code>
+            &middot;
+            <a href="{{ settings_search_url }}" class="text-primary underline">{{ 'Configure'|trans }}</a>
+        </p>
+    </div>
+{% endblock %}

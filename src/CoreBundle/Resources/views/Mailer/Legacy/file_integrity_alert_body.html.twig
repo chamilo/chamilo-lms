@@ -1,0 +1,42 @@
+<p>{{ 'A file integrity scan detected changes on the platform:'|trans }}</p>
+
+<ul>
+    <li>{{ 'Added'|trans }}: {{ added_count }}</li>
+    <li>{{ 'Modified'|trans }}: {{ modified_count }}</li>
+    <li>{{ 'Deleted'|trans }}: {{ deleted_count }}</li>
+</ul>
+
+{% if git_config_changed %}
+    <p><strong>{{ 'The Git remote configuration (.git/config) has changed. Verify this was expected.'|trans }}</strong></p>
+{% endif %}
+
+{% if scan_incomplete %}
+    <p>{{ 'The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial.'|trans }}</p>
+{% endif %}
+
+{% if truncated %}
+    <p>{{ 'Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list.'|trans }}</p>
+{% endif %}
+
+{% if added|length %}
+    <p>{{ 'Added files'|trans }}:</p>
+    <ul>
+        {% for path in added %}<li>{{ path }}</li>{% endfor %}
+    </ul>
+{% endif %}
+
+{% if modified|length %}
+    <p>{{ 'Modified files'|trans }}:</p>
+    <ul>
+        {% for path in modified %}<li>{{ path }}</li>{% endfor %}
+    </ul>
+{% endif %}
+
+{% if deleted|length %}
+    <p>{{ 'Deleted files'|trans }}:</p>
+    <ul>
+        {% for path in deleted %}<li>{{ path }}</li>{% endfor %}
+    </ul>
+{% endif %}
+
+<p>{{ 'Review the full report from Administration > Security > File integrity.'|trans }}</p>

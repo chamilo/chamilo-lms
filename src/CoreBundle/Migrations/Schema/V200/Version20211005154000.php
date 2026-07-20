@@ -8,40 +8,53 @@ use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\Kernel;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20211005154000 extends AbstractMigrationChamilo
 {
+    private const ORM_FLUSH_BATCH_SIZE = 100;
+
     public function getDescription(): string
     {
         return 'Migrate ticket attachment files';
     }
 
+    /**
+     * Ticket attachments are committed in explicit ORM batches.
+     * This makes the migration resumable and avoids losing hours of work if
+     * the process is interrupted.
+     */
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
-        /** @var Kernel $kernel */
-        $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-
         $attachmentRepo = $this->container->get(TicketMessageAttachmentRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
 
-        $sql = 'SELECT * FROM ticket_message_attachments ORDER BY id';
+        $items = $this->connection->fetchAllAssociative(
+            'SELECT id, sys_insert_user_id, path
+             FROM ticket_message_attachments
+             WHERE resource_node_id IS NULL
+             ORDER BY id'
+        );
 
-        $result = $this->connection->executeQuery($sql);
-        $items = $result->fetchAllAssociative();
+        $processed = 0;
 
         foreach ($items as $item) {
-            /** @var TicketMessageAttachment $messageAttachment */
-            $messageAttachment = $attachmentRepo->find($item['id']);
+            $id = (int) $item['id'];
 
-            if ($messageAttachment->hasResourceNode()) {
+            /** @var TicketMessageAttachment|null $messageAttachment */
+            $messageAttachment = $attachmentRepo->find($id);
+
+            if (!$messageAttachment instanceof TicketMessageAttachment || $messageAttachment->hasResourceNode()) {
                 continue;
             }
 
             $ticket = $messageAttachment->getTicket();
-            $user = $userRepo->find($item['sys_insert_user_id']);
+            $user = $userRepo->find((int) $item['sys_insert_user_id']);
 
             if (null === $user) {
                 continue;
@@ -57,10 +70,18 @@ class Version20211005154000 extends AbstractMigrationChamilo
 
             $filePath = $this->getUpdateRootPath().'/app/upload/ticket_attachment/'.$item['path'];
             error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
-            $this->addLegacyFileToResource($filePath, $attachmentRepo, $messageAttachment, $item['id']);
+            $this->addLegacyFileToResource($filePath, $attachmentRepo, $messageAttachment, $id);
 
             $this->entityManager->persist($messageAttachment);
-            $this->entityManager->flush();
+            ++$processed;
+
+            if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
+                $this->entityManager->flush();
+                $this->entityManager->clear();
+            }
         }
+
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 }

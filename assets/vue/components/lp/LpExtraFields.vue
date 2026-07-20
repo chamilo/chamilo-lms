@@ -10,14 +10,14 @@
       <BaseCheckbox
         v-if="field.valueType === FIELD_CHECKBOX"
         :id="fieldId(field)"
-        v-model="values[field.id]"
+        v-model="model[field.id]"
         :label="field.label"
         :name="fieldName(field)"
       />
 
       <BaseRadioButtons
         v-else-if="field.valueType === FIELD_RADIO"
-        v-model="values[field.id]"
+        v-model="model[field.id]"
         :name="fieldName(field)"
         :options="field.options"
         :title="field.label"
@@ -26,7 +26,7 @@
       <BaseSelect
         v-else-if="field.valueType === FIELD_SELECT"
         :id="fieldId(field)"
-        v-model="values[field.id]"
+        v-model="model[field.id]"
         :label="field.label"
         :message-text="field.helpText || null"
         :name="fieldName(field)"
@@ -40,7 +40,7 @@
       >
         <FloatLabel variant="on">
           <MultiSelect
-            v-model="values[field.id]"
+            v-model="model[field.id]"
             :input-id="fieldId(field)"
             :name="fieldName(field)"
             :options="field.options"
@@ -60,7 +60,7 @@
       <BaseCalendar
         v-else-if="field.valueType === FIELD_DATE || field.valueType === FIELD_DATETIME"
         :id="fieldId(field)"
-        v-model="values[field.id]"
+        v-model="model[field.id]"
         :label="field.label"
         :show-time="field.valueType === FIELD_DATETIME"
       />
@@ -68,7 +68,7 @@
       <BaseInputNumber
         v-else-if="field.valueType === FIELD_INTEGER || field.valueType === FIELD_FLOAT || field.valueType === FIELD_DURATION"
         :id="fieldId(field)"
-        v-model="values[field.id]"
+        v-model="model[field.id]"
         :help-text="field.helpText || null"
         :label="field.label"
         :step="field.valueType === FIELD_FLOAT ? 0.01 : 1"
@@ -81,7 +81,7 @@
         <FloatLabel variant="on">
           <Textarea
             :id="fieldId(field)"
-            v-model="values[field.id]"
+            v-model="model[field.id]"
             :name="fieldName(field)"
             auto-resize
             fluid
@@ -118,7 +118,7 @@
       <BaseInputText
         v-else
         :id="fieldId(field)"
-        v-model="values[field.id]"
+        v-model="model[field.id]"
         :help-text="field.helpText || ''"
         :label="field.label"
         :name="fieldName(field)"
@@ -128,7 +128,6 @@
 </template>
 
 <script setup>
-import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import FloatLabel from "primevue/floatlabel"
 import MultiSelect from "primevue/multiselect"
@@ -155,24 +154,20 @@ const FIELD_FLOAT = 17
 const FIELD_FILE = 18
 const FIELD_DURATION = 28
 
-const props = defineProps({
+defineProps({
   fields: {
     type: Array,
     default: () => [],
   },
-  modelValue: {
-    type: Object,
-    required: true,
-  },
 })
 
-const emit = defineEmits(["update:modelValue", "file-selected"])
+const model = defineModel({
+  type: Object,
+  required: true,
+})
+
+const emit = defineEmits(["file-selected"])
 const { t } = useI18n()
-
-const values = computed({
-  get: () => props.modelValue,
-  set: (value) => emit("update:modelValue", value),
-})
 
 function fieldId(field) {
   return `lp-extra-${field.id}`

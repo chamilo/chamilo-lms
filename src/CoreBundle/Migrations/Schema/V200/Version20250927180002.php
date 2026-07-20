@@ -14,145 +14,202 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
 use DateTime;
 use DateTimeZone;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Schema\Schema;
-use Exception;
 
-class Version20250927180002 extends AbstractMigrationChamilo
+final class Version20250927180002 extends AbstractMigrationChamilo
 {
+    private const READ_BATCH_SIZE = 250;
+    private const FLUSH_BATCH_SIZE = 100;
+
     public function getDescription(): string
     {
-        return 'Migrate portfolio comments to resource nodes';
+        return 'Migrate portfolio comments to resource nodes using keyset reads and bounded ORM flushes';
     }
 
-    /**
-     * @throws Exception
-     */
     public function up(Schema $schema): void
     {
-        /** @var ResourceRepository $portfolioRepo */
+        /** @var PortfolioRepository $portfolioRepo */
         $portfolioRepo = $this->container->get(PortfolioRepository::class);
-
-        /** @var ResourceRepository $commentRepo */
+        /** @var PortfolioCommentRepository $commentRepo */
         $commentRepo = $this->container->get(PortfolioCommentRepository::class);
-
         /** @var UserRepository $userRepo */
         $userRepo = $this->container->get(UserRepository::class);
 
-        $commentRows = $this->connection
-            ->executeQuery('SELECT * FROM portfolio_comment ORDER BY id ASC')
-            ->fetchAllAssociative()
-        ;
+        $lastId = 0;
+        $seen = 0;
+        $migrated = 0;
+        $skipped = 0;
+        $pendingFlush = 0;
 
-        foreach ($commentRows as $commentRow) {
-            /** @var PortfolioComment $comment */
-            $comment = $commentRepo->find($commentRow['id']);
-
-            /** @var User $author */
-            $author = $userRepo->find($commentRow['author_id']);
-
-            /** @var Portfolio $item */
-            $item = $portfolioRepo->find($commentRow['item_id']);
-
-            /** @var PortfolioComment $parent */
-            $parent = $commentRow['parent_id'] ? $commentRepo->find($commentRow['parent_id']) : null;
-            $visibility = (int) $commentRow['visibility'];
-            $creationDate = new DateTime($commentRow['date']);
-            $resourceParent = $parent ?: $item;
-
-            $comment->setParent($resourceParent);
-
-            $resourceNode = $commentRepo->addResourceNode(
-                $comment,
-                $author,
-                $resourceParent,
+        while (true) {
+            $rows = $this->connection->fetchAllAssociative(
+                \sprintf(
+                    <<<'SQL'
+SELECT
+    comment.*,
+    item.c_id AS item_c_id,
+    item.session_id AS item_session_id,
+    item.creation_date AS item_creation_date,
+    item.update_date AS item_update_date
+FROM portfolio_comment comment
+INNER JOIN portfolio item ON item.id = comment.item_id
+WHERE comment.id > :lastId
+ORDER BY comment.id ASC
+LIMIT %d
+SQL,
+                    self::READ_BATCH_SIZE
+                ),
+                ['lastId' => $lastId]
             );
 
-            $this->entityManager->persist($resourceNode);
-            $this->entityManager->flush();
+            if ([] === $rows) {
+                break;
+            }
 
-            $resourceNode
-                ->setCreatedAt($creationDate)
-                ->setUpdatedAt($creationDate)
-            ;
+            $lastId = (int) $rows[\array_key_last($rows)]['id'];
+            $properties = $this->loadItemProperties('portfolio_comment', array_column($rows, 'id'));
 
-            $this->entityManager->flush();
+            foreach ($rows as $row) {
+                ++$seen;
+                $commentId = (int) $row['id'];
+                $comment = $commentRepo->find($commentId);
+                $author = $userRepo->find((int) $row['author_id']);
+                $item = $portfolioRepo->find((int) $row['item_id']);
+                $parent = !empty($row['parent_id'])
+                    ? $commentRepo->find((int) $row['parent_id'])
+                    : null;
 
-            $courseLinkVisibility = match ($visibility) {
-                PortfolioComment::VISIBILITY_VISIBLE => ResourceLink::VISIBILITY_PUBLISHED,
-                default => ResourceLink::VISIBILITY_PENDING,
-            };
-
-            $itemsProperty = $this->connection
-                ->executeQuery(
-                    "SELECT * FROM c_item_property
-                        WHERE tool = 'portfolio_comment' AND ref = {$comment->getId()}"
-                )
-                ->fetchAllAssociative()
-            ;
-
-            if (empty($itemsProperty)) {
-                $itemRow = $this->connection
-                    ->executeQuery("SELECT * FROM portfolio WHERE id = {$commentRow['item_id']}")
-                    ->fetchAssociative()
-                ;
-
-                if ($itemRow && !empty($itemRow['c_id'])) {
-                    $course = $this->findCourse($itemRow['c_id']);
-                    $session = $itemRow['session_id'] ? $this->findSession($itemRow['session_id']) : null;
-                    $creationDate = new DateTime($itemRow['creation_date']);
-                    $updateDate = new DateTime($itemRow['update_date']);
-
-                    $courseLink = $comment->addCourseLink(
-                        $course,
-                        $session,
-                        null,
-                        $courseLinkVisibility,
-                        $creationDate,
-                        $updateDate
-                    );
-
-                    $this->entityManager->persist($courseLink);
+                if (!$comment instanceof PortfolioComment
+                    || !$author instanceof User
+                    || !$item instanceof Portfolio
+                    || $comment->hasResourceNode()
+                ) {
+                    ++$skipped;
+                    continue;
                 }
-            } else {
-                foreach ($itemsProperty as $itemProperty) {
-                    $course = $itemProperty['c_id'] ? $this->findCourse($itemProperty['c_id']) : null;
-                    $session = $itemProperty['session_id'] ? $this->findSession($itemProperty['session_id']) : null;
-                    $toUser = $itemProperty['to_user_id'] ? $userRepo->find($itemProperty['to_user_id']) : null;
-                    $insertDate = new DateTime($itemProperty['insert_date'], new DateTimeZone('UTC'));
-                    $editDate = new DateTime($itemProperty['lastedit_date'], new DateTimeZone('UTC'));
 
-                    $resourceNode->setUpdatedAt($editDate);
+                $creationDate = new DateTime((string) $row['date']);
+                $resourceParent = $parent instanceof PortfolioComment ? $parent : $item;
+                $comment->setParent($resourceParent);
 
-                    if ($toUser) {
-                        $userLink = $comment->addUserLink(
-                            $toUser,
+                $resourceNode = $commentRepo->addResourceNode($comment, $author, $resourceParent);
+                $resourceNode->setCreatedAt($creationDate)->setUpdatedAt($creationDate);
+                $this->entityManager->persist($resourceNode);
+
+                $linkVisibility = PortfolioComment::VISIBILITY_VISIBLE === (int) $row['visibility']
+                    ? ResourceLink::VISIBILITY_PUBLISHED
+                    : ResourceLink::VISIBILITY_PENDING;
+
+                $itemProperties = $properties[$commentId] ?? [];
+                if ([] === $itemProperties && !empty($row['item_c_id'])) {
+                    $course = $this->findCourse((int) $row['item_c_id']);
+                    $session = !empty($row['item_session_id'])
+                        ? $this->findSession((int) $row['item_session_id'])
+                        : null;
+                    $itemCreationDate = new DateTime((string) $row['item_creation_date']);
+                    $itemUpdateDate = new DateTime((string) $row['item_update_date']);
+
+                    $this->entityManager->persist(
+                        $comment->addCourseLink(
                             $course,
                             $session,
                             null,
-                            $insertDate,
-                            $editDate,
-                        );
+                            $linkVisibility,
+                            $itemCreationDate,
+                            $itemUpdateDate
+                        )
+                    );
+                } else {
+                    foreach ($itemProperties as $itemProperty) {
+                        $course = !empty($itemProperty['c_id'])
+                            ? $this->findCourse((int) $itemProperty['c_id'])
+                            : null;
+                        $session = !empty($itemProperty['session_id'])
+                            ? $this->findSession((int) $itemProperty['session_id'])
+                            : null;
+                        $toUser = !empty($itemProperty['to_user_id'])
+                            ? $userRepo->find((int) $itemProperty['to_user_id'])
+                            : null;
+                        $insertDate = new DateTime((string) $itemProperty['insert_date'], new DateTimeZone('UTC'));
+                        $editDate = new DateTime((string) $itemProperty['lastedit_date'], new DateTimeZone('UTC'));
 
-                        $this->entityManager->persist($userLink);
-                    } else {
-                        $courseLink = $comment->addCourseLink(
-                            $course,
-                            $session,
-                            null,
-                            $courseLinkVisibility,
-                            $insertDate,
-                            $editDate
-                        );
-
-                        $this->entityManager->persist($courseLink);
+                        $resourceNode->setUpdatedAt($editDate);
+                        if ($toUser instanceof User) {
+                            $this->entityManager->persist(
+                                $comment->addUserLink(
+                                    $toUser,
+                                    $course,
+                                    $session,
+                                    null,
+                                    $insertDate,
+                                    $editDate
+                                )
+                            );
+                        } elseif (null !== $course) {
+                            $this->entityManager->persist(
+                                $comment->addCourseLink(
+                                    $course,
+                                    $session,
+                                    null,
+                                    $linkVisibility,
+                                    $insertDate,
+                                    $editDate
+                                )
+                            );
+                        }
                     }
+                }
+
+                $this->entityManager->persist($comment);
+                ++$migrated;
+                ++$pendingFlush;
+
+                if ($pendingFlush >= self::FLUSH_BATCH_SIZE) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+                    $pendingFlush = 0;
                 }
             }
 
             $this->entityManager->flush();
+            $this->entityManager->clear();
+            $pendingFlush = 0;
+
+            $this->getLogger()->info('Portfolio comment resource migration progress.', [
+                'seen' => $seen,
+                'migrated' => $migrated,
+                'skipped' => $skipped,
+                'last_id' => $lastId,
+            ]);
         }
+    }
+
+    /**
+     * @param array<int, int|string> $refs
+     *
+     * @return array<int, array<int, array<string, mixed>>>
+     */
+    private function loadItemProperties(string $tool, array $refs): array
+    {
+        $refs = array_values(array_unique(array_map('intval', $refs)));
+        if ([] === $refs) {
+            return [];
+        }
+
+        $rows = $this->connection->executeQuery(
+            'SELECT * FROM c_item_property WHERE tool = :tool AND ref IN (:refs) ORDER BY ref, iid',
+            ['tool' => $tool, 'refs' => $refs],
+            ['refs' => ArrayParameterType::INTEGER]
+        )->fetchAllAssociative();
+
+        $result = [];
+        foreach ($rows as $row) {
+            $result[(int) $row['ref']][] = $row;
+        }
+
+        return $result;
     }
 }

@@ -51,7 +51,8 @@ final class IllustrationRepository extends ResourceRepository
         ResourceInterface $resource,
         User $creator,
         ?UploadedFile $uploadFile = null,
-        string $crop = ''
+        string $crop = '',
+        bool $flush = true
     ): ?ResourceFile {
         if (null === $uploadFile) {
             return null;
@@ -79,7 +80,9 @@ final class IllustrationRepository extends ResourceRepository
             }
             $em->persist($file);
         }
-        $em->flush();
+        if ($flush) {
+            $em->flush();
+        }
 
         return $file;
     }

@@ -23,6 +23,13 @@ final class Version20251202103000 extends AbstractMigrationChamilo
         return 'Convert remaining core tables to utf8mb4 / utf8mb4_unicode_ci';
     }
 
+    public function isTransactional(): bool
+    {
+        // Each ALTER TABLE commits independently on MySQL/MariaDB. Direct,
+        // resumable execution lets a retry skip tables already converted.
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $this->abortIf(
@@ -293,17 +300,83 @@ final class Version20251202103000 extends AbstractMigrationChamilo
     private function convertTable(string $table, string $charset, string $collation): void
     {
         if (!$this->tableExists($table)) {
-            // Table might not exist depending on the edition / previous migrations.
             return;
         }
 
-        // CONVERT changes all textual columns (CHAR/VARCHAR/TEXT/ENUM/SET) and the table default collation.
-        $this->addSql(\sprintf(
-            'ALTER TABLE `%s` CONVERT TO CHARACTER SET %s COLLATE %s',
-            $table,
-            $charset,
-            $collation
-        ));
+        $tableMetadata = $this->connection->fetchAssociative(
+            <<<'SQL'
+SELECT TABLE_COLLATION
+FROM information_schema.TABLES
+WHERE TABLE_SCHEMA = DATABASE()
+  AND TABLE_NAME = :tableName
+LIMIT 1
+SQL,
+            ['tableName' => $table]
+        );
+
+        if (false === $tableMetadata) {
+            return;
+        }
+
+        $columnMetadata = $this->connection->fetchAssociative(
+            <<<'SQL'
+SELECT
+    COUNT(*) AS textual_columns,
+    SUM(
+        CHARACTER_SET_NAME <> :charset
+        OR COLLATION_NAME <> :collation
+    ) AS non_compliant_columns
+FROM information_schema.COLUMNS
+WHERE TABLE_SCHEMA = DATABASE()
+  AND TABLE_NAME = :tableName
+  AND DATA_TYPE IN ('char', 'varchar', 'tinytext', 'text', 'mediumtext', 'longtext', 'enum', 'set')
+  AND COLLATION_NAME IS NOT NULL
+SQL,
+            [
+                'tableName' => $table,
+                'charset' => $charset,
+                'collation' => $collation,
+            ]
+        );
+
+        $textualColumns = (int) ($columnMetadata['textual_columns'] ?? 0);
+        $nonCompliantColumns = (int) ($columnMetadata['non_compliant_columns'] ?? 0);
+        $tableAlreadyCompliant = $collation === (string) ($tableMetadata['TABLE_COLLATION'] ?? '');
+
+        if ($tableAlreadyCompliant && 0 === $nonCompliantColumns) {
+            $this->getLogger()->info('Skipping table already converted.', ['table' => $table]);
+
+            return;
+        }
+
+        if (0 === $textualColumns) {
+            $sql = \sprintf(
+                'ALTER TABLE `%s` DEFAULT CHARACTER SET %s COLLATE %s',
+                $table,
+                $charset,
+                $collation
+            );
+        } else {
+            $sql = \sprintf(
+                'ALTER TABLE `%s` CONVERT TO CHARACTER SET %s COLLATE %s',
+                $table,
+                $charset,
+                $collation
+            );
+        }
+
+        $this->getLogger()->info('Converting table character set.', [
+            'table' => $table,
+            'textual_columns' => $textualColumns,
+            'non_compliant_columns' => $nonCompliantColumns,
+            'target_collation' => $collation,
+        ]);
+        $startedAt = microtime(true);
+        $this->connection->executeStatement($sql);
+        $this->getLogger()->info('Table character set converted.', [
+            'table' => $table,
+            'elapsed_seconds' => round(microtime(true) - $startedAt, 2),
+        ]);
     }
 
     private function tableExists(string $table): bool

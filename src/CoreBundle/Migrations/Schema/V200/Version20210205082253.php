@@ -13,131 +13,200 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Doctrine\DBAL\Schema\Schema;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20210205082253 extends AbstractMigrationChamilo
 {
+    private const FILE_BATCH_SIZE = 50;
+    private const USERGROUP_BATCH_SIZE = 100;
+
     public function getDescription(): string
     {
-        return 'Migrate User/Usergroups images';
+        return 'Migrate User/Usergroup images with filtered candidates and batched flushes';
     }
 
     public function up(Schema $schema): void
     {
-        $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-
         $illustrationRepo = $this->container->get(IllustrationRepository::class);
+        $splitDirectories = 'true' === (string) $this->connection->fetchOne(
+            "SELECT selected_value FROM settings WHERE variable = 'split_users_upload_directory' AND access_url = 1 LIMIT 1"
+        );
 
-        // Adding users to the resource node tree.
-        $batchSize = self::BATCH_SIZE;
-        $counter = 1;
-        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+        $this->migrateUserImages($illustrationRepo, $splitDirectories);
+        $this->migrateUsergroupResources();
+        $this->migrateUsergroupImages($illustrationRepo, $splitDirectories);
+    }
 
-        $sql = "SELECT * FROM settings WHERE variable = 'split_users_upload_directory' AND access_url = 1";
-        $result = $this->connection->executeQuery($sql);
-        $setting = $result->fetchAssociative();
+    private function migrateUserImages(IllustrationRepository $illustrationRepo, bool $splitDirectories): void
+    {
+        $query = $this->entityManager->createQuery(
+            "SELECT u FROM Chamilo\\CoreBundle\\Entity\\User u
+             WHERE u.pictureUri IS NOT NULL AND u.pictureUri <> :empty"
+        )->setParameter('empty', '');
 
-        /** @var User $userEntity */
-        foreach ($q->toIterable() as $userEntity) {
-            if ($userEntity->hasResourceNode()) {
+        $seen = 0;
+        $migrated = 0;
+        $missing = 0;
+        $pendingFlush = 0;
+
+        /** @var User $user */
+        foreach ($query->toIterable() as $user) {
+            ++$seen;
+
+            // Preserve the original migration rule: only users without an
+            // illustration resource node are candidates.
+            if ($user->hasResourceNode()) {
                 continue;
             }
-            $id = $userEntity->getId();
-            $picture = $userEntity->getPictureUri();
-            if (empty($picture)) {
+
+            $id = (int) $user->getId();
+            $picture = trim((string) $user->getPictureUri());
+            if ('' === $picture) {
                 continue;
             }
-            $path = "users/{$id}/";
-            if (!empty($setting) && 'true' === $setting['selected_value']) {
-                $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
-            }
-            $picturePath = $this->getUpdateRootPath().'/app/upload/'.$path.'/'.$picture;
-            error_log('MIGRATIONS :: $filePath -- '.$picturePath.' ...');
-            if ($this->fileExists($picturePath)) {
-                $mimeType = mime_content_type($picturePath);
-                $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
-                $illustrationRepo->addIllustration($userEntity, $userEntity, $file);
+
+            $path = $splitDirectories
+                ? 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'
+                : 'users/'.$id.'/';
+            $picturePath = $this->getUpdateRootPath().'/app/upload/'.$path.$picture;
+
+            if (!$this->fileExists($picturePath)) {
+                ++$missing;
+                $this->warnIf(true, "User image {$id} not found: {$picturePath}");
+                continue;
             }
 
-            if (($counter % $batchSize) === 0) {
+            $mimeType = mime_content_type($picturePath) ?: 'application/octet-stream';
+            $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
+            $illustrationRepo->addIllustration($user, $user, $file);
+            ++$migrated;
+            ++$pendingFlush;
+
+            if ($pendingFlush >= self::FILE_BATCH_SIZE) {
                 $this->entityManager->flush();
-                $this->entityManager->clear(); // Detaches all objects from Doctrine!
+                $this->entityManager->clear();
+                $pendingFlush = 0;
             }
-            $counter++;
         }
 
         $this->entityManager->flush();
         $this->entityManager->clear();
 
-        // Migrate Usergroup.
-        $counter = 1;
-        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
-        $admin = $this->getAdmin();
+        $this->getLogger()->info('User image migration completed.', [
+            'seen' => $seen,
+            'migrated' => $migrated,
+            'missing' => $missing,
+        ]);
+    }
 
+    private function migrateUsergroupResources(): void
+    {
+        /** @var UsergroupRepository $userGroupRepo */
         $userGroupRepo = $this->container->get(UsergroupRepository::class);
+        /** @var AccessUrlRepository $urlRepo */
         $urlRepo = $this->container->get(AccessUrlRepository::class);
 
-        $urlList = $urlRepo->findAll();
+        /** @var AccessUrl|null $url */
+        $url = $urlRepo->findOneBy([], ['id' => 'ASC']);
+        if (!$url instanceof AccessUrl) {
+            throw new RuntimeException('No access URL was found for usergroup migration.');
+        }
 
-        /** @var AccessUrl $url */
-        $url = $urlList[0];
+        $admin = $this->getAdmin();
+        $query = $this->entityManager->createQuery('SELECT u FROM Chamilo\\CoreBundle\\Entity\\Usergroup u');
+        $pendingFlush = 0;
+        $migrated = 0;
 
         /** @var Usergroup $userGroup */
-        foreach ($q->toIterable() as $userGroup) {
+        foreach ($query->toIterable() as $userGroup) {
             if ($userGroup->hasResourceNode()) {
                 continue;
             }
 
             $userGroup->setCreator($admin);
-
             if (0 === $userGroup->getUrls()->count()) {
-                $accessUrlRelUserGroup = (new AccessUrlRelUserGroup())
+                $relation = (new AccessUrlRelUserGroup())
                     ->setUserGroup($userGroup)
-                    ->setUrl($url)
-                ;
-                $userGroup->getUrls()->add($accessUrlRelUserGroup);
+                    ->setUrl($url);
+                $userGroup->getUrls()->add($relation);
             }
+
             $userGroupRepo->addResourceNode($userGroup, $admin, $url);
             $this->entityManager->persist($userGroup);
-            $this->entityManager->flush();
-        }
-        $this->entityManager->clear();
+            ++$migrated;
+            ++$pendingFlush;
 
-        // Migrate Usergroup images.
-        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
-
-        /** @var Usergroup $userGroup */
-        foreach ($q->toIterable() as $userGroup) {
-            if (!$userGroup->hasResourceNode()) {
-                continue;
-            }
-
-            $picture = $userGroup->getPicture();
-            if (empty($picture)) {
-                continue;
-            }
-            $id = $userGroup->getId();
-            $path = "groups/{$id}/";
-            if (!empty($setting) && 'true' === $setting['selected_value']) {
-                $path = 'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
-            }
-            $picturePath = $this->getUpdateRootPath().'/app/upload/'.$path.'/'.$picture;
-            error_log('MIGRATIONS :: $filePath -- '.$picturePath.' ...');
-            if ($this->fileExists($picturePath)) {
-                $mimeType = mime_content_type($picturePath);
-                $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
-                $illustrationRepo->addIllustration($userGroup, $admin, $file);
-            }
-
-            if (($counter % $batchSize) === 0) {
+            if ($pendingFlush >= self::USERGROUP_BATCH_SIZE) {
                 $this->entityManager->flush();
-                $this->entityManager->clear(); // Detaches all objects from Doctrine!
+                $pendingFlush = 0;
             }
-            $counter++;
         }
 
         $this->entityManager->flush();
         $this->entityManager->clear();
+
+        $this->getLogger()->info('Usergroup resource migration completed.', ['migrated' => $migrated]);
+    }
+
+    private function migrateUsergroupImages(IllustrationRepository $illustrationRepo, bool $splitDirectories): void
+    {
+        $query = $this->entityManager->createQuery(
+            "SELECT u FROM Chamilo\\CoreBundle\\Entity\\Usergroup u
+             WHERE u.picture IS NOT NULL AND u.picture <> :empty"
+        )->setParameter('empty', '');
+
+        $admin = $this->getAdmin();
+        $pendingFlush = 0;
+        $seen = 0;
+        $migrated = 0;
+        $missing = 0;
+
+        /** @var Usergroup $userGroup */
+        foreach ($query->toIterable() as $userGroup) {
+            ++$seen;
+            if (!$userGroup->hasResourceNode()) {
+                continue;
+            }
+
+            $picture = trim((string) $userGroup->getPicture());
+            if ('' === $picture) {
+                continue;
+            }
+
+            $id = (int) $userGroup->getId();
+            $path = $splitDirectories
+                ? 'groups/'.substr((string) $id, 0, 1).'/'.$id.'/'
+                : 'groups/'.$id.'/';
+            $picturePath = $this->getUpdateRootPath().'/app/upload/'.$path.$picture;
+
+            if (!$this->fileExists($picturePath)) {
+                ++$missing;
+                $this->warnIf(true, "Usergroup image {$id} not found: {$picturePath}");
+                continue;
+            }
+
+            $mimeType = mime_content_type($picturePath) ?: 'application/octet-stream';
+            $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
+            $illustrationRepo->addIllustration($userGroup, $admin, $file);
+            ++$migrated;
+            ++$pendingFlush;
+
+            if ($pendingFlush >= self::FILE_BATCH_SIZE) {
+                $this->entityManager->flush();
+                $this->entityManager->clear();
+                $admin = $this->getAdmin();
+                $pendingFlush = 0;
+            }
+        }
+
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        $this->getLogger()->info('Usergroup image migration completed.', [
+            'seen' => $seen,
+            'migrated' => $migrated,
+            'missing' => $missing,
+        ]);
     }
 }

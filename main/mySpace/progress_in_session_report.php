@@ -113,6 +113,10 @@ if ($form->validate()) {
         foreach ($accessSessionCourse as $access) {
             $user = api_get_user_entity($access['user_id']);
 
+            if (null === $user) {
+                continue;
+            }
+
             $studentLink = Display::url(
                 UserManager::formatUserFullName($user),
                 api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$user->getId().'&origin=session_report'
@@ -125,6 +129,11 @@ if ($form->validate()) {
                 ),
             ];
             $course = api_get_course_entity($access['c_id']);
+
+            if (null === $course) {
+                continue;
+            }
+
             $courses[$course->getCode()] = $course->getCode();
         }
 

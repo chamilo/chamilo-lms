@@ -89,6 +89,8 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     }
 
     $lessonStatus = $myLPI->get_status();
+    $progressMeasure = $myLPI->get_progress_measure();
+    $progressMeasureJs = null === $progressMeasure ? 'null' : json_encode((float) $progressMeasure);
     $interactionsCount = $myLPI->get_interactions_count();
 
     $totalItems = $myLP->getTotalItemsCountWithoutDirs();
@@ -109,6 +111,9 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     $return .=
         "olms.lms_lp_id=".$lpId.";".
         "olms.lms_item_id=".$newItemId.";".
+        "olms.progress_measure=".$progressMeasureJs.";".
+        "if (olms.lms_item_progress_measures) { olms.lms_item_progress_measures['i".$newItemId."'] = ".$progressMeasureJs."; }".
+        "if (olms.lms_item_statuses) { olms.lms_item_statuses['i".$newItemId."'] = '".$lessonStatus."'; }".
         "olms.lms_old_item_id=".$oldItemId.";".
         "olms.lms_initialized=0;".
         "olms.lms_view_id=".$viewId.";".
@@ -137,6 +142,13 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
             $score = $myLPI->get_score();
             $maxScore = $myLPI->get_max();
             $return .= "update_progress_bar('$score', '$maxScore', '$progressMode');";
+            $progressBarSpecial = true;
+        }
+    }
+    if (!$progressBarSpecial) {
+        $scormProgress = $myLP->getScormProgressMeasureBarValues($progressMode);
+        if (null !== $scormProgress) {
+            $return .= "update_progress_bar('{$scormProgress[0]}', '100', '%');";
             $progressBarSpecial = true;
         }
     }

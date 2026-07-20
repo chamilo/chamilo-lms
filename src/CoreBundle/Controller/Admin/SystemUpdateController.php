@@ -299,7 +299,6 @@ final class SystemUpdateController extends AbstractController
         }
     }
 
-
     #[Route('/progress/{operationId}', name: 'progress', methods: ['GET'])]
     public function progress(string $operationId): JsonResponse
     {
@@ -362,7 +361,6 @@ final class SystemUpdateController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
     }
-
 
     #[Route('/migration-safety', name: 'migration_safety', methods: ['POST'])]
     public function migrationSafety(Request $request): JsonResponse
@@ -577,7 +575,6 @@ final class SystemUpdateController extends AbstractController
 
         return $skipSignature;
     }
-
 
     /**
      * @param array<string, mixed> $payload

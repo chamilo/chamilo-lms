@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use ChamiloSession as Session;
 
 /**
@@ -539,10 +540,10 @@ function processUsers(&$users, $sendMail)
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$defined_auth_sources[] = UserAuthSource::PLATFORM;
-if (isset($extAuthSource) && is_array($extAuthSource)) {
-    $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
-}
+/** @var AuthenticationConfigHelper $authenticationConfigHelper */
+$authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
+$accessUrl = Container::getAccessUrlUtil()->getCurrent();
+$defined_auth_sources = $authenticationConfigHelper->getAuthSourceAuthentications($accessUrl);
 
 $tool_name = get_lang('Import users list');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];

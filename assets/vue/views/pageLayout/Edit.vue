@@ -52,7 +52,7 @@
             v-if="loadingTemplates"
             class="text-gray-600"
           >
-            {{ t("Loading templates...") }}
+            {{ t("Loading templates") }}
           </div>
 
           <div v-else>

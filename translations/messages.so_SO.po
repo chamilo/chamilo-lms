@@ -1575,8 +1575,8 @@ msgstr "Ma hubtaa in aad rabto in aad tirtirto tallaabooyinkan?"
 msgid "Authoring tool"
 msgstr "Qalabka qorista"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Faylka SCORM ama AICC ee la soo dejinayo"
+msgid "SCORM file to upload"
+msgstr "Faylka SCORM ee la soo dejinayo"
 
 msgid "Course location"
 msgstr "Goobta koorsada"
@@ -36488,4 +36488,853 @@ msgstr "Eeg mawduucyada"
 
 msgid "No auth source"
 msgstr "No auth source"
+
+msgid "You must add at least one question"
+msgstr "You must add at least one question"
+
+msgid "Advanced actions"
+msgstr "Advanced actions"
+
+msgid "Application path"
+msgstr "Application path"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Apply plan failed"
+
+msgid "Apply plan ready"
+msgstr "Apply plan ready"
+
+msgid "Apply preparation"
+msgstr "Apply preparation"
+
+msgid "Apply staged files"
+msgstr "Apply staged files"
+
+msgid "Applying files..."
+msgstr "Applying files..."
+
+msgid "Audit file"
+msgstr "Audit file"
+
+msgid "Backup directory"
+msgstr "Galka kaydinta"
+
+msgid "Baseline clean"
+msgstr "Saldhig nadiif ah"
+
+msgid "Baseline warnings"
+msgstr "Digniinaha saldhigga"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Dhis qorshe codsi ammaan ah oo laga soo qaatay xirmada la diyaariyey. Tani waxay hubisaa oo keliya faylasha, oggolaanshaha, waddada kaydinta iyo xaaladda qufulka. Ma beddesho faylasha."
+
+msgid "Build production frontend assets."
+msgstr "Dhis hantida hore ee soo saarista."
+
+msgid "Building plan..."
+msgstr "Dhisidda qorshaha..."
+
+msgid "Channel"
+msgstr "Kanaalka"
+
+msgid "Check"
+msgstr "Hubi"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Hubi cusboonaysiinta Chamilo ee la heli karo, xaqiiji xirmooyinka, diyaari faylasha oo socodsii tallaabooyinka xakamaynta kadib cusboonaysiinta."
+
+msgid "Check manifest"
+msgstr "Hubi muujinta"
+
+msgid "Checking post-apply actions..."
+msgstr "Hubidda ficillada kadib codsiga..."
+
+msgid "Checking..."
+msgstr "Hubidda..."
+
+msgid "Composer install"
+msgstr "Composer rakib"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Ficillada Composer, Yarn iyo socodsiinta xogta waxay beddeli karaan ku-tiirsanaanta, hantida la soo saaray ama xogta. Iyaga dooro oo keliya ka dib markaad xaqiijiso kaydinta iyo oggolaanshaha."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "U qaybi CHAMILO_UPDATE_MANIFEST_URL server-ka ama bixi URL muujinta HTTPS ah."
+
+msgid "Configured"
+msgstr "La habeeyey"
+
+msgid "Current migration"
+msgstr "Socodsiinta xogta ee hadda"
+
+msgid "Database baseline"
+msgstr "Saldhigga xogta"
+
+msgid "Database migration safety review"
+msgstr "Dib-u-eegidda ammaanka socodsiinta xogta"
+
+msgid "Database migrations"
+msgstr "Socodsiinta xogta"
+
+msgid "Development mode"
+msgstr "Habka horumarinta"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ha furin tan ilaa kaydinta cusboonaysiinta iyo oggolaanshaha server-ka la eego."
+
+msgid "Doctrine dry-run command"
+msgstr "Amarka Doctrine ee tijaabada qallalan"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine waxay sheegtay digniinaha saldhigga taariikhiga ah. Cusboonaysiyuhu wuxuu weli fulin doonaa oo keliya socodsiinta V210 ee la diyaariyey ka dib xaqiijinta cad."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine wuxuu fulin doonaa oo keliya socodsiinta V210 ee la diyaariyey si cad ka dib markay dib-u-eegidda ammaanka dhaafto."
+
+msgid "Dry-run exit code"
+msgstr "Koodhka bixitaanka tijaabada qallalan"
+
+msgid "Executed unavailable migrations"
+msgstr "Socodsiinta aan la heli karin ee la fuliyey"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Kala soo bixi xirmada cusboonaysiinta ee la xaqiijiyey oo geli galka diyaarinta si loo baaro. Tani ma beddesho faylasha, ma socodsiiso socodsiinta xogta, mana wax ka beddesho xogta."
+
+msgid "File apply available"
+msgstr "Codsi fayl oo la heli karo"
+
+msgid "Files to replace"
+msgstr "Faylasha la beddelayo"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Waxaan xaqiijinayaa in kayd xog ah uu jiro oo la xaqiijiyey ka hor intaan la socodsiin socodsiinta xogta."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Waxaan fahmayaa in ficillada horumarsan ay beddeli karaan ku-tiirsanaanta, hantida la soo saaray ama xogta."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Waxaan fahmayaa in tani ay beddeli doonto faylasha ku jira rakibka Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Waxaan fahmayaa in tani ay socodsiin doonto amarrada cusboonaysiinta server-ka."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Rakib ku-tiirsanaanta hore ka hor intaadan dib u dhisin hantida."
+
+msgid "Installed version"
+msgstr "Nooca la rakibay"
+
+msgid "Latest migration"
+msgstr "Socodsiinta xogta ee ugu dambeysay"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Ka tag waddooyinka xirmada iyo saxeexa madhan si aad uga soo dejiso URL-yada muujinta ee la xaqiijiyey. Waddooyinka maxalliga ah waxay kaliya u diyaar yihiin tijaabooyinka horumarinta."
+
+msgid "Live command log"
+msgstr "Diiwaanka amarka tooska ah"
+
+msgid "Live update log"
+msgstr "Diiwaanka cusboonaysiinta tooska ah"
+
+msgid "Local test options"
+msgstr "Xulashooyinka tijaabada maxalliga ah"
+
+msgid "Local test update notice link"
+msgstr "Xiriirka ogeysiiska cusboonaysiinta maxalliga ah"
+
+msgid "Local update notice simulation"
+msgstr "Jilidda ogeysiiska cusboonaysiinta maxalliga ah"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Jilidda ogeysiiska cusboonaysiinta maxalliga ah waxay kaliya diyaar tahay habka horumarinta."
+
+msgid "Manifest"
+msgstr "Muujinta"
+
+msgid "Manifest source"
+msgstr "Ilaha muujinta"
+
+msgid "Migration safety details"
+msgstr "Faahfaahinta ammaanka socodsiinta xogta"
+
+msgid "Migration safety review failed"
+msgstr "Dib-u-eegidda ammaanka socodsiinta xogta way fashilantay"
+
+msgid "Migration safety review ready"
+msgstr "Dib-u-eegidda ammaanka socodsiinta xogta waa diyaar"
+
+msgid "Migration target"
+msgstr "Bartilmaameedka socodsiinta xogta"
+
+msgid "New files"
+msgstr "Faylal cusub"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Socdaal cusub oo ay sheegtay Doctrine"
+
+msgid "Next migration"
+msgstr "Socdaalka xiga"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Wax socdaal ah oo aan la fulin oo aan la heli karin lama sheegin."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Wali lama dejin URL-ka rasmi ah ee muujinta. Isticmaal URL HTTPS ah ama waddo maxalli ah oo loogu talagalay tijaabooyinka horumarinta."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Wax socdaal ah oo sugaya lama helin ka hor bartilmaameedka cusboonaysiinta ee la diyaariyay."
+
+msgid "Not configured"
+msgstr "Lama dejin"
+
+msgid "Not detected"
+msgstr "Lama helin"
+
+msgid "Official Chamilo update channel"
+msgstr "Kanaalka cusboonaysiinta rasmi ah ee Chamilo"
+
+msgid "Package SHA-256"
+msgstr "Xirmada SHA-256"
+
+msgid "Package URL"
+msgstr "URL-ka xirmada"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Faylasha xirmada iyo saxeexa waxaa laga soo dejin doonaa muujinta. Waddooyinka maxalliga ah waa la damiyay jawigan."
+
+msgid "Package path"
+msgstr "Waddada xirmada"
+
+msgid "Package staged successfully"
+msgstr "Xirmada si guul leh ayaa loo diyaariyay"
+
+msgid "Package staging failed"
+msgstr "Diyaarinta xirmada waa ay fashilantay"
+
+msgid "Package verification"
+msgstr "Xaqiijinta xirmada"
+
+msgid "Package verification failed"
+msgstr "Xaqiijinta xirmada waa ay fashilantay"
+
+msgid "Package verified successfully"
+msgstr "Xirmada si guul leh ayaa loo xaqiijiyay"
+
+msgid "Pending migrations before this update"
+msgstr "Socdaal sugaya ka hor cusboonaysiintan"
+
+msgid "Planned backup path"
+msgstr "Waddada kaydinta la qorsheeyay"
+
+msgid "Post-apply actions completed"
+msgstr "Ficilada ka dib codsiga waa la dhammaystiray"
+
+msgid "Post-apply actions failed"
+msgstr "Ficilada ka dib codsiga waa ay fashilmeen"
+
+msgid "Post-apply actions ready"
+msgstr "Ficilada ka dib codsiga waa diyaar yihiin"
+
+msgid "Post-apply checks"
+msgstr "Hubinta ka dib codsiga"
+
+msgid "Post-apply checks failed"
+msgstr "Hubinta ka dib codsiga waa ay fashilantay"
+
+msgid "Post-apply details"
+msgstr "Faahfaahinta ka dib codsiga"
+
+msgid "Post-apply run details"
+msgstr "Faahfaahinta socodsiinta ka dib codsiga"
+
+msgid "Preflight checks"
+msgstr "Hubinta horudhaca"
+
+msgid "Preflight checks completed"
+msgstr "Hubinta horudhaca waa la dhammaystiray"
+
+msgid "Preflight checks failed"
+msgstr "Hubinta horudhaca waa ay fashilantay"
+
+msgid "Preflight details"
+msgstr "Faahfaahinta horudhaca"
+
+msgid "Prepare staging"
+msgstr "Diyaarinta marxaladda"
+
+msgid "Preparing staging..."
+msgstr "Diyaarinaya marxaladda..."
+
+msgid "Production mode"
+msgstr "Habka wax soo saarka"
+
+msgid "Released at"
+msgstr "La sii daayay"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Beddel faylasha Chamilo ee xirmada la diyaariyay adigoo isticmaalaya qorshaha codsiga ee dib loo eegay. Tani ma fuliso socdaalka xogta, Composer, Yarn ama amarrada kaydka."
+
+msgid "Review apply plan"
+msgstr "Dib u eeg qorshaha codsiga"
+
+msgid "Review database migrations"
+msgstr "Dib u eeg socdaalka xogta"
+
+msgid "Review post-apply actions"
+msgstr "Dib u eeg ficilada ka dib codsiga"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Dib u eeg amarrada gacanta ee lagu taliyay ka dib codsiga faylasha cusboonaysiinta. Tallaabadan ma fuliso Composer, Yarn, socdaalka ama amarrada kaydka."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Dib u eeg socdaalka Doctrine ee la diyaariyay iyo soo saarista tijaabada qallalan ka hor inta aan la fulin socdaalka xogta."
+
+msgid "Reviewing database migrations..."
+msgstr "Dib u eegidaya socdaalka xogta..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Fulinta dib u eegista badbaadada socdaalka ka hor inta aan la fulin socdaalka xogta."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Fulinta hubinta jawiga ka hor tallaabada codsiga cusboonaysiinta ee mustaqbalka. Tani ma beddesho faylasha ama xogta."
+
+msgid "Run post-apply actions"
+msgstr "Fulinta ficilada ka dib codsiga"
+
+msgid "Run preflight checks"
+msgstr "Fulinta hubinta horudhaca"
+
+msgid "Run selected post-apply actions"
+msgstr "Fulinta ficilada ka dib codsiga ee la doortay"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Fulinta amarrada ka dib codsiga ee la doortay adigoo isticmaalaya liis oggolaansho ah oo la xakameeyay. Amarro qolof ah oo gaar ah lama aqbalo."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Fulinta amarradan gacanta ka soo server ka dib markaad xaqiijiso natiijada cusboonaysiinta faylasha iyo kaydinta."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Fulinta ficilada ka dib codsiga ee UI-ga waa la damiyay habka wax soo saarka."
+
+msgid "Running post-apply actions..."
+msgstr "Waxqabadyada ka dib codsiga ayaa socda..."
+
+msgid "Safe actions"
+msgstr "Ficillo ammaan ah"
+
+msgid "Signature path"
+msgstr "Waddada saxeexa"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Xaqiijinta saxeexa lagama boodi karo jawigan."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Ka bood xaqiijinta saxeexa tijaabooyinka horumarka maxalliga ah"
+
+msgid "Staged file application failed"
+msgstr "Codsiga faylka marxaladda ayaa fashilmay"
+
+msgid "Staged files applied successfully"
+msgstr "Faylasha marxaladda si guul leh ayaa loo codsaday"
+
+msgid "Staging details"
+msgstr "Faahfaahinta marxaladda"
+
+msgid "Staging directory"
+msgstr "Mareegta marxaladda"
+
+msgid "Staging extraction"
+msgstr "Kala soo bixidda marxaladda"
+
+msgid "Symfony cache clear"
+msgstr "Nadiifinta kaydka Symfony"
+
+msgid "System update"
+msgstr "Cusboonaysiinta nidaamka"
+
+msgid "Target version"
+msgstr "Nooca bartilmaameedka"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL-ka muujinta rasmiga ah ee la habeeyey waa la buuxiyey. Haddii loo baahdo waad u beddeli kartaa muujin kale oo HTTPS ah."
+
+msgid "The database migration baseline is clean."
+msgstr "Heerka guuritaanka xogta waa nadiif."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Jawaabta HTTP ee ugu dambeysa ayaa fashilmay ka dib markii hawlgalku dhammaaday. Tan waxaa badanaa sababa oggolaanshaha kaydka runtime ama dib u bilaabidda server-ka inta codsigu socdo."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Diiwaanka hawlgalku wuxuu sheegayaa in ficillada ka dib codsiga ay si guul leh u dhammaadeen."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Amarrada ka dib codsiga ee la doortay ayaa si guul leh u dhammaaday, laakiin jawaabta HTTP ee ugu dambeysa ayaa fashilmay. Bogga dib u cusboonaysii oo xaqiiji oggolaanshaha kaydka runtime haddii boggu si sax ah uusan u soo rarin."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Cusboonaysiiyuhu ma abuuro ama soo celiyo kaydka xogta."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ficilladan waa ammaan in laga socodsiiyo UI-ga ka dib markii la eego natiijada cusboonaysiinta."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Amarradan waxay beddeli karaan ku-tiirsanaanta, hantida la soo saaray, kaydka ama xogta. Xaqiiji kaydka ka hor inta aan la sii wadin."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ficilkan wuxuu beddelayaa faylasha ku jira rakibka Chamilo. Hubso in qorshaha codsiga la eegay oo kaydka la karti geliyey ka hor inta aan la sii wadin."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Qoraalkan horumarka wuxuu u ekaysiinayaa ogeysiiska cusboonaysiinta Chamilo.org ee mustaqbalka isagoo isticmaalaya waddooyinka xirmooyinka tijaabada maxalliga ah."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Shaashadan waxaa laga furay ogeysiis cusboonaysi oo rasmi ah, laakiin ilaa hadda lama habayn muujinta rasmiga ah."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Shaashadan waxaa laga furay ogeysiis cusboonaysi. Kaliya hubinta muujinta ayaa si toos ah loo bilaabay."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Tallaabadaani waxay diyaarinaysaa dib u eegis oo keliya. Beddelka faylasha wuxuu dhacayaa tallaabada Faylasha marxaladda codsi dambe, iyadoo leh quful, kayd iyo ilaalinta dib u soo celinta."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Cusboonaysiiyahan ma abuuro kayd xog ah. Abuur oo xaqiiji kayd ka hor inta aan la socodsiin guuritaanka."
+
+msgid "Trusted public key"
+msgstr "Furaha dadweynaha ee la aamino"
+
+msgid "Trusted signing key"
+msgstr "Furaha saxeexa ee la aamino"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Qor APPLY UPDATE FILES si loo xaqiijiyo"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Qor RUN DATABASE MIGRATIONS si loo xaqiijiyo guuritaanka xogta"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Qor RUN POST UPDATE ACTIONS si loo xaqiijiyo"
+
+msgid "Unknown update notice source."
+msgstr "Isha ogeysiiska cusboonaysiinta lama yaqaan."
+
+msgid "Update availability"
+msgstr "Helitaanka cusboonaysiinta"
+
+msgid "Update directory"
+msgstr "Mareegta cusboonaysiinta"
+
+msgid "Update lock path"
+msgstr "Waddada qufulka cusboonaysiinta"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Isticmaal mareegta marxaladda ee tallaabada hore lagu soo saaray. Backend-ku wuxuu aqbalayaa oo keliya mareegaha ku jira var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Isticmaal xiriirkan si aad u ekaysiiso ogeysiiska cusboonaysiinta Chamilo.org ee mustaqbalka inta lagu jiro tijaabooyinka horumarka."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Tan u isticmaal oo keliya tijaabooyinka horumarka maxalliga ah. Cusboonaysiinta wax soo saarka waa inay isticmaalaan furaha server-ka la habeeyey."
+
+msgid "Verification details"
+msgstr "Faahfaahinta xaqiijinta"
+
+msgid "Verify package"
+msgstr "Xaqiiji xirmada"
+
+msgid "Verifying..."
+msgstr "Waxa la xaqiijinayaa..."
+
+msgid "Waiting for command progress events..."
+msgstr "Sugaya dhacdooyinka horumarka amarka..."
+
+msgid "Waiting for update progress events..."
+msgstr "Sugaya dhacdooyinka horumarka cusboonaysiinta..."
+
+msgid "Yarn build"
+msgstr "Dhisidda Yarn"
+
+msgid "Yarn install"
+msgstr "Ku rakibida Yarn"
+
+msgid "A comment is required"
+msgstr "Faallo ayaa loo baahan yahay"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Xog-ururin leh magac la mid ah ayaa horay u jirta. Haddii ay ka kooban tahay miisasyo, waa la tirtiri doonaa; haddii ay madhan tahay, waa la isticmaali doonaa."
+
+msgid "AI generated"
+msgstr "AI ayaa soo saaray"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Ku dar ugu yaraan hal su'aal ka hor inta aanad ku noqon waddada barashada."
+
+msgid "Add attachments"
+msgstr "Ku dar lifaaqyo"
+
+msgid "Additional fields"
+msgstr "Goobaha dheeraadka ah"
+
+msgid "Allow comments"
+msgstr "Oggolow faallooyinka"
+
+msgid "Allow new pages"
+msgstr "Oggolow bogagga cusub"
+
+msgid "Allow ratings"
+msgstr "Oggolow qiimaynta"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Ma hubtaa inaad tirtirto dhammaan walxaha?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Ma hubtaa inaad soo celiso cusboonaysiinta tooska ah?"
+
+msgid "Attachment has been deleted"
+msgstr "Lifaaqa waa la tirtiray"
+
+msgid "Backup file"
+msgstr "Faylka kaydka"
+
+msgid "Block comments"
+msgstr "Xannib faallooyinka"
+
+msgid "Block new pages"
+msgstr "Xannib bogagga cusub"
+
+msgid "Block ratings"
+msgstr "Xannib qiimaynta"
+
+msgid "Cancel renewal"
+msgstr "Jooji cusboonaysiinta"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Xidhiidhada qaybta waa laga saari doonaa bogagga Wiki ee %s."
+
+msgid "Change"
+msgstr "Beddel"
+
+msgid "Clear group"
+msgstr "Nadiifi kooxda"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Guji sumad si aad ugu geliso tifaftiraha. Meelaha bannaan ee noocan ah waa la beddeli doonaa marka shahaadada la soo saaro."
+
+msgid "Comment added"
+msgstr "Faallo waa la kordhiyay"
+
+msgid "Comment is required"
+msgstr "Faallo waa loo baahan yahay"
+
+msgid "Comment score"
+msgstr "Qiimaynta faallada"
+
+msgid "Compare selected versions line by line"
+msgstr "Isbarbardhig noocyada la doortay sadar-sadar"
+
+msgid "Compare selected versions word by word"
+msgstr "Isbarbardhig noocyada la doortay kelmad-kelmad"
+
+msgid "Compare versions"
+msgstr "Isbarbardhig noocyada"
+
+msgid "Copy completed"
+msgstr "Nuqulka waa la dhammaystiray"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Abuur bogag shaqo oo Wiki ah oo gaar ah ardayda"
+
+msgid "Current view mode"
+msgstr "Habka aragga ee hadda"
+
+msgid "Delete Wiki"
+msgstr "Tirtir Wiki"
+
+msgid "Delete page"
+msgstr "Tirtir bogga"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Tirtiridda bogga guriga ee Wiki lama talinayo. Waad dib u abuuri kartaa hadhow."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Damiidka Wiki wuxuu xannibayaa bogagga Wiki ee caadiga ah iyo ficillada. Boggan dejinta ayaa weli la heli karaa macallimiinta koorsada."
+
+msgid "Discussion"
+msgstr "Dood"
+
+msgid "Edit Comment"
+msgstr "Wax ka beddel faallada"
+
+msgid "Edit page"
+msgstr "Wax ka beddel bogga"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Taariikhda dhammaadka waa inay noqotaa ka dib ama la mid taariikhda dhicitaanka"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Geli ereyga raadinta si aad u hesho bogagga Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Taariikhda dhicitaanka waa inay noqotaa ka hor ama la mid taariikhda dhammaadka"
+
+msgid "Failed email recipients"
+msgstr "Qaataha iimaylka ee guuldarraystay"
+
+msgid "Finish and return to learning path"
+msgstr "Dhammaystir oo ku noqo dariiqa barashada"
+
+msgid "Forum image"
+msgstr "Sawirka madasha"
+
+msgid "Hide discussion"
+msgstr "Qari doodda"
+
+msgid "Hide page"
+msgstr "Qari bogga"
+
+msgid "I changed my mind"
+msgstr "Waxaan beddelay fikradayda"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Haddii aan la saxin, faylashaas waxay sii heli doonaan maamulaha aaladda iyada oo loo marayo qalabka 'Macluumaadka faylka'."
+
+msgid "Internal message failures"
+msgstr "Cilladaha farriimaha gudaha"
+
+msgid "Internal messages available"
+msgstr "Farriimaha gudaha ee la heli karo"
+
+msgid "Internal messages created now"
+msgstr "Farriimaha gudaha ee hadda la abuuray"
+
+msgid "Item score"
+msgstr "Qiimaynta shayga"
+
+msgid "Last post"
+msgstr "Boostada ugu dambeysay"
+
+msgid "Lock page"
+msgstr "Xir bogga"
+
+msgid "Manage categories"
+msgstr "Maamul qaybaha"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Waxa uu calaamadeeyaa dukumeentigan inuu yahay mid AI-caawin ah. Isticmaal markii nuxurka la abuuray ama si weyn loogu beddelay qalabka AI."
+
+msgid "Maximum score is required"
+msgstr "Dhibcaha ugu badan waa lama huraan"
+
+msgid "Metric"
+msgstr "Cabbir"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Faallooyin cusub waa la xannibay doodan"
+
+msgid "No Wiki categories are available yet."
+msgstr "Wali ma jiraan qaybo Wiki ah oo la heli karo."
+
+msgid "No categories found"
+msgstr "Qaybo lama helin"
+
+msgid "No content"
+msgstr "Wax nuxur ah ma jiro"
+
+msgid "No parent category"
+msgstr "Qayb waalid ma jirto"
+
+msgid "Number of comments scored"
+msgstr "Tirada faallooyinka la qiimeeyay"
+
+msgid "Old version"
+msgstr "Nooc hore"
+
+msgid "Only image files are allowed."
+msgstr "Kaliya faylasha sawirada ayaa la oggol yahay."
+
+msgid "Please fill all required fields"
+msgstr "Fadlan buuxi dhammaan meelaha loo baahan yahay"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Su'aalaha leh meel-bixiyeyaal fasal ama arday ayaa loo soo saari doonaa fasallada ama kooxaha koorsada: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Qiimaynta waa la xannibay doodan"
+
+msgid "Remove image"
+msgstr "Ka saar sawirka"
+
+msgid "Restore renewal"
+msgstr "Soo celinta cusbooneysiinta"
+
+msgid "Restore version"
+msgstr "Soo celinta nooca"
+
+msgid "Search in"
+msgstr "Raadi gudaha"
+
+msgid "Select group"
+msgstr "Dooro koox"
+
+msgid "Select image"
+msgstr "Dooro sawir"
+
+msgid "Selected image"
+msgstr "Sawirka la doortay"
+
+msgid "Show discussion"
+msgstr "Tus doodda"
+
+msgid "Show page"
+msgstr "Tus bogga"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Qaar ka mid ah faylasha ama galka ma laha oggolaanshaha qorista. Si aad u rakibto Chamilo waa inaad marka hore beddeshaa oggolaanshahooda (adigoo isticmaalaya CHMOD). Fadlan akhri"
+
+msgid "Subcategories"
+msgstr "Qayb-hoosaadyo"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Guji bidix ama midig si aad u dhex maro"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Muddada xilliga loo qabtay hawsha Wiki way dhammaatay, laakiin dib u gudbinta dib loo oggol yahay."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Muddada xilliga loo qabtay hawsha Wiki way dhammaatay."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Hawsha Wiki weli ma bilaabmin."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Qufulka tafatirka bogga Wiki waa loo baahan yahay ka hor inta aan la kaydin."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Ogeysiiska waa la kaydiyay, laakiin lifaaq lama soo rari karin."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Ogeysiiska waa la kaydiyay, laakiin gudbinta iimaylka way fashilantay."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Ogeysiiska waa la kaydiyay, laakiin iimayl lama gudbin karin."
+
+msgid "The category has been created"
+msgstr "Qaybta waa la abuuray"
+
+msgid "The category has been deleted"
+msgstr "Qaybta waa la tirtiray"
+
+msgid "The category has been updated"
+msgstr "Qaybta waa la cusbooneysiiyay"
+
+msgid "The end date is invalid"
+msgstr "Taariikhda dhammaadka waa mid aan sax ahayn"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Tirada ugu badan ee noocyada waa inay noqotaa tiro aan taban ahayn"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Tirada ugu badan ee ereyada waa inay noqotaa tiro aan taban ahayn"
+
+msgid "The print window could not be opened"
+msgstr "Daaqadda daabacaadda lama furi karin"
+
+msgid "The start date is invalid"
+msgstr "Taariikhda bilowga waa mid aan sax ahayn"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Dejintaani waxay khusaysaa koorsada oo dhan, oo ay ku jiraan kalfadhiyadeeda iyo kooxaheeda."
+
+msgid "This announcement has already been sent by email."
+msgstr "Ogeysiiskan hore ayaa iimayl loogu diray."
+
+msgid "This discussion is hidden from learners"
+msgstr "Dooddan waa laga qariyay ardayda"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Qalabkan AI-ga ah wuxuu kuu oggolaanayaa inaad abuurto sawirro iyo fiidiyowyo gaagaaban si aad ugu muujiso koorsadaada. Adigoo sharraxaya (qoraal ahaan) waxa aad rabto qaybta tilmaanta, waxaad siin doontaa moodeelka AI ee la habeeyay xubnaha lagama maarmaanka u ah inuu abuuro sawir ama fiidiyoow. Fadlan samir. Moodeelka AI wuxuu qaadan doonaa xoogaa waqti ah oo wuxuu soo saari doonaa natiijo, taas oo aad rabto inaad kaydiso adigoo kaydinaya warbaahinta galka dukumeentiyadaada, ka dibna ku dhex gelinaya dukumeenti HTML ah. Dhammaan moodeellada AI isku mid ma aha xagga xawaaraha ama tayada. Moodeelka AI wuxuu sidoo kale kaa siin karaa tilmaan la beddelay, taas oo ah fasiraad faahfaahsan oo codsigaaga ah. Markaas waxaad isticmaali kartaa tilmaantan la beddelay si aad u hagaajiso codsigaaga. Fadlan ogow in qalabkan, gaar ahaan fiidiyowyada, uu abuuri karo kharashyo badan ururkaaga, xitaa haddii aad go'aansato inaadan kaydin warbaahinta la soo saaray. Fadlan u isticmaal si habboon. Haddii aad dhibaato kala kulanto helitaanka waxa aad raadinayso, fadlan waqti u qaado inaad internetka ka baadho xeeladaha tilmaanta ee moodeelka AI ee aad haysato."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Taariikhdan waxay iska leedahay koorsada aasaasiga ah. Soo celinta waa la heli karaa ka dib markii la abuuro nooc kalfadhi ah."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Sawirkan wuxuu beddelayaa astaanta madasha caadiga ah ee ka muuqata cinwaanka madasha agtiisa."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Boggan wuxuu ka yimid koorsada aasaasiga ah. Kaydintiisa waxay abuuri doontaa nooc loogu talagalay kalfadhiga hadda."
+
+msgid "This will also delete %s subcategories."
+msgstr "Tani waxay sidoo kale tirtiri doontaa %s qayb-hoosaadyo."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Tani waxay abuuri doontaa bogag shaqo oo gaar ah %s arday."
+
+msgid "Thread history"
+msgstr "Taariikhda mawduuca"
+
+msgid "Title and content"
+msgstr "Cinwaanka iyo nuxurka"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Hadda ma suurtogali karto in la joojiyo cusboonaysiinta."
+
+msgid "Unable to restore renewal right now."
+msgstr "Hadda ma suurtogali karto in la soo celiyo cusboonaysiinta."
+
+msgid "Unlock page"
+msgstr "Fur bogga"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Isticmaal [[Bog]] ama [[Bog|Qoraal muuqda]] si aad u abuurto xiriiriyeyaal Wiki gudaha ah."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Isticmaal barta bannaan ama furayaasha fallaaraha si aad u dhex maro"
+
+msgid "View version"
+msgstr "Eeg nooca"
+
+msgid "Visible only to teachers"
+msgstr "Muuqda oo keliya macallimiinta"
+
+msgid "Weight is required"
+msgstr "Miisaanka waa loo baahan yahay"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Qaybaha Wiki-ga waa la damiyay koorsadan."
+
+msgid "Wiki categories enabled"
+msgstr "Qaybaha Wiki-ga waa la furay"
+
+msgid "Wiki html strict filtering"
+msgstr "Sifaynta adag ee HTML ee Wiki"
+
+msgid "Wiki settings"
+msgstr "Dejinta Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Dejinta Wiki waa la cusboonaysiiyay"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Waxaad eegaysaa nooc taariikheed oo boggan ah"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Waxaad ku lifaaqi kartaa hal ama dhowr fayl jawaabtan."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Waxaad wax ka beddeli kartaa boggan shaqada, laakiin boggaga shaqada ardayda lama beddeli doono."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Waxaad isticmaali kartaa calaamadaha {{class_name}} iyo {{student_full_name}} su'aasha dhexdeeda."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Waxaad haysataa 20 daqiiqo si aad u beddesho boggan ka hor inta aan qufulka beddelka dhicin."
+
+msgid "by"
+msgstr "waxaa qoray"
+
+msgid "required"
+msgstr "loo baahan yahay"
 

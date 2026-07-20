@@ -101,12 +101,7 @@ const platformConfigStore = usePlatformConfig()
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const isTeacherUI = computed(
-  () =>
-    (securityStore.isCurrentTeacher ||
-      securityStore.isCourseAdmin ||
-      securityStore.isAdmin ||
-      securityStore.isTeacher) &&
-    !platformConfigStore.isStudentViewActive,
+  () => (securityStore.isCourseAdmin || securityStore.isTeacher) && !platformConfigStore.isStudentViewActive,
 )
 
 const componentToShow = computed(() => (isTeacherUI.value ? TeacherAssignmentList : StudentAssignmentList))

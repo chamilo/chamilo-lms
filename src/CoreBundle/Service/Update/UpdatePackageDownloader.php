@@ -11,6 +11,9 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+use const PHP_URL_PATH;
+use const PHP_URL_SCHEME;
+
 final readonly class UpdatePackageDownloader
 {
     public function __construct(

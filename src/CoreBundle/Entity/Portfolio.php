@@ -6,18 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Stringable;
-use Symfony\Component\Uid\Uuid;
 
 #[ORM\Table(name: 'portfolio')]
 #[ORM\Index(columns: ['category_id'], name: 'category')]
-#[ORM\Entity]
-class Portfolio extends AbstractResource implements ResourceInterface, Stringable
+#[ORM\Entity(repositoryClass: PortfolioRepository::class)]
+class Portfolio extends AbstractResource implements ExtraFieldItemInterface, ResourceInterface, Stringable
 {
     public const TYPE_ITEM = 1;
     public const TYPE_COMMENT = 2;
@@ -347,8 +347,8 @@ class Portfolio extends AbstractResource implements ResourceInterface, Stringabl
         return $this->getTitle();
     }
 
-    public function getResourceIdentifier(): int|Uuid
+    public function getResourceIdentifier(): int
     {
-        return $this->getId();
+        return (int) $this->getId();
     }
 }

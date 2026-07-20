@@ -247,9 +247,34 @@ function routeExists(name) {
   return router.getRoutes().some((route) => route.name === name)
 }
 
+const defaultLinkSettings = {
+  info_url: "course_about",
+  image_url: "course_about",
+}
+
+function normalizeCatalogueSettings(rawSettings) {
+  if (!rawSettings || rawSettings === false || rawSettings === "false") {
+    return {}
+  }
+
+  if (typeof rawSettings === "string") {
+    try {
+      return JSON.parse(rawSettings)
+    } catch (error) {
+      console.error("Invalid catalogue settings format", error)
+      return {}
+    }
+  }
+
+  return typeof rawSettings === "object" ? rawSettings : {}
+}
+
 const linkSettings = computed(() => {
-  const settings = platformConfigStore.getSetting("catalog.course_catalog_settings")
-  return settings?.link_settings ?? {}
+  const settings = normalizeCatalogueSettings(platformConfigStore.getSetting("catalog.course_catalog_settings"))
+  return {
+    ...defaultLinkSettings,
+    ...(settings?.link_settings ?? {}),
+  }
 })
 
 function resolveLinkSetting(value) {
@@ -360,7 +385,7 @@ onMounted(() => {
         />
 
         <BaseAppLink
-          v-if="allowDescription && showInfoButton && infoLink && typeof infoLink === 'string'"
+          v-if="showInfoButton && infoLink && typeof infoLink === 'string'"
           :url="infoLink"
           class="absolute bottom-0 left-0"
         >
@@ -374,7 +399,7 @@ onMounted(() => {
         </BaseAppLink>
 
         <BaseAppLink
-          v-else-if="allowDescription && showInfoButton && infoLink && typeof infoLink === 'object'"
+          v-else-if="showInfoButton && infoLink && typeof infoLink === 'object'"
           :to="infoLink"
           class="absolute bottom-0 left-0"
         >
@@ -602,9 +627,8 @@ onMounted(() => {
         <h3
           v-if="item.title"
           class="text-lg font-semibold"
-        >
-          {{ item.title }}
-        </h3>
+          v-html="item.title"
+        ></h3>
 
         <div
           v-if="item.content"

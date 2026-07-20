@@ -11,17 +11,20 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class BuyCoursesCourseCreatedEventSubscriber implements EventSubscriberInterface
 {
     private BuyCoursesPlugin $plugin;
     private Connection $connection;
+    private Security $security;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
     {
         $this->plugin = BuyCoursesPlugin::create();
         $this->connection = $entityManager->getConnection();
+        $this->security = $security;
     }
 
     public static function getSubscribedEvents(): array
@@ -52,9 +55,30 @@ final class BuyCoursesCourseCreatedEventSubscriber implements EventSubscriberInt
             return;
         }
 
-        $userId = api_get_user_id();
+        $securityUser = $this->security->getUser();
+        $userId = is_object($securityUser) && method_exists($securityUser, 'getId')
+            ? (int) $securityUser->getId()
+            : 0;
 
-        if ($userId <= 0 || api_is_platform_admin()) {
+        // Modern course creation runs through Symfony and does not always initialize
+        // the legacy global user context. Keep the legacy lookup as a fallback for
+        // course creation flows that still dispatch this event from legacy pages.
+        if ($userId <= 0) {
+            $userId = api_get_user_id();
+        }
+
+        if ($userId <= 0) {
+            error_log(
+                '[BuyCourses][CourseCreated] Cannot resolve the authenticated course owner. course_id='.
+                $course->getId().
+                ' service_sale_id='.
+                $selectedServiceSaleId
+            );
+
+            return;
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN') || api_is_platform_admin()) {
             return;
         }
 

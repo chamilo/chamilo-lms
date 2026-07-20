@@ -479,6 +479,13 @@
 
       <template #footer>
         <BaseButton
+          v-if="lpId"
+          :label="t('Cancel')"
+          icon="close"
+          type="black"
+          @click="goBackToLearningPath"
+        />
+        <BaseButton
           :label="t('Save')"
           :is-loading="isSavingEdit"
           icon="save"
@@ -493,7 +500,7 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -510,6 +517,7 @@ import { useSecurityStore } from "../../store/securityStore"
 
 const { t, d, locale } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const notifications = useNotification()
 const securityStore = useSecurityStore()
 const { requireConfirmation } = useConfirmation()
@@ -555,6 +563,7 @@ const cid = computed(() => Number(route.query.cid || 0))
 const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
+const requestedThreadEditId = computed(() => Number(route.query.editThreadId || 0))
 const canManage = computed(() => isAllowedToEdit.value)
 const forumAvailabilityStatus = computed(() => getForumAvailabilityStatus(forum.value))
 const forumAvailabilityMessage = computed(() => {
@@ -619,15 +628,21 @@ async function ensureToken() {
 }
 
 function goBackToLearningPath() {
-  const params = new URLSearchParams()
-  params.set("cid", String(cid.value || ""))
-  params.set("sid", String(sid.value || 0))
-  params.set("gid", String(gid.value || 0))
-  params.set("gradebook", "")
-  params.set("action", "add_item")
-  params.set("type", "step")
-  params.set("lp_id", String(lpId.value))
-  window.location.href = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.editThreadId
+  delete query.lpItemId
+
+  return router.push({
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: lpId.value,
+    },
+    query,
+  })
 }
 
 function getForumAvailabilityStatus(item) {
@@ -1121,6 +1136,13 @@ async function saveThreadEdit() {
 
     notifications.showSuccessNotification(t("Thread updated"))
     editDialogVisible.value = false
+
+    if (lpId.value > 0) {
+      await goBackToLearningPath()
+
+      return
+    }
+
     await loadThreads()
   } catch (error) {
     console.error("Error updating forum thread:", error)
@@ -1208,5 +1230,14 @@ async function deleteThread(thread) {
   }
 }
 
-onMounted(loadThreads)
+onMounted(async () => {
+  await loadThreads()
+
+  if (canManage.value && requestedThreadEditId.value > 0) {
+    const thread = threads.value.find((item) => Number(item.iid || 0) === requestedThreadEditId.value)
+    if (thread) {
+      openEditThread(thread)
+    }
+  }
+})
 </script>

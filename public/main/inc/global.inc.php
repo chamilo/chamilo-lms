@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 // Use when running PHPUnit tests.
@@ -94,7 +95,10 @@ if ($isCli) {
             throw $exception;
         }
 
-        error_log($exception->getTraceAsString());
+        // Do not pollute the error log with expected client errors (403/404 from CidReqListener, voters, etc.)
+        if (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {
+            error_log($exception->getTraceAsString());
+        }
 
         $event = new ExceptionEvent(
             $kernel,
@@ -139,7 +143,10 @@ if ($isCli) {
             throw $exception;
         }
 
-        error_log($exception->getTraceAsString());
+        // Do not pollute the error log with expected client errors (403/404 from CidReqListener, voters, etc.)
+        if (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {
+            error_log($exception->getTraceAsString());
+        }
 
         $event = new ExceptionEvent(
             $kernel,

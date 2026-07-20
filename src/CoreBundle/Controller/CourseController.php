@@ -52,6 +52,7 @@ use CourseManager;
 use Database;
 use DateTimeInterface;
 use Display;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Event;
@@ -59,6 +60,7 @@ use Exercise;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
 use IntlDateFormatter;
+use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -74,6 +76,9 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use UserManager;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -626,7 +631,16 @@ class CourseController extends ToolBaseController
             ];
         }
 
-        $thematicUrl = '/main/course_progress/index.php?cid='.$course->getId().'&sid='.$this->getSessionId().'&action=thematic_details';
+        $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+        $thematicUrl = null;
+
+        if ($courseNodeId > 0) {
+            $thematicUrl = '/resources/course-progress/'.$courseNodeId.'/?'.http_build_query([
+                'cid' => (int) $course->getId(),
+                'sid' => $this->getSessionId(),
+            ]);
+        }
+
         $thematicScoreRaw = $thematicRepository->calculateTotalAverageForCourse($course, $sessionEntity);
         $thematicScore = $thematicScoreRaw.'%';
 
@@ -766,6 +780,31 @@ class CourseController extends ToolBaseController
         SettingsFormFactory $formFactory
     ): Response {
         $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        $manager->setCourse($course);
+
+        if ('wiki' === $namespace) {
+            $user = $this->userHelper->getCurrent();
+            $canManageWikiSettings = $this->isGranted('ROLE_ADMIN')
+                || ($user instanceof User && (
+                    $course->hasUserAsTeacher($user)
+                    || $this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+                ));
+
+            if (!$canManageWikiSettings) {
+                throw $this->createAccessDeniedException('You are not allowed to manage Wiki settings.');
+            }
+
+            if ($request->isMethod(Request::METHOD_GET)) {
+                $nodeId = $course->getResourceNode()?->getId();
+                if (null !== $nodeId) {
+                    return $this->redirect(\sprintf(
+                        '/resources/wiki/%d/settings?cid=%d',
+                        $nodeId,
+                        $course->getId(),
+                    ));
+                }
+            }
+        }
 
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);
@@ -779,7 +818,6 @@ class CourseController extends ToolBaseController
             $messageType = 'success';
 
             try {
-                $manager->setCourse($course);
                 $manager->save($form->getData());
                 $message = $this->trans('Update');
             } catch (ValidatorException $validatorException) {
@@ -818,12 +856,16 @@ class CourseController extends ToolBaseController
 
         $user = $this->userHelper->getCurrent();
 
+        if (!$this->isGranted(CourseVoter::VIEW, $course)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $fieldsRepo = $em->getRepository(ExtraField::class);
 
         /** @var TagRepository $tagRepo */
         $tagRepo = $em->getRepository(Tag::class);
 
-        $courseDescriptions = $courseDescriptionRepository->getResourcesByCourse($course)->getQuery()->getResult();
+        $courseDescriptions = $courseDescriptionRepository->findAllInCourseForCatalogue($course);
 
         $courseValues = new ExtraFieldValue('course');
 
@@ -837,7 +879,7 @@ class CourseController extends ToolBaseController
                 'complete_name' => UserManager::formatUserFullName($teacher),
                 'image' => $illustrationRepository->getIllustrationUrl($teacher),
                 'diploma' => $teacher->getDiplomas(),
-                'openarea' => $teacher->getOpenarea(),
+                'openarea' => $this->sanitizeCourseAboutHtml((string) $teacher->getOpenarea()),
             ];
 
             $teachersData[] = $userData;
@@ -857,10 +899,21 @@ class CourseController extends ToolBaseController
         $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = '';
         $courseMaterial = $courseResources = $courseAssessment = '';
         $courseCustom = [];
+        $descriptionSections = [];
+
         foreach ($courseDescriptions as $descriptionTool) {
+            if (!$descriptionTool instanceof CCourseDescription) {
+                continue;
+            }
+
+            $section = $this->buildCourseAboutDescriptionSection($descriptionTool);
+            if (null !== $section) {
+                $descriptionSections[] = $section;
+            }
+
             switch ($descriptionTool->getDescriptionType()) {
                 case CCourseDescription::TYPE_DESCRIPTION:
-                    $courseDescription = $descriptionTool->getContent();
+                    $courseDescription = $section['content'] ?? '';
 
                     break;
 
@@ -901,6 +954,10 @@ class CourseController extends ToolBaseController
             }
         }
 
+        if ('' === $courseDescription && [] !== $descriptionSections) {
+            $courseDescription = (string) ($descriptionSections[0]['content'] ?? '');
+        }
+
         $topics = [
             'objectives' => $courseObjectives,
             'topics' => $courseTopics,
@@ -924,6 +981,7 @@ class CourseController extends ToolBaseController
         $params = [
             'course' => $course,
             'description' => $courseDescription,
+            'description_sections' => $descriptionSections,
             'image' => $image,
             'syllabus' => $topics,
             'tags' => $courseTags,
@@ -941,16 +999,51 @@ class CourseController extends ToolBaseController
             'allow_subscribe' => $allowSubscribe,
         ];
 
-        $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
+        $metaInfo = '<meta property="og:url" content="'.htmlspecialchars($urlCourse, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
         $metaInfo .= '<meta property="og:type" content="website" />';
-        $metaInfo .= '<meta property="og:title" content="'.$course->getTitle().'" />';
-        $metaInfo .= '<meta property="og:description" content="'.strip_tags($courseDescription).'" />';
-        $metaInfo .= '<meta property="og:image" content="'.$image.'" />';
+        $metaInfo .= '<meta property="og:title" content="'.htmlspecialchars($course->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
+        $metaInfo .= '<meta property="og:description" content="'.htmlspecialchars(strip_tags($courseDescription), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
+        $metaInfo .= '<meta property="og:image" content="'.htmlspecialchars($image, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
 
         $htmlHeadXtra[] = $metaInfo;
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
         return $this->render('@ChamiloCore/Course/about.html.twig', $params);
+    }
+
+    private function buildCourseAboutDescriptionSection(CCourseDescription $description): ?array
+    {
+        $title = trim(strip_tags((string) $description->getTitle()));
+        $content = $this->sanitizeCourseAboutHtml((string) $description->getContent());
+
+        if ('' === $title && '' === strip_tags($content)) {
+            return null;
+        }
+
+        return [
+            'iid' => $description->getIid(),
+            'title' => $title,
+            'content' => $content,
+            'type' => $description->getDescriptionType(),
+            'progress' => $description->getProgress(),
+        ];
+    }
+
+    private function sanitizeCourseAboutHtml(string $content): string
+    {
+        $content = trim($content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        if (class_exists('Security')) {
+            $userStatus = \defined('STUDENT') ? \STUDENT : null;
+
+            return (string) \Security::remove_XSS($content, $userStatus);
+        }
+
+        return $content;
     }
 
     #[Route('/{id}/welcome', name: 'chamilo_core_course_welcome')]
@@ -1185,6 +1278,14 @@ class CourseController extends ToolBaseController
                     'courseId' => $course->getId(),
                 ]);
             }
+        } catch (InvalidArgumentException $exception) {
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $exception->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (RuntimeException $exception) {
             return new JsonResponse(
                 [
@@ -1193,23 +1294,20 @@ class CourseController extends ToolBaseController
                 ],
                 Response::HTTP_FORBIDDEN
             );
-        } catch (Throwable $exception) {
-            error_log(
-                '[course.create] throwable='.
-                $exception::class.
-                ' message='.$exception->getMessage().
-                ' file='.$exception->getFile().
-                ' line='.(string) $exception->getLine().
-                ' peak='.memory_get_peak_usage(true)
-            );
+        } catch (UniqueConstraintViolationException $exception) {
+            if ($this->isCourseCodeUniqueConstraintViolation($exception)) {
+                return new JsonResponse(
+                    [
+                        'success' => false,
+                        'message' => $this->getDuplicateCourseCreationMessage($wantedCode, $translator),
+                    ],
+                    Response::HTTP_CONFLICT
+                );
+            }
 
-            return new JsonResponse(
-                [
-                    'success' => false,
-                    'message' => $translator->trans('An error occurred while creating the course.'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return $this->createCourseCreationServerErrorResponse($exception, $translator);
+        } catch (Throwable $exception) {
+            return $this->createCourseCreationServerErrorResponse($exception, $translator);
         }
 
         return new JsonResponse(
@@ -1218,6 +1316,46 @@ class CourseController extends ToolBaseController
                 'message' => $translator->trans('An error occurred while creating the course.'),
             ],
             Response::HTTP_BAD_REQUEST
+        );
+    }
+
+    private function isCourseCodeUniqueConstraintViolation(UniqueConstraintViolationException $exception): bool
+    {
+        $message = $exception->getMessage();
+
+        return str_contains($message, 'UNIQ_169E6FB977153098')
+            || str_contains($message, "for key 'code'")
+            || str_contains($message, 'for key "code"');
+    }
+
+    private function getDuplicateCourseCreationMessage(?string $wantedCode, TranslatorInterface $translator): string
+    {
+        if (null !== $wantedCode && '' !== trim($wantedCode)) {
+            return $translator->trans('This course code already exists, please choose another code.');
+        }
+
+        return $translator->trans('This course title already exists, please choose another title.');
+    }
+
+    private function createCourseCreationServerErrorResponse(
+        Throwable $exception,
+        TranslatorInterface $translator
+    ): JsonResponse {
+        error_log(
+            '[course.create] throwable='.
+            $exception::class.
+            ' message='.$exception->getMessage().
+            ' file='.$exception->getFile().
+            ' line='.(string) $exception->getLine().
+            ' peak='.memory_get_peak_usage(true)
+        );
+
+        return new JsonResponse(
+            [
+                'success' => false,
+                'message' => $translator->trans('An error occurred while creating the course.'),
+            ],
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
     }
 

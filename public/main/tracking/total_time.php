@@ -224,7 +224,7 @@ if (!empty($teacherList)) {
 }
 
 if (!empty($coaches)) {
-    $html .= Display::page_subheader2(get_lang('Coaches'));
+    $html .= Display::page_subheader2(get_lang('Tutors'));
     $html .= $coaches;
 }
 

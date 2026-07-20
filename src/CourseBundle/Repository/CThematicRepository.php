@@ -38,34 +38,52 @@ final class CThematicRepository extends ResourceRepository
     }
 
     /**
+     * Return advances ordered by thematic display order and advance start date.
+     *
+     * @return CThematicAdvance[]
+     */
+    public function findOrderedAdvancesForCourse(Course $course, ?Session $session = null): array
+    {
+        $orderedAdvances = [];
+
+        foreach ($this->getThematicListForCourse($course, $session) as $thematic) {
+            $advances = $thematic->getAdvances()->toArray();
+
+            usort(
+                $advances,
+                static function (CThematicAdvance $first, CThematicAdvance $second): int {
+                    $dateComparison = $first->getStartDate() <=> $second->getStartDate();
+
+                    if (0 !== $dateComparison) {
+                        return $dateComparison;
+                    }
+
+                    return (int) $first->getIid() <=> (int) $second->getIid();
+                },
+            );
+
+            foreach ($advances as $advance) {
+                $orderedAdvances[] = $advance;
+            }
+        }
+
+        return $orderedAdvances;
+    }
+
+    /**
      * Return the last done advance for the given course/session.
      */
     public function findLastDoneAdvanceForCourse(Course $course, ?Session $session = null): ?CThematicAdvance
     {
-        $thematics = $this->getThematicListForCourse($course, $session);
+        $lastDoneAdvance = null;
 
-        /** @var CThematicAdvance[] $candidates */
-        $candidates = [];
-
-        foreach ($thematics as $thematic) {
-            foreach ($thematic->getAdvances() as $advance) {
-                if (true === $advance->getDoneAdvance()) {
-                    $candidates[] = $advance;
-                }
+        foreach ($this->findOrderedAdvancesForCourse($course, $session) as $advance) {
+            if (true === $advance->getDoneAdvance()) {
+                $lastDoneAdvance = $advance;
             }
         }
 
-        if (empty($candidates)) {
-            return null;
-        }
-
-        // Sort by start date ASC and return the last one
-        usort(
-            $candidates,
-            static fn (CThematicAdvance $a, CThematicAdvance $b) => $a->getStartDate() <=> $b->getStartDate()
-        );
-
-        return end($candidates) ?: null;
+        return $lastDoneAdvance;
     }
 
     /**
@@ -76,31 +94,27 @@ final class CThematicRepository extends ResourceRepository
     public function findNextNotDoneAdvancesForCourse(
         Course $course,
         ?Session $session = null,
-        int $limit = 1
+        int $limit = 1,
     ): array {
-        $thematics = $this->getThematicListForCourse($course, $session);
-
-        /** @var CThematicAdvance[] $pending */
-        $pending = [];
-
-        foreach ($thematics as $thematic) {
-            foreach ($thematic->getAdvances() as $advance) {
-                if (false === $advance->getDoneAdvance()) {
-                    $pending[] = $advance;
-                }
-            }
-        }
-
-        if (empty($pending)) {
+        if ($limit <= 0) {
             return [];
         }
 
-        usort(
-            $pending,
-            static fn (CThematicAdvance $a, CThematicAdvance $b) => $a->getStartDate() <=> $b->getStartDate()
-        );
+        $pending = [];
 
-        return \array_slice($pending, 0, $limit);
+        foreach ($this->findOrderedAdvancesForCourse($course, $session) as $advance) {
+            if (true === $advance->getDoneAdvance()) {
+                continue;
+            }
+
+            $pending[] = $advance;
+
+            if (\count($pending) >= $limit) {
+                break;
+            }
+        }
+
+        return $pending;
     }
 
     /**

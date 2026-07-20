@@ -70,25 +70,6 @@ class AttendanceController extends AbstractController
 
         $data = $this->attendanceCalendarRepository->findAttendanceWithData($attendanceId);
 
-        if (isset($data['attendanceDates']) && \is_array($data['attendanceDates'])) {
-            foreach ($data['attendanceDates'] as &$date) {
-                if (!isset($date['id'])) {
-                    continue;
-                }
-
-                $calendar = $this->attendanceCalendarRepository->find((int) $date['id']);
-                if (!$calendar instanceof CAttendanceCalendar) {
-                    continue;
-                }
-
-                $duration = $calendar->getDuration();
-                if (null !== $duration) {
-                    $date['duration'] = $duration;
-                }
-            }
-            unset($date);
-        }
-
         return $this->json($data, 200);
     }
 
@@ -733,6 +714,7 @@ class AttendanceController extends AbstractController
                 'sheetId' => $sheet?->getIid(),
                 'signature' => $sheet?->getSignature(),
                 'duration' => $calendar->getDuration(),
+                'effectiveRoom' => CAttendance::formatRoomData($calendar->getEffectiveRoom()),
             ];
         })->toArray();
 
@@ -761,6 +743,7 @@ class AttendanceController extends AbstractController
                     'dateTime' => $d['dateTime'],
                     'done' => $d['done'],
                     'duration' => $d['duration'],
+                    'effectiveRoom' => $d['effectiveRoom'],
                 ],
                 $dates
             ),
@@ -818,6 +801,7 @@ class AttendanceController extends AbstractController
             'presence' => $presence,
             'comments' => $comments,
             'signatures' => $signatures,
+            'effectiveRoom' => CAttendance::formatRoomData($calendar->getEffectiveRoom()),
         ]);
     }
 

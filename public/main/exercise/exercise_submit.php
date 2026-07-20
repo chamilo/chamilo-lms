@@ -39,11 +39,17 @@ $debug = false;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
-$requestedLearnpathId = (int) ($_REQUEST['learnpath_id'] ?? $_REQUEST['lp_id'] ?? 0);
 $origin = api_get_origin();
-if (empty($origin) && $requestedLearnpathId > 0) {
+$requestedOrigin = (string) ($_REQUEST['origin'] ?? '');
+$requestedLearnpathId = (int) ($_REQUEST['learnpath_id'] ?? ($_REQUEST['lp_id'] ?? 0));
+$requestedLearnpathItemId = (int) ($_REQUEST['learnpath_item_id'] ?? ($_REQUEST['lp_item_id'] ?? ($_REQUEST['item_id'] ?? 0)));
+
+if ('learnpath' === $requestedOrigin
+    || ($requestedLearnpathId > 0 && $requestedLearnpathItemId > 0)
+) {
     $origin = 'learnpath';
 }
+
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
@@ -1352,12 +1358,12 @@ if ($allowTimePerQuestion && ONE_PER_PAGE == $objExercise->type) {
             ";
     }
 }
-if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'], true)) {
     // Standalone quiz page with full legacy layout.
     SessionManager::addFlashSessionReadOnly();
     Display::display_header(null, 'Exercises');
 } elseif (in_array($origin, ['learnpath', 'embeddable'], true)) {
-    // Use a clean legacy layout without Vue shell, sidebar, header or breadcrumbs.
+    // LP and embeddable executions must render only the exercise content.
     ob_start();
     Display::$legacyTemplate = $embeddedLegacyTemplate;
     echo '<div style="height:10px">&nbsp;</div>';
@@ -2318,7 +2324,7 @@ if ($keepAliveInterval > 0) {
     </script>
     <?php
 }
-if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'], true)) {
     echo '</div>'; // End glossary div
     Display::display_footer();
 } elseif (in_array($origin, ['learnpath', 'embeddable'], true)) {

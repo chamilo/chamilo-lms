@@ -61,7 +61,7 @@
         icon="search"
         size="big"
       />
-      {{ t("No search results found") }}
+      {{ t("No results found") }}
     </div>
 
     <div

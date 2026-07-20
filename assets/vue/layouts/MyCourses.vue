@@ -38,12 +38,7 @@ function isSettingEnabled(name) {
 }
 
 const canReviewCourseItems = computed(() => {
-  return Boolean(
-    securityStore.isAdmin ||
-    securityStore.isTeacher ||
-    securityStore.isCurrentTeacher ||
-    securityStore.isCurrentCourseTeacher,
-  )
+  return Boolean(securityStore.isTeacher || securityStore.isCurrentTeacher || securityStore.isCurrentCourseTeacher)
 })
 
 const showPendingAssignmentsSetting = computed(() => {

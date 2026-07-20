@@ -219,7 +219,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'send_to_coaches',
-                'display_text' => 'Send to coaches',
+                'display_text' => 'Send to tutors',
                 'item_type' => ExtraField::SCHEDULED_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             ],

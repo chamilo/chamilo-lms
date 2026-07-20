@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Throwable;
 
 /**
  * Doctrine entity listener for CQuizQuestion to trigger Xapian indexing.
@@ -25,16 +26,35 @@ final class QuizQuestionSearchEntityListener
 
     public function postPersist(CQuizQuestion $question, LifecycleEventArgs $args): void
     {
-        $this->indexer->indexQuestion($question);
+        $this->indexSafely($question, 'postPersist');
     }
 
     public function postUpdate(CQuizQuestion $question, LifecycleEventArgs $args): void
     {
-        $this->indexer->indexQuestion($question);
+        $this->indexSafely($question, 'postUpdate');
     }
 
     public function postRemove(CQuizQuestion $question, LifecycleEventArgs $args): void
     {
-        $this->indexer->deleteQuestionIndex($question);
+        try {
+            $this->indexer->deleteQuestionIndex($question);
+        } catch (Throwable $exception) {
+            error_log(
+                '[Xapian] QuizQuestionSearchEntityListener postRemove: deletion failed: '
+                .$exception->getMessage()
+            );
+        }
+    }
+
+    private function indexSafely(CQuizQuestion $question, string $event): void
+    {
+        try {
+            $this->indexer->indexQuestion($question);
+        } catch (Throwable $exception) {
+            error_log(
+                '[Xapian] QuizQuestionSearchEntityListener '.$event.': indexing failed: '
+                .$exception->getMessage()
+            );
+        }
     }
 }

@@ -22,8 +22,8 @@ use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
-use DateTimeInterface;
 use Chamilo\CourseBundle\Repository\CForumRepository;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -302,33 +302,34 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
 
         $absoluteDiff = abs($diffInSeconds);
         $locale = strtolower((string) ($this->requestStack->getCurrentRequest()?->getLocale() ?? ''));
-        if (45 > $absoluteDiff) {
+        if ($absoluteDiff < 45) {
             return str_starts_with($locale, 'es') ? 'ahora' : 'just now';
         }
 
-        $selected = $units[count($units) - 1];
+        $selected = $units[\count($units) - 1];
         foreach ($units as $unit) {
             if ($absoluteDiff >= $unit['seconds']) {
                 $selected = $unit;
+
                 break;
             }
         }
 
         $amount = (int) round($diffInSeconds / $selected['seconds']);
         if (0 === $amount) {
-            $amount = 0 > $diffInSeconds ? -1 : 1;
+            $amount = $diffInSeconds < 0 ? -1 : 1;
         }
 
         $absoluteAmount = abs($amount);
         if (str_starts_with($locale, 'es')) {
             $unit = $selected['es'][1 === $absoluteAmount ? 0 : 1];
 
-            return 0 > $amount ? 'hace '.$absoluteAmount.' '.$unit : 'en '.$absoluteAmount.' '.$unit;
+            return $amount < 0 ? 'hace '.$absoluteAmount.' '.$unit : 'en '.$absoluteAmount.' '.$unit;
         }
 
         $unit = $selected['en'][1 === $absoluteAmount ? 0 : 1];
 
-        return 0 > $amount ? $absoluteAmount.' '.$unit.' ago' : 'in '.$absoluteAmount.' '.$unit;
+        return $amount < 0 ? $absoluteAmount.' '.$unit.' ago' : 'in '.$absoluteAmount.' '.$unit;
     }
 
     private function getPosterAvatarUrl(?User $user): string
@@ -366,7 +367,6 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
 
         return $avatarUrl.(str_contains($avatarUrl, '?') ? '&' : '?').'w=64';
     }
-
 
     private function getPosterRole(?User $user, Course $course, ?Session $session, ?CGroup $group): string
     {

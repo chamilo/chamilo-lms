@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sincerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -1588,7 +1588,7 @@ msgstr "Està segur de voler eliminar aquests elements?"
 msgid "Authoring tool"
 msgstr "Origen"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Arxiu a enviar"
 
 msgid "Course location"
@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:sense copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Carpeta,, application\/msword:MsWord,, application\/octet-stream:Flux d'octets,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercici,, simulation:simulació,, questionnaire:questionari,, diagram:diagrama,, figure:figura,, graph:gràfica,, index:índex,, slide:diapositiva,, table:taula,, narrative text:text narratiu,, exam:examen,, experiment:experiència,, problem statement:problema,, self assessment:autoavaluació,, lecture:presentació"
@@ -36507,4 +36507,853 @@ msgstr "Mostra els fils"
 
 msgid "No auth source"
 msgstr "Cap font d'autenticació"
+
+msgid "You must add at least one question"
+msgstr "Heu d'afegir com a mínim una pregunta"
+
+msgid "Advanced actions"
+msgstr "Accions avançades"
+
+msgid "Application path"
+msgstr "Camí de l'aplicació"
+
+msgid "Apply files details"
+msgstr "Aplica detalls dels fitxers"
+
+msgid "Apply plan details"
+msgstr "Aplica detalls del pla"
+
+msgid "Apply plan failed"
+msgstr "L'aplicació del pla ha fallat"
+
+msgid "Apply plan ready"
+msgstr "Pla d'aplicació preparat"
+
+msgid "Apply preparation"
+msgstr "Preparació de l'aplicació"
+
+msgid "Apply staged files"
+msgstr "Aplica fitxers en preparació"
+
+msgid "Applying files..."
+msgstr "Aplicant fitxers..."
+
+msgid "Audit file"
+msgstr "Fitxer d'auditoria"
+
+msgid "Backup directory"
+msgstr "Directori de còpia de seguretat"
+
+msgid "Baseline clean"
+msgstr "Línia base neta"
+
+msgid "Baseline warnings"
+msgstr "Avisos de la línia base"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Crea un pla d'aplicació segur a partir del paquet en preparació. Això només comprova fitxers, permisos, camí de còpia de seguretat i estat de bloqueig. No substitueix fitxers."
+
+msgid "Build production frontend assets."
+msgstr "Construeix els actius del frontend de producció."
+
+msgid "Building plan..."
+msgstr "Creant el pla..."
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Check"
+msgstr "Comprova"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Comprova si hi ha actualitzacions de Chamilo disponibles, verifica paquets, prepara fitxers i executa passos controlats després de l'actualització."
+
+msgid "Check manifest"
+msgstr "Comprova el manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Comprovant accions posteriors a l'aplicació..."
+
+msgid "Checking..."
+msgstr "Comprovant..."
+
+msgid "Composer install"
+msgstr "Instal·lació de Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Les accions de Composer, Yarn i migració de base de dades poden modificar dependències, actius generats o la base de dades. Seleccioneu-les només després de confirmar les còpies de seguretat i els permisos."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configureu CHAMILO_UPDATE_MANIFEST_URL al servidor o proporcioneu un URL HTTPS del manifest."
+
+msgid "Configured"
+msgstr "Configurat"
+
+msgid "Current migration"
+msgstr "Migració actual"
+
+msgid "Database baseline"
+msgstr "Línia base de la base de dades"
+
+msgid "Database migration safety review"
+msgstr "Revisió de seguretat de la migració de la base de dades"
+
+msgid "Database migrations"
+msgstr "Migracions de la base de dades"
+
+msgid "Development mode"
+msgstr "Mode de desenvolupament"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "No activeu això llevat que s'hagi revisat la còpia de seguretat de l'actualització i els permisos del servidor."
+
+msgid "Doctrine dry-run command"
+msgstr "Ordre de simulació de Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine ha informat d'advertències de la línia base històrica. L'actualitzador executarà només les migracions V210 preparades després de la confirmació explícita."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine executarà només les migracions V210 preparades explícitament després que la revisió de seguretat sigui correcta."
+
+msgid "Dry-run exit code"
+msgstr "Codi de sortida de la simulació"
+
+msgid "Executed unavailable migrations"
+msgstr "Migracions no disponibles executades"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Extreu el paquet d'actualització verificat en un directori d'assaig per a la inspecció. Això no substitueix fitxers, executa migracions ni modifica la base de dades."
+
+msgid "File apply available"
+msgstr "Aplicació de fitxers disponible"
+
+msgid "Files to replace"
+msgstr "Fitxers a substituir"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Confirmo que existeix una còpia de seguretat de la base de dades i que s'ha verificat abans d'executar les migracions."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Entenc que les accions avançades poden modificar dependències, actius generats o la base de dades."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Entenc que això substituirà fitxers a la instal·lació de Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Entenc que això executarà ordres d'actualització al servidor."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instal·leu les dependències de frontend abans de reconstruir els actius."
+
+msgid "Installed version"
+msgstr "Versió instal·lada"
+
+msgid "Latest migration"
+msgstr "Última migració"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Deixeu buits els camins del paquet i de la signatura per baixar-los des de les URL del manifest verificat. Els camins locals només estan disponibles per a proves de desenvolupament."
+
+msgid "Live command log"
+msgstr "Registre d'ordres en directe"
+
+msgid "Live update log"
+msgstr "Registre d'actualització en directe"
+
+msgid "Local test options"
+msgstr "Opcions de prova local"
+
+msgid "Local test update notice link"
+msgstr "Enllaç de notificació d'actualització de prova local"
+
+msgid "Local update notice simulation"
+msgstr "Simulació de notificació d'actualització local"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "La simulació de notificació d'actualització local només està disponible en mode de desenvolupament."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Font del manifest"
+
+msgid "Migration safety details"
+msgstr "Detalls de la revisió de seguretat de la migració"
+
+msgid "Migration safety review failed"
+msgstr "La revisió de seguretat de la migració ha fallat"
+
+msgid "Migration safety review ready"
+msgstr "Revisió de seguretat de la migració preparada"
+
+msgid "Migration target"
+msgstr "Destinació de la migració"
+
+msgid "New files"
+msgstr "Fitxers nous"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Noves migracions informades per Doctrine"
+
+msgid "Next migration"
+msgstr "Propera migració"
+
+msgid "No executed unavailable migration was reported."
+msgstr "No s'ha informat de cap migració no disponible executada."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Encara no s'ha configurat cap URL de manifest oficial. Utilitzeu una URL HTTPS o un camí local per a proves de desenvolupament."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "No s'ha detectat cap migració pendent abans de la destinació d'actualització preparada."
+
+msgid "Not configured"
+msgstr "No configurat"
+
+msgid "Not detected"
+msgstr "No detectat"
+
+msgid "Official Chamilo update channel"
+msgstr "Canal oficial d'actualització de Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 del paquet"
+
+msgid "Package URL"
+msgstr "URL del paquet"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Els fitxers del paquet i de la signatura es baixaran des del manifest. Els camins locals estan desactivats en aquest entorn."
+
+msgid "Package path"
+msgstr "Camí del paquet"
+
+msgid "Package staged successfully"
+msgstr "Paquet preparat correctament"
+
+msgid "Package staging failed"
+msgstr "Preparació del paquet fallida"
+
+msgid "Package verification"
+msgstr "Verificació del paquet"
+
+msgid "Package verification failed"
+msgstr "Verificació del paquet fallida"
+
+msgid "Package verified successfully"
+msgstr "Paquet verificat correctament"
+
+msgid "Pending migrations before this update"
+msgstr "Migracions pendents abans d'aquesta actualització"
+
+msgid "Planned backup path"
+msgstr "Camí de còpia de seguretat planificada"
+
+msgid "Post-apply actions completed"
+msgstr "Accions post-aplicació completades"
+
+msgid "Post-apply actions failed"
+msgstr "Accions post-aplicació fallides"
+
+msgid "Post-apply actions ready"
+msgstr "Accions post-aplicació preparades"
+
+msgid "Post-apply checks"
+msgstr "Comprovacions post-aplicació"
+
+msgid "Post-apply checks failed"
+msgstr "Comprovacions post-aplicació fallides"
+
+msgid "Post-apply details"
+msgstr "Detalls post-aplicació"
+
+msgid "Post-apply run details"
+msgstr "Detalls d'execució post-aplicació"
+
+msgid "Preflight checks"
+msgstr "Comprovacions prèvies"
+
+msgid "Preflight checks completed"
+msgstr "Comprovacions prèvies completades"
+
+msgid "Preflight checks failed"
+msgstr "Comprovacions prèvies fallides"
+
+msgid "Preflight details"
+msgstr "Detalls prèvies"
+
+msgid "Prepare staging"
+msgstr "Preparar entorn de proves"
+
+msgid "Preparing staging..."
+msgstr "Preparant entorn de proves..."
+
+msgid "Production mode"
+msgstr "Mode de producció"
+
+msgid "Released at"
+msgstr "Publicat el"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Substitueix els fitxers de Chamilo del paquet preparat utilitzant el pla d'aplicació revisat. Això no executa migracions de base de dades, Composer, Yarn ni ordres de memòria cau."
+
+msgid "Review apply plan"
+msgstr "Revisar el pla d'aplicació"
+
+msgid "Review database migrations"
+msgstr "Revisar migracions de base de dades"
+
+msgid "Review post-apply actions"
+msgstr "Revisar accions post-aplicació"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Revisa les ordres manuals recomanades després d'aplicar els fitxers d'actualització. Aquest pas no executa Composer, Yarn, migracions ni ordres de memòria cau."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Revisa les migracions de Doctrine preparades i la sortida de prova abans d'executar les migracions de base de dades."
+
+msgid "Reviewing database migrations..."
+msgstr "Revisant migracions de base de dades..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Executa i supera la revisió de seguretat de migracions abans d'executar les migracions de base de dades."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Executa comprovacions d'entorn abans de qualsevol pas futur d'aplicació d'actualització. Això no modifica fitxers ni la base de dades."
+
+msgid "Run post-apply actions"
+msgstr "Executar accions post-aplicació"
+
+msgid "Run preflight checks"
+msgstr "Executar comprovacions prèvies"
+
+msgid "Run selected post-apply actions"
+msgstr "Executar accions post-aplicació seleccionades"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Executa les ordres post-aplicació seleccionades des del servidor utilitzant una llista permesa controlada. No s'accepten ordres de shell personalitzades."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Executa aquestes ordres manualment des del servidor després de confirmar el resultat de l'actualització de fitxers i les còpies de seguretat."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "L'execució d'accions post-aplicació des de la interfície està desactivada en mode de producció."
+
+msgid "Running post-apply actions..."
+msgstr "Executant accions post-aplicació..."
+
+msgid "Safe actions"
+msgstr "Accions segures"
+
+msgid "Signature path"
+msgstr "Camí de la signatura"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "La verificació de la signatura no es pot ometre en aquest entorn."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Omet la verificació de la signatura per a proves de desenvolupament local"
+
+msgid "Staged file application failed"
+msgstr "L'aplicació de fitxers preparats ha fallat"
+
+msgid "Staged files applied successfully"
+msgstr "Fitxers preparats aplicats correctament"
+
+msgid "Staging details"
+msgstr "Detalls de preparació"
+
+msgid "Staging directory"
+msgstr "Directori de preparació"
+
+msgid "Staging extraction"
+msgstr "Extracció de preparació"
+
+msgid "Symfony cache clear"
+msgstr "Neteja de la memòria cau de Symfony"
+
+msgid "System update"
+msgstr "Actualització del sistema"
+
+msgid "Target version"
+msgstr "Versió objectiu"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "L'URL del manifest oficial configurat està predefinit. Podeu canviar-lo a un altre manifest HTTPS si cal."
+
+msgid "The database migration baseline is clean."
+msgstr "La línia base de migracions de la base de dades està neta."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "La resposta HTTP final ha fallat després que l'operació s'hagués completat. Normalment és causat per permisos de memòria cau en temps d'execució o un reinici del servidor web durant la petició."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "El registre d'operacions indica que les accions post-aplicació s'han completat correctament."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Les ordres post-aplicació seleccionades s'han completat correctament, però la resposta HTTP final ha fallat. Refresqueu la pàgina i verifiqueu els permisos de la memòria cau d'execució si la pàgina no es carrega correctament."
+
+msgid "The updater does not create or restore database backups."
+msgstr "L'actualitzador no crea ni restaura còpies de seguretat de la base de dades."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Aquestes accions són segures per executar des de la interfície després de revisar el resultat de l'actualització."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Aquestes ordres poden modificar dependències, actius generats, memòria cau o la base de dades. Confirmeu les còpies de seguretat abans de continuar."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Aquesta acció modifica fitxers de la instal·lació de Chamilo. Assegureu-vos que el pla d'aplicació s'ha revisat i que les còpies de seguretat estan habilitades abans de continuar."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Aquesta entrada de desenvolupament simula el futur avís d'actualització de Chamilo.org utilitzant rutes de paquets de prova locals."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Aquesta pantalla s'ha obert des d'un avís d'actualització oficial, però encara no s'ha configurat cap font de manifest oficial."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Aquesta pantalla s'ha obert des d'un avís d'actualització. Només es inicia automàticament la comprovació del manifest."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Aquest pas prepara només una revisió. La substitució de fitxers es produeix més endavant al pas Aplica fitxers en fase, amb bloqueig, còpia de seguretat i protecció de reversió."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Aquest actualitzador no crea una còpia de seguretat de la base de dades. Creeu i verifiqueu una còpia de seguretat abans d'executar migracions."
+
+msgid "Trusted public key"
+msgstr "Clau pública de confiança"
+
+msgid "Trusted signing key"
+msgstr "Clau de signatura de confiança"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Escriviu APLICA FITXERS D'ACTUALITZACIÓ per confirmar"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Escriviu EXECUTA MIGRACIONS DE BASE DE DADES per confirmar les migracions de la base de dades"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Escriviu EXECUTA ACCIONS POST-ACTUALITZACIÓ per confirmar"
+
+msgid "Unknown update notice source."
+msgstr "Font desconeguda de l'avís d'actualització."
+
+msgid "Update availability"
+msgstr "Disponibilitat d'actualització"
+
+msgid "Update directory"
+msgstr "Directori d'actualització"
+
+msgid "Update lock path"
+msgstr "Camí de bloqueig d'actualització"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Utilitzeu el directori de preparació generat pel pas anterior. El backend només accepta directoris dins de var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Utilitzeu aquest enllaç per simular el futur avís d'actualització de Chamilo.org durant les proves de desenvolupament."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Utilitzeu això només per a proves de desenvolupament locals. Les actualitzacions de producció han d'utilitzar la clau configurada al servidor."
+
+msgid "Verification details"
+msgstr "Detalls de verificació"
+
+msgid "Verify package"
+msgstr "Verificar paquet"
+
+msgid "Verifying..."
+msgstr "Verificant..."
+
+msgid "Waiting for command progress events..."
+msgstr "Esperant esdeveniments de progrés de l'ordre..."
+
+msgid "Waiting for update progress events..."
+msgstr "Esperant esdeveniments de progrés de l'actualització..."
+
+msgid "Yarn build"
+msgstr "Construcció Yarn"
+
+msgid "Yarn install"
+msgstr "Instal·lació Yarn"
+
+msgid "A comment is required"
+msgstr "Cal un comentari"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Ja existeix una base de dades amb el mateix nom. Si conté taules, s'eliminaran; si està buida, es reutilitzarà."
+
+msgid "AI generated"
+msgstr "Generat per IA"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Afegiu almenys una pregunta abans de tornar al camí d'aprenentatge."
+
+msgid "Add attachments"
+msgstr "Afegir adjunts"
+
+msgid "Additional fields"
+msgstr "Camps addicionals"
+
+msgid "Allow comments"
+msgstr "Permetre comentaris"
+
+msgid "Allow new pages"
+msgstr "Permetre pàgines noves"
+
+msgid "Allow ratings"
+msgstr "Permetre valoracions"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Esteu segur que voleu suprimir tots els elements?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Esteu segur que voleu restaurar la renovació automàtica?"
+
+msgid "Attachment has been deleted"
+msgstr "L'adjunt s'ha suprimit"
+
+msgid "Backup file"
+msgstr "Fitxer de còpia de seguretat"
+
+msgid "Block comments"
+msgstr "Bloquejar comentaris"
+
+msgid "Block new pages"
+msgstr "Bloquejar pàgines noves"
+
+msgid "Block ratings"
+msgstr "Bloquejar valoracions"
+
+msgid "Cancel renewal"
+msgstr "Cancel·lar renovació"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Els enllaços de categoria s'eliminaran de %s pàgines del Wiki."
+
+msgid "Change"
+msgstr "Canviar"
+
+msgid "Clear group"
+msgstr "Netejar grup"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Feu clic en una etiqueta per inserir-la a l'editor. Aquests marcadors de posició es reemplaçaran en generar el certificat."
+
+msgid "Comment added"
+msgstr "Comentari afegit"
+
+msgid "Comment is required"
+msgstr "El comentari és obligatori"
+
+msgid "Comment score"
+msgstr "Puntuació del comentari"
+
+msgid "Compare selected versions line by line"
+msgstr "Compara les versions seleccionades línia per línia"
+
+msgid "Compare selected versions word by word"
+msgstr "Compara les versions seleccionades paraula per paraula"
+
+msgid "Compare versions"
+msgstr "Compara versions"
+
+msgid "Copy completed"
+msgstr "Còpia completada"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Crea pàgines de treball Wiki individuals per als aprenents"
+
+msgid "Current view mode"
+msgstr "Mode de visualització actual"
+
+msgid "Delete Wiki"
+msgstr "Suprimeix el Wiki"
+
+msgid "Delete page"
+msgstr "Suprimeix la pàgina"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "No es recomana suprimir la pàgina d'inici del Wiki. Podeu recrear-la més endavant."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "En desactivar el Wiki, es bloquegen les pàgines i accions normals del Wiki. Aquesta pàgina de configuració continua disponible per als professors del curs."
+
+msgid "Discussion"
+msgstr "Discussió"
+
+msgid "Edit Comment"
+msgstr "Edita el comentari"
+
+msgid "Edit page"
+msgstr "Edita la pàgina"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "La data de finalització ha de ser posterior o igual a la data de caducitat"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Introduïu un terme de cerca per trobar pàgines Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "La data de caducitat ha de ser anterior o igual a la data de finalització"
+
+msgid "Failed email recipients"
+msgstr "Destinataris de correu electrònic fallits"
+
+msgid "Finish and return to learning path"
+msgstr "Finalitza i torna al camí d'aprenentatge"
+
+msgid "Forum image"
+msgstr "Imatge del fòrum"
+
+msgid "Hide discussion"
+msgstr "Oculta la discussió"
+
+msgid "Hide page"
+msgstr "Oculta la pàgina"
+
+msgid "I changed my mind"
+msgstr "He canviat d'opinió"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Si no està marcat, aquests fitxers continuaran disponibles per a l'administrador de la plataforma mitjançant l'eina 'Informació de fitxers'."
+
+msgid "Internal message failures"
+msgstr "Errors de missatges interns"
+
+msgid "Internal messages available"
+msgstr "Missatges interns disponibles"
+
+msgid "Internal messages created now"
+msgstr "Missatges interns creats ara"
+
+msgid "Item score"
+msgstr "Puntuació de l'element"
+
+msgid "Last post"
+msgstr "Última publicació"
+
+msgid "Lock page"
+msgstr "Bloqueja la pàgina"
+
+msgid "Manage categories"
+msgstr "Gestiona les categories"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Marca aquest document com a assistit per IA. Utilitzeu-lo quan el contingut s'hagi creat o modificat significativament amb eines d'IA."
+
+msgid "Maximum score is required"
+msgstr "La puntuació màxima és obligatòria"
+
+msgid "Metric"
+msgstr "Mètrica"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Els nous comentaris estan bloquejats en aquesta discussió"
+
+msgid "No Wiki categories are available yet."
+msgstr "Encara no hi ha categories Wiki disponibles."
+
+msgid "No categories found"
+msgstr "No s'han trobat categories"
+
+msgid "No content"
+msgstr "Sense contingut"
+
+msgid "No parent category"
+msgstr "Sense categoria pare"
+
+msgid "Number of comments scored"
+msgstr "Nombre de comentaris puntuats"
+
+msgid "Old version"
+msgstr "Versió antiga"
+
+msgid "Only image files are allowed."
+msgstr "Només es permeten fitxers d'imatge."
+
+msgid "Please fill all required fields"
+msgstr "Empleneu tots els camps obligatoris"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Les preguntes amb marcadors de classe o estudiant es generaran per a classes o grups del curs: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Les valoracions estan bloquejades en aquesta discussió"
+
+msgid "Remove image"
+msgstr "Elimina la imatge"
+
+msgid "Restore renewal"
+msgstr "Restaura la renovació"
+
+msgid "Restore version"
+msgstr "Restaura la versió"
+
+msgid "Search in"
+msgstr "Cerca a"
+
+msgid "Select group"
+msgstr "Selecciona grup"
+
+msgid "Select image"
+msgstr "Selecciona imatge"
+
+msgid "Selected image"
+msgstr "Imatge seleccionada"
+
+msgid "Show discussion"
+msgstr "Mostra discussió"
+
+msgid "Show page"
+msgstr "Mostra pàgina"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Alguns fitxers o carpetes no tenen permís d'escriptura. Per poder instal·lar Chamilo primer heu de canviar els seus permisos (utilitzant CHMOD). Llegiu el"
+
+msgid "Subcategories"
+msgstr "Subcategories"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Toqueu a l'esquerra o a la dreta per navegar"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "El termini de lliurament de la tasca Wiki ha passat, però es permet l'entrega amb retard."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "El termini de lliurament de la tasca Wiki ha passat."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "La tasca Wiki encara no ha començat."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Cal bloquejar l'edició de la pàgina Wiki abans de desar."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "L'anunci s'ha desat, però no s'ha pogut pujar un adjunt."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "L'anunci s'ha desat, però ha fallat l'enviament per correu electrònic."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "L'anunci s'ha desat, però no s'ha pogut enviar cap correu electrònic."
+
+msgid "The category has been created"
+msgstr "La categoria s'ha creat"
+
+msgid "The category has been deleted"
+msgstr "La categoria s'ha suprimit"
+
+msgid "The category has been updated"
+msgstr "La categoria s'ha actualitzat"
+
+msgid "The end date is invalid"
+msgstr "La data de finalització no és vàlida"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "El nombre màxim de versions ha de ser un enter no negatiu"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "El nombre màxim de paraules ha de ser un enter no negatiu"
+
+msgid "The print window could not be opened"
+msgstr "No s'ha pogut obrir la finestra d'impressió"
+
+msgid "The start date is invalid"
+msgstr "La data d'inici no és vàlida"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Aquesta configuració s'aplica a tot el curs, incloses les seves sessions i grups."
+
+msgid "This announcement has already been sent by email."
+msgstr "Aquest anunci ja s'ha enviat per correu electrònic."
+
+msgid "This discussion is hidden from learners"
+msgstr "Aquesta discussió està oculta per als estudiants"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Aquesta eina d'IA generativa us permet crear imatges i vídeos curts per il·lustrar el vostre curs. En explicar (en text) el que voleu a la secció del prompt, donareu al model d'IA configurat els elements necessaris per generar una imatge o un vídeo. Tingueu paciència. El model d'IA trigarà una mica i generarà un resultat, que potser voldreu conservar desant el mitjà a la vostra carpeta de documents i incrustant-lo després en un document HTML. No tots els models d'IA són iguals pel que fa a velocitat o qualitat. El model d'IA també us pot proporcionar un prompt modificat, que és una interpretació més detallada de la vostra petició. Podeu utilitzar aquest prompt modificat per ajustar la vostra petició. Tingueu en compte que aquesta eina, especialment per als vídeos, pot generar costos considerables per a la vostra organització, encara que decidiu no desar el mitjà generat. Utilitzeu-la adequadament. Si teniu problemes per obtenir el que busqueu, dediqueu una estona a investigar trucs de prompt en línia per al model d'IA que teniu a la vostra disposició."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Aquest historial pertany al curs base. La restauració està disponible després de crear una versió de sessió."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Aquesta imatge substitueix la icona per defecte del fòrum que es mostra al costat del títol del fòrum."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Aquesta pàgina prové del curs base. En desar-la es crearà una versió per a la sessió actual."
+
+msgid "This will also delete %s subcategories."
+msgstr "Això també suprimirà %s subcategories."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Això crearà pàgines de treball individuals per a %s estudiants."
+
+msgid "Thread history"
+msgstr "Historial del fil"
+
+msgid "Title and content"
+msgstr "Títol i contingut"
+
+msgid "Unable to cancel renewal right now."
+msgstr "No es pot cancel·lar la renovació ara mateix."
+
+msgid "Unable to restore renewal right now."
+msgstr "No es pot restaurar la renovació ara mateix."
+
+msgid "Unlock page"
+msgstr "Desbloqueja pàgina"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Utilitzeu [[Pàgina]] o [[Pàgina|Text visible]] per crear enllaços Wiki interns."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Utilitzeu la barra espaiadora o les tecles de fletxa per navegar"
+
+msgid "View version"
+msgstr "Visualitza versió"
+
+msgid "Visible only to teachers"
+msgstr "Visible només per als professors"
+
+msgid "Weight is required"
+msgstr "El pes és obligatori"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Les categories Wiki estan desactivades per a aquest curs."
+
+msgid "Wiki categories enabled"
+msgstr "Categories Wiki activades"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtratge estricte d'HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Configuració Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Configuració Wiki actualitzada"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Esteu veient una versió històrica d'aquesta pàgina"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Podeu adjuntar un o més fitxers a aquesta resposta."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Podeu editar aquesta pàgina de tasques, però les pàgines de treball dels estudiants no es modificaran."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Podeu utilitzar les etiquetes {{class_name}} i {{student_full_name}} a la pregunta."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Teniu 20 minuts per editar aquesta pàgina abans que expiri el bloqueig d'edició."
+
+msgid "by"
+msgstr "per"
+
+msgid "required"
+msgstr "obligatori"
 

@@ -31,8 +31,6 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    Chamilo\CoreBundle\Hook\HookFactory: ~
-
     # Form types
     # Custom yes/no form type, use in the platform settings
     Chamilo\CoreBundle\Form\Type\YesNoType:

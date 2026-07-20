@@ -7,7 +7,7 @@ declare(strict_types=1);
 use ChamiloSession as Session;
 
 /**
- * Enable or cancel PayPal recurring billing for a completed renewable service sale.
+ * Enable PayPal recurring billing, cancel renewal or restore renewal for a completed renewable service sale.
  */
 $cidReset = true;
 
@@ -17,94 +17,83 @@ $plugin = BuyCoursesPlugin::create();
 $includeServices = 'true' === $plugin->get('include_services');
 $paypalEnabled = 'true' === $plugin->get('paypal_enable');
 $currentUserId = api_get_user_id();
+$isJsonRequest = str_contains(strtolower((string) ($_SERVER['HTTP_ACCEPT'] ?? '')), 'application/json');
+$panelUrl = api_get_path(WEB_PATH).'my-services';
 
-if (!$includeServices || !$paypalEnabled || $currentUserId <= 0) {
-    api_not_allowed(true);
-}
+$respondWithError = static function (string $message, int $statusCode = 400) use ($isJsonRequest, $panelUrl): never {
+    if ($isJsonRequest) {
+        http_response_code($statusCode);
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode([
+            'success' => false,
+            'message' => $message,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 
-$orderId = isset($_REQUEST['order']) ? (int) $_REQUEST['order'] : (int) Session::read('bc_recurring_service_sale_id');
-$action = isset($_REQUEST['action']) ? trim((string) $_REQUEST['action']) : (string) Session::read('bc_recurring_action');
-$token = isset($_REQUEST['token']) ? trim((string) $_REQUEST['token']) : '';
-$panelUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_panel.php';
-
-if ('disable_recurring_payment' === $action) {
-    $action = 'cancel_recurring_payment';
-}
-
-if ($orderId <= 0 || '' === $action) {
-    api_not_allowed(true);
-}
-
-$serviceSale = $plugin->getServiceSale($orderId);
-
-if (empty($serviceSale) || (int) ($serviceSale['buyer']['id'] ?? 0) !== $currentUserId) {
-    api_not_allowed(true);
-}
-
-if ((int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_PENDING) !== BuyCoursesPlugin::SERVICE_STATUS_COMPLETED) {
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('RecurringPaymentRequiresCompletedSale'), 'warning', false)
-    );
-
-    header('Location: '.$panelUrl);
-    exit;
-}
-
-if ((int) ($serviceSale['payment_type'] ?? 0) !== BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL) {
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('RecurringPaymentRequiresPayPal'), 'warning', false)
-    );
-
-    header('Location: '.$panelUrl);
-    exit;
-}
-
-if (empty($serviceSale['service']['renewable'])) {
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('ServiceIsNotRenewable'), 'warning', false)
-    );
-
-    header('Location: '.$panelUrl);
-    exit;
-}
-
-$paypalParams = $plugin->getPaypalParams();
-
-$isSandbox = 1 === (int) ($paypalParams['sandbox'] ?? 0);
-$test = $isSandbox;
-$pruebas = $isSandbox;
-
-$paypalUsername = trim((string) ($paypalParams['username'] ?? ''));
-$paypalPassword = trim((string) ($paypalParams['password'] ?? ''));
-$paypalSignature = trim((string) ($paypalParams['signature'] ?? ''));
-
-error_log('[BuyCourses][Recurring] PayPal sandbox='.($isSandbox ? 'true' : 'false'));
-error_log('[BuyCourses][Recurring] API username configured='.('' !== $paypalUsername ? 'yes' : 'no'));
-error_log('[BuyCourses][Recurring] API password configured='.('' !== $paypalPassword ? 'yes' : 'no'));
-error_log('[BuyCourses][Recurring] API signature configured='.('' !== $paypalSignature ? 'yes' : 'no'));
-
-if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('PayPalApiCredentialsIncomplete'), 'error', false)
-    );
-
-    header('Location: '.$panelUrl);
-    exit;
-}
-
-require_once 'paypalfunctions.php';
-
-$redirectWithError = static function (string $message) use ($panelUrl): void {
     Display::addFlash(Display::return_message($message, 'error', false));
     header('Location: '.$panelUrl);
     exit;
 };
 
-$redirectWithSuccess = static function (string $message) use ($panelUrl): void {
+$respondWithSuccess = static function (string $message) use ($isJsonRequest, $panelUrl): never {
+    if ($isJsonRequest) {
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode([
+            'success' => true,
+            'message' => $message,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
     Display::addFlash(Display::return_message($message, 'success', false));
     header('Location: '.$panelUrl);
     exit;
 };
+
+if (!$includeServices || $currentUserId <= 0) {
+    $respondWithError($plugin->get_lang('RecurringPaymentAccessDenied'), 403);
+}
+
+$orderId = isset($_REQUEST['order']) ? (int) $_REQUEST['order'] : (int) Session::read('bc_recurring_service_sale_id');
+$action = isset($_REQUEST['action']) ? trim((string) $_REQUEST['action']) : (string) Session::read('bc_recurring_action');
+$token = isset($_REQUEST['token']) ? trim((string) $_REQUEST['token']) : '';
+
+if ('disable_recurring_payment' === $action) {
+    $action = 'cancel_recurring_payment';
+}
+
+if ('restore_renewal' === $action) {
+    $action = 'restore_recurring_payment';
+}
+
+if ($orderId <= 0 || '' === $action) {
+    $respondWithError($plugin->get_lang('RecurringPaymentInvalidRequest'));
+}
+
+$serviceSale = $plugin->getServiceSale($orderId);
+
+if (empty($serviceSale) || (int) ($serviceSale['buyer']['id'] ?? 0) !== $currentUserId) {
+    $respondWithError($plugin->get_lang('RecurringPaymentAccessDenied'), 403);
+}
+
+if ((int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_PENDING) !== BuyCoursesPlugin::SERVICE_STATUS_COMPLETED) {
+    $respondWithError($plugin->get_lang('RecurringPaymentRequiresCompletedSale'));
+}
+
+if (empty($serviceSale['service']['renewable'])) {
+    $respondWithError($plugin->get_lang('ServiceIsNotRenewable'));
+}
+
+$paypalParams = $plugin->getPaypalParams();
+$isSandbox = 1 === (int) ($paypalParams['sandbox'] ?? 0);
+$test = $isSandbox;
+$pruebas = $isSandbox;
+$paypalUsername = trim((string) ($paypalParams['username'] ?? ''));
+$paypalPassword = trim((string) ($paypalParams['password'] ?? ''));
+$paypalSignature = trim((string) ($paypalParams['signature'] ?? ''));
+
+require_once 'paypalfunctions.php';
 
 switch ($action) {
     case 'cancel_action':
@@ -119,8 +108,16 @@ switch ($action) {
         exit;
 
     case 'enable_recurring_payment':
+        if (!$paypalEnabled || (int) ($serviceSale['payment_type'] ?? 0) !== BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL) {
+            $respondWithError($plugin->get_lang('RecurringPaymentRequiresPayPal'));
+        }
+
+        if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
+            $respondWithError($plugin->get_lang('PayPalApiCredentialsIncomplete'));
+        }
+
         if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === (int) ($serviceSale['recurring_payment'] ?? 0)) {
-            $redirectWithSuccess($plugin->get_lang('RecurringPaymentAlreadyEnabled'));
+            $respondWithSuccess($plugin->get_lang('RecurringPaymentAlreadyEnabled'));
         }
 
         if ('' === $token) {
@@ -158,7 +155,7 @@ switch ($action) {
                     ' MESSAGE='.$longMessage
                 );
 
-                $redirectWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
+                $respondWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
             }
 
             RedirectToPayPal((string) ($expressCheckout['TOKEN'] ?? ''));
@@ -178,14 +175,14 @@ switch ($action) {
                 ' MESSAGE='.$longMessage
             );
 
-            $redirectWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
+            $respondWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
         }
 
         $durationDays = max(1, (int) ($serviceSale['service']['duration_days'] ?? 1));
         $totalCharges = max(0, (int) ($serviceSale['service']['total_charges'] ?? 0));
         $currency = $plugin->getCurrency((int) ($serviceSale['currency_id'] ?? 0));
         $currencyCode = strtoupper(trim((string) ($currency['iso_code'] ?? ($serviceSale['service']['currency'] ?? ''))));
-        $amount = (float) ($serviceSale['price'] ?? 0);
+        $amount = (float) ($serviceSale['recurring_amount'] ?? $serviceSale['price'] ?? 0);
         $description = (string) ($serviceSale['service']['name'] ?? 'Service');
         $reference = (string) ($serviceSale['reference'] ?? 'service-sale-'.$orderId);
         $buyerName = (string) ($serviceSale['buyer']['name'] ?? '');
@@ -224,7 +221,7 @@ switch ($action) {
                 ' MESSAGE='.$longMessage
             );
 
-            $redirectWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
+            $respondWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
         }
 
         $previousProfileId = trim((string) ($serviceSale['recurring_profile_id'] ?? ''));
@@ -238,7 +235,7 @@ switch ($action) {
             );
         }
 
-        $plugin->updateServiceSaleGatewayData(
+        if ($plugin->updateServiceSaleGatewayData(
             $orderId,
             [
                 'recurring_gateway' => 'paypal',
@@ -246,64 +243,320 @@ switch ($action) {
                 'recurring_profile_id' => $newProfileId,
                 'next_charge_date' => $billingStart->format('Y-m-d H:i:s'),
             ]
-        );
+        )) {
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_ENABLED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $orderId,
+                [
+                    'gateway' => 'paypal',
+                    'profile_id' => $newProfileId,
+                    'next_charge_date' => $billingStart->format('Y-m-d H:i:s'),
+                ],
+                $currentUserId,
+                BuyCoursesPlugin::AUDIT_SOURCE_USER
+            );
+        }
 
         Session::erase('bc_recurring_service_sale_id');
         Session::erase('bc_recurring_action');
         unset($_SESSION['TOKEN'], $_SESSION['payer_id']);
 
-        $redirectWithSuccess($plugin->get_lang('RecurringPaymentEnabledSuccessfully'));
-        break;
+        $respondWithSuccess($plugin->get_lang('RecurringPaymentEnabledSuccessfully'));
+
+    case 'restore_recurring_payment':
+        if ('POST' !== strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'))) {
+            $respondWithError($plugin->get_lang('RestoreRenewalPostRequired'), 405);
+        }
+
+        if (!Security::check_token('post')) {
+            $respondWithError($plugin->get_lang('InvalidSecurityToken'), 403);
+        }
+
+        $recurringPayment = (int) ($serviceSale['recurring_payment'] ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED);
+        $isCancellationScheduled = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
+            || '' !== trim((string) ($serviceSale['cancelled_at'] ?? ''));
+
+        if (!$isCancellationScheduled) {
+            if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === $recurringPayment) {
+                $respondWithSuccess($plugin->get_lang('RecurringPaymentAlreadyEnabled'));
+            }
+
+            $respondWithError($plugin->get_lang('RenewalIsNotCancelled'));
+        }
+
+        $periodEndTimestamp = !empty($serviceSale['date_end']) ? strtotime((string) $serviceSale['date_end']) : 0;
+        if ($periodEndTimestamp <= time()) {
+            $respondWithError($plugin->get_lang('RestoreRenewalRequiresActiveService'));
+        }
+
+        $gateway = strtolower(trim((string) ($serviceSale['recurring_gateway'] ?? '')));
+        if ('' === $gateway) {
+            $gateway = match ((int) ($serviceSale['payment_type'] ?? 0)) {
+                BuyCoursesPlugin::PAYMENT_TYPE_STRIPE => 'stripe',
+                BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL => 'paypal',
+                default => '',
+            };
+        }
+
+        if ('stripe' !== $gateway) {
+            $respondWithError($plugin->get_lang('RestoreRenewalUnsupportedGateway'));
+        }
+
+        $subscriptionId = trim((string) ($serviceSale['gateway_subscription_id'] ?? $serviceSale['recurring_profile_id'] ?? ''));
+        $stripeParams = $plugin->getStripeParams();
+        $secretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+
+        if ('' === $subscriptionId || '' === $secretKey) {
+            $respondWithError($plugin->get_lang('StripeRestoreConfigurationMissing'));
+        }
+
+        $plannedRenewalDate = trim((string) ($serviceSale['next_charge_date'] ?? ''));
+        if ('' === $plannedRenewalDate) {
+            $plannedRenewalDate = trim((string) ($serviceSale['date_end'] ?? ''));
+        }
+
+        try {
+            \Stripe\Stripe::setApiKey($secretKey);
+            \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+
+            $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+            $subscriptionStatus = strtolower((string) ($subscription->status ?? ''));
+
+            if (in_array($subscriptionStatus, ['canceled', 'cancelled'], true)) {
+                $respondWithError($plugin->get_lang('RenewalCannotBeRestoredAfterGatewayCancellation'));
+            }
+
+            if (!empty($subscription->cancel_at_period_end)) {
+                $subscription = \Stripe\Subscription::update($subscriptionId, [
+                    'cancel_at_period_end' => false,
+                ]);
+            }
+
+            $periodEnd = (int) ($subscription->current_period_end ?? 0);
+            if ($periodEnd <= 0) {
+                $periodEnd = (int) ($subscription->items->data[0]->current_period_end ?? 0);
+            }
+
+            if ($periodEnd > 0) {
+                $plannedRenewalDate = gmdate('Y-m-d H:i:s', $periodEnd);
+            }
+
+            $gatewayData = [
+                'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
+                'cancelled_at' => null,
+                'recurring_gateway' => 'stripe',
+                'gateway_subscription_id' => $subscriptionId,
+                'recurring_profile_id' => $subscriptionId,
+            ];
+
+            if ('' !== $plannedRenewalDate) {
+                $gatewayData['next_charge_date'] = $plannedRenewalDate;
+                $gatewayData['date_end'] = $plannedRenewalDate;
+            }
+
+            if (!$plugin->updateServiceSaleGatewayData($orderId, $gatewayData)) {
+                $respondWithError($plugin->get_lang('RestoreRenewalGatewayFailed'));
+            }
+
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_RESTORED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $orderId,
+                [
+                    'gateway' => 'stripe',
+                    'subscription_id' => $subscriptionId,
+                    'planned_renewal_date' => $plannedRenewalDate,
+                    'cancel_at_period_end' => false,
+                ],
+                $currentUserId,
+                BuyCoursesPlugin::AUDIT_SOURCE_USER
+            );
+        } catch (Throwable $exception) {
+            error_log(
+                '[BuyCourses][Recurring] Stripe renewal restore failed for service sale '.$orderId.
+                ' MESSAGE='.$exception->getMessage()
+            );
+
+            $respondWithError($plugin->get_lang('RestoreRenewalGatewayFailed'));
+        }
+
+        $respondWithSuccess($plugin->get_lang('RenewalRestoredSuccessfully'));
 
     case 'cancel_recurring_payment':
-        $profileId = trim((string) ($serviceSale['recurring_profile_id'] ?? ''));
+        if ('POST' !== strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'))) {
+            $respondWithError($plugin->get_lang('CancelRenewalPostRequired'), 405);
+        }
 
-        if ('' === $profileId) {
-            $plugin->updateServiceSaleRecurringData(
+        if (!Security::check_token('post')) {
+            $respondWithError($plugin->get_lang('InvalidSecurityToken'), 403);
+        }
+
+        $recurringPayment = (int) ($serviceSale['recurring_payment'] ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED);
+        if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
+            || '' !== trim((string) ($serviceSale['cancelled_at'] ?? ''))
+        ) {
+            $respondWithSuccess($plugin->get_lang('RenewalAlreadyCancelled'));
+        }
+
+        if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED !== $recurringPayment) {
+            $respondWithError($plugin->get_lang('RecurringPaymentIsNotEnabled'));
+        }
+
+        $gateway = strtolower(trim((string) ($serviceSale['recurring_gateway'] ?? '')));
+        if ('' === $gateway) {
+            $gateway = match ((int) ($serviceSale['payment_type'] ?? 0)) {
+                BuyCoursesPlugin::PAYMENT_TYPE_STRIPE => 'stripe',
+                BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL => 'paypal',
+                default => '',
+            };
+        }
+
+        $cancelledAt = api_get_utc_datetime();
+        $plannedRenewalDate = trim((string) ($serviceSale['next_charge_date'] ?? ''));
+        if ('' === $plannedRenewalDate) {
+            $plannedRenewalDate = trim((string) ($serviceSale['date_end'] ?? ''));
+        }
+
+        if ('stripe' === $gateway) {
+            $subscriptionId = trim((string) ($serviceSale['gateway_subscription_id'] ?? $serviceSale['recurring_profile_id'] ?? ''));
+            $stripeParams = $plugin->getStripeParams();
+            $secretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+
+            if ('' === $subscriptionId || '' === $secretKey) {
+                $respondWithError($plugin->get_lang('StripeCancellationConfigurationMissing'));
+            }
+
+            try {
+                \Stripe\Stripe::setApiKey($secretKey);
+                \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+
+                $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+                $subscriptionStatus = strtolower((string) ($subscription->status ?? ''));
+
+                if ('canceled' !== $subscriptionStatus && empty($subscription->cancel_at_period_end)) {
+                    $subscription = \Stripe\Subscription::update($subscriptionId, [
+                        'cancel_at_period_end' => true,
+                    ]);
+                }
+
+                $periodEnd = (int) ($subscription->current_period_end ?? 0);
+                if ($periodEnd <= 0) {
+                    $periodEnd = (int) ($subscription->items->data[0]->current_period_end ?? 0);
+                }
+
+                if ($periodEnd > 0) {
+                    $plannedRenewalDate = gmdate('Y-m-d H:i:s', $periodEnd);
+                }
+
+                $gatewayData = [
+                    'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED,
+                    'cancelled_at' => $cancelledAt,
+                    'recurring_gateway' => 'stripe',
+                    'gateway_subscription_id' => $subscriptionId,
+                    'recurring_profile_id' => $subscriptionId,
+                ];
+
+                if ('' !== $plannedRenewalDate) {
+                    $gatewayData['next_charge_date'] = $plannedRenewalDate;
+                    $gatewayData['date_end'] = $plannedRenewalDate;
+                }
+
+                if (!$plugin->updateServiceSaleGatewayData($orderId, $gatewayData)) {
+                    $respondWithError($plugin->get_lang('CancelRenewalGatewayFailed'));
+                }
+
+                $plugin->recordAudit(
+                    BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED,
+                    BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                    $orderId,
+                    [
+                        'gateway' => 'stripe',
+                        'subscription_id' => $subscriptionId,
+                        'planned_renewal_date' => $plannedRenewalDate,
+                        'cancel_at_period_end' => true,
+                    ],
+                    $currentUserId,
+                    BuyCoursesPlugin::AUDIT_SOURCE_USER
+                );
+            } catch (Throwable $exception) {
+                error_log(
+                    '[BuyCourses][Recurring] Stripe cancellation failed for service sale '.$orderId.
+                    ' MESSAGE='.$exception->getMessage()
+                );
+
+                $respondWithError($plugin->get_lang('CancelRenewalGatewayFailed'));
+            }
+
+            $respondWithSuccess($plugin->get_lang('RenewalCancelledSuccessfully'));
+        }
+
+        if ('paypal' === $gateway) {
+            if (!$paypalEnabled || '' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
+                $respondWithError($plugin->get_lang('PayPalApiCredentialsIncomplete'));
+            }
+
+            $profileId = trim((string) ($serviceSale['recurring_profile_id'] ?? ''));
+            if ('' === $profileId) {
+                $respondWithError($plugin->get_lang('PayPalRecurringProfileMissing'));
+            }
+
+            error_log('[BuyCourses][Recurring] Cancelling PayPal recurring profile '.$profileId.' for service sale '.$orderId);
+
+            $update = ManageRecurringPaymentsProfileStatus(
+                $profileId,
+                BuyCoursesPlugin::PAYPAL_RECURRING_PAYMENT_CANCEL,
+                $plugin->get_lang('RecurringPaymentCancelledByCustomer')
+            );
+
+            $ack = strtoupper((string) ($update['ACK'] ?? ''));
+
+            if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
+                $errorCode = (string) ($update['L_ERRORCODE0'] ?? 'unknown');
+                $longMessage = (string) ($update['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
+
+                error_log(
+                    '[BuyCourses][Recurring] ManageRecurringPaymentsProfileStatus failed for service sale '.$orderId.
+                    ' CODE='.$errorCode.
+                    ' MESSAGE='.$longMessage
+                );
+
+                $respondWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
+            }
+
+            $gatewayData = [
+                'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED,
+                'cancelled_at' => $cancelledAt,
+                'recurring_gateway' => 'paypal',
+                'recurring_profile_id' => $profileId,
+            ];
+
+            if ('' !== $plannedRenewalDate) {
+                $gatewayData['next_charge_date'] = $plannedRenewalDate;
+            }
+
+            if (!$plugin->updateServiceSaleGatewayData($orderId, $gatewayData)) {
+                $respondWithError($plugin->get_lang('CancelRenewalGatewayFailed'));
+            }
+
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
                 $orderId,
-                BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED,
-                null,
-                null,
-                api_get_utc_datetime()
+                [
+                    'gateway' => 'paypal',
+                    'profile_id' => $profileId,
+                    'planned_renewal_date' => $plannedRenewalDate,
+                ],
+                $currentUserId,
+                BuyCoursesPlugin::AUDIT_SOURCE_USER
             );
 
-            $redirectWithSuccess($plugin->get_lang('RecurringPaymentCancelledSuccessfully'));
+            $respondWithSuccess($plugin->get_lang('RenewalCancelledSuccessfully'));
         }
 
-        error_log('[BuyCourses][Recurring] Cancelling PayPal recurring profile '.$profileId.' for service sale '.$orderId);
-
-        $update = ManageRecurringPaymentsProfileStatus(
-            $profileId,
-            BuyCoursesPlugin::PAYPAL_RECURRING_PAYMENT_CANCEL,
-            $plugin->get_lang('RecurringPaymentCancelledByCustomer')
-        );
-
-        $ack = strtoupper((string) ($update['ACK'] ?? ''));
-
-        if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
-            $errorCode = (string) ($update['L_ERRORCODE0'] ?? 'unknown');
-            $longMessage = (string) ($update['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
-
-            error_log(
-                '[BuyCourses][Recurring] ManageRecurringPaymentsProfileStatus failed for service sale '.$orderId.
-                ' CODE='.$errorCode.
-                ' MESSAGE='.$longMessage
-            );
-
-            $redirectWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
-        }
-
-        $plugin->updateServiceSaleRecurringData(
-            $orderId,
-            BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED,
-            $profileId,
-            null,
-            api_get_utc_datetime()
-        );
-
-        $redirectWithSuccess($plugin->get_lang('RecurringPaymentCancelledSuccessfully'));
-        break;
+        $respondWithError($plugin->get_lang('CancelRenewalUnsupportedGateway'));
 
     default:
-        api_not_allowed(true);
+        $respondWithError($plugin->get_lang('RecurringPaymentInvalidRequest'));
 }

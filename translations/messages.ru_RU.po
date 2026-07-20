@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "С уважением"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример формулы: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример формулы: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазоны переменных"
@@ -1581,8 +1581,8 @@ msgstr "Вы уверены, что хотите удалить эти шаги?
 msgid "Authoring tool"
 msgstr "Происхождение"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM или AICC файлы для загрузки"
+msgid "SCORM file to upload"
+msgstr "SCORM файлы для загрузки"
 
 msgid "Course location"
 msgstr "Местоположение курса"
@@ -2023,7 +2023,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":да:авторское право,, нет:без авторского права"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток октетов,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Папка,, application\/msword:MsWord,, application\/octet-stream:Поток октетов,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":упражнение:упражнение,, имитация:имитация,, вопросник:вопросник,, диаграмма:диаграмма,, рисунок:рисунок,, график:график,, индекс:индекс,, слайд:слайд,, таблица:таблица,, повествовательный текст:повествовательный текст,, экзамен:экзамен,, эксперимент:эксперимент,, постановка проблемы:постановка проблемы,, самооценка:самооценка,, лекция:лекция"
@@ -36495,4 +36495,853 @@ msgstr "Просмотреть темы"
 
 msgid "No auth source"
 msgstr "Нет источника аутентификации"
+
+msgid "You must add at least one question"
+msgstr "Необходимо добавить хотя бы один вопрос"
+
+msgid "Advanced actions"
+msgstr "Дополнительные действия"
+
+msgid "Application path"
+msgstr "Путь к приложению"
+
+msgid "Apply files details"
+msgstr "Применить сведения о файлах"
+
+msgid "Apply plan details"
+msgstr "Применить сведения о плане"
+
+msgid "Apply plan failed"
+msgstr "Не удалось применить план"
+
+msgid "Apply plan ready"
+msgstr "План готов к применению"
+
+msgid "Apply preparation"
+msgstr "Подготовка к применению"
+
+msgid "Apply staged files"
+msgstr "Применить подготовленные файлы"
+
+msgid "Applying files..."
+msgstr "Применение файлов..."
+
+msgid "Audit file"
+msgstr "Файл аудита"
+
+msgid "Backup directory"
+msgstr "Каталог резервной копии"
+
+msgid "Baseline clean"
+msgstr "Базовая очистка"
+
+msgid "Baseline warnings"
+msgstr "Базовые предупреждения"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Создать безопасный план применения из подготовленного пакета. Проверяются только файлы, права доступа, путь резервной копии и статус блокировки. Файлы не заменяются."
+
+msgid "Build production frontend assets."
+msgstr "Собрать производственные ресурсы фронтенда."
+
+msgid "Building plan..."
+msgstr "Создание плана..."
+
+msgid "Channel"
+msgstr "Канал"
+
+msgid "Check"
+msgstr "Проверить"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Проверить наличие обновлений Chamilo, проверить пакеты, подготовить файлы и выполнить контролируемые шаги после обновления."
+
+msgid "Check manifest"
+msgstr "Проверить манифест"
+
+msgid "Checking post-apply actions..."
+msgstr "Проверка действий после применения..."
+
+msgid "Checking..."
+msgstr "Проверка..."
+
+msgid "Composer install"
+msgstr "Установка Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Действия Composer, Yarn и миграции базы данных могут изменить зависимости, сгенерированные ресурсы или базу данных. Выбирайте их только после подтверждения резервных копий и прав доступа."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Настройте CHAMILO_UPDATE_MANIFEST_URL на сервере или укажите HTTPS-URL манифеста."
+
+msgid "Configured"
+msgstr "Настроено"
+
+msgid "Current migration"
+msgstr "Текущая миграция"
+
+msgid "Database baseline"
+msgstr "Базовая линия базы данных"
+
+msgid "Database migration safety review"
+msgstr "Проверка безопасности миграции базы данных"
+
+msgid "Database migrations"
+msgstr "Миграции базы данных"
+
+msgid "Development mode"
+msgstr "Режим разработки"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Не включайте это, если резервная копия обновления и права доступа сервера не были проверены."
+
+msgid "Doctrine dry-run command"
+msgstr "Команда Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine сообщил о предупреждениях базовой линии. Обновление всё равно выполнит только подготовленные миграции V210 после явного подтверждения."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine выполнит только подготовленные миграции V210 явно после прохождения проверки безопасности."
+
+msgid "Dry-run exit code"
+msgstr "Код выхода пробного запуска"
+
+msgid "Executed unavailable migrations"
+msgstr "Выполнены недоступные миграции"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Извлечь проверённый пакет обновления во временный каталог для проверки. Это не заменяет файлы, не запускает миграции и не изменяет базу данных."
+
+msgid "File apply available"
+msgstr "Файл доступен для применения"
+
+msgid "Files to replace"
+msgstr "Файлы для замены"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Я подтверждаю, что резервная копия базы данных существует и была проверена перед запуском миграций."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Я понимаю, что расширенные действия могут изменить зависимости, сгенерированные ресурсы или базу данных."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Я понимаю, что это заменит файлы в установке Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Я понимаю, что это запустит команды обновления на сервере."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Установить зависимости фронтенда перед пересборкой ресурсов."
+
+msgid "Installed version"
+msgstr "Установленная версия"
+
+msgid "Latest migration"
+msgstr "Последняя миграция"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Оставьте пути к пакету и подписи пустыми, чтобы загрузить их из проверенных URL манифеста. Локальные пути доступны только для тестов в режиме разработки."
+
+msgid "Live command log"
+msgstr "Журнал команд в реальном времени"
+
+msgid "Live update log"
+msgstr "Журнал обновления в реальном времени"
+
+msgid "Local test options"
+msgstr "Параметры локального теста"
+
+msgid "Local test update notice link"
+msgstr "Ссылка на уведомление о локальном тестовом обновлении"
+
+msgid "Local update notice simulation"
+msgstr "Симуляция локального уведомления об обновлении"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Симуляция локального уведомления об обновлении доступна только в режиме разработки."
+
+msgid "Manifest"
+msgstr "Манифест"
+
+msgid "Manifest source"
+msgstr "Источник манифеста"
+
+msgid "Migration safety details"
+msgstr "Сведения о безопасности миграции"
+
+msgid "Migration safety review failed"
+msgstr "Проверка безопасности миграции не пройдена"
+
+msgid "Migration safety review ready"
+msgstr "Проверка безопасности миграции готова"
+
+msgid "Migration target"
+msgstr "Целевая миграция"
+
+msgid "New files"
+msgstr "Новые файлы"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Новые миграции, обнаруженные Doctrine"
+
+msgid "Next migration"
+msgstr "Следующая миграция"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Недоступных миграций не обнаружено."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Официальный URL манифеста ещё не настроен. Используйте HTTPS-URL или локальный путь для тестов в режиме разработки."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Перед целевым обновлением не обнаружено ожидающих миграций."
+
+msgid "Not configured"
+msgstr "Не настроено"
+
+msgid "Not detected"
+msgstr "Не обнаружено"
+
+msgid "Official Chamilo update channel"
+msgstr "Официальный канал обновлений Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 пакета"
+
+msgid "Package URL"
+msgstr "URL пакета"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Пакет и файлы подписи будут загружены из манифеста. Локальные пути отключены в этой среде."
+
+msgid "Package path"
+msgstr "Путь к пакету"
+
+msgid "Package staged successfully"
+msgstr "Пакет успешно размещён"
+
+msgid "Package staging failed"
+msgstr "Не удалось разместить пакет"
+
+msgid "Package verification"
+msgstr "Проверка пакета"
+
+msgid "Package verification failed"
+msgstr "Проверка пакета не пройдена"
+
+msgid "Package verified successfully"
+msgstr "Пакет успешно проверен"
+
+msgid "Pending migrations before this update"
+msgstr "Ожидающие миграции перед этим обновлением"
+
+msgid "Planned backup path"
+msgstr "Планируемый путь резервной копии"
+
+msgid "Post-apply actions completed"
+msgstr "Действия после применения завершены"
+
+msgid "Post-apply actions failed"
+msgstr "Действия после применения не выполнены"
+
+msgid "Post-apply actions ready"
+msgstr "Действия после применения готовы"
+
+msgid "Post-apply checks"
+msgstr "Проверки после применения"
+
+msgid "Post-apply checks failed"
+msgstr "Проверки после применения не пройдены"
+
+msgid "Post-apply details"
+msgstr "Детали после применения"
+
+msgid "Post-apply run details"
+msgstr "Детали запуска после применения"
+
+msgid "Preflight checks"
+msgstr "Предварительные проверки"
+
+msgid "Preflight checks completed"
+msgstr "Предварительные проверки завершены"
+
+msgid "Preflight checks failed"
+msgstr "Предварительные проверки не пройдены"
+
+msgid "Preflight details"
+msgstr "Детали предварительных проверок"
+
+msgid "Prepare staging"
+msgstr "Подготовка промежуточной среды"
+
+msgid "Preparing staging..."
+msgstr "Подготовка промежуточной среды..."
+
+msgid "Production mode"
+msgstr "Рабочий режим"
+
+msgid "Released at"
+msgstr "Выпущено"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Заменить файлы Chamilo из промежуточного пакета по утверждённому плану применения. Миграции базы данных, Composer, Yarn и команды очистки кэша не выполняются."
+
+msgid "Review apply plan"
+msgstr "Проверить план применения"
+
+msgid "Review database migrations"
+msgstr "Проверить миграции базы данных"
+
+msgid "Review post-apply actions"
+msgstr "Проверить действия после применения"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Проверить рекомендуемые команды после применения файлов обновления. На этом шаге не выполняются Composer, Yarn, миграции и команды очистки кэша."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Проверить промежуточные миграции Doctrine и результат пробного запуска перед выполнением миграций базы данных."
+
+msgid "Reviewing database migrations..."
+msgstr "Проверка миграций базы данных..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Выполните и пройдите проверку безопасности миграций перед запуском миграций базы данных."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Выполнить проверки среды перед любым будущим шагом применения обновления. Файлы и база данных не изменяются."
+
+msgid "Run post-apply actions"
+msgstr "Выполнить действия после применения"
+
+msgid "Run preflight checks"
+msgstr "Выполнить предварительные проверки"
+
+msgid "Run selected post-apply actions"
+msgstr "Выполнить выбранные действия после применения"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Выполнить выбранные команды после применения с сервера по контролируемому белому списку. Пользовательские команды оболочки не принимаются."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Выполните эти команды вручную с сервера после подтверждения результата обновления файлов и резервных копий."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Запуск действий после применения из интерфейса отключён в рабочем режиме."
+
+msgid "Running post-apply actions..."
+msgstr "Выполнение действий после применения..."
+
+msgid "Safe actions"
+msgstr "Безопасные действия"
+
+msgid "Signature path"
+msgstr "Путь к подписи"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Пропуск проверки подписи в этой среде невозможен."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Пропустить проверку подписи для локальных тестов разработки"
+
+msgid "Staged file application failed"
+msgstr "Применение промежуточных файлов не удалось"
+
+msgid "Staged files applied successfully"
+msgstr "Промежуточные файлы успешно применены"
+
+msgid "Staging details"
+msgstr "Детали промежуточной среды"
+
+msgid "Staging directory"
+msgstr "Каталог промежуточной среды"
+
+msgid "Staging extraction"
+msgstr "Распаковка промежуточной среды"
+
+msgid "Symfony cache clear"
+msgstr "Очистка кэша Symfony"
+
+msgid "System update"
+msgstr "Обновление системы"
+
+msgid "Target version"
+msgstr "Целевая версия"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Настроенный URL официального манифеста уже заполнен. При необходимости его можно изменить на другой HTTPS-манифест."
+
+msgid "The database migration baseline is clean."
+msgstr "Базовая линия миграций базы данных чистая."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Финальный HTTP-ответ не был получен после завершения операции. Обычно это вызвано правами доступа к кэшу во время выполнения или перезапуском веб-сервера во время запроса."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Журнал операций сообщает об успешном завершении действий после применения."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Выбранные команды после применения завершились успешно, но финальный HTTP-ответ не был получен. Обновите страницу и проверьте права доступа к кэшу во время выполнения, если страница загружается некорректно."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Средство обновления не создаёт и не восстанавливает резервные копии базы данных."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Эти действия безопасно выполнять из интерфейса после проверки результата обновления."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Эти команды могут изменить зависимости, сгенерированные ресурсы, кэш или базу данных. Перед продолжением подтвердите наличие резервных копий."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Это действие изменяет файлы в установке Chamilo. Убедитесь, что план применения был проверен и резервные копии включены, прежде чем продолжить."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Эта запись разработки имитирует будущее уведомление об обновлении Chamilo.org с использованием локальных тестовых путей пакетов."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Этот экран открыт из официального уведомления об обновлении, но официальный источник манифеста ещё не настроен."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Этот экран открыт из уведомления об обновлении. Автоматически запускается только проверка манифеста."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Этот шаг подготавливает только рецензию. Замена файлов произойдёт позже на этапе «Применить подготовленные файлы» с защитой блокировкой, резервным копированием и откатом."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Это обновление не создаёт резервную копию базы данных. Создайте и проверьте резервную копию перед запуском миграций."
+
+msgid "Trusted public key"
+msgstr "Доверенный открытый ключ"
+
+msgid "Trusted signing key"
+msgstr "Доверенный ключ подписи"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Введите APPLY UPDATE FILES для подтверждения"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Введите RUN DATABASE MIGRATIONS для подтверждения миграций базы данных"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Введите RUN POST UPDATE ACTIONS для подтверждения"
+
+msgid "Unknown update notice source."
+msgstr "Неизвестный источник уведомления об обновлении."
+
+msgid "Update availability"
+msgstr "Доступность обновления"
+
+msgid "Update directory"
+msgstr "Каталог обновления"
+
+msgid "Update lock path"
+msgstr "Путь к файлу блокировки обновления"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Использовать каталог подготовки, созданный на предыдущем шаге. Бэкенд принимает только каталоги внутри var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Используйте эту ссылку для имитации будущего уведомления об обновлении Chamilo.org при разработке."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Используйте только для локальных тестов разработки. Обновления в продакшене должны использовать ключ, настроенный на сервере."
+
+msgid "Verification details"
+msgstr "Детали проверки"
+
+msgid "Verify package"
+msgstr "Проверить пакет"
+
+msgid "Verifying..."
+msgstr "Проверка..."
+
+msgid "Waiting for command progress events..."
+msgstr "Ожидание событий выполнения команды..."
+
+msgid "Waiting for update progress events..."
+msgstr "Ожидание событий выполнения обновления..."
+
+msgid "Yarn build"
+msgstr "Сборка Yarn"
+
+msgid "Yarn install"
+msgstr "Установка Yarn"
+
+msgid "A comment is required"
+msgstr "Требуется комментарий"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "База данных с таким именем уже существует. Если она содержит таблицы, они будут удалены; если пуста, будет использована повторно."
+
+msgid "AI generated"
+msgstr "Сгенерировано ИИ"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Добавьте хотя бы один вопрос перед возвратом к учебному пути."
+
+msgid "Add attachments"
+msgstr "Добавить вложения"
+
+msgid "Additional fields"
+msgstr "Дополнительные поля"
+
+msgid "Allow comments"
+msgstr "Разрешить комментарии"
+
+msgid "Allow new pages"
+msgstr "Разрешить новые страницы"
+
+msgid "Allow ratings"
+msgstr "Разрешить оценки"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Вы уверены, что хотите удалить все элементы?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Вы уверены, что хотите восстановить автоматическое продление?"
+
+msgid "Attachment has been deleted"
+msgstr "Вложение удалено"
+
+msgid "Backup file"
+msgstr "Файл резервной копии"
+
+msgid "Block comments"
+msgstr "Заблокировать комментарии"
+
+msgid "Block new pages"
+msgstr "Заблокировать новые страницы"
+
+msgid "Block ratings"
+msgstr "Заблокировать оценки"
+
+msgid "Cancel renewal"
+msgstr "Отменить продление"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Ссылки на категорию будут удалены из %s страниц Wiki."
+
+msgid "Change"
+msgstr "Изменить"
+
+msgid "Clear group"
+msgstr "Очистить группу"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Щёлкните тег, чтобы вставить его в редактор. Эти плейсхолдеры будут заменены при создании сертификата."
+
+msgid "Comment added"
+msgstr "Комментарий добавлен"
+
+msgid "Comment is required"
+msgstr "Требуется комментарий"
+
+msgid "Comment score"
+msgstr "Оценка комментария"
+
+msgid "Compare selected versions line by line"
+msgstr "Сравнить выбранные версии построчно"
+
+msgid "Compare selected versions word by word"
+msgstr "Сравнить выбранные версии пословно"
+
+msgid "Compare versions"
+msgstr "Сравнить версии"
+
+msgid "Copy completed"
+msgstr "Копирование завершено"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Создать индивидуальные рабочие страницы Wiki для обучающихся"
+
+msgid "Current view mode"
+msgstr "Текущий режим просмотра"
+
+msgid "Delete Wiki"
+msgstr "Удалить Wiki"
+
+msgid "Delete page"
+msgstr "Удалить страницу"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Удаление главной страницы Wiki не рекомендуется. Вы сможете создать её заново позже."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Отключение Wiki блокирует обычные страницы и действия Wiki. Эта страница настроек остаётся доступной преподавателям курса."
+
+msgid "Discussion"
+msgstr "Обсуждение"
+
+msgid "Edit Comment"
+msgstr "Редактировать комментарий"
+
+msgid "Edit page"
+msgstr "Редактировать страницу"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Дата окончания должна быть позже или равна дате истечения срока"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Введите поисковый запрос для поиска страниц Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Дата истечения срока должна быть раньше или равна дате окончания"
+
+msgid "Failed email recipients"
+msgstr "Неуспешные получатели email"
+
+msgid "Finish and return to learning path"
+msgstr "Завершить и вернуться к учебному пути"
+
+msgid "Forum image"
+msgstr "Изображение форума"
+
+msgid "Hide discussion"
+msgstr "Скрыть обсуждение"
+
+msgid "Hide page"
+msgstr "Скрыть страницу"
+
+msgid "I changed my mind"
+msgstr "Я передумал(а)"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Если флажок снят, эти файлы останутся доступны администратору платформы через инструмент «Информация о файлах»."
+
+msgid "Internal message failures"
+msgstr "Сбои внутренних сообщений"
+
+msgid "Internal messages available"
+msgstr "Доступные внутренние сообщения"
+
+msgid "Internal messages created now"
+msgstr "Внутренние сообщения, созданные сейчас"
+
+msgid "Item score"
+msgstr "Оценка элемента"
+
+msgid "Last post"
+msgstr "Последнее сообщение"
+
+msgid "Lock page"
+msgstr "Заблокировать страницу"
+
+msgid "Manage categories"
+msgstr "Управление категориями"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Отметить этот документ как созданный с помощью ИИ. Используйте, когда содержимое было создано или существенно изменено с помощью инструментов ИИ."
+
+msgid "Maximum score is required"
+msgstr "Максимальная оценка обязательна"
+
+msgid "Metric"
+msgstr "Метрика"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Новые комментарии в этом обсуждении заблокированы"
+
+msgid "No Wiki categories are available yet."
+msgstr "Категории Wiki пока недоступны."
+
+msgid "No categories found"
+msgstr "Категории не найдены"
+
+msgid "No content"
+msgstr "Нет содержимого"
+
+msgid "No parent category"
+msgstr "Нет родительской категории"
+
+msgid "Number of comments scored"
+msgstr "Количество оценённых комментариев"
+
+msgid "Old version"
+msgstr "Старая версия"
+
+msgid "Only image files are allowed."
+msgstr "Разрешены только файлы изображений."
+
+msgid "Please fill all required fields"
+msgstr "Пожалуйста, заполните все обязательные поля"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Вопросы с плейсхолдерами класса или студента будут сгенерированы для классов или групп курса: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Оценки в этом обсуждении заблокированы"
+
+msgid "Remove image"
+msgstr "Удалить изображение"
+
+msgid "Restore renewal"
+msgstr "Восстановить продление"
+
+msgid "Restore version"
+msgstr "Восстановить версию"
+
+msgid "Search in"
+msgstr "Искать в"
+
+msgid "Select group"
+msgstr "Выбрать группу"
+
+msgid "Select image"
+msgstr "Выбрать изображение"
+
+msgid "Selected image"
+msgstr "Выбранное изображение"
+
+msgid "Show discussion"
+msgstr "Показать обсуждение"
+
+msgid "Show page"
+msgstr "Показать страницу"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Некоторые файлы или папки не имеют прав на запись. Чтобы установить Chamilo, сначала измените их разрешения (с помощью CHMOD). Пожалуйста, прочитайте"
+
+msgid "Subcategories"
+msgstr "Подкатегории"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Нажмите слева или справа для навигации"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Срок сдачи задания Wiki истёк, но разрешена отсроченная подача."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Срок сдачи задания Wiki истёк."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Задание Wiki ещё не началось."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Перед сохранением необходимо заблокировать редактирование страницы Wiki."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Объявление сохранено, но вложение не удалось загрузить."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Объявление сохранено, но доставка по электронной почте не удалась."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Объявление сохранено, но ни одно письмо не удалось доставить."
+
+msgid "The category has been created"
+msgstr "Категория создана"
+
+msgid "The category has been deleted"
+msgstr "Категория удалена"
+
+msgid "The category has been updated"
+msgstr "Категория обновлена"
+
+msgid "The end date is invalid"
+msgstr "Недействительная дата окончания"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Максимальное количество версий должно быть неотрицательным целым числом"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Максимальное количество слов должно быть неотрицательным целым числом"
+
+msgid "The print window could not be opened"
+msgstr "Не удалось открыть окно печати"
+
+msgid "The start date is invalid"
+msgstr "Недействительная дата начала"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Эти настройки применяются ко всему курсу, включая его сессии и группы."
+
+msgid "This announcement has already been sent by email."
+msgstr "Это объявление уже было отправлено по электронной почте."
+
+msgid "This discussion is hidden from learners"
+msgstr "Это обсуждение скрыто от обучающихся"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Этот инструмент генеративного ИИ позволяет создавать изображения и короткие видео для иллюстрации вашего курса. Описав (текстом) желаемый результат в поле запроса, вы предоставите настроенной модели ИИ необходимые элементы для генерации изображения или видео. Пожалуйста, будьте терпеливы. Модель ИИ потребует некоторое время и сгенерирует результат, который вы, возможно, захотите сохранить, поместив медиафайл в папку документов, а затем вставив его в HTML-документ. Не все модели ИИ одинаковы по скорости и качеству. Модель ИИ также может предложить изменённый запрос — более подробную интерпретацию вашего запроса. Вы можете использовать этот изменённый запрос для уточнения. Обратите внимание, что этот инструмент, особенно для видео, может повлечь значительные расходы для вашей организации, даже если вы решите не сохранять сгенерированные медиафайлы. Используйте его соответственно. Если у вас возникли трудности с получением желаемого результата, потратьте время на изучение приёмов составления запросов в интернете для доступной вам модели ИИ."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Эта история принадлежит базовому курсу. Восстановление доступно после создания версии для сессии."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Это изображение заменяет стандартную иконку форума, отображаемую рядом с названием форума."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Эта страница взята из базового курса. При сохранении будет создана версия для текущей сессии."
+
+msgid "This will also delete %s subcategories."
+msgstr "Это также удалит %s подкатегорий."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Будут созданы индивидуальные страницы работ для %s обучающихся."
+
+msgid "Thread history"
+msgstr "История темы"
+
+msgid "Title and content"
+msgstr "Заголовок и содержимое"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Невозможно отменить продление прямо сейчас."
+
+msgid "Unable to restore renewal right now."
+msgstr "Невозможно восстановить продление прямо сейчас."
+
+msgid "Unlock page"
+msgstr "Разблокировать страницу"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Используйте [[Страница]] или [[Страница|Видимый текст]] для создания внутренних ссылок Wiki."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Используйте пробел или клавиши со стрелками для навигации"
+
+msgid "View version"
+msgstr "Просмотреть версию"
+
+msgid "Visible only to teachers"
+msgstr "Видимо только преподавателям"
+
+msgid "Weight is required"
+msgstr "Вес обязателен"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Категории Wiki отключены для этого курса."
+
+msgid "Wiki categories enabled"
+msgstr "Категории Wiki включены"
+
+msgid "Wiki html strict filtering"
+msgstr "Строгая HTML-фильтрация Wiki"
+
+msgid "Wiki settings"
+msgstr "Настройки Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Настройки Wiki обновлены"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Вы просматриваете историческую версию этой страницы"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Вы можете прикрепить один или несколько файлов к этому ответу."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Вы можете редактировать эту страницу задания, но страницы работ обучающихся не будут изменены."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Вы можете использовать теги {{class_name}} и {{student_full_name}} в вопросе."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "У вас есть 20 минут на редактирование этой страницы до истечения блокировки редактирования."
+
+msgid "by"
+msgstr "от"
+
+msgid "required"
+msgstr "обязательно"
 

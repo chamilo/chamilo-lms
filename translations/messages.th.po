@@ -1580,8 +1580,8 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 msgid "Authoring tool"
 msgstr "เครื่องมือสร้างเนื้อหา"
 
-msgid "SCORM or AICC file to upload"
-msgstr "ไฟล์ SCORM หรือ AICC ที่จะอัปโหลด"
+msgid "SCORM file to upload"
+msgstr "ไฟล์ SCORM ที่จะอัปโหลด"
 
 msgid "Course location"
 msgstr "ตำแหน่งรายวิชา"
@@ -36494,4 +36494,853 @@ msgstr "ดูกระทู้"
 
 msgid "No auth source"
 msgstr "ไม่มีแหล่งตรวจสอบสิทธิ์"
+
+msgid "You must add at least one question"
+msgstr "คุณต้องเพิ่มคำถามอย่างน้อยหนึ่งข้อ"
+
+msgid "Advanced actions"
+msgstr "การดำเนินการขั้นสูง"
+
+msgid "Application path"
+msgstr "เส้นทางแอปพลิเคชัน"
+
+msgid "Apply files details"
+msgstr "นำรายละเอียดไฟล์ไปใช้"
+
+msgid "Apply plan details"
+msgstr "นำรายละเอียดแผนไปใช้"
+
+msgid "Apply plan failed"
+msgstr "นำแผนไปใช้ล้มเหลว"
+
+msgid "Apply plan ready"
+msgstr "นำแผนไปใช้พร้อมแล้ว"
+
+msgid "Apply preparation"
+msgstr "นำการเตรียมการไปใช้"
+
+msgid "Apply staged files"
+msgstr "นำไฟล์ที่จัดเตรียมไว้ไปใช้"
+
+msgid "Applying files..."
+msgstr "กำลังนำไฟล์ไปใช้..."
+
+msgid "Audit file"
+msgstr "ตรวจสอบไฟล์"
+
+msgid "Backup directory"
+msgstr "ไดเรกทอรีสำรองข้อมูล"
+
+msgid "Baseline clean"
+msgstr "Baseline clean"
+
+msgid "Baseline warnings"
+msgstr "Baseline warnings"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "สร้างแผนการนำไปใช้ที่ปลอดภัยจากแพ็กเกจที่จัดเตรียมไว้ การดำเนินการนี้ตรวจสอบเฉพาะไฟล์ สิทธิ์ เส้นทางสำรองข้อมูล และสถานะล็อกเท่านั้น ไม่ได้แทนที่ไฟล์"
+
+msgid "Build production frontend assets."
+msgstr "สร้างแอสเซ็ตส่วนหน้าแบบ production"
+
+msgid "Building plan..."
+msgstr "กำลังสร้างแผน..."
+
+msgid "Channel"
+msgstr "ช่องทาง"
+
+msgid "Check"
+msgstr "ตรวจสอบ"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "ตรวจสอบการอัปเดต Chamilo ที่พร้อมใช้งาน ตรวจสอบแพ็กเกจ จัดเตรียมไฟล์ และดำเนินการขั้นตอนหลังการอัปเดตแบบควบคุม"
+
+msgid "Check manifest"
+msgstr "ตรวจสอบ manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "กำลังตรวจสอบการดำเนินการหลังนำไปใช้..."
+
+msgid "Checking..."
+msgstr "กำลังตรวจสอบ..."
+
+msgid "Composer install"
+msgstr "Composer install"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "การดำเนินการของ Composer, Yarn และการย้ายฐานข้อมูลสามารถแก้ไข dependencies, แอสเซ็ตที่สร้างขึ้น หรือฐานข้อมูลได้ เลือกเฉพาะหลังจากยืนยันการสำรองข้อมูลและสิทธิ์แล้ว"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "กำหนดค่า CHAMILO_UPDATE_MANIFEST_URL บนเซิร์ฟเวอร์หรือระบุ URL manifest แบบ HTTPS"
+
+msgid "Configured"
+msgstr "กำหนดค่าแล้ว"
+
+msgid "Current migration"
+msgstr "การย้ายข้อมูลปัจจุบัน"
+
+msgid "Database baseline"
+msgstr "ฐานข้อมูลพื้นฐาน"
+
+msgid "Database migration safety review"
+msgstr "การตรวจสอบความปลอดภัยของการย้ายฐานข้อมูล"
+
+msgid "Database migrations"
+msgstr "การย้ายฐานข้อมูล"
+
+msgid "Development mode"
+msgstr "โหมดพัฒนา"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "อย่าเปิดใช้งานเว้นแต่จะมีการตรวจสอบการสำรองข้อมูลการอัปเดตและสิทธิ์ของเซิร์ฟเวอร์แล้ว"
+
+msgid "Doctrine dry-run command"
+msgstr "คำสั่งทดสอบ Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine รายงานคำเตือนพื้นฐานในอดีต โปรแกรมอัปเดตจะยังคงดำเนินการย้ายข้อมูล V210 ที่จัดเตรียมไว้หลังจากการยืนยันอย่างชัดเจนเท่านั้น"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine จะดำเนินการย้ายข้อมูล V210 ที่จัดเตรียมไว้อย่างชัดเจนหลังจากการตรวจสอบความปลอดภัยผ่านเท่านั้น"
+
+msgid "Dry-run exit code"
+msgstr "รหัสออกจากการทดสอบ"
+
+msgid "Executed unavailable migrations"
+msgstr "ดำเนินการย้ายข้อมูลที่ไม่พร้อมใช้งาน"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "แตกแพ็กเกจอัปเดตที่ตรวจสอบแล้วไปยังไดเรกทอรีชั่วคราวเพื่อตรวจสอบ การดำเนินการนี้จะไม่แทนที่ไฟล์ เรียกใช้การย้ายข้อมูล หรือแก้ไขฐานข้อมูล"
+
+msgid "File apply available"
+msgstr "ไฟล์พร้อมใช้งาน"
+
+msgid "Files to replace"
+msgstr "ไฟล์ที่จะแทนที่"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "ฉันยืนยันว่ามีการสำรองข้อมูลฐานข้อมูลและได้รับการตรวจสอบก่อนดำเนินการย้ายข้อมูล"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "ฉันเข้าใจว่าการดำเนินการขั้นสูงอาจแก้ไขการพึ่งพา สินทรัพย์ที่สร้างขึ้น หรือฐานข้อมูล"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "ฉันเข้าใจว่าการดำเนินการนี้จะแทนที่ไฟล์ในระบบติดตั้ง Chamilo"
+
+msgid "I understand this will run update commands on the server."
+msgstr "ฉันเข้าใจว่าการดำเนินการนี้จะเรียกใช้คำสั่งอัปเดตบนเซิร์ฟเวอร์"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "ติดตั้งการพึ่งพาส่วนหน้า ก่อนสร้างสินทรัพย์ใหม่"
+
+msgid "Installed version"
+msgstr "เวอร์ชันที่ติดตั้ง"
+
+msgid "Latest migration"
+msgstr "การย้ายข้อมูลล่าสุด"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "เว้นว่างเส้นทางแพ็กเกจและลายเซ็นเพื่อดาวน์โหลดจาก URL แมนิเฟสต์ที่ตรวจสอบแล้ว เส้นทางภายในเครื่องใช้ได้เฉพาะสำหรับการทดสอบการพัฒนาเท่านั้น"
+
+msgid "Live command log"
+msgstr "บันทึกคำสั่งแบบเรียลไทม์"
+
+msgid "Live update log"
+msgstr "บันทึกการอัปเดตแบบเรียลไทม์"
+
+msgid "Local test options"
+msgstr "ตัวเลือกการทดสอบภายในเครื่อง"
+
+msgid "Local test update notice link"
+msgstr "ลิงก์แจ้งการอัปเดตการทดสอบภายในเครื่อง"
+
+msgid "Local update notice simulation"
+msgstr "การจำลองการแจ้งการอัปเดตภายในเครื่อง"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "การจำลองการแจ้งการอัปเดตภายในเครื่องใช้ได้เฉพาะในโหมดพัฒนาเท่านั้น"
+
+msgid "Manifest"
+msgstr "แมนิเฟสต์"
+
+msgid "Manifest source"
+msgstr "แหล่งที่มาแมนิเฟสต์"
+
+msgid "Migration safety details"
+msgstr "รายละเอียดการตรวจสอบความปลอดภัยการย้ายข้อมูล"
+
+msgid "Migration safety review failed"
+msgstr "การตรวจสอบความปลอดภัยการย้ายข้อมูลล้มเหลว"
+
+msgid "Migration safety review ready"
+msgstr "การตรวจสอบความปลอดภัยการย้ายข้อมูลพร้อม"
+
+msgid "Migration target"
+msgstr "เป้าหมายการย้ายข้อมูล"
+
+msgid "New files"
+msgstr "ไฟล์ใหม่"
+
+msgid "New migrations reported by Doctrine"
+msgstr "การย้ายข้อมูลใหม่ที่รายงานโดย Doctrine"
+
+msgid "Next migration"
+msgstr "การย้ายข้อมูลถัดไป"
+
+msgid "No executed unavailable migration was reported."
+msgstr "ไม่มีการรายงานการย้ายข้อมูลที่ไม่พร้อมใช้งานที่ดำเนินการแล้ว"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "ยังไม่ได้กำหนดค่า URL แมนิเฟสต์อย่างเป็นทางการ ใช้ URL HTTPS หรือเส้นทางภายในเครื่องสำหรับการทดสอบการพัฒนา"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "ไม่พบการย้ายข้อมูลที่รอดำเนินการก่อนเป้าหมายการอัปเดตที่จัดเตรียมไว้"
+
+msgid "Not configured"
+msgstr "ยังไม่ได้กำหนดค่า"
+
+msgid "Not detected"
+msgstr "ไม่พบ"
+
+msgid "Official Chamilo update channel"
+msgstr "ช่องทางการอัปเดต Chamilo อย่างเป็นทางการ"
+
+msgid "Package SHA-256"
+msgstr "แพ็กเกจ SHA-256"
+
+msgid "Package URL"
+msgstr "URL แพ็กเกจ"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "ไฟล์แพ็กเกจและลายเซ็นจะถูกดาวน์โหลดจากแมนิเฟสต์ เส้นทางภายในเครื่องถูกปิดใช้งานในสภาพแวดล้อมนี้"
+
+msgid "Package path"
+msgstr "เส้นทางแพ็กเกจ"
+
+msgid "Package staged successfully"
+msgstr "จัดเตรียมแพ็กเกจสำเร็จ"
+
+msgid "Package staging failed"
+msgstr "การจัดเตรียมแพ็กเกจล้มเหลว"
+
+msgid "Package verification"
+msgstr "การตรวจสอบแพ็กเกจ"
+
+msgid "Package verification failed"
+msgstr "การตรวจสอบแพ็กเกจล้มเหลว"
+
+msgid "Package verified successfully"
+msgstr "ตรวจสอบแพ็กเกจสำเร็จแล้ว"
+
+msgid "Pending migrations before this update"
+msgstr "การย้ายข้อมูลที่รอดำเนินการก่อนการอัปเดตนี้"
+
+msgid "Planned backup path"
+msgstr "เส้นทางสำรองข้อมูลที่วางแผนไว้"
+
+msgid "Post-apply actions completed"
+msgstr "ดำเนินการหลังการปรับใช้เสร็จสมบูรณ์"
+
+msgid "Post-apply actions failed"
+msgstr "ดำเนินการหลังการปรับใช้ล้มเหลว"
+
+msgid "Post-apply actions ready"
+msgstr "ดำเนินการหลังการปรับใช้พร้อมแล้ว"
+
+msgid "Post-apply checks"
+msgstr "การตรวจสอบหลังการปรับใช้"
+
+msgid "Post-apply checks failed"
+msgstr "การตรวจสอบหลังการปรับใช้ล้มเหลว"
+
+msgid "Post-apply details"
+msgstr "รายละเอียดหลังการปรับใช้"
+
+msgid "Post-apply run details"
+msgstr "รายละเอียดการดำเนินการหลังการปรับใช้"
+
+msgid "Preflight checks"
+msgstr "การตรวจสอบก่อนการปรับใช้"
+
+msgid "Preflight checks completed"
+msgstr "การตรวจสอบก่อนการปรับใช้เสร็จสมบูรณ์"
+
+msgid "Preflight checks failed"
+msgstr "การตรวจสอบก่อนการปรับใช้ล้มเหลว"
+
+msgid "Preflight details"
+msgstr "รายละเอียดก่อนการปรับใช้"
+
+msgid "Prepare staging"
+msgstr "เตรียมสภาพแวดล้อมชั่วคราว"
+
+msgid "Preparing staging..."
+msgstr "กำลังเตรียมสภาพแวดล้อมชั่วคราว..."
+
+msgid "Production mode"
+msgstr "โหมดการผลิต"
+
+msgid "Released at"
+msgstr "เผยแพร่เมื่อ"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "แทนที่ไฟล์ Chamilo จากแพ็กเกจที่เตรียมไว้โดยใช้แผนการปรับใช้ที่ตรวจสอบแล้ว การดำเนินการนี้ไม่รวมการย้ายฐานข้อมูล คำสั่ง Composer, Yarn หรือคำสั่งล้างแคช"
+
+msgid "Review apply plan"
+msgstr "ตรวจสอบแผนการปรับใช้"
+
+msgid "Review database migrations"
+msgstr "ตรวจสอบการย้ายฐานข้อมูล"
+
+msgid "Review post-apply actions"
+msgstr "ตรวจสอบการดำเนินการหลังการปรับใช้"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "ตรวจสอบคำสั่งแนะนำด้วยตนเองหลังจากปรับใช้ไฟล์อัปเดต ขั้นตอนนี้ไม่รวมการรัน Composer, Yarn, การย้ายข้อมูล หรือคำสั่งล้างแคช"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "ตรวจสอบการย้ายข้อมูล Doctrine ที่เตรียมไว้และผลลัพธ์การทดสอบก่อนรันการย้ายฐานข้อมูล"
+
+msgid "Reviewing database migrations..."
+msgstr "กำลังตรวจสอบการย้ายฐานข้อมูล..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "ดำเนินการและผ่านการตรวจสอบความปลอดภัยของการย้ายข้อมูลก่อนดำเนินการย้ายฐานข้อมูล"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "ดำเนินการตรวจสอบสภาพแวดล้อมก่อนขั้นตอนการปรับใช้การอัปเดตในอนาคต การดำเนินการนี้ไม่แก้ไขไฟล์หรือฐานข้อมูล"
+
+msgid "Run post-apply actions"
+msgstr "ดำเนินการหลังการปรับใช้"
+
+msgid "Run preflight checks"
+msgstr "ดำเนินการตรวจสอบก่อนการปรับใช้"
+
+msgid "Run selected post-apply actions"
+msgstr "ดำเนินการหลังการปรับใช้ที่เลือก"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "รันคำสั่งหลังการปรับใช้ที่เลือกจากเซิร์ฟเวอร์โดยใช้รายการที่อนุญาตที่ควบคุม ไม่ยอมรับคำสั่งเชลล์แบบกำหนดเอง"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "รันคำสั่งเหล่านี้ด้วยตนเองจากเซิร์ฟเวอร์หลังจากยืนยันผลการอัปเดตไฟล์และการสำรองข้อมูล"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "การดำเนินการหลังการปรับใช้จาก UI ถูกปิดใช้งานในโหมดการผลิต"
+
+msgid "Running post-apply actions..."
+msgstr "กำลังดำเนินการหลังการปรับใช้..."
+
+msgid "Safe actions"
+msgstr "การดำเนินการที่ปลอดภัย"
+
+msgid "Signature path"
+msgstr "เส้นทางลายเซ็น"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "ไม่สามารถข้ามการตรวจสอบลายเซ็นในสภาพแวดล้อมนี้ได้"
+
+msgid "Skip signature verification for local development tests"
+msgstr "ข้ามการตรวจสอบลายเซ็นสำหรับการทดสอบการพัฒนาในเครื่อง"
+
+msgid "Staged file application failed"
+msgstr "การปรับใช้ไฟล์ที่เตรียมไว้ล้มเหลว"
+
+msgid "Staged files applied successfully"
+msgstr "ปรับใช้ไฟล์ที่เตรียมไว้สำเร็จแล้ว"
+
+msgid "Staging details"
+msgstr "รายละเอียดสภาพแวดล้อมชั่วคราว"
+
+msgid "Staging directory"
+msgstr "ไดเรกทอรีสภาพแวดล้อมชั่วคราว"
+
+msgid "Staging extraction"
+msgstr "การแตกไฟล์สภาพแวดล้อมชั่วคราว"
+
+msgid "Symfony cache clear"
+msgstr "ล้างแคช Symfony"
+
+msgid "System update"
+msgstr "การอัปเดตระบบ"
+
+msgid "Target version"
+msgstr "เวอร์ชันเป้าหมาย"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL แมนิเฟสต์อย่างเป็นทางการที่กำหนดค่าไว้จะถูกเติมล่วงหน้า คุณสามารถเปลี่ยนเป็นแมนิเฟสต์ HTTPS อื่นได้หากจำเป็น"
+
+msgid "The database migration baseline is clean."
+msgstr "ฐานข้อมูลการย้ายข้อมูลเริ่มต้นสะอาด"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "การตอบสนอง HTTP สุดท้ายล้มเหลวหลังจากการดำเนินการเสร็จสิ้น โดยปกติเกิดจากสิทธิ์แคชรันไทม์หรือการรีสตาร์ทเว็บเซิร์ฟเวอร์ระหว่างการร้องขอ"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "บันทึกการดำเนินการรายงานว่าการดำเนินการหลังการปรับใช้เสร็จสมบูรณ์แล้ว"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "คำสั่งหลังการใช้งานที่เลือกเสร็จสมบูรณ์แล้ว แต่การตอบสนอง HTTP สุดท้ายล้มเหลว โปรดรีเฟรชหน้าและตรวจสอบสิทธิ์แคชรันไทม์หากหน้าไม่โหลดถูกต้อง"
+
+msgid "The updater does not create or restore database backups."
+msgstr "ตัวอัปเดตไม่ได้สร้างหรือกู้คืนข้อมูลสำรองฐานข้อมูล"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "การดำเนินการเหล่านี้สามารถเรียกใช้จาก UI ได้อย่างปลอดภัยหลังจากตรวจสอบผลการอัปเดตแล้ว"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "คำสั่งเหล่านี้อาจแก้ไขการพึ่งพา สินทรัพย์ที่สร้างขึ้น แคช หรือฐานข้อมูล โปรดยืนยันข้อมูลสำรองก่อนดำเนินการต่อ"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "การดำเนินการนี้แก้ไขไฟล์ในระบบติดตั้ง Chamilo โปรดตรวจสอบให้แน่ใจว่าแผนการใช้งานได้รับการตรวจสอบและเปิดใช้งานข้อมูลสำรองก่อนดำเนินการต่อ"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "รายการพัฒนานี้จำลองประกาศการอัปเดต Chamilo.org ในอนาคตโดยใช้เส้นทางแพ็กเกจทดสอบภายในเครื่อง"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "หน้าจอนี้เปิดจากประกาศการอัปเดตอย่างเป็นทางการ แต่ยังไม่ได้กำหนดค่าต้นทางแมนนิเฟสต์อย่างเป็นทางการ"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "หน้าจอนี้เปิดจากประกาศการอัปเดต โดยเริ่มตรวจสอบแมนนิเฟสต์โดยอัตโนมัติเท่านั้น"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "ขั้นตอนนี้เตรียมการตรวจสอบเท่านั้น การแทนที่ไฟล์จะเกิดขึ้นในขั้นตอนการใช้งานไฟล์ที่จัดเตรียมไว้ในภายหลัง พร้อมการล็อก ข้อมูลสำรอง และการป้องกันการย้อนกลับ"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "ตัวอัปเดตนี้ไม่ได้สร้างข้อมูลสำรองฐานข้อมูล โปรดสร้างและตรวจสอบข้อมูลสำรองก่อนเรียกใช้การย้ายข้อมูล"
+
+msgid "Trusted public key"
+msgstr "กุญแจสาธารณะที่เชื่อถือได้"
+
+msgid "Trusted signing key"
+msgstr "กุญแจลายเซ็นที่เชื่อถือได้"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "พิมพ์ APPLY UPDATE FILES เพื่อยืนยัน"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "พิมพ์ RUN DATABASE MIGRATIONS เพื่อยืนยันการย้ายข้อมูลฐานข้อมูล"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "พิมพ์ RUN POST UPDATE ACTIONS เพื่อยืนยัน"
+
+msgid "Unknown update notice source."
+msgstr "ไม่ทราบแหล่งที่มาของประกาศการอัปเดต"
+
+msgid "Update availability"
+msgstr "ความพร้อมใช้งานของการอัปเดต"
+
+msgid "Update directory"
+msgstr "ไดเรกทอรีการอัปเดต"
+
+msgid "Update lock path"
+msgstr "เส้นทางล็อกการอัปเดต"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "ใช้ไดเรกทอรีจัดเตรียมที่สร้างโดยขั้นตอนก่อนหน้า แบ็กเอนด์ยอมรับเฉพาะไดเรกทอรีภายใน var/update/staging เท่านั้น"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "ใช้ลิงก์นี้เพื่อจำลองประกาศการอัปเดต Chamilo.org ในอนาคตระหว่างการทดสอบการพัฒนา"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "ใช้เฉพาะการทดสอบการพัฒนาภายในเครื่องเท่านั้น การอัปเดตจริงต้องใช้กุญแจที่กำหนดค่าไว้บนเซิร์ฟเวอร์"
+
+msgid "Verification details"
+msgstr "รายละเอียดการตรวจสอบ"
+
+msgid "Verify package"
+msgstr "ตรวจสอบแพ็กเกจ"
+
+msgid "Verifying..."
+msgstr "กำลังตรวจสอบ..."
+
+msgid "Waiting for command progress events..."
+msgstr "กำลังรอเหตุการณ์ความคืบหน้าของคำสั่ง..."
+
+msgid "Waiting for update progress events..."
+msgstr "กำลังรอเหตุการณ์ความคืบหน้าของการอัปเดต..."
+
+msgid "Yarn build"
+msgstr "สร้างด้วย Yarn"
+
+msgid "Yarn install"
+msgstr "ติดตั้งด้วย Yarn"
+
+msgid "A comment is required"
+msgstr "ต้องระบุความคิดเห็น"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "มีฐานข้อมูลชื่อเดียวกันอยู่แล้ว หากมีตารางจะถูกลบ หากว่างเปล่าจะถูกนำกลับมาใช้ใหม่"
+
+msgid "AI generated"
+msgstr "สร้างโดย AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "เพิ่มคำถามอย่างน้อยหนึ่งข้อก่อนกลับไปยังเส้นทางการเรียนรู้"
+
+msgid "Add attachments"
+msgstr "เพิ่มไฟล์แนบ"
+
+msgid "Additional fields"
+msgstr "ฟิลด์เพิ่มเติม"
+
+msgid "Allow comments"
+msgstr "อนุญาตความคิดเห็น"
+
+msgid "Allow new pages"
+msgstr "อนุญาตหน้าใหม่"
+
+msgid "Allow ratings"
+msgstr "อนุญาตการให้คะแนน"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบรายการทั้งหมด?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการคืนค่าการต่ออายุอัตโนมัติ?"
+
+msgid "Attachment has been deleted"
+msgstr "ไฟล์แนบถูกลบแล้ว"
+
+msgid "Backup file"
+msgstr "ไฟล์สำรอง"
+
+msgid "Block comments"
+msgstr "บล็อกความคิดเห็น"
+
+msgid "Block new pages"
+msgstr "บล็อกหน้าใหม่"
+
+msgid "Block ratings"
+msgstr "บล็อกการให้คะแนน"
+
+msgid "Cancel renewal"
+msgstr "ยกเลิกการต่ออายุ"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "ลิงก์หมวดหมู่จะถูกลบออกจากหน้า Wiki %s"
+
+msgid "Change"
+msgstr "เปลี่ยน"
+
+msgid "Clear group"
+msgstr "ล้างกลุ่ม"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "คลิกแท็กเพื่อแทรกลงในตัวแก้ไข ตัวยึดตำแหน่งเหล่านี้จะถูกแทนที่เมื่อสร้างใบรับรอง"
+
+msgid "Comment added"
+msgstr "เพิ่มความคิดเห็นแล้ว"
+
+msgid "Comment is required"
+msgstr "จำเป็นต้องมีข้อความ"
+
+msgid "Comment score"
+msgstr "คะแนนความคิดเห็น"
+
+msgid "Compare selected versions line by line"
+msgstr "เปรียบเทียบเวอร์ชันที่เลือกทีละบรรทัด"
+
+msgid "Compare selected versions word by word"
+msgstr "เปรียบเทียบเวอร์ชันที่เลือกทีละคำ"
+
+msgid "Compare versions"
+msgstr "เปรียบเทียบเวอร์ชัน"
+
+msgid "Copy completed"
+msgstr "คัดลอกเสร็จสมบูรณ์"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "สร้างหน้างานวิกิรายบุคคลสำหรับผู้เรียน"
+
+msgid "Current view mode"
+msgstr "โหมดมุมมองปัจจุบัน"
+
+msgid "Delete Wiki"
+msgstr "ลบวิกิ"
+
+msgid "Delete page"
+msgstr "ลบหน้า"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "ไม่แนะนำให้ลบหน้าแรกของวิกิ คุณสามารถสร้างใหม่ได้ในภายหลัง"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "การปิดใช้งานวิกิจะบล็อกหน้าวิกิและการดำเนินการปกติ หน้าการตั้งค่านี้ยังคงใช้งานได้สำหรับผู้สอนในหลักสูตร"
+
+msgid "Discussion"
+msgstr "การสนทนา"
+
+msgid "Edit Comment"
+msgstr "แก้ไขความคิดเห็น"
+
+msgid "Edit page"
+msgstr "แก้ไขหน้า"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "วันที่สิ้นสุดต้องอยู่หลังหรือเท่ากับวันหมดอายุ"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "ป้อนคำค้นหาเพื่อค้นหาหน้าวิกิ"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "วันหมดอายุต้องอยู่ก่อนหรือเท่ากับวันสิ้นสุด"
+
+msgid "Failed email recipients"
+msgstr "ผู้รับอีเมลที่ล้มเหลว"
+
+msgid "Finish and return to learning path"
+msgstr "เสร็จสิ้นและกลับไปยังเส้นทางการเรียนรู้"
+
+msgid "Forum image"
+msgstr "ภาพฟอรัม"
+
+msgid "Hide discussion"
+msgstr "ซ่อนการสนทนา"
+
+msgid "Hide page"
+msgstr "ซ่อนหน้า"
+
+msgid "I changed my mind"
+msgstr "ฉันเปลี่ยนใจ"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "หากไม่เลือก ไฟล์เหล่านั้นจะยังคงใช้งานได้สำหรับผู้ดูแลระบบผ่านเครื่องมือ 'ข้อมูลไฟล์'"
+
+msgid "Internal message failures"
+msgstr "ข้อความภายในล้มเหลว"
+
+msgid "Internal messages available"
+msgstr "ข้อความภายในพร้อมใช้งาน"
+
+msgid "Internal messages created now"
+msgstr "ข้อความภายในที่สร้างขึ้นใหม่"
+
+msgid "Item score"
+msgstr "คะแนนรายการ"
+
+msgid "Last post"
+msgstr "โพสต์ล่าสุด"
+
+msgid "Lock page"
+msgstr "ล็อกหน้า"
+
+msgid "Manage categories"
+msgstr "จัดการหมวดหมู่"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "ทำเครื่องหมายเอกสารนี้ว่าได้รับความช่วยเหลือจาก AI ใช้เมื่อเนื้อหาถูกสร้างหรือปรับเปลี่ยนอย่างมีนัยสำคัญด้วยเครื่องมือ AI"
+
+msgid "Maximum score is required"
+msgstr "จำเป็นต้องมีคะแนนสูงสุด"
+
+msgid "Metric"
+msgstr "เมตริก"
+
+msgid "New comments are blocked in this discussion"
+msgstr "ความคิดเห็นใหม่ถูกบล็อกในการสนทนานี้"
+
+msgid "No Wiki categories are available yet."
+msgstr "ยังไม่มีหมวดหมู่วิกิ"
+
+msgid "No categories found"
+msgstr "ไม่พบหมวดหมู่"
+
+msgid "No content"
+msgstr "ไม่มีเนื้อหา"
+
+msgid "No parent category"
+msgstr "ไม่มีหมวดหมู่หลัก"
+
+msgid "Number of comments scored"
+msgstr "จำนวนความคิดเห็นที่ได้รับคะแนน"
+
+msgid "Old version"
+msgstr "เวอร์ชันเก่า"
+
+msgid "Only image files are allowed."
+msgstr "อนุญาตเฉพาะไฟล์ภาพเท่านั้น"
+
+msgid "Please fill all required fields"
+msgstr "กรุณากรอกข้อมูลในช่องที่จำเป็นทั้งหมด"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "คำถามที่มีตัวแทนชั้นเรียนหรือนักเรียนจะถูกสร้างขึ้นสำหรับชั้นเรียนหรือกลุ่มในหลักสูตร: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "การให้คะแนนถูกบล็อกในการสนทนานี้"
+
+msgid "Remove image"
+msgstr "ลบภาพ"
+
+msgid "Restore renewal"
+msgstr "คืนค่าการต่ออายุ"
+
+msgid "Restore version"
+msgstr "คืนค่าเวอร์ชัน"
+
+msgid "Search in"
+msgstr "ค้นหาใน"
+
+msgid "Select group"
+msgstr "เลือกกลุ่ม"
+
+msgid "Select image"
+msgstr "เลือกภาพ"
+
+msgid "Selected image"
+msgstr "ภาพที่เลือก"
+
+msgid "Show discussion"
+msgstr "แสดงการสนทนา"
+
+msgid "Show page"
+msgstr "แสดงหน้า"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "บางไฟล์หรือโฟลเดอร์ไม่มีสิทธิ์เขียน หากต้องการติดตั้ง Chamilo คุณต้องเปลี่ยนสิทธิ์ก่อน (โดยใช้ CHMOD) โปรดอ่าน"
+
+msgid "Subcategories"
+msgstr "หมวดย่อย"
+
+msgid "Tap on the left or right to navigate"
+msgstr "แตะด้านซ้ายหรือขวาเพื่อนำทาง"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "กำหนดส่งงาน Wiki ผ่านไปแล้ว แต่ยังอนุญาตให้ส่งงานล่าช้าได้"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "กำหนดส่งงาน Wiki ผ่านไปแล้ว"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "งาน Wiki ยังไม่เริ่มต้น"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "ต้องล็อกการแก้ไขหน้าก่อนบันทึก"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "บันทึกประกาศแล้ว แต่ไม่สามารถอัปโหลดไฟล์แนบได้"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "บันทึกประกาศแล้ว แต่การส่งอีเมลล้มเหลว"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "บันทึกประกาศแล้ว แต่ไม่สามารถส่งอีเมลได้"
+
+msgid "The category has been created"
+msgstr "สร้างหมวดหมู่แล้ว"
+
+msgid "The category has been deleted"
+msgstr "ลบหมวดหมู่แล้ว"
+
+msgid "The category has been updated"
+msgstr "อัปเดตหมวดหมู่แล้ว"
+
+msgid "The end date is invalid"
+msgstr "วันที่สิ้นสุดไม่ถูกต้อง"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "จำนวนเวอร์ชันสูงสุดต้องเป็นจำนวนเต็มที่ไม่เป็นลบ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "จำนวนคำสูงสุดต้องเป็นจำนวนเต็มที่ไม่เป็นลบ"
+
+msgid "The print window could not be opened"
+msgstr "ไม่สามารถเปิดหน้าต่างพิมพ์ได้"
+
+msgid "The start date is invalid"
+msgstr "วันที่เริ่มต้นไม่ถูกต้อง"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "การตั้งค่าเหล่านี้มีผลกับหลักสูตรทั้งหมด รวมถึงเซสชันและกลุ่ม"
+
+msgid "This announcement has already been sent by email."
+msgstr "ประกาศนี้ถูกส่งทางอีเมลแล้ว"
+
+msgid "This discussion is hidden from learners"
+msgstr "การสนทนานี้ถูกซ่อนจากผู้เรียน"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "เครื่องมือ AI นี้ช่วยให้คุณสร้างภาพและวิดีโอสั้นเพื่อประกอบหลักสูตร โดยการอธิบาย (ด้วยข้อความ) สิ่งที่ต้องการในส่วนพรอมต์ คุณจะให้โมเดล AI ที่กำหนดค่าไว้มีองค์ประกอบที่จำเป็นในการสร้างภาพหรือวิดีโอ โปรดอดทน โมเดล AI จะใช้เวลาสักระยะและสร้างผลลัพธ์ ซึ่งคุณอาจต้องการเก็บไว้โดยบันทึกสื่อในโฟลเดอร์เอกสารของคุณ แล้วฝังในเอกสาร HTML ไม่ใช่ทุกโมเดล AI จะมีประสิทธิภาพเท่ากันในด้านความเร็วหรือคุณภาพ โมเดล AI อาจให้พรอมต์ที่ปรับแก้แล้ว ซึ่งเป็นการตีความคำขอของคุณอย่างละเอียดยิ่งขึ้น จากนั้นคุณสามารถใช้พรอมต์ที่ปรับแก้แล้วเพื่อปรับแต่งคำขอของคุณ โปรดทราบว่าเครื่องมือนี้ โดยเฉพาะวิดีโอ อาจทำให้องค์กรของคุณมีค่าใช้จ่ายสูง แม้ว่าคุณจะตัดสินใจไม่บันทึกสื่อที่สร้างขึ้นก็ตาม โปรดใช้อย่างเหมาะสม หากคุณมีปัญหาในการได้ผลลัพธ์ที่ต้องการ โปรดใช้เวลาศึกษาเทคนิคการเขียนพรอมต์ออนไลน์สำหรับโมเดล AI ที่คุณมี"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "ประวัตินี้เป็นของหลักสูตรหลัก การกู้คืนจะพร้อมใช้งานหลังจากสร้างเวอร์ชันเซสชันแล้ว"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "ภาพนี้แทนที่ไอคอนฟอรัมเริ่มต้นที่แสดงถัดจากชื่อฟอรัม"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "หน้านี้มาจากหลักสูตรหลัก การบันทึกจะสร้างเวอร์ชันสำหรับเซสชันปัจจุบัน"
+
+msgid "This will also delete %s subcategories."
+msgstr "การดำเนินการนี้จะลบหมวดย่อย %s ด้วย"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "การดำเนินการนี้จะสร้างหน้างานแยกสำหรับผู้เรียน %s คน"
+
+msgid "Thread history"
+msgstr "ประวัติกระทู้"
+
+msgid "Title and content"
+msgstr "ชื่อเรื่องและเนื้อหา"
+
+msgid "Unable to cancel renewal right now."
+msgstr "ไม่สามารถยกเลิกการต่ออายุได้ในขณะนี้"
+
+msgid "Unable to restore renewal right now."
+msgstr "ไม่สามารถกู้คืนสิทธิ์การต่ออายุได้ในขณะนี้"
+
+msgid "Unlock page"
+msgstr "ปลดล็อกหน้า"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "ใช้ [[Page]] หรือ [[Page|ข้อความที่แสดง]] เพื่อสร้างลิงก์ Wiki ภายใน"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "ใช้แถบเว้นวรรคหรือปุ่มลูกศรเพื่อนำทาง"
+
+msgid "View version"
+msgstr "ดูเวอร์ชัน"
+
+msgid "Visible only to teachers"
+msgstr "มองเห็นได้เฉพาะครู"
+
+msgid "Weight is required"
+msgstr "ต้องระบุน้ำหนัก"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "หมวดหมู่ Wiki ถูกปิดใช้งานสำหรับหลักสูตรนี้"
+
+msgid "Wiki categories enabled"
+msgstr "เปิดใช้งานหมวดหมู่ Wiki แล้ว"
+
+msgid "Wiki html strict filtering"
+msgstr "การกรอง HTML แบบเข้มงวดของ Wiki"
+
+msgid "Wiki settings"
+msgstr "การตั้งค่า Wiki"
+
+msgid "Wiki settings updated"
+msgstr "อัปเดตการตั้งค่า Wiki แล้ว"
+
+msgid "You are viewing a historical version of this page"
+msgstr "คุณกำลังดูเวอร์ชันประวัติของหน้านี้"
+
+msgid "You can attach one or more files to this reply."
+msgstr "คุณสามารถแนบไฟล์อย่างน้อยหนึ่งไฟล์กับการตอบกลับนี้ได้"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "คุณสามารถแก้ไขหน้านี้ของงานที่มอบหมายได้ แต่หน้าผลงานของผู้เรียนจะไม่ถูกแก้ไข"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "คุณสามารถใช้แท็ก {{class_name}} และ {{student_full_name}} ในคำถามได้"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "คุณมีเวลา 20 นาทีในการแก้ไขหน้านี้ก่อนที่การล็อกการแก้ไขจะหมดอายุ"
+
+msgid "by"
+msgstr "โดย"
+
+msgid "required"
+msgstr "จำเป็น"
 

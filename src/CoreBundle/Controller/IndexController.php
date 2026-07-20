@@ -30,9 +30,28 @@ class IndexController extends BaseController
     #[Route('/resources/courses', name: 'resources_courses', methods: ['GET'])]
     #[Route('/resources/courses/{vueRouting}', name: 'resources_courses_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/document/{nodeId}/manager', name: 'resources_filemanager', methods: ['GET'])]
+    #[Route('/resources/lp/{node}/{lpId}/builder', name: 'resources_lp_builder', requirements: ['node' => '\d+', 'lpId' => '\d+'], methods: ['GET'])]
+    #[Route('/resources/lp/{node}/{lpId}/runtime', name: 'resources_lp_runtime', requirements: ['node' => '\d+', 'lpId' => '\d+'], methods: ['GET'])]
+    #[Route('/resources/lp/{node}/{lpId}/reporting', name: 'resources_lp_reporting', requirements: ['node' => '\d+', 'lpId' => '\d+'], methods: ['GET'])]
+    #[Route('/resources/lp/{node}/{lpId}/update-scorm', name: 'resources_lp_scorm_update', requirements: ['node' => '\d+', 'lpId' => '\d+'], methods: ['GET'])]
+    #[Route(
+        '/resources/lp/{node}/import',
+        name: 'resources_lp_scorm_import',
+        requirements: ['node' => '\d+'],
+        methods: ['GET'],
+    )]
     #[Route('/resources/lp/{node}/advanced-access', name: 'resources_lp_advanced_access', methods: ['GET'])]
+    #[Route('/resources/lp/{node}/categories/{categoryId}/subscriptions', name: 'resources_lp_category_subscriptions', requirements: ['node' => '\d+', 'categoryId' => '\d+'], methods: ['GET'])]
     #[Route('/resources/forum/{vueRouting}', name: 'resources_forum_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/survey/{vueRouting}', name: 'resources_survey_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/course-description/{vueRouting}', name: 'resources_course_description_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/notebook/{vueRouting}', name: 'resources_notebook_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/portfolio/{vueRouting}', name: 'resources_portfolio_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/wiki/{vueRouting}', name: 'resources_wiki_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/course-progress/{vueRouting}', name: 'resources_course_progress_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/announcement/{vueRouting}', name: 'resources_announcement_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/tickets', name: 'tickets_vue_entrypoint', methods: ['GET'])]
+    #[Route('/tickets/{vueRouting}', name: 'tickets_vue_nested_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/survey/pending', name: 'survey_pending_vue_entrypoint', methods: ['GET'])]
     #[Route('/resources/accessurl/{id}/delete', name: 'access_url_delete', methods: ['GET'])]
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]
@@ -120,7 +139,15 @@ class IndexController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_TEACHER')) {
+        // Teachers and coaches of the current course may toggle too. The contextual
+        // roles are resolved from the cid/sid query params by CidReqListener +
+        // CourseContextRoleListener; ROLE_ADMIN reaches them through the role
+        // hierarchy, so platform admins are covered as well.
+        if (
+            !$this->isGranted('ROLE_ADMIN')
+            && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            && !$this->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+        ) {
             throw $this->createAccessDeniedException();
         }
 

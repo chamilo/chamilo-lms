@@ -175,15 +175,26 @@ class CourseHelper
 
         $this->assertCanCreateCourse($params);
 
+        // A course created with a validated BuyCourses service starts as private.
+        // Explicit visibility values remain respected for administrative/custom flows.
+        if (
+            !empty($params['buycourses_service_sale_id'])
+            && !\array_key_exists('visibility', $params)
+        ) {
+            $params['visibility'] = Course::REGISTERED;
+        }
+
+        $wantedCodeWasGeneratedFromTitle = false;
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $this->generateCourseCode($params['title']);
+            $wantedCodeWasGeneratedFromTitle = true;
             $this->debugLog('createCourse:generatedWantedCode', ['wanted_code' => $params['wanted_code']]);
         }
 
         if ($this->courseRepository->courseCodeExists($params['wanted_code'])) {
             $this->debugLog('createCourse:duplicateCode', ['wanted_code' => $params['wanted_code']]);
 
-            throw new Exception('The course code already exists: '.$params['wanted_code']);
+            throw new InvalidArgumentException($this->translator->trans($wantedCodeWasGeneratedFromTitle ? 'This course title already exists, please choose another title.' : 'This course code already exists, please choose another code.'));
         }
 
         $keys = $this->defineCourseKeys($params['wanted_code']);
@@ -381,7 +392,7 @@ class CourseHelper
             $message .= $this->translator->trans('Category').': '.$category->getCode()."\n";
         }
 
-        $message .= $this->translator->trans('Coach').': '.$course->getTutorName()."\n";
+        $message .= $this->translator->trans('Tutor').': '.$course->getTutorName()."\n";
         $message .= $this->translator->trans('Language').': '.$course->getCourseLanguage();
 
         $email = (new Email())
@@ -1591,7 +1602,7 @@ class CourseHelper
         return $limits;
     }
 
-    public function deleteCourse(Course $course, bool $deleteExclusiveDocuments = false): void
+    public function deleteCourse(Course $course, bool $deleteExclusiveDocuments = false): bool
     {
         $em = $this->entityManager;
 
@@ -1615,11 +1626,13 @@ class CourseHelper
             $count = UrlManager::getCountUrlRelCourse($course->getId());
         }
 
+        // In a multi-URL portal the course may still be linked to other URLs.
+        // In that case it was only unsubscribed from the current URL, not deleted.
         if (0 !== $count) {
-            return;
+            return false;
         }
 
-        $groupCategories = GroupManager::get_categories($course, null);
+        $groupCategories = GroupManager::get_categories($course);
         if (!empty($groupCategories)) {
             foreach ($groupCategories as $category) {
                 GroupManager::delete_category($category['iid'], $course->getCode());
@@ -1747,6 +1760,8 @@ class CourseHelper
             api_get_user_id(),
             $course->getId()
         );
+
+        return true;
     }
 
     /**

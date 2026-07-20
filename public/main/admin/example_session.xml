@@ -23,14 +23,14 @@
     </Courses>
     <Session>
         <SessionName>The Universe</SessionName>
-        <Coach>Coach</Coach>
+        <Tutor>Tutor</Tutor>
         <DateStart>2008/08/01</DateStart>
         <DateEnd>2020/12/12</DateEnd>
         <User>jmontoya</User>
         <User>jmontoya2</User>
     	<Course>
     		<CourseCode>08011942</CourseCode>
-    		<Coach>Hawking</Coach>
+            <Tutor>Hawking</Tutor>
     		<User>jmontoya</User>
 			<User>jmontoya2</User>
     	</Course>

@@ -167,6 +167,24 @@
                         {% endif %}
                     </div>
 
+                    <div class="w-full max-w-lg space-y-2">
+                        <label for="coupon-times-applied" class="block text-sm font-semibold text-gray-90">
+                            {{ 'CouponTimesApplied'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </label>
+                        <input
+                            id="coupon-times-applied"
+                            name="times_applied"
+                            type="number"
+                            min="0"
+                            step="1"
+                            value="{{ data.times_applied|default('0')|e('html_attr') }}"
+                            class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
+                        >
+                        <div class="text-sm text-gray-50">
+                            {{ 'CouponTimesAppliedHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </div>
+                    </div>
+
                     <div class="grid gap-4 lg:grid-cols-2">
                         <div class="w-full max-w-lg space-y-2">
                             <label for="coupon-date-start" class="block text-sm font-semibold text-gray-90">

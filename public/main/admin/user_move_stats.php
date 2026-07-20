@@ -134,6 +134,7 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 $TBL_LP_VIEW = Database::get_course_table(TABLE_LP_VIEW);
                 $TBL_NOTEBOOK = Database::get_course_table(TABLE_NOTEBOOK);
+                $TBL_RESOURCE_LINK = Database::get_main_table('resource_link');
                 $TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
                 $TBL_STUDENT_PUBLICATION_ASSIGNMENT = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
                 $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -575,27 +576,47 @@ if (isset($_REQUEST['load_ajax'])) {
                 }
 
                 //11. Notebook
+                // Notebook course/session context is stored in resource_link in Chamilo 2.
+                $originNotebookSessionCondition = 0 === $origin_session_id
+                    ? 'rl.session_id IS NULL'
+                    : 'rl.session_id = '.$origin_session_id;
 
-                $sql = "SELECT notebook_id FROM $TBL_NOTEBOOK
-                        WHERE user_id = $user_id AND session_id = $origin_session_id AND course = '$origin_course_code' AND c_id = $course_id";
+                $sql = "SELECT rl.id AS resource_link_id
+                        FROM $TBL_NOTEBOOK notebook
+                        INNER JOIN $TBL_RESOURCE_LINK rl
+                            ON rl.resource_node_id = notebook.resource_node_id
+                        WHERE notebook.user_id = $user_id
+                            AND rl.c_id = $course_id
+                            AND $originNotebookSessionCondition
+                            AND rl.deleted_at IS NULL";
                 if ($debug) {
                     var_dump($sql);
                 }
                 $res = Database::query($sql);
                 while ($row = Database::fetch_assoc($res)) {
-                    $id = $row['notebook_id'];
-                    if ($update_database) {
-                        $sql = "UPDATE $TBL_NOTEBOOK
-                                SET session_id = $new_session_id
-                                WHERE c_id = $course_id AND notebook_id = $id";
-                        if ($debug) {
-                            var_dump($sql);
-                        }
-                        $res = Database::query($sql);
-                        if ($debug) {
-                            var_dump($res);
-                        }
+                    $resourceLinkId = (int) $row['resource_link_id'];
+                    if (!$update_database) {
+                        $result_message[$TBL_NOTEBOOK][$resourceLinkId] = [
+                            'resource_link_id' => $resourceLinkId,
+                            'origin_session_id' => $origin_session_id,
+                            'destination_session_id' => $new_session_id,
+                        ];
+
+                        continue;
                     }
+
+                    $newSessionValue = 0 === $new_session_id ? 'NULL' : (string) $new_session_id;
+                    $sql = "UPDATE $TBL_RESOURCE_LINK
+                            SET session_id = $newSessionValue
+                            WHERE id = $resourceLinkId";
+                    if ($debug) {
+                        var_dump($sql);
+                    }
+                    $updateResult = Database::query($sql);
+                    if ($debug) {
+                        var_dump($updateResult);
+                    }
+                    $result_message[$TBL_NOTEBOOK] = ($result_message[$TBL_NOTEBOOK] ?? 0) + 1;
                 }
 
                 if ($update_database) {

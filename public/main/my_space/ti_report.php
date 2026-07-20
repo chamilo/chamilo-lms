@@ -110,7 +110,7 @@ if ($form->validate()) {
     ]);
 
     $headers = [
-        get_lang('Coach'),
+        get_lang('Tutor'),
         get_lang('Sessions'),
     ];
 
@@ -139,7 +139,7 @@ if ($form->validate()) {
     foreach ($coachList as $coachData) {
         $column = 0;
 
-        // Coach name
+        // Tutor name
         $table->setCellContents($row, $column, $coachData['complete_name']);
         $table->updateCellAttributes(
             $row,
@@ -284,7 +284,7 @@ echo '          <h2 class="text-base md:text-lg font-semibold text-gray-800">'.
     get_lang('Head manager report').
     '</h2>';
 echo '          <p class="text-sm text-gray-600">'.
-    get_lang('This report shows the weekly distribution of sessions per general coach in the selected date range.').
+    get_lang('This report shows the weekly distribution of sessions per general tutor in the selected date range.').
     '</p>';
 
 echo '          <div class="mb-4">';

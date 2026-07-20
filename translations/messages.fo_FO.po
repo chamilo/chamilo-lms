@@ -1575,8 +1575,8 @@ msgstr "Er tú vís í at sletta hesum trimum?"
 msgid "Authoring tool"
 msgstr "Ritverktøy"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM ella AICC fíla at leggja upp"
+msgid "SCORM file to upload"
+msgstr "SCORM fíla at leggja upp"
 
 msgid "Course location"
 msgstr "Kursstaður"
@@ -36488,4 +36488,853 @@ msgstr "Vís tráðir"
 
 msgid "No auth source"
 msgstr "Onki samgildiskelda"
+
+msgid "You must add at least one question"
+msgstr "Tú mást í minsta lagi leggja eina spurningar"
+
+msgid "Advanced actions"
+msgstr "Avanseraðir atgerðir"
+
+msgid "Application path"
+msgstr "Forritaleið"
+
+msgid "Apply files details"
+msgstr "Ger fíladetaljir galdandi"
+
+msgid "Apply plan details"
+msgstr "Ger ætlanardetaljir galdandi"
+
+msgid "Apply plan failed"
+msgstr "Ætlanardetaljir kundu ikki gerast galdandi"
+
+msgid "Apply plan ready"
+msgstr "Ætlanardetaljir eru klárar"
+
+msgid "Apply preparation"
+msgstr "Ger fyrireiking galdandi"
+
+msgid "Apply staged files"
+msgstr "Ger stigfestar fílir galdandi"
+
+msgid "Applying files..."
+msgstr "Ger fílir galdandi..."
+
+msgid "Audit file"
+msgstr "Endurskoða fíl"
+
+msgid "Backup directory"
+msgstr "Trygdaravritsmappa"
+
+msgid "Baseline clean"
+msgstr "Grundarlína rein"
+
+msgid "Baseline warnings"
+msgstr "Grundarlína ávaringar"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Bygg eina trygda ætlan frá tí stigfesta pakkanum. Hetta kannað bert fílir, rættindi, trygdaravritsmappu og læsingarstøðu. Tað skiftir ikki fílir."
+
+msgid "Build production frontend assets."
+msgstr "Bygg framleiðslu frontend assets."
+
+msgid "Building plan..."
+msgstr "Byggingaráætlun..."
+
+msgid "Channel"
+msgstr "Rás"
+
+msgid "Check"
+msgstr "Kanna"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Leita eftir tiltækum uppfærslum Chamilo, sannprófa pakka, undirbúa skrár og keyra stýrðar eftir-uppfærslu aðgerðir."
+
+msgid "Check manifest"
+msgstr "Kanna manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Athuga eftir-uppfærslu aðgerðir..."
+
+msgid "Checking..."
+msgstr "Athugar..."
+
+msgid "Composer install"
+msgstr "Composer uppsetning"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn og gagnagrunnsflutningsaðgerðir geta breytt ósjálfstæðum, búnum eignum eða gagnagrunninum. Veldu þær aðeins eftir að hafa staðfest afrit og heimildir."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Stilltu CHAMILO_UPDATE_MANIFEST_URL á þjóninum eða gefðu upp HTTPS manifest-slóð."
+
+msgid "Configured"
+msgstr "Stillt"
+
+msgid "Current migration"
+msgstr "Núverandi flutningur"
+
+msgid "Database baseline"
+msgstr "Gagnagrunnsgrunnlína"
+
+msgid "Database migration safety review"
+msgstr "Öryggisendurskoðun gagnagrunnsflutninga"
+
+msgid "Database migrations"
+msgstr "Gagnagrunnsflutningar"
+
+msgid "Development mode"
+msgstr "Þróunarhamur"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ekki virkja þetta nema uppfærsluafrit og þjónsheimildir hafi verið yfirfarnar."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine prófunarkeyrsla"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine tilkynnti viðvaranir um sögulega grunnlínu. Uppfærslan mun samt aðeins keyra undirbúnar V210 flutningar eftir staðfesta samþykki."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine mun aðeins keyra undirbúnar V210 flutningar eftir að öryggisendurskoðun hefur verið samþykkt."
+
+msgid "Dry-run exit code"
+msgstr "Útkóði prófunarkeyrslu"
+
+msgid "Executed unavailable migrations"
+msgstr "Keyrðir ótiltækir flutningar"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Afþjappa sannreyndan uppfærslupakka í undirbúningsmöppu til skoðunar. Þetta kemur ekki í stað skráa, keyrir ekki flutninga né breytir gagnagrunninum."
+
+msgid "File apply available"
+msgstr "Skráaruppfærsla tiltæk"
+
+msgid "Files to replace"
+msgstr "Skrár sem á að skipta út"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Ég staðfesti að gagnagrunnsafrit er til og hefur verið sannreynt áður en flutningar eru keyrðir."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Ég skil að háþróaðar aðgerðir geta breytt ósjálfstæðum, búnum eignum eða gagnagrunninum."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Ég skil að þetta mun skipta út skrám í Chamilo uppsetningunni."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Ég skil að þetta mun keyra uppfærsluskipanir á þjóninum."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Settu upp framendaósjálfstæði áður en eignir eru endurbyggðar."
+
+msgid "Installed version"
+msgstr "Uppsett útgáfa"
+
+msgid "Latest migration"
+msgstr "Síðasti flutningur"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Skildu pakka- og undirskriftarslóðir eftir tómar til að hlaða þeim niður frá sannreyndum manifest-slóðum. Staðbundnar slóðir eru aðeins tiltækar fyrir þróunarprófanir."
+
+msgid "Live command log"
+msgstr "Lifandi skipanaskrá"
+
+msgid "Live update log"
+msgstr "Lifandi uppfærsluskrá"
+
+msgid "Local test options"
+msgstr "Staðbundnir prófunarvalkostir"
+
+msgid "Local test update notice link"
+msgstr "Staðbundinn prófunartilkynningartengill"
+
+msgid "Local update notice simulation"
+msgstr "Staðbundin prófunartilkynningarsimulering"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Staðbundin prófunartilkynningarsimulering er aðeins tiltæk í þróunarham."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Manifest-uppruni"
+
+msgid "Migration safety details"
+msgstr "Flutningaöryggisupplýsingar"
+
+msgid "Migration safety review failed"
+msgstr "Flutningaöryggisendurskoðun mistókst"
+
+msgid "Migration safety review ready"
+msgstr "Flutningaöryggisendurskoðun tilbúin"
+
+msgid "Migration target"
+msgstr "Flutningsmarkmið"
+
+msgid "New files"
+msgstr "Nýjar skrár"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Nýir flutningar tilkynntir af Doctrine"
+
+msgid "Next migration"
+msgstr "Næsti flutningur"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Enginn keyrður ótiltækur flutningur var tilkynntur."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Engin opinber manifest-slóð er enn stillt. Notaðu HTTPS-slóð eða staðbundna slóð fyrir þróunarprófanir."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Ongin bíðandi flyting varð staðfest áðrenn uppdateringarmálið."
+
+msgid "Not configured"
+msgstr "Ikki uppsett"
+
+msgid "Not detected"
+msgstr "Ikki staðfest"
+
+msgid "Official Chamilo update channel"
+msgstr "Alment Chamilo-uppdateringsrás"
+
+msgid "Package SHA-256"
+msgstr "Pakki SHA-256"
+
+msgid "Package URL"
+msgstr "Pakki URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Pakki- og undirskriftarfílir verða taknir niður frá manifestinum. Lokalar leiðir eru óvirknar í hesi umhvørvi."
+
+msgid "Package path"
+msgstr "Pakki leið"
+
+msgid "Package staged successfully"
+msgstr "Pakki varð staddur væleydnað"
+
+msgid "Package staging failed"
+msgstr "Pakki staddur miseydnað"
+
+msgid "Package verification"
+msgstr "Pakki váttan"
+
+msgid "Package verification failed"
+msgstr "Pakki váttan miseydnað"
+
+msgid "Package verified successfully"
+msgstr "Pakki váttaður væleydnað"
+
+msgid "Pending migrations before this update"
+msgstr "Bíðandi flytingar áðrenn hesa uppdatering"
+
+msgid "Planned backup path"
+msgstr "Ætlað trygdartrygging leið"
+
+msgid "Post-apply actions completed"
+msgstr "Eftir-virkandi gerðir fullførdar"
+
+msgid "Post-apply actions failed"
+msgstr "Eftir-virkandi gerðir miseydnaðar"
+
+msgid "Post-apply actions ready"
+msgstr "Eftir-virkandi gerðir klárar"
+
+msgid "Post-apply checks"
+msgstr "Eftir-virkandi kanningar"
+
+msgid "Post-apply checks failed"
+msgstr "Eftir-virkandi kanningar miseydnaðar"
+
+msgid "Post-apply details"
+msgstr "Eftir-virkandi upplýsingar"
+
+msgid "Post-apply run details"
+msgstr "Eftir-virkandi koyringar upplýsingar"
+
+msgid "Preflight checks"
+msgstr "Undanflúgving kanningar"
+
+msgid "Preflight checks completed"
+msgstr "Undanflúgving kanningar fullførdar"
+
+msgid "Preflight checks failed"
+msgstr "Undanflúgving kanningar miseydnaðar"
+
+msgid "Preflight details"
+msgstr "Undanflúgving upplýsingar"
+
+msgid "Prepare staging"
+msgstr "Fyrireika staddan"
+
+msgid "Preparing staging..."
+msgstr "Fyrireikar staddan..."
+
+msgid "Production mode"
+msgstr "Framleiðslumáti"
+
+msgid "Released at"
+msgstr "Útgivin"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Skift Chamilo fílir úr stadda pakkanum við nágreiniligum virkandi ætlan. Hetta koyrir ikki dátugrunn flytingar, Composer, Yarn ella cache boð."
+
+msgid "Review apply plan"
+msgstr "Endurskoða virkandi ætlan"
+
+msgid "Review database migrations"
+msgstr "Endurskoða dátugrunn flytingar"
+
+msgid "Review post-apply actions"
+msgstr "Endurskoða eftir-virkandi gerðir"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Endurskoða tilrádd manuell boð eftir at hava virkað uppdatering fílir. Hetta stig koyrir ikki Composer, Yarn, flytingar ella cache boð."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Endurskoða stadda Doctrine flytingar og dry-run úttak áðrenn koyra dátugrunn flytingar."
+
+msgid "Reviewing database migrations..."
+msgstr "Endurskoðar dátugrunn flytingar..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Koyr og standast flyting trygdar endurskoðan áðrenn koyra dátugrunn flytingar."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Koyr umhvørvi kanningar áðrenn nakra framtíðar uppdatering virkandi stig. Hetta broytir ikki fílir ella dátugrunn."
+
+msgid "Run post-apply actions"
+msgstr "Koyr eftir-virkandi gerðir"
+
+msgid "Run preflight checks"
+msgstr "Koyr undanflúgving kanningar"
+
+msgid "Run selected post-apply actions"
+msgstr "Koyr valdar eftir-virkandi gerðir"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Koyr valdar eftir-virkandi boð frá servaranum við stýrdum loyvislista. Eingin serstøk skel boð verða góðtikin."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Koyr hesi boð manuelt frá servaranum eftir at hava váttað fíla uppdatering úrslit og trygdartryggingar."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "At koyra eftir-virkandi gerðir frá UI er óvirkið í framleiðslumáta."
+
+msgid "Running post-apply actions..."
+msgstr "Koyrir eftir-virkandi gerðir..."
+
+msgid "Safe actions"
+msgstr "Trygdar gerðir"
+
+msgid "Signature path"
+msgstr "Undirskrift leið"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Undirskrift váttan kann ikki verða loyst í hesi umhvørvi."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Loys undirskrift váttan fyri lokalar menningar royndir"
+
+msgid "Staged file application failed"
+msgstr "Staging av fílu miseydnaðist"
+
+msgid "Staged files applied successfully"
+msgstr "Staging av fílum eydnaðist"
+
+msgid "Staging details"
+msgstr "Staging upplýsingar"
+
+msgid "Staging directory"
+msgstr "Staging mappu"
+
+msgid "Staging extraction"
+msgstr "Staging útpakking"
+
+msgid "Symfony cache clear"
+msgstr "Symfony cache tømd"
+
+msgid "System update"
+msgstr "Kervisuppdatering"
+
+msgid "Target version"
+msgstr "Málversjón"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Hin uppsetta opinbera manifest URL er fyriutfylt. Tú kanst broyta hana til aðra HTTPS manifest, um neyðugt."
+
+msgid "The database migration baseline is clean."
+msgstr "Grundarlínjan fyri dátugrunn flyting er rein."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Endaliga HTTP svarið miseydnaðist eftir at atgerðin var liðug. Hetta er oftast orsakað av rættindum til runtime cache ella endurbyrjan av vevservara undir áheitanini."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Atgerðarlógin vísir, at post-apply atgerðir eydnaðust."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Tær valdu post-apply skipanir eydnaðust, men endaliga HTTP svarið miseydnaðist. Endurles síðuna og vátta rættindi til runtime cache, um síðan ikki tekur rætt."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Uppdateringin skapar ella endurstillar ikki dátugrunn avrit."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Hesar atgerðir eru trygdar at koyra frá UI eftir at hava gjøgnumgingið uppdatering úrslitið."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Hesar skipanir kunnu broyta avhangandi, framleidd virði, cache ella dátugrunnin. Vátta avrit áðrenn tú heldur á."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Henda atgerð broytir fílur í Chamilo installatiónini. Tryggja tær, at apply ætlanin er gjøgnumgingin og avrit eru virkjað áðrenn tú heldur á."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Hetta menningarinngangur simulerar framtíðar Chamilo.org uppdatering kunngerð við nýtslu av lokalum royndarpakkaleiðum."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Hetta skermur var opnaður frá einari opinberari uppdatering kunngerð, men eingin opinber manifest kelda er enn uppsett."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Hetta skermur var opnaður frá einari uppdatering kunngerð. Bert manifest kanningin byrjar sjálvvirkandi."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Hetta stig fyrireikar bert eina gjøgnumgongd. Fílu skifting hendir seinni í Apply staged files stiginum, við lás, avriti og rollback vernd."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Hetta updateringin skapar ikki eitt dátugrunn avrit. Ger og vátta eitt avrit áðrenn tú koyrir flytingar."
+
+msgid "Trusted public key"
+msgstr "Treyst almennur lykil"
+
+msgid "Trusted signing key"
+msgstr "Treyst undirskrivanar lykil"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Skriva APPLY UPDATE FILES fyri at vátta"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Skriva RUN DATABASE MIGRATIONS fyri at vátta dátugrunn flytingar"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Skriva RUN POST UPDATE ACTIONS fyri at vátta"
+
+msgid "Unknown update notice source."
+msgstr "Ókend uppdatering kunngerð kelda."
+
+msgid "Update availability"
+msgstr "Uppdatering tøka"
+
+msgid "Update directory"
+msgstr "Uppdatering mappu"
+
+msgid "Update lock path"
+msgstr "Uppdatering lás leið"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Nýt staging mappuna, sum varð gjørd av undanfarnu stiginum. Backend tekur bert ímóti mappum innan var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Nýt hesa leinkju fyri at simulerar framtíðar Chamilo.org uppdatering kunngerð undir menningarroyndum."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Nýt hetta bert til lokalar menningarroyndir. Framleiðslu uppdateringarnar mugu nýta servaran uppsetta lykilin."
+
+msgid "Verification details"
+msgstr "Váttan upplýsingar"
+
+msgid "Verify package"
+msgstr "Vátta pakka"
+
+msgid "Verifying..."
+msgstr "Váttar..."
+
+msgid "Waiting for command progress events..."
+msgstr "Bíðar eftir skipan framgongd hendingum..."
+
+msgid "Waiting for update progress events..."
+msgstr "Bíðar eftir uppdatering framgongd hendingum..."
+
+msgid "Yarn build"
+msgstr "Yarn bygging"
+
+msgid "Yarn install"
+msgstr "Yarn installatión"
+
+msgid "A comment is required"
+msgstr "Ein viðmerking er neyðug"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Ein dátugrunnur við sama navni finst longu. Um hann inniheldur talvur, verða tær strikaðar; um hann er tómur, verður hann endurnýttur."
+
+msgid "AI generated"
+msgstr "AI framleitt"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Legg í minsta lagi eina spurningar áðrenn tú vendir aftur til læristíðina."
+
+msgid "Add attachments"
+msgstr "Legg viðhengi"
+
+msgid "Additional fields"
+msgstr "Víðkaðar leiðir"
+
+msgid "Allow comments"
+msgstr "Loyv viðmerkingum"
+
+msgid "Allow new pages"
+msgstr "Loyv nýggjum síðum"
+
+msgid "Allow ratings"
+msgstr "Loyv metingum"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Ert tú vís/ur í at strika allar lutir?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Ert tú vís/ur í at endurstovna sjálvvirkandi endurnýggjan?"
+
+msgid "Attachment has been deleted"
+msgstr "Viðfesti er strikað"
+
+msgid "Backup file"
+msgstr "Trygdaravrit"
+
+msgid "Block comments"
+msgstr "Forða viðmerkingum"
+
+msgid "Block new pages"
+msgstr "Forða nýggjum síðum"
+
+msgid "Block ratings"
+msgstr "Forða metingum"
+
+msgid "Cancel renewal"
+msgstr "Ógilda endurnýggjan"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Bólkalinkir verða strikaðar frá %s Wiki síðum."
+
+msgid "Change"
+msgstr "Broyt"
+
+msgid "Clear group"
+msgstr "Rensla bólk"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Trýst á merki fyri at seta tað inn í ritil. Hesir plássmerkir verða skiftir út tá vottan verður gjørd."
+
+msgid "Comment added"
+msgstr "Viðmerking løgd afturat"
+
+msgid "Comment is required"
+msgstr "Viðmerking er kravd"
+
+msgid "Comment score"
+msgstr "Viðmerkingastig"
+
+msgid "Compare selected versions line by line"
+msgstr "Samanber valdar útgávur linju fyri linju"
+
+msgid "Compare selected versions word by word"
+msgstr "Samanber valdar útgávur orð fyri orð"
+
+msgid "Compare versions"
+msgstr "Samanber útgávur"
+
+msgid "Copy completed"
+msgstr "Avritan liðug"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Stovna einstaklinga Wiki arbeiðssíður til næmingar"
+
+msgid "Current view mode"
+msgstr "Verandi vísingarmáti"
+
+msgid "Delete Wiki"
+msgstr "Strika Wiki"
+
+msgid "Delete page"
+msgstr "Strika síðu"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "At strika Wiki heimasíðuna er ikki ráðiligt. Tú kanst endurstovna hana seinni."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "At óvirkja Wiki forðar vanligum Wiki síðum og gerðum. Henda stillingarsíðan er framvegis tøka fyri lærara."
+
+msgid "Discussion"
+msgstr "Samrøða"
+
+msgid "Edit Comment"
+msgstr "Rætta viðmerking"
+
+msgid "Edit page"
+msgstr "Rætta síðu"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Endadagur má vera eftir ella sama dag sum útloysingardagur"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Skriva eitt leiti orð fyri at finna Wiki síður"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Útloysingardagur má vera áðrenn ella sama dag sum endadagur"
+
+msgid "Failed email recipients"
+msgstr "Ikki sendir teldupostar"
+
+msgid "Finish and return to learning path"
+msgstr "Enda og far aftur til lærustíg"
+
+msgid "Forum image"
+msgstr "Forum mynd"
+
+msgid "Hide discussion"
+msgstr "Fjal samrøðu"
+
+msgid "Hide page"
+msgstr "Fjal síðu"
+
+msgid "I changed my mind"
+msgstr "Eg broytti hugsan"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Um ikki valt, verða hesir fílir framvegis atkomuligir fyri skipanarstjóran gjøgnum 'Fílinformasjon' amboðið."
+
+msgid "Internal message failures"
+msgstr "Innanhýsis boð mistekst"
+
+msgid "Internal messages available"
+msgstr "Innanhýsis boð tøk"
+
+msgid "Internal messages created now"
+msgstr "Innanhýsis boð stovnað nú"
+
+msgid "Item score"
+msgstr "Lutastig"
+
+msgid "Last post"
+msgstr "Seinasta innlegg"
+
+msgid "Lock page"
+msgstr "Læs síðu"
+
+msgid "Manage categories"
+msgstr "Stýr bólkum"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Markar hetta skjal sum AI-assisterað. Brúka tað tá innihaldið er stovnað ella týðiliga broytt við AI amboðum."
+
+msgid "Maximum score is required"
+msgstr "Hægsta stig er kravt"
+
+msgid "Metric"
+msgstr "Mæling"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Nýggjar viðmerkingar eru forðaðar í hesi samrøðu"
+
+msgid "No Wiki categories are available yet."
+msgstr "Ongar Wiki bólkar eru tøkar enn."
+
+msgid "No categories found"
+msgstr "Ongar bólkar funnir"
+
+msgid "No content"
+msgstr "Einki innihald"
+
+msgid "No parent category"
+msgstr "Ongin foreldrabólkur"
+
+msgid "Number of comments scored"
+msgstr "Tal av viðmerkingum, sum eru stiggevnar"
+
+msgid "Old version"
+msgstr "Gamla útgáva"
+
+msgid "Only image files are allowed."
+msgstr "Bert myndafílur eru loyvdar."
+
+msgid "Please fill all required fields"
+msgstr "Vinarliga fyll allar kravdar teigar"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Spurningar við bólka- ella næmingaplássmerkjum verða framleiddir fyri námsbólkar ella bólkar: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Stig eru blokkað í hesi samrøðu"
+
+msgid "Remove image"
+msgstr "Tak burtur mynd"
+
+msgid "Restore renewal"
+msgstr "Endurstovna endurnýggjan"
+
+msgid "Restore version"
+msgstr "Endurstovna útgávu"
+
+msgid "Search in"
+msgstr "Leita í"
+
+msgid "Select group"
+msgstr "Vel bólk"
+
+msgid "Select image"
+msgstr "Vel mynd"
+
+msgid "Selected image"
+msgstr "Valda mynd"
+
+msgid "Show discussion"
+msgstr "Vís samrøðu"
+
+msgid "Show page"
+msgstr "Vís síðu"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Nakrir fílur ella mappur hava ikki skriviloyvi. Fyri at kunna innstallera Chamilo mást tú fyrst broyta teirra loyvi (við CHMOD). Vinarliga les"
+
+msgid "Subcategories"
+msgstr "Undirbólkar"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Trýst á vinstra ella høgra fyri at blaka"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Fresturin fyri Wiki-uppgávuna er farin, men seinkað innlating er loyvd."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Fresturin fyri Wiki-uppgávuna er farin."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki-uppgávan er ikki byrjað enn."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Læsing av Wiki-síðu má vera gjørd áðrenn goymist."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Fráboðanin var goymd, men ein viðfesti kundi ikki verða uppsendur."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Fráboðanin var goymd, men teldupostflutningur miseydnaðist."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Fráboðanin var goymd, men eingin teldupostur kundi verða sendur."
+
+msgid "The category has been created"
+msgstr "Bólkurin er stovnaður"
+
+msgid "The category has been deleted"
+msgstr "Bólkurin er strikaður"
+
+msgid "The category has been updated"
+msgstr "Bólkurin er dagførdur"
+
+msgid "The end date is invalid"
+msgstr "Endadagur er ógildur"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Hægsta tal av útgávum má vera eitt ikki-negativt heiltal"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Hægsta tal av orðum má vera eitt ikki-negativt heiltal"
+
+msgid "The print window could not be opened"
+msgstr "Prentgluggin kundi ikki verða latin upp"
+
+msgid "The start date is invalid"
+msgstr "Byrjanardagur er ógildur"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Hesar stillingar galda fyri allan námsbólkin, eisini sessiónir og bólkar."
+
+msgid "This announcement has already been sent by email."
+msgstr "Henda fráboðanin er longu send við telduposti."
+
+msgid "This discussion is hidden from learners"
+msgstr "Henda samrøðan er fjald fyri næmingum"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Hetta generativa AI-amfarð letur teg skapa myndir og stuttar filmar til at lýsa títt námsbólk. Við at greina (í teksti) hvat tú ynskir í prompt-øklinum, gevur tú tí stillaða AI-modellinum neyðugu lutirnar til at framleiða eina mynd ella ein film. Vinarliga ver still. AI-modellin tekur eina løtu og framleiðir eitt úrslit, sum tú kanska vilt goyma við at goyma miðluna í tínum skjølumappu og síðani innseta í einum HTML-skjali. Ikki allir AI-modellar eru eins í skjótleika ella gæði. AI-modellin kann eisini geva tær eina broytta prompt, sum er ein meira neyðug tulking av tínum ynski. Tú kanst so brúka hesa broyttu prompt til at finjustera títt ynski. Vinarliga ver varugur um, at hetta amfarð, serliga fyri filmar, kann skapa munandi kostnað fyri tína skipan, eisini um tú velur ikki at goyma tað framleidda miðluna. Vinarliga brúka tað hóskandi. Um tú hevur trupulleikar við at fáa tað tú leitar eftir, vinarliga tak tíð at granska prompting-tricks á netinum fyri AI-modellin, sum tú hevur at ráði."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Hetta søga tilheyrir grundleggjandi námsbólkinum. Endurstovnan er tøkt eftir at hava stovnað eina sessiónsútgávu."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Henda myndin avloysir forsetta forum-íkon, sum vísist við forumheitið."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Henda síðan kemur frá grundleggjandi námsbólkinum. At goyma hana fer at skapa eina útgávu fyri núverandi sessión."
+
+msgid "This will also delete %s subcategories."
+msgstr "Hetta fer eisini at strika %s undirbólkar."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Hetta fer at skapa einstaklinga arbeiðssíður fyri %s næmingar."
+
+msgid "Thread history"
+msgstr "Tráðsøga"
+
+msgid "Title and content"
+msgstr "Heiti og innihald"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Ikki ført fyri at avlýsa endurnýggjan nú."
+
+msgid "Unable to restore renewal right now."
+msgstr "Ikki ført fyri at endurstovna endurnýggjan nú."
+
+msgid "Unlock page"
+msgstr "Læs síðu upp"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Nýt [[Page]] ella [[Page|Visible text]] fyri at skapa innanhýsis Wiki-leinkjur."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Nýt millumrúm ella píla-tangar til at flyta"
+
+msgid "View version"
+msgstr "Vís útgávu"
+
+msgid "Visible only to teachers"
+msgstr "Bert sjónligt fyri lærarum"
+
+msgid "Weight is required"
+msgstr "Vekt er kravd"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki-bólkar eru óvirkjaðir fyri hetta lærugrein."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki-bólkar virkjaðir"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki html strangt filtur"
+
+msgid "Wiki settings"
+msgstr "Wiki-stillingar"
+
+msgid "Wiki settings updated"
+msgstr "Wiki-stillingar dagførðar"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Tú sært eina eldri útgávu av hesi síðu"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Tú kanst viðhefta eina ella fleiri fílur til hetta svarið."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Tú kanst rætta hesa uppgávusíðu, men arbeiðssíður lærisins verða ikki broyttar."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Tú kanst nýta merkin {{class_name}} og {{student_full_name}} í spurninginum."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Tú hevur 20 minuttir at rætta hesa síðu áðrenn rættingarlásin gongur út."
+
+msgid "by"
+msgstr "av"
+
+msgid "required"
+msgstr "kravt"
 

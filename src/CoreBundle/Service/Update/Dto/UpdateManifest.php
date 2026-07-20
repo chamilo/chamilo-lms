@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\Update\Dto;
 
-use Symfony\Component\DependencyInjection\Attribute\Exclude;
 use InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
 
 #[Exclude]
 final readonly class UpdateManifest

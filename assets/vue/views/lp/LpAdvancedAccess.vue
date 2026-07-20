@@ -5,6 +5,7 @@ import { useRoute, useRouter } from "vue-router"
 import lpService from "../../services/lpService"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -13,12 +14,17 @@ const router = useRouter()
 const isLoading = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref("")
+const successMessage = ref("")
 const search = ref("")
 const lp = ref(null)
 const course = ref(null)
 const session = ref(null)
 const users = ref([])
 const groups = ref([])
+const allowUserGroups = ref(false)
+const userGroups = ref([])
+const selectedUserGroupIds = ref([])
+const csrfToken = ref("")
 const selectedUserId = ref(null)
 const selectedGroupId = ref(null)
 const form = ref({
@@ -64,8 +70,34 @@ const filteredGroups = computed(() => {
   return groups.value.filter((group) => normalizeSearch(group.title).includes(query))
 })
 
-const selectedUser = computed(() => users.value.find((user) => Number(user.id) === Number(selectedUserId.value)) || null)
-const selectedGroup = computed(() => groups.value.find((group) => Number(group.id) === Number(selectedGroupId.value)) || null)
+const filteredUserGroups = computed(() => {
+  const query = normalizeSearch(search.value)
+
+  if (!query) {
+    return userGroups.value
+  }
+
+  return userGroups.value.filter((userGroup) => normalizeSearch(userGroup.title).includes(query))
+})
+
+const selectedUser = computed(
+  () => users.value.find((user) => Number(user.id) === Number(selectedUserId.value)) || null,
+)
+const selectedGroup = computed(
+  () => groups.value.find((group) => Number(group.id) === Number(selectedGroupId.value)) || null,
+)
+const startDateModel = computed({
+  get: () => parseCalendarDate(form.value.startDate),
+  set: (value) => {
+    form.value.startDate = formatCalendarDate(value)
+  },
+})
+const endDateModel = computed({
+  get: () => parseCalendarDate(form.value.endDate),
+  set: (value) => {
+    form.value.endDate = formatCalendarDate(value)
+  },
+})
 
 const dateRangeError = computed(() => {
   if (form.value.isOpenWithoutDate || !form.value.startDate || !form.value.endDate) {
@@ -82,12 +114,35 @@ const dateRangeError = computed(() => {
   return startDate > endDate ? t("The end date must be after the start date.") : ""
 })
 
-const canSaveRestriction = computed(() => Boolean(selectedUser.value || selectedGroup.value) && !dateRangeError.value && !isSaving.value)
+const canSaveRestriction = computed(
+  () => Boolean(selectedUser.value || selectedGroup.value) && !dateRangeError.value && !isSaving.value,
+)
 
 function normalizeSearch(value) {
   return String(value || "")
     .trim()
     .toLocaleLowerCase()
+}
+
+function parseCalendarDate(value) {
+  const normalized = String(value || "").trim()
+  if (!normalized) {
+    return null
+  }
+
+  const parsed = new Date(normalized)
+
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+function formatCalendarDate(value) {
+  if (!(value instanceof Date) || Number.isNaN(value.getTime())) {
+    return ""
+  }
+
+  const pad = (part) => String(part).padStart(2, "0")
+
+  return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`
 }
 
 function userFullName(user) {
@@ -167,6 +222,12 @@ async function loadData() {
     session.value = data.session
     users.value = data.users || []
     groups.value = data.groups || []
+    allowUserGroups.value = Boolean(data.allowUserGroups)
+    userGroups.value = data.userGroups || []
+    selectedUserGroupIds.value = userGroups.value
+      .filter((userGroup) => userGroup.selected)
+      .map((userGroup) => userGroup.id)
+    csrfToken.value = data.csrfToken || ""
   } catch (error) {
     errorMessage.value = error?.response?.data?.error || t("An error occurred")
   } finally {
@@ -237,6 +298,25 @@ async function removeGroupRestriction(group) {
   }
 }
 
+async function saveUserGroups() {
+  isSaving.value = true
+  errorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    await lpService.saveUserGroupAdvancedAccess(lpId.value, contextQuery.value, {
+      selectedUserGroupIds: selectedUserGroupIds.value,
+      csrfToken: csrfToken.value,
+    })
+    successMessage.value = t("Updated")
+    await loadData()
+  } catch (error) {
+    errorMessage.value = error?.response?.data?.error || t("An error occurred")
+  } finally {
+    isSaving.value = false
+  }
+}
+
 async function clearDates() {
   if (!window.confirm(t("Remove all date restrictions for this learning path?"))) {
     return
@@ -273,7 +353,10 @@ onMounted(loadData)
 
 <template>
   <div class="flex flex-col gap-6">
-    <SectionHeader :title="t('Advanced learning path access')">
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Advanced learning path access')"
+    >
       <BaseButton
         :label="t('Back to learning paths')"
         icon="back"
@@ -287,6 +370,13 @@ onMounted(loadData)
       class="rounded-xl border border-danger/20 bg-danger/10 px-4 py-3 text-sm text-danger"
     >
       {{ errorMessage }}
+    </div>
+
+    <div
+      v-if="successMessage"
+      class="rounded-xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success"
+    >
+      {{ successMessage }}
     </div>
 
     <div
@@ -338,9 +428,66 @@ onMounted(loadData)
         />
       </section>
 
+      <section
+        v-if="allowUserGroups"
+        class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm"
+      >
+        <div class="mb-4 flex items-center justify-between gap-4">
+          <h2 class="text-lg font-bold text-gray-90">
+            {{ t("Classes") }}
+          </h2>
+          <span class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
+            {{ selectedUserGroupIds.length }} / {{ userGroups.length }}
+          </span>
+        </div>
+
+        <div
+          v-if="filteredUserGroups.length"
+          class="grid gap-3 md:grid-cols-2"
+        >
+          <label
+            v-for="userGroup in filteredUserGroups"
+            :key="userGroup.id"
+            class="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-gray-25 bg-white px-4 py-3"
+          >
+            <span class="font-semibold text-gray-90">{{ userGroup.title }}</span>
+            <input
+              v-model="selectedUserGroupIds"
+              :value="userGroup.id"
+              class="h-4 w-4 rounded border-gray-30 text-primary focus:ring-primary"
+              name="lp-usergroups[]"
+              type="checkbox"
+            />
+          </label>
+        </div>
+
+        <div
+          v-else
+          class="rounded-xl border border-gray-25 bg-gray-15 px-4 py-6 text-center text-sm text-gray-60"
+        >
+          {{ t("No classes found") }}
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <BaseButton
+            :disabled="isSaving"
+            :label="isSaving ? t('Saving') : t('Save')"
+            icon="save"
+            type="success"
+            @click="saveUserGroups"
+          />
+        </div>
+      </section>
+
       <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
         <h2 class="mb-4 text-lg font-bold text-gray-90">
-          {{ selectedUser ? t("Edit user restriction") : selectedGroup ? t("Edit group restriction") : t("Select a user or group") }}
+          {{
+            selectedUser
+              ? t("Edit user restriction")
+              : selectedGroup
+                ? t("Edit group restriction")
+                : t("Select a user or group")
+          }}
         </h2>
 
         <div
@@ -351,25 +498,21 @@ onMounted(loadData)
         </div>
 
         <div class="grid gap-4 md:grid-cols-3">
-          <label class="flex flex-col gap-2 text-sm font-semibold text-gray-90">
-            {{ t("Start date") }}
-            <input
-              v-model="form.startDate"
-              :disabled="form.isOpenWithoutDate"
-              class="rounded-xl border border-gray-30 bg-white px-3 py-2 text-sm text-gray-90 disabled:bg-gray-15 disabled:text-gray-50"
-              type="datetime-local"
-            />
-          </label>
+          <BaseCalendar
+            id="lp-advanced-access-start-date"
+            v-model="startDateModel"
+            :disabled="form.isOpenWithoutDate"
+            :label="t('Start date')"
+            show-time
+          />
 
-          <label class="flex flex-col gap-2 text-sm font-semibold text-gray-90">
-            {{ t("End date") }}
-            <input
-              v-model="form.endDate"
-              :disabled="form.isOpenWithoutDate"
-              class="rounded-xl border border-gray-30 bg-white px-3 py-2 text-sm text-gray-90 disabled:bg-gray-15 disabled:text-gray-50"
-              type="datetime-local"
-            />
-          </label>
+          <BaseCalendar
+            id="lp-advanced-access-end-date"
+            v-model="endDateModel"
+            :disabled="form.isOpenWithoutDate"
+            :label="t('End date')"
+            show-time
+          />
 
           <label class="flex items-center gap-2 pt-7 text-sm font-semibold text-gray-90">
             <input
@@ -410,7 +553,9 @@ onMounted(loadData)
         </div>
 
         <div class="overflow-hidden rounded-xl border border-gray-25">
-          <div class="hidden grid-cols-[minmax(0,1.4fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto] gap-3 border-b border-gray-25 bg-gray-15 px-4 py-3 text-sm font-bold text-gray-70 md:grid">
+          <div
+            class="hidden grid-cols-[minmax(0,1.4fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto] gap-3 border-b border-gray-25 bg-gray-15 px-4 py-3 text-sm font-bold text-gray-70 md:grid"
+          >
             <div>{{ t("Name") }}</div>
             <div>{{ t("Email") }}</div>
             <div>{{ t("Groups") }}</div>
@@ -444,11 +589,11 @@ onMounted(loadData)
             </div>
             <div class="flex justify-end gap-2">
               <BaseButton
-                :label="t('Edit')"
-                icon="edit"
+                :label="user.individualRestriction ? t('Edit') : t('Add')"
+                :icon="user.individualRestriction ? 'edit' : 'plus'"
                 only-icon
                 size="small"
-                type="secondary"
+                :type="user.individualRestriction ? 'secondary' : 'success'"
                 @click="selectUser(user)"
               />
               <BaseButton
@@ -484,9 +629,7 @@ onMounted(loadData)
             <div class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="font-bold text-gray-90">{{ group.title }}</h3>
-                <p class="text-sm text-gray-60">
-                  {{ group.membersCount }} {{ t("members") }}
-                </p>
+                <p class="text-sm text-gray-60">{{ group.membersCount }} {{ t("members") }}</p>
                 <p class="mt-2 text-sm text-gray-70">
                   {{ formatRestriction(group.restriction) }}
                 </p>
@@ -494,11 +637,11 @@ onMounted(loadData)
 
               <div class="flex gap-2">
                 <BaseButton
-                  :label="t('Edit')"
-                  icon="edit"
+                  :label="group.restriction ? t('Edit') : t('Add')"
+                  :icon="group.restriction ? 'edit' : 'plus'"
                   only-icon
                   size="small"
-                  type="secondary"
+                  :type="group.restriction ? 'secondary' : 'success'"
                   @click="selectGroup(group)"
                 />
                 <BaseButton

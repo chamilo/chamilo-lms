@@ -1669,7 +1669,7 @@ msgstr "Êtes-vous certain de vouloir supprimer ces étapes ?"
 msgid "Authoring tool"
 msgstr "Origine"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Fichier à envoyer"
 
 msgid "Course location"
@@ -2111,7 +2111,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:sans copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossier,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossier,, application/msword:MsWord,, application/octet-stream:Flux octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercice,,      simulation:simulation,,      questionnaire:enquête,,      diagram:diagramme,,      figure:figure,,      graph:graphe,,      index:index,,      slide:diapo,,      table:table,,      narrative text:texte narratif,,      exam:examen,,      experiment:expérience,,      problem statement:problème,,      self assessment:auto-évaluation,,      lecture:présentation"
@@ -38374,4 +38374,853 @@ msgstr "Voir les fils de discussion"
 
 msgid "No auth source"
 msgstr "Pas d'auth source"
+
+msgid "You must add at least one question"
+msgstr "Vous devez ajouter au moins une question"
+
+msgid "Advanced actions"
+msgstr "Actions avancées"
+
+msgid "Application path"
+msgstr "Chemin de l'application"
+
+msgid "Apply files details"
+msgstr "Appliquer les détails des fichiers"
+
+msgid "Apply plan details"
+msgstr "Appliquer les détails du plan"
+
+msgid "Apply plan failed"
+msgstr "Échec de l'application du plan"
+
+msgid "Apply plan ready"
+msgstr "Plan d'application prêt"
+
+msgid "Apply preparation"
+msgstr "Préparation de l'application"
+
+msgid "Apply staged files"
+msgstr "Appliquer les fichiers en attente"
+
+msgid "Applying files..."
+msgstr "Application des fichiers..."
+
+msgid "Audit file"
+msgstr "Fichier d'audit"
+
+msgid "Backup directory"
+msgstr "Répertoire de sauvegarde"
+
+msgid "Baseline clean"
+msgstr "Ligne de base propre"
+
+msgid "Baseline warnings"
+msgstr "Avertissements de la ligne de base"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Créer un plan d'application sécurisé à partir du paquet en attente. Cela ne vérifie que les fichiers, les permissions, le chemin de sauvegarde et l'état de verrouillage. Cela ne remplace pas les fichiers."
+
+msgid "Build production frontend assets."
+msgstr "Générer les ressources frontend de production."
+
+msgid "Building plan..."
+msgstr "Création du plan..."
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Check"
+msgstr "Vérifier"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Vérifier les mises à jour Chamilo disponibles, valider les paquets, mettre les fichiers en attente et exécuter les étapes post-mise à jour contrôlées."
+
+msgid "Check manifest"
+msgstr "Vérifier le manifeste"
+
+msgid "Checking post-apply actions..."
+msgstr "Vérification des actions post-application..."
+
+msgid "Checking..."
+msgstr "Vérification..."
+
+msgid "Composer install"
+msgstr "Installation Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Les actions Composer, Yarn et migration de base de données peuvent modifier les dépendances, les ressources générées ou la base de données. Ne les sélectionnez qu'après avoir confirmé les sauvegardes et les permissions."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configurez CHAMILO_UPDATE_MANIFEST_URL sur le serveur ou fournissez une URL de manifeste HTTPS."
+
+msgid "Configured"
+msgstr "Configuré"
+
+msgid "Current migration"
+msgstr "Migration actuelle"
+
+msgid "Database baseline"
+msgstr "Base de données de référence"
+
+msgid "Database migration safety review"
+msgstr "Vérification de sécurité de la migration de base de données"
+
+msgid "Database migrations"
+msgstr "Migrations de base de données"
+
+msgid "Development mode"
+msgstr "Mode développement"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ne pas activer sauf si la sauvegarde de mise à jour et les permissions serveur ont été vérifiées."
+
+msgid "Doctrine dry-run command"
+msgstr "Commande Doctrine en simulation"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine a signalé des avertissements sur la base de référence historique. L'outil de mise à jour n'exécutera que les migrations V210 planifiées après confirmation explicite."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine n'exécutera que les migrations V210 planifiées explicitement après validation de la vérification de sécurité."
+
+msgid "Dry-run exit code"
+msgstr "Code de sortie de la simulation"
+
+msgid "Executed unavailable migrations"
+msgstr "Migrations indisponibles exécutées"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Extraire le paquet de mise à jour vérifié dans un répertoire de test pour inspection. Cela ne remplace pas les fichiers, n'exécute pas de migrations ni ne modifie la base de données."
+
+msgid "File apply available"
+msgstr "Application de fichier disponible"
+
+msgid "Files to replace"
+msgstr "Fichiers à remplacer"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Je confirme qu'une sauvegarde de la base de données existe et a été vérifiée avant d'exécuter les migrations."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Je comprends que les actions avancées peuvent modifier des dépendances, des ressources générées ou la base de données."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Je comprends que cela remplacera des fichiers dans l'installation de Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Je comprends que cela exécutera des commandes de mise à jour sur le serveur."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Installer les dépendances frontend avant de reconstruire les ressources."
+
+msgid "Installed version"
+msgstr "Version installée"
+
+msgid "Latest migration"
+msgstr "Dernière migration"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Laisser les chemins du paquet et de la signature vides pour les télécharger depuis les URL du manifeste vérifié. Les chemins locaux ne sont disponibles que pour les tests en développement."
+
+msgid "Live command log"
+msgstr "Journal des commandes en direct"
+
+msgid "Live update log"
+msgstr "Journal de mise à jour en direct"
+
+msgid "Local test options"
+msgstr "Options de test local"
+
+msgid "Local test update notice link"
+msgstr "Lien de notification de mise à jour de test local"
+
+msgid "Local update notice simulation"
+msgstr "Simulation de notification de mise à jour locale"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "La simulation de notification de mise à jour locale n'est disponible qu'en mode développement."
+
+msgid "Manifest"
+msgstr "Manifeste"
+
+msgid "Manifest source"
+msgstr "Source du manifeste"
+
+msgid "Migration safety details"
+msgstr "Détails de la vérification de sécurité de la migration"
+
+msgid "Migration safety review failed"
+msgstr "Vérification de sécurité de la migration échouée"
+
+msgid "Migration safety review ready"
+msgstr "Vérification de sécurité de la migration prête"
+
+msgid "Migration target"
+msgstr "Cible de migration"
+
+msgid "New files"
+msgstr "Nouveaux fichiers"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Nouvelles migrations signalées par Doctrine"
+
+msgid "Next migration"
+msgstr "Migration suivante"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Aucune migration indisponible exécutée n'a été signalée."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Aucune URL de manifeste officielle n'est encore configurée. Utilisez une URL HTTPS ou un chemin local pour les tests en développement."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Aucune migration en attente n'a été détectée avant la cible de mise à jour planifiée."
+
+msgid "Not configured"
+msgstr "Non configuré"
+
+msgid "Not detected"
+msgstr "Non détecté"
+
+msgid "Official Chamilo update channel"
+msgstr "Canal officiel de mise à jour de Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 du paquet"
+
+msgid "Package URL"
+msgstr "URL du paquet"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Les fichiers du paquet et de la signature seront téléchargés depuis le manifeste. Les chemins locaux sont désactivés dans cet environnement."
+
+msgid "Package path"
+msgstr "Chemin du paquet"
+
+msgid "Package staged successfully"
+msgstr "Paquet mis en place avec succès"
+
+msgid "Package staging failed"
+msgstr "Mise en place du paquet échouée"
+
+msgid "Package verification"
+msgstr "Vérification du paquet"
+
+msgid "Package verification failed"
+msgstr "Échec de la vérification du paquet"
+
+msgid "Package verified successfully"
+msgstr "Paquet vérifié avec succès"
+
+msgid "Pending migrations before this update"
+msgstr "Migrations en attente avant cette mise à jour"
+
+msgid "Planned backup path"
+msgstr "Chemin de sauvegarde planifié"
+
+msgid "Post-apply actions completed"
+msgstr "Actions post-application terminées"
+
+msgid "Post-apply actions failed"
+msgstr "Échec des actions post-application"
+
+msgid "Post-apply actions ready"
+msgstr "Actions post-application prêtes"
+
+msgid "Post-apply checks"
+msgstr "Vérifications post-application"
+
+msgid "Post-apply checks failed"
+msgstr "Échec des vérifications post-application"
+
+msgid "Post-apply details"
+msgstr "Détails post-application"
+
+msgid "Post-apply run details"
+msgstr "Détails d’exécution post-application"
+
+msgid "Preflight checks"
+msgstr "Vérifications préalables"
+
+msgid "Preflight checks completed"
+msgstr "Vérifications préalables terminées"
+
+msgid "Preflight checks failed"
+msgstr "Échec des vérifications préalables"
+
+msgid "Preflight details"
+msgstr "Détails des vérifications préalables"
+
+msgid "Prepare staging"
+msgstr "Préparer l’environnement de test"
+
+msgid "Preparing staging..."
+msgstr "Préparation de l’environnement de test..."
+
+msgid "Production mode"
+msgstr "Mode production"
+
+msgid "Released at"
+msgstr "Publié le"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Remplacer les fichiers Chamilo à partir du paquet mis en scène en utilisant le plan d’application examiné. Cela n’exécute pas les migrations de base de données, Composer, Yarn ni les commandes de cache."
+
+msgid "Review apply plan"
+msgstr "Examiner le plan d’application"
+
+msgid "Review database migrations"
+msgstr "Examiner les migrations de base de données"
+
+msgid "Review post-apply actions"
+msgstr "Examiner les actions post-application"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Examiner les commandes manuelles recommandées après l’application des fichiers de mise à jour. Cette étape n’exécute pas Composer, Yarn, les migrations ni les commandes de cache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Examiner les migrations Doctrine mises en scène et la sortie de simulation avant d’exécuter les migrations de base de données."
+
+msgid "Reviewing database migrations..."
+msgstr "Examen des migrations de base de données..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Exécuter et valider l’examen de sécurité des migrations avant d’exécuter les migrations de base de données."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Exécuter les vérifications d’environnement avant toute étape future d’application de mise à jour. Cela ne modifie ni les fichiers ni la base de données."
+
+msgid "Run post-apply actions"
+msgstr "Exécuter les actions post-application"
+
+msgid "Run preflight checks"
+msgstr "Exécuter les vérifications préalables"
+
+msgid "Run selected post-apply actions"
+msgstr "Exécuter les actions post-application sélectionnées"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Exécuter les commandes post-application sélectionnées depuis le serveur à l’aide d’une liste blanche contrôlée. Aucune commande shell personnalisée n’est acceptée."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Exécuter ces commandes manuellement depuis le serveur après avoir confirmé le résultat de la mise à jour des fichiers et les sauvegardes."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "L’exécution des actions post-application depuis l’interface est désactivée en mode production."
+
+msgid "Running post-apply actions..."
+msgstr "Exécution des actions post-application..."
+
+msgid "Safe actions"
+msgstr "Actions sécurisées"
+
+msgid "Signature path"
+msgstr "Chemin de la signature"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "La vérification de signature ne peut pas être ignorée dans cet environnement."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Ignorer la vérification de signature pour les tests de développement local"
+
+msgid "Staged file application failed"
+msgstr "Échec de l’application des fichiers mis en scène"
+
+msgid "Staged files applied successfully"
+msgstr "Fichiers mis en scène appliqués avec succès"
+
+msgid "Staging details"
+msgstr "Détails de la mise en scène"
+
+msgid "Staging directory"
+msgstr "Répertoire de mise en scène"
+
+msgid "Staging extraction"
+msgstr "Extraction de la mise en scène"
+
+msgid "Symfony cache clear"
+msgstr "Vidage du cache Symfony"
+
+msgid "System update"
+msgstr "Mise à jour du système"
+
+msgid "Target version"
+msgstr "Version cible"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "L’URL du manifeste officiel configurée est préremplie. Vous pouvez la modifier pour un autre manifeste HTTPS si nécessaire."
+
+msgid "The database migration baseline is clean."
+msgstr "La ligne de base des migrations de base de données est propre."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "La réponse HTTP finale a échoué après l'exécution de l'opération. Cela est généralement dû à des permissions de cache d'exécution ou à un redémarrage du serveur web pendant la requête."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Le journal des opérations indique que les actions post-application se sont terminées avec succès."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Les commandes post-application sélectionnées se sont terminées avec succès, mais la réponse HTTP finale a échoué. Actualisez la page et vérifiez les permissions de cache d'exécution si la page ne se charge pas correctement."
+
+msgid "The updater does not create or restore database backups."
+msgstr "L'outil de mise à jour ne crée ni ne restaure de sauvegardes de base de données."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ces actions peuvent être exécutées en toute sécurité depuis l'interface utilisateur après avoir examiné le résultat de la mise à jour."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Ces commandes peuvent modifier des dépendances, des ressources générées, le cache ou la base de données. Confirmez les sauvegardes avant de continuer."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Cette action modifie des fichiers dans l'installation de Chamilo. Assurez-vous que le plan d'application a été examiné et que les sauvegardes sont activées avant de continuer."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Cette entrée de développement simule la future notification de mise à jour de Chamilo.org en utilisant des chemins de paquet de test locaux."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Cet écran a été ouvert depuis une notification de mise à jour officielle, mais aucune source de manifeste officielle n'est encore configurée."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Cet écran a été ouvert depuis une notification de mise à jour. Seule la vérification du manifeste est lancée automatiquement."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Cette étape prépare uniquement une révision. Le remplacement des fichiers a lieu ultérieurement lors de l'étape Appliquer les fichiers en attente, avec verrouillage, sauvegarde et protection par restauration."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Cet outil de mise à jour ne crée pas de sauvegarde de base de données. Créez et vérifiez une sauvegarde avant d'exécuter les migrations."
+
+msgid "Trusted public key"
+msgstr "Clé publique de confiance"
+
+msgid "Trusted signing key"
+msgstr "Clé de signature de confiance"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Saisissez APPLIQUER LES FICHIERS DE MISE À JOUR pour confirmer"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Saisissez EXÉCUTER LES MIGRATIONS DE BASE DE DONNÉES pour confirmer les migrations de base de données"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Saisissez EXÉCUTER LES ACTIONS POST-MISE À JOUR pour confirmer"
+
+msgid "Unknown update notice source."
+msgstr "Source de notification de mise à jour inconnue."
+
+msgid "Update availability"
+msgstr "Disponibilité de la mise à jour"
+
+msgid "Update directory"
+msgstr "Répertoire de mise à jour"
+
+msgid "Update lock path"
+msgstr "Chemin du verrou de mise à jour"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Utilisez le répertoire de préparation généré par l'étape précédente. Le backend n'accepte que les répertoires situés dans var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Utilisez ce lien pour simuler la future notification de mise à jour de Chamilo.org lors des tests de développement."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Utilisez ceci uniquement pour les tests de développement locaux. Les mises à jour en production doivent utiliser la clé configurée sur le serveur."
+
+msgid "Verification details"
+msgstr "Détails de vérification"
+
+msgid "Verify package"
+msgstr "Vérifier le paquet"
+
+msgid "Verifying..."
+msgstr "Vérification en cours..."
+
+msgid "Waiting for command progress events..."
+msgstr "En attente des événements de progression de la commande..."
+
+msgid "Waiting for update progress events..."
+msgstr "En attente des événements de progression de la mise à jour..."
+
+msgid "Yarn build"
+msgstr "Compilation Yarn"
+
+msgid "Yarn install"
+msgstr "Installation Yarn"
+
+msgid "A comment is required"
+msgstr "Un commentaire est requis"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Une base de données portant le même nom existe déjà. Si elle contient des tables, elles seront supprimées ; si elle est vide, elle sera réutilisée."
+
+msgid "AI generated"
+msgstr "Généré par IA"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Ajoutez au moins une question avant de revenir au parcours d'apprentissage."
+
+msgid "Add attachments"
+msgstr "Ajouter des pièces jointes"
+
+msgid "Additional fields"
+msgstr "Champs supplémentaires"
+
+msgid "Allow comments"
+msgstr "Autoriser les commentaires"
+
+msgid "Allow new pages"
+msgstr "Autoriser les nouvelles pages"
+
+msgid "Allow ratings"
+msgstr "Autoriser les évaluations"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Êtes-vous sûr de vouloir supprimer tous les éléments ?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Êtes-vous sûr de vouloir restaurer le renouvellement automatique ?"
+
+msgid "Attachment has been deleted"
+msgstr "La pièce jointe a été supprimée"
+
+msgid "Backup file"
+msgstr "Fichier de sauvegarde"
+
+msgid "Block comments"
+msgstr "Bloquer les commentaires"
+
+msgid "Block new pages"
+msgstr "Bloquer les nouvelles pages"
+
+msgid "Block ratings"
+msgstr "Bloquer les évaluations"
+
+msgid "Cancel renewal"
+msgstr "Annuler le renouvellement"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Les liens de catégorie seront supprimés des pages Wiki de %s."
+
+msgid "Change"
+msgstr "Modifier"
+
+msgid "Clear group"
+msgstr "Effacer le groupe"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Cliquez sur une balise pour l'insérer dans l'éditeur. Ces placeholders seront remplacés lors de la génération du certificat."
+
+msgid "Comment added"
+msgstr "Commentaire ajouté"
+
+msgid "Comment is required"
+msgstr "Le commentaire est obligatoire"
+
+msgid "Comment score"
+msgstr "Score du commentaire"
+
+msgid "Compare selected versions line by line"
+msgstr "Comparer les versions sélectionnées ligne par ligne"
+
+msgid "Compare selected versions word by word"
+msgstr "Comparer les versions sélectionnées mot par mot"
+
+msgid "Compare versions"
+msgstr "Comparer les versions"
+
+msgid "Copy completed"
+msgstr "Copie terminée"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Créer des pages de travail Wiki individuelles pour les apprenants"
+
+msgid "Current view mode"
+msgstr "Mode d'affichage actuel"
+
+msgid "Delete Wiki"
+msgstr "Supprimer le Wiki"
+
+msgid "Delete page"
+msgstr "Supprimer la page"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "La suppression de la page d'accueil du Wiki n'est pas recommandée. Vous pourrez la recréer ultérieurement."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "La désactivation du Wiki bloque les pages et actions Wiki normales. Cette page de paramètres reste accessible aux enseignants du cours."
+
+msgid "Discussion"
+msgstr "Discussion"
+
+msgid "Edit Comment"
+msgstr "Modifier le commentaire"
+
+msgid "Edit page"
+msgstr "Modifier la page"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "La date de fin doit être postérieure ou égale à la date d'expiration"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Saisissez un terme de recherche pour trouver des pages Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "La date d'expiration doit être antérieure ou égale à la date de fin"
+
+msgid "Failed email recipients"
+msgstr "Destinataires d'e-mails en échec"
+
+msgid "Finish and return to learning path"
+msgstr "Terminer et revenir au parcours d'apprentissage"
+
+msgid "Forum image"
+msgstr "Image du forum"
+
+msgid "Hide discussion"
+msgstr "Masquer la discussion"
+
+msgid "Hide page"
+msgstr "Masquer la page"
+
+msgid "I changed my mind"
+msgstr "J'ai changé d'avis"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Si cette case n'est pas cochée, ces fichiers resteront accessibles à l'administrateur de la plateforme via l'outil « Informations sur les fichiers »."
+
+msgid "Internal message failures"
+msgstr "Échecs de messages internes"
+
+msgid "Internal messages available"
+msgstr "Messages internes disponibles"
+
+msgid "Internal messages created now"
+msgstr "Messages internes créés maintenant"
+
+msgid "Item score"
+msgstr "Score de l'élément"
+
+msgid "Last post"
+msgstr "Dernier message"
+
+msgid "Lock page"
+msgstr "Verrouiller la page"
+
+msgid "Manage categories"
+msgstr "Gérer les catégories"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Marque ce document comme assisté par IA. Utilisez-le lorsque le contenu a été créé ou modifié de manière significative avec des outils IA."
+
+msgid "Maximum score is required"
+msgstr "Le score maximum est obligatoire"
+
+msgid "Metric"
+msgstr "Métrique"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Les nouveaux commentaires sont bloqués dans cette discussion"
+
+msgid "No Wiki categories are available yet."
+msgstr "Aucune catégorie Wiki n'est disponible pour le moment."
+
+msgid "No categories found"
+msgstr "Aucune catégorie trouvée"
+
+msgid "No content"
+msgstr "Aucun contenu"
+
+msgid "No parent category"
+msgstr "Aucune catégorie parente"
+
+msgid "Number of comments scored"
+msgstr "Nombre de commentaires notés"
+
+msgid "Old version"
+msgstr "Ancienne version"
+
+msgid "Only image files are allowed."
+msgstr "Seuls les fichiers image sont autorisés."
+
+msgid "Please fill all required fields"
+msgstr "Veuillez remplir tous les champs obligatoires"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Les questions avec des placeholders de classe ou d'étudiant seront générées pour les classes ou groupes du cours : %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Les évaluations sont bloquées dans cette discussion"
+
+msgid "Remove image"
+msgstr "Supprimer l'image"
+
+msgid "Restore renewal"
+msgstr "Restaurer le renouvellement"
+
+msgid "Restore version"
+msgstr "Restaurer la version"
+
+msgid "Search in"
+msgstr "Rechercher dans"
+
+msgid "Select group"
+msgstr "Sélectionner un groupe"
+
+msgid "Select image"
+msgstr "Sélectionner une image"
+
+msgid "Selected image"
+msgstr "Image sélectionnée"
+
+msgid "Show discussion"
+msgstr "Afficher la discussion"
+
+msgid "Show page"
+msgstr "Afficher la page"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Certains fichiers ou dossiers n'ont pas les droits d'écriture. Pour pouvoir installer Chamilo, vous devez d'abord modifier leurs permissions (en utilisant CHMOD). Veuillez lire le"
+
+msgid "Subcategories"
+msgstr "Sous-catégories"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Appuyez à gauche ou à droite pour naviguer"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "La date limite du devoir Wiki est passée, mais la soumission tardive est autorisée."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "La date limite du devoir Wiki est passée."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Le devoir Wiki n'a pas encore commencé."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Le verrouillage de l'édition de la page Wiki est requis avant l'enregistrement."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "L'annonce a été enregistrée, mais une pièce jointe n'a pas pu être téléversée."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "L'annonce a été enregistrée, mais la distribution par e-mail a échoué."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "L'annonce a été enregistrée, mais aucun e-mail n'a pu être envoyé."
+
+msgid "The category has been created"
+msgstr "La catégorie a été créée"
+
+msgid "The category has been deleted"
+msgstr "La catégorie a été supprimée"
+
+msgid "The category has been updated"
+msgstr "La catégorie a été mise à jour"
+
+msgid "The end date is invalid"
+msgstr "La date de fin est invalide"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Le nombre maximum de versions doit être un entier non négatif"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Le nombre maximum de mots doit être un entier non négatif"
+
+msgid "The print window could not be opened"
+msgstr "La fenêtre d'impression n'a pas pu être ouverte"
+
+msgid "The start date is invalid"
+msgstr "La date de début est invalide"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Ces paramètres s'appliquent à l'ensemble du cours, y compris ses sessions et groupes."
+
+msgid "This announcement has already been sent by email."
+msgstr "Cette annonce a déjà été envoyée par e-mail."
+
+msgid "This discussion is hidden from learners"
+msgstr "Cette discussion est masquée pour les apprenants"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Cet outil d'IA générative vous permet de créer des images et des vidéos courtes pour illustrer votre cours. En expliquant (en texte) ce que vous souhaitez dans la section d'invite, vous fournirez au modèle d'IA configuré les éléments nécessaires pour générer une image ou une vidéo. Veuillez patienter. Le modèle d'IA prendra un certain temps et générera un résultat, que vous pourrez conserver en enregistrant le média dans votre dossier de documents, puis en l'intégrant dans un document HTML. Tous les modèles d'IA ne sont pas égaux en termes de vitesse ou de qualité. Le modèle d'IA peut également vous fournir une invite modifiée, qui est une interprétation plus détaillée de votre demande. Vous pouvez ensuite utiliser cette invite modifiée pour affiner votre demande. Veuillez noter que cet outil, en particulier pour les vidéos, peut générer des coûts considérables pour votre organisation, même si vous décidez de ne pas enregistrer le média généré. Veuillez l'utiliser en conséquence. Si vous rencontrez des difficultés pour obtenir ce que vous recherchez, prenez le temps de rechercher en ligne des astuces de prompt pour le modèle d'IA à votre disposition."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Cet historique appartient au cours de base. La restauration est disponible après la création d'une version de session."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Cette image remplace l'icône de forum par défaut affichée à côté du titre du forum."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Cette page provient du cours de base. L'enregistrer créera une version pour la session actuelle."
+
+msgid "This will also delete %s subcategories."
+msgstr "Cela supprimera également %s sous-catégories."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Cela créera des pages de travail individuelles pour %s apprenants."
+
+msgid "Thread history"
+msgstr "Historique du fil"
+
+msgid "Title and content"
+msgstr "Titre et contenu"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Impossible d'annuler le renouvellement pour le moment."
+
+msgid "Unable to restore renewal right now."
+msgstr "Impossible de restaurer le renouvellement pour le moment."
+
+msgid "Unlock page"
+msgstr "Déverrouiller la page"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Utilisez [[Page]] ou [[Page|Texte visible]] pour créer des liens Wiki internes."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Utilisez la barre d'espace ou les touches fléchées pour naviguer"
+
+msgid "View version"
+msgstr "Voir la version"
+
+msgid "Visible only to teachers"
+msgstr "Visible uniquement pour les enseignants"
+
+msgid "Weight is required"
+msgstr "Le poids est requis"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Les catégories Wiki sont désactivées pour ce cours."
+
+msgid "Wiki categories enabled"
+msgstr "Catégories Wiki activées"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtrage strict HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Paramètres Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Paramètres Wiki mis à jour"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Vous consultez une version historique de cette page"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Vous pouvez joindre un ou plusieurs fichiers à cette réponse."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Vous pouvez modifier cette page de devoir, mais les pages de travail des apprenants ne seront pas modifiées."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Vous pouvez utiliser les balises {{class_name}} et {{student_full_name}} dans la question."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Vous disposez de 20 minutes pour modifier cette page avant l'expiration du verrouillage d'édition."
+
+msgid "by"
+msgstr "par"
+
+msgid "required"
+msgstr "obligatoire"
 

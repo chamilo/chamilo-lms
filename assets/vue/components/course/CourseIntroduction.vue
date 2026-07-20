@@ -78,7 +78,7 @@ const displayedIntroText = computed(() => {
     return null
   }
 
-  if (platformConfigStore.getSetting("editor.translate_html") === "true") {
+  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
     return filterTranslatedHtml(text, window.user?.locale)
   }
 

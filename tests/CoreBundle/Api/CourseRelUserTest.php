@@ -121,6 +121,33 @@ class CourseRelUserTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(403);
     }
 
+    public function testGetSingleCourseRelUserAsTeacher(): void
+    {
+        $course = $this->createCourse('Test Course Teacher View');
+        $student = $this->createUser('student_viewed_by_teacher');
+        $teacher = $this->createUser('teacher_viewer', '', '', 'ROLE_TEACHER');
+
+        $em = $this->getEntityManager();
+        $subscription = (new CourseRelUser())
+            ->setCourse($course)
+            ->setUser($student)
+            ->setStatus(CourseRelUser::STUDENT)
+            ->setRelationType(0)
+        ;
+        $em->persist($subscription);
+        $em->flush();
+
+        $tokenTeacher = $this->getUserTokenFromUser($teacher);
+
+        // Teachers may view any subscription, not only their own.
+        $this->createClientWithCredentials($tokenTeacher)->request(
+            'GET',
+            '/api/course_rel_users/'.$subscription->getId(),
+        );
+
+        $this->assertResponseIsSuccessful();
+    }
+
     // -------------------------------------------------------------------------
     // GET /api/course_rel_users (collection)
     // -------------------------------------------------------------------------
@@ -349,6 +376,35 @@ class CourseRelUserTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(201);
     }
 
+    public function testPostSubscribeDuplicateReturnsConflict(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $course = $this->createCourse('Duplicate Subscription Course');
+        $course->setVisibility(Course::OPEN_WORLD);
+        $courseRepo->update($course);
+
+        $student = $this->createUser('student_duplicate');
+
+        $token = $this->getUserTokenFromUser($student);
+
+        $payload = [
+            'json' => [
+                'course' => $this->getCourseIri($course),
+                'user' => $student->getIri(),
+                'relationType' => 0,
+            ],
+        ];
+
+        $this->createClientWithCredentials($token)->request('POST', '/api/course_rel_users', $payload);
+        $this->assertResponseStatusCodeSame(201);
+
+        // A second subscription of the same user to the same course is rejected.
+        $this->createClientWithCredentials($token)->request('POST', '/api/course_rel_users', $payload);
+        $this->assertResponseStatusCodeSame(409);
+    }
+
     public function testPostSubscribeUnauthenticatedReturns401(): void
     {
         $course = $this->createCourse('Unauth Post Course');
@@ -433,6 +489,75 @@ class CourseRelUserTest extends AbstractApiTest
         $this->assertSame(CourseRelUser::STUDENT, $data['status']);
     }
 
+    public function testStudentCannotEscalateToTeacherViaStatus(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $course = $this->createCourse('Status Escalation Course');
+        $course->setVisibility(Course::OPEN_WORLD);
+        $courseRepo->update($course);
+
+        $student = $this->createUser('student_status_escalation');
+
+        $token = $this->getUserTokenFromUser($student);
+
+        // A self-enrolling user is always persisted as a student, even if they send status = TEACHER.
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/course_rel_users',
+            [
+                'json' => [
+                    'course' => $this->getCourseIri($course),
+                    'user' => $student->getIri(),
+                    'status' => CourseRelUser::TEACHER,
+                    'relationType' => 0,
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $data = $response->toArray();
+
+        $this->assertSame(CourseRelUser::STUDENT, $data['status']);
+    }
+
+    public function testTeacherCanSubscribeAnotherUserAsTeacherToOwnCourse(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $course = $this->createCourse('Teacher Assigns Teacher Course');
+        $course->setVisibility(Course::OPEN_WORLD);
+
+        $teacher = $this->createUser('teacher_assigns_teacher', '', '', 'ROLE_TEACHER');
+        $course->addUserAsTeacher($teacher);
+        $courseRepo->update($course);
+
+        $colleague = $this->createUser('colleague_as_teacher');
+
+        $tokenTeacher = $this->getUserTokenFromUser($teacher);
+
+        // A teacher of the course may assign the TEACHER status to another user.
+        $response = $this->createClientWithCredentials($tokenTeacher)->request(
+            'POST',
+            '/api/course_rel_users',
+            [
+                'json' => [
+                    'course' => $this->getCourseIri($course),
+                    'user' => $colleague->getIri(),
+                    'status' => CourseRelUser::TEACHER,
+                    'relationType' => 0,
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $data = $response->toArray();
+
+        $this->assertSame(CourseRelUser::TEACHER, $data['status']);
+    }
+
     public function testAdminCanSubscribeToClosedCourseBypassingCatalogueCheck(): void
     {
         /** @var CourseRepository $courseRepo */
@@ -464,7 +589,7 @@ class CourseRelUserTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(201);
     }
 
-    public function testAdminCannotSubscribeAnotherUserViaApi(): void
+    public function testAdminCanSubscribeAnotherUserViaApi(): void
     {
         /** @var CourseRepository $courseRepo */
         $courseRepo = self::getContainer()->get(CourseRepository::class);
@@ -478,14 +603,123 @@ class CourseRelUserTest extends AbstractApiTest
 
         $tokenAdmin = $this->getUserTokenFromUser($admin);
 
-        // securityPostDenormalize: 'object.getUser() == user' blocks this even for admins.
-        $this->createClientWithCredentials($tokenAdmin)->request(
+        // securityPostDenormalize grants ROLE_ADMIN a bypass, so an admin may subscribe any user.
+        $response = $this->createClientWithCredentials($tokenAdmin)->request(
             'POST',
             '/api/course_rel_users',
             [
                 'json' => [
                     'course' => $this->getCourseIri($course),
                     'user' => $teacher->getIri(),
+                    'relationType' => 0,
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+
+        // The subscription is created for the target user, not the acting admin.
+        $data = $response->toArray();
+        $this->assertSame($teacher->getUsername(), $data['user']['username']);
+    }
+
+    public function testAdminCanSubscribeAnotherUserToClosedCourseBypassingCatalogueCheck(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        // A CLOSED course is excluded from the public catalogue.
+        $course = $this->createCourse('Admin Subscribe Other User Closed Course');
+        $course->setVisibility(Course::CLOSED);
+        $courseRepo->update($course);
+
+        $admin = $this->createAdminUser('sub_other_closed');
+        $teacher = $this->createUser('teacher_sub_other_closed', '', '', 'ROLE_TEACHER');
+
+        $tokenAdmin = $this->getUserTokenFromUser($admin);
+
+        // CourseRelUserVoter grants ROLE_ADMIN a full bypass of both the owner check and the
+        // public-catalogue check.
+        $response = $this->createClientWithCredentials($tokenAdmin)->request(
+            'POST',
+            '/api/course_rel_users',
+            [
+                'json' => [
+                    'course' => $this->getCourseIri($course),
+                    'user' => $teacher->getIri(),
+                    'relationType' => 0,
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+
+        $data = $response->toArray();
+        $this->assertSame($teacher->getUsername(), $data['user']['username']);
+    }
+
+    public function testTeacherCanSubscribeAnotherUserToOwnCourse(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        // A CLOSED course is excluded from the public catalogue.
+        $course = $this->createCourse('Teacher Own Course Subscription');
+        $course->setVisibility(Course::CLOSED);
+
+        $teacher = $this->createUser('teacher_owner_subscriber', '', '', 'ROLE_TEACHER');
+        $course->addUserAsTeacher($teacher);
+        $courseRepo->update($course);
+
+        $student = $this->createUser('student_subscribed_by_owner_teacher');
+
+        $tokenTeacher = $this->getUserTokenFromUser($teacher);
+
+        // A teacher may subscribe any user to a course they teach, catalogue status notwithstanding.
+        $response = $this->createClientWithCredentials($tokenTeacher)->request(
+            'POST',
+            '/api/course_rel_users',
+            [
+                'json' => [
+                    'course' => $this->getCourseIri($course),
+                    'user' => $student->getIri(),
+                    'relationType' => 0,
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+
+        $data = $response->toArray();
+        $this->assertSame($student->getUsername(), $data['user']['username']);
+    }
+
+    public function testTeacherCannotSubscribeAnotherUserToCourseTheyDoNotTeach(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        // Public course, but the acting teacher does not teach it.
+        $course = $this->createCourse('Teacher Foreign Course Subscription');
+        $course->setVisibility(Course::OPEN_WORLD);
+        $courseRepo->update($course);
+
+        $teacher = $this->createUser('teacher_foreign_subscriber', '', '', 'ROLE_TEACHER');
+        $student = $this->createUser('student_not_subscribed_by_foreign_teacher');
+
+        $tokenTeacher = $this->getUserTokenFromUser($teacher);
+
+        // The teacher bypass only covers courses the teacher teaches; subscribing a third party elsewhere is denied.
+        $this->createClientWithCredentials($tokenTeacher)->request(
+            'POST',
+            '/api/course_rel_users',
+            [
+                'json' => [
+                    'course' => $this->getCourseIri($course),
+                    'user' => $student->getIri(),
                     'relationType' => 0,
                 ],
             ]

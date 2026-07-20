@@ -170,6 +170,16 @@ if (0 === (int) ($duplicateRow['inserted_count'] ?? 1)) {
     $respond('DUPLICATE');
 }
 
+$releaseEventForRetry = static function () use ($logTable, $eventKeySql, $eventKey, $profileId, $log): void {
+    $deleted = Database::query("DELETE FROM $logTable WHERE event_key = '$eventKeySql'");
+    if (false === $deleted) {
+        $log('Unable to release failed IPN event for retry.', [
+            'event_key' => $eventKey,
+            'profile_id' => $profileId,
+        ]);
+    }
+};
+
 $serviceSaleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES_SALE);
 $serviceTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
 $subscriptionCourseTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SUBSCRIPTION_COURSE);
@@ -324,7 +334,7 @@ $reactivateCoursesForSubscriptionSale = static function (
     return ['found' => $found, 'reactivated' => $reactivated, 'errors' => $errors];
 };
 
-$extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSaleTable, $serviceSaleId, $durationDays, $profileId, $txnId, $log, $reactivateCoursesForSubscriptionSale, $subscriptionCourseTable, $courseTable, $defaultActiveCourseVisibility, $decodeContext, $encodeContextForSql): void {
+$extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSaleTable, $serviceSaleId, $durationDays, $profileId, $txnId, $eventKey, $txnType, $paymentStatus, $postData, $log, $reactivateCoursesForSubscriptionSale, $subscriptionCourseTable, $courseTable, $defaultActiveCourseVisibility, $decodeContext, $encodeContextForSql): bool {
     $currentEnd = new DateTimeImmutable((string) ($saleRow['date_end'] ?? 'now'), new DateTimeZone('UTC'));
     $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
     $baseDate = $currentEnd > $now ? $currentEnd : $now;
@@ -343,11 +353,21 @@ $extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSale
         $updateValues['gateway_transaction_id'] = $txnId;
     }
 
-    Database::update(
+    $updated = Database::update(
         $serviceSaleTable,
         $updateValues,
         ['id = ?' => $serviceSaleId]
     );
+
+    if (false === $updated) {
+        $log('Recurring payment was verified but the service sale could not be extended.', [
+            'service_sale_id' => $serviceSaleId,
+            'profile_id' => $profileId,
+            'event_key' => $eventKey,
+        ]);
+
+        return false;
+    }
 
     $plugin->applyServiceBenefitsFromSale($serviceSaleId);
 
@@ -361,6 +381,27 @@ $extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSale
         $log
     );
 
+    $auditData = [
+        'gateway' => 'paypal',
+        'event_key' => $eventKey,
+        'txn_type' => $txnType,
+        'payment_status' => $paymentStatus,
+        'profile_id' => $profileId,
+        'transaction_id' => $txnId,
+        'new_date_end' => $newEndSql,
+        'amount' => isset($postData['mc_gross']) ? (float) $postData['mc_gross'] : null,
+        'currency' => isset($postData['mc_currency']) ? strtoupper((string) $postData['mc_currency']) : null,
+    ];
+
+    $plugin->recordAudit(
+        BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED,
+        BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+        $serviceSaleId,
+        $auditData,
+        null,
+        BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+    );
+
     $log('Recurring payment completed and service sale extended.', [
         'service_sale_id' => $serviceSaleId,
         'profile_id' => $profileId,
@@ -369,31 +410,62 @@ $extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSale
         'courses_reactivated' => (int) $reactivationResult['reactivated'],
         'reactivation_errors' => (int) $reactivationResult['errors'],
     ]);
+
+    return true;
 };
 
-$markRecurringStatus = static function (int $status, ?string $cancelledAt = null) use ($serviceSaleTable, $serviceSaleId): void {
+$markRecurringStatus = static function (int $status, ?string $cancelledAt = null) use ($sale, $serviceSaleTable, $serviceSaleId): bool {
     $values = [
         'recurring_payment' => $status,
     ];
 
     if (null !== $cancelledAt) {
-        $values['cancelled_at'] = $cancelledAt;
+        $existingCancelledAt = trim((string) ($sale['cancelled_at'] ?? ''));
+        $values['cancelled_at'] = '' !== $existingCancelledAt ? $existingCancelledAt : $cancelledAt;
     }
 
-    Database::update(
+    return false !== Database::update(
         $serviceSaleTable,
         $values,
         ['id = ?' => $serviceSaleId]
     );
 };
 
+$buildGatewayAuditData = static function () use ($eventKey, $txnType, $paymentStatus, $profileStatus, $profileId, $txnId): array {
+    return [
+        'gateway' => 'paypal',
+        'event_key' => $eventKey,
+        'txn_type' => $txnType,
+        'payment_status' => $paymentStatus,
+        'profile_status' => $profileStatus,
+        'profile_id' => $profileId,
+        'transaction_id' => $txnId,
+    ];
+};
+
 if ('recurring_payment' === $txnType && 'completed' === $paymentStatus) {
-    $extendServiceSale($sale);
+    if (!$extendServiceSale($sale)) {
+        $releaseEventForRetry();
+        $respond('PROCESSING_ERROR', 500);
+    }
+
     $respond('OK');
 }
 
 if (in_array($txnType, ['recurring_payment_failed', 'recurring_payment_skipped'], true)) {
-    $markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED);
+    if (!$markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED)) {
+        $releaseEventForRetry();
+        $respond('PROCESSING_ERROR', 500);
+    }
+
+    $plugin->recordAudit(
+        BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_FAILED,
+        BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+        $serviceSaleId,
+        $buildGatewayAuditData(),
+        null,
+        BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+    );
 
     $log('Recurring payment failed or skipped.', [
         'service_sale_id' => $serviceSaleId,
@@ -406,7 +478,20 @@ if (in_array($txnType, ['recurring_payment_failed', 'recurring_payment_skipped']
 }
 
 if (in_array($txnType, ['recurring_payment_profile_cancel', 'recurring_payment_profile_cancelled'], true)) {
-    $markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED, api_get_utc_datetime());
+    $cancelledAt = api_get_utc_datetime();
+    if (!$markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED, $cancelledAt)) {
+        $releaseEventForRetry();
+        $respond('PROCESSING_ERROR', 500);
+    }
+
+    $plugin->recordAudit(
+        BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED,
+        BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+        $serviceSaleId,
+        $buildGatewayAuditData() + ['cancelled_at' => $cancelledAt],
+        null,
+        BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+    );
 
     $log('Recurring payment profile cancelled.', [
         'service_sale_id' => $serviceSaleId,
@@ -418,7 +503,19 @@ if (in_array($txnType, ['recurring_payment_profile_cancel', 'recurring_payment_p
 }
 
 if ('recurring_payment_profile_created' === $txnType) {
-    $markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED);
+    if (!$markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED)) {
+        $releaseEventForRetry();
+        $respond('PROCESSING_ERROR', 500);
+    }
+
+    $plugin->recordAudit(
+        BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_ENABLED,
+        BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+        $serviceSaleId,
+        $buildGatewayAuditData(),
+        null,
+        BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+    );
 
     $log('Recurring payment profile creation confirmed.', [
         'service_sale_id' => $serviceSaleId,
@@ -430,12 +527,39 @@ if ('recurring_payment_profile_created' === $txnType) {
 }
 
 if (in_array($profileStatus, ['cancelled', 'canceled'], true)) {
-    $markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED, api_get_utc_datetime());
+    $cancelledAt = api_get_utc_datetime();
+    if (!$markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED, $cancelledAt)) {
+        $releaseEventForRetry();
+        $respond('PROCESSING_ERROR', 500);
+    }
+
+    $plugin->recordAudit(
+        BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED,
+        BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+        $serviceSaleId,
+        $buildGatewayAuditData() + ['cancelled_at' => $cancelledAt],
+        null,
+        BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+    );
+
     $respond('OK');
 }
 
 if ('suspended' === $profileStatus) {
-    $markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED);
+    if (!$markRecurringStatus(BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED)) {
+        $releaseEventForRetry();
+        $respond('PROCESSING_ERROR', 500);
+    }
+
+    $plugin->recordAudit(
+        BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_FAILED,
+        BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+        $serviceSaleId,
+        $buildGatewayAuditData(),
+        null,
+        BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+    );
+
     $respond('OK');
 }
 

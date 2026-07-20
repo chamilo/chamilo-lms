@@ -23,8 +23,8 @@ export default {
    * @param {Number|String} attendanceId - ID of the attendance list.
    * @returns {Promise<Object>} - Data of the specific attendance list.
    */
-  getAttendance: async (attendanceId) => {
-    return await baseService.get(`/api/attendances/${attendanceId}/`)
+  getAttendance: async (attendanceId, params = {}) => {
+    return await baseService.get(`/api/attendances/${attendanceId}/`, params)
   },
 
   /**
@@ -145,9 +145,12 @@ export default {
    * @param {Number|String} attendanceId - ID of the attendance list.
    * @returns {Promise<Object>} - Full attendance data structured for Vue.
    */
-  getFullAttendanceData: async (attendanceId) => {
+  getFullAttendanceData: async (attendanceId, params = {}) => {
     try {
-      return await baseService.get(`/attendance/full-data`, { attendanceId })
+      return await baseService.get(`/attendance/full-data`, {
+        attendanceId,
+        ...params,
+      })
     } catch (error) {
       console.error("Error fetching full attendance data:", error)
       throw error
@@ -241,9 +244,9 @@ export default {
     return await baseService.get(`/attendance/list_with_done_count`, params)
   },
 
-  getStudentAttendanceData: async (attendanceId) => {
+  getStudentAttendanceData: async (attendanceId, params = {}) => {
     try {
-      return await baseService.get(`/attendance/${attendanceId}/student-dates`)
+      return await baseService.get(`/attendance/${attendanceId}/student-dates`, params)
     } catch (error) {
       console.error("Error fetching student attendance data:", error)
       throw error

@@ -264,7 +264,7 @@ class MessageManager
         } elseif ($totalFileSize > (int) api_get_setting('message_max_upload_filesize')) {
             $warning = sprintf(
                 get_lang('Files size exceeds'),
-                format_file_size(api_get_setting('message_max_upload_filesize'))
+                \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize(api_get_setting('message_max_upload_filesize'))
             );
 
             Display::addFlash(Display::return_message($warning, 'warning'));
@@ -1270,7 +1270,7 @@ class MessageManager
             $attachIcon = Display::getMdiIcon('paperclip');
             $repo = Container::getMessageAttachmentRepository();
             foreach ($files as $file) {
-                $size = format_file_size($file->getSize());
+                $size = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($file->getSize());
                 $comment = Security::remove_XSS($file->getComment());
                 $filename = Security::remove_XSS($file->getFilename());
                 $url = $repo->getResourceFileUrl($file);

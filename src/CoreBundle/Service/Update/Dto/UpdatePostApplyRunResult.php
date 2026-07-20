@@ -12,11 +12,11 @@ use Symfony\Component\DependencyInjection\Attribute\Exclude;
 final readonly class UpdatePostApplyRunResult
 {
     /**
-     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}>                                               $checks
      * @param array<int, array{key: string, title: string, command: string, status: string, exitCode?: int|null, durationSeconds?: float, advanced?: bool}> $actions
-     * @param string[] $errors
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                                                                      $errors
+     * @param string[]                                                                                                                                      $warnings
+     * @param array<string, mixed>                                                                                                                          $details
      */
     public function __construct(
         private bool $valid,
@@ -31,10 +31,10 @@ final readonly class UpdatePostApplyRunResult
     ) {}
 
     /**
-     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}>                                               $checks
      * @param array<int, array{key: string, title: string, command: string, status: string, exitCode?: int|null, durationSeconds?: float, advanced?: bool}> $actions
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                                                                      $warnings
+     * @param array<string, mixed>                                                                                                                          $details
      */
     public static function success(
         string $stagingPath,
@@ -49,11 +49,11 @@ final readonly class UpdatePostApplyRunResult
     }
 
     /**
-     * @param string[] $errors
-     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
+     * @param string[]                                                                                                                                      $errors
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}>                                               $checks
      * @param array<int, array{key: string, title: string, command: string, status: string, exitCode?: int|null, durationSeconds?: float, advanced?: bool}> $actions
-     * @param string[] $warnings
-     * @param array<string, mixed> $details
+     * @param string[]                                                                                                                                      $warnings
+     * @param array<string, mixed>                                                                                                                          $details
      */
     public static function failure(
         array $errors,

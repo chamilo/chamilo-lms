@@ -114,7 +114,7 @@ if ('true' === $allowTutors) {
     <!-- General properties -->
     <table class="table table-hover table-striped data_table">
     <tr>
-        <td><?php echo get_lang('General coach'); ?> :</td>
+        <td><?php echo get_lang('General tutor'); ?> :</td>
         <td>
             <?php
             foreach ($session->getGeneralCoaches() as $generalCoach) {
@@ -142,7 +142,7 @@ if ('true' === $allowTutors) {
             <td><?php echo $sessionDates['access'] ?></td>
         </tr>
         <tr>
-            <td><?php echo get_lang('Access dates for coaches'); ?></td>
+            <td><?php echo get_lang('Access dates for tutors'); ?></td>
             <td><?php echo $sessionDates['coach'] ?></td>
         </tr>
     <?php } ?>
@@ -176,7 +176,7 @@ if ('true' === $allowTutors) {
     <table class="table table-hover table-striped data_table">
     <tr>
       <th width="35%"><?php echo get_lang('Course title'); ?></th>
-      <th width="30%"><?php echo get_lang('Course coach'); ?></th>
+      <th width="30%"><?php echo get_lang('Course tutor'); ?></th>
       <th width="20%"><?php echo get_lang('Users number'); ?></th>
     </tr>
     <?php

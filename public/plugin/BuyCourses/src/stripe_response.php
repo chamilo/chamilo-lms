@@ -38,6 +38,49 @@ $log = static function (string $message, array $context = []): void {
     error_log('[BuyCourses][Stripe] '.$message.$suffix);
 };
 
+$deleteStripeSubscriptionDiscount = static function (string $subscriptionId, string $secretKey): array {
+    if ('' === $subscriptionId || '' === $secretKey) {
+        return [false, 'Missing subscription ID or Stripe secret key.'];
+    }
+
+    if (!function_exists('curl_init')) {
+        return [false, 'PHP cURL extension is not available.'];
+    }
+
+    $url = 'https://api.stripe.com/v1/subscriptions/'.rawurlencode($subscriptionId).'/discount';
+    $curl = curl_init($url);
+
+    if (false === $curl) {
+        return [false, 'Could not initialize cURL.'];
+    }
+
+    curl_setopt_array($curl, [
+        CURLOPT_CUSTOMREQUEST => 'DELETE',
+        CURLOPT_USERPWD => $secretKey.':',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+    ]);
+
+    $response = curl_exec($curl);
+    $error = curl_error($curl);
+    $httpCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if (false === $response) {
+        return [false, '' !== $error ? $error : 'Unknown cURL error.'];
+    }
+
+    $decoded = json_decode((string) $response, true);
+
+    if ($httpCode >= 200 && $httpCode < 300) {
+        return [true, $decoded ?: []];
+    }
+
+    $message = $decoded['error']['message'] ?? $response;
+
+    return [false, $message];
+};
+
 if ('' === $payload || '' === $signatureHeader || '' === $endpointSecret) {
     $log('Webhook rejected because payload, signature or endpoint secret is missing.');
     $respond('BAD_REQUEST', 400);
@@ -214,7 +257,7 @@ $completeCourseOrSessionSale = static function (mixed $checkoutSession) use ($pl
     return true;
 };
 
-$completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use ($plugin, $timestampToDateTime, $log): bool {
+$completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use ($plugin, $eventId, $eventType, $timestampToDateTime, $log): bool {
     $checkoutSessionId = (string) ($checkoutSession->id ?? '');
     if ('' === $checkoutSessionId) {
         return false;
@@ -245,8 +288,26 @@ $completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use 
     }
 
     $plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
-    $plugin->completeServiceSale($serviceSaleId);
-    $plugin->applyServiceBenefitsFromSale($serviceSaleId);
+    if (!$plugin->completeServiceSale(
+        $serviceSaleId,
+        BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+        null,
+        [
+            'gateway' => 'stripe',
+            'event_id' => $eventId,
+            'event_type' => $eventType,
+            'checkout_session_id' => $checkoutSessionId,
+            'subscription_id' => $subscriptionId,
+        ]
+    )) {
+        $log('Service Stripe checkout could not be completed.', [
+            'service_sale_id' => $serviceSaleId,
+            'checkout_session_id' => $checkoutSessionId,
+            'error' => $plugin->getLastServiceSaleError(),
+        ]);
+
+        return false;
+    }
 
     $completedServiceSale = $plugin->getServiceSale($serviceSaleId);
     $nextChargeDate = trim((string) ($completedServiceSale['date_end'] ?? ''));
@@ -271,8 +332,12 @@ $completeServiceSaleFromCheckout = static function (mixed $checkoutSession) use 
 
 switch ($eventType) {
     case 'checkout.session.completed':
-        if (!$completeCourseOrSessionSale($object)) {
-            $completeServiceSaleFromCheckout($object);
+        if (!$completeCourseOrSessionSale($object) && !$completeServiceSaleFromCheckout($object)) {
+            $log('Stripe checkout event did not match or complete any sale.', [
+                'event_id' => $eventId,
+                'checkout_session_id' => (string) ($object->id ?? ''),
+            ]);
+            $respond('SERVICE_COMPLETION_FAILED', 500);
         }
         break;
 
@@ -325,12 +390,20 @@ switch ($eventType) {
 
         $customerId = isset($object->customer) ? (string) $object->customer : null;
 
-        $plugin->completeStripeRecurringServiceSale(
+        if (!$plugin->completeStripeRecurringServiceSale(
             $serviceSaleId,
             $subscriptionId,
             $customerId,
             $nextChargeDate
-        );
+        )) {
+            $log('Stripe recurring service sale could not be completed.', [
+                'service_sale_id' => $serviceSaleId,
+                'subscription_id' => $subscriptionId,
+                'event_id' => $eventId,
+                'error' => $plugin->getLastServiceSaleError(),
+            ]);
+            $respond('SERVICE_COMPLETION_FAILED', 500);
+        }
 
         $updateData = [
             'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
@@ -356,6 +429,71 @@ switch ($eventType) {
         $plugin->updateServiceSaleGatewayData($serviceSaleId, $updateData);
         $plugin->applyServiceBenefitsFromSale($serviceSaleId);
         $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
+        $plugin->recordAudit(
+            BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED,
+            BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+            $serviceSaleId,
+            [
+                'gateway' => 'stripe',
+                'event_id' => $eventId,
+                'event_type' => $eventType,
+                'subscription_id' => $subscriptionId,
+                'transaction_id' => $paymentIntentId,
+                'next_charge_date' => $nextChargeDate,
+                'amount_paid' => isset($object->amount_paid) ? ((float) $object->amount_paid / 100) : null,
+                'currency' => isset($object->currency) ? strtoupper((string) $object->currency) : null,
+            ],
+            null,
+            BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+        );
+
+        $billingReason = strtolower(trim((string) ($object->billing_reason ?? '')));
+        if ('subscription_create' !== $billingReason) {
+            $couponUsage = $plugin->getServiceSaleCouponUsage($serviceSaleId);
+            $couponTimesApplied = max(0, (int) ($couponUsage['times_applied'] ?? 0));
+
+            if ($couponTimesApplied > 0) {
+                $currentAppliedCount = max(0, (int) ($couponUsage['applied_count'] ?? 0));
+
+                if ($currentAppliedCount < $couponTimesApplied) {
+                    $appliedCount = $plugin->incrementServiceSaleCouponAppliedCount($serviceSaleId);
+
+                    if ($appliedCount >= $couponTimesApplied) {
+                        $stripeSecretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+
+                        if ('' !== $stripeSecretKey && '' !== $subscriptionId) {
+                            try {
+                                \Stripe\Stripe::setApiKey($stripeSecretKey);
+                                \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+                                [$discountDeleted, $discountDeleteResult] = $deleteStripeSubscriptionDiscount(
+                                    $subscriptionId,
+                                    $stripeSecretKey
+                                );
+
+                                if (!$discountDeleted) {
+                                    throw new RuntimeException((string) $discountDeleteResult);
+                                }
+
+                                $log('Stripe limited coupon discount removed after reaching its application limit.', [
+                                    'service_sale_id' => $serviceSaleId,
+                                    'subscription_id' => $subscriptionId,
+                                    'coupon_id' => (int) ($couponUsage['id'] ?? 0),
+                                    'applied_count' => $appliedCount,
+                                    'times_applied' => $couponTimesApplied,
+                                ]);
+                            } catch (Throwable $exception) {
+                                $log('Stripe limited coupon discount could not be removed.', [
+                                    'service_sale_id' => $serviceSaleId,
+                                    'subscription_id' => $subscriptionId,
+                                    'coupon_id' => (int) ($couponUsage['id'] ?? 0),
+                                    'error' => $exception->getMessage(),
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         $log('Stripe recurring invoice paid.', [
             'service_sale_id' => $serviceSaleId,
@@ -381,15 +519,38 @@ switch ($eventType) {
         }
 
         if (!empty($serviceSale)) {
-            $plugin->updateServiceSaleGatewayData((int) $serviceSale['id'], [
+            $serviceSaleId = (int) $serviceSale['id'];
+            if ($plugin->wasGatewayEventProcessed($serviceSaleId, $eventId)) {
+                $log('Duplicate Stripe invoice.payment_failed ignored.', [
+                    'service_sale_id' => $serviceSaleId,
+                    'event_id' => $eventId,
+                ]);
+                break;
+            }
+
+            $plugin->updateServiceSaleGatewayData($serviceSaleId, [
                 'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED,
                 'recurring_gateway' => 'stripe',
                 'gateway_subscription_id' => $subscriptionId,
                 'recurring_profile_id' => $subscriptionId,
             ]);
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_FAILED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $serviceSaleId,
+                [
+                    'gateway' => 'stripe',
+                    'event_id' => $eventId,
+                    'event_type' => $eventType,
+                    'subscription_id' => $subscriptionId,
+                ],
+                null,
+                BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+            );
+            $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
 
             $log('Stripe recurring invoice payment failed. Sale marked as suspended.', [
-                'service_sale_id' => (int) $serviceSale['id'],
+                'service_sale_id' => $serviceSaleId,
                 'subscription_id' => $subscriptionId,
             ]);
         }
@@ -403,16 +564,45 @@ switch ($eventType) {
 
         $serviceSale = $plugin->getServiceSaleFromGatewaySubscriptionId($subscriptionId);
         if (!empty($serviceSale)) {
-            $plugin->updateServiceSaleGatewayData((int) $serviceSale['id'], [
+            $serviceSaleId = (int) $serviceSale['id'];
+            if ($plugin->wasGatewayEventProcessed($serviceSaleId, $eventId)) {
+                $log('Duplicate Stripe customer.subscription.deleted ignored.', [
+                    'service_sale_id' => $serviceSaleId,
+                    'event_id' => $eventId,
+                ]);
+                break;
+            }
+
+            $cancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
+            if ('' === $cancelledAt) {
+                $cancelledAt = api_get_utc_datetime();
+            }
+
+            $plugin->updateServiceSaleGatewayData($serviceSaleId, [
                 'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED,
-                'cancelled_at' => api_get_utc_datetime(),
+                'cancelled_at' => $cancelledAt,
                 'recurring_gateway' => 'stripe',
                 'gateway_subscription_id' => $subscriptionId,
                 'recurring_profile_id' => $subscriptionId,
             ]);
+            $plugin->recordAudit(
+                BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $serviceSaleId,
+                [
+                    'gateway' => 'stripe',
+                    'event_id' => $eventId,
+                    'event_type' => $eventType,
+                    'subscription_id' => $subscriptionId,
+                    'cancelled_at' => $cancelledAt,
+                ],
+                null,
+                BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+            );
+            $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
 
             $log('Stripe subscription deleted.', [
-                'service_sale_id' => (int) $serviceSale['id'],
+                'service_sale_id' => $serviceSaleId,
                 'subscription_id' => $subscriptionId,
             ]);
         }

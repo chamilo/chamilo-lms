@@ -187,7 +187,6 @@ class CourseChatUtils
 
         $message = trim($message);
         $message = nl2br($message);
-        $message = Security::remove_XSS($message);
 
         // url -> anchor
         $message = preg_replace(
@@ -203,6 +202,10 @@ class CourseChatUtils
         );
 
         $message = MarkdownExtra::defaultTransform($message);
+
+        // Sanitize last, after Markdown produced the final HTML, so HTMLPurifier
+        // strips javascript: links and other payloads Markdown may have generated.
+        $message = Security::remove_XSS($message);
 
         return $message;
     }

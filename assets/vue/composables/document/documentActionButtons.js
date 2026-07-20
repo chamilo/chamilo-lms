@@ -1,18 +1,11 @@
 import { computed } from "vue"
 import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
-import { usePlatformConfig } from "../../store/platformConfig"
 
 export function useDocumentActionButtons() {
   const route = useRoute()
   const securityStore = useSecurityStore()
-  const platformConfigStore = usePlatformConfig()
-
-  const inStudentView = computed(() => platformConfigStore.isStudentViewActive)
-  const isTeacherUI = computed(
-    () =>
-      (securityStore.isCurrentTeacher || securityStore.isCourseAdmin || securityStore.isAdmin) && !inStudentView.value,
-  )
+  const isTeacherUI = computed(() => securityStore.isCurrentTeacher)
 
   const isCertificateMode = computed(() => route.query.filetype === "certificate")
 

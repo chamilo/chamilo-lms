@@ -37,6 +37,16 @@ final class Version20231022124700 extends AbstractMigrationChamilo
         $this->entityManager->clear();
         $this->courseIdsByCode = $this->loadCourseIdsByCode();
 
+        // Extend MySQL session timeouts to survive long processing on shared hosting.
+        try {
+            $this->connection->executeStatement('SET SESSION wait_timeout = 28800');
+            $this->connection->executeStatement('SET SESSION interactive_timeout = 28800');
+            $this->connection->executeStatement('SET SESSION net_read_timeout = 3600');
+            $this->connection->executeStatement('SET SESSION net_write_timeout = 3600');
+        } catch (Exception) {
+            // Non-fatal: the server may not allow changing these session variables.
+        }
+
         $updateConfigurations = [
             ['table' => 'c_tool_intro', 'fields' => ['intro_text']],
             ['table' => 'c_course_description', 'fields' => ['content']],
@@ -104,13 +114,15 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $this->connection->executeStatement(
-                    "UPDATE {$table} SET {$field} = :content WHERE iid = :iid",
-                    [
-                        'content' => $replacement,
-                        'iid' => (int) $row['iid'],
-                    ]
-                );
+                $this->executeWithReconnect(function () use ($table, $field, $replacement, $row): void {
+                    $this->connection->executeStatement(
+                        "UPDATE {$table} SET {$field} = :content WHERE iid = :iid",
+                        [
+                            'content' => $replacement,
+                            'iid' => (int) $row['iid'],
+                        ]
+                    );
+                });
                 ++$updated;
             }
 
@@ -122,6 +134,40 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                 'last_iid' => $lastIid,
                 'elapsed_seconds' => (int) (microtime(true) - $startedAt),
             ]);
+            $this->keepAlive();
+        }
+    }
+
+    /**
+     * Execute a callable, reconnecting once if the MySQL connection has gone away.
+     */
+    private function executeWithReconnect(callable $fn): void
+    {
+        try {
+            $fn();
+        } catch (Exception $exception) {
+            if (str_contains($exception->getMessage(), 'server has gone away') || str_contains($exception->getMessage(), '2006')) {
+                $this->connection->close();
+                $this->connection->connect();
+                $fn();
+
+                return;
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * Send a lightweight query to keep the MySQL connection alive.
+     */
+    private function keepAlive(): void
+    {
+        try {
+            $this->connection->executeQuery('SELECT 1');
+        } catch (Exception) {
+            $this->connection->close();
+            $this->connection->connect();
         }
     }
 
@@ -208,6 +254,7 @@ SQL,
                 'updated' => $updated,
                 'last_iid' => $lastIid,
             ]);
+            $this->keepAlive();
         }
     }
 

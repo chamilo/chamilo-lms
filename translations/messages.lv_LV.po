@@ -1579,8 +1579,8 @@ msgstr "Jūs tiešām vēlaties dzēst šos soļus?"
 msgid "Authoring tool"
 msgstr "Autora izstrādes instruments"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM vai AICC fails augšupielādēšanai"
+msgid "SCORM file to upload"
+msgstr "SCORM fails augšupielādēšanai"
 
 msgid "Course location"
 msgstr "Kursa atrašanās vieta"
@@ -21887,7 +21887,7 @@ msgid "Choose recipients"
 msgstr "Izvēlēties saņēmējus"
 
 msgid "Progress: %s %%"
-msgstr "Progress: %s %%"
+msgstr "Progresss: %s %%"
 
 msgid "This session has a maximum duration of %s days."
 msgstr "Šai sesijai ir maksimālais ilgums %s dienas."
@@ -36493,4 +36493,853 @@ msgstr "Skatīt tēmas"
 
 msgid "No auth source"
 msgstr "Nav autentifikācijas avota"
+
+msgid "You must add at least one question"
+msgstr "Jāpievieno vismaz viens jautājums"
+
+msgid "Advanced actions"
+msgstr "Papildu darbības"
+
+msgid "Application path"
+msgstr "Lietotnes ceļš"
+
+msgid "Apply files details"
+msgstr "Lietot failu detaļas"
+
+msgid "Apply plan details"
+msgstr "Lietot plāna detaļas"
+
+msgid "Apply plan failed"
+msgstr "Plāna lietošana neizdevās"
+
+msgid "Apply plan ready"
+msgstr "Plāna lietošana gatava"
+
+msgid "Apply preparation"
+msgstr "Lietošanas sagatavošana"
+
+msgid "Apply staged files"
+msgstr "Lietot sagatavotos failus"
+
+msgid "Applying files..."
+msgstr "Failu lietošana..."
+
+msgid "Audit file"
+msgstr "Revīzijas fails"
+
+msgid "Backup directory"
+msgstr "Dublējuma direktorijs"
+
+msgid "Baseline clean"
+msgstr "Bāzes tīrīšana"
+
+msgid "Baseline warnings"
+msgstr "Bāzes brīdinājumi"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Izveidot drošu lietošanas plānu no sagatavotās pakotnes. Tas pārbauda tikai failus, atļaujas, dublējuma ceļu un bloķēšanas statusu. Tas neaizstāj failus."
+
+msgid "Build production frontend assets."
+msgstr "Veidot ražošanas priekšgala aktīvus."
+
+msgid "Building plan..."
+msgstr "Plāna veidošana..."
+
+msgid "Channel"
+msgstr "Kanāls"
+
+msgid "Check"
+msgstr "Pārbaudīt"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Pārbaudīt pieejamos Chamilo atjauninājumus, verificēt pakotnes, sagatavot failus un izpildīt kontrolētas darbības pēc atjaunināšanas."
+
+msgid "Check manifest"
+msgstr "Pārbaudīt manifestu"
+
+msgid "Checking post-apply actions..."
+msgstr "Pēclietošanas darbību pārbaude..."
+
+msgid "Checking..."
+msgstr "Pārbauda..."
+
+msgid "Composer install"
+msgstr "Composer instalācija"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn un datu bāzes migrācijas darbības var mainīt atkarības, ģenerētos aktīvus vai datu bāzi. Atlasiet tās tikai pēc dublējumkopiju un tiesību apstiprināšanas."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfigurējiet CHAMILO_UPDATE_MANIFEST_URL serverī vai norādiet HTTPS manifest URL."
+
+msgid "Configured"
+msgstr "Konfigurēts"
+
+msgid "Current migration"
+msgstr "Pašreizējā migrācija"
+
+msgid "Database baseline"
+msgstr "Datu bāzes bāzeslīnija"
+
+msgid "Database migration safety review"
+msgstr "Datu bāzes migrācijas drošības pārbaude"
+
+msgid "Database migrations"
+msgstr "Datu bāzes migrācijas"
+
+msgid "Development mode"
+msgstr "Izstrādes režīms"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ieslēdziet šo tikai pēc tam, kad ir pārbaudīta atjaunināšanas dublējumkopija un servera tiesības."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine sauso palaišanu komanda"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine ziņoja par vēsturiskās bāzeslīnijas brīdinājumiem. Atjauninātājs joprojām izpildīs tikai sagatavotās V210 migrācijas pēc skaidra apstiprinājuma."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine izpildīs tikai sagatavotās V210 migrācijas pēc tam, kad drošības pārbaude būs veiksmīga."
+
+msgid "Dry-run exit code"
+msgstr "Sausās palaišanas izejas kods"
+
+msgid "Executed unavailable migrations"
+msgstr "Izpildītās nepieejamās migrācijas"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Izpako verificēto atjauninājuma pakotni sagatavošanas direktorijā pārbaudei. Tas nenomaina failus, neizpilda migrācijas un nemodificē datu bāzi."
+
+msgid "File apply available"
+msgstr "Failu lietošana pieejama"
+
+msgid "Files to replace"
+msgstr "Aizstājami faili"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Apstiprinu, ka datu bāzes dublējumkopija pastāv un tika verificēta pirms migrāciju palaišanas."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Saprotu, ka papildu darbības var mainīt atkarības, ģenerētos aktīvus vai datu bāzi."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Saprotu, ka tas aizstās failus Chamilo instalācijā."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Saprotu, ka tas izpildīs atjaunināšanas komandas serverī."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instalējiet priekšgala atkarības pirms aktīvu pārbūves."
+
+msgid "Installed version"
+msgstr "Instalētā versija"
+
+msgid "Latest migration"
+msgstr "Jaunākā migrācija"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Atstājiet pakotnes un paraksta ceļus tukšus, lai lejupielādētu tos no verificētajiem manifest URL. Vietējie ceļi ir pieejami tikai izstrādes testiem."
+
+msgid "Live command log"
+msgstr "Tiešraides komandu žurnāls"
+
+msgid "Live update log"
+msgstr "Tiešraides atjaunināšanas žurnāls"
+
+msgid "Local test options"
+msgstr "Vietējās testēšanas opcijas"
+
+msgid "Local test update notice link"
+msgstr "Vietējās atjaunināšanas paziņojuma saite"
+
+msgid "Local update notice simulation"
+msgstr "Vietējās atjaunināšanas paziņojuma simulācija"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Vietējās atjaunināšanas paziņojuma simulācija ir pieejama tikai izstrādes režīmā."
+
+msgid "Manifest"
+msgstr "Manifests"
+
+msgid "Manifest source"
+msgstr "Manifesta avots"
+
+msgid "Migration safety details"
+msgstr "Migrācijas drošības detaļas"
+
+msgid "Migration safety review failed"
+msgstr "Migrācijas drošības pārbaude neizdevās"
+
+msgid "Migration safety review ready"
+msgstr "Migrācijas drošības pārbaude gatava"
+
+msgid "Migration target"
+msgstr "Migrācijas mērķis"
+
+msgid "New files"
+msgstr "Jauni faili"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine ziņoja par jaunām migrācijām"
+
+msgid "Next migration"
+msgstr "Nākamā migrācija"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Netika ziņots par izpildītajām nepieejamajām migrācijām."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Vēl nav konfigurēts oficiālais manifest URL. Izmantojiet HTTPS URL vai vietējo ceļu izstrādes testiem."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Pirms sagatavotā atjaunināšanas mērķa netika konstatēta neizpildīta migrācija."
+
+msgid "Not configured"
+msgstr "Nav konfigurēts"
+
+msgid "Not detected"
+msgstr "Nav konstatēts"
+
+msgid "Official Chamilo update channel"
+msgstr "Oficiālais Chamilo atjaunināšanas kanāls"
+
+msgid "Package SHA-256"
+msgstr "Pakotnes SHA-256"
+
+msgid "Package URL"
+msgstr "Pakotnes URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Pakotnes un paraksta faili tiks lejupielādēti no manifestācijas. Vietējie ceļi šajā vidē ir atspējoti."
+
+msgid "Package path"
+msgstr "Pakotnes ceļš"
+
+msgid "Package staged successfully"
+msgstr "Pakotne veiksmīgi sagatavota"
+
+msgid "Package staging failed"
+msgstr "Pakotnes sagatavošana neizdevās"
+
+msgid "Package verification"
+msgstr "Pakotnes verifikācija"
+
+msgid "Package verification failed"
+msgstr "Pakotnes verifikācija neizdevās"
+
+msgid "Package verified successfully"
+msgstr "Pakotne veiksmīgi verificēta"
+
+msgid "Pending migrations before this update"
+msgstr "Gaidošās migrācijas pirms šī atjauninājuma"
+
+msgid "Planned backup path"
+msgstr "Plānotais dublējuma ceļš"
+
+msgid "Post-apply actions completed"
+msgstr "Pēcpiemērošanas darbības pabeigtas"
+
+msgid "Post-apply actions failed"
+msgstr "Pēcpiemērošanas darbības neizdevās"
+
+msgid "Post-apply actions ready"
+msgstr "Pēcpiemērošanas darbības gatavas"
+
+msgid "Post-apply checks"
+msgstr "Pēcpiemērošanas pārbaudes"
+
+msgid "Post-apply checks failed"
+msgstr "Pēcpiemērošanas pārbaudes neizdevās"
+
+msgid "Post-apply details"
+msgstr "Pēcpiemērošanas detaļas"
+
+msgid "Post-apply run details"
+msgstr "Pēcpiemērošanas izpildes detaļas"
+
+msgid "Preflight checks"
+msgstr "Priekšpārbaudes"
+
+msgid "Preflight checks completed"
+msgstr "Priekšpārbaudes pabeigtas"
+
+msgid "Preflight checks failed"
+msgstr "Priekšpārbaudes neizdevās"
+
+msgid "Preflight details"
+msgstr "Priekšpārbaudes detaļas"
+
+msgid "Prepare staging"
+msgstr "Sagatavot posmu"
+
+msgid "Preparing staging..."
+msgstr "Sagatavo posmu..."
+
+msgid "Production mode"
+msgstr "Produkcijas režīms"
+
+msgid "Released at"
+msgstr "Izlaists"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Aizvietot Chamilo failus no sagatavotās pakotnes, izmantojot pārskatīto piemērošanas plānu. Tas neveic datubāzes migrācijas, Composer, Yarn vai kešatmiņas komandas."
+
+msgid "Review apply plan"
+msgstr "Pārskatīt piemērošanas plānu"
+
+msgid "Review database migrations"
+msgstr "Pārskatīt datubāzes migrācijas"
+
+msgid "Review post-apply actions"
+msgstr "Pārskatīt pēcpiemērošanas darbības"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Pārskatīt ieteicamās manuālās komandas pēc atjauninājuma failu piemērošanas. Šis solis neveic Composer, Yarn, migrācijas vai kešatmiņas komandas."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Pārskatīt sagatavotās Doctrine migrācijas un sauso palaišanas izvadi pirms datubāzes migrāciju izpildes."
+
+msgid "Reviewing database migrations..."
+msgstr "Pārskata datubāzes migrācijas..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Izpildīt un izturēt migrācijas drošības pārskatu pirms datubāzes migrāciju izpildes."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Izpildīt vides pārbaudes pirms jebkura nākamā atjauninājuma piemērošanas soļa. Tas nemodificē failus vai datubāzi."
+
+msgid "Run post-apply actions"
+msgstr "Izpildīt pēcpiemērošanas darbības"
+
+msgid "Run preflight checks"
+msgstr "Izpildīt priekšpārbaudes"
+
+msgid "Run selected post-apply actions"
+msgstr "Izpildīt atlasītās pēcpiemērošanas darbības"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Izpildīt atlasītās pēcpiemērošanas komandas no servera, izmantojot kontrolētu atļauto sarakstu. Pielāgotas čaulas komandas netiek pieņemtas."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Izpildīt šīs komandas manuāli no servera pēc failu atjauninājuma rezultāta un dublējumu apstiprināšanas."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Pēcpiemērošanas darbību izpilde no lietotāja saskarnes ir atspējota produkcijas režīmā."
+
+msgid "Running post-apply actions..."
+msgstr "Izpilda pēcpiemērošanas darbības..."
+
+msgid "Safe actions"
+msgstr "Drošas darbības"
+
+msgid "Signature path"
+msgstr "Paraksta ceļš"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Paraksta verifikāciju šajā vidē nevar izlaist."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Izlaist paraksta verifikāciju lokālās izstrādes testiem"
+
+msgid "Staged file application failed"
+msgstr "Sagatavoto failu piemērošana neizdevās"
+
+msgid "Staged files applied successfully"
+msgstr "Sagatavotie faili veiksmīgi piemēroti"
+
+msgid "Staging details"
+msgstr "Sagatavošanas detaļas"
+
+msgid "Staging directory"
+msgstr "Sagatavošanas direktorijs"
+
+msgid "Staging extraction"
+msgstr "Sagatavošanas izvilkšana"
+
+msgid "Symfony cache clear"
+msgstr "Symfony kešatmiņas tīrīšana"
+
+msgid "System update"
+msgstr "Sistēmas atjaunināšana"
+
+msgid "Target version"
+msgstr "Mērķa versija"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Konfigurētā oficiālā manifest URL ir iepriekš aizpildīta. Ja nepieciešams, varat to mainīt uz citu HTTPS manifest."
+
+msgid "The database migration baseline is clean."
+msgstr "Datubāzes migrācijas bāzes līnija ir tīra."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Gala HTTP atbilde neizdevās pēc operācijas pabeigšanas. Tas parasti rodas izpildlaika kešatmiņas atļauju vai tīmekļa servera restartēšanas dēļ pieprasījuma laikā."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Operāciju žurnāls ziņo, ka darbības pēc lietošanas ir veiksmīgi pabeigtas."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Atlasītās darbības pēc lietošanas ir veiksmīgi pabeigtas, bet gala HTTP atbilde neizdevās. Atsvaidziniet lapu un pārbaudiet izpildlaika kešatmiņas atļaujas, ja lapa neielādējas pareizi."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Atjauninātājs neveido un neatjauno datubāzes dublējumkopijas."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Šīs darbības ir droši palaist no lietotāja saskarnes pēc atjaunināšanas rezultāta pārskatīšanas."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Šīs komandas var mainīt atkarības, ģenerētos aktīvus, kešatmiņu vai datubāzi. Pirms turpināšanas apstipriniet dublējumkopijas."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Šī darbība maina failus Chamilo instalācijā. Pirms turpināšanas pārliecinieties, ka lietošanas plāns ir pārskatīts un dublējumkopijas ir iespējotas."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Šis izstrādes ieraksts simulē nākotnes Chamilo.org atjaunināšanas paziņojumu, izmantojot lokālos testa pakotņu ceļus."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Šī ekrāna atvēršanas avots ir oficiāls atjaunināšanas paziņojums, bet oficiālais manifest avots vēl nav konfigurēts."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Šī ekrāna atvēršanas avots ir atjaunināšanas paziņojums. Automātiski tiek palaista tikai manifesta pārbaude."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Šis solis sagatavo tikai pārskatu. Failu aizstāšana notiek vēlāk solī \"Lietot sagatavotos failus\" ar bloķēšanu, dublēšanu un atjaunošanas aizsardzību."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Šis atjauninātājs neveido datubāzes dublējumkopiju. Pirms migrāciju palaišanas izveidojiet un pārbaudiet dublējumkopiju."
+
+msgid "Trusted public key"
+msgstr "Uzticama publiskā atslēga"
+
+msgid "Trusted signing key"
+msgstr "Uzticama parakstīšanas atslēga"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Lai apstiprinātu, ierakstiet APPLY UPDATE FILES"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Lai apstiprinātu datubāzes migrācijas, ierakstiet RUN DATABASE MIGRATIONS"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Lai apstiprinātu, ierakstiet RUN POST UPDATE ACTIONS"
+
+msgid "Unknown update notice source."
+msgstr "Nezināms atjaunināšanas paziņojuma avots."
+
+msgid "Update availability"
+msgstr "Atjauninājuma pieejamība"
+
+msgid "Update directory"
+msgstr "Atjauninājuma direktorijs"
+
+msgid "Update lock path"
+msgstr "Atjauninājuma bloķēšanas ceļš"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Izmantojiet iepriekšējā solī ģenerēto sagatavošanas direktoriju. Aizmugursistēma pieņem tikai direktorijus mapē var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Izmantojiet šo saiti, lai simulētu nākotnes Chamilo.org atjaunināšanas paziņojumu izstrādes testu laikā."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Izmantojiet to tikai lokālo izstrādes testu vajadzībām. Ražošanas atjauninājumiem jāizmanto serverī konfigurētā atslēga."
+
+msgid "Verification details"
+msgstr "Verifikācijas detaļas"
+
+msgid "Verify package"
+msgstr "Pārbaudīt pakotni"
+
+msgid "Verifying..."
+msgstr "Notiek pārbaude..."
+
+msgid "Waiting for command progress events..."
+msgstr "Gaida komandu progresa notikumus..."
+
+msgid "Waiting for update progress events..."
+msgstr "Gaida atjauninājuma progresa notikumus..."
+
+msgid "Yarn build"
+msgstr "Yarn būvēšana"
+
+msgid "Yarn install"
+msgstr "Yarn instalēšana"
+
+msgid "A comment is required"
+msgstr "Nepieciešams komentārs"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Datubāze ar tādu pašu nosaukumu jau pastāv. Ja tā satur tabulas, tās tiks dzēstas; ja tā ir tukša, tā tiks atkārtoti izmantota."
+
+msgid "AI generated"
+msgstr "AI ģenerēts"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Pirms atgriešanās mācību ceļā pievienojiet vismaz vienu jautājumu."
+
+msgid "Add attachments"
+msgstr "Pievienot pielikumus"
+
+msgid "Additional fields"
+msgstr "Papildu lauki"
+
+msgid "Allow comments"
+msgstr "Atļaut komentārus"
+
+msgid "Allow new pages"
+msgstr "Atļaut jaunas lapas"
+
+msgid "Allow ratings"
+msgstr "Atļaut vērtējumus"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Vai tiešām vēlaties dzēst visus elementus?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Vai tiešām vēlaties atjaunot automātisko atjaunošanu?"
+
+msgid "Attachment has been deleted"
+msgstr "Pielikums ir dzēsts"
+
+msgid "Backup file"
+msgstr "Dublējumkopijas fails"
+
+msgid "Block comments"
+msgstr "Bloķēt komentārus"
+
+msgid "Block new pages"
+msgstr "Bloķēt jaunas lapas"
+
+msgid "Block ratings"
+msgstr "Bloķēt vērtējumus"
+
+msgid "Cancel renewal"
+msgstr "Atcelt atjaunošanu"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Kategoriju saites tiks noņemtas no %s Wiki lapām."
+
+msgid "Change"
+msgstr "Mainīt"
+
+msgid "Clear group"
+msgstr "Notīrīt grupu"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Noklikšķiniet uz taga, lai ievietotu to redaktorā. Šie vietturi tiks aizstāti, ģenerējot sertifikātu."
+
+msgid "Comment added"
+msgstr "Komentārs pievienots"
+
+msgid "Comment is required"
+msgstr "Komentārs ir obligāts"
+
+msgid "Comment score"
+msgstr "Komentāra vērtējums"
+
+msgid "Compare selected versions line by line"
+msgstr "Salīdzināt atlasītās versijas rindu pa rindai"
+
+msgid "Compare selected versions word by word"
+msgstr "Salīdzināt atlasītās versijas vārdu pa vārdam"
+
+msgid "Compare versions"
+msgstr "Salīdzināt versijas"
+
+msgid "Copy completed"
+msgstr "Kopēšana pabeigta"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Izveidot individuālas Wiki darba lapas dalībniekiem"
+
+msgid "Current view mode"
+msgstr "Pašreizējais skata režīms"
+
+msgid "Delete Wiki"
+msgstr "Dzēst Wiki"
+
+msgid "Delete page"
+msgstr "Dzēst lapu"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Wiki sākumlapas dzēšana nav ieteicama. Jūs varat to izveidot vēlāk."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Atspējojot Wiki, tiek bloķētas parastās Wiki lapas un darbības. Šī iestatījumu lapa paliek pieejama kursa pasniedzējiem."
+
+msgid "Discussion"
+msgstr "Diskusija"
+
+msgid "Edit Comment"
+msgstr "Rediģēt komentāru"
+
+msgid "Edit page"
+msgstr "Rediģēt lapu"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Beigu datumam jābūt pēc vai vienādam ar derīguma termiņu"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Ievadiet meklēšanas terminu, lai atrastu Wiki lapas"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Derīguma termiņam jābūt pirms vai vienādam ar beigu datumu"
+
+msgid "Failed email recipients"
+msgstr "Neizdevās nosūtīt e-pasta saņēmējiem"
+
+msgid "Finish and return to learning path"
+msgstr "Pabeigt un atgriezties mācību ceļā"
+
+msgid "Forum image"
+msgstr "Foruma attēls"
+
+msgid "Hide discussion"
+msgstr "Paslēpt diskusiju"
+
+msgid "Hide page"
+msgstr "Paslēpt lapu"
+
+msgid "I changed my mind"
+msgstr "Es pārdomāju"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Ja nav atzīmēts, šie faili paliks pieejami platformas administratoram caur rīku 'Failu informācija'."
+
+msgid "Internal message failures"
+msgstr "Iekšējo ziņojumu kļūdas"
+
+msgid "Internal messages available"
+msgstr "Iekšējie ziņojumi pieejami"
+
+msgid "Internal messages created now"
+msgstr "Iekšējie ziņojumi izveidoti tagad"
+
+msgid "Item score"
+msgstr "Vienības vērtējums"
+
+msgid "Last post"
+msgstr "Pēdējais ieraksts"
+
+msgid "Lock page"
+msgstr "Bloķēt lapu"
+
+msgid "Manage categories"
+msgstr "Pārvaldīt kategorijas"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Atzīmē šo dokumentu kā AI atbalstītu. Izmantojiet to, ja saturs ir izveidots vai būtiski modificēts ar AI rīkiem."
+
+msgid "Maximum score is required"
+msgstr "Maksimālais vērtējums ir obligāts"
+
+msgid "Metric"
+msgstr "Metrisks"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Jauni komentāri šajā diskusijā ir bloķēti"
+
+msgid "No Wiki categories are available yet."
+msgstr "Vēl nav pieejamas Wiki kategorijas."
+
+msgid "No categories found"
+msgstr "Kategorijas nav atrastas"
+
+msgid "No content"
+msgstr "Nav satura"
+
+msgid "No parent category"
+msgstr "Nav vecākkategorijas"
+
+msgid "Number of comments scored"
+msgstr "Komentāru skaits ar vērtējumu"
+
+msgid "Old version"
+msgstr "Vecā versija"
+
+msgid "Only image files are allowed."
+msgstr "Atļauti tikai attēlu faili."
+
+msgid "Please fill all required fields"
+msgstr "Lūdzu, aizpildiet visus obligātos laukus"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Jautājumi ar klases vai studenta vietturiem tiks ģenerēti kursa klasēm vai grupām: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Vērtējumi šajā diskusijā ir bloķēti"
+
+msgid "Remove image"
+msgstr "Noņemt attēlu"
+
+msgid "Restore renewal"
+msgstr "Atjaunot atjaunošanu"
+
+msgid "Restore version"
+msgstr "Atjaunot versiju"
+
+msgid "Search in"
+msgstr "Meklēt"
+
+msgid "Select group"
+msgstr "Izvēlēties grupu"
+
+msgid "Select image"
+msgstr "Izvēlēties attēlu"
+
+msgid "Selected image"
+msgstr "Izvēlētais attēls"
+
+msgid "Show discussion"
+msgstr "Rādīt diskusiju"
+
+msgid "Show page"
+msgstr "Rādīt lapu"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Dažiem failiem vai mapēm nav rakstīšanas tiesību. Lai varētu instalēt Chamilo, vispirms jāmaina to tiesības (izmantojot CHMOD). Lūdzu, izlasiet"
+
+msgid "Subcategories"
+msgstr "Apakškategorijas"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Pieskarieties kreisajā vai labajā pusē, lai pārvietotos"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki uzdevuma termiņš ir beidzies, bet kavēta iesniegšana ir atļauta."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki uzdevuma termiņš ir beidzies."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki uzdevums vēl nav sācies."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Pirms saglabāšanas nepieciešams Wiki lapas rediģēšanas bloķējums."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Paziņojums tika saglabāts, bet pielikumu nevarēja augšupielādēt."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Paziņojums tika saglabāts, bet e-pasta piegāde neizdevās."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Paziņojums tika saglabāts, bet e-pastu nevarēja piegādāt."
+
+msgid "The category has been created"
+msgstr "Kategorija ir izveidota"
+
+msgid "The category has been deleted"
+msgstr "Kategorija ir dzēsta"
+
+msgid "The category has been updated"
+msgstr "Kategorija ir atjaunināta"
+
+msgid "The end date is invalid"
+msgstr "Beigu datums nav derīgs"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Maksimālajam versiju skaitam jābūt nenegatīvam veselam skaitlim"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Maksimālajam vārdu skaitam jābūt nenegatīvam veselam skaitlim"
+
+msgid "The print window could not be opened"
+msgstr "Drukāšanas logu nevarēja atvērt"
+
+msgid "The start date is invalid"
+msgstr "Sākuma datums nav derīgs"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Šie iestatījumi attiecas uz visu kursu, ieskaitot tā sesijas un grupas."
+
+msgid "This announcement has already been sent by email."
+msgstr "Šis paziņojums jau ir nosūtīts pa e-pastu."
+
+msgid "This discussion is hidden from learners"
+msgstr "Šī diskusija ir paslēpta no izglītojamajiem"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Šis ģeneratīvās mākslīgā intelekta rīks ļauj izveidot attēlus un īsus videoklipus, lai ilustrētu jūsu kursu. Izskaidrojot (tekstā), ko vēlaties uzvednes sadaļā, jūs sniegsiet konfigurētajam AI modelim elementus, kas nepieciešami attēla vai video ģenerēšanai. Lūdzu, esiet pacietīgi. AI modelim būs nepieciešams laiks, lai ģenerētu rezultātu, kuru varat saglabāt dokumentu mapē un pēc tam ievietot HTML dokumentā. Ne visi AI modeļi ir vienādi ātruma vai kvalitātes ziņā. AI modelis var arī sniegt modificētu uzvedni, kas ir detalizētāka jūsu pieprasījuma interpretācija. Pēc tam varat izmantot šo modificēto uzvedni, lai precizētu pieprasījumu. Lūdzu, ņemiet vērā, ka šis rīks, īpaši video gadījumā, var radīt ievērojamas izmaksas jūsu organizācijai, pat ja izlemjat nesaglabāt ģenerēto mediju. Lūdzu, izmantojiet to atbilstoši. Ja rodas problēmas ar vēlamā rezultāta iegūšanu, lūdzu, veltiet laiku, lai tiešsaistē izpētītu uzvednes trikus AI modelim, kas jums ir pieejams."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Šī vēsture pieder bāzes kursam. Atjaunošana ir pieejama pēc sesijas versijas izveides."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Šis attēls aizstāj noklusējuma foruma ikonu, kas tiek rādīta blakus foruma nosaukumam."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Šī lapa nāk no bāzes kursa. Saglabājot to, tiks izveidota versija pašreizējai sesijai."
+
+msgid "This will also delete %s subcategories."
+msgstr "Tas arī dzēsīs %s apakškategorijas."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Tas izveidos individuālas darba lapas %s izglītojamajiem."
+
+msgid "Thread history"
+msgstr "Diskusijas vēsture"
+
+msgid "Title and content"
+msgstr "Virsraksts un saturs"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Pašlaik nevar atcelt atjaunošanu."
+
+msgid "Unable to restore renewal right now."
+msgstr "Pašlaik nevar atjaunot atjaunošanu."
+
+msgid "Unlock page"
+msgstr "Atbloķēt lapu"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Izmantojiet [[Lapa]] vai [[Lapa|Redzamais teksts]], lai izveidotu iekšējās Wiki saites."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Izmantojiet atstarpes taustiņu vai bulttaustiņus, lai pārvietotos"
+
+msgid "View version"
+msgstr "Skatīt versiju"
+
+msgid "Visible only to teachers"
+msgstr "Redzams tikai pasniedzējiem"
+
+msgid "Weight is required"
+msgstr "Svars ir obligāts"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Wiki kategorijas šim kursam ir atspējotas."
+
+msgid "Wiki categories enabled"
+msgstr "Wiki kategorijas iespējotas"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki HTML stingrā filtrēšana"
+
+msgid "Wiki settings"
+msgstr "Wiki iestatījumi"
+
+msgid "Wiki settings updated"
+msgstr "Wiki iestatījumi atjaunināti"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Jūs skatāt šīs lapas vēsturisko versiju"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Jūs varat pievienot vienu vai vairākas datnes šai atbildei."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Jūs varat rediģēt šo uzdevuma lapu, bet izglītojamo darba lapas netiks mainītas."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Jūs varat izmantot tagus {{class_name}} un {{student_full_name}} jautājumā."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Jums ir 20 minūtes, lai rediģētu šo lapu, pirms rediģēšanas bloķējums beidzas."
+
+msgid "by"
+msgstr "autors"
+
+msgid "required"
+msgstr "obligāts"
 

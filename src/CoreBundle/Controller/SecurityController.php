@@ -282,6 +282,24 @@ class SecurityController extends AbstractController
         return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
     }
 
+    /**
+     * Returns the contextual ROLE_CURRENT_COURSE_* roles the current user holds
+     * for the course/session/group context resolved from the cid/sid/gid query
+     * parameters. CidReqListener resolves the context into the session and
+     * CourseContextRoleListener publishes the roles on the token before this
+     * controller runs, so we only expose the contextual subset of the token roles.
+     */
+    #[Route('/course-context-roles', name: 'course_context_roles', methods: ['GET'])]
+    public function courseContextRoles(): JsonResponse
+    {
+        $token = $this->tokenStorage->getToken();
+        $roles = null !== $token
+            ? array_values(array_intersect($token->getRoleNames(), User::CONTEXT_ROLES))
+            : [];
+
+        return new JsonResponse(['roles' => $roles], Response::HTTP_OK);
+    }
+
     #[Route('/login/token/request', name: 'login_token_request', methods: ['GET'])]
     public function loginTokenRequest(
         JWTTokenManagerInterface $jwtManager,

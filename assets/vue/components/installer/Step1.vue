@@ -10,7 +10,7 @@
     <BaseSelect
       v-model="installerData.langIso"
       :message-text="
-        t('Cannot find your language in the list? Contact us at {0} to contribute as a translator.', [
+        t('Cannot find your language in the list? Contact us at {0} to contribute as a translator', [
           'info@chamilo.org',
         ])
       "

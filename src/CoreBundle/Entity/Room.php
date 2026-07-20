@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\State\RoomStateProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,19 +28,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['room:list']],
         ),
         new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('VIEW', object)",
             normalizationContext: ['groups' => ['room:read']],
         ),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: ['groups' => ['room:write']],
+            processor: RoomStateProcessor::class,
         ),
         new Put(
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
             denormalizationContext: ['groups' => ['room:write']],
+            processor: RoomStateProcessor::class,
         ),
         new Delete(
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') and is_granted('DELETE', object)",
         ),
     ],
 )]
@@ -65,6 +68,15 @@ class Room
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
+    #[Groups(['room:list', 'room:read', 'room:write'])]
+    #[ORM\Column(name: 'floor_number', type: 'integer', nullable: true)]
+    protected ?int $floorNumber = null;
+
+    #[Groups(['room:list', 'room:read', 'room:write'])]
+    #[Assert\Positive]
+    #[ORM\Column(name: 'capacity', type: 'integer', nullable: true)]
+    protected ?int $capacity = null;
+
     #[Groups(['room:read', 'room:write'])]
     #[Assert\Length(max: 255)]
     #[ORM\Column(name: 'geolocation', type: 'string', length: 255, nullable: true, unique: false)]
@@ -82,9 +94,10 @@ class Room
     protected ?string $ipMask = null;
 
     #[Groups(['room:list', 'room:read', 'room:write'])]
+    #[Assert\NotNull]
     #[ORM\ManyToOne(targetEntity: BranchSync::class)]
     #[ORM\JoinColumn(name: 'branch_id', referencedColumnName: 'id')]
-    protected BranchSync $branch;
+    protected ?BranchSync $branch = null;
 
     /**
      * Get id.
@@ -121,9 +134,33 @@ class Room
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getFloorNumber(): ?int
+    {
+        return $this->floorNumber;
+    }
+
+    public function setFloorNumber(?int $floorNumber): self
+    {
+        $this->floorNumber = $floorNumber;
+
+        return $this;
+    }
+
+    public function getCapacity(): ?int
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity(?int $capacity): self
+    {
+        $this->capacity = $capacity;
 
         return $this;
     }
@@ -136,7 +173,7 @@ class Room
         return $this->geolocation;
     }
 
-    public function setGeolocation(string $geolocation): self
+    public function setGeolocation(?string $geolocation): self
     {
         $this->geolocation = $geolocation;
 
@@ -151,7 +188,7 @@ class Room
         return $this->ip;
     }
 
-    public function setIp(string $ip): self
+    public function setIp(?string $ip): self
     {
         $this->ip = $ip;
 
@@ -166,7 +203,7 @@ class Room
         return $this->ipMask;
     }
 
-    public function setIpMask(string $ipMask): self
+    public function setIpMask(?string $ipMask): self
     {
         $this->ipMask = $ipMask;
 
@@ -176,12 +213,12 @@ class Room
     /**
      * @return BranchSync
      */
-    public function getBranch()
+    public function getBranch(): ?BranchSync
     {
         return $this->branch;
     }
 
-    public function setBranch(BranchSync $branch): self
+    public function setBranch(?BranchSync $branch): self
     {
         $this->branch = $branch;
 

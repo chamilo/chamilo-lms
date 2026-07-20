@@ -2418,7 +2418,7 @@ class CourseManager
                             'ch-tool-icon',
                             null,
                             ICON_SIZE_TINY,
-                            get_lang('Coach')
+                            get_lang('Tutor')
                         ).' '.$coachs
                     );
                 }
@@ -2516,6 +2516,8 @@ class CourseManager
      *                                         only used in this course.
      *
      * @return bool
+     *
+     * @deprecated use CourseHelper::deleteCourse() instead
      */
     public static function delete_course($code, bool $deleteExclusiveDocuments = false)
     {
@@ -4368,7 +4370,7 @@ class CourseManager
                 ) {
                 $sessionInfo['dates'] = '';
                 if ('true' === api_get_setting('show_session_coach')) {
-                    $sessionInfo['coach'] = get_lang('General coach').': '.$sessionCoachName;
+                    $sessionInfo['coach'] = get_lang('General tutor').': '.$sessionCoachName;
                 }
                 $active = true;
             } else {
@@ -4376,7 +4378,7 @@ class CourseManager
                     get_lang('From').' '.$sessionInfo['access_start_date'].' '.
                     get_lang('To').' '.$sessionInfo['access_end_date'];
                 if ('true' === api_get_setting('show_session_coach')) {
-                    $sessionInfo['coach'] = get_lang('General coach').': '.$sessionCoachName;
+                    $sessionInfo['coach'] = get_lang('General tutor').': '.$sessionCoachName;
                 }
                 $date_start = $sessionInfo['access_start_date'];
                 $date_end = $sessionInfo['access_end_date'];
@@ -5443,7 +5445,7 @@ class CourseManager
                     if ($deleteSessionTeacherNotInList) {
                         foreach ($teachers as $userId) {
                             if ($logger) {
-                                $logger->debug("Set coach #$userId in session #$sessionId of course #$courseId ");
+                                $logger->debug("Set tutor #$userId in session #$sessionId of course #$courseId ");
                             }
                             SessionManager::set_coach_to_course_session(
                                 $userId,
@@ -5460,7 +5462,7 @@ class CourseManager
                         if (!empty($teachersToDelete)) {
                             foreach ($teachersToDelete as $userId) {
                                 if ($logger) {
-                                    $logger->debug("Delete coach #$userId in session #$sessionId of course #$courseId ");
+                                    $logger->debug("Delete tutor #$userId in session #$sessionId of course #$courseId ");
                                 }
                                 SessionManager::set_coach_to_course_session(
                                     $userId,
@@ -5474,7 +5476,7 @@ class CourseManager
                         // Add new teachers only
                         foreach ($teachers as $userId) {
                             if ($logger) {
-                                $logger->debug("Add coach #$userId in session #$sessionId of course #$courseId ");
+                                $logger->debug("Add tutor #$userId in session #$sessionId of course #$courseId ");
                             }
                             SessionManager::set_coach_to_course_session(
                                 $userId,

@@ -31,6 +31,120 @@ function bcEscapeHtml(?string $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+function bcFormatServiceDescription(string $html): string
+{
+    if ('' === trim($html)) {
+        return '';
+    }
+
+    $text = preg_replace(
+        [
+            '~<li\b[^>]*>~i',
+            '~</li>~i',
+            '~<br\s*/?>~i',
+            '~</p>~i',
+            '~</div>~i',
+            '~</ul>~i',
+            '~</ol>~i',
+        ],
+        [
+            '• ',
+            "\n",
+            "\n",
+            "\n",
+            "\n",
+            "\n",
+            "\n",
+        ],
+        $html
+    );
+    $text = html_entity_decode(strip_tags((string) $text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $lines = preg_split('/\R/u', $text) ?: [];
+    $formattedLines = [];
+
+    foreach ($lines as $line) {
+        $line = preg_replace('/[\t ]+/u', ' ', trim($line));
+        if (null !== $line && '' !== $line) {
+            $formattedLines[] = $line;
+        }
+    }
+
+    return implode("\n", $formattedLines);
+}
+
+function bcGetAuditDataLabel(string $key): string
+{
+    $labels = [
+        'service_id' => 'Service ID',
+        'payment_type' => 'Payment method',
+        'status' => 'Status',
+        'previous_status' => 'Previous status',
+        'new_status' => 'New status',
+        'gateway' => 'Payment gateway',
+        'subscription_id' => 'Subscription ID',
+        'profile_id' => 'Profile ID',
+        'transaction_id' => 'Transaction ID',
+        'event_id' => 'Gateway event ID',
+        'event_type' => 'Gateway event type',
+        'next_charge_date' => 'Next charge date',
+        'planned_renewal_date' => 'Planned renewal date',
+        'cancel_at_period_end' => 'Cancel at period end',
+        'amount_paid' => 'Amount paid',
+        'currency' => 'Currency',
+        'trigger' => 'Triggered by',
+        'upgrade_from_sale_id' => 'Upgrade source sale ID',
+        'source_sale_id' => 'Source sale ID',
+        'source_service_id' => 'Source service ID',
+        'target_sale_id' => 'Target sale ID',
+        'target_service_id' => 'Target service ID',
+        'upgrade_credit_amount' => 'Upgrade credit amount',
+        'error_code' => 'Error code',
+        'error_message' => 'Error message',
+    ];
+
+    return $labels[$key] ?? ucfirst(str_replace('_', ' ', $key));
+}
+
+function bcFormatAuditDataValue(string $key, mixed $value, BuyCoursesPlugin $plugin): string
+{
+    if (null === $value || '' === $value) {
+        return '—';
+    }
+
+    if (is_bool($value)) {
+        return $value ? get_lang('Yes') : get_lang('No');
+    }
+
+    if (in_array($key, ['status', 'previous_status', 'new_status'], true) && is_numeric($value)) {
+        return match ((int) $value) {
+            BuyCoursesPlugin::SERVICE_STATUS_COMPLETED => $plugin->get_lang('Active'),
+            BuyCoursesPlugin::SERVICE_STATUS_PENDING => $plugin->get_lang('Pending'),
+            BuyCoursesPlugin::SERVICE_STATUS_CANCELLED => $plugin->get_lang('Cancelled'),
+            default => (string) $value,
+        };
+    }
+
+    if ('payment_type' === $key && is_numeric($value)) {
+        $paymentTypes = $plugin->getPaymentTypes();
+
+        return (string) ($paymentTypes[(int) $value] ?? $value);
+    }
+
+    if (in_array($key, ['next_charge_date', 'planned_renewal_date'], true) && is_string($value)) {
+        return (string) api_get_local_time($value);
+    }
+
+    if (is_array($value)) {
+        if (array_is_list($value)) {
+            return implode(', ', array_map(static fn (mixed $item): string => (string) $item, $value));
+        }
+
+        return (string) json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    return (string) $value;
+}
+
 function bcRequireAdminAjax(): void
 {
     if (!api_is_platform_admin()) {
@@ -529,7 +643,15 @@ switch ($action) {
         }
 
         if ($httpCode >= 200 && $httpCode < 300 && !empty($response['id'])) {
-            $saleCompleted = $plugin->completeServiceSale($serviceSaleId);
+            $saleCompleted = $plugin->completeServiceSale(
+                $serviceSaleId,
+                BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+                api_get_user_id(),
+                [
+                    'gateway' => 'culqi',
+                    'charge_id' => (string) $response['id'],
+                ]
+            );
 
             if (!$saleCompleted) {
                 error_log(
@@ -656,7 +778,11 @@ switch ($action) {
 
         $serviceRows = [
             ['label' => $plugin->get_lang('ServiceName'), 'value' => (string) $serviceSale['service']['name']],
-            ['label' => $plugin->get_lang('Description'), 'value' => (string) $serviceSale['service']['description']],
+            [
+                'label' => $plugin->get_lang('Description'),
+                'value' => bcFormatServiceDescription((string) $serviceSale['service']['description']),
+                'multiline' => true,
+            ],
         ];
 
         if (!empty($nodeName)) {
@@ -677,8 +803,8 @@ switch ($action) {
         $saleRows[] = ['label' => $plugin->get_lang('OrderDate'), 'value' => (string) api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG)];
 
         if ($taxAmount > 0.0 || $taxRate > 0.0) {
-            $saleRows[] = ['label' => $plugin->get_lang('Subtotal'), 'value' => $plugin->formatSaleAmount($priceWithoutTax, $isoCode)];
-            $saleRows[] = ['label' => $plugin->get_lang('VAT'), 'value' => $plugin->formatSaleAmount($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)'];
+            $saleRows[] = ['label' => $plugin->get_lang('Subtotal'), 'value' => $plugin->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode)];
+            $saleRows[] = ['label' => $plugin->get_lang('VAT'), 'value' => $plugin->getPriceWithCurrencyFromIsoCode($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)'];
         }
 
         $saleRows[] = ['label' => $plugin->get_lang('Total'), 'value' => (string) $serviceSale['service']['total_price']];
@@ -703,6 +829,74 @@ switch ($action) {
 
         $saleRows[] = ['label' => $plugin->get_lang('Status'), 'value' => (string) $statusLabel];
 
+        $auditRows = [];
+        $auditEntries = $plugin->getAuditEntries(
+            BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+            (int) $serviceSale['id']
+        );
+
+        foreach ($auditEntries as $auditEntry) {
+            $subjectUserId = (int) ($auditEntry['subject_user_id'] ?? 0);
+            $actorName = trim(api_get_person_name(
+                (string) ($auditEntry['firstname'] ?? ''),
+                (string) ($auditEntry['lastname'] ?? '')
+            ));
+            $actorUsername = trim((string) ($auditEntry['username'] ?? ''));
+
+            if ('' === $actorName && '' !== $actorUsername) {
+                $actorName = $actorUsername;
+            } elseif ('' !== $actorName && '' !== $actorUsername) {
+                $actorName .= ' ('.$actorUsername.')';
+            } elseif ('' === $actorName && $subjectUserId > 0) {
+                $actorName = '#'.$subjectUserId;
+            }
+
+            if ('' === $actorName) {
+                $actorName = $plugin->get_lang('AuditSystemSubject');
+            }
+
+            $details = [
+                ['label' => $plugin->get_lang('AuditActor'), 'value' => $actorName],
+                [
+                    'label' => $plugin->get_lang('AuditSource'),
+                    'value' => $plugin->getAuditSourceLabel((string) ($auditEntry['source'] ?? '')),
+                ],
+            ];
+
+            $auditIp = trim((string) ($auditEntry['ip_address'] ?? ''));
+            if ('' !== $auditIp) {
+                $details[] = ['label' => $plugin->get_lang('AuditIpAddress'), 'value' => $auditIp];
+            }
+
+            $auditData = trim((string) ($auditEntry['data_json'] ?? ''));
+            if ('' !== $auditData) {
+                $decodedAuditData = json_decode($auditData, true);
+                if (is_array($decodedAuditData)) {
+                    foreach ($decodedAuditData as $key => $value) {
+                        $details[] = [
+                            'label' => bcGetAuditDataLabel((string) $key),
+                            'value' => bcFormatAuditDataValue((string) $key, $value, $plugin),
+                        ];
+                    }
+                } else {
+                    $details[] = ['label' => $plugin->get_lang('AuditData'), 'value' => $auditData];
+                }
+            }
+
+            $auditRows[] = [
+                'label' => $plugin->getAuditActionLabel((string) ($auditEntry['action'] ?? '')),
+                'meta' => (string) api_get_local_time((string) ($auditEntry['created_at'] ?? '')),
+                'details' => $details,
+            ];
+        }
+
+        if (empty($auditRows)) {
+            $auditRows[] = [
+                'label' => $plugin->get_lang('AuditHistory'),
+                'value' => $plugin->get_lang('NoAuditEntries'),
+            ];
+        }
+
         header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'imageUrl' => (string) ($serviceSale['service']['image'] ?: Display::get_icon_path('session_default.png')),
@@ -710,6 +904,7 @@ switch ($action) {
             'sections' => [
                 ['title' => $plugin->get_lang('ServiceInformation'), 'rows' => $serviceRows],
                 ['title' => $plugin->get_lang('SaleInfo'), 'rows' => $saleRows],
+                ['title' => $plugin->get_lang('AuditHistory'), 'rows' => $auditRows],
             ],
         ], \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
 
@@ -724,7 +919,12 @@ switch ($action) {
             break;
         }
 
-        $response = $plugin->completeServiceSale($id);
+        $response = $plugin->completeServiceSale(
+            $id,
+            BuyCoursesPlugin::AUDIT_SOURCE_ADMIN,
+            api_get_user_id(),
+            ['trigger' => 'service_sales_report']
+        );
         $html = "<div class='text-center'>";
 
         if ($response) {
@@ -756,7 +956,12 @@ switch ($action) {
             break;
         }
 
-        $response = $plugin->cancelServiceSale($id);
+        $response = $plugin->cancelServiceSale(
+            $id,
+            BuyCoursesPlugin::AUDIT_SOURCE_ADMIN,
+            api_get_user_id(),
+            ['trigger' => 'service_sales_report']
+        );
         $html = '';
         $html .= "<div class='text-center'>";
 

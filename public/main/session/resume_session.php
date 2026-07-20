@@ -144,53 +144,83 @@ if ($isMultipleUrl) {
     $urlList = $session->getUrls();
 }
 
-$url = Display::url(
+$courseListActions = Display::url(
     Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-gradient', null, 32, get_lang('Add')),
-    "add_courses_to_session.php?page=resume_session.php&id_session=$sessionId"
+    "add_courses_to_session.php?page=resume_session.php&id_session=$sessionId",
+    ['class' => 'inline-flex items-center']
 );
-$courseListToShow = Display::page_subheader(get_lang('Course list').$url);
+$courseListActions .= Display::url(
+    Display::getMdiIcon('format-list-bulleted', 'ch-tool-icon-gradient', null, 32, get_lang('Courses in this session')),
+    "session_course_list.php?id_session=$sessionId",
+    ['class' => 'inline-flex items-center']
+);
 
-$courseListToShow .= '<table id="session-list-course" class="table table-hover data_table">
-<tr>
-  <th width="35%">'.get_lang('Course title').'</th>
-  <th width="30%">'.get_lang('Course coach').'</th>
-  <th width="10%">'.get_lang('Users number').'</th>
-  <th width="25%">'.get_lang('Detail').'</th>
-</tr>';
+$courseListToShow = '<div class="overflow-hidden rounded-lg border border-gray-30 bg-white shadow-sm">';
+$courseListToShow .= '<div class="flex flex-col gap-3 border-b border-gray-20 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">';
+$courseListToShow .= '<h2 class="text-lg font-semibold text-gray-90">'.get_lang('Course list').'</h2>';
+$courseListToShow .= '<div class="flex items-center gap-3">'.$courseListActions.'</div>';
+$courseListToShow .= '</div>';
+$courseListToShow .= '<div class="overflow-x-auto">';
+$courseListToShow .= '<table id="session-list-course" class="min-w-full divide-y divide-gray-20 text-sm">';
+$courseListToShow .= '<thead class="bg-gray-10 text-left text-gray-70"><tr>';
+$courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Course title').'</th>';
+$courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Course tutor').'</th>';
+$courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Room').'</th>';
+$courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Users number').'</th>';
+$courseListToShow .= '<th class="px-4 py-3 font-semibold text-right">'.get_lang('Detail').'</th>';
+$courseListToShow .= '</tr></thead><tbody class="divide-y divide-gray-20 bg-white">';
 
 if (0 === $session->getNbrCourses()) {
-    $courseListToShow .= '<tr>
-			<td colspan="4">'.get_lang('No course for this session').'</td>
-		</tr>';
+    $courseListToShow .= '<tr><td colspan="5" class="px-4 py-10 text-center text-sm text-gray-50">'.get_lang('No course for this session').'</td></tr>';
 } else {
     $count = 0;
-    $courseItem = '';
     $courses = $session->getCourses();
-
-    $allowSkills = ('true' === api_get_setting('skill.allow_skill_rel_items'));
+    $allowSkills = 'true' === api_get_setting('skill.allow_skill_rel_items');
 
     /** @var SessionRelCourse $sessionRelCourse */
     foreach ($courses as $sessionRelCourse) {
         $course = $sessionRelCourse->getCourse();
         $courseId = $course->getId();
         $courseCode = $course->getCode();
-        // Select the number of users
         $numberOfUsers = SessionManager::getCountUsersInCourseSession($course, $session);
+        $namesOfTutors = [];
+        $tutorSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::COURSE_COACH);
 
-        // Get coaches of the courses in session
-        $namesOfCoaches = [];
-        $coachSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::COURSE_COACH);
-
-        if ($coachSubscriptions) {
+        if ($tutorSubscriptions) {
             /** @var SessionRelCourseRelUser $subscription */
-            foreach ($coachSubscriptions as $subscription) {
-                $namesOfCoaches[] = UserManager::formatUserFullName($subscription->getUser(), true);
+            foreach ($tutorSubscriptions as $subscription) {
+                $namesOfTutors[] = api_htmlentities(
+                    UserManager::formatUserFullName($subscription->getUser(), true),
+                    ENT_QUOTES
+                );
             }
         }
 
-        $orderButtons = '';
+        $roomLabel = '-';
+        $room = $sessionRelCourse->getRoom();
+        if (null !== $room) {
+            $branchTitle = $room->getBranch()?->getTitle();
+            $roomLabel = trim(($branchTitle ? $branchTitle.' — ' : '').$room->getTitle());
+        }
+
+        $courseUrl = api_get_course_url($courseId, $sessionId);
+        $courseActions = '';
+        $courseActions .= Display::url(
+            Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, 22, get_lang('Course')),
+            $courseUrl,
+            ['class' => 'inline-flex items-center']
+        );
+
+        if ($allowSkills) {
+            $courseActions .= Display::url(
+                Display::getMdiIcon('shield-star', 'ch-tool-icon', null, 22, get_lang('Skills')),
+                $codePath.'skills/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$courseId,
+                ['class' => 'inline-flex items-center']
+            );
+        }
+
         if (SessionManager::orderCourseIsEnabled()) {
-            $orderButtons = Display::url(
+            $courseActions .= Display::url(
                 Display::getMdiIcon(
                     ActionIcon::UP,
                     !$count ? 'ch-tool-icon-disabled' : 'ch-tool-icon',
@@ -198,12 +228,10 @@ if (0 === $session->getNbrCourses()) {
                     ICON_SIZE_SMALL,
                     get_lang('Move up')
                 ),
-                !$count
-                    ? '#'
-                    : api_get_self().'?id_session='.$sessionId.'&course_id='.$courseId.'&action=move_up'
+                !$count ? '#' : api_get_self().'?id_session='.$sessionId.'&course_id='.$courseId.'&action=move_up',
+                ['class' => 'inline-flex items-center']
             );
-
-            $orderButtons .= Display::url(
+            $courseActions .= Display::url(
                 Display::getMdiIcon(
                     ActionIcon::DOWN,
                     $count + 1 == count($courses) ? 'ch-tool-icon-disabled' : 'ch-tool-icon',
@@ -213,83 +241,66 @@ if (0 === $session->getNbrCourses()) {
                 ),
                 $count + 1 == count($courses)
                     ? '#'
-                    : api_get_self().'?id_session='.$sessionId.'&course_id='.$courseId.'&action=move_down'
+                    : api_get_self().'?id_session='.$sessionId.'&course_id='.$courseId.'&action=move_down',
+                ['class' => 'inline-flex items-center']
             );
         }
 
-        $courseUrl = api_get_course_url($courseId, $sessionId);
-
-        // hide_course_breadcrumb the parameter has been added to hide the name
-        // of the course, that appeared in the default $interbreadcrumb
-        $courseItem .= '<tr>
-			<td class="title">'
-            .Display::url(
-                $course->getTitle().' ('.$course->getVisualCode().')',
-                $courseUrl
-            )
-            .'</td>';
-        $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('none')).'</td>';
-        $courseItem .= '<td>'.$numberOfUsers.'</td>';
-        $courseItem .= '<td>';
-        $courseItem .= Display::url(Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, 22, get_lang('Course')), $courseUrl);
-
-        if ($allowSkills) {
-            $courseItem .= Display::url(
-                Display::getMdiIcon('shield-star', 'ch-tool-icon', null, 22, get_lang('Skills')),
-                $codePath.'skills/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$courseId
-            );
-        }
-        $courseItem .= $orderButtons;
-
-        $courseItem .= Display::url(
+        $courseActions .= Display::url(
             Display::getMdiIcon(ActionIcon::ADD_USER, 'ch-tool-icon', null, 22, get_lang('Add a user')),
-            $codePath."session/add_users_to_session_course.php?id_session=$sessionId&course_id=".$courseId
+            $codePath."session/add_users_to_session_course.php?id_session=$sessionId&course_id=$courseId",
+            ['class' => 'inline-flex items-center']
         );
-        $courseItem .= Display::url(
+        $courseActions .= Display::url(
             Display::getMdiIcon('account-multiple', 'ch-tool-icon', null, 22, get_lang('Users')),
-            $codePath."session/session_course_user_list.php?id_session=$sessionId&course_code=".$courseCode
+            $codePath."session/session_course_user_list.php?id_session=$sessionId&course_code=$courseCode",
+            ['class' => 'inline-flex items-center']
         );
-        $courseItem .= Display::url(
+        $courseActions .= Display::url(
             Display::getMdiIcon('archive-arrow-up', 'ch-tool-icon', null, 22, get_lang('Import users list')),
-            $codePath."user/user_import.php?action=import&cid={$courseId}&sid=$sessionId"
+            $codePath."user/user_import.php?action=import&cid=$courseId&sid=$sessionId",
+            ['class' => 'inline-flex items-center']
         );
-        $courseItem .= Display::url(
+        $courseActions .= Display::url(
             Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon', null, 22, get_lang('Export users of a course')),
-            $codePath."user/user_export.php?file_type=csv&course_session=$courseCode:$sessionId&addcsvheader=1"
+            $codePath."user/user_export.php?file_type=csv&course_session=$courseCode:$sessionId&addcsvheader=1",
+            ['class' => 'inline-flex items-center']
         );
-        $courseItem .= Display::url(
+        $courseActions .= Display::url(
             Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 22, get_lang('Reporting')),
-            $codePath."tracking/courseLog.php?sid=$sessionId&cid={$courseId}$orig_param&hide_course_breadcrumb=1"
+            $codePath."tracking/courseLog.php?sid=$sessionId&cid=$courseId$orig_param&hide_course_breadcrumb=1",
+            ['class' => 'inline-flex items-center']
         );
-        $courseItem .= Display::url(
-            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, 22, get_lang('Edit coach')),
-            $codePath."session/session_course_edit.php?id_session=$sessionId&page=resume_session.php&course_code={$courseCode}$orig_param"
+        $courseActions .= Display::url(
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, 22, get_lang('Edit')),
+            $codePath."session/session_course_edit.php?id_session=$sessionId&page=resume_session.php&course_code=$courseCode$orig_param",
+            ['class' => 'inline-flex items-center']
         );
-
-        // @todo
-        /*$courseItem .= Display::url(
-            Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('File upload')),
-            '#',
-            [
-                'class' => 'session-upload-file-btn',
-                'data-session' => $sessionId,
-                'data-course' => $courseId,
-            ]
-        );*/
-        $courseItem .= Display::url(
+        $courseActions .= Display::url(
             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, 22, get_lang('Delete')),
-            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$courseCode}",
+            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]=$courseCode",
             [
+                'class' => 'inline-flex items-center',
                 'onclick' => "javascript:if(!confirm('".get_lang('Please confirm your choice')."')) return false;",
             ]
         );
 
-        $courseItem .= '</td></tr>';
+        $courseListToShow .= '<tr class="hover:bg-gray-10">';
+        $courseListToShow .= '<td class="px-4 py-3 align-middle font-medium text-gray-90">'.Display::url(
+            api_htmlentities($course->getTitle().' ('.$course->getVisualCode().')', ENT_QUOTES),
+            $courseUrl,
+            ['class' => 'hover:underline']
+        ).'</td>';
+        $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-70">'.($namesOfTutors ? implode('<br>', $namesOfTutors) : get_lang('none')).'</td>';
+        $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-70">'.api_htmlentities($roomLabel, ENT_QUOTES).'</td>';
+        $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-70">'.$numberOfUsers.'</td>';
+        $courseListToShow .= '<td class="px-4 py-3 align-middle"><div class="flex flex-wrap items-center justify-end gap-2">'.$courseActions.'</div></td>';
+        $courseListToShow .= '</tr>';
         $count++;
     }
-    $courseListToShow .= $courseItem;
 }
-$courseListToShow .= '</table><br />';
+
+$courseListToShow .= '</tbody></table></div></div>';
 
 $url = '&nbsp;'.Display::url(
     Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-gradient', null, 32, get_lang('Add')),

@@ -24,7 +24,7 @@ class Portfolio extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/portfolio/index.php';
+        return '/resources/portfolio/:nodeId/';
     }
 
     public function getIcon(): string

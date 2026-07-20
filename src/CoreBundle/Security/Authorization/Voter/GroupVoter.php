@@ -125,6 +125,7 @@ class GroupVoter extends Voter
                     '/main/calendar/' => $group->getCalendarState(),
                     '/main/announcements/' => $group->getAnnouncementsState(),
                     '/main/work/' => $group->getWorkState(),
+                    '/resources/wiki/' => $group->getWikiState(),
                     '/main/wiki/' => $group->getWikiState(),
                     /*'/main/group/group_space' => GroupManager::TOOL_PUBLIC,
                     '/main/inc/ajax/model.ajax.php' => GroupManager::TOOL_PUBLIC,

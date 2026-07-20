@@ -30,6 +30,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * @implements ProviderInterface<SurveyConfiguration>
  */
@@ -256,8 +259,8 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
     {
         return [
             'visibleResults' => [
-                ['value' => self::VISIBLE_TUTOR, 'label' => 'Coach'],
-                ['value' => self::VISIBLE_TUTOR_STUDENT, 'label' => 'Coach and student'],
+                ['value' => self::VISIBLE_TUTOR, 'label' => 'Tutor'],
+                ['value' => self::VISIBLE_TUTOR_STUDENT, 'label' => 'Tutor and student'],
                 ['value' => self::VISIBLE_PUBLIC, 'label' => 'Everyone'],
             ],
             'surveyTypes' => $this->getSurveyTypeOptions(),

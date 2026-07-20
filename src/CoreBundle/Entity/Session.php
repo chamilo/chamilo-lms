@@ -125,7 +125,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     new Parameter(
                         name: 'sid',
                         in: 'query',
-                        description: 'Session identifier. When omitted (or <= 0) the endpoint returns the sessions where the current user is a tutor/coach; when provided it returns the calendar events of that session.',
+                        description: 'Session identifier. When omitted (or <= 0) the endpoint returns the sessions where the current user is a tutor; when provided it returns the calendar events of that session.',
                         required: false,
                         schema: ['type' => 'integer'],
                     ),

@@ -1575,8 +1575,8 @@ msgstr "འདི་དང་པོའི་རིམ་པ་འབུབས་
 msgid "Authoring tool"
 msgstr "སློབ་གཉེར་རྩོམ་པའི་རྒྱུར་ཆས་"
 
-msgid "SCORM or AICC file to upload"
-msgstr "སློབ་གཉེར་རྩོམ་པའི SCORM པོ་ཏི་ཁ་ AICC ཡིག་སྦྱོར་སློབ་རྒྱུན་ལ་འབུགས་"
+msgid "SCORM file to upload"
+msgstr "སློབ་གཉེར་རྩོམ་པའི SCORM པོ་ཏི་ཁ་ ཡིག་སྦྱོར་སློབ་རྒྱུན་ལ་འབུགས་"
 
 msgid "Course location"
 msgstr "སློབ་གཉེར་གྱི་གནས་ས་"

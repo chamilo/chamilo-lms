@@ -26,6 +26,13 @@ import assignments from "./assignments"
 import links from "./links"
 import forum from "./forum"
 import survey from "./survey"
+import courseDescription from "./courseDescription"
+import notebook from "./notebook"
+import portfolio from "./portfolio"
+import wiki from "./wiki"
+import courseProgress from "./courseProgress"
+import announcement from "./announcement"
+import ticket from "./ticket"
 import glossary from "./glossary"
 import attendance from "./attendance"
 import lpRoutes from "./lp"
@@ -51,43 +58,34 @@ import { useCourseSettings } from "../store/courseSettingStore"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import courseService from "../services/courseService"
-import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
+import { checkIsAllowedToEdit } from "../composables/userPermissions"
+import securityService from "../services/securityService"
 import { customVueTemplateEnabled } from "../config/env"
+import { resolveCourseIdFromRoute } from "../utils/courseContext"
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function resolveCourseId(to) {
-  if ("CourseHome" === to.name) {
-    return parseInt(to.params?.id ?? 0)
-  }
-
-  return parseInt(to.query?.cid ?? 0)
-}
-
-function normalizeInternalUrl(url) {
+// Parses an internal (same-origin) URL and appends the course context
+// (cid, and sid when present) without overriding params already there.
+// Returns an origin-relative URL, or null for external/malformed URLs —
+// the result is assigned to window.location.href, so rejecting foreign
+// origins here is the open-redirect defense.
+function appendCourseContext(url, courseId, sessionId) {
   if (!url || typeof url !== "string") {
     return null
   }
 
+  let parsedUrl
+
   try {
-    const parsedUrl = new URL(url, window.location.origin)
-
-    if (parsedUrl.origin !== window.location.origin) {
-      return null
-    }
-
-    return parsedUrl
-  } catch (error) {
+    parsedUrl = new URL(url, window.location.origin)
+  } catch {
     return null
   }
-}
 
-function appendCourseContext(url, courseId, sessionId) {
-  const parsedUrl = normalizeInternalUrl(url)
-
-  if (!parsedUrl) {
+  if (parsedUrl.origin !== window.location.origin) {
     return null
   }
 
@@ -146,7 +144,11 @@ async function resolveForumAutoLaunchUrl(courseId, sessionId, course) {
     console.error("[CourseHome] Failed to resolve forum tool URL", error)
   }
 
-  const courseResourceNodeUrl = buildForumToolUrlFromResourceNode({ resourceNode: course?.resourceNode }, courseId, sessionId)
+  const courseResourceNodeUrl = buildForumToolUrlFromResourceNode(
+    { resourceNode: course?.resourceNode },
+    courseId,
+    sessionId,
+  )
 
   if (courseResourceNodeUrl) {
     return courseResourceNodeUrl
@@ -324,19 +326,20 @@ async function courseHomeBeforeEnter(to) {
 
     // Learning path auto-launch
     const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
+    const learningPathNodeId = Number(cidReqStore.course?.resourceNode?.id || 0)
 
-    if (lpAutoLaunch === 2) {
+    if (lpAutoLaunch === 2 && learningPathNodeId > 0) {
       sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/main/lp/lp_controller.php?cid=${courseId}` + sid
+      window.location.href = `/resources/lp/${learningPathNodeId}?cid=${courseId}` + sid
 
       return false
-    } else if (lpAutoLaunch === 1) {
+    } else if (lpAutoLaunch === 1 && learningPathNodeId > 0) {
       const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
 
       if (lpId) {
         sessionStorage.setItem(autoLaunchKey, "true")
         window.location.href =
-          `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true` + sid
+          `/resources/lp/${learningPathNodeId}/${lpId}/runtime?cid=${courseId}&isStudentView=true` + sid
 
         return false
       }
@@ -477,6 +480,7 @@ const router = createRouter({
       },
     },
     fileManagerRoutes,
+    ...portfolio,
     socialNetworkRoutes,
     catalogue,
     adminRoutes,
@@ -486,6 +490,12 @@ const router = createRouter({
     links,
     forum,
     survey,
+    courseDescription,
+    notebook,
+    wiki,
+    courseProgress,
+    announcement,
+    ticket,
     glossary,
     attendance,
     lpRoutes,
@@ -512,7 +522,6 @@ const router = createRouter({
     buycoursesRoutes,
   ],
 })
-
 
 // ---------------------------------------------------------------------------
 // Route loading indicator
@@ -585,7 +594,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  const cid = resolveCourseId(to)
+  const cid = resolveCourseIdFromRoute(to)
 
   if (!cid) {
     Object.keys(sessionStorage)
@@ -620,7 +629,7 @@ router.beforeEach(async (to, from, next) => {
 
     if (wantsAdmin && wantsSessionAdmin) {
       // Route can be accessed by platform admins OR session admins
-      allowed = !!securityStore.isAdmin || !!securityStore.isSessionAdmin
+      allowed = securityStore.isGranted("ROLE_SESSION_MANAGER")
     } else if (wantsAdmin && wantsHR) {
       // Route can be accessed by platform admins OR HR users
       allowed = !!securityStore.isAdmin || !!securityStore.isHRM
@@ -641,6 +650,18 @@ router.beforeEach(async (to, from, next) => {
 
       return
     }
+  }
+
+  // Course-context guard: routes flagged with requiresCourseContext need a cid
+  // (query param, or path param on CourseHome — see utils/courseContext.js).
+  // sid/gid stay optional. Blocking here, before beforeResolve, keeps the
+  // cidReq store from being fed a course-less context.
+  const requiresCourseContext = to.matched.some((record) => record.meta?.requiresCourseContext === true)
+
+  if (requiresCourseContext && !cid) {
+    next({ name: "Home", replace: true })
+
+    return
   }
 
   // Feature-flag guard: platform.allow_my_files
@@ -664,40 +685,48 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
+// Tracks the last course context for which contextual roles were loaded, so we
+// skip the backend round-trip when navigating between tools of the same course.
+let lastCourseContextKey = null
+
 router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
   const securityStore = useSecurityStore()
 
-  const cid = resolveCourseId(to)
-  const sid = parseInt(to.query?.sid ?? 0)
+  const cid = resolveCourseIdFromRoute(to)
+  const sid = parseInt(to.query?.sid ?? 0) || 0
+  const gid = parseInt(to.query?.gid ?? 0) || 0
 
-  if (cid) {
-    await cidReqStore.setCourseAndSessionById(cid, sid)
-
-    if (cidReqStore.session) {
-      const { isGeneralCoach, isCourseCoach } = useUserSessionSubscription()
-
-      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
-      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_STUDENT")
-
-      if (isGeneralCoach.value || isCourseCoach.value) {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_TEACHER")
-      } else {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")
-      }
-    } else {
-      const isTeacher = cidReqStore.course?.teachers?.some((userSubscription) => {
-        return 0 === userSubscription.relationType && userSubscription.user["@id"] === securityStore.user["@id"]
-      })
-
-      if (isTeacher) {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_TEACHER")
-      } else {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_STUDENT")
-      }
-    }
-  } else {
+  if (!cid) {
+    // Leaving the course context resets both the cid and the contextual roles,
+    // keeping the personal/global roles intact.
     cidReqStore.resetCid()
+    securityStore.setContextRoles([])
+    lastCourseContextKey = ""
+
+    return
+  }
+
+  await cidReqStore.setCourseAndSessionById(cid, sid)
+
+  // Skip the backend round-trip when navigating between tools of the same course.
+  const courseContextKey = `${cid}:${sid}:${gid}`
+
+  if (courseContextKey === lastCourseContextKey) {
+    return
+  }
+
+  lastCourseContextKey = courseContextKey
+
+  // The backend (CourseAccessResolver) is the single source of truth for the
+  // ROLE_CURRENT_COURSE_* roles; replace the contextual roles with its result.
+  try {
+    const roles = await securityService.getCourseContextRoles({ cid, sid, gid })
+
+    securityStore.setContextRoles(roles)
+  } catch (error) {
+    console.error("[Router] Failed to load course context roles", error)
+    securityStore.setContextRoles([])
   }
 })
 

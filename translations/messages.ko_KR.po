@@ -1578,8 +1578,8 @@ msgstr "이 단계를 삭제하시겠습니까?"
 msgid "Authoring tool"
 msgstr "저작 도구"
 
-msgid "SCORM or AICC file to upload"
-msgstr "업로드할 SCORM 또는 AICC 파일"
+msgid "SCORM file to upload"
+msgstr "업로드할 SCORM 파일"
 
 msgid "Course location"
 msgstr "강의 위치"
@@ -36492,4 +36492,853 @@ msgstr "스레드 보기"
 
 msgid "No auth source"
 msgstr "인증 소스 없음"
+
+msgid "You must add at least one question"
+msgstr "질문을 하나 이상 추가해야 합니다"
+
+msgid "Advanced actions"
+msgstr "고급 작업"
+
+msgid "Application path"
+msgstr "애플리케이션 경로"
+
+msgid "Apply files details"
+msgstr "파일 세부 정보 적용"
+
+msgid "Apply plan details"
+msgstr "계획 세부 정보 적용"
+
+msgid "Apply plan failed"
+msgstr "계획 적용 실패"
+
+msgid "Apply plan ready"
+msgstr "계획 적용 준비 완료"
+
+msgid "Apply preparation"
+msgstr "준비 적용"
+
+msgid "Apply staged files"
+msgstr "스테이징된 파일 적용"
+
+msgid "Applying files..."
+msgstr "파일 적용 중..."
+
+msgid "Audit file"
+msgstr "감사 파일"
+
+msgid "Backup directory"
+msgstr "백업 디렉터리"
+
+msgid "Baseline clean"
+msgstr "기준선 정리"
+
+msgid "Baseline warnings"
+msgstr "기준선 경고"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "스테이징된 패키지에서 안전한 적용 계획을 생성합니다. 파일, 권한, 백업 경로 및 잠금 상태만 확인하며 파일을 교체하지 않습니다."
+
+msgid "Build production frontend assets."
+msgstr "프로덕션 프론트엔드 에셋을 빌드합니다."
+
+msgid "Building plan..."
+msgstr "계획 생성 중..."
+
+msgid "Channel"
+msgstr "채널"
+
+msgid "Check"
+msgstr "확인"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "사용 가능한 Chamilo 업데이트를 확인하고, 패키지를 검증하며, 파일을 스테이징하고 제어된 업데이트 후 단계를 실행합니다."
+
+msgid "Check manifest"
+msgstr "매니페스트 확인"
+
+msgid "Checking post-apply actions..."
+msgstr "적용 후 작업 확인 중..."
+
+msgid "Checking..."
+msgstr "확인 중..."
+
+msgid "Composer install"
+msgstr "Composer 설치"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn 및 데이터베이스 마이그레이션 작업은 종속성, 생성된 에셋 또는 데이터베이스를 수정할 수 있습니다. 백업 및 권한을 확인한 후에만 선택하세요."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "서버에서 CHAMILO_UPDATE_MANIFEST_URL을 구성하거나 HTTPS 매니페스트 URL을 제공하세요."
+
+msgid "Configured"
+msgstr "구성됨"
+
+msgid "Current migration"
+msgstr "현재 마이그레이션"
+
+msgid "Database baseline"
+msgstr "데이터베이스 기준선"
+
+msgid "Database migration safety review"
+msgstr "데이터베이스 마이그레이션 안전성 검토"
+
+msgid "Database migrations"
+msgstr "데이터베이스 마이그레이션"
+
+msgid "Development mode"
+msgstr "개발 모드"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "업데이트 백업과 서버 권한을 검토하지 않은 경우 활성화하지 마십시오."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine 드라이-런 명령"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine에서 과거 기준선 경고를 보고했습니다. 업데이트 도구는 명시적 확인 후 V210 마이그레이션만 실행합니다."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine는 안전 검토 통과 후 명시적으로 준비된 V210 마이그레이션만 실행합니다."
+
+msgid "Dry-run exit code"
+msgstr "드라이-런 종료 코드"
+
+msgid "Executed unavailable migrations"
+msgstr "실행할 수 없는 마이그레이션 실행"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "검증된 업데이트 패키지를 검사용 스테이징 디렉터리에 추출합니다. 파일을 교체하거나 마이그레이션을 실행하거나 데이터베이스를 수정하지 않습니다."
+
+msgid "File apply available"
+msgstr "파일 적용 가능"
+
+msgid "Files to replace"
+msgstr "교체할 파일"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "마이그레이션을 실행하기 전에 데이터베이스 백업이 존재하며 검증되었음을 확인합니다."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "고급 작업이 종속성, 생성된 자산 또는 데이터베이스를 수정할 수 있음을 이해합니다."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Chamilo 설치의 파일을 교체할 것임을 이해합니다."
+
+msgid "I understand this will run update commands on the server."
+msgstr "서버에서 업데이트 명령을 실행할 것임을 이해합니다."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "자산을 다시 빌드하기 전에 프런트엔드 종속성을 설치하십시오."
+
+msgid "Installed version"
+msgstr "설치된 버전"
+
+msgid "Latest migration"
+msgstr "최신 마이그레이션"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "패키지 및 서명 경로를 비워 두면 검증된 매니페스트 URL에서 다운로드합니다. 로컬 경로는 개발 테스트용으로만 사용할 수 있습니다."
+
+msgid "Live command log"
+msgstr "실시간 명령 로그"
+
+msgid "Live update log"
+msgstr "실시간 업데이트 로그"
+
+msgid "Local test options"
+msgstr "로컬 테스트 옵션"
+
+msgid "Local test update notice link"
+msgstr "로컬 테스트 업데이트 공지 링크"
+
+msgid "Local update notice simulation"
+msgstr "로컬 업데이트 공지 시뮬레이션"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "로컬 업데이트 공지 시뮬레이션은 개발 모드에서만 사용할 수 있습니다."
+
+msgid "Manifest"
+msgstr "매니페스트"
+
+msgid "Manifest source"
+msgstr "매니페스트 소스"
+
+msgid "Migration safety details"
+msgstr "마이그레이션 안전 세부 정보"
+
+msgid "Migration safety review failed"
+msgstr "마이그레이션 안전 검토 실패"
+
+msgid "Migration safety review ready"
+msgstr "마이그레이션 안전 검토 준비 완료"
+
+msgid "Migration target"
+msgstr "마이그레이션 대상"
+
+msgid "New files"
+msgstr "새 파일"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine에서 보고된 새 마이그레이션"
+
+msgid "Next migration"
+msgstr "다음 마이그레이션"
+
+msgid "No executed unavailable migration was reported."
+msgstr "실행할 수 없는 마이그레이션이 보고되지 않았습니다."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "공식 매니페스트 URL이 아직 구성되지 않았습니다. HTTPS URL 또는 개발 테스트용 로컬 경로를 사용하십시오."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "준비된 업데이트 대상 이전에 보류 중인 마이그레이션이 감지되지 않았습니다."
+
+msgid "Not configured"
+msgstr "구성되지 않음"
+
+msgid "Not detected"
+msgstr "감지되지 않음"
+
+msgid "Official Chamilo update channel"
+msgstr "공식 Chamilo 업데이트 채널"
+
+msgid "Package SHA-256"
+msgstr "패키지 SHA-256"
+
+msgid "Package URL"
+msgstr "패키지 URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "패키지 및 서명 파일은 매니페스트에서 다운로드됩니다. 이 환경에서는 로컬 경로가 비활성화됩니다."
+
+msgid "Package path"
+msgstr "패키지 경로"
+
+msgid "Package staged successfully"
+msgstr "패키지가 성공적으로 스테이징되었습니다"
+
+msgid "Package staging failed"
+msgstr "패키지 스테이징 실패"
+
+msgid "Package verification"
+msgstr "패키지 검증"
+
+msgid "Package verification failed"
+msgstr "패키지 검증 실패"
+
+msgid "Package verified successfully"
+msgstr "패키지가 성공적으로 검증되었습니다"
+
+msgid "Pending migrations before this update"
+msgstr "이 업데이트 이전의 보류 중인 마이그레이션"
+
+msgid "Planned backup path"
+msgstr "예정된 백업 경로"
+
+msgid "Post-apply actions completed"
+msgstr "적용 후 작업 완료"
+
+msgid "Post-apply actions failed"
+msgstr "적용 후 작업 실패"
+
+msgid "Post-apply actions ready"
+msgstr "적용 후 작업 준비 완료"
+
+msgid "Post-apply checks"
+msgstr "적용 후 검사"
+
+msgid "Post-apply checks failed"
+msgstr "적용 후 검사 실패"
+
+msgid "Post-apply details"
+msgstr "적용 후 세부 정보"
+
+msgid "Post-apply run details"
+msgstr "적용 후 실행 세부 정보"
+
+msgid "Preflight checks"
+msgstr "사전 검사"
+
+msgid "Preflight checks completed"
+msgstr "사전 검사 완료"
+
+msgid "Preflight checks failed"
+msgstr "사전 검사 실패"
+
+msgid "Preflight details"
+msgstr "사전 검사 세부 정보"
+
+msgid "Prepare staging"
+msgstr "스테이징 준비"
+
+msgid "Preparing staging..."
+msgstr "스테이징 준비 중..."
+
+msgid "Production mode"
+msgstr "운영 모드"
+
+msgid "Released at"
+msgstr "릴리스 일시"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "검토된 적용 계획을 사용하여 스테이징 패키지에서 Chamilo 파일을 교체합니다. 데이터베이스 마이그레이션, Composer, Yarn 또는 캐시 명령은 실행되지 않습니다."
+
+msgid "Review apply plan"
+msgstr "적용 계획 검토"
+
+msgid "Review database migrations"
+msgstr "데이터베이스 마이그레이션 검토"
+
+msgid "Review post-apply actions"
+msgstr "적용 후 작업 검토"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "업데이트 파일 적용 후 권장되는 수동 명령을 검토합니다. 이 단계에서는 Composer, Yarn, 마이그레이션 또는 캐시 명령을 실행하지 않습니다."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "데이터베이스 마이그레이션을 실행하기 전에 스테이징된 Doctrine 마이그레이션과 드라이런 출력을 검토합니다."
+
+msgid "Reviewing database migrations..."
+msgstr "데이터베이스 마이그레이션 검토 중..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "데이터베이스 마이그레이션을 실행하기 전에 마이그레이션 안전 검토를 실행하고 통과해야 합니다."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "향후 업데이트 적용 단계 전에 환경 검사를 실행합니다. 파일이나 데이터베이스를 수정하지 않습니다."
+
+msgid "Run post-apply actions"
+msgstr "적용 후 작업 실행"
+
+msgid "Run preflight checks"
+msgstr "사전 검사 실행"
+
+msgid "Run selected post-apply actions"
+msgstr "선택한 적용 후 작업 실행"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "제어된 허용 목록을 사용하여 서버에서 선택한 적용 후 명령을 실행합니다. 사용자 지정 셸 명령은 허용되지 않습니다."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "파일 업데이트 결과와 백업을 확인한 후 서버에서 이 명령을 수동으로 실행합니다."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "운영 모드에서는 UI에서 적용 후 작업 실행이 비활성화됩니다."
+
+msgid "Running post-apply actions..."
+msgstr "적용 후 작업 실행 중..."
+
+msgid "Safe actions"
+msgstr "안전한 작업"
+
+msgid "Signature path"
+msgstr "서명 경로"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "이 환경에서는 서명 확인을 건너뛸 수 없습니다."
+
+msgid "Skip signature verification for local development tests"
+msgstr "로컬 개발 테스트를 위한 서명 확인 건너뛰기"
+
+msgid "Staged file application failed"
+msgstr "스테이징된 파일 적용 실패"
+
+msgid "Staged files applied successfully"
+msgstr "스테이징된 파일이 성공적으로 적용됨"
+
+msgid "Staging details"
+msgstr "스테이징 세부 정보"
+
+msgid "Staging directory"
+msgstr "스테이징 디렉터리"
+
+msgid "Staging extraction"
+msgstr "스테이징 추출"
+
+msgid "Symfony cache clear"
+msgstr "Symfony 캐시 지우기"
+
+msgid "System update"
+msgstr "시스템 업데이트"
+
+msgid "Target version"
+msgstr "대상 버전"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "구성된 공식 매니페스트 URL이 미리 입력되어 있습니다. 필요한 경우 다른 HTTPS 매니페스트로 변경할 수 있습니다."
+
+msgid "The database migration baseline is clean."
+msgstr "데이터베이스 마이그레이션 기준이 깨끗합니다."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "작업이 완료된 후 최종 HTTP 응답이 실패했습니다. 일반적으로 런타임 캐시 권한 문제 또는 요청 중 웹 서버 재시작으로 인해 발생합니다."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "작업 로그에 적용 후 작업이 성공적으로 완료된 것으로 보고되었습니다."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "선택한 적용 후 명령이 성공적으로 완료되었으나 최종 HTTP 응답이 실패했습니다. 페이지가 올바르게 로드되지 않으면 페이지를 새로 고치고 런타임 캐시 권한을 확인하십시오."
+
+msgid "The updater does not create or restore database backups."
+msgstr "업데이트 도구는 데이터베이스 백업을 생성하거나 복원하지 않습니다."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "이러한 작업은 업데이트 결과를 검토한 후 UI에서 안전하게 실행할 수 있습니다."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "이러한 명령은 종속성, 생성된 자산, 캐시 또는 데이터베이스를 수정할 수 있습니다. 계속하기 전에 백업을 확인하십시오."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "이 작업은 Chamilo 설치의 파일을 수정합니다. 적용 계획을 검토하고 백업이 활성화되었는지 확인한 후 계속하십시오."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "이 개발 항목은 로컬 테스트 패키지 경로를 사용하여 미래의 Chamilo.org 업데이트 알림을 시뮬레이션합니다."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "이 화면은 공식 업데이트 알림에서 열렸으나, 아직 공식 매니페스트 소스가 구성되지 않았습니다."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "이 화면은 업데이트 알림에서 열렸습니다. 매니페스트 확인만 자동으로 시작됩니다."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "이 단계는 검토만 준비합니다. 파일 교체는 잠금, 백업 및 롤백 보호와 함께 나중에 '스테이징된 파일 적용' 단계에서 수행됩니다."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "이 업데이터는 데이터베이스 백업을 생성하지 않습니다. 마이그레이션을 실행하기 전에 백업을 생성하고 확인하십시오."
+
+msgid "Trusted public key"
+msgstr "신뢰할 수 있는 공개 키"
+
+msgid "Trusted signing key"
+msgstr "신뢰할 수 있는 서명 키"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "확인하려면 APPLY UPDATE FILES를 입력하세요"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "데이터베이스 마이그레이션을 확인하려면 RUN DATABASE MIGRATIONS를 입력하세요"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "확인하려면 RUN POST UPDATE ACTIONS를 입력하세요"
+
+msgid "Unknown update notice source."
+msgstr "알 수 없는 업데이트 알림 소스입니다."
+
+msgid "Update availability"
+msgstr "업데이트 가능 여부"
+
+msgid "Update directory"
+msgstr "업데이트 디렉터리"
+
+msgid "Update lock path"
+msgstr "업데이트 잠금 경로"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "이전 단계에서 생성된 스테이징 디렉터리를 사용하세요. 백엔드는 var/update/staging 내부의 디렉터리만 허용합니다."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "개발 테스트 중 미래의 Chamilo.org 업데이트 알림을 시뮬레이션하려면 이 링크를 사용하세요."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "로컬 개발 테스트에만 사용하세요. 프로덕션 업데이트는 서버에 구성된 키를 사용해야 합니다."
+
+msgid "Verification details"
+msgstr "검증 세부 정보"
+
+msgid "Verify package"
+msgstr "패키지 검증"
+
+msgid "Verifying..."
+msgstr "검증 중..."
+
+msgid "Waiting for command progress events..."
+msgstr "명령 진행 이벤트 대기 중..."
+
+msgid "Waiting for update progress events..."
+msgstr "업데이트 진행 이벤트 대기 중..."
+
+msgid "Yarn build"
+msgstr "Yarn 빌드"
+
+msgid "Yarn install"
+msgstr "Yarn 설치"
+
+msgid "A comment is required"
+msgstr "댓글을 입력해야 합니다"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "동일한 이름의 데이터베이스가 이미 존재합니다. 테이블이 포함되어 있으면 삭제되고, 비어 있으면 재사용됩니다."
+
+msgid "AI generated"
+msgstr "AI 생성"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "학습 경로로 돌아가기 전에 최소한 하나의 질문을 추가하세요."
+
+msgid "Add attachments"
+msgstr "첨부 파일 추가"
+
+msgid "Additional fields"
+msgstr "추가 필드"
+
+msgid "Allow comments"
+msgstr "댓글 허용"
+
+msgid "Allow new pages"
+msgstr "새 페이지 허용"
+
+msgid "Allow ratings"
+msgstr "평가 허용"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "모든 항목을 삭제하시겠습니까?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "자동 갱신을 복원하시겠습니까?"
+
+msgid "Attachment has been deleted"
+msgstr "첨부 파일이 삭제되었습니다"
+
+msgid "Backup file"
+msgstr "백업 파일"
+
+msgid "Block comments"
+msgstr "댓글 차단"
+
+msgid "Block new pages"
+msgstr "새 페이지 차단"
+
+msgid "Block ratings"
+msgstr "평가 차단"
+
+msgid "Cancel renewal"
+msgstr "갱신 취소"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "카테고리 링크가 %s 위키 페이지에서 제거됩니다."
+
+msgid "Change"
+msgstr "변경"
+
+msgid "Clear group"
+msgstr "그룹 지우기"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "태그를 클릭하여 편집기에 삽입하세요. 이 자리 표시자는 인증서를 생성할 때 대체됩니다."
+
+msgid "Comment added"
+msgstr "댓글이 추가되었습니다"
+
+msgid "Comment is required"
+msgstr "댓글이 필요합니다"
+
+msgid "Comment score"
+msgstr "댓글 점수"
+
+msgid "Compare selected versions line by line"
+msgstr "선택한 버전 비교 (줄 단위)"
+
+msgid "Compare selected versions word by word"
+msgstr "선택한 버전 비교 (단어 단위)"
+
+msgid "Compare versions"
+msgstr "버전 비교"
+
+msgid "Copy completed"
+msgstr "복사 완료"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "학습자별 개별 위키 작업 페이지 생성"
+
+msgid "Current view mode"
+msgstr "현재 보기 모드"
+
+msgid "Delete Wiki"
+msgstr "위키 삭제"
+
+msgid "Delete page"
+msgstr "페이지 삭제"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "위키 홈페이지를 삭제하는 것은 권장하지 않습니다. 나중에 다시 만들 수 있습니다."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "위키를 비활성화하면 일반 위키 페이지와 작업이 차단됩니다. 이 설정 페이지는 강사만 이용할 수 있습니다."
+
+msgid "Discussion"
+msgstr "토론"
+
+msgid "Edit Comment"
+msgstr "댓글 편집"
+
+msgid "Edit page"
+msgstr "페이지 편집"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "종료일은 만료일 이후이거나 같아야 합니다"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "위키 페이지를 검색하려면 검색어를 입력하세요"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "만료일은 종료일 이전이거나 같아야 합니다"
+
+msgid "Failed email recipients"
+msgstr "이메일 전송 실패 수신자"
+
+msgid "Finish and return to learning path"
+msgstr "완료하고 학습 경로로 돌아가기"
+
+msgid "Forum image"
+msgstr "포럼 이미지"
+
+msgid "Hide discussion"
+msgstr "토론 숨기기"
+
+msgid "Hide page"
+msgstr "페이지 숨기기"
+
+msgid "I changed my mind"
+msgstr "생각이 바뀌었습니다"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "선택을 해제하면 해당 파일은 플랫폼 관리자가 '파일 정보' 도구를 통해 계속 사용할 수 있습니다."
+
+msgid "Internal message failures"
+msgstr "내부 메시지 전송 실패"
+
+msgid "Internal messages available"
+msgstr "내부 메시지 사용 가능"
+
+msgid "Internal messages created now"
+msgstr "내부 메시지 생성됨"
+
+msgid "Item score"
+msgstr "항목 점수"
+
+msgid "Last post"
+msgstr "최근 게시물"
+
+msgid "Lock page"
+msgstr "페이지 잠금"
+
+msgid "Manage categories"
+msgstr "카테고리 관리"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "이 문서를 AI 지원으로 표시합니다. 콘텐츠가 AI 도구로 생성되거나 크게 수정된 경우 사용하세요."
+
+msgid "Maximum score is required"
+msgstr "최대 점수가 필요합니다"
+
+msgid "Metric"
+msgstr "지표"
+
+msgid "New comments are blocked in this discussion"
+msgstr "이 토론에서는 새 댓글을 작성할 수 없습니다"
+
+msgid "No Wiki categories are available yet."
+msgstr "사용 가능한 위키 카테고리가 없습니다."
+
+msgid "No categories found"
+msgstr "카테고리를 찾을 수 없습니다"
+
+msgid "No content"
+msgstr "내용 없음"
+
+msgid "No parent category"
+msgstr "상위 카테고리 없음"
+
+msgid "Number of comments scored"
+msgstr "점수가 매겨진 댓글 수"
+
+msgid "Old version"
+msgstr "이전 버전"
+
+msgid "Only image files are allowed."
+msgstr "이미지 파일만 허용됩니다."
+
+msgid "Please fill all required fields"
+msgstr "필수 항목을 모두 입력하세요"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "수업 또는 학생 자리표시자가 있는 문제는 강의 수업 또는 그룹용으로 생성됩니다: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "이 토론에서는 평가가 차단되어 있습니다"
+
+msgid "Remove image"
+msgstr "이미지 제거"
+
+msgid "Restore renewal"
+msgstr "갱신 복원"
+
+msgid "Restore version"
+msgstr "버전 복원"
+
+msgid "Search in"
+msgstr "검색 범위"
+
+msgid "Select group"
+msgstr "그룹 선택"
+
+msgid "Select image"
+msgstr "이미지 선택"
+
+msgid "Selected image"
+msgstr "선택한 이미지"
+
+msgid "Show discussion"
+msgstr "토론 보기"
+
+msgid "Show page"
+msgstr "페이지 보기"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "일부 파일 또는 폴더에 쓰기 권한이 없습니다. Chamilo를 설치하려면 먼저 해당 권한을 변경(CHMOD)해야 합니다. 자세한 내용은 다음을 참조하세요:"
+
+msgid "Subcategories"
+msgstr "하위 카테고리"
+
+msgid "Tap on the left or right to navigate"
+msgstr "탐색하려면 왼쪽 또는 오른쪽을 탭하세요"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "위키 과제 제출 기한이 지났지만, 지연 제출이 허용됩니다."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "위키 과제 제출 기한이 지났습니다."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "위키 과제가 아직 시작되지 않았습니다."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "저장하기 전에 위키 페이지 편집 잠금이 필요합니다."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "공지사항이 저장되었지만 첨부 파일을 업로드할 수 없습니다."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "공지사항이 저장되었지만 이메일 전송에 실패했습니다."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "공지사항이 저장되었지만 이메일을 보낼 수 없습니다."
+
+msgid "The category has been created"
+msgstr "카테고리가 생성되었습니다"
+
+msgid "The category has been deleted"
+msgstr "카테고리가 삭제되었습니다"
+
+msgid "The category has been updated"
+msgstr "카테고리가 업데이트되었습니다"
+
+msgid "The end date is invalid"
+msgstr "종료일이 유효하지 않습니다"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "최대 버전 수는 0 이상의 정수여야 합니다"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "최대 단어 수는 0 이상의 정수여야 합니다"
+
+msgid "The print window could not be opened"
+msgstr "인쇄 창을 열 수 없습니다"
+
+msgid "The start date is invalid"
+msgstr "시작일이 유효하지 않습니다"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "이 설정은 세션과 그룹을 포함한 전체 코스에 적용됩니다."
+
+msgid "This announcement has already been sent by email."
+msgstr "이 공지사항은 이미 이메일로 전송되었습니다."
+
+msgid "This discussion is hidden from learners"
+msgstr "이 토론은 학습자에게 숨겨져 있습니다"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "이 생성형 AI 도구를 사용하면 코스를 설명하기 위한 이미지와 짧은 동영상을 만들 수 있습니다. 프롬프트 섹션에 원하는 내용을 (텍스트로) 설명하면 구성된 AI 모델이 이미지 또는 동영상을 생성하는 데 필요한 요소를 제공합니다. 잠시 기다려 주세요. AI 모델은 결과를 생성하는 데 시간이 걸리며, 생성된 미디어를 문서 폴더에 저장한 후 HTML 문서에 삽입할 수 있습니다. 모든 AI 모델의 속도와 품질이 동일하지는 않습니다. AI 모델은 요청에 대한 더 자세한 해석인 수정된 프롬프트를 제공할 수도 있습니다. 그런 다음 이 수정된 프롬프트를 사용하여 요청을 세부 조정할 수 있습니다. 특히 동영상의 경우, 생성된 미디어를 저장하지 않기로 결정하더라도 이 도구가 조직에 상당한 비용을 발생시킬 수 있음을 유의하세요. 이에 따라 사용해 주세요. 원하는 결과를 얻는 데 문제가 있는 경우, 사용 가능한 AI 모델에 대한 프롬프트 기법을 온라인에서 조사하는 데 시간을 할애하세요."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "이 기록은 기본 코스에 속합니다. 세션 버전을 생성한 후 복원이 가능합니다."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "이 이미지는 포럼 제목 옆에 표시되는 기본 포럼 아이콘을 대체합니다."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "이 페이지는 기본 코스에서 가져온 것입니다. 저장하면 현재 세션용 버전이 생성됩니다."
+
+msgid "This will also delete %s subcategories."
+msgstr "이 작업은 %s개의 하위 카테고리도 삭제합니다."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "이 작업은 %s명의 학습자를 위한 개별 작업 페이지를 생성합니다."
+
+msgid "Thread history"
+msgstr "스레드 기록"
+
+msgid "Title and content"
+msgstr "제목 및 내용"
+
+msgid "Unable to cancel renewal right now."
+msgstr "지금은 갱신 권한을 취소할 수 없습니다."
+
+msgid "Unable to restore renewal right now."
+msgstr "지금은 갱신 권한을 복원할 수 없습니다."
+
+msgid "Unlock page"
+msgstr "페이지 잠금 해제"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "내부 위키 링크를 만들려면 [[페이지]] 또는 [[페이지|표시 텍스트]]를 사용하세요."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "스페이스바 또는 화살표 키를 사용하여 탐색하세요"
+
+msgid "View version"
+msgstr "버전 보기"
+
+msgid "Visible only to teachers"
+msgstr "교사에게만 표시"
+
+msgid "Weight is required"
+msgstr "가중치가 필요합니다"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "이 코스에서는 위키 카테고리가 비활성화되어 있습니다."
+
+msgid "Wiki categories enabled"
+msgstr "위키 카테고리 활성화됨"
+
+msgid "Wiki html strict filtering"
+msgstr "위키 HTML 엄격 필터링"
+
+msgid "Wiki settings"
+msgstr "위키 설정"
+
+msgid "Wiki settings updated"
+msgstr "위키 설정이 업데이트되었습니다"
+
+msgid "You are viewing a historical version of this page"
+msgstr "이 페이지의 이전 버전을 보고 있습니다"
+
+msgid "You can attach one or more files to this reply."
+msgstr "이 답글에 하나 이상의 파일을 첨부할 수 있습니다."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "이 과제 페이지를 편집할 수 있지만, 학습자 작업 페이지는 수정되지 않습니다."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "질문에 {{class_name}} 및 {{student_full_name}} 태그를 사용할 수 있습니다."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "이 페이지를 편집할 수 있는 시간은 20분이며, 그 이후에는 편집 잠금이 해제됩니다."
+
+msgid "by"
+msgstr "작성자"
+
+msgid "required"
+msgstr "필수"
 

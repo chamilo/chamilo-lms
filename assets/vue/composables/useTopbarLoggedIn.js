@@ -281,13 +281,13 @@ export function useTopbarLoggedIn(props) {
     isSettingEnabled(platformConfigStore, "workflows.allow_users_to_create_courses"),
   )
 
-  const canCreateCourseFromTopbar = computed(() => isAdmin.value || (isTeacher.value && allowUsersToCreateCourses.value))
+  const canCreateCourseFromTopbar = computed(
+    () => isAdmin.value || (isTeacher.value && allowUsersToCreateCourses.value),
+  )
 
   const hideLogoutButton = computed(() => isSettingEnabled(platformConfigStore, "display.hide_logout_button"))
 
-  const showTicketLink = computed(
-    () => platformConfigStore.getSetting("ticket.show_link_ticket_notification") !== "false",
-  )
+  const showTicketLink = computed(() => isSettingEnabled(platformConfigStore, "ticket.show_link_ticket_notification"))
 
   const displayTabs = computed(() => resolveDisplayTabsConfig(platformConfigStore, securityStore))
 
@@ -343,15 +343,23 @@ export function useTopbarLoggedIn(props) {
     () => isSettingEnabled(platformConfigStore, "message.allow_message_tool") && !isAnonymous.value,
   )
 
-  const ticketUrl = computed(() => {
-    const searchParams = new URLSearchParams()
+  const ticketRoute = computed(() => {
+    const query = {}
+    const courseId = Number(cidReqStore.course?.id ?? route.query.cid ?? 0)
+    const sessionId = Number(cidReqStore.session?.id ?? route.query.sid ?? 0)
+    const groupId = Number(cidReqStore.group?.id ?? route.query.gid ?? 0)
 
-    searchParams.append("project_id", "1")
-    searchParams.append("cid", cidReqStore.course?.id ?? 0)
-    searchParams.append("sid", cidReqStore.session?.id ?? 0)
-    searchParams.append("gid", cidReqStore.group?.id ?? 0)
+    if (courseId > 0) {
+      query.cid = String(courseId)
+    }
+    if (sessionId > 0) {
+      query.sid = String(sessionId)
+    }
+    if (groupId > 0) {
+      query.gid = String(groupId)
+    }
 
-    return "/main/ticket/tickets.php?" + searchParams.toString()
+    return { name: "TicketList", query }
   })
 
   const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
@@ -594,7 +602,7 @@ export function useTopbarLoggedIn(props) {
     showTicketLink,
     isAnonymous,
     messagingEnabled,
-    ticketUrl,
+    ticketRoute,
     btnInboxBadge,
     userSubmenuItems,
     toggleUserMenu,

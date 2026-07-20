@@ -133,8 +133,8 @@ const courseCatalogueSettings = computed(() => {
 })
 
 const isAnonymous = !securityStore.isAuthenticated
-const isPrivilegedUser =
-  securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+// ROLE_TEACHER covers admin and HR through the hierarchy; ROLE_SESSION_MANAGER covers session admins.
+const isPrivilegedUser = securityStore.isGranted("ROLE_TEACHER") || securityStore.isGranted("ROLE_SESSION_MANAGER")
 
 const allowCatalogueAccess = computed(() => {
   if (isAnonymous) {

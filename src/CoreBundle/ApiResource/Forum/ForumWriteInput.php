@@ -38,6 +38,8 @@ final class ForumWriteInput
 
     public ?int $lpId = null;
 
+    public ?int $lpParentId = null;
+
     public ?string $csrfToken = null;
 
     public ?int $groupForum = null;

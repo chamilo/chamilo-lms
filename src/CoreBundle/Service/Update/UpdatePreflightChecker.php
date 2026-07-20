@@ -12,6 +12,10 @@ use Composer\InstalledVersions;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 
+use const PATHINFO_EXTENSION;
+use const PHP_VERSION;
+use const PREG_SPLIT_NO_EMPTY;
+
 final readonly class UpdatePreflightChecker
 {
     private const MINIMUM_FREE_SPACE_BYTES = 209715200;
@@ -50,8 +54,8 @@ final readonly class UpdatePreflightChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
+     * @param string[]                                                                                        $errors
+     * @param string[]                                                                                        $warnings
      */
     private function checkUpdateDirectory(
         string $updateDirectory,
@@ -78,7 +82,7 @@ final readonly class UpdatePreflightChecker
             return;
         }
 
-        $parentDirectory = dirname($updateDirectory);
+        $parentDirectory = \dirname($updateDirectory);
 
         if (is_dir($parentDirectory) && is_writable($parentDirectory)) {
             $message = 'Update directory does not exist yet, but its parent directory is writable.';
@@ -113,8 +117,8 @@ final readonly class UpdatePreflightChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
+     * @param string[]                                                                                        $errors
+     * @param string[]                                                                                        $warnings
      */
     private function checkDiskSpace(
         string $updateDirectory,
@@ -170,8 +174,8 @@ final readonly class UpdatePreflightChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
+     * @param string[]                                                                                        $errors
+     * @param string[]                                                                                        $warnings
      */
     private function checkPhpRequirement(UpdateManifest $manifest, array &$checks, array &$errors, array &$warnings): void
     {
@@ -220,8 +224,8 @@ final readonly class UpdatePreflightChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
+     * @param string[]                                                                                        $errors
+     * @param string[]                                                                                        $warnings
      */
     private function checkPackagePath(?string $packagePath, array &$checks, array &$errors, array &$warnings): void
     {
@@ -261,8 +265,8 @@ final readonly class UpdatePreflightChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $errors
-     * @param string[] $warnings
+     * @param string[]                                                                                        $errors
+     * @param string[]                                                                                        $warnings
      */
     private function checkVersionDirection(UpdateManifest $manifest, array &$checks, array &$errors, array &$warnings): void
     {
@@ -323,7 +327,7 @@ final readonly class UpdatePreflightChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
+     * @param string[]                                                                                        $warnings
      */
     private function checkGitWorkingTree(string $projectDir, array &$checks, array &$warnings): void
     {
@@ -377,7 +381,7 @@ final readonly class UpdatePreflightChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param string[] $warnings
+     * @param string[]                                                                                        $warnings
      */
     private function checkProjectMetadata(string $projectDir, array &$checks, array &$warnings): void
     {
@@ -404,7 +408,7 @@ final readonly class UpdatePreflightChecker
 
     private function findExistingDiskPath(string $updateDirectory, string $projectDir): string
     {
-        foreach ([$updateDirectory, dirname($updateDirectory), $projectDir.'/var', $projectDir] as $path) {
+        foreach ([$updateDirectory, \dirname($updateDirectory), $projectDir.'/var', $projectDir] as $path) {
             if (is_dir($path)) {
                 return $path;
             }
@@ -430,7 +434,7 @@ final readonly class UpdatePreflightChecker
         }
 
         try {
-            $version = \api_get_version();
+            $version = api_get_version();
 
             if (\is_string($version) && '' !== trim($version)) {
                 return $version;
@@ -510,9 +514,9 @@ final readonly class UpdatePreflightChecker
      */
     private function summarizeCommandOutput(array $output): string
     {
-        $summary = trim(implode(' ', array_slice($output, 0, 3)));
+        $summary = trim(implode(' ', \array_slice($output, 0, 3)));
 
-        if (180 < \strlen($summary)) {
+        if (\strlen($summary) > 180) {
             return substr($summary, 0, 177).'...';
         }
 
@@ -574,7 +578,7 @@ final readonly class UpdatePreflightChecker
 
     /**
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
-     * @param array<string, mixed> $details
+     * @param array<string, mixed>                                                                            $details
      */
     private function addCheck(array &$checks, string $key, string $status, string $message, array $details = []): void
     {

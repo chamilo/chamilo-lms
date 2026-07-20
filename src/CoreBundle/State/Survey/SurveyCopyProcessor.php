@@ -34,8 +34,8 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class SurveyCopyProcessor implements ProcessorInterface
 {
-    use SurveyPersonalitySupportTrait;
     use SurveyCsrfTokenValidationTrait;
+    use SurveyPersonalitySupportTrait;
 
     public function __construct(
         private RequestStack $requestStack,

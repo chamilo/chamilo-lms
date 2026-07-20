@@ -1575,8 +1575,8 @@ msgstr "დარწმუნებული ხართ რომ გსურ
 msgid "Authoring tool"
 msgstr "ავტორის ინსტრუმენტი"
 
-msgid "SCORM or AICC file to upload"
-msgstr "SCORM ან AICC ფაილი ატვირთვისთვის"
+msgid "SCORM file to upload"
+msgstr "SCORM ფაილი ატვირთვისთვის"
 
 msgid "Course location"
 msgstr "კურსის მდებარეობა"
@@ -36488,4 +36488,853 @@ msgstr "თემების ნახვა"
 
 msgid "No auth source"
 msgstr "ავტორიზაციის წყარო არ არის"
+
+msgid "You must add at least one question"
+msgstr "თქვენ უნდა დაამატოთ მინიმუმ ერთი კითხვა"
+
+msgid "Advanced actions"
+msgstr "Advanced actions"
+
+msgid "Application path"
+msgstr "Application path"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Apply plan failed"
+
+msgid "Apply plan ready"
+msgstr "Apply plan ready"
+
+msgid "Apply preparation"
+msgstr "Apply preparation"
+
+msgid "Apply staged files"
+msgstr "Apply staged files"
+
+msgid "Applying files..."
+msgstr "Applying files..."
+
+msgid "Audit file"
+msgstr "Audit file"
+
+msgid "Backup directory"
+msgstr "Backup directory"
+
+msgid "Baseline clean"
+msgstr "Baseline clean"
+
+msgid "Baseline warnings"
+msgstr "Baseline warnings"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+
+msgid "Build production frontend assets."
+msgstr "Build production frontend assets."
+
+msgid "Building plan..."
+msgstr "Building plan..."
+
+msgid "Channel"
+msgstr "Channel"
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+
+msgid "Check manifest"
+msgstr "Check manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Checking post-apply actions..."
+
+msgid "Checking..."
+msgstr "Checking..."
+
+msgid "Composer install"
+msgstr "Composer install"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+
+msgid "Configured"
+msgstr "Configured"
+
+msgid "Current migration"
+msgstr "Current migration"
+
+msgid "Database baseline"
+msgstr "Database baseline"
+
+msgid "Database migration safety review"
+msgstr "მონაცემთა ბაზის მიგრაციის უსაფრთხოების მიმოხილვა"
+
+msgid "Database migrations"
+msgstr "მონაცემთა ბაზის მიგრაციები"
+
+msgid "Development mode"
+msgstr "განვითარების რეჟიმი"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "არ ჩართოთ ეს, თუ არ გადახედეთ განახლების სარეზერვო ასლს და სერვერის უფლებებს."
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine-ის მშრალი გაშვების ბრძანება"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine-მა დააფიქსირა ისტორიული საბაზისო გაფრთხილებები. განმახორციელებელი მაინც შეასრულებს მხოლოდ დადგმულ V210 მიგრაციებს აშკარა დადასტურების შემდეგ."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine შეასრულებს მხოლოდ დადგმულ V210 მიგრაციებს უსაფრთხოების მიმოხილვის წარმატებით დასრულების შემდეგ."
+
+msgid "Dry-run exit code"
+msgstr "მშრალი გაშვების გასასვლელი კოდი"
+
+msgid "Executed unavailable migrations"
+msgstr "შესრულებული მიუწვდომელი მიგრაციები"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "დადასტურებული განახლების პაკეტის ამოღება დროებით დირექტორიაში შემოწმებისთვის. ეს არ ცვლის ფაილებს, არ აწარმოებს მიგრაციებს და არ ცვლის მონაცემთა ბაზას."
+
+msgid "File apply available"
+msgstr "ფაილის გამოყენება ხელმისაწვდომია"
+
+msgid "Files to replace"
+msgstr "ფაილები ჩასანაცვლებლად"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "ვადასტურებ, რომ მონაცემთა ბაზის სარეზერვო ასლი არსებობს და დადასტურებულია მიგრაციების გაშვებამდე."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "მესმის, რომ გაფართოებულმა მოქმედებებმა შეიძლება შეცვალონ დამოკიდებულებები, გენერირებული აქტივები ან მონაცემთა ბაზა."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "მესმის, რომ ეს ჩაანაცვლებს ფაილებს Chamilo-ის ინსტალაციაში."
+
+msgid "I understand this will run update commands on the server."
+msgstr "მესმის, რომ ეს გაუშვებს განახლების ბრძანებებს სერვერზე."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "ფრონტენდის დამოკიდებულებების დაყენება აქტივების ხელახლა აშენებამდე."
+
+msgid "Installed version"
+msgstr "დაყენებული ვერსია"
+
+msgid "Latest migration"
+msgstr "უახლესი მიგრაცია"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "დატოვეთ პაკეტისა და ხელმოწერის გზები ცარიელი, რომ ჩამოტვირთოთ ისინი დადასტურებული მანიფესტის URL-ებიდან. ლოკალური გზები ხელმისაწვდომია მხოლოდ განვითარების ტესტებისთვის."
+
+msgid "Live command log"
+msgstr "ცოცხალი ბრძანების ჟურნალი"
+
+msgid "Live update log"
+msgstr "ცოცხალი განახლების ჟურნალი"
+
+msgid "Local test options"
+msgstr "ლოკალური ტესტის პარამეტრები"
+
+msgid "Local test update notice link"
+msgstr "ლოკალური ტესტის განახლების შეტყობინების ბმული"
+
+msgid "Local update notice simulation"
+msgstr "ლოკალური განახლების შეტყობინების სიმულაცია"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "ლოკალური განახლების შეტყობინების სიმულაცია ხელმისაწვდომია მხოლოდ განვითარების რეჟიმში."
+
+msgid "Manifest"
+msgstr "მანიფესტი"
+
+msgid "Manifest source"
+msgstr "მანიფესტის წყარო"
+
+msgid "Migration safety details"
+msgstr "მიგრაციის უსაფრთხოების დეტალები"
+
+msgid "Migration safety review failed"
+msgstr "მიგრაციის უსაფრთხოების მიმოხილვა ვერ მოხერხდა"
+
+msgid "Migration safety review ready"
+msgstr "მიგრაციის უსაფრთხოების მიმოხილვა მზადაა"
+
+msgid "Migration target"
+msgstr "მიგრაციის სამიზნე"
+
+msgid "New files"
+msgstr "ახალი ფაილები"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine-ის მიერ დარეგისტრირებული ახალი მიგრაციები"
+
+msgid "Next migration"
+msgstr "შემდეგი მიგრაცია"
+
+msgid "No executed unavailable migration was reported."
+msgstr "არ დარეგისტრირდა შესრულებული მიუწვდომელი მიგრაცია."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "ოფიციალური მანიფესტის URL ჯერ არ არის კონფიგურირებული. გამოიყენეთ HTTPS URL ან ლოკალური გზა განვითარების ტესტებისთვის."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "დადგმულ განახლების სამიზნემდე არ აღმოჩენილა მომლოდინე მიგრაცია."
+
+msgid "Not configured"
+msgstr "არ არის კონფიგურირებული"
+
+msgid "Not detected"
+msgstr "არ არის აღმოჩენილი"
+
+msgid "Official Chamilo update channel"
+msgstr "ოფიციალური Chamilo-ის განახლების არხი"
+
+msgid "Package SHA-256"
+msgstr "პაკეტის SHA-256"
+
+msgid "Package URL"
+msgstr "პაკეტის URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "პაკეტი და ხელმოწერის ფაილები ჩამოიტვირთება მანიფესტიდან. ლოკალური გზები გამორთულია ამ გარემოში."
+
+msgid "Package path"
+msgstr "პაკეტის გზა"
+
+msgid "Package staged successfully"
+msgstr "პაკეტი წარმატებით დაიდგა"
+
+msgid "Package staging failed"
+msgstr "პაკეტის დადგმა ვერ მოხერხდა"
+
+msgid "Package verification"
+msgstr "პაკეტის ვერიფიკაცია"
+
+msgid "Package verification failed"
+msgstr "პაკეტის ვერიფიკაცია ვერ მოხერხდა"
+
+msgid "Package verified successfully"
+msgstr "პაკეტი წარმატებით გადამოწმდა"
+
+msgid "Pending migrations before this update"
+msgstr "ამ განახლებამდე დაგეგმილი მიგრაციები"
+
+msgid "Planned backup path"
+msgstr "დაგეგმილი სარეზერვო გზა"
+
+msgid "Post-apply actions completed"
+msgstr "განახლების შემდგომი მოქმედებები დასრულდა"
+
+msgid "Post-apply actions failed"
+msgstr "განახლების შემდგომი მოქმედებები ვერ შესრულდა"
+
+msgid "Post-apply actions ready"
+msgstr "განახლების შემდგომი მოქმედებები მზადაა"
+
+msgid "Post-apply checks"
+msgstr "განახლების შემდგომი შემოწმებები"
+
+msgid "Post-apply checks failed"
+msgstr "განახლების შემდგომი შემოწმებები ვერ შესრულდა"
+
+msgid "Post-apply details"
+msgstr "განახლების შემდგომი დეტალები"
+
+msgid "Post-apply run details"
+msgstr "განახლების შემდგომი გაშვების დეტალები"
+
+msgid "Preflight checks"
+msgstr "წინასწარი შემოწმებები"
+
+msgid "Preflight checks completed"
+msgstr "წინასწარი შემოწმებები დასრულდა"
+
+msgid "Preflight checks failed"
+msgstr "წინასწარი შემოწმებები ვერ შესრულდა"
+
+msgid "Preflight details"
+msgstr "წინასწარი დეტალები"
+
+msgid "Prepare staging"
+msgstr "სცენური გარემოს მომზადება"
+
+msgid "Preparing staging..."
+msgstr "სცენური გარემო მზადდება..."
+
+msgid "Production mode"
+msgstr "საწარმოო რეჟიმი"
+
+msgid "Released at"
+msgstr "გამოშვებულია"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "ჩაანაცვლეთ Chamilo-ის ფაილები სცენური პაკეტიდან განხილული განახლების გეგმის მიხედვით. ეს არ ასრულებს მონაცემთა ბაზის მიგრაციებს, Composer-ს, Yarn-ს ან ქეშის ბრძანებებს."
+
+msgid "Review apply plan"
+msgstr "განახლების გეგმის განხილვა"
+
+msgid "Review database migrations"
+msgstr "მონაცემთა ბაზის მიგრაციების განხილვა"
+
+msgid "Review post-apply actions"
+msgstr "განახლების შემდგომი მოქმედებების განხილვა"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "განიხილეთ რეკომენდებული ხელით ბრძანებები განახლების ფაილების გამოყენების შემდეგ. ეს ნაბიჯი არ ასრულებს Composer-ს, Yarn-ს, მიგრაციებს ან ქეშის ბრძანებებს."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "განიხილეთ სცენური Doctrine მიგრაციები და მშრალი გაშვების შედეგი მონაცემთა ბაზის მიგრაციების გაშვებამდე."
+
+msgid "Reviewing database migrations..."
+msgstr "მონაცემთა ბაზის მიგრაციების განხილვა..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "გაუშვით და გაიარეთ მიგრაციის უსაფრთხოების განხილვა მონაცემთა ბაზის მიგრაციების შესრულებამდე."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "გაუშვით გარემოს შემოწმებები განახლების გამოყენების ნებისმიერი მომავალი ნაბიჯის წინ. ეს არ ცვლის ფайლებს ან მონაცემთა ბაზას."
+
+msgid "Run post-apply actions"
+msgstr "განახლების შემდგომი მოქმედებების გაშვება"
+
+msgid "Run preflight checks"
+msgstr "წინასწარი შემოწმებების გაშვება"
+
+msgid "Run selected post-apply actions"
+msgstr "არჩეული განახლების შემდგომი მოქმედებების გაშვება"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "გაუშვით არჩეული განახლების შემდგომი ბრძანებები სერვერიდან კონტროლირებადი ნებადართული სიის გამოყენებით. მორგებული shell ბრძანებები არ მიიღება."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "გაუშვით ეს ბრძანებები ხელით სერვერიდან ფაილების განახლების შედეგის და სარეზერვო ასლების დადასტურების შემდეგ."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "განახლების შემდგომი მოქმედებების გაშვება ინტერფეისიდან გამორთულია საწარმოო რეჟიმში."
+
+msgid "Running post-apply actions..."
+msgstr "განახლების შემდგომი მოქმედებები მიმდინარეობს..."
+
+msgid "Safe actions"
+msgstr "უსაფრთხო მოქმედებები"
+
+msgid "Signature path"
+msgstr "ხელმოწერის გზა"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "ხელმოწერის გადამოწმების გამოტოვება ამ გარემოში შეუძლებელია."
+
+msgid "Skip signature verification for local development tests"
+msgstr "ხელმოწერის გადამოწმების გამოტოვება ლოკალური განვითარების ტესტებისთვის"
+
+msgid "Staged file application failed"
+msgstr "სცენური ფაილების გამოყენება ვერ მოხერხდა"
+
+msgid "Staged files applied successfully"
+msgstr "სცენური ფაილები წარმატებით გამოიყენა"
+
+msgid "Staging details"
+msgstr "სცენური დეტალები"
+
+msgid "Staging directory"
+msgstr "სცენური დირექტორია"
+
+msgid "Staging extraction"
+msgstr "სცენური ამოღება"
+
+msgid "Symfony cache clear"
+msgstr "Symfony ქეშის გასუფთავება"
+
+msgid "System update"
+msgstr "სისტემის განახლება"
+
+msgid "Target version"
+msgstr "სამიზნე ვერსია"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "კონფიგურირებული ოფიციალური მანიფესტის URL წინასწარ არის შევსებული. საჭიროების შემთხვევაში შეგიძლიათ შეცვალოთ იგი სხვა HTTPS მანიფესტით."
+
+msgid "The database migration baseline is clean."
+msgstr "მონაცემთა ბაზის მიგრაციის საწყისი მდგომარეობა სუფთაა."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "ოპერაციის დასრულების შემდეგ საბოლოო HTTP პასუხი ვერ მიიღო. ეს ჩვეულებრივ გამოწვეულია გაშვების დროს ქეშის უფლებებით ან ვებ სერვერის გადატვირთვით მოთხოვნის დროს."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "ოპერაციის ჟურნალი აცხადებს, რომ განახლების შემდგომი მოქმედებები წარმატებით დასრულდა."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "არჩეული განახლების შემდგომი ბრძანებები წარმატებით დასრულდა, მაგრამ საბოლოო HTTP პასუხი ვერ მიიღო. განაახლეთ გვერდი და შეამოწმეთ გაშვების დროს ქეშის უფლებები, თუ გვერდი სწორად არ იტვირთება."
+
+msgid "The updater does not create or restore database backups."
+msgstr "განახლების პროგრამა არ ქმნის და არ აღადგენს მონაცემთა ბაზის სარეზერვო ასლებს."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "ეს მოქმედებები უსაფრთხოა გაშვება ინტერფეისიდან განახლების შედეგის გადახედვის შემდეგ."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "ეს ბრძანებები შეიძლება შეცვალონ დამოკიდებულებები, გენერირებული აქტივები, ქეში ან მონაცემთა ბაზა. გააგრძელებამდე დაადასტურეთ სარეზერვო ასლები."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "ეს მოქმედება ცვლის ფაილებს Chamilo-ის ინსტალაციაში. გააგრძელებამდე დარწმუნდით, რომ განახლების გეგმა გადახედილია და სარეზერვო ასლები ჩართულია."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "ეს განვითარების ჩანაწერი ახდენს მომავალი Chamilo.org განახლების შეტყობინების სიმულაციას ლოკალური სატესტო პაკეტის გზების გამოყენებით."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "ეს ეკრანი გახსნილია ოფიციალური განახლების შეტყობინებიდან, მაგრამ ჯერ არ არის კონფიგურირებული ოფიციალური მანიფესტის წყარო."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "ეს ეკრანი გახსნილია განახლების შეტყობინებიდან. ავტომატურად იწყება მხოლოდ მანიფესტის შემოწმება."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "ეს ნაბიჯი ამზადებს მხოლოდ მიმოხილვას. ფაილების ჩანაცვლება ხდება მოგვიანებით, „სტადირებული ფაილების გამოყენების“ ნაბიჯში, დაბლოკვის, სარეზერვო ასლის და უკან დაბრუნების დაცვით."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "ეს განახლების პროგრამა არ ქმნის მონაცემთა ბაზის სარეზერვო ასლს. შექმენით და გადაამოწმეთ სარეზერვო ასლი მიგრაციების გაშვებამდე."
+
+msgid "Trusted public key"
+msgstr "სანდო საჯარო გასაღები"
+
+msgid "Trusted signing key"
+msgstr "სანდო ხელმოწერის გასაღები"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "დასადასტურებლად აკრიფეთ APPLY UPDATE FILES"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "მონაცემთა ბაზის მიგრაციების დასადასტურებლად აკრიფეთ RUN DATABASE MIGRATIONS"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "დასადასტურებლად აკრიფეთ RUN POST UPDATE ACTIONS"
+
+msgid "Unknown update notice source."
+msgstr "განახლების შეტყობინების წყარო უცნობია."
+
+msgid "Update availability"
+msgstr "განახლების ხელმისაწვდომობა"
+
+msgid "Update directory"
+msgstr "განახლების დირექტორია"
+
+msgid "Update lock path"
+msgstr "განახლების დაბლოკვის გზა"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "გამოიყენეთ წინა ნაბიჯით გენერირებული სტადირების დირექტორია. ბექენდი იღებს მხოლოდ დირექტორიებს var/update/staging-ის შიგნით."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "გამოიყენეთ ეს ბმული მომავალი Chamilo.org განახლების შეტყობინების სიმულაციისთვის განვითარების ტესტების დროს."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "გამოიყენეთ ეს მხოლოდ ლოკალური განვითარების ტესტებისთვის. წარმოების განახლებები უნდა იყენებდეს სერვერზე კონფიგურირებულ გასაღებს."
+
+msgid "Verification details"
+msgstr "ვერიფიკაციის დეტალები"
+
+msgid "Verify package"
+msgstr "პაკეტის შემოწმება"
+
+msgid "Verifying..."
+msgstr "მიმდინარეობს შემოწმება..."
+
+msgid "Waiting for command progress events..."
+msgstr "ველოდებით ბრძანების პროგრესის მოვლენებს..."
+
+msgid "Waiting for update progress events..."
+msgstr "ველოდებით განახლების პროგრესის მოვლენებს..."
+
+msgid "Yarn build"
+msgstr "Yarn build"
+
+msgid "Yarn install"
+msgstr "Yarn install"
+
+msgid "A comment is required"
+msgstr "კომენტარი აუცილებელია"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "ამავე სახელის მქონე მონაცემთა ბაზა უკვე არსებობს. თუ ის შეიცავს ცხრილებს, ისინი წაიშლება; თუ ცარიელია, გამოყენებული იქნება ხელახლა."
+
+msgid "AI generated"
+msgstr "AI-ით გენერირებული"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "სასწავლო გზაზე დაბრუნებამდე დაამატეთ მინიმუმ ერთი კითხვა."
+
+msgid "Add attachments"
+msgstr "დანართების დამატება"
+
+msgid "Additional fields"
+msgstr "დამატებითი ველები"
+
+msgid "Allow comments"
+msgstr "კომენტარების დაშვება"
+
+msgid "Allow new pages"
+msgstr "ახალი გვერდების დაშვება"
+
+msgid "Allow ratings"
+msgstr "შეფასებების დაშვება"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ყველა ელემენტის წაშლა?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ავტომატური განახლების აღდგენა?"
+
+msgid "Attachment has been deleted"
+msgstr "დანართი წაიშალა"
+
+msgid "Backup file"
+msgstr "სარეზერვო ფაილი"
+
+msgid "Block comments"
+msgstr "კომენტარების დაბლოკვა"
+
+msgid "Block new pages"
+msgstr "ახალი გვერდების დაბლოკვა"
+
+msgid "Block ratings"
+msgstr "შეფასებების დაბლოკვა"
+
+msgid "Cancel renewal"
+msgstr "განახლების გაუქმება"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "კატეგორიის ბმულები წაიშლება %s ვიკის გვერდებიდან."
+
+msgid "Change"
+msgstr "შეცვლა"
+
+msgid "Clear group"
+msgstr "ჯგუფის გასუფთავება"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "დააწკაპუნეთ ტეგზე მისი რედაქტორში ჩასასმელად. ეს ადგილმჭერები ჩანაცვლდება სერტიფიკატის გენერირებისას."
+
+msgid "Comment added"
+msgstr "კომენტარი დამატებულია"
+
+msgid "Comment is required"
+msgstr "კომენტარი სავალდებულოა"
+
+msgid "Comment score"
+msgstr "კომენტარის ქულა"
+
+msgid "Compare selected versions line by line"
+msgstr "შედარება არჩეული ვერსიების ხაზ-ხაზით"
+
+msgid "Compare selected versions word by word"
+msgstr "შედარება არჩეული ვერსიების სიტყვა-სიტყვით"
+
+msgid "Compare versions"
+msgstr "ვერსიების შედარება"
+
+msgid "Copy completed"
+msgstr "კოპირება დასრულდა"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "შექმენით ინდივიდუალური ვიკი გვერდები მოსწავლეებისთვის"
+
+msgid "Current view mode"
+msgstr "მიმდინარე ხედვის რეჟიმი"
+
+msgid "Delete Wiki"
+msgstr "ვიკის წაშლა"
+
+msgid "Delete page"
+msgstr "გვერდის წაშლა"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "ვიკის მთავარი გვერდის წაშლა არ არის რეკომენდებული. მოგვიანებით შეგიძლიათ ხელახლა შექმნათ."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "ვიკის გამორთვა ბლოკავს ნორმალურ ვიკი გვერდებს და მოქმედებებს. ეს პარამეტრების გვერდი ხელმისაწვდომი რჩება კურსის მასწავლებლებისთვის."
+
+msgid "Discussion"
+msgstr "დისკუსია"
+
+msgid "Edit Comment"
+msgstr "კომენტარის რედაქტირება"
+
+msgid "Edit page"
+msgstr "გვერდის რედაქტირება"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "დასრულების თარიღი უნდა იყოს ვადის გასვლის თარიღის შემდეგ ან ტოლი"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "შეიყვანეთ საძიებო ტერმინი ვიკი გვერდების მოსაძებნად"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "ვადის გასვლის თარიღი უნდა იყოს დასრულების თარიღამდე ან ტოლი"
+
+msgid "Failed email recipients"
+msgstr "ელფოსტის მიმღებები, რომლებზეც გაგზავნა ვერ მოხერხდა"
+
+msgid "Finish and return to learning path"
+msgstr "დასრულება და დაბრუნება სასწავლო გზაზე"
+
+msgid "Forum image"
+msgstr "ფორუმის სურათი"
+
+msgid "Hide discussion"
+msgstr "დისკუსიის დამალვა"
+
+msgid "Hide page"
+msgstr "გვერდის დამალვა"
+
+msgid "I changed my mind"
+msgstr "გადავიფიქრე"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "თუ არ არის მონიშნული, ეს ფაილები ხელმისაწვდომი დარჩება პლატფორმის ადმინისტრატორისთვის „ფაილის ინფორმაციის“ ხელსაწყოს მეშვეობით."
+
+msgid "Internal message failures"
+msgstr "შიდა შეტყობინებების გაგზავნის შეცდომები"
+
+msgid "Internal messages available"
+msgstr "შიდა შეტყობინებები ხელმისაწვდომია"
+
+msgid "Internal messages created now"
+msgstr "შიდა შეტყობინებები შექმნილია ახლა"
+
+msgid "Item score"
+msgstr "ელემენტის ქულა"
+
+msgid "Last post"
+msgstr "ბოლო პოსტი"
+
+msgid "Lock page"
+msgstr "გვერდის დაბლოკვა"
+
+msgid "Manage categories"
+msgstr "კატეგორიების მართვა"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "მონიშნავს ამ დოკუმენტს როგორც AI-ით დახმარებულს. გამოიყენეთ, როდესაც შინაარსი შეიქმნა ან მნიშვნელოვნად შეიცვალა AI ინსტრუმენტებით."
+
+msgid "Maximum score is required"
+msgstr "მაქსიმალური ქულა სავალდებულოა"
+
+msgid "Metric"
+msgstr "მეტრიკა"
+
+msgid "New comments are blocked in this discussion"
+msgstr "ახალი კომენტარები დაბლოკილია ამ დისკუსიაში"
+
+msgid "No Wiki categories are available yet."
+msgstr "ვიკი კატეგორიები ჯერ არ არის ხელმისაწვდომი."
+
+msgid "No categories found"
+msgstr "კატეგორიები ვერ მოიძებნა"
+
+msgid "No content"
+msgstr "შინაარსი არ არის"
+
+msgid "No parent category"
+msgstr "მშობელი კატეგორია არ არის"
+
+msgid "Number of comments scored"
+msgstr "ქულით შეფასებული კომენტარების რაოდენობა"
+
+msgid "Old version"
+msgstr "ძველი ვერსია"
+
+msgid "Only image files are allowed."
+msgstr "ნებადართულია მხოლოდ სურათის ფაილები."
+
+msgid "Please fill all required fields"
+msgstr "გთხოვთ შეავსოთ ყველა სავალდებულო ველი"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "კითხვები კლასის ან სტუდენტის ადგილმჭერებით შეიქმნება კურსის კლასებისთვის ან ჯგუფებისთვის: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "შეფასებები დაბლოკილია ამ დისკუსიაში"
+
+msgid "Remove image"
+msgstr "სურათის წაშლა"
+
+msgid "Restore renewal"
+msgstr "განახლების აღდგენა"
+
+msgid "Restore version"
+msgstr "ვერსიის აღდგენა"
+
+msgid "Search in"
+msgstr "ძებნა"
+
+msgid "Select group"
+msgstr "ჯგუფის არჩევა"
+
+msgid "Select image"
+msgstr "სურათის არჩევა"
+
+msgid "Selected image"
+msgstr "არჩეული სურათი"
+
+msgid "Show discussion"
+msgstr "დისკუსიის ჩვენება"
+
+msgid "Show page"
+msgstr "გვერდის ჩვენება"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "ზოგიერთ ფაილს ან საქაღალდეს არ აქვს ჩაწერის უფლება. Chamilo-ის დასაყენებლად ჯერ უნდა შეცვალოთ მათი უფლებები (CHMOD-ის გამოყენებით). გთხოვთ, წაიკითხოთ"
+
+msgid "Subcategories"
+msgstr "ქვეკატეგორიები"
+
+msgid "Tap on the left or right to navigate"
+msgstr "ნავიგაციისთვის დააჭირეთ მარცხნივ ან მარჯვნივ"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "ვიკის დავალების ვადა გავიდა, მაგრამ დაგვიანებული წარდგენა დასაშვებია."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "ვიკის დავალების ვადა გავიდა."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "ვიკის დავალება ჯერ არ დაწყებულა."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "შენახვამდე საჭიროა ვიკის გვერდის რედაქტირების დაბლოკვა."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "განცხადება შეინახა, მაგრამ დანართის ატვირთვა ვერ მოხერხდა."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "განცხადება შეინახა, მაგრამ ელფოსტის მიწოდება ვერ მოხერხდა."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "განცხადება შეინახა, მაგრამ ელფოსტა ვერ გაიგზავნა."
+
+msgid "The category has been created"
+msgstr "კატეგორია შეიქმნა"
+
+msgid "The category has been deleted"
+msgstr "კატეგორია წაიშალა"
+
+msgid "The category has been updated"
+msgstr "კატეგორია განახლდა"
+
+msgid "The end date is invalid"
+msgstr "დასრულების თარიღი არასწორია"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "ვერსიების მაქსიმალური რაოდენობა უნდა იყოს არაუარყოფითი მთელი რიცხვი"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "სიტყვების მაქსიმალური რაოდენობა უნდა იყოს არაუარყოფითი მთელი რიცხვი"
+
+msgid "The print window could not be opened"
+msgstr "დაბეჭდვის ფანჯრის გახსნა ვერ მოხერხდა"
+
+msgid "The start date is invalid"
+msgstr "დაწყების თარიღი არასწორია"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "ეს პარამეტრები ვრცელდება მთელ კურსზე, მათ შორის მის სესიებზე და ჯგუფებზე."
+
+msgid "This announcement has already been sent by email."
+msgstr "ეს განცხადება უკვე გაიგზავნა ელფოსტით."
+
+msgid "This discussion is hidden from learners"
+msgstr "ეს დისკუსია დამალულია მსმენელებისთვის"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "ეს გენერაციული AI ინსტრუმენტი საშუალებას გაძლევთ შექმნათ სურათები და მოკლე ვიდეოები თქვენი კურსის ილუსტრაციისთვის. ტექსტით ახსნით, რა გსურთ მოთხოვნის განყოფილებაში, თქვენ მიაწვდით კონფიგურირებულ AI მოდელს ელემენტებს, რომლებიც აუცილებელია სურათის ან ვიდეოს გენერირებისთვის. გთხოვთ, იყოთ მოთმინებით. AI მოდელს დასჭირდება გარკვეული დრო და გამოიმუშავებს შედეგს, რომლის შენახვაც შეგიძლიათ დოკუმენტების საქაღალდეში და შემდეგ ჩასვათ HTML დოკუმენტში. ყველა AI მოდელი არ არის თანაბარი სიჩქარის ან ხარისხის მხრივ. AI მოდელმა ასევე შეიძლება მოგაწოდოთ შეცვლილი მოთხოვნა, რომელიც თქვენი მოთხოვნის უფრო დეტალური ინტერპრეტაციაა. შემდეგ შეგიძლიათ გამოიყენოთ ეს შეცვლილი მოთხოვნა თქვენი მოთხოვნის დასაზუსტებლად. გთხოვთ, გაითვალისწინოთ, რომ ეს ინსტრუმენტი, განსაკუთრებით ვიდეოებისთვის, შეიძლება მნიშვნელოვანი ხარჯები გამოიწვიოს თქვენი ორგანიზაციისთვის, მაშინაც კი, თუ გადაწყვეტთ არ შეინახოთ გენერირებული მედია. გთხოვთ, გამოიყენოთ იგი შესაბამისად. თუ პრობლემები გაქვთ სასურველი შედეგის მიღებაში, გთხოვთ, გარკვეული დრო დაუთმოთ ონლაინ მოთხოვნების ხრიკების კვლევას თქვენს განკარგულებაში არსებული AI მოდელისთვის."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "ეს ისტორია ეკუთვნის საბაზისო კურსს. აღდგენა ხელმისაწვდომია სესიის ვერსიის შექმნის შემდეგ."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "ეს სურათი ცვლის ფორუმის ნაგულისხმევ ხატულას, რომელიც ნაჩვენებია ფორუმის სათაურის გვერდით."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "ეს გვერდი მოდის საბაზისო კურსიდან. მისი შენახვა შექმნის ვერსიას მიმდინარე სესიისთვის."
+
+msgid "This will also delete %s subcategories."
+msgstr "ეს ასევე წაშლის %s ქვეკატეგორიას."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "ეს შექმნის ინდივიდუალურ სამუშაო გვერდებს %s მსმენელისთვის."
+
+msgid "Thread history"
+msgstr "თემის ისტორია"
+
+msgid "Title and content"
+msgstr "სათაური და შინაარსი"
+
+msgid "Unable to cancel renewal right now."
+msgstr "განახლების უფლების გაუქმება ამჟამად შეუძლებელია."
+
+msgid "Unable to restore renewal right now."
+msgstr "განახლების უფლების აღდგენა ამჟამად შეუძლებელია."
+
+msgid "Unlock page"
+msgstr "გვერდის განბლოკვა"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "შიდა ვიკი ბმულების შესაქმნელად გამოიყენეთ [[გვერდი]] ან [[გვერდი|ხილული ტექსტი]]."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "ნავიგაციისთვის გამოიყენეთ ღილაკი Space ან ისრის ღილაკები"
+
+msgid "View version"
+msgstr "ვერსიის ნახვა"
+
+msgid "Visible only to teachers"
+msgstr "ხილული მხოლოდ მასწავლებლებისთვის"
+
+msgid "Weight is required"
+msgstr "წონა სავალდებულოა"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "ვიკის კატეგორიები გამორთულია ამ კურსისთვის."
+
+msgid "Wiki categories enabled"
+msgstr "ვიკის კატეგორიები ჩართულია"
+
+msgid "Wiki html strict filtering"
+msgstr "ვიკის HTML მკაცრი ფილტრაცია"
+
+msgid "Wiki settings"
+msgstr "ვიკის პარამეტრები"
+
+msgid "Wiki settings updated"
+msgstr "ვიკის პარამეტრები განახლდა"
+
+msgid "You are viewing a historical version of this page"
+msgstr "თქვენ ნახულობთ ამ გვერდის ისტორიულ ვერსიას"
+
+msgid "You can attach one or more files to this reply."
+msgstr "ამ პასუხს შეგიძლიათ ერთი ან მეტი ფაილი დაურთოთ."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "შეგიძლიათ დაარედაქტიროთ ეს დავალების გვერდი, მაგრამ მსმენელების სამუშაო გვერდები არ შეიცვლება."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "კითხვაში შეგიძლიათ გამოიყენოთ ტეგები {{class_name}} და {{student_full_name}}."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "ამ გვერდის რედაქტირებისთვის გაქვთ 20 წუთი, სანამ რედაქტირების ბლოკირება ამოიწურება."
+
+msgid "by"
+msgstr "ავტორი"
+
+msgid "required"
+msgstr "აუცილებელი"
 

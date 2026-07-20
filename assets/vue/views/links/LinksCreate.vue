@@ -21,6 +21,27 @@ const router = useRouter()
 const route = useRoute()
 
 const goBack = () => {
+  const lpId = Number(route.query.lp_id || 0)
+  const isLearningPathContext = "learnpath" === String(route.query.origin || "").toLowerCase() && lpId > 0
+
+  if (isLearningPathContext) {
+    const query = { ...route.query }
+    delete query.action
+    delete query.create
+    delete query.content
+
+    router.push({
+      name: "LpBuilder",
+      params: {
+        node: Number(route.query.node || route.params.node || 0),
+        lpId,
+      },
+      query,
+    })
+
+    return
+  }
+
   router.push({
     name: "LinksList",
     query: route.query,

@@ -37,8 +37,8 @@ use Throwable;
  */
 final readonly class SurveyInvitationProcessor implements ProcessorInterface
 {
-    use SurveyPersonalitySupportTrait;
     use SurveyCsrfTokenValidationTrait;
+    use SurveyPersonalitySupportTrait;
 
     public function __construct(
         private RequestStack $requestStack,

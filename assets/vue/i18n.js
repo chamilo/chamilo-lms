@@ -58,9 +58,13 @@ function buildFallbackChain(base, resolved, messages) {
 
 const messages = loadLocaleMessages()
 
-// Prefer previously chosen locale, otherwise <html lang>, otherwise "en"
-const stored = typeof localStorage !== "undefined" ? localStorage.getItem("app_locale") : null
-const initialHtmlLocale = stored || document.documentElement.dataset?.lang || "en_US"
+// The server (LocaleSubscriber) resolves the locale for every full page load and
+// prints it in <html data-lang>: it already factors platform/user/course settings,
+// the language priorities, the ?_locale override and the browser Accept-Language.
+// That answer is authoritative at boot. Client-side route changes are handled at
+// runtime by setLocale() (driven by the useLocale composable) — never persist the
+// locale on the client, a stored value can only disagree with the server.
+const initialHtmlLocale = document.documentElement.dataset?.lang || "en_US"
 const initial = resolveBestLocale(initialHtmlLocale, messages)
 
 // NOTE: do NOT create runtime aliases; use the resolved bundle directly
@@ -72,7 +76,12 @@ const i18n = createI18n({
   messages,
 })
 
-// Public API: switch locale at runtime (no page reload)
+/**
+ * Switches the interface locale at runtime (no page reload), e.g. when a
+ * client-side navigation enters or leaves a course with its own language.
+ *
+ * @param {string} code - requested locale code (e.g. "es", "en_US", "pt-BR")
+ */
 export function setLocale(code) {
   const target = resolveBestLocale(code, messages)
 
@@ -82,9 +91,6 @@ export function setLocale(code) {
 
   if (typeof document !== "undefined") {
     document.documentElement.dataset.lang = target.resolved
-  }
-  if (typeof localStorage !== "undefined") {
-    localStorage.setItem("app_locale", target.resolved)
   }
 }
 

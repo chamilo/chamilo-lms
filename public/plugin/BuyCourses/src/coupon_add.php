@@ -184,6 +184,7 @@ $formData = [
     'code' => '',
     'discount_type' => '',
     'discount_amount' => '0',
+    'times_applied' => '0',
     'date_start_input' => $defaultStart->format('Y-m-d\TH:i'),
     'date_end_input' => $defaultEnd->format('Y-m-d\TH:i'),
     'active' => false,
@@ -215,6 +216,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $formData['code'] = trim((string) ($_POST['code'] ?? ''));
     $formData['discount_type'] = trim((string) ($_POST['discount_type'] ?? ''));
     $formData['discount_amount'] = trim((string) ($_POST['discount_amount'] ?? '0'));
+    $formData['times_applied'] = trim((string) ($_POST['times_applied'] ?? '0'));
     $formData['date_start_input'] = trim((string) ($_POST['date_start'] ?? $formData['date_start_input']));
     $formData['date_end_input'] = trim((string) ($_POST['date_end'] ?? $formData['date_end_input']));
     $formData['active'] = isset($_POST['active']);
@@ -268,6 +270,16 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         $hasError = true;
     }
 
+    $timesApplied = (int) $formData['times_applied'];
+    if ($timesApplied < 0) {
+        $messages[] = Display::return_message(
+            $plugin->get_lang('CouponTimesAppliedMustBeZeroOrGreater'),
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
     $validStart = normalizeCouponDateTime($formData['date_start_input']);
     $validEnd = normalizeCouponDateTime($formData['date_end_input']);
 
@@ -308,6 +320,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         $coupon['code'] = $formData['code'];
         $coupon['discount_type'] = $discountType;
         $coupon['discount_amount'] = $discountAmount;
+        $coupon['times_applied'] = $timesApplied;
         $coupon['valid_start'] = (string) $validStart;
         $coupon['valid_end'] = (string) $validEnd;
         $coupon['active'] = $formData['active'] ? 1 : 0;

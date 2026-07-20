@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use ApiPlatform\Validator\ValidatorInterface;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -90,6 +92,10 @@ class CreateSessionWithUsersAndCoursesAction
             $this->em->persist($relCourse);
 
             $relCourses[$courseId] = $relCourse;
+
+            if ($data->getCopyEvaluation()) {
+                $this->copyGradebookFromBaseCourse($course, $session);
+            }
         }
 
         foreach ($data->getStudentIds() as $userId) {
@@ -148,5 +154,46 @@ class CreateSessionWithUsersAndCoursesAction
         $this->em->flush();
 
         return $session;
+    }
+
+    /**
+     * Duplicates the base course's gradebook (categories, links and evaluations)
+     * into the given session, mirroring the "Import gradebook from base course"
+     * checkbox in add_courses_to_session.php.
+     */
+    private function copyGradebookFromBaseCourse(Course $course, Session $session): void
+    {
+        $categories = $this->em->getRepository(GradebookCategory::class)
+            ->findBy(['course' => $course->getId(), 'session' => null])
+        ;
+
+        foreach ($categories as $category) {
+            $newCategory = new GradebookCategory();
+            $newCategory
+                ->setTitle($category->getTitle())
+                ->setDescription($category->getDescription())
+                ->setWeight($category->getWeight())
+                ->setVisible($category->getVisible())
+                ->setCertifMinScore($category->getCertifMinScore())
+                ->setGenerateCertificates($category->getGenerateCertificates())
+                ->setIsRequirement($category->getIsRequirement())
+                ->setCourse($course)
+                ->setSession($session)
+                ->setParent($category->getParent())
+            ;
+            $this->em->persist($newCategory);
+
+            foreach ($category->getLinks() as $link) {
+                $newLink = clone $link;
+                $newLink->setCategory($newCategory);
+                $this->em->persist($newLink);
+            }
+
+            foreach ($category->getEvaluations() as $evaluation) {
+                $newEvaluation = clone $evaluation;
+                $newEvaluation->setCategory($newCategory);
+                $this->em->persist($newEvaluation);
+            }
+        }
     }
 }

@@ -1658,7 +1658,7 @@ HTML;
         $session['dates'] = '';
         $session['coach'] = '';
         if ('true' === api_get_setting('show_session_coach') && $generalCoachesNames) {
-            $session['coach'] = get_lang('General coach').': '.$generalCoachesNames;
+            $session['coach'] = get_lang('General tutor').': '.$generalCoachesNames;
         }
         $active = false;
         if (('0000-00-00 00:00:00' === $session_info['access_end_date'] &&

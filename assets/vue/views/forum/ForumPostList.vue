@@ -859,15 +859,21 @@ function formatSize(value) {
 }
 
 function goBackToLearningPath() {
-  const params = new URLSearchParams()
-  params.set("cid", String(cid.value || ""))
-  params.set("sid", String(sid.value || 0))
-  params.set("gid", String(gid.value || 0))
-  params.set("gradebook", "")
-  params.set("action", "add_item")
-  params.set("type", "step")
-  params.set("lp_id", String(lpId.value))
-  window.location.href = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.editThreadId
+  delete query.lpItemId
+
+  return router.push({
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: lpId.value,
+    },
+    query,
+  })
 }
 
 async function ensureToken() {

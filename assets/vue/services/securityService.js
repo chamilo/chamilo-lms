@@ -83,6 +83,31 @@ async function checkSession() {
 }
 
 /**
+ * Fetches the contextual ROLE_CURRENT_COURSE_* roles the current user holds for
+ * the given course context, as resolved authoritatively by the backend.
+ * @param {Object} context
+ * @param {number} context.cid - Current course id
+ * @param {number} [context.sid=0] - Current session id
+ * @param {number} [context.gid=0] - Current group id
+ * @returns {Promise<string[]>}
+ */
+async function getCourseContextRoles({ cid, sid = 0, gid = 0 }) {
+  const params = new URLSearchParams({ cid: String(cid) })
+
+  if (sid) {
+    params.set("sid", String(sid))
+  }
+
+  if (gid) {
+    params.set("gid", String(gid))
+  }
+
+  const { roles } = await baseService.get(`/course-context-roles?${params.toString()}`)
+
+  return roles ?? []
+}
+
+/**
  * Requests a login token from the server.
  * @returns {Promise<string>}
  */
@@ -114,6 +139,7 @@ export default {
   loginLdap,
   getLoginCaptchaStatus,
   checkSession,
+  getCourseContextRoles,
   loginTokenRequest,
   loginTokenCheck,
 }

@@ -42,7 +42,7 @@
           <span
             class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-700"
           ></span>
-          <span>{{ t("Loading more courses...") }}</span>
+          <span>{{ t("Loading more courses") }}</span>
         </div>
 
         <div ref="lastCourseRef"></div>
@@ -182,6 +182,42 @@ function extractNumericId(value) {
 const getCourseNumericId = (course) => extractNumericId(course?.id ?? course?._id ?? course?.["@id"])
 const getSessionNumericId = (cru) => extractNumericId(cru?.session?.id ?? cru?.sessionId ?? cru?.session?.["@id"] ?? 0)
 
+const addBuyCoursesServiceLabels = async (items) => {
+  const teacherCourseIds = items
+    .filter((cru) => Number(cru?.status) === 1)
+    .map((cru) => getCourseNumericId(cru?.course))
+    .filter((courseId) => courseId > 0)
+
+  if (teacherCourseIds.length === 0) {
+    return items
+  }
+
+  try {
+    const labels = await courseService.getBuyCoursesCourseServiceLabels(teacherCourseIds)
+
+    return items.map((cru) => {
+      const courseId = getCourseNumericId(cru?.course)
+      const serviceName = String(labels?.[courseId]?.serviceName ?? "").trim()
+
+      if (!serviceName || !cru?.course) {
+        return cru
+      }
+
+      return {
+        ...cru,
+        course: {
+          ...cru.course,
+          buyCoursesServiceName: serviceName,
+        },
+      }
+    })
+  } catch (error) {
+    console.warn("[CoursesList] Failed to load BuyCourses service labels.", error)
+
+    return items
+  }
+}
+
 const normalizeCollection = (data) => {
   if (Array.isArray(data)) return data
   if (data && Array.isArray(data["hydra:member"])) return data["hydra:member"]
@@ -298,11 +334,12 @@ const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
     const page = Math.max(1, Number(pageToLoad) || 1)
     const data = await courseService.listMyCourses(page, PAGE_SIZE, { signal: fetchAbort.signal })
     const items = normalizeCollection(data)
+    const itemsWithServiceLabels = await addBuyCoursesServiceLabels(items)
 
     serverHasMore.value = Array.isArray(items) && items.length >= PAGE_SIZE
     serverPage.value = page
 
-    mergeCoursesFromProvider(items, { reset })
+    mergeCoursesFromProvider(itemsWithServiceLabels, { reset })
     await observeLast()
   } catch (e) {
     if (e?.name !== "AbortError" && e?.code !== "ERR_CANCELED") {

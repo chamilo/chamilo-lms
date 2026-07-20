@@ -1,5 +1,132 @@
+v7.11 - 2026-07-10
+=====
+
+Feature: coupons now include a "Times applied" option. A value of 0 keeps the
+current unlimited behaviour, while a positive value limits how many paid service
+periods can receive the discount.
+
+Feature: Stripe recurring service purchases with limited coupons now keep the
+subscription at the regular recurring price and use a Stripe discount while the
+configured number of applications remains. After the limit is reached, the Stripe
+subscription discount is removed without changing the subscription itself.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure so the new `plugin_buycourses_coupon.times_applied` and
+`plugin_buycourses_coupon_rel_service_sale.applied_count` columns are created.
+Existing coupons keep unlimited behaviour by default. Either load
+`[your-host]/plugin/BuyCourses/update.php` in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_coupon
+    ADD times_applied INT UNSIGNED NOT NULL DEFAULT 0;
+
+ALTER TABLE plugin_buycourses_coupon_rel_service_sale
+    ADD applied_count INT UNSIGNED NOT NULL DEFAULT 1;
+```
+
+v7.10 - 2026-07-10
+=====
+
+Feature: users can now restore a previously cancelled Stripe renewal from My
+Services while the current paid service period is still active. The restore action
+removes Stripe's cancel-at-period-end flag, re-enables the local recurring payment
+state, clears the local cancellation marker, and records a `renewal_restored`
+audit entry.
+
+v7.9 - 2026-07-09
+====
+
+Feature: services now have an independent Active state. Inactive services remain
+editable in administration, but are hidden from catalogs and new course-creation
+or upgrade offers, and direct checkout requests are rejected server-side. Existing
+completed purchases, recurring subscriptions, and their granted benefits continue
+working until their normal end date. Duplicated services start inactive so they can
+be reviewed before publication.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new `plugin_buycourses_services.active` column is
+created. Existing services are marked active by default and existing sale records
+are not modified. Either load `[your-host]/plugin/BuyCourses/update.php` in your
+browser as a platform administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_services ADD active TINYINT(1) NOT NULL DEFAULT 1;
+```
+
+v7.8 - 2026-07-09
+====
+
+Feature: added the plugin-owned `plugin_buycourses_audit` table to record service sale and recurring-subscription events with the acting user, action, related sale, source, UTC date/time, request IP address, and optional JSON context. The first audited events cover order creation, completion, administrative cancellation, service upgrades, renewal activation/cancellation, and successful or failed recurring payments from Stripe and PayPal.
+
+Feature: the service sale information modal now includes the audit history, showing who performed each action and whether it originated from a user, administrator, payment gateway, or system process.
+
+Fix: the service sales report now uses the real `buy_date` field for "Order date" instead of the nonexistent `date` field, which previously caused cancelled orders to appear with the current date whenever the page was refreshed.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new `plugin_buycourses_audit` table is created. The
+update is idempotent and does not modify existing sale records. Either load
+`[your-host]/plugin/BuyCourses/update.php` in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+CREATE TABLE IF NOT EXISTS plugin_buycourses_audit (
+    id int unsigned NOT NULL AUTO_INCREMENT,
+    subject_user_id int unsigned NULL,
+    action varchar(64) NOT NULL,
+    object_type varchar(64) NOT NULL,
+    object_id int unsigned NOT NULL,
+    source varchar(32) NOT NULL,
+    created_at datetime NOT NULL,
+    ip_address varchar(45) NULL,
+    data_json longtext NULL,
+    PRIMARY KEY (id),
+    KEY idx_buycourses_audit_subject (subject_user_id),
+    KEY idx_buycourses_audit_action (action),
+    KEY idx_buycourses_audit_object (object_type, object_id),
+    KEY idx_buycourses_audit_created_at (created_at)
+);
+```
+
+v7.7 - 2026-07-08
+====
+
+Fix: services in the same recursive Upsale lineage as an active plan can no longer be purchased as independent services. The direct next Upgrade remains available, while lower plans and non-adjacent higher plans hide their purchase action and are also rejected by checkout endpoints.
+
+Fix: upgrade offers now keep the target service's normal price visible, show the unused source-service value as a separate prorated credit, and display the actual amount due today independently.
+Fix: an Upsale target may now have the same or a longer duration than its source service, while shorter target durations remain invalid.
+
+Feature: paid course cards on `/courses` now show the linked service name to the current course manager, including sticky course cards, without exposing sale or payment identifiers.
+Fix: service descriptions on `/resources/courses/new` now preserve safe paragraph and list formatting after multilingual filtering, with a second DOMPurify sanitization before rendering.
+Fix: permanently deleting a paid course now marks its BuyCourses relation as deleted, clears frozen-enrollment remnants, and service course counts also ignore missing or soft-deleted courses.
+
+Feature: renewable services can now schedule renewal cancellation from My Services with a detailed confirmation modal, Stripe cancel-at-period-end support, PayPal recurring profile cancellation, CSRF protection, idempotent local state, and continued access until the paid period ends.
+Fix: Stripe service upgrades now reuse an existing pending Checkout Session, reconcile an already-paid pending upgrade before creating another charge, replace only expired sessions, and use Stripe idempotency keys so repeated confirmation requests cannot create duplicate Checkout Sessions.
+UI: reorganized the service create and edit forms into clear sections for general information, pricing, recurring billing, publication, media, granted benefits, AI features, and destructive actions without changing submitted field names or service business logic.
+Fix: service plans now use the same stable creation order in the shop catalog and on the course creation page.
+Fix: upgrade actions are now also exposed on the BuyCourses landing page and on the course creation service cards.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update
+procedure (see below) so the new upsale and service-upgrade columns are added to
+the `plugin_buycourses_services` and `plugin_buycourses_service_sale` tables.
+Either load [your-host]/plugin/BuyCourses/update.php in your browser as a platform
+administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_services ADD upsale_from_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_from_sale_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_credit_amount DECIMAL(10,2) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD recurring_amount DECIMAL(10,2) DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgraded_to_sale_id INT UNSIGNED DEFAULT NULL;
+ALTER TABLE plugin_buycourses_service_sale ADD upgrade_completed_at DATETIME DEFAULT NULL;
+```
+
 v7.6 - 2026-07-02
 ====
+
+Feature: services can now define an optional Upsale source service. Users with an active source service see an Upgrade action, receive a server-validated prorated credit for the unused period, and keep their linked courses and granted benefits on the upgraded service. Existing recurring Stripe profiles are moved to the target service after successful payment; unsupported or failed transitions leave the local source service unchanged.
+
+Feature: AI feature settings now support `Yes`, `No`, and `Plugin-defined`. In plugin-defined mode, a course can display and use an AI feature only while it is linked to an active BuyCourses service that grants that specific feature. Existing Yes/No behavior remains unchanged.
+
+Fix: courses created with an active paid service now start with private visibility, and their teachers can change course visibility while the linked paid period remains active, even when the platform setting normally reserves visibility changes for administrators. Course subscription settings remain protected by the platform rule. Existing recurring expiration/reactivation processing continues to save and restore the teacher's latest visibility.
+
+Fix: standardized service duration output across catalog, detail and purchase screens through the translated `%s days` placeholder, replaced the raw `TabsDashboard` breadcrumb with the core `Shop` label, reused the core `More information` translation in course creation, separated standard-course counts from BuyCourses-linked courses, prevented a second purchase of an already active user service from both the detail page and direct checkout URL, and replaced the unknown tax percentage on service details with a translated `%s + tax` price notice.
 Feature: VAT invoices are now generated automatically at the moment a sale, service
 sale, or subscription sale completes — mandatory and immediate for business buyers
 (EU/Belgian VAT rules require an invoice for every B2B sale), and optional for
@@ -116,6 +243,60 @@ Fix: garbled `?` character appearing in PDF invoice/receipt times (e.g.
 which restricts output to CP1252/WinAnsi fonts and can't render the narrow
 no-break space some locales use before "AM"/"PM"; it's now normalized to a regular
 non-break space before rendering.
+
+Fix: the service options shown on the "Create a new course" page
+(`/resources/courses/new`) displayed every language block of a multilingual
+service description concatenated together, instead of just the visitor's
+language. `BuyCoursesPlugin::getDisplayedServiceCourseCreationOptionsForUser()`
+stripped the description's HTML tags directly, without first filtering it
+through `filterServiceMultilingualHtml()` like the service catalog and service
+information pages already did — now uses the existing
+`filterServiceMultilingualPlainText()` helper, which applies that same
+language filtering before stripping tags.
+
+Fix: the "Owner" select box on the service admin forms (`services_add.php`,
+`services_edit.php`) listed every platform user, including students, instead of
+only users who can plausibly own a service (teachers, session admins, and
+platform/global admins). Now built from
+`UserRepository::findByRoleList(['ROLE_TEACHER', 'ROLE_ADMIN',
+'ROLE_SESSION_MANAGER', 'ROLE_GLOBAL_ADMIN'], ...)`. On the edit form, a
+service's current owner is still shown/preserved even if their role no longer
+qualifies, so saving unrelated changes never silently reassigns ownership.
+
+Fix: the price summary shown on `service_process_confirm.php` (the "Confirm
+your purchase" step) displayed the seller's flat/default VAT rate (e.g. 21%)
+instead of the buyer's actual destination-country rate (e.g. 20% for France),
+even though the sale being paid for had already correctly resolved and stored
+the buyer-specific rate via `resolveSaleVat()`/`determineVatTreatment()`. The
+confirmation screen rebuilt its own "service_item" display data from a fresh,
+buyer-unaware `getService()`/`setPriceSettings()` call — which only knows the
+service's own tax override or the plugin's global tax percentage — instead of
+reading the rate already resolved for this buyer. The amount actually charged
+at the payment gateway was always correct (it reads the sale's `price` column
+directly); only the on-screen breakdown was wrong, which could still confuse
+or mislead the buyer about what they were being charged. Now built by the new
+`BuyCoursesPlugin::buildServiceSaleVatSummary()`, sourced entirely from the
+persisted sale record.
+
+Fix: `BuyCoursesCourseUserSubscriptionEventSubscriber::onCourseUserSubscriptionCheck()`
+(the only listener enforcing course-user-subscription limits when a teacher/admin
+subscribes a student via `CourseManager::subscribeUser()`) checked only
+`getActiveSubscriptionCourseHostingLimit()` — a limit tied to a course-creation
+BuyCourses subscription — and silently allowed the subscription whenever a course
+had none, ignoring the platform-wide "Global limit of users per course"
+(`platform.hosting_limit_users_per_course`) setting entirely for any ordinary
+course. Now uses `getEffectiveUsersPerCourseLimitForCourse()`, the same
+fallback-aware limit already used by `/main/user/user.php`'s UI warning and by
+`subscribe_user.php`/`course_user_import.php`'s own pre-checks. This also fixes
+the course-level CSV import (`user/user_import.php`), which had no pre-check of
+its own and relied entirely on this listener.
+
+Follow-up fix: `getEffectiveUsersPerCourseLimitForCourse()` no longer applies a
+teacher's user-level `buycourses_hosting_limit` benefit to every course managed by
+that teacher. Only a service subscription explicitly linked to the course through
+`plugin_buycourses_subscription_course` may override the global limit. Courses
+created before the service purchase, or otherwise not linked to that service,
+continue to use `platform.hosting_limit_users_per_course`.
 
 ACTION REQUIRED for installations updated from an earlier version: run the update
 procedure (see below) so the new `buyer_type`, `invoice_requested`, and

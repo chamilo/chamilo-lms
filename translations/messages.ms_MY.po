@@ -1578,8 +1578,8 @@ msgstr "Adakah anda pasti mahu memadam langkah-langkah ini?"
 msgid "Authoring tool"
 msgstr "Alat pembuatan"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Fail SCORM atau AICC untuk dimuat naik"
+msgid "SCORM file to upload"
+msgstr "Fail SCORM untuk dimuat naik"
 
 msgid "Course location"
 msgstr "Lokasi kursus"
@@ -36492,4 +36492,853 @@ msgstr "Lihat tren"
 
 msgid "No auth source"
 msgstr "No auth source"
+
+msgid "You must add at least one question"
+msgstr "You must add at least one question"
+
+msgid "Advanced actions"
+msgstr "Advanced actions"
+
+msgid "Application path"
+msgstr "Application path"
+
+msgid "Apply files details"
+msgstr "Apply files details"
+
+msgid "Apply plan details"
+msgstr "Apply plan details"
+
+msgid "Apply plan failed"
+msgstr "Apply plan failed"
+
+msgid "Apply plan ready"
+msgstr "Apply plan ready"
+
+msgid "Apply preparation"
+msgstr "Apply preparation"
+
+msgid "Apply staged files"
+msgstr "Apply staged files"
+
+msgid "Applying files..."
+msgstr "Applying files..."
+
+msgid "Audit file"
+msgstr "Audit file"
+
+msgid "Backup directory"
+msgstr "Backup directory"
+
+msgid "Baseline clean"
+msgstr "Baseline clean"
+
+msgid "Baseline warnings"
+msgstr "Baseline warnings"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+
+msgid "Build production frontend assets."
+msgstr "Build production frontend assets."
+
+msgid "Building plan..."
+msgstr "Building plan..."
+
+msgid "Channel"
+msgstr "Channel"
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Semak kemas kini Chamilo yang tersedia, sahkan pakej, peringkat fail dan jalankan langkah pasca-kemas kini terkawal."
+
+msgid "Check manifest"
+msgstr "Semak manifes"
+
+msgid "Checking post-apply actions..."
+msgstr "Menyemak tindakan pasca-guna..."
+
+msgid "Checking..."
+msgstr "Menyemak..."
+
+msgid "Composer install"
+msgstr "Pemasangan Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Tindakan Composer, Yarn dan migrasi pangkalan data boleh mengubahsuai kebergantungan, aset dijana atau pangkalan data. Pilih hanya selepas mengesahkan sandaran dan kebenaran."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfigurasikan CHAMILO_UPDATE_MANIFEST_URL pada pelayan atau berikan URL manifes HTTPS."
+
+msgid "Configured"
+msgstr "Dikonfigurasikan"
+
+msgid "Current migration"
+msgstr "Migrasi semasa"
+
+msgid "Database baseline"
+msgstr "Garis dasar pangkalan data"
+
+msgid "Database migration safety review"
+msgstr "Semakan keselamatan migrasi pangkalan data"
+
+msgid "Database migrations"
+msgstr "Migrasi pangkalan data"
+
+msgid "Development mode"
+msgstr "Mod pembangunan"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Jangan aktifkan ini melainkan sandaran kemas kini dan kebenaran pelayan telah disemak."
+
+msgid "Doctrine dry-run command"
+msgstr "Perintah ujian Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine melaporkan amaran garis dasar sejarah. Pengemas kini akan tetap melaksanakan hanya migrasi V210 berperingkat selepas pengesahan eksplisit."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine akan melaksanakan hanya migrasi V210 berperingkat secara eksplisit selepas semakan keselamatan lulus."
+
+msgid "Dry-run exit code"
+msgstr "Kod keluar ujian"
+
+msgid "Executed unavailable migrations"
+msgstr "Migrasi tidak tersedia yang dilaksanakan"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Ekstrak pakej kemas kini yang disahkan ke dalam direktori peringkat untuk pemeriksaan. Ini tidak menggantikan fail, menjalankan migrasi, atau mengubahsuai pangkalan data."
+
+msgid "File apply available"
+msgstr "Guna fail tersedia"
+
+msgid "Files to replace"
+msgstr "Fail untuk diganti"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Saya mengesahkan bahawa sandaran pangkalan data wujud dan telah disahkan sebelum menjalankan migrasi."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Saya faham bahawa tindakan lanjutan boleh mengubahsuai kebergantungan, aset dijana atau pangkalan data."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Saya faham ini akan menggantikan fail dalam pemasangan Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Saya faham ini akan menjalankan arahan kemas kini pada pelayan."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Pasang kebergantungan frontend sebelum membina semula aset."
+
+msgid "Installed version"
+msgstr "Versi dipasang"
+
+msgid "Latest migration"
+msgstr "Migrasi terkini"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Biarkan laluan pakej dan tandatangan kosong untuk memuat turunnya daripada URL manifes yang disahkan. Laluan tempatan hanya tersedia untuk ujian pembangunan."
+
+msgid "Live command log"
+msgstr "Log arahan langsung"
+
+msgid "Live update log"
+msgstr "Log kemas kini langsung"
+
+msgid "Local test options"
+msgstr "Pilihan ujian tempatan"
+
+msgid "Local test update notice link"
+msgstr "Pautan notis kemas kini ujian tempatan"
+
+msgid "Local update notice simulation"
+msgstr "Simulasi notis kemas kini tempatan"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simulasi notis kemas kini tempatan hanya tersedia dalam mod pembangunan."
+
+msgid "Manifest"
+msgstr "Manifes"
+
+msgid "Manifest source"
+msgstr "Sumber manifes"
+
+msgid "Migration safety details"
+msgstr "Butiran semakan keselamatan migrasi"
+
+msgid "Migration safety review failed"
+msgstr "Semakan keselamatan migrasi gagal"
+
+msgid "Migration safety review ready"
+msgstr "Semakan keselamatan migrasi sedia"
+
+msgid "Migration target"
+msgstr "Sasaran migrasi"
+
+msgid "New files"
+msgstr "Fail baharu"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Migrasi baharu dilaporkan oleh Doctrine"
+
+msgid "Next migration"
+msgstr "Migrasi seterusnya"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Tiada migrasi tidak tersedia yang dilaksanakan dilaporkan."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Tiada URL manifes rasmi dikonfigurasikan lagi. Gunakan URL HTTPS atau laluan tempatan untuk ujian pembangunan."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Tiada migrasi belum selesai dikesan sebelum sasaran kemas kini berperingkat."
+
+msgid "Not configured"
+msgstr "Tidak dikonfigurasikan"
+
+msgid "Not detected"
+msgstr "Tidak dikesan"
+
+msgid "Official Chamilo update channel"
+msgstr "Saluran kemas kini rasmi Chamilo"
+
+msgid "Package SHA-256"
+msgstr "Pakej SHA-256"
+
+msgid "Package URL"
+msgstr "URL Pakej"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Fail pakej dan tandatangan akan dimuat turun daripada manifes. Laluan setempat dilumpuhkan dalam persekitaran ini."
+
+msgid "Package path"
+msgstr "Laluan pakej"
+
+msgid "Package staged successfully"
+msgstr "Pakej berjaya disediakan"
+
+msgid "Package staging failed"
+msgstr "Penyediaan pakej gagal"
+
+msgid "Package verification"
+msgstr "Pengesahan pakej"
+
+msgid "Package verification failed"
+msgstr "Pengesahan pakej gagal"
+
+msgid "Package verified successfully"
+msgstr "Pakej berjaya disahkan"
+
+msgid "Pending migrations before this update"
+msgstr "Migrasi belum selesai sebelum kemas kini ini"
+
+msgid "Planned backup path"
+msgstr "Laluan sandaran yang dirancang"
+
+msgid "Post-apply actions completed"
+msgstr "Tindakan pasca-guna selesai"
+
+msgid "Post-apply actions failed"
+msgstr "Tindakan pasca-guna gagal"
+
+msgid "Post-apply actions ready"
+msgstr "Tindakan pasca-guna sedia"
+
+msgid "Post-apply checks"
+msgstr "Semakan pasca-guna"
+
+msgid "Post-apply checks failed"
+msgstr "Semakan pasca-guna gagal"
+
+msgid "Post-apply details"
+msgstr "Butiran pasca-guna"
+
+msgid "Post-apply run details"
+msgstr "Butiran pelaksanaan pasca-guna"
+
+msgid "Preflight checks"
+msgstr "Semakan pra-penerbangan"
+
+msgid "Preflight checks completed"
+msgstr "Semakan pra-penerbangan selesai"
+
+msgid "Preflight checks failed"
+msgstr "Semakan pra-penerbangan gagal"
+
+msgid "Preflight details"
+msgstr "Butiran pra-penerbangan"
+
+msgid "Prepare staging"
+msgstr "Sediakan peringkat"
+
+msgid "Preparing staging..."
+msgstr "Menyediakan peringkat..."
+
+msgid "Production mode"
+msgstr "Mod pengeluaran"
+
+msgid "Released at"
+msgstr "Dikeluarkan pada"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Gantikan fail Chamilo daripada pakej yang disediakan menggunakan pelan guna yang telah disemak. Ini tidak menjalankan migrasi pangkalan data, Composer, Yarn atau arahan cache."
+
+msgid "Review apply plan"
+msgstr "Semak pelan guna"
+
+msgid "Review database migrations"
+msgstr "Semak migrasi pangkalan data"
+
+msgid "Review post-apply actions"
+msgstr "Semak tindakan pasca-guna"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Semak arahan manual yang disyorkan selepas mengguna fail kemas kini. Langkah ini tidak menjalankan Composer, Yarn, migrasi atau arahan cache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Semak migrasi Doctrine yang disediakan dan output ujian kering sebelum menjalankan migrasi pangkalan data."
+
+msgid "Reviewing database migrations..."
+msgstr "Menyemak migrasi pangkalan data..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Jalankan dan lulus semakan keselamatan migrasi sebelum melaksanakan migrasi pangkalan data."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Jalankan semakan persekitaran sebelum mana-mana langkah aplikasi kemas kini akan datang. Ini tidak mengubah fail atau pangkalan data."
+
+msgid "Run post-apply actions"
+msgstr "Jalankan tindakan pasca-guna"
+
+msgid "Run preflight checks"
+msgstr "Jalankan semakan pra-penerbangan"
+
+msgid "Run selected post-apply actions"
+msgstr "Jalankan tindakan pasca-guna yang dipilih"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Jalankan arahan pasca-guna yang dipilih daripada pelayan menggunakan senarai dibenarkan yang dikawal. Tiada arahan shell tersuai diterima."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Jalankan arahan ini secara manual daripada pelayan selepas mengesahkan hasil kemas kini fail dan sandaran."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Menjalankan tindakan pasca-guna daripada UI dilumpuhkan dalam mod pengeluaran."
+
+msgid "Running post-apply actions..."
+msgstr "Menjalankan tindakan pasca-guna..."
+
+msgid "Safe actions"
+msgstr "Tindakan selamat"
+
+msgid "Signature path"
+msgstr "Laluan tandatangan"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Pengesahan tandatangan tidak boleh dilangkau dalam persekitaran ini."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Langkau pengesahan tandatangan untuk ujian pembangunan setempat"
+
+msgid "Staged file application failed"
+msgstr "Aplikasi fail yang disediakan gagal"
+
+msgid "Staged files applied successfully"
+msgstr "Fail yang disediakan berjaya digunakan"
+
+msgid "Staging details"
+msgstr "Butiran peringkat"
+
+msgid "Staging directory"
+msgstr "Direktori pementasan"
+
+msgid "Staging extraction"
+msgstr "Pengekstrakan pementasan"
+
+msgid "Symfony cache clear"
+msgstr "Kosongkan cache Symfony"
+
+msgid "System update"
+msgstr "Kemas kini sistem"
+
+msgid "Target version"
+msgstr "Versi sasaran"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL manifes rasmi yang dikonfigurasikan telah diprapenuhi. Anda boleh menukarnya kepada manifes HTTPS lain jika perlu."
+
+msgid "The database migration baseline is clean."
+msgstr "Garis dasar penghijrahan pangkalan data adalah bersih."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Respons HTTP akhir gagal selepas operasi selesai. Ini biasanya disebabkan oleh kebenaran cache masa jalan atau but semula pelayan web semasa permintaan."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Log operasi melaporkan bahawa tindakan pasca-guna telah diselesaikan dengan jayanya."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Perintah pasca-guna yang dipilih telah diselesaikan dengan jayanya, tetapi respons HTTP akhir gagal. Muat semula halaman dan sahkan kebenaran cache masa jalan jika halaman tidak dimuatkan dengan betul."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Pengemas kini ini tidak mencipta atau memulihkan sandaran pangkalan data."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Tindakan ini selamat untuk dijalankan dari UI selepas menyemak hasil kemas kini."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Perintah ini boleh mengubah suai kebergantungan, aset yang dijana, cache atau pangkalan data. Sahkan sandaran sebelum meneruskan."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Tindakan ini mengubah suai fail dalam pemasangan Chamilo. Pastikan pelan guna telah disemak dan sandaran didayakan sebelum meneruskan."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Entri pembangunan ini mensimulasikan notis kemas kini Chamilo.org masa depan menggunakan laluan pakej ujian tempatan."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Skrin ini dibuka dari notis kemas kini rasmi, tetapi tiada sumber manifes rasmi dikonfigurasikan lagi."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Skrin ini dibuka dari notis kemas kini. Hanya semakan manifes dimulakan secara automatik."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Langkah ini menyediakan semakan sahaja. Penggantian fail berlaku kemudian dalam langkah Guna fail berperingkat, dengan kunci, sandaran dan perlindungan rollback."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Pengemas kini ini tidak mencipta sandaran pangkalan data. Cipta dan sahkan sandaran sebelum menjalankan penghijrahan."
+
+msgid "Trusted public key"
+msgstr "Kunci awam yang dipercayai"
+
+msgid "Trusted signing key"
+msgstr "Kunci tandatangan yang dipercayai"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Taip APPLY UPDATE FILES untuk mengesahkan"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Taip RUN DATABASE MIGRATIONS untuk mengesahkan penghijrahan pangkalan data"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Taip RUN POST UPDATE ACTIONS untuk mengesahkan"
+
+msgid "Unknown update notice source."
+msgstr "Sumber notis kemas kini tidak diketahui."
+
+msgid "Update availability"
+msgstr "Ketersediaan kemas kini"
+
+msgid "Update directory"
+msgstr "Direktori kemas kini"
+
+msgid "Update lock path"
+msgstr "Laluan kunci kemas kini"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Gunakan direktori pementasan yang dijana oleh langkah sebelumnya. Backend hanya menerima direktori di dalam var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Gunakan pautan ini untuk mensimulasikan notis kemas kini Chamilo.org masa depan semasa ujian pembangunan."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Gunakan ini hanya untuk ujian pembangunan tempatan. Kemas kini pengeluaran mesti menggunakan kunci yang dikonfigurasikan pelayan."
+
+msgid "Verification details"
+msgstr "Butiran pengesahan"
+
+msgid "Verify package"
+msgstr "Sahkan pakej"
+
+msgid "Verifying..."
+msgstr "Mengesahkan..."
+
+msgid "Waiting for command progress events..."
+msgstr "Menunggu peristiwa kemajuan arahan..."
+
+msgid "Waiting for update progress events..."
+msgstr "Menunggu peristiwa kemajuan kemas kini..."
+
+msgid "Yarn build"
+msgstr "Binaan Yarn"
+
+msgid "Yarn install"
+msgstr "Pemasangan Yarn"
+
+msgid "A comment is required"
+msgstr "Komen diperlukan"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Pangkalan data dengan nama yang sama sudah wujud. Jika ia mengandungi jadual, jadual tersebut akan dipadamkan; jika ia kosong, ia akan digunakan semula."
+
+msgid "AI generated"
+msgstr "Dijana AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Tambah sekurang-kurangnya satu soalan sebelum kembali ke laluan pembelajaran."
+
+msgid "Add attachments"
+msgstr "Tambah lampiran"
+
+msgid "Additional fields"
+msgstr "Medan tambahan"
+
+msgid "Allow comments"
+msgstr "Benarkan komen"
+
+msgid "Allow new pages"
+msgstr "Benarkan halaman baharu"
+
+msgid "Allow ratings"
+msgstr "Benarkan penilaian"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Adakah anda pasti mahu memadamkan semua item?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Adakah anda pasti mahu memulihkan pembaharuan automatik?"
+
+msgid "Attachment has been deleted"
+msgstr "Lampiran telah dipadamkan"
+
+msgid "Backup file"
+msgstr "Fail sandaran"
+
+msgid "Block comments"
+msgstr "Blok komen"
+
+msgid "Block new pages"
+msgstr "Blok halaman baharu"
+
+msgid "Block ratings"
+msgstr "Blok penilaian"
+
+msgid "Cancel renewal"
+msgstr "Batal pembaharuan"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Pautan kategori akan dikeluarkan daripada %s halaman Wiki."
+
+msgid "Change"
+msgstr "Tukar"
+
+msgid "Clear group"
+msgstr "Kosongkan kumpulan"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Klik tag untuk memasukkannya ke dalam editor. Pemegang tempat ini akan digantikan semasa menjana sijil."
+
+msgid "Comment added"
+msgstr "Komen ditambah"
+
+msgid "Comment is required"
+msgstr "Komen diperlukan"
+
+msgid "Comment score"
+msgstr "Skor komen"
+
+msgid "Compare selected versions line by line"
+msgstr "Bandingkan versi terpilih baris demi baris"
+
+msgid "Compare selected versions word by word"
+msgstr "Bandingkan versi terpilih perkataan demi perkataan"
+
+msgid "Compare versions"
+msgstr "Bandingkan versi"
+
+msgid "Copy completed"
+msgstr "Salinan selesai"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Cipta halaman kerja Wiki individu untuk pelajar"
+
+msgid "Current view mode"
+msgstr "Mod paparan semasa"
+
+msgid "Delete Wiki"
+msgstr "Padam Wiki"
+
+msgid "Delete page"
+msgstr "Padam halaman"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Memadam laman utama Wiki tidak disyorkan. Anda boleh menciptanya semula kemudian."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Melumpuhkan Wiki menyekat halaman dan tindakan Wiki biasa. Halaman tetapan ini kekal tersedia untuk guru kursus."
+
+msgid "Discussion"
+msgstr "Perbincangan"
+
+msgid "Edit Comment"
+msgstr "Edit Komen"
+
+msgid "Edit page"
+msgstr "Edit halaman"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Tarikh tamat mesti selepas atau sama dengan tarikh luput"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Masukkan istilah carian untuk mencari halaman Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Tarikh luput mesti sebelum atau sama dengan tarikh tamat"
+
+msgid "Failed email recipients"
+msgstr "Penerima e-mel yang gagal"
+
+msgid "Finish and return to learning path"
+msgstr "Selesai dan kembali ke laluan pembelajaran"
+
+msgid "Forum image"
+msgstr "Imej forum"
+
+msgid "Hide discussion"
+msgstr "Sembunyikan perbincangan"
+
+msgid "Hide page"
+msgstr "Sembunyikan halaman"
+
+msgid "I changed my mind"
+msgstr "Saya telah berubah fikiran"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Jika tidak ditandakan, fail tersebut akan kekal tersedia kepada pentadbir platform melalui alat 'Maklumat fail'."
+
+msgid "Internal message failures"
+msgstr "Kegagalan mesej dalaman"
+
+msgid "Internal messages available"
+msgstr "Mesej dalaman tersedia"
+
+msgid "Internal messages created now"
+msgstr "Mesej dalaman dicipta sekarang"
+
+msgid "Item score"
+msgstr "Skor item"
+
+msgid "Last post"
+msgstr "Catatan terakhir"
+
+msgid "Lock page"
+msgstr "Kunci halaman"
+
+msgid "Manage categories"
+msgstr "Urus kategori"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Tandakan dokumen ini sebagai dibantu AI. Gunakan apabila kandungan dicipta atau diubah suai secara signifikan dengan alat AI."
+
+msgid "Maximum score is required"
+msgstr "Skor maksimum diperlukan"
+
+msgid "Metric"
+msgstr "Metrik"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Komen baharu disekat dalam perbincangan ini"
+
+msgid "No Wiki categories are available yet."
+msgstr "Tiada kategori Wiki tersedia lagi."
+
+msgid "No categories found"
+msgstr "Tiada kategori ditemui"
+
+msgid "No content"
+msgstr "Tiada kandungan"
+
+msgid "No parent category"
+msgstr "Tiada kategori induk"
+
+msgid "Number of comments scored"
+msgstr "Bilangan komen yang dinilai"
+
+msgid "Old version"
+msgstr "Versi lama"
+
+msgid "Only image files are allowed."
+msgstr "Hanya fail imej dibenarkan."
+
+msgid "Please fill all required fields"
+msgstr "Sila isi semua ruangan yang diperlukan"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Soalan dengan pemegang tempat kelas atau pelajar akan dijana untuk kelas atau kumpulan kursus: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Penilaian disekat dalam perbincangan ini"
+
+msgid "Remove image"
+msgstr "Buang imej"
+
+msgid "Restore renewal"
+msgstr "Pulihkan pembaharuan"
+
+msgid "Restore version"
+msgstr "Pulihkan versi"
+
+msgid "Search in"
+msgstr "Cari dalam"
+
+msgid "Select group"
+msgstr "Pilih kumpulan"
+
+msgid "Select image"
+msgstr "Pilih imej"
+
+msgid "Selected image"
+msgstr "Imej dipilih"
+
+msgid "Show discussion"
+msgstr "Tunjukkan perbincangan"
+
+msgid "Show page"
+msgstr "Tunjukkan halaman"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Sesetengah fail atau folder tidak mempunyai kebenaran menulis. Untuk memasang Chamilo, anda perlu menukar kebenaran mereka terlebih dahulu (menggunakan CHMOD). Sila baca"
+
+msgid "Subcategories"
+msgstr "Subkategori"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Ketik kiri atau kanan untuk navigasi"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Tarikh akhir tugasan Wiki telah berlalu, tetapi penyerahan lewat dibenarkan."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Tarikh akhir tugasan Wiki telah berlalu."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Tugasan Wiki belum bermula lagi."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Kunci suntingan halaman Wiki diperlukan sebelum menyimpan."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Pengumuman telah disimpan, tetapi lampiran tidak dapat dimuat naik."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Pengumuman telah disimpan, tetapi penghantaran e-mel gagal."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Pengumuman telah disimpan, tetapi tiada e-mel dapat dihantar."
+
+msgid "The category has been created"
+msgstr "Kategori telah dicipta"
+
+msgid "The category has been deleted"
+msgstr "Kategori telah dipadam"
+
+msgid "The category has been updated"
+msgstr "Kategori telah dikemas kini"
+
+msgid "The end date is invalid"
+msgstr "Tarikh akhir tidak sah"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Bilangan maksimum versi mestilah integer bukan negatif"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Bilangan maksimum perkataan mestilah integer bukan negatif"
+
+msgid "The print window could not be opened"
+msgstr "Tetingkap cetakan tidak dapat dibuka"
+
+msgid "The start date is invalid"
+msgstr "Tarikh mula tidak sah"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Tetapan ini terpakai untuk keseluruhan kursus, termasuk sesi dan kumpulannya."
+
+msgid "This announcement has already been sent by email."
+msgstr "Pengumuman ini telah dihantar melalui e-mel."
+
+msgid "This discussion is hidden from learners"
+msgstr "Perbincangan ini disembunyikan daripada pelajar"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Alat AI generatif ini membolehkan anda mencipta imej dan video pendek untuk menggambarkan kursus anda. Dengan menerangkan (dalam teks) apa yang anda mahukan dalam bahagian gesaan, anda akan memberikan model AI yang dikonfigurasikan elemen yang diperlukan untuk menjana imej atau video. Sila bersabar. Model AI akan mengambil sedikit masa dan menjana beberapa hasil, yang anda mungkin mahu simpan dengan menyimpan media dalam folder dokumen anda, dan kemudian benamkan dalam dokumen HTML. Tidak semua model AI sama dari segi kelajuan atau kualiti. Model AI juga mungkin memberikan anda gesaan yang diubah suai, iaitu tafsiran yang lebih terperinci tentang permintaan anda. Anda kemudian boleh menggunakan gesaan yang diubah suai ini untuk menyesuaikan permintaan anda. Sila ambil perhatian bahawa alat ini, terutamanya untuk video, mungkin menjana kos yang besar kepada organisasi anda, walaupun anda memutuskan untuk tidak menyimpan media yang dijana. Sila gunakannya dengan sewajarnya. Jika anda menghadapi masalah untuk mendapatkan apa yang anda cari, sila luangkan masa untuk menyelidik helah gesaan dalam talian untuk model AI yang anda ada."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Sejarah ini milik kursus asas. Pemulihan tersedia selepas mencipta versi sesi."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Imej ini menggantikan ikon forum lalai yang ditunjukkan di sebelah tajuk forum."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Halaman ini datang dari kursus asas. Menyimpannya akan mencipta versi untuk sesi semasa."
+
+msgid "This will also delete %s subcategories."
+msgstr "Tindakan ini juga akan memadamkan %s subkategori."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Tindakan ini akan mencipta halaman kerja individu untuk %s pelajar."
+
+msgid "Thread history"
+msgstr "Sejarah utas"
+
+msgid "Title and content"
+msgstr "Tajuk dan kandungan"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Tidak dapat membatalkan pembaharuan sekarang."
+
+msgid "Unable to restore renewal right now."
+msgstr "Tidak dapat memulihkan pembaharuan sekarang."
+
+msgid "Unlock page"
+msgstr "Buka kunci halaman"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Gunakan [[Halaman]] atau [[Halaman|Teks yang kelihatan]] untuk mencipta pautan Wiki dalaman."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Gunakan bar ruang atau kekunci anak panah untuk navigasi"
+
+msgid "View version"
+msgstr "Lihat versi"
+
+msgid "Visible only to teachers"
+msgstr "Hanya kelihatan kepada guru"
+
+msgid "Weight is required"
+msgstr "Berat diperlukan"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Kategori Wiki dilumpuhkan untuk kursus ini."
+
+msgid "Wiki categories enabled"
+msgstr "Kategori Wiki didayakan"
+
+msgid "Wiki html strict filtering"
+msgstr "Penapisan ketat HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Tetapan Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Tetapan Wiki dikemas kini"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Anda sedang melihat versi sejarah halaman ini"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Anda boleh lampirkan satu atau lebih fail kepada balasan ini."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Anda boleh mengedit halaman tugasan ini, tetapi halaman kerja pelajar tidak akan diubah."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Anda boleh menggunakan tag {{class_name}} dan {{student_full_name}} dalam soalan."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Anda mempunyai 20 minit untuk mengedit halaman ini sebelum kunci pengeditan tamat tempoh."
+
+msgid "by"
+msgstr "oleh"
+
+msgid "required"
+msgstr "diperlukan"
 

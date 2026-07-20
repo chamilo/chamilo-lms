@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de formulă: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -1589,7 +1589,7 @@ msgstr "Sunteți sigur că doriți să ștergeți aceste elemente?"
 msgid "Authoring tool"
 msgstr "Origine"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Fișier pentru trimitere"
 
 msgid "Course location"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:copyright,, nu:fara copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Flux octet,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr "exercise:exercitiu,, simulation:simulare,, questionnaire:chestionare,, diagram:diagrama,, figure:figura,, graph:grafic,, index:index,, slide:slide,, table:tabel,, narrative text:text narativ,, exam:examen,, experiment:experiment,, problem statement:problema,, self assessment:realizari personale,, lecture:lectura"
@@ -36508,4 +36508,853 @@ msgstr "Vizualizare subiecte"
 
 msgid "No auth source"
 msgstr "Nicio sursă de autentificare"
+
+msgid "You must add at least one question"
+msgstr "Trebuie să adăugați cel puțin o întrebare"
+
+msgid "Advanced actions"
+msgstr "Acțiuni avansate"
+
+msgid "Application path"
+msgstr "Cale aplicație"
+
+msgid "Apply files details"
+msgstr "Aplică detalii fișiere"
+
+msgid "Apply plan details"
+msgstr "Aplică detalii plan"
+
+msgid "Apply plan failed"
+msgstr "Aplicare plan eșuată"
+
+msgid "Apply plan ready"
+msgstr "Aplicare plan gata"
+
+msgid "Apply preparation"
+msgstr "Aplicare pregătire"
+
+msgid "Apply staged files"
+msgstr "Aplică fișiere pregătite"
+
+msgid "Applying files..."
+msgstr "Se aplică fișierele..."
+
+msgid "Audit file"
+msgstr "Fișier audit"
+
+msgid "Backup directory"
+msgstr "Director backup"
+
+msgid "Baseline clean"
+msgstr "Linie de bază curată"
+
+msgid "Baseline warnings"
+msgstr "Avertismente linie de bază"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Creează un plan de aplicare sigur din pachetul pregătit. Aceasta verifică doar fișierele, permisiunile, calea de backup și starea de blocare. Nu înlocuiește fișierele."
+
+msgid "Build production frontend assets."
+msgstr "Construiește activele frontend de producție."
+
+msgid "Building plan..."
+msgstr "Se construiește planul..."
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Check"
+msgstr "Verifică"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Verifică actualizări Chamilo disponibile, verifică pachete, pregătește fișiere și execută pași controlați post-actualizare."
+
+msgid "Check manifest"
+msgstr "Verifică manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Se verifică acțiunile post-aplicare..."
+
+msgid "Checking..."
+msgstr "Se verifică..."
+
+msgid "Composer install"
+msgstr "Instalare Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Acțiunile Composer, Yarn și migrarea bazei de date pot modifica dependențele, activele generate sau baza de date. Selectați-le doar după confirmarea backup-urilor și a permisiunilor."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configurați CHAMILO_UPDATE_MANIFEST_URL pe server sau furnizați un URL HTTPS pentru manifest."
+
+msgid "Configured"
+msgstr "Configurat"
+
+msgid "Current migration"
+msgstr "Migrare curentă"
+
+msgid "Database baseline"
+msgstr "Linie de bază a bazei de date"
+
+msgid "Database migration safety review"
+msgstr "Revizuire de siguranță a migrării bazei de date"
+
+msgid "Database migrations"
+msgstr "Migrări ale bazei de date"
+
+msgid "Development mode"
+msgstr "Mod dezvoltare"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Nu activați această opțiune decât dacă backup-ul actualizării și permisiunile serverului au fost revizuite."
+
+msgid "Doctrine dry-run command"
+msgstr "Comanda Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine a raportat avertismente privind linia de bază istorică. Actualizatorul va executa totuși doar migrările V210 etapizate după confirmare explicită."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine va executa doar migrările V210 etapizate explicit după ce revizuirea de siguranță este validată."
+
+msgid "Dry-run exit code"
+msgstr "Cod de ieșire dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Migrări indisponibile executate"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Extrageți pachetul de actualizare verificat într-un director de etapizare pentru inspecție. Aceasta nu înlocuiește fișiere, nu rulează migrări și nu modifică baza de date."
+
+msgid "File apply available"
+msgstr "Aplicare fișier disponibilă"
+
+msgid "Files to replace"
+msgstr "Fișiere de înlocuit"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Confirm că există o copie de rezervă a bazei de date și a fost verificată înainte de rularea migrărilor."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Înțeleg că acțiunile avansate pot modifica dependențele, activele generate sau baza de date."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Înțeleg că aceasta va înlocui fișierele din instalarea Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Înțeleg că aceasta va rula comenzi de actualizare pe server."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instalați dependențele frontend înainte de a reconstrui activele."
+
+msgid "Installed version"
+msgstr "Versiune instalată"
+
+msgid "Latest migration"
+msgstr "Ultima migrare"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Lăsați căile pachetului și semnăturii goale pentru a le descărca din URL-urile manifestului verificat. Căile locale sunt disponibile doar pentru teste de dezvoltare."
+
+msgid "Live command log"
+msgstr "Jurnal de comenzi live"
+
+msgid "Live update log"
+msgstr "Jurnal de actualizare live"
+
+msgid "Local test options"
+msgstr "Opțiuni de test local"
+
+msgid "Local test update notice link"
+msgstr "Link de notificare actualizare test local"
+
+msgid "Local update notice simulation"
+msgstr "Simulare notificare actualizare locală"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simularea notificării de actualizare locală este disponibilă doar în modul dezvoltare."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Sursă manifest"
+
+msgid "Migration safety details"
+msgstr "Detalii revizuire de siguranță a migrării"
+
+msgid "Migration safety review failed"
+msgstr "Revizuirea de siguranță a migrării a eșuat"
+
+msgid "Migration safety review ready"
+msgstr "Revizuirea de siguranță a migrării este gata"
+
+msgid "Migration target"
+msgstr "Țintă migrare"
+
+msgid "New files"
+msgstr "Fișiere noi"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Migrări noi raportate de Doctrine"
+
+msgid "Next migration"
+msgstr "Următoarea migrare"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Nu a fost raportată nicio migrare indisponibilă executată."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Nu este configurat încă niciun URL oficial de manifest. Utilizați un URL HTTPS sau o cale locală pentru teste de dezvoltare."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Nu a fost detectată nicio migrare în așteptare înainte de ținta de actualizare etapizată."
+
+msgid "Not configured"
+msgstr "Neconfigurat"
+
+msgid "Not detected"
+msgstr "Nedetectat"
+
+msgid "Official Chamilo update channel"
+msgstr "Canal oficial de actualizare Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 pachet"
+
+msgid "Package URL"
+msgstr "URL pachet"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Fișierele pachetului și ale semnăturii vor fi descărcate din manifest. Căile locale sunt dezactivate în acest mediu."
+
+msgid "Package path"
+msgstr "Cale pachet"
+
+msgid "Package staged successfully"
+msgstr "Pachet pregătit cu succes"
+
+msgid "Package staging failed"
+msgstr "Pregătirea pachetului a eșuat"
+
+msgid "Package verification"
+msgstr "Verificare pachet"
+
+msgid "Package verification failed"
+msgstr "Verificarea pachetului a eșuat"
+
+msgid "Package verified successfully"
+msgstr "Pachet verificat cu succes"
+
+msgid "Pending migrations before this update"
+msgstr "Migrații în așteptare înainte de această actualizare"
+
+msgid "Planned backup path"
+msgstr "Cale planificată pentru backup"
+
+msgid "Post-apply actions completed"
+msgstr "Acțiuni post-aplicare finalizate"
+
+msgid "Post-apply actions failed"
+msgstr "Acțiunile post-aplicare au eșuat"
+
+msgid "Post-apply actions ready"
+msgstr "Acțiuni post-aplicare gata"
+
+msgid "Post-apply checks"
+msgstr "Verificări post-aplicare"
+
+msgid "Post-apply checks failed"
+msgstr "Verificările post-aplicare au eșuat"
+
+msgid "Post-apply details"
+msgstr "Detalii post-aplicare"
+
+msgid "Post-apply run details"
+msgstr "Detalii execuție post-aplicare"
+
+msgid "Preflight checks"
+msgstr "Verificări preliminare"
+
+msgid "Preflight checks completed"
+msgstr "Verificările preliminare finalizate"
+
+msgid "Preflight checks failed"
+msgstr "Verificările preliminare au eșuat"
+
+msgid "Preflight details"
+msgstr "Detalii preliminare"
+
+msgid "Prepare staging"
+msgstr "Pregătește staging"
+
+msgid "Preparing staging..."
+msgstr "Se pregătește staging..."
+
+msgid "Production mode"
+msgstr "Mod producție"
+
+msgid "Released at"
+msgstr "Lansat la"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Înlocuiește fișierele Chamilo din pachetul pregătit utilizând planul de aplicare revizuit. Aceasta nu rulează migrații de baze de date, Composer, Yarn sau comenzi de cache."
+
+msgid "Review apply plan"
+msgstr "Revizuiește planul de aplicare"
+
+msgid "Review database migrations"
+msgstr "Revizuiește migrațiile bazei de date"
+
+msgid "Review post-apply actions"
+msgstr "Revizuiește acțiunile post-aplicare"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Revizuiește comenzile manuale recomandate după aplicarea fișierelor de actualizare. Această etapă nu rulează Composer, Yarn, migrații sau comenzi de cache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Revizuiește migrațiile Doctrine pregătite și rezultatul dry-run înainte de a rula migrațiile bazei de date."
+
+msgid "Reviewing database migrations..."
+msgstr "Se revizuiesc migrațiile bazei de date..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Rulează și trece revizuirea de siguranță a migrațiilor înainte de a executa migrațiile bazei de date."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Rulează verificările de mediu înainte de orice etapă viitoare de aplicare a actualizării. Aceasta nu modifică fișiere sau baza de date."
+
+msgid "Run post-apply actions"
+msgstr "Rulează acțiuni post-aplicare"
+
+msgid "Run preflight checks"
+msgstr "Rulează verificări preliminare"
+
+msgid "Run selected post-apply actions"
+msgstr "Rulează acțiunile post-aplicare selectate"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Rulează comenzile post-aplicare selectate de pe server utilizând o listă de permisiuni controlată. Nu sunt acceptate comenzi shell personalizate."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Rulează aceste comenzi manual de pe server după confirmarea rezultatului actualizării fișierelor și a backup-urilor."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Rularea acțiunilor post-aplicare din interfață este dezactivată în modul producție."
+
+msgid "Running post-apply actions..."
+msgstr "Se rulează acțiunile post-aplicare..."
+
+msgid "Safe actions"
+msgstr "Acțiuni sigure"
+
+msgid "Signature path"
+msgstr "Cale semnătură"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Verificarea semnăturii nu poate fi omisă în acest mediu."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Omite verificarea semnăturii pentru teste de dezvoltare locală"
+
+msgid "Staged file application failed"
+msgstr "Aplicarea fișierelor pregătite a eșuat"
+
+msgid "Staged files applied successfully"
+msgstr "Fișierele pregătite au fost aplicate cu succes"
+
+msgid "Staging details"
+msgstr "Detalii staging"
+
+msgid "Staging directory"
+msgstr "Director staging"
+
+msgid "Staging extraction"
+msgstr "Extragere staging"
+
+msgid "Symfony cache clear"
+msgstr "Golire cache Symfony"
+
+msgid "System update"
+msgstr "Actualizare sistem"
+
+msgid "Target version"
+msgstr "Versiune țintă"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL-ul manifestului oficial configurat este precompletat. Îl puteți modifica cu un alt manifest HTTPS, dacă este necesar."
+
+msgid "The database migration baseline is clean."
+msgstr "Linia de bază a migrării bazei de date este curată."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Răspunsul HTTP final a eșuat după finalizarea operațiunii. Aceasta este de obicei cauzată de permisiunile cache-ului de runtime sau de o repornire a serverului web în timpul cererii."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Jurnalul operațiunii indică faptul că acțiunile post-aplicare s-au finalizat cu succes."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Comenzile post-aplicare selectate s-au finalizat cu succes, dar răspunsul HTTP final a eșuat. Reîmprospătați pagina și verificați permisiunile cache-ului de runtime dacă pagina nu se încarcă corect."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Acest instrument de actualizare nu creează sau restaurează copii de rezervă ale bazei de date."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Aceste acțiuni pot fi rulate în siguranță din interfață după revizuirea rezultatului actualizării."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Aceste comenzi pot modifica dependențe, active generate, cache sau baza de date. Confirmați copiile de rezervă înainte de a continua."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Această acțiune modifică fișierele din instalarea Chamilo. Asigurați-vă că planul de aplicare a fost revizuit și că copiile de rezervă sunt activate înainte de a continua."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Această intrare de dezvoltare simulează notificarea viitoare de actualizare Chamilo.org utilizând căi locale de pachete de test."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Acest ecran a fost deschis dintr-o notificare oficială de actualizare, dar nu este configurată încă nicio sursă oficială de manifest."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Acest ecran a fost deschis dintr-o notificare de actualizare. Doar verificarea manifestului este pornită automat."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Acest pas pregătește doar o revizuire. Înlocuirea fișierelor are loc ulterior în pasul Aplicare fișiere în etapă, cu protecție prin blocare, copie de rezervă și revenire."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Acest instrument de actualizare nu creează o copie de rezervă a bazei de date. Creați și verificați o copie de rezervă înainte de a rula migrările."
+
+msgid "Trusted public key"
+msgstr "Cheie publică de încredere"
+
+msgid "Trusted signing key"
+msgstr "Cheie de semnare de încredere"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Tastați APLICARE FIȘIERE ACTUALIZARE pentru a confirma"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Tastați RULARE MIGRĂRI BAZĂ DE DATE pentru a confirma migrările bazei de date"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Tastați RULARE ACȚIUNI POST-ACTUALIZARE pentru a confirma"
+
+msgid "Unknown update notice source."
+msgstr "Sursă necunoscută a notificării de actualizare."
+
+msgid "Update availability"
+msgstr "Disponibilitate actualizare"
+
+msgid "Update directory"
+msgstr "Director actualizare"
+
+msgid "Update lock path"
+msgstr "Cale blocare actualizare"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Utilizați directorul de etapă generat de pasul anterior. Backend-ul acceptă doar directoare din interiorul var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Utilizați acest link pentru a simula notificarea viitoare de actualizare Chamilo.org în timpul testelor de dezvoltare."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Utilizați acest lucru doar pentru teste locale de dezvoltare. Actualizările de producție trebuie să utilizeze cheia configurată pe server."
+
+msgid "Verification details"
+msgstr "Detalii verificare"
+
+msgid "Verify package"
+msgstr "Verificare pachet"
+
+msgid "Verifying..."
+msgstr "Se verifică..."
+
+msgid "Waiting for command progress events..."
+msgstr "Se așteaptă evenimente de progres ale comenzii..."
+
+msgid "Waiting for update progress events..."
+msgstr "Se așteaptă evenimente de progres ale actualizării..."
+
+msgid "Yarn build"
+msgstr "Compilare Yarn"
+
+msgid "Yarn install"
+msgstr "Instalare Yarn"
+
+msgid "A comment is required"
+msgstr "Este necesar un comentariu"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "O bază de date cu același nume există deja. Dacă conține tabele, acestea vor fi șterse; dacă este goală, va fi refolosită."
+
+msgid "AI generated"
+msgstr "Generat de IA"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Adăugați cel puțin o întrebare înainte de a reveni la calea de învățare."
+
+msgid "Add attachments"
+msgstr "Adăugați atașamente"
+
+msgid "Additional fields"
+msgstr "Câmpuri suplimentare"
+
+msgid "Allow comments"
+msgstr "Permite comentarii"
+
+msgid "Allow new pages"
+msgstr "Permite pagini noi"
+
+msgid "Allow ratings"
+msgstr "Permite evaluări"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Sigur doriți să ștergeți toate elementele?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Sigur doriți să restaurați reînnoirea automată?"
+
+msgid "Attachment has been deleted"
+msgstr "Atașamentul a fost șters"
+
+msgid "Backup file"
+msgstr "Fișier de rezervă"
+
+msgid "Block comments"
+msgstr "Blochează comentarii"
+
+msgid "Block new pages"
+msgstr "Blochează pagini noi"
+
+msgid "Block ratings"
+msgstr "Blochează evaluări"
+
+msgid "Cancel renewal"
+msgstr "Anulează reînnoirea"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Linkurile de categorie vor fi eliminate din paginile Wiki %s."
+
+msgid "Change"
+msgstr "Modifică"
+
+msgid "Clear group"
+msgstr "Golește grupul"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Faceți clic pe o etichetă pentru a o insera în editor. Aceste marcaje vor fi înlocuite la generarea certificatului."
+
+msgid "Comment added"
+msgstr "Comentariu adăugat"
+
+msgid "Comment is required"
+msgstr "Comentariul este obligatoriu"
+
+msgid "Comment score"
+msgstr "Scor comentariu"
+
+msgid "Compare selected versions line by line"
+msgstr "Compară versiunile selectate linie cu linie"
+
+msgid "Compare selected versions word by word"
+msgstr "Compară versiunile selectate cuvânt cu cuvânt"
+
+msgid "Compare versions"
+msgstr "Compară versiunile"
+
+msgid "Copy completed"
+msgstr "Copiere finalizată"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Creează pagini individuale de lucru Wiki pentru cursanți"
+
+msgid "Current view mode"
+msgstr "Mod de vizualizare curent"
+
+msgid "Delete Wiki"
+msgstr "Șterge Wiki"
+
+msgid "Delete page"
+msgstr "Șterge pagina"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Ștergerea paginii principale Wiki nu este recomandată. O puteți recrea ulterior."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Dezactivarea Wiki blochează paginile și acțiunile Wiki normale. Această pagină de setări rămâne disponibilă profesorilor cursului."
+
+msgid "Discussion"
+msgstr "Discuție"
+
+msgid "Edit Comment"
+msgstr "Editează comentariul"
+
+msgid "Edit page"
+msgstr "Editează pagina"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Data de încheiere trebuie să fie după sau egală cu data de expirare"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Introduceți un termen de căutare pentru a găsi pagini Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Data de expirare trebuie să fie înainte sau egală cu data de încheiere"
+
+msgid "Failed email recipients"
+msgstr "Destinatari e-mail eșuați"
+
+msgid "Finish and return to learning path"
+msgstr "Finalizează și revino la calea de învățare"
+
+msgid "Forum image"
+msgstr "Imagine forum"
+
+msgid "Hide discussion"
+msgstr "Ascunde discuția"
+
+msgid "Hide page"
+msgstr "Ascunde pagina"
+
+msgid "I changed my mind"
+msgstr "M-am răzgândit"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Dacă nu este bifat, aceste fișiere vor rămâne disponibile administratorului platformei prin instrumentul „Informații fișier”."
+
+msgid "Internal message failures"
+msgstr "Eșecuri mesaje interne"
+
+msgid "Internal messages available"
+msgstr "Mesaje interne disponibile"
+
+msgid "Internal messages created now"
+msgstr "Mesaje interne create acum"
+
+msgid "Item score"
+msgstr "Scor element"
+
+msgid "Last post"
+msgstr "Ultima postare"
+
+msgid "Lock page"
+msgstr "Blochează pagina"
+
+msgid "Manage categories"
+msgstr "Gestionează categoriile"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Marchează acest document ca asistat de IA. Utilizați-l atunci când conținutul a fost creat sau modificat semnificativ cu instrumente IA."
+
+msgid "Maximum score is required"
+msgstr "Scorul maxim este obligatoriu"
+
+msgid "Metric"
+msgstr "Metrică"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Comentariile noi sunt blocate în această discuție"
+
+msgid "No Wiki categories are available yet."
+msgstr "Nu există încă categorii Wiki disponibile."
+
+msgid "No categories found"
+msgstr "Nicio categorie găsită"
+
+msgid "No content"
+msgstr "Fără conținut"
+
+msgid "No parent category"
+msgstr "Nicio categorie părinte"
+
+msgid "Number of comments scored"
+msgstr "Număr de comentarii evaluate"
+
+msgid "Old version"
+msgstr "Versiune veche"
+
+msgid "Only image files are allowed."
+msgstr "Sunt permise doar fișiere imagine."
+
+msgid "Please fill all required fields"
+msgstr "Vă rugăm să completați toate câmpurile obligatorii"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Întrebările cu substituenți de clasă sau student vor fi generate pentru clasele sau grupurile cursului: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Evaluările sunt blocate în această discuție"
+
+msgid "Remove image"
+msgstr "Elimină imaginea"
+
+msgid "Restore renewal"
+msgstr "Restaurează reînnoirea"
+
+msgid "Restore version"
+msgstr "Restaurează versiunea"
+
+msgid "Search in"
+msgstr "Caută în"
+
+msgid "Select group"
+msgstr "Selectează grupul"
+
+msgid "Select image"
+msgstr "Selectează imaginea"
+
+msgid "Selected image"
+msgstr "Imagine selectată"
+
+msgid "Show discussion"
+msgstr "Afișează discuția"
+
+msgid "Show page"
+msgstr "Afișează pagina"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Unele fișiere sau foldere nu au permisiuni de scriere. Pentru a putea instala Chamilo, trebuie mai întâi să schimbați permisiunile acestora (folosind CHMOD). Vă rugăm să citiți"
+
+msgid "Subcategories"
+msgstr "Subcategorii"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Apasă pe stânga sau dreapta pentru a naviga"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Termenul limită pentru sarcina Wiki a trecut, dar este permisă trimiterea cu întârziere."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Termenul limită pentru sarcina Wiki a trecut."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Sarcina Wiki nu a început încă."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Blocarea editării paginii Wiki este necesară înainte de salvare."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Anunțul a fost salvat, dar un atașament nu a putut fi încărcat."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Anunțul a fost salvat, dar livrarea prin e-mail a eșuat."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Anunțul a fost salvat, dar nu a putut fi livrat niciun e-mail."
+
+msgid "The category has been created"
+msgstr "Categoria a fost creată"
+
+msgid "The category has been deleted"
+msgstr "Categoria a fost ștearsă"
+
+msgid "The category has been updated"
+msgstr "Categoria a fost actualizată"
+
+msgid "The end date is invalid"
+msgstr "Data de încheiere este invalidă"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Numărul maxim de versiuni trebuie să fie un număr întreg non-negativ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Numărul maxim de cuvinte trebuie să fie un număr întreg non-negativ"
+
+msgid "The print window could not be opened"
+msgstr "Fereastra de imprimare nu a putut fi deschisă"
+
+msgid "The start date is invalid"
+msgstr "Data de începere este invalidă"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Aceste setări se aplică întregului curs, inclusiv sesiunilor și grupurilor sale."
+
+msgid "This announcement has already been sent by email."
+msgstr "Acest anunț a fost deja trimis prin e-mail."
+
+msgid "This discussion is hidden from learners"
+msgstr "Această discuție este ascunsă de la cursanți"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Acest instrument de inteligență artificială generativă vă permite să creați imagini și videoclipuri scurte pentru a ilustra cursul. Explicând (în text) ce doriți în secțiunea prompt, veți oferi modelului AI configurat elementele necesare pentru a genera o imagine sau un videoclip. Vă rugăm să aveți răbdare. Modelul AI va dura ceva timp și va genera un rezultat, pe care s-ar putea să doriți să îl păstrați salvând media în folderul de documente și apoi să îl încorporați într-un document HTML. Nu toate modelele AI sunt egale în ceea ce privește viteza sau calitatea. Modelul AI vă poate oferi, de asemenea, un prompt modificat, care este o interpretare mai detaliată a cererii dumneavoastră. Puteți apoi utiliza acest prompt modificat pentru a vă rafina cererea. Vă rugăm să rețineți că acest instrument, în special pentru videoclipuri, ar putea genera costuri considerabile pentru organizația dumneavoastră, chiar dacă decideți să nu salvați media generată. Vă rugăm să îl utilizați în consecință. Dacă aveți probleme în obținerea a ceea ce căutați, vă rugăm să acordați timp pentru a cerceta trucuri de promptare online pentru modelul AI de care dispuneți."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Acest istoric aparține cursului de bază. Restaurarea este disponibilă după crearea unei versiuni de sesiune."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Această imagine înlocuiește pictograma implicită a forumului afișată lângă titlul forumului."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Această pagină provine din cursul de bază. Salvarea acesteia va crea o versiune pentru sesiunea curentă."
+
+msgid "This will also delete %s subcategories."
+msgstr "Aceasta va șterge, de asemenea, %s subcategorii."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Aceasta va crea pagini de lucru individuale pentru %s cursanți."
+
+msgid "Thread history"
+msgstr "Istoric fir"
+
+msgid "Title and content"
+msgstr "Titlu și conținut"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Nu se poate anula reînnoirea momentan."
+
+msgid "Unable to restore renewal right now."
+msgstr "Nu se poate restaura reînnoirea momentan."
+
+msgid "Unlock page"
+msgstr "Deblochează pagina"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Utilizați [[Pagină]] sau [[Pagină|Text vizibil]] pentru a crea linkuri Wiki interne."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Folosiți bara de spațiu sau tastele săgeată pentru a naviga"
+
+msgid "View version"
+msgstr "Vizualizează versiune"
+
+msgid "Visible only to teachers"
+msgstr "Vizibil doar pentru profesori"
+
+msgid "Weight is required"
+msgstr "Ponderea este obligatorie"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Categoriile Wiki sunt dezactivate pentru acest curs."
+
+msgid "Wiki categories enabled"
+msgstr "Categoriile Wiki activate"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtrare strictă HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Setări Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Setări Wiki actualizate"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Vizualizați o versiune istorică a acestei pagini"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Puteți atașa unul sau mai multe fișiere la acest răspuns."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Puteți edita această pagină de temă, dar paginile de lucru ale cursanților nu vor fi modificate."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Puteți utiliza etichetele {{class_name}} și {{student_full_name}} în întrebare."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Aveți 20 de minute pentru a edita această pagină înainte ca blocarea editării să expire."
+
+msgid "by"
+msgstr "de"
+
+msgid "required"
+msgstr "obligatoriu"
 

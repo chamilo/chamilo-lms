@@ -62,6 +62,8 @@ const props = defineProps({
   useFileManager: { type: Boolean, default: false },
   // When true, includes TinyMCE "fullpage" plugin/button.
   fullPage: { type: Boolean, default: true },
+  // Keep translate_html enabled by default, but allow language-specific editors to opt out.
+  enableTranslateHtml: { type: Boolean, default: true },
 })
 
 /* Derived UI flags */
@@ -382,6 +384,10 @@ const editorFeatureFlags = computed(() => ({
   enabledSupportSvg: allowSvgInEditor.value,
 }))
 
+const translateHtmlEnabled = computed(() => {
+  return props.enableTranslateHtml && toBool(platformConfigStore.getSetting("editor.translate_html"))
+})
+
 const enableUploadImageInEditor = computed(() => {
   return (
     securityStore.isAuthenticated === true &&
@@ -506,7 +512,15 @@ function resolvePickedUrl(url) {
 }
 
 function removeToolbarItems(toolbar, removedItems) {
-  const blocked = new Set(removedItems.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean))
+  const blocked = new Set(
+    removedItems
+      .map((item) =>
+        String(item || "")
+          .trim()
+          .toLowerCase(),
+      )
+      .filter(Boolean),
+  )
 
   const cleanupToolbar = (toolbarValue) =>
     String(toolbarValue || "")
@@ -526,6 +540,64 @@ function removeToolbarItems(toolbar, removedItems) {
   }
 
   return cleanupToolbar(toolbar)
+}
+
+function normalizeTinyPluginList(rawPlugins) {
+  const values = Array.isArray(rawPlugins) ? rawPlugins : [rawPlugins]
+
+  return values
+    .flatMap((value) => String(value || "").split(/\s+/))
+    .map((value) => value.trim())
+    .filter(Boolean)
+}
+
+function mergeTinyPlugins(rawPlugins, additionalPlugins) {
+  return Array.from(new Set([...normalizeTinyPluginList(rawPlugins), ...additionalPlugins])).join(" ")
+}
+
+function toolbarContainsItem(toolbar, item) {
+  const rows = Array.isArray(toolbar) ? toolbar : [toolbar]
+  const expected = String(item || "")
+    .trim()
+    .toLowerCase()
+
+  return rows.some((row) =>
+    String(row || "")
+      .split(/[|\s]+/)
+      .map((value) => value.trim().toLowerCase())
+      .filter(Boolean)
+      .includes(expected),
+  )
+}
+
+function appendToolbarItem(toolbar, item) {
+  if (toolbarContainsItem(toolbar, item)) {
+    return toolbar
+  }
+
+  if (Array.isArray(toolbar)) {
+    const rows = [...toolbar]
+
+    if (rows.length === 0) {
+      return [item]
+    }
+
+    const lastIndex = rows.length - 1
+    const currentRow = String(rows[lastIndex] || "").trim()
+    rows[lastIndex] = currentRow ? `${currentRow} | ${item}` : item
+
+    return rows
+  }
+
+  const currentToolbar = String(toolbar || "").trim()
+
+  return currentToolbar ? `${currentToolbar} | ${item}` : item
+}
+
+function positiveContextId(value) {
+  const parsed = Number.parseInt(String(value ?? "0"), 10)
+
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : 0
 }
 
 const editorConfig = computed(() => {
@@ -569,6 +641,20 @@ const editorConfig = computed(() => {
   }
 
   const built = builder ? builder(local) : local
+
+  if (translateHtmlEnabled.value) {
+    built.plugins = mergeTinyPlugins(built.plugins, ["translatehtml"])
+    built.toolbar = appendToolbarItem(built.toolbar, "translatehtml")
+    built.translatehtml_ai_endpoint = built.translatehtml_ai_endpoint || "/api/wysiwyg_translation"
+    built.translatehtml_context = {
+      ...(built.translatehtml_context && typeof built.translatehtml_context === "object"
+        ? built.translatehtml_context
+        : {}),
+      courseId: positiveContextId(course.value?.id || route.query?.cid),
+      sessionId: positiveContextId(route.query?.sid),
+      groupId: positiveContextId(route.query?.gid),
+    }
+  }
 
   if (removeToolbarButtons.length > 0) {
     built.toolbar = removeToolbarItems(built.toolbar, removeToolbarButtons)

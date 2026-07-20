@@ -533,6 +533,9 @@
                         {{ 'Duration'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        {{ 'ActiveService'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </th>
+                    <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
@@ -566,7 +569,21 @@
                         {% if item.duration_days == 0 %}
                         {{ 'NoLimit'|get_lang }}
                         {% else %}
-                        {{ item.duration_days }} {{ 'Days'|get_lang }}
+                        {{ 'ServiceDurationXDays'|get_plugin_lang('BuyCoursesPlugin')|format(item.duration_days) }}
+                        {% endif %}
+                    </td>
+
+                    <td class="px-6 py-4 text-center">
+                        {% if item.active is not defined or item.active == 1 %}
+                        <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
+                            <em class="mdi mdi-check"></em>
+                            {{ 'Yes'|get_lang }}
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-2 rounded-full bg-warning/10 px-3 py-1 text-xs font-semibold text-warning">
+                            <em class="mdi mdi-pause-circle-outline"></em>
+                            {{ 'No'|get_lang }}
+                        </span>
                         {% endif %}
                     </td>
 
@@ -646,7 +663,7 @@
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="{{ tax_enable and (tax_applies_to == 1 or tax_applies_to == 4) ? 8 : 7 }}" class="px-6 py-10 text-center text-sm text-gray-50">
+                    <td colspan="{{ tax_enable and (tax_applies_to == 1 or tax_applies_to == 4) ? 9 : 8 }}" class="px-6 py-10 text-center text-sm text-gray-50">
                         {{ 'NoResults'|get_lang }}
                     </td>
                 </tr>

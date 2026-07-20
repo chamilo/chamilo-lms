@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Twig\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\FormatHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
@@ -56,7 +57,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('api_get_local_time', 'api_get_local_time'),
             new TwigFilter('api_convert_and_format_date', 'api_convert_and_format_date'),
             new TwigFilter('format_date', 'api_format_date'),
-            new TwigFilter('format_file_size', 'format_file_size'),
+            new TwigFilter('format_file_size', FormatHelper::formatFileSize(...), ['is_safe' => ['html']]),
             new TwigFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate', ['is_safe' => ['html']]),
             new TwigFilter('api_get_configuration_value', 'api_get_configuration_value'),
             new TwigFilter('remove_xss', 'Security::remove_XSS'),

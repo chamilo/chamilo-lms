@@ -97,7 +97,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Patch(
             denormalizationContext: ['groups' => ['attendance:write']],
-            security: "is_granted('EDIT', object.resourceNode)"
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: RoomAssignmentStateProcessor::class,
         ),
     ],
     normalizationContext: [

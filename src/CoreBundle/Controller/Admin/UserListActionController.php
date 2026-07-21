@@ -21,6 +21,9 @@ use UserManager;
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 class UserListActionController extends AbstractController
 {
+    private const CANNOT_DELETE_MESSAGE = 'This user cannot be deleted: they are still an active member of a '
+        .'course, or user deletion is disabled on this platform.';
+
     public function __construct(
         private readonly EntityManagerInterface $em,
     ) {}
@@ -59,6 +62,7 @@ class UserListActionController extends AbstractController
 
         $userRepo = $this->em->getRepository(User::class);
         $affected = 0;
+        $failedIds = [];
 
         foreach ($userIds as $userId) {
             if ($userId <= 0 || $userId === $currentUserId) {
@@ -102,8 +106,11 @@ class UserListActionController extends AbstractController
                     break;
 
                 case 'destroy_users':
-                    UserManager::delete_user($userId, true);
-                    ++$affected;
+                    if (UserManager::delete_user($userId, true)) {
+                        ++$affected;
+                    } else {
+                        $failedIds[] = $userId;
+                    }
 
                     break;
             }
@@ -111,7 +118,18 @@ class UserListActionController extends AbstractController
 
         $this->em->flush();
 
-        return $this->json(['success' => true, 'affected' => $affected]);
+        $response = ['success' => true, 'affected' => $affected];
+
+        if ([] !== $failedIds) {
+            $response['failedIds'] = $failedIds;
+            $response['error'] = \sprintf(
+                '%d user(s) could not be permanently deleted: they are still an active member of a course, '
+                    .'or user deletion is disabled on this platform.',
+                \count($failedIds)
+            );
+        }
+
+        return $this->json($response);
     }
 
     private function handleSingleAction(Request $request, string $action): JsonResponse
@@ -138,7 +156,9 @@ class UserListActionController extends AbstractController
                     return $this->json(['error' => 'Access denied.'], Response::HTTP_FORBIDDEN);
                 }
 
-                UserManager::delete_user($userId);
+                if (!UserManager::delete_user($userId)) {
+                    return $this->json(['error' => self::CANNOT_DELETE_MESSAGE], Response::HTTP_CONFLICT);
+                }
 
                 break;
 
@@ -156,7 +176,9 @@ class UserListActionController extends AbstractController
                     return $this->json(['error' => 'Access denied.'], Response::HTTP_FORBIDDEN);
                 }
 
-                UserManager::delete_user($userId, true);
+                if (!UserManager::delete_user($userId, true)) {
+                    return $this->json(['error' => self::CANNOT_DELETE_MESSAGE], Response::HTTP_CONFLICT);
+                }
 
                 break;
 

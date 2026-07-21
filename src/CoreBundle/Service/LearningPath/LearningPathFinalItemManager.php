@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\LearningPath;
 
+use Category;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
@@ -24,8 +25,13 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use SkillModel;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
+
+use const DATE_ATOM;
+use const PATHINFO_FILENAME;
+use const PREG_SPLIT_DELIM_CAPTURE;
 
 final readonly class LearningPathFinalItemManager
 {
@@ -102,7 +108,7 @@ HTML;
         }
 
         $category = $this->resolveGradebookCategory($finalItem, $course, $session);
-        if (!$category instanceof GradebookCategory || !class_exists(\Category::class)) {
+        if (!$category instanceof GradebookCategory || !class_exists(Category::class)) {
             return;
         }
 
@@ -111,15 +117,15 @@ HTML;
                 (int) $category->getId(),
                 (int) $user->getId(),
             );
-            \Category::generateUserCertificate($category, (int) $user->getId());
-            $currentScore = (float) \Category::getCurrentScore(
+            Category::generateUserCertificate($category, (int) $user->getId());
+            $currentScore = (float) Category::getCurrentScore(
                 (int) $user->getId(),
                 $category,
                 true,
                 (int) $course->getId(),
                 (int) ($session?->getId() ?? 0),
             );
-            $registeredScore = (float) \Category::getCurrentScore(
+            $registeredScore = (float) Category::getCurrentScore(
                 (int) $user->getId(),
                 $category,
                 false,
@@ -130,7 +136,7 @@ HTML;
             if (abs($currentScore - $registeredScore) > 0.0001
                 || !($certificateBefore instanceof GradebookCertificate)
             ) {
-                \Category::registerCurrentScore(
+                Category::registerCurrentScore(
                     $currentScore,
                     (int) $user->getId(),
                     (int) $category->getId(),
@@ -250,7 +256,7 @@ HTML;
             '/(\(\(certificate\)\)|\(\(skill\)\))/',
             $content,
             -1,
-            \PREG_SPLIT_DELIM_CAPTURE,
+            PREG_SPLIT_DELIM_CAPTURE,
         );
         if (false === $parts) {
             $parts = [$content];
@@ -264,12 +270,14 @@ HTML;
             if ('((certificate))' === $part) {
                 $blocks[] = ['type' => 'certificate'];
                 $hasCertificateToken = true;
+
                 continue;
             }
 
             if ('((skill))' === $part) {
                 $blocks[] = ['type' => 'skills'];
                 $hasSkillToken = true;
+
                 continue;
             }
 
@@ -299,7 +307,7 @@ HTML;
         $skills = [];
 
         if ($this->isTruthySetting($this->settingsManager->getSetting('skill.allow_skill_rel_items', true))) {
-            $itemType = defined('ITEM_TYPE_LEARNPATH') ? (int) constant('ITEM_TYPE_LEARNPATH') : 4;
+            $itemType = \defined('ITEM_TYPE_LEARNPATH') ? (int) \constant('ITEM_TYPE_LEARNPATH') : 4;
             $relations = $this->entityManager->getRepository(SkillRelItem::class)->findBy([
                 'itemType' => $itemType,
                 'itemId' => (int) $learningPath->getIid(),
@@ -379,7 +387,7 @@ HTML;
 
             $skill = $relation->getSkill();
             $skillId = (int) ($skill?->getId() ?? 0);
-            if ($skill instanceof Skill && in_array($skillId, $allowedSkillIds, true)) {
+            if ($skill instanceof Skill && \in_array($skillId, $allowedSkillIds, true)) {
                 $skills[$skillId] = $skill;
             }
         }
@@ -464,7 +472,7 @@ HTML;
         }
 
         $path = trim((string) $certificate->getPathCertificate());
-        $hash = pathinfo(basename($path), \PATHINFO_FILENAME);
+        $hash = pathinfo(basename($path), PATHINFO_FILENAME);
         if (1 !== preg_match('/^[A-Za-z0-9_-]+$/', $hash)) {
             $hash = '';
         }
@@ -518,17 +526,17 @@ HTML;
         $skillId = (int) $skill->getId();
         $sharePath = $acquired ? '/badge/'.$skillId.'/user/'.(int) $user->getId() : '';
         $shareUrl = '' !== $sharePath ? rtrim($baseUrl, '/').$sharePath : '';
-        $siteName = function_exists('api_get_setting') ? (string) api_get_setting('siteName') : 'Chamilo';
-        $tweetText = function_exists('get_lang')
-            ? sprintf(get_lang('I have achieved skill %s on %s'), $skill->getTitle(), $siteName)
-            : sprintf('I have achieved skill %s on %s', $skill->getTitle(), $siteName);
+        $siteName = \function_exists('api_get_setting') ? (string) api_get_setting('siteName') : 'Chamilo';
+        $tweetText = \function_exists('get_lang')
+            ? \sprintf(get_lang('I have achieved skill %s on %s'), $skill->getTitle(), $siteName)
+            : \sprintf('I have achieved skill %s on %s', $skill->getTitle(), $siteName);
 
         return [
             'id' => $skillId,
             'title' => trim($skill->getTitle()),
             'description' => trim($skill->getDescription()),
-            'iconUrl' => class_exists(\SkillModel::class)
-                ? (string) \SkillModel::getWebIconPath($skill)
+            'iconUrl' => class_exists(SkillModel::class)
+                ? (string) SkillModel::getWebIconPath($skill)
                 : '/img/icons/32/badges-default.png',
             'acquired' => $acquired,
             'shareUrl' => $sharePath,
@@ -563,15 +571,15 @@ HTML;
 
     private function isExcludedUserType(): bool
     {
-        return function_exists('api_is_excluded_user_type') && api_is_excluded_user_type();
+        return \function_exists('api_is_excluded_user_type') && api_is_excluded_user_type();
     }
 
     private function isTruthySetting(mixed $value): bool
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value;
         }
 
-        return in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 }

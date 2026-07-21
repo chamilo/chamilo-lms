@@ -14,6 +14,8 @@ export const CERTIFICATE_TAGS = [
   "((course_code))",
   "((course_title))",
   "((gradebook_grade))",
+  "((gradebook_grade_score))",
+  "((gradebook_grade_percentage))",
   "((certificate_link))",
   "((certificate_link_html))",
   "((certificate_barcode))",

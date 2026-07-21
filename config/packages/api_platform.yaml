@@ -56,10 +56,7 @@ api_platform:
         hydra_prefix: true
 
     graphql:
-        graphiql:
-            enabled: false
-        graphql_playground:
-            enabled: false
+        enabled: false
 
 #    mercure:
 #        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'

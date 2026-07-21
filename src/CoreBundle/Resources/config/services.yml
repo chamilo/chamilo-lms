@@ -66,11 +66,6 @@ services:
           driver: 'gd'
         $filters: [ ]
 
-    Chamilo\CoreBundle\Helpers\GlideAssetUtil:
-        arguments:
-            - {source: '@oneup_flysystem.asset_filesystem', cache: '@oneup_flysystem.asset_cache_filesystem'}
-            - '%glide_media_filters%'
-
     # Check if users are online
 #    chamilo_core.listener.online:
 #        class: Chamilo\CoreBundle\EventListener\OnlineListener

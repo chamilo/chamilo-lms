@@ -349,8 +349,14 @@
             {{ t("Loading") }}…
           </div>
 
+          <LpFinalItem
+            v-if="isFinalItem"
+            :data="runtime.finalItem"
+            class="h-full overflow-y-auto"
+          />
+
           <iframe
-            v-if="runtime.contentUrl"
+            v-else-if="runtime.contentUrl"
             ref="contentFrame"
             :key="`${runtime.currentItemId}-${runtime.scorm?.itemViewId || runtime.currentItemAttempt}-${iframeReloadKey}`"
             :src="runtime.contentUrl"
@@ -371,6 +377,7 @@ import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import LpFinalItem from "../../components/lp/LpFinalItem.vue"
 import LpImpressRuntime from "../../components/lp/LpImpressRuntime.vue"
 import LpReporting from "./LpReporting.vue"
 import { useNotification } from "../../composables/notification"
@@ -495,6 +502,9 @@ function exposeLegacyCidContext() {
 }
 const currentItem = computed(
   () => runtime.value?.items?.find((item) => Number(item.id) === Number(runtime.value.currentItemId)) || null,
+)
+const isFinalItem = computed(
+  () => currentItem.value?.itemType === "final_item" && Boolean(runtime.value?.finalItem?.enabled),
 )
 const previewImageUrl = computed(() => String(runtime.value?.previewImageUrl || ""))
 const shouldShowPreviewImage = computed(() => {

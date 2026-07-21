@@ -809,6 +809,9 @@ async function submitSurvey() {
     )
     normalizeResponse(data)
     successMessage.value = t("Survey completed")
+    if (isLearningPathContext.value && window.parent !== window) {
+      window.parent.postMessage({ type: "chamilo:learning-path:refresh" }, window.location.origin)
+    }
   } catch (error) {
     console.error("Error submitting survey answers", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not save survey answers")

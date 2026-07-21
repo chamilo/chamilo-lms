@@ -47,6 +47,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
     use LearningPathStateHelperTrait;
 
     private const ITEM_TYPE_LEARNING_PATH = 4;
+    private const NO_SPECIFIC_LANGUAGE = '__none__';
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -93,7 +94,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         $result->id = $lp?->getIid();
         $result->title = $lp?->getTitle() ?? '';
         $result->categoryId = $lp?->getCategory()?->getIid();
-        $result->language = $lp?->getResourceNode()?->getLanguage()?->getIsocode() ?? '';
+        $result->language = $lp?->getResourceNode()?->getLanguage()?->getIsocode() ?? self::NO_SPECIFIC_LANGUAGE;
         $result->hideTocFrame = $lp?->getHideTocFrame() ?? false;
         $result->defaultViewMode = $lp?->getDefaultViewMod() ?? 'embedded';
         $result->theme = $lp?->getTheme() ?? '';
@@ -232,7 +233,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         );
 
         return [
-            ['label' => $this->translator->trans('No specific language'), 'value' => ''],
+            ['label' => $this->translator->trans('No specific language'), 'value' => self::NO_SPECIFIC_LANGUAGE],
             ...$languageOptions,
         ];
     }

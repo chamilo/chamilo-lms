@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
 use Chamilo\CoreBundle\Service\LearningPath\ScormRuntimeManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -68,6 +69,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         private LpAdvancedAccessHelper $advancedAccessHelper,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private ResourceNodeRepository $resourceNodeRepository,
+        private LearningPathFinalItemManager $finalItemManager,
         private ScormRuntimeManager $scormRuntimeManager,
         private LearningPathRuntimeProgressManager $progressManager,
         private CLpRepository $lpRepository,
@@ -267,16 +269,32 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $contentIds,
             $availabilityById,
         );
-        $runtime->contentUrl = $runtime->runtimeSupported && $currentItem instanceof CLpItem
-            ? $this->buildItemUrl(
+        $isFinalItem = $currentItem instanceof CLpItem
+            && 'final_item' === strtolower(trim($currentItem->getItemType()));
+        $runtime->finalItem = $runtime->runtimeSupported && $isFinalItem
+            ? $this->finalItemManager->buildRuntimeData(
+                $lp,
                 $currentItem,
-                $itemViews[$currentItemId] ?? null,
                 $course,
                 $session,
                 $group,
+                $user,
+                $canEdit,
                 $request,
             )
-            : '';
+            : [];
+        $runtime->contentUrl = $runtime->runtimeSupported
+            && $currentItem instanceof CLpItem
+            && !$isFinalItem
+                ? $this->buildItemUrl(
+                    $currentItem,
+                    $itemViews[$currentItemId] ?? null,
+                    $course,
+                    $session,
+                    $group,
+                    $request,
+                )
+                : '';
         [$runtime->audioUrl, $runtime->audioTitle] = $currentItem instanceof CLpItem
             ? $this->buildItemAudio($currentItem, $course, $session, $group, $request)
             : ['', ''];
@@ -791,17 +809,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             unset($documentParams['type']);
 
             return $this->resourceNodeRepository->getResourceFileUrl($document->getResourceNode(), $documentParams);
-        }
-
-        if ('final_item' === $type) {
-            $document = $this->findContextResource(CDocument::class, $resourceId, $course, $session, $group);
-            if (!$document instanceof CDocument) {
-                return '';
-            }
-
-            $params['id'] = $learningPathItemId;
-
-            return $this->appendQuery('/main/lp/lp_final_item.php', $params);
         }
 
         if ('quiz' === $type) {

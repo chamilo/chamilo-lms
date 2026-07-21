@@ -33,6 +33,16 @@
       class="flex w-full flex-col gap-6"
       @submit.prevent="save"
     >
+      <div class="flex justify-end">
+        <BaseButton
+          :disabled="saving"
+          :label="isEdit ? t('Save course settings') : t('Continue')"
+          icon="save"
+          type="success"
+          is-submit
+        />
+      </div>
+
       <div
         v-if="!isEdit"
         class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm text-info-dark"
@@ -64,24 +74,12 @@
           required
         />
 
-        <BaseSelect
-          v-if="isEdit"
-          id="lp-category"
-          v-model="form.categoryId"
-          name="categoryId"
-          :label="t('Category')"
-          :options="form.categoryOptions"
-          option-label="label"
-          option-value="value"
-          allow-clear
-        />
       </div>
 
       <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
         <div class="flex w-full flex-col gap-5">
           <BaseSelect
-            v-if="!isEdit"
-            id="lp-category-create"
+            id="lp-category"
             v-model="form.categoryId"
             name="categoryId"
             :label="t('Category')"
@@ -402,6 +400,7 @@ const FIELD_DATE = 6
 const FIELD_DATETIME = 7
 const FIELD_MULTI_SELECT = 5
 const FIELD_TAG = 10
+const NO_SPECIFIC_LANGUAGE = "__none__"
 
 const createIntroductionKey =
   "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left."
@@ -435,7 +434,7 @@ const form = reactive({
   id: null,
   title: "",
   categoryId: null,
-  language: "",
+  language: NO_SPECIFIC_LANGUAGE,
   hideTocFrame: false,
   defaultViewMode: "embedded",
   theme: "",
@@ -512,6 +511,7 @@ async function loadConfiguration() {
   try {
     const data = await lpService.getConfiguration(lpId.value, context.value)
     Object.assign(form, data)
+    form.language = String(data.language || NO_SPECIFIC_LANGUAGE)
     form.publishedOn = toDate(data.publishedOn, new Date())
     form.expiredOn = toDate(data.expiredOn, new Date(Date.now() + 86400000))
     form.skillIds = Array.isArray(data.skillIds) ? data.skillIds.map(Number) : []
@@ -584,7 +584,7 @@ function buildPayload() {
   return {
     title: form.title,
     categoryId: form.categoryId || null,
-    language: form.showLanguage ? form.language : "",
+    language: form.showLanguage && form.language !== NO_SPECIFIC_LANGUAGE ? form.language : "",
     hideTocFrame: form.hideTocFrame,
     defaultViewMode: form.defaultViewMode,
     theme: form.theme,

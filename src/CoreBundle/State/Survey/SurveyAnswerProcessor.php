@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyAnswer;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer as CSurveyAnswerEntity;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
@@ -40,6 +41,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private SurveyAnswerProvider $surveyAnswerProvider,
+        private LearningPathSurveyCompletionManager $learningPathSurveyCompletionManager,
     ) {}
 
     /**
@@ -107,7 +109,13 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             $survey->setAnswered($survey->getAnswered() + 1);
         }
 
-        $this->entityManager->flush();
+        $this->learningPathSurveyCompletionManager->completeAndFlush(
+            $survey,
+            $course,
+            $session,
+            $user,
+            $request,
+        );
 
         return $this->surveyAnswerProvider->buildResponse(
             $survey,

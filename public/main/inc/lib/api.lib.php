@@ -3010,7 +3010,7 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
 }
 
 /**
- * Checks whether the user given as user id is in the admin table.
+ * Checks whether the user given as user id has platform administrator rights.
  *
  * @param int $user_id If none provided, will use current user
  * @param int $url     URL ID. If provided, also check if the user is active on given URL
@@ -3025,7 +3025,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
         return false;
     }
 
-    $is_admin = $user->isAdmin();
+    $is_admin = $user->isAdmin() || $user->isSuperAdmin();
 
     if (!$is_admin || !isset($url)) {
         return $is_admin;
@@ -5685,10 +5685,7 @@ function api_get_tool_information_by_name($name)
 /**
  * Function used to protect a "global" admin script.
  * The function blocks access when the user has no global platform admin rights.
- * Global admins are the admins that are registered in the main.admin table
- * AND the users who have access to the "principal" portal.
- * That means that there is a record in the main.access_url_rel_user table
- * with his user id and the access_url_id=1.
+ * Global admins are users with ROLE_GLOBAL_ADMIN.
  *
  * @author Julio Montoya
  *
@@ -5731,14 +5728,7 @@ function api_global_admin_can_edit_admin(
         return true;
     }
 
-    // Primary check: legacy admin table (TABLE_MAIN_ADMIN)
     $is_platform_admin = api_is_platform_admin_by_id($userId);
-    if (!$is_platform_admin) {
-        $userEntity = api_get_user_entity($userId);
-        if ($userEntity !== null && ($userEntity->isAdmin() || $userEntity->isSuperAdmin())) {
-            $is_platform_admin = true;
-        }
-    }
 
     if ($allow_session_admin && !$is_platform_admin) {
         $user = api_get_user_entity($userId);

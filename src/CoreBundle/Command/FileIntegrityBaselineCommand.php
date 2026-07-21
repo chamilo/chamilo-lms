@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Helpers\FileIntegrityChecker;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,7 +39,20 @@ class FileIntegrityBaselineCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $count = $this->checker->generateBaseline();
+
+        if ($this->checker->isRunInProgress()) {
+            $io->warning('A file integrity scan is already running; please wait for it to finish.');
+
+            return Command::SUCCESS;
+        }
+
+        try {
+            $count = $this->checker->generateBaseline();
+        } catch (RuntimeException $e) {
+            $io->warning($e->getMessage());
+
+            return Command::SUCCESS;
+        }
 
         $io->success(\sprintf('File integrity baseline generated: %d files captured.', $count));
 

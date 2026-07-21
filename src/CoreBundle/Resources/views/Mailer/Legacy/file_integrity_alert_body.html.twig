@@ -4,6 +4,7 @@
     <li>{{ 'Added'|trans }}: {{ added_count }}</li>
     <li>{{ 'Modified'|trans }}: {{ modified_count }}</li>
     <li>{{ 'Deleted'|trans }}: {{ deleted_count }}</li>
+    <li>{{ 'Permissions changed'|trans }}: {{ permissions_changed_count }}</li>
 </ul>
 
 {% if git_config_changed %}
@@ -36,6 +37,13 @@
     <p>{{ 'Deleted files'|trans }}:</p>
     <ul>
         {% for path in deleted %}<li>{{ path }}</li>{% endfor %}
+    </ul>
+{% endif %}
+
+{% if permissions_changed|length %}
+    <p>{{ 'Files with changed permissions'|trans }}:</p>
+    <ul>
+        {% for path in permissions_changed %}<li>{{ path }}</li>{% endfor %}
     </ul>
 {% endif %}
 

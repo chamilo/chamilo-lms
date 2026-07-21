@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Helpers\FileIntegrityChecker;
 use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -72,17 +73,29 @@ class FileIntegrityScanCommand extends Command
             return Command::SUCCESS;
         }
 
-        if ($this->checker->isSnoozed()) {
-            $count = $this->checker->generateBaseline();
-            $io->success(\sprintf(
-                'Maintenance window active: baseline adopted (%d files), no alert sent.',
-                $count
-            ));
+        if ($this->checker->isRunInProgress()) {
+            $io->note('A file integrity scan is already running; skipping this run.');
 
             return Command::SUCCESS;
         }
 
-        $report = $this->checker->scan();
+        try {
+            if ($this->checker->isSnoozed()) {
+                $count = $this->checker->generateBaseline();
+                $io->success(\sprintf(
+                    'Maintenance window active: baseline adopted (%d files), no alert sent.',
+                    $count
+                ));
+
+                return Command::SUCCESS;
+            }
+
+            $report = $this->checker->scan();
+        } catch (RuntimeException $e) {
+            $io->note($e->getMessage());
+
+            return Command::SUCCESS;
+        }
 
         if ($report['establishedBaseline']) {
             $io->success(\sprintf(
@@ -108,10 +121,11 @@ class FileIntegrityScanCommand extends Command
         $sentTo = $this->notifyAdmins($report);
 
         $io->warning(\sprintf(
-            'File integrity drift detected: %d added, %d modified, %d deleted.%s Notified %d admin(s).',
+            'File integrity drift detected: %d added, %d modified, %d deleted, %d permission change(s).%s Notified %d admin(s).',
             $report['addedCount'],
             $report['modifiedCount'],
             $report['deletedCount'],
+            $report['permissionsChangedCount'],
             $report['gitConfigChanged'] ? ' Git remote configuration changed!' : '',
             $sentTo
         ));
@@ -134,12 +148,14 @@ class FileIntegrityScanCommand extends Command
             'added_count' => $report['addedCount'],
             'modified_count' => $report['modifiedCount'],
             'deleted_count' => $report['deletedCount'],
+            'permissions_changed_count' => $report['permissionsChangedCount'],
             'git_config_changed' => $report['gitConfigChanged'],
             'scan_incomplete' => $report['scanIncomplete'],
             'truncated' => $report['truncated'],
             'added' => array_keys($report['added']),
             'modified' => array_keys($report['modified']),
             'deleted' => array_keys($report['deleted']),
+            'permissions_changed' => array_keys($report['permissionsChanged']),
         ]);
 
         $from = $this->mailHelper->getPlatformFromAddress();

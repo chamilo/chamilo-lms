@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Helpers\WeakPasswordCheckerHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use DateTimeImmutable;
+use RuntimeException;
 use Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -311,6 +312,8 @@ final class SecurityController extends BaseController
             'has_baseline' => $this->fileIntegrityChecker->hasBaseline(),
             'is_snoozed' => $this->fileIntegrityChecker->isSnoozed(),
             'snooze_until' => $this->fileIntegrityChecker->getSnoozeUntil(),
+            'run_status' => $this->fileIntegrityChecker->getRunStatus(),
+            'history' => $this->fileIntegrityChecker->getHistory(),
             'is_global_admin' => $this->isGranted('ROLE_GLOBAL_ADMIN'),
             'csrf_token' => $csrfToken,
             'settings_search_url' => $this->generateUrl(
@@ -353,10 +356,6 @@ final class SecurityController extends BaseController
             }
         }
 
-        // A full tree walk can take a while: release the session lock and lift the time limit.
-        session_write_close();
-        set_time_limit(0);
-
         if ('pause' === $action) {
             $this->fileIntegrityChecker->snooze(3600);
             $this->addFlash('success', $this->translator->trans('File integrity alerting paused for 1 hour.'));
@@ -364,17 +363,38 @@ final class SecurityController extends BaseController
             return $redirect;
         }
 
-        if ('rebaseline' === $action) {
-            $count = $this->fileIntegrityChecker->generateBaseline();
+        // 'scan' and 'rebaseline' both walk the whole tree, which can take
+        // minutes: refuse to start a second one on top of one already running.
+        if ($this->fileIntegrityChecker->isRunInProgress()) {
             $this->addFlash(
-                'success',
-                \sprintf($this->translator->trans('New baseline established: %s files.'), (string) $count)
+                'warning',
+                $this->translator->trans('A scan is already running. Please wait for it to finish before starting another one.')
             );
 
             return $redirect;
         }
 
-        $report = $this->fileIntegrityChecker->scan();
+        // A full tree walk can take a while: release the session lock and lift the time limit.
+        session_write_close();
+        set_time_limit(0);
+
+        try {
+            if ('rebaseline' === $action) {
+                $count = $this->fileIntegrityChecker->generateBaseline();
+                $this->addFlash(
+                    'success',
+                    \sprintf($this->translator->trans('New baseline established: %s files.'), (string) $count)
+                );
+
+                return $redirect;
+            }
+
+            $report = $this->fileIntegrityChecker->scan();
+        } catch (RuntimeException $e) {
+            $this->addFlash('warning', $e->getMessage());
+
+            return $redirect;
+        }
 
         if ($this->fileIntegrityChecker->hasDrift($report) || $report['gitConfigChanged']) {
             $this->addFlash('warning', $this->translator->trans('Scan complete: changes were detected.'));

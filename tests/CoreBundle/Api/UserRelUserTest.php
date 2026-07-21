@@ -36,6 +36,7 @@ class UserRelUserTest extends AbstractApiTest
             'POST',
             '/api/user_rel_users',
             [
+                'headers' => ['content-type' => ['application/ld+json']],
                 'json' => [
                     'user' => $user->getIri(),
                     'friend' => $friend->getIri(),
@@ -73,9 +74,10 @@ class UserRelUserTest extends AbstractApiTest
         );
 
         $this->createClientWithCredentials($tokenFriend)->request(
-            'PUT',
+            'PATCH',
             $user_iri,
             [
+                'headers' => ['content-type' => ['application/merge-patch+json']],
                 'json' => [
                     'relationType' => UserRelUser::USER_RELATION_TYPE_FRIEND,
                 ],

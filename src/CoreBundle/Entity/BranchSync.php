@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Repository\BranchSyncRepository;
@@ -43,6 +44,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             processor: BranchSyncStateProcessor::class,
         ),
         new Put(
+            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
+            denormalizationContext: ['groups' => ['branch:write']],
+            processor: BranchSyncStateProcessor::class,
+        ),
+        new Patch(
             security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
             denormalizationContext: ['groups' => ['branch:write']],
             processor: BranchSyncStateProcessor::class,

@@ -41,7 +41,7 @@ export default {
    * @returns {Promise<Object>}
    */
   async updateGroup(groupId, params) {
-    return await baseService.put(`/api/usergroups/${groupId}`, params)
+    return await baseService.patch(`/api/usergroups/${groupId}`, params)
   },
 
   /**

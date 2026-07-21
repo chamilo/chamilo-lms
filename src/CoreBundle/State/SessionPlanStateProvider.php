@@ -26,6 +26,9 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**
  * @template-implements ProviderInterface<Session>
  */
+/**
+ * @implements ProviderInterface<SessionPlanItem>
+ */
 final class SessionPlanStateProvider implements ProviderInterface
 {
     /**

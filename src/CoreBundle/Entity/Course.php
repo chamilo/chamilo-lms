@@ -301,12 +301,12 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[ORM\Column(name: 'department_name', type: 'string', length: 30, unique: false, nullable: true)]
     protected ?string $departmentName = null;
 
-    #[Assert\Url]
+    #[Assert\Url(requireTld: false)]
     #[Groups(['course:read', 'course:write'])]
     #[ORM\Column(name: 'department_url', type: 'string', length: 180, unique: false, nullable: true)]
     protected ?string $departmentUrl = null;
 
-    #[Assert\Url]
+    #[Assert\Url(requireTld: false)]
     #[Groups(['course:read', 'course:write'])]
     #[ORM\Column(name: 'video_url', type: 'string', length: 255)]
     protected string $videoUrl;

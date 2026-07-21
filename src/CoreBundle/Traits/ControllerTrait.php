@@ -40,10 +40,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait ControllerTrait
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
     public static function getSubscribedServices(): array
     {

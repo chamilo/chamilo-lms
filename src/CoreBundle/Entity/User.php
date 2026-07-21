@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -61,7 +62,7 @@ use UserManager;
             security: "is_granted('VIEW', object)",
         ),
         new Put(security: "is_granted('EDIT', object)"),
-        new Delete(security: "is_granted('DELETE', object)"),
+        new Patch(security: "is_granted('EDIT', object)"), new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(
             security: "is_granted('ROLE_USER')",
             provider: UserCollectionStateProvider::class,

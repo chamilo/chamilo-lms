@@ -1,0 +1,11 @@
+services:
+    chamilo_settings.form_factory.settings:
+        class: Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory
+        public: true
+        arguments:
+            - '@sylius.registry.settings_schema'
+            - '@form.factory'
+
+    Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory:
+        alias: chamilo_settings.form_factory.settings
+        public: true

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Filter;
 use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -28,35 +29,37 @@ class ExtraFieldFilter extends AbstractFilter
         return [
             "$this->fieldProperty[]" => [
                 'is_collection' => true,
-                'property' => null,
                 'type' => 'string',
                 'required' => false,
                 'description' => 'Extra field variables',
-                'openapi' => [
-                    'schema' => [
+                'openapi' => new Parameter(
+                    name: "$this->fieldProperty[]",
+                    in: 'query',
+                    allowEmptyValue: false,
+                    schema: [
                         'type' => 'array',
                         'items' => [
                             'type' => 'string',
                         ],
                     ],
-                    'allowEmptyValue' => false,
-                ],
+                ),
             ],
             "$this->fieldValueProperty[]" => [
                 'is_collection' => true,
-                'property' => null,
                 'type' => 'string',
                 'required' => false,
                 'description' => 'Extra field values',
-                'openapi' => [
-                    'schema' => [
+                'openapi' => new Parameter(
+                    name: "$this->fieldValueProperty[]",
+                    in: 'query',
+                    allowEmptyValue: false,
+                    schema: [
                         'type' => 'array',
                         'items' => [
                             'type' => 'string',
                         ],
                     ],
-                    'allowEmptyValue' => false,
-                ],
+                ),
             ],
         ];
     }

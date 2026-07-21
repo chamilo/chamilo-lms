@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Provides forum posts for action operations without API Platform eager loading.
  *
- * @implements ProviderInterface<CForumPost|null>
+ * @implements ProviderInterface<CForumPost>
  */
 final readonly class ForumPostActionProvider implements ProviderInterface
 {

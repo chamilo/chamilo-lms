@@ -202,7 +202,7 @@ class ResourceListener
         if (null !== $request && null === $parentNode) {
             $currentRequest = $request->getCurrentRequest();
             if (null !== $currentRequest) {
-                $resourceNodeIdFromRequest = $currentRequest->get('parentResourceNodeId');
+                $resourceNodeIdFromRequest = $currentRequest->query->get('parentResourceNodeId', $currentRequest->request->get('parentResourceNodeId'));
                 if (empty($resourceNodeIdFromRequest)) {
                     $contentData = $request->getCurrentRequest()->getContent();
                     $contentData = json_decode($contentData, true, 512, JSON_THROW_ON_ERROR);

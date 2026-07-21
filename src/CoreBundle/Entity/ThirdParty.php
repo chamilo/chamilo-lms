@@ -41,7 +41,7 @@ class ThirdParty
     protected ?string $address = null;
 
     #[Groups(['third_party:read', 'third_party:write'])]
-    #[Assert\Url]
+    #[Assert\Url(requireTld: false)]
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $website = null;
 

@@ -246,8 +246,8 @@ class CourseController extends ToolBaseController
     #[Route(path: '/item_return', name: 'chamilo_lti_return_item')]
     public function returnItem(Request $request): Response
     {
-        $contentItems = $request->get('content_items');
-        $data = $request->get('data');
+        $contentItems = $request->request->get('content_items');
+        $data = $request->request->get('data');
 
         if (empty($contentItems) || empty($data)) {
             throw $this->createAccessDeniedException();
@@ -273,8 +273,8 @@ class CourseController extends ToolBaseController
 
         $signatureIsValid = Utils::checkRequestSignature(
             $url,
-            $request->get('oauth_consumer_key'),
-            $request->get('oauth_signature'),
+            $request->request->get('oauth_consumer_key'),
+            $request->request->get('oauth_signature'),
             $tool
         );
 

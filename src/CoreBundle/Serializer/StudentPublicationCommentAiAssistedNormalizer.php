@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Serializer;
 
+use ArrayObject;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final class StudentPublicationCommentAiAssistedNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
+final class StudentPublicationCommentAiAssistedNormalizer implements NormalizerAwareInterface, NormalizerInterface
 {
     use NormalizerAwareTrait;
 
@@ -32,7 +33,7 @@ final class StudentPublicationCommentAiAssistedNormalizer implements ContextAwar
         return $data instanceof CStudentPublicationComment;
     }
 
-    public function normalize($object, ?string $format = null, array $context = [])
+    public function normalize($object, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 
@@ -56,5 +57,10 @@ final class StudentPublicationCommentAiAssistedNormalizer implements ContextAwar
         $data['ai_assisted'] = $this->aiDisclosureHelper->isDisclosureEnabled() && (bool) $raw;
 
         return $data;
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [CStudentPublicationComment::class => false];
     }
 }

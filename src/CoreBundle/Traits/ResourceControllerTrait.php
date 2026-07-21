@@ -13,21 +13,18 @@ use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\ORM\EntityNotFoundException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 trait ResourceControllerTrait
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
     public function getRepositoryFromRequest(Request $request): ResourceRepository
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
+        $tool = $request->attributes->get('tool');
+        $type = $request->attributes->get('type');
 
         return $this->getRepository($tool, $type);
     }
@@ -62,9 +59,9 @@ trait ResourceControllerTrait
 
     public function getResourceParams(Request $request): array
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $id = (int) $request->get('id');
+        $tool = $request->attributes->get('tool');
+        $type = $request->attributes->get('type');
+        $id = (int) $request->attributes->get('id');
 
         $courseId = null;
         $sessionId = null;
@@ -86,7 +83,7 @@ trait ResourceControllerTrait
 
     protected function getParentResourceNode(Request $request): ResourceNode
     {
-        $parentNodeId = $request->get('id');
+        $parentNodeId = $request->attributes->get('id');
 
         $parentResourceNode = null;
         if (empty($parentNodeId)) {

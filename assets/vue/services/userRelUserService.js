@@ -49,7 +49,7 @@ async function searchRelationshipByUsername(userIri, searchTerm) {
  * @returns {Promise<Object>}
  */
 async function update(iri, payload) {
-  return await baseService.put(iri, payload)
+  return await baseService.patch(iri, payload)
 }
 
 /**

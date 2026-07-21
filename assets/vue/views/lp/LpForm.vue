@@ -419,7 +419,7 @@ const saving = ref(false)
 const showAdvancedSettings = ref(false)
 const imageFile = ref(null)
 const extraFiles = reactive({})
-const extraFieldValues = reactive({})
+const extraFieldValues = ref({})
 const lpId = computed(() => Number(route.params.lpId || 0))
 const isEdit = computed(() => lpId.value > 0)
 const managementQuery = computed(() =>
@@ -525,30 +525,30 @@ async function loadConfiguration() {
 }
 
 function initializeExtraFields(fields) {
-  Object.keys(extraFieldValues).forEach((key) => delete extraFieldValues[key])
+  Object.keys(extraFieldValues.value).forEach((key) => delete extraFieldValues.value[key])
   fields.forEach((field) => {
     const value = field.value
     if (field.valueType === FIELD_CHECKBOX) {
-      extraFieldValues[field.id] = [true, 1, "1", "true"].includes(value)
+      extraFieldValues.value[field.id] = [true, 1, "1", "true"].includes(value)
       return
     }
     if ([FIELD_INTEGER, FIELD_FLOAT, FIELD_DURATION].includes(field.valueType)) {
-      extraFieldValues[field.id] = Number(value || 0)
+      extraFieldValues.value[field.id] = Number(value || 0)
       return
     }
     if ([FIELD_DATE, FIELD_DATETIME].includes(field.valueType)) {
-      extraFieldValues[field.id] = parseExtraFieldDate(field.valueType, value)
+      extraFieldValues.value[field.id] = parseExtraFieldDate(field.valueType, value)
       return
     }
     if ([FIELD_MULTI_SELECT, FIELD_TAG].includes(field.valueType)) {
-      extraFieldValues[field.id] = Array.isArray(value)
+      extraFieldValues.value[field.id] = Array.isArray(value)
         ? value
         : String(value || "")
             .split(";")
             .filter(Boolean)
       return
     }
-    extraFieldValues[field.id] = value ?? ""
+    extraFieldValues.value[field.id] = value ?? ""
   })
 }
 
@@ -612,7 +612,7 @@ function buildPayload() {
 function serializeExtraFields() {
   const result = {}
   form.extraFields.forEach((field) => {
-    const value = extraFieldValues[field.id]
+    const value = extraFieldValues.value[field.id]
     if (value instanceof Date) {
       result[field.id] = field.valueType === FIELD_DATE ? toLocalDate(value) : toLocalDateTime(value)
       return

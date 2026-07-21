@@ -33,6 +33,9 @@ api_platform:
     messenger: true
     defaults:
         pagination_client_items_per_page: true
+        extra_properties:
+            # Return API errors as RFC 7807 (application/problem+json), which is the API Platform 4 default.
+            rfc_7807_compliant_errors: true
         cache_headers:
             # Automatically generate etags for API responses.
             etag: true
@@ -42,8 +45,8 @@ api_platform:
         # default api platform https://api-platform.com/docs/core/errors/#converting-php-exceptions-to-http-errors
         Symfony\Component\Serializer\Exception\ExceptionInterface: 400
         # Or with a constant defined in the 'Symfony\Component\HttpFoundation\Response' class.
-        ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
-        ApiPlatform\Core\Exception\FilterValidationException: 400
+        ApiPlatform\Metadata\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        ApiPlatform\ParameterValidator\Exception\ValidationExceptionInterface: 400
         Doctrine\ORM\OptimisticLockException: 409
         Doctrine\DBAL\Exception\UniqueConstraintViolationException: 409
 
@@ -51,8 +54,6 @@ api_platform:
 
     serializer:
         hydra_prefix: true
-
-    keep_legacy_inflector: false
 
     graphql:
         graphiql:

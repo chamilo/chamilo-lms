@@ -58,7 +58,7 @@ async function findByIri(iri) {
  * @returns {Promise<Object>}
  */
 async function update(item) {
-  return baseService.put(item["@id"], item)
+  return baseService.patch(item["@id"], item)
 }
 
 export default {

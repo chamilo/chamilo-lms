@@ -79,7 +79,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
     public function diskSpace(Request $request): Response
     {
-        $nodeId = $request->get('id');
+        $nodeId = $request->attributes->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var ResourceNode $resourceNode */
@@ -156,9 +156,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         TrackEDownloadsRepository $trackEDownloadsRepository,
         ResourceFileHelper $resourceFileHelper,
     ): Response {
-        $id = $request->get('id');
-        $resourceFileId = $request->get('resourceFileId');
-        $filter = (string) $request->get('filter');
+        $id = $request->attributes->get('id');
+        $resourceFileId = $request->query->get('resourceFileId');
+        $filter = (string) $request->query->get('filter');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
         if (null === $resourceNode) {
@@ -218,9 +218,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         CLinkRepository $cLinkRepository,
         EntityManagerInterface $entityManager
     ): RedirectResponse {
-        $tool = (string) $request->get('tool');
-        $type = (string) $request->get('type');
-        $id = (int) $request->get('id');
+        $tool = (string) $request->attributes->get('tool');
+        $type = (string) $request->attributes->get('type');
+        $id = (int) $request->attributes->get('id');
 
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
@@ -286,7 +286,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         ResourceFileHelper $resourceFileHelper,
         ResourceNodeRepository $resourceNodeRepository,
     ): Response {
-        $id = $request->get('id');
+        $id = $request->attributes->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
         if (null === $resourceNode) {

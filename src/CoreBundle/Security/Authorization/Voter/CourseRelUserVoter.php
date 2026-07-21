@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CourseCatalogueHelper;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -23,7 +23,7 @@ class CourseRelUserVoter extends Voter
     public const VIEW = 'VIEW';
 
     public function __construct(
-        private readonly Security $security,
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
         private readonly CourseCatalogueHelper $courseCatalogueHelper,
     ) {}
 
@@ -41,20 +41,20 @@ class CourseRelUserVoter extends Voter
         }
 
         return match ($attribute) {
-            self::CREATE => $this->canCreate($subject, $user),
-            self::VIEW => $this->canView($subject, $user),
+            self::CREATE => $this->canCreate($token, $subject, $user),
+            self::VIEW => $this->canView($token, $subject, $user),
         };
     }
 
-    private function canCreate(CourseRelUser $subject, User $user): bool
+    private function canCreate(TokenInterface $token, CourseRelUser $subject, User $user): bool
     {
         // Admins may subscribe any user to any course.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 
         // Teachers may subscribe any user, but only to a course where they themselves teach.
-        if ($this->security->isGranted('ROLE_TEACHER') && $subject->getCourse()->hasUserAsTeacher($user)) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_TEACHER']) && $subject->getCourse()->hasUserAsTeacher($user)) {
             return true;
         }
 
@@ -63,11 +63,11 @@ class CourseRelUserVoter extends Voter
             && $this->courseCatalogueHelper->isCourseInPublicCatalogue($subject->getCourse());
     }
 
-    private function canView(CourseRelUser $subject, User $user): bool
+    private function canView(TokenInterface $token, CourseRelUser $subject, User $user): bool
     {
         // Teachers and session managers (and admins, who inherit both) may view any subscription;
         // any other user only their own.
-        if ($this->security->isGranted('ROLE_TEACHER') || $this->security->isGranted('ROLE_SESSION_MANAGER')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_TEACHER']) || $this->accessDecisionManager->decide($token, ['ROLE_SESSION_MANAGER'])) {
             return true;
         }
 

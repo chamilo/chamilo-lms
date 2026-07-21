@@ -16,7 +16,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class CourseVoterTest extends WebTestCase
@@ -38,9 +38,9 @@ class CourseVoterTest extends WebTestCase
         $request_stack = $this->getMockedRequestStack([
             'query' => ['sid' => 1],
         ]);
-        $security = $this->getContainer()->get(Security::class);
+        $accessDecisionManager = $this->getContainer()->get(AccessDecisionManagerInterface::class);
         $settingsManager = $this->getContainer()->get(SettingsManager::class);
-        $voter = new CourseVoter($security, $translator, $settingsManager, $request_stack, $entity_manager);
+        $voter = new CourseVoter($accessDecisionManager, $translator, $settingsManager, $request_stack, $entity_manager);
         foreach ($tests as $message => $test) {
             [$expected, $user, $course] = $test;
             $client->loginUser($user);

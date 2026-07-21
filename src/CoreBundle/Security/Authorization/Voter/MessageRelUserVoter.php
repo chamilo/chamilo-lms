@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\User;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -24,7 +24,7 @@ class MessageRelUserVoter extends Voter
     public const EDIT = 'EDIT';
 
     public function __construct(
-        private readonly Security $security
+        private readonly AccessDecisionManagerInterface $accessDecisionManager
     ) {}
 
     protected function supports(string $attribute, mixed $subject): bool
@@ -41,7 +41,7 @@ class MessageRelUserVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

@@ -38,6 +38,10 @@ if (!array_key_exists('code', $_GET)) {
     // Get the state generated for you and store it to the session.
     ChamiloSession::write('oauth2state', $provider->getState());
 
+    // Store the PKCE code_verifier (if any) so it can be restored on the
+    // next request, since $provider will be a fresh instance by then.
+    ChamiloSession::write('oauth2pkceCode', $provider->getPkceCode());
+
     // Redirect the user to the authorization URL.
     header('Location: '.$authorizationUrl);
     exit;
@@ -47,6 +51,15 @@ if (!array_key_exists('code', $_GET)) {
 if (!array_key_exists('state', $_GET) || ($_GET['state'] !== ChamiloSession::read('oauth2state'))) {
     ChamiloSession::erase('oauth2state');
     exit('Invalid state');
+}
+
+// Restore the PKCE code_verifier generated when the auth request was built
+// (oidc_login.php, or this same file's own initiation branch above), since
+// $provider is a fresh instance for this request and would otherwise have
+// none.
+$pkceCode = ChamiloSession::read('oauth2pkceCode');
+if (!empty($pkceCode)) {
+    $provider->setPkceCode($pkceCode);
 }
 
 try {
@@ -89,10 +102,15 @@ $userInfo['uidReset'] = true;
 $_GET['redirect_after_not_allow_page'] = 1;
 
 $redirectAfterNotAllowPage = ChamiloSession::read('redirect_after_not_allow_page');
+// Also preserve the access token across the clear(): otherwise it's lost
+// and online_logout() never detects the user came in through OAuth2,
+// leaving the logout redirect to the provider (Logout URL) dead.
+$oauth2AccessToken = ChamiloSession::read('oauth2AccessToken');
 
 ChamiloSession::clear();
 
 ChamiloSession::write('redirect_after_not_allow_page', $redirectAfterNotAllowPage);
+ChamiloSession::write('oauth2AccessToken', $oauth2AccessToken);
 
 ChamiloSession::write('_user', $userInfo);
 ChamiloSession::write('_user_auth_source', 'oauth2');

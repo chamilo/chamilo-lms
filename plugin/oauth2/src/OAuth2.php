@@ -68,6 +68,8 @@ class OAuth2 extends Plugin
 
     public const SETTING_ALLOW_THIRD_PARTY_LOGIN = 'allow_third_party_login';
 
+    public const SETTING_PKCE_ENABLE = 'pkce_enable';
+
     public const EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
 
     private const DEBUG = false;
@@ -129,6 +131,8 @@ class OAuth2 extends Plugin
                 self::SETTING_MANAGEMENT_LOGIN_NAME => 'text',
 
                 self::SETTING_ALLOW_THIRD_PARTY_LOGIN => 'boolean',
+
+                self::SETTING_PKCE_ENABLE => 'boolean',
             ]
         );
     }
@@ -159,6 +163,10 @@ class OAuth2 extends Plugin
             'urlAuthorize' => $this->get(self::SETTING_AUTHORIZE_URL),
             'urlResourceOwnerDetails' => $this->get(self::SETTING_RESOURCE_OWNER_DETAILS_URL),
         ];
+
+        if ('true' === $this->get(self::SETTING_PKCE_ENABLE)) {
+            $options['pkceMethod'] = AbstractProvider::PKCE_METHOD_S256;
+        }
 
         if ('' === $scopeSeparator = (string) $this->get(self::SETTING_SCOPE_SEPARATOR)) {
             $scopeSeparator = ' ';

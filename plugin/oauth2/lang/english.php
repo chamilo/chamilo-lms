@@ -126,6 +126,11 @@ $strings['management_login_name_help'] = 'Default value is "Management Login".';
 
 $strings['allow_third_party_login'] = 'Allow third party login';
 
+$strings['pkce_enable'] = 'Enable PKCE';
+$strings['pkce_enable_help'] = 'If enabled, authentication requests use PKCE (Proof Key for Code Exchange, RFC 7636) with the S256 method.
+<br/>Only enable this if the configured OAuth2/OIDC server supports and expects PKCE, otherwise the authorization code exchange will fail.
+<br/>Disabled by default for backward compatibility with existing configurations.';
+
 // please keep these below alphabetically sorted
 $strings['AccountInactive'] = "Account inactive";
 $strings['DefaultFirstname'] = 'OAuth2 User default firstname';

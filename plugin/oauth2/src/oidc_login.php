@@ -42,6 +42,7 @@ try {
     );
 
     ChamiloSession::write('oauth2state', $provider->getState());
+    ChamiloSession::write('oauth2pkceCode', $provider->getPkceCode());
 
     $httpResponse = new RedirectResponse($authorizationUrl);
     $httpResponse->send();

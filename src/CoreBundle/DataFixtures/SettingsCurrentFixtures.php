@@ -3149,11 +3149,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => "X-XSS-Protection sets the configuration for the cross-site scripting filter built into most browsers. Recommended value '1; mode=block'.",
                 ],
                 [
-                    'name' => 'file_integrity_check_enabled',
-                    'title' => 'File integrity check',
-                    'comment' => 'Enable the periodic file integrity scan (app:file-integrity:scan) that compares the installed files against a trusted baseline and alerts administrators of unexpected changes.',
-                ],
-                [
                     'name' => 'file_integrity_check_notify_admins',
                     'title' => 'File integrity check notification recipients',
                     'comment' => 'Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead.',

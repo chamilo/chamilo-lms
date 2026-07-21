@@ -47,11 +47,9 @@ class FileIntegrityScanCommand extends Command
             ->setHelp(
                 'Intended to run from cron, e.g.:'."\n\n"
                 .'    0 3 * * *  cd /var/www/chamilo && php bin/console app:file-integrity:scan'."\n\n"
-                .'Reads the "security.file_integrity_check_enabled" platform setting (Administration '
-                .'> Settings > Security) and does nothing when it is off. Recipients come from the '
-                .'"security.file_integrity_check_notify_admins" setting, or every global administrator '
-                .'when that list is empty. During a maintenance window opened with '
-                .'app:file-integrity:snooze, the current tree is silently adopted as the new baseline '
+                .'Recipients come from the "security.file_integrity_check_notify_admins" setting, or '
+                .'every global administrator when that list is empty. During a maintenance window opened '
+                .'with app:file-integrity:snooze, the current tree is silently adopted as the new baseline '
                 .'instead of raising an alert.'
             )
         ;
@@ -66,14 +64,6 @@ class FileIntegrityScanCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
         $debug = true === $input->getOption('debug');
-
-        if ('true' !== $this->settingsManager->getSetting('security.file_integrity_check_enabled', true)) {
-            if ($debug) {
-                $io->note('File integrity check is disabled (security.file_integrity_check_enabled).');
-            }
-
-            return Command::SUCCESS;
-        }
 
         if ($this->checker->isRunInProgress()) {
             $io->note('A file integrity scan is already running; skipping this run.');

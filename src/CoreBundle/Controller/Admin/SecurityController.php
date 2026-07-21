@@ -320,7 +320,7 @@ final class SecurityController extends BaseController
             'csrf_token' => $csrfToken,
             'settings_search_url' => $this->generateUrl(
                 'chamilo_platform_settings_search',
-                ['keyword' => 'file_integrity_check_enabled']
+                ['keyword' => 'file_integrity_check_notify_admins']
             ),
             'cef_log_url' => $this->generateUrl('admin_security_file_integrity_cef_log'),
             'project_dir' => $this->getParameter('kernel.project_dir'),

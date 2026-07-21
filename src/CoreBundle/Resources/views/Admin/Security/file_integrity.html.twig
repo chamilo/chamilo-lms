@@ -229,7 +229,7 @@
                 </h2>
 
                 <div class="flex flex-wrap items-stretch gap-4">
-                    <div class="flex-1 rounded-xl border border-gray-25 p-3">
+                    <div class="flex flex-1 flex-col justify-end rounded-xl border border-gray-25 p-3">
                         <form method="post" action="{{ path('admin_security_file_integrity_action') }}">
                             <input type="hidden" name="_token" value="{{ csrf_token }}">
                             <input type="hidden" name="action" value="scan">

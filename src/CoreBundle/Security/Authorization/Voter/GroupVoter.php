@@ -13,9 +13,9 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\ORM\EntityManager;
 use GroupManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,7 +29,7 @@ class GroupVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private Security $security;
+    private AccessDecisionManagerInterface $accessDecisionManager;
     private RequestStack $requestStack;
 
     public function __construct(
@@ -37,12 +37,12 @@ class GroupVoter extends Voter
         // CourseRepository $courseManager,
         // CGroupRepository $groupManager,
         RequestStack $requestStack,
-        Security $security
+        AccessDecisionManagerInterface $accessDecisionManager
     ) {
         // $this->entityManager = $entityManager;
         // $this->courseManager = $courseManager;
         // $this->groupManager = $groupManager;
-        $this->security = $security;
+        $this->accessDecisionManager = $accessDecisionManager;
         $this->requestStack = $requestStack;
     }
 
@@ -72,7 +72,7 @@ class GroupVoter extends Voter
         }
 
         // Admins have access to everything.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

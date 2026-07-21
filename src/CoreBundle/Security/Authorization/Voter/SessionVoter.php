@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,7 +28,7 @@ class SessionVoter extends Voter
     public const DELETE = 'DELETE';
 
     public function __construct(
-        private readonly Security $security,
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
         private readonly SettingsManager $settingsManager,
         private readonly SessionVisibilityHelper $sessionVisibilityHelper,
     ) {}
@@ -60,7 +60,10 @@ class SessionVoter extends Voter
         }
 
         // Admins have access to everything.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        // Use the AccessDecisionManager (not Security::isGranted) so the nested
+        // decision runs against the exact token passed to this voter, per the
+        // Symfony voter docs ("Checking for Roles inside a Voter").
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 
@@ -101,7 +104,7 @@ class SessionVoter extends Voter
                 // canEditSession() runs the per-session ownership check (allowed())
                 // so non-admin session managers/teachers are confined to the
                 // sessions they actually own/coach.
-                return $this->canEditSession($user, $session);
+                return $this->canEditSession($token, $user, $session);
         }
 
         return false;
@@ -110,34 +113,34 @@ class SessionVoter extends Voter
     // Admins are already granted in voteOnAttribute(), so the methods below only
     // ever run for non-admin users. ROLE_ADMIN is therefore intentionally not
     // re-checked here.
-    private function canEditSession(User $user, Session $session): bool
+    private function canEditSession(TokenInterface $token, User $user, Session $session): bool
     {
-        if (!$this->allowToManageSessions()) {
+        if (!$this->allowToManageSessions($token)) {
             return false;
         }
 
-        return $this->allowed($user, $session);
+        return $this->allowed($token, $user, $session);
     }
 
-    private function allowToManageSessions(): bool
+    private function allowToManageSessions(TokenInterface $token): bool
     {
-        if ($this->security->isGranted('ROLE_SESSION_MANAGER')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_SESSION_MANAGER'])) {
             return true;
         }
 
-        return $this->teachersCanCreateSessions() && $this->security->isGranted('ROLE_TEACHER');
+        return $this->teachersCanCreateSessions() && $this->accessDecisionManager->decide($token, ['ROLE_TEACHER']);
     }
 
-    private function allowed(User $user, Session $session): bool
+    private function allowed(TokenInterface $token, User $user, Session $session): bool
     {
-        if ($this->security->isGranted('ROLE_SESSION_MANAGER')
+        if ($this->accessDecisionManager->decide($token, ['ROLE_SESSION_MANAGER'])
             && 'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions', true)
             && !$session->hasUserAsSessionAdmin($user)
         ) {
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_TEACHER')
+        if ($this->accessDecisionManager->decide($token, ['ROLE_TEACHER'])
             && $this->teachersCanCreateSessions()
             && !$session->hasUserAsGeneralCoach($user)
         ) {

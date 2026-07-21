@@ -8,11 +8,13 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\FileIntegrityChecker;
 use Chamilo\CoreBundle\Helpers\IntrusionDetectionLogHelper;
 use Chamilo\CoreBundle\Helpers\WeakPasswordCheckerHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use DateTimeImmutable;
+use RuntimeException;
 use Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,6 +48,7 @@ final class SecurityController extends BaseController
         private readonly UserRepository $userRepository,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly TranslatorInterface $translator,
+        private readonly FileIntegrityChecker $fileIntegrityChecker,
         #[Autowire(param: 'chamilo.ids.enabled')]
         private readonly bool $idsEnabled,
     ) {}
@@ -296,6 +299,110 @@ final class SecurityController extends BaseController
             'scanned_users' => array_map([$this, 'formatPasswordStrengthUser'], $scannedUsers),
             'weak_users' => array_map([$this, 'formatPasswordStrengthUser'], $weakUsers),
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/file-integrity', name: 'admin_security_file_integrity', methods: ['GET'])]
+    public function fileIntegrity(): Response
+    {
+        $csrfToken = $this->csrfTokenManager->getToken('file_integrity_action')->getValue();
+
+        return $this->render('@ChamiloCore/Admin/Security/file_integrity.html.twig', [
+            'report' => $this->fileIntegrityChecker->getLastReport(),
+            'has_baseline' => $this->fileIntegrityChecker->hasBaseline(),
+            'is_snoozed' => $this->fileIntegrityChecker->isSnoozed(),
+            'snooze_until' => $this->fileIntegrityChecker->getSnoozeUntil(),
+            'run_status' => $this->fileIntegrityChecker->getRunStatus(),
+            'history' => $this->fileIntegrityChecker->getHistory(),
+            'is_global_admin' => $this->isGranted('ROLE_GLOBAL_ADMIN'),
+            'csrf_token' => $csrfToken,
+            'settings_search_url' => $this->generateUrl(
+                'chamilo_platform_settings_search',
+                ['keyword' => 'file_integrity_check_enabled']
+            ),
+            'project_dir' => $this->getParameter('kernel.project_dir'),
+        ]);
+    }
+
+    #[IsGranted('ROLE_GLOBAL_ADMIN')]
+    #[Route('/file-integrity/action', name: 'admin_security_file_integrity_action', methods: ['POST'])]
+    public function fileIntegrityAction(Request $request): RedirectResponse
+    {
+        $redirect = new RedirectResponse($this->generateUrl('admin_security_file_integrity'));
+        $token = (string) $request->request->get('_token', '');
+
+        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken('file_integrity_action', $token))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $action = (string) $request->request->get('action', '');
+        $currentUser = $this->getUser();
+
+        if (!\in_array($action, ['scan', 'rebaseline', 'pause'], true) || !$currentUser instanceof User) {
+            $this->addFlash('warning', $this->translator->trans('Invalid action.'));
+
+            return $redirect;
+        }
+
+        // Pausing or adopting a new baseline can hide an ongoing intrusion, so a
+        // hijacked admin session alone must not be enough: re-check the password.
+        if (\in_array($action, ['pause', 'rebaseline'], true)) {
+            $password = (string) $request->request->get('admin_password', '');
+
+            if ('' === $password || !$this->userRepository->isPasswordValid($currentUser, $password)) {
+                $this->addFlash('warning', $this->translator->trans('Incorrect password.'));
+
+                return $redirect;
+            }
+        }
+
+        if ('pause' === $action) {
+            $this->fileIntegrityChecker->snooze(3600);
+            $this->addFlash('success', $this->translator->trans('File integrity alerting paused for 1 hour.'));
+
+            return $redirect;
+        }
+
+        // 'scan' and 'rebaseline' both walk the whole tree, which can take
+        // minutes: refuse to start a second one on top of one already running.
+        if ($this->fileIntegrityChecker->isRunInProgress()) {
+            $this->addFlash(
+                'warning',
+                $this->translator->trans('A scan is already running. Please wait for it to finish before starting another one.')
+            );
+
+            return $redirect;
+        }
+
+        // A full tree walk can take a while: release the session lock and lift the time limit.
+        session_write_close();
+        set_time_limit(0);
+
+        try {
+            if ('rebaseline' === $action) {
+                $count = $this->fileIntegrityChecker->generateBaseline();
+                $this->addFlash(
+                    'success',
+                    \sprintf($this->translator->trans('New baseline established: %s files.'), (string) $count)
+                );
+
+                return $redirect;
+            }
+
+            $report = $this->fileIntegrityChecker->scan();
+        } catch (RuntimeException $e) {
+            $this->addFlash('warning', $e->getMessage());
+
+            return $redirect;
+        }
+
+        if ($this->fileIntegrityChecker->hasDrift($report) || $report['gitConfigChanged']) {
+            $this->addFlash('warning', $this->translator->trans('Scan complete: changes were detected.'));
+        } else {
+            $this->addFlash('success', $this->translator->trans('Scan complete: no changes were detected.'));
+        }
+
+        return $redirect;
     }
 
     /**

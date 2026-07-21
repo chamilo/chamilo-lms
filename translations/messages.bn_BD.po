@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ফর্মুলা নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ফর্মুলার উদাহরণ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -37337,4 +37337,139 @@ msgstr "দ্বারা"
 
 msgid "required"
 msgstr "প্রয়োজনীয়"
+
+msgid "Incorrect password."
+msgstr "ভুল পাসওয়ার্ড।"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "ফাইল ইন্টেগ্রিটি অ্যালার্ট ১ ঘণ্টার জন্য বিরতি দেওয়া হয়েছে।"
+
+msgid "New baseline established: %s files."
+msgstr "নতুন বেসলাইন প্রতিষ্ঠিত: %s ফাইল।"
+
+msgid "Scan complete: changes were detected."
+msgstr "স্ক্যান সম্পন্ন: পরিবর্তন সনাক্ত করা হয়েছে।"
+
+msgid "Scan complete: no changes were detected."
+msgstr "স্ক্যান সম্পন্ন: কোনো পরিবর্তন সনাক্ত করা হয়নি।"
+
+msgid "File integrity"
+msgstr "ফাইল ইন্টেগ্রিটি"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "এই রিপোর্ট ইনস্টল করা ফাইলগুলোকে (var/ এবং .git/ বাদে, যদিও .git/config এখনো হাইজ্যাকড রিমোট ধরতে দেখা হয়) একটি বিশ্বস্ত বেসলাইনের সাথে তুলনা করে অপ্রত্যাশিত সংযোজন, পরিবর্তন বা মুছে ফেলা সনাক্ত করে।"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "আপনি নিচে সর্বশেষ রিপোর্ট পর্যালোচনা করতে পারেন। স্ক্যান চালানো, অ্যালার্ট বিরতি দেওয়া বা নতুন বেসলাইন প্রতিষ্ঠা করতে গ্লোবাল অ্যাডমিনিস্ট্রেটর প্রয়োজন।"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "রক্ষণাবেক্ষণের জন্য অ্যালার্টিং বর্তমানে বিরতি দেওয়া আছে। এটি স্বয়ংক্রিয়ভাবে %date% এ পুনরায় শুরু হবে।"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "এখনো কোনো স্ক্যান চালানো হয়নি। এখান থেকে বা কমান্ড লাইন থেকে app:file-integrity:scan দিয়ে একটি চালান।"
+
+msgid "Last scan"
+msgstr "সর্বশেষ স্ক্যান"
+
+msgid "Files scanned"
+msgstr "স্ক্যান করা ফাইল"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "এখনো কোনো বেসলাইন ছিল না: এই স্ক্যান একটি প্রতিষ্ঠা করেছে। পরবর্তী স্ক্যান থেকে পরিবর্তন রিপোর্ট করা হবে।"
+
+msgid "No changes detected since the baseline."
+msgstr "বেসলাইনের পর থেকে কোনো পরিবর্তন সনাক্ত করা হয়নি।"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git রিমোট কনফিগারেশন (.git/config) পরিবর্তিত হয়েছে। এটি প্রত্যাশিত ছিল কিনা যাচাই করুন।"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "স্ক্যান তাড়াতাড়ি বন্ধ হয়েছে কারণ একটি সাবডিরেক্টরি পড়া যায়নি (ফাইল অনুমতি চেক করুন)। নিচের ফলাফল আংশিক হতে পারে।"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "পূর্ণ তালিকা করার জন্য অনেক পরিবর্তন; প্রতিটি বিভাগের শুধু প্রথম এন্ট্রিগুলো নিচে দেখানো হয়েছে। সম্পূর্ণ তালিকার জন্য CEF লগ দেখুন।"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% ফাইল(গুলো) পড়া যায়নি (অনুমতি) এবং এড়িয়ে যাওয়া হয়েছে।"
+
+msgid "Run a scan now"
+msgstr "এখন একটি স্ক্যান চালান"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "১ ঘণ্টার জন্য অ্যালার্টিং বিরতি দিন (রক্ষণাবেক্ষণের জন্য)"
+
+msgid "Pause for 1 hour"
+msgstr "১ ঘণ্টার জন্য বিরতি দিন"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "বর্তমান ফাইল ট্রি নতুন বেসলাইন হিসেবে বিশ্বাস করুন"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "এটি প্রতিটি বর্তমান ফাইলকে সঠিক হিসেবে বিশ্বাস করবে, যেকোনো অপর্যালোচিত পরিবর্তনসহ। চালিয়ে যাবেন?"
+
+msgid "Establish new baseline"
+msgstr "নতুন বেসলাইন প্রতিষ্ঠা করুন"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "উদাহরণস্বরূপ একটি সিস্টেম ক্রনট্যাব থেকে স্ক্যান শিডিউল করুন"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% এ ফাইল ইন্টেগ্রিটি অ্যালার্ট"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "একটি ফাইল ইন্টেগ্রিটি স্ক্যান প্ল্যাটফর্মে পরিবর্তন সনাক্ত করেছে:"
+
+msgid "Added files"
+msgstr "যোগ করা ফাইল"
+
+msgid "Modified files"
+msgstr "পরিবর্তিত ফাইল"
+
+msgid "Deleted files"
+msgstr "মুছে ফেলা ফাইল"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "প্রশাসন > নিরাপত্তা > ফাইল ইন্টেগ্রিটি থেকে সম্পূর্ণ রিপোর্ট পর্যালোচনা করুন।"
+
+msgid "Password to confirm pausing alerts"
+msgstr "অ্যালার্ট বিরতি নিশ্চিত করার পাসওয়ার্ড"
+
+msgid "Password to confirm the new baseline"
+msgstr "নতুন বেসলাইন নিশ্চিত করার পাসওয়ার্ড"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "একটি স্ক্যান ইতিমধ্যে চলছে। অন্যটি শুরু করার আগে এটি শেষ হওয়ার জন্য অপেক্ষা করুন।"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "একটি স্ক্যান বর্তমানে চলছে (%date% এ শুরু হয়েছে)। একটি সম্পূর্ণ স্ক্যানে কয়েক মিনিট সময় লাগতে পারে; অগ্রগতি পরীক্ষা করতে এই পৃষ্ঠাটি নিরাপদে রিলোড করা যাবে।"
+
+msgid "Currently processing"
+msgstr "বর্তমানে প্রক্রিয়াকরণ চলছে"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "একটি পূর্ববর্তী স্ক্যান (%date% এ শুরু হয়েছে) সম্পন্ন হওয়ার আগেই বাধাগ্রস্ত হয়েছে — প্রক্রিয়াটি আর চলছে না। আপনি নিরাপদে একটি নতুন স্ক্যান শুরু করতে পারেন।"
+
+msgid "files"
+msgstr "ফাইলসমূহ"
+
+msgid "Permissions changed"
+msgstr "অনুমতি পরিবর্তিত হয়েছে"
+
+msgid "Files with changed permissions"
+msgstr "যেসব ফাইলের অনুমতি পরিবর্তিত হয়েছে"
+
+msgid "Alert history"
+msgstr "সতর্কতার ইতিহাস"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "প্রতিটি স্ক্যান যেখানে কিছু পাওয়া গিয়েছে, তা ড্রিফট সমাধান হওয়ার পরেও বা নতুন বেসলাইন তৈরি হওয়ার পরেও রাখা হয় — উপরের রিপোর্টের বিপরীতে, একটি পরিষ্কার স্ক্যান বা রিবেসলাইন এটি কখনো মুছে ফেলে না।"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "এই এন্ট্রিটি ক্যাপচারের সময় কাটা হয়েছে; সম্পূর্ণ তালিকার জন্য CEF লগ দেখুন।"
+
+msgid "No alert has been recorded yet."
+msgstr "এখনো কোনো সতর্কতা রেকর্ড করা হয়নি।"
+
+msgid "Git remote changed"
+msgstr "Git রিমোট পরিবর্তিত হয়েছে"
 

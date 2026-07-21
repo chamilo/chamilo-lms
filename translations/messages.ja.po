@@ -37408,3 +37408,138 @@ msgstr "作成者"
 msgid "required"
 msgstr "必須"
 
+msgid "Incorrect password."
+msgstr "パスワードが正しくありません。"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "ファイル整合性アラートを1時間一時停止しました。"
+
+msgid "New baseline established: %s files."
+msgstr "新しいベースラインを確立しました: %s ファイル。"
+
+msgid "Scan complete: changes were detected."
+msgstr "スキャン完了: 変更が検出されました。"
+
+msgid "Scan complete: no changes were detected."
+msgstr "スキャン完了: 変更は検出されませんでした。"
+
+msgid "File integrity"
+msgstr "ファイル整合性"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "このレポートは、インストールされたファイル（var/ と .git/ を除く。ただし .git/config はリモートハイジャックを検知するため監視対象）を信頼できるベースラインと比較し、予期しない追加・変更・削除を検出します。"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "最新のレポートは以下で確認できます。スキャンの実行、アラートの停止、または新しいベースラインの確立にはグローバル管理者権限が必要です。"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "メンテナンスのためアラートは現在一時停止中です。%date% に自動的に再開されます。"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "まだスキャンが実行されていません。ここから、またはコマンドラインで app:file-integrity:scan を実行してください。"
+
+msgid "Last scan"
+msgstr "最終スキャン"
+
+msgid "Files scanned"
+msgstr "スキャン済みファイル"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "ベースラインはまだ存在しませんでした。このスキャンでベースラインを確立しました。変更は次回以降のスキャンから報告されます。"
+
+msgid "No changes detected since the baseline."
+msgstr "ベースライン以降の変更は検出されませんでした。"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Gitリモート設定（.git/config）が変更されました。意図した変更か確認してください。"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "サブディレクトリが読み取れなかったため、スキャンは途中で停止しました。以下の結果は一部のみである可能性があります。"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "変更が多すぎるため全件表示できません。各カテゴリの最初のエントリのみ表示しています。完全なリストは CEF ログを参照してください。"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% ファイルが読み取れず（権限）、スキップされました。"
+
+msgid "Run a scan now"
+msgstr "今すぐスキャンを実行"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "1時間アラートを一時停止（メンテナンス用）"
+
+msgid "Pause for 1 hour"
+msgstr "1時間一時停止"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "現在のファイルツリーを新しいベースラインとして信頼する"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "未確認の変更を含むすべての現在のファイルを正しいものとして信頼します。続行しますか？"
+
+msgid "Establish new baseline"
+msgstr "新しいベースラインを確立"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "システムの crontab からスキャンをスケジュールする例"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% のファイル整合性アラート"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "ファイル整合性スキャンでプラットフォーム上の変更が検出されました:"
+
+msgid "Added files"
+msgstr "追加されたファイル"
+
+msgid "Modified files"
+msgstr "変更されたファイル"
+
+msgid "Deleted files"
+msgstr "削除されたファイル"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "管理 > セキュリティ > ファイル整合性 から完全なレポートを確認してください。"
+
+msgid "Password to confirm pausing alerts"
+msgstr "アラートの一時停止を確認するパスワード"
+
+msgid "Password to confirm the new baseline"
+msgstr "新しいベースラインを確認するパスワード"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "スキャンがすでに実行中です。新しいスキャンを開始する前に完了を待ってください。"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "スキャンが現在実行中です（%date% に開始）。完全なスキャンには数分かかることがあります。このページは安全に再読み込みして進捗を確認できます。"
+
+msgid "Currently processing"
+msgstr "現在処理中"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "以前のスキャン（%date% に開始）が完了前に中断されました — プロセスはすでに実行されていません。新しいスキャンを安全に開始できます。"
+
+msgid "files"
+msgstr "ファイル"
+
+msgid "Permissions changed"
+msgstr "権限が変更されました"
+
+msgid "Files with changed permissions"
+msgstr "権限が変更されたファイル"
+
+msgid "Alert history"
+msgstr "アラート履歴"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "何らかの検出があったスキャンはすべて記録され、差異が解消されたり新しいベースラインが設定された後も保持されます — 上記のレポートとは異なり、クリーンなスキャンや再ベースラインによってこの履歴がクリアされることはありません。"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "このエントリは取得時に切り詰められました。完全なリストは CEF ログを参照してください。"
+
+msgid "No alert has been recorded yet."
+msgstr "まだアラートは記録されていません。"
+
+msgid "Git remote changed"
+msgstr "Git リモートが変更されました"
+

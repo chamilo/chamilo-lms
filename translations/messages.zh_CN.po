@@ -37344,3 +37344,138 @@ msgstr "作者"
 msgid "required"
 msgstr "必填"
 
+msgid "Incorrect password."
+msgstr "密码错误。"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "文件完整性警报已暂停 1 小时。"
+
+msgid "New baseline established: %s files."
+msgstr "已建立新基线：%s 个文件。"
+
+msgid "Scan complete: changes were detected."
+msgstr "扫描完成：检测到更改。"
+
+msgid "Scan complete: no changes were detected."
+msgstr "扫描完成：未检测到更改。"
+
+msgid "File integrity"
+msgstr "文件完整性"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "此报告将已安装的文件（除 var/ 和 .git/ 外，但仍监视 .git/config 以检测远程劫持）与可信基线进行比较，以检测意外的添加、修改或删除。"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "您可以在下方查看最新报告。运行扫描、暂停警报或建立新基线需要全局管理员权限。"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "警报当前因维护而暂停。它将在 %date% 自动恢复。"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "尚未运行扫描。请从此处或使用命令行 app:file-integrity:scan 运行扫描。"
+
+msgid "Last scan"
+msgstr "上次扫描"
+
+msgid "Files scanned"
+msgstr "已扫描文件"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "尚无基线：本次扫描已建立基线。从下次扫描起将报告更改。"
+
+msgid "No changes detected since the baseline."
+msgstr "自基线以来未检测到更改。"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git 远程配置（.git/config）已更改。请确认此操作是否符合预期。"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "扫描因无法读取子目录而提前停止（请检查文件权限）。以下结果可能不完整。"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "更改过多，无法完整列出；仅显示每类前几项。完整列表请参阅 CEF 日志。"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% 个文件因权限问题无法读取，已跳过。"
+
+msgid "Run a scan now"
+msgstr "立即运行扫描"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "暂停警报 1 小时（用于维护）"
+
+msgid "Pause for 1 hour"
+msgstr "暂停 1 小时"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "将当前文件树设为新基线"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "这将信任所有当前文件为正确，包括任何未审核的更改。继续？"
+
+msgid "Establish new baseline"
+msgstr "建立新基线"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "例如从系统 crontab 计划扫描"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% 的文件完整性警报"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "文件完整性扫描在平台上检测到更改："
+
+msgid "Added files"
+msgstr "已添加文件"
+
+msgid "Modified files"
+msgstr "已修改的文件"
+
+msgid "Deleted files"
+msgstr "已删除的文件"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "请在“管理 > 安全 > 文件完整性”中查看完整报告。"
+
+msgid "Password to confirm pausing alerts"
+msgstr "确认暂停警报的密码"
+
+msgid "Password to confirm the new baseline"
+msgstr "确认新基线的密码"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "已有扫描正在运行。请等待其完成后再启动新的扫描。"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "当前正在运行扫描（开始于 %date%）。完整扫描可能需要数分钟；可安全刷新此页面以查看进度。"
+
+msgid "Currently processing"
+msgstr "正在处理"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "之前的扫描（开始于 %date%）在完成前被中断——进程已不再运行。您可以安全地启动新的扫描。"
+
+msgid "files"
+msgstr "文件"
+
+msgid "Permissions changed"
+msgstr "权限已更改"
+
+msgid "Files with changed permissions"
+msgstr "权限已更改的文件"
+
+msgid "Alert history"
+msgstr "警报历史"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "每次发现问题的扫描都会保留，即使偏差已解决或建立了新基线——与上方报告不同，干净扫描或重新基线不会清除此记录。"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "此条目在捕获时被截断；请参阅 CEF 日志以获取完整列表。"
+
+msgid "No alert has been recorded yet."
+msgstr "尚未记录任何警报。"
+
+msgid "Git remote changed"
+msgstr "Git 远程已更改"
+

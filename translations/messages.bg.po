@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Октетен поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -37343,4 +37343,139 @@ msgstr "от"
 
 msgid "required"
 msgstr "задължително"
+
+msgid "Incorrect password."
+msgstr "Неправилна парола."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Сигналът за цялост на файловете е спрян за 1 час."
+
+msgid "New baseline established: %s files."
+msgstr "Установена е нова базова линия: %s файла."
+
+msgid "Scan complete: changes were detected."
+msgstr "Сканирането завърши: открити са промени."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Сканирането завърши: не са открити промени."
+
+msgid "File integrity"
+msgstr "Цялост на файловете"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Този доклад сравнява инсталираните файлове (всичко освен var/ и .git/, въпреки че .git/config все още се наблюдава, за да се открие отвлечен отдалечен адрес) с доверена базова линия, за да се открият неочаквани добавяния, промени или изтривания."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Можете да прегледате последния доклад по-долу. Изпълнението на сканиране, спирането на сигнали или установяването на нова базова линия изисква глобален администратор."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Сигналите са спрени временно за поддръжка. Те ще се възобновят автоматично на %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Все още не е извършено сканиране. Изпълнете едно оттук или от командния ред с app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Последно сканиране"
+
+msgid "Files scanned"
+msgstr "Сканирани файлове"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Все още не е съществувала базова линия: това сканиране я установи. Промените ще се отчитат от следващото сканиране."
+
+msgid "No changes detected since the baseline."
+msgstr "Не са открити промени спрямо базовата линия."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Конфигурацията на Git отдалечения адрес (.git/config) е променена. Проверете дали това е очаквано."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Сканирането спря преждевременно, защото поддиректория не можа да бъде прочетена (проверете правата за достъп до файловете). Резултатите по-долу може да са частични."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Твърде много промени за пълно показване; по-долу са показани само първите записи от всяка категория. Вижте CEF журнала за пълния списък."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% файл(а) не можаха да бъдат прочетени (права за достъп) и бяха пропуснати."
+
+msgid "Run a scan now"
+msgstr "Изпълни сканиране сега"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Спри сигналите за 1 час (за поддръжка)"
+
+msgid "Pause for 1 hour"
+msgstr "Спри за 1 час"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Довери се на текущото дърво от файлове като нова базова линия"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Това ще приеме всеки текущ файл като правилен, включително всяка непрегледана промяна. Продължи?"
+
+msgid "Establish new baseline"
+msgstr "Установи нова базова линия"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Планирай сканирането от системен crontab, например"
+
+msgid "File integrity alert on %platform%"
+msgstr "Сигнал за цялост на файловете на %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Сканиране за цялост на файловете откри промени на платформата:"
+
+msgid "Added files"
+msgstr "Добавени файлове"
+
+msgid "Modified files"
+msgstr "Променени файлове"
+
+msgid "Deleted files"
+msgstr "Изтрити файлове"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Прегледайте пълния доклад от Администриране > Сигурност > Целост на файловете."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Парола за потвърждение на паузиране на предупрежденията"
+
+msgid "Password to confirm the new baseline"
+msgstr "Парола за потвърждение на новата базова линия"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "В момента се изпълнява сканиране. Моля, изчакайте да завърши, преди да стартирате ново."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "В момента се изпълнява сканиране (стартирано на %date%). Пълното сканиране може да отнеме няколко минути; тази страница може безопасно да се презареди, за да се провери напредъкът."
+
+msgid "Currently processing"
+msgstr "В момента се обработва"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Предишно сканиране (стартирано на %date%) беше прекъснато преди да завърши — процесът вече не се изпълнява. Можете безопасно да стартирате ново."
+
+msgid "files"
+msgstr "файлове"
+
+msgid "Permissions changed"
+msgstr "Променени права"
+
+msgid "Files with changed permissions"
+msgstr "Файлове с променени права"
+
+msgid "Alert history"
+msgstr "История на предупрежденията"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Всяко сканиране, което е открило нещо, се запазва дори след отстраняване на отклонението или установяване на нова базова линия — за разлика от горния доклад, чистото сканиране или повторното установяване на базова линия никога не изчиства това."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Този запис е съкратен по време на заснемането; вижте CEF журнала за пълния списък."
+
+msgid "No alert has been recorded yet."
+msgstr "Все още не е записано предупреждение."
+
+msgid "Git remote changed"
+msgstr "Променен отдалечен Git"
 

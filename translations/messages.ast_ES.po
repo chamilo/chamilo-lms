@@ -37344,3 +37344,138 @@ msgstr "por"
 msgid "required"
 msgstr "obligatoriu"
 
+msgid "Incorrect password."
+msgstr "Contraseña incorreuta."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alerta d'integridá de ficheros pospuesta 1 hora."
+
+msgid "New baseline established: %s files."
+msgstr "Nueva llinia base establecida: %s ficheros."
+
+msgid "Scan complete: changes were detected."
+msgstr "Escáner completáu: cambeos detectaos."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Escáner completáu: nun se detectaron cambeos."
+
+msgid "File integrity"
+msgstr "Integridá de ficheros"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Esti informe compara los ficheros instalaos (too sacante var/ y .git/, anque .git/config tovía se vixila pa detectar un remotu secuestráu) con una llinia base de confianza, pa detectar adiciones, modificaciones o eliminaciones inesperaes."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Pues revisar l'informe más recién embaxo. Pa executar un escáner, posponer l'alerta o establecer una nueva llinia base, ríquese un alministrador global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "L'alerta ta pospuesta agora pa mantenimientu. Reanudaráse automáticamente en %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Entá nun s'executó nengún escáner. Executa unu dende equí o dende la llinia de comandos con app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Últimu escáner"
+
+msgid "Files scanned"
+msgstr "Ficheros escaneaos"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Entá nun esistía llinia base: esti escáner estableció una. Los cambeos informaránse a partir del siguiente escáner."
+
+msgid "No changes detected since the baseline."
+msgstr "Nun se detectaron cambeos dende la llinia base."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "La configuración remota de Git (.git/config) camudó. Verifica que fuera esperáu."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "L'escáner paró enantes porque nun pudo lleese un subdireutoriu (comprueba los permisos de ficheros). Los resultaos embaxo puen ser parciales."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Demasiaos cambeos pa llistar completos; namái se amuesen embaxo les primeres entraes de cada categoría. Consulta'l log CEF pa la llista completa."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% ficheru(os) nun pudieron lleese (permisos) y saltáronse."
+
+msgid "Run a scan now"
+msgstr "Executar un escáner agora"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Posponer l'alerta 1 hora (pa mantenimientu)"
+
+msgid "Pause for 1 hour"
+msgstr "Posponer 1 hora"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Confiar nel árbol de ficheros actual como nueva llinia base"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Esto va confiar en tolos ficheros actuales como correutos, incluyendo cualesquier cambéu non revisáu. ¿Continuar?"
+
+msgid "Establish new baseline"
+msgstr "Establecer nueva llinia base"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Programar l'escáner dende un crontab del sistema, por exemplu"
+
+msgid "File integrity alert on %platform%"
+msgstr "Alerta d'integridá de ficheros en %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Un escáner d'integridá de ficheros detectó cambeos na plataforma:"
+
+msgid "Added files"
+msgstr "Ficheros amestaos"
+
+msgid "Modified files"
+msgstr "Ficheros modificaos"
+
+msgid "Deleted files"
+msgstr "Ficheros desaniciaos"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Revisa l'informe completu dende Alministración > Seguridá > Integridá de ficheros."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Contraseña pa confirmar la posposición d'alertes"
+
+msgid "Password to confirm the new baseline"
+msgstr "Contraseña pa confirmar la nueva llinia base"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Yá hai una esploración en cursu. Espera a que fine enantes d'aniciar otra."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Hai una esploración en cursu (aniciada'l %date%). Una esploración completa pue tardar dellos minutos; esta páxina pue recargase de mou seguru pa comprobar el progresu."
+
+msgid "Currently processing"
+msgstr "Procesando agora"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Una esploración anterior (aniciada'l %date%) interrumpióse enantes de finar — el procesu yá nun ta executándose. Pues aniciar una nueva de mou seguru."
+
+msgid "files"
+msgstr "ficheros"
+
+msgid "Permissions changed"
+msgstr "Permisos camudaos"
+
+msgid "Files with changed permissions"
+msgstr "Ficheros con permisos camudaos"
+
+msgid "Alert history"
+msgstr "Historial d'alertes"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Cada esploración que topó daqué, caltenida inclusu depués de resolver la deriva o d'establecer una nueva llinia base — a diferencia del informe d'arriba, una esploración llimpia o una redefinición de llinia base enxamás borra esto."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Esta entrada truncóse nel momentu de la captura; consulta'l rexistru CEF pa ver la llista completa."
+
+msgid "No alert has been recorded yet."
+msgstr "Entá nun se grabó nenguna alerta."
+
+msgid "Git remote changed"
+msgstr "Git remotu camudáu"
+

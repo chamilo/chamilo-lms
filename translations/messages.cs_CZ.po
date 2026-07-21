@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukázkový vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorek vzorce: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autorské právo,, no:bez autorského práva"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Složka,, application/msword:MsWord,, application/octet-stream:Datový proud,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Složka,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cvičení,,      simulation:simulace,,      questionnaire:dotazník,,      diagram:diagram,,      figure:obrázek,,      graph:graf,,      index:index,,      slide:slide,,      table:tabulka,,      narrative text:narrativní text,,      exam:zkouška,,      experiment:experiment,,      problem statement:zadání problému,,      self assessment:sám sebehodnocení,,      lecture:přednáška"
@@ -37337,4 +37337,139 @@ msgstr "od"
 
 msgid "required"
 msgstr "povinné"
+
+msgid "Incorrect password."
+msgstr "Nesprávné heslo."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Upozorňování na integritu souborů pozastaveno na 1 hodinu."
+
+msgid "New baseline established: %s files."
+msgstr "Nová základní linie vytvořena: %s souborů."
+
+msgid "Scan complete: changes were detected."
+msgstr "Skenování dokončeno: byly zjištěny změny."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Skenování dokončeno: nebyly zjištěny žádné změny."
+
+msgid "File integrity"
+msgstr "Integrita souborů"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Tato zpráva porovnává nainstalované soubory (vše kromě var\/ a .git\/, přestože .git\/config je stále sledován kvůli zachycení uneseného vzdáleného úložiště) s důvěryhodnou základní linií, aby byly zjištěny neočekávané přidání, úpravy nebo odstranění."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Nejnovější zprávu můžete zobrazit níže. Spuštění skenování, pozastavení upozorňování nebo vytvoření nové základní linie vyžaduje globálního správce."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Upozorňování je v současné době pozastaveno kvůli údržbě. Automaticky se obnoví v %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Dosud nebylo provedeno žádné skenování. Spusťte jej odtud nebo z příkazové řádky pomocí app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Poslední skenování"
+
+msgid "Files scanned"
+msgstr "Proskenované soubory"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Základní linie dosud neexistovala: toto skenování ji vytvořilo. Změny budou hlášeny od příštího skenování."
+
+msgid "No changes detected since the baseline."
+msgstr "Od základní linie nebyly zjištěny žádné změny."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Konfigurace vzdáleného úložiště Git (.git\/config) se změnila. Ověřte, zda to bylo očekáváno."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Skenování bylo předčasně ukončeno, protože nebylo možné přečíst podadresář (zkontrolujte oprávnění k souborům). Výsledky níže mohou být částečné."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Příliš mnoho změn k zobrazení v plném rozsahu; níže jsou zobrazeny pouze první položky každé kategorie. Úplný seznam naleznete v protokolu CEF."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% soubor(ů) se nepodařilo přečíst (nedostatečná oprávnění) a byly přeskočeny."
+
+msgid "Run a scan now"
+msgstr "Spustit kontrolu nyní"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Pozastavit upozornění na 1 hodinu (pro údržbu)"
+
+msgid "Pause for 1 hour"
+msgstr "Pozastavit na 1 hodinu"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Považovat aktuální strom souborů za nový základ"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Tímto budou všechny aktuální soubory považovány za správné, včetně jakékoli nezkontrolované změny. Pokračovat?"
+
+msgid "Establish new baseline"
+msgstr "Vytvořit nový základ"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Naplánovat kontrolu například ze systémového crontabu"
+
+msgid "File integrity alert on %platform%"
+msgstr "Upozornění na integritu souborů na %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Kontrola integrity souborů zjistila změny na platformě:"
+
+msgid "Added files"
+msgstr "Přidané soubory"
+
+msgid "Modified files"
+msgstr "Změněné soubory"
+
+msgid "Deleted files"
+msgstr "Odstraněné soubory"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Úplnou zprávu naleznete v Administrace > Zabezpečení > Integrita souborů."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Heslo pro potvrzení pozastavení upozornění"
+
+msgid "Password to confirm the new baseline"
+msgstr "Heslo pro potvrzení nového základu"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Kontrola již probíhá. Před spuštěním další kontroly počkejte na její dokončení."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Kontrola právě probíhá (spuštěna %date%). Úplná kontrola může trvat několik minut; tuto stránku lze bezpečně znovu načíst pro zobrazení průběhu."
+
+msgid "Currently processing"
+msgstr "Aktuálně zpracováváno"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Předchozí kontrola (spuštěna %date%) byla přerušena před dokončením — proces již neběží. Můžete bezpečně spustit novou kontrolu."
+
+msgid "files"
+msgstr "soubory"
+
+msgid "Permissions changed"
+msgstr "Oprávnění změněna"
+
+msgid "Files with changed permissions"
+msgstr "Soubory se změněnými oprávněními"
+
+msgid "Alert history"
+msgstr "Historie upozornění"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Každá kontrola, která něco zjistila, je uchována i po vyřešení odchylky nebo vytvoření nového základu — na rozdíl od výše uvedené zprávy se čistá kontrola ani nový základ z této historie neodstraní."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Tato položka byla při zachycení zkrácena; úplný seznam naleznete v protokolu CEF."
+
+msgid "No alert has been recorded yet."
+msgstr "Zatím nebylo zaznamenáno žádné upozornění."
+
+msgid "Git remote changed"
+msgstr "Vzdálený repozitář Git změněn"
 

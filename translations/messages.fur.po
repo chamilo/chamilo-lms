@@ -37338,3 +37338,138 @@ msgstr "di"
 msgid "required"
 msgstr "obligatori"
 
+msgid "Incorrect password."
+msgstr "Password sbaliade."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Avîs di integritât dai files in pause par 1 ore."
+
+msgid "New baseline established: %s files."
+msgstr "Gnove baseline stabilide: %s files."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scansion completade: modificazions rilevadis."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scansion completade: nissune modificazion rilevade."
+
+msgid "File integrity"
+msgstr "Integritât dai files"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Chest rapuart al compare i files instalâts (ducj fûr di var/ e .git/, ancje se .git/config al è ancjemò controlât par cjatâ un remote compromès) cun une baseline fidade, par rilevâ zontis, modificazions o eliminazions inspietadis."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Tu puedis riviodi il ultin rapuart chi sot. Esecuzion di une scansion, pause dai avîs o stabiliment di une gnove baseline a àn bisugne di un aministradôr globâl."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "I avîs a son atualmentri in pause par manutenzion. A riprendaran in automatic a %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Nissune scansion eseguide fin cumò. Eseguìs une di chi o de rie di comant cun app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Ultime scansion"
+
+msgid "Files scanned"
+msgstr "Files scansionâts"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Nissune baseline esistive: cheste scansion le à stabilide. Lis modifichis a saran segnaladis a partî de prossime scansion."
+
+msgid "No changes detected since the baseline."
+msgstr "Nissune modificazion rilevade rispiet ae baseline."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "La configurazion dal remote Git (.git/config) e je cambiade. Verifiche che al sedi stât previodût."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "La scansion si è fermade prime parcè che no si è podût lei une sot-cartel (controle i permès dai files). I risultâts chi sot a podin jessi parziâi."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Tropis modifichis par listâlis dal dut; a son mostrâts dome i prins elements di ogni categorie. Cjale il regjistri CEF par la liste complete."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% file(s) no si àn podût lei (permès) e a son stâts saltâts."
+
+msgid "Run a scan now"
+msgstr "Eseguìs une scansion cumò"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Pause dai avîs par 1 ore (par manutenzion)"
+
+msgid "Pause for 1 hour"
+msgstr "Pause par 1 ore"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Considerâ l'arbul dai files atuâl come gnove baseline"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Cheste operazion considerarà ogni file atuâl come coret, ancje cualsisei modifiche no controlade. Continuâ?"
+
+msgid "Establish new baseline"
+msgstr "Stabilì gnove baseline"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Programâ la scansion di un crontab di sisteme, par esempli"
+
+msgid "File integrity alert on %platform%"
+msgstr "Avîs di integritât dai files su %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Une scansion di integritât dai files à rilevât modifichis su la plateforme:"
+
+msgid "Added files"
+msgstr "Files zontâts"
+
+msgid "Modified files"
+msgstr "Files modificâts"
+
+msgid "Deleted files"
+msgstr "Files eliminâts"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Consultâ il rapuart complet in Amministrazion > Sigurece > Integritât dai files."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Password par confermâ la pause dai avîs"
+
+msgid "Password to confirm the new baseline"
+msgstr "Password par confermâ la gnove baseline"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Une scansion e je za in cors. Spietâ che e finissi prime di iniziâ une altre."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Une scansion e je in cors (iniziade a %date%). Une scansion complete e pues durâ plui minûts; cheste pagjine si pues ricjariâ in sigurece par controlâ il progrès."
+
+msgid "Currently processing"
+msgstr "In elaborazion"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Une scansion precedente (iniziade a %date%) e je stade interote prime di finî — il procès nol è plui in esecuzion. Si pues iniziâ in sigurece une gnove."
+
+msgid "files"
+msgstr "files"
+
+msgid "Permissions changed"
+msgstr "Permès modificâts"
+
+msgid "Files with changed permissions"
+msgstr "Files cun permès modificâts"
+
+msgid "Alert history"
+msgstr "Storic dai avîs"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Ogni scansion che à cjatât alc, tignude ancje dopo che il drift al è stât risolt o che e je stade stabilide une gnove baseline — a diference dal rapuart parsore, une scansion nete o une gnove baseline no nete mai chest."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Cheste vôs e je stade tajade tal moment de cature; cjalâ il log CEF par la liste complete."
+
+msgid "No alert has been recorded yet."
+msgstr "Nissun avîs al è stât regjistrât ancjemò."
+
+msgid "Git remote changed"
+msgstr "Remote Git modificât"
+

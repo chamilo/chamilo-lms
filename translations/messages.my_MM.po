@@ -37342,3 +37342,138 @@ msgstr ""
 msgid "required"
 msgstr ""
 
+msgid "Incorrect password."
+msgstr ""
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr ""
+
+msgid "New baseline established: %s files."
+msgstr ""
+
+msgid "Scan complete: changes were detected."
+msgstr ""
+
+msgid "Scan complete: no changes were detected."
+msgstr "စကင်ဖတ်မှု ပြီးဆုံးပါပြီ။ ပြောင်းလဲမှုများ မတွေ့ရှိပါ။"
+
+msgid "File integrity"
+msgstr "ဖိုင်များ မှန်ကန်မှု"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "ဤအစီရင်ခံစာသည် တပ်ဆင်ထားသော ဖိုင်များ (var/ နှင့် .git/ မှလွဲ၍၊ သို့သော် .git/config ကို ဆက်လက်စောင့်ကြည့်သည်) ကို ယုံကြည်စိတ်ချရသော အခြေခံတစ်ခုနှင့် နှိုင်းယှဉ်ကာ မမျှော်လင့်ထားသော ထည့်သွင်းမှုများ၊ ပြင်ဆင်မှုများ သို့မဟုတ် ဖျက်ပစ်မှုများကို ရှာဖွေသည်။"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "နောက်ဆုံး အစီရင်ခံစာကို အောက်တွင် ပြန်လည်သုံးသပ်နိုင်ပါသည်။ စကင်ဖတ်မှုတစ်ခု လုပ်ဆောင်ခြင်း၊ သတိပေးချက်များ ခေတ္တရပ်ဆိုင်းခြင်း သို့မဟုတ် အခြေခံအသစ်တစ်ခု သတ်မှတ်ခြင်းအတွက် ကမ္ဘာလုံးဆိုင်ရာ စီမံခန့်ခွဲသူ လိုအပ်ပါသည်။"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "ပြုပြင်ထိန်းသိမ်းမှုအတွက် သတိပေးချက်များကို လက်ရှိတွင် ခေတ္တရပ်ဆိုင်းထားပါသည်။ ၎င်းသည် %date% တွင် အလိုအလျောက် ပြန်လည်စတင်ပါမည်။"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "စကင်ဖတ်မှု မလုပ်ဆောင်ရသေးပါ။ ဤနေရာမှ သို့မဟုတ် အမိန့်ပေးစာကြောင်း app:file-integrity:scan ဖြင့် တစ်ခု လုပ်ဆောင်ပါ။"
+
+msgid "Last scan"
+msgstr "နောက်ဆုံး စကင်ဖတ်မှု"
+
+msgid "Files scanned"
+msgstr "စကင်ဖတ်ခဲ့သော ဖိုင်များ"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "အခြေခံ မရှိသေးပါ။ ဤစကင်ဖတ်မှုက အခြေခံတစ်ခု သတ်မှတ်လိုက်ပါသည်။ ပြောင်းလဲမှုများကို နောက်ထပ်စကင်ဖတ်မှုမှ စတင်၍ အစီရင်ခံပါမည်။"
+
+msgid "No changes detected since the baseline."
+msgstr "အခြေခံမှ စ၍ ပြောင်းလဲမှုများ မတွေ့ရှိပါ။"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git အဝေးထိန်း ပြင်ဆင်မှု (.git/config) ပြောင်းလဲသွားပါပြီ။ ဤအရာကို မျှော်မှန်းထားခြင်း ရှိမရှိ စစ်ဆေးပါ။"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "စကင်ဖတ်မှုကို စောစီးစွာ ရပ်တန့်လိုက်ပါသည်။ အကြောင်းမှာ လက်အောက်ခံ ဖိုင်တွဲတစ်ခုကို ဖတ်၍မရသောကြောင့် ဖြစ်သည် (ဖိုင်ခွင့်ပြုချက်များကို စစ်ဆေးပါ)။ အောက်ပါ ရလဒ်များမှာ တစ်စိတ်တစ်ပိုင်း ဖြစ်နိုင်ပါသည်။"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "ပြောင်းလဲမှုများ များလွန်းသောကြောင့် အပြည့်အစုံ မဖော်ပြနိုင်ပါ။ အောက်တွင် အမျိုးအစားတစ်ခုစီ၏ ပထမဆုံး အချက်အလက်များကိုသာ ပြသထားပါသည်။ အပြည့်အစုံစာရင်းအတွက် CEF မှတ်တမ်းကို ကြည့်ပါ။"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% ဖိုင်(များ) ကို ဖတ်၍မရပါ (ခွင့်ပြုချက်များ) နှင့် ကျော်သွားပါသည်။"
+
+msgid "Run a scan now"
+msgstr "ယခု စကင်ဖတ်မှု လုပ်ဆောင်ပါ"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "သတိပေးချက်များကို ၁ နာရီ ခေတ္တရပ်ဆိုင်းပါ (ပြုပြင်ထိန်းသိမ်းမှုအတွက်)"
+
+msgid "Pause for 1 hour"
+msgstr "၁ နာရီ ခေတ္တရပ်ဆိုင်းပါ"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "လက်ရှိ ဖိုင်သစ်ပင်ကို အခြေခံအသစ်အဖြစ် ယုံကြည်ပါ"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "ဤအရာသည် လက်ရှိ ဖိုင်တိုင်းကို မှန်ကန်သည်ဟု ယုံကြည်စေမည်ဖြစ်ပြီး ပြန်လည်သုံးသပ်မထားသော ပြောင်းလဲမှုများလည်း ပါဝင်ပါသည်။ ဆက်လက်လုပ်ဆောင်မည်လား?"
+
+msgid "Establish new baseline"
+msgstr "အခြေခံအသစ် သတ်မှတ်ပါ"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "စနစ် crontab မှ စကင်ဖတ်မှုကို အချိန်ဇယားချပါ၊ ဥပမာ"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% တွင် ဖိုင်များ မှန်ကန်မှု သတိပေးချက်"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "ဖိုင်များ မှန်ကန်မှု စကင်ဖတ်မှုတစ်ခုက ပလက်ဖောင်းတွင် ပြောင်းလဲမှုများ တွေ့ရှိခဲ့ပါသည်။"
+
+msgid "Added files"
+msgstr "ထည့်သွင်းခဲ့သော ဖိုင်များ"
+
+msgid "Modified files"
+msgstr "ပြင်ဆင်ခဲ့သော ဖိုင်များ"
+
+msgid "Deleted files"
+msgstr "ဖျက်ပစ်ခဲ့သော ဖိုင်များ"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "စီမံခန့်ခွဲမှု > လုံခြုံရေး > ဖိုင်များ မှန်ကန်မှု မှ အပြည့်အစုံ အစီရင်ခံစာကို ပြန်လည်သုံးသပ်ပါ။"
+
+msgid "Password to confirm pausing alerts"
+msgstr "သတိပေးချက်များ ခေတ္တရပ်ဆိုင်းရန် စကားဝှက်"
+
+msgid "Password to confirm the new baseline"
+msgstr "အခြေခံအသစ်ကို အတည်ပြုရန် စကားဝှက်"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "စကင်ဖတ်မှုတစ်ခု လက်ရှိတွင် လုပ်ဆောင်နေပါပြီ။ အခြားတစ်ခု မစတင်မီ ၎င်းပြီးဆုံးသည်အထိ စောင့်ပါ။"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "စကင်ဖတ်မှုတစ်ခု လက်ရှိတွင် လုပ်ဆောင်နေပါသည် (%date% တွင် စတင်ခဲ့သည်)။ အပြည့်အစုံ စကင်ဖတ်မှုတစ်ခုသည် မိနစ်အတော်ကြာ ကြာနိုင်ပါသည်။ ဤစာမျက်နှာကို တိုးတက်မှု စစ်ဆေးရန် ဘေးကင်းစွာ ပြန်လည်တင်နိုင်ပါသည်။"
+
+msgid "Currently processing"
+msgstr "လက်ရှိ လုပ်ဆောင်နေသည်"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "ယခင်စကင်ဖတ်မှုတစ်ခု (%date% တွင် စတင်ခဲ့သည်) ပြီးဆုံးမီ ရပ်တန့်သွားပါသည် — လုပ်ငန်းစဉ်သည် ဆက်လက်လုပ်ဆောင်နေခြင်း မရှိတော့ပါ။ သင်သည် အသစ်တစ်ခုကို ဘေးကင်းစွာ စတင်နိုင်ပါသည်။"
+
+msgid "files"
+msgstr "ဖိုင်များ"
+
+msgid "Permissions changed"
+msgstr "ခွင့်ပြုချက်များ ပြောင်းလဲသွားပါပြီ"
+
+msgid "Files with changed permissions"
+msgstr "ခွင့်ပြုချက်များ ပြောင်းလဲသွားသော ဖိုင်များ"
+
+msgid "Alert history"
+msgstr "သတိပေးချက် မှတ်တမ်း"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "တစ်စုံတစ်ရာ တွေ့ရှိခဲ့သော စကင်ဖတ်မှုတိုင်းကို ထိန်းသိမ်းထားပါသည်၊ ပင်ကိုယ်ပြောင်းလဲမှု ဖြေရှင်းပြီးနောက် သို့မဟုတ် အခြေခံအသစ် သတ်မှတ်ပြီးနောက်တွင်ပင် — အထက်ပါ အစီရင်ခံစာနှင့် မတူဘဲ၊ သန့်ရှင်းသော စကင်ဖတ်မှု သို့မဟုတ် အခြေခံပြန်လည်သတ်မှတ်မှုသည် ဤအရာကို ဘယ်သောအခါမှ ရှင်းလင်းမပေးပါ။"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "ဤအချက်အလက်ကို ဖမ်းယူချိန်တွင် ဖြတ်တောက်ထားပါသည်။ အပြည့်အစုံစာရင်းအတွက် CEF မှတ်တမ်းကို ကြည့်ပါ။"
+
+msgid "No alert has been recorded yet."
+msgstr "သတိပေးချက် မှတ်တမ်းတင်ထားခြင်း မရှိသေးပါ။"
+
+msgid "Git remote changed"
+msgstr "Git အဝေးထိန်း ပြောင်းလဲသွားပါပြီ"
+

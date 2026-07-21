@@ -37338,3 +37338,138 @@ msgstr "waxaa qoray"
 msgid "required"
 msgstr "loo baahan yahay"
 
+msgid "Incorrect password."
+msgstr "Furaha sirta ah oo khaldan."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Digniin gelinta faylka waa la joojiyay 1 saac."
+
+msgid "New baseline established: %s files."
+msgstr "Heer cusub oo la aasaasay: %s fayl."
+
+msgid "Scan complete: changes were detected."
+msgstr "Baadhitaan dhammaaday: isbeddelo ayaa la helay."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Baadhitaan dhammaaday: wax isbeddel ah lama helin."
+
+msgid "File integrity"
+msgstr "Daacadnimada faylka"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Warbixintan waxay isbarbardhigaysaa faylasha la rakibay (wax kasta oo aan ahayn var/ iyo .git/, in kasta oo .git/config weli la ilaalinayo si loo qabto fogaan la qafaashay) oo ka dhanka ah heer aamin ah, si loo ogaado waxyaabo lama filaan ah oo lagu daray, wax laga beddelay ama la tirtiray."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Waxaad dib u eegi kartaa warbixinta ugu dambeysa hoos. Socodsiinta baadhitaan, joojinta digniinta, ama aasaasidda heer cusub waxay u baahan tahay maamule guud."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Digniin bixintu hadda waa la joojiyay dayactirka dartiis. Waxay si toos ah dib uga bilaaban doontaa %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Wax baadhitaan ah weli lama samayn. Mid ka socodsiiso halkan, ama khadka amarka adigoo isticmaalaya app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Baadhitaankii ugu dambeeyay"
+
+msgid "Files scanned"
+msgstr "Faylasha la baadhay"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Heer weli ma jirin: baadhitaankan ayaa mid cusub aasaasay. Isbeddelada waxaa laga soo sheegi doonaa laga bilaabo baadhitaanka xiga."
+
+msgid "No changes detected since the baseline."
+msgstr "Wax isbeddel ah lama helin tan iyo heerka."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Qaabeynta fog ee Git (.git/config) waa la beddelay. Xaqiiji in tani ay ahayd mid la filayay."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Baadhitaanku wuxuu joogsaday goor hore sababtoo ah ma jirin in la akhriyo hoosaad (hubi oggolaanshaha faylka). Natiijooyinka hoos waxaa laga yaabaa inay qayb ahaan yihiin."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Isbeddelo aad u badan oo aan si buuxda loogu qori karin; kaliya qoraallada ugu horreeya ee qayb kasta ayaa hoos lagu muujiyay. Eeg diiwaanka CEF si aad u hesho liiska dhammaystiran."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fayl (faylasha) lama akhri karin (oggolaanshaha) waana la booday."
+
+msgid "Run a scan now"
+msgstr "Hadda baadhitaan samee"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Jooji digniinta 1 saac (dayactirka dartiis)"
+
+msgid "Pause for 1 hour"
+msgstr "Jooji 1 saac"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Aamino geedka faylka ee hadda inuu yahay heerka cusub"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Tani waxay aamini doontaa fayl kasta oo hadda jira inuu sax yahay, oo ay ku jiraan isbeddel kasta oo aan dib loo eegin. Sii wad?"
+
+msgid "Establish new baseline"
+msgstr "Aasaas heer cusub"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Jadwal baadhitaanka ka soo qaad crontab nidaamka, tusaale ahaan"
+
+msgid "File integrity alert on %platform%"
+msgstr "Digniin daacadnimada faylka ee %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Baadhitaan daacadnimada faylka ayaa ogaaday isbeddelo madasha:"
+
+msgid "Added files"
+msgstr "Faylasha lagu daray"
+
+msgid "Modified files"
+msgstr "Faylasha la beddelay"
+
+msgid "Deleted files"
+msgstr "Faylasha la tirtiray"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Dib u eeg warbixinta buuxda ee Maamulka > Amniga > Daacadnimada faylka."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Furaha sirta ah si loo xaqiijiyo joojinta digniinta"
+
+msgid "Password to confirm the new baseline"
+msgstr "Furaha sirta ah si loo xaqiijiyo heerka cusub"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Baadhitaan horay ayuu u socday. Fadlan sug inta uu dhammaynayo ka hor intaadan mid kale bilaabin."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Baadhitaan hadda wuu socdaa (wuxuu bilaabmay %date%). Baadhitaan buuxa wuxuu qaadan karaa dhowr daqiiqo; boggan si badbaado leh ayaa dib loogu soo dejin karaa si loo hubiyo horumarka."
+
+msgid "Currently processing"
+msgstr "Hadda la shaqeynayaa"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Baadhitaan hore (wuxuu bilaabmay %date%) waa la joojiyay ka hor inta uusan dhammaan — hawsha hadda ma socoto. Si badbaado ah ayaad mid cusub bilaabi kartaa."
+
+msgid "files"
+msgstr "faylasha"
+
+msgid "Permissions changed"
+msgstr "Oggolaanshaha la beddelay"
+
+msgid "Files with changed permissions"
+msgstr "Faylasha oggolaanshahooda la beddelay"
+
+msgid "Alert history"
+msgstr "Taariikhda digniinta"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Baadhitaan kasta oo wax helay, waa la hayaa xitaa ka dib markii isbeddelka la xaliyo ama heer cusub la aasaaso — si ka duwan warbixinta sare, baadhitaan nadiif ah ama dib u aasaasid weligood ma nadiifin doonto tan."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Qoraalkan waa la gooyay waqtigii la qabtay; eeg diiwaanka CEF si aad u hesho liiska dhammaystiran."
+
+msgid "No alert has been recorded yet."
+msgstr "Wax digniin ah weli lama diiwaangelin."
+
+msgid "Git remote changed"
+msgstr "Fogeynta Git waa la beddelay"
+

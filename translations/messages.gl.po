@@ -37357,3 +37357,138 @@ msgstr "por"
 msgid "required"
 msgstr "obrigatorio"
 
+msgid "Incorrect password."
+msgstr "Contrasinal incorrecto."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alerta de integridade de ficheiros en pausa durante 1 hora."
+
+msgid "New baseline established: %s files."
+msgstr "Nova liña base establecida: %s ficheiros."
+
+msgid "Scan complete: changes were detected."
+msgstr "Escaneo completado: detectáronse cambios."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Escaneo completado: non se detectaron cambios."
+
+msgid "File integrity"
+msgstr "Integridade de ficheiros"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Este informe compara os ficheiros instalados (todo agás var/ e .git/, aínda que .git/config segue sendo vixiado para detectar un secuestro remoto) cunha liña base de confianza, para detectar engadidos, modificacións ou eliminacións inesperadas."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Pode revisar o último informe a continuación. Executar un escaneo, pausar as alertas ou establecer unha nova liña base require un administrador global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "As alertas están actualmente en pausa por mantemento. Reanudaranse automaticamente en %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Aínda non se executou ningún escaneo. Execute un desde aquí ou desde a liña de comandos con app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Último escaneo"
+
+msgid "Files scanned"
+msgstr "Ficheiros escaneados"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Aínda non existía ningunha liña base: este escaneo estableceu unha. Os cambios informaranse a partir do seguinte escaneo."
+
+msgid "No changes detected since the baseline."
+msgstr "Non se detectaron cambios desde a liña base."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "A configuración do remoto de Git (.git/config) cambiou. Verifique se era o esperado."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "O escaneo detívose prematuramente porque non se puido ler un subdirectorio (comprobe os permisos dos ficheiros). Os resultados a continuación poden ser parciais."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Demasiados cambios para listar en total; só se mostran as primeiras entradas de cada categoría a continuación. Consulte o rexistro CEF para a lista completa."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% ficheiro(s) non puideron lerse (permisos) e omitíronse."
+
+msgid "Run a scan now"
+msgstr "Executar un escaneo agora"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Pausar as alertas durante 1 hora (para mantemento)"
+
+msgid "Pause for 1 hour"
+msgstr "Pausar durante 1 hora"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Confiar na árbore de ficheiros actual como nova liña base"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Isto confiará en que todos os ficheiros actuais son correctos, incluído calquera cambio non revisado. Continuar?"
+
+msgid "Establish new baseline"
+msgstr "Establecer nova liña base"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Programar o escaneo desde un crontab do sistema, por exemplo"
+
+msgid "File integrity alert on %platform%"
+msgstr "Alerta de integridade de ficheiros en %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Un escaneo de integridade de ficheiros detectou cambios na plataforma:"
+
+msgid "Added files"
+msgstr "Ficheiros engadidos"
+
+msgid "Modified files"
+msgstr "Ficheiros modificados"
+
+msgid "Deleted files"
+msgstr "Ficheiros eliminados"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Revise o informe completo en Administración > Seguridade > Integridade de ficheiros."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Contrasinal para confirmar a pausa das alertas"
+
+msgid "Password to confirm the new baseline"
+msgstr "Contrasinal para confirmar a nova liña base"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Xa se está executando unha análise. Agarde a que remate antes de iniciar outra."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Actualmente está executándose unha análise (iniciada o %date%). Unha análise completa pode tardar varios minutos; esta páxina pódese recargar con seguridade para comprobar o progreso."
+
+msgid "Currently processing"
+msgstr "Procesando actualmente"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Unha análise anterior (iniciada o %date%) interrompeuse antes de rematar — o proceso xa non está en execución. Pode iniciar unha nova con seguridade."
+
+msgid "files"
+msgstr "ficheiros"
+
+msgid "Permissions changed"
+msgstr "Permisos cambiados"
+
+msgid "Files with changed permissions"
+msgstr "Ficheiros con permisos cambiados"
+
+msgid "Alert history"
+msgstr "Historial de alertas"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Cada análise que atopou algo, mantida incluso despois de resolver a desviación ou establecer unha nova liña base — a diferenza do informe anterior, unha análise limpa ou unha nova liña base nunca borra isto."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Esta entrada truncouse no momento da captura; consulte o rexistro CEF para ver a lista completa."
+
+msgid "No alert has been recorded yet."
+msgstr "Aínda non se rexistrou ningunha alerta."
+
+msgid "Git remote changed"
+msgstr "Cambiou o remoto de Git"
+

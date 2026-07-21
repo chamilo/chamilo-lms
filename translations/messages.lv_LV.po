@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -37342,4 +37342,139 @@ msgstr "autors"
 
 msgid "required"
 msgstr "obligāts"
+
+msgid "Incorrect password."
+msgstr "Nepareiza parole."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Failu integritātes brīdinājumi apturēti uz 1 stundu."
+
+msgid "New baseline established: %s files."
+msgstr "Jauna bāze izveidota: %s faili."
+
+msgid "Scan complete: changes were detected."
+msgstr "Skenēšana pabeigta: konstatētas izmaiņas."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Skenēšana pabeigta: izmaiņas nav konstatētas."
+
+msgid "File integrity"
+msgstr "Failu integritāte"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Šis ziņojums salīdzina instalētos failus (visu, izņemot var/ un .git/, lai gan .git/config joprojām tiek uzraudzīts, lai atklātu nolaupītu attālo krātuvi) ar uzticamu bāzi, lai noteiktu negaidītas pievienošanas, izmaiņas vai dzēšanas."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Jūs varat pārskatīt jaunāko ziņojumu zemāk. Skenēšanas palaišanai, brīdinājumu apturēšanai vai jaunas bāzes izveidei nepieciešamas globālā administratora tiesības."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Brīdinājumi pašlaik ir apturēti apkopes dēļ. Tie automātiski atsāksies %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Skenēšana vēl nav veikta. Veiciet to šeit vai komandrindā ar app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Pēdējā skenēšana"
+
+msgid "Files scanned"
+msgstr "Skenētie faili"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Bāze vēl nebija izveidota: šī skenēšana to izveidoja. Izmaiņas tiks ziņotas, sākot ar nākamo skenēšanu."
+
+msgid "No changes detected since the baseline."
+msgstr "Kopš bāzes izveides izmaiņas nav konstatētas."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git attālās konfigurācijas (.git/config) ir mainījusies. Pārbaudiet, vai tas bija paredzēts."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Skenēšana priekšlaicīgi pārtraukta, jo apakšdirektoriju nevarēja nolasīt (pārbaudiet failu atļaujas). Zemāk redzamie rezultāti var būt daļēji."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Pārāk daudz izmaiņu, lai tās pilnībā uzskaitītu; zemāk parādīti tikai pirmie ieraksti katrā kategorijā. Pilnu sarakstu skatiet CEF žurnālā."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% failu(s) nevarēja nolasīt (atļaujas) un tika izlaisti."
+
+msgid "Run a scan now"
+msgstr "Veikt skenēšanu tagad"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Apturēt brīdinājumus uz 1 stundu (apkopes dēļ)"
+
+msgid "Pause for 1 hour"
+msgstr "Apturēt uz 1 stundu"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Uzticēties pašreizējai failu koksnei kā jaunai bāzei"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Tas uzticēsies katram pašreizējam failam kā pareizam, ieskaitot jebkuras nepārskatītas izmaiņas. Turpināt?"
+
+msgid "Establish new baseline"
+msgstr "Izveidot jaunu bāzlīniju"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Plānot skenēšanu no sistēmas crontab, piemēram"
+
+msgid "File integrity alert on %platform%"
+msgstr "Failu integritātes brīdinājums platformā %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Failu integritātes skenēšana konstatēja izmaiņas platformā:"
+
+msgid "Added files"
+msgstr "Pievienotie faili"
+
+msgid "Modified files"
+msgstr "Modificētie faili"
+
+msgid "Deleted files"
+msgstr "Dzēstie faili"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Skatīt pilno atskaiti sadaļā Administrācija > Drošība > Failu integritāte."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Parole, lai apstiprinātu brīdinājumu pauzi"
+
+msgid "Password to confirm the new baseline"
+msgstr "Parole, lai apstiprinātu jauno bāzlīniju"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Skenēšana jau notiek. Lūdzu, uzgaidiet, līdz tā beidzas, pirms sākat jaunu."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Pašlaik notiek skenēšana (sākta %date%). Pilna skenēšana var ilgt vairākas minūtes; šo lapu var droši atkārtoti ielādēt, lai pārbaudītu progresu."
+
+msgid "Currently processing"
+msgstr "Pašlaik apstrādā"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Iepriekšējā skenēšana (sākta %date%) tika pārtraukta pirms pabeigšanas — process vairs nedarbojas. Varat droši sākt jaunu."
+
+msgid "files"
+msgstr "faili"
+
+msgid "Permissions changed"
+msgstr "Atļaujas mainītas"
+
+msgid "Files with changed permissions"
+msgstr "Faili ar mainītām atļaujām"
+
+msgid "Alert history"
+msgstr "Brīdinājumu vēsture"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Katrs skenējums, kas kaut ko atrada, tiek saglabāts pat pēc tam, kad novirze ir novērsta vai izveidota jauna bāzlīnija — atšķirībā no iepriekšējā atskaites, tīrs skenējums vai atkārtota bāzlīnijas izveide nekad to nenotīra."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Šis ieraksts tika saīsināts uztveršanas brīdī; pilnu sarakstu skatiet CEF žurnālā."
+
+msgid "No alert has been recorded yet."
+msgstr "Vēl nav reģistrēts neviens brīdinājums."
+
+msgid "Git remote changed"
+msgstr "Git attālā krātuve mainīta"
 

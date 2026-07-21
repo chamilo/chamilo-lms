@@ -37342,3 +37342,138 @@ msgstr "ըստ"
 msgid "required"
 msgstr "պարտադիր"
 
+msgid "Incorrect password."
+msgstr "Սխալ գաղտնաբառ։"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Ֆայլերի ամբողջականության ահազանգումը դադարեցվել է 1 ժամով։"
+
+msgid "New baseline established: %s files."
+msgstr "Նոր ելակետ ստեղծվել է՝ %s ֆայլ։"
+
+msgid "Scan complete: changes were detected."
+msgstr "Սկանավորումն ավարտվեց՝ հայտնաբերվել են փոփոխություններ։"
+
+msgid "Scan complete: no changes were detected."
+msgstr "Սկանավորումն ավարտվեց՝ փոփոխություններ չեն հայտնաբերվել։"
+
+msgid "File integrity"
+msgstr "Ֆայլերի ամբողջականություն"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Այս զեկույցը համեմատում է տեղադրված ֆայլերը (բացառությամբ var/ և .git/, թեև .git/config-ը դեռևս վերահսկվում է հեռակա կապի գրավման դեպքում) վստահելի ելակետի հետ՝ անսպասելի ավելացումներ, փոփոխություններ կամ ջնջումներ հայտնաբերելու համար։"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Դուք կարող եք դիտել վերջին զեկույցը ստորև։ Սկանավորման գործարկումը, ահազանգման դադարեցումը կամ նոր ելակետի ստեղծումը պահանջում է գլոբալ ադմինիստրատորի իրավունքներ։"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Ահազանգումը ներկայումս դադարեցված է սպասարկման համար։ Այն ավտոմատ կերպով կվերսկսվի %date%-ին։"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Դեռևս սկանավորում չի իրականացվել։ Գործարկեք այն այստեղից կամ հրամանի տողից՝ app:file-integrity:scan։"
+
+msgid "Last scan"
+msgstr "Վերջին սկանավորում"
+
+msgid "Files scanned"
+msgstr "Սկանավորված ֆայլեր"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Ելակետ դեռևս չկար՝ այս սկանավորումը ստեղծեց այն։ Փոփոխությունները կհայտնվեն հաջորդ սկանավորումից սկսած։"
+
+msgid "No changes detected since the baseline."
+msgstr "Ելակետից հետո փոփոխություններ չեն հայտնաբերվել։"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git-ի հեռակա կազմաձևումը (.git/config) փոխվել է։ Ստուգեք, արդյոք դա սպասվող էր։"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Սկանավորումը վաղաժամկետ դադարեցվեց, քանի որ ենթաթղթապանակը հնարավոր չէր կարդալ (ստուգեք ֆայլերի թույլտվությունները)։ Ստորև բերված արդյունքները կարող են մասնակի լինել։"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Չափազանց շատ փոփոխություններ՝ ամբողջությամբ ցուցադրելու համար; ստորև ցուցադրվում են յուրաքանչյուր կատեգորիայի միայն առաջին գրառումները։ Ամբողջական ցանկը տեսեք CEF մատյանում։"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% ֆայլ(եր) հնարավոր չէր կարդալ (թույլտվություններ) և բաց թողնվեցին։"
+
+msgid "Run a scan now"
+msgstr "Կատարել սկանավորում հիմա"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Դադարեցնել ահազանգումը 1 ժամով (սպասարկման համար)"
+
+msgid "Pause for 1 hour"
+msgstr "Դադարեցնել 1 ժամով"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Վստահել ընթացիկ ֆայլային ծառը որպես նոր ելակետ"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr ""
+
+msgid "Establish new baseline"
+msgstr ""
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr ""
+
+msgid "File integrity alert on %platform%"
+msgstr ""
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr ""
+
+msgid "Added files"
+msgstr ""
+
+msgid "Modified files"
+msgstr ""
+
+msgid "Deleted files"
+msgstr ""
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr ""
+
+msgid "Password to confirm pausing alerts"
+msgstr ""
+
+msgid "Password to confirm the new baseline"
+msgstr ""
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr ""
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr ""
+
+msgid "Currently processing"
+msgstr ""
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr ""
+
+msgid "files"
+msgstr ""
+
+msgid "Permissions changed"
+msgstr ""
+
+msgid "Files with changed permissions"
+msgstr ""
+
+msgid "Alert history"
+msgstr ""
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr ""
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr ""
+
+msgid "No alert has been recorded yet."
+msgstr ""
+
+msgid "Git remote changed"
+msgstr ""
+

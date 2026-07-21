@@ -37342,3 +37342,138 @@ msgstr "oleh"
 msgid "required"
 msgstr "wajib"
 
+msgid "Incorrect password."
+msgstr "Kata sandi salah."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Peringatan integritas berkas dijeda selama 1 jam."
+
+msgid "New baseline established: %s files."
+msgstr "Garis dasar baru ditetapkan: %s berkas."
+
+msgid "Scan complete: changes were detected."
+msgstr "Pemindaian selesai: perubahan terdeteksi."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Pemindaian selesai: tidak ada perubahan terdeteksi."
+
+msgid "File integrity"
+msgstr "Integritas berkas"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Laporan ini membandingkan berkas yang terinstal (semua kecuali var/ dan .git/, meskipun .git/config tetap dipantau untuk mendeteksi pembajakan jarak jauh) dengan garis dasar tepercaya, untuk mendeteksi penambahan, modifikasi, atau penghapusan yang tidak terduga."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Anda dapat meninjau laporan terbaru di bawah ini. Menjalankan pemindaian, menjeda peringatan, atau menetapkan garis dasar baru memerlukan administrator global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Peringatan saat ini dijeda untuk pemeliharaan. Akan dilanjutkan secara otomatis pada %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Belum ada pemindaian yang dijalankan. Jalankan dari sini, atau dari baris perintah dengan app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Pemindaian terakhir"
+
+msgid "Files scanned"
+msgstr "Berkas yang dipindai"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Belum ada garis dasar: pemindaian ini menetapkan satu. Perubahan akan dilaporkan mulai dari pemindaian berikutnya."
+
+msgid "No changes detected since the baseline."
+msgstr "Tidak ada perubahan terdeteksi sejak garis dasar."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Konfigurasi jarak jauh Git (.git/config) telah berubah. Verifikasi bahwa ini diharapkan."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Pemindaian berhenti lebih awal karena subdirektori tidak dapat dibaca (periksa izin berkas). Hasil di bawah mungkin tidak lengkap."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Terlalu banyak perubahan untuk dicantumkan secara lengkap; hanya entri pertama dari setiap kategori yang ditampilkan di bawah. Lihat log CEF untuk daftar lengkap."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% berkas tidak dapat dibaca (izin) dan dilewati."
+
+msgid "Run a scan now"
+msgstr "Jalankan pemindaian sekarang"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Jeda peringatan selama 1 jam (untuk pemeliharaan)"
+
+msgid "Pause for 1 hour"
+msgstr "Jeda selama 1 jam"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Percayai struktur berkas saat ini sebagai garis dasar baru"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Tindakan ini akan mempercayai setiap berkas saat ini sebagai benar, termasuk perubahan yang belum ditinjau. Lanjutkan?"
+
+msgid "Establish new baseline"
+msgstr "Tetapkan garis dasar baru"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Jadwalkan pemindaian dari crontab sistem, misalnya"
+
+msgid "File integrity alert on %platform%"
+msgstr "Peringatan integritas berkas pada %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Pemindaian integritas berkas mendeteksi perubahan pada platform:"
+
+msgid "Added files"
+msgstr "Berkas ditambahkan"
+
+msgid "Modified files"
+msgstr "Berkas dimodifikasi"
+
+msgid "Deleted files"
+msgstr "Berkas dihapus"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Tinjau laporan lengkap dari Administrasi > Keamanan > Integritas berkas."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Kata sandi untuk mengonfirmasi jeda peringatan"
+
+msgid "Password to confirm the new baseline"
+msgstr "Kata sandi untuk mengonfirmasi garis dasar baru"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Pemindaian sedang berjalan. Harap tunggu hingga selesai sebelum memulai yang baru."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Pemindaian sedang berjalan (dimulai pada %date%). Pemindaian lengkap dapat memakan waktu beberapa menit; halaman ini dapat dimuat ulang dengan aman untuk memeriksa kemajuan."
+
+msgid "Currently processing"
+msgstr "Sedang memproses"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Pemindaian sebelumnya (dimulai pada %date%) terhenti sebelum selesai — proses tidak lagi berjalan. Anda dapat memulai yang baru dengan aman."
+
+msgid "files"
+msgstr "berkas"
+
+msgid "Permissions changed"
+msgstr "Izin berubah"
+
+msgid "Files with changed permissions"
+msgstr "Berkas dengan izin berubah"
+
+msgid "Alert history"
+msgstr "Riwayat peringatan"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Setiap pemindaian yang menemukan sesuatu, tetap disimpan bahkan setelah penyimpangan teratasi atau garis dasar baru ditetapkan — tidak seperti laporan di atas, pemindaian bersih atau penetapan ulang garis dasar tidak pernah menghapus ini."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Entri ini dipotong saat pengambilan; lihat log CEF untuk daftar lengkap."
+
+msgid "No alert has been recorded yet."
+msgstr "Belum ada peringatan yang tercatat."
+
+msgid "Git remote changed"
+msgstr "Git jarak jauh berubah"
+

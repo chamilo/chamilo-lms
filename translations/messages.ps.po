@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوښۍ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -37337,4 +37337,139 @@ msgstr "له خوا"
 
 msgid "required"
 msgstr "اړين"
+
+msgid "Incorrect password."
+msgstr "ناسم پټنوم."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "د فایل بشپړتیا خبرتیا د ۱ ساعت لپاره ودرول شوه."
+
+msgid "New baseline established: %s files."
+msgstr "نوی اساسي کرښه جوړه شوه: %s فایلونه."
+
+msgid "Scan complete: changes were detected."
+msgstr "سکین بشپړ شو: بدلونونه وموندل شول."
+
+msgid "Scan complete: no changes were detected."
+msgstr "سکین بشپړ شو: هیڅ بدلون ونه موندل شو."
+
+msgid "File integrity"
+msgstr "د فایل بشپړتیا"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "دا راپور نصب شوي فایلونه (هرڅه پرته له var/ او .git/، که څه هم .git/config لاهم د لرې کنټرول لپاره څارل کیږي) د یو باوري اساسي کرښې سره پرتله کوي، ترڅو غیر متوقع اضافه، بدلونونه یا حذفونه وموندل شي."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "تاسو کولی شئ لاندې وروستی راپور وګورئ. د سکین چلول، خبرتیا ودرول، یا نوې اساسي کرښه جوړول د نړیوال مدیر ته اړتیا لري."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "خبرتیا اوس د ساتنې لپاره ودرول شوې ده. دا به په اتوماتيک ډول په %date% بیا پیل شي."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "تر اوسه هیڅ سکین نه دی چلول شوی. له دلته یو چل کړئ، یا د کمانډ لاین سره app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "وروستی سکین"
+
+msgid "Files scanned"
+msgstr "سکین شوي فایلونه"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "تر اوسه هیڅ اساسي کرښه نه وه: دا سکین یوه جوړه کړه. بدلونونه به له راتلونکي سکین څخه راپور شي."
+
+msgid "No changes detected since the baseline."
+msgstr "له اساسي کرښې راهیسې هیڅ بدلون ونه موندل شو."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "د Git لرې ترتیب (.git/config) بدل شوی دی. تصدیق کړئ چې دا متوقع و."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "سکین ژر ودرېد ځکه چې یو فرعي لارښود نه شو لوستل کېدای (د فایل اجازې وګورئ). لاندې پایلې ممکن نيمګړې وي."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "ډېر بدلونونه دي چې په بشپړه توګه لیست شي؛ یوازې د هرې کټګورۍ لومړۍ ننوتنې لاندې ښودل شوې دي. د بشپړ لیست لپاره CEF لاګ وګورئ."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% فایل(ونه) نه شو لوستل کېدای (اجازې) او پریښودل شول."
+
+msgid "Run a scan now"
+msgstr "اوس یو سکین چل کړئ"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "د ۱ ساعت لپاره خبرتیا ودرول (د ساتنې لپاره)"
+
+msgid "Pause for 1 hour"
+msgstr "د ۱ ساعت لپاره ودرول"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "د اوسني فایل ونې باور کول د نوې اساسي کرښې په توګه"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "دا به هر اوسنی فایل د سم په توګه باور کړي، په شمول هر غیر بیاکتل شوی بدلون. دوام ورکړئ؟"
+
+msgid "Establish new baseline"
+msgstr "نوې اساسي کرښه جوړول"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "د سکین مهالویش له یوې سیسټم crontab څخه، د بېلګې په توګه"
+
+msgid "File integrity alert on %platform%"
+msgstr "د فایل بشپړتیا خبرتیا په %platform% کې"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "د فایل بشپړتیا سکین په پلیټ فارم کې بدلونونه وموندل:"
+
+msgid "Added files"
+msgstr "اضافه شوي فایلونه"
+
+msgid "Modified files"
+msgstr "بدل شوي فایلونه"
+
+msgid "Deleted files"
+msgstr "حذف شوي فایلونه"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "د ادارې > امنیت > د فایل بشپړتیا څخه بشپړ راپور بیاکتنه وکړئ."
+
+msgid "Password to confirm pausing alerts"
+msgstr "د خبرتیاوو ودرولو لپاره د تصدیق پټنوم"
+
+msgid "Password to confirm the new baseline"
+msgstr "د نوې اساسي کرښې لپاره د تصدیق پټنوم"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "یو سکین لا دمخه روان دی. مهرباني وکړئ د بل پیلولو دمخه د هغې بشپړېدو ته انتظار وکړئ."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "اوس یو سکین روان دی (په %date% پیل شوی). یو بشپړ سکین څو دقیقې وخت نیسي؛ دا پاڼه په خوندي ډول بیا بارېدای شي ترڅو پرمختګ وګورئ."
+
+msgid "Currently processing"
+msgstr "اوس پروسس کېدی شي"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "یو پخوانی سکین (په %date% پیل شوی) د بشپړېدو دمخه ودرول شو — پروسه نوره نه چلیږي. تاسو په خوندي ډول یو نوی پیل کولی شئ."
+
+msgid "files"
+msgstr "فایلونه"
+
+msgid "Permissions changed"
+msgstr "اجازې بدلې شوې"
+
+msgid "Files with changed permissions"
+msgstr "هغه فایلونه چې اجازې یې بدلې شوې"
+
+msgid "Alert history"
+msgstr "خبرتیا تاریخچه"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "هر سکین چې یو څه وموندل، حتی وروسته له دې چې انحراف حل شي یا نوې اساسي کرښه جوړه شي — د پورته راپور برعکس، یو پاک سکین یا بیا اساسي کول هیڅکله دا نه پاکوي."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "دا ننوتنه د نیولو په وخت کې ټوټه شوې وه؛ د بشپړ لیست لپاره CEF لاګ وګورئ."
+
+msgid "No alert has been recorded yet."
+msgstr "تر اوسه هیڅ خبرتیا ثبت شوې نه ده."
+
+msgid "Git remote changed"
+msgstr "Git ریموټ بدل شو"
 

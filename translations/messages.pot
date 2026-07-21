@@ -37259,6 +37259,7 @@ msgstr ""
 
 msgid "required"
 msgstr ""
+
 msgid "Incorrect password."
 msgstr ""
 
@@ -37316,9 +37317,6 @@ msgstr ""
 msgid "Run a scan now"
 msgstr ""
 
-msgid "Your password"
-msgstr ""
-
 msgid "Pause alerting for 1 hour (for maintenance)"
 msgstr ""
 
@@ -37353,5 +37351,47 @@ msgid "Deleted files"
 msgstr ""
 
 msgid "Review the full report from Administration > Security > File integrity."
+msgstr ""
+
+msgid "Password to confirm pausing alerts"
+msgstr ""
+
+msgid "Password to confirm the new baseline"
+msgstr ""
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr ""
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr ""
+
+msgid "Currently processing"
+msgstr ""
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr ""
+
+msgid "files"
+msgstr ""
+
+msgid "Permissions changed"
+msgstr ""
+
+msgid "Files with changed permissions"
+msgstr ""
+
+msgid "Alert history"
+msgstr ""
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr ""
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr ""
+
+msgid "No alert has been recorded yet."
+msgstr ""
+
+msgid "Git remote changed"
 msgstr ""
 

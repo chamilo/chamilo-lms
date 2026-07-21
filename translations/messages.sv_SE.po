@@ -35494,7 +35494,7 @@ msgid "%s results"
 msgstr "%s resultat"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsformulär: beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsaktivitet : beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://sv.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Borttagen"
@@ -36532,10 +36532,10 @@ msgid "Backup directory"
 msgstr "Säkerhetskopieringskatalog"
 
 msgid "Baseline clean"
-msgstr "Baseline clean"
+msgstr "Baseline ren"
 
 msgid "Baseline warnings"
-msgstr "Baseline warnings"
+msgstr "Baseline varningar"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
 msgstr "Skapa en säker tillämpningsplan från det iscensatta paketet. Detta kontrollerar endast filer, behörigheter, säkerhetskopieringssökväg och låsstatus. Det ersätter inte filer."
@@ -37343,4 +37343,139 @@ msgstr "av"
 
 msgid "required"
 msgstr "obligatorisk"
+
+msgid "Incorrect password."
+msgstr "Felaktigt lösenord."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Filintegritetsvarning pausad i 1 timme."
+
+msgid "New baseline established: %s files."
+msgstr "Ny baseline skapad: %s filer."
+
+msgid "Scan complete: changes were detected."
+msgstr "Skanning slutförd: ändringar upptäcktes."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Skanning slutförd: inga ändringar upptäcktes."
+
+msgid "File integrity"
+msgstr "Filintegritet"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Denna rapport jämför de installerade filerna (allt utom var/ och .git/, även om .git/config fortfarande övervakas för att upptäcka en kapad fjärranslutning) mot en betrodd baseline, för att upptäcka oväntade tillägg, ändringar eller borttagningar."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Du kan granska den senaste rapporten nedan. Att köra en skanning, pausa varningar eller skapa en ny baseline kräver en global administratör."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Varningar är för närvarande pausade för underhåll. De återupptas automatiskt den %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Ingen skanning har körts ännu. Kör en härifrån eller från kommandoraden med app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Senaste skanning"
+
+msgid "Files scanned"
+msgstr "Skannade filer"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Ingen baseline fanns ännu: denna skanning skapade en. Ändringar kommer att rapporteras från nästa skanning."
+
+msgid "No changes detected since the baseline."
+msgstr "Inga ändringar upptäckta sedan baslinjen."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git-fjärrkonfigurationen (.git/config) har ändrats. Kontrollera att detta var förväntat."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Skanningen avbröts tidigt eftersom en underkatalog inte kunde läsas (kontrollera filrättigheter). Resultaten nedan kan vara ofullständiga."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "För många ändringar för att lista helt; endast de första posterna i varje kategori visas nedan. Se CEF-loggen för den fullständiga listan."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fil(er) kunde inte läsas (rättigheter) och hoppades över."
+
+msgid "Run a scan now"
+msgstr "Kör en genomsökning nu"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Pausa aviseringar i 1 timme (för underhåll)"
+
+msgid "Pause for 1 hour"
+msgstr "Pausa i 1 timme"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Lita på den aktuella filstrukturen som ny baslinje"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Detta kommer att lita på varje aktuell fil som korrekt, inklusive eventuella ogranskade ändringar. Fortsätta?"
+
+msgid "Establish new baseline"
+msgstr "Upprätta ny baslinje"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Schemalägg genomsökningen från en system-crontab, till exempel"
+
+msgid "File integrity alert on %platform%"
+msgstr "Filintegritetsvarning på %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "En filintegritetsgenomsökning upptäckte ändringar på plattformen:"
+
+msgid "Added files"
+msgstr "Tillagda filer"
+
+msgid "Modified files"
+msgstr "Ändrade filer"
+
+msgid "Deleted files"
+msgstr "Borttagna filer"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Granska den fullständiga rapporten under Administration > Säkerhet > Filintegritet."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Lösenord för att bekräfta paus av aviseringar"
+
+msgid "Password to confirm the new baseline"
+msgstr "Lösenord för att bekräfta ny baslinje"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "En genomsökning pågår redan. Vänta tills den är klar innan du startar en ny."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "En genomsökning pågår för närvarande (startad %date%). En fullständig genomsökning kan ta flera minuter; denna sida kan laddas om för att kontrollera framsteg."
+
+msgid "Currently processing"
+msgstr "Bearbetar för närvarande"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "En tidigare genomsökning (startad %date%) avbröts innan den slutfördes – processen körs inte längre. Du kan säkert starta en ny."
+
+msgid "files"
+msgstr "filer"
+
+msgid "Permissions changed"
+msgstr "Behörigheter ändrade"
+
+msgid "Files with changed permissions"
+msgstr "Filer med ändrade behörigheter"
+
+msgid "Alert history"
+msgstr "Alerthistorik"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Varje genomsökning som hittade något sparas även efter att avvikelsen är löst eller en ny baslinje har upprättats – till skillnad från rapporten ovan rensas aldrig en ren genomsökning eller en ny baslinje."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Denna post trunkerades vid inspelningstillfället; se CEF-loggen för den fullständiga listan."
+
+msgid "No alert has been recorded yet."
+msgstr "Ingen varning har registrerats ännu."
+
+msgid "Git remote changed"
+msgstr "Git-fjärr ändrad"
 

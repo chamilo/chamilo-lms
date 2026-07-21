@@ -37344,3 +37344,138 @@ msgstr "tekijä"
 msgid "required"
 msgstr "pakollinen"
 
+msgid "Incorrect password."
+msgstr "Virheellinen salasana."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Tiedostojen eheyden hälytykset keskeytetty 1 tunniksi."
+
+msgid "New baseline established: %s files."
+msgstr "Uusi vertailupohja luotu: %s tiedostoa."
+
+msgid "Scan complete: changes were detected."
+msgstr "Skannaus valmis: muutoksia havaittu."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Skannaus valmis: muutoksia ei havaittu."
+
+msgid "File integrity"
+msgstr "Tiedostojen eheys"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Tämä raportti vertaa asennettuja tiedostoja (kaikki paitsi var\/ ja .git\/, vaikka .git\/configia seurataan edelleen kaapatun etäyhteyden havaitsemiseksi) luotettuun vertailupohjaan odottamattomien lisäysten, muutosten tai poistojen havaitsemiseksi."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Voit tarkastella uusinta raporttia alla. Skannauksen suorittaminen, hälytysten keskeyttäminen tai uuden vertailupohjan luominen edellyttää pääkäyttäjän oikeuksia."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Hälytykset on tällä hetkellä keskeytetty huoltoa varten. Ne jatkuvat automaattisesti %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Skannausta ei ole vielä suoritettu. Suorita skannaus tästä tai komentoriviltä komennolla app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Viimeisin skannaus"
+
+msgid "Files scanned"
+msgstr "Skannatut tiedostot"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Vertailupohjaa ei ollut vielä olemassa: tämä skannaus loi sen. Muutoksista ilmoitetaan seuraavasta skannauksesta alkaen."
+
+msgid "No changes detected since the baseline."
+msgstr "Muutoksia ei havaittu vertailupohjan jälkeen."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git-etäasetukset (.git\/config) ovat muuttuneet. Varmista, että muutos oli odotettu."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Skannaus keskeytyi, koska alihakemistoa ei voitu lukea (tarkista tiedostojen käyttöoikeudet). Alla olevat tulokset voivat olla osittaisia."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Liian monta muutosta lueteltavaksi kokonaisuudessaan; vain kunkin luokan ensimmäiset merkinnät näytetään alla. Katso täydellinen luettelo CEF-lokista."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% tiedosto(a) ei voitu lukea (käyttöoikeudet) ja ne ohitettiin."
+
+msgid "Run a scan now"
+msgstr "Suorita skannaus nyt"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Keskeytä hälytykset 1 tunniksi (huoltoa varten)"
+
+msgid "Pause for 1 hour"
+msgstr "Keskeytä 1 tunniksi"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Luota nykyiseen tiedostorakenteeseen uutena vertailupohjana"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Tämä luottaa kaikkiin nykyisiin tiedostoihin oikeina, myös tarkistamattomiin muutoksiin. Jatketaanko?"
+
+msgid "Establish new baseline"
+msgstr "Luo uusi vertailupohja"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Ajoita skannaus järjestelmän crontabista, esimerkiksi"
+
+msgid "File integrity alert on %platform%"
+msgstr "Tiedostojen eheyden hälytys alustalla %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Tiedostojen eheyden skannaus havaitsi muutoksia alustalla:"
+
+msgid "Added files"
+msgstr "Lisätyt tiedostot"
+
+msgid "Modified files"
+msgstr "Muutetut tiedostot"
+
+msgid "Deleted files"
+msgstr "Poistetut tiedostot"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Tarkista koko raportti kohdasta Hallinta > Turvallisuus > Tiedostojen eheys."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Salasana hälytysten keskeyttämisen vahvistamiseksi"
+
+msgid "Password to confirm the new baseline"
+msgstr "Salasana uuden vertailupohjan vahvistamiseksi"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Skannaus on jo käynnissä. Odota sen valmistumista ennen uuden aloittamista."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Skannaus on parhaillaan käynnissä (käynnistetty %date%). Koko skannaus voi kestää useita minuutteja; tämä sivu voidaan turvallisesti päivittää edistymisen tarkistamiseksi."
+
+msgid "Currently processing"
+msgstr "Käsitellään parhaillaan"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Aiempi skannaus (käynnistetty %date%) keskeytyi ennen valmistumista — prosessi ei ole enää käynnissä. Voit turvallisesti aloittaa uuden."
+
+msgid "files"
+msgstr "tiedostot"
+
+msgid "Permissions changed"
+msgstr "Käyttöoikeudet muutettu"
+
+msgid "Files with changed permissions"
+msgstr "Tiedostot, joiden käyttöoikeudet ovat muuttuneet"
+
+msgid "Alert history"
+msgstr "Hälytyshistoria"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Jokainen skannaus, joka löysi jotain, säilytetään myös poikkeaman ratkaisemisen tai uuden perustason asettamisen jälkeen — toisin kuin yllä oleva raportti, puhdas skannaus tai uudelleenperustason asettaminen ei koskaan tyhjennä tätä."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Tämä merkintä katkaistiin tallennushetkellä; katso täydellinen luettelo CEF-lokista."
+
+msgid "No alert has been recorded yet."
+msgstr "Hälytyksiä ei ole vielä tallennettu."
+
+msgid "Git remote changed"
+msgstr "Git-etäyhteys muuttunut"
+

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "مثال على الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نموذج الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -37355,4 +37355,139 @@ msgstr "بواسطة"
 
 msgid "required"
 msgstr "مطلوب"
+
+msgid "Incorrect password."
+msgstr "كلمة مرور غير صحيحة."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "تم إيقاف تنبيه سلامة الملفات مؤقتًا لمدة ساعة واحدة."
+
+msgid "New baseline established: %s files."
+msgstr "تم إنشاء خط أساس جديد: %s ملف."
+
+msgid "Scan complete: changes were detected."
+msgstr "اكتمل الفحص: تم اكتشاف تغييرات."
+
+msgid "Scan complete: no changes were detected."
+msgstr "اكتمل الفحص: لم يتم اكتشاف أي تغييرات."
+
+msgid "File integrity"
+msgstr "سلامة الملفات"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "يقارن هذا التقرير الملفات المثبتة (كل شيء باستثناء var\/ و .git\/، على الرغم من أن .git\/config لا يزال مراقبًا للكشف عن الاختراق عن بعد) مقابل خط أساس موثوق به، للكشف عن الإضافات أو التعديلات أو الحذف غير المتوقعة."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "يمكنك مراجعة أحدث تقرير أدناه. يتطلب تشغيل فحص أو إيقاف التنبيه مؤقتًا أو إنشاء خط أساس جديد مسؤولاً عامًا."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "تم إيقاف التنبيه حاليًا للصيانة. سيتم استئنافه تلقائيًا في %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "لم يتم تشغيل أي فحص بعد. قم بتشغيل واحد من هنا، أو من سطر الأوامر باستخدام app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "آخر فحص"
+
+msgid "Files scanned"
+msgstr "الملفات المفحوصة"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "لم يكن هناك خط أساس بعد: أنشأ هذا الفحص واحدًا. سيتم الإبلاغ عن التغييرات بدءًا من الفحص التالي."
+
+msgid "No changes detected since the baseline."
+msgstr "لم يتم اكتشاف أي تغييرات منذ خط الأساس."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "تم تغيير تكوين Git البعيد (.git\/config). تحقق مما إذا كان ذلك متوقعًا."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "توقف الفحص مبكرًا لأنه تعذر قراءة دليل فرعي (تحقق من أذونات الملفات). قد تكون النتائج أدناه جزئية."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "عدد التغييرات كبير جدًا لسردها بالكامل؛ يتم عرض أول إدخالات كل فئة فقط أدناه. راجع سجل CEF للقائمة الكاملة."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "تعذرت قراءة %count% ملف (أذونات) وتم تخطيها."
+
+msgid "Run a scan now"
+msgstr "تشغيل فحص الآن"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "إيقاف التنبيه مؤقتًا لمدة ساعة واحدة (للصيانة)"
+
+msgid "Pause for 1 hour"
+msgstr "إيقاف مؤقت لمدة ساعة واحدة"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "الثقة بشجرة الملفات الحالية كخط أساس جديد"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "سيؤدي هذا إلى الثقة بكل ملف حالي كملف صحيح، بما في ذلك أي تغيير لم تتم مراجعته. هل تريد المتابعة؟"
+
+msgid "Establish new baseline"
+msgstr "إنشاء خط أساس جديد"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "جدولة الفحص من crontab النظام، على سبيل المثال"
+
+msgid "File integrity alert on %platform%"
+msgstr "تنبيه سلامة الملفات على %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "اكتشف فحص سلامة الملفات تغييرات على المنصة:"
+
+msgid "Added files"
+msgstr "الملفات المضافة"
+
+msgid "Modified files"
+msgstr "الملفات المعدلة"
+
+msgid "Deleted files"
+msgstr "الملفات المحذوفة"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "راجع التقرير الكامل من الإدارة > الأمان > سلامة الملفات."
+
+msgid "Password to confirm pausing alerts"
+msgstr "كلمة المرور لتأكيد إيقاف التنبيهات"
+
+msgid "Password to confirm the new baseline"
+msgstr "كلمة المرور لتأكيد خط الأساس الجديد"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "هناك فحص قيد التشغيل بالفعل. يرجى الانتظار حتى ينتهي قبل بدء فحص آخر."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "يتم تشغيل فحص حاليًا (بدأ في %date%). قد يستغرق الفحص الكامل عدة دقائق؛ يمكن إعادة تحميل هذه الصفحة بأمان للتحقق من التقدم."
+
+msgid "Currently processing"
+msgstr "جاري المعالجة حاليًا"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "تمت مقاطعة فحص سابق (بدأ في %date%) قبل انتهائه — لم تعد العملية قيد التشغيل. يمكنك بدء فحص جديد بأمان."
+
+msgid "files"
+msgstr "ملفات"
+
+msgid "Permissions changed"
+msgstr "تم تغيير الأذونات"
+
+msgid "Files with changed permissions"
+msgstr "الملفات ذات الصلاحيات المعدلة"
+
+msgid "Alert history"
+msgstr "سجل التنبيهات"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "كل فحص وجد شيئًا، يُحتفظ به حتى بعد حل الانحراف أو إنشاء خط أساس جديد — على عكس التقرير أعلاه، لا يمحو الفحص النظيف أو إعادة الخط الأساسي هذا السجل أبدًا."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "تم اقتطاع هذا الإدخال عند الالتقاط؛ راجع سجل CEF للقائمة الكاملة."
+
+msgid "No alert has been recorded yet."
+msgstr "لم يُسجَّل أي تنبيه بعد."
+
+msgid "Git remote changed"
+msgstr "تم تغيير مستودع Git البعيد"
 

@@ -37342,6 +37342,7 @@ msgstr "by"
 
 msgid "required"
 msgstr "required"
+
 msgid "Incorrect password."
 msgstr "Incorrect password."
 
@@ -37399,9 +37400,6 @@ msgstr "%count% file(s) could not be read (permissions) and were skipped."
 msgid "Run a scan now"
 msgstr "Run a scan now"
 
-msgid "Your password"
-msgstr "Your password"
-
 msgid "Pause alerting for 1 hour (for maintenance)"
 msgstr "Pause alerting for 1 hour (for maintenance)"
 
@@ -37437,4 +37435,46 @@ msgstr "Deleted files"
 
 msgid "Review the full report from Administration > Security > File integrity."
 msgstr "Review the full report from Administration > Security > File integrity."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Password to confirm pausing alerts"
+
+msgid "Password to confirm the new baseline"
+msgstr "Password to confirm the new baseline"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "A scan is already running. Please wait for it to finish before starting another one."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+
+msgid "Currently processing"
+msgstr "Currently processing"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+
+msgid "files"
+msgstr "files"
+
+msgid "Permissions changed"
+msgstr "Permissions changed"
+
+msgid "Files with changed permissions"
+msgstr "Files with changed permissions"
+
+msgid "Alert history"
+msgstr "Alert history"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "This entry was truncated at capture time; see the CEF log for the complete list."
+
+msgid "No alert has been recorded yet."
+msgstr "No alert has been recorded yet."
+
+msgid "Git remote changed"
+msgstr "Git remote changed"
 

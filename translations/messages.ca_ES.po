@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sincerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -37356,4 +37356,139 @@ msgstr "per"
 
 msgid "required"
 msgstr "obligatori"
+
+msgid "Incorrect password."
+msgstr "Contrasenya incorrecta."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alerta d'integritat de fitxers pausada durant 1 hora."
+
+msgid "New baseline established: %s files."
+msgstr "Nova línia base establerta: %s fitxers."
+
+msgid "Scan complete: changes were detected."
+msgstr "Escaneig completat: s'han detectat canvis."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Escaneig completat: no s'han detectat canvis."
+
+msgid "File integrity"
+msgstr "Integritat de fitxers"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Aquest informe compara els fitxers instal·lats (tots excepte var/ i .git/, tot i que .git/config encara es supervisa per detectar un remot segrestat) amb una línia base de confiança, per detectar addicions, modificacions o supressions inesperades."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Podeu revisar l'últim informe a continuació. Executar un escaneig, pausar l'alerta o establir una nova línia base requereix un administrador global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "L'alerta està actualment pausada per manteniment. Es reprendrà automàticament el %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Encara no s'ha executat cap escaneig. Executeu-ne un des d'aquí o des de la línia d'ordres amb app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Últim escaneig"
+
+msgid "Files scanned"
+msgstr "Fitxers escanejats"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Encara no existia cap línia base: aquest escaneig n'ha establert una. Els canvis es reportaran a partir del següent escaneig."
+
+msgid "No changes detected since the baseline."
+msgstr "No s'han detectat canvis des de la línia base."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "La configuració remota de Git (.git/config) ha canviat. Verifiqueu que era esperat."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "L'escaneig s'ha aturat abans d'hora perquè no s'ha pogut llegir un subdirectori (comproveu els permisos dels fitxers). Els resultats a continuació poden ser parcials."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Hi ha massa canvis per llistar-los completament; només es mostren les primeres entrades de cada categoria a continuació. Consulteu el registre CEF per veure la llista completa."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fitxer(s) no s'han pogut llegir (permisos) i s'han omès."
+
+msgid "Run a scan now"
+msgstr "Executa un escaneig ara"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Pausa l'alerta durant 1 hora (per manteniment)"
+
+msgid "Pause for 1 hour"
+msgstr "Pausa durant 1 hora"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Confia en l'arbre de fitxers actual com a nova línia base"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Això confiarà en cada fitxer actual com a correcte, incloent-hi qualsevol canvi no revisat. Voleu continuar?"
+
+msgid "Establish new baseline"
+msgstr "Estableix una nova línia base"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Programa l'escaneig des d'un crontab del sistema, per exemple"
+
+msgid "File integrity alert on %platform%"
+msgstr "Alerta d'integritat de fitxers a %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Un escaneig d'integritat de fitxers ha detectat canvis a la plataforma:"
+
+msgid "Added files"
+msgstr "Fitxers afegits"
+
+msgid "Modified files"
+msgstr "Fitxers modificats"
+
+msgid "Deleted files"
+msgstr "Fitxers suprimits"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Reviseu l'informe complet des d'Administració > Seguretat > Integritat de fitxers."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Contrasenya per confirmar la pausa de les alertes"
+
+msgid "Password to confirm the new baseline"
+msgstr "Contrasenya per confirmar la nova línia base"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Ja s'està executant un escaneig. Espereu que acabi abans d'iniciar-ne un altre."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "S'està executant un escaneig (iniciat el %date%). Un escaneig complet pot trigar diversos minuts; aquesta pàgina es pot recarregar amb seguretat per comprovar el progrés."
+
+msgid "Currently processing"
+msgstr "Processant actualment"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Un escaneig anterior (iniciat el %date%) es va interrompre abans d'acabar — el procés ja no s'està executant. Podeu iniciar-ne un de nou amb seguretat."
+
+msgid "files"
+msgstr "fitxers"
+
+msgid "Permissions changed"
+msgstr "Permisos canviats"
+
+msgid "Files with changed permissions"
+msgstr "Fitxers amb permisos canviats"
+
+msgid "Alert history"
+msgstr "Historial d'alertes"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Cada escaneig que ha trobat alguna cosa es conserva fins i tot després que es resolgui la desviació o s'estableixi una nova línia base — a diferència de l'informe anterior, un escaneig net o una nova línia base mai no esborra aquest historial."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Aquesta entrada es va truncar en el moment de la captura; consulteu el registre CEF per veure la llista completa."
+
+msgid "No alert has been recorded yet."
+msgstr "Encara no s'ha registrat cap alerta."
+
+msgid "Git remote changed"
+msgstr "El repositori remot de Git ha canviat"
 

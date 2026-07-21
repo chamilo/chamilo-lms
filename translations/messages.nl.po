@@ -39422,3 +39422,138 @@ msgstr "door"
 msgid "required"
 msgstr "verplicht"
 
+msgid "Incorrect password."
+msgstr "Onjuist wachtwoord."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Bestandsintegriteitswaarschuwing 1 uur gepauzeerd."
+
+msgid "New baseline established: %s files."
+msgstr "Nieuwe baseline vastgesteld: %s bestanden."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scan voltooid: wijzigingen gedetecteerd."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scan voltooid: geen wijzigingen gedetecteerd."
+
+msgid "File integrity"
+msgstr "Bestandsintegriteit"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Dit rapport vergelijkt de geïnstalleerde bestanden (alles behalve var/ en .git/, hoewel .git/config nog steeds wordt bewaakt om een gekaapte remote te detecteren) met een vertrouwde baseline, om onverwachte toevoegingen, wijzigingen of verwijderingen te detecteren."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "U kunt het laatste rapport hieronder bekijken. Een scan uitvoeren, waarschuwingen pauzeren of een nieuwe baseline vaststellen vereist een globale beheerder."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Waarschuwen is momenteel gepauzeerd voor onderhoud. Het wordt automatisch hervat op %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Er is nog geen scan uitgevoerd. Voer er een uit vanaf hier of vanaf de opdrachtregel met app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Laatste scan"
+
+msgid "Files scanned"
+msgstr "Gescande bestanden"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Er bestond nog geen baseline: deze scan heeft er een vastgesteld. Wijzigingen worden gerapporteerd vanaf de volgende scan."
+
+msgid "No changes detected since the baseline."
+msgstr "Geen wijzigingen gedetecteerd sinds de baseline."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "De Git-remoteconfiguratie (.git/config) is gewijzigd. Controleer of dit verwacht was."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "De scan is vroegtijdig gestopt omdat een subdirectory niet kon worden gelezen (controleer bestandsrechten). Resultaten hieronder kunnen onvolledig zijn."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Te veel wijzigingen om volledig weer te geven; alleen de eerste vermeldingen van elke categorie worden hieronder getoond. Zie het CEF-log voor de volledige lijst."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% bestand(en) kon(den) niet worden gelezen (rechten) en werd(en) overgeslagen."
+
+msgid "Run a scan now"
+msgstr "Nu een scan uitvoeren"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Waarschuwen 1 uur pauzeren (voor onderhoud)"
+
+msgid "Pause for 1 hour"
+msgstr "1 uur pauzeren"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "De huidige bestandsstructuur vertrouwen als nieuwe baseline"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Dit zal elk huidig bestand vertrouwen als correct, inclusief elke niet-beoordeelde wijziging. Doorgaan?"
+
+msgid "Establish new baseline"
+msgstr "Nieuwe baseline vaststellen"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "De scan plannen vanuit een systeem-crontab, bijvoorbeeld"
+
+msgid "File integrity alert on %platform%"
+msgstr "Bestandsintegriteitswaarschuwing op %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Een bestandsintegriteitsscan heeft wijzigingen op het platform gedetecteerd:"
+
+msgid "Added files"
+msgstr "Toegevoegde bestanden"
+
+msgid "Modified files"
+msgstr "Gewijzigde bestanden"
+
+msgid "Deleted files"
+msgstr "Verwijderde bestanden"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Bekijk het volledige rapport via Beheer > Beveiliging > Bestandsintegriteit."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Wachtwoord om waarschuwingen te pauzeren"
+
+msgid "Password to confirm the new baseline"
+msgstr "Wachtwoord om de nieuwe baseline te bevestigen"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Er loopt al een scan. Wacht tot deze is voltooid voordat u een nieuwe start."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Er loopt momenteel een scan (gestart op %date%). Een volledige scan kan enkele minuten duren; deze pagina kan veilig worden vernieuwd om de voortgang te controleren."
+
+msgid "Currently processing"
+msgstr "Momenteel verwerken"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Een vorige scan (gestart op %date%) werd onderbroken voordat deze was voltooid — het proces draait niet meer. U kunt veilig een nieuwe starten."
+
+msgid "files"
+msgstr "bestanden"
+
+msgid "Permissions changed"
+msgstr "Rechten gewijzigd"
+
+msgid "Files with changed permissions"
+msgstr "Bestanden met gewijzigde rechten"
+
+msgid "Alert history"
+msgstr "Waarschuwingsgeschiedenis"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Elke scan die iets vond, wordt bewaard zelfs nadat de afwijking is opgelost of een nieuwe baseline is vastgesteld — in tegenstelling tot het rapport hierboven, wist een schone scan of een nieuwe baseline dit nooit."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Deze vermelding werd afgekapt op het moment van vastlegging; zie het CEF-log voor de volledige lijst."
+
+msgid "No alert has been recorded yet."
+msgstr "Er is nog geen waarschuwing vastgelegd."
+
+msgid "Git remote changed"
+msgstr "Git-remote gewijzigd"
+

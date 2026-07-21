@@ -35488,7 +35488,7 @@ msgid "%s results"
 msgstr "%s resultats"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemple d'activitat de formulari : calcular l'índex de massa corporal</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edat</strong></td>            <td width=\"75%\" style=\"\">[25] ans</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sexe</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pès</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Talha</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indèx de massa corporal</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Pès/Talha<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Article de Wikipèdia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemple d'activitat de formulari : calcular l'índex de massa corporal</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edat</strong></td>            <td width=\"75%\" style=\"\">[25] ans</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sexe</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pes</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Talha</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indèx de massa corporal</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Pes/Talha<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Article de Wikipèdia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Suprimit"
@@ -37337,4 +37337,139 @@ msgstr "per"
 
 msgid "required"
 msgstr "obligatòri"
+
+msgid "Incorrect password."
+msgstr "Senhal incorrècte."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alèrta d'integritat dels fichièrs en pausa per 1 ora."
+
+msgid "New baseline established: %s files."
+msgstr "Nòva referéncia establida : %s fichièrs."
+
+msgid "Scan complete: changes were detected."
+msgstr "Analisi acabada : de cambiaments son estats detectats."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Analisi acabada : cap de cambiament pas detectat."
+
+msgid "File integrity"
+msgstr "Integritat dels fichièrs"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Aqueste rapòrt compara los fichièrs installats (tot levat var/ e .git/, malgrat que .git/config es totjorn susvelhat per detectar un desviament de remote) amb una referéncia de fisança, per detectar d'ajusts, de modificacions o de supressions inesperadas."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Podètz consultar lo darrièr rapòrt çaisús. L'execucion d'una analisi, la mesa en pausa de las alèrtas o l'establiment d'una nòva referéncia requerís un administrator global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Las alèrtas son actualament en pausa per mantenença. Se reprendràn automaticament a %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Cap d'analisi pas encara executada. Executatz-ne una aicí o dempuèi la linha de comanda amb app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Darrièra analisi"
+
+msgid "Files scanned"
+msgstr "Fichièrs analizats"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Cap de referéncia existissiá pas encara : aquesta analisi n'a establida una. Los cambiaments seràn raportats a partir de la seguida."
+
+msgid "No changes detected since the baseline."
+msgstr ""
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr ""
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr ""
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr ""
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr ""
+
+msgid "Run a scan now"
+msgstr ""
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr ""
+
+msgid "Pause for 1 hour"
+msgstr ""
+
+msgid "Trust the current file tree as the new baseline"
+msgstr ""
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr ""
+
+msgid "Establish new baseline"
+msgstr ""
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr ""
+
+msgid "File integrity alert on %platform%"
+msgstr ""
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr ""
+
+msgid "Added files"
+msgstr ""
+
+msgid "Modified files"
+msgstr ""
+
+msgid "Deleted files"
+msgstr ""
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr ""
+
+msgid "Password to confirm pausing alerts"
+msgstr ""
+
+msgid "Password to confirm the new baseline"
+msgstr ""
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr ""
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr ""
+
+msgid "Currently processing"
+msgstr ""
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr ""
+
+msgid "files"
+msgstr ""
+
+msgid "Permissions changed"
+msgstr ""
+
+msgid "Files with changed permissions"
+msgstr ""
+
+msgid "Alert history"
+msgstr ""
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr ""
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr ""
+
+msgid "No alert has been recorded yet."
+msgstr ""
+
+msgid "Git remote changed"
+msgstr ""
 

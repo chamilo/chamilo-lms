@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ใช่ :ลิขสิทธิ์,, ไม่:ไม่มีลิขสิทธิ์ :yes:copyright,, no:no copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:สตรีมออคเต็ต,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:แบบฝึกหัด,, simulation:การจำลอง,, questionnaire:แบบสอบถาม,, diagram:ไดอะแกรม,, figure:รูปภาพ,, graph:กราฟ,, index:ดัชนี,, slide:สไลด์,, table:ตาราง,, narrative text:ข้อความบรรยาย,, exam:ข้อสอบ,, experiment:การทดลอง,, problem statement:ประโยคปัญหา,, self assessment:การประเมินตนเอง,, lecture:การบรรยาย"
@@ -37343,4 +37343,139 @@ msgstr "โดย"
 
 msgid "required"
 msgstr "จำเป็น"
+
+msgid "Incorrect password."
+msgstr "รหัสผ่านไม่ถูกต้อง"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "การแจ้งเตือนความสมบูรณ์ของไฟล์ถูกหยุดชั่วคราวเป็นเวลา 1 ชั่วโมง"
+
+msgid "New baseline established: %s files."
+msgstr "สร้าง baseline ใหม่แล้ว: %s ไฟล์"
+
+msgid "Scan complete: changes were detected."
+msgstr "สแกนเสร็จสมบูรณ์: ตรวจพบการเปลี่ยนแปลง"
+
+msgid "Scan complete: no changes were detected."
+msgstr "สแกนเสร็จสมบูรณ์: ไม่พบการเปลี่ยนแปลง"
+
+msgid "File integrity"
+msgstr "ความสมบูรณ์ของไฟล์"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "รายงานนี้เปรียบเทียบไฟล์ที่ติดตั้ง (ทุกอย่างยกเว้น var/ และ .git/ แม้ว่า .git/config จะยังถูกตรวจสอบเพื่อจับการไฮแจ็กรีโมท) กับ baseline ที่เชื่อถือได้ เพื่อตรวจจับการเพิ่ม การแก้ไข หรือการลบที่ไม่คาดคิด"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "คุณสามารถตรวจสอบรายงานล่าสุดด้านล่าง การรันสแกน การหยุดการแจ้งเตือนชั่วคราว หรือการสร้าง baseline ใหม่ต้องใช้ผู้ดูแลระบบระดับโลก"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "การแจ้งเตือนถูกหยุดชั่วคราวเพื่อการบำรุงรักษาในขณะนี้ จะกลับมาทำงานโดยอัตโนมัติที่ %date%"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "ยังไม่มีการสแกนใด ๆ เกิดขึ้น สแกนจากที่นี่ หรือจากบรรทัดคำสั่งด้วย app:file-integrity:scan"
+
+msgid "Last scan"
+msgstr "สแกนล่าสุด"
+
+msgid "Files scanned"
+msgstr "ไฟล์ที่สแกน"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "ยังไม่มี baseline: การสแกนนี้ได้สร้าง baseline ขึ้นมา การเปลี่ยนแปลงจะถูกรายงานเริ่มจากการสแกนครั้งถัดไป"
+
+msgid "No changes detected since the baseline."
+msgstr "ไม่พบการเปลี่ยนแปลงตั้งแต่ baseline"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "การกำหนดค่ารีโมท Git (.git/config) มีการเปลี่ยนแปลง โปรดตรวจสอบว่าคาดการณ์ไว้"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "การสแกนหยุดก่อนกำหนดเนื่องจากไม่สามารถอ่านไดเรกทอรีย่อยได้ (ตรวจสอบสิทธิ์ไฟล์) ผลลัพธ์ด้านล่างอาจไม่สมบูรณ์"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "มีการเปลี่ยนแปลงมากเกินไปที่จะแสดงทั้งหมด แสดงเฉพาะรายการแรกของแต่ละหมวดหมู่ด้านล่าง ดูบันทึก CEF สำหรับรายการทั้งหมด"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% ไฟล์ไม่สามารถอ่านได้ (สิทธิ์) และถูกข้าม"
+
+msgid "Run a scan now"
+msgstr "รันสแกนตอนนี้"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "หยุดการแจ้งเตือนเป็นเวลา 1 ชั่วโมง (เพื่อการบำรุงรักษา)"
+
+msgid "Pause for 1 hour"
+msgstr "หยุดเป็นเวลา 1 ชั่วโมง"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "เชื่อถือโครงสร้างไฟล์ปัจจุบันเป็น baseline ใหม่"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "การดำเนินการนี้จะเชื่อถือทุกไฟล์ปัจจุบันว่าถูกต้อง รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้ตรวจสอบ ดำเนินการต่อ?"
+
+msgid "Establish new baseline"
+msgstr "สร้าง baseline ใหม่"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "กำหนดการสแกนจาก crontab ของระบบ เช่น"
+
+msgid "File integrity alert on %platform%"
+msgstr "การแจ้งเตือนความสมบูรณ์ของไฟล์บน %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "การสแกนความสมบูรณ์ของไฟล์ตรวจพบการเปลี่ยนแปลงบนแพลตฟอร์ม:"
+
+msgid "Added files"
+msgstr "ไฟล์ที่เพิ่ม"
+
+msgid "Modified files"
+msgstr "ไฟล์ที่แก้ไข"
+
+msgid "Deleted files"
+msgstr "ไฟล์ที่ลบ"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "ดูรายงานฉบับเต็มได้ที่ การจัดการ > ความปลอดภัย > ความสมบูรณ์ของไฟล์"
+
+msgid "Password to confirm pausing alerts"
+msgstr "รหัสผ่านเพื่อยืนยันการหยุดแจ้งเตือนชั่วคราว"
+
+msgid "Password to confirm the new baseline"
+msgstr "รหัสผ่านเพื่อยืนยันฐานข้อมูลใหม่"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "มีการสแกนกำลังทำงานอยู่ โปรดรอให้เสร็จสิ้นก่อนเริ่มการสแกนใหม่"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "กำลังสแกนอยู่ (เริ่มเมื่อ %date%) การสแกนเต็มรูปแบบอาจใช้เวลาหลายนาที สามารถโหลดหน้านี้ใหม่เพื่อตรวจสอบความคืบหน้าได้อย่างปลอดภัย"
+
+msgid "Currently processing"
+msgstr "กำลังประมวลผล"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "การสแกนก่อนหน้า (เริ่มเมื่อ %date%) ถูกขัดจังหวะก่อนเสร็จสิ้น — กระบวนการไม่ได้ทำงานอีกต่อไป คุณสามารถเริ่มการสแกนใหม่ได้อย่างปลอดภัย"
+
+msgid "files"
+msgstr "ไฟล์"
+
+msgid "Permissions changed"
+msgstr "สิทธิ์การเข้าถึงเปลี่ยนแปลง"
+
+msgid "Files with changed permissions"
+msgstr "ไฟล์ที่มีสิทธิ์การเข้าถึงเปลี่ยนแปลง"
+
+msgid "Alert history"
+msgstr "ประวัติการแจ้งเตือน"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "ทุกการสแกนที่พบปัญหาจะถูกเก็บรักษาไว้ แม้ปัญหาจะได้รับการแก้ไขหรือมีการกำหนดฐานข้อมูลใหม่ — ต่างจากรายงานด้านบน การสแกนที่ไม่มีปัญหาหรือการกำหนดฐานข้อมูลใหม่จะไม่ล้างข้อมูลนี้"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "รายการนี้ถูกตัดทอนในขณะที่บันทึก ดูบันทึก CEF สำหรับรายการทั้งหมด"
+
+msgid "No alert has been recorded yet."
+msgstr "ยังไม่มีบันทึกการแจ้งเตือน"
+
+msgid "Git remote changed"
+msgstr "รีโมท Git เปลี่ยนแปลง"
 

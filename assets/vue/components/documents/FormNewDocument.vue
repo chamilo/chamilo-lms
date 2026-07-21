@@ -111,7 +111,7 @@
     </div>
 
     <BaseAdvancedSettingsButton
-      v-if="searchEnabled || showResourceLanguageAdvancedSettings || hasAdvancedSlot"
+      v-if="(searchEnabled && !isCertificateDocument) || showResourceLanguageAdvancedSettings || hasAdvancedSlot"
       v-model="showAdvancedSettings"
     >
       <ResourceLanguageSelector
@@ -120,7 +120,7 @@
       />
 
       <div
-        v-if="searchEnabled"
+        v-if="searchEnabled && !isCertificateDocument"
         class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center"
       >
         <div class="flex w-40 shrink-0 items-center gap-1 font-semibold">
@@ -146,7 +146,7 @@
       </div>
 
       <div
-        v-if="searchEnabled && searchFields.length > 0"
+        v-if="searchEnabled && !isCertificateDocument && searchFields.length > 0"
         class="mt-3 flex flex-col gap-2"
       >
         <div
@@ -297,6 +297,9 @@ export default {
     violations() {
       return this.errors || {}
     },
+    isCertificateDocument() {
+      return "certificate" === String(this.item?.filetype || "").trim().toLowerCase()
+    },
     effectiveParentResourceNodeId() {
       const routeNode = this.normalizeNodeId(this.$route?.params?.node ?? this.$route?.params?.id)
       const itemNode = this.normalizeNodeId(this.item?.parentResourceNodeId)
@@ -379,7 +382,9 @@ export default {
       this.item.searchFieldValues = {}
     }
 
-    if (undefined === this.item.indexDocumentContent) {
+    if (this.isCertificateDocument) {
+      this.item.indexDocumentContent = false
+    } else if (undefined === this.item.indexDocumentContent) {
       this.item.indexDocumentContent = true
     }
 
@@ -387,7 +392,7 @@ export default {
 
     this.ensureResourceLanguage()
 
-    if (!this.searchEnabled) {
+    if (!this.searchEnabled || this.isCertificateDocument) {
       return
     }
 
@@ -415,10 +420,19 @@ export default {
       immediate: true,
       handler() {
         this.ensureResourceLanguage()
+        this.enforceCertificateIndexingDisabled()
       },
     },
   },
   methods: {
+    enforceCertificateIndexingDisabled() {
+      if (!this.isCertificateDocument || !this.item) {
+        return
+      }
+
+      this.item.indexDocumentContent = false
+      this.item.searchFieldValues = {}
+    },
     getDocumentEditorContentStyle() {
       const baseStyle =
         typeof window !== "undefined" ? String(window.CHAMILO_TINYMCE_BASE_CONFIG?.content_style || "") : ""
@@ -458,6 +472,7 @@ export default {
         this.item.contentFile = editor.getContent()
       }
 
+      this.enforceCertificateIndexingDisabled()
       this.$emit("submit")
     },
     patchDocumentFormNativeSubmit() {
@@ -618,6 +633,7 @@ export default {
         this.item.contentFile = editor.getContent()
       }
 
+      this.enforceCertificateIndexingDisabled()
       this.$nextTick(() => {
         this.$emit("submit")
 

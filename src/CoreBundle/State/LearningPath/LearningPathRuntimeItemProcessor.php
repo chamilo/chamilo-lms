@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathRuntimeItemInput;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -29,7 +30,7 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
 {
     use LearningPathStateHelperTrait;
 
-    private const EXTERNALLY_COMPLETED_TYPES = ['quiz', 'hotpotatoes', 'sco', 'au'];
+    private const EXTERNALLY_COMPLETED_TYPES = ['quiz', 'hotpotatoes', 'sco', 'au', 'survey'];
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -38,6 +39,7 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
         private LearningPathRuntimeWriteProtection $writeProtection,
         private LearningPathRuntimeProvider $runtimeProvider,
         private LearningPathRuntimeProgressManager $progressManager,
+        private LearningPathFinalItemManager $finalItemManager,
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
     ) {}
@@ -164,6 +166,16 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
         $view->setLastItem($data->itemId);
         $this->entityManager->flush();
         $this->progressManager->synchronize($lp, $view);
+
+        if ('final_item' === strtolower(trim($item->getItemType()))) {
+            $this->finalItemManager->completeForLearner(
+                $item,
+                $course,
+                $session,
+                $user,
+                $runtime->canEdit,
+            );
+        }
     }
 
     private function shouldCompleteWhenOpened(CLpItem $item): bool

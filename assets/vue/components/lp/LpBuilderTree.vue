@@ -25,7 +25,7 @@ const emit = defineEmits([
   "resource-drop",
 ])
 
-const externalDropActive = ref(false)
+const externalDropTarget = ref(null)
 
 const itemsModel = computed({
   get: () => props.items,
@@ -59,26 +59,35 @@ function updateChildren(item, children) {
   item.children = children
 }
 
+function normalizeParentId(parentId) {
+  return Number(parentId || 0)
+}
+
 function isExternalResourceDrag(event) {
   const types = Array.from(event.dataTransfer?.types || [])
 
   return types.includes(RESOURCE_MIME_TYPE)
 }
 
-function handleExternalDragOver(event) {
+function isExternalDropActive(parentId) {
+  return externalDropTarget.value === normalizeParentId(parentId)
+}
+
+function handleExternalDragOver(event, parentId) {
   if (!props.canManage || !isExternalResourceDrag(event)) {
     return
   }
 
   event.preventDefault()
-  externalDropActive.value = true
+  event.stopPropagation()
+  externalDropTarget.value = normalizeParentId(parentId)
 
   if (event.dataTransfer) {
     event.dataTransfer.dropEffect = "copy"
   }
 }
 
-function handleExternalDragLeave(event) {
+function handleExternalDragLeave(event, parentId) {
   const currentTarget = event.currentTarget
   const relatedTarget = event.relatedTarget
 
@@ -86,18 +95,20 @@ function handleExternalDragLeave(event) {
     return
   }
 
-  externalDropActive.value = false
+  if (isExternalDropActive(parentId)) {
+    externalDropTarget.value = null
+  }
 }
 
 function handleResourceDrop(event, parentId) {
   if (!isExternalResourceDrag(event)) {
-    externalDropActive.value = false
+    externalDropTarget.value = null
     return
   }
 
   event.preventDefault()
   event.stopPropagation()
-  externalDropActive.value = false
+  externalDropTarget.value = null
 
   const raw = event.dataTransfer?.getData(RESOURCE_MIME_TYPE)
   if (!raw) {
@@ -106,14 +117,14 @@ function handleResourceDrop(event, parentId) {
 
   try {
     const resource = JSON.parse(raw)
-    emit("resource-drop", { resource, parentId: parentId || null })
+    emit("resource-drop", { resource, parentId: normalizeParentId(parentId) || null })
   } catch {
     // Ignore data that does not come from the learning path resource selector.
   }
 }
 
 async function handleStructureChanged() {
-  externalDropActive.value = false
+  externalDropTarget.value = null
 
   // Cross-list moves update the source and destination models in separate steps.
   // Wait until both recursive lists have settled before serializing the full tree.
@@ -123,6 +134,22 @@ async function handleStructureChanged() {
 </script>
 
 <template>
+  <div
+    v-if="canManage && parentId === 0"
+    class="lp-builder-drop-zone mb-3 flex min-h-14 items-center justify-center rounded-lg border border-dashed px-3 py-4 text-center text-body-2 transition"
+    :class="
+      isExternalDropActive(0)
+        ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20'
+        : 'border-support-3 bg-support-1 text-support-5 hover:border-primary hover:bg-primary/5'
+    "
+    @dragenter="handleExternalDragOver($event, 0)"
+    @dragleave="handleExternalDragLeave($event, 0)"
+    @dragover="handleExternalDragOver($event, 0)"
+    @drop="handleResourceDrop($event, 0)"
+  >
+    {{ $t("Drag and drop an element here") }}
+  </div>
+
   <Draggable
     v-model="itemsModel"
     :animation="150"
@@ -142,9 +169,16 @@ async function handleStructureChanged() {
       <div>
         <div
           class="rounded-lg border px-2 py-2 transition"
-          :class="
-            selectedId === element.id ? 'border-primary bg-primary/5' : 'border-gray-20 bg-white hover:bg-gray-10'
-          "
+          :class="[
+            selectedId === element.id ? 'border-primary bg-primary/5' : 'border-gray-20 bg-white hover:bg-gray-10',
+            element.isSection && isExternalDropActive(element.id)
+              ? 'bg-primary/10 ring-2 ring-primary/30'
+              : '',
+          ]"
+          @dragenter="element.isSection && handleExternalDragOver($event, element.id)"
+          @dragleave="element.isSection && handleExternalDragLeave($event, element.id)"
+          @dragover="element.isSection && handleExternalDragOver($event, element.id)"
+          @drop="element.isSection && handleResourceDrop($event, element.id)"
         >
           <div class="flex items-center gap-2">
             <button
@@ -235,16 +269,16 @@ async function handleStructureChanged() {
 
     <template #footer>
       <div
-        v-if="canManage"
+        v-if="canManage && parentId !== 0"
         class="lp-builder-drop-zone mt-2 flex min-h-14 items-center justify-center rounded-lg border border-dashed px-3 py-4 text-center text-body-2 transition"
         :class="
-          externalDropActive
-            ? 'border-primary bg-primary/10 text-primary'
+          isExternalDropActive(parentId)
+            ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20'
             : 'border-support-3 bg-support-1 text-support-5 hover:border-primary hover:bg-primary/5'
         "
-        @dragenter="handleExternalDragOver"
-        @dragleave="handleExternalDragLeave"
-        @dragover="handleExternalDragOver"
+        @dragenter="handleExternalDragOver($event, parentId)"
+        @dragleave="handleExternalDragLeave($event, parentId)"
+        @dragover="handleExternalDragOver($event, parentId)"
         @drop="handleResourceDrop($event, parentId)"
       >
         {{ $t("Drag and drop an element here") }}

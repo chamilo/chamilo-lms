@@ -85,6 +85,7 @@ async function saveCertificate() {
       formData.append("contentFileMimeType", "text/html")
       formData.append("parentResourceNodeId", String(props.documentsRootNodeId))
       formData.append("resourceLinkList", JSON.stringify([{ visibility: 1 }]))
+      formData.append("indexDocumentContent", "false")
 
       const document = await lpService.createBuilderDocument(props.context, formData)
       documentId = getDocumentId(document)
@@ -114,6 +115,16 @@ async function saveCertificate() {
 
 <template>
   <div class="space-y-4">
+    <div class="flex justify-end">
+      <BaseButton
+        :is-loading="saving"
+        :label="t('Save')"
+        icon="save"
+        type="success"
+        @click="saveCertificate"
+      />
+    </div>
+
     <BaseInputText
       id="lp-certificate-title"
       v-model="form.title"

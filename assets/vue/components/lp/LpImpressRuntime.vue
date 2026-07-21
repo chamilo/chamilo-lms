@@ -49,14 +49,20 @@
             <h2>{{ activeItem.title }}</h2>
 
             <div
-              v-if="isChangingItem || iframeLoading || !contentReady"
+              v-if="!finalItemReady && (isChangingItem || iframeLoading || !contentReady)"
               class="lp-impress-loader"
             >
               {{ t("Loading") }}…
             </div>
 
+            <LpFinalItem
+              v-if="finalItemReady"
+              :data="runtime.finalItem"
+              class="min-h-0 flex-1 overflow-auto"
+            />
+
             <iframe
-              v-if="contentReady"
+              v-else-if="contentReady"
               ref="contentFrame"
               :key="`${activeItem.id}-${runtime.scorm?.itemViewId || runtime.currentItemAttempt}-${iframeReloadKey}`"
               :src="runtime.contentUrl"
@@ -91,6 +97,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
+import LpFinalItem from "./LpFinalItem.vue"
 
 const props = defineProps({
   runtime: {
@@ -137,6 +144,14 @@ const activeItem = computed(() => presentationItems.value[activeIndex.value] || 
 const canGoPrevious = computed(() => activeIndex.value > 0)
 const canGoNext = computed(() => activeIndex.value >= 0 && activeIndex.value < presentationItems.value.length - 1)
 const transitionName = computed(() => (direction.value === "previous" ? "lp-impress-backward" : "lp-impress-forward"))
+const finalItemReady = computed(
+  () =>
+    activeItem.value &&
+    !activeItem.value.isSection &&
+    activeItem.value.itemType === "final_item" &&
+    Number(activeItem.value.id) === Number(props.runtime.currentItemId) &&
+    Boolean(props.runtime.finalItem?.enabled),
+)
 const contentReady = computed(
   () =>
     activeItem.value &&

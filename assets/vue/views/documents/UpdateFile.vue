@@ -15,7 +15,7 @@
         <DocumentsForm
           ref="updateForm"
           :errors="violations"
-          :search-enabled="isSearchEnabled"
+          :search-enabled="isSearchEnabled && !isCertificateDocument"
           :values="item"
           @submit="onSendFormData"
         >
@@ -161,6 +161,9 @@ const isSearchEnabled = computed(() => "false" !== platformConfigStore.getSettin
 
 const allowedFiletypes = ["file", "certificate", "video"]
 const filetype = allowedFiletypes.includes(route.query.filetype) ? route.query.filetype : "file"
+const isCertificateDocument = computed(() =>
+  "certificate" === String(item.value?.filetype || filetype).trim().toLowerCase(),
+)
 
 const { certificateTags, insertCertificateTag, copyAllCertificateTags } = useCertificateTags(item)
 const { templates, fetchTemplates, addTemplateToEditor } = useDocumentTemplates(item, updateForm)
@@ -182,6 +185,11 @@ watch(
   item,
   (val) => {
     if (!val || typeof val !== "object") return
+    if ("certificate" === String(val.filetype || filetype).trim().toLowerCase()) {
+      val.indexDocumentContent = false
+      val.searchFieldValues = {}
+    }
+
     const raw = val.ai_assisted_raw ?? val.ai_assisted
     aiAssistedFlag.value = raw === true || raw === 1 || raw === "1"
   },
@@ -237,6 +245,11 @@ function normalizeAiAssistedState() {
 }
 
 function onSendFormData() {
+  if (isCertificateDocument.value) {
+    item.value.indexDocumentContent = false
+    item.value.searchFieldValues = {}
+  }
+
   normalizeAiAssistedState()
   dispatchSendFormData(updateForm.value)
 }

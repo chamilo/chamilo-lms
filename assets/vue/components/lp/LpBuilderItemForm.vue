@@ -273,8 +273,17 @@ async function generateQuickTest() {
 
 <template>
   <div class="space-y-4">
-    <div class="text-h4 font-semibold text-gray-90">
-      {{ t("Edit") }}
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div class="text-h4 font-semibold text-gray-90">
+        {{ t("Edit") }}
+      </div>
+      <BaseButton
+        :is-loading="saving"
+        :label="saveLabel"
+        icon="save"
+        type="success"
+        @click="saveItem"
+      />
     </div>
 
     <BaseTinyEditor

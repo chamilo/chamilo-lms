@@ -32,29 +32,29 @@ final class DocumentAiAssistedNormalizer implements NormalizerAwareInterface, No
         return $data instanceof CDocument;
     }
 
-    public function normalize($object, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
+    public function normalize($data, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $data = $this->normalizer->normalize($object, $format, $context);
+        $result = $this->normalizer->normalize($data, $format, $context);
 
-        if (!\is_array($data) || !$object instanceof CDocument) {
-            return $data;
+        if (!\is_array($result) || !$data instanceof CDocument) {
+            return $result;
         }
 
-        $docId = (int) ($object->getIid() ?? 0);
+        $docId = (int) ($data->getIid() ?? 0);
         if ($docId <= 0) {
-            $data['ai_assisted'] = false;
-            $data['ai_assisted_raw'] = false;
+            $result['ai_assisted'] = false;
+            $result['ai_assisted_raw'] = false;
 
-            return $data;
+            return $result;
         }
 
         $raw = $this->aiDisclosureHelper->isAiAssistedExtraField('document', $docId);
-        $data['ai_assisted_raw'] = (bool) $raw;
-        $data['ai_assisted'] = $this->aiDisclosureHelper->isDisclosureEnabled() && $raw;
+        $result['ai_assisted_raw'] = (bool) $raw;
+        $result['ai_assisted'] = $this->aiDisclosureHelper->isDisclosureEnabled() && $raw;
 
-        return $data;
+        return $result;
     }
 
     public function getSupportedTypes(?string $format): array

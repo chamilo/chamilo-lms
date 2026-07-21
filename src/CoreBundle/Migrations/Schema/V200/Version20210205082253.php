@@ -41,7 +41,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
     private function migrateUserImages(IllustrationRepository $illustrationRepo, bool $splitDirectories): void
     {
         $query = $this->entityManager->createQuery(
-            'SELECT u FROM Chamilo\\CoreBundle\\Entity\\User u
+            'SELECT u FROM Chamilo\CoreBundle\Entity\User u
              WHERE u.pictureUri IS NOT NULL AND u.pictureUri <> :empty'
         )->setParameter('empty', '');
 
@@ -155,7 +155,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
     private function migrateUsergroupImages(IllustrationRepository $illustrationRepo, bool $splitDirectories): void
     {
         $query = $this->entityManager->createQuery(
-            'SELECT u FROM Chamilo\\CoreBundle\\Entity\\Usergroup u
+            'SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u
              WHERE u.picture IS NOT NULL AND u.picture <> :empty'
         )->setParameter('empty', '');
 

@@ -69,6 +69,9 @@ class UserDenormalizer implements DenormalizerInterface, DenormalizerAwareInterf
         return $user;
     }
 
+    /**
+     * @psalm-suppress MethodSignatureMismatch
+     */
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {

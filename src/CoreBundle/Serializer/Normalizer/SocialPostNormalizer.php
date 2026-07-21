@@ -18,18 +18,18 @@ class SocialPostNormalizer implements NormalizerInterface, NormalizerAwareInterf
 
     private const ALREADY_CALLED = 'SOCIAL_POST_NORMALIZER_ALREADY_CALLED';
 
-    public function normalize($object, ?string $format = null, array $context = []): array
+    public function normalize($data, ?string $format = null, array $context = []): array
     {
         $context[self::ALREADY_CALLED] = true;
 
-        /** @var array<string, mixed> $data */
-        $data = $this->normalizer->normalize($object, $format, $context);
+        /** @var array<string, mixed> $result */
+        $result = $this->normalizer->normalize($data, $format, $context);
 
-        if (isset($data['content']) && \is_string($data['content'])) {
-            $data['content'] = Security::remove_XSS($data['content'], STUDENT);
+        if (isset($result['content']) && \is_string($result['content'])) {
+            $result['content'] = Security::remove_XSS($result['content'], STUDENT);
         }
 
-        return $data;
+        return $result;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

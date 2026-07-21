@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,7 +72,7 @@ class RoomAvailabilityController extends BaseController
                     .' OR (cal.room IS NULL AND a.room IS NULL AND src.room IS NULL AND IDENTITY(c.room) = :roomId)'
                 )
                 ->setParameter('roomId', $room['id'])
-                ->setParameter('end', $end)
+                ->setParameter('end', $end, Types::DATETIME_MUTABLE)
                 ->getQuery()
                 ->getArrayResult()
             ;

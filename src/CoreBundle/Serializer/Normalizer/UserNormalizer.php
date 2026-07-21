@@ -22,15 +22,15 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
         private readonly NameConventionHelper $nameConventionHelper,
     ) {}
 
-    public function normalize($object, ?string $format = null, array $context = []): array
+    public function normalize($data, ?string $format = null, array $context = []): array
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $data = $this->normalizer->normalize($object, $format, $context);
+        $result = $this->normalizer->normalize($data, $format, $context);
 
-        $data['fullName'] = $this->nameConventionHelper->getPersonName($object);
+        $result['fullName'] = $this->nameConventionHelper->getPersonName($data);
 
-        return $data;
+        return $result;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

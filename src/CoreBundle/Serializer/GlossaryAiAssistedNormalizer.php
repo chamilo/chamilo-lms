@@ -32,29 +32,29 @@ final class GlossaryAiAssistedNormalizer implements NormalizerAwareInterface, No
         return $data instanceof CGlossary;
     }
 
-    public function normalize($object, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
+    public function normalize($data, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $data = $this->normalizer->normalize($object, $format, $context);
+        $result = $this->normalizer->normalize($data, $format, $context);
 
-        if (!\is_array($data) || !$object instanceof CGlossary) {
-            return $data;
+        if (!\is_array($result) || !$data instanceof CGlossary) {
+            return $result;
         }
 
-        $iid = (int) ($object->getIid() ?? 0);
+        $iid = (int) ($data->getIid() ?? 0);
         if ($iid <= 0) {
-            $data['ai_assisted_raw'] = false;
-            $data['ai_assisted'] = false;
+            $result['ai_assisted_raw'] = false;
+            $result['ai_assisted'] = false;
 
-            return $data;
+            return $result;
         }
 
         $raw = $this->aiDisclosureHelper->isAiAssistedExtraField('glossary', $iid);
-        $data['ai_assisted_raw'] = (bool) $raw;
-        $data['ai_assisted'] = $this->aiDisclosureHelper->isDisclosureEnabled() && (bool) $raw;
+        $result['ai_assisted_raw'] = (bool) $raw;
+        $result['ai_assisted'] = $this->aiDisclosureHelper->isDisclosureEnabled() && (bool) $raw;
 
-        return $data;
+        return $result;
     }
 
     public function getSupportedTypes(?string $format): array

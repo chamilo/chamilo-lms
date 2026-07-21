@@ -324,6 +324,9 @@ PROMPT;
         return mb_substr($text, 0, self::MAX_CONTENT_LENGTH);
     }
 
+    /**
+     * @psalm-suppress UndefinedFunction
+     */
     private function tryNormalizeAiken(string $generated): ?string
     {
         $this->loadAikenImporter();
@@ -437,6 +440,9 @@ PROMPT;
         return trim(implode("\n", $normalizedLines));
     }
 
+    /**
+     * @psalm-suppress UndefinedFunction
+     */
     private function importAiken(string $aiken, string $title, string $providerName): int
     {
         $this->loadAikenImporter();

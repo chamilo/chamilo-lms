@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
 use Chamilo\CoreBundle\Service\LearningPath\ScormRuntimeManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -69,6 +70,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         private LpAdvancedAccessHelper $advancedAccessHelper,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private ResourceNodeRepository $resourceNodeRepository,
+        private LearningPathAccessChecker $accessChecker,
         private LearningPathFinalItemManager $finalItemManager,
         private ScormRuntimeManager $scormRuntimeManager,
         private LearningPathRuntimeProgressManager $progressManager,
@@ -352,60 +354,17 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         User $user,
         bool $canManage,
     ): void {
-        $resourceNode = $lp->getResourceNode();
-        if (null === $resourceNode || !$this->security->isGranted('VIEW', $resourceNode)) {
-            throw new AccessDeniedHttpException('The learning path is not available in this context.');
-        }
+        $denialReason = $this->accessChecker->getLearningPathAccessDenialReason(
+            $lp,
+            $course,
+            $session,
+            $group,
+            $user,
+            canManage: $canManage,
+        );
 
-        $resourceLink = $this->getContextResourceLink($lp, $course, $session, $group);
-        if (!$resourceLink instanceof ResourceLink) {
-            throw new AccessDeniedHttpException('The learning path is not linked to this context.');
-        }
-
-        if ($canManage) {
-            return;
-        }
-
-        if (ResourceLink::VISIBILITY_PUBLISHED !== $resourceLink->getVisibility()) {
-            throw new AccessDeniedHttpException('The learning path is not visible.');
-        }
-
-        if (!$this->advancedAccessHelper->isAllowed($course, $lp, $session, $user)) {
-            throw new AccessDeniedHttpException('The learning path is not available for this user.');
-        }
-
-        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
-        $publishedOn = $lp->getPublishedOn();
-        $expiredOn = $lp->getExpiredOn();
-        if (($publishedOn instanceof DateTimeInterface && $publishedOn > $now)
-            || ($expiredOn instanceof DateTimeInterface && $expiredOn < $now)
-        ) {
-            throw new AccessDeniedHttpException('The learning path is not currently available.');
-        }
-
-        $category = $lp->getCategory();
-        if (null !== $category) {
-            $categoryLink = $this->getContextResourceLink($category, $course, $session, $group);
-            if (!$categoryLink instanceof ResourceLink
-                || ResourceLink::VISIBILITY_PUBLISHED !== $categoryLink->getVisibility()
-            ) {
-                throw new AccessDeniedHttpException('The learning path category is not visible.');
-            }
-        }
-
-        $prerequisiteLpId = $lp->getPrerequisite();
-        if ($prerequisiteLpId <= 0) {
-            return;
-        }
-
-        $prerequisiteLp = $this->lpRepository->find($prerequisiteLpId);
-        if (!$prerequisiteLp instanceof CLp) {
-            throw new AccessDeniedHttpException('The learning path prerequisite is not available.');
-        }
-
-        $prerequisiteView = $this->findLatestView($prerequisiteLp, $course, $session, $user);
-        if (!$prerequisiteView instanceof CLpView || (int) $prerequisiteView->getProgress() < 100) {
-            throw new AccessDeniedHttpException('The learning path prerequisite is not completed.');
+        if (null !== $denialReason) {
+            throw new AccessDeniedHttpException($denialReason);
         }
     }
 

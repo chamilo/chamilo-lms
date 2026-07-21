@@ -19,11 +19,18 @@ use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
+
+use const DIRECTORY_SEPARATOR;
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PHP_URL_HOST;
 
 #[Route('/certificates')]
 class CertificateController extends AbstractController
@@ -33,6 +40,8 @@ class CertificateController extends AbstractController
         private readonly SettingsManager $settingsManager,
         private readonly UserHelper $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
+        #[Autowire('%kernel.project_dir%')]
+        private readonly string $projectDir,
     ) {}
 
     #[Route('/{hash}.html', name: 'chamilo_certificate_public_view', methods: ['GET'])]
@@ -54,7 +63,7 @@ class CertificateController extends AbstractController
     }
 
     #[Route('/{hash}.pdf', name: 'chamilo_certificate_public_pdf', methods: ['GET'])]
-    public function downloadPdf(string $hash): Response
+    public function downloadPdf(string $hash, Request $request): Response
     {
         // Resolve certificate row
         [$certificate] = $this->resolveCertificateByHash($hash);
@@ -65,10 +74,17 @@ class CertificateController extends AbstractController
         // Read HTML and render PDF
         $html = $this->readCertificateHtml($certificate, $hash);
         $html = str_replace(' media="screen"', '', $html);
+        $html = $this->localizePublicAssetsForPdf($html, $request);
 
         try {
             $mpdf = new Mpdf([
-                'format' => 'A4',
+                'format' => 'A4-L',
+                'margin_left' => 0,
+                'margin_right' => 0,
+                'margin_top' => 0,
+                'margin_bottom' => 0,
+                'margin_header' => 0,
+                'margin_footer' => 0,
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
             ], SafeMpdfHttpClient::container());
             $mpdf->WriteHTML($html);
@@ -85,6 +101,82 @@ class CertificateController extends AbstractController
         } catch (MpdfException $e) {
             throw new RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
         }
+    }
+
+    /**
+     * Rewrites same-platform public asset URLs to verified local files before
+     * mPDF renders the certificate. This keeps the SSRF-safe HTTP client in
+     * place while allowing images from the local Chamilo installation.
+     */
+    private function localizePublicAssetsForPdf(string $html, Request $request): string
+    {
+        $publicPath = \realpath($this->projectDir.'/public');
+
+        if (false === $publicPath) {
+            return $html;
+        }
+
+        $allowedHosts = [\strtolower($request->getHost()) => true];
+        $configuredHost = \parse_url((string) api_get_path(WEB_PATH), PHP_URL_HOST);
+
+        if (\is_string($configuredHost) && '' !== $configuredHost) {
+            $allowedHosts[\strtolower($configuredHost)] = true;
+        }
+
+        $requestBasePath = \rtrim($request->getBaseUrl(), '/');
+        $publicPrefix = $publicPath.DIRECTORY_SEPARATOR;
+
+        $localizeUrl = static function (array $matches) use (
+            $allowedHosts,
+            $publicPath,
+            $publicPrefix,
+            $requestBasePath,
+        ): string {
+            $url = \html_entity_decode($matches['url'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $urlPath = $url;
+
+            if (\preg_match('~^https?://~i', $url)) {
+                $parts = \parse_url($url);
+
+                if (!\is_array($parts) || !isset($parts['host'], $parts['path'])) {
+                    return $matches[0];
+                }
+
+                if (!isset($allowedHosts[\strtolower((string) $parts['host'])])) {
+                    return $matches[0];
+                }
+
+                $urlPath = (string) $parts['path'];
+            }
+
+            $urlPath = \rawurldecode($urlPath);
+
+            if ('' !== $requestBasePath && \str_starts_with($urlPath, $requestBasePath.'/')) {
+                $urlPath = \substr($urlPath, \strlen($requestBasePath));
+            }
+
+            $localPath = \realpath($publicPath.'/'.\ltrim($urlPath, '/'));
+
+            if (false === $localPath || !\is_file($localPath) || !\str_starts_with($localPath, $publicPrefix)) {
+                return $matches[0];
+            }
+
+            return $matches['prefix']
+                .\str_replace(DIRECTORY_SEPARATOR, '/', $localPath)
+                .$matches['suffix'];
+        };
+
+        $localizedHtml = \preg_replace_callback(
+            '~(?P<prefix>\\b(?:src|poster|background)\\s*=\\s*["\\\'])(?P<url>https?://[^"\\\']+|/(?!/)[^"\\\']+)(?P<suffix>["\\\'])~i',
+            $localizeUrl,
+            $html,
+        ) ?? $html;
+
+        return \preg_replace_callback(
+            '~(?P<prefix>url\\(\\s*["\\\']?)(?P<url>https?://[^"\\\')\\s]+|/(?!/)[^"\\\')\\s]+)(?P<suffix>["\\\']?\\s*\\))~i',
+            $localizeUrl,
+            $localizedHtml,
+        ) ?? $localizedHtml;
     }
 
     /**

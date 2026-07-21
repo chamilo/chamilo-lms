@@ -22,6 +22,9 @@ use RuntimeException;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 final class Version20201217124011 extends AbstractMigrationChamilo
 {
     private const RESOURCE_BATCH_SIZE = 500;
@@ -204,7 +207,7 @@ SQL, self::COMMENT_BATCH_SIZE),
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
             $seen += \count($rows);
             $preparedRows = [];
 
@@ -213,6 +216,7 @@ SQL, self::COMMENT_BATCH_SIZE),
                 $contexts = $this->fetchParentContexts($parentNodeId);
                 if ([] === $contexts) {
                     ++$skippedMissingParent;
+
                     continue;
                 }
 
@@ -292,7 +296,7 @@ SQL, self::COMMENT_BATCH_SIZE),
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
             $seen += \count($rows);
             $itemProperties = $this->fetchItemProperties($tool, $rows);
             $preparedRows = [];
@@ -305,6 +309,7 @@ SQL, self::COMMENT_BATCH_SIZE),
 
                 if ([] === $items) {
                     ++$skippedMissingItemProperty;
+
                     continue;
                 }
 
@@ -398,7 +403,7 @@ SQL;
             $sql,
             [
                 'tool' => $tool,
-                'refs' => \array_values(\array_unique($refs)),
+                'refs' => array_values(array_unique($refs)),
             ],
             [
                 'refs' => ArrayParameterType::INTEGER,
@@ -488,14 +493,7 @@ SQL,
 
             $nodeIdsByUuid = $this->fetchNodeIdsByUuid($nodeRows, $uuidIsBinary);
             if (\count($nodeIdsByUuid) !== \count($rows)) {
-                throw new RuntimeException(
-                    \sprintf(
-                        'Expected %d inserted resource nodes for %s, found %d.',
-                        \count($rows),
-                        $table,
-                        \count($nodeIdsByUuid)
-                    )
-                );
+                throw new RuntimeException(\sprintf('Expected %d inserted resource nodes for %s, found %d.', \count($rows), $table, \count($nodeIdsByUuid)));
             }
 
             $sourceMappings = [];
@@ -616,11 +614,7 @@ SQL,
                 $this->connection->rollBack();
             }
 
-            throw new RuntimeException(
-                "Fast student publication migration failed for {$table}: {$e->getMessage()}",
-                0,
-                $e
-            );
+            throw new RuntimeException("Fast student publication migration failed for {$table}: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -645,7 +639,7 @@ SQL,
         }
 
         $rows = $this->connection->executeQuery(
-            'SELECT id, uuid FROM resource_node WHERE uuid IN ('.\implode(', ', $placeholders).')',
+            'SELECT id, uuid FROM resource_node WHERE uuid IN ('.implode(', ', $placeholders).')',
             $parameters,
             $types
         )->fetchAllAssociative();
@@ -698,7 +692,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
             foreach ($rows as $row) {
                 ++$seen;
@@ -714,6 +708,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
                 if (!$this->fileExists($filePath)) {
                     ++$missing;
                     $this->warnIf(true, "Student publication file {$iid} not found: {$filePath}");
+
                     continue;
                 }
 
@@ -752,6 +747,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
     {
         /** @var CStudentPublicationRepository $publicationRepository */
         $publicationRepository = $this->container->get(CStudentPublicationRepository::class);
+
         /** @var CStudentPublicationCorrectionRepository $correctionRepository */
         $correctionRepository = $this->container->get(CStudentPublicationCorrectionRepository::class);
 
@@ -796,7 +792,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
             foreach ($rows as $row) {
                 $iid = (int) $row['iid'];
@@ -888,6 +884,7 @@ SQL
             if (!$this->fileExists($filePath)) {
                 ++$missing;
                 $this->warnIf(true, "Student publication comment file {$iid} not found: {$filePath}");
+
                 continue;
             }
 
@@ -962,22 +959,22 @@ SQL
         foreach ($rows as $rowIndex => $row) {
             $placeholders = [];
             foreach ($columns as $column) {
-                $parameterName = 'p_'.$rowIndex.'_'.\preg_replace('/[^a-zA-Z0-9_]/', '_', $column);
+                $parameterName = 'p_'.$rowIndex.'_'.preg_replace('/[^a-zA-Z0-9_]/', '_', $column);
                 $placeholders[] = ':'.$parameterName;
                 $parameters[$parameterName] = $row[$column] ?? null;
                 if (\in_array($column, $binaryColumns, true)) {
                     $types[$parameterName] = ParameterType::BINARY;
                 }
             }
-            $valueGroups[] = '('.\implode(', ', $placeholders).')';
+            $valueGroups[] = '('.implode(', ', $placeholders).')';
         }
 
         $this->connection->executeStatement(
             \sprintf(
                 'INSERT INTO %s (%s) VALUES %s',
                 $table,
-                \implode(', ', $columns),
-                \implode(', ', $valueGroups)
+                implode(', ', $columns),
+                implode(', ', $valueGroups)
             ),
             $parameters,
             $types
@@ -1020,10 +1017,10 @@ SQL
                 $table,
                 $valueColumn,
                 $idColumn,
-                \implode(' ', $cases),
+                implode(' ', $cases),
                 $valueColumn,
                 $idColumn,
-                \implode(', ', $where)
+                implode(', ', $where)
             ),
             $parameters
         );

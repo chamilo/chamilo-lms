@@ -19,6 +19,9 @@ use RuntimeException;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 final class Version20231012185600 extends AbstractMigrationChamilo
 {
     private const QUIZ_BATCH_SIZE = 1000;
@@ -38,6 +41,7 @@ final class Version20231012185600 extends AbstractMigrationChamilo
     {
         /** @var CQuizRepository $quizRepo */
         $quizRepo = $this->container->get(CQuizRepository::class);
+
         /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
 
@@ -190,11 +194,7 @@ final class Version20231012185600 extends AbstractMigrationChamilo
                         $this->connection->rollBack();
                     }
 
-                    throw new RuntimeException(
-                        "Missing quiz DBAL batch failed for course {$courseId}: {$e->getMessage()}",
-                        0,
-                        $e
-                    );
+                    throw new RuntimeException("Missing quiz DBAL batch failed for course {$courseId}: {$e->getMessage()}", 0, $e);
                 }
 
                 $elapsed = max(1, (int) (microtime(true) - $startedAt));
@@ -271,7 +271,7 @@ final class Version20231012185600 extends AbstractMigrationChamilo
             $column = $table->getColumn('uuid');
             $type = $column->getType()->getName();
 
-            return in_array($type, ['binary', 'varbinary'], true) || 16 === $column->getLength();
+            return \in_array($type, ['binary', 'varbinary'], true) || 16 === $column->getLength();
         } catch (Throwable) {
             return false;
         }

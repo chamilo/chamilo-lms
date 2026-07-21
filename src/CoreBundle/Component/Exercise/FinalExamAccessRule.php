@@ -13,6 +13,9 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use JsonException;
 use RuntimeException;
+use Tracking;
+
+use const JSON_THROW_ON_ERROR;
 
 final class FinalExamAccessRule
 {
@@ -44,7 +47,7 @@ final class FinalExamAccessRule
         }
 
         $requiredMinutes = (int) $rule['minimum_minutes_before_exam'];
-        $spentSeconds = (int) \Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
+        $spentSeconds = (int) Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
         $spentMinutes = (int) floor($spentSeconds / 60);
         $timeRequirementMet = $spentMinutes >= $requiredMinutes;
 
@@ -107,7 +110,7 @@ final class FinalExamAccessRule
     {
         $minutes = max(0, $minutes);
 
-        return sprintf('%02d hours %02d minutes', intdiv($minutes, 60), $minutes % 60);
+        return \sprintf('%02d hours %02d minutes', intdiv($minutes, 60), $minutes % 60);
     }
 
     /**
@@ -136,27 +139,21 @@ final class FinalExamAccessRule
         try {
             $rule = json_decode($rawRule, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException(
-                sprintf('Invalid final exam access rule configured for exercise %d.', $exerciseId),
-                0,
-                $exception
-            );
+            throw new RuntimeException(\sprintf('Invalid final exam access rule configured for exercise %d.', $exerciseId), 0, $exception);
         }
 
         if (!\is_array($rule)) {
-            throw new RuntimeException(sprintf('Invalid final exam access rule configured for exercise %d.', $exerciseId));
+            throw new RuntimeException(\sprintf('Invalid final exam access rule configured for exercise %d.', $exerciseId));
         }
 
         foreach (['minimum_minutes_before_exam', 'user_identifier_field_variable'] as $key) {
-            if (!array_key_exists($key, $rule)) {
-                throw new RuntimeException(
-                    sprintf('Final exam access rule for exercise %d is missing "%s".', $exerciseId, $key)
-                );
+            if (!\array_key_exists($key, $rule)) {
+                throw new RuntimeException(\sprintf('Final exam access rule for exercise %d is missing "%s".', $exerciseId, $key));
             }
         }
 
         if ((int) $rule['minimum_minutes_before_exam'] < 0) {
-            throw new RuntimeException(sprintf('Invalid final exam access rule configured for exercise %d.', $exerciseId));
+            throw new RuntimeException(\sprintf('Invalid final exam access rule configured for exercise %d.', $exerciseId));
         }
 
         return $rule;
@@ -200,9 +197,7 @@ final class FinalExamAccessRule
     private static function getExtraFieldValuesRepository(): ExtraFieldValuesRepository
     {
         /** @var ExtraFieldValuesRepository $repository */
-        $repository = Container::getEntityManager()->getRepository(ExtraFieldValues::class);
-
-        return $repository;
+        return Container::getEntityManager()->getRepository(ExtraFieldValues::class);
     }
 
     /**

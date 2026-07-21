@@ -18,6 +18,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
+use const DATE_ATOM;
+use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+
 #[AsCommand(
     name: 'chamilo:migration:evaluate-course-completion',
     description: 'Evaluate one configured course-completion rule without changing gradebook, tracking or certificates.'
@@ -26,8 +31,9 @@ final class EvaluateCourseCompletionRuleCommand extends Command
 {
     private readonly CourseCompletionRuleEvaluator $evaluator;
 
-    public function __construct(private readonly Connection $connection)
-    {
+    public function __construct(
+        private readonly Connection $connection
+    ) {
         // CoreBundle Component classes are excluded from service auto-discovery.
         $this->evaluator = new CourseCompletionRuleEvaluator($connection);
 
@@ -92,15 +98,12 @@ final class EvaluateCourseCompletionRuleCommand extends Command
                 ['code' => $courseCode]
             );
             if (false === $course) {
-                throw new RuntimeException(sprintf('Course %s was not found.', $courseCode));
+                throw new RuntimeException(\sprintf('Course %s was not found.', $courseCode));
             }
 
             $courseId = (int) $course['id'];
             if (!$this->evaluator->supports($courseId)) {
-                throw new RuntimeException(sprintf(
-                    'No course completion rule is configured for course %s.',
-                    $courseCode
-                ));
+                throw new RuntimeException(\sprintf('No course completion rule is configured for course %s.', $courseCode));
             }
 
             $categories = $this->connection->fetchAllAssociative(
@@ -114,7 +117,7 @@ SQL,
                 ['courseId' => $courseId]
             );
             if ([] === $categories) {
-                throw new RuntimeException(sprintf('No root gradebook category was found for course %s.', $courseCode));
+                throw new RuntimeException(\sprintf('No root gradebook category was found for course %s.', $courseCode));
             }
 
             $category = $this->selectCategory($categories, $requestedCategoryId);
@@ -132,7 +135,7 @@ SQL,
             );
 
             $io->definitionList(
-                ['Course' => sprintf('%s — %s', $course['code'], $course['title'])],
+                ['Course' => \sprintf('%s — %s', $course['code'], $course['title'])],
                 ['Course ID' => $courseId],
                 ['Category ID' => (int) $category['id']],
                 ['Category title' => (string) $category['title']],
@@ -186,7 +189,7 @@ SQL,
                     'category_id' => (int) $category['id'],
                     'evaluation' => $result,
                 ]);
-                $io->note(sprintf('JSON report written to %s', $outputPath));
+                $io->note(\sprintf('JSON report written to %s', $outputPath));
             }
 
             if (!$result['complete']) {
@@ -219,13 +222,10 @@ SQL,
                 }
             }
 
-            throw new RuntimeException(sprintf(
-                'Category %d is not a root gradebook category of the selected course.',
-                $requestedCategoryId
-            ));
+            throw new RuntimeException(\sprintf('Category %d is not a root gradebook category of the selected course.', $requestedCategoryId));
         }
 
-        if (1 === count($categories)) {
+        if (1 === \count($categories)) {
             return $categories[0];
         }
 
@@ -234,10 +234,7 @@ SQL,
             $categories
         );
 
-        throw new RuntimeException(sprintf(
-            'The course has multiple root gradebook categories (%s). Re-run with --category-id.',
-            implode(', ', $categoryIds)
-        ));
+        throw new RuntimeException(\sprintf('The course has multiple root gradebook categories (%s). Re-run with --category-id.', implode(', ', $categoryIds)));
     }
 
     private function formatNumber(float $value): string
@@ -245,12 +242,14 @@ SQL,
         return rtrim(rtrim(number_format($value, 4, '.', ''), '0'), '.');
     }
 
-    /** @param array<string, mixed> $report */
+    /**
+     * @param array<string, mixed> $report
+     */
     private function writeJsonReport(string $outputPath, array $report): void
     {
-        $directory = dirname($outputPath);
+        $directory = \dirname($outputPath);
         if (!is_dir($directory) && !mkdir($directory, 0770, true) && !is_dir($directory)) {
-            throw new RuntimeException(sprintf('Could not create output directory %s.', $directory));
+            throw new RuntimeException(\sprintf('Could not create output directory %s.', $directory));
         }
 
         try {
@@ -260,7 +259,7 @@ SQL,
         }
 
         if (false === file_put_contents($outputPath, $json."\n")) {
-            throw new RuntimeException(sprintf('Could not write JSON report to %s.', $outputPath));
+            throw new RuntimeException(\sprintf('Could not write JSON report to %s.', $outputPath));
         }
     }
 }

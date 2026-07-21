@@ -57,6 +57,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
     {
         /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
+
         /** @var ToolRepository $toolRepo */
         $toolRepo = $this->container->get(ToolRepository::class);
 
@@ -76,7 +77,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
 
         $existingRows = $this->entityManager->createQuery(
             'SELECT IDENTITY(ct.course) AS course_id, tool.title AS tool_title
-             FROM Chamilo\\CourseBundle\\Entity\\CTool ct
+             FROM Chamilo\CourseBundle\Entity\CTool ct
              INNER JOIN ct.tool tool
              WHERE ct.session IS NULL
                AND tool.title IN (:titles)'
@@ -106,6 +107,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
                 $this->getLogger()->warning('Course was not found while ensuring base tools.', [
                     'course_id' => $courseId,
                 ]);
+
                 continue;
             }
 
@@ -113,10 +115,11 @@ final class Version20240509123200 extends AbstractMigrationChamilo
                 $tool = $toolsByTitle[$toolName] ?? null;
                 if (!$tool instanceof Tool) {
                     $missingDefinitions[$toolName] = true;
+
                     continue;
                 }
 
-                $visibility = in_array($toolName, ['course_setting', 'course_maintenance'], true)
+                $visibility = \in_array($toolName, ['course_setting', 'course_maintenance'], true)
                     ? ResourceLink::VISIBILITY_DRAFT
                     : ResourceLink::VISIBILITY_PUBLISHED;
 
@@ -148,7 +151,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
 
         $removed = 0;
         $query = $this->entityManager->createQuery(
-            'SELECT ct FROM Chamilo\\CourseBundle\\Entity\\CTool ct WHERE ct.session IS NOT NULL'
+            'SELECT ct FROM Chamilo\CourseBundle\Entity\CTool ct WHERE ct.session IS NOT NULL'
         );
 
         foreach ($query->toIterable() as $sessionTool) {
@@ -173,7 +176,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
         $this->entityManager->clear();
 
         $this->getLogger()->info('Course-tool normalization completed.', [
-            'courses' => count($courseIds),
+            'courses' => \count($courseIds),
             'created_base_tools' => $created,
             'removed_session_tools' => $removed,
             'missing_tool_definitions' => array_keys($missingDefinitions),

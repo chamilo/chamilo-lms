@@ -12,6 +12,8 @@ use Doctrine\DBAL\Connection;
 use JsonException;
 use RuntimeException;
 
+use const JSON_THROW_ON_ERROR;
+
 /**
  * Read-only evaluator for configurable course-completion rules.
  *
@@ -24,9 +26,9 @@ final class CourseCompletionRuleEvaluator
     public const COURSE_RULE_FIELD_VARIABLE = 'course_completion_rule';
     public const RULE_VERSION = 1;
 
-    public function __construct(private readonly Connection $connection)
-    {
-    }
+    public function __construct(
+        private readonly Connection $connection
+    ) {}
 
     public function supports(int $courseId): bool
     {
@@ -276,7 +278,9 @@ final class CourseCompletionRuleEvaluator
         ];
     }
 
-    /** @return array<string, mixed>|null */
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getRuleForCourse(int $courseId): ?array
     {
         if ($courseId <= 0) {
@@ -305,31 +309,23 @@ SQL,
             return null;
         }
 
-        if (1 !== count($rows)) {
-            throw new RuntimeException(sprintf(
-                'Course %d has %d completion rule values; exactly one is required.',
-                $courseId,
-                count($rows)
-            ));
+        if (1 !== \count($rows)) {
+            throw new RuntimeException(\sprintf('Course %d has %d completion rule values; exactly one is required.', $courseId, \count($rows)));
         }
 
         $rawRule = trim((string) $rows[0]['field_value']);
         if ('' === $rawRule) {
-            throw new RuntimeException(sprintf('Course %d has an empty completion rule.', $courseId));
+            throw new RuntimeException(\sprintf('Course %d has an empty completion rule.', $courseId));
         }
 
         try {
             $rule = json_decode($rawRule, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException(
-                sprintf('Course %d has an invalid JSON completion rule.', $courseId),
-                0,
-                $exception
-            );
+            throw new RuntimeException(\sprintf('Course %d has an invalid JSON completion rule.', $courseId), 0, $exception);
         }
 
         if (!\is_array($rule)) {
-            throw new RuntimeException(sprintf('Course %d has an invalid completion rule.', $courseId));
+            throw new RuntimeException(\sprintf('Course %d has an invalid completion rule.', $courseId));
         }
 
         return $rule;
@@ -345,7 +341,7 @@ SQL,
         $errors = [];
 
         if (self::RULE_VERSION !== (int) ($rule['version'] ?? 0)) {
-            $errors[] = sprintf(
+            $errors[] = \sprintf(
                 'Unsupported course completion rule version: %s.',
                 (string) ($rule['version'] ?? 'missing')
             );
@@ -357,14 +353,14 @@ SQL,
 
         foreach ($rule['components'] as $index => $component) {
             if (!\is_array($component)) {
-                $errors[] = sprintf('Completion component %d is invalid.', $index + 1);
+                $errors[] = \sprintf('Completion component %d is invalid.', $index + 1);
 
                 continue;
             }
 
             $type = (string) ($component['type'] ?? '');
             if (!\in_array($type, ['forum', 'work', 'evaluation', 'exercise'], true)) {
-                $errors[] = sprintf('Completion component %d has unsupported type "%s".', $index + 1, $type);
+                $errors[] = \sprintf('Completion component %d has unsupported type "%s".', $index + 1, $type);
             }
 
             $expectedCalculation = match ($type) {
@@ -376,7 +372,7 @@ SQL,
             if (null !== $expectedCalculation
                 && $expectedCalculation !== (string) ($component['calculation'] ?? '')
             ) {
-                $errors[] = sprintf(
+                $errors[] = \sprintf(
                     'Completion component %d (%s) has an unsupported calculation.',
                     $index + 1,
                     $type
@@ -385,19 +381,19 @@ SQL,
 
             $weight = $component['weight'] ?? null;
             if (!\is_int($weight) && !\is_float($weight)) {
-                $errors[] = sprintf('Completion component %d has an invalid weight.', $index + 1);
+                $errors[] = \sprintf('Completion component %d has an invalid weight.', $index + 1);
             } elseif ((float) $weight < 0.0) {
-                $errors[] = sprintf('Completion component %d has a negative weight.', $index + 1);
+                $errors[] = \sprintf('Completion component %d has a negative weight.', $index + 1);
             }
 
             $resourceId = $this->positiveIntOrNull($component['resource_id'] ?? null);
             if (null === $resourceId) {
                 $sourceId = $this->positiveIntOrNull($component['source_resource_id'] ?? null);
-                $errors[] = sprintf(
+                $errors[] = \sprintf(
                     'Completion component %d (%s%s) has no verified resource ID.',
                     $index + 1,
                     $type,
-                    null === $sourceId ? '' : sprintf(' source %d', $sourceId)
+                    null === $sourceId ? '' : \sprintf(' source %d', $sourceId)
                 );
             }
 
@@ -405,7 +401,7 @@ SQL,
                 foreach (['one_post_points', 'two_plus_points'] as $key) {
                     $value = $component[$key] ?? null;
                     if (!\is_int($value) && !\is_float($value)) {
-                        $errors[] = sprintf('Forum component %d is missing %s.', $index + 1, $key);
+                        $errors[] = \sprintf('Forum component %d is missing %s.', $index + 1, $key);
                     }
                 }
             }
@@ -507,7 +503,7 @@ SQL,
             return [];
         }
 
-        $sql = sprintf(
+        $sql = \sprintf(
             <<<'SQL'
 SELECT DISTINCT entity.%s
 FROM %s entity
@@ -665,7 +661,7 @@ SQL,
         $results = [];
         foreach ($rows as $row) {
             $evaluationId = (int) $row['evaluation_id'];
-            if (!array_key_exists($evaluationId, $results) && null !== $row['score']) {
+            if (!\array_key_exists($evaluationId, $results) && null !== $row['score']) {
                 $results[$evaluationId] = (float) $row['score'];
             }
         }
@@ -726,7 +722,9 @@ SQL,
         return $results;
     }
 
-    /** @param array<string, mixed> $component */
+    /**
+     * @param array<string, mixed> $component
+     */
     private function getExerciseTrackingIds(array $component): array
     {
         $resourceId = $this->positiveIntOrNull($component['resource_id'] ?? null);
@@ -795,7 +793,7 @@ SQL,
             'partial_score' => 0.0,
             'finished' => false,
             'components' => [],
-            'errors' => [sprintf('No course completion rule is configured for course %s.', $courseCode)],
+            'errors' => [\sprintf('No course completion rule is configured for course %s.', $courseCode)],
             'warnings' => [],
         ];
     }

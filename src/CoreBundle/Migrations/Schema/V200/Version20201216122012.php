@@ -37,8 +37,10 @@ final class Version20201216122012 extends AbstractMigrationChamilo
 
         /** @var CLpCategoryRepository $lpCategoryRepo */
         $lpCategoryRepo = $this->container->get(CLpCategoryRepository::class);
+
         /** @var CLpRepository $lpRepo */
         $lpRepo = $this->container->get(CLpRepository::class);
+
         /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
 
@@ -177,6 +179,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                     'course_id' => $courseId,
                     'category_id' => $id,
                 ]);
+
                 continue;
             }
 
@@ -264,6 +267,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                     'course_id' => $courseId,
                     'lp_id' => $id,
                 ]);
+
                 continue;
             }
 

@@ -8,12 +8,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Schema\Schema;
 use RuntimeException;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
+
+use const PATHINFO_EXTENSION;
 
 final class Version20240128205500 extends AbstractMigrationChamilo
 {
@@ -62,7 +63,7 @@ SQL
         $prepared = 0;
         $startedAt = microtime(true);
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Certificate DBAL metadata phase started: pending=%d batch_size=%d uuid_binary=%s.',
             $total,
             self::METADATA_BATCH_SIZE,
@@ -71,7 +72,7 @@ SQL
 
         while (true) {
             $rows = $this->connection->fetchAllAssociative(
-                sprintf(<<<'SQL'
+                \sprintf(<<<'SQL'
 SELECT
     gc.id,
     gc.user_id,
@@ -99,7 +100,7 @@ SQL, self::METADATA_BATCH_SIZE),
             }
 
             $lastId = (int) $rows[array_key_last($rows)]['id'];
-            $seen += count($rows);
+            $seen += \count($rows);
 
             $prepared += $this->persistMetadataBatch(
                 $rows,
@@ -111,7 +112,7 @@ SQL, self::METADATA_BATCH_SIZE),
             $rate = $seen / $elapsed;
             $remaining = max(0, $total - $seen);
 
-            $this->write(sprintf(
+            $this->write(\sprintf(
                 'Certificate DBAL metadata progress: %d/%d (%.2f%%), prepared=%d rate=%.2f cert/s ETA=%ds last_id=%d.',
                 $seen,
                 $total,
@@ -150,7 +151,7 @@ WHERE gc.resource_node_id IS NULL
 SQL
         );
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Certificate DBAL metadata phase completed: seen=%d/%d prepared=%d remaining_eligible=%d missing_user_node=%d elapsed=%ds. Physical files must be processed with chamilo:migration:migrate-ricky-certificate-files.',
             $seen,
             $total,
@@ -222,12 +223,8 @@ SQL
             );
 
             $nodeIdsByUuid = $this->fetchNodeIdsByUuid($nodeRows, $uuidIsBinary);
-            if (count($nodeIdsByUuid) !== count($rows)) {
-                throw new RuntimeException(sprintf(
-                    'Expected %d inserted certificate resource nodes, found %d.',
-                    count($rows),
-                    count($nodeIdsByUuid)
-                ));
+            if (\count($nodeIdsByUuid) !== \count($rows)) {
+                throw new RuntimeException(\sprintf('Expected %d inserted certificate resource nodes, found %d.', \count($rows), \count($nodeIdsByUuid)));
             }
 
             $certificateMappings = [];
@@ -238,10 +235,7 @@ SQL
                 $uuidKey = $uuidKeysByCertificateId[$certificateId];
                 $resourceNodeId = $nodeIdsByUuid[$uuidKey] ?? 0;
                 if ($resourceNodeId <= 0) {
-                    throw new RuntimeException(sprintf(
-                        'Resource node was not resolved for certificate %d.',
-                        $certificateId
-                    ));
+                    throw new RuntimeException(\sprintf('Resource node was not resolved for certificate %d.', $certificateId));
                 }
 
                 $certificateMappings[$certificateId] = $resourceNodeId;
@@ -296,17 +290,13 @@ SQL
 
             $this->connection->commit();
 
-            return count($rows);
+            return \count($rows);
         } catch (Throwable $exception) {
             if ($this->connection->isTransactionActive()) {
                 $this->connection->rollBack();
             }
 
-            throw new RuntimeException(
-                'Certificate DBAL metadata batch failed: '.$exception->getMessage(),
-                0,
-                $exception
-            );
+            throw new RuntimeException('Certificate DBAL metadata batch failed: '.$exception->getMessage(), 0, $exception);
         }
     }
 
@@ -348,9 +338,7 @@ SQL,
         );
 
         if (false === $id || (int) $id <= 0) {
-            throw new RuntimeException(
-                "ResourceType 'files' was not found and no existing certificate resource could provide it."
-            );
+            throw new RuntimeException("ResourceType 'files' was not found and no existing certificate resource could provide it.");
         }
 
         return (int) $id;
@@ -416,7 +404,7 @@ SQL,
                 $parameterName = 'p_'.$rowIndex.'_'.preg_replace('/[^a-zA-Z0-9_]/', '_', $column);
                 $placeholders[] = ':'.$parameterName;
                 $parameters[$parameterName] = $row[$column] ?? null;
-                if (in_array($column, $binaryColumns, true)) {
+                if (\in_array($column, $binaryColumns, true)) {
                     $types[$parameterName] = ParameterType::BINARY;
                 }
             }
@@ -424,7 +412,7 @@ SQL,
         }
 
         $this->connection->executeStatement(
-            sprintf(
+            \sprintf(
                 'INSERT INTO %s (%s) VALUES %s',
                 $table,
                 implode(', ', $columns),
@@ -466,7 +454,7 @@ SQL,
         }
 
         $this->connection->executeStatement(
-            sprintf(
+            \sprintf(
                 'UPDATE %s SET %s = CASE %s %s ELSE %s END WHERE %s IN (%s)',
                 $table,
                 $valueColumn,
@@ -509,10 +497,7 @@ SQL,
     ): string {
         $parentPath = rtrim($parentPath, '/');
         if ('' === $parentPath) {
-            throw new RuntimeException(sprintf(
-                'Parent resource path is empty for certificate %d.',
-                $certificateId
-            ));
+            throw new RuntimeException(\sprintf('Parent resource path is empty for certificate %d.', $certificateId));
         }
 
         $segment = preg_replace('/\s+/u', ' ', trim($title));
@@ -536,7 +521,7 @@ SQL,
             $type = $column->getType()->getName();
             $length = $column->getLength();
 
-            return in_array($type, ['binary', 'varbinary'], true) || 16 === $length;
+            return \in_array($type, ['binary', 'varbinary'], true) || 16 === $length;
         } catch (Throwable) {
             return false;
         }

@@ -36,6 +36,7 @@ use const LOCK_NB;
 use const LOCK_UN;
 use const PATHINFO_EXTENSION;
 use const PATHINFO_FILENAME;
+use const UPLOAD_ERR_INI_SIZE;
 
 final readonly class ScormPackageImporter
 {
@@ -834,7 +835,7 @@ final readonly class ScormPackageImporter
             return;
         }
 
-        if (\UPLOAD_ERR_INI_SIZE === $package->getError()) {
+        if (UPLOAD_ERR_INI_SIZE === $package->getError()) {
             throw new RuntimeException($package->getErrorMessage());
         }
 

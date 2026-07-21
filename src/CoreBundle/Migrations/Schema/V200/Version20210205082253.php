@@ -41,8 +41,8 @@ final class Version20210205082253 extends AbstractMigrationChamilo
     private function migrateUserImages(IllustrationRepository $illustrationRepo, bool $splitDirectories): void
     {
         $query = $this->entityManager->createQuery(
-            "SELECT u FROM Chamilo\\CoreBundle\\Entity\\User u
-             WHERE u.pictureUri IS NOT NULL AND u.pictureUri <> :empty"
+            'SELECT u FROM Chamilo\\CoreBundle\\Entity\\User u
+             WHERE u.pictureUri IS NOT NULL AND u.pictureUri <> :empty'
         )->setParameter('empty', '');
 
         $seen = 0;
@@ -74,6 +74,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             if (!$this->fileExists($picturePath)) {
                 ++$missing;
                 $this->warnIf(true, "User image {$id} not found: {$picturePath}");
+
                 continue;
             }
 
@@ -104,6 +105,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
     {
         /** @var UsergroupRepository $userGroupRepo */
         $userGroupRepo = $this->container->get(UsergroupRepository::class);
+
         /** @var AccessUrlRepository $urlRepo */
         $urlRepo = $this->container->get(AccessUrlRepository::class);
 
@@ -114,7 +116,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
         }
 
         $admin = $this->getAdmin();
-        $query = $this->entityManager->createQuery('SELECT u FROM Chamilo\\CoreBundle\\Entity\\Usergroup u');
+        $query = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
         $pendingFlush = 0;
         $migrated = 0;
 
@@ -128,7 +130,8 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             if (0 === $userGroup->getUrls()->count()) {
                 $relation = (new AccessUrlRelUserGroup())
                     ->setUserGroup($userGroup)
-                    ->setUrl($url);
+                    ->setUrl($url)
+                ;
                 $userGroup->getUrls()->add($relation);
             }
 
@@ -152,8 +155,8 @@ final class Version20210205082253 extends AbstractMigrationChamilo
     private function migrateUsergroupImages(IllustrationRepository $illustrationRepo, bool $splitDirectories): void
     {
         $query = $this->entityManager->createQuery(
-            "SELECT u FROM Chamilo\\CoreBundle\\Entity\\Usergroup u
-             WHERE u.picture IS NOT NULL AND u.picture <> :empty"
+            'SELECT u FROM Chamilo\\CoreBundle\\Entity\\Usergroup u
+             WHERE u.picture IS NOT NULL AND u.picture <> :empty'
         )->setParameter('empty', '');
 
         $admin = $this->getAdmin();
@@ -183,6 +186,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             if (!$this->fileExists($picturePath)) {
                 ++$missing;
                 $this->warnIf(true, "Usergroup image {$id} not found: {$picturePath}");
+
                 continue;
             }
 

@@ -16,6 +16,9 @@ use RuntimeException;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 final class Version20240323181500 extends AbstractMigrationChamilo
 {
     private const SYS_CALENDAR_BATCH_SIZE = 1000;
@@ -64,7 +67,7 @@ final class Version20240323181500 extends AbstractMigrationChamilo
         $this->createMappingTable();
 
         $total = (int) $this->connection->fetchOne(
-            sprintf(
+            \sprintf(
                 'SELECT COUNT(*)
                  FROM sys_calendar source
                  LEFT JOIN %s mapped ON mapped.old_id = source.id
@@ -85,7 +88,7 @@ final class Version20240323181500 extends AbstractMigrationChamilo
         $prepared = 0;
         $startedAt = microtime(true);
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'sys_calendar DBAL phase started: pending=%d batch_size=%d uuid_binary=%s.',
             $total,
             self::SYS_CALENDAR_BATCH_SIZE,
@@ -94,7 +97,7 @@ final class Version20240323181500 extends AbstractMigrationChamilo
 
         while (true) {
             $rows = $this->connection->fetchAllAssociative(
-                sprintf(
+                \sprintf(
                     'SELECT source.id, source.title, source.content, source.start_date,
                             source.end_date, source.all_day, source.color
                      FROM sys_calendar source
@@ -111,7 +114,7 @@ final class Version20240323181500 extends AbstractMigrationChamilo
                 break;
             }
 
-            $seen += count($rows);
+            $seen += \count($rows);
             $prepared += $this->persistBatch(
                 $rows,
                 $eventColumns,
@@ -128,7 +131,7 @@ final class Version20240323181500 extends AbstractMigrationChamilo
             $remaining = max(0, $total - $seen);
             $lastId = (int) $rows[array_key_last($rows)]['id'];
 
-            $this->write(sprintf(
+            $this->write(\sprintf(
                 'sys_calendar DBAL progress: %d/%d (%.2f%%), prepared=%d rate=%.2f events/s ETA=%ds last_id=%d.',
                 $seen,
                 $total,
@@ -143,7 +146,7 @@ final class Version20240323181500 extends AbstractMigrationChamilo
         $this->updateAdminAgendaReminders($schema);
 
         $remaining = (int) $this->connection->fetchOne(
-            sprintf(
+            \sprintf(
                 'SELECT COUNT(*)
                  FROM sys_calendar source
                  LEFT JOIN %s mapped ON mapped.old_id = source.id
@@ -153,15 +156,12 @@ final class Version20240323181500 extends AbstractMigrationChamilo
         );
 
         if (0 !== $remaining) {
-            throw new RuntimeException(sprintf(
-                'sys_calendar migration finished with %d unmapped rows.',
-                $remaining
-            ));
+            throw new RuntimeException(\sprintf('sys_calendar migration finished with %d unmapped rows.', $remaining));
         }
 
         $this->dropMappingTable();
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'sys_calendar DBAL phase completed: seen=%d/%d prepared=%d remaining=%d elapsed=%ds.',
             $seen,
             $total,
@@ -243,12 +243,8 @@ final class Version20240323181500 extends AbstractMigrationChamilo
             );
 
             $nodeIdsByUuid = $this->fetchNodeIdsByUuid($nodeRows, $uuidIsBinary);
-            if (count($nodeIdsByUuid) !== count($rows)) {
-                throw new RuntimeException(sprintf(
-                    'Expected %d calendar resource nodes, found %d.',
-                    count($rows),
-                    count($nodeIdsByUuid)
-                ));
+            if (\count($nodeIdsByUuid) !== \count($rows)) {
+                throw new RuntimeException(\sprintf('Expected %d calendar resource nodes, found %d.', \count($rows), \count($nodeIdsByUuid)));
             }
 
             $eventRows = [];
@@ -259,10 +255,7 @@ final class Version20240323181500 extends AbstractMigrationChamilo
                 $uuidKey = $uuidKeysBySourceId[$sourceId];
                 $resourceNodeId = $nodeIdsByUuid[$uuidKey] ?? 0;
                 if ($resourceNodeId <= 0) {
-                    throw new RuntimeException(sprintf(
-                        'Resource node was not resolved for sys_calendar %d.',
-                        $sourceId
-                    ));
+                    throw new RuntimeException(\sprintf('Resource node was not resolved for sys_calendar %d.', $sourceId));
                 }
 
                 $nodeIds[] = $resourceNodeId;
@@ -305,12 +298,8 @@ final class Version20240323181500 extends AbstractMigrationChamilo
                 ['nodeIds' => ArrayParameterType::INTEGER]
             )->fetchAllAssociative();
 
-            if (count($eventRowsByNode) !== count($rows)) {
-                throw new RuntimeException(sprintf(
-                    'Expected %d calendar events, found %d.',
-                    count($rows),
-                    count($eventRowsByNode)
-                ));
+            if (\count($eventRowsByNode) !== \count($rows)) {
+                throw new RuntimeException(\sprintf('Expected %d calendar events, found %d.', \count($rows), \count($eventRowsByNode)));
             }
 
             $pathMappings = [];
@@ -322,10 +311,7 @@ final class Version20240323181500 extends AbstractMigrationChamilo
                 $newEventId = (int) $eventRow['iid'];
                 $sourceId = $sourceIdByNodeId[$resourceNodeId] ?? 0;
                 if ($sourceId <= 0) {
-                    throw new RuntimeException(sprintf(
-                        'Source row was not resolved for calendar resource node %d.',
-                        $resourceNodeId
-                    ));
+                    throw new RuntimeException(\sprintf('Source row was not resolved for calendar resource node %d.', $resourceNodeId));
                 }
 
                 $metadata = $sourceMetadata[$sourceId];
@@ -380,17 +366,13 @@ final class Version20240323181500 extends AbstractMigrationChamilo
 
             $this->connection->commit();
 
-            return count($rows);
+            return \count($rows);
         } catch (Throwable $exception) {
             if ($this->connection->isTransactionActive()) {
                 $this->connection->rollBack();
             }
 
-            throw new RuntimeException(
-                'sys_calendar DBAL batch failed: '.$exception->getMessage(),
-                0,
-                $exception
-            );
+            throw new RuntimeException('sys_calendar DBAL batch failed: '.$exception->getMessage(), 0, $exception);
         }
     }
 
@@ -410,9 +392,7 @@ SQL
         );
 
         if (false === $id || (int) $id <= 0) {
-            throw new RuntimeException(
-                'No existing calendar-event resource node could provide the resource type.'
-            );
+            throw new RuntimeException('No existing calendar-event resource node could provide the resource type.');
         }
 
         return (int) $id;
@@ -457,20 +437,14 @@ SQL
                 continue;
             }
 
-            if (!in_array($column->getName(), $columns, true)) {
-                throw new RuntimeException(sprintf(
-                    'Unsupported mandatory c_calendar_event column: %s.',
-                    $column->getName()
-                ));
+            if (!\in_array($column->getName(), $columns, true)) {
+                throw new RuntimeException(\sprintf('Unsupported mandatory c_calendar_event column: %s.', $column->getName()));
             }
         }
 
         foreach (['title', 'all_day', 'resource_node_id'] as $required) {
-            if (!in_array($required, $columns, true)) {
-                throw new RuntimeException(sprintf(
-                    'Required c_calendar_event column was not found: %s.',
-                    $required
-                ));
+            if (!\in_array($required, $columns, true)) {
+                throw new RuntimeException(\sprintf('Required c_calendar_event column was not found: %s.', $required));
             }
         }
 
@@ -502,7 +476,7 @@ SQL
         }
 
         $updated = $this->connection->executeStatement(
-            sprintf(
+            \sprintf(
                 "UPDATE agenda_reminder reminder
                  INNER JOIN %s mapped ON mapped.old_id = reminder.event_id
                  SET reminder.event_id = mapped.new_event_id
@@ -511,12 +485,12 @@ SQL
             )
         );
 
-        $this->write(sprintf('Admin agenda reminders updated: %d.', $updated));
+        $this->write(\sprintf('Admin agenda reminders updated: %d.', $updated));
     }
 
     private function createMappingTable(): void
     {
-        $this->connection->executeStatement(sprintf(
+        $this->connection->executeStatement(\sprintf(
             'CREATE TABLE IF NOT EXISTS %s (
                 old_id INT NOT NULL,
                 new_event_id INT NOT NULL,
@@ -594,7 +568,7 @@ SQL
                 $parameterName = 'p_'.$rowIndex.'_'.preg_replace('/[^a-zA-Z0-9_]/', '_', $column);
                 $placeholders[] = ':'.$parameterName;
                 $parameters[$parameterName] = $row[$column] ?? null;
-                if (in_array($column, $binaryColumns, true)) {
+                if (\in_array($column, $binaryColumns, true)) {
                     $types[$parameterName] = ParameterType::BINARY;
                 }
             }
@@ -602,7 +576,7 @@ SQL
         }
 
         $this->connection->executeStatement(
-            sprintf(
+            \sprintf(
                 'INSERT INTO %s (%s) VALUES %s',
                 $table,
                 implode(', ', $columns),
@@ -644,7 +618,7 @@ SQL
         }
 
         $this->connection->executeStatement(
-            sprintf(
+            \sprintf(
                 'UPDATE %s SET %s = CASE %s %s ELSE %s END WHERE %s IN (%s)',
                 $table,
                 $valueColumn,
@@ -691,10 +665,7 @@ SQL
     ): string {
         $parentPath = rtrim($parentPath, '/');
         if ('' === $parentPath) {
-            throw new RuntimeException(sprintf(
-                'Parent resource path is empty for sys_calendar %d.',
-                $sourceId
-            ));
+            throw new RuntimeException(\sprintf('Parent resource path is empty for sys_calendar %d.', $sourceId));
         }
 
         return $parentPath.'/'.$title.'-'.$sourceId.'-'.$resourceNodeId.'/';
@@ -712,7 +683,7 @@ SQL
             $type = $column->getType()->getName();
             $length = $column->getLength();
 
-            return in_array($type, ['binary', 'varbinary'], true) || 16 === $length;
+            return \in_array($type, ['binary', 'varbinary'], true) || 16 === $length;
         } catch (Throwable) {
             return false;
         }

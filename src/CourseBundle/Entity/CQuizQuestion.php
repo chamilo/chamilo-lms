@@ -16,6 +16,9 @@ use Stringable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * CQuizQuestion.
  */

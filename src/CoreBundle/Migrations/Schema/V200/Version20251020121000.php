@@ -41,7 +41,7 @@ WHERE gc.resource_node_id IS NOT NULL
 SQL
         );
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Certificate schema phase completed. pending_metadata=%d pending_physical_files=%d. Physical files must be processed with chamilo:migration:migrate-ricky-certificate-files.',
             $pendingMetadata,
             $pendingFiles

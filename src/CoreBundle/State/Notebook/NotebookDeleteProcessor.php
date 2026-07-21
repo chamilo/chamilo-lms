@@ -114,5 +114,4 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
 
         return \is_string($token) ? $token : '';
     }
-
 }

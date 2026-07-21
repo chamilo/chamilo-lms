@@ -137,6 +137,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
             if (isset($existingTitles[$title])) {
                 ++$this->alreadyExistingFiles;
                 $this->logProgress();
+
                 continue;
             }
 
@@ -246,7 +247,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
         }
 
         $value = $this->connection->fetchOne(
-            sprintf(
+            \sprintf(
                 'SELECT selected_value
                  FROM %s
                  WHERE variable = :variable

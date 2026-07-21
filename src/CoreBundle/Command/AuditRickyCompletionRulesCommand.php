@@ -18,6 +18,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
+use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+
 #[AsCommand(
     name: 'chamilo:migration:audit-ricky-completion-rules',
     description: 'Audit Ricky completion references and separate verified exercise mappings from review-required candidates without changing data.'
@@ -25,7 +29,6 @@ use Throwable;
 final class AuditRickyCompletionRulesCommand extends Command
 {
     private const LEGACY_SOURCE_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
-
 
     private const EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
 
@@ -143,7 +146,9 @@ final class AuditRickyCompletionRulesCommand extends Command
         ],
     ];
 
-    /** @var list<string> */
+    /**
+     * @var list<string>
+     */
     private const FLATVIEW_ONLY_COURSE_CODES = [
         '1510C',
         'CROWDMANAGERTRAINING',
@@ -521,8 +526,9 @@ final class AuditRickyCompletionRulesCommand extends Command
         ],
     ];
 
-    public function __construct(private readonly Connection $connection)
-    {
+    public function __construct(
+        private readonly Connection $connection
+    ) {
         parent::__construct();
     }
 
@@ -576,14 +582,14 @@ final class AuditRickyCompletionRulesCommand extends Command
             $selectedRules = array_values(array_filter(
                 self::LEGACY_RULES,
                 static fn (array $rule): bool => [] === $requestedCodes
-                    || in_array($rule['code'], $requestedCodes, true)
+                    || \in_array($rule['code'], $requestedCodes, true)
             ));
 
             $report = [
                 'generated_at' => gmdate('c'),
                 'audit_version' => 4,
                 'legacy_source_sha256' => self::LEGACY_SOURCE_SHA256,
-                'selected_rule_count' => count($selectedRules),
+                'selected_rule_count' => \count($selectedRules),
                 'tracking_backup_available' => $hasTrackingBackup,
                 'summary' => $this->newSummary(),
                 'courses' => [],
@@ -611,7 +617,7 @@ final class AuditRickyCompletionRulesCommand extends Command
             );
             $this->renderSummary($io, $report['summary'], $hasTrackingBackup);
             if ($report['summary']['exercise_review_required'] > 0) {
-                $io->warning(sprintf(
+                $io->warning(\sprintf(
                     '%d exercise reference(s) still require manual confirmation. Suggested IDs are audit hints only and must not be used by runtime scoring.',
                     $report['summary']['exercise_review_required']
                 ));
@@ -650,7 +656,7 @@ final class AuditRickyCompletionRulesCommand extends Command
         ];
 
         foreach ($required as $tableName) {
-            if (!in_array($tableName, $tableNames, true)) {
+            if (!\in_array($tableName, $tableNames, true)) {
                 throw new RuntimeException("Required table '{$tableName}' is missing.");
             }
         }
@@ -661,7 +667,7 @@ final class AuditRickyCompletionRulesCommand extends Command
      */
     private function hasUsableTrackingBackup(array $tableNames): bool
     {
-        if (!in_array('track_e_exercises_backup', $tableNames, true)) {
+        if (!\in_array('track_e_exercises_backup', $tableNames, true)) {
             return false;
         }
 
@@ -788,7 +794,7 @@ final class AuditRickyCompletionRulesCommand extends Command
             return $this->emptyResourceAudit();
         }
 
-        $sql = sprintf(
+        $sql = \sprintf(
             <<<'SQL'
 SELECT DISTINCT entity.%s AS resource_id
 FROM %s entity
@@ -822,9 +828,9 @@ SQL,
         sort($missingIds);
 
         return [
-            'total' => count($ids),
-            'resolved' => count($resolvedIds),
-            'missing' => count($missingIds),
+            'total' => \count($ids),
+            'resolved' => \count($resolvedIds),
+            'missing' => \count($missingIds),
             'resolved_ids' => $resolvedIds,
             'missing_ids' => $missingIds,
         ];
@@ -860,9 +866,9 @@ SQL,
         sort($missingIds);
 
         return [
-            'total' => count($ids),
-            'resolved' => count($resolvedIds),
-            'missing' => count($missingIds),
+            'total' => \count($ids),
+            'resolved' => \count($resolvedIds),
+            'missing' => \count($missingIds),
             'resolved_ids' => $resolvedIds,
             'missing_ids' => $missingIds,
         ];
@@ -941,18 +947,18 @@ SQL,
             $status = 'unresolved';
             $evidence = [];
 
-            if (1 === count($historicalIds)) {
+            if (1 === \count($historicalIds)) {
                 $selectedId = $historicalIds[0];
                 $strategy = 'tracking_history';
                 $confidence = 'high';
                 $status = 'resolved_from_history';
                 $evidence[] = 'unique_backup_to_current_attempt_mapping';
-            } elseif (count($historicalIds) > 1) {
+            } elseif (\count($historicalIds) > 1) {
                 $status = 'ambiguous_candidates';
                 $strategy = 'tracking_history';
                 $confidence = 'none';
                 $evidence[] = 'multiple_backup_to_current_attempt_mappings';
-            } elseif ('final_exam' === $legacyRole && 1 === count($finalExamIds)) {
+            } elseif ('final_exam' === $legacyRole && 1 === \count($finalExamIds)) {
                 $selectedId = $finalExamIds[0];
                 $strategy = 'final_exam_access_rule';
                 $confidence = 'high';
@@ -964,8 +970,8 @@ SQL,
                     $legacyId,
                     $legacyRole
                 );
-                $roleConflict = in_array('role_title_conflict', $directEvidence, true);
-                $contextEvidenceCount = count(array_intersect(
+                $roleConflict = \in_array('role_title_conflict', $directEvidence, true);
+                $contextEvidenceCount = \count(array_intersect(
                     $directEvidence,
                     [
                         'used_by_learning_path',
@@ -988,7 +994,7 @@ SQL,
             if (
                 'unresolved' === $status
                 && null !== $courseSequenceAnchorOffset
-                && in_array($legacyRole, ['midterm', 'final_exam'], true)
+                && \in_array($legacyRole, ['midterm', 'final_exam'], true)
             ) {
                 $targetDisplayOrder = $legacyId - 1 + $courseSequenceAnchorOffset;
                 $sequenceMatches = array_values(array_filter(
@@ -996,15 +1002,15 @@ SQL,
                     static fn (array $candidate): bool => (int) $candidate['display_order'] === $targetDisplayOrder
                 ));
 
-                if (1 === count($sequenceMatches)) {
+                if (1 === \count($sequenceMatches)) {
                     $sequenceCandidate = $sequenceMatches[0];
                     $sequenceEvidence = $this->candidateEvidence(
                         $sequenceCandidate,
                         $legacyId,
                         $legacyRole
                     );
-                    $roleConflict = in_array('role_title_conflict', $sequenceEvidence, true);
-                    $roleMatch = in_array('role_title_match', $sequenceEvidence, true);
+                    $roleConflict = \in_array('role_title_conflict', $sequenceEvidence, true);
+                    $roleMatch = \in_array('role_title_match', $sequenceEvidence, true);
 
                     if (!$roleConflict && $roleMatch) {
                         $selectedId = (int) $sequenceCandidate['exercise_id'];
@@ -1028,13 +1034,13 @@ SQL,
             if ('unresolved' === $status) {
                 $roleMatches = array_values(array_filter(
                     $rankedCandidates,
-                    static fn (array $candidate): bool => in_array(
+                    static fn (array $candidate): bool => \in_array(
                         'role_title_match',
                         $candidate['evidence'],
                         true
                     )
                 ));
-                if (1 === count($roleMatches)) {
+                if (1 === \count($roleMatches)) {
                     $suggestedId = (int) $roleMatches[0]['exercise_id'];
                     $strategy = 'unique_role_title_match';
                     $confidence = 'medium';
@@ -1044,18 +1050,18 @@ SQL,
                 } else {
                     $displayOrderMatches = array_values(array_filter(
                         $rankedCandidates,
-                        static fn (array $candidate): bool => in_array(
+                        static fn (array $candidate): bool => \in_array(
                             'legacy_display_order_match',
                             $candidate['evidence'],
                             true
                         )
                     ));
-                    if (1 === count($displayOrderMatches)) {
+                    if (1 === \count($displayOrderMatches)) {
                         $displayEvidence = $displayOrderMatches[0]['evidence'];
                         $suggestedId = (int) $displayOrderMatches[0]['exercise_id'];
                         $strategy = 'unique_legacy_display_order';
 
-                        if (in_array('role_title_conflict', $displayEvidence, true)) {
+                        if (\in_array('role_title_conflict', $displayEvidence, true)) {
                             $confidence = 'none';
                             $status = 'unresolved';
                             $evidence = $displayEvidence;
@@ -1091,21 +1097,21 @@ SQL,
                 'historical_current_ids' => $historicalIds,
                 'historical_mappings' => $mappings,
                 'configured_final_exam_ids' => $finalExamIds,
-                'candidates' => array_slice($rankedCandidates, 0, 12),
+                'candidates' => \array_slice($rankedCandidates, 0, 12),
             ];
         }
 
         return [
-            'total' => count($legacyIds),
+            'total' => \count($legacyIds),
             ...$counters,
             'details' => $details,
         ];
     }
 
     /**
-     * @param list<int>                  $legacyIds
+     * @param list<int>                        $legacyIds
      * @param array<int, array<string, mixed>> $candidateById
-     * @param list<int>                  $finalExamIds
+     * @param list<int>                        $finalExamIds
      */
     private function findCourseSequenceAnchorOffset(
         string $courseCode,
@@ -1113,7 +1119,7 @@ SQL,
         array $candidateById,
         array $finalExamIds
     ): ?int {
-        if (1 !== count($finalExamIds)) {
+        if (1 !== \count($finalExamIds)) {
             return null;
         }
 
@@ -1134,7 +1140,7 @@ SQL,
 
         $offsets = array_values(array_unique($offsets));
 
-        return 1 === count($offsets) ? $offsets[0] : null;
+        return 1 === \count($offsets) ? $offsets[0] : null;
     }
 
     /**
@@ -1421,7 +1427,7 @@ SQL,
      */
     private function candidateMatchesRole(array $candidate, string $legacyRole): ?bool
     {
-        if (!in_array($legacyRole, ['midterm', 'final_exam'], true)) {
+        if (!\in_array($legacyRole, ['midterm', 'final_exam'], true)) {
             return null;
         }
 
@@ -1455,7 +1461,7 @@ SQL,
                 $legacyExerciseId,
                 $legacyRole
             );
-            if (in_array((int) $candidate['exercise_id'], $configuredFinalExamIds, true)) {
+            if (\in_array((int) $candidate['exercise_id'], $configuredFinalExamIds, true)) {
                 $evidence[] = 'configured_final_exam';
             }
 
@@ -1499,9 +1505,9 @@ SQL,
     private function missingResourceAudit(array $ids): array
     {
         return [
-            'total' => count($ids),
+            'total' => \count($ids),
             'resolved' => 0,
-            'missing' => count($ids),
+            'missing' => \count($ids),
             'resolved_ids' => [],
             'missing_ids' => $ids,
         ];
@@ -1515,7 +1521,7 @@ SQL,
     private function missingExerciseAudit(array $ids): array
     {
         return [
-            'total' => count($ids),
+            'total' => \count($ids),
             'resolved_from_history' => 0,
             'resolved_from_final_exam_rule' => 0,
             'verified_direct_with_context' => 0,
@@ -1523,7 +1529,7 @@ SQL,
             'candidate_role_match' => 0,
             'candidate_display_order' => 0,
             'ambiguous_candidates' => 0,
-            'unresolved' => count($ids),
+            'unresolved' => \count($ids),
             'details' => array_map(
                 static fn (int $id): array => [
                     'legacy_exercise_id' => $id,
@@ -1618,7 +1624,7 @@ SQL,
 
         foreach ($courses as $course) {
             foreach ($course['exercises']['details'] as $detail) {
-                $isVerified = in_array($detail['status'], $verifiedStatuses, true);
+                $isVerified = \in_array($detail['status'], $verifiedStatuses, true);
                 if ($verified !== $isVerified) {
                     continue;
                 }
@@ -1643,12 +1649,12 @@ SQL,
     }
 
     /**
-     * @param array<string, int> $summary
+     * @param array<string, int>          $summary
      * @param list<array{status: string}> $flatviewOnlyRules
      */
     private function addFlatviewOnlySummary(array &$summary, array $flatviewOnlyRules): void
     {
-        $summary['flatview_only_rules'] = count($flatviewOnlyRules);
+        $summary['flatview_only_rules'] = \count($flatviewOnlyRules);
         foreach ($flatviewOnlyRules as $rule) {
             if ('found_without_category_formula' === $rule['status']) {
                 ++$summary['flatview_only_courses_found'];
@@ -1715,7 +1721,7 @@ SQL,
      */
     private function renderCourseReport(SymfonyStyle $io, array $courseReport): void
     {
-        $io->section(sprintf(
+        $io->section(\sprintf(
             '%s — %s',
             $courseReport['code'],
             $courseReport['course_title'] ?? 'course not found'
@@ -1729,7 +1735,7 @@ SQL,
             ['Forum threads' => $this->formatResourceAudit($courseReport['forum_threads'])],
             ['Works' => $this->formatResourceAudit($courseReport['works'])],
             ['Evaluations' => $this->formatResourceAudit($courseReport['evaluations'])],
-            ['Exercises' => sprintf(
+            ['Exercises' => \sprintf(
                 '%d total; %d history; %d final-rule; %d direct-context; %d sequence-anchor; %d role candidates; %d order candidates; %d ambiguous; %d unresolved',
                 $courseReport['exercises']['total'],
                 $courseReport['exercises']['resolved_from_history'],
@@ -1754,7 +1760,7 @@ SQL,
         }
 
         foreach ($courseReport['exercises']['details'] as $detail) {
-            if (in_array($detail['status'], [
+            if (\in_array($detail['status'], [
                 'resolved_from_history',
                 'resolved_from_final_exam_rule',
                 'verified_direct_with_context',
@@ -1764,16 +1770,16 @@ SQL,
             }
 
             $candidatePreview = array_map(
-                static fn (array $candidate): string => sprintf(
+                static fn (array $candidate): string => \sprintf(
                     '%d:%s(score=%d)',
                     $candidate['exercise_id'],
                     $candidate['title'],
                     $candidate['score']
                 ),
-                array_slice($detail['candidates'], 0, 3)
+                \array_slice($detail['candidates'], 0, 3)
             );
 
-            $io->writeln(sprintf(
+            $io->writeln(\sprintf(
                 '<comment>Exercise legacy=%d role=%s status=%s selected=%s suggested=%s confidence=%s candidates=%s</comment>',
                 $detail['legacy_exercise_id'],
                 $detail['legacy_role'],
@@ -1795,7 +1801,7 @@ SQL,
      */
     private function formatResourceAudit(array $audit): string
     {
-        return sprintf('%d total; %d resolved; %d missing', $audit['total'], $audit['resolved'], $audit['missing']);
+        return \sprintf('%d total; %d resolved; %d missing', $audit['total'], $audit['resolved'], $audit['missing']);
     }
 
     /**
@@ -1827,10 +1833,10 @@ SQL,
             ['Courses found' => $summary['courses_found']],
             ['Courses missing' => $summary['courses_missing']],
             ['Legacy/current course ID mismatches' => $summary['legacy_course_id_mismatches']],
-            ['Forum references' => sprintf('%d total; %d resolved; %d missing', $summary['forum_thread_references'], $summary['forum_thread_resolved'], $summary['forum_thread_missing'])],
-            ['Work references' => sprintf('%d total; %d resolved; %d missing', $summary['work_references'], $summary['work_resolved'], $summary['work_missing'])],
-            ['Evaluation references' => sprintf('%d total; %d resolved; %d missing', $summary['evaluation_references'], $summary['evaluation_resolved'], $summary['evaluation_missing'])],
-            ['Exercise references' => sprintf(
+            ['Forum references' => \sprintf('%d total; %d resolved; %d missing', $summary['forum_thread_references'], $summary['forum_thread_resolved'], $summary['forum_thread_missing'])],
+            ['Work references' => \sprintf('%d total; %d resolved; %d missing', $summary['work_references'], $summary['work_resolved'], $summary['work_missing'])],
+            ['Evaluation references' => \sprintf('%d total; %d resolved; %d missing', $summary['evaluation_references'], $summary['evaluation_resolved'], $summary['evaluation_missing'])],
+            ['Exercise references' => \sprintf(
                 '%d total; %d history; %d final-rule; %d direct-context; %d sequence-anchor; %d role candidates; %d order candidates; %d ambiguous; %d unresolved',
                 $summary['exercise_references'],
                 $summary['exercise_resolved_from_history'],
@@ -1845,7 +1851,7 @@ SQL,
             ['Verified exercise references' => $summary['exercise_verified_references']],
             ['Exercise references requiring review' => $summary['exercise_review_required']],
             ['Indexed tracking backup usable' => $hasTrackingBackup ? 'yes' : 'no'],
-            ['Flatview-only rules' => sprintf('%d total; %d courses found; %d missing', $summary['flatview_only_rules'], $summary['flatview_only_courses_found'], $summary['flatview_only_courses_missing'])]
+            ['Flatview-only rules' => \sprintf('%d total; %d courses found; %d missing', $summary['flatview_only_rules'], $summary['flatview_only_courses_found'], $summary['flatview_only_courses_missing'])]
         );
     }
 
@@ -1862,9 +1868,9 @@ SQL,
             throw new RuntimeException('--output must be an absolute path.');
         }
 
-        $directory = dirname($outputPath);
+        $directory = \dirname($outputPath);
         if (!is_dir($directory) || !is_writable($directory)) {
-            throw new RuntimeException(sprintf('Output directory is not writable: %s', $directory));
+            throw new RuntimeException(\sprintf('Output directory is not writable: %s', $directory));
         }
 
         try {
@@ -1874,7 +1880,7 @@ SQL,
         }
 
         if (false === file_put_contents($outputPath, $json."\n")) {
-            throw new RuntimeException(sprintf('Could not write JSON report: %s', $outputPath));
+            throw new RuntimeException(\sprintf('Could not write JSON report: %s', $outputPath));
         }
 
         $io->note('JSON report written to '.$outputPath);

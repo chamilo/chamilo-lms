@@ -27,6 +27,9 @@ use RuntimeException;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 final class Version20201215142610 extends AbstractMigrationChamilo
 {
     private const ORM_FLUSH_BATCH_SIZE = 100;
@@ -339,11 +342,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                 $this->connection->rollBack();
             }
 
-            throw new RuntimeException(
-                "Referenced quiz repair failed for course {$courseId}: {$e->getMessage()}",
-                0,
-                $e
-            );
+            throw new RuntimeException("Referenced quiz repair failed for course {$courseId}: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -602,11 +601,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     $this->connection->rollBack();
                 }
 
-                throw new RuntimeException(
-                    "Fast question migration failed for course {$courseId} near question {$lastQuestionId}: {$e->getMessage()}",
-                    0,
-                    $e
-                );
+                throw new RuntimeException("Fast question migration failed for course {$courseId} near question {$lastQuestionId}: {$e->getMessage()}", 0, $e);
             }
 
             $processed += $batchProcessed;

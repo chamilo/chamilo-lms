@@ -37,8 +37,10 @@ final class Version20201212195011 extends AbstractMigrationChamilo
     {
         /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
+
         /** @var CToolRepository $toolRepo */
         $toolRepo = $this->container->get(CToolRepository::class);
+
         /** @var AccessUrlRepository $urlRepo */
         $urlRepo = $this->container->get(AccessUrlRepository::class);
 
@@ -70,6 +72,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
             }
 
             $courseIds = [];
+
             /** @var AccessUrlRelCourse $relation */
             foreach ($url->getCourses() as $relation) {
                 $course = $relation->getCourse();

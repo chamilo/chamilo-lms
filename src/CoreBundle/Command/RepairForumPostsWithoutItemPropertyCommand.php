@@ -22,6 +22,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 #[AsCommand(
     name: 'chamilo:migration:repair-forum-posts-without-item-property',
     description: 'Repairs visible legacy forum posts that still have no resource node but have a valid migrated thread.',
@@ -31,8 +34,9 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
     private const BATCH_SIZE = 100;
     private const RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
 
-    public function __construct(private readonly Connection $connection)
-    {
+    public function __construct(
+        private readonly Connection $connection
+    ) {
         parent::__construct();
     }
 
@@ -60,7 +64,7 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
             $summary = $this->repair(
                 $dryRun,
                 static function (array $progress) use ($io): void {
-                    $io->writeln(sprintf(
+                    $io->writeln(\sprintf(
                         'seen=%d repaired=%d last_iid=%d skipped_parent_context=%d rate=%s rows/s',
                         (int) $progress['seen'],
                         (int) $progress['repaired'],
@@ -113,7 +117,7 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
                 continue;
             }
 
-            $seen += count($rows);
+            $seen += \count($rows);
             $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
             $parentNodeIds = array_values(array_unique(array_map(
@@ -136,6 +140,7 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
 
                     if ([] === $contexts) {
                         ++$skippedMissingParentContext;
+
                         continue;
                     }
 
@@ -214,11 +219,7 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
                     $this->connection->rollBack();
                 }
 
-                throw new RuntimeException(
-                    'Forum post repair failed after legacy post '.$lastIid.': '.$e->getMessage(),
-                    0,
-                    $e
-                );
+                throw new RuntimeException('Forum post repair failed after legacy post '.$lastIid.': '.$e->getMessage(), 0, $e);
             }
 
             if (null !== $progress) {
@@ -355,7 +356,7 @@ SQL,
 
     private function countEligiblePending(): int
     {
-        return count($this->findEligiblePendingPostIds());
+        return \count($this->findEligiblePendingPostIds());
     }
 
     private function countOrphanThreadPosts(): int
@@ -509,7 +510,7 @@ SQL
             $type = $column->getType()->getName();
             $length = $column->getLength();
 
-            return in_array($type, ['binary', 'varbinary'], true) || 16 === $length;
+            return \in_array($type, ['binary', 'varbinary'], true) || 16 === $length;
         } catch (Throwable) {
             return false;
         }

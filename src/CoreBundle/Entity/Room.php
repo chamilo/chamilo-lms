@@ -216,9 +216,6 @@ class Room
         return $this;
     }
 
-    /**
-     * @return BranchSync
-     */
     public function getBranch(): ?BranchSync
     {
         return $this->branch;

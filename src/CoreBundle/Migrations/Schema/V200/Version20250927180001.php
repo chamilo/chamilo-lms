@@ -30,6 +30,7 @@ final class Version20250927180001 extends AbstractMigrationChamilo
     {
         /** @var PortfolioRepository $portfolioRepo */
         $portfolioRepo = $this->container->get(PortfolioRepository::class);
+
         /** @var UserRepository $userRepo */
         $userRepo = $this->container->get(UserRepository::class);
 
@@ -52,7 +53,7 @@ final class Version20250927180001 extends AbstractMigrationChamilo
                 break;
             }
 
-            $lastId = (int) $rows[\array_key_last($rows)]['id'];
+            $lastId = (int) $rows[array_key_last($rows)]['id'];
             $properties = $this->loadItemProperties('portfolio', array_column($rows, 'id'));
 
             foreach ($rows as $row) {
@@ -63,6 +64,7 @@ final class Version20250927180001 extends AbstractMigrationChamilo
 
                 if (!$portfolio instanceof Portfolio || null === $creator || $portfolio->hasResourceNode()) {
                     ++$skipped;
+
                     continue;
                 }
 

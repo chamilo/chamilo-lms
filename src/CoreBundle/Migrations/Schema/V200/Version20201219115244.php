@@ -48,6 +48,7 @@ final class Version20201219115244 extends AbstractMigrationChamilo
             if (null === $course) {
                 $skipped += \count($ids);
                 $this->warnIf(true, "Course {$courseId} not found while migrating wiki resources.");
+
                 continue;
             }
 
@@ -70,6 +71,7 @@ final class Version20201219115244 extends AbstractMigrationChamilo
                     $itemProperties[$id] ?? []
                 )) {
                     ++$skipped;
+
                     continue;
                 }
 

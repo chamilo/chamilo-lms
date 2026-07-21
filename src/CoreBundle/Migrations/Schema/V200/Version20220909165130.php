@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use RuntimeException;
 use Throwable;
 
 final class Version20220909165130 extends AbstractMigrationChamilo
@@ -76,11 +77,7 @@ SQL,
         try {
             $this->connection->executeStatement($sql);
         } catch (Throwable $e) {
-            throw new \RuntimeException(
-                \sprintf('Could not widen %s.%s: %s', $table, $column, $e->getMessage()),
-                0,
-                $e
-            );
+            throw new RuntimeException(\sprintf('Could not widen %s.%s: %s', $table, $column, $e->getMessage()), 0, $e);
         }
     }
 }

@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Schema\Schema;
+use RuntimeException;
 use Throwable;
 
 final class Version20250501000100 extends AbstractMigrationChamilo
@@ -29,6 +30,7 @@ final class Version20250501000100 extends AbstractMigrationChamilo
     {
         /** @var CStudentPublicationRepository $publicationRepository */
         $publicationRepository = $this->container->get(CStudentPublicationRepository::class);
+
         /** @var CStudentPublicationCommentRepository $commentRepository */
         $commentRepository = $this->container->get(CStudentPublicationCommentRepository::class);
 
@@ -112,7 +114,7 @@ LIMIT %d
 SQL,
                 $urlExpression,
                 $correctionExpression,
-                \implode(' OR ', $pathPredicates),
+                implode(' OR ', $pathPredicates),
                 self::READ_BATCH_SIZE
             );
 
@@ -121,7 +123,7 @@ SQL,
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
             $existingFiles = $this->loadExistingResourceFilesForRows($rows);
 
             foreach ($rows as $row) {
@@ -135,12 +137,12 @@ SQL,
                     ['path' => (string) ($row['legacy_url'] ?? ''), 'is_correction' => false],
                     ['path' => (string) ($row['legacy_correction_url'] ?? ''), 'is_correction' => true],
                 ] as $candidate) {
-                    $legacyPath = \trim($candidate['path']);
+                    $legacyPath = trim($candidate['path']);
                     if ('' === $legacyPath) {
                         continue;
                     }
 
-                    $filename = \basename($legacyPath);
+                    $filename = basename($legacyPath);
                     if ('' === $filename) {
                         continue;
                     }
@@ -153,6 +155,7 @@ SQL,
                     $source = $this->resolveCourseFile($directory, $legacyPath, true);
                     if (null === $source) {
                         ++$missing;
+
                         continue;
                     }
 
@@ -246,15 +249,15 @@ SQL,
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
             $existingFiles = $this->loadExistingResourceFilesForRows($rows);
 
             foreach ($rows as $row) {
                 ++$seen;
                 $iid = (int) $row['iid'];
                 $nodeId = (int) $row['resource_node_id'];
-                $legacyPath = \trim((string) $row['file']);
-                $filename = \basename($legacyPath);
+                $legacyPath = trim((string) $row['file']);
+                $filename = basename($legacyPath);
                 $fileKey = $nodeId.':'.$filename;
 
                 if ('' === $filename || isset($existingFiles[$fileKey])) {
@@ -264,6 +267,7 @@ SQL,
                 $source = $this->resolveCourseFile((string) $row['directory'], $legacyPath, true);
                 if (null === $source) {
                     ++$missing;
+
                     continue;
                 }
 
@@ -302,16 +306,16 @@ SQL,
 
     private function resolveCourseFile(string $courseDirectory, string $legacyPath, bool $includeWorkFallback): ?string
     {
-        $legacyPath = \ltrim($legacyPath, '/');
+        $legacyPath = ltrim($legacyPath, '/');
         $base = $this->getUpdateRootPath().'/app/courses/'.$courseDirectory.'/';
         $candidates = [$base.$legacyPath];
 
         if ($includeWorkFallback) {
             $candidates[] = $base.'work/'.$legacyPath;
-            $candidates[] = $base.'work/'.\basename($legacyPath);
+            $candidates[] = $base.'work/'.basename($legacyPath);
         }
 
-        foreach (\array_unique($candidates) as $candidate) {
+        foreach (array_unique($candidates) as $candidate) {
             if ($this->fileExists($candidate)) {
                 return $candidate;
             }
@@ -345,7 +349,7 @@ SELECT resource_node_id, title, original_name
 FROM resource_file
 WHERE resource_node_id IN (:nodeIds)
 SQL,
-            ['nodeIds' => \array_values($nodeIds)],
+            ['nodeIds' => array_values($nodeIds)],
             ['nodeIds' => ArrayParameterType::INTEGER]
         )->fetchAllAssociative();
 
@@ -376,11 +380,7 @@ SQL,
 
             return $result;
         } catch (Throwable $exception) {
-            throw new \RuntimeException(
-                \sprintf('Unable to inspect table %s: %s', $tableName, $exception->getMessage()),
-                0,
-                $exception
-            );
+            throw new RuntimeException(\sprintf('Unable to inspect table %s: %s', $tableName, $exception->getMessage()), 0, $exception);
         }
     }
 }

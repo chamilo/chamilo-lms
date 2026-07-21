@@ -17,7 +17,9 @@ final class Version20231022124700 extends AbstractMigrationChamilo
     private const CONTENT_BATCH_SIZE = 1000;
     private const DOCUMENT_BATCH_SIZE = 100;
 
-    /** @var array<string, int> */
+    /**
+     * @var array<string, int>
+     */
     private array $courseIdsByCode = [];
 
     public function getDescription(): string
@@ -103,7 +105,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
             foreach ($rows as $row) {
                 ++$seen;
@@ -175,6 +177,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
     {
         /** @var CDocumentRepository $documentRepo */
         $documentRepo = $this->container->get(CDocumentRepository::class);
+
         /** @var ResourceNodeRepository $resourceNodeRepo */
         $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
 
@@ -204,7 +207,7 @@ SQL,
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
             foreach ($rows as $row) {
                 ++$seen;
@@ -258,7 +261,9 @@ SQL,
         }
     }
 
-    /** @return array<string, int> */
+    /**
+     * @return array<string, int>
+     */
     private function loadCourseIdsByCode(): array
     {
         $rows = $this->connection->fetchAllAssociative(

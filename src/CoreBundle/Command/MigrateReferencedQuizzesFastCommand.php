@@ -20,6 +20,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 #[AsCommand(
     name: 'chamilo:migration:repair-referenced-quizzes',
     description: 'Creates draft resource nodes for referenced legacy quizzes that still have no resource node.',
@@ -99,6 +102,7 @@ final class MigrateReferencedQuizzesFastCommand extends Command
 
             if (!$courseRow || empty($courseRow['resource_node_id'])) {
                 $io->warning("Course {$courseId} has no resource node. Skipping its referenced quizzes.");
+
                 continue;
             }
 
@@ -110,6 +114,7 @@ final class MigrateReferencedQuizzesFastCommand extends Command
 
             if (!$courseNode) {
                 $io->warning("Course {$courseId} resource node {$courseNodeId} was not found.");
+
                 continue;
             }
 
@@ -303,6 +308,7 @@ final class MigrateReferencedQuizzesFastCommand extends Command
 
             if (0 === $questionRelations && 0 === $attemptRows) {
                 ++$unusedPending;
+
                 continue;
             }
 
@@ -336,6 +342,7 @@ final class MigrateReferencedQuizzesFastCommand extends Command
 
             if (null !== $reason) {
                 $unresolved[] = ['quiz_id' => $quizId, 'reason' => $reason];
+
                 continue;
             }
 
@@ -356,7 +363,9 @@ final class MigrateReferencedQuizzesFastCommand extends Command
         ];
     }
 
-    /** @param array<int, array{quiz_id: int, reason: string}> $unresolved */
+    /**
+     * @param array<int, array{quiz_id: int, reason: string}> $unresolved
+     */
     private function printUnresolvedQuizzes(SymfonyStyle $io, array $unresolved): void
     {
         if ([] === $unresolved) {
@@ -364,7 +373,7 @@ final class MigrateReferencedQuizzesFastCommand extends Command
         }
 
         $io->warning(\count($unresolved).' referenced quizzes were preserved because their course context is not safe to infer.');
-        foreach (array_slice($unresolved, 0, 20) as $row) {
+        foreach (\array_slice($unresolved, 0, 20) as $row) {
             $io->writeln(\sprintf('  - Quiz %d: %s', $row['quiz_id'], $row['reason']));
         }
         if (\count($unresolved) > 20) {
@@ -372,7 +381,9 @@ final class MigrateReferencedQuizzesFastCommand extends Command
         }
     }
 
-    /** @param array<string, mixed> $resolution */
+    /**
+     * @param array<string, mixed> $resolution
+     */
     private function printSummary(SymfonyStyle $io, array $resolution): void
     {
         $io->definitionList(

@@ -48,6 +48,7 @@ final class Version20201218132719 extends AbstractMigrationChamilo
             if (null === $course) {
                 $skipped += \count($ids);
                 $this->warnIf(true, "Course {$courseId} not found while migrating surveys.");
+
                 continue;
             }
 
@@ -70,6 +71,7 @@ final class Version20201218132719 extends AbstractMigrationChamilo
                     $itemProperties[$id] ?? []
                 )) {
                     ++$skipped;
+
                     continue;
                 }
 

@@ -314,9 +314,9 @@ final class Version20230904173400 extends AbstractMigrationChamilo
     }
 
     /**
-     * @param array<string, mixed>                                  $row
+     * @param array<string, mixed>                                                                                 $row
      * @param array{by_agenda: array<int, array<string, mixed>>, users_by_invitation: array<int, array<int, int>>} $invitationData
-     * @param array<int, User>                                      $users
+     * @param array<int, User>                                                                                     $users
      */
     private function applyInvitationData(
         CCalendarEvent $event,
@@ -419,7 +419,7 @@ final class Version20230904173400 extends AbstractMigrationChamilo
                  FROM agenda_event_invitee
                  WHERE invitation_id IN (:ids)
                  ORDER BY invitation_id, created_at, id',
-                ['ids' => \array_values(\array_unique($invitationIds))],
+                ['ids' => array_values(array_unique($invitationIds))],
                 ['ids' => ArrayParameterType::INTEGER]
             )->fetchAllAssociative();
         } catch (Throwable) {
@@ -441,13 +441,13 @@ final class Version20230904173400 extends AbstractMigrationChamilo
      */
     private function loadUsers(array $userIds): array
     {
-        $userIds = \array_values(\array_unique(\array_filter(\array_map('intval', $userIds))));
+        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
         if ([] === $userIds) {
             return [];
         }
 
         $entities = $this->entityManager
-            ->createQuery('SELECT user FROM Chamilo\\CoreBundle\\Entity\\User user WHERE user.id IN (:ids)')
+            ->createQuery('SELECT user FROM Chamilo\CoreBundle\Entity\User user WHERE user.id IN (:ids)')
             ->setParameter('ids', $userIds)
             ->getResult()
         ;
@@ -469,7 +469,7 @@ final class Version20230904173400 extends AbstractMigrationChamilo
      */
     private function loadParentEvents(array $eventIds): array
     {
-        $eventIds = \array_values(\array_unique(\array_filter(\array_map('intval', $eventIds))));
+        $eventIds = array_values(array_unique(array_filter(array_map('intval', $eventIds))));
         if ([] === $eventIds) {
             return [];
         }
@@ -512,11 +512,10 @@ final class Version20230904173400 extends AbstractMigrationChamilo
         }
 
         $this->connection->executeStatement(
-            'INSERT INTO '.self::MAP_TABLE.' (old_id, new_id) VALUES '.\implode(', ', $values),
+            'INSERT INTO '.self::MAP_TABLE.' (old_id, new_id) VALUES '.implode(', ', $values),
             $parameters
         );
     }
-
 
     private function ensurePersonalAgendaParentIndex(): void
     {

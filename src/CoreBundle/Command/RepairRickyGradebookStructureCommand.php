@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use JsonException;
 use RuntimeException;
@@ -18,6 +19,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
+
+use const JSON_THROW_ON_ERROR;
 
 #[AsCommand(
     name: 'chamilo:migration:repair-ricky-gradebook-structure',
@@ -30,8 +33,9 @@ final class RepairRickyGradebookStructureCommand extends Command
     private const LINK_STUDENT_PUBLICATION = 3;
     private const LINK_FORUM_THREAD = 5;
 
-    public function __construct(private readonly Connection $connection)
-    {
+    public function __construct(
+        private readonly Connection $connection
+    ) {
         parent::__construct();
     }
 
@@ -56,7 +60,7 @@ final class RepairRickyGradebookStructureCommand extends Command
         ))));
         $forcedCategoryId = (int) ($input->getOption('category-id') ?? 0);
 
-        if ($forcedCategoryId > 0 && 1 !== count($courseIds)) {
+        if ($forcedCategoryId > 0 && 1 !== \count($courseIds)) {
             $io->error('--category-id requires exactly one --course-id.');
 
             return Command::INVALID;
@@ -79,7 +83,7 @@ final class RepairRickyGradebookStructureCommand extends Command
 
         try {
             $rules = $this->loadRules($courseIds);
-            $summary['selected_courses'] = count($rules);
+            $summary['selected_courses'] = \count($rules);
 
             if ([] === $rules) {
                 throw new RuntimeException('No persisted Ricky completion rules matched the requested course IDs.');
@@ -94,14 +98,14 @@ final class RepairRickyGradebookStructureCommand extends Command
 
                 if (null === $rule) {
                     ++$summary['conflicts'];
-                    $io->warning(sprintf('Course %d (%s) has invalid JSON configuration.', $courseId, $courseCode));
+                    $io->warning(\sprintf('Course %d (%s) has invalid JSON configuration.', $courseId, $courseCode));
 
                     continue;
                 }
 
                 if (empty($rule['migration_complete'])) {
                     ++$summary['skipped_incomplete'];
-                    $io->warning(sprintf('Course %d (%s) was skipped because its rule is incomplete.', $courseId, $courseCode));
+                    $io->warning(\sprintf('Course %d (%s) was skipped because its rule is incomplete.', $courseId, $courseCode));
 
                     continue;
                 }
@@ -112,7 +116,7 @@ final class RepairRickyGradebookStructureCommand extends Command
 
                 if (null === $categoryId) {
                     ++$summary['ambiguous_categories'];
-                    $io->warning(sprintf('Course %d (%s) has no uniquely identifiable gradebook category.', $courseId, $courseCode));
+                    $io->warning(\sprintf('Course %d (%s) has no uniquely identifiable gradebook category.', $courseId, $courseCode));
 
                     continue;
                 }
@@ -130,7 +134,7 @@ final class RepairRickyGradebookStructureCommand extends Command
 
                     if (null === $resourceId || $weight <= 0.0) {
                         ++$summary['conflicts'];
-                        $io->warning(sprintf(
+                        $io->warning(\sprintf(
                             'Course %d (%s) has an unusable %s component; no gradebook change was made for it.',
                             $courseId,
                             $courseCode,
@@ -151,7 +155,7 @@ final class RepairRickyGradebookStructureCommand extends Command
 
                 if ($summary['conflicts'] === $courseConflictsBefore) {
                     ++$summary['processed_courses'];
-                    $io->writeln(sprintf('Prepared: %d (%s), category %d', $courseId, $courseCode, $categoryId));
+                    $io->writeln(\sprintf('Prepared: %d (%s), category %d', $courseId, $courseCode, $categoryId));
                 }
             }
 
@@ -183,7 +187,8 @@ final class RepairRickyGradebookStructureCommand extends Command
                 return Command::FAILURE;
             }
 
-            $io->success($dryRun
+            $io->success(
+                $dryRun
                 ? 'Ricky gradebook structure dry-run completed without changing data.'
                 : 'Ricky gradebook structure was repaired successfully.'
             );
@@ -200,7 +205,9 @@ final class RepairRickyGradebookStructureCommand extends Command
         }
     }
 
-    /** @return list<array{course_id: int|string, course_code: string, field_value: string}> */
+    /**
+     * @return list<array{course_id: int|string, course_code: string, field_value: string}>
+     */
     private function loadRules(array $courseIds): array
     {
         $sql = <<<'SQL'
@@ -226,7 +233,7 @@ SQL;
         if ([] !== $courseIds) {
             $sql .= ' AND c.id IN (:courseIds)';
             $params['courseIds'] = $courseIds;
-            $types['courseIds'] = \Doctrine\DBAL\ArrayParameterType::INTEGER;
+            $types['courseIds'] = ArrayParameterType::INTEGER;
         }
 
         $sql .= ' ORDER BY c.id';
@@ -241,20 +248,22 @@ SQL;
             ['categoryId' => $categoryId, 'courseId' => $courseId]
         );
         if (1 !== $matched) {
-            throw new RuntimeException(sprintf('Gradebook category %d does not belong to course %d.', $categoryId, $courseId));
+            throw new RuntimeException(\sprintf('Gradebook category %d does not belong to course %d.', $categoryId, $courseId));
         }
 
         return $categoryId;
     }
 
-    /** @param list<array<string, mixed>> $components */
+    /**
+     * @param list<array<string, mixed>> $components
+     */
     private function resolveCategoryId(int $courseId, array $components): ?int
     {
         $categories = $this->connection->fetchAllAssociative(
             'SELECT id FROM gradebook_category WHERE c_id = :courseId ORDER BY id',
             ['courseId' => $courseId]
         );
-        if (1 === count($categories)) {
+        if (1 === \count($categories)) {
             return (int) $categories[0]['id'];
         }
         if ([] === $categories) {
@@ -275,6 +284,7 @@ SQL;
                         'SELECT COUNT(*) FROM gradebook_evaluation WHERE id = :id AND category_id = :categoryId',
                         ['id' => $resourceId, 'categoryId' => $categoryId]
                     );
+
                     continue;
                 }
 
@@ -296,7 +306,7 @@ SQL;
                 $scores[$categoryId] += (int) $this->connection->fetchOne(
                     'SELECT COUNT(*) FROM gradebook_link WHERE category_id = :categoryId AND type = :type AND ref_id IN (:ids)',
                     ['categoryId' => $categoryId, 'type' => $linkType, 'ids' => $ids],
-                    ['ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+                    ['ids' => ArrayParameterType::INTEGER]
                 );
             }
         }
@@ -307,14 +317,16 @@ SQL;
             return null;
         }
         $bestIds = array_keys(array_filter($scores, static fn (int $score): bool => $score === (int) $bestScore));
-        if (1 === count($bestIds)) {
+        if (1 === \count($bestIds)) {
             return (int) $bestIds[0];
         }
 
         return $this->resolveCategoryByCertificateHistory(array_map('intval', $bestIds));
     }
 
-    /** @param list<int> $categoryIds */
+    /**
+     * @param list<int> $categoryIds
+     */
     private function resolveCategoryByCertificateHistory(array $categoryIds): ?int
     {
         if ([] === $categoryIds) {
@@ -325,12 +337,12 @@ SQL;
         $rows = $this->connection->executeQuery(
             'SELECT cat_id AS category_id, COUNT(*) AS certificate_count FROM gradebook_certificate WHERE cat_id IN (:categoryIds) GROUP BY cat_id',
             ['categoryIds' => $categoryIds],
-            ['categoryIds' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+            ['categoryIds' => ArrayParameterType::INTEGER]
         )->fetchAllAssociative();
 
         foreach ($rows as $row) {
             $categoryId = (int) $row['category_id'];
-            if (array_key_exists($categoryId, $certificateCounts)) {
+            if (\array_key_exists($categoryId, $certificateCounts)) {
                 $certificateCounts[$categoryId] = (int) $row['certificate_count'];
             }
         }
@@ -346,7 +358,7 @@ SQL;
             static fn (int $count): bool => $count === (int) $bestCount
         ));
 
-        return 1 === count($bestIds) ? (int) $bestIds[0] : null;
+        return 1 === \count($bestIds) ? (int) $bestIds[0] : null;
     }
 
     private function syncExerciseLink(
@@ -360,7 +372,7 @@ SQL;
     ): void {
         if (!$this->resourceBelongsToCourse('c_quiz', $resourceId, $courseId)) {
             ++$summary['conflicts'];
-            $io->warning(sprintf('Exercise %d is not linked to course %d.', $resourceId, $courseId));
+            $io->warning(\sprintf('Exercise %d is not linked to course %d.', $resourceId, $courseId));
 
             return;
         }
@@ -369,7 +381,7 @@ SQL;
         $links = $this->connection->executeQuery(
             'SELECT id, ref_id, weight FROM gradebook_link WHERE category_id = :categoryId AND type = :type AND ref_id IN (:ids) ORDER BY id',
             ['categoryId' => $categoryId, 'type' => self::LINK_EXERCISE, 'ids' => $ids],
-            ['ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+            ['ids' => ArrayParameterType::INTEGER]
         )->fetchAllAssociative();
 
         $targetLinks = array_values(array_filter($links, static fn (array $link): bool => (int) $link['ref_id'] === $resourceId));
@@ -377,21 +389,21 @@ SQL;
             ? []
             : array_values(array_filter($links, static fn (array $link): bool => (int) $link['ref_id'] === $sourceId));
 
-        if (count($targetLinks) > 1 || count($sourceLinks) > 1 || ([] !== $targetLinks && [] !== $sourceLinks)) {
+        if (\count($targetLinks) > 1 || \count($sourceLinks) > 1 || ([] !== $targetLinks && [] !== $sourceLinks)) {
             ++$summary['conflicts'];
-            $io->warning(sprintf('Exercise mapping %s -> %d has duplicate or conflicting gradebook links in category %d.', $sourceId ?? '-', $resourceId, $categoryId));
+            $io->warning(\sprintf('Exercise mapping %s -> %d has duplicate or conflicting gradebook links in category %d.', $sourceId ?? '-', $resourceId, $categoryId));
 
             return;
         }
 
-        if (1 === count($targetLinks)) {
+        if (1 === \count($targetLinks)) {
             $this->syncWeight((int) $targetLinks[0]['id'], (float) $targetLinks[0]['weight'], $weight, $summary);
             ++$summary['already_correct'];
 
             return;
         }
 
-        if (1 === count($sourceLinks)) {
+        if (1 === \count($sourceLinks)) {
             $this->connection->update('gradebook_link', ['ref_id' => $resourceId, 'weight' => $weight], ['id' => (int) $sourceLinks[0]['id']]);
             ++$summary['repaired_exercise_links'];
 
@@ -415,7 +427,7 @@ SQL;
     ): void {
         if (!$this->resourceBelongsToCourse($resourceTable, $resourceId, $courseId)) {
             ++$summary['conflicts'];
-            $io->warning(sprintf('%s %d is not linked to course %d.', ucfirst($label), $resourceId, $courseId));
+            $io->warning(\sprintf('%s %d is not linked to course %d.', ucfirst($label), $resourceId, $courseId));
 
             return;
         }
@@ -424,13 +436,13 @@ SQL;
             'SELECT id, weight FROM gradebook_link WHERE category_id = :categoryId AND type = :type AND ref_id = :refId ORDER BY id',
             ['categoryId' => $categoryId, 'type' => $linkType, 'refId' => $resourceId]
         );
-        if (count($links) > 1) {
+        if (\count($links) > 1) {
             ++$summary['conflicts'];
-            $io->warning(sprintf('%s %d has duplicate gradebook links in category %d.', ucfirst($label), $resourceId, $categoryId));
+            $io->warning(\sprintf('%s %d has duplicate gradebook links in category %d.', ucfirst($label), $resourceId, $categoryId));
 
             return;
         }
-        if (1 === count($links)) {
+        if (1 === \count($links)) {
             $this->syncWeight((int) $links[0]['id'], (float) $links[0]['weight'], $weight, $summary);
             ++$summary['already_correct'];
 
@@ -459,7 +471,7 @@ SQL;
         );
         if (false === $evaluation || (int) $evaluation['c_id'] !== $courseId || (int) $evaluation['category_id'] !== $categoryId) {
             ++$summary['conflicts'];
-            $io->warning(sprintf('Evaluation %d is not in course %d category %d.', $evaluationId, $courseId, $categoryId));
+            $io->warning(\sprintf('Evaluation %d is not in course %d category %d.', $evaluationId, $courseId, $categoryId));
 
             return;
         }
@@ -471,7 +483,7 @@ SQL;
     private function resourceBelongsToCourse(string $table, int $resourceId, int $courseId): bool
     {
         $count = (int) $this->connection->fetchOne(
-            sprintf(
+            \sprintf(
                 'SELECT COUNT(*) FROM %s resource INNER JOIN resource_link rl ON rl.resource_node_id = resource.resource_node_id WHERE resource.iid = :resourceId AND rl.c_id = :courseId AND rl.deleted_at IS NULL AND rl.session_id IS NULL AND rl.usergroup_id IS NULL AND rl.group_id IS NULL AND rl.user_id IS NULL',
                 $table
             ),
@@ -518,7 +530,9 @@ SQL;
         ++$summary['updated_weights'];
     }
 
-    /** @return array<string, mixed>|null */
+    /**
+     * @return array<string, mixed>|null
+     */
     private function decodeRule(string $raw): ?array
     {
         try {

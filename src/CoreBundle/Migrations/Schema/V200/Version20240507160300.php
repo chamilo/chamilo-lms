@@ -27,6 +27,7 @@ final class Version20240507160300 extends AbstractMigrationChamilo
     {
         /** @var IllustrationRepository $illustrationRepo */
         $illustrationRepo = $this->container->get(IllustrationRepository::class);
+
         /** @var UserRepository $userRepo */
         $userRepo = $this->container->get(UserRepository::class);
 
@@ -52,7 +53,7 @@ final class Version20240507160300 extends AbstractMigrationChamilo
             ]
         );
 
-        $totalCandidates = count($rows);
+        $totalCandidates = \count($rows);
         if (0 === $totalCandidates) {
             $this->getLogger()->info('No missing user illustrations were found.');
 
@@ -81,6 +82,7 @@ final class Version20240507160300 extends AbstractMigrationChamilo
             if (!$this->fileExists($picturePath)) {
                 ++$missing;
                 $this->logProgressIfNeeded($seen, $totalCandidates, $migrated, $missing, $invalidUsers, $startedAt);
+
                 continue;
             }
 
@@ -88,6 +90,7 @@ final class Version20240507160300 extends AbstractMigrationChamilo
             if (!$user instanceof User || null === $user->getResourceNode()) {
                 ++$invalidUsers;
                 $this->logProgressIfNeeded($seen, $totalCandidates, $migrated, $missing, $invalidUsers, $startedAt);
+
                 continue;
             }
 

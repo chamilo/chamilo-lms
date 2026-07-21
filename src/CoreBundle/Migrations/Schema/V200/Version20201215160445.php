@@ -20,6 +20,9 @@ use RuntimeException;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 final class Version20201215160445 extends AbstractMigrationChamilo
 {
     private const SMALL_BATCH_SIZE = 500;
@@ -287,7 +290,7 @@ SQL;
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
             $seen += \count($rows);
 
             $itemProperties = $this->fetchItemProperties($tool, $rows);
@@ -301,6 +304,7 @@ SQL;
 
                 if ([] === $items) {
                     ++$skippedMissingItemProperty;
+
                     continue;
                 }
 
@@ -414,7 +418,7 @@ SQL;
             $sql,
             [
                 'tool' => $tool,
-                'refs' => \array_values(\array_unique($refs)),
+                'refs' => array_values(array_unique($refs)),
             ],
             [
                 'refs' => ArrayParameterType::INTEGER,
@@ -439,7 +443,7 @@ SQL;
         array $rows,
         bool $uuidIsBinary
     ): void {
-        $slugs = \array_column($rows, 'slug');
+        $slugs = array_column($rows, 'slug');
         $existingSlugCount = (int) $this->connection->executeQuery(
             'SELECT COUNT(*)
              FROM resource_node
@@ -455,10 +459,7 @@ SQL;
         )->fetchOne();
 
         if ($existingSlugCount > 0) {
-            throw new RuntimeException(
-                "Detected {$existingSlugCount} pre-existing deterministic resource slugs for {$table}. "
-                .'Refusing to create duplicate nodes; audit partial data first.'
-            );
+            throw new RuntimeException("Detected {$existingSlugCount} pre-existing deterministic resource slugs for {$table}. ".'Refusing to create duplicate nodes; audit partial data first.');
         }
 
         $this->connection->beginTransaction();
@@ -512,14 +513,7 @@ SQL;
             )->fetchAllAssociative();
 
             if (\count($nodeIdRows) !== \count($rows)) {
-                throw new RuntimeException(
-                    \sprintf(
-                        'Expected %d inserted resource nodes for %s, found %d.',
-                        \count($rows),
-                        $table,
-                        \count($nodeIdRows)
-                    )
-                );
+                throw new RuntimeException(\sprintf('Expected %d inserted resource nodes for %s, found %d.', \count($rows), $table, \count($nodeIdRows)));
             }
 
             $nodeIdsBySlug = [];
@@ -647,11 +641,7 @@ SQL;
                 $this->connection->rollBack();
             }
 
-            throw new RuntimeException(
-                "Fast forum migration failed for table {$table}: {$e->getMessage()}",
-                0,
-                $e
-            );
+            throw new RuntimeException("Fast forum migration failed for table {$table}: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -677,7 +667,7 @@ SQL;
         foreach ($rows as $rowIndex => $row) {
             $placeholders = [];
             foreach ($columns as $column) {
-                $parameterName = 'p_'.$rowIndex.'_'.\preg_replace('/[^a-zA-Z0-9_]/', '_', $column);
+                $parameterName = 'p_'.$rowIndex.'_'.preg_replace('/[^a-zA-Z0-9_]/', '_', $column);
                 $placeholders[] = ':'.$parameterName;
                 $parameters[$parameterName] = $row[$column] ?? null;
 
@@ -685,14 +675,14 @@ SQL;
                     $types[$parameterName] = ParameterType::BINARY;
                 }
             }
-            $valueGroups[] = '('.\implode(', ', $placeholders).')';
+            $valueGroups[] = '('.implode(', ', $placeholders).')';
         }
 
         $sql = \sprintf(
             'INSERT INTO %s (%s) VALUES %s',
             $table,
-            \implode(', ', $columns),
-            \implode(', ', $valueGroups)
+            implode(', ', $columns),
+            implode(', ', $valueGroups)
         );
 
         $this->connection->executeStatement($sql, $parameters, $types);
@@ -734,10 +724,10 @@ SQL;
             $table,
             $valueColumn,
             $idColumn,
-            \implode(' ', $cases),
+            implode(' ', $cases),
             $valueColumn,
             $idColumn,
-            \implode(', ', $where)
+            implode(', ', $where)
         );
 
         $this->connection->executeStatement($sql, $parameters);
@@ -774,12 +764,14 @@ SQL;
             if (!$this->fileExists($filePath)) {
                 ++$missing;
                 $this->warnIf(true, "Forum image not found for forum {$forumId}: {$filePath}");
+
                 continue;
             }
 
             $forum = $forumRepository->find($forumId);
             if (!$forum instanceof CForum || !$forum->hasResourceNode()) {
                 $this->warnIf(true, "Forum {$forumId} could not be reloaded for image migration.");
+
                 continue;
             }
 
@@ -852,12 +844,14 @@ SQL;
             if (!$this->fileExists($filePath)) {
                 ++$missing;
                 $this->warnIf(true, "Forum attachment {$attachmentId} not found: {$filePath}");
+
                 continue;
             }
 
             $post = $postRepository->find($postId);
             if (!$post instanceof CForumPost || !$post->hasResourceNode()) {
                 $this->warnIf(true, "Forum post {$postId} could not be reloaded for attachment {$attachmentId}.");
+
                 continue;
             }
 
@@ -900,17 +894,16 @@ SQL;
         ]);
     }
 
-
     /**
      * @return array<int, true>
      */
     private function loadMigratedAttachmentIds(): array
     {
         $rows = $this->connection->fetchFirstColumn(
-            "SELECT metadata
+            'SELECT metadata
              FROM resource_file
              WHERE metadata IS NOT NULL
-               AND metadata LIKE :marker",
+               AND metadata LIKE :marker',
             ['marker' => '%legacy_forum_attachment_iid%']
         );
 
@@ -951,7 +944,6 @@ SQL;
 
         return false !== $this->connection->fetchOne($sql, $parameters);
     }
-
 
     private function ensureItemPropertyMigrationIndex(): void
     {

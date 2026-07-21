@@ -3163,7 +3163,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'show_simple_session_info',
                     'title' => 'Show simple session info',
-                    'comment' => "Add the tutor and dates to the session subtitle in the session list.",
+                    'comment' => 'Add the tutor and dates to the session subtitle in the session list.',
                 ],
                 [
                     'name' => 'duplicate_specific_session_content_on_session_copy',

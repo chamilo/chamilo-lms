@@ -139,7 +139,6 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         )->fetchAllAssociative();
 
         foreach ($items as $item) {
-
             /** @var CDocument|null $document */
             $document = $documentRepo->find((int) $item['iid']);
             if (!$document) {

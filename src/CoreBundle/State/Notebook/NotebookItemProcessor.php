@@ -140,7 +140,6 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
         return $this->buildResponse($note);
     }
 
-
     private function sanitizeNotebookContent(string $content): string
     {
         if (class_exists(LegacySecurity::class)) {

@@ -13,6 +13,9 @@ use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+use const UPLOAD_ERR_INI_SIZE;
+use const UPLOAD_ERR_PARTIAL;
+
 final class ScormPackageImporterTest extends TestCase
 {
     public function testItReportsThePhpUploadLimitForOversizedPackages(): void
@@ -21,7 +24,7 @@ final class ScormPackageImporterTest extends TestCase
             '',
             'minerias.zip',
             'application/zip',
-            \UPLOAD_ERR_INI_SIZE,
+            UPLOAD_ERR_INI_SIZE,
         );
 
         $this->expectException(RuntimeException::class);
@@ -45,7 +48,7 @@ final class ScormPackageImporterTest extends TestCase
             '',
             'minerias.zip',
             'application/zip',
-            \UPLOAD_ERR_PARTIAL,
+            UPLOAD_ERR_PARTIAL,
         );
 
         $this->expectException(RuntimeException::class);

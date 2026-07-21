@@ -63,7 +63,7 @@ SQL, self::SELECT_BATCH_SIZE),
                 break;
             }
 
-            $lastIid = (int) $rows[\array_key_last($rows)]['iid'];
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
             foreach ($rows as $row) {
                 ++$seen;
@@ -74,6 +74,7 @@ SQL, self::SELECT_BATCH_SIZE),
                 if (!$this->fileExists($filePath)) {
                     ++$missing;
                     $this->warnIf(true, "Learning path image {$iid} not found: {$filePath}");
+
                     continue;
                 }
 

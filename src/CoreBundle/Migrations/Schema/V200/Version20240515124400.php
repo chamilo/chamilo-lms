@@ -113,6 +113,7 @@ final class Version20240515124400 extends AbstractMigrationChamilo
 
                 if (null === $resourceLinkId) {
                     ++$unmatched;
+
                     continue;
                 }
 
@@ -121,6 +122,7 @@ final class Version20240515124400 extends AbstractMigrationChamilo
             }
 
             $this->connection->beginTransaction();
+
             try {
                 $this->bulkUpdateResourceLinks($updates);
                 $this->connection->commit();
@@ -128,6 +130,7 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                 if ($this->connection->isTransactionActive()) {
                     $this->connection->rollBack();
                 }
+
                 throw $e;
             }
 

@@ -32,6 +32,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
     {
         /** @var SocialPostAttachmentRepository $repo */
         $repo = $this->container->get(SocialPostAttachmentRepository::class);
+
         /** @var SocialPostRepository $socialPostRepo */
         $socialPostRepo = $this->container->get(SocialPostRepository::class);
 
@@ -58,6 +59,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
             $message = $legacyAttachment->getMessage();
             if (!$message) {
                 ++$skipped;
+
                 continue;
             }
 
@@ -69,12 +71,14 @@ final class Version20231026231100 extends AbstractMigrationChamilo
 
             if (null === $foundFilePath || !$sender) {
                 ++$missing;
+
                 continue;
             }
 
             $socialPost = $socialPostRepo->find($messageId);
             if (!$socialPost) {
                 ++$skipped;
+
                 continue;
             }
 
@@ -85,6 +89,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
             ]);
             if ($existing instanceof SocialPostAttachment) {
                 ++$skipped;
+
                 continue;
             }
 
@@ -142,6 +147,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
         }
 
         $index = [];
+
         try {
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS)

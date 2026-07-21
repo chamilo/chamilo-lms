@@ -33,8 +33,10 @@ final class Version20250927180002 extends AbstractMigrationChamilo
     {
         /** @var PortfolioRepository $portfolioRepo */
         $portfolioRepo = $this->container->get(PortfolioRepository::class);
+
         /** @var PortfolioCommentRepository $commentRepo */
         $commentRepo = $this->container->get(PortfolioCommentRepository::class);
+
         /** @var UserRepository $userRepo */
         $userRepo = $this->container->get(UserRepository::class);
 
@@ -69,7 +71,7 @@ SQL,
                 break;
             }
 
-            $lastId = (int) $rows[\array_key_last($rows)]['id'];
+            $lastId = (int) $rows[array_key_last($rows)]['id'];
             $properties = $this->loadItemProperties('portfolio_comment', array_column($rows, 'id'));
 
             foreach ($rows as $row) {
@@ -88,6 +90,7 @@ SQL,
                     || $comment->hasResourceNode()
                 ) {
                     ++$skipped;
+
                     continue;
                 }
 

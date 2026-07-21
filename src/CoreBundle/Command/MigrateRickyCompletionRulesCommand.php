@@ -19,6 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+
 #[AsCommand(
     name: 'chamilo:migration:migrate-ricky-completion-rules',
     description: 'Persist Ricky Rescue legacy completion formulas as generic course completion rules.'
@@ -1323,8 +1326,9 @@ final class MigrateRickyCompletionRulesCommand extends Command
             ],
         ],
     ];
-    public function __construct(private readonly Connection $connection)
-    {
+    public function __construct(
+        private readonly Connection $connection
+    ) {
         parent::__construct();
     }
 
@@ -1366,7 +1370,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
             $rules = $this->selectRules($requestedCourseCode);
             $fieldId = $this->getOrCreateCourseRuleField($dryRun);
             $summary = [
-                'selected_rules' => count($rules),
+                'selected_rules' => \count($rules),
                 'configured' => 0,
                 'updated' => 0,
                 'already_configured' => 0,
@@ -1378,14 +1382,14 @@ final class MigrateRickyCompletionRulesCommand extends Command
             ];
 
             foreach ($rules as $key => $legacyRule) {
-                $courseCode = substr($key, strlen('course:'));
+                $courseCode = substr($key, \strlen('course:'));
                 $course = $this->connection->fetchAssociative(
                     'SELECT id, code, title FROM course WHERE code = :code LIMIT 1',
                     ['code' => $courseCode]
                 );
                 if (false === $course) {
                     ++$summary['missing_course'];
-                    $io->warning(sprintf('Course %s was not found; its completion rule was skipped.', $courseCode));
+                    $io->warning(\sprintf('Course %s was not found; its completion rule was skipped.', $courseCode));
 
                     continue;
                 }
@@ -1394,7 +1398,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
                 $expectedCourseId = (int) $legacyRule['course_id'];
                 if ($courseId !== $expectedCourseId) {
                     ++$summary['course_id_mismatch'];
-                    $io->warning(sprintf(
+                    $io->warning(\sprintf(
                         'Course %s has ID %d, but the verified audit expected ID %d; its completion rule was skipped.',
                         $courseCode,
                         $courseId,
@@ -1409,7 +1413,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
                 if ($unresolvedCount > 0) {
                     ++$summary['incomplete_rules'];
                     $summary['unresolved_exercises'] += $unresolvedCount;
-                    $io->warning(sprintf(
+                    $io->warning(\sprintf(
                         'Course %s has %d unresolved exercise mapping(s); the stored rule will fail closed.',
                         $courseCode,
                         $unresolvedCount
@@ -1427,9 +1431,9 @@ final class MigrateRickyCompletionRulesCommand extends Command
                         ['fieldId' => $fieldId, 'courseId' => $courseId]
                     );
 
-                if (count($existingValues) > 1) {
+                if (\count($existingValues) > 1) {
                     ++$summary['conflicting_existing'];
-                    $io->warning(sprintf(
+                    $io->warning(\sprintf(
                         'Course %s has multiple course completion rule values; no value was changed.',
                         $courseCode
                     ));
@@ -1437,11 +1441,11 @@ final class MigrateRickyCompletionRulesCommand extends Command
                     continue;
                 }
 
-                if (1 === count($existingValues)) {
+                if (1 === \count($existingValues)) {
                     $existingRule = $this->decodeRule((string) $existingValues[0]['field_value']);
                     if (null !== $existingRule && $existingRule == $rule) {
                         ++$summary['already_configured'];
-                        $io->writeln(sprintf('Already configured: %s', $courseCode));
+                        $io->writeln(\sprintf('Already configured: %s', $courseCode));
 
                         continue;
                     }
@@ -1451,7 +1455,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
                         : trim((string) ($existingRule['source'] ?? ''));
                     if (!$force || self::SOURCE !== $existingSource) {
                         ++$summary['conflicting_existing'];
-                        $io->warning(sprintf(
+                        $io->warning(\sprintf(
                             'Course %s already has a different completion rule; use --force only for values created by this command.',
                             $courseCode
                         ));
@@ -1461,7 +1465,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
 
                     if ($dryRun) {
                         ++$summary['updated'];
-                        $io->writeln(sprintf('Would update: %s', $courseCode));
+                        $io->writeln(\sprintf('Would update: %s', $courseCode));
 
                         continue;
                     }
@@ -1475,14 +1479,14 @@ final class MigrateRickyCompletionRulesCommand extends Command
                         ['id' => (int) $existingValues[0]['id']]
                     );
                     ++$summary['updated'];
-                    $io->writeln(sprintf('Updated: %s', $courseCode));
+                    $io->writeln(\sprintf('Updated: %s', $courseCode));
 
                     continue;
                 }
 
                 if ($dryRun) {
                     ++$summary['configured'];
-                    $io->writeln(sprintf('Would configure: %s', $courseCode));
+                    $io->writeln(\sprintf('Would configure: %s', $courseCode));
 
                     continue;
                 }
@@ -1502,7 +1506,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
                     'asset_id' => null,
                 ]);
                 ++$summary['configured'];
-                $io->writeln(sprintf('Configured: %s', $courseCode));
+                $io->writeln(\sprintf('Configured: %s', $courseCode));
             }
 
             $io->definitionList(
@@ -1524,7 +1528,8 @@ final class MigrateRickyCompletionRulesCommand extends Command
                 return Command::FAILURE;
             }
 
-            $io->success($dryRun
+            $io->success(
+                $dryRun
                 ? 'Ricky completion rule dry-run completed without changing data.'
                 : 'Ricky completion rules were persisted as generic course configuration.'
             );
@@ -1546,7 +1551,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
 
         foreach (['course', 'extra_field', 'extra_field_values'] as $tableName) {
             if (!\in_array($tableName, $tableNames, true)) {
-                throw new RuntimeException(sprintf('Required table %s was not found.', $tableName));
+                throw new RuntimeException(\sprintf('Required table %s was not found.', $tableName));
             }
         }
     }
@@ -1562,10 +1567,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
 
         $key = 'course:'.$requestedCourseCode;
         if (!isset(self::RULES[$key])) {
-            throw new RuntimeException(sprintf(
-                'No Ricky legacy completion rule is configured for course %s.',
-                $requestedCourseCode
-            ));
+            throw new RuntimeException(\sprintf('No Ricky legacy completion rule is configured for course %s.', $requestedCourseCode));
         }
 
         return [$key => self::RULES[$key]];
@@ -1698,7 +1700,9 @@ final class MigrateRickyCompletionRulesCommand extends Command
         ];
     }
 
-    /** @param array<string, mixed> $rule */
+    /**
+     * @param array<string, mixed> $rule
+     */
     private function encodeRule(array $rule): string
     {
         try {
@@ -1708,7 +1712,9 @@ final class MigrateRickyCompletionRulesCommand extends Command
         }
     }
 
-    /** @return array<string, mixed>|null */
+    /**
+     * @return array<string, mixed>|null
+     */
     private function decodeRule(string $rawRule): ?array
     {
         $rawRule = trim($rawRule);

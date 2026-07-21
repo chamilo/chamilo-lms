@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
-use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Doctrine\DBAL\Schema\Schema;
@@ -26,12 +26,13 @@ final class Version20241025120000 extends AbstractMigrationChamilo
     {
         /** @var CQuizQuestionRepository $quizQuestionRepo */
         $quizQuestionRepo = $this->container->get(CQuizQuestionRepository::class);
+
         /** @var CDocumentRepository $documentRepo */
         $documentRepo = $this->container->get(CDocumentRepository::class);
 
         $query = $this->entityManager->createQuery(
             'SELECT question
-             FROM Chamilo\\CourseBundle\\Entity\\CQuizQuestion question
+             FROM Chamilo\CourseBundle\Entity\CQuizQuestion question
              WHERE question.picture IS NOT NULL AND question.picture <> :empty
              ORDER BY question.iid'
         )->setParameter('empty', '');
@@ -53,6 +54,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
             $pictureId = trim((string) $question->getPicture());
             if ('' === $pictureId) {
                 $this->entityManager->detach($question);
+
                 continue;
             }
 
@@ -67,6 +69,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
                 if (!$document instanceof CDocument || null === $course) {
                     ++$missingDocuments;
                     $this->entityManager->detach($question);
+
                     continue;
                 }
 
@@ -81,6 +84,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
 
             if (!$question->hasResourceNode() || $question->getResourceNode()->hasResourceFile()) {
                 $this->entityManager->detach($question);
+
                 continue;
             }
 
@@ -88,6 +92,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
             if (!$document instanceof CDocument || !$document->hasResourceNode()) {
                 ++$missingDocuments;
                 $this->entityManager->detach($question);
+
                 continue;
             }
 
@@ -97,6 +102,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
                 if (null === $course) {
                     ++$missingDocuments;
                     $this->entityManager->detach($question);
+
                     continue;
                 }
 
@@ -106,6 +112,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
                 if (!$this->fileExists($filePath)) {
                     ++$missingFiles;
                     $this->entityManager->detach($question);
+
                     continue;
                 }
 
@@ -117,6 +124,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
             if (!$document->getResourceNode()->hasResourceFile()) {
                 ++$missingFiles;
                 $this->entityManager->detach($question);
+
                 continue;
             }
 
@@ -124,6 +132,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
             if (!$resourceFile) {
                 ++$missingFiles;
                 $this->entityManager->detach($question);
+
                 continue;
             }
 

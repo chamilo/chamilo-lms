@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Uid\Uuid;
 
@@ -86,7 +87,7 @@ SQL, self::SELECT_BATCH_SIZE),
                 break;
             }
 
-            $lastId = (int) $rows[\array_key_last($rows)]['id'];
+            $lastId = (int) $rows[array_key_last($rows)]['id'];
 
             foreach ($rows as $row) {
                 ++$seen;
@@ -104,6 +105,7 @@ SQL, self::SELECT_BATCH_SIZE),
                 if (!$this->fileExists($filePath)) {
                     ++$missing;
                     $this->warnIf(true, 'Exercise audio file not found: '.$filePath);
+
                     continue;
                 }
 
@@ -112,7 +114,8 @@ SQL, self::SELECT_BATCH_SIZE),
                 $asset = (new Asset())
                     ->setCategory(Asset::EXERCISE_ATTEMPT)
                     ->setTitle($fileName)
-                    ->setFile($uploadedFile);
+                    ->setFile($uploadedFile)
+                ;
 
                 $this->entityManager->persist($asset);
                 $queued[] = [
@@ -148,7 +151,7 @@ SQL, self::SELECT_BATCH_SIZE),
     /**
      * @param array<int, array{attempt_id: int, asset: Asset}> $queued
      */
-    private function flushAssetBatch(array $queued, \Doctrine\DBAL\Schema\Table $attemptFileTable): int
+    private function flushAssetBatch(array $queued, Table $attemptFileTable): int
     {
         $this->entityManager->flush();
         $now = gmdate('Y-m-d H:i:s');

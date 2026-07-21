@@ -18,6 +18,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 #[AsCommand(
     name: 'chamilo:migration:migrate-ricky-final-exam-access',
     description: 'Migrate Ricky final-exam access rules and repair verified legacy references.'
@@ -70,7 +74,6 @@ final class MigrateRickyFinalExamAccessCommand extends Command
         'NFPA2024' => ['course_duration_minutes' => 480, 'final_exam_minutes' => 240],
     ];
 
-
     /**
      * Legacy course-local exercise IDs used only to resolve ambiguous migrated
      * Final Exam resources. In Chamilo 1 these IDs were local to each course;
@@ -92,8 +95,9 @@ final class MigrateRickyFinalExamAccessCommand extends Command
         'AERIALDRIVEROPERATOR' => 512,
     ];
 
-    public function __construct(private readonly Connection $connection)
-    {
+    public function __construct(
+        private readonly Connection $connection
+    ) {
         parent::__construct();
     }
 
@@ -189,20 +193,17 @@ final class MigrateRickyFinalExamAccessCommand extends Command
         );
 
         foreach (['course', 'c_lp', 'c_lp_item', 'c_quiz', 'resource_link', 'extra_field', 'extra_field_values'] as $tableName) {
-            if (!in_array(strtolower($tableName), $tableNames, true)) {
+            if (!\in_array(strtolower($tableName), $tableNames, true)) {
                 throw new RuntimeException("Required table '{$tableName}' is missing.");
             }
         }
 
         if (!$this->hasRickyUserIdentifierField()) {
-            throw new RuntimeException(sprintf(
-                'Required Ricky user identifier field "%s" was not found.',
-                self::USER_IDENTIFIER_FIELD_VARIABLE
-            ));
+            throw new RuntimeException(\sprintf('Required Ricky user identifier field "%s" was not found.', self::USER_IDENTIFIER_FIELD_VARIABLE));
         }
 
-        $hasTracking = in_array('track_e_exercises', $tableNames, true);
-        $hasGradebookLinks = in_array('gradebook_link', $tableNames, true);
+        $hasTracking = \in_array('track_e_exercises', $tableNames, true);
+        $hasGradebookLinks = \in_array('gradebook_link', $tableNames, true);
         $fieldId = $this->getOrCreateExerciseRuleField();
 
         $summary = [
@@ -223,7 +224,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
             // PHP converts numeric-string array keys (for example, '2120') to integers.
             $courseCode = (string) $courseCode;
 
-            if ([] !== $requestedCodes && !in_array($courseCode, $requestedCodes, true)) {
+            if ([] !== $requestedCodes && !\in_array($courseCode, $requestedCodes, true)) {
                 continue;
             }
 
@@ -255,7 +256,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
                 $this->writeWarning($io, 'Final-exam rule skipped: learning-path item could not be resolved safely.', [
                     'course_id' => $courseId,
                     'course_code' => $courseCode,
-                    'candidates' => count($finalExamItems),
+                    'candidates' => \count($finalExamItems),
                 ]);
 
                 continue;
@@ -281,7 +282,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
                     'course_code' => $courseCode,
                     'learning_path_id' => (int) $finalExamItem['learning_path_id'],
                     'learning_path_item_id' => (int) $finalExamItem['learning_path_item_id'],
-                    'exercise_candidates' => count($exerciseCandidates),
+                    'exercise_candidates' => \count($exerciseCandidates),
                 ]);
 
                 continue;
@@ -322,7 +323,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
             );
 
             if ([] !== $existingValues) {
-                if (1 === count($existingValues) && $this->rulesMatch((string) $existingValues[0]['field_value'], $rule)) {
+                if (1 === \count($existingValues) && $this->rulesMatch((string) $existingValues[0]['field_value'], $rule)) {
                     ++$summary['already_configured'];
                 } else {
                     ++$summary['conflicting_existing'];
@@ -332,7 +333,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
                         'learning_path_id' => (int) $finalExamItem['learning_path_id'],
                         'learning_path_item_id' => (int) $finalExamItem['learning_path_item_id'],
                         'exercise_id' => $exerciseId,
-                        'existing_values' => count($existingValues),
+                        'existing_values' => \count($existingValues),
                     ]);
                 }
 
@@ -364,7 +365,6 @@ final class MigrateRickyFinalExamAccessCommand extends Command
 
         return $summary;
     }
-
 
     private function hasRickyUserIdentifierField(): bool
     {
@@ -419,8 +419,6 @@ final class MigrateRickyFinalExamAccessCommand extends Command
 
         return (int) $this->connection->lastInsertId();
     }
-
-
 
     /**
      * @return list<array<string, mixed>>
@@ -767,7 +765,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
         }
 
         foreach ($expectedRule as $key => $expectedValue) {
-            if (!array_key_exists($key, $existingRule) || $existingRule[$key] !== $expectedValue) {
+            if (!\array_key_exists($key, $existingRule) || $existingRule[$key] !== $expectedValue) {
                 return false;
             }
         }
@@ -780,7 +778,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
      */
     private function writeInfo(SymfonyStyle $io, string $message, array $context): void
     {
-        $io->writeln(sprintf('<info>%s</info> %s', $message, $this->formatContext($context)));
+        $io->writeln(\sprintf('<info>%s</info> %s', $message, $this->formatContext($context)));
     }
 
     /**
@@ -788,7 +786,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
      */
     private function writeWarning(SymfonyStyle $io, string $message, array $context): void
     {
-        $io->writeln(sprintf('<comment>%s</comment> %s', $message, $this->formatContext($context)));
+        $io->writeln(\sprintf('<comment>%s</comment> %s', $message, $this->formatContext($context)));
     }
 
     /**

@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
-use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use RuntimeException;
@@ -58,7 +57,7 @@ final class MigrateRickyCertificateFilesCommand extends Command
         $dryRun = (bool) $input->getOption('dry-run');
 
         if ($workerId < 0 || $workerId >= $workers) {
-            throw new RuntimeException(sprintf('worker-id must be between 0 and %d.', $workers - 1));
+            throw new RuntimeException(\sprintf('worker-id must be between 0 and %d.', $workers - 1));
         }
 
         $legacyRoot = trim((string) $input->getOption('legacy-root'));
@@ -68,15 +67,12 @@ final class MigrateRickyCertificateFilesCommand extends Command
 
         $resolvedLegacyRoot = realpath($legacyRoot);
         if (false === $resolvedLegacyRoot) {
-            throw new RuntimeException(sprintf('Project root does not exist: %s', $legacyRoot));
+            throw new RuntimeException(\sprintf('Project root does not exist: %s', $legacyRoot));
         }
         $legacyRoot = rtrim($resolvedLegacyRoot, '/');
 
         if (!is_dir($legacyRoot.'/app/upload/users')) {
-            throw new RuntimeException(sprintf(
-                'Legacy users directory was not found under %s/app/upload/users. Pass --legacy-root explicitly.',
-                $legacyRoot
-            ));
+            throw new RuntimeException(\sprintf('Legacy users directory was not found under %s/app/upload/users. Pass --legacy-root explicitly.', $legacyRoot));
         }
 
         $manager = $this->registry->getManagerForClass(GradebookCertificate::class);
@@ -103,12 +99,12 @@ SQL.$partitionSql,
         );
 
         if (0 === $total) {
-            $output->writeln(sprintf('<info>Worker %d/%d: no pending certificate files.</info>', $workerId, $workers));
+            $output->writeln(\sprintf('<info>Worker %d/%d: no pending certificate files.</info>', $workerId, $workers));
 
             return Command::SUCCESS;
         }
 
-        $output->writeln(sprintf(
+        $output->writeln(\sprintf(
             '<info>Worker %d/%d started: pending=%d batch_size=%d dry_run=%s legacy_root=%s</info>',
             $workerId,
             $workers,
@@ -183,6 +179,7 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
 
                 if ($certificate->getResourceNode()->hasResourceFile()) {
                     ++$alreadyDone;
+
                     continue;
                 }
 
@@ -192,11 +189,12 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
 
                 if ('' === $logicalFileName || '.' === $logicalFileName) {
                     ++$missingSource;
-                    $output->writeln(sprintf(
+                    $output->writeln(\sprintf(
                         '<comment>Worker %d: certificate %d skipped: empty logical filename.</comment>',
                         $workerId,
                         $certificateId
                     ));
+
                     continue;
                 }
 
@@ -209,30 +207,33 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
 
                 if ('ambiguous' === $source['status']) {
                     ++$ambiguousSource;
-                    $output->writeln(sprintf(
+                    $output->writeln(\sprintf(
                         '<comment>Worker %d: certificate %d skipped: ambiguous exact PersonalFile source for user %d and %s.</comment>',
                         $workerId,
                         $certificateId,
                         $userId,
                         $logicalFileName
                     ));
+
                     continue;
                 }
 
-                if ('found' !== $source['status'] || !is_string($source['content']) || '' === $source['content']) {
+                if ('found' !== $source['status'] || !\is_string($source['content']) || '' === $source['content']) {
                     ++$missingSource;
-                    $output->writeln(sprintf(
+                    $output->writeln(\sprintf(
                         '<comment>Worker %d: certificate %d skipped: source not found for user %d and %s.</comment>',
                         $workerId,
                         $certificateId,
                         $userId,
                         $logicalFileName
                     ));
+
                     continue;
                 }
 
                 if ($dryRun) {
                     ++$migrated;
+
                     continue;
                 }
 
@@ -254,7 +255,7 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
                     ++$migrated;
                 } catch (Throwable $exception) {
                     ++$errors;
-                    $output->writeln(sprintf(
+                    $output->writeln(\sprintf(
                         '<error>Worker %d: certificate %d preparation failed: %s</error>',
                         $workerId,
                         $certificateId,
@@ -268,7 +269,7 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
                     $manager->flush();
                 } catch (Throwable $exception) {
                     ++$errors;
-                    $output->writeln(sprintf(
+                    $output->writeln(\sprintf(
                         '<error>Worker %d: batch ending at certificate %d failed during flush: %s</error>',
                         $workerId,
                         $lastId,
@@ -285,7 +286,7 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
             $elapsed = max(1, (int) (microtime(true) - $startedAt));
             $rate = $seen / $elapsed;
             $remaining = max(0, $total - $seen);
-            $output->writeln(sprintf(
+            $output->writeln(\sprintf(
                 'Worker %d/%d progress: %d/%d (%.2f%%), migrated=%d already_done=%d missing_source=%d ambiguous_source=%d errors=%d rate=%.2f cert/s ETA=%ds last_id=%d.',
                 $workerId,
                 $workers,
@@ -303,7 +304,7 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
             ));
         }
 
-        $output->writeln(sprintf(
+        $output->writeln(\sprintf(
             '<info>Worker %d/%d completed: seen=%d/%d migrated=%d already_done=%d missing_source=%d ambiguous_source=%d errors=%d elapsed=%ds.</info>',
             $workerId,
             $workers,
@@ -386,7 +387,7 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
         string $logicalFileName,
         array $personalFiles
     ): array {
-        $legacyPath = sprintf(
+        $legacyPath = \sprintf(
             '%s/app/upload/users/%s/%d/certificate/%s',
             $legacyRoot,
             substr((string) $userId, 0, 1),
@@ -396,19 +397,19 @@ SQL.$partitionSql.' GROUP BY gc.id ORDER BY gc.id ASC LIMIT '.$currentLimit;
 
         if (is_file($legacyPath) && is_readable($legacyPath)) {
             $content = file_get_contents($legacyPath);
-            if (is_string($content) && '' !== $content) {
+            if (\is_string($content) && '' !== $content) {
                 return ['status' => 'found', 'content' => $content];
             }
         }
 
         $candidates = $personalFiles[$this->sourceKey($userId, $logicalFileName)] ?? [];
-        if (count($candidates) > 1) {
+        if (\count($candidates) > 1) {
             return ['status' => 'ambiguous', 'content' => null];
         }
-        if (1 === count($candidates)) {
+        if (1 === \count($candidates)) {
             try {
                 $content = $this->personalFileRepository->getResourceFileContent($candidates[0]);
-                if (is_string($content) && '' !== $content) {
+                if (\is_string($content) && '' !== $content) {
                     return ['status' => 'found', 'content' => $content];
                 }
             } catch (Throwable) {

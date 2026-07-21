@@ -33,7 +33,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
         $attachmentBatch = [];
 
         $query = $this->entityManager->createQuery(
-            'SELECT c FROM Chamilo\\CoreBundle\\Entity\\Course c'
+            'SELECT c FROM Chamilo\CoreBundle\Entity\Course c'
         );
 
         /** @var Course $course */
@@ -120,7 +120,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
                         .$itemData['path'],
                 ];
 
-                if (count($attachmentBatch) >= self::ATTACHMENT_BATCH_SIZE) {
+                if (\count($attachmentBatch) >= self::ATTACHMENT_BATCH_SIZE) {
                     $this->flushAttachmentBatch(
                         $attachmentBatch,
                         $announcementAttachmentRepo

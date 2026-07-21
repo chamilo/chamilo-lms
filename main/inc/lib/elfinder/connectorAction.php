@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Editor\Connector;
+use Chamilo\CoreBundle\Component\Editor\ElFinderConnector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 
 require_once __DIR__.'/../../global.inc.php';
@@ -38,5 +39,5 @@ $operations = $connector->getOperations();
 
 // Run elFinder
 $finder = new Finder($operations);
-$elFinderConnector = new \elFinderConnector($finder);
+$elFinderConnector = new ElFinderConnector($finder);
 $elFinderConnector->run();

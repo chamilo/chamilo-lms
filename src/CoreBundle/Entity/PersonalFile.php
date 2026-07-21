@@ -91,6 +91,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiResource(
     uriTemplate: '/documents/{document_id}/personal_files',
+    shortName: 'DocumentPersonalFile',
     operations: [
         new Post(
             openapi: new Operation(

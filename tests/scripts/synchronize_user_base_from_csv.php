@@ -48,7 +48,6 @@ $anonymizeUserAccountsDisbaledFor3Years = false;
 // Extra field to be emptied when user is anonymized to really make it anonymous, for example the sso id of the user
 // $extraFieldToEmpty = "cas_user";
 
-use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
@@ -93,15 +92,8 @@ if ($debug) {
     echo count($dbUsers) . " users with id > 1 found in internal database\n";
 }
 
-$adminRepo = $entityManager->getRepository(Admin::class);
-$firstAdmin = $adminRepo->createQueryBuilder('a')
-    ->setMaxResults(1)
-    ->getQuery()
-    ->getOneOrNullResult();
-
-if ($firstAdmin) {
-    $creator = $firstAdmin->getUser();
-} else {
+$creator = $userRepository->findOnePlatformAdmin();
+if (!$creator instanceof User) {
     die("No admin found in the database\n");
 }
 

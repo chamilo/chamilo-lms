@@ -748,9 +748,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TrackELogin::class, cascade: ['persist', 'remove'])]
     protected Collection $logins;
 
-    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Admin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    protected ?Admin $admin = null;
-
     #[ORM\Column(type: 'uuid', unique: true)]
     protected Uuid $uuid;
 
@@ -2241,37 +2238,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return '/img/user_default.svg';
     }
 
-    public function getAdmin(): ?Admin
-    {
-        return $this->admin;
-    }
-
-    public function setAdmin(?Admin $admin): self
-    {
-        $this->admin = $admin;
-
-        return $this;
-    }
-
     public function addUserAsAdmin(): self
     {
-        if (null === $this->admin) {
-            $admin = new Admin();
-            $admin->setUser($this);
-            $this->setAdmin($admin);
-            $this->addRole('ROLE_ADMIN');
-        }
-
-        return $this;
+        return $this->addRole('ROLE_ADMIN');
     }
 
     public function removeUserAsAdmin(): self
     {
-        $this->admin->setUser(null);
-        $this->admin = null;
-        $this->removeRole('ROLE_ADMIN');
-
-        return $this;
+        return $this->removeRole('ROLE_ADMIN');
     }
 
     public function getSessionsByStatusInCourseSubscription(int $status): ReadableCollection

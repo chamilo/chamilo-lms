@@ -340,13 +340,10 @@ class Login
             if (isset($_user['user_id']) && $_user['user_id'] && !api_is_anonymous()) {
                 // a uid is given (log in succeeded)
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
-                $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
                 $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-                $sql = "SELECT user.*, a.user_id is_admin, UNIX_TIMESTAMP(login.login_date) login_date
+                $sql = "SELECT user.*, UNIX_TIMESTAMP(login.login_date) login_date
                         FROM $user_table
-                        LEFT JOIN $admin_table a
-                        ON user.user_id = a.user_id
                         LEFT JOIN $track_e_login login
                         ON user.user_id  = login.login_user_id
                         WHERE user.user_id = '".$_user['user_id']."'
@@ -373,7 +370,7 @@ class Login
                     $_user['theme'] = $userEntity->getTheme();
                     $_user['status'] = $userEntity->getStatus();
 
-                    $is_platformAdmin = (bool) (!is_null($uData['is_admin']));
+                    $is_platformAdmin = $userEntity->isAdmin() || $userEntity->isSuperAdmin();
                     $is_allowedCreateCourse = (bool) ((1 == $userEntity->getStatus()) or (api_get_setting('drhCourseManagerRights') and 4 == $userEntity->getStatus()));
                     ConditionalLogin::check_conditions($uData);
 

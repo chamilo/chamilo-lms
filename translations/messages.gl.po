@@ -37405,9 +37405,6 @@ msgstr "A configuración do remoto de Git (.git/config) cambiou. Verifique se er
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "O escaneo detívose prematuramente porque non se puido ler un subdirectorio (comprobe os permisos dos ficheiros). Os resultados a continuación poden ser parciais."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Demasiados cambios para listar en total; só se mostran as primeiras entradas de cada categoría a continuación. Consulte o rexistro CEF para a lista completa."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ficheiro(s) non puideron lerse (permisos) e omitíronse."
 
@@ -37491,4 +37488,7 @@ msgstr "Aínda non se rexistrou ningunha alerta."
 
 msgid "Git remote changed"
 msgstr "Cambiou o remoto de Git"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Demasiados cambios para listar en detalle; só se amosan as primeiras entradas de cada categoría. Consulte o %link_start%rexistro CEF%link_end% para ver a lista completa."
 

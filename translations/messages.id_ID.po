@@ -37390,9 +37390,6 @@ msgstr "Konfigurasi jarak jauh Git (.git/config) telah berubah. Verifikasi bahwa
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Pemindaian berhenti lebih awal karena subdirektori tidak dapat dibaca (periksa izin berkas). Hasil di bawah mungkin tidak lengkap."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Terlalu banyak perubahan untuk dicantumkan secara lengkap; hanya entri pertama dari setiap kategori yang ditampilkan di bawah. Lihat log CEF untuk daftar lengkap."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% berkas tidak dapat dibaca (izin) dan dilewati."
 
@@ -37476,4 +37473,7 @@ msgstr "Belum ada peringatan yang tercatat."
 
 msgid "Git remote changed"
 msgstr "Git jarak jauh berubah"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Terlalu banyak perubahan untuk ditampilkan secara lengkap; hanya entri pertama dari setiap kategori yang ditampilkan di bawah ini. Lihat %link_start%log CEF%link_end% untuk daftar lengkap."
 

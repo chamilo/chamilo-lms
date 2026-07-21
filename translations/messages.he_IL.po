@@ -37403,9 +37403,6 @@ msgstr "הגדרת ה-Git המרוחקת (.git\/config) השתנתה. יש לו�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "הסריקה הופסקה מוקדם מכיוון שלא ניתן לקרוא תיקיית משנה (בדוק הרשאות קבצים). התוצאות להלן עשויות להיות חלקיות."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "יותר מדי שינויים להצגה מלאה; מוצגות להלן רק הרשומות הראשונות בכל קטגוריה. ראה את יומן ה-CEF לרשימה המלאה."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% קובץ/ים לא ניתן/ו לקריאה (הרשאות) ולכן דולג/ו."
 
@@ -37489,4 +37486,7 @@ msgstr "טרם נרשמה התראה."
 
 msgid "Git remote changed"
 msgstr "ה־Git המרוחק שונה"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "יותר מדי שינויים להצגה מלאה; מוצגות להלן רק הרשומות הראשונות מכל קטגוריה. ראו את %link_start%יומן CEF%link_end% לרשימה המלאה."
 

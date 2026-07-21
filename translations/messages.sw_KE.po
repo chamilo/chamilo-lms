@@ -37386,9 +37386,6 @@ msgstr "Mipangilio ya mbali ya Git (.git/config) imebadilika. Thibitisha ikiwa h
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Uchanganuzi ulisimama mapema kwa sababu saraka ndogo haikuweza kusomwa (angalia ruhusa za faili). Matokeo hapa chini yanaweza kuwa sehemu tu."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Mabadiliko mengi sana kuorodhesha kwa ukamilifu; maingizo ya kwanza tu ya kila kategoria yanaonyeshwa hapa chini. Angalia kumbukumbu ya CEF kwa orodha kamili."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "Faili %count% hazikuweza kusomwa (ruhusa) na zilirukwa."
 
@@ -37472,4 +37469,7 @@ msgstr "Hakuna arifa iliyorekodiwa bado."
 
 msgid "Git remote changed"
 msgstr "Git remote imebadilika"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Mabadiliko mengi sana kuorodheshwa kikamilifu; maingizo ya kwanza tu ya kila kategoria yanaonyeshwa hapa chini. Angalia %link_start%logi ya CEF%link_end% kwa orodha kamili."
 

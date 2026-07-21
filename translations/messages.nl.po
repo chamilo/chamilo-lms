@@ -39470,9 +39470,6 @@ msgstr "De Git-remoteconfiguratie (.git/config) is gewijzigd. Controleer of dit 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "De scan is vroegtijdig gestopt omdat een subdirectory niet kon worden gelezen (controleer bestandsrechten). Resultaten hieronder kunnen onvolledig zijn."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Te veel wijzigingen om volledig weer te geven; alleen de eerste vermeldingen van elke categorie worden hieronder getoond. Zie het CEF-log voor de volledige lijst."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% bestand(en) kon(den) niet worden gelezen (rechten) en werd(en) overgeslagen."
 
@@ -39556,4 +39553,7 @@ msgstr "Er is nog geen waarschuwing vastgelegd."
 
 msgid "Git remote changed"
 msgstr "Git-remote gewijzigd"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Te veel wijzigingen om volledig weer te geven; alleen de eerste items van elke categorie worden hieronder getoond. Zie het %link_start%CEF-log%link_end% voor de volledige lijst."
 

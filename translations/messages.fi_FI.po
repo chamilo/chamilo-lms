@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -37392,9 +37392,6 @@ msgstr "Git-etäasetukset (.git\/config) ovat muuttuneet. Varmista, että muutos
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skannaus keskeytyi, koska alihakemistoa ei voitu lukea (tarkista tiedostojen käyttöoikeudet). Alla olevat tulokset voivat olla osittaisia."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Liian monta muutosta lueteltavaksi kokonaisuudessaan; vain kunkin luokan ensimmäiset merkinnät näytetään alla. Katso täydellinen luettelo CEF-lokista."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% tiedosto(a) ei voitu lukea (käyttöoikeudet) ja ne ohitettiin."
 
@@ -37478,4 +37475,7 @@ msgstr "Hälytyksiä ei ole vielä tallennettu."
 
 msgid "Git remote changed"
 msgstr "Git-etäyhteys muuttunut"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Liian monta muutosta lueteltavaksi kokonaisuudessaan; vain kunkin kategorian ensimmäiset merkinnät näytetään alla. Katso täydellinen luettelo %link_start%CEF-lokista%link_end%."
 

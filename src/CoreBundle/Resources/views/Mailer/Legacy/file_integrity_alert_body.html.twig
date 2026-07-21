@@ -16,7 +16,10 @@
 {% endif %}
 
 {% if truncated %}
-    <p>{{ 'Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list.'|trans }}</p>
+    <p>{{ 'Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list.'|trans({
+        '%link_start%': '<a href="' ~ cef_log_url ~ '">',
+        '%link_end%': '</a>',
+    })|raw }}</p>
 {% endif %}
 
 {% if added|length %}

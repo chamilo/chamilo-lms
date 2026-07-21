@@ -37386,9 +37386,6 @@ msgstr "The Git remote configuration (.git/config) has changed. Verify this was 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skanningin steðgaði fyrr, tí ein undirmappa kundi ikki lesast (kanna fíluheimildir). Niðurstøðurnar niðanfyri kunnu vera ófullfíggjaðar."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Ov nógvar broytingar til at vísa allar; bert tær fyrstu í hvørjum bólki eru vísdar niðanfyri. Sí CEF-loggin fyri fulla listan."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fíla(r) kundu ikki lesast (heimildir) og vórðu hoppaðar yvir."
 
@@ -37472,4 +37469,7 @@ msgstr "Ongin ávaring er skrásett enn."
 
 msgid "Git remote changed"
 msgstr "Git-fjarstýring broytt"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr ""
 

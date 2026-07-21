@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Saygılarımızla"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formül örneği: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formül örneği: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Değişken aralıkları"
@@ -37392,9 +37392,6 @@ msgstr "Git uzak yapılandırması (.git/config) değişti. Bunun beklenen bir d
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Tarama erken durdu çünkü bir alt dizin okunamadı (dosya izinlerini kontrol edin). Aşağıdaki sonuçlar kısmi olabilir."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Listelenecek çok fazla değişiklik var; her kategorinin yalnızca ilk girdileri aşağıda gösteriliyor. Tam liste için CEF günlüğüne bakın."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% dosya okunamadı (izinler) ve atlandı."
 
@@ -37478,4 +37475,7 @@ msgstr "Henüz hiçbir uyarı kaydedilmedi."
 
 msgid "Git remote changed"
 msgstr "Git uzak deposu değiştirildi"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Listelenecek çok fazla değişiklik var; her kategorinin yalnızca ilk girdileri aşağıda gösterilmektedir. Tam liste için %link_start%CEF günlüğü%link_end% sayfasına bakın."
 

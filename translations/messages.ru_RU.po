@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "С уважением"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример формулы: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример формулы: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазоны переменных"
@@ -37393,9 +37393,6 @@ msgstr "Конфигурация удалённого репозитория Git
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Сканирование завершилось досрочно, так как не удалось прочитать подкаталог (проверьте права доступа к файлам). Результаты ниже могут быть неполными."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Слишком много изменений для полного списка; ниже показаны только первые записи каждой категории. Полный список см. в журнале CEF."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% файл(ов) не удалось прочитать (права доступа) и они были пропущены."
 
@@ -37479,4 +37476,7 @@ msgstr "Оповещений ещё не записано."
 
 msgid "Git remote changed"
 msgstr "Удалённый репозиторий Git изменён"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Слишком много изменений для полного отображения; ниже показаны только первые записи каждой категории. Полный список см. в %link_start%журнале CEF%link_end%."
 

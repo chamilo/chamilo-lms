@@ -37391,9 +37391,6 @@ msgstr "Konfiguracija Git udaljenog repozitorija (.git/config) promijenjena je. 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skeniranje je prijevremeno zaustavljeno jer se podmapa nije mogla pročitati (provjerite dozvole datoteka). Rezultati u nastavku mogu biti djelomični."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Previše promjena za potpuni prikaz; u nastavku su prikazani samo prvi unosi svake kategorije. Potpuni popis potražite u CEF zapisniku."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% datoteka nije se moglo pročitati (dozvole) i preskočene su."
 
@@ -37477,4 +37474,7 @@ msgstr "Još nije zabilježeno nijedno upozorenje."
 
 msgid "Git remote changed"
 msgstr "Git udaljeni repozitorij promijenjen"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Previše promjena za potpuni prikaz; prikazuju se samo prvi unosi svake kategorije. Pogledajte %link_start%CEF zapis%link_end% za potpuni popis."
 

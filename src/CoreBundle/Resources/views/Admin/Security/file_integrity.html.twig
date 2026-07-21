@@ -20,7 +20,7 @@
 
         {% if is_snoozed %}
             <div class="rounded-2xl border border-warning bg-support-2 p-4 text-gray-90">
-                {{ 'Alerting is currently paused for maintenance. It will automatically resume at %date%.'|trans({'%date%': snooze_until|date('Y-m-d H:i:s')}) }}
+                {{ 'Alerting is currently paused for maintenance. It will automatically resume at %date%.'|trans({'%date%': snooze_until|api_get_local_time}) }}
             </div>
         {% endif %}
 
@@ -28,7 +28,7 @@
             <div class="rounded-2xl border {{ run_status.alive ? 'border-gray-25' : 'border-warning' }} bg-support-2 p-4 text-gray-90">
                 {% if run_status.alive %}
                     <p class="m-0 font-semibold">
-                        {{ 'A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress.'|trans({'%date%': run_status.startedAt|date('Y-m-d H:i:s')}) }}
+                        {{ 'A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress.'|trans({'%date%': run_status.startedAt|api_get_local_time}) }}
                     </p>
                     {% if run_status.current %}
                         <p class="m-0 mt-2 text-body-2">
@@ -37,7 +37,7 @@
                     {% endif %}
                 {% else %}
                     <p class="m-0 font-semibold">
-                        {{ 'A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one.'|trans({'%date%': run_status.startedAt|date('Y-m-d H:i:s')}) }}
+                        {{ 'A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one.'|trans({'%date%': run_status.startedAt|api_get_local_time}) }}
                     </p>
                 {% endif %}
 
@@ -71,7 +71,7 @@
                 </p>
             {% else %}
                 <p class="m-0 text-body-2 text-gray-50">
-                    {{ 'Last scan'|trans }}: <strong>{{ report.at|date('Y-m-d H:i:s') }}</strong>
+                    {{ 'Last scan'|trans }}: <strong>{{ report.at|api_get_local_time }}</strong>
                     &middot; {{ 'Files scanned'|trans }}: <strong>{{ report.scannedCount }}</strong>
                 </p>
 
@@ -99,7 +99,10 @@
 
                 {% if report.truncated %}
                     <div class="mt-3 rounded-2xl border border-warning bg-support-2 p-3 text-gray-90">
-                        {{ 'Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list.'|trans }}
+                        {{ 'Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list.'|trans({
+                            '%link_start%': '<a href="' ~ cef_log_url ~ '" class="underline text-primary">',
+                            '%link_end%': '</a>',
+                        })|raw }}
                     </div>
                 {% endif %}
 
@@ -162,7 +165,7 @@
                     {% for entry in history %}
                         <details class="rounded-xl border border-gray-25 p-3">
                             <summary class="cursor-pointer text-body-2 text-gray-90">
-                                <strong>{{ entry.at|date('Y-m-d H:i:s') }}</strong>
+                                <strong>{{ entry.at|api_get_local_time }}</strong>
                                 &middot; {{ 'Added'|trans }}: {{ entry.addedCount }}
                                 &middot; {{ 'Modified'|trans }}: {{ entry.modifiedCount }}
                                 &middot; {{ 'Deleted'|trans }}: {{ entry.deletedCount }}

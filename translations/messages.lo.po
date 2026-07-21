@@ -37667,67 +37667,67 @@ msgid "This learning path is not available for your user at this time."
 msgstr ""
 
 msgid "StartDateMustBeBeforeTheEndDate"
-msgstr ""
+msgstr "ວັນທີເລີ່ມຕ້ອງກ່ອນວັນທີສິ້ນສຸດ"
 
 msgid "Next learning path"
-msgstr ""
+msgstr "ເສັ້ນທາງການຮຽນຕໍ່ໄປ"
 
 msgid "Select the learning path that will be available after this one."
-msgstr ""
+msgstr "ເລືອກເສັ້ນທາງການຮຽນທີ່ຈະມີໃຫ້ໃຊ້ຫຼັງຈາກນີ້."
 
 msgid "Create another learning path in this course to enable learning path flow."
-msgstr ""
+msgstr "ສ້າງເສັ້ນທາງການຮຽນອື່ນໃນຫຼັກສູດນີ້ເພື່ອເປີດໃຊ້ການໄຫຼຂອງເສັ້ນທາງການຮຽນ."
 
 msgid "Available from %s"
-msgstr ""
+msgstr "ມີໃຫ້ໃຊ້ຕັ້ງແຕ່ %s"
 
 msgid "Available until %s"
-msgstr ""
+msgstr "ມີໃຫ້ໃຊ້ຈົນເຖິງ %s"
 
 msgid "Statistics reset date"
-msgstr ""
+msgstr "ວັນທີຣີເຊັດສະຖິຕິ"
 
 msgid "Last 24 hours"
-msgstr ""
+msgstr "24 ຊົ່ວໂມງທີ່ຜ່ານມາ"
 
 msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
-msgstr ""
+msgstr "ວັນທີຣີເຊັດນີ້ຖືກໃຊ້ເປັນວັນທີອ້າງອີງສຳລັບບົດລາຍງານ. ມັນບໍ່ລຶບຂໍ້ມູນການຕິດຕາມປະຫວັດ."
 
 msgid "Since reset date"
-msgstr ""
+msgstr "ນັບຕັ້ງແຕ່ວັນທີຣີເຊັດ"
 
 msgid "Users connected in the last 24 hours"
-msgstr ""
+msgstr "ຜູ້ໃຊ້ທີ່ເຊື່ອມຕໍ່ໃນ 24 ຊົ່ວໂມງທີ່ຜ່ານມາ"
 
 msgid "Learners with at least one course access during the last 24 hours."
-msgstr ""
+msgstr "ນັກຮຽນທີ່ມີການເຂົ້າເຖິງຫຼັກສູດຢ່າງໜ້ອຍໜຶ່ງຄັ້ງໃນ 24 ຊົ່ວໂມງທີ່ຜ່ານມາ."
 
 msgid "Users connected in the last week"
-msgstr ""
+msgstr "ຜູ້ໃຊ້ທີ່ເຊື່ອມຕໍ່ໃນອາທິດທີ່ຜ່ານມາ"
 
 msgid "Learners with at least one course access during the last 7 days."
-msgstr ""
+msgstr "ນັກຮຽນທີ່ມີການເຂົ້າເຖິງຫຼັກສູດຢ່າງໜ້ອຍໜຶ່ງຄັ້ງໃນ 7 ມື້ທີ່ຜ່ານມາ."
 
 msgid "Users connected in the last month"
-msgstr ""
+msgstr "ຜູ້ໃຊ້ທີ່ເຊື່ອມຕໍ່ໃນເດືອນທີ່ຜ່ານມາ"
 
 msgid "Learners with at least one course access during the last 30 days."
-msgstr ""
+msgstr "ນັກຮຽນທີ່ມີການເຂົ້າເຖິງຫຼັກສູດຢ່າງໜ້ອຍໜຶ່ງຄັ້ງໃນ 30 ມື້ທີ່ຜ່ານມາ."
 
 msgid "Not recently connected users"
-msgstr ""
+msgstr "ຜູ້ໃຊ້ທີ່ບໍ່ໄດ້ເຊື່ອມຕໍ່ມາໃກ້ໆ"
 
 msgid "Learners without course access since %s."
-msgstr ""
+msgstr "ນັກຮຽນທີ່ບໍ່ມີການເຂົ້າເຖິງຫຼັກສູດນັບຕັ້ງແຕ່ %s."
 
 msgid "Recently used resources"
-msgstr ""
+msgstr "ຊັບພະຍາກອນທີ່ໃຊ້ມາໃກ້ໆ"
 
 msgid "Course tools/resources used since %s."
-msgstr ""
+msgstr "ເຄື່ອງມື/ຊັບພະຍາກອນຂອງຫຼັກສູດທີ່ໃຊ້ນັບຕັ້ງແຕ່ %s."
 
 msgid "%s %% of learners"
-msgstr ""
+msgstr "%s %% ຂອງນັກຮຽນ"
 
 msgid "Connections"
 msgstr "ການເຊື່ອມຕໍ່"
@@ -37880,91 +37880,91 @@ msgid "Apply the first row values"
 msgstr "ນຳໃຊ້ຄ່າແຖວທຳອິດ"
 
 msgid "Create groups manually or generate them from the classes subscribed to this course."
-msgstr ""
+msgstr "ສ້າງກຸ່ມດ້ວຍຕົນເອງ ຫຼື ສ້າງຈາກຫ້ອງຮຽນທີ່ລົງທະບຽນໃນຫຼັກສູດນີ້."
 
 msgid "Create manual groups"
-msgstr ""
+msgstr "ສ້າງກຸ່ມດ້ວຍຕົນເອງ"
 
 msgid "Use this form when you want to create empty course groups manually."
-msgstr ""
+msgstr "ໃຊ້ແບບຟອມນີ້ເມື່ອທ່ານຕ້ອງການສ້າງກຸ່ມຫຼັກສູດທີ່ຫວ່າງເປົ່າດ້ວຍຕົນເອງ."
 
 msgid "Configure manual groups"
-msgstr ""
+msgstr "ຕັ້ງຄ່າກຸ່ມດ້ວຍຕົນເອງ"
 
 msgid "Create groups from subscribed classes"
-msgstr ""
+msgstr "ສ້າງກຸ່ມຈາກຫ້ອງຮຽນທີ່ລົງທະບຽນ"
 
 msgid "Use this form when you want to create one course group for each selected class."
-msgstr ""
+msgstr "ໃຊ້ແບບຟອມນີ້ເມື່ອທ່ານຕ້ອງການສ້າງກຸ່ມຫຼັກສູດໜຶ່ງກຸ່ມສຳລັບແຕ່ລະຫ້ອງຮຽນທີ່ເລືອກ."
 
 msgid "Keep created groups linked to their source classes"
-msgstr ""
+msgstr "ຮັກສາກຸ່ມທີ່ສ້າງໄວ້ເຊື່ອມໂຍງກັບຫ້ອງຮຽນຕົ້ນທາງ"
 
 msgid "Create groups from selected classes"
-msgstr ""
+msgstr "ສ້າງກຸ່ມຈາກຫ້ອງຮຽນທີ່ເລືອກ"
 
 msgid "You must be logged in to access this page."
-msgstr ""
+msgstr "ທ່ານຕ້ອງເຂົ້າສູ່ລະບົບເພື່ອເຂົ້າເຖິງໜ້ານີ້."
 
 msgid "Invalid user"
-msgstr ""
+msgstr "ຜູ້ໃຊ້ບໍ່ຖືກຕ້ອງ"
 
 msgid "UseCourseCustomCertificate"
-msgstr ""
+msgstr "UseCourseCustomCertificate"
 
 msgid "UseDefaultCustomCertificate"
-msgstr ""
+msgstr "UseDefaultCustomCertificate"
 
 msgid "CertificateSetting"
-msgstr ""
+msgstr "CertificateSetting"
 
 msgid "SelectOneOptionBeforeOpeningEditor"
-msgstr ""
+msgstr "SelectOneOptionBeforeOpeningEditor"
 
 msgid "ChooseCustomCertificateModeHelp"
-msgstr ""
+msgstr "ChooseCustomCertificateModeHelp"
 
 msgid "CertificateMode"
-msgstr ""
+msgstr "CertificateMode"
 
 msgid "Enable student to validate own attendance"
-msgstr ""
+msgstr "ເປີດໃຫ້ນັກຮຽນຢັ້ງຢືນການເຂົ້າຮຽນຂອງຕົນເອງ"
 
 msgid "Course block"
-msgstr ""
+msgstr "ບລັອກຫຼັກສູດ"
 
 msgid "Add custom content blocks to course footer regions."
-msgstr ""
+msgstr "ເພີ່ມບລັອກເນື້ອຫາແບບກຳນົດເອງໃນພື້ນທີ່ຕີນຫຼັກສູດ."
 
 msgid "course_block_pre_footer"
-msgstr ""
+msgstr "course_block_pre_footer"
 
 msgid "Before footer"
-msgstr ""
+msgstr "ກ່ອນຕີນ"
 
 msgid "course_block_footer_left"
-msgstr ""
+msgstr "course_block_footer_left"
 
 msgid "Footer left"
-msgstr ""
+msgstr "ຕີນຊ້າຍ"
 
 msgid "course_block_footer_center"
-msgstr ""
+msgstr "course_block_footer_center"
 
 msgid "Footer center"
-msgstr ""
+msgstr "ຕີນກາງ"
 
 msgid "course_block_footer_right"
-msgstr ""
+msgstr "course_block_footer_right"
 
 msgid "Footer right"
-msgstr ""
+msgstr "ຕີນຂວາ"
 
 msgid "SetNotification"
-msgstr ""
+msgstr "SetNotification"
 
 msgid "CourseLegal"
-msgstr ""
+msgstr "CourseLegal"
 
 msgid "Certificates search is not available"
 msgstr ""
@@ -39736,9 +39736,6 @@ msgstr ""
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr ""
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr ""
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr ""
 
@@ -39821,5 +39818,8 @@ msgid "No alert has been recorded yet."
 msgstr ""
 
 msgid "Git remote changed"
+msgstr ""
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
 msgstr ""
 

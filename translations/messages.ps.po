@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوښۍ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -37386,9 +37386,6 @@ msgstr "د Git لرې ترتیب (.git/config) بدل شوی دی. تصدیق ک
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "سکین ژر ودرېد ځکه چې یو فرعي لارښود نه شو لوستل کېدای (د فایل اجازې وګورئ). لاندې پایلې ممکن نيمګړې وي."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "ډېر بدلونونه دي چې په بشپړه توګه لیست شي؛ یوازې د هرې کټګورۍ لومړۍ ننوتنې لاندې ښودل شوې دي. د بشپړ لیست لپاره CEF لاګ وګورئ."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% فایل(ونه) نه شو لوستل کېدای (اجازې) او پریښودل شول."
 
@@ -37472,4 +37469,7 @@ msgstr "تر اوسه هیڅ خبرتیا ثبت شوې نه ده."
 
 msgid "Git remote changed"
 msgstr "Git ریموټ بدل شو"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "د لیست کولو لپاره ډېر بدلونونه؛ یوازې د هرې کټګورۍ لومړني ننوتنې لاندې ښودل شوي. بشپړ لیست لپاره %link_start%CEF لاگ%link_end% وګورئ."
 

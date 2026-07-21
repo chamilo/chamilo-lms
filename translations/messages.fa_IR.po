@@ -37390,9 +37390,6 @@ msgstr "پیکربندی ریموت گیت (.git\/config) تغییر کرده ا
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "اسکن زودتر متوقف شد زیرا یک زیرشاخه قابل خواندن نبود (مجوزهای فایل را بررسی کنید). نتایج زیر ممکن است ناقص باشد."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "تغییرات بیش از حد برای فهرست کامل؛ فقط اولین ورودی‌های هر دسته در زیر نمایش داده می‌شود. فهرست کامل را در لاگ CEF ببینید."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% فایل(ها) به دلیل مجوزها قابل خواندن نبودند و نادیده گرفته شدند."
 
@@ -37476,4 +37473,7 @@ msgstr "هنوز هیچ هشداری ثبت نشده است."
 
 msgid "Git remote changed"
 msgstr "ریموت گیت تغییر کرده است"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "تغییرات بسیار زیاد برای فهرست کامل؛ تنها اولین ورودی‌های هر دسته در زیر نمایش داده شده‌اند. برای فهرست کامل به %link_start%گزارش CEF%link_end% مراجعه کنید."
 

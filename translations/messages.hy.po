@@ -37390,9 +37390,6 @@ msgstr "Git-ի հեռակա կազմաձևումը (.git/config) փոխվել է
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Սկանավորումը վաղաժամկետ դադարեցվեց, քանի որ ենթաթղթապանակը հնարավոր չէր կարդալ (ստուգեք ֆայլերի թույլտվությունները)։ Ստորև բերված արդյունքները կարող են մասնակի լինել։"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Չափազանց շատ փոփոխություններ՝ ամբողջությամբ ցուցադրելու համար; ստորև ցուցադրվում են յուրաքանչյուր կատեգորիայի միայն առաջին գրառումները։ Ամբողջական ցանկը տեսեք CEF մատյանում։"
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ֆայլ(եր) հնարավոր չէր կարդալ (թույլտվություններ) և բաց թողնվեցին։"
 
@@ -37409,71 +37406,74 @@ msgid "Trust the current file tree as the new baseline"
 msgstr "Վստահել ընթացիկ ֆայլային ծառը որպես նոր ելակետ"
 
 msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
-msgstr ""
+msgstr "Սա կվստահի բոլոր ընթացիկ ֆայլերը որպես ճիշտ, ներառյալ չստուգված փոփոխությունները։ Շարունակե՞լ"
 
 msgid "Establish new baseline"
-msgstr ""
+msgstr "Ստեղծել նոր ելակետ"
 
 msgid "Schedule the scan from a system crontab, for example"
-msgstr ""
+msgstr "Պլանավորել սկանավորումը համակարգային crontab-ից, օրինակ"
 
 msgid "File integrity alert on %platform%"
-msgstr ""
+msgstr "Ֆայլերի ամբողջականության ահազանգ %platform%-ում"
 
 msgid "A file integrity scan detected changes on the platform:"
-msgstr ""
+msgstr "Ֆայլերի ամբողջականության սկանավորումը հայտնաբերել է փոփոխություններ հարթակում՝"
 
 msgid "Added files"
-msgstr ""
+msgstr "Ավելացված ֆայլեր"
 
 msgid "Modified files"
-msgstr ""
+msgstr "Փոփոխված ֆայլեր"
 
 msgid "Deleted files"
-msgstr ""
+msgstr "Ջնջված ֆայլեր"
 
 msgid "Review the full report from Administration > Security > File integrity."
-msgstr ""
+msgstr "Վերանայեք ամբողջ զեկույցը Վարչակազմ > Անվտանգություն > Ֆայլերի ամբողջականություն բաժնում։"
 
 msgid "Password to confirm pausing alerts"
-msgstr ""
+msgstr "Գաղտնաբառ ահազանգերի դադարեցումը հաստատելու համար"
 
 msgid "Password to confirm the new baseline"
-msgstr ""
+msgstr "Գաղտնաբառ նոր ելակետը հաստատելու համար"
 
 msgid "A scan is already running. Please wait for it to finish before starting another one."
-msgstr ""
+msgstr "Սկանավորում արդեն ընթացքի մեջ է։ Խնդրում ենք սպասել դրա ավարտին՝ նախքան նորը սկսելը։"
 
 msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
-msgstr ""
+msgstr "Սկանավորումը ընթացքի մեջ է (սկսվել է %date%-ին)։ Ամբողջական սկանավորումը կարող է տևել մի քանի րոպե; այս էջը կարող է անվտանգ վերաբեռնվել՝ առաջընթացը ստուգելու համար։"
 
 msgid "Currently processing"
-msgstr ""
+msgstr "Ներկայումս մշակվում է"
 
 msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
-msgstr ""
+msgstr "Նախորդ սկանավորումը (սկսվել է %date%-ին) ընդհատվել է առանց ավարտվելու — գործընթացն այլևս չի աշխատում։ Դուք կարող եք անվտանգ սկսել նորը։"
 
 msgid "files"
-msgstr ""
+msgstr "ֆայլեր"
 
 msgid "Permissions changed"
-msgstr ""
+msgstr "Թույլտվությունները փոխվել են"
 
 msgid "Files with changed permissions"
-msgstr ""
+msgstr "Փոխված թույլտվություններով ֆայլեր"
 
 msgid "Alert history"
-msgstr ""
+msgstr "Ահազանգերի պատմություն"
 
 msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
-msgstr ""
+msgstr "Յուրաքանչյուր սկանավորում, որը հայտնաբերել է ինչ-որ բան, պահպանվում է նույնիսկ շեղման լուծումից կամ նոր ելակետի ստեղծումից հետո — ի տարբերություն վերևի զեկույցի, մաքուր սկանավորումը կամ վերահիմնավորումը երբեք չի ջնջում սա։"
 
 msgid "This entry was truncated at capture time; see the CEF log for the complete list."
-msgstr ""
+msgstr "Այս գրառումը կրճատվել է գրավման պահին; ամբողջական ցանկը տեսեք CEF մատյանում։"
 
 msgid "No alert has been recorded yet."
-msgstr ""
+msgstr "Ահազանգ դեռ չի գրանցվել։"
 
 msgid "Git remote changed"
-msgstr ""
+msgstr "Git հեռակա փոխվել է"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Չափազանց շատ փոփոխություններ՝ ամբողջությամբ ցուցադրելու համար. ստորև ցուցադրված են յուրաքանչյուր կատեգորիայի միայն առաջին գրառումները։ Տես %link_start%CEF մատյան%link_end% ամբողջական ցանկի համար։"
 

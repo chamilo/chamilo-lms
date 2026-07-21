@@ -37398,9 +37398,6 @@ msgstr "A configuração remota do Git (.git\/config) foi alterada. Verifique se
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "A análise parou prematuramente porque não foi possível ler um subdiretório (verifique as permissões dos ficheiros). Os resultados abaixo podem ser parciais."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Demasiadas alterações para listar na totalidade; apenas as primeiras entradas de cada categoria são mostradas abaixo. Consulte o registo CEF para a lista completa."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ficheiro(s) não puderam ser lidos (permissões) e foram ignorados."
 
@@ -37414,74 +37411,77 @@ msgid "Pause for 1 hour"
 msgstr "Pausar por 1 hora"
 
 msgid "Trust the current file tree as the new baseline"
-msgstr ""
+msgstr "Confiar na árvore de ficheiros atual como nova linha de base"
 
 msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
-msgstr ""
+msgstr "Isto irá confiar em todos os ficheiros atuais como corretos, incluindo qualquer alteração não revista. Continuar?"
 
 msgid "Establish new baseline"
-msgstr ""
+msgstr "Estabelecer nova linha de base"
 
 msgid "Schedule the scan from a system crontab, for example"
-msgstr ""
+msgstr "Agendar a verificação a partir de um crontab do sistema, por exemplo"
 
 msgid "File integrity alert on %platform%"
-msgstr ""
+msgstr "Alerta de integridade de ficheiros em %platform%"
 
 msgid "A file integrity scan detected changes on the platform:"
-msgstr ""
+msgstr "Uma verificação de integridade de ficheiros detetou alterações na plataforma:"
 
 msgid "Added files"
-msgstr ""
+msgstr "Ficheiros adicionados"
 
 msgid "Modified files"
-msgstr ""
+msgstr "Ficheiros modificados"
 
 msgid "Deleted files"
-msgstr ""
+msgstr "Ficheiros eliminados"
 
 msgid "Review the full report from Administration > Security > File integrity."
-msgstr ""
+msgstr "Rever o relatório completo em Administração > Segurança > Integridade de ficheiros."
 
 msgid "Password to confirm pausing alerts"
-msgstr ""
+msgstr "Palavra-passe para confirmar a pausa dos alertas"
 
 msgid "Password to confirm the new baseline"
-msgstr ""
+msgstr "Palavra-passe para confirmar a nova linha de base"
 
 msgid "A scan is already running. Please wait for it to finish before starting another one."
-msgstr ""
+msgstr "Já está a decorrer uma verificação. Aguarde que termine antes de iniciar outra."
 
 msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
-msgstr ""
+msgstr "Está atualmente a decorrer uma verificação (iniciada em %date%). Uma verificação completa pode demorar vários minutos; esta página pode ser recarregada com segurança para verificar o progresso."
 
 msgid "Currently processing"
-msgstr ""
+msgstr "A processar atualmente"
 
 msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
-msgstr ""
+msgstr "Uma verificação anterior (iniciada em %date%) foi interrompida antes de terminar — o processo já não está em execução. Pode iniciar uma nova com segurança."
 
 msgid "files"
-msgstr ""
+msgstr "ficheiros"
 
 msgid "Permissions changed"
-msgstr ""
+msgstr "Permissões alteradas"
 
 msgid "Files with changed permissions"
-msgstr ""
+msgstr "Ficheiros com permissões alteradas"
 
 msgid "Alert history"
-msgstr ""
+msgstr "Histórico de alertas"
 
 msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
-msgstr ""
+msgstr "Cada verificação que encontrou algo é mantida, mesmo após a resolução do desvio ou o estabelecimento de uma nova linha de base — ao contrário do relatório acima, uma verificação limpa ou uma nova linha de base nunca limpa este histórico."
 
 msgid "This entry was truncated at capture time; see the CEF log for the complete list."
-msgstr ""
+msgstr "Esta entrada foi truncada no momento da captura; consulte o registo CEF para a lista completa."
 
 msgid "No alert has been recorded yet."
-msgstr ""
+msgstr "Ainda não foi registado nenhum alerta."
 
 msgid "Git remote changed"
-msgstr ""
+msgstr "Repositório Git remoto alterado"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Demasiadas alterações para listar na totalidade; apenas as primeiras entradas de cada categoria são mostradas abaixo. Consulte o %link_start%registo CEF%link_end% para a lista completa."
 

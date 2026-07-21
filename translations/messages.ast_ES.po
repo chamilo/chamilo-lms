@@ -37392,9 +37392,6 @@ msgstr "La configuración remota de Git (.git/config) camudó. Verifica que fuer
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "L'escáner paró enantes porque nun pudo lleese un subdireutoriu (comprueba los permisos de ficheros). Los resultaos embaxo puen ser parciales."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Demasiaos cambeos pa llistar completos; namái se amuesen embaxo les primeres entraes de cada categoría. Consulta'l log CEF pa la llista completa."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ficheru(os) nun pudieron lleese (permisos) y saltáronse."
 
@@ -37478,4 +37475,7 @@ msgstr "Entá nun se grabó nenguna alerta."
 
 msgid "Git remote changed"
 msgstr "Git remotu camudáu"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Demasiaos cambeos pa llistar completos; namái s'amuesen les primeres entraes de cada categoría embaxo. Consulta'l %link_start%rexistru CEF%link_end% pa la llista completa."
 

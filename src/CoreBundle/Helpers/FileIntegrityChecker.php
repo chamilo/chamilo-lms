@@ -105,6 +105,16 @@ class FileIntegrityChecker
     }
 
     /**
+     * Absolute path to the CEF log, so a controller can offer it for download —
+     * the JSON report is capped to MAX_REPORTED_PATHS per category, but every
+     * individual change is always logged here regardless of that cap.
+     */
+    public function getCefLogPath(): string
+    {
+        return $this->cefLogFile;
+    }
+
+    /**
      * Walks the tree and adopts it as the new trusted reference.
      *
      * @return int the number of files captured in the new baseline

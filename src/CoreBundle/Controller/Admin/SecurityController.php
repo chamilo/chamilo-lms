@@ -17,10 +17,12 @@ use DateTimeImmutable;
 use RuntimeException;
 use Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -320,8 +322,26 @@ final class SecurityController extends BaseController
                 'chamilo_platform_settings_search',
                 ['keyword' => 'file_integrity_check_enabled']
             ),
+            'cef_log_url' => $this->generateUrl('admin_security_file_integrity_cef_log'),
             'project_dir' => $this->getParameter('kernel.project_dir'),
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/file-integrity/cef-log', name: 'admin_security_file_integrity_cef_log', methods: ['GET'])]
+    public function fileIntegrityCefLog(): BinaryFileResponse
+    {
+        $path = $this->fileIntegrityChecker->getCefLogPath();
+
+        if (!is_file($path)) {
+            throw $this->createNotFoundException('No file integrity events have been logged yet.');
+        }
+
+        $response = new BinaryFileResponse($path);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'file_integrity.log');
+        $response->headers->set('Content-Type', 'text/plain');
+
+        return $response;
     }
 
     #[IsGranted('ROLE_GLOBAL_ADMIN')]

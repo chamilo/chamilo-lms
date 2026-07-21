@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Z poważaniem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Przykładowy wzór: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Przykładowy wzór: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Zakresy zmiennych"
@@ -37396,9 +37396,6 @@ msgstr "Konfiguracja zdalnego repozytorium Git (.git/config) uległa zmianie. Sp
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skanowanie zostało przerwane, ponieważ nie można odczytać podkatalogu (sprawdź uprawnienia do plików). Wyniki poniżej mogą być częściowe."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Zbyt wiele zmian, aby je w pełni wyświetlić; poniżej pokazano tylko pierwsze wpisy z każdej kategorii. Pełną listę znajdziesz w dzienniku CEF."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% plik(ów) nie można było odczytać (uprawnienia) i zostały pominięte."
 
@@ -37482,4 +37479,7 @@ msgstr "Nie zarejestrowano jeszcze żadnego alertu."
 
 msgid "Git remote changed"
 msgstr "Zmieniono zdalne repozytorium Git"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Zbyt wiele zmian, aby wyświetlić je w całości; poniżej pokazano tylko pierwsze wpisy z każdej kategorii. Pełną listę znajdziesz w %link_start%dzienniku CEF%link_end%."
 

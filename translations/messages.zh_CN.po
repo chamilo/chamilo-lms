@@ -37392,9 +37392,6 @@ msgstr "Git 远程配置（.git/config）已更改。请确认此操作是否符
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "扫描因无法读取子目录而提前停止（请检查文件权限）。以下结果可能不完整。"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "更改过多，无法完整列出；仅显示每类前几项。完整列表请参阅 CEF 日志。"
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% 个文件因权限问题无法读取，已跳过。"
 
@@ -37478,4 +37475,7 @@ msgstr "尚未记录任何警报。"
 
 msgid "Git remote changed"
 msgstr "Git 远程已更改"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "更改过多，无法完整列出；以下仅显示每类前几项。完整列表请查看 %link_start%CEF 日志%link_end%。"
 

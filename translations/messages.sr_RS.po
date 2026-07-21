@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -36497,31 +36497,31 @@ msgid "No auth source"
 msgstr "Nema izvora autentifikacije"
 
 msgid "You must add at least one question"
-msgstr "You must add at least one question"
+msgstr "Morate dodati barem jedno pitanje"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Napredne radnje"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Putanja aplikacije"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Primeni detalje datoteka"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Primeni detalje plana"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Primena plana nije uspela"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Primena plana spremna"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "Primeni pripremu"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "Primeni pripremljene datoteke"
 
 msgid "Applying files..."
 msgstr "Primena datoteka..."
@@ -37393,9 +37393,6 @@ msgstr "Konfiguracija Git udaljenog repozitorijuma (.git/config) je promenjena. 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skeniranje je rano prekinuto jer se poddirektorijum nije mogao pročitati (proverite dozvole datoteka). Rezultati ispod mogu biti delimični."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Previše promena za potpuni prikaz; ispod su prikazani samo prvi unosi svake kategorije. Kompletan spisak potražite u CEF dnevniku."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% datoteka se nije moglo pročitati (dozvole) i preskočene su."
 
@@ -37479,4 +37476,7 @@ msgstr "Još uvek nije zabeleženo nijedno upozorenje."
 
 msgid "Git remote changed"
 msgstr "Git udaljeni repozitorijum promenjen"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Previše izmena za potpuni prikaz; prikazane su samo prve stavke svake kategorije. Pogledajte %link_start%CEF dnevnik%link_end% za potpunu listu."
 

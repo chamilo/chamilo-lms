@@ -37386,9 +37386,6 @@ msgstr "Qaabeynta fog ee Git (.git/config) waa la beddelay. Xaqiiji in tani ay a
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Baadhitaanku wuxuu joogsaday goor hore sababtoo ah ma jirin in la akhriyo hoosaad (hubi oggolaanshaha faylka). Natiijooyinka hoos waxaa laga yaabaa inay qayb ahaan yihiin."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Isbeddelo aad u badan oo aan si buuxda loogu qori karin; kaliya qoraallada ugu horreeya ee qayb kasta ayaa hoos lagu muujiyay. Eeg diiwaanka CEF si aad u hesho liiska dhammaystiran."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fayl (faylasha) lama akhri karin (oggolaanshaha) waana la booday."
 
@@ -37472,4 +37469,7 @@ msgstr "Wax digniin ah weli lama diiwaangelin."
 
 msgid "Git remote changed"
 msgstr "Fogeynta Git waa la beddelay"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Isbeddelo badan oo aan si buuxda loo taxin karin; kaliya qoraallada ugu horreeya ee qayb kasta ayaa hoos lagu muujiyay. Eeg %link_start%CEF log%link_end% si aad u hesho liiska dhammaystiran."
 

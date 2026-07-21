@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula lagina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula lagina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr "bai:copyright,, ez: copyright gabe"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Karpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Karpeta,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ariketa,, simulation:simulazioa,, questionnaire:galdeketa,, diagram:diagrama,, figure:irudia,, graph:grafikoa,, index:indexa,, slide:diapositiba,, table:taula,, narrative text:testu narratiboa,, exam:azterketa,, experiment:saioa,, problem statement:problemaren egoera,, self assessment:autoebaluazioa,, lecture:irakurketa"
@@ -37397,9 +37397,6 @@ msgstr "Git urruneko konfigurazioa (.git/config) aldatu da. Egiaztatu hau espero
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Eskaneatzea goiz gelditu da azpidirektorio bat ezin izan delako irakurri (egiaztatu fitxategien baimenak). Beheko emaitzak partzialak izan daitezke."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Aldaketa gehiegi zerrenda osoan sartzeko; behean kategoria bakoitzeko lehen sarrerak soilik erakusten dira. Ikusi CEF erregistroa zerrenda osoa ikusteko."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fitxategi ezin izan dira irakurri (baimenak) eta saltatu egin dira."
 
@@ -37483,4 +37480,7 @@ msgstr "Oraindik ez da alertarik erregistratu."
 
 msgid "Git remote changed"
 msgstr "Git urruneko aldaketa"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Aldaketa gehiegi zerrenda osoan erakusteko; behean kategoria bakoitzeko lehen sarrerak soilik erakusten dira. Ikusi zerrenda osoa %link_start%CEF erregistroan%link_end%."
 

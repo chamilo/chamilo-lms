@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 use const FILTER_VALIDATE_EMAIL;
@@ -34,6 +35,7 @@ class FileIntegrityScanCommand extends Command
         private readonly UserRepository $userRepository,
         private readonly MailHelper $mailHelper,
         private readonly Environment $twig,
+        private readonly UrlGeneratorInterface $urlGenerator,
     ) {
         parent::__construct();
     }
@@ -156,6 +158,11 @@ class FileIntegrityScanCommand extends Command
             'modified' => array_keys($report['modified']),
             'deleted' => array_keys($report['deleted']),
             'permissions_changed' => array_keys($report['permissionsChanged']),
+            'cef_log_url' => $this->urlGenerator->generate(
+                'admin_security_file_integrity_cef_log',
+                [],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ),
         ]);
 
         $from = $this->mailHelper->getPlatformFromAddress();

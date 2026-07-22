@@ -1842,12 +1842,38 @@ class SessionManager
                     'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
                 ]
             );
-            $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
-            foreach ($works as $index => $work) {
-                if ($work['filetype'] = 'folder') {
-                    Database::query("DELETE FROM $tbl_student_publication_assignment WHERE publication_id = $index");
+            $courseDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
+            $baseWorkDir = $courseDir.'/work';
+            foreach ($works as $work) {
+                if ('folder' === $work['filetype']) {
+                    Database::query(
+                        "DELETE FROM $tbl_student_publication_assignment
+                        WHERE publication_id = ".(int) $work['iid']
+                    );
                 }
-                my_delete($currentCourseRepositorySys.'/'.$work['url']);
+
+                // Skip rows without a URL: an empty value would resolve to the
+                // course root and delete the whole course from disk.
+                if (empty($work['url'])) {
+                    continue;
+                }
+
+                // Folder URLs are stored relative to the "work" directory,
+                // with a leading slash (e.g. "/Tarea-1"); file URLs are stored
+                // relative to the course root, with the "work/" prefix
+                // (e.g. "work/Tarea-1/e979f10a4cf15154531708b730c34553").
+                $workPath = 'folder' === $work['filetype']
+                    ? $baseWorkDir.$work['url']
+                    : $courseDir.'/'.$work['url'];
+
+                // Defensive boundary: only ever delete paths located strictly
+                // inside the course "work" directory.
+                if (
+                    Security::check_abs_path($workPath.'/', $baseWorkDir.'/')
+                    && realpath($workPath) !== realpath($baseWorkDir)
+                ) {
+                    my_delete($workPath);
+                }
             }
 
             // Delete learning paths

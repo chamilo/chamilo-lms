@@ -53,7 +53,7 @@ final readonly class CreateCourseDocumentTool
      *     document: array{
      *         document_id: int,
      *         resource_node_id: int,
-     *         documents_root_node_id: int,
+     *         parent_resource_node_id: int,
      *         title: string,
      *         file_name: string|null,
      *         topic: string,
@@ -166,7 +166,10 @@ final readonly class CreateCourseDocumentTool
         /** @var CDocument $document */
         $document = $this->entityManager->wrapInTransaction(
             function () use ($course, $courseId, $title, $topic, $content, $language, $visibility): CDocument {
-                $documentsRoot = $this->documentRepository->ensureCourseDocumentsRootNode($course);
+                $courseResourceNode = $course->getResourceNode();
+                if (null === $courseResourceNode || null === $courseResourceNode->getId()) {
+                    throw new RuntimeException('The course resource node could not be resolved.');
+                }
 
                 $request = Request::create(
                     '/api/documents?cid='.$courseId,
@@ -179,7 +182,7 @@ final readonly class CreateCourseDocumentTool
                         'contentFileExtension' => 'html',
                         'contentFileMimeType' => 'text/html',
                         'language' => $language ?? '',
-                        'parentResourceNodeId' => (int) $documentsRoot->getId(),
+                        'parentResourceNodeId' => (int) $courseResourceNode->getId(),
                         'resourceLinkList' => json_encode(
                             [['visibility' => $visibility]],
                             JSON_THROW_ON_ERROR
@@ -213,11 +216,6 @@ final readonly class CreateCourseDocumentTool
             throw new RuntimeException('Chamilo created an incomplete document resource.');
         }
 
-        $documentsRoot = $this->documentRepository->getCourseDocumentsRootNode($course);
-        if (null === $documentsRoot || null === $documentsRoot->getId()) {
-            throw new RuntimeException('The course Documents root could not be resolved.');
-        }
-
         $resourceFile = $resourceNode?->getFirstResourceFile();
         $fileName = $resourceFile instanceof ResourceFile
             ? ($resourceFile->getOriginalName() ?: $resourceFile->getTitle())
@@ -232,7 +230,7 @@ final readonly class CreateCourseDocumentTool
             'document' => [
                 'document_id' => $documentId,
                 'resource_node_id' => $resourceNodeId,
-                'documents_root_node_id' => (int) $documentsRoot->getId(),
+                'parent_resource_node_id' => (int) $course->getResourceNode()?->getId(),
                 'title' => $document->getTitle(),
                 'file_name' => $fileName,
                 'topic' => $topic,

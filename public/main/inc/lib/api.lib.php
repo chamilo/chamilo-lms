@@ -5665,9 +5665,10 @@ function api_get_tool_information_by_name($name)
 {
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
     $course_id = api_get_course_int_id();
+    $courseToolName = TOOL_USER === $name ? 'member' : $name;
 
     $sql = "SELECT id FROM tool
-            WHERE title = '".Database::escape_string($name)."' ";
+            WHERE title = '".Database::escape_string($courseToolName)."' ";
     $rs = Database::query($sql);
     $data = Database::fetch_array($rs);
     if ($data) {

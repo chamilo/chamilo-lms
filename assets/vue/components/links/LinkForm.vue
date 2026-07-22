@@ -362,7 +362,15 @@ const fetchLink = async () => {
       formData.showOnHomepage = response.onHomepage
       formData.target = response.target
       formData.parentResourceNodeId = response.parentResourceNodeId
-      formData.resourceLinkList = response.resourceLinkList
+
+      const fetchedResourceLinks = Array.isArray(response.resourceLinkList)
+        ? response.resourceLinkList
+        : []
+      resourceLinkList.value = JSON.stringify(
+        fetchedResourceLinks.length > 0
+          ? fetchedResourceLinks
+          : [{ visibility: RESOURCE_LINK_PUBLISHED }],
+      )
 
       if (response.customImageUrl) {
         formData.customImageUrl = response.customImageUrl

@@ -50,6 +50,10 @@ use Symfony\Bundle\SecurityBundle\Security;
  */
 class ToolChain
 {
+    private const COURSE_TOOL_ALIASES = [
+        'user' => 'member',
+    ];
+
     protected EntityManagerInterface $entityManager;
 
     protected SettingsManager $settingsManager;
@@ -134,7 +138,9 @@ class ToolChain
     public function addToolsInCourse(Course $course): Course
     {
         $manager = $this->entityManager;
-        $activeToolsOnCreate = $this->settingsManager->getSetting('course.active_tools_on_create') ?? [];
+        $activeToolsOnCreate = $this->normalizeCourseToolSetting(
+            $this->settingsManager->getSetting('course.active_tools_on_create')
+        );
 
         // Hardcoded tool list order
         $toolList = [
@@ -166,24 +172,29 @@ class ToolChain
             'course_maintenance',
             'portfolio',
         ];
-        $toolList = array_flip($toolList);
+        $toolList = array_fill_keys(
+            array_map(static fn (string $tool): string => strtolower($tool), $toolList),
+            true,
+        );
 
         $toolRepo = $manager->getRepository(Tool::class);
 
         $tools = $this->handlerCollection->getCollection();
 
         foreach ($tools as $tool) {
+            $toolTitle = $tool->getTitle();
+            $courseToolName = strtolower($this->normalizeCourseToolName($toolTitle));
             $criteria = [
-                'title' => $tool->getTitle(),
+                'title' => $toolTitle,
             ];
-            if (!isset($toolList[$tool->getTitle()])) {
+            if (!isset($toolList[$courseToolName])) {
                 continue;
             }
 
-            $visibility = \in_array($tool->getTitle(), $activeToolsOnCreate, true);
+            $visibility = isset($activeToolsOnCreate[$courseToolName]);
             $linkVisibility = $visibility ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
 
-            if (\in_array($tool->getTitle(), ['course_setting', 'course_maintenance'])) {
+            if (\in_array($courseToolName, ['course_setting', 'course_maintenance'], true)) {
                 $linkVisibility = ResourceLink::VISIBILITY_DRAFT;
             }
 
@@ -192,7 +203,7 @@ class ToolChain
             if ($toolEntity) {
                 $courseTool = (new CTool())
                     ->setTool($toolEntity)
-                    ->setTitle($tool->getTitle())
+                    ->setTitle($toolTitle)
                     ->setParent($course)
                     ->setCreator($course->getCreator())
                     ->addCourseLink($course, null, null, $linkVisibility)
@@ -207,6 +218,65 @@ class ToolChain
     public function getTools(): iterable
     {
         return $this->handlerCollection->getCollection();
+    }
+
+    public function normalizeCourseToolName(string $title): string
+    {
+        $title = trim($title);
+        if ('' === $title) {
+            return '';
+        }
+
+        return self::COURSE_TOOL_ALIASES[strtolower($title)] ?? $title;
+    }
+
+    public function getCourseToolFromName(string $title): AbstractTool
+    {
+        return $this->getToolFromName($this->normalizeCourseToolName($title));
+    }
+
+    /**
+     * Normalize the persisted setting without changing its legacy-compatible values.
+     *
+     * @return array<string, true>
+     */
+    private function normalizeCourseToolSetting(mixed $setting): array
+    {
+        if (null === $setting || false === $setting) {
+            return [];
+        }
+
+        if (\is_array($setting)) {
+            $values = $setting;
+        } elseif (\is_scalar($setting)) {
+            $raw = trim((string) $setting);
+            if ('' === $raw) {
+                return [];
+            }
+
+            $decoded = json_decode($raw, true);
+            $values = \is_array($decoded) ? $decoded : (preg_split('/[,;|]+/', $raw) ?: []);
+        } else {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($values as $key => $value) {
+            if ((true === $value || 'true' === $value || '1' === $value) && \is_string($key)) {
+                $value = $key;
+            }
+
+            if (!\is_scalar($value) && null !== $value) {
+                continue;
+            }
+
+            $courseToolName = strtolower($this->normalizeCourseToolName((string) $value));
+            if ('' !== $courseToolName) {
+                $normalized[$courseToolName] = true;
+            }
+        }
+
+        return $normalized;
     }
 
     public function getToolFromName(string $title): AbstractTool

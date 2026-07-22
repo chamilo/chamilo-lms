@@ -37342,3 +37342,139 @@ msgstr "by"
 
 msgid "required"
 msgstr "required"
+
+msgid "Incorrect password."
+msgstr "Incorrect password."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "File integrity alerting paused for 1 hour."
+
+msgid "New baseline established: %s files."
+msgstr "New baseline established: %s files."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scan complete: changes were detected."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scan complete: no changes were detected."
+
+msgid "File integrity"
+msgstr "File integrity"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Last scan"
+
+msgid "Files scanned"
+msgstr "Files scanned"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+
+msgid "No changes detected since the baseline."
+msgstr "No changes detected since the baseline."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "The Git remote configuration (.git/config) has changed. Verify this was expected."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% file(s) could not be read (permissions) and were skipped."
+
+msgid "Run a scan now"
+msgstr "Run a scan now"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Pause alerting for 1 hour (for maintenance)"
+
+msgid "Pause for 1 hour"
+msgstr "Pause for 1 hour"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Trust the current file tree as the new baseline"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "This will trust every current file as correct, including any unreviewed change. Continue?"
+
+msgid "Establish new baseline"
+msgstr "Establish new baseline"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Schedule the scan from a system crontab, for example"
+
+msgid "File integrity alert on %platform%"
+msgstr "File integrity alert on %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "A file integrity scan detected changes on the platform:"
+
+msgid "Added files"
+msgstr "Added files"
+
+msgid "Modified files"
+msgstr "Modified files"
+
+msgid "Deleted files"
+msgstr "Deleted files"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Review the full report from Administration > Security > File integrity."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Password to confirm pausing alerts"
+
+msgid "Password to confirm the new baseline"
+msgstr "Password to confirm the new baseline"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "A scan is already running. Please wait for it to finish before starting another one."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+
+msgid "Currently processing"
+msgstr "Currently processing"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+
+msgid "files"
+msgstr "files"
+
+msgid "Permissions changed"
+msgstr "Permissions changed"
+
+msgid "Files with changed permissions"
+msgstr "Files with changed permissions"
+
+msgid "Alert history"
+msgstr "Alert history"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "This entry was truncated at capture time; see the CEF log for the complete list."
+
+msgid "No alert has been recorded yet."
+msgstr "No alert has been recorded yet."
+
+msgid "Git remote changed"
+msgstr "Git remote changed"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+

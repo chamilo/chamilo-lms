@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -26,6 +26,9 @@ const router = useRouter()
 const { requireConfirmation } = useConfirmation()
 const { showErrorNotification, showSuccessNotification } = useNotification()
 
+const RESOURCE_MIME_TYPE = "application/x-chamilo-lp-resource"
+const FLOATING_DROP_TOP_OFFSET = 112
+
 const loading = ref(true)
 const saving = ref(false)
 const savingOrder = ref(false)
@@ -33,6 +36,11 @@ const addingResourceKey = ref("")
 const builder = ref(null)
 const tree = ref([])
 const selectedId = ref(0)
+const selectedSectionTargetId = ref(0)
+const tocColumn = ref(null)
+const resourceDragActive = ref(false)
+const floatingDropTargetId = ref(null)
+const floatingDropTargetStyle = ref({})
 const supportedToolKeys = new Set([
   "documents",
   "tests",
@@ -63,10 +71,19 @@ const context = computed(() => ({
 const canManage = computed(() => Boolean(builder.value?.canManageStructure))
 const resources = computed(() => builder.value?.resources || {})
 const selectedItem = computed(() => findItem(tree.value, selectedId.value))
-const selectedSectionId = computed(() => (selectedItem.value?.isSection ? selectedItem.value.id : null))
-const selectedTargetLabel = computed(() =>
-  selectedItem.value ? selectedItem.value.displayTitle || selectedItem.value.title : builder.value?.title,
-)
+const selectedSectionTarget = computed(() => findItem(tree.value, selectedSectionTargetId.value))
+const selectedSectionId = computed(() => {
+  if (selectedItem.value?.isSection) {
+    return Number(selectedItem.value.id)
+  }
+
+  return selectedSectionTarget.value?.isSection ? Number(selectedSectionTarget.value.id) : null
+})
+const selectedTargetLabel = computed(() => {
+  const target = selectedItem.value || selectedSectionTarget.value
+
+  return target ? target.displayTitle || target.title : builder.value?.title
+})
 const sectionParentOptions = computed(() => buildParentOptions(0))
 const selectedParentOptions = computed(() => buildParentOptions(selectedId.value))
 const documentFolderOptions = computed(() => {
@@ -165,6 +182,12 @@ const learningPathQuery = computed(() => ({
 }))
 
 onMounted(async () => {
+  document.addEventListener("dragstart", handleDocumentDragStart)
+  document.addEventListener("dragend", handleDocumentDragEnd)
+  document.addEventListener("drop", handleDocumentDragEnd)
+  window.addEventListener("resize", updateFloatingDropTargetPosition)
+  window.addEventListener("scroll", updateFloatingDropTargetPosition, true)
+
   await loadBuilder()
 
   if ("author-price" === String(route.query.panel || "") && builder.value?.bulkAuthorPrice?.enabled) {
@@ -190,6 +213,111 @@ onMounted(async () => {
   }
 })
 
+onBeforeUnmount(() => {
+  document.removeEventListener("dragstart", handleDocumentDragStart)
+  document.removeEventListener("dragend", handleDocumentDragEnd)
+  document.removeEventListener("drop", handleDocumentDragEnd)
+  window.removeEventListener("resize", updateFloatingDropTargetPosition)
+  window.removeEventListener("scroll", updateFloatingDropTargetPosition, true)
+})
+
+function isExternalResourceDrag(event) {
+  const types = Array.from(event.dataTransfer?.types || [])
+
+  return types.includes(RESOURCE_MIME_TYPE)
+}
+
+function handleDocumentDragStart(event) {
+  if (!canManage.value || !isExternalResourceDrag(event)) {
+    return
+  }
+
+  resourceDragActive.value = true
+  floatingDropTargetId.value = null
+  updateFloatingDropTargetPosition()
+  window.requestAnimationFrame(updateFloatingDropTargetPosition)
+}
+
+function handleDocumentDragEnd() {
+  resourceDragActive.value = false
+  floatingDropTargetId.value = null
+  floatingDropTargetStyle.value = {}
+}
+
+function updateFloatingDropTargetPosition() {
+  if (!resourceDragActive.value || !tocColumn.value || "undefined" === typeof window) {
+    return
+  }
+
+  const rect = tocColumn.value.getBoundingClientRect()
+  if (rect.width <= 0) {
+    return
+  }
+
+  const viewportPadding = 16
+  const left = Math.max(viewportPadding, rect.left)
+  const availableWidth = Math.max(0, window.innerWidth - left - viewportPadding)
+  const width = Math.min(Math.max(rect.width, 240), availableWidth)
+  const top = Math.max(FLOATING_DROP_TOP_OFFSET, rect.top)
+  const maxHeight = Math.max(160, window.innerHeight - top - viewportPadding)
+
+  floatingDropTargetStyle.value = {
+    top: `${top}px`,
+    left: `${left}px`,
+    width: `${width}px`,
+    maxHeight: `${maxHeight}px`,
+  }
+}
+
+function handleFloatingDragOver(event, parentId) {
+  if (!resourceDragActive.value || !isExternalResourceDrag(event)) {
+    return
+  }
+
+  event.preventDefault()
+  event.stopPropagation()
+  floatingDropTargetId.value = Number(parentId || 0)
+
+  if (event.dataTransfer) {
+    event.dataTransfer.dropEffect = "copy"
+  }
+}
+
+function handleFloatingDragLeave(event, parentId) {
+  if (event.currentTarget.contains(event.relatedTarget)) {
+    return
+  }
+
+  if (floatingDropTargetId.value === Number(parentId || 0)) {
+    floatingDropTargetId.value = null
+  }
+}
+
+function handleFloatingResourceDrop(event, parentId) {
+  if (!isExternalResourceDrag(event)) {
+    handleDocumentDragEnd()
+    return
+  }
+
+  event.preventDefault()
+  event.stopPropagation()
+
+  const raw = event.dataTransfer?.getData(RESOURCE_MIME_TYPE)
+  handleDocumentDragEnd()
+  if (!raw) {
+    return
+  }
+
+  try {
+    handleResourceDrop({
+      resource: JSON.parse(raw),
+      parentId: Number(parentId || 0) || null,
+    })
+  } catch {
+    // Ignore data that does not come from the learning path resource selector.
+  }
+}
+
 async function loadBuilder(showLoading = true) {
   if (showLoading) {
     loading.value = true
@@ -200,6 +328,9 @@ async function loadBuilder(showLoading = true) {
     tree.value = cloneItems(builder.value.items || [])
     if (selectedId.value && !findItem(tree.value, selectedId.value)) {
       selectedId.value = 0
+    }
+    if (selectedSectionTargetId.value && !findItem(tree.value, selectedSectionTargetId.value)) {
+      selectedSectionTargetId.value = 0
     }
   } catch (error) {
     showErrorNotification(error)
@@ -232,6 +363,8 @@ function selectItem(id) {
   selectedId.value = id
 
   const item = findItem(tree.value, id)
+  selectedSectionTargetId.value = item?.isSection ? Number(item.id) : 0
+  panelMode.value = ""
   if ("audio" === String(route.query.panel || "") && item && !item.isSection && !item.isFinal) {
     panelMode.value = "audio"
   }
@@ -569,6 +702,10 @@ function selectTool(toolKey) {
     return
   }
 
+  if (selectedItem.value?.isSection) {
+    selectedSectionTargetId.value = Number(selectedItem.value.id)
+  }
+  selectedId.value = 0
   activeTool.value = toolKey
   panelMode.value = ""
   if ("documents" === toolKey) {
@@ -590,6 +727,7 @@ function selectDocumentList(tab) {
 
 function resetBuilderSelection() {
   selectedId.value = 0
+  selectedSectionTargetId.value = 0
   panelMode.value = ""
 }
 
@@ -680,44 +818,49 @@ function goBack() {
 
     <div
       v-else
-      class="grid gap-4 xl:h-[calc(100vh-12rem)] xl:grid-cols-[minmax(320px,34%)_minmax(0,1fr)] xl:overflow-hidden"
+      class="grid gap-4 xl:grid-cols-[minmax(320px,34%)_minmax(0,1fr)]"
     >
-      <div class="self-start xl:h-full xl:min-h-0 xl:overflow-y-auto xl:overscroll-contain">
-        <BaseCard>
-          <template #header>
-            <button
-              class="w-full border-l-4 border-secondary px-3 py-2 text-left text-body-1 font-semibold text-gray-90"
-              type="button"
-              @click="resetBuilderSelection"
-            >
-              {{ builder?.title || t("Learning path") }}
-            </button>
-          </template>
+      <div
+        ref="tocColumn"
+        class="self-stretch"
+      >
+        <div class="xl:sticky xl:top-4 xl:z-10">
+          <BaseCard>
+            <template #header>
+              <button
+                class="w-full border-l-4 border-secondary px-3 py-2 text-left text-body-1 font-semibold text-gray-90"
+                type="button"
+                @click="resetBuilderSelection"
+              >
+                {{ builder?.title || t("Learning path") }}
+              </button>
+            </template>
 
-          <div class="p-3">
-            <LpBuilderTree
-              v-model:items="tree"
-              :can-manage="canManage && !savingOrder"
-              :parent-id="0"
-              :selected-id="selectedId"
-              @delete="confirmDeleteItem"
-              @edit="openItemEditor"
-              @prerequisite="openItemPrerequisite"
-              @resource-drop="handleResourceDrop"
-              @select="selectItem"
-              @structure-changed="onStructureChanged"
-            />
-            <div
-              v-if="savingOrder"
-              class="pt-2 text-center text-caption text-gray-50"
-            >
-              {{ t("Loading") }}...
+            <div class="p-3">
+              <LpBuilderTree
+                v-model:items="tree"
+                :can-manage="canManage && !savingOrder"
+                :parent-id="0"
+                :selected-id="selectedId"
+                @delete="confirmDeleteItem"
+                @edit="openItemEditor"
+                @prerequisite="openItemPrerequisite"
+                @resource-drop="handleResourceDrop"
+                @select="selectItem"
+                @structure-changed="onStructureChanged"
+              />
+              <div
+                v-if="savingOrder"
+                class="pt-2 text-center text-caption text-gray-50"
+              >
+                {{ t("Loading") }}...
+              </div>
             </div>
-          </div>
-        </BaseCard>
+          </BaseCard>
+        </div>
       </div>
 
-      <div class="min-w-0 space-y-3 xl:h-full xl:min-h-0 xl:overflow-y-auto xl:overscroll-contain xl:pr-1">
+      <div class="min-w-0 space-y-3">
         <BaseCard>
           <div class="flex flex-wrap items-center justify-start gap-2 p-3">
             <BaseButton
@@ -842,6 +985,8 @@ function goBack() {
               :lp-id="lpId"
               @saved="handleBulkAuthorPriceSaved"
             />
+
+            <div v-else-if="selectedItem" />
 
             <template v-else-if="activeTool === 'documents'">
               <div class="flex flex-wrap gap-2 border-b border-gray-20 pb-3">
@@ -1075,6 +1220,41 @@ function goBack() {
         </BaseCard>
       </div>
     </div>
+
+    <Teleport to="body">
+      <div
+        v-if="resourceDragActive && canManage"
+        class="pointer-events-none fixed inset-0 z-[1100]"
+      >
+        <div
+          class="pointer-events-auto fixed overflow-y-auto rounded-xl border border-gray-20 bg-white p-3 shadow-2xl"
+          :style="floatingDropTargetStyle"
+        >
+          <div class="mb-3 border-l-4 border-secondary px-3 py-2 text-body-1 font-semibold text-gray-90">
+            {{ builder?.title || t("Learning path") }}
+          </div>
+
+          <div class="space-y-2">
+            <div
+              v-for="option in sectionParentOptions"
+              :key="`floating-lp-drop-${option.value}`"
+              class="flex min-h-14 items-center justify-center rounded-lg border border-dashed px-3 py-3 text-center text-body-2 transition"
+              :class="
+                floatingDropTargetId === Number(option.value || 0)
+                  ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20'
+                  : 'border-support-3 bg-support-1 text-support-5'
+              "
+              @dragenter="handleFloatingDragOver($event, option.value)"
+              @dragleave="handleFloatingDragLeave($event, option.value)"
+              @dragover="handleFloatingDragOver($event, option.value)"
+              @drop="handleFloatingResourceDrop($event, option.value)"
+            >
+              {{ Number(option.value || 0) === 0 ? t("Drag and drop an element here") : option.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 <style scoped>

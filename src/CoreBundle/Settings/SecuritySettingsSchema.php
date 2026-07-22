@@ -48,6 +48,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'login_max_attempt_before_blocking_account' => '0',
             'force_renew_password_at_first_login' => 'false',
             'hide_breadcrumb_if_not_allowed' => 'false',
+            'file_integrity_check_notify_admins' => '',
         ]);
 
         $allowedTypes = [
@@ -90,6 +91,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('login_max_attempt_before_blocking_account', TextType::class)
             ->add('force_renew_password_at_first_login', YesNoType::class)
             ->add('hide_breadcrumb_if_not_allowed', YesNoType::class)
+            ->add('file_integrity_check_notify_admins', TextareaType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

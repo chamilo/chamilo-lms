@@ -25,6 +25,16 @@
           {{ slotProps.data.branch?.title || "-" }}
         </template>
       </Column>
+      <Column :header="t('Floor number')">
+        <template #body="slotProps">
+          {{ slotProps.data.floorNumber ?? "-" }}
+        </template>
+      </Column>
+      <Column :header="t('Capacity')">
+        <template #body="slotProps">
+          {{ slotProps.data.capacity ?? "-" }}
+        </template>
+      </Column>
       <Column :header="t('Courses')">
         <template #body="slotProps">
           <a

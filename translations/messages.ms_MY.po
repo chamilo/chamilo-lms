@@ -37342,3 +37342,138 @@ msgstr "oleh"
 msgid "required"
 msgstr "diperlukan"
 
+msgid "Incorrect password."
+msgstr "Incorrect password."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "File integrity alerting paused for 1 hour."
+
+msgid "New baseline established: %s files."
+msgstr "Garis dasar baharu ditetapkan: %s fail."
+
+msgid "Scan complete: changes were detected."
+msgstr "Imbasan selesai: perubahan dikesan."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Imbasan selesai: tiada perubahan dikesan."
+
+msgid "File integrity"
+msgstr "Integriti fail"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Laporan ini membandingkan fail yang dipasang (semua kecuali var/ dan .git/, walaupun .git/config masih dipantau untuk mengesan perampasan jauh) dengan garis dasar yang dipercayai, bagi mengesan penambahan, pengubahan atau pemadaman yang tidak dijangka."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Anda boleh menyemak laporan terkini di bawah. Menjalankan imbasan, menjeda amaran, atau menetapkan garis dasar baharu memerlukan pentadbir global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Amaran kini dijeda untuk penyelenggaraan. Ia akan disambung semula secara automatik pada %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Tiada imbasan dijalankan lagi. Jalankan satu dari sini, atau dari baris arahan dengan app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Imbasan terakhir"
+
+msgid "Files scanned"
+msgstr "Fail diimbas"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Tiada garis dasar wujud lagi: imbasan ini menetapkan satu. Perubahan akan dilaporkan bermula dari imbasan seterusnya."
+
+msgid "No changes detected since the baseline."
+msgstr "Tiada perubahan dikesan sejak garis dasar."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Konfigurasi jauh Git (.git/config) telah berubah. Sahkan ini adalah seperti yang dijangka."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Imbasan berhenti awal kerana subdirektori tidak dapat dibaca (semak kebenaran fail). Keputusan di bawah mungkin tidak lengkap."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fail tidak dapat dibaca (kebenaran) dan telah dilangkau."
+
+msgid "Run a scan now"
+msgstr "Jalankan imbasan sekarang"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Jeda amaran selama 1 jam (untuk penyelenggaraan)"
+
+msgid "Pause for 1 hour"
+msgstr "Jeda selama 1 jam"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Percayai pokok fail semasa sebagai garis dasar baharu"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Ini akan mempercayai setiap fail semasa sebagai betul, termasuk sebarang perubahan yang belum disemak. Teruskan?"
+
+msgid "Establish new baseline"
+msgstr "Tetapkan garis dasar baharu"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Jadualkan imbasan dari crontab sistem, sebagai contoh"
+
+msgid "File integrity alert on %platform%"
+msgstr "Amaran integriti fail pada %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Imbasan integriti fail mengesan perubahan pada platform:"
+
+msgid "Added files"
+msgstr "Fail ditambah"
+
+msgid "Modified files"
+msgstr "Fail diubah suai"
+
+msgid "Deleted files"
+msgstr "Fail dipadam"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Semak laporan penuh dari Pentadbiran > Keselamatan > Integriti fail."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Kata laluan untuk mengesahkan jeda amaran"
+
+msgid "Password to confirm the new baseline"
+msgstr "Kata laluan untuk mengesahkan garis dasar baharu"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Imbasan sudah berjalan. Sila tunggu sehingga selesai sebelum memulakan yang lain."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Imbasan sedang berjalan (dimulakan pada %date%). Imbasan penuh boleh mengambil beberapa minit; halaman ini boleh dimuat semula dengan selamat untuk menyemak kemajuan."
+
+msgid "Currently processing"
+msgstr "Sedang diproses"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Imbasan sebelumnya (dimulakan pada %date%) terganggu sebelum selesai — proses tidak lagi berjalan. Anda boleh memulakan yang baharu dengan selamat."
+
+msgid "files"
+msgstr "fail"
+
+msgid "Permissions changed"
+msgstr "Kebenaran diubah"
+
+msgid "Files with changed permissions"
+msgstr "Fail dengan kebenaran diubah"
+
+msgid "Alert history"
+msgstr "Sejarah amaran"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Setiap imbasan yang mendapati sesuatu, disimpan walaupun selepas penyimpangan diselesaikan atau garis dasar baharu ditetapkan — tidak seperti laporan di atas, imbasan bersih atau penetapan semula garis dasar tidak akan memadamkan ini."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Entri ini dipotong pada masa tangkapan; lihat log CEF untuk senarai lengkap."
+
+msgid "No alert has been recorded yet."
+msgstr "Tiada amaran direkodkan lagi."
+
+msgid "Git remote changed"
+msgstr "Git jauh berubah"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Terlalu banyak perubahan untuk disenaraikan sepenuhnya; hanya entri pertama bagi setiap kategori ditunjukkan di bawah. Sila lihat %link_start%log CEF%link_end% untuk senarai lengkap."
+

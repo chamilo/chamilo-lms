@@ -42,7 +42,7 @@ export async function updateVote({ iri, vote, sessionId = null, urlId }) {
     if (sessionId) payload.session = `/api/sessions/${sessionId}`
     if (urlId) payload.url = `/api/access_urls/${urlId}`
 
-    return await baseService.put(iri, payload)
+    return await baseService.patch(iri, payload)
   } catch (error) {
     console.error("Error updating user vote:", error)
     throw error

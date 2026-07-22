@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\PartialPaginatorInterface;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\DataTransformer\CourseToolDataTranformer;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
@@ -91,10 +92,26 @@ final class CToolStateProvider implements ProviderInterface
             $session?->getId()
         );
 
+        /** @var CTool[] $courseTools */
+        $courseTools = iterator_to_array($result, false);
+        $canonicalRows = $this->getCanonicalCourseToolRows($courseTools);
+        $emittedCourseTools = [];
         $results = [];
 
-        /** @var CTool $cTool */
-        foreach ($result as $cTool) {
+        foreach ($courseTools as $cTool) {
+            $storedName = $this->getStoredCourseToolName($cTool);
+            $canonicalName = $this->normalizeCourseToolKey($storedName);
+
+            // Prefer the real course-tool row over a legacy alias such as user -> member.
+            if ($storedName !== $canonicalName && isset($canonicalRows[$canonicalName])) {
+                continue;
+            }
+
+            // Do not render two semantic aliases of the same course tool.
+            if (isset($emittedCourseTools[$canonicalName])) {
+                continue;
+            }
+
             if ($this->shouldSkipUnavailableTeacherOnlyLegacyCourseTool($cTool)) {
                 continue;
             }
@@ -151,6 +168,11 @@ final class CToolStateProvider implements ProviderInterface
                 }
             }
 
+            $userToolVisibilityLocked = $this->isUserToolVisibilityLocked($course, $resolvedName);
+            if ($userToolVisibilityLocked && (!$isAllowToEdit || 'studentview' === $studentView)) {
+                continue;
+            }
+
             if (!$isAllowToEdit || 'studentview' === $studentView) {
                 $firstLink = $resourceLinks->first();
                 if (!$firstLink) {
@@ -167,10 +189,67 @@ final class CToolStateProvider implements ProviderInterface
                 }
             }
 
-            $results[] = $this->transformer->transform($cTool, $toolModel);
+            $courseTool = $this->transformer->transform($cTool, $toolModel);
+            if ($userToolVisibilityLocked) {
+                $courseTool->visibility = false;
+                $courseTool->allowChangeVisibility = false;
+            }
+
+            $results[] = $courseTool;
+            $emittedCourseTools[$canonicalName] = true;
         }
 
         return $results;
+    }
+
+    /**
+     * @param CTool[] $courseTools
+     *
+     * @return array<string, true>
+     */
+    private function getCanonicalCourseToolRows(array $courseTools): array
+    {
+        $canonicalRows = [];
+
+        foreach ($courseTools as $courseTool) {
+            $storedName = $this->getStoredCourseToolName($courseTool);
+            $canonicalName = $this->normalizeCourseToolKey($storedName);
+
+            if ($storedName === $canonicalName) {
+                $canonicalRows[$canonicalName] = true;
+            }
+        }
+
+        return $canonicalRows;
+    }
+
+    private function getStoredCourseToolName(CTool $courseTool): string
+    {
+        return strtolower(trim((string) $courseTool->getTool()->getTitle()));
+    }
+
+    private function normalizeCourseToolKey(string $toolName): string
+    {
+        return strtolower(trim($this->toolChain->normalizeCourseToolName($toolName)));
+    }
+
+    private function isUserToolVisibilityLocked(Course $course, string $toolName): bool
+    {
+        if ('member' !== $this->normalizeCourseToolKey($toolName) || !$course->isPublic()) {
+            return false;
+        }
+
+        return $this->isSettingEnabled(
+            $this->settingsManager->getSetting('privacy.disable_change_user_visibility_for_public_courses')
+        );
+    }
+
+    private function isSettingEnabled(mixed $value): bool
+    {
+        return true === $value
+            || 1 === $value
+            || '1' === $value
+            || 'true' === strtolower(trim((string) $value));
     }
 
     /**
@@ -184,13 +263,19 @@ final class CToolStateProvider implements ProviderInterface
         $rawTitle = $toolEntity ? trim((string) $toolEntity->getTitle()) : '';
         $courseToolTitle = trim((string) $cTool->getTitle());
 
-        foreach ($this->buildToolNameCandidates($rawTitle) as $candidate) {
+        $canonicalTitle = $this->toolChain->normalizeCourseToolName($rawTitle);
+        $candidates = array_values(array_unique(array_merge(
+            $this->buildToolNameCandidates($canonicalTitle),
+            $this->buildToolNameCandidates($rawTitle),
+        )));
+
+        foreach ($candidates as $candidate) {
             try {
                 $model = $this->toolChain->getToolFromName($candidate);
 
                 return [
                     'model' => $model,
-                    'name' => $candidate,
+                    'name' => $this->normalizeCourseToolKey($model->getTitle()),
                 ];
             } catch (Throwable) {
                 // Try next candidate

@@ -23,21 +23,21 @@ class SessionNormalizer implements NormalizerInterface, NormalizerAwareInterface
 
     private const ALREADY_CALLED = 'SESSION_NORMALIZER_ALREADY_CALLED';
 
-    public function normalize($object, ?string $format = null, array $context = []): array
+    public function normalize($data, ?string $format = null, array $context = []): array
     {
         $context[self::ALREADY_CALLED] = true;
 
-        \assert($object instanceof Session);
+        \assert($data instanceof Session);
 
         try {
-            $object->getAccessVisibility();
+            $data->getAccessVisibility();
         } catch (LogicException) {
-            $object->setAccessVisibilityByUser(
+            $data->setAccessVisibilityByUser(
                 $this->userHelper->getCurrent()
             );
         }
 
-        return $this->normalizer->normalize($object, $format, $context);
+        return $this->normalizer->normalize($data, $format, $context);
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

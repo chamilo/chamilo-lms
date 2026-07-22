@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyMeeting;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
@@ -44,6 +45,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private LearningPathSurveyCompletionManager $learningPathSurveyCompletionManager,
     ) {}
 
     /**
@@ -376,7 +378,13 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             $survey->setAnswered($survey->getAnswered() + 1);
         }
 
-        $this->entityManager->flush();
+        $this->learningPathSurveyCompletionManager->completeAndFlush(
+            $survey,
+            $course,
+            $session,
+            $user,
+            $request,
+        );
 
         return $this->surveyMeetingProvider->buildResponse(
             $survey,

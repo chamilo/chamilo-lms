@@ -37,29 +37,29 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
         private readonly Connection $connection
     ) {}
 
-    public function normalize(mixed $object, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $data = $this->normalizer->normalize($object, $format, $context);
+        $result = $this->normalizer->normalize($data, $format, $context);
 
-        if (!$object instanceof User || !\is_array($data)) {
-            return $data;
+        if (!$data instanceof User || !\is_array($result)) {
+            return $result;
         }
 
         $fieldName = trim((string) $this->settingsManager->getSetting('webservice.webservice_return_user_field'));
 
         if ('' === $fieldName || 'false' === strtolower($fieldName)) {
-            return $data;
+            return $result;
         }
 
-        $value = $this->resolveUserWebserviceField($object, $fieldName);
+        $value = $this->resolveUserWebserviceField($data, $fieldName);
 
         if (null !== $value && '' !== $value) {
-            $data['webserviceUserId'] = $value;
+            $result['webserviceUserId'] = $value;
         }
 
-        return $data;
+        return $result;
     }
 
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool

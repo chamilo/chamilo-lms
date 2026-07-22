@@ -39,12 +39,12 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         Security $security,
         AiDisclosureHelper $aiDisclosureHelper
     ): CStudentPublicationComment {
-        $fileExistsOption = $request->get('fileExistsOption', 'rename');
+        $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
 
         $commentEntity = new CStudentPublicationComment();
 
         $hasFile = (bool) $request->files->get('uploadFile');
-        $hasComment = '' !== trim((string) $request->get('comment'));
+        $hasComment = '' !== trim((string) $request->request->get('comment'));
 
         if ($hasFile || $hasComment) {
             $result = $this->handleCreateCommentRequest(
@@ -62,9 +62,9 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             }
         }
 
-        $commentText = $request->get('comment');
-        $submissionId = (int) $request->get('submissionId');
-        $sendMail = $request->get('sendMail', false);
+        $commentText = $request->request->get('comment');
+        $submissionId = (int) $request->request->get('submissionId');
+        $sendMail = $request->request->get('sendMail', false);
 
         if (!$submissionId) {
             throw new NotFoundHttpException('submissionId is required');
@@ -84,7 +84,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
 
         $managedUser = $em->getReference(User::class, $securityUser->getId());
 
-        $qualification = $request->get('qualification', null);
+        $qualification = $request->request->get('qualification', null);
         $hasQualification = null !== $qualification;
 
         // Object-level authorization: the submission must be reachable by the current user
@@ -123,7 +123,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
 
         // Persist AI-assisted raw flag as an ExtraField (comment-level correction).
         // Handler: work_corrections_comment (avoid collisions with correction files later).
-        $raw = $request->get('ai_assisted_raw', null);
+        $raw = $request->request->get('ai_assisted_raw', null);
         if (null !== $raw && ($hasFile || $hasComment)) {
             $iid = (int) ($commentEntity->getIid() ?? 0);
             if ($iid > 0) {

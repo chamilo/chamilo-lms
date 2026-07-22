@@ -631,6 +631,9 @@ async function submitAvailability() {
     meeting.value = response
     selectedSlots.value = Array.isArray(response.selectedSlots) ? [...response.selectedSlots] : []
     successMessage.value = response.message ? t(response.message) : t("Saved")
+    if (isLearningPathContext.value && window.parent !== window) {
+      window.parent.postMessage({ type: "chamilo:learning-path:refresh" }, window.location.origin)
+    }
   } catch (error) {
     console.error("Error saving meeting availability", error)
     errorMessage.value = error?.response?.data?.["hydra:description"] || t("Could not save meeting availability")

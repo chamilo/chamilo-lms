@@ -48,7 +48,7 @@ class Asset implements Stringable
     protected ?string $title = null;
 
     #[Assert\NotBlank]
-    #[Assert\Choice([self::SCORM, self::WATERMARK, self::EXTRA_FIELD, self::COURSE_CATEGORY, self::SKILL], message: 'Choose a valid category.')]
+    #[Assert\Choice(choices: [self::SCORM, self::WATERMARK, self::EXTRA_FIELD, self::COURSE_CATEGORY, self::SKILL], message: 'Choose a valid category.')]
     #[ORM\Column(type: 'string', length: 255)]
     protected ?string $category = null;
 

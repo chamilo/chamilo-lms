@@ -40,6 +40,7 @@
       <button
         v-if="
           isAllowedToEdit &&
+          tool.allowChangeVisibility !== false &&
           !isSorting &&
           !isCustomizing &&
           (session?.id ? 'true' === getSetting('session.allow_edit_tool_visibility_in_session') : true)
@@ -185,5 +186,11 @@ const resolvedToolUrl = computed(() => {
   return exerciseToolRoute.value ? null : props.tool.url || null
 })
 
-const isVisible = computed(() => props.tool?.resourceNode?.resourceLinks?.[0]?.visibility === 2)
+const isVisible = computed(() => {
+  if (typeof props.tool.visibility === "boolean") {
+    return props.tool.visibility
+  }
+
+  return props.tool.resourceNode?.resourceLinks?.[0]?.visibility === 2
+})
 </script>

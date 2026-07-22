@@ -14,14 +14,30 @@ use Exception;
 
 final class Version20231022124700 extends AbstractMigrationChamilo
 {
+    private const CONTENT_BATCH_SIZE = 1000;
+    private const DOCUMENT_BATCH_SIZE = 100;
+
+    /**
+     * @var array<string, int>
+     */
+    private array $courseIdsByCode = [];
+
     public function getDescription(): string
     {
-        return 'Replace old cidReq URL path with the new version and handle updates for HTML files.';
+        return 'Replace old cidReq URLs with keyset batches and a cached course map';
+    }
+
+    public function isTransactional(): bool
+    {
+        // Every replacement is idempotent. Committing statement by statement makes
+        // this migration safely resumable on large Ricky tables.
+        return false;
     }
 
     public function up(Schema $schema): void
     {
         $this->entityManager->clear();
+        $this->courseIdsByCode = $this->loadCourseIdsByCode();
 
         // Extend MySQL session timeouts to survive long processing on shared hosting.
         try {
@@ -33,53 +49,94 @@ final class Version20231022124700 extends AbstractMigrationChamilo
             // Non-fatal: the server may not allow changing these session variables.
         }
 
-        // Configuration for content updates in the database
         $updateConfigurations = [
-            ['table' => 'c_tool_intro', 'field' => 'intro_text'],
-            ['table' => 'c_course_description', 'field' => 'content'],
+            ['table' => 'c_tool_intro', 'fields' => ['intro_text']],
+            ['table' => 'c_course_description', 'fields' => ['content']],
             ['table' => 'c_quiz', 'fields' => ['description', 'text_when_finished']],
             ['table' => 'c_quiz_question', 'fields' => ['description', 'question']],
             ['table' => 'c_quiz_answer', 'fields' => ['answer', 'comment']],
-            ['table' => 'c_student_publication', 'field' => 'description'],
-            ['table' => 'c_student_publication_comment', 'field' => 'comment'],
-            ['table' => 'c_forum_post', 'field' => 'post_text'],
-            ['table' => 'c_glossary', 'field' => 'description'],
+            ['table' => 'c_student_publication', 'fields' => ['description']],
+            ['table' => 'c_student_publication_comment', 'fields' => ['comment']],
+            ['table' => 'c_forum_post', 'fields' => ['post_text']],
+            ['table' => 'c_glossary', 'fields' => ['description']],
             ['table' => 'c_survey', 'fields' => ['title', 'subtitle']],
             ['table' => 'c_survey_question', 'fields' => ['survey_question', 'survey_question_comment']],
-            ['table' => 'c_survey_question_option', 'field' => 'option_text'],
+            ['table' => 'c_survey_question_option', 'fields' => ['option_text']],
         ];
 
-        foreach ($updateConfigurations as $config) {
-            $this->updateContent($config);
+        foreach ($updateConfigurations as $configuration) {
+            foreach ($configuration['fields'] as $field) {
+                $this->updateContentField($configuration['table'], $field);
+            }
         }
 
         $this->updateHtmlFiles();
     }
 
-    private function updateContent(array $config): void
+    private function updateContentField(string $table, string $field): void
     {
-        $fields = isset($config['field']) ? [$config['field']] : $config['fields'] ?? [];
+        $lastIid = 0;
+        $seen = 0;
+        $updated = 0;
+        $startedAt = microtime(true);
 
-        foreach ($fields as $field) {
-            // Only process rows that actually contain the old cidReq pattern.
-            $sql = "SELECT iid, {$field} FROM {$config['table']} WHERE {$field} LIKE '%cidReq=%'";
+        while (true) {
+            $rows = $this->connection->fetchAllAssociative(
+                \sprintf(
+                    'SELECT iid, %1$s AS content
+                     FROM %2$s
+                     WHERE iid > :lastIid
+                       AND %1$s IS NOT NULL
+                       AND %1$s <> \'\'
+                       AND %1$s LIKE :needle
+                     ORDER BY iid
+                     LIMIT %3$d',
+                    $field,
+                    $table,
+                    self::CONTENT_BATCH_SIZE
+                ),
+                [
+                    'lastIid' => $lastIid,
+                    'needle' => '%cidReq=%',
+                ]
+            );
 
-            // Use iterateAssociative() for streaming (one row at a time) to avoid
-            // loading millions of rows into memory and to keep the connection active.
-            $rows = $this->connection->executeQuery($sql)->iterateAssociative();
-
-            foreach ($rows as $item) {
-                $originalText = $item[$field];
-                if (\is_string($originalText) && '' !== trim($originalText)) {
-                    $updatedText = $this->replaceURLParametersInContent($originalText);
-                    if ($originalText !== $updatedText) {
-                        $this->executeWithReconnect(function () use ($config, $field, $updatedText, $item): void {
-                            $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
-                            $this->connection->executeQuery($updateSql, ['newText' => $updatedText, 'id' => $item['iid']]);
-                        });
-                    }
-                }
+            if ([] === $rows) {
+                break;
             }
+
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
+
+            foreach ($rows as $row) {
+                ++$seen;
+                $original = (string) ($row['content'] ?? '');
+                $replacement = $this->replaceURLParametersInContent($original);
+
+                if ($replacement === $original) {
+                    continue;
+                }
+
+                $this->executeWithReconnect(function () use ($table, $field, $replacement, $row): void {
+                    $this->connection->executeStatement(
+                        "UPDATE {$table} SET {$field} = :content WHERE iid = :iid",
+                        [
+                            'content' => $replacement,
+                            'iid' => (int) $row['iid'],
+                        ]
+                    );
+                });
+                ++$updated;
+            }
+
+            $this->getLogger()->info('cidReq database-content migration progress.', [
+                'table' => $table,
+                'field' => $field,
+                'seen_candidates' => $seen,
+                'updated' => $updated,
+                'last_iid' => $lastIid,
+                'elapsed_seconds' => (int) (microtime(true) - $startedAt),
+            ]);
+            $this->keepAlive();
         }
     }
 
@@ -90,14 +147,16 @@ final class Version20231022124700 extends AbstractMigrationChamilo
     {
         try {
             $fn();
-        } catch (Exception $e) {
-            if (str_contains($e->getMessage(), 'server has gone away') || str_contains($e->getMessage(), '2006')) {
+        } catch (Exception $exception) {
+            if (str_contains($exception->getMessage(), 'server has gone away') || str_contains($exception->getMessage(), '2006')) {
                 $this->connection->close();
                 $this->connection->connect();
                 $fn();
-            } else {
-                throw $e;
+
+                return;
             }
+
+            throw $exception;
         }
     }
 
@@ -116,109 +175,160 @@ final class Version20231022124700 extends AbstractMigrationChamilo
 
     private function updateHtmlFiles(): void
     {
-        $sql = "SELECT iid, resource_node_id FROM c_document WHERE filetype = 'file'";
-        $result = $this->connection->executeQuery($sql);
-        $items = $result->fetchAllAssociative();
-
+        /** @var CDocumentRepository $documentRepo */
         $documentRepo = $this->container->get(CDocumentRepository::class);
+
+        /** @var ResourceNodeRepository $resourceNodeRepo */
         $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
 
-        foreach ($items as $item) {
-            $document = $documentRepo->find($item['iid']);
-            if (!$document) {
-                continue;
+        $lastIid = 0;
+        $seen = 0;
+        $htmlCandidates = 0;
+        $updated = 0;
+
+        while (true) {
+            $rows = $this->connection->fetchAllAssociative(
+                \sprintf(
+                    <<<'SQL'
+SELECT iid
+FROM c_document
+WHERE filetype = 'file'
+  AND resource_node_id IS NOT NULL
+  AND iid > :lastIid
+ORDER BY iid
+LIMIT %d
+SQL,
+                    self::DOCUMENT_BATCH_SIZE
+                ),
+                ['lastIid' => $lastIid]
+            );
+
+            if ([] === $rows) {
+                break;
             }
 
-            $resourceNode = $document->getResourceNode();
-            if (!$resourceNode || !$resourceNode->hasResourceFile()) {
-                continue;
-            }
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
-            $resourceFile = $resourceNode->getResourceFiles()->first();
-            if (!$resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
-                continue;
-            }
-
-            try {
-                $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                if (\is_string($content) && '' !== trim($content)) {
-                    $updatedContent = $this->replaceURLParametersInContent($content);
-                    if ($content !== $updatedContent) {
-                        $documentRepo->updateResourceFileContent($document, $updatedContent);
-                        $documentRepo->update($document);
-                    }
+            foreach ($rows as $row) {
+                ++$seen;
+                $document = $documentRepo->find((int) $row['iid']);
+                if (null === $document) {
+                    continue;
                 }
-            } catch (Exception $e) {
-                // Error handling for specific documents
-                error_log("Error processing file for document ID {$item['iid']}: ".$e->getMessage());
+
+                $resourceNode = $document->getResourceNode();
+                if (null === $resourceNode || !$resourceNode->hasResourceFile()) {
+                    continue;
+                }
+
+                $resourceFile = $resourceNode->getResourceFiles()->first();
+                if (false === $resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
+                    continue;
+                }
+
+                ++$htmlCandidates;
+
+                try {
+                    $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+                    if (!\is_string($content) || !str_contains($content, 'cidReq=')) {
+                        continue;
+                    }
+
+                    $replacement = $this->replaceURLParametersInContent($content);
+                    if ($replacement === $content) {
+                        continue;
+                    }
+
+                    $documentRepo->updateResourceFileContent($document, $replacement);
+                    $documentRepo->update($document);
+                    ++$updated;
+                } catch (Exception $exception) {
+                    $this->getLogger()->warning('Could not update cidReq URL in HTML document.', [
+                        'document_iid' => (int) $row['iid'],
+                        'error' => $exception->getMessage(),
+                    ]);
+                }
+            }
+
+            $this->entityManager->clear();
+            $this->getLogger()->info('cidReq HTML-file migration progress.', [
+                'documents_seen' => $seen,
+                'html_candidates' => $htmlCandidates,
+                'updated' => $updated,
+                'last_iid' => $lastIid,
+            ]);
+            $this->keepAlive();
+        }
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function loadCourseIdsByCode(): array
+    {
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT id, code FROM course WHERE code IS NOT NULL AND code <> \'\' ORDER BY id DESC'
+        );
+
+        $map = [];
+        foreach ($rows as $row) {
+            $code = (string) $row['code'];
+            if (!isset($map[$code])) {
+                $map[$code] = (int) $row['id'];
             }
         }
+
+        return $map;
     }
 
     private function replaceURLParametersInContent(string $content): string
     {
-        // Pattern to find and replace cidReq, id_session, and gidReq
         $pattern = '/((https?:\/\/[^\/\s]*|)\/[^?\s]+?)\?(.*?)(cidReq=([a-zA-Z0-9_]+))((?:&|&amp;)id_session=([0-9]+))?((?:&|&amp;)gidReq=([0-9]+))?(.*)/i';
 
         try {
             $newContent = @preg_replace_callback(
                 $pattern,
-                function ($matches) {
+                function (array $matches): string {
                     $code = $matches[5] ?? null;
-
-                    if (!$code) {
-                        error_log('Missing cidReq in URL: '.$matches[0]);
-
+                    if (null === $code || '' === $code) {
                         return $matches[0];
                     }
 
-                    $courseId = null;
-                    $sql = 'SELECT id FROM course WHERE code = :code ORDER BY id DESC LIMIT 1';
-                    $stmt = $this->connection->executeQuery($sql, ['code' => $code]);
-                    $course = $stmt->fetch();
-
-                    if ($course) {
-                        $courseId = $course['id'];
-                    }
-
+                    $courseId = $this->courseIdsByCode[$code] ?? null;
                     if (null === $courseId) {
-                        error_log('Course ID not found for cidReq: '.$code);
-
                         return $matches[0];
                     }
 
-                    // Ensure sid and gid are always populated
                     $sessionId = $matches[7] ?? '0';
                     $groupId = $matches[9] ?? '0';
                     $remainingParams = $matches[10] ?? '';
-
-                    // Prepare new URL with updated parameters
-                    $newParams = "cid=$courseId&sid=$sessionId&gid=$groupId";
                     $beforeCidReqParams = $matches[3] ?? '';
+                    $newParams = "cid={$courseId}&sid={$sessionId}&gid={$groupId}";
 
-                    // Ensure other parameters are maintained
-                    if (!empty($remainingParams)) {
+                    if ('' !== $remainingParams) {
                         $newParams .= '&'.ltrim($remainingParams, '&amp;');
                     }
 
-                    $finalUrl = $matches[1].'?'.$beforeCidReqParams.$newParams;
-
-                    return str_replace('&amp;', '&', $finalUrl);
+                    return str_replace(
+                        '&amp;',
+                        '&',
+                        $matches[1].'?'.$beforeCidReqParams.$newParams
+                    );
                 },
                 $content
             );
 
             if (false === $newContent || null === $newContent) {
-                error_log('preg_replace_callback failed for content: '.substr($content, 0, 500));
-
                 return $content;
             }
-        } catch (Exception $e) {
-            error_log('Exception in replaceURLParametersInContent: '.$e->getMessage());
+
+            return $newContent;
+        } catch (Exception $exception) {
+            $this->getLogger()->warning('cidReq URL replacement failed.', [
+                'error' => $exception->getMessage(),
+            ]);
 
             return $content;
         }
-
-        return $newContent;
     }
 }

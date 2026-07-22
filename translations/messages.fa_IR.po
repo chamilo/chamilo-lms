@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -37341,4 +37341,139 @@ msgstr "توسط"
 
 msgid "required"
 msgstr "الزامی"
+
+msgid "Incorrect password."
+msgstr "رمز عبور نادرست است."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "هشدار یکپارچگی فایل برای ۱ ساعت متوقف شد."
+
+msgid "New baseline established: %s files."
+msgstr "خط مبنا جدید ایجاد شد: %s فایل."
+
+msgid "Scan complete: changes were detected."
+msgstr "اسکن کامل شد: تغییراتی شناسایی شد."
+
+msgid "Scan complete: no changes were detected."
+msgstr "اسکن کامل شد: هیچ تغییری شناسایی نشد."
+
+msgid "File integrity"
+msgstr "یکپارچگی فایل"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "این گزارش فایل‌های نصب‌شده (همه چیز به‌جز var\/ و .git\/، هرچند .git\/config همچنان برای شناسایی ربوده‌شدن ریموت نظارت می‌شود) را با یک خط مبنای معتبر مقایسه می‌کند تا افزودن، تغییر یا حذف غیرمنتظره را شناسایی کند."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "می‌توانید آخرین گزارش را در زیر بررسی کنید. اجرای اسکن، توقف هشدار یا ایجاد خط مبنای جدید نیازمند مدیر سراسری است."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "هشداردهی در حال حاضر برای نگهداری متوقف شده است. به‌طور خودکار در %date% از سر گرفته خواهد شد."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "هنوز هیچ اسکنی اجرا نشده است. از اینجا یا از خط فرمان با app:file-integrity:scan اجرا کنید."
+
+msgid "Last scan"
+msgstr "آخرین اسکن"
+
+msgid "Files scanned"
+msgstr "فایل‌های اسکن‌شده"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "هنوز خط مبنایی وجود نداشت: این اسکن یکی ایجاد کرد. تغییرات از اسکن بعدی گزارش خواهند شد."
+
+msgid "No changes detected since the baseline."
+msgstr "از زمان ایجاد خط مبنا هیچ تغییری شناسایی نشد."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "پیکربندی ریموت گیت (.git\/config) تغییر کرده است. بررسی کنید که این تغییر مورد انتظار بوده باشد."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "اسکن زودتر متوقف شد زیرا یک زیرشاخه قابل خواندن نبود (مجوزهای فایل را بررسی کنید). نتایج زیر ممکن است ناقص باشد."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% فایل(ها) به دلیل مجوزها قابل خواندن نبودند و نادیده گرفته شدند."
+
+msgid "Run a scan now"
+msgstr "اکنون اسکن را اجرا کنید"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "توقف هشدار برای ۱ ساعت (برای نگهداری)"
+
+msgid "Pause for 1 hour"
+msgstr "توقف برای ۱ ساعت"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "درخت فایل فعلی را به‌عنوان خط مبنای جدید تأیید کنید"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "این کار همه فایل‌های فعلی را به‌عنوان صحیح تأیید می‌کند، از جمله هر تغییری که بررسی نشده است. ادامه می‌دهید؟"
+
+msgid "Establish new baseline"
+msgstr "ایجاد خط مبنای جدید"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "زمان‌بندی اسکن از crontab سیستم، برای مثال"
+
+msgid "File integrity alert on %platform%"
+msgstr "هشدار یکپارچگی فایل در %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "اسکن یکپارچگی فایل تغییراتی را در پلتفرم شناسایی کرد:"
+
+msgid "Added files"
+msgstr "فایل‌های اضافه‌شده"
+
+msgid "Modified files"
+msgstr "فایل‌های تغییر‌یافته"
+
+msgid "Deleted files"
+msgstr "فایل‌های حذف‌شده"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "گزارش کامل را از مدیریت > امنیت > یکپارچگی فایل بررسی کنید."
+
+msgid "Password to confirm pausing alerts"
+msgstr "رمز عبور برای تأیید توقف هشدارها"
+
+msgid "Password to confirm the new baseline"
+msgstr "رمز عبور برای تأیید خط مبنای جدید"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "اسکنی در حال اجرا است. لطفاً پیش از شروع اسکن جدید، منتظر پایان آن بمانید."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "اسکنی در حال اجرا است (شروع‌شده در %date%). اسکن کامل ممکن است چند دقیقه طول بکشد؛ این صفحه را می‌توان با خیال راحت برای بررسی پیشرفت بارگذاری مجدد کرد."
+
+msgid "Currently processing"
+msgstr "در حال پردازش"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "اسکن قبلی (شروع‌شده در %date%) پیش از پایان قطع شد — فرآیند دیگر در حال اجرا نیست. می‌توانید با خیال راحت اسکن جدیدی شروع کنید."
+
+msgid "files"
+msgstr "فایل‌ها"
+
+msgid "Permissions changed"
+msgstr "مجوزها تغییر کرده است"
+
+msgid "Files with changed permissions"
+msgstr "فایل‌هایی با مجوزهای تغییر‌یافته"
+
+msgid "Alert history"
+msgstr "تاریخچه هشدارها"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "هر اسکنی که چیزی یافت، حتی پس از رفع انحراف یا ایجاد خط مبنای جدید نگه داشته می‌شود — برخلاف گزارش بالا، اسکن تمیز یا بازنشانی خط مبنا هرگز این را پاک نمی‌کند."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "این ورودی در زمان ثبت کوتاه شد؛ فهرست کامل را در لاگ CEF ببینید."
+
+msgid "No alert has been recorded yet."
+msgstr "هنوز هیچ هشداری ثبت نشده است."
+
+msgid "Git remote changed"
+msgstr "ریموت گیت تغییر کرده است"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "تغییرات بسیار زیاد برای فهرست کامل؛ تنها اولین ورودی‌های هر دسته در زیر نمایش داده شده‌اند. برای فهرست کامل به %link_start%گزارش CEF%link_end% مراجعه کنید."
 

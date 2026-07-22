@@ -250,7 +250,7 @@ table and create a new one, losing all records in that table in the process.
 
 To avoid this, prefer executing migrations with the following instead.
 ```
-php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V200\Version[date]"
+php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V210\Version[date]"
 ```
 This will respect the migration logic and do the required data processing.
 You can see the version numbers in the list of updated or created files when launching `git pull`.

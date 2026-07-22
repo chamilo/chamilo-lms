@@ -7,113 +7,196 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Asset;
-use Chamilo\CoreBundle\Entity\AttemptFile;
-use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Schema\Schema;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use Doctrine\DBAL\Schema\Table;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Uid\Uuid;
 
 final class Version20240519210000 extends AbstractMigrationChamilo
 {
+    private const SELECT_BATCH_SIZE = 250;
+    private const ASSET_FLUSH_BATCH_SIZE = 25;
+
     public function getDescription(): string
     {
-        return 'Migrate exercise audio files';
+        return 'Migrate exercise audio files with direct course paths and batched assets';
+    }
+
+    public function isTransactional(): bool
+    {
+        // Filesystem writes cannot be rolled back. Each batch is made
+        // idempotent through attempt_file.attempt_id checks.
+        return false;
     }
 
     public function up(Schema $schema): void
     {
-        $attemptRepo = $this->entityManager->getRepository(TrackEAttempt::class);
+        if (!$schema->hasTable('attempt_file')) {
+            $this->getLogger()->warning('attempt_file table is missing; exercise audio migration skipped.');
 
-        // Migrate exercise audio files
-        $sql = "SELECT ta.exe_id, ta.question_id, ta.user_id, ta.session_id, te.exe_exo_id, ta.filename
-                FROM track_e_attempt ta
-                INNER JOIN track_e_exercises te ON te.exe_id = ta.exe_id
-                WHERE (ta.filename IS NOT NULL AND ta.filename != '')";
-        $result = $this->connection->executeQuery($sql);
-        $attempts = $result->fetchAllAssociative();
-
-        foreach ($attempts as $attemptData) {
-            $sessionId = (int) $attemptData['session_id'];
-            $exerciseId = (int) $attemptData['exe_exo_id'];
-            $questionId = (int) $attemptData['question_id'];
-            $userId = (int) $attemptData['user_id'];
-            $filename = $attemptData['filename'];
-
-            $pathPattern = "{$sessionId}/{$exerciseId}/{$questionId}/{$userId}/{$filename}";
-            $courseDir = $this->findCourseDirectory($pathPattern);
-
-            if ($courseDir) {
-                $filePath = $this->getUpdateRootPath()."app/courses/{$courseDir}/exercises/{$pathPattern}";
-                $this->processFile($filePath, $attemptRepo, $attemptData);
-            } else {
-                error_log('MIGRATIONS :: File not found for pattern: '.$pathPattern);
-            }
+            return;
         }
 
-        $this->entityManager->flush();
-    }
+        $attemptFileTable = $this->connection->createSchemaManager()->introspectTable('attempt_file');
+        if (!$attemptFileTable->hasColumn('asset_id')) {
+            $this->getLogger()->warning('attempt_file.asset_id is missing; exercise audio migration skipped.');
 
-    private function findCourseDirectory(string $pathPattern): ?string
-    {
-        $kernel = $this->container->get('kernel');
-        $rootPath = $this->getUpdateRootPath().'/app/courses/';
-        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootPath));
-
-        foreach ($iterator as $file) {
-            if (str_contains($file->getPathname(), $pathPattern)) {
-                $relativePath = str_replace($rootPath, '', $file->getPath());
-
-                return explode('/', $relativePath)[0];
-            }
+            return;
         }
 
-        return null;
-    }
+        $lastId = 0;
+        $seen = 0;
+        $migrated = 0;
+        $missing = 0;
+        $queued = [];
 
-    private function processFile(string $filePath, $attemptRepo, array $attemptData): void
-    {
-        if (file_exists($filePath)) {
-            $fileName = basename($filePath);
+        while (true) {
+            $rows = $this->connection->fetchAllAssociative(
+                \sprintf(<<<'SQL'
+SELECT
+    attempt.id,
+    attempt.exe_id,
+    attempt.question_id,
+    attempt.user_id,
+    attempt.filename,
+    exercise.session_id,
+    exercise.exe_exo_id,
+    course.directory
+FROM track_e_attempt attempt
+INNER JOIN track_e_exercises exercise
+    ON exercise.exe_id = attempt.exe_id
+INNER JOIN course
+    ON course.id = exercise.c_id
+WHERE attempt.id > :lastId
+  AND attempt.filename IS NOT NULL
+  AND TRIM(attempt.filename) <> ''
+  AND NOT EXISTS (
+      SELECT 1
+      FROM attempt_file existing_file
+      WHERE existing_file.attempt_id = attempt.id
+  )
+ORDER BY attempt.id
+LIMIT %d
+SQL, self::SELECT_BATCH_SIZE),
+                ['lastId' => $lastId]
+            );
 
-            /** @var TrackEAttempt $attempt */
-            $attempt = $attemptRepo->findOneBy([
-                'user' => $attemptData['user_id'],
-                'questionId' => $attemptData['question_id'],
-                'filename' => $fileName,
-            ]);
+            if ([] === $rows) {
+                break;
+            }
 
-            if (null !== $attempt) {
-                if ($attempt->getAttemptFiles()->count() > 0) {
-                    return;
+            $lastId = (int) $rows[array_key_last($rows)]['id'];
+
+            foreach ($rows as $row) {
+                ++$seen;
+                $fileName = basename((string) $row['filename']);
+                $relativePath = \sprintf(
+                    '%d/%d/%d/%d/%s',
+                    (int) $row['session_id'],
+                    (int) $row['exe_exo_id'],
+                    (int) $row['question_id'],
+                    (int) $row['user_id'],
+                    $fileName
+                );
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.(string) $row['directory'].'/exercises/'.$relativePath;
+
+                if (!$this->fileExists($filePath)) {
+                    ++$missing;
+                    $this->warnIf(true, 'Exercise audio file not found: '.$filePath);
+
+                    continue;
                 }
 
-                $mimeType = mime_content_type($filePath);
-                $file = new UploadedFile($filePath, $fileName, $mimeType, null, true);
-
+                $mimeType = mime_content_type($filePath) ?: 'application/octet-stream';
+                $uploadedFile = new UploadedFile($filePath, $fileName, $mimeType, null, true);
                 $asset = (new Asset())
                     ->setCategory(Asset::EXERCISE_ATTEMPT)
                     ->setTitle($fileName)
-                    ->setFile($file)
+                    ->setFile($uploadedFile)
                 ;
+
                 $this->entityManager->persist($asset);
-                $this->entityManager->flush();
+                $queued[] = [
+                    'attempt_id' => (int) $row['id'],
+                    'asset' => $asset,
+                ];
 
-                $attemptFile = (new AttemptFile())
-                    ->setAsset($asset)
-                ;
-                $attempt->addAttemptFile($attemptFile);
-                $this->entityManager->persist($attemptFile);
-                $this->entityManager->flush();
-
-                error_log('MIGRATIONS :: File processed and inserted as asset and attempt file: '.$filePath);
+                if (\count($queued) >= self::ASSET_FLUSH_BATCH_SIZE) {
+                    $migrated += $this->flushAssetBatch($queued, $attemptFileTable);
+                    $queued = [];
+                }
             }
+
+            $this->getLogger()->info('Exercise audio migration progress.', [
+                'seen' => $seen,
+                'migrated' => $migrated,
+                'missing' => $missing,
+                'last_attempt_id' => $lastId,
+            ]);
         }
+
+        if ([] !== $queued) {
+            $migrated += $this->flushAssetBatch($queued, $attemptFileTable);
+        }
+
+        $this->getLogger()->info('Exercise audio migration completed.', [
+            'seen' => $seen,
+            'migrated' => $migrated,
+            'missing' => $missing,
+        ]);
+    }
+
+    /**
+     * @param array<int, array{attempt_id: int, asset: Asset}> $queued
+     */
+    private function flushAssetBatch(array $queued, Table $attemptFileTable): int
+    {
+        $this->entityManager->flush();
+        $now = gmdate('Y-m-d H:i:s');
+        $inserted = 0;
+
+        foreach ($queued as $item) {
+            $attemptId = $item['attempt_id'];
+            if (false !== $this->connection->fetchOne(
+                'SELECT id FROM attempt_file WHERE attempt_id = :attemptId LIMIT 1',
+                ['attemptId' => $attemptId]
+            )) {
+                continue;
+            }
+
+            $row = [
+                'id' => Uuid::v4()->toBinary(),
+                'attempt_id' => $attemptId,
+                'asset_id' => $item['asset']->getId()->toBinary(),
+            ];
+            $types = [
+                'id' => ParameterType::BINARY,
+                'asset_id' => ParameterType::BINARY,
+            ];
+
+            if ($attemptFileTable->hasColumn('created_at')) {
+                $row['created_at'] = $now;
+            }
+            if ($attemptFileTable->hasColumn('updated_at')) {
+                $row['updated_at'] = $now;
+            }
+            if ($attemptFileTable->hasColumn('comment')) {
+                $row['comment'] = '';
+            }
+
+            $this->connection->insert('attempt_file', $row, $types);
+            ++$inserted;
+        }
+
+        $this->entityManager->clear(Asset::class);
+
+        return $inserted;
     }
 
     public function down(Schema $schema): void
     {
-        // This migration is not reversible
+        // Filesystem migration is not reversible.
     }
 }

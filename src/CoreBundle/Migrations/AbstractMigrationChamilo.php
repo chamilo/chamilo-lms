@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
@@ -31,6 +30,7 @@ use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManagerInterface;
 use finfo;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -110,27 +110,59 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $this->container = $container;
     }
 
-    public function adminExist(): bool
-    {
-        $sql = 'SELECT user_id FROM admin WHERE user_id IN (SELECT id FROM user) ORDER BY id LIMIT 1';
-        $result = $this->connection->executeQuery($sql);
-        $adminRow = $result->fetchAssociative();
-
-        if (empty($adminRow)) {
-            return false;
-        }
-
-        return true;
-    }
-
     public function getAdmin(): User
     {
-        $admin = $this->entityManager
-            ->getRepository(Admin::class)
-            ->findOneBy([], ['id' => 'ASC'])
-        ;
+        $adminId = $this->findRoleBasedAdminId();
 
-        return $admin->getUser();
+        // Historical migrations run before roles were populated. Keep this
+        // fallback only while upgrading a legacy database that still has the
+        // admin table; current runtime code must use user roles exclusively.
+        if (null === $adminId && $this->connection->createSchemaManager()->tablesExist(['admin'])) {
+            $legacyAdminId = $this->connection->fetchOne(
+                'SELECT user_id FROM admin WHERE user_id IN (SELECT id FROM user) ORDER BY id LIMIT 1'
+            );
+            $adminId = false === $legacyAdminId ? null : (int) $legacyAdminId;
+        }
+
+        if (null === $adminId || $adminId <= 0) {
+            throw new RuntimeException('Unable to resolve a platform administrator for the migration.');
+        }
+
+        $admin = $this->entityManager->find(User::class, $adminId);
+        if (!$admin instanceof User) {
+            throw new RuntimeException('The platform administrator user could not be loaded.');
+        }
+
+        return $admin;
+    }
+
+    private function findRoleBasedAdminId(): ?int
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+        if (!$schemaManager->tablesExist(['user'])) {
+            return null;
+        }
+
+        if (!$schemaManager->introspectTable('user')->hasColumn('roles')) {
+            return null;
+        }
+
+        $adminId = $this->connection->fetchOne(
+            <<<'SQL'
+SELECT id
+FROM user
+WHERE roles LIKE :admin_role
+   OR roles LIKE :global_admin_role
+ORDER BY id
+LIMIT 1
+SQL,
+            [
+                'admin_role' => '%ROLE_ADMIN%',
+                'global_admin_role' => '%ROLE_GLOBAL_ADMIN%',
+            ]
+        );
+
+        return false === $adminId ? null : (int) $adminId;
     }
 
     public function addSettingCurrent(

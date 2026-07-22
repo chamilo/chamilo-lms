@@ -135,6 +135,12 @@ final class LearningPathRuntime
     #[Groups(['learning_path_runtime:read'])]
     public string $contentUrl = '';
 
+    /**
+     * @var array<string, mixed>
+     */
+    #[Groups(['learning_path_runtime:read'])]
+    public array $finalItem = [];
+
     #[Groups(['learning_path_runtime:read'])]
     public string $audioUrl = '';
 

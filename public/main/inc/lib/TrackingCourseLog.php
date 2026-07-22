@@ -226,7 +226,7 @@ class TrackingCourseLog
             if (!empty($displayRow['session_name'])) {
                 $sessionText = $displayRow['session_name'];
                 if (!empty($displayRow['coach_username'])) {
-                    $sessionText .= '<br />'.get_lang('Coach').': '.$displayRow['coach_username'];
+                    $sessionText .= '<br />'.get_lang('Tutor').': '.$displayRow['coach_username'];
                 }
             }
             $displayRow[2] = $sessionText;

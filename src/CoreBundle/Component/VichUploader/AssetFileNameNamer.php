@@ -42,7 +42,7 @@ class AssetFileNameNamer implements NamerInterface
             $request = $this->requestStack->getCurrentRequest();
             if ($request) {
                 $templateId = $object->getId();
-                $templateTitle = (string) $request->get('title', 'default-title');
+                $templateTitle = (string) $request->query->get('title', $request->request->get('title', 'default-title'));
                 $titleSlug = $this->slugify($templateTitle);
 
                 $currentFileName = $mapping->getFileName($object);

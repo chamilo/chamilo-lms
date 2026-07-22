@@ -30,6 +30,9 @@ var/upload/*
 /config/settings_overrides.yaml
 /config/plugin.yaml
 
+# Symfony 7.4 auto-generated config reference (IDE autocompletion helper)
+/config/reference.php
+
 # Home
 components/*
 

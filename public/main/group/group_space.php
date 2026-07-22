@@ -338,7 +338,7 @@ if (!empty($actions_array)) {
 $tutors = $groupEntity->getTutors();
 
 echo '<div class="mt-8 rounded-2xl border border-gray-50 bg-white p-6 shadow-sm">';
-echo '<h2 class="text-base font-semibold text-gray-900">'.get_lang('Coaches').'</h2>';
+echo '<h2 class="text-base font-semibold text-gray-900">'.get_lang('Tutors').'</h2>';
 
 if (0 == count($tutors)) {
     echo '<p class="mt-3 text-sm text-gray-600">'.get_lang('(none)').'</p>';

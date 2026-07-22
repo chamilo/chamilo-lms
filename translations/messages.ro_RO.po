@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de formulă: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -37357,4 +37357,139 @@ msgstr "de"
 
 msgid "required"
 msgstr "obligatoriu"
+
+msgid "Incorrect password."
+msgstr "Parolă incorectă."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alertarea integrității fișierelor a fost întreruptă pentru 1 oră."
+
+msgid "New baseline established: %s files."
+msgstr "Noua linie de bază stabilită: %s fișiere."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scanare finalizată: au fost detectate modificări."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scanare finalizată: nu au fost detectate modificări."
+
+msgid "File integrity"
+msgstr "Integritate fișiere"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Acest raport compară fișierele instalate (totul cu excepția var/ și .git/, deși .git/config este totuși monitorizat pentru a detecta o preluare neautorizată a remote-ului) cu o linie de bază de încredere, pentru a detecta adăugări, modificări sau ștergeri neașteptate."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Puteți consulta cel mai recent raport mai jos. Executarea unei scanări, întreruperea alertării sau stabilirea unei noi linii de bază necesită un administrator global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Alertarea este momentan întreruptă pentru întreținere. Va relua automat la %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Nu a fost executată nicio scanare încă. Executați una de aici sau din linia de comandă cu app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Ultima scanare"
+
+msgid "Files scanned"
+msgstr "Fișiere scanate"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Nu exista încă nicio linie de bază: această scanare a stabilit una. Modificările vor fi raportate începând cu următoarea scanare."
+
+msgid "No changes detected since the baseline."
+msgstr "Nu au fost detectate modificări față de linia de bază."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Configurația remote Git (.git/config) a fost modificată. Verificați dacă acest lucru era așteptat."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Scanarea s-a oprit prematur deoarece un subdirector nu a putut fi citit (verificați permisiunile fișierelor). Rezultatele de mai jos pot fi parțiale."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fișier(e) nu au putut fi citite (permisiuni) și au fost omise."
+
+msgid "Run a scan now"
+msgstr "Executați o scanare acum"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Întrerupeți alertarea pentru 1 oră (pentru întreținere)"
+
+msgid "Pause for 1 hour"
+msgstr "Întrerupeți pentru 1 oră"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Încredeți-vă în arborele de fișiere curent ca nouă linie de bază"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Aceasta va considera fiecare fișier curent ca fiind corect, inclusiv orice modificare nerevizuită. Continuați?"
+
+msgid "Establish new baseline"
+msgstr "Stabiliți o nouă linie de referință"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Programați scanarea dintr-un crontab de sistem, de exemplu"
+
+msgid "File integrity alert on %platform%"
+msgstr "Alertă de integritate a fișierelor pe %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "O scanare de integritate a fișierelor a detectat modificări pe platformă:"
+
+msgid "Added files"
+msgstr "Fișiere adăugate"
+
+msgid "Modified files"
+msgstr "Fișiere modificate"
+
+msgid "Deleted files"
+msgstr "Fișiere șterse"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Consultați raportul complet din Administrare > Securitate > Integritate fișiere."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Parolă pentru confirmarea întreruperii alertelor"
+
+msgid "Password to confirm the new baseline"
+msgstr "Parolă pentru confirmarea noii linii de referință"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "O scanare este deja în curs. Vă rugăm să așteptați finalizarea acesteia înainte de a începe alta."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "O scanare este în curs de desfășurare (începută la %date%). O scanare completă poate dura câteva minute; această pagină poate fi reîncărcată în siguranță pentru a verifica progresul."
+
+msgid "Currently processing"
+msgstr "Se procesează în prezent"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "O scanare anterioară (începută la %date%) a fost întreruptă înainte de a se finaliza — procesul nu mai rulează. Puteți începe în siguranță una nouă."
+
+msgid "files"
+msgstr "fișiere"
+
+msgid "Permissions changed"
+msgstr "Permisiuni modificate"
+
+msgid "Files with changed permissions"
+msgstr "Fișiere cu permisiuni modificate"
+
+msgid "Alert history"
+msgstr "Istoric alerte"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Fiecare scanare care a găsit ceva este păstrată chiar și după rezolvarea abaterii sau stabilirea unei noi linii de referință — spre deosebire de raportul de mai sus, o scanare curată sau o reinițializare nu șterge niciodată acest istoric."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Această intrare a fost trunchiată la momentul capturării; consultați jurnalul CEF pentru lista completă."
+
+msgid "No alert has been recorded yet."
+msgstr "Nu a fost înregistrată nicio alertă încă."
+
+msgid "Git remote changed"
+msgstr "Remote Git modificat"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Prea multe modificări pentru a fi afișate integral; doar primele intrări din fiecare categorie sunt afișate mai jos. Consultați %link_start%jurnalul CEF%link_end% pentru lista completă."
 

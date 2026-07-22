@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -37343,4 +37343,139 @@ msgstr "bởi"
 
 msgid "required"
 msgstr "bắt buộc"
+
+msgid "Incorrect password."
+msgstr "Mật khẩu không đúng."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Cảnh báo toàn vẹn tệp đã tạm dừng trong 1 giờ."
+
+msgid "New baseline established: %s files."
+msgstr "Đường cơ sở mới được thiết lập: %s tệp."
+
+msgid "Scan complete: changes were detected."
+msgstr "Quét hoàn tất: đã phát hiện thay đổi."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Quét hoàn tất: không phát hiện thay đổi."
+
+msgid "File integrity"
+msgstr "Toàn vẹn tệp"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Báo cáo này so sánh các tệp đã cài đặt (tất cả ngoại trừ var\/ và .git\/, mặc dù .git\/config vẫn được theo dõi để phát hiện điều khiển từ xa bị chiếm đoạt) với đường cơ sở đáng tin cậy, nhằm phát hiện các thêm, sửa đổi hoặc xóa không mong muốn."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Bạn có thể xem báo cáo mới nhất bên dưới. Chạy quét, tạm dừng cảnh báo hoặc thiết lập đường cơ sở mới yêu cầu quản trị viên toàn cục."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Cảnh báo hiện đang tạm dừng để bảo trì. Nó sẽ tự động tiếp tục vào %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Chưa có lần quét nào được chạy. Chạy một lần từ đây hoặc từ dòng lệnh với app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Lần quét gần nhất"
+
+msgid "Files scanned"
+msgstr "Tệp đã quét"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Chưa có đường cơ sở nào: lần quét này đã thiết lập một đường cơ sở. Các thay đổi sẽ được báo cáo bắt đầu từ lần quét tiếp theo."
+
+msgid "No changes detected since the baseline."
+msgstr "Không phát hiện thay đổi nào kể từ đường cơ sở."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Cấu hình Git remote (.git\/config) đã thay đổi. Hãy xác minh đây là điều mong muốn."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Quét đã dừng sớm vì không thể đọc một thư mục con (kiểm tra quyền tệp). Kết quả bên dưới có thể chỉ là một phần."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% tệp không thể đọc (quyền) và đã bị bỏ qua."
+
+msgid "Run a scan now"
+msgstr "Chạy quét ngay"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Tạm dừng cảnh báo trong 1 giờ (để bảo trì)"
+
+msgid "Pause for 1 hour"
+msgstr "Tạm dừng trong 1 giờ"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Tin tưởng cây tệp hiện tại làm đường cơ sở mới"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Thao tác này sẽ tin tưởng mọi tệp hiện tại là đúng, bao gồm mọi thay đổi chưa được xem xét. Tiếp tục?"
+
+msgid "Establish new baseline"
+msgstr "Thiết lập đường cơ sở mới"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Lên lịch quét từ crontab hệ thống, ví dụ"
+
+msgid "File integrity alert on %platform%"
+msgstr "Cảnh báo toàn vẹn tệp trên %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Một lần quét toàn vẹn tệp đã phát hiện thay đổi trên nền tảng:"
+
+msgid "Added files"
+msgstr "Tệp đã thêm"
+
+msgid "Modified files"
+msgstr "Tệp đã sửa đổi"
+
+msgid "Deleted files"
+msgstr "Tệp đã xóa"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Xem báo cáo đầy đủ từ Quản trị > Bảo mật > Toàn vẹn tệp."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Mật khẩu để xác nhận tạm dừng cảnh báo"
+
+msgid "Password to confirm the new baseline"
+msgstr "Mật khẩu để xác nhận đường cơ sở mới"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Một lần quét đang chạy. Vui lòng đợi nó kết thúc trước khi bắt đầu lần quét khác."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Một lần quét đang chạy (bắt đầu lúc %date%). Một lần quét đầy đủ có thể mất vài phút; trang này có thể được tải lại an toàn để kiểm tra tiến độ."
+
+msgid "Currently processing"
+msgstr "Đang xử lý"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Một lần quét trước đó (bắt đầu lúc %date%) đã bị gián đoạn trước khi hoàn tất — tiến trình không còn chạy nữa. Bạn có thể bắt đầu một lần quét mới an toàn."
+
+msgid "files"
+msgstr "tệp"
+
+msgid "Permissions changed"
+msgstr "Quyền đã thay đổi"
+
+msgid "Files with changed permissions"
+msgstr "Tệp có quyền thay đổi"
+
+msgid "Alert history"
+msgstr "Lịch sử cảnh báo"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Mỗi lần quét phát hiện điều gì đó đều được giữ lại ngay cả sau khi sự lệch đã được giải quyết hoặc một đường cơ sở mới được thiết lập — không giống như báo cáo trên, một lần quét sạch hoặc thiết lập lại đường cơ sở không bao giờ xóa mục này."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Mục này đã bị cắt bớt tại thời điểm thu thập; xem nhật ký CEF để có danh sách đầy đủ."
+
+msgid "No alert has been recorded yet."
+msgstr "Chưa có cảnh báo nào được ghi lại."
+
+msgid "Git remote changed"
+msgstr "Git remote đã thay đổi"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Quá nhiều thay đổi để liệt kê đầy đủ; chỉ các mục đầu tiên của mỗi danh mục được hiển thị bên dưới. Xem %link_start%nhật ký CEF%link_end% để có danh sách đầy đủ."
 

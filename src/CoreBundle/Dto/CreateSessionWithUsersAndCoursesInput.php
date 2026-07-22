@@ -58,6 +58,9 @@ class CreateSessionWithUsersAndCoursesInput
     private ?int $visibility = 1;
 
     #[Groups(['write'])]
+    private ?bool $copyEvaluation = false;
+
+    #[Groups(['write'])]
     private array $courseIds = [];
 
     #[Groups(['write'])]
@@ -194,6 +197,16 @@ class CreateSessionWithUsersAndCoursesInput
     public function setVisibility(?int $visibility): void
     {
         $this->visibility = $visibility;
+    }
+
+    public function getCopyEvaluation(): ?bool
+    {
+        return $this->copyEvaluation;
+    }
+
+    public function setCopyEvaluation(?bool $copyEvaluation): void
+    {
+        $this->copyEvaluation = $copyEvaluation;
     }
 
     public function getCourseIds(): array

@@ -37357,3 +37357,138 @@ msgstr "από"
 msgid "required"
 msgstr "υποχρεωτικό"
 
+msgid "Incorrect password."
+msgstr "Λανθασμένος κωδικός πρόσβασης."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Ειδοποίηση ακεραιότητας αρχείων σε παύση για 1 ώρα."
+
+msgid "New baseline established: %s files."
+msgstr "Νέα γραμμή βάσης καθορίστηκε: %s αρχεία."
+
+msgid "Scan complete: changes were detected."
+msgstr "Η σάρωση ολοκληρώθηκε: εντοπίστηκαν αλλαγές."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Η σάρωση ολοκληρώθηκε: δεν εντοπίστηκαν αλλαγές."
+
+msgid "File integrity"
+msgstr "Ακεραιότητα αρχείων"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Αυτή η αναφορά συγκρίνει τα εγκατεστημένα αρχεία (όλα εκτός από var/ και .git/, αν και το .git/config παρακολουθείται ακόμα για να εντοπιστεί απομακρυσμένη παραβίαση) με μια αξιόπιστη γραμμή βάσης, για να ανιχνευθούν απροσδόκητες προσθήκες, τροποποιήσεις ή διαγραφές."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Μπορείτε να ελέγξετε την τελευταία αναφορά παρακάτω. Η εκτέλεση σάρωσης, η παύση ειδοποιήσεων ή ο καθορισμός νέας γραμμής βάσης απαιτεί καθολικό διαχειριστή."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Οι ειδοποιήσεις είναι προς το παρόν σε παύση για συντήρηση. Θα συνεχιστούν αυτόματα στις %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Δεν έχει εκτελεστεί ακόμα καμία σάρωση. Εκτελέστε μία από εδώ ή από τη γραμμή εντολών με app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Τελευταία σάρωση"
+
+msgid "Files scanned"
+msgstr "Αρχεία που σαρώθηκαν"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Δεν υπήρχε ακόμα γραμμή βάσης: αυτή η σάρωση καθόρισε μία. Οι αλλαγές θα αναφέρονται από την επόμενη σάρωση και μετά."
+
+msgid "No changes detected since the baseline."
+msgstr "Δεν εντοπίστηκαν αλλαγές από τη γραμμή βάσης."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Η διαμόρφωση του απομακρυσμένου Git (.git/config) έχει αλλάξει. Επαληθεύστε ότι αυτό ήταν αναμενόμενο."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Η σάρωση σταμάτησε πρόωρα επειδή δεν ήταν δυνατή η ανάγνωση ενός υποκαταλόγου (ελέγξτε τα δικαιώματα αρχείων). Τα αποτελέσματα παρακάτω ενδέχεται να είναι μερικά."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% αρχείο(α) δεν ήταν δυνατή η ανάγνωσή τους (δικαιώματα) και παραλείφθηκαν."
+
+msgid "Run a scan now"
+msgstr "Εκτέλεση σάρωσης τώρα"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Παύση ειδοποιήσεων για 1 ώρα (για συντήρηση)"
+
+msgid "Pause for 1 hour"
+msgstr "Παύση για 1 ώρα"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Εμπιστοσύνη στο τρέχον δέντρο αρχείων ως νέα γραμμή βάσης"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Αυτό θα εμπιστευτεί κάθε τρέχον αρχείο ως σωστό, συμπεριλαμβανομένης οποιασδήποτε μη ελεγμένης αλλαγής. Συνέχεια;"
+
+msgid "Establish new baseline"
+msgstr "Καθορισμός νέας γραμμής βάσης"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Προγραμματισμός της σάρωσης από crontab συστήματος, για παράδειγμα"
+
+msgid "File integrity alert on %platform%"
+msgstr "Ειδοποίηση ακεραιότητας αρχείων στο %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Μια σάρωση ακεραιότητας αρχείων εντόπισε αλλαγές στην πλατφόρμα:"
+
+msgid "Added files"
+msgstr "Προστιθέμενα αρχεία"
+
+msgid "Modified files"
+msgstr "Τροποποιημένα αρχεία"
+
+msgid "Deleted files"
+msgstr "Διαγραμμένα αρχεία"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Ελέγξτε την πλήρη αναφορά από Διαχείριση > Ασφάλεια > Ακεραιότητα αρχείων."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Κωδικός πρόσβασης για επιβεβαίωση παύσης ειδοποιήσεων"
+
+msgid "Password to confirm the new baseline"
+msgstr "Κωδικός πρόσβασης για επιβεβαίωση της νέας βασικής γραμμής"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Μια σάρωση εκτελείται ήδη. Περιμένετε να ολοκληρωθεί πριν ξεκινήσετε άλλη."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Μια σάρωση εκτελείται αυτήν τη στιγμή (ξεκίνησε στις %date%). Μια πλήρης σάρωση μπορεί να διαρκέσει αρκετά λεπτά· αυτή η σελίδα μπορεί να φορτωθεί με ασφάλεια για έλεγχο προόδου."
+
+msgid "Currently processing"
+msgstr "Γίνεται επεξεργασία"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Μια προηγούμενη σάρωση (ξεκίνησε στις %date%) διακόπηκε πριν ολοκληρωθεί — η διεργασία δεν εκτελείται πλέον. Μπορείτε να ξεκινήσετε με ασφάλεια μια νέα."
+
+msgid "files"
+msgstr "αρχεία"
+
+msgid "Permissions changed"
+msgstr "Τα δικαιώματα άλλαξαν"
+
+msgid "Files with changed permissions"
+msgstr "Αρχεία με αλλαγμένα δικαιώματα"
+
+msgid "Alert history"
+msgstr "Ιστορικό ειδοποιήσεων"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Κάθε σάρωση που βρήκε κάτι, διατηρείται ακόμη και μετά την επίλυση της απόκλισης ή τη δημιουργία νέας βασικής γραμμής — σε αντίθεση με την παραπάνω αναφορά, μια καθαρή σάρωση ή νέα βασική γραμμή δεν διαγράφει ποτέ αυτό το ιστορικό."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Αυτή η καταχώριση περικόπηκε κατά τη λήψη· δείτε το αρχείο καταγραφής CEF για την πλήρη λίστα."
+
+msgid "No alert has been recorded yet."
+msgstr "Δεν έχει καταγραφεί ακόμη καμία ειδοποίηση."
+
+msgid "Git remote changed"
+msgstr "Το απομακρυσμένο Git άλλαξε"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Πάρα πολλές αλλαγές για πλήρη εμφάνιση· εμφανίζονται μόνο οι πρώτες καταχωρίσεις κάθε κατηγορίας. Δείτε το %link_start%αρχείο καταγραφής CEF%link_end% για την πλήρη λίστα."
+

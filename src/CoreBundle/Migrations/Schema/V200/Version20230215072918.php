@@ -17,9 +17,21 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20230215072918 extends AbstractMigrationChamilo
 {
+    private const ORM_FLUSH_BATCH_SIZE = 100;
+
     public function getDescription(): string
     {
         return 'Migrate learnpath subscription';
+    }
+
+    /**
+     * Learnpath subscriptions are committed in explicit ORM batches.
+     * This makes the migration resumable and avoids losing hours of work if
+     * the process is interrupted.
+     */
+    public function isTransactional(): bool
+    {
+        return false;
     }
 
     public function up(Schema $schema): void
@@ -29,48 +41,85 @@ final class Version20230215072918 extends AbstractMigrationChamilo
         $sessionRepo = $this->container->get(SessionRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
 
-        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $rows = $this->connection->fetchAllAssociative(
+            "SELECT ip.c_id, ip.ref AS lp_id, ip.session_id, ip.to_user_id
+             FROM c_item_property ip
+             WHERE ip.tool = 'learnpath'
+               AND ip.lastedit_type = 'LearnpathSubscription'
+               AND ip.to_user_id IS NOT NULL
+               AND ip.to_user_id <> 0
+             ORDER BY ip.c_id, ip.ref"
+        );
 
-        /** @var Course $course */
-        foreach ($q->toIterable() as $course) {
-            $courseId = $course->getId();
+        $rowsByCourse = [];
+        foreach ($rows as $row) {
+            $rowsByCourse[(int) $row['c_id']][] = $row;
+        }
+
+        $processed = 0;
+
+        foreach ($rowsByCourse as $courseId => $courseRows) {
             $course = $courseRepo->find($courseId);
+            if (!$course instanceof Course) {
+                continue;
+            }
 
-            $sql = "SELECT * FROM c_lp WHERE c_id = {$courseId}
-                    ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $lps = $result->fetchAllAssociative();
-            foreach ($lps as $lpData) {
-                $id = $lpData['iid'];
-                $lp = $lpRepo->find($id);
-                $sql = "SELECT * FROM c_item_property
-                        WHERE tool = 'learnpath' AND c_id = {$courseId} AND ref = {$id} AND lastedit_type = 'LearnpathSubscription'";
-                $result = $this->connection->executeQuery($sql);
-                $items = $result->fetchAllAssociative();
+            $lpCache = [];
+            $userCache = [];
+            $sessionCache = [];
 
-                if (!empty($items)) {
-                    foreach ($items as $item) {
-                        if (!(null === $item['to_user_id'] || 0 === $item['to_user_id'])) {
-                            $sessionId = $item['session_id'] ?? 0;
-                            $userId = $item['to_user_id'] ?? 0;
-                            $session = $sessionRepo->find($sessionId);
-                            $user = $userRepo->find($userId);
-                            $item = new CLpRelUser();
-                            $item
-                                ->setUser($user)
-                                ->setCourse($course)
-                                ->setLp($lp)
-                            ;
-                            if (!empty($session)) {
-                                $item->setSession($session);
-                            }
-                            $this->entityManager->persist($item);
-                            $this->entityManager->flush();
-                        }
+            foreach ($courseRows as $row) {
+                $lpId = (int) $row['lp_id'];
+                $userId = (int) $row['to_user_id'];
+                $sessionId = (int) ($row['session_id'] ?? 0);
+
+                if (!\array_key_exists($lpId, $lpCache)) {
+                    $lpCache[$lpId] = $lpRepo->find($lpId);
+                }
+                if (null === $lpCache[$lpId]) {
+                    continue;
+                }
+
+                if (!\array_key_exists($userId, $userCache)) {
+                    $userCache[$userId] = $userRepo->find($userId);
+                }
+                if (null === $userCache[$userId]) {
+                    continue;
+                }
+
+                $item = new CLpRelUser();
+                $item
+                    ->setUser($userCache[$userId])
+                    ->setCourse($course)
+                    ->setLp($lpCache[$lpId])
+                ;
+
+                if ($sessionId > 0) {
+                    if (!\array_key_exists($sessionId, $sessionCache)) {
+                        $sessionCache[$sessionId] = $sessionRepo->find($sessionId);
                     }
+                    if (null !== $sessionCache[$sessionId]) {
+                        $item->setSession($sessionCache[$sessionId]);
+                    }
+                }
+
+                $this->entityManager->persist($item);
+                ++$processed;
+
+                if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+
+                    $course = $courseRepo->find($courseId);
+                    $lpCache = [];
+                    $userCache = [];
+                    $sessionCache = [];
                 }
             }
         }
+
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 
     public function down(Schema $schema): void {}

@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:akukho copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Ifolda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:umsebenzi,,      simulation:ukwenza okufana,,      questionnaire:ufuzo,,      diagram:umzobo,,      figure:umfanekiso,,      graph:grafu,,      index:isazisi,,      slide:isilayidi,,      table:thebhule,,      narrative text:umbhalo obalasele,,      exam:oviwo,,      experiment:uphando,,      problem statement:ingxelo yengxaki,,      self assessment:ukuzivavanya,,      lecture:intetho"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifom yomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -35488,7 +35488,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifom yomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -36349,13 +36349,13 @@ msgid "Could not save forum"
 msgstr "Could not save forum"
 
 msgid "Are you sure you want to delete this forum category?"
-msgstr "Are you sure you want to delete this forum category?"
+msgstr "Uqinisekile ufuna ukucima eli candelo leforum?"
 
 msgid "Could not delete forum category"
 msgstr "Could not delete forum category"
 
 msgid "Are you sure you want to delete this forum?"
-msgstr "Are you sure you want to delete this forum?"
+msgstr "Uqinisekile ufuna ukucima le forum?"
 
 msgid "Could not delete forum"
 msgstr "Ayikwazanga kucima iforamu"
@@ -37337,4 +37337,139 @@ msgstr "ngu"
 
 msgid "required"
 msgstr "kufuneka"
+
+msgid "Incorrect password."
+msgstr "Igama lokungena elingalunganga."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Isilumkiso sokugcinwa kwengqibelelo yefayile simiswe okwexeshana kangangeyure enye."
+
+msgid "New baseline established: %s files."
+msgstr "Umgca othembekileyo omtsha umiselwe: iifayile ezi-%s."
+
+msgid "Scan complete: changes were detected."
+msgstr "Ukuhlolwa kugqityiwe: utshintsho lufunyenwe."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Ukuhlolwa kugqityiwe: akukho lutshintsho lufunyenweyo."
+
+msgid "File integrity"
+msgstr "Ukugcinwa kwengqibelelo yefayile"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Le ngxelo ithelekisa iifayile ezifakwe (zonke ngaphandle kwe-var/ kunye ne-.git/, nangona i-.git/config isajongwa ukuze ibambe ukuthathwa ngokungekho mthethweni kwendawo ekude) ngokuchasene nomgca othembekileyo, ukuze ibone ukongezwa, ukuguqulwa okanye ukucinywa okungalindelekanga."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Ungahlola ingxelo yamva nje ngezantsi. Ukuqhuba ukuhlolwa, ukumisa isilumkiso okwexeshana, okanye ukuseka umgca othembekileyo omtsha kufuna umlawuli jikelele."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Isilumkiso simiswe okwexeshana ngoku ngenxa yolondolozo. Siya kuphinda ngokuzenzekelayo ngo-%date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Akukho kuhlolwa kuse kwenziwe. Qhuba enye apha, okanye ngomgca womyalelo nge-app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Ukuhlolwa kokugqibela"
+
+msgid "Files scanned"
+msgstr "Iifayile ezihloliweyo"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Akukho mgca othembekileyo wawukho: olu kuhlolwa luseke omnye. Utshintsho luza kuxelwa ukusuka kuhlolo olulandelayo."
+
+msgid "No changes detected since the baseline."
+msgstr "Akukho lutshintsho lufunyenweyo ukususela kumgca othembekileyo."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Uqwalaselo lwe-Git remote (.git/config) lutshintshile. Qinisekisa ukuba oku bekulindelekile."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Ukuhlolwa kumiswe kwangethuba kuba isikhombisi esingaphantsi asikwazanga kufundwa (jonga iimvume zefayile). Iziphumo ezingezantsi zinokuba ngamaqhekeza."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "Iifayile ezi-%count% azikwazanga kufundwa (iimvume) kwaye zitsitswe."
+
+msgid "Run a scan now"
+msgstr "Qhuba ukuhlolwa ngoku"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Misa isilumkiso okwexeshana kangangeyure enye (ngenxa yolondolozo)"
+
+msgid "Pause for 1 hour"
+msgstr "Misa okwexeshana kangangeyure enye"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Themba umthi wefayile wangoku njengomgca othembekileyo omtsha"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Oku kuya kuthemba yonke ifayile yangoku njengento echanekileyo, kuquka naluphi na utshintsho olungahlolwanga. Qhubeka?"
+
+msgid "Establish new baseline"
+msgstr "Sekela umgca othembekileyo omtsha"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Cwangcisa ukuhlolwa kwitafile ye-crontab yesixokelelwano, umzekelo"
+
+msgid "File integrity alert on %platform%"
+msgstr "Isilumkiso sokugcinwa kwengqibelelo yefayile kwi-%platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Ukuhlolwa kokugcinwa kwengqibelelo yefayile kufumene utshintsho kwiqonga:"
+
+msgid "Added files"
+msgstr "Iifayile ezongezweyo"
+
+msgid "Modified files"
+msgstr "Iifayile eziguquliweyo"
+
+msgid "Deleted files"
+msgstr "Iifayile ezicinyiweyo"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Hlola ingxelo epheleleyo ukusuka ku-Lawulo > Ukhuseleko > Ukugcinwa kwengqibelelo yefayile."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Igama lokungena ukuqinisekisa ukumisa izilumkiso"
+
+msgid "Password to confirm the new baseline"
+msgstr "Igama lokungena ukuqinisekisa umgca othembekileyo omtsha"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Ukuhlolwa sele kuqhuba. Nceda linda ukuba kugqitywe phambi kokuba uqale enye."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Ukuhlolwa kuqhuba ngoku (kuqalwe ngo-%date%). Ukuhlolwa okupheleleyo kungathatha imizuzu emininzi; eli phepha linokuhlaziywa ngokukhuselekileyo ukuze uhlolle inkqubela."
+
+msgid "Currently processing"
+msgstr "Kusenziwa ngoku"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Ukuhlolwa kwangaphambili (kuqalwe ngo-%date%) kwaphazanyiswa phambi kokuba kugqitywe — inkqubo ayisaqhubi. Ungaqala ngokukhuselekileyo entsha."
+
+msgid "files"
+msgstr "iifayile"
+
+msgid "Permissions changed"
+msgstr "Iimvume zitshintshile"
+
+msgid "Files with changed permissions"
+msgstr "Iifayile ezineemvume ezitshintshileyo"
+
+msgid "Alert history"
+msgstr "Imbali yezilumkiso"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Lonke ukuhlolwa olufumene into, kugcinwa nasemva kokuba umahluko usonjululwe okanye umgca othembekileyo omtsha umiselwe — ngokungafaniyo nengxelo engentla, ukuhlolwa okucocekileyo okanye ukuseka umgca omtsha akususi oku."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Eli ngenelo lancitshiswa ngexesha lokufakwa; bona i-CEF log ukufumana uluhlu olupheleleyo."
+
+msgid "No alert has been recorded yet."
+msgstr "Akukho silumkiso sifakwe ngoku."
+
+msgid "Git remote changed"
+msgstr "I-Git remote itshintshile"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Iinguquko ezininzi kakhulu ukuba zingadweliswa ngokupheleleyo; kuphela amangenelo okuqala kwicandelo ngalinye abonisiwe ngezantsi. Bona %link_start%CEF log%link_end% ukufumana uluhlu olupheleleyo."
 

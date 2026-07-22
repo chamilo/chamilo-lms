@@ -22,7 +22,9 @@ const isEnabled = computed(() => {
 })
 
 const isCourseHome = computed(() => {
-  return /^\/course\/\d+\/home\/?$/.test(route.path)
+  const courseHomePattern = /^\/course\/\d+\/home\/?$/
+
+  return courseHomePattern.test(route.path) || courseHomePattern.test(window.location.pathname)
 })
 
 const shouldShowShortcuts = computed(() => {

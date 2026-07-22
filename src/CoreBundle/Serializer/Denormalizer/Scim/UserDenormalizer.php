@@ -18,7 +18,7 @@ class UserDenormalizer implements DenormalizerInterface, DenormalizerAwareInterf
     public const FORMAT = 'scim';
     private const ALREADY_CALLED = 'SCIM_USER_DENORMALIZER_ALREADY_CALLED';
 
-    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         $context[self::ALREADY_CALLED] = true;
 
@@ -69,6 +69,9 @@ class UserDenormalizer implements DenormalizerInterface, DenormalizerAwareInterf
         return $user;
     }
 
+    /**
+     * @psalm-suppress MethodSignatureMismatch
+     */
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {

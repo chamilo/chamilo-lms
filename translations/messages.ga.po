@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -37341,4 +37341,139 @@ msgstr "ag"
 
 msgid "required"
 msgstr "riachtanach"
+
+msgid "Incorrect password."
+msgstr "Focal faire mícheart."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Foláireamh sláine comhaid curtha ar sos ar feadh 1 uair."
+
+msgid "New baseline established: %s files."
+msgstr "Bunlíne nua bunaithe: %s comhad."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scanadh críochnaithe: athruithe braite."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scanadh críochnaithe: gan aon athrú braite."
+
+msgid "File integrity"
+msgstr "Sláine comhaid"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Déanann an tuarascáil seo comparáid idir na comhaid suiteáilte (gach rud seachas var/ agus .git/, cé go bhfuil .git/config fós á fhaire chun cianfhostaíocht a bhrath) agus bunlíne iontaofa, chun breiseanna, modhnuithe nó scriosadh gan choinne a bhrath."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Is féidir leat an tuarascáil is déanaí a athbhreithniú thíos. Teastaíonn riarthóir domhanda chun scanadh a rith, foláireamh a chur ar sos, nó bunlíne nua a bhunú."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Tá an foláireamh curtha ar sos faoi láthair le haghaidh cothabhála. Atosóidh sé go huathoibríoch ag %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Níl aon scanadh déanta fós. Rith ceann anseo, nó ón líne ordaithe le app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "An scanadh is déanaí"
+
+msgid "Files scanned"
+msgstr "Comhaid scanta"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Ní raibh aon bhunlíne ann fós: bhunaigh an scanadh seo ceann. Tuairisceofar athruithe ón gcéad scanadh eile."
+
+msgid "No changes detected since the baseline."
+msgstr "Níor braitheadh aon athrú ón mbunlíne."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Tá cumraíocht chianfhostaíochta Git (.git/config) athraithe. Deimhnigh go raibh sé seo ag súil leis."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Stop an scanadh go luath mar níorbh fhéidir fo-eolaire a léamh (seiceáil ceadanna comhaid). D’fhéadfadh na torthaí thíos a bheith páirteach."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "Níorbh fhéidir %count% comhad a léamh (ceadanna) agus rinneadh iad a scipeáil."
+
+msgid "Run a scan now"
+msgstr "Rith scanadh anois"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Cuir foláireamh ar sos ar feadh 1 uair (le haghaidh cothabhála)"
+
+msgid "Pause for 1 hour"
+msgstr "Cuir ar sos ar feadh 1 uair"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Iontaobh an crann comhaid reatha mar an mbunlíne nua"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Iontaobhfaidh sé seo gach comhad reatha mar cheart, lena n-áirítear aon athrú nach bhfuil athbhreithnithe. Lean ar aghaidh?"
+
+msgid "Establish new baseline"
+msgstr "Bunaigh bunlíne nua"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Sceideal an scanadh ó crontab córais, mar shampla"
+
+msgid "File integrity alert on %platform%"
+msgstr "Foláireamh sláine comhaid ar %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Bhraith scanadh sláine comhaid athruithe ar an ardán:"
+
+msgid "Added files"
+msgstr "Comhaid curtha leis"
+
+msgid "Modified files"
+msgstr "Comhaid modhnaithe"
+
+msgid "Deleted files"
+msgstr "Comhaid scriosta"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Athbhreithnigh an tuarascáil iomlán ó Riarachán > Slándáil > Sláine comhaid."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Focal faire chun foláireamh a chur ar sos"
+
+msgid "Password to confirm the new baseline"
+msgstr "Focal faire chun an bhunlíne nua a dheimhniú"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Tá scanadh ar siúl cheana. Fan go gcríochnaíonn sé sula dtosaíonn tú ceann eile."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Tá scanadh ar siúl faoi láthair (tosaíodh ag %date%). Féadfaidh scanadh iomlán roinnt nóiméad a ghlacadh; is féidir an leathanach seo a athlódáil go sábháilte chun dul chun cinn a sheiceáil."
+
+msgid "Currently processing"
+msgstr "Á phróiseáil faoi láthair"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Cuireadh isteach ar scan roimhe seo (a tosaíodh ag %date%) sula raibh sé críochnaithe — níl an próiseas ag rith a thuilleadh. Is féidir leat ceann nua a thosú go sábháilte."
+
+msgid "files"
+msgstr "comhaid"
+
+msgid "Permissions changed"
+msgstr "Ceadanna athraithe"
+
+msgid "Files with changed permissions"
+msgstr "Comhaid le ceadanna athraithe"
+
+msgid "Alert history"
+msgstr "Stair na bhfoláirimh"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Gach scan a fuair rud éigin, coimeádta fiú tar éis an sruth a réiteach nó bunlíne nua a bhunú — murab ionann agus an tuarascáil thuas, ní ghlanann scan glan nó athbhunú an liosta seo riamh."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Truncáilíodh an iontráil seo ag am an ghabhála; féach an log CEF chun an liosta iomlán a fheiceáil."
+
+msgid "No alert has been recorded yet."
+msgstr "Níl aon fholáireamh taifeadta fós."
+
+msgid "Git remote changed"
+msgstr "Athraíodh an cianstóras Git"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "An iomarca athruithe le liostú ina n-iomláine; ní thaispeántar ach na chéad iontrálacha de gach catagóir thíos. Féach ar an %link_start%log CEF%link_end% chun an liosta iomlán a fheiceáil."
 

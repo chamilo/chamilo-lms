@@ -34519,7 +34519,7 @@ msgid "Remove all date restrictions for this learning path?"
 msgstr "Alisin ang lahat ng date restriction para sa learning path na ito?"
 
 msgid "Advanced learning path access"
-msgstr "Advanced learning path access"
+msgstr "Advanced na access sa learning path"
 
 msgid "Remove date restrictions"
 msgstr "Alisin ang date restrictions"
@@ -34930,25 +34930,25 @@ msgid "Flat view"
 msgstr "Flat view"
 
 msgid "Flat gradebook results view."
-msgstr "Flat gradebook results view."
+msgstr "Flat na view ng gradebook results."
 
 msgid "Evaluation log"
 msgstr "Evaluation log"
 
 msgid "Change log for gradebook evaluations."
-msgstr "Change log for gradebook evaluations."
+msgstr "Change log para sa gradebook evaluations."
 
 msgid "Link log"
 msgstr "Link log"
 
 msgid "Change log for gradebook links."
-msgstr "Change log for gradebook links."
+msgstr "Change log para sa gradebook links."
 
 msgid "Result details"
 msgstr "Result details"
 
 msgid "Detailed view of a gradebook result."
-msgstr "Detailed view of a gradebook result."
+msgstr "Detalyadong view ng gradebook result."
 
 msgid "Personal certificates report."
 msgstr "Personal certificates report."
@@ -36487,10 +36487,10 @@ msgid "View threads"
 msgstr "Tingnan ang mga thread"
 
 msgid "No auth source"
-msgstr "No auth source"
+msgstr "Walang auth source"
 
 msgid "You must add at least one question"
-msgstr "You must add at least one question"
+msgstr "Dapat kang magdagdag ng hindi bababa sa isang tanong"
 
 msgid "Advanced actions"
 msgstr "Advanced actions"
@@ -36499,25 +36499,25 @@ msgid "Application path"
 msgstr "Application path"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Ilapat ang mga detalye ng files"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Ilapat ang mga detalye ng plan"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Nabigo ang paglalapat ng plan"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Handa na ang paglalapat ng plan"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "Paghahanda sa paglalapat"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "Ilapat ang mga staged files"
 
 msgid "Applying files..."
-msgstr "Applying files..."
+msgstr "Inilalapat ang mga files..."
 
 msgid "Audit file"
 msgstr "Audit file"
@@ -36532,13 +36532,13 @@ msgid "Baseline warnings"
 msgstr "Baseline warnings"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Bumuo ng ligtas na apply plan mula sa staged package. Tinitingnan lamang nito ang mga files, permissions, backup path at lock status. Hindi nito pinapalitan ang mga files."
 
 msgid "Build production frontend assets."
-msgstr "Build production frontend assets."
+msgstr "Bumuo ng production frontend assets."
 
 msgid "Building plan..."
-msgstr "Building plan..."
+msgstr "Binubuo ang plan..."
 
 msgid "Channel"
 msgstr "Channel"
@@ -36547,13 +36547,13 @@ msgid "Check"
 msgstr "Check"
 
 msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
-msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Suriin ang mga available na update ng Chamilo, i-verify ang mga packages, i-stage ang mga files at patakbuhin ang kontroladong post-update steps."
 
 msgid "Check manifest"
-msgstr "Check manifest"
+msgstr "Suriin ang manifest"
 
 msgid "Checking post-apply actions..."
-msgstr "Checking post-apply actions..."
+msgstr "Sinusuri ang post-apply actions..."
 
 msgid "Checking..."
 msgstr "Checking..."
@@ -36562,7 +36562,7 @@ msgid "Composer install"
 msgstr "Composer install"
 
 msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
-msgstr "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Ang mga aksyon ng Composer, Yarn at database migration ay maaaring magbago ng dependencies, generated assets o ang database. Piliin lamang ang mga ito pagkatapos kumpirmahin ang mga backup at permissions."
 
 msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
 msgstr "I-configure ang CHAMILO_UPDATE_MANIFEST_URL sa server o magbigay ng HTTPS manifest URL."
@@ -36649,7 +36649,7 @@ msgid "Local test update notice link"
 msgstr "Link ng local test update notice"
 
 msgid "Local update notice simulation"
-msgstr "Local update notice simulation"
+msgstr "Simulasyon ng lokal na abiso sa pag-update"
 
 msgid "Local update notice simulation is only available in development mode."
 msgstr "Available lamang ang local update notice simulation sa development mode."
@@ -36670,7 +36670,7 @@ msgid "Migration safety review ready"
 msgstr "Handa na ang pagsusuri sa migration safety"
 
 msgid "Migration target"
-msgstr "Migration target"
+msgstr "Target ng migrasyon"
 
 msgid "New files"
 msgstr "Mga bagong file"
@@ -36700,10 +36700,10 @@ msgid "Official Chamilo update channel"
 msgstr "Opisyal na update channel ng Chamilo"
 
 msgid "Package SHA-256"
-msgstr "Package SHA-256"
+msgstr "SHA-256 ng package"
 
 msgid "Package URL"
-msgstr "Package URL"
+msgstr "URL ng package"
 
 msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
 msgstr "I-download ang package at signature files mula sa manifest. Hindi pinapayagan ang mga lokal na landas sa kapaligirang ito."
@@ -36925,10 +36925,10 @@ msgid "Update availability"
 msgstr "Availability ng update"
 
 msgid "Update directory"
-msgstr "Update directory"
+msgstr "Direktoryo ng update"
 
 msgid "Update lock path"
-msgstr "Update lock path"
+msgstr "Landas ng update lock"
 
 msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
 msgstr "Gamitin ang staging directory na ginawa ng nakaraang hakbang. Tanging mga directory sa loob ng var/update/staging ang tinatanggap ng backend."
@@ -37309,7 +37309,7 @@ msgid "Wiki categories enabled"
 msgstr "Naka-enable ang Wiki categories"
 
 msgid "Wiki html strict filtering"
-msgstr "Wiki html strict filtering"
+msgstr "Mahigpit na pagsala ng Wiki html"
 
 msgid "Wiki settings"
 msgstr "Mga setting ng Wiki"
@@ -37337,4 +37337,139 @@ msgstr "ni"
 
 msgid "required"
 msgstr "kinakailangan"
+
+msgid "Incorrect password."
+msgstr "Maling password."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Na-pause ang pag-abiso sa integridad ng file sa loob ng 1 oras."
+
+msgid "New baseline established: %s files."
+msgstr "Naitatag ang bagong baseline: %s (na) file."
+
+msgid "Scan complete: changes were detected."
+msgstr "Tapos na ang pag-scan: may mga pagbabagong natuklasan."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Tapos na ang pag-scan: walang pagbabagong natuklasan."
+
+msgid "File integrity"
+msgstr "Integridad ng file"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Inihahambing ng ulat na ito ang mga naka-install na file (lahat maliban sa var/ at .git/, bagaman ang .git/config ay patuloy na binabantayan upang mahuli ang isang na-hijack na remote) laban sa isang pinagkakatiwalaang baseline, upang matuklasan ang hindi inaasahang pagdaragdag, pagbabago, o pagtanggal."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Maaari mong suriin ang pinakabagong ulat sa ibaba. Ang pagpapatakbo ng scan, pag-pause ng pag-abiso, o pagtatatag ng bagong baseline ay nangangailangan ng global administrator."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Kasalukuyang naka-pause ang pag-abiso para sa maintenance. Awtomatikong magpapatuloy ito sa %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Wala pang naisagawang scan. Magsagawa ng isa mula rito, o mula sa command line gamit ang app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Huling scan"
+
+msgid "Files scanned"
+msgstr "Mga file na na-scan"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Wala pang baseline: itinatag ito ng scan na ito. Magsisimulang iulat ang mga pagbabago simula sa susunod na scan."
+
+msgid "No changes detected since the baseline."
+msgstr "Walang pagbabagong natuklasan mula noong baseline."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Nabago ang configuration ng Git remote (.git/config). Suriin kung ito ay inaasahan."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Maagang tumigil ang scan dahil hindi mabasa ang isang subdirectory (suriin ang mga pahintulot sa file). Maaaring bahagi lamang ang mga resulta sa ibaba."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% (na) file ang hindi mabasa (mga pahintulot) at nilaktawan."
+
+msgid "Run a scan now"
+msgstr "Magsagawa ng scan ngayon"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "I-pause ang pag-abiso sa loob ng 1 oras (para sa maintenance)"
+
+msgid "Pause for 1 hour"
+msgstr "I-pause sa loob ng 1 oras"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Ituring ang kasalukuyang file tree bilang bagong baseline"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Ititiwala nito ang bawat kasalukuyang file bilang tama, kasama ang anumang hindi pa nasusuring pagbabago. Magpatuloy?"
+
+msgid "Establish new baseline"
+msgstr "Magtatag ng bagong baseline"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "I-schedule ang scan mula sa isang system crontab, halimbawa"
+
+msgid "File integrity alert on %platform%"
+msgstr "Alerto sa integridad ng file sa %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "May natuklasang pagbabago sa platform sa pamamagitan ng file integrity scan:"
+
+msgid "Added files"
+msgstr "Mga idinagdag na file"
+
+msgid "Modified files"
+msgstr "Mga binagong file"
+
+msgid "Deleted files"
+msgstr "Mga tinanggal na file"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Suriin ang buong ulat mula sa Administration > Security > File integrity."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Password para kumpirmahin ang pag-pause ng mga alerto"
+
+msgid "Password to confirm the new baseline"
+msgstr "Password para kumpirmahin ang bagong baseline"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "May kasalukuyang tumatakbong scan. Mangyaring maghintay hanggang matapos ito bago simulan ang isa pa."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "May kasalukuyang tumatakbong scan (nagsimula noong %date%). Maaaring tumagal ng ilang minuto ang isang buong scan; ligtas na i-reload ang pahinang ito upang suriin ang progreso."
+
+msgid "Currently processing"
+msgstr "Kasalukuyang pinoproseso"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Naantala ang nakaraang scan (nagsimula noong %date%) bago ito matapos — hindi na tumatakbo ang proseso. Maaari kang ligtas na magsimula ng bago."
+
+msgid "files"
+msgstr "mga file"
+
+msgid "Permissions changed"
+msgstr "Nabago ang mga pahintulot"
+
+msgid "Files with changed permissions"
+msgstr "Mga file na may nabagong pahintulot"
+
+msgid "Alert history"
+msgstr "Kasaysayan ng alerto"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Bawat pag-scan na nakakita ng isang bagay, naitala kahit na nalutas na ang drift o naitatag ang bagong baseline — hindi tulad ng ulat sa itaas, ang malinis na pag-scan o muling pagtatatag ng baseline ay hindi kailanman naglilinis nito."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Ang entry na ito ay pinutol sa oras ng pagkuha; tingnan ang CEF log para sa kumpletong listahan."
+
+msgid "No alert has been recorded yet."
+msgstr "Wala pang naitalang alerto."
+
+msgid "Git remote changed"
+msgstr "Nagbago ang Git remote"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
 

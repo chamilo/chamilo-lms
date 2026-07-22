@@ -350,7 +350,7 @@ if (count($sessions) > 0) {
                     $status = get_lang('Learner');
                     break;
                 case 2:
-                    $status = get_lang('Course coach');
+                    $status = get_lang('Course tutor');
                     break;
             }
 

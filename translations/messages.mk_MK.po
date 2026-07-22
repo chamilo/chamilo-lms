@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -37341,4 +37341,139 @@ msgstr "од"
 
 msgid "required"
 msgstr "задолжително"
+
+msgid "Incorrect password."
+msgstr "Неточна лозинка."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Известувањето за интегритет на датотеки е паузирано за 1 час."
+
+msgid "New baseline established: %s files."
+msgstr "Нова основна линија воспоставена: %s датотеки."
+
+msgid "Scan complete: changes were detected."
+msgstr "Скенирањето е завршено: откриени се промени."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Скенирањето е завршено: не се откриени промени."
+
+msgid "File integrity"
+msgstr "Интегритет на датотеки"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Овој извештај ги споредува инсталираните датотеки (сè освен var\/ и .git\/, иако .git\/config сè уште се следи за да се открие хакиран далечински сервер) со доверлива основна линија, за да се откријат неочекувани додавања, измени или бришења."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Можете да го прегледате најновиот извештај подолу. Извршувањето на скенирање, паузирањето на известувањето или воспоставувањето на нова основна линија бара глобален администратор."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Известувањето моментално е паузирано за одржување. Автоматски ќе се продолжи на %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Сè уште не е извршено скенирање. Извршете едно од овде или од командната линија со app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Последно скенирање"
+
+msgid "Files scanned"
+msgstr "Скенирани датотеки"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Сè уште не постоеше основна линија: ова скенирање ја воспостави. Промените ќе се пријавуваат од следното скенирање."
+
+msgid "No changes detected since the baseline."
+msgstr "Не се откриени промени од основната линија."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Конфигурацијата на Git далечинскиот сервер (.git\/config) е променета. Проверете дали ова е очекувано."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Скенирањето рано престана бидејќи потдиректориум не можеше да се прочита (проверете ги дозволите за датотеки). Резултатите подолу може да бидат делумни."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% датотека(и) не можеа да се прочитаат (дозволи) и беа прескокнати."
+
+msgid "Run a scan now"
+msgstr "Изврши скенирање сега"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Паузирај известување за 1 час (за одржување)"
+
+msgid "Pause for 1 hour"
+msgstr "Паузирај за 1 час"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Довери го тековното дрво на датотеки како нова основна линија"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Ова ќе ги довери сите тековни датотеки како точни, вклучувајќи ги и сите неразгледани промени. Продолжи?"
+
+msgid "Establish new baseline"
+msgstr "Воспостави нова основна линија"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Закажете го скенирањето од системски crontab, на пример"
+
+msgid "File integrity alert on %platform%"
+msgstr "Известување за интегритет на датотеки на %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Скенирањето за интегритет на датотеки откри промени на платформата:"
+
+msgid "Added files"
+msgstr "Додадени датотеки"
+
+msgid "Modified files"
+msgstr "Изменети датотеки"
+
+msgid "Deleted files"
+msgstr "Избришани датотеки"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Прегледајте го целосниот извештај од Администрација > Безбедност > Интегритет на датотеки."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Лозинка за потврда на паузирање на известувања"
+
+msgid "Password to confirm the new baseline"
+msgstr "Лозинка за потврда на нова основна линија"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Скенирање веќе се извршува. Ве молиме почекајте да заврши пред да започнете ново."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Скенирање моментално се извршува (започнато на %date%). Целосното скенирање може да трае неколку минути; оваа страница може безбедно да се освежи за проверка на напредокот."
+
+msgid "Currently processing"
+msgstr "Моментално се обработува"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Претходно скенирање (започнато на %date%) беше прекинато пред да заврши — процесот повеќе не се извршува. Можете безбедно да започнете ново."
+
+msgid "files"
+msgstr "датотеки"
+
+msgid "Permissions changed"
+msgstr "Променети дозволи"
+
+msgid "Files with changed permissions"
+msgstr "Датотеки со променети дозволи"
+
+msgid "Alert history"
+msgstr "Историја на известувања"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Секое скенирање кое пронашло нешто, се чува дури и откако отстапувањето ќе се реши или ќе се воспостави нова основна линија — за разлика од извештајот погоре, чистото скенирање или повторното воспоставување на основната линија никогаш не го брише ова."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Овој запис беше скратен во моментот на снимање; видете го CEF дневникот за целосната листа."
+
+msgid "No alert has been recorded yet."
+msgstr "Сè уште не е забележано известување."
+
+msgid "Git remote changed"
+msgstr "Git далечински сервер е променет"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Премногу промени за целосно прикажување; подолу се прикажани само првите записи од секоја категорија. Погледнете го %link_start%CEF логот%link_end% за целосната листа."
 

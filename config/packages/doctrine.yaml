@@ -93,6 +93,8 @@ when@test:
         dbal:
             # "TEST_TOKEN" is typically set by ParaTest
             dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            # dama/doctrine-test-bundle >=8 wraps each test in a nested transaction via savepoints
+            use_savepoints: true
 
 when@prod:
     doctrine:

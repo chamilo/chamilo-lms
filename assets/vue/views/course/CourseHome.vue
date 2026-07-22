@@ -4,77 +4,7 @@
     id="course-home"
     class="course-home"
   >
-    <div
-      v-if="isCourseLoading"
-      class="flex flex-col gap-4"
-    >
-      <div class="flex gap-4 items-center">
-        <Skeleton
-          class="mr-auto"
-          height="2.5rem"
-          width="12rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          height="2.5rem"
-          width="8rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          height="2.5rem"
-          width="3rem"
-        />
-      </div>
-
-      <Skeleton height="16rem" />
-
-      <div class="flex items-center gap-6">
-        <Skeleton
-          height="1.5rem"
-          width="6rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          class="ml-auto"
-          height="1.5rem"
-          width="6rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          class="aspect-square"
-          height="1.5rem"
-          width="6rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          class="aspect-square"
-          height="1.5rem"
-          width="6rem"
-        />
-        <!-- Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          class="aspect-square"
-          height="1.5rem"
-          width="6rem"
-        / -->
-      </div>
-
-      <hr class="mt-0 mb-4" />
-
-      <div class="course-home__tools">
-        <Skeleton
-          v-for="v in 30"
-          :key="v"
-          class="aspect-square"
-          height="auto"
-          width="7.5rem"
-        />
-      </div>
-    </div>
-    <div
-      v-else
-      class="flex flex-col gap-4"
-    >
+    <div class="flex flex-col gap-4">
       <SectionHeader :title="course.title">
         <BaseButton
           v-if="isAllowedToEdit && courseIntroEl?.introduction?.iid"
@@ -171,7 +101,7 @@
 
         <div class="ml-auto">
           <BaseToggleButton
-            :disabled="isSorting || isCustomizing || !allowEditToolVisibilityInSession"
+            :disabled="isCourseLoading || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Show all')"
             :on-label="t('Show all')"
@@ -183,7 +113,7 @@
             @click="onClickShowAll"
           />
           <BaseToggleButton
-            :disabled="isSorting || isCustomizing || !allowEditToolVisibilityInSession"
+            :disabled="isCourseLoading || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Hide all')"
             :on-label="t('Hide all')"
@@ -195,7 +125,7 @@
           />
           <BaseToggleButton
             v-model="isSorting"
-            :disabled="isCustomizing"
+            :disabled="isCourseLoading || isCustomizing"
             :off-label="t('Sort')"
             :on-label="t('Sort')"
             off-icon="swap-vertical"
@@ -217,6 +147,31 @@
       </div>
 
       <div
+        v-if="isCourseLoading"
+        aria-busy="true"
+        class="course-home__tools"
+      >
+        <div
+          v-for="item in COURSE_TOOL_SKELETON_COUNT"
+          :key="`course-tool-skeleton-${item}`"
+          aria-hidden="true"
+          class="course-tool"
+        >
+          <Skeleton
+            class="aspect-square"
+            height="auto"
+            width="7.5rem"
+          />
+          <Skeleton
+            class="mt-2"
+            height="1rem"
+            width="5.5rem"
+          />
+        </div>
+      </div>
+
+      <div
+        v-else
         id="course-tools"
         class="course-home__tools"
       >
@@ -272,7 +227,6 @@ import courseService from "../../services/courseService"
 import baseService from "../../services/baseService"
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
 import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
@@ -281,7 +235,6 @@ import PluginRegion from "../../components/layout/PluginRegion.vue"
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
 const platformConfigStore = usePlatformConfig()
-const securityStore = useSecurityStore()
 const { course, session } = storeToRefs(cidReqStore)
 const { getSetting } = storeToRefs(platformConfigStore)
 
@@ -338,6 +291,7 @@ const lpAutoLaunchMessage = computed(() => {
   )
 })
 
+const COURSE_TOOL_SKELETON_COUNT = 16
 const TOOL_VISIBILITY_VISIBLE = 2
 
 function normalizeToolNavigation(tool) {
@@ -349,6 +303,10 @@ function normalizeToolNavigation(tool) {
 }
 
 function getToolVisibility(tool) {
+  if (typeof tool?.visibility === "boolean") {
+    return tool.visibility ? TOOL_VISIBILITY_VISIBLE : 0
+  }
+
   return tool?.resourceNode?.resourceLinks?.[0]?.visibility
 }
 
@@ -449,7 +407,7 @@ async function loadCourseTools(showSkeleton = true) {
 
       // Convenience flag for UI states (e.g. customize mode)
       tool.isEnabled =
-        tool.resourceNode?.resourceLinks?.[0]?.visibility === 2 || shouldShowInvisibleLearningPathTool(tool)
+        getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE || shouldShowInvisibleLearningPathTool(tool)
 
       return tool
     })
@@ -532,7 +490,11 @@ function goToSettingCourseTool(tool) {
 }
 
 const setToolVisibility = (tool, visibility) => {
-  tool.resourceNode.resourceLinks[0].visibility = visibility
+  tool.visibility = visibility === TOOL_VISIBILITY_VISIBLE
+
+  if (tool.resourceNode?.resourceLinks?.[0]) {
+    tool.resourceNode.resourceLinks[0].visibility = visibility
+  }
 }
 
 async function changeVisibility(tool) {
@@ -551,7 +513,7 @@ async function onClickShowAll() {
     await baseService.post(
       `/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`,
     )
-    tools.value.forEach((tool) => setToolVisibility(tool, 2))
+    await loadCourseTools(false)
   } catch (error) {
     console.log(error)
   }
@@ -562,7 +524,7 @@ async function onClickHideAll() {
     await baseService.post(
       `/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`,
     )
-    tools.value.forEach((tool) => setToolVisibility(tool, 0))
+    await loadCourseTools(false)
   } catch (error) {
     console.log(error)
   }

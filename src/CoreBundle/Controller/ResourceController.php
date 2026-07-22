@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -28,7 +29,6 @@ use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
-use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -79,7 +79,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
     public function diskSpace(Request $request): Response
     {
-        $nodeId = $request->get('id');
+        $nodeId = $request->attributes->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var ResourceNode $resourceNode */
@@ -156,14 +156,20 @@ class ResourceController extends AbstractResourceController implements CourseCon
         TrackEDownloadsRepository $trackEDownloadsRepository,
         ResourceFileHelper $resourceFileHelper,
     ): Response {
-        $id = $request->get('id');
-        $resourceFileId = $request->get('resourceFileId');
-        $filter = (string) $request->get('filter');
+        $id = $request->attributes->get('id');
+        $resourceFileId = $request->query->get('resourceFileId');
+        $filter = (string) $request->query->get('filter');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException($this->trans('Resource not found'));
         }
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
 
         $resourceFile = null;
         if ($resourceFileId) {
@@ -212,9 +218,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         CLinkRepository $cLinkRepository,
         EntityManagerInterface $entityManager
     ): RedirectResponse {
-        $tool = (string) $request->get('tool');
-        $type = (string) $request->get('type');
-        $id = (int) $request->get('id');
+        $tool = (string) $request->attributes->get('tool');
+        $type = (string) $request->attributes->get('type');
+        $id = (int) $request->attributes->get('id');
 
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
@@ -280,7 +286,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         ResourceFileHelper $resourceFileHelper,
         ResourceNodeRepository $resourceNodeRepository,
     ): Response {
-        $id = $request->get('id');
+        $id = $request->attributes->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
         if (null === $resourceNode) {
@@ -380,56 +386,63 @@ class ResourceController extends AbstractResourceController implements CourseCon
     #[Route('/{tool}/{type}/{id}/change_visibility', name: 'chamilo_core_resource_change_visibility', methods: ['POST'])]
     public function changeVisibility(
         Request $request,
+        CToolRepository $toolRepository,
+        ToolChain $toolChain,
+        SettingsManager $settingsManager,
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
         Security $security,
     ): Response {
         /** @var User $user */
         $user = $security->getUser();
-        $isAdmin = ($user->isSuperAdmin() || $user->isAdmin());
-        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
+        $isAdmin = $user->isSuperAdmin() || $user->isAdmin();
+        $isCourseTeacher = $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+            || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
 
-        if (!($isCourseTeacher || $isAdmin)) {
+        if (!$isCourseTeacher && !$isAdmin) {
             throw new AccessDeniedHttpException();
         }
 
-        $session = null;
-        if ($this->getSession()) {
-            $sessionId = $this->getSession()->getId();
-            $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        $course = $this->getCourse();
+        if (null === $course) {
+            throw new NotFoundHttpException($this->trans('Course not found'));
         }
-        $courseId = $this->getCourse()->getId();
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
+
+        $session = $this->getSession();
         $id = $request->attributes->getInt('id');
-        $resourceNode = $this->getResourceNodeRepository()->findOneBy(['id' => $id]);
+        $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
             throw new NotFoundHttpException($this->trans('Resource not found'));
         }
 
-        $link = null;
-        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
-            if ($resourceLink->getSession() === $session) {
-                $link = $resourceLink;
+        $courseTool = $toolRepository->findOneBy([
+            'resourceNode' => $resourceNode,
+            'course' => $course,
+        ]);
 
-                break;
-            }
+        if (!$courseTool instanceof CTool) {
+            throw new AccessDeniedHttpException($this->trans('Unauthorised access to resource'));
         }
 
+        if ($this->isUserToolVisibilityLocked($course, $courseTool, $toolChain, $settingsManager)) {
+            throw new AccessDeniedHttpException($this->trans('This tool visibility cannot be changed'));
+        }
+
+        $link = $this->findCourseToolResourceLink($resourceNode, $course, $session);
+
         if (null === $link) {
-            $link = new ResourceLink();
-            $link->setResourceNode($resourceNode)
+            $link = (new ResourceLink())
+                ->setResourceNode($resourceNode)
                 ->setSession($session)
                 ->setCourse($course)
                 ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
             ;
             $entityManager->persist($link);
+        } elseif (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+            $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
         } else {
-            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-                $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
-            } else {
-                $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
-            }
+            $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
         }
 
         $entityManager->flush();
@@ -453,69 +466,91 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function changeVisibilityAll(
         Request $request,
         CToolRepository $toolRepository,
-        CShortcutRepository $shortcutRepository,
         ToolChain $toolChain,
+        SettingsManager $settingsManager,
         EntityManagerInterface $entityManager,
         Security $security
     ): Response {
         /** @var User $user */
         $user = $security->getUser();
-        $isAdmin = ($user->isSuperAdmin() || $user->isAdmin());
-        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
+        $isAdmin = $user->isSuperAdmin() || $user->isAdmin();
+        $isCourseTeacher = $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+            || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
 
-        if (!($isCourseTeacher || $isAdmin)) {
+        if (!$isCourseTeacher && !$isAdmin) {
             throw new AccessDeniedHttpException();
         }
 
-        $visibility = $request->attributes->get('visibility');
-
-        $session = null;
-        if ($this->getSession()) {
-            $sessionId = $this->getSession()->getId();
-            $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        $visibility = (string) $request->attributes->get('visibility');
+        if (!\in_array($visibility, ['show', 'hide'], true)) {
+            throw new BadRequestHttpException($this->trans('Invalid visibility'));
         }
-        $courseId = $this->getCourse()->getId();
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
 
-        $result = $toolRepository->getResourcesByCourse($course, $session)
+        $course = $this->getCourse();
+        if (null === $course) {
+            throw new NotFoundHttpException($this->trans('Course not found'));
+        }
+
+        $session = $this->getSession();
+
+        /** @var CTool[] $courseTools */
+        $courseTools = $toolRepository->getResourcesByCourse($course, $session)
             ->addSelect('tool')
             ->innerJoin('resource.tool', 'tool')
             ->getQuery()
             ->getResult()
         ;
 
-        $skipTools = ['course_tool',
-            // 'chat',
-            // 'notebook',
-            // 'wiki'
-        ];
+        $canonicalRows = [];
+        foreach ($courseTools as $courseTool) {
+            $storedName = strtolower(trim($courseTool->getTool()->getTitle()));
+            $canonicalName = strtolower($toolChain->normalizeCourseToolName($storedName));
 
-        /** @var CTool $item */
-        foreach ($result as $item) {
-            if (\in_array($item->getTitle(), $skipTools, true)) {
+            if ($storedName === $canonicalName) {
+                $canonicalRows[$canonicalName] = true;
+            }
+        }
+
+        $skipTools = ['course_tool'];
+        $processedTools = [];
+
+        foreach ($courseTools as $courseTool) {
+            $storedName = strtolower(trim($courseTool->getTool()->getTitle()));
+            $canonicalName = strtolower($toolChain->normalizeCourseToolName($storedName));
+
+            if ($storedName !== $canonicalName && isset($canonicalRows[$canonicalName])) {
                 continue;
             }
-            $toolModel = $toolChain->getToolFromName($item->getTool()->getTitle());
 
+            if (isset($processedTools[$canonicalName])) {
+                continue;
+            }
+
+            if (\in_array($canonicalName, $skipTools, true)) {
+                continue;
+            }
+
+            $toolModel = $toolChain->getCourseToolFromName($storedName);
             if (!\in_array($toolModel->getCategory(), ['authoring', 'interaction'], true)) {
                 continue;
             }
 
-            $resourceNode = $item->getResourceNode();
+            if ($this->isUserToolVisibilityLocked($course, $courseTool, $toolChain, $settingsManager)) {
+                $processedTools[$canonicalName] = true;
 
-            /** @var ResourceLink $link */
-            $link = null;
-            foreach ($resourceNode->getResourceLinks() as $resourceLink) {
-                if ($resourceLink->getSession() === $session) {
-                    $link = $resourceLink;
-
-                    break;
-                }
+                continue;
             }
 
+            $resourceNode = $courseTool->getResourceNode();
+            if (null === $resourceNode) {
+                continue;
+            }
+
+            $link = $this->findCourseToolResourceLink($resourceNode, $course, $session);
+
             if (null === $link) {
-                $link = new ResourceLink();
-                $link->setResourceNode($resourceNode)
+                $link = (new ResourceLink())
+                    ->setResourceNode($resourceNode)
                     ->setSession($session)
                     ->setCourse($course)
                     ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
@@ -523,16 +558,75 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $entityManager->persist($link);
             }
 
-            if ('show' === $visibility) {
-                $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
-            } elseif ('hide' === $visibility) {
-                $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
-            }
+            $link->setVisibility(
+                'show' === $visibility
+                    ? ResourceLink::VISIBILITY_PUBLISHED
+                    : ResourceLink::VISIBILITY_DRAFT
+            );
+            $processedTools[$canonicalName] = true;
         }
 
         $entityManager->flush();
 
         return new Response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    private function findCourseToolResourceLink(
+        ResourceNode $resourceNode,
+        Course $course,
+        ?Session $session
+    ): ?ResourceLink {
+        $courseId = $course->getId();
+        $sessionId = $session?->getId();
+
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            if ($resourceLink->getCourse()?->getId() !== $courseId) {
+                continue;
+            }
+
+            if ($resourceLink->getSession()?->getId() !== $sessionId) {
+                continue;
+            }
+
+            if (
+                null !== $resourceLink->getGroup()
+                || null !== $resourceLink->getUserGroup()
+                || null !== $resourceLink->getUser()
+            ) {
+                continue;
+            }
+
+            return $resourceLink;
+        }
+
+        return null;
+    }
+
+    private function isUserToolVisibilityLocked(
+        Course $course,
+        CTool $courseTool,
+        ToolChain $toolChain,
+        SettingsManager $settingsManager
+    ): bool {
+        $courseToolName = strtolower(
+            $toolChain->normalizeCourseToolName($courseTool->getTool()->getTitle())
+        );
+
+        if ('member' !== $courseToolName || !$course->isPublic()) {
+            return false;
+        }
+
+        return $this->isSettingEnabled(
+            $settingsManager->getSetting('privacy.disable_change_user_visibility_for_public_courses')
+        );
+    }
+
+    private function isSettingEnabled(mixed $value): bool
+    {
+        return true === $value
+            || 1 === $value
+            || '1' === $value
+            || 'true' === strtolower(trim((string) $value));
     }
 
     #[Route('/resource_files/{resourceNodeId}/variants', name: 'chamilo_core_resource_files_variants', methods: ['GET'])]

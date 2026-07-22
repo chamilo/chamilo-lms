@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:அடைவு,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:அடைவு,, application/msword:MsWord,, application/octet-stream:ஆக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -37341,4 +37341,139 @@ msgstr "மூலம்"
 
 msgid "required"
 msgstr "தேவை"
+
+msgid "Incorrect password."
+msgstr "தவறான கடவுச்சொல்."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "கோப்பு ஒருமைப்பாடு எச்சரிக்கை 1 மணி நேரத்திற்கு இடைநிறுத்தப்பட்டது."
+
+msgid "New baseline established: %s files."
+msgstr "புதிய அடிப்படை நிறுவப்பட்டது: %s கோப்புகள்."
+
+msgid "Scan complete: changes were detected."
+msgstr "ஸ்கேன் முடிந்தது: மாற்றங்கள் கண்டறியப்பட்டன."
+
+msgid "Scan complete: no changes were detected."
+msgstr "ஸ்கேன் முடிந்தது: எந்த மாற்றங்களும் கண்டறியப்படவில்லை."
+
+msgid "File integrity"
+msgstr "கோப்பு ஒருமைப்பாடு"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "இந்த அறிக்கை நிறுவப்பட்ட கோப்புகளை (var/ மற்றும் .git/ தவிர அனைத்தும், ஆனால் .git/config இன்னும் கண்காணிக்கப்படுகிறது) நம்பகமான அடிப்படையுடன் ஒப்பிடுகிறது, எதிர்பாராத சேர்த்தல்கள், மாற்றங்கள் அல்லது நீக்கங்களைக் கண்டறிய."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "சமீபத்திய அறிக்கையை கீழே மதிப்பாய்வு செய்யலாம். ஸ்கேன் இயக்குதல், எச்சரிக்கையை இடைநிறுத்துதல் அல்லது புதிய அடிப்படையை நிறுவுதல் ஆகியவை உலகளாவிய நிர்வாகி தேவை."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "எச்சரிக்கை தற்போது பராமரிப்புக்காக இடைநிறுத்தப்பட்டுள்ளது. இது தானாகவே %date% இல் மீண்டும் தொடங்கும்."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "இன்னும் எந்த ஸ்கேனும் இயக்கப்படவில்லை. இங்கிருந்து அல்லது app:file-integrity:scan கட்டளை வரியுடன் இயக்கவும்."
+
+msgid "Last scan"
+msgstr "கடைசி ஸ்கேன்"
+
+msgid "Files scanned"
+msgstr "ஸ்கேன் செய்யப்பட்ட கோப்புகள்"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "இன்னும் அடிப்படை இல்லை: இந்த ஸ்கேன் ஒன்றை நிறுவியது. அடுத்த ஸ்கேனிலிருந்து மாற்றங்கள் அறிவிக்கப்படும்."
+
+msgid "No changes detected since the baseline."
+msgstr "அடிப்படையிலிருந்து எந்த மாற்றங்களும் கண்டறியப்படவில்லை."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git ரிமோட் உள்ளமைவு (.git/config) மாற்றப்பட்டுள்ளது. இது எதிர்பார்க்கப்பட்டதா என சரிபார்க்கவும்."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "ஒரு துணை அடைவைப் படிக்க முடியாததால் ஸ்கேன் முன்கூட்டியே நிறுத்தப்பட்டது (கோப்பு அனுமதிகளைச் சரிபார்க்கவும்). கீழே உள்ள முடிவுகள் பகுதியாக இருக்கலாம்."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% கோப்பு(கள்) படிக்க முடியவில்லை (அனுமதிகள்) மற்றும் தவிர்க்கப்பட்டன."
+
+msgid "Run a scan now"
+msgstr "இப்போது ஸ்கேன் இயக்கவும்"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "1 மணி நேரத்திற்கு எச்சரிக்கையை இடைநிறுத்தவும் (பராமரிப்புக்காக)"
+
+msgid "Pause for 1 hour"
+msgstr "1 மணி நேரத்திற்கு இடைநிறுத்தவும்"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "தற்போதைய கோப்பு மரத்தை புதிய அடிப்படையாக நம்புங்கள்"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "இது எந்த மதிப்பாய்வு செய்யப்படாத மாற்றம் உட்பட ஒவ்வொரு தற்போதைய கோப்பையும் சரியானதாக நம்பும். தொடரவா?"
+
+msgid "Establish new baseline"
+msgstr "புதிய அடிப்படையை நிறுவவும்"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "எடுத்துக்காட்டாக கணினி க்ரான்டேபிலிருந்து ஸ்கேனை திட்டமிடவும்"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% இல் கோப்பு ஒருமைப்பாடு எச்சரிக்கை"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "கோப்பு ஒருமைப்பாடு ஸ்கேன் தளத்தில் மாற்றங்களைக் கண்டறிந்தது:"
+
+msgid "Added files"
+msgstr "சேர்க்கப்பட்ட கோப்புகள்"
+
+msgid "Modified files"
+msgstr "மாற்றப்பட்ட கோப்புகள்"
+
+msgid "Deleted files"
+msgstr "நீக்கப்பட்ட கோப்புகள்"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "நிர்வாகம் > பாதுகாப்பு > கோப்பு ஒருமைப்பாடு என்பதிலிருந்து முழு அறிக்கையை மதிப்பாய்வு செய்யவும்."
+
+msgid "Password to confirm pausing alerts"
+msgstr "எச்சரிக்கைகளை இடைநிறுத்த உறுதிப்படுத்தும் கடவுச்சொல்"
+
+msgid "Password to confirm the new baseline"
+msgstr "புதிய அடிப்படையை உறுதிப்படுத்தும் கடவுச்சொல்"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "ஒரு ஸ்கேன் ஏற்கனவே இயங்குகிறது. மற்றொன்றைத் தொடங்குவதற்கு முன் அதை முடிக்க காத்திருக்கவும்."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "தற்போது ஒரு ஸ்கேன் இயங்குகிறது (%date% இல் தொடங்கியது). ஒரு முழு ஸ்கேன் பல நிமிடங்கள் ஆகலாம்; முன்னேற்றத்தைச் சரிபார்க்க இந்தப் பக்கத்தைப் பாதுகாப்பாக மீண்டும் ஏற்றலாம்."
+
+msgid "Currently processing"
+msgstr "தற்போது செயலாக்கப்படுகிறது"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "முந்தைய ஸ்கேன் (%date% இல் தொடங்கியது) முடிவடைவதற்கு முன் குறுக்கிடப்பட்டது — செயல்முறை இனி இயங்கவில்லை. நீங்கள் பாதுகாப்பாக புதியதைத் தொடங்கலாம்."
+
+msgid "files"
+msgstr "கோப்புகள்"
+
+msgid "Permissions changed"
+msgstr "அனுமதிகள் மாற்றப்பட்டன"
+
+msgid "Files with changed permissions"
+msgstr "அனுமதிகள் மாற்றப்பட்ட கோப்புகள்"
+
+msgid "Alert history"
+msgstr "எச்சரிக்கை வரலாறு"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "ஏதாவது கண்டறியப்பட்ட ஒவ்வொரு ஸ்கேனும், விலகல் தீர்க்கப்பட்ட பின்னரோ அல்லது புதிய அடிப்படை நிறுவப்பட்ட பின்னரோ கூட வைக்கப்படும் — மேலே உள்ள அறிக்கையைப் போலல்லாமல், தூய்மையான ஸ்கேன் அல்லது மறு அடிப்படை இதை ஒருபோதும் அழிக்காது."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "பதிவு செய்யும் நேரத்தில் இந்த உள்ளீடு துண்டிக்கப்பட்டது; முழுமையான பட்டியலுக்கு CEF பதிவைப் பார்க்கவும்."
+
+msgid "No alert has been recorded yet."
+msgstr "இதுவரை எந்த எச்சரிக்கையும் பதிவு செய்யப்படவில்லை."
+
+msgid "Git remote changed"
+msgstr "Git தொலைநிலை மாற்றப்பட்டது"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
 

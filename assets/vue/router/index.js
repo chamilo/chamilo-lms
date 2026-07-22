@@ -264,7 +264,7 @@ function derivePageTypeClasses(to) {
  */
 async function courseHomeBeforeEnter(to) {
   const courseId = parseInt(to.params.id)
-  const sessionId = parseInt(to.query?.sid)
+  const sessionId = parseInt(to.query?.sid ?? 0) || 0
   const autoLaunchKey = `course_autolaunch_${courseId}`
 
   if (sessionStorage.getItem(autoLaunchKey) === "true") {

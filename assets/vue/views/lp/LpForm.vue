@@ -33,6 +33,16 @@
       class="flex w-full flex-col gap-6"
       @submit.prevent="save"
     >
+      <div class="flex justify-end">
+        <BaseButton
+          :disabled="saving"
+          :label="isEdit ? t('Save course settings') : t('Continue')"
+          icon="save"
+          type="success"
+          is-submit
+        />
+      </div>
+
       <div
         v-if="!isEdit"
         class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm text-info-dark"
@@ -64,24 +74,12 @@
           required
         />
 
-        <BaseSelect
-          v-if="isEdit"
-          id="lp-category"
-          v-model="form.categoryId"
-          name="categoryId"
-          :label="t('Category')"
-          :options="form.categoryOptions"
-          option-label="label"
-          option-value="value"
-          allow-clear
-        />
       </div>
 
       <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
         <div class="flex w-full flex-col gap-5">
           <BaseSelect
-            v-if="!isEdit"
-            id="lp-category-create"
+            id="lp-category"
             v-model="form.categoryId"
             name="categoryId"
             :label="t('Category')"
@@ -402,6 +400,7 @@ const FIELD_DATE = 6
 const FIELD_DATETIME = 7
 const FIELD_MULTI_SELECT = 5
 const FIELD_TAG = 10
+const NO_SPECIFIC_LANGUAGE = "__none__"
 
 const createIntroductionKey =
   "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left."
@@ -419,7 +418,7 @@ const saving = ref(false)
 const showAdvancedSettings = ref(false)
 const imageFile = ref(null)
 const extraFiles = reactive({})
-const extraFieldValues = reactive({})
+const extraFieldValues = ref({})
 const lpId = computed(() => Number(route.params.lpId || 0))
 const isEdit = computed(() => lpId.value > 0)
 const managementQuery = computed(() =>
@@ -435,7 +434,7 @@ const form = reactive({
   id: null,
   title: "",
   categoryId: null,
-  language: "",
+  language: NO_SPECIFIC_LANGUAGE,
   hideTocFrame: false,
   defaultViewMode: "embedded",
   theme: "",
@@ -512,6 +511,7 @@ async function loadConfiguration() {
   try {
     const data = await lpService.getConfiguration(lpId.value, context.value)
     Object.assign(form, data)
+    form.language = String(data.language || NO_SPECIFIC_LANGUAGE)
     form.publishedOn = toDate(data.publishedOn, new Date())
     form.expiredOn = toDate(data.expiredOn, new Date(Date.now() + 86400000))
     form.skillIds = Array.isArray(data.skillIds) ? data.skillIds.map(Number) : []
@@ -525,30 +525,30 @@ async function loadConfiguration() {
 }
 
 function initializeExtraFields(fields) {
-  Object.keys(extraFieldValues).forEach((key) => delete extraFieldValues[key])
+  Object.keys(extraFieldValues.value).forEach((key) => delete extraFieldValues.value[key])
   fields.forEach((field) => {
     const value = field.value
     if (field.valueType === FIELD_CHECKBOX) {
-      extraFieldValues[field.id] = [true, 1, "1", "true"].includes(value)
+      extraFieldValues.value[field.id] = [true, 1, "1", "true"].includes(value)
       return
     }
     if ([FIELD_INTEGER, FIELD_FLOAT, FIELD_DURATION].includes(field.valueType)) {
-      extraFieldValues[field.id] = Number(value || 0)
+      extraFieldValues.value[field.id] = Number(value || 0)
       return
     }
     if ([FIELD_DATE, FIELD_DATETIME].includes(field.valueType)) {
-      extraFieldValues[field.id] = parseExtraFieldDate(field.valueType, value)
+      extraFieldValues.value[field.id] = parseExtraFieldDate(field.valueType, value)
       return
     }
     if ([FIELD_MULTI_SELECT, FIELD_TAG].includes(field.valueType)) {
-      extraFieldValues[field.id] = Array.isArray(value)
+      extraFieldValues.value[field.id] = Array.isArray(value)
         ? value
         : String(value || "")
             .split(";")
             .filter(Boolean)
       return
     }
-    extraFieldValues[field.id] = value ?? ""
+    extraFieldValues.value[field.id] = value ?? ""
   })
 }
 
@@ -584,7 +584,7 @@ function buildPayload() {
   return {
     title: form.title,
     categoryId: form.categoryId || null,
-    language: form.showLanguage ? form.language : "",
+    language: form.showLanguage && form.language !== NO_SPECIFIC_LANGUAGE ? form.language : "",
     hideTocFrame: form.hideTocFrame,
     defaultViewMode: form.defaultViewMode,
     theme: form.theme,
@@ -612,7 +612,7 @@ function buildPayload() {
 function serializeExtraFields() {
   const result = {}
   form.extraFields.forEach((field) => {
-    const value = extraFieldValues[field.id]
+    const value = extraFieldValues.value[field.id]
     if (value instanceof Date) {
       result[field.id] = field.valueType === FIELD_DATE ? toLocalDate(value) : toLocalDateTime(value)
       return

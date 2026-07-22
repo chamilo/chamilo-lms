@@ -37358,3 +37358,138 @@ msgstr "avtor"
 msgid "required"
 msgstr "obvezno"
 
+msgid "Incorrect password."
+msgstr "Napačno geslo."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Opozorilo o celovitosti datotek začasno ustavljeno za 1 uro."
+
+msgid "New baseline established: %s files."
+msgstr "Vzpostavljena nova osnovna linija: %s datotek."
+
+msgid "Scan complete: changes were detected."
+msgstr "Pregled končan: zaznane so bile spremembe."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Pregled končan: spremembe niso bile zaznane."
+
+msgid "File integrity"
+msgstr "Celovitost datotek"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "To poročilo primerja nameščene datoteke (vse razen var\/ in .git\/, čeprav se .git\/config še vedno spremlja za zaznavanje ugrabitve oddaljenega strežnika) z zaupanja vredno osnovno linijo, da zazna nepričakovane dodatke, spremembe ali brisanja."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Najnovejše poročilo si lahko ogledate spodaj. Zagon pregleda, začasno ustavitev opozarjanja ali vzpostavitev nove osnovne linije zahteva globalnega administratorja."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Opozarjanje je trenutno začasno ustavljeno zaradi vzdrževanja. Samodejno se bo nadaljevalo ob %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Pregled še ni bil izveden. Zaženite ga tukaj ali prek ukazne vrstice z app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Zadnji pregled"
+
+msgid "Files scanned"
+msgstr "Pregledane datoteke"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Osnovna linija še ni obstajala: ta pregled jo je vzpostavil. Spremembe bodo poročane od naslednjega pregleda naprej."
+
+msgid "No changes detected since the baseline."
+msgstr "Od vzpostavitve osnovne linije ni bilo zaznanih sprememb."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Konfiguracija oddaljenega Git repozitorija (.git\/config) se je spremenila. Preverite, ali je bila sprememba pričakovana."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Pregled se je predčasno ustavil, ker ni bilo mogoče prebrati podimenika (preverite dovoljenja datotek). Spodnji rezultati so lahko delni."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% datotek(e) ni bilo mogoče prebrati (dovoljenja) in so bile preskočene."
+
+msgid "Run a scan now"
+msgstr "Zaženi pregled zdaj"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Začasno ustavi opozarjanje za 1 uro (zaradi vzdrževanja)"
+
+msgid "Pause for 1 hour"
+msgstr "Začasno ustavi za 1 uro"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Zaupaj trenutnemu drevesu datotek kot novi osnovni liniji"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "To bo zaupalo vsaki trenutni datoteki kot pravilni, vključno s kakršno koli nepregledano spremembo. Nadaljujem?"
+
+msgid "Establish new baseline"
+msgstr "Vzpostavi novo osnovno linijo"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Načrtuj pregled iz sistemskega crontaba, na primer"
+
+msgid "File integrity alert on %platform%"
+msgstr "Opozorilo o celovitosti datotek na %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Pregled celovitosti datotek je zaznal spremembe na platformi:"
+
+msgid "Added files"
+msgstr "Dodane datoteke"
+
+msgid "Modified files"
+msgstr "Spremenjene datoteke"
+
+msgid "Deleted files"
+msgstr "Izbrisane datoteke"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Preglejte celotno poročilo v Administracija > Varnost > Celovitost datotek."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Geslo za potrditev začasne ustavitve opozoril"
+
+msgid "Password to confirm the new baseline"
+msgstr "Geslo za potrditev nove osnovne črte"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Pregled že poteka. Počakajte, da se konča, preden začnete novega."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Pregled trenutno poteka (začel se je ob %date%). Celoten pregled lahko traja več minut; to stran lahko varno osvežite za preverjanje napredka."
+
+msgid "Currently processing"
+msgstr "Trenutno obdelujem"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Prejšnji pregled (začel se je ob %date%) je bil prekinjen, preden se je končal — postopek ne teče več. Varno lahko začnete novega."
+
+msgid "files"
+msgstr "datoteke"
+
+msgid "Permissions changed"
+msgstr "Dovoljenja spremenjena"
+
+msgid "Files with changed permissions"
+msgstr "Datoteke s spremenjenimi dovoljenji"
+
+msgid "Alert history"
+msgstr "Zgodovina opozoril"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Vsak pregled, ki je nekaj zaznal, se ohrani tudi po odpravi odstopanja ali vzpostavitvi nove osnovne črte — za razliko od zgornjega poročila čisti pregled ali ponovna osnovna črta tega ne počisti."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Ta vnos je bil ob zajemu skrajšan; za popoln seznam glejte dnevnik CEF."
+
+msgid "No alert has been recorded yet."
+msgstr "Opozorilo še ni bilo zabeleženo."
+
+msgid "Git remote changed"
+msgstr "Oddaljeni Git spremenjen"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Preveč sprememb za popoln seznam; spodaj so prikazani le prvi vnosi vsake kategorije. Za celoten seznam glejte %link_start%CEF dnevnik%link_end%."
+

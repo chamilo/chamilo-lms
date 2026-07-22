@@ -37342,3 +37342,138 @@ msgstr "nga"
 msgid "required"
 msgstr "i detyrueshëm"
 
+msgid "Incorrect password."
+msgstr "Incorrect password."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "File integrity alerting paused for 1 hour."
+
+msgid "New baseline established: %s files."
+msgstr "Baza e re e vendosur: %s skedarë."
+
+msgid "Scan complete: changes were detected."
+msgstr "Skanimi përfundoi: u zbuluan ndryshime."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Skanimi përfundoi: nuk u zbuluan ndryshime."
+
+msgid "File integrity"
+msgstr "Integriteti i skedarëve"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Ky raport krahason skedarët e instaluar (gjithçka përveç var/ dhe .git/, megjithëse .git/config ende mbikëqyret për të kapur një remote të rrëmbyer) me një bazë të besueshme, për të zbuluar shtesa, modifikime ose fshirje të papritura."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Mund të shikoni raportin e fundit më poshtë. Për të kryer një skanim, për të ndaluar përkohësisht njoftimet ose për të vendosur një bazë të re kërkohet një administrator global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Njoftimet janë ndalur përkohësisht për mirëmbajtje. Ato do të rifillojnë automatikisht më %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Asnjë skanim nuk është kryer ende. Kryeni një nga këtu, ose nga rreshti i komandës me app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Skanimi i fundit"
+
+msgid "Files scanned"
+msgstr "Skedarë të skanuar"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Nuk ekzistonte ende asnjë bazë: ky skanim vendosi një. Ndryshimet do të raportohen duke filluar nga skanimi tjetër."
+
+msgid "No changes detected since the baseline."
+msgstr "Nuk u zbuluan ndryshime që nga baza."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Konfigurimi i remote-it Git (.git/config) është ndryshuar. Verifikoni nëse kjo ishte e pritur."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Skanimi u ndal herët sepse një nën-direktori nuk mund të lexohej (kontrolloni lejet e skedarëve). Rezultatet më poshtë mund të jenë të pjesshme."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% skedar(ë) nuk mund të lexoheshin (leje) dhe u anashkaluan."
+
+msgid "Run a scan now"
+msgstr "Kryej një skanim tani"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Ndalo njoftimet për 1 orë (për mirëmbajtje)"
+
+msgid "Pause for 1 hour"
+msgstr "Ndalo për 1 orë"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Beso pemën aktuale të skedarëve si bazë e re"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Kjo do të besojë çdo skedar aktual si të saktë, duke përfshirë çdo ndryshim të parecensuar. Të vazhdohet?"
+
+msgid "Establish new baseline"
+msgstr "Vendos bazë të re"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Planifikoni skanimin nga një crontab i sistemit, për shembull"
+
+msgid "File integrity alert on %platform%"
+msgstr "Njoftim integriteti skedarësh në %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Një skanim integriteti skedarësh zbuloi ndryshime në platformë:"
+
+msgid "Added files"
+msgstr "Skedarë të shtuar"
+
+msgid "Modified files"
+msgstr "Skedarë të modifikuar"
+
+msgid "Deleted files"
+msgstr "Skedarë të fshirë"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Shikoni raportin e plotë nga Administrimi > Siguria > Integriteti i skedarëve."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Fjalëkalimi për të konfirmuar ndalimin e njoftimeve"
+
+msgid "Password to confirm the new baseline"
+msgstr "Fjalëkalimi për të konfirmuar bazën e re"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Një skanim është tashmë në proces. Ju lutemi prisni që të përfundojë para se të filloni një tjetër."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Një skanim është aktualisht në proces (filloi më %date%). Një skanim i plotë mund të zgjasë disa minuta; kjo faqe mund të ringarkohet me siguri për të kontrolluar përparimin."
+
+msgid "Currently processing"
+msgstr "Aktualisht në proces"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Një skanim i mëparshëm (filloi më %date%) u ndërpre para se të përfundonte — procesi nuk është më në ekzekutim. Mund të filloni me siguri një të ri."
+
+msgid "files"
+msgstr "skedarë"
+
+msgid "Permissions changed"
+msgstr "Lejet u ndryshuan"
+
+msgid "Files with changed permissions"
+msgstr "Skedarë me leje të ndryshuara"
+
+msgid "Alert history"
+msgstr "Historia e njoftimeve"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Çdo skanim që gjeti diçka, ruhet edhe pasi devijimi të jetë zgjidhur ose një bazë e re të jetë vendosur — ndryshe nga raporti më sipër, një skanim i pastër ose një rivendosje bazë nuk e pastron kurrë këtë."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Kjo hyrje u shkurtesua në kohën e kapjes; shihni regjistrin CEF për listën e plotë."
+
+msgid "No alert has been recorded yet."
+msgstr "Asnjë njoftim nuk është regjistruar ende."
+
+msgid "Git remote changed"
+msgstr "Remote-i Git u ndryshua"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Shumë ndryshime për t'u listuar plotësisht; vetëm hyrjet e para të çdo kategorie shfaqen më poshtë. Shihni %link_start%regjistrin CEF%link_end% për listën e plotë."
+

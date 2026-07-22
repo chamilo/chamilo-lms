@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathRuntimeItemInput;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -23,22 +24,22 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<LearningPathRuntimeItemInput, void> */
 final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterface
 {
     use LearningPathStateHelperTrait;
 
-    private const EXTERNALLY_COMPLETED_TYPES = ['quiz', 'hotpotatoes', 'sco', 'au'];
+    private const EXTERNALLY_COMPLETED_TYPES = ['quiz', 'hotpotatoes', 'sco', 'au', 'survey'];
 
     public function __construct(
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
+        private LearningPathRuntimeWriteProtection $writeProtection,
         private LearningPathRuntimeProvider $runtimeProvider,
         private LearningPathRuntimeProgressManager $progressManager,
+        private LearningPathFinalItemManager $finalItemManager,
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
     ) {}
@@ -54,7 +55,7 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
+        $this->writeProtection->assertWriteAllowed($data->csrfToken);
 
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
         if ($lpId <= 0 || $data->itemId <= 0) {
@@ -165,6 +166,16 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
         $view->setLastItem($data->itemId);
         $this->entityManager->flush();
         $this->progressManager->synchronize($lp, $view);
+
+        if ('final_item' === strtolower(trim($item->getItemType()))) {
+            $this->finalItemManager->completeForLearner(
+                $item,
+                $course,
+                $session,
+                $user,
+                $runtime->canEdit,
+            );
+        }
     }
 
     private function shouldCompleteWhenOpened(CLpItem $item): bool

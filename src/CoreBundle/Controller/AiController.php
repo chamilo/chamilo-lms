@@ -3650,7 +3650,7 @@ class AiController extends AbstractController
 
     private function getAiCourseAnalyzerSessionFromRequest(Request $request): ?Session
     {
-        $sessionId = (int) $request->get('sid', 0);
+        $sessionId = (int) $request->query->get('sid');
         if ($sessionId <= 0) {
             return null;
         }

@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:कपीराइट,, no:कपीराइट नभएको"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फोल्डर,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:व्यायाम,,      simulation:सिमुलेशन,,      questionnaire:प्रश्नावली,,      diagram:डायाग्राम,,      figure:चित्र,,      graph:ग्राफ,,      index:सूची,,      slide:स्लाइड,,      table:तालिका,,      narrative text:कथन पाठ,,      exam:परीक्षा,,      experiment:प्रयोग,,      problem statement:समस्या कथन,,      self assessment:आत्म मूल्याङ्कन,,      lecture:व्याख्यान"
@@ -37341,4 +37341,139 @@ msgstr "द्वारा"
 
 msgid "required"
 msgstr "आवश्यक"
+
+msgid "Incorrect password."
+msgstr "गलत पासवर्ड।"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "फाइल अखण्डता चेतावनी १ घण्टाका लागि रोकिएको छ।"
+
+msgid "New baseline established: %s files."
+msgstr "नयाँ आधाररेखा स्थापना गरियो: %s फाइलहरू।"
+
+msgid "Scan complete: changes were detected."
+msgstr "स्क्यान सम्पन्न: परिवर्तनहरू पत्ता लागे।"
+
+msgid "Scan complete: no changes were detected."
+msgstr "स्क्यान सम्पन्न: कुनै परिवर्तन पत्ता लागेन।"
+
+msgid "File integrity"
+msgstr "फाइल अखण्डता"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "यो प्रतिवेदनले स्थापित फाइलहरू (var/ र .git/ बाहेक, तर .git/config अझै पनि हाइज्याक गरिएको रिमोट पत्ता लगाउन हेर्न सकिन्छ) लाई विश्वसनीय आधाररेखासँग तुलना गर्दछ, अप्रत्याशित थप, परिमार्जन वा मेटाइ पत्ता लगाउन।"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "तपाईं तलको नवीनतम प्रतिवेदन समीक्षा गर्न सक्नुहुन्छ। स्क्यान चलाउने, चेतावनी रोक्ने, वा नयाँ आधाररेखा स्थापना गर्न विश्वव्यापी प्रशासक आवश्यक पर्छ।"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "मर्मतसम्भारका लागि चेतावनी हाल रोकिएको छ। यो स्वतः %date% मा पुनः सुरु हुनेछ।"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "अहिलेसम्म कुनै स्क्यान चलेको छैन। यहाँबाट वा आदेश रेखाबाट app:file-integrity:scan सँग चलाउनुहोस्।"
+
+msgid "Last scan"
+msgstr "अन्तिम स्क्यान"
+
+msgid "Files scanned"
+msgstr "स्क्यान गरिएका फाइलहरू"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "अहिलेसम्म कुनै आधाररेखा थिएन: यो स्क्यानले एउटा स्थापना गर्‍यो। अर्को स्क्यानबाट परिवर्तनहरू रिपोर्ट गरिनेछ।"
+
+msgid "No changes detected since the baseline."
+msgstr "आधाररेखादेखि कुनै परिवर्तन पत्ता लागेन।"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git रिमोट कन्फिगरेसन (.git/config) परिवर्तन भएको छ। यो अपेक्षित थियो कि थिएन जाँच गर्नुहोस्।"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "स्क्यान चाँडै रोकियो किनकि उपनिर्देशिका पढ्न सकिएन (फाइल अनुमतिहरू जाँच गर्नुहोस्)। तलका नतिजाहरू आंशिक हुन सक्छन्।"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% फाइल(हरू) पढ्न सकिएन (अनुमतिहरू) र छोडियो।"
+
+msgid "Run a scan now"
+msgstr "अहिले स्क्यान चलाउनुहोस्"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "१ घण्टाका लागि चेतावनी रोक्नुहोस् (मर्मतसम्भारका लागि)"
+
+msgid "Pause for 1 hour"
+msgstr "१ घण्टाका लागि रोक्नुहोस्"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "हालको फाइल ट्रीलाई नयाँ आधाररेखाको रूपमा विश्वास गर्नुहोस्"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "यसले कुनै पनि समीक्षा नगरिएको परिवर्तन सहित प्रत्येक हालको फाइललाई सही मान्नेछ। जारी राख्ने?"
+
+msgid "Establish new baseline"
+msgstr "नयाँ आधाररेखा स्थापना गर्नुहोस्"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "उदाहरणका लागि प्रणाली क्रोन्ट्याबबाट स्क्यान तालिका बनाउनुहोस्"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% मा फाइल अखण्डता चेतावनी"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "फाइल अखण्डता स्क्यानले प्लेटफर्ममा परिवर्तनहरू पत्ता लगायो:"
+
+msgid "Added files"
+msgstr "थपिएका फाइलहरू"
+
+msgid "Modified files"
+msgstr "परिमार्जित फाइलहरू"
+
+msgid "Deleted files"
+msgstr "मेटिएका फाइलहरू"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "प्रशासन > सुरक्षा > फाइल अखण्डता बाट पूर्ण प्रतिवेदन समीक्षा गर्नुहोस्।"
+
+msgid "Password to confirm pausing alerts"
+msgstr "अलर्ट रोक्न पासवर्ड पुष्टि गर्नुहोस्"
+
+msgid "Password to confirm the new baseline"
+msgstr "नयाँ आधाररेखा पुष्टि गर्न पासवर्ड"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "स्क्यान पहिले नै चलिरहेको छ। अर्को सुरु गर्नुअघि यसलाई समाप्त हुन दिनुहोस्।"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "स्क्यान हाल चलिरहेको छ (%date% मा सुरु भएको)। पूर्ण स्क्यानमा केही मिनेट लाग्न सक्छ; प्रगति जाँच्न यो पृष्ठ सुरक्षित रूपमा पुनः लोड गर्न सकिन्छ।"
+
+msgid "Currently processing"
+msgstr "हाल प्रक्रिया गर्दै"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "अघिल्लो स्क्यान (%date% मा सुरु भएको) समाप्त हुनुअघि अवरोधित भएको थियो — प्रक्रिया अब चलिरहेको छैन। तपाईं सुरक्षित रूपमा नयाँ स्क्यान सुरु गर्न सक्नुहुन्छ।"
+
+msgid "files"
+msgstr "फाइलहरू"
+
+msgid "Permissions changed"
+msgstr "अनुमतिहरू परिवर्तन गरियो"
+
+msgid "Files with changed permissions"
+msgstr "अनुमति परिवर्तन भएका फाइलहरू"
+
+msgid "Alert history"
+msgstr "अलर्ट इतिहास"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "प्रत्येक स्क्यान जसले केही फेला पार्‍यो, ड्रिफ्ट समाधान भएपछि वा नयाँ आधाररेखा स्थापना भएपछि पनि राखिन्छ — माथिको प्रतिवेदन विपरीत, सफा स्क्यान वा पुनः आधाररेखाले यसलाई कहिल्यै खाली गर्दैन।"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "यो प्रविष्टि क्याप्चर समयमा काटिएको थियो; पूर्ण सूचीका लागि CEF लग हेर्नुहोस्।"
+
+msgid "No alert has been recorded yet."
+msgstr "अहिलेसम्म कुनै अलर्ट रेकर्ड गरिएको छैन।"
+
+msgid "Git remote changed"
+msgstr "Git रिमोट परिवर्तन भयो"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
 

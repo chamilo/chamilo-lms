@@ -28,6 +28,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -50,6 +52,7 @@ class ResourceNodeVoter extends Voter
 
     public function __construct(
         private Security $security,
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
         private EntityManagerInterface $entityManager,
@@ -95,7 +98,7 @@ class ResourceNodeVoter extends Voter
         return \in_array($role, $this->security->getUser()?->getRoles() ?? [], true);
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
@@ -112,7 +115,7 @@ class ResourceNodeVoter extends Voter
         }
 
         // Checking admin role.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 
@@ -159,7 +162,7 @@ class ResourceNodeVoter extends Voter
                         if ($rel && $rel->getQuiz()) {
                             $quiz = $rel->getQuiz();
                             // Allow if the user has VIEW rights on the quiz
-                            if ($this->security->isGranted('VIEW', $quiz)) {
+                            if ($this->accessDecisionManager->decide($token, ['VIEW'], $quiz)) {
                                 return true;
                             }
                         }

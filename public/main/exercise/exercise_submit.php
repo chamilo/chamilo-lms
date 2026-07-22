@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Exercise\FinalExamAccessRule;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -135,7 +136,7 @@ $template = new Template();
 $embeddedLegacyTemplate = '@ChamiloCore/Layout/blank.html.twig';
 
 // General parameters passed via POST/GET
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_id = $requestedLearnpathId;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 
@@ -276,6 +277,35 @@ if ($plugin->isEnabled()) {
     }
 }
 
+if (!$is_allowedToEdit) {
+    $finalExamAccess = FinalExamAccessRule::evaluate(
+        api_get_user_id(),
+        $courseId,
+        $sessionId,
+        $exerciseId
+    );
+
+    if ($finalExamAccess['applies'] && !$finalExamAccess['allowed']) {
+        $overviewParams = ['exerciseId' => $exerciseId];
+        if ($learnpath_id > 0) {
+            $overviewParams['learnpath_id'] = $learnpath_id;
+        }
+        if ($learnpath_item_id > 0) {
+            $overviewParams['learnpath_item_id'] = $learnpath_item_id;
+        }
+        if ($learnpath_item_view_id > 0) {
+            $overviewParams['learnpath_item_view_id'] = $learnpath_item_view_id;
+        }
+        if (!empty($origin)) {
+            $overviewParams['origin'] = $origin;
+        }
+
+        $overviewUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.
+            api_get_cidreq().'&'.http_build_query($overviewParams);
+        api_location($overviewUrl);
+    }
+}
+
 // if the user has submitted the form.
 $exercise_title = $objExercise->selectTitle();
 $exercise_sound = $objExercise->getSound();
@@ -283,7 +313,7 @@ $exercise_sound = $objExercise->getSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if (-1 == $remind_question_id) {
-        $extraParams = "&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id";
+        $extraParams = "&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&origin=".urlencode($origin);
         $url = api_get_path(WEB_CODE_PATH).
             'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().$extraParams;
         api_location($url);
@@ -373,13 +403,13 @@ if ($objExercise->selectAttempts() > 0) {
                             )
                         );
 
-                        if (in_array($origin, ['learnpath', 'embeddable'])) {
-                            Display::display_reduced_header();
-                            Display::display_reduced_footer();
+                        if (in_array($origin, ['learnpath', 'embeddable'], true)) {
+                            ob_start();
+                            Display::$legacyTemplate = $embeddedLegacyTemplate;
                         } else {
                             Display::display_header(get_lang('Tests'));
-                            Display::display_footer();
                         }
+                        Display::display_footer();
 
                         exit;
                     }
@@ -429,17 +459,15 @@ if ($objExercise->selectAttempts() > 0) {
             $attempt_html .= $messageReachedMax;
         }
 
-        if (in_array($origin, ['learnpath', 'embeddable'])) {
-            Display::display_reduced_header();
+        if (in_array($origin, ['learnpath', 'embeddable'], true)) {
+            ob_start();
+            Display::$legacyTemplate = $embeddedLegacyTemplate;
         } else {
             Display::display_header(get_lang('Tests'));
         }
 
         echo $attempt_html;
-
-        if (!in_array($origin, ['learnpath', 'embeddable'])) {
-            Display::display_footer();
-        }
+        Display::display_footer();
         exit;
     }
 }
@@ -778,11 +806,7 @@ if ($time_control) {
           AND status = 'incomplete'
     ");
 
-        $resultUrl = 'exercise_result.php?' . api_get_cidreq()
-            . "&exe_id=$exe_id"
-            . "&learnpath_id=$learnpath_id"
-            . "&learnpath_item_id=$learnpath_item_id"
-            . "&learnpath_item_view_id=$learnpath_item_view_id";
+        $resultUrl = 'exercise_result.php?'.$resultBaseQuery;
         header('Location: ' . $resultUrl);
         exit;
     }
@@ -1135,11 +1159,7 @@ if ($formSent && isset($_POST)) {
                 // Final redirect: if "Review my answers" is enabled, go to reminder list first.
                 $endUrl = $objExercise->review_answers
                     ? 'exercise_reminder.php?'.$params
-                    : 'exercise_result.php?'.api_get_cidreq()
-                    ."&exe_id=$exe_id"
-                    ."&learnpath_id=$learnpath_id"
-                    ."&learnpath_item_id=$learnpath_item_id"
-                    ."&learnpath_item_view_id=$learnpath_item_view_id";
+                    : 'exercise_result.php?'.$resultBaseQuery;
 
                 header('Location: '.$endUrl);
                 exit;
@@ -1147,14 +1167,14 @@ if ($formSent && isset($_POST)) {
                 if ($debug) {
                     error_log('10. Redirecting to exercise_result.php');
                 }
-                header('Location: exercise_result.php?'.api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header('Location: exercise_result.php?'.$resultBaseQuery);
                 exit;
             }
         } else {
             if ($debug) {
                 error_log('10. Redirecting to exercise_submit.php');
             }
-            header('Location: exercise_submit.php?'.api_get_cidreq()."&exerciseId=$exerciseId");
+            header('Location: exercise_submit.php?'.$submitBaseQuery);
             exit;
         }
     }
@@ -1197,12 +1217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'
     if ($objExercise->review_answers) {
         header('Location: exercise_reminder.php?'.$params);
     } else {
-        header('Location: exercise_result.php?'.api_get_cidreq()
-            ."&exe_id=$exe_id"
-            ."&learnpath_id=$learnpath_id"
-            ."&learnpath_item_id=$learnpath_item_id"
-            ."&learnpath_item_view_id=$learnpath_item_view_id"
-        );
+        header('Location: exercise_result.php?'.$resultBaseQuery);
     }
     exit;
 }
@@ -1269,12 +1284,7 @@ if (0 != $question_count) {
                         );
                     }
 
-                    header('Location: exercise_result.php?'
-                        .api_get_cidreq()
-                        ."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id="
-                        .$learnpath_item_id
-                        ."&learnpath_item_view_id=$learnpath_item_view_id"
-                    );
+                    header('Location: exercise_result.php?'.$resultBaseQuery);
                     exit;
                 }
             }

@@ -6,8 +6,9 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -19,7 +20,7 @@ class TrackEExerciseVoter extends Voter
     public const VIEW = 'VIEW';
 
     public function __construct(
-        private Security $security
+        private AccessDecisionManagerInterface $accessDecisionManager
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -31,7 +32,7 @@ class TrackEExerciseVoter extends Voter
         return $subject instanceof TrackEExercise && \in_array($attribute, $allowed, true);
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -40,7 +41,7 @@ class TrackEExerciseVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

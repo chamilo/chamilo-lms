@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula lagina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula lagina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr "bai:copyright,, ez: copyright gabe"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Karpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Karpeta,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ariketa,, simulation:simulazioa,, questionnaire:galdeketa,, diagram:diagrama,, figure:irudia,, graph:grafikoa,, index:indexa,, slide:diapositiba,, table:taula,, narrative text:testu narratiboa,, exam:azterketa,, experiment:saioa,, problem statement:problemaren egoera,, self assessment:autoebaluazioa,, lecture:irakurketa"
@@ -37348,4 +37348,139 @@ msgstr "egilea"
 
 msgid "required"
 msgstr "beharrezkoa"
+
+msgid "Incorrect password."
+msgstr "Pasahitz okerra."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Fitxategien osotasunaren alerta 1 ordurako gelditu da."
+
+msgid "New baseline established: %s files."
+msgstr "Oinarri-lerro berria ezarri da: %s fitxategi."
+
+msgid "Scan complete: changes were detected."
+msgstr "Eskaneatzea amaitu da: aldaketak detektatu dira."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Eskaneatzea amaitu da: ez da aldaketarik detektatu."
+
+msgid "File integrity"
+msgstr "Fitxategien osotasuna"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Txosten honek instalatutako fitxategiak (var/ eta .git/ izan ezik, nahiz eta .git/config urruneko bahiketa bat harrapatzeko ikusten den) konfiantzazko oinarri-lerro batekin alderatzen ditu, ustekabeko gehikuntzak, aldaketak edo ezabatzeak detektatzeko."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Azken txostena behean ikus dezakezu. Eskaneatze bat exekutatzeko, alerta gelditzeko edo oinarri-lerro berri bat ezartzeko administratzaile global bat behar da."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Alerta mantentze-lanetarako geldituta dago une honetan. Automatikoki berrabiaraziko da %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Oraindik ez da eskaneatzerik egin. Exekutatu bat hemendik, edo komando-lerrotik app:file-integrity:scan erabiliz."
+
+msgid "Last scan"
+msgstr "Azken eskaneatzea"
+
+msgid "Files scanned"
+msgstr "Eskaneatutako fitxategiak"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Oraindik ez zen oinarri-lerroik existitzen: eskaneatze honek bat ezarri du. Aldaketak hurrengo eskaneatzetik aurrera jakinaraziko dira."
+
+msgid "No changes detected since the baseline."
+msgstr "Ez da aldaketarik detektatu oinarri-lerrotik."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git urruneko konfigurazioa (.git/config) aldatu da. Egiaztatu hau espero zena zen."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Eskaneatzea goiz gelditu da azpidirektorio bat ezin izan delako irakurri (egiaztatu fitxategien baimenak). Beheko emaitzak partzialak izan daitezke."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fitxategi ezin izan dira irakurri (baimenak) eta saltatu egin dira."
+
+msgid "Run a scan now"
+msgstr "Exekutatu eskaneatze bat orain"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Gelditu alerta 1 ordurako (mantentze-lanetarako)"
+
+msgid "Pause for 1 hour"
+msgstr "Pausatu 1 ordurako"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Konfiantza eman uneko fitxategi-zuhaitzari oinarri berri gisa"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Honek uneko fitxategi guztiak zuzen gisa fidatuko ditu, berrikusi gabeko aldaketa barne. Jarraitu?"
+
+msgid "Establish new baseline"
+msgstr "Ezarri oinarri berria"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Programatu eskaneatzea sistemaren crontab batetik, adibidez"
+
+msgid "File integrity alert on %platform%"
+msgstr "Fitxategien osotasun-alerta %platform% plataforman"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Fitxategien osotasun-eskaneatze batek aldaketak detektatu ditu plataforman:"
+
+msgid "Added files"
+msgstr "Gehitutako fitxategiak"
+
+msgid "Modified files"
+msgstr "Aldatutako fitxategiak"
+
+msgid "Deleted files"
+msgstr "Ezabatutako fitxategiak"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Berrikusi txosten osoa Administrazioa > Segurtasuna > Fitxategien osotasuna atalean."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Pasahitza alertak pausatzea berresteko"
+
+msgid "Password to confirm the new baseline"
+msgstr "Pasahitza oinarri berria berresteko"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Eskaneatze bat dagoeneko martxan dago. Itxaron amaitu arte beste bat hasi aurretik."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Eskaneatze bat martxan dago (%date% hasita). Eskaneatze oso batek hainbat minutu behar ditzake; orri hau modu seguruan birkargatu daiteke aurrerapena egiaztatzeko."
+
+msgid "Currently processing"
+msgstr "Une honetan prozesatzen"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Aurreko eskaneatze bat (%date% hasita) amaitu aurretik eten zen — prozesua ez da gehiago martxan. Seguru hasi dezakezu berri bat."
+
+msgid "files"
+msgstr "fitxategiak"
+
+msgid "Permissions changed"
+msgstr "Baimenak aldatu dira"
+
+msgid "Files with changed permissions"
+msgstr "Baimenak aldatu dituzten fitxategiak"
+
+msgid "Alert history"
+msgstr "Alerta-historia"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Ezer aurkitu duen eskaneatze bakoitza, desbideratzea konpondu edo oinarri berria ezarri ondoren ere gordetzen da — goiko txostenaren aldean, eskaneatze garbi batek edo oinarri berri batek ez du hau garbitzen."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Sarrera hau kapturatu zen unean moztu zen; ikusi CEF erregistroa zerrenda osoa lortzeko."
+
+msgid "No alert has been recorded yet."
+msgstr "Oraindik ez da alertarik erregistratu."
+
+msgid "Git remote changed"
+msgstr "Git urruneko aldaketa"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Aldaketa gehiegi zerrenda osoan erakusteko; behean kategoria bakoitzeko lehen sarrerak soilik erakusten dira. Ikusi zerrenda osoa %link_start%CEF erregistroan%link_end%."
 

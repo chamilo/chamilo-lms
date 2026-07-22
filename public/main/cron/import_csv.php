@@ -446,7 +446,7 @@ class ImportCsv
     public function updateUsersEmails()
     {
         if (true === $this->getUpdateEmailToDummy()) {
-            $sql = "UPDATE user SET email = CONCAT(username,'@example.com') WHERE id NOT IN (SELECT user_id FROM admin)";
+            $sql = "UPDATE user SET email = CONCAT(username,'@example.com') WHERE roles NOT LIKE '%ROLE_ADMIN%' AND roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'";
             Database::query($sql);
         }
     }
@@ -2118,7 +2118,7 @@ class ImportCsv
                         $this->extraFieldIdNameList['session']
                     );
 
-                    $coachUserName = isset($session['Coach']) ? $session['Coach'] : null;
+                    $coachUserName = $session['Tutor'] ?? $session['Coach'] ?? null;
                     $categoryId = isset($session['category_id']) ? $session['category_id'] : null;
 
                     // 2014-06-30
@@ -2263,7 +2263,7 @@ class ImportCsv
                         $this->logger->addInfo("Session #$sessionId: Courses added: '".implode(', ', $courseList)."'");
 
                         if (empty($courseListWithCoach)) {
-                            $this->logger->addInfo("No users/coaches to update");
+                            $this->logger->addInfo("No users/tutors to update");
                             continue;
                         }
 
@@ -2287,7 +2287,7 @@ class ImportCsv
                                     }
                                 }
 
-                                $this->logger->addInfo("Session #$sessionId: course '$courseCode' coaches added: '".implode(', ', $coachList)."'");
+                                $this->logger->addInfo("Session #$sessionId: course '$courseCode' tutors added: '".implode(', ', $coachList)."'");
 
                                 SessionManager::updateCoaches(
                                     $sessionId,
@@ -2296,7 +2296,7 @@ class ImportCsv
                                     true
                                 );
                             } else {
-                                $this->logger->addInfo("No coaches added");
+                                $this->logger->addInfo("No tutors added");
                             }
 
                             // Students
@@ -3079,9 +3079,10 @@ class ImportCsv
 
         // User
         $table = Database::get_main_table(TABLE_MAIN_USER);
-        $tableAdmin = Database::get_main_table(TABLE_MAIN_ADMIN);
         $sql = "DELETE FROM $table
-                WHERE user_id not in (select user_id from $tableAdmin) and status <> ".ANONYMOUS;
+                WHERE roles NOT LIKE '%ROLE_ADMIN%'
+                  AND roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
+                  AND status <> ".ANONYMOUS;
         Database::query($sql);
         echo $sql.PHP_EOL;
 

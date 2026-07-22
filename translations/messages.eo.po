@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulo-ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -37343,4 +37343,139 @@ msgstr "de"
 
 msgid "required"
 msgstr "postulata"
+
+msgid "Incorrect password."
+msgstr "Nekorekta pasvorto."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Dosiera integreca atentigo paŭzita dum 1 horo."
+
+msgid "New baseline established: %s files."
+msgstr "Nova bazlinio establita: %s dosieroj."
+
+msgid "Scan complete: changes were detected."
+msgstr "Skanado finita: ŝanĝoj estis detektitaj."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Skanado finita: neniu ŝanĝo estis detektita."
+
+msgid "File integrity"
+msgstr "Dosiera integreco"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Ĉi tiu raporto komparas la instalitajn dosierojn (ĉion krom var/ kaj .git/, kvankam .git/config ankoraŭ estas observata por kapti ŝtelitan foran) kun fidinda bazlinio, por detekti neatenditajn aldonojn, modifojn aŭ forigojn."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Vi povas revizii la plej novan raporton sube. Ruli skanadon, paŭzigi atentigon, aŭ establi novan bazlinion postulas ĝeneralan administranton."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Atentigo estas nuntempe paŭzita por prizorgado. Ĝi aŭtomate rekomencos je %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Ankoraŭ neniu skanado ruliĝis. Rulu unu ĉi tie, aŭ per la komandlinio kun app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Lasta skanado"
+
+msgid "Files scanned"
+msgstr "Dosieroj skanitaj"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Ankoraŭ neniu bazlinio ekzistis: ĉi tiu skanado establis unu. Ŝanĝoj estos raportitaj ekde la sekva skanado."
+
+msgid "No changes detected since the baseline."
+msgstr "Neniu ŝanĝo detektita ekde la bazlinio."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "La Git fora agordo (.git/config) ŝanĝiĝis. Kontrolu ĉu tio estis atendita."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "La skanado ĉesis frue ĉar subdosierujo ne povis esti legata (kontrolu dosierpermesojn). Rezultoj sube povas esti partaj."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% dosiero(j) ne povis esti legata(j) (permesoj) kaj estis preterpasita(j)."
+
+msgid "Run a scan now"
+msgstr "Rulu skanadon nun"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Paŭzigu atentigon dum 1 horo (por prizorgado)"
+
+msgid "Pause for 1 hour"
+msgstr "Paŭzigi dum 1 horo"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Fidi la nunan dosierarbon kiel novan bazlinion"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Ĉi tio fidos ĉiun nunan dosieron kiel ĝustan, inkluzive de ĉiu nereviziita ŝanĝo. Ĉu daŭrigi?"
+
+msgid "Establish new baseline"
+msgstr "Establi novan bazlinion"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Planu la skanadon ekzemple el sistema crontab"
+
+msgid "File integrity alert on %platform%"
+msgstr "Dosiera integreca averto ĉe %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Dosiera integreca skanado detektis ŝanĝojn sur la platformo:"
+
+msgid "Added files"
+msgstr "Aldonitaj dosieroj"
+
+msgid "Modified files"
+msgstr "Modifitaj dosieroj"
+
+msgid "Deleted files"
+msgstr "Forigitaj dosieroj"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Reviziu la kompletan raporton en Administrado > Sekureco > Dosiera integreco."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Pasvorto por konfirmi paŭzigon de avertoj"
+
+msgid "Password to confirm the new baseline"
+msgstr "Pasvorto por konfirmi la novan bazlinion"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Skanado jam rulas. Bonvolu atendi ĝian finon antaŭ ol komenci alian."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Skanado nuntempe rulas (komencita je %date%). Plena skanado povas daŭri plurajn minutojn; ĉi tiu paĝo povas esti sekure reŝargita por kontroli la progreson."
+
+msgid "Currently processing"
+msgstr "Nuntempe prilaborante"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Antaŭa skanado (komencita je %date%) estis interrompita antaŭ ol ĝi finiĝis — la procezo ne plu rulas. Vi povas sekure komenci novan."
+
+msgid "files"
+msgstr "dosieroj"
+
+msgid "Permissions changed"
+msgstr "Permesoj ŝanĝiĝis"
+
+msgid "Files with changed permissions"
+msgstr "Dosieroj kun ŝanĝitaj permesoj"
+
+msgid "Alert history"
+msgstr "Averta historio"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Ĉiu skanado kiu trovis ion, konservita eĉ post kiam la devio estas solvita aŭ nova bazlinio estas establita — male al la supra raporto, pura skanado aŭ reestablado de bazlinio neniam forigas ĉi tion."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Ĉi tiu enigo estis mallongigita ĉe kaptotempo; vidu la CEF-protokolon por la kompleta listo."
+
+msgid "No alert has been recorded yet."
+msgstr "Ankoraŭ neniu averto estis registrita."
+
+msgid "Git remote changed"
+msgstr "Git fora deponejo ŝanĝiĝis"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Tro multaj ŝanĝoj por listigi plene; nur la unuaj eroj de ĉiu kategorio estas montrataj sube. Vidu la %link_start%CEF-protokolon%link_end% por la kompleta listo."
 

@@ -17,9 +17,11 @@ $current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 
 api_protect_course_script(true);
-$origin = api_get_origin();
-
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$origin = api_get_origin();
+if (empty($origin) && $learnpath_id > 0) {
+    $origin = 'learnpath';
+}
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
@@ -33,7 +35,13 @@ if (!empty($exerciseInSession)) {
 if (!$objExercise) {
     // Redirect to the exercise overview
     // Check if the exe_id exists
-    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
+        'exerciseId' => $exerciseId,
+        'learnpath_id' => $learnpath_id,
+        'learnpath_item_id' => $learnpath_item_id,
+        'learnpath_item_view_id' => $learnpath_item_view_id,
+        'origin' => $origin,
+    ]));
     exit;
 }
 
@@ -88,12 +96,13 @@ if (empty($exercise_stat_info) || empty($question_list) || $exercise_stat_info['
 $nameTools = get_lang('Tests');
 $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
 
-$hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
+$hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable'], true);
 
 if (!$hideHeaderAndFooter) {
     Display::display_header($nameTools, get_lang('Test'));
 } else {
-    Display::display_reduced_header();
+    ob_start();
+    Display::$legacyTemplate = '@ChamiloCore/Layout/blank.html.twig';
 }
 
 /* DISPLAY AND MAIN PROCESS */
@@ -155,9 +164,4 @@ $exerciseActions .= '&nbsp;'.Display::url(
 echo Display::div('', ['class' => 'clear']);
 echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
 
-if (!$hideHeaderAndFooter) {
-    // We are not in learnpath tool or embeddable quiz
-    Display::display_footer();
-} else {
-    Display::display_reduced_footer();
-}
+Display::display_footer();

@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class ChamiloCoreExtension extends Extension
 {
@@ -25,12 +25,7 @@ class ChamiloCoreExtension extends Extension
         $loader->load('repositories.yml');
         $loader->load('tool_settings.yml');
         $loader->load('listeners.yml');
-
-        $loader = new Loader\XmlFileLoader(
-            $container,
-            new FileLocator(__DIR__.'/../Resources/config')
-        );
-        $loader->load('services.xml');
+        $loader->load('services_settings.yml');
     }
 
     public function getAlias(): string

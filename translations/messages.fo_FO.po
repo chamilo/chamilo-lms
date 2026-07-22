@@ -37338,3 +37338,138 @@ msgstr "av"
 msgid "required"
 msgstr "kravt"
 
+msgid "Incorrect password."
+msgstr "Rangt loyniorð."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "File integrity alerting paused for 1 hour."
+
+msgid "New baseline established: %s files."
+msgstr "New baseline established: %s files."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scan complete: changes were detected."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scan complete: no changes were detected."
+
+msgid "File integrity"
+msgstr "File integrity"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Last scan"
+
+msgid "Files scanned"
+msgstr "Files scanned"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+
+msgid "No changes detected since the baseline."
+msgstr "No changes detected since the baseline."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "The Git remote configuration (.git/config) has changed. Verify this was expected."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Skanningin steðgaði fyrr, tí ein undirmappa kundi ikki lesast (kanna fíluheimildir). Niðurstøðurnar niðanfyri kunnu vera ófullfíggjaðar."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fíla(r) kundu ikki lesast (heimildir) og vórðu hoppaðar yvir."
+
+msgid "Run a scan now"
+msgstr "Koyr eina skanning nú"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Steðga ávaringum í 1 tíma (til viðlíkahald)"
+
+msgid "Pause for 1 hour"
+msgstr "Steðga í 1 tíma"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Treyst núverandi fílutrænum sum nýggja grundstøði"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Hetta fer at treysta allar núverandi fílur sum rættar, eisini allar óbetraktaðar broytingar. Halda áfram?"
+
+msgid "Establish new baseline"
+msgstr "Set nýtt grundstøði"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Áset skanningina úr einum system-crontab, til dømis"
+
+msgid "File integrity alert on %platform%"
+msgstr "Fíluheildarávaring á %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Ein fíluheildaskanning hevur funnið broytingar á pallinum:"
+
+msgid "Added files"
+msgstr "Lagt afturat fílur"
+
+msgid "Modified files"
+msgstr "Broyttar fílur"
+
+msgid "Deleted files"
+msgstr "Strikaðar fílur"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Endurskoða fulla frágreiðingina undir Umsiting > Trygd > Fíluheild."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Loyniorð til at vátta steðg ávaringum"
+
+msgid "Password to confirm the new baseline"
+msgstr "Loyniorð til at vátta nýggja grundstøðið"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Ein skanning er longu í gongd. Vinarliga bíða til hon er liðug áðrenn tú byrjar eina nýggja."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Ein skanning er í gongd (byrjað %date%). Ein full skanning kann taka fleiri minuttir; hetta síðan kann trygt endurlesast fyri at hyggja at framgongd."
+
+msgid "Currently processing"
+msgstr "Verður viðgjørd"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Ein undanfarn skanning (byrjað %date%) varð avbrotið áðrenn hon var liðug — prosessurin koyrir ikki longur. Tú kanst trygt byrja eina nýggja."
+
+msgid "files"
+msgstr "fílur"
+
+msgid "Permissions changed"
+msgstr "Heimildir broyttar"
+
+msgid "Files with changed permissions"
+msgstr "Fílur við broyttum heimildum"
+
+msgid "Alert history"
+msgstr "Ávaringarsøga"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Hvør skanning sum fann nakað, varð goymd eisini eftir at frávikið er loyst ella nýtt grundstøði er sett — í mun til frágreiðingina omanfyri, ein rein skanning ella nýtt grundstøði ruddar ikki hetta."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Hesin posturin varð avstyttur tá hann varð tikin; sí CEF-loggin fyri fulla listan."
+
+msgid "No alert has been recorded yet."
+msgstr "Ongin ávaring er skrásett enn."
+
+msgid "Git remote changed"
+msgstr "Git-fjarstýring broytt"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr ""
+

@@ -31,7 +31,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
         TranslatorInterface $translator,
         Security $security
     ): CStudentPublicationCorrection {
-        $submissionId = (int) $request->get('submissionId');
+        $submissionId = (int) $request->request->get('submissionId');
 
         if (!$submissionId) {
             throw new NotFoundHttpException('submissionId is required');
@@ -50,7 +50,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
             throw new AccessDeniedHttpException('Not allowed to grade this submission.');
         }
 
-        $fileExistsOption = $request->get('fileExistsOption', 'rename');
+        $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
 
         $correction = new CStudentPublicationCorrection();
 

@@ -179,7 +179,7 @@ class CourseToolAccessTracker
     {
         $type = (string) $request->attributes->get('type', '');
         if ('' === $type) {
-            $type = (string) $request->get('type', '');
+            $type = (string) $request->query->get('type', $request->request->get('type', ''));
         }
 
         if ('' !== $type) {
@@ -188,7 +188,7 @@ class CourseToolAccessTracker
 
         $tool = (string) $request->attributes->get('tool', '');
         if ('' === $tool) {
-            $tool = (string) $request->get('tool', '');
+            $tool = (string) $request->query->get('tool', $request->request->get('tool', ''));
         }
 
         return '' === $tool ? null : $this->mapToolName($tool);

@@ -231,8 +231,10 @@ function parseBasePoFile(string $filePath): array {
     $entries = [];
     $currentLines = [];
     $firstEntry = true;
+    $sawMsgid = false;
+    $sawMsgstr = false;
 
-    $flushEntry = function () use (&$entries, &$currentLines, &$firstEntry) {
+    $flushEntry = function () use (&$entries, &$currentLines, &$firstEntry, &$sawMsgid, &$sawMsgstr) {
         if (empty($currentLines)) {
             return;
         }
@@ -290,14 +292,36 @@ function parseBasePoFile(string $filePath): array {
         $entries[] = $entry;
         $currentLines = [];
         $firstEntry = false;
+        $sawMsgid = false;
+        $sawMsgstr = false;
     };
 
     foreach ($lines as $line) {
-        if (trim($line) === '') {
+        $trim = ltrim($line);
+
+        if ($trim === '') {
             $flushEntry();
-        } else {
-            $currentLines[] = $line;
+            continue;
         }
+
+        // Defensive: entries should be separated by a blank line, but some
+        // generated/hand-edited .po files are missing it. If we already have a
+        // complete entry buffered (msgid AND msgstr both seen) and this line
+        // looks like the start of a new one (a comment or a fresh msgid), flush
+        // the buffered entry first. Without this, the new msgid/comment would
+        // simply be appended into the same buffer and silently overwrite the
+        // previous entry's msgid when it is parsed, discarding it entirely.
+        if ($sawMsgid && $sawMsgstr && ($trim[0] === '#' || preg_match('/^msgid\s+"/', $trim))) {
+            $flushEntry();
+        }
+
+        if (preg_match('/^msgid\s+"/', $trim)) {
+            $sawMsgid = true;
+        } elseif (preg_match('/^msgstr(\[\d+\])?\s+"/', $trim)) {
+            $sawMsgstr = true;
+        }
+
+        $currentLines[] = $line;
     }
     $flushEntry();
 
@@ -339,8 +363,10 @@ function parseTargetPoFile(string $filePath): array {
     $currentLines = [];
     $entryIndex = 0;
     $inHeader = true;
+    $sawMsgid = false;
+    $sawMsgstr = false;
 
-    $flushEntry = function () use (&$currentLines, &$headerRaw, &$singular, &$singularRaw, &$pluralRaw, &$entryIndex, &$inHeader) {
+    $flushEntry = function () use (&$currentLines, &$headerRaw, &$singular, &$singularRaw, &$pluralRaw, &$entryIndex, &$inHeader, &$sawMsgid, &$sawMsgstr) {
         if (empty($currentLines)) {
             return;
         }
@@ -400,14 +426,32 @@ function parseTargetPoFile(string $filePath): array {
 
         $currentLines = [];
         $entryIndex++;
+        $sawMsgid = false;
+        $sawMsgstr = false;
     };
 
     foreach ($lines as $line) {
-        if (trim($line) === '') {
+        $trim = ltrim($line);
+
+        if ($trim === '') {
             $flushEntry();
-        } else {
-            $currentLines[] = $line;
+            continue;
         }
+
+        // Defensive: see the matching comment in parseBasePoFile() — some .po
+        // files are missing the blank line between entries, which would
+        // otherwise silently merge two entries and discard the first one.
+        if ($sawMsgid && $sawMsgstr && ($trim[0] === '#' || preg_match('/^msgid\s+"/', $trim))) {
+            $flushEntry();
+        }
+
+        if (preg_match('/^msgid\s+"/', $trim)) {
+            $sawMsgid = true;
+        } elseif (preg_match('/^msgstr(\[\d+\])?\s+"/', $trim)) {
+            $sawMsgstr = true;
+        }
+
+        $currentLines[] = $line;
     }
     $flushEntry();
 

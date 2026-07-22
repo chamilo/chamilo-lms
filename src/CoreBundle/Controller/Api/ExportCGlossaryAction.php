@@ -49,7 +49,7 @@ readonly class ExportCGlossaryAction
         CGlossaryRepository $repo,
         EntityManager $em,
     ): Response {
-        $format = (string) $request->get('format', '');
+        $format = (string) $request->query->get('format', '');
         $cid = $request->request->getInt('cid');
         $sid = $request->request->getInt('sid');
 

@@ -205,11 +205,20 @@ watch(
         />
       </EmptyState>
 
-      <Skeleton
+      <div
         v-else-if="isLoading"
-        class="mb-4"
-        height="21.5rem"
-      />
+        aria-busy="true"
+        class="mb-4 flex flex-col gap-2"
+      >
+        <Skeleton
+          height="1rem"
+          width="70%"
+        />
+        <Skeleton
+          height="1rem"
+          width="45%"
+        />
+      </div>
     </template>
   </div>
 </template>

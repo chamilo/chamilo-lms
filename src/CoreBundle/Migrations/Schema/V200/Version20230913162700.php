@@ -48,7 +48,6 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             ['table' => 'c_quiz', 'fields' => ['description', 'text_when_finished']],
             ['table' => 'c_quiz_question', 'fields' => ['description', 'question']],
             ['table' => 'c_quiz_answer', 'fields' => ['answer', 'comment']],
-            ['table' => 'c_course_description', 'field' => 'content'],
             ['table' => 'c_student_publication', 'field' => 'description'],
             ['table' => 'c_student_publication_comment', 'field' => 'comment'],
             ['table' => 'c_forum_category', 'field' => 'cat_comment'],
@@ -73,6 +72,11 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             }
 
             $this->updateHtmlContent($course, $documentRepo, $resourceNodeRepo);
+            $this->getLogger()->info('Legacy document URL replacement course completed.', [
+                'course_id' => (int) $course->getId(),
+                'course_directory' => $courseDirectory,
+            ]);
+            $this->entityManager->clear();
         }
     }
 
@@ -90,8 +94,18 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         }
 
         foreach ($fields as $field) {
-            $sql = "SELECT iid, {$field} FROM {$config['table']} WHERE c_id = {$courseId}";
-            $items = $this->connection->executeQuery($sql)->fetchAllAssociative();
+            $sql = \sprintf(
+                'SELECT iid, %1$s FROM %2$s WHERE c_id = :courseId AND %1$s LIKE :legacyPath',
+                $field,
+                $config['table']
+            );
+            $items = $this->connection->executeQuery(
+                $sql,
+                [
+                    'courseId' => $courseId,
+                    'legacyPath' => '%/courses/%/document/%',
+                ]
+            )->fetchAllAssociative();
 
             foreach ($items as $item) {
                 $originalText = (string) ($item[$field] ?? '');
@@ -103,7 +117,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
 
                 if ($originalText !== $updatedText) {
                     $sql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
-                    $this->connection->executeQuery($sql, [
+                    $this->connection->executeStatement($sql, [
                         'newText' => $updatedText,
                         'id' => (int) $item['iid'],
                     ]);
@@ -119,14 +133,12 @@ final class Version20230913162700 extends AbstractMigrationChamilo
     ): void {
         $courseId = (int) $course->getId();
         $courseDirectory = (string) $course->getDirectory();
-        $sql = "SELECT iid, c_id FROM c_document WHERE filetype = 'file'";
-        $items = $this->connection->executeQuery($sql)->fetchAllAssociative();
+        $items = $this->connection->executeQuery(
+            "SELECT iid FROM c_document WHERE filetype = 'file' AND c_id = :courseId",
+            ['courseId' => $courseId]
+        )->fetchAllAssociative();
 
         foreach ($items as $item) {
-            if ((int) ($item['c_id'] ?? 0) !== $courseId) {
-                continue;
-            }
-
             /** @var CDocument|null $document */
             $document = $documentRepo->find((int) $item['iid']);
             if (!$document) {

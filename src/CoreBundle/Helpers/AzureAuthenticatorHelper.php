@@ -305,7 +305,7 @@ readonly class AzureAuthenticatorHelper
             'admin' => function (User $user): void {
                 $user
                     ->setStatus(COURSEMANAGER)
-                    ->addUserAsAdmin()
+                    ->addRole('ROLE_ADMIN')
                     ->setRoleFromStatus(COURSEMANAGER)
                 ;
             },
@@ -315,9 +315,7 @@ readonly class AzureAuthenticatorHelper
                     ->setRoleFromStatus(SESSIONADMIN)
                 ;
 
-                if ($user->getAdmin()) {
-                    $user->removeUserAsAdmin();
-                }
+                $user->removeUserAsAdmin();
             },
             'teacher' => function (User $user): void {
                 $user
@@ -325,9 +323,7 @@ readonly class AzureAuthenticatorHelper
                     ->setRoleFromStatus(COURSEMANAGER)
                 ;
 
-                if ($user->getAdmin()) {
-                    $user->removeUserAsAdmin();
-                }
+                $user->removeUserAsAdmin();
             },
         ];
     }

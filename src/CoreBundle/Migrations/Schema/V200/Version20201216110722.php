@@ -7,26 +7,42 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
-use Database;
 use Doctrine\DBAL\Schema\Schema;
+use RuntimeException;
 
 final class Version20201216110722 extends AbstractMigrationChamilo
 {
+    private const ORM_FLUSH_BATCH_SIZE = 100;
+
     public function getDescription(): string
     {
         return 'Migrate c_attendance';
+    }
+
+    /**
+     * Attendances are committed in explicit ORM batches.
+     * This makes the migration resumable and avoids losing hours of work if
+     * the process is interrupted.
+     */
+    public function isTransactional(): bool
+    {
+        return false;
     }
 
     public function up(Schema $schema): void
     {
         $attendanceRepo = $this->container->get(CAttendanceRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
         $attendanceResourceType = $attendanceRepo->getResourceType();
-        $admin = $this->getAdmin();
+        $adminId = (int) $this->getAdmin()->getId();
 
         $skipAttendances = (bool) getenv(DoctrineMigrationsMigrateCommandDecorator::SKIP_ATTENDANCES_FLAG);
 
@@ -79,7 +95,7 @@ final class Version20201216110722 extends AbstractMigrationChamilo
 
         foreach ($courseIds as $courseId) {
             $courseId = (int) $courseId;
-            $course = $courseRepo->find($courseId);
+            [$course, $admin] = $this->reloadAttendanceContext($courseId, $adminId, $courseRepo, $userRepo);
 
             if (null === $course) {
                 $this->write(\sprintf('Course %s not found - skipping attendances migration', $courseId));
@@ -95,9 +111,12 @@ final class Version20201216110722 extends AbstractMigrationChamilo
                     ON ip.tool = 'attendance'
                    AND ip.ref = a.iid
                    AND ip.c_id = :courseId
+                 WHERE a.resource_node_id IS NULL
                  ORDER BY a.iid",
                 ['courseId' => $courseId]
             );
+
+            $processed = 0;
 
             foreach ($rows as $row) {
                 $id = (int) $row['iid'];
@@ -131,27 +150,55 @@ final class Version20201216110722 extends AbstractMigrationChamilo
                 }
 
                 $this->entityManager->persist($resource);
-                $this->entityManager->flush();
+                ++$processed;
+
+                if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+
+                    [$course, $admin] = $this->reloadAttendanceContext($courseId, $adminId, $courseRepo, $userRepo);
+                }
             }
+
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
 
         // Restore attendance title and resource_node title
-        $db = new Database();
-        $db->setManager($this->entityManager);
-
         foreach ($attendancesBackup as $attendance) {
             $iid = (int) $attendance['iid'];
-            $titleForDatabase = $db->escape_string((string) $attendance['title']);
+            $title = (string) $attendance['title'];
 
             $this->connection->executeStatement(
-                "UPDATE c_attendance SET title = '{$titleForDatabase}' WHERE iid = {$iid}"
+                'UPDATE c_attendance SET title = :title WHERE iid = :iid',
+                ['title' => $title, 'iid' => $iid]
             );
 
             $this->connection->executeStatement(
-                "UPDATE resource_node
-                 SET title = '{$titleForDatabase}'
-                 WHERE id IN (SELECT resource_node_id FROM c_attendance WHERE iid = {$iid})"
+                'UPDATE resource_node
+                 SET title = :title
+                 WHERE id IN (SELECT resource_node_id FROM c_attendance WHERE iid = :iid)',
+                ['title' => $title, 'iid' => $iid]
             );
         }
+    }
+
+    /**
+     * @return array{0: Course|null, 1: User}
+     */
+    private function reloadAttendanceContext(
+        int $courseId,
+        int $adminId,
+        CourseRepository $courseRepo,
+        UserRepository $userRepo
+    ): array {
+        $course = $courseRepo->find($courseId);
+        $admin = $userRepo->find($adminId);
+
+        if (!$admin instanceof User) {
+            throw new RuntimeException("Admin user {$adminId} could not be reloaded.");
+        }
+
+        return [$course, $admin];
     }
 }

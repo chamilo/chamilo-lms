@@ -37338,3 +37338,138 @@ msgstr "द्वारा"
 msgid "required"
 msgstr "आवश्यक"
 
+msgid "Incorrect password."
+msgstr "गलत पासवर्ड।"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "फ़ाइल अखंडता चेतावनी 1 घंटे के लिए रोक दी गई।"
+
+msgid "New baseline established: %s files."
+msgstr "नया आधार रेखा स्थापित: %s फ़ाइलें।"
+
+msgid "Scan complete: changes were detected."
+msgstr "स्कैन पूर्ण: परिवर्तन पाए गए।"
+
+msgid "Scan complete: no changes were detected."
+msgstr "स्कैन पूर्ण: कोई परिवर्तन नहीं पाया गया।"
+
+msgid "File integrity"
+msgstr "फ़ाइल अखंडता"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "यह रिपोर्ट स्थापित फ़ाइलों (var/ और .git/ को छोड़कर, हालांकि .git/config अभी भी रिमोट हाईजैकिंग को पकड़ने के लिए देखी जाती है) की तुलना एक विश्वसनीय आधार रेखा से करती है, ताकि अप्रत्याशित जोड़, संशोधन या हटाए जाने का पता लगाया जा सके।"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "आप नीचे नवीनतम रिपोर्ट की समीक्षा कर सकते हैं। स्कैन चलाना, चेतावनी रोकना, या नई आधार रेखा स्थापित करना वैश्विक व्यवस्थापक की आवश्यकता है।"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "चेतावनी वर्तमान में रखरखाव के लिए रोक दी गई है। यह स्वचालित रूप से %date% पर फिर से शुरू होगी।"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "अभी तक कोई स्कैन नहीं चला है। यहां से या कमांड लाइन से app:file-integrity:scan के साथ एक स्कैन चलाएं।"
+
+msgid "Last scan"
+msgstr "अंतिम स्कैन"
+
+msgid "Files scanned"
+msgstr "स्कैन की गई फ़ाइलें"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "अभी तक कोई आधार रेखा मौजूद नहीं थी: इस स्कैन ने एक स्थापित की। अगले स्कैन से परिवर्तनों की रिपोर्ट की जाएगी।"
+
+msgid "No changes detected since the baseline."
+msgstr "आधार रेखा के बाद से कोई परिवर्तन नहीं पाया गया।"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git रिमोट कॉन्फ़िगरेशन (.git/config) बदल गया है। सत्यापित करें कि यह अपेक्षित था।"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "स्कैन जल्दी रुका क्योंकि एक उपनिर्देशिका पढ़ी नहीं जा सकी (फ़ाइल अनुमतियाँ जांचें)। नीचे के परिणाम आंशिक हो सकते हैं।"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% फ़ाइल(ें) पढ़ी नहीं जा सकीं (अनुमतियाँ) और छोड़ दी गईं।"
+
+msgid "Run a scan now"
+msgstr "अभी स्कैन चलाएं"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "1 घंटे के लिए चेतावनी रोकें (रखरखाव के लिए)"
+
+msgid "Pause for 1 hour"
+msgstr "1 घंटे के लिए रोकें"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "वर्तमान फ़ाइल ट्री को नई आधार रेखा के रूप में विश्वास करें"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "यह हर वर्तमान फ़ाइल को सही मान लेगा, जिसमें कोई भी समीक्षा न किया गया परिवर्तन भी शामिल है। जारी रखें?"
+
+msgid "Establish new baseline"
+msgstr "नई आधार रेखा स्थापित करें"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "सिस्टम क्रॉनटैब से स्कैन शेड्यूल करें, उदाहरण के लिए"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% पर फ़ाइल अखंडता चेतावनी"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "एक फ़ाइल अखंडता स्कैन ने प्लेटफ़ॉर्म पर परिवर्तन पाए:"
+
+msgid "Added files"
+msgstr "जोड़ी गई फ़ाइलें"
+
+msgid "Modified files"
+msgstr "संशोधित फ़ाइलें"
+
+msgid "Deleted files"
+msgstr "हटाई गई फ़ाइलें"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "प्रशासन > सुरक्षा > फ़ाइल अखंडता से पूर्ण रिपोर्ट देखें।"
+
+msgid "Password to confirm pausing alerts"
+msgstr "चेतावनियाँ रोकने की पुष्टि के लिए पासवर्ड"
+
+msgid "Password to confirm the new baseline"
+msgstr "नया आधार रेखा स्थापित करने की पुष्टि के लिए पासवर्ड"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "एक स्कैन पहले से चल रहा है। कृपया दूसरा शुरू करने से पहले इसके समाप्त होने की प्रतीक्षा करें।"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "वर्तमान में एक स्कैन चल रहा है (शुरू हुआ %date% को)। पूर्ण स्कैन में कई मिनट लग सकते हैं; प्रगति जाँचने के लिए इस पृष्ठ को सुरक्षित रूप से पुनः लोड किया जा सकता है।"
+
+msgid "Currently processing"
+msgstr "वर्तमान में संसाधित किया जा रहा है"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "एक पिछला स्कैन (%date% को शुरू हुआ) समाप्त होने से पहले बाधित हो गया — प्रक्रिया अब चल नहीं रही। आप सुरक्षित रूप से नया स्कैन शुरू कर सकते हैं।"
+
+msgid "files"
+msgstr "फ़ाइलें"
+
+msgid "Permissions changed"
+msgstr "अनुमतियाँ बदली गईं"
+
+msgid "Files with changed permissions"
+msgstr "बदली गई अनुमतियों वाली फ़ाइलें"
+
+msgid "Alert history"
+msgstr "चेतावनी इतिहास"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "प्रत्येक स्कैन जिसने कुछ पाया, उसे तब भी रखा जाता है जब विचलन हल हो जाए या नई आधार रेखा स्थापित हो जाए — ऊपर की रिपोर्ट के विपरीत, एक स्वच्छ स्कैन या पुनः आधार रेखा इस इतिहास को कभी नहीं मिटाती।"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "यह प्रविष्टि कैप्चर के समय काट दी गई थी; पूर्ण सूची के लिए CEF लॉग देखें।"
+
+msgid "No alert has been recorded yet."
+msgstr "अभी तक कोई चेतावनी दर्ज नहीं की गई है।"
+
+msgid "Git remote changed"
+msgstr "Git रिमोट बदला गया"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "सूची में पूर्ण रूप से दिखाने के लिए बहुत अधिक परिवर्तन; नीचे प्रत्येक श्रेणी की केवल प्रथम प्रविष्टियाँ दिखाई गई हैं। पूर्ण सूची के लिए %link_start%CEF लॉग%link_end% देखें।"
+

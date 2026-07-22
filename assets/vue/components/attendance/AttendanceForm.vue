@@ -18,6 +18,13 @@
       editor-id="attendance_description"
     />
 
+    <BaseSelect
+      id="attendance_room"
+      v-model="formData.room"
+      :label="t('Default room')"
+      :options="roomOptions"
+    />
+
     <!-- Advanced Settings (create + edit) -->
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <ResourceLanguageSelector
@@ -112,6 +119,7 @@ import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { getCourseContext } from "../../utils/courseContext"
 import gradebookService from "../../services/gradebookService"
+import roomService from "../../services/roomService"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -139,9 +147,11 @@ const formData = reactive({
   gradeWeight: 0.0,
   requireUnique: false,
   language: "",
+  room: null,
 })
 
 const gradebookOptions = ref([])
+const roomOptions = ref([])
 
 const rules = {
   title: { required },
@@ -151,6 +161,7 @@ const rules = {
   gradebookTitle: {},
   gradeWeight: {},
   requireUnique: {},
+  room: {},
 }
 
 const v$ = useVuelidate(rules, formData)
@@ -158,6 +169,17 @@ const showAdvancedSettings = ref(false)
 const isEditMode = computed(() => !!props.initialData?.id)
 
 onMounted(async () => {
+  try {
+    roomOptions.value = await roomService.getOptions({
+      includeDefault: true,
+      defaultLabel: t("No default room"),
+      floorLabel: t("Floor"),
+      capacityLabel: t("Capacity"),
+    })
+  } catch (error) {
+    console.error("Error loading rooms:", error)
+  }
+
   if (!isEditMode.value) {
     try {
       const categories = await gradebookService.getCategories(cid, sid)
@@ -183,6 +205,10 @@ watch(
   () => props.initialData,
   (newData) => {
     Object.assign(formData, newData || {})
+
+    if (newData?.room && typeof newData.room === "object") {
+      formData.room = newData.room["@id"] || null
+    }
   },
   { immediate: true },
 )
@@ -202,6 +228,7 @@ const submitForm = async () => {
     attendanceWeight: formData.gradeWeight,
     requireUnique: !!formData.requireUnique,
     language: formData.language || "",
+    room: formData.room || null,
   }
 
   // Only send these on create (safer)

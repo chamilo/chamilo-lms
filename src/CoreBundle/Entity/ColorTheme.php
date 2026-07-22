@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\State\ColorThemeStateProcessor;
@@ -22,7 +23,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(),
         new Put(),
-    ],
+        new Patch(), ],
     denormalizationContext: [
         'groups' => ['color_theme:write'],
     ],

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Qhawana ruq'una: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Muestra de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -36505,46 +36505,46 @@ msgid "Application path"
 msgstr "Aplicación ñan"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Aplicar detalles de archivos"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Aplicar detalles del plan"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Aplicar plan fallido"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Aplicar plan listo"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "Aplicar preparación"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "Aplicar archivos en etapa"
 
 msgid "Applying files..."
-msgstr "Applying files..."
+msgstr "Aplicando archivos..."
 
 msgid "Audit file"
-msgstr "Audit file"
+msgstr "Auditar archivo"
 
 msgid "Backup directory"
-msgstr "Backup directory"
+msgstr "Directorio de respaldo"
 
 msgid "Baseline clean"
-msgstr "Baseline clean"
+msgstr "Línea base limpia"
 
 msgid "Baseline warnings"
-msgstr "Baseline warnings"
+msgstr "Advertencias de línea base"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Construir un plan de aplicación seguro desde el paquete en etapa. Esto solo verifica archivos, permisos, ruta de respaldo y estado de bloqueo. No reemplaza archivos."
 
 msgid "Build production frontend assets."
-msgstr "Build production frontend assets."
+msgstr "Construir activos frontend de producción."
 
 msgid "Building plan..."
-msgstr "Building plan..."
+msgstr "Construyendo plan..."
 
 msgid "Channel"
 msgstr "Channel"
@@ -36553,25 +36553,25 @@ msgid "Check"
 msgstr "Check"
 
 msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
-msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Verificar actualizaciones de Chamilo disponibles, verificar paquetes, preparar archivos y ejecutar pasos controlados post-actualización."
 
 msgid "Check manifest"
-msgstr "Check manifest"
+msgstr "Verificar manifiesto"
 
 msgid "Checking post-apply actions..."
-msgstr "Checking post-apply actions..."
+msgstr "Verificando acciones post-aplicación..."
 
 msgid "Checking..."
 msgstr "Checking..."
 
 msgid "Composer install"
-msgstr "Composer install"
+msgstr "Instalación de Composer"
 
 msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
-msgstr "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Las acciones de Composer, Yarn y migración de base de datos pueden modificar dependencias, activos generados o la base de datos. Selecciónelas solo después de confirmar respaldos y permisos."
 
 msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
-msgstr "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configure CHAMILO_UPDATE_MANIFEST_URL en el servidor o proporcione una URL de manifiesto HTTPS."
 
 msgid "Configured"
 msgstr "Qhawasqa"
@@ -37343,4 +37343,139 @@ msgstr "kaymanta"
 
 msgid "required"
 msgstr "mi"
+
+msgid "Incorrect password."
+msgstr "Contraseña incorrecta."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alerta de integridad de archivos pausada por 1 hora."
+
+msgid "New baseline established: %s files."
+msgstr "Nueva línea base establecida: %s archivos."
+
+msgid "Scan complete: changes were detected."
+msgstr "Escaneo completo: se detectaron cambios."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Escaneo completo: no se detectaron cambios."
+
+msgid "File integrity"
+msgstr "Integridad de archivos"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Kay willayqa churakusqa willañiqikunata (var/ hinaspa .git/ nisqamanta wakinkunata, ichataq .git/config qhawasqa kashanmi qarqosqa remote qhawananpaq) yupaychasqa qallariyman qhawaspa, mana yuyasqa yapasqakunata, hukchasqakunata icha qullusqakunata tarinapaq."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Qhipa willayta urapi qhawayta atinki. Huk qhawayta qallarinapaq, willayta sayachinapaq icha musuq qallariyta ruwanapaq, sapsi kamachiqmi kanan."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Willayqa kunan allinchanapaq sayachisqa kashan. %date% p'unchawpi kikillanmanta qallarinqa."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Manaraq qhaway ruwakunchu. Kaymanta icha kamachina siq'iwan app:file-integrity:scan nisqawan ruway."
+
+msgid "Last scan"
+msgstr "Qhipa qhaway"
+
+msgid "Files scanned"
+msgstr "Qhawasqa willañiqikuna"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Manaraq qallariy kanchu: kay qhawaymi hukta ruwarqan. Hukchasqakuna qhipa qhawaymanta willasqa kanqa."
+
+msgid "No changes detected since the baseline."
+msgstr "Qallariymanta pacha mana hukchasqa tarikunchu."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git remote qallariy (.git/config) hukchasqa kashan. Kay munasqa kasqanta qhawariy."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Qhawayqa ñawpaqta sayarqan, huk qhipa ñan mana ñawirisqa karqan (willañiqikunap kamachiyta qhaway). Urin willaykuna mana hunt'asqa kanman."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% willañiqi mana ñawirisqa karqan (kamachiyrayku) hinaspa saqesqa karqan."
+
+msgid "Run a scan now"
+msgstr "Kunan qhawayta ruway"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Willayta 1 hora sayachiy (allinchanapaq)"
+
+msgid "Pause for 1 hour"
+msgstr "1 hora sayachiy"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Kunan willañiqikunata musuq qallariy hina yupaychay"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Kayqa kay pacha willañiqikunata hunt'asqa hina yupaychanqa, mana qhawasqa hukchasqakunatapas. ¿Qatiy?"
+
+msgid "Establish new baseline"
+msgstr "Musuq qallariyta ruway"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Qhawayta sistema crontabmanta wakichiy, kay hina"
+
+msgid "File integrity alert on %platform%"
+msgstr "Willañiqi yupaychay willay %platform% nisqapi"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Huk willañiqi yupaychay qhaway hukchasqakunata tarirqan:"
+
+msgid "Added files"
+msgstr "Yapasqa willañiqikuna"
+
+msgid "Modified files"
+msgstr "Hukchasqa willañiqikuna"
+
+msgid "Deleted files"
+msgstr "Qullusqa willañiqikuna"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Hunt'asqa willayta Kamachina > Seguridad > Willañiqi yupaychay nisqamanta qhaway."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Willayta sayachinapaq yaykuna rimay"
+
+msgid "Password to confirm the new baseline"
+msgstr "Musuq qallariyta ruwanapaq yaykuna rimay"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Huk qhawayña ruwakushan. Qhipaqta qallarinaykipaq, ñawpaqta tukunanpaq suyay."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Kunan qhaway ruwakushan (%date% qallarisqa). Hunt'asqa qhawayqa achka minutukunata qhellqan; kay p'anqata qhawachikuyta atinki ñawpaqta qhawanaykipaq."
+
+msgid "Currently processing"
+msgstr "Kunan ruwakushan"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Ñawpaq qhaway (%date% qallarisqa) mana tukusqa sayarqan — ruwayqa manaña ruwakushan. Musuqta qallariyta atinki."
+
+msgid "files"
+msgstr "willañiqikuna"
+
+msgid "Permissions changed"
+msgstr "Kamachiy hukchasqa"
+
+msgid "Files with changed permissions"
+msgstr "Kamachiy hukchasqa willañiqikuna"
+
+msgid "Alert history"
+msgstr "Willaypaq wiñay willay"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Sapa qhaway hukta tarisqa, hukchasqa allichasqa icha musuq qallariy ruwasqa kachkaptinpas qhawachikun — urapi willaymanta mana qhaway limpio icha musuq qallariy kayta chinkachinchu."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Kay willayqa qhawachikuy p'unchawpi q'ipisqa karqan; hunt'asqa willayta CEF qelqapi qhaway."
+
+msgid "No alert has been recorded yet."
+msgstr "Manaraq willay qelqasqa kanchu."
+
+msgid "Git remote changed"
+msgstr "Git remote hukchasqa"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Demasiados cambios para listar completamente; solo se muestran las primeras entradas de cada categoría. Ver el %link_start%registro CEF%link_end% para la lista completa."
 

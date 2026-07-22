@@ -46,55 +46,47 @@ if (!empty($doExerciseUrl)) {
     $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'
         .http_build_query(['sid' => $session_id, 'cid' => $courseId]);
     if (isset($_GET['gradebook'])) {
-        $url .= '&gradebook=view&exerciseId='.((int) $_GET['exerciseId']);
+        $exerciseId = (int) $_GET['exerciseId'];
+        $legacyOverviewUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
+            [
+                'sid' => $session_id,
+                'cid' => $courseId,
+                'gradebook' => $gradebook,
+                'origin' => '',
+                'learnpath_id' => '',
+                'learnpath_item_id' => '',
+                'exerciseId' => $exerciseId,
+            ]
+        );
+        $url = ExerciseLib::buildVueOverviewUrl(
+            $exerciseId,
+            [
+                'gradebook' => $gradebook,
+                'origin' => '',
+                'learnpath_id' => '',
+                'learnpath_item_id' => '',
+            ],
+            (int) $courseId,
+            (int) $session_id
+        ) ?? $legacyOverviewUrl;
 
-        // Check if exercise is inserted inside a LP, if that's the case
-        $exerciseId = $_GET['exerciseId'];
-        $exercise = new Exercise();
-        $exercise->read($exerciseId);
-        if (!empty($exercise->id)) {
-            if ($exercise->exercise_was_added_in_lp) {
-                if (!empty($exercise->lpList)) {
-                    // If the exercise was added once redirect to the LP
-                    $firstLp = $exercise->getLpBySession($session_id);
-                    if (isset($firstLp['lp_id'])) {
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&'
-                            .http_build_query(
-                                [
-                                    'lp_id' => $firstLp['lp_id'],
-                                    'action' => 'view',
-                                    'isStudentView' => 'true',
-                                ]
-                            );
-                    }
-                }
-            } else {
-                $vueUrl = ExerciseLib::buildVueOverviewUrl(
-                    (int) $_GET['exerciseId'],
-                    [
-                        'gradebook' => $gradebook,
-                        'origin' => '',
-                        'learnpath_id' => '',
-                        'learnpath_item_id' => '',
-                    ],
-                    (int) $courseId,
-                    (int) $session_id
-                );
-                if (null !== $vueUrl) {
-                    $url = $vueUrl;
-                } else {
-                    $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
+        // Exercise IDs can be reused by migrated LP items from other courses.
+        // Redirect only when exactly one LP in the current course contains it.
+        $lpList = Exercise::getLpListFromExercise($exerciseId, (int) $courseId);
+
+        if (1 === count($lpList)) {
+            $firstLp = reset($lpList);
+            $lpId = (int) ($firstLp['lp_id'] ?? 0);
+
+            if ($lpId > 0) {
+                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&'
+                    .http_build_query(
                         [
-                            'sid' => $session_id,
-                            'cid' => $courseId,
-                            'gradebook' => $gradebook,
-                            'origin' => '',
-                            'learnpath_id' => '',
-                            'learnpath_item_id' => '',
-                            'exerciseId' => (int) $_GET['exerciseId'],
+                            'lp_id' => $lpId,
+                            'action' => 'view',
+                            'isStudentView' => 'true',
                         ]
                     );
-                }
             }
         }
     }

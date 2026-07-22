@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fodha,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -37337,4 +37337,139 @@ msgstr "na"
 
 msgid "required"
 msgstr "inahitajika"
+
+msgid "Incorrect password."
+msgstr "Nenosiri lisilo sahihi."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Tahadhari ya uadilifu wa faili imesimamishwa kwa saa 1."
+
+msgid "New baseline established: %s files."
+msgstr "Msingi mpya umeanzishwa: faili %s."
+
+msgid "Scan complete: changes were detected."
+msgstr "Uchanganuzi umekamilika: mabadiliko yamegunduliwa."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Uchanganuzi umekamilika: hakuna mabadiliko yaliyogunduliwa."
+
+msgid "File integrity"
+msgstr "Uadilifu wa faili"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Ripoti hii inalinganisha faili zilizosakinishwa (kila kitu isipokuwa var/ na .git/, ingawa .git/config bado inafuatiliwa ili kugundua uharamia wa mbali) dhidi ya msingi unaoaminika, ili kugundua nyongeza zisizotarajiwa, mabadiliko au ufutaji."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Unaweza kukagua ripoti ya hivi karibuni hapa chini. Kuendesha uchanganuzi, kusitisha arifa, au kuanzisha msingi mpya kunahitaji msimamizi wa kimataifa."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Arifa zimesitishwa kwa sasa kwa ajili ya matengenezo. Zitarejea kiotomatiki tarehe %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Hakuna uchanganuzi uliofanywa bado. Endesha moja kutoka hapa, au kutoka kwa laini ya amri kwa app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Uchanganuzi wa mwisho"
+
+msgid "Files scanned"
+msgstr "Faili zilizochanganuliwa"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Hakuna msingi uliokuwepo bado: uchanganuzi huu ulianzisha mmoja. Mabadiliko yataripotiwa kuanzia uchanganuzi unaofuata."
+
+msgid "No changes detected since the baseline."
+msgstr "Hakuna mabadiliko yaliyogunduliwa tangu msingi."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Mipangilio ya mbali ya Git (.git/config) imebadilika. Thibitisha ikiwa hii ilitarajiwa."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Uchanganuzi ulisimama mapema kwa sababu saraka ndogo haikuweza kusomwa (angalia ruhusa za faili). Matokeo hapa chini yanaweza kuwa sehemu tu."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "Faili %count% hazikuweza kusomwa (ruhusa) na zilirukwa."
+
+msgid "Run a scan now"
+msgstr "Endesha uchanganuzi sasa"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Sitisha arifa kwa saa 1 (kwa ajili ya matengenezo)"
+
+msgid "Pause for 1 hour"
+msgstr "Sitisha kwa saa 1"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Amini mti wa faili wa sasa kama msingi mpya"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Hii itaamini kila faili ya sasa kuwa sahihi, ikijumuisha mabadiliko yoyote ambayo hayajakaguliwa. Endelea?"
+
+msgid "Establish new baseline"
+msgstr "Anzisha msingi mpya"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Panga uchanganuzi kutoka kwa crontab ya mfumo, kwa mfano"
+
+msgid "File integrity alert on %platform%"
+msgstr "Arifa ya uadilifu wa faili kwenye %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Uchanganuzi wa uadilifu wa faili uligundua mabadiliko kwenye jukwaa:"
+
+msgid "Added files"
+msgstr "Faili zilizongezwa"
+
+msgid "Modified files"
+msgstr "Faili zilizobadilishwa"
+
+msgid "Deleted files"
+msgstr "Faili zilizofutwa"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Kagua ripoti kamili kutoka kwa Utawala > Usalama > Uadilifu wa faili."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Nenosiri la kuthibitisha kusitisha arifa"
+
+msgid "Password to confirm the new baseline"
+msgstr "Nenosiri la kuthibitisha msingi mpya"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Uchanganuzi tayari unaendelea. Tafadhali subiri ukamilike kabla ya kuanza mwingine."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Uchanganuzi unaendelea sasa (ulianzia %date%). Uchanganuzi kamili unaweza kuchukua dakika kadhaa; ukurasa huu unaweza kupakiwa upya kwa usalama ili kuangalia maendeleo."
+
+msgid "Currently processing"
+msgstr "Inachakatwa sasa"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Uchanganuzi wa awali (ulianzia %date%) ulikatizwa kabla ya kukamilika — mchakato hauendelei tena. Unaweza kuanza mpya kwa usalama."
+
+msgid "files"
+msgstr "faili"
+
+msgid "Permissions changed"
+msgstr "Ruhusa zimebadilika"
+
+msgid "Files with changed permissions"
+msgstr "Faili zenye ruhusa zilizobadilika"
+
+msgid "Alert history"
+msgstr "Historia ya arifa"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Kila uchanganuzi uliopata kitu, huhifadhiwa hata baada ya mkengeuko kutatuliwa au msingi mpya kuanzishwa — tofauti na ripoti hapo juu, uchanganuzi safi au kuweka msingi upya hauufuti huu."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Ingizo hili lilipunguzwa wakati wa kunasa; angalia kumbukumbu ya CEF kwa orodha kamili."
+
+msgid "No alert has been recorded yet."
+msgstr "Hakuna arifa iliyorekodiwa bado."
+
+msgid "Git remote changed"
+msgstr "Git remote imebadilika"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Mabadiliko mengi sana kuorodheshwa kikamilifu; maingizo ya kwanza tu ya kila kategoria yanaonyeshwa hapa chini. Angalia %link_start%logi ya CEF%link_end% kwa orodha kamili."
 

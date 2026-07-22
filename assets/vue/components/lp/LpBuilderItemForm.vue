@@ -41,7 +41,7 @@ const formSubmitted = ref(false)
 const contentEditorId = "lp-builder-item-content"
 const contentEditor = ref(null)
 const extraFieldFiles = reactive({})
-const extraFieldValues = reactive({})
+const extraFieldValues = ref({})
 const form = reactive({
   title: "",
   parentId: null,
@@ -119,26 +119,26 @@ function getCurrentEditorContent() {
 }
 
 function initializeExtraFields(fields) {
-  Object.keys(extraFieldValues).forEach((key) => delete extraFieldValues[key])
+  Object.keys(extraFieldValues.value).forEach((key) => delete extraFieldValues.value[key])
   fields.forEach((field) => {
     const value = field.value
     if (field.valueType === FIELD_CHECKBOX) {
-      extraFieldValues[field.id] = [true, 1, "1", "true"].includes(value)
+      extraFieldValues.value[field.id] = [true, 1, "1", "true"].includes(value)
       return
     }
     if ([FIELD_INTEGER, FIELD_FLOAT, FIELD_DURATION].includes(field.valueType)) {
-      extraFieldValues[field.id] = Number(value || 0)
+      extraFieldValues.value[field.id] = Number(value || 0)
       return
     }
     if ([FIELD_DATE, FIELD_DATETIME].includes(field.valueType)) {
-      extraFieldValues[field.id] = parseExtraFieldDate(field.valueType, value)
+      extraFieldValues.value[field.id] = parseExtraFieldDate(field.valueType, value)
       return
     }
     if ([FIELD_MULTI_SELECT, FIELD_TAG].includes(field.valueType)) {
-      extraFieldValues[field.id] = Array.isArray(value) ? value : String(value || "").split(";").filter(Boolean)
+      extraFieldValues.value[field.id] = Array.isArray(value) ? value : String(value || "").split(";").filter(Boolean)
       return
     }
-    extraFieldValues[field.id] = value ?? ""
+    extraFieldValues.value[field.id] = value ?? ""
   })
 }
 
@@ -146,7 +146,7 @@ function serializeExtraFields() {
   const result = {}
   const fields = props.item?.extraFields || []
   fields.forEach((field) => {
-    const value = extraFieldValues[field.id]
+    const value = extraFieldValues.value[field.id]
     if (value instanceof Date) {
       result[field.id] = field.valueType === FIELD_DATE ? toLocalDate(value) : toLocalDateTime(value)
       return
@@ -273,8 +273,17 @@ async function generateQuickTest() {
 
 <template>
   <div class="space-y-4">
-    <div class="text-h4 font-semibold text-gray-90">
-      {{ t("Edit") }}
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div class="text-h4 font-semibold text-gray-90">
+        {{ t("Edit") }}
+      </div>
+      <BaseButton
+        :is-loading="saving"
+        :label="saveLabel"
+        icon="save"
+        type="success"
+        @click="saveItem"
+      />
     </div>
 
     <BaseTinyEditor

@@ -194,6 +194,12 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             ],
             [
+                'variable' => 'manual_completion',
+                'display_text' => 'Manual completion',
+                'item_type' => ExtraField::LP_VIEW_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+            ],
+            [
                 'variable' => 'start_date',
                 'display_text' => 'Start date',
                 'item_type' => ExtraField::LP_ITEM_FIELD_TYPE,
@@ -213,7 +219,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'send_to_coaches',
-                'display_text' => 'Send to coaches',
+                'display_text' => 'Send to tutors',
                 'item_type' => ExtraField::SCHEDULED_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             ],
@@ -441,6 +447,18 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             [
                 'variable' => 'number_of_days_for_completion',
                 'display_text' => 'Number of days for completion',
+                'item_type' => ExtraField::LP_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
+            [
+                'variable' => 'lab_title',
+                'display_text' => 'Lab title',
+                'item_type' => ExtraField::LP_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
+            [
+                'variable' => 'lab_week',
+                'display_text' => 'Lab week',
                 'item_type' => ExtraField::LP_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],

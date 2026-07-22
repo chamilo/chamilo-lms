@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const JSON_THROW_ON_ERROR;
 
@@ -38,7 +36,7 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
+        private NotebookWriteProtection $writeProtection,
     ) {}
 
     /**
@@ -79,7 +77,7 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('Notebook is read-only in this context.');
         }
 
-        $this->validateCsrfToken($this->getSubmittedCsrfToken($request));
+        $this->writeProtection->assertWriteAllowed($this->getSubmittedCsrfToken($request));
 
         $noteId = isset($uriVariables['iid']) ? (int) $uriVariables['iid'] : 0;
         $user = $this->getNotebookUser($this->userHelper);
@@ -115,12 +113,5 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
         $token = $payload['csrfToken'] ?? '';
 
         return \is_string($token) ? $token : '';
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(NotebookItemProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 }

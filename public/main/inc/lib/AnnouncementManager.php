@@ -58,9 +58,9 @@ class AnnouncementManager
         }
         $sessionId = api_get_session_id();
         if (!empty($sessionId)) {
-            $tags[] = '((coaches))';
-            $tags[] = '((general_coach))';
-            $tags[] = '((general_coach_email))';
+            $tags[] = '((tutors))';
+            $tags[] = '((general_tutor))';
+            $tags[] = '((general_tutor_email))';
         }
 
         return $tags;
@@ -149,9 +149,16 @@ class AnnouncementManager
         }
 
         if (!empty($sessionId)) {
-            $data['coaches'] = $coaches;
-            $data['general_coach'] = $generalCoachName;
-            $data['general_coach_email'] = $generalCoachEmail;
+            $data['tutors'] = $coaches;
+            $data['general_tutor'] = $generalCoachName;
+            $data['general_tutor_email'] = $generalCoachEmail;
+
+            // Keep legacy tags working in existing announcement templates.
+            $content = str_replace(
+                ['((coaches))', '((general_coach))', '((general_coach_email))'],
+                [$coaches, $generalCoachName, $generalCoachEmail],
+                $content
+            );
         }
 
         $tags = self::getTags();

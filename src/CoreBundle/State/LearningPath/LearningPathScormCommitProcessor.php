@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<LearningPathScormCommitInput, void> */
 final readonly class LearningPathScormCommitProcessor implements ProcessorInterface
@@ -36,7 +35,7 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
+        private LearningPathRuntimeWriteProtection $writeProtection,
         private LearningPathRuntimeProvider $runtimeProvider,
         private LearningPathRuntimeProgressManager $progressManager,
         private ScormRuntimeManager $runtimeManager,
@@ -59,7 +58,7 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
+        $this->writeProtection->assertWriteAllowed($data->csrfToken);
 
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
         $itemId = $data->itemId;

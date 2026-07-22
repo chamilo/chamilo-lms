@@ -13,6 +13,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CoreBundle\State\RoomAssignmentStateProcessor;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,9 +24,18 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(security: "object.getAttendance() != null and is_granted('VIEW', object.getAttendance().resourceNode)"),
         new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
-        new Post(securityPostDenormalize: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)"),
-        new Put(security: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)"),
-        new Patch(security: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)"),
+        new Post(
+            securityPostDenormalize: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)",
+            processor: RoomAssignmentStateProcessor::class,
+        ),
+        new Put(
+            security: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)",
+            processor: RoomAssignmentStateProcessor::class,
+        ),
+        new Patch(
+            security: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)",
+            processor: RoomAssignmentStateProcessor::class,
+        ),
         new Delete(security: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)"),
     ],
     normalizationContext: ['groups' => ['attendance_calendar:read']],
@@ -62,6 +73,11 @@ class CAttendanceCalendar
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     #[Groups(['attendance:read', 'attendance:write', 'attendance_calendar:read', 'attendance_calendar:write'])]
     protected ?int $duration = null;
+
+    #[ORM\ManyToOne(targetEntity: Room::class)]
+    #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Groups(['attendance:read', 'attendance_calendar:read', 'attendance_calendar:write'])]
+    protected ?Room $room = null;
 
     /**
      * @var Collection<int, CAttendanceSheet>
@@ -142,6 +158,29 @@ class CAttendanceCalendar
         $this->sheets = $sheets;
 
         return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): self
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public function getEffectiveRoom(): ?Room
+    {
+        return $this->room ?? $this->attendance->getRoom();
+    }
+
+    #[Groups(['attendance:read', 'attendance_calendar:read'])]
+    public function getEffectiveRoomData(): ?array
+    {
+        return CAttendance::formatRoomData($this->getEffectiveRoom());
     }
 
     public function getDuration(): ?int

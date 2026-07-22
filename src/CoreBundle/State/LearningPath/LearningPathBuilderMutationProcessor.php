@@ -461,6 +461,10 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             $session,
             $group,
         );
+        if ($resource instanceof CDocument && 'certificate' === strtolower(trim($resource->getFiletype()))) {
+            throw new BadRequestHttpException('Certificate documents cannot be added as regular learning path items.');
+        }
+
         $parent = $this->resolveParent($lp, $root, $data->parentId);
         $itemType = $this->resolveItemType($data->resourceType, $resource);
         $title = $this->resourceTitle($resource);

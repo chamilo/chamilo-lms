@@ -37355,3 +37355,138 @@ msgstr "מאת"
 msgid "required"
 msgstr "חובה"
 
+msgid "Incorrect password."
+msgstr "סיסמה שגויה."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "התראות שלמות קבצים מושהות למשך שעה אחת."
+
+msgid "New baseline established: %s files."
+msgstr "קו בסיס חדש הוקם: %s קבצים."
+
+msgid "Scan complete: changes were detected."
+msgstr "הסריקה הושלמה: זוהו שינויים."
+
+msgid "Scan complete: no changes were detected."
+msgstr "הסריקה הושלמה: לא זוהו שינויים."
+
+msgid "File integrity"
+msgstr "שלמות קבצים"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "דוח זה משווה את הקבצים המותקנים (הכולל את כל התיקיות למעט var\/ ו-.git\/, אם כי .git\/config עדיין נצפה כדי לזהות שליטה מרוחקת שנחטפה) מול קו בסיס מהימן, כדי לזהות הוספות, שינויים או מחיקות בלתי צפויות."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "ניתן לעיין בדוח האחרון להלן. הפעלת סריקה, השהיית התראות או הקמת קו בסיס חדש דורשת מנהל מערכת גלובלי."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "התראות מושהות כעת לצורכי תחזוקה. הן יחודשו אוטומטית ב-%date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "טרם בוצעה סריקה. ניתן להפעיל סריקה מכאן או משורת הפקודה עם app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "סריקה אחרונה"
+
+msgid "Files scanned"
+msgstr "קבצים שנסרקו"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "טרם נוצר קו בסיס: סריקה זו הקימה אחד. שינויים ידווחו החל מהסריקה הבאה."
+
+msgid "No changes detected since the baseline."
+msgstr "לא זוהו שינויים מאז קו הבסיס."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "הגדרת ה-Git המרוחקת (.git\/config) השתנתה. יש לוודא ששינוי זה צפוי."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "הסריקה הופסקה מוקדם מכיוון שלא ניתן לקרוא תיקיית משנה (בדוק הרשאות קבצים). התוצאות להלן עשויות להיות חלקיות."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% קובץ/ים לא ניתן/ו לקריאה (הרשאות) ולכן דולג/ו."
+
+msgid "Run a scan now"
+msgstr "הפעל סריקה כעת"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "השהה התראות למשך שעה אחת (לתחזוקה)"
+
+msgid "Pause for 1 hour"
+msgstr "השהה למשך שעה אחת"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "הגדר את עץ הקבצים הנוכחי כקו בסיס חדש"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "פעולה זו תסמוך על כל קובץ נוכחי כתקין, כולל כל שינוי שלא נסקר. להמשיך?"
+
+msgid "Establish new baseline"
+msgstr "הקם קו בסיס חדש"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "תזמן את הסריקה מ-crontab של המערכת, לדוגמה"
+
+msgid "File integrity alert on %platform%"
+msgstr "התראת שלמות קבצים ב-%platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "סריקת שלמות קבצים זיהתה שינויים בפלטפורמה:"
+
+msgid "Added files"
+msgstr "קבצים שנוספו"
+
+msgid "Modified files"
+msgstr "קבצים ששונו"
+
+msgid "Deleted files"
+msgstr "קבצים שנמחקו"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "עיין בדוח המלא מ-Administration > Security > File integrity."
+
+msgid "Password to confirm pausing alerts"
+msgstr "סיסמה לאישור השהיית התראות"
+
+msgid "Password to confirm the new baseline"
+msgstr "סיסמה לאישור קו הבסיס החדש"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "סריקה כבר מתבצעת. המתן לסיומה לפני הפעלת סריקה נוספת."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "סריקה מתבצעת כעת (החלה ב־%date%). סריקה מלאה עשויה להימשך מספר דקות; ניתן לטעון מחדש את הדף בבטחה כדי לבדוק את ההתקדמות."
+
+msgid "Currently processing"
+msgstr "מעבד כעת"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "סריקה קודמת (החלה ב־%date%) הופסקה לפני שהסתיימה — התהליך אינו פעיל עוד. ניתן להתחיל סריקה חדשה בבטחה."
+
+msgid "files"
+msgstr "קבצים"
+
+msgid "Permissions changed"
+msgstr "הרשאות שונו"
+
+msgid "Files with changed permissions"
+msgstr "קבצים עם הרשאות ששונו"
+
+msgid "Alert history"
+msgstr "היסטוריית התראות"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "כל סריקה שמצאה משהו נשמרת גם לאחר פתרון הסטייה או קביעת בסיס חדש — בניגוד לדוח לעיל, סריקה נקייה או איפוס בסיס אינם מוחקים אותה לעולם."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "רשומה זו קוצרה בזמן הלכידה; ראה את יומן ה־CEF לרשימה המלאה."
+
+msgid "No alert has been recorded yet."
+msgstr "טרם נרשמה התראה."
+
+msgid "Git remote changed"
+msgstr "ה־Git המרוחק שונה"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "יותר מדי שינויים להצגה מלאה; מוצגות להלן רק הרשומות הראשונות מכל קטגוריה. ראו את %link_start%יומן CEF%link_end% לרשימה המלאה."
+

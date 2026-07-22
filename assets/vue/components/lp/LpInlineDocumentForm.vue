@@ -158,8 +158,17 @@ async function saveDocument() {
     </div>
 
     <div class="space-y-4">
-      <div class="text-h4 font-semibold text-gray-90">
-        {{ t("Add") }}
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="text-h4 font-semibold text-gray-90">
+          {{ t("Add") }}
+        </div>
+        <BaseButton
+          :is-loading="saving"
+          :label="t('Save')"
+          icon="save"
+          type="success"
+          @click="saveDocument"
+        />
       </div>
 
       <BaseInputText

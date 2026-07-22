@@ -26,7 +26,7 @@ class AddVariantResourceFileAction
             throw new BadRequestHttpException('"file" is required');
         }
 
-        $resourceNodeId = $request->get('resourceNodeId');
+        $resourceNodeId = $request->request->get('resourceNodeId');
         if (!$resourceNodeId) {
             throw new BadRequestHttpException('"resourceNodeId" is required');
         }
@@ -36,7 +36,7 @@ class AddVariantResourceFileAction
             throw new NotFoundHttpException('ResourceNode not found');
         }
 
-        $accessUrlId = $request->get('accessUrlId');
+        $accessUrlId = $request->request->get('accessUrlId');
         $accessUrl = null;
         if ($accessUrlId) {
             $accessUrl = $em->getRepository(AccessUrl::class)->find($accessUrlId);

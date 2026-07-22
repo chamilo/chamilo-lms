@@ -60,9 +60,9 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
             ResourceLink::VISIBILITY_PUBLISHED
         );
 
-        $isUncompressZipEnabled = (string) $request->get('isUncompressZipEnabled', 'false');
-        $fileExistsOption = (string) $request->get('fileExistsOption', 'rename');
-        $aiAssistedRaw = strtolower(trim((string) $request->get('ai_assisted', '')));
+        $isUncompressZipEnabled = (string) $request->request->get('isUncompressZipEnabled', 'false');
+        $fileExistsOption = (string) $request->request->get('fileExistsOption', 'rename');
+        $aiAssistedRaw = strtolower(trim((string) $request->request->get('ai_assisted', '')));
         $isAiAssisted = \in_array($aiAssistedRaw, ['1', 'true', 'yes', 'on'], true);
 
         $document = new CDocument();

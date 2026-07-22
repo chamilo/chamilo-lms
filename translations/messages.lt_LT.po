@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Pagarbiai"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulės pavyzdys: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulės pavyzdys: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kintamųjų ribos"
@@ -37342,4 +37342,139 @@ msgstr "autorius"
 
 msgid "required"
 msgstr "privalomas"
+
+msgid "Incorrect password."
+msgstr "Neteisingas slaptažodis."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Failų vientisumo įspėjimas pristabdytas 1 valandai."
+
+msgid "New baseline established: %s files."
+msgstr "Nauja bazinė linija nustatyta: %s failų."
+
+msgid "Scan complete: changes were detected."
+msgstr "Nuskaitymas baigtas: aptikta pakeitimų."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Nuskaitymas baigtas: pakeitimų neaptikta."
+
+msgid "File integrity"
+msgstr "Failų vientisumas"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Šioje ataskaitoje palyginami įdiegti failai (viskas, išskyrus var/ ir .git/, nors .git/config vis dar stebimas, kad būtų aptiktas užgrobtas nuotolinis serveris) su patikima bazine linija, siekiant aptikti netikėtus pridėjimus, modifikacijas ar ištrynimus."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Naujausią ataskaitą galite peržiūrėti žemiau. Nuskaitymo vykdymas, įspėjimų pristabdymas ar naujos bazinės linijos nustatymas reikalauja globalaus administratoriaus."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Įspėjimai šiuo metu pristabdyti priežiūrai. Jie automatiškai atsinaujins %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Dar nėra atliktas joks nuskaitymas. Paleiskite jį iš čia arba iš komandinės eilutės su app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Paskutinis nuskaitymas"
+
+msgid "Files scanned"
+msgstr "Nuskaityti failai"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Dar nebuvo bazinės linijos: šis nuskaitymas ją nustatė. Pakeitimai bus pranešami pradedant nuo kito nuskaitymo."
+
+msgid "No changes detected since the baseline."
+msgstr "Nuo bazinės linijos pakeitimų neaptikta."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git nuotolinė konfigūracija (.git/config) pasikeitė. Patikrinkite, ar tai buvo numatyta."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Nuskaitymas sustojo anksčiau, nes nepavyko perskaityti pakatalogio (patikrinkite failų leidimus). Žemiau pateikti rezultatai gali būti daliniai."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% failo(-ų) nepavyko perskaityti (leidimai) ir jie buvo praleisti."
+
+msgid "Run a scan now"
+msgstr "Paleisti nuskaitymą dabar"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Pristabdyti įspėjimus 1 valandai (priežiūrai)"
+
+msgid "Pause for 1 hour"
+msgstr "Pristabdyti 1 valandai"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Patikėti dabartinį failų medį kaip naują bazinę liniją"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Tai patikės kiekvieną dabartinį failą kaip teisingą, įskaitant bet kokį neperžiūrėtą pakeitimą. Tęsti?"
+
+msgid "Establish new baseline"
+msgstr "Nustatyti naują bazinę liniją"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Suplanuoti nuskaitymą iš sistemos crontab, pavyzdžiui"
+
+msgid "File integrity alert on %platform%"
+msgstr "Failų vientisumo įspėjimas platformoje %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Failų vientisumo nuskaitymas aptiko pakeitimų platformoje:"
+
+msgid "Added files"
+msgstr "Pridėti failai"
+
+msgid "Modified files"
+msgstr "Pakeisti failai"
+
+msgid "Deleted files"
+msgstr "Ištrinti failai"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Peržiūrėkite visą ataskaitą: Administravimas > Saugumas > Failų vientisumas."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Slaptažodis įspėjimų pristabdymui patvirtinti"
+
+msgid "Password to confirm the new baseline"
+msgstr "Slaptažodis naujai pradinei būklei patvirtinti"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Skenavimas jau vyksta. Prieš pradėdami naują, palaukite, kol jis baigsis."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Šiuo metu vyksta skenavimas (pradėtas %date%). Pilnas skenavimas gali trukti kelias minutes; šį puslapį galima saugiai įkelti iš naujo, norint patikrinti eigą."
+
+msgid "Currently processing"
+msgstr "Šiuo metu apdorojama"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Ankstesnis skenavimas (pradėtas %date%) buvo nutrauktas nebaigus — procesas nebevyksta. Galite saugiai pradėti naują."
+
+msgid "files"
+msgstr "failai"
+
+msgid "Permissions changed"
+msgstr "Leidimai pakeisti"
+
+msgid "Files with changed permissions"
+msgstr "Failai su pakeistais leidimais"
+
+msgid "Alert history"
+msgstr "Įspėjimų istorija"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Kiekvienas skenavimas, radęs ką nors, išsaugomas net ir išsprendus nukrypimą ar nustacius naują pradinę būklę — skirtingai nei aukščiau pateikta ataskaita, švarus skenavimas ar pakartotinis pradinės būklės nustatymas niekada neišvalo šios istorijos."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Šis įrašas buvo sutrumpintas fiksavimo metu; visą sąrašą rasite CEF žurnale."
+
+msgid "No alert has been recorded yet."
+msgstr "Dar nėra užfiksuota jokių įspėjimų."
+
+msgid "Git remote changed"
+msgstr "Git nuotolinis šaltinis pakeistas"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Per daug pakeitimų, kad būtų galima parodyti visus; žemiau rodomi tik pirmieji kiekvienos kategorijos įrašai. Visą sąrašą rasite %link_start%CEF žurnale%link_end%."
 

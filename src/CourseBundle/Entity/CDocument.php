@@ -280,9 +280,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             uriTemplate: '/documents/{cid}/usage',
             controller: DocumentUsageAction::class,
-            openapiContext: [
-                'summary' => 'Get usage/quota information for documents.',
-            ],
+            openapi: new Operation(summary: 'Get usage/quota information for documents.'),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             read: false,
             name: 'api_documents_usage'
@@ -333,7 +331,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     protected ?string $comment;
 
     #[Groups(['document:read', 'document:write'])]
-    #[Assert\Choice(['folder', 'file', 'certificate', 'video', 'link'], message: 'Choose a valid filetype.')]
+    #[Assert\Choice(choices: ['folder', 'file', 'certificate', 'video', 'link'], message: 'Choose a valid filetype.')]
     #[ORM\Column(name: 'filetype', type: 'string', length: 15, nullable: false)]
     protected string $filetype;
 

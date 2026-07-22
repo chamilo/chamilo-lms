@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -37341,4 +37341,139 @@ msgstr "által"
 
 msgid "required"
 msgstr "kötelező"
+
+msgid "Incorrect password."
+msgstr "Helytelen jelszó."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Fájlintegritás-figyelmeztetés szüneteltetve 1 órára."
+
+msgid "New baseline established: %s files."
+msgstr "Új alapvonal létrehozva: %s fájl."
+
+msgid "Scan complete: changes were detected."
+msgstr "Szkennelés befejezve: változásokat észleltünk."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Szkennelés befejezve: nem észleltünk változásokat."
+
+msgid "File integrity"
+msgstr "Fájlintegritás"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Ez a jelentés összehasonlítja a telepített fájlokat (a var\/ és .git\/ kivételével, bár a .git\/config továbbra is figyelve van a távoli eltérítés észleléséhez) egy megbízható alapvonallal, hogy váratlan hozzáadások, módosítások vagy törlések észlelhetők legyenek."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Az alábbiakban áttekintheti a legfrissebb jelentést. A szkennelés futtatásához, a figyelmeztetés szüneteltetéséhez vagy új alapvonal létrehozásához globális rendszergazdai jogosultság szükséges."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "A figyelmeztetés jelenleg karbantartás miatt szünetel. Automatikusan folytatódik ekkor: %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Még nem futott szkennelés. Futtasson egyet innen, vagy a parancssorból az app:file-integrity:scan paranccsal."
+
+msgid "Last scan"
+msgstr "Utolsó szkennelés"
+
+msgid "Files scanned"
+msgstr "Szkennelt fájlok"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Még nem létezett alapvonal: ez a szkennelés hozta létre. A változások a következő szkenneléstől lesznek jelentve."
+
+msgid "No changes detected since the baseline."
+msgstr "Az alapvonal óta nem észleltek változásokat."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "A Git távoli konfigurációja (.git\/config) megváltozott. Ellenőrizze, hogy ez volt-e a szándék."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "A szkennelés idő előtt leállt, mert egy alkönyvtár nem olvasható (ellenőrizze a fájljogosultságokat). Az alábbi eredmények részlegesek lehetnek."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fájl nem olvasható (jogosultságok miatt), ezért kihagyásra került."
+
+msgid "Run a scan now"
+msgstr "Szkennelés futtatása most"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Figyelmeztetés szüneteltetése 1 órára (karbantartáshoz)"
+
+msgid "Pause for 1 hour"
+msgstr "Szüneteltetés 1 órára"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "A jelenlegi fájlfa megbízhatóvá tétele új alapvonalként"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Ez minden jelenlegi fájlt helyesnek fogad el, beleértve az át nem tekintett változásokat is. Folytatja?"
+
+msgid "Establish new baseline"
+msgstr "Új alapvonal létrehozása"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "A szkennelés ütemezése rendszer crontab-ból, például"
+
+msgid "File integrity alert on %platform%"
+msgstr "Fájlintegritás-riasztás a(z) %platform% platformon"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Egy fájlintegritás-szkennelés változásokat észlelt a platformon:"
+
+msgid "Added files"
+msgstr "Hozzáadott fájlok"
+
+msgid "Modified files"
+msgstr "Módosított fájlok"
+
+msgid "Deleted files"
+msgstr "Törölt fájlok"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Tekintse meg a teljes jelentést az Adminisztráció > Biztonság > Fájlintegritás menüpontban."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Jelszó a riasztások szüneteltetésének megerősítéséhez"
+
+msgid "Password to confirm the new baseline"
+msgstr "Jelszó az új alapvonal megerősítéséhez"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Már fut egy vizsgálat. Kérjük, várja meg a befejezését, mielőtt újat indítana."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Jelenleg vizsgálat fut (kezdés: %date%). A teljes vizsgálat több percet is igénybe vehet; az oldal biztonságosan újratölthető a folyamat ellenőrzéséhez."
+
+msgid "Currently processing"
+msgstr "Feldolgozás folyamatban"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Egy korábbi vizsgálat (kezdés: %date%) befejezetlenül megszakadt — a folyamat már nem fut. Biztonságosan indíthat újat."
+
+msgid "files"
+msgstr "fájlok"
+
+msgid "Permissions changed"
+msgstr "Engedélyek megváltoztak"
+
+msgid "Files with changed permissions"
+msgstr "Engedélyváltozással rendelkező fájlok"
+
+msgid "Alert history"
+msgstr "Riasztástörténet"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Minden olyan vizsgálat, amely talált valamit, még akkor is megőrződik, ha az eltérés megoldódott vagy új alapvonalat hoztak létre — ellentétben a fenti jelentéssel, egy tiszta vizsgálat vagy új alapvonal létrehozása soha nem törli ezt."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Ez a bejegyzés a rögzítéskor csonkolásra került; a teljes listához lásd a CEF naplót."
+
+msgid "No alert has been recorded yet."
+msgstr "Még nem rögzítettek riasztást."
+
+msgid "Git remote changed"
+msgstr "Git távoli tároló megváltozott"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Túl sok változás a teljes listázáshoz; az egyes kategóriák első bejegyzései láthatók lent. A teljes listához lásd a %link_start%CEF naplót%link_end%."
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Saygılarımızla"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formül örneği: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formül örneği: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Değişken aralıkları"
@@ -37343,4 +37343,139 @@ msgstr "tarafından"
 
 msgid "required"
 msgstr "zorunlu"
+
+msgid "Incorrect password."
+msgstr "Yanlış parola."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Dosya bütünlüğü uyarısı 1 saatliğine duraklatıldı."
+
+msgid "New baseline established: %s files."
+msgstr "Yeni temel oluşturuldu: %s dosya."
+
+msgid "Scan complete: changes were detected."
+msgstr "Tarama tamamlandı: değişiklikler tespit edildi."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Tarama tamamlandı: değişiklik tespit edilmedi."
+
+msgid "File integrity"
+msgstr "Dosya bütünlüğü"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Bu rapor, yüklü dosyaları (var/ ve .git/ hariç, ancak .git/config uzaktan ele geçirme tespiti için izlenir) güvenilir bir temel ile karşılaştırarak beklenmeyen eklemeleri, değişiklikleri veya silmeleri tespit eder."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "En son raporu aşağıda inceleyebilirsiniz. Tarama çalıştırmak, uyarıları duraklatmak veya yeni bir temel oluşturmak global yönetici gerektirir."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Uyarılar şu anda bakım için duraklatıldı. Otomatik olarak %date% tarihinde devam edecektir."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Henüz tarama yapılmadı. Buradan veya app:file-integrity:scan komutuyla tarama çalıştırın."
+
+msgid "Last scan"
+msgstr "Son tarama"
+
+msgid "Files scanned"
+msgstr "Taranan dosyalar"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Henüz temel yoktu: bu tarama bir temel oluşturdu. Değişiklikler bir sonraki taramadan itibaren raporlanacaktır."
+
+msgid "No changes detected since the baseline."
+msgstr "Temel ile karşılaştırıldığında değişiklik tespit edilmedi."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git uzak yapılandırması (.git/config) değişti. Bunun beklenen bir değişiklik olduğundan emin olun."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Tarama erken durdu çünkü bir alt dizin okunamadı (dosya izinlerini kontrol edin). Aşağıdaki sonuçlar kısmi olabilir."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% dosya okunamadı (izinler) ve atlandı."
+
+msgid "Run a scan now"
+msgstr "Şimdi tarama çalıştır"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Uyarıları 1 saatliğine duraklat (bakım için)"
+
+msgid "Pause for 1 hour"
+msgstr "1 saatliğine duraklat"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Mevcut dosya ağacını yeni temel olarak kabul et"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Bu işlem, incelenmemiş değişiklikler dahil olmak üzere tüm mevcut dosyaları doğru olarak kabul edecektir. Devam edilsin mi?"
+
+msgid "Establish new baseline"
+msgstr "Yeni temel oluştur"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Tarama örneğin sistem crontab'ından zamanlanabilir"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% üzerinde dosya bütünlüğü uyarısı"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Bir dosya bütünlüğü taraması platformda değişiklikler tespit etti:"
+
+msgid "Added files"
+msgstr "Eklenen dosyalar"
+
+msgid "Modified files"
+msgstr "Değiştirilen dosyalar"
+
+msgid "Deleted files"
+msgstr "Silinen dosyalar"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Tam raporu Yönetim > Güvenlik > Dosya bütünlüğü bölümünden inceleyin."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Uyarıları duraklatmayı onaylamak için parola"
+
+msgid "Password to confirm the new baseline"
+msgstr "Yeni temeli onaylamak için parola"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Zaten bir tarama çalışıyor. Başka bir tarama başlatmadan önce bitmesini bekleyin."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Şu anda bir tarama çalışıyor (%date% tarihinde başlatıldı). Tam bir tarama birkaç dakika sürebilir; ilerlemeyi kontrol etmek için bu sayfa güvenli bir şekilde yeniden yüklenebilir."
+
+msgid "Currently processing"
+msgstr "Şu anda işleniyor"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Önceki bir tarama (%date% tarihinde başlatıldı) tamamlanmadan kesintiye uğradı — işlem artık çalışmıyor. Güvenle yeni bir tarama başlatabilirsiniz."
+
+msgid "files"
+msgstr "dosyalar"
+
+msgid "Permissions changed"
+msgstr "İzinler değiştirildi"
+
+msgid "Files with changed permissions"
+msgstr "İzinleri değiştirilen dosyalar"
+
+msgid "Alert history"
+msgstr "Uyarı geçmişi"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Bir şey bulunan her tarama, sapma çözülse veya yeni bir temel oluşturulsa bile saklanır — yukarıdaki rapordan farklı olarak, temiz bir tarama veya yeniden temel oluşturma bu geçmişi asla silmez."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Bu kayıt yakalama sırasında kısaltıldı; tam liste için CEF günlüğüne bakın."
+
+msgid "No alert has been recorded yet."
+msgstr "Henüz hiçbir uyarı kaydedilmedi."
+
+msgid "Git remote changed"
+msgstr "Git uzak deposu değiştirildi"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Listelenecek çok fazla değişiklik var; her kategorinin yalnızca ilk girdileri aşağıda gösterilmektedir. Tam liste için %link_start%CEF günlüğü%link_end% sayfasına bakın."
 

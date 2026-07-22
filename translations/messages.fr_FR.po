@@ -2111,7 +2111,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:sans copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossier,, application/msword:MsWord,, application/octet-stream:Flux octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossier,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercice,,      simulation:simulation,,      questionnaire:enquête,,      diagram:diagramme,,      figure:figure,,      graph:graphe,,      index:index,,      slide:diapo,,      table:table,,      narrative text:texte narratif,,      exam:examen,,      experiment:expérience,,      problem statement:problème,,      self assessment:auto-évaluation,,      lecture:présentation"
@@ -39223,4 +39223,139 @@ msgstr "par"
 
 msgid "required"
 msgstr "obligatoire"
+
+msgid "Incorrect password."
+msgstr "Mot de passe incorrect."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alerte d'intégrité des fichiers suspendue pour 1 heure."
+
+msgid "New baseline established: %s files."
+msgstr "Nouvelle ligne de base établie : %s fichiers."
+
+msgid "Scan complete: changes were detected."
+msgstr "Analyse terminée : des modifications ont été détectées."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Analyse terminée : aucune modification détectée."
+
+msgid "File integrity"
+msgstr "Intégrité des fichiers"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Ce rapport compare les fichiers installés (tout sauf var/ et .git/, bien que .git/config soit toujours surveillé pour détecter un détournement distant) avec une ligne de base de confiance, afin de détecter des ajouts, modifications ou suppressions inattendus."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Vous pouvez consulter le dernier rapport ci-dessous. Lancer une analyse, suspendre les alertes ou établir une nouvelle ligne de base nécessite un administrateur global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Les alertes sont actuellement suspendues pour maintenance. Elles reprendront automatiquement le %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Aucune analyse n'a encore été effectuée. Lancez-en une ici ou depuis la ligne de commande avec app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Dernière analyse"
+
+msgid "Files scanned"
+msgstr "Fichiers analysés"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Aucune ligne de base n'existait encore : cette analyse en a établi une. Les modifications seront signalées à partir de la prochaine analyse."
+
+msgid "No changes detected since the baseline."
+msgstr "Aucune modification détectée depuis la ligne de base."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "La configuration du dépôt Git distant (.git/config) a changé. Vérifiez que cela était prévu."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "L'analyse s'est arrêtée prématurément car un sous-répertoire n'a pas pu être lu (vérifiez les permissions des fichiers). Les résultats ci-dessous peuvent être partiels."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fichier(s) n'ont pas pu être lus (permissions) et ont été ignorés."
+
+msgid "Run a scan now"
+msgstr "Lancer une analyse maintenant"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Suspendre les alertes pendant 1 heure (pour maintenance)"
+
+msgid "Pause for 1 hour"
+msgstr "Suspendre pendant 1 heure"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Considérer l'arborescence actuelle comme nouvelle ligne de base"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Cela considérera chaque fichier actuel comme correct, y compris toute modification non examinée. Continuer ?"
+
+msgid "Establish new baseline"
+msgstr "Établir une nouvelle ligne de base"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Planifier l'analyse depuis une crontab système, par exemple"
+
+msgid "File integrity alert on %platform%"
+msgstr "Alerte d'intégrité des fichiers sur %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Une analyse d'intégrité des fichiers a détecté des modifications sur la plateforme :"
+
+msgid "Added files"
+msgstr "Fichiers ajoutés"
+
+msgid "Modified files"
+msgstr "Fichiers modifiés"
+
+msgid "Deleted files"
+msgstr "Fichiers supprimés"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Consultez le rapport complet depuis Administration > Sécurité > Intégrité des fichiers."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Mot de passe pour confirmer la mise en pause des alertes"
+
+msgid "Password to confirm the new baseline"
+msgstr "Mot de passe pour confirmer la nouvelle ligne de base"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Une analyse est déjà en cours. Veuillez attendre qu'elle se termine avant d'en lancer une autre."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Une analyse est en cours (démarrée le %date%). Une analyse complète peut prendre plusieurs minutes ; cette page peut être rechargée sans risque pour vérifier la progression."
+
+msgid "Currently processing"
+msgstr "Traitement en cours"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Une analyse précédente (démarrée le %date%) a été interrompue avant sa fin — le processus n'est plus en cours. Vous pouvez lancer une nouvelle analyse sans risque."
+
+msgid "files"
+msgstr "fichiers"
+
+msgid "Permissions changed"
+msgstr "Permissions modifiées"
+
+msgid "Files with changed permissions"
+msgstr "Fichiers dont les permissions ont changé"
+
+msgid "Alert history"
+msgstr "Historique des alertes"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Chaque analyse ayant détecté quelque chose est conservée, même après résolution de l'écart ou établissement d'une nouvelle ligne de base — contrairement au rapport ci-dessus, une analyse propre ou une réinitialisation de la ligne de base ne vide jamais cet historique."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Cette entrée a été tronquée lors de la capture ; consultez le journal CEF pour la liste complète."
+
+msgid "No alert has been recorded yet."
+msgstr "Aucune alerte n'a encore été enregistrée."
+
+msgid "Git remote changed"
+msgstr "Dépôt Git distant modifié"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Trop de modifications pour les lister intégralement ; seules les premières entrées de chaque catégorie sont affichées ci-dessous. Consultez le %link_start%journal CEF%link_end% pour la liste complète."
 

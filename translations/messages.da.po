@@ -37344,3 +37344,138 @@ msgstr "af"
 msgid "required"
 msgstr "påkrævet"
 
+msgid "Incorrect password."
+msgstr "Forkert adgangskode."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Filintegritetsadvarsel sat på pause i 1 time."
+
+msgid "New baseline established: %s files."
+msgstr "Ny baseline oprettet: %s filer."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scanning fuldført: ændringer blev fundet."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scanning fuldført: ingen ændringer blev fundet."
+
+msgid "File integrity"
+msgstr "Filintegritet"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Denne rapport sammenligner de installerede filer (alt undtagen var/ og .git/, selvom .git/config stadig overvåges for at opdage en kapret fjernforbindelse) med en pålidelig baseline for at opdage uventede tilføjelser, ændringer eller sletninger."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Du kan gennemgå den seneste rapport nedenfor. Kørsel af en scanning, pause af advarsler eller oprettelse af en ny baseline kræver en global administrator."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Advarsler er i øjeblikket sat på pause for vedligeholdelse. De genoptages automatisk den %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Ingen scanning er kørt endnu. Kør en fra her eller fra kommandolinjen med app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Seneste scanning"
+
+msgid "Files scanned"
+msgstr "Filer scannet"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Ingen baseline eksisterede endnu: denne scanning oprettede en. Ændringer vil blive rapporteret fra næste scanning."
+
+msgid "No changes detected since the baseline."
+msgstr "Ingen ændringer fundet siden baselinen."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git-fjernkonfigurationen (.git/config) er ændret. Bekræft, at dette var forventet."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Scanningen stoppede tidligt, fordi en undermappe ikke kunne læses (kontrollér filrettigheder). Resultaterne nedenfor kan være ufuldstændige."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fil(er) kunne ikke læses (rettigheder) og blev sprunget over."
+
+msgid "Run a scan now"
+msgstr "Kør en scanning nu"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Sæt advarsler på pause i 1 time (til vedligeholdelse)"
+
+msgid "Pause for 1 hour"
+msgstr "Sæt på pause i 1 time"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Godkend det aktuelle filttræ som ny baseline"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Dette vil godkende alle aktuelle filer som korrekte, inklusive eventuelle ikke-gennemgåede ændringer. Fortsæt?"
+
+msgid "Establish new baseline"
+msgstr "Opret ny baseline"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Planlæg scanningen fra en system-crontab, for eksempel"
+
+msgid "File integrity alert on %platform%"
+msgstr "Filintegritetsadvarsel på %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "En filintegritetsscanning fandt ændringer på platformen:"
+
+msgid "Added files"
+msgstr "Tilføjede filer"
+
+msgid "Modified files"
+msgstr "Ændrede filer"
+
+msgid "Deleted files"
+msgstr "Slettede filer"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Gennemgå den fulde rapport under Administration > Sikkerhed > Filintegritet."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Adgangskode til bekræftelse af pause af advarsler"
+
+msgid "Password to confirm the new baseline"
+msgstr "Adgangskode til bekræftelse af ny baseline"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "En scanning kører allerede. Vent på, at den er færdig, før du starter en ny."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "En scanning kører i øjeblikket (startet den %date%). En fuld scanning kan tage flere minutter; denne side kan genindlæses sikkert for at kontrollere fremskridt."
+
+msgid "Currently processing"
+msgstr "Behandler i øjeblikket"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "En tidligere scanning (startet den %date%) blev afbrudt, før den var færdig — processen kører ikke længere. Du kan sikkert starte en ny."
+
+msgid "files"
+msgstr "filer"
+
+msgid "Permissions changed"
+msgstr "Rettigheder ændret"
+
+msgid "Files with changed permissions"
+msgstr "Filer med ændrede rettigheder"
+
+msgid "Alert history"
+msgstr "Advarselshistorik"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Hver scanning, der fandt noget, gemmes selv efter, at afvigelsen er løst, eller en ny baseline er oprettet — i modsætning til rapporten ovenfor rydder en ren scanning eller en ny baseline aldrig dette."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Denne post blev afkortet ved indfangningstidspunktet; se CEF-loggen for den fulde liste."
+
+msgid "No alert has been recorded yet."
+msgstr "Ingen advarsel er registreret endnu."
+
+msgid "Git remote changed"
+msgstr "Git-fjernforbindelse ændret"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "For mange ændringer til at vise fuldt ud; kun de første poster i hver kategori vises nedenfor. Se den fulde liste i %link_start%CEF-loggen%link_end%."
+

@@ -34,7 +34,7 @@ async function create({ title, colors }) {
  * Update a color theme
  */
 async function update({ iri, title, colors }) {
-  return await baseService.put(iri, {
+  return await baseService.patch(iri, {
     title,
     variables: colors,
   })

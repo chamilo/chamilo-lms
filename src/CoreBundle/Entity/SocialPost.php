@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\DislikeSocialPostController;
@@ -41,7 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
         new Put(security: "is_granted('EDIT', object)"),
-        new Delete(security: "is_granted('DELETE', object)"),
+        new Patch(security: "is_granted('EDIT', object)"), new Delete(security: "is_granted('DELETE', object)"),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
         new Post(
             uriTemplate: '/social_posts/{id}/like',
@@ -109,7 +110,7 @@ class SocialPost
     protected string $content;
 
     #[Groups(['social_post:write', 'social_post:read'])]
-    #[Assert\Choice([
+    #[Assert\Choice(choices: [
         self::TYPE_WALL_POST,
         self::TYPE_WALL_COMMENT,
         self::TYPE_GROUP_MESSAGE,
@@ -118,7 +119,7 @@ class SocialPost
     #[ORM\Column(type: 'smallint')]
     protected int $type;
 
-    #[Assert\Choice([self::STATUS_SENT, self::STATUS_DELETED], message: 'Choose a status.')]
+    #[Assert\Choice(choices: [self::STATUS_SENT, self::STATUS_DELETED], message: 'Choose a status.')]
     #[ORM\Column(type: 'smallint')]
     protected int $status;
 

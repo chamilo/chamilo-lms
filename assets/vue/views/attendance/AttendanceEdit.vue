@@ -67,6 +67,7 @@ const fetchAttendance = async () => {
       gradeWeight: fetchedData.attendanceWeight || 0.0,
       requireUnique: !!fetchedData.requireUnique,
       language: extractResourceLanguage(fetchedData),
+      room: typeof fetchedData.room === "string" ? fetchedData.room : fetchedData.room?.["@id"] || null,
     }
   } catch (error) {
     console.error("Error fetching attendance:", error)

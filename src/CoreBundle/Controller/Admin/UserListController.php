@@ -188,14 +188,6 @@ class UserListController extends AbstractController
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
         $isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER') && !$isPlatformAdmin;
 
-        $adminTable = $this->em->getConnection()->createQueryBuilder()
-            ->select('user_id')
-            ->from('admin')
-            ->executeQuery()
-            ->fetchFirstColumn()
-        ;
-        $adminIds = array_map('intval', $adminTable);
-
         $items = [];
         $now = new DateTime();
 
@@ -210,8 +202,7 @@ class UserListController extends AbstractController
             $isAnonymous = \in_array('ROLE_ANONYMOUS', $allRoles, true);
             $isUserAdmin = \in_array('ROLE_PLATFORM_ADMIN', $allRoles, true)
                 || \in_array('ROLE_GLOBAL_ADMIN', $allRoles, true)
-                || \in_array('ROLE_ADMIN', $allRoles, true)
-                || \in_array($userId, $adminIds, true);
+                || \in_array('ROLE_ADMIN', $allRoles, true);
             $isStudent = \in_array('ROLE_STUDENT', $allRoles, true);
             $isSessionManager = \in_array('ROLE_SESSION_MANAGER', $allRoles, true);
             $isHR = \in_array('ROLE_HR', $allRoles, true);

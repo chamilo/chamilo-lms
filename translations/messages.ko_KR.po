@@ -37342,3 +37342,138 @@ msgstr "작성자"
 msgid "required"
 msgstr "필수"
 
+msgid "Incorrect password."
+msgstr "잘못된 비밀번호입니다."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "파일 무결성 알림이 1시간 동안 일시 중지되었습니다."
+
+msgid "New baseline established: %s files."
+msgstr "새 기준선 설정 완료: %s개 파일."
+
+msgid "Scan complete: changes were detected."
+msgstr "스캔 완료: 변경 사항이 감지되었습니다."
+
+msgid "Scan complete: no changes were detected."
+msgstr "스캔 완료: 변경 사항이 감지되지 않았습니다."
+
+msgid "File integrity"
+msgstr "파일 무결성"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "이 보고서는 설치된 파일(var/ 및 .git/ 제외, .git/config는 원격 하이재킹 감지를 위해 계속 감시)을 신뢰할 수 있는 기준선과 비교하여 예상치 못한 추가, 수정 또는 삭제를 감지합니다."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "최신 보고서는 아래에서 확인할 수 있습니다. 스캔 실행, 알림 일시 중지 또는 새 기준선 설정은 전역 관리자만 수행할 수 있습니다."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "유지보수를 위해 알림이 현재 일시 중지되었습니다. %date%에 자동으로 재개됩니다."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "아직 실행된 스캔이 없습니다. 여기에서 또는 명령줄에서 app:file-integrity:scan으로 실행하세요."
+
+msgid "Last scan"
+msgstr "마지막 스캔"
+
+msgid "Files scanned"
+msgstr "스캔된 파일"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "기준선이 아직 존재하지 않았습니다. 이 스캔으로 기준선이 설정되었습니다. 다음 스캔부터 변경 사항이 보고됩니다."
+
+msgid "No changes detected since the baseline."
+msgstr "기준선 이후 변경 사항이 감지되지 않았습니다."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git 원격 구성(.git/config)이 변경되었습니다. 의도된 변경인지 확인하세요."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "하위 디렉터리를 읽을 수 없어 스캔이 조기에 중지되었습니다(파일 권한 확인). 아래 결과는 일부일 수 있습니다."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count%개 파일을 읽을 수 없어(권한 문제) 건너뛰었습니다."
+
+msgid "Run a scan now"
+msgstr "지금 스캔 실행"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "유지보수를 위해 1시간 동안 알림 일시 중지"
+
+msgid "Pause for 1 hour"
+msgstr "1시간 동안 일시 중지"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "현재 파일 트리를 새 기준선으로 신뢰"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "검토되지 않은 변경 사항을 포함하여 현재 모든 파일을 올바른 것으로 신뢰합니다. 계속하시겠습니까?"
+
+msgid "Establish new baseline"
+msgstr "새 기준선 설정"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "예를 들어 시스템 crontab에서 스캔을 예약하세요"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform%의 파일 무결성 알림"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "파일 무결성 스캔에서 플랫폼의 변경 사항이 감지되었습니다:"
+
+msgid "Added files"
+msgstr "추가된 파일"
+
+msgid "Modified files"
+msgstr "수정된 파일"
+
+msgid "Deleted files"
+msgstr "삭제된 파일"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "관리 > 보안 > 파일 무결성에서 전체 보고서를 확인하세요."
+
+msgid "Password to confirm pausing alerts"
+msgstr "알림 일시 중지를 확인하는 비밀번호"
+
+msgid "Password to confirm the new baseline"
+msgstr "새 기준선을 확인하는 비밀번호"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "스캔이 이미 실행 중입니다. 다른 스캔을 시작하기 전에 완료될 때까지 기다리세요."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "현재 스캔이 실행 중입니다(%date%에 시작됨). 전체 스캔에는 몇 분이 걸릴 수 있습니다. 이 페이지를 안전하게 새로 고쳐 진행 상황을 확인할 수 있습니다."
+
+msgid "Currently processing"
+msgstr "현재 처리 중"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "이전 스캔(%date%에 시작됨)이 완료되기 전에 중단되었습니다. 프로세스가 더 이상 실행되지 않습니다. 새 스캔을 안전하게 시작할 수 있습니다."
+
+msgid "files"
+msgstr "파일"
+
+msgid "Permissions changed"
+msgstr "권한 변경됨"
+
+msgid "Files with changed permissions"
+msgstr "권한이 변경된 파일"
+
+msgid "Alert history"
+msgstr "알림 기록"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "무언가를 발견한 모든 스캔은, 드리프트가 해결되거나 새 기준선이 설정된 후에도 유지됩니다. 위의 보고서와 달리, 정상 스캔이나 재기준선 설정은 이 기록을 지우지 않습니다."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "이 항목은 캡처 시점에 잘렸습니다. 전체 목록은 CEF 로그를 참조하세요."
+
+msgid "No alert has been recorded yet."
+msgstr "아직 기록된 알림이 없습니다."
+
+msgid "Git remote changed"
+msgstr "Git 원격 저장소 변경됨"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "변경 사항이 너무 많아 전체 목록을 표시할 수 없습니다. 각 범주의 첫 항목만 아래에 표시됩니다. 전체 목록은 %link_start%CEF 로그%link_end%를 참조하세요."
+

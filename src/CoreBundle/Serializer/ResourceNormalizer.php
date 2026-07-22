@@ -30,7 +30,7 @@ final class ResourceNormalizer implements NormalizerInterface, NormalizerAwareIn
     ) {}
 
     public function normalize(
-        $object,
+        $data,
         ?string $format = null,
         array $context = []
     ): array|ArrayObject|bool|float|int|string|null {
@@ -43,26 +43,26 @@ final class ResourceNormalizer implements NormalizerInterface, NormalizerAwareIn
         $groupId = 0;
 
         if ($request) {
-            $getFile = $request->get('getFile');
-            $courseId = (int) $request->get('cid');
+            $getFile = $request->query->get('getFile');
+            $courseId = (int) $request->query->get('cid');
             if (empty($courseId)) {
                 // Try with cid from session
                 $courseId = (int) $request->getSession()->get('cid');
             }
 
-            $sessionId = (int) $request->get('sid');
+            $sessionId = (int) $request->query->get('sid');
             if (empty($sessionId)) {
                 $sessionId = (int) $request->getSession()->get('sid');
             }
 
-            $groupId = (int) $request->get('gid');
+            $groupId = (int) $request->query->get('gid');
             if (empty($groupId)) {
                 $groupId = (int) $request->getSession()->get('gid');
             }
         }
 
-        if ($object->hasResourceNode()) {
-            $resourceNode = $object->getResourceNode();
+        if ($data->hasResourceNode()) {
+            $resourceNode = $data->getResourceNode();
 
             if ($resourceNode->hasResourceFile()) {
                 $params = [
@@ -83,16 +83,16 @@ final class ResourceNormalizer implements NormalizerInterface, NormalizerAwareIn
 
             // if ($getFile) {
             // Get all links from resource.
-            if ($object instanceof AbstractResource) {
-                $object->setResourceLinkListFromEntity();
-                $object->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
-                $object->downloadUrl = $this->generator->generate('chamilo_core_resource_download', $params);
+            if ($data instanceof AbstractResource) {
+                $data->setResourceLinkListFromEntity();
+                $data->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
+                $data->downloadUrl = $this->generator->generate('chamilo_core_resource_download', $params);
             }
             // }
 
             // Get illustration of a resource, instead of looking for the node children to get the illustration.
-            if ($object instanceof ResourceIllustrationInterface) {
-                $object->illustrationUrl = $this->illustrationRepository->getIllustrationUrl($object);
+            if ($data instanceof ResourceIllustrationInterface) {
+                $data->illustrationUrl = $this->illustrationRepository->getIllustrationUrl($data);
             }
 
             // This gets the file contents, usually use to get HTML/Text data to be edited.
@@ -100,13 +100,13 @@ final class ResourceNormalizer implements NormalizerInterface, NormalizerAwareIn
                 && $resourceNode->hasResourceFile()
                 && $resourceNode->hasEditableTextContent()
             ) {
-                $object->contentFile = $this->resourceNodeRepository->getResourceNodeFileContent(
+                $data->contentFile = $this->resourceNodeRepository->getResourceNodeFileContent(
                     $resourceNode
                 );
             }
         }
 
-        return $this->normalizer->normalize($object, $format, $context);
+        return $this->normalizer->normalize($data, $format, $context);
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

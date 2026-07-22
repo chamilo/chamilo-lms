@@ -1441,7 +1441,7 @@ function btnChangeVisibilityOnClick(item) {
   const folderParams = route.query
   folderParams.id = item["@id"]
 
-  baseService.put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {}).then((data) => {
+  baseService.patch(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {}).then((data) => {
     item.resourceLinkListFromEntity = data.resourceLinkListFromEntity
   })
 }

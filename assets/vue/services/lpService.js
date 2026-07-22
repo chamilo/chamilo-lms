@@ -140,14 +140,14 @@ const getActionToken = async (params = {}) => {
 
 /** Toggles LP visibility in the current course/session/group context. */
 const toggleVisibility = async (lpId, params, payload) => {
-  return await baseService.put(`/api/learning_paths/${lpId}/toggle-visibility`, payload, {
+  return await baseService.patch(`/api/learning_paths/${lpId}/toggle-visibility`, payload, {
     params: cleanParams(params),
   })
 }
 
 /** Toggles LP category visibility in the current course/session/group context. */
 const toggleCategoryVisibility = async (categoryId, params, payload) => {
-  return await baseService.put(`/api/learning_path_categories/${categoryId}/toggle-visibility`, payload, {
+  return await baseService.patch(`/api/learning_path_categories/${categoryId}/toggle-visibility`, payload, {
     params: cleanParams(params),
   })
 }
@@ -262,12 +262,12 @@ const updateBuilderPrerequisites = async (lpId, params, payload) =>
   })
 
 const updateBuilderItemPrerequisite = async (lpId, itemId, params, payload) =>
-  await baseService.put(`/api/learning_path_builder_items/${itemId}/prerequisite`, { ...payload, lpId }, {
+  await baseService.patch(`/api/learning_path_builder_items/${itemId}/prerequisite`, { ...payload, lpId }, {
     params: cleanParams(params),
   })
 
 const updateBuilderItemAudio = async (lpId, itemId, params, payload) =>
-  await baseService.put(`/api/learning_path_builder_items/${itemId}/audio`, { ...payload, lpId }, {
+  await baseService.patch(`/api/learning_path_builder_items/${itemId}/audio`, { ...payload, lpId }, {
     params: cleanParams(params),
   })
 
@@ -291,7 +291,7 @@ const createCategory = async (params, payload) =>
   await baseService.post("/api/learning_path_categories/manage", payload, {}, { params: cleanParams(params) })
 
 const updateCategory = async (categoryId, params, payload) =>
-  await baseService.put(`/api/learning_path_categories/${categoryId}/manage`, payload, {
+  await baseService.patch(`/api/learning_path_categories/${categoryId}/manage`, payload, {
     params: cleanParams(params),
   })
 
@@ -312,7 +312,7 @@ const getCategorySubscriptions = async (categoryId, params) =>
   await baseService.get(`/api/learning_path_categories/${categoryId}/subscriptions`, cleanParams(params))
 
 const saveCategorySubscriptions = async (categoryId, params, payload) =>
-  await baseService.put(`/api/learning_path_categories/${categoryId}/subscriptions`, payload, {
+  await baseService.patch(`/api/learning_path_categories/${categoryId}/subscriptions`, payload, {
     params: cleanParams(params),
   })
 

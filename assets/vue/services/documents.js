@@ -379,7 +379,7 @@ export default {
    * @returns {Promise<Object>}
    */
   async moveDocument(iid, parentResourceNodeId, params = {}) {
-    return baseService.put(`/api/documents/${iid}/move`, { parentResourceNodeId }, { params })
+    return baseService.patch(`/api/documents/${iid}/move`, { parentResourceNodeId }, { params })
   },
 
   /**

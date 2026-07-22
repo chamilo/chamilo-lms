@@ -20,13 +20,13 @@
             {{ t("Layout template name") }}
           </label>
           <BaseInputText
-            v-model.trim="templateName"
+            v-model.trim="templateTitle"
             :placeholder="t('e.g. 3 columns layout')"
-            :error="submitted && !templateName"
+            :error="submitted && !templateTitle"
             label=""
           />
           <small
-            v-if="submitted && !templateName"
+            v-if="submitted && !templateTitle"
             class="text-red-500"
           >
             {{ t("Template name is required") }}
@@ -88,7 +88,7 @@ const route = useRoute()
 const id = route.params.id
 
 const submitted = ref(false)
-const templateName = ref("")
+const templateTitle = ref("")
 const selectedTemplateId = ref(null)
 
 const layoutJson = ref({
@@ -148,7 +148,7 @@ watch(selectedTemplateId, (newVal) => {
   }
 
   layoutJson.value = JSON.parse(JSON.stringify(templatesData[newVal]))
-  templateName.value = layoutJson.value.page.title
+  templateTitle.value = layoutJson.value.page.title
 })
 
 onMounted(async () => {
@@ -158,8 +158,7 @@ onMounted(async () => {
     if (tpl.layout) {
       const layoutObj = JSON.parse(tpl.layout)
 
-      templateName.value =
-        layoutObj?.page?.title || `Template #${tpl.id}`
+      templateTitle.value = tpl.title || layoutObj?.page?.title || `Template #${tpl.id}`
 
       layoutJson.value = layoutObj
     }
@@ -171,12 +170,12 @@ onMounted(async () => {
 async function saveTemplate() {
   submitted.value = true
 
-  if (!templateName.value) return
+  if (!templateTitle.value) return
 
-  // Save the name into the JSON!
-  layoutJson.value.page.title = templateName.value
+  layoutJson.value.page.title = templateTitle.value
 
   const payload = {
+    title: templateTitle.value,
     layout: JSON.stringify(layoutJson.value, null, 2),
   }
 

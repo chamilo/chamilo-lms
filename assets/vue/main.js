@@ -241,6 +241,7 @@ function applyPrimeLocale() {
     reject: t("No"),
     emptyMessage: t("No available options"),
     emptyFilterMessage: t("No available options"),
+    emptySearchMessage: t("No results found"),
   }
 }
 applyPrimeLocale()

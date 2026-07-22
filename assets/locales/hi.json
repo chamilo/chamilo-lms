@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "\u092a\u0943\u0937\u094d\u0920 {0} \u0915\u093e {1}",
     "Showing {0} posts": "{0} \u092a\u094b\u0938\u094d\u091f \u0926\u093f\u0916\u093e \u0930\u0939\u0947 \u0939\u0948\u0902",
     "Showing {0} tasks": "{0} \u0915\u093e\u0930\u094d\u092f \u0926\u093f\u0916\u093e \u0930\u0939\u0947 \u0939\u0948\u0902",
-    "contains {0} items": "{0} \u0906\u0907\u091f\u092e\u094d\u0938 \u0938\u092e\u093e\u0939\u093f\u0924 \u0915\u0930\u0924\u093e \u0939\u0948"
+    "contains {0} items": "{0} \u0906\u0907\u091f\u092e\u094d\u0938 \u0938\u092e\u093e\u0939\u093f\u0924 \u0915\u0930\u0924\u093e \u0939\u0948",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

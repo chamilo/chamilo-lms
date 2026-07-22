@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Pagina {0} din {1}",
     "Showing {0} posts": "Afi\u0219ate {0} post\u0103ri",
     "Showing {0} tasks": "Afi\u0219ate {0} sarcini",
-    "contains {0} items": "con\u021bine {0} elemente"
+    "contains {0} items": "con\u021bine {0} elemente",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

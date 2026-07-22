@@ -37308,6 +37308,9 @@ msgstr ""
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr ""
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr ""
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr ""
 
@@ -37392,6 +37395,15 @@ msgstr ""
 msgid "Git remote changed"
 msgstr ""
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+
+msgid "Press enter to select"
 msgstr ""
 
+msgid "Press enter to remove"
+msgstr ""
+
+msgid "No elements found. Consider changing the search query."
+msgstr ""
+
+msgid "List is empty."
+msgstr ""

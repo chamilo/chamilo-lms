@@ -3317,6 +3317,7 @@ class SessionManager
                     s.nbr_courses,
                     s.access_start_date,
                     s.access_end_date,
+                    s.duration,
                     u.firstname,
                     u.lastname,
                     sc.name as category_name,

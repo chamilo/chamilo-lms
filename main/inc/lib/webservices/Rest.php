@@ -1752,6 +1752,7 @@ class Rest extends WebService
                 'name' => $session['name'],
                 'access_start_date' => $session['access_start_date'],
                 'access_end_date' => $session['access_end_date'],
+                'duration' => $session['duration'],
             ];
             if ($getExtraFields) {
                 $extraFieldValues = new ExtraFieldValue('session');

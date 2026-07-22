@@ -199,7 +199,7 @@ class NotificationEvent extends Model
                                 $read = $this->isRead($id, $extraFieldData);
                             }
 
-                            $eventText = $justificationPlugin->get_lang('Justification').': '.$fieldData['name'].' <br />';
+                            $eventText = $justificationPlugin->get_lang('Justification').': '.$fieldData['title'].' <br />';
                             $eventText .= $justificationPlugin->get_lang('Justification expiration').': '.$userJustification['date_validity'];
 
                             $url = $event['link'];

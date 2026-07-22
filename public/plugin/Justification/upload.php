@@ -68,7 +68,7 @@ if (empty($documents)) {
     foreach ($documents as $document) {
         $documentId = (int) $document['id'];
         $existing = $existingByDocument[$documentId] ?? null;
-        $documentName = Security::remove_XSS((string) $document['name']);
+        $documentName = Security::remove_XSS((string) $document['title']);
         $documentCode = Security::remove_XSS((string) $document['code']);
         $documentComment = Security::remove_XSS((string) $document['comment']);
         $hasManualDate = !empty($document['date_manual_on']);

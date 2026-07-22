@@ -11,9 +11,23 @@
   @apply box-border;
 }
 
+.tiny-content ul {
+  @apply list-disc pl-6;
+}
+
+.tiny-content ol {
+  @apply list-decimal pl-6;
+}
+
 // Specific styles for TinyMCE content
 .tiny-content img {
   @apply block mx-auto;
+}
+
+.tiny-content table,
+.tiny-content td,
+.tiny-content th {
+  border: 1px solid #ccc;
 }
 
 .tiny-content table {

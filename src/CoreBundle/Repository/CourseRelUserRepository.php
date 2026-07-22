@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -18,6 +19,42 @@ class CourseRelUserRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CourseRelUser::class);
+    }
+
+    /**
+     * Returns courses managed by the user as a teacher in the given access URL.
+     *
+     * @return list<array{
+     *     id: int,
+     *     title: string,
+     *     code: string,
+     *     visualCode: string|null,
+     *     visibility: int
+     * }>
+     */
+    public function findTeacherCoursesForUserAndAccessUrl(User $user, AccessUrl $accessUrl): array
+    {
+        /** @var list<array{id: int, title: string, code: string, visualCode: string|null, visibility: int}> $courses */
+        $courses = $this->createQueryBuilder('cru')
+            ->select(
+                'DISTINCT course.id AS id, course.title AS title, course.code AS code, '
+                .'course.visualCode AS visualCode, course.visibility AS visibility'
+            )
+            ->innerJoin('cru.course', 'course')
+            ->innerJoin('course.urls', 'urlRelation')
+            ->andWhere('cru.user = :user')
+            ->andWhere('cru.status = :teacherStatus')
+            ->andWhere('urlRelation.url = :accessUrl')
+            ->setParameter('user', $user)
+            ->setParameter('teacherStatus', CourseRelUser::TEACHER)
+            ->setParameter('accessUrl', $accessUrl)
+            ->orderBy('course.title', 'ASC')
+            ->addOrderBy('course.id', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return $courses;
     }
 
     /**

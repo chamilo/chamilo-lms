@@ -38,10 +38,12 @@ $form->addButtonSave(get_lang('Accept'));
 
 if ($form->validate()) {
     $formValues = $form->exportValues();
-    if (sha1($formValues['course_password']) === $courseInfo['registration_code']) {
+    if (CourseManager::verifyRegistrationCode(
+        (string) $formValues['course_password'],
+        $courseInfo['registration_code']
+    )) {
         Session::write('course_password_'.$courseInfo['real_id'], true);
-        header('Location: '.api_get_course_url($courseInfo['real_id'], $sessionId).
-        '&action=subscribe&sec_token='.Security::get_existing_token());
+        header('Location: '.api_get_course_url($courseInfo['real_id'], $sessionId, 0));
         exit;
     } else {
         Display::addFlash(

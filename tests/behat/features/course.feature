@@ -233,19 +233,20 @@ Feature: Course tools basic testing
     Then I should not see an error
 
   Scenario: Enter to public password-protected course
-    Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
-    And I click the "button.p-button-icon-only" element
-    And I wait for the page to be loaded
-    Then I follow "Course settings"
-    And I wait for the page to be loaded
-    And I click the "a.collapse_course_access" element
-    And I wait for the page to be loaded
-    And I fill in the following:
-      | course_registration_password | abc |
-    And I press "submit"
-    Then I wait for the page to be loaded
-    Then I should not see an error
+    Given I have a public password-protected course named "PASSWORDPROTECTED" with password "123456"
+    And I am not logged
+    And I am a student
+    And I am on the modern homepage of course "PASSWORDPROTECTED"
+    Then I should see "This course requires a password"
+    When I fill in "course_password" with "wrong-password"
+    And I press "Accept"
+    Then I should see "The course password is incorrect"
+    When I fill in "course_password" with "123456"
+    And I press "Accept"
+    And I wait for the page to be loaded when ready
+    Then I should be on the modern homepage of course "PASSWORDPROTECTED"
+    And I should see "Password Protected"
+    And I should not see "The course password is incorrect"
 
   Scenario: Create a private course before testing
     Given I am on "/main/admin/course_add.php"

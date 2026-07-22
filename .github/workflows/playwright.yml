@@ -98,7 +98,14 @@ jobs:
             -   name: Check apache is up
                 run: |
                     sudo chmod 777 -R ${{ github.workspace }}
-                    curl http://localhost/main/install/index.php
+                    echo "--- apache2ctl -S (configured vhosts) ---"
+                    sudo apache2ctl -S
+                    echo "--- active 000-default.conf content ---"
+                    cat /etc/apache2/sites-enabled/000-default.conf
+                    echo "--- does the install file actually exist here? ---"
+                    ls -la "${{ github.workspace }}/public/main/install/index.php"
+                    echo "--- curl -v ---"
+                    curl -v http://localhost/main/install/index.php
 
             -   name: Install chamilo
                 env:

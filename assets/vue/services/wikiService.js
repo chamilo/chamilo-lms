@@ -90,7 +90,7 @@ export default {
   },
 
   async updatePage(pageId, params = {}, payload = {}) {
-    return await baseService.put(
+    return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}`, params),
       payload,
     );

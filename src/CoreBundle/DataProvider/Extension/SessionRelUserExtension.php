@@ -15,9 +15,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-
-final class SessionRelUserExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
+final class SessionRelUserExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security,

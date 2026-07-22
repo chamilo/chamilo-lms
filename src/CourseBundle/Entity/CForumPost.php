@@ -14,8 +14,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -97,7 +97,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             read: true,
             name: 'create_forum_reply',
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_posts/{iid}/update',
             security: "is_granted('VIEW', object.resourceNode)",
             deserialize: false,
@@ -105,7 +105,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: ForumPostActionProvider::class,
             processor: ForumPostProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_posts/{iid}/toggle-visibility',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
@@ -113,7 +113,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: ForumPostActionProvider::class,
             processor: ForumPostProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_posts/{iid}/approve',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
@@ -121,7 +121,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: ForumPostActionProvider::class,
             processor: ForumPostProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_posts/{iid}/reject',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
@@ -129,7 +129,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: ForumPostActionProvider::class,
             processor: ForumPostProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_posts/{iid}/move',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
@@ -137,7 +137,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: ForumPostActionProvider::class,
             processor: ForumPostProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_posts/{iid}/ask-revision',
             security: "is_granted('VIEW', object.resourceNode)",
             deserialize: false,
@@ -145,7 +145,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: ForumPostActionProvider::class,
             processor: ForumPostProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_posts/{iid}/report',
             security: "is_granted('VIEW', object.resourceNode)",
             deserialize: false,

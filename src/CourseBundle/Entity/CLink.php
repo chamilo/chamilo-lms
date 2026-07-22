@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -52,13 +53,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/links/{iid}/toggle_visibility',
             controller: UpdateVisibilityLink::class,
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/links/{iid}/move',
             controller: UpdatePositionLink::class,
             security: "is_granted('EDIT', object.resourceNode)",

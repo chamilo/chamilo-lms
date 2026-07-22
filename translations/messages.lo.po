@@ -3597,11 +3597,11 @@ msgstr "ກວດພົບຮູບພາບທີ່ຂາດຫາຍ"
 msgid "Publish"
 msgstr "ເຜີຍແຜ່"
 
-msgid "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
-msgstr "ນີ້ແມ່ນລາຍວິຊາ SCORM. ເພື່ອຫຼິ້ນມັນ, ຄລິກທີ່ນີ້ : <input type=button name=scormbutton value='ເປີດ ມັນ !' ='openscorm()'>"
+msgid "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
+msgstr "ນີ້ແມ່ນລາຍວິຊາ SCORM. ເພື່ອຫຼິ້ນມັນ, ຄລິກທີ່ນີ້ : <input type=button name=scormbutton value='ເປີດ ມັນ !' ='openscorm()'>"
 
-msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
-msgstr "ນີ້ແມ່ນເນື້ອຫາ SCORM<br><input type=button name=scormbutton value='ເປີດ ມັນ !' ='openscorm()'>"
+msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
+msgstr "ນີ້ແມ່ນເນື້ອຫາ SCORM<br><input type=button name=scormbutton value='ເປີດ ມັນ !' ='openscorm()'>"
 
 msgid "The zip file can not contain .PHP files"
 msgstr "ໄຟລ໌ zip ບໍ່ສາມາດມີໄຟລ໌ .PHP ໄດ້"
@@ -4149,7 +4149,7 @@ msgstr "ບໍ່ອະນຸຍາດໃຫ້ນັກຮຽນດາວໂຫ
 msgid "Login list"
 msgstr "ລາຍການເຂົ້າໃຊ້"
 
-msgid "Status of MySQL server :"
+msgid "Status of MySQL server :"
 msgstr "ສະຖານະຂອງເຊີບເວີ MySQL:"
 
 msgid "Database"
@@ -5280,8 +5280,8 @@ msgstr "ສະແດງຈຳນວນລາຍວິຊາໃນແຕ່ລະ
 msgid "Start using the Ephorus anti plagiarism service in Chamilo.<br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
 msgstr "ເລີ່ມໃຊ້ບໍລິການປ້ອງກັນການລັກລອກຜົນງານ Ephorus ໃນ Chamilo.<br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>ດ້ວຍ Ephorus, ທ່ານຈະປ້ອງກັນການລັກລອກຜົນງານທາງອິນເຕີເນັດໂດຍບໍ່ຕ້ອງພະຍາຍາມເພີ່ມເຕີມ.</strong><br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t ທ່ານສາມາດໃຊ້ບໍລິການເວັບມາດຕະຖານເປີດທີ່ເປັນເອກະລັກຂອງພວກເຮົາເພື່ອສ້າງການເຊື່ອມໂຍງຂອງທ່ານເອງ ຫຼື ທ່ານສາມາດໃຊ້ໂມດູນການເຊື່ອມໂຍງ Chamilo ຂອງພວກເຮົາອັນໃດອັນໜຶ່ງ."
 
-msgid "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
-msgstr "<strong>ຜູ້ນຳໃນ <br />ການປ້ອງກັນການລັກລອກຜົນງານ </strong>\t\t\t\t"
+msgid "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
+msgstr "<strong>ຜູ້ນຳໃນ <br />ການປ້ອງກັນການລັກລອກຜົນງານ </strong>\t\t\t\t"
 
 msgid "Click here for more information and prices\t\t\t"
 msgstr "ຄລິກທີ່ນີ້ສຳລັບຂໍ້ມູນເພີ່ມເຕີມ ແລະ ລາຄາ\t\t\t"
@@ -6885,7 +6885,7 @@ msgstr "ຜູ້ຮຽນທີ່ບໍ່ໄດ້ຢູ່ໃນກຸ່ມ
 msgid "A user can be member of maximum"
 msgstr "ຜູ້ໃຊ້ຄົນໜຶ່ງສາມາດເປັນສະມາຊິກໄດ້ສູງສຸດ"
 
-msgid " groups"
+msgid " groups"
 msgstr " ກຸ່ມ"
 
 msgid "Limit"
@@ -7401,8 +7401,8 @@ msgstr "ກະລຸນາອັບໂຫຼດສະເພາະເອກະສ
 msgid "Show audio recorder"
 msgstr "ສະແດງເຄື່ອງບັນທຶກສຽງ"
 
-msgid "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
-msgstr "ເພື່ອຄົ້ນຫາຖານຂໍ້ມູນລາຍວິຊາ, ກະລຸນາໃຊ້ cú pháp ຕໍ່ໄປນີ້:<br/>        <i>ຄຳ tag:ຊື່_tag -ບໍ່ລວມ +ລວມ \"ວະລີທີ່ແນ່ນອນ\"</i><br/>     ຕົວຢ່າງ:<br/>        <i>ລົດ tag:ລົດບັນທຸກ -ferrari +ford \"ການບໍລິໂພກສູງ\".</i><br/>     ນີ້ຈະສະແດງຜົນການຄົ້ນຫາທັງໝົດສຳລັບຄຳວ່າ 'ລົດ' ທີ່ຕິດແທັກວ່າ 'ລົດບັນທຸກ', ບໍ່ລວມຄຳວ່າ 'ferrari' ແຕ່ລວມຄຳວ່າ 'ford' ແລະ ວະລີທີ່ແນ່ນອນ 'ການບໍລິໂພກສູງ'."
+msgid "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
+msgstr "ເພື່ອຄົ້ນຫາຖານຂໍ້ມູນລາຍວິຊາ, ກະລຸນາໃຊ້ cú pháp ຕໍ່ໄປນີ້:<br/>        <i>ຄຳ tag:ຊື່_tag -ບໍ່ລວມ +ລວມ \"ວະລີທີ່ແນ່ນອນ\"</i><br/>     ຕົວຢ່າງ:<br/>        <i>ລົດ tag:ລົດບັນທຸກ -ferrari +ford \"ການບໍລິໂພກສູງ\".</i><br/>     ນີ້ຈະສະແດງຜົນການຄົ້ນຫາທັງໝົດສຳລັບຄຳວ່າ 'ລົດ' ທີ່ຕິດແທັກວ່າ 'ລົດບັນທຸກ', ບໍ່ລວມຄຳວ່າ 'ferrari' ແຕ່ລວມຄຳວ່າ 'ford' ແລະ ວະລີທີ່ແນ່ນອນ 'ການບໍລິໂພກສູງ'."
 
 msgid "View course"
 msgstr "ເບິ່ງລາຍວິຊາ"
@@ -7692,8 +7692,8 @@ msgstr "-ອົງປະກອບ"
 msgid "Please type your text below"
 msgstr "ກະລຸນາພິມຂໍ້ຄວາມຂອງທ່ານດ້ານລຸ່ມ"
 
-msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ຕົວຢ່າງກິດຈະກຳຕົວໃຫມ່ແບບຟອມ: ຄຳນວນດັດສານມະຫາພາກຂອງຮ່າງກາຍ</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ອາຍຸ</strong></td>            <td width=\"75%\" style=\"\">[25] ປີ</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ເພດ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ຫຼື F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ນ້ຳໜັກ</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ສູງ</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ດັດສານມະຫາພາກຂອງຮ່າງກາຍ</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =ນ້ຳໜັກ/ສູງ<sup>2</sup> (ເບິ່ງ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ບົດຄວາມ Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ຕົວຢ່າງກິດຈະກຳຕົວໃຫມ່ແບບຟອມ: ຄຳນວນດັດສານມະຫາພາກຂອງຮ່າງກາຍ</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ອາຍຸ</strong></td>            <td width=\"75%\" style=\"\">[25] ປີ</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ເພດ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ຫຼື F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ນ້ຳໜັກ</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ສູງ</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ດັດສານມະຫາພາກຂອງຮ່າງກາຍ</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =ນ້ຳໜັກ/ສູງ<sup>2</sup> (ເບິ່ງ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ບົດຄວາມ Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "ຈົດທີ່ຢູ່ໄວ້"
@@ -10864,7 +10864,7 @@ msgstr "ຖືກຮັກສາໄວ້"
 msgid "Confirm user unsubscription"
 msgstr "ຢືນຢັນການຍົກເລີກການສະໝັກຂອງຜູ້ໃຊ້"
 
-msgid "Go to"
+msgid "Go to"
 msgstr "ໄປທີ່"
 
 msgid "My latest visits"
@@ -10900,7 +10900,7 @@ msgstr "ຈຳນວນ"
 msgid "Upload the list"
 msgstr "ອັບໂຫຼດລາຍການ"
 
-msgid "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
+msgid "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
 msgstr "ທຸກໆແຖວຂອງໄຟລ໌ທີ່ຈະສົ່ງຕ້ອງປະກອບມີ 5 ຟິວເທົ່ານັ້ນ: <b>ຊື່ ນາມສະກຸນ ຊື່ຜູ້ໃຊ້ ລະຫັດຜ່ານ ອີເມວ</b> ໂດຍແຍກກັນດ້ວຍແຖບ (tab) ແລະ ຕາມລຳດັບນີ້. ຜູ້ໃຊ້ຈະໄດ້ຮັບອີເມວຢືນຢັນພ້ອມຊື່ຜູ້ໃຊ້/ລະຫັດຜ່ານຂອງພວກເຂົາ."
 
 msgid "Import a users list"
@@ -25611,8 +25611,8 @@ msgstr "ຟິວທີ່ກຳນົດໃນອາເຣນີ້ຈະປາ
 msgid "Prefill course fields with fields from user"
 msgstr "ຕື່ມຂໍ້ມູນໃນຟິວລາຍການຮຽນອັດຕະໂນມັດດ້ວຍຟິວຈາກຜູ້ໃຊ້"
 
-msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
-msgstr "ຖ້າບໍ່ຫວ່າງ, ຂະບວນການສ້າງລາຍການຮຽນຈະຊອກຫາບາງຟິວໃນໂປຣໄຟລ໌ຜູ້ໃຊ້ ແລະ ຕື່ມຂໍ້ມູນອັດຕະໂນມັດໃຫ້ກັບລາຍການຮຽນ. ຕົວຢ່າງ, ອາຈານທີ່ຊ່ຽວຊານດ້ານການຕະຫຼາດດິຈິຕອລສາມາດຕັ້ງຄ່າ « ການຕະຫຼາດດິຈິຕອລ » ໂດຍອັດຕະໂນມັດໃນທຸກລາຍການຮຽນທີ່ລາວສ້າງ."
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "ຖ້າບໍ່ປະວ່າງໄວ້, ຂະບວນການສ້າງວິຊາຮຽນຈະກວດເບິ່ງບາງຟິວຂໍ້ມູນໃນໂປຣໄຟລ໌ຜູ້ໃຊ້ ແລະ ຕື່ມຂໍ້ມູນໃສ່ວິຊາຮຽນໃຫ້ໂດຍອັດຕະໂນມັດ. ຕົວຢ່າງ: ຄູສອນທີ່ມີຄວາມຊ່ຽວຊານດ້ານການຕະຫຼາດດິຈິຕອນ ສາມາດກຳນົດເຄື່ອງໝາຍ « ການຕະຫຼາດດິຈິຕອນ » ໃຫ້ກັບແຕ່ລະວິຊາທີ່ລາວສ້າງຂຶ້ນໄດ້ໂດຍອັດຕະໂນມັດ."
 
 msgid "Allow tool visibility edition in sessions"
 msgstr "ອະນຸຍາດໃຫ້ແກ້ໄຂການເບິ່ງເຫັນເຄື່ອງມືໃນເຊສຊັນ"
@@ -35839,6 +35839,18 @@ msgid ""
 "%s\n"
 "%s"
 msgstr ""
+"ຮຽນ %s,\n"
+"\n"
+"ຂະບວນການຮັກສາຄວາມປອດໄພຂອງພວກເຮົາກວດພົບວ່າ ທ່ານກຳລັງນຳໃຊ້ລະຫັດຜ່ານທີ່ຖືກໃຊ້ທົ່ວໄປໃນອິນເຕີເນັດ, ເຊິ່ງໝາຍຄວາມວ່າບັນຊີຂອງທ່ານອາດຖືກລັກໄປໄດ້ງ່າຍ. ເພື່ອເປັນມາດຕະການປ້ອງກັນ, ພວກເຮົາຈຶ່ງໄດ້ຕັດສິນໃຈເລີ່ມຂັ້ນຕອນການຕັ້ງລະຫັດຜ່ານໃໝ່. ລະຫັດຜ່ານໃໝ່ຂອງທ່ານທີ່ຖືກສ້າງຂຶ້ນແບບອັດຕະໂນມັດແມ່ນ:\n"
+"\n"
+"%s\n"
+"\n"
+"ກະລຸນາເຂົ້າສູ່ລະບົບ (ໂດຍໃຊ້ລະຫັດຜ່ານໃໝ່ນີ້) ໃນໄວໆນີ້ ເພື່ອຕັ້ງລະຫັດຜ່ານສ່ວນຕົວທີ່ມີຄວາມປອດໄພຂອງທ່ານເອງ.\n"
+"\n"
+"ດ້ວຍຄວາມປອດໄພ.\n"
+"\n"
+"%s\n"
+"%s"
 
 msgid "Signature saved successfully"
 msgstr "ບັນທຶກລາຍເຊັນສຳເລັດແລ້ວ"
@@ -36657,454 +36669,454 @@ msgid "You must add at least one question"
 msgstr "ທ່ານຕ້ອງເພີ່ມຢ່າງໜ້ອຍໜຶ່ງຄຳຖາມ"
 
 msgid "Advanced actions"
-msgstr ""
+msgstr "ການດຳເນີນການຂັ້ນສູງ"
 
 msgid "Application path"
-msgstr ""
+msgstr "ເສັ້ນທາງແອັບພລິເຄຊັນ"
 
 msgid "Apply files details"
-msgstr ""
+msgstr "ລາຍລະອຽດການນຳໃຊ້ໄຟລ໌"
 
 msgid "Apply plan details"
-msgstr ""
+msgstr "ລາຍລະອຽດແຜນການນຳໃຊ້"
 
 msgid "Apply plan failed"
-msgstr ""
+msgstr "ການນຳໃຊ້ແຜນການລົ້ມເຫຼວ"
 
 msgid "Apply plan ready"
-msgstr ""
+msgstr "ແຜນການນຳໃຊ້ພ້ອມແລ້ວ"
 
 msgid "Apply preparation"
-msgstr ""
+msgstr "ການກຽມການນຳໃຊ້"
 
 msgid "Apply staged files"
-msgstr ""
+msgstr "ນຳໃຊ້ໄຟລ໌ທີ່ກຽມໄວ້"
 
 msgid "Applying files..."
-msgstr ""
+msgstr "ກຳລັງນຳໃຊ້ໄຟລ໌..."
 
 msgid "Audit file"
-msgstr ""
+msgstr "ໄຟລ໌ກວດສອບ"
 
 msgid "Backup directory"
-msgstr ""
+msgstr "ໂຟນເດີສຳຮອງຂໍ້ມູນ"
 
 msgid "Baseline clean"
-msgstr ""
+msgstr "ຄ່າເລີ່ມຕົ້ນປົກກະຕິ"
 
 msgid "Baseline warnings"
-msgstr ""
+msgstr "ຄຳເຕືອນຄ່າເລີ່ມຕົ້ນ"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr ""
+msgstr "ສ້າງແຜນການນຳໃຊ້ທີ່ປອດໄພຈາກແພັກເກດທີ່ກຽມໄວ້. ສິ່ງນີ້ຈະກວດສອບພຽງແຕ່ໄຟລ໌, ການອະນຸຍາດ, ເສັ້ນທາງສຳຮອງ ແລະ ສະຖານະການລັອກເທົ່ານັ້ນ. ມັນຈະບໍ່ມີການປ່ຽນແທນໄຟລ໌."
 
 msgid "Build production frontend assets."
-msgstr ""
+msgstr "ສ້າງໄຟລ໌ລະບົບສ່ວນໜ້າ (Frontend assets) ສຳລັບການນຳໃຊ້ຈິງ."
 
 msgid "Building plan..."
-msgstr ""
+msgstr "ກຳລັງສ້າງແຜນການ..."
 
 msgid "Channel"
-msgstr ""
+msgstr "ຊ່ອງທາງ"
 
 msgid "Check"
-msgstr ""
+msgstr "ກວດສອບ"
 
 msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
-msgstr ""
+msgstr "ກວດສອບການອັບເດດ Chamilo ທີ່ມີ, ກວດສອບແພັກເກດ, ກຽມໄຟລ໌ ແລະ ດຳເນີນຂັ້ນຕອນຫຼັງການອັບເດດ."
 
 msgid "Check manifest"
-msgstr ""
+msgstr "ກວດສອບ Manifest"
 
 msgid "Checking post-apply actions..."
-msgstr ""
+msgstr "ກຳລັງກວດສອບການດຳເນີນການຫຼັງການນຳໃຊ້..."
 
 msgid "Checking..."
-msgstr ""
+msgstr "ກຳລັງກວດສອບ..."
 
 msgid "Composer install"
-msgstr ""
+msgstr "ຕິດຕັ້ງ Composer"
 
 msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
-msgstr ""
+msgstr "ການດຳເນີນການຂອງ Composer, Yarn ແລະ ການຍ້າຍຖານຂໍ້ມູນ ສາມາດປ່ຽນແປງຂໍ້ມູນພາກສ່ວນກ່ຽວຂ້ອງ, ໄຟລ໌ລະບົບ ຫຼື ຖານຂໍ້ມູນໄດ້. ເລືອກພວກມັນຫຼັງຈາກຢືນຢັນການສຳຮອງຂໍ້ມູນ ແລະ ການອະນຸຍາດແລ້ວເທົ່ານັ້ນ."
 
 msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
-msgstr ""
+msgstr "ຕັ້ງຄ່າ CHAMILO_UPDATE_MANIFEST_URL ເທິງເຊີເວີ ຫຼື ລະບຸ HTTPS manifest URL."
 
 msgid "Configured"
-msgstr ""
+msgstr "ຕັ້ງຄ່າແລ້ວ"
 
 msgid "Current migration"
-msgstr ""
+msgstr "ການຍ້າຍຂໍ້ມູນປະຈຸບັນ"
 
 msgid "Database baseline"
-msgstr ""
+msgstr "ຄ່າເລີ່ມຕົ້ນຖານຂໍ້ມູນ"
 
 msgid "Database migration safety review"
-msgstr ""
+msgstr "ກວດສອບຄວາມປອດໄພຂອງການຍ້າຍຖານຂໍ້ມູນ"
 
 msgid "Database migrations"
-msgstr ""
+msgstr "ການຍ້າຍຖານຂໍ້ມູນ"
 
 msgid "Development mode"
-msgstr ""
+msgstr "ໂໝດນັກພັດທະນາ"
 
 msgid "Do not enable this unless the update backup and server permissions were reviewed."
-msgstr ""
+msgstr "ຫ້າມເປີດໃຊ້ງານສິ່ງນີ້ ຈົນກວ່າຈະໄດ້ກວດສອບການສຳຮອງຂໍ້ມູນອັບເດດ ແລະ ການອະນຸຍາດຂອງເຊີເວີແລ້ວ."
 
 msgid "Doctrine dry-run command"
-msgstr ""
+msgstr "ຄຳສັ່ງ Doctrine dry-run"
 
 msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
-msgstr ""
+msgstr "Doctrine ລາຍງານຄຳເຕືອນກ່ຽວກັບຄ່າເລີ່ມຕົ້ນໃນອະດີດ. ຕົວອັບເດດຈະຍັງຄົງດຳເນີນການສະເພາະການຍ້າຍຂໍ້ມູນ V210 ທີ່ກຽມໄວ້ ຫຼັງຈາກການຢືນຢັນທີ່ຊັດເຈນ."
 
 msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
-msgstr ""
+msgstr "Doctrine ຈະດຳເນີນການສະເພາະການຍ້າຍຂໍ້ມູນ V210 ທີ່ກຽມໄວ້ ຫຼັງຈາກການກວດສອບຄວາມປອດໄພຜ່ານແລ້ວ."
 
 msgid "Dry-run exit code"
-msgstr ""
+msgstr "ລະຫັດອອກຂອງການທົດລອງລັນ (Dry-run exit code)"
 
 msgid "Executed unavailable migrations"
-msgstr ""
+msgstr "ດຳເນີນການຍ້າຍຂໍ້ມູນທີ່ບໍ່ພ້ອມໃຊ້ງານ"
 
 msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
-msgstr ""
+msgstr "ແຕກໄຟລ໌ແພັກເກດອັບເດດທີ່ກວດສອບແລ້ວ ໄປໄວ້ໃນໂຟນເດີພັກຂໍ້ມູນເພື່ອທຳການກວດສອບ. ສິ່ງນີ້ຈະບໍ່ປ່ຽນແທນໄຟລ໌, ບໍ່ລັນການຍ້າຍຂໍ້ມູນ ຫຼື ແກ້ໄຂຖານຂໍ້ມູນ."
 
 msgid "File apply available"
-msgstr ""
+msgstr "ມີໄຟລ໌ທີ່ພ້ອມນຳໃຊ້"
 
 msgid "Files to replace"
-msgstr ""
+msgstr "ໄຟລ໌ທີ່ຈະປ່ຽນແທນ"
 
 msgid "I confirm that a database backup exists and was verified before running migrations."
-msgstr ""
+msgstr "ຂ້ອຍຢືນຢັນວ່າໄດ້ສຳຮອງຖານຂໍ້ມູນ ແລະ ກວດສອບຄວາມຖືກຕ້ອງແລ້ວກ່ອນທີ່ຈະເລີ່ມການຍ້າຍຂໍ້ມູນ."
 
 msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
-msgstr ""
+msgstr "ຂ້ອຍເຂົ້າໃຈວ່າການດຳເນີນການຂັ້ນສູງສາມາດປ່ຽນແປງຂໍ້ມູນພາກສ່ວນກ່ຽວຂ້ອງ, ໄຟລ໌ລະບົບ ຫຼື ຖານຂໍ້ມູນໄດ້."
 
 msgid "I understand this will replace files in the Chamilo installation."
-msgstr ""
+msgstr "ຂ້ອຍເຂົ້າໃຈວ່າສິ່ງນີ້ຈະປ່ຽນແທນໄຟລ໌ໃນການຕິດຕັ້ງ Chamilo."
 
 msgid "I understand this will run update commands on the server."
-msgstr ""
+msgstr "ຂ້ອຍເຂົ້າໃຈວ່າສິ່ງນີ້ຈະລັນຄຳສັ່ງອັບເດດເທິງເຊີເວີ."
 
 msgid "Install frontend dependencies before rebuilding assets."
-msgstr ""
+msgstr "ຕິດຕັ້ງ frontend dependencies ກ່ອນທີ່ຈະສ້າງໄຟລ໌ລະບົບໃໝ່."
 
 msgid "Installed version"
-msgstr ""
+msgstr "ເວີຊັນທີ່ຕິດຕັ້ງແລ້ວ"
 
 msgid "Latest migration"
-msgstr ""
+msgstr "ການຍ້າຍຂໍ້ມູນຫຼ້າສຸດ"
 
 msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
-msgstr ""
+msgstr "ປ່ອຍໃຫ້ເສັ້ນທາງແພັກເກດ ແລະ ລາຍເຊັນວ່າງໄວ້ເພື່ອດາວໂຫລດຈາກ manifest URL ທີ່ກວດສອບແລ້ວ. ເສັ້ນທາງພາຍໃນເຄື່ອງ (Local paths) ໃຊ້ໄດ້ສະເພາະການທົດສອບໃນການພັດທະນາເທົ່ານັ້ນ."
 
 msgid "Live command log"
-msgstr ""
+msgstr "ບັນທຶກຄຳສັ່ງແບບສົດ"
 
 msgid "Live update log"
-msgstr ""
+msgstr "ບັນທຶກການອັບເດດແບບສົດ"
 
 msgid "Local test options"
-msgstr ""
+msgstr "ຕົວເລືອກການທົດສອບພາຍໃນ"
 
 msgid "Local test update notice link"
-msgstr ""
+msgstr "ລິ້ງແຈ້ງເຕືອນການອັບເດດທົດສອບພາຍໃນ"
 
 msgid "Local update notice simulation"
-msgstr ""
+msgstr "ການຈຳລອງການແຈ້ງເຕືອນອັບເດດພາຍໃນ"
 
 msgid "Local update notice simulation is only available in development mode."
-msgstr ""
+msgstr "ການຈຳລອງການແຈ້ງເຕືອນອັບເດດພາຍໃນ ສາມາດໃຊ້ໄດ້ສະເພາະໃນໂໝດນັກພັດທະນາເທົ່ານັ້ນ."
 
 msgid "Manifest"
-msgstr ""
+msgstr "Manifest"
 
 msgid "Manifest source"
-msgstr ""
+msgstr "ແຫຼ່ງທີ່ມາຂອງ Manifest"
 
 msgid "Migration safety details"
-msgstr ""
+msgstr "ລາຍລະອຽດຄວາມປອດໄພຂອງການຍ້າຍຂໍ້ມູນ"
 
 msgid "Migration safety review failed"
-msgstr ""
+msgstr "ການກວດສອບຄວາມປອດໄພຂອງການຍ້າຍຂໍ້ມູນລົ້ມເຫຼວ"
 
 msgid "Migration safety review ready"
-msgstr ""
+msgstr "ການກວດສອບຄວາມປອດໄພຂອງການຍ້າຍຂໍ້ມູນພ້ອມແລ້ວ"
 
 msgid "Migration target"
-msgstr ""
+msgstr "ເປົ້າໝາຍການຍ້າຍຂໍ້ມູນ"
 
 msgid "New files"
-msgstr ""
+msgstr "ໄຟລ໌ໃໝ່"
 
 msgid "New migrations reported by Doctrine"
-msgstr ""
+msgstr "ການຍ້າຍຂໍ້ມູນໃໝ່ທີ່ລາຍງານໂດຍ Doctrine"
 
 msgid "Next migration"
-msgstr ""
+msgstr "ການຍ້າຍຂໍ້ມູນຖັດໄປ"
 
 msgid "No executed unavailable migration was reported."
-msgstr ""
+msgstr "ບໍ່ມີລາຍງານການຍ້າຍຂໍ້ມູນທີ່ບໍ່ພ້ອມໃຊ້ງານທີ່ຖືກດຳເນີນການ."
 
 msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
-msgstr ""
+msgstr "ຍັງບໍ່ທັນໄດ້ຕັ້ງຄ່າ manifest URL ຢ່າງເປັນທາງການ. ໃຫ້ໃຊ້ HTTPS URL ຫຼື ເສັ້ນທາງພາຍໃນເຄື່ອງສຳລັບການທົດສອບພັດທະນາ."
 
 msgid "No pending migration was detected before the staged update target."
-msgstr ""
+msgstr "ບໍ່ພົບການຍ້າຍຂໍ້ມູນທີ່ຄ້າງຢູ່ກ່ອນເປົ້າໝາຍການອັບເດດທີ່ກຽມໄວ້."
 
 msgid "Not configured"
-msgstr ""
+msgstr "ບໍ່ໄດ້ຕັ້ງຄ່າ"
 
 msgid "Not detected"
-msgstr ""
+msgstr "ກວດບໍ່ພົບ"
 
 msgid "Official Chamilo update channel"
-msgstr ""
+msgstr "ຊ່ອງທາງການອັບເດດ Chamilo ຢ່າງເປັນທາງການ"
 
 msgid "Package SHA-256"
-msgstr ""
+msgstr "SHA-256 ຂອງແພັກເກດ"
 
 msgid "Package URL"
-msgstr ""
+msgstr "URL ຂອງແພັກເກດ"
 
 msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
-msgstr ""
+msgstr "ໄຟລ໌ແພັກເກດ ແລະ ລາຍເຊັນຈະຖືກດາວໂຫລດຈາກ manifest. ເສັ້ນທາງພາຍໃນເຄື່ອງຖືກປິດໃຊ້ງານໃນສະພາບແວດລ້ອມນີ້."
 
 msgid "Package path"
-msgstr ""
+msgstr "ເສັ້ນທາງແພັກເກດ"
 
 msgid "Package staged successfully"
-msgstr ""
+msgstr "ກຽມແພັກເກດສຳເລັດແລ້ວ"
 
 msgid "Package staging failed"
-msgstr ""
+msgstr "ການກຽມແພັກເກດລົ້ມເຫຼວ"
 
 msgid "Package verification"
-msgstr ""
+msgstr "ການກວດສອບແພັກເກດ"
 
 msgid "Package verification failed"
-msgstr ""
+msgstr "ການກວດສອບແພັກເກດລົ້ມເຫຼວ"
 
 msgid "Package verified successfully"
-msgstr ""
+msgstr "ກວດສອບແພັກເກດສຳເລັດແລ້ວ"
 
 msgid "Pending migrations before this update"
-msgstr ""
+msgstr "ການຍ້າຍຂໍ້ມູນທີ່ຄ້າງຢູ່ກ່ອນການອັບເດດນີ້"
 
 msgid "Planned backup path"
-msgstr ""
+msgstr "ເສັ້ນທາງສຳຮອງຂໍ້ມູນທີ່ວາງແຜນໄວ້"
 
 msgid "Post-apply actions completed"
-msgstr ""
+msgstr "ການດຳເນີນການຫຼັງການນຳໃຊ້ສຳເລັດແລ້ວ"
 
 msgid "Post-apply actions failed"
-msgstr ""
+msgstr "ການດຳເນີນການຫຼັງການນຳໃຊ້ລົ້ມເຫຼວ"
 
 msgid "Post-apply actions ready"
-msgstr ""
+msgstr "ການດຳເນີນການຫຼັງການນຳໃຊ້ພ້ອມແລ້ວ"
 
 msgid "Post-apply checks"
-msgstr ""
+msgstr "ການກວດສອບຫຼັງການນຳໃຊ້"
 
 msgid "Post-apply checks failed"
-msgstr ""
+msgstr "ການກວດສອບຫຼັງການນຳໃຊ້ລົ້ມເຫຼວ"
 
 msgid "Post-apply details"
-msgstr ""
+msgstr "ລາຍລະອຽດຫຼັງການນຳໃຊ້"
 
 msgid "Post-apply run details"
-msgstr ""
+msgstr "ລາຍລະອຽດການລັນຫຼັງການນຳໃຊ້"
 
 msgid "Preflight checks"
-msgstr ""
+msgstr "ການກວດສອບກ່ອນເລີ່ມ (Preflight)"
 
 msgid "Preflight checks completed"
-msgstr ""
+msgstr "ການກວດສອບກ່ອນເລີ່ມສຳເລັດແລ້ວ"
 
 msgid "Preflight checks failed"
-msgstr ""
+msgstr "ການກວດສອບກ່ອນເລີ່ມລົ້ມເຫຼວ"
 
 msgid "Preflight details"
-msgstr ""
+msgstr "ລາຍລະອຽດການກວດສອບກ່ອນເລີ່ມ"
 
 msgid "Prepare staging"
-msgstr ""
+msgstr "ກຽມພື້ນທີ່ພັກຂໍ້ມູນ"
 
 msgid "Preparing staging..."
-msgstr ""
+msgstr "ກຳລັງກຽມພື້ນທີ່ພັກຂໍ້ມູນ..."
 
 msgid "Production mode"
-msgstr ""
+msgstr "ໂໝດໃຊ້ງານຈິງ"
 
 msgid "Released at"
-msgstr ""
+msgstr "ອອກເມື່ອວັນທີ"
 
 msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
-msgstr ""
+msgstr "ປ່ຽນແທນໄຟລ໌ Chamilo ຈາກແພັກເກດທີ່ກຽມໄວ້ໂດຍໃຊ້ແຜນການທີ່ກວດສອບແລ້ວ. ສິ່ງນີ້ຈະບໍ່ລັນການຍ້າຍຖານຂໍ້ມູນ, Composer, Yarn ຫຼື ຄຳສັ່ງແຄດ."
 
 msgid "Review apply plan"
-msgstr ""
+msgstr "ກວດສອບແຜນການນຳໃຊ້"
 
 msgid "Review database migrations"
-msgstr ""
+msgstr "ກວດສອບການຍ້າຍຖານຂໍ້ມູນ"
 
 msgid "Review post-apply actions"
-msgstr ""
+msgstr "ກວດສອບການດຳເນີນການຫຼັງການນຳໃຊ້"
 
 msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
-msgstr ""
+msgstr "ກວດສອບຄຳສັ່ງທີ່ແນະນຳໃຫ້ເຮັດດ້ວຍຕົນເອງຫຼັງຈາກນຳໃຊ້ໄຟລ໌ອັບເດດ. ຂັ້ນຕອນນີ້ຈະບໍ່ລັນ Composer, Yarn, ການຍ້າຍຂໍ້ມູນ ຫຼື ຄຳສັ່ງແຄດ."
 
 msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
-msgstr ""
+msgstr "ກວດສອບການຍ້າຍຂໍ້ມູນ Doctrine ທີ່ກຽມໄວ້ ແລະ ຜົນການທົດລອງລັນ ກ່ອນທີ່ຈະລັນການຍ້າຍຖານຂໍ້ມູນຈິງ."
 
 msgid "Reviewing database migrations..."
-msgstr ""
+msgstr "ກຳລັງກວດສອບການຍ້າຍຖານຂໍ້ມູນ..."
 
 msgid "Run and pass the migration safety review before executing database migrations."
-msgstr ""
+msgstr "ລັນ ແລະ ຜ່ານການກວດສອບຄວາມປອດໄພຂອງການຍ້າຍຂໍ້ມູນ ກ່ອນທີ່ຈະດຳເນີນການຍ້າຍຖານຂໍ້ມູນ."
 
 msgid "Run environment checks before any future update application step. This does not modify files or the database."
-msgstr ""
+msgstr "ລັນການກວດສອບສະພາບແວດລ້ອມກ່ອນຂັ້ນຕອນການອັບເດດໃນອະນາຄົດ. ສິ່ງນີ້ຈະບໍ່ແກ້ໄຂໄຟລ໌ ຫຼື ຖານຂໍ້ມູນ."
 
 msgid "Run post-apply actions"
-msgstr ""
+msgstr "ລັນການດຳເນີນການຫຼັງການນຳໃຊ້"
 
 msgid "Run preflight checks"
-msgstr ""
+msgstr "ລັນການກວດສອບກ່ອນເລີ່ມ"
 
 msgid "Run selected post-apply actions"
-msgstr ""
+msgstr "ລັນການດຳເນີນການຫຼັງການນຳໃຊ້ທີ່ເລືອກ"
 
 msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
-msgstr ""
+msgstr "ລັນຄຳສັ່ງຫຼັງການນຳໃຊ້ທີ່ເລືອກຈາກເຊີເວີໂດຍໃຊ້ລາຍການທີ່ໄດ້ຮັບອະນຸຍາດ. ບໍ່ອະນຸຍາດຄຳສັ່ງ shell ແບບກຳນົດເອງ."
 
 msgid "Run these commands manually from the server after confirming the file update result and backups."
-msgstr ""
+msgstr "ລັນຄຳສັ່ງເຫຼົ່ານີ້ດ້ວຍຕົນເອງຈາກເຊີເວີ ຫຼັງຈາກຢືນຢັນຜົນການອັບເດດໄຟລ໌ ແລະ ການສຳຮອງຂໍ້ມູນແລ້ວ."
 
 msgid "Running post-apply actions from the UI is disabled in production mode."
-msgstr ""
+msgstr "ການລັນການດຳເນີນການຫຼັງການນຳໃຊ້ຜ່ານ UI ຖືກປິດໃຊ້ງານໃນໂໝດໃຊ້ງານຈິງ."
 
 msgid "Running post-apply actions..."
-msgstr ""
+msgstr "ກຳລັງລັນການດຳເນີນການຫຼັງການນຳໃຊ້..."
 
 msgid "Safe actions"
-msgstr ""
+msgstr "ການດຳເນີນການທີ່ປອດໄພ"
 
 msgid "Signature path"
-msgstr ""
+msgstr "ເສັ້ນທາງລາຍເຊັນ"
 
 msgid "Signature verification cannot be skipped in this environment."
-msgstr ""
+msgstr "ບໍ່ສາມາດຂ້າມການກວດສອບລາຍເຊັນໄດ້ໃນສະພາບແວດລ້ອມນີ້."
 
 msgid "Skip signature verification for local development tests"
-msgstr ""
+msgstr "ຂ້າມການກວດສອບລາຍເຊັນສຳລັບການທົດສອບພັດທະນາພາຍໃນ"
 
 msgid "Staged file application failed"
-msgstr ""
+msgstr "ການນຳໃຊ້ໄຟລ໌ທີ່ກຽມໄວ້ລົ້ມເຫຼວ"
 
 msgid "Staged files applied successfully"
-msgstr ""
+msgstr "ນຳໃຊ້ໄຟລ໌ທີ່ກຽມໄວ້ສຳເລັດແລ້ວ"
 
 msgid "Staging details"
-msgstr ""
+msgstr "ລາຍລະອຽດການກຽມຂໍ້ມູນ"
 
 msgid "Staging directory"
-msgstr ""
+msgstr "ໂຟນເດີພັກຂໍ້ມູນ"
 
 msgid "Staging extraction"
-msgstr ""
+msgstr "ການແຕກໄຟລ໌ໄປຍັງພື້ນທີ່ພັກ"
 
 msgid "Symfony cache clear"
-msgstr ""
+msgstr "ລ້າງແຄດ Symfony"
 
 msgid "System update"
-msgstr ""
+msgstr "ອັບເດດລະບົບ"
 
 msgid "Target version"
-msgstr ""
+msgstr "ເວີຊັນເປົ້າໝາຍ"
 
 msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
-msgstr ""
+msgstr "ລະບົບໄດ້ຕື່ມ manifest URL ຢ່າງເປັນທາງການໄວ້ໃຫ້ແລ້ວ. ທ່ານສາມາດປ່ຽນເປັນ HTTPS manifest ອື່ນໄດ້ຖ້າຕ້ອງການ."
 
 msgid "The database migration baseline is clean."
-msgstr ""
+msgstr "ຄ່າເລີ່ມຕົ້ນຂອງການຍ້າຍຖານຂໍ້ມູນແມ່ນປົກກະຕິ."
 
 msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
-msgstr ""
+msgstr "ການຕອບສະໜອງ HTTP ສຸດທ້າຍລົ້ມເຫຼວຫຼັງຈາກການດຳເນີນການສຳເລັດ. ສິ່ງນີ້ມັກຈະເກີດຈາກການອະນຸຍາດແຄດ ຫຼື ເຊີເວີຣີສະຕາດໃນລະຫວ່າງການຮ້ອງຂໍ."
 
 msgid "The operation log reports that post-apply actions completed successfully."
-msgstr ""
+msgstr "ບັນທຶກການດຳເນີນການລາຍງານວ່າ ການດຳເນີນການຫຼັງການນຳໃຊ້ສຳເລັດແລ້ວ."
 
 msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
-msgstr ""
+msgstr "ຄຳສັ່ງຫຼັງການນຳໃຊ້ທີ່ເລືອກສຳເລັດແລ້ວ, ແຕ່ການຕອບສະໜອງ HTTP ສຸດທ້າຍລົ້ມເຫຼວ. ໃຫ້ຣີເຟຣດໜ້າເວັບ ແລະ ກວດສອບການອະນຸຍາດແຄດ ຖ້າໜ້າເວັບໂຫລດບໍ່ຖືກຕ້ອງ."
 
 msgid "The updater does not create or restore database backups."
-msgstr ""
+msgstr "ຕົວອັບເດດຈະບໍ່ສ້າງ ຫຼື ກູ້ຄືນການສຳຮອງຖານຂໍ້ມູນ."
 
 msgid "These actions are safe to run from the UI after reviewing the update result."
-msgstr ""
+msgstr "ການດຳເນີນການເຫຼົ່ານີ້ປອດໄພທີ່ຈະລັນຈາກ UI ຫຼັງຈາກກວດສອບຜົນການອັບເດດແລ້ວ."
 
 msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
-msgstr ""
+msgstr "ຄຳສັ່ງເຫຼົ່ານີ້ສາມາດປ່ຽນແປງຂໍ້ມູນພາກສ່ວນກ່ຽວຂ້ອງ, ໄຟລ໌ລະບົບ, ແຄດ ຫຼື ຖານຂໍ້ມູນໄດ້. ໃຫ້ຢືນຢັນການສຳຮອງຂໍ້ມູນກ່ອນດຳເນີນການຕໍ່."
 
 msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
-msgstr ""
+msgstr "ການດຳເນີນການນີ້ຈະແກ້ໄຂໄຟລ໌ໃນການຕິດຕັ້ງ Chamilo. ກະລຸນາກວດສອບໃຫ້ແນ່ໃຈວ່າໄດ້ກວດສອບແຜນການນຳໃຊ້ ແລະ ເປີດການສຳຮອງຂໍ້ມູນແລ້ວກ່ອນດຳເນີນການຕໍ່."
 
 msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
-msgstr ""
+msgstr "ຂໍ້ມູນການພັດທະນານີ້ຈຳລອງການແຈ້ງເຕືອນອັບເດດ Chamilo.org ໃນອະນາຄົດ ໂດຍໃຊ້ເສັ້ນທາງແພັກເກດທົດສອບພາຍໃນ."
 
 msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
-msgstr ""
+msgstr "ໜ້ານີ້ຖືກເປີດຈາກການແຈ້ງເຕືອນອັບເດດຢ່າງເປັນທາງການ, ແຕ່ຍັງບໍ່ທັນໄດ້ຕັ້ງຄ່າແຫຼ່ງທີ່ມາຂອງ manifest ຢ່າງເປັນທາງການ."
 
 msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
-msgstr ""
+msgstr "ໜ້ານີ້ຖືກເປີດຈາກການແຈ້ງເຕືອນອັບເດດ. ມີພຽງແຕ່ການກວດສອບ manifest ເທົ່ານັ້ນທີ່ເລີ່ມຕົ້ນໂດຍອັດຕະໂນມັດ."
 
 msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
-msgstr ""
+msgstr "ຂັ້ນຕອນນີ້ເປັນພຽງການກຽມການກວດສອບເທົ່ານັ້ນ. ການປ່ຽນແທນໄຟລ໌ຈະເກີດຂຶ້ນໃນຂັ້ນຕອນ 'ນຳໃຊ້ໄຟລ໌ທີ່ກຽມໄວ້' ພ້ອມກັບການປ້ອງກັນດ້ວຍລະບົບລັອກ, ສຳຮອງຂໍ້ມູນ ແລະ ການຍ້ອນກັບ (Rollback)."
 
 msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
-msgstr ""
+msgstr "ຕົວອັບເດດນີ້ບໍ່ໄດ້ສ້າງການສຳຮອງຖານຂໍ້ມູນ. ກະລຸນາສ້າງ ແລະ ກວດສອບການສຳຮອງຂໍ້ມູນກ່ອນທີ່ຈະລັນການຍ້າຍຂໍ້ມູນ."
 
 msgid "Trusted public key"
-msgstr ""
+msgstr "Public key ທີ່ເຊື່ອຖືໄດ້"
 
 msgid "Trusted signing key"
-msgstr ""
+msgstr "ລາຍເຊັນຄີ (Signing key) ທີ່ເຊື່ອຖືໄດ້"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr ""
+msgstr "ພິມ APPLY UPDATE FILES ເພື່ອຢືນຢັນ"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr ""
+msgstr "ພິມ RUN DATABASE MIGRATIONS ເພື່ອຢືນຢັນການຍ້າຍຖານຂໍ້ມູນ"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr ""
+msgstr "ພິມ RUN POST UPDATE ACTIONS ເພື່ອຢືນຢັນ"
 
 msgid "Unknown update notice source."
-msgstr ""
+msgstr "ບໍ່ຮູ້ແຫຼ່ງທີ່ມາຂອງການແຈ້ງເຕືອນອັບເດດ."
 
 msgid "Update availability"
-msgstr ""
+msgstr "ການອັບເດດທີ່ມີໃຫ້"
 
 msgid "Update directory"
-msgstr ""
+msgstr "ໂຟນເດີອັບເດດ"
 
 msgid "Update lock path"
-msgstr ""
+msgstr "ເສັ້ນທາງລັອກການອັບເດດ"
 
 msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
-msgstr ""
+msgstr "ໃຊ້ໂຟນເດີພັກຂໍ້ມູນທີ່ສ້າງຂຶ້ນຈາກຂັ້ນຕອນກ່ອນໜ້າ. ລະບົບຫຼັງບ້ານຈະຍອມຮັບສະເພາະໂຟນເດີທີ່ຢູ່ພາຍໃນ var/update/staging ເທົ່ານັ້ນ."
 
 msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
-msgstr ""
+msgstr "ໃຊ້ລິ້ງນີ້ເພື່ອຈຳລອງການແຈ້ງເຕືອນອັບເດດ Chamilo.org ໃນລະຫວ່າງການທົດສອບພັດທະນາ."
 
 msgid "Use this only for local development tests. Production updates must use the server configured key."
-msgstr ""
+msgstr "ໃຊ້ສິ່ງນີ້ສະເພາະການທົດສອບພັດທະນາພາຍໃນເທົ່ານັ້ນ. ການອັບເດດໃນລະບົບຈິງຕ້ອງໃຊ້ຄີທີ່ຕັ້ງຄ່າໄວ້ໃນເຊີເວີ."
 
 msgid "Verification details"
-msgstr ""
+msgstr "ລາຍລະອຽດການກວດສອບ"
 
 msgid "Verify package"
 msgstr "ກວດສອບແພັກເກັດ"
@@ -37407,232 +37419,232 @@ msgid "The print window could not be opened"
 msgstr "ບໍ່ສາມາດເປີດໜ້າຕ່າງການພິມໄດ້"
 
 msgid "The start date is invalid"
-msgstr ""
+msgstr "ວັນທີເລີ່ມຕົ້ນບໍ່ຖືກຕ້ອງ"
 
 msgid "These settings apply to the whole course, including its sessions and groups."
-msgstr ""
+msgstr "ການຕັ້ງຄ່າເຫຼົ່ານີ້ຈະນຳໃຊ້ກັບທັງໝົດຫຼັກສູດ, ລວມທັງວາລະການຮຽນ ແລະ ກຸ່ມ."
 
 msgid "This announcement has already been sent by email."
-msgstr ""
+msgstr "ແຈ້ງການນີ້ໄດ້ຖືກສົ່ງຜ່ານອີເມລແລ້ວ."
 
 msgid "This discussion is hidden from learners"
-msgstr ""
+msgstr "ການສົນທະນານີ້ຖືກຊ່ອນຈາກຜູ້ຮຽນ"
 
 msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
-msgstr ""
+msgstr "ເຄື່ອງມື AI ສ້າງສັນ (Generative AI) ນີ້ ຊ່ວຍໃຫ້ທ່ານສ້າງຮູບພາບ ແລະ ວິດີໂອສັ້ນເພື່ອປະກອບເຂົ້າໃນຫຼັກສູດຂອງທ່ານ. ໂດຍການອະທິບາຍ (ເປັນຂໍ້ຄວາມ) ສິ່ງທີ່ທ່ານຕ້ອງການໃນສ່ວນໃສ່ຄຳສັ່ງ (Prompt), ທ່ານຈະໃຫ້ຂໍ້ມູນທີ່ຈຳເປັນແກ່ຕົວແບບ AI ເພື່ອສ້າງຮູບພາບ ຫຼື ວິດີໂອ. ກະລຸນາລໍຖ້າດ້ວຍຄວາມອົດທົນ, ເນື່ອງຈາກຕົວແບບ AI ຕ້ອງໃຊ້ເວລາໃນການປະມວນຜົນ. ທ່ານສາມາດບັນທຶກສື່ທີ່ສ້າງຂຶ້ນໄວ້ໃນໂຟນເດີເອກະສານຂອງທ່ານ ແລະ ນຳໄປຝັງໄວ້ໃນເອກະສານ HTML ໄດ້. ຕົວແບບ AI ແຕ່ລະຕົວມີຄວາມໄວ ແລະ ຄຸນນະພາບທີ່ແຕກຕ່າງກັນ. ບາງຄັ້ງ AI ອາດແນະນຳຄຳສັ່ງທີ່ຖືກປັບປຸງໃໝ່ ເພື່ອໃຫ້ໄດ້ຜົນລັດທີ່ລະອຽດກວ່າ ເຊິ່ງທ່ານສາມາດນຳໄປໃຊ້ເພື່ອປັບແຕ່ງຄວາມຕ້ອງການຂອງທ່ານໃຫ້ດີຂຶ້ນ. ກະລຸນາຮັບຊາບວ່າເຄື່ອງມືນີ້, ໂດຍສະເພາະການສ້າງວິດີໂອ, ອາດມີຄ່າໃຊ້ຈ່າຍສູງຕໍ່ອົງກອນຂອງທ່ານ ເຖິງແມ່ນວ່າທ່ານຈະບໍ່ໄດ້ບັນທຶກສື່ນັ້ນກໍຕາມ. ກະລຸນານຳໃຊ້ຢ່າງເໝາະສົມ. ຫາກທ່ານພົບຫາບັນຫາໃນການສ້າງສິ່ງທີ່ຕ້ອງການ, ກະລຸນາສຶກສາເຕັກນິກການຂຽນຄຳສັ່ງ (Prompting tricks) ທາງອອນໄລນ໌ເພີ່ມເຕີມ."
 
 msgid "This history belongs to the base course. Restore is available after creating a session version."
-msgstr ""
+msgstr "ປະຫວັດນີ້ເປັນຂອງຫຼັກສູດພື້ນຖານ. ສາມາດກູ້ຄືນໄດ້ຫຼັງຈາກສ້າງເວີຊັນວາລະການຮຽນແລ້ວ."
 
 msgid "This image replaces the default forum icon shown next to the forum title."
-msgstr ""
+msgstr "ຮູບນີ້ຈະປ່ຽນແທນໄອຄອນຟໍຣຳມາດຕະຖານທີ່ສະແດງຢູ່ຂ້າງຫົວຂໍ້ຟໍຣຳ."
 
 msgid "This page comes from the base course. Saving it will create a version for the current session."
-msgstr ""
+msgstr "ໜ້ານີ້ມາຈາກຫຼັກສູດພື້ນຖານ. ການບັນທຶກຈະເປັນການສ້າງເວີຊັນໃໝ່ສຳລັບວາລະການຮຽນປັດຈຸບັນ."
 
 msgid "This will also delete %s subcategories."
-msgstr ""
+msgstr "ນີ້ຈະລຶບ %s ໝວດໝູ່ຍ່ອຍນຳ."
 
 msgid "This will create individual work pages for %s learners."
-msgstr ""
+msgstr "ນີ້ຈະສ້າງໜ້າວຽກສ່ວນບຸກຄົນສຳລັບຜູ້ຮຽນ %s ຄົນ."
 
 msgid "Thread history"
-msgstr ""
+msgstr "ປະຫວັດຫົວຂໍ້ສົນທະນາ"
 
 msgid "Title and content"
-msgstr ""
+msgstr "ຫົວຂໍ້ ແລະ ເນື້ອໃນ"
 
 msgid "Unable to cancel renewal right now."
-msgstr ""
+msgstr "ບໍ່ສາມາດຍົກເລີກການຕໍ່ອາຍຸໄດ້ໃນເວລານີ້."
 
 msgid "Unable to restore renewal right now."
-msgstr ""
+msgstr "ບໍ່ສາມາດກູ້ຄືນການຕໍ່ອາຍຸໄດ້ໃນເວລານີ້."
 
 msgid "Unlock page"
-msgstr ""
+msgstr "ປົດລັອກໜ້າ"
 
 msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
-msgstr ""
+msgstr "ໃຊ້ [[Page]] ຫຼື [[Page|Visible text]] ເພື່ອສ້າງລິງກ໌ Wiki ພາຍໃນ."
 
 msgid "Use a spacebar or arrow keys to navigate"
-msgstr ""
+msgstr "ໃຊ້ປຸ່ມ spacebar ຫຼື ປຸ່ມລູກສອນເພື່ອເລື່ອນເບິ່ງ"
 
 msgid "View version"
-msgstr ""
+msgstr "ເບິ່ງເວີຊັນ"
 
 msgid "Visible only to teachers"
-msgstr ""
+msgstr "ເຫັນໄດ້ສະເພາະຄູສອນເທົັ້ນນັ້ນ"
 
 msgid "Weight is required"
-msgstr ""
+msgstr "ຈຳເປັນຕ້ອງໃສ່ນ້ຳໜັກຄະແນນ"
 
 msgid "Wiki categories are disabled for this course."
-msgstr ""
+msgstr "ໝວດໝູ່ Wiki ຖືກປິດນຳໃຊ້ສຳລັບຫຼັກສູດນີ້."
 
 msgid "Wiki categories enabled"
-msgstr ""
+msgstr "ເປີດໃຊ້ໝວດໝູ່ Wiki"
 
 msgid "Wiki html strict filtering"
-msgstr ""
+msgstr "ການກັ່ນຕອງ HTML Wiki ແບບເຂັ້ມງວດ"
 
 msgid "Wiki settings"
-msgstr ""
+msgstr "ການຕັ້ງຄ່າ Wiki"
 
 msgid "Wiki settings updated"
-msgstr ""
+msgstr "ອັບເດດການຕັ້ງຄ່າ Wiki ແລ້ວ"
 
 msgid "You are viewing a historical version of this page"
-msgstr ""
+msgstr "ທ່ານກຳລັງເບິ່ງເວີຊັນເກົ່າຂອງໜ້ານີ້"
 
 msgid "You can attach one or more files to this reply."
-msgstr ""
+msgstr "ທ່ານສາມາດຄັດຕິດໄຟລ໌ໜຶ່ງ ຫຼື ຫຼາຍໄຟລ໌ໃນການຕອບກັບນີ້."
 
 msgid "You can edit this assignment page, but learner work pages will not be modified."
-msgstr ""
+msgstr "ທ່ານສາມາດແກ້ໄຂໜ້າວຽກມອບໝາຍນີ້ໄດ້, ແຕ່ໜ້າວຽກຂອງຜູ້ຮຽນຈະບໍ່ຖືກປ່ຽນແປງ."
 
 msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
-msgstr ""
+msgstr "ທ່ານສາມາດໃຊ້ແທັກ {{class_name}} ແລະ {{student_full_name}} ໃນຄຳຖາມໄດ້."
 
 msgid "You have 20 minutes to edit this page before the editing lock expires."
-msgstr ""
+msgstr "ທ່ານມີເວລາ 20 ນາທີໃນການແກ້ໄຂໜ້ານີ້ ກ່ອນທີ່ການລັອກການແກ້ໄຂຈະໝົດອາຍຸ."
 
 msgid "by"
-msgstr ""
+msgstr "ໂດຍ"
 
 msgid "required"
-msgstr ""
+msgstr "ຈຳເປັນ"
 
 msgid "Incorrect password."
-msgstr ""
+msgstr "ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ."
 
 msgid "File integrity alerting paused for 1 hour."
-msgstr ""
+msgstr "ຢຸດການແຈ້ງເຕືອນຄວາມຖືກຕ້ອງຂອງໄຟລ໌ຊົ່ວຄາວເປັນເວລາ 1 ຊົ່ວໂມງ."
 
 msgid "New baseline established: %s files."
-msgstr ""
+msgstr "ກຳນົດຈຸດອ້າງອີງໃໝ່ແລ້ວ: %s ໄຟລ໌."
 
 msgid "Scan complete: changes were detected."
-msgstr ""
+msgstr "ການກວດສອບສຳເລັດ: ພົບການປ່ຽນແປງ."
 
 msgid "Scan complete: no changes were detected."
-msgstr ""
+msgstr "ການກວດສອບສຳເລັດ: ບໍ່ພົບການປ່ຽນແປງ."
 
 msgid "File integrity"
-msgstr ""
+msgstr "ຄວາມຖືກຕ້ອງສົມບູນຂອງໄຟລ໌"
 
 msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
-msgstr ""
+msgstr "ລາຍງານນີ້ປຽບທຽບໄຟລ໌ທີ່ຕິດຕັ້ງ (ທັງໝົດຍົກເວັ້ນ var/ ແລະ .git/, ເຖິງແມ່ນວ່າ .git/config ຍັງຖືກຕິດຕາມຢູ່ເພື່ອປ້ອງກັນການລັກລະບົບ) ກັບຈຸດອ້າງອີງທີ່ເຊື່ອຖືໄດ້, ເພື່ອຄົ້ນຫາການເພີ່ມ, ການແກ້ໄຂ ຫຼື ການລຶບທີ່ບໍ່ຄາດຄິດ."
 
 msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
-msgstr ""
+msgstr "ທ່ານສາມາດກວດສອບລາຍງານຫຼ້າສຸດໄດ້ຢູ່ດ້ານລຸ່ມ. ການກວດສອບ, ການຢຸດການແຈ້ງເຕືອນ ຫຼື ການກຳນົດຈຸດອ້າງອີງໃໝ່ ຕ້ອງດຳເນີນການໂດຍຜູ້ດູແລລະບົບສູງສຸດ."
 
 msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
-msgstr ""
+msgstr "ການແຈ້ງເຕືອນຖືກຢຸດຊົ່ວຄາວເພື່ອບຳລຸງຮັກສາ. ມັນຈະກັບມາເຮັດວຽກໂດຍອັດຕະໂນມັດໃນວັນທີ %date%."
 
 msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
-msgstr ""
+msgstr "ຍັງບໍ່ທັນມີການກວດສອບເທື່ອ. ໃຫ້ເລີ່ມກວດສອບຈາກບ່ອນນີ້ ຫຼື ຜ່ານຄຳສັ່ງ app:file-integrity:scan."
 
 msgid "Last scan"
-msgstr ""
+msgstr "ການກວດສອບຫຼ້າສຸດ"
 
 msgid "Files scanned"
-msgstr ""
+msgstr "ໄຟລ໌ທີ່ຖືກກວດສອບແລ້ວ"
 
 msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
-msgstr ""
+msgstr "ຍັງບໍ່ມີຈຸດອ້າງອີງມາກ່ອນ: ການກວດສອບນີ້ໄດ້ສ້າງຈຸດອ້າງອີງຂຶ້ນມາ. ການປ່ຽນແປງຈະຖືກລາຍງານເລີ່ມແຕ່ການກວດສອບຄັ້ງຕໍ່ໄປ."
 
 msgid "No changes detected since the baseline."
-msgstr ""
+msgstr "ບໍ່ພົບການປ່ຽນແປງນັບຕັ້ງແຕ່ການກຳນົດຈຸດອ້າງອີງ."
 
 msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
-msgstr ""
+msgstr "ການຕັ້ງຄ່າ Git remote (.git/config) ມີການປ່ຽນແປງ. ກະລຸນາກວດສອບວ່າເປັນສິ່ງທີ່ຄາດໄວ້ຫຼືບໍ່."
 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
-msgstr ""
+msgstr "ການກວດສອບຢຸດກ່ອນກຳນົດຍ້ອນວ່າບໍ່ສາມາດອ່ານໂຟນເດີຍ່ອຍໄດ້ (ກະລຸນາກວດສອບສິດການເຂົ້າເຖິງໄຟລ໌). ຜົນລາຍງານດ້ານລຸ່ມອາດບໍ່ຄົບຖ້ວນ."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
-msgstr ""
+msgstr "ບໍ່ສາມາດອ່ານໄດ້ %count% ໄຟລ໌ (ສິດການເຂົ້າເຖິງ) ແລະ ຖືກຂ້າມໄປ."
 
 msgid "Run a scan now"
-msgstr ""
+msgstr "ເລີ່ມການກວດສອບດຽວນີ້"
 
 msgid "Pause alerting for 1 hour (for maintenance)"
-msgstr ""
+msgstr "ຢຸດການແຈ້ງເຕືອນເປັນເວລາ 1 ຊົ່ວໂມງ (ເພື່ອບຳລຸງຮັກສາ)"
 
 msgid "Pause for 1 hour"
-msgstr ""
+msgstr "ຢຸດຊົ່ວຄາວ 1 ຊົ່ວໂມງ"
 
 msgid "Trust the current file tree as the new baseline"
-msgstr ""
+msgstr "ເຊື່ອຖືໂຄງສ້າງໄຟລ໌ປັດຈຸບັນເປັນຈຸດອ້າງອີງໃໝ່"
 
 msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
-msgstr ""
+msgstr "ນີ້ຈະຖືວ່າທຸກໄຟລ໌ປັດຈຸບັນຖືກຕ້ອງ, ລວມທັງການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ກວດສອບ. ຕ້ອງການດຳເນີນການຕໍ່ຫຼືບໍ່?"
 
 msgid "Establish new baseline"
-msgstr ""
+msgstr "ກຳນົດຈຸດອ້າງອີງໃໝ່"
 
 msgid "Schedule the scan from a system crontab, for example"
-msgstr ""
+msgstr "ຕັ້ງເວລາການກວດສອບຈາກ system crontab, ຕົວຢ່າງ"
 
 msgid "File integrity alert on %platform%"
-msgstr ""
+msgstr "ການແຈ້ງເຕືອນຄວາມຖືກຕ້ອງຂອງໄຟລ໌ໃນ %platform%"
 
 msgid "A file integrity scan detected changes on the platform:"
-msgstr ""
+msgstr "ການກວດສອບຄວາມຖືກຕ້ອງຂອງໄຟລ໌ພົບການປ່ຽນແປງໃນລະບົບ:"
 
 msgid "Added files"
-msgstr ""
+msgstr "ໄຟລ໌ທີ່ເພີ່ມເຂົ້າ"
 
 msgid "Modified files"
-msgstr ""
+msgstr "ໄຟລ໌ທີ່ຖືກແກ້ໄຂ"
 
 msgid "Deleted files"
-msgstr ""
+msgstr "ໄຟລ໌ທີ່ຖືກລຶບ"
 
 msgid "Review the full report from Administration > Security > File integrity."
-msgstr ""
+msgstr "ກວດສອບລາຍງານທັງໝົດໄດ້ທີ່ ການບໍລິຫານລະບົບ > ຄວາມປອດໄພ > ຄວາມຖືກຕ້ອງຂອງໄຟລ໌."
 
 msgid "Password to confirm pausing alerts"
-msgstr ""
+msgstr "ລະຫັດຜ່ານເພື່ອຢືນຢັນການຢຸດການແຈ້ງເຕືອນ"
 
 msgid "Password to confirm the new baseline"
-msgstr ""
+msgstr "ລະຫັດຜ່ານເພື່ອຢືນຢັນຈຸດອ້າງອີງໃໝ່"
 
 msgid "A scan is already running. Please wait for it to finish before starting another one."
-msgstr ""
+msgstr "ກຳລັງມີການກວດສອບດຳເນີນຢູ່. ກະລຸນາລໍຖ້າໃຫ້ສຳເລັດກ່ອນທີ່ຈະເລີ່ມການກວດສອບໃໝ່."
 
 msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
-msgstr ""
+msgstr "ຂະນະນີ້ກຳລັງມີການກວດສອບດຳເນີນຢູ່ (ເລີ່ມເມື່ອ %date%). ການກວດສອບທັງໝົດອາດໃຊ້ເວລາຫຼາຍນາທີ; ທ່ານສາມາດໂຫຼດໜ້ານີ້ໃໝ່ເພື່ອເບິ່ງຄວາມຄືບໜ້າໄດ້."
 
 msgid "Currently processing"
-msgstr ""
+msgstr "ກຳລັງປະມວນຜົນ"
 
 msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
-msgstr ""
+msgstr "ການກວດສອບກ່ອນໜ້ານີ້ (ເລີ່ມເມື່ອ %date%) ຖືກຂັດຈັງຫວະກ່ອນຈະສຳເລັດ — ຂະບວນການບໍ່ໄດ້ເຮັດວຽກແລ້ວ. ທ່ານສາມາດເລີ່ມການກວດສອບໃໝ່ໄດ້."
 
 msgid "files"
-msgstr ""
+msgstr "ໄຟລ໌"
 
 msgid "Permissions changed"
-msgstr ""
+msgstr "ສິດການເຂົ້າເຖິງປ່ຽນແປງ"
 
 msgid "Files with changed permissions"
-msgstr ""
+msgstr "ໄຟລ໌ທີ່ມີການປ່ຽນແປງສິດການເຂົ້າເຖິງ"
 
 msgid "Alert history"
-msgstr ""
+msgstr "ປະຫວັດການແຈ້ງເຕືອນ"
 
 msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
-msgstr ""
+msgstr "ທຸກໆການກວດສອບທີ່ພົບຄວາມຜິດປົກກະຕິຈະຖືກເກັບໄວ້ ເຖິງແມ່ນວ່າການຄາດເຄື່ອນຈະຖືກແກ້ໄຂ ຫຼື ມີການກຳນົດຈຸດອ້າງອີງໃໝ່ແລ້ວກໍຕາມ — ບໍ່ຄືກັບລາຍງານຂ້າງເທິງ, ການກວດສອບທີ່ສະອາດ ຫຼື ການກຳນົດຈຸດອ້າງອີງໃໝ່ຈະບໍ່ລຶບຂໍ້ມູນສ່ວນນີ້."
 
 msgid "This entry was truncated at capture time; see the CEF log for the complete list."
-msgstr ""
+msgstr "ຂໍ້ມູນນີ້ຖືກຕັດໃຫ້ສັ້ນລົງໃນຂະນະທີ່ບັນທຶກ; ເບິ່ງບັນທຶກ CEF ສຳລັບລາຍການທີ່ສົມບູນ."
 
 msgid "No alert has been recorded yet."
-msgstr ""
+msgstr "ຍັງບໍ່ທັນມີການບັນທຶກການແຈ້ງເຕືອນເທື່ອ."
 
 msgid "Git remote changed"
-msgstr ""
+msgstr "Git remote ມີການປ່ຽນແປງ"
 
 msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr ""
+msgstr "ມີການປ່ຽນແປງຫຼາຍເກີນກວ່າຈະສະແດງທັງໝົດ; ສະແດງສະເພາະລາຍການທຳອິດຂອງແຕ່ລະໝວດໝູ່ເທົ່ານັ້ນ. ເບິ່ງ %link_start%ບັນທຶກ CEF%link_end% ສຳລັບລາຍການທີ່ສົມບູນ."

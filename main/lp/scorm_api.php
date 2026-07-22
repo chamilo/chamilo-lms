@@ -275,6 +275,10 @@ $(function() {
         } else {
             logit_lms('Content type is SCO and is responsible to launch LMSInitialize() on its own - Skipping',2);
         }
+
+        // Re-attach on every load: the previous document's listener (if any)
+        // is gone once it's replaced, and this new document needs its own
+        attachContentIframeCheckpoint();
     });
 });
 
@@ -927,6 +931,9 @@ function savedata(item_id) {
     var forceIframeSave = arguments.length > 1 && arguments[1] !== undefined
         ? arguments[1]
         : 0;
+    var useSendBeacon = arguments.length > 2 && arguments[2] !== undefined
+        ? arguments[2]
+        : false;
 
     // Origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
     logit_lms('function savedata(' + item_id + ')', 3);
@@ -958,7 +965,7 @@ function savedata(item_id) {
         olms.finishSignalReceived,
         olms.userNavigatesAway,
         olms.statusSignalReceived,
-        false,
+        useSendBeacon,
         forceIframeSave
     );
 
@@ -1174,11 +1181,45 @@ function lastCall() {
 }
 
 /**
+ * Best-effort save of whatever is currently known about the active item,
+ * via sendBeacon, WITHOUT signaling that the user has navigated away. Safe
+ * to call as often as needed (tab switches, iframe teardown) since it never
+ * finalizes/marks the item completed - only lastCall() does that.
+ */
+function checkpointCurrentItem() {
+    if (olms.lms_item_type == 'sco') {
+        savedata(olms.lms_item_id, 0, true);
+    } else {
+        lms_save_asset(true);
+    }
+}
+
+/**
+ * The SCO package can navigate between its own internal pages (or Chamilo
+ * can swap the iframe's src) without ever touching the top-level window's
+ * own pagehide/visibilitychange - from outside #content_id that teardown is
+ * just as invisible to us as it would be from inside it. Hooking the
+ * iframe's own contentWindow lets us checkpoint at that point too. This only
+ * works same-origin; cross-origin content (externally hosted, LTI, ...)
+ * falls back to whatever the top-level listeners catch.
+ */
+function attachContentIframeCheckpoint() {
+    try {
+        var contentWindow = document.getElementById('content_id').contentWindow;
+        contentWindow.addEventListener('pagehide', function (e) {
+            console.log('content iframe pagehide checkpoint');
+            checkpointCurrentItem();
+            logit_lms('content iframe pagehide checkpoint', 3);
+        });
+    } catch (err) {
+        logit_lms('Could not attach pagehide checkpoint to content iframe (cross-origin content?)', 3);
+    }
+}
+
+/**
  * Add listeners to the page objects. This has to be defined for
  * the current context as it acts on objects that should exist
- * on the page
- * possibly deprecated
- * @todo Try to use $(document).unload(lms_save_asset()) instead of the addEvent() method
+ * on the page.
  */
 function addListeners(){
     //exit if the browser doesn't support ID or tag retrieval
@@ -1197,23 +1238,25 @@ function addListeners(){
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
         //visibilitychange covers tab switches/minimizing and fires before unload
-        //everywhere; pagehide is the bfcache-safe fallback for actual teardown
+        //everywhere; pagehide is the bfcache-safe fallback for actual teardown.
+        //Neither one means the user is done with this item - just checkpoint
+        //via sendBeacon so a kill right after backgrounding still saves
         document.addEventListener('visibilitychange', function (e) {
             if (document.visibilityState === 'hidden') {
-                lms_save_asset();
-                logit_lms('visibilitychange (hidden) call', 3);
+                checkpointCurrentItem();
+                logit_lms('visibilitychange (hidden) checkpoint', 3);
             }
         });
         window.addEventListener('pagehide', function (e) {
-            lms_save_asset();
-            logit_lms('pagehide call', 3);
+            checkpointCurrentItem();
+            logit_lms('pagehide checkpoint', 3);
         });
         logit_lms('Added event listener lms_save_asset() on visibilitychange/pagehide', 3);
     }
 
     if (olms.lms_item_type=='sco') {
         //beforeunload is kept only to warn the user before leaving; the actual
-        //commit moved to visibilitychange/pagehide (see above) since Blink
+        //commit moved to visibilitychange/pagehide (see below) since Blink
         //browsers disable the back/forward cache for any page with an unload listener
         window.addEventListener('beforeunload', function (e) {
             var preventsBeforeUnload = <?php echo (int) api_get_configuration_value('lp_prevents_beforeunload'); ?>;
@@ -1226,19 +1269,33 @@ function addListeners(){
             }
         });
 
+        //visibilitychange fires on every tab switch/minimize, not just on a
+        //real departure, so it must NOT signal userNavigatesAway (that would
+        //mark the SCO as completed just for being backgrounded). It only
+        //checkpoints the current values via sendBeacon, so a tab killed
+        //right after being hidden (no further event at all) still has its
+        //latest state saved
         document.addEventListener('visibilitychange', function (e) {
             if (document.visibilityState === 'hidden') {
                 console.log('visibilitychange');
-                savedata(olms.lms_item_id);
-                logit_lms('visibilitychange (hidden) called', 3);
-                lastCall();
+                checkpointCurrentItem();
+                logit_lms('visibilitychange (hidden) checkpoint', 3);
             }
         });
+        //pagehide's event.persisted tells us whether the document is going
+        //into the bfcache (may come back via history nav, so this is not a
+        //real departure either) or is actually being destroyed. Only the
+        //latter is treated as the user navigating away for good
         window.addEventListener('pagehide', function (e) {
-            console.log('pagehide');
-            savedata(olms.lms_item_id);
-            logit_lms('pagehide called', 3);
-            lastCall();
+            if (e.persisted) {
+                console.log('pagehide (persisted, bfcache) checkpoint');
+                checkpointCurrentItem();
+                logit_lms('pagehide (persisted) checkpoint', 3);
+            } else {
+                console.log('pagehide (final)');
+                lastCall();
+                logit_lms('pagehide (final) called', 3);
+            }
         });
         logit_lms('Added savedata()/lastCall() on visibilitychange/pagehide', 3);
     }
@@ -1250,6 +1307,10 @@ function addListeners(){
  * leaving it
  */
 function lms_save_asset() {
+    var useSendBeacon = arguments.length > 0 && arguments[0] !== undefined
+        ? arguments[0]
+        : false;
+
     // only for Chamilo lps
     if (olms.execute_stats) {
         olms.execute_stats = false;
@@ -1285,7 +1346,11 @@ function lms_save_asset() {
             olms.lms_item_core_exit,
             olms.lms_item_type,
             olms.session_id,
-            olms.course_id
+            olms.course_id,
+            olms.finishSignalReceived,
+            0,
+            olms.statusSignalReceived,
+            useSendBeacon
         );
         if (olms.item_objectives.length>0) {
             xajax_save_objectives(
@@ -1296,6 +1361,14 @@ function lms_save_asset() {
                 olms.item_objectives
             );
         }
+    } else {
+        // This function is bound to API.save_asset and called directly from
+        // the home/quit/reporting/lessons-list icons' onclick, for every LP
+        // item type. For SCO items the block above is a no-op, so without
+        // this branch those clicks would send no commit at all for SCORM
+        // content and rely purely on pagehide/visibilitychange firing on
+        // whatever frame ends up being torn down
+        lastCall();
     }
 }
 
@@ -1657,12 +1730,15 @@ function switch_item(current_item, next_item)
          We need to save, switching not necessary (LMSInitialize does the job)
      (3) sco switching to asset
          We need to switch the document in the content frame, but we cannot
-         switch the item details, otherwise the LMSFinish() call (that *must*
-         be triggered by the SCO when it unloads) will use bad values. However,
-         we need to load the new asset's context once the SCO has unloaded
+         switch the item details, otherwise the outgoing SCO's own LMSFinish()
+         call (SCORM expects the SCO to make it as it tears down) would use
+         bad values. However, we need to load the new asset's context once the
+         outgoing SCO is done. We no longer trust the SCO's own teardown to
+         happen reliably though, so we also force the commit explicitly below.
      (4) sco switching to sco
-         We don't need to switch nor commit, LMSFinish() on unload and
-         LMSInitialize on load will do the job
+         We don't need to switch nor commit, LMSFinish() from the outgoing SCO
+         and LMSInitialize() on the incoming one will do the job - again
+         backed up by an explicit commit below rather than solely trusting that.
      In any case, we need to change the current document frame.
      These cases, although clear here, are however very difficult to implement
     */
@@ -1696,6 +1772,19 @@ function switch_item(current_item, next_item)
             olms.statusSignalReceived
         );
 
+        // Flush objectives here directly (rather than relying on any event on
+        // the outgoing item), so this doesn't depend on the browser or on the
+        // outgoing item's own teardown timing
+        if (olms.item_objectives.length > 0) {
+            xajax_save_objectives(
+                olms.lms_lp_id,
+                olms.lms_user_id,
+                olms.lms_view_id,
+                olms.lms_item_id,
+                olms.item_objectives
+            );
+        }
+
         if (saveAjax) {
             $.when(saveAjax).done(function(results) {
                 xajax_switch_item_details(
@@ -1727,6 +1816,11 @@ function switch_item(current_item, next_item)
             olms.statusSignalReceived
         );
 
+        // Final commit triggered here directly (rather than relying on any
+        // event on the outgoing SCO) via sendBeacon, so it survives the
+        // iframe teardown that follows regardless of browser
+        lastCall();
+
         if (saveAjax) {
             $.when(saveAjax).done(function(result) {
                 reinit_updatable_vars_list();
@@ -1754,19 +1848,17 @@ function switch_item(current_item, next_item)
     /**
      * Because of SCORM 1.2's special rule about unsent commits and the fact
      * that a SCO should be SET TO 'completed' IF NO STATUS WAS SENT (and
-     * then some checks have to be done on score), we have to force a
-     * special commit here to avoid getting to the next element with a
-     * missing prerequisite. The 'onunload' event is treated with
-     * savedata_onunload(), and doesn't need to be triggered at any
-     * particular time, but here we are in the case of switching to another
-     * item, so this is particularly important to complete the element in
-     * time.
-     * However, this cannot be initiated from the JavaScript, mainly
-     * because another onunload event can be triggered by the SCO itself,
-     * which can set, for example, the status to incomplete while the
-     * status has already been set to "completed" by the hand-made
-     * savedata() (and then the status cannot be "incompleted"
-     * anymore)
+     * then some checks have to be done on score), we force the special commit
+     * above (xajax_save_objectives()/lastCall(), depending on the case)
+     * ourselves, right here, rather than waiting on the outgoing item's own
+     * teardown to do it - this is particularly important when switching to
+     * another item, so the next element doesn't find a missing prerequisite.
+     * This still race against whatever the outgoing SCO does on its own
+     * teardown (it could still call LMSSetValue()/LMSFinish() itself around
+     * the same time, e.g. setting the status to "incomplete" after our own
+     * commit already set it to "completed" - the status can't go back to
+     * "incomplete" once "completed" per the SCORM 1.2 status state machine,
+     * so this ordering isn't a real risk in practice)
      */
 
     olms.execute_stats = false;
@@ -1826,9 +1918,9 @@ function switch_item(current_item, next_item)
         cont_f.onload=function(){
             olms.info_lms_item[0]=olms.info_lms_item[1];
         }
-        cont_f.onunload=function(){
+        cont_f.addEventListener('pagehide', function(){
             olms.info_lms_item[0]=olms.info_lms_item[1];
-        }
+        });
 
     <?php
     } else {
@@ -1976,6 +2068,42 @@ var loadForumThread = function(lpId, lpItemId) {
  * @return  void
  * @uses lp_ajax_save_item.php through an AJAX call
  */
+/**
+ * Posts save-item params to lp_ajax_save_item.php, via navigator.sendBeacon
+ * (survives page/frame teardown, fire-and-forget) when useSendBeacon is set
+ * and supported, otherwise via a regular $.ajax POST.
+ * @param   string  URL-encoded params string ('key=value&key2=value2...')
+ * @param   bool    Use sendBeacon instead of $.ajax
+ * @param   bool    $.ajax only: whether the request is asynchronous
+ * @return  jqXHR|bool  the $.ajax promise, or sendBeacon's boolean result
+ */
+function postSaveItem(params, useSendBeacon, async) {
+    var saveUrl = '<?php echo api_get_path(WEB_CODE_PATH).'lp/'; ?>lp_ajax_save_item.php' + courseUrl;
+
+    if (useSendBeacon == 1 && navigator.sendBeacon) {
+        logit_lms('Saving via sendBeacon with params:' + params, 3);
+        var formData = new FormData();
+        var paramsToArray = params.split('&');
+        for (var i = 0; i < paramsToArray.length; i++) {
+            if (!paramsToArray[i])
+                continue;
+            var pair = paramsToArray[i].split('=');
+            formData.append(pair[0], decodeURIComponent(pair[1]));
+        }
+
+        return navigator.sendBeacon(saveUrl, formData);
+    }
+
+    logit_lms('Saving via ajax with params:' + params, 3);
+    return $.ajax({
+        type: "POST",
+        data: params,
+        url: saveUrl,
+        dataType: "script",
+        async: async
+    });
+}
+
 function xajax_save_item(
     lms_lp_id,
     lms_user_id,
@@ -1995,7 +2123,8 @@ function xajax_save_item(
     course_id,
     finishSignalReceived,
     userNavigatesAway,
-    statusSignalReceived
+    statusSignalReceived,
+    useSendBeacon
 ) {
     var params = '';
     if (typeof(finishSignalReceived) == 'undefined') {
@@ -2022,14 +2151,7 @@ function xajax_save_item(
     params += '&statusSignalReceived='+statusSignalReceived;
 
     if (item_type != 'sco') {
-        logit_lms('xajax_save_item with params:' + params, 3);
-        return $.ajax({
-            type:"POST",
-            data: params,
-            url: "lp_ajax_save_item.php" + courseUrl,
-            dataType: "script",
-            async: false
-        });
+        return postSaveItem(params, useSendBeacon, false);
     }
 
     return false;
@@ -2143,43 +2265,11 @@ function xajax_save_item_scorm(
         is_interactions='false';
     }
 
-    logit_lms('xajax_save_item_scorm with params:' + params, 3);
-    var codePathUrl = '<?php echo api_get_path(WEB_CODE_PATH).'lp/'; ?>';
-    var saveUrl = codePathUrl + "lp_ajax_save_item.php" + courseUrl;
+    var result = postSaveItem(params, useSendBeacon, true);
+    params = '';
+    my_scorm_values = null;
 
-    if (useSendBeacon == 1 && navigator.sendBeacon) {
-        console.log('useSendBeacon');
-        var formData = new FormData();
-        var paramsToArray = params.split('&');
-        for (var i = 0; i < paramsToArray.length; i++) {
-            if (!paramsToArray[i])
-                continue;
-            var pair = paramsToArray[i].split('=');
-            formData.append(pair[0], decodeURIComponent(pair[1]));
-        }
-
-        result = navigator.sendBeacon(saveUrl, formData);
-        console.log(result);
-
-        params = '';
-        my_scorm_values = null;
-
-        return false;
-    } else {
-        logit_lms('Ajax call');
-        var ajax = $.ajax({
-            type:"POST",
-            data: params,
-            url: saveUrl,
-            dataType: "script",
-            async: true
-        });
-
-        params = '';
-        my_scorm_values = null;
-
-        return ajax;
-    }
+    return result;
 }
 
 /**

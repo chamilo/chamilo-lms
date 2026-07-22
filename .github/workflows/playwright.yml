@@ -2,11 +2,17 @@ name: Playwright tests 🎭
 
 # Runs alongside behat.yml, not instead of it — only a small subset of
 # scenarios has been ported to Playwright so far (see tests/playwright/).
-# Environment provisioning steps up through "Install chamilo" are copied
-# from behat.yml on purpose, to stand up the exact same app instance the
-# Behat suite tests against. Everything after that differs: Playwright
-# manages its own headless browser, so there's no Chrome/Chromedriver/
-# Selenium/Java/Xvfb setup to do.
+# Environment provisioning steps up through MySQL are copied from
+# behat.yml on purpose, to stand up the same environment the Behat suite
+# runs against.
+#
+# Unlike behat.yml, there is no Chrome/Chromedriver/Selenium/Java/Xvfb
+# stack here at all: tests/behat/features/actionInstall.feature (the
+# scenario that actually installs Chamilo by clicking through the legacy
+# web installer at /main/install/index.php) has been ported to Playwright
+# too (tests/playwright/features/actionInstall.feature), so Playwright's
+# own browser now handles both installing the app and testing it — one
+# browser-automation stack for the whole job, not two.
 on: [ push, pull_request ]
 
 jobs:
@@ -86,19 +92,24 @@ jobs:
             -   name: Start mysql service
                 run: sudo /etc/init.d/mysql start
 
-            -   name: Install chamilo
+            -   name: Install Playwright browsers
+                run: yarn playwright install --with-deps chromium
+
+            -   name: Check apache is up
                 run: |
-                    cd tests/behat
-                    ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
-                    cd ../..
+                    sudo chmod 777 -R ${{ github.workspace }}
+                    curl http://localhost/main/install/index.php
+
+            -   name: Install chamilo
+                env:
+                    BASE_URL: http://localhost
+                run: |
+                    yarn test:playwright:install
                     sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env
                     sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env
                     printf '\nwhen@prod:\n    framework:\n        http_cache: true\n' >> config/packages/framework.yaml
                     sudo php bin/console cache:clear
                     sudo chmod -R 777 var
-
-            -   name: Install Playwright browsers
-                run: yarn playwright install --with-deps chromium
 
             -   name: Playwright tests
                 env:
@@ -114,3 +125,13 @@ jobs:
                         var/test-results/playwright/report
                         var/test-results/playwright/results
                     retention-days: 7
+                    if-no-files-found: ignore
+
+            -   name: Upload provisioning logs on failure
+                if: failure()
+                uses: actions/upload-artifact@v7
+                with:
+                    name: provisioning-logs-php${{ matrix.php-versions }}
+                    path: /var/log/apache2/error.log
+                    retention-days: 7
+                    if-no-files-found: ignore

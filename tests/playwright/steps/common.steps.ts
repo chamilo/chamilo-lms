@@ -1,37 +1,73 @@
-import { expect } from "@playwright/test"
-import { createBdd } from "playwright-bdd"
+import { expect, Page } from "@playwright/test"
+import { createBdd, DataTable } from "playwright-bdd"
 
 const { Given, When, Then } = createBdd()
 
 // Ported from tests/behat/features/bootstrap/FeatureContext.php.
-// "I am on"/"I fill in ... for ..."/"I press"/"I should see" are standard
-// Mink/MinkContext steps in Behat (not custom code) — reimplemented here.
+// "I am on"/"I fill in ... for ..."/"I press"/"I should see"/"I check"/
+// "I fill in the following:" are all standard Mink/MinkContext steps in
+// Behat (not custom code) — reimplemented here.
 
 Given("I am on {string}", async ({ page }, path: string) => {
   await page.goto(path)
 })
 
-// Mink's fillField resolves a field by id, then name, then label text (in
-// that order) — which is why the Gherkin locator "login" has always worked
-// here without anyone needing to know it's actually an `id`, not a `name`
-// (assets/vue/components/Login.vue uses id="login" / input-id="password",
-// no name attribute at all). Mirror that same id -> name -> label fallback
-// so this step keeps working regardless of which attribute a given form uses.
-When("I fill in {string} for {string}", async ({ page }, value: string, field: string) => {
+// Mink's fillField/checkField both resolve a field by id, then name, then
+// label text (in that order) — which is why Gherkin locators like "login"
+// have always worked here without anyone needing to know whether that's
+// actually an `id` or a `name` attribute (e.g. assets/vue/components/Login.vue
+// uses id="login" with no name attribute at all, while the legacy install
+// wizard's form fields are plain name="..." attributes). Mirror that same
+// id -> name -> label fallback for both fill and check so these steps keep
+// working regardless of which attribute a given form happens to use.
+async function resolveField(page: Page, field: string) {
   const byId = page.locator(`#${field}`)
-  if (await byId.count()) {
-    await byId.fill(value)
-    return
-  }
+  if (await byId.count()) return byId
   const byName = page.locator(`[name="${field}"]`)
-  if (await byName.count()) {
-    await byName.fill(value)
-    return
-  }
-  await page.getByLabel(field).fill(value)
+  if (await byName.count()) return byName
+  return page.getByLabel(field)
+}
+
+When("I fill in {string} for {string}", async ({ page }, value: string, field: string) => {
+  await (await resolveField(page, field)).fill(value)
 })
 
+// Mink's "I fill in the following:" takes a table of |field|value| rows and
+// fills each one the same way the single-field step does.
+Then("I fill in the following:", async ({ page }, dataTable: DataTable) => {
+  for (const [field, value] of dataTable.rows()) {
+    await (await resolveField(page, field)).fill(value)
+  }
+})
+
+// Mink's "I check ..." checks a checkbox, same id -> name -> label resolution.
+Then("I check {string}", async ({ page }, field: string) => {
+  await (await resolveField(page, field)).check()
+})
+
+// Mink's pressButton resolves a button/submit input by id, then name, then
+// value/visible text (e.g. actionInstall.feature's "step4"/"step5"/
+// "button_step6"/"license-next" are id attributes on the legacy install
+// wizard's submit buttons, not their visible labels — unlike "Sign in",
+// which is only ever visible text, never a valid id/name value in the
+// first place since it contains a space). Only attempt the id/name lookup
+// when the label is actually shaped like one, to avoid feeding something
+// like "#Sign in" to a CSS selector.
+const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
+
 When("I press {string}", async ({ page }, label: string) => {
+  if (looksLikeIdentifier(label)) {
+    const byId = page.locator(`#${label}`)
+    if (await byId.count()) {
+      await byId.first().click()
+      return
+    }
+    const byName = page.locator(`[name="${label}"]`)
+    if (await byName.count()) {
+      await byName.first().click()
+      return
+    }
+  }
   await page
     .locator(`button:has-text("${label}"), input[type="submit"][value="${label}"]`)
     .first()
@@ -42,16 +78,36 @@ Then("I should see {string}", async ({ page }, text: string) => {
   await expect(page.getByText(text).first()).toBeVisible()
 })
 
-// FeatureContext::waitVeryLongForThePageToBeLoaded() / waitForThePageToBeLoadedWhenReady()
-// use hardcoded sleeps (14s / 9s) because Mink/Selenium has no reliable
-// auto-wait. Playwright's actions and assertions already auto-wait/retry,
-// so these steps are kept only to match the ported scenario 1:1 — a real
-// migration would likely delete them and lean on Playwright's own waiting.
-Then("wait very long for the page to be loaded", async ({ page }) => {
+// FeatureContext::waitForThePageToBeLoaded() / waitVeryLongForThePageToBeLoaded()
+// / waitForThePageToBeLoadedWhenReady() / waitOneMinuteForThePageToBeLoaded()
+// all use hardcoded sleeps (8s / 14s / 9s / 60s) because Mink/Selenium has no
+// reliable auto-wait. Playwright's actions and assertions already auto-wait/
+// retry, so these are kept only to match ported scenarios 1:1 rather than as
+// blind sleeps — including "wait one minute", used by actionInstall.feature
+// right after the final install button, where the real wait is however long
+// schema creation actually takes: the subsequent "I should see" step's own
+// polling (up to the test timeout) covers that, not this step itself. A real
+// migration would likely delete all four and lean on Playwright's waiting.
+//
+// Behat's own regexes for these four allow an optional "I " prefix
+// (`^(?:|I )wait ...$`), and actionInstall.feature genuinely uses both forms
+// interchangeably (e.g. "Then wait for the page to be loaded" vs "And I wait
+// for the page to be loaded") — so these are registered as regexes matching
+// that same optional prefix, rather than as plain Cucumber-expression
+// strings that would only match one exact form.
+Then(/^(?:|I )wait for the page to be loaded$/, async ({ page }) => {
   await page.waitForLoadState("domcontentloaded")
 })
 
-Then("wait for the page to be loaded when ready", async ({ page }) => {
+Then(/^(?:|I )wait very long for the page to be loaded$/, async ({ page }) => {
+  await page.waitForLoadState("domcontentloaded")
+})
+
+Then(/^(?:|I )wait for the page to be loaded when ready$/, async ({ page }) => {
+  await page.waitForLoadState("networkidle")
+})
+
+Then(/^(?:|I )wait one minute for the page to be loaded$/, async ({ page }) => {
   await page.waitForLoadState("networkidle")
 })
 

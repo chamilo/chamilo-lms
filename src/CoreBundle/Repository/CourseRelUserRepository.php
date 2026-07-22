@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -55,6 +56,52 @@ class CourseRelUserRepository extends ServiceEntityRepository
         ;
 
         return $courses;
+    }
+
+    /**
+     * Returns a course only when the user manages it as a teacher in the given access URL.
+     */
+    public function findTeacherCourseForUserAndAccessUrl(
+        User $user,
+        AccessUrl $accessUrl,
+        int $courseId,
+    ): ?Course {
+        /** @var CourseRelUser|null $relation */
+        $relation = $this->createQueryBuilder('cru')
+            ->addSelect('course')
+            ->innerJoin('cru.course', 'course')
+            ->innerJoin('course.urls', 'urlRelation')
+            ->andWhere('cru.user = :user')
+            ->andWhere('cru.status = :teacherStatus')
+            ->andWhere('course.id = :courseId')
+            ->andWhere('urlRelation.url = :accessUrl')
+            ->setParameter('user', $user)
+            ->setParameter('teacherStatus', CourseRelUser::TEACHER)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('accessUrl', $accessUrl)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $relation?->getCourse();
+    }
+
+    /**
+     * Counts users directly registered as students in the base course.
+     */
+    public function countDirectStudentsForCourse(Course $course): int
+    {
+        return (int) $this->createQueryBuilder('cru')
+            ->select('COUNT(DISTINCT student.id)')
+            ->innerJoin('cru.user', 'student')
+            ->andWhere('cru.course = :course')
+            ->andWhere('cru.status = :studentStatus')
+            ->setParameter('course', $course)
+            ->setParameter('studentStatus', CourseRelUser::STUDENT)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**

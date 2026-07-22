@@ -151,7 +151,7 @@ function userFullName(user) {
 
 function formatRestriction(restriction) {
   if (!restriction) {
-    return "-"
+    return t("No access")
   }
 
   if (restriction.isOpenWithoutDate) {
@@ -180,7 +180,7 @@ function effectiveStatus(user) {
   }
 
   return {
-    label: t("No restriction"),
+    label: t("No access"),
     className: "bg-gray-15 text-gray-60",
   }
 }
@@ -399,6 +399,9 @@ onMounted(loadData)
             <p class="mt-2 text-sm text-gray-60">
               {{ course?.title }}
               <span v-if="session">· {{ session.title }}</span>
+            </p>
+            <p class="mt-3 text-sm text-gray-70">
+              {{ t("Only users and groups added here can access this learning path.") }}
             </p>
           </div>
 

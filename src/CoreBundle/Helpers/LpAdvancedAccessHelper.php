@@ -28,6 +28,10 @@ final readonly class LpAdvancedAccessHelper
 
     public function isAllowed(Course $course, CLp $lp, ?Session $session, User $user): bool
     {
+        if (0 === $lp->getSubscribeUsers() || !$this->learningPathSubscriptionsEnabled()) {
+            return true;
+        }
+
         $individualRestriction = $this->findIndividualRestriction($course, $lp, $session, $user);
 
         if ($individualRestriction instanceof CLpRelUser) {
@@ -47,7 +51,7 @@ final readonly class LpAdvancedAccessHelper
             return $userGroupAccess['allowed'];
         }
 
-        return [] === $groupRestrictions;
+        return false;
     }
 
     private function findIndividualRestriction(Course $course, CLp $lp, ?Session $session, User $user): ?CLpRelUser
@@ -183,6 +187,25 @@ final readonly class LpAdvancedAccessHelper
         }
 
         return true;
+    }
+
+    private function learningPathSubscriptionsEnabled(): bool
+    {
+        $value = $this->settingsManager->getSetting('lp.lp_subscription_settings');
+        if (\is_string($value)) {
+            $decoded = json_decode($value, true);
+            if (\is_array($decoded)) {
+                $value = $decoded;
+            }
+        }
+
+        if (!\is_array($value)) {
+            return true;
+        }
+
+        $options = \is_array($value['options'] ?? null) ? $value['options'] : $value;
+
+        return (bool) ($options['allow_add_users_to_lp'] ?? true);
     }
 
     private function settingEnabled(string $name): bool

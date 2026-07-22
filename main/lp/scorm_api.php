@@ -1002,7 +1002,6 @@ function LMSCommit(val) {
         forceIframeSave = 1;
     }
 
-    console.log(forceIframeSave);
     savedata(olms.lms_item_id, forceIframeSave);
 
     //reinit_updatable_vars_list();
@@ -1164,7 +1163,7 @@ function addEvent(elm, evType, fn, useCapture){
 }
 
 function lastCall() {
-    console.log('lastCall');
+    logit_lms('lastCall()', 3);
     savedata(olms.lms_item_id);
     xajax_save_item_scorm(
         olms.lms_lp_id,
@@ -1207,7 +1206,6 @@ function attachContentIframeCheckpoint() {
     try {
         var contentWindow = document.getElementById('content_id').contentWindow;
         contentWindow.addEventListener('pagehide', function (e) {
-            console.log('content iframe pagehide checkpoint');
             checkpointCurrentItem();
             logit_lms('content iframe pagehide checkpoint', 3);
         });
@@ -1277,7 +1275,6 @@ function addListeners(){
         //latest state saved
         document.addEventListener('visibilitychange', function (e) {
             if (document.visibilityState === 'hidden') {
-                console.log('visibilitychange');
                 checkpointCurrentItem();
                 logit_lms('visibilitychange (hidden) checkpoint', 3);
             }
@@ -1288,11 +1285,9 @@ function addListeners(){
         //latter is treated as the user navigating away for good
         window.addEventListener('pagehide', function (e) {
             if (e.persisted) {
-                console.log('pagehide (persisted, bfcache) checkpoint');
                 checkpointCurrentItem();
                 logit_lms('pagehide (persisted) checkpoint', 3);
             } else {
-                console.log('pagehide (final)');
                 lastCall();
                 logit_lms('pagehide (final) called', 3);
             }
@@ -1925,7 +1920,7 @@ function switch_item(current_item, next_item)
     <?php
     } else {
         ?>
-            log_in_log('loading '+mysrc+' in frame');
+            logit_lms('loading '+mysrc+' in frame', 3);
             cont_f.attr("src",mysrc);
     <?php
     } ?>

@@ -12,6 +12,47 @@ Given("I am on {string}", async ({ page }, path: string) => {
   await page.goto(path)
 })
 
+// Ported from FeatureContext::iAmLoggedAs() / iAmAPlatformAdministrator() /
+// iAmATeacher() / iAmAStudent() / iAmAnHR() / iAmAStudentBoss() /
+// iAmAnInvitee(): each fixed test account uses its own username as both
+// login and password, and all six "I am a ..." steps are thin wrappers
+// around the same login flow, keyed by username. Doesn't reuse resolveField
+// (defined further below) because the login form's fields are known and
+// fixed here, not table/option-driven like the rest of the file's steps.
+async function loginAs(page: Page, username: string) {
+  await page.goto("/login")
+  await page.locator("#login").fill(username)
+  await page.locator("#password").fill(username)
+  await page
+    .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
+    .first()
+    .click()
+}
+
+Given("I am a platform administrator", async ({ page }) => {
+  await loginAs(page, "admin")
+})
+
+Given("I am a teacher", async ({ page }) => {
+  await loginAs(page, "mmosquera")
+})
+
+Given("I am a student", async ({ page }) => {
+  await loginAs(page, "acostea")
+})
+
+Given("I am an HR manager", async ({ page }) => {
+  await loginAs(page, "ptook")
+})
+
+Given("I am a student boss", async ({ page }) => {
+  await loginAs(page, "abaggins")
+})
+
+Given("I am an invitee", async ({ page }) => {
+  await loginAs(page, "bproudfoot")
+})
+
 // Mink's fillField/checkField both resolve a field by id, then name, then
 // label text (in that order) — which is why Gherkin locators like "login"
 // have always worked here without anyone needing to know whether that's

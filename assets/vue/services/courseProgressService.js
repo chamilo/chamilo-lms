@@ -20,7 +20,7 @@ export default {
   },
 
   async updateThematic(iid, payload, params = {}) {
-    return await baseService.put(`/api/course-progress/thematic/${iid}`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/course-progress/thematic/${iid}`, payload, { params: cleanParams(params) })
   },
 
   async getThematicPlans(thematicId, params = {}) {
@@ -28,7 +28,7 @@ export default {
   },
 
   async saveThematicPlans(thematicId, payload, params = {}) {
-    return await baseService.put(`/api/course-progress/thematic/${thematicId}/plans`, payload, {
+    return await baseService.patch(`/api/course-progress/thematic/${thematicId}/plans`, payload, {
       params: cleanParams(params),
     })
   },
@@ -51,7 +51,7 @@ export default {
   },
 
   async updateThematicAdvance(thematicId, iid, payload, params = {}) {
-    return await baseService.put(`/api/course-progress/thematic-advance/${iid}`, payload, {
+    return await baseService.patch(`/api/course-progress/thematic-advance/${iid}`, payload, {
       params: cleanParams({ ...params, thematicId }),
     })
   },

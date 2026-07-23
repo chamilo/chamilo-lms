@@ -11,8 +11,8 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -77,7 +77,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
-        new Put(
+        new Patch(
             uriTemplate: '/learning_paths/{iid}/toggle-visibility',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,

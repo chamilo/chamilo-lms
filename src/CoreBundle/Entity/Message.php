@@ -63,6 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiResource(
     uriTemplate: '/usergroups/{usergroupId}/messages',
+    shortName: 'UsergroupMessage',
     operations: [
         new GetCollection(
             name: 'get_messages_by_social_group',

@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\QueryParameter;
@@ -44,6 +45,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Put(
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: CStudentPublicationPostStateProcessor::class
+        ),
+        new Patch(
             security: "is_granted('EDIT', object.resourceNode)",
             processor: CStudentPublicationPostStateProcessor::class
         ),

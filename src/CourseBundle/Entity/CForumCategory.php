@@ -14,8 +14,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -68,28 +68,28 @@ use Symfony\Component\Validator\Constraints as Assert;
             name: 'create_forum_category',
             processor: ForumCategoryProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_categories/{iid}/update',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'update_forum_category',
             processor: ForumCategoryProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_categories/{iid}/toggle-lock',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'toggle_forum_category_lock',
             processor: ForumCategoryProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_categories/{iid}/toggle-visibility',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'toggle_forum_category_visibility',
             processor: ForumCategoryProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_categories/{iid}/move',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,

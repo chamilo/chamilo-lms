@@ -14,8 +14,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -79,35 +79,35 @@ use Symfony\Component\Validator\Constraints as Assert;
             name: 'create_forum',
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/update',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'update_forum',
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/toggle-lock',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'toggle_forum_lock',
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/toggle-visibility',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'toggle_forum_visibility',
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/move',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'move_forum',
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/toggle-subscription',
             security: "is_granted('VIEW', object.resourceNode)",
             deserialize: false,

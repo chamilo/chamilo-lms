@@ -131,6 +131,16 @@ jobs:
                     sudo php bin/console cache:clear
                     sudo chmod -R 777 var
 
+            # Seeds the fixed test accounts (mmosquera, acostea, ptook, etc.)
+            # that the rest of the suite logs in as via "I am a teacher" /
+            # "I am a student" / etc. — kept as its own step, run once,
+            # separate from "Playwright tests" below, same reasoning as
+            # keeping "Install chamilo" separate.
+            -   name: Seed test users
+                env:
+                    BASE_URL: http://localhost
+                run: yarn test:playwright:seed
+
             -   name: Playwright tests
                 env:
                     BASE_URL: http://localhost

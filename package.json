@@ -8,7 +8,8 @@
     "watch": "encore dev --watch",
     "build": "encore production --progress",
     "test:playwright:install": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Installation process\" --timeout=300000",
-    "test:playwright": "playwright test --config=tests/playwright/playwright.config.ts --grep-invert \"Installation process\"",
+    "test:playwright:seed": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Create tests users successfully\" --timeout=120000",
+    "test:playwright": "playwright test --config=tests/playwright/playwright.config.ts --grep-invert \"Installation process|Create tests users successfully\"",
     "test:playwright:ui": "playwright test --config=tests/playwright/playwright.config.ts --ui"
   },
   "dependencies": {

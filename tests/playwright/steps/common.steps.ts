@@ -19,6 +19,14 @@ Given("I am on {string}", async ({ page }, path: string) => {
 // around the same login flow, keyed by username. Doesn't reuse resolveField
 // (defined further below) because the login form's fields are known and
 // fixed here, not table/option-driven like the rest of the file's steps.
+//
+// iAmLoggedAs() itself waits (waitForThePageToBeLoaded(), an 8s sleep) right
+// after pressing "Sign in", before returning control to the caller — this
+// was missed on the first pass here, and its absence is exactly what broke
+// adminFillUsers.feature's first scenario: without it, the very next step
+// (navigating straight to filler.php?fill=users) could fire before the
+// session cookie from the login redirect was actually set, so the app
+// bounced it back to the login page as unauthenticated.
 async function loginAs(page: Page, username: string) {
   await page.goto("/login")
   await page.locator("#login").fill(username)
@@ -27,6 +35,7 @@ async function loginAs(page: Page, username: string) {
     .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
     .first()
     .click()
+  await page.waitForLoadState("networkidle")
 }
 
 Given("I am a platform administrator", async ({ page }) => {

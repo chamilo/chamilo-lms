@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Pa\u011do {0} el {1}",
     "Showing {0} posts": "Montras {0} afi\u015dojn",
     "Showing {0} tasks": "Montras {0} taskojn",
-    "contains {0} items": "enhavas {0} elementojn"
+    "contains {0} items": "enhavas {0} elementojn",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

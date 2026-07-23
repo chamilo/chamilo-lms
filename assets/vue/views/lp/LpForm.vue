@@ -278,13 +278,24 @@
             :label="t('Use default maximum score of 100')"
           />
 
-          <BaseCheckbox
+          <div
             v-if="form.showSubscribeUsers"
-            id="lp-subscribe-users"
-            v-model="form.subscribeUsers"
-            name="subscribeUsers"
-            :label="t('Subscribe users to learning path')"
-          />
+            class="flex flex-col gap-2"
+          >
+            <BaseRadioButtons
+              v-model="form.accessMode"
+              name="subscribeUsers"
+              :options="accessModeOptions"
+              :title="t('Learning path access')"
+            />
+            <small class="text-gray-50">
+              {{
+                form.accessMode === LP_ACCESS_SELECTED
+                  ? t("Only selected users and groups can access this learning path. Manage them after saving.")
+                  : t("All current and future course users can access this learning path.")
+              }}
+            </small>
+          </div>
 
           <div
             v-if="isEdit"
@@ -401,6 +412,8 @@ const FIELD_DATETIME = 7
 const FIELD_MULTI_SELECT = 5
 const FIELD_TAG = 10
 const NO_SPECIFIC_LANGUAGE = "__none__"
+const LP_ACCESS_ALL = "all"
+const LP_ACCESS_SELECTED = "selected"
 
 const createIntroductionKey =
   "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left."
@@ -449,6 +462,7 @@ const form = reactive({
   expiredOn: new Date(Date.now() + 86400000),
   useMaxScore: true,
   subscribeUsers: false,
+  accessMode: LP_ACCESS_ALL,
   accumulateScormTime: false,
   useScoreAsProgress: false,
   icon: "",
@@ -483,6 +497,11 @@ const context = computed(() => ({
   gid: Number(route.query.gid ?? 0),
 }))
 
+const accessModeOptions = computed(() => [
+  { label: t("All course users"), value: LP_ACCESS_ALL },
+  { label: t("Selected users and groups"), value: LP_ACCESS_SELECTED },
+])
+
 const viewModeOptions = computed(() => [
   { label: t("Current view mode: fullscreen"), value: "fullscreen" },
   { label: t("Current view mode: embedded"), value: "embedded" },
@@ -511,6 +530,8 @@ async function loadConfiguration() {
   try {
     const data = await lpService.getConfiguration(lpId.value, context.value)
     Object.assign(form, data)
+    form.subscribeUsers = Boolean(data.subscribeUsers)
+    form.accessMode = form.subscribeUsers ? LP_ACCESS_SELECTED : LP_ACCESS_ALL
     form.language = String(data.language || NO_SPECIFIC_LANGUAGE)
     form.publishedOn = toDate(data.publishedOn, new Date())
     form.expiredOn = toDate(data.expiredOn, new Date(Date.now() + 86400000))
@@ -598,7 +619,7 @@ function buildPayload() {
     activateEndDate: form.activateEndDate,
     expiredOn: form.activateEndDate ? toIso(form.expiredOn) : null,
     useMaxScore: form.useMaxScore,
-    subscribeUsers: form.subscribeUsers,
+    subscribeUsers: form.accessMode === LP_ACCESS_SELECTED,
     accumulateScormTime: form.accumulateScormTime,
     useScoreAsProgress: form.useScoreAsProgress,
     icon: form.icon,

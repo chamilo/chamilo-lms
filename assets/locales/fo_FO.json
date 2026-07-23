@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "S\u00ed\u00f0a {0} av {1}",
     "Showing {0} posts": "V\u00edsir {0} innlegg",
     "Showing {0} tasks": "V\u00edsir {0} uppg\u00e1vur",
-    "contains {0} items": "innheldur {0} lutir"
+    "contains {0} items": "innheldur {0} lutir",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Puslapis {0} i\u0161 {1}",
     "Showing {0} posts": "Rodoma {0} \u012fra\u0161\u0173",
     "Showing {0} tasks": "Rodoma {0} u\u017eduo\u010di\u0173",
-    "contains {0} items": "apima {0} elementus"
+    "contains {0} items": "apima {0} elementus",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

@@ -21,7 +21,7 @@ class JustificationDocument
     private ?string $code = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $name = null;
+    private ?string $title = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $validityDuration = null;
@@ -49,14 +49,14 @@ class JustificationDocument
         return $this;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(?string $name): self
+    public function setTitle(?string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "P\u00e2gine {0} di {1}",
     "Showing {0} posts": "Mostrant {0} post",
     "Showing {0} tasks": "Mostrant {0} ativid\u00e2ts",
-    "contains {0} items": "contign {0} elemets"
+    "contains {0} items": "contign {0} elemets",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

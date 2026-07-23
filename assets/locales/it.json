@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Pagina {0} di {1}",
     "Showing {0} posts": "Visualizzazione di {0} post",
     "Showing {0} tasks": "Visualizzazione di {0} compiti",
-    "contains {0} items": "contiene {0} elementi"
+    "contains {0} items": "contiene {0} elementi",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

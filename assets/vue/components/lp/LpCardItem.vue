@@ -540,7 +540,7 @@ const progressTextClass = computed(() =>
                   :url="advancedAccessUrl"
                   class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
                 >
-                  {{ t("Subscribe users to learning path") }}
+                  {{ t("Advanced learning path access") }}
                 </BaseAppLink>
                 <BaseAppLink
                   v-if="canDownloadScormPackage"
@@ -690,7 +690,7 @@ const progressTextClass = computed(() =>
 
         <BaseButton
           v-if="isLpSubscriptionMode"
-          :label="t('Subscribe users to learning path')"
+          :label="t('Advanced learning path access')"
           :to-url="advancedAccessUrl"
           icon="join-group"
           only-icon

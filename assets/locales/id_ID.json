@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Halaman {0} dari {1}",
     "Showing {0} posts": "Menampilkan {0} kiriman",
     "Showing {0} tasks": "Menampilkan {0} tugas",
-    "contains {0} items": "berisi {0} item"
+    "contains {0} items": "berisi {0} item",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

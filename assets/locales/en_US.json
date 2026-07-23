@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Create course packages for a certain time with training sessions",
     "Sessions management": "Sessions management",
     "Tracking": "Tracking",
+    "Analytics": "Analytics",
     "View reports, statistics and tracking data": "View reports, statistics and tracking data",
     "Manage the skills of your users, through courses and badges": "Manage the skills of your users, through courses and badges",
     "Personal data protection": "Personal data protection",
@@ -3134,5 +3135,9 @@
     "Page {0} of {1}": "Page {0} of {1}",
     "Showing {0} posts": "Showing {0} posts",
     "Showing {0} tasks": "Showing {0} tasks",
-    "contains {0} items": "contains {0} items"
+    "contains {0} items": "contains {0} items",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

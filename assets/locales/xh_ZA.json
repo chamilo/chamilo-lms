@@ -2340,9 +2340,9 @@
     "Forum updated": "Ifowamu ihlaziyiwe",
     "Forum created": "Ifowamu yenziwe",
     "Could not save forum": "Could not save forum",
-    "Are you sure you want to delete this forum category?": "Are you sure you want to delete this forum category?",
+    "Are you sure you want to delete this forum category?": "Uqinisekile ufuna ukucima eli candelo leforum?",
     "Could not delete forum category": "Could not delete forum category",
-    "Are you sure you want to delete this forum?": "Are you sure you want to delete this forum?",
+    "Are you sure you want to delete this forum?": "Uqinisekile ufuna ukucima le forum?",
     "Could not delete forum": "Ayikwazanga kucima iforamu",
     "Forum category unlocked": "Udidi lweforamu luvuliwe",
     "Forum category locked": "Udidi lweforamu lutshixiwe",
@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Iphepha {0} kwezokulandelayo {1}",
     "Showing {0} posts": "Kuboniswa iiposti {0}",
     "Showing {0} tasks": "Kuboniswa imisebenzi {0}",
-    "contains {0} items": "iqaqambile {0} izinto"
+    "contains {0} items": "iqaqambile {0} izinto",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

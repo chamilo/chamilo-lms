@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "{0} / {1} \u30da\u30fc\u30b8",
     "Showing {0} posts": "{0}\u4ef6\u306e\u6295\u7a3f\u3092\u8868\u793a\u4e2d",
     "Showing {0} tasks": "{0}\u4ef6\u306e\u30bf\u30b9\u30af\u3092\u8868\u793a\u4e2d",
-    "contains {0} items": "{0}\u9805\u76ee\u3092\u542b\u307f\u307e\u3059"
+    "contains {0} items": "{0}\u9805\u76ee\u3092\u542b\u307f\u307e\u3059",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

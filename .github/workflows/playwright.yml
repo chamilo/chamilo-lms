@@ -29,6 +29,13 @@ jobs:
             -   name: Checkout
                 uses: actions/checkout@v7
 
+            # As of PHP 8.5, opcache is compiled into core (php-src RFC "Make OPcache a
+            # non-optional part of PHP") and no longer ships as its own loadable
+            # extension/package — there's no php8.5-opcache in ondrej/php, and
+            # requesting the "opcache" extension by name would fail. Both spots below
+            # that reference it (this apt package list, and the extensions: list two
+            # steps down) skip it for 8.5 accordingly. Extend the `== '8.5'` check if a
+            # future PHP version keeps this behavior, since it isn't version-range-proofed.
             -   name: Setup apache
                 run: |
                     sudo apt-get install software-properties-common
@@ -45,7 +52,7 @@ jobs:
                       php${{ matrix.php-versions }}-intl \
                       php${{ matrix.php-versions }}-ldap \
                       php${{ matrix.php-versions }}-mbstring \
-                      php${{ matrix.php-versions }}-opcache \
+                      ${{ matrix.php-versions == '8.5' && '' || format('php{0}-opcache', matrix.php-versions) }} \
                       php${{ matrix.php-versions }}-soap \
                       php${{ matrix.php-versions }}-xml \
                       php${{ matrix.php-versions }}-zip \
@@ -57,7 +64,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php-versions }}
-                    extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, pdo_mysql, mysqli, opcache, soap, xml, zip
+                    extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, pdo_mysql, mysqli, soap, xml, zip${{ matrix.php-versions == '8.5' && '' || ', opcache' }}
                     ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris, opcache.enable=1, opcache.memory_consumption=64M
 
             -   name: Get composer cache directory
@@ -130,6 +137,22 @@ jobs:
                     printf '\nwhen@prod:\n    framework:\n        http_cache: true\n' >> config/packages/framework.yaml
                     sudo php bin/console cache:clear
                     sudo chmod -R 777 var
+
+            # Diagnostic for a "Create tests users successfully" failure seen where the
+            # admin/admin login got a genuine 401 {"error":"Invalid credentials."} from
+            # the server — not a Playwright/timing issue, the exact right JSON body was
+            # sent and rejected. This is the first time fresh-install-then-admin-login
+            # has actually been exercised end-to-end (the install step alone was
+            # verified before "Seed test users" existed), so it's unclear yet whether
+            # the account itself is broken right after install, or something about the
+            # browser/session flow specifically. A plain curl here, with no browser
+            # involved, isolates which one it is on the next run.
+            -   name: Verify admin login before seeding
+                run: |
+                    curl -s -X POST http://localhost/login_json \
+                      -H "Content-Type: application/json" \
+                      -d '{"username":"admin","password":"admin","_remember_me":false}' \
+                      -w "\nHTTP status: %{http_code}\n"
 
             # Seeds the fixed test accounts (mmosquera, acostea, ptook, etc.)
             # that the rest of the suite logs in as via "I am a teacher" /

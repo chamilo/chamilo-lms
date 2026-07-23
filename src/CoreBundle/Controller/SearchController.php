@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
@@ -17,6 +18,7 @@ use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CoreBundle\Search\Xapian\XapianSearchService;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -151,8 +153,9 @@ final class SearchController extends AbstractController
                 $estimatedTotal = (int) ($searchResult['count'] ?? 0);
                 $results = $searchResult['results'] ?? [];
 
-                $results = $this->hydrateResultsWithCourseRootNode($results);
+                $results = $this->hydrateQuizResultsWithExerciseContext($results);
                 $results = $this->hydrateQuestionResultsWithQuizIds($results);
+                $results = $this->hydrateResultsWithCourseRootNode($results);
 
                 $results = $this->hydrateResultsWithCourseMeta($results);
 
@@ -205,6 +208,55 @@ final class SearchController extends AbstractController
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * For quiz results, resolve missing exercise/course context from the quiz resource node.
+     *
+     * Older Xapian entries may not contain quiz_id/course_id even if they were indexed as quiz.
+     * This keeps visible search results linked to the migrated Vue exercise overview without
+     * bypassing the normal access check later in decorateResultsForUi().
+     *
+     * @param array<int, array<string, mixed>> $results
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function hydrateQuizResultsWithExerciseContext(array $results): array
+    {
+        foreach ($results as &$result) {
+            if (!\is_array($result)) {
+                continue;
+            }
+
+            $data = $result['data'] ?? [];
+            if (!\is_array($data)) {
+                $data = [];
+            }
+
+            $kind = (string) ($data['kind'] ?? '');
+            $tool = (string) ($data['tool'] ?? '');
+            $isQuiz = ('quiz' === $kind) || ('quiz' === $tool);
+
+            if (!$isQuiz) {
+                $result['data'] = $data;
+
+                continue;
+            }
+
+            $quiz = $this->findQuizFromSearchData($data, true);
+            if (!$quiz instanceof CQuiz) {
+                $data['search_is_stale'] = true;
+                $data['search_stale_reason'] = 'Quiz not found';
+                unset($data['quiz_id'], $data['course_id'], $data['course_root_node_id']);
+                $result['data'] = $data;
+
+                continue;
+            }
+
+            $result['data'] = $this->applyQuizContextToSearchData($data, $quiz, true);
+        }
+
+        return $results;
     }
 
     /**
@@ -313,28 +365,171 @@ final class SearchController extends AbstractController
 
             $quiz = $rel->getQuiz();
             if (!$quiz || null === $quiz->getIid()) {
+                $data['search_is_stale'] = true;
+                $data['search_stale_reason'] = 'Related quiz not found';
+                unset($data['quiz_id'], $data['course_id'], $data['course_root_node_id']);
                 $result['data'] = $data;
 
                 continue;
             }
 
-            // Attach quiz id for linking.
-            if (empty($data['quiz_id'])) {
-                $data['quiz_id'] = (string) $quiz->getIid();
-            }
-
-            // Attach quiz title so we can display it instead of exposing full question text.
-            if (empty($data['quiz_title']) && method_exists($quiz, 'getTitle')) {
-                $quizTitle = (string) $quiz->getTitle();
-                if ('' !== $quizTitle) {
-                    $data['quiz_title'] = $quizTitle;
-                }
-            }
-
-            $result['data'] = $data;
+            $result['data'] = $this->applyQuizContextToSearchData($data, $quiz, false);
         }
 
         return $results;
+    }
+
+    private function findQuizFromSearchData(array $data, bool $allowResourceNodeLookup): ?CQuiz
+    {
+        $quizId = isset($data['quiz_id']) && '' !== (string) $data['quiz_id']
+            ? (int) $data['quiz_id']
+            : 0;
+
+        if ($quizId > 0) {
+            $quiz = $this->em->find(CQuiz::class, $quizId);
+            if ($quiz instanceof CQuiz) {
+                return $quiz;
+            }
+        }
+
+        $xapianData = $data['xapian_data'] ?? null;
+        if (\is_string($xapianData) && '' !== trim($xapianData)) {
+            $decoded = json_decode($xapianData, true);
+            if (\is_array($decoded)) {
+                $candidateId = (int) ($decoded['exercise_id'] ?? $decoded['quiz_id'] ?? $decoded['primary_quiz_id'] ?? 0);
+                if ($candidateId > 0) {
+                    $quiz = $this->em->find(CQuiz::class, $candidateId);
+                    if ($quiz instanceof CQuiz) {
+                        return $quiz;
+                    }
+                }
+            }
+        }
+
+        if (!$allowResourceNodeLookup) {
+            return null;
+        }
+
+        $resourceNodeId = isset($data['resource_node_id']) && '' !== (string) $data['resource_node_id']
+            ? (int) $data['resource_node_id']
+            : 0;
+
+        if ($resourceNodeId <= 0) {
+            return null;
+        }
+
+        /** @var ResourceNode|null $resourceNode */
+        $resourceNode = $this->em->find(ResourceNode::class, $resourceNodeId);
+        if (!$resourceNode instanceof ResourceNode) {
+            return null;
+        }
+
+        /** @var CQuiz|null $quiz */
+        $quiz = $this->em
+            ->getRepository(CQuiz::class)
+            ->findOneBy(['resourceNode' => $resourceNode])
+        ;
+
+        return $quiz instanceof CQuiz ? $quiz : null;
+    }
+
+    private function applyQuizContextToSearchData(array $data, CQuiz $quiz, bool $replaceResourceNode): array
+    {
+        $quizId = $quiz->getIid();
+        if (null !== $quizId) {
+            $data['quiz_id'] = (string) $quizId;
+        }
+
+        if (empty($data['quiz_title']) && method_exists($quiz, 'getTitle')) {
+            $quizTitle = (string) $quiz->getTitle();
+            if ('' !== $quizTitle) {
+                $data['quiz_title'] = $quizTitle;
+            }
+        }
+
+        $resourceNode = $quiz->getResourceNode();
+        if (!$resourceNode instanceof ResourceNode) {
+            $data['search_is_stale'] = true;
+            $data['search_stale_reason'] = 'Quiz resource node not found';
+            unset($data['course_id'], $data['course_root_node_id']);
+
+            return $data;
+        }
+
+        if ($replaceResourceNode || empty($data['resource_node_id'])) {
+            $data['resource_node_id'] = (string) $resourceNode->getId();
+        }
+
+        $link = $this->resolveQuizResourceLink($resourceNode, $data);
+        if (!$link instanceof ResourceLink) {
+            $data['search_is_stale'] = true;
+            $data['search_stale_reason'] = 'Quiz course link not found';
+            unset($data['course_id'], $data['course_root_node_id']);
+
+            return $data;
+        }
+
+        $course = $link->getCourse();
+        if (!$course instanceof Course || !$course->getResourceNode()) {
+            $data['search_is_stale'] = true;
+            $data['search_stale_reason'] = 'Quiz course not found';
+            unset($data['course_id'], $data['course_root_node_id']);
+
+            return $data;
+        }
+
+        // The Xapian document may contain stale course metadata. Always use the
+        // current resource link so the generated Vue route points to an existing
+        // course/exercise pair.
+        $data['course_id'] = (string) $course->getId();
+        $data['course_root_node_id'] = (string) $course->getResourceNode()->getId();
+
+        $session = $link->getSession();
+        if ($session instanceof Session) {
+            $data['session_id'] = (string) $session->getId();
+        } elseif (!empty($data['session_id'])) {
+            unset($data['session_id']);
+        }
+
+        unset($data['search_is_stale'], $data['search_stale_reason']);
+
+        return $data;
+    }
+
+    private function resolveQuizResourceLink(ResourceNode $resourceNode, array $data): ?ResourceLink
+    {
+        $requestedCourseId = isset($data['course_id']) && '' !== (string) $data['course_id']
+            ? (int) $data['course_id']
+            : 0;
+        $requestedSessionId = isset($data['session_id']) && '' !== (string) $data['session_id']
+            ? (int) $data['session_id']
+            : 0;
+
+        $fallback = null;
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            if (!$link instanceof ResourceLink) {
+                continue;
+            }
+
+            $course = $link->getCourse();
+            if (!$course instanceof Course || !$course->getResourceNode()) {
+                continue;
+            }
+
+            $fallback ??= $link;
+
+            $session = $link->getSession();
+            $linkSessionId = $session instanceof Session ? (int) $session->getId() : 0;
+
+            if ($requestedCourseId > 0 && (int) $course->getId() === $requestedCourseId) {
+                if ($requestedSessionId <= 0 || $linkSessionId === $requestedSessionId) {
+                    return $link;
+                }
+            }
+        }
+
+        return $fallback;
     }
 
     /**
@@ -492,8 +687,12 @@ final class SearchController extends AbstractController
                 $data['excerpt_html'] = $this->buildExcerptHtml($content, $terms, 220);
             }
 
-            // Session-aware access flag.
-            $data['is_accessible'] = $this->isResultAccessible($data, $resolvedSid);
+            // Session-aware access flag. Stale Xapian hits must never build
+            // clickable links; they can only be displayed as unavailable when
+            // search_show_unlinked_results is enabled.
+            $data['is_accessible'] = !empty($data['search_is_stale'])
+                ? false
+                : $this->isResultAccessible($data, $resolvedSid);
 
             $data['thumbnail_url'] = $this->resolveSearchResultThumbnailUrl($data, $ext, $filetype);
             $data['thumbnail_source'] = '' !== (string) $data['thumbnail_url']
@@ -642,6 +841,10 @@ final class SearchController extends AbstractController
     private function isResultAccessible(array $data, int $resolvedSessionId = 0): bool
     {
         $user = $this->getUser();
+
+        if (!empty($data['search_is_stale'])) {
+            return false;
+        }
 
         if (!$user instanceof UserInterface) {
             return false;

@@ -92,6 +92,7 @@
                 {% set filetype = data.filetype|default('unknown') %}
                 {% set tool = data.tool|default(data.kind|default('document')) %}
                 {% set isAccessible = (data.is_accessible is not defined) ? true : data.is_accessible %}
+                {% set isStale = data.search_is_stale|default(false) %}
 
                 {% set kind = data.kind|default('document') %}
                 {% set quizId = data.quiz_id|default('') %}
@@ -107,7 +108,7 @@
                 {% set openUrl = null %}
                 {% set actionLabel = 'View'|trans %}
 
-                {% if isCourseDescResult %}
+                {% if not isStale and isCourseDescResult %}
                     {% if courseRootNodeId is not empty and courseId is not empty %}
                         {% set openUrl = app.request.basePath ~ '/resources/course-description/' ~ courseRootNodeId ~ '/?cid=' ~ courseId ~ '&sid=' ~ resolvedSid ~ '&gid=0' %}
                     {% endif %}
@@ -117,11 +118,19 @@
                     {% endif %}
                 {% elseif isQuestionResult %}
                     {% if courseId is not empty and quizId is not empty %}
-                        {% set openUrl = app.request.basePath ~ '/main/exercise/overview.php?cid=' ~ courseId ~ '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~ '&gid=0&gradebook=0&origin=&exerciseId=' ~ quizId %}
+                        {% if courseRootNodeId is not empty %}
+                            {% set openUrl = app.request.basePath ~ '/resources/exercise/' ~ courseRootNodeId ~ '/' ~ quizId ~ '/overview?cid=' ~ courseId ~ '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~ '&gid=0&gradebook=0&origin=' %}
+                        {% else %}
+                            {% set openUrl = app.request.basePath ~ '/main/exercise/overview.php?cid=' ~ courseId ~ '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~ '&gid=0&gradebook=0&origin=&exerciseId=' ~ quizId %}
+                        {% endif %}
                     {% endif %}
                 {% elseif isQuizResult %}
                     {% if courseId is not empty and quizId is not empty %}
-                        {% set openUrl = app.request.basePath ~ '/main/exercise/overview.php?cid=' ~ courseId ~ '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~ '&gid=0&gradebook=0&origin=&exerciseId=' ~ quizId %}
+                        {% if courseRootNodeId is not empty %}
+                            {% set openUrl = app.request.basePath ~ '/resources/exercise/' ~ courseRootNodeId ~ '/' ~ quizId ~ '/overview?cid=' ~ courseId ~ '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~ '&gid=0&gradebook=0&origin=' %}
+                        {% else %}
+                            {% set openUrl = app.request.basePath ~ '/main/exercise/overview.php?cid=' ~ courseId ~ '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~ '&gid=0&gradebook=0&origin=&exerciseId=' ~ quizId %}
+                        {% endif %}
                     {% endif %}
                 {% else %}
                     {% if courseRootNodeId is not empty and courseId is not empty %}
@@ -156,11 +165,24 @@
                                 <div class="min-w-0">
                                     <div class="flex items-start gap-2">
                                         <span class="mdi {{ fileIcon }} mt-0.5 text-lg text-gray-90"></span>
-                                        <h2 class="break-words text-lg font-bold text-gray-90">{{ title }}</h2>
+                                        <h2 class="break-words text-lg font-bold text-gray-90">
+                                            {% if openUrl and isAccessible %}
+                                                <a
+                                                    href="{{ openUrl }}"
+                                                    class="text-gray-90 hover:text-primary hover:underline"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >{{ title }}</a>
+                                            {% else %}
+                                                {{ title }}
+                                            {% endif %}
+                                        </h2>
                                     </div>
 
                                     <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-70">
-                                        {% if isAccessible == false %}
+                                        {% if isStale %}
+                                            <span class="rounded-full bg-red-10 px-2 py-1 text-red-70">{{ 'Unavailable'|trans }}</span>
+                                        {% elseif isAccessible == false %}
                                             <span class="rounded-full bg-red-10 px-2 py-1 text-red-70">{{ 'Restricted'|trans }}</span>
                                         {% endif %}
 
@@ -193,7 +215,7 @@
                                             <span class="mdi mdi-open-in-new"></span>
                                             {{ actionLabel }}
                                         </a>
-                                    {% elseif openUrl and not isAccessible %}
+                                    {% elseif openUrl and not isAccessible and not isStale %}
                                         <span class="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-gray-20 px-4 py-2 font-semibold text-gray-50">
                                             <span class="mdi mdi-open-in-new"></span>
                                             {{ actionLabel }}

@@ -1553,6 +1553,12 @@ class AiController extends AbstractController
     #[Route('/open_answer_grade', name: 'chamilo_core_ai_open_answer_grade', methods: ['POST'])]
     public function openAnswerGrade(Request $request): JsonResponse
     {
+        if ('true' !== api_get_setting('ai_helpers.enable_ai_helpers')
+            || 'true' !== api_get_setting('ai_helpers.open_answers_grader')
+        ) {
+            return $this->json(['error' => 'AI open answer grading is disabled.'], 403);
+        }
+
         $exeId = $request->request->getInt('exeId', 0);
         $questionId = $request->request->getInt('questionId', 0);
         $courseId = $request->request->getInt('courseId', 0);

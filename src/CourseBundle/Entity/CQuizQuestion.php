@@ -335,6 +335,13 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
         return $this->mandatory;
     }
 
+    public function setMandatory(int $mandatory): self
+    {
+        $this->mandatory = $mandatory;
+
+        return $this;
+    }
+
     /**
      * @return CQuizQuestionOption[]|Collection
      */

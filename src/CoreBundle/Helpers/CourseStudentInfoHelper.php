@@ -595,7 +595,7 @@ final class CourseStudentInfoHelper
             'course_home' => $base.'course/'.$courseId.'/home?'.$qs,
             'documents' => $base.'resources/document/'.$parentResourceNodeId.'/?'.$qs,
             'learnpaths' => $base.'resources/lp/'.$parentResourceNodeId.'/?'.$qs,
-            'exercises' => $base.'main/exercise/exercise.php?'.$qs,
+            'exercises' => $base.'resources/exercise/'.$parentResourceNodeId.'/?'.$qs,
             'forums' => $base.'main/forum/index.php?'.$qs,
             'wikis' => $base.'resources/wiki/'.$parentResourceNodeId.'/?'.$qs,
             'links' => $base.'resources/links/'.$parentResourceNodeId.'/?'.$qs,

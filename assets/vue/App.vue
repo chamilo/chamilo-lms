@@ -233,6 +233,43 @@ const isEmbeddedContext = computed(() => {
   return isPickerContext.value || isIframeContext.value || isDialogContext.value
 })
 
+const isTruthyQueryValue = (value) => {
+  return ["1", "true", "yes", "on"].includes(String(value || "").toLowerCase())
+}
+
+const isLearnpathEmbeddedRoute = computed(() => {
+  const qp = queryParams.value
+  const origin = String(qp.get("origin") || "").toLowerCase()
+  const lpAction = String(qp.get("action") || "").toLowerCase()
+  const hasLpId = qp.has("lp_id")
+
+  // LP player/runtime screens are rendered inside the learning path player.
+  // They must use EmptyLayout to avoid duplicated Chamilo header/sidebar.
+  if (
+    hasLpId &&
+    ("view" === lpAction || isTruthyQueryValue(qp.get("embedded")) || isTruthyQueryValue(qp.get("isStudentView")))
+  ) {
+    return true
+  }
+
+  if ("learnpath" !== origin) {
+    return false
+  }
+
+  // Authoring screens launched from the LP add-item screen must keep the full
+  // course layout. This is used by Exercise, Forum and Survey creation flows.
+  if (isTruthyQueryValue(qp.get("returnToLp"))) {
+    return false
+  }
+
+  return (
+    qp.has("lp_init") ||
+    qp.has("learnpath_id") ||
+    qp.has("learnpath_item_id") ||
+    qp.has("learnpath_item_view_id")
+  )
+})
+
 const layout = computed(() => {
   if (showAccessUrlChosserLayout.value && !hideGlobalUi.value) {
     return AccessUrlChooserLayout
@@ -250,12 +287,7 @@ const layout = computed(() => {
     return EmptyLayout
   }
 
-  const lpAction = String(qp.get("action") || "").toLowerCase()
-  const isLearningPathPlayerContext =
-    qp.has("lp_id") &&
-    ("view" === lpAction || "1" === qp.get("embedded") || "true" === String(qp.get("isStudentView") || ""))
-
-  if (isLearningPathPlayerContext) {
+  if (isLearnpathEmbeddedRoute.value) {
     return EmptyLayout
   }
 

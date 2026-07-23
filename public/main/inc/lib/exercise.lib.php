@@ -7281,4 +7281,103 @@ EOT;
 
         $exerciseStatInfo['data_tracking'] = $newTracking;
     }
+
+
+    private static function getCourseResourceNodeId(int $courseId): int
+    {
+        if ($courseId <= 0) {
+            return 0;
+        }
+
+        $course = Container::getEntityManager()->getRepository(CourseEntity::class)->find($courseId);
+        if (!$course instanceof CourseEntity) {
+            return 0;
+        }
+
+        $resourceNode = $course->getResourceNode();
+
+        return null !== $resourceNode ? (int) $resourceNode->getId() : 0;
+    }
+
+    /**
+     * Build the modern Vue create URL for an exercise when a legacy integration
+     * still needs to create a test without showing legacy exercise UI.
+     */
+    public static function buildVueCreateUrl(
+        array $extraParams = [],
+        ?int $courseId = null,
+        ?int $sessionId = null,
+        ?int $groupId = null
+    ): ?string {
+        $courseId = $courseId ?? (int) api_get_course_int_id();
+        if ($courseId <= 0) {
+            return null;
+        }
+
+        $nodeId = self::getCourseResourceNodeId($courseId);
+        if ($nodeId <= 0) {
+            return null;
+        }
+
+        $sessionId = $sessionId ?? (int) api_get_session_id();
+        $groupId = $groupId ?? (int) api_get_group_id();
+        $params = [
+            'cid' => $courseId,
+            'sid' => max(0, $sessionId),
+            'gid' => max(0, $groupId),
+        ];
+
+        foreach ($extraParams as $key => $value) {
+            if (null === $value || '' === (string) $value) {
+                continue;
+            }
+            $params[$key] = $value;
+        }
+
+        return rtrim(api_get_path(WEB_PATH), '/').'/resources/exercise/'.$nodeId.'/create?'.http_build_query($params);
+    }
+
+    /**
+     * Build the modern Vue overview URL for an exercise when a legacy integration
+     * still needs to point to a test.
+     */
+    public static function buildVueOverviewUrl(
+        int $exerciseId,
+        array $extraParams = [],
+        ?int $courseId = null,
+        ?int $sessionId = null,
+        ?int $groupId = null
+    ): ?string {
+        if ($exerciseId <= 0) {
+            return null;
+        }
+
+        $courseId = $courseId ?? (int) api_get_course_int_id();
+        if ($courseId <= 0) {
+            return null;
+        }
+
+        $nodeId = self::getCourseResourceNodeId($courseId);
+        if ($nodeId <= 0) {
+            return null;
+        }
+
+        $sessionId = $sessionId ?? (int) api_get_session_id();
+        $groupId = $groupId ?? (int) api_get_group_id();
+        $params = [
+            'cid' => $courseId,
+            'sid' => max(0, $sessionId),
+            'gid' => max(0, $groupId),
+        ];
+
+        foreach ($extraParams as $key => $value) {
+            if (null === $value || '' === (string) $value) {
+                continue;
+            }
+            $params[$key] = $value;
+        }
+
+        return rtrim(api_get_path(WEB_PATH), '/').'/resources/exercise/'.$nodeId.'/'.$exerciseId.'/overview?'.http_build_query($params);
+    }
+
 }

@@ -51,11 +51,7 @@ jobs:
                       php${{ matrix.php-versions }}-zip \
                       libapache2-mod-php${{ matrix.php-versions }}
                     sudo a2enmod rewrite actions
-                    sudo a2dissite 000-default.conf
-                    sudo cp -f ${{ github.workspace }}/.github/gh-apache /etc/apache2/sites-available/000-default.conf
-                    sudo a2ensite 000-default.conf
                     sudo chmod 777 -R $HOME
-                    sudo systemctl restart apache2
 
             -   name: Setup PHP, with composer and extensions
                 uses: shivammathur/setup-php@v2
@@ -94,6 +90,23 @@ jobs:
 
             -   name: Install Playwright browsers
                 run: yarn playwright install --with-deps chromium
+
+            # Deliberately last, right before Apache is actually needed, not
+            # right after `apt-get install apache2` back in "Setup apache".
+            # A previous run showed 000-default.conf was still the stock
+            # /var/www/html vhost by this point in the job, despite "Setup
+            # apache" copying gh-apache into it and re-enabling the site
+            # without error — something in between (most likely
+            # shivammathur/setup-php@v2, which manages the Apache/PHP
+            # integration) was resetting it. Applying the vhost swap here
+            # instead, as the last write before first use, sidesteps that
+            # regardless of which exact step was clobbering it.
+            -   name: Configure apache vhost
+                run: |
+                    sudo a2dissite 000-default.conf
+                    sudo cp -f ${{ github.workspace }}/.github/gh-apache /etc/apache2/sites-available/000-default.conf
+                    sudo a2ensite 000-default.conf
+                    sudo systemctl restart apache2
 
             -   name: Check apache is up
                 run: |

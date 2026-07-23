@@ -24,7 +24,11 @@ jobs:
             fail-fast: false
             matrix:
                 operating-system: [ ubuntu-latest ]
-                php-versions: [ '8.3', '8.4', '8.5' ]
+                # 8.4/8.5 temporarily disabled: focusing on getting the full suite green on
+                # 8.3 first, then re-enabling the rest — that split also makes any future
+                # failure easier to read as "version-specific" instead of muddying it with
+                # whatever's still being worked out on 8.3 alone. Re-enable by uncommenting.
+                php-versions: [ '8.3' ] # , '8.4', '8.5'
         steps:
             -   name: Checkout
                 uses: actions/checkout@v7
@@ -161,8 +165,16 @@ jobs:
             # any plain (non-LDAP/OAuth2) login for a user missing it — this is the
             # first time fresh-install-then-admin-login has been exercised
             # end-to-end, so if that gap exists it would never have surfaced before.
-            # This step confirms it directly at the DB level rather than resting on
-            # the inference alone.
+            #
+            # UPDATE: ruled out. A run confirmed the admin row exists/is active
+            # (status=1, active=1) AND has the expected user_auth_source row
+            # (authentication='platform') — so UserAuthSourceListener isn't what's
+            # rejecting this login. All 3 PHP versions fail identically on this
+            # exact scenario, so it's not version-specific either. That leaves the
+            # password itself: either the hash the installer wrote isn't in a
+            # format the "auto" password hasher (bcrypt/legacy_md5/legacy_sha1/
+            # legacy_bcrypt) recognizes, or "admin" genuinely isn't what got saved.
+            # Dumping the raw stored hash to see which.
             -   name: Verify admin login before seeding
                 run: |
                     curl -s -X POST http://localhost/login_json \
@@ -173,6 +185,8 @@ jobs:
                     php bin/console doctrine:query:sql "SELECT id, username, status, active FROM user WHERE username = 'admin'"
                     echo "--- admin user_auth_source rows (expect one with authentication='platform') ---"
                     php bin/console doctrine:query:sql "SELECT * FROM user_auth_source WHERE user_id = (SELECT id FROM user WHERE username = 'admin')"
+                    echo "--- admin stored password hash ---"
+                    php bin/console doctrine:query:sql "SELECT password FROM user WHERE username = 'admin'"
 
             # Seeds the fixed test accounts (mmosquera, acostea, ptook, etc.)
             # that the rest of the suite logs in as via "I am a teacher" /

@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Oju-iwe {0} ti {1}",
     "Showing {0} posts": "Nfihan {0} aw\u1ecdn ifiweran\u1e63\u1eb9",
     "Showing {0} tasks": "Nfihan {0} aw\u1ecdn i\u1e63\u1eb9\u0301-\u1e63i\u1e63e",
-    "contains {0} items": "n\u00ed {0} aw\u1ecdn ohun kan"
+    "contains {0} items": "n\u00ed {0} aw\u1ecdn ohun kan",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Sivu {0} / {1}",
     "Showing {0} posts": "N\u00e4ytt\u00e4\u00e4 {0} viesti\u00e4",
     "Showing {0} tasks": "N\u00e4ytt\u00e4\u00e4 {0} teht\u00e4v\u00e4\u00e4",
-    "contains {0} items": "sis\u00e4lt\u00e4\u00e4 {0} kohdetta"
+    "contains {0} items": "sis\u00e4lt\u00e4\u00e4 {0} kohdetta",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

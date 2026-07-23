@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Pagina {0} van {1}",
     "Showing {0} posts": "Toont {0} berichten",
     "Showing {0} tasks": "Toont {0} taken",
-    "contains {0} items": "bevat {0} items"
+    "contains {0} items": "bevat {0} items",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

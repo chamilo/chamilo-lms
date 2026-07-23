@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Leathanach {0} de {1}",
     "Showing {0} posts": "Ag taispe\u00e1int {0} post",
     "Showing {0} tasks": "Ag taispe\u00e1int {0} tasc",
-    "contains {0} items": "ag brath {0} m\u00edreanna"
+    "contains {0} items": "ag brath {0} m\u00edreanna",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Pagina {0} de {1}",
     "Showing {0} posts": "Afichatge de {0} publicacions",
     "Showing {0} tasks": "Afichatge de {0} taches",
-    "contains {0} items": "conten {0} elements"
+    "contains {0} items": "conten {0} elements",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

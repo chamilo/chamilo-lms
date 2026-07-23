@@ -52,28 +52,40 @@
                 class="friend-info"
               >
                 <img
-                  :alt="item.friend.username"
+                  :alt="item.friend.fullName"
                   :src="item.friend.illustrationUrl"
                   class="friend-info__avatar"
                 />
-                <div
-                  class="friend-info__username"
-                  v-text="item.friend.username"
-                />
+                <div class="flex flex-col items-center">
+                  <div
+                    class="friend-info__username"
+                    v-text="item.friend.username"
+                  />
+                  <div
+                    class="text-sm text-gray-500"
+                    v-text="item.friend.fullName"
+                  />
+                </div>
               </div>
               <div
                 v-else
                 class="friend-info"
               >
                 <img
-                  :alt="item.user.username"
+                  :alt="item.user.fullName"
                   :src="item.user.illustrationUrl"
                   class="friend-info__avatar"
                 />
-                <div
-                  class="friend-info__username"
-                  v-text="item.user.username"
-                />
+                <div class="flex flex-col items-center">
+                  <div
+                    class="friend-info__username"
+                    v-text="item.user.username"
+                  />
+                  <div
+                    class="text-sm text-gray-500"
+                    v-text="item.user.fullName"
+                  />
+                </div>
               </div>
               <div
                 v-if="isCurrentUser"

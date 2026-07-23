@@ -2520,8 +2520,8 @@
     "Back to top": "Tillbaka till toppen",
     "Backup directory": "S\u00e4kerhetskopieringskatalog",
     "Backup file": "S\u00e4kerhetskopieringsfil",
-    "Baseline clean": "Baseline clean",
-    "Baseline warnings": "Baseline warnings",
+    "Baseline clean": "Baseline ren",
+    "Baseline warnings": "Baseline varningar",
     "Block comments": "Blockera kommentarer",
     "Block new pages": "Blockera nya sidor",
     "Block ratings": "Blockera betyg",
@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Sida {0} av {1}",
     "Showing {0} posts": "Visar {0} inl\u00e4gg",
     "Showing {0} tasks": "Visar {0} uppgifter",
-    "contains {0} items": "inneh\u00e5ller {0} objekt"
+    "contains {0} items": "inneh\u00e5ller {0} objekt",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

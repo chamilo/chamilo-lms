@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Strona {0} z {1}",
     "Showing {0} posts": "Wy\u015bwietlanie {0} post\u00f3w",
     "Showing {0} tasks": "Wy\u015bwietlanie {0} zada\u0144",
-    "contains {0} items": "zawiera {0} element\u00f3w"
+    "contains {0} items": "zawiera {0} element\u00f3w",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

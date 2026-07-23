@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Ukurasa {0} wa {1}",
     "Showing {0} posts": "Inayoonyesha {0} machapisho",
     "Showing {0} tasks": "Inayoonyesha {0} kazi",
-    "contains {0} items": "ina vitu {0}"
+    "contains {0} items": "ina vitu {0}",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

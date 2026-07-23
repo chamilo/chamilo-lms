@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Laman {0} daripada {1}",
     "Showing {0} posts": "Memaparkan {0} siaran",
     "Showing {0} tasks": "Memaparkan {0} tugas",
-    "contains {0} items": "mengandungi {0} item"
+    "contains {0} items": "mengandungi {0} item",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

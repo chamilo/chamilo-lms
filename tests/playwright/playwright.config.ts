@@ -37,7 +37,13 @@ export default defineConfig({
   ],
   use: {
     baseURL: process.env.BASE_URL || "http://my.chamilo.net",
-    trace: "retain-on-failure",
+    // Temporarily "on" (always trace, not just on failure) instead of
+    // "retain-on-failure" — actionInstall.feature's "Installation process"
+    // scenario currently passes, but its resulting admin password doesn't
+    // verify server-side (see project memory / recent CI investigation), so
+    // there's nothing to inspect from a passing test by default. Once that's
+    // root-caused, revert this to "retain-on-failure" to keep artifacts lean.
+    trace: "on",
     screenshot: "only-on-failure",
   },
   projects: [

@@ -16,14 +16,22 @@ Given("I am on {string}", async ({ page }, path: string) => {
 // label text (in that order) — which is why Gherkin locators like "login"
 // have always worked here without anyone needing to know whether that's
 // actually an `id` or a `name` attribute (e.g. assets/vue/components/Login.vue
-// uses id="login" with no name attribute at all, while the legacy install
-// wizard's form fields are plain name="..." attributes). Mirror that same
+// uses id="login" with no name attribute at all, while the install wizard's
+// PrimeVue-based fields use name="..." — see below). Mirror that same
 // id -> name -> label fallback for both fill and check so these steps keep
 // working regardless of which attribute a given form happens to use.
+//
+// `:visible` matters here: PrimeVue form fields (e.g. the install wizard's
+// database step) render a hidden proxy <input type="hidden" name="dbNameForm">
+// kept in sync alongside the actual visible <input name="dbNameForm"
+// input-id="dbNameForm">, so a plain [name="..."] locator matches both and
+// Playwright's strict mode rightly refuses to guess. Restricting to the
+// visible one is also just the more correct thing to do regardless — a real
+// user can't type into a hidden field.
 async function resolveField(page: Page, field: string) {
-  const byId = page.locator(`#${field}`)
+  const byId = page.locator(`#${field}:visible`)
   if (await byId.count()) return byId
-  const byName = page.locator(`[name="${field}"]`)
+  const byName = page.locator(`[name="${field}"]:visible`)
   if (await byName.count()) return byName
   return page.getByLabel(field)
 }
@@ -57,12 +65,14 @@ const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
 
 When("I press {string}", async ({ page }, label: string) => {
   if (looksLikeIdentifier(label)) {
-    const byId = page.locator(`#${label}`)
+    // Same hidden-proxy-vs-visible-widget situation as resolveField() above
+    // can apply to buttons too, hence :visible here as well.
+    const byId = page.locator(`#${label}:visible`)
     if (await byId.count()) {
       await byId.first().click()
       return
     }
-    const byName = page.locator(`[name="${label}"]`)
+    const byName = page.locator(`[name="${label}"]:visible`)
     if (await byName.count()) {
       await byName.first().click()
       return

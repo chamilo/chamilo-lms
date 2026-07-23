@@ -20,12 +20,19 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
+use Mcp\Exception\ToolCallException;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const JSON_THROW_ON_ERROR;
+use const PREG_SPLIT_NO_EMPTY;
 
 final readonly class CreateCourseDocumentTool
 {
@@ -62,6 +69,7 @@ final readonly class CreateCourseDocumentTool
      *         word_count_within_20_percent: bool,
      *         published: bool,
      *         ai_assisted: true,
+     *         content_type: 'text/html',
      *         content_url: string
      *     }
      * }
@@ -78,6 +86,54 @@ final readonly class CreateCourseDocumentTool
         string $content,
         ?string $language = null,
         bool $publish = true,
+    ): array {
+        try {
+            return $this->doCreateCourseDocument(
+                $courseId,
+                $title,
+                $topic,
+                $requestedWordCount,
+                $content,
+                $language,
+                $publish,
+            );
+        } catch (ToolCallException $exception) {
+            throw $exception;
+        } catch (AccessDeniedException|InvalidArgumentException|RuntimeException $exception) {
+            throw new ToolCallException($exception->getMessage());
+        } catch (Throwable $throwable) {
+            throw new ToolCallException('The course document could not be created because of an unexpected server error. Check the Chamilo log for technical details.', 0, $throwable);
+        }
+    }
+
+    /**
+     * @return array{
+     *     created: true,
+     *     document: array{
+     *         document_id: int,
+     *         resource_node_id: int,
+     *         parent_resource_node_id: int,
+     *         title: string,
+     *         file_name: string|null,
+     *         topic: string,
+     *         requested_word_count: int,
+     *         actual_word_count: int,
+     *         word_count_within_20_percent: bool,
+     *         published: bool,
+     *         ai_assisted: true,
+     *         content_type: 'text/html',
+     *         content_url: string
+     *     }
+     * }
+     */
+    private function doCreateCourseDocument(
+        int $courseId,
+        string $title,
+        string $topic,
+        int $requestedWordCount,
+        string $content,
+        ?string $language,
+        bool $publish,
     ): array {
         if ($courseId <= 0) {
             throw new InvalidArgumentException('The course ID must be a positive integer.');
@@ -100,9 +156,7 @@ final readonly class CreateCourseDocumentTool
         );
 
         if (null === $course) {
-            throw new AccessDeniedException(
-                'The course was not found or is not managed by the authenticated teacher.'
-            );
+            throw new AccessDeniedException('The course was not found or is not managed by the authenticated teacher.');
         }
 
         $title = trim(strip_tags($title));
@@ -127,13 +181,7 @@ final readonly class CreateCourseDocumentTool
             $requestedWordCount < self::MIN_REQUESTED_WORDS
             || $requestedWordCount > self::MAX_REQUESTED_WORDS
         ) {
-            throw new InvalidArgumentException(
-                \sprintf(
-                    'The requested word count must be between %d and %d.',
-                    self::MIN_REQUESTED_WORDS,
-                    self::MAX_REQUESTED_WORDS
-                )
-            );
+            throw new InvalidArgumentException(\sprintf('The requested word count must be between %d and %d.', self::MIN_REQUESTED_WORDS, self::MAX_REQUESTED_WORDS));
         }
 
         $content = trim($content);
@@ -185,17 +233,17 @@ final readonly class CreateCourseDocumentTool
                         'parentResourceNodeId' => (int) $courseResourceNode->getId(),
                         'resourceLinkList' => json_encode(
                             [['visibility' => $visibility]],
-                            JSON_THROW_ON_ERROR
+                            JSON_THROW_ON_ERROR,
                         ),
                         'ai_assisted' => '1',
                     ],
                     [],
                     [],
                     [],
-                    ''
+                    '',
                 );
 
-                return ($this->createDocumentFileAction)(
+                $document = ($this->createDocumentFileAction)(
                     $request,
                     $this->documentRepository,
                     $this->entityManager,
@@ -205,6 +253,20 @@ final readonly class CreateCourseDocumentTool
                     $this->courseHelper,
                     $this->aiDisclosureHelper,
                 );
+
+                $resourceFile = $document->getResourceNode()?->getFirstResourceFile();
+
+                if (!$resourceFile instanceof ResourceFile) {
+                    throw new RuntimeException('Chamilo created the HTML document without a resource file.');
+                }
+
+                // Vich/Finfo can detect short HTML fragments as text/plain.
+                // The tool created and sanitized an HTML file explicitly, so
+                // normalize the persisted metadata after Vich processed it.
+                $resourceFile->setMimeType('text/html');
+                $this->entityManager->persist($resourceFile);
+
+                return $document;
             }
         );
 
@@ -240,9 +302,10 @@ final readonly class CreateCourseDocumentTool
                     && $actualWordCount <= $maximumExpected,
                 'published' => $publish,
                 'ai_assisted' => true,
+                'content_type' => 'text/html',
                 'content_url' => $this->documentRepository->getResourceFileUrl(
                     $document,
-                    ['cid' => $courseId]
+                    ['cid' => $courseId],
                 ),
             ],
         ];
@@ -257,7 +320,7 @@ final readonly class CreateCourseDocumentTool
         if (\defined('COURSEMANAGERLOWSECURITY')) {
             return (string) \Security::remove_XSS(
                 $content,
-                (int) \constant('COURSEMANAGERLOWSECURITY')
+                (int) \constant('COURSEMANAGERLOWSECURITY'),
             );
         }
 
@@ -269,7 +332,7 @@ final readonly class CreateCourseDocumentTool
         $plainText = html_entity_decode(
             strip_tags($html),
             ENT_QUOTES | ENT_HTML5,
-            'UTF-8'
+            'UTF-8',
         );
         $plainText = trim((string) preg_replace('/\s+/u', ' ', $plainText));
 

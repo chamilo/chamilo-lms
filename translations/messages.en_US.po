@@ -8552,6 +8552,9 @@ msgstr "Company"
 msgid "Reporting"
 msgstr "Reporting"
 
+msgid "Analytics"
+msgstr "Analytics"
+
 msgid "Update"
 msgstr "Update"
 

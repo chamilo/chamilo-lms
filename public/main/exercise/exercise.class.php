@@ -9285,8 +9285,10 @@ class Exercise
         }
 
         if (!empty($keyword)) {
+            // Exercise titles are stored HTML-entity-encoded (see format_title_variable()),
+            // so the search keyword must be encoded the same way to match accented characters.
             $qb->andWhere($qb->expr()->like('resource.title', ':keyword'));
-            $qb->setParameter('keyword', '%'.$keyword.'%');
+            $qb->setParameter('keyword', '%'.api_htmlentities($keyword).'%');
         }
 
         // Students should only see published exercises.

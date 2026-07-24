@@ -99,17 +99,31 @@ async function resolveField(page: Page, field: string) {
 // is enough for a plain <input> (e.g. Login.vue's fields) but was proven NOT
 // enough for actionInstall.feature's Step5.vue admin password field: it's
 // PrimeVue's <Password> widget, which auto-generates its own suggested value
-// on mount and apparently doesn't react to a batch .fill() the way a plain
-// input's v-model does — confirmed via a network trace showing the
-// installer's own auto-generated password ("7%eDtmXb4SrBT"-style) went
-// through to the real submission on every request, never "admin", even
-// though the fill() call itself didn't error. clear() + pressSequentially()
-// simulates real keystrokes (one native keydown/input per character), which
-// is the standard, more broadly-compatible fix for rich components that
-// don't pick up a single programmatic value assignment.
+// on mount. Confirmed via network trace that the installer's own
+// auto-generated password went through to the real submission every time,
+// never "admin" — first with plain .fill(), and clear()+pressSequentially()
+// (simulated real keystrokes, the standard fix for rich components that
+// ignore a batch value assignment) did NOT fix it either, so whatever's
+// going on here isn't (only) an event-dispatch problem.
+//
+// Rather than guess at a third fill strategy blind, this now verifies its
+// own result immediately via inputValue() and throws with full context if
+// it doesn't match — turning a silent mismatch into an immediate, precise
+// failure right here, instead of a confusing symptom several steps later
+// (in this case: a 401 on a completely different login attempt). This is
+// worth keeping permanently regardless of this specific bug — the same
+// silent-mismatch class of issue could hit any field on any future feature.
 async function fillReliably(locator: ReturnType<Page["locator"]>, value: string) {
   await locator.clear()
   await locator.pressSequentially(value)
+  const actual = await locator.inputValue()
+  if (actual !== value) {
+    throw new Error(
+      `Fill did not take effect: expected "${value}", but the field's value is "${actual}" ` +
+        `immediately after filling. This field likely isn't a plain <input> — see the ` +
+        `comment above fillReliably() for the known case (PrimeVue's <Password> widget).`,
+    )
+  }
 }
 
 When("I fill in {string} for {string}", async ({ page }, value: string, field: string) => {

@@ -170,10 +170,8 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
             ->innerJoin('rn.resourceLinks', 'rl')
             ->andWhere('rl.course = :course')
             ->andWhere('lp.lpType = :scormType')
-            ->setParameters([
-                'course' => $course,
-                'scormType' => CLp::SCORM_TYPE,
-            ])
+            ->setParameter('course', $course)
+            ->setParameter('scormType', CLp::SCORM_TYPE)
             ->getQuery()
             ->getResult()
         ;

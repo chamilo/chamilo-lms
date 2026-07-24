@@ -510,7 +510,7 @@ trait ClosureTreeRepositoryTrait
 
         if ($node !== null) {
             $q->where('c.ancestor = :node');
-            $q->setParameters(compact('node'));
+            $q->setParameter('node', $node);
         } else {
             $q->groupBy('c.descendant');
         }
@@ -536,11 +536,11 @@ trait ClosureTreeRepositoryTrait
     {
         $nodeMeta = $this->getClassMetadata();
         $nodeIdField = $nodeMeta->getSingleIdentifierFieldName();
-        $config = $this->listener->getConfiguration($this->_em, $nodeMeta->name);
-        $closureMeta = $this->_em->getClassMetadata($config['closure']);
+        $config = $this->listener->getConfiguration($this->getEntityManager(), $nodeMeta->name);
+        $closureMeta = $this->getEntityManager()->getClassMetadata($config['closure']);
         $errors = [];
 
-        $q = $this->_em->createQuery("
+        $q = $this->getEntityManager()->createQuery("
           SELECT COUNT(node)
           FROM {$nodeMeta->name} AS node
           LEFT JOIN {$closureMeta->name} AS c WITH c.ancestor = node AND c.depth = 0
@@ -551,7 +551,7 @@ trait ClosureTreeRepositoryTrait
             $errors[] = "Missing $missingSelfRefsCount self referencing closures";
         }
 
-        $q = $this->_em->createQuery("
+        $q = $this->getEntityManager()->createQuery("
           SELECT COUNT(node)
           FROM {$nodeMeta->name} AS node
           INNER JOIN {$closureMeta->name} AS c1 WITH c1.descendant = node.{$config['parent']}
@@ -579,8 +579,8 @@ trait ClosureTreeRepositoryTrait
     public function rebuildClosure()
     {
         $nodeMeta = $this->getClassMetadata();
-        $config = $this->listener->getConfiguration($this->_em, $nodeMeta->name);
-        $closureMeta = $this->_em->getClassMetadata($config['closure']);
+        $config = $this->listener->getConfiguration($this->getEntityManager(), $nodeMeta->name);
+        $closureMeta = $this->getEntityManager()->getClassMetadata($config['closure']);
 
         $insertClosures = function ($entries) use ($closureMeta) {
             $closureTable = $closureMeta->getTableName();
@@ -588,7 +588,7 @@ trait ClosureTreeRepositoryTrait
             $descendantColumnName = $this->getJoinColumnFieldName($closureMeta->getAssociationMapping('descendant'));
             $depthColumnName = $closureMeta->getColumnName('depth');
 
-            $conn = $this->_em->getConnection();
+            $conn = $this->getEntityManager()->getConnection();
             $conn->beginTransaction();
             foreach ($entries as $entry) {
                 $conn->insert($closureTable, array_combine(
@@ -602,7 +602,7 @@ trait ClosureTreeRepositoryTrait
         $buildClosures = function ($dql) use ($insertClosures) {
             $newClosuresCount = 0;
             $batchSize = 1000;
-            $q = $this->_em->createQuery($dql)->setMaxResults($batchSize)->setCacheable(false);
+            $q = $this->getEntityManager()->createQuery($dql)->setMaxResults($batchSize)->setCacheable(false);
             do {
                 $entries = $q->getScalarResult();
                 $insertClosures($entries);
@@ -631,11 +631,11 @@ trait ClosureTreeRepositoryTrait
 
     public function cleanUpClosure()
     {
-        $conn = $this->_em->getConnection();
+        $conn = $this->getEntityManager()->getConnection();
         $nodeMeta = $this->getClassMetadata();
         $nodeIdField = $nodeMeta->getSingleIdentifierFieldName();
-        $config = $this->listener->getConfiguration($this->_em, $nodeMeta->name);
-        $closureMeta = $this->_em->getClassMetadata($config['closure']);
+        $config = $this->listener->getConfiguration($this->getEntityManager(), $nodeMeta->name);
+        $closureMeta = $this->getEntityManager()->getClassMetadata($config['closure']);
         $closureTableName = $closureMeta->getTableName();
 
         $dql = "
@@ -648,7 +648,7 @@ trait ClosureTreeRepositoryTrait
 
         $deletedClosuresCount = 0;
         $batchSize = 1000;
-        $q = $this->_em->createQuery($dql)->setMaxResults($batchSize)->setCacheable(false);
+        $q = $this->getEntityManager()->createQuery($dql)->setMaxResults($batchSize)->setCacheable(false);
 
         while (($ids = $q->getScalarResult()) && !empty($ids)) {
             $ids = array_map(function ($el) {

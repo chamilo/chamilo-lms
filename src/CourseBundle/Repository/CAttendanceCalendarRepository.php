@@ -64,10 +64,8 @@ final class CAttendanceCalendarRepository extends ResourceRepository
         return $this->createQueryBuilder('c')
             ->where('c.id = :calendarId')
             ->andWhere('c.attendance = :attendanceId')
-            ->setParameters([
-                'calendarId' => $calendarId,
-                'attendanceId' => $attendanceId,
-            ])
+            ->setParameter('calendarId', $calendarId)
+            ->setParameter('attendanceId', $attendanceId)
             ->getQuery()
             ->getOneOrNullResult()
         ;

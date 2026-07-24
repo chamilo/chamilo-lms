@@ -102,7 +102,7 @@ class ResourceLinkRepository extends SortableRepository
      */
     public function getAvailableTools(): array
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('DISTINCT t.id, t.title')
             ->from(ResourceLink::class, 'rl')
@@ -130,7 +130,7 @@ class ResourceLinkRepository extends SortableRepository
      */
     public function getToolUsageReportByTools(array $toolIds): array
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder
             ->select(

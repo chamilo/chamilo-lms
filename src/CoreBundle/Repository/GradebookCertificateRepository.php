@@ -77,8 +77,8 @@ class GradebookCertificateRepository extends ResourceRepository
         if (!$existingCertificate) {
             $certificate = new GradebookCertificate();
 
-            $category = 0 === $catId ? null : $this->_em->getRepository(GradebookCategory::class)->find($catId);
-            $user = $this->_em->getRepository(User::class)->find($userId);
+            $category = 0 === $catId ? null : $this->getEntityManager()->getRepository(GradebookCategory::class)->find($catId);
+            $user = $this->getEntityManager()->getRepository(User::class)->find($userId);
 
             if ($category) {
                 $certificate->setCategory($category);
@@ -88,8 +88,8 @@ class GradebookCertificateRepository extends ResourceRepository
             $certificate->setScoreCertificate($scoreCertificate);
             $certificate->setCreatedAt(new DateTime());
 
-            $this->_em->persist($certificate);
-            $this->_em->flush();
+            $this->getEntityManager()->persist($certificate);
+            $this->getEntityManager()->flush();
 
             return;
         }
@@ -98,7 +98,7 @@ class GradebookCertificateRepository extends ResourceRepository
             $existingCertificate->setPathCertificate($fileName);
         }
         $existingCertificate->setScoreCertificate($scoreCertificate);
-        $this->_em->flush();
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -421,7 +421,7 @@ class GradebookCertificateRepository extends ResourceRepository
     ): array {
         $today = new DateTimeImmutable();
 
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('srcu')
             ->from(SessionRelCourseRelUser::class, 'srcu')
@@ -435,7 +435,7 @@ class GradebookCertificateRepository extends ResourceRepository
             ->andWhere(
                 $qb->expr()->not(
                     $qb->expr()->exists(
-                        $this->_em->createQueryBuilder()
+                        $this->getEntityManager()->createQueryBuilder()
                             ->select('gc2.id')
                             ->from(GradebookCertificate::class, 'gc2')
                             ->join('gc2.category', 'cat2')

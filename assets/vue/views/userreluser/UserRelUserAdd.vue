@@ -36,6 +36,9 @@
         @select="addFriend"
         @search-change="asyncFind"
       >
+        <template #option="{ option }">
+          {{ option.username }} ({{ option.fullName }})
+        </template>
         <template #noResult>
           {{ t("No elements found. Consider changing the search query.") }}
         </template>

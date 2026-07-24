@@ -32,7 +32,7 @@ export default {
   },
 
   async update(id, payload, params = {}) {
-    return await baseService.put(`/api/announcement/${id}`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/announcement/${id}`, payload, { params: cleanParams(params) })
   },
 
   async changeVisibility(id, visibility, csrfToken, params = {}) {

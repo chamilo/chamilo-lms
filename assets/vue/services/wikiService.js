@@ -51,7 +51,7 @@ export default {
   },
 
   async updateCategory(categoryId, params = {}, payload = {}) {
-    return await baseService.put(
+    return await baseService.patch(
       buildUrl(`/api/wiki/categories/${categoryId}`, params),
       payload,
     );
@@ -90,7 +90,7 @@ export default {
   },
 
   async updatePage(pageId, params = {}, payload = {}) {
-    return await baseService.put(
+    return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}`, params),
       payload,
     );

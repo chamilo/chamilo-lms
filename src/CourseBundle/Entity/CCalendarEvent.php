@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
@@ -46,6 +47,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
         new Put(
+            controller: UpdateCCalendarEventAction::class,
+            security: "is_granted('EDIT', object)",
+            deserialize: false
+        ),
+        new Patch(
             controller: UpdateCCalendarEventAction::class,
             security: "is_granted('EDIT', object)",
             deserialize: false

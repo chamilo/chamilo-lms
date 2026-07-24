@@ -42,6 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\EntityListeners([AccessUrlListener::class, ResourceListener::class])]
 #[ApiResource(
     uriTemplate: '/users/{id}/access_urls',
+    shortName: 'UserAccessUrl',
     operations: [new GetCollection(controller: UserAccessUrlsController::class)],
     uriVariables: [
         'id' => new Link(description: 'User identifier'),

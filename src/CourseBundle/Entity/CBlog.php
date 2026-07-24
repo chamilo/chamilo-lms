@@ -15,7 +15,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ArrayObject;
@@ -74,7 +73,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Patch(security: "is_granted('EDIT', object.resourceNode)"),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
-        new Put(
+        new Patch(
             uriTemplate: '/c_blogs/{iid}/toggle_visibility',
             controller: UpdateVisibilityBlog::class,
             security: "is_granted('EDIT', object.resourceNode)",

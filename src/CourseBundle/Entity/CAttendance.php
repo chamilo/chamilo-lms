@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     shortName: 'Attendance',
     operations: [
-        new Put(
+        new Patch(
             uriTemplate: '/attendances/{iid}/toggle_visibility',
             openapi: new Operation(
                 summary: 'Toggle visibility of the attendance\'s associated ResourceLink'
@@ -46,7 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             processor: CAttendanceStateProcessor::class,
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/attendances/{iid}/soft_delete',
             openapi: new Operation(
                 summary: 'Soft delete the attendance'

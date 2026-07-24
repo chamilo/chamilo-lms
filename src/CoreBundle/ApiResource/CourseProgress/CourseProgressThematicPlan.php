@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\CourseProgress;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseProgress\CourseProgressThematicPlanProcessor;
@@ -36,7 +36,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'get_course_progress_thematic_plans',
             provider: CourseProgressThematicPlanProvider::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/course-progress/thematic/{thematicId}/plans',
             requirements: ['thematicId' => '\d+'],
             openapi: new Operation(

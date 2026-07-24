@@ -230,6 +230,17 @@ const SETTINGS_PAGES = [
 
 const settingsSnapshot = new Map<string, string[]>()
 
+// Shared between BeforeAll and AfterAll deliberately: creating a *fresh*
+// browser context in AfterAll (as a first attempt did) raced against
+// Playwright's own worker teardown — by the time AfterAll runs, the worker
+// has finished all its assigned tests and is winding down, and a brand new
+// context's navigation could never complete (a plain "Sign in" click hung
+// past even a very generous per-action timeout). Keeping the one context
+// BeforeAll already opened alive in between, instead of closing and
+// recreating it, sidesteps that race entirely — it's an already-running,
+// healthy context the whole time, just idle between the two hooks.
+let settingsPage: import("@playwright/test").Page | undefined
+
 async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Browser, baseURL?: string) {
   const page = await (await browser.newContext({ baseURL })).newPage()
   await page.goto("/login")
@@ -246,6 +257,7 @@ async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Brows
 
 BeforeAll({ tags: "@settings" }, async ({ browser, baseURL }) => {
   const page = await loginAsAdminOnFreshPage(browser, baseURL)
+  settingsPage = page
   for (const { path, field } of SETTINGS_PAGES) {
     await page.goto(path)
     await page.waitForLoadState("domcontentloaded")
@@ -254,23 +266,11 @@ BeforeAll({ tags: "@settings" }, async ({ browser, baseURL }) => {
     )
     settingsSnapshot.set(field, values)
   }
-  await page.context().close()
 })
 
-// AfterAll does strictly more work than any single scenario (its own login,
-// then 3 rounds of navigate+select+save+wait vs. one scenario's one round),
-// so it needing a bit more than the default 30s hook timeout tracks now
-// that the app itself is fast (production mode) — unlike the earlier,
-// much larger bump this same hook needed while my.chamilo.net was
-// mistakenly left in dev mode. NOTE: playwright-bdd's own per-hook
-// `timeout` option (tried first) does NOT propagate to the underlying
-// Playwright-native test.afterAll() wrapper's timeout in this version —
-// confirmed by testing it directly, not assumed — so the global `timeout`
-// in playwright.config.ts is bumped instead, the one lever that reliably
-// controls this (test.beforeAll()/afterAll() inherit it when no override
-// is given).
-AfterAll({ tags: "@settings" }, async ({ browser, baseURL }) => {
-  const page = await loginAsAdminOnFreshPage(browser, baseURL)
+AfterAll({ tags: "@settings" }, async () => {
+  if (!settingsPage) return
+  const page = settingsPage
   for (const { path, field } of SETTINGS_PAGES) {
     const values = settingsSnapshot.get(field)
     if (!values) continue

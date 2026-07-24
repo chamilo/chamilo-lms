@@ -41,7 +41,7 @@ test.describe('Settings update', () => {
 // == technical section ==
 
 test.beforeAll('BeforeAll Hooks', ({ $runBeforeAllHooks, baseURL, browser }) => $runBeforeAllHooks(test, { baseURL, browser }, bddFileData));
-test.afterAll('AfterAll Hooks', ({ $registerAfterAllHooks, baseURL, browser }) => $registerAfterAllHooks(test, { baseURL, browser }, bddFileData));
+test.afterAll('AfterAll Hooks', ({ $registerAfterAllHooks }) => $registerAfterAllHooks(test, {  }, bddFileData));
 
 test.use({
   $test: [({}, use) => use(test), { scope: 'test', box: true }],

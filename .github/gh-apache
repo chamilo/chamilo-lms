@@ -3,6 +3,15 @@
     ServerName localhost
     SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 
+    # CI-only: this vhost file is exclusively used by playwright.yml/behat.yml
+    # on the Actions runner, never for a real deployment, so it's safe to set
+    # this unconditionally here. Gives public/main/install/index.php a
+    # deterministic admin password ("admin") via getenv() instead of the
+    # normal random one, so the automated install can be followed by a
+    # predictable login — see index.php's CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD
+    # usage for the (env-var-only, never request-controllable) fallback logic.
+    SetEnv CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD admin
+
     <Directory "/home/runner/work/chamilo-lms/chamilo-lms/public">
         Options Indexes FollowSymLinks
         AllowOverride All

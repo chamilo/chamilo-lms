@@ -197,6 +197,25 @@ jobs:
                     HASH=$(mysql -uroot -proot chamilo -N -B -e "SELECT password FROM user WHERE username='admin'")
                     php -r "var_dump(password_verify('admin', '$HASH'));"
 
+            # `playwright test` clears its outputDir at the start of every invocation,
+            # and "Install chamilo" / "Seed test users" / "Playwright tests" below are
+            # three separate invocations — so the install run's trace (needed to see
+            # the actual #passForm value at submission time, see project memory) would
+            # otherwise get wiped the moment "Seed test users" starts, long before the
+            # end-of-job "Upload Playwright report on failure" step ever runs. Uploading
+            # it here, immediately, with if: always() (not if: failure() — the install
+            # scenario itself currently passes) is the only way to actually capture it.
+            -   name: Upload install trace
+                if: always()
+                uses: actions/upload-artifact@v7
+                with:
+                    name: playwright-install-trace-php${{ matrix.php-versions }}
+                    path: |
+                        var/test-results/playwright/report
+                        var/test-results/playwright/results
+                    retention-days: 7
+                    if-no-files-found: ignore
+
             # Seeds the fixed test accounts (mmosquera, acostea, ptook, etc.)
             # that the rest of the suite logs in as via "I am a teacher" /
             # "I am a student" / etc. — kept as its own step, run once,

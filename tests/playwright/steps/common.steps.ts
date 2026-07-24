@@ -95,15 +95,32 @@ async function resolveField(page: Page, field: string) {
   return page.getByLabel(field)
 }
 
+// A plain .fill() sets the DOM value and dispatches one `input` event, which
+// is enough for a plain <input> (e.g. Login.vue's fields) but was proven NOT
+// enough for actionInstall.feature's Step5.vue admin password field: it's
+// PrimeVue's <Password> widget, which auto-generates its own suggested value
+// on mount and apparently doesn't react to a batch .fill() the way a plain
+// input's v-model does — confirmed via a network trace showing the
+// installer's own auto-generated password ("7%eDtmXb4SrBT"-style) went
+// through to the real submission on every request, never "admin", even
+// though the fill() call itself didn't error. clear() + pressSequentially()
+// simulates real keystrokes (one native keydown/input per character), which
+// is the standard, more broadly-compatible fix for rich components that
+// don't pick up a single programmatic value assignment.
+async function fillReliably(locator: ReturnType<Page["locator"]>, value: string) {
+  await locator.clear()
+  await locator.pressSequentially(value)
+}
+
 When("I fill in {string} for {string}", async ({ page }, value: string, field: string) => {
-  await (await resolveField(page, field)).fill(value)
+  await fillReliably(await resolveField(page, field), value)
 })
 
 // Mink's "I fill in the following:" takes a table of |field|value| rows and
 // fills each one the same way the single-field step does.
 Then("I fill in the following:", async ({ page }, dataTable: DataTable) => {
   for (const [field, value] of dataTable.rows()) {
-    await (await resolveField(page, field)).fill(value)
+    await fillReliably(await resolveField(page, field), value)
   }
 })
 

@@ -132,9 +132,29 @@ When("I fill in {string} for {string}", async ({ page }, value: string, field: s
 
 // Mink's "I fill in the following:" takes a table of |field|value| rows and
 // fills each one the same way the single-field step does.
+//
+// actionInstall.feature's Step 5 table showed something new: filling
+// "passForm" (first row) verified correctly right after typing (inputValue()
+// matched "admin"), yet the network trace at actual submission — after every
+// other row in the table had also been filled — still showed the installer's
+// auto-generated suggestion, not "admin". So the fill itself works; something
+// triggered by filling a LATER field (emailForm/mailerDsn/etc.) resets an
+// EARLIER one. Rather than single out which field causes it, this does a
+// settle pass after the initial fill: re-check every field and re-fill any
+// that drifted from what was intended, so a later row clobbering an earlier
+// one gets caught and corrected regardless of which row is the trigger.
 Then("I fill in the following:", async ({ page }, dataTable: DataTable) => {
-  for (const [field, value] of dataTable.rows()) {
+  const rows = dataTable.rows()
+
+  for (const [field, value] of rows) {
     await fillReliably(await resolveField(page, field), value)
+  }
+
+  for (const [field, value] of rows) {
+    const locator = await resolveField(page, field)
+    if ((await locator.inputValue()) !== value) {
+      await fillReliably(locator, value)
+    }
   }
 })
 

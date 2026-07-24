@@ -1,7 +1,7 @@
 import { expect, Page } from "@playwright/test"
 import { createBdd, DataTable } from "playwright-bdd"
 
-const { Given, When, Then } = createBdd()
+const { Given, When, Then, BeforeAll, AfterAll } = createBdd()
 
 // Ported from tests/behat/features/bootstrap/FeatureContext.php.
 // "I am on"/"I fill in ... for ..."/"I press"/"I should see"/"I check"/
@@ -80,18 +80,41 @@ Given("I am an invitee", async ({ page }) => {
 // id -> name -> label fallback for both fill and check so these steps keep
 // working regardless of which attribute a given form happens to use.
 //
-// `:visible` matters here: PrimeVue form fields (e.g. the install wizard's
-// database step) render a hidden proxy <input type="hidden" name="dbNameForm">
-// kept in sync alongside the actual visible <input name="dbNameForm"
-// input-id="dbNameForm">, so a plain [name="..."] locator matches both and
-// Playwright's strict mode rightly refuses to guess. Restricting to the
-// visible one is also just the more correct thing to do regardless — a real
-// user can't type into a hidden field.
+// `:visible` is only a tie-breaker for genuine ambiguity, never a blanket
+// requirement — two opposite real cases have shown up so far:
+//   - PrimeVue form fields (e.g. the install wizard's database step) render
+//     a hidden proxy <input type="hidden" name="dbNameForm"> kept in sync
+//     alongside the actual visible <input name="dbNameForm"
+//     input-id="dbNameForm">, so a plain [name="..."] locator matches BOTH
+//     and Playwright's strict mode rightly refuses to guess — :visible
+//     disambiguates correctly here.
+//   - PrimeVue's <Select> component (e.g. adminSettings.feature's platform
+//     settings dropdowns) is the opposite: it renders a real, SINGLE native
+//     <select id="form_x" class="p-select ...">, deliberately hidden via
+//     CSS, with a separate custom-styled widget handling the visible
+//     interaction. Requiring :visible here would wrongly exclude the one
+//     correct element — but selectOption() (unlike .fill()/.click()) works
+//     directly on the underlying <select> regardless of visibility, since
+//     it doesn't simulate a real pointer interaction.
+// So: use a plain id/name match first; only add :visible when that match is
+// ambiguous (count > 1), to break the tie in favor of the real one.
 async function resolveField(page: Page, field: string) {
-  const byId = page.locator(`#${field}:visible`)
-  if (await byId.count()) return byId
-  const byName = page.locator(`[name="${field}"]:visible`)
-  if (await byName.count()) return byName
+  const byId = page.locator(`#${field}`)
+  const idCount = await byId.count()
+  if (idCount === 1) return byId
+  if (idCount > 1) {
+    const visibleById = page.locator(`#${field}:visible`)
+    if (await visibleById.count()) return visibleById
+  }
+
+  const byName = page.locator(`[name="${field}"]`)
+  const nameCount = await byName.count()
+  if (nameCount === 1) return byName
+  if (nameCount > 1) {
+    const visibleByName = page.locator(`[name="${field}"]:visible`)
+    if (await visibleByName.count()) return visibleByName
+  }
+
   return page.getByLabel(field)
 }
 
@@ -163,6 +186,103 @@ Then("I check {string}", async ({ page }, field: string) => {
   await (await resolveField(page, field)).check()
 })
 
+// Mink's "I select X from Y" (a <select>'s option, matched by its visible
+// label) replaces the current selection entirely — correct for a plain
+// single-select, and for a multi-select it's always the FIRST of a
+// "select" + N "additionally select" sequence in these .feature files, so
+// starting from a clean selection is exactly right.
+Then("I select {string} from {string}", async ({ page }, optionLabel: string, field: string) => {
+  await (await resolveField(page, field)).selectOption({ label: optionLabel })
+})
+
+// Mink's "I additionally select X from Y" adds one more option to a
+// <select multiple> without clearing whatever's already selected.
+// Playwright's selectOption() always sets the *entire* selection to
+// whatever array it's given (there's no built-in "add one" variant), so
+// this reads the currently-selected option labels first and re-selects
+// the union of those plus the new one.
+Then("I additionally select {string} from {string}", async ({ page }, optionLabel: string, field: string) => {
+  const locator = await resolveField(page, field)
+  const currentLabels: string[] = await locator.evaluate((el) =>
+    Array.from((el as HTMLSelectElement).selectedOptions).map((option) => option.label),
+  )
+  await locator.selectOption([...currentLabels, optionLabel].map((label) => ({ label })))
+})
+
+// Not ported from Behat — the original adminSettings.feature has no
+// teardown at all and just leaves platform settings permanently changed.
+// Added here specifically so this feature is safe to run repeatedly against
+// a real, shared instance. Runs once for the whole file (BeforeAll/AfterAll
+// tagged to @settings, not a Before/After per scenario), matching how
+// "Seed test users" is also a single one-time action, not per-scenario:
+// snapshot whatever each setting's actual current value already is (not a
+// hardcoded assumed default, which could be wrong for a given instance and
+// would itself be an unwanted mutation) before any @settings scenario
+// mutates it, then restore exactly that once after the last one finishes.
+// BeforeAll/AfterAll are worker-scoped: with fullyParallel:false a single
+// feature file's scenarios run sequentially within one worker, so this
+// runs once per worker touching @settings scenarios, not once per scenario.
+const SETTINGS_PAGES = [
+  { path: "/admin/settings/search_settings?keyword=changeable_options", field: "form_changeable_options" },
+  { path: "/admin/settings/search_settings?keyword=allow_registration", field: "form_allow_registration" },
+  { path: "/admin/settings/search_settings?keyword=allow_group_categories", field: "form_allow_group_categories" },
+]
+
+const settingsSnapshot = new Map<string, string[]>()
+
+async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Browser, baseURL?: string) {
+  const page = await (await browser.newContext({ baseURL })).newPage()
+  await page.goto("/login")
+  await page.locator("#login").fill("admin")
+  await page.locator("#password").fill("admin")
+  await page
+    .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
+    .first()
+    .click()
+  await page.waitForURL((url) => !url.pathname.startsWith("/login"))
+  await page.waitForLoadState("networkidle")
+  return page
+}
+
+BeforeAll({ tags: "@settings" }, async ({ browser, baseURL }) => {
+  const page = await loginAsAdminOnFreshPage(browser, baseURL)
+  for (const { path, field } of SETTINGS_PAGES) {
+    await page.goto(path)
+    await page.waitForLoadState("domcontentloaded")
+    const values: string[] = await page.locator(`#${field}`).evaluate((el) =>
+      Array.from((el as HTMLSelectElement).selectedOptions).map((option) => option.value),
+    )
+    settingsSnapshot.set(field, values)
+  }
+  await page.context().close()
+})
+
+// AfterAll does strictly more work than any single scenario (its own login,
+// then 3 rounds of navigate+select+save+wait vs. one scenario's one round),
+// so it needing a bit more than the default 30s hook timeout tracks now
+// that the app itself is fast (production mode) — unlike the earlier,
+// much larger bump this same hook needed while my.chamilo.net was
+// mistakenly left in dev mode. NOTE: playwright-bdd's own per-hook
+// `timeout` option (tried first) does NOT propagate to the underlying
+// Playwright-native test.afterAll() wrapper's timeout in this version —
+// confirmed by testing it directly, not assumed — so the global `timeout`
+// in playwright.config.ts is bumped instead, the one lever that reliably
+// controls this (test.beforeAll()/afterAll() inherit it when no override
+// is given).
+AfterAll({ tags: "@settings" }, async ({ browser, baseURL }) => {
+  const page = await loginAsAdminOnFreshPage(browser, baseURL)
+  for (const { path, field } of SETTINGS_PAGES) {
+    const values = settingsSnapshot.get(field)
+    if (!values) continue
+    await page.goto(path)
+    await page.waitForLoadState("domcontentloaded")
+    await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
+    await pressButton(page, "Save")
+    await page.waitForLoadState("domcontentloaded")
+  }
+  await page.context().close()
+})
+
 // Mink's pressButton resolves a button/submit input by id, then name, then
 // value/visible text (e.g. actionInstall.feature's "step4"/"step5"/
 // "button_step6"/"license-next" are id attributes on the legacy install
@@ -173,7 +293,7 @@ Then("I check {string}", async ({ page }, field: string) => {
 // like "#Sign in" to a CSS selector.
 const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
 
-When("I press {string}", async ({ page }, label: string) => {
+async function pressButton(page: Page, label: string) {
   if (looksLikeIdentifier(label)) {
     // Same hidden-proxy-vs-visible-widget situation as resolveField() above
     // can apply to buttons too, hence :visible here as well.
@@ -192,6 +312,10 @@ When("I press {string}", async ({ page }, label: string) => {
     .locator(`button:has-text("${label}"), input[type="submit"][value="${label}"]`)
     .first()
     .click()
+}
+
+When("I press {string}", async ({ page }, label: string) => {
+  await pressButton(page, label)
 })
 
 Then("I should see {string}", async ({ page }, text: string) => {

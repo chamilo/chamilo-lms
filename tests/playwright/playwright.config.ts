@@ -27,7 +27,16 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
-  timeout: 30_000,
+  // 60s, not the Playwright default 30s: adminSettings.feature's @settings
+  // AfterAll hook does its own login plus 3 rounds of navigate+select+
+  // save+wait (see common.steps.ts) — more work than any single scenario —
+  // and test.beforeAll()/afterAll() wrappers inherit this same config
+  // value when a hook doesn't set its own override (playwright-bdd's own
+  // per-hook `timeout` option doesn't reach that outer wrapper, confirmed
+  // by testing it directly). Regular scenarios run in ~23s in production
+  // mode, well under either value, so this doesn't mask a genuinely hung
+  // test for long.
+  timeout: 60_000,
   fullyParallel: false,
   retries: 0,
   outputDir: path.join(repoRoot, "var/test-results/playwright/results"),
@@ -37,13 +46,7 @@ export default defineConfig({
   ],
   use: {
     baseURL: process.env.BASE_URL || "http://my.chamilo.net",
-    // Temporarily "on" (always trace, not just on failure) instead of
-    // "retain-on-failure" — actionInstall.feature's "Installation process"
-    // scenario currently passes, but its resulting admin password doesn't
-    // verify server-side (see project memory / recent CI investigation), so
-    // there's nothing to inspect from a passing test by default. Once that's
-    // root-caused, revert this to "retain-on-failure" to keep artifacts lean.
-    trace: "on",
+    trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
   projects: [

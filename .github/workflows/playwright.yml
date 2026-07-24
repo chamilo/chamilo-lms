@@ -133,14 +133,7 @@ jobs:
             -   name: Check apache is up
                 run: |
                     sudo chmod 777 -R ${{ github.workspace }}
-                    echo "--- apache2ctl -S (configured vhosts) ---"
-                    sudo apache2ctl -S
-                    echo "--- active 000-default.conf content ---"
-                    cat /etc/apache2/sites-enabled/000-default.conf
-                    echo "--- does the install file actually exist here? ---"
-                    ls -la "${{ github.workspace }}/public/main/install/index.php"
-                    echo "--- curl -v ---"
-                    curl -v http://localhost/main/install/index.php
+                    curl http://localhost/main/install/index.php
 
             -   name: Install chamilo
                 env:
@@ -152,69 +145,6 @@ jobs:
                     printf '\nwhen@prod:\n    framework:\n        http_cache: true\n' >> config/packages/framework.yaml
                     sudo php bin/console cache:clear
                     sudo chmod -R 777 var
-
-            # Diagnostic for a "Create tests users successfully" failure: admin/admin
-            # login gets a genuine 401 {"error":"Invalid credentials."} from the
-            # server, confirmed via plain curl (no Playwright/browser involved), so
-            # it's a real server-side rejection, not a timing/client bug. Leading
-            # hypothesis, per this project's own conventions (see CLAUDE.md's note
-            # on testing admin JWT access: "the fixture admin/admin account may
-            # lack [a UserAuthSource::PLATFORM row] in a fresh test DB"): the web
-            # installer's admin-account creation may not register that row the way
-            # the createUser() PHP helper does, and UserAuthSourceListener rejects
-            # any plain (non-LDAP/OAuth2) login for a user missing it — this is the
-            # first time fresh-install-then-admin-login has been exercised
-            # end-to-end, so if that gap exists it would never have surfaced before.
-            #
-            # UPDATE: ruled out. A run confirmed the admin row exists/is active
-            # (status=1, active=1) AND has the expected user_auth_source row
-            # (authentication='platform') — so UserAuthSourceListener isn't what's
-            # rejecting this login. All 3 PHP versions fail identically on this
-            # exact scenario, so it's not version-specific either. The stored
-            # password is a well-formed bcrypt hash ($2y$13$...), but that alone
-            # doesn't prove it's actually the hash *of* "admin" — bcrypt hashes an
-            # empty string just as happily. password_verify() directly against the
-            # raw stored hash, bypassing Symfony's auth stack entirely, answers
-            # that unambiguously: true means something else in the security stack
-            # is rejecting a genuinely-correct password; false confirms "admin"
-            # isn't actually what got saved (most likely candidate: the install
-            # wizard's password field is PrimeVue's <Password> widget, a richer
-            # component than a plain <input> — its v-model may not have picked up
-            # Playwright's fill() the way a plain input does).
-            -   name: Verify admin login before seeding
-                run: |
-                    curl -s -X POST http://localhost/login_json \
-                      -H "Content-Type: application/json" \
-                      -d '{"username":"admin","password":"admin","_remember_me":false}' \
-                      -w "\nHTTP status: %{http_code}\n"
-                    echo "--- admin user row ---"
-                    php bin/console doctrine:query:sql "SELECT id, username, status, active FROM user WHERE username = 'admin'"
-                    echo "--- admin user_auth_source rows (expect one with authentication='platform') ---"
-                    php bin/console doctrine:query:sql "SELECT * FROM user_auth_source WHERE user_id = (SELECT id FROM user WHERE username = 'admin')"
-                    echo "--- admin stored password hash ---"
-                    php bin/console doctrine:query:sql "SELECT password FROM user WHERE username = 'admin'"
-                    echo "--- does 'admin' verify against that exact hash? ---"
-                    HASH=$(mysql -uroot -proot chamilo -N -B -e "SELECT password FROM user WHERE username='admin'")
-                    php -r "var_dump(password_verify('admin', '$HASH'));"
-
-            # `playwright test` clears its outputDir at the start of every invocation,
-            # and "Install chamilo" / "Seed test users" / "Playwright tests" below are
-            # three separate invocations — so the install run's trace (needed to see
-            # the actual #passForm value at submission time, see project memory) would
-            # otherwise get wiped the moment "Seed test users" starts, long before the
-            # end-of-job "Upload Playwright report on failure" step ever runs. Uploading
-            # it here, immediately, with if: always() (not if: failure() — the install
-            # scenario itself currently passes) is the only way to actually capture it.
-            -   name: Upload install trace
-                if: always()
-                uses: actions/upload-artifact@v7
-                with:
-                    name: playwright-install-trace-php${{ matrix.php-versions }}
-                    path: |
-                        var/test-results/playwright/report
-                        var/test-results/playwright/results
-                    retention-days: 7
-                    if-no-files-found: ignore
 
             # Seeds the fixed test accounts (mmosquera, acostea, ptook, etc.)
             # that the rest of the suite logs in as via "I am a teacher" /

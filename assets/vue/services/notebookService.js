@@ -20,7 +20,7 @@ export default {
   },
 
   async update(iid, payload, params = {}) {
-    return await baseService.put(`/api/notebook/${iid}`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/notebook/${iid}`, payload, { params: cleanParams(params) })
   },
 
   async remove(iid, payload, params = {}) {

@@ -289,10 +289,11 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Change visibility to draft.
         $this->createClientWithCredentials($token)->request(
-            'PUT',
+            'PATCH',
             "$iri/toggle_visibility",
             [
                 'query' => ['cid' => $courseId],
+                'headers' => ['content-type' => ['application/merge-patch+json']],
             ]
         );
 
@@ -538,10 +539,11 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Change visibility of the document to DRAFT
         $this->createClientWithCredentials($token)->request(
-            'PUT',
+            'PATCH',
             "/api/documents/$documentId/toggle_visibility",
             [
                 'query' => ['cid' => $courseId],
+                'headers' => ['content-type' => ['application/merge-patch+json']],
             ]
         );
 
@@ -1101,22 +1103,22 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $url = '/api/documents/'.$documentId.'/toggle_visibility?cid='.$course->getId();
 
         // Not logged in.
-        $client->request('PUT', $url);
+        $client->request('PATCH', $url, ['headers' => ['content-type' => ['application/merge-patch+json']]]);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         // Another user.
         $this->createUser('another');
         $client = $this->getClientWithGuiCredentials('another', 'another');
-        $client->request('PUT', $url);
+        $client->request('PATCH', $url, ['headers' => ['content-type' => ['application/merge-patch+json']]]);
 
         // Admin.
         $token = $this->getUserToken([]);
         $this->createClientWithCredentials($token)->request(
-            'PUT',
+            'PATCH',
             $url,
             [
                 'headers' => [
-                    'Content-Type' => 'application/json',
+                    'content-type' => ['application/merge-patch+json'],
                 ],
             ]
         );

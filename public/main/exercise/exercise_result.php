@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -21,12 +23,13 @@ use ChamiloSession as Session;
  * @todo    split more code up in functions, move functions to library?
  */
 $debug = false;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 
-/* 	ACCESS RIGHTS  */
+/* 	ACCESS RIGHTS */
 api_protect_course_script(true);
 
 $origin = api_get_origin();
@@ -99,6 +102,7 @@ if (empty($objExercise)) {
             && isset($exercise_stat_info['exe_exo_id'])
         ) {
             header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq().'&origin='.$origin);
+
             exit;
         }
 
@@ -189,7 +193,6 @@ if (
     $allowSignature = false === $signature;
 }
 
-
 if ('learnpath' === $origin) {
     $pageTop .= '
         <form method="GET" action="exercise.php?'.api_get_cidreq().'">
@@ -234,8 +237,8 @@ if ($objExercise->selectAttempts() > 0) {
             Display::addFlash(
                 Display::return_message(
                     sprintf(get_lang('You have reached the maximum number of attempts for this test. Being a trainer, you can go on practicing but your Results will not be reported.'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
-                'warning',
-                false
+                    'warning',
+                    false
                 )
             );
         }
@@ -247,14 +250,14 @@ if ($objExercise->selectAttempts() > 0) {
         $template = new Template($nameTools, $showHeader, $showFooter);
         $template->assign('actions', $pageActions);
         $template->display_one_col_template();
+
         exit;
-    } else {
-        $attempt_count++;
-        $remainingAttempts = $objExercise->selectAttempts() - $attempt_count;
-        if ($remainingAttempts) {
-            $attemptMessage = sprintf(get_lang('Remaining %d attempts'), $remainingAttempts);
-            $remainingMessage = sprintf('<p>%s</p> %s', $attemptMessage, $attemptButton);
-        }
+    }
+    $attempt_count++;
+    $remainingAttempts = $objExercise->selectAttempts() - $attempt_count;
+    if ($remainingAttempts) {
+        $attemptMessage = sprintf(get_lang('Remaining %d attempts'), $remainingAttempts);
+        $remainingMessage = sprintf('<p>%s</p> %s', $attemptMessage, $attemptButton);
     }
 } else {
     $remainingMessage = $attemptButton ? "<p>$attemptButton</p>" : '';
@@ -285,7 +288,7 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
     $saveResults,
     $remainingMessage,
     $allowSignature,
-    ('true' === api_get_setting('exercise.quiz_results_answers_report')),
+    'true' === api_get_setting('exercise.quiz_results_answers_report'),
     false
 );
 $pageContent .= ob_get_contents();
@@ -313,7 +316,7 @@ $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
     false,
     $remainingMessage,
     $allowSignature,
-    ('true' === api_get_setting('exercise.quiz_results_answers_report')),
+    'true' === api_get_setting('exercise.quiz_results_answers_report'),
     false
 );
 ob_end_clean();
@@ -348,11 +351,11 @@ $courseCodeForLtiScore = $courseInfo['code'] ?? api_get_course_id();
 
 if ('' !== $ltiLaunchId && $exeId > 0 && !empty($courseCodeForLtiScore)) {
     $scoreUrl = api_get_path(WEB_PLUGIN_PATH).'LtiProvider/tool/api/score.php?'.http_build_query([
-            'lti_launch_id' => $ltiLaunchId,
-            'lti_tool' => 'quiz',
-            'lti_result_id' => $exeId,
-            'cidReq' => $courseCodeForLtiScore,
-        ]);
+        'lti_launch_id' => $ltiLaunchId,
+        'lti_tool' => 'quiz',
+        'lti_result_id' => $exeId,
+        'cidReq' => $courseCodeForLtiScore,
+    ]);
 
     $pageBottom .= '<script>
 (function () {
@@ -372,7 +375,7 @@ if ('' !== $ltiLaunchId && $exeId > 0 && !empty($courseCodeForLtiScore)) {
 </script>';
 }
 
-//Unset session for clock time
+// Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,
     $learnpath_id,
@@ -420,7 +423,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $courseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : api_get_course_int_id();
     Exercise::saveExerciseInLp($learnpath_item_id, $exeId, $courseId);
 
-    //$pageBottom .= '<script type="text/javascript">'.$href.'</script>';
+    // $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
 
     $showFooter = false;
 }
@@ -432,12 +435,19 @@ $template->assign('page_bottom', $pageBottom);
 $template->assign('allow_signature', $allowSignature);
 $template->assign('exe_id', $exeId);
 $template->assign('actions', $pageActions);
-$template->assign('content', $template->fetch($template->get_template('exercise/result.tpl')));
+$resultContent = $template->fetch($template->get_template('exercise/result.tpl'));
+$template->assign('content', $resultContent);
 
 if (in_array($origin, ['learnpath', 'embeddable'], true)) {
     $template->display_blank_template();
-} else {
+} elseif ('mobileapp' === $origin) {
     $template->display_one_col_template();
+} else {
+    // Standalone exercise results must use the regular legacy page shell.
+    Display::display_header($nameTools);
+    echo $pageActions;
+    echo $resultContent;
+    Display::display_footer();
 }
 
 function showEmbeddableFinishButton()
@@ -462,5 +472,5 @@ function showEmbeddableFinishButton()
         ['class' => 'text-center']
     );
 
-    return $js.PHP_EOL.$html;
+    return $js.\PHP_EOL.$html;
 }

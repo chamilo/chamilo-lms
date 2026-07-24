@@ -624,8 +624,8 @@ final readonly class TicketWorkflowService
 
     private function getFirstCategoryUser(TicketCategory $category, AccessUrl $accessUrl): ?User
     {
-        $user = $this->entityManager->createQueryBuilder()
-            ->select('user')
+        $relation = $this->entityManager->createQueryBuilder()
+            ->select('relation')
             ->from(TicketCategoryRelUser::class, 'relation')
             ->innerJoin('relation.user', 'user')
             ->innerJoin('user.portals', 'portal')
@@ -641,7 +641,7 @@ final readonly class TicketWorkflowService
             ->getOneOrNullResult()
         ;
 
-        return $user instanceof User ? $user : null;
+        return $relation instanceof TicketCategoryRelUser ? $relation->getUser() : null;
     }
 
     private function assertCourseAndSessionSelectionIsAllowed(

@@ -1,0 +1,21 @@
+mcp:
+    app: 'Chamilo'
+    version: '2.1.0'
+    description: 'Chamilo LMS MCP server'
+    pagination_limit: 50
+    instructions: |
+        This server exposes Chamilo LMS capabilities to authenticated users.
+        Every capability must respect the permissions of the authenticated Chamilo user.
+    client_transports:
+        stdio: true
+        http: true
+    http:
+        path: /mcp
+        allowed_hosts:
+            - 'chamilo2.local'
+            - 'localhost'
+            - '127.0.0.1'
+        session:
+            store: file
+            directory: '%kernel.cache_dir%/mcp-sessions'
+            ttl: 3600

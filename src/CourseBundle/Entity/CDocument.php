@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\QueryParameter;
@@ -61,7 +62,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/documents/{iid}/toggle_visibility',
             controller: UpdateVisibilityDocument::class,
             openapi: new Operation(
@@ -70,7 +71,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/documents/{iid}/move',
             controller: MoveDocumentAction::class,
             openapi: new Operation(summary: 'Move document (context-aware using ResourceLink.parent)'),

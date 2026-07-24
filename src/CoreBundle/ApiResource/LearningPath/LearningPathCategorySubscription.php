@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\LearningPath;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathCategorySubscriptionProcessor;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathCategorySubscriptionProvider;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             provider: LearningPathCategorySubscriptionProvider::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/learning_path_categories/{categoryId}/subscriptions',
             requirements: ['categoryId' => '\d+'],
             read: false,

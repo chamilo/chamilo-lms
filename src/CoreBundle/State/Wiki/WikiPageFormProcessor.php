@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State\Wiki;
 
 use ApiPlatform\Metadata\Operation;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageForm;
 use Chamilo\CoreBundle\Entity\Course;
@@ -109,7 +108,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             $session,
             $group,
         );
-        $isUpdate = $operation instanceof Put;
+        $isUpdate = (int) ($uriVariables['pageId'] ?? 0) > 0;
         $latest = null;
         $templatePage = null;
 

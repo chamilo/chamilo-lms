@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\ApiResource\LearningPath;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathCategoryMutationProcessor;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -32,7 +32,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             processor: LearningPathCategoryMutationProcessor::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/learning_path_categories/{id}/manage',
             requirements: ['id' => '\d+'],
             output: false,

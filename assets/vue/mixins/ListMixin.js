@@ -237,7 +237,7 @@ export default {
     changeVisibilityHandler(item, slotProps) {
       let folderParams = this.$route.query
       folderParams["id"] = item["@id"]
-      baseService.put(item["@id"] + "/toggle_visibility", {}).then((data) => {
+      baseService.patch(item["@id"] + "/toggle_visibility", {}).then((data) => {
         item["resourceLinkListFromEntity"] = data["resourceLinkListFromEntity"]
       })
     },

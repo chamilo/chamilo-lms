@@ -81,6 +81,7 @@ use UserManager;
 )]
 #[ApiResource(
     uriTemplate: '/access_urls/{id}/user',
+    shortName: 'AccessUrlUser',
     operations: [
         new Post(
             controller: CreateUserOnAccessUrlAction::class,

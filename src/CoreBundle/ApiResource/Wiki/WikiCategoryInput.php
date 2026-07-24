@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\ApiResource\Wiki;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Wiki\WikiCategoryProcessor;
@@ -38,7 +38,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'post_wiki_category',
             processor: WikiCategoryProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/wiki/categories/{categoryId}',
             requirements: ['categoryId' => '\d+'],
             openapi: new Operation(

@@ -22,6 +22,13 @@
         :for="editorId"
       >
         {{ title }}
+        <span
+          v-if="showRequiredMarker"
+          aria-hidden="true"
+          class="text-red-500"
+        >
+          *
+        </span>
       </label>
     </FloatLabel>
     <small
@@ -55,6 +62,7 @@ const isFocused = ref(false)
 const props = defineProps({
   editorId: { type: String, required: true },
   required: { type: Boolean, default: false },
+  showRequiredMarker: { type: Boolean, default: false },
   title: { type: String, default: "", required: true },
   editorConfig: { type: Object, default: () => ({}) },
   helpText: { type: String, default: "" },

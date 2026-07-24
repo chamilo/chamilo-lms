@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -51,7 +51,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             provider: ForumThreadGradingProvider::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_threads/{threadId}/grading',
             name: 'update_forum_thread_grading',
             input: ForumThreadGradingInput::class,
@@ -81,7 +81,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_ADMIN')",
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forum_threads/{threadId}/grading/score',
             name: 'save_forum_thread_score',
             input: ForumThreadScoreInput::class,

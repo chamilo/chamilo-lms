@@ -178,7 +178,8 @@ final class Version20250310215900 extends AbstractMigrationChamilo
             $meeting = new ConferenceMeeting();
             $meeting->setServiceProvider('zoom');
             $meeting->setRemoteId($zoom['meeting_id']);
-            $meeting->setTitle($zoom['meeting_list_item_json']);
+            $title = $zoom['meeting_list_item_json'] ?? 'Zoom meeting '.$zoom['meeting_id'];
+            $meeting->setTitle(mb_substr($title, 0, 255));
             $meeting->setSignAttendance((bool) $zoom['sign_attendance']);
             $meeting->setReasonToSignAttendance($zoom['reason_to_sign_attendance']);
             $meeting->setAccountEmail($zoom['account_email']);

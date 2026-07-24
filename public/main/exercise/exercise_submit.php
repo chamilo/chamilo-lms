@@ -674,25 +674,22 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id"
-    . "&origin=".$origin
     . "&page=" . ($page ?? 1)
-    . "&" . api_get_cidreq();
+    . "&" . api_get_cidreq(true, true, $origin);
 
 // Base query strings used by JS navigation (keep LP context on every click).
 $submitBaseQuery = "exe_id=$exe_id&exerciseId=$exerciseId"
     . "&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id"
     . "&learnpath_item_view_id=$learnpath_item_view_id"
-    . "&origin=".$origin
     . "&reminder=$reminder"
-    . "&" . api_get_cidreq();
+    . "&" . api_get_cidreq(true, true, $origin);
 
 $resultBaseQuery = "exe_id=$exe_id"
     . "&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id"
     . "&learnpath_item_view_id=$learnpath_item_view_id"
-    . "&origin=".$origin
-    . "&" . api_get_cidreq();
+    . "&" . api_get_cidreq(true, true, $origin);
 
 
 if (2 === $reminder && empty($myRemindList)) {

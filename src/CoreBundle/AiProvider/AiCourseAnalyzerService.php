@@ -17,9 +17,13 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\File\File;
 use Throwable;
 use ZipArchive;
@@ -38,11 +42,17 @@ final class AiCourseAnalyzerService
     private const MAX_ITEMS_PER_LESSON = 120;
     private const MAX_STANDALONE_DOCUMENTS = 25;
     private const MAX_STANDALONE_EXERCISES = 20;
+    private const MAX_ASSIGNMENTS = 20;
+    private const MAX_SURVEYS = 15;
+    private const MAX_SURVEY_QUESTIONS = 50;
+    private const MAX_SURVEY_OPTIONS = 20;
     private const MAX_EXERCISES = 20;
     private const MAX_QUESTIONS_PER_EXERCISE = 80;
     private const MAX_ANSWERS_PER_QUESTION = 20;
     private const MAX_CHARS_PER_DOCUMENT = 12000;
     private const MAX_TOTAL_TEXT_CHARS = 90000;
+    private const MAX_ANALYSIS_OUTPUT_TOKENS = 12000;
+    private const MAX_COMPACT_OUTPUT_TOKENS = 7000;
 
     /**
      * @var string[]
@@ -94,6 +104,7 @@ final class AiCourseAnalyzerService
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly AiChatCompletionClientInterface $chatCompletionClient,
+        private readonly CDocumentRepository $documentRepository,
     ) {}
 
     /**
@@ -106,23 +117,44 @@ final class AiCourseAnalyzerService
         string $provider,
         bool $includeStandaloneDocuments = false,
         bool $includeStandaloneExercises = false,
-    ): array {
+        bool $includeDraftResources = false,
+    ): array
+    {
         $payload = $this->buildPayload(
             $course,
             $session,
             $teacherPrompt,
             $includeStandaloneDocuments,
             $includeStandaloneExercises,
+            $includeDraftResources,
         );
-        $messages = $this->buildMessages($payload);
-
-        $rawResponse = $this->chatCompletionClient->chat($provider, $messages, [
-            'temperature' => 0.2,
-            'max_tokens' => 6000,
-            'throw_on_error' => true,
-        ]);
+        $messages = $this->buildMessages($payload, false);
+        $rawResponse = $this->requestStructuredAnalysis(
+            $provider,
+            $messages,
+            self::MAX_ANALYSIS_OUTPUT_TOKENS,
+        );
 
         $structuredResponse = $this->decodeStructuredResponse($rawResponse);
+        $responseRepaired = false;
+        $responseMode = 'full';
+
+        if (!\is_array($structuredResponse)) {
+            /*
+             * A long per-resource analysis can reach a provider output limit.
+             * Retry once with a compact contract instead of exposing a
+             * truncated JSON response to the MCP client.
+             */
+            $responseRepaired = true;
+            $responseMode = 'compact_retry';
+            $rawResponse = $this->requestStructuredAnalysis(
+                $provider,
+                $this->buildMessages($payload, true),
+                self::MAX_COMPACT_OUTPUT_TOKENS,
+            );
+            $structuredResponse = $this->decodeStructuredResponse($rawResponse);
+        }
+
         if (\is_array($structuredResponse)) {
             $structuredResponse = $this->normalizeStructuredResponse($payload, $structuredResponse);
         }
@@ -131,6 +163,10 @@ final class AiCourseAnalyzerService
             'payload' => $payload,
             'rawResponse' => $rawResponse,
             'structuredResponse' => $structuredResponse,
+            'responseRepaired' => $responseRepaired,
+            'responseMode' => $responseMode,
+            'rawResponseLength' => mb_strlen($rawResponse),
+            'payloadStats' => $this->buildPayloadStats($payload),
         ];
     }
 
@@ -143,7 +179,9 @@ final class AiCourseAnalyzerService
         string $teacherPrompt,
         bool $includeStandaloneDocuments = false,
         bool $includeStandaloneExercises = false,
-    ): array {
+        bool $includeDraftResources = false,
+    ): array
+    {
         $totalCharacters = 0;
         $lessonDocumentIds = [];
         $lessonExerciseIds = [];
@@ -153,13 +191,24 @@ final class AiCourseAnalyzerService
             $totalCharacters,
             $lessonDocumentIds,
             $lessonExerciseIds,
+            $includeDraftResources,
         );
         $standaloneDocuments = $includeStandaloneDocuments
-            ? $this->collectVisibleStandaloneDocuments($course, $session, $lessonDocumentIds, $totalCharacters)
+            ? $this->collectVisibleStandaloneDocuments($course, $session, $lessonDocumentIds, $totalCharacters, $includeDraftResources)
             : [];
         $standaloneExercises = $includeStandaloneExercises
-            ? $this->collectVisibleStandaloneExercises($course, $session, $lessonExerciseIds)
+            ? $this->collectVisibleStandaloneExercises($course, $session, $lessonExerciseIds, $includeDraftResources)
             : [];
+        $assignments = $this->collectReviewAssignments(
+            $course,
+            $session,
+            $includeDraftResources,
+        );
+        $surveys = $this->collectReviewSurveys(
+            $course,
+            $session,
+            $includeDraftResources,
+        );
 
         return [
             'course' => [
@@ -170,17 +219,30 @@ final class AiCourseAnalyzerService
             ],
             'teacherPrompt' => trim($teacherPrompt),
             'analysisScope' => [
-                'defaultScope' => 'visible_lessons',
+                'defaultScope' => $includeDraftResources
+                    ? 'teacher_course_resources_including_drafts'
+                    : 'published_lessons',
                 'includeStandaloneDocuments' => $includeStandaloneDocuments,
                 'includeStandaloneExercises' => $includeStandaloneExercises,
-                'standaloneDocumentsDescription' => 'Standalone documents are visible course documents that were not referenced by any analyzed lesson item.',
-                'standaloneExercisesDescription' => 'Standalone exercises are visible course tests that were not referenced by any analyzed lesson item.',
+                'includeDraftResources' => $includeDraftResources,
+                'resourceVisibilityDescription' => $includeDraftResources
+                    ? 'Published, pending and draft resources are included for teacher review. Their visibility is reported in each payload item.'
+                    : 'Only published resources are included.',
+                'standaloneDocumentsDescription' => $includeDraftResources
+                    ? 'Standalone documents include teacher-reviewable published, pending and draft course documents that were not referenced by any analyzed lesson item.'
+                    : 'Standalone documents are published course documents that were not referenced by any analyzed lesson item.',
+                'standaloneExercisesDescription' => $includeDraftResources
+                    ? 'Standalone exercises include teacher-reviewable published, pending and draft course tests that were not referenced by any analyzed lesson item.'
+                    : 'Standalone exercises are published course tests that were not referenced by any analyzed lesson item.',
             ],
             'limits' => [
                 'maxLessons' => self::MAX_LESSONS,
                 'maxItemsPerLesson' => self::MAX_ITEMS_PER_LESSON,
                 'maxStandaloneDocuments' => self::MAX_STANDALONE_DOCUMENTS,
                 'maxStandaloneExercises' => self::MAX_STANDALONE_EXERCISES,
+                'maxAssignments' => self::MAX_ASSIGNMENTS,
+                'maxSurveys' => self::MAX_SURVEYS,
+                'maxSurveyQuestions' => self::MAX_SURVEY_QUESTIONS,
                 'maxExercises' => self::MAX_EXERCISES,
                 'maxQuestionsPerExercise' => self::MAX_QUESTIONS_PER_EXERCISE,
                 'maxCharactersPerDocument' => self::MAX_CHARS_PER_DOCUMENT,
@@ -189,6 +251,8 @@ final class AiCourseAnalyzerService
             'lessons' => $lessons,
             'standaloneDocuments' => $standaloneDocuments,
             'standaloneExercises' => $standaloneExercises,
+            'assignments' => $assignments,
+            'surveys' => $surveys,
         ];
     }
 
@@ -203,7 +267,9 @@ final class AiCourseAnalyzerService
         int &$totalCharacters,
         array &$lessonDocumentIds,
         array &$lessonExerciseIds,
-    ): array {
+        bool $includeDraftResources,
+    ): array
+    {
         $qb = $this->entityManager->createQueryBuilder();
         $qb
             ->select('learningPath', 'resourceNode', 'resourceLink')
@@ -211,12 +277,16 @@ final class AiCourseAnalyzerService
             ->innerJoin('learningPath.resourceNode', 'resourceNode')
             ->innerJoin('resourceNode.resourceLinks', 'resourceLink')
             ->andWhere('resourceLink.course = :course')
-            ->andWhere('resourceLink.visibility = :visibility')
             ->setParameter('course', (int) $course->getId())
-            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ->setMaxResults(self::MAX_LESSONS)
             ->orderBy('resourceLink.displayOrder', 'ASC')
         ;
+
+        $this->applyReviewVisibilityFilter(
+            $qb,
+            'resourceLink',
+            $includeDraftResources,
+        );
 
         if ($session instanceof Session) {
             $qb
@@ -249,11 +319,15 @@ final class AiCourseAnalyzerService
                     $totalCharacters,
                     $lessonDocumentIds,
                     $lessonExerciseIds,
+                    $includeDraftResources,
                 );
                 $itemCount++;
             }
 
             $resourceNode = $learningPath->getResourceNode();
+            $resourceLink = $resourceNode instanceof ResourceNode
+                ? $this->findReviewableResourceLink($resourceNode, $course, $session, $includeDraftResources)
+                : null;
 
             $lessons[] = [
                 'id' => $learningPath->getIid(),
@@ -263,6 +337,7 @@ final class AiCourseAnalyzerService
                 'resourceNodeId' => $resourceNode instanceof ResourceNode ? $resourceNode->getId() : null,
                 'resourcePath' => $resourceNode instanceof ResourceNode ? $resourceNode->getPathForDisplay() : null,
                 'editUrl' => $this->buildLearningPathEditUrl($learningPath, $course, $session),
+                'visibility' => $this->buildVisibilityPayload($resourceLink),
                 'items' => $lessonItems,
             ];
         }
@@ -308,8 +383,12 @@ final class AiCourseAnalyzerService
         int &$totalCharacters,
         array &$lessonDocumentIds,
         array &$lessonExerciseIds,
-    ): array {
+        bool $includeDraftResources,
+    ): array
+    {
         $itemType = strtolower($item->getItemType());
+        $resourceReference = $this->resolveLessonItemResourceReference($item);
+
         $payload = [
             'id' => $item->getIid(),
             'title' => $item->getTitle(),
@@ -318,6 +397,8 @@ final class AiCourseAnalyzerService
             'ref' => $item->getRef(),
             'description' => $this->cleanText((string) $item->getDescription()),
             'path' => $item->getPath(),
+            'resourceReferenceId' => $resourceReference['id'],
+            'resourceReferenceSource' => $resourceReference['source'],
             'position' => $item->getDisplayOrder(),
             'level' => $item->getLvl(),
             'parentItemId' => $item->getParentItemId(),
@@ -332,32 +413,42 @@ final class AiCourseAnalyzerService
         ];
 
         if (\in_array($itemType, self::DOCUMENT_LIKE_ITEM_TYPES, true)) {
-            $document = $this->findVisibleDocumentByReference($item->getRef(), $course, $session);
+            $document = $this->findVisibleDocumentByReference(
+                $resourceReference['value'],
+                $course,
+                $session,
+                $includeDraftResources,
+            );
             if (!$document instanceof CDocument) {
-                $payload['notice'] = 'The referenced lesson document is not visible or no longer available.';
+                $payload['notice'] = 'The referenced lesson document is not available in the selected teacher-review scope.';
 
                 return $payload;
             }
 
             $documentId = (int) $document->getIid();
             $lessonDocumentIds[$documentId] = $documentId;
-            $payload['document'] = $this->buildDocumentPayload($document, $totalCharacters, $course, $session);
+            $payload['document'] = $this->buildDocumentPayload($document, $totalCharacters, $course, $session, $includeDraftResources);
             $payload['contentIncluded'] = true === ($payload['document']['textIncluded'] ?? false);
 
             return $payload;
         }
 
         if (\in_array($itemType, self::EXERCISE_LIKE_ITEM_TYPES, true)) {
-            $quiz = $this->findVisibleQuizByReference($item->getRef(), $course, $session);
+            $quiz = $this->findVisibleQuizByReference(
+                $resourceReference['value'],
+                $course,
+                $session,
+                $includeDraftResources,
+            );
             if (!$quiz instanceof CQuiz) {
-                $payload['notice'] = 'The referenced lesson exercise is not visible or no longer available.';
+                $payload['notice'] = 'The referenced lesson exercise is not available in the selected teacher-review scope.';
 
                 return $payload;
             }
 
             $exerciseId = (int) $quiz->getIid();
             $lessonExerciseIds[$exerciseId] = $exerciseId;
-            $payload['exercise'] = $this->buildExercisePayload($quiz, $course, $session);
+            $payload['exercise'] = $this->buildExercisePayload($quiz, $course, $session, $includeDraftResources);
             $payload['contentIncluded'] = true;
 
             return $payload;
@@ -385,7 +476,50 @@ final class AiCourseAnalyzerService
         return 'metadata';
     }
 
-    private function findVisibleDocumentByReference(string $reference, Course $course, ?Session $session): ?CDocument
+    /**
+     * Legacy learning-path items do not consistently use the `ref` column.
+     * Items created through learnpath::add_item() can keep `ref` empty and
+     * store the numeric document or quiz identifier in `path`.
+     *
+     * Prefer a valid numeric `ref` and use a numeric `path` only as the
+     * compatibility fallback. Non-numeric paths remain metadata and cannot be
+     * mistaken for local resource identifiers.
+     *
+     * @return array{id:int|null,value:string,source:string|null}
+     */
+    private function resolveLessonItemResourceReference(CLpItem $item): array
+    {
+        $references = [
+            'ref' => trim((string) $item->getRef()),
+            'path' => trim((string) $item->getPath()),
+        ];
+
+        foreach ($references as $source => $reference) {
+            $resourceId = $this->normalizePositiveIntegerReference($reference);
+            if (null === $resourceId) {
+                continue;
+            }
+
+            return [
+                'id' => $resourceId,
+                'value' => (string) $resourceId,
+                'source' => $source,
+            ];
+        }
+
+        return [
+            'id' => null,
+            'value' => '',
+            'source' => null,
+        ];
+    }
+
+    private function findVisibleDocumentByReference(
+        string $reference,
+        Course $course,
+        ?Session $session,
+        bool $includeDraftResources,
+    ): ?CDocument
     {
         $documentId = $this->normalizePositiveIntegerReference($reference);
         if (null === $documentId) {
@@ -399,14 +533,19 @@ final class AiCourseAnalyzerService
         }
 
         $resourceNode = $document->getResourceNode();
-        if (!$resourceNode instanceof ResourceNode || !$this->isResourceNodeVisibleInCourse($resourceNode, $course, $session)) {
+        if (!$resourceNode instanceof ResourceNode || !$this->isResourceNodeVisibleInCourse($resourceNode, $course, $session, $includeDraftResources)) {
             return null;
         }
 
         return $document;
     }
 
-    private function findVisibleQuizByReference(string $reference, Course $course, ?Session $session): ?CQuiz
+    private function findVisibleQuizByReference(
+        string $reference,
+        Course $course,
+        ?Session $session,
+        bool $includeDraftResources,
+    ): ?CQuiz
     {
         $quizId = $this->normalizePositiveIntegerReference($reference);
         if (null === $quizId) {
@@ -420,7 +559,7 @@ final class AiCourseAnalyzerService
         }
 
         $resourceNode = $quiz->getResourceNode();
-        if (!$resourceNode instanceof ResourceNode || !$this->isResourceNodeVisibleInCourse($resourceNode, $course, $session)) {
+        if (!$resourceNode instanceof ResourceNode || !$this->isResourceNodeVisibleInCourse($resourceNode, $course, $session, $includeDraftResources)) {
             return null;
         }
 
@@ -438,7 +577,27 @@ final class AiCourseAnalyzerService
         return $id > 0 ? $id : null;
     }
 
-    private function isResourceNodeVisibleInCourse(ResourceNode $resourceNode, Course $course, ?Session $session): bool
+    private function isResourceNodeVisibleInCourse(
+        ResourceNode $resourceNode,
+        Course $course,
+        ?Session $session,
+        bool $includeDraftResources,
+    ): bool
+    {
+        return $this->findReviewableResourceLink(
+            $resourceNode,
+            $course,
+            $session,
+            $includeDraftResources,
+        ) instanceof ResourceLink;
+    }
+
+    private function findReviewableResourceLink(
+        ResourceNode $resourceNode,
+        Course $course,
+        ?Session $session,
+        bool $includeDraftResources,
+    ): ?ResourceLink
     {
         foreach ($resourceNode->getResourceLinks() as $resourceLink) {
             if (!$resourceLink instanceof ResourceLink) {
@@ -449,20 +608,77 @@ final class AiCourseAnalyzerService
                 continue;
             }
 
-            if (ResourceLink::VISIBILITY_PUBLISHED !== $resourceLink->getVisibility()) {
+            if (!$this->isReviewableVisibility($resourceLink->getVisibility(), $includeDraftResources)) {
                 continue;
             }
 
             if (!$session instanceof Session && null === $resourceLink->getSession()) {
-                return true;
+                return $resourceLink;
             }
 
             if ($session instanceof Session && (null === $resourceLink->getSession() || $this->isSameSession($resourceLink->getSession(), $session))) {
-                return true;
+                return $resourceLink;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    private function isReviewableVisibility(int $visibility, bool $includeDraftResources): bool
+    {
+        if (!$includeDraftResources) {
+            return ResourceLink::VISIBILITY_PUBLISHED === $visibility;
+        }
+
+        return \in_array($visibility, [
+            ResourceLink::VISIBILITY_DRAFT,
+            ResourceLink::VISIBILITY_PENDING,
+            ResourceLink::VISIBILITY_PUBLISHED,
+        ], true);
+    }
+
+    /**
+     * @return array{value:int|null,label:string,published:bool}
+     */
+    private function buildVisibilityPayload(?ResourceLink $resourceLink): array
+    {
+        $visibility = $resourceLink?->getVisibility();
+
+        return [
+            'value' => $visibility,
+            'label' => match ($visibility) {
+                ResourceLink::VISIBILITY_DRAFT => 'draft',
+                ResourceLink::VISIBILITY_PENDING => 'pending',
+                ResourceLink::VISIBILITY_PUBLISHED => 'published',
+                default => 'unknown',
+            },
+            'published' => ResourceLink::VISIBILITY_PUBLISHED === $visibility,
+        ];
+    }
+
+    private function applyReviewVisibilityFilter(
+        QueryBuilder $queryBuilder,
+        string $resourceLinkAlias,
+        bool $includeDraftResources,
+    ): void
+    {
+        if ($includeDraftResources) {
+            $queryBuilder
+                ->andWhere($resourceLinkAlias.'.visibility IN (:reviewVisibilities)')
+                ->setParameter('reviewVisibilities', [
+                    ResourceLink::VISIBILITY_DRAFT,
+                    ResourceLink::VISIBILITY_PENDING,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                ], ArrayParameterType::INTEGER)
+            ;
+
+            return;
+        }
+
+        $queryBuilder
+            ->andWhere($resourceLinkAlias.'.visibility = :publishedVisibility')
+            ->setParameter('publishedVisibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
+        ;
     }
 
     private function isSameCourse(?Course $left, Course $right): bool
@@ -545,7 +761,9 @@ final class AiCourseAnalyzerService
         ?Session $session,
         array $excludedDocumentIds,
         int &$totalCharacters,
-    ): array {
+        bool $includeDraftResources,
+    ): array
+    {
         $qb = $this->entityManager->createQueryBuilder();
         $qb
             ->select('document', 'resourceNode', 'resourceLink', 'resourceFile')
@@ -554,10 +772,8 @@ final class AiCourseAnalyzerService
             ->innerJoin('resourceNode.resourceLinks', 'resourceLink')
             ->leftJoin('resourceNode.resourceFiles', 'resourceFile')
             ->andWhere('resourceLink.course = :course')
-            ->andWhere('resourceLink.visibility = :visibility')
             ->andWhere('document.filetype = :filetype')
             ->setParameter('course', (int) $course->getId())
-            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ->setParameter('filetype', 'file', Types::STRING)
             ->setMaxResults(self::MAX_STANDALONE_DOCUMENTS)
             ->orderBy('resourceLink.displayOrder', 'ASC')
@@ -569,6 +785,12 @@ final class AiCourseAnalyzerService
                 ->setParameter('excludedDocumentIds', array_values($excludedDocumentIds), ArrayParameterType::INTEGER)
             ;
         }
+
+        $this->applyReviewVisibilityFilter(
+            $qb,
+            'resourceLink',
+            $includeDraftResources,
+        );
 
         if ($session instanceof Session) {
             $qb
@@ -584,7 +806,7 @@ final class AiCourseAnalyzerService
 
         $documents = [];
         foreach ($documentList as $document) {
-            $documents[] = $this->buildDocumentPayload($document, $totalCharacters, $course, $session);
+            $documents[] = $this->buildDocumentPayload($document, $totalCharacters, $course, $session, $includeDraftResources);
         }
 
         return $documents;
@@ -595,7 +817,12 @@ final class AiCourseAnalyzerService
      *
      * @return array<int, array<string, mixed>>
      */
-    private function collectVisibleStandaloneExercises(Course $course, ?Session $session, array $excludedExerciseIds): array
+    private function collectVisibleStandaloneExercises(
+        Course $course,
+        ?Session $session,
+        array $excludedExerciseIds,
+        bool $includeDraftResources,
+    ): array
     {
         $qb = $this->entityManager->createQueryBuilder();
         $qb
@@ -607,9 +834,7 @@ final class AiCourseAnalyzerService
             ->leftJoin('quizQuestionRel.question', 'question')
             ->leftJoin('question.answers', 'answer')
             ->andWhere('resourceLink.course = :course')
-            ->andWhere('resourceLink.visibility = :visibility')
             ->setParameter('course', (int) $course->getId())
-            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ->setMaxResults(self::MAX_STANDALONE_EXERCISES)
             ->orderBy('resourceLink.displayOrder', 'ASC')
         ;
@@ -620,6 +845,12 @@ final class AiCourseAnalyzerService
                 ->setParameter('excludedExerciseIds', array_values($excludedExerciseIds), ArrayParameterType::INTEGER)
             ;
         }
+
+        $this->applyReviewVisibilityFilter(
+            $qb,
+            'resourceLink',
+            $includeDraftResources,
+        );
 
         if ($session instanceof Session) {
             $qb
@@ -635,10 +866,171 @@ final class AiCourseAnalyzerService
 
         $exercises = [];
         foreach ($quizList as $quiz) {
-            $exercises[] = $this->buildExercisePayload($quiz, $course, $session);
+            $exercises[] = $this->buildExercisePayload($quiz, $course, $session, $includeDraftResources);
         }
 
         return $exercises;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function collectReviewAssignments(
+        Course $course,
+        ?Session $session,
+        bool $includeDraftResources,
+    ): array {
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb
+            ->select('assignment', 'resourceNode', 'resourceLink')
+            ->from(CStudentPublication::class, 'assignment')
+            ->innerJoin('assignment.resourceNode', 'resourceNode')
+            ->innerJoin('resourceNode.resourceLinks', 'resourceLink')
+            ->andWhere('resourceLink.course = :course')
+            ->andWhere('assignment.publicationParent IS NULL')
+            ->setParameter('course', (int) $course->getId())
+            ->setMaxResults(self::MAX_ASSIGNMENTS)
+            ->orderBy('resourceLink.displayOrder', 'ASC')
+        ;
+
+        $this->applyReviewVisibilityFilter(
+            $qb,
+            'resourceLink',
+            $includeDraftResources,
+        );
+
+        if ($session instanceof Session) {
+            $qb
+                ->andWhere('(resourceLink.session IS NULL OR resourceLink.session = :session)')
+                ->setParameter('session', (int) $session->getId())
+            ;
+        } else {
+            $qb->andWhere('resourceLink.session IS NULL');
+        }
+
+        /** @var CStudentPublication[] $assignmentList */
+        $assignmentList = $qb->getQuery()->getResult();
+
+        $assignments = [];
+        foreach ($assignmentList as $assignment) {
+            $resourceNode = $assignment->getResourceNode();
+            $resourceLink = $resourceNode instanceof ResourceNode
+                ? $this->findReviewableResourceLink(
+                    $resourceNode,
+                    $course,
+                    $session,
+                    $includeDraftResources,
+                )
+                : null;
+
+            $assignments[] = [
+                'id' => $assignment->getIid(),
+                'title' => $assignment->getTitle(),
+                'description' => $this->cleanText((string) $assignment->getDescription()),
+                'maximumScore' => $assignment->getQualification(),
+                'submissionMode' => $assignment->getAllowTextAssignment(),
+                'active' => $assignment->getActive(),
+                'visibility' => $this->buildVisibilityPayload($resourceLink),
+            ];
+        }
+
+        return $assignments;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function collectReviewSurveys(
+        Course $course,
+        ?Session $session,
+        bool $includeDraftResources,
+    ): array {
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb
+            ->select('survey', 'resourceNode', 'resourceLink')
+            ->from(CSurvey::class, 'survey')
+            ->innerJoin('survey.resourceNode', 'resourceNode')
+            ->innerJoin('resourceNode.resourceLinks', 'resourceLink')
+            ->andWhere('resourceLink.course = :course')
+            ->setParameter('course', (int) $course->getId())
+            ->setMaxResults(self::MAX_SURVEYS)
+            ->orderBy('resourceLink.displayOrder', 'ASC')
+        ;
+
+        $this->applyReviewVisibilityFilter(
+            $qb,
+            'resourceLink',
+            $includeDraftResources,
+        );
+
+        if ($session instanceof Session) {
+            $qb
+                ->andWhere('(resourceLink.session IS NULL OR resourceLink.session = :session)')
+                ->setParameter('session', (int) $session->getId())
+            ;
+        } else {
+            $qb->andWhere('resourceLink.session IS NULL');
+        }
+
+        /** @var CSurvey[] $surveyList */
+        $surveyList = $qb->getQuery()->getResult();
+
+        $surveys = [];
+        foreach ($surveyList as $survey) {
+            $questions = [];
+
+            foreach ($survey->getQuestions() as $question) {
+                if (\count($questions) >= self::MAX_SURVEY_QUESTIONS) {
+                    break;
+                }
+
+                $options = [];
+                foreach ($question->getOptions() as $option) {
+                    if (\count($options) >= self::MAX_SURVEY_OPTIONS) {
+                        break;
+                    }
+
+                    $options[] = [
+                        'text' => $this->cleanText((string) $option->getOptionText()),
+                        'value' => $option->getValue(),
+                    ];
+                }
+
+                $questions[] = [
+                    'id' => $question->getIid(),
+                    'question' => $this->cleanText($question->getSurveyQuestion()),
+                    'comment' => $this->cleanText((string) $question->getSurveyQuestionComment()),
+                    'type' => $question->getType(),
+                    'mandatory' => $question->isMandatory(),
+                    'position' => $question->getSort(),
+                    'options' => $options,
+                ];
+            }
+
+            $resourceNode = $survey->getResourceNode();
+            $resourceLink = $resourceNode instanceof ResourceNode
+                ? $this->findReviewableResourceLink(
+                    $resourceNode,
+                    $course,
+                    $session,
+                    $includeDraftResources,
+                )
+                : null;
+
+            $surveys[] = [
+                'id' => $survey->getIid(),
+                'title' => $survey->getTitle(),
+                'introduction' => $this->cleanText((string) $survey->getIntro()),
+                'thanks' => $this->cleanText((string) $survey->getSurveythanks()),
+                'language' => $survey->getLang(),
+                'anonymous' => '1' === $survey->getAnonymous(),
+                'questionCount' => \count($questions),
+                'visibility' => $this->buildVisibilityPayload($resourceLink),
+                'questions' => $questions,
+            ];
+        }
+
+        return $surveys;
     }
 
     /**
@@ -649,8 +1041,13 @@ final class AiCourseAnalyzerService
         int &$totalCharacters,
         ?Course $course = null,
         ?Session $session = null,
-    ): array {
+        bool $includeDraftResources = false,
+    ): array
+    {
         $resourceNode = $document->getResourceNode();
+        $resourceLink = $resourceNode instanceof ResourceNode && $course instanceof Course
+            ? $this->findReviewableResourceLink($resourceNode, $course, $session, $includeDraftResources)
+            : null;
 
         $metadata = [
             'id' => $document->getIid(),
@@ -660,10 +1057,14 @@ final class AiCourseAnalyzerService
             'resourceNodeId' => $resourceNode instanceof ResourceNode ? $resourceNode->getId() : null,
             'resourcePath' => $resourceNode instanceof ResourceNode ? $resourceNode->getPathForDisplay() : null,
             'editUrl' => $course instanceof Course ? $this->buildDocumentEditUrl($document, $course, $session) : null,
+            'visibility' => $this->buildVisibilityPayload($resourceLink),
             'fileName' => null,
             'mimeType' => null,
             'size' => null,
             'textIncluded' => false,
+            'textSource' => null,
+            'textLength' => 0,
+            'textTruncated' => false,
             'text' => '',
             'notice' => null,
         ];
@@ -694,14 +1095,23 @@ final class AiCourseAnalyzerService
             return $metadata;
         }
 
-        $text = $this->extractResourceFileText($resourceFile, min(self::MAX_CHARS_PER_DOCUMENT, $remainingCharacters));
+        $extracted = $this->extractDocumentText(
+            $document,
+            $resourceFile,
+            min(self::MAX_CHARS_PER_DOCUMENT, $remainingCharacters),
+        );
+        $text = $extracted['text'];
+
         if ('' === $text) {
-            $metadata['notice'] = 'This file type is listed but was not included as text in this proof of concept.';
+            $metadata['notice'] = 'The document content could not be read from Chamilo storage.';
 
             return $metadata;
         }
 
         $metadata['textIncluded'] = true;
+        $metadata['textSource'] = $extracted['source'];
+        $metadata['textLength'] = mb_strlen($text);
+        $metadata['textTruncated'] = $extracted['truncated'];
         $metadata['text'] = $text;
         $totalCharacters += mb_strlen($text);
 
@@ -711,7 +1121,12 @@ final class AiCourseAnalyzerService
     /**
      * @return array<string, mixed>
      */
-    private function buildExercisePayload(CQuiz $quiz, ?Course $course = null, ?Session $session = null): array
+    private function buildExercisePayload(
+        CQuiz $quiz,
+        ?Course $course = null,
+        ?Session $session = null,
+        bool $includeDraftResources = false,
+    ): array
     {
         $questions = [];
 
@@ -759,13 +1174,75 @@ final class AiCourseAnalyzerService
             ];
         }
 
+        $resourceNode = $quiz->getResourceNode();
+        $resourceLink = $resourceNode instanceof ResourceNode && $course instanceof Course
+            ? $this->findReviewableResourceLink($resourceNode, $course, $session, $includeDraftResources)
+            : null;
+
         return [
             'id' => $quiz->getIid(),
             'title' => $quiz->getTitle(),
             'description' => $this->cleanText((string) $quiz->getDescription()),
             'type' => $quiz->getType(),
             'editUrl' => $course instanceof Course ? $this->buildExerciseEditUrl($quiz, $course, $session) : null,
+            'visibility' => $this->buildVisibilityPayload($resourceLink),
             'questions' => $questions,
+        ];
+    }
+
+    /**
+     * Read through the Chamilo repository first so Flysystem/Vich-backed
+     * resources and editable text content are available outside a file upload
+     * request. Fall back to the direct ResourceFile path for legacy files.
+     *
+     * @return array{text:string,source:string|null,truncated:bool}
+     */
+    private function extractDocumentText(
+        CDocument $document,
+        ResourceFile $resourceFile,
+        int $maxCharacters,
+    ): array {
+        if ($maxCharacters <= 0) {
+            return [
+                'text' => '',
+                'source' => null,
+                'truncated' => false,
+            ];
+        }
+
+        $fileName = (string) (
+            $resourceFile->getOriginalName()
+            ?: $resourceFile->getTitle()
+            ?: ''
+        );
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+        $mimeType = strtolower((string) $resourceFile->getMimeType());
+
+        if ('docx' !== $extension && $this->isPlainTextResource($extension, $mimeType)) {
+            try {
+                $rawContent = $this->documentRepository->getResourceFileContent($document);
+                $cleanContent = $this->cleanText($rawContent);
+
+                if ('' !== $cleanContent) {
+                    $truncated = mb_strlen($cleanContent) > $maxCharacters;
+
+                    return [
+                        'text' => $this->truncateText($cleanContent, $maxCharacters),
+                        'source' => 'chamilo_repository',
+                        'truncated' => $truncated,
+                    ];
+                }
+            } catch (Throwable) {
+                // Continue with the direct ResourceFile fallback.
+            }
+        }
+
+        $text = $this->extractResourceFileText($resourceFile, $maxCharacters);
+
+        return [
+            'text' => $text,
+            'source' => '' !== $text ? 'resource_file_fallback' : null,
+            'truncated' => '' !== $text && mb_strlen($text) >= $maxCharacters,
         ];
     }
 
@@ -870,6 +1347,8 @@ final class AiCourseAnalyzerService
         $structuredLessons = $this->arrayList($structured['lessons'] ?? []);
         $structuredStandaloneDocuments = $this->arrayList($structured['standaloneDocuments'] ?? []);
         $structuredStandaloneExercises = $this->arrayList($structured['standaloneExercises'] ?? []);
+        $structuredAssignments = $this->arrayList($structured['assignments'] ?? []);
+        $structuredSurveys = $this->arrayList($structured['surveys'] ?? []);
 
         $structured['lessons'] = $this->normalizeLessonFeedbackList(
             $this->arrayList($payload['lessons'] ?? []),
@@ -882,6 +1361,16 @@ final class AiCourseAnalyzerService
         $structured['standaloneExercises'] = $this->normalizeStandaloneExerciseFeedbackList(
             $this->arrayList($payload['standaloneExercises'] ?? []),
             $structuredStandaloneExercises,
+        );
+        $structured['assignments'] = $this->normalizeSimpleResourceFeedbackList(
+            $this->arrayList($payload['assignments'] ?? []),
+            $structuredAssignments,
+            'Assignment',
+        );
+        $structured['surveys'] = $this->normalizeSimpleResourceFeedbackList(
+            $this->arrayList($payload['surveys'] ?? []),
+            $structuredSurveys,
+            'Survey',
         );
 
         return $structured;
@@ -1015,6 +1504,42 @@ final class AiCourseAnalyzerService
     }
 
     /**
+     * @param array<int, mixed> $payloadItems
+     * @param array<int, mixed> $structuredItems
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeSimpleResourceFeedbackList(
+        array $payloadItems,
+        array $structuredItems,
+        string $fallbackTitle,
+    ): array {
+        $items = [];
+
+        foreach ($payloadItems as $payloadItem) {
+            if (!\is_array($payloadItem)) {
+                continue;
+            }
+
+            $structuredItem = $this->findStructuredFeedback(
+                $structuredItems,
+                $payloadItem,
+            );
+
+            $items[] = [
+                'id' => $payloadItem['id'] ?? null,
+                'title' => $payloadItem['title'] ?? $fallbackTitle,
+                'feedback' => $this->stringValue($structuredItem['feedback'] ?? ''),
+                'recommendations' => $this->stringList(
+                    $structuredItem['recommendations'] ?? [],
+                ),
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
      * @param array<int, mixed> $payloadQuestions
      * @param array<int, mixed> $structuredQuestions
      *
@@ -1029,14 +1554,28 @@ final class AiCourseAnalyzerService
                 continue;
             }
 
-            $structuredQuestion = $this->findStructuredFeedback($structuredQuestions, $payloadQuestion);
+            $structuredQuestion = $this->findStructuredFeedback(
+                $structuredQuestions,
+                $payloadQuestion,
+            );
+            $feedback = $this->stringValue($structuredQuestion['feedback'] ?? '');
+            $answersFeedback = $this->stringValue(
+                $structuredQuestion['answersFeedback'] ?? '',
+            );
+            $recommendations = $this->stringList(
+                $structuredQuestion['recommendations'] ?? [],
+            );
+
+            if ('' === $feedback && '' === $answersFeedback && [] === $recommendations) {
+                continue;
+            }
 
             $items[] = [
                 'id' => $payloadQuestion['id'] ?? null,
                 'question' => $payloadQuestion['question'] ?? 'Question',
-                'feedback' => $this->stringValue($structuredQuestion['feedback'] ?? ''),
-                'answersFeedback' => $this->stringValue($structuredQuestion['answersFeedback'] ?? ''),
-                'recommendations' => $this->stringList($structuredQuestion['recommendations'] ?? []),
+                'feedback' => $feedback,
+                'answersFeedback' => $answersFeedback,
+                'recommendations' => $recommendations,
             ];
         }
 
@@ -1149,48 +1688,149 @@ final class AiCourseAnalyzerService
     /**
      * @param array<string, mixed> $payload
      *
+     * @return array<string, int>
+     */
+    private function buildPayloadStats(array $payload): array
+    {
+        $documents = [];
+        $exerciseCount = 0;
+        $questionCount = 0;
+
+        foreach ($this->arrayList($payload['lessons'] ?? []) as $lesson) {
+            if (!\is_array($lesson)) {
+                continue;
+            }
+
+            foreach ($this->arrayList($lesson['items'] ?? []) as $item) {
+                if (!\is_array($item)) {
+                    continue;
+                }
+
+                if (\is_array($item['document'] ?? null)) {
+                    $documents[] = $item['document'];
+                }
+
+                if (\is_array($item['exercise'] ?? null)) {
+                    ++$exerciseCount;
+                    $questionCount += \count(
+                        $this->arrayList($item['exercise']['questions'] ?? []),
+                    );
+                }
+            }
+        }
+
+        foreach ($this->arrayList($payload['standaloneDocuments'] ?? []) as $document) {
+            if (\is_array($document)) {
+                $documents[] = $document;
+            }
+        }
+
+        foreach ($this->arrayList($payload['standaloneExercises'] ?? []) as $exercise) {
+            if (!\is_array($exercise)) {
+                continue;
+            }
+
+            ++$exerciseCount;
+            $questionCount += \count(
+                $this->arrayList($exercise['questions'] ?? []),
+            );
+        }
+
+        $documentsWithText = 0;
+        $documentsWithoutText = 0;
+        $truncatedDocuments = 0;
+        $includedTextCharacters = 0;
+
+        foreach ($documents as $document) {
+            if (true === ($document['textIncluded'] ?? false)) {
+                ++$documentsWithText;
+                $includedTextCharacters += (int) ($document['textLength'] ?? 0);
+
+                if (true === ($document['textTruncated'] ?? false)) {
+                    ++$truncatedDocuments;
+                }
+
+                continue;
+            }
+
+            ++$documentsWithoutText;
+        }
+
+        return [
+            'documents_total' => \count($documents),
+            'documents_with_text' => $documentsWithText,
+            'documents_without_text' => $documentsWithoutText,
+            'documents_truncated' => $truncatedDocuments,
+            'included_text_characters' => $includedTextCharacters,
+            'exercises_total' => $exerciseCount,
+            'questions_total' => $questionCount,
+            'assignments_total' => \count($this->arrayList($payload['assignments'] ?? [])),
+            'surveys_total' => \count($this->arrayList($payload['surveys'] ?? [])),
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
      * @return array<int, array{role:string,content:string}>
      */
-    private function buildMessages(array $payload): array
-    {
-        $payloadJson = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    private function buildMessages(
+        array $payload,
+        bool $compact,
+    ): array {
+        $payloadJson = json_encode(
+            $payload,
+            JSON_PRETTY_PRINT
+                | JSON_UNESCAPED_UNICODE
+                | JSON_UNESCAPED_SLASHES,
+        );
         if (!\is_string($payloadJson)) {
             $payloadJson = '{}';
         }
 
+        $detailRules = $compact
+            ? [
+                'This is a compact retry after an invalid or truncated response.',
+                'Keep general feedback under 900 characters.',
+                'Return at most 5 strengths, 5 risks and 7 recommendations.',
+                'Keep each resource feedback under 280 characters and each resource recommendation list to at most 3 concise items.',
+                'Only include question-level feedback for questions with a concrete defect. Omit question objects that need no correction.',
+            ]
+            : [
+                'Keep general feedback under 1400 characters.',
+                'Return at most 7 strengths, 7 risks and 10 recommendations.',
+                'Keep each resource feedback concise and evidence-based.',
+                'Question-level feedback should focus only on concrete wording, answer, scoring or feedback defects.',
+            ];
+
         return [
             [
                 'role' => 'system',
-                'content' => implode("\n", [
+                'content' => implode("\n", array_merge([
                     'You are an expert instructional designer and e-learning quality reviewer.',
-                    'Analyze the Chamilo course by prioritizing the visible learning path structure.',
+                    'Analyze the Chamilo course by prioritizing its learning path structure and respecting each resource visibility state.',
                     'Review each lesson as an ordered pedagogical sequence, and explain the purpose and quality of each lesson item when possible.',
-                    'When an item or standalone exercise includes questions and answers, analyze question wording, answer quality, correct-answer alignment, feedback comments and scoring.',
-                    'Documents and exercises inside lessons are the primary analysis scope. Standalone documents and standalone exercises are secondary and only included when the teacher explicitly selected those options.',
+                    'When a document includes text, base your feedback on that text rather than its title or generation topic.',
+                    'When an exercise includes questions and answers, analyze wording, answer quality, correct-answer alignment, feedback comments and scoring.',
+                    'Review assignment descriptions, scoring and submission mode, and review survey structure, wording, option quality and anonymity.',
+                    'Draft and pending resources are teacher work in progress. Analyze them and do not describe the course as empty merely because resources are unpublished.',
                     'Return only valid JSON, without markdown fences.',
-                    'Do not invent lessons, items, documents, exercises or questions.',
-                    'Use the exact id and title/question values from the payload whenever possible.',
-                    'Return one feedback object for every lesson, lesson item, standalone document, standalone exercise and exercise question present in the payload. If a file has metadata only, still provide a short recommendation based on its title, type and position.',
-                    'Use this exact structure:',
+                    'Do not invent lessons, items, documents, exercises, assignments, surveys or questions.',
+                    'Use exact IDs and titles from the payload whenever possible.',
+                ], $detailRules, [
+                    'Use this JSON structure:',
                     '{',
                     '  "generalFeedback": "string",',
                     '  "strengths": ["string"],',
                     '  "risks": ["string"],',
                     '  "recommendations": ["string"],',
-                    '  "lessons": [',
-                    '    {',
-                    '      "id": 0,',
-                    '      "title": "string",',
-                    '      "feedback": "string",',
-                    '      "sequenceFeedback": "string",',
-                    '      "items": [{"id": 0, "title": "string", "type": "string", "purpose": "string", "feedback": "string", "questions": [{"id": 0, "question": "string", "feedback": "string", "answersFeedback": "string", "recommendations": ["string"]}], "recommendations": ["string"]}],',
-                    '      "recommendations": ["string"]',
-                    '    }',
-                    '  ],',
+                    '  "lessons": [{"id": 0, "title": "string", "feedback": "string", "sequenceFeedback": "string", "items": [{"id": 0, "title": "string", "type": "string", "purpose": "string", "feedback": "string", "questions": [{"id": 0, "question": "string", "feedback": "string", "answersFeedback": "string", "recommendations": ["string"]}], "recommendations": ["string"]}], "recommendations": ["string"]}],',
                     '  "standaloneDocuments": [{"id": 0, "title": "string", "feedback": "string", "recommendations": ["string"]}],',
-                    '  "standaloneExercises": [{"id": 0, "title": "string", "feedback": "string", "questions": [{"id": 0, "question": "string", "feedback": "string", "answersFeedback": "string", "recommendations": ["string"]}], "recommendations": ["string"]}]',
+                    '  "standaloneExercises": [{"id": 0, "title": "string", "feedback": "string", "questions": [{"id": 0, "question": "string", "feedback": "string", "answersFeedback": "string", "recommendations": ["string"]}], "recommendations": ["string"]}],',
+                    '  "assignments": [{"id": 0, "title": "string", "feedback": "string", "recommendations": ["string"]}],',
+                    '  "surveys": [{"id": 0, "title": "string", "feedback": "string", "recommendations": ["string"]}]',
                     '}',
-                ]),
+                ])),
             ],
             [
                 'role' => 'user',
@@ -1200,13 +1840,37 @@ final class AiCourseAnalyzerService
     }
 
     /**
+     * @param array<int, array{role:string,content:string}> $messages
+     */
+    private function requestStructuredAnalysis(
+        string $provider,
+        array $messages,
+        int $maxTokens,
+    ): string {
+        return $this->chatCompletionClient->chat($provider, $messages, [
+            'temperature' => 0.15,
+            'max_tokens' => $maxTokens,
+            'max_output_tokens' => $maxTokens,
+            'response_mime_type' => 'application/json',
+            'throw_on_error' => true,
+        ]);
+    }
+
+    /**
      * @return array<string, mixed>|null
      */
     private function decodeStructuredResponse(string $rawResponse): ?array
     {
         $response = trim($rawResponse);
-        $response = preg_replace('/^```(?:json)?\s*/i', '', $response) ?? $response;
-        $response = preg_replace('/\s*```$/', '', $response) ?? $response;
+        $response = preg_replace('/^```(?:json)?\\s*/i', '', $response) ?? $response;
+        $response = preg_replace('/\\s*```$/', '', $response) ?? $response;
+
+        $start = strpos($response, '{');
+        $end = strrpos($response, '}');
+
+        if (false !== $start && false !== $end && $end >= $start) {
+            $response = substr($response, $start, $end - $start + 1);
+        }
 
         try {
             $decoded = json_decode($response, true, 512, JSON_THROW_ON_ERROR);

@@ -153,6 +153,7 @@
     "symfony/lock": "7.4.*",
     "symfony/mailer": "7.4.*",
     "symfony/mailjet-mailer": "7.4.*",
+    "symfony/mcp-bundle": "^0.12",
     "symfony/messenger": "7.4.*",
     "symfony/mime": "7.4.*",
     "symfony/monolog-bundle": "^3.1",
@@ -197,8 +198,9 @@
     "component-dir": "public/assets",
     "sort-packages": true,
     "allow-plugins": {
-      "symfony/flex": true,
       "dealerdirect/phpcodesniffer-composer-installer": true,
+      "php-http/discovery": true,
+      "symfony/flex": true,
       "symfony/runtime": true
     },
     "process-timeout": 900

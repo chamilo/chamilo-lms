@@ -177,7 +177,8 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             temperature: $resolved['temperature'],
             maxOutputTokens: $resolved['max_output_tokens'],
             prompt: $prompt,
-            toolName: 'generateText'
+            toolName: 'generateText',
+            responseMimeType: $resolved['response_mime_type'],
         );
 
         if (null === $result || '' === trim($result)) {
@@ -413,7 +414,14 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             );
     }
 
-    private function requestGeminiText(string $url, float $temperature, int $maxOutputTokens, string $prompt, string $toolName): ?string
+    private function requestGeminiText(
+        string $url,
+        float $temperature,
+        int $maxOutputTokens,
+        string $prompt,
+        string $toolName,
+        ?string $responseMimeType = null,
+    ): ?string
     {
         $this->lastTextError = null;
 
@@ -437,6 +445,10 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
                 'maxOutputTokens' => $maxOutputTokens,
             ],
         ];
+
+        if (null !== $responseMimeType) {
+            $payload['generationConfig']['responseMimeType'] = $responseMimeType;
+        }
 
         try {
             $data = $this->postJson($url, $payload);
@@ -1258,7 +1270,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
      *
      * @param array<string,mixed> $options
      *
-     * @return array{url:string,temperature:float,max_output_tokens:int}
+     * @return array{url:string,temperature:float,max_output_tokens:int,response_mime_type:string|null}
      */
     private function resolveTextOptions(array $options): array
     {
@@ -1278,10 +1290,17 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             $max = $this->textMaxOutputTokens > 0 ? $this->textMaxOutputTokens : 1000;
         }
 
+        $responseMimeType = $options['response_mime_type'] ?? $options['responseMimeType'] ?? null;
+        $responseMimeType = null !== $responseMimeType ? trim((string) $responseMimeType) : null;
+        if (!\in_array($responseMimeType, [null, 'application/json', 'text/plain'], true)) {
+            $responseMimeType = null;
+        }
+
         return [
             'url' => $url,
             'temperature' => $temperature,
             'max_output_tokens' => $max,
+            'response_mime_type' => $responseMimeType,
         ];
     }
 

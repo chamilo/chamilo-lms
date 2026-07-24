@@ -278,7 +278,14 @@ AfterAll({ tags: "@settings" }, async () => {
     await page.waitForLoadState("domcontentloaded")
     await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
     await pressButton(page, "Save")
-    await page.waitForLoadState("domcontentloaded")
+    // "Save" is a form submit — likely POST-redirect-GET under the hood —
+    // and domcontentloaded can resolve on an intermediate state before that
+    // redirect chain actually settles. A real CI run hit exactly this: the
+    // *next* iteration's page.goto() got interrupted by a still-in-flight
+    // navigation left over from *this* iteration's Save. networkidle is a
+    // stronger signal that the whole chain, not just the first response,
+    // has actually finished before the loop moves on.
+    await page.waitForLoadState("networkidle")
   }
   await page.context().close()
 })

@@ -68,12 +68,14 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        # MCP remote server authenticated with Chamilo JWT.
+        # MCP remote server authenticated with a personal MCP API key or a legacy development JWT.
         mcp:
             pattern: ^/mcp$
             stateless: true
-            jwt: ~
             provider: app_user_provider
+            entry_point: Chamilo\CoreBundle\Security\Authenticator\McpBearerAuthenticator
+            custom_authenticators:
+                - Chamilo\CoreBundle\Security\Authenticator\McpBearerAuthenticator
 
         # Use to connect via a JWT token
         api:

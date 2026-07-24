@@ -37,6 +37,10 @@ framework:
             policy: 'sliding_window'
             limit: 5
             interval: '1 minute'
+        mcp_authentication:
+            policy: 'sliding_window'
+            limit: 120
+            interval: '1 minute'
 
     # For legacy code (ending in ".php"), also edit public/main/inc/global.inc.php according to the changes you make here
 

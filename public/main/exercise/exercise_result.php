@@ -432,12 +432,19 @@ $template->assign('page_bottom', $pageBottom);
 $template->assign('allow_signature', $allowSignature);
 $template->assign('exe_id', $exeId);
 $template->assign('actions', $pageActions);
-$template->assign('content', $template->fetch($template->get_template('exercise/result.tpl')));
+$resultContent = $template->fetch($template->get_template('exercise/result.tpl'));
+$template->assign('content', $resultContent);
 
 if (in_array($origin, ['learnpath', 'embeddable'], true)) {
     $template->display_blank_template();
-} else {
+} elseif ('mobileapp' === $origin) {
     $template->display_one_col_template();
+} else {
+    // Standalone exercise results must use the regular legacy page shell.
+    Display::display_header($nameTools);
+    echo $pageActions;
+    echo $resultContent;
+    Display::display_footer();
 }
 
 function showEmbeddableFinishButton()

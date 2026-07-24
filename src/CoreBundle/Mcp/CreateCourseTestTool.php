@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Service\Exercise\AiCourseTestGenerator;
+use Chamilo\CoreBundle\Service\Mcp\McpCourseAiFeatureManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use InvalidArgumentException;
@@ -32,6 +33,7 @@ final readonly class CreateCourseTestTool
         private CourseRelUserRepository $courseRelUserRepository,
         private CDocumentRepository $documentRepository,
         private AiCourseTestGenerator $testGenerator,
+        private McpCourseAiFeatureManager $courseAiFeatureManager,
     ) {}
 
     /**
@@ -68,18 +70,21 @@ final readonly class CreateCourseTestTool
         bool $publish = false,
     ): array {
         try {
+            $result = $this->doCreateCourseTest(
+                $courseId,
+                $title,
+                $questionCount,
+                $topicDescription,
+                $documentId,
+                $language,
+                $provider,
+                $publish,
+            );
+
             return [
                 'created' => true,
-                'test' => $this->doCreateCourseTest(
-                    $courseId,
-                    $title,
-                    $questionCount,
-                    $topicDescription,
-                    $documentId,
-                    $language,
-                    $provider,
-                    $publish,
-                ),
+                'course_features_enabled' => $result['course_features_enabled'],
+                'test' => $result['test'],
             ];
         } catch (ToolCallException $exception) {
             throw $exception;
@@ -143,6 +148,13 @@ final readonly class CreateCourseTestTool
             throw new AccessDeniedException('The course was not found or is not managed by the authenticated teacher.');
         }
 
+        $enabledFeatures = $this->courseAiFeatureManager->ensureEnabled(
+            $course,
+            $user,
+            'exercise_generator',
+            'create_course_test',
+        );
+
         $title = trim(strip_tags($title));
         if ('' === $title) {
             throw new InvalidArgumentException('The test title is required.');
@@ -165,19 +177,22 @@ final readonly class CreateCourseTestTool
                 throw new InvalidArgumentException('The topic description cannot be longer than 20000 characters.');
             }
 
-            return $this->testGenerator->createTest(
-                $course,
-                $user,
-                $title,
-                $questionCount,
-                'topic',
-                $title,
-                $topicDescription,
-                null,
-                $language,
-                $provider,
-                $publish,
-            );
+            return [
+                'course_features_enabled' => $enabledFeatures,
+                'test' => $this->testGenerator->createTest(
+                    $course,
+                    $user,
+                    $title,
+                    $questionCount,
+                    'topic',
+                    $title,
+                    $topicDescription,
+                    null,
+                    $language,
+                    $provider,
+                    $publish,
+                ),
+            ];
         }
 
         $document = $this->documentRepository->find($documentId);
@@ -196,18 +211,21 @@ final readonly class CreateCourseTestTool
 
         $sourceText = $this->testGenerator->getDocumentSource($document);
 
-        return $this->testGenerator->createTest(
-            $course,
-            $user,
-            $title,
-            $questionCount,
-            'document',
-            trim(strip_tags((string) $document->getTitle())),
-            $sourceText,
-            $documentId,
-            $language,
-            $provider,
-            $publish,
-        );
+        return [
+            'course_features_enabled' => $enabledFeatures,
+            'test' => $this->testGenerator->createTest(
+                $course,
+                $user,
+                $title,
+                $questionCount,
+                'document',
+                trim(strip_tags((string) $document->getTitle())),
+                $sourceText,
+                $documentId,
+                $language,
+                $provider,
+                $publish,
+            ),
+        ];
     }
 }

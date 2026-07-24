@@ -6,15 +6,22 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\UserApiKeyRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserApiKey.
+ * API keys associated with Chamilo users.
+ *
+ * Legacy services continue to use rows with api_service = "default".
+ * MCP rows use api_service = "mcp" and store a SHA-256 hash instead of the
+ * recoverable secret.
  */
 #[ORM\Table(name: 'user_api_key')]
 #[ORM\Index(name: 'idx_user_api_keys_user', columns: ['user_id'])]
-#[ORM\Entity]
+#[ORM\Index(name: 'idx_user_api_key_mcp_lookup', columns: ['api_service', 'api_key', 'access_url_id', 'revoked_at'])]
+#[ORM\UniqueConstraint(name: 'uniq_user_api_key_service_url', columns: ['user_id', 'api_service', 'access_url_id'])]
+#[ORM\Entity(repositoryClass: UserApiKeyRepository::class)]
 class UserApiKey
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -25,7 +32,7 @@ class UserApiKey
     #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
 
-    #[ORM\Column(name: 'api_key', type: 'string', length: 32, nullable: false)]
+    #[ORM\Column(name: 'api_key', type: 'string', length: 64, nullable: false)]
     protected string $apiKey;
 
     #[ORM\Column(name: 'api_service', type: 'string', length: 10, nullable: false)]
@@ -46,189 +53,177 @@ class UserApiKey
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * Set userId.
-     *
-     * @return UserApiKey
-     */
-    public function setUserId(int $userId)
+    #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: true)]
+    protected ?int $accessUrlId = null;
+
+    #[ORM\Column(name: 'key_prefix', type: 'string', length: 32, nullable: true)]
+    protected ?string $keyPrefix = null;
+
+    #[ORM\Column(name: 'last_used_at', type: 'datetime', nullable: true)]
+    protected ?DateTime $lastUsedAt = null;
+
+    #[ORM\Column(name: 'revoked_at', type: 'datetime', nullable: true)]
+    protected ?DateTime $revokedAt = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setUserId(int $userId): self
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
-    /**
-     * Set apiKey.
-     *
-     * @return UserApiKey
-     */
-    public function setApiKey(string $apiKey)
+    public function setApiKey(string $apiKey): self
     {
         $this->apiKey = $apiKey;
 
         return $this;
     }
 
-    /**
-     * Get apiKey.
-     *
-     * @return string
-     */
-    public function getApiKey()
+    public function getApiKey(): string
     {
         return $this->apiKey;
     }
 
-    /**
-     * Set apiService.
-     *
-     * @return UserApiKey
-     */
-    public function setApiService(string $apiService)
+    public function setApiService(string $apiService): self
     {
         $this->apiService = $apiService;
 
         return $this;
     }
 
-    /**
-     * Get apiService.
-     *
-     * @return string
-     */
-    public function getApiService()
+    public function getApiService(): string
     {
         return $this->apiService;
     }
 
-    /**
-     * Set apiEndPoint.
-     *
-     * @return UserApiKey
-     */
-    public function setApiEndPoint(string $apiEndPoint)
+    public function setApiEndPoint(?string $apiEndPoint): self
     {
         $this->apiEndPoint = $apiEndPoint;
 
         return $this;
     }
 
-    /**
-     * Get apiEndPoint.
-     *
-     * @return string
-     */
-    public function getApiEndPoint()
+    public function getApiEndPoint(): ?string
     {
         return $this->apiEndPoint;
     }
 
-    /**
-     * Set createdDate.
-     *
-     * @return UserApiKey
-     */
-    public function setCreatedDate(DateTime $createdDate)
+    public function setCreatedDate(?DateTime $createdDate): self
     {
         $this->createdDate = $createdDate;
 
         return $this;
     }
 
-    /**
-     * Get createdDate.
-     *
-     * @return DateTime
-     */
-    public function getCreatedDate()
+    public function getCreatedDate(): ?DateTime
     {
         return $this->createdDate;
     }
 
-    /**
-     * Set validityStartDate.
-     *
-     * @return UserApiKey
-     */
-    public function setValidityStartDate(DateTime $validityStartDate)
+    public function setValidityStartDate(?DateTime $validityStartDate): self
     {
         $this->validityStartDate = $validityStartDate;
 
         return $this;
     }
 
-    /**
-     * Get validityStartDate.
-     *
-     * @return DateTime
-     */
-    public function getValidityStartDate()
+    public function getValidityStartDate(): ?DateTime
     {
         return $this->validityStartDate;
     }
 
-    /**
-     * Set validityEndDate.
-     *
-     * @return UserApiKey
-     */
-    public function setValidityEndDate(DateTime $validityEndDate)
+    public function setValidityEndDate(?DateTime $validityEndDate): self
     {
         $this->validityEndDate = $validityEndDate;
 
         return $this;
     }
 
-    /**
-     * Get validityEndDate.
-     *
-     * @return DateTime
-     */
-    public function getValidityEndDate()
+    public function getValidityEndDate(): ?DateTime
     {
         return $this->validityEndDate;
     }
 
-    /**
-     * Set description.
-     *
-     * @return UserApiKey
-     */
-    public function setDescription(string $description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function setAccessUrlId(?int $accessUrlId): self
     {
-        return $this->id;
+        $this->accessUrlId = $accessUrlId;
+
+        return $this;
+    }
+
+    public function getAccessUrlId(): ?int
+    {
+        return $this->accessUrlId;
+    }
+
+    public function setKeyPrefix(?string $keyPrefix): self
+    {
+        $this->keyPrefix = $keyPrefix;
+
+        return $this;
+    }
+
+    public function getKeyPrefix(): ?string
+    {
+        return $this->keyPrefix;
+    }
+
+    public function setLastUsedAt(?DateTime $lastUsedAt): self
+    {
+        $this->lastUsedAt = $lastUsedAt;
+
+        return $this;
+    }
+
+    public function getLastUsedAt(): ?DateTime
+    {
+        return $this->lastUsedAt;
+    }
+
+    public function setRevokedAt(?DateTime $revokedAt): self
+    {
+        $this->revokedAt = $revokedAt;
+
+        return $this;
+    }
+
+    public function getRevokedAt(): ?DateTime
+    {
+        return $this->revokedAt;
+    }
+
+    public function isActiveAt(DateTime $date): bool
+    {
+        if (null !== $this->revokedAt) {
+            return false;
+        }
+
+        if (null !== $this->validityStartDate && $this->validityStartDate > $date) {
+            return false;
+        }
+
+        return null === $this->validityEndDate || $this->validityEndDate > $date;
     }
 }

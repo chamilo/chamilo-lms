@@ -17,5 +17,11 @@ export default {
       meta: { breadcrumb: "Personal data" },
       component: () => import("../views/user/PersonalData.vue"),
     },
+    {
+      name: "McpApiKey",
+      path: "mcp_api_key",
+      meta: { breadcrumb: "MCP API key" },
+      component: () => import("../views/user/McpApiKey.vue"),
+    },
   ],
 }

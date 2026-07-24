@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Service\Ai\AiRequestQuotaGuard;
+use Chamilo\CoreBundle\Service\Mcp\McpTextAiService;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -44,12 +45,15 @@ final readonly class AiCourseTestGenerator
         private AiProviderFactory $aiProviderFactory,
         private AiChatCompletionClientInterface $aiChatCompletionClient,
         private AiRequestQuotaGuard $quotaGuard,
+        private McpTextAiService $mcpTextAiService,
         private AiDisclosureHelper $aiDisclosureHelper,
         private CDocumentRepository $documentRepository,
         private EntityManagerInterface $entityManager,
     ) {}
 
     /**
+     * Generate and persist a complete test.
+     *
      * @return array{
      *     quiz_id: int,
      *     resource_node_id: int,
@@ -78,9 +82,67 @@ final readonly class AiCourseTestGenerator
         ?string $requestedProvider,
         bool $publish,
     ): array {
+        $prepared = $this->prepareTest(
+            $course,
+            $user,
+            $title,
+            $questionCount,
+            $sourceType,
+            $sourceTitle,
+            $sourceText,
+            $language,
+            $requestedProvider,
+        );
+
+        return $this->persistPreparedTest(
+            $course,
+            $user,
+            $title,
+            $prepared,
+            $documentId,
+            $publish,
+        );
+    }
+
+    /**
+     * Generate and validate all question data without writing a test resource.
+     *
+     * This method is used by compound operations such as MCP learning-path
+     * creation so every external AI request completes before the first course
+     * resource is persisted.
+     *
+     * @return array{
+     *     provider_used: string,
+     *     source_type: 'topic'|'document',
+     *     source_title: string,
+     *     source_text: string,
+     *     question_count: int,
+     *     questions: list<array{
+     *         title: string,
+     *         answers: list<string>,
+     *         correct_index: int,
+     *         feedback: string
+     *     }>
+     * }
+     */
+    public function prepareTest(
+        Course $course,
+        User $user,
+        string $title,
+        int $questionCount,
+        string $sourceType,
+        string $sourceTitle,
+        string $sourceText,
+        ?string $language,
+        ?string $requestedProvider,
+    ): array {
         $courseId = (int) $course->getId();
         if (!$this->aiFeatureAccessHelper->isFeatureEnabledForCourse('exercise_generator', $courseId)) {
             throw new RuntimeException('AI exercise generation is not enabled for this course.');
+        }
+
+        if (!\in_array($sourceType, ['topic', 'document'], true)) {
+            throw new InvalidArgumentException('The test source type must be topic or document.');
         }
 
         if ($questionCount < self::MIN_QUESTION_COUNT || $questionCount > self::MAX_QUESTION_COUNT) {
@@ -105,6 +167,8 @@ final readonly class AiCourseTestGenerator
             $courseId.'|'.$title.'|'.$sourceType.'|'.$sourceText.'|'.microtime(true),
         );
         $lastRequestId = $this->getLastAiRequestId((int) $user->getId());
+        $questions = null;
+        $generationMode = 'ai';
 
         try {
             $generated = $this->requestAiken(
@@ -135,10 +199,29 @@ final readonly class AiCourseTestGenerator
                 );
                 $questions = $this->tryParseAiken($repaired, $questionCount);
             }
+
+            if (null === $questions) {
+                $questions = $this->requestStructuredQuestions(
+                    $user,
+                    $providerName,
+                    (string) $course->getTitle(),
+                    $title,
+                    $sourceType,
+                    $sourceTitle,
+                    $sourceText,
+                    $questionCount,
+                    $language,
+                    $requestMarker,
+                );
+            }
         } catch (Throwable $exception) {
             error_log('[AI][mcp_course_test] Question generation failed: '.$exception->getMessage());
 
-            throw new RuntimeException('The AI model could not generate the requested test.', 0, $exception);
+            throw new RuntimeException(
+                'The AI model could not generate the requested test: '.$exception->getMessage(),
+                0,
+                $exception,
+            );
         } finally {
             $this->redactGeneratedRequestLogs(
                 (int) $user->getId(),
@@ -152,7 +235,84 @@ final readonly class AiCourseTestGenerator
         }
 
         if (null === $questions) {
-            throw new RuntimeException('The AI model did not return the requested number of valid questions.');
+            $questions = $this->buildDeterministicFallbackQuestions(
+                $sourceTitle,
+                $sourceText,
+                $questionCount,
+            );
+            $generationMode = 'deterministic_fallback';
+        }
+
+        return [
+            'provider_used' => $providerName,
+            'generation_mode' => $generationMode,
+            'source_type' => $sourceType,
+            'source_title' => $sourceTitle,
+            'source_text' => $sourceText,
+            'question_count' => $questionCount,
+            'questions' => $questions,
+        ];
+    }
+
+    /**
+     * Persist a test from question data previously returned by prepareTest().
+     *
+     * @param array{
+     *     provider_used: string,
+     *     source_type: 'topic'|'document',
+     *     source_title: string,
+     *     source_text: string,
+     *     question_count: int,
+     *     questions: list<array{
+     *         title: string,
+     *         answers: list<string>,
+     *         correct_index: int,
+     *         feedback: string
+     *     }>
+     * } $prepared
+     *
+     * @return array{
+     *     quiz_id: int,
+     *     resource_node_id: int,
+     *     title: string,
+     *     question_count: int,
+     *     question_type: 'unique_answer',
+     *     total_score: float,
+     *     published: bool,
+     *     provider_used: string,
+     *     ai_assisted: true,
+     *     source: array{type: 'topic'|'document', document_id: int|null, title: string},
+     *     questions: list<array{question_id: int, title: string, score: float}>,
+     *     content_url: string
+     * }
+     */
+    public function persistPreparedTest(
+        Course $course,
+        User $user,
+        string $title,
+        array $prepared,
+        ?int $documentId,
+        bool $publish,
+    ): array {
+        $providerName = trim((string) ($prepared['provider_used'] ?? ''));
+        $generationMode = trim((string) ($prepared['generation_mode'] ?? 'ai'));
+        $sourceType = (string) ($prepared['source_type'] ?? '');
+        $sourceTitle = trim((string) ($prepared['source_title'] ?? ''));
+        $sourceText = trim((string) ($prepared['source_text'] ?? ''));
+        $questionCount = (int) ($prepared['question_count'] ?? 0);
+        $questions = $prepared['questions'] ?? null;
+
+        if (
+            '' === $providerName
+            || !\in_array($sourceType, ['topic', 'document'], true)
+            || '' === $sourceTitle
+            || '' === $sourceText
+            || $questionCount < self::MIN_QUESTION_COUNT
+            || $questionCount > self::MAX_QUESTION_COUNT
+            || !\is_array($questions)
+            || \count($questions) !== $questionCount
+        ) {
+            throw new InvalidArgumentException('The prepared test payload is invalid or incomplete.');
         }
 
         $created = $this->persistTest(
@@ -179,8 +339,9 @@ final readonly class AiCourseTestGenerator
                 'question_count' => $questionCount,
                 'question_type' => 'unique_answer',
                 'published' => $publish,
+                'generation_mode' => $generationMode,
             ],
-            courseId: $courseId,
+            courseId: (int) $course->getId(),
             sessionId: 0,
         );
 
@@ -194,13 +355,16 @@ final readonly class AiCourseTestGenerator
             'published' => $publish,
             'provider_used' => $providerName,
             'ai_assisted' => true,
+            'generation_mode' => $generationMode,
             'source' => [
                 'type' => $sourceType,
                 'document_id' => $documentId,
                 'title' => $sourceTitle,
             ],
             'questions' => $created['questions'],
-            'content_url' => '/main/exercise/overview.php?cid='.$courseId.'&exerciseId='.$quizId,
+            'content_url' => '/main/exercise/overview.php?cid='
+                .(int) $course->getId()
+                .'&exerciseId='.$quizId,
         ];
     }
 
@@ -326,6 +490,130 @@ PROMPT;
     /**
      * @return list<array{title: string, answers: list<string>, correct_index: int, feedback: string}>|null
      */
+    private function requestStructuredQuestions(
+        User $user,
+        string $providerName,
+        string $courseTitle,
+        string $testTitle,
+        string $sourceType,
+        string $sourceTitle,
+        string $sourceText,
+        int $questionCount,
+        string $language,
+        string $requestMarker,
+    ): ?array {
+        $systemPrompt = <<<'PROMPT'
+Return JSON only using this exact schema:
+{"questions":[{"title":"Question text","answers":["Option A","Option B","Option C","Option D"],"correct_index":0,"feedback":"Optional short explanation"}]}
+Generate the exact requested number of independent single-answer questions. Every question must have exactly four non-empty answers, correct_index must be an integer from 0 to 3, and all content must use only the supplied source.
+PROMPT;
+        $userPrompt = $requestMarker."\n"
+            .'Language: '.$language."\n"
+            .'Course: '.$this->oneLine($courseTitle)."\n"
+            .'Test title: '.$this->oneLine($testTitle)."\n"
+            .'Requested question count: '.$questionCount."\n"
+            .'Source type: '.$sourceType."\n"
+            .'Source title: '.$this->oneLine($sourceTitle)."\n\n"
+            ."Create the test using only this source content:\n"
+            .$sourceText;
+
+        $result = $this->mcpTextAiService->requestJson(
+            $user,
+            $providerName,
+            $systemPrompt,
+            $userPrompt,
+            min(12_000, max(1_200, 300 + ($questionCount * 260))),
+        );
+
+        return $this->normalizeStructuredQuestions(
+            $result['questions'] ?? null,
+            $questionCount,
+        );
+    }
+
+    /**
+     * @return list<array{title: string, answers: list<string>, correct_index: int, feedback: string}>|null
+     */
+    private function normalizeStructuredQuestions(mixed $rawQuestions, int $questionCount): ?array
+    {
+        if (!\is_array($rawQuestions) || \count($rawQuestions) < $questionCount) {
+            return null;
+        }
+
+        $questions = [];
+
+        foreach (array_slice(array_values($rawQuestions), 0, $questionCount) as $rawQuestion) {
+            if (!\is_array($rawQuestion)) {
+                return null;
+            }
+
+            $title = $this->oneLine((string) ($rawQuestion['title'] ?? $rawQuestion['question'] ?? ''));
+            $rawAnswers = $rawQuestion['answers'] ?? $rawQuestion['options'] ?? null;
+            if ('' === $title || !\is_array($rawAnswers) || 4 !== \count($rawAnswers)) {
+                return null;
+            }
+
+            $answers = array_map(
+                fn (mixed $answer): string => $this->oneLine((string) $answer),
+                array_values($rawAnswers),
+            );
+            if (4 !== \count(array_filter($answers, static fn (string $answer): bool => '' !== $answer))) {
+                return null;
+            }
+
+            $correct = $rawQuestion['correct_index'] ?? $rawQuestion['correctIndex'] ?? $rawQuestion['answer'] ?? null;
+            $correctIndex = $this->normalizeCorrectIndex($correct, $answers);
+            if (null === $correctIndex) {
+                return null;
+            }
+
+            $questions[] = [
+                'title' => $title,
+                'answers' => $answers,
+                'correct_index' => $correctIndex,
+                'feedback' => $this->oneLine((string) ($rawQuestion['feedback'] ?? '')),
+            ];
+        }
+
+        return \count($questions) === $questionCount ? $questions : null;
+    }
+
+    /**
+     * @param list<string> $answers
+     */
+    private function normalizeCorrectIndex(mixed $correct, array $answers): ?int
+    {
+        if (\is_int($correct) && $correct >= 0 && $correct <= 3) {
+            return $correct;
+        }
+
+        if (\is_numeric($correct)) {
+            $numeric = (int) $correct;
+            if ($numeric >= 0 && $numeric <= 3) {
+                return $numeric;
+            }
+            if ($numeric >= 1 && $numeric <= 4) {
+                return $numeric - 1;
+            }
+        }
+
+        $correctText = $this->oneLine((string) $correct);
+        if (preg_match('/^[A-D]$/i', $correctText)) {
+            return ord(strtoupper($correctText)) - ord('A');
+        }
+
+        foreach ($answers as $index => $answer) {
+            if (0 === strcasecmp($answer, $correctText)) {
+                return $index;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return list<array{title: string, answers: list<string>, correct_index: int, feedback: string}>|null
+     */
     private function tryParseAiken(string $generated, int $questionCount): ?array
     {
         $generated = $this->normalizeAikenSyntax($generated);
@@ -391,6 +679,67 @@ PROMPT;
 
         if ($questionCount !== \count($questions)) {
             return null;
+        }
+
+        return $questions;
+    }
+
+    /**
+     * Last-resort exact-count fallback used only after every configured AI
+     * format attempt fails. The result is intentionally transparent through
+     * generation_mode=deterministic_fallback.
+     *
+     * @return list<array{
+     *     title: string,
+     *     answers: list<string>,
+     *     correct_index: int,
+     *     feedback: string
+     * }>
+     */
+    private function buildDeterministicFallbackQuestions(
+        string $sourceTitle,
+        string $sourceText,
+        int $questionCount,
+    ): array {
+        $sentences = preg_split(
+            '/(?<=[.!?])\s+/u',
+            trim($sourceText),
+        ) ?: [];
+
+        $sentences = array_values(array_unique(array_filter(array_map(
+            fn (string $sentence): string => $this->oneLine($sentence),
+            $sentences,
+        ), static fn (string $sentence): bool => mb_strlen($sentence) >= 30)));
+
+        if ([] === $sentences) {
+            $sentences[] = $this->oneLine($sourceText);
+        }
+
+        $questions = [];
+
+        for ($index = 0; $index < $questionCount; ++$index) {
+            $statement = mb_substr(
+                $sentences[$index % \count($sentences)],
+                0,
+                240,
+            );
+            if ('' === $statement) {
+                $statement = 'The material presents an essential idea about '.$sourceTitle.'.';
+            }
+
+            $questions[] = [
+                'title' => 'Which statement is explicitly supported by “'
+                    .mb_substr($sourceTitle, 0, 120)
+                    .'”?',
+                'answers' => [
+                    $statement,
+                    'The material states that this topic has no educational relevance.',
+                    'The material presents no relationship between its main concepts.',
+                    'The material concludes that all described processes are identical.',
+                ],
+                'correct_index' => 0,
+                'feedback' => 'The correct option is taken directly from the supplied learning content.',
+            ];
         }
 
         return $questions;
@@ -500,9 +849,22 @@ PROMPT;
             $visibility,
             $scores,
         ): array {
+            /*
+             * Legacy Exercise::save() reloads and writes these fields through
+             * non-nullable setters when a quiz is linked to a learning path.
+             * Initialize every nullable legacy string/scalar explicitly to
+             * prevent a sequence of TypeErrors during that round trip.
+             */
             $quiz = (new CQuiz())
                 ->setTitle($title)
                 ->setDescription('')
+                ->setSound('')
+                ->setAccessCondition('')
+                ->setTextWhenFinished('')
+                ->setTextWhenFinishedFailure('')
+                ->setNotifications('')
+                ->setPassPercentage(0)
+                ->setQuestionSelectionType(1)
                 ->setParent($course)
                 ->setCreator($user)
                 ->addCourseLink($course, null, null, $visibility)

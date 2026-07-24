@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
-use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
+use Chamilo\CoreBundle\Service\Mcp\McpCourseAiFeatureManager;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Service\Ai\AiRequestQuotaGuard;
 use Chamilo\CoreBundle\Service\Ai\GeneratedMediaStorageService;
@@ -33,7 +33,7 @@ final readonly class CreateCourseIllustrationTool
         private Security $security,
         private AccessUrlHelper $accessUrlHelper,
         private CourseRelUserRepository $courseRelUserRepository,
-        private AiFeatureAccessHelper $aiFeatureAccessHelper,
+        private McpCourseAiFeatureManager $courseAiFeatureManager,
         private AiProviderFactory $aiProviderFactory,
         private AiRequestQuotaGuard $quotaGuard,
         private GeneratedMediaStorageService $mediaStorage,
@@ -163,16 +163,12 @@ final readonly class CreateCourseIllustrationTool
             );
         }
 
-        if (
-            !$this->aiFeatureAccessHelper->isFeatureEnabledForCourse(
-                'image_generator',
-                $courseId,
-            )
-        ) {
-            throw new AccessDeniedException(
-                'Image generation is not enabled for this course.'
-            );
-        }
+        $enabledFeatures = $this->courseAiFeatureManager->ensureEnabled(
+            $course,
+            $user,
+            'image_generator',
+            'create_course_illustration',
+        );
 
         $title = trim(strip_tags($title));
         if ('' === $title) {
@@ -329,6 +325,7 @@ final readonly class CreateCourseIllustrationTool
 
         return [
             'created' => true,
+            'course_features_enabled' => $enabledFeatures,
             'illustration' => [
                 'document_id' => $documentId,
                 'resource_node_id' => $resourceNodeId,

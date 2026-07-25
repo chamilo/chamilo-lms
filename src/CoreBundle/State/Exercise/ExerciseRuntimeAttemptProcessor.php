@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 /**
  * Starts or resumes an exercise runtime attempt without submitting answers yet.
@@ -106,7 +107,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -141,7 +142,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             );
         }
 
-        if (0 < (int) $quiz->getRandomByCategory() && 0 >= (int) $quiz->getRandom()) {
+        if ((int) $quiz->getRandomByCategory() > 0 && (int) $quiz->getRandom() <= 0) {
             return $this->createLegacyRequiredResponse(
                 $quiz,
                 $course,
@@ -184,7 +185,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
                 $course,
                 $session,
                 $request,
-                sprintf(
+                \sprintf(
                     'Sorry, you have reached the maximum number of questions (%d) for the day. Please try again tomorrow.',
                     $this->getCourseSettingInt($course, 'quiz_question_limit_per_day')
                 ),
@@ -216,7 +217,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -231,7 +232,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -265,12 +266,11 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         return 'learnpath' === $origin
             || $request->query->has('lp_init')
             || $request->query->has('learnpath_id')
-            || in_array($isStudentView, ['1', 'true', 'yes'], true)
+            || \in_array($isStudentView, ['1', 'true', 'yes'], true)
             || str_starts_with($isStudentView, 'true')
-            || in_array($preview, ['1', 'true', 'yes'], true)
+            || \in_array($preview, ['1', 'true', 'yes'], true)
             || str_starts_with($preview, 'true');
     }
-
 
     private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool
     {
@@ -285,11 +285,11 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         $origin = strtolower(trim((string) $request->query->get('origin', '')));
         $hasLearnpathContext = 'learnpath' === $origin
             || $request->query->has('lp_init')
-            || 0 < $learnpathId
-            || 0 < $learnpathItemId
-            || 0 < $learnpathItemViewId;
+            || $learnpathId > 0
+            || $learnpathItemId > 0
+            || $learnpathItemViewId > 0;
 
-        if (!$hasLearnpathContext || 0 >= $learnpathId || 0 >= $learnpathItemId) {
+        if (!$hasLearnpathContext || $learnpathId <= 0 || $learnpathItemId <= 0) {
             return false;
         }
 
@@ -299,7 +299,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         }
 
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return false;
         }
 
@@ -339,7 +339,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             return false;
         }
 
-        if (0 >= $learnpathItemViewId) {
+        if ($learnpathItemViewId <= 0) {
             return true;
         }
 
@@ -567,7 +567,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private function canCreateNewAttempt(CQuiz $quiz, Course $course, ?Session $session, User $user, Request $request): bool
     {
         $maxAttempt = (int) $quiz->getMaxAttempt();
-        if (0 >= $maxAttempt) {
+        if ($maxAttempt <= 0) {
             return true;
         }
 
@@ -618,7 +618,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
         $selectionType = (int) ($quiz->getQuestionSelectionType() ?? 0);
         $randomCount = (int) $quiz->getRandom();
-        if (0 < (int) $quiz->getRandomByCategory() && 0 !== $randomCount) {
+        if ((int) $quiz->getRandomByCategory() > 0 && 0 !== $randomCount) {
             return $this->buildRandomByCategoryQuestionList($quiz, $relations, $randomCount);
         }
 
@@ -629,13 +629,13 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         }
 
         $mustShuffle = self::QUESTION_SELECTION_RANDOM === $selectionType;
-        $questionIds = $this->buildOrderedQuestionIds($relations, $mustShuffle || 0 < $randomCount);
+        $questionIds = $this->buildOrderedQuestionIds($relations, $mustShuffle || $randomCount > 0);
 
-        if ($mustShuffle || 0 < $randomCount) {
+        if ($mustShuffle || $randomCount > 0) {
             shuffle($questionIds);
         }
 
-        if (0 < $randomCount && $randomCount < \count($questionIds)) {
+        if ($randomCount > 0 && $randomCount < \count($questionIds)) {
             $questionIds = \array_slice($questionIds, 0, $randomCount);
         }
 
@@ -885,8 +885,9 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
                 ->getConnection()
                 ->createSchemaManager()
                 ->introspectTable('c_quiz_question_rel_category')
-                ->hasColumn('mandatory');
-        } catch (\Throwable) {
+                ->hasColumn('mandatory')
+            ;
+        } catch (Throwable) {
             return false;
         }
     }
@@ -922,6 +923,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             $categories = $question->getCategories();
             if (0 === $categories->count()) {
                 $questionsByCategory[0][] = $questionId;
+
                 continue;
             }
 
@@ -939,7 +941,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
      */
     private function getExerciseCategoryRows(int $exerciseId): array
     {
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return [];
         }
 
@@ -1007,7 +1009,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private function isQuestionLimitPerDayReached(array $questionIds, Course $course, ?Session $session, User $user): bool
     {
         $limit = $this->getCourseSettingInt($course, 'quiz_question_limit_per_day');
-        if (0 >= $limit || [] === $questionIds) {
+        if ($limit <= 0 || [] === $questionIds) {
             return false;
         }
 
@@ -1064,11 +1066,11 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private function buildExpiredAt(CQuiz $quiz): ?DateTime
     {
         $expiredMinutes = (int) $quiz->getExpiredTime();
-        if (0 >= $expiredMinutes) {
+        if ($expiredMinutes <= 0) {
             return null;
         }
 
-        return (new DateTime())->modify(sprintf('+%d minutes', $expiredMinutes));
+        return (new DateTime())->modify(\sprintf('+%d minutes', $expiredMinutes));
     }
 
     private function createTeacherPreviewResponse(CQuiz $quiz, Course $course, ?Session $session, Request $request): ExerciseRuntimeAttempt
@@ -1156,7 +1158,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         }
 
         $stepsCounter = max(0, (int) $attempt->getStepsCounter());
-        if (0 >= $stepsCounter) {
+        if ($stepsCounter <= 0) {
             return 0;
         }
 
@@ -1167,7 +1169,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     {
         $quiz = $attempt->getQuiz();
         $attemptId = (int) $attempt->getExeId();
-        if (null === $quiz || null === $quiz->getIid() || 0 >= $attemptId) {
+        if (null === $quiz || null === $quiz->getIid() || $attemptId <= 0) {
             return 0;
         }
 
@@ -1260,7 +1262,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             }
 
             $questionId = (int) ($row['questionId'] ?? 0);
-            if (0 >= $questionId) {
+            if ($questionId <= 0) {
                 continue;
             }
 

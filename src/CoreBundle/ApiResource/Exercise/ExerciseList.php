@@ -12,8 +12,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\State\Exercise\ExerciseListProvider;
 use Chamilo\CoreBundle\State\Exercise\ExerciseListActionProcessor;
+use Chamilo\CoreBundle\State\Exercise\ExerciseListProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(

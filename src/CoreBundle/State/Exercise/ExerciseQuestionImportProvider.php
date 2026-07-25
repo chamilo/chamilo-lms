@@ -73,7 +73,7 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -88,7 +88,7 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -145,14 +145,13 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
         ];
         $queryString = http_build_query(array_filter(
             $params,
-            static fn (mixed $value): bool => \is_int($value) ? 0 < $value : '' !== trim((string) $value)
+            static fn (mixed $value): bool => \is_int($value) ? $value > 0 : '' !== trim((string) $value)
         ));
 
         return [
             'excelTemplate' => '/api/exercise/import/excel/template.xlsx'.('' !== $queryString ? '?'.$queryString : ''),
         ];
     }
-
 
     private function isLearningPathImportContext(Request $request): bool
     {
@@ -161,8 +160,8 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
 
         return 'learnpath' === $origin
             || \in_array($returnToLp, ['1', 'true', 'yes'], true)
-            || 0 < $request->query->getInt('lp_id')
-            || 0 < $request->query->getInt('learnpath_id');
+            || $request->query->getInt('lp_id') > 0
+            || $request->query->getInt('learnpath_id') > 0;
     }
 
     private function getImportSample(string $importType): string

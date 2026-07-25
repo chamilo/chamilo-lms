@@ -46,7 +46,7 @@ SQL
             $roles[] = 'ROLE_ADMIN';
             $this->addSql(
                 'UPDATE user SET roles = ? WHERE id = ?',
-                [\serialize(\array_values(\array_unique($roles))), (int) $adminUser['user_id']]
+                [serialize(array_values(array_unique($roles))), (int) $adminUser['user_id']]
             );
         }
 
@@ -93,17 +93,16 @@ SQL
             return [];
         }
 
-        $roles = \str_starts_with($storedRoles, 'a:')
-            ? \unserialize($storedRoles, ['allowed_classes' => false])
-            : \json_decode($storedRoles, true)
-        ;
+        $roles = str_starts_with($storedRoles, 'a:')
+            ? unserialize($storedRoles, ['allowed_classes' => false])
+            : json_decode($storedRoles, true);
 
         if (!\is_array($roles)) {
             return [];
         }
 
-        return \array_values(\array_unique(\array_filter(\array_map(
-            static fn (mixed $role): string => \strtoupper(\trim((string) $role)),
+        return array_values(array_unique(array_filter(array_map(
+            static fn (mixed $role): string => strtoupper(trim((string) $role)),
             $roles,
         ))));
     }

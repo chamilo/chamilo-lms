@@ -51,7 +51,7 @@ final readonly class ExerciseGlobalReportProvider implements ProviderInterface
         $data->selectedCourseId = $selectedCourseId;
         $data->canExport = true;
         $data->actionUrls = [
-            'exportCsv' => 0 < $selectedCourseId
+            'exportCsv' => $selectedCourseId > 0
                 ? '/api/exercise/global-report/export.csv?cid='.$selectedCourseId
                 : '',
         ];
@@ -84,7 +84,7 @@ final readonly class ExerciseGlobalReportProvider implements ProviderInterface
         $options = [];
         foreach ($rows as $row) {
             $courseId = (int) ($row['id'] ?? 0);
-            if (0 >= $courseId) {
+            if ($courseId <= 0) {
                 continue;
             }
 
@@ -92,7 +92,7 @@ final readonly class ExerciseGlobalReportProvider implements ProviderInterface
             $code = trim((string) ($row['code'] ?? ''));
             $label = $title;
             if ('' !== $code) {
-                $label = '' !== $label ? sprintf('%s (%s)', $label, $code) : $code;
+                $label = '' !== $label ? \sprintf('%s (%s)', $label, $code) : $code;
             }
 
             $options[] = [

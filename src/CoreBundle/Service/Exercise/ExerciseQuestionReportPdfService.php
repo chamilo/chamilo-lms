@@ -17,6 +17,10 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+
 final readonly class ExerciseQuestionReportPdfService
 {
     public function __construct(
@@ -26,7 +30,7 @@ final readonly class ExerciseQuestionReportPdfService
 
     public function exportReportByQuestionPdf(int $exerciseId): Response
     {
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -37,14 +41,14 @@ final readonly class ExerciseQuestionReportPdfService
 
         return $this->createPdfResponse(
             $this->renderReportByQuestionHtml($report),
-            sprintf('exercise_%d_report_by_question.pdf', $exerciseId),
+            \sprintf('exercise_%d_report_by_question.pdf', $exerciseId),
             $this->text($report->title) ?: 'Report by question'
         );
     }
 
     public function exportQuestionStatsPdf(int $exerciseId): Response
     {
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -55,7 +59,7 @@ final readonly class ExerciseQuestionReportPdfService
 
         return $this->createPdfResponse(
             $this->renderQuestionStatsHtml($stats),
-            sprintf('exercise_%d_question_statistics.pdf', $exerciseId),
+            \sprintf('exercise_%d_question_statistics.pdf', $exerciseId),
             $this->text($stats->title) ?: 'Question statistics'
         );
     }

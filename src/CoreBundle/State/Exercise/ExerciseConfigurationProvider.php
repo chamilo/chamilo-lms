@@ -20,12 +20,12 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
-use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -52,7 +52,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
     private const SKILL_ITEM_TYPE_EXERCISE = 1;
-
 
     public function __construct(
         private RequestStack $requestStack,
@@ -81,7 +80,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 < $exerciseId) {
+        if ($exerciseId > 0) {
             $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
 
             return $this->buildEditConfiguration($quiz, $course, $session);
@@ -311,7 +310,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         ];
     }
 
-
     /**
      * @return array<int, array<string, mixed>>
      */
@@ -344,7 +342,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     private function getCategoryMatrix(CQuiz $quiz): array
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return [];
         }
 
@@ -379,6 +377,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             $questionCategories = $question->getCategories();
             if (0 === $questionCategories->count()) {
                 $generalQuestionCount++;
+
                 continue;
             }
 
@@ -494,7 +493,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
 
         return true === $value || 1 === $value || '1' === (string) $value || 'on' === strtolower((string) $value);
     }
-
 
     /**
      * Legacy freezes these fields only when the exercise is linked to a learning path
@@ -621,7 +619,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     private function getSelectedSkillIds(CQuiz $quiz): array
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return [];
         }
 
@@ -749,7 +747,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             $values[$field->getVariable()] = $this->normalizeExtraFieldValueForFrontend(
                 (int) $field->getValueType(),
                 (string) ($field->getDefaultValue() ?? ''),
-                0 < $field->getOptions()->count()
+                $field->getOptions()->count() > 0
             );
         }
 
@@ -763,7 +761,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
         $values = $this->getDefaultExtraFieldValues();
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return $values;
         }
 
@@ -792,7 +790,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             $values[$field->getVariable()] = $this->normalizeExtraFieldValueForFrontend(
                 (int) $field->getValueType(),
                 (string) ($row->getFieldValue() ?? ''),
-                0 < $field->getOptions()->count()
+                $field->getOptions()->count() > 0
             );
         }
 
@@ -802,7 +800,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     private function getExerciseExtraNotification(CQuiz $quiz): string
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return '';
         }
 
@@ -926,7 +924,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     private function getExerciseGradebookLink(CQuiz $quiz, Course $course): ?GradebookLink
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return null;
         }
 
@@ -992,14 +990,14 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
                 static fn (string $value): int => (int) trim($value),
                 explode(',', $notifications)
             ),
-            static fn (int $value): bool => 0 < $value
+            static fn (int $value): bool => $value > 0
         ));
     }
 
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -1014,7 +1012,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -1058,7 +1056,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             return null;
         }
 
-        return $date->format('Y-m-d\\TH:i');
+        return $date->format('Y-m-d\TH:i');
     }
 
     private function buildLegacyQuestionsUrl(CQuiz $quiz, Course $course, ?Session $session): string

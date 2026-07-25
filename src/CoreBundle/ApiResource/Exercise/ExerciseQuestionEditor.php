@@ -36,7 +36,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Get(
             uriTemplate: '/exercise/questions/global/editor/{questionId}',
-            requirements: ['questionId' => '\\d+'],
+            requirements: ['questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Exercise question editor for an existing global question',
                 parameters: [
@@ -52,7 +52,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Get(
             uriTemplate: '/exercise/questions/{exerciseId}/editor',
-            requirements: ['exerciseId' => '\\d+'],
+            requirements: ['exerciseId' => '\d+'],
             openapi: new Operation(
                 summary: 'Exercise question editor for a new question',
                 parameters: [
@@ -69,7 +69,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Get(
             uriTemplate: '/exercise/questions/{exerciseId}/editor/{questionId}',
-            requirements: ['exerciseId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['exerciseId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Exercise question editor for an existing choice question',
                 parameters: [
@@ -100,7 +100,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/exercise/questions/global/editor/{questionId}',
-            requirements: ['questionId' => '\\d+'],
+            requirements: ['questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Update a global exercise question',
                 parameters: [
@@ -116,7 +116,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/exercise/questions/{exerciseId}/editor',
-            requirements: ['exerciseId' => '\\d+'],
+            requirements: ['exerciseId' => '\d+'],
             openapi: new Operation(
                 summary: 'Create an exercise question',
                 parameters: [
@@ -132,7 +132,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/exercise/questions/{exerciseId}/editor/{questionId}',
-            requirements: ['exerciseId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['exerciseId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Update an exercise question',
                 parameters: [

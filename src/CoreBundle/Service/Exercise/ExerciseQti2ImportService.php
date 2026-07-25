@@ -14,13 +14,20 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use ZipArchive;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const LIBXML_NOERROR;
+use const LIBXML_NONET;
+use const LIBXML_NOWARNING;
 
 /**
  * Modern IMS/QTI 2 importer for the subset supported by the legacy Chamilo importer.
@@ -122,7 +129,7 @@ final readonly class ExerciseQti2ImportService
                 }
 
                 $content = $zip->getFromIndex($index);
-                if (!is_string($content) || '' === trim($content)) {
+                if (!\is_string($content) || '' === trim($content)) {
                     continue;
                 }
 
@@ -173,6 +180,7 @@ final readonly class ExerciseQti2ImportService
 
         $document = new DOMDocument('1.0', 'UTF-8');
         $previous = libxml_use_internal_errors(true);
+
         try {
             if (!$document->loadXML($content, LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING)) {
                 throw new BadRequestHttpException('Error opening XML file');
@@ -211,11 +219,12 @@ final readonly class ExerciseQti2ImportService
             }
 
             $nodeName = $this->localName($node);
+
             switch ($nodeName) {
                 case 'assessmentItem':
                     $currentQuestionIdent = $node->getAttribute('identifier');
                     if ('' === $currentQuestionIdent) {
-                        $currentQuestionIdent = 'question_'.(count($package['questions']) + 1);
+                        $currentQuestionIdent = 'question_'.(\count($package['questions']) + 1);
                     }
 
                     $package['questions'][$currentQuestionIdent] = [
@@ -231,6 +240,7 @@ final readonly class ExerciseQti2ImportService
                         'statement' => '',
                     ];
                     $currentMatchSet = null;
+
                     break;
 
                 case 'section':
@@ -238,6 +248,7 @@ final readonly class ExerciseQti2ImportService
                     if ('' !== $title) {
                         $package['name'] = $this->formatPlainText($title);
                     }
+
                     break;
 
                 case 'responseDeclaration':
@@ -251,6 +262,7 @@ final readonly class ExerciseQti2ImportService
                     if (str_starts_with($currentAnswerId, 'fill_')) {
                         $package['questions'][$currentQuestionIdent]['type'] = self::FILL_IN_BLANKS;
                         $package['questions'][$currentQuestionIdent]['subtype'] = 'TEXTFIELD_FILL';
+
                         break;
                     }
 
@@ -259,6 +271,7 @@ final readonly class ExerciseQti2ImportService
                     } elseif ('single' === $cardinality) {
                         $package['questions'][$currentQuestionIdent]['type'] = self::UNIQUE_ANSWER;
                     }
+
                     break;
 
                 case 'inlineChoiceInteraction':
@@ -268,6 +281,7 @@ final readonly class ExerciseQti2ImportService
                     $package['questions'][$currentQuestionIdent]['type'] = self::FILL_IN_BLANKS;
                     $package['questions'][$currentQuestionIdent]['subtype'] = 'LISTBOX_FILL';
                     $currentAnswerId = $node->getAttribute('responseIdentifier');
+
                     break;
 
                 case 'inlineChoice':
@@ -301,6 +315,7 @@ final readonly class ExerciseQti2ImportService
                     } else {
                         $package['questions'][$currentQuestionIdent]['fib_options'][$responseId]['wrongs'][] = $choiceText;
                     }
+
                     break;
 
                 case 'textEntryInteraction':
@@ -310,6 +325,7 @@ final readonly class ExerciseQti2ImportService
                     $package['questions'][$currentQuestionIdent]['type'] = self::FILL_IN_BLANKS;
                     $package['questions'][$currentQuestionIdent]['subtype'] = 'TEXTFIELD_FILL';
                     $package['questions'][$currentQuestionIdent]['response_text'] = $currentQuestionItemBody;
+
                     break;
 
                 case 'matchInteraction':
@@ -317,6 +333,7 @@ final readonly class ExerciseQti2ImportService
                         // The legacy importer detected matching but did not save it in the supported list.
                         $package['questions'][$currentQuestionIdent]['type'] = 4;
                     }
+
                     break;
 
                 case 'extendedTextInteraction':
@@ -325,6 +342,7 @@ final readonly class ExerciseQti2ImportService
                     }
                     $package['questions'][$currentQuestionIdent]['type'] = self::FREE_ANSWER;
                     $package['questions'][$currentQuestionIdent]['description'] = trim($node->textContent);
+
                     break;
 
                 case 'simpleMatchSet':
@@ -333,6 +351,7 @@ final readonly class ExerciseQti2ImportService
                     }
                     $currentMatchSet = null === $currentMatchSet ? 1 : $currentMatchSet + 1;
                     $package['questions'][$currentQuestionIdent]['answer'][$currentMatchSet] = [];
+
                     break;
 
                 case 'simpleAssociableChoice':
@@ -341,6 +360,7 @@ final readonly class ExerciseQti2ImportService
                     }
                     $choiceId = $node->getAttribute('identifier');
                     $package['questions'][$currentQuestionIdent]['answer'][$currentMatchSet][$choiceId] = trim($node->textContent);
+
                     break;
 
                 case 'simpleChoice':
@@ -353,6 +373,7 @@ final readonly class ExerciseQti2ImportService
                     }
                     $simpleChoiceValue = $this->extractSimpleChoiceText($node);
                     $package['questions'][$currentQuestionIdent]['answer'][$currentAnswerId]['value'] = ($package['questions'][$currentQuestionIdent]['answer'][$currentAnswerId]['value'] ?? '').$simpleChoiceValue;
+
                     break;
 
                 case 'mapEntry':
@@ -366,6 +387,7 @@ final readonly class ExerciseQti2ImportService
                             $package['questions'][$currentQuestionIdent]['weighting'][$answerId] = $node->getAttribute('mappedValue');
                         }
                     }
+
                     break;
 
                 case 'mapping':
@@ -376,6 +398,7 @@ final readonly class ExerciseQti2ImportService
                     if ('' !== $defaultValue) {
                         $package['questions'][$currentQuestionIdent]['default_weighting'] = $defaultValue;
                     }
+
                     break;
 
                 case 'itemBody':
@@ -387,7 +410,7 @@ final readonly class ExerciseQti2ImportService
 
                     if (self::FILL_IN_BLANKS === $questionType) {
                         $candidate = (string) $currentQuestionItemBody;
-                        $hasPlaceholders = false !== strpos($candidate, '**claroline_start**');
+                        $hasPlaceholders = str_contains($candidate, '**claroline_start**');
                         $hasRealContent = '' !== trim(strip_tags($candidate));
                         if ($hasPlaceholders || $hasRealContent) {
                             $package['questions'][$currentQuestionIdent]['response_text'] = $candidate;
@@ -400,6 +423,7 @@ final readonly class ExerciseQti2ImportService
                     } else {
                         $package['questions'][$currentQuestionIdent]['statement'] = $currentQuestionItemBody;
                     }
+
                     break;
 
                 case 'order':
@@ -407,6 +431,7 @@ final readonly class ExerciseQti2ImportService
                     if ('' !== $orderType) {
                         $package['orderType'] = $orderType;
                     }
+
                     break;
 
                 case 'feedbackInline':
@@ -414,6 +439,7 @@ final readonly class ExerciseQti2ImportService
                         break;
                     }
                     $package['questions'][$currentQuestionIdent]['answer'][$currentAnswerId]['feedback'] = ($package['questions'][$currentQuestionIdent]['answer'][$currentAnswerId]['feedback'] ?? '').trim($node->textContent);
+
                     break;
 
                 case 'value':
@@ -444,6 +470,7 @@ final readonly class ExerciseQti2ImportService
                             $package['questions'][$currentQuestionIdent]['weighting'][0] = $nodeValue;
                         }
                     }
+
                     break;
 
                 case 'mattext':
@@ -451,6 +478,7 @@ final readonly class ExerciseQti2ImportService
                     if ('' !== $nodeValue) {
                         $package['description'] = $nodeValue;
                     }
+
                     break;
 
                 case 'prompt':
@@ -460,6 +488,7 @@ final readonly class ExerciseQti2ImportService
                             $package['questions'][$currentQuestionIdent]['description'] = $description;
                         }
                     }
+
                     break;
             }
         }
@@ -481,7 +510,7 @@ final readonly class ExerciseQti2ImportService
     private function stripGivenTags(string $content, array $tags): string
     {
         foreach ($tags as $tag) {
-            $content = preg_replace(sprintf('#</?%s(?:\s[^>]*)?>#i', preg_quote($tag, '#')), '', $content) ?? $content;
+            $content = preg_replace(\sprintf('#</?%s(?:\s[^>]*)?>#i', preg_quote($tag, '#')), '', $content) ?? $content;
         }
 
         return $content;
@@ -525,18 +554,20 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
 
-            if (!in_array($childName, $nonHtmlTagsToAvoid, true)) {
+            if (!\in_array($childName, $nonHtmlTagsToAvoid, true)) {
                 $content .= '<'.$childName;
                 foreach ($childNode->attributes ?? [] as $attribute) {
                     $content .= ' '.$attribute->nodeName.'="'.htmlspecialchars($attribute->nodeValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'"';
                 }
                 $content .= '>'.$childNode->textContent.'</'.$childName.'>';
+
                 continue;
             }
 
             if ('inlineChoiceInteraction' === $childName || 'textEntryInteraction' === $childName) {
                 $responseId = $childNode->getAttribute('responseIdentifier');
                 $content .= '**claroline_start**'.$responseId.'**claroline_end**';
+
                 continue;
             }
 
@@ -571,7 +602,7 @@ final readonly class ExerciseQti2ImportService
     private function postProcessFibQuestions(array &$questions): void
     {
         foreach ($questions as &$question) {
-            if ((int) ($question['type'] ?? 0) !== self::FILL_IN_BLANKS) {
+            if (self::FILL_IN_BLANKS !== (int) ($question['type'] ?? 0)) {
                 continue;
             }
 
@@ -582,10 +613,10 @@ final readonly class ExerciseQti2ImportService
 
             $subtype = $question['subtype'] ?? null;
             if ('LISTBOX_FILL' === $subtype) {
-                $options = is_array($question['fib_options'] ?? null) ? $question['fib_options'] : [];
+                $options = \is_array($question['fib_options'] ?? null) ? $question['fib_options'] : [];
                 foreach ($options as $responseId => $data) {
                     $correct = (string) ($data['correct'] ?? '');
-                    $wrongs = is_array($data['wrongs'] ?? null) ? $data['wrongs'] : [];
+                    $wrongs = \is_array($data['wrongs'] ?? null) ? $data['wrongs'] : [];
                     $final = [];
                     if ('' !== $correct) {
                         $final[] = $correct;
@@ -600,7 +631,7 @@ final readonly class ExerciseQti2ImportService
                     $text = str_replace('**claroline_start**'.$responseId.'**claroline_end**', '['.implode('|', $final).']', $text);
                 }
             } else {
-                $corrects = is_array($question['correct_answers'] ?? null) ? $question['correct_answers'] : [];
+                $corrects = \is_array($question['correct_answers'] ?? null) ? $question['correct_answers'] : [];
                 foreach ($corrects as $responseId => $answerValue) {
                     if (!str_starts_with((string) $responseId, 'fill_')) {
                         continue;
@@ -670,13 +701,15 @@ final readonly class ExerciseQti2ImportService
             $questionType = (int) ($questionData['type'] ?? 0);
             if (!isset(self::SUPPORTED_TYPES[$questionType])) {
                 ++$skippedCount;
+
                 continue;
             }
 
             $title = $this->formatPlainText(strip_tags((string) ($questionData['title'] ?? '')));
             if ('' === $title) {
                 ++$skippedCount;
-                $errors[] = sprintf('QTI question %s skipped because it has no title.', (string) $identifier);
+                $errors[] = \sprintf('QTI question %s skipped because it has no title.', (string) $identifier);
+
                 continue;
             }
 
@@ -752,20 +785,20 @@ final readonly class ExerciseQti2ImportService
      */
     private function createChoiceAnswers(CQuizQuestion $question, array $questionData): void
     {
-        $answerList = is_array($questionData['answer'] ?? null) ? $questionData['answer'] : [];
-        $correctAnswersRaw = is_array($questionData['correct_answers'] ?? null) ? $questionData['correct_answers'] : [];
+        $answerList = \is_array($questionData['answer'] ?? null) ? $questionData['answer'] : [];
+        $correctAnswersRaw = \is_array($questionData['correct_answers'] ?? null) ? $questionData['correct_answers'] : [];
         $correctAnswerIds = array_values($correctAnswersRaw);
         $defaultWeight = $this->scoreFromValue($questionData['default_weighting'] ?? 0);
         $totalCorrectWeight = 0.0;
         $position = 1;
 
         foreach ($answerList as $key => $answerData) {
-            $answerData = is_array($answerData) ? $answerData : [];
+            $answerData = \is_array($answerData) ? $answerData : [];
             $answerValue = $this->formatHtml((string) ($answerData['value'] ?? ''));
             $answerFeedback = $this->formatHtml((string) ($answerData['feedback'] ?? ''));
-            $isCorrect = in_array((string) $key, array_map('strval', $correctAnswerIds), true);
+            $isCorrect = \in_array((string) $key, array_map('strval', $correctAnswerIds), true);
             $weight = $defaultWeight;
-            if (isset($questionData['weighting']) && is_array($questionData['weighting']) && array_key_exists((string) $key, $questionData['weighting'])) {
+            if (isset($questionData['weighting']) && \is_array($questionData['weighting']) && \array_key_exists((string) $key, $questionData['weighting'])) {
                 $weight = $this->scoreFromValue($questionData['weighting'][(string) $key]);
             }
 
@@ -802,12 +835,13 @@ final readonly class ExerciseQti2ImportService
     {
         $text = trim((string) ($questionData['response_text'] ?? ''));
         $looksEmptyOrWrong = '' === $text
-            || (false === strpos($text, '[') && false === strpos($text, '::') && false === strpos($text, '**claroline_start**'));
+            || (!str_contains($text, '[') && !str_contains($text, '::') && !str_contains($text, '**claroline_start**'));
 
-        if ($looksEmptyOrWrong && isset($questionData['correct_answers']) && is_array($questionData['correct_answers'])) {
+        if ($looksEmptyOrWrong && isset($questionData['correct_answers']) && \is_array($questionData['correct_answers'])) {
             foreach ($questionData['correct_answers'] as $key => $value) {
                 if (str_starts_with((string) $key, 'fill_')) {
                     $text = trim((string) $value);
+
                     break;
                 }
             }
@@ -823,7 +857,7 @@ final readonly class ExerciseQti2ImportService
 
         $text = str_replace('::', '', $text);
         $text = str_replace("\xc2\xa0", ' ', $text);
-        $weightsMap = is_array($questionData['weighting'] ?? null) ? $questionData['weighting'] : [];
+        $weightsMap = \is_array($questionData['weighting'] ?? null) ? $questionData['weighting'] : [];
         preg_match_all('/\[[^\]]*\]/', $text, $matches);
         $weights = [];
         $sizes = [];
@@ -832,16 +866,16 @@ final readonly class ExerciseQti2ImportService
         foreach ($matches[0] ?? [] as $blankRaw) {
             $inside = trim((string) $blankRaw, '[]');
             $correct = $inside;
-            if (false !== strpos($correct, '||')) {
+            if (str_contains($correct, '||')) {
                 $parts = explode('||', $correct);
                 $correct = $parts[0] ?? $correct;
-            } elseif (false !== strpos($correct, '|')) {
+            } elseif (str_contains($correct, '|')) {
                 $parts = explode('|', $correct);
                 $correct = $parts[0] ?? $correct;
             }
             $correct = trim((string) $correct);
             $weight = 1.0;
-            if ('' !== $correct && array_key_exists($correct, $weightsMap)) {
+            if ('' !== $correct && \array_key_exists($correct, $weightsMap)) {
                 $weight = $this->scoreFromValue($weightsMap[$correct]);
             }
             $weights[] = $weight;

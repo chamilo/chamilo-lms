@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt',
-            requirements: ['exerciseId' => '\\d+'],
+            requirements: ['exerciseId' => '\d+'],
             openapi: new Operation(
                 summary: 'Start or resume an exercise runtime attempt',
                 parameters: [

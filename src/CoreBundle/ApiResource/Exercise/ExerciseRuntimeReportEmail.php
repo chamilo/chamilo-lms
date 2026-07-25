@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempts/email',
-            requirements: ['exerciseId' => '\\d+'],
+            requirements: ['exerciseId' => '\d+'],
             openapi: new Operation(
                 summary: 'Send reviewed exercise attempt result emails from the migrated report',
                 parameters: [

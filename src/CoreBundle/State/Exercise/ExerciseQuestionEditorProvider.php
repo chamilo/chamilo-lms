@@ -26,6 +26,7 @@ use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use OnlyofficePlugin;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,6 +34,12 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PHP_EOL;
+use const SYS_PLUGIN_PATH;
 
 /**
  * @implements ProviderInterface<ExerciseQuestionEditor>
@@ -104,9 +111,9 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
         $questionId = isset($uriVariables['questionId']) ? (int) $uriVariables['questionId'] : 0;
-        $quiz = 0 < $exerciseId ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        $quiz = $exerciseId > 0 ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
 
-        if (0 < $questionId) {
+        if ($questionId > 0) {
             if ($quiz instanceof CQuiz) {
                 return $this->buildExistingQuestionResponse($quiz, $questionId, $course, $session);
             }
@@ -415,8 +422,9 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
                 ->getConnection()
                 ->createSchemaManager()
                 ->introspectTable('c_quiz_question_rel_category')
-                ->hasColumn('mandatory');
-        } catch (\Throwable) {
+                ->hasColumn('mandatory')
+            ;
+        } catch (Throwable) {
             return false;
         }
     }
@@ -424,7 +432,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -436,11 +444,10 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         return $course;
     }
 
-
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -521,7 +528,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         return $relation->getQuestion();
     }
-
 
     private function getQuestionFromCurrentContext(int $questionId, Course $course, ?Session $session): CQuizQuestion
     {
@@ -1048,7 +1054,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
-
     private function addHotspotData(ExerciseQuestionEditor $response, CQuiz $quiz, CQuizQuestion $question, Course $course, ?Session $session): void
     {
         if (!$this->usesHotspot((int) $question->getType())) {
@@ -1291,7 +1296,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         return \in_array($type, [self::HOT_SPOT, self::HOT_SPOT_DELINEATION, self::HOT_SPOT_COMBINATION], true);
     }
 
-
     private function addOnlyofficeData(
         ExerciseQuestionEditor $response,
         CQuiz $quiz,
@@ -1325,24 +1329,24 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private function isOnlyofficePluginEnabled(): bool
     {
         try {
-            if (!\class_exists('OnlyofficePlugin')) {
-                $pluginPath = \api_get_path(\SYS_PLUGIN_PATH).'Onlyoffice/lib/onlyofficePlugin.php';
+            if (!class_exists('OnlyofficePlugin')) {
+                $pluginPath = api_get_path(SYS_PLUGIN_PATH).'Onlyoffice/lib/onlyofficePlugin.php';
                 if (is_file($pluginPath)) {
                     require_once $pluginPath;
                 }
             }
 
-            if (!\class_exists('OnlyofficePlugin')) {
+            if (!class_exists('OnlyofficePlugin')) {
                 return false;
             }
 
-            $plugin = \OnlyofficePlugin::create();
+            $plugin = OnlyofficePlugin::create();
             if (method_exists($plugin, 'isEnabledForCurrentAccessUrl')) {
                 return (bool) $plugin->isEnabledForCurrentAccessUrl();
             }
 
             return 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }
@@ -1427,7 +1431,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             }
 
             $correct = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $correct) {
+            if ($correct <= 0) {
                 $option = [
                     'id' => (int) $answer->getIid(),
                     'localId' => 'option-'.(int) $answer->getPosition(),
@@ -1497,13 +1501,12 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
     private function getMatchingOptionLabel(int $position): string
     {
-        if (1 <= $position && 26 >= $position) {
-            return chr(64 + $position);
+        if ($position >= 1 && $position <= 26) {
+            return \chr(64 + $position);
         }
 
         return (string) $position;
     }
-
 
     private function addDraggableData(ExerciseQuestionEditor $response, CQuizQuestion $question): void
     {
@@ -1525,7 +1528,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $items = [];
         foreach ($this->getExistingAnswers($question) as $answer) {
             $correct = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $correct) {
+            if ($correct <= 0) {
                 continue;
             }
 

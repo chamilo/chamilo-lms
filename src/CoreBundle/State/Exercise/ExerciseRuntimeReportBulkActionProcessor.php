@@ -76,7 +76,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -112,7 +112,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -127,7 +127,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -315,7 +315,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
     {
         return array_values(array_unique(array_filter(
             array_map(static fn (mixed $attemptId): int => (int) $attemptId, $data->attemptIds),
-            static fn (int $attemptId): bool => 0 < $attemptId,
+            static fn (int $attemptId): bool => $attemptId > 0,
         )));
     }
 
@@ -324,7 +324,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
         $beforeDate = trim($beforeDate);
         $date = DateTimeImmutable::createFromFormat('!Y-m-d', $beforeDate);
         $errors = DateTimeImmutable::getLastErrors();
-        if (!$date instanceof DateTimeImmutable || (\is_array($errors) && (0 < $errors['warning_count'] || 0 < $errors['error_count']))) {
+        if (!$date instanceof DateTimeImmutable || (\is_array($errors) && ($errors['warning_count'] > 0 || $errors['error_count'] > 0))) {
             throw new BadRequestHttpException('A valid date is required.');
         }
 

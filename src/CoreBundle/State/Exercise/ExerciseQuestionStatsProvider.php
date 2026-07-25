@@ -12,9 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionStats;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
-use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
@@ -95,7 +93,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -118,7 +116,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -133,7 +131,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -228,7 +226,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
                 'id' => $questionId,
                 'title' => $question->getQuestion(),
                 'type' => $type,
-                'typeLabel' => self::TYPE_NAMES[$type] ?? sprintf('Type %d', $type),
+                'typeLabel' => self::TYPE_NAMES[$type] ?? \sprintf('Type %d', $type),
                 'maxScore' => (float) $question->getPonderation(),
                 'position' => (int) $relation->getQuestionOrder(),
             ];
@@ -277,7 +275,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
         foreach ($queryBuilder->getQuery()->getArrayResult() as $row) {
             $questionId = (int) ($row['questionId'] ?? 0);
             $attemptId = (int) ($row['attemptId'] ?? 0);
-            if (0 >= $questionId || 0 >= $attemptId) {
+            if ($questionId <= 0 || $attemptId <= 0) {
                 continue;
             }
 
@@ -289,7 +287,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
 
     /**
      * @param array<int, array<string, mixed>> $questions
-     * @param array<int, array<int, float>> $attemptMarks
+     * @param array<int, array<int, float>>    $attemptMarks
      *
      * @return array<int, array<string, mixed>>
      */
@@ -387,7 +385,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
         ];
 
         $sessionId = $request->query->getInt('sid');
-        if (0 < $sessionId) {
+        if ($sessionId > 0) {
             $params['sid'] = $sessionId;
         }
 

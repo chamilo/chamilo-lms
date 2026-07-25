@@ -12,9 +12,9 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseReportByQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseSpecialQuestionReportCounterService;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
-use Chamilo\CoreBundle\Service\Exercise\ExerciseSpecialQuestionReportCounterService;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
@@ -113,7 +113,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -137,7 +137,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -152,7 +152,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -274,7 +274,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
                 'questionId' => $questionId,
                 'title' => (string) $question->getQuestion(),
                 'type' => $type,
-                'typeLabel' => self::TYPE_NAMES[$type] ?? sprintf('Type %d', $type),
+                'typeLabel' => self::TYPE_NAMES[$type] ?? \sprintf('Type %d', $type),
                 'maxScore' => round((float) $question->getPonderation(), 2),
                 'position' => (int) $relation->getQuestionOrder(),
                 'extra' => (string) $question->getExtra(),
@@ -301,7 +301,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
 
             foreach (($question['answers'] ?? []) as $answer) {
                 $answerId = (int) ($answer['answerId'] ?? 0);
-                if (0 < $answerId) {
+                if ($answerId > 0) {
                     $answerIds[$answerId] = (string) $answerId;
                 }
             }
@@ -352,7 +352,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
         foreach ($queryBuilder->getQuery()->getArrayResult() as $row) {
             $questionId = (int) ($row['questionId'] ?? 0);
             $answerId = (int) ($row['answerValue'] ?? 0);
-            if (0 >= $questionId || 0 >= $answerId) {
+            if ($questionId <= 0 || $answerId <= 0) {
                 continue;
             }
 
@@ -363,8 +363,8 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
     }
 
     /**
-     * @param array<int, array<string, mixed>> $questions
-     * @param array<int, array<int, int>> $answerCounts
+     * @param array<int, array<string, mixed>>                                                                            $questions
+     * @param array<int, array<int, int>>                                                                                 $answerCounts
      * @param array<int, array{answers: array<int, array<string, mixed>>, totalSelections: int, countingAvailable: bool}> $specialAnswerDistributions
      *
      * @return array<int, array<string, mixed>>
@@ -404,7 +404,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
                     ];
                 }
 
-                if (0 < $totalSelections) {
+                if ($totalSelections > 0) {
                     foreach ($answers as &$answerRow) {
                         if (null !== $answerRow['selectedCount']) {
                             $answerRow['selectedPercentage'] = round(((int) $answerRow['selectedCount'] * 100) / $totalSelections, 2);
@@ -491,7 +491,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
         ];
 
         $sessionId = $request->query->getInt('sid');
-        if (0 < $sessionId) {
+        if ($sessionId > 0) {
             $params['sid'] = $sessionId;
         }
 

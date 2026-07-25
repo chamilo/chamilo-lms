@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/exercise/runtime/{exerciseId}/report-by-question',
-            requirements: ['exerciseId' => '\\d+'],
+            requirements: ['exerciseId' => '\d+'],
             openapi: new Operation(
                 summary: 'Exercise report by question',
                 parameters: [

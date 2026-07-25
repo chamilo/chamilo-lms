@@ -20,12 +20,12 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
-use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTime;
 use DateTimeInterface;
@@ -41,6 +41,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<ExerciseConfiguration, ExerciseConfiguration>
@@ -56,7 +57,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
     private const SKILL_ITEM_TYPE_EXERCISE = 1;
-
 
     public function __construct(
         private RequestStack $requestStack,
@@ -92,7 +92,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $this->getLanguageFromCode($data->language);
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        if (0 < $exerciseId) {
+        if ($exerciseId > 0) {
             $quiz = $this->updateExercise($exerciseId, $data, $course, $session);
         } else {
             $quiz = $this->createExercise($data, $course, $session);
@@ -226,7 +226,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         }
     }
 
-
     /**
      * @param array<string, mixed> $configuration
      *
@@ -297,12 +296,12 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
 
     private function normalizeResultsDisabled(int $resultsDisabled): int
     {
-        return 0 <= $resultsDisabled && 10 >= $resultsDisabled ? $resultsDisabled : 0;
+        return $resultsDisabled >= 0 && $resultsDisabled <= 10 ? $resultsDisabled : 0;
     }
 
     private function normalizeQuestionSelectionType(int $questionSelectionType): int
     {
-        return 1 <= $questionSelectionType && 10 >= $questionSelectionType ? $questionSelectionType : 1;
+        return $questionSelectionType >= 1 && $questionSelectionType <= 10 ? $questionSelectionType : 1;
     }
 
     private function normalizeRandomByCategory(int $randomByCategory): int
@@ -350,7 +349,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
 
     private function getCategory(?int $categoryId, Course $course): ?CQuizCategory
     {
-        if (null === $categoryId || 0 >= $categoryId) {
+        if (null === $categoryId || $categoryId <= 0) {
             return null;
         }
 
@@ -423,7 +422,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
 
         try {
             $date = new DateTime($value);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw new BadRequestHttpException('The '.$field.' field contains an invalid date.');
         }
 
@@ -434,7 +433,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
 
     private function normalizeNullablePositiveInteger(?int $value): ?int
     {
-        if (null === $value || 0 >= $value) {
+        if (null === $value || $value <= 0) {
             return null;
         }
 
@@ -444,7 +443,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -459,7 +458,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -564,8 +563,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         return $configuration;
     }
 
-
-
     private function applyResourceLanguage(CQuiz $quiz, string $rawLanguage): void
     {
         $resourceNode = $quiz->getResourceNode();
@@ -578,7 +575,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $resourceNode->setLanguage($language);
         $this->entityManager->persist($resourceNode);
     }
-
 
     private function getLanguageFromCode(string $rawLanguage): ?Language
     {
@@ -602,7 +598,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function saveExerciseGradebookLink(CQuiz $quiz, ExerciseConfiguration $data, Course $course): void
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return;
         }
 
@@ -615,7 +611,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             return;
         }
 
-        if (null === $data->gradebookCategoryId || 0 >= $data->gradebookCategoryId) {
+        if (null === $data->gradebookCategoryId || $data->gradebookCategoryId <= 0) {
             return;
         }
 
@@ -755,7 +751,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         }
 
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return;
         }
 
@@ -829,7 +825,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function getAllowedCategoryMatrixIds(CQuiz $quiz): array
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return [];
         }
 
@@ -883,7 +879,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function getCategoryMatrix(CQuiz $quiz): array
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return [];
         }
 
@@ -918,6 +914,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             $questionCategories = $question->getCategories();
             if (0 === $questionCategories->count()) {
                 $generalQuestionCount++;
+
                 continue;
             }
 
@@ -1144,7 +1141,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         ];
     }
 
-
     /**
      * @return array<int, array<string, string>>
      */
@@ -1264,7 +1260,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function getSelectedSkillIds(CQuiz $quiz): array
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return [];
         }
 
@@ -1297,13 +1293,13 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function saveExerciseSkills(CQuiz $quiz, ExerciseConfiguration $data, Course $course, ?Session $session): void
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return;
         }
 
         $skillIds = array_values(array_unique(array_filter(
             array_map(static fn (mixed $value): int => (int) $value, $data->skillIds),
-            static fn (int $value): bool => 0 < $value
+            static fn (int $value): bool => $value > 0
         )));
 
         $this->entityManager->createQueryBuilder()
@@ -1456,11 +1452,11 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             $values[$field->getVariable()] = $this->normalizeExtraFieldValueForFrontend(
                 (int) $field->getValueType(),
                 (string) ($field->getDefaultValue() ?? ''),
-                0 < $field->getOptions()->count()
+                $field->getOptions()->count() > 0
             );
         }
 
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return $values;
         }
 
@@ -1489,7 +1485,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             $values[$field->getVariable()] = $this->normalizeExtraFieldValueForFrontend(
                 (int) $field->getValueType(),
                 (string) ($row->getFieldValue() ?? ''),
-                0 < $field->getOptions()->count()
+                $field->getOptions()->count() > 0
             );
         }
 
@@ -1499,7 +1495,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function saveExerciseExtraFields(CQuiz $quiz, ExerciseConfiguration $data): void
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return;
         }
 
@@ -1517,7 +1513,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function getExerciseExtraNotification(CQuiz $quiz): string
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return '';
         }
 
@@ -1542,7 +1538,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function saveExerciseExtraNotification(CQuiz $quiz, ExerciseConfiguration $data): void
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return;
         }
 
@@ -1605,7 +1601,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private function normalizeExtraFieldValueForStorage(ExtraField $field, mixed $rawValue): string
     {
         $type = (int) $field->getValueType();
-        $hasOptions = 0 < $field->getOptions()->count();
+        $hasOptions = $field->getOptions()->count() > 0;
 
         if (ExtraField::FIELD_TYPE_SELECT_MULTIPLE === $type || (ExtraField::FIELD_TYPE_CHECKBOX === $type && $hasOptions)) {
             if (!\is_array($rawValue)) {
@@ -1711,7 +1707,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
                 static fn (string $value): int => (int) trim($value),
                 explode(',', $notifications)
             ),
-            static fn (int $value): bool => 0 < $value
+            static fn (int $value): bool => $value > 0
         ));
     }
 

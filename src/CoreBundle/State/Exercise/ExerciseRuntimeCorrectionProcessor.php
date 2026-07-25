@@ -93,7 +93,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : (int) ($data->attemptId ?? 0);
         $questionId = (int) ($data->questionId ?? 0);
 
-        if (0 >= $exerciseId || 0 >= $attemptId || 0 >= $questionId) {
+        if ($exerciseId <= 0 || $attemptId <= 0 || $questionId <= 0) {
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
         }
 
@@ -114,7 +114,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
 
         $maxScore = (float) $question->getPonderation();
         $marks = (float) $data->marks;
-        if (0.0 > $marks || $marks > $maxScore) {
+        if ($marks < 0.0 || $marks > $maxScore) {
             throw new BadRequestHttpException('The correction score must be between zero and the question maximum score.');
         }
 
@@ -180,7 +180,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -195,7 +195,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -341,7 +341,6 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         return $row;
     }
 
-
     private function isGradebookLocked(int $exerciseId, Course $course): bool
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
@@ -420,12 +419,12 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
 
     private function hasScoreChanged(float $oldMarks, float $newMarks): bool
     {
-        return 0.00001 < abs($oldMarks - $newMarks);
+        return abs($oldMarks - $newMarks) > 0.00001;
     }
 
     private function recordQuestionScoreUpdateEvent(TrackEExercise $attempt, int $questionId, float $oldMarks, float $newMarks): void
     {
-        if (!class_exists(Event::class) || !defined('LOG_QUESTION_SCORE_UPDATE') || !defined('LOG_EXERCISE_ATTEMPT_QUESTION_ID')) {
+        if (!class_exists(Event::class) || !\defined('LOG_QUESTION_SCORE_UPDATE') || !\defined('LOG_EXERCISE_ATTEMPT_QUESTION_ID')) {
             return;
         }
 
@@ -458,7 +457,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         }
 
         $subject = 'Examsheet viewed/corrected/commented by the trainer';
-        if (function_exists('get_lang')) {
+        if (\function_exists('get_lang')) {
             $subject = get_lang('Examsheet viewed/corrected/commented by the trainer');
         }
 
@@ -508,8 +507,9 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
             }
 
             $marks = (float) $row->getMarks();
-            if (0 === (int) $quiz->getPropagateNeg() && 0 > $marks) {
+            if (0 === (int) $quiz->getPropagateNeg() && $marks < 0) {
                 $seenQuestions[$questionId] = true;
+
                 continue;
             }
 
@@ -530,7 +530,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $lpItemId = (int) $attempt->getOrigLpItemId();
         $lpItemViewId = (int) $attempt->getOrigLpItemViewId();
 
-        if (0 >= $lpId || 0 >= $lpItemId || 0 >= $lpItemViewId) {
+        if ($lpId <= 0 || $lpItemId <= 0 || $lpItemViewId <= 0) {
             return;
         }
 
@@ -632,9 +632,9 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $status = self::STATUS_COMPLETED;
         $passPercentage = $quiz->getPassPercentage();
 
-        if (self::FEEDBACK_TYPE_DIRECT !== (int) $quiz->getFeedbackType() && null !== $passPercentage && 0 < $passPercentage) {
+        if (self::FEEDBACK_TYPE_DIRECT !== (int) $quiz->getFeedbackType() && null !== $passPercentage && $passPercentage > 0) {
             $status = self::LP_STATUS_FAILED;
-            $percentage = 0.0 < $maxScore ? ($score / $maxScore) * 100 : 0.0;
+            $percentage = $maxScore > 0.0 ? ($score / $maxScore) * 100 : 0.0;
             if ($percentage >= (float) $passPercentage) {
                 $status = self::LP_STATUS_PASSED;
             }
@@ -649,7 +649,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private function updateLearnpathProgress(CLpView $lpView): array
     {
         $lpId = (int) ($lpView->getLp()->getIid() ?? 0);
-        if (0 >= $lpId) {
+        if ($lpId <= 0) {
             return ['completedItems' => 0, 'totalItems' => 0, 'progress' => 0, 'progressMode' => '%'];
         }
 
@@ -664,7 +664,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
             ->getSingleScalarResult()
         ;
 
-        if (0 >= $totalItems) {
+        if ($totalItems <= 0) {
             $lpView->setProgress(0);
 
             return ['completedItems' => 0, 'totalItems' => 0, 'progress' => 0, 'progressMode' => '%'];

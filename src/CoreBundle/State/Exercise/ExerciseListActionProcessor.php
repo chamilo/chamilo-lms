@@ -15,12 +15,12 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
-use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -115,7 +115,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         }
 
         $exerciseId = (int) $data->exerciseId;
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -209,7 +209,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         $ids = [];
         foreach ($exerciseIds as $exerciseId) {
             $id = (int) $exerciseId;
-            if (0 < $id) {
+            if ($id > 0) {
                 $ids[$id] = $id;
             }
         }
@@ -249,7 +249,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -264,7 +264,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -726,7 +726,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         $optionIidMap = [];
 
         foreach ($sourceAnswers as $sourceAnswer) {
-            if (0 < (int) $sourceAnswer->getCorrect()) {
+            if ((int) $sourceAnswer->getCorrect() > 0) {
                 continue;
             }
 
@@ -741,7 +741,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
 
         foreach ($sourceAnswers as $sourceAnswer) {
             $sourceCorrect = (int) $sourceAnswer->getCorrect();
-            if (0 >= $sourceCorrect) {
+            if ($sourceCorrect <= 0) {
                 continue;
             }
 

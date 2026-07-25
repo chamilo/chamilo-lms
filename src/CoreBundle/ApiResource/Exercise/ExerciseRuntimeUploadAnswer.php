@@ -22,8 +22,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/upload-answer',
             requirements: [
-                'exerciseId' => '\\d+',
-                'attemptId' => '\\d+',
+                'exerciseId' => '\d+',
+                'attemptId' => '\d+',
             ],
             openapi: new Operation(
                 summary: 'Upload a file or oral recording as a Vue exercise runtime answer',

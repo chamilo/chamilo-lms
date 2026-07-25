@@ -23,6 +23,7 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use OnlyofficePlugin;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,6 +31,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 
 /**
  * @implements ProviderInterface<ExerciseQuestion>
@@ -67,7 +69,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -98,7 +100,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -113,7 +115,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -444,7 +446,6 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         return $total;
     }
 
-
     /**
      * @return array<string, mixed>|null
      */
@@ -471,7 +472,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
             }
 
             $targetPosition = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $targetPosition) {
+            if ($targetPosition <= 0) {
                 continue;
             }
 
@@ -519,7 +520,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
             }
 
             $correct = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $correct) {
+            if ($correct <= 0) {
                 $option = [
                     'id' => (int) $answer->getIid(),
                     'label' => $this->getMatchingOptionLabel(\count($options) + 1),
@@ -552,13 +553,12 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
 
     private function getMatchingOptionLabel(int $position): string
     {
-        if (1 <= $position && 26 >= $position) {
-            return chr(64 + $position);
+        if ($position >= 1 && $position <= 26) {
+            return \chr(64 + $position);
         }
 
         return (string) $position;
     }
-
 
     /**
      * @return array<string, mixed>|null
@@ -796,7 +796,6 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         ];
     }
 
-
     private function isQuestionTypeVisibleInSelector(int $type, int $feedbackType): bool
     {
         if (8 === $type) {
@@ -830,28 +829,27 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         return \in_array($type, [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], true);
     }
 
-
     private function isOnlyofficePluginEnabled(): bool
     {
         try {
-            if (!\class_exists('OnlyofficePlugin')) {
+            if (!class_exists('OnlyofficePlugin')) {
                 $pluginPath = api_get_path(SYS_PLUGIN_PATH).'Onlyoffice/lib/onlyofficePlugin.php';
                 if (is_file($pluginPath)) {
                     require_once $pluginPath;
                 }
             }
 
-            if (!\class_exists('OnlyofficePlugin')) {
+            if (!class_exists('OnlyofficePlugin')) {
                 return false;
             }
 
-            $plugin = \OnlyofficePlugin::create();
+            $plugin = OnlyofficePlugin::create();
             if (method_exists($plugin, 'isEnabledForCurrentAccessUrl')) {
                 return (bool) $plugin->isEnabledForCurrentAccessUrl();
             }
 
             return 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }

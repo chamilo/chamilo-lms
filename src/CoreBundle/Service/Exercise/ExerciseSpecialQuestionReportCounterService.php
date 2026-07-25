@@ -10,10 +10,13 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 /**
  * Legacy-equivalent counters for answer distributions that cannot be counted by
@@ -95,7 +98,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
     }
 
     /**
-     * @param array<string, mixed>              $question
+     * @param array<string, mixed>             $question
      * @param array<int, array<string, mixed>> $answers
      *
      * @return array{answers: array<int, array<string, mixed>>, totalSelections: int, countingAvailable: bool}|null
@@ -121,7 +124,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
         $userResults = [];
         foreach ($this->getCompletedAttemptAnswerRows($quiz, $course, $session, $questionId) as $attemptRow) {
             $userId = (int) ($attemptRow['userId'] ?? 0);
-            if (0 >= $userId) {
+            if ($userId <= 0) {
                 continue;
             }
 
@@ -132,6 +135,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
 
                 if ('' !== $studentScore) {
                     $userResults[$userId][$index] = '1' === $studentScore ? 0 : (-2 === $this->normalizeFillBlankState($studentAnswer) ? -2 : -1);
+
                     continue;
                 }
 
@@ -139,6 +143,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
                     if (!isset($userResults[$userId][$index])) {
                         $userResults[$userId][$index] = -2;
                     }
+
                     continue;
                 }
 
@@ -159,8 +164,8 @@ final readonly class ExerciseSpecialQuestionReportCounterService
 
             $totalSelections += $selectedCount;
             $rows[] = [
-                'id' => sprintf('%d-blank-%d', $questionId, $index + 1),
-                'answerId' => sprintf('%s:%d', $baseAnswerId, $index + 1),
+                'id' => \sprintf('%d-blank-%d', $questionId, $index + 1),
+                'answerId' => \sprintf('%s:%d', $baseAnswerId, $index + 1),
                 'answer' => $this->stripFillBlankBrackets((string) $label, (string) $teacherInfo['blank_separator_start'], (string) $teacherInfo['blank_separator_end']),
                 'correct' => false,
                 'correctValue' => 0,
@@ -190,7 +195,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
         $answersByPosition = [];
         foreach ($answers as $answer) {
             $position = (int) ($answer['position'] ?? 0);
-            if (0 < $position) {
+            if ($position > 0) {
                 $answersByPosition[$position] = $answer;
             }
         }
@@ -204,7 +209,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
             }
 
             $answerId = (int) ($answer['answerId'] ?? 0);
-            if (0 >= $answerId) {
+            if ($answerId <= 0) {
                 continue;
             }
 
@@ -228,7 +233,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
     }
 
     /**
-     * @param array<string, mixed>              $targetAnswer
+     * @param array<string, mixed>             $targetAnswer
      * @param array<int, array<string, mixed>> $answersByPosition
      *
      * @return array<string, mixed>
@@ -257,7 +262,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
             return $source;
         }
 
-        return sprintf('%s → %s', $source, $target);
+        return \sprintf('%s → %s', $source, $target);
     }
 
     /**
@@ -270,7 +275,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
         $answerIds = [];
         foreach ($answers as $answer) {
             $answerId = (int) ($answer['answerId'] ?? 0);
-            if (0 < $answerId) {
+            if ($answerId > 0) {
                 $answerIds[] = $answerId;
             }
         }
@@ -291,7 +296,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
         $totalSelections = 0;
         foreach ($answers as $answer) {
             $answerId = (int) ($answer['answerId'] ?? 0);
-            if (0 >= $answerId) {
+            if ($answerId <= 0) {
                 continue;
             }
 
@@ -459,7 +464,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
      */
     private function withPercentages(array $rows, int $totalSelections): array
     {
-        if (0 < $totalSelections) {
+        if ($totalSelections > 0) {
             foreach ($rows as &$row) {
                 $row['selectedPercentage'] = round(((int) ($row['selectedCount'] ?? 0) * 100) / $totalSelections, 2);
             }
@@ -561,7 +566,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
     {
         $normalizedStudentAnswer = $caseInsensitive ? mb_strtolower($studentAnswer) : $studentAnswer;
 
-        if (false !== strpos($correctAnswer, '|') && false === strpos($correctAnswer, '||')) {
+        if (str_contains($correctAnswer, '|') && !str_contains($correctAnswer, '||')) {
             $menuAnswers = array_map([$this, 'trimFillBlankOption'], explode('|', $correctAnswer));
             $firstAnswer = (string) ($menuAnswers[0] ?? '');
             $normalizedFirstAnswer = $caseInsensitive ? mb_strtolower($firstAnswer) : $firstAnswer;
@@ -569,7 +574,7 @@ final readonly class ExerciseSpecialQuestionReportCounterService
             return $normalizedStudentAnswer === $normalizedFirstAnswer || $normalizedStudentAnswer === sha1($normalizedFirstAnswer);
         }
 
-        if (false !== strpos($correctAnswer, '||')) {
+        if (str_contains($correctAnswer, '||')) {
             $answers = array_map([$this, 'trimFillBlankOption'], preg_split('/\|\|/', $correctAnswer) ?: []);
             foreach ($answers as $answer) {
                 $candidate = $caseInsensitive ? mb_strtolower($answer) : $answer;

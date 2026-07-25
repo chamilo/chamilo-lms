@@ -23,7 +23,7 @@ final class ExerciseQti2ExportController extends AbstractController
     #[Route(
         '/api/exercise/{exerciseId}/qti2-export',
         name: 'chamilo_core_exercise_qti2_export_zip',
-        requirements: ['exerciseId' => '\\d+'],
+        requirements: ['exerciseId' => '\d+'],
         methods: ['GET']
     )]
     public function __invoke(int $exerciseId, Request $request): BinaryFileResponse

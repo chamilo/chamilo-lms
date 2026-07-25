@@ -13,8 +13,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
@@ -72,7 +72,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        $quiz = 0 < $exerciseId ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        $quiz = $exerciseId > 0 ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
         if ($quiz instanceof CQuiz && $this->isExerciseReadOnlyFromLearningPath((int) $quiz->getIid())) {
             throw new AccessDeniedHttpException('This exercise is read-only because it is included in a learning path.');
         }
@@ -116,7 +116,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -131,7 +131,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -159,7 +159,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
-        if (!($quiz instanceof CQuiz)) {
+        if (!$quiz instanceof CQuiz) {
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
@@ -215,7 +215,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
      */
     private function reuseQuestions(?CQuiz $quiz, ExerciseQuestionBank $data, Course $course, ?Session $session): array
     {
-        if (!($quiz instanceof CQuiz)) {
+        if (!$quiz instanceof CQuiz) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -231,11 +231,13 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
             $question = $this->getQuestionFromCurrentContext($questionId, $course, $session);
             if (!$this->isQuestionTypeAllowedByFeedback((int) $question->getType(), (int) $quiz->getFeedbackType())) {
                 $skippedCount++;
+
                 continue;
             }
 
             if ($this->hasQuestion($quiz, $questionId)) {
                 $skippedCount++;
+
                 continue;
             }
 
@@ -295,11 +297,11 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
     private function getSubmittedQuestionIds(ExerciseQuestionBank $data): array
     {
         $questionIds = array_map('intval', $data->questionIds);
-        if (null !== $data->questionId && 0 < (int) $data->questionId) {
+        if (null !== $data->questionId && (int) $data->questionId > 0) {
             $questionIds[] = (int) $data->questionId;
         }
 
-        return array_values(array_unique(array_filter($questionIds, static fn (int $questionId): bool => 0 < $questionId)));
+        return array_values(array_unique(array_filter($questionIds, static fn (int $questionId): bool => $questionId > 0)));
     }
 
     private function getQuestionFromCurrentContext(int $questionId, Course $course, ?Session $session): CQuizQuestion
@@ -442,7 +444,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
     private function isQuestionUsedInActiveQuiz(CQuizQuestion $question, Course $course, ?Session $session): bool
     {
         $questionId = (int) ($question->getIid() ?? 0);
-        if (0 >= $questionId) {
+        if ($questionId <= 0) {
             return false;
         }
 

@@ -15,8 +15,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use DateTimeImmutable;
@@ -88,7 +88,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -103,7 +103,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -166,7 +166,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         }
 
         $categoryId = $request->query->getInt('categoryId');
-        if (0 < $categoryId) {
+        if ($categoryId > 0) {
             $queryBuilder
                 ->andWhere('IDENTITY(quiz.quizCategory) = :categoryId')
                 ->setParameter('categoryId', $categoryId, Types::INTEGER)
@@ -276,7 +276,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $usage = [];
         foreach ($rows as $row) {
             $exerciseId = (int) ($row['exercisePath'] ?: $row['exerciseRef']);
-            if (0 >= $exerciseId) {
+            if ($exerciseId <= 0) {
                 continue;
             }
 
@@ -546,7 +546,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $score = $attempt->getScore();
         $percentage = 0.0;
 
-        if (0.0 < $maxScore) {
+        if ($maxScore > 0.0) {
             $percentage = ($score * 100) / $maxScore;
         }
 

@@ -26,6 +26,7 @@ use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use OnlyofficePlugin;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -34,7 +35,14 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 use Webit\Util\EvalMath\EvalMath;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
+use const PHP_EOL;
+use const SYS_PLUGIN_PATH;
 
 /**
  * @implements ProcessorInterface<ExerciseQuestionEditor, ExerciseQuestionEditor>
@@ -110,7 +118,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        $quiz = 0 < $exerciseId ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        $quiz = $exerciseId > 0 ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
         if ($quiz instanceof CQuiz && $this->isExerciseReadOnlyFromLearningPath((int) $quiz->getIid())) {
             throw new AccessDeniedHttpException('This exercise is read-only because it is included in a learning path.');
         }
@@ -118,11 +126,11 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $questionId = isset($uriVariables['questionId']) ? (int) $uriVariables['questionId'] : (int) ($data->questionId ?? 0);
         $this->assertQuestionTypeAllowedByFeedback($quiz, (int) $data->type);
         $this->validatePayload($data);
-        $this->validateAnnotationImageOnCreate($data, 0 >= $questionId);
-        $this->validateHotspotImageOnCreate($data, 0 >= $questionId);
-        $this->validateOnlyofficeTemplateOnCreate($data, 0 >= $questionId);
+        $this->validateAnnotationImageOnCreate($data, $questionId <= 0);
+        $this->validateHotspotImageOnCreate($data, $questionId <= 0);
+        $this->validateOnlyofficeTemplateOnCreate($data, $questionId <= 0);
 
-        if (0 < $questionId) {
+        if ($questionId > 0) {
             $question = $quiz instanceof CQuiz
                 ? $this->updateQuestion($quiz, $questionId, $data, $course, $session)
                 : $this->updateGlobalQuestion($questionId, $data, $course, $session);
@@ -389,7 +397,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC], true)) {
-            if (0 >= (float) $data->score) {
+            if ((float) $data->score <= 0) {
                 throw new BadRequestHttpException('Required field.');
             }
 
@@ -426,7 +434,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         $answers = $this->getCleanAnswers($data);
         $regularAnswers = array_filter($answers, static fn (array $answer): bool => true !== ($answer['isUnknown'] ?? false));
-        if (2 > \count($regularAnswers)) {
+        if (\count($regularAnswers) < 2) {
             throw new BadRequestHttpException('At least two answers are required.');
         }
 
@@ -455,16 +463,16 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                 }
             }
 
-            if (0 >= $dropdownScore) {
+            if ($dropdownScore <= 0) {
                 throw new BadRequestHttpException('Required field.');
             }
         }
 
-        if ($this->usesGlobalScore($type) && 0 >= (float) $data->globalScore) {
+        if ($this->usesGlobalScore($type) && (float) $data->globalScore <= 0) {
             throw new BadRequestHttpException('Required field.');
         }
 
-        if ($this->usesTrueFalseScoreOptions($type) && 0 >= (float) $data->correctScore) {
+        if ($this->usesTrueFalseScoreOptions($type) && (float) $data->correctScore <= 0) {
             throw new BadRequestHttpException('Required field.');
         }
     }
@@ -527,7 +535,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         );
     }
 
-
     private function validateOnlyofficeTemplateOnCreate(ExerciseQuestionEditor $data, bool $isCreate): void
     {
         if (self::ANSWER_IN_OFFICE_DOC !== (int) $data->type) {
@@ -565,7 +572,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         $template = $this->decodeOnlyofficeTemplate($data);
         $questionId = (int) ($question->getIid() ?? 0);
-        if (0 >= $questionId) {
+        if ($questionId <= 0) {
             throw new BadRequestHttpException('A valid exercise question is required to store the Office document.');
         }
 
@@ -645,24 +652,24 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     private function isOnlyofficePluginEnabled(): bool
     {
         try {
-            if (!\class_exists('OnlyofficePlugin')) {
-                $pluginPath = \api_get_path(\SYS_PLUGIN_PATH).'Onlyoffice/lib/onlyofficePlugin.php';
+            if (!class_exists('OnlyofficePlugin')) {
+                $pluginPath = api_get_path(SYS_PLUGIN_PATH).'Onlyoffice/lib/onlyofficePlugin.php';
                 if (is_file($pluginPath)) {
                     require_once $pluginPath;
                 }
             }
 
-            if (!\class_exists('OnlyofficePlugin')) {
+            if (!class_exists('OnlyofficePlugin')) {
                 return false;
             }
 
-            $plugin = \OnlyofficePlugin::create();
+            $plugin = OnlyofficePlugin::create();
             if (method_exists($plugin, 'isEnabledForCurrentAccessUrl')) {
                 return (bool) $plugin->isEnabledForCurrentAccessUrl();
             }
 
             return 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }
@@ -755,7 +762,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -767,11 +774,10 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         return $course;
     }
 
-
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -992,7 +998,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         $categoryId = (int) $data->categoryId;
-        if (0 >= $categoryId) {
+        if ($categoryId <= 0) {
             return;
         }
 
@@ -1003,7 +1009,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     private function syncQuestionCategoryMandatory(CQuiz $quiz, CQuizQuestion $question, ExerciseQuestionEditor $data): void
     {
         $questionId = (int) ($question->getIid() ?? 0);
-        if (0 >= $questionId || !$this->hasMandatoryQuestionCategoryColumn()) {
+        if ($questionId <= 0 || !$this->hasMandatoryQuestionCategoryColumn()) {
             return;
         }
 
@@ -1035,8 +1041,9 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                 ->getConnection()
                 ->createSchemaManager()
                 ->introspectTable('c_quiz_question_rel_category')
-                ->hasColumn('mandatory');
-        } catch (\Throwable) {
+                ->hasColumn('mandatory')
+            ;
+        } catch (Throwable) {
             return false;
         }
     }
@@ -1089,11 +1096,11 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function normalizeDifficulty(int $difficulty): int
     {
-        if (1 > $difficulty) {
+        if ($difficulty < 1) {
             return 1;
         }
 
-        if (5 < $difficulty) {
+        if ($difficulty > 5) {
             return 5;
         }
 
@@ -1103,7 +1110,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     private function normalizeParentMediaId(CQuiz $quiz, ExerciseQuestionEditor $data, CQuizQuestion $question): ?int
     {
         $mediaId = (int) $data->parentMediaId;
-        if (0 >= $mediaId) {
+        if ($mediaId <= 0) {
             return null;
         }
 
@@ -1279,12 +1286,12 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         $score = 0.0;
         foreach ($this->getCleanAnswers($data) as $answer) {
-            if (true === $answer['correct'] && 0 < $answer['score']) {
+            if (true === $answer['correct'] && $answer['score'] > 0) {
                 $score += $answer['score'];
             }
         }
 
-        if (0 < $score) {
+        if ($score > 0) {
             return $score;
         }
 
@@ -1307,7 +1314,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function normalizeNullablePositiveInteger(?int $value): ?int
     {
-        if (null === $value || 0 >= $value) {
+        if (null === $value || $value <= 0) {
             return null;
         }
 
@@ -1512,7 +1519,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                 }
             }
 
-            $correctScore = 0 < $correctCount ? max(0.0, (float) $data->globalScore) / $correctCount : 0.0;
+            $correctScore = $correctCount > 0 ? max(0.0, (float) $data->globalScore) / $correctCount : 0.0;
             foreach ($answers as &$answer) {
                 $answer['score'] = true === $answer['correct']
                     ? abs($correctScore)
@@ -1619,7 +1626,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         ];
     }
 
-
     private function buildQuestionExtra(int $type, ExerciseQuestionEditor $data, CQuizQuestion $question): ?string
     {
         if ($this->usesTrueFalseScoreOptions($type)) {
@@ -1645,12 +1651,11 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         return $question->getExtra();
     }
 
-
     private function validateDraggablePayload(ExerciseQuestionEditor $data): void
     {
         $items = $this->getCleanDraggableItems($data);
 
-        if (2 > \count($items)) {
+        if (\count($items) < 2) {
             throw new BadRequestHttpException('At least two draggable items are required.');
         }
 
@@ -1661,7 +1666,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             }
         }
 
-        if (0 >= $this->calculateQuestionScore($data)) {
+        if ($this->calculateQuestionScore($data) <= 0) {
             throw new BadRequestHttpException('Required field.');
         }
     }
@@ -1732,11 +1737,11 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $options = $this->getCleanMatchingOptions($data);
         $pairs = $this->getCleanMatchingPairs($data);
 
-        if (2 > \count($options)) {
+        if (\count($options) < 2) {
             throw new BadRequestHttpException('At least two matching options are required.');
         }
 
-        if (2 > \count($pairs)) {
+        if (\count($pairs) < 2) {
             throw new BadRequestHttpException('At least two matching pairs are required.');
         }
 
@@ -1747,7 +1752,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             }
         }
 
-        if (0 >= $this->calculateQuestionScore($data)) {
+        if ($this->calculateQuestionScore($data) <= 0) {
             throw new BadRequestHttpException('Required field.');
         }
     }
@@ -1786,7 +1791,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         foreach ($pairs as $pairData) {
             $optionLocalId = (string) ($pairData['optionLocalId'] ?? '');
             $correctOptionIid = (int) ($optionIids[$optionLocalId] ?? 0);
-            if (0 >= $correctOptionIid) {
+            if ($correctOptionIid <= 0) {
                 throw new BadRequestHttpException('Each matching pair must be linked to a valid option.');
             }
 
@@ -1888,7 +1893,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         foreach ($this->getExistingAnswers($question) as $answer) {
             $correct = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $correct) {
+            if ($correct <= 0) {
                 $option = [
                     'id' => (int) $answer->getIid(),
                     'localId' => 'option-'.(int) $answer->getPosition(),
@@ -1926,13 +1931,12 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function getMatchingOptionLabel(int $position): string
     {
-        if (1 <= $position && 26 >= $position) {
-            return chr(64 + $position);
+        if ($position >= 1 && $position <= 26) {
+            return \chr(64 + $position);
         }
 
         return (string) $position;
     }
-
 
     private function validateCalculatedPayload(ExerciseQuestionEditor $data): void
     {
@@ -1948,11 +1952,11 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('Please, write the formula.');
         }
 
-        if (0 >= (float) $data->score) {
+        if ((float) $data->score <= 0) {
             throw new BadRequestHttpException('Required field.');
         }
 
-        if (1 > (int) $data->calculatedVariations) {
+        if ((int) $data->calculatedVariations < 1) {
             throw new BadRequestHttpException('Question variations.');
         }
     }
@@ -2344,7 +2348,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         if (self::HOT_SPOT_COMBINATION === (int) $data->type) {
-            if (0 >= (float) $data->globalScore) {
+            if ((float) $data->globalScore <= 0) {
                 throw new BadRequestHttpException('Required field.');
             }
 
@@ -2358,7 +2362,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                     $hasDelineation = true;
                 }
 
-                if ('oar' !== (string) ($item['hotspotType'] ?? '') && 0 >= (float) ($item['score'] ?? 0.0)) {
+                if ('oar' !== (string) ($item['hotspotType'] ?? '') && (float) ($item['score'] ?? 0.0) <= 0) {
                     throw new BadRequestHttpException('You must give a positive score for each hotspots');
                 }
             }
@@ -2371,7 +2375,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         foreach ($items as $item) {
-            if (0 >= (float) ($item['score'] ?? 0.0)) {
+            if ((float) ($item['score'] ?? 0.0) <= 0) {
                 throw new BadRequestHttpException('You must give a positive score for each hotspots');
             }
         }
@@ -2587,14 +2591,14 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         if (self::FILL_IN_BLANKS_COMBINATION === $type) {
-            if (0 >= (float) $data->globalScore) {
+            if ((float) $data->globalScore <= 0) {
                 throw new BadRequestHttpException('Required field.');
             }
 
             return;
         }
 
-        if (0 >= $this->calculateFillBlanksScore($data)) {
+        if ($this->calculateFillBlanksScore($data) <= 0) {
             throw new BadRequestHttpException('Required field.');
         }
     }
@@ -2630,7 +2634,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             $sizes[] = $this->normalizeFillBlanksInputSize((int) ($item['inputSize'] ?? 200));
         }
 
-        return sprintf(
+        return \sprintf(
             '%s::%s:%s:%d@%s',
             $text,
             implode(',', $weights),
@@ -2708,11 +2712,11 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function normalizeFillBlanksInputSize(int $inputSize): int
     {
-        if (40 > $inputSize) {
+        if ($inputSize < 40) {
             return 40;
         }
 
-        if (800 < $inputSize) {
+        if ($inputSize > 800) {
             return 800;
         }
 
@@ -2882,7 +2886,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $items = [];
         foreach ($this->getExistingAnswers($question) as $answer) {
             $correct = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $correct) {
+            if ($correct <= 0) {
                 continue;
             }
 
@@ -2925,7 +2929,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     {
         return \in_array($type, [self::FILL_IN_BLANKS, self::FILL_IN_BLANKS_COMBINATION], true);
     }
-
 
     private function buildDropdownListText(CQuizQuestion $question): string
     {
@@ -3060,7 +3063,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     private function isQuestionMandatoryInCategory(CQuizQuestion $question): bool
     {
         $questionId = (int) ($question->getIid() ?? 0);
-        if (0 >= $questionId || !$this->hasMandatoryQuestionCategoryColumn()) {
+        if ($questionId <= 0 || !$this->hasMandatoryQuestionCategoryColumn()) {
             return 1 === (int) $question->getMandatory();
         }
 

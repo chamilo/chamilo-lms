@@ -22,6 +22,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const PATHINFO_EXTENSION;
+
 /**
  * @implements ProviderInterface<ExerciseAiAikenGenerator>
  */
@@ -83,7 +85,7 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 

@@ -24,8 +24,11 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 use Twig\Environment;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
 use const FILTER_VALIDATE_EMAIL;
 
 final readonly class ExerciseRuntimeResultEmailService
@@ -50,7 +53,7 @@ final readonly class ExerciseRuntimeResultEmailService
      */
     public function sendReviewedAttempts(int $exerciseId, Request $request, string $node = ''): array
     {
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -72,7 +75,7 @@ final readonly class ExerciseRuntimeResultEmailService
      */
     public function sendAttempt(int $exerciseId, int $attemptId, Request $request, string $node = ''): array
     {
-        if (0 >= $exerciseId || 0 >= $attemptId) {
+        if ($exerciseId <= 0 || $attemptId <= 0) {
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
@@ -124,13 +127,14 @@ final readonly class ExerciseRuntimeResultEmailService
                     'recipientId' => (int) $recipient->getId(),
                     'reason' => 'Invalid recipient email',
                 ];
+
                 continue;
             }
 
             try {
                 $this->sendAttemptEmail($attempt, $quiz, $course, $session, $sender, $request, $node);
                 ++$sentCount;
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 ++$failedCount;
                 $failures[] = [
                     'attemptId' => (int) $attempt->getExeId(),
@@ -141,11 +145,11 @@ final readonly class ExerciseRuntimeResultEmailService
         }
 
         $totalCount = \count($attempts);
-        $success = 0 === $totalCount || 0 < $sentCount;
+        $success = 0 === $totalCount || $sentCount > 0;
         $message = match (true) {
             0 === $totalCount => 'No reviewed attempts found',
-            0 < $sentCount && 0 === $failedCount && 0 === $skippedCount => 'Exercise result emails sent',
-            0 < $sentCount => 'Exercise result emails sent with warnings',
+            $sentCount > 0 && 0 === $failedCount && 0 === $skippedCount => 'Exercise result emails sent',
+            $sentCount > 0 => 'Exercise result emails sent with warnings',
             default => 'Could not send emails',
         };
 
@@ -213,7 +217,7 @@ final readonly class ExerciseRuntimeResultEmailService
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -228,7 +232,7 @@ final readonly class ExerciseRuntimeResultEmailService
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -416,7 +420,7 @@ final readonly class ExerciseRuntimeResultEmailService
 
         $baseUrl = rtrim($request->getSchemeAndHttpHost().$request->getBaseUrl(), '/');
 
-        return sprintf(
+        return \sprintf(
             '%s/resources/exercise/%s/%d/result/%d?%s',
             $baseUrl,
             rawurlencode($safeNode),

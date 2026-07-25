@@ -20,8 +20,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/recalculate',
             requirements: [
-                'exerciseId' => '\\d+',
-                'attemptId' => '\\d+',
+                'exerciseId' => '\d+',
+                'attemptId' => '\d+',
             ],
             openapi: new Operation(
                 summary: 'Recalculate an exercise attempt score from the migrated report',

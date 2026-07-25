@@ -110,7 +110,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -125,7 +125,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -156,7 +156,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
         $weight = (float) $value;
 
-        return 0 < $weight ? $weight : self::DEFAULT_TOTAL_WEIGHT;
+        return $weight > 0 ? $weight : self::DEFAULT_TOTAL_WEIGHT;
     }
 
     private function normalizeScoreValue(string $value): ?float
@@ -213,7 +213,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         $useCustomScore = $this->normalizeBoolean((string) $request->request->get('useCustomScore', ''));
         $correctScore = $this->normalizeScoreValue((string) $request->request->get('correctScore', ''));
         $incorrectScore = $this->normalizeScoreValue((string) $request->request->get('incorrectScore', ''));
-        $propagateNegative = $useCustomScore && null !== $incorrectScore && 0 > $incorrectScore ? 1 : 0;
+        $propagateNegative = $useCustomScore && null !== $incorrectScore && $incorrectScore < 0 ? 1 : 0;
 
         $quiz = $this->createExercise($excelData['quizTitle'], $course, $session, $propagateNegative);
         $importResult = $this->createExcelQuestions($quiz, $excelData['questions'], $course, $session, $useCustomScore, $correctScore, $incorrectScore);
@@ -291,7 +291,6 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         return $response;
     }
 
-
     private function isLearningPathImportContext(Request $request): bool
     {
         $origin = strtolower(trim((string) $request->query->get('origin', '')));
@@ -299,8 +298,8 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
         return 'learnpath' === $origin
             || \in_array($returnToLp, ['1', 'true', 'yes'], true)
-            || 0 < $request->query->getInt('lp_id')
-            || 0 < $request->query->getInt('learnpath_id');
+            || $request->query->getInt('lp_id') > 0
+            || $request->query->getInt('learnpath_id') > 0;
     }
 
     private function attachImportedExerciseToLearningPathIfNeeded(CQuiz $quiz, Request $request, Course $course, ?Session $session): ?CLpItem
@@ -311,7 +310,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
         $lp = $this->getLearningPathFromCurrentContext($request, $course, $session);
         $exerciseId = (int) $quiz->getIid();
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return null;
         }
 
@@ -344,7 +343,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     private function getLearningPathFromCurrentContext(Request $request, Course $course, ?Session $session): CLp
     {
         $lpId = $request->query->getInt('lp_id', $request->query->getInt('learnpath_id'));
-        if (0 >= $lpId) {
+        if ($lpId <= 0) {
             throw new BadRequestHttpException('A valid learning path id is required.');
         }
 
@@ -423,7 +422,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     {
         foreach (['lp_parent_id', 'parent'] as $parameterName) {
             $candidateId = $request->query->getInt($parameterName);
-            if (0 >= $candidateId) {
+            if ($candidateId <= 0) {
                 continue;
             }
 
@@ -542,9 +541,8 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     private function normalizeTextContent(string $content): string
     {
         $content = str_replace(["\r\n", "\r"], "\n", $content);
-        $content = preg_replace('/^\xEF\xBB\xBF/', '', $content) ?? $content;
 
-        return $content;
+        return preg_replace('/^\xEF\xBB\xBF/', '', $content) ?? $content;
     }
 
     /**
@@ -580,11 +578,13 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
                     'score' => null,
                 ];
                 $answersByLetter = [];
+
                 continue;
             }
 
             if (null === $currentQuestion) {
                 $errors[] = 'Line '.$lineNumber.': ignored content before the first question.';
+
                 continue;
             }
 
@@ -592,6 +592,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
                 $answerIndex = \count($currentQuestion['answers']);
                 $currentQuestion['answers'][] = trim((string) $matches[2]);
                 $answersByLetter[(string) $matches[1]] = $answerIndex;
+
                 continue;
             }
 
@@ -602,19 +603,22 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
                 } else {
                     $errors[] = 'Line '.$lineNumber.': ANSWER references an unknown option.';
                 }
+
                 continue;
             }
 
             if (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $line, $matches)) {
                 $currentQuestion['feedback'] = trim((string) $matches[1]);
+
                 continue;
             }
 
             if (preg_match('/^SCORE:\s?(.*)/', $line, $matches)) {
                 $score = str_replace(',', '.', trim((string) $matches[1]));
-                if (is_numeric($score) && 0 < (float) $score) {
+                if (is_numeric($score) && (float) $score > 0) {
                     $currentQuestion['score'] = (float) $score;
                 }
+
                 continue;
             }
 
@@ -631,9 +635,10 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         foreach ($questions as $question) {
             $answers = array_values(array_filter($question['answers'], static fn (string $answer): bool => '' !== trim($answer)));
             $correctIndexes = array_values(array_unique(array_map('intval', $question['correctIndexes'])));
-            if ('' === trim((string) $question['title']) || 2 > \count($answers) || [] === $correctIndexes) {
+            if ('' === trim((string) $question['title']) || \count($answers) < 2 || [] === $correctIndexes) {
                 ++$skippedCount;
                 $errors[] = 'Line '.(int) $question['line'].': skipped invalid Aiken question.';
+
                 continue;
             }
 
@@ -730,12 +735,14 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
             if ('Quiz' === $label) {
                 $quizTitle = $data;
+
                 continue;
             }
 
             if ('Question' === $label) {
                 $questions[] = $this->createEmptyExcelQuestion($data, $row);
                 $currentIndex = array_key_last($questions);
+
                 continue;
             }
 
@@ -745,36 +752,43 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
             if (str_starts_with($label, 'Answer')) {
                 $questions[$currentIndex]['answers'][] = ['data' => $data, 'extra' => $extra];
+
                 continue;
             }
 
             if ('Score' === $label) {
                 $questions[$currentIndex]['score'] = $extra;
+
                 continue;
             }
 
             if ('NoNegativeScore' === $label) {
                 $questions[$currentIndex]['noNegativeScore'] = $extra;
+
                 continue;
             }
 
             if ('Category' === $label) {
                 $questions[$currentIndex]['category'] = $data;
+
                 continue;
             }
 
             if ('FeedbackTrue' === $label) {
                 $questions[$currentIndex]['feedbackTrue'] = $data;
+
                 continue;
             }
 
             if ('FeedbackFalse' === $label) {
                 $questions[$currentIndex]['feedbackFalse'] = $data;
+
                 continue;
             }
 
             if ('EnrichQuestion' === $label) {
                 $questions[$currentIndex]['description'] = $data;
+
                 continue;
             }
 
@@ -891,6 +905,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             if ('' === $title) {
                 ++$skippedCount;
                 $errors[] = 'Row '.(int) $questionData['row'].': skipped question without title.';
+
                 continue;
             }
 
@@ -961,7 +976,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
     /**
      * @param array<int, string> $answers
-     * @param array<int, int> $correctIndexes
+     * @param array<int, int>    $correctIndexes
      */
     private function createChoiceAnswers(CQuizQuestion $question, array $answers, array $correctIndexes, float $score, string $feedback): void
     {
@@ -982,7 +997,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
     /**
      * @param array<int, array<string, string>> $answers
-     * @param array<string, mixed> $questionData
+     * @param array<string, mixed>              $questionData
      */
     private function createExcelAnswers(
         CQuizQuestion $question,
@@ -1011,7 +1026,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
     /**
      * @param array<int, array<string, string>> $answers
-     * @param array<string, mixed> $questionData
+     * @param array<string, mixed>              $questionData
      */
     private function createMultipleChoiceAnswers(
         CQuizQuestion $question,
@@ -1198,6 +1213,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             $extra = (string) ($answerData['extra'] ?? '');
             if ('x' === strtolower($extra)) {
                 ++$correct;
+
                 continue;
             }
 
@@ -1210,7 +1226,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             return self::UNIQUE_ANSWER;
         }
 
-        if (1 < $correct) {
+        if ($correct > 1) {
             return $isNumeric ? self::MULTIPLE_ANSWER : self::GLOBAL_MULTIPLE_ANSWER;
         }
 

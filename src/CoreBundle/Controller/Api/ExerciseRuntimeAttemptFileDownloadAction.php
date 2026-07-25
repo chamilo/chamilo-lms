@@ -41,9 +41,9 @@ final class ExerciseRuntimeAttemptFileDownloadAction extends AbstractController
         '/api/exercise/runtime/{exerciseId}/attempt/{attemptId}/file/{resourceNodeId}/download',
         name: 'chamilo_core_exercise_runtime_attempt_file_download',
         requirements: [
-            'exerciseId' => '\\d+',
-            'attemptId' => '\\d+',
-            'resourceNodeId' => '\\d+',
+            'exerciseId' => '\d+',
+            'attemptId' => '\d+',
+            'resourceNodeId' => '\d+',
         ],
         methods: ['GET']
     )]
@@ -87,7 +87,7 @@ final class ExerciseRuntimeAttemptFileDownloadAction extends AbstractController
         });
 
         $response->headers->set('Content-Type', $resourceFile->getMimeType() ?: 'application/octet-stream');
-        if (0 < (int) $resourceFile->getSize()) {
+        if ((int) $resourceFile->getSize() > 0) {
             $response->headers->set('Content-Length', (string) $resourceFile->getSize());
         }
         $response->headers->set(
@@ -105,7 +105,7 @@ final class ExerciseRuntimeAttemptFileDownloadAction extends AbstractController
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -120,7 +120,7 @@ final class ExerciseRuntimeAttemptFileDownloadAction extends AbstractController
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 

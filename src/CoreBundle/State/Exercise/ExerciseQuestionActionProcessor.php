@@ -78,7 +78,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -112,7 +112,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -127,7 +127,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -215,7 +215,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
 
     private function getQuestionRelation(CQuiz $quiz, int $questionId): CQuizRelQuestion
     {
-        if (0 >= $questionId) {
+        if ($questionId <= 0) {
             throw new BadRequestHttpException('A valid question id is required.');
         }
 
@@ -247,7 +247,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
 
         $this->entityManager->remove($relation);
 
-        if (1 >= $relationCount) {
+        if ($relationCount <= 1) {
             foreach ($this->getAnswers($question) as $answer) {
                 $this->entityManager->remove($answer);
             }
@@ -345,7 +345,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
         $optionIidMap = [];
 
         foreach ($sourceAnswers as $sourceAnswer) {
-            if (0 < (int) $sourceAnswer->getCorrect()) {
+            if ((int) $sourceAnswer->getCorrect() > 0) {
                 continue;
             }
 
@@ -360,7 +360,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
 
         foreach ($sourceAnswers as $sourceAnswer) {
             $sourceCorrect = (int) $sourceAnswer->getCorrect();
-            if (0 >= $sourceCorrect) {
+            if ($sourceCorrect <= 0) {
                 continue;
             }
 

@@ -14,9 +14,8 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
-use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
@@ -71,7 +70,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -119,7 +118,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -134,7 +133,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -283,7 +282,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         };
         $score = $attempt->getScore();
         $maxScore = $attempt->getMaxScore();
-        $percentage = 0.0 < $maxScore ? round(($score * 100) / $maxScore, 2) : 0.0;
+        $percentage = $maxScore > 0.0 ? round(($score * 100) / $maxScore, 2) : 0.0;
         $attemptId = (int) $attempt->getExeId();
         $userId = (int) $user->getId();
 
@@ -332,7 +331,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 
     private function formatLearningPath(TrackEExercise $attempt): string
     {
-        if (0 < $attempt->getOrigLpId()) {
+        if ($attempt->getOrigLpId() > 0) {
             return '#'.$attempt->getOrigLpId();
         }
 
@@ -352,7 +351,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $ids = [];
         foreach (preg_split('/[,;]+/', $value) ?: [] as $rawId) {
             $id = (int) trim($rawId);
-            if (0 < $id) {
+            if ($id > 0) {
                 $ids[] = $id;
             }
         }
@@ -404,7 +403,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         }
 
         $groupId = (int) $groupFilter;
-        if (0 < $groupId) {
+        if ($groupId > 0) {
             $queryBuilder
                 ->andWhere('IDENTITY(groupRelFilter.group) = :groupId')
                 ->setParameter('groupId', $groupId, Types::INTEGER)
@@ -432,7 +431,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             $userIds[] = (int) $attempt->getUser()->getId();
         }
 
-        return array_values(array_unique(array_filter($userIds, static fn (int $userId): bool => 0 < $userId)));
+        return array_values(array_unique(array_filter($userIds, static fn (int $userId): bool => $userId > 0)));
     }
 
     /**
@@ -509,7 +508,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 
             $group = $row->getGroup();
             $groupId = (int) $group->getIid();
-            if (0 >= $groupId || isset($options[$groupId])) {
+            if ($groupId <= 0 || isset($options[$groupId])) {
                 continue;
             }
 
@@ -575,7 +574,6 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         return 'true' === $this->settingsManager->getSetting($name, true);
     }
 
-
     private function shouldShowOfficialCode(): bool
     {
         return $this->isSettingEnabled('exercise.show_official_code_exercise_result_list');
@@ -616,7 +614,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             }
 
             $fieldId = (int) $row->getId();
-            if (0 >= $fieldId) {
+            if ($fieldId <= 0) {
                 continue;
             }
 
@@ -699,7 +697,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         ];
 
         $sessionId = $request->query->getInt('sid');
-        if (0 < $sessionId) {
+        if ($sessionId > 0) {
             $params['sid'] = $sessionId;
         }
 

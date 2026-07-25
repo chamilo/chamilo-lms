@@ -22,7 +22,7 @@ final class ExerciseQuestionReportPdfController extends AbstractController
     #[Route(
         '/api/exercise/runtime/{exerciseId}/report-by-question.pdf',
         name: 'chamilo_core_exercise_report_by_question_pdf',
-        requirements: ['exerciseId' => '\\d+'],
+        requirements: ['exerciseId' => '\d+'],
         methods: ['GET']
     )]
     public function reportByQuestion(int $exerciseId): Response
@@ -33,7 +33,7 @@ final class ExerciseQuestionReportPdfController extends AbstractController
     #[Route(
         '/api/exercise/runtime/{exerciseId}/question-stats.pdf',
         name: 'chamilo_core_exercise_question_stats_pdf',
-        requirements: ['exerciseId' => '\\d+'],
+        requirements: ['exerciseId' => '\d+'],
         methods: ['GET']
     )]
     public function questionStats(int $exerciseId): Response

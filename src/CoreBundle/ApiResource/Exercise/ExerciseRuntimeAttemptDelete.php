@@ -20,8 +20,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/delete',
             requirements: [
-                'exerciseId' => '\\d+',
-                'attemptId' => '\\d+',
+                'exerciseId' => '\d+',
+                'attemptId' => '\d+',
             ],
             openapi: new Operation(
                 summary: 'Delete an exercise attempt from the migrated report',

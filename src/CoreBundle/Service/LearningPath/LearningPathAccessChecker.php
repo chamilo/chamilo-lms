@@ -210,7 +210,7 @@ final readonly class LearningPathAccessChecker
         User $user,
     ): ?CLpView {
         /** @var CLpView|null $view */
-        $view = $this->entityManager->getRepository(CLpView::class)->findOneBy(
+        return $this->entityManager->getRepository(CLpView::class)->findOneBy(
             [
                 'lp' => $learningPath,
                 'course' => $course,
@@ -222,7 +222,5 @@ final readonly class LearningPathAccessChecker
                 'iid' => 'DESC',
             ],
         );
-
-        return $view;
     }
 }

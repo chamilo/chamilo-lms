@@ -121,7 +121,7 @@ final readonly class ExerciseRuntimeReportExportService
 
     private function getValidatedExercise(int $exerciseId, Request $request): CQuiz
     {
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -138,7 +138,7 @@ final readonly class ExerciseRuntimeReportExportService
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -153,7 +153,7 @@ final readonly class ExerciseRuntimeReportExportService
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -302,7 +302,7 @@ final readonly class ExerciseRuntimeReportExportService
 
     /**
      * @param array<int, array<string, mixed>> $extraFields
-     * @param array<int, array<int, string>>  $extraFieldValues
+     * @param array<int, array<int, string>>   $extraFieldValues
      *
      * @return array<int, int|float|string>
      */
@@ -316,7 +316,7 @@ final readonly class ExerciseRuntimeReportExportService
         $user = $attempt->getUser();
         $score = $attempt->getScore();
         $maxScore = $attempt->getMaxScore();
-        $percentage = 0.0 < $maxScore ? round(($score * 100) / $maxScore, 2) : 0.0;
+        $percentage = $maxScore > 0.0 ? round(($score * 100) / $maxScore, 2) : 0.0;
 
         $row = [
             (string) $user->getFirstname(),
@@ -345,7 +345,7 @@ final readonly class ExerciseRuntimeReportExportService
 
     /**
      * @param array<int, array<string, mixed>> $extraFields
-     * @param array<int, array<int, string>>  $extraFieldValues
+     * @param array<int, array<int, string>>   $extraFieldValues
      *
      * @return array<int, int|float|string>
      */
@@ -382,9 +382,9 @@ final readonly class ExerciseRuntimeReportExportService
     }
 
     /**
-     * @param array<int, int|float|string>    $row
+     * @param array<int, int|float|string>     $row
      * @param array<int, array<string, mixed>> $extraFields
-     * @param array<int, array<int, string>>  $extraFieldValues
+     * @param array<int, array<int, string>>   $extraFieldValues
      */
     private function appendExtraFieldValues(array &$row, User $user, array $extraFields, array $extraFieldValues): void
     {
@@ -479,7 +479,7 @@ final readonly class ExerciseRuntimeReportExportService
         }
 
         $groupId = (int) $groupFilter;
-        if (0 < $groupId) {
+        if ($groupId > 0) {
             $queryBuilder
                 ->andWhere('IDENTITY(groupRelFilter.group) = :groupId')
                 ->setParameter('groupId', $groupId, Types::INTEGER)
@@ -545,8 +545,8 @@ final readonly class ExerciseRuntimeReportExportService
     {
         $candidateMaxScore = $candidate->getMaxScore();
         $currentMaxScore = $current->getMaxScore();
-        $candidatePercentage = 0.0 < $candidateMaxScore ? ($candidate->getScore() * 100) / $candidateMaxScore : 0.0;
-        $currentPercentage = 0.0 < $currentMaxScore ? ($current->getScore() * 100) / $currentMaxScore : 0.0;
+        $candidatePercentage = $candidateMaxScore > 0.0 ? ($candidate->getScore() * 100) / $candidateMaxScore : 0.0;
+        $currentPercentage = $currentMaxScore > 0.0 ? ($current->getScore() * 100) / $currentMaxScore : 0.0;
 
         if ($candidatePercentage > $currentPercentage) {
             return true;
@@ -608,7 +608,7 @@ final readonly class ExerciseRuntimeReportExportService
 
             $user = $relation->getUser();
             $userId = (int) $user->getId();
-            if (0 >= $userId) {
+            if ($userId <= 0) {
                 continue;
             }
 
@@ -634,7 +634,7 @@ final readonly class ExerciseRuntimeReportExportService
             $userIds[] = (int) $user->getId();
         }
 
-        return array_values(array_unique(array_filter($userIds, static fn (int $userId): bool => 0 < $userId)));
+        return array_values(array_unique(array_filter($userIds, static fn (int $userId): bool => $userId > 0)));
     }
 
     /**
@@ -712,7 +712,7 @@ final readonly class ExerciseRuntimeReportExportService
             }
 
             $fieldId = (int) $row->getId();
-            if (0 >= $fieldId) {
+            if ($fieldId <= 0) {
                 continue;
             }
 
@@ -736,7 +736,7 @@ final readonly class ExerciseRuntimeReportExportService
     {
         $fieldIds = array_values(array_filter(
             array_map(static fn (array $field): int => (int) ($field['id'] ?? 0), $extraFields),
-            static fn (int $fieldId): bool => 0 < $fieldId
+            static fn (int $fieldId): bool => $fieldId > 0
         ));
 
         if ([] === $fieldIds || [] === $userIds) {
@@ -807,7 +807,7 @@ final readonly class ExerciseRuntimeReportExportService
 
     private function formatLearningPath(TrackEExercise $attempt): string
     {
-        if (0 < $attempt->getOrigLpId()) {
+        if ($attempt->getOrigLpId() > 0) {
             return '#'.$attempt->getOrigLpId();
         }
 
@@ -821,11 +821,11 @@ final readonly class ExerciseRuntimeReportExportService
         $minutes = intdiv($seconds % 3600, 60);
         $remainingSeconds = $seconds % 60;
 
-        if (0 < $hours) {
-            return sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
+        if ($hours > 0) {
+            return \sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
         }
 
-        return sprintf('%02d:%02d', $minutes, $remainingSeconds);
+        return \sprintf('%02d:%02d', $minutes, $remainingSeconds);
     }
 
     private function formatDate(DateTimeInterface $date): string

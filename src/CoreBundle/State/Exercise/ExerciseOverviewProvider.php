@@ -80,7 +80,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -100,7 +100,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $hasIncompleteAttempt = $incompleteAttempt instanceof TrackEExercise;
         $newAttemptsDisabled = $this->isSettingEnabled('exercise.exercises_disable_new_attempts');
         $maxAttempt = (int) $quiz->getMaxAttempt();
-        $attemptLimitReached = 0 < $maxAttempt && $currentUserAttemptCount >= $maxAttempt;
+        $attemptLimitReached = $maxAttempt > 0 && $currentUserAttemptCount >= $maxAttempt;
         $hideAttemptsTable = $this->isSettingEnabled('exercise.quiz_hide_attempts_table_on_start_page');
 
         $availabilityStatus = $this->getAvailabilityStatus($quiz->getStartTime(), $quiz->getEndTime());
@@ -139,7 +139,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $overview->showScoreColumn = $this->shouldShowScoreColumn($quiz, $currentUserAttemptCount);
         $overview->showDetailsColumn = $this->shouldShowDetailsColumn($quiz, $currentUserAttemptCount);
         $overview->attemptLimitReached = $attemptLimitReached;
-        $overview->startButtonLabel = 0 < $currentUserAttemptCount || $hasIncompleteAttempt ? 'Proceed with the test' : 'Start test';
+        $overview->startButtonLabel = $currentUserAttemptCount > 0 || $hasIncompleteAttempt ? 'Proceed with the test' : 'Start test';
         $overview->browserCheckEnabled = $this->isSettingEnabled('exercise.quiz_check_button_enable');
         $overview->notice = $this->getOverviewNotice($currentUserAttemptCount, $newAttemptsDisabled, $hasIncompleteAttempt, $canManage);
 
@@ -149,7 +149,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -164,7 +164,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -212,11 +212,11 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $origin = strtolower(trim((string) $request->query->get('origin', '')));
         $hasLearnpathContext = 'learnpath' === $origin
             || $request->query->has('lp_init')
-            || 0 < $learnpathId
-            || 0 < $learnpathItemId
-            || 0 < $learnpathItemViewId;
+            || $learnpathId > 0
+            || $learnpathItemId > 0
+            || $learnpathItemViewId > 0;
 
-        if (!$hasLearnpathContext || 0 >= $learnpathId || 0 >= $learnpathItemId) {
+        if (!$hasLearnpathContext || $learnpathId <= 0 || $learnpathItemId <= 0) {
             return false;
         }
 
@@ -226,7 +226,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         }
 
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return false;
         }
 
@@ -266,7 +266,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
             return false;
         }
 
-        if (0 >= $learnpathItemViewId) {
+        if ($learnpathItemViewId <= 0) {
             return true;
         }
 
@@ -427,7 +427,6 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
     /**
      * @return array<int, array<string, mixed>>
      */
-
     private function findIncompleteAttempt(
         CQuiz $quiz,
         Course $course,
@@ -522,7 +521,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
                 'userIp' => $attempt->getUserIp(),
                 'score' => round($attempt->getScore(), 2),
                 'maxScore' => round($maxScore, 2),
-                'percentage' => 0 < $maxScore ? round(($attempt->getScore() / $maxScore) * 100, 2) : 0.0,
+                'percentage' => $maxScore > 0 ? round(($attempt->getScore() / $maxScore) * 100, 2) : 0.0,
                 'revised' => $revised,
                 'showValidationStatus' => $revised || $this->hasPendingManualCorrection($attempt),
             ];
@@ -543,9 +542,8 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
             ->getSingleScalarResult()
         ;
 
-        return 0 < (int) $total;
+        return (int) $total > 0;
     }
-
 
     private function hasPendingManualCorrection(TrackEExercise $attempt): bool
     {
@@ -562,7 +560,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
             return 'Disable new test attempts';
         }
 
-        return 0 < $currentUserAttemptCount ? 'You have tried to resolve this exercise earlier' : '';
+        return $currentUserAttemptCount > 0 ? 'You have tried to resolve this exercise earlier' : '';
     }
 
     private function shouldShowScoreColumn(CQuiz $quiz, int $attemptCount): bool
@@ -632,7 +630,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
     {
         $maxAttempt = (int) $quiz->getMaxAttempt();
 
-        return 0 >= $maxAttempt || $attemptCount >= $maxAttempt;
+        return $maxAttempt <= 0 || $attemptCount >= $maxAttempt;
     }
 
     private function getAvailabilityStatus(?DateTimeInterface $startTime, ?DateTimeInterface $endTime): string

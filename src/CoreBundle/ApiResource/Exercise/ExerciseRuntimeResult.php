@@ -20,8 +20,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/result',
             requirements: [
-                'exerciseId' => '\\d+',
-                'attemptId' => '\\d+',
+                'exerciseId' => '\d+',
+                'attemptId' => '\d+',
             ],
             openapi: new Operation(
                 summary: 'Exercise runtime attempt result and review data',

@@ -24,7 +24,7 @@ final class ExerciseRuntimeReportExportController extends AbstractController
     #[Route(
         '/api/exercise/runtime/{exerciseId}/attempts/export.csv',
         name: 'chamilo_core_exercise_runtime_report_export_csv',
-        requirements: ['exerciseId' => '\\d+'],
+        requirements: ['exerciseId' => '\d+'],
         methods: ['GET']
     )]
     public function csv(int $exerciseId, Request $request): StreamedResponse
@@ -35,7 +35,7 @@ final class ExerciseRuntimeReportExportController extends AbstractController
     #[Route(
         '/api/exercise/runtime/{exerciseId}/attempts/export.xlsx',
         name: 'chamilo_core_exercise_runtime_report_export_xlsx',
-        requirements: ['exerciseId' => '\\d+'],
+        requirements: ['exerciseId' => '\d+'],
         methods: ['GET']
     )]
     public function xlsx(int $exerciseId, Request $request): BinaryFileResponse

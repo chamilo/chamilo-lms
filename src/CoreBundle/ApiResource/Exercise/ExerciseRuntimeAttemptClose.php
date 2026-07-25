@@ -20,8 +20,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/close',
             requirements: [
-                'exerciseId' => '\\d+',
-                'attemptId' => '\\d+',
+                'exerciseId' => '\d+',
+                'attemptId' => '\d+',
             ],
             openapi: new Operation(
                 summary: 'Close an incomplete exercise attempt from the migrated report',

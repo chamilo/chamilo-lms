@@ -72,7 +72,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -101,7 +101,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -116,7 +116,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -199,7 +199,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
      */
     private function getLiveAttempts(CQuiz $quiz, Course $course, ?Session $session, int $minutes, string $status): array
     {
-        $since = (new DateTime())->sub(new DateInterval(sprintf('PT%dM', $minutes)));
+        $since = (new DateTime())->sub(new DateInterval(\sprintf('PT%dM', $minutes)));
 
         $idQueryBuilder = $this->entityManager->createQueryBuilder()
             ->select('DISTINCT attempt.exeId AS attemptId')
@@ -242,7 +242,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         $attemptIds = [];
         foreach ($idQueryBuilder->getQuery()->getArrayResult() as $row) {
             $attemptId = (int) ($row['attemptId'] ?? 0);
-            if (0 < $attemptId) {
+            if ($attemptId > 0) {
                 $attemptIds[] = $attemptId;
             }
         }
@@ -289,7 +289,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         $statusLabel = self::STATUS_INCOMPLETE === $status ? 'Ongoing' : 'Completed';
         $score = $attempt->getScore();
         $maxScore = $attempt->getMaxScore();
-        $percentage = 0.0 < $maxScore ? round(($score * 100) / $maxScore, 2) : 0.0;
+        $percentage = $maxScore > 0.0 ? round(($score * 100) / $maxScore, 2) : 0.0;
 
         return [
             'id' => (int) $attempt->getExeId(),
@@ -322,7 +322,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
             }
 
             $questionId = (int) $answer->getQuestionId();
-            if (0 < $questionId) {
+            if ($questionId > 0) {
                 $questionIds[$questionId] = true;
             }
         }
@@ -394,7 +394,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         ];
 
         $sessionId = $request->query->getInt('sid');
-        if (0 < $sessionId) {
+        if ($sessionId > 0) {
             $params['sid'] = $sessionId;
         }
 

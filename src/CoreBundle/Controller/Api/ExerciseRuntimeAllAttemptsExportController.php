@@ -23,7 +23,7 @@ final class ExerciseRuntimeAllAttemptsExportController extends AbstractControlle
     #[Route(
         '/api/exercise/runtime/{exerciseId}/attempts/export-all.zip',
         name: 'chamilo_core_exercise_runtime_all_attempts_export_zip',
-        requirements: ['exerciseId' => '\\d+'],
+        requirements: ['exerciseId' => '\d+'],
         methods: ['GET']
     )]
     public function __invoke(int $exerciseId, Request $request): BinaryFileResponse

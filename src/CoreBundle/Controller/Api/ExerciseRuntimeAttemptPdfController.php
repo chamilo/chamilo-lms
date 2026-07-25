@@ -23,7 +23,7 @@ final class ExerciseRuntimeAttemptPdfController extends AbstractController
     #[Route(
         '/api/exercise/runtime/{exerciseId}/attempt/{attemptId}/pdf',
         name: 'chamilo_core_exercise_runtime_attempt_pdf',
-        requirements: ['exerciseId' => '\\d+', 'attemptId' => '\\d+'],
+        requirements: ['exerciseId' => '\d+', 'attemptId' => '\d+'],
         methods: ['GET']
     )]
     public function __invoke(int $exerciseId, int $attemptId, Request $request): Response

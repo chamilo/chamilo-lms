@@ -13,9 +13,9 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
-use DOMDocument;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use DOMDocument;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
@@ -25,6 +25,13 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ZipArchive;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const LIBXML_NOERROR;
+use const LIBXML_NONET;
+use const LIBXML_NOWARNING;
 
 /**
  * Modern IMS/QTI 2 exporter for the same exercise-level subset exported by legacy Chamilo.
@@ -56,14 +63,14 @@ final readonly class ExerciseQti2ExportService
             throw new BadRequestHttpException('The QTI2 export archive could not be created.');
         }
 
-        $zip->addFromString(sprintf('qti2export_%d.xml', $exerciseId), $xml);
+        $zip->addFromString(\sprintf('qti2export_%d.xml', $exerciseId), $xml);
         if (!$zip->close()) {
             throw new BadRequestHttpException('The QTI2 export archive could not be finalized.');
         }
 
         $response = new BinaryFileResponse(new File($zipPath));
         $response->headers->set('Content-Type', 'application/zip');
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, sprintf('qti2_export_%d.zip', $exerciseId));
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, \sprintf('qti2_export_%d.zip', $exerciseId));
         $response->deleteFileAfterSend(true);
 
         return $response;
@@ -71,7 +78,7 @@ final readonly class ExerciseQti2ExportService
 
     private function getValidatedExercise(int $exerciseId, Request $request): CQuiz
     {
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -88,7 +95,7 @@ final readonly class ExerciseQti2ExportService
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -103,7 +110,7 @@ final readonly class ExerciseQti2ExportService
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -196,7 +203,7 @@ final readonly class ExerciseQti2ExportService
     private function exportDuration(CQuiz $quiz): string
     {
         $duration = (int) ($quiz->getDuration() ?? 0);
-        if (0 >= $duration) {
+        if ($duration <= 0) {
             return '';
         }
 
@@ -216,7 +223,7 @@ final readonly class ExerciseQti2ExportService
     private function exportOrdering(CQuiz $quiz): string
     {
         $random = (int) $quiz->getRandom();
-        if (0 < $random) {
+        if ($random > 0) {
             return '<selection_ordering>'
                 ."  <selection>\n"
                 .'    <selection_number>'.$random."</selection_number>\n"
@@ -261,7 +268,7 @@ final readonly class ExerciseQti2ExportService
             }
 
             $questionId = (int) $question->getIid();
-            if (0 < $questionId) {
+            if ($questionId > 0) {
                 $questions[$questionId] = $question;
             }
         }
@@ -299,7 +306,7 @@ final readonly class ExerciseQti2ExportService
     {
         if (self::FREE_ANSWER === (int) $question->getType()) {
             $xml = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="single" baseType="string">';
-            $xml .= '<outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">' .
+            $xml .= '<outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">'.
                 '<defaultValue><value>'.$this->formatScore((float) $question->getPonderation()).'</value></defaultValue></outcomeDeclaration>';
             $xml .= '  </responseDeclaration>'."\n";
 
@@ -390,6 +397,7 @@ final readonly class ExerciseQti2ExportService
     {
         $document = new DOMDocument('1.0', 'UTF-8');
         $previous = libxml_use_internal_errors(true);
+
         try {
             if (!$document->loadXML($xml, LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING)) {
                 throw new BadRequestHttpException('The QTI2 export XML could not be generated.');
@@ -442,7 +450,7 @@ final readonly class ExerciseQti2ExportService
 
     private function formatScore(float $score): string
     {
-        $formatted = rtrim(rtrim(sprintf('%.6F', $score), '0'), '.');
+        $formatted = rtrim(rtrim(\sprintf('%.6F', $score), '0'), '.');
 
         return '' === $formatted ? '0' : $formatted;
     }

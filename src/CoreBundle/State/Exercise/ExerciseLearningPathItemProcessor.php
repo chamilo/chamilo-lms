@@ -72,7 +72,7 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -125,7 +125,7 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -140,7 +140,7 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -197,7 +197,7 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
     private function getLearningPathFromCurrentContext(Request $request, Course $course, ?Session $session): CLp
     {
         $lpId = $request->query->getInt('lp_id', $request->query->getInt('learnpath_id'));
-        if (0 >= $lpId) {
+        if ($lpId <= 0) {
             throw new BadRequestHttpException('A valid learning path id is required.');
         }
 
@@ -324,7 +324,7 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
     {
         foreach (['lp_parent_id', 'parent'] as $parameterName) {
             $candidateId = $request->query->getInt($parameterName);
-            if (0 >= $candidateId) {
+            if ($candidateId <= 0) {
                 continue;
             }
 

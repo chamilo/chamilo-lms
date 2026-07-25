@@ -1987,7 +1987,7 @@ class CourseController extends ToolBaseController
         }
 
         $path = '/resources/exercise/'.(int) $nodeId.'/';
-        if (null !== $exerciseId && 0 < $exerciseId) {
+        if (null !== $exerciseId && $exerciseId > 0) {
             $path .= $exerciseId.'/overview';
         }
 

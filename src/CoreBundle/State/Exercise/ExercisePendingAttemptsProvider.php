@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExercisePendingAttempts;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use CourseManager;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
@@ -18,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 /**
  * Read-only provider for the migrated pending exercise attempts page.
@@ -235,7 +239,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
 
     /**
      * @param array<string, int|string> $filters
-     * @param array<int, int> $allowedCourseIds
+     * @param array<int, int>           $allowedCourseIds
      *
      * @return array<int, array<string, mixed>>
      */
@@ -257,7 +261,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
 
         if (!$includeSessions) {
             $currentSessionId = $this->getCurrentSessionId();
-            if (0 < $currentSessionId) {
+            if ($currentSessionId > 0) {
                 $where[] = 'te.session_id = :currentSessionId';
                 $params['currentSessionId'] = $currentSessionId;
                 $types['currentSessionId'] = ParameterType::INTEGER;
@@ -521,7 +525,7 @@ SQL;
      */
     private function getExerciseOptions(int $courseId, array $allowedCourseIds): array
     {
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             return [];
         }
 
@@ -546,7 +550,7 @@ SQL;
 
         foreach ($rows as $row) {
             $exerciseId = (int) ($row['iid'] ?? 0);
-            if (0 >= $exerciseId) {
+            if ($exerciseId <= 0) {
                 continue;
             }
 
@@ -567,11 +571,11 @@ SQL;
         $courses = [];
 
         if ($this->isPlatformAdmin()) {
-            if (\class_exists('CourseManager')) {
-                $courses = \CourseManager::get_courses_list();
+            if (class_exists('CourseManager')) {
+                $courses = CourseManager::get_courses_list();
             }
-        } elseif (\class_exists('CourseManager')) {
-            $courses = \CourseManager::get_courses_list_by_user_id($this->getCurrentUserId(), $includeSessions, false, false);
+        } elseif (class_exists('CourseManager')) {
+            $courses = CourseManager::get_courses_list_by_user_id($this->getCurrentUserId(), $includeSessions, false, false);
         }
 
         $options = [];
@@ -581,7 +585,7 @@ SQL;
             }
 
             $courseId = (int) ($course['real_id'] ?? $course['id'] ?? 0);
-            if (0 >= $courseId) {
+            if ($courseId <= 0) {
                 continue;
             }
 
@@ -605,11 +609,11 @@ SQL;
             return [];
         }
 
-        if (!\class_exists('CourseManager')) {
+        if (!class_exists('CourseManager')) {
             return [];
         }
 
-        $courses = \CourseManager::get_courses_list_by_user_id($this->getCurrentUserId(), $includeSessions, false, false);
+        $courses = CourseManager::get_courses_list_by_user_id($this->getCurrentUserId(), $includeSessions, false, false);
         $courseIds = [];
 
         foreach ($courses as $course) {
@@ -618,7 +622,7 @@ SQL;
             }
 
             $courseId = (int) ($course['real_id'] ?? $course['id'] ?? 0);
-            if (0 < $courseId) {
+            if ($courseId > 0) {
                 $courseIds[$courseId] = $courseId;
             }
         }
@@ -665,7 +669,7 @@ SQL;
     private function tableHasColumn(string $table, string $column): bool
     {
         $rows = $this->connection
-            ->executeQuery(sprintf('SHOW COLUMNS FROM %s LIKE :column', $table), ['column' => $column])
+            ->executeQuery(\sprintf('SHOW COLUMNS FROM %s LIKE :column', $table), ['column' => $column])
             ->fetchAllAssociative()
         ;
 

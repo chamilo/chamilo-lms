@@ -102,7 +102,7 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -117,7 +117,7 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -171,7 +171,8 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
                 ->setDescription($data->description)
                 ->setPosition($this->getNextExerciseCategoryPosition($course))
                 ->setParent($course)
-                ->addCourseLink($course);
+                ->addCourseLink($course)
+            ;
             $this->entityManager->persist($category);
 
             return 'Category added';
@@ -187,7 +188,8 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
             ->setTitle($title)
             ->setDescription($data->description)
             ->setParent($course)
-            ->addCourseLink($course, $session);
+            ->addCourseLink($course, $session)
+        ;
         $this->questionCategoryRepository->create($category);
 
         return 'Category added';
@@ -197,7 +199,7 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
     {
         $categoryId = (int) ($data->categoryId ?? 0);
         $title = trim($data->categoryTitle);
-        if (0 >= $categoryId || '' === $title) {
+        if ($categoryId <= 0 || '' === $title) {
             throw new BadRequestHttpException('A valid category id and title are required.');
         }
 
@@ -206,7 +208,8 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
             $this->assertExerciseCategoryTitleIsUnique($title, $course, $categoryId);
             $category
                 ->setTitle($title)
-                ->setDescription($data->description);
+                ->setDescription($data->description)
+            ;
 
             return 'Category updated';
         }
@@ -214,7 +217,8 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
         $category = $this->getQuestionCategory($categoryId, $course, $session);
         $category
             ->setTitle($title)
-            ->setDescription($data->description);
+            ->setDescription($data->description)
+        ;
         $this->questionCategoryRepository->update($category);
 
         return 'Category updated';
@@ -223,7 +227,7 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
     private function deleteCategory(string $categoryType, ExerciseCategoryManagement $data, Course $course, ?Session $session): string
     {
         $categoryId = (int) ($data->categoryId ?? 0);
-        if (0 >= $categoryId) {
+        if ($categoryId <= 0) {
             throw new BadRequestHttpException('A valid category id is required.');
         }
 
@@ -294,7 +298,8 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
                 ->setTitle($title)
                 ->setDescription($description)
                 ->setParent($course)
-                ->addCourseLink($course, $session);
+                ->addCourseLink($course, $session)
+            ;
             $this->questionCategoryRepository->create($category);
             $importedCount++;
         }

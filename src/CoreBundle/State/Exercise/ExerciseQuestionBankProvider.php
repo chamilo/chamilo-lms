@@ -18,7 +18,6 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
-use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -64,7 +63,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        $quiz = 0 < $exerciseId ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        $quiz = $exerciseId > 0 ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
         if ($quiz instanceof CQuiz && $this->isAdaptiveFeedbackExercise($quiz)) {
             throw new AccessDeniedHttpException('Question recycling is not available in adaptive/direct feedback exercises.');
         }
@@ -91,7 +90,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $response->totalItems = $totalItems;
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->canManage = true;
-        $response->globalMode = !($quiz instanceof CQuiz);
+        $response->globalMode = !$quiz instanceof CQuiz;
         $response->canDelete = $this->canRunRestrictedAction();
 
         return $response;
@@ -100,7 +99,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -115,7 +114,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -136,7 +135,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
-        if (!($quiz instanceof CQuiz)) {
+        if (!$quiz instanceof CQuiz) {
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
@@ -214,7 +213,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
 
     /**
      * @param array<string, mixed> $filters
-     * @param array<int, int>     $existingQuestionIds
+     * @param array<int, int>      $existingQuestionIds
      *
      * @return array<int, array<string, mixed>>
      */
@@ -320,7 +319,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     private function applyQuestionFilters(QueryBuilder $queryBuilder, ?CQuiz $quiz, Course $course, ?Session $session, array $filters): void
     {
         $categoryId = (int) ($filters['categoryId'] ?? 0);
-        if (0 < $categoryId) {
+        if ($categoryId > 0) {
             $queryBuilder
                 ->innerJoin('question.categories', 'category')
                 ->andWhere('category.iid = :categoryId')
@@ -337,7 +336,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         }
 
         $questionType = (int) ($filters['questionType'] ?? -1);
-        if (0 < $questionType) {
+        if ($questionType > 0) {
             $queryBuilder
                 ->andWhere('question.type = :questionType')
                 ->setParameter('questionType', $questionType, Types::INTEGER)
@@ -361,7 +360,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         }
 
         $sourceExerciseId = (int) ($filters['sourceExerciseId'] ?? 0);
-        if (0 < $sourceExerciseId) {
+        if ($sourceExerciseId > 0) {
             $this->applySourceExerciseFilter($queryBuilder, $sourceExerciseId, $course, $session);
         } elseif (-1 === $sourceExerciseId) {
             $this->applyOrphanQuestionFilter($queryBuilder, $course, $session);
@@ -559,7 +558,6 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         return true;
     }
 
-
     private function isAdaptiveFeedbackExercise(CQuiz $quiz): bool
     {
         return 1 === (int) $quiz->getFeedbackType();
@@ -582,7 +580,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     private function isQuestionUsedInActiveQuiz(CQuizQuestion $question, Course $course, ?Session $session): bool
     {
         $questionId = (int) ($question->getIid() ?? 0);
-        if (0 >= $questionId) {
+        if ($questionId <= 0) {
             return false;
         }
 
@@ -668,6 +666,4 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
             ['type' => 31, 'label' => 'Page break', 'icon' => 'page_end.png'],
         ];
     }
-
-
 }

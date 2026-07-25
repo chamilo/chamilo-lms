@@ -91,7 +91,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         $secondsSpent = max(0, $request->request->getInt('secondsSpent'));
         $reviewLater = $request->request->has('reviewLater') ? $request->request->getBoolean('reviewLater') : null;
 
-        if (0 >= $exerciseId || 0 >= $attemptId || 0 >= $questionId) {
+        if ($exerciseId <= 0 || $attemptId <= 0 || $questionId <= 0) {
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
         }
 
@@ -184,7 +184,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         $questionIndex = $this->getAttemptQuestionIndex($attempt, $questionId);
-        if (0 > $questionIndex) {
+        if ($questionIndex < 0) {
             return;
         }
 
@@ -212,7 +212,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         $questionIndex = $this->getAttemptQuestionIndex($attempt, $questionId);
-        if (0 > $questionIndex) {
+        if ($questionIndex < 0) {
             return;
         }
 
@@ -286,7 +286,6 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         return $session instanceof Session ? $session : null;
     }
 
-
     private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -300,11 +299,11 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         $origin = strtolower(trim((string) $request->query->get('origin', '')));
         $hasLearnpathContext = 'learnpath' === $origin
             || $request->query->has('lp_init')
-            || 0 < $learnpathId
-            || 0 < $learnpathItemId
-            || 0 < $learnpathItemViewId;
+            || $learnpathId > 0
+            || $learnpathItemId > 0
+            || $learnpathItemViewId > 0;
 
-        if (!$hasLearnpathContext || 0 >= $learnpathId || 0 >= $learnpathItemId) {
+        if (!$hasLearnpathContext || $learnpathId <= 0 || $learnpathItemId <= 0) {
             return false;
         }
 
@@ -314,7 +313,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return false;
         }
 
@@ -354,7 +353,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             return false;
         }
 
-        if (0 >= $learnpathItemViewId) {
+        if ($learnpathItemViewId <= 0) {
             return true;
         }
 
@@ -576,7 +575,6 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         return array_values(array_filter($files, static fn (mixed $item): bool => $item instanceof UploadedFile));
     }
 
-
     private function validateUploadedFileForQuestion(UploadedFile $uploadedFile, CQuizQuestion $question): void
     {
         if (self::ORAL_EXPRESSION !== (int) $question->getType()) {
@@ -696,7 +694,6 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         return $files;
     }
 
-
     private function getAttemptFileDownloadUrl(TrackEAttempt $attemptRow, ResourceNode $resourceNode): string
     {
         $attempt = $attemptRow->getTrackEExercise();
@@ -724,7 +721,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             }
         }
 
-        return sprintf(
+        return \sprintf(
             '/api/exercise/runtime/%d/attempt/%d/file/%d/download?%s',
             (int) $quiz->getIid(),
             (int) $attempt->getExeId(),

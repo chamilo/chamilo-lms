@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\State\Exercise\ExerciseRuntimeResultProvider;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,6 +22,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_UNICODE;
 
 final readonly class ExerciseRuntimeAttemptPdfService
 {
@@ -48,7 +56,7 @@ final readonly class ExerciseRuntimeAttemptPdfService
      */
     public function buildAttemptPdfFile(int $exerciseId, int $attemptId, Request $request): array
     {
-        if (0 >= $exerciseId || 0 >= $attemptId) {
+        if ($exerciseId <= 0 || $attemptId <= 0) {
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
@@ -115,7 +123,7 @@ final readonly class ExerciseRuntimeAttemptPdfService
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -130,7 +138,7 @@ final readonly class ExerciseRuntimeAttemptPdfService
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -219,7 +227,7 @@ final readonly class ExerciseRuntimeAttemptPdfService
         $score = $this->questionScore($question);
 
         $html = '<div class="question">';
-        $html .= '<h2>'.(0 < $position ? $position.'. ' : '').$this->escape($title).'</h2>';
+        $html .= '<h2>'.($position > 0 ? $position.'. ' : '').$this->escape($title).'</h2>';
         if ('' !== $typeLabel) {
             $html .= '<div class="muted">'.$this->escape($typeLabel).'</div>';
         }
@@ -417,9 +425,6 @@ final readonly class ExerciseRuntimeAttemptPdfService
         return $html;
     }
 
-    /**
-     * @param mixed $items
-     */
     private function renderOrderedItems(mixed $items): string
     {
         if (!\is_array($items) || [] === $items) {
@@ -536,9 +541,6 @@ final readonly class ExerciseRuntimeAttemptPdfService
         return $html;
     }
 
-    /**
-     * @param mixed $items
-     */
     private function compactList(mixed $items): string
     {
         if (!\is_array($items)) {
@@ -578,8 +580,8 @@ final readonly class ExerciseRuntimeAttemptPdfService
 
         if (\is_string($value) && '' !== $value) {
             try {
-                return (new \DateTimeImmutable($value))->format('Y-m-d H:i:s');
-            } catch (\Throwable) {
+                return (new DateTimeImmutable($value))->format('Y-m-d H:i:s');
+            } catch (Throwable) {
                 return $value;
             }
         }
@@ -594,11 +596,11 @@ final readonly class ExerciseRuntimeAttemptPdfService
         $minutes = intdiv($seconds % 3600, 60);
         $remainingSeconds = $seconds % 60;
 
-        if (0 < $hours) {
-            return sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
+        if ($hours > 0) {
+            return \sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
         }
 
-        return sprintf('%02d:%02d', $minutes, $remainingSeconds);
+        return \sprintf('%02d:%02d', $minutes, $remainingSeconds);
     }
 
     private function formatNumber(float $value): string

@@ -65,7 +65,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : (int) ($data->attemptId ?? 0);
-        if (0 >= $exerciseId || 0 >= $attemptId) {
+        if ($exerciseId <= 0 || $attemptId <= 0) {
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
@@ -100,7 +100,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -115,7 +115,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -163,7 +163,6 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
 
         return $quiz;
     }
-
 
     private function canDeleteResults(): bool
     {

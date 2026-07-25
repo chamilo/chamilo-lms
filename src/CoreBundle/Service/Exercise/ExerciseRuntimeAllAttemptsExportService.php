@@ -23,6 +23,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ZipArchive;
 
+use const PATHINFO_FILENAME;
+
 final readonly class ExerciseRuntimeAllAttemptsExportService
 {
     private const STATUS_INCOMPLETE = 'incomplete';
@@ -75,7 +77,7 @@ final readonly class ExerciseRuntimeAllAttemptsExportService
 
     private function getValidatedExercise(int $exerciseId, Request $request): CQuiz
     {
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
@@ -92,7 +94,7 @@ final readonly class ExerciseRuntimeAllAttemptsExportService
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -107,7 +109,7 @@ final readonly class ExerciseRuntimeAllAttemptsExportService
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 

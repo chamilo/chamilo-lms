@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/exercise/runtime/{exerciseId}',
-            requirements: ['exerciseId' => '\\d+'],
+            requirements: ['exerciseId' => '\d+'],
             openapi: new Operation(
                 summary: 'Exercise runtime player data',
                 parameters: [
@@ -74,7 +74,6 @@ final class ExerciseRuntime
 
     #[Groups(['exercise_runtime:read'])]
     public bool $canManage = false;
-
 
     /**
      * @var array<string, mixed>|null

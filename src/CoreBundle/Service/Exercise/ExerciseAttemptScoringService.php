@@ -21,6 +21,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+
 /**
  * Recalculates persisted exercise attempt scores using the migrated runtime scoring rules.
  */
@@ -126,7 +129,7 @@ final readonly class ExerciseAttemptScoringService
             $score = $this->scoreQuestion($quiz, $question, $answers, $options, $rows);
             $weight = $this->getQuestionWeight($question, $answers);
 
-            if (0 === (int) $quiz->getPropagateNeg() && 0 > $score) {
+            if (0 === (int) $quiz->getPropagateNeg() && $score < 0) {
                 $score = 0.0;
             }
 
@@ -140,7 +143,7 @@ final readonly class ExerciseAttemptScoringService
             $totalWeight += $weight;
         }
 
-        if (0.0 >= $totalWeight) {
+        if ($totalWeight <= 0.0) {
             $totalWeight = (float) $attempt->getMaxScore();
         }
 
@@ -161,7 +164,7 @@ final readonly class ExerciseAttemptScoringService
 
     private function syncLearningPathScore(TrackEExercise $attempt, float $score): void
     {
-        if (0 >= $attempt->getOrigLpId() || 0 >= $attempt->getOrigLpItemId() || 0 >= $attempt->getOrigLpItemViewId()) {
+        if ($attempt->getOrigLpId() <= 0 || $attempt->getOrigLpItemId() <= 0 || $attempt->getOrigLpItemViewId() <= 0) {
             return;
         }
 
@@ -376,7 +379,7 @@ final readonly class ExerciseAttemptScoringService
     private function scoreUniqueAnswer(array $answers, array $rows): float
     {
         $selectedAnswerId = $this->getFirstSavedAnswerId($rows);
-        if (0 >= $selectedAnswerId || !isset($answers[$selectedAnswerId])) {
+        if ($selectedAnswerId <= 0 || !isset($answers[$selectedAnswerId])) {
             return 0.0;
         }
 
@@ -439,13 +442,15 @@ final readonly class ExerciseAttemptScoringService
         foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
             $studentChoice = $choices[$answerId] ?? 0;
-            if (0 >= $studentChoice) {
+            if ($studentChoice <= 0) {
                 $score += $doubtScore;
+
                 continue;
             }
 
             if ($this->isTrueFalseChoiceCorrect($studentChoice, (int) $answer->getCorrect(), $options)) {
                 $score += $trueScore;
+
                 continue;
             }
 
@@ -470,16 +475,17 @@ final readonly class ExerciseAttemptScoringService
         foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
             $studentChoice = (int) ($choices[$answerId]['choice'] ?? 0);
-            if (0 >= $studentChoice) {
+            if ($studentChoice <= 0) {
                 continue;
             }
 
             $studentDegreeChoice = (int) ($choices[$answerId]['degree'] ?? 0);
             $studentDegreeChoicePosition = $this->getTrueFalseOptionPosition($studentDegreeChoice, $options);
-            $hasCertainty = 3 <= $studentDegreeChoicePosition && 9 > $studentDegreeChoicePosition;
+            $hasCertainty = $studentDegreeChoicePosition >= 3 && $studentDegreeChoicePosition < 9;
 
             if ($this->isTrueFalseChoiceCorrect($studentChoice, (int) $answer->getCorrect(), $options)) {
                 $score += $hasCertainty ? $trueScore : $doubtScore;
+
                 continue;
             }
 
@@ -502,7 +508,7 @@ final readonly class ExerciseAttemptScoringService
             $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
             $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
             $degreeId = isset($parts[2]) ? (int) $parts[2] : 0;
-            if (0 < $answerId && 0 < $optionId) {
+            if ($answerId > 0 && $optionId > 0) {
                 $choices[$answerId] = [
                     'choice' => $optionId,
                     'degree' => $degreeId,
@@ -561,19 +567,20 @@ final readonly class ExerciseAttemptScoringService
             $parts = explode(':', (string) $row->getAnswer());
             $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
             $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
-            if (0 < $answerId && 0 < $optionId) {
+            if ($answerId > 0 && $optionId > 0) {
                 $choices[$answerId] = $optionId;
             }
         }
 
         return $choices;
     }
+
     /**
      * @param array<int, CQuizQuestionOption> $options
      */
     private function isTrueFalseChoiceCorrect(int $studentChoice, int $correctChoice, array $options): bool
     {
-        if (0 >= $studentChoice || 0 >= $correctChoice) {
+        if ($studentChoice <= 0 || $correctChoice <= 0) {
             return false;
         }
 
@@ -584,7 +591,7 @@ final readonly class ExerciseAttemptScoringService
         $studentPosition = $this->getTrueFalseOptionPosition($studentChoice, $options);
         $correctPosition = $this->getTrueFalseOptionPosition($correctChoice, $options);
 
-        return 0 < $studentPosition && $studentPosition === $correctPosition;
+        return $studentPosition > 0 && $studentPosition === $correctPosition;
     }
 
     /**
@@ -632,7 +639,6 @@ final readonly class ExerciseAttemptScoringService
 
         return '';
     }
-
 
     /**
      * @param array<int, CQuizAnswer>   $answers
@@ -807,7 +813,7 @@ final readonly class ExerciseAttemptScoringService
     {
         $normalizedStudentAnswer = $caseInsensitive ? mb_strtolower($studentAnswer) : $studentAnswer;
 
-        if (false !== strpos($correctAnswer, '|') && false === strpos($correctAnswer, '||')) {
+        if (str_contains($correctAnswer, '|') && !str_contains($correctAnswer, '||')) {
             $menuAnswers = array_map([$this, 'trimFillBlankOption'], explode('|', $correctAnswer));
             $firstAnswer = (string) ($menuAnswers[0] ?? '');
             $normalizedFirstAnswer = $caseInsensitive ? mb_strtolower($firstAnswer) : $firstAnswer;
@@ -815,7 +821,7 @@ final readonly class ExerciseAttemptScoringService
             return $normalizedStudentAnswer === $normalizedFirstAnswer || $normalizedStudentAnswer === sha1($normalizedFirstAnswer);
         }
 
-        if (false !== strpos($correctAnswer, '||')) {
+        if (str_contains($correctAnswer, '||')) {
             $answers = array_map([$this, 'trimFillBlankOption'], preg_split('/\|\|/', $correctAnswer) ?: []);
             foreach ($answers as $answer) {
                 $candidate = $caseInsensitive ? mb_strtolower($answer) : $answer;
@@ -870,7 +876,7 @@ final readonly class ExerciseAttemptScoringService
 
         foreach ($answers as $answer) {
             $correctPosition = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $correctPosition) {
+            if ($correctPosition <= 0) {
                 continue;
             }
 
@@ -905,7 +911,7 @@ final readonly class ExerciseAttemptScoringService
             }
         }
 
-        return 0 < $optionCount && $correctCount === $optionCount ? (float) $question->getPonderation() : 0.0;
+        return $optionCount > 0 && $correctCount === $optionCount ? (float) $question->getPonderation() : 0.0;
     }
 
     /**
@@ -918,7 +924,7 @@ final readonly class ExerciseAttemptScoringService
         $choices = [];
         foreach ($rows as $row) {
             $position = $row->getPosition();
-            if (null === $position || 0 >= $position) {
+            if (null === $position || $position <= 0) {
                 continue;
             }
 
@@ -950,13 +956,13 @@ final readonly class ExerciseAttemptScoringService
                 continue;
             }
 
-            if (0.0 < (float) $answer->getPonderation()) {
+            if ((float) $answer->getPonderation() > 0.0) {
                 ++$scoringZoneCount;
             }
 
             foreach ($points as $point) {
                 $pointAnswerId = (int) ($point['answerId'] ?? 0);
-                if (0 < $pointAnswerId && $pointAnswerId !== $answerId) {
+                if ($pointAnswerId > 0 && $pointAnswerId !== $answerId) {
                     continue;
                 }
 
@@ -965,6 +971,7 @@ final readonly class ExerciseAttemptScoringService
                     if (!$combination) {
                         $score += (float) $answer->getPonderation();
                     }
+
                     break;
                 }
             }
@@ -974,7 +981,7 @@ final readonly class ExerciseAttemptScoringService
             return $score;
         }
 
-        return 0 < $scoringZoneCount && \count($matchedAnswerIds) >= $scoringZoneCount ? $questionWeight : 0.0;
+        return $scoringZoneCount > 0 && \count($matchedAnswerIds) >= $scoringZoneCount ? $questionWeight : 0.0;
     }
 
     /**
@@ -1010,12 +1017,12 @@ final readonly class ExerciseAttemptScoringService
         }
 
         $parts = array_map('trim', explode(';', $coordinateValue));
-        if (2 > \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+        if (\count($parts) < 2 || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
             return null;
         }
 
         $point = ['x' => (float) $parts[0], 'y' => (float) $parts[1]];
-        if (0 < $answerId) {
+        if ($answerId > 0) {
             $point['answerId'] = $answerId;
         }
 
@@ -1057,7 +1064,7 @@ final readonly class ExerciseAttemptScoringService
     private function isPointInEllipse(array $point, string $coordinates): bool
     {
         [$origin, $width, $height] = $this->parseBoxCoordinates($coordinates);
-        if (null === $origin || 0.0 >= $width || 0.0 >= $height) {
+        if (null === $origin || $width <= 0.0 || $height <= 0.0) {
             return false;
         }
 
@@ -1097,7 +1104,7 @@ final readonly class ExerciseAttemptScoringService
         }
 
         $count = \count($vertices);
-        if (3 > $count) {
+        if ($count < 3) {
             return false;
         }
 
@@ -1130,7 +1137,7 @@ final readonly class ExerciseAttemptScoringService
         }
 
         [$answerId, $studentAnswer] = $this->parseCalculatedStudentAnswer((string) $row->getAnswer());
-        $teacherAnswer = 0 < $answerId && isset($answers[$answerId]) ? $answers[$answerId] : reset($answers);
+        $teacherAnswer = $answerId > 0 && isset($answers[$answerId]) ? $answers[$answerId] : reset($answers);
         if (!$teacherAnswer instanceof CQuizAnswer) {
             return 0.0;
         }
@@ -1222,7 +1229,7 @@ final readonly class ExerciseAttemptScoringService
         foreach ($rows as $row) {
             $answerId = (int) $row->getPosition();
             $selectedPosition = (int) $row->getAnswer();
-            if (0 < $answerId && 0 < $selectedPosition) {
+            if ($answerId > 0 && $selectedPosition > 0) {
                 $positions[$answerId] = $selectedPosition;
             }
         }
@@ -1231,8 +1238,6 @@ final readonly class ExerciseAttemptScoringService
     }
 
     /**
-     * @param array<int, TrackEAttempt> $rows
-     *
      * @return array<int, int>
      */
     private function requiresManualCorrection(CQuizQuestion $question): bool
@@ -1245,7 +1250,7 @@ final readonly class ExerciseAttemptScoringService
         $answerIds = [];
         foreach ($rows as $row) {
             $answerId = (int) $row->getAnswer();
-            if (0 < $answerId && !\in_array($answerId, $answerIds, true)) {
+            if ($answerId > 0 && !\in_array($answerId, $answerIds, true)) {
                 $answerIds[] = $answerId;
             }
         }
@@ -1267,5 +1272,4 @@ final readonly class ExerciseAttemptScoringService
             return;
         }
     }
-
 }

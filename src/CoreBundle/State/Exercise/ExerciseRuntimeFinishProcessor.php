@@ -39,6 +39,9 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+
 /**
  * Finishes Vue runtime attempts using native Symfony/Doctrine scoring rules mirrored from the verified legacy rules.
  *
@@ -159,7 +162,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : (int) ($data->attemptId ?? 0);
 
-        if (0 >= $exerciseId || 0 >= $attemptId) {
+        if ($exerciseId <= 0 || $attemptId <= 0) {
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
@@ -197,7 +200,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             $score = $this->scoreQuestion($quiz, $question, $answers, $options, $rows);
             $weight = $this->getQuestionWeight($question, $answers);
 
-            if (0 === (int) $quiz->getPropagateNeg() && 0 > $score) {
+            if (0 === (int) $quiz->getPropagateNeg() && $score < 0) {
                 $score = 0.0;
             }
 
@@ -211,7 +214,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             $totalWeight += $weight;
         }
 
-        if (0.0 >= $totalWeight) {
+        if ($totalWeight <= 0.0) {
             $totalWeight = (float) $attempt->getMaxScore();
         }
 
@@ -249,7 +252,6 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         return $response;
     }
 
-
     /**
      * @return array<string, mixed>
      */
@@ -269,7 +271,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $lpItemId = $this->getPositiveQueryInt($request, 'learnpath_item_id', $attempt->getOrigLpItemId());
         $lpItemViewId = $this->getPositiveQueryInt($request, 'learnpath_item_view_id', $attempt->getOrigLpItemViewId());
 
-        if (0 >= $lpId || 0 >= $lpItemId) {
+        if ($lpId <= 0 || $lpItemId <= 0) {
             return [];
         }
 
@@ -325,9 +327,9 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             || $request->query->has('learnpath_id')
             || $request->query->has('learnpath_item_id')
             || $request->query->has('learnpath_item_view_id')
-            || 0 < (int) $attempt->getOrigLpId()
-            || 0 < (int) $attempt->getOrigLpItemId()
-            || 0 < (int) $attempt->getOrigLpItemViewId();
+            || (int) $attempt->getOrigLpId() > 0
+            || (int) $attempt->getOrigLpItemId() > 0
+            || (int) $attempt->getOrigLpItemViewId() > 0;
     }
 
     private function getPositiveQueryInt(Request $request, string $name, int $fallback = 0): int
@@ -389,7 +391,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             ->setMaxResults(1)
         ;
 
-        if (0 < $lpItemViewId) {
+        if ($lpItemViewId > 0) {
             $queryBuilder
                 ->andWhere('itemView.iid = :lpItemViewId')
                 ->setParameter('lpItemViewId', $lpItemViewId, Types::INTEGER)
@@ -427,7 +429,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             && $passPercentage > 0
         ) {
             $status = self::LP_STATUS_FAILED;
-            $percentage = 0.0 < $maxScore ? ($score / $maxScore) * 100 : 0.0;
+            $percentage = $maxScore > 0.0 ? ($score / $maxScore) * 100 : 0.0;
             if ($percentage >= (float) $passPercentage) {
                 $status = self::LP_STATUS_PASSED;
             }
@@ -442,7 +444,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function updateLearnpathProgress(CLpView $lpView): array
     {
         $lpId = (int) ($lpView->getLp()->getIid() ?? 0);
-        if (0 >= $lpId) {
+        if ($lpId <= 0) {
             return ['completedItems' => 0, 'totalItems' => 0, 'progress' => 0, 'progressMode' => '%'];
         }
 
@@ -457,7 +459,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             ->getSingleScalarResult()
         ;
 
-        if (0 >= $totalItems) {
+        if ($totalItems <= 0) {
             $lpView->setProgress(0);
 
             return ['completedItems' => 0, 'totalItems' => 0, 'progress' => 0, 'progressMode' => '%'];
@@ -502,7 +504,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         }
 
         $attemptId = (int) $attempt->getExeId();
-        if (0 >= $attemptId) {
+        if ($attemptId <= 0) {
             return;
         }
 
@@ -545,7 +547,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -560,7 +562,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -571,7 +573,6 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
         return $session;
     }
-
 
     private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool
     {
@@ -586,11 +587,11 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $origin = strtolower(trim((string) $request->query->get('origin', '')));
         $hasLearnpathContext = 'learnpath' === $origin
             || $request->query->has('lp_init')
-            || 0 < $learnpathId
-            || 0 < $learnpathItemId
-            || 0 < $learnpathItemViewId;
+            || $learnpathId > 0
+            || $learnpathItemId > 0
+            || $learnpathItemViewId > 0;
 
-        if (!$hasLearnpathContext || 0 >= $learnpathId || 0 >= $learnpathItemId) {
+        if (!$hasLearnpathContext || $learnpathId <= 0 || $learnpathItemId <= 0) {
             return false;
         }
 
@@ -600,7 +601,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         }
 
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return false;
         }
 
@@ -640,7 +641,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             return false;
         }
 
-        if (0 >= $learnpathItemViewId) {
+        if ($learnpathItemViewId <= 0) {
             return true;
         }
 
@@ -898,7 +899,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
     /**
      * @param array<int, CQuizQuestion> $questions
-     * @param array<int, int> $questionIds
+     * @param array<int, int>           $questionIds
      */
     private function recordProgressiveAdaptiveResult(CQuiz $quiz, TrackEExercise $attempt, array $questions, array $questionIds, User $user): void
     {
@@ -929,7 +930,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
     /**
      * @param array<int, CQuizQuestion> $questions
-     * @param array<int, int> $questionIds
+     * @param array<int, int>           $questionIds
      */
     private function resolveProgressiveAdaptiveAchievedLevel(array $questions, array $questionIds): string
     {
@@ -980,7 +981,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             }
 
             $questionId = (int) ($row['questionId'] ?? 0);
-            if (0 < $questionId && !\in_array($questionId, $questionIds, true)) {
+            if ($questionId > 0 && !\in_array($questionId, $questionIds, true)) {
                 $questionIds[] = $questionId;
             }
         }
@@ -1116,7 +1117,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function scoreUniqueAnswer(array $answers, array $rows): float
     {
         $selectedAnswerId = $this->getFirstSavedAnswerId($rows);
-        if (0 >= $selectedAnswerId || !isset($answers[$selectedAnswerId])) {
+        if ($selectedAnswerId <= 0 || !isset($answers[$selectedAnswerId])) {
             return 0.0;
         }
 
@@ -1179,13 +1180,15 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
             $studentChoice = $choices[$answerId] ?? 0;
-            if (0 >= $studentChoice) {
+            if ($studentChoice <= 0) {
                 $score += $doubtScore;
+
                 continue;
             }
 
             if ($this->isTrueFalseChoiceCorrect($studentChoice, (int) $answer->getCorrect(), $options)) {
                 $score += $trueScore;
+
                 continue;
             }
 
@@ -1215,16 +1218,17 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
             $studentChoice = (int) ($choices[$answerId]['choice'] ?? 0);
-            if (0 >= $studentChoice) {
+            if ($studentChoice <= 0) {
                 continue;
             }
 
             $studentDegreeChoice = (int) ($choices[$answerId]['degree'] ?? 0);
             $studentDegreeChoicePosition = $this->getTrueFalseOptionPosition($studentDegreeChoice, $options);
-            $hasCertainty = 3 <= $studentDegreeChoicePosition && 9 > $studentDegreeChoicePosition;
+            $hasCertainty = $studentDegreeChoicePosition >= 3 && $studentDegreeChoicePosition < 9;
 
             if ($this->isTrueFalseChoiceCorrect($studentChoice, (int) $answer->getCorrect(), $options)) {
                 $score += $hasCertainty ? $trueScore : $doubtScore;
+
                 continue;
             }
 
@@ -1247,7 +1251,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
             $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
             $degreeId = isset($parts[2]) ? (int) $parts[2] : 0;
-            if (0 < $answerId && 0 < $optionId) {
+            if ($answerId > 0 && $optionId > 0) {
                 $choices[$answerId] = [
                     'choice' => $optionId,
                     'degree' => $degreeId,
@@ -1306,19 +1310,20 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             $parts = explode(':', (string) $row->getAnswer());
             $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
             $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
-            if (0 < $answerId && 0 < $optionId) {
+            if ($answerId > 0 && $optionId > 0) {
                 $choices[$answerId] = $optionId;
             }
         }
 
         return $choices;
     }
+
     /**
      * @param array<int, CQuizQuestionOption> $options
      */
     private function isTrueFalseChoiceCorrect(int $studentChoice, int $correctChoice, array $options): bool
     {
-        if (0 >= $studentChoice || 0 >= $correctChoice) {
+        if ($studentChoice <= 0 || $correctChoice <= 0) {
             return false;
         }
 
@@ -1329,7 +1334,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $studentPosition = $this->getTrueFalseOptionPosition($studentChoice, $options);
         $correctPosition = $this->getTrueFalseOptionPosition($correctChoice, $options);
 
-        return 0 < $studentPosition && $studentPosition === $correctPosition;
+        return $studentPosition > 0 && $studentPosition === $correctPosition;
     }
 
     /**
@@ -1377,7 +1382,6 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
         return '';
     }
-
 
     /**
      * @param array<int, CQuizAnswer>   $answers
@@ -1552,7 +1556,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     {
         $normalizedStudentAnswer = $caseInsensitive ? mb_strtolower($studentAnswer) : $studentAnswer;
 
-        if (false !== strpos($correctAnswer, '|') && false === strpos($correctAnswer, '||')) {
+        if (str_contains($correctAnswer, '|') && !str_contains($correctAnswer, '||')) {
             $menuAnswers = array_map([$this, 'trimFillBlankOption'], explode('|', $correctAnswer));
             $firstAnswer = (string) ($menuAnswers[0] ?? '');
             $normalizedFirstAnswer = $caseInsensitive ? mb_strtolower($firstAnswer) : $firstAnswer;
@@ -1560,7 +1564,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             return $normalizedStudentAnswer === $normalizedFirstAnswer || $normalizedStudentAnswer === sha1($normalizedFirstAnswer);
         }
 
-        if (false !== strpos($correctAnswer, '||')) {
+        if (str_contains($correctAnswer, '||')) {
             $answers = array_map([$this, 'trimFillBlankOption'], preg_split('/\|\|/', $correctAnswer) ?: []);
             foreach ($answers as $answer) {
                 $candidate = $caseInsensitive ? mb_strtolower($answer) : $answer;
@@ -1615,7 +1619,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
         foreach ($answers as $answer) {
             $correctPosition = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $correctPosition) {
+            if ($correctPosition <= 0) {
                 continue;
             }
 
@@ -1650,7 +1654,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             }
         }
 
-        return 0 < $optionCount && $correctCount === $optionCount ? (float) $question->getPonderation() : 0.0;
+        return $optionCount > 0 && $correctCount === $optionCount ? (float) $question->getPonderation() : 0.0;
     }
 
     /**
@@ -1663,7 +1667,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $choices = [];
         foreach ($rows as $row) {
             $position = $row->getPosition();
-            if (null === $position || 0 >= $position) {
+            if (null === $position || $position <= 0) {
                 continue;
             }
 
@@ -1695,13 +1699,13 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
                 continue;
             }
 
-            if (0.0 < (float) $answer->getPonderation()) {
+            if ((float) $answer->getPonderation() > 0.0) {
                 ++$scoringZoneCount;
             }
 
             foreach ($points as $point) {
                 $pointAnswerId = (int) ($point['answerId'] ?? 0);
-                if (0 < $pointAnswerId && $pointAnswerId !== $answerId) {
+                if ($pointAnswerId > 0 && $pointAnswerId !== $answerId) {
                     continue;
                 }
 
@@ -1710,6 +1714,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
                     if (!$combination) {
                         $score += (float) $answer->getPonderation();
                     }
+
                     break;
                 }
             }
@@ -1719,7 +1724,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             return $score;
         }
 
-        return 0 < $scoringZoneCount && \count($matchedAnswerIds) >= $scoringZoneCount ? $questionWeight : 0.0;
+        return $scoringZoneCount > 0 && \count($matchedAnswerIds) >= $scoringZoneCount ? $questionWeight : 0.0;
     }
 
     /**
@@ -1729,7 +1734,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function scoreHotspotDelineationAnswer(CQuiz $quiz, CQuizQuestion $question, array $answers, array $rows): float
     {
         $studentPolygon = $this->getSavedDelineationPolygon($rows);
-        if (3 > \count($studentPolygon)) {
+        if (\count($studentPolygon) < 3) {
             return 0.0;
         }
 
@@ -1739,6 +1744,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             $hotspotType = (string) $answer->getHotspotType();
             if ('delineation' === $hotspotType && null === $teacherDelineation) {
                 $teacherDelineation = $answer;
+
                 continue;
             }
 
@@ -1752,7 +1758,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         }
 
         $teacherPolygon = $this->parseDelineationPolygon((string) $teacherDelineation->getHotspotCoordinates());
-        if (3 > \count($teacherPolygon)) {
+        if (\count($teacherPolygon) < 3) {
             return 0.0;
         }
 
@@ -1773,14 +1779,14 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
         foreach ($organsAtRisk as $organAtRisk) {
             $organPolygon = $this->parseDelineationPolygon((string) $organAtRisk->getHotspotCoordinates());
-            if (3 <= \count($organPolygon) && $this->polygonsOverlap($studentPolygon, $organPolygon)) {
+            if (\count($organPolygon) >= 3 && $this->polygonsOverlap($studentPolygon, $organPolygon)) {
                 return 0.0;
             }
         }
 
         $score = (float) $teacherDelineation->getPonderation();
 
-        return 0.0 < $score ? $score : (float) $question->getPonderation();
+        return $score > 0.0 ? $score : (float) $question->getPonderation();
     }
 
     /**
@@ -1823,7 +1829,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function removeDuplicateClosingPoint(array $points): array
     {
         $count = \count($points);
-        if (4 > $count) {
+        if ($count < 4) {
             return $points;
         }
 
@@ -1875,7 +1881,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             }
         }
 
-        if (0 >= $expectedArea) {
+        if ($expectedArea <= 0) {
             return ['overlap' => 0.0, 'missing' => 100.0, 'excess' => 100.0];
         }
 
@@ -2004,12 +2010,12 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         }
 
         $parts = array_map('trim', explode(';', $coordinateValue));
-        if (2 > \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+        if (\count($parts) < 2 || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
             return null;
         }
 
         $point = ['x' => (float) $parts[0], 'y' => (float) $parts[1]];
-        if (0 < $answerId) {
+        if ($answerId > 0) {
             $point['answerId'] = $answerId;
         }
 
@@ -2051,7 +2057,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function isPointInEllipse(array $point, string $coordinates): bool
     {
         [$origin, $width, $height] = $this->parseBoxCoordinates($coordinates);
-        if (null === $origin || 0.0 >= $width || 0.0 >= $height) {
+        if (null === $origin || $width <= 0.0 || $height <= 0.0) {
             return false;
         }
 
@@ -2091,7 +2097,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         }
 
         $count = \count($vertices);
-        if (3 > $count) {
+        if ($count < 3) {
             return false;
         }
 
@@ -2124,7 +2130,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         }
 
         [$answerId, $studentAnswer] = $this->parseCalculatedStudentAnswer((string) $row->getAnswer());
-        $teacherAnswer = 0 < $answerId && isset($answers[$answerId]) ? $answers[$answerId] : reset($answers);
+        $teacherAnswer = $answerId > 0 && isset($answers[$answerId]) ? $answers[$answerId] : reset($answers);
         if (!$teacherAnswer instanceof CQuizAnswer) {
             return 0.0;
         }
@@ -2216,7 +2222,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         foreach ($rows as $row) {
             $answerId = (int) $row->getPosition();
             $selectedPosition = (int) $row->getAnswer();
-            if (0 < $answerId && 0 < $selectedPosition) {
+            if ($answerId > 0 && $selectedPosition > 0) {
                 $positions[$answerId] = $selectedPosition;
             }
         }
@@ -2225,8 +2231,6 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     }
 
     /**
-     * @param array<int, TrackEAttempt> $rows
-     *
      * @return array<int, int>
      */
     private function requiresManualCorrection(CQuizQuestion $question): bool
@@ -2239,7 +2243,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $answerIds = [];
         foreach ($rows as $row) {
             $answerId = (int) $row->getAnswer();
-            if (0 < $answerId && !\in_array($answerId, $answerIds, true)) {
+            if ($answerId > 0 && !\in_array($answerId, $answerIds, true)) {
                 $answerIds[] = $answerId;
             }
         }

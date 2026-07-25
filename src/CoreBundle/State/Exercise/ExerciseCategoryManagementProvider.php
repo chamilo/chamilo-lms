@@ -81,7 +81,7 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -96,7 +96,7 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 

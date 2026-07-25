@@ -17,6 +17,10 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizDestinationResult;
@@ -24,10 +28,6 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
-use Chamilo\CourseBundle\Entity\CLpItem;
-use Chamilo\CourseBundle\Entity\CLpItemView;
-use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 /**
  * Read-only provider for migrated exercise runtime result/review data.
@@ -93,7 +94,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : 0;
-        if (0 >= $exerciseId || 0 >= $attemptId) {
+        if ($exerciseId <= 0 || $attemptId <= 0) {
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
@@ -169,14 +170,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private function getCorrectionHistory(TrackEExercise $attempt, array $questions): array
     {
         $attemptId = (int) $attempt->getExeId();
-        if (0 >= $attemptId) {
+        if ($attemptId <= 0) {
             return [];
         }
 
         $questionTitles = [];
         foreach ($questions as $question) {
             $questionId = (int) ($question['id'] ?? 0);
-            if (0 >= $questionId) {
+            if ($questionId <= 0) {
                 continue;
             }
 
@@ -219,7 +220,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 'teacherComment' => (string) ($row['teacher_comment'] ?? ''),
                 'authorId' => (int) ($row['author'] ?? 0),
                 'authorName' => $authorName,
-                'isOriginalValue' => 0 >= (int) ($row['author'] ?? 0),
+                'isOriginalValue' => (int) ($row['author'] ?? 0) <= 0,
                 'insertedAt' => $this->formatNullableDate($row['insert_date'] ?? null),
             ];
         }
@@ -240,7 +241,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         try {
             return (new DateTimeImmutable($rawValue))->format(DateTimeInterface::ATOM);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return $rawValue;
         }
     }
@@ -267,7 +268,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -282,7 +283,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -412,11 +413,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $origin = strtolower(trim((string) $request->query->get('origin', '')));
         $hasLearnpathContext = 'learnpath' === $origin
             || $request->query->has('lp_init')
-            || 0 < $learnpathId
-            || 0 < $learnpathItemId
-            || 0 < $learnpathItemViewId;
+            || $learnpathId > 0
+            || $learnpathItemId > 0
+            || $learnpathItemViewId > 0;
 
-        if (!$hasLearnpathContext || 0 >= $learnpathId || 0 >= $learnpathItemId) {
+        if (!$hasLearnpathContext || $learnpathId <= 0 || $learnpathItemId <= 0) {
             return false;
         }
 
@@ -426,7 +427,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if (0 >= $exerciseId) {
+        if ($exerciseId <= 0) {
             return false;
         }
 
@@ -466,7 +467,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             return false;
         }
 
-        if (0 >= $learnpathItemViewId) {
+        if ($learnpathItemViewId <= 0) {
             return true;
         }
 
@@ -608,7 +609,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             }
 
             $questionId = (int) ($row['questionId'] ?? 0);
-            if (0 < $questionId) {
+            if ($questionId > 0) {
                 $questionIds[] = $questionId;
             }
         }
@@ -666,7 +667,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             }
 
             $questionId = (int) $row->getQuestionId();
-            if (0 >= $questionId) {
+            if ($questionId <= 0) {
                 continue;
             }
 
@@ -812,7 +813,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private function isLastAllowedAttempt(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session): bool
     {
         $maxAttempt = (int) $quiz->getMaxAttempt();
-        if (0 >= $maxAttempt) {
+        if ($maxAttempt <= 0) {
             return false;
         }
 
@@ -850,9 +851,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     {
         $score = (float) $attempt->getScore();
         $maxScore = (float) $attempt->getMaxScore();
-        $percentage = 0.0 < $maxScore ? round(($score / $maxScore) * 100, 2) : 0.0;
+        $percentage = $maxScore > 0.0 ? round(($score / $maxScore) * 100, 2) : 0.0;
         $passPercentage = (int) ($quiz->getPassPercentage() ?? 0);
-        $hasPassPercentage = 0 < $passPercentage;
+        $hasPassPercentage = $passPercentage > 0;
         $passed = $hasPassPercentage ? $percentage >= (float) $passPercentage : null;
 
         return [
@@ -985,7 +986,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             $rows[] = $this->normalizeCategoryScoreRow($row);
         }
 
-        if (null !== $noneRow && 0.0 < (float) ($noneRow['maxScore'] ?? 0.0)) {
+        if (null !== $noneRow && (float) ($noneRow['maxScore'] ?? 0.0) > 0.0) {
             $rows[] = $this->normalizeCategoryScoreRow($noneRow);
         }
 
@@ -1047,16 +1048,16 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'labelKey' => isset($row['labelKey']) ? (string) $row['labelKey'] : null,
             'score' => $score,
             'maxScore' => $maxScore,
-            'percentage' => 0.0 < $maxScore ? round(($score / $maxScore) * 100, 2) : 0.0,
+            'percentage' => $maxScore > 0.0 ? round(($score / $maxScore) * 100, 2) : 0.0,
             'isTotal' => true === ($row['isTotal'] ?? false),
         ];
     }
 
     /**
-     * @param array<int, int>                      $questionIds
+     * @param array<int, int>                       $questionIds
      * @param array<int, array<int, TrackEAttempt>> $rowsByQuestion
-     * @param array<string, mixed>                 $visibility
-     * @param array<int, int>                      $pendingQuestionIds
+     * @param array<string, mixed>                  $visibility
+     * @param array<int, int>                       $pendingQuestionIds
      *
      * @return array<int, array<string, mixed>>
      */
@@ -1123,7 +1124,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $maxScore = $this->getQuestionMaxScore($question);
         $requiresManualCorrection = $this->requiresManualCorrection($question);
         $isStructuralContent = $this->isStructuralContentQuestion($question);
-        $isCorrect = 0 < $maxScore ? $questionScore >= $maxScore : 0 < $questionScore;
+        $isCorrect = $maxScore > 0 ? $questionScore >= $maxScore : $questionScore > 0;
         if ($isStructuralContent || ($requiresManualCorrection && $pendingCorrection)) {
             $isCorrect = null;
         }
@@ -1153,14 +1154,13 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         ];
     }
 
-
     /**
      * @return array<string, mixed>|null
      */
     private function normalizeParentMediaQuestion(CQuizQuestion $question): ?array
     {
         $parentId = (int) ($question->getParentMediaId() ?? 0);
-        if (0 >= $parentId) {
+        if ($parentId <= 0) {
             return null;
         }
 
@@ -1181,7 +1181,6 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ],
         ];
     }
-
 
     private function getQuestionMaxScore(CQuizQuestion $question): float
     {
@@ -1234,8 +1233,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         array $visibility,
         bool $showQuestionCorrection,
         bool $isCorrect,
-    ): ?string
-    {
+    ): ?string {
         if (
             $isCorrect
             || !$showQuestionCorrection
@@ -1254,7 +1252,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             return false;
         }
 
-        return 0.0 < $questionScore;
+        return $questionScore > 0.0;
     }
 
     /**
@@ -1374,13 +1372,13 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 if ($isDegreeCertainty) {
                     $selectedOption = (int) ($degreeCertaintyChoices[$answerId]['choice'] ?? 0);
                     $selectedDegree = (int) ($degreeCertaintyChoices[$answerId]['degree'] ?? 0);
-                    $choice['selectedDegreeId'] = $showStudentAnswers && 0 < $selectedDegree ? $selectedDegree : null;
+                    $choice['selectedDegreeId'] = $showStudentAnswers && $selectedDegree > 0 ? $selectedDegree : null;
                     $choice['selectedDegreeLabel'] = $showStudentAnswers ? $this->getOptionTitle($options, $selectedDegree) : '';
                 } else {
                     $selectedOption = $trueFalseChoices[$answerId] ?? 0;
                 }
 
-                $choice['selectedOptionId'] = $showStudentAnswers && 0 < $selectedOption ? $selectedOption : null;
+                $choice['selectedOptionId'] = $showStudentAnswers && $selectedOption > 0 ? $selectedOption : null;
                 $choice['selectedOptionLabel'] = $showStudentAnswers ? $this->getOptionTitle($options, $selectedOption) : '';
             }
 
@@ -1423,7 +1421,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
             $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
             $degreeId = isset($parts[2]) ? (int) $parts[2] : 0;
-            if (0 < $answerId && 0 < $optionId) {
+            if ($answerId > 0 && $optionId > 0) {
                 $choices[$answerId] = [
                     'choice' => $optionId,
                     'degree' => $degreeId,
@@ -1490,7 +1488,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
-            if (0 < (int) ($answer->getCorrect() ?? 0)) {
+            if ((int) ($answer->getCorrect() ?? 0) > 0) {
                 continue;
             }
 
@@ -1504,7 +1502,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
             $correct = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $correct) {
+            if ($correct <= 0) {
                 continue;
             }
 
@@ -1553,7 +1551,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         foreach ($this->getOrderedAnswers($question) as $answer) {
             $answerId = (int) $answer->getIid();
             $targetPosition = (int) ($answer->getCorrect() ?? 0);
-            if (0 >= $targetPosition) {
+            if ($targetPosition <= 0) {
                 continue;
             }
 
@@ -1629,7 +1627,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         return [
             'kind' => 'dropdown',
-            'selectedId' => $showStudentAnswers && 0 < $selectedId ? $selectedId : null,
+            'selectedId' => $showStudentAnswers && $selectedId > 0 ? $selectedId : null,
             'options' => $options,
         ];
     }
@@ -1648,7 +1646,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             [$answerId, $studentAnswer] = $this->parseCalculatedStudentAnswer((string) $row->getAnswer());
         }
 
-        $teacherAnswer = 0 < $answerId ? $this->getAnswerById($question, $answerId) : $this->getFirstAnswer($question);
+        $teacherAnswer = $answerId > 0 ? $this->getAnswerById($question, $answerId) : $this->getFirstAnswer($question);
         $parsedTeacherAnswer = $teacherAnswer instanceof CQuizAnswer
             ? $this->parseCalculatedTeacherAnswer((string) $teacherAnswer->getAnswer())
             : ['text' => '', 'expectedAnswer' => ''];
@@ -1771,7 +1769,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             }
 
             $parts = array_map('trim', explode(';', $coordinateValue));
-            if (2 > \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+            if (\count($parts) < 2 || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
                 continue;
             }
 
@@ -1780,7 +1778,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 'y' => (float) $parts[1],
                 'label' => $index + 1,
             ];
-            if (0 < $answerId) {
+            if ($answerId > 0) {
                 $point['answerId'] = $answerId;
             }
 
@@ -1794,7 +1792,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     {
         try {
             return $this->resourceNodeRepository->getResourceFileUrl($question->getResourceNode());
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return '';
         }
     }
@@ -1894,13 +1892,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                     }
                 }
 
-                if (2 <= \count($points)) {
+                if (\count($points) >= 2) {
                     $result['paths'][] = ['points' => $points];
                 }
+
                 continue;
             }
 
-            if ('T' === $type && 2 <= \count($parts)) {
+            if ('T' === $type && \count($parts) >= 2) {
                 $text = trim((string) array_shift($parts));
                 $decoded = $this->decodeAnnotationPoint((string) ($parts[0] ?? ''));
                 if ('' !== $text && null !== $decoded) {
@@ -1922,7 +1921,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private function decodeAnnotationPoint(string $value): ?array
     {
         $parts = array_map('trim', explode(';', $value));
-        if (2 > \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+        if (\count($parts) < 2 || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
             return null;
         }
 
@@ -2051,7 +2050,6 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         return $files;
     }
 
-
     private function getAttemptFileDownloadUrl(TrackEAttempt $attemptRow, ResourceNode $resourceNode, bool $inline = false): string
     {
         $attempt = $attemptRow->getTrackEExercise();
@@ -2072,10 +2070,10 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $request = $this->requestStack->getCurrentRequest();
         if (null !== $request) {
             if ($inline) {
-            $query['inline'] = 1;
-        }
+                $query['inline'] = 1;
+            }
 
-        foreach (['gid', 'origin', 'learnpath_id', 'learnpath_item_id', 'learnpath_item_view_id'] as $queryKey) {
+            foreach (['gid', 'origin', 'learnpath_id', 'learnpath_item_id', 'learnpath_item_view_id'] as $queryKey) {
                 $value = $request->query->get($queryKey);
                 if (null !== $value && '' !== (string) $value) {
                     $query[$queryKey] = (string) $value;
@@ -2083,7 +2081,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             }
         }
 
-        return sprintf(
+        return \sprintf(
             '/api/exercise/runtime/%d/attempt/%d/file/%d/download?%s',
             (int) $quiz->getIid(),
             (int) $attempt->getExeId(),
@@ -2169,7 +2167,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $answerIds = [];
         foreach ($rows as $row) {
             $answerId = (int) $row->getAnswer();
-            if (0 < $answerId && !\in_array($answerId, $answerIds, true)) {
+            if ($answerId > 0 && !\in_array($answerId, $answerIds, true)) {
                 $answerIds[] = $answerId;
             }
         }
@@ -2199,7 +2197,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             $parts = explode(':', (string) $row->getAnswer());
             $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
             $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
-            if (0 < $answerId && 0 < $optionId) {
+            if ($answerId > 0 && $optionId > 0) {
                 $choices[$answerId] = $optionId;
             }
         }
@@ -2217,7 +2215,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $choices = [];
         foreach ($rows as $row) {
             $position = $row->getPosition();
-            if (null === $position || 0 >= $position) {
+            if (null === $position || $position <= 0) {
                 continue;
             }
 
@@ -2386,14 +2384,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $currentUser = $this->security->getUser();
         $currentUserId = $currentUser instanceof User ? (int) $currentUser->getId() : 0;
         $attemptUserId = (int) $attempt->getUser()->getId();
-        $isLearningPathAttempt = 0 < (int) $attempt->getOrigLpId()
-            || 0 < (int) $attempt->getOrigLpItemId()
-            || 0 < (int) $attempt->getOrigLpItemViewId();
+        $isLearningPathAttempt = (int) $attempt->getOrigLpId() > 0
+            || (int) $attempt->getOrigLpItemId() > 0
+            || (int) $attempt->getOrigLpItemViewId() > 0;
         $isOwnAttempt = $currentUserId > 0 && $currentUserId === $attemptUserId;
         $showFinalActions = !$isReviewMode && !$isLearningPathAttempt && $isOwnAttempt;
         $attemptCount = $this->getAttemptCountForResultContext($quiz, $attempt, $course, $session);
         $maxAttempt = (int) $quiz->getMaxAttempt();
-        $attemptLimitReached = 0 < $maxAttempt && $attemptCount >= $maxAttempt;
+        $attemptLimitReached = $maxAttempt > 0 && $attemptCount >= $maxAttempt;
         $canTryAgain = $showFinalActions
             && $this->isExerciseOpenForRetry($quiz)
             && !$attemptLimitReached;
@@ -2405,7 +2403,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'canTryAgain' => $canTryAgain,
             'attemptCount' => $attemptCount,
             'maxAttempt' => $maxAttempt,
-            'remainingAttempts' => 0 < $maxAttempt ? max(0, $maxAttempt - $attemptCount) : null,
+            'remainingAttempts' => $maxAttempt > 0 ? max(0, $maxAttempt - $attemptCount) : null,
         ];
     }
 
@@ -2494,7 +2492,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             }
 
             $userId = (int) $row->getUser()->getId();
-            if (0 >= $userId || isset($bestAttemptsByUser[$userId])) {
+            if ($userId <= 0 || isset($bestAttemptsByUser[$userId])) {
                 continue;
             }
 
@@ -2534,5 +2532,4 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         return 'User #'.(int) $user->getId();
     }
-
 }

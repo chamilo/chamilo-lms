@@ -110,20 +110,20 @@ class CertificateController extends AbstractController
      */
     private function localizePublicAssetsForPdf(string $html, Request $request): string
     {
-        $publicPath = \realpath($this->projectDir.'/public');
+        $publicPath = realpath($this->projectDir.'/public');
 
         if (false === $publicPath) {
             return $html;
         }
 
-        $allowedHosts = [\strtolower($request->getHost()) => true];
-        $configuredHost = \parse_url((string) api_get_path(WEB_PATH), PHP_URL_HOST);
+        $allowedHosts = [strtolower($request->getHost()) => true];
+        $configuredHost = parse_url((string) api_get_path(WEB_PATH), PHP_URL_HOST);
 
         if (\is_string($configuredHost) && '' !== $configuredHost) {
-            $allowedHosts[\strtolower($configuredHost)] = true;
+            $allowedHosts[strtolower($configuredHost)] = true;
         }
 
-        $requestBasePath = \rtrim($request->getBaseUrl(), '/');
+        $requestBasePath = rtrim($request->getBaseUrl(), '/');
         $publicPrefix = $publicPath.DIRECTORY_SEPARATOR;
 
         $localizeUrl = static function (array $matches) use (
@@ -132,48 +132,48 @@ class CertificateController extends AbstractController
             $publicPrefix,
             $requestBasePath,
         ): string {
-            $url = \html_entity_decode($matches['url'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $url = html_entity_decode($matches['url'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
             $urlPath = $url;
 
-            if (\preg_match('~^https?://~i', $url)) {
-                $parts = \parse_url($url);
+            if (preg_match('~^https?://~i', $url)) {
+                $parts = parse_url($url);
 
                 if (!\is_array($parts) || !isset($parts['host'], $parts['path'])) {
                     return $matches[0];
                 }
 
-                if (!isset($allowedHosts[\strtolower((string) $parts['host'])])) {
+                if (!isset($allowedHosts[strtolower((string) $parts['host'])])) {
                     return $matches[0];
                 }
 
                 $urlPath = (string) $parts['path'];
             }
 
-            $urlPath = \rawurldecode($urlPath);
+            $urlPath = rawurldecode($urlPath);
 
-            if ('' !== $requestBasePath && \str_starts_with($urlPath, $requestBasePath.'/')) {
-                $urlPath = \substr($urlPath, \strlen($requestBasePath));
+            if ('' !== $requestBasePath && str_starts_with($urlPath, $requestBasePath.'/')) {
+                $urlPath = substr($urlPath, \strlen($requestBasePath));
             }
 
-            $localPath = \realpath($publicPath.'/'.\ltrim($urlPath, '/'));
+            $localPath = realpath($publicPath.'/'.ltrim($urlPath, '/'));
 
-            if (false === $localPath || !\is_file($localPath) || !\str_starts_with($localPath, $publicPrefix)) {
+            if (false === $localPath || !is_file($localPath) || !str_starts_with($localPath, $publicPrefix)) {
                 return $matches[0];
             }
 
             return $matches['prefix']
-                .\str_replace(DIRECTORY_SEPARATOR, '/', $localPath)
+                .str_replace(DIRECTORY_SEPARATOR, '/', $localPath)
                 .$matches['suffix'];
         };
 
-        $localizedHtml = \preg_replace_callback(
-            '~(?P<prefix>\\b(?:src|poster|background)\\s*=\\s*["\\\'])(?P<url>https?://[^"\\\']+|/(?!/)[^"\\\']+)(?P<suffix>["\\\'])~i',
+        $localizedHtml = preg_replace_callback(
+            '~(?P<prefix>\b(?:src|poster|background)\s*=\s*["\\\'])(?P<url>https?://[^"\\\']+|/(?!/)[^"\\\']+)(?P<suffix>["\\\'])~i',
             $localizeUrl,
             $html,
         ) ?? $html;
 
-        return \preg_replace_callback(
-            '~(?P<prefix>url\\(\\s*["\\\']?)(?P<url>https?://[^"\\\')\\s]+|/(?!/)[^"\\\')\\s]+)(?P<suffix>["\\\']?\\s*\\))~i',
+        return preg_replace_callback(
+            '~(?P<prefix>url\(\s*["\\\']?)(?P<url>https?://[^"\\\')\s]+|/(?!/)[^"\\\')\s]+)(?P<suffix>["\\\']?\s*\))~i',
             $localizeUrl,
             $localizedHtml,
         ) ?? $localizedHtml;

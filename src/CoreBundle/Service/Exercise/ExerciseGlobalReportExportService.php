@@ -6,8 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\Exercise;
 
+use CourseManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
+use Exercise;
+use ExerciseLib;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -36,7 +39,7 @@ final readonly class ExerciseGlobalReportExportService
         $this->requireLegacyExerciseClasses();
 
         $courseId = $this->resolveCourseId($request);
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -87,7 +90,7 @@ final readonly class ExerciseGlobalReportExportService
     {
         $courseId = $request->query->getInt('cid', $request->query->getInt('courseId'));
 
-        if (0 >= $courseId && \function_exists('api_get_course_int_id')) {
+        if ($courseId <= 0 && \function_exists('api_get_course_int_id')) {
             $courseId = (int) api_get_course_int_id();
         }
 
@@ -146,7 +149,7 @@ final readonly class ExerciseGlobalReportExportService
             }
 
             $studentId = (int) ($student['user_id'] ?? $student['id'] ?? 0);
-            if (0 >= $studentId) {
+            if ($studentId <= 0) {
                 continue;
             }
 
@@ -163,20 +166,21 @@ final readonly class ExerciseGlobalReportExportService
 
             foreach ($exercises as $exercise) {
                 $exerciseId = (int) ($exercise['iid'] ?? 0);
-                if (0 >= $exerciseId) {
+                if ($exerciseId <= 0) {
                     continue;
                 }
 
                 $attempt = $this->getFirstCompletedAttempt($courseId, $studentId, $exerciseId);
                 if (null === $attempt) {
                     $userExerciseData[$exerciseId] = null;
+
                     continue;
                 }
 
                 $stats = $this->getAttemptStats($courseId, $exerciseId, (int) $attempt['exe_id']);
                 foreach ($categories as $category) {
                     $categoryId = (int) ($category['id'] ?? 0);
-                    if (0 >= $categoryId) {
+                    if ($categoryId <= 0) {
                         continue;
                     }
 
@@ -234,8 +238,8 @@ final readonly class ExerciseGlobalReportExportService
      */
     private function getStudents(string $courseCode): array
     {
-        if (\class_exists('CourseManager')) {
-            $students = \CourseManager::get_student_list_from_course_code($courseCode);
+        if (class_exists('CourseManager')) {
+            $students = CourseManager::get_student_list_from_course_code($courseCode);
 
             return \is_array($students) ? $students : [];
         }
@@ -316,18 +320,19 @@ SQL;
      */
     private function getAttemptStats(int $courseId, int $exerciseId, int $attemptId): array
     {
-        if (!\class_exists('Exercise') || !\class_exists('ExerciseLib')) {
+        if (!class_exists('Exercise') || !class_exists('ExerciseLib')) {
             return ['category_list' => [], 'total_score' => null];
         }
 
-        $exercise = new \Exercise($courseId);
+        $exercise = new Exercise($courseId);
         if (!$exercise->read($exerciseId)) {
             return ['category_list' => [], 'total_score' => null];
         }
 
         ob_start();
+
         try {
-            $stats = \ExerciseLib::displayQuestionListByAttempt(
+            $stats = ExerciseLib::displayQuestionListByAttempt(
                 $exercise,
                 $attemptId,
                 false,
@@ -347,7 +352,7 @@ SQL;
     {
         $legacyBase = \function_exists('api_get_path') && \defined('SYS_CODE_PATH')
             ? rtrim((string) api_get_path(SYS_CODE_PATH), '/').'/'
-            : dirname(__DIR__, 4).'/public/main/';
+            : \dirname(__DIR__, 4).'/public/main/';
 
         $files = [
             $legacyBase.'exercise/exercise.class.php',
@@ -365,7 +370,7 @@ SQL;
     private function tableHasColumn(string $table, string $column): bool
     {
         $rows = $this->connection
-            ->executeQuery(sprintf('SHOW COLUMNS FROM %s LIKE :column', $table), ['column' => $column])
+            ->executeQuery(\sprintf('SHOW COLUMNS FROM %s LIKE :column', $table), ['column' => $column])
             ->fetchAllAssociative()
         ;
 

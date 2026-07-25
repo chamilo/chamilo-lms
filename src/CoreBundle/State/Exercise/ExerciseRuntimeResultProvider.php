@@ -740,6 +740,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'showTotalScore' => $showScore && false === $pageResultConfiguration['hideTotalScore'],
             'showQuestionScore' => $showQuestionScore,
             'showQuestionStatus' => $showQuestionScore,
+            'hideQuestionStatusLabel' => $this->isSettingEnabled('exercise.exercise_hide_label'),
             'showQuestionDetails' => $showQuestionDetails,
             'showCorrections' => $showExpectedAnswers,
             'showExpectedAnswers' => $showExpectedAnswers,
@@ -1127,7 +1128,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             $isCorrect = null;
         }
         $showQuestionCorrection = $this->shouldShowQuestionCorrection($rows, $visibility, true === $isCorrect);
-        $feedback = $this->getQuestionFeedback($question, $visibility, $showQuestionCorrection);
+        $feedback = $this->getQuestionFeedback($question, $visibility, $showQuestionCorrection, true === $isCorrect);
         if ($this->shouldHideManualCorrectionFeedback($requiresManualCorrection, $pendingCorrection, $questionScore)) {
             $feedback = null;
         }
@@ -1228,9 +1229,19 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     /**
      * @param array<string, mixed> $visibility
      */
-    private function getQuestionFeedback(CQuizQuestion $question, array $visibility, bool $showQuestionCorrection): ?string
+    private function getQuestionFeedback(
+        CQuizQuestion $question,
+        array $visibility,
+        bool $showQuestionCorrection,
+        bool $isCorrect,
+    ): ?string
     {
-        if (!$showQuestionCorrection || true !== ($visibility['showFeedback'] ?? false)) {
+        if (
+            $isCorrect
+            || !$showQuestionCorrection
+            || true !== ($visibility['showFeedback'] ?? false)
+            || !$this->isSettingEnabled('exercise.allow_quiz_question_feedback')
+        ) {
             return null;
         }
 

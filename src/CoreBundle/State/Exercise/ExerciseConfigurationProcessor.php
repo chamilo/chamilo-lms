@@ -48,7 +48,10 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class ExerciseConfigurationProcessor implements ProcessorInterface
 {
     private const FEEDBACK_TYPE_DIRECT = 1;
-    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 3;
+    private const FEEDBACK_TYPE_EXAM = 2;
+    private const FEEDBACK_TYPE_POPUP = 3;
+    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const CSRF_TOKEN_ID = 'exercise_configuration';
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
@@ -143,8 +146,11 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         }
 
         $feedbackType = $this->normalizeFeedbackType($data->feedbackType);
-        if (self::FEEDBACK_TYPE_DIRECT === $feedbackType && !$this->isSettingEnabled('enable_quiz_scenario')) {
-            $feedbackType = self::FEEDBACK_TYPE_DIRECT === $quiz->getFeedbackType() ? $quiz->getFeedbackType() : 0;
+        if (
+            \in_array($feedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP], true)
+            && !$this->isSettingEnabled('enable_quiz_scenario')
+        ) {
+            $feedbackType = $feedbackType === (int) $quiz->getFeedbackType() ? (int) $quiz->getFeedbackType() : 0;
         }
 
         if (self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE === $feedbackType && !$this->isProgressiveAdaptiveSettingEnabled()) {
@@ -152,7 +158,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         }
 
         $resultsDisabled = $this->normalizeResultsDisabled($data->resultsDisabled);
-        if (\in_array($feedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE], true)) {
+        if ($this->isImmediateFeedbackType($feedbackType)) {
             $resultsDisabled = 0;
         }
 
@@ -161,16 +167,16 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             $type = CQuiz::ONE_PER_PAGE;
         }
 
-        if (\in_array($feedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE], true)) {
+        if ($this->isImmediateFeedbackType($feedbackType)) {
             $type = CQuiz::ONE_PER_PAGE;
         }
 
-        $isExistingExercise = null !== $quiz->getIid();
-        $random = $isExistingExercise ? (int) $quiz->getRandom() : $this->normalizeRandomQuestionCount($data->random);
-        $maxAttempt = $isExistingExercise ? $quiz->getMaxAttempt() : max(0, $data->maxAttempt);
-        $propagateNeg = $isExistingExercise ? $quiz->getPropagateNeg() : ($data->propagateNeg ? 1 : 0);
-        $reviewAnswers = $isExistingExercise ? $quiz->getReviewAnswers() : ($data->reviewAnswers ? 1 : 0);
-        $expiredTime = $isExistingExercise ? $quiz->getExpiredTime() : max(0, $data->expiredTime);
+        $lockLearningPathFields = $this->shouldLockFieldsForEdit($quiz);
+        $random = $lockLearningPathFields ? (int) $quiz->getRandom() : $this->normalizeRandomQuestionCount($data->random);
+        $maxAttempt = $lockLearningPathFields ? $quiz->getMaxAttempt() : max(0, $data->maxAttempt);
+        $propagateNeg = $lockLearningPathFields ? $quiz->getPropagateNeg() : ($data->propagateNeg ? 1 : 0);
+        $reviewAnswers = $lockLearningPathFields ? $quiz->getReviewAnswers() : ($data->reviewAnswers ? 1 : 0);
+        $expiredTime = $lockLearningPathFields ? $quiz->getExpiredTime() : max(0, $data->expiredTime);
 
         $quiz
             ->setTitle(trim($data->title))
@@ -265,9 +271,28 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         return true === $value || 1 === $value || '1' === (string) $value || 'on' === strtolower((string) $value);
     }
 
+    private function isImmediateFeedbackType(int $feedbackType): bool
+    {
+        return \in_array(
+            $feedbackType,
+            [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE],
+            true,
+        );
+    }
+
     private function normalizeFeedbackType(int $feedbackType): int
     {
-        return \in_array($feedbackType, [0, 1, 2, 3], true) ? $feedbackType : 0;
+        return \in_array(
+            $feedbackType,
+            [
+                0,
+                self::FEEDBACK_TYPE_DIRECT,
+                self::FEEDBACK_TYPE_EXAM,
+                self::FEEDBACK_TYPE_POPUP,
+                self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE,
+            ],
+            true,
+        ) ? $feedbackType : 0;
     }
 
     private function normalizeResultsDisabled(int $resultsDisabled): int
@@ -494,7 +519,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $configuration->skillIds = $this->getSelectedSkillIds($quiz);
         $configuration->extraFieldValues = $this->getExerciseExtraFieldValues($quiz);
         $configuration->extraNotification = '';
-        $configuration->lockedFields = $this->getLockedFieldsForEdit();
+        $configuration->lockedFields = $this->getLockedFieldsForEdit($quiz);
         $configuration->startTime = $this->formatDateForInput($quiz->getStartTime());
         $configuration->endTime = $this->formatDateForInput($quiz->getEndTime());
         $configuration->duration = $quiz->getDuration();
@@ -680,12 +705,17 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     }
 
     /**
-     * Legacy freezes these fields after an exercise has been created.
+     * Legacy freezes these fields only when the exercise is linked to a learning path
+     * and the platform does not explicitly allow editing it there.
      *
      * @return array<int, string>
      */
-    private function getLockedFieldsForEdit(): array
+    private function getLockedFieldsForEdit(CQuiz $quiz): array
     {
+        if (!$this->shouldLockFieldsForEdit($quiz)) {
+            return [];
+        }
+
         return [
             'random',
             'maxAttempt',
@@ -694,6 +724,28 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             'expiredTime',
             'reviewAnswers',
         ];
+    }
+
+    private function shouldLockFieldsForEdit(CQuiz $quiz): bool
+    {
+        if (
+            null === $quiz->getIid()
+            || $this->isSettingEnabled('lp.force_edit_exercise_in_lp')
+        ) {
+            return false;
+        }
+
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('lpItem.iid')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseId', (string) $quiz->getIid(), Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
     private function saveCategoryMatrix(CQuiz $quiz, ExerciseConfiguration $data): void
@@ -720,7 +772,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         );
 
         foreach ($matrix as $categoryId => $categorySettings) {
-            if (0 === (int) $categoryId) {
+            if (0 === $categoryId) {
                 continue;
             }
 
@@ -913,7 +965,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             'categoryId' => 0,
             'title' => 'General',
             'availableQuestions' => $generalQuestionCount,
-            'countQuestions' => $savedCategorySettings[0]['countQuestions'] ?? -1,
+            'countQuestions' => $savedCategorySettings[0]['countQuestions'] ?? (0 === $generalQuestionCount ? 0 : -1),
             'destinations' => $savedCategorySettings[0]['destinations'] ?? '',
         ];
 
@@ -1062,11 +1114,16 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             ['value' => 2, 'label' => 'Exam (no feedback)'],
         ];
 
-        if ($this->isSettingEnabled('enable_quiz_scenario') || self::FEEDBACK_TYPE_DIRECT === (int) ($quiz?->getFeedbackType() ?? 0)) {
+        $currentFeedbackType = (int) ($quiz?->getFeedbackType() ?? 0);
+        if (
+            $this->isSettingEnabled('enable_quiz_scenario')
+            || \in_array($currentFeedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP], true)
+        ) {
             $options[] = ['value' => self::FEEDBACK_TYPE_DIRECT, 'label' => 'Adaptative test with immediate feedback'];
+            $options[] = ['value' => self::FEEDBACK_TYPE_POPUP, 'label' => 'Direct pop-up mode'];
         }
 
-        if ($this->isProgressiveAdaptiveSettingEnabled() || self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE === (int) ($quiz?->getFeedbackType() ?? 0)) {
+        if ($this->isProgressiveAdaptiveSettingEnabled() || self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE === $currentFeedbackType) {
             $options[] = ['value' => self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE, 'label' => 'Progressive adaptive'];
         }
 

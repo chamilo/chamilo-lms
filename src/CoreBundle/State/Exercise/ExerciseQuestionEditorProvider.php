@@ -302,6 +302,10 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->totalScore = (float) $summary['totalScore'];
         $response->categoryOptions = $this->getCategoryOptions($course, $session);
         $response->mediaOptions = $this->getMediaOptions($quiz, $question);
+        $response->attachedQuestions = [];
+        if ($question instanceof CQuizQuestion && self::MEDIA_QUESTION === (int) $question->getType()) {
+            $response->attachedQuestions = $this->getAttachedQuestions($quiz, $question);
+        }
         $response->legacyUrls = $this->getLegacyUrls($quiz, $course, $session);
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
@@ -322,6 +326,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->totalScore = 0.0;
         $response->categoryOptions = $this->getCategoryOptions($course, $session);
         $response->mediaOptions = [];
+        $response->attachedQuestions = [];
         $response->legacyUrls = [];
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
@@ -538,8 +543,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             ->select('question.iid')
             ->from(CQuizQuestion::class, 'question')
             ->leftJoin('question.resourceNode', 'questionNode')
-            ->andWhere('question = :question')
-            ->setParameter('question', $question)
+            ->andWhere('question.iid = :questionId')
+            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setMaxResults(1)
         ;
@@ -820,6 +825,53 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             $items[] = [
                 'label' => strip_tags($question->getQuestion()),
                 'value' => (int) $question->getIid(),
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return array<int, array{id: int, title: string, type: int, typeLabel: string, position: int}>
+     */
+    private function getAttachedQuestions(CQuiz $quiz, CQuizQuestion $mediaQuestion): array
+    {
+        $mediaQuestionId = (int) ($mediaQuestion->getIid() ?? 0);
+        if ($mediaQuestionId <= 0) {
+            return [];
+        }
+
+        $relations = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion', 'question')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.question', 'question')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->andWhere('question.parentMediaId = :mediaQuestionId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('mediaQuestionId', $mediaQuestionId, Types::INTEGER)
+            ->orderBy('relQuestion.questionOrder', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $items = [];
+        foreach ($relations as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $question = $relation->getQuestion();
+            if (!$question instanceof CQuizQuestion || null === $question->getIid()) {
+                continue;
+            }
+
+            $type = (int) $question->getType();
+            $items[] = [
+                'id' => (int) $question->getIid(),
+                'title' => trim(strip_tags($question->getQuestion())),
+                'type' => $type,
+                'typeLabel' => $this->getQuestionTypeLabel($type),
+                'position' => (int) $relation->getQuestionOrder(),
             ];
         }
 
@@ -1354,6 +1406,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
      */
     private function buildMatchingData(CQuizQuestion $question): array
     {
+        $type = (int) $question->getType();
         $answers = $this->entityManager->createQueryBuilder()
             ->select('answer')
             ->from(CQuizAnswer::class, 'answer')

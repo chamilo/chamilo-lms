@@ -417,22 +417,20 @@
           </div>
 
           <div class="grid gap-6 md:grid-cols-2">
-            <BaseInputText
+            <BaseCalendar
               v-if="form.enableStartTime"
               id="exercise-start-time"
               v-model="form.startTime"
               :label="t('Available from')"
-              name="startTime"
-              type="datetime-local"
+              show-time
             />
 
-            <BaseInputText
+            <BaseCalendar
               v-if="form.enableEndTime"
               id="exercise-end-time"
               v-model="form.endTime"
               :label="t('Until')"
-              name="endTime"
-              type="datetime-local"
+              show-time
             />
           </div>
 
@@ -564,47 +562,88 @@
         <section class="space-y-4 rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
           <h2 class="text-base font-semibold text-gray-90">{{ t("Extra settings") }}</h2>
 
-          <div class="grid gap-6 md:grid-cols-2">
-            <BaseSelect
-              v-if="settings.allowExerciseCategories && categoryOptions.length > 1"
-              id="exercise-category"
-              v-model="form.categoryId"
-              :label="t('Category')"
-              name="categoryId"
-              :options="categoryOptions"
-              option-label="label"
-              option-value="value"
-            />
+          <div
+            v-if="(settings.allowExerciseCategories && categoryOptions.length > 1) || languageOptions.length > 0"
+            class="space-y-3 rounded-lg border border-gray-20 bg-gray-5 p-3"
+          >
+            <div class="space-y-1">
+              <h3 class="text-sm font-semibold text-gray-90">{{ t("Classification") }}</h3>
+              <p class="text-xs text-gray-600">
+                {{ t("Use these fields to classify the exercise independently from its display options.") }}
+              </p>
+            </div>
 
-            <BaseSelect
-              v-if="languageOptions.length > 0"
-              id="exercise-language"
-              v-model="form.language"
-              :label="t('Language')"
-              name="language"
-              :options="languageOptions"
-              option-label="label"
-              option-value="value"
-            />
+            <div class="grid gap-6 md:grid-cols-2">
+              <BaseSelect
+                v-if="settings.allowExerciseCategories && categoryOptions.length > 1"
+                id="exercise-category"
+                v-model="form.categoryId"
+                :label="t('Category')"
+                name="categoryId"
+                :options="categoryOptions"
+                option-label="label"
+                option-value="value"
+              />
 
-            <BaseCheckbox
-              id="exercise-hide-attempts-table"
-              v-model="form.hideAttemptsTable"
-              :label="t('Hide attempts table on start page')"
-              name="hideAttemptsTable"
-            />
+              <div
+                v-if="languageOptions.length > 0"
+                class="space-y-2"
+              >
+                <BaseSelect
+                  id="exercise-language"
+                  v-model="form.language"
+                  :label="t('Language')"
+                  name="language"
+                  :options="languageOptions"
+                  option-label="label"
+                  option-value="value"
+                />
+                <p class="text-xs text-gray-600">
+                  {{ t("Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself.") }}
+                </p>
+              </div>
+            </div>
+          </div>
 
-            <BaseCheckbox
-              v-if="isEditMode"
-              id="exercise-update-title-in-learning-paths"
-              v-model="form.updateTitleInLearningPaths"
-              :label="t('Update this title in learning paths')"
-              name="updateTitleInLearningPaths"
-            />
+          <div class="space-y-3 rounded-lg border border-gray-20 bg-gray-5 p-3">
+            <h3 class="text-sm font-semibold text-gray-90">{{ t("Display and learning path") }}</h3>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <BaseCheckbox
+                id="exercise-hide-attempts-table"
+                v-model="form.hideAttemptsTable"
+                :label="t('Hide attempts table on start page')"
+                name="hideAttemptsTable"
+              />
+
+              <BaseCheckbox
+                v-if="isEditMode"
+                id="exercise-update-title-in-learning-paths"
+                v-model="form.updateTitleInLearningPaths"
+                :label="t('Update this title in learning paths')"
+                name="updateTitleInLearningPaths"
+              />
+            </div>
           </div>
 
           <div
             v-if="skillOptions.length || extraFieldDefinitions.length"
+            class="space-y-2"
+          >
+            <BaseButton
+              :icon="showMetadata ? 'chevron-down' : 'chevron-right'"
+              :label="t('Metadata')"
+              type="primary-text"
+              @click="showMetadata = !showMetadata"
+            />
+            <p class="text-xs text-gray-600">
+              {{ t("Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened.") }}
+            </p>
+          </div>
+
+          <div
+            v-if="skillOptions.length || extraFieldDefinitions.length"
+            v-show="showMetadata"
             class="space-y-4 rounded-lg border border-gray-20 bg-gray-5 p-3"
           >
             <h3 class="text-sm font-semibold text-gray-90">{{ t("Metadata") }}</h3>
@@ -729,6 +768,7 @@ import { computed, defineComponent, h, onMounted, reactive, ref, watch } from "v
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputNumber from "../../components/basecomponents/BaseInputNumber.vue"
@@ -747,6 +787,7 @@ const isLoading = ref(false)
 const isSaving = ref(false)
 const formSubmitted = ref(false)
 const showAdvancedSettings = ref(false)
+const showMetadata = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
 const csrfToken = ref("")
@@ -754,14 +795,6 @@ const questionsUrl = ref("")
 const settings = ref({})
 const options = ref({})
 const lockedFields = ref([])
-const defaultLockedFieldsOnEdit = [
-  "random",
-  "maxAttempt",
-  "propagateNeg",
-  "enableTimeControl",
-  "expiredTime",
-  "reviewAnswers",
-]
 const EXTRA_FIELD_TEXTAREA = 2
 const EXTRA_FIELD_RADIO = 3
 const EXTRA_FIELD_SELECT = 4
@@ -916,7 +949,7 @@ const typeOptions = computed(() => {
     label: t(option.label),
   }))
 
-  if ([1, 3].includes(Number(form.feedbackType))) {
+  if ([1, 3, 4].includes(Number(form.feedbackType))) {
     return items.filter((option) => 2 === option.value)
   }
 
@@ -960,7 +993,7 @@ const feedbackOptions = computed(() => mapTranslatedOptions(options.value.feedba
 const resultOptions = computed(() => {
   const items = mapTranslatedOptions(options.value.resultOptions || [])
 
-  if ([1, 3].includes(Number(form.feedbackType))) {
+  if ([1, 3, 4].includes(Number(form.feedbackType))) {
     return items.filter((option) => [0, 1, 2].includes(option.value))
   }
 
@@ -972,7 +1005,9 @@ const notificationOptions = computed(() => mapTranslatedOptions(options.value.no
 const saveCorrectAnswerOptions = computed(() => mapTranslatedOptions(options.value.saveCorrectAnswerOptions || []))
 const showRandomQuestionCount = computed(() => [2, 3, 4, 5, 6].includes(Number(form.questionSelectionType)))
 const showCategorySelectionOptions = computed(() => 3 <= Number(form.questionSelectionType))
-const showCategoryDestinations = computed(() => Number(form.feedbackType || 0) === 3 && true === settings.value.quizQuestionCategoryDestinations)
+const showCategoryDestinations = computed(
+  () => Number(form.feedbackType || 0) === 4 && true === settings.value.quizQuestionCategoryDestinations,
+)
 const showCategoryMatrix = computed(() => showCategorySelectionOptions.value || showCategoryDestinations.value)
 const hasCategoryMatrixWarning = computed(() =>
   form.categoryMatrix.some((row) => {
@@ -1017,13 +1052,7 @@ function removeCategoryDestinationRule(row, index) {
 
   row.destinationRules.splice(index, 1)
 }
-const effectiveLockedFields = computed(() => {
-  if (lockedFields.value.length > 0) {
-    return lockedFields.value
-  }
-
-  return isEditMode.value ? defaultLockedFieldsOnEdit : []
-})
+const effectiveLockedFields = computed(() => lockedFields.value)
 
 function mapTranslatedOptions(items) {
   return items.map((option) => ({
@@ -1086,8 +1115,8 @@ function fillForm(data) {
   form.updateTitleInLearningPaths = false
   form.skillIds = normalizeIdValues(data.skillIds || [])
   form.extraNotification = data.extraNotification || ""
-  form.startTime = data.startTime || ""
-  form.endTime = data.endTime || ""
+  form.startTime = parseDateTimeValue(data.startTime)
+  form.endTime = parseDateTimeValue(data.endTime)
   form.enableStartTime = Boolean(data.startTime)
   form.enableEndTime = Boolean(data.endTime)
   form.duration = Number(data.duration || 0)
@@ -1133,6 +1162,52 @@ function fillForm(data) {
   options.value = data.options || {}
   form.extraFieldValues = normalizeExtraFieldValues(data.extraFieldValues || {}, extraFieldDefinitions.value)
   lockedFields.value = Array.isArray(data.lockedFields) ? data.lockedFields : []
+}
+
+function parseDateTimeValue(value) {
+  if (!value) {
+    return null
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value
+  }
+
+  const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/)
+  if (!match) {
+    return null
+  }
+
+  const date = new Date(
+    Number(match[1]),
+    Number(match[2]) - 1,
+    Number(match[3]),
+    Number(match[4]),
+    Number(match[5]),
+  )
+
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+function formatDateTimeValue(value) {
+  const date = parseDateTimeValue(value)
+  if (!date) {
+    return null
+  }
+
+  const pad = (part) => String(part).padStart(2, "0")
+
+  return [
+    date.getFullYear(),
+    "-",
+    pad(date.getMonth() + 1),
+    "-",
+    pad(date.getDate()),
+    "T",
+    pad(date.getHours()),
+    ":",
+    pad(date.getMinutes()),
+  ].join("")
 }
 
 function normalizeIdValues(values) {
@@ -1343,8 +1418,8 @@ function buildPayload() {
     skillIds: normalizeIdValues(form.skillIds),
     extraFieldValues: normalizeExtraFieldValuesForPayload(),
     extraNotification: form.extraNotification || "",
-    startTime: form.enableStartTime ? form.startTime || null : null,
-    endTime: form.enableEndTime ? form.endTime || null : null,
+    startTime: form.enableStartTime ? formatDateTimeValue(form.startTime) : null,
+    endTime: form.enableEndTime ? formatDateTimeValue(form.endTime) : null,
     duration: Number(form.duration || 0),
     maxAttempt: Number(form.maxAttempt || 0),
     passPercentage: Number(form.passPercentage || 0),
@@ -1440,11 +1515,8 @@ async function saveConfiguration() {
 watch(
   () => form.feedbackType,
   (feedbackType) => {
-    if ([1, 3].includes(Number(feedbackType))) {
+    if ([1, 3, 4].includes(Number(feedbackType))) {
       form.resultsDisabled = 0
-    }
-
-    if ([1, 3].includes(Number(feedbackType))) {
       form.type = 2
     }
   },

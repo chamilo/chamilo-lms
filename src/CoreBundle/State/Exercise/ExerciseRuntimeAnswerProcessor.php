@@ -59,7 +59,8 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const STATUS_INCOMPLETE = 'incomplete';
     private const FEEDBACK_TYPE_DIRECT = 1;
-    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 3;
+    private const FEEDBACK_TYPE_POPUP = 3;
+    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
     private const UNIQUE_TYPES = [1, 10, 17, 21];
     private const MULTIPLE_TYPES = [2, 9, 14];
     private const TRUE_FALSE_TYPES = [11, 12];
@@ -1646,7 +1647,11 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     private function buildFeedback(CQuiz $quiz, TrackEExercise $attempt, CQuizQuestion $question, array $rows): array
     {
         $feedbackType = (int) $quiz->getFeedbackType();
-        if (!\in_array($feedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE], true)) {
+        if (!\in_array(
+            $feedbackType,
+            [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE],
+            true,
+        )) {
             return [];
         }
 
@@ -1662,7 +1667,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
         return [
             'enabled' => true,
-            'mode' => 'direct',
+            'mode' => self::FEEDBACK_TYPE_POPUP === $feedbackType ? 'popup' : 'direct',
             'questionId' => (int) $question->getIid(),
             'status' => $status,
             'title' => $this->getFeedbackTitle($status),

@@ -335,6 +335,14 @@ final class ExerciseQuestionEditor
     public array $mediaOptions = [];
 
     /**
+     * Questions attached to the current media question inside this exercise.
+     *
+     * @var array<int, array{id: int, title: string, type: int, typeLabel: string, position: int}>
+     */
+    #[Groups(['exercise_question_editor:read'])]
+    public array $attachedQuestions = [];
+
+    /**
      * @var array<int, array<string, mixed>>
      */
     #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]

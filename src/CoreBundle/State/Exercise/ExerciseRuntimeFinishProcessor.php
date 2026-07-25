@@ -53,7 +53,8 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private const LP_STATUS_FAILED = 'failed';
     private const LP_STATUS_PASSED = 'passed';
     private const FEEDBACK_TYPE_DIRECT = 1;
-    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 3;
+    private const FEEDBACK_TYPE_POPUP = 3;
+    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -332,17 +333,14 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function getPositiveQueryInt(Request $request, string $name, int $fallback = 0): int
     {
         $value = $request->query->get($name);
-        if (null !== $value) {
-            $value = \is_array($value) ? reset($value) : $value;
-            if (is_numeric($value)) {
-                $intValue = (int) $value;
-                if (0 < $intValue) {
-                    return $intValue;
-                }
+        if (null !== $value && is_numeric($value)) {
+            $intValue = (int) $value;
+            if ($intValue > 0) {
+                return $intValue;
             }
         }
 
-        return 0 < $fallback ? $fallback : 0;
+        return $fallback > 0 ? $fallback : 0;
     }
 
     private function getValidExerciseLpItem(int $lpItemId, int $lpId, CQuiz $quiz): ?CLpItem
@@ -419,7 +417,15 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $status = self::STATUS_COMPLETED;
         $passPercentage = $quiz->getPassPercentage();
 
-        if (self::FEEDBACK_TYPE_DIRECT !== (int) $quiz->getFeedbackType() && null !== $passPercentage && 0 < $passPercentage) {
+        if (
+            !\in_array(
+                (int) $quiz->getFeedbackType(),
+                [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP],
+                true,
+            )
+            && null !== $passPercentage
+            && $passPercentage > 0
+        ) {
             $status = self::LP_STATUS_FAILED;
             $percentage = 0.0 < $maxScore ? ($score / $maxScore) * 100 : 0.0;
             if ($percentage >= (float) $passPercentage) {
@@ -871,7 +877,11 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
      */
     private function normalizeCompletedQuestionIds(CQuiz $quiz, TrackEExercise $attempt, array $questionIds): array
     {
-        if (!\in_array((int) $quiz->getFeedbackType(), [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE], true)) {
+        if (!\in_array(
+            (int) $quiz->getFeedbackType(),
+            [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP, self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE],
+            true,
+        )) {
             return $questionIds;
         }
 

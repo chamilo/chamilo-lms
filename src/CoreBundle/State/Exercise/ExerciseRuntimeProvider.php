@@ -1052,18 +1052,18 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         foreach ($normalizedById as $questionId => &$item) {
             $parentId = (int) ($item['parentId'] ?? 0);
-            if (0 < $parentId) {
-                if (!isset($mediaParents[$parentId])) {
-                    $mediaQuestion = $this->entityManager->getRepository(CQuizQuestion::class)->find($parentId);
-                    if ($mediaQuestion instanceof CQuizQuestion && self::MEDIA_QUESTION === (int) $mediaQuestion->getType()) {
-                        $mediaParents[$parentId] = $this->normalizeMediaParentQuestion($mediaQuestion);
-                    }
-                }
-
-                if (isset($mediaParents[$parentId])) {
-                    $item['parent'] = $mediaParents[$parentId];
-                }
+            if (0 >= $parentId) {
+                continue;
             }
+
+            if (!isset($mediaParents[$parentId])) {
+                $item['parentId'] = 0;
+                $item['parent'] = null;
+
+                continue;
+            }
+
+            $item['parent'] = $mediaParents[$parentId];
         }
         unset($item);
 

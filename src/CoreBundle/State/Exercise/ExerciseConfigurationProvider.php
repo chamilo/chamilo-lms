@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -43,6 +44,11 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class ExerciseConfigurationProvider implements ProviderInterface
 {
     private const CSRF_TOKEN_ID = 'exercise_configuration';
+    private const FEEDBACK_TYPE_DIRECT = 1;
+    private const FEEDBACK_TYPE_EXAM = 2;
+    private const FEEDBACK_TYPE_POPUP = 3;
+    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
     private const SKILL_ITEM_TYPE_EXERCISE = 1;
@@ -137,7 +143,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->skillIds = $this->getSelectedSkillIds($quiz);
         $configuration->extraFieldValues = $this->getExerciseExtraFieldValues($quiz);
         $configuration->extraNotification = '';
-        $configuration->lockedFields = $this->getLockedFieldsForEdit();
+        $configuration->lockedFields = $this->getLockedFieldsForEdit($quiz);
         $configuration->startTime = $this->formatDateForInput($quiz->getStartTime());
         $configuration->endTime = $this->formatDateForInput($quiz->getEndTime());
         $configuration->duration = $quiz->getDuration();
@@ -313,15 +319,20 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     {
         $options = [
             ['value' => 0, 'label' => 'At end of test'],
-            ['value' => 2, 'label' => 'Exam (no feedback)'],
+            ['value' => self::FEEDBACK_TYPE_EXAM, 'label' => 'Exam (no feedback)'],
         ];
 
-        if ($this->isSettingEnabled('enable_quiz_scenario') || 1 === (int) ($quiz?->getFeedbackType() ?? 0)) {
-            $options[] = ['value' => 1, 'label' => 'Adaptative test with immediate feedback'];
+        $currentFeedbackType = (int) ($quiz?->getFeedbackType() ?? 0);
+        if (
+            $this->isSettingEnabled('enable_quiz_scenario')
+            || \in_array($currentFeedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP], true)
+        ) {
+            $options[] = ['value' => self::FEEDBACK_TYPE_DIRECT, 'label' => 'Adaptative test with immediate feedback'];
+            $options[] = ['value' => self::FEEDBACK_TYPE_POPUP, 'label' => 'Direct pop-up mode'];
         }
 
-        if ($this->isProgressiveAdaptiveSettingEnabled() || 3 === (int) ($quiz?->getFeedbackType() ?? 0)) {
-            $options[] = ['value' => 3, 'label' => 'Progressive adaptive'];
+        if ($this->isProgressiveAdaptiveSettingEnabled() || self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE === $currentFeedbackType) {
+            $options[] = ['value' => self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE, 'label' => 'Progressive adaptive'];
         }
 
         return $options;
@@ -415,7 +426,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             'categoryId' => 0,
             'title' => 'General',
             'availableQuestions' => $generalQuestionCount,
-            'countQuestions' => $savedCategorySettings[0]['countQuestions'] ?? -1,
+            'countQuestions' => $savedCategorySettings[0]['countQuestions'] ?? (0 === $generalQuestionCount ? 0 : -1),
             'destinations' => $savedCategorySettings[0]['destinations'] ?? '',
         ];
 
@@ -486,12 +497,21 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
 
 
     /**
-     * Legacy freezes these fields after an exercise has been created.
+     * Legacy freezes these fields only when the exercise is linked to a learning path
+     * and the platform does not explicitly allow editing it there.
      *
      * @return array<int, string>
      */
-    private function getLockedFieldsForEdit(): array
+    private function getLockedFieldsForEdit(CQuiz $quiz): array
     {
+        if (
+            null === $quiz->getIid()
+            || $this->isSettingEnabled('lp.force_edit_exercise_in_lp')
+            || !$this->isExerciseLinkedToLearningPath((int) $quiz->getIid())
+        ) {
+            return [];
+        }
+
         return [
             'random',
             'maxAttempt',
@@ -500,6 +520,21 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             'expiredTime',
             'reviewAnswers',
         ];
+    }
+
+    private function isExerciseLinkedToLearningPath(int $exerciseId): bool
+    {
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('lpItem.iid')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseId', (string) $exerciseId, Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
     /**

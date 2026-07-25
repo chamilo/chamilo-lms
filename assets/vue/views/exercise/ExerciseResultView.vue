@@ -404,7 +404,7 @@
                   {{ t("Score") }}: {{ formatNumber(question.score) }} / {{ formatNumber(question.maxScore) }}
                 </span>
                 <span
-                  v-if="visibility.showQuestionScore && questionResultBadgeLabel(question)"
+                  v-if="visibility.showQuestionScore && !visibility.hideQuestionStatusLabel && questionResultBadgeLabel(question)"
                   class="rounded-full px-3 py-1 text-xs font-semibold"
                   :class="questionResultBadgeClass(question)"
                 >

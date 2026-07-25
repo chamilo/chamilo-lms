@@ -299,7 +299,11 @@
         </div>
       </div>
 
-      <form v-if="!showReviewReminderScreen && (canManage || activeAttempt)" class="space-y-4" @submit.prevent="submitDisabled">
+      <form
+        v-if="!isPreviewFinished && !showReviewReminderScreen && (canManage || activeAttempt)"
+        class="space-y-4"
+        @submit.prevent="submitDisabled"
+      >
         <div
           v-if="currentRuntimePage?.pageBreak || currentRuntimePage?.media"
           class="space-y-4 rounded-xl border border-gray-20 bg-white p-5 shadow-sm"
@@ -507,24 +511,11 @@
             </div>
 
             <div v-else-if="isFillBlanksQuestion(question)" class="rounded-lg border border-gray-20 p-4 text-gray-800">
-              <template
-                v-for="(segment, segmentIndex) in question.fillBlanks.segments"
-                :key="`${question.id}-blank-segment-${segmentIndex}`"
-              >
-                <span
-                  v-if="segment.type === 'text'"
-                  class="exercise-runtime-html inline"
-                  v-html="segment.text"
-                />
-                <input
-                  v-else
-                  v-model="answers[question.id].blanks[segment.position]"
-                  class="mx-1 inline-block rounded border border-gray-30 px-2 py-1 text-sm"
-                  :name="`question_${question.id}_blank_${segment.position}`"
-                  :style="{ width: `${Math.min(Math.max(Number(segment.inputSize || 160), 80), 320)}px` }"
-                  type="text"
-                />
-              </template>
+              <ExerciseFillBlanksRuntime
+                v-model="answers[question.id].blanks"
+                :question-id="Number(question.id)"
+                :segments="question.fillBlanks.segments"
+              />
             </div>
 
             <div v-else-if="isMatchingDraggableQuestion(question)" class="space-y-4">
@@ -1259,6 +1250,19 @@
           </div>
 
           <div
+            v-if="!canManage && activeAttempt && !usesPagedNavigation && isDraftSaveSupported(question)"
+            class="mt-4 flex justify-end border-t border-gray-20 pt-4"
+          >
+            <BaseButton
+              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
+              :label="isSavingAnswer ? t('Saving') : t('Save draft')"
+              icon="check"
+              type="success"
+              @click="saveSingleQuestionAnswer(question)"
+            />
+          </div>
+
+          <div
             v-if="directFeedbackForQuestion(question)"
             class="mt-4 space-y-3 rounded-lg border p-4 text-sm"
             :class="feedbackStatusClass(directFeedbackForQuestion(question))"
@@ -1343,7 +1347,7 @@
           />
           <div class="flex flex-wrap gap-2">
             <BaseButton
-              v-if="!canManage && activeAttempt"
+              v-if="!canManage && activeAttempt && usesPagedNavigation"
               :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || !visibleQuestions.some(isDraftSaveSupported)"
               :label="isSavingAnswer ? t('Saving') : t('Save draft')"
               icon="check"
@@ -1366,6 +1370,13 @@
               @click="returnToReviewReminder"
             />
             <BaseButton
+              v-if="!isReviewingMarkedQuestions && canManage && canFinishCurrentPage"
+              :label="t('Finish test')"
+              icon="check"
+              type="primary"
+              @click="finishPreview"
+            />
+            <BaseButton
               v-if="!isReviewingMarkedQuestions && !canManage && activeAttempt && canFinishCurrentPage"
               :disabled="!canSubmit || !canFinishWithConfirmation || isSavingAnswer || isFinishingAttempt || isAutoFinishingExpiredAttempt || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
               :label="finishButtonLabel"
@@ -1376,6 +1387,41 @@
           </div>
         </div>
       </form>
+
+      <section
+        v-if="canManage && isPreviewFinished"
+        class="space-y-4 rounded-xl border border-success/30 bg-success/10 p-5 text-sm text-gray-700 shadow-sm"
+      >
+        <div class="space-y-1">
+          <h2 class="text-xl font-semibold text-gray-90">
+            {{ t("Preview") }}
+          </h2>
+          <p class="font-medium text-success">
+            {{ t("Attempt finished") }}
+          </p>
+          <p>
+            {{ t("Teacher preview does not create a tracked attempt.") }}
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <BaseButton
+            :label="t('Preview')"
+            icon="refresh"
+            type="primary"
+            @click="restartPreview"
+          />
+          <BaseButton
+            :label="t('Questions')"
+            :route="{
+              name: 'ExerciseQuestions',
+              params: { ...route.params, exerciseId: getExerciseId() },
+              query: getContextParams(),
+            }"
+            icon="format-list-bulleted"
+            type="plain"
+          />
+        </div>
+      </section>
     </template>
 
     <BaseDialog
@@ -1556,6 +1602,7 @@ import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import AudioRecorder from "../../components/AudioRecorder.vue"
+import ExerciseFillBlanksRuntime from "./components/ExerciseFillBlanksRuntime.vue"
 import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
@@ -1585,6 +1632,7 @@ const isSavingAnswer = ref(false)
 const answerSaveError = ref("")
 const answerSaveMessage = ref("")
 const isFinishingAttempt = ref(false)
+const isPreviewFinished = ref(false)
 const finishError = ref("")
 const finishMessage = ref("")
 const savedQuestionIds = ref(new Set())
@@ -1683,7 +1731,7 @@ const visibleQuestions = computed(() => {
 })
 
 const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
-const isImmediateFeedbackRuntime = computed(() => [1, 3].includes(Number(settings.value.feedbackType || 0)))
+const isImmediateFeedbackRuntime = computed(() => [1, 3, 4].includes(Number(settings.value.feedbackType || 0)))
 const isReviewAnswersEnabled = computed(() => !isImmediateFeedbackRuntime.value && Number(settings.value.reviewAnswers || 0) > 0)
 const isCheckAnswersBeforeFinishEnabled = computed(() => !isImmediateFeedbackRuntime.value && true === settings.value.checkAllAnswersBeforeEndTest)
 const isFinalAnswerChecklistEnabled = computed(() => !isImmediateFeedbackRuntime.value && (isReviewAnswersEnabled.value || isCheckAnswersBeforeFinishEnabled.value))
@@ -1767,7 +1815,11 @@ const currentAttemptLabel = computed(() => {
   return t("Current attempt")
 })
 const currentCategoryLabel = computed(() => {
-  if (true !== settings.value.blockCategoryQuestions) {
+  const shouldDisplayCategory = true === settings.value.blockCategoryQuestions
+    || true === settings.value.displayCategoryName
+    || 1 === Number(settings.value.displayCategoryName)
+
+  if (!shouldDisplayCategory) {
     return ""
   }
 
@@ -2501,6 +2553,7 @@ async function loadRuntime() {
     questionCount.value = Number(response.questionCount || questions.value.length)
     totalScore.value = Number(response.totalScore || 0)
     canManage.value = true === response.canManage
+    isPreviewFinished.value = false
     canStartAttempt.value = true === response.canStartAttempt && true !== settings.value.requiresLegacyRuntime
     activeAttempt.value = response.attempt || null
     canSubmit.value = true === response.canSubmit
@@ -2686,6 +2739,27 @@ async function goToNextQuestion() {
   }
 }
 
+async function saveSingleQuestionAnswer(question) {
+  if (canManage.value || !activeAttempt.value?.attemptId || !isDraftSaveSupported(question)) {
+    return
+  }
+
+  isSavingAnswer.value = true
+  answerSaveError.value = ""
+  answerSaveMessage.value = ""
+  feedbackShownOnLastSave.value = false
+
+  try {
+    await saveQuestionDraftAnswer(question, "none")
+    answerSaveMessage.value = t("Draft answer saved")
+  } catch (error) {
+    console.error("Error saving exercise draft answer", error)
+    answerSaveError.value = t("Could not save draft answer")
+  } finally {
+    isSavingAnswer.value = false
+  }
+}
+
 async function saveVisibleAnswers(options = {}) {
   if (canManage.value || !activeAttempt.value?.attemptId) {
     return true
@@ -2717,6 +2791,29 @@ async function saveVisibleAnswers(options = {}) {
   } finally {
     isSavingAnswer.value = false
   }
+}
+
+function finishPreview() {
+  if (!canManage.value || !canFinishCurrentPage.value) {
+    return
+  }
+
+  isPreviewFinished.value = true
+  finishError.value = ""
+  finishMessage.value = ""
+  window.scrollTo({ top: 0, behavior: "smooth" })
+}
+
+function restartPreview() {
+  isPreviewFinished.value = false
+  currentQuestionIndex.value = 0
+  answers.value = {}
+  directFeedbackByQuestion.value = {}
+  feedbackDialog.value = null
+  isFeedbackDialogVisible.value = false
+  initializeAnswerState()
+  syncQuestionCountdown()
+  window.scrollTo({ top: 0, behavior: "smooth" })
 }
 
 async function finishAttempt(options = {}) {
@@ -2888,7 +2985,7 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFe
 
 
 function isRuntimeFeedbackMode() {
-  return [1, 3].includes(Number(settings.value.feedbackType || 0))
+  return [1, 3, 4].includes(Number(settings.value.feedbackType || 0))
 }
 
 function handleRuntimeFeedback(question, feedback, afterAction = "none") {

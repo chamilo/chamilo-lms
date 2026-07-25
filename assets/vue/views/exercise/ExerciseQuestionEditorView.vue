@@ -185,6 +185,52 @@
           :full-page="false"
           :title="structuralEditorTitle"
         />
+
+        <div
+          v-if="isMediaQuestion && isEditMode"
+          class="space-y-3 rounded-lg border border-gray-20 bg-gray-5 p-3"
+        >
+          <div class="space-y-1">
+            <h3 class="text-sm font-semibold text-gray-90">{{ t("Attached questions") }}</h3>
+            <p class="text-xs text-gray-600">
+              {{ t("Only questions attached to this media question inside the current exercise are listed here.") }}
+            </p>
+          </div>
+
+          <div
+            v-if="attachedQuestions.length"
+            class="divide-y divide-gray-20 rounded-lg border border-gray-20 bg-white"
+          >
+            <div
+              v-for="question in attachedQuestions"
+              :key="`attached-question-${question.id}`"
+              class="flex flex-wrap items-center justify-between gap-3 px-3 py-2"
+            >
+              <div class="min-w-0">
+                <p class="font-medium text-gray-90">
+                  {{ question.position }}. {{ question.title || t("Untitled") }}
+                </p>
+                <p class="text-xs text-gray-600">{{ t(question.typeLabel || "Question") }}</p>
+              </div>
+
+              <BaseButton
+                :label="t('Edit')"
+                :route="attachedQuestionEditRoute(question)"
+                icon="edit"
+                only-icon
+                size="small"
+                type="secondary-text"
+              />
+            </div>
+          </div>
+
+          <p
+            v-else
+            class="text-sm text-gray-600"
+          >
+            {{ t("No questions are attached to this media question in the current exercise.") }}
+          </p>
+        </div>
       </section>
 
       <section
@@ -941,7 +987,7 @@
             @click="syncFillBlankItems"
           />
           <span class="text-sm text-gray-70">
-            {{ t("Detected blanks: {0}", [form.fillBlankItems.length]) }}
+            {{ formatTranslatedText("Detected blanks: {0}", [form.fillBlankItems.length]) }}
           </span>
         </div>
 
@@ -1746,6 +1792,7 @@ const questionCount = ref(0)
 const totalScore = ref(0)
 const categoryOptions = ref([])
 const mediaOptions = ref([])
+const attachedQuestions = ref([])
 const showAdvancedSettings = ref(false)
 const allowQuestionFeedback = ref(false)
 const imageZoomEnabled = ref(false)
@@ -2072,6 +2119,18 @@ const questionsRoute = computed(() => {
     query: getContextParams(),
   }
 })
+
+function attachedQuestionEditRoute(question) {
+  return {
+    name: "ExerciseQuestionEdit",
+    params: {
+      node: route.params.node,
+      exerciseId: exerciseId.value,
+      questionId: Number(question?.id || 0),
+    },
+    query: getContextParams(),
+  }
+}
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -2506,6 +2565,7 @@ function fillForm(data) {
   totalScore.value = Number(data.totalScore || 0)
   categoryOptions.value = Array.isArray(data.categoryOptions) ? data.categoryOptions.map(normalizeOption) : []
   mediaOptions.value = Array.isArray(data.mediaOptions) ? data.mediaOptions.map(normalizeOption) : []
+  attachedQuestions.value = Array.isArray(data.attachedQuestions) ? data.attachedQuestions : []
   csrfToken.value = data.csrfToken || ""
   allowQuestionFeedback.value = true === data.allowQuestionFeedback
   imageZoomEnabled.value = true === data.imageZoomEnabled
@@ -3851,6 +3911,18 @@ watch(() => form.calculatedText, () => {
     syncCalculatedRanges()
   }
 })
+
+watch(
+  () => getQueryValue(route.params.questionId),
+  async (currentQuestionId, previousQuestionId) => {
+    if (currentQuestionId === previousQuestionId) {
+      return
+    }
+
+    attachedQuestions.value = []
+    await loadQuestionEditor()
+  },
+)
 
 onMounted(loadQuestionEditor)
 </script>

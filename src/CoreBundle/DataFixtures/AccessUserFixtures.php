@@ -33,9 +33,6 @@ class AccessUserFixtures extends Fixture
 
         $accessUrl = $this->accessUrlHelper->getCurrent();
 
-        // Defined in AccessGroupFixtures.php.
-        // $group = $this->getReference('GROUP_ADMIN');
-
         $admin = (new User())
             ->setSkipResourceNode(true)
             ->setLastname('Doe')

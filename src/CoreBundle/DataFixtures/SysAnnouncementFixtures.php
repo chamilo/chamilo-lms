@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataFixtures;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\SysAnnouncement;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -20,7 +21,7 @@ class SysAnnouncementFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
+        $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE, AccessUrl::class);
         $content = $this->translator->trans(
             '<p><img src="/img/document/images/mr_chamilo/svg/collaborative.svg" width="320" height="340" /></p>'
             .' If this is your first time using Chamilo, make sure you check the side menu to find your way through'

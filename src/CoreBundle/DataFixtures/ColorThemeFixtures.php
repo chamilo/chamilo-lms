@@ -66,7 +66,7 @@ class ColorThemeFixtures extends Fixture implements FixtureGroupInterface
         ;
 
         /** @var AccessUrl $accessUrl */
-        $accessUrl = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
+        $accessUrl = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE, AccessUrl::class);
 
         if (!$accessUrl->getId()) {
             $manager->persist($accessUrl);

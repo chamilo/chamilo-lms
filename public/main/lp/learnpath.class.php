@@ -3153,7 +3153,7 @@ class learnpath
                                 if (1 === $prevent_reinit && $count_item_view > 0) {
                                     $not_multiple_attempt = 1;
                                 }
-                                $file .= '&not_multiple_attempt='.$not_multiple_attempt;
+                                $file .= '&amp;not_multiple_attempt='.$not_multiple_attempt;
                             }
                             break;
                     }
@@ -5475,7 +5475,7 @@ class learnpath
                     $return .= $exercise->description.'<br />';
                     $return .= Display::url(
                         get_lang('Go to exercise'),
-                        api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exercise->id,
+                        (ExerciseLib::buildVueOverviewUrl((int) $exercise->id) ?: api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exercise->id),
                         ['class' => 'btn btn--primary']
                     );
                 }
@@ -7174,9 +7174,23 @@ document.addEventListener("DOMContentLoaded", function () {
         $return = '<ul class="mt-2 bg-white list-group list-group-flush border border-gray-25 rounded lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element border-gray-25 disable_drag">';
         $return .= Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('New test'));
-        $return .= '<a
-            href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
-            get_lang('New test').'</a>';
+        $createExerciseParams = [
+            'origin' => 'learnpath',
+            'lp_id' => $this->lp_id,
+            'returnToLp' => 1,
+            'type' => 'step',
+            'isStudentView' => 'false',
+        ];
+        if (!empty($_REQUEST['node'])) {
+            $createExerciseParams['node'] = (int) $_REQUEST['node'];
+        }
+        $createExerciseUrl = ExerciseLib::buildVueCreateUrl($createExerciseParams)
+            ?: '#';
+        $return .= Display::url(
+            get_lang('New test'),
+            $createExerciseUrl,
+            ['class' => 'moved link_with_id', 'data_type' => 'quiz-new']
+        );
         $return .= '</li>';
 
         $previewIcon = Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview'));
@@ -7188,10 +7202,11 @@ document.addEventListener("DOMContentLoaded", function () {
             $title = strip_tags(api_html_entity_decode($exercise->getTitle()));
             $visibility = $exercise->isVisible($course, $session);
 
+            $previewUrl = ExerciseLib::buildVueOverviewUrl((int) $exerciseId) ?: $exerciseUrl.'&exerciseId='.$exerciseId;
             $link = Display::url(
                 $previewIcon,
-                $exerciseUrl.'&exerciseId='.$exerciseId,
-                ['target' => '_blank']
+                $previewUrl,
+                ['target' => '_blank', 'rel' => 'noopener noreferrer']
             );
             $return .= '<li
                 class="list-group-item lp_resource_element border-gray-25"
@@ -9342,12 +9357,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 $learnpathItemViewData = current($learnpathItemViewResult);
                 $learnpathItemViewId = $learnpathItemViewData ? $learnpathItemViewData->getIid() : 0;
 
-                return $main_dir_path.'exercise/overview.php?'.$extraParams.'&'
-                    .http_build_query([
+                $vueUrl = ExerciseLib::buildVueOverviewUrl(
+                    (int) $id,
+                    [
+                        'origin' => 'learnpath',
                         'lp_init' => 1,
                         'learnpath_item_view_id' => $learnpathItemViewId,
                         'learnpath_id' => $learningPathId,
                         'learnpath_item_id' => $id_in_path,
+                        'isStudentView' => isset($_REQUEST['isStudentView']) ? Security::remove_XSS((string) $_REQUEST['isStudentView']) : 'true',
+                    ]
+                );
+                if (null !== $vueUrl) {
+                    return $vueUrl;
+                }
+
+                return $main_dir_path.'exercise/overview.php?'.$extraParams.'&'
+                    .http_build_query([
+                        'origin' => 'learnpath',
+                        'lp_init' => 1,
+                        'learnpath_item_view_id' => $learnpathItemViewId,
+                        'learnpath_id' => $learningPathId,
+                        'learnpath_item_id' => $id_in_path,
+                        'isStudentView' => isset($_REQUEST['isStudentView']) ? Security::remove_XSS((string) $_REQUEST['isStudentView']) : 'true',
                         'exerciseId' => $id,
                     ]);
             case TOOL_HOTPOTATOES:

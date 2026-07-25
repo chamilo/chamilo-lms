@@ -294,6 +294,14 @@ const lpAutoLaunchMessage = computed(() => {
 const COURSE_TOOL_SKELETON_COUNT = 16
 const TOOL_VISIBILITY_VISIBLE = 2
 
+function normalizeToolNavigation(tool) {
+  if (routerTools.includes(tool.title)) {
+    tool.to = tool.url
+  }
+
+  return tool
+}
+
 function getToolVisibility(tool) {
   if (typeof tool?.visibility === "boolean") {
     return tool.visibility ? TOOL_VISIBILITY_VISIBLE : 0
@@ -395,11 +403,7 @@ async function loadCourseTools(showSkeleton = true) {
     const cTools = await courseService.loadCTools(course.value.id, session.value?.id)
 
     const normalizedTools = cTools.map((rawTool) => {
-      const tool = { ...rawTool }
-
-      if (routerTools.includes(tool.title)) {
-        tool.to = tool.url
-      }
+      const tool = normalizeToolNavigation({ ...rawTool })
 
       // Convenience flag for UI states (e.g. customize mode)
       tool.isEnabled =

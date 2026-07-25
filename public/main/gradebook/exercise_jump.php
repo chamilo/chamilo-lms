@@ -12,6 +12,7 @@
  * @author Bert Steppé
  */
 require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../inc/lib/exercise.lib.php';
 api_block_anonymous_users();
 $this_section = SECTION_COURSES;
 
@@ -46,7 +47,7 @@ if (!empty($doExerciseUrl)) {
         .http_build_query(['sid' => $session_id, 'cid' => $courseId]);
     if (isset($_GET['gradebook'])) {
         $exerciseId = (int) $_GET['exerciseId'];
-        $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
+        $legacyOverviewUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
             [
                 'sid' => $session_id,
                 'cid' => $courseId,
@@ -57,6 +58,17 @@ if (!empty($doExerciseUrl)) {
                 'exerciseId' => $exerciseId,
             ]
         );
+        $url = ExerciseLib::buildVueOverviewUrl(
+            $exerciseId,
+            [
+                'gradebook' => $gradebook,
+                'origin' => '',
+                'learnpath_id' => '',
+                'learnpath_item_id' => '',
+            ],
+            (int) $courseId,
+            (int) $session_id
+        ) ?? $legacyOverviewUrl;
 
         // Exercise IDs can be reused by migrated LP items from other courses.
         // Redirect only when exactly one LP in the current course contains it.

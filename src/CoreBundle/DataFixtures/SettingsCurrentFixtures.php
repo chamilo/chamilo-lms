@@ -2463,6 +2463,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Test categories are not enabled by default because they add a level of complexity. Enable this feature to show all test categories related management icons appear.',
                 ],
                 [
+                    'name' => 'quiz_question_category_destinations',
+                    'title' => 'Enable progressive adaptive tests by category destination',
+                    'comment' => 'Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score.',
+                ],
+                [
                     'name' => 'allow_mandatory_question_in_category',
                     'title' => 'Enable selecting mandatory questions',
                     'comment' => 'Enable the selection of mandatory questions in a test when using random categories.',

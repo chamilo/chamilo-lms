@@ -26,6 +26,7 @@ import assignments from "./assignments"
 import links from "./links"
 import forum from "./forum"
 import survey from "./survey"
+import exercise from "./exercise"
 import courseDescription from "./courseDescription"
 import notebook from "./notebook"
 import portfolio from "./portfolio"
@@ -294,6 +295,11 @@ async function courseHomeBeforeEnter(to) {
 
     const courseSettingsStore = useCourseSettings()
     const sid = sessionId ? `&sid=${sessionId}` : ""
+    const courseContextQuery = {
+      cid: courseId,
+      sid: sessionId || 0,
+      gid: 0,
+    }
 
     // Document auto-launch
     const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
@@ -307,20 +313,27 @@ async function courseHomeBeforeEnter(to) {
 
     // Exercise auto-launch
     const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+    const exerciseResourceNodeId = cidReqStore.course?.resourceNode?.id
 
-    if (exerciseAutoLaunch === 2) {
+    if (exerciseAutoLaunch === 2 && exerciseResourceNodeId) {
       sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/main/exercise/exercise.php?cid=${courseId}` + sid
 
-      return false
+      return {
+        name: "ExerciseList",
+        params: { node: exerciseResourceNodeId },
+        query: courseContextQuery,
+      }
     } else if (exerciseAutoLaunch === 1) {
       const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
 
-      if (exerciseId) {
+      if (exerciseId && exerciseResourceNodeId) {
         sessionStorage.setItem(autoLaunchKey, "true")
-        window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}` + sid
 
-        return false
+        return {
+          name: "ExerciseOverview",
+          params: { node: exerciseResourceNodeId, exerciseId },
+          query: courseContextQuery,
+        }
       }
     }
 
@@ -443,6 +456,26 @@ const router = createRouter({
           component: MyCourseList,
           meta: { requiresAuth: true },
         },
+        {
+          path: "exercise/pending-attempts",
+          name: "ExercisePendingAttempts",
+          component: () => import("../views/exercise/ExercisePendingAttemptsView.vue"),
+          meta: {
+            requiresAuth: true,
+            showBreadcrumb: true,
+            breadcrumb: "Pending attempts",
+          },
+        },
+        {
+          path: "exercise/global-report",
+          name: "ExerciseGlobalReport",
+          component: () => import("../views/exercise/ExerciseGlobalReportView.vue"),
+          meta: {
+            requiresAuth: true,
+            showBreadcrumb: true,
+            breadcrumb: "Exercises global report",
+          },
+        },
       ],
     },
     {
@@ -490,6 +523,7 @@ const router = createRouter({
     links,
     forum,
     survey,
+    exercise,
     courseDescription,
     notebook,
     wiki,

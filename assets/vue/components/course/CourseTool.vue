@@ -3,8 +3,8 @@
     <BaseAppLink
       :aria-labelledby="`course-tool-${tool.iid}`"
       :class="cardCustomClass"
-      :to="tool.to"
-      :url="tool.url"
+      :to="resolvedToolTo"
+      :url="resolvedToolUrl"
       class="course-tool__link hover:primary-gradient"
     >
       <svg
@@ -29,8 +29,8 @@
     <BaseAppLink
       :id="`course-tool-${tool.iid}`"
       :class="titleCustomClass"
-      :to="tool.to"
-      :url="tool.url"
+      :to="resolvedToolTo"
+      :url="resolvedToolUrl"
       class="course-tool__title"
     >
       {{ $t(tool.tool.titleToShow) }}
@@ -81,7 +81,7 @@ import { useCidReqStore } from "../../store/cidReq"
 const platformConfigStore = usePlatformConfig()
 const cidReqStore = useCidReqStore()
 
-const { session } = storeToRefs(cidReqStore)
+const { course, session } = storeToRefs(cidReqStore)
 const { getSetting } = storeToRefs(platformConfigStore)
 
 const isSorting = inject("isSorting")
@@ -127,6 +127,65 @@ const titleCustomClass = computed(() => {
   }
   return ""
 })
+
+function getCourseResourceNodeId() {
+  return Number(cidReqStore.course?.resourceNode?.id) || Number(course.value?.resourceNode?.id) || 0
+}
+
+const isExerciseTool = computed(() => {
+  const values = [
+    props.tool?.title,
+    props.tool?.titleToShow,
+    props.tool?.name,
+    props.tool?.tool?.title,
+    props.tool?.tool?.titleToShow,
+    props.tool?.tool?.name,
+    props.tool?.url,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase()
+
+  return (
+    values.includes("quiz") ||
+    values.includes("exercise/exercise.php") ||
+    values.includes("/main/exercise/exercise.php") ||
+    values.includes("tests") ||
+    values.includes("exercises")
+  )
+})
+
+const exerciseToolRoute = computed(() => {
+  if (!isExerciseTool.value) {
+    return null
+  }
+
+  const nodeId = getCourseResourceNodeId()
+  const courseId = Number(course.value?.id) || Number(cidReqStore.course?.id) || 0
+
+  if (nodeId <= 0 || courseId <= 0) {
+    return null
+  }
+
+  return {
+    name: "ExerciseList",
+    params: { node: nodeId },
+    query: {
+      cid: courseId,
+      sid: Number(session.value?.id) || 0,
+      gid: 0,
+    },
+  }
+})
+
+const resolvedToolTo = computed(() => {
+  return exerciseToolRoute.value || props.tool.to || null
+})
+
+const resolvedToolUrl = computed(() => {
+  return exerciseToolRoute.value ? null : props.tool.url || null
+})
+
 const isVisible = computed(() => {
   if (typeof props.tool.visibility === "boolean") {
     return props.tool.visibility

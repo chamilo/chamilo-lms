@@ -153,21 +153,33 @@ When("I fill in {string} for {string}", async ({ page }, value: string, field: s
   await fillReliably(await resolveField(page, field), value)
 })
 
-// Mink's "I fill in the following:" takes a table of |field|value| rows and
-// fills each one the same way the single-field step does.
+// Mink's "I fill in the following:" (MinkContext::fillFields(), via Behat's
+// TableNode::getRowsHash()) treats EVERY row as a field/value pair — there is
+// no header row in this table shape. playwright-bdd's DataTable mirrors
+// Cucumber's JS convention instead, where `.rows()` assumes row 0 IS a header
+// and strips it (correct for `.hashes()`-style tables, wrong here) while
+// `.raw()` returns every row verbatim. Using `.rows()` here silently dropped
+// the FIRST field/value pair of every such table — e.g. career.feature's
+// single-row table (career_title) fills nothing at all, and
+// actionInstall.feature's Step 5 table silently never filled "passForm"
+// (found in this session while porting career.feature, whose 1-row table
+// made the bug immediately obvious: 0 rows survived `.rows()`, so nothing was
+// ever filled). This retroactively explains the earlier, never-fully-closed
+// "actionInstall.feature admin password" investigation (see gotcha 10 in
+// memory) — the working theory then was a second, timing-related reset
+// mechanism on top of the real Step5.vue hidden-input bug, but the simplest
+// explanation is this: passForm was the first row in that table and was
+// never actually filled by this step at all, so of course the installer's
+// own auto-generated suggestion always went through. The CI escape hatch
+// (CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD) and the Step5.vue fix are both
+// still correct/worth keeping independently, but this was likely the actual
+// proximate cause all along.
 //
-// actionInstall.feature's Step 5 table showed something new: filling
-// "passForm" (first row) verified correctly right after typing (inputValue()
-// matched "admin"), yet the network trace at actual submission — after every
-// other row in the table had also been filled — still showed the installer's
-// auto-generated suggestion, not "admin". So the fill itself works; something
-// triggered by filling a LATER field (emailForm/mailerDsn/etc.) resets an
-// EARLIER one. Rather than single out which field causes it, this does a
-// settle pass after the initial fill: re-check every field and re-fill any
-// that drifted from what was intended, so a later row clobbering an earlier
-// one gets caught and corrected regardless of which row is the trigger.
+// The settle pass (re-check every field after the initial fill, re-fill any
+// that drifted) is kept regardless — still a reasonable defense against a
+// later row's fill resetting an earlier one, whatever the mechanism.
 Then("I fill in the following:", async ({ page }, dataTable: DataTable) => {
-  const rows = dataTable.rows()
+  const rows = dataTable.raw()
 
   for (const [field, value] of rows) {
     await fillReliably(await resolveField(page, field), value)
@@ -179,6 +191,26 @@ Then("I fill in the following:", async ({ page }, dataTable: DataTable) => {
       await fillReliably(locator, value)
     }
   }
+})
+
+// Ported from FeatureContext::iFillInWysiwygOnFieldWith(). The legacy admin
+// pages (e.g. careers.php) use a TinyMCE editor bound to a hidden <textarea>,
+// not a plain field — window.setContentFromEditor(id, content) (assets/js/
+// legacy/app.js) is the same helper the original Behat step's JS shelled out
+// to inline; only legacy pages load it (bundled in the legacy_app webpack
+// entry), never the Vue SPA. Behat blindly slept 2000ms first "just in case
+// ckeditor is loaded" (its own comment — the app actually uses TinyMCE, not
+// CKEditor); waitForFunction polls for the real readiness signal instead.
+Then("I fill in editor field {string} with {string}", async ({ page }, field: string, value: string) => {
+  const fieldId = await (await resolveField(page, field)).getAttribute("id")
+  if (!fieldId) {
+    throw new Error(`Could not find an id for field with locator: ${field}`)
+  }
+  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), fieldId)
+  await page.evaluate(
+    ({ id, value }) => (window as any).setContentFromEditor(id, value),
+    { id: fieldId, value },
+  )
 })
 
 // Mink's "I check ..." checks a checkbox, same id -> name -> label resolution.
@@ -325,8 +357,45 @@ When("I press {string}", async ({ page }, label: string) => {
   await pressButton(page, label)
 })
 
+// Ported from FeatureContext::iClickTheElement(): a plain CSS-selector click,
+// first match (career.feature's row-action icons, e.g. "i.mdi-pencil").
+//
+// career.feature's delete/copy icons trigger a native `confirm()` (careers.php
+// builds its jqGrid action links with a plain `onclick="if(!confirm(...))
+// return false;"`, not a SweetAlert2 modal) and Playwright auto-dismisses any
+// native dialog that has no handler attached *before* it fires — since the
+// dialog opens synchronously inside this click, a handler registered by the
+// separate later "I confirm the popup" step would always be too late. The
+// only correct place to attach it is here, right before the click that may
+// trigger one; `once` means it's a no-op for elements that don't.
+Then("I click the {string} element", async ({ page }, selector: string) => {
+  page.once("dialog", (dialog) => dialog.accept())
+  await page.locator(selector).first().click()
+})
+
+// Ported from FeatureContext::confirmPopup(). Native `confirm()` dialogs are
+// already handled by the listener "I click the ... element" attaches above —
+// by the time this step runs any such dialog is already gone, so this is a
+// no-op for career.feature's own scenarios. Kept as a real fallback (not
+// deleted) for the SweetAlert2 (.swal2-container) case Behat's original step
+// also handled, for whichever future ported feature uses that instead.
+When(/^(?:|I )confirm the popup$/, async ({ page }) => {
+  const modal = page.locator(".swal2-container")
+  if (await modal.count()) {
+    await modal.locator(".swal2-confirm").click()
+  }
+})
+
 Then("I should see {string}", async ({ page }, text: string) => {
   await expect(page.getByText(text).first()).toBeVisible()
+})
+
+// Mirrors Mink's assertPageNotContainsText: checks the page's raw text, not
+// a specific element's visibility, since there's nothing to select when the
+// text is genuinely absent (career.feature's delete scenario: confirms
+// "Developer Copy" then "Developer" are both gone after each delete).
+Then("I should not see {string}", async ({ page }, text: string) => {
+  await expect(page.locator("body")).not.toContainText(text)
 })
 
 // FeatureContext::waitForThePageToBeLoaded() / waitVeryLongForThePageToBeLoaded()
@@ -362,9 +431,17 @@ Then(/^(?:|I )wait one minute for the page to be loaded$/, async ({ page }) => {
   await page.waitForLoadState("networkidle")
 })
 
-// Ported from FeatureContext::iShouldNotSeeAnError().
+// Ported from FeatureContext::iShouldNotSeeAnError(). Its own .alert-danger
+// check explicitly tolerates one that exists but has `display:none;` in its
+// style attribute — jqGrid (careers.php and other legacy jqGrid list pages)
+// always renders an empty, permanently display:none .alert-danger error bar
+// in the DOM regardless of whether an error ever occurred, only populating/
+// showing it on an actual AJAX error. A blanket toHaveCount(0) is stricter
+// than the original and false-positives on that always-present element;
+// :visible mirrors the original's actual intent (fail only on one that's
+// really shown).
 Then("I should not see an error", async ({ page }) => {
   await expect(page.locator("body")).not.toContainText("Internal server error")
-  await expect(page.locator(".alert-danger")).toHaveCount(0)
+  await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
   await expect(page.locator(".p-message-error")).toHaveCount(0)
 })

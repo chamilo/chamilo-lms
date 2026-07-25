@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc471c243d0463e62f489ec2b9765a74",
+    "content-hash": "3e11fcf2c574191b234c975ce42fcb63",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -1092,16 +1092,16 @@
         },
         {
             "name": "chamilo/settings-bundle",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AngelFQC/SyliusSettingsBundle.git",
-                "reference": "31ccd4bef879522907332e9073702e776eeeed9c"
+                "reference": "ed5e307b80a40dc0a5cb56a803d3ab30f7dae698"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AngelFQC/SyliusSettingsBundle/zipball/31ccd4bef879522907332e9073702e776eeeed9c",
-                "reference": "31ccd4bef879522907332e9073702e776eeeed9c",
+                "url": "https://api.github.com/repos/AngelFQC/SyliusSettingsBundle/zipball/ed5e307b80a40dc0a5cb56a803d3ab30f7dae698",
+                "reference": "ed5e307b80a40dc0a5cb56a803d3ab30f7dae698",
                 "shasum": ""
             },
             "require": {
@@ -1173,9 +1173,9 @@
                 "webshop"
             ],
             "support": {
-                "source": "https://github.com/AngelFQC/SyliusSettingsBundle/tree/v1.4.0"
+                "source": "https://github.com/AngelFQC/SyliusSettingsBundle/tree/v1.5.0"
             },
-            "time": "2026-07-13T23:11:20+00:00"
+            "time": "2026-07-25T00:13:16+00:00"
         },
         {
             "name": "clue/graph",

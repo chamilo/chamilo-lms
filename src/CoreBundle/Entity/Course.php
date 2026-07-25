@@ -343,7 +343,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course").
      */
-    // protected $curriculumCategories;    #[ORM\Column(name: 'add_teachers_to_sessions_courses', type: 'boolean', nullable: true)]
+    // protected $curriculumCategories;
+
+    #[ORM\Column(name: 'add_teachers_to_sessions_courses', type: 'boolean', nullable: true)]
     protected ?bool $addTeachersToSessionsCourses;
     #[ORM\Column(name: 'course_type_id', type: 'integer', unique: false, nullable: true)]
     protected ?int $courseTypeId;

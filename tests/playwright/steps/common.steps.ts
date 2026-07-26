@@ -1,7 +1,13 @@
+import path from "node:path"
 import { expect, Page } from "@playwright/test"
 import { createBdd, DataTable } from "playwright-bdd"
 
 const { Given, When, Then, BeforeAll, AfterAll } = createBdd()
+
+// Mirrors Mink's `files_path` (tests/behat/behat.yml: "%paths.base%/../../",
+// i.e. repo root) — attachFileToField() paths in .feature files are relative
+// to repo root, not this steps file. tests/playwright/steps -> repo root.
+const repoRoot = path.resolve(__dirname, "../../..")
 
 // Ported from tests/behat/features/bootstrap/FeatureContext.php.
 // "I am on"/"I fill in ... for ..."/"I press"/"I should see"/"I check"/
@@ -193,6 +199,16 @@ Then("I fill in the following:", async ({ page }, dataTable: DataTable) => {
   }
 })
 
+// Mink's built-in attachFileToField (MinkContext, not custom FeatureContext
+// code) — resolves relative paths against `files_path` (repo root, see
+// `repoRoot` above); path.join here mirrors that same concatenation, and
+// correctly collapses a leading "/" in `filePath` since it's not the first
+// segment (unlike path.resolve, which would treat a leading-"/" second arg as
+// re-rooting and drop repoRoot entirely).
+When("I attach the file {string} to {string}", async ({ page }, filePath: string, field: string) => {
+  await (await resolveField(page, field)).setInputFiles(path.join(repoRoot, filePath))
+})
+
 // Ported from FeatureContext::iFillInWysiwygOnFieldWith(). The legacy admin
 // pages (e.g. careers.php) use a TinyMCE editor bound to a hidden <textarea>,
 // not a plain field — window.setContentFromEditor(id, content) (assets/js/
@@ -347,6 +363,34 @@ async function pressButton(page: Page, label: string) {
       return
     }
   }
+  // Exact match first — `:has-text()` (the final fallback below) is a
+  // SUBSTRING match, and a real bug surfaced by class.feature showed why
+  // that's not safe as the only option: UsergroupList.vue has both a
+  // page-header "Add a class" button and, inside its create dialog, a plain
+  // "Add" submit button — "Add" is a substring of "Add a class", so
+  // `button:has-text("Add")` matched BOTH, and `.first()` (DOM order)
+  // silently picked the header button, which sits BEHIND the dialog's
+  // backdrop and can never actually be clicked while the dialog is open
+  // (confirmed via a real Playwright actionability timeout: "the backdrop
+  // div intercepts pointer events", retried for the full test timeout).
+  // `getByRole("button", { name, exact: true })` matches on accessible name
+  // exactly, so "Add" no longer matches "Add a class". Tried `:text-is()`
+  // first — surprisingly returned 0 matches even for the correct element
+  // (PrimeVue's Button renders the label inside a <span> flanked by Vue's
+  // `<!---->` comment placeholders for its unused icon/badge slots, which
+  // apparently trips up Playwright's text-content normalization here) —
+  // getByRole is also the more standard tool for "does this look like a
+  // button with this exact name" in the first place.
+  const exact = page.getByRole("button", { name: label, exact: true })
+  if (await exact.count()) {
+    await exact.first().click()
+    return
+  }
+  const exactSubmit = page.locator(`input[type="submit"][value="${label}"]`)
+  if (await exactSubmit.count()) {
+    await exactSubmit.first().click()
+    return
+  }
   await page
     .locator(`button:has-text("${label}"), input[type="submit"][value="${label}"]`)
     .first()
@@ -371,6 +415,21 @@ When("I press {string}", async ({ page }, label: string) => {
 Then("I click the {string} element", async ({ page }, selector: string) => {
   page.once("dialog", (dialog) => dialog.accept())
   await page.locator(selector).first().click()
+})
+
+// Not ported — new, for pages with real pre-existing data alongside whatever
+// a scenario creates (e.g. class.feature's /admin/usergroups: the shared dev
+// box already has other classes). A blind `.first()` (as "I click the ...
+// element" above does, safe for career.feature since careers.php had zero
+// pre-existing rows) picks whatever row the table happens to sort first —
+// confirmed the hard way: class.feature's "Delete a class" scenario deleted
+// a real, unrelated, pre-existing "Another Class" row instead of its own,
+// because that row sorted before it. Scoping the click to the table row
+// that actually contains our own row's identifying text avoids this
+// entirely — use this instead of "I click the ... element" on any page
+// where other rows might already exist.
+Then("I click the {string} icon in the row for {string}", async ({ page }, selector: string, rowText: string) => {
+  await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 
 // Ported from FeatureContext::confirmPopup(). Native `confirm()` dialogs are

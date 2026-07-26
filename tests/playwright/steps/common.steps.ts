@@ -18,6 +18,16 @@ Given("I am on {string}", async ({ page }, path: string) => {
   await page.goto(path)
 })
 
+// Ported from FeatureContext::iAmOnCourseXHomepage(): navigates via the
+// legacy redirect entry point (cidReq resolves the course by its code, not
+// its numeric id) and asserts no visible error, matching the original's own
+// assertElementNotOnPage('.alert-danger') right after navigating.
+Given("I am on course {string} homepage", async ({ page }, courseCode: string) => {
+  await page.goto(`/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}`)
+  await page.waitForLoadState("domcontentloaded")
+  await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
+})
+
 // Ported from FeatureContext::iAmLoggedAs() / iAmAPlatformAdministrator() /
 // iAmATeacher() / iAmAStudent() / iAmAnHR() / iAmAStudentBoss() /
 // iAmAnInvitee(): each fixed test account uses its own username as both
@@ -159,6 +169,15 @@ When("I fill in {string} for {string}", async ({ page }, value: string, field: s
   await fillReliably(await resolveField(page, field), value)
 })
 
+// Mink actually registers TWO separate step regexes for a single-field fill —
+// "I fill in X with Y" (field, value) and "I fill in Y for X" (value, field),
+// same underlying fillField() action, just opposite argument order. Only the
+// "for" form had been ported so far; course.feature is the first to use the
+// "with" form ("I fill in 'title' with 'TEMP'").
+When("I fill in {string} with {string}", async ({ page }, field: string, value: string) => {
+  await fillReliably(await resolveField(page, field), value)
+})
+
 // Mink's "I fill in the following:" (MinkContext::fillFields(), via Behat's
 // TableNode::getRowsHash()) treats EVERY row as a field/value pair — there is
 // no header row in this table shape. playwright-bdd's DataTable mirrors
@@ -232,6 +251,16 @@ Then("I fill in editor field {string} with {string}", async ({ page }, field: st
 // Mink's "I check ..." checks a checkbox, same id -> name -> label resolution.
 Then("I check {string}", async ({ page }, field: string) => {
   await (await resolveField(page, field)).check()
+})
+
+// Ported from FeatureContext::iCheckTheRadioButton(): resolves a radio input
+// by its associated <label> text (Mink's findField() also allows id/name,
+// but course.feature's own usage — "Private access (access authorized to
+// group members only)" — is plainly label text, not an id/name value) and
+// checks it. getByLabel handles both a wrapping <label> and a <label for="">
+// pointing at the input, matching findField()'s own resolution.
+When("I check the {string} radio button", async ({ page }, label: string) => {
+  await page.getByLabel(label).check()
 })
 
 // Mink's "I select X from Y" (a <select>'s option, matched by its visible
@@ -430,6 +459,28 @@ Then("I click the {string} element", async ({ page }, selector: string) => {
 // where other rows might already exist.
 Then("I click the {string} icon in the row for {string}", async ({ page }, selector: string, rowText: string) => {
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
+})
+
+// Mink's built-in "I follow" (MinkContext::iClickLink(), not custom
+// FeatureContext code) clicks a link resolved by id, then title attribute,
+// then visible text/label (e.g. an image link's alt text) — course.feature
+// uses plain visible text throughout ("Course description", "Documents",
+// etc.), so the text tier is what actually matters here, but the id/title
+// tiers are kept for parity with Mink's own resolution order.
+When("I follow {string}", async ({ page }, link: string) => {
+  if (looksLikeIdentifier(link)) {
+    const byId = page.locator(`#${link}:visible`)
+    if (await byId.count()) {
+      await byId.first().click()
+      return
+    }
+  }
+  const byTitle = page.locator(`a[title="${link}"]:visible`)
+  if (await byTitle.count()) {
+    await byTitle.first().click()
+    return
+  }
+  await page.getByRole("link", { name: link }).first().click()
 })
 
 // Ported from FeatureContext::confirmPopup(). Native `confirm()` dialogs are

@@ -263,6 +263,23 @@ When("I check the {string} radio button", async ({ page }, label: string) => {
   await page.getByLabel(label).check()
 })
 
+// Not ported — new. Mirrors FeatureContext's own generic Select2/ajax-select
+// steps (iFillInSelectInputWithAndSelect / iFillInAjaxSelectInputWithAndSelect)
+// but drives the REAL widget through the UI instead of shelling out to jQuery,
+// for course_add.php's course_categories field (FormValidator's addSelectAjax,
+// backed by Select2 + an AJAX search endpoint — course.ajax.php?a=search_category
+// — not a plain <select>, so resolveField()/selectOption() don't apply).
+// Typing into the search box triggers the AJAX call; filtering the results
+// locator by the exact option text (rather than grabbing whatever's first)
+// means this naturally waits out the "Searching…" placeholder instead of
+// racing it.
+When("I select {string} from the ajax select {string}", async ({ page }, optionText: string, fieldId: string) => {
+  const searchField = page.locator(`#${fieldId}`).locator("..").locator(".select2-search__field")
+  await searchField.click()
+  await searchField.fill(optionText)
+  await page.locator(".select2-results__option", { hasText: optionText }).first().click()
+})
+
 // Mink's "I select X from Y" (a <select>'s option, matched by its visible
 // label) replaces the current selection entirely — correct for a plain
 // single-select, and for a multi-select it's always the FIRST of a
@@ -441,9 +458,22 @@ When("I press {string}", async ({ page }, label: string) => {
 // separate later "I confirm the popup" step would always be too late. The
 // only correct place to attach it is here, right before the click that may
 // trigger one; `once` means it's a no-op for elements that don't.
+// `:visible` here isn't a tie-breaker (contrast resolveField() above) — it's
+// the wait condition itself. course.feature's "button.p-button-icon-only"
+// also matches an always-present, permanently-hidden global modal close
+// button (id="close-global-model") that happens to come first in the DOM on
+// some pages. Without `:visible`, `.first()` locks onto that hidden button
+// and Playwright's click retries for the full 60s waiting for IT to become
+// visible (it never does) — even though the real, intended button (e.g. a
+// course's "More actions" toggle) does render shortly after, just not
+// instantly. Filtering the locator itself to `:visible` makes it dynamically
+// re-resolve to whichever matching element is visible, so it naturally
+// waits out the real button's render delay instead of being stuck on a
+// decoy. Safe for career.feature's existing usage too — those icons are
+// already visible the moment they're queried, so this changes nothing there.
 Then("I click the {string} element", async ({ page }, selector: string) => {
   page.once("dialog", (dialog) => dialog.accept())
-  await page.locator(selector).first().click()
+  await page.locator(`${selector}:visible`).first().click()
 })
 
 // Not ported — new, for pages with real pre-existing data alongside whatever

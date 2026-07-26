@@ -28,6 +28,19 @@ Feature: Course tools basic testing
     Given I am on "/main/admin/course_add.php"
     And I wait for the page to be loaded
     And I fill in "title" with "TEMP"
+    # Not in the original Behat scenario: course.course_creation_form_set_
+    # course_category_mandatory is off by default on a fresh install (so the
+    # original, title-only version works there), but is enabled on this
+    # shared dev box specifically — without a category, submit silently
+    # re-renders the same form with a validation error instead of creating
+    # anything. Filling it defensively works either way (mandatory or not).
+    And I select "Language skills" from the ajax select "update_course_course_categories"
+    # Also not in the original: this platform's default course language is
+    # French, so an unselected Language field silently created "TEMP" as a
+    # French-language course — every subsequent tool label ("Documents"
+    # aside, a coincidental cognate) then rendered in French, breaking every
+    # "I follow" step that looks for the English tool name.
+    And I select "English" from "course_language"
     When I press "submit"
     And wait very long for the page to be loaded
     Then I should see "TEMP"
@@ -244,11 +257,22 @@ Feature: Course tools basic testing
     And I wait for the page to be loaded
     Then I follow "Course settings"
     And I wait for the page to be loaded
-    And I click the "a.collapse_course_access" element
+    # Original Behat selector targeted a CLASS ("collapse_course_access") on
+    # this toggle; the current markup keeps the same id as a data-target
+    # attribute instead (<a data-toggle="collapse" data-target="#collapse_
+    # course_access">), no class of that name exists anymore. Single-quoted
+    # inside the CSS selector since the whole thing sits inside a
+    # double-quoted Gherkin string.
+    And I click the "a[data-target='#collapse_course_access']" element
     And I wait for the page to be loaded
     And I fill in the following:
       | course_registration_password | abc |
-    And I press "submit"
+    # Original Behat button was id/name="submit"; the redesigned Course
+    # settings form's save button is now name="submit_save" with visible
+    # text "Save settings" — pressButton()'s id/name tier no longer matches
+    # "submit" at all, so this falls through to its text-based fallback,
+    # which needs the CURRENT visible label.
+    And I press "Save settings"
     Then I wait for the page to be loaded
     Then I should not see an error
 
@@ -257,6 +281,7 @@ Feature: Course tools basic testing
     And I wait for the page to be loaded
     Then I should not see "not authorized"
     When I fill in "title" with "TEMP_PRIVATE"
+    And I select "Language skills" from the ajax select "update_course_course_categories"
     Then I check the "Private access (access authorized to group members only)" radio button
     And I press "submit"
     Then wait for the page to be loaded

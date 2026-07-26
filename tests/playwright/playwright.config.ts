@@ -37,6 +37,23 @@ export default defineConfig({
   // mode, well under either value, so this doesn't mask a genuinely hung
   // test for long.
   timeout: 60_000,
+  // Default is 5s. Bumped after a real CI failure: career.feature's "Create a
+  // career" is the first ported scenario to touch a legacy jqGrid page
+  // (careers.php) — every prior feature (login, adminFillUsers,
+  // adminSettings) is Vue-only. Trace analysis of the failure showed the
+  // jqGrid data AJAX call (get_careers) didn't even fire until ~6.6s after
+  // the redirect-after-submit response, because on a fresh, nothing-cached
+  // CI install the Vue admin-layout bundle, jQuery, jqGrid, and its i18n
+  // chunk all have to load and initialize serially first — well past the
+  // default 5s assertion window, so "Then I should see Developer" timed out
+  // before the grid's own AJAX call even started (confirmed via the aborted
+  // request's status: -1 in the trace, a side effect of the test's own
+  // teardown, not a server error). Edit/Copy/Delete (same file, same worker,
+  // right after) all passed fine once those bundles were warm. Raised
+  // instead of touching career.feature or the shared steps: every assertion
+  // still resolves as soon as it's satisfied, so this only adds patience,
+  // never slows down anything that already passes.
+  expect: { timeout: 15_000 },
   fullyParallel: false,
   retries: 0,
   outputDir: path.join(repoRoot, "var/test-results/playwright/results"),

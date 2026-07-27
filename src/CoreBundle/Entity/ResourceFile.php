@@ -171,7 +171,7 @@ class ResourceFile implements Stringable
     /**
      * @var string[]
      */
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: 'json', nullable: true)]
     protected ?array $metadata = [];
     #[Groups(['message:read'])]
     protected ?bool $audio = null;

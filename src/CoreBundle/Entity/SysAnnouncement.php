@@ -48,7 +48,7 @@ class SysAnnouncement
      *
      * @var string[]
      */
-    #[ORM\Column(type: 'array')]
+    #[ORM\Column(type: 'json')]
     protected array $roles = [];
 
     #[ORM\ManyToOne(targetEntity: Career::class)]

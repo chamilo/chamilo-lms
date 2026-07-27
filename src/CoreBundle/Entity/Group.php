@@ -38,7 +38,7 @@ class Group implements Stringable
         #[Assert\NotBlank]
         #[ORM\Column(name: 'title', type: 'string', length: 255, unique: true, nullable: false)]
         protected string $title,
-        #[ORM\Column(name: 'roles', type: 'array')]
+        #[ORM\Column(name: 'roles', type: 'json')]
         protected array $roles
         = [
         ]

@@ -996,7 +996,6 @@ function display_database_settings_form(
 
             $manager = Database::getManager();
             $connection = $manager->getConnection();
-            $connection->connect();
             $schemaManager = $connection->createSchemaManager();
 
             $table = 'zXxTESTxX_'.mt_rand(0, 1000);

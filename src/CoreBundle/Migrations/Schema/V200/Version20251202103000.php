@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Throwable;
 
@@ -33,7 +34,7 @@ final class Version20251202103000 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $this->abortIf(
-            !\in_array($this->connection->getDatabasePlatform()->getName(), ['mysql', 'mariadb'], true),
+            !$this->connection->getDatabasePlatform() instanceof AbstractMySQLPlatform,
             'This migration only supports MySQL/MariaDB.'
         );
 
@@ -45,7 +46,7 @@ final class Version20251202103000 extends AbstractMigrationChamilo
     public function down(Schema $schema): void
     {
         $this->abortIf(
-            !\in_array($this->connection->getDatabasePlatform()->getName(), ['mysql', 'mariadb'], true),
+            !$this->connection->getDatabasePlatform() instanceof AbstractMySQLPlatform,
             'This migration only supports MySQL/MariaDB.'
         );
 

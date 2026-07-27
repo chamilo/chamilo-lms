@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 if (!isset($_GET['course'])) {
     $cidReset = true;
@@ -1005,8 +1006,9 @@ if ($notebookTeacherEnable && !empty($studentId) && !empty($courseCode)) {
 }
 
 if (api_can_login_as($studentId)) {
-    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$studentId
-        .'&sec_token='.$token.'">'
+    $loginAsToken = Container::$container->get(CsrfTokenManagerInterface::class)->getToken('login_as')->getValue();
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$studentId
+        .'&sec_token='.urlencode($loginAsToken).'">'
         .Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')).'</a>&nbsp;&nbsp;';
 }
 

@@ -87,6 +87,18 @@ Given("I am an invitee", async ({ page }) => {
   await loginAs(page, "bproudfoot")
 })
 
+// Ported from FeatureContext::iAmLoggedAs() — same login flow as the fixed
+// "I am a ..." steps above, but for an arbitrary username (createUser.feature
+// logs in as a user it just created, e.g. "hrm", not one of the fixed roles).
+Given("I am logged as {string}", async ({ page }, username: string) => {
+  await loginAs(page, username)
+})
+
+// Ported from FeatureContext::iAmNotLogged() — just visits /logout.
+Given("I am not logged", async ({ page }) => {
+  await page.goto("/logout")
+})
+
 // Mink's fillField/checkField both resolve a field by id, then name, then
 // label text (in that order) — which is why Gherkin locators like "login"
 // have always worked here without anyone needing to know whether that's
@@ -114,13 +126,26 @@ Given("I am an invitee", async ({ page }) => {
 //     it doesn't simulate a real pointer interaction.
 // So: use a plain id/name match first; only add :visible when that match is
 // ambiguous (count > 1), to break the tie in favor of the real one.
+//
+// Only attempt the bare `#field` selector when `field` is actually shaped
+// like a valid id (a real CSS bug, not a hypothetical): createUser.feature
+// needed to target user_add.php's "roles" multi-select by its real `name`
+// attribute, "roles[]" (see the name-tier comment on FormValidator's select
+// rendering below) — `#roles[]` is not valid CSS (unescaped brackets), and
+// page.locator() throws a SyntaxError immediately instead of just finding
+// zero matches, crashing every step that ever resolves a field whose only
+// valid attribute is a bracketed multi-select name.
+const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
+
 async function resolveField(page: Page, field: string) {
-  const byId = page.locator(`#${field}`)
-  const idCount = await byId.count()
-  if (idCount === 1) return byId
-  if (idCount > 1) {
-    const visibleById = page.locator(`#${field}:visible`)
-    if (await visibleById.count()) return visibleById
+  if (looksLikeIdentifier(field)) {
+    const byId = page.locator(`#${field}`)
+    const idCount = await byId.count()
+    if (idCount === 1) return byId
+    if (idCount > 1) {
+      const visibleById = page.locator(`#${field}:visible`)
+      if (await visibleById.count()) return visibleById
+    }
   }
 
   const byName = page.locator(`[name="${field}"]`)
@@ -261,6 +286,16 @@ Then("I check {string}", async ({ page }, field: string) => {
 // pointing at the input, matching findField()'s own resolution.
 When("I check the {string} radio button", async ({ page }, label: string) => {
   await page.getByLabel(label).check()
+})
+
+// Ported from FeatureContext::iCheckTheRadioButtonBasedInSelector(). Unlike
+// the label-based step above, this one takes a raw CSS selector directly
+// (createUser.feature's "#send_mail_no") — the original PHP step just set the
+// DOM `checked` property via jQuery with no real user interaction/events;
+// .check() is the direct Playwright equivalent (a real click, which also
+// covers any onclick/change listener the original's bare .prop() skipped).
+When("I check the {string} radio button selector", async ({ page }, selector: string) => {
+  await page.locator(selector).check()
 })
 
 // Not ported — new. Mirrors FeatureContext's own generic Select2/ajax-select
@@ -419,16 +454,6 @@ AfterAll({ tags: "@settings" }, async () => {
   }
   await page.context().close()
 })
-
-// Mink's pressButton resolves a button/submit input by id, then name, then
-// value/visible text (e.g. actionInstall.feature's "step4"/"step5"/
-// "button_step6"/"license-next" are id attributes on the legacy install
-// wizard's submit buttons, not their visible labels — unlike "Sign in",
-// which is only ever visible text, never a valid id/name value in the
-// first place since it contains a space). Only attempt the id/name lookup
-// when the label is actually shaped like one, to avoid feeding something
-// like "#Sign in" to a CSS selector.
-const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
 
 // pressButton()'s tiers each need to decide "does THIS locator apply" before
 // falling through to the next one — but a plain `.count()` is an instant,

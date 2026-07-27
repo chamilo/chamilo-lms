@@ -1,0 +1,9 @@
+# Docker stack: route dev mail to Mailpit (http://localhost:8025) instead of
+# discarding it, so registration / password-reset flows are testable.
+#
+# config/packages/mailer.yaml hardcodes 'null://null' including a when@dev
+# block; files under config/packages/dev/ load afterwards, so this wins.
+# Filename is zz_-prefixed to sort last within the directory.
+framework:
+    mailer:
+        dsn: 'smtp://mailpit:1025'

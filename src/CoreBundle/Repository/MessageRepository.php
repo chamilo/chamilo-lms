@@ -50,6 +50,92 @@ class MessageRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @return Message[]
+     */
+    public function findMobileMessagesForUser(
+        User $user,
+        string $box,
+        ?string $search = null,
+        ?bool $unread = null,
+        ?bool $starred = null,
+        int $limit = 50
+    ): array {
+        $queryBuilder = $this->createQueryBuilder('message')
+            ->innerJoin('message.receivers', 'userRelation')
+            ->where('userRelation.receiver = :user')
+            ->andWhere('userRelation.deletedAt IS NULL OR userRelation.deletedAt > CURRENT_TIMESTAMP()')
+            ->andWhere('message.msgType = :messageType')
+            ->andWhere('message.status <> :deletedStatus')
+            ->setParameter('user', $user)
+            ->setParameter('senderType', MessageRelUser::TYPE_SENDER)
+            ->setParameter('messageType', Message::MESSAGE_TYPE_INBOX)
+            ->setParameter('deletedStatus', Message::MESSAGE_STATUS_DELETED)
+            ->orderBy('message.sendDate', 'DESC')
+            ->addOrderBy('message.id', 'DESC')
+        ;
+
+        if ('sent' === $box) {
+            $queryBuilder
+                ->andWhere('userRelation.receiverType = :senderType')
+                ->andWhere('message.sender = :user')
+            ;
+        } else {
+            $queryBuilder->andWhere('userRelation.receiverType <> :senderType');
+        }
+
+        $normalizedSearch = trim((string) $search);
+
+        if ('' !== $normalizedSearch) {
+            $queryBuilder
+                ->andWhere('LOWER(message.title) LIKE :search OR LOWER(message.content) LIKE :search')
+                ->setParameter('search', '%'.mb_strtolower($normalizedSearch).'%')
+            ;
+        }
+
+        if (null !== $unread && 'sent' !== $box) {
+            $queryBuilder
+                ->andWhere('userRelation.read = :read')
+                ->setParameter('read', !$unread)
+            ;
+        }
+
+        if (null !== $starred) {
+            $queryBuilder
+                ->andWhere('userRelation.starred = :starred')
+                ->setParameter('starred', $starred)
+            ;
+        }
+
+        return $queryBuilder
+            ->setMaxResults(max(1, min($limit, 100)))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findMobileMessageForUser(int $messageId, User $user): ?Message
+    {
+        if ($messageId <= 0) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('message')
+            ->innerJoin('message.receivers', 'userRelation')
+            ->where('message.id = :messageId')
+            ->andWhere('userRelation.receiver = :user')
+            ->andWhere('userRelation.deletedAt IS NULL OR userRelation.deletedAt > CURRENT_TIMESTAMP()')
+            ->andWhere('message.msgType = :messageType')
+            ->andWhere('message.status <> :deletedStatus')
+            ->setParameter('messageId', $messageId)
+            ->setParameter('user', $user)
+            ->setParameter('messageType', Message::MESSAGE_TYPE_INBOX)
+            ->setParameter('deletedStatus', Message::MESSAGE_STATUS_DELETED)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     protected function addReceiverQueryBuilder(User $user, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'm');

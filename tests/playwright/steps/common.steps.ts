@@ -486,8 +486,13 @@ Then("I click the {string} element", async ({ page }, selector: string) => {
 // because that row sorted before it. Scoping the click to the table row
 // that actually contains our own row's identifying text avoids this
 // entirely — use this instead of "I click the ... element" on any page
-// where other rows might already exist.
+// where other rows might already exist. Also registers the same native-
+// dialog handler as "I click the ... element" (courseCategory.feature's
+// delete icon triggers a native confirm(), same as career.feature's) — a
+// no-op for class.feature's PrimeVue ConfirmDialog usage, which never fires
+// a native dialog.
 Then("I click the {string} icon in the row for {string}", async ({ page }, selector: string, rowText: string) => {
+  page.once("dialog", (dialog) => dialog.accept())
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 

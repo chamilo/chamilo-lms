@@ -280,16 +280,33 @@ watch(
     if (legacyContainer.value) legacyContainer.value.innerHTML = ""
   },
 )
+
+// Drains window.chEditors (populated by legacy pages' own inline scripts —
+// see TinyEditor.php's editorReplace()) and initializes each queued config.
+// shift()-based so it's safe to call more than once: whichever caller runs
+// first drains whatever's there, any later call just finds an empty array.
+// Needed because the legacy page's own DOMContentLoaded handler that pushes
+// onto this queue runs on its own schedule, independent of this component's
+// lifecycle — under a slow/cold page load it can fire AFTER the watchEffect
+// below already ran once, and without re-draining on the "editor-queued"
+// event too, that config would sit in the queue forever with its editor
+// never initialized (found via a real CI failure — courseCategory.feature's
+// description field stayed a plain, un-enhanced textarea for the full test
+// timeout, with zero trace of tinymce anywhere having run).
+function drainChEditors() {
+  const chEditors = window.chEditors || []
+  while (chEditors.length) {
+    tinymce.init(chEditors.shift())
+  }
+}
+
 watchEffect(() => {
   if (!legacyContainer.value) return
   const content = document.querySelector("#sectionMainContent")
 
   if (content) {
     legacyContainer.value.appendChild(content)
-
-    const chEditors = window.chEditors || []
-    chEditors.forEach((editorConfig) => tinymce.init(editorConfig))
-
+    drainChEditors()
     content.style.display = "block"
   }
 })
@@ -352,6 +369,7 @@ onMounted(async () => {
   document.addEventListener("paste", blockCopyPasteEvent, true)
   document.addEventListener("contextmenu", blockCopyPasteEvent, true)
   document.addEventListener("keydown", blockCopyPasteShortcut, true)
+  window.addEventListener("chamilo:editor-queued", drainChEditors)
 
   const { loader } = useMediaElementLoader()
   loader()
@@ -465,6 +483,7 @@ onBeforeUnmount(() => {
   document.removeEventListener("paste", blockCopyPasteEvent, true)
   document.removeEventListener("contextmenu", blockCopyPasteEvent, true)
   document.removeEventListener("keydown", blockCopyPasteShortcut, true)
+  window.removeEventListener("chamilo:editor-queued", drainChEditors)
   delete window.chamiloCidReq
 })
 </script>

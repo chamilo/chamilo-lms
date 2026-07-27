@@ -48,16 +48,16 @@ use const STR_PAD_LEFT;
 
 final readonly class TicketWorkflowService
 {
-    public const CSRF_TOKEN_ID = 'ticket_workflow';
-    public const MAX_ATTACHMENTS = 6;
+    public const string CSRF_TOKEN_ID = 'ticket_workflow';
+    public const int MAX_ATTACHMENTS = 6;
 
-    private const PRIORITY_NORMAL = 1;
-    private const SOURCE_PLATFORM = 'PLA';
-    private const STATUS_PENDING = 2;
-    private const STATUS_UNCONFIRMED = 3;
-    private const STATUS_CLOSED = 4;
-    private const STATUS_FORWARDED = 5;
-    private const STATUS_NEW = 1;
+    private const int PRIORITY_NORMAL = 1;
+    private const string SOURCE_PLATFORM = 'PLA';
+    private const int STATUS_PENDING = 2;
+    private const int STATUS_UNCONFIRMED = 3;
+    private const int STATUS_CLOSED = 4;
+    private const int STATUS_FORWARDED = 5;
+    private const int STATUS_NEW = 1;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -624,8 +624,8 @@ final readonly class TicketWorkflowService
 
     private function getFirstCategoryUser(TicketCategory $category, AccessUrl $accessUrl): ?User
     {
-        $user = $this->entityManager->createQueryBuilder()
-            ->select('user')
+        $relation = $this->entityManager->createQueryBuilder()
+            ->select('relation')
             ->from(TicketCategoryRelUser::class, 'relation')
             ->innerJoin('relation.user', 'user')
             ->innerJoin('user.portals', 'portal')
@@ -641,7 +641,7 @@ final readonly class TicketWorkflowService
             ->getOneOrNullResult()
         ;
 
-        return $user instanceof User ? $user : null;
+        return $relation instanceof TicketCategoryRelUser ? $relation->getUser() : null;
     }
 
     private function assertCourseAndSessionSelectionIsAllowed(

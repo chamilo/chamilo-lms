@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\ApiResource\LearningPath;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathCategoryMutationProcessor;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -18,27 +18,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/learning_path_categories/manage',
-            output: false,
             status: Response::HTTP_NO_CONTENT,
-            processor: LearningPathCategoryMutationProcessor::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            output: false,
+            processor: LearningPathCategoryMutationProcessor::class,
         ),
         new Post(
             uriTemplate: '/learning_path_categories/{id}/manage-action',
             requirements: ['id' => '\d+'],
-            read: false,
-            output: false,
             status: Response::HTTP_NO_CONTENT,
-            processor: LearningPathCategoryMutationProcessor::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            output: false,
+            read: false,
+            processor: LearningPathCategoryMutationProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/learning_path_categories/{id}/manage',
             requirements: ['id' => '\d+'],
-            output: false,
             status: Response::HTTP_NO_CONTENT,
-            processor: LearningPathCategoryMutationProcessor::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            output: false,
+            processor: LearningPathCategoryMutationProcessor::class,
         ),
     ],
     normalizationContext: ['groups' => ['lp_category_input:read']],

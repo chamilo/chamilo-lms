@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Strana {0} z {1}",
     "Showing {0} posts": "Zobrazujem {0} pr\u00edspevkov",
     "Showing {0} tasks": "Zobrazujem {0} \u00faloh",
-    "contains {0} items": "obsahuje {0} polo\u017eiek"
+    "contains {0} items": "obsahuje {0} polo\u017eiek",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

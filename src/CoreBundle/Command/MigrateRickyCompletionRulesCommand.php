@@ -28,11 +28,11 @@ use const JSON_UNESCAPED_SLASHES;
 )]
 final class MigrateRickyCompletionRulesCommand extends Command
 {
-    private const SOURCE = 'ricky_legacy_completion_rule';
-    private const LEGACY_SOURCE_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
-    private const AUDIT_REPORT_SHA256 = '7e9ae6aa2b26ee9a282c14314ef71e7df30f24eb24cbc044ab65a2e2d6ffa692';
+    private const string SOURCE = 'ricky_legacy_completion_rule';
+    private const string LEGACY_SOURCE_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
+    private const string AUDIT_REPORT_SHA256 = '7e9ae6aa2b26ee9a282c14314ef71e7df30f24eb24cbc044ab65a2e2d6ffa692';
 
-    private const RULES = [
+    private const array RULES = [
         'course:1301' => [
             'course_id' => 11,
             'forum' => [

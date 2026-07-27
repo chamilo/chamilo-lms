@@ -19,7 +19,7 @@ final readonly class UpdateTrustedKeyring
      *
      * @var array<string, array{keyId: string, publicKey: string}>
      */
-    private const OFFICIAL_MINISIGN_PUBLIC_KEYS = [
+    private const array OFFICIAL_MINISIGN_PUBLIC_KEYS = [
     ];
 
     /**
@@ -30,7 +30,7 @@ final readonly class UpdateTrustedKeyring
      *
      * @var array<string, array{keyId: string, publicKey: string}>
      */
-    private const DEVELOPMENT_MINISIGN_PUBLIC_KEYS = [
+    private const array DEVELOPMENT_MINISIGN_PUBLIC_KEYS = [
         'local-test' => [
             'keyId' => 'BD33C3A79B0937B9',
             'publicKey' => 'RWS5Nwmbp8MzvSf1yf9ndm6DHjE9P8HqOJGdxKy9+lKSbsxfy1/Q5YC1',

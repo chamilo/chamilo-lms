@@ -65,40 +65,6 @@ class SysAnnouncement
     }
 
     /**
-     * Get dateStart.
-     *
-     * @return DateTime
-     */
-    public function getDateStart()
-    {
-        return $this->dateStart;
-    }
-
-    public function setDateStart(DateTime $dateStart): self
-    {
-        $this->dateStart = $dateStart;
-
-        return $this;
-    }
-
-    /**
-     * Get dateEnd.
-     *
-     * @return DateTime
-     */
-    public function getDateEnd()
-    {
-        return $this->dateEnd;
-    }
-
-    public function setDateEnd(DateTime $dateEnd): self
-    {
-        $this->dateEnd = $dateEnd;
-
-        return $this;
-    }
-
-    /**
      * Get title.
      *
      * @return string
@@ -236,5 +202,39 @@ class SysAnnouncement
         $now = new DateTime();
 
         return $this->getDateStart() <= $now && $now <= $this->getDateEnd();
+    }
+
+    /**
+     * Get dateStart.
+     *
+     * @return DateTime
+     */
+    public function getDateStart()
+    {
+        return $this->dateStart;
+    }
+
+    public function setDateStart(DateTime $dateStart): self
+    {
+        $this->dateStart = $dateStart;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEnd.
+     *
+     * @return DateTime
+     */
+    public function getDateEnd()
+    {
+        return $this->dateEnd;
+    }
+
+    public function setDateEnd(DateTime $dateEnd): self
+    {
+        $this->dateEnd = $dateEnd;
+
+        return $this;
     }
 }

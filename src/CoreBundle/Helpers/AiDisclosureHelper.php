@@ -26,16 +26,16 @@ use const PREG_OFFSET_CAPTURE;
  */
 final class AiDisclosureHelper
 {
-    public const EVENT_TYPE_AUDIT = 'ai_disclosure_audit';
-    public const EXTRA_FIELD_VARIABLE_AI_ASSISTED = 'ai_assisted';
+    public const string EVENT_TYPE_AUDIT = 'ai_disclosure_audit';
+    public const string EXTRA_FIELD_VARIABLE_AI_ASSISTED = 'ai_assisted';
 
     // We keep these as constants so they can be searched easily in DB.
-    public const VALUE_TYPE_TARGET_KEY = 'target_key';
+    public const string VALUE_TYPE_TARGET_KEY = 'target_key';
 
-    public const DEFAULT_MARKER_PREFIX = '[AI-assisted] ';
+    public const string DEFAULT_MARKER_PREFIX = '[AI-assisted] ';
 
     // Settings keys (best-effort): the real key might differ by portal.
-    private const SETTING_KEYS = [
+    private const array SETTING_KEYS = [
         'disclose_ai_assistance',
         'ai_helpers_disclose_ai_assistance',
         'ai_helpers.disclose_ai_assistance',

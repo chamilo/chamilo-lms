@@ -22,7 +22,7 @@ use const PHP_EOL;
 
 final readonly class UpdateOperationLogger
 {
-    private const OPERATION_ID_PATTERN = '/^[A-Za-z0-9._-]{8,80}$/';
+    private const string OPERATION_ID_PATTERN = '/^[A-Za-z0-9._-]{8,80}$/';
 
     public function __construct(
         #[Autowire(param: 'kernel.project_dir')]

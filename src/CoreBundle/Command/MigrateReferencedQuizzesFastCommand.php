@@ -29,7 +29,7 @@ use const ENT_QUOTES;
 )]
 final class MigrateReferencedQuizzesFastCommand extends Command
 {
-    private const RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
+    private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
 
     public function __construct(
         private readonly Connection $connection,

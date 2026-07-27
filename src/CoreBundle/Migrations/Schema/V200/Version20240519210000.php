@@ -16,8 +16,8 @@ use Symfony\Component\Uid\Uuid;
 
 final class Version20240519210000 extends AbstractMigrationChamilo
 {
-    private const SELECT_BATCH_SIZE = 250;
-    private const ASSET_FLUSH_BATCH_SIZE = 25;
+    private const int SELECT_BATCH_SIZE = 250;
+    private const int ASSET_FLUSH_BATCH_SIZE = 25;
 
     public function getDescription(): string
     {

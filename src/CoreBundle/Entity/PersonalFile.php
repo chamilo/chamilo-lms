@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -37,6 +38,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Put(
+            controller: UpdatePersonalFileAction::class,
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false
+        ),
+        new Patch(
             controller: UpdatePersonalFileAction::class,
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
@@ -91,6 +97,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiResource(
     uriTemplate: '/documents/{document_id}/personal_files',
+    shortName: 'DocumentPersonalFile',
     operations: [
         new Post(
             openapi: new Operation(
@@ -180,11 +187,6 @@ class PersonalFile extends AbstractResource implements ResourceInterface, String
         return $this->getTitle();
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
     public function getTitle(): string
     {
         return $this->title;
@@ -212,6 +214,11 @@ class PersonalFile extends AbstractResource implements ResourceInterface, String
     public function getResourceIdentifier(): int
     {
         return $this->getId();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getResourceName(): string

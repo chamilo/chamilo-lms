@@ -35,7 +35,7 @@ use const PREG_SPLIT_DELIM_CAPTURE;
 
 final readonly class LearningPathFinalItemManager
 {
-    private const DEFAULT_CONTENT = <<<'HTML'
+    private const string DEFAULT_CONTENT = <<<'HTML'
 <div>
     Congratulations! You have finished this learning path
 </div>

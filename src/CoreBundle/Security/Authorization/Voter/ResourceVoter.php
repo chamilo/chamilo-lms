@@ -22,11 +22,11 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class ResourceVoter extends Voter
 {
-    public const VIEW = 'VIEW';
-    public const CREATE = 'CREATE';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
-    public const EXPORT = 'EXPORT';
+    public const string VIEW = 'VIEW';
+    public const string CREATE = 'CREATE';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
+    public const string EXPORT = 'EXPORT';
 
     public function __construct(
         private readonly AccessDecisionManagerInterface $accessDecisionManager,

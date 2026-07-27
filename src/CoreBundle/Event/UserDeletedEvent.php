@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\Entity\User;
 
 class UserDeletedEvent extends AbstractEvent
 {
-    public const DELETE_TYPE_SOFT = 'soft';
-    public const DELETE_TYPE_HARD = 'hard';
+    public const string DELETE_TYPE_SOFT = 'soft';
+    public const string DELETE_TYPE_HARD = 'hard';
 
     /**
      * Available in TYPE_PRE and in TYPE_POST for soft-delete. Null in TYPE_POST for hard-delete.

@@ -18,8 +18,8 @@ use const PATHINFO_EXTENSION;
 
 final class Version20240128205500 extends AbstractMigrationChamilo
 {
-    private const METADATA_BATCH_SIZE = 1000;
-    private const RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
+    private const int METADATA_BATCH_SIZE = 1000;
+    private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
 
     public function getDescription(): string
     {

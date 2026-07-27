@@ -62,7 +62,7 @@ export default {
     const queryString = buildQueryString(params)
 
     if (surveyId) {
-      return await baseService.put(
+      return await baseService.patch(
         `/api/survey/configuration/${surveyId}${queryString}`,
         payload,
         surveyRequestConfig({}, getPayloadCsrfToken(payload)),
@@ -87,7 +87,7 @@ export default {
     const queryString = buildQueryString(params)
 
     if (surveyId) {
-      return await baseService.put(
+      return await baseService.patch(
         `/api/survey/meeting/${surveyId}${queryString}`,
         payload,
         surveyRequestConfig({}, getPayloadCsrfToken(payload)),
@@ -121,7 +121,7 @@ export default {
     const queryString = buildQueryString(params)
 
     if (questionId) {
-      return await baseService.put(
+      return await baseService.patch(
         `/api/survey/questions/${surveyId}/${questionId}${queryString}`,
         payload,
         surveyRequestConfig({}, getPayloadCsrfToken(payload)),

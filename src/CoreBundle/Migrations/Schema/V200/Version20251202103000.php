@@ -12,11 +12,11 @@ use Throwable;
 
 final class Version20251202103000 extends AbstractMigrationChamilo
 {
-    private const TARGET_CHARSET = 'utf8mb4';
-    private const TARGET_COLLATION = 'utf8mb4_unicode_ci';
+    private const string TARGET_CHARSET = 'utf8mb4';
+    private const string TARGET_COLLATION = 'utf8mb4_unicode_ci';
 
-    private const LEGACY_CHARSET = 'utf8mb3';
-    private const LEGACY_COLLATION = 'utf8mb3_unicode_ci';
+    private const string LEGACY_CHARSET = 'utf8mb3';
+    private const string LEGACY_COLLATION = 'utf8mb3_unicode_ci';
 
     public function getDescription(): string
     {

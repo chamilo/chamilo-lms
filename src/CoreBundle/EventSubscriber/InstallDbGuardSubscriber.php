@@ -17,7 +17,7 @@ use const PHP_SAPI;
 
 final class InstallDbGuardSubscriber implements EventSubscriberInterface
 {
-    private const VERSION_KEY = 'chamilo_database_version';
+    private const string VERSION_KEY = 'chamilo_database_version';
 
     public function __construct(
         private readonly Connection $connection

@@ -15,11 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 class CAttendanceSheet
 {
-    public const ABSENT = 0;
-    public const PRESENT = 1;
-    public const LATE_LESS_THAN_15_MINUTES = 2;
-    public const LATE_MORE_THAN_15_MINUTES = 3;
-    public const ABSENT_BUT_JUSTIFIED = 4;
+    public const int ABSENT = 0;
+    public const int PRESENT = 1;
+    public const int LATE_LESS_THAN_15_MINUTES = 2;
+    public const int LATE_MORE_THAN_15_MINUTES = 3;
+    public const int ABSENT_BUT_JUSTIFIED = 4;
 
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

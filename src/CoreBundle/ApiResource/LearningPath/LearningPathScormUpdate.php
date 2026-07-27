@@ -20,11 +20,9 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormUpdateProcessor;
             uriTemplate: '/learning_paths/{lpId}/scorm/update',
             requirements: ['lpId' => '\d+'],
             controller: LearningPathScormUpdateAction::class,
-            processor: LearningPathScormUpdateProcessor::class,
             openapi: new Operation(
                 summary: 'Replace the package files of an existing SCORM learning path',
                 requestBody: new RequestBody(
-                    required: true,
                     content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
@@ -40,12 +38,14 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormUpdateProcessor;
                             ],
                         ],
                     ]),
+                    required: true,
                 ),
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            output: false,
             read: false,
             deserialize: false,
-            output: false,
+            processor: LearningPathScormUpdateProcessor::class,
         ),
     ],
 )]

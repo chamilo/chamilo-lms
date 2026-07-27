@@ -34,7 +34,7 @@ final readonly class WikiDiscussionProvider implements ProviderInterface
 {
     use WikiAccessHelperTrait;
 
-    private const STUDENT_STATUS = 5;
+    private const int STUDENT_STATUS = 5;
 
     public function __construct(
         private RequestStack $requestStack,

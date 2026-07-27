@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/course-description/list',
-            name: 'get_course_description_list',
             openapi: new Operation(
                 parameters: [
                     new Parameter(
@@ -51,6 +50,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     ),
                 ],
             ),
+            name: 'get_course_description_list',
             provider: CourseDescriptionListProvider::class,
         ),
     ],

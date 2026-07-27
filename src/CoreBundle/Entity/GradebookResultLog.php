@@ -45,6 +45,16 @@ class GradebookResultLog
     protected User $user;
 
     /**
+     * Get createdAt.
+     *
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * Set createdAt.
      *
      * @return GradebookResultLog
@@ -57,13 +67,13 @@ class GradebookResultLog
     }
 
     /**
-     * Get createdAt.
+     * Get score.
      *
-     * @return DateTime
+     * @return float
      */
-    public function getCreatedAt()
+    public function getScore()
     {
-        return $this->createdAt;
+        return $this->score;
     }
 
     /**
@@ -76,16 +86,6 @@ class GradebookResultLog
         $this->score = $score;
 
         return $this;
-    }
-
-    /**
-     * Get score.
-     *
-     * @return float
-     */
-    public function getScore()
-    {
-        return $this->score;
     }
 
     /**

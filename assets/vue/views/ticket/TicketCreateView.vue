@@ -50,11 +50,15 @@
         <BaseSelect
           id="ticket-project"
           v-model="form.projectId"
+          :is-invalid="formSubmitted && !form.projectId"
           :label="t('Project')"
+          :message-text="formSubmitted && !form.projectId ? t('Required field') : null"
           name="project_id"
           option-label="title"
           option-value="id"
           :options="formData.projects"
+          required
+          show-required-marker
           @change="changeProject"
         />
 
@@ -68,6 +72,8 @@
           option-label="label"
           option-value="id"
           :options="formData.categories"
+          required
+          show-required-marker
         />
 
         <BaseInputText
@@ -79,6 +85,7 @@
           :label="t('Subject')"
           name="subject"
           required
+          show-required-marker
         />
 
         <BaseInputText
@@ -119,6 +126,8 @@
           option-label="label"
           option-value="id"
           :options="formData.courses"
+          :required="courseIsRequired"
+          :show-required-marker="courseIsRequired"
         />
 
         <template v-if="formData.isAdmin">
@@ -156,7 +165,7 @@
             id="ticket-assignee"
             v-model="selectedAssignee"
             class="w-full"
-            :label="t('Assign')"
+            :label="`${t('Assign')} (${t('Optional')})`"
             name="assigned_user"
             option-label="label"
             :search="searchAssignees"
@@ -169,6 +178,7 @@
         editor-id="ticket-content"
         :full-page="false"
         :help-text="formSubmitted && !hasMessageContent ? t('Required field') : ''"
+        show-required-marker
         :title="t('Message')"
       />
 
@@ -358,6 +368,7 @@ function selectFile(index, file) {
 async function submitForm() {
   formSubmitted.value = true
   if (
+    !form.projectId ||
     !form.categoryId ||
     !form.subject.trim() ||
     !hasMessageContent.value ||

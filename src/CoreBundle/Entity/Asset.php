@@ -26,18 +26,18 @@ class Asset implements Stringable
 {
     use TimestampableEntity;
 
-    public const SCORM = 'scorm';
-    public const WATERMARK = 'watermark';
+    public const string SCORM = 'scorm';
+    public const string WATERMARK = 'watermark';
     // public const CSS = 'css';
-    public const EXTRA_FIELD = 'ef';
-    public const COURSE_CATEGORY = 'course_category';
-    public const SKILL = 'skill';
-    public const EXERCISE_ATTEMPT = 'exercise_attempt';
-    public const EXERCISE_FEEDBACK = 'exercise_feedback';
-    public const SYSTEM_TEMPLATE = 'system_template';
-    public const TEMPLATE = 'template';
-    public const SESSION = 'session';
-    public const LINK = 'link';
+    public const string EXTRA_FIELD = 'ef';
+    public const string COURSE_CATEGORY = 'course_category';
+    public const string SKILL = 'skill';
+    public const string EXERCISE_ATTEMPT = 'exercise_attempt';
+    public const string EXERCISE_FEEDBACK = 'exercise_feedback';
+    public const string SYSTEM_TEMPLATE = 'system_template';
+    public const string TEMPLATE = 'template';
+    public const string SESSION = 'session';
+    public const string LINK = 'link';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
@@ -48,7 +48,9 @@ class Asset implements Stringable
     protected ?string $title = null;
 
     #[Assert\NotBlank]
-    #[Assert\Choice(choices: [self::SCORM, self::WATERMARK, self::EXTRA_FIELD, self::COURSE_CATEGORY, self::SKILL], message: 'Choose a valid category.')]
+    #[Assert\Choice(choices: [
+        self::SCORM, self::WATERMARK, self::EXTRA_FIELD, self::COURSE_CATEGORY, self::SKILL,
+    ], message: 'Choose a valid category.')]
     #[ORM\Column(type: 'string', length: 255)]
     protected ?string $category = null;
 

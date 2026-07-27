@@ -83,7 +83,7 @@ use const JSON_UNESCAPED_UNICODE;
 
 class CourseHelper
 {
-    public const MAX_COURSE_LENGTH_CODE = 40;
+    public const int MAX_COURSE_LENGTH_CODE = 40;
     private bool $debug = false;
 
     public function __construct(

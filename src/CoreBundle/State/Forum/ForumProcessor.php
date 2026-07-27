@@ -43,8 +43,8 @@ final class ForumProcessor implements ProcessorInterface
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
 
-    private const FORUM_IMAGE_ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
-    private const DEFAULT_FORUM_CATEGORY_TITLE = 'General';
+    private const array FORUM_IMAGE_ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
+    private const string DEFAULT_FORUM_CATEGORY_TITLE = 'General';
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

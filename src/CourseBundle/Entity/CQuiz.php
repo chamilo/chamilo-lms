@@ -27,8 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CQuizRepository::class)]
 class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
-    public const ALL_ON_ONE_PAGE = 1;
-    public const ONE_PER_PAGE = 2;
+    public const int ALL_ON_ONE_PAGE = 1;
+    public const int ONE_PER_PAGE = 2;
 
     #[Groups(['track_e_exercise:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]

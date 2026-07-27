@@ -86,16 +86,16 @@ class UserRelCourseVote
         return $this->id;
     }
 
+    public function getVote(): int
+    {
+        return $this->vote;
+    }
+
     public function setVote(int $vote): self
     {
         $this->vote = $vote;
 
         return $this;
-    }
-
-    public function getVote(): int
-    {
-        return $this->vote;
     }
 
     public function getUser(): User

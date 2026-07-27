@@ -44,7 +44,7 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
     /**
      * Patterns applied to URL query-parameter values.
      */
-    private const PARAM_PATTERNS = [
+    private const array PARAM_PATTERNS = [
         // SQL Injection -------------------------------------------------------
         ['pattern' => '/UNION\s+(ALL\s+)?SELECT\s/i', 'type' => 'SQLi'],
         ['pattern' => '/SELECT\s+[\w\s,*\'`]+\s+FROM\s+\w/i', 'type' => 'SQLi'],
@@ -81,7 +81,7 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
     /**
      * Patterns applied to the raw request URI (path + query string).
      */
-    private const URI_PATTERNS = [
+    private const array URI_PATTERNS = [
         // Path traversal in URI
         ['pattern' => '/(?:\.\.[\/]){2,}/', 'type' => 'PathTraversal'],
         ['pattern' => '/%2e%2e[%\/]/i', 'type' => 'PathTraversal'],
@@ -98,7 +98,7 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
     /**
      * Patterns applied to the User-Agent header only.
      */
-    private const UA_PATTERNS = [
+    private const array UA_PATTERNS = [
         ['pattern' => '/sqlmap/i', 'type' => 'Scanner'],
         ['pattern' => '/nikto/i', 'type' => 'Scanner'],
         ['pattern' => '/nessus/i', 'type' => 'Scanner'],
@@ -114,24 +114,24 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
     /**
      * Patterns applied to the Referer header.
      */
-    private const REFERER_PATTERNS = [
+    private const array REFERER_PATTERNS = [
         ['pattern' => '/<script[^>]*>/i', 'type' => 'XSS'],
         ['pattern' => '/javascript\s*:/i', 'type' => 'XSS'],
         ['pattern' => '/UNION\s+(ALL\s+)?SELECT\s/i', 'type' => 'SQLi'],
     ];
 
     // Paths matching this regex are never scanned (static assets, dev tools).
-    private const SKIP_PATH_REGEX = '/^\/(_(profiler|wdt)|build\/|bundles\/|css\/|images\/|js\/)/';
+    private const string SKIP_PATH_REGEX = '/^\/(_(profiler|wdt)|build\/|bundles\/|css\/|images\/|js\/)/';
 
     // Extensions that indicate a static asset request.
-    private const STATIC_EXT_REGEX = '/\.(css|js|map|png|jpe?g|gif|svg|ico|woff2?|ttf|eot|pdf)(\?|$)/i';
+    private const string STATIC_EXT_REGEX = '/\.(css|js|map|png|jpe?g|gif|svg|ico|woff2?|ttf|eot|pdf)(\?|$)/i';
 
     /**
      * Top-level directories that exist under public/main/ as of 2026-02-20.
      * Used to recognise legitimate ?redirect= values pointing at legacy PHP scripts.
      * This list can only shrink over time as legacy code is migrated to Symfony.
      */
-    private const LEGACY_MAIN_DIRS = [
+    private const array LEGACY_MAIN_DIRS = [
         'admin', 'announcements', 'attendance', 'auth', 'calendar', 'chat',
         'course_copy', 'course_description', 'course_home', 'course_info',
         'course_progress', 'create_course', 'cron', 'dashboard', 'dropbox',

@@ -62,6 +62,11 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
         return $this->getId();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getResourceName(): string
     {
         return (string) $this;
@@ -72,9 +77,9 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getId(): ?int
+    public function getCategory(): ?GradebookCategory
     {
-        return $this->id;
+        return $this->category;
     }
 
     public function setCategory(?GradebookCategory $category): self
@@ -84,9 +89,9 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getCategory(): ?GradebookCategory
+    public function getUser(): User
     {
-        return $this->category;
+        return $this->user;
     }
 
     public function setUser(User $user): self
@@ -96,9 +101,9 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getUser(): User
+    public function getScoreCertificate(): float
     {
-        return $this->user;
+        return $this->scoreCertificate;
     }
 
     public function setScoreCertificate(float $scoreCertificate): self
@@ -108,9 +113,9 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getScoreCertificate(): float
+    public function getCreatedAt(): DateTime
     {
-        return $this->scoreCertificate;
+        return $this->createdAt;
     }
 
     public function setCreatedAt(DateTime $createdAt): self
@@ -120,9 +125,9 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getPathCertificate(): ?string
     {
-        return $this->createdAt;
+        return $this->pathCertificate;
     }
 
     public function setPathCertificate(?string $pathCertificate): self
@@ -130,11 +135,6 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
         $this->pathCertificate = $pathCertificate;
 
         return $this;
-    }
-
-    public function getPathCertificate(): ?string
-    {
-        return $this->pathCertificate;
     }
 
     public function getDownloadedAt(): ?DateTime
@@ -149,15 +149,15 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
         return $this;
     }
 
+    public function getPublish(): bool
+    {
+        return $this->publish;
+    }
+
     public function setPublish(bool $publish): self
     {
         $this->publish = $publish;
 
         return $this;
-    }
-
-    public function getPublish(): bool
-    {
-        return $this->publish;
     }
 }

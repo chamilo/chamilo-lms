@@ -44,7 +44,7 @@ use UserManager;
 #[Route('/admin')]
 class AdminController extends BaseController
 {
-    private const ITEMS_PER_PAGE = 50;
+    private const int ITEMS_PER_PAGE = 50;
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,

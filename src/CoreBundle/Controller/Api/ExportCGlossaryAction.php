@@ -30,7 +30,7 @@ use const ENT_SUBSTITUTE;
 
 readonly class ExportCGlossaryAction
 {
-    private const MIME_TYPES = [
+    private const array MIME_TYPES = [
         'csv' => 'text/csv; charset=UTF-8',
         'xls' => 'application/vnd.ms-excel',
         'pdf' => 'application/pdf',

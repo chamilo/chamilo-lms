@@ -28,12 +28,12 @@ use const JSON_THROW_ON_ERROR;
 
 final readonly class ScormRuntimeManager
 {
-    public const VERSION_12 = '1.2';
-    public const VERSION_2004 = '2004';
+    public const string VERSION_12 = '1.2';
+    public const string VERSION_2004 = '2004';
 
-    private const SCALED_SCORE_OBJECTIVE_ID = '__chamilo_scaled_score__';
-    private const MAX_VALUE_LENGTH = 65535;
-    private const MAX_PAYLOAD_LENGTH = 1048576;
+    private const string SCALED_SCORE_OBJECTIVE_ID = '__chamilo_scaled_score__';
+    private const int MAX_VALUE_LENGTH = 65535;
+    private const int MAX_PAYLOAD_LENGTH = 1048576;
 
     public function __construct(
         private EntityManagerInterface $entityManager,

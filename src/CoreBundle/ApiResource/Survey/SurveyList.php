@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/survey/list',
-            name: 'get_survey_list',
             openapi: new Operation(
                 parameters: [
                     new Parameter(
@@ -51,8 +50,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     ),
                 ],
             ),
-            provider: SurveyListProvider::class,
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            name: 'get_survey_list',
+            provider: SurveyListProvider::class,
         ),
     ],
     normalizationContext: [

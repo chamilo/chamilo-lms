@@ -19,10 +19,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CCalendarEventVoter extends Voter
 {
-    public const CREATE = 'CREATE';
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string CREATE = 'CREATE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
     public function __construct(
         private readonly AccessDecisionManagerInterface $accessDecisionManager

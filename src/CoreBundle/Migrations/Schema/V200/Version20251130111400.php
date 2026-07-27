@@ -20,7 +20,7 @@ use Throwable;
 
 final class Version20251130111400 extends AbstractMigrationChamilo
 {
-    private const DRY_RUN = false;
+    private const bool DRY_RUN = false;
 
     public function getDescription(): string
     {

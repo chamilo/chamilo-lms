@@ -46,7 +46,7 @@ class CidReqListener
      * These roles are context roles and must be cleared every request
      * to avoid "role leakage" between courses/groups/sessions.
      */
-    private const CONTEXT_ROLES = [
+    private const array CONTEXT_ROLES = [
         'ROLE_CURRENT_COURSE_GROUP_TEACHER',
         'ROLE_CURRENT_COURSE_GROUP_STUDENT',
         'ROLE_CURRENT_COURSE_STUDENT',
@@ -59,7 +59,7 @@ class CidReqListener
      * Routes that expose the course id through the {id} route parameter instead of a
      * cid query param. For these, the course id is read from the route attributes.
      */
-    private const ROUTES_WITH_COURSE_ID_PARAM = [
+    private const array ROUTES_WITH_COURSE_ID_PARAM = [
         'chamilo_core_course_gettoolintro',
     ];
 

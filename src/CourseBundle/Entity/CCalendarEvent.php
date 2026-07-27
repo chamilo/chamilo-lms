@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
@@ -50,6 +51,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('EDIT', object)",
             deserialize: false
         ),
+        new Patch(
+            controller: UpdateCCalendarEventAction::class,
+            security: "is_granted('EDIT', object)",
+            deserialize: false
+        ),
         new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(
             paginationEnabled: false,
@@ -78,14 +84,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(GlobalEventFilter::class, properties: ['type'])]
 class CCalendarEvent extends AbstractResource implements ResourceInterface, ResourceRestrictToGroupContextInterface, Stringable
 {
-    public const COLOR_STUDENT_PUBLICATION = '#FF8C00';
+    public const string COLOR_STUDENT_PUBLICATION = '#FF8C00';
 
-    public const TYPE_INVITATION = 'invitation';
-    public const TYPE_SUBSCRIPTION = 'subscription';
+    public const string TYPE_INVITATION = 'invitation';
+    public const string TYPE_SUBSCRIPTION = 'subscription';
 
-    public const SUBSCRIPTION_VISIBILITY_NO = 0;
-    public const SUBSCRIPTION_VISIBILITY_ALL = 1;
-    public const SUBSCRIPTION_VISIBILITY_CLASS = 2;
+    public const int SUBSCRIPTION_VISIBILITY_NO = 0;
+    public const int SUBSCRIPTION_VISIBILITY_ALL = 1;
+    public const int SUBSCRIPTION_VISIBILITY_CLASS = 2;
 
     #[Groups(['calendar_event:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]

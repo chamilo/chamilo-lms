@@ -89,7 +89,7 @@ export default {
    * @returns {Promise<void>} - Result of the toggle action.
    */
   toggleVisibility: async (attendanceId) => {
-    await baseService.put(`/api/attendances/${attendanceId}/toggle_visibility`, {})
+    await baseService.patch(`/api/attendances/${attendanceId}/toggle_visibility`, {})
   },
 
   /**
@@ -98,7 +98,7 @@ export default {
    * @returns {Promise<void>} - Result of the soft delete action.
    */
   softDelete: async (attendanceId) => {
-    await baseService.put(`/api/attendances/${attendanceId}/soft_delete`, {})
+    await baseService.patch(`/api/attendances/${attendanceId}/soft_delete`, {})
   },
 
   /**

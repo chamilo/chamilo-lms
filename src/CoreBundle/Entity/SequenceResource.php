@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SequenceResourceRepository::class)]
 class SequenceResource
 {
-    public const COURSE_TYPE = 1;
-    public const SESSION_TYPE = 2;
+    public const int COURSE_TYPE = 1;
+    public const int SESSION_TYPE = 2;
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -60,14 +60,6 @@ class SequenceResource
     }
 
     /**
-     * @return string
-     */
-    public function getGraph()
-    {
-        return $this->getSequence()->getGraph();
-    }
-
-    /**
      * @return bool
      */
     public function hasGraph()
@@ -78,21 +70,11 @@ class SequenceResource
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getResourceId()
+    public function getGraph()
     {
-        return $this->resourceId;
-    }
-
-    /**
-     * @return $this
-     */
-    public function setResourceId(int $resourceId): self
-    {
-        $this->resourceId = $resourceId;
-
-        return $this;
+        return $this->getSequence()->getGraph();
     }
 
     /**
@@ -109,6 +91,24 @@ class SequenceResource
     public function setSequence(Sequence $sequence): self
     {
         $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getResourceId()
+    {
+        return $this->resourceId;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setResourceId(int $resourceId): self
+    {
+        $this->resourceId = $resourceId;
 
         return $this;
     }

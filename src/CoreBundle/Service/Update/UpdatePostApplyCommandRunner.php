@@ -20,10 +20,10 @@ use const LOCK_EX;
 
 final readonly class UpdatePostApplyCommandRunner
 {
-    private const SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\CoreBundle\Migrations\Schema\V210\\';
-    private const METADATA_FILE_NAME = 'POST-APPLY-RUN-RESULT.json';
+    private const string SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\CoreBundle\Migrations\Schema\V210\\';
+    private const string METADATA_FILE_NAME = 'POST-APPLY-RUN-RESULT.json';
 
-    private const ADVANCED_ACTION_KEYS = [
+    private const array ADVANCED_ACTION_KEYS = [
         'composer_install',
         'yarn_install',
         'yarn_build',

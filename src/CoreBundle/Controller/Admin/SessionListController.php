@@ -33,7 +33,7 @@ use Throwable;
 #[Route('/admin/session-list-data')]
 class SessionListController extends AbstractController
 {
-    private const ALLOWED_SORT_FIELDS = [
+    private const array ALLOWED_SORT_FIELDS = [
         'title' => 's.title',
         'categoryName' => 'sc.title',
         'displayStartDate' => 's.displayStartDate',
@@ -44,7 +44,7 @@ class SessionListController extends AbstractController
         'status' => 's.status',
     ];
 
-    private const VISIBILITY_LABELS = [
+    private const array VISIBILITY_LABELS = [
         Session::READ_ONLY => 'Read only',
         Session::VISIBLE => 'Visible',
         Session::INVISIBLE => 'Invisible',
@@ -52,7 +52,7 @@ class SessionListController extends AbstractController
         Session::LIST_ONLY => 'List only',
     ];
 
-    private const STATUS_LABELS = [
+    private const array STATUS_LABELS = [
         Session::STATUS_PLANNED => 'Planned',
         Session::STATUS_PROGRESS => 'In progress',
         Session::STATUS_FINISHED => 'Finished',
@@ -60,7 +60,7 @@ class SessionListController extends AbstractController
         Session::STATUS_UNKNOWN => 'Unknown',
     ];
 
-    private const ALLOWED_LIST_TYPES = [
+    private const array ALLOWED_LIST_TYPES = [
         'all',
         'active',
         'close',

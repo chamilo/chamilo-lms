@@ -40,9 +40,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
 {
     use LearningPathStateHelperTrait;
 
-    private const SECTION_GROUPS = 'groups';
-    private const SECTION_USER_GROUPS = 'usergroups';
-    private const SECTION_USERS = 'users';
+    private const string SECTION_GROUPS = 'groups';
+    private const string SECTION_USER_GROUPS = 'usergroups';
+    private const string SECTION_USERS = 'users';
 
     public function __construct(
         private EntityManagerInterface $entityManager,

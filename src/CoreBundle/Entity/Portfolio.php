@@ -19,13 +19,13 @@ use Stringable;
 #[ORM\Entity(repositoryClass: PortfolioRepository::class)]
 class Portfolio extends AbstractResource implements ExtraFieldItemInterface, ResourceInterface, Stringable
 {
-    public const TYPE_ITEM = 1;
-    public const TYPE_COMMENT = 2;
+    public const int TYPE_ITEM = 1;
+    public const int TYPE_COMMENT = 2;
 
-    public const VISIBILITY_HIDDEN = 0;
-    public const VISIBILITY_VISIBLE = 1;
-    public const VISIBILITY_HIDDEN_EXCEPT_TEACHER = 2;
-    public const VISIBILITY_PER_USER = 3;
+    public const int VISIBILITY_HIDDEN = 0;
+    public const int VISIBILITY_VISIBLE = 1;
+    public const int VISIBILITY_HIDDEN_EXCEPT_TEACHER = 2;
+    public const int VISIBILITY_PER_USER = 3;
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -80,20 +80,9 @@ class Portfolio extends AbstractResource implements ExtraFieldItemInterface, Res
         $this->duplicates = new ArrayCollection();
     }
 
-    public function setTitle(string $title): static
+    public function getContent(): string
     {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getTitle(bool $stripTags = false): string
-    {
-        if ($stripTags) {
-            return strip_tags($this->title);
-        }
-
-        return $this->title;
+        return $this->content;
     }
 
     public function setContent(string $content): static
@@ -103,14 +92,9 @@ class Portfolio extends AbstractResource implements ExtraFieldItemInterface, Res
         return $this;
     }
 
-    public function getContent(): string
+    public function getVisibility(): int
     {
-        return $this->content;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
+        return $this->visibility;
     }
 
     public function setVisibility(int $visibility): self
@@ -118,11 +102,6 @@ class Portfolio extends AbstractResource implements ExtraFieldItemInterface, Res
         $this->visibility = $visibility;
 
         return $this;
-    }
-
-    public function getVisibility(): int
-    {
-        return $this->visibility;
     }
 
     public function getCategory(): ?PortfolioCategory
@@ -222,34 +201,12 @@ class Portfolio extends AbstractResource implements ExtraFieldItemInterface, Res
         return $this;
     }
 
-    public function getDuplicatedFrom(): ?self
-    {
-        return $this->duplicatedFrom;
-    }
-
-    public function setDuplicatedFrom(?self $duplicatedFrom): self
-    {
-        $this->duplicatedFrom = $duplicatedFrom;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Portfolio>
      */
     public function getDuplicates(): Collection
     {
         return $this->duplicates;
-    }
-
-    public function addDuplicate(self $duplicate): self
-    {
-        if (!$this->duplicates->contains($duplicate)) {
-            $this->duplicates->add($duplicate);
-            $duplicate->setDuplicatedFrom($this);
-        }
-
-        return $this;
     }
 
     public function removeDuplicate(self $duplicate): self
@@ -260,6 +217,18 @@ class Portfolio extends AbstractResource implements ExtraFieldItemInterface, Res
                 $duplicate->setDuplicatedFrom(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDuplicatedFrom(): ?self
+    {
+        return $this->duplicatedFrom;
+    }
+
+    public function setDuplicatedFrom(?self $duplicatedFrom): self
+    {
+        $this->duplicatedFrom = $duplicatedFrom;
 
         return $this;
     }
@@ -290,6 +259,11 @@ class Portfolio extends AbstractResource implements ExtraFieldItemInterface, Res
         ;
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function isDuplicatedInSessionId(int $sessionId): bool
     {
         return $this->duplicates
@@ -304,13 +278,6 @@ class Portfolio extends AbstractResource implements ExtraFieldItemInterface, Res
                 ;
             })
         ;
-    }
-
-    public function reset(): void
-    {
-        $this->id = null;
-        $this->duplicates = new ArrayCollection();
-        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -332,9 +299,42 @@ class Portfolio extends AbstractResource implements ExtraFieldItemInterface, Res
         return $duplicate;
     }
 
+    public function reset(): void
+    {
+        $this->id = null;
+        $this->duplicates = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
+
+    public function addDuplicate(self $duplicate): self
+    {
+        if (!$this->duplicates->contains($duplicate)) {
+            $this->duplicates->add($duplicate);
+            $duplicate->setDuplicatedFrom($this);
+        }
+
+        return $this;
+    }
+
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function getTitle(bool $stripTags = false): string
+    {
+        if ($stripTags) {
+            return strip_tags($this->title);
+        }
+
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function setResourceName(string $name): static

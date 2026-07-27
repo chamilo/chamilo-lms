@@ -43,14 +43,14 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
 {
     use LearningPathStateHelperTrait;
 
-    private const ACTION_COPY = 'copy';
-    private const ACTION_DELETE = 'delete';
-    private const ACTION_SWITCH_ATTEMPT_MODE = 'switch_attempt_mode';
-    private const ACTION_SWITCH_SCORM_DEBUG = 'switch_scorm_debug';
-    private const ACTION_SWITCH_VIEW_MODE = 'switch_view_mode';
-    private const ACTION_TOGGLE_AUTO_LAUNCH = 'toggle_auto_launch';
-    private const ACTION_TOGGLE_PUBLISH = 'toggle_publish';
-    private const ACTION_TOGGLE_SERIOUS_GAME = 'toggle_serious_game';
+    private const string ACTION_COPY = 'copy';
+    private const string ACTION_DELETE = 'delete';
+    private const string ACTION_SWITCH_ATTEMPT_MODE = 'switch_attempt_mode';
+    private const string ACTION_SWITCH_SCORM_DEBUG = 'switch_scorm_debug';
+    private const string ACTION_SWITCH_VIEW_MODE = 'switch_view_mode';
+    private const string ACTION_TOGGLE_AUTO_LAUNCH = 'toggle_auto_launch';
+    private const string ACTION_TOGGLE_PUBLISH = 'toggle_publish';
+    private const string ACTION_TOGGLE_SERIOUS_GAME = 'toggle_serious_game';
 
     public function __construct(
         private EntityManagerInterface $entityManager,

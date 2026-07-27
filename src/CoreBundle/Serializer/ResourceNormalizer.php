@@ -20,7 +20,7 @@ final class ResourceNormalizer implements NormalizerInterface, NormalizerAwareIn
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'MEDIA_OBJECT_NORMALIZER_ALREADY_CALLED';
+    private const string ALREADY_CALLED = 'MEDIA_OBJECT_NORMALIZER_ALREADY_CALLED';
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,

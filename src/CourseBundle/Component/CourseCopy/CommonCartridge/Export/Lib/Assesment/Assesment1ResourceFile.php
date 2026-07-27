@@ -11,7 +11,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Utils\CcHel
 
 class Assesment1ResourceFile extends CcGeneralFile
 {
-    public const DEAFULTNAME = 'assessment.xml';
+    public const string DEAFULTNAME = 'assessment.xml';
 
     protected $rootns = 'xmlns';
     protected $rootname = CcQtiTags::QUESTESTINTEROP;

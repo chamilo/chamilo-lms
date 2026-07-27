@@ -28,9 +28,9 @@ use const JSON_UNESCAPED_SLASHES;
 )]
 final class AuditRickyCompletionRulesCommand extends Command
 {
-    private const LEGACY_SOURCE_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
+    private const string LEGACY_SOURCE_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
 
-    private const EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
+    private const string EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
 
     /**
      * Semantic hints extracted from the legacy score formulas. They are used
@@ -38,7 +38,7 @@ final class AuditRickyCompletionRulesCommand extends Command
      *
      * @var array<string, array<int, array{role: string, weight: float}>>
      */
-    private const LEGACY_EXERCISE_HINTS = [
+    private const array LEGACY_EXERCISE_HINTS = [
         '1301' => [
             17 => ['role' => 'midterm', 'weight' => 0.20],
             22 => ['role' => 'assessment', 'weight' => 0.30],
@@ -149,7 +149,7 @@ final class AuditRickyCompletionRulesCommand extends Command
     /**
      * @var list<string>
      */
-    private const FLATVIEW_ONLY_COURSE_CODES = [
+    private const array FLATVIEW_ONLY_COURSE_CODES = [
         '1510C',
         'CROWDMANAGERTRAINING',
         'EMERGENCYVEHICLEOPERATORCOURSE',
@@ -171,7 +171,7 @@ final class AuditRickyCompletionRulesCommand extends Command
      *     exercise_ids: list<int>
      * }>
      */
-    private const LEGACY_RULES = [
+    private const array LEGACY_RULES = [
         [
             'code' => '1301',
             'legacy_course_id' => 11,

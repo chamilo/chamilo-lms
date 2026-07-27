@@ -28,13 +28,13 @@ use Throwable;
 )]
 final class DisableUserConditionsCommand extends Command
 {
-    private const EXTRA_FIELD_VARIABLE_TERM_ACTIVATED = 'termactivated';
+    private const string EXTRA_FIELD_VARIABLE_TERM_ACTIVATED = 'termactivated';
 
-    private const USER_STATUS_STUDENT = 5;
-    private const USER_ACTIVE_ENABLED = 1;
-    private const USER_ACTIVE_DISABLED = 0;
+    private const int USER_STATUS_STUDENT = 5;
+    private const int USER_ACTIVE_ENABLED = 1;
+    private const int USER_ACTIVE_DISABLED = 0;
 
-    private const MESSAGE_RECEIVER_TYPE_TO = 1;
+    private const int MESSAGE_RECEIVER_TYPE_TO = 1;
 
     /**
      * @var array<string, string[]>

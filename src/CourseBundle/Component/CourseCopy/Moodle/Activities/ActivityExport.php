@@ -20,8 +20,8 @@ abstract class ActivityExport
     /**
      * Synthetic module id used by the root "Documents" folder activity.
      */
-    public const DOCS_MODULE_ID = 1000000;
-    public const INTRO_PAGE_MODULE_ID = 1000001;
+    public const int DOCS_MODULE_ID = 1000000;
+    public const int INTRO_PAGE_MODULE_ID = 1000001;
 
     /**
      * @var object

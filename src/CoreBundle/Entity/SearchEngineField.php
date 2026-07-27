@@ -62,6 +62,11 @@ class SearchEngineField
         return $this->id;
     }
 
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
     public function setCode(string $code): self
     {
         $this->code = $code;
@@ -69,9 +74,9 @@ class SearchEngineField
         return $this;
     }
 
-    public function getCode(): string
+    public function getTitle(): string
     {
-        return $this->code;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -79,10 +84,5 @@ class SearchEngineField
         $this->title = $title;
 
         return $this;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
     }
 }

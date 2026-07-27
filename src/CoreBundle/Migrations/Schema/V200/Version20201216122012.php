@@ -23,8 +23,8 @@ use Throwable;
 
 final class Version20201216122012 extends AbstractMigrationChamilo
 {
-    private const ORM_FLUSH_BATCH_SIZE = 100;
-    private const ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
+    private const int ORM_FLUSH_BATCH_SIZE = 100;
+    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
 
     public function getDescription(): string
     {

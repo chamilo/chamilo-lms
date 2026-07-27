@@ -25,11 +25,11 @@ use const ENT_QUOTES;
 
 final class Version20201215160445 extends AbstractMigrationChamilo
 {
-    private const SMALL_BATCH_SIZE = 500;
-    private const POST_BATCH_SIZE = 1500;
-    private const FILE_FLUSH_BATCH_SIZE = 25;
-    private const RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
-    private const ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
+    private const int SMALL_BATCH_SIZE = 500;
+    private const int POST_BATCH_SIZE = 1500;
+    private const int FILE_FLUSH_BATCH_SIZE = 25;
+    private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
+    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
 
     public function getDescription(): string
     {

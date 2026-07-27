@@ -109,18 +109,6 @@ class MessageAttachment extends AbstractResource implements ResourceInterface, S
         return $this;
     }
 
-    public function getSize(): int
-    {
-        return $this->size;
-    }
-
-    public function setSize(int $size): self
-    {
-        $this->size = $size;
-
-        return $this;
-    }
-
     public function getMessage(): ?Message
     {
         return $this->message;
@@ -172,6 +160,18 @@ class MessageAttachment extends AbstractResource implements ResourceInterface, S
         ;
 
         $this->resourceFileToAttach = $resourceFileToAttach;
+
+        return $this;
+    }
+
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    public function setSize(int $size): self
+    {
+        $this->size = $size;
 
         return $this;
     }

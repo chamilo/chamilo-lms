@@ -17,16 +17,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/learning_paths/ai-generator',
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_learning_path_ai_generator',
             provider: LearningPathAiGeneratorProvider::class,
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
         new Post(
             uriTemplate: '/learning_paths/ai-generator',
-            name: 'create_learning_path_from_ai',
-            read: false,
-            processor: LearningPathAiGeneratorProcessor::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            read: false,
+            name: 'create_learning_path_from_ai',
+            processor: LearningPathAiGeneratorProcessor::class,
         ),
     ],
     normalizationContext: ['groups' => ['learning_path_ai_generator:read']],

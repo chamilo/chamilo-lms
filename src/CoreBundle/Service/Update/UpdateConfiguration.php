@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class UpdateConfiguration
 {
-    public const OFFICIAL_MANIFEST_SOURCE = 'https://updates.chamilo.org/2.x/stable.json';
+    public const string OFFICIAL_MANIFEST_SOURCE = 'https://updates.chamilo.org/2.x/stable.json';
 
     /**
      * Internal development-only switch.
@@ -18,12 +18,12 @@ final readonly class UpdateConfiguration
      * Keep disabled in committed code. Enable locally only when testing local
      * packages, unsigned packages or simulated update notices.
      */
-    public const ENABLE_DEVELOPMENT_UPDATE_TOOLS = false;
+    public const bool ENABLE_DEVELOPMENT_UPDATE_TOOLS = false;
 
-    private const LOCAL_TEST_MANIFEST_SOURCE = '/tmp/chamilo-update-slow-manifest.json';
-    private const LOCAL_TEST_PACKAGE_PATH = '/tmp/chamilo-update-slow.zip';
-    private const DEBUG_SLOW_COPY_MS = 0;
-    private const COMMAND_TIMEOUT_SECONDS = 900;
+    private const string LOCAL_TEST_MANIFEST_SOURCE = '/tmp/chamilo-update-slow-manifest.json';
+    private const string LOCAL_TEST_PACKAGE_PATH = '/tmp/chamilo-update-slow.zip';
+    private const int DEBUG_SLOW_COPY_MS = 0;
+    private const int COMMAND_TIMEOUT_SECONDS = 900;
 
     public function __construct(
         #[Autowire(param: 'kernel.environment')]

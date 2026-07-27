@@ -39,11 +39,11 @@ use const PHP_URL_SCHEME;
 
 class ChamiloHelper
 {
-    public const COURSE_MANAGER = 1;
-    public const SESSION_ADMIN = 3;
-    public const DRH = 4;
-    public const STUDENT = 5;
-    public const ANONYMOUS = 6;
+    public const int COURSE_MANAGER = 1;
+    public const int SESSION_ADMIN = 3;
+    public const int DRH = 4;
+    public const int STUDENT = 5;
+    public const int ANONYMOUS = 6;
 
     private static array $configuration;
 

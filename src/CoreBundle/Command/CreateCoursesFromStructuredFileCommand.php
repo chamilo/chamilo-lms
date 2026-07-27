@@ -37,7 +37,7 @@ If permissions like 0660/0770 are used, it is recommended to run this command as
 )]
 class CreateCoursesFromStructuredFileCommand extends Command
 {
-    private const MAX_COURSE_LENGTH_CODE = 40;
+    private const int MAX_COURSE_LENGTH_CODE = 40;
 
     public function __construct(
         private readonly EntityManagerInterface $em,

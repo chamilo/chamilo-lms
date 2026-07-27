@@ -15,7 +15,7 @@ use const JSON_ERROR_NONE;
 #[AutoconfigureTag('serializer.encoder')]
 final readonly class ForumMultipartDecoder implements DecoderInterface
 {
-    public const FORMAT = 'multipart';
+    public const string FORMAT = 'multipart';
 
     public function __construct(
         private RequestStack $requestStack,

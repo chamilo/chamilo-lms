@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\ApiResource\Survey;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Survey\SurveyConfigurationProcessor;
@@ -64,7 +64,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'post_survey_configuration',
             processor: SurveyConfigurationProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/survey/configuration/{surveyId}',
             requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
@@ -76,8 +76,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            read: false,
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            read: false,
             name: 'put_survey_configuration',
             processor: SurveyConfigurationProcessor::class,
         ),

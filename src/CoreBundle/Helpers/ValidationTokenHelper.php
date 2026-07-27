@@ -14,9 +14,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class ValidationTokenHelper
 {
     // Define constants for the types
-    public const TYPE_TICKET = 1;
-    public const TYPE_USER = 2;
-    public const TYPE_REMEMBER_ME = 3;
+    public const int TYPE_TICKET = 1;
+    public const int TYPE_USER = 2;
+    public const int TYPE_REMEMBER_ME = 3;
 
     public function __construct(
         private readonly ValidationTokenRepository $tokenRepository,

@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "{0}. sayfa, toplam {1}",
     "Showing {0} posts": "{0} g\u00f6nderi g\u00f6steriliyor",
     "Showing {0} tasks": "{0} g\u00f6rev g\u00f6steriliyor",
-    "contains {0} items": "{0} \u00f6\u011fe i\u00e7eriyor"
+    "contains {0} items": "{0} \u00f6\u011fe i\u00e7eriyor",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

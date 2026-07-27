@@ -18,8 +18,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/ticket/form',
-            name: 'get_ticket_form',
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             openapi: new Operation(
                 parameters: [
                     new Parameter(
@@ -38,6 +36,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     ),
                 ],
             ),
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            name: 'get_ticket_form',
             provider: TicketFormProvider::class,
         ),
     ],

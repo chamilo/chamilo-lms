@@ -33,7 +33,7 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
 {
     use CourseProgressAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'course_progress_completion';
+    public const string CSRF_TOKEN_ID = 'course_progress_completion';
 
     public function __construct(
         private RequestStack $requestStack,

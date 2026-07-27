@@ -41,8 +41,8 @@ use const DATE_ATOM;
  */
 final readonly class TicketDetailProvider implements ProviderInterface
 {
-    private const STATUS_UNCONFIRMED_ID = 3;
-    private const STATUS_CLOSED_ID = 4;
+    private const int STATUS_UNCONFIRMED_ID = 3;
+    private const int STATUS_CLOSED_ID = 4;
 
     public function __construct(
         private EntityManagerInterface $entityManager,

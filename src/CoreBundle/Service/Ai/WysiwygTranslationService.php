@@ -32,11 +32,11 @@ use const LIBXML_NOWARNING;
 
 final readonly class WysiwygTranslationService
 {
-    public const CSRF_TOKEN_ID = 'wysiwyg_translation';
+    public const string CSRF_TOKEN_ID = 'wysiwyg_translation';
 
-    private const TOOL_NAME = 'wysiwyg_translation';
-    private const MAX_HTML_LENGTH = 100000;
-    private const MAX_OUTPUT_TOKENS = 12000;
+    private const string TOOL_NAME = 'wysiwyg_translation';
+    private const int MAX_HTML_LENGTH = 100000;
+    private const int MAX_OUTPUT_TOKENS = 12000;
 
     public function __construct(
         private SettingsManager $settingsManager,

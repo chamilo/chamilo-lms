@@ -39,8 +39,8 @@ use const DATE_ATOM;
  */
 final readonly class TicketListProvider implements ProviderInterface
 {
-    private const DEFAULT_ITEMS_PER_PAGE = 20;
-    private const MAX_ITEMS_PER_PAGE = 100;
+    private const int DEFAULT_ITEMS_PER_PAGE = 20;
+    private const int MAX_ITEMS_PER_PAGE = 100;
 
     public function __construct(
         private RequestStack $requestStack,

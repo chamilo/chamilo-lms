@@ -26,7 +26,7 @@ use const PATHINFO_EXTENSION;
 
 final class AiTaskGraderService
 {
-    private const LOG_PREFIX = '[Assignments][AI][task_grader]';
+    private const string LOG_PREFIX = '[Assignments][AI][task_grader]';
     private bool $logEnabled = false;
 
     public function __construct(

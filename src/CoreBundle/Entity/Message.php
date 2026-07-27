@@ -63,6 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiResource(
     uriTemplate: '/usergroups/{usergroupId}/messages',
+    shortName: 'UsergroupMessage',
     operations: [
         new GetCollection(
             name: 'get_messages_by_social_group',
@@ -98,16 +99,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(ExistsFilter::class, properties: ['receivers.deletedAt'])]
 class Message
 {
-    public const MESSAGE_TYPE_INBOX = 1;
-    public const MESSAGE_TYPE_GROUP = 5;
-    public const MESSAGE_TYPE_INVITATION = 6;
-    public const MESSAGE_TYPE_CONVERSATION = 7;
+    public const int MESSAGE_TYPE_INBOX = 1;
+    public const int MESSAGE_TYPE_GROUP = 5;
+    public const int MESSAGE_TYPE_INVITATION = 6;
+    public const int MESSAGE_TYPE_CONVERSATION = 7;
     // status
-    public const MESSAGE_STATUS_DELETED = 3;
-    public const MESSAGE_STATUS_DRAFT = 4;
-    public const MESSAGE_STATUS_INVITATION_PENDING = 5;
-    public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
-    public const MESSAGE_STATUS_INVITATION_DENIED = 7;
+    public const int MESSAGE_STATUS_DELETED = 3;
+    public const int MESSAGE_STATUS_DRAFT = 4;
+    public const int MESSAGE_STATUS_INVITATION_PENDING = 5;
+    public const int MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
+    public const int MESSAGE_STATUS_INVITATION_DENIED = 7;
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

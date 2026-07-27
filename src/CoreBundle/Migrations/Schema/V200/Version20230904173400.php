@@ -18,9 +18,9 @@ use Throwable;
 
 final class Version20230904173400 extends AbstractMigrationChamilo
 {
-    private const AGENDA_BATCH_SIZE = 250;
-    private const MAP_TABLE = 'tmp_ricky_personal_agenda_map';
-    private const PARENT_INDEX = 'idx_ricky_personal_agenda_parent_event';
+    private const int AGENDA_BATCH_SIZE = 250;
+    private const string MAP_TABLE = 'tmp_ricky_personal_agenda_map';
+    private const string PARENT_INDEX = 'idx_ricky_personal_agenda_parent_event';
 
     public function getDescription(): string
     {

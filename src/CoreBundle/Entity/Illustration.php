@@ -25,43 +25,52 @@ class Illustration extends AbstractResource implements ResourceInterface, String
 {
     use PersonalResourceTrait;
     use TimestampableEntity;
+
     #[ORM\Column(name: 'id', type: 'uuid')]
     #[ORM\Id]
     protected Uuid $id;
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
         $this->title = 'illustration';
     }
+
     public function __toString(): string
     {
         return $this->getTitle();
     }
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
+
     public function getTitle(): string
     {
         return $this->title;
     }
+
     public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
+
     public function getResourceIdentifier(): Uuid
     {
         return $this->getId();
     }
+
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
+
     public function getResourceName(): string
     {
         return $this->getTitle();
     }
+
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);

@@ -24,13 +24,13 @@ final class ThemeHelper
      * Absolute last resort if nothing else is configured.
      * Kept for backward compatibility.
      */
-    public const DEFAULT_THEME = 'chamilo';
+    public const string DEFAULT_THEME = 'chamilo';
 
     /**
      * Fallback palette (rgba) if no palette file is available in the theme FS.
      * Colors are looped if more are needed.
      */
-    private const FALLBACK_RGBA = [
+    private const array FALLBACK_RGBA = [
         'rgba(169,68,66,0.9)',
         'rgba(230,126,34,0.9)',
         'rgba(241,196,15,0.9)',

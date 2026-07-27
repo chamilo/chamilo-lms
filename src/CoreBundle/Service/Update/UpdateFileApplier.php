@@ -22,12 +22,12 @@ use const PHP_EOL;
 
 final readonly class UpdateFileApplier
 {
-    private const SKIPPED_EXACT_PATHS = [
+    private const array SKIPPED_EXACT_PATHS = [
         '.env',
         '.env.local',
         'app/config/configuration.php',
     ];
-    private const SKIPPED_PREFIXES = [
+    private const array SKIPPED_PREFIXES = [
         '.git',
         'node_modules',
         'vendor',
@@ -35,7 +35,7 @@ final readonly class UpdateFileApplier
         'public/courses',
         'public/upload',
     ];
-    private const AUDIT_FILE_NAME = 'APPLY-RESULT.json';
+    private const string AUDIT_FILE_NAME = 'APPLY-RESULT.json';
 
     public function __construct(
         #[Autowire(param: 'kernel.project_dir')]

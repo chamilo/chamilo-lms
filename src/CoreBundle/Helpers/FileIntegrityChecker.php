@@ -61,12 +61,12 @@ use const PHP_OS_FAMILY;
  */
 class FileIntegrityChecker
 {
-    private const EXCLUDED_DIRECTORIES = ['var', '.git'];
-    private const GIT_CONFIG_RELATIVE_PATH = '.git/config';
-    private const MAX_REPORTED_PATHS = 500;
-    private const MAX_SNOOZE_SECONDS = 86400;
-    private const MAX_HISTORY_ENTRIES = 50;
-    private const ROOT_FILES_LABEL = '(root files)';
+    private const array EXCLUDED_DIRECTORIES = ['var', '.git'];
+    private const string GIT_CONFIG_RELATIVE_PATH = '.git/config';
+    private const int MAX_REPORTED_PATHS = 500;
+    private const int MAX_SNOOZE_SECONDS = 86400;
+    private const int MAX_HISTORY_ENTRIES = 50;
+    private const string ROOT_FILES_LABEL = '(root files)';
 
     private readonly string $projectDir;
     private readonly string $stateDir;

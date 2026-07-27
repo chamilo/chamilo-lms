@@ -35,12 +35,12 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
 {
     use CourseProgressAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'course_progress_thematic_plan';
+    public const string CSRF_TOKEN_ID = 'course_progress_thematic_plan';
 
     /**
      * @var array<int, string>
      */
-    private const DEFAULT_TITLES = [
+    private const array DEFAULT_TITLES = [
         1 => 'Objectives',
         2 => 'Skills to acquire',
         3 => 'Methodology',
@@ -52,7 +52,7 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
     /**
      * @var array<int, string>
      */
-    private const DEFAULT_HELP = [
+    private const array DEFAULT_HELP = [
         1 => 'What should the end results be when the learner has completed the course? What are the activities performed during the course?',
         2 => 'What skills are to be acquired bu the end of this thematic section?',
         3 => 'What methods and activities help achieve the objectives of the course?  What would the schedule be?',

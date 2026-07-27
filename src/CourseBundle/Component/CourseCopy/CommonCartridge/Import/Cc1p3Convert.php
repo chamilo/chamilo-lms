@@ -21,13 +21,13 @@ use const DIRECTORY_SEPARATOR;
 class Cc1p3Convert extends CcBase
 {
     // Keep local CC_TYPE_* for readability; values must match the manifest exactly (v1p3).
-    public const CC_TYPE_FORUM = 'imsdt_xmlv1p3';
-    public const CC_TYPE_QUIZ = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
-    public const CC_TYPE_QUESTION_BANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
-    public const CC_TYPE_WEBLINK = 'imswl_xmlv1p3';
-    public const CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
-    public const CC_TYPE_WEBCONTENT = 'webcontent';
-    public const CC_TYPE_BASICLTI = 'imsbasiclti_xmlv1p3';
+    public const string CC_TYPE_FORUM = 'imsdt_xmlv1p3';
+    public const string CC_TYPE_QUIZ = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
+    public const string CC_TYPE_QUESTION_BANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
+    public const string CC_TYPE_WEBLINK = 'imswl_xmlv1p3';
+    public const string CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
+    public const string CC_TYPE_WEBCONTENT = 'webcontent';
+    public const string CC_TYPE_BASICLTI = 'imsbasiclti_xmlv1p3';
 
     /**
      * XPath namespaces for imsmanifest.xml (v1p3 or plain imscp v1p1).

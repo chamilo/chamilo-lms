@@ -49,18 +49,6 @@ class GradebookLinkevalLog
     protected DateTime $createdAt;
 
     /**
-     * Set idLinkevalLog.
-     *
-     * @return GradebookLinkevalLog
-     */
-    public function setIdLinkevalLog(int $idLinkevalLog)
-    {
-        $this->idLinkevalLog = $idLinkevalLog;
-
-        return $this;
-    }
-
-    /**
      * Get idLinkevalLog.
      *
      * @return int
@@ -70,9 +58,14 @@ class GradebookLinkevalLog
         return $this->idLinkevalLog;
     }
 
-    public function setTitle(string $title): self
+    /**
+     * Set idLinkevalLog.
+     *
+     * @return GradebookLinkevalLog
+     */
+    public function setIdLinkevalLog(int $idLinkevalLog)
     {
-        $this->title = $title;
+        $this->idLinkevalLog = $idLinkevalLog;
 
         return $this;
     }
@@ -87,9 +80,9 @@ class GradebookLinkevalLog
         return $this->title;
     }
 
-    public function setDescription(string $description): self
+    public function setTitle(string $title): self
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
@@ -104,14 +97,9 @@ class GradebookLinkevalLog
         return $this->description;
     }
 
-    /**
-     * Set createdAt.
-     *
-     * @return GradebookLinkevalLog
-     */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setDescription(string $description): self
     {
-        $this->createdAt = $createdAt;
+        $this->description = $description;
 
         return $this;
     }
@@ -127,13 +115,13 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set weight.
+     * Set createdAt.
      *
      * @return GradebookLinkevalLog
      */
-    public function setWeight(int $weight)
+    public function setCreatedAt(DateTime $createdAt)
     {
-        $this->weight = $weight;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -149,13 +137,13 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set visible.
+     * Set weight.
      *
      * @return GradebookLinkevalLog
      */
-    public function setVisible(bool $visible)
+    public function setWeight(int $weight)
     {
-        $this->visible = $visible;
+        $this->weight = $weight;
 
         return $this;
     }
@@ -171,13 +159,13 @@ class GradebookLinkevalLog
     }
 
     /**
-     * Set type.
+     * Set visible.
      *
      * @return GradebookLinkevalLog
      */
-    public function setType(string $type)
+    public function setVisible(bool $visible)
     {
-        $this->type = $type;
+        $this->visible = $visible;
 
         return $this;
     }
@@ -190,6 +178,18 @@ class GradebookLinkevalLog
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set type.
+     *
+     * @return GradebookLinkevalLog
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
+
+        return $this;
     }
 
     /**

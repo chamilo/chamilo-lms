@@ -41,10 +41,10 @@ class CBlogTaskRelUser
 {
     use UserTrait;
 
-    public const STATUS_OPEN = 0;
-    public const STATUS_IN_PROGRESS = 1;
-    public const STATUS_WAITING_TEST = 2;
-    public const STATUS_DONE = 3;
+    public const int STATUS_OPEN = 0;
+    public const int STATUS_IN_PROGRESS = 1;
+    public const int STATUS_WAITING_TEST = 2;
+    public const int STATUS_DONE = 3;
 
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

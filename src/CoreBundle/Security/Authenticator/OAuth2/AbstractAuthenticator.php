@@ -33,7 +33,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 
 abstract class AbstractAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
 {
-    private const STATE_RETRY_COOKIE_LIFETIME = 300;
+    private const int STATE_RETRY_COOKIE_LIFETIME = 300;
 
     protected string $providerName = '';
 

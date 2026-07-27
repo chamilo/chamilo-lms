@@ -12,6 +12,7 @@
         :option-value="optionValue"
         :options="realOptions"
         :placeholder="placeholder"
+        :required="required"
         :show-clear="allowClear"
         @change="emit('change', $event)"
       >
@@ -20,10 +21,16 @@
           {{ t("No available options") }}
         </template>
       </Dropdown>
-      <label
-        :for="id"
-        v-text="label"
-      />
+      <label :for="id">
+        {{ label }}
+        <span
+          v-if="showRequiredMarker"
+          aria-hidden="true"
+          class="text-red-500"
+        >
+          *
+        </span>
+      </label>
     </FloatLabel>
     <Message
       v-if="isInvalid || messageText"
@@ -80,6 +87,16 @@ const props = defineProps({
     default: "value",
   },
   isInvalid: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  required: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  showRequiredMarker: {
     type: Boolean,
     required: false,
     default: false,

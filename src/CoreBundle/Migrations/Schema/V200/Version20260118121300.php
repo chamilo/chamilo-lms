@@ -15,13 +15,13 @@ use const JSON_UNESCAPED_SLASHES;
 
 final class Version20260118121300 extends AbstractMigrationChamilo
 {
-    private const DEBUG = true;
+    private const bool DEBUG = true;
 
     /**
      * All known menu keys that should be configurable via display.show_tabs JSON.
      * NOTE: Add new keys here in the future without needing DB schema changes.
      */
-    private const MENU_KEYS = [
+    private const array MENU_KEYS = [
         'campus_homepage',
         'my_courses',
         'reporting',
@@ -39,7 +39,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
     /**
      * All known topbar keys that should be configurable via display.show_tabs JSON.
      */
-    private const TOPBAR_KEYS = [
+    private const array TOPBAR_KEYS = [
         'topbar_certificate',
         'topbar_skills',
     ];

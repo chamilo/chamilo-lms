@@ -24,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class FileIntegritySnoozeCommand extends Command
 {
-    private const DEFAULT_DURATION_SECONDS = 3600;
+    private const int DEFAULT_DURATION_SECONDS = 3600;
 
     public function __construct(
         private readonly FileIntegrityChecker $checker,

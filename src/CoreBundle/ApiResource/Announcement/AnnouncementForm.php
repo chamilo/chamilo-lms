@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\ApiResource\Announcement;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Announcement\AnnouncementFormProcessor;
@@ -72,7 +72,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'post_announcement',
             processor: AnnouncementFormProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/announcement/{id}',
             requirements: ['id' => '\d+'],
             openapi: new Operation(
@@ -85,8 +85,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            read: false,
             name: 'put_announcement',
             processor: AnnouncementFormProcessor::class,
         ),

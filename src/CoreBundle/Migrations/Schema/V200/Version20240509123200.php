@@ -17,9 +17,9 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20240509123200 extends AbstractMigrationChamilo
 {
-    private const FLUSH_BATCH_SIZE = 200;
+    private const int FLUSH_BATCH_SIZE = 200;
 
-    private const REQUIRED_TOOLS = [
+    private const array REQUIRED_TOOLS = [
         'course_description',
         'document',
         'learnpath',

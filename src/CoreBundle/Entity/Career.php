@@ -22,8 +22,8 @@ class Career
 {
     use TimestampableEntity;
 
-    public const CAREER_STATUS_ACTIVE = 1;
-    public const CAREER_STATUS_INACTIVE = 0;
+    public const int CAREER_STATUS_ACTIVE = 1;
+    public const int CAREER_STATUS_INACTIVE = 0;
 
     #[Groups(['calendar_event:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -65,21 +65,14 @@ class Career
         return $this->id;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setDescription(string $description): self
+    public function setTitle(string $title): self
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
@@ -89,9 +82,9 @@ class Career
         return $this->description;
     }
 
-    public function setStatus(int $status): self
+    public function setDescription(string $description): self
     {
-        $this->status = $status;
+        $this->description = $description;
 
         return $this;
     }
@@ -99,6 +92,13 @@ class Career
     public function getStatus(): int
     {
         return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
     }
 
     public function getPromotions(): array|ArrayCollection|Collection

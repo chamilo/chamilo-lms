@@ -21,13 +21,13 @@ use DOMXPath;
  */
 class CcVersion13 extends CcVersion1
 {
-    public const WEBCONTENT = 'webcontent';
-    public const QUESTIONBANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
-    public const ASSESSMENT = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
-    public const ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
-    public const DISCUSSIONTOPIC = 'imsdt_xmlv1p3';
-    public const WEBLINK = 'imswl_xmlv1p3';
-    public const BASICLTI = 'imsbasiclti_xmlv1p3';
+    public const string WEBCONTENT = 'webcontent';
+    public const string QUESTIONBANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
+    public const string ASSESSMENT = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
+    public const string ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
+    public const string DISCUSSIONTOPIC = 'imsdt_xmlv1p3';
+    public const string WEBLINK = 'imswl_xmlv1p3';
+    public const string BASICLTI = 'imsbasiclti_xmlv1p3';
 
     /**
      * @var string[]

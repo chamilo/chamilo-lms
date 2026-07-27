@@ -37,11 +37,11 @@ use const ENT_SUBSTITUTE;
 #[Route('/admin/security')]
 final class SecurityController extends BaseController
 {
-    private const PASSWORD_STRENGTH_SCAN_BATCH_SIZE = 1;
-    private const PASSWORD_STRENGTH_SCAN_FOUND_KEY = 'admin_password_strength_found_user_ids';
-    private const PASSWORD_STRENGTH_SCAN_OFFSET_KEY = 'admin_password_strength_scan_offset';
-    private const PASSWORD_STRENGTH_SCAN_TOTAL_KEY = 'admin_password_strength_scan_total';
-    private const PASSWORD_STRENGTH_SCAN_FILTER_IDS_KEY = 'admin_password_strength_scan_filter_user_ids';
+    private const int PASSWORD_STRENGTH_SCAN_BATCH_SIZE = 1;
+    private const string PASSWORD_STRENGTH_SCAN_FOUND_KEY = 'admin_password_strength_found_user_ids';
+    private const string PASSWORD_STRENGTH_SCAN_OFFSET_KEY = 'admin_password_strength_scan_offset';
+    private const string PASSWORD_STRENGTH_SCAN_TOTAL_KEY = 'admin_password_strength_scan_total';
+    private const string PASSWORD_STRENGTH_SCAN_FILTER_IDS_KEY = 'admin_password_strength_scan_filter_user_ids';
 
     public function __construct(
         private readonly TrackELoginRecordRepository $repo,

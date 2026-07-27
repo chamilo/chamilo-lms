@@ -47,10 +47,10 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 {
     use SurveyPersonalitySupportTrait;
 
-    private const REPORT_OVERVIEW = 'overview';
-    private const REPORT_QUESTION = 'question';
-    private const REPORT_USER = 'user';
-    private const REPORT_COMPLETE = 'complete';
+    private const string REPORT_OVERVIEW = 'overview';
+    private const string REPORT_QUESTION = 'question';
+    private const string REPORT_USER = 'user';
+    private const string REPORT_COMPLETE = 'complete';
 
     public function __construct(
         private RequestStack $requestStack,

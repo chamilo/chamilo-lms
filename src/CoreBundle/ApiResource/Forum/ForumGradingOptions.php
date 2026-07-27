@@ -36,8 +36,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     ),
                 ],
             ),
-            provider: ForumGradingOptionsProvider::class,
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_ADMIN')",
+            provider: ForumGradingOptionsProvider::class,
         ),
     ],
     normalizationContext: [
@@ -56,13 +56,8 @@ final class ForumGradingOptions
     #[Groups(['forum_grading_options:read'])]
     public array $categories = [];
 
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
     /**
-     * @param array<int, array<string, mixed>> $categories
+     * @param  array<int, array<string, mixed>>  $categories
      */
     public static function fromCategories(array $categories): self
     {
@@ -70,5 +65,10 @@ final class ForumGradingOptions
         $options->categories = $categories;
 
         return $options;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 }

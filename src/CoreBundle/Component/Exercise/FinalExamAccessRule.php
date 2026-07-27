@@ -19,7 +19,7 @@ use const JSON_THROW_ON_ERROR;
 
 final class FinalExamAccessRule
 {
-    public const EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
+    public const string EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
 
     /**
      * @return array{

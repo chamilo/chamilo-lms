@@ -15,10 +15,10 @@ use Doctrine\Persistence\ObjectManager;
 
 class AccessUserFixtures extends Fixture
 {
-    public const ADMIN_USER_REFERENCE = 'admin';
-    public const ANON_USER_REFERENCE = 'anon';
-    public const FALLBACK_USER_REFERENCE = 'fallback_user';
-    public const ACCESS_URL_REFERENCE = 'accessUrl';
+    public const string ADMIN_USER_REFERENCE = 'admin';
+    public const string ANON_USER_REFERENCE = 'anon';
+    public const string FALLBACK_USER_REFERENCE = 'fallback_user';
+    public const string ACCESS_URL_REFERENCE = 'accessUrl';
 
     public function __construct(
         private readonly ToolChain $toolChain,

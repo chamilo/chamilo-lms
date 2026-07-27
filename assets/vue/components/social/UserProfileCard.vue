@@ -285,6 +285,30 @@
               aria-hidden="true"
             ></i>
           </button>
+
+          <button
+            type="button"
+            class="group flex min-h-[56px] w-full items-center rounded-xl bg-secondary px-4 py-3 text-left text-secondary-button-text shadow-sm transition hover:opacity-95 hover:shadow-xl"
+            @click="manageMcpApiKey"
+          >
+            <span
+              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-secondary shadow-sm"
+            >
+              <i
+                class="mdi mdi-lock-outline text-lg"
+                aria-hidden="true"
+              ></i>
+            </span>
+
+            <span class="ml-3 min-w-0 flex-1 text-body-2 font-semibold leading-snug">
+              {{ t("MCP API key") }}
+            </span>
+
+            <i
+              class="mdi mdi-chevron-right ml-2 text-lg opacity-80 transition group-hover:translate-x-0.5"
+              aria-hidden="true"
+            ></i>
+          </button>
         </div>
       </div>
     </div>
@@ -352,6 +376,10 @@ function editProfile() {
 
 function changePassword() {
   window.location.href = "/account/change-password"
+}
+
+function manageMcpApiKey() {
+  window.location.href = "/resources/users/mcp_api_key"
 }
 
 async function fetchUserProfile(userId) {

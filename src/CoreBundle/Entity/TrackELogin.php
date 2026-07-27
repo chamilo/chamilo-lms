@@ -49,13 +49,6 @@ class TrackELogin
         return $this;
     }
 
-    public function setLoginDate(DateTime $loginDate): self
-    {
-        $this->loginDate = $loginDate;
-
-        return $this;
-    }
-
     /**
      * Get loginDate.
      *
@@ -66,9 +59,9 @@ class TrackELogin
         return $this->loginDate;
     }
 
-    public function setUserIp(string $userIp): self
+    public function setLoginDate(DateTime $loginDate): self
     {
-        $this->userIp = $userIp;
+        $this->loginDate = $loginDate;
 
         return $this;
     }
@@ -83,9 +76,9 @@ class TrackELogin
         return $this->userIp;
     }
 
-    public function setLogoutDate(DateTime $logoutDate): self
+    public function setUserIp(string $userIp): self
     {
-        $this->logoutDate = $logoutDate;
+        $this->userIp = $userIp;
 
         return $this;
     }
@@ -93,6 +86,13 @@ class TrackELogin
     public function getLogoutDate(): ?DateTime
     {
         return $this->logoutDate;
+    }
+
+    public function setLogoutDate(DateTime $logoutDate): self
+    {
+        $this->logoutDate = $logoutDate;
+
+        return $this;
     }
 
     /**

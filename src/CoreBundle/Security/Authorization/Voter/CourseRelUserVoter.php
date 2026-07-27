@@ -19,8 +19,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class CourseRelUserVoter extends Voter
 {
-    public const CREATE = 'CREATE';
-    public const VIEW = 'VIEW';
+    public const string CREATE = 'CREATE';
+    public const string VIEW = 'VIEW';
 
     public function __construct(
         private readonly AccessDecisionManagerInterface $accessDecisionManager,

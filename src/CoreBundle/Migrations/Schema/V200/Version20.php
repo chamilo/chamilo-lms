@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 class Version20 extends AbstractMigrationChamilo
 {
     // List of sublanguages to be excluded from updates, except those explicitly allowed.
-    public const ALLOWED_SUBLANGUAGES = [
+    public const array ALLOWED_SUBLANGUAGES = [
         'ast',
         'ast_ES',
         'ca',

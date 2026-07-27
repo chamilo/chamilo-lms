@@ -31,7 +31,7 @@ final readonly class WikiPageHistoryProvider implements ProviderInterface
 {
     use WikiAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'wiki_page_restore';
+    public const string CSRF_TOKEN_ID = 'wiki_page_restore';
 
     public function __construct(
         private RequestStack $requestStack,

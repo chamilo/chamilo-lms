@@ -42,18 +42,6 @@ class TrackEHotpotatoes
     protected int $maxScore;
 
     /**
-     * Set title.
-     *
-     * @return TrackEHotpotatoes
-     */
-    public function setTitle(string $title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
      * Get title.
      *
      * @return string
@@ -64,13 +52,13 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set exeUserId.
+     * Set title.
      *
      * @return TrackEHotpotatoes
      */
-    public function setExeUserId(int $exeUserId)
+    public function setTitle(string $title)
     {
-        $this->exeUserId = $exeUserId;
+        $this->title = $title;
 
         return $this;
     }
@@ -86,13 +74,13 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set exeDate.
+     * Set exeUserId.
      *
      * @return TrackEHotpotatoes
      */
-    public function setExeDate(DateTime $exeDate)
+    public function setExeUserId(int $exeUserId)
     {
-        $this->exeDate = $exeDate;
+        $this->exeUserId = $exeUserId;
 
         return $this;
     }
@@ -108,13 +96,13 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set cId.
+     * Set exeDate.
      *
      * @return TrackEHotpotatoes
      */
-    public function setCId(int $cId)
+    public function setExeDate(DateTime $exeDate)
     {
-        $this->cId = $cId;
+        $this->exeDate = $exeDate;
 
         return $this;
     }
@@ -127,6 +115,18 @@ class TrackEHotpotatoes
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Set cId.
+     *
+     * @return TrackEHotpotatoes
+     */
+    public function setCId(int $cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
     }
 
     /**

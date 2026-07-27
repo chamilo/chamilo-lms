@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/course-progress/list',
-            name: 'get_course_progress_list',
             openapi: new Operation(
                 parameters: [
                     new Parameter(
@@ -51,6 +50,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     ),
                 ],
             ),
+            name: 'get_course_progress_list',
             provider: CourseProgressListProvider::class,
         ),
     ],

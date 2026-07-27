@@ -124,41 +124,31 @@ class GradebookCategory
 
     #[ORM\Column(name: 'certif_min_score', type: 'integer', nullable: true)]
     protected ?int $certifMinScore = null;
-
+    #[Assert\NotBlank]
+    #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
+    protected ?int $locked;
+    #[ORM\Column(name: 'default_lowest_eval_exclude', type: 'boolean', nullable: true)]
+    protected ?bool $defaultLowestEvalExclude = null;
+    #[Assert\NotNull]
+    #[ORM\Column(name: 'generate_certificates', type: 'boolean', nullable: false)]
+    protected bool $generateCertificates;
+    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
+    #[ORM\Column(name: 'certificate_validity_period', type: 'integer', nullable: true)]
+    protected ?int $certificateValidityPeriod = null;
+    #[ORM\Column(name: 'is_requirement', type: 'boolean', nullable: false, options: ['default' => 0])]
+    protected bool $isRequirement;
+    #[ORM\Column(name: 'depends', type: 'text', nullable: true)]
+    protected ?string $depends = null;
+    #[ORM\Column(name: 'minimum_to_validate', type: 'integer', nullable: true)]
+    protected ?int $minimumToValidate = null;
+    #[ORM\Column(name: 'gradebooks_to_validate_in_dependence', type: 'integer', nullable: true)]
+    protected ?int $gradeBooksToValidateInDependence = null;
+    #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
+    protected ?int $allowSkillsBySubcategory;
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
     #[ORM\ManyToOne(targetEntity: CDocument::class, inversedBy: 'gradebookCategories')]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
     private ?CDocument $document = null;
-
-    #[Assert\NotBlank]
-    #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
-    protected ?int $locked;
-
-    #[ORM\Column(name: 'default_lowest_eval_exclude', type: 'boolean', nullable: true)]
-    protected ?bool $defaultLowestEvalExclude = null;
-
-    #[Assert\NotNull]
-    #[ORM\Column(name: 'generate_certificates', type: 'boolean', nullable: false)]
-    protected bool $generateCertificates;
-
-    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
-    #[ORM\Column(name: 'certificate_validity_period', type: 'integer', nullable: true)]
-    protected ?int $certificateValidityPeriod = null;
-
-    #[ORM\Column(name: 'is_requirement', type: 'boolean', nullable: false, options: ['default' => 0])]
-    protected bool $isRequirement;
-
-    #[ORM\Column(name: 'depends', type: 'text', nullable: true)]
-    protected ?string $depends = null;
-
-    #[ORM\Column(name: 'minimum_to_validate', type: 'integer', nullable: true)]
-    protected ?int $minimumToValidate = null;
-
-    #[ORM\Column(name: 'gradebooks_to_validate_in_dependence', type: 'integer', nullable: true)]
-    protected ?int $gradeBooksToValidateInDependence = null;
-
-    #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
-    protected ?int $allowSkillsBySubcategory;
 
     public function __construct()
     {
@@ -184,21 +174,14 @@ class GradebookCategory
         return $this->id;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setDescription(?string $description): self
+    public function setTitle(string $title): self
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
@@ -208,9 +191,9 @@ class GradebookCategory
         return $this->description;
     }
 
-    public function setWeight(float $weight): self
+    public function setDescription(?string $description): self
     {
-        $this->weight = $weight;
+        $this->description = $description;
 
         return $this;
     }
@@ -225,9 +208,9 @@ class GradebookCategory
         return $this->weight;
     }
 
-    public function setVisible(bool $visible): self
+    public function setWeight(float $weight): self
     {
-        $this->visible = $visible;
+        $this->weight = $weight;
 
         return $this;
     }
@@ -242,9 +225,9 @@ class GradebookCategory
         return $this->visible;
     }
 
-    public function setCertifMinScore(int $certifMinScore): self
+    public function setVisible(bool $visible): self
     {
-        $this->certifMinScore = $certifMinScore;
+        $this->visible = $visible;
 
         return $this;
     }
@@ -259,9 +242,9 @@ class GradebookCategory
         return $this->certifMinScore;
     }
 
-    public function setDocument(?CDocument $document): static
+    public function setCertifMinScore(int $certifMinScore): self
     {
-        $this->document = $document;
+        $this->certifMinScore = $certifMinScore;
 
         return $this;
     }
@@ -271,9 +254,9 @@ class GradebookCategory
         return $this->document;
     }
 
-    public function setLocked(int $locked): self
+    public function setDocument(?CDocument $document): static
     {
-        $this->locked = $locked;
+        $this->document = $document;
 
         return $this;
     }
@@ -288,9 +271,9 @@ class GradebookCategory
         return $this->locked;
     }
 
-    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
+    public function setLocked(int $locked): self
     {
-        $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
+        $this->locked = $locked;
 
         return $this;
     }
@@ -305,9 +288,9 @@ class GradebookCategory
         return $this->defaultLowestEvalExclude;
     }
 
-    public function setGenerateCertificates(bool $generateCertificates): self
+    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
     {
-        $this->generateCertificates = $generateCertificates;
+        $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
 
         return $this;
     }
@@ -320,6 +303,13 @@ class GradebookCategory
     public function getGenerateCertificates()
     {
         return $this->generateCertificates;
+    }
+
+    public function setGenerateCertificates(bool $generateCertificates): self
+    {
+        $this->generateCertificates = $generateCertificates;
+
+        return $this;
     }
 
     /**
@@ -336,13 +326,6 @@ class GradebookCategory
     public function setCertificateValidityPeriod(?int $certificateValidityPeriod): self
     {
         $this->certificateValidityPeriod = $certificateValidityPeriod;
-
-        return $this;
-    }
-
-    public function setIsRequirement(bool $isRequirement): self
-    {
-        $this->isRequirement = $isRequirement;
 
         return $this;
     }
@@ -391,6 +374,13 @@ class GradebookCategory
     public function getIsRequirement()
     {
         return $this->isRequirement;
+    }
+
+    public function setIsRequirement(bool $isRequirement): self
+    {
+        $this->isRequirement = $isRequirement;
+
+        return $this;
     }
 
     public function getGradeBooksToValidateInDependence(): ?int
@@ -491,16 +481,16 @@ class GradebookCategory
         return $this->subCategories;
     }
 
-    public function hasSubCategories(): bool
-    {
-        return $this->subCategories->count() > 0;
-    }
-
     public function setSubCategories(Collection $subCategories): self
     {
         $this->subCategories = $subCategories;
 
         return $this;
+    }
+
+    public function hasSubCategories(): bool
+    {
+        return $this->subCategories->count() > 0;
     }
 
     public function getDepends(): ?string

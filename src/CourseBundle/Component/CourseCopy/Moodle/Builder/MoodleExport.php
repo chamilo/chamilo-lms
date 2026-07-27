@@ -68,17 +68,17 @@ class MoodleExport
     /**
      * Synthetic module id for the News forum generated from announcements.
      */
-    private const ANNOUNCEMENTS_MODULE_ID = 48000001;
+    private const int ANNOUNCEMENTS_MODULE_ID = 48000001;
 
     /**
      * Synthetic module id for Gradebook Chamilo-only metadata.
      */
-    private const GRADEBOOK_MODULE_ID = 48000002;
+    private const int GRADEBOOK_MODULE_ID = 48000002;
 
     /**
      * Synthetic module id for the single exported wiki activity.
      */
-    private const WIKI_MODULE_ID = 48000003;
+    private const int WIKI_MODULE_ID = 48000003;
 
     private static int $backupCourseContextId = 0;
     private static int $backupCourseId = 0;

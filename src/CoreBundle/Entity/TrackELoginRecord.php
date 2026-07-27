@@ -55,6 +55,16 @@ class TrackELoginRecord
     }
 
     /**
+     * Get login date.
+     *
+     * @return DateTime
+     */
+    public function getLoginDate()
+    {
+        return $this->loginDate;
+    }
+
+    /**
      * Set Login date.
      *
      * @return $this
@@ -67,13 +77,13 @@ class TrackELoginRecord
     }
 
     /**
-     * Get login date.
+     * Get user Ip.
      *
-     * @return DateTime
+     * @return string
      */
-    public function getLoginDate()
+    public function getUserIp()
     {
-        return $this->loginDate;
+        return $this->userIp;
     }
 
     /**
@@ -86,16 +96,6 @@ class TrackELoginRecord
         $this->userIp = $userIp;
 
         return $this;
-    }
-
-    /**
-     * Get user Ip.
-     *
-     * @return string
-     */
-    public function getUserIp()
-    {
-        return $this->userIp;
     }
 
     /**

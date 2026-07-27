@@ -14,8 +14,8 @@ use Exception;
 
 final class Version20231022124700 extends AbstractMigrationChamilo
 {
-    private const CONTENT_BATCH_SIZE = 1000;
-    private const DOCUMENT_BATCH_SIZE = 100;
+    private const int CONTENT_BATCH_SIZE = 1000;
+    private const int DOCUMENT_BATCH_SIZE = 100;
 
     /**
      * @var array<string, int>

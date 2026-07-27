@@ -16,7 +16,7 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'USER_NORMALIZER_ALREADY_CALLED';
+    private const string ALREADY_CALLED = 'USER_NORMALIZER_ALREADY_CALLED';
 
     public function __construct(
         private readonly NameConventionHelper $nameConventionHelper,

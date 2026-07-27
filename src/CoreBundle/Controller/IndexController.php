@@ -44,6 +44,7 @@ class IndexController extends BaseController
     #[Route('/resources/lp/{node}/categories/{categoryId}/subscriptions', name: 'resources_lp_category_subscriptions', requirements: ['node' => '\d+', 'categoryId' => '\d+'], methods: ['GET'])]
     #[Route('/resources/forum/{vueRouting}', name: 'resources_forum_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/survey/{vueRouting}', name: 'resources_survey_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/exercise/{vueRouting}', name: 'resources_exercise_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/course-description/{vueRouting}', name: 'resources_course_description_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/notebook/{vueRouting}', name: 'resources_notebook_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/portfolio/{vueRouting}', name: 'resources_portfolio_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]

@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Base\CcGene
 
 class CcForum extends CcGeneralFile
 {
-    public const DEAFULTNAME = 'discussion.xml';
+    public const string DEAFULTNAME = 'discussion.xml';
     protected $rootns = 'dt';
     protected $rootname = 'topic';
     protected $ccnamespaces = ['dt' => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3',

@@ -21,15 +21,15 @@ use const PHP_EOL;
 
 final readonly class UpdatePostApplyChecker
 {
-    private const METADATA_FILE_NAME = 'POST-APPLY-CHECKS.json';
+    private const string METADATA_FILE_NAME = 'POST-APPLY-CHECKS.json';
 
-    private const SKIPPED_EXACT_PATHS = [
+    private const array SKIPPED_EXACT_PATHS = [
         '.env',
         '.env.local',
         'app/config/configuration.php',
     ];
 
-    private const SKIPPED_PREFIXES = [
+    private const array SKIPPED_PREFIXES = [
         '.git',
         'node_modules',
         'vendor',

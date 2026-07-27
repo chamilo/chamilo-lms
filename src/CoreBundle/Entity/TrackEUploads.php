@@ -40,18 +40,6 @@ class TrackEUploads
     protected int $sessionId;
 
     /**
-     * Set uploadUserId.
-     *
-     * @return TrackEUploads
-     */
-    public function setUploadUserId(int $uploadUserId)
-    {
-        $this->uploadUserId = $uploadUserId;
-
-        return $this;
-    }
-
-    /**
      * Get uploadUserId.
      *
      * @return int
@@ -62,13 +50,13 @@ class TrackEUploads
     }
 
     /**
-     * Set uploadDate.
+     * Set uploadUserId.
      *
      * @return TrackEUploads
      */
-    public function setUploadDate(DateTime $uploadDate)
+    public function setUploadUserId(int $uploadUserId)
     {
-        $this->uploadDate = $uploadDate;
+        $this->uploadUserId = $uploadUserId;
 
         return $this;
     }
@@ -84,13 +72,13 @@ class TrackEUploads
     }
 
     /**
-     * Set cId.
+     * Set uploadDate.
      *
      * @return TrackEUploads
      */
-    public function setCId(int $cId)
+    public function setUploadDate(DateTime $uploadDate)
     {
-        $this->cId = $cId;
+        $this->uploadDate = $uploadDate;
 
         return $this;
     }
@@ -106,13 +94,13 @@ class TrackEUploads
     }
 
     /**
-     * Set uploadWorkId.
+     * Set cId.
      *
      * @return TrackEUploads
      */
-    public function setUploadWorkId(int $uploadWorkId)
+    public function setCId(int $cId)
     {
-        $this->uploadWorkId = $uploadWorkId;
+        $this->cId = $cId;
 
         return $this;
     }
@@ -128,13 +116,13 @@ class TrackEUploads
     }
 
     /**
-     * Set sessionId.
+     * Set uploadWorkId.
      *
      * @return TrackEUploads
      */
-    public function setSessionId(int $sessionId)
+    public function setUploadWorkId(int $uploadWorkId)
     {
-        $this->sessionId = $sessionId;
+        $this->uploadWorkId = $uploadWorkId;
 
         return $this;
     }
@@ -147,6 +135,18 @@ class TrackEUploads
     public function getSessionId()
     {
         return $this->sessionId;
+    }
+
+    /**
+     * Set sessionId.
+     *
+     * @return TrackEUploads
+     */
+    public function setSessionId(int $sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
     }
 
     /**

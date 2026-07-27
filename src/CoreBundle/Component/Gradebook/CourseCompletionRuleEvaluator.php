@@ -23,8 +23,8 @@ use const JSON_THROW_ON_ERROR;
  */
 final class CourseCompletionRuleEvaluator
 {
-    public const COURSE_RULE_FIELD_VARIABLE = 'course_completion_rule';
-    public const RULE_VERSION = 1;
+    public const string COURSE_RULE_FIELD_VARIABLE = 'course_completion_rule';
+    public const int RULE_VERSION = 1;
 
     public function __construct(
         private readonly Connection $connection

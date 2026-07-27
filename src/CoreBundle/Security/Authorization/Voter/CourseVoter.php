@@ -28,9 +28,9 @@ use const FILTER_VALIDATE_BOOLEAN;
  */
 class CourseVoter extends Voter
 {
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
     private RequestStack $requestStack;
     private EntityManagerInterface $entityManager;

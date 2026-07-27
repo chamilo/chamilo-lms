@@ -51,9 +51,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
-            output: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            output: false,
+            read: false,
             name: 'post_wiki_discussion_comment',
             processor: WikiDiscussionProcessor::class,
         ),
@@ -63,7 +63,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 final class WikiDiscussion
 {
-    public const CSRF_TOKEN_ID = 'wiki_discussion';
+    public const string CSRF_TOKEN_ID = 'wiki_discussion';
 
     #[ApiProperty(identifier: true)]
     #[Groups(['wiki_discussion:read'])]

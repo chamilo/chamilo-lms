@@ -18,8 +18,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20210205082253 extends AbstractMigrationChamilo
 {
-    private const FILE_BATCH_SIZE = 50;
-    private const USERGROUP_BATCH_SIZE = 100;
+    private const int FILE_BATCH_SIZE = 50;
+    private const int USERGROUP_BATCH_SIZE = 100;
 
     public function getDescription(): string
     {

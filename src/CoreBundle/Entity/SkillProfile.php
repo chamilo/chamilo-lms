@@ -54,6 +54,11 @@ class SkillProfile
         $this->skills = new ArrayCollection();
     }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -61,9 +66,9 @@ class SkillProfile
         return $this;
     }
 
-    public function getTitle(): string
+    public function getDescription(): string
     {
-        return $this->title;
+        return $this->description;
     }
 
     public function setDescription(string $description): self
@@ -71,11 +76,6 @@ class SkillProfile
         $this->description = $description;
 
         return $this;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
     }
 
     public function getId(): ?int

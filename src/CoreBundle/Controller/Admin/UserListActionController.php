@@ -21,7 +21,7 @@ use UserManager;
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 class UserListActionController extends AbstractController
 {
-    private const CANNOT_DELETE_MESSAGE = 'This user cannot be deleted: they are still an active member of a '
+    private const string CANNOT_DELETE_MESSAGE = 'This user cannot be deleted: they are still an active member of a '
         .'course, or user deletion is disabled on this platform.';
 
     public function __construct(

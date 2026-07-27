@@ -358,7 +358,7 @@ const buttonActions = computed(() =>
       visible: true,
     },
     {
-      label: t("Subscribe users to learning path"),
+      label: t("Advanced learning path access"),
       icon: "join-group",
       toUrl: advancedAccessUrl.value,
       disabled: !manageableInContext.value,
@@ -432,7 +432,7 @@ const itemActionsMobile = computed(() =>
     ...(props.canSeriousGame ? [seriousGameAction.value] : []),
     ...(props.canAutoLaunch ? [autoLaunchAction.value] : []),
     {
-      label: t("Subscribe users to learning path"),
+      label: t("Advanced learning path access"),
       url: advancedAccessUrl.value,
       disabled: !manageableInContext.value,
       visible: isLpSubscriptionMode.value,

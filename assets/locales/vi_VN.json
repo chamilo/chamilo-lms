@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Trang {0} c\u1ee7a {1}",
     "Showing {0} posts": "Hi\u1ec3n th\u1ecb {0} b\u00e0i \u0111\u0103ng",
     "Showing {0} tasks": "Hi\u1ec3n th\u1ecb {0} nhi\u1ec7m v\u1ee5",
-    "contains {0} items": "ch\u1ee9a {0} m\u1ee5c"
+    "contains {0} items": "ch\u1ee9a {0} m\u1ee5c",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

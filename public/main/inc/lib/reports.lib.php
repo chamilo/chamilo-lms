@@ -694,7 +694,7 @@ class ReportRegistry
                 'title' => get_lang('Exercises global report'),
                 'description' => get_lang('Global exercise results report for the course.'),
                 'category' => self::CATEGORY_LEARNING_ANALYTICS,
-                'url' => '/main/exercise/exercise_global_report.php',
+                'url' => '/courses/exercise/global-report',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
             ],

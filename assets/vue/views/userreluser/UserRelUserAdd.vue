@@ -20,19 +20,32 @@
       />
 
       <VueMultiselect
+        :deselect-label="t('Press enter to remove')"
         :internal-search="false"
         :loading="isLoadingSelect"
         :multiple="true"
         :options="users"
         :placeholder="t('Add')"
         :searchable="true"
+        :select-label="t('Press enter to select')"
+        :selected-label="t('Selected')"
         label="username"
         limit="3"
         limit-text="3"
         track-by="id"
         @select="addFriend"
         @search-change="asyncFind"
-      />
+      >
+        <template #option="{ option }">
+          {{ option.username }} ({{ option.fullName }})
+        </template>
+        <template #noResult>
+          {{ t("No elements found. Consider changing the search query.") }}
+        </template>
+        <template #noOptions>
+          {{ t("List is empty.") }}
+        </template>
+      </VueMultiselect>
     </div>
   </div>
 </template>

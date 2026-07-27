@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
  */
 final class CourseContextRoleListener
 {
-    public const JWT_AUTHENTICATED_REQUEST_ATTRIBUTE = '_chamilo_jwt_authenticated';
+    public const string JWT_AUTHENTICATED_REQUEST_ATTRIBUTE = '_chamilo_jwt_authenticated';
 
     public function __construct(
         private readonly TokenStorageInterface $tokenStorage,

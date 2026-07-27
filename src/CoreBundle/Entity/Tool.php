@@ -77,9 +77,10 @@ class Tool implements Stringable
      * $this->resourceNodes = $resourceNodes;
      * return $this;
      * }*/
-    public function getId(): int
+
+    public function getTitle(): string
     {
-        return $this->id;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -89,9 +90,9 @@ class Tool implements Stringable
         return $this;
     }
 
-    public function getTitle(): string
+    public function getId(): int
     {
-        return $this->title;
+        return $this->id;
     }
 
     /**
@@ -100,6 +101,13 @@ class Tool implements Stringable
     public function getResourceTypes(): Collection
     {
         return $this->resourceTypes;
+    }
+
+    public function setResourceTypes(Collection $resourceTypes): self
+    {
+        $this->resourceTypes = $resourceTypes;
+
+        return $this;
     }
 
     public function hasResourceType(ResourceType $resourceType): bool
@@ -114,13 +122,6 @@ class Tool implements Stringable
         }
 
         return false;
-    }
-
-    public function setResourceTypes(Collection $resourceTypes): self
-    {
-        $this->resourceTypes = $resourceTypes;
-
-        return $this;
     }
 
     /*public function getResourceTypeByName(string $title): ?ResourceType

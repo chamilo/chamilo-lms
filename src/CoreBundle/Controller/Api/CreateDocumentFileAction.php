@@ -21,7 +21,7 @@ use Throwable;
 
 final class CreateDocumentFileAction extends BaseResourceFileAction
 {
-    private const ALLOWED_CLOUD_LINK_HOSTS = [
+    private const array ALLOWED_CLOUD_LINK_HOSTS = [
         'asuswebstorage.com',
         'box.com',
         'dropbox.com',

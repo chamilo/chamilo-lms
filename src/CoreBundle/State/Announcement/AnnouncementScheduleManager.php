@@ -18,9 +18,9 @@ use RuntimeException;
 
 final readonly class AnnouncementScheduleManager
 {
-    private const SEND_AT_DATE_VARIABLE = 'send_notification_at_a_specific_date';
-    private const DATE_TO_SEND_VARIABLE = 'date_to_send_notification';
-    private const SEND_TO_SESSIONS_VARIABLE = 'send_to_users_in_session';
+    private const string SEND_AT_DATE_VARIABLE = 'send_notification_at_a_specific_date';
+    private const string DATE_TO_SEND_VARIABLE = 'date_to_send_notification';
+    private const string SEND_TO_SESSIONS_VARIABLE = 'send_to_users_in_session';
 
     public function __construct(
         private SettingsManager $settingsManager,

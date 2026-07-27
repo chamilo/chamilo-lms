@@ -20,7 +20,7 @@ use const JSON_ERROR_NONE;
 
 abstract class AbstractScimController extends AbstractController
 {
-    public const SCIM_CONTENT_TYPE = 'application/scim+json';
+    public const string SCIM_CONTENT_TYPE = 'application/scim+json';
 
     protected array $scimConfig;
 

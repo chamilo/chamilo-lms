@@ -25,7 +25,7 @@ use const JSON_THROW_ON_ERROR;
 
 trait ForumWriteHelperTrait
 {
-    private const FORUM_ACTION_TOKEN_INTENTION = 'forum_action';
+    private const string FORUM_ACTION_TOKEN_INTENTION = 'forum_action';
 
     /**
      * @return array<string, mixed>

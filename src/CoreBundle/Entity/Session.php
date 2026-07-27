@@ -180,23 +180,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity('title')]
 class Session implements ResourceWithAccessUrlInterface, Stringable
 {
-    public const READ_ONLY = 1;
-    public const VISIBLE = 2;
-    public const INVISIBLE = 3;
-    public const AVAILABLE = 4;
-    public const LIST_ONLY = 5;
+    public const int READ_ONLY = 1;
+    public const int VISIBLE = 2;
+    public const int INVISIBLE = 3;
+    public const int AVAILABLE = 4;
+    public const int LIST_ONLY = 5;
 
-    public const STUDENT = 0;
-    public const DRH = 1;
-    public const COURSE_COACH = 2;
-    public const GENERAL_COACH = 3;
-    public const SESSION_ADMIN = 4;
+    public const int STUDENT = 0;
+    public const int DRH = 1;
+    public const int COURSE_COACH = 2;
+    public const int GENERAL_COACH = 3;
+    public const int SESSION_ADMIN = 4;
 
-    public const STATUS_PLANNED = 1;
-    public const STATUS_PROGRESS = 2;
-    public const STATUS_FINISHED = 3;
-    public const STATUS_CANCELLED = 4;
-    public const STATUS_UNKNOWN = 0;
+    public const int STATUS_PLANNED = 1;
+    public const int STATUS_PROGRESS = 2;
+    public const int STATUS_FINISHED = 3;
+    public const int STATUS_CANCELLED = 4;
+    public const int STATUS_UNKNOWN = 0;
 
     #[Groups([
         'session:basic',
@@ -440,32 +440,23 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
-
-    #[Groups(['session:basic'])]
-    private ?string $imageUrl = null;
-
-    #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
-    private int $accessVisibility = 0;
-
     #[ORM\Column(name: 'parent_id', type: 'integer', nullable: true)]
     protected ?int $parentId = null;
-
     #[ORM\Column(name: 'days_to_reinscription', type: 'integer', nullable: true)]
     protected ?int $daysToReinscription = null;
-
     #[ORM\Column(name: 'last_repetition', type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $lastRepetition = false;
-
     #[ORM\Column(name: 'days_to_new_repetition', type: 'integer', nullable: true)]
     protected ?int $daysToNewRepetition = null;
-
     #[ORM\Column(name: 'notify_boss', type: 'boolean', options: ['default' => false])]
     protected bool $notifyBoss = false;
-
     #[Groups(['session:basic', 'session:read', 'session:write'])]
     #[ORM\Column(name: 'validity_in_days', type: 'integer', nullable: true)]
     protected ?int $validityInDays = null;
-
+    #[Groups(['session:basic'])]
+    private ?string $imageUrl = null;
+    #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
+    private int $accessVisibility = 0;
     #[Groups(['user_subscriptions:sessions'])]
     private ?int $daysLeft = null;
 
@@ -498,11 +489,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $this->position = 0;
     }
 
-    public function __toString(): string
-    {
-        return $this->getTitle();
-    }
-
     public static function getRelationTypeList(): array
     {
         return [self::STUDENT, self::DRH, self::COURSE_COACH, self::GENERAL_COACH, self::SESSION_ADMIN];
@@ -518,14 +504,19 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         ];
     }
 
-    public function getDuration(): ?int
+    public function __toString(): string
     {
-        return $this->duration;
+        return $this->getTitle();
     }
 
-    public function setDuration(int $duration): self
+    public function getTitle(): string
     {
-        $this->duration = $duration;
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }
@@ -540,55 +531,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $this->showDescription = $showDescription;
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, SessionRelUser>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function setUsers(Collection $users): self
-    {
-        $this->users = new ArrayCollection();
-        foreach ($users as $user) {
-            $this->addUserSubscription($user);
-        }
-
-        return $this;
-    }
-
-    public function addUserSubscription(SessionRelUser $subscription): void
-    {
-        $subscription->setSession($this);
-        if (!$this->hasUser($subscription)) {
-            $this->users->add($subscription);
-            $this->nbrUsers++;
-        }
-    }
-
-    public function hasUser(SessionRelUser $subscription): bool
-    {
-        if (0 !== $this->getUsers()->count()) {
-            $criteria = Criteria::create()
-                ->where(
-                    Criteria::expr()->eq('user', $subscription->getUser())
-                )
-                ->andWhere(
-                    Criteria::expr()->eq('session', $subscription->getSession())
-                )
-                ->andWhere(
-                    Criteria::expr()->eq('relationType', $subscription->getRelationType())
-                )
-            ;
-            $relation = $this->getUsers()->matching($criteria);
-
-            return $relation->count() > 0;
-        }
-
-        return false;
     }
 
     public function hasCourse(Course $course): bool
@@ -671,23 +613,11 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getCourseSubscription(Course $course): ?SessionRelCourse
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
 
         return $this->courses->matching($criteria)->current();
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
     }
 
     public function getNbrUsers(): int
@@ -700,61 +630,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $this->nbrUsers = $nbrUsers;
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, SessionRelCourseRelUser>
-     */
-    public function getAllUsersFromCourse(int $status): Collection
-    {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
-
-        return $this->getSessionRelCourseRelUsers()->matching($criteria);
-    }
-
-    public function getSessionRelCourseRelUsers(): Collection
-    {
-        return $this->sessionRelCourseRelUsers;
-    }
-
-    public function setSessionRelCourseRelUsers(Collection $sessionRelCourseRelUsers): self
-    {
-        $this->sessionRelCourseRelUsers = new ArrayCollection();
-        foreach ($sessionRelCourseRelUsers as $item) {
-            $this->addSessionRelCourseRelUser($item);
-        }
-
-        return $this;
-    }
-
-    public function addSessionRelCourseRelUser(SessionRelCourseRelUser $sessionRelCourseRelUser): void
-    {
-        $sessionRelCourseRelUser->setSession($this);
-        if (!$this->hasUserCourseSubscription($sessionRelCourseRelUser)) {
-            $this->sessionRelCourseRelUsers->add($sessionRelCourseRelUser);
-        }
-    }
-
-    public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription): bool
-    {
-        if (0 !== $this->getSessionRelCourseRelUsers()->count()) {
-            $criteria = Criteria::create()
-                ->where(
-                    Criteria::expr()->eq('user', $subscription->getUser())
-                )
-                ->andWhere(
-                    Criteria::expr()->eq('course', $subscription->getCourse())
-                )
-                ->andWhere(
-                    Criteria::expr()->eq('session', $subscription->getSession())
-                )
-            ;
-            $relation = $this->getSessionRelCourseRelUsers()->matching($criteria);
-
-            return $relation->count() > 0;
-        }
-
-        return false;
     }
 
     /**
@@ -802,18 +677,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function setNbrClasses(int $nbrClasses): self
     {
         $this->nbrClasses = $nbrClasses;
-
-        return $this;
-    }
-
-    public function getVisibility(): int
-    {
-        return $this->visibility;
-    }
-
-    public function setVisibility(int $visibility): self
-    {
-        $this->visibility = $visibility;
 
         return $this;
     }
@@ -867,18 +730,10 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     /**
      * @return Collection<int, SessionRelUser>
      */
-    public function getCoachesSubscriptions(bool $includeSessionAdmin = false): Collection
+    #[Groups(['session:basic', 'user_subscriptions:sessions'])]
+    public function getGeneralCoachesSubscriptions(): Collection
     {
-        $relationTypes = [
-            self::COURSE_COACH,
-            self::GENERAL_COACH,
-        ];
-
-        if ($includeSessionAdmin) {
-            $relationTypes[] = self::SESSION_ADMIN;
-        }
-
-        $criteria = Criteria::create()->where(Criteria::expr()->in('relationType', $relationTypes));
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('relationType', self::GENERAL_COACH));
 
         return $this->users->matching($criteria);
     }
@@ -891,31 +746,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $criteria = Criteria::create()->where(Criteria::expr()->eq('relationType', self::STUDENT));
 
         return $this->users->matching($criteria);
-    }
-
-    /**
-     * @return Collection<int, SessionRelUser>
-     */
-    #[Groups(['session:basic', 'user_subscriptions:sessions'])]
-    public function getGeneralCoachesSubscriptions(): Collection
-    {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('relationType', self::GENERAL_COACH));
-
-        return $this->users->matching($criteria);
-    }
-
-    public function hasUserAsGeneralCoach(User $user): bool
-    {
-        $criteria = Criteria::create()
-            ->where(
-                Criteria::expr()->eq('relationType', self::GENERAL_COACH)
-            )
-            ->andWhere(
-                Criteria::expr()->eq('user', $user)
-            )
-        ;
-
-        return $this->users->matching($criteria)->count() > 0;
     }
 
     public function hasUserInSession(User $user, int $relationType): bool
@@ -967,6 +797,55 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    /**
+     * @return Collection<int, SessionRelUser>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function setUsers(Collection $users): self
+    {
+        $this->users = new ArrayCollection();
+        foreach ($users as $user) {
+            $this->addUserSubscription($user);
+        }
+
+        return $this;
+    }
+
+    public function addUserSubscription(SessionRelUser $subscription): void
+    {
+        $subscription->setSession($this);
+        if (!$this->hasUser($subscription)) {
+            $this->users->add($subscription);
+            $this->nbrUsers++;
+        }
+    }
+
+    public function hasUser(SessionRelUser $subscription): bool
+    {
+        if (0 !== $this->getUsers()->count()) {
+            $criteria = Criteria::create()
+                ->where(
+                    Criteria::expr()->eq('user', $subscription->getUser())
+                )
+                ->andWhere(
+                    Criteria::expr()->eq('session', $subscription->getSession())
+                )
+                ->andWhere(
+                    Criteria::expr()->eq('relationType', $subscription->getRelationType())
+                )
+            ;
+            $relation = $this->getUsers()->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
+    }
+
     public function removeGeneralCoach(User $user): self
     {
         $this->removeUserInSession(self::GENERAL_COACH, $user);
@@ -1000,18 +879,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             $this->users->removeElement($subscription);
             $this->nbrUsers--;
         }
-
-        return $this;
-    }
-
-    public function getCategory(): ?SessionCategory
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?SessionCategory $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }
@@ -1070,6 +937,21 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    protected function compareDates(?DateTime $start, ?DateTime $end = null): bool
+    {
+        $now = new DateTime('now');
+
+        if (!empty($start) && !empty($end)) {
+            return $now >= $start && $now <= $end;
+        }
+
+        if (!empty($start)) {
+            return $now >= $start;
+        }
+
+        return !empty($end) && $now <= $end;
+    }
+
     public function isActiveForCoach(): bool
     {
         $start = $this->getCoachAccessStartDate();
@@ -1104,6 +986,25 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->coachAccessEndDate;
     }
 
+    /**
+     * @return Collection<int, SessionRelUser>
+     */
+    public function getCoachesSubscriptions(bool $includeSessionAdmin = false): Collection
+    {
+        $relationTypes = [
+            self::COURSE_COACH,
+            self::GENERAL_COACH,
+        ];
+
+        if ($includeSessionAdmin) {
+            $relationTypes[] = self::SESSION_ADMIN;
+        }
+
+        $criteria = Criteria::create()->where(Criteria::expr()->in('relationType', $relationTypes));
+
+        return $this->users->matching($criteria);
+    }
+
     public function setCoachAccessEndDate(
         ?DateTime $coachAccessEndDate,
         bool $updateCoachesDates = false,
@@ -1130,7 +1031,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         $now = new DateTime();
 
-        return (!$this->accessStartDate || $now >= $this->accessStartDate) && (!$this->accessEndDate || $now <= $this->accessEndDate);
+        return (!$this->accessStartDate || $now >= $this->accessStartDate)
+            && (!$this->accessEndDate
+                || $now <= $this->accessEndDate);
     }
 
     public function addCourse(Course $course): self
@@ -1189,6 +1092,35 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         }
 
         return $userRelCourseRelSession;
+    }
+
+    /**
+     * @param int $status if not set it will check if the user is registered
+     *                    with any status
+     */
+    public function hasUserInCourse(User $user, Course $course, ?int $status = null): bool
+    {
+        $relation = $this->getUserInCourse($user, $course, $status);
+
+        return $relation->count() > 0;
+    }
+
+    public function getUserInCourse(User $user, Course $course, ?int $status = null): Collection
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('course', $course)
+            )
+            ->andWhere(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
+
+        if (null !== $status) {
+            $criteria->andWhere(Criteria::expr()->eq('status', $status));
+        }
+
+        return $this->getSessionRelCourseRelUsers()->matching($criteria);
     }
 
     /**
@@ -1375,28 +1307,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->resourceLinks;
     }
 
-    public function getImage(): ?Asset
-    {
-        return $this->image;
-    }
-
-    public function setImage(?Asset $asset): self
-    {
-        $this->image = $asset;
-
-        return $this;
-    }
-
     public function hasImage(): bool
     {
         return null !== $this->image;
-    }
-
-    public function setImageUrl(?string $imageUrl): self
-    {
-        $this->imageUrl = $imageUrl;
-
-        return $this;
     }
 
     public function getImageUrl(): ?string
@@ -1413,56 +1326,35 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return null;
     }
 
-    /**
-     * Check if $user is course coach in any course.
-     */
-    public function hasCoachInCourseList(User $user): bool
+    public function setImageUrl(?string $imageUrl): self
     {
-        foreach ($this->courses as $sessionCourse) {
-            if ($this->hasCourseCoachInCourse($user, $sessionCourse->getCourse())) {
-                return true;
-            }
-        }
+        $this->imageUrl = $imageUrl;
 
-        return false;
+        return $this;
     }
 
-    public function hasCourseCoachInCourse(User $user, ?Course $course = null): bool
+    public function getImage(): ?Asset
     {
-        if (null === $course) {
-            return false;
-        }
-
-        return $this->hasUserInCourse($user, $course, self::COURSE_COACH);
+        return $this->image;
     }
 
-    /**
-     * @param int $status if not set it will check if the user is registered
-     *                    with any status
-     */
-    public function hasUserInCourse(User $user, Course $course, ?int $status = null): bool
+    public function setImage(?Asset $asset): self
     {
-        $relation = $this->getUserInCourse($user, $course, $status);
+        $this->image = $asset;
 
-        return $relation->count() > 0;
+        return $this;
     }
 
-    public function getUserInCourse(User $user, Course $course, ?int $status = null): Collection
+    public function getCategory(): ?SessionCategory
     {
-        $criteria = Criteria::create()
-            ->where(
-                Criteria::expr()->eq('course', $course)
-            )
-            ->andWhere(
-                Criteria::expr()->eq('user', $user)
-            )
-        ;
+        return $this->category;
+    }
 
-        if (null !== $status) {
-            $criteria->andWhere(Criteria::expr()->eq('status', $status));
-        }
+    public function setCategory(?SessionCategory $category): self
+    {
+        $this->category = $category;
 
-        return $this->getSessionRelCourseRelUsers()->matching($criteria);
+        return $this;
     }
 
     /**
@@ -1484,21 +1376,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->hasUserInCourse($user, $course, self::STUDENT);
     }
 
-    protected function compareDates(?DateTime $start, ?DateTime $end = null): bool
-    {
-        $now = new DateTime('now');
-
-        if (!empty($start) && !empty($end)) {
-            return $now >= $start && $now <= $end;
-        }
-
-        if (!empty($start)) {
-            return $now >= $start;
-        }
-
-        return !empty($end) && $now <= $end;
-    }
-
     /**
      * @return Collection<int, User>
      */
@@ -1516,6 +1393,61 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function getCourseCoachesSubscriptions(): Collection
     {
         return $this->getAllUsersFromCourse(self::COURSE_COACH);
+    }
+
+    /**
+     * @return Collection<int, SessionRelCourseRelUser>
+     */
+    public function getAllUsersFromCourse(int $status): Collection
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
+
+        return $this->getSessionRelCourseRelUsers()->matching($criteria);
+    }
+
+    public function getSessionRelCourseRelUsers(): Collection
+    {
+        return $this->sessionRelCourseRelUsers;
+    }
+
+    public function setSessionRelCourseRelUsers(Collection $sessionRelCourseRelUsers): self
+    {
+        $this->sessionRelCourseRelUsers = new ArrayCollection();
+        foreach ($sessionRelCourseRelUsers as $item) {
+            $this->addSessionRelCourseRelUser($item);
+        }
+
+        return $this;
+    }
+
+    public function addSessionRelCourseRelUser(SessionRelCourseRelUser $sessionRelCourseRelUser): void
+    {
+        $sessionRelCourseRelUser->setSession($this);
+        if (!$this->hasUserCourseSubscription($sessionRelCourseRelUser)) {
+            $this->sessionRelCourseRelUsers->add($sessionRelCourseRelUser);
+        }
+    }
+
+    public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription): bool
+    {
+        if (0 !== $this->getSessionRelCourseRelUsers()->count()) {
+            $criteria = Criteria::create()
+                ->where(
+                    Criteria::expr()->eq('user', $subscription->getUser())
+                )
+                ->andWhere(
+                    Criteria::expr()->eq('course', $subscription->getCourse())
+                )
+                ->andWhere(
+                    Criteria::expr()->eq('session', $subscription->getSession())
+                )
+            ;
+            $relation = $this->getSessionRelCourseRelUsers()->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
     }
 
     public function isAvailableByDurationForUser(User $user): bool
@@ -1544,6 +1476,18 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $totalDuration > $currentTime;
     }
 
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
     public function getDaysLeftByUser(User $user): int
     {
         $userSessionSubscription = $user->getSubscriptionToSession($this);
@@ -1564,6 +1508,23 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $currentTime = time();
 
         return (int) round(($endDateInSeconds - $currentTime) / 60 / 60 / 24);
+    }
+
+    public function setAccessVisibilityByUser(
+        User $user,
+        bool $ignoreVisibilityForAdmins = true,
+        bool $coachAccessAfterDurationEnd = false
+    ): int {
+        if (($user->isAdmin() || $user->isSuperAdmin()) && $ignoreVisibilityForAdmins) {
+            $this->accessVisibility = self::AVAILABLE;
+        } elseif (!$this->getAccessStartDate() && !$this->getAccessEndDate()) {
+            // I don't care the session visibility.
+            $this->accessVisibility = $this->getAccessVisibilityByDuration($user, $coachAccessAfterDurationEnd);
+        } else {
+            $this->accessVisibility = $this->getAcessVisibilityByDates($user);
+        }
+
+        return $this->accessVisibility;
     }
 
     private function getAccessVisibilityByDuration(User $user, bool $coachAccessAfterDurationEnd = false): int
@@ -1607,6 +1568,43 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->hasUserAsGeneralCoach($user) || $this->hasCoachInCourseList($user);
     }
 
+    public function hasUserAsGeneralCoach(User $user): bool
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::GENERAL_COACH)
+            )
+            ->andWhere(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
+
+        return $this->users->matching($criteria)->count() > 0;
+    }
+
+    /**
+     * Check if $user is course coach in any course.
+     */
+    public function hasCoachInCourseList(User $user): bool
+    {
+        foreach ($this->courses as $sessionCourse) {
+            if ($this->hasCourseCoachInCourse($user, $sessionCourse->getCourse())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasCourseCoachInCourse(User $user, ?Course $course = null): bool
+    {
+        if (null === $course) {
+            return false;
+        }
+
+        return $this->hasUserInCourse($user, $course, self::COURSE_COACH);
+    }
+
     private function getAcessVisibilityByDates(User $user): int
     {
         $now = new DateTime();
@@ -1626,20 +1624,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         }
 
         return self::AVAILABLE;
-    }
-
-    public function setAccessVisibilityByUser(User $user, bool $ignoreVisibilityForAdmins = true, bool $coachAccessAfterDurationEnd = false): int
-    {
-        if (($user->isAdmin() || $user->isSuperAdmin()) && $ignoreVisibilityForAdmins) {
-            $this->accessVisibility = self::AVAILABLE;
-        } elseif (!$this->getAccessStartDate() && !$this->getAccessEndDate()) {
-            // I don't care the session visibility.
-            $this->accessVisibility = $this->getAccessVisibilityByDuration($user, $coachAccessAfterDurationEnd);
-        } else {
-            $this->accessVisibility = $this->getAcessVisibilityByDates($user);
-        }
-
-        return $this->accessVisibility;
     }
 
     public function getAccessVisibility(): int
@@ -1662,6 +1646,18 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             $sessionRelCourse->getCourse()->getVisibility(),
             $closedVisibilities
         ));
+    }
+
+    public function getVisibility(): int
+    {
+        return $this->visibility;
+    }
+
+    public function setVisibility(int $visibility): self
+    {
+        $this->visibility = $visibility;
+
+        return $this;
     }
 
     public function getParentId(): ?int

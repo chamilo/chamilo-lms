@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 final class ResourceFileVoter extends Voter
 {
-    public const DOWNLOAD = 'VIEW';
+    public const string DOWNLOAD = 'VIEW';
 
     public function __construct(
         private readonly AccessDecisionManagerInterface $accessDecisionManager,

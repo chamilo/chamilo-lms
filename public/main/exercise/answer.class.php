@@ -273,9 +273,9 @@ class Answer
             $this->comment[$i] = $doubt_data->comment;
             $this->weighting[$i] = $doubt_data->ponderation;
             $this->position[$i] = $doubt_data->position;
-            $this->hotspot_coordinates[$i] = isset($object->hotspot_coordinates) ? $object->hotspot_coordinates : 0;
-            $this->hotspot_type[$i] = isset($object->hotspot_type) ? $object->hotspot_type : 0;
-            $this->destination[$i] = $doubt_data->destination;
+            $this->hotspot_coordinates[$i] = isset($doubt_data->hotspot_coordinates) ? $doubt_data->hotspot_coordinates : 0;
+            $this->hotspot_type[$i] = isset($doubt_data->hotspot_type) ? $doubt_data->hotspot_type : 0;
+            $this->destination[$i] = isset($doubt_data->destination) ? $doubt_data->destination : 0;
             $this->autoId[$i] = $doubt_data->iid;
             $this->iid[$i] = $doubt_data->iid;
             $i++;

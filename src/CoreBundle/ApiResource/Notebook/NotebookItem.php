@@ -10,8 +10,8 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Notebook\NotebookDeleteProcessor;
@@ -49,12 +49,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            read: false,
             name: 'post_notebook',
             processor: NotebookItemProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/notebook/{iid}',
             requirements: ['iid' => '\d+'],
             openapi: new Operation(
@@ -67,8 +67,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            read: false,
             name: 'put_notebook',
             processor: NotebookItemProcessor::class,
         ),

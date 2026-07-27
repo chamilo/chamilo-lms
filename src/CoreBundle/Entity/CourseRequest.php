@@ -72,13 +72,6 @@ class CourseRequest
         $this->requestDate = new DateTime();
     }
 
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
     /**
      * Get code.
      *
@@ -89,9 +82,9 @@ class CourseRequest
         return $this->code;
     }
 
-    public function setCourseLanguage(string $courseLanguage): self
+    public function setCode(string $code): self
     {
-        $this->courseLanguage = $courseLanguage;
+        $this->code = $code;
 
         return $this;
     }
@@ -106,9 +99,9 @@ class CourseRequest
         return $this->courseLanguage;
     }
 
-    public function setTitle(string $title): self
+    public function setCourseLanguage(string $courseLanguage): self
     {
-        $this->title = $title;
+        $this->courseLanguage = $courseLanguage;
 
         return $this;
     }
@@ -123,9 +116,9 @@ class CourseRequest
         return $this->title;
     }
 
-    public function setDescription(string $description): self
+    public function setTitle(string $title): self
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
@@ -140,9 +133,9 @@ class CourseRequest
         return $this->description;
     }
 
-    public function setCategoryCode(string $categoryCode): self
+    public function setDescription(string $description): self
     {
-        $this->categoryCode = $categoryCode;
+        $this->description = $description;
 
         return $this;
     }
@@ -157,9 +150,9 @@ class CourseRequest
         return $this->categoryCode;
     }
 
-    public function setTutorName(string $tutorName): self
+    public function setCategoryCode(string $categoryCode): self
     {
-        $this->tutorName = $tutorName;
+        $this->categoryCode = $categoryCode;
 
         return $this;
     }
@@ -174,9 +167,9 @@ class CourseRequest
         return $this->tutorName;
     }
 
-    public function setVisualCode(string $visualCode): self
+    public function setTutorName(string $tutorName): self
     {
-        $this->visualCode = $visualCode;
+        $this->tutorName = $tutorName;
 
         return $this;
     }
@@ -191,9 +184,9 @@ class CourseRequest
         return $this->visualCode;
     }
 
-    public function setRequestDate(DateTime $requestDate): self
+    public function setVisualCode(string $visualCode): self
     {
-        $this->requestDate = $requestDate;
+        $this->visualCode = $visualCode;
 
         return $this;
     }
@@ -208,9 +201,9 @@ class CourseRequest
         return $this->requestDate;
     }
 
-    public function setObjetives(string $objetives): self
+    public function setRequestDate(DateTime $requestDate): self
     {
-        $this->objetives = $objetives;
+        $this->requestDate = $requestDate;
 
         return $this;
     }
@@ -225,9 +218,9 @@ class CourseRequest
         return $this->objetives;
     }
 
-    public function setTargetAudience(string $targetAudience): self
+    public function setObjetives(string $objetives): self
     {
-        $this->targetAudience = $targetAudience;
+        $this->objetives = $objetives;
 
         return $this;
     }
@@ -242,9 +235,9 @@ class CourseRequest
         return $this->targetAudience;
     }
 
-    public function setStatus(int $status): self
+    public function setTargetAudience(string $targetAudience): self
     {
-        $this->status = $status;
+        $this->targetAudience = $targetAudience;
 
         return $this;
     }
@@ -259,9 +252,9 @@ class CourseRequest
         return $this->status;
     }
 
-    public function setInfo(int $info): self
+    public function setStatus(int $status): self
     {
-        $this->info = $info;
+        $this->status = $status;
 
         return $this;
     }
@@ -276,9 +269,9 @@ class CourseRequest
         return $this->info;
     }
 
-    public function setExemplaryContent(int $exemplaryContent): self
+    public function setInfo(int $info): self
     {
-        $this->exemplaryContent = $exemplaryContent;
+        $this->info = $info;
 
         return $this;
     }
@@ -291,6 +284,13 @@ class CourseRequest
     public function getExemplaryContent()
     {
         return $this->exemplaryContent;
+    }
+
+    public function setExemplaryContent(int $exemplaryContent): self
+    {
+        $this->exemplaryContent = $exemplaryContent;
+
+        return $this;
     }
 
     /**

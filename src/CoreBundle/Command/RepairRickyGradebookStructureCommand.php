@@ -28,10 +28,10 @@ use const JSON_THROW_ON_ERROR;
 )]
 final class RepairRickyGradebookStructureCommand extends Command
 {
-    private const SOURCE = 'ricky_legacy_completion_rule';
-    private const LINK_EXERCISE = 1;
-    private const LINK_STUDENT_PUBLICATION = 3;
-    private const LINK_FORUM_THREAD = 5;
+    private const string SOURCE = 'ricky_legacy_completion_rule';
+    private const int LINK_EXERCISE = 1;
+    private const int LINK_STUDENT_PUBLICATION = 3;
+    private const int LINK_FORUM_THREAD = 5;
 
     public function __construct(
         private readonly Connection $connection

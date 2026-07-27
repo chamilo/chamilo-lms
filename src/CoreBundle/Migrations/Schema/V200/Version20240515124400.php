@@ -13,7 +13,7 @@ use Throwable;
 
 final class Version20240515124400 extends AbstractMigrationChamilo
 {
-    public const BATCH_SIZE = 1000;
+    public const int BATCH_SIZE = 1000;
 
     public function getDescription(): string
     {

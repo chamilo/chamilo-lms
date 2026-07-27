@@ -84,13 +84,6 @@ class GradebookEvaluation
         $this->visible = 1;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     /**
      * Get title.
      *
@@ -101,9 +94,9 @@ class GradebookEvaluation
         return $this->title;
     }
 
-    public function setDescription(?string $description): self
+    public function setTitle(string $title): self
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
@@ -118,9 +111,9 @@ class GradebookEvaluation
         return $this->description;
     }
 
-    public function setCreatedAt(DateTime $createdAt): self
+    public function setDescription(?string $description): self
     {
-        $this->createdAt = $createdAt;
+        $this->description = $description;
 
         return $this;
     }
@@ -135,9 +128,9 @@ class GradebookEvaluation
         return $this->createdAt;
     }
 
-    public function setWeight(float $weight): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
-        $this->weight = $weight;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -152,9 +145,9 @@ class GradebookEvaluation
         return $this->weight;
     }
 
-    public function setMax(float $max): self
+    public function setWeight(float $weight): self
     {
-        $this->max = $max;
+        $this->weight = $weight;
 
         return $this;
     }
@@ -169,9 +162,9 @@ class GradebookEvaluation
         return $this->max;
     }
 
-    public function setVisible(int $visible): self
+    public function setMax(float $max): self
     {
-        $this->visible = $visible;
+        $this->max = $max;
 
         return $this;
     }
@@ -186,9 +179,9 @@ class GradebookEvaluation
         return $this->visible;
     }
 
-    public function setType(string $type): self
+    public function setVisible(int $visible): self
     {
-        $this->type = $type;
+        $this->visible = $visible;
 
         return $this;
     }
@@ -203,9 +196,9 @@ class GradebookEvaluation
         return $this->type;
     }
 
-    public function setLocked(int $locked): self
+    public function setType(string $type): self
     {
-        $this->locked = $locked;
+        $this->type = $type;
 
         return $this;
     }
@@ -218,6 +211,13 @@ class GradebookEvaluation
     public function getLocked()
     {
         return $this->locked;
+    }
+
+    public function setLocked(int $locked): self
+    {
+        $this->locked = $locked;
+
+        return $this;
     }
 
     /**

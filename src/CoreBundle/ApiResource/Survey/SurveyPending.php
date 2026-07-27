@@ -17,12 +17,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/survey/pending',
-            name: 'get_survey_pending',
             openapi: new Operation(
                 summary: 'Pending surveys for the current user',
             ),
-            provider: SurveyPendingProvider::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            name: 'get_survey_pending',
+            provider: SurveyPendingProvider::class,
         ),
     ],
     normalizationContext: [

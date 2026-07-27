@@ -5,8 +5,17 @@
     <template v-if="isDateType">
       <label
         :for="id"
-        class="block text-sm font-medium text-gray-700 mb-1"
-      >{{ label }}</label>
+        class="mb-1 block text-sm font-medium text-gray-700"
+      >
+        {{ label }}
+        <span
+          v-if="showRequiredMarker"
+          aria-hidden="true"
+          class="text-red-500"
+        >
+          *
+        </span>
+      </label>
       <InputText
         :id="id"
         :aria-label="label"
@@ -36,6 +45,13 @@
       />
       <label :for="id">
         {{ label }}
+        <span
+          v-if="showRequiredMarker"
+          aria-hidden="true"
+          class="text-red-500"
+        >
+          *
+        </span>
       </label>
     </FloatLabel>
     <small
@@ -85,6 +101,10 @@ defineProps({
     default: false,
   },
   required: {
+    type: Boolean,
+    default: false,
+  },
+  showRequiredMarker: {
     type: Boolean,
     default: false,
   },

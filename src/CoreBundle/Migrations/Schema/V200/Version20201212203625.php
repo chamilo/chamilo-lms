@@ -29,10 +29,10 @@ final class Version20201212203625 extends AbstractMigrationChamilo
      *
      * @var string[]
      */
-    private const DOCUMENT_BATCH_SIZE = 100;
-    private const ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
+    private const int DOCUMENT_BATCH_SIZE = 100;
+    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
 
-    private const FOLDER_LIKE_FILETYPES = [
+    private const array FOLDER_LIKE_FILETYPES = [
         'folder',
         'user_folder',
         'user_folder_ses',

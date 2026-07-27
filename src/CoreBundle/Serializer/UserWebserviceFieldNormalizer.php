@@ -19,7 +19,7 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'chamilo_user_webservice_field_normalizer_already_called';
+    private const string ALREADY_CALLED = 'chamilo_user_webservice_field_normalizer_already_called';
 
     /**
      * @var array<string, int|null>

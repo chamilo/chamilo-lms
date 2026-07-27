@@ -18,6 +18,7 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -63,6 +64,7 @@ $type = (string) getHashValue($hashData, 'type', '');
 $courseId = (int) getHashValue($hashData, 'courseId', 0);
 $userId = (int) getHashValue($hashData, 'userId', 0);
 $docId = (int) getHashValue($hashData, 'docId', 0);
+$resourceNodeId = (int) getHashValue($hashData, 'resourceNodeId', 0);
 $groupId = (int) getHashValue($hashData, 'groupId', 0);
 $sessionId = (int) getHashValue($hashData, 'sessionId', 0);
 
@@ -85,6 +87,7 @@ onlyofficeLog('DEBUG', 'Callback entry', [
     'courseCode' => $courseCode,
     'userId' => $userId,
     'docId' => $docId,
+    'resourceNodeId' => $resourceNodeId,
     'groupId' => $groupId,
     'sessionId' => $sessionId,
     'docPath' => $docPath,
@@ -160,6 +163,7 @@ function track(): array
     global $jwtManager;
     global $courseCode;
     global $docId;
+    global $resourceNodeId;
     global $docPath;
     global $sessionId;
 
@@ -204,7 +208,7 @@ function track(): array
         return ['error' => 0];
     }
 
-    $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath);
+    $resolved = resolveDocumentSource($docId, $resourceNodeId, $courseCode, $sessionId, $docPath);
     if (null === $resolved) {
         onlyofficeLog('ERROR', 'File not found for save', [
             'docId' => $docId,
@@ -265,10 +269,11 @@ function download(): void
 {
     global $courseCode;
     global $docId;
+    global $resourceNodeId;
     global $docPath;
     global $sessionId;
 
-    $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath);
+    $resolved = resolveDocumentSource($docId, $resourceNodeId, $courseCode, $sessionId, $docPath);
 
     if (null === $resolved) {
         sendNoCacheHeaders();
@@ -365,7 +370,7 @@ function emptyFile(): void
 /**
  * Resolve a document source in C2 first, then legacy.
  */
-function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, string $docPath): ?array
+function resolveDocumentSource(int $docId, int $resourceNodeId, string $courseCode, int $sessionId, string $docPath): ?array
 {
     if ('' !== $docPath) {
         $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
@@ -395,6 +400,13 @@ function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, s
             'docPath' => $docPath,
             'filePath' => $filePath,
         ]);
+    }
+
+    if ($resourceNodeId > 0) {
+        $resolved = resolveResourceNodeSourceFromC2($resourceNodeId);
+        if (null !== $resolved) {
+            return $resolved;
+        }
     }
 
     if ($docId > 0) {
@@ -435,6 +447,7 @@ function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, s
 
     onlyofficeLog('ERROR', 'resolveDocumentSource failed', [
         'docId' => $docId,
+        'resourceNodeId' => $resourceNodeId,
         'docPath' => $docPath,
         'courseCode' => $courseCode,
         'sessionId' => $sessionId,
@@ -543,6 +556,93 @@ function resolveDocumentSourceFromC2(int $docId): ?array
         'storagePath' => $storagePath,
         'title' => $title,
         'documentKey' => (string) $docId,
+        'resourceFileId' => (int) $resourceFile->getId(),
+        'resourceNodeId' => (int) $resourceNode->getId(),
+        'entityManager' => $entityManager,
+        'resourceNodeRepository' => $resourceNodeRepository,
+        'size' => $size,
+        'mimeType' => $mimeType,
+    ];
+}
+
+/**
+ * Resolve a C2 ResourceNode directly. Used for exercise AttemptFile documents.
+ */
+function resolveResourceNodeSourceFromC2(int $resourceNodeId): ?array
+{
+    $entityManager = getEntityManager();
+    if (null === $entityManager) {
+        onlyofficeLog('ERROR', 'Entity manager could not be resolved');
+
+        return null;
+    }
+
+    /** @var ResourceNode|null $resourceNode */
+    $resourceNode = $entityManager->getRepository(ResourceNode::class)->find($resourceNodeId);
+    if (!$resourceNode instanceof ResourceNode) {
+        onlyofficeLog('ERROR', 'ResourceNode not found', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    $resourceFile = $resourceNode->getFirstResourceFile();
+    if (!$resourceFile instanceof ResourceFile) {
+        onlyofficeLog('ERROR', 'ResourceFile missing for ResourceNode', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    $resourceNodeRepository = getResourceNodeRepository();
+    if (null === $resourceNodeRepository) {
+        onlyofficeLog('ERROR', 'ResourceNodeRepository could not be resolved');
+
+        return null;
+    }
+
+    $storagePath = '';
+    try {
+        $storagePath = (string) $resourceNodeRepository->getFilename($resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeLog('WARNING', 'Failed to resolve storage filename', [
+            'message' => $e->getMessage(),
+        ]);
+    }
+
+    try {
+        $stream = $resourceNodeRepository->getResourceNodeFileStream($resourceNode, $resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeLog('ERROR', 'Failed to open resource stream', [
+            'message' => $e->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    if (!\is_resource($stream)) {
+        onlyofficeLog('ERROR', 'Resource stream is not available', [
+            'resourceNodeId' => $resourceNodeId,
+            'resourceFileId' => (int) $resourceFile->getId(),
+            'storagePath' => $storagePath,
+        ]);
+
+        return null;
+    }
+
+    $title = (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle() ?: $resourceNode->getTitle());
+    $size = (int) ($resourceFile->getSize() ?? 0);
+    $mimeType = (string) ($resourceFile->getMimeType() ?: getMimeTypeFromFilename($title));
+
+    return [
+        'filePath' => null,
+        'stream' => $stream,
+        'storagePath' => $storagePath,
+        'title' => $title,
+        'documentKey' => 'rn'.$resourceNodeId,
         'resourceFileId' => (int) $resourceFile->getId(),
         'resourceNodeId' => (int) $resourceNode->getId(),
         'entityManager' => $entityManager,

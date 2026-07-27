@@ -34,6 +34,16 @@ class BranchTransactionStatus
     }
 
     /**
+     * Get title.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * Set title.
      *
      * @return BranchTransactionStatus
@@ -43,15 +53,5 @@ class BranchTransactionStatus
         $this->title = $title;
 
         return $this;
-    }
-
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class DoctrineMigrationsMigrateCommandDecorator extends Command
 {
-    public const SKIP_ATTENDANCES_FLAG = 'CHAMILO_MIGRATION_SKIP_ATTENDANCES';
+    public const string SKIP_ATTENDANCES_FLAG = 'CHAMILO_MIGRATION_SKIP_ATTENDANCES';
 
     public function __construct(
         private readonly Command $inner

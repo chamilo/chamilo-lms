@@ -13,13 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserAuthSourceRepository::class)]
 class UserAuthSource
 {
-    public const PLATFORM = 'platform';
-    public const CAS = 'cas';
-    public const LDAP = 'extldap';
-    public const AZURE = 'azure';
-    public const FACEBOOK = 'facebook';
-    public const KEYCLOAK = 'keycloak';
-    public const OAUTH2 = 'oauth2';
+    public const string PLATFORM = 'platform';
+    public const string CAS = 'cas';
+    public const string LDAP = 'extldap';
+    public const string AZURE = 'azure';
+    public const string FACEBOOK = 'facebook';
+    public const string KEYCLOAK = 'keycloak';
+    public const string OAUTH2 = 'oauth2';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

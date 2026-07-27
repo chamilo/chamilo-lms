@@ -32,9 +32,9 @@ final readonly class WikiPageFormProvider implements ProviderInterface
 {
     use WikiAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'wiki_page_form';
+    public const string CSRF_TOKEN_ID = 'wiki_page_form';
 
-    private const LOCK_TIMEOUT_SECONDS = 1200;
+    private const int LOCK_TIMEOUT_SECONDS = 1200;
 
     public function __construct(
         private RequestStack $requestStack,

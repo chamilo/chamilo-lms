@@ -25,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/admin/user-list-data')]
 class UserListController extends AbstractController
 {
-    private const ALLOWED_SORT_FIELDS = [
+    private const array ALLOWED_SORT_FIELDS = [
         'officialCode' => 'u.officialCode',
         'firstname' => 'u.firstname',
         'lastname' => 'u.lastname',
@@ -36,7 +36,7 @@ class UserListController extends AbstractController
         'lastLogin' => 'u.lastLogin',
     ];
 
-    private const ROLE_LABELS = [
+    private const array ROLE_LABELS = [
         'ROLE_STUDENT' => 'Learner',
         'ROLE_TEACHER' => 'Teacher',
         'ROLE_HR' => 'Human Resources Manager',
@@ -188,14 +188,6 @@ class UserListController extends AbstractController
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
         $isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER') && !$isPlatformAdmin;
 
-        $adminTable = $this->em->getConnection()->createQueryBuilder()
-            ->select('user_id')
-            ->from('admin')
-            ->executeQuery()
-            ->fetchFirstColumn()
-        ;
-        $adminIds = array_map('intval', $adminTable);
-
         $items = [];
         $now = new DateTime();
 
@@ -210,8 +202,7 @@ class UserListController extends AbstractController
             $isAnonymous = \in_array('ROLE_ANONYMOUS', $allRoles, true);
             $isUserAdmin = \in_array('ROLE_PLATFORM_ADMIN', $allRoles, true)
                 || \in_array('ROLE_GLOBAL_ADMIN', $allRoles, true)
-                || \in_array('ROLE_ADMIN', $allRoles, true)
-                || \in_array($userId, $adminIds, true);
+                || \in_array('ROLE_ADMIN', $allRoles, true);
             $isStudent = \in_array('ROLE_STUDENT', $allRoles, true);
             $isSessionManager = \in_array('ROLE_SESSION_MANAGER', $allRoles, true);
             $isHR = \in_array('ROLE_HR', $allRoles, true);

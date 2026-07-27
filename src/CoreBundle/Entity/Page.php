@@ -169,6 +169,7 @@ class Page
     {
         return $this->locale;
     }
+
     public function setLocale(string $locale): self
     {
         $this->locale = $locale;

@@ -21,8 +21,8 @@ use Chamilo\CoreBundle\Controller\Api\LearningPathScormPackageAction;
                 summary: 'Download the original package of a SCORM learning path',
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
-            read: false,
             output: false,
+            read: false,
         ),
     ],
 )]

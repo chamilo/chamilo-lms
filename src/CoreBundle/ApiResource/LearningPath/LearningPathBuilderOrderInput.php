@@ -17,10 +17,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/learning_paths/{lpId}/builder/reorder',
             requirements: ['lpId' => '\d+'],
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             read: false,
             name: 'reorder_learning_path_builder_items',
             processor: LearningPathBuilderMutationProcessor::class,
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
     ],
     normalizationContext: ['groups' => ['learning_path_builder_order:read']],

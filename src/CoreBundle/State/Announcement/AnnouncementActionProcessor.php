@@ -35,7 +35,7 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
 {
     use AnnouncementAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'announcement_manage';
+    public const string CSRF_TOKEN_ID = 'announcement_manage';
 
     public function __construct(
         private RequestStack $requestStack,

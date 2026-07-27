@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class TrackEExerciseVoter extends Voter
 {
-    public const VIEW = 'VIEW';
+    public const string VIEW = 'VIEW';
 
     public function __construct(
         private AccessDecisionManagerInterface $accessDecisionManager

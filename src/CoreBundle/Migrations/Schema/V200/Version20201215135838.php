@@ -18,7 +18,7 @@ use RuntimeException;
 
 final class Version20201215135838 extends AbstractMigrationChamilo
 {
-    private const ORM_FLUSH_BATCH_SIZE = 100;
+    private const int ORM_FLUSH_BATCH_SIZE = 100;
 
     public function getDescription(): string
     {

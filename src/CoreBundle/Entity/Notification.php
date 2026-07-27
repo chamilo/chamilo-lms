@@ -44,18 +44,6 @@ class Notification
     protected ?DateTime $sentAt = null;
 
     /**
-     * Set destUserId.
-     *
-     * @return Notification
-     */
-    public function setDestUserId(int $destUserId)
-    {
-        $this->destUserId = $destUserId;
-
-        return $this;
-    }
-
-    /**
      * Get destUserId.
      *
      * @return int
@@ -66,13 +54,13 @@ class Notification
     }
 
     /**
-     * Set destMail.
+     * Set destUserId.
      *
      * @return Notification
      */
-    public function setDestMail(string $destMail)
+    public function setDestUserId(int $destUserId)
     {
-        $this->destMail = $destMail;
+        $this->destUserId = $destUserId;
 
         return $this;
     }
@@ -88,13 +76,13 @@ class Notification
     }
 
     /**
-     * Set title.
+     * Set destMail.
      *
      * @return Notification
      */
-    public function setTitle(string $title)
+    public function setDestMail(string $destMail)
     {
-        $this->title = $title;
+        $this->destMail = $destMail;
 
         return $this;
     }
@@ -110,13 +98,13 @@ class Notification
     }
 
     /**
-     * Set content.
+     * Set title.
      *
      * @return Notification
      */
-    public function setContent(string $content)
+    public function setTitle(string $title)
     {
-        $this->content = $content;
+        $this->title = $title;
 
         return $this;
     }
@@ -132,13 +120,13 @@ class Notification
     }
 
     /**
-     * Set sendFreq.
+     * Set content.
      *
      * @return Notification
      */
-    public function setSendFreq(int $sendFreq)
+    public function setContent(string $content)
     {
-        $this->sendFreq = $sendFreq;
+        $this->content = $content;
 
         return $this;
     }
@@ -154,13 +142,13 @@ class Notification
     }
 
     /**
-     * Set createdAt.
+     * Set sendFreq.
      *
      * @return Notification
      */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setSendFreq(int $sendFreq)
     {
-        $this->createdAt = $createdAt;
+        $this->sendFreq = $sendFreq;
 
         return $this;
     }
@@ -176,13 +164,13 @@ class Notification
     }
 
     /**
-     * Set sentAt.
+     * Set createdAt.
      *
      * @return Notification
      */
-    public function setSentAt(DateTime $sentAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
-        $this->sentAt = $sentAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -195,6 +183,18 @@ class Notification
     public function getSentAt()
     {
         return $this->sentAt;
+    }
+
+    /**
+     * Set sentAt.
+     *
+     * @return Notification
+     */
+    public function setSentAt(DateTime $sentAt)
+    {
+        $this->sentAt = $sentAt;
+
+        return $this;
     }
 
     /**

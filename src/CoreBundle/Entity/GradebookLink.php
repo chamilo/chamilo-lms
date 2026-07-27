@@ -77,6 +77,11 @@ class GradebookLink
         $this->userScoreList = [];
     }
 
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
     public function setType(int $type): self
     {
         $this->type = $type;
@@ -84,9 +89,14 @@ class GradebookLink
         return $this;
     }
 
-    public function getType(): int
+    /**
+     * Get refId.
+     *
+     * @return int
+     */
+    public function getRefId()
     {
-        return $this->type;
+        return $this->refId;
     }
 
     /**
@@ -102,23 +112,6 @@ class GradebookLink
     }
 
     /**
-     * Get refId.
-     *
-     * @return int
-     */
-    public function getRefId()
-    {
-        return $this->refId;
-    }
-
-    public function setCreatedAt(DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
      * Get createdAt.
      *
      * @return DateTime
@@ -128,9 +121,9 @@ class GradebookLink
         return $this->createdAt;
     }
 
-    public function setWeight(float $weight): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
-        $this->weight = $weight;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -145,9 +138,9 @@ class GradebookLink
         return $this->weight;
     }
 
-    public function setVisible(int $visible): self
+    public function setWeight(float $weight): self
     {
-        $this->visible = $visible;
+        $this->weight = $weight;
 
         return $this;
     }
@@ -162,9 +155,9 @@ class GradebookLink
         return $this->visible;
     }
 
-    public function setLocked(int $locked): self
+    public function setVisible(int $visible): self
     {
-        $this->locked = $locked;
+        $this->visible = $visible;
 
         return $this;
     }
@@ -177,6 +170,13 @@ class GradebookLink
     public function getLocked()
     {
         return $this->locked;
+    }
+
+    public function setLocked(int $locked): self
+    {
+        $this->locked = $locked;
+
+        return $this;
     }
 
     /**

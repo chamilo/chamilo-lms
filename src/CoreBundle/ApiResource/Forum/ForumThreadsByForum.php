@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/forums/{forumId}/threads',
-            name: 'get_forum_threads_by_forum',
             openapi: new Operation(
                 parameters: [
                     new Parameter(
@@ -51,8 +50,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     ),
                 ],
             ),
-            provider: ForumThreadCollectionStateProvider::class,
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            name: 'get_forum_threads_by_forum',
+            provider: ForumThreadCollectionStateProvider::class,
         ),
     ],
     normalizationContext: [

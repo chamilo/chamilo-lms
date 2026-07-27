@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class TrackEAttemptQualifyVoter extends Voter
 {
-    public const VIEW = 'VIEW';
+    public const string VIEW = 'VIEW';
 
     public function __construct(
         private readonly AccessDecisionManagerInterface $accessDecisionManager,

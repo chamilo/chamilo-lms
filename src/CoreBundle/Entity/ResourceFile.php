@@ -125,6 +125,7 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
 class ResourceFile implements Stringable
 {
     use TimestampableEntity;
+
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -204,9 +205,22 @@ class ResourceFile implements Stringable
         $this->metadata = [];
         $this->dimensions = [];
     }
+
     public function __toString(): string
     {
         return $this->getOriginalName();
+    }
+
+    public function getOriginalName(): ?string
+    {
+        return $this->originalName;
+    }
+
+    public function setOriginalName(?string $originalName): self
+    {
+        $this->originalName = $originalName;
+
+        return $this;
     }
 
     /**
@@ -226,40 +240,59 @@ class ResourceFile implements Stringable
 
         return $this;
     }
+
     public function isText(): bool
     {
         $mimeType = $this->getMimeType();
 
         return str_contains($mimeType, 'text');
     }
+
+    public function getMimeType(): ?string
+    {
+        return $this->mimeType;
+    }
+
+    public function setMimeType(?string $mimeType): self
+    {
+        $this->mimeType = $mimeType;
+
+        return $this;
+    }
+
     public function isImage(): bool
     {
         $mimeType = $this->getMimeType();
 
         return str_contains($mimeType, 'image');
     }
+
     public function isVideo(): bool
     {
         $mimeType = $this->getMimeType();
 
         return str_contains($mimeType, 'video');
     }
+
     public function isAudio(): bool
     {
         $mimeType = $this->getMimeType();
 
         return str_contains($mimeType, 'audio');
     }
+
     public function getTitle(): ?string
     {
         return $this->title;
     }
+
     public function setTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
+
     public function getCrop(): ?string
     {
         return $this->crop;
@@ -274,10 +307,12 @@ class ResourceFile implements Stringable
 
         return $this;
     }
+
     public function getSize(): ?int
     {
         return $this->size;
     }
+
     public function setSize(?int $size): self
     {
         $this->size = $size;
@@ -290,36 +325,6 @@ class ResourceFile implements Stringable
         return $this->id;
     }
 
-    public function getMimeType(): ?string
-    {
-        return $this->mimeType;
-    }
-    public function setMimeType(?string $mimeType): self
-    {
-        $this->mimeType = $mimeType;
-
-        return $this;
-    }
-    public function getOriginalName(): ?string
-    {
-        return $this->originalName;
-    }
-    public function setOriginalName(?string $originalName): self
-    {
-        $this->originalName = $originalName;
-
-        return $this;
-    }
-    public function getDimensions(): array
-    {
-        return $this->dimensions;
-    }
-    public function setDimensions(?array $dimensions): self
-    {
-        $this->dimensions = $dimensions;
-
-        return $this;
-    }
     public function getWidth(): int
     {
         $data = $this->getDimensions();
@@ -329,6 +334,19 @@ class ResourceFile implements Stringable
 
         return 0;
     }
+
+    public function getDimensions(): array
+    {
+        return $this->dimensions;
+    }
+
+    public function setDimensions(?array $dimensions): self
+    {
+        $this->dimensions = $dimensions;
+
+        return $this;
+    }
+
     public function getHeight(): int
     {
         $data = $this->getDimensions();
@@ -338,26 +356,31 @@ class ResourceFile implements Stringable
 
         return 0;
     }
+
     public function getMetadata(): array
     {
         return $this->metadata;
     }
+
     public function setMetadata(array $metadata): self
     {
         $this->metadata = $metadata;
 
         return $this;
     }
+
     public function getDescription(): string
     {
         return $this->description;
     }
+
     public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
+
     public function getFile(): ?File
     {
         return $this->file;

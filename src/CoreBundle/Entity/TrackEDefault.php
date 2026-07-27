@@ -47,18 +47,6 @@ class TrackEDefault
     protected ?int $sessionId = null;
 
     /**
-     * Set defaultUserId.
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultUserId(int $defaultUserId)
-    {
-        $this->defaultUserId = $defaultUserId;
-
-        return $this;
-    }
-
-    /**
      * Get defaultUserId.
      *
      * @return int
@@ -68,9 +56,14 @@ class TrackEDefault
         return $this->defaultUserId;
     }
 
-    public function setCId(?int $cId): self
+    /**
+     * Set defaultUserId.
+     *
+     * @return TrackEDefault
+     */
+    public function setDefaultUserId(int $defaultUserId)
     {
-        $this->cId = $cId;
+        $this->defaultUserId = $defaultUserId;
 
         return $this;
     }
@@ -85,9 +78,9 @@ class TrackEDefault
         return $this->cId;
     }
 
-    public function setDefaultDate(DateTime $defaultDate): self
+    public function setCId(?int $cId): self
     {
-        $this->defaultDate = $defaultDate;
+        $this->cId = $cId;
 
         return $this;
     }
@@ -102,9 +95,9 @@ class TrackEDefault
         return $this->defaultDate;
     }
 
-    public function setDefaultEventType(string $defaultEventType): self
+    public function setDefaultDate(DateTime $defaultDate): self
     {
-        $this->defaultEventType = $defaultEventType;
+        $this->defaultDate = $defaultDate;
 
         return $this;
     }
@@ -119,9 +112,9 @@ class TrackEDefault
         return $this->defaultEventType;
     }
 
-    public function setDefaultValueType(string $defaultValueType): self
+    public function setDefaultEventType(string $defaultEventType): self
     {
-        $this->defaultValueType = $defaultValueType;
+        $this->defaultEventType = $defaultEventType;
 
         return $this;
     }
@@ -136,9 +129,9 @@ class TrackEDefault
         return $this->defaultValueType;
     }
 
-    public function setDefaultValue(string $defaultValue): self
+    public function setDefaultValueType(string $defaultValueType): self
     {
-        $this->defaultValue = $defaultValue;
+        $this->defaultValueType = $defaultValueType;
 
         return $this;
     }
@@ -153,9 +146,9 @@ class TrackEDefault
         return $this->defaultValue;
     }
 
-    public function setSessionId(?int $sessionId): self
+    public function setDefaultValue(string $defaultValue): self
     {
-        $this->sessionId = $sessionId;
+        $this->defaultValue = $defaultValue;
 
         return $this;
     }
@@ -168,6 +161,13 @@ class TrackEDefault
     public function getSessionId()
     {
         return $this->sessionId;
+    }
+
+    public function setSessionId(?int $sessionId): self
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
     }
 
     /**

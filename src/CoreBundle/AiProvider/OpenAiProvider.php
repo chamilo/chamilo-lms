@@ -24,9 +24,9 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     private int $monthlyTokenLimit;
 
     // OpenAI Videos API constraints (validate early to avoid avoidable 400s).
-    private const ALLOWED_VIDEO_MODELS = ['sora-2', 'sora-2-pro'];
-    private const ALLOWED_VIDEO_SECONDS = ['4', '8', '12'];
-    private const ALLOWED_VIDEO_SIZES = ['720x1280', '1280x720', '1024x1792', '1792x1024'];
+    private const array ALLOWED_VIDEO_MODELS = ['sora-2', 'sora-2-pro'];
+    private const array ALLOWED_VIDEO_SECONDS = ['4', '8', '12'];
+    private const array ALLOWED_VIDEO_SIZES = ['720x1280', '1280x720', '1024x1792', '1792x1024'];
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,

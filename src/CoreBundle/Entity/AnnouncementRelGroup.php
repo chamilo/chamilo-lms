@@ -23,6 +23,16 @@ class AnnouncementRelGroup
     protected int $announcementId;
 
     /**
+     * Get groupId.
+     *
+     * @return int
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
+
+    /**
      * Set groupId.
      *
      * @return AnnouncementRelGroup
@@ -35,13 +45,13 @@ class AnnouncementRelGroup
     }
 
     /**
-     * Get groupId.
+     * Get announcementId.
      *
      * @return int
      */
-    public function getGroupId()
+    public function getAnnouncementId()
     {
-        return $this->groupId;
+        return $this->announcementId;
     }
 
     /**
@@ -54,15 +64,5 @@ class AnnouncementRelGroup
         $this->announcementId = $announcementId;
 
         return $this;
-    }
-
-    /**
-     * Get announcementId.
-     *
-     * @return int
-     */
-    public function getAnnouncementId()
-    {
-        return $this->announcementId;
     }
 }

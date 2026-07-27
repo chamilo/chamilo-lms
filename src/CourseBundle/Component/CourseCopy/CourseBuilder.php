@@ -165,7 +165,7 @@ class CourseBuilder
      * Internal trace toggle for this class.
      * Set to false to disable logs.
      */
-    private const TRACE_ENABLED = false;
+    private const bool TRACE_ENABLED = false;
 
     /**
      * Constructor (keeps legacy init; wires Doctrine repositories).

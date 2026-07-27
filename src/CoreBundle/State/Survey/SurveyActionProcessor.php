@@ -45,7 +45,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
     use SurveyCsrfTokenValidationTrait;
     use SurveyPersonalitySupportTrait;
 
-    public const CSRF_TOKEN_ID = 'survey_action';
+    public const string CSRF_TOKEN_ID = 'survey_action';
 
     public function __construct(
         private RequestStack $requestStack,

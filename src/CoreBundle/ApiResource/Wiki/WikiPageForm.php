@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Wiki\WikiPageFormProcessor;
@@ -51,12 +50,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            read: false,
             name: 'post_wiki_page',
             processor: WikiPageFormProcessor::class,
         ),
-        new Put(
+        new Post(
             uriTemplate: '/wiki/page/{pageId}',
             requirements: ['pageId' => '\d+'],
             openapi: new Operation(
@@ -70,9 +69,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
-            name: 'put_wiki_page',
+            read: false,
+            name: 'post_wiki_page_version',
             processor: WikiPageFormProcessor::class,
         ),
         new Post(
@@ -88,8 +87,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            read: false,
             name: 'post_wiki_page_lock',
             processor: WikiPageLockProcessor::class,
         ),
@@ -106,8 +105,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            read: false,
             name: 'post_wiki_page_unlock',
             processor: WikiPageLockProcessor::class,
         ),

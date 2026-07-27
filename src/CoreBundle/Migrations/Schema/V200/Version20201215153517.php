@@ -15,8 +15,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201215153517 extends AbstractMigrationChamilo
 {
-    private const ANNOUNCEMENT_BATCH_SIZE = 250;
-    private const ATTACHMENT_BATCH_SIZE = 50;
+    private const int ANNOUNCEMENT_BATCH_SIZE = 250;
+    private const int ATTACHMENT_BATCH_SIZE = 50;
 
     public function getDescription(): string
     {

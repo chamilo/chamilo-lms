@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Side {0} af {1}",
     "Showing {0} posts": "Viser {0} opslag",
     "Showing {0} tasks": "Viser {0} opgaver",
-    "contains {0} items": "indeholder {0} elementer"
+    "contains {0} items": "indeholder {0} elementer",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

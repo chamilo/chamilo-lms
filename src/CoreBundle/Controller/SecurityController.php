@@ -53,7 +53,7 @@ class SecurityController extends AbstractController
      * Prefix used to identify HKDF-based encryption format for MFA secrets.
      * Legacy secrets have no prefix and remain readable for backward compatibility.
      */
-    private const MFA_SECRET_V2_PREFIX = 'v2:';
+    private const string MFA_SECRET_V2_PREFIX = 'v2:';
 
     public function __construct(
         private SerializerInterface $serializer,

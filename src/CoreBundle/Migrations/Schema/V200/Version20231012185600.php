@@ -24,8 +24,8 @@ use const ENT_QUOTES;
 
 final class Version20231012185600 extends AbstractMigrationChamilo
 {
-    private const QUIZ_BATCH_SIZE = 1000;
-    private const RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
+    private const int QUIZ_BATCH_SIZE = 1000;
+    private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
 
     public function getDescription(): string
     {

@@ -23,7 +23,7 @@ use const JSON_UNESCAPED_UNICODE;
 
 final class UserMergeHelper
 {
-    private const LOG_PREFIX = '[UserMergeHelper]';
+    private const string LOG_PREFIX = '[UserMergeHelper]';
     private bool $enableLogs = false;
 
     public function __construct(

@@ -80,12 +80,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['sendDate'])]
 class SocialPost
 {
-    public const TYPE_WALL_POST = 1;
-    public const TYPE_WALL_COMMENT = 2;
-    public const TYPE_GROUP_MESSAGE = 3;
-    public const TYPE_PROMOTED_MESSAGE = 4;
-    public const STATUS_SENT = 1;
-    public const STATUS_DELETED = 2;
+    public const int TYPE_WALL_POST = 1;
+    public const int TYPE_WALL_COMMENT = 2;
+    public const int TYPE_GROUP_MESSAGE = 3;
+    public const int TYPE_PROMOTED_MESSAGE = 4;
+    public const int STATUS_SENT = 1;
+    public const int STATUS_DELETED = 2;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

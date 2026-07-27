@@ -10,6 +10,9 @@ framework:
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
+        routing:
+            'Chamilo\CoreBundle\Message\MobileMessagePushRequested': sync_priority_high
+
 when@test:
     framework:
         messenger:

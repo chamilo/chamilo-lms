@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Assignment\MobileAssignmentSubmissionAccess;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
@@ -38,6 +39,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -107,16 +110,95 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
+    #[Route('/{assignmentId}/detail', name: 'chamilo_core_assignment_mobile_detail', methods: ['GET'])]
+    public function getAssignmentMobileDetail(
+        int $assignmentId,
+        SerializerInterface $serializer,
+        CStudentPublicationRepository $repo,
+        Security $security,
+        MobileAssignmentSubmissionAccess $submissionAccess
+    ): JsonResponse {
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $assignment = null;
+
+        try {
+            $managementContext = $submissionAccess->resolveCourseContext(
+                $course->getId(),
+                $session?->getId(),
+            );
+            $assignment = $submissionAccess->resolveVisibleAssignment(
+                $assignmentId,
+                $managementContext['course'],
+                $managementContext['session'],
+            );
+        } catch (AccessDeniedHttpException $exception) {
+            $assignment = $repo->find($assignmentId);
+
+            if (
+                !$assignment instanceof CStudentPublication
+                || null === $assignment->getFirstResourceLinkFromCourseSession($course, $session)
+            ) {
+                throw new NotFoundHttpException('Assignment not found in the current course context.');
+            }
+
+            if (!$security->isGranted('VIEW', $assignment->getResourceNode())) {
+                throw $exception;
+            }
+        }
+
+        $data = json_decode($serializer->serialize(
+            $assignment,
+            'json',
+            [
+                'groups' => [
+                    'student_publication:read',
+                    'student_publication:item:get',
+                ],
+            ],
+        ), true);
+
+        return new JsonResponse($data);
+    }
+
     #[Route('/{assignmentId}/submissions', name: 'chamilo_core_assignment_student_submission_list', methods: ['GET'])]
     public function getAssignmentSubmissions(
         int $assignmentId,
         Request $request,
         SerializerInterface $serializer,
         CStudentPublicationRepository $repo,
-        Security $security
+        Security $security,
+        MobileAssignmentSubmissionAccess $submissionAccess
     ): JsonResponse {
         /** @var User $user */
         $user = $security->getUser();
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $assignment = $repo->find($assignmentId);
+
+        if (
+            !$assignment instanceof CStudentPublication
+            || null === $assignment->getFirstResourceLinkFromCourseSession($course, $session)
+        ) {
+            return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $managementContext = null;
+
+        try {
+            $managementContext = $submissionAccess->resolveCourseContext(
+                $course->getId(),
+                $session?->getId(),
+            );
+            $submissionAccess->resolveVisibleAssignment(
+                $assignmentId,
+                $managementContext['course'],
+                $managementContext['session'],
+            );
+        } catch (AccessDeniedHttpException|NotFoundHttpException) {
+            // Reading the assignment remains available to teachers and administrators.
+            // Management capabilities are exposed only when the student context is valid.
+        }
 
         $page = (int) $request->query->get('page', 1);
         $itemsPerPage = (int) $request->query->get('itemsPerPage', 10);
@@ -135,6 +217,24 @@ class StudentPublicationController extends AbstractController
             'json',
             ['groups' => ['student_publication:read']]
         ), true);
+
+        if (null !== $managementContext) {
+            foreach ($submissions as $index => $submission) {
+                if (!$submission instanceof CStudentPublication || !isset($data[$index])) {
+                    continue;
+                }
+
+                $data[$index] = array_merge(
+                    $data[$index],
+                    $submissionAccess->capabilities(
+                        $submission,
+                        $managementContext['user'],
+                        $managementContext['course'],
+                        $managementContext['session'],
+                    ),
+                );
+            }
+        }
 
         return new JsonResponse([
             'hydra:member' => $data,

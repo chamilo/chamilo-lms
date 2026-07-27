@@ -56,4 +56,42 @@ class MobilePushInstallationRepository extends ServiceEntityRepository
             ->execute()
         ;
     }
+
+    /**
+     * @param User[] $recipients
+     *
+     * @return MobilePushInstallation[]
+     */
+    public function findForRecipientsAndAccessUrl(array $recipients, AccessUrl $accessUrl): array
+    {
+        if ([] === $recipients) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('installation')
+            ->where('installation.user IN (:recipients)')
+            ->andWhere('installation.accessUrl = :accessUrl')
+            ->setParameter('recipients', $recipients)
+            ->setParameter('accessUrl', $accessUrl)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function removeInvalidInstallation(MobilePushInstallation $installation): int
+    {
+        $id = $installation->getId();
+
+        if (null === $id) {
+            return 0;
+        }
+
+        return $this->createQueryBuilder('invalidInstallation')
+            ->delete()
+            ->where('invalidInstallation.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute()
+        ;
+    }
 }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
@@ -36,6 +37,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
     private const int SQL_QUESTION_BATCH_SIZE = 1000;
     private const int IMAGE_FLUSH_BATCH_SIZE = 20;
     private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
+    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
 
     public function getDescription(): string
     {
@@ -54,6 +56,8 @@ final class Version20201215142610 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->ensureItemPropertyMigrationIndex();
+
         $quizRepo = $this->container->get(CQuizRepository::class);
         $questionRepo = $this->container->get(CQuizQuestionRepository::class);
         $categoryRepo = $this->container->get(CQuizQuestionCategoryRepository::class);
@@ -141,49 +145,42 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             ['courseId' => $courseId]
         );
 
-        $processed = 0;
-
-        foreach ($quizIds as $quizIdValue) {
-            $quizId = (int) $quizIdValue;
-            $quiz = $quizRepo->find($quizId);
-
-            if (!$quiz instanceof CQuiz || $quiz->hasResourceNode()) {
-                continue;
+        foreach (array_chunk(array_map('intval', $quizIds), self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
+            $quizzesById = [];
+            foreach ($quizRepo->findBy(['iid' => $idChunk]) as $quizEntity) {
+                $quizzesById[$quizEntity->getIid()] = $quizEntity;
             }
 
-            $result = $this->fixItemProperty(
-                'quiz',
-                $quizRepo,
-                $course,
-                $courseAdmin,
-                $quiz,
-                $course,
-                $itemProperties[$quizId] ?? [],
-                $resourceType
-            );
+            foreach ($idChunk as $quizId) {
+                $quiz = $quizzesById[$quizId] ?? null;
 
-            if (false === $result) {
-                continue;
-            }
+                if (!$quiz instanceof CQuiz || $quiz->hasResourceNode()) {
+                    continue;
+                }
 
-            ++$processed;
-
-            if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
-                $this->entityManager->flush();
-                $this->entityManager->clear();
-
-                [$course, $courseAdmin] = $this->reloadCourseContext(
-                    $courseId,
-                    $courseAdminId,
-                    $courseRepo,
-                    $userRepo
+                $this->fixItemProperty(
+                    'quiz',
+                    $quizRepo,
+                    $course,
+                    $courseAdmin,
+                    $quiz,
+                    $course,
+                    $itemProperties[$quizId] ?? [],
+                    $resourceType
                 );
-                $resourceType = $quizRepo->getResourceType();
             }
-        }
 
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+
+            [$course, $courseAdmin] = $this->reloadCourseContext(
+                $courseId,
+                $courseAdminId,
+                $courseRepo,
+                $userRepo
+            );
+            $resourceType = $quizRepo->getResourceType();
+        }
     }
 
     /**
@@ -398,49 +395,42 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             ['courseId' => $courseId]
         );
 
-        $processed = 0;
-
-        foreach ($categoryIds as $categoryIdValue) {
-            $categoryId = (int) $categoryIdValue;
-            $category = $categoryRepo->find($categoryId);
-
-            if (!$category instanceof CQuizQuestionCategory || $category->hasResourceNode()) {
-                continue;
+        foreach (array_chunk(array_map('intval', $categoryIds), self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
+            $categoriesById = [];
+            foreach ($categoryRepo->findBy(['iid' => $idChunk]) as $categoryEntity) {
+                $categoriesById[$categoryEntity->getIid()] = $categoryEntity;
             }
 
-            $result = $this->fixItemProperty(
-                'test_category',
-                $categoryRepo,
-                $course,
-                $courseAdmin,
-                $category,
-                $course,
-                $itemProperties[$categoryId] ?? [],
-                $resourceType
-            );
+            foreach ($idChunk as $categoryId) {
+                $category = $categoriesById[$categoryId] ?? null;
 
-            if (false === $result) {
-                continue;
-            }
+                if (!$category instanceof CQuizQuestionCategory || $category->hasResourceNode()) {
+                    continue;
+                }
 
-            ++$processed;
-
-            if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
-                $this->entityManager->flush();
-                $this->entityManager->clear();
-
-                [$course, $courseAdmin] = $this->reloadCourseContext(
-                    $courseId,
-                    $courseAdminId,
-                    $courseRepo,
-                    $userRepo
+                $this->fixItemProperty(
+                    'test_category',
+                    $categoryRepo,
+                    $course,
+                    $courseAdmin,
+                    $category,
+                    $course,
+                    $itemProperties[$categoryId] ?? [],
+                    $resourceType
                 );
-                $resourceType = $categoryRepo->getResourceType();
             }
-        }
 
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+
+            [$course, $courseAdmin] = $this->reloadCourseContext(
+                $courseId,
+                $courseAdminId,
+                $courseRepo,
+                $userRepo
+            );
+            $resourceType = $categoryRepo->getResourceType();
+        }
     }
 
     private function migrateQuestionsWithDbal(
@@ -651,67 +641,85 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         $processed = 0;
         $migrated = 0;
 
-        foreach ($imageRows as $imageRow) {
-            $pictureId = (string) ($imageRow['picture'] ?? '');
-            if ('' === $pictureId || !ctype_digit($pictureId)) {
-                continue;
+        foreach (array_chunk($imageRows, self::IMAGE_FLUSH_BATCH_SIZE) as $rowChunk) {
+            $questionIds = [];
+            $pictureIds = [];
+            foreach ($rowChunk as $imageRow) {
+                $pictureId = (string) ($imageRow['picture'] ?? '');
+                if ('' === $pictureId || !ctype_digit($pictureId)) {
+                    continue;
+                }
+                $questionIds[] = (int) $imageRow['iid'];
+                $pictureIds[] = (int) $pictureId;
             }
 
-            $questionId = (int) $imageRow['iid'];
-            $question = $questionRepo->find($questionId);
-            $document = $documentRepo->find((int) $pictureId);
-
-            if (!$question instanceof CQuizQuestion
-                || !$document instanceof CDocument
-                || !$document->hasResourceNode()
-                || !$document->getResourceNode()->hasResourceFile()
-            ) {
-                $this->getLogger()->warning('Question image source could not be migrated.', [
-                    'course_id' => $courseId,
-                    'question_iid' => $questionId,
-                    'document_iid' => $pictureId,
-                ]);
-
-                continue;
+            $questionsById = [];
+            foreach ($questionIds ? $questionRepo->findBy(['iid' => $questionIds]) : [] as $questionEntity) {
+                $questionsById[$questionEntity->getIid()] = $questionEntity;
             }
 
-            $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
-            $contents = $documentRepo->getResourceFileContent($document);
-            $originalName = $resourceFile->getOriginalName() ?: 'question-'.$questionId;
-            $mimeType = $resourceFile->getMimeType() ?: 'application/octet-stream';
+            $documentsById = [];
+            foreach ($pictureIds ? $documentRepo->findBy(['iid' => $pictureIds]) : [] as $documentEntity) {
+                $documentsById[$documentEntity->getIid()] = $documentEntity;
+            }
 
-            $migratedResourceFile = $questionRepo->addFileFromString(
-                $question,
-                $originalName,
-                $mimeType,
-                $contents,
-                false
-            );
+            foreach ($rowChunk as $imageRow) {
+                $pictureId = (string) ($imageRow['picture'] ?? '');
+                if ('' === $pictureId || !ctype_digit($pictureId)) {
+                    continue;
+                }
 
-            if (null !== $migratedResourceFile) {
-                $migratedResourceFile->setTitle(
-                    mb_substr($originalName, 0, self::RESOURCE_NODE_TITLE_MAX_LENGTH)
+                $questionId = (int) $imageRow['iid'];
+                $question = $questionsById[$questionId] ?? null;
+                $document = $documentsById[(int) $pictureId] ?? null;
+
+                if (!$question instanceof CQuizQuestion
+                    || !$document instanceof CDocument
+                    || !$document->hasResourceNode()
+                    || !$document->getResourceNode()->hasResourceFile()
+                ) {
+                    $this->getLogger()->warning('Question image source could not be migrated.', [
+                        'course_id' => $courseId,
+                        'question_iid' => $questionId,
+                        'document_iid' => $pictureId,
+                    ]);
+
+                    continue;
+                }
+
+                $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
+                $contents = $documentRepo->getResourceFileContent($document);
+                $originalName = $resourceFile->getOriginalName() ?: 'question-'.$questionId;
+                $mimeType = $resourceFile->getMimeType() ?: 'application/octet-stream';
+
+                $migratedResourceFile = $questionRepo->addFileFromString(
+                    $question,
+                    $originalName,
+                    $mimeType,
+                    $contents,
+                    false
                 );
+
+                if (null !== $migratedResourceFile) {
+                    $migratedResourceFile->setTitle(
+                        mb_substr($originalName, 0, self::RESOURCE_NODE_TITLE_MAX_LENGTH)
+                    );
+                }
+
+                $this->entityManager->persist($question);
+                ++$processed;
+                ++$migrated;
             }
 
-            $this->entityManager->persist($question);
-            ++$processed;
-            ++$migrated;
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
-            if (0 === $processed % self::IMAGE_FLUSH_BATCH_SIZE) {
-                $this->entityManager->flush();
-                $this->entityManager->clear();
-
-                $this->getLogger()->info('Quiz question image migration progress.', [
-                    'course_id' => $courseId,
-                    'processed' => $processed,
-                    'migrated' => $migrated,
-                ]);
-            }
+            $this->getLogger()->info('Quiz question image migration progress.', [
+                'course_id' => $courseId,
+                'processed' => $processed,
+                'migrated' => $migrated,
+            ]);
         }
-
-        $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 
     private function normalizeQuestionTitle(string $question, int $questionId): string
@@ -763,12 +771,25 @@ final class Version20201215142610 extends AbstractMigrationChamilo
 
     private function resolveCourseAdminId(Course $course): int
     {
-        foreach ($course->getTeachersSubscriptions() as $courseRelUser) {
-            $user = $courseRelUser->getUser();
+        // A scalar query avoids hydrating the full (potentially huge) course
+        // roster just to find one teacher, unlike getTeachersSubscriptions().
+        // Order by the course_rel_user row's own id (not user_id) to match the
+        // subscription-order first-teacher semantics of the original unordered
+        // getTeachersSubscriptions() iteration (Course::$users has no OrderBy).
+        $teacherId = $this->connection->fetchOne(
+            'SELECT user_id
+             FROM course_rel_user
+             WHERE c_id = :courseId AND status = :teacher
+             ORDER BY id
+             LIMIT 1',
+            [
+                'courseId' => (int) $course->getId(),
+                'teacher' => CourseRelUser::TEACHER,
+            ]
+        );
 
-            if ($user instanceof User && null !== $user->getId()) {
-                return (int) $user->getId();
-            }
+        if (false !== $teacherId && null !== $teacherId) {
+            return (int) $teacherId;
         }
 
         $admin = $this->getAdmin();
@@ -778,6 +799,41 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         }
 
         return (int) $admin->getId();
+    }
+
+    private function ensureItemPropertyMigrationIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('c_item_property', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('c_item_property') as $index) {
+                if (self::ITEM_PROPERTY_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if (\count($columns) >= 2
+                    && 'tool' === $columns[0]
+                    && 'ref' === $columns[1]
+                ) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating temporary migration index on c_item_property.', [
+                'index' => self::ITEM_PROPERTY_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::ITEM_PROPERTY_INDEX.' ON c_item_property (tool, ref, c_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create c_item_property migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
     }
 
     /**

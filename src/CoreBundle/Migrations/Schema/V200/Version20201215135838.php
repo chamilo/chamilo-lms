@@ -15,10 +15,12 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\DBAL\Schema\Schema;
 use RuntimeException;
+use Throwable;
 
 final class Version20201215135838 extends AbstractMigrationChamilo
 {
     private const int ORM_FLUSH_BATCH_SIZE = 100;
+    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
 
     public function getDescription(): string
     {
@@ -37,6 +39,8 @@ final class Version20201215135838 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->ensureItemPropertyMigrationIndex();
+
         $courseDescriptionRepo = $this->container->get(CCourseDescriptionRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
@@ -53,48 +57,83 @@ final class Version20201215135838 extends AbstractMigrationChamilo
                 ['courseId' => $courseId]
             );
 
-            $processed = 0;
+            $itemPropsMap = $this->fetchItemPropertiesMap('course_description', $courseId, array_map('intval', $itemIds));
 
-            foreach ($itemIds as $itemIdValue) {
-                $id = (int) $itemIdValue;
-
-                /** @var CCourseDescription $resource */
-                $resource = $courseDescriptionRepo->find($id);
-                if (!$resource instanceof CCourseDescription || $resource->hasResourceNode()) {
-                    continue;
+            foreach (array_chunk(array_map('intval', $itemIds), self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
+                $resourcesById = [];
+                foreach ($courseDescriptionRepo->findBy(['iid' => $idChunk]) as $resourceEntity) {
+                    $resourcesById[$resourceEntity->getIid()] = $resourceEntity;
                 }
 
-                $result = $this->fixItemProperty(
-                    'course_description',
-                    $courseDescriptionRepo,
-                    $course,
-                    $admin,
-                    $resource,
-                    $course
-                );
+                foreach ($idChunk as $id) {
+                    /** @var CCourseDescription|null $resource */
+                    $resource = $resourcesById[$id] ?? null;
+                    if (!$resource instanceof CCourseDescription || $resource->hasResourceNode()) {
+                        continue;
+                    }
 
-                if (false === $result) {
-                    continue;
-                }
-
-                $this->entityManager->persist($resource);
-                ++$processed;
-
-                if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
-                    $this->entityManager->flush();
-                    $this->entityManager->clear();
-
-                    [$course, $admin] = $this->reloadCourseDescriptionContext(
-                        $courseId,
-                        $adminId,
-                        $courseRepo,
-                        $userRepo
+                    $result = $this->fixItemProperty(
+                        'course_description',
+                        $courseDescriptionRepo,
+                        $course,
+                        $admin,
+                        $resource,
+                        $course,
+                        $itemPropsMap[$id] ?? []
                     );
+
+                    if (false === $result) {
+                        continue;
+                    }
+
+                    $this->entityManager->persist($resource);
+                }
+
+                $this->entityManager->flush();
+                $this->entityManager->clear();
+
+                [$course, $admin] = $this->reloadCourseDescriptionContext(
+                    $courseId,
+                    $adminId,
+                    $courseRepo,
+                    $userRepo
+                );
+            }
+        }
+    }
+
+    private function ensureItemPropertyMigrationIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('c_item_property', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('c_item_property') as $index) {
+                if (self::ITEM_PROPERTY_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if (\count($columns) >= 2
+                    && 'tool' === $columns[0]
+                    && 'ref' === $columns[1]
+                ) {
+                    return;
                 }
             }
 
-            $this->entityManager->flush();
-            $this->entityManager->clear();
+            $this->getLogger()->notice('Creating temporary migration index on c_item_property.', [
+                'index' => self::ITEM_PROPERTY_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::ITEM_PROPERTY_INDEX.' ON c_item_property (tool, ref, c_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create c_item_property migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
         }
     }
 

@@ -1,0 +1,40 @@
+# Behat profile for the Docker stack (docker/test.sh, docker/setup.sh).
+# Generated/maintained alongside docker/ — not part of upstream Chamilo.
+#
+# Why a whole second config instead of BEHAT_PARAMS:
+# Behat 3.29's ConfigurationLoader::loadConfiguration() appends the file config
+# AFTER the BEHAT_PARAMS config, and later entries win the merge — so behat.yml's
+# `base_url: http://localhost` silently beat any env-var override.
+#
+# It lives next to behat.yml on purpose: %paths.base% resolves to this file's
+# directory, so the suite path and FeatureContext autoloading keep working.
+#
+# The only change from behat.yml is base_url, which needs the port Apache
+# actually listens on inside the container (see docker/README.md). wd_host is
+# unchanged: the selenium container shares the web container's network
+# namespace, so 127.0.0.1:4444 already reaches the grid.
+default:
+  extensions:
+    Behat\MinkExtension:
+      base_url: http://localhost:8380
+      default_session: selenium2
+      javascript_session: selenium2
+      selenium2:
+        wd_host: "http://127.0.0.1:4444"
+        browser: chrome
+        capabilities:
+          browserName: chrome
+          extra_capabilities:
+            "goog:chromeOptions":
+              args:
+                - "--headless=new"
+                - "--no-sandbox"
+                - "--disable-dev-shm-usage"
+                - "--disable-gpu"
+                - "--window-size=1920,1080"
+      files_path: "%paths.base%/../../"
+  suites:
+    default:
+      paths: ["%paths.base%/features"]
+  formatters:
+    pretty: true

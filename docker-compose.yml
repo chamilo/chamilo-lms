@@ -1,0 +1,139 @@
+# Chamilo LMS 2.0 — local development / test stack
+#
+#   docker compose up -d --build      bring the stack up
+#   docker/setup.sh                   install Chamilo + prepare the test DB
+#   docker/test.sh phpunit|behat|...  run a test tier
+#
+# Port note: Apache listens on 8380 *inside* the container and is published on
+# host 8380, so the URL is `http://localhost:8380` from the host browser, from
+# Behat, and from the Chrome container alike. Chamilo persists root_web at
+# install time, so a mismatch there breaks every redirect in the browser tests.
+# To change it, edit HTTP_PORT in docker/php/Dockerfile and the `ports:` entry
+# below together — they must stay equal.
+
+name: chamilo
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8380:8380"   # Chamilo — must equal HTTP_PORT in docker/php/Dockerfile
+      - "4444:4444"   # Selenium Grid (shares this container's netns)
+      - "7900:7900"   # Selenium noVNC — watch the browser tests run
+    environment:
+      # Consumed only by docker/php/entrypoint.sh. Deliberately NOT named
+      # DATABASE_* so they cannot shadow .env / .env.test — see entrypoint.sh.
+      WAIT_DB_HOST: db
+      WAIT_DB_PORT: "3306"
+      WAIT_DB_USER: chamilo
+      WAIT_DB_PASSWORD: chamilo
+      JWT_PASSPHRASE: your_secret_passphrase
+      # Keeps `yarn`/`composer` caches off the bind mount
+      COMPOSER_HOME: /tmp/composer
+    volumes:
+      - .:/var/www/chamilo:cached
+      # Named volumes: keep heavy, platform-specific trees out of the macOS
+      # bind mount. node_modules holds linux/arm64 native binaries that would
+      # clash with the host's darwin/arm64 build.
+      - node_modules:/var/www/chamilo/node_modules
+      - var_cache:/var/www/chamilo/var/cache
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks: [chamilo]
+
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    ports:
+      - "3307:3306"   # 3307 on the host to avoid clashing with a local MySQL
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: chamilo
+      MARIADB_USER: chamilo
+      MARIADB_PASSWORD: chamilo
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      # Chamilo's queries are not ONLY_FULL_GROUP_BY-clean; doctrine.yaml strips
+      # the mode per-connection, but the legacy public/main/* code uses its own
+      # connections, so it has to be off server-wide too.
+      - --sql-mode=NO_ENGINE_SUBSTITUTION
+      - --innodb-buffer-pool-size=512M
+      - --max-allowed-packet=256M
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    networks: [chamilo]
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    networks: [chamilo]
+
+  # Catches every outgoing mail — registration, password reset, notifications.
+  # UI at http://localhost:8325 (8025 is taken by another stack on this machine)
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "8325:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+    networks: [chamilo]
+
+  # Behat's browser. Shares the web container's network namespace so that
+  # Chrome resolves http://localhost:8380 to Apache, and Behat (running inside
+  # `web`) reaches the grid at 127.0.0.1:4444 — exactly what tests/behat/behat.yml
+  # already expects, so no config override is needed for wd_host.
+  #
+  # Pinned to Selenium 4.1.4 on purpose. behat/mink-selenium2-driver 1.7 talks
+  # through instaclick/php-webdriver, which only speaks the legacy JSON Wire
+  # protocol. Grid 4.1.x still converts that to W3C; later releases dropped the
+  # conversion and answer every request with
+  #     No nodes support the capabilities in the request: []
+  # CI pins selenium-server 4.1.3 for the same reason. `seleniarm` is the
+  # community arm64 build of that era — the official selenium/ images only
+  # gained arm64 from 4.11 onwards, by which point the legacy protocol was gone.
+  #
+  # Moving to a current grid means adding a W3C driver (Selenium4Factory wants
+  # Behat\Mink\Driver\Selenium4Driver, which is not in composer.json) and
+  # editing tests/behat/behat.yml — an upstream change, not a local one.
+  selenium:
+    image: seleniarm/standalone-chromium:4.1.4-20220429
+    restart: unless-stopped
+    network_mode: "service:web"
+    shm_size: 2gb
+    environment:
+      SE_NODE_MAX_SESSIONS: "1"
+      SE_NODE_SESSION_TIMEOUT: "300"
+      SE_START_XVFB: "true"
+      SE_SCREEN_WIDTH: "1920"
+      SE_SCREEN_HEIGHT: "1080"
+    depends_on:
+      - web
+    profiles: [behat]
+
+volumes:
+  db_data:
+  redis_data:
+  node_modules:
+  var_cache:
+
+networks:
+  chamilo:

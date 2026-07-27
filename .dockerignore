@@ -1,0 +1,4 @@
+# The project tree is bind-mounted at runtime; the build context only needs
+# docker/. Keeping this tight makes `docker compose build` near-instant.
+*
+!docker/

@@ -56,6 +56,20 @@ availability of, external services/applications.
 
 You can try out Chamilo at https://campus.chamilo.net/ (use the "Teach courses" option to give yourself creation rights).
 
+## Local development with Docker
+
+The quickest way to get Chamilo running on your own machine. You only need
+Docker — no PHP, MySQL, Node.js or Apache to install:
+
+~~~~
+docker/setup.sh
+~~~~
+
+Then open <http://localhost:8380> and log in as `admin` / `admin`.
+
+- **[SETUP.md](SETUP.md)** — step-by-step guide, ports, tests, troubleshooting
+- **[docker/README.md](docker/README.md)** — how the stack is built and why
+
 ## Quick install
 
 **IMPORTANT** Chamilo 2.0 is in its validation phase right now.

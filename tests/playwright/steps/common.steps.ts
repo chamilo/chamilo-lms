@@ -354,7 +354,20 @@ BeforeAll({ tags: "@settings" }, async ({ browser, baseURL }) => {
   settingsPage = page
   for (const { path, field } of SETTINGS_PAGES) {
     await page.goto(path)
-    await page.waitForLoadState("domcontentloaded")
+    // Same navigation race as AfterAll's own restore loop below (see the
+    // comment on its own networkidle wait) — a real CI failure showed this
+    // exact sibling loop hit it too: "Navigation to .../allow_registration
+    // is interrupted by another navigation to .../changeable_options", i.e.
+    // a still-settling load from THIS iteration's own goto (an earlier
+    // settings page's search_settings response can itself trigger further,
+    // slightly-delayed loading) colliding with the NEXT iteration's fresh
+    // goto. domcontentloaded resolving before that fully settles was
+    // already proven insufficient once for AfterAll; never got applied
+    // here too since this loop only reads values (no Save button involved,
+    // so it looked like a different, simpler case) — but the underlying
+    // "domcontentloaded fires before the page is truly done" issue is the
+    // same regardless of whether a save/redirect is involved.
+    await page.waitForLoadState("networkidle")
     const values: string[] = await page.locator(`#${field}`).evaluate((el) =>
       Array.from((el as HTMLSelectElement).selectedOptions).map((option) => option.value),
     )

@@ -208,10 +208,8 @@ class LegalRepository extends ServiceEntityRepository
         $qb->where('l.languageId = :languageId')
             ->andWhere('l.version = :versionId')
             ->andWhere('l.type = 0')
-            ->setParameters([
-                'languageId' => $languageId,
-                'versionId' => $versionId,
-            ])
+            ->setParameter('languageId', $languageId)
+            ->setParameter('versionId', $versionId)
             ->setMaxResults(1)
         ;
 
@@ -239,10 +237,8 @@ class LegalRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('l')
             ->andWhere('l.languageId = :languageId')
             ->andWhere('l.version = :version')
-            ->setParameters([
-                'languageId' => $languageId,
-                'version' => $version,
-            ])
+            ->setParameter('languageId', $languageId)
+            ->setParameter('version', $version)
             ->orderBy('l.type', 'ASC')
             ->getQuery()
             ->getResult()

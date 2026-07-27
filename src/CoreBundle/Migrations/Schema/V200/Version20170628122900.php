@@ -23,7 +23,7 @@ class Version20170628122900 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('id')) {
             $this->addSql('ALTER TABLE access_url_rel_user MODIFY COLUMN access_url_id INT NOT NULL');
             $this->addSql('ALTER TABLE access_url_rel_user MODIFY COLUMN user_id INT NOT NULL');
-            if ($table->hasPrimaryKey()) {
+            if (null !== $table->getPrimaryKey()) {
                 $this->addSql('ALTER TABLE access_url_rel_user DROP PRIMARY KEY');
             }
 

@@ -59,7 +59,7 @@ class ExtraFieldRepository extends ServiceEntityRepository
             'options' => [],
         ];
 
-        $options = $this->_em->getRepository(ExtraFieldOptions::class)->findBy([
+        $options = $this->getEntityManager()->getRepository(ExtraFieldOptions::class)->findBy([
             'field' => $extraField,
         ]);
 

@@ -996,8 +996,7 @@ function display_database_settings_form(
 
             $manager = Database::getManager();
             $connection = $manager->getConnection();
-            $connection->connect();
-            $schemaManager = $connection->getSchemaManager();
+            $schemaManager = $connection->createSchemaManager();
 
             $table = 'zXxTESTxX_'.mt_rand(0, 1000);
             $sql = "CREATE TABLE $table (id INT AUTO_INCREMENT NOT NULL, name varchar(255), PRIMARY KEY(id))";
@@ -1324,7 +1323,7 @@ function migrate(EntityManager $manager)
     $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
     // Check if old "version" table exists from 1.11.x, use new version.
-    $schema = $manager->getConnection()->getSchemaManager();
+    $schema = $manager->getConnection()->createSchemaManager();
     $dropOldVersionTable = false;
     if ($schema->tablesExist('version')) {
         $columns = $schema->listTableColumns('version');

@@ -85,7 +85,7 @@ class Asset implements Stringable
     #[ORM\Column(name: 'crop', type: 'string', length: 255, nullable: true)]
     protected ?string $crop = null;
 
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: 'json', nullable: true)]
     protected ?array $metadata;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]

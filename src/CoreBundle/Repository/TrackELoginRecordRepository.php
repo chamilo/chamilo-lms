@@ -29,8 +29,8 @@ final class TrackELoginRecordRepository extends ServiceEntityRepository
             ->setSuccess($success)
         ;
 
-        $this->_em->persist($trackELoginRecord);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($trackELoginRecord);
+        $this->getEntityManager()->flush();
     }
 
     public function failedByMonth(int $months = 12): array

@@ -175,11 +175,9 @@ final class CDocumentRepository extends ResourceRepository
                 ->where('rn.parent = :parent')
                 ->andWhere('rn.title LIKE :prefix')
                 ->andWhere('d.filetype = :folderType')
-                ->setParameters([
-                    'parent' => $parent,
-                    'prefix' => $prefix.'%',
-                    'folderType' => 'folder',
-                ])
+                ->setParameter('parent', $parent)
+                ->setParameter('prefix', $prefix.'%')
+                ->setParameter('folderType', 'folder')
                 ->setMaxResults(1)
             ;
 
@@ -195,10 +193,8 @@ final class CDocumentRepository extends ResourceRepository
                 ->innerJoin('d.resourceNode', 'rn')
                 ->where('rn.parent = :folder')
                 ->andWhere('d.filetype = :fileType')
-                ->setParameters([
-                    'folder' => $folder,
-                    'fileType' => 'file',
-                ])
+                ->setParameter('folder', $folder)
+                ->setParameter('fileType', 'file')
                 ->orderBy('d.iid', 'DESC')
                 ->setMaxResults(1)
             ;
@@ -258,7 +254,8 @@ final class CDocumentRepository extends ResourceRepository
             ->from(ResourceNode::class, 'rn')
             ->where('rn.parent = :parent')
             ->andWhere('rn.title LIKE :prefix')
-            ->setParameters(['parent' => $parent, 'prefix' => $prefix.'%'])
+            ->setParameter('parent', $parent)
+            ->setParameter('prefix', $prefix.'%')
             ->setMaxResults(1)
         ;
 
@@ -646,12 +643,10 @@ final class CDocumentRepository extends ResourceRepository
             ->from(ResourceNode::class, 'rn')
             ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
             ->where('rn.parent = :parent AND rn.title = :title AND rn.resourceType = :rt AND d.filetype = :ft')
-            ->setParameters([
-                'parent' => $parent,
-                'title' => $title,
-                'rt' => $docRt,
-                'ft' => 'folder',
-            ])
+            ->setParameter('parent', $parent)
+            ->setParameter('title', $title)
+            ->setParameter('rt', $docRt)
+            ->setParameter('ft', 'folder')
             ->setMaxResults(1)
         ;
 
@@ -716,12 +711,10 @@ final class CDocumentRepository extends ResourceRepository
             ->andWhere('rn.title = :title')
             ->andWhere('rn.resourceType = :rt')
             ->andWhere('d.filetype = :ft')
-            ->setParameters([
-                'parent' => $parent,
-                'title' => $title,
-                'rt' => $docRt,
-                'ft' => 'file',
-            ])
+            ->setParameter('parent', $parent)
+            ->setParameter('title', $title)
+            ->setParameter('rt', $docRt)
+            ->setParameter('ft', 'file')
             ->setMaxResults(1)
         ;
 

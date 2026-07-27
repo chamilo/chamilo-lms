@@ -254,7 +254,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceFile = $this->addFile($resource, $uploadedFile);
 
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
 
         return $resourceFile;
@@ -622,9 +622,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         //    ->innerJoin('node.creator', 'userCreator')
             ->leftJoin('node.resourceLinks', 'links')
             ->where('node.id = :id')
-            ->setParameters([
-                'id' => $resourceNodeId,
-            ])
+            ->setParameter('id', $resourceNodeId)
         ;
 
         return $qb->getQuery()->getOneOrNullResult();
@@ -890,11 +888,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('node.resourceFiles', 'file')
             ->where('l.course = :course')
             ->andWhere('file IS NOT NULL')
-            ->setParameters(
-                [
-                    'course' => $course,
-                ]
-            )
+            ->setParameter('course', $course)
         ;
 
         if (null === $group) {

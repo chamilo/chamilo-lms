@@ -64,7 +64,7 @@ class GradebookLink
     #[ORM\Column(name: 'score_weight', type: 'float', precision: 6, scale: 2, nullable: true)]
     protected ?float $scoreWeight = null;
 
-    #[ORM\Column(name: 'user_score_list', type: 'array', nullable: true)]
+    #[ORM\Column(name: 'user_score_list', type: 'json', nullable: true)]
     protected ?array $userScoreList = null;
 
     #[ORM\Column(name: 'min_score', type: 'float', precision: 6, scale: 2, nullable: true)]

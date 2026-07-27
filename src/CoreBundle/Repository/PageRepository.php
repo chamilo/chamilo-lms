@@ -33,12 +33,10 @@ final class PageRepository extends ServiceEntityRepository
             ->andWhere('p.url = :url')
             ->andWhere('c.title = :category')
             ->andWhere('p.locale = :locale')
-            ->setParameters([
-                'enabled' => true,
-                'url' => $url,
-                'category' => $categoryTitle,
-                'locale' => $locale,
-            ])
+            ->setParameter('enabled', true)
+            ->setParameter('url', $url)
+            ->setParameter('category', $categoryTitle)
+            ->setParameter('locale', $locale)
         ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -56,12 +54,10 @@ final class PageRepository extends ServiceEntityRepository
             ->andWhere('p.url = :url')
             ->andWhere('c.title = :category')
             ->andWhere('p.locale LIKE :prefix')
-            ->setParameters([
-                'enabled' => true,
-                'url' => $url,
-                'category' => $categoryTitle,
-                'prefix' => $localePrefix.'%',
-            ])
+            ->setParameter('enabled', true)
+            ->setParameter('url', $url)
+            ->setParameter('category', $categoryTitle)
+            ->setParameter('prefix', $localePrefix.'%')
         ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -78,11 +74,9 @@ final class PageRepository extends ServiceEntityRepository
             ->andWhere('p.enabled = :enabled')
             ->andWhere('p.url = :url')
             ->andWhere('c.title = :category')
-            ->setParameters([
-                'enabled' => true,
-                'url' => $url,
-                'category' => $categoryTitle,
-            ])
+            ->setParameter('enabled', true)
+            ->setParameter('url', $url)
+            ->setParameter('category', $categoryTitle)
             ->setMaxResults(1)
         ;
 

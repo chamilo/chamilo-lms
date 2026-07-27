@@ -285,7 +285,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_A468585C12469DE2')) {
-            if ($table->hasPrimaryKey()) {
+            if (null !== $table->getPrimaryKey()) {
                 $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY');
                 $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (category_id, question_id)');
             }

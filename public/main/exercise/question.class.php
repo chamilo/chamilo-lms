@@ -2285,10 +2285,7 @@ abstract class Question
         try {
             $conn = Database::getConnection();
 
-            // DBAL 2/3 schema manager compatibility
-            $sm = method_exists($conn, 'createSchemaManager')
-                ? $conn->createSchemaManager()
-                : $conn->getSchemaManager();
+            $sm = $conn->createSchemaManager();
 
             $tableNames = method_exists($sm, 'listTableNames') ? $sm->listTableNames() : [];
 

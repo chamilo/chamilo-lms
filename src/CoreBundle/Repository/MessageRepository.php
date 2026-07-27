@@ -203,11 +203,9 @@ class MessageRepository extends ServiceEntityRepository
             ->where('mr.receiver = :user')
             ->andWhere('m.msgType = :msgType')
             ->andWhere('m.status = :status')
-            ->setParameters([
-                'user' => $user,
-                'msgType' => Message::MESSAGE_TYPE_INVITATION,
-                'status' => Message::MESSAGE_STATUS_INVITATION_PENDING,
-            ])
+            ->setParameter('user', $user)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_INVITATION)
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING)
             ->getQuery()
             ->getResult()
         ;
@@ -219,11 +217,9 @@ class MessageRepository extends ServiceEntityRepository
             ->where('m.sender = :user')
             ->andWhere('m.msgType = :msgType')
             ->andWhere('m.status = :status')
-            ->setParameters([
-                'user' => $user,
-                'msgType' => Message::MESSAGE_TYPE_INVITATION,
-                'status' => Message::MESSAGE_STATUS_INVITATION_PENDING,
-            ])
+            ->setParameter('user', $user)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_INVITATION)
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING)
             ->getQuery()
             ->getResult()
         ;
@@ -249,9 +245,9 @@ class MessageRepository extends ServiceEntityRepository
         $messageRelUser->setReceiverType(MessageRelUser::TYPE_TO);
         $message->addReceiver($messageRelUser);
 
-        $this->_em->persist($message);
-        $this->_em->persist($messageRelUser);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($message);
+        $this->getEntityManager()->persist($messageRelUser);
+        $this->getEntityManager()->flush();
 
         return true;
     }
@@ -275,12 +271,10 @@ class MessageRepository extends ServiceEntityRepository
             ->andWhere('mr.receiver = :receiver')
             ->andWhere('m.msgType = :msgType')
             ->andWhere($qb->expr()->in('m.status', ':statuses'))
-            ->setParameters([
-                'sender' => $userSender,
-                'receiver' => $userReceiver,
-                'msgType' => Message::MESSAGE_TYPE_INVITATION,
-                'statuses' => $statuses,
-            ])
+            ->setParameter('sender', $userSender)
+            ->setParameter('receiver', $userReceiver)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_INVITATION)
+            ->setParameter('statuses', $statuses)
         ;
 
         return $qb->getQuery()->getResult();
@@ -288,7 +282,7 @@ class MessageRepository extends ServiceEntityRepository
 
     public function invitationAccepted(User $sender, User $receiver): bool
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder->select('m')
             ->from(Message::class, 'm')
@@ -301,7 +295,7 @@ class MessageRepository extends ServiceEntityRepository
         $messages = $queryBuilder->getQuery()->getResult();
 
         foreach ($messages as $message) {
-            $messageRelUser = $this->_em->getRepository(MessageRelUser::class)->findOneBy([
+            $messageRelUser = $this->getEntityManager()->getRepository(MessageRelUser::class)->findOneBy([
                 'message' => $message,
                 'receiver' => $receiver,
             ]);
@@ -310,9 +304,9 @@ class MessageRepository extends ServiceEntityRepository
                 $invitation = $messageRelUser->getMessage();
                 $invitation->setStatus(Message::MESSAGE_STATUS_INVITATION_ACCEPTED);
 
-                $this->_em->flush();
+                $this->getEntityManager()->flush();
 
-                $friendship = $this->_em->getRepository(UserRelUser::class)->findOneBy([
+                $friendship = $this->getEntityManager()->getRepository(UserRelUser::class)->findOneBy([
                     'user' => $sender,
                     'friend' => $receiver,
                 ]) ?: new UserRelUser();
@@ -321,8 +315,8 @@ class MessageRepository extends ServiceEntityRepository
                 $friendship->setFriend($receiver);
                 $friendship->setRelationType(UserRelUser::USER_RELATION_TYPE_FRIEND);
 
-                $this->_em->persist($friendship);
-                $this->_em->flush();
+                $this->getEntityManager()->persist($friendship);
+                $this->getEntityManager()->flush();
 
                 return true;
             }
@@ -333,7 +327,7 @@ class MessageRepository extends ServiceEntityRepository
 
     public function invitationDenied(User $sender, User $receiver): bool
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder->select('m')
             ->from(Message::class, 'm')
@@ -346,14 +340,14 @@ class MessageRepository extends ServiceEntityRepository
         $messages = $queryBuilder->getQuery()->getResult();
 
         foreach ($messages as $message) {
-            $messageRelUser = $this->_em->getRepository(MessageRelUser::class)->findOneBy([
+            $messageRelUser = $this->getEntityManager()->getRepository(MessageRelUser::class)->findOneBy([
                 'message' => $message,
                 'receiver' => $receiver,
             ]);
 
             if ($messageRelUser) {
-                $this->_em->remove($messageRelUser);
-                $this->_em->flush();
+                $this->getEntityManager()->remove($messageRelUser);
+                $this->getEntityManager()->flush();
 
                 return true;
             }
@@ -462,10 +456,8 @@ class MessageRepository extends ServiceEntityRepository
             ->innerJoin('m.receivers', 'mr')
             ->where('mr.receiver = :userTwo')
             ->andWhere('m.sender = :userOne')
-            ->setParameters([
-                'userOne' => $targetUser,
-                'userTwo' => $currentUser,
-            ])
+            ->setParameter('userOne', $targetUser)
+            ->setParameter('userTwo', $currentUser)
             ->setMaxResults(1)
         ;
 

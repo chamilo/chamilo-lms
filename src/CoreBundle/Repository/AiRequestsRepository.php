@@ -20,8 +20,8 @@ class AiRequestsRepository extends ServiceEntityRepository
 
     public function save(AiRequests $request): void
     {
-        $this->_em->persist($request);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($request);
+        $this->getEntityManager()->flush();
     }
 
     public function findLatestUnlinkedToolRequestSince(

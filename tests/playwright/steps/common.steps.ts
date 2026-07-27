@@ -335,6 +335,35 @@ const settingsSnapshot = new Map<string, string[]>()
 // healthy context the whole time, just idle between the two hooks.
 let settingsPage: import("@playwright/test").Page | undefined
 
+// Wraps page.goto() for the settings BeforeAll/AfterAll loops specifically.
+// Both hooks have now independently hit the SAME failure, despite two
+// separate rounds of adjusting the wait BEFORE each goto() (domcontentloaded
+// -> networkidle, applied first to AfterAll's post-Save wait, then to
+// BeforeAll's own loop): "Navigation to X is interrupted by another
+// navigation to Y" — a still-lagging navigation from an EARLIER step (a
+// previous iteration's page load, or its Save-triggered redirect) hasn't
+// actually finished by the time THIS iteration's goto() fires, even though
+// the preceding wait already resolved. This app has documented background
+// polling (notifications, chat presence — see loginAs()'s own comment
+// elsewhere in this file) that can make `networkidle` resolve on a brief
+// lull before a redirect chain is truly done, so neither domcontentloaded
+// nor networkidle is a fully reliable "everything has settled" signal here.
+// Rather than continuing to chase the exact right wait, this catches the
+// specific error and retries the goto() once: by the time the catch runs,
+// the interrupting navigation has already finished, so the retry lands with
+// nothing left competing for the frame.
+async function gotoReliably(page: Page, path: string) {
+  try {
+    await page.goto(path)
+  } catch (error) {
+    if (!String(error).includes("is interrupted by another navigation")) {
+      throw error
+    }
+    await page.goto(path)
+  }
+  await page.waitForLoadState("networkidle")
+}
+
 async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Browser, baseURL?: string) {
   const page = await (await browser.newContext({ baseURL })).newPage()
   await page.goto("/login")
@@ -353,21 +382,7 @@ BeforeAll({ tags: "@settings" }, async ({ browser, baseURL }) => {
   const page = await loginAsAdminOnFreshPage(browser, baseURL)
   settingsPage = page
   for (const { path, field } of SETTINGS_PAGES) {
-    await page.goto(path)
-    // Same navigation race as AfterAll's own restore loop below (see the
-    // comment on its own networkidle wait) — a real CI failure showed this
-    // exact sibling loop hit it too: "Navigation to .../allow_registration
-    // is interrupted by another navigation to .../changeable_options", i.e.
-    // a still-settling load from THIS iteration's own goto (an earlier
-    // settings page's search_settings response can itself trigger further,
-    // slightly-delayed loading) colliding with the NEXT iteration's fresh
-    // goto. domcontentloaded resolving before that fully settles was
-    // already proven insufficient once for AfterAll; never got applied
-    // here too since this loop only reads values (no Save button involved,
-    // so it looked like a different, simpler case) — but the underlying
-    // "domcontentloaded fires before the page is truly done" issue is the
-    // same regardless of whether a save/redirect is involved.
-    await page.waitForLoadState("networkidle")
+    await gotoReliably(page, path)
     const values: string[] = await page.locator(`#${field}`).evaluate((el) =>
       Array.from((el as HTMLSelectElement).selectedOptions).map((option) => option.value),
     )
@@ -381,17 +396,13 @@ AfterAll({ tags: "@settings" }, async () => {
   for (const { path, field } of SETTINGS_PAGES) {
     const values = settingsSnapshot.get(field)
     if (!values) continue
-    await page.goto(path)
-    await page.waitForLoadState("domcontentloaded")
+    await gotoReliably(page, path)
     await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
     await pressButton(page, "Save")
-    // "Save" is a form submit — likely POST-redirect-GET under the hood —
-    // and domcontentloaded can resolve on an intermediate state before that
-    // redirect chain actually settles. A real CI run hit exactly this: the
-    // *next* iteration's page.goto() got interrupted by a still-in-flight
-    // navigation left over from *this* iteration's Save. networkidle is a
-    // stronger signal that the whole chain, not just the first response,
-    // has actually finished before the loop moves on.
+    // "Save" is a form submit — likely POST-redirect-GET under the hood.
+    // The NEXT iteration's own gotoReliably() now absorbs a still-lagging
+    // redirect from this Save if one occurs, so this wait just needs to be
+    // reasonable, not airtight.
     await page.waitForLoadState("networkidle")
   }
   await page.context().close()

@@ -128,7 +128,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             throw new RuntimeException('Unable to resolve a platform administrator for the migration.');
         }
 
-        $admin = $this->entityManager->find(User::class, $adminId);
+        // getReference() (not find()): migrations run against a database whose
+        // schema is being built up incrementally, while the User entity mapping
+        // always reflects the final, current schema. Eager hydration via find()
+        // would SELECT columns (e.g. api_token, mfa_enabled) that later
+        // migrations in the sequence haven't created yet.
+        $admin = $this->entityManager->getReference(User::class, $adminId);
         if (!$admin instanceof User) {
             throw new RuntimeException('The platform administrator user could not be loaded.');
         }

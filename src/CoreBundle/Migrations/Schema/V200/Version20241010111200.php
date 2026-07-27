@@ -153,7 +153,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
                 $courseCode = $parsedParams['cidReq'];
                 $sql = 'SELECT id FROM course WHERE code = :code ORDER BY id DESC LIMIT 1';
                 $stmt = $this->connection->executeQuery($sql, ['code' => $courseCode]);
-                $course = $stmt->fetch();
+                $course = $stmt->fetchAssociative();
 
                 if ($course) {
                     $courseId = $course['id'];
@@ -179,7 +179,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
             } elseif ($courseId) {
                 $sql = 'SELECT resource_node_id FROM course WHERE id = :courseId';
                 $result = $this->connection->executeQuery($sql, ['courseId' => $courseId]);
-                $course = $result->fetch();
+                $course = $result->fetchAssociative();
 
                 if ($course && isset($course['resource_node_id'])) {
                     $newUrl = $this->generateFolderUrl((int) $course['resource_node_id'], (int) $courseId, $sessionId, $groupId);
@@ -216,7 +216,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
             if ($courseId) {
                 $sql = 'SELECT resource_node_id FROM course WHERE id = :courseId';
                 $result = $this->connection->executeQuery($sql, ['courseId' => $courseId]);
-                $course = $result->fetch();
+                $course = $result->fetchAssociative();
 
                 if ($course && isset($course['resource_node_id'])) {
                     $newUrl = $this->generateLinkUrl((int) $course['resource_node_id'], (int) $courseId, $sessionId, $groupId);
@@ -245,7 +245,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
     {
         $sql = 'SELECT id FROM course WHERE code = :code ORDER BY id DESC LIMIT 1';
         $stmt = $this->connection->executeQuery($sql, ['code' => $courseCode]);
-        $course = $stmt->fetch();
+        $course = $stmt->fetchAssociative();
 
         return $course ? (int) $course['id'] : null;
     }

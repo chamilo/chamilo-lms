@@ -1296,9 +1296,7 @@ final class CourseStudentInfoHelper
     private function tableExists(string $tableName): bool
     {
         try {
-            $sm = method_exists($this->connection, 'createSchemaManager')
-                ? $this->connection->createSchemaManager()
-                : $this->connection->getSchemaManager();
+            $sm = $this->connection->createSchemaManager();
 
             return $sm->tablesExist([$tableName]);
         } catch (Throwable $e) {

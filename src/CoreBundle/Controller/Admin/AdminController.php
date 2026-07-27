@@ -28,7 +28,7 @@ use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use MessageManager;
 use RuntimeException;
@@ -1008,7 +1008,7 @@ class AdminController extends BaseController
                 WHERE p.c_id IN (:cids)
         ";
 
-        $rows = $conn->executeQuery($sql, ['cids' => $cids], ['cids' => Connection::PARAM_INT_ARRAY])->fetchAllAssociative();
+        $rows = $conn->executeQuery($sql, ['cids' => $cids], ['cids' => ArrayParameterType::INTEGER])->fetchAllAssociative();
 
         $out = [];
         foreach ($rows as $r) {

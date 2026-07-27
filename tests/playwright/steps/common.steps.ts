@@ -394,17 +394,45 @@ AfterAll({ tags: "@settings" }, async () => {
 // like "#Sign in" to a CSS selector.
 const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
 
+// pressButton()'s tiers each need to decide "does THIS locator apply" before
+// falling through to the next one — but a plain `.count()` is an instant,
+// non-retrying snapshot of the CURRENT DOM. A real CI failure showed why
+// that's fragile: career.feature's "Edit a career" calls this right after
+// filling the TinyMCE editor (setContentFromEditor), and the trace showed
+// EVERY tier's queryCount happening within ~60ms of that call, all reporting
+// 0 matches — including `[name="submit"]:visible`, on a button that
+// definitely exists and definitely has that name. TinyMCE's own content-
+// driven reflow (resizing itself, shifting whatever's below it) can make a
+// perfectly real, normally-visible element transiently not-visible for a
+// brief moment right after its content changes — and since `.count()` never
+// retries, a tier check landing in that exact window permanently commits to
+// the WRONG fallback (here: text-matching "submit" against a button whose
+// actual visible label is "Edit", which can never match). `waitForSelector`
+// with a short, bounded timeout gives each tier a brief grace period to
+// settle before being ruled out, without meaningfully slowing down the
+// normal case where a tier genuinely doesn't apply (labels not shaped like
+// an id, e.g. "Sign in", still skip the id/name tiers entirely and never pay
+// this cost).
+async function isSoonVisible(locator: ReturnType<Page["locator"]>, timeoutMs = 2000): Promise<boolean> {
+  try {
+    await locator.first().waitFor({ state: "visible", timeout: timeoutMs })
+    return true
+  } catch {
+    return false
+  }
+}
+
 async function pressButton(page: Page, label: string) {
   if (looksLikeIdentifier(label)) {
     // Same hidden-proxy-vs-visible-widget situation as resolveField() above
     // can apply to buttons too, hence :visible here as well.
     const byId = page.locator(`#${label}:visible`)
-    if (await byId.count()) {
+    if (await isSoonVisible(byId)) {
       await byId.first().click()
       return
     }
     const byName = page.locator(`[name="${label}"]:visible`)
-    if (await byName.count()) {
+    if (await isSoonVisible(byName)) {
       await byName.first().click()
       return
     }
@@ -428,12 +456,12 @@ async function pressButton(page: Page, label: string) {
   // getByRole is also the more standard tool for "does this look like a
   // button with this exact name" in the first place.
   const exact = page.getByRole("button", { name: label, exact: true })
-  if (await exact.count()) {
+  if (await isSoonVisible(exact)) {
     await exact.first().click()
     return
   }
   const exactSubmit = page.locator(`input[type="submit"][value="${label}"]`)
-  if (await exactSubmit.count()) {
+  if (await isSoonVisible(exactSubmit)) {
     await exactSubmit.first().click()
     return
   }

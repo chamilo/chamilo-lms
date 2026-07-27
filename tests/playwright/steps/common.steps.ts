@@ -348,20 +348,32 @@ let settingsPage: import("@playwright/test").Page | undefined
 // elsewhere in this file) that can make `networkidle` resolve on a brief
 // lull before a redirect chain is truly done, so neither domcontentloaded
 // nor networkidle is a fully reliable "everything has settled" signal here.
-// Rather than continuing to chase the exact right wait, this catches the
-// specific error and retries the goto() once: by the time the catch runs,
-// the interrupting navigation has already finished, so the retry lands with
-// nothing left competing for the frame.
-async function gotoReliably(page: Page, path: string) {
-  try {
-    await page.goto(path)
-  } catch (error) {
-    if (!String(error).includes("is interrupted by another navigation")) {
-      throw error
+//
+// A first version of this just retried the goto() ONCE, immediately, right
+// after catching the error. That wasn't enough either — a real CI run then
+// showed "Navigation to allow_registration is interrupted by ANOTHER
+// navigation to allow_registration" (same URL both times): a rejected
+// goto() doesn't necessarily mean the browser fully cancelled that
+// navigation at the frame level, so firing a new goto() to the same URL
+// immediately can collide with the very attempt that just "failed". This
+// version instead waits for whatever's CURRENTLY in flight to actually
+// finish (`waitForLoadState("load")`, swallowed if it also errors — we only
+// care that things go quiet, not what specifically was loading) before
+// trying again, and allows a few attempts rather than exactly one, since
+// there's no guarantee a single retry lands cleanly.
+async function gotoReliably(page: Page, path: string, maxAttempts = 3) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await page.goto(path)
+      await page.waitForLoadState("networkidle")
+      return
+    } catch (error) {
+      if (!String(error).includes("is interrupted by another navigation") || attempt === maxAttempts) {
+        throw error
+      }
+      await page.waitForLoadState("load").catch(() => {})
     }
-    await page.goto(path)
   }
-  await page.waitForLoadState("networkidle")
 }
 
 async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Browser, baseURL?: string) {

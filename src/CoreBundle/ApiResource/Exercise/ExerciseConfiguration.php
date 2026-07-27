@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\ApiResource\Exercise;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Exercise\ExerciseConfigurationProcessor;
@@ -64,7 +64,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'post_exercise_configuration',
             processor: ExerciseConfigurationProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/exercise/configuration/{exerciseId}',
             requirements: ['exerciseId' => '\d+'],
             openapi: new Operation(
@@ -78,7 +78,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             ),
             read: false,
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
-            name: 'put_exercise_configuration',
+            name: 'patch_exercise_configuration',
             processor: ExerciseConfigurationProcessor::class,
         ),
     ],

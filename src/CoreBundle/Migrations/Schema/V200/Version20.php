@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 /**
  * Migrate file to updated to Chamilo 2.0.
@@ -64,12 +63,13 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('set foreign_key_checks=0');
 
         // Basic checks.
-        try {
-            $this->getAdmin();
-            $adminExists = true;
-        } catch (RuntimeException) {
-            $adminExists = false;
-        }
+        // Raw SQL only: the current User entity mapping expects columns
+        // (e.g. api_token) that later migrations in this sequence haven't
+        // created yet, so ORM hydration via getAdmin() cannot run here.
+        $adminExists = $this->connection->createSchemaManager()->tablesExist(['admin'])
+            && false !== $this->connection->fetchOne(
+                'SELECT user_id FROM admin WHERE user_id IN (SELECT id FROM user) ORDER BY id LIMIT 1'
+            );
         $this->abortIf(!$adminExists, 'Admin not found in the system');
 
         $table = $schema->getTable('user');

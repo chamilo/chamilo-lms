@@ -801,7 +801,7 @@ final readonly class TicketWorkflowService
 
             $this->entityManager->persist($attachment);
             $this->entityManager->flush();
-            $this->attachmentRepository->addFile($attachment, $file);
+            $this->attachmentRepository->addFile($attachment, $file, '', true);
         }
     }
 

@@ -55,6 +55,25 @@ export default defineConfig({
   // never slows down anything that already passes.
   expect: { timeout: 15_000 },
   fullyParallel: false,
+  // Real CI run hit a genuine cross-file race: course_user_registration.
+  // feature hardcodes cid=1, assuming course.feature's "Create a course
+  // before testing" scenario has already created "TEMP" (which becomes id 1
+  // on a fresh install) — an implicit ordering dependency the original Behat
+  // suite got "for free" from running everything single-threaded. With the
+  // default multi-worker pool, `fullyParallel: false` only serializes
+  // scenarios WITHIN one file; DIFFERENT files (course.feature vs.
+  // course_user_registration.feature) still run concurrently across
+  // workers, so course_user_registration's very first scenario reached
+  // /main/user/subscribe_user.php?...&cid=1 before "TEMP" existed yet —
+  // confirmed directly from a real CI log: its "Subscribe amann" scenario
+  // (test #17) started before course.feature's own "Create a course before
+  // testing" (test #20) had even run. 12 more remaining feature files also
+  // hardcode cid=1/depend on "TEMP", so this isn't a one-off — workers: 1
+  // fixes the whole class of cross-file ordering dependencies at once by
+  // matching the original suite's own sequential execution, at the cost of
+  // losing multi-worker parallelism (roughly doubles total CI wall-clock
+  // time versus the previous default of 2 workers on this runner).
+  workers: 1,
   retries: 0,
   outputDir: path.join(repoRoot, "var/test-results/playwright/results"),
   reporter: [

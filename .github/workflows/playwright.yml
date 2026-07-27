@@ -156,6 +156,24 @@ jobs:
                     BASE_URL: http://localhost
                 run: yarn test:playwright:seed
 
+            # Creates the "TEMP" course (which becomes cid=1 on this fresh
+            # install) as a one-time setup fixture, same reasoning as "Seed
+            # test users" above: course_user_registration.feature and every
+            # remaining course-tool feature file (toolAgenda, toolForum,
+            # toolLp, etc. — 12 in total as of this writing) hardcode cid=1,
+            # assuming "TEMP" already exists. Left as its own step, run once,
+            # BEFORE the main parallel "Playwright tests" step below, so
+            # every other feature file can rely on it regardless of which
+            # worker picks them up or what order they run in — a real CI
+            # failure showed course_user_registration.feature's first
+            # scenario reaching cid=1 before course.feature's own course-
+            # creation scenario (in a different file, different worker) had
+            # even run.
+            -   name: Seed test course
+                env:
+                    BASE_URL: http://localhost
+                run: yarn test:playwright:seed-course
+
             -   name: Playwright tests
                 env:
                     BASE_URL: http://localhost

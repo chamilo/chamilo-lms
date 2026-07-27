@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 /**
  * Migrate file to updated to Chamilo 2.0.
@@ -63,7 +64,13 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('set foreign_key_checks=0');
 
         // Basic checks.
-        $this->abortIf(!$this->adminExist(), 'Admin not found in the system');
+        try {
+            $this->getAdmin();
+            $adminExists = true;
+        } catch (RuntimeException) {
+            $adminExists = false;
+        }
+        $this->abortIf(!$adminExists, 'Admin not found in the system');
 
         $table = $schema->getTable('user');
         if (false === $table->hasColumn('uuid')) {

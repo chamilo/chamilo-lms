@@ -135,6 +135,7 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
                 $item,
                 $itemView,
                 $course,
+                $user,
                 trim($data->version),
                 $data->values,
                 $data->changedKeys,

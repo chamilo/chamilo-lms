@@ -24,6 +24,7 @@ use Chamilo\CourseBundle\Entity\CSurvey;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Mcp\Server\ClientGateway;
 
 final readonly class McpCourseQualityReviewer
 {
@@ -43,6 +44,7 @@ final readonly class McpCourseQualityReviewer
         User $user,
         ?string $focus,
         ?string $provider,
+        ?ClientGateway $client = null,
     ): array {
         $enabledFeatures = $this->courseAiFeatureManager->ensureEnabled(
             $course,
@@ -50,6 +52,8 @@ final readonly class McpCourseQualityReviewer
             'course_analyser',
             'review_course_quality',
         );
+
+        $client?->progress(0.0, 1.0, 'Gathering the course inventory (documents, tests, learning paths, surveys, assignments, forums)...');
 
         $providerName = $this->aiService->resolveProvider($user, $provider);
         $teacherPrompt = trim(strip_tags((string) $focus));
@@ -88,6 +92,8 @@ final readonly class McpCourseQualityReviewer
             ."\n- Assignments: ".$this->formatInventorySummary($inventoryByVisibility['assignments'])
             ."\n- Forums: ".$this->formatInventorySummary($inventoryByVisibility['forums'])
             ."\n- Forum posts: ".$this->formatInventorySummary($inventoryByVisibility['forum_posts']);
+
+        $client?->progress(0.5, 1.0, 'Analyzing the course with the AI provider...');
 
         $result = $this->courseAnalyzer->analyze(
             course: $course,

@@ -20,6 +20,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
+use Mcp\Server\RequestContext;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -74,6 +75,7 @@ final readonly class CreateCourseIllustrationTool
         ?string $language = null,
         ?string $provider = null,
         bool $publish = true,
+        ?RequestContext $context = null,
     ): array {
         try {
             return $this->doCreateCourseIllustration(
@@ -84,6 +86,7 @@ final readonly class CreateCourseIllustrationTool
                 $language,
                 $provider,
                 $publish,
+                $context,
             );
         } catch (ToolCallException $exception) {
             throw $exception;
@@ -125,7 +128,10 @@ final readonly class CreateCourseIllustrationTool
         ?string $language,
         ?string $provider,
         bool $publish,
+        ?RequestContext $context,
     ): array {
+        $client = $context?->getClientGateway();
+
         if ($courseId <= 0) {
             throw new InvalidArgumentException('The course ID must be a positive integer.');
         }
@@ -226,6 +232,8 @@ final readonly class CreateCourseIllustrationTool
             throw new RuntimeException('The selected provider does not support image generation.');
         }
 
+        $client?->progress(0.0, 1.0, 'Generating the illustration with the AI provider...');
+
         $generatedResult = $imageProvider->generateImage(
             $prompt,
             'document_image_generate',
@@ -249,6 +257,8 @@ final readonly class CreateCourseIllustrationTool
         ) {
             throw new RuntimeException(trim(substr($generatedResult, 6)));
         }
+
+        $client?->progress(0.8, 1.0, 'Saving the generated illustration...');
 
         $document = $this->mediaStorage->storeGeneratedImage(
             $course,

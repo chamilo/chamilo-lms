@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Service\Mcp\McpTeacherCourseContext;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
+use Mcp\Server\RequestContext;
 use RuntimeException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Throwable;
@@ -33,15 +34,17 @@ final readonly class ReviewCourseQualityTool
         int $courseId,
         ?string $focus = null,
         ?string $provider = null,
+        ?RequestContext $context = null,
     ): array {
         try {
-            $context = $this->courseContext->resolve($courseId);
+            $resolved = $this->courseContext->resolve($courseId);
 
             return $this->courseReviewer->review(
-                $context['course'],
-                $context['user'],
+                $resolved['course'],
+                $resolved['user'],
                 $focus,
                 $provider,
+                $context?->getClientGateway(),
             );
         } catch (ToolCallException $exception) {
             throw $exception;

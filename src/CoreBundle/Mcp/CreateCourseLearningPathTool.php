@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Service\Mcp\McpTeacherCourseContext;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
+use Mcp\Server\RequestContext;
 use RuntimeException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Throwable;
@@ -37,21 +38,23 @@ final readonly class CreateCourseLearningPathTool
         int $questionsPerQuiz = 2,
         ?string $provider = null,
         bool $publish = false,
+        ?RequestContext $context = null,
     ): array {
         try {
-            $context = $this->courseContext->resolve($courseId);
+            $resolved = $this->courseContext->resolve($courseId);
 
             return [
                 'created' => true,
                 'learning_path' => $this->learningPathCreator->create(
-                    $context['course'],
-                    $context['user'],
+                    $resolved['course'],
+                    $resolved['user'],
                     $topic,
                     $pageCount,
                     $wordsPerPage,
                     $questionsPerQuiz,
                     $provider,
                     $publish,
+                    $context?->getClientGateway(),
                 ),
             ];
         } catch (ToolCallException $exception) {

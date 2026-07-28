@@ -165,8 +165,9 @@ class LanguageRepository extends ServiceEntityRepository
     }
 
     /**
-     * Resolves either an isocode (e.g. "es") or a human-readable title
-     * (e.g. "Spanish", "Español") to the matching available language.
+     * Resolves either an isocode (e.g. "es"), a human-readable title (e.g.
+     * "Spanish", "Español"), or a bare ISO-639 prefix (e.g. "en" matching
+     * the available "en_US") to the matching available language.
      */
     public function findOneAvailableByTitleOrCode(string $value): ?Language
     {
@@ -175,17 +176,30 @@ class LanguageRepository extends ServiceEntityRepository
             return null;
         }
 
+        $normalized = mb_strtolower(str_replace('-', '_', $value));
+
         try {
-            return $this->createQueryBuilder('l')
+            $exact = $this->createQueryBuilder('l')
                 ->andWhere('l.available = true')
                 ->andWhere('LOWER(l.isocode) = :value OR LOWER(l.englishName) = :value OR LOWER(l.originalName) = :value')
-                ->setParameter('value', mb_strtolower($value))
+                ->setParameter('value', $normalized)
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult()
             ;
         } catch (NonUniqueResultException) {
-            return null;
+            $exact = null;
         }
+
+        if ($exact instanceof Language) {
+            return $exact;
+        }
+
+        $baseIso = explode('_', $normalized, 2)[0];
+        if (1 === preg_match('/^[a-z]{2,3}$/', $baseIso)) {
+            return $this->findFirstAvailableByIsoPrefix($baseIso);
+        }
+
+        return null;
     }
 }

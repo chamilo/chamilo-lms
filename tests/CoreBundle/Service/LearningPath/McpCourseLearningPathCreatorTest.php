@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Service\LearningPath\McpCourseLearningPathCreator;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -199,21 +200,12 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
 
     /**
      * A later page failing (here: the duplicate-title guard) must surface a
-     * clear, stage-naming error naming exactly what failed and why, so the
-     * MCP client/teacher knows what to fix and can retry safely.
-     *
-     * NOTE: the actual rollback of already-persisted resources
-     * (rollbackCreatedResources/scheduleResourceRemoval) is pre-existing code
-     * this change did not touch, and was already failing before this change
-     * too (verified by reproducing it with plain document-only pages, no
-     * quiz involved) — a Doctrine UnitOfWork error re-fetching the resource
-     * graph on a reset EntityManager. It is not asserted as working here;
-     * it is a separate, pre-existing gap in the resource system worth a
-     * dedicated fix, and is now more likely to be hit in practice since a
-     * duplicate title on page N (out of the client's control until it asks)
-     * is a plausible, not just theoretical, mid-batch failure.
+     * clear, stage-naming error naming exactly what failed and why, and must
+     * actually roll back everything already persisted for the failed
+     * attempt (learning path, document, quiz, question) so a retry never
+     * finds orphaned resources left behind.
      */
-    public function testALaterPageFailingSurfacesAClearStageNamingError(): void
+    public function testALaterPageFailingRollsBackEverythingAndSurfacesAClearError(): void
     {
         $existingResult = $this->creator->create(
             $this->course,
@@ -250,7 +242,28 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
         } catch (RuntimeException $exception) {
             self::assertStringContainsString('creating document for page 2', $exception->getMessage());
             self::assertStringContainsString('already exists in this folder', $exception->getMessage());
+            self::assertStringContainsString('rolled back', $exception->getMessage());
         }
+
+        // The failed attempt's own learning path must not remain.
+        $lps = $this->em->getRepository(CLp::class)->findBy(['title' => 'MCP LP Rollback Test']);
+        self::assertCount(0, $lps, 'The learning path from the failed attempt must not remain.');
+
+        // Its page-1 document (created before page 2 failed) must not remain either.
+        $orphanedDocuments = $this->em->getRepository(CDocument::class)
+            ->findBy(['title' => 'MCP LP First Page Should Roll Back'])
+        ;
+        self::assertCount(0, $orphanedDocuments, 'The page-1 document from the failed attempt must not remain.');
+
+        // Its page-1 mini-test must not remain either.
+        $orphanedQuizzes = $this->em->getRepository(CQuiz::class)->findBy(['title' => 'Mini-test 1: MCP LP First Page Should Roll Back']);
+        self::assertCount(0, $orphanedQuizzes, 'The page-1 mini-test from the failed attempt must not remain.');
+
+        // The pre-existing document (unrelated to the failed attempt) must still be there, untouched.
+        $stillExisting = $this->em->getRepository(CDocument::class)
+            ->findBy(['title' => 'MCP LP Duplicate Title Page'])
+        ;
+        self::assertCount(1, $stillExisting, 'The pre-existing document must survive the rollback of the other attempt.');
     }
 
     private function firstQuestionIdOf(CQuiz $quiz): int

@@ -542,6 +542,25 @@ final readonly class McpCourseLearningPathCreator
 
         $entityManager->remove($resource);
         if ($resourceNode instanceof ResourceNode) {
+            $resourceLinks = $resourceNode->getResourceLinks();
+            foreach ($resourceLinks as $resourceLink) {
+                $entityManager->remove($resourceLink);
+            }
+
+            /*
+             * ResourceDoctrineListener::postRemove() reads this same in-memory
+             * collection to build a "deletion" tracking event, then postFlush()
+             * persists it through its own constructor-injected EntityManager —
+             * a reference captured before this rollback's resetManager() call,
+             * so it is stale and can still hold unflushed state from the
+             * original failed attempt. Clearing the collection here means
+             * getResourceLinks()->first() finds nothing, so no tracking event
+             * is queued and that stale EntityManager's nested flush() never
+             * runs — sidestepping the stale reference entirely rather than
+             * fixing tracking data for resources that never really existed.
+             */
+            $resourceLinks->clear();
+
             $entityManager->remove($resourceNode);
         }
     }

@@ -244,7 +244,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
 
     #[Groups(['forum_post:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['forum_post:read'])]

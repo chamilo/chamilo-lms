@@ -324,7 +324,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
 
     #[Groups(['document:read', 'document:write', 'document:browse', 'student_publication_rel_document:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['document:read', 'document:write'])]

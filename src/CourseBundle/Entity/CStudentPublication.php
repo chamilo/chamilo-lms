@@ -131,7 +131,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected string $title;
 

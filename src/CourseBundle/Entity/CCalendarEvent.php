@@ -101,7 +101,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Reso
 
     #[Groups(['calendar_event:write', 'calendar_event:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['calendar_event:write', 'calendar_event:read'])]

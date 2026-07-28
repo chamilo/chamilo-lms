@@ -34,7 +34,7 @@ class CNotebook extends AbstractResource implements ResourceInterface, Stringabl
     protected User $user;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Assert\NotBlank]

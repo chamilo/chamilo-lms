@@ -25430,9 +25430,7 @@ msgid "There is no class with the name \"%s\""
 msgstr "Es gibt keine Klasse mit dem Namen '%s'"
 
 msgid "Maximum number of subscriptions allowed. Leave at 0 to not limit it."
-msgstr ""
-"Maximale Anzahl erlaubter Abonnements. Bei 0 eingeben, um es nicht zu "
-"begrenzen."
+msgstr "Maximale Anzahl erlaubter Abonnements. Auf 0 lassen, um es nicht zu begrenzen."
 
 msgid "Subscriptions"
 msgstr "Abonnements"

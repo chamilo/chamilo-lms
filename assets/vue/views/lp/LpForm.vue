@@ -90,7 +90,7 @@
           />
 
           <BaseSelect
-            v-if="form.showLanguage"
+            v-if="resourceLanguageEnabled && form.showLanguage"
             id="lp-language"
             v-model="form.language"
             name="language"
@@ -400,6 +400,7 @@ import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import LpExtraFields from "../../components/lp/LpExtraFields.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import lpService from "../../services/lpService"
 import { useCidReqStore } from "../../store/cidReq"
 
@@ -424,6 +425,7 @@ const router = useRouter()
 const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
 const { showSuccessNotification, showErrorNotification } = useNotification()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 const loading = ref(true)
 const loadError = ref(false)

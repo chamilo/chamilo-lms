@@ -2169,6 +2169,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'language' => [
                 [
+                    'name' => 'language_by_resource',
+                    'title' => 'Language by resource',
+                    'comment' => 'Allow assigning a specific language to individual resources.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'allow_course_multiple_languages',
                     'title' => 'Multiple-language courses',
                     'comment' => "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures.",

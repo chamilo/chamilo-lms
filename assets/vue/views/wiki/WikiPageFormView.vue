@@ -209,7 +209,7 @@
           >
             <div class="space-y-6">
               <BaseSelect
-                v-if="form.languages.length > 1"
+                v-if="resourceLanguageEnabled && form.languages.length > 1"
                 id="wiki_page_language"
                 v-model="form.language"
                 :label="t('Language')"
@@ -411,11 +411,13 @@ import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue";
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue";
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue";
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility";
 import wikiService from "../../services/wikiService";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const { resourceLanguageEnabled } = useResourceLanguageVisibility();
 
 const isLoading = ref(false);
 const isSaving = ref(false);
@@ -442,7 +444,8 @@ const assignmentEditorConfig = computed(() => ({
 }));
 
 const showAdvancedSection = computed(
-  () => form.value.languages.length > 1 || form.value.canConfigureAssignment,
+  () =>
+    (resourceLanguageEnabled.value && form.value.languages.length > 1) || form.value.canConfigureAssignment,
 );
 
 function createEmptyForm() {

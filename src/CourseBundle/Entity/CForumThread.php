@@ -213,7 +213,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, Resour
 
     #[Groups(['forum_thread:read', 'forum_post:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['forum_thread:read', 'forum_post:read'])]

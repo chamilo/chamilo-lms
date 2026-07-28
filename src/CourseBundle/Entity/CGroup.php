@@ -64,7 +64,7 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     #[Groups(['group:read', 'group:write'])]
     protected ?int $iid = null;
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     #[Groups(['group:read', 'group:write'])]
     protected string $title;
     #[Assert\NotNull]

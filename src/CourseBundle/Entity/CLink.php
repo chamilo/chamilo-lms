@@ -235,7 +235,7 @@ class CLink extends AbstractResource implements ResourceInterface, ResourceShowC
 
     #[Groups(['link:read', 'link:write', 'link:browse'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['link:read', 'link:write', 'link:browse'])]

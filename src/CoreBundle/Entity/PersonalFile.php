@@ -175,7 +175,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface, String
 
     #[Assert\NotBlank]
     #[Groups(['personal_file:read'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['personal_file:read'])]

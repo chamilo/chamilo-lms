@@ -11,10 +11,19 @@ mcp:
         http: true
     http:
         path: /mcp
-        allowed_hosts:
-            - 'chamilo2.local'
-            - 'localhost'
-            - '127.0.0.1'
+        # false (not omitted) explicitly disables the SDK's DNS-rebinding-protection
+        # middleware. Omitting this key instead falls back to the SDK default of
+        # localhost-only, which would block every real request on a public server.
+        # This is the bundle's own sanctioned way to "expose a public MCP server"
+        # (see Symfony\AI\McpBundle\Http\MiddlewareFactory) — Chamilo doesn't need
+        # that check on top: /mcp already requires a Bearer credential (personal API
+        # key, JWT, or OAuth access token) via McpBearerAuthenticator regardless of
+        # the request's Host/Origin header, so DNS rebinding (which relies on
+        # ambient/cookie-style auth riding along with a spoofed Host) isn't
+        # exploitable here — a rebinding page cannot forge a bearer token it doesn't
+        # already have. A multi-AccessUrl platform reachable under many hostnames
+        # also makes a static per-host allowlist a poor fit operationally.
+        allowed_hosts: false
         session:
             store: file
             directory: '%kernel.cache_dir%/mcp-sessions'

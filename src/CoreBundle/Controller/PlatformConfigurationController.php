@@ -160,6 +160,7 @@ class PlatformConfigurationController extends AbstractController
                 'session.limit_session_admin_list_users',
                 'workflows.redirect_index_to_url_for_logged_users',
                 'language.platform_language',
+                'language.language_by_resource',
                 'language.language_priority_1',
                 'language.language_priority_2',
                 'language.language_priority_3',

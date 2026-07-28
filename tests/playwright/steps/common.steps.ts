@@ -14,8 +14,16 @@ const repoRoot = path.resolve(__dirname, "../../..")
 // "I fill in the following:" are all standard Mink/MinkContext steps in
 // Behat (not custom code) — reimplemented here.
 
+// Uses gotoReliably (defined further below) rather than a bare page.goto():
+// a real CI failure in createUser.feature's "Create a HRM user" showed that
+// a plain goto right after a settings form Save can lose a race against the
+// Save's own still-settling POST-redirect-GET / Vue SPA re-navigation
+// ("Navigation to .../user_add.php is interrupted by another navigation to
+// .../search_settings?keyword=admins_can_set_users_pass"). That same race
+// class is what gotoReliably was built for (adminSettings @settings hooks);
+// every "I am on" is a candidate for it, not just those two call sites.
 Given("I am on {string}", async ({ page }, path: string) => {
-  await page.goto(path)
+  await gotoReliably(page, path)
 })
 
 // Ported from FeatureContext::iAmOnCourseXHomepage(): navigates via the

@@ -130,7 +130,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'course_catalogue:read',
     ])]
     #[Assert\NotBlank(message: 'A Course requires a title')]
-    #[ORM\Column(name: 'title', type: 'string', length: 250, unique: false, nullable: true)]
+    #[ORM\Column(name: 'title', type: 'text', unique: false, nullable: true)]
     protected ?string $title = null;
 
     /**

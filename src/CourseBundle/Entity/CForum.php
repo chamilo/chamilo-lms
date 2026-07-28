@@ -233,7 +233,7 @@ class CForum extends AbstractResource implements ResourceInterface, ResourceShow
 
     #[Groups(['forum:read', 'forum_thread:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['forum:read'])]

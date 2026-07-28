@@ -563,7 +563,10 @@
           <h2 class="text-base font-semibold text-gray-90">{{ t("Extra settings") }}</h2>
 
           <div
-            v-if="(settings.allowExerciseCategories && categoryOptions.length > 1) || languageOptions.length > 0"
+            v-if="
+              (settings.allowExerciseCategories && categoryOptions.length > 1) ||
+              (resourceLanguageEnabled && languageOptions.length > 0)
+            "
             class="space-y-3 rounded-lg border border-gray-20 bg-gray-5 p-3"
           >
             <div class="space-y-1">
@@ -586,7 +589,7 @@
               />
 
               <div
-                v-if="languageOptions.length > 0"
+                v-if="resourceLanguageEnabled && languageOptions.length > 0"
                 class="space-y-2"
               >
                 <BaseSelect
@@ -777,11 +780,13 @@ import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 const isLoading = ref(false)
 const isSaving = ref(false)

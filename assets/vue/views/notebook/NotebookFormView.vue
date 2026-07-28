@@ -55,7 +55,7 @@
           />
 
           <BaseAdvancedSettingsButton
-            v-if="form.languages.length > 1"
+            v-if="resourceLanguageEnabled && form.languages.length > 1"
             v-model="showAdvancedSettings"
           >
             <BaseSelect
@@ -101,12 +101,14 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import notebookService from "../../services/notebookService"
 
 const { t } = useI18n()
 const toast = useToast()
 const route = useRoute()
 const router = useRouter()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 const isLoading = ref(false)
 const isSaving = ref(false)

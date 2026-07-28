@@ -161,11 +161,13 @@ import ResourceLanguageSelector from "../../components/resources/ResourceLanguag
 import prettyBytes from "pretty-bytes"
 import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 
 const securityStore = useSecurityStore()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 const { cid, sid, gid } = getCourseContext()
 const file = ref(null)
 const variations = ref([])
@@ -197,7 +199,7 @@ function isResourceLanguageActive(language) {
 const showResourceLanguageAdvancedSettings = computed(() => {
   const languages = Array.isArray(window.languages) ? window.languages : []
 
-  return languages.filter(isResourceLanguageActive).length > 1
+  return resourceLanguageEnabled.value && languages.filter(isResourceLanguageActive).length > 1
 })
 const selectedLanguage = ref("")
 const accessUrls = ref([])

@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Api;
 use Chamilo\CoreBundle\Entity\OAuthClient;
 use Chamilo\CoreBundle\Entity\OAuthRefreshToken;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
@@ -52,6 +53,7 @@ final class OAuthConnectedAppApiSecurityTest extends AbstractApiTest
     {
         /** @var EntityManagerInterface $em */
         $em = self::getContainer()->get(EntityManagerInterface::class);
+        $accessUrl = self::getContainer()->get(AccessUrlHelper::class)->getCurrent();
 
         $now = new DateTime();
         $grant = (new OAuthRefreshToken())
@@ -59,6 +61,7 @@ final class OAuthConnectedAppApiSecurityTest extends AbstractApiTest
             ->setGrantId(Uuid::v4()->toRfc4122())
             ->setClient($client)
             ->setUser($owner)
+            ->setAccessUrlId((int) $accessUrl->getId())
             ->setScope('mcp')
             ->setConsentedAt($now)
             ->setCreatedAt($now)

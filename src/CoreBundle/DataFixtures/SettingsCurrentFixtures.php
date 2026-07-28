@@ -3158,6 +3158,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'File integrity check notification recipients',
                     'comment' => 'Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead.',
                 ],
+                [
+                    'name' => 'oauth_server_enabled',
+                    'title' => 'Enable the OAuth authorization server',
+                    'comment' => 'Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user\'s own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on.',
+                ],
             ],
             'session' => [
                 [

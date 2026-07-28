@@ -7,13 +7,17 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authenticator;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\OAuthAccessToken;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserApiKey;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\OAuthAccessTokenRepository;
 use Chamilo\CoreBundle\Repository\UserApiKeyRepository;
 use Chamilo\CoreBundle\Service\Mcp\McpApiKeyManager;
+use Chamilo\CoreBundle\Service\OAuthServer\OAuthMetadataService;
+use Chamilo\CoreBundle\Service\OAuthServer\OAuthTokenService;
 use DateTime;
 use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -39,6 +43,8 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
         private readonly AccessUrlRepository $accessUrlRepository,
         private readonly JWTTokenManagerInterface $jwtManager,
         private readonly RateLimiterFactory $mcpAuthenticationLimiter,
+        private readonly OAuthMetadataService $oauthMetadata,
+        private readonly OAuthAccessTokenRepository $oauthAccessTokenRepository,
     ) {}
 
     public function supports(Request $request): ?bool
@@ -60,6 +66,10 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
             throw new CustomUserMessageAuthenticationException('Missing or invalid MCP bearer credential.');
         }
 
+        if (OAuthTokenService::isAccessToken($bearer)) {
+            return $this->authenticateOAuthToken($request, $bearer);
+        }
+
         if (McpApiKeyManager::isMcpKey($bearer)) {
             return $this->authenticateApiKey($request, $bearer);
         }
@@ -74,18 +84,51 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new JsonResponse(
+        $response = new JsonResponse(
             ['message' => $exception->getMessageKey()],
             Response::HTTP_UNAUTHORIZED,
         );
+        $response->headers->set(
+            'WWW-Authenticate',
+            $this->buildWwwAuthenticateHeader('invalid_token', $exception->getMessageKey()),
+        );
+
+        return $response;
     }
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
-        return new JsonResponse(
+        $response = new JsonResponse(
             ['message' => 'MCP authentication credentials are required.'],
             Response::HTTP_UNAUTHORIZED,
         );
+        $response->headers->set('WWW-Authenticate', $this->buildWwwAuthenticateHeader());
+
+        return $response;
+    }
+
+    /**
+     * Advertises where an OAuth client can discover this resource server's
+     * Authorization Server (RFC 9728 §5.1 / MCP authorization spec). Without
+     * this header, a bare 401 gives an OAuth client nothing to discover the
+     * new /oauth/* endpoints with.
+     */
+    private function buildWwwAuthenticateHeader(?string $error = null, ?string $errorDescription = null): string
+    {
+        $parts = [
+            'realm="Chamilo MCP"',
+            'resource_metadata="'.$this->oauthMetadata->getResourceMetadataUrl('mcp').'"',
+        ];
+
+        if (null !== $error) {
+            $parts[] = 'error="'.$error.'"';
+        }
+
+        if (null !== $errorDescription) {
+            $parts[] = 'error_description="'.str_replace('"', "'", $errorDescription).'"';
+        }
+
+        return 'Bearer '.implode(', ', $parts);
     }
 
     private function authenticateApiKey(Request $request, string $plainKey): SelfValidatingPassport
@@ -109,6 +152,46 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
         $this->apiKeyRepository->touchLastUsed($apiKey, $now);
 
         $request->attributes->set('_chamilo_mcp_auth_source', 'api_key');
+
+        return new SelfValidatingPassport(
+            new UserBadge((string) $user->getId(), static fn (): User => $user),
+        );
+    }
+
+    /**
+     * Accepts an access token issued by the generic OAuth Authorization
+     * Server (see Chamilo\CoreBundle\Service\OAuthServer\*) — the first
+     * resource server built on top of it. isAccessToken()'s prefix regex is
+     * disjoint from McpApiKeyManager::isMcpKey()'s, so the two schemes never
+     * collide; keep this branch ordered before isMcpKey() regardless, so the
+     * precedence stays explicit rather than accidental.
+     */
+    private function authenticateOAuthToken(Request $request, string $plainToken): SelfValidatingPassport
+    {
+        $accessUrl = $this->resolveAccessUrl();
+        $now = new DateTime();
+        $hash = hash('sha256', $plainToken);
+        $token = $this->oauthAccessTokenRepository->findActiveByHash($hash, $now);
+
+        if (!$token instanceof OAuthAccessToken || !hash_equals($token->getTokenHash(), $hash)) {
+            throw new CustomUserMessageAuthenticationException('Invalid or revoked MCP OAuth access token.');
+        }
+
+        if ($token->getAccessUrlId() !== (int) $accessUrl->getId()) {
+            // Same message as an outright invalid token: a cross-portal
+            // token must not be distinguishable from a bogus one.
+            throw new CustomUserMessageAuthenticationException('Invalid or revoked MCP OAuth access token.');
+        }
+
+        if (!$token->getClient()->isActiveAt($now)) {
+            throw new CustomUserMessageAuthenticationException('Invalid or revoked MCP OAuth access token.');
+        }
+
+        $user = $token->getUser();
+        $this->assertUserCanAuthenticate($user, $accessUrl);
+        $this->oauthAccessTokenRepository->touchLastUsed($token, $now);
+
+        $request->attributes->set('_chamilo_mcp_auth_source', 'oauth');
 
         return new SelfValidatingPassport(
             new UserBadge((string) $user->getId(), static fn (): User => $user),

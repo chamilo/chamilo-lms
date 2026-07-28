@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
@@ -56,6 +57,7 @@ final readonly class CreateCourseDocumentTool
         private CourseHelper $courseHelper,
         private AiDisclosureHelper $aiDisclosureHelper,
         private LanguageRepository $languageRepository,
+        private CourseDocumentContentService $documentContentService,
     ) {}
 
     /**
@@ -174,6 +176,15 @@ final readonly class CreateCourseDocumentTool
             throw new InvalidArgumentException('The document title cannot be longer than 250 characters.');
         }
 
+        $courseResourceNode = $course->getResourceNode();
+        if (null === $courseResourceNode || null === $courseResourceNode->getId()) {
+            throw new RuntimeException('The course resource node could not be resolved.');
+        }
+
+        if ($this->documentContentService->titleExistsInParentFolder($course, (int) $courseResourceNode->getId(), $title)) {
+            throw new InvalidArgumentException(\sprintf('A document titled "%s" already exists in this folder.', $title));
+        }
+
         $topic = trim(strip_tags($topic));
         if ('' === $topic) {
             throw new InvalidArgumentException('The document topic is required.');
@@ -212,12 +223,7 @@ final readonly class CreateCourseDocumentTool
 
         /** @var CDocument $document */
         $document = $this->entityManager->wrapInTransaction(
-            function () use ($course, $courseId, $title, $topic, $content, $languageIsoCode, $visibility): CDocument {
-                $courseResourceNode = $course->getResourceNode();
-                if (null === $courseResourceNode || null === $courseResourceNode->getId()) {
-                    throw new RuntimeException('The course resource node could not be resolved.');
-                }
-
+            function () use ($courseId, $title, $topic, $content, $languageIsoCode, $visibility, $courseResourceNode): CDocument {
                 $request = Request::create(
                     '/api/documents?cid='.$courseId,
                     'POST',

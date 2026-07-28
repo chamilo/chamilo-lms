@@ -31,6 +31,33 @@
 #   pre-existing Behat typo already found/fixed in course.feature — no such
 #   step was ever defined, so every scenario using it always errored out
 #   there in the original suite. Fixed here too.
+# - **Real CI-only failure found and fixed**: `user_add.php`'s manual
+#   "password" field/group only renders when the platform setting
+#   `security.admins_can_set_users_pass` is on — its schema default is `''`
+#   (falsy), so a FRESH install never renders it at all, and the whole
+#   password field is simply absent. The original Behat table's "password"
+#   row happened to work on the long-lived shared dev box this migration
+#   verifies against locally (that setting is enabled there from years of ad
+#   hoc admin use), masking that it doesn't work on a truly fresh CI DB.
+#   Removed the "password" row from every scenario that filled it EXCEPT
+#   "Create a HRM user" — none of the others are actually testing manual
+#   password-setting, so letting the account get its normal auto-generated
+#   password is fine. "Create a HRM user" is different: "HRM logs as
+#   teacher"/"HRM logs as student" need to actually log in as "hrm" with a
+#   KNOWN password (same "username as its own password" convention every
+#   other fixed test account here uses), which is only possible with a
+#   manually-set password — so that scenario now enables
+#   `admins_can_set_users_pass` via the settings UI first, and doesn't
+#   restore it afterward (a deliberate, low-risk, permanent side effect for
+#   this suite, same category as course.feature leaving "TEMP" behind — it
+#   only grants admins an existing, already-permission-gated capability, not
+#   a new attack surface).
+#   This also exposed a real robustness gap in `resolveField()`'s final
+#   `getByLabel()` fallback (fixed in common.steps.ts): with the field gone,
+#   it fell through to a case-insensitive SUBSTRING match on "password" and
+#   silently latched onto an unrelated, permanently-hidden extra field
+#   ("Moodle password"), hanging for the full test timeout instead of failing
+#   fast — `resolveField()` now uses `{exact: true}` there.
 # - **Real regression found and fixed** (not a test-only issue): the HR
 #   manager "Login as" link in `my_space/teachers.php`/`student.php`
 #   (`myStudents.php`) pointed at the same dead `admin/user_list.php` stub,
@@ -67,7 +94,6 @@ Feature: Users management as admin
       | lastname  | Marshall              |
       | email     | smarshall@example.com |
       | username  | smarshall             |
-      | password  | smarshall             |
     And I select "Learner" from "roles[]"
     And I click the "input#send_mail_no" element
     And I press "submit"
@@ -82,7 +108,6 @@ Feature: Users management as admin
       | lastname  | NIÑO                  |
       | email     | example@example.com |
       | username  | NIÑO                  |
-      | password  | smarshall             |
     And I check the "#send_mail_no" radio button selector
     And I click the "input#send_mail_no" element
     And I press "submit"
@@ -97,7 +122,6 @@ Feature: Users management as admin
       | lastname  | Juls                  |
       | email     | NI -ÑO@example.com      |
       | username  | Juls                  |
-      | password  | Juls                  |
     And I check the "#send_mail_no" radio button selector
     And I click the "input#send_mail_no" element
     And I press "submit"
@@ -124,6 +148,18 @@ Feature: Users management as admin
     Then I should not see an error
 
   Scenario: Create a HRM user
+    # Unlike the other "Create a ... user" scenarios, this one's password
+    # can't just be left auto-generated: "HRM logs as teacher"/"HRM logs as
+    # student" below need to actually log in as "hrm" with a KNOWN password,
+    # the same "username as its own password" convention every other fixed
+    # test account in this suite uses (see loginAs() in common.steps.ts). That
+    # requires the manual-password field, which only renders when
+    # `security.admins_can_set_users_pass` is on — so enable it first.
+    Given I am on "/admin/settings/search_settings?keyword=admins_can_set_users_pass"
+    And wait for the page to be loaded when ready
+    And I select "Yes" from "form_admins_can_set_users_pass"
+    And I press "Save"
+    And wait for the page to be loaded when ready
     Given I am on "/main/admin/user_add.php"
     And wait very long for the page to be loaded
     And I fill in the following:
@@ -147,7 +183,6 @@ Feature: Users management as admin
       | lastname  | teacher lastname |
       | email     | teacher@example.com |
       | username  | teacher  |
-      | password  | teacher00!   |
     And I select "Teacher" from "roles[]"
     And I click the "input#send_mail_no" element
     And I press "submit"
@@ -162,7 +197,6 @@ Feature: Users management as admin
       | lastname  | student lastname |
       | email     | student@example.com |
       | username  | student   |
-      | password  | student00!   |
     And I select "Learner" from "roles[]"
     And I click the "input#send_mail_no" element
     And I press "submit"

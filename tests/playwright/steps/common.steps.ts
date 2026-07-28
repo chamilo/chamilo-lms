@@ -156,7 +156,21 @@ async function resolveField(page: Page, field: string) {
     if (await visibleByName.count()) return visibleByName
   }
 
-  return page.getByLabel(field)
+  // {exact: true}: getByLabel() defaults to a case-insensitive SUBSTRING
+  // match, which silently matches an unrelated field when the intended one
+  // genuinely doesn't exist. Real CI failure: createUser.feature filling
+  // "password" on user_add.php when `security.admins_can_set_users_pass` is
+  // off (the fresh-install default) — the whole password field/group never
+  // renders, but getByLabel('password') still matched an unrelated, hidden
+  // extra field ("Moodle password", id="extra_moodle_password", tucked
+  // inside the collapsed advanced-settings panel) and hung retrying an
+  // interaction with a permanently-invisible element for the full test
+  // timeout. Same substring-match trap already documented for
+  // page.getByText() in course.feature's "TEMP"/"template" gotcha, just on
+  // the fill side instead of the assertion side — exact matching makes a
+  // genuinely-missing field fail fast and clearly instead of silently
+  // latching onto the wrong one.
+  return page.getByLabel(field, { exact: true })
 }
 
 // A plain .fill() sets the DOM value and dispatches one `input` event, which

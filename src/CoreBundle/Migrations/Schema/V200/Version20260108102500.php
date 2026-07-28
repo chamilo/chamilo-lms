@@ -18,12 +18,6 @@ final class Version20260108102500 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        // Chamilo runs on MySQL/MariaDB typically. Keep it safe.
-        $this->abortIf(
-            'mysql' !== $this->connection->getDatabasePlatform()->getName(),
-            'This migration is intended for MySQL/MariaDB.'
-        );
-
         // Only touch rows that look suspicious to avoid scanning the whole table.
         $rows = $this->connection->fetchAllAssociative(
             'SELECT id, roles FROM user WHERE roles LIKE :pattern',

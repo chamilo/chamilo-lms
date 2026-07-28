@@ -64,8 +64,8 @@ class TrackEOnlineRepository extends ServiceEntityRepository
         $trackEOnline->setSessionId($sessionId);
         $trackEOnline->setAccessUrlId($accessUrlId);
 
-        $this->_em->persist($trackEOnline);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($trackEOnline);
+        $this->getEntityManager()->flush();
     }
 
     public function removeOnlineSessionsByUser(int $userId): void
@@ -73,10 +73,10 @@ class TrackEOnlineRepository extends ServiceEntityRepository
         $sessions = $this->findBy(['loginUserId' => $userId]);
 
         foreach ($sessions as $session) {
-            $this->_em->remove($session);
+            $this->getEntityManager()->remove($session);
         }
 
-        $this->_em->flush();
+        $this->getEntityManager()->flush();
     }
 
     public function hasOnlineSessionForUser(int $userId): bool

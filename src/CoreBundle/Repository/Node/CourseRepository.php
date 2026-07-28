@@ -16,9 +16,11 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -79,10 +81,8 @@ class CourseRepository extends ResourceRepository
             ->innerJoin('c.urls', 'accessUrlRelCourse')
             ->where('courseRelUser.user = :user')
             ->andWhere('accessUrlRelCourse.url = :url')
-            ->setParameters([
-                'user' => $user,
-                'url' => $url,
-            ])
+            ->setParameter('user', $user)
+            ->setParameter('url', $url)
         ;
 
         $query = $qb->getQuery();
@@ -106,11 +106,9 @@ class CourseRepository extends ResourceRepository
             ->where('accessUrlRelCourse.url = :url')
             ->andWhere('courseRelUser.user = :user')
             ->andWhere('courseRelUser.status = :status')
-            ->setParameters([
-                'user' => $user,
-                'url' => $url,
-                'status' => $status,
-            ])
+            ->setParameter('user', $user)
+            ->setParameter('url', $url)
+            ->setParameter('status', $status)
         ;
 
         if (!empty($keyword)) {
@@ -261,11 +259,9 @@ class CourseRepository extends ResourceRepository
             ->where($qb->expr()->eq('cru.user', ':user'))
             ->andWhere($qb->expr()->neq('cru.relationType', ':relationType'))
             ->andWhere($qb->expr()->eq('urc.url', ':url'))
-            ->setParameters([
-                'user' => $user->getId(),
-                'relationType' => COURSE_RELATION_TYPE_RRHH,
-                'url' => $url->getId(),
-            ])
+            ->setParameter('user', $user->getId())
+            ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+            ->setParameter('url', $url->getId())
             ->getQuery()
             ->getResult()
         ;
@@ -313,7 +309,7 @@ class CourseRepository extends ResourceRepository
             ->addOrderBy('s.accessEndDate')
             ->addOrderBy('s.title')
             ->setMaxResults($sessionLimit)
-            ->setParameters($qbParams)
+            ->setParameters(new ArrayCollection(array_map(static fn ($name, $value) => new Parameter($name, $value), array_keys($qbParams), array_values($qbParams))))
             ->getQuery()
             ->getResult()
         ;
@@ -351,7 +347,7 @@ class CourseRepository extends ResourceRepository
             ->orderBy('s.accessStartDate')
             ->addOrderBy('s.accessEndDate')
             ->addOrderBy('s.title')
-            ->setParameters($qbParams)
+            ->setParameters(new ArrayCollection(array_map(static fn ($name, $value) => new Parameter($name, $value), array_keys($qbParams), array_values($qbParams))))
             ->getQuery()
             ->getResult()
         ;
@@ -415,10 +411,8 @@ class CourseRepository extends ResourceRepository
                 ->leftJoin('scu.user', 'u')
                 ->where($qb->expr()->eq('scu.user', ':user'))
                 ->orderBy('c.title')
-                ->setParameters([
-                    'session' => $enreg->getId(),
-                    'user' => $user->getId(),
-                ])
+                ->setParameter('session', $enreg->getId())
+                ->setParameter('user', $user->getId())
                 ->getQuery()
                 ->getResult()
             ;

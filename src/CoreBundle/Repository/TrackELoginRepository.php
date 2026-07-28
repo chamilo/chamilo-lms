@@ -26,8 +26,8 @@ class TrackELoginRepository extends ServiceEntityRepository
         $loginRecord->setLoginDate($loginDate);
         $loginRecord->setUserIp($userIp);
 
-        $this->_em->persist($loginRecord);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($loginRecord);
+        $this->getEntityManager()->flush();
 
         return $loginRecord;
     }
@@ -41,7 +41,7 @@ class TrackELoginRepository extends ServiceEntityRepository
 
         if (null !== $lastLoginRecord) {
             $lastLoginRecord->setLogoutDate($logoutDate);
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 }

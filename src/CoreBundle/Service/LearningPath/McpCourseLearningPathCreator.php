@@ -27,6 +27,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 use learnpath;
+use Mcp\Server\ClientGateway;
 use RuntimeException;
 use Throwable;
 
@@ -65,6 +66,7 @@ final readonly class McpCourseLearningPathCreator
         int $questionsPerQuiz,
         ?string $provider,
         bool $publish,
+        ?ClientGateway $client = null,
     ): array {
         $topic = trim(strip_tags($topic));
         if ('' === $topic) {
@@ -108,6 +110,7 @@ final readonly class McpCourseLearningPathCreator
             $pageCount,
             $wordsPerPage,
             $provider,
+            $client,
         );
         $providerUsed = (string) $generated['_provider'];
         unset($generated['_provider']);
@@ -125,6 +128,12 @@ final readonly class McpCourseLearningPathCreator
             $pageTitle = (string) $page['title'];
             $pageContent = (string) $page['content'];
             $quizTitle = 'Mini-test '.$pageNumber.': '.$pageTitle;
+
+            $client?->progress(
+                ($pageCount + $index) / ($pageCount * 3),
+                1.0,
+                \sprintf('Generating mini-test %d of %d...', $pageNumber, $pageCount),
+            );
 
             $preparedPages[] = [
                 'page_number' => $pageNumber,
@@ -201,6 +210,12 @@ final readonly class McpCourseLearningPathCreator
                 $pageTitle = (string) $preparedPage['title'];
                 $pageContent = (string) $preparedPage['content'];
                 $quizTitle = (string) $preparedPage['quiz_title'];
+
+                $client?->progress(
+                    (2 * $pageCount + $pageNumber - 1) / ($pageCount * 3),
+                    1.0,
+                    \sprintf('Saving page %d of %d...', $pageNumber, $pageCount),
+                );
 
                 $stage = 'creating document for page '.$pageNumber;
                 $documentResult = $this->documentTool->createCourseDocument(
@@ -357,6 +372,7 @@ final readonly class McpCourseLearningPathCreator
         int $pageCount,
         int $wordsPerPage,
         ?string $provider,
+        ?ClientGateway $client,
     ): array {
         $pages = [];
         $providerUsed = '';
@@ -364,6 +380,12 @@ final readonly class McpCourseLearningPathCreator
         $previousTitles = [];
 
         for ($pageNumber = 1; $pageNumber <= $pageCount; ++$pageNumber) {
+            $client?->progress(
+                ($pageNumber - 1) / ($pageCount * 3),
+                1.0,
+                \sprintf('Generating page %d of %d...', $pageNumber, $pageCount),
+            );
+
             $title = $this->buildPageTitle(
                 $topic,
                 $pageNumber,

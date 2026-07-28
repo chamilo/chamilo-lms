@@ -2169,6 +2169,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'language' => [
                 [
+                    'name' => 'language_by_resource',
+                    'title' => 'Language by resource',
+                    'comment' => 'Allow assigning a specific language to individual resources.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'allow_course_multiple_languages',
                     'title' => 'Multiple-language courses',
                     'comment' => "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures.",
@@ -3157,6 +3163,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'file_integrity_check_notify_admins',
                     'title' => 'File integrity check notification recipients',
                     'comment' => 'Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead.',
+                ],
+                [
+                    'name' => 'oauth_server_enabled',
+                    'title' => 'Enable the OAuth authorization server',
+                    'comment' => 'Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user\'s own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on.',
                 ],
             ],
             'session' => [

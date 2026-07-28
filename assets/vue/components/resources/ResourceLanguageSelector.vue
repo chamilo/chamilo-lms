@@ -17,6 +17,7 @@
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 
 const selectedLanguage = defineModel({
   type: String,
@@ -39,6 +40,7 @@ const props = defineProps({
 })
 
 const { t } = useI18n()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 function isLanguageActive(language) {
   if (!language || "object" !== typeof language) {
@@ -93,6 +95,10 @@ const languageOptionsWithEmpty = computed(() => [
 ])
 
 const shouldDisplaySelector = computed(() => {
+  if (!resourceLanguageEnabled.value) {
+    return false
+  }
+
   if (!props.hideWhenSingleLanguage) {
     return languageOptions.value.length > 0
   }

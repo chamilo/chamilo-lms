@@ -150,7 +150,6 @@ final class Version20231022124700 extends AbstractMigrationChamilo
         } catch (Exception $exception) {
             if (str_contains($exception->getMessage(), 'server has gone away') || str_contains($exception->getMessage(), '2006')) {
                 $this->connection->close();
-                $this->connection->connect();
                 $fn();
 
                 return;
@@ -169,7 +168,6 @@ final class Version20231022124700 extends AbstractMigrationChamilo
             $this->connection->executeQuery('SELECT 1');
         } catch (Exception) {
             $this->connection->close();
-            $this->connection->connect();
         }
     }
 

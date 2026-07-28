@@ -135,6 +135,7 @@
                         {% set resourceNodeId = file.resourceNode ? file.resourceNode.id : 'N/A' %}
                         {% set links          = linksCount[file.id]|default(0) %}
                         {% set isOrphan       = orphanFlags[file.id]|default(false) %}
+                        {% set creationDate   = file.createdAt ? file.createdAt|date('Y-m-d H:i:s') : '' %}
 
                         <tr>
                             <td class="col-title">{{ title }}</td>
@@ -157,6 +158,7 @@
                                    data-mime-type="{{ file.mimeType|default('') }}"
                                    data-original-name="{{ originalName|default('N/A'|trans) }}"
                                    data-size="{{ file.size|default(0) }}"
+                                   data-creation-date="{{ creationDate }}"
                                    data-course="{{ courseTitle|e('html_attr') }}"
                                    data-courses-json="{{ courses|json_encode|e('html_attr') }}"
                                    data-user="{{ username }}"
@@ -202,6 +204,7 @@
                 <p class="mb-3"><strong>{{ 'MIME Type:'|trans }}</strong> <span id="file-mime-type"></span></p>
                 <p class="mb-3"><strong>{{ 'Original Name:'|trans }}</strong> <span id="file-original-name"></span></p>
                 <p class="mb-3"><strong>{{ 'Size:'|trans }}</strong> <span id="file-size"></span></p>
+                <p class="mb-3"><strong>{{ 'Creation date'|trans }}:</strong> <span id="file-creation-date"></span></p>
 
                 <p class="mb-3 flex items-start gap-2">
                     <strong class="mt-0.5">{{ 'Course(s):'|trans }}</strong>
@@ -226,7 +229,7 @@
                 </p>
                 <p class="mb-3">
                     <strong>{{ 'File Link:'|trans }}</strong>
-                    <a href="#" id="file-url" target="_blank">{{ 'Open File'|trans }}</a>
+                    <a href="#" id="file-url" target="_blank" rel="noopener noreferrer">{{ 'Open File'|trans }}</a>
                 </p>
 
                 {# Actions: attach to course(s) + delete only if orphan #}
@@ -499,6 +502,7 @@
             var mimeType = button.getAttribute('data-mime-type');
             var originalName = button.getAttribute('data-original-name');
             var size = button.getAttribute('data-size');
+            var creationDate = button.getAttribute('data-creation-date');
             var courseLabel = button.getAttribute('data-course') || "";
             var coursesJson = button.getAttribute('data-courses-json') || "[]";
             var user = button.getAttribute('data-user');
@@ -519,6 +523,7 @@
             document.getElementById('file-mime-type').textContent = mimeType || '';
             document.getElementById('file-original-name').textContent = originalName || '';
             document.getElementById('file-size').textContent = (size || 0) + ' bytes';
+            document.getElementById('file-creation-date').textContent = creationDate || '';
             document.getElementById('file-user').textContent = user || '';
             document.getElementById('file-path').textContent = filePath || '';
             document.getElementById('file-url').href = fileUrl || '#';

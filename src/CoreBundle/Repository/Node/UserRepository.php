@@ -765,9 +765,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->select('COUNT(u)')
             ->innerJoin('u.portals', 'p')
             ->where('p.url = :url')
-            ->setParameters([
-                'url' => $url,
-            ])
+            ->setParameter('url', $url)
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -786,9 +784,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->select('COUNT(u)')
             ->innerJoin('u.portals', 'p')
             ->where('p.url = :url')
-            ->setParameters([
-                'url' => $url,
-            ])
+            ->setParameter('url', $url)
         ;
 
         $this->addRoleListQueryBuilder(['ROLE_TEACHER'], $qb);
@@ -1124,11 +1120,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where('v.itemId = :userId')
             ->andWhere('e.variable = :fieldVariable')
             ->andWhere('e.itemType = :itemType')
-            ->setParameters([
-                'userId' => $userId,
-                'fieldVariable' => $fieldVariable,
-                'itemType' => ExtraField::USER_FIELD_TYPE,
-            ])
+            ->setParameter('userId', $userId)
+            ->setParameter('fieldVariable', $fieldVariable)
+            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
         ;
 
         if (!$allVisibility) {
@@ -1351,13 +1345,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     public function findUsersByContext(int $courseId, ?int $sessionId = null, ?int $groupId = null): array
     {
-        $course = $this->_em->getRepository(Course::class)->find($courseId);
+        $course = $this->getEntityManager()->getRepository(Course::class)->find($courseId);
         if (!$course) {
             throw new InvalidArgumentException('Course not found.');
         }
 
         if (null !== $sessionId) {
-            $session = $this->_em->getRepository(Session::class)->find($sessionId);
+            $session = $this->getEntityManager()->getRepository(Session::class)->find($sessionId);
             if (!$session) {
                 throw new InvalidArgumentException('Session not found.');
             }
@@ -1375,16 +1369,14 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
 
         if (null !== $groupId) {
-            $qb = $this->_em->createQueryBuilder();
+            $qb = $this->getEntityManager()->createQueryBuilder();
             $qb->select('u')
                 ->from(CGroupRelUser::class, 'cgru')
                 ->innerJoin('cgru.user', 'u')
                 ->where('cgru.cId = :courseId')
                 ->andWhere('cgru.group = :groupId')
-                ->setParameters([
-                    'courseId' => $courseId,
-                    'groupId' => $groupId,
-                ])
+                ->setParameter('courseId', $courseId)
+                ->setParameter('groupId', $groupId)
                 ->orderBy('u.lastname', 'ASC')
                 ->addOrderBy('u.firstname', 'ASC')
             ;
@@ -1392,7 +1384,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             return $qb->getQuery()->getResult();
         }
 
-        $queryBuilder = $this->_em->getRepository(Course::class)->getSubscribedStudents($course);
+        $queryBuilder = $this->getEntityManager()->getRepository(Course::class)->getSubscribedStudents($course);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -1492,10 +1484,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where(
                 $qb->expr()->in('u.id', ':ids')
             )
-            ->setParameters([
-                'active' => false,
-                'ids' => $ids,
-            ])
+            ->setParameter('active', false)
+            ->setParameter('ids', $ids)
         ;
     }
 

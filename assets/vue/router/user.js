@@ -23,5 +23,11 @@ export default {
       meta: { breadcrumb: "MCP API key" },
       component: () => import("../views/user/McpApiKey.vue"),
     },
+    {
+      name: "AuthorizedApplications",
+      path: "authorized_apps",
+      meta: { breadcrumb: "Authorized applications" },
+      component: () => import("../views/user/AuthorizedApplications.vue"),
+    },
   ],
 }

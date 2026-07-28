@@ -13,7 +13,10 @@
       :vuelidate-property="v$.description"
     />
 
-    <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+    <BaseAdvancedSettingsButton
+      v-if="resourceLanguageEnabled || canShowAiToggle"
+      v-model="showAdvancedSettings"
+    >
       <div class="flex flex-col gap-4">
         <ResourceLanguageSelector
           id="glossary-language"
@@ -70,6 +73,7 @@ import useVuelidate from "@vuelidate/core"
 import BaseTextAreaWithVuelidate from "../basecomponents/BaseTextAreaWithVuelidate.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import { useNotification } from "../../composables/notification"
 import glossaryService from "../../services/glossaryService"
 import { useSecurityStore } from "../../store/securityStore"
@@ -78,6 +82,7 @@ import { useIsAllowedToEdit } from "../../composables/userPermissions"
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 const notification = useNotification()
 const securityStore = useSecurityStore()
 

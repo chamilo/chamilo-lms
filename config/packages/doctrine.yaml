@@ -14,8 +14,8 @@ doctrine:
             collate: utf8mb4_unicode_ci
             row_format: DYNAMIC
         types:
-            json: Doctrine\DBAL\Types\JsonType
-            json_array: Doctrine\DBAL\Types\JsonType
+            json: Chamilo\CoreBundle\Doctrine\Type\TolerantJsonType
+            json_array: Chamilo\CoreBundle\Doctrine\Type\TolerantJsonType
             uuid: Symfony\Bridge\Doctrine\Types\UuidType
             datetime: SimPod\DoctrineUtcDateTime\UTCDateTimeType
             datetimetz: SimPod\DoctrineUtcDateTime\UTCDateTimeType

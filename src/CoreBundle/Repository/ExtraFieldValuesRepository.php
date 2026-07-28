@@ -228,11 +228,9 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->where($qb->expr()->eq('efv.itemId', ':item_id'))
             ->andWhere($qb->expr()->eq('efv.field', ':field_id'))
             ->andWhere($qb->expr()->eq('ef.itemType', ':item_type'))
-            ->setParameters([
-                'item_id' => $itemId,
-                'field_id' => $fieldId,
-                'item_type' => $itemType,
-            ])
+            ->setParameter('item_id', $itemId)
+            ->setParameter('field_id', $fieldId)
+            ->setParameter('item_type', $itemType)
             ->getQuery()
             ->getResult()
         ;

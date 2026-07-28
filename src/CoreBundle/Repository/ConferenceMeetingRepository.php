@@ -70,8 +70,8 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
      */
     public function insert(ConferenceMeeting $meeting): void
     {
-        $this->_em->persist($meeting);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($meeting);
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -79,7 +79,7 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
      */
     public function updateVideoUrl(int $id, string $url): void
     {
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->update(ConferenceMeeting::class, 'm')
             ->set('m.videoUrl', ':url')
             ->where('m.id = :id')
@@ -95,7 +95,7 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
      */
     public function updateVisibility(int $id, bool $visible): void
     {
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->update(ConferenceMeeting::class, 'm')
             ->set('m.visibility', ':visible')
             ->where('m.id = :id')
@@ -111,7 +111,7 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
      */
     public function closeMeeting(int $id, DateTimeInterface $closedAt): void
     {
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->update(ConferenceMeeting::class, 'm')
             ->set('m.status', 0)
             ->set('m.closedAt', ':closedAt')
@@ -128,7 +128,7 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
      */
     public function deleteById(int $id): void
     {
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->delete(ConferenceMeeting::class, 'm')
             ->where('m.id = :id')
             ->setParameter('id', $id)

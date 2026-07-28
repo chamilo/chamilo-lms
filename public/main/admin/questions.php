@@ -61,11 +61,7 @@ $url = api_get_self();
  * Resolve a DBAL SchemaManager compatible with DBAL 2/3.
  */
 $resolveSchemaManager = static function ($connection) {
-    if (method_exists($connection, 'createSchemaManager')) {
-        return $connection->createSchemaManager();
-    }
-
-    return $connection->getSchemaManager();
+    return $connection->createSchemaManager();
 };
 
 /**

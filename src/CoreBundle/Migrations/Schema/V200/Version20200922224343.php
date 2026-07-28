@@ -21,8 +21,8 @@ final class Version20200922224343 extends AbstractMigrationChamilo
         $table = $schema->getTable('sys_announcement');
 
         if (!$table->hasColumn('roles')) {
-            $this->addSql("ALTER TABLE sys_announcement ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:array)'");
-            $this->addSql('UPDATE sys_announcement SET roles = "a:0:{}"');
+            $this->addSql("ALTER TABLE sys_announcement ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:json)'");
+            $this->addSql('UPDATE sys_announcement SET roles = "[]"');
         }
 
         if (!$table->hasColumn('career_id')) {

@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
+use Mcp\Server\RequestContext;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -68,6 +69,7 @@ final readonly class CreateCourseTestTool
         ?string $language = null,
         ?string $provider = null,
         bool $publish = false,
+        ?RequestContext $context = null,
     ): array {
         try {
             $result = $this->doCreateCourseTest(
@@ -79,6 +81,7 @@ final readonly class CreateCourseTestTool
                 $language,
                 $provider,
                 $publish,
+                $context,
             );
 
             return [
@@ -120,7 +123,10 @@ final readonly class CreateCourseTestTool
         ?string $language,
         ?string $provider,
         bool $publish,
+        ?RequestContext $context,
     ): array {
+        $client = $context?->getClientGateway();
+
         if ($courseId <= 0) {
             throw new InvalidArgumentException('The course ID must be a positive integer.');
         }
@@ -173,6 +179,8 @@ final readonly class CreateCourseTestTool
                 throw new InvalidArgumentException('The topic description cannot be longer than 20000 characters.');
             }
 
+            $client?->progress(0.0, 1.0, 'Generating '.$questionCount.' test question(s) with the AI provider...');
+
             return [
                 'course_features_enabled' => $enabledFeatures,
                 'test' => $this->testGenerator->createTest(
@@ -206,6 +214,8 @@ final readonly class CreateCourseTestTool
         }
 
         $sourceText = $this->testGenerator->getDocumentSource($document);
+
+        $client?->progress(0.0, 1.0, 'Generating '.$questionCount.' test question(s) with the AI provider...');
 
         return [
             'course_features_enabled' => $enabledFeatures,

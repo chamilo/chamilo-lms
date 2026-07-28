@@ -443,7 +443,11 @@ export default {
     const queryString = buildQueryString(params)
 
     if (exerciseId) {
-      return await baseService.put(`/api/exercise/configuration/${exerciseId}${queryString}`, payload, exerciseRequestConfig())
+      return await baseService.patch(
+        `/api/exercise/configuration/${exerciseId}${queryString}`,
+        payload,
+        exerciseRequestConfig(),
+      )
     }
 
     return await baseService.post(`/api/exercise/configuration${queryString}`, payload, {}, exerciseRequestConfig())

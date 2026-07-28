@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Mcp;
 
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
@@ -14,6 +16,7 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -52,6 +55,7 @@ final readonly class CreateCourseDocumentTool
         private CourseRepository $courseRepository,
         private CourseHelper $courseHelper,
         private AiDisclosureHelper $aiDisclosureHelper,
+        private LanguageRepository $languageRepository,
     ) {}
 
     /**
@@ -63,6 +67,7 @@ final readonly class CreateCourseDocumentTool
      *         parent_resource_node_id: int,
      *         title: string,
      *         file_name: string|null,
+     *         language: string,
      *         topic: string,
      *         requested_word_count: int,
      *         actual_word_count: int,
@@ -76,7 +81,7 @@ final readonly class CreateCourseDocumentTool
      */
     #[McpTool(
         name: 'create_course_document',
-        description: 'Create an AI-assisted HTML document in the root Documents folder of a course managed by the authenticated teacher. The MCP client must supply the generated HTML content.',
+        description: 'Create an AI-assisted HTML document in the root Documents folder of a course managed by the authenticated teacher. The MCP client must supply the generated HTML content. If language is omitted, the course\'s own language is used; otherwise provide either a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").',
     )]
     public function createCourseDocument(
         int $courseId,
@@ -115,6 +120,7 @@ final readonly class CreateCourseDocumentTool
      *         parent_resource_node_id: int,
      *         title: string,
      *         file_name: string|null,
+     *         language: string,
      *         topic: string,
      *         requested_word_count: int,
      *         actual_word_count: int,
@@ -198,14 +204,7 @@ final readonly class CreateCourseDocumentTool
             throw new InvalidArgumentException('The document content is empty after sanitization.');
         }
 
-        $language = null !== $language ? trim($language) : null;
-        if ('' === $language) {
-            $language = null;
-        }
-
-        if (null !== $language && !preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $language)) {
-            throw new InvalidArgumentException('The document language code is invalid.');
-        }
+        $languageIsoCode = $this->resolveLanguageIsoCode($course, $language);
 
         $visibility = $publish
             ? ResourceLink::VISIBILITY_PUBLISHED
@@ -213,7 +212,7 @@ final readonly class CreateCourseDocumentTool
 
         /** @var CDocument $document */
         $document = $this->entityManager->wrapInTransaction(
-            function () use ($course, $courseId, $title, $topic, $content, $language, $visibility): CDocument {
+            function () use ($course, $courseId, $title, $topic, $content, $languageIsoCode, $visibility): CDocument {
                 $courseResourceNode = $course->getResourceNode();
                 if (null === $courseResourceNode || null === $courseResourceNode->getId()) {
                     throw new RuntimeException('The course resource node could not be resolved.');
@@ -229,7 +228,7 @@ final readonly class CreateCourseDocumentTool
                         'contentFile' => $content,
                         'contentFileExtension' => 'html',
                         'contentFileMimeType' => 'text/html',
-                        'language' => $language ?? '',
+                        'language' => $languageIsoCode,
                         'parentResourceNodeId' => (int) $courseResourceNode->getId(),
                         'resourceLinkList' => json_encode(
                             [['visibility' => $visibility]],
@@ -295,6 +294,7 @@ final readonly class CreateCourseDocumentTool
                 'parent_resource_node_id' => (int) $course->getResourceNode()?->getId(),
                 'title' => $document->getTitle(),
                 'file_name' => $fileName,
+                'language' => $languageIsoCode,
                 'topic' => $topic,
                 'requested_word_count' => $requestedWordCount,
                 'actual_word_count' => $actualWordCount,
@@ -309,6 +309,42 @@ final readonly class CreateCourseDocumentTool
                 ),
             ],
         ];
+    }
+
+    /**
+     * Resolves the document language to an available Chamilo isocode.
+     *
+     * When no language is requested, the course's own language is used —
+     * itself resolved through the same lookup, so a course whose stored
+     * language is no longer an available Chamilo language fails loudly
+     * instead of silently creating a document with no language set. When a
+     * language is requested, it is treated primarily as a human-readable
+     * title (e.g. "Spanish") since that is what an AI client naturally
+     * produces; an existing isocode is also accepted directly.
+     */
+    private function resolveLanguageIsoCode(Course $course, ?string $language): string
+    {
+        $language = null !== $language ? trim($language) : '';
+
+        if ('' === $language) {
+            $courseLanguageCode = trim((string) $course->getCourseLanguage());
+            $resolved = '' !== $courseLanguageCode
+                ? $this->languageRepository->findOneAvailableByTitleOrCode($courseLanguageCode)
+                : null;
+
+            if (!$resolved instanceof Language) {
+                throw new InvalidArgumentException('The course language could not be resolved to a valid, available Chamilo language.');
+            }
+
+            return $resolved->getIsocode();
+        }
+
+        $resolved = $this->languageRepository->findOneAvailableByTitleOrCode($language);
+        if (!$resolved instanceof Language) {
+            throw new InvalidArgumentException(\sprintf('Unknown document language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").', $language));
+        }
+
+        return $resolved->getIsocode();
     }
 
     private function sanitizeHtml(string $content): string

@@ -335,7 +335,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * Writable only by admins — see UserSerializerContextBuilder.
      */
     #[Groups(['user:read', 'user:admin:write', 'user_json:read'])]
-    #[ORM\Column(type: 'array')]
+    #[ORM\Column(type: 'json')]
     protected array $roles = [];
     #[ORM\Column(name: 'profile_completed', type: 'boolean', nullable: true)]
     protected ?bool $profileCompleted = null;

@@ -32,8 +32,8 @@ class TrackEDownloadsRepository extends ServiceEntityRepository
             ->setResourceLink($resourceLink)
         ;
 
-        $this->_em->persist($download);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($download);
+        $this->getEntityManager()->flush();
 
         return $download->getDownId();
     }

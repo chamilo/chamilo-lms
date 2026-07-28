@@ -84,7 +84,7 @@
           >
             <div class="space-y-4">
               <BaseSelect
-                v-if="form.languages.length > 2"
+                v-if="resourceLanguageEnabled && form.languages.length > 2"
                 id="resource_language"
                 v-model="form.language"
                 :label="t('Language')"
@@ -136,11 +136,13 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import courseDescriptionService from "../../services/courseDescriptionService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -200,7 +202,9 @@ const translatedLanguages = computed(() =>
   })),
 )
 
-const showAdvancedSettings = computed(() => form.value.languages.length > 2 || settings.value.searchEnabled)
+const showAdvancedSettings = computed(
+  () => (resourceLanguageEnabled.value && form.value.languages.length > 2) || settings.value.searchEnabled,
+)
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value

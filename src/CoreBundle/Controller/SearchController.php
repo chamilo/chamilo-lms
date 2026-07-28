@@ -1341,9 +1341,7 @@ final class SearchController extends AbstractController
             $table = 'session_rel_course_rel_user';
 
             // Detect column names safely.
-            $sm = method_exists($conn, 'createSchemaManager')
-                ? $conn->createSchemaManager()
-                : $conn->getSchemaManager();
+            $sm = $conn->createSchemaManager();
 
             $columns = array_map(
                 static fn ($c) => strtolower($c->getName()),

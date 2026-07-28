@@ -666,9 +666,7 @@ final class UserMergeHelper
     private function listTableColumnsMeta(Connection $conn, string $table): array
     {
         try {
-            $sm = method_exists($conn, 'createSchemaManager')
-                ? $conn->createSchemaManager()
-                : $conn->getSchemaManager();
+            $sm = $conn->createSchemaManager();
 
             return $sm->listTableColumns($table);
         } catch (DbalException $e) {

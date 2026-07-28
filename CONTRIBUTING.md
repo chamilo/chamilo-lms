@@ -21,9 +21,9 @@ contribution. We will thoroughly review them before integration
 to make sure they do not introduce security vulnerabilities or degrade the
 platform's ease of use, but we do appreciate any sincere effort to help.
 
-Version 2.0 of Chamilo is composed of 2 parts: one legacy part located mostly
+Version 3.0 of Chamilo is composed of 2 parts: one (now minor) legacy part located mostly
 in the "public/main" folder, and the main Symfony-based part located in the
-"src" folder.
+"src" folder (with support of a VueJS frontent in assets/vue/).
 
 Any contribution to the project should either strive to convert legacy code to
 Symfony or to add new features to the Symfony part.
@@ -31,7 +31,7 @@ Symfony or to add new features to the Symfony part.
 # Installing Chamilo
 
 The following instructions are all intended to set a development environment up
-for Chamilo 2.
+for Chamilo 3.
 If you want to install Chamilo on a production server, please refer to the
 official installation guide in the documentation/ folder.
 
@@ -57,17 +57,17 @@ We recommend developing Chamilo on a machine with at least
 
 ## Quick step-by-step
 
-You will need PHP8.2 or 8.3 and NodeJS v18+ to run Chamilo 2.
+You will need PHP8.3, 8.4 or 8.5 and NodeJS v20+ to run Chamilo 2.
 
 On Ubuntu 24.04+, the following should take care of all dependencies (certbot is optional).
 
-Replace 'chamilo2' by the database name and user you want, and '{password}' by a more secure password.
+Replace 'chamilo' by the database name and user you want, and '{password}' by a more secure password.
 ~~~~
 sudo apt update && apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,soap,xml,zip} git unzip curl certbot
 sudo mysql
-mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
+mysql> CREATE USER chamilo@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost;
 mysql> exit
 cd ~
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
@@ -88,9 +88,8 @@ sudo cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.cha
 sudo a2ensite my.chamilo.net
 sudo systemctl restart apache2
 yarn set version stable
-yarn up && yarn install && yarn dev
-# If yarn dev fails with "FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory", use this instead of only "yarn dev"
-# NODE_OPTIONS="--max-old-space-size=4096" yarn dev
+yarn up && yarn install && NODE_OPTIONS="--max-old-space-size=4096" yarn dev
+# The NODE_OPTIONS is to avoid "FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory", use this instead of only "yarn dev"
 sudo touch .env
 sudo chown -R www-data: var/ .env config/
 # load http://my.chamilo.net in your browser and follow the installation wizard
@@ -103,10 +102,10 @@ The following is the section above, but with more details and hedge cases.
 ~~~~
 sudo apt update
 sudo apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,soap,xml,zip} git unzip curl certbot
 sudo mysql
-mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
+mysql> CREATE USER chamilo@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost;
 mysql> exit
 ~~~~
 
@@ -118,18 +117,18 @@ sudo apt -y upgrade
 sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
-sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl
+sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,soap,xml,zip} git unzip curl
 sudo mysql
-mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
+mysql> CREATE USER chamilo@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost;
 mysql> exit
 ~~~~
-(replace 'chamilo2' by the database name and user you want, and '{password}' by a more secure password)
+(replace 'chamilo' by the database name and user you want, and '{password}' by a more secure password)
 
 ## NodeJS, Yarn, Composer
 
 If you already have nodejs installed, check the version with `node -v`
-Otherwise, install Node.js 18 or above.
+Otherwise, install Node.js 20 or above.
 
 Use the following lines to get a static version of Node.js 20 from https://deb.nodesource.com/ (recommended)
 ~~~~
@@ -213,8 +212,6 @@ If you do not use SSL, you can remove the first block and change `*:443` by `*:8
     Require all denied
   </LocationMatch>
   php_value session.cookie_httponly 1
-  php_admin_value session.save_handler "redis"
-  php_admin_value session.save_path "tcp://127.0.0.1:6379"
   php_admin_value upload_max_filesize 256M
   php_admin_value post_max_size 256M
 </VirtualHost>
@@ -250,7 +247,7 @@ table and create a new one, losing all records in that table in the process.
 
 To avoid this, prefer executing migrations with the following instead.
 ```
-php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V210\Version[date]"
+php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V300\Version[date]"
 ```
 This will respect the migration logic and do the required data processing.
 You can see the version numbers in the list of updated or created files when launching `git pull`.
@@ -329,7 +326,7 @@ sudo apt update
 sudo apt install php8.3 libapache2-mod-php7.4 php8.3-{modules} php7.4-{modules}
 sudo apt remove libapache2-mod-php8.3 php7.4-fpm
 sudo a2enmod proxy_fcgi
-sudo vim /etc/apache2/sites-available/[your-chamilo2-vhost].conf
+sudo vim /etc/apache2/sites-available/[your-chamilo-vhost].conf
 ```
 
 In the vhost configuration, make sure you set PHP 8.3 FPM to answer this single

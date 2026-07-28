@@ -86,7 +86,15 @@ final class Version20260727000000 extends AbstractMigrationChamilo
      */
     private function reencodeColumn(string $table, string $pk, string $column, bool $nullable, bool $toJson): void
     {
-        $lastId = 0;
+        // Not necessarily numeric: some primary keys (e.g. Asset::$id) are
+        // UUIDs stored as BINARY(16), not auto-increment integers. Casting
+        // the cursor to (int) silently mangles a UUID's raw bytes to 0 (PHP
+        // finds no leading digits), so the cursor never advances and the
+        // WHERE/UPDATE clauses stop matching real rows — an infinite loop
+        // that never actually converts the data. Keep the cursor as the raw
+        // value MySQL returns; '' sorts before any real id (numeric 0 for
+        // int columns, empty-string-is-less-than for binary columns).
+        $lastId = '';
 
         do {
             $rows = $this->connection->fetchAllAssociative(
@@ -100,7 +108,7 @@ final class Version20260727000000 extends AbstractMigrationChamilo
             );
 
             foreach ($rows as $row) {
-                $lastId = (int) $row['pk'];
+                $lastId = $row['pk'];
                 $value = (string) $row['val'];
                 $converted = $toJson
                     ? $this->serializedToJson($value, $nullable)

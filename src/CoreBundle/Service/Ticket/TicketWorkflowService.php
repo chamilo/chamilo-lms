@@ -508,7 +508,9 @@ final readonly class TicketWorkflowService
                 ->andWhere(
                     'LOWER(user.username) LIKE :keyword'
                     .' OR LOWER(user.firstname) LIKE :keyword'
-                    .' OR LOWER(user.lastname) LIKE :keyword',
+                    .' OR LOWER(user.lastname) LIKE :keyword'
+                    .' OR LOWER(CONCAT(user.firstname, \' \', user.lastname)) LIKE :keyword'
+                    .' OR LOWER(CONCAT(user.lastname, \' \', user.firstname)) LIKE :keyword',
                 )
                 ->setParameter('keyword', '%'.mb_strtolower($keyword).'%', Types::STRING)
             ;

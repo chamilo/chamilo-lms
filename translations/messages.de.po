@@ -39054,3 +39054,6 @@ msgstr "Keine Ergebnisse gefunden. Ändern Sie Ihre Suchanfrage."
 
 msgid "List is empty."
 msgstr "Liste ist leer."
+
+msgid "Your session has expired. Please try again."
+msgstr "Ihre Sitzung ist abgelaufen. Bitte versuchen Sie es erneut."

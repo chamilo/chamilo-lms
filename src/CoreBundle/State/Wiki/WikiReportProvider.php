@@ -40,20 +40,20 @@ final readonly class WikiReportProvider implements ProviderInterface
 {
     use WikiAccessHelperTrait;
 
-    private const REPORT_ALL = 'all';
-    private const REPORT_RECENT = 'recent';
-    private const REPORT_SEARCH = 'search';
-    private const REPORT_BACKLINKS = 'backlinks';
-    private const REPORT_ACTIVE_USERS = 'active-users';
-    private const REPORT_USER_CONTRIBUTIONS = 'user-contributions';
-    private const REPORT_MOST_CHANGED = 'most-changed';
-    private const REPORT_MOST_VISITED = 'most-visited';
-    private const REPORT_MOST_LINKED = 'most-linked';
-    private const REPORT_ORPHANED = 'orphaned';
-    private const REPORT_WANTED = 'wanted';
-    private const REPORT_STATISTICS = 'statistics';
+    private const string REPORT_ALL = 'all';
+    private const string REPORT_RECENT = 'recent';
+    private const string REPORT_SEARCH = 'search';
+    private const string REPORT_BACKLINKS = 'backlinks';
+    private const string REPORT_ACTIVE_USERS = 'active-users';
+    private const string REPORT_USER_CONTRIBUTIONS = 'user-contributions';
+    private const string REPORT_MOST_CHANGED = 'most-changed';
+    private const string REPORT_MOST_VISITED = 'most-visited';
+    private const string REPORT_MOST_LINKED = 'most-linked';
+    private const string REPORT_ORPHANED = 'orphaned';
+    private const string REPORT_WANTED = 'wanted';
+    private const string REPORT_STATISTICS = 'statistics';
 
-    private const MAX_ITEMS_PER_PAGE = 100;
+    private const int MAX_ITEMS_PER_PAGE = 100;
 
     public function __construct(
         private RequestStack $requestStack,

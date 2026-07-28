@@ -18,17 +18,28 @@ use Throwable;
 
 final class Version20230904173400 extends AbstractMigrationChamilo
 {
-    private const AGENDA_BATCH_SIZE = 250;
-    private const MAP_TABLE = 'tmp_ricky_personal_agenda_map';
-    private const PARENT_INDEX = 'idx_ricky_personal_agenda_parent_event';
+    private const int AGENDA_BATCH_SIZE = 250;
+    private const string DOCTRINE_STRING_TYPE_COMMENT = '(DC2Type:string)';
+    private const string MAP_TABLE = 'tmp_ricky_personal_agenda_map';
+    private const string PARENT_INDEX = 'idx_ricky_personal_agenda_parent_event';
+    private const array LONG_TITLE_TABLES = [
+        'resource_node',
+        'c_calendar_event',
+    ];
 
     public function getDescription(): string
     {
         return 'Migrate personal_agenda to c_calendar_event in bounded ORM batches and update agenda_reminder';
     }
 
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
+        $this->ensureLongTitleColumns();
         $this->ensurePersonalAgendaParentIndex();
 
         $collectiveInvitationsEnabled = $this->isEnabledSetting(
@@ -515,6 +526,52 @@ final class Version20230904173400 extends AbstractMigrationChamilo
             'INSERT INTO '.self::MAP_TABLE.' (old_id, new_id) VALUES '.implode(', ', $values),
             $parameters
         );
+    }
+
+    private function ensureLongTitleColumns(): void
+    {
+        foreach (self::LONG_TITLE_TABLES as $tableName) {
+            $column = $this->connection->fetchAssociative(
+                'SELECT DATA_TYPE AS data_type, IS_NULLABLE AS is_nullable, COLUMN_COMMENT AS column_comment
+                 FROM information_schema.COLUMNS
+                 WHERE TABLE_SCHEMA = DATABASE()
+                   AND TABLE_NAME = :table_name
+                   AND COLUMN_NAME = :column_name',
+                [
+                    'table_name' => $tableName,
+                    'column_name' => 'title',
+                ]
+            );
+
+            if (false === $column) {
+                throw new RuntimeException(\sprintf("Required column '%s.title' is missing.", $tableName));
+            }
+
+            $notNull = 'NO' === strtoupper((string) $column['is_nullable']);
+            $requiresStringTypeComment = 'resource_node' === $tableName;
+            $hasExpectedTypeComment = !$requiresStringTypeComment
+                || self::DOCTRINE_STRING_TYPE_COMMENT === (string) $column['column_comment'];
+
+            if ('longtext' === strtolower((string) $column['data_type']) && $hasExpectedTypeComment) {
+                continue;
+            }
+
+            $nullability = $notNull ? 'NOT NULL' : 'DEFAULT NULL';
+            $comment = $requiresStringTypeComment
+                ? " COMMENT '".self::DOCTRINE_STRING_TYPE_COMMENT."'"
+                : '';
+
+            // This DDL must run immediately because the same migration persists
+            // calendar entities through Doctrine before queued SQL is executed.
+            $this->connection->executeStatement(
+                \sprintf(
+                    'ALTER TABLE %s CHANGE title title LONGTEXT %s%s',
+                    $tableName,
+                    $nullability,
+                    $comment
+                )
+            );
+        }
     }
 
     private function ensurePersonalAgendaParentIndex(): void

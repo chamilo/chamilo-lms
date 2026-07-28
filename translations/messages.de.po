@@ -25430,9 +25430,7 @@ msgid "There is no class with the name \"%s\""
 msgstr "Es gibt keine Klasse mit dem Namen '%s'"
 
 msgid "Maximum number of subscriptions allowed. Leave at 0 to not limit it."
-msgstr ""
-"Maximale Anzahl erlaubter Abonnements. Bei 0 eingeben, um es nicht zu "
-"begrenzen."
+msgstr "Maximale Anzahl erlaubter Abonnements. Auf 0 lassen, um es nicht zu begrenzen."
 
 msgid "Subscriptions"
 msgstr "Abonnements"
@@ -39045,3 +39043,17 @@ msgstr "Es wurde noch kein Alarm aufgezeichnet."
 msgid "Git remote changed"
 msgstr "Git-Remote geändert"
 
+msgid "Press enter to select"
+msgstr "Auf Enter drücken, um auszuwählen"
+
+msgid "Press enter to remove"
+msgstr "Auf Enter drücken, um es zu entfernen."
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Keine Ergebnisse gefunden. Ändern Sie Ihre Suchanfrage."
+
+msgid "List is empty."
+msgstr "Liste ist leer."
+
+msgid "Your session has expired. Please try again."
+msgstr "Ihre Sitzung ist abgelaufen. Bitte versuchen Sie es erneut."

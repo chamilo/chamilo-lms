@@ -21,7 +21,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final readonly class LearningPathRuntimeProgressManager
 {
-    private const COMPLETED_STATUSES = ['completed', 'passed', 'succeeded', 'browsed', 'failed'];
+    private const array COMPLETED_STATUSES = ['completed', 'passed', 'succeeded', 'browsed', 'failed'];
 
     public function __construct(
         private EntityManagerInterface $entityManager,

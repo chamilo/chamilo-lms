@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -49,7 +50,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/link_categories/{iid}/toggle_visibility',
             controller: UpdateVisibilityLinkCategory::class,
             security: "is_granted('EDIT', object.resourceNode)",
@@ -150,7 +151,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Resou
 
     #[Groups(['link_category:read', 'link_category:write', 'link_category:browse'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['link_category:read', 'link_category:write'])]

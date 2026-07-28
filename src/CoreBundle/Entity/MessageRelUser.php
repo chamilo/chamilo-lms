@@ -66,21 +66,21 @@ class MessageRelUser
     use SoftDeleteableEntity;
 
     // Type indicating the message is sent to the main recipient
-    public const TYPE_TO = 1;
+    public const int TYPE_TO = 1;
     // Type indicating the message is sent as a carbon copy (CC) to the recipient
-    public const TYPE_CC = 2;
+    public const int TYPE_CC = 2;
     // Type indicating the message is promoted
-    public const TYPE_PROMOTED = 3;
+    public const int TYPE_PROMOTED = 3;
     // Type indicating the message is posted on the user's wall
-    public const TYPE_WALL = 4;
+    public const int TYPE_WALL = 4;
     // Type indicating the message is sent to a group
-    public const TYPE_GROUP = 5;
+    public const int TYPE_GROUP = 5;
     // Type indicating the message is an invitation
-    public const TYPE_INVITATION = 6;
+    public const int TYPE_INVITATION = 6;
     // Type indicating the message is part of a conversation
-    public const TYPE_CONVERSATION = 7;
+    public const int TYPE_CONVERSATION = 7;
     // Type indicating the message is sent by the sender and should appear in the sender's outbox
-    public const TYPE_SENDER = 8;
+    public const int TYPE_SENDER = 8;
 
     #[Groups(['message_rel_user:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]

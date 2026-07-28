@@ -72,7 +72,9 @@ class MessageTag
     protected User $user;
 
     #[Assert\NotBlank]
-    #[Groups(['message_tag:read', 'message_tag:write', 'message:read', 'message_rel_user:read', 'message_rel_user:write'])]
+    #[Groups([
+        'message_tag:read', 'message_tag:write', 'message:read', 'message_rel_user:read', 'message_rel_user:write',
+    ])]
     #[ORM\Column(name: 'tag', type: 'string', nullable: false)]
     protected string $tag;
 

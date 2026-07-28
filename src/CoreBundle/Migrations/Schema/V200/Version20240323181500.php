@@ -21,9 +21,9 @@ use const ENT_QUOTES;
 
 final class Version20240323181500 extends AbstractMigrationChamilo
 {
-    private const SYS_CALENDAR_BATCH_SIZE = 1000;
-    private const MAP_TABLE = 'tmp_ricky_sys_calendar_map';
-    private const RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
+    private const int SYS_CALENDAR_BATCH_SIZE = 1000;
+    private const string MAP_TABLE = 'tmp_ricky_sys_calendar_map';
+    private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
 
     public function getDescription(): string
     {

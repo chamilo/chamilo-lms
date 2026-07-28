@@ -10,9 +10,9 @@ use SimpleXMLElement;
 
 abstract class OutcomeResponse
 {
-    public const TYPE_REPLACE = 'replace';
-    public const TYPE_READ = 'read';
-    public const TYPE_DELETE = 'delete';
+    public const string TYPE_REPLACE = 'replace';
+    public const string TYPE_READ = 'read';
+    public const string TYPE_DELETE = 'delete';
 
     protected array $bodyParams;
     private OutcomeResponseStatus $statusInfo;

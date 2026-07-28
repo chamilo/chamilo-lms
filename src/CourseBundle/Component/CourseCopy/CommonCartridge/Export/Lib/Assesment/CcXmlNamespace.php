@@ -8,5 +8,5 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Lib\A
 
 abstract class CcXmlNamespace
 {
-    public const XML = 'http://www.w3.org/XML/1998/namespace';
+    public const string XML = 'http://www.w3.org/XML/1998/namespace';
 }

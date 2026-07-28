@@ -50,8 +50,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     ),
                 ],
             ),
-            provider: ForumSearchStateProvider::class,
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            provider: ForumSearchStateProvider::class,
         ),
     ],
     normalizationContext: [

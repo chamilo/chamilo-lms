@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -19,7 +18,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 /**
  * Extension is called when loading api/documents.json.
  */
-final class CDocumentExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
+final class CDocumentExtension implements QueryCollectionExtensionInterface
 {
     use CourseLinkExtensionTrait;
 

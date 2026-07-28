@@ -36,7 +36,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class SurveyMeetingProvider implements ProviderInterface
 {
-    public const CSRF_TOKEN_ID = 'survey_meeting';
+    public const string CSRF_TOKEN_ID = 'survey_meeting';
 
     public function __construct(
         private RequestStack $requestStack,

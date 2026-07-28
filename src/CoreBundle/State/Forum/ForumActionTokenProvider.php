@@ -18,7 +18,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class ForumActionTokenProvider implements ProviderInterface
 {
-    private const FORUM_ACTION_TOKEN_INTENTION = 'forum_action';
+    private const string FORUM_ACTION_TOKEN_INTENTION = 'forum_action';
 
     public function __construct(
         private CsrfTokenManagerInterface $csrfTokenManager,

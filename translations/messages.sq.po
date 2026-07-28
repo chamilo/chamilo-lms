@@ -37390,9 +37390,6 @@ msgstr "Konfigurimi i remote-it Git (.git/config) është ndryshuar. Verifikoni 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skanimi u ndal herët sepse një nën-direktori nuk mund të lexohej (kontrolloni lejet e skedarëve). Rezultatet më poshtë mund të jenë të pjesshme."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Shumë ndryshime për t'u listuar plotësisht; vetëm hyrjet e para të secilës kategori shfaqen më poshtë. Shihni regjistrin CEF për listën e plotë."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% skedar(ë) nuk mund të lexoheshin (leje) dhe u anashkaluan."
 
@@ -37476,4 +37473,7 @@ msgstr "Asnjë njoftim nuk është regjistruar ende."
 
 msgid "Git remote changed"
 msgstr "Remote-i Git u ndryshua"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Shumë ndryshime për t'u listuar plotësisht; vetëm hyrjet e para të çdo kategorie shfaqen më poshtë. Shihni %link_start%regjistrin CEF%link_end% për listën e plotë."
 

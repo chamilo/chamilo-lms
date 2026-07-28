@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\ApiResource\Wiki;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Wiki\WikiCategoryProcessor;
@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(
             uriTemplate: '/wiki/categories',
+            status: Response::HTTP_NO_CONTENT,
             openapi: new Operation(
                 summary: 'Create a Wiki category',
                 parameters: [
@@ -31,16 +32,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
-            output: false,
-            status: Response::HTTP_NO_CONTENT,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            output: false,
+            read: false,
             name: 'post_wiki_category',
             processor: WikiCategoryProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/wiki/categories/{categoryId}',
             requirements: ['categoryId' => '\d+'],
+            status: Response::HTTP_NO_CONTENT,
             openapi: new Operation(
                 summary: 'Update a Wiki category',
                 parameters: [
@@ -52,16 +53,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
-            output: false,
-            status: Response::HTTP_NO_CONTENT,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            output: false,
+            read: false,
             name: 'put_wiki_category',
             processor: WikiCategoryProcessor::class,
         ),
         new Post(
             uriTemplate: '/wiki/categories/{categoryId}/delete',
             requirements: ['categoryId' => '\d+'],
+            status: Response::HTTP_NO_CONTENT,
             openapi: new Operation(
                 summary: 'Delete a Wiki category and its descendants',
                 parameters: [
@@ -73,10 +74,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
-            output: false,
-            status: Response::HTTP_NO_CONTENT,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            output: false,
+            read: false,
             name: 'post_wiki_category_delete',
             processor: WikiCategoryProcessor::class,
         ),

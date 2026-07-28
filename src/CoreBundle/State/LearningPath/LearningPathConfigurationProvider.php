@@ -46,8 +46,8 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
 {
     use LearningPathStateHelperTrait;
 
-    private const ITEM_TYPE_LEARNING_PATH = 4;
-    private const NO_SPECIFIC_LANGUAGE = '__none__';
+    private const int ITEM_TYPE_LEARNING_PATH = 4;
+    private const string NO_SPECIFIC_LANGUAGE = '__none__';
 
     public function __construct(
         private EntityManagerInterface $entityManager,

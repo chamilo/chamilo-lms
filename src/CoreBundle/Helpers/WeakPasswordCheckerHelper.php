@@ -18,7 +18,7 @@ final class WeakPasswordCheckerHelper
      *
      * Keep this list short because every candidate is checked against every selected user hash.
      */
-    private const COMMON_PASSWORD_CANDIDATES = [
+    private const array COMMON_PASSWORD_CANDIDATES = [
         '123456',
         '123456789',
         '12345',

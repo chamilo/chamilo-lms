@@ -29,7 +29,7 @@ class ResourceLinkRepository extends SortableRepository
         'document' => '/resources/document/%resource_node_id%/',
         'learnpath' => '/main/lp/lp_controller.php',
         'link' => '/resources/links/%resource_node_id%/',
-        'quiz' => '/main/exercise/exercise.php',
+        'quiz' => '/resources/exercise/%resource_node_id%/',
         'announcement' => '/resources/announcement/%resource_node_id%/',
         'glossary' => '/resources/glossary/%resource_node_id%/',
         'attendance' => '/main/attendance/index.php',
@@ -102,7 +102,7 @@ class ResourceLinkRepository extends SortableRepository
      */
     public function getAvailableTools(): array
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('DISTINCT t.id, t.title')
             ->from(ResourceLink::class, 'rl')
@@ -130,7 +130,7 @@ class ResourceLinkRepository extends SortableRepository
      */
     public function getToolUsageReportByTools(array $toolIds): array
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder
             ->select(

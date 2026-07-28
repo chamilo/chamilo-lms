@@ -44,10 +44,10 @@ use const PATHINFO_EXTENSION;
 #[Route('/course_maintenance/{node}', name: 'cm_', requirements: ['node' => '\d+'])]
 class CourseMaintenanceController extends AbstractCourseMaintenanceController
 {
-    private const IMPORT_ALLOWED_EXTENSIONS = ['zip', 'mbz', 'gz', 'tgz'];
-    private const CC13_ALLOWED_EXTENSIONS = ['imscc', 'zip'];
+    private const array IMPORT_ALLOWED_EXTENSIONS = ['zip', 'mbz', 'gz', 'tgz'];
+    private const array CC13_ALLOWED_EXTENSIONS = ['imscc', 'zip'];
 
-    private const LEGACY_SNAPSHOT_TOOLS = [
+    private const array LEGACY_SNAPSHOT_TOOLS = [
         'documents',
         'forums',
         'tool_intro',
@@ -70,7 +70,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         'learnpaths',
     ];
 
-    private const MOODLE_EXPORT_DEFAULT_TOOLS = [
+    private const array MOODLE_EXPORT_DEFAULT_TOOLS = [
         'documents',
         'links',
         'forums',
@@ -91,7 +91,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         'course_descriptions',
     ];
 
-    private const MOODLE_EXPORT_RESOURCE_PICKER_DEFAULT_TOOLS = [
+    private const array MOODLE_EXPORT_RESOURCE_PICKER_DEFAULT_TOOLS = [
         'documents',
         'links',
         'forums',

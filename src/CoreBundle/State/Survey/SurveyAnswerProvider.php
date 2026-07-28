@@ -39,12 +39,12 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
 
-    public const CSRF_TOKEN_ID = 'survey_answer';
+    public const string CSRF_TOKEN_ID = 'survey_answer';
 
     /**
      * @var array<int, string>
      */
-    private const SUPPORTED_TYPES = [
+    private const array SUPPORTED_TYPES = [
         'yesno',
         'multiplechoice',
         'multipleresponse',

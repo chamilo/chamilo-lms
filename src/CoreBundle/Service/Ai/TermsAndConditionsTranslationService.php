@@ -25,12 +25,12 @@ use const JSON_UNESCAPED_UNICODE;
 
 final readonly class TermsAndConditionsTranslationService
 {
-    public const CSRF_TOKEN_ID = 'terms_and_conditions_translation';
+    public const string CSRF_TOKEN_ID = 'terms_and_conditions_translation';
 
-    private const TOOL_NAME = 'terms_and_conditions_translation';
-    private const MAX_SECTION_HTML_LENGTH = 100000;
-    private const MAX_TOTAL_HTML_LENGTH = 250000;
-    private const MAX_OUTPUT_TOKENS = 12000;
+    private const string TOOL_NAME = 'terms_and_conditions_translation';
+    private const int MAX_SECTION_HTML_LENGTH = 100000;
+    private const int MAX_TOTAL_HTML_LENGTH = 250000;
+    private const int MAX_OUTPUT_TOKENS = 12000;
 
     public function __construct(
         private SettingsManager $settingsManager,

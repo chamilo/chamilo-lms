@@ -2170,10 +2170,32 @@ if (empty($details)) {
                         if ($allowToQualify) {
                             $qualifyLink = '&action=qualify';
                         }
-                        $attemptLink =
-                            '../exercise/exercise_show.php?id='.$id_last_attempt.'&cid='.$courseId
-                            .'&sid='.$sessionId.'&student='.$studentId.'&origin='
-                            .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
+                        $exerciseResourceNodeId = null !== $course && null !== $course->getResourceNode()
+                            ? (int) $course->getResourceNode()->getId()
+                            : 0;
+
+                        if (0 < $exerciseResourceNodeId) {
+                            $attemptQueryParams = [
+                                'cid' => $courseId,
+                                'sid' => $sessionId,
+                                'gid' => 0,
+                                'student' => $studentId,
+                                'origin' => empty($origin) ? 'tracking' : $origin,
+                            ];
+
+                            if ($allowToQualify) {
+                                $attemptQueryParams['action'] = 'qualify';
+                            }
+
+                            $attemptLink = api_get_path(WEB_PATH).'resources/exercise/'
+                                .$exerciseResourceNodeId.'/'.$exercise_id.'/result/'.$id_last_attempt.'?'
+                                .http_build_query($attemptQueryParams);
+                        } else {
+                            $attemptLink =
+                                '../exercise/exercise_show.php?id='.$id_last_attempt.'&cid='.$courseId
+                                .'&sid='.$sessionId.'&student='.$studentId.'&origin='
+                                .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
+                        }
                         echo Display::url(
                             Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Test')),
                             $attemptLink
@@ -2184,8 +2206,23 @@ if (empty($details)) {
 
                 echo '<td>';
                 if ($count_attempts > 0) {
-                    $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&"
-                        ."cid=".$courseId."&filter_by_user=$studentId&sid=$sessionId";
+                    $exerciseResourceNodeId = null !== $course && null !== $course->getResourceNode()
+                        ? (int) $course->getResourceNode()->getId()
+                        : 0;
+
+                    if (0 < $exerciseResourceNodeId) {
+                        $all_attempt_url = api_get_path(WEB_PATH).'resources/exercise/'
+                            .$exerciseResourceNodeId.'/'.$exercise_id.'/report?'
+                            .http_build_query([
+                                'cid' => $courseId,
+                                'sid' => $sessionId,
+                                'gid' => 0,
+                                'filter_by_user' => $studentId,
+                            ]);
+                    } else {
+                        $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&"
+                            ."cid=".$courseId."&filter_by_user=$studentId&sid=$sessionId";
+                    }
                     echo Display::url(
                         Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('All attempts')),
                         $all_attempt_url

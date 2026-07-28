@@ -11,8 +11,8 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ArrayObject;
@@ -45,7 +45,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: LearningPathCategoryCollectionProvider::class,
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
-        new Put(
+        new Patch(
             uriTemplate: '/learning_path_categories/{iid}/toggle-visibility',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,

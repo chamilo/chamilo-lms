@@ -17,8 +17,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             uriTemplate: '/ticket/{id}',
             requirements: ['id' => '\d+'],
-            name: 'get_ticket_detail',
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            name: 'get_ticket_detail',
             provider: TicketDetailProvider::class,
         ),
     ],

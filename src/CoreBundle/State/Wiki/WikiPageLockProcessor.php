@@ -34,7 +34,7 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
 {
     use WikiAccessHelperTrait;
 
-    private const LOCK_TIMEOUT_SECONDS = 1200;
+    private const int LOCK_TIMEOUT_SECONDS = 1200;
 
     public function __construct(
         private RequestStack $requestStack,

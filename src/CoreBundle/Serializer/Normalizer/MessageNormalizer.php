@@ -16,7 +16,7 @@ class MessageNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'MESSAGE_NORMALIZER_ALREADY_CALLED';
+    private const string ALREADY_CALLED = 'MESSAGE_NORMALIZER_ALREADY_CALLED';
 
     public function normalize($data, ?string $format = null, array $context = []): array
     {

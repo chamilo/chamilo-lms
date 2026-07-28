@@ -66,7 +66,7 @@ switch ($action) {
             ->getConnection()
             ->executeQuery("SHOW TABLES LIKE '$db_c_prefix$db_prefix%'");
 
-        while ($table = $statement->fetch(PDO::FETCH_NUM)) {
+        while ($table = $statement->fetchNumeric()) {
             $manager->getConnection()->executeQuery("DROP TABLE {$table[0]}");
         }
 

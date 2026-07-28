@@ -14,19 +14,19 @@ use Doctrine\DBAL\Exception;
 
 final class BuyCoursesExpiryHelper
 {
-    private const TABLE_SETTINGS = 'settings';
-    private const TABLE_COURSE = 'course';
-    private const TABLE_COURSE_REL_USER = 'course_rel_user';
-    private const TABLE_EXTRA_FIELD = 'extra_field';
-    private const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
-    private const TABLE_SERVICE_REL_EXTRA_FIELD = 'plugin_buycourses_service_rel_extra_field';
-    private const TABLE_FROZEN_ENROLLMENT = 'plugin_buycourses_frozen_enrollment';
+    private const string TABLE_SETTINGS = 'settings';
+    private const string TABLE_COURSE = 'course';
+    private const string TABLE_COURSE_REL_USER = 'course_rel_user';
+    private const string TABLE_EXTRA_FIELD = 'extra_field';
+    private const string TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
+    private const string TABLE_SERVICE_REL_EXTRA_FIELD = 'plugin_buycourses_service_rel_extra_field';
+    private const string TABLE_FROZEN_ENROLLMENT = 'plugin_buycourses_frozen_enrollment';
 
-    private const SERVICE_STATUS_COMPLETED = 1;
-    private const COURSE_USER_STATUS_TEACHER = 1;
-    private const COURSE_USER_STATUS_STUDENT = 5;
-    private const COURSE_RELATION_TYPE_RRHH = 1;
-    private const COURSE_VISIBILITY_CLOSED = 0;
+    private const int SERVICE_STATUS_COMPLETED = 1;
+    private const int COURSE_USER_STATUS_TEACHER = 1;
+    private const int COURSE_USER_STATUS_STUDENT = 5;
+    private const int COURSE_RELATION_TYPE_RRHH = 1;
+    private const int COURSE_VISIBILITY_CLOSED = 0;
 
     private ?bool $buyCoursesAvailable = null;
 

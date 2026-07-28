@@ -34,7 +34,7 @@ final readonly class NotebookItemProvider implements ProviderInterface
 {
     use NotebookAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'notebook_item';
+    public const string CSRF_TOKEN_ID = 'notebook_item';
 
     public function __construct(
         private RequestStack $requestStack,

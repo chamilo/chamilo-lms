@@ -51,9 +51,9 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         $qb
             ->andWhere('s.lang IS NULL OR s.lang = :lang OR s.lang = :empty')
             ->andWhere('s.url = :url')
-            ->setParameters(
-                ['url' => $url, 'lang' => $iso, 'empty' => '']
-            )
+            ->setParameter('url', $url)
+            ->setParameter('lang', $iso)
+            ->setParameter('empty', '')
         ;
 
         $this->addDateQueryBuilder($qb);

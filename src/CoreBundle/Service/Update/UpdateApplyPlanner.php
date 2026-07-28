@@ -21,13 +21,13 @@ use const PHP_EOL;
 
 final readonly class UpdateApplyPlanner
 {
-    private const FILE_LIST_LIMIT = 200;
-    private const SKIPPED_EXACT_PATHS = [
+    private const int FILE_LIST_LIMIT = 200;
+    private const array SKIPPED_EXACT_PATHS = [
         '.env',
         '.env.local',
         'app/config/configuration.php',
     ];
-    private const SKIPPED_PREFIXES = [
+    private const array SKIPPED_PREFIXES = [
         '.git',
         'node_modules',
         'vendor',

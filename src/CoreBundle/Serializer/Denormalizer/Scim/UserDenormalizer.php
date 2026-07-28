@@ -15,8 +15,8 @@ class UserDenormalizer implements DenormalizerInterface, DenormalizerAwareInterf
 {
     use DenormalizerAwareTrait;
 
-    public const FORMAT = 'scim';
-    private const ALREADY_CALLED = 'SCIM_USER_DENORMALIZER_ALREADY_CALLED';
+    public const string FORMAT = 'scim';
+    private const string ALREADY_CALLED = 'SCIM_USER_DENORMALIZER_ALREADY_CALLED';
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {

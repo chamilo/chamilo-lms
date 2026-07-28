@@ -13,9 +13,9 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,15 +28,15 @@ use const FILTER_VALIDATE_BOOLEAN;
  */
 class CourseVoter extends Voter
 {
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
     private RequestStack $requestStack;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
-        private readonly Security $security,
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
         private readonly TranslatorInterface $translator,
         private readonly SettingsManager $settingsManager,
         RequestStack $requestStack,
@@ -68,7 +68,7 @@ class CourseVoter extends Voter
         $user = $token->getUser();
 
         // Admins have access to everything.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

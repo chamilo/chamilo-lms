@@ -15,8 +15,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20240507160300 extends AbstractMigrationChamilo
 {
-    private const FLUSH_BATCH_SIZE = 50;
-    private const PROGRESS_INTERVAL = 100;
+    private const int FLUSH_BATCH_SIZE = 50;
+    private const int PROGRESS_INTERVAL = 100;
 
     public function getDescription(): string
     {

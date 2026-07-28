@@ -21,7 +21,7 @@ class SessionNormalizer implements NormalizerInterface, NormalizerAwareInterface
         private readonly UserHelper $userHelper,
     ) {}
 
-    private const ALREADY_CALLED = 'SESSION_NORMALIZER_ALREADY_CALLED';
+    private const string ALREADY_CALLED = 'SESSION_NORMALIZER_ALREADY_CALLED';
 
     public function normalize($data, ?string $format = null, array $context = []): array
     {

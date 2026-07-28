@@ -34,7 +34,7 @@ class GenericAuthenticator extends AbstractAuthenticator
 {
     use ArrayAccessorTrait;
 
-    public const EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
+    public const string EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
 
     protected string $providerName = 'generic';
 

@@ -31,7 +31,7 @@ use Twig\Environment;
 )]
 class LpProgressReminderCommand extends Command
 {
-    private const NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION = 3;
+    private const int NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION = 3;
 
     public function __construct(
         private readonly CourseRepository $courseRepository,

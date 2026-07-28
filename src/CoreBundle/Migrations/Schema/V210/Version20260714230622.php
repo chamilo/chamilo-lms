@@ -11,9 +11,9 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20260714230622 extends AbstractMigrationChamilo
 {
-    private const VARIABLE = 'wysiwyg_translation_all_languages';
+    private const string VARIABLE = 'wysiwyg_translation_all_languages';
 
-    private const REQUIRED_COLUMNS = [
+    private const array REQUIRED_COLUMNS = [
         'access_url',
         'variable',
         'subkey',

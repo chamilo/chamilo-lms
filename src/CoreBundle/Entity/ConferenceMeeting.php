@@ -422,6 +422,11 @@ class ConferenceMeeting
         return 1 === $this->status;
     }
 
+    public function isRecordingAvailable(): bool
+    {
+        return $this->hasRecording() && $this->hasVideoUrl();
+    }
+
     public function hasRecording(): bool
     {
         return true === $this->record;
@@ -430,10 +435,5 @@ class ConferenceMeeting
     public function hasVideoUrl(): bool
     {
         return !empty($this->videoUrl);
-    }
-
-    public function isRecordingAvailable(): bool
-    {
-        return $this->hasRecording() && $this->hasVideoUrl();
     }
 }

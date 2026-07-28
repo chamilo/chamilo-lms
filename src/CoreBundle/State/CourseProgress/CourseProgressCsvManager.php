@@ -39,9 +39,9 @@ final readonly class CourseProgressCsvManager
 {
     use CourseProgressAccessHelperTrait;
 
-    private const MAX_FILE_SIZE = 5_242_880;
-    private const MAX_ROWS = 10_000;
-    private const MAX_PLAN_ITEMS_PER_THEMATIC = 100;
+    private const int MAX_FILE_SIZE = 5_242_880;
+    private const int MAX_ROWS = 10_000;
+    private const int MAX_PLAN_ITEMS_PER_THEMATIC = 100;
 
     public function __construct(
         private EntityManagerInterface $entityManager,

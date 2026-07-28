@@ -263,6 +263,24 @@ The pipeline is: `translations/messages.pot` → `translations/messages.en_US.po
 - **`USER_SOFT_DELETED = -2`** (defined in `public/main/inc/lib/api.lib.php`). The value `-1` is `INACTIVE_AUTOMATIC` — a different state. The User entity constants are `SOFT_DELETED = -2`, `INACTIVE_AUTOMATIC = -1`, `INACTIVE = 0`, `ACTIVE = 1`.
 - DQL has no `UNION`. Replace with two separate queries merged in PHP via `array_merge`.
 
+### Adding a new platform setting
+
+Adding a variable to a `*SettingsSchema.php` file (e.g. `SecuritySettingsSchema.php`) only defines its default value and form type — that alone is **not enough** for the setting to reach existing installations:
+
+- **Fresh installs** pick it up automatically: `public/main/install/index.php` calls `SettingsManager::installSchemas()`, which reads every registered `*SettingsSchema` class and inserts a row per setting.
+- **Existing/upgraded installations never run this** — `doctrine:migrations:migrate` is the only thing that runs on upgrade, and it does not load fixtures or re-run `installSchemas()`. Without a migration, the setting reads back its schema default via `SettingsManager::getSetting()` (so code doesn't crash), but there is no row in `settings`/`settings_current`, and it is **invisible in Administration > Settings** until one is added.
+
+So a new setting needs both:
+
+1. An entry under the right category key in `SettingsCurrentFixtures::getNewConfigurationSettings()` (`src/CoreBundle/DataFixtures/SettingsCurrentFixtures.php`) — `['name' => ..., 'title' => ..., 'comment' => ...]`.
+2. A fixtures-upsert migration that re-runs the same logic as `Version20250926174000.php`: it reads every setting from `SettingsCurrentFixtures` plus the schema-declared defaults (`SettingsManager::getSchemas()`), `UPDATE`s category/title/comment for settings that already have a row (never touching `selected_value` — an admin's configured value survives being re-synced), and `INSERT`s a row (using the schema default) for ones that don't yet exist. Its `down()` is intentionally a no-op — this is a one-way sync, not meant to be reversed.
+
+**Only one such migration is needed per version** (i.e. per `Schema/V210/` directory, or whichever is current) — **check that directory first**:
+- If one already exists, **don't create a second one**. Just add the fixture entry from step 1; whoever needs the DB updated re-executes the existing migration manually (`doctrine:migrations:execute '<FQCN>' --up`), since Doctrine won't automatically re-run a migration already marked as executed. Developers/ops are expected to know this and re-run it after pulling changes that add settings.
+- Only create a **new** migration (copy `Version20250926174000.php`'s body verbatim into a freshly dated `Version<timestamp>` class, same namespace) if the current version's directory doesn't have a fixtures-upsert migration yet.
+
+`AbstractMigrationChamilo::addSettingCurrent()` (`src/CoreBundle/Migrations/AbstractMigrationChamilo.php`) exists as a single-setting-insert helper but has zero callers repo-wide — the fixtures-upsert migration above is the actual convention to copy, not that helper.
+
 ### Legacy link locations
 
 When replacing a legacy PHP page, search these locations for old links:

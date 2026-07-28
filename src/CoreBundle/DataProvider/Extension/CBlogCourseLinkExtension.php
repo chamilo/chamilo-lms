@@ -44,7 +44,7 @@ final class CBlogCourseLinkExtension implements QueryCollectionExtensionInterfac
      * CBlogComment may have a null blog but always belongs to a post, so it is
      * scoped through post.blog.
      */
-    private const BLOG_PATHS = [
+    private const array BLOG_PATHS = [
         CBlogPost::class => [null, 'blog'],
         CBlogTask::class => [null, 'blog'],
         CBlogTaskRelUser::class => [null, 'blog'],

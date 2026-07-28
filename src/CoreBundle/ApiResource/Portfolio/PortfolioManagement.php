@@ -28,8 +28,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/portfolio/management/action',
             openapi: new Operation(summary: 'Manage Portfolio categories or tags'),
-            read: false,
             security: "is_granted('ROLE_USER')",
+            read: false,
             name: 'post_portfolio_management_action',
             processor: PortfolioManagementProcessor::class,
         ),

@@ -33,10 +33,10 @@ final class ForumSearchStateProvider implements ProviderInterface
 {
     use ForumStateHelperTrait;
 
-    private const MIN_SEARCH_LENGTH = 3;
-    private const MAX_TERMS = 8;
-    private const MAX_RESULTS_PER_TYPE = 40;
-    private const SNIPPET_LENGTH = 180;
+    private const int MIN_SEARCH_LENGTH = 3;
+    private const int MAX_TERMS = 8;
+    private const int MAX_RESULTS_PER_TYPE = 40;
+    private const int SNIPPET_LENGTH = 180;
 
     public function __construct(
         private readonly RequestStack $requestStack,

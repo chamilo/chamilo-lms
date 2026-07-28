@@ -24,17 +24,17 @@ use const PATHINFO_EXTENSION;
 
 final class DocumentRawTextExtractor
 {
-    private const MAX_ARCHIVE_BYTES = 30_000_000; // 30MB safety limit for zip-based docs
+    private const int MAX_ARCHIVE_BYTES = 30_000_000; // 30MB safety limit for zip-based docs
 
-    private const MAX_AI_MEDIA_BYTES = 25_000_000; // 25MB safety limit before sending media to AI
+    private const int MAX_AI_MEDIA_BYTES = 25_000_000; // 25MB safety limit before sending media to AI
 
-    private const AI_METADATA_KEY_TEXT = 'xapian_ai_extracted_text';
+    private const string AI_METADATA_KEY_TEXT = 'xapian_ai_extracted_text';
 
-    private const AI_METADATA_KEY_SIGNATURE = 'xapian_ai_extracted_signature';
+    private const string AI_METADATA_KEY_SIGNATURE = 'xapian_ai_extracted_signature';
 
-    private const GENERIC_EXTENSIONS = ['bin', 'tmp', 'dat'];
+    private const array GENERIC_EXTENSIONS = ['bin', 'tmp', 'dat'];
 
-    private const SUPPORTED_EXTENSIONS = [
+    private const array SUPPORTED_EXTENSIONS = [
         'html', 'htm', 'txt', 'md', 'csv', 'log',
         'pdf', 'ps', 'doc', 'ppt', 'rtf', 'xls',
         'docx', 'docm', 'dotx', 'dotm',
@@ -46,11 +46,11 @@ final class DocumentRawTextExtractor
         'mp4', 'm4v', 'mov',
     ];
 
-    private const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    private const array IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 
-    private const AUDIO_EXTENSIONS = ['mp3', 'm4a', 'wav', 'webm', 'mpga', 'mpeg', 'ogg', 'oga'];
+    private const array AUDIO_EXTENSIONS = ['mp3', 'm4a', 'wav', 'webm', 'mpga', 'mpeg', 'ogg', 'oga'];
 
-    private const VIDEO_EXTENSIONS = ['mp4', 'm4v', 'mov', 'webm'];
+    private const array VIDEO_EXTENSIONS = ['mp4', 'm4v', 'mov', 'webm'];
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,

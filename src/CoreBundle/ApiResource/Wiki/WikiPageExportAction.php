@@ -31,9 +31,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
-            read: false,
-            output: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            output: false,
+            read: false,
             name: self::OPERATION_EXPORT_DOCUMENT,
             processor: WikiPageExportProcessor::class,
         ),
@@ -42,7 +42,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 final class WikiPageExportAction
 {
-    public const OPERATION_EXPORT_DOCUMENT = 'post_wiki_page_export_document';
+    public const string OPERATION_EXPORT_DOCUMENT = 'post_wiki_page_export_document';
 
     #[ApiProperty(identifier: true)]
     public ?int $pageId = null;

@@ -3657,15 +3657,14 @@ class UserManager
      */
     public static function is_admin($user_id)
     {
-        $user_id = (int) $user_id;
-        if (empty($user_id)) {
+        $userId = (int) $user_id;
+        if (empty($userId)) {
             return false;
         }
-        $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
-        $res = Database::query($sql);
 
-        return 1 === Database::num_rows($res);
+        $user = api_get_user_entity($userId);
+
+        return $user instanceof User && ($user->isAdmin() || $user->isSuperAdmin());
     }
 
     /**
@@ -4054,25 +4053,24 @@ class UserManager
      */
     public static function get_all_administrators()
     {
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlId = api_get_current_access_url_id();
+        $adminRoleCondition = "(u.roles LIKE '%ROLE_ADMIN%' OR u.roles LIKE '%ROLE_GLOBAL_ADMIN%')";
+
         if (api_get_multiple_access_url()) {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active, locale
-                    FROM $tbl_url_rel_user as url
-                    INNER JOIN $table_admin as admin
-                    ON (admin.user_id=url.user_id)
-                    INNER JOIN $table_user u
-                    ON (u.id=admin.user_id)
-                    WHERE access_url_id ='".$access_url_id."'";
+            $sql = "SELECT u.id AS user_id, username, firstname, lastname, email, active, locale
+                    FROM $tableAccessUrlRelUser url
+                    INNER JOIN $tableUser u
+                    ON (u.id = url.user_id)
+                    WHERE url.access_url_id = '$accessUrlId'
+                      AND $adminRoleCondition";
         } else {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active, locale
-                    FROM $table_admin as admin
-                    INNER JOIN $table_user u
-                    ON (u.id=admin.user_id)";
+            $sql = "SELECT u.id AS user_id, username, firstname, lastname, email, active, locale
+                    FROM $tableUser u
+                    WHERE $adminRoleCondition";
         }
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
+        $sql .= ' AND u.active <> '.USER_SOFT_DELETED;
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
@@ -5077,28 +5075,14 @@ class UserManager
 
     public static function addUserAsAdmin(User $user)
     {
-        $userId = $user->getId();
-
-        if (!self::is_admin($userId)) {
-            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
-            $sql = "INSERT INTO $table SET user_id = $userId";
-            Database::query($sql);
-        }
-
-        $user->addRole('ROLE_ADMIN');
+        $user->addUserAsAdmin();
         Container::getUserRepository()->updateUser($user, true);
     }
 
     public static function removeUserAdmin(User $user)
     {
-        $userId = (int) $user->getId();
-        if (self::is_admin($userId)) {
-            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
-            $sql = "DELETE FROM $table WHERE user_id = $userId";
-            Database::query($sql);
-            $user->removeRole('ROLE_ADMIN');
-            Container::getUserRepository()->updateUser($user, true);
-        }
+        $user->removeUserAsAdmin();
+        Container::getUserRepository()->updateUser($user, true);
     }
 
     /**

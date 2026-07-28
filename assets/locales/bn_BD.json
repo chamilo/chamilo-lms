@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "{0} \u09aa\u09c3\u09b7\u09cd\u09a0\u09be {1} \u098f\u09b0 \u09ae\u09a7\u09cd\u09af\u09c7",
     "Showing {0} posts": "{0} \u09aa\u09cb\u09b8\u09cd\u099f \u09aa\u09cd\u09b0\u09a6\u09b0\u09cd\u09b6\u09a8 \u0995\u09b0\u09be \u09b9\u099a\u09cd\u099b\u09c7",
     "Showing {0} tasks": "{0} \u0995\u09be\u099c \u09aa\u09cd\u09b0\u09a6\u09b0\u09cd\u09b6\u09a8 \u0995\u09b0\u09be \u09b9\u099a\u09cd\u099b\u09c7",
-    "contains {0} items": "{0} \u0986\u0987\u099f\u09c7\u09ae \u09a7\u09be\u09b0\u09a3 \u0995\u09b0\u09c7"
+    "contains {0} items": "{0} \u0986\u0987\u099f\u09c7\u09ae \u09a7\u09be\u09b0\u09a3 \u0995\u09b0\u09c7",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

@@ -17,8 +17,8 @@ use Throwable;
 
 final class Version20230720143000 extends AbstractMigrationChamilo
 {
-    private const FILE_FLUSH_BATCH_SIZE = 25;
-    private const PROGRESS_INTERVAL = 500;
+    private const int FILE_FLUSH_BATCH_SIZE = 25;
+    private const int PROGRESS_INTERVAL = 500;
 
     private int $seenFiles = 0;
     private int $migratedFiles = 0;

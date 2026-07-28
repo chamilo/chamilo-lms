@@ -17,9 +17,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             uriTemplate: '/learning_paths/{lpId}/runtime',
             requirements: ['lpId' => '\d+'],
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT') or is_granted('ROLE_CURRENT_COURSE_GROUP_STUDENT')",
             name: 'get_learning_path_runtime',
             provider: LearningPathRuntimeProvider::class,
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT') or is_granted('ROLE_CURRENT_COURSE_GROUP_STUDENT')",
         ),
     ],
     normalizationContext: ['groups' => ['learning_path_runtime:read']],

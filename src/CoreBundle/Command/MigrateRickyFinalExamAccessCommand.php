@@ -28,10 +28,10 @@ use const JSON_UNESCAPED_UNICODE;
 )]
 final class MigrateRickyFinalExamAccessCommand extends Command
 {
-    private const EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
-    private const USER_IDENTIFIER_FIELD_VARIABLE = 'fcdice_or_acadis_student_id';
-    private const FINAL_EXAM_TITLE = 'Final Exam';
-    private const SOURCE = 'ricky_legacy_final_exam_rule';
+    private const string EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
+    private const string USER_IDENTIFIER_FIELD_VARIABLE = 'fcdice_or_acadis_student_id';
+    private const string FINAL_EXAM_TITLE = 'Final Exam';
+    private const string SOURCE = 'ricky_legacy_final_exam_rule';
 
     /**
      * Legacy Ricky course timing values converted once into exercise configuration.
@@ -39,7 +39,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
      *
      * @var array<int|string, array{course_duration_minutes: int, final_exam_minutes: int}>
      */
-    private const LEGACY_COURSE_RULES = [
+    private const array LEGACY_COURSE_RULES = [
         '2120' => ['course_duration_minutes' => 2400, 'final_exam_minutes' => 60],
         '2720' => ['course_duration_minutes' => 2400, 'final_exam_minutes' => 60],
         '2770' => ['course_duration_minutes' => 2400, 'final_exam_minutes' => 60],
@@ -82,7 +82,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
      *
      * @var array<string, int>
      */
-    private const LEGACY_FINAL_EXAM_LOCAL_IDS = [
+    private const array LEGACY_FINAL_EXAM_LOCAL_IDS = [
         '2120' => 7,
         '2770' => 6,
         '1510' => 4,

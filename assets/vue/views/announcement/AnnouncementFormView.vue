@@ -160,7 +160,7 @@
           <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
             <div class="space-y-5">
               <BaseSelect
-                v-if="form.languages.length > 2"
+                v-if="resourceLanguageEnabled && form.languages.length > 2"
                 id="resource_language"
                 v-model="form.language"
                 :label="t('Language')"
@@ -441,11 +441,13 @@ import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import CalendarRemindersEditor from "../../components/ccalendarevent/CalendarRemindersEditor.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import announcementService from "../../services/announcementService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(false)
@@ -653,7 +655,7 @@ async function loadForm() {
     attachmentFiles.value = []
     fileComment.value = ""
     showAdvancedSettings.value = Boolean(
-      form.value.language ||
+      (resourceLanguageEnabled.value && form.value.language) ||
         form.value.attachments.length ||
         form.value.sendByEmail ||
         form.value.sendCopyToSelf ||

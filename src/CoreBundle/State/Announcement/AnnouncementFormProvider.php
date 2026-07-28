@@ -38,7 +38,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
 {
     use AnnouncementAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'announcement_form';
+    public const string CSRF_TOKEN_ID = 'announcement_form';
 
     public function __construct(
         private RequestStack $requestStack,

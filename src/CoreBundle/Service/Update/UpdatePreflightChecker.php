@@ -18,8 +18,8 @@ use const PREG_SPLIT_NO_EMPTY;
 
 final readonly class UpdatePreflightChecker
 {
-    private const MINIMUM_FREE_SPACE_BYTES = 209715200;
-    private const PACKAGE_SPACE_MULTIPLIER = 3;
+    private const int MINIMUM_FREE_SPACE_BYTES = 209715200;
+    private const int PACKAGE_SPACE_MULTIPLIER = 3;
 
     public function __construct(
         private KernelInterface $kernel,

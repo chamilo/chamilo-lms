@@ -31,7 +31,7 @@ final class Version20240713125400 extends AbstractMigrationChamilo
                 }, $roles);
 
                 $newRolesSerialized = serialize($updatedRoles);
-                $conn->executeUpdate(
+                $conn->executeStatement(
                     'UPDATE user SET roles = ? WHERE id = ?',
                     [$newRolesSerialized, $user['id']]
                 );
@@ -55,7 +55,7 @@ final class Version20240713125400 extends AbstractMigrationChamilo
 
                 $newRolesSerialized = serialize($updatedRoles);
 
-                $conn->executeUpdate(
+                $conn->executeStatement(
                     'UPDATE user SET roles = ? WHERE id = ?',
                     [$newRolesSerialized, $user['id']]
                 );

@@ -25,7 +25,7 @@ final readonly class WikiCategoryProvider implements ProviderInterface
 {
     use WikiAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'wiki_category_management';
+    public const string CSRF_TOKEN_ID = 'wiki_category_management';
 
     public function __construct(
         private RequestStack $requestStack,

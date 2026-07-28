@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "\u7b2c {0} \u9801\uff0c\u5171 {1} \u9801",
     "Showing {0} posts": "\u986f\u793a {0} \u7bc7\u6587\u7ae0",
     "Showing {0} tasks": "\u986f\u793a {0} \u500b\u4efb\u52d9",
-    "contains {0} items": "\u5305\u542b {0} \u9805"
+    "contains {0} items": "\u5305\u542b {0} \u9805",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

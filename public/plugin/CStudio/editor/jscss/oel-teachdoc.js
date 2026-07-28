@@ -5813,7 +5813,7 @@ bTxt += '</td></tr>';
 bTxt +='</table>';
 
 editor.BlockManager.add('TxtTeach',{
-	label: 'Text Bloc',
+	label: 'Text Block',
 	attributes: {class: 'fa fa-text icon-txtteach'},
 	category: 'Basic',
 	content: {
@@ -14369,7 +14369,7 @@ function displayFXTeachList(myObj){
 		bdDiv += generateIconFx('Text MathJax','txtmathjax');
 		
 		bdDiv += generateIconFx('intro bloc','oelcontentcardinfo');
-		bdDiv += generateIconFx('text bloc circle','oelcontentcardinfocircle');
+		bdDiv += generateIconFx('text block circle','oelcontentcardinfocircle');
 		bdDiv += generateIconFx('Photo legend','oelcontentphotowtitle');
 
 		bdDiv += generateIconFx('2 lists','oelcontentlistbox50');

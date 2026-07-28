@@ -32,12 +32,12 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
 {
     use CourseDescriptionAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'course_description_item';
+    public const string CSRF_TOKEN_ID = 'course_description_item';
 
     /**
      * @var array<int, string>
      */
-    private const TYPE_LABELS = [
+    private const array TYPE_LABELS = [
         CCourseDescription::TYPE_DESCRIPTION => 'Description',
         CCourseDescription::TYPE_OBJECTIVES => 'Objectives',
         CCourseDescription::TYPE_TOPICS => 'Topics',
@@ -51,7 +51,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
     /**
      * @var array<int, string>
      */
-    private const TYPE_ICONS = [
+    private const array TYPE_ICONS = [
         CCourseDescription::TYPE_DESCRIPTION => 'image-text',
         CCourseDescription::TYPE_OBJECTIVES => 'flag-checkered',
         CCourseDescription::TYPE_TOPICS => 'table-of-contents',
@@ -65,7 +65,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
     /**
      * @var array<int, string>
      */
-    private const HELP_TEXTS = [
+    private const array HELP_TEXTS = [
         CCourseDescription::TYPE_DESCRIPTION => 'What is the goal of the course? Are there prerequisites? How is this training connected to other courses?',
         CCourseDescription::TYPE_OBJECTIVES => 'What should the end results be when the learner has completed the course? What are the activities performed during the course?',
         CCourseDescription::TYPE_TOPICS => 'How does the course progress? Where should the learner pay special care? Are there identifiable problems in understanding different areas? How much time should one dedicate to the different areas of the course?',
@@ -78,7 +78,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
     /**
      * @var array<int, string>
      */
-    private const INFORMATION_TEXTS = [
+    private const array INFORMATION_TEXTS = [
         CCourseDescription::TYPE_DESCRIPTION => 'Describe the course (number of hours, serial number, location) and teacher (name, office, Tel., e-mail, office hours . . . .).',
         CCourseDescription::TYPE_OBJECTIVES => 'What are the objectives of the course (competences, skills, outcomes)?',
         CCourseDescription::TYPE_TOPICS => 'List of topics included in the training. Importance of each topic. Level of difficulty. Structure and inter-dependence of the different parts.',

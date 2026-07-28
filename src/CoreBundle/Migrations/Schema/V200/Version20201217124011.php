@@ -27,10 +27,10 @@ use const ENT_QUOTES;
 
 final class Version20201217124011 extends AbstractMigrationChamilo
 {
-    private const RESOURCE_BATCH_SIZE = 500;
-    private const COMMENT_BATCH_SIZE = 250;
-    private const FILE_FLUSH_BATCH_SIZE = 25;
-    private const RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
+    private const int RESOURCE_BATCH_SIZE = 500;
+    private const int COMMENT_BATCH_SIZE = 250;
+    private const int FILE_FLUSH_BATCH_SIZE = 25;
+    private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
 
     public function getDescription(): string
     {

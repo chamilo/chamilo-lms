@@ -15,10 +15,12 @@ use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\DBAL\Schema\Schema;
 use RuntimeException;
+use Throwable;
 
 final class Version20201216120654 extends AbstractMigrationChamilo
 {
-    private const ORM_FLUSH_BATCH_SIZE = 100;
+    private const int ORM_FLUSH_BATCH_SIZE = 100;
+    private const string CGLOSSARY_CID_INDEX = 'idx_ricky_migration_cglossary_c_id';
 
     public function getDescription(): string
     {
@@ -37,6 +39,8 @@ final class Version20201216120654 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->ensureCGlossaryCidIndex();
+
         $glossaryRepo = $this->container->get(CGlossaryRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
@@ -53,43 +57,75 @@ final class Version20201216120654 extends AbstractMigrationChamilo
                 ['courseId' => $courseId]
             );
 
-            $processed = 0;
+            $itemPropsMap = $this->fetchItemPropertiesMap('glossary', $courseId, array_map('intval', $glossaryIds));
 
-            foreach ($glossaryIds as $glossaryIdValue) {
-                $id = (int) $glossaryIdValue;
-
-                /** @var CGlossary $resource */
-                $resource = $glossaryRepo->find($id);
-                if (!$resource instanceof CGlossary || $resource->hasResourceNode()) {
-                    continue;
+            foreach (array_chunk(array_map('intval', $glossaryIds), self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
+                $resourcesById = [];
+                foreach ($glossaryRepo->findBy(['iid' => $idChunk]) as $resourceEntity) {
+                    $resourcesById[$resourceEntity->getIid()] = $resourceEntity;
                 }
 
-                $result = $this->fixItemProperty(
-                    'glossary',
-                    $glossaryRepo,
-                    $course,
-                    $admin,
-                    $resource,
-                    $course
-                );
+                foreach ($idChunk as $id) {
+                    /** @var CGlossary|null $resource */
+                    $resource = $resourcesById[$id] ?? null;
+                    if (!$resource instanceof CGlossary || $resource->hasResourceNode()) {
+                        continue;
+                    }
 
-                if (false === $result) {
-                    continue;
+                    $result = $this->fixItemProperty(
+                        'glossary',
+                        $glossaryRepo,
+                        $course,
+                        $admin,
+                        $resource,
+                        $course,
+                        $itemPropsMap[$id] ?? []
+                    );
+
+                    if (false === $result) {
+                        continue;
+                    }
+
+                    $this->entityManager->persist($resource);
                 }
 
-                $this->entityManager->persist($resource);
-                ++$processed;
+                $this->entityManager->flush();
+                $this->entityManager->clear();
 
-                if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
-                    $this->entityManager->flush();
-                    $this->entityManager->clear();
+                [$course, $admin] = $this->reloadGlossaryContext($courseId, $adminId, $courseRepo, $userRepo);
+            }
+        }
+    }
 
-                    [$course, $admin] = $this->reloadGlossaryContext($courseId, $adminId, $courseRepo, $userRepo);
+    private function ensureCGlossaryCidIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('c_glossary', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('c_glossary') as $index) {
+                if (self::CGLOSSARY_CID_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if ([] !== $columns && 'c_id' === $columns[0]) {
+                    return;
                 }
             }
 
-            $this->entityManager->flush();
-            $this->entityManager->clear();
+            $this->getLogger()->notice('Creating temporary migration index on c_glossary.', [
+                'index' => self::CGLOSSARY_CID_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::CGLOSSARY_CID_INDEX.' ON c_glossary (c_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create c_glossary migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
         }
     }
 

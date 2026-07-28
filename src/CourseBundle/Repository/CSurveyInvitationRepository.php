@@ -36,10 +36,8 @@ final class CSurveyInvitationRepository extends ResourceRepository
             ->andWhere('i.user = :u')
             ->andWhere('s.availFrom <= :now AND s.availTill >= :now')
             ->andWhere('s.answered = 0')
-            ->setParameters([
-                'now' => new Datetime(),
-                'u' => $user,
-            ])
+            ->setParameter('now', new Datetime())
+            ->setParameter('u', $user)
             ->orderBy('s.availTill', Criteria::ASC)
         ;
 
@@ -83,11 +81,9 @@ final class CSurveyInvitationRepository extends ResourceRepository
             ->andWhere('i.user = :user')
             ->andWhere('i.course = :course')
             ->andWhere('i.answered = 1')
-            ->setParameters([
-                'survey' => $survey,
-                'user' => $user,
-                'course' => $course,
-            ])
+            ->setParameter('survey', $survey)
+            ->setParameter('user', $user)
+            ->setParameter('course', $course)
         ;
 
         if ($session) {

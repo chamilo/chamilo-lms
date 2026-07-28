@@ -41,11 +41,11 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
 
-    private const VISIBLE_TUTOR = 0;
-    private const VISIBLE_TUTOR_STUDENT = 1;
-    private const VISIBLE_PUBLIC = 2;
-    private const GRADEBOOK_LINK_TYPE_SURVEY = 8;
-    private const CSRF_TOKEN_ID = 'survey_configuration';
+    private const int VISIBLE_TUTOR = 0;
+    private const int VISIBLE_TUTOR_STUDENT = 1;
+    private const int VISIBLE_PUBLIC = 2;
+    private const int GRADEBOOK_LINK_TYPE_SURVEY = 8;
+    private const string CSRF_TOKEN_ID = 'survey_configuration';
 
     public function __construct(
         private RequestStack $requestStack,

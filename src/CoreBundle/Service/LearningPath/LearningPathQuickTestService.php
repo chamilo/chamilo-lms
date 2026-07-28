@@ -27,10 +27,10 @@ use const ENT_QUOTES;
 
 final readonly class LearningPathQuickTestService
 {
-    private const QUESTION_COUNT = 2;
-    private const MAX_CONTENT_LENGTH = 20000;
-    private const MAX_GENERATED_LENGTH = 12000;
-    private const OUTPUT_TOKEN_BUDGET = 800;
+    private const int QUESTION_COUNT = 2;
+    private const int MAX_CONTENT_LENGTH = 20000;
+    private const int MAX_GENERATED_LENGTH = 12000;
+    private const int OUTPUT_TOKEN_BUDGET = 800;
 
     public function __construct(
         private AiFeatureAccessHelper $aiFeatureAccessHelper,

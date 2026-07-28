@@ -1270,6 +1270,18 @@ class DocumentManager
 
         // info gradebook certificate
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_info, $sessionId, $user_id);
+        $gradebook_grade_score = '';
+        $gradebook_grade_percentage = '';
+        if ($info_grade_certificate && isset($info_grade_certificate['score_certificate'])) {
+            $gradebook_grade_score = $info_grade_certificate['score_certificate'];
+            $cat = Category::load($info_grade_certificate['cat_id']);
+            if (!empty($cat)) {
+                $gradebook_grade_percentage = ScoreDisplay::instance()->display_score(
+                    [$gradebook_grade_score, $cat[0]->get_weight()],
+                    SCORE_PERCENT
+                );
+            }
+        }
         $date_long_certificate = '';
         $date_certificate = '';
         $url = '';
@@ -1345,6 +1357,8 @@ class DocumentManager
             $course_info['code'],
             $course_info['name'],
             isset($info_grade_certificate['grade']) ? $info_grade_certificate['grade'] : '',
+            $gradebook_grade_score,
+            $gradebook_grade_percentage,
             $url,
             '<a href="'.$url.'" target="_blank">'.get_lang('Online link to certificate').'</a>',
             '((certificate_barcode))',
@@ -1369,6 +1383,8 @@ class DocumentManager
             '((course_code))',
             '((course_title))',
             '((gradebook_grade))',
+            '((gradebook_grade_score))',
+            '((gradebook_grade_percentage))',
             '((certificate_link))',
             '((certificate_link_html))',
             '((certificate_barcode))',

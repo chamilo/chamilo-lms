@@ -13,7 +13,7 @@ use const PREG_SPLIT_NO_EMPTY;
 
 final class WikiPageDiffService
 {
-    private const MAX_WORD_TOKENS = 600;
+    private const int MAX_WORD_TOKENS = 600;
 
     /**
      * @return array<int, array{type:string, content:string}>

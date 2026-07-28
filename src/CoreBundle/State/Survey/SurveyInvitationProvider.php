@@ -39,7 +39,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
 {
     use SurveyPersonalitySupportTrait;
 
-    public const CSRF_TOKEN_ID = 'survey_invitation';
+    public const string CSRF_TOKEN_ID = 'survey_invitation';
 
     public function __construct(
         private RequestStack $requestStack,

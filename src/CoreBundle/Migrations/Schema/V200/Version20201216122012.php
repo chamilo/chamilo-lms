@@ -23,8 +23,10 @@ use Throwable;
 
 final class Version20201216122012 extends AbstractMigrationChamilo
 {
-    private const ORM_FLUSH_BATCH_SIZE = 100;
-    private const ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
+    private const int ORM_FLUSH_BATCH_SIZE = 100;
+    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
+    private const string CLP_CATEGORY_CID_INDEX = 'idx_ricky_migration_clp_category_c_id';
+    private const string CLP_CID_INDEX = 'idx_ricky_migration_clp_c_id';
 
     public function getDescription(): string
     {
@@ -34,6 +36,8 @@ final class Version20201216122012 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $this->ensureItemPropertyMigrationIndex();
+        $this->ensureCLpCategoryCidIndex();
+        $this->ensureCLpCidIndex();
 
         /** @var CLpCategoryRepository $lpCategoryRepo */
         $lpCategoryRepo = $this->container->get(CLpCategoryRepository::class);
@@ -166,53 +170,56 @@ final class Version20201216122012 extends AbstractMigrationChamilo
             $repository
         );
 
-        foreach ($ids as $id) {
-            $resource = $repository->find($id);
-            if (!$resource instanceof CLpCategory || $resource->hasResourceNode()) {
-                continue;
+        foreach (array_chunk($ids, self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
+            $resourcesById = [];
+            foreach ($repository->findBy(['iid' => $idChunk]) as $resourceEntity) {
+                $resourcesById[$resourceEntity->getIid()] = $resourceEntity;
             }
 
-            $items = $itemProperties[$id] ?? [];
-            if ([] === $items) {
-                $this->logItemPropertyInconsistency('learnpath_category', $id, (string) $resource);
-                $this->getLogger()->warning('Learning-path category skipped: missing c_item_property.', [
-                    'course_id' => $courseId,
-                    'category_id' => $id,
-                ]);
+            foreach ($idChunk as $id) {
+                $resource = $resourcesById[$id] ?? null;
+                if (!$resource instanceof CLpCategory || $resource->hasResourceNode()) {
+                    continue;
+                }
 
-                continue;
-            }
+                $items = $itemProperties[$id] ?? [];
+                if ([] === $items) {
+                    $this->logItemPropertyInconsistency('learnpath_category', $id, (string) $resource);
+                    $this->getLogger()->warning('Learning-path category skipped: missing c_item_property.', [
+                        'course_id' => $courseId,
+                        'category_id' => $id,
+                    ]);
 
-            $result = $this->fixItemProperty(
-                'learnpath_category',
-                $repository,
-                $course,
-                $admin,
-                $resource,
-                $course,
-                $items,
-                $resourceType
-            );
+                    continue;
+                }
 
-            if (false === $result) {
-                continue;
-            }
-
-            ++$processed;
-            if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
-                $this->entityManager->flush();
-                $this->entityManager->clear();
-                [$course, $admin, $resourceType] = $this->reloadContext(
-                    $courseId,
-                    $adminId,
-                    $courseRepo,
-                    $repository
+                $result = $this->fixItemProperty(
+                    'learnpath_category',
+                    $repository,
+                    $course,
+                    $admin,
+                    $resource,
+                    $course,
+                    $items,
+                    $resourceType
                 );
-            }
-        }
 
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+                if (false === $result) {
+                    continue;
+                }
+
+                ++$processed;
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+            [$course, $admin, $resourceType] = $this->reloadContext(
+                $courseId,
+                $adminId,
+                $courseRepo,
+                $repository
+            );
+        }
 
         $this->getLogger()->info('Learning-path categories migrated.', [
             'course_id' => $courseId,
@@ -254,65 +261,68 @@ final class Version20201216122012 extends AbstractMigrationChamilo
             $repository
         );
 
-        foreach ($ids as $id) {
-            $resource = $repository->find($id);
-            if (!$resource instanceof CLp || $resource->hasResourceNode()) {
-                continue;
+        foreach (array_chunk($ids, self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
+            $resourcesById = [];
+            foreach ($repository->findBy(['iid' => $idChunk]) as $resourceEntity) {
+                $resourcesById[$resourceEntity->getIid()] = $resourceEntity;
             }
 
-            $items = $itemProperties[$id] ?? [];
-            if ([] === $items) {
-                $this->logItemPropertyInconsistency('learnpath', $id, (string) $resource);
-                $this->getLogger()->warning('Learning path skipped: missing c_item_property.', [
-                    'course_id' => $courseId,
-                    'lp_id' => $id,
-                ]);
+            foreach ($idChunk as $id) {
+                $resource = $resourcesById[$id] ?? null;
+                if (!$resource instanceof CLp || $resource->hasResourceNode()) {
+                    continue;
+                }
 
-                continue;
-            }
+                $items = $itemProperties[$id] ?? [];
+                if ([] === $items) {
+                    $this->logItemPropertyInconsistency('learnpath', $id, (string) $resource);
+                    $this->getLogger()->warning('Learning path skipped: missing c_item_property.', [
+                        'course_id' => $courseId,
+                        'lp_id' => $id,
+                    ]);
 
-            $result = $this->fixItemProperty(
-                'learnpath',
-                $repository,
-                $course,
-                $admin,
-                $resource,
-                $course,
-                $items,
-                $resourceType
-            );
+                    continue;
+                }
 
-            if (false === $result) {
-                continue;
-            }
-
-            if (!isset($rootItemLpIds[$id])) {
-                $rootItem = (new CLpItem())
-                    ->setTitle('root')
-                    ->setPath('root')
-                    ->setLp($resource)
-                    ->setItemType('root')
-                ;
-                $this->entityManager->persist($rootItem);
-                $rootItemLpIds[$id] = true;
-                ++$rootsCreated;
-            }
-
-            ++$processed;
-            if (0 === $processed % self::ORM_FLUSH_BATCH_SIZE) {
-                $this->entityManager->flush();
-                $this->entityManager->clear();
-                [$course, $admin, $resourceType] = $this->reloadContext(
-                    $courseId,
-                    $adminId,
-                    $courseRepo,
-                    $repository
+                $result = $this->fixItemProperty(
+                    'learnpath',
+                    $repository,
+                    $course,
+                    $admin,
+                    $resource,
+                    $course,
+                    $items,
+                    $resourceType
                 );
-            }
-        }
 
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+                if (false === $result) {
+                    continue;
+                }
+
+                if (!isset($rootItemLpIds[$id])) {
+                    $rootItem = (new CLpItem())
+                        ->setTitle('root')
+                        ->setPath('root')
+                        ->setLp($resource)
+                        ->setItemType('root')
+                    ;
+                    $this->entityManager->persist($rootItem);
+                    $rootItemLpIds[$id] = true;
+                    ++$rootsCreated;
+                }
+
+                ++$processed;
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+            [$course, $admin, $resourceType] = $this->reloadContext(
+                $courseId,
+                $adminId,
+                $courseRepo,
+                $repository
+            );
+        }
 
         $this->getLogger()->info('Learning paths migrated.', [
             'course_id' => $courseId,
@@ -368,6 +378,70 @@ final class Version20201216122012 extends AbstractMigrationChamilo
         $resourceType = $repository->getResourceType();
 
         return [$course, $admin, $resourceType];
+    }
+
+    private function ensureCLpCategoryCidIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('c_lp_category', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('c_lp_category') as $index) {
+                if (self::CLP_CATEGORY_CID_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if ([] !== $columns && 'c_id' === $columns[0]) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating temporary migration index on c_lp_category.', [
+                'index' => self::CLP_CATEGORY_CID_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::CLP_CATEGORY_CID_INDEX.' ON c_lp_category (c_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create c_lp_category migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function ensureCLpCidIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('c_lp', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('c_lp') as $index) {
+                if (self::CLP_CID_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if ([] !== $columns && 'c_id' === $columns[0]) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating temporary migration index on c_lp.', [
+                'index' => self::CLP_CID_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::CLP_CID_INDEX.' ON c_lp (c_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create c_lp migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
     }
 
     private function ensureItemPropertyMigrationIndex(): void

@@ -22,7 +22,7 @@ use Throwable;
 
 final readonly class LearningPathCopyService
 {
-    private const TOOL_KEY = 'learnpaths';
+    private const string TOOL_KEY = 'learnpaths';
 
     public function __construct(
         private CLpRepository $learningPathRepository,

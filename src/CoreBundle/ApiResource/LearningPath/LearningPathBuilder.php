@@ -17,9 +17,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             uriTemplate: '/learning_paths/{lpId}/builder',
             requirements: ['lpId' => '\d+'],
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_learning_path_builder',
             provider: LearningPathBuilderProvider::class,
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
     ],
     normalizationContext: ['groups' => ['learning_path_builder:read']],

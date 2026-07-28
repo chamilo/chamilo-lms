@@ -68,7 +68,7 @@ class SettingsManager implements SettingsManagerInterface
      * IMPORTANT:
      * - Values are stored as strings in legacy course settings ("true"/"false" is common).
      */
-    private const COURSE_SETTINGS_PROPAGATION = [
+    private const array COURSE_SETTINGS_PROPAGATION = [
         'ai_helpers' => [
             // Only propagate "feature flags" (not JSON providers, etc.)
             'learning_path_generator',

@@ -115,13 +115,6 @@ class Room
         return $this->id;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     /**
      * Get title.
      *
@@ -130,6 +123,13 @@ class Room
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     /**

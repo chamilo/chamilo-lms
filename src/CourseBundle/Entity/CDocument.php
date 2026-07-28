@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\QueryParameter;
@@ -61,7 +62,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/documents/{iid}/toggle_visibility',
             controller: UpdateVisibilityDocument::class,
             openapi: new Operation(
@@ -70,7 +71,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/documents/{iid}/move',
             controller: MoveDocumentAction::class,
             openapi: new Operation(summary: 'Move document (context-aware using ResourceLink.parent)'),
@@ -323,7 +324,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
 
     #[Groups(['document:read', 'document:write', 'document:browse', 'student_publication_rel_document:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['document:read', 'document:write'])]

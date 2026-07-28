@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\ApiResource\LearningPath;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\LearningPathBuilderItemAction;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathBuilderMutationProcessor;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
-        new Put(
+        new Patch(
             uriTemplate: '/learning_path_builder_items/{itemId}',
             requirements: ['itemId' => '\d+'],
             read: false,
@@ -30,14 +30,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/learning_path_builder_items/{itemId}/edit',
             requirements: ['itemId' => '\d+'],
+            status: Response::HTTP_NO_CONTENT,
             controller: LearningPathBuilderItemAction::class,
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            output: false,
             read: false,
             deserialize: false,
-            output: false,
-            status: Response::HTTP_NO_CONTENT,
             name: 'update_learning_path_builder_item_form',
             processor: LearningPathBuilderMutationProcessor::class,
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
     ],
     normalizationContext: ['groups' => ['learning_path_builder_item_update:read']],

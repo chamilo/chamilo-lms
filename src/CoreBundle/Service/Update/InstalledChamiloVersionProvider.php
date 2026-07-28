@@ -12,12 +12,12 @@ use Throwable;
 
 final readonly class InstalledChamiloVersionProvider
 {
-    private const VERSION_FILES = [
+    private const array VERSION_FILES = [
         '/version.php',
         '/public/main/install/version.php',
     ];
 
-    private const VERSION_KEYS = [
+    private const array VERSION_KEYS = [
         'new_version',
         'system_version',
         'version',

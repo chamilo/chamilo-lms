@@ -37391,9 +37391,6 @@ msgstr "Git nuotolinė konfigūracija (.git/config) pasikeitė. Patikrinkite, ar
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Nuskaitymas sustojo anksčiau, nes nepavyko perskaityti pakatalogio (patikrinkite failų leidimus). Žemiau pateikti rezultatai gali būti daliniai."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Per daug pakeitimų, kad būtų galima išvardyti visus; žemiau rodomi tik pirmieji kiekvienos kategorijos įrašai. Visą sąrašą rasite CEF žurnale."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% failo(-ų) nepavyko perskaityti (leidimai) ir jie buvo praleisti."
 
@@ -37477,4 +37474,7 @@ msgstr "Dar nėra užfiksuota jokių įspėjimų."
 
 msgid "Git remote changed"
 msgstr "Git nuotolinis šaltinis pakeistas"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Per daug pakeitimų, kad būtų galima parodyti visus; žemiau rodomi tik pirmieji kiekvienos kategorijos įrašai. Visą sąrašą rasite %link_start%CEF žurnale%link_end%."
 

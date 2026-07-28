@@ -55,14 +55,14 @@ use const JSON_THROW_ON_ERROR;
 final readonly class LearningPathConfigurationProcessor implements ProcessorInterface
 {
     use LearningPathStateHelperTrait;
-    private const VIEW_MODES = ['fullscreen', 'embedded', 'embedframe', 'impress'];
+    private const array VIEW_MODES = ['fullscreen', 'embedded', 'embedframe', 'impress'];
 
-    private const ITEM_TYPE_LEARNING_PATH = 4;
+    private const int ITEM_TYPE_LEARNING_PATH = 4;
 
     /**
      * @var int[]
      */
-    private const FILE_EXTRA_FIELD_TYPES = [
+    private const array FILE_EXTRA_FIELD_TYPES = [
         ExtraField::FIELD_TYPE_FILE_IMAGE,
         ExtraField::FIELD_TYPE_FILE,
     ];

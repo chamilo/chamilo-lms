@@ -17,7 +17,7 @@ final class DocumentAiAssistedNormalizer implements NormalizerAwareInterface, No
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'chamilo_document_ai_assisted_normalizer_called';
+    private const string ALREADY_CALLED = 'chamilo_document_ai_assisted_normalizer_called';
 
     public function __construct(
         private readonly AiDisclosureHelper $aiDisclosureHelper,

@@ -16,8 +16,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/forum/action-token',
-            provider: ForumActionTokenProvider::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            provider: ForumActionTokenProvider::class,
         ),
     ],
     normalizationContext: [

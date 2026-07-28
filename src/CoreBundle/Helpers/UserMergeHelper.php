@@ -23,7 +23,7 @@ use const JSON_UNESCAPED_UNICODE;
 
 final class UserMergeHelper
 {
-    private const LOG_PREFIX = '[UserMergeHelper]';
+    private const string LOG_PREFIX = '[UserMergeHelper]';
     private bool $enableLogs = false;
 
     public function __construct(
@@ -666,9 +666,7 @@ final class UserMergeHelper
     private function listTableColumnsMeta(Connection $conn, string $table): array
     {
         try {
-            $sm = method_exists($conn, 'createSchemaManager')
-                ? $conn->createSchemaManager()
-                : $conn->getSchemaManager();
+            $sm = $conn->createSchemaManager();
 
             return $sm->listTableColumns($table);
         } catch (DbalException $e) {

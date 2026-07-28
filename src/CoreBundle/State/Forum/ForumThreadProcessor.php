@@ -56,7 +56,7 @@ final class ForumThreadProcessor implements ProcessorInterface
     use ForumNotificationHelperTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
-    private const LINK_FORUM_THREAD = 5;
+    private const int LINK_FORUM_THREAD = 5;
 
     public function __construct(
         private readonly CForumRepository $forumRepository,

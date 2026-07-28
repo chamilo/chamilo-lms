@@ -25,13 +25,13 @@ class AccessUserUrlFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         /** @var User $admin */
-        $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE);
+        $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE, User::class);
 
         /** @var User $anon */
-        $anon = $this->getReference(AccessUserFixtures::ANON_USER_REFERENCE);
+        $anon = $this->getReference(AccessUserFixtures::ANON_USER_REFERENCE, User::class);
 
         /** @var User $fallbackUser */
-        $fallbackUser = $this->getReference(AccessUserFixtures::FALLBACK_USER_REFERENCE);
+        $fallbackUser = $this->getReference(AccessUserFixtures::FALLBACK_USER_REFERENCE, User::class);
 
         // Login as admin
         $token = new UsernamePasswordToken(

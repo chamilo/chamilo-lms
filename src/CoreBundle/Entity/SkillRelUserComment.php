@@ -46,31 +46,16 @@ class SkillRelUserComment
         return $this->skillRelUser;
     }
 
-    public function getFeedbackGiver(): ?User
-    {
-        return $this->feedbackGiver;
-    }
-
-    public function getFeedbackText(): string
-    {
-        return $this->feedbackText;
-    }
-
-    public function getFeedbackValue(): ?int
-    {
-        return $this->feedbackValue;
-    }
-
-    public function getFeedbackDateTime(): DateTime
-    {
-        return $this->feedbackDateTime;
-    }
-
     public function setSkillRelUser(SkillRelUser $skillRelUser): self
     {
         $this->skillRelUser = $skillRelUser;
 
         return $this;
+    }
+
+    public function getFeedbackGiver(): ?User
+    {
+        return $this->feedbackGiver;
     }
 
     public function setFeedbackGiver(User $feedbackGiver): self
@@ -80,6 +65,11 @@ class SkillRelUserComment
         return $this;
     }
 
+    public function getFeedbackText(): string
+    {
+        return $this->feedbackText;
+    }
+
     public function setFeedbackText(string $feedbackText): self
     {
         $this->feedbackText = $feedbackText;
@@ -87,11 +77,21 @@ class SkillRelUserComment
         return $this;
     }
 
+    public function getFeedbackValue(): ?int
+    {
+        return $this->feedbackValue;
+    }
+
     public function setFeedbackValue(?int $feedbackValue): self
     {
         $this->feedbackValue = $feedbackValue;
 
         return $this;
+    }
+
+    public function getFeedbackDateTime(): DateTime
+    {
+        return $this->feedbackDateTime;
     }
 
     public function setFeedbackDateTime(DateTime $feedbackDateTime): self

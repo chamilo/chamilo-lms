@@ -15,9 +15,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/learning_paths/action-token',
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_learning_path_action_token',
             provider: LearningPathActionTokenProvider::class,
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
     ],
     normalizationContext: ['groups' => ['learning_path_action_token:read']],

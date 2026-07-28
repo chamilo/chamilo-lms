@@ -288,18 +288,6 @@ class XApiCmi5Item
         return $this;
     }
 
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?self $parent): static
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, self>
      */
@@ -326,6 +314,18 @@ class XApiCmi5Item
                 $child->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): static
+    {
+        $this->parent = $parent;
 
         return $this;
     }

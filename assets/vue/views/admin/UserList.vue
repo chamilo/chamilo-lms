@@ -526,6 +526,7 @@
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import { useToast } from "primevue/usetoast"
 import { useConfirmation } from "../../composables/useConfirmation"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -535,6 +536,7 @@ import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
+const toast = useToast()
 const route = useRoute()
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -626,6 +628,10 @@ function canLoginAs(data) {
   return false
 }
 
+function actionError(error) {
+  return error?.response?.data?.error || t("An error occurred")
+}
+
 function confirmAction(action, data, title) {
   requireConfirmation({
     title,
@@ -643,6 +649,7 @@ function confirmAction(action, data, title) {
         await load()
       } catch (e) {
         console.error("Error performing action:", e)
+        toast.add({ severity: "error", summary: t("Error"), detail: actionError(e), life: 5000 })
       }
     },
   })
@@ -658,12 +665,17 @@ function confirmBulkAction(action) {
         selectedItems.value.forEach((item) => formData.append("user_ids[]", String(item.id)))
 
         // URLSearchParams body makes axios send application/x-www-form-urlencoded.
-        await baseService.post("/admin/user-list-action", formData)
+        const data = await baseService.post("/admin/user-list-action", formData)
+
+        if (data?.error) {
+          toast.add({ severity: "warn", summary: t("Warning"), detail: data.error, life: 5000 })
+        }
 
         selectedItems.value = []
         await load()
       } catch (e) {
         console.error("Error performing bulk action:", e)
+        toast.add({ severity: "error", summary: t("Error"), detail: actionError(e), life: 5000 })
       }
     },
   })

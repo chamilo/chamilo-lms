@@ -13,8 +13,8 @@ use Throwable;
 
 final class AiMediaFailoverService
 {
-    private const DEFAULT_TOOL = 'default';
-    private const ACTIVE_PROVIDER_SESSION_PREFIX = 'ai_media_active_provider_';
+    private const string DEFAULT_TOOL = 'default';
+    private const string ACTIVE_PROVIDER_SESSION_PREFIX = 'ai_media_active_provider_';
 
     public function __construct(
         private readonly RequestStack $requestStack,

@@ -360,18 +360,6 @@ class XApiObject
         return $this;
     }
 
-    public function getGroup(): ?self
-    {
-        return $this->group;
-    }
-
-    public function setGroup(?self $group): static
-    {
-        $this->group = $group;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, self>
      */
@@ -398,6 +386,18 @@ class XApiObject
                 $member->setGroup(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGroup(): ?self
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?self $group): static
+    {
+        $this->group = $group;
 
         return $this;
     }

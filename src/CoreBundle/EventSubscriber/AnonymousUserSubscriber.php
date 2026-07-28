@@ -29,23 +29,23 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 class AnonymousUserSubscriber implements EventSubscriberInterface
 {
-    private const FIREWALL_NAME = 'main';
-    private const MAX_ANONYMOUS_USERS = 5;
+    private const string FIREWALL_NAME = 'main';
+    private const int MAX_ANONYMOUS_USERS = 5;
 
     // Session flags for the “active public course” context
-    private const S_ACTIVE_CID = '_active_public_cid';
-    private const S_ACTIVE_PUBLIC = '_active_public_flag';
-    private const S_ACTIVE_EXPIRES_AT = '_active_public_expires_at';
-    private const S_SECURITY_TOKEN = '_security_'.self::FIREWALL_NAME;
+    private const string S_ACTIVE_CID = '_active_public_cid';
+    private const string S_ACTIVE_PUBLIC = '_active_public_flag';
+    private const string S_ACTIVE_EXPIRES_AT = '_active_public_expires_at';
+    private const string S_SECURITY_TOKEN = '_security_'.self::FIREWALL_NAME;
 
     // TTL (in seconds) for the “public course anonymous session” window
-    private const ACTIVE_TTL_SECONDS = 600; // 10 minutes
+    private const int ACTIVE_TTL_SECONDS = 600; // 10 minutes
 
     /**
      * Whitelist: only preserve the anonymous context on the contact pages.
      * NOTE: We intentionally avoid whitelisting all LP paths here to keep scope tight.
      */
-    private const ANON_WHITELIST_PREFIXES = [
+    private const array ANON_WHITELIST_PREFIXES = [
         '/contact',
         '/main/lp/contact',
     ];

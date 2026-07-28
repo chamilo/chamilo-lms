@@ -24,7 +24,7 @@ use const DATE_ATOM;
  */
 final class XapianIndexService
 {
-    private const DEFAULT_LANGUAGE = 'english';
+    private const string DEFAULT_LANGUAGE = 'english';
 
     public function __construct(
         private readonly SearchIndexPathResolver $indexPathResolver,

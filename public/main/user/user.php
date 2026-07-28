@@ -18,11 +18,11 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool = TOOL_USER;
+$current_course_tool = 'member';
 $this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
-api_protect_course_script(true, false, 'user');
+api_protect_course_script(true, false, 'member');
 
 if (!api_is_platform_admin(true)) {
     if (!api_is_course_admin() && !api_is_coach()) {
@@ -609,7 +609,7 @@ if (isset($origin) && 'learnpath' === $origin) {
     Display::display_header($tool_name, 'User');
 }
 
-Display::display_introduction_section(TOOL_USER);
+Display::display_introduction_section('member');
 $actions = '';
 $selectedTab = 1;
 
@@ -803,7 +803,7 @@ function get_number_of_users()
  * @param string $lastname
  * @param string $username
  * @param string $official_code
- * @param $keyword
+ * @param string $keyword
  *
  * @return bool
  */

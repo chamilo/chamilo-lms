@@ -12,19 +12,19 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20200821224244 extends AbstractMigrationChamilo
 {
-    private const OLD_MESSAGE_STATUS_NEW = 0;
-    private const OLD_MESSAGE_STATUS_UNREAD = 1;
-    private const OLD_MESSAGE_STATUS_DELETED = 3;
-    private const OLD_MESSAGE_STATUS_OUTBOX = 4;
-    private const OLD_MESSAGE_STATUS_INVITATION_PENDING = 5;
-    private const OLD_MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
-    private const OLD_MESSAGE_STATUS_INVITATION_DENIED = 7;
-    private const OLD_MESSAGE_STATUS_WALL = 8;
-    private const OLD_MESSAGE_STATUS_WALL_DELETE = 9;
-    private const OLD_MESSAGE_STATUS_WALL_POST = 10;
-    private const OLD_MESSAGE_STATUS_CONVERSATION = 11;
-    private const OLD_MESSAGE_STATUS_FORUM = 12;
-    private const OLD_MESSAGE_STATUS_PROMOTED = 13;
+    private const int OLD_MESSAGE_STATUS_NEW = 0;
+    private const int OLD_MESSAGE_STATUS_UNREAD = 1;
+    private const int OLD_MESSAGE_STATUS_DELETED = 3;
+    private const int OLD_MESSAGE_STATUS_OUTBOX = 4;
+    private const int OLD_MESSAGE_STATUS_INVITATION_PENDING = 5;
+    private const int OLD_MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
+    private const int OLD_MESSAGE_STATUS_INVITATION_DENIED = 7;
+    private const int OLD_MESSAGE_STATUS_WALL = 8;
+    private const int OLD_MESSAGE_STATUS_WALL_DELETE = 9;
+    private const int OLD_MESSAGE_STATUS_WALL_POST = 10;
+    private const int OLD_MESSAGE_STATUS_CONVERSATION = 11;
+    private const int OLD_MESSAGE_STATUS_FORUM = 12;
+    private const int OLD_MESSAGE_STATUS_PROMOTED = 13;
 
     public function getDescription(): string
     {

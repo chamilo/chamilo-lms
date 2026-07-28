@@ -34,7 +34,7 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
 {
     use AnnouncementAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'announcement_email';
+    public const string CSRF_TOKEN_ID = 'announcement_email';
 
     public function __construct(
         private RequestStack $requestStack,

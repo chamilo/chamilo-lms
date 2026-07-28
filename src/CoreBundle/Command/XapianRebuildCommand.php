@@ -39,7 +39,7 @@ use const DIRECTORY_SEPARATOR;
 )]
 final class XapianRebuildCommand extends Command
 {
-    private const DEFAULT_BATCH_SIZE = 50;
+    private const int DEFAULT_BATCH_SIZE = 50;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

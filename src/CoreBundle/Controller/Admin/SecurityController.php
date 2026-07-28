@@ -17,10 +17,12 @@ use DateTimeImmutable;
 use RuntimeException;
 use Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -35,11 +37,11 @@ use const ENT_SUBSTITUTE;
 #[Route('/admin/security')]
 final class SecurityController extends BaseController
 {
-    private const PASSWORD_STRENGTH_SCAN_BATCH_SIZE = 1;
-    private const PASSWORD_STRENGTH_SCAN_FOUND_KEY = 'admin_password_strength_found_user_ids';
-    private const PASSWORD_STRENGTH_SCAN_OFFSET_KEY = 'admin_password_strength_scan_offset';
-    private const PASSWORD_STRENGTH_SCAN_TOTAL_KEY = 'admin_password_strength_scan_total';
-    private const PASSWORD_STRENGTH_SCAN_FILTER_IDS_KEY = 'admin_password_strength_scan_filter_user_ids';
+    private const int PASSWORD_STRENGTH_SCAN_BATCH_SIZE = 1;
+    private const string PASSWORD_STRENGTH_SCAN_FOUND_KEY = 'admin_password_strength_found_user_ids';
+    private const string PASSWORD_STRENGTH_SCAN_OFFSET_KEY = 'admin_password_strength_scan_offset';
+    private const string PASSWORD_STRENGTH_SCAN_TOTAL_KEY = 'admin_password_strength_scan_total';
+    private const string PASSWORD_STRENGTH_SCAN_FILTER_IDS_KEY = 'admin_password_strength_scan_filter_user_ids';
 
     public function __construct(
         private readonly TrackELoginRecordRepository $repo,
@@ -318,10 +320,28 @@ final class SecurityController extends BaseController
             'csrf_token' => $csrfToken,
             'settings_search_url' => $this->generateUrl(
                 'chamilo_platform_settings_search',
-                ['keyword' => 'file_integrity_check_enabled']
+                ['keyword' => 'file_integrity_check_notify_admins']
             ),
+            'cef_log_url' => $this->generateUrl('admin_security_file_integrity_cef_log'),
             'project_dir' => $this->getParameter('kernel.project_dir'),
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/file-integrity/cef-log', name: 'admin_security_file_integrity_cef_log', methods: ['GET'])]
+    public function fileIntegrityCefLog(): BinaryFileResponse
+    {
+        $path = $this->fileIntegrityChecker->getCefLogPath();
+
+        if (!is_file($path)) {
+            throw $this->createNotFoundException('No file integrity events have been logged yet.');
+        }
+
+        $response = new BinaryFileResponse($path);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'file_integrity.log');
+        $response->headers->set('Content-Type', 'text/plain');
+
+        return $response;
     }
 
     #[IsGranted('ROLE_GLOBAL_ADMIN')]

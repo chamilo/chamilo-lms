@@ -46,18 +46,6 @@ class Templates
     protected ?Asset $image = null;
 
     /**
-     * Set title.
-     *
-     * @return Templates
-     */
-    public function setTitle(string $title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
      * Get title.
      *
      * @return string
@@ -68,13 +56,13 @@ class Templates
     }
 
     /**
-     * Set description.
+     * Set title.
      *
      * @return Templates
      */
-    public function setDescription(string $description)
+    public function setTitle(string $title)
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
@@ -90,13 +78,13 @@ class Templates
     }
 
     /**
-     * Set refDoc.
+     * Set description.
      *
      * @return Templates
      */
-    public function setRefDoc(int $refDoc)
+    public function setDescription(string $description)
     {
-        $this->refDoc = $refDoc;
+        $this->description = $description;
 
         return $this;
     }
@@ -109,6 +97,18 @@ class Templates
     public function getRefDoc()
     {
         return $this->refDoc;
+    }
+
+    /**
+     * Set refDoc.
+     *
+     * @return Templates
+     */
+    public function setRefDoc(int $refDoc)
+    {
+        $this->refDoc = $refDoc;
+
+        return $this;
     }
 
     public function getImage(): ?Asset

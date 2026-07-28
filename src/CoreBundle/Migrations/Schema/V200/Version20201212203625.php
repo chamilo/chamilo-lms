@@ -29,10 +29,13 @@ final class Version20201212203625 extends AbstractMigrationChamilo
      *
      * @var string[]
      */
-    private const DOCUMENT_BATCH_SIZE = 100;
-    private const ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
+    private const int DOCUMENT_BATCH_SIZE = 100;
+    private const int AUDIO_ASSET_FLUSH_BATCH_SIZE = 50;
+    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
+    private const string CDOCUMENT_CID_INDEX = 'idx_ricky_migration_cdocument_c_id';
+    private const string TRACK_E_ATTEMPT_LOOKUP_INDEX = 'idx_ricky_migration_track_e_attempt_uid_qid_fn';
 
-    private const FOLDER_LIKE_FILETYPES = [
+    private const array FOLDER_LIKE_FILETYPES = [
         'folder',
         'user_folder',
         'user_folder_ses',
@@ -50,6 +53,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
     {
         $this->ensureCDocumentFiletypeVarchar15();
         $this->ensureItemPropertyMigrationIndex();
+        $this->ensureCDocumentCidIndex();
+        $this->ensureTrackEAttemptLookupIndex();
 
         /** @var CDocumentRepository $documentRepo */
         $documentRepo = $this->container->get(CDocumentRepository::class);
@@ -107,6 +112,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         // --------------------------
         // 1) Teacher exercise audio
         // --------------------------
+        $pendingFeedbackRows = [];
+
         foreach ($courses as $courseData) {
             $courseId = (int) ($courseData['id'] ?? 0);
             $courseDirectory = (string) ($courseData['directory'] ?? '');
@@ -164,20 +171,27 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     ;
 
                     $this->entityManager->persist($asset);
-                    $this->entityManager->flush();
+                    $pendingFeedbackRows[] = [$attemptId, $userId, $asset];
 
-                    $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
+                    if (\count($pendingFeedbackRows) >= self::AUDIO_ASSET_FLUSH_BATCH_SIZE) {
+                        $this->flushPendingFeedbackRows($pendingFeedbackRows);
+                        $pendingFeedbackRows = [];
+                    }
                 } catch (Throwable) {
                     // Ignore single-file failures to keep the migration running.
                 }
             }
+        }
 
-            $this->entityManager->clear();
+        if ([] !== $pendingFeedbackRows) {
+            $this->flushPendingFeedbackRows($pendingFeedbackRows);
         }
 
         // --------------------------
         // 2) Student exercise audio
         // --------------------------
+        $pendingFileRows = [];
+
         foreach ($courses as $courseData) {
             $courseId = (int) ($courseData['id'] ?? 0);
             $courseDirectory = (string) ($courseData['directory'] ?? '');
@@ -248,15 +262,20 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     ;
 
                     $this->entityManager->persist($asset);
-                    $this->entityManager->flush();
+                    $pendingFileRows[] = [$attemptId, $asset];
 
-                    $this->insertAttemptFileRow($attemptId, $asset);
+                    if (\count($pendingFileRows) >= self::AUDIO_ASSET_FLUSH_BATCH_SIZE) {
+                        $this->flushPendingFileRows($pendingFileRows);
+                        $pendingFileRows = [];
+                    }
                 } catch (Throwable) {
                     // Ignore single-file failures to keep the migration running.
                 }
             }
+        }
 
-            $this->entityManager->clear();
+        if ([] !== $pendingFileRows) {
+            $this->flushPendingFileRows($pendingFileRows);
         }
 
         // --------------------------
@@ -518,6 +537,70 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         return false !== $v;
     }
 
+    /**
+     * @param array<int, array{0: int, 1: int, 2: Asset}> $pendingRows
+     */
+    private function flushPendingFeedbackRows(array $pendingRows): void
+    {
+        try {
+            $this->entityManager->flush();
+            foreach ($pendingRows as [$attemptId, $userId, $asset]) {
+                $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
+            }
+            $this->entityManager->clear();
+
+            return;
+        } catch (Throwable) {
+            $this->entityManager->clear();
+        }
+
+        // A single bad file must not drop the whole batch: retry one by one,
+        // exactly like the original per-row flush this batching replaced.
+        foreach ($pendingRows as [$attemptId, $userId, $asset]) {
+            try {
+                $this->entityManager->persist($asset);
+                $this->entityManager->flush();
+                $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
+            } catch (Throwable) {
+                // Ignore single-file failures to keep the migration running.
+            }
+        }
+
+        $this->entityManager->clear();
+    }
+
+    /**
+     * @param array<int, array{0: int, 1: Asset}> $pendingRows
+     */
+    private function flushPendingFileRows(array $pendingRows): void
+    {
+        try {
+            $this->entityManager->flush();
+            foreach ($pendingRows as [$attemptId, $asset]) {
+                $this->insertAttemptFileRow($attemptId, $asset);
+            }
+            $this->entityManager->clear();
+
+            return;
+        } catch (Throwable) {
+            $this->entityManager->clear();
+        }
+
+        // A single bad file must not drop the whole batch: retry one by one,
+        // exactly like the original per-row flush this batching replaced.
+        foreach ($pendingRows as [$attemptId, $asset]) {
+            try {
+                $this->entityManager->persist($asset);
+                $this->entityManager->flush();
+                $this->insertAttemptFileRow($attemptId, $asset);
+            } catch (Throwable) {
+                // Ignore single-file failures to keep the migration running.
+            }
+        }
+
+        $this->entityManager->clear();
+    }
+
     private function insertAttemptFeedbackRow(int $attemptId, int $userId, Asset $asset): void
     {
         $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
@@ -579,6 +662,74 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             );
         } catch (Throwable $exception) {
             $this->getLogger()->warning('Could not create c_item_property migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function ensureCDocumentCidIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('c_document', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('c_document') as $index) {
+                if (self::CDOCUMENT_CID_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if ([] !== $columns && 'c_id' === $columns[0]) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating temporary migration index on c_document.', [
+                'index' => self::CDOCUMENT_CID_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::CDOCUMENT_CID_INDEX.' ON c_document (c_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create c_document migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function ensureTrackEAttemptLookupIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('track_e_attempt', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('track_e_attempt') as $index) {
+                if (self::TRACK_E_ATTEMPT_LOOKUP_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if (\count($columns) >= 3
+                    && 'user_id' === $columns[0]
+                    && 'question_id' === $columns[1]
+                    && 'filename' === $columns[2]
+                ) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating temporary migration index on track_e_attempt.', [
+                'index' => self::TRACK_E_ATTEMPT_LOOKUP_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::TRACK_E_ATTEMPT_LOOKUP_INDEX.' ON track_e_attempt (user_id, question_id, filename)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create track_e_attempt migration index; continuing safely.', [
                 'error' => $exception->getMessage(),
             ]);
         }

@@ -30,18 +30,6 @@ class UserGroupRelUserGroup
     protected int $relationType;
 
     /**
-     * Set groupId.
-     *
-     * @return $this
-     */
-    public function setGroupId(int $groupId)
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
      * Get groupId.
      *
      * @return int
@@ -52,13 +40,13 @@ class UserGroupRelUserGroup
     }
 
     /**
-     * Set subgroupId.
+     * Set groupId.
      *
      * @return $this
      */
-    public function setSubgroupId(int $subgroupId)
+    public function setGroupId(int $groupId)
     {
-        $this->subgroupId = $subgroupId;
+        $this->groupId = $groupId;
 
         return $this;
     }
@@ -74,13 +62,13 @@ class UserGroupRelUserGroup
     }
 
     /**
-     * Set relationType.
+     * Set subgroupId.
      *
      * @return $this
      */
-    public function setRelationType(int $relationType)
+    public function setSubgroupId(int $subgroupId)
     {
-        $this->relationType = $relationType;
+        $this->subgroupId = $subgroupId;
 
         return $this;
     }
@@ -93,6 +81,18 @@ class UserGroupRelUserGroup
     public function getRelationType()
     {
         return $this->relationType;
+    }
+
+    /**
+     * Set relationType.
+     *
+     * @return $this
+     */
+    public function setRelationType(int $relationType)
+    {
+        $this->relationType = $relationType;
+
+        return $this;
     }
 
     /**

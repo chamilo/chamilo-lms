@@ -41,9 +41,9 @@ class ResourceLink implements Stringable
     use SoftDeleteableEntity;
     use TimestampableTypedEntity;
 
-    public const VISIBILITY_DRAFT = 0;
-    public const VISIBILITY_PENDING = 1;
-    public const VISIBILITY_PUBLISHED = 2;
+    public const int VISIBILITY_DRAFT = 0;
+    public const int VISIBILITY_PENDING = 1;
+    public const int VISIBILITY_PUBLISHED = 2;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -53,43 +53,25 @@ class ResourceLink implements Stringable
     #[ORM\ManyToOne(targetEntity: ResourceNode::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
-
-    /**
-     * Parent link for the document hierarchy by context (course/session).
-     */
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    private ?self $parent = null;
-
-    /**
-     * @var Collection<int, self>
-     *
-     * Children links in the document hierarchy by context
-     */
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
-    private Collection $children;
-
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
-
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Session::class, cascade: ['persist'], inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
-    #[Groups(['resource_link:read', 'resource_link:write', 'student_publication:read', 'student_publication_comment:read'])]
+    #[Groups([
+        'resource_link:read', 'resource_link:write', 'student_publication:read', 'student_publication_comment:read',
+    ])]
     protected ?Session $session = null;
-
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Usergroup::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Usergroup $userGroup = null;
-
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: CGroup::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
-
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
@@ -105,7 +87,6 @@ class ResourceLink implements Stringable
         orphanRemoval: true
     )]
     protected Collection $resourceRights;
-
     #[Groups([
         'ctool:read',
         'c_tool_intro:read',
@@ -113,15 +94,27 @@ class ResourceLink implements Stringable
     ])]
     #[ORM\Column(name: 'visibility', type: 'integer', nullable: false)]
     protected int $visibility;
-
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write', 'document:read'])]
     #[ORM\Column(name: 'start_visibility_at', type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $startVisibilityAt = null;
-
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write', 'document:read'])]
     #[ORM\Column(name: 'end_visibility_at', type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $endVisibilityAt = null;
 
+    /**
+     * Parent link for the document hierarchy by context (course/session).
+     */
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?self $parent = null;
+
+    /**
+     * @var Collection<int, self>
+     *
+     * Children links in the document hierarchy by context
+     */
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
+    private Collection $children;
     #[Gedmo\SortablePosition]
     #[ORM\Column]
     private int $displayOrder;
@@ -288,6 +281,11 @@ class ResourceLink implements Stringable
         return $this;
     }
 
+    public function isPublished(): bool
+    {
+        return self::VISIBILITY_PUBLISHED === $this->getVisibility();
+    }
+
     public function getVisibility(): int
     {
         return $this->visibility;
@@ -315,11 +313,6 @@ class ResourceLink implements Stringable
             'Pending' => self::VISIBILITY_PENDING,
             'Published' => self::VISIBILITY_PUBLISHED,
         ];
-    }
-
-    public function isPublished(): bool
-    {
-        return self::VISIBILITY_PUBLISHED === $this->getVisibility();
     }
 
     public function isPending(): bool

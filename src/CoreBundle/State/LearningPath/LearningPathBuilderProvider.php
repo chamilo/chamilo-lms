@@ -54,9 +54,9 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
 {
     use LearningPathStateHelperTrait;
 
-    private const ACTION_TOKEN_INTENTION = 'learning_path_action';
-    private const AUDIO_EXTENSIONS = ['aac', 'm4a', 'mp3', 'ogg', 'wav', 'webm'];
-    private const DEFAULT_FINAL_ITEM_CONTENT = '<div>Congratulations! You have finished this learning path</div>((certificate)) <br />((skill))';
+    private const string ACTION_TOKEN_INTENTION = 'learning_path_action';
+    private const array AUDIO_EXTENSIONS = ['aac', 'm4a', 'mp3', 'ogg', 'wav', 'webm'];
+    private const string DEFAULT_FINAL_ITEM_CONTENT = '<div>Congratulations! You have finished this learning path</div>((certificate)) <br />((skill))';
 
     public function __construct(
         private EntityManagerInterface $entityManager,

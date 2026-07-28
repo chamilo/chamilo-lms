@@ -35,11 +35,11 @@ use const ENT_QUOTES;
 
 final readonly class TicketAdminService
 {
-    private const DEFAULT_PRIORITY_CODES = ['1', '2', '3'];
-    private const DEFAULT_STATUS_CODES = ['1', '2', '3', '4', '5'];
-    private const STATUS_CLOSED = 4;
-    private const STATUS_FORWARDED = 5;
-    private const STATUS_NEW = 1;
+    private const array DEFAULT_PRIORITY_CODES = ['1', '2', '3'];
+    private const array DEFAULT_STATUS_CODES = ['1', '2', '3', '4', '5'];
+    private const int STATUS_CLOSED = 4;
+    private const int STATUS_FORWARDED = 5;
+    private const int STATUS_NEW = 1;
 
     public function __construct(
         private EntityManagerInterface $entityManager,

@@ -82,14 +82,22 @@ use const SORT_NATURAL;
 #[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
 {
-    public const CLOSED = 0;
-    public const REGISTERED = 1;
+    public const int CLOSED = 0;
+    public const int REGISTERED = 1;
     // Only registered users in the course.
-    public const OPEN_PLATFORM = 2;
+    public const int OPEN_PLATFORM = 2;
     // All users registered in the platform (default).
-    public const OPEN_WORLD = 3;
-    public const HIDDEN = 4;
-
+    public const int OPEN_WORLD = 3;
+    public const int HIDDEN = 4;
+    #[Groups([
+        'course:read',
+        'course_catalogue:read',
+    ])]
+    public bool $subscribed = false;
+    #[Groups([
+        'course_catalogue:read',
+    ])]
+    public array $catalogueDescriptions = [];
     #[Groups([
         'course:read',
         'course_rel_user:read',
@@ -122,7 +130,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'course_catalogue:read',
     ])]
     #[Assert\NotBlank(message: 'A Course requires a title')]
-    #[ORM\Column(name: 'title', type: 'string', length: 250, unique: false, nullable: true)]
+    #[ORM\Column(name: 'title', type: 'text', unique: false, nullable: true)]
     protected ?string $title = null;
 
     /**
@@ -140,7 +148,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Gedmo\Slug(fields: ['title'], updatable: false, style: 'upper', unique: true, separator: '')]
     #[ORM\Column(name: 'code', type: 'string', length: 40, unique: true, nullable: false)]
     protected string $code;
-
     #[Assert\Length(max: 40, maxMessage: 'Code cannot be longer than {{ limit }} characters')]
     #[ORM\Column(name: 'visual_code', type: 'string', length: 40, unique: false, nullable: true)]
     protected ?string $visualCode = null;
@@ -194,9 +201,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         orphanRemoval: true
     )]
     protected Collection $tools;
-
     protected Session $currentSession;
-
     protected AccessUrl $currentUrl;
 
     /**
@@ -240,10 +245,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      */
     #[ORM\OneToMany(mappedBy: 'course', targetEntity: Templates::class, cascade: ['persist', 'remove'])]
     protected Collection $templates;
-
     #[ORM\Column(name: 'directory', type: 'string', length: 40, unique: false, nullable: true)]
     protected ?string $directory = null;
-
     #[Groups([
         'course:read',
         'session:read',
@@ -253,7 +256,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Assert\NotBlank]
     #[ORM\Column(name: 'course_language', type: 'string', length: 20, unique: false, nullable: false)]
     protected string $courseLanguage;
-
     #[Groups([
         'course:read',
         'course_rel_user:read',
@@ -261,7 +263,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     ])]
     #[ORM\Column(name: 'description', type: 'text', unique: false, nullable: true)]
     protected ?string $description;
-
     #[Groups(['course:read', 'course_rel_user:read'])]
     #[ORM\Column(name: 'introduction', type: 'text', nullable: true)]
     protected ?string $introduction;
@@ -281,7 +282,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[ORM\InverseJoinColumn(name: 'course_category_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: CourseCategory::class, inversedBy: 'courses')]
     protected Collection $categories;
-
     #[Assert\NotBlank]
     #[Groups([
         'course:read',
@@ -290,47 +290,35 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     ])]
     #[ORM\Column(name: 'visibility', type: 'integer', unique: false, nullable: false)]
     protected int $visibility;
-
     #[ORM\Column(name: 'show_score', type: 'integer', unique: false, nullable: true)]
     protected ?int $showScore = null;
-
     #[ORM\Column(name: 'tutor_name', type: 'string', length: 200, unique: false, nullable: true)]
     protected ?string $tutorName;
-
     #[Groups(['course:read'])]
     #[ORM\Column(name: 'department_name', type: 'string', length: 30, unique: false, nullable: true)]
     protected ?string $departmentName = null;
-
     #[Assert\Url(requireTld: false)]
     #[Groups(['course:read', 'course:write'])]
     #[ORM\Column(name: 'department_url', type: 'string', length: 180, unique: false, nullable: true)]
     protected ?string $departmentUrl = null;
-
     #[Assert\Url(requireTld: false)]
     #[Groups(['course:read', 'course:write'])]
     #[ORM\Column(name: 'video_url', type: 'string', length: 255)]
     protected string $videoUrl;
-
     #[Groups(['course:read', 'course:write'])]
     #[ORM\Column(name: 'sticky', type: 'boolean')]
     protected bool $sticky;
-
     #[ORM\Column(name: 'disk_quota', type: 'integer', unique: false, nullable: true)]
     protected ?int $diskQuota = null;
-
     #[ORM\Column(name: 'last_visit', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $lastVisit;
-
     #[ORM\Column(name: 'last_edit', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $lastEdit;
-
     #[ORM\Column(name: 'creation_date', type: 'datetime', unique: false, nullable: false)]
     protected DateTime $creationDate;
-
     #[Groups(['course:read'])]
     #[ORM\Column(name: 'expiration_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $expirationDate = null;
-
     #[Assert\NotNull]
     #[Groups([
         'course:read',
@@ -338,7 +326,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     ])]
     #[ORM\Column(name: 'subscribe', type: 'boolean', unique: false, nullable: false)]
     protected bool $subscribe;
-
     #[Assert\NotNull]
     #[Groups([
         'course:read',
@@ -346,36 +333,27 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     ])]
     #[ORM\Column(name: 'unsubscribe', type: 'boolean', unique: false, nullable: false)]
     protected bool $unsubscribe;
-
     #[ORM\Column(name: 'registration_code', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $registrationCode;
-
     #[ORM\Column(name: 'legal', type: 'text', unique: false, nullable: true)]
     protected ?string $legal;
-
     #[ORM\Column(name: 'activate_legal', type: 'integer', unique: false, nullable: true)]
     protected ?int $activateLegal;
-
-    #[ORM\Column(name: 'add_teachers_to_sessions_courses', type: 'boolean', nullable: true)]
-    protected ?bool $addTeachersToSessionsCourses;
-
-    #[ORM\Column(name: 'course_type_id', type: 'integer', unique: false, nullable: true)]
-    protected ?int $courseTypeId;
 
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course").
      */
     // protected $curriculumCategories;
 
+    #[ORM\Column(name: 'add_teachers_to_sessions_courses', type: 'boolean', nullable: true)]
+    protected ?bool $addTeachersToSessionsCourses;
+    #[ORM\Column(name: 'course_type_id', type: 'integer', unique: false, nullable: true)]
+    protected ?int $courseTypeId;
+
     #[Groups(['course:read', 'course:write'])]
     #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room;
-
-    #[Groups(['course:read', 'course_rel_user:read', 'course:write'])]
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $duration = null;
-
     #[Groups([
         'course:read',
         'course:write',
@@ -383,28 +361,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     ])]
     #[ORM\Column(name: 'popularity', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $popularity = 0;
-
-    #[Groups([
-        'course:read',
-        'course_catalogue:read',
-    ])]
-    public bool $subscribed = false;
-
-    #[Groups([
-        'course_catalogue:read',
-    ])]
-    public array $catalogueDescriptions = [];
-
-    #[SerializedName('allowSelfSignup')]
-    #[Groups([
-        'course:read',
-        'session:read',
-        'course_catalogue:read',
-    ])]
-    public function getAllowSelfSignup(): bool
-    {
-        return self::REGISTERED !== $this->visibility;
-    }
+    #[Groups(['course:read', 'course_rel_user:read', 'course:write'])]
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $duration = null;
 
     public function __construct()
     {
@@ -441,11 +400,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->sticky = false;
     }
 
-    public function __toString(): string
-    {
-        return $this->getTitle();
-    }
-
     public static function getStatusList(): array
     {
         return [
@@ -455,6 +409,22 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
             self::OPEN_WORLD => 'Open world',
             self::HIDDEN => 'Hidden',
         ];
+    }
+
+    #[SerializedName('allowSelfSignup')]
+    #[Groups([
+        'course:read',
+        'session:read',
+        'course_catalogue:read',
+    ])]
+    public function getAllowSelfSignup(): bool
+    {
+        return self::REGISTERED !== $this->visibility;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
     }
 
     public function getTitle(): string
@@ -526,14 +496,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->users;
     }
 
-    public function addSubscription(CourseRelUser $courseRelUser): self
+    public function getId(): ?int
     {
-        $courseRelUser->setCourse($this);
-        if (!$this->hasUsers($courseRelUser)) {
-            $this->users->add($courseRelUser);
-        }
-
-        return $this;
+        return $this->id;
     }
 
     public function removeSubscription(CourseRelUser $user): void
@@ -543,41 +508,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
                 unset($this->users[$key]);
             }
         }
-    }
-
-    public function hasUsers(CourseRelUser $subscription): bool
-    {
-        if (0 !== $this->users->count()) {
-            $criteria = Criteria::create()
-                ->where(
-                    Criteria::expr()->eq('user', $subscription->getUser())
-                )
-                ->andWhere(
-                    Criteria::expr()->eq('status', $subscription->getStatus())
-                )
-                ->andWhere(
-                    Criteria::expr()->eq('relationType', $subscription->getRelationType())
-                )
-            ;
-            $relation = $this->users->matching($criteria);
-
-            return $relation->count() > 0;
-        }
-
-        return false;
-    }
-
-    public function addSubscriptionForUser(User $user, int $relationType, ?string $role, int $status): self
-    {
-        $courseRelUser = (new CourseRelUser())
-            ->setCourse($this)
-            ->setUser($user)
-            ->setRelationType($relationType)
-            ->setStatus($status)
-        ;
-        $this->addSubscription($courseRelUser);
-
-        return $this;
     }
 
     public function hasUserAsStudent(User $user): bool
@@ -600,6 +530,51 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->addSubscriptionForUser($user, 0, '', CourseRelUser::STUDENT);
 
         return $this;
+    }
+
+    public function addSubscriptionForUser(User $user, int $relationType, ?string $role, int $status): self
+    {
+        $courseRelUser = (new CourseRelUser())
+            ->setCourse($this)
+            ->setUser($user)
+            ->setRelationType($relationType)
+            ->setStatus($status)
+        ;
+        $this->addSubscription($courseRelUser);
+
+        return $this;
+    }
+
+    public function addSubscription(CourseRelUser $courseRelUser): self
+    {
+        $courseRelUser->setCourse($this);
+        if (!$this->hasUsers($courseRelUser)) {
+            $this->users->add($courseRelUser);
+        }
+
+        return $this;
+    }
+
+    public function hasUsers(CourseRelUser $subscription): bool
+    {
+        if (0 !== $this->users->count()) {
+            $criteria = Criteria::create()
+                ->where(
+                    Criteria::expr()->eq('user', $subscription->getUser())
+                )
+                ->andWhere(
+                    Criteria::expr()->eq('status', $subscription->getStatus())
+                )
+                ->andWhere(
+                    Criteria::expr()->eq('relationType', $subscription->getRelationType())
+                )
+            ;
+            $relation = $this->users->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
     }
 
     public function hasUserAsTeacher(User $user): bool
@@ -651,11 +626,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
               Criteria::expr()->eq('groups', $group)
           );*/
         // return $this->getGroups()->contains($group);
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     /**
@@ -1042,20 +1012,20 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->urls;
     }
 
+    public function addAccessUrl(?AccessUrl $url): self
+    {
+        $urlRelCourse = (new AccessUrlRelCourse())->setUrl($url);
+        $this->addUrls($urlRelCourse);
+
+        return $this;
+    }
+
     public function addUrls(AccessUrlRelCourse $urlRelCourse): static
     {
         if (!$this->urls->contains($urlRelCourse)) {
             $this->urls->add($urlRelCourse);
             $urlRelCourse->setCourse($this);
         }
-
-        return $this;
-    }
-
-    public function addAccessUrl(?AccessUrl $url): self
-    {
-        $urlRelCourse = (new AccessUrlRelCourse())->setUrl($url);
-        $this->addUrls($urlRelCourse);
 
         return $this;
     }

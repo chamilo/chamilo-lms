@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorek vzorce: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukázkový vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -26614,7 +26614,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurace připojení LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Pole definující hostitele a port pro LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Nastavit datum expirace při prvním přihlášení"
@@ -37386,9 +37386,6 @@ msgstr "Konfigurace vzdáleného úložiště Git (.git\/config) se změnila. Ov
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skenování bylo předčasně ukončeno, protože nebylo možné přečíst podadresář (zkontrolujte oprávnění k souborům). Výsledky níže mohou být částečné."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Příliš mnoho změn k zobrazení v plném rozsahu; níže jsou zobrazeny pouze první položky každé kategorie. Úplný seznam naleznete v protokolu CEF."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% soubor(ů) se nepodařilo přečíst (nedostatečná oprávnění) a byly přeskočeny."
 
@@ -37472,4 +37469,7 @@ msgstr "Zatím nebylo zaznamenáno žádné upozornění."
 
 msgid "Git remote changed"
 msgstr "Vzdálený repozitář Git změněn"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Příliš mnoho změn pro úplný výpis; níže jsou zobrazeny pouze první položky z každé kategorie. Úplný seznam naleznete v %link_start%CEF log%link_end%."
 

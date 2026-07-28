@@ -25,8 +25,8 @@ use UnserializeApi;
 #[ORM\Entity]
 class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface, Stringable
 {
-    public const V_1P1 = 'lti1p1';
-    public const V_1P3 = 'lti1p3';
+    public const string V_1P1 = 'lti1p1';
+    public const string V_1P3 = 'lti1p3';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -37391,9 +37391,6 @@ msgstr "Git attālās konfigurācijas (.git/config) ir mainījusies. Pārbaudiet
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skenēšana priekšlaicīgi pārtraukta, jo apakšdirektoriju nevarēja nolasīt (pārbaudiet failu atļaujas). Zemāk redzamie rezultāti var būt daļēji."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Pārāk daudz izmaiņu, lai tās pilnībā uzskaitītu; zemāk parādīti tikai pirmie ieraksti katrā kategorijā. Pilnu sarakstu skatiet CEF žurnālā."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% failu(s) nevarēja nolasīt (atļaujas) un tika izlaisti."
 
@@ -37477,4 +37474,7 @@ msgstr "Vēl nav reģistrēts neviens brīdinājums."
 
 msgid "Git remote changed"
 msgstr "Git attālā krātuve mainīta"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Pārāk daudz izmaiņu, lai parādītu pilnu sarakstu; zemāk redzami tikai pirmie ieraksti katrā kategorijā. Pilnu sarakstu skatiet %link_start%CEF žurnālā%link_end%."
 

@@ -24,6 +24,16 @@ class UserFriendRelationType
     protected string $title;
 
     /**
+     * Get title.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * Set title.
      *
      * @return UserFriendRelationType
@@ -33,16 +43,6 @@ class UserFriendRelationType
         $this->title = $title;
 
         return $this;
-    }
-
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**

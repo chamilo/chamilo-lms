@@ -24,7 +24,7 @@ use const PCLZIP_OPT_PATH;
 
 class Imscc13Import
 {
-    public const FORMAT_IMSCC13 = 'imscc13';
+    public const string FORMAT_IMSCC13 = 'imscc13';
 
     public function log(string $message, string|int $level = 'info', $a = null, $depth = null, bool $display = false): void
     {

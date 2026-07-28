@@ -39,7 +39,7 @@ class OpenGraphController extends AbstractController
      * Only public, well-known content platforms are allowed.
      * Add entries here to extend the list.
      */
-    private const ALLOWED_DOMAINS = [
+    private const array ALLOWED_DOMAINS = [
         'youtube.com',
         'youtu.be',
         'vimeo.com',

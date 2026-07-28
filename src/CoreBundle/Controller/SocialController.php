@@ -54,7 +54,7 @@ use UserManager;
 #[Route('/social-network')]
 class SocialController extends AbstractController
 {
-    private const TERMS_SECTIONS = [
+    private const array TERMS_SECTIONS = [
         0 => ['title' => 'Terms and Conditions', 'subtitle' => null],
         1 => ['title' => 'Personal data collection', 'subtitle' => 'Why do we collect this data?'],
         2 => ['title' => 'Personal data recording', 'subtitle' => 'Where do we record the data?'],

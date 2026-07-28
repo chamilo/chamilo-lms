@@ -37392,9 +37392,6 @@ msgstr "Git-fjernkonfigurationen (.git/config) er ændret. Bekræft, at dette va
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Scanningen stoppede tidligt, fordi en undermappe ikke kunne læses (kontrollér filrettigheder). Resultaterne nedenfor kan være ufuldstændige."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "For mange ændringer til at vise fuldt ud; kun de første poster i hver kategori vises nedenfor. Se CEF-loggen for den fulde liste."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fil(er) kunne ikke læses (rettigheder) og blev sprunget over."
 
@@ -37478,4 +37475,7 @@ msgstr "Ingen advarsel er registreret endnu."
 
 msgid "Git remote changed"
 msgstr "Git-fjernforbindelse ændret"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "For mange ændringer til at vise fuldt ud; kun de første poster i hver kategori vises nedenfor. Se den fulde liste i %link_start%CEF-loggen%link_end%."
 

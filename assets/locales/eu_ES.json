@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "{0} orria {1}-tik",
     "Showing {0} posts": "{0} mezu erakusten",
     "Showing {0} tasks": "{0} zeregin erakusten",
-    "contains {0} items": "{0} elementu dauzka"
+    "contains {0} items": "{0} elementu dauzka",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

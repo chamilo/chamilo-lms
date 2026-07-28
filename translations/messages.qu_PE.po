@@ -37392,9 +37392,6 @@ msgstr "Git remote qallariy (.git/config) hukchasqa kashan. Kay munasqa kasqanta
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Qhawayqa ñawpaqta sayarqan, huk qhipa ñan mana ñawirisqa karqan (willañiqikunap kamachiyta qhaway). Urin willaykuna mana hunt'asqa kanman."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Hukchasqakunaqa achka, mana hunt'asqa qhawachikunchu; sapa t'aqamanta ñawpaq willaykunallam qhawachikun. Hunt'asqa willayta CEF qelqapi qhaway."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% willañiqi mana ñawirisqa karqan (kamachiyrayku) hinaspa saqesqa karqan."
 
@@ -37478,4 +37475,7 @@ msgstr "Manaraq willay qelqasqa kanchu."
 
 msgid "Git remote changed"
 msgstr "Git remote hukchasqa"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Demasiados cambios para listar completamente; solo se muestran las primeras entradas de cada categoría. Ver el %link_start%registro CEF%link_end% para la lista completa."
 

@@ -76,6 +76,7 @@
             v-model="showAdvancedSettingsPanel"
           >
             <BaseSelect
+              v-if="resourceLanguageEnabled"
               id="resource_language"
               v-model="form.language"
               :label="t('Language')"
@@ -117,11 +118,13 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import courseProgressService from "../../services/courseProgressService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -168,7 +171,7 @@ const translatedLanguages = computed(() =>
   })),
 )
 
-const showAdvancedSettings = computed(() => form.value.languages.length > 2)
+const showAdvancedSettings = computed(() => resourceLanguageEnabled.value && form.value.languages.length > 2)
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value

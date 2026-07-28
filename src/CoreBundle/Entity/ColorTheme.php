@@ -23,7 +23,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Post(),
         new Put(),
-        new Patch(), ],
+        new Patch(),
+    ],
     denormalizationContext: [
         'groups' => ['color_theme:write'],
     ],

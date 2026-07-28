@@ -39,7 +39,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
 {
     use ForumStateHelperTrait;
 
-    private const LINK_FORUM_THREAD = 5;
+    private const int LINK_FORUM_THREAD = 5;
 
     public function __construct(
         private readonly RequestStack $requestStack,

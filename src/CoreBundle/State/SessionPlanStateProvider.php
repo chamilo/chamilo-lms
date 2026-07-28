@@ -35,7 +35,7 @@ final class SessionPlanStateProvider implements ProviderInterface
      * This is a safety limit to avoid rendering huge grids.
      * It must be applied to the year-filtered result, not to all followed sessions.
      */
-    private const MAX_SESSIONS = 50;
+    private const int MAX_SESSIONS = 50;
 
     public function __construct(
         private readonly Security $security,

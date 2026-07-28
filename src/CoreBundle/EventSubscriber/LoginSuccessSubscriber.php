@@ -20,7 +20,7 @@ use Throwable;
 
 class LoginSuccessSubscriber implements EventSubscriberInterface
 {
-    private const COURSE_STUDENT_STATUS = 5;
+    private const int COURSE_STUDENT_STATUS = 5;
 
     public function __construct(
         private readonly LoginCaptchaManager $loginCaptchaManager,

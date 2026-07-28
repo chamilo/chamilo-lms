@@ -17,8 +17,8 @@ final class StudentPublicationCommentAiAssistedNormalizer implements NormalizerA
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'chamilo_work_comment_ai_assisted_normalizer_called';
-    private const HANDLER = 'work_corrections_comment';
+    private const string ALREADY_CALLED = 'chamilo_work_comment_ai_assisted_normalizer_called';
+    private const string HANDLER = 'work_corrections_comment';
 
     public function __construct(
         private readonly AiDisclosureHelper $aiDisclosureHelper,

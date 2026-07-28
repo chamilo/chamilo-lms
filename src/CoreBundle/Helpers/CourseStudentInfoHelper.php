@@ -27,21 +27,21 @@ use const WEB_PATH;
 
 final class CourseStudentInfoHelper
 {
-    private const LOG_PREFIX = '[CourseStudentInfoHelper]';
-    private const TOOL_TABLE = 'tool';
-    private const TOOL_TITLE_CACHE_KEY = 'course_student_info_tool_id_title_map_v1';
+    private const string LOG_PREFIX = '[CourseStudentInfoHelper]';
+    private const string TOOL_TABLE = 'tool';
+    private const string TOOL_TITLE_CACHE_KEY = 'course_student_info_tool_id_title_map_v1';
 
     /**
      * Hard limit to avoid log storms when listing many courses.
      */
-    private const LOG_LIMIT = 600;
+    private const int LOG_LIMIT = 600;
 
     private static int $logCount = 0;
 
     /**
      * Standard table in Chamilo 2 for resources visibility and placement.
      */
-    private const RESOURCE_LINK_TABLE = 'resource_link';
+    private const string RESOURCE_LINK_TABLE = 'resource_link';
 
     private bool $showDebug = false;
 
@@ -595,7 +595,7 @@ final class CourseStudentInfoHelper
             'course_home' => $base.'course/'.$courseId.'/home?'.$qs,
             'documents' => $base.'resources/document/'.$parentResourceNodeId.'/?'.$qs,
             'learnpaths' => $base.'resources/lp/'.$parentResourceNodeId.'/?'.$qs,
-            'exercises' => $base.'main/exercise/exercise.php?'.$qs,
+            'exercises' => $base.'resources/exercise/'.$parentResourceNodeId.'/?'.$qs,
             'forums' => $base.'main/forum/index.php?'.$qs,
             'wikis' => $base.'resources/wiki/'.$parentResourceNodeId.'/?'.$qs,
             'links' => $base.'resources/links/'.$parentResourceNodeId.'/?'.$qs,
@@ -1296,9 +1296,7 @@ final class CourseStudentInfoHelper
     private function tableExists(string $tableName): bool
     {
         try {
-            $sm = method_exists($this->connection, 'createSchemaManager')
-                ? $this->connection->createSchemaManager()
-                : $this->connection->getSchemaManager();
+            $sm = $this->connection->createSchemaManager();
 
             return $sm->tablesExist([$tableName]);
         } catch (Throwable $e) {

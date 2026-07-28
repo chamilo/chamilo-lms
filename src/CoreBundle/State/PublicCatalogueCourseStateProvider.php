@@ -36,7 +36,7 @@ use const STUDENT;
  */
 readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 {
-    public const DEFAULT_PAGE_SIZE = 12;
+    public const int DEFAULT_PAGE_SIZE = 12;
 
     public function __construct(
         private FilterExtension $filterExtension,

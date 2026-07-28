@@ -20,13 +20,13 @@
             {{ t("Layout template name") }}
           </label>
           <BaseInputText
-            v-model.trim="templateName"
+            v-model.trim="templateTitle"
             :placeholder="t('e.g. 3 columns layout')"
-            :error="submitted && !templateName"
+            :error="submitted && !templateTitle"
             label=""
           />
           <small
-            v-if="submitted && !templateName"
+            v-if="submitted && !templateTitle"
             class="text-red-500"
           >
             {{ t("Template name is required") }}
@@ -86,7 +86,7 @@ const { t } = useI18n()
 const router = useRouter()
 
 const submitted = ref(false)
-const templateName = ref("")
+const templateTitle = ref("")
 const selectedTemplateId = ref(null)
 
 const layoutJson = ref({
@@ -148,9 +148,12 @@ watch(selectedTemplateId, (newVal) => {
 async function saveTemplate() {
   submitted.value = true
 
-  if (!templateName.value) return
+  if (!templateTitle.value) return
+
+  layoutJson.value.page.title = templateTitle.value
 
   await pageService.createPageLayoutTemplate({
+    title: templateTitle.value,
     layout: JSON.stringify(layoutJson.value, null, 2),
   })
 

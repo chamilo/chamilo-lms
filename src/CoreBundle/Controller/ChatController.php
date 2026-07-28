@@ -48,10 +48,10 @@ final class ChatController extends AbstractController
     use CourseControllerTrait;
     use ResourceControllerTrait;
 
-    private const AI_TUTOR_UNAVAILABLE_SESSION_KEY = 'ai_tutor_temporarily_unavailable_until';
-    private const AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS = 60;
-    private const AI_TUTOR_UNAVAILABLE_MESSAGE = 'AI tutor is temporarily unavailable. Please try again later.';
-    private const AI_SELECTED_TEXT_CONTEXT_MAX_CHARS = 12000;
+    private const string AI_TUTOR_UNAVAILABLE_SESSION_KEY = 'ai_tutor_temporarily_unavailable_until';
+    private const int AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS = 60;
+    private const string AI_TUTOR_UNAVAILABLE_MESSAGE = 'AI tutor is temporarily unavailable. Please try again later.';
+    private const int AI_SELECTED_TEXT_CONTEXT_MAX_CHARS = 12000;
 
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,

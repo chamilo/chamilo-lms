@@ -70,9 +70,9 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
     /**
      * @var string[]
      */
-    private const AUDIO_EXTENSIONS = ['aac', 'm4a', 'mp3', 'ogg', 'wav', 'webm'];
+    private const array AUDIO_EXTENSIONS = ['aac', 'm4a', 'mp3', 'ogg', 'wav', 'webm'];
 
-    private const FILE_EXTRA_FIELD_TYPES = [
+    private const array FILE_EXTRA_FIELD_TYPES = [
         ExtraField::FIELD_TYPE_FILE_IMAGE,
         ExtraField::FIELD_TYPE_FILE,
     ];

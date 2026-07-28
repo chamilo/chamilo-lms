@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,13 +19,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CCalendarEventVoter extends Voter
 {
-    public const CREATE = 'CREATE';
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string CREATE = 'CREATE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
     public function __construct(
-        private readonly Security $security
+        private readonly AccessDecisionManagerInterface $accessDecisionManager
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -56,7 +56,7 @@ class CCalendarEventVoter extends Voter
         }
 
         // Admins have access to everything.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

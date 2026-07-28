@@ -48,7 +48,7 @@ export default {
    * @returns {Promise<Object>}
    */
   toggleLinkVisibility: async (linkId, visible, cid, sid) => {
-    return await baseService.put(`/api/links/${linkId}/toggle_visibility?cid=${cid}&sid=${sid}`, { visible })
+    return await baseService.patch(`/api/links/${linkId}/toggle_visibility?cid=${cid}&sid=${sid}`, { visible })
   },
 
   /**
@@ -69,7 +69,7 @@ export default {
       payload.categoryId = opts.categoryId ?? 0
     }
 
-    return await baseService.put(`/api/links/${linkId}/move`, payload, { params })
+    return await baseService.patch(`/api/links/${linkId}/move`, payload, { params })
   },
 
   /**
@@ -158,7 +158,7 @@ export default {
   toggleCategoryVisibility: async (categoryId, visible, cid, sid) => {
     const endpoint = `/api/link_categories/${categoryId}/toggle_visibility?cid=${cid}&sid=${sid}`
 
-    return await baseService.put(endpoint, { visible })
+    return await baseService.patch(endpoint, { visible })
   },
 
   /**

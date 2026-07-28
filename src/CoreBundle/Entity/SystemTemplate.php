@@ -42,13 +42,6 @@ class SystemTemplate
         $this->comment = '';
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     /**
      * Get title.
      *
@@ -59,9 +52,9 @@ class SystemTemplate
         return $this->title;
     }
 
-    public function setComment(string $comment): self
+    public function setTitle(string $title): self
     {
-        $this->comment = $comment;
+        $this->title = $title;
 
         return $this;
     }
@@ -74,6 +67,13 @@ class SystemTemplate
     public function getComment()
     {
         return $this->comment;
+    }
+
+    public function setComment(string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 
     public function getImage(): ?Asset
@@ -93,13 +93,6 @@ class SystemTemplate
         return null !== $this->image;
     }
 
-    public function setContent(string $content): self
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
     /**
      * Get content.
      *
@@ -108,6 +101,13 @@ class SystemTemplate
     public function getContent()
     {
         return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
     }
 
     /**

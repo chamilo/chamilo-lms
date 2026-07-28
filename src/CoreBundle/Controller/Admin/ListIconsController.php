@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class ListIconsController extends AbstractController
 {
-    private const ICON_ENUMS = [
+    private const array ICON_ENUMS = [
         'ActionIcon' => ActionIcon::class,
         'ToolIcon' => ToolIcon::class,
         'ObjectIcon' => ObjectIcon::class,

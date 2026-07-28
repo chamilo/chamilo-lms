@@ -227,7 +227,7 @@ class UsergroupRepository extends ResourceRepository
 
         $results = $qb->getQuery()->getResult();
 
-        $userRepository = $this->_em->getRepository(User::class);
+        $userRepository = $this->getEntityManager()->getRepository(User::class);
 
         foreach ($results as &$user) {
             $user['pictureUri'] = $userRepository->getUserPicture($user['id']);
@@ -239,7 +239,7 @@ class UsergroupRepository extends ResourceRepository
     public function addUserToGroup(int $userId, int $groupId, int $relationType = Usergroup::GROUP_USER_PERMISSION_READER): void
     {
         $group = $this->find($groupId);
-        $user = $this->_em->getRepository(User::class)->find($userId);
+        $user = $this->getEntityManager()->getRepository(User::class)->find($userId);
 
         if (!$group || !$user) {
             throw new Exception('Group or User not found');
@@ -249,7 +249,7 @@ class UsergroupRepository extends ResourceRepository
             $relationType = Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION;
         }
 
-        $existingRelation = $this->_em->getRepository(UsergroupRelUser::class)->findOneBy([
+        $existingRelation = $this->getEntityManager()->getRepository(UsergroupRelUser::class)->findOneBy([
             'usergroup' => $group,
             'user' => $user,
         ]);
@@ -262,8 +262,8 @@ class UsergroupRepository extends ResourceRepository
 
         $existingRelation->setRelationType($relationType);
 
-        $this->_em->persist($existingRelation);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($existingRelation);
+        $this->getEntityManager()->flush();
     }
 
     public function updateUserRole($userId, $groupId, $relationType = Usergroup::GROUP_USER_PERMISSION_READER): void
@@ -280,7 +280,7 @@ class UsergroupRepository extends ResourceRepository
         $query->execute();
 
         $group = $this->find($groupId);
-        $user = $this->_em->getRepository(User::class)->find($userId);
+        $user = $this->getEntityManager()->getRepository(User::class)->find($userId);
 
         if (!$group || !$user) {
             throw new Exception('Group or User not found');
@@ -291,15 +291,15 @@ class UsergroupRepository extends ResourceRepository
         $usergroupRelUser->setUser($user);
         $usergroupRelUser->setRelationType($relationType);
 
-        $this->_em->persist($usergroupRelUser);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($usergroupRelUser);
+        $this->getEntityManager()->flush();
     }
 
     public function removeUserFromGroup(int $userId, int $groupId, bool $checkLeaveRestriction = true): bool
     {
         /** @var Usergroup $group */
         $group = $this->find($groupId);
-        $user = $this->_em->getRepository(User::class)->find($userId);
+        $user = $this->getEntityManager()->getRepository(User::class)->find($userId);
 
         if (!$group || !$user) {
             throw new Exception('Group or User not found');
@@ -309,14 +309,14 @@ class UsergroupRepository extends ResourceRepository
             throw new Exception('Members are not allowed to leave this group');
         }
 
-        $relation = $this->_em->getRepository(UsergroupRelUser::class)->findOneBy([
+        $relation = $this->getEntityManager()->getRepository(UsergroupRelUser::class)->findOneBy([
             'usergroup' => $group,
             'user' => $user,
         ]);
 
         if ($relation) {
-            $this->_em->remove($relation);
-            $this->_em->flush();
+            $this->getEntityManager()->remove($relation);
+            $this->getEntityManager()->flush();
 
             return true;
         }
@@ -492,10 +492,8 @@ class UsergroupRepository extends ResourceRepository
             ->where($qb->expr()->eq('g.title', ':title'))
             ->andWhere($qb->expr()->eq('u.url', ':url'))
             ->setMaxResults(1)
-            ->setParameters([
-                'title' => $title,
-                'url' => $url->getId(),
-            ])
+            ->setParameter('title', $title)
+            ->setParameter('url', $url->getId())
             ->setParameter('title', $title)
             ->getQuery()
             ->getOneOrNullResult()

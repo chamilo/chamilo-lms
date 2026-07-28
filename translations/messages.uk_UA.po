@@ -37386,9 +37386,6 @@ msgstr "Конфігурація віддаленого репозиторію G
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Сканування зупинилося достроково, оскільки не вдалося прочитати підкаталог (перевірте права доступу до файлів). Результати нижче можуть бути неповними."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Занадто багато змін для повного списку; нижче показано лише перші записи кожної категорії. Повний список дивіться в журналі CEF."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% файл(ів) не вдалося прочитати (права доступу) і їх пропущено."
 
@@ -37472,4 +37469,7 @@ msgstr "Сповіщень ще не зафіксовано."
 
 msgid "Git remote changed"
 msgstr "Змінено віддалений репозиторій Git"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Занадто багато змін для повного списку; нижче показано лише перші записи кожної категорії. Повний список дивіться в %link_start%журналі CEF%link_end%."
 

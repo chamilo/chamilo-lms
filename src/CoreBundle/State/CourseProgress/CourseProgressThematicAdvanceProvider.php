@@ -45,7 +45,7 @@ final readonly class CourseProgressThematicAdvanceProvider implements ProviderIn
 {
     use CourseProgressAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'course_progress_thematic_advance';
+    public const string CSRF_TOKEN_ID = 'course_progress_thematic_advance';
 
     public function __construct(
         private RequestStack $requestStack,

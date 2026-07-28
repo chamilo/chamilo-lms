@@ -17,16 +17,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/terms_and_conditions_translation',
+            security: "is_granted('ROLE_ADMIN')",
             name: 'get_terms_and_conditions_translation_configuration',
             provider: TermsAndConditionsTranslationProvider::class,
-            security: "is_granted('ROLE_ADMIN')",
         ),
         new Post(
             uriTemplate: '/terms_and_conditions_translation',
+            security: "is_granted('ROLE_ADMIN')",
             read: false,
             name: 'create_terms_and_conditions_translation',
             processor: TermsAndConditionsTranslationProcessor::class,
-            security: "is_granted('ROLE_ADMIN')",
         ),
     ],
     normalizationContext: ['groups' => ['terms_translation:read']],

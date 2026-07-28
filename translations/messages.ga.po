@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -37390,9 +37390,6 @@ msgstr "Tá cumraíocht chianfhostaíochta Git (.git/config) athraithe. Deimhnig
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Stop an scanadh go luath mar níorbh fhéidir fo-eolaire a léamh (seiceáil ceadanna comhaid). D’fhéadfadh na torthaí thíos a bheith páirteach."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "An iomarca athruithe le liostú go hiomlán; ní thaispeántar ach na chéad iontrálacha de gach catagóir thíos. Féach an log CEF don liosta iomlán."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "Níorbh fhéidir %count% comhad a léamh (ceadanna) agus rinneadh iad a scipeáil."
 
@@ -37476,4 +37473,7 @@ msgstr "Níl aon fholáireamh taifeadta fós."
 
 msgid "Git remote changed"
 msgstr "Athraíodh an cianstóras Git"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "An iomarca athruithe le liostú ina n-iomláine; ní thaispeántar ach na chéad iontrálacha de gach catagóir thíos. Féach ar an %link_start%log CEF%link_end% chun an liosta iomlán a fheiceáil."
 

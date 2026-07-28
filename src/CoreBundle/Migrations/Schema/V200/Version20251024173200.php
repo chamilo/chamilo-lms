@@ -17,7 +17,7 @@ final class Version20251024173200 extends AbstractMigrationChamilo
     /**
      * Enable this to log changes without writing them to the database.
      */
-    private const DRY_RUN = false;
+    private const bool DRY_RUN = false;
 
     public function getDescription(): string
     {

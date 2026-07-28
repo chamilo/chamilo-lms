@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsController]
 final class DocumentUsageAction extends AbstractController
 {
-    private const BYTES_PER_MB = 1048576;
+    private const int BYTES_PER_MB = 1048576;
 
     public function __construct(
         private readonly CourseRepository $courseRepository,

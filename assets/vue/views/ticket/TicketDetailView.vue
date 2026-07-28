@@ -343,7 +343,7 @@
             <div>
               <h3 class="text-base font-semibold text-gray-90">{{ t("Files attachments") }}</h3>
               <p class="text-sm text-gray-600">
-                {{ t("Maximun file size: %s", [formatFileSize(detail.maxUploadSize)]) }}
+                {{ t("Size") }}: {{ formatFileSize(detail.maxUploadSize) }} ({{ t("maximum") }})
               </p>
             </div>
             <BaseButton

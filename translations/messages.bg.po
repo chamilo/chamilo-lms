@@ -37392,9 +37392,6 @@ msgstr "Конфигурацията на Git отдалечения адрес 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Сканирането спря преждевременно, защото поддиректория не можа да бъде прочетена (проверете правата за достъп до файловете). Резултатите по-долу може да са частични."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Твърде много промени за пълно показване; по-долу са показани само първите записи от всяка категория. Вижте CEF журнала за пълния списък."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% файл(а) не можаха да бъдат прочетени (права за достъп) и бяха пропуснати."
 
@@ -37478,4 +37475,7 @@ msgstr "Все още не е записано предупреждение."
 
 msgid "Git remote changed"
 msgstr "Променен отдалечен Git"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Твърде много промени за пълно показване; по-долу са показани само първите записи от всяка категория. Вижте %link_start%CEF журнала%link_end% за пълния списък."
 

@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Strana {0} od {1}",
     "Showing {0} posts": "Prikazano {0} objava",
     "Showing {0} tasks": "Prikazano {0} zadataka",
-    "contains {0} items": "sadr\u017ei {0} stavki"
+    "contains {0} items": "sadr\u017ei {0} stavki",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

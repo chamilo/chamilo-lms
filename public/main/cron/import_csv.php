@@ -446,7 +446,7 @@ class ImportCsv
     public function updateUsersEmails()
     {
         if (true === $this->getUpdateEmailToDummy()) {
-            $sql = "UPDATE user SET email = CONCAT(username,'@example.com') WHERE id NOT IN (SELECT user_id FROM admin)";
+            $sql = "UPDATE user SET email = CONCAT(username,'@example.com') WHERE roles NOT LIKE '%ROLE_ADMIN%' AND roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'";
             Database::query($sql);
         }
     }
@@ -3079,9 +3079,10 @@ class ImportCsv
 
         // User
         $table = Database::get_main_table(TABLE_MAIN_USER);
-        $tableAdmin = Database::get_main_table(TABLE_MAIN_ADMIN);
         $sql = "DELETE FROM $table
-                WHERE user_id not in (select user_id from $tableAdmin) and status <> ".ANONYMOUS;
+                WHERE roles NOT LIKE '%ROLE_ADMIN%'
+                  AND roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
+                  AND status <> ".ANONYMOUS;
         Database::query($sql);
         echo $sql.PHP_EOL;
 

@@ -29,7 +29,7 @@ use const JSON_THROW_ON_ERROR;
 
 trait LearningPathStateHelperTrait
 {
-    private const ACTION_TOKEN_INTENTION = 'learning_path_action';
+    private const string ACTION_TOKEN_INTENTION = 'learning_path_action';
 
     /**
      * @return array<string, mixed>

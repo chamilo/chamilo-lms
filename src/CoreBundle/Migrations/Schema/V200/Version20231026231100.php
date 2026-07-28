@@ -21,7 +21,7 @@ use Throwable;
 
 final class Version20231026231100 extends AbstractMigrationChamilo
 {
-    private const CLEAR_BATCH_SIZE = 25;
+    private const int CLEAR_BATCH_SIZE = 25;
 
     public function getDescription(): string
     {

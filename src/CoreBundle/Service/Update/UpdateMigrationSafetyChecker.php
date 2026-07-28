@@ -24,12 +24,12 @@ use const PHP_EOL;
 
 final readonly class UpdateMigrationSafetyChecker
 {
-    private const METADATA_FILE_NAME = 'MIGRATION-SAFETY-CHECKS.json';
-    private const DRY_RUN_OUTPUT_LIMIT = 20000;
-    private const BASELINE_OUTPUT_LIMIT = 30000;
+    private const string METADATA_FILE_NAME = 'MIGRATION-SAFETY-CHECKS.json';
+    private const int DRY_RUN_OUTPUT_LIMIT = 20000;
+    private const int BASELINE_OUTPUT_LIMIT = 30000;
 
-    private const SUPPORTED_MIGRATION_PREFIX = 'src/CoreBundle/Migrations/Schema/V210/';
-    private const SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\CoreBundle\Migrations\Schema\V210\\';
+    private const string SUPPORTED_MIGRATION_PREFIX = 'src/CoreBundle/Migrations/Schema/V210/';
+    private const string SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\CoreBundle\Migrations\Schema\V210\\';
 
     public function __construct(
         private UpdateConfiguration $updateConfiguration,

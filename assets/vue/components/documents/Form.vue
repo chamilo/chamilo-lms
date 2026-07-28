@@ -60,8 +60,10 @@ import { useI18n } from "vue-i18n"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 
 const { t } = useI18n()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 const showAdvancedSettings = ref(false)
 
 function isResourceLanguageActive(language) {
@@ -87,7 +89,7 @@ function isResourceLanguageActive(language) {
 const showResourceLanguageAdvancedSettings = computed(() => {
   const languages = Array.isArray(window.languages) ? window.languages : []
 
-  return languages.filter(isResourceLanguageActive).length > 1
+  return resourceLanguageEnabled.value && languages.filter(isResourceLanguageActive).length > 1
 })
 
 const props = defineProps({

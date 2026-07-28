@@ -35,22 +35,22 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['branch:list']],
         ),
         new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('VIEW', object)",
             normalizationContext: ['groups' => ['branch:read']],
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('VIEW', object)",
         ),
         new Post(
-            security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: ['groups' => ['branch:write']],
+            security: "is_granted('ROLE_ADMIN')",
             processor: BranchSyncStateProcessor::class,
         ),
         new Put(
-            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
             denormalizationContext: ['groups' => ['branch:write']],
+            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
             processor: BranchSyncStateProcessor::class,
         ),
         new Patch(
-            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
             denormalizationContext: ['groups' => ['branch:write']],
+            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
             processor: BranchSyncStateProcessor::class,
         ),
         new Delete(
@@ -201,13 +201,6 @@ class BranchSync
         return $this->id;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     /**
      * Get title.
      *
@@ -218,9 +211,9 @@ class BranchSync
         return $this->title;
     }
 
-    public function setBranchIp(?string $branchIp): self
+    public function setTitle(string $title): self
     {
-        $this->branchIp = $branchIp;
+        $this->title = $title;
 
         return $this;
     }
@@ -235,9 +228,9 @@ class BranchSync
         return $this->branchIp;
     }
 
-    public function setLatitude(?string $latitude): self
+    public function setBranchIp(?string $branchIp): self
     {
-        $this->latitude = $latitude;
+        $this->branchIp = $branchIp;
 
         return $this;
     }
@@ -250,9 +243,9 @@ class BranchSync
         return $this->latitude;
     }
 
-    public function setLongitude(?string $longitude): self
+    public function setLatitude(?string $latitude): self
     {
-        $this->longitude = $longitude;
+        $this->latitude = $latitude;
 
         return $this;
     }
@@ -265,14 +258,9 @@ class BranchSync
         return $this->longitude;
     }
 
-    /**
-     * Set dwnSpeed.
-     *
-     * @return BranchSync
-     */
-    public function setDwnSpeed(?int $dwnSpeed)
+    public function setLongitude(?string $longitude): self
     {
-        $this->dwnSpeed = $dwnSpeed;
+        $this->longitude = $longitude;
 
         return $this;
     }
@@ -288,13 +276,13 @@ class BranchSync
     }
 
     /**
-     * Set upSpeed.
+     * Set dwnSpeed.
      *
      * @return BranchSync
      */
-    public function setUpSpeed(?int $upSpeed)
+    public function setDwnSpeed(?int $dwnSpeed)
     {
-        $this->upSpeed = $upSpeed;
+        $this->dwnSpeed = $dwnSpeed;
 
         return $this;
     }
@@ -310,13 +298,13 @@ class BranchSync
     }
 
     /**
-     * Set delay.
+     * Set upSpeed.
      *
      * @return BranchSync
      */
-    public function setDelay(?int $delay)
+    public function setUpSpeed(?int $upSpeed)
     {
-        $this->delay = $delay;
+        $this->upSpeed = $upSpeed;
 
         return $this;
     }
@@ -332,13 +320,13 @@ class BranchSync
     }
 
     /**
-     * Set adminMail.
+     * Set delay.
      *
      * @return BranchSync
      */
-    public function setAdminMail(?string $adminMail)
+    public function setDelay(?int $delay)
     {
-        $this->adminMail = $adminMail;
+        $this->delay = $delay;
 
         return $this;
     }
@@ -354,13 +342,13 @@ class BranchSync
     }
 
     /**
-     * Set adminName.
+     * Set adminMail.
      *
      * @return BranchSync
      */
-    public function setAdminName(?string $adminName)
+    public function setAdminMail(?string $adminMail)
     {
-        $this->adminName = $adminName;
+        $this->adminMail = $adminMail;
 
         return $this;
     }
@@ -376,13 +364,13 @@ class BranchSync
     }
 
     /**
-     * Set adminPhone.
+     * Set adminName.
      *
      * @return BranchSync
      */
-    public function setAdminPhone(?string $adminPhone)
+    public function setAdminName(?string $adminName)
     {
-        $this->adminPhone = $adminPhone;
+        $this->adminName = $adminName;
 
         return $this;
     }
@@ -398,13 +386,13 @@ class BranchSync
     }
 
     /**
-     * Set lastSyncTransId.
+     * Set adminPhone.
      *
      * @return BranchSync
      */
-    public function setLastSyncTransId(?int $lastSyncTransId)
+    public function setAdminPhone(?string $adminPhone)
     {
-        $this->lastSyncTransId = $lastSyncTransId;
+        $this->adminPhone = $adminPhone;
 
         return $this;
     }
@@ -420,25 +408,13 @@ class BranchSync
     }
 
     /**
-     * Set lastSyncTransDate.
+     * Set lastSyncTransId.
      *
      * @return BranchSync
      */
-    public function setLastSyncTransDate(?DateTime $lastSyncTransDate)
+    public function setLastSyncTransId(?int $lastSyncTransId)
     {
-        $this->lastSyncTransDate = $lastSyncTransDate;
-
-        return $this;
-    }
-
-    /**
-     * Set sslPubKey.
-     *
-     * @return BranchSync
-     */
-    public function setSslPubKey(?string $sslPubKey)
-    {
-        $this->sslPubKey = $sslPubKey;
+        $this->lastSyncTransId = $lastSyncTransId;
 
         return $this;
     }
@@ -458,9 +434,9 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setBranchType(?string $branchType)
+    public function setSslPubKey(?string $sslPubKey)
     {
-        $this->branchType = $branchType;
+        $this->sslPubKey = $sslPubKey;
 
         return $this;
     }
@@ -476,6 +452,18 @@ class BranchSync
     }
 
     /**
+     * Set sslPubKey.
+     *
+     * @return BranchSync
+     */
+    public function setBranchType(?string $branchType)
+    {
+        $this->branchType = $branchType;
+
+        return $this;
+    }
+
+    /**
      * Get lastSyncTransDate.
      *
      * @return DateTime
@@ -486,13 +474,13 @@ class BranchSync
     }
 
     /**
-     * Set lastSyncType.
+     * Set lastSyncTransDate.
      *
      * @return BranchSync
      */
-    public function setLastSyncType(?string $lastSyncType)
+    public function setLastSyncTransDate(?DateTime $lastSyncTransDate)
     {
-        $this->lastSyncType = $lastSyncType;
+        $this->lastSyncTransDate = $lastSyncTransDate;
 
         return $this;
     }
@@ -508,13 +496,13 @@ class BranchSync
     }
 
     /**
-     * Set lft.
+     * Set lastSyncType.
      *
      * @return BranchSync
      */
-    public function setLft(int $lft)
+    public function setLastSyncType(?string $lastSyncType)
     {
-        $this->lft = $lft;
+        $this->lastSyncType = $lastSyncType;
 
         return $this;
     }
@@ -530,13 +518,13 @@ class BranchSync
     }
 
     /**
-     * Set rgt.
+     * Set lft.
      *
      * @return BranchSync
      */
-    public function setRgt(int $rgt)
+    public function setLft(int $lft)
     {
-        $this->rgt = $rgt;
+        $this->lft = $lft;
 
         return $this;
     }
@@ -552,13 +540,13 @@ class BranchSync
     }
 
     /**
-     * Set lvl.
+     * Set rgt.
      *
      * @return BranchSync
      */
-    public function setLvl(int $lvl)
+    public function setRgt(int $rgt)
     {
-        $this->lvl = $lvl;
+        $this->rgt = $rgt;
 
         return $this;
     }
@@ -574,13 +562,13 @@ class BranchSync
     }
 
     /**
-     * Set root.
+     * Set lvl.
      *
      * @return BranchSync
      */
-    public function setRoot(int $root)
+    public function setLvl(int $lvl)
     {
-        $this->root = $root;
+        $this->lvl = $lvl;
 
         return $this;
     }
@@ -595,9 +583,14 @@ class BranchSync
         return $this->root;
     }
 
-    public function setParent(?self $parent = null): self
+    /**
+     * Set root.
+     *
+     * @return BranchSync
+     */
+    public function setRoot(int $root)
     {
-        $this->parent = $parent;
+        $this->root = $root;
 
         return $this;
     }
@@ -605,6 +598,13 @@ class BranchSync
     public function getParent(): ?self
     {
         return $this->parent;
+    }
+
+    public function setParent(?self $parent = null): self
+    {
+        $this->parent = $parent;
+
+        return $this;
     }
 
     public function getUniqueId(): string

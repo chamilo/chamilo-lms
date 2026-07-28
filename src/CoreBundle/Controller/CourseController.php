@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
@@ -30,12 +32,15 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -173,7 +178,9 @@ class CourseController extends ToolBaseController
         Request $request,
         CShortcutRepository $shortcutRepository,
         EntityManagerInterface $em,
-        AssetRepository $assetRepository
+        AssetRepository $assetRepository,
+        SettingsManager $settingsManager,
+        LearningPathAccessChecker $learningPathAccessChecker,
     ): Response {
         // Handle drag & drop sort for course tools
         if ($request->isMethod('POST')) {
@@ -220,6 +227,18 @@ class CourseController extends ToolBaseController
             $userId = $user->getId();
         }
 
+        $session = $sessionId > 0 ? $em->getRepository(Session::class)->find($sessionId) : null;
+        $canManageShortcuts = null !== $user
+            && 'studentview' !== $sessionHandler->get('studentview')
+            && (
+                $user->isAdmin()
+                || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+                || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            );
+        $showInvisibleLearningPaths = $this->isTruthyCourseHomeSetting(
+            $settingsManager->getSetting('lp.show_invisible_lp_in_course_home', true),
+        );
+
         $courseCode = $course->getCode();
         $courseId = $course->getId();
 
@@ -260,7 +279,15 @@ class CourseController extends ToolBaseController
 
         $shortcuts = [];
         if (null !== $user) {
-            $shortcutQuery = $shortcutRepository->getResources($course->getResourceNode());
+            $shortcutQuery = $shortcutRepository->getResourcesByCourse(
+                $course,
+                $session,
+                null,
+                $course->getResourceNode(),
+                false,
+                true,
+                true,
+            );
             $shortcuts = $shortcutQuery->getQuery()->getResult();
 
             $pluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
@@ -333,12 +360,18 @@ class CourseController extends ToolBaseController
             $sid = $this->getSessionId() ?: null;
 
             $externalToolRepository = $em->getRepository(ExternalTool::class);
+            $learningPathRepository = $em->getRepository(CLp::class);
+            $learningPathCategoryRepository = $em->getRepository(CLpCategory::class);
             $topLinksRelationRepository = $isTopLinksEnabled ? $em->getRepository($topLinksRelationClass) : null;
             $visibleShortcuts = [];
 
             /** @var CShortcut $shortcut */
             foreach ($shortcuts as $shortcut) {
                 $resourceNode = $shortcut->getShortCutNode();
+
+                if (!$canManageShortcuts && !$this->isCourseHomeResourcePublished($shortcut, $course, $session)) {
+                    continue;
+                }
 
                 if (null !== $topLinksRelationRepository) {
                     $topLinksRelation = $topLinksRelationRepository->findOneBy(['shortcut' => $shortcut]);
@@ -426,8 +459,62 @@ class CourseController extends ToolBaseController
                     continue;
                 }
 
+                /** @var CLp|null $learningPath */
+                $learningPath = $learningPathRepository->findOneBy(['resourceNode' => $resourceNode]);
+                if ($learningPath) {
+                    if (!$canManageShortcuts
+                        && !$learningPathAccessChecker->isLearningPathVisibleOnCourseHome(
+                            $learningPath,
+                            $course,
+                            $session,
+                            $user,
+                            $showInvisibleLearningPaths,
+                        )
+                    ) {
+                        continue;
+                    }
+
+                    $shortcut->setCustomImageUrl(null);
+                    $shortcut->setUrlOverride(null);
+                    $shortcut->setIcon(null);
+                    $shortcut->target = '_self';
+
+                    $visibleShortcuts[] = $shortcut;
+
+                    continue;
+                }
+
+                /** @var CLpCategory|null $learningPathCategory */
+                $learningPathCategory = $learningPathCategoryRepository->findOneBy(['resourceNode' => $resourceNode]);
+                if ($learningPathCategory) {
+                    if (!$canManageShortcuts
+                        && !$learningPathAccessChecker->isCategoryVisibleOnCourseHome(
+                            $learningPathCategory,
+                            $course,
+                            $session,
+                            $user,
+                            $showInvisibleLearningPaths,
+                        )
+                    ) {
+                        continue;
+                    }
+
+                    $shortcut->setCustomImageUrl(null);
+                    $shortcut->setUrlOverride(null);
+                    $shortcut->setIcon(null);
+                    $shortcut->target = '_self';
+
+                    $visibleShortcuts[] = $shortcut;
+
+                    continue;
+                }
+
                 $cLink = $em->getRepository(CLink::class)->findOneBy(['resourceNode' => $resourceNode]);
                 if ($cLink) {
+                    if (!$canManageShortcuts && !$this->isCourseHomeResourcePublished($cLink, $course, $session)) {
+                        continue;
+                    }
+
                     $shortcut->setCustomImageUrl(
                         $cLink->getCustomImage()
                             ? $assetRepository->getAssetUrl($cLink->getCustomImage())
@@ -738,6 +825,10 @@ class CourseController extends ToolBaseController
         CToolRepository $repo,
         ToolChain $toolChain
     ): RedirectResponse {
+        if (null === $this->getCourse()) {
+            throw new NotFoundHttpException($this->trans('Course not found'));
+        }
+
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
             'title' => $toolName,
@@ -747,12 +838,16 @@ class CourseController extends ToolBaseController
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
-        $link = $tool->getLink();
+        $toolDefinition = $toolChain->getToolFromName($tool->getTool()->getTitle());
+        $link = $toolDefinition->getLink();
 
-        if (null === $this->getCourse()) {
-            throw new NotFoundHttpException($this->trans('Course not found'));
+        if ($this->isExerciseToolEntry($toolName, $tool->getTool()->getTitle(), $link)) {
+            $exerciseUrl = $this->buildExerciseVueToolUrl();
+            if (null !== $exerciseUrl) {
+                return $this->redirect($exerciseUrl);
+            }
         }
+
         $optionalParams = '';
 
         $optionalParams = $request->query->get('cert') ? '&cert='.$request->query->get('cert') : '';
@@ -1792,8 +1887,11 @@ class CourseController extends ToolBaseController
                     );
                 }
             } else {
-                // Redirecting to the document
-                $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
+                $url = $this->buildExerciseVueToolUrl();
+                if (null === $url) {
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
+                }
+
                 header(\sprintf('Location: %s', $url));
 
                 exit;
@@ -1828,8 +1926,12 @@ class CourseController extends ToolBaseController
                 if (Database::num_rows($result) > 0) {
                     $row = Database::fetch_array($result);
                     $exerciseId = $row['iid'];
-                    $url = api_get_path(WEB_CODE_PATH).
-                        'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
+                    $url = $this->buildExerciseVueToolUrl((int) $exerciseId);
+                    if (null === $url) {
+                        $url = api_get_path(WEB_CODE_PATH).
+                            'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
+                    }
+
                     header(\sprintf('Location: %s', $url));
 
                     exit;
@@ -1866,6 +1968,98 @@ class CourseController extends ToolBaseController
                 )
             );
         }
+    }
+
+    private function buildExerciseVueToolUrl(?int $exerciseId = null): ?string
+    {
+        $course = $this->getCourse();
+        if (!$course instanceof Course) {
+            $course = api_get_course_entity();
+        }
+
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return null;
+        }
+
+        $nodeId = $course->getResourceNode()->getId();
+        if (null === $nodeId) {
+            return null;
+        }
+
+        $path = '/resources/exercise/'.(int) $nodeId.'/';
+        if (null !== $exerciseId && $exerciseId > 0) {
+            $path .= $exerciseId.'/overview';
+        }
+
+        $query = http_build_query([
+            'cid' => (int) api_get_course_int_id(),
+            'sid' => (int) api_get_session_id(),
+            'gid' => (int) api_get_group_id(),
+        ]);
+
+        return rtrim(api_get_path(WEB_PATH), '/').$path.'?'.$query;
+    }
+
+    private function isExerciseToolEntry(string $toolName, string $toolTitle, string $link): bool
+    {
+        $toolCandidates = array_map('strtolower', [$toolName, $toolTitle]);
+
+        foreach ($toolCandidates as $candidate) {
+            if (\in_array($candidate, ['quiz', 'exercise', 'exercises', 'tests'], true)) {
+                return true;
+            }
+        }
+
+        return str_contains($link, 'exercise/exercise.php')
+            || str_contains($link, '/main/exercise/exercise.php');
+    }
+
+    private function isCourseHomeResourcePublished(
+        AbstractResource $resource,
+        Course $course,
+        ?Session $session
+    ): bool {
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        $baseLink = null;
+
+        $courseId = $course->getId();
+        $sessionId = $session?->getId();
+
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            if ($resourceLink->getCourse()?->getId() !== $courseId
+                || null !== $resourceLink->getGroup()
+                || null !== $resourceLink->getUserGroup()
+                || null !== $resourceLink->getUser()
+            ) {
+                continue;
+            }
+
+            $resourceSessionId = $resourceLink->getSession()?->getId();
+
+            if (null !== $sessionId && $resourceSessionId === $sessionId) {
+                return ResourceLink::VISIBILITY_PUBLISHED === $resourceLink->getVisibility();
+            }
+
+            if (null === $resourceSessionId) {
+                $baseLink = $resourceLink;
+            }
+        }
+
+        return $baseLink instanceof ResourceLink
+            && ResourceLink::VISIBILITY_PUBLISHED === $baseLink->getVisibility();
+    }
+
+    private function isTruthyCourseHomeSetting(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
     /**

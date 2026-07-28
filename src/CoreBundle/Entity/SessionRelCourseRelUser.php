@@ -63,10 +63,11 @@ class SessionRelCourseRelUser
     /**
      * @var array<int, string>
      */
-    public const STATUS_LIST = [
-        Session::STUDENT => 'student',
-        Session::COURSE_COACH => 'course_coach',
-    ];
+    public const array STATUS_LIST
+        = [
+            Session::STUDENT => 'student',
+            Session::COURSE_COACH => 'course_coach',
+        ];
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

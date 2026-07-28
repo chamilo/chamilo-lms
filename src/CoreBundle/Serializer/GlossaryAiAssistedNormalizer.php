@@ -17,7 +17,7 @@ final class GlossaryAiAssistedNormalizer implements NormalizerAwareInterface, No
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'chamilo_glossary_ai_assisted_normalizer_called';
+    private const string ALREADY_CALLED = 'chamilo_glossary_ai_assisted_normalizer_called';
 
     public function __construct(
         private readonly AiDisclosureHelper $aiDisclosureHelper,

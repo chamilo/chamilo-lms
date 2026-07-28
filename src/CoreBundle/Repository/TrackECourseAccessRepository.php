@@ -38,12 +38,12 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
             return null;
         }
 
-        if ($this->_em->contains($user)) {
+        if ($this->getEntityManager()->contains($user)) {
             return $user;
         }
 
         // Use a reference to avoid an extra database query.
-        return $this->_em->getReference(User::class, $id);
+        return $this->getEntityManager()->getReference(User::class, $id);
     }
 
     /**
@@ -97,7 +97,7 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
         ) {
             $access->setLogoutCourseDate($now);
             $access->setCounter($access->getCounter() + 1);
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -119,8 +119,8 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
         $access->setUserIp($ip);
         $access->setLoginCourseDate(new DateTime());
         $access->setCounter(1);
-        $this->_em->persist($access);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($access);
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -141,12 +141,10 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
         $access = $this->createQueryBuilder('a')
             ->where('a.user = :user AND a.cId = :courseId AND a.sessionId = :sessionId')
             ->andWhere('a.loginCourseDate > :limitTime')
-            ->setParameters([
-                'user' => $userRef,
-                'courseId' => $courseId,
-                'sessionId' => $sessionId,
-                'limitTime' => $limitTime,
-            ])
+            ->setParameter('user', $userRef)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('limitTime', $limitTime)
             ->orderBy('a.loginCourseDate', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
@@ -156,7 +154,7 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
         if ($access) {
             $access->setLogoutCourseDate($now);
             $access->setCounter($access->getCounter() + 1);
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
 
             return;
         }
@@ -171,8 +169,8 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
         $newAccess->setLogoutCourseDate($now);
         $newAccess->setCounter(1);
 
-        $this->_em->persist($newAccess);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($newAccess);
+        $this->getEntityManager()->flush();
     }
 
     public function getCourseVisits(Course $course, ?Session $session = null): int
@@ -218,10 +216,8 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('a')
             ->where('a.user = :user AND a.sessionId = :sessionId')
-            ->setParameters([
-                'user' => $userRef,
-                'sessionId' => $sessionId,
-            ])
+            ->setParameter('user', $userRef)
+            ->setParameter('sessionId', $sessionId)
             ->orderBy('a.loginCourseDate', 'ASC')
             ->setMaxResults(1)
             ->getQuery()

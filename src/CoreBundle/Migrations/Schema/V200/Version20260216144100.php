@@ -11,14 +11,14 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20260216144100 extends AbstractMigrationChamilo
 {
-    private const DEBUG = false;
+    private const bool DEBUG = false;
 
     public function getDescription(): string
     {
         return 'Fix title/comment for course_catalog_published (publish catalogue for anonymous users).';
     }
 
-    private const UPDATES = [
+    private const array UPDATES = [
         'course_catalog_published' => [
             'title' => 'Publish course catalogue',
             'comment' => 'Make the courses catalogue available to anonymous users (the general public) without the need to login.',

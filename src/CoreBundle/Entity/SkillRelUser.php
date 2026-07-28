@@ -108,21 +108,14 @@ class SkillRelUser
         $this->acquiredSkillAt = new DateTime();
     }
 
-    public function setSkill(?Skill $skill): self
-    {
-        $this->skill = $skill;
-
-        return $this;
-    }
-
     public function getSkill(): ?Skill
     {
         return $this->skill;
     }
 
-    public function setCourse(Course $course): self
+    public function setSkill(?Skill $skill): self
     {
-        $this->course = $course;
+        $this->skill = $skill;
 
         return $this;
     }
@@ -132,9 +125,9 @@ class SkillRelUser
         return $this->course;
     }
 
-    public function setSession(Session $session): self
+    public function setCourse(Course $course): self
     {
-        $this->session = $session;
+        $this->course = $course;
 
         return $this;
     }
@@ -144,9 +137,9 @@ class SkillRelUser
         return $this->session;
     }
 
-    public function setAcquiredSkillAt(DateTime $acquiredSkillAt): self
+    public function setSession(Session $session): self
     {
-        $this->acquiredSkillAt = $acquiredSkillAt;
+        $this->session = $session;
 
         return $this;
     }
@@ -156,14 +149,9 @@ class SkillRelUser
         return $this->acquiredSkillAt;
     }
 
-    public function getId(): ?int
+    public function setAcquiredSkillAt(DateTime $acquiredSkillAt): self
     {
-        return $this->id;
-    }
-
-    public function setAcquiredLevel(Level $acquiredLevel): self
-    {
-        $this->acquiredLevel = $acquiredLevel;
+        $this->acquiredSkillAt = $acquiredSkillAt;
 
         return $this;
     }
@@ -173,9 +161,9 @@ class SkillRelUser
         return $this->acquiredLevel;
     }
 
-    public function setArgumentationAuthorId(int $argumentationAuthorId): self
+    public function setAcquiredLevel(Level $acquiredLevel): self
     {
-        $this->argumentationAuthorId = $argumentationAuthorId;
+        $this->acquiredLevel = $acquiredLevel;
 
         return $this;
     }
@@ -185,9 +173,9 @@ class SkillRelUser
         return $this->argumentationAuthorId;
     }
 
-    public function setArgumentation(string $argumentation): self
+    public function setArgumentationAuthorId(int $argumentationAuthorId): self
     {
-        $this->argumentation = $argumentation;
+        $this->argumentationAuthorId = $argumentationAuthorId;
 
         return $this;
     }
@@ -195,6 +183,13 @@ class SkillRelUser
     public function getArgumentation(): string
     {
         return $this->argumentation;
+    }
+
+    public function setArgumentation(string $argumentation): self
+    {
+        $this->argumentation = $argumentation;
+
+        return $this;
     }
 
     /**
@@ -228,6 +223,11 @@ class SkillRelUser
     public function getIssueUrlAll(): string
     {
         return api_get_path(WEB_PATH).\sprintf('skill/%s/user/%s', $this->skill->getId(), $this->user->getId());
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**

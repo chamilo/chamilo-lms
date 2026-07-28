@@ -37,9 +37,9 @@ use const PHP_URL_PATH;
 
 final readonly class LearningPathContentPdfService
 {
-    private const HTML_EXTENSIONS = ['htm', 'html', 'xht', 'xhtml'];
-    private const IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'webp'];
-    private const SUPPORTED_ITEM_TYPES = ['asset', 'dir', 'document', 'sco'];
+    private const array HTML_EXTENSIONS = ['htm', 'html', 'xht', 'xhtml'];
+    private const array IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'webp'];
+    private const array SUPPORTED_ITEM_TYPES = ['asset', 'dir', 'document', 'sco'];
 
     public function __construct(
         private CLpItemRepository $lpItemRepository,

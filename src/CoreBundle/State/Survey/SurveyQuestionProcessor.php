@@ -39,7 +39,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
     /**
      * @var array<int, string>
      */
-    private const SUPPORTED_TYPES = [
+    private const array SUPPORTED_TYPES = [
         'yesno',
         'multiplechoice',
         'multipleresponse',
@@ -56,7 +56,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
     /**
      * @var array<int, string>
      */
-    private const OPTION_TYPES = [
+    private const array OPTION_TYPES = [
         'yesno',
         'multiplechoice',
         'multipleresponse',
@@ -70,7 +70,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
     /**
      * @var array<int, string>
      */
-    private const DISPLAY_TYPES = [
+    private const array DISPLAY_TYPES = [
         'yesno',
         'multiplechoice',
         'multipleresponse',

@@ -114,10 +114,14 @@ $month = date('m');
 $end = api_strtotime($year.'-'.$month.'-01 00:00:00') - 1;
 $start = $end - (2*365*86400);
 
-// Prepare a list of admin users to avoid removing their relation to the base course
-$sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_ADMIN);
+// Prepare a list of admin users to avoid removing their relation to the base course.
+$userTable = Database::get_main_table(TABLE_MAIN_USER);
+$sql = "SELECT id AS user_id
+        FROM $userTable
+        WHERE roles LIKE '%ROLE_ADMIN%'
+           OR roles LIKE '%ROLE_GLOBAL_ADMIN%'";
 $resultAdmin = Database::query($sql);
-$admins = array();
+$admins = [];
 while ($row = Database::fetch_assoc($resultAdmin)) {
     $admins[] = $row['user_id'];
 }

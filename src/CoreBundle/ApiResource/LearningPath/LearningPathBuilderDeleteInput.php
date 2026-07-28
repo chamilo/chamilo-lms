@@ -17,10 +17,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/learning_path_builder_items/{itemId}/delete',
             requirements: ['itemId' => '\d+'],
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             read: false,
             name: 'delete_learning_path_builder_item',
             processor: LearningPathBuilderMutationProcessor::class,
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
     ],
     normalizationContext: ['groups' => ['learning_path_builder_delete:read']],

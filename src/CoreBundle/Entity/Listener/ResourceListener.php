@@ -202,7 +202,10 @@ class ResourceListener
         if (null !== $request && null === $parentNode) {
             $currentRequest = $request->getCurrentRequest();
             if (null !== $currentRequest) {
-                $resourceNodeIdFromRequest = $currentRequest->query->get('parentResourceNodeId', $currentRequest->request->get('parentResourceNodeId'));
+                $resourceNodeIdFromRequest = $currentRequest->query->get(
+                    'parentResourceNodeId',
+                    $currentRequest->request->get('parentResourceNodeId')
+                );
                 if (empty($resourceNodeIdFromRequest)) {
                     $contentData = $request->getCurrentRequest()->getContent();
                     $contentData = json_decode($contentData, true, 512, JSON_THROW_ON_ERROR);
@@ -344,6 +347,28 @@ class ResourceListener
         }
     }
 
+    public function updateResourceName(AbstractResource $resource): void
+    {
+        $resourceName = $resource->getResourceName();
+
+        // Legacy Chamilo 1.x data may have empty titles/filenames. Use a safe
+        // fallback so migrations do not abort on dirty rows.
+        if (empty($resourceName)) {
+            $resourceName = 'resource-'.$resource->getResourceIdentifier();
+        }
+
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
+        if (empty($extension)) {
+            // $slug = $this->slugify->slugify($resourceName);
+        }
+        $resourceNode->setTitle($resourceName);
+    }
+
     /**
      * Forces a single-entry resourceLinkList to bind to the current course
      * context resolved by CidReqListener (stored in the session), which is the
@@ -411,98 +436,6 @@ class ResourceListener
             : ResourceLink::VISIBILITY_PUBLISHED;
 
         $resource->setResourceLinkArray([$context]);
-    }
-
-    /**
-     * When updating a Resource.
-     */
-    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if (null === $resourceNode) {
-            return;
-        }
-
-        $parentResourceNode = $resource->getParent()?->resourceNode;
-
-        if ($parentResourceNode) {
-            $resourceNode->setParent($parentResourceNode);
-        }
-
-        $this->updateResourceName($resource);
-
-        $this->applyResourceLanguageFromRequest($resource, $eventArgs);
-
-        // error_log('Resource listener preUpdate');
-        // $this->setLinks($resource, $eventArgs->getEntityManager());
-    }
-
-    public function updateResourceName(AbstractResource $resource): void
-    {
-        $resourceName = $resource->getResourceName();
-
-        // Legacy Chamilo 1.x data may have empty titles/filenames. Use a safe
-        // fallback so migrations do not abort on dirty rows.
-        if (empty($resourceName)) {
-            $resourceName = 'resource-'.$resource->getResourceIdentifier();
-        }
-
-        $resourceNode = $resource->getResourceNode();
-        if (null === $resourceNode) {
-            return;
-        }
-
-        $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
-        if (empty($extension)) {
-            // $slug = $this->slugify->slugify($resourceName);
-        }
-        $resourceNode->setTitle($resourceName);
-    }
-
-    private function addCCalendarEventGlobalLink(CCalendarEvent $event, PrePersistEventArgs $eventArgs): void
-    {
-        $currentRequest = $this->request->getCurrentRequest();
-
-        if (null === $currentRequest) {
-            return;
-        }
-
-        $type = $currentRequest->query->get('type');
-        if (null === $type) {
-            $content = $currentRequest->getContent();
-            $params = json_decode($content, true);
-            if (isset($params['isGlobal']) && 1 === (int) $params['isGlobal']) {
-                $type = 'global';
-            }
-        }
-
-        if ('global' === $type) {
-            $em = $eventArgs->getObjectManager();
-            $resourceNode = $event->getResourceNode();
-
-            $globalLink = new ResourceLink();
-            $globalLink->setCourse(null)
-                ->setSession(null)
-                ->setGroup(null)
-                ->setUser(null)
-            ;
-
-            $alreadyHasGlobalLink = false;
-            foreach ($resourceNode->getResourceLinks() as $existingLink) {
-                if (null === $existingLink->getCourse() && null === $existingLink->getSession()
-                    && null === $existingLink->getGroup() && null === $existingLink->getUser()) {
-                    $alreadyHasGlobalLink = true;
-
-                    break;
-                }
-            }
-
-            if (!$alreadyHasGlobalLink) {
-                $resourceNode->addResourceLink($globalLink);
-                $em->persist($globalLink);
-            }
-        }
     }
 
     private function applyResourceLanguageFromRequest(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
@@ -601,6 +534,78 @@ class ResourceListener
         throw new BadRequestHttpException('Invalid resource language.');
     }
 
+    private function addCCalendarEventGlobalLink(CCalendarEvent $event, PrePersistEventArgs $eventArgs): void
+    {
+        $currentRequest = $this->request->getCurrentRequest();
+
+        if (null === $currentRequest) {
+            return;
+        }
+
+        $type = $currentRequest->query->get('type');
+        if (null === $type) {
+            $content = $currentRequest->getContent();
+            $params = json_decode($content, true);
+            if (isset($params['isGlobal']) && 1 === (int) $params['isGlobal']) {
+                $type = 'global';
+            }
+        }
+
+        if ('global' === $type) {
+            $em = $eventArgs->getObjectManager();
+            $resourceNode = $event->getResourceNode();
+
+            $globalLink = new ResourceLink();
+            $globalLink->setCourse(null)
+                ->setSession(null)
+                ->setGroup(null)
+                ->setUser(null)
+            ;
+
+            $alreadyHasGlobalLink = false;
+            foreach ($resourceNode->getResourceLinks() as $existingLink) {
+                if (null === $existingLink->getCourse() && null === $existingLink->getSession()
+                    && null === $existingLink->getGroup()
+                    && null === $existingLink->getUser()
+                ) {
+                    $alreadyHasGlobalLink = true;
+
+                    break;
+                }
+            }
+
+            if (!$alreadyHasGlobalLink) {
+                $resourceNode->addResourceLink($globalLink);
+                $em->persist($globalLink);
+            }
+        }
+    }
+
+    /**
+     * When updating a Resource.
+     */
+    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
+    {
+        $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $parentResourceNode = $resource->getParent()?->resourceNode;
+
+        if ($parentResourceNode) {
+            $resourceNode->setParent($parentResourceNode);
+        }
+
+        $this->updateResourceName($resource);
+
+        $this->applyResourceLanguageFromRequest($resource, $eventArgs);
+
+        // error_log('Resource listener preUpdate');
+        // $this->setLinks($resource, $eventArgs->getEntityManager());
+    }
+
     public function preRemove(AbstractResource $resource, LifecycleEventArgs $args): void
     {
         if (!$resource instanceof CDocument) {
@@ -612,7 +617,6 @@ class ResourceListener
         $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
             ->setParameter('path', $docID)
             ->setParameter('type', 'document')
-            ->execute()
-        ;
+            ->execute();
     }
 }

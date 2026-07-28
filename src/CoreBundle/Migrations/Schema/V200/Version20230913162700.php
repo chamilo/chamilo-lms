@@ -23,13 +23,13 @@ final class Version20230913162700 extends AbstractMigrationChamilo
      * When enabled, missing embedded files referenced in HTML may be created as new documents.
      * This is the "original behavior", but now guarded to avoid duplicates.
      */
-    private const ENABLE_DOCUMENT_CREATION = true;
+    private const bool ENABLE_DOCUMENT_CREATION = true;
 
     /**
      * Deterministic filesystem search only:
      * - Search in referenced course dir and/or current course dir (no global recursion).
      */
-    private const ENABLE_DETERMINISTIC_FS_SEARCH = true;
+    private const bool ENABLE_DETERMINISTIC_FS_SEARCH = true;
 
     public function getDescription(): string
     {

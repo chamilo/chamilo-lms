@@ -16,7 +16,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 final readonly class LearningPathRuntimeWriteProtection
 {
-    private const ACTION_TOKEN_INTENTION = 'learning_path_action';
+    private const string ACTION_TOKEN_INTENTION = 'learning_path_action';
 
     public function __construct(
         private RequestStack $requestStack,

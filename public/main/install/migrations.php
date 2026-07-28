@@ -13,6 +13,7 @@ return [
     'migrations_paths' => [
         'Chamilo\CoreBundle\Migrations\Schema\V200' => '../../../src/CoreBundle/Migrations/Schema/V200',
         'Chamilo\CoreBundle\Migrations\Schema\V210' => '../../../src/CoreBundle/Migrations/Schema/V210',
+        'Chamilo\CoreBundle\Migrations\Schema\V300' => '../../../src/CoreBundle/Migrations/Schema/V300',
     ],
     'all_or_nothing' => false,
     'check_database_platform' => true,

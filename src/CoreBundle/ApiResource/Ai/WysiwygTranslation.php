@@ -17,16 +17,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/wysiwyg_translation',
+            security: "is_granted('ROLE_USER')",
             name: 'get_wysiwyg_translation_configuration',
             provider: WysiwygTranslationProvider::class,
-            security: "is_granted('ROLE_USER')",
         ),
         new Post(
             uriTemplate: '/wysiwyg_translation',
+            security: "is_granted('ROLE_USER')",
             read: false,
             name: 'create_wysiwyg_translation',
             processor: WysiwygTranslationProcessor::class,
-            security: "is_granted('ROLE_USER')",
         ),
     ],
     normalizationContext: ['groups' => ['wysiwyg_translation:read']],
@@ -62,7 +62,7 @@ final class WysiwygTranslation
     public string $html = '';
 
     /**
-     * @var list<string>
+     * @var array<string>
      */
     #[Groups(['wysiwyg_translation:write'])]
     public array $targetLanguages = [];
@@ -71,13 +71,13 @@ final class WysiwygTranslation
     public string $provider = '';
 
     /**
-     * @var list<string>
+     * @var array<string>
      */
     #[Groups(['wysiwyg_translation:read'])]
     public array $addedLanguages = [];
 
     /**
-     * @var list<string>
+     * @var array<string>
      */
     #[Groups(['wysiwyg_translation:read'])]
     public array $skippedLanguages = [];

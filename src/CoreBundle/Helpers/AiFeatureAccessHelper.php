@@ -12,11 +12,11 @@ use Throwable;
 
 final readonly class AiFeatureAccessHelper
 {
-    public const MODE_ENABLED = 'true';
-    public const MODE_DISABLED = 'false';
-    public const MODE_PLUGIN_DEFINED = 'plugin_defined';
+    public const string MODE_ENABLED = 'true';
+    public const string MODE_DISABLED = 'false';
+    public const string MODE_PLUGIN_DEFINED = 'plugin_defined';
 
-    private const FEATURES = [
+    private const array FEATURES = [
         'learning_path_generator',
         'exercise_generator',
         'open_answers_grader',

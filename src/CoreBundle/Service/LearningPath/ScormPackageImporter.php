@@ -40,9 +40,9 @@ use const UPLOAD_ERR_INI_SIZE;
 
 final readonly class ScormPackageImporter
 {
-    private const MAX_ARCHIVE_ENTRIES = 20000;
-    private const MAX_MANIFEST_SIZE = 10485760;
-    private const MAX_UNCOMPRESSED_SIZE = 2147483648;
+    private const int MAX_ARCHIVE_ENTRIES = 20000;
+    private const int MAX_MANIFEST_SIZE = 10485760;
+    private const int MAX_UNCOMPRESSED_SIZE = 2147483648;
 
     public function __construct(
         private EntityManagerInterface $entityManager,

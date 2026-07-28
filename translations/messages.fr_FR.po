@@ -39359,3 +39359,18 @@ msgstr "Aucune alerte n'a encore été enregistrée."
 msgid "Git remote changed"
 msgstr "Dépôt Git distant modifié"
 
+
+msgid "Press enter to select"
+msgstr "Appuyez sur Entrée pour sélectionner"
+
+msgid "Press enter to remove"
+msgstr "Appuyez sur Entrée pour retirer"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Aucun élément trouvé. Essayez de modifier votre recherche."
+
+msgid "List is empty."
+msgstr "La liste est vide."
+
+msgid "Your session has expired. Please try again."
+msgstr "Votre session a expiré. Veuillez réessayer."

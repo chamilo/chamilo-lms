@@ -36,7 +36,7 @@ final readonly class AnnouncementAttachmentController
 {
     use AnnouncementAccessHelperTrait;
 
-    public const CSRF_TOKEN_ID = 'announcement_attachment';
+    public const string CSRF_TOKEN_ID = 'announcement_attachment';
 
     public function __construct(
         private EntityManagerInterface $entityManager,

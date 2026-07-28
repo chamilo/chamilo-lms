@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "Page {0} sur {1}",
     "Showing {0} posts": "Affichage de {0} publications",
     "Showing {0} tasks": "Affichage de {0} t\u00e2ches",
-    "contains {0} items": "contient {0} \u00e9l\u00e9ments"
+    "contains {0} items": "contient {0} \u00e9l\u00e9ments",
+    "Press enter to select": "Appuyez sur Entr\u00e9e pour s\u00e9lectionner",
+    "Press enter to remove": "Appuyez sur Entr\u00e9e pour retirer",
+    "No elements found. Consider changing the search query.": "Aucun \u00e9l\u00e9ment trouv\u00e9. Essayez de modifier votre recherche.",
+    "List is empty.": "La liste est vide."
 }

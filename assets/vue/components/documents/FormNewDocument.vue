@@ -307,6 +307,10 @@ export default {
       return itemNode || routeNode || resourceNodeId || null
     },
     showResourceLanguageAdvancedSettings() {
+      if ("true" !== this.platformConfigStore.getSetting("language.language_by_resource")) {
+        return false
+      }
+
       const languages = Array.isArray(window.languages) ? window.languages : []
 
       return (

@@ -33,13 +33,6 @@ class GradeComponents
     #[ORM\JoinColumn(name: 'grade_model_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradeModel $gradeModel;
 
-    public function setPercentage(string $percentage): self
-    {
-        $this->percentage = $percentage;
-
-        return $this;
-    }
-
     /**
      * Get percentage.
      *
@@ -50,9 +43,9 @@ class GradeComponents
         return $this->percentage;
     }
 
-    public function setTitle(string $title): self
+    public function setPercentage(string $percentage): self
     {
-        $this->title = $title;
+        $this->percentage = $percentage;
 
         return $this;
     }
@@ -67,9 +60,9 @@ class GradeComponents
         return $this->title;
     }
 
-    public function setAcronym(string $acronym): self
+    public function setTitle(string $title): self
     {
-        $this->acronym = $acronym;
+        $this->title = $title;
 
         return $this;
     }
@@ -82,6 +75,13 @@ class GradeComponents
     public function getAcronym()
     {
         return $this->acronym;
+    }
+
+    public function setAcronym(string $acronym): self
+    {
+        $this->acronym = $acronym;
+
+        return $this;
     }
 
     /**

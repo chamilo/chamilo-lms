@@ -43,14 +43,6 @@ class Level implements Stringable
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * @return string
      */
     public function getTitle()
@@ -63,6 +55,14 @@ class Level implements Stringable
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getPosition(): int

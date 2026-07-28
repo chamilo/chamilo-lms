@@ -19,11 +19,9 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormImportProcessor;
         new Post(
             uriTemplate: '/learning_paths/scorm/import',
             controller: LearningPathScormImportAction::class,
-            processor: LearningPathScormImportProcessor::class,
             openapi: new Operation(
                 summary: 'Import a SCORM package into the current course context',
                 requestBody: new RequestBody(
-                    required: true,
                     content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
@@ -47,12 +45,14 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormImportProcessor;
                             ],
                         ],
                     ]),
+                    required: true,
                 ),
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            output: false,
             read: false,
             deserialize: false,
-            output: false,
+            processor: LearningPathScormImportProcessor::class,
         ),
     ],
 )]

@@ -74,7 +74,7 @@
       :description="t('View reports, statistics and tracking data')"
       :editable="blockTracking.editable"
       :items="blockTracking.items"
-      :title="t('Tracking')"
+      :title="t('Analytics')"
       bg-image="images/bg-block-admin-tracking.png"
       icon="tracking"
     />

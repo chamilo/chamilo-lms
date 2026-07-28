@@ -37405,9 +37405,6 @@ msgstr "La configuració remota de Git (.git/config) ha canviat. Verifiqueu que 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "L'escaneig s'ha aturat abans d'hora perquè no s'ha pogut llegir un subdirectori (comproveu els permisos dels fitxers). Els resultats a continuació poden ser parcials."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Hi ha massa canvis per llistar-los completament; només es mostren les primeres entrades de cada categoria a continuació. Consulteu el registre CEF per veure la llista completa."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fitxer(s) no s'han pogut llegir (permisos) i s'han omès."
 
@@ -37491,4 +37488,7 @@ msgstr "Encara no s'ha registrat cap alerta."
 
 msgid "Git remote changed"
 msgstr "El repositori remot de Git ha canviat"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Massa canvis per mostrar-los complets; només es mostren les primeres entrades de cada categoria. Consulteu el %link_start%registre CEF%link_end% per veure la llista completa."
 

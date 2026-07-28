@@ -27,7 +27,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin/usergroups/{id}/add-users-data', requirements: ['id' => '\d+'])]
 class UsergroupAddUsersController extends AbstractController
 {
-    private const ALLOWED_RELATION_TYPES = [
+    private const array ALLOWED_RELATION_TYPES = [
         Usergroup::GROUP_USER_PERMISSION_ADMIN,
         Usergroup::GROUP_USER_PERMISSION_READER,
         Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION,

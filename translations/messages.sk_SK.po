@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukážka vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukážka vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -26632,7 +26632,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurácia pripojenia LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Pole definujúce hostiteľa a port pre LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Nastaviť dátum expirácie pri prvom prihlásení"
@@ -37405,9 +37405,6 @@ msgstr "Konfigurácia vzdialeného úložiska Git (.git/config) sa zmenila. Over
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skenovanie sa predčasne zastavilo, pretože nebolo možné prečítať podadresár (skontrolujte oprávnenia súborov). Výsledky nižšie môžu byť čiastočné."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Príliš veľa zmien na úplné zobrazenie; nižšie sú zobrazené iba prvé položky každej kategórie. Úplný zoznam nájdete v protokole CEF."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% súborov nebolo možné načítať (prístupové práva) a boli preskočené."
 
@@ -37491,4 +37488,7 @@ msgstr "Zatiaľ nebolo zaznamenané žiadne upozornenie."
 
 msgid "Git remote changed"
 msgstr "Vzdialené úložisko Git sa zmenilo"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
 

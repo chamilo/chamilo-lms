@@ -37386,9 +37386,6 @@ msgstr "La configurazion dal remote Git (.git/config) e je cambiade. Verifiche c
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "La scansion si è fermade prime parcè che no si è podût lei une sot-cartel (controle i permès dai files). I risultâts chi sot a podin jessi parziâi."
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Tropis modifichis par listâlis dal dut; a son mostrâts dome i prins elements di ogni categorie. Cjale il regjistri CEF par la liste complete."
-
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% file(s) no si àn podût lei (permès) e a son stâts saltâts."
 
@@ -37472,4 +37469,7 @@ msgstr "Nissun avîs al è stât regjistrât ancjemò."
 
 msgid "Git remote changed"
 msgstr "Remote Git modificât"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgstr "Tropis modifichis par listâlis dal dut; a son mostrâts dome i prins elements di ogni categorie. Viôt il %link_start%log CEF%link_end% pe liste complete."
 

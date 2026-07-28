@@ -32,10 +32,10 @@ final class AiTutorChatService
      * >  0 => private chat with a user
      * -1 => AI Tutor private conversation (per user).
      */
-    public const FRIEND_AI = -1;
+    public const int FRIEND_AI = -1;
 
-    private const DEFAULT_PROVIDER = 'openai';
-    private const ACTIVE_PROVIDER_SESSION_PREFIX = 'ai_tutor_active_provider_';
+    private const string DEFAULT_PROVIDER = 'openai';
+    private const string ACTIVE_PROVIDER_SESSION_PREFIX = 'ai_tutor_active_provider_';
 
     public function __construct(
         private readonly RequestStack $requestStack,

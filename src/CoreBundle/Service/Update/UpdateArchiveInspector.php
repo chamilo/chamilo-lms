@@ -11,7 +11,7 @@ use ZipArchive;
 
 final class UpdateArchiveInspector
 {
-    private const ZIP_OPSYS_UNIX = 3;
+    private const int ZIP_OPSYS_UNIX = 3;
 
     /**
      * @return array{file_count: int, top_level_entries: string[]}

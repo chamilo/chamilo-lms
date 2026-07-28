@@ -3134,5 +3134,9 @@
     "Page {0} of {1}": "{0} \ud398\uc774\uc9c0 / {1} \ud398\uc774\uc9c0",
     "Showing {0} posts": "{0}\uac1c \uac8c\uc2dc\ubb3c \ud45c\uc2dc \uc911",
     "Showing {0} tasks": "{0}\uac1c \uc791\uc5c5 \ud45c\uc2dc \uc911",
-    "contains {0} items": "{0}\uac1c \ud56d\ubaa9 \ud3ec\ud568"
+    "contains {0} items": "{0}\uac1c \ud56d\ubaa9 \ud3ec\ud568",
+    "Press enter to select": "Press enter to select",
+    "Press enter to remove": "Press enter to remove",
+    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
+    "List is empty.": "List is empty."
 }

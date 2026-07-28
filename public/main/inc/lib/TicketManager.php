@@ -1554,7 +1554,6 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         $user_info = api_get_user_info();
         $userId = $user_info['user_id'];
         $sql = "SELECT COUNT(DISTINCT ticket.id) AS unread
@@ -1567,9 +1566,10 @@ class TicketManager
                     user.user_id = message.sys_insert_user_id ";
         if (!api_is_platform_admin()) {
             $sql .= " AND ticket.request_user = '$userId'
-                      AND user_id IN (SELECT user_id FROM $table_main_admin)  ";
+                      AND (user.roles LIKE '%ROLE_ADMIN%' OR user.roles LIKE '%ROLE_GLOBAL_ADMIN%') ";
         } else {
-            $sql .= " AND user_id NOT IN (SELECT user_id FROM $table_main_admin)
+            $sql .= " AND user.roles NOT LIKE '%ROLE_ADMIN%'
+                      AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
                       AND ticket.status_id != '".self::STATUS_FORWARDED."'";
         }
         $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlUtil()->getCurrent()->getId();

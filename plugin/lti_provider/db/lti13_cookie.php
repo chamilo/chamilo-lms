@@ -31,7 +31,7 @@ class Lti13Cookie implements Lti1p3Cookie
         // SameSite none and secure will be required for tools to work inside iframes
         $sameSiteOptions = [
             'samesite' => 'None',
-            'secure' => false,
+            'secure' => true,
             'httponly' => true,
         ];
 

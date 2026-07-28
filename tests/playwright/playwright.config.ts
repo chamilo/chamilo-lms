@@ -27,16 +27,23 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
-  // 60s, not the Playwright default 30s: adminSettings.feature's @settings
-  // AfterAll hook does its own login plus 3 rounds of navigate+select+
-  // save+wait (see common.steps.ts) — more work than any single scenario —
-  // and test.beforeAll()/afterAll() wrappers inherit this same config
-  // value when a hook doesn't set its own override (playwright-bdd's own
-  // per-hook `timeout` option doesn't reach that outer wrapper, confirmed
-  // by testing it directly). Regular scenarios run in ~23s in production
+  // 90s, not the Playwright default 30s (and up from an earlier 60s):
+  // adminSettings.feature's @settings AfterAll hook does its own login
+  // plus 3 rounds of navigate+select+save+wait (see common.steps.ts) —
+  // more work than any single scenario — and test.beforeAll()/afterAll()
+  // wrappers inherit this same config value when a hook doesn't set its
+  // own override (playwright-bdd's own per-hook `timeout` option doesn't
+  // reach that outer wrapper, confirmed by testing it directly). Also
+  // covers createUser.feature's "Create a HRM user", which enables a
+  // platform setting via the settings UI before filling user_add.php —
+  // login + settings Save + interrupt-retry navigation + form submit
+  // regularly lands in the 55–65s range on cold CI even when every step
+  // is healthy (a real CI run timed out at exactly 60s after a successful
+  // submit, with the next four HRM scenarios all passing on the user it
+  // had already created). Regular scenarios run in ~23s in production
   // mode, well under either value, so this doesn't mask a genuinely hung
   // test for long.
-  timeout: 60_000,
+  timeout: 90_000,
   // Default is 5s. Bumped after a real CI failure: career.feature's "Create a
   // career" is the first ported scenario to touch a legacy jqGrid page
   // (careers.php) — every prior feature (login, adminFillUsers,

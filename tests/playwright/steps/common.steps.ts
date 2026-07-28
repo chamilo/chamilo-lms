@@ -51,14 +51,18 @@ Given("I am on course {string} homepage", async ({ page }, courseCode: string) =
 // filler.php?fill=users) could fire before the session cookie from the
 // login redirect was actually set, so the app bounced it back to the login
 // page as unauthenticated. A follow-up fix added waitForLoadState
-// ("networkidle") here, which was NOT enough — the app has background
-// polling (notifications, chat presence, same kind of thing DockedChat.vue
-// does) that can make "network idle for 500ms" resolve on a brief lull
-// before the actual post-login redirect lands, rather than after it.
-// Waiting for the browser to actually leave /login is a deterministic
-// signal that networkidle isn't; keeping the networkidle wait afterward too
-// as a second guard, in case some async data-loading on the destination
-// page still matters to whatever step comes next.
+// ("networkidle") here, which was NOT enough on its own — the app has
+// background polling (notifications, chat presence, same kind of thing
+// DockedChat.vue does) that can make "network idle for 500ms" resolve on a
+// brief lull before the actual post-login redirect lands, rather than after
+// it. Waiting for the browser to actually leave /login is the deterministic
+// signal that matters (session cookie is set by then). A trailing
+// networkidle after that was later dropped: it added multi-second cost on
+// every login (the bulk of "Create a HRM user"'s ~35s wall time) without
+// buying reliability, because background polling means networkidle is neither
+// a fast nor a trustworthy "page is ready" signal on this app. Downstream
+// steps' own locator auto-wait / explicit "wait for the page..." covers
+// destination-page readiness.
 async function loginAs(page: Page, username: string) {
   await page.goto("/login")
   await page.locator("#login").fill(username)
@@ -68,7 +72,6 @@ async function loginAs(page: Page, username: string) {
     .first()
     .click()
   await page.waitForURL((url) => !url.pathname.startsWith("/login"))
-  await page.waitForLoadState("networkidle")
 }
 
 Given("I am a platform administrator", async ({ page }) => {
@@ -418,11 +421,21 @@ let settingsPage: import("@playwright/test").Page | undefined
 // care that things go quiet, not what specifically was loading) before
 // trying again, and allows a few attempts rather than exactly one, since
 // there's no guarantee a single retry lands cleanly.
+//
+// Deliberately does NOT wait for networkidle after a successful goto: this
+// helper is also used by every "I am on" step, and createUser.feature's
+// "Create a HRM user" (settings enable + form + submit, with 1–2 interrupt
+// retries on the post-Save jump to user_add.php) burned the entire 60s
+// test budget on networkidle waits alone — the form submitted fine and
+// subsequent HRM scenarios all passed, but the final "I should not see an
+// error" assertion never got a chance to run. page.goto()'s default
+// waitUntil:"load" is enough for the next step's own locator auto-wait /
+// explicit "wait for the page..." steps to take over; the value of this
+// helper is the interrupt-retry, not a second settle strategy.
 async function gotoReliably(page: Page, path: string, maxAttempts = 3) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       await page.goto(path)
-      await page.waitForLoadState("networkidle")
       return
     } catch (error) {
       if (!String(error).includes("is interrupted by another navigation") || attempt === maxAttempts) {
@@ -442,8 +455,8 @@ async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Brows
     .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
     .first()
     .click()
+  // Same settle rule as loginAs(): leave /login, no networkidle (see comment there).
   await page.waitForURL((url) => !url.pathname.startsWith("/login"))
-  await page.waitForLoadState("networkidle")
   return page
 }
 

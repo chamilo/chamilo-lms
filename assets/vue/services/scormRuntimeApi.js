@@ -95,6 +95,21 @@ function getSetValueError(name, value, is2004) {
     }
   }
 
+  if (name === "cmi.learner_preference.audio_level" || name === "cmi.learner_preference.delivery_speed") {
+    if (normalizedValue === "" || !Number.isFinite(Number(normalizedValue))) {
+      return "406"
+    }
+    if (Number(normalizedValue) < 0) {
+      return "407"
+    }
+  }
+
+  if (name === "cmi.learner_preference.audio_captioning") {
+    if (!["-1", "0", "1"].includes(normalizedValue)) {
+      return "406"
+    }
+  }
+
   return "0"
 }
 

@@ -151,7 +151,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Resou
 
     #[Groups(['link_category:read', 'link_category:write', 'link_category:browse'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['link_category:read', 'link_category:write'])]

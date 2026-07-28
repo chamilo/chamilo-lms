@@ -48,7 +48,7 @@ class CDropboxFile extends AbstractResource implements ResourceInterface, String
     #[ORM\Column(name: 'filesize', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $filesize = 0;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'string', length: 250, nullable: true)]

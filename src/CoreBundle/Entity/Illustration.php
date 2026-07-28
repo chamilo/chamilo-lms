@@ -30,7 +30,7 @@ class Illustration extends AbstractResource implements ResourceInterface, String
     #[ORM\Id]
     protected Uuid $id;
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     public function __construct()

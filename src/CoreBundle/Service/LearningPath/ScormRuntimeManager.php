@@ -8,9 +8,12 @@ namespace Chamilo\CoreBundle\Service\LearningPath;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\AssetRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -30,10 +33,16 @@ final readonly class ScormRuntimeManager
 {
     public const string VERSION_12 = '1.2';
     public const string VERSION_2004 = '2004';
+    public const string LEARNER_PREFERENCES_FIELD = 'scorm_preferences';
 
     private const string SCALED_SCORE_OBJECTIVE_ID = '__chamilo_scaled_score__';
     private const int MAX_VALUE_LENGTH = 65535;
     private const int MAX_PAYLOAD_LENGTH = 1048576;
+    private const array LEARNER_PREFERENCE_DEFAULTS = [
+        'audio_level' => 1.0,
+        'delivery_speed' => 1.0,
+        'audio_captioning' => 0,
+    ];
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -41,6 +50,8 @@ final readonly class ScormRuntimeManager
         private ScormManifestParser $manifestParser,
         private SettingsManager $settingsManager,
         private UrlGeneratorInterface $urlGenerator,
+        private ExtraFieldRepository $extraFieldRepository,
+        private ExtraFieldValuesRepository $extraFieldValuesRepository,
     ) {}
 
     public function isScormLearningPath(CLp $lp): bool
@@ -201,6 +212,7 @@ final readonly class ScormRuntimeManager
         CLpItem $item,
         CLpItemView $itemView,
         Course $course,
+        User $user,
         string $version,
         array $values,
         array $changedKeys,
@@ -218,6 +230,7 @@ final readonly class ScormRuntimeManager
             $lp,
             $item,
             $itemView,
+            $user,
             $version,
             $normalized,
             $normalizedChangedKeys,
@@ -301,6 +314,7 @@ final readonly class ScormRuntimeManager
         $progressMeasure = $itemView->getProgress();
         $student = $this->getStudentData($user);
         $masteryScore = $item->getMasteryScore();
+        $learnerPreferences = $this->getLearnerPreferences($user);
 
         $values = [
             'cmi._version' => '1.0',
@@ -326,8 +340,11 @@ final readonly class ScormRuntimeManager
             ]),
             'cmi.learner_id' => $student['id'],
             'cmi.learner_name' => $student['name'],
-            'cmi.learner_preference._children' => 'language',
+            'cmi.learner_preference._children' => 'audio_level,language,delivery_speed,audio_captioning',
+            'cmi.learner_preference.audio_level' => $this->formatNumber($learnerPreferences['audio_level']),
             'cmi.learner_preference.language' => '',
+            'cmi.learner_preference.delivery_speed' => $this->formatNumber($learnerPreferences['delivery_speed']),
+            'cmi.learner_preference.audio_captioning' => (string) $learnerPreferences['audio_captioning'],
             'cmi.location' => (string) ($itemView->getLessonLocation() ?? ''),
             'cmi.credit' => 'credit',
             'cmi.completion_status' => $completionStatus,
@@ -388,6 +405,9 @@ final readonly class ScormRuntimeManager
             $values[$prefix.$responseKey] = (string) $interaction->getStudentResponse();
             $values[$prefix.'result'] = (string) $interaction->getResult();
             $values[$prefix.'latency'] = (string) $interaction->getLatency();
+            if ($scorm2004) {
+                $values[$prefix.'description'] = (string) $interaction->getDescription();
+            }
 
             $correctResponses = $this->decodeStringList((string) $interaction->getCorrectResponses());
             $values[$prefix.'correct_responses._count'] = (string) \count($correctResponses);
@@ -419,6 +439,10 @@ final readonly class ScormRuntimeManager
             if ($scorm2004) {
                 $values[$prefix.'completion_status'] = $this->getCompletionStatus((string) $objective->getStatus());
                 $values[$prefix.'success_status'] = $this->getSuccessStatus((string) $objective->getStatus());
+                $progressMeasure = $objective->getProgressMeasure();
+                $values[$prefix.'progress_measure'] = null !== $progressMeasure
+                    ? $this->formatNumber($progressMeasure)
+                    : '';
             } else {
                 $values[$prefix.'status'] = (string) $objective->getStatus();
             }
@@ -435,6 +459,7 @@ final readonly class ScormRuntimeManager
         CLp $lp,
         CLpItem $item,
         CLpItemView $itemView,
+        User $user,
         string $version,
         array $values,
         array $changedKeys,
@@ -530,6 +555,9 @@ final readonly class ScormRuntimeManager
 
                 $itemView->setProgress($progress);
             }
+
+            $this->saveLearnerPreferences($user, $values);
+
             if (null !== $scaledScore) {
                 $this->saveReservedObjectiveValue(
                     $itemView,
@@ -585,6 +613,7 @@ final readonly class ScormRuntimeManager
                 ->setStudentResponse($data['learner_response'] ?? $data['student_response'] ?? '')
                 ->setResult(mb_substr($data['result'] ?? '', 0, 255))
                 ->setLatency(mb_substr($data['latency'] ?? '', 0, 16))
+                ->setDescription($data['description'] ?? null)
             ;
         }
     }
@@ -623,6 +652,7 @@ final readonly class ScormRuntimeManager
                 ->setScoreMax((float) ($this->nullableFloat($data['score.max'] ?? null) ?? 0.0))
                 ->setScoreMin((float) ($this->nullableFloat($data['score.min'] ?? null) ?? 0.0))
                 ->setStatus(mb_substr($status, 0, 32))
+                ->setProgressMeasure($this->nullableFloat($data['progress_measure'] ?? null))
             ;
         }
     }
@@ -732,6 +762,113 @@ final readonly class ScormRuntimeManager
             'id' => '' !== trim($id) ? trim($id) : (string) $user->getId(),
             'name' => trim($name, ' ,'),
         ];
+    }
+
+    /**
+     * @return array{audio_level: float, delivery_speed: float, audio_captioning: int}
+     */
+    private function getLearnerPreferences(User $user): array
+    {
+        $fieldValue = $this->extraFieldValuesRepository->getValueByVariableAndItem(
+            self::LEARNER_PREFERENCES_FIELD,
+            (int) $user->getId(),
+            ExtraField::USER_FIELD_TYPE,
+        );
+
+        return $this->normalizeLearnerPreferences($fieldValue?->getFieldValue());
+    }
+
+    /**
+     * @return array{audio_level: float, delivery_speed: float, audio_captioning: int}
+     */
+    private function normalizeLearnerPreferences(?string $json): array
+    {
+        $decoded = [];
+        if (null !== $json && '' !== trim($json)) {
+            try {
+                $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            } catch (JsonException) {
+                $decoded = [];
+            }
+            if (!\is_array($decoded)) {
+                $decoded = [];
+            }
+        }
+
+        $audioLevelRaw = $decoded['audio_level'] ?? null;
+        $deliverySpeedRaw = $decoded['delivery_speed'] ?? null;
+        $audioLevel = \is_scalar($audioLevelRaw) ? $this->nullableFloat($audioLevelRaw) : null;
+        $deliverySpeed = \is_scalar($deliverySpeedRaw) ? $this->nullableFloat($deliverySpeedRaw) : null;
+        $audioCaptioning = $decoded['audio_captioning'] ?? null;
+
+        return [
+            'audio_level' => null !== $audioLevel && $audioLevel >= 0.0
+                ? $audioLevel
+                : self::LEARNER_PREFERENCE_DEFAULTS['audio_level'],
+            'delivery_speed' => null !== $deliverySpeed && $deliverySpeed >= 0.0
+                ? $deliverySpeed
+                : self::LEARNER_PREFERENCE_DEFAULTS['delivery_speed'],
+            'audio_captioning' => \in_array($audioCaptioning, [-1, 0, 1], true)
+                ? $audioCaptioning
+                : self::LEARNER_PREFERENCE_DEFAULTS['audio_captioning'],
+        ];
+    }
+
+    /**
+     * @param array<string, string> $values
+     */
+    private function saveLearnerPreferences(User $user, array $values): void
+    {
+        $overrides = [];
+
+        if (isset($values['cmi.learner_preference.audio_level'])
+            && '' !== trim($values['cmi.learner_preference.audio_level'])
+        ) {
+            $audioLevel = $this->nullableFloat($values['cmi.learner_preference.audio_level']);
+            if (null === $audioLevel || $audioLevel < 0.0) {
+                throw new RuntimeException('SCORM 2004 learner_preference.audio_level must be a number greater than or equal to 0.');
+            }
+
+            $overrides['audio_level'] = $audioLevel;
+        }
+
+        if (isset($values['cmi.learner_preference.delivery_speed'])
+            && '' !== trim($values['cmi.learner_preference.delivery_speed'])
+        ) {
+            $deliverySpeed = $this->nullableFloat($values['cmi.learner_preference.delivery_speed']);
+            if (null === $deliverySpeed || $deliverySpeed < 0.0) {
+                throw new RuntimeException('SCORM 2004 learner_preference.delivery_speed must be a number greater than or equal to 0.');
+            }
+
+            $overrides['delivery_speed'] = $deliverySpeed;
+        }
+
+        if (isset($values['cmi.learner_preference.audio_captioning'])
+            && '' !== trim($values['cmi.learner_preference.audio_captioning'])
+        ) {
+            $audioCaptioning = trim($values['cmi.learner_preference.audio_captioning']);
+            if (!\in_array($audioCaptioning, ['-1', '0', '1'], true)) {
+                throw new RuntimeException('SCORM 2004 learner_preference.audio_captioning must be -1, 0 or 1.');
+            }
+
+            $overrides['audio_captioning'] = (int) $audioCaptioning;
+        }
+
+        if ([] === $overrides) {
+            return;
+        }
+
+        $extraField = $this->extraFieldRepository->findByVariable(
+            ExtraField::USER_FIELD_TYPE,
+            self::LEARNER_PREFERENCES_FIELD,
+        );
+        $merged = array_merge($this->getLearnerPreferences($user), $overrides);
+
+        $this->extraFieldValuesRepository->updateItemData(
+            $extraField,
+            $user,
+            json_encode($merged, JSON_THROW_ON_ERROR),
+        );
     }
 
     private function getMaxScore(CLpItem $item, CLpItemView $itemView): float

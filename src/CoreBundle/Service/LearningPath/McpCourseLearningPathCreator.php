@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Service\LearningPath;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
@@ -16,7 +15,6 @@ use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Mcp\CreateCourseDocumentTool;
 use Chamilo\CoreBundle\Service\Exercise\AiCourseTestGenerator;
 use Chamilo\CoreBundle\Service\Mcp\McpCourseAiFeatureManager;
-use Chamilo\CoreBundle\Service\Mcp\McpTextAiService;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -31,19 +29,28 @@ use Mcp\Server\ClientGateway;
 use RuntimeException;
 use Throwable;
 
-use const ENT_QUOTES;
-use const ENT_SUBSTITUTE;
-
+/**
+ * Persists a learning path from pages fully authored by the MCP client
+ * (page HTML and, optionally, mini-test questions). Chamilo does not call
+ * any AI provider here — it only validates and stores what it is given.
+ */
 final readonly class McpCourseLearningPathCreator
 {
     private const int MAX_PAGE_COUNT = 10;
-    private const int MAX_TOTAL_WORDS = 6000;
-    private const int MAX_WORDS_PER_PAGE = 1500;
-    private const int MIN_PAGE_COUNT = 1;
-    private const int MIN_WORDS_PER_PAGE = 50;
+    private const int MAX_PAGE_CONTENT_LENGTH = 2_000_000;
+    private const int MIN_QUESTIONS_PER_QUIZ = 1;
+    private const int MAX_QUESTIONS_PER_QUIZ = 20;
+    private const int MIN_ANSWERS_PER_QUESTION = 2;
+    private const int MAX_ANSWERS_PER_QUESTION = 10;
+
+    // Matches CreateCourseDocumentTool's own requestedWordCount bounds — that
+    // parameter no longer drives generation there either, it is only kept as
+    // an advisory stat, so a value derived from the actual word count is
+    // clamped into range rather than exposing a second, redundant parameter.
+    private const int DOCUMENT_TOOL_MIN_REQUESTED_WORDS = 50;
+    private const int DOCUMENT_TOOL_MAX_REQUESTED_WORDS = 5_000;
 
     public function __construct(
-        private McpTextAiService $aiService,
         private McpCourseAiFeatureManager $courseAiFeatureManager,
         private AiCourseTestGenerator $testGenerator,
         private CLpRepository $lpRepository,
@@ -55,104 +62,65 @@ final readonly class McpCourseLearningPathCreator
     ) {}
 
     /**
+     * @param list<array{
+     *     title: string,
+     *     content: string,
+     *     quiz?: array{
+     *         title?: string,
+     *         questions: list<array{
+     *             title: string,
+     *             answers: list<string>,
+     *             correct_index: int,
+     *             feedback?: string
+     *         }>
+     *     }
+     * }> $pages
+     *
      * @return array<string, mixed>
      */
     public function create(
         Course $course,
         User $user,
-        string $topic,
-        int $pageCount,
-        int $wordsPerPage,
-        int $questionsPerQuiz,
-        ?string $provider,
+        string $title,
+        array $pages,
+        ?string $language,
         bool $publish,
         ?ClientGateway $client = null,
     ): array {
-        $topic = trim(strip_tags($topic));
-        if ('' === $topic) {
-            throw new InvalidArgumentException('The learning path topic is required.');
+        $title = trim(strip_tags($title));
+        if ('' === $title) {
+            throw new InvalidArgumentException('The learning path title is required.');
         }
-        if (mb_strlen($topic) > 255) {
-            throw new InvalidArgumentException('The learning path topic cannot be longer than 255 characters.');
+        if (mb_strlen($title) > 255) {
+            throw new InvalidArgumentException('The learning path title cannot be longer than 255 characters.');
         }
-        if ($pageCount < self::MIN_PAGE_COUNT || $pageCount > self::MAX_PAGE_COUNT) {
-            throw new InvalidArgumentException('The page count must be between 1 and 10.');
+
+        $pageCount = \count($pages);
+        if ($pageCount < 1 || $pageCount > self::MAX_PAGE_COUNT) {
+            throw new InvalidArgumentException(\sprintf('The learning path must have between 1 and %d pages.', self::MAX_PAGE_COUNT));
         }
-        if ($wordsPerPage < self::MIN_WORDS_PER_PAGE || $wordsPerPage > self::MAX_WORDS_PER_PAGE) {
-            throw new InvalidArgumentException('The word count per page must be between 50 and 1500.');
+
+        $normalizedPages = [];
+        $hasAnyQuiz = false;
+        foreach (array_values($pages) as $index => $page) {
+            $normalizedPage = $this->normalizePage($page, $index + 1);
+            $normalizedPages[] = $normalizedPage;
+            if (null !== $normalizedPage['quiz']) {
+                $hasAnyQuiz = true;
+            }
         }
-        if ($questionsPerQuiz < 1 || $questionsPerQuiz > 5) {
-            throw new InvalidArgumentException('The number of questions per mini-test must be between 1 and 5.');
-        }
-        if ($pageCount * $wordsPerPage > self::MAX_TOTAL_WORDS) {
-            throw new InvalidArgumentException('The complete learning path cannot request more than 6000 words.');
+
+        $requiredFeatures = ['learning_path_generator'];
+        if ($hasAnyQuiz) {
+            $requiredFeatures[] = 'exercise_generator';
         }
 
         $enabledFeatures = $this->courseAiFeatureManager->ensureAllEnabled(
             $course,
             $user,
-            [
-                'learning_path_generator',
-                'exercise_generator',
-            ],
+            $requiredFeatures,
             'create_course_learning_path',
         );
-
-        /*
-         * Complete every external AI operation before the first course
-         * resource is persisted. If a provider, quota or format error occurs,
-         * Chamilo returns the error without leaving a partial learning path.
-         */
-        $generated = $this->generatePages(
-            $course,
-            $user,
-            $topic,
-            $pageCount,
-            $wordsPerPage,
-            $provider,
-            $client,
-        );
-        $providerUsed = (string) $generated['_provider'];
-        unset($generated['_provider']);
-
-        /*
-         * Resource files require an available ISO language. Older or imported
-         * courses can contain a descriptive language value that is valid for
-         * prompts but not for ResourceNode language assignment.
-         */
-        $resourceLanguage = $this->resolveAvailableResourceLanguage($course);
-
-        $preparedPages = [];
-        foreach ($generated['pages'] as $index => $page) {
-            $pageNumber = $index + 1;
-            $pageTitle = (string) $page['title'];
-            $pageContent = (string) $page['content'];
-            $quizTitle = 'Mini-test '.$pageNumber.': '.$pageTitle;
-
-            $client?->progress(
-                ($pageCount + $index) / ($pageCount * 3),
-                1.0,
-                \sprintf('Generating mini-test %d of %d...', $pageNumber, $pageCount),
-            );
-
-            $preparedPages[] = [
-                'page_number' => $pageNumber,
-                'title' => $pageTitle,
-                'content' => $pageContent,
-                'quiz_title' => $quizTitle,
-                'prepared_quiz' => $this->testGenerator->prepareTest(
-                    $course,
-                    $user,
-                    $quizTitle,
-                    $questionsPerQuiz,
-                    'topic',
-                    $pageTitle,
-                    $pageContent,
-                    $course->getCourseLanguage(),
-                    $providerUsed,
-                ),
-            ];
-        }
 
         $courseNode = $course->getResourceNode();
         if (!$courseNode instanceof ResourceNode) {
@@ -165,7 +133,7 @@ final readonly class McpCourseLearningPathCreator
 
         $learningPath = (new CLp())
             ->setLpType(CLp::LP_TYPE)
-            ->setTitle($topic)
+            ->setTitle($title)
             ->setDescription('')
             ->setParent($course)
             ->addCourseLink($course, null, null, $visibility)
@@ -205,16 +173,20 @@ final readonly class McpCourseLearningPathCreator
 
             $previousItemId = 0;
 
-            foreach ($preparedPages as $preparedPage) {
-                $pageNumber = (int) $preparedPage['page_number'];
-                $pageTitle = (string) $preparedPage['title'];
-                $pageContent = (string) $preparedPage['content'];
-                $quizTitle = (string) $preparedPage['quiz_title'];
+            foreach ($normalizedPages as $index => $page) {
+                $pageNumber = $index + 1;
+                $pageTitle = $page['title'];
+                $pageContent = $page['content'];
 
                 $client?->progress(
-                    (2 * $pageCount + $pageNumber - 1) / ($pageCount * 3),
+                    ($pageNumber - 1) / $pageCount,
                     1.0,
                     \sprintf('Saving page %d of %d...', $pageNumber, $pageCount),
+                );
+
+                $requestedWordCount = max(
+                    self::DOCUMENT_TOOL_MIN_REQUESTED_WORDS,
+                    min(self::DOCUMENT_TOOL_MAX_REQUESTED_WORDS, $this->countWords($pageContent)),
                 );
 
                 $stage = 'creating document for page '.$pageNumber;
@@ -222,9 +194,9 @@ final readonly class McpCourseLearningPathCreator
                     (int) $course->getId(),
                     $pageTitle,
                     $pageTitle,
-                    $wordsPerPage,
+                    $requestedWordCount,
                     $pageContent,
-                    $resourceLanguage,
+                    $language,
                     $publish,
                 );
                 $document = $documentResult['document'];
@@ -249,44 +221,59 @@ final readonly class McpCourseLearningPathCreator
                 $previousItemId = $documentItemId;
                 $this->markItem($documentItemId);
 
-                $stage = 'persisting mini-test for page '.$pageNumber;
-                $test = $this->testGenerator->persistPreparedTest(
-                    $course,
-                    $user,
-                    $quizTitle,
-                    $preparedPage['prepared_quiz'],
-                    null,
-                    false,
-                );
-                $quizId = (int) $test['quiz_id'];
-                if ($quizId <= 0) {
-                    throw new RuntimeException('Chamilo returned an invalid mini-test ID.');
-                }
-                $createdQuizIds[] = $quizId;
+                $quizId = null;
+                $quizItemId = null;
 
-                foreach ($test['questions'] as $createdQuestion) {
-                    $questionId = (int) ($createdQuestion['question_id'] ?? 0);
-                    if ($questionId <= 0) {
-                        throw new RuntimeException('Chamilo returned an invalid mini-test question ID.');
+                if (null !== $page['quiz']) {
+                    $stage = 'persisting mini-test for page '.$pageNumber;
+                    $prepared = [
+                        'provider_used' => 'mcp_client',
+                        'generation_mode' => 'mcp_client_supplied',
+                        'source_type' => 'topic',
+                        'source_title' => $pageTitle,
+                        'source_text' => $pageTitle,
+                        'question_count' => \count($page['quiz']['questions']),
+                        'questions' => $page['quiz']['questions'],
+                    ];
+
+                    $test = $this->testGenerator->persistPreparedTest(
+                        $course,
+                        $user,
+                        $page['quiz']['title'],
+                        $prepared,
+                        null,
+                        false,
+                    );
+                    $quizId = (int) $test['quiz_id'];
+                    if ($quizId <= 0) {
+                        throw new RuntimeException('Chamilo returned an invalid mini-test ID.');
+                    }
+                    $createdQuizIds[] = $quizId;
+
+                    foreach ($test['questions'] as $createdQuestion) {
+                        $questionId = (int) ($createdQuestion['question_id'] ?? 0);
+                        if ($questionId <= 0) {
+                            throw new RuntimeException('Chamilo returned an invalid mini-test question ID.');
+                        }
+
+                        $createdQuestionIds[] = $questionId;
                     }
 
-                    $createdQuestionIds[] = $questionId;
-                }
+                    $stage = 'linking mini-test for page '.$pageNumber;
+                    $quizItemId = (int) $legacyLearningPath->add_item(
+                        $rootItem,
+                        $previousItemId,
+                        TOOL_QUIZ,
+                        $quizId,
+                        $page['quiz']['title'],
+                    );
+                    if ($quizItemId <= 0) {
+                        throw new RuntimeException('A learning path mini-test item could not be added.');
+                    }
 
-                $stage = 'linking mini-test for page '.$pageNumber;
-                $quizItemId = (int) $legacyLearningPath->add_item(
-                    $rootItem,
-                    $previousItemId,
-                    TOOL_QUIZ,
-                    $quizId,
-                    $quizTitle,
-                );
-                if ($quizItemId <= 0) {
-                    throw new RuntimeException('A learning path mini-test item could not be added.');
+                    $previousItemId = $quizItemId;
+                    $this->markItem($quizItemId);
                 }
-
-                $previousItemId = $quizItemId;
-                $this->markItem($quizItemId);
 
                 $createdPages[] = [
                     'page_number' => $pageNumber,
@@ -313,21 +300,22 @@ final readonly class McpCourseLearningPathCreator
             throw new RuntimeException($message, 0, $exception);
         }
 
+        $quizPageCount = \count(array_filter(
+            $createdPages,
+            static fn (array $page): bool => null !== $page['quiz_id'],
+        ));
+
         $this->aiDisclosureHelper->markAiAssistedExtraField('lp', $learningPathId, true);
         $this->aiDisclosureHelper->logAudit(
             targetKey: 'lp:'.$learningPathId,
             userId: (int) $user->getId(),
             meta: [
                 'feature' => 'mcp_learning_path',
-                'mode' => 'generated',
-                'provider' => $providerUsed,
-                'topic' => $topic,
+                'mode' => 'mcp_client_supplied',
+                'title' => $title,
                 'page_count' => $pageCount,
-                'words_per_page' => $wordsPerPage,
-                'questions_per_quiz' => $questionsPerQuiz,
+                'quiz_page_count' => $quizPageCount,
                 'published' => $publish,
-                'generation_mode' => $generated['_generation_mode'] ?? 'per_page_html',
-                'repaired_page_count' => $generated['_repaired_page_count'] ?? 0,
             ],
             courseId: (int) $course->getId(),
             sessionId: 0,
@@ -338,12 +326,9 @@ final readonly class McpCourseLearningPathCreator
             'resource_node_id' => (int) $learningPath->getResourceNode()?->getId(),
             'title' => $learningPath->getTitle(),
             'page_count' => \count($createdPages),
-            'questions_per_quiz' => $questionsPerQuiz,
+            'quiz_page_count' => $quizPageCount,
             'published' => $publish,
-            'provider_used' => $providerUsed,
             'ai_assisted' => true,
-            'generation_mode' => $generated['_generation_mode'] ?? 'per_page_html',
-            'repaired_page_count' => $generated['_repaired_page_count'] ?? 0,
             'course_features_enabled' => $enabledFeatures,
             'items' => $createdPages,
             'content_url' => '/resources/lp/'
@@ -354,205 +339,124 @@ final readonly class McpCourseLearningPathCreator
     }
 
     /**
-     * Generate exactly one page per controlled loop iteration. The provider
-     * never decides the array length, so the requested page count is
-     * deterministic even when structured JSON output is unreliable.
-     *
      * @return array{
-     *     pages: list<array{title: string, content: string}>,
-     *     _provider: string,
-     *     _generation_mode: 'per_page_html',
-     *     _repaired_page_count: int
+     *     title: string,
+     *     content: string,
+     *     quiz: array{title: string, questions: list<array{title: string, answers: list<string>, correct_index: int, feedback: string}>}|null
      * }
      */
-    private function generatePages(
-        Course $course,
-        User $user,
-        string $topic,
-        int $pageCount,
-        int $wordsPerPage,
-        ?string $provider,
-        ?ClientGateway $client,
-    ): array {
-        $pages = [];
-        $providerUsed = '';
-        $repairedPageCount = 0;
-        $previousTitles = [];
-
-        for ($pageNumber = 1; $pageNumber <= $pageCount; ++$pageNumber) {
-            $client?->progress(
-                ($pageNumber - 1) / ($pageCount * 3),
-                1.0,
-                \sprintf('Generating page %d of %d...', $pageNumber, $pageCount),
-            );
-
-            $title = $this->buildPageTitle(
-                $topic,
-                $pageNumber,
-                $pageCount,
-            );
-            $focus = $this->buildPageFocus(
-                $pageNumber,
-                $pageCount,
-            );
-
-            $systemPrompt = <<<'PROMPT'
-Return only a valid HTML fragment for one educational page. Start with one <h1> using the exact supplied page title, followed by clear paragraphs and optional lists. Do not return JSON, Markdown fences, explanations, quizzes or metadata. The page must be self-contained, factual, non-repetitive and written in the requested language.
-PROMPT;
-            $userPrompt = 'Course: '.$course->getTitle()."\n"
-                .'Language: '.$course->getCourseLanguage()."\n"
-                .'Complete learning path topic: '.$topic."\n"
-                .'Current page: '.$pageNumber.' of '.$pageCount."\n"
-                .'Exact page title: '.$title."\n"
-                .'Page focus: '.$focus."\n"
-                .'Approximate words: '.$wordsPerPage."\n"
-                .'Previous page titles: '
-                .([] === $previousTitles ? 'none' : implode(' | ', $previousTitles));
-
-            $tokenBudget = min(
-                8_000,
-                max(900, 400 + ($wordsPerPage * 4)),
-            );
-
-            $result = $this->aiService->requestText(
-                $user,
-                $provider,
-                $systemPrompt,
-                $userPrompt,
-                $tokenBudget,
-            );
-            $providerUsed = (string) $result['provider'];
-            if ((bool) $result['repaired']) {
-                ++$repairedPageCount;
-            }
-
-            $pageContent = $this->normalizeGeneratedPageContent(
-                (string) $result['content'],
-                $title,
-            );
-
-            /*
-             * A short response is still usable, but request one controlled
-             * expansion before accepting it. This does not affect page count.
-             */
-            if ($this->countWords($pageContent) < max(40, (int) floor($wordsPerPage * 0.55))) {
-                $expanded = $this->aiService->requestText(
-                    $user,
-                    $providerUsed,
-                    $systemPrompt,
-                    $userPrompt
-                        ."\n\nExpand the page substantially. Preserve the exact title and "
-                        .'return approximately '.$wordsPerPage.' words.',
-                    $tokenBudget,
-                );
-                $pageContent = $this->normalizeGeneratedPageContent(
-                    (string) $expanded['content'],
-                    $title,
-                );
-
-                if ((bool) $expanded['repaired']) {
-                    ++$repairedPageCount;
-                }
-            }
-
-            $pages[] = [
-                'title' => $title,
-                'content' => $pageContent,
-            ];
-            $previousTitles[] = $title;
+    private function normalizePage(mixed $page, int $pageNumber): array
+    {
+        if (!\is_array($page)) {
+            throw new InvalidArgumentException(\sprintf('Page %d must be an object with a title and content.', $pageNumber));
         }
 
+        $title = trim(strip_tags((string) ($page['title'] ?? '')));
+        if ('' === $title) {
+            throw new InvalidArgumentException(\sprintf('Page %d is missing a title.', $pageNumber));
+        }
+        if (mb_strlen($title) > 255) {
+            throw new InvalidArgumentException(\sprintf('Page %d title cannot be longer than 255 characters.', $pageNumber));
+        }
+
+        $content = trim((string) ($page['content'] ?? ''));
+        if ('' === $content) {
+            throw new InvalidArgumentException(\sprintf('Page %d is missing content.', $pageNumber));
+        }
+        if (mb_strlen($content) > self::MAX_PAGE_CONTENT_LENGTH) {
+            throw new InvalidArgumentException(\sprintf('Page %d content is too large.', $pageNumber));
+        }
+
+        $quiz = isset($page['quiz']) ? $this->normalizeQuiz($page['quiz'], $title, $pageNumber) : null;
+
         return [
-            'pages' => $pages,
-            '_provider' => $providerUsed,
-            '_generation_mode' => 'per_page_html',
-            '_repaired_page_count' => $repairedPageCount,
+            'title' => $title,
+            'content' => $content,
+            'quiz' => $quiz,
         ];
     }
 
-    private function buildPageTitle(
-        string $topic,
-        int $pageNumber,
-        int $pageCount,
-    ): string {
-        if (1 === $pageNumber) {
-            return mb_substr('Introduction to '.$topic, 0, 255);
+    /**
+     * @return array{title: string, questions: list<array{title: string, answers: list<string>, correct_index: int, feedback: string}>}
+     */
+    private function normalizeQuiz(mixed $quiz, string $pageTitle, int $pageNumber): array
+    {
+        if (!\is_array($quiz) || !isset($quiz['questions']) || !\is_array($quiz['questions'])) {
+            throw new InvalidArgumentException(\sprintf('Page %d quiz must include a list of questions.', $pageNumber));
         }
 
-        if ($pageNumber === $pageCount) {
-            return mb_substr('Synthesis and application: '.$topic, 0, 255);
+        $quizTitle = trim(strip_tags((string) ($quiz['title'] ?? '')));
+        if ('' === $quizTitle) {
+            $quizTitle = 'Mini-test '.$pageNumber.': '.$pageTitle;
+        }
+        if (mb_strlen($quizTitle) > 255) {
+            throw new InvalidArgumentException(\sprintf('Page %d quiz title cannot be longer than 255 characters.', $pageNumber));
         }
 
-        return mb_substr(
-            'Key concepts '.$pageNumber.': '.$topic,
-            0,
-            255,
-        );
+        $rawQuestions = array_values($quiz['questions']);
+        $questionCount = \count($rawQuestions);
+        if ($questionCount < self::MIN_QUESTIONS_PER_QUIZ || $questionCount > self::MAX_QUESTIONS_PER_QUIZ) {
+            throw new InvalidArgumentException(\sprintf('Page %d quiz must have between %d and %d questions.', $pageNumber, self::MIN_QUESTIONS_PER_QUIZ, self::MAX_QUESTIONS_PER_QUIZ));
+        }
+
+        $questions = [];
+        foreach ($rawQuestions as $questionIndex => $rawQuestion) {
+            $questions[] = $this->normalizeQuestion($rawQuestion, $pageNumber, $questionIndex + 1);
+        }
+
+        return [
+            'title' => $quizTitle,
+            'questions' => $questions,
+        ];
     }
 
-    private function buildPageFocus(
-        int $pageNumber,
-        int $pageCount,
-    ): string {
-        if (1 === $pageNumber) {
-            return 'Introduce the topic, its purpose, context and essential vocabulary.';
+    /**
+     * @return array{title: string, answers: list<string>, correct_index: int, feedback: string}
+     */
+    private function normalizeQuestion(mixed $rawQuestion, int $pageNumber, int $questionNumber): array
+    {
+        if (!\is_array($rawQuestion)) {
+            throw new InvalidArgumentException(\sprintf('Page %d, question %d must be an object.', $pageNumber, $questionNumber));
         }
 
-        if ($pageNumber === $pageCount) {
-            return 'Integrate the previous ideas, explain applications and provide a concise conclusion.';
+        $title = trim(strip_tags((string) ($rawQuestion['title'] ?? '')));
+        if ('' === $title) {
+            throw new InvalidArgumentException(\sprintf('Page %d, question %d is missing a title.', $pageNumber, $questionNumber));
         }
 
-        return 'Develop distinct mechanisms, components, relationships and examples without repeating previous pages.';
-    }
-
-    private function normalizeGeneratedPageContent(
-        string $content,
-        string $title,
-    ): string {
-        $content = trim((string) preg_replace(
-            '#<(script|style)\b[^>]*>.*?</\1>#is',
-            '',
-            $content,
-        ));
-        $content = (string) preg_replace('/^```(?:html)?\s*/iu', '', $content);
-        $content = (string) preg_replace('/\s*```$/u', '', $content);
-        $content = trim($content);
-
-        if ('' === trim(strip_tags($content))) {
-            throw new RuntimeException('The AI model returned an empty learning path page.');
+        $rawAnswers = $rawQuestion['answers'] ?? null;
+        if (!\is_array($rawAnswers)) {
+            throw new InvalidArgumentException(\sprintf('Page %d, question %d is missing its answers.', $pageNumber, $questionNumber));
         }
 
-        if (!preg_match('/<h1\b/i', $content)) {
-            $content = '<h1>'.htmlspecialchars(
-                $title,
-                ENT_QUOTES | ENT_SUBSTITUTE,
-                'UTF-8',
-            ).'</h1>'.$content;
-        }
-
-        if (!preg_match('/<[^>]+>/', $content)) {
-            $paragraphs = preg_split('/\R{2,}/u', $content) ?: [$content];
-            $content = '<h1>'.htmlspecialchars(
-                $title,
-                ENT_QUOTES | ENT_SUBSTITUTE,
-                'UTF-8',
-            ).'</h1>';
-
-            foreach ($paragraphs as $paragraph) {
-                $paragraph = trim($paragraph);
-                if ('' === $paragraph) {
-                    continue;
-                }
-
-                $content .= '<p>'.htmlspecialchars(
-                    $paragraph,
-                    ENT_QUOTES | ENT_SUBSTITUTE,
-                    'UTF-8',
-                ).'</p>';
+        $answers = [];
+        foreach (array_values($rawAnswers) as $answer) {
+            $answerText = trim(strip_tags((string) $answer));
+            if ('' === $answerText) {
+                throw new InvalidArgumentException(\sprintf('Page %d, question %d has an empty answer.', $pageNumber, $questionNumber));
             }
+
+            $answers[] = $answerText;
         }
 
-        return mb_substr($content, 0, 2_000_000);
+        $answerCount = \count($answers);
+        if ($answerCount < self::MIN_ANSWERS_PER_QUESTION || $answerCount > self::MAX_ANSWERS_PER_QUESTION) {
+            throw new InvalidArgumentException(\sprintf('Page %d, question %d must have between %d and %d answers.', $pageNumber, $questionNumber, self::MIN_ANSWERS_PER_QUESTION, self::MAX_ANSWERS_PER_QUESTION));
+        }
+
+        $correctIndex = $rawQuestion['correct_index'] ?? null;
+        if (!\is_int($correctIndex) || $correctIndex < 0 || $correctIndex >= $answerCount) {
+            throw new InvalidArgumentException(\sprintf('Page %d, question %d has an invalid correct_index.', $pageNumber, $questionNumber));
+        }
+
+        $feedback = trim(strip_tags((string) ($rawQuestion['feedback'] ?? '')));
+
+        return [
+            'title' => $title,
+            'answers' => $answers,
+            'correct_index' => $correctIndex,
+            'feedback' => $feedback,
+        ];
     }
 
     private function countWords(string $html): int
@@ -638,25 +542,27 @@ PROMPT;
 
         $entityManager->remove($resource);
         if ($resourceNode instanceof ResourceNode) {
+            $resourceLinks = $resourceNode->getResourceLinks();
+            foreach ($resourceLinks as $resourceLink) {
+                $entityManager->remove($resourceLink);
+            }
+
+            /*
+             * ResourceDoctrineListener::postRemove() reads this same in-memory
+             * collection to build a "deletion" tracking event, then postFlush()
+             * persists it through its own constructor-injected EntityManager —
+             * a reference captured before this rollback's resetManager() call,
+             * so it is stale and can still hold unflushed state from the
+             * original failed attempt. Clearing the collection here means
+             * getResourceLinks()->first() finds nothing, so no tracking event
+             * is queued and that stale EntityManager's nested flush() never
+             * runs — sidestepping the stale reference entirely rather than
+             * fixing tracking data for resources that never really existed.
+             */
+            $resourceLinks->clear();
+
             $entityManager->remove($resourceNode);
         }
-    }
-
-    private function resolveAvailableResourceLanguage(Course $course): ?string
-    {
-        $courseLanguage = trim($course->getCourseLanguage());
-        if ('' === $courseLanguage) {
-            return null;
-        }
-
-        $language = $this->entityManager->getRepository(Language::class)->findOneBy([
-            'isocode' => $courseLanguage,
-            'available' => true,
-        ]);
-
-        return $language instanceof Language
-            ? $language->getIsocode()
-            : null;
     }
 
     private function markItem(int $itemId): void

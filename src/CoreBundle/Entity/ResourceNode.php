@@ -91,7 +91,13 @@ class ResourceNode implements Stringable
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     #[Assert\NotBlank]
     #[Gedmo\TreePathSource]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(
+        name: 'title',
+        type: 'string',
+        length: 255,
+        nullable: false,
+        columnDefinition: 'LONGTEXT NOT NULL COMMENT \'(DC2Type:string)\'',
+    )]
     protected string $title;
 
     #[Assert\NotBlank]

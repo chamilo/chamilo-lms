@@ -55,6 +55,9 @@ class CLpIvInteraction
     #[ORM\Column(name: 'latency', type: 'string', length: 16, nullable: false)]
     protected string $latency;
 
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    protected ?string $description = null;
+
     /**
      * Set orderId.
      *
@@ -273,6 +276,28 @@ class CLpIvInteraction
     public function getLatency()
     {
         return $this->latency;
+    }
+
+    /**
+     * Set description.
+     *
+     * @return CLpIvInteraction
+     */
+    public function setDescription(?string $description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description.
+     *
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

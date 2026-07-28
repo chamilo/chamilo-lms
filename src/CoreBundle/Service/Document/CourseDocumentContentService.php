@@ -100,6 +100,42 @@ final readonly class CourseDocumentContentService
         return $matches[0];
     }
 
+    /**
+     * Whether a non-folder document already exists with this exact title in
+     * the given base-course folder (same "belongs to this course" scoping as
+     * resolveDocument/list_documents). Used to reject duplicate document names
+     * before creation — Chamilo allows same-named files in the legacy UI, but
+     * MCP-created documents must be unambiguous for later title-based lookups.
+     */
+    public function titleExistsInParentFolder(Course $course, int $parentResourceNodeId, string $title): bool
+    {
+        $title = trim($title);
+        if ('' === $title) {
+            return false;
+        }
+
+        $count = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(document.iid)')
+            ->from(CDocument::class, 'document')
+            ->innerJoin('document.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'resourceLink')
+            ->andWhere('IDENTITY(resourceLink.course) = :courseId')
+            ->andWhere('resourceLink.session IS NULL')
+            ->andWhere('resourceLink.group IS NULL')
+            ->andWhere('resourceLink.userGroup IS NULL')
+            ->andWhere('resourceLink.user IS NULL')
+            ->andWhere('node.parent = :parentNodeId')
+            ->andWhere('document.title = :title')
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('parentNodeId', $parentResourceNodeId, Types::INTEGER)
+            ->setParameter('title', $title)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
     public function assertEditableHtmlDocument(CDocument $document): void
     {
         if ('file' !== $document->getFiletype()) {

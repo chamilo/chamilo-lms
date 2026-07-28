@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
@@ -27,7 +26,6 @@ final readonly class CreateCourseTool
         private CourseHelper $courseHelper,
         private EntityManagerInterface $entityManager,
         private LanguageRepository $languageRepository,
-        private SettingsManager $settingsManager,
         private UrlGeneratorInterface $urlGenerator,
     ) {}
 
@@ -47,7 +45,7 @@ final readonly class CreateCourseTool
      */
     #[McpTool(
         name: 'create_course',
-        description: 'Create a Chamilo course for the authenticated teacher using the platform course-creation rules.',
+        description: 'Create a Chamilo course for the authenticated teacher using the platform course-creation rules. If language is omitted, the authenticated user\'s own language is used; otherwise provide either a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").',
     )]
     public function createCourse(
         string $title,
@@ -85,7 +83,7 @@ final readonly class CreateCourseTool
             throw new InvalidArgumentException(\sprintf('The course code cannot be longer than %d characters.', CourseHelper::MAX_COURSE_LENGTH_CODE));
         }
 
-        $language = $this->resolveCourseLanguage($language);
+        $language = $this->resolveCourseLanguage($language, $user);
 
         $params = [
             'title' => $title,
@@ -125,124 +123,45 @@ final readonly class CreateCourseTool
         ];
     }
 
-    private function resolveCourseLanguage(?string $requestedLanguage): string
+    /**
+     * When a language is requested, it is resolved by title or code among
+     * the instance's available languages (LanguageRepository is the single
+     * shared resolver also used by create_course_document). When none is
+     * requested, the course defaults to the authenticated user's own
+     * language, falling back to the platform's configured default language
+     * only if the user's own language cannot be resolved.
+     */
+    private function resolveCourseLanguage(?string $requestedLanguage, User $user): string
     {
-        $requestedLanguage = null !== $requestedLanguage
-            ? trim($requestedLanguage)
-            : '';
+        $requestedLanguage = null !== $requestedLanguage ? trim($requestedLanguage) : '';
 
-        $usesPlatformDefault = '' === $requestedLanguage;
-
-        if ($usesPlatformDefault) {
-            $requestedLanguage = trim((string) $this->settingsManager->getSetting(
-                'language.platform_language',
-                true,
-            ));
-
-            if ('' === $requestedLanguage) {
-                $requestedLanguage = trim((string) $this->settingsManager->getSetting(
-                    'language.platformLanguage',
-                ));
+        if ('' !== $requestedLanguage) {
+            if (mb_strlen($requestedLanguage) > 255) {
+                throw new InvalidArgumentException('The course language identifier cannot be longer than 255 characters.');
             }
+
+            $language = $this->languageRepository->findOneAvailableByTitleOrCode($requestedLanguage);
+            if (!$language instanceof Language) {
+                throw new InvalidArgumentException(\sprintf('The course language "%s" is not available in Chamilo. Use an available ISO code or language name.', $requestedLanguage));
+            }
+
+            return $language->getIsocode();
         }
 
-        if ('' === $requestedLanguage) {
-            throw new RuntimeException('Chamilo has no valid platform language configured for course creation.');
+        $userLanguage = $this->languageRepository->findOneAvailableByTitleOrCode($user->getLocale());
+        if ($userLanguage instanceof Language) {
+            return $userLanguage->getIsocode();
         }
 
-        if (mb_strlen($requestedLanguage) > 255) {
-            throw new InvalidArgumentException('The course language identifier cannot be longer than 255 characters.');
+        $platformDefaultIso = $this->languageRepository->getPlatformDefaultIso();
+        $platformLanguage = null !== $platformDefaultIso
+            ? $this->languageRepository->findOneAvailableByTitleOrCode($platformDefaultIso)
+            : null;
+
+        if ($platformLanguage instanceof Language) {
+            return $platformLanguage->getIsocode();
         }
 
-        $normalizedIdentifier = mb_strtolower(str_replace(
-            '-',
-            '_',
-            $requestedLanguage,
-        ));
-
-        $language = $this->findLanguageByIdentifier(
-            $normalizedIdentifier,
-            !$usesPlatformDefault,
-        );
-
-        if (null === $language) {
-            $language = $this->findLanguageByIsoPrefix($normalizedIdentifier);
-        }
-
-        if (null === $language) {
-            throw new InvalidArgumentException(\sprintf('The course language "%s" is not available in Chamilo. Use an available ISO code or language name.', $requestedLanguage));
-        }
-
-        return $language->getIsocode();
-    }
-
-    private function findLanguageByIdentifier(
-        string $identifier,
-        bool $requireAvailable,
-    ): ?Language {
-        $queryBuilder = $this->languageRepository->createQueryBuilder('language');
-
-        $queryBuilder
-            ->andWhere(
-                $queryBuilder->expr()->orX(
-                    'LOWER(language.isocode) = :identifier',
-                    'LOWER(language.englishName) = :identifier',
-                    'LOWER(language.originalName) = :identifier',
-                )
-            )
-            ->setParameter('identifier', $identifier)
-            ->addSelect(
-                'CASE WHEN LOWER(language.isocode) = :identifier THEN 0 ELSE 1 END AS HIDDEN identifierPriority'
-            )
-            ->orderBy('identifierPriority', 'ASC')
-            ->addOrderBy('language.isocode', 'ASC')
-            ->setMaxResults(1)
-        ;
-
-        if ($requireAvailable) {
-            $queryBuilder
-                ->andWhere('language.available = :available')
-                ->setParameter('available', true)
-            ;
-        }
-
-        $result = $queryBuilder->getQuery()->getResult();
-
-        return $result[0] ?? null;
-    }
-
-    private function findLanguageByIsoPrefix(
-        string $identifier,
-    ): ?Language {
-        $baseIso = explode('_', $identifier, 2)[0];
-
-        if (1 !== preg_match('/^[a-z]{2,3}$/', $baseIso)) {
-            return null;
-        }
-
-        $queryBuilder = $this->languageRepository->createQueryBuilder('language');
-
-        $queryBuilder
-            ->andWhere('language.available = :available')
-            ->andWhere(
-                $queryBuilder->expr()->orX(
-                    'LOWER(language.isocode) = :baseIso',
-                    'LOWER(language.isocode) LIKE :isoPrefix',
-                )
-            )
-            ->setParameter('available', true)
-            ->setParameter('baseIso', $baseIso)
-            ->setParameter('isoPrefix', $baseIso.'_%')
-            ->addSelect(
-                'CASE WHEN LOWER(language.isocode) = :baseIso THEN 0 ELSE 1 END AS HIDDEN isoPriority'
-            )
-            ->orderBy('isoPriority', 'ASC')
-            ->addOrderBy('language.isocode', 'ASC')
-            ->setMaxResults(1)
-        ;
-
-        $result = $queryBuilder->getQuery()->getResult();
-
-        return $result[0] ?? null;
+        throw new RuntimeException('Chamilo has no valid, available language configured for course creation (checked the current user\'s language and the platform default).');
     }
 }

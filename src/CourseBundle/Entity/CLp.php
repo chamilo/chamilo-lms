@@ -226,7 +226,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected int $lpType = self::LP_TYPE;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     #[Groups(['lp:read', 'lp:write'])]
     protected string $title;
 

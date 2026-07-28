@@ -41,7 +41,7 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
     protected string $reflink;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Assert\NotBlank]

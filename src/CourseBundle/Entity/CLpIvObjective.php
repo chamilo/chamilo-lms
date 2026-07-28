@@ -46,6 +46,9 @@ class CLpIvObjective
     #[ORM\Column(name: 'status', type: 'string', length: 32, nullable: false)]
     protected string $status;
 
+    #[ORM\Column(name: 'progress_measure', type: 'float', nullable: true)]
+    protected ?float $progressMeasure = null;
+
     /**
      * Set lpIvId.
      *
@@ -198,6 +201,28 @@ class CLpIvObjective
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set progressMeasure.
+     *
+     * @return CLpIvObjective
+     */
+    public function setProgressMeasure(?float $progressMeasure)
+    {
+        $this->progressMeasure = $progressMeasure;
+
+        return $this;
+    }
+
+    /**
+     * Get progressMeasure.
+     *
+     * @return float|null
+     */
+    public function getProgressMeasure()
+    {
+        return $this->progressMeasure;
     }
 
     /**

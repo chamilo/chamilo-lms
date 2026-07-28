@@ -347,14 +347,27 @@ if (!isEmpty(window.user)) {
   securityStore.setUser(window.user)
 }
 
-onUpdated(() => {
+// Symfony flash bag is embedded as JSON on #app[data-flashes] by the Twig
+// layout (vue_setup.html.twig). Must run on mount as well as on update:
+// legacy pages that set a flash then redirect (e.g. extra_fields.php after
+// "Item added") do a full page load — onUpdated never fires for the initial
+// paint, so toasts were silently dropped until something else re-rendered
+// the app. Consume + clear the dataset in one place so either lifecycle hook
+// is safe to call.
+function consumeFlashesFromAppDataset() {
   const app = document.getElementById("app")
 
   if (!(app && app.dataset.flashes)) {
     return
   }
 
-  const flashes = JSON.parse(app.dataset.flashes)
+  let flashes
+  try {
+    flashes = JSON.parse(app.dataset.flashes)
+  } catch {
+    app.dataset.flashes = ""
+    return
+  }
 
   if (!Array.isArray(flashes)) {
     for (const key in flashes) {
@@ -367,6 +380,10 @@ onUpdated(() => {
   }
 
   app.dataset.flashes = ""
+}
+
+onUpdated(() => {
+  consumeFlashesFromAppDataset()
 })
 
 api.interceptors.response.use(
@@ -396,6 +413,8 @@ watch(
 )
 
 onMounted(async () => {
+  consumeFlashesFromAppDataset()
+
   document.addEventListener("copy", blockCopyPasteEvent, true)
   document.addEventListener("cut", blockCopyPasteEvent, true)
   document.addEventListener("paste", blockCopyPasteEvent, true)

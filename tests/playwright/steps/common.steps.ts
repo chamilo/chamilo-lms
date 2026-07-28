@@ -659,6 +659,24 @@ Then("I should see {string}", async ({ page }, text: string) => {
   await expect(page.getByText(text).first()).toBeVisible()
 })
 
+// URL assertions — used when a success path is a redirect (e.g. extra_fields.php
+// leaves action=add only on validation failure; on save it Location-redirects
+// to the list). More reliable than flash toasts for legacy header()+exit flows
+// where the Symfony flash bag does not always survive into the next request's
+// #app[data-flashes] payload. Use expect().toHaveURL (auto-retrying), never a
+// one-shot page.url() read — form submit is POST-redirect-GET and a plain
+// url() snapshot can still see the pre-redirect address.
+Then("the URL should contain {string}", async ({ page }, part: string) => {
+  await expect(page).toHaveURL(new RegExp(part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")))
+})
+
+Then("the URL should not contain {string}", async ({ page }, part: string) => {
+  // Negative URL match: poll until the forbidden substring is gone (or timeout).
+  await expect
+    .poll(() => page.url(), { timeout: 15_000 })
+    .not.toContain(part)
+})
+
 // Mirrors Mink's assertPageNotContainsText: checks the page's raw text, not
 // a specific element's visibility, since there's nothing to select when the
 // text is genuinely absent (career.feature's delete scenario: confirms

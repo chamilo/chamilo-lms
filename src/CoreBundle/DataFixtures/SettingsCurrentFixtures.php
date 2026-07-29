@@ -2013,6 +2013,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Enable Multi-Level Attendance Grading',
                     'comment' => 'Allows grading attendance with multiple levels instead of a simple present/absent system.',
                 ],
+                [
+                    'name' => 'attendance_add_official_code',
+                    'title' => "Show students' official code in attendance sheets",
+                    'comment' => "Whether to display the students' official code alongside their name in attendance sheets and lists.",
+                ],
             ],
             'display' => [
                 [

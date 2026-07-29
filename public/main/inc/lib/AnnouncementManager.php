@@ -337,8 +337,8 @@ class AnnouncementManager
         $visibility = 1
     ) {
         $dql = "SELECT a
-                FROM ChamiloCourseBundle:CAnnouncement a
-                JOIN ChamiloCourseBundle:CItemProperty ip
+                FROM Chamilo\CourseBundle\Entity\CAnnouncement a
+                JOIN Chamilo\CourseBundle\Entity\CItemProperty ip
                 WITH a.id = ip.ref AND a.cId = ip.course
                 WHERE
                     ip.tool = 'announcement' AND
@@ -389,8 +389,8 @@ class AnnouncementManager
             (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
             $dql = "SELECT a, ip
-                    FROM ChamiloCourseBundle:CAnnouncement a
-                    JOIN ChamiloCourseBundle:CItemProperty ip
+                    FROM Chamilo\CourseBundle\Entity\CAnnouncement a
+                    JOIN Chamilo\CourseBundle\Entity\CItemProperty ip
                     WITH a.id = ip.ref AND a.cId = ip.course
                     WHERE
                         a.id = :announcement AND
@@ -414,8 +414,8 @@ class AnnouncementManager
                 }
 
                 $dql = "SELECT a, ip
-                        FROM ChamiloCourseBundle:CAnnouncement a
-                        JOIN ChamiloCourseBundle:CItemProperty ip
+                        FROM Chamilo\CourseBundle\Entity\CAnnouncement a
+                        JOIN Chamilo\CourseBundle\Entity\CItemProperty ip
                         WITH a.id = ip.ref AND a.cId = ip.course
                         WHERE
                             a.id = :announcement AND
@@ -431,8 +431,8 @@ class AnnouncementManager
                         ORDER BY a.displayOrder DESC";
             } else {
                 $dql = "SELECT a, ip
-                        FROM ChamiloCourseBundle:CAnnouncement a
-                        JOIN ChamiloCourseBundle:CItemProperty ip
+                        FROM Chamilo\CourseBundle\Entity\CAnnouncement a
+                        JOIN Chamilo\CourseBundle\Entity\CItemProperty ip
                         WITH a.id = ip.ref AND a.cId = ip.course
                         WHERE
                             a.id = :announcement AND

@@ -2695,7 +2695,7 @@ class Category implements GradebookItem
     public static function findByCertificate($id)
     {
         $category = Database::getManager()
-            ->createQuery('SELECT c.catId FROM ChamiloCoreBundle:GradebookCertificate c WHERE c.id = :id')
+            ->createQuery('SELECT c.catId FROM Chamilo\CoreBundle\Entity\GradebookCertificate c WHERE c.id = :id')
             ->setParameters(['id' => $id])
             ->getOneOrNullResult();
 

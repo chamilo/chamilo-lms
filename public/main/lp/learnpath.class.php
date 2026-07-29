@@ -1319,7 +1319,7 @@ class learnpath
     {
         try {
             $lastId = Database::getManager()
-                ->createQuery('SELECT i.iid FROM ChamiloCourseBundle:CLpItem i
+                ->createQuery('SELECT i.iid FROM Chamilo\CourseBundle\Entity\CLpItem i
                 WHERE i.lp = :lp AND i.parent IS NULL AND i.itemType != :type ORDER BY i.displayOrder DESC')
                 ->setMaxResults(1)
                 ->setParameters(['lp' => $this->lp_id, 'type' => TOOL_LP_FINAL_ITEM])
@@ -3701,7 +3701,7 @@ class learnpath
 
         $tools = $em
             ->createQuery("
-                SELECT t FROM ChamiloCourseBundle:CTool t
+                SELECT t FROM Chamilo\CourseBundle\Entity\CTool t
                 WHERE t.course = :course AND
                     t.name = :name AND
                     t.image LIKE 'lp_category.%' AND

@@ -77,7 +77,7 @@ class SurveyExportTxtPlugin extends Plugin
     private function createLinkToCourseTools()
     {
         $result = Database::getManager()
-            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
+            ->createQuery('SELECT c.id FROM Chamilo\CoreBundle\Entity\Course c')
             ->getResult();
 
         foreach ($result as $item) {
@@ -91,7 +91,7 @@ class SurveyExportTxtPlugin extends Plugin
     private function removeLinkToCourseTools()
     {
         Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.link LIKE :link AND t.category = :category')
+            ->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CTool t WHERE t.link LIKE :link AND t.category = :category')
             ->execute(['link' => 'SurveyExportTxt/start.php%', 'category' => 'plugin']);
     }
 }

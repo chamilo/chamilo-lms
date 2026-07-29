@@ -10240,11 +10240,11 @@ class SessionManager
         return Database::getManager()
             ->createQuery("
                 SELECT COUNT(scu)
-                FROM ChamiloCoreBundle:SessionRelCourseRelUser scu
-                INNER JOIN ChamiloCoreBundle:SessionRelUser su
+                FROM Chamilo\CoreBundle\Entity\SessionRelCourseRelUser scu
+                INNER JOIN Chamilo\CoreBundle\Entity\SessionRelUser su
                     WITH scu.user = su.user
                     AND scu.session = su.session
-                INNER JOIN ChamiloCoreBundle:AccessUrlRelUser a
+                INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelUser a
                     WITH a.user = su.user
                 WHERE
                     scu.course = :course AND

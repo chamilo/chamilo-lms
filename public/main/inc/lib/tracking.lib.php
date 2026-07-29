@@ -6778,8 +6778,8 @@ class Tracking
         return Database::getManager()
             ->createQuery("
                 SELECT csp
-                FROM ChamiloCourseBundle:CStudentPublication csp
-                INNER JOIN ChamiloCourseBundle:CItemProperty cip
+                FROM Chamilo\CourseBundle\Entity\CStudentPublication csp
+                INNER JOIN Chamilo\CourseBundle\Entity\CItemProperty cip
                     WITH (
                         csp.iid = cip.ref AND
                         csp.session = cip.session AND

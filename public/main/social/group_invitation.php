@@ -41,7 +41,7 @@ if (empty($group_id)) {
 }
 
 $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']];
+$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['title']];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Subscribe users to group')];
 
 $form_sent = 0;
@@ -66,8 +66,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             [$group_id],
             GROUP_USER_PERMISSION_PENDING_INVITATION
         );
-        $title = get_lang('You are invited to group').' '.$group_info['name'];
-        $content = get_lang('You are invited to access a group content').' '.$group_info['name'].' <br />';
+        $title = get_lang('You are invited to group').' '.$group_info['title'];
+        $content = get_lang('You are invited to access a group content').' '.$group_info['title'].' <br />';
         $content .= get_lang('To subscribe, click the link below').' <br />';
         $content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.
             get_lang('Subscribe').'</a>';
@@ -143,7 +143,7 @@ if (is_array($Users) && count($Users) > 0) {
 }
 
 //$social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
-$social_right_content = '<h3 class="group-title">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h3>';
+$social_right_content = '<h3 class="group-title">'.Security::remove_XSS($group_info['title'], STUDENT, true).'</h3>';
 
 if (0 == count($nosessionUsersList)) {
     $friends = SocialManager::get_friends(api_get_user_id());

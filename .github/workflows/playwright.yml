@@ -174,6 +174,20 @@ jobs:
                     BASE_URL: http://localhost
                 run: yarn test:playwright:seed-course
 
+            # Same reasoning as "Seed test course" above, for the OTHER course
+            # fixture: sessionAccess.feature (new) selects this course by its
+            # code, "TEMPPRIVATE", to attach to the sessions it creates.
+            # course.feature's own "Create a private course before testing"
+            # scenario is what creates it, but wasn't part of the dedicated
+            # seed step (only "Create a course before testing"/TEMP was) — the
+            # exact same cross-file race gotcha already fixed once for TEMP/
+            # cid=1 would otherwise apply here too, just for a course "TEMPPRIVATE"
+            # is looked up by code instead of by an assumed id.
+            -   name: Seed private course
+                env:
+                    BASE_URL: http://localhost
+                run: yarn test:playwright:seed-private-course
+
             -   name: Playwright tests
                 env:
                     BASE_URL: http://localhost

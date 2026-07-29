@@ -365,6 +365,25 @@ function selectFile(index, file) {
   uploadSlots.value[index].file = file
 }
 
+// The CSRF token loaded at mount (loadForm(), onMounted) can go stale by the
+// time a user finishes filling out this form and submits — same staleness
+// window documented and fixed for UsergroupList.vue's saveForm()/
+// performDelete(). Re-fetching immediately before the mutating request closes
+// that window regardless of how long the form was left open.
+async function refreshCsrfToken() {
+  try {
+    const response = await ticketService.getForm({
+      projectId: form.projectId || undefined,
+      sessionId: form.sessionId || undefined,
+    })
+    if (formData.value) {
+      formData.value.csrfToken = response.csrfToken || formData.value.csrfToken
+    }
+  } catch {
+    // Keep the existing token; the submit itself will surface any real error.
+  }
+}
+
 async function submitForm() {
   formSubmitted.value = true
   if (
@@ -379,6 +398,7 @@ async function submitForm() {
 
   isSubmitting.value = true
   try {
+    await refreshCsrfToken()
     const payload = new FormData()
     payload.append("csrfToken", formData.value.csrfToken)
     payload.append("projectId", String(form.projectId || 0))

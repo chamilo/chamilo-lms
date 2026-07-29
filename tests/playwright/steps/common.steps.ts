@@ -36,6 +36,21 @@ Given("I am on course {string} homepage", async ({ page }, courseCode: string) =
   await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
 })
 
+// Ported from FeatureContext::iAmOnCourseXHomepageInSessionY() — same
+// redirect entry point, with the session name appended so the course loads
+// in that session's context (sessionAccess.feature checks access is/isn't
+// allowed depending on the visiting user's session subscription).
+Given(
+  "I am on course {string} homepage in session {string}",
+  async ({ page }, courseCode: string, sessionName: string) => {
+    await page.goto(
+      `/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}&session_name=${encodeURIComponent(sessionName)}`,
+    )
+    await page.waitForLoadState("domcontentloaded")
+    await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
+  },
+)
+
 // Ported from FeatureContext::iAmLoggedAs() / iAmAPlatformAdministrator() /
 // iAmATeacher() / iAmAStudent() / iAmAnHR() / iAmAStudentBoss() /
 // iAmAnInvitee(): each fixed test account uses its own username as both
@@ -148,9 +163,26 @@ Given("I am not logged", async ({ page }) => {
 // valid attribute is a bracketed multi-select name.
 const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
 
+// Bounded grace period before a tier's .count() snapshot, mirroring
+// pressButton()'s isSoonVisible() below for the same reason: a plain
+// .count() is an instant, non-retrying read of the CURRENT DOM. On a page
+// whose form renders asynchronously (e.g. TicketCreateView.vue's
+// onMounted(() => loadForm())), a fill attempt that starts before that
+// request resolves can see 0 matches for BOTH the id and name tiers — not
+// because the field doesn't exist under that identifier, but because it
+// simply hasn't rendered yet — and permanently commit to the getByLabel()
+// fallback below, which then hangs for the full test timeout if the visible
+// label text doesn't happen to exact-match the identifier too. Real failure:
+// ticket.feature's "Create a ticket" hung 90s on
+// getByLabel('subject', { exact: true }) because BaseInputText's real
+// name="subject" attribute hadn't rendered yet when this ran.
 async function resolveField(page: Page, field: string) {
   if (looksLikeIdentifier(field)) {
     const byId = page.locator(`#${field}`)
+    await byId
+      .first()
+      .waitFor({ state: "attached", timeout: 5000 })
+      .catch(() => {})
     const idCount = await byId.count()
     if (idCount === 1) return byId
     if (idCount > 1) {
@@ -160,6 +192,10 @@ async function resolveField(page: Page, field: string) {
   }
 
   const byName = page.locator(`[name="${field}"]`)
+  await byName
+    .first()
+    .waitFor({ state: "attached", timeout: 2000 })
+    .catch(() => {})
   const nameCount = await byName.count()
   if (nameCount === 1) return byName
   if (nameCount > 1) {
@@ -298,6 +334,34 @@ Then("I fill in editor field {string} with {string}", async ({ page }, field: st
   )
 })
 
+// Ported from FeatureContext::iFillInTinyMceOnFieldWith() — distinct from
+// "I fill in editor field ... with ..." above, which relies on
+// window.setContentFromEditor(), a legacy-pages-only helper (assets/js/legacy/
+// app.js, bundled only in the legacy_app webpack entry). ticket.feature's forms
+// are Vue (TicketCreateView.vue/TicketSettingsView.vue), whose BaseTinyEditor
+// wraps @tinymce/tinymce-vue with no custom `model-events` prop, so it falls
+// back to that library's default modelEvents list, 'change input undo redo'
+// (node_modules/@tinymce/tinymce-vue/lib/es2015/main/ts/Utils.js) to know when
+// to emit update:modelValue. TinyMCE's own setContent() only fires internal
+// SetContent/BeforeSetContent events, neither of which is in that list — so a
+// bare setContent() would silently never reach the Vue v-model, and
+// TicketCreateView.vue's submit blocks entirely on empty content
+// (hasMessageContent check, content is a required field there). Firing
+// 'change' explicitly after setContent() is what actually satisfies
+// bindModelHandlers()'s listener.
+Then("I fill in tinymce field {string} with {string}", async ({ page }, field: string, value: string) => {
+  const fieldId = await (await resolveField(page, field)).getAttribute("id")
+  if (!fieldId) {
+    throw new Error(`Could not find an id for field with locator: ${field}`)
+  }
+  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), fieldId)
+  await page.evaluate(({ id, value }) => {
+    const editor = (window as any).tinymce.get(id)
+    editor.setContent(value)
+    editor.fire("change")
+  }, { id: fieldId, value })
+})
+
 // Mink's "I check ..." checks a checkbox, same id -> name -> label resolution.
 Then("I check {string}", async ({ page }, field: string) => {
   await (await resolveField(page, field)).check()
@@ -326,18 +390,52 @@ When("I check the {string} radio button selector", async ({ page }, selector: st
 // Not ported — new. Mirrors FeatureContext's own generic Select2/ajax-select
 // steps (iFillInSelectInputWithAndSelect / iFillInAjaxSelectInputWithAndSelect)
 // but drives the REAL widget through the UI instead of shelling out to jQuery,
-// for course_add.php's course_categories field (FormValidator's addSelectAjax,
-// backed by Select2 + an AJAX search endpoint — course.ajax.php?a=search_category
-// — not a plain <select>, so resolveField()/selectOption() don't apply).
-// Typing into the search box triggers the AJAX call; filtering the results
-// locator by the exact option text (rather than grabbing whatever's first)
-// means this naturally waits out the "Searching…" placeholder instead of
-// racing it.
+// for any FormValidator::addSelectAjax() field (Select2 + a real AJAX search
+// endpoint — course_add.php's course_categories, session_add.php's
+// coach_username/courses/users — not a plain <select>, so resolveField()/
+// selectOption() don't apply). Typing into the search box triggers the AJAX
+// call; getByRole('option') naturally waits out the "Searching…" placeholder
+// (no result exists until the request resolves) instead of racing it.
+//
+// Tries an exact-ish named match first (safer when a search can return more
+// than one loosely-matching result, e.g. course_add.php's category search),
+// then falls back to whatever the server returned first: for some fields the
+// searched text is not what's DISPLAYED — session_add.php's coach_username
+// searches by username (e.g. "mmosquera") but Select2 there renders full
+// names ("Michela Mosquera Guardamino"), so a name-based match would never
+// find anything even though the correct (and only) result is right there.
+// The server already did the actual matching (that's what the search query
+// just triggered), so falling back to "first result" is safe once a named
+// match is confirmed absent, not just slow to appear.
+//
+// Uses the raw `[role="option"]` ATTRIBUTE selector, not getByRole("option"):
+// two failed attempts first. (1) Unscoped getByRole("option") matches ANY
+// option-role element on the page, including a plain native <select>'s
+// <option> children (implicit ARIA role, no literal attribute) — on
+// session_add.php's "advanced settings" panel, which has three native
+// <select>s (session template, category, status) visible at the same time
+// as the coach_username Select2, this reliably grabbed the category select's
+// static "none" option instead of the real search result. (2) Scoping to the
+// field's own DOM parent (on the theory the results dropdown renders
+// alongside the search box) also failed — Select2 renders its dropdown/
+// listbox APPENDED TO document.body as a floating overlay, not nested inside
+// the original field's container at all, so that scoped locator never found
+// anything, even for the previously-working simple case. `[role="option"]`
+// (an attribute selector) only matches elements with that EXACT literal HTML
+// attribute — Select2's real dropdown items have it (confirmed via a real
+// accessibility snapshot), native <option> elements never do (their role is
+// computed/implicit, not a DOM attribute) — so this naturally excludes
+// unrelated native selects without needing correct DOM scoping at all.
 When("I select {string} from the ajax select {string}", async ({ page }, optionText: string, fieldId: string) => {
   const searchField = page.locator(`#${fieldId}`).locator("..").locator(".select2-search__field")
   await searchField.click()
   await searchField.fill(optionText)
-  await page.locator(".select2-results__option", { hasText: optionText }).first().click()
+  const named = page.locator('[role="option"]', { hasText: optionText })
+  if (await isSoonVisible(named, 3000)) {
+    await named.first().click()
+    return
+  }
+  await page.locator('[role="option"]').first().click()
 })
 
 // Mink's "I select X from Y" (a <select>'s option, matched by its visible
@@ -654,6 +752,56 @@ When(/^(?:|I )confirm the popup$/, async ({ page }) => {
     await modal.locator(".swal2-confirm").click()
   }
 })
+
+// Ported from FeatureContext::iHaveAFriend(). Establishes a real, accepted
+// friend relationship between the fixed admin account and an arbitrary user,
+// entirely via the same two legacy AJAX endpoints the original Behat step
+// shelled out to (GET requests, matching Mink's plain visit() semantics) —
+// admin sends the invitation, then the target user's own session accepts it.
+// Ends logged back in as admin, matching the original's own final
+// iAmAPlatformAdministrator() call, since the next Gherkin step generally
+// assumes an admin session is still current.
+//
+// Unlike the original PHP (which re-logs-in as admin as its own first action,
+// redundantly — both socialGroup.feature scenarios using this step already
+// have "Given I am a platform administrator" immediately before it), this
+// does NOT repeat that login: the Vue /login route redirects straight to the
+// dashboard when a session cookie is already active (confirmed directly —
+// navigating there mid-admin-session lands on the Home page, never rendering
+// #login), so a redundant loginAs("admin") right after one that already
+// happened hangs forever waiting for a login form that will never appear.
+// Mink's Selenium session apparently tolerated the original's redundant call
+// (or a subtly different /login behavior in the legacy stack did); this
+// doesn't, so the fix is to simply not repeat it.
+Given("I have a friend named {string} with id {string}", async ({ page }, friendUsername: string, friendId: string) => {
+  const adminId = 1
+  await page.goto(
+    `/main/inc/ajax/message.ajax.php?a=send_invitation&user_id=${encodeURIComponent(friendId)}&content=${encodeURIComponent("Add me")}`,
+  )
+  // An explicit /logout before switching to friendUsername is needed for the
+  // same reason noted above — this page already carries the admin cookie
+  // from the Gherkin's preceding "Given I am a platform administrator".
+  await page.goto("/logout")
+  await loginAs(page, friendUsername)
+  await page.goto(`/main/inc/ajax/social.ajax.php?a=add_friend&friend_id=${adminId}&is_my_friend=friend`)
+  await page.goto("/logout")
+  await loginAs(page, "admin")
+})
+
+// Ported from FeatureContext::iInviteAFriendToASocialGroup(). group_add.php's
+// invitation field (FormValidator::addMultiSelect('invitation', ...)) is a
+// plain native <select multiple name="invitation[]">, not a Select2/AJAX
+// widget — Mink's fillField() on a <select> selects the option matching the
+// given VALUE (the friend's numeric id), which selectOption({ value }) mirrors
+// directly.
+When(
+  "I invite to a friend with id {string} to a social group with id {string}",
+  async ({ page }, friendId: string, groupId: string) => {
+    await page.goto(`/main/social/group_invitation.php?id=${encodeURIComponent(groupId)}`)
+    await page.locator('[name="invitation[]"]').selectOption({ value: friendId })
+    await pressButton(page, "submit")
+  },
+)
 
 Then("I should see {string}", async ({ page }, text: string) => {
   await expect(page.getByText(text).first()).toBeVisible()

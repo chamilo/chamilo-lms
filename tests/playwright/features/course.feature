@@ -282,6 +282,13 @@ Feature: Course tools basic testing
     Then I should not see "not authorized"
     When I fill in "title" with "TEMP_PRIVATE"
     And I select "Language skills" from the ajax select "update_course_course_categories"
+    # Same fix as "Create a course before testing" above (this scenario predates
+    # that fix and was never updated to match): an unselected Language field
+    # silently creates TEMP_PRIVATE as a French-language course, which then
+    # breaks any later feature relying on its English tool/message text —
+    # confirmed by sessionAccess.feature's access-denied check rendering as
+    # "Vous n'êtes pas autorisé dans ce cours" instead of "not allowed".
+    And I select "English" from "course_language"
     Then I check the "Private access (access authorized to group members only)" radio button
     And I press "submit"
     Then wait for the page to be loaded

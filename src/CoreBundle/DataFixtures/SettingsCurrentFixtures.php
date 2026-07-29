@@ -1340,6 +1340,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Display official code in exercises results',
                     'comment' => "Whether to show the students' official code in the exercises results reports",
                 ],
+                [
+                    'name' => 'quiz_result_pdf_export_include_official_code_in_file_name',
+                    'title' => 'Include official code in exported quiz result PDF file name',
+                    'comment' => "Whether to include the student's official code in the file name when exporting a quiz result to PDF",
+                ],
             ],
             'security' => [
                 [

@@ -101,13 +101,13 @@
                                 </a>
 
                                 {% if skill.status == 0 %}
-                                    <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'enable' }|url_encode }}"
+                                    <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'enable', 'sec_token': token }|url_encode }}"
                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-gray-90 ring-1 ring-gray-20 hover:bg-gray-10"
                                        title="{{ 'Enable'|trans }}">
                                         {{ 'StateIcon::INACTIVE'|mdi_icon }}
                                     </a>
                                 {% else %}
-                                    <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'disable' }|url_encode }}"
+                                    <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'disable', 'sec_token': token }|url_encode }}"
                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-gray-90 ring-1 ring-gray-20 hover:bg-gray-10"
                                        title="{{ 'Disable'|trans }}">
                                         {{ 'StateIcon::ACTIVE'|mdi_icon }}

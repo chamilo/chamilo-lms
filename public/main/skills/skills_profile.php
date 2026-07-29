@@ -7,7 +7,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(false, 'true' === api_get_setting('allow_hr_skills_management'));
 SkillModel::isAllowed();
 
 $interbreadcrumb[] = [

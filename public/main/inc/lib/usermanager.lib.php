@@ -4530,8 +4530,8 @@ class UserManager
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND (
             u.last_login IS NULL OR
-            u.last_login = '0000-00-00 00:00:00' OR
-            u.last_login = '0000-00-00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00 00:00:00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00' OR
             u.last_login <= '$lastConnectionDate'
         ) ";
         }

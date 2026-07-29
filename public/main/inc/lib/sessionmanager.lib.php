@@ -6850,8 +6850,8 @@ class SessionManager
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND (
             u.last_login IS NULL OR
-            u.last_login = '0000-00-00 00:00:00' OR
-            u.last_login = '0000-00-00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00 00:00:00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00' OR
             u.last_login <= '$lastConnectionDate'
         ) ";
         }
@@ -9048,10 +9048,10 @@ class SessionManager
         $query_rows = "SELECT count(*) as total_rows, c.title as course_title, s.title,
                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
-                            (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
+                            (CAST(s.access_start_date AS CHAR(20)) = '0000-00-00 00:00:00' AND CAST(s.access_end_date AS CHAR(20)) = '0000-00-00 00:00:00' ) OR
                             (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
-                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
-                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
+                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = CAST(s.access_end_date AS CHAR(20)) OR s.access_end_date IS NULL )) OR
+                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = CAST(s.access_start_date AS CHAR(20)) OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active
                        FROM $extraFieldTables $tbl_session s
                        LEFT JOIN  $tbl_session_category sc
@@ -9711,10 +9711,10 @@ class SessionManager
                     SELECT DISTINCT
                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
-                            (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
+                            (CAST(s.access_start_date AS CHAR(20)) = '0000-00-00 00:00:00' AND CAST(s.access_end_date AS CHAR(20)) = '0000-00-00 00:00:00' ) OR
                             (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
-                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
-                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
+                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = CAST(s.access_end_date AS CHAR(20)) OR s.access_end_date IS NULL )) OR
+                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = CAST(s.access_start_date AS CHAR(20)) OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active,
                 s.title,
                 s.nbr_courses,

@@ -40,7 +40,7 @@ official installation guide in the documentation/ folder.
 ### Hardware
 
 We recommend developing Chamilo on a machine with at least
-- 8GB of RAM
+- 8GB of RAM (or 4GB + 4GB of swap on SSD/NVMe)
 - 2 powerful CPUs
 - about 10GB of disk space
 

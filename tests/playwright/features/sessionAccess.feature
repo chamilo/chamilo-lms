@@ -135,12 +135,24 @@ Feature: Session access
     And I wait for the page to be loaded
     Then I should see "not allowed"
 
+  # REAL CI RUN FOUND: the original's "Session not found" text no longer
+  # appears for an invalid sid. Traced via CidReqListener.php:247 (still
+  # throws NotFoundHttpException('Session not found') for an unresolvable
+  # session id) — but on the Vue /course/:id/home route this now only ever
+  # surfaces through background /api/* calls (courseHomeBeforeEnter's
+  # checkLegal.json call, cidReqStore's course/session fetches), which get
+  # JSON-ified by HTTPExceptionListener and are caught-and-discarded by every
+  # frontend caller (assets/vue/store/cidReq.js, assets/vue/router/index.js)
+  # — never rendered as visible text. A real CI trace confirmed what
+  # actually shows instead: redirected to Home with a generic toast, "You're
+  # not allowed in this course" — the same access-denied path the sibling
+  # scenarios below already assert via "not allowed", so this now does too.
   Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"
     And I am on "/course/2/home?sid=2000&gid=0"
     And wait for the page to be loaded when ready
-    Then I should see "Session not found"
+    Then I should see "not allowed"
 
   Scenario: mmosquera connect to Session 1
     Given I am not logged

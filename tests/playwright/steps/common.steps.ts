@@ -783,22 +783,92 @@ Given("I have a friend named {string} with id {string}", async ({ page }, friend
   // from the Gherkin's preceding "Given I am a platform administrator".
   await page.goto("/logout")
   await loginAs(page, friendUsername)
-  await page.goto(`/main/inc/ajax/social.ajax.php?a=add_friend&friend_id=${adminId}&is_my_friend=friend`)
+  // Ported from FeatureContext, this originally called
+  // social.ajax.php?a=add_friend — but that action doesn't exist in
+  // social.ajax.php at all (confirmed via a full-repo grep: no case handles
+  // it, nothing else in the codebase calls it either — it silently falls
+  // through to social.ajax.php's own `default:` case and no-ops, always
+  // returning 200 without ever creating a friend relation). The real,
+  // currently-working implementation is SocialController::user()'s
+  // 'add_friend' case (the same modern /social-network/user-action endpoint
+  // the Vue "Add friend" UI itself posts to) — uses page.request.post() (not
+  // page.goto(), since this needs a JSON body) so friendUsername's own
+  // session cookie is used, matching "the target user's own session
+  // accepts it".
+  await page.request.post("/social-network/user-action", {
+    data: { targetUserId: adminId, action: "add_friend", is_my_friend: true },
+  })
   await page.goto("/logout")
   await loginAs(page, "admin")
 })
 
-// Ported from FeatureContext::iInviteAFriendToASocialGroup(). group_add.php's
-// invitation field (FormValidator::addMultiSelect('invitation', ...)) is a
-// plain native <select multiple name="invitation[]">, not a Select2/AJAX
-// widget — Mink's fillField() on a <select> selects the option matching the
-// given VALUE (the friend's numeric id), which selectOption({ value }) mirrors
-// directly.
+// Not ported — new. socialGroup.feature originally hardcoded the just-created
+// group's id (assuming it's always "1", the first-ever usergroup row) — a
+// real CI run disproved that: usergroup rows are shared with class.feature's
+// classes (different group_type, same table/id sequence, different worker,
+// no ordering guarantee), so another file can legitimately win id 1. Reads
+// the real id off group_add.php's own success redirect instead
+// (`social/group_view.php?id=<id>`, confirmed in its source) — module-level,
+// not page-scoped, matching this file's existing settingsPage/
+// settingsSnapshot pattern for state shared across scenarios in the same
+// worker (fullyParallel:false keeps a file's scenarios sequential in one
+// worker, so this is safe).
+let lastCreatedGroupId: string | null = null
+
+Then("I remember the created group id", async ({ page }) => {
+  const match = page.url().match(/[?&]id=(\d+)/)
+  if (!match) {
+    throw new Error(`Could not find a group id in the current URL: ${page.url()}`)
+  }
+  lastCreatedGroupId = match[1]
+})
+
+// Ported from FeatureContext::iInviteAFriendToASocialGroup(), but the
+// original's own assumption about this field was wrong (confirmed by
+// actually reading the rendered HTML, not just the PHP source):
+// FormValidator::addMultiSelect('invitation', ...) does NOT render a single
+// plain <select multiple name="invitation[]"> — it renders a dual-listbox
+// widget (jQuery "multiselect" plugin, initialized by an inline <script>):
+// a LEFT <select id="invitation" name="invitation-f[]"> holding every
+// available friend as a real <option>, and a RIGHT <select id="invitation_to"
+// name="invitation[]"> — the one actually submitted — which starts EMPTY and
+// only gets populated when the widget's own JS moves an option over (via the
+// #invitation_rightSelected button, or a double-click). Directly calling
+// selectOption() on name="invitation[]" (the right side) can never work: it
+// has no options to select until this step runs. Mink's original fillField()
+// on the same target likely had the identical problem — plausibly another
+// case (like the DataTable .rows() bug elsewhere in this suite) where the
+// original Behat step never actually worked either, just never got caught.
+// Fixed by moving the friend's real <option> node from the left list to the
+// right one directly (same "shell out to the DOM" approach already used
+// elsewhere in this file for other JS-widget quirks, e.g. the Select2 steps
+// above) rather than relying on the multiselect plugin's own click handler —
+// clicking #invitation_rightSelected directly did not reliably move the
+// option in practice (its init script may not always be attached in time);
+// moving the actual <option> element and firing 'change' produces the exact
+// same DOM state the plugin's own handler would, which is all the
+// subsequent form submit cares about.
 When(
-  "I invite to a friend with id {string} to a social group with id {string}",
-  async ({ page }, friendId: string, groupId: string) => {
-    await page.goto(`/main/social/group_invitation.php?id=${encodeURIComponent(groupId)}`)
-    await page.locator('[name="invitation[]"]').selectOption({ value: friendId })
+  "I invite to a friend with id {string} to the social group I just created",
+  async ({ page }, friendId: string) => {
+    if (!lastCreatedGroupId) {
+      throw new Error(
+        "No group id remembered — run \"I remember the created group id\" right after creating it first.",
+      )
+    }
+    await page.goto(`/main/social/group_invitation.php?id=${encodeURIComponent(lastCreatedGroupId)}`)
+    await page.waitForSelector("#invitation option")
+    await page.evaluate((value) => {
+      const left = document.querySelector("#invitation") as HTMLSelectElement
+      const right = document.querySelector("#invitation_to") as HTMLSelectElement
+      const option = Array.from(left.options).find((o) => o.value === value)
+      if (!option) {
+        throw new Error(`No option with value "${value}" found in the available-friends list`)
+      }
+      option.selected = true
+      right.appendChild(option)
+      right.dispatchEvent(new Event("change", { bubbles: true }))
+    }, friendId)
     await pressButton(page, "submit")
   },
 )

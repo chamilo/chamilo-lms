@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -81,7 +83,16 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                     $content
                 );
             }
-            Display::addFlash(Display::return_message(get_lang('Invitation sent')));
+            // Display::addFlash() alone does not reliably survive this
+            // legacy header()+exit redirect into the next request's
+            // #app[data-flashes] payload — same fix already applied to
+            // extra_fields.php/assign.php: Container::addFlash() + an
+            // explicit session save before the redirect.
+            Container::addFlash(get_lang('Invitation sent'), 'success');
+            $session = Container::getSession();
+            if ($session && method_exists($session, 'save')) {
+                $session->save();
+            }
         }
 
         header('Location: '.api_get_self().'?id='.$group_id);

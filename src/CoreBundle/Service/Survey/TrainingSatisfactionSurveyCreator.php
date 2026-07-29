@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateInterval;
 use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use RuntimeException;
@@ -89,6 +90,7 @@ final readonly class TrainingSatisfactionSurveyCreator
             ->setShowFormProfile(0)
             ->setFormFields('')
             ->setParent($course)
+            ->setCreator($user)
             ->addCourseLink($course, null, null, $visibility)
         ;
 
@@ -136,6 +138,26 @@ final readonly class TrainingSatisfactionSurveyCreator
 
         $this->entityManager->flush();
 
+        $verifiedInCourse = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(surveyVerification.iid)')
+            ->from(CSurvey::class, 'surveyVerification')
+            ->innerJoin('surveyVerification.resourceNode', 'verificationNode')
+            ->innerJoin('verificationNode.resourceLinks', 'verificationLink')
+            ->andWhere('surveyVerification.iid = :surveyId')
+            ->andWhere('IDENTITY(verificationLink.course) = :courseId')
+            ->andWhere('verificationLink.session IS NULL')
+            ->andWhere('verificationLink.group IS NULL')
+            ->andWhere('verificationLink.userGroup IS NULL')
+            ->andWhere('verificationLink.user IS NULL')
+            ->setParameter('surveyId', $surveyId, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult() > 0;
+
+        if (!$verifiedInCourse) {
+            throw new RuntimeException('Chamilo created the survey but it could not be verified in the selected course.');
+        }
+
         if (null !== $providerUsed) {
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'survey:'.$surveyId,
@@ -159,6 +181,7 @@ final readonly class TrainingSatisfactionSurveyCreator
             'language' => $language,
             'anonymous' => $anonymous,
             'published' => $publish,
+            'verified_in_course' => $verifiedInCourse,
             'question_count' => \count($createdQuestions),
             'provider_used' => $providerUsed,
             'ai_assisted' => null !== $providerUsed,

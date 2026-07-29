@@ -81,7 +81,7 @@ final readonly class CourseDocumentContentService
         } else {
             $queryBuilder
                 ->andWhere('document.title = :title')
-                ->setParameter('title', $title)
+                ->setParameter('title', $title, Types::STRING)
             ;
         }
 
@@ -107,14 +107,19 @@ final readonly class CourseDocumentContentService
      * before creation — Chamilo allows same-named files in the legacy UI, but
      * MCP-created documents must be unambiguous for later title-based lookups.
      */
-    public function titleExistsInParentFolder(Course $course, int $parentResourceNodeId, string $title): bool
+    public function titleExistsInParentFolder(
+        Course $course,
+        int $parentResourceNodeId,
+        string $title,
+        ?int $excludeDocumentId = null,
+    ): bool
     {
         $title = trim($title);
         if ('' === $title) {
             return false;
         }
 
-        $count = (int) $this->entityManager->createQueryBuilder()
+        $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('COUNT(document.iid)')
             ->from(CDocument::class, 'document')
             ->innerJoin('document.resourceNode', 'node')
@@ -124,16 +129,51 @@ final readonly class CourseDocumentContentService
             ->andWhere('resourceLink.group IS NULL')
             ->andWhere('resourceLink.userGroup IS NULL')
             ->andWhere('resourceLink.user IS NULL')
-            ->andWhere('node.parent = :parentNodeId')
+            ->andWhere('IDENTITY(node.parent) = :parentNodeId')
             ->andWhere('document.title = :title')
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setParameter('parentNodeId', $parentResourceNodeId, Types::INTEGER)
-            ->setParameter('title', $title)
+            ->setParameter('title', $title, Types::STRING)
+        ;
+
+        if (null !== $excludeDocumentId && $excludeDocumentId > 0) {
+            $queryBuilder
+                ->andWhere('document.iid != :excludeDocumentId')
+                ->setParameter('excludeDocumentId', $excludeDocumentId, Types::INTEGER)
+            ;
+        }
+
+        $count = (int) $queryBuilder
             ->getQuery()
             ->getSingleScalarResult()
         ;
 
         return $count > 0;
+    }
+
+    public function createUniqueTitle(
+        Course $course,
+        int $parentResourceNodeId,
+        string $requestedTitle,
+        int $maximumLength = 250,
+        ?int $excludeDocumentId = null,
+    ): string {
+        $requestedTitle = trim($requestedTitle);
+        if (!$this->titleExistsInParentFolder($course, $parentResourceNodeId, $requestedTitle, $excludeDocumentId)) {
+            return $requestedTitle;
+        }
+
+        for ($suffix = 2; $suffix <= 999; ++$suffix) {
+            $suffixText = ' ('.$suffix.')';
+            $baseLength = max(1, $maximumLength - mb_strlen($suffixText));
+            $candidate = rtrim(mb_substr($requestedTitle, 0, $baseLength)).$suffixText;
+
+            if (!$this->titleExistsInParentFolder($course, $parentResourceNodeId, $candidate, $excludeDocumentId)) {
+                return $candidate;
+            }
+        }
+
+        throw new RuntimeException('A unique document title could not be generated.');
     }
 
     public function assertEditableHtmlDocument(CDocument $document): void

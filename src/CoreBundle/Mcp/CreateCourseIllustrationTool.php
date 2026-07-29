@@ -65,7 +65,7 @@ final readonly class CreateCourseIllustrationTool
      */
     #[McpTool(
         name: 'create_course_illustration',
-        description: 'Generate an AI illustration about a topic and save it as a real file in the Documents tool of a course managed by the authenticated teacher.',
+        description: 'Create, generate, draw or illustrate an image with AI for a course managed by the authenticated teacher, and save it as a real file in the course Documents tool. Use this whenever the user asks for an AI image, picture, drawing, diagram or illustration. To place the new image inside a document section, call illustrate_document_paragraph afterwards with the returned document_id.',
     )]
     public function createCourseIllustration(
         int $courseId,

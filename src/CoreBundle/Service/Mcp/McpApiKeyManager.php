@@ -33,6 +33,7 @@ final readonly class McpApiKeyManager
         private UserApiKeyRepository $apiKeyRepository,
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
+        private McpAccessPolicy $mcpAccessPolicy,
     ) {}
 
     /**
@@ -154,6 +155,10 @@ final readonly class McpApiKeyManager
 
         if (!$this->accessUrlRepository->isUrlActiveForUser($accessUrl, $user)) {
             throw new AccessDeniedException('The authenticated user is not active on this access URL.');
+        }
+
+        if (!$this->mcpAccessPolicy->canUse($user)) {
+            throw new AccessDeniedException('MCP access is disabled or not allowed for this user role.');
         }
 
         return [$user, $accessUrl];

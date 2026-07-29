@@ -857,6 +857,7 @@ PROMPT;
                 ->setNotifications('')
                 ->setPassPercentage(0)
                 ->setQuestionSelectionType(1)
+                ->setRandomAnswers(true)
                 ->setParent($course)
                 ->setCreator($user)
                 ->addCourseLink($course, null, null, $visibility)

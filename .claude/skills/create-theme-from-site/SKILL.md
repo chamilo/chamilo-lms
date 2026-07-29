@@ -69,10 +69,14 @@ otherwise masquerade as "brand colors" if you just count frequency.
      site's own custom neutral/text-link color (not a generic Bootstrap gray).
    - **tertiary** — the site's actual body text color (often a dark gray
      close to, but distinct from, `#212529`).
-4. **Do not** derive `success`/`info`/`warning`/`danger` from the site. Those
-   carry meaning (green=good, red=bad) independent of brand identity — keep
-   Chamilo's own defaults for these four unless the user explicitly asks
-   otherwise.
+4. **Do not fully replace** `success`/`info`/`warning`/`danger` with site
+   colors. Those carry meaning (green=good, red=bad) independent of brand
+   identity, so their hue family must never change — but they should still
+   feel like part of the same palette as `primary`/`secondary` rather than
+   looking bolted on. Step 4 covers the harmonization (a small, capped hue
+   nudge + a partial saturation blend toward the site's own primary/
+   secondary) that keeps each one clearly still "green"/"blue"/"yellow"/
+   "red" while relating to the brand.
 
 ---
 
@@ -107,11 +111,115 @@ convert logo.png -resize 190x60 logo_header.png   # only if it exceeds 190x60
 ## Step 4: Map colors to the 23 `ColorTheme` variable keys
 
 Values are **strings of three space-separated integers `"R G B"`** — no
-`#`, no commas, no `rgb()` wrapper. `*-gradient` values are computed here as
-each RGB channel × 0.75 (rounded down) — a plain, explainable 25% darken.
-(Chamilo's own shipped defaults use inconsistent, hand-tuned offsets, some
-of them out-of-range/negative — that's tolerated, since nothing validates
-these values, but there's no need to replicate that exact formula.)
+`#`, no commas, no `rgb()` wrapper. `*-gradient` values are computed as each
+RGB channel × 0.75 (rounded down) — a plain, explainable 25% darken, applied
+to whatever the final base color is (site-derived for primary/secondary/
+tertiary, harmonized for the four semantic colors below). (Chamilo's own
+shipped defaults use inconsistent, hand-tuned offsets, some of them
+out-of-range/negative — that's tolerated, since nothing validates these
+values, but there's no need to replicate that exact formula.)
+
+### 4a. Harmonize the semantic colors (success/info/warning/danger)
+
+Don't hardcode Chamilo's defaults verbatim, and don't replace them with raw
+site colors either — nudge them: a small, capped hue rotation toward the
+site's own primary/secondary hue, plus a partial blend of saturation, using
+basic color-wheel harmony (analogous-hue nudging). This keeps every one of
+them unmistakably still green/blue/yellow/red while making the whole palette
+read as one family instead of "brand colors + unrelated stock colors bolted
+on". Run this script with the primary-base and secondary-base RGB you picked
+in Step 2 (before formatting them as `"R G B"` strings):
+
+```bash
+cat > /tmp/harmonize_semantic_colors.py << 'EOF'
+#!/usr/bin/env python3
+"""
+Nudge Chamilo's default semantic colors (success/info/warning/danger) toward
+a site's derived primary/secondary brand colors, without losing their
+semantic hue family (green stays green, red stays red, etc).
+
+Usage: harmonize_semantic_colors.py PR PG PB SR SG SB
+  PR PG PB = primary-base RGB (0-255 each)
+  SR SG SB = secondary-base RGB (0-255 each)
+Prints the 4 harmonized base colors as "R G B" strings.
+"""
+import colorsys
+import math
+import sys
+
+DEFAULTS = {
+    "success": (119, 170, 12),
+    "info": (13, 123, 253),
+    "warning": (245, 206, 1),
+    "danger": (223, 59, 59),
+}
+
+MAX_HUE_SHIFT_DEG = 12   # cap: never enough to cross into a different semantic hue family
+SATURATION_BLEND = 0.25  # how much of the site's own saturation profile to mix in
+MIN_SATURATION = 0.45    # floor: keep semantic colors from washing out to gray
+WEAK_CHROMA_THRESHOLD = 0.12  # below this combined chroma, treat brand hue as undefined
+
+
+def rgb_to_hsl(rgb):
+    r, g, b = rgb
+    h, l, s = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
+    return h * 360, s, l
+
+
+def hsl_to_rgb(h_deg, s, l):
+    r, g, b = colorsys.hls_to_rgb((h_deg % 360) / 360, l, s)
+    return tuple(max(0, min(255, round(c * 255))) for c in (r, g, b))
+
+
+def shift_hue_toward(h0_deg, href_deg, max_shift_deg=MAX_HUE_SHIFT_DEG):
+    diff = (href_deg - h0_deg + 180) % 360 - 180
+    shift = max(-max_shift_deg, min(max_shift_deg, diff))
+    return (h0_deg + shift) % 360
+
+
+def reference_hue_and_saturation(primary_rgb, secondary_rgb):
+    hp, sp, _ = rgb_to_hsl(primary_rgb)
+    hs, ss, _ = rgb_to_hsl(secondary_rgb)
+
+    # Saturation-weighted circular mean: a near-gray color has no meaningful
+    # hue, so it must not skew the reference hue (a naive unweighted average
+    # would wrongly pull a vivid primary's hue toward an arbitrary "hue" that
+    # colorsys assigns to gray).
+    x = sp * math.cos(math.radians(hp)) + ss * math.cos(math.radians(hs))
+    y = sp * math.sin(math.radians(hp)) + ss * math.sin(math.radians(hs))
+    chroma_strength = math.hypot(x, y)
+    href = math.degrees(math.atan2(y, x)) % 360 if chroma_strength >= WEAK_CHROMA_THRESHOLD else None
+
+    sref = (sp + ss) / 2
+    return href, sref
+
+
+def harmonize(primary_rgb, secondary_rgb):
+    href, sref = reference_hue_and_saturation(primary_rgb, secondary_rgb)
+
+    out = {}
+    for name, rgb in DEFAULTS.items():
+        h0, s0, l0 = rgb_to_hsl(rgb)
+        new_h = shift_hue_toward(h0, href) if href is not None else h0
+        new_s = max(MIN_SATURATION, s0 * (1 - SATURATION_BLEND) + sref * SATURATION_BLEND)
+        out[name] = hsl_to_rgb(new_h, new_s, l0)
+    return out
+
+
+if __name__ == "__main__":
+    pr, pg, pb, sr, sg, sb = (int(x) for x in sys.argv[1:7])
+    result = harmonize((pr, pg, pb), (sr, sg, sb))
+    for name, (r, g, b) in result.items():
+        print(f"{name} {r} {g} {b}")
+EOF
+python3 /tmp/harmonize_semantic_colors.py <primary_r> <primary_g> <primary_b> <secondary_r> <secondary_g> <secondary_b>
+```
+
+Lightness is deliberately left unchanged (only hue and saturation move), so
+the existing button-text contrast pairing (white on success/info/danger,
+black on warning) stays valid — no need to recompute those.
+
+### 4b. Assemble the full variable set
 
 ```json
 {
@@ -127,17 +235,17 @@ these values, but there's no need to replicate that exact formula.)
     "--color-tertiary-base": "R G B",
     "--color-tertiary-gradient": "R*0.75 G*0.75 B*0.75",
     "--color-tertiary-button-text": "<same as tertiary-base>",
-    "--color-success-base": "119 170 12",
-    "--color-success-gradient": "80 128 -43",
+    "--color-success-base": "<harmonized success, from 4a>",
+    "--color-success-gradient": "<harmonized success * 0.75>",
     "--color-success-button-text": "255 255 255",
-    "--color-info-base": "13 123 253",
-    "--color-info-gradient": "-33 83 211",
+    "--color-info-base": "<harmonized info, from 4a>",
+    "--color-info-gradient": "<harmonized info * 0.75>",
     "--color-info-button-text": "255 255 255",
-    "--color-warning-base": "245 206 1",
-    "--color-warning-gradient": "189 151 -65",
+    "--color-warning-base": "<harmonized warning, from 4a>",
+    "--color-warning-gradient": "<harmonized warning * 0.75>",
     "--color-warning-button-text": "0 0 0",
-    "--color-danger-base": "223 59 59",
-    "--color-danger-gradient": "180 -13 20",
+    "--color-danger-base": "<harmonized danger, from 4a>",
+    "--color-danger-gradient": "<harmonized danger * 0.75>",
     "--color-danger-button-text": "255 255 255",
     "--color-form-base": "<same as primary-base>"
   }
@@ -147,6 +255,8 @@ these values, but there's no need to replicate that exact formula.)
 `primary`/`tertiary` `button-text` reuse their own base color (Chamilo's
 convention for outline/ghost-style buttons); `secondary-button-text` and
 `primary-button-alternative-text` are white (used on solid-color buttons).
+Semantic `button-text` values are unchanged from Chamilo's defaults (see
+4a — lightness never moves, so the existing contrast pairing still holds).
 
 ---
 
@@ -240,8 +350,10 @@ curl -s "http://<host>/api/access_url_rel_color_themes" -H "Authorization: Beare
 
 Summarize for the user: theme name/slug, the three chosen colors with a
 one-line justification for each (what element on the source site they came
-from), where the logo was found, whether it's now active, and a link to
-`/admin/configuration/colors` so they can review/tweak it visually.
+from), a brief note that success/info/warning/danger were harmonized rather
+than left as stock defaults or fully replaced, where the logo was found,
+whether it's now active, and a link to `/admin/configuration/colors` so they
+can review/tweak it visually.
 
 ---
 

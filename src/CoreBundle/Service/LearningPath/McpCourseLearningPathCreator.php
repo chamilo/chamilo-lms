@@ -14,13 +14,14 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Mcp\CreateCourseDocumentTool;
 use Chamilo\CoreBundle\Service\Exercise\AiCourseTestGenerator;
-use Chamilo\CoreBundle\Service\Mcp\McpCourseAiFeatureManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
@@ -51,7 +52,6 @@ final readonly class McpCourseLearningPathCreator
     private const int DOCUMENT_TOOL_MAX_REQUESTED_WORDS = 5_000;
 
     public function __construct(
-        private McpCourseAiFeatureManager $courseAiFeatureManager,
         private AiCourseTestGenerator $testGenerator,
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
@@ -101,26 +101,10 @@ final readonly class McpCourseLearningPathCreator
         }
 
         $normalizedPages = [];
-        $hasAnyQuiz = false;
         foreach (array_values($pages) as $index => $page) {
             $normalizedPage = $this->normalizePage($page, $index + 1);
             $normalizedPages[] = $normalizedPage;
-            if (null !== $normalizedPage['quiz']) {
-                $hasAnyQuiz = true;
-            }
         }
-
-        $requiredFeatures = ['learning_path_generator'];
-        if ($hasAnyQuiz) {
-            $requiredFeatures[] = 'exercise_generator';
-        }
-
-        $enabledFeatures = $this->courseAiFeatureManager->ensureAllEnabled(
-            $course,
-            $user,
-            $requiredFeatures,
-            'create_course_learning_path',
-        );
 
         $courseNode = $course->getResourceNode();
         if (!$courseNode instanceof ResourceNode) {
@@ -157,8 +141,6 @@ final readonly class McpCourseLearningPathCreator
             }
 
             require_once api_get_path(SYS_CODE_PATH).'lp/learnpath.class.php';
-
-            require_once api_get_path(SYS_CODE_PATH).'exercise/exercise.class.php';
 
             $courseInfo = api_get_course_info($course->getCode());
             if (!\is_array($courseInfo) || [] === $courseInfo) {
@@ -204,6 +186,10 @@ final readonly class McpCourseLearningPathCreator
                 if ($documentId <= 0) {
                     throw new RuntimeException('Chamilo returned an invalid document ID.');
                 }
+                $documentTitle = trim((string) ($document['title'] ?? $pageTitle));
+                if ('' === $documentTitle) {
+                    $documentTitle = $pageTitle;
+                }
                 $createdDocumentIds[] = $documentId;
 
                 $stage = 'linking document for page '.$pageNumber;
@@ -212,7 +198,7 @@ final readonly class McpCourseLearningPathCreator
                     $previousItemId,
                     TOOL_DOCUMENT,
                     $documentId,
-                    $pageTitle,
+                    $documentTitle,
                 );
                 if ($documentItemId <= 0) {
                     throw new RuntimeException('A learning path document item could not be added.');
@@ -260,16 +246,13 @@ final readonly class McpCourseLearningPathCreator
                     }
 
                     $stage = 'linking mini-test for page '.$pageNumber;
-                    $quizItemId = (int) $legacyLearningPath->add_item(
+                    $quizItemId = $this->createQuizLearningPathItem(
+                        $learningPath,
                         $rootItem,
-                        $previousItemId,
-                        TOOL_QUIZ,
                         $quizId,
                         $page['quiz']['title'],
+                        $test['questions'],
                     );
-                    if ($quizItemId <= 0) {
-                        throw new RuntimeException('A learning path mini-test item could not be added.');
-                    }
 
                     $previousItemId = $quizItemId;
                     $this->markItem($quizItemId);
@@ -277,7 +260,7 @@ final readonly class McpCourseLearningPathCreator
 
                 $createdPages[] = [
                     'page_number' => $pageNumber,
-                    'title' => $pageTitle,
+                    'title' => $documentTitle,
                     'document_id' => $documentId,
                     'document_item_id' => $documentItemId,
                     'quiz_id' => $quizId,
@@ -299,6 +282,21 @@ final readonly class McpCourseLearningPathCreator
 
             throw new RuntimeException($message, 0, $exception);
         }
+
+        $orderedItemIds = [];
+        foreach ($createdPages as $createdPage) {
+            $orderedItemIds[] = (int) $createdPage['document_item_id'];
+            if (null !== $createdPage['quiz_item_id']) {
+                $orderedItemIds[] = (int) $createdPage['quiz_item_id'];
+            }
+        }
+
+        $verifiedItemCount = $this->finalizeAndVerifyStructure(
+            $learningPath,
+            $course,
+            $orderedItemIds,
+        );
+        $client?->progress(1.0, 1.0, 'Learning path created and verified.');
 
         $quizPageCount = \count(array_filter(
             $createdPages,
@@ -328,8 +326,11 @@ final readonly class McpCourseLearningPathCreator
             'page_count' => \count($createdPages),
             'quiz_page_count' => $quizPageCount,
             'published' => $publish,
+            'verified_in_course' => true,
+            'verified_item_count' => $verifiedItemCount,
             'ai_assisted' => true,
-            'course_features_enabled' => $enabledFeatures,
+            'content_source' => 'mcp_client',
+            'course_features_enabled' => [],
             'items' => $createdPages,
             'content_url' => '/resources/lp/'
                 .(int) $courseNode->getId()
@@ -459,6 +460,44 @@ final readonly class McpCourseLearningPathCreator
         ];
     }
 
+    /**
+     * @param list<array{question_id: int, title: string, score: float}> $questions
+     */
+    private function createQuizLearningPathItem(
+        CLp $learningPath,
+        CLpItem $rootItem,
+        int $quizId,
+        string $title,
+        array $questions,
+    ): int {
+        $maxScore = 0.0;
+        foreach ($questions as $question) {
+            $maxScore += $question['score'];
+        }
+
+        $item = (new CLpItem())
+            ->setTitle($title)
+            ->setDescription('')
+            ->setPath((string) $quizId)
+            ->setLp($learningPath)
+            ->setItemType(TOOL_QUIZ)
+            ->setMaxScore($maxScore)
+            ->setMaxTimeAllowed('0')
+            ->setPrerequisite('0')
+            ->setParent($rootItem)
+        ;
+
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+
+        $itemId = (int) $item->getIid();
+        if ($itemId <= 0) {
+            throw new RuntimeException('A learning path mini-test item could not be added.');
+        }
+
+        return $itemId;
+    }
+
     private function countWords(string $html): int
     {
         $text = trim((string) preg_replace('/\s+/u', ' ', strip_tags($html)));
@@ -563,6 +602,83 @@ final readonly class McpCourseLearningPathCreator
 
             $entityManager->remove($resourceNode);
         }
+    }
+
+    /**
+     * @param list<int> $orderedItemIds
+     */
+    private function finalizeAndVerifyStructure(
+        CLp $learningPath,
+        Course $course,
+        array $orderedItemIds,
+    ): int {
+        if ([] === $orderedItemIds) {
+            throw new RuntimeException('The learning path has no persisted content items.');
+        }
+
+        $rootItem = $this->lpItemRepository->getRootItem((int) $learningPath->getIid());
+        if (!$rootItem instanceof CLpItem) {
+            throw new RuntimeException('The learning path root item could not be verified.');
+        }
+
+        $rootItem
+            ->setDisplayOrder(1)
+            ->setPreviousItemId(null)
+            ->setNextItemId(null)
+        ;
+        $this->entityManager->persist($rootItem);
+
+        foreach ($orderedItemIds as $position => $itemId) {
+            $item = $this->lpItemRepository->find($itemId);
+            if (!$item instanceof CLpItem || (int) $item->getLp()->getIid() !== (int) $learningPath->getIid()) {
+                throw new RuntimeException('A persisted learning path item could not be verified.');
+            }
+
+            $item
+                ->setParent($rootItem)
+                ->setDisplayOrder($position + 2)
+                ->setPreviousItemId(null)
+                ->setNextItemId(null)
+            ;
+            $this->entityManager->persist($item);
+        }
+        $this->entityManager->flush();
+
+        $this->lpItemRepository->recoverNode($rootItem, 'displayOrder');
+        $this->entityManager->persist($rootItem);
+        $this->entityManager->flush();
+
+        $verifiedInCourse = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(verifiedLearningPath.iid)')
+            ->from(CLp::class, 'verifiedLearningPath')
+            ->innerJoin('verifiedLearningPath.resourceNode', 'verifiedNode')
+            ->innerJoin('verifiedNode.resourceLinks', 'verifiedLink')
+            ->andWhere('verifiedLearningPath.iid = :learningPathId')
+            ->andWhere('IDENTITY(verifiedLink.course) = :courseId')
+            ->andWhere('verifiedLink.session IS NULL')
+            ->andWhere('verifiedLink.group IS NULL')
+            ->andWhere('verifiedLink.userGroup IS NULL')
+            ->andWhere('verifiedLink.user IS NULL')
+            ->setParameter('learningPathId', (int) $learningPath->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult() > 0;
+
+        $persistedItemCount = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(verifiedItem.iid)')
+            ->from(CLpItem::class, 'verifiedItem')
+            ->andWhere('IDENTITY(verifiedItem.lp) = :learningPathId')
+            ->andWhere('verifiedItem.itemType != :rootType')
+            ->setParameter('learningPathId', (int) $learningPath->getIid(), Types::INTEGER)
+            ->setParameter('rootType', 'root', Types::STRING)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        if (!$verifiedInCourse || $persistedItemCount !== \count($orderedItemIds)) {
+            throw new RuntimeException('The learning path was created but its persisted course structure could not be verified.');
+        }
+
+        return $persistedItemCount;
     }
 
     private function markItem(int $itemId): void

@@ -68,6 +68,8 @@ final readonly class CreateCourseDocumentTool
      *         resource_node_id: int,
      *         parent_resource_node_id: int,
      *         title: string,
+     *         requested_title: string,
+     *         title_adjusted: bool,
      *         file_name: string|null,
      *         language: string,
      *         topic: string,
@@ -121,6 +123,8 @@ final readonly class CreateCourseDocumentTool
      *         resource_node_id: int,
      *         parent_resource_node_id: int,
      *         title: string,
+     *         requested_title: string,
+     *         title_adjusted: bool,
      *         file_name: string|null,
      *         language: string,
      *         topic: string,
@@ -181,9 +185,12 @@ final readonly class CreateCourseDocumentTool
             throw new RuntimeException('The course resource node could not be resolved.');
         }
 
-        if ($this->documentContentService->titleExistsInParentFolder($course, (int) $courseResourceNode->getId(), $title)) {
-            throw new InvalidArgumentException(\sprintf('A document titled "%s" already exists in this folder.', $title));
-        }
+        $requestedTitle = $title;
+        $title = $this->documentContentService->createUniqueTitle(
+            $course,
+            (int) $courseResourceNode->getId(),
+            $title,
+        );
 
         $topic = trim(strip_tags($topic));
         if ('' === $topic) {
@@ -299,6 +306,8 @@ final readonly class CreateCourseDocumentTool
                 'resource_node_id' => $resourceNodeId,
                 'parent_resource_node_id' => (int) $course->getResourceNode()?->getId(),
                 'title' => $document->getTitle(),
+                'requested_title' => $requestedTitle,
+                'title_adjusted' => $requestedTitle !== $document->getTitle(),
                 'file_name' => $fileName,
                 'language' => $languageIsoCode,
                 'topic' => $topic,

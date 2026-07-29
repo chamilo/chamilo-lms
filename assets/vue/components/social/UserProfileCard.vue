@@ -287,6 +287,7 @@
           </button>
 
           <button
+            v-if="isCurrentUser && canManageMcpApiKey"
             type="button"
             class="group flex min-h-[56px] w-full items-center rounded-xl bg-secondary px-4 py-3 text-left text-secondary-button-text shadow-sm transition hover:opacity-95 hover:shadow-xl"
             @click="manageMcpApiKey"
@@ -311,6 +312,7 @@
           </button>
 
           <button
+            v-if="isCurrentUser && isOAuthServerEnabled"
             type="button"
             class="group flex min-h-[56px] w-full items-center rounded-xl bg-secondary px-4 py-3 text-left text-secondary-button-text shadow-sm transition hover:opacity-95 hover:shadow-xl"
             @click="manageAuthorizedApplications"
@@ -346,11 +348,13 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import socialService from "../../services/socialService"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 import { usePushSubscription } from "../../composables/usePushSubscription"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
 const extraInfo = ref([])
@@ -376,6 +380,14 @@ const {
 } = usePushSubscription()
 
 const showDetails = ref(false)
+
+const canManageMcpApiKey = computed(() => {
+  return isCurrentUser.value && true === platformConfigStore.getSetting("security.mcp_access_allowed")
+})
+
+const isOAuthServerEnabled = computed(() => {
+  return "true" === platformConfigStore.getSetting("security.oauth_server_enabled")
+})
 
 const hasExtraInfo = computed(() => {
   return Array.isArray(extraInfo.value) && extraInfo.value.some((item) => item?.value)

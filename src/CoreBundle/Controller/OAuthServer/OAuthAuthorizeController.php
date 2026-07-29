@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\OAuthServer;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\OAuthServer\OAuthException;
+use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthAuthorizationService;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthClientResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -38,6 +39,7 @@ final class OAuthAuthorizeController extends BaseController
         private readonly SettingsManager $settingsManager,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly RateLimiterFactory $oauthAuthorizationLimiter,
+        private readonly McpAccessPolicy $mcpAccessPolicy,
     ) {}
 
     #[Route('/oauth/authorize', name: 'oauth_authorize', methods: ['GET'])]
@@ -77,6 +79,10 @@ final class OAuthAuthorizeController extends BaseController
 
         if (!$this->authorizationService->assertUserActiveOnCurrentPortal($user)) {
             return $this->renderError('Your account is not currently active on this Chamilo portal.');
+        }
+
+        if ($this->isMcpResource($authorizeRequest->resource) && !$this->mcpAccessPolicy->canUse($user)) {
+            return $this->renderError('MCP access is disabled or not allowed for your user role.');
         }
 
         return $this->render('@ChamiloCore/OAuthServer/consent.html.twig', [
@@ -120,6 +126,10 @@ final class OAuthAuthorizeController extends BaseController
             return $this->renderError('Your account is not currently active on this Chamilo portal.');
         }
 
+        if ($this->isMcpResource($authorizeRequest->resource) && !$this->mcpAccessPolicy->canUse($user)) {
+            return $this->renderError('MCP access is disabled or not allowed for your user role.');
+        }
+
         $action = (string) $request->request->get('action', '');
 
         if ('deny' === $action) {
@@ -157,6 +167,15 @@ final class OAuthAuthorizeController extends BaseController
         if ('true' !== $this->settingsManager->getSetting('security.oauth_server_enabled')) {
             throw new NotFoundHttpException();
         }
+    }
+
+    private function isMcpResource(?string $resource): bool
+    {
+        if (null === $resource || '' === trim($resource)) {
+            return false;
+        }
+
+        return str_ends_with(rtrim($resource, '/'), '/mcp');
     }
 
     private function renderError(string $message): Response

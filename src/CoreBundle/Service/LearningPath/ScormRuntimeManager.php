@@ -19,6 +19,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpIvComment;
 use Chamilo\CourseBundle\Entity\CLpIvInteraction;
 use Chamilo\CourseBundle\Entity\CLpIvObjective;
 use Doctrine\ORM\EntityManagerInterface;
@@ -239,6 +240,7 @@ final readonly class ScormRuntimeManager
         );
         $this->saveInteractions($itemView, $course, $normalized);
         $this->saveObjectives($itemView, $course, $normalized);
+        $this->saveComments($itemView, $course, $normalized);
 
         $this->entityManager->flush();
     }
@@ -362,8 +364,8 @@ final readonly class ScormRuntimeManager
             'cmi.session_time' => '',
             'cmi.suspend_data' => (string) ($itemView->getSuspendData() ?? ''),
             'cmi.launch_data' => (string) $item->getLaunchData(),
-            'cmi.comments_from_learner._count' => '0',
-            'cmi.comments_from_lms._count' => '0',
+            'cmi.comments_from_learner._children' => 'comment,location,timestamp',
+            'cmi.comments_from_lms._children' => 'comment,location,timestamp',
             'cmi.interactions._children' => 'id,type,objectives,timestamp,correct_responses,weighting,learner_response,result,latency,description',
             'cmi.objectives._children' => 'id,score,success_status,completion_status,progress_measure,description',
             'cmi.completion_threshold' => '1',
@@ -372,7 +374,41 @@ final readonly class ScormRuntimeManager
                 : '',
         ];
 
-        return $this->appendInteractionAndObjectiveValues($values, $itemView, true);
+        $values = $this->appendInteractionAndObjectiveValues($values, $itemView, true);
+
+        return $this->appendCommentValues($values, $itemView);
+    }
+
+    /**
+     * @param array<string, string> $values
+     *
+     * @return array<string, string>
+     */
+    private function appendCommentValues(array $values, CLpItemView $itemView): array
+    {
+        $itemViewId = (int) $itemView->getIid();
+        $sources = [
+            CLpIvComment::SOURCE_LEARNER => 'cmi.comments_from_learner.',
+            CLpIvComment::SOURCE_LMS => 'cmi.comments_from_lms.',
+        ];
+
+        foreach ($sources as $source => $prefix) {
+            /** @var array<int, CLpIvComment> $comments */
+            $comments = $this->entityManager->getRepository(CLpIvComment::class)->findBy(
+                ['lpIvId' => $itemViewId, 'source' => $source],
+                ['orderId' => 'ASC'],
+            );
+            $values[$prefix.'_count'] = (string) \count($comments);
+
+            foreach ($comments as $index => $commentEntity) {
+                $entryPrefix = $prefix.$index.'.';
+                $values[$entryPrefix.'comment'] = $commentEntity->getComment();
+                $values[$entryPrefix.'location'] = $commentEntity->getLocation();
+                $values[$entryPrefix.'timestamp'] = $commentEntity->getCommentTimestamp();
+            }
+        }
+
+        return $values;
     }
 
     /**
@@ -653,6 +689,43 @@ final readonly class ScormRuntimeManager
                 ->setScoreMin((float) ($this->nullableFloat($data['score.min'] ?? null) ?? 0.0))
                 ->setStatus(mb_substr($status, 0, 32))
                 ->setProgressMeasure($this->nullableFloat($data['progress_measure'] ?? null))
+            ;
+        }
+    }
+
+    /**
+     * @param array<string, string> $values
+     */
+    private function saveComments(CLpItemView $itemView, Course $course, array $values): void
+    {
+        $grouped = $this->groupIndexedValues($values, 'cmi.comments_from_learner.');
+        $itemViewId = (int) $itemView->getIid();
+        foreach ($grouped as $index => $data) {
+            if (!isset($data['comment']) || '' === trim($data['comment'])) {
+                continue;
+            }
+
+            /** @var CLpIvComment|null $commentEntity */
+            $commentEntity = $this->entityManager->getRepository(CLpIvComment::class)->findOneBy([
+                'lpIvId' => $itemViewId,
+                'orderId' => $index,
+                'source' => CLpIvComment::SOURCE_LEARNER,
+            ]);
+            if (!$commentEntity instanceof CLpIvComment) {
+                $commentEntity = new CLpIvComment();
+                $commentEntity
+                    ->setLpIvId($itemViewId)
+                    ->setOrderId($index)
+                    ->setSource(CLpIvComment::SOURCE_LEARNER)
+                    ->setCId((int) $course->getId())
+                ;
+                $this->entityManager->persist($commentEntity);
+            }
+
+            $commentEntity
+                ->setComment($data['comment'])
+                ->setLocation(mb_substr($data['location'] ?? '', 0, 255))
+                ->setCommentTimestamp(mb_substr($data['timestamp'] ?? '', 0, 32))
             ;
         }
     }

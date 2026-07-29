@@ -873,7 +873,7 @@ function deletePost(CForumPost $post): void
     $em = Database::getManager();
     $em
         ->createQuery('
-            UPDATE ChamiloCourseBundle:CForumPost p
+            UPDATE Chamilo\CourseBundle\Entity\CForumPost p
             SET p.postParent = :parent_of_deleted_post
             WHERE
                 p.postParent = :post AND

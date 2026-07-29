@@ -34,7 +34,7 @@ trait CourseControllerTrait
      * if (empty($courseId)) {
      * return null;
      * }
-     * return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Course', $courseId);
+     * return $this->getDoctrine()->getManager()->find('Chamilo\CoreBundle\Entity\Course', $courseId);
      * }.
      */
 

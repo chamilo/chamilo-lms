@@ -5346,7 +5346,7 @@ EOT;
     {
         $em = Database::getManager();
 
-        $dql = 'SELECT DISTINCT u.id FROM ChamiloCoreBundle:TrackEExercise te JOIN te.user u WHERE te.quiz = :id AND te.course = :cId';
+        $dql = 'SELECT DISTINCT u.id FROM Chamilo\CoreBundle\Entity\TrackEExercise te JOIN te.user u WHERE te.quiz = :id AND te.course = :cId';
         $dql .= api_get_session_condition($sessionId, true, false, 'te.session');
 
         $result = $em
@@ -5969,7 +5969,7 @@ EOT;
 
         $result = $em
             ->createQuery('
-                SELECT COUNT(ea) FROM ChamiloCoreBundle:TrackEAttempt ea
+                SELECT COUNT(ea) FROM Chamilo\CoreBundle\Entity\TrackEAttempt ea
                 WHERE ea.userId = :user AND ea.cId = :course AND ea.sessionId = :session
                     AND ea.tms > :time
             ')
@@ -6028,8 +6028,8 @@ EOT;
 
         $countAll = $em
             ->createQuery('SELECT COUNT(qq)
-                FROM ChamiloCourseBundle:CQuizQuestion qq
-                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
+                FROM Chamilo\CourseBundle\Entity\CQuizQuestion qq
+                INNER JOIN Chamilo\CourseBundle\Entity\CQuizRelQuestion qrq
                    WITH qq.iid = qrq.question
                 WHERE qrq.quiz = :id'
             )
@@ -6038,8 +6038,8 @@ EOT;
 
         $countOfAllowed = $em
             ->createQuery('SELECT COUNT(qq)
-                FROM ChamiloCourseBundle:CQuizQuestion qq
-                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
+                FROM Chamilo\CourseBundle\Entity\CQuizQuestion qq
+                INNER JOIN Chamilo\CourseBundle\Entity\CQuizRelQuestion qrq
                    WITH qq.iid = qrq.question
                 WHERE qrq.quiz = :id AND qq.type IN (:types)'
             )
@@ -6130,7 +6130,7 @@ EOT;
 
         return $em
             ->createQuery('SELECT cq.title
-                FROM ChamiloCourseBundle:CQuiz cq
+                FROM Chamilo\CourseBundle\Entity\CQuiz cq
                 WHERE cq.iid = :iid'
             )
             ->setParameter('iid', $exerciseId)

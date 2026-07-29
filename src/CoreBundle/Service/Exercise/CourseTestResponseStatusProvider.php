@@ -38,6 +38,15 @@ final readonly class CourseTestResponseStatusProvider
      *         incomplete_attempts: int,
      *         considered_attempts: int,
      *         ignored_non_student_attempts: int
+     *     },
+     *     teachers: array{
+     *         total_teachers: int,
+     *         teachers_with_completed_attempts: int,
+     *         teachers_with_incomplete_attempts: int,
+     *         completed_attempts: int,
+     *         incomplete_attempts: int,
+     *         teacher_attempted: bool,
+     *         counts_towards_student_totals: false
      *     }
      * }
      */
@@ -47,17 +56,36 @@ final readonly class CourseTestResponseStatusProvider
         $quizId = (int) $quiz->getIid();
         $studentIds = $this->findActiveDirectStudentIds($courseId);
         $studentLookup = array_fill_keys($studentIds, true);
+        $teacherIds = $this->findActiveDirectTeacherIds($courseId);
+        $teacherLookup = array_fill_keys($teacherIds, true);
         $answeredStudents = [];
         $inProgressStudents = [];
         $completedAttempts = 0;
         $incompleteAttempts = 0;
         $ignoredNonStudentAttempts = 0;
+        $teacherCompletedAttempts = 0;
+        $teacherIncompleteAttempts = 0;
+        $teachersWithCompletedAttempts = [];
+        $teachersWithIncompleteAttempts = [];
 
         foreach ($this->findBaseCourseAttempts($courseId, $quizId) as $attempt) {
             $userId = (int) $attempt['userId'];
 
             if (!isset($studentLookup[$userId])) {
-                ++$ignoredNonStudentAttempts;
+                if (isset($teacherLookup[$userId])) {
+                    if ('incomplete' === (string) $attempt['status']) {
+                        ++$teacherIncompleteAttempts;
+                        if (!isset($teachersWithCompletedAttempts[$userId])) {
+                            $teachersWithIncompleteAttempts[$userId] = true;
+                        }
+                    } else {
+                        ++$teacherCompletedAttempts;
+                        $teachersWithCompletedAttempts[$userId] = true;
+                        unset($teachersWithIncompleteAttempts[$userId]);
+                    }
+                } else {
+                    ++$ignoredNonStudentAttempts;
+                }
 
                 continue;
             }
@@ -110,6 +138,15 @@ final readonly class CourseTestResponseStatusProvider
                 'considered_attempts' => $completedAttempts + $incompleteAttempts,
                 'ignored_non_student_attempts' => $ignoredNonStudentAttempts,
             ],
+            'teachers' => [
+                'total_teachers' => \count($teacherIds),
+                'teachers_with_completed_attempts' => \count($teachersWithCompletedAttempts),
+                'teachers_with_incomplete_attempts' => \count($teachersWithIncompleteAttempts),
+                'completed_attempts' => $teacherCompletedAttempts,
+                'incomplete_attempts' => $teacherIncompleteAttempts,
+                'teacher_attempted' => ($teacherCompletedAttempts + $teacherIncompleteAttempts) > 0,
+                'counts_towards_student_totals' => false,
+            ],
         ];
     }
 
@@ -133,6 +170,36 @@ final readonly class CourseTestResponseStatusProvider
             ->setParameter('active', User::ACTIVE, Types::INTEGER)
             ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
             ->orderBy('student.id', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_values(array_map(
+            static fn (array $row): int => (int) $row['userId'],
+            $rows,
+        ));
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function findActiveDirectTeacherIds(int $courseId): array
+    {
+        /** @var list<array{userId: int|string}> $rows */
+        $rows = $this->entityManager
+            ->createQueryBuilder()
+            ->select('DISTINCT teacher.id AS userId')
+            ->from(CourseRelUser::class, 'subscription')
+            ->innerJoin('subscription.user', 'teacher')
+            ->andWhere('IDENTITY(subscription.course) = :courseId')
+            ->andWhere('subscription.status = :teacherStatus')
+            ->andWhere('teacher.active = :active')
+            ->andWhere('teacher.status != :softDeleted')
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('teacherStatus', CourseRelUser::TEACHER, Types::INTEGER)
+            ->setParameter('active', User::ACTIVE, Types::INTEGER)
+            ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
+            ->orderBy('teacher.id', 'ASC')
             ->getQuery()
             ->getArrayResult()
         ;

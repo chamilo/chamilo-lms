@@ -18,7 +18,6 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
-use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -31,6 +30,7 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
     private McpCourseLearningPathCreator $creator;
     private Course $course;
     private User $user;
+    private Session $session;
 
     protected function setUp(): void
     {
@@ -42,7 +42,8 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
         // a real HTTP request. A bare KernelTestCase boot never sets it.
         Container::setContainer($container);
         Container::setLegacyServices($container);
-        Container::setSession(new Session(new MockArraySessionStorage()));
+        $this->session = new Session(new MockArraySessionStorage());
+        Container::setSession($this->session);
 
         $this->em = $container->get(EntityManagerInterface::class);
         $this->creator = $container->get(McpCourseLearningPathCreator::class);
@@ -106,6 +107,8 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
         self::assertSame(1, $result['quiz_page_count']);
         self::assertFalse($result['published']);
         self::assertTrue($result['ai_assisted']);
+        self::assertSame('mcp_client', $result['content_source']);
+        self::assertTrue($result['verified_in_course']);
 
         $items = $result['items'];
         self::assertCount(2, $items);
@@ -127,6 +130,7 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
         $quiz = $this->em->find(CQuiz::class, $items[0]['quiz_id']);
         self::assertInstanceOf(CQuiz::class, $quiz);
         self::assertSame('Custom quiz title', $quiz->getTitle());
+        self::assertTrue($quiz->getRandomAnswers());
 
         $question = $this->em->find(CQuizQuestion::class, $this->firstQuestionIdOf($quiz));
         self::assertInstanceOf(CQuizQuestion::class, $question);
@@ -140,6 +144,37 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
         self::assertSame(1, $answers[1]->getCorrect());
         self::assertSame(0, $answers[0]->getCorrect());
         self::assertSame(0, $answers[2]->getCorrect());
+    }
+
+    public function testCreatingMiniTestDoesNotStartLegacySession(): void
+    {
+        self::assertFalse($this->session->isStarted());
+
+        $result = $this->creator->create(
+            $this->course,
+            $this->user,
+            'MCP LP Session-Safe Quiz Link',
+            [
+                [
+                    'title' => 'MCP LP Session-Safe Page',
+                    'content' => '<p>Content supplied by the MCP client.</p>',
+                    'quiz' => [
+                        'questions' => [
+                            [
+                                'title' => 'Choose the correct answer',
+                                'answers' => ['Wrong', 'Correct'],
+                                'correct_index' => 1,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            null,
+            false,
+        );
+
+        self::assertFalse($this->session->isStarted());
+        self::assertNotNull($result['items'][0]['quiz_item_id']);
     }
 
     public function testRejectsInvalidCorrectIndex(): void
@@ -198,14 +233,7 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
         $this->creator->create($this->course, $this->user, 'Empty', [], null, false);
     }
 
-    /**
-     * A later page failing (here: the duplicate-title guard) must surface a
-     * clear, stage-naming error naming exactly what failed and why, and must
-     * actually roll back everything already persisted for the failed
-     * attempt (learning path, document, quiz, question) so a retry never
-     * finds orphaned resources left behind.
-     */
-    public function testALaterPageFailingRollsBackEverythingAndSurfacesAClearError(): void
+    public function testDuplicatePageTitlesAreMadeUniqueAndLinkedWithThePersistedTitle(): void
     {
         $existingResult = $this->creator->create(
             $this->course,
@@ -217,53 +245,30 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
         );
         self::assertSame(1, $existingResult['page_count']);
 
-        try {
-            $this->creator->create(
-                $this->course,
-                $this->user,
-                'MCP LP Rollback Test',
-                [
-                    [
-                        'title' => 'MCP LP First Page Should Roll Back',
-                        'content' => '<p>first page content</p>',
-                        'quiz' => [
-                            'questions' => [
-                                ['title' => 'Q', 'answers' => ['a', 'b'], 'correct_index' => 0],
-                            ],
-                        ],
-                    ],
-                    // Same title as the pre-created document above -> duplicate-title failure.
-                    ['title' => 'MCP LP Duplicate Title Page', 'content' => '<p>second page content</p>'],
-                ],
-                null,
-                false,
-            );
-            self::fail('Expected a RuntimeException from the duplicate-title failure on page 2.');
-        } catch (RuntimeException $exception) {
-            self::assertStringContainsString('creating document for page 2', $exception->getMessage());
-            self::assertStringContainsString('already exists in this folder', $exception->getMessage());
-            self::assertStringContainsString('rolled back', $exception->getMessage());
-        }
+        $result = $this->creator->create(
+            $this->course,
+            $this->user,
+            'MCP LP Unique Document Titles',
+            [['title' => 'MCP LP Duplicate Title Page', 'content' => '<p>new page content</p>']],
+            null,
+            false,
+        );
 
-        // The failed attempt's own learning path must not remain.
-        $lps = $this->em->getRepository(CLp::class)->findBy(['title' => 'MCP LP Rollback Test']);
-        self::assertCount(0, $lps, 'The learning path from the failed attempt must not remain.');
+        self::assertSame(1, $result['page_count']);
+        self::assertSame('MCP LP Duplicate Title Page (2)', $result['items'][0]['title']);
 
-        // Its page-1 document (created before page 2 failed) must not remain either.
-        $orphanedDocuments = $this->em->getRepository(CDocument::class)
-            ->findBy(['title' => 'MCP LP First Page Should Roll Back'])
-        ;
-        self::assertCount(0, $orphanedDocuments, 'The page-1 document from the failed attempt must not remain.');
+        $document = $this->em->find(CDocument::class, $result['items'][0]['document_id']);
+        self::assertInstanceOf(CDocument::class, $document);
+        self::assertSame('MCP LP Duplicate Title Page (2)', $document->getTitle());
 
-        // Its page-1 mini-test must not remain either.
-        $orphanedQuizzes = $this->em->getRepository(CQuiz::class)->findBy(['title' => 'Mini-test 1: MCP LP First Page Should Roll Back']);
-        self::assertCount(0, $orphanedQuizzes, 'The page-1 mini-test from the failed attempt must not remain.');
+        $learningPath = $this->em->find(CLp::class, $result['learning_path_id']);
+        self::assertInstanceOf(CLp::class, $learningPath);
+        self::assertSame('MCP LP Unique Document Titles', $learningPath->getTitle());
 
-        // The pre-existing document (unrelated to the failed attempt) must still be there, untouched.
-        $stillExisting = $this->em->getRepository(CDocument::class)
+        $sameTitleDocuments = $this->em->getRepository(CDocument::class)
             ->findBy(['title' => 'MCP LP Duplicate Title Page'])
         ;
-        self::assertCount(1, $stillExisting, 'The pre-existing document must survive the rollback of the other attempt.');
+        self::assertCount(1, $sameTitleDocuments);
     }
 
     private function firstQuestionIdOf(CQuiz $quiz): int

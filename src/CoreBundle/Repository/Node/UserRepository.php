@@ -823,8 +823,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             if ('true' === $allowSendMessageToAllUsers || api_is_platform_admin()) {
                 $this->addNotCurrentUserQueryBuilder($currentUserId, $qb);
             /*$dql = "SELECT DISTINCT U
-                    FROM ChamiloCoreBundle:User U
-                    LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                    FROM Chamilo\CoreBundle\Entity\User U
+                    LEFT JOIN Chamilo\CoreBundle\Entity\AccessUrlRelUser R
                     WITH U = R.user
                     WHERE
                         U.active = 1 AND
@@ -834,8 +834,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             } else {
                 $this->addOnlyMyFriendsQueryBuilder($currentUserId, $qb);
                 /*$dql = 'SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
-                        INNER JOIN ChamiloCoreBundle:User AS U
+                        FROM Chamilo\CoreBundle\Entity\AccessUrlRelUser R, Chamilo\CoreBundle\Entity\UserRelUser UF
+                        INNER JOIN Chamilo\CoreBundle\Entity\User AS U
                         WITH UF.friendUserId = U
                         WHERE
                             U.active = 1 AND
@@ -858,8 +858,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $online_time = time() - ($time_limit * 60);
                 $limit_date = api_get_utc_datetime($online_time);
                 $dql = "SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:User U
-                        INNER JOIN ChamiloCoreBundle:TrackEOnline T
+                        FROM Chamilo\CoreBundle\Entity\User U
+                        INNER JOIN Chamilo\CoreBundle\Entity\TrackEOnline T
                         WITH U.id = T.loginUserId
                         WHERE
                           U.active = 1 AND

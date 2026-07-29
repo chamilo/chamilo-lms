@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Service\Survey\TrainingSatisfactionSurveyCreator;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
+use Mcp\Server\RequestContext;
 use RuntimeException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Throwable;
@@ -36,21 +37,25 @@ final readonly class CreateTrainingSatisfactionSurveyTool
         ?string $provider = null,
         bool $publish = false,
         bool $anonymous = true,
+        ?RequestContext $context = null,
     ): array {
         try {
-            $context = $this->courseContext->resolve($courseId);
+            $context?->getClientGateway()?->progress(0.05, 1.0, 'Preparing the training satisfaction survey...');
+            $resolved = $this->courseContext->resolve($courseId);
+            $survey = $this->surveyCreator->create(
+                $resolved['course'],
+                $resolved['user'],
+                $title,
+                $language,
+                $provider,
+                $publish,
+                $anonymous,
+            );
+            $context?->getClientGateway()?->progress(1.0, 1.0, 'Training satisfaction survey created and verified.');
 
             return [
                 'created' => true,
-                'survey' => $this->surveyCreator->create(
-                    $context['course'],
-                    $context['user'],
-                    $title,
-                    $language,
-                    $provider,
-                    $publish,
-                    $anonymous,
-                ),
+                'survey' => $survey,
             ];
         } catch (ToolCallException $exception) {
             throw $exception;

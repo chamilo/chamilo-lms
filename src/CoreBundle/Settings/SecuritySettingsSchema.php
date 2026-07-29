@@ -11,6 +11,7 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 class SecuritySettingsSchema extends AbstractSettingsSchema
 {
@@ -50,6 +51,8 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'hide_breadcrumb_if_not_allowed' => 'false',
             'file_integrity_check_notify_admins' => '',
             'oauth_server_enabled' => 'false',
+            'mcp_enabled' => 'false',
+            'mcp_allowed_roles' => '{"ADMIN":true,"COURSEMANAGER":true,"STUDENT":false,"DRH":false,"SESSIONADMIN":false,"STUDENT_BOSS":false,"INVITEE":false}',
         ]);
 
         $allowedTypes = [
@@ -94,6 +97,10 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('hide_breadcrumb_if_not_allowed', YesNoType::class)
             ->add('file_integrity_check_notify_admins', TextareaType::class)
             ->add('oauth_server_enabled', YesNoType::class)
+            ->add('mcp_enabled', YesNoType::class)
+            ->add('mcp_allowed_roles', TextareaType::class, [
+                'constraints' => [new Json()],
+            ])
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

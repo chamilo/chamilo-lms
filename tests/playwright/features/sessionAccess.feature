@@ -128,38 +128,60 @@ Feature: Session access
     And wait for the page to be loaded when ready
     Then I should not see "You are not allowed"
 
+  # REAL CI RUN FOUND (3rd round): "Then I should see 'not allowed'" is
+  # flaky-to-always-failing for the two access-denied scenarios below
+  # (ywarnier/Session2, mmosquera/Session1). Traced the exact server flow
+  # via a real CI trace.zip's network log and Location headers:
+  #   GET /course/2/home?sid=<X>            -> 302 Location: /
+  #   GET /                                 -> 200 (full reload)
+  # CidReqListener denies access (CourseVoter/SessionVoter::VIEW false) by
+  # throwing AccessDeniedHttpException — for a plain browser navigation
+  # (not XHR/JSON), ExceptionListener.php catches it, adds the message to
+  # the Symfony session flash bag, and redirects to the `index` route (/).
+  # The Vue shell then boots, reads #app[data-flashes] and fires a toast,
+  # but that toast is NOT guaranteed to still be in the DOM by the time the
+  # assertion polls (confirmed failing in 2 of 3 identically-shaped
+  # scenarios in the same CI run) — same "transient toast, not a durable
+  # signal" trap already hit and fixed elsewhere in this suite. CORRECTION
+  # to an earlier version of this comment: a first pass misread the
+  # trace's network log (out of chronological order in the raw JSON) and
+  # concluded the final URL was "/courses" — re-sorted by timestamp AND
+  # confirmed locally, the "_route_name=MyCourses" calls actually happen
+  # right after LOGIN (login.js's own post-auth landing target), BEFORE
+  # this scenario's own navigation; the real final resting URL after the
+  # denial redirect is the site root "/" (Index route), which nothing
+  # further redirects away from. Asserting that instead, via a dedicated
+  # step (a plain substring "the URL should contain '/'" would match any
+  # URL, since every path starts with "/").
   Scenario: ywarnier connect to Session 2
     Given I am not logged
     Given I am logged as "ywarnier"
     Then I am on course "TEMPPRIVATE" homepage in session "Session2"
     And I wait for the page to be loaded
-    Then I should see "not allowed"
+    Then the URL should be the site root
 
-  # REAL CI RUN FOUND: the original's "Session not found" text no longer
-  # appears for an invalid sid. Traced via CidReqListener.php:247 (still
-  # throws NotFoundHttpException('Session not found') for an unresolvable
-  # session id) — but on the Vue /course/:id/home route this now only ever
-  # surfaces through background /api/* calls (courseHomeBeforeEnter's
-  # checkLegal.json call, cidReqStore's course/session fetches), which get
-  # JSON-ified by HTTPExceptionListener and are caught-and-discarded by every
-  # frontend caller (assets/vue/store/cidReq.js, assets/vue/router/index.js)
-  # — never rendered as visible text. A real CI trace confirmed what
-  # actually shows instead: redirected to Home with a generic toast, "You're
-  # not allowed in this course" — the same access-denied path the sibling
-  # scenarios below already assert via "not allowed", so this now does too.
+  # Unlike the two AccessDeniedHttpException cases above, an unresolvable
+  # session id hits CidReqListener's OTHER branch: `$entityManager->find(
+  # Session::class, $sessionId)` returns null, throwing a plain
+  # NotFoundHttpException('Session not found') — NOT AccessDeniedHttpException
+  # — so ExceptionListener's flash+redirect-to-index branch does NOT apply.
+  # Confirmed locally: the browser stays on /course/2/home?sid=2000&gid=0
+  # (no redirect at all) and the CourseHome view itself renders a durable,
+  # dismiss-only inline alert reading "Session not found" — the original
+  # Behat assertion was actually correct all along; reverting to it.
   Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"
     And I am on "/course/2/home?sid=2000&gid=0"
     And wait for the page to be loaded when ready
-    Then I should see "not allowed"
+    Then I should see "Session not found"
 
   Scenario: mmosquera connect to Session 1
     Given I am not logged
     Given I am logged as "mmosquera"
     Then I am on course "TEMPPRIVATE" homepage in session "Session1"
     And wait for the page to be loaded when ready
-    Then I should see "not allowed"
+    Then the URL should be the site root
 
   Scenario: mmosquera connect to Session 2
     Given I am not logged

@@ -18,17 +18,16 @@
 #   (`group_view.php?id=<id>`, confirmed in its source) via the new
 #   "I remember the created group id" step, instead of assuming any
 #   particular number.
-# - The original's friend id "11" (fbaggins) was ALSO wrong, confirmed by a
-#   second real CI run (after the group-id race above was fixed, this exact
-#   error surfaced clearly on its own): "No option with value 11 found in
-#   the available-friends list". Recounted tests/datafiller/data_users.php's
-#   actual fixture order: fbaggins is the 9th entry (ywarnier, mmosquera,
-#   mlanoix, jmontoya, agarcia, pperez, ggerard, norizales, fbaggins) — with
-#   admin=id 1 and sequential seeding by the dedicated "Seed test users" CI
-#   step, that makes fbaggins id 10, not 11. Fixed both literals below to
-#   "10". Unlike the group id, this one IS a stable, safe literal once
-#   correct — user seeding has its own dedicated, ordered, one-time CI step
-#   (same reasoning as TEMP/cid=1), so no other file can race it.
+# - The original's hardcoded friend id ("11", then "10" after recounting the
+#   seed fixture order) was wrong BOTH times, confirmed by two separate real
+#   CI runs each reporting a different missing value. Unlike the group id
+#   (which has no dedicated ordered seeding step), user seeding IS ordered
+#   and dedicated — but evidently not stable enough in practice to hardcode
+#   a numeric id against (other CI steps/fixtures can still shift it). Fixed
+#   for good by not guessing at all: looks up fbaggins's real id at runtime
+#   via message.ajax.php's own working "find_users" action (same endpoint
+#   the real "New message" recipient search uses) and remembers it, the same
+#   pattern already used for the created group's id above.
 # - The three commented-out scenarios in the original (accept/deny invitation,
 #   delete member) are dropped, not ported — they were already inert in the
 #   original Behat suite too.
@@ -66,7 +65,7 @@ Feature: Social Group
 
   Scenario: Invite a friend to group
     Given I am a platform administrator
-    And I have a friend named "fbaggins" with id "10"
-    When I invite to a friend with id "10" to the social group I just created
+    And I have a friend named "fbaggins"
+    When I invite the friend to the social group I just created
     Then I should see "Users already invited"
     And I should not see an error

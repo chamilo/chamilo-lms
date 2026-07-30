@@ -773,8 +773,27 @@ When(/^(?:|I )confirm the popup$/, async ({ page }) => {
 // Mink's Selenium session apparently tolerated the original's redundant call
 // (or a subtly different /login behavior in the legacy stack did); this
 // doesn't, so the fix is to simply not repeat it.
-Given("I have a friend named {string} with id {string}", async ({ page }, friendUsername: string, friendId: string) => {
+// friendId used to be a hardcoded literal passed in from the Gherkin step
+// ("with id \"11\"", later "with id \"10\""), assuming a fixed seed order —
+// disproven TWICE by real CI runs (fbaggins landed at different ids across
+// runs depending on exactly what else seeded first). Looked up dynamically
+// instead via message.ajax.php's own working "find_users" action (the same
+// endpoint the real "New message" recipient search box uses), which resolves
+// a username to its real id regardless of what that id happens to be this run.
+let lastFriendUserId: string | null = null
+
+Given("I have a friend named {string}", async ({ page }, friendUsername: string) => {
   const adminId = 1
+  const searchResponse = await page.request.get(
+    `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(friendUsername)}&page_limit=10`,
+  )
+  const { items } = await searchResponse.json()
+  const match = items?.[0]
+  if (!match) {
+    throw new Error(`find_users returned no match for username "${friendUsername}"`)
+  }
+  const friendId = String(match.id)
+  lastFriendUserId = friendId
   await page.goto(
     `/main/inc/ajax/message.ajax.php?a=send_invitation&user_id=${encodeURIComponent(friendId)}&content=${encodeURIComponent("Add me")}`,
   )
@@ -848,30 +867,28 @@ Then("I remember the created group id", async ({ page }) => {
 // moving the actual <option> element and firing 'change' produces the exact
 // same DOM state the plugin's own handler would, which is all the
 // subsequent form submit cares about.
-When(
-  "I invite to a friend with id {string} to the social group I just created",
-  async ({ page }, friendId: string) => {
-    if (!lastCreatedGroupId) {
-      throw new Error(
-        "No group id remembered — run \"I remember the created group id\" right after creating it first.",
-      )
+When("I invite the friend to the social group I just created", async ({ page }) => {
+  if (!lastCreatedGroupId) {
+    throw new Error("No group id remembered — run \"I remember the created group id\" right after creating it first.")
+  }
+  if (!lastFriendUserId) {
+    throw new Error("No friend id remembered — run \"I have a friend named ...\" first.")
+  }
+  await page.goto(`/main/social/group_invitation.php?id=${encodeURIComponent(lastCreatedGroupId)}`)
+  await page.waitForSelector("#invitation option")
+  await page.evaluate((value) => {
+    const left = document.querySelector("#invitation") as HTMLSelectElement
+    const right = document.querySelector("#invitation_to") as HTMLSelectElement
+    const option = Array.from(left.options).find((o) => o.value === value)
+    if (!option) {
+      throw new Error(`No option with value "${value}" found in the available-friends list`)
     }
-    await page.goto(`/main/social/group_invitation.php?id=${encodeURIComponent(lastCreatedGroupId)}`)
-    await page.waitForSelector("#invitation option")
-    await page.evaluate((value) => {
-      const left = document.querySelector("#invitation") as HTMLSelectElement
-      const right = document.querySelector("#invitation_to") as HTMLSelectElement
-      const option = Array.from(left.options).find((o) => o.value === value)
-      if (!option) {
-        throw new Error(`No option with value "${value}" found in the available-friends list`)
-      }
-      option.selected = true
-      right.appendChild(option)
-      right.dispatchEvent(new Event("change", { bubbles: true }))
-    }, friendId)
-    await pressButton(page, "submit")
-  },
-)
+    option.selected = true
+    right.appendChild(option)
+    right.dispatchEvent(new Event("change", { bubbles: true }))
+  }, lastFriendUserId)
+  await pressButton(page, "submit")
+})
 
 Then("I should see {string}", async ({ page }, text: string) => {
   await expect(page.getByText(text).first()).toBeVisible()
@@ -893,6 +910,15 @@ Then("the URL should not contain {string}", async ({ page }, part: string) => {
   await expect
     .poll(() => page.url(), { timeout: 15_000 })
     .not.toContain(part)
+})
+
+// Used for the CidReqListener access-denied redirect chain (AccessDeniedHttpException
+// -> ExceptionListener flashes + redirects to the `index` route, "/"). A plain
+// "the URL should contain '/'" is unusable here since every URL's path starts
+// with "/" — this asserts the path component is genuinely empty (root), not a
+// substring match.
+Then("the URL should be the site root", async ({ page }) => {
+  await expect(page).toHaveURL(/^https?:\/\/[^/]+\/(?:\?.*)?$/)
 })
 
 // Mirrors Mink's assertPageNotContainsText: checks the page's raw text, not

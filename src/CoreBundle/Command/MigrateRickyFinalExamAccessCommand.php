@@ -31,7 +31,8 @@ final class MigrateRickyFinalExamAccessCommand extends Command
     private const string EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
     private const string USER_IDENTIFIER_FIELD_VARIABLE = 'fcdice_or_acadis_student_id';
     private const string FINAL_EXAM_TITLE = 'Final Exam';
-    private const string SOURCE = 'ricky_legacy_final_exam_rule';
+    private const string SOURCE = 'legacy_final_exam_access_rule';
+    private const string LEGACY_SOURCE = 'ricky_legacy_final_exam_rule';
 
     /**
      * Legacy Ricky course timing values converted once into exercise configuration.
@@ -762,6 +763,10 @@ final class MigrateRickyFinalExamAccessCommand extends Command
 
         if (!\is_array($existingRule)) {
             return false;
+        }
+
+        if (self::LEGACY_SOURCE === ($existingRule['source'] ?? null)) {
+            $existingRule['source'] = self::SOURCE;
         }
 
         foreach ($expectedRule as $key => $expectedValue) {

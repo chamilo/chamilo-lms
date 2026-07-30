@@ -28,7 +28,8 @@ use const JSON_THROW_ON_ERROR;
 )]
 final class RepairRickyGradebookStructureCommand extends Command
 {
-    private const string SOURCE = 'ricky_legacy_completion_rule';
+    private const string SOURCE = 'legacy_course_completion_rule';
+    private const string LEGACY_SOURCE = 'ricky_legacy_completion_rule';
     private const int LINK_EXERCISE = 1;
     private const int LINK_STUDENT_PUBLICATION = 3;
     private const int LINK_FORUM_THREAD = 5;
@@ -221,14 +222,16 @@ INNER JOIN course c ON c.id = efv.item_id
 WHERE ef.item_type = :itemType
   AND ef.variable = :variable
   AND JSON_VALID(efv.field_value) = 1
-  AND JSON_UNQUOTE(JSON_EXTRACT(efv.field_value, '$.source')) = :source
+  AND JSON_UNQUOTE(JSON_EXTRACT(efv.field_value, '$.source')) IN (:sources)
 SQL;
         $params = [
             'itemType' => ExtraField::COURSE_FIELD_TYPE,
             'variable' => CourseCompletionRuleEvaluator::COURSE_RULE_FIELD_VARIABLE,
-            'source' => self::SOURCE,
+            'sources' => [self::SOURCE, self::LEGACY_SOURCE],
         ];
-        $types = [];
+        $types = [
+            'sources' => ArrayParameterType::STRING,
+        ];
 
         if ([] !== $courseIds) {
             $sql .= ' AND c.id IN (:courseIds)';

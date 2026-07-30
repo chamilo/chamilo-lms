@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
@@ -9,6 +10,7 @@ use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\FormatHelper;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Chamilo\CoreBundle\Entity\Course;
 
 /**
@@ -225,6 +227,16 @@ $formOptionsArray = [];
 
 $enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
 $aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
+$aiProviderFactory = Container::$container->get(AiProviderFactory::class);
+$canGenerateCoursePictureWithAi = $aiProviderFactory->hasProvidersForType('image')
+    && $aiFeatureAccessHelper->isFeatureEnabledForCourse('image_generator', $courseId);
+
+$generateCoursePictureWithAiCsrfToken = '';
+if ($canGenerateCoursePictureWithAi) {
+    $generateCoursePictureWithAiCsrfToken = Container::$container->get(CsrfTokenManagerInterface::class)
+        ->getToken('ai_generate_course_picture_'.$courseId)
+        ->getValue();
+}
 
 $courseVisibilityAdminsOnlySetting = api_get_setting('workflows.course_visibility_change_only_admin');
 $courseVisibilityAdminsOnly = \in_array($courseVisibilityAdminsOnlySetting, ['true', '1'], true);
@@ -410,8 +422,22 @@ $form->addFile(
     ]
 );
 
+$generateCoursePictureWithAiButton = '';
+if ($canGenerateCoursePictureWithAi) {
+    $generateCoursePictureWithAiButton = '
+                <button
+                    type="button"
+                    id="course-picture-generate-ai-button"
+                    class="mt-3 inline-flex items-center gap-2 rounded-xl border border-primary bg-white px-4 py-2 text-body-2 font-semibold text-primary transition hover:bg-primary hover:text-white"
+                >
+                    <span class="mdi mdi-robot"></span>
+                    '.get_lang('Generate with AI').'
+                </button>';
+}
+
 $form->addHtml('
                 </div>
+                '.$generateCoursePictureWithAiButton.'
 
                 <p
                     id="course-picture-selected-file"
@@ -445,6 +471,64 @@ $form->addHtml('
         </div>
     </div>
 ');
+
+if ($canGenerateCoursePictureWithAi) {
+    $defaultAiCoursePicturePrompt = get_lang(
+        "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+    );
+
+    $form->addHtml('
+    <div
+        id="course-picture-ai-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
+    >
+        <div class="w-full max-w-lg rounded-2xl bg-white p-5 shadow-lg">
+            <div class="mb-3 flex items-center justify-between gap-2">
+                <h4 class="m-0 text-body-1 font-semibold text-gray-90">'.get_lang('Generate with AI').'</h4>
+                <button
+                    type="button"
+                    id="course-picture-ai-modal-close"
+                    class="text-gray-50 hover:text-gray-90"
+                    aria-label="'.get_lang('Close').'"
+                >
+                    <span class="mdi mdi-close"></span>
+                </button>
+            </div>
+
+            <label
+                for="course-picture-ai-prompt"
+                class="mb-1 block text-body-2 font-semibold text-gray-90"
+            >'.get_lang('Prompt').'</label>
+            <textarea
+                id="course-picture-ai-prompt"
+                rows="4"
+                class="w-full rounded-xl border border-gray-25 p-3 text-body-2 text-gray-90"
+            >'.htmlspecialchars($defaultAiCoursePicturePrompt, ENT_QUOTES | ENT_SUBSTITUTE).'</textarea>
+
+            <p
+                id="course-picture-ai-error"
+                class="mt-2 hidden text-body-2 font-semibold text-danger"
+            ></p>
+
+            <div class="mt-4 flex items-center justify-end gap-2">
+                <button
+                    type="button"
+                    id="course-picture-ai-cancel"
+                    class="rounded-xl border border-gray-25 px-4 py-2 text-body-2 font-semibold text-gray-90 hover:bg-gray-10"
+                >'.get_lang('Cancel').'</button>
+                <button
+                    type="button"
+                    id="course-picture-ai-generate"
+                    class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-body-2 font-semibold text-white hover:bg-primary-gradient disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                    <span id="course-picture-ai-generate-icon" class="mdi mdi-robot"></span>
+                    <span id="course-picture-ai-generate-label">'.get_lang('Generate').'</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    ');
+}
 
 $form->addRule(
     'picture',
@@ -2112,6 +2196,201 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 ';
+
+if ($canGenerateCoursePictureWithAi) {
+    $htmlHeadXtra[] = '
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var openButton = document.getElementById("course-picture-generate-ai-button");
+    var modal = document.getElementById("course-picture-ai-modal");
+    var closeButton = document.getElementById("course-picture-ai-modal-close");
+    var cancelButton = document.getElementById("course-picture-ai-cancel");
+    var generateButton = document.getElementById("course-picture-ai-generate");
+    var generateIcon = document.getElementById("course-picture-ai-generate-icon");
+    var generateLabel = document.getElementById("course-picture-ai-generate-label");
+    var promptField = document.getElementById("course-picture-ai-prompt");
+    var errorBox = document.getElementById("course-picture-ai-error");
+    var pictureInput = document.getElementById("picture");
+
+    if (!openButton || !modal || !generateButton || !promptField || !pictureInput) {
+        return;
+    }
+
+    var courseId = '.(int) $courseId.';
+    var csrfToken = '.json_encode($generateCoursePictureWithAiCsrfToken).';
+    var generateLabelDefault = generateLabel.textContent;
+    var generateIconDefaultClass = generateIcon.className;
+    var generatingLabel = '.json_encode(get_lang('Generating...')).';
+    var genericErrorMessage = '.json_encode(get_lang('An error occurred. Please try again.')).';
+
+    function showError(message) {
+        if (!errorBox) {
+            return;
+        }
+        errorBox.textContent = message || genericErrorMessage;
+        errorBox.classList.remove("hidden");
+    }
+
+    function hideError() {
+        if (!errorBox) {
+            return;
+        }
+        errorBox.classList.add("hidden");
+        errorBox.textContent = "";
+    }
+
+    function openModal() {
+        hideError();
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    }
+
+    function closeModal() {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    }
+
+    function freezeGenerateButton() {
+        generateButton.disabled = true;
+        generateIcon.className = "mdi mdi-loading mdi-spin";
+        generateLabel.textContent = generatingLabel;
+    }
+
+    function unfreezeGenerateButton() {
+        generateButton.disabled = false;
+        generateIcon.className = generateIconDefaultClass;
+        generateLabel.textContent = generateLabelDefault;
+    }
+
+    function resizeBase64ImageCover(rawBase64, contentType, targetWidth, targetHeight) {
+        return new Promise(function (resolve, reject) {
+            var img = new Image();
+
+            img.onload = function () {
+                try {
+                    var canvas = document.createElement("canvas");
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    var ctx = canvas.getContext("2d");
+                    if (!ctx) {
+                        reject(new Error("Canvas context not available"));
+                        return;
+                    }
+
+                    var scale = Math.max(targetWidth / img.width, targetHeight / img.height);
+                    var sourceWidth = targetWidth / scale;
+                    var sourceHeight = targetHeight / scale;
+                    var sourceX = (img.width - sourceWidth) / 2;
+                    var sourceY = (img.height - sourceHeight) / 2;
+
+                    ctx.drawImage(
+                        img,
+                        sourceX,
+                        sourceY,
+                        sourceWidth,
+                        sourceHeight,
+                        0,
+                        0,
+                        targetWidth,
+                        targetHeight
+                    );
+
+                    canvas.toBlob(function (blob) {
+                        if (!blob) {
+                            reject(new Error("Failed to create blob from canvas"));
+                            return;
+                        }
+                        resolve(blob);
+                    }, "image/png");
+                } catch (e) {
+                    reject(e);
+                }
+            };
+
+            img.onerror = function () {
+                reject(new Error("Failed to load the generated image"));
+            };
+
+            img.src = "data:" + (contentType || "image/png") + ";base64," + rawBase64;
+        });
+    }
+
+    function applyGeneratedBlobToPictureInput(blob) {
+        var file = new File([blob], "course_picture_ai.png", { type: blob.type || "image/png" });
+        var dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        pictureInput.files = dataTransfer.files;
+        pictureInput.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    function generate() {
+        var prompt = (promptField.value || "").trim();
+
+        if (!prompt) {
+            showError('.json_encode(get_lang('This field is required')).');
+            return;
+        }
+
+        hideError();
+        freezeGenerateButton();
+
+        fetch("'.addslashes((string) api_get_path(WEB_PATH)).'ai/generate_course_picture?cid=" + courseId, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cid: courseId, prompt: prompt, _token: csrfToken })
+        })
+            .then(function (response) {
+                return response.json().then(function (data) {
+                    return { ok: response.ok, data: data };
+                });
+            })
+            .then(function (payload) {
+                if (!payload.ok || !payload.data || !payload.data.success) {
+                    throw new Error((payload.data && payload.data.text) || "");
+                }
+
+                var result = payload.data.result || {};
+
+                if (!result.is_base64 || !result.content) {
+                    throw new Error("");
+                }
+
+                return resizeBase64ImageCover(result.content, result.content_type, 1024, 576);
+            })
+            .then(function (blob) {
+                applyGeneratedBlobToPictureInput(blob);
+                unfreezeGenerateButton();
+                closeModal();
+            })
+            .catch(function (error) {
+                unfreezeGenerateButton();
+                showError((error && error.message) || genericErrorMessage);
+            });
+    }
+
+    openButton.addEventListener("click", openModal);
+
+    if (closeButton) {
+        closeButton.addEventListener("click", closeModal);
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener("click", closeModal);
+    }
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    generateButton.addEventListener("click", generate);
+});
+</script>
+';
+}
 
 // Handle form submission
 if ($form->validate()) {

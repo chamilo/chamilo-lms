@@ -1340,6 +1340,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Display official code in exercises results',
                     'comment' => "Whether to show the students' official code in the exercises results reports",
                 ],
+                [
+                    'name' => 'quiz_result_pdf_export_include_official_code_in_file_name',
+                    'title' => 'Include official code in exported quiz result PDF file name',
+                    'comment' => "Whether to include the student's official code in the file name when exporting a quiz result to PDF",
+                ],
             ],
             'security' => [
                 [
@@ -2007,6 +2012,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'multilevel_grading',
                     'title' => 'Enable Multi-Level Attendance Grading',
                     'comment' => 'Allows grading attendance with multiple levels instead of a simple present/absent system.',
+                ],
+                [
+                    'name' => 'attendance_add_official_code',
+                    'title' => "Show students' official code in attendance sheets",
+                    'comment' => "Whether to display the students' official code alongside their name in attendance sheets and lists.",
                 ],
             ],
             'display' => [

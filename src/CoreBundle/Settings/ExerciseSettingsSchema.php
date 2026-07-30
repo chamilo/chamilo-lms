@@ -24,6 +24,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             'quiz_question_category_destinations' => 'false',
             'allow_coach_feedback_exercises' => 'true',
             'show_official_code_exercise_result_list' => 'false',
+            'quiz_result_pdf_export_include_official_code_in_file_name' => 'false',
             'email_alert_manager_on_new_quiz' => 'true',
             'exercise_max_editors_in_page' => '0',
             'configure_exercise_visibility_in_course' => 'false',
@@ -102,6 +103,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('quiz_question_category_destinations', YesNoType::class)
             ->add('allow_coach_feedback_exercises', YesNoType::class)
             ->add('show_official_code_exercise_result_list', YesNoType::class)
+            ->add('quiz_result_pdf_export_include_official_code_in_file_name', YesNoType::class)
             ->add('email_alert_manager_on_new_quiz', YesNoType::class)
             ->add('exercise_max_editors_in_page')
             ->add('configure_exercise_visibility_in_course', YesNoType::class)

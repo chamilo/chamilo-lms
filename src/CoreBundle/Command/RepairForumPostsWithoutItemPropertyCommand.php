@@ -244,7 +244,7 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
     }
 
     /**
-     * Returns only posts still missing a resource node. On Ricky this is a
+     * Returns only posts still missing a resource node. On large legacy datasets this is a
      * very small remainder after the main forum migration, so selecting by
      * the existing resource_node_id index avoids rescanning 1.3M rows with
      * a correlated NOT EXISTS for every batch.

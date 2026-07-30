@@ -37,7 +37,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
     private const int SQL_QUESTION_BATCH_SIZE = 1000;
     private const int IMAGE_FLUSH_BATCH_SIZE = 20;
     private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
-    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
+    private const string ITEM_PROPERTY_INDEX = 'idx_legacy_migration_item_property_tool_ref_course';
 
     public function getDescription(): string
     {

@@ -67,7 +67,8 @@ if (!empty($doExerciseUrl)) {
                 'learnpath_item_id' => '',
             ],
             (int) $courseId,
-            (int) $session_id
+            (int) $session_id,
+            isset($_GET['gid']) ? (int) $_GET['gid'] : (int) api_get_group_id()
         ) ?? $legacyOverviewUrl;
 
         // Exercise IDs can be reused by migrated LP items from other courses.
@@ -77,16 +78,25 @@ if (!empty($doExerciseUrl)) {
         if (1 === count($lpList)) {
             $firstLp = reset($lpList);
             $lpId = (int) ($firstLp['lp_id'] ?? 0);
+            $itemId = (int) ($firstLp['item_id'] ?? 0);
+            $course = api_get_course_entity((int) $courseId);
+            $courseNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
 
-            if ($lpId > 0) {
-                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&'
-                    .http_build_query(
-                        [
-                            'lp_id' => $lpId,
-                            'action' => 'view',
-                            'isStudentView' => 'true',
-                        ]
-                    );
+            if ($lpId > 0 && $courseNodeId > 0) {
+                $params = [
+                    'cid' => (int) $courseId,
+                    'sid' => (int) $session_id,
+                    'gid' => isset($_GET['gid']) ? (int) $_GET['gid'] : (int) api_get_group_id(),
+                    'gradebook' => 1,
+                    'origin' => 'gradebook',
+                    'isStudentView' => 'true',
+                ];
+                if ($itemId > 0) {
+                    $params['item_id'] = $itemId;
+                }
+
+                $url = rtrim(api_get_path(WEB_PATH), '/').'/resources/lp/'
+                    .$courseNodeId.'/'.$lpId.'/runtime?'.http_build_query($params);
             }
         }
     }

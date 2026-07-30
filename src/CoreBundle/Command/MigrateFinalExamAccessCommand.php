@@ -23,19 +23,18 @@ use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 
 #[AsCommand(
-    name: 'chamilo:migration:migrate-ricky-final-exam-access',
-    description: 'Migrate Ricky final-exam access rules and repair verified legacy references.'
+    name: 'chamilo:migration:migrate-final-exam-access',
+    description: 'Migrate final-exam access rules and repair verified legacy references.'
 )]
-final class MigrateRickyFinalExamAccessCommand extends Command
+final class MigrateFinalExamAccessCommand extends Command
 {
     private const string EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
     private const string USER_IDENTIFIER_FIELD_VARIABLE = 'fcdice_or_acadis_student_id';
     private const string FINAL_EXAM_TITLE = 'Final Exam';
     private const string SOURCE = 'legacy_final_exam_access_rule';
-    private const string LEGACY_SOURCE = 'ricky_legacy_final_exam_rule';
 
     /**
-     * Legacy Ricky course timing values converted once into exercise configuration.
+     * Legacy course timing values converted once into exercise configuration.
      * Runtime requests do not depend on these course codes after the migration.
      *
      * @var array<int|string, array{course_duration_minutes: int, final_exam_minutes: int}>
@@ -115,7 +114,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
                 'course-code',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Limits processing to one or more Ricky course codes.'
+                'Limits processing to one or more configured course codes.'
             )
         ;
     }
@@ -123,7 +122,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Migrate Ricky final-exam access rules');
+        $io->title('Migrate final-exam access rules');
 
         $dryRun = (bool) $input->getOption('dry-run');
         $requestedCodes = array_values(array_unique(array_filter(array_map(
@@ -134,7 +133,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
         $knownCodes = array_map('strval', array_keys(self::LEGACY_COURSE_RULES));
         $unknownCodes = array_values(array_diff($requestedCodes, $knownCodes));
         if ([] !== $unknownCodes) {
-            $io->error('Unknown Ricky course code(s): '.implode(', ', $unknownCodes));
+            $io->error('Unknown configured course code(s): '.implode(', ', $unknownCodes));
 
             return Command::INVALID;
         }
@@ -163,7 +162,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
             return Command::FAILURE;
         }
 
-        $io->success($dryRun ? 'Dry-run completed.' : 'Ricky final-exam migration completed.');
+        $io->success($dryRun ? 'Dry-run completed.' : 'Final-exam access migration completed.');
         $io->definitionList(
             ['Selected legacy rules' => $summary['legacy_rules']],
             ['Configured rules' => $summary['configured']],
@@ -199,8 +198,8 @@ final class MigrateRickyFinalExamAccessCommand extends Command
             }
         }
 
-        if (!$this->hasRickyUserIdentifierField()) {
-            throw new RuntimeException(\sprintf('Required Ricky user identifier field "%s" was not found.', self::USER_IDENTIFIER_FIELD_VARIABLE));
+        if (!$this->hasUserIdentifierField()) {
+            throw new RuntimeException(\sprintf('Required user identifier field "%s" was not found.', self::USER_IDENTIFIER_FIELD_VARIABLE));
         }
 
         $hasTracking = \in_array('track_e_exercises', $tableNames, true);
@@ -353,7 +352,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
             ]);
             ++$summary['configured'];
 
-            $this->writeInfo($io, 'Configured Ricky final-exam access rule.', [
+            $this->writeInfo($io, 'Configured final-exam access rule.', [
                 'course_id' => $courseId,
                 'course_code' => $courseCode,
                 'learning_path_id' => (int) $finalExamItem['learning_path_id'],
@@ -367,7 +366,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
         return $summary;
     }
 
-    private function hasRickyUserIdentifierField(): bool
+    private function hasUserIdentifierField(): bool
     {
         return 1 === (int) $this->connection->fetchOne(
             'SELECT COUNT(1)
@@ -765,7 +764,7 @@ final class MigrateRickyFinalExamAccessCommand extends Command
             return false;
         }
 
-        if (self::LEGACY_SOURCE === ($existingRule['source'] ?? null)) {
+        if (array_key_exists('source', $existingRule)) {
             $existingRule['source'] = self::SOURCE;
         }
 

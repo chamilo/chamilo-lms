@@ -13,7 +13,7 @@ final class Version20251020121000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Keep certificate file migration outside schema migrations; use the resumable Ricky certificate command';
+        return 'Keep certificate file migration outside schema migrations; use the resumable certificate command';
     }
 
     public function up(Schema $schema): void
@@ -42,7 +42,7 @@ SQL
         );
 
         $this->write(\sprintf(
-            'Certificate schema phase completed. pending_metadata=%d pending_physical_files=%d. Physical files must be processed with chamilo:migration:migrate-ricky-certificate-files.',
+            'Certificate schema phase completed. pending_metadata=%d pending_physical_files=%d. Physical files must be processed with chamilo:migration:migrate-certificate-files.',
             $pendingMetadata,
             $pendingFiles
         ));

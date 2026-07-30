@@ -449,6 +449,30 @@ if (!$is_allowed_to_edit
     );
     $goList();
 }
+$useExplicitLegacyRuntime = 1 === (int) ($_GET['legacy'] ?? 0);
+if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET')
+    && 'view' === $action
+    && !$useExplicitLegacyRuntime
+    && $nodeId > 0
+    && $lpId > 0
+) {
+    $runtimeParams = $qs;
+    $runtimeParams['origin'] = !empty($_GET['origin'])
+        ? Security::remove_XSS((string) $_GET['origin'])
+        : (isset($_GET['gradebook']) ? 'gradebook' : 'learnpath');
+    $requestedItemId = (int) ($_GET['item_id'] ?? $_GET['lp_item_id'] ?? $_GET['id'] ?? 0);
+    if ($requestedItemId > 0) {
+        $runtimeParams['item_id'] = $requestedItemId;
+    }
+
+    header(
+        'Location: '.api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'/'.$lpId.'/runtime?'
+        .http_build_query($runtimeParams),
+        true,
+        302
+    );
+    exit;
+}
 $eventLpId = $lpId ?: (($lp_found && is_object($oLP)) ? $oLP->get_id() : 0);
 $lp_detail_id = 0;
 $attemptId = 0;

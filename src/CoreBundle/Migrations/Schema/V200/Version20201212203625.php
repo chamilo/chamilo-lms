@@ -31,9 +31,9 @@ final class Version20201212203625 extends AbstractMigrationChamilo
      */
     private const int DOCUMENT_BATCH_SIZE = 100;
     private const int AUDIO_ASSET_FLUSH_BATCH_SIZE = 50;
-    private const string ITEM_PROPERTY_INDEX = 'idx_ricky_migration_item_property_tool_ref_course';
-    private const string CDOCUMENT_CID_INDEX = 'idx_ricky_migration_cdocument_c_id';
-    private const string TRACK_E_ATTEMPT_LOOKUP_INDEX = 'idx_ricky_migration_track_e_attempt_uid_qid_fn';
+    private const string ITEM_PROPERTY_INDEX = 'idx_legacy_migration_item_property_tool_ref_course';
+    private const string CDOCUMENT_CID_INDEX = 'idx_legacy_migration_cdocument_c_id';
+    private const string TRACK_E_ATTEMPT_LOOKUP_INDEX = 'idx_legacy_migration_track_e_attempt_uid_qid_fn';
 
     private const array FOLDER_LIKE_FILETYPES = [
         'folder',

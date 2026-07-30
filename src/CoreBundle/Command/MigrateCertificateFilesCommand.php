@@ -22,10 +22,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 
 #[AsCommand(
-    name: 'chamilo:migration:migrate-ricky-certificate-files',
-    description: 'Copy Ricky certificate HTML files to prepared certificate resources in resumable batches.'
+    name: 'chamilo:migration:migrate-certificate-files',
+    description: 'Copy legacy certificate HTML files to prepared certificate resources in resumable batches.'
 )]
-final class MigrateRickyCertificateFilesCommand extends Command
+final class MigrateCertificateFilesCommand extends Command
 {
     public function __construct(
         private readonly ManagerRegistry $registry,

@@ -16,7 +16,7 @@ final class Version20260729215300 extends AbstractMigrationChamilo
 
     public function getDescription(): string
     {
-        return 'Backfill available Ricky legacy LP evidence in the current database without requiring already-removed legacy sources.';
+        return 'Backfill available legacy LP evidence in the current database without requiring already-removed legacy sources.';
     }
 
     public function isTransactional(): bool
@@ -98,7 +98,7 @@ SQL);
         $this->abortIf(
             $completionConflicts > 0,
             sprintf(
-                'Ricky LP evidence migration refused because %d completion-date conflicts already exist.',
+                'Legacy LP evidence migration refused because %d completion-date conflicts already exist.',
                 $completionConflicts
             )
         );
@@ -160,7 +160,7 @@ SQL);
         $this->abortIf(
             $paramedicValueConflicts > 0,
             sprintf(
-                'Ricky LP evidence migration refused because %d LPs have conflicting legacy lab metadata.',
+                'Legacy LP evidence migration refused because %d LPs have conflicting legacy lab metadata.',
                 $paramedicValueConflicts
             )
         );
@@ -176,7 +176,7 @@ SQL);
         $this->abortIf(
             $labTitleConflicts + $labWeekConflicts > 0,
             sprintf(
-                'Ricky LP evidence migration refused because %d conflicting normalized lab values already exist.',
+                'Legacy LP evidence migration refused because %d conflicting normalized lab values already exist.',
                 $labTitleConflicts + $labWeekConflicts
             )
         );
@@ -243,7 +243,7 @@ SQL) ?: [];
         $this->abortIf(
             $manualCompletionConflicts > 0,
             sprintf(
-                'Ricky LP evidence migration refused because %d conflicting manual-completion values already exist.',
+                'Legacy LP evidence migration refused because %d conflicting manual-completion values already exist.',
                 $manualCompletionConflicts
             )
         );
@@ -339,10 +339,10 @@ SQL, [
         int $labWeekFieldId
     ): void {
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_paramedic_values'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_lab_metadata_values'
         );
         $this->addSql(<<<'SQL'
-CREATE TEMPORARY TABLE tmp_ricky_paramedic_values ENGINE = InnoDB AS
+CREATE TEMPORARY TABLE tmp_legacy_lab_metadata_values ENGINE = InnoDB AS
 SELECT
     target.iid AS lp_iid,
     MAX(NULLIF(TRIM(source.title), '')) AS lab_title,
@@ -359,12 +359,12 @@ WHERE EXISTS (
 GROUP BY target.iid
 SQL);
         $this->addSql(
-            'ALTER TABLE tmp_ricky_paramedic_values ADD PRIMARY KEY (lp_iid)'
+            'ALTER TABLE tmp_legacy_lab_metadata_values ADD PRIMARY KEY (lp_iid)'
         );
 
         $this->addSql(<<<'SQL'
 UPDATE extra_field_values existing
-INNER JOIN tmp_ricky_paramedic_values source
+INNER JOIN tmp_legacy_lab_metadata_values source
     ON source.lp_iid = existing.item_id
 SET existing.field_value = source.lab_title,
     existing.updated_at = NOW()
@@ -381,7 +381,7 @@ SELECT
     source.lp_iid,
     NOW(),
     NOW()
-FROM tmp_ricky_paramedic_values source
+FROM tmp_legacy_lab_metadata_values source
 LEFT JOIN extra_field_values existing
     ON existing.field_id = :field_id
    AND existing.item_id = source.lp_iid
@@ -391,7 +391,7 @@ SQL, ['field_id' => $labTitleFieldId]);
 
         $this->addSql(<<<'SQL'
 UPDATE extra_field_values existing
-INNER JOIN tmp_ricky_paramedic_values source
+INNER JOIN tmp_legacy_lab_metadata_values source
     ON source.lp_iid = existing.item_id
 SET existing.field_value = source.lab_week,
     existing.updated_at = NOW()
@@ -408,7 +408,7 @@ SELECT
     source.lp_iid,
     NOW(),
     NOW()
-FROM tmp_ricky_paramedic_values source
+FROM tmp_legacy_lab_metadata_values source
 LEFT JOIN extra_field_values existing
     ON existing.field_id = :field_id
    AND existing.item_id = source.lp_iid
@@ -417,7 +417,7 @@ WHERE source.lab_week IS NOT NULL
 SQL, ['field_id' => $labWeekFieldId]);
 
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_paramedic_values'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_lab_metadata_values'
         );
     }
 
@@ -435,10 +435,10 @@ SQL, ['field_id' => $labWeekFieldId]);
             : 0;
 
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_track_progress_distinct'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_track_progress_distinct'
         );
         $this->addSql(<<<'SQL'
-CREATE TEMPORARY TABLE tmp_ricky_track_progress_distinct (
+CREATE TEMPORARY TABLE tmp_legacy_track_progress_distinct (
     c_id INT NOT NULL,
     user_id INT NOT NULL,
     lp_id INT NOT NULL,
@@ -446,7 +446,7 @@ CREATE TEMPORARY TABLE tmp_ricky_track_progress_distinct (
 ) ENGINE = InnoDB
 SQL);
         $this->addSql(<<<'SQL'
-INSERT IGNORE INTO tmp_ricky_track_progress_distinct
+INSERT IGNORE INTO tmp_legacy_track_progress_distinct
     (c_id, user_id, lp_id)
 SELECT cId, userId, lpId
 FROM track_progress
@@ -457,12 +457,12 @@ WHERE complete = 1
 SQL);
 
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_manual_completion_candidates'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_manual_completion_candidates'
         );
         $this->addSql(<<<'SQL'
-CREATE TEMPORARY TABLE tmp_ricky_manual_completion_candidates ENGINE = InnoDB AS
+CREATE TEMPORARY TABLE tmp_legacy_manual_completion_candidates ENGINE = InnoDB AS
 SELECT MIN(target.iid) AS item_id
-FROM tmp_ricky_track_progress_distinct source
+FROM tmp_legacy_track_progress_distinct source
 INNER JOIN c_lp_view target
     ON target.c_id = source.c_id
    AND target.user_id = source.user_id
@@ -472,12 +472,12 @@ HAVING COUNT(target.iid) = 1
    AND COALESCE(MAX(target.progress), 0) < 100
 SQL);
         $this->addSql(
-            'ALTER TABLE tmp_ricky_manual_completion_candidates ADD PRIMARY KEY (item_id)'
+            'ALTER TABLE tmp_legacy_manual_completion_candidates ADD PRIMARY KEY (item_id)'
         );
 
         $this->addSql(<<<'SQL'
 UPDATE extra_field_values existing
-INNER JOIN tmp_ricky_manual_completion_candidates source
+INNER JOIN tmp_legacy_manual_completion_candidates source
     ON source.item_id = existing.item_id
 SET existing.field_value = :field_value,
     existing.updated_at = NOW()
@@ -510,7 +510,7 @@ SELECT
     source.item_id,
     NOW(),
     NOW()
-FROM tmp_ricky_manual_completion_candidates source
+FROM tmp_legacy_manual_completion_candidates source
 LEFT JOIN extra_field_values existing
     ON existing.field_id = :field_id
    AND existing.item_id = source.item_id
@@ -526,10 +526,10 @@ SQL, [
         }
 
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_manual_completion_candidates'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_manual_completion_candidates'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_track_progress_distinct'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_track_progress_distinct'
         );
     }
 

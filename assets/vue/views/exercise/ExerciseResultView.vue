@@ -1686,7 +1686,13 @@ function getContextParams() {
     learnpath_id: getQueryValue(route.query.learnpath_id),
     learnpath_item_id: getQueryValue(route.query.learnpath_item_id),
     learnpath_item_view_id: getQueryValue(route.query.learnpath_item_view_id),
+    lp_id: getQueryValue(route.query.lp_id),
+    item_id: getQueryValue(route.query.item_id),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    embedded: getQueryValue(route.query.embedded),
+    gradebook: getQueryValue(route.query.gradebook),
     isStudentView: getQueryValue(route.query.isStudentView),
+    preview: getQueryValue(route.query.preview),
     review: getQueryValue(route.query.review),
     mode: getQueryValue(route.query.mode),
   }
@@ -1703,13 +1709,16 @@ function isEmbeddedInLearnpath() {
       const parentPath = window.parent.location?.pathname || ""
       const referrer = document.referrer || ""
 
-      return parentPath.includes("/main/lp/")
+      return parentPath.includes("/resources/lp/")
+        || parentPath.includes("/main/lp/")
         || parentPath.includes("/main/newscorm/")
+        || referrer.includes("/resources/lp/")
         || referrer.includes("/main/lp/")
         || referrer.includes("/main/newscorm/")
     }
   } catch (error) {
-    return (document.referrer || "").includes("/main/lp/")
+    return (document.referrer || "").includes("/resources/lp/")
+      || (document.referrer || "").includes("/main/lp/")
       || (document.referrer || "").includes("/main/newscorm/")
   }
 

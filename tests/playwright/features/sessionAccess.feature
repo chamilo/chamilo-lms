@@ -160,21 +160,30 @@ Feature: Session access
     And I wait for the page to be loaded
     Then the URL should be the site root
 
-  # Unlike the two AccessDeniedHttpException cases above, an unresolvable
-  # session id hits CidReqListener's OTHER branch: `$entityManager->find(
-  # Session::class, $sessionId)` returns null, throwing a plain
-  # NotFoundHttpException('Session not found') — NOT AccessDeniedHttpException
-  # — so ExceptionListener's flash+redirect-to-index branch does NOT apply.
-  # Confirmed locally: the browser stays on /course/2/home?sid=2000&gid=0
-  # (no redirect at all) and the CourseHome view itself renders a durable,
-  # dismiss-only inline alert reading "Session not found" — the original
-  # Behat assertion was actually correct all along; reverting to it.
+  # SELF-CORRECTION (4th round): a previous edit reverted this scenario's
+  # assertion to "Session not found", reasoning that an unresolvable session
+  # id hits CidReqListener's NotFoundHttpException branch rather than
+  # AccessDeniedHttpException — confirmed true LOCALLY, but that local
+  # result depended on ywarnier already having base course-level access to
+  # TEMPPRIVATE from this shared dev box's own accumulated state. A REAL
+  # fresh-install CI run disproved it: there, ywarnier has no course-level
+  # access to TEMPPRIVATE at all via this direct numeric-id URL (unlike the
+  # "connects to SessionX" scenarios, which go through
+  # main/course_home/redirect.php's own CODE+name resolution/subscription
+  # logic, not this raw cid/sid path), so CourseVoter::VIEW itself denies
+  # first — same AccessDeniedHttpException -> durable "You're not allowed
+  # in this course" alert (confirmed via the CI trace's accessibility
+  # snapshot: an `alert` with a dismiss "Close" button, i.e. NOT the
+  # App.vue toast the two scenarios above deal with — this one doesn't
+  # auto-hide, so a plain visibility assertion is fine here). This matches
+  # what a round-2 CI run had already independently confirmed before this
+  # regression was introduced — reverting back to it for good.
   Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"
     And I am on "/course/2/home?sid=2000&gid=0"
     And wait for the page to be loaded when ready
-    Then I should see "Session not found"
+    Then I should see "not allowed"
 
   Scenario: mmosquera connect to Session 1
     Given I am not logged

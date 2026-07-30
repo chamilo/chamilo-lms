@@ -55,6 +55,9 @@ class SecurityController extends AbstractController
      */
     private const string MFA_SECRET_V2_PREFIX = 'v2:';
 
+    private const int SESSION_EXPIRATION_WARNING_SECONDS = 1380;
+    private const string SESSION_KEEP_ALIVE_KEY = '_session_keep_alive_at';
+
     public function __construct(
         private SerializerInterface $serializer,
         private TrackELoginRecordRepository $trackELoginRecordRepository,
@@ -280,6 +283,60 @@ class SecurityController extends AbstractController
         $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
 
         return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
+    }
+
+    #[Route('/session/expiration', name: 'session_expiration_status', methods: ['GET'])]
+    public function sessionExpirationStatus(Request $request): JsonResponse
+    {
+        return $this->createSessionExpirationResponse($request);
+    }
+
+    #[Route('/session/keep-alive', name: 'session_keep_alive', methods: ['POST'])]
+    public function sessionKeepAlive(Request $request): JsonResponse
+    {
+        return $this->createSessionExpirationResponse($request);
+    }
+
+    private function createSessionExpirationResponse(Request $request): JsonResponse
+    {
+        $session = $request->getSession();
+
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+
+        $now = time();
+        $session->set(self::SESSION_KEEP_ALIVE_KEY, $now);
+
+        $lifetime = max(0, (int) $session->getMetadataBag()->getLifetime());
+
+        // A cookie lifetime of 0 means "until the browser closes" and does not
+        // describe the server-side inactivity limit. In that standard Symfony
+        // configuration, use PHP's session retention lifetime instead.
+        if ($lifetime <= 1) {
+            $lifetime = max(0, (int) ini_get('session.gc_maxlifetime'));
+        }
+
+        $warningSeconds = $lifetime > 1
+            ? min(self::SESSION_EXPIRATION_WARNING_SECONDS, $lifetime - 1)
+            : 0;
+
+        $user = $this->getUser();
+        $isAuthenticated = $user instanceof User && User::ANONYMOUS !== $user->getStatus();
+
+        $response = new JsonResponse([
+            'enabled' => $lifetime > 1 && $warningSeconds > 0,
+            'isAuthenticated' => $isAuthenticated,
+            'lifetime' => $lifetime,
+            'warningSeconds' => $warningSeconds,
+            'expiresAt' => $lifetime > 0 ? $now + $lifetime : 0,
+            'logoutUrl' => '/logout',
+        ]);
+
+        $response->headers->set('Cache-Control', 'no-store, private');
+        $response->headers->set('Pragma', 'no-cache');
+
+        return $response;
     }
 
     /**

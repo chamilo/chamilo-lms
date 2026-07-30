@@ -780,9 +780,12 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $params['learnpath_id'] = $learningPathId;
             $params['learnpath_item_id'] = $learningPathItemId;
             $params['learnpath_item_view_id'] = (int) ($itemView?->getIid() ?? 0);
-            $params['exerciseId'] = $resourceId;
+            unset($params['type']);
 
-            return $this->appendQuery('/main/exercise/overview.php', $params);
+            return $this->appendQuery(
+                '/resources/exercise/'.$courseNodeId.'/'.$resourceId.'/player',
+                $params,
+            );
         }
 
         if ('link' === $type) {
@@ -1037,6 +1040,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $params = $this->buildContextParams($course, $session, $group, $request);
         $params['lp_id'] = (int) $lp->getIid();
         $params['action'] = 'view';
+        $params['legacy'] = 1;
 
         return $this->appendQuery('/main/lp/lp_controller.php', $params);
     }

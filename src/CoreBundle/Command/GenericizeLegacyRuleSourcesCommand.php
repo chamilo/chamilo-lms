@@ -29,14 +29,12 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
             'label' => 'Course completion rules',
             'item_type' => ExtraField::COURSE_FIELD_TYPE,
             'variable' => CourseCompletionRuleEvaluator::COURSE_RULE_FIELD_VARIABLE,
-            'legacy_source' => 'ricky_legacy_completion_rule',
             'generic_source' => 'legacy_course_completion_rule',
         ],
         [
             'label' => 'Final-exam access rules',
             'item_type' => ExtraField::EXERCISE_FIELD_TYPE,
             'variable' => 'final_exam_access_rule',
-            'legacy_source' => 'ricky_legacy_final_exam_rule',
             'generic_source' => 'legacy_final_exam_access_rule',
         ],
     ];
@@ -72,18 +70,32 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
         try {
             $this->assertRequiredTables();
 
+            $plannedMappings = [];
             $rows = [];
+
             foreach (self::SOURCE_MAPPINGS as $mapping) {
-                $legacyRows = $this->countRows($mapping, $mapping['legacy_source']);
+                $legacySources = $this->findNonGenericSources($mapping);
+                if (\count($legacySources) > 1) {
+                    throw new RuntimeException(\sprintf(
+                        '%s contains multiple non-generic source markers; no value was changed.',
+                        $mapping['label']
+                    ));
+                }
+
+                $legacySource = $legacySources[0] ?? null;
+                $legacyRows = null === $legacySource
+                    ? 0
+                    : $this->countRows($mapping, $legacySource);
                 $genericRows = $this->countRows($mapping, $mapping['generic_source']);
 
                 $summary['legacy_rows'] += $legacyRows;
                 $summary['generic_rows'] += $genericRows;
 
+                $plannedMappings[] = $mapping + ['legacy_source' => $legacySource];
                 $rows[] = [
                     $mapping['label'],
                     $mapping['variable'],
-                    $mapping['legacy_source'],
+                    $legacySource ?? 'none',
                     $mapping['generic_source'],
                     $legacyRows,
                     $genericRows,
@@ -94,7 +106,7 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
                 [
                     'Rule type',
                     'Extra field',
-                    'Legacy source',
+                    'Detected legacy source',
                     'Generic source',
                     'Legacy rows',
                     'Generic rows',
@@ -127,13 +139,22 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
 
             $this->connection->beginTransaction();
 
-            foreach (self::SOURCE_MAPPINGS as $mapping) {
-                $expectedRows = $this->countRows($mapping, $mapping['legacy_source']);
-                if (0 === $expectedRows) {
+            foreach ($plannedMappings as $mapping) {
+                $legacySource = $mapping['legacy_source'];
+                if (null === $legacySource) {
                     continue;
                 }
 
-                $updatedRows = $this->updateRows($mapping);
+                $currentSources = $this->findNonGenericSources($mapping);
+                if ([$legacySource] !== $currentSources) {
+                    throw new RuntimeException(\sprintf(
+                        '%s source markers changed during execution; no value was committed.',
+                        $mapping['label']
+                    ));
+                }
+
+                $expectedRows = $this->countRows($mapping, $legacySource);
+                $updatedRows = $this->updateRows($mapping, $legacySource);
                 if ($updatedRows !== $expectedRows) {
                     throw new RuntimeException(\sprintf(
                         '%s expected %d updates but changed %d rows.',
@@ -148,7 +169,9 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
 
             $remainingLegacyRows = 0;
             foreach (self::SOURCE_MAPPINGS as $mapping) {
-                $remainingLegacyRows += $this->countRows($mapping, $mapping['legacy_source']);
+                foreach ($this->findNonGenericSources($mapping) as $source) {
+                    $remainingLegacyRows += $this->countRows($mapping, $source);
+                }
             }
 
             if (0 !== $remainingLegacyRows) {
@@ -193,7 +216,40 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
      * @param array{
      *     item_type: int,
      *     variable: string,
-     *     legacy_source: string,
+     *     generic_source: string
+     * } $mapping
+     *
+     * @return list<string>
+     */
+    private function findNonGenericSources(array $mapping): array
+    {
+        $sources = $this->connection->fetchFirstColumn(
+            <<<'SQL'
+SELECT DISTINCT JSON_UNQUOTE(JSON_EXTRACT(efv.field_value, '$.source')) AS source
+FROM extra_field ef
+INNER JOIN extra_field_values efv ON efv.field_id = ef.id
+WHERE ef.item_type = :itemType
+  AND ef.variable = :variable
+  AND JSON_VALID(efv.field_value) = 1
+  AND JSON_TYPE(JSON_EXTRACT(efv.field_value, '$.source')) = 'STRING'
+  AND TRIM(JSON_UNQUOTE(JSON_EXTRACT(efv.field_value, '$.source'))) <> ''
+  AND JSON_UNQUOTE(JSON_EXTRACT(efv.field_value, '$.source')) <> :genericSource
+ORDER BY source
+SQL,
+            [
+                'itemType' => $mapping['item_type'],
+                'variable' => $mapping['variable'],
+                'genericSource' => $mapping['generic_source'],
+            ]
+        );
+
+        return array_values(array_map('strval', $sources));
+    }
+
+    /**
+     * @param array{
+     *     item_type: int,
+     *     variable: string,
      *     generic_source: string
      * } $mapping
      */
@@ -221,11 +277,10 @@ SQL,
      * @param array{
      *     item_type: int,
      *     variable: string,
-     *     legacy_source: string,
      *     generic_source: string
      * } $mapping
      */
-    private function updateRows(array $mapping): int
+    private function updateRows(array $mapping, string $legacySource): int
     {
         return $this->connection->executeStatement(
             <<<'SQL'
@@ -244,7 +299,7 @@ SQL,
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'itemType' => $mapping['item_type'],
                 'variable' => $mapping['variable'],
-                'legacySource' => $mapping['legacy_source'],
+                'legacySource' => $legacySource,
             ]
         );
     }

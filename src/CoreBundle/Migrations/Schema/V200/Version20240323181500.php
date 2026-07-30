@@ -22,7 +22,7 @@ use const ENT_QUOTES;
 final class Version20240323181500 extends AbstractMigrationChamilo
 {
     private const int SYS_CALENDAR_BATCH_SIZE = 1000;
-    private const string MAP_TABLE = 'tmp_ricky_sys_calendar_map';
+    private const string MAP_TABLE = 'tmp_legacy_sys_calendar_map';
     private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
 
     public function getDescription(): string
@@ -496,8 +496,8 @@ SQL
                 new_event_id INT NOT NULL,
                 resource_node_id INT NOT NULL,
                 PRIMARY KEY (old_id),
-                UNIQUE KEY uniq_ricky_sys_calendar_event (new_event_id),
-                UNIQUE KEY uniq_ricky_sys_calendar_node (resource_node_id)
+                UNIQUE KEY uniq_legacy_sys_calendar_event (new_event_id),
+                UNIQUE KEY uniq_legacy_sys_calendar_node (resource_node_id)
             ) ENGINE=InnoDB',
             self::MAP_TABLE
         ));

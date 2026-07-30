@@ -23,13 +23,13 @@ use Throwable;
 use const JSON_THROW_ON_ERROR;
 
 #[AsCommand(
-    name: 'chamilo:migration:repair-ricky-gradebook-structure',
-    description: 'Repair Ricky gradebook links from persisted course completion rules.'
+    name: 'chamilo:migration:repair-gradebook-structure',
+    description: 'Repair gradebook links from persisted course completion rules.'
 )]
-final class RepairRickyGradebookStructureCommand extends Command
+final class RepairGradebookStructureCommand extends Command
 {
     private const string SOURCE = 'legacy_course_completion_rule';
-    private const string LEGACY_SOURCE = 'ricky_legacy_completion_rule';
+    private const string SOURCE_DATA_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
     private const int LINK_EXERCISE = 1;
     private const int LINK_STUDENT_PUBLICATION = 3;
     private const int LINK_FORUM_THREAD = 5;
@@ -52,7 +52,7 @@ final class RepairRickyGradebookStructureCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Repair Ricky gradebook structure');
+        $io->title('Repair gradebook structure');
 
         $dryRun = (bool) $input->getOption('dry-run');
         $courseIds = array_values(array_unique(array_filter(array_map(
@@ -87,7 +87,7 @@ final class RepairRickyGradebookStructureCommand extends Command
             $summary['selected_courses'] = \count($rules);
 
             if ([] === $rules) {
-                throw new RuntimeException('No persisted Ricky completion rules matched the requested course IDs.');
+                throw new RuntimeException('No persisted completion rules matched the requested course IDs.');
             }
 
             $this->connection->beginTransaction();
@@ -190,8 +190,8 @@ final class RepairRickyGradebookStructureCommand extends Command
 
             $io->success(
                 $dryRun
-                ? 'Ricky gradebook structure dry-run completed without changing data.'
-                : 'Ricky gradebook structure was repaired successfully.'
+                ? 'Gradebook structure dry-run completed without changing data.'
+                : 'Gradebook structure was repaired successfully.'
             );
 
             return Command::SUCCESS;
@@ -222,16 +222,18 @@ INNER JOIN course c ON c.id = efv.item_id
 WHERE ef.item_type = :itemType
   AND ef.variable = :variable
   AND JSON_VALID(efv.field_value) = 1
-  AND JSON_UNQUOTE(JSON_EXTRACT(efv.field_value, '$.source')) IN (:sources)
+  AND (
+      JSON_UNQUOTE(JSON_EXTRACT(efv.field_value, '$.source')) = :source
+      OR JSON_UNQUOTE(JSON_EXTRACT(efv.field_value, '$.legacy_source_sha256')) = :sourceDataSha256
+  )
 SQL;
         $params = [
             'itemType' => ExtraField::COURSE_FIELD_TYPE,
             'variable' => CourseCompletionRuleEvaluator::COURSE_RULE_FIELD_VARIABLE,
-            'sources' => [self::SOURCE, self::LEGACY_SOURCE],
+            'source' => self::SOURCE,
+            'sourceDataSha256' => self::SOURCE_DATA_SHA256,
         ];
-        $types = [
-            'sources' => ArrayParameterType::STRING,
-        ];
+        $types = [];
 
         if ([] !== $courseIds) {
             $sql .= ' AND c.id IN (:courseIds)';

@@ -37410,3 +37410,9 @@ msgstr ""
 
 msgid "List is empty."
 msgstr ""
+
+msgid "Generate with AI"
+msgstr ""
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr ""

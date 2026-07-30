@@ -28,7 +28,8 @@ use const JSON_UNESCAPED_SLASHES;
 )]
 final class MigrateRickyCompletionRulesCommand extends Command
 {
-    private const string SOURCE = 'ricky_legacy_completion_rule';
+    private const string SOURCE = 'legacy_course_completion_rule';
+    private const string LEGACY_SOURCE = 'ricky_legacy_completion_rule';
     private const string LEGACY_SOURCE_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
     private const string AUDIT_REPORT_SHA256 = '7e9ae6aa2b26ee9a282c14314ef71e7df30f24eb24cbc044ab65a2e2d6ffa692';
 
@@ -1443,6 +1444,14 @@ final class MigrateRickyCompletionRulesCommand extends Command
 
                 if (1 === \count($existingValues)) {
                     $existingRule = $this->decodeRule((string) $existingValues[0]['field_value']);
+                    $existingSource = null === $existingRule
+                        ? ''
+                        : trim((string) ($existingRule['source'] ?? ''));
+
+                    if (self::LEGACY_SOURCE === $existingSource && null !== $existingRule) {
+                        $existingRule['source'] = self::SOURCE;
+                    }
+
                     if (null !== $existingRule && $existingRule == $rule) {
                         ++$summary['already_configured'];
                         $io->writeln(\sprintf('Already configured: %s', $courseCode));
@@ -1450,10 +1459,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
                         continue;
                     }
 
-                    $existingSource = null === $existingRule
-                        ? ''
-                        : trim((string) ($existingRule['source'] ?? ''));
-                    if (!$force || self::SOURCE !== $existingSource) {
+                    if (!$force || !\in_array($existingSource, [self::SOURCE, self::LEGACY_SOURCE], true)) {
                         ++$summary['conflicting_existing'];
                         $io->warning(\sprintf(
                             'Course %s already has a different completion rule; use --force only for values created by this command.',

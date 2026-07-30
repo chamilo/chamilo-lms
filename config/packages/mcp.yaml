@@ -39,6 +39,16 @@ mcp:
         dueAt or dueInDays deadline. A returned created=false value means the existing assignment
         was reused, not that the call failed. A survey or learning path is successful only when its
         result reports verified_in_course=true.
+
+        For the "Course Description" tool, call get_course_description_template first: it returns
+        the 7 standard sections (Description, Objectives, Topics, Methodology, Course material,
+        Resources, Assessment) with a guiding question for each and whether it already has content.
+        Ask the user the guiding question for each section they want to write, then call
+        create_course_description with the matching descriptionType. Calling it again with the same
+        descriptionType (1-7) updates that section in place instead of duplicating it; descriptionType
+        8 always adds a new custom "Other" item. Use edit_course_description to change content, title
+        or language on an existing item. There is no delete tool for course descriptions yet. Write
+        the HTML content with the same style conventions as create_course_document.
     client_transports:
         stdio: true
         http: true

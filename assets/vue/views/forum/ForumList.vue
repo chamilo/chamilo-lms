@@ -179,12 +179,11 @@
                 @click="toggleCategoryFold(category)"
               />
             </div>
-            <p
+            <div
               v-if="category.catComment"
-              class="mt-1 text-sm text-gray-600"
-            >
-              {{ category.catComment }}
-            </p>
+              class="prose prose-sm mt-1 max-w-none text-sm leading-5 text-gray-600"
+              v-html="sanitizeCategoryComment(category.catComment)"
+            />
           </div>
 
           <div
@@ -559,6 +558,7 @@ import ForumCardList from "./ForumCardList.vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -738,6 +738,10 @@ function goBackToLearningPath() {
     },
     query,
   })
+}
+
+function sanitizeCategoryComment(value) {
+  return sanitizeHtml(value || "")
 }
 
 function isCategoryVisible(category) {

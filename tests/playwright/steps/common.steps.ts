@@ -163,6 +163,8 @@ Given("I am not logged", async ({ page }) => {
 // valid attribute is a bracketed multi-select name.
 const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
 
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
 // Bounded grace period before a tier's .count() snapshot, mirroring
 // pressButton()'s isSoonVisible() below for the same reason: a plain
 // .count() is an instant, non-retrying read of the CURRENT DOM. On a page
@@ -312,6 +314,20 @@ Then("I fill in the following:", async ({ page }, dataTable: DataTable) => {
 // re-rooting and drop repoRoot entirely).
 When("I attach the file {string} to {string}", async ({ page }, filePath: string, field: string) => {
   await (await resolveField(page, field)).setInputFiles(path.join(repoRoot, filePath))
+})
+
+// Not ported — new, for toolDocument.feature's Uppy-based upload dialog
+// (DocumentsUpload.vue). Uppy's <Dashboard> renders a real, visually-hidden
+// <input type="file"> with no id/name/label resolveField() could match, so
+// this bypasses that cascade entirely and targets the raw CSS selector
+// directly — confirmed via a real run that setInputFiles() works on it
+// despite the element being hidden (Playwright's own file-chooser action
+// doesn't require visibility the way a click/fill does).
+When("I attach the file {string} to the upload dropzone", async ({ page }, filePath: string) => {
+  // Uppy's <Dashboard> renders more than one <input type="file"> (confirmed
+  // via a real run: 2 matches, "strict mode violation") — .first() is the
+  // one actually wired to the visible dropzone.
+  await page.locator('input[type="file"]').first().setInputFiles(path.join(repoRoot, filePath))
 })
 
 // Ported from FeatureContext::iFillInWysiwygOnFieldWith(). The legacy admin
@@ -649,14 +665,96 @@ async function pressButton(page: Page, label: string) {
   // apparently trips up Playwright's text-content normalization here) —
   // getByRole is also the more standard tool for "does this look like a
   // button with this exact name" in the first place.
+  // Real bug found porting toolAgenda/toolAttendance: any page with a
+  // TinyMCE editor above the real submit button can ALSO match "Save" (or
+  // whatever) here — TinyMCE's own toolbar has a "Save" plugin button
+  // (aria-label="Save", disabled by default via aria-disabled="true"
+  // unless the save plugin is actually wired up), which sits earlier in
+  // DOM order than the form's real submit button. Worse: the form's own
+  // real Save/Update button is often a PrimeVue icon+label Button, which
+  // (per the getByRole/exact-match limitation documented above) frequently
+  // DOESN'T match {exact: true} at all — so the disabled TinyMCE button
+  // ends up the ONLY exact match, not just the first among several.
+  // `.first()` on that one-and-only match silently grabbed it and retried
+  // the click for the full test timeout ("element is not enabled"),
+  // never falling through to a tier that could find the real button.
+  // Filtering out aria-disabled matches (self-referential XPath, since
+  // Playwright locators can't filter on the matched element's OWN
+  // attributes any other way) BEFORE deciding whether anything usable
+  // exists — not just as a tie-breaker when there happen to be several
+  // matches — is what actually avoids ever preferring a disabled decoy.
   const exact = page.getByRole("button", { name: label, exact: true })
-  if (await isSoonVisible(exact)) {
-    await exact.first().click()
+  const enabledExact = exact.locator('xpath=self::*[not(@aria-disabled="true")]')
+  if (await isSoonVisible(enabledExact)) {
+    await enabledExact.first().click()
     return
   }
   const exactSubmit = page.locator(`input[type="submit"][value="${label}"]`)
   if (await isSoonVisible(exactSubmit)) {
     await exactSubmit.first().click()
+    return
+  }
+  // Real bug found porting toolAgenda's Vue calendar-event form: it has
+  // both a plain "Add" submit button and an "Add reminder" button — the
+  // getByRole exact tier above matches NEITHER (PrimeVue's icon-left Button
+  // layout breaks {exact: true} the same way already documented above for
+  // "Save"/fm-button, confirmed here too via a real DOM check: no
+  // aria-label, clean textContent "Add", yet exact accessible-name
+  // matching still returns 0) — so it falls through to here, where the
+  // final blind `:has-text()` fallback would be a SUBSTRING match and
+  // could pick "Add reminder" instead (same class.feature "Add"/"Add a
+  // class" trap, just with getByRole unable to help this time). Filtering
+  // by the button's own exact (trimmed, whitespace-normalized) text content
+  // — not its computed accessible name — sidesteps the icon issue entirely
+  // and reliably disambiguates.
+  //
+  // Second real bug, found porting toolDocument.feature: the app shell's own
+  // persistent sidebar-collapse toggle (present on every page, `class=
+  // "app-sidebar__button"`) is a PrimeVue ToggleButton whose current-state
+  // label happens to render as literally "Yes" (confirmed via a live DOM
+  // check: `<span class="p-togglebutton-label">Yes</span>`, likely a
+  // mistranslated i18n key on the toggle itself — a pre-existing app bug,
+  // out of scope to fix here) — so a blind textExact match for "I press
+  // 'Yes'" (a PrimeVue confirm dialog's real Yes/No buttons, used all over
+  // this suite) can match that unrelated sidebar toggle instead, which
+  // sits BEHIND the dialog's own backdrop and can never be clicked while
+  // open. Every real dialog action button in this app is a plain, non-
+  // toggling button (no `aria-pressed`), while every PrimeVue ToggleButton
+  // (the only other thing that could coincidentally share a button's exact
+  // label) always carries `aria-pressed` — filtering those out keeps this
+  // tier safe without needing to special-case "Yes" by name.
+  const textExact = page
+    .locator("button", { hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`) })
+    .locator("xpath=self::*[not(@aria-pressed)]")
+  if (await isSoonVisible(textExact)) {
+    await textExact.first().click()
+    return
+  }
+  // jqGrid's own native add/edit/delete confirmation dialogs (navGrid's
+  // built-in forms — toolAttendance/toolAnnouncement's delete flow, likely
+  // others) render their action buttons as `<a role="button" class="fm-
+  // button">`, not a real <button>/<input type=submit> — confirmed via a
+  // real DOM inspection of the "Delete selected record(s)?" dialog
+  // (jqGrid's del options), which the CSS-only final fallback below can
+  // never match (it only ever looks at button/input elements). The exact
+  // getByRole tier above ALSO misses it: fm-button renders an icon glyph
+  // ahead of the label text (class "fm-button-icon-left"), which becomes
+  // part of the computed accessible name and breaks an {exact: true} match
+  // even though a non-exact getByRole (or this CSS selector) matches fine.
+  const fmButton = page.locator(`a.fm-button:has-text("${label}")`)
+  if (await isSoonVisible(fmButton)) {
+    await fmButton.first().click()
+    return
+  }
+  // Not ported — new, for toolDocument.feature's icon-only toolbar buttons
+  // (DocumentsList.vue's "New folder"/"New document"/"Upload" etc. — plain
+  // `<button title="...">` with an icon and NO text content or aria-label
+  // at all). Confirmed via a real run that even the exact getByRole tier
+  // above doesn't resolve these reliably, so this targets the `title`
+  // attribute directly rather than relying on accessible-name computation.
+  const byTitle = page.getByTitle(label, { exact: true })
+  if (await isSoonVisible(byTitle)) {
+    await byTitle.first().click()
     return
   }
   await page
@@ -975,4 +1073,88 @@ Then("I should not see an error", async ({ page }) => {
   await expect(page.locator("body")).not.toContainText("Internal server error")
   await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
   await expect(page.locator(".p-message-error")).toHaveCount(0)
+})
+
+// Ported from FeatureContext::focus() (Mink's findField() id -> name -> label
+// cascade, then .focus()). toolAgenda.feature needs this before filling
+// "date_range": DateRangePicker.php binds a jQuery daterangepicker widget to
+// a plain text input, and focusing first mirrors the original Behat step's
+// intent (a real user would click/focus the field before the picker
+// initializes its popup) — though the actual value-setting still goes
+// through the existing "I fill in ... with ..." step, which is enough on
+// its own since .fill() dispatches both input and change events and the
+// widget's bound '#id'.on('change', ...) handler (populates the two hidden
+// _start/_end fields the form actually submits) only cares about the latter.
+When(/^(?:|I )focus "([^"]*)"$/, async ({ page }, field: string) => {
+  await (await resolveField(page, field)).focus()
+})
+
+// Not ported — new, generalizes the dual-listbox "move option across" DOM
+// manipulation already used for socialGroup.feature's group_invitation.php
+// (FormValidator::addMultiSelect() widget: a left `#<name>` <select> holding
+// every available option, a right `#<name>_to` <select> — the one actually
+// submitted — empty until JS moves an option over). That earlier version
+// matched by the option's numeric `value`, which requires knowing an id in
+// advance; toolAnnouncement.feature's "Choose recipients" widget
+// (CourseManager::addUserGroupMultiSelect(), same underlying widget, field
+// name "users") only ever needs to select a user by their visible name
+// ("John Doe"), so this matches by trimmed option text instead. Same
+// left->right DOM move + 'change' event dispatch as the original, just a
+// different match key — kept as a separate step rather than changing the
+// group-invitation one, since that one's numeric-value matching is still
+// correct for its own use and changing it isn't needed here.
+When(
+  "I select {string} from the multiselect {string}",
+  async ({ page }, optionText: string, fieldName: string) => {
+    const leftSelector = `#${fieldName}`
+    const rightSelector = `#${fieldName}_to`
+    await page.waitForSelector(`${leftSelector} option`)
+    await page.evaluate(
+      ({ leftSelector, rightSelector, optionText }) => {
+        const left = document.querySelector(leftSelector) as HTMLSelectElement
+        const right = document.querySelector(rightSelector) as HTMLSelectElement
+        const option = Array.from(left.options).find((o) => o.text.trim() === optionText)
+        if (!option) {
+          throw new Error(`No option with text "${optionText}" found in the "${fieldName}" list`)
+        }
+        option.selected = true
+        right.appendChild(option)
+        right.dispatchEvent(new Event("change", { bubbles: true }))
+      },
+      { leftSelector, rightSelector, optionText },
+    )
+  },
+)
+
+// Not ported — new, for toolAttendance.feature. attendance_add's own success
+// redirect appends a real `attendance_id=<id>` query param (public/main/
+// attendance/index.php: `header('Location: '.$currentUrl.'&action=
+// calendar_add&attendance_id='.$attendanceId)`) — same "capture the real id
+// instead of assuming 1" pattern already established for socialGroup's
+// created-group id, needed here because `c_attendance.iid` is a single
+// GLOBAL AUTO_INCREMENT shared across every course on the platform (not
+// scoped per-course), so a fresh install's first-ever attendance is NOT
+// guaranteed to land on id=1 the way a fresh course does.
+let lastCreatedAttendanceId: string | null = null
+
+Then("I remember the created attendance id", async ({ page }) => {
+  const match = page.url().match(/[?&]attendance_id=(\d+)/)
+  if (!match) {
+    throw new Error(`Could not find an attendance_id in the current URL: ${page.url()}`)
+  }
+  lastCreatedAttendanceId = match[1]
+})
+
+// Not ported — new. Substitutes the id remembered by the step above into a
+// path containing the literal placeholder "ATTENDANCE_ID", then navigates —
+// avoids hardcoding attendance_id=1 (see gotcha above) while keeping the
+// Gherkin readable (a plain "I am on {string}" with the placeholder baked
+// into the string, resolved here instead of at authoring time).
+Given("I am on the attendance page {string}", async ({ page }, pathTemplate: string) => {
+  if (!lastCreatedAttendanceId) {
+    throw new Error(
+      "No attendance id remembered — run \"I remember the created attendance id\" right after creating it first.",
+    )
+  }
+  await gotoReliably(page, pathTemplate.replace("ATTENDANCE_ID", lastCreatedAttendanceId))
 })

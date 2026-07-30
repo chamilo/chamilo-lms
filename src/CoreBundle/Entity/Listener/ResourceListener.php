@@ -28,7 +28,9 @@ use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Cocur\Slugify\SlugifyInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -613,10 +615,14 @@ class ResourceListener
         }
 
         $em = $args->getObjectManager();
-        $docID = $resource->getIid();
-        $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
-            ->setParameter('path', $docID)
+        \assert($em instanceof EntityManagerInterface);
+        $em->createQueryBuilder()
+            ->delete(CLpItem::class, 'i')
+            ->where('i.path = :path')
+            ->andWhere('i.itemType = :type')
+            ->setParameter('path', $resource->getIid())
             ->setParameter('type', 'document')
+            ->getQuery()
             ->execute()
         ;
     }

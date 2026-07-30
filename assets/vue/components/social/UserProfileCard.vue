@@ -240,7 +240,7 @@
           icon="pencil"
           type="primary-alternative"
           class="w-full"
-          @click="editProfile"
+          to-url="/account/edit"
         />
 
         <BaseButton
@@ -248,7 +248,7 @@
           icon="lock-outline"
           type="secondary"
           class="w-full"
-          @click="changePassword"
+          to-url="/account/change-password"
         />
 
         <BaseButton
@@ -257,7 +257,7 @@
           icon="lock-outline"
           type="secondary"
           class="w-full"
-          @click="manageMcpApiKey"
+          :route="{ name: 'McpApiKey' }"
         />
 
         <BaseButton
@@ -266,7 +266,7 @@
           icon="shield-key-outline"
           type="secondary"
           class="w-full"
-          @click="manageAuthorizedApplications"
+          :route="{ name: 'AuthorizedApplications' }"
         />
       </div>
     </div>
@@ -337,22 +337,6 @@ const hasContactInfo = computed(() => {
 
 function toggleDetails() {
   showDetails.value = !showDetails.value
-}
-
-function editProfile() {
-  window.location.href = "/account/edit"
-}
-
-function changePassword() {
-  window.location.href = "/account/change-password"
-}
-
-function manageMcpApiKey() {
-  window.location.href = "/resources/users/mcp_api_key"
-}
-
-function manageAuthorizedApplications() {
-  window.location.href = "/resources/users/authorized_apps"
 }
 
 async function fetchUserProfile(userId) {

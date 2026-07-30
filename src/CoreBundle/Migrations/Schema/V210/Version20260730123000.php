@@ -21,7 +21,7 @@ final class Version20260730123000 extends AbstractMigrationChamilo
     private const INSERT_BATCH_SIZE = 500;
     private const MAPPING_SHA256 = '9032ac45384e3bfd03958d1aa02d0ae220a2dca29fcd4c6131060653c1e98152';
 
-    private const MAPPING_GZIP_BASE64 = <<<'RICKY_MAPPING'
+    private const MAPPING_GZIP_BASE64 = <<<'LEGACY_ANSWER_MAPPING'
 H4sICMuIa2oCA3JpY2t5X3F1aXpfYW5zd2VyX21hcHBpbmcudHN2AETdS4Ijua4D0HHWaqy/tP+NVQAkgcFNncFr4jXDVJdcSrv9tX/9+9/4/je//62//m9/
 /zvf/+73v/f9r/3wo+FHx4+BHxM/8H/d8H/e8H/f8A80/BMd/0THP9HxT3T8Ex3/RMc/0fFPdPwT/f6Nf/19P8YPPxp+9L/5bwz8mPix8GPjx/lb/8bFj/f9
 mD/8aPjR//a/OfBj4sfCj40f5+/8mxc/3vdj/fCj/d1/q+PHwI+JH+vv/VsbPw5+XPx434/9+2u/f7vxZ+fPwZ+TP9dfa//25s/Dn5c/H36e75/9+tj4s/Pn
@@ -8960,11 +8960,11 @@ AwpIWXR99X+1qw0lpCy6vvq/2lWDOuQsaoF3tzShBTmLWuDdLZ1X3t2Ss6gF3t3SgAJyFrXAu1vaUELO
 q/+rXQ0oIGXR9dX/1a42lJCy6Prq/2pXDeqQs6gF3t3ShBbkLGqBd7d0Xnl3S86iFnh3SwMKyFnUAu9uaUMJOcvXAv9Xu2pQh5wlpYAmtCBnOVJC55V3t6Qs
 ur76v9rVgAJSFl1f/V/takMJKYuur/6vdtWgDjnLkAKa0IKcJaSEzivvbslZptShAQXkLEta0IYScha1wLtbalCHnEUt8O6WJrQgZ1ELvLul88q7W1IW3Wn9
 X+1qQFH6DygSkj+qukcA
-RICKY_MAPPING;
+LEGACY_ANSWER_MAPPING;
 
     public function getDescription(): string
     {
-        return 'Restore the audited Ricky answer-to-question relations in the already-migrated Chamilo 2 database.';
+        return 'Restore the audited legacy answer-to-question relations in the already-migrated Chamilo 2 database.';
     }
 
     public function isTransactional(): bool
@@ -8988,14 +8988,14 @@ RICKY_MAPPING;
         $this->abortIf(
             $answerRows < self::MINIMUM_TARGET_ANSWER_ROWS,
             sprintf(
-                'Ricky quiz answer relation repair refused because c_quiz_answer contains only %d rows.',
+                'Legacy quiz answer relation repair refused because c_quiz_answer contains only %d rows.',
                 $answerRows
             )
         );
         $this->abortIf(
             self::EXPECTED_QUIZ_305_QUESTIONS !== $quiz305Questions,
             sprintf(
-                'Ricky quiz answer relation repair requires the quiz-question repair first: quiz 305 has %d relations.',
+                'Legacy quiz answer relation repair requires the quiz-question repair first: quiz 305 has %d relations.',
                 $quiz305Questions
             )
         );
@@ -9003,51 +9003,51 @@ RICKY_MAPPING;
         $mappingRows = $this->decodeMappingRows();
 
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_quiz_answer_guard'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_quiz_answer_guard'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_quiz_answer_map'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_quiz_answer_map'
         );
 
         $this->addSql(<<<'SQL'
-CREATE TEMPORARY TABLE tmp_ricky_quiz_answer_map (
+CREATE TEMPORARY TABLE tmp_legacy_quiz_answer_map (
     answer_iid INT UNSIGNED NOT NULL,
     question_iid INT NOT NULL,
     PRIMARY KEY (answer_iid),
-    INDEX idx_tmp_ricky_answer_question (question_iid)
+    INDEX idx_tmp_legacy_answer_question (question_iid)
 ) ENGINE=InnoDB
 SQL);
 
         $this->queueMappingRows($mappingRows);
 
         $this->addSql(
-            'CREATE TEMPORARY TABLE tmp_ricky_quiz_answer_guard (
+            'CREATE TEMPORARY TABLE tmp_legacy_quiz_answer_guard (
                 id TINYINT NOT NULL PRIMARY KEY
              ) ENGINE=InnoDB'
         );
         $this->addSql(
-            'INSERT INTO tmp_ricky_quiz_answer_guard (id) VALUES (1)'
+            'INSERT INTO tmp_legacy_quiz_answer_guard (id) VALUES (1)'
         );
 
         $this->queueDuplicateKeyGuard(
             'SELECT 1
              WHERE (
                  SELECT COUNT(*)
-                 FROM tmp_ricky_quiz_answer_map
+                 FROM tmp_legacy_quiz_answer_map
              ) <> '.self::EXPECTED_MAPPING_ROWS
         );
         $this->queueDuplicateKeyGuard(
             'SELECT 1
              WHERE (
                  SELECT COUNT(DISTINCT question_iid)
-                 FROM tmp_ricky_quiz_answer_map
+                 FROM tmp_legacy_quiz_answer_map
              ) <> '.self::EXPECTED_MAPPING_QUESTIONS
         );
         $this->queueDuplicateKeyGuard(<<<'SQL'
 SELECT 1
 WHERE EXISTS (
     SELECT 1
-    FROM tmp_ricky_quiz_answer_map mapping
+    FROM tmp_legacy_quiz_answer_map mapping
     LEFT JOIN c_quiz_answer answer
         ON answer.iid = mapping.answer_iid
     WHERE answer.iid IS NULL
@@ -9057,7 +9057,7 @@ SQL);
 SELECT 1
 WHERE EXISTS (
     SELECT 1
-    FROM tmp_ricky_quiz_answer_map mapping
+    FROM tmp_legacy_quiz_answer_map mapping
     LEFT JOIN c_quiz_question question
         ON question.iid = mapping.question_iid
     WHERE question.iid IS NULL
@@ -9066,7 +9066,7 @@ SQL);
 
         $this->addSql(<<<'SQL'
 UPDATE c_quiz_answer answer
-INNER JOIN tmp_ricky_quiz_answer_map mapping
+INNER JOIN tmp_legacy_quiz_answer_map mapping
     ON mapping.answer_iid = answer.iid
 SET answer.question_id = mapping.question_iid
 WHERE answer.question_id IS NULL
@@ -9077,7 +9077,7 @@ SQL);
 SELECT 1
 WHERE EXISTS (
     SELECT 1
-    FROM tmp_ricky_quiz_answer_map mapping
+    FROM tmp_legacy_quiz_answer_map mapping
     INNER JOIN c_quiz_answer answer
         ON answer.iid = mapping.answer_iid
     WHERE answer.question_id IS NULL
@@ -9089,7 +9089,7 @@ SELECT 1
 WHERE EXISTS (
     SELECT 1
     FROM c_quiz_answer answer
-    INNER JOIN tmp_ricky_quiz_answer_map mapping
+    INNER JOIN tmp_legacy_quiz_answer_map mapping
         ON mapping.answer_iid = answer.iid
     LEFT JOIN c_quiz_question question
         ON question.iid = answer.question_id
@@ -9130,14 +9130,14 @@ SQL);
         );
 
         $this->addSql(
-            'DROP TEMPORARY TABLE tmp_ricky_quiz_answer_guard'
+            'DROP TEMPORARY TABLE tmp_legacy_quiz_answer_guard'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE tmp_ricky_quiz_answer_map'
+            'DROP TEMPORARY TABLE tmp_legacy_quiz_answer_map'
         );
 
         $this->write(sprintf(
-            'Ricky quiz answer relation repair queued: %d answers mapped to %d questions; quiz 305 must expose %d answers across %d questions.',
+            'Legacy quiz answer relation repair queued: %d answers mapped to %d questions; quiz 305 must expose %d answers across %d questions.',
             self::EXPECTED_MAPPING_ROWS,
             self::EXPECTED_MAPPING_QUESTIONS,
             self::EXPECTED_QUIZ_305_ANSWER_ROWS,
@@ -9167,20 +9167,20 @@ SQL);
 
         if (false === $compressed) {
             throw new RuntimeException(
-                'Unable to decode the embedded Ricky quiz answer mapping.'
+                'Unable to decode the embedded legacy quiz answer mapping.'
             );
         }
 
         $raw = gzdecode($compressed);
         if (false === $raw) {
             throw new RuntimeException(
-                'Unable to decompress the embedded Ricky quiz answer mapping.'
+                'Unable to decompress the embedded legacy quiz answer mapping.'
             );
         }
 
         if (!hash_equals(self::MAPPING_SHA256, hash('sha256', $raw))) {
             throw new RuntimeException(
-                'The embedded Ricky quiz answer mapping checksum is invalid.'
+                'The embedded legacy quiz answer mapping checksum is invalid.'
             );
         }
 
@@ -9197,7 +9197,7 @@ SQL);
                 )
             ) {
                 throw new RuntimeException(sprintf(
-                    'Invalid Ricky quiz answer mapping row at line %d.',
+                    'Invalid legacy quiz answer mapping row at line %d.',
                     $lineNumber + 1
                 ));
             }
@@ -9207,14 +9207,14 @@ SQL);
 
             if ($answerId <= 0 || $questionId <= 0) {
                 throw new RuntimeException(sprintf(
-                    'Invalid Ricky quiz answer mapping values at line %d.',
+                    'Invalid legacy quiz answer mapping values at line %d.',
                     $lineNumber + 1
                 ));
             }
 
             if (isset($answerIds[$answerId])) {
                 throw new RuntimeException(sprintf(
-                    'Duplicate Ricky answer iid at line %d.',
+                    'Duplicate legacy answer iid at line %d.',
                     $lineNumber + 1
                 ));
             }
@@ -9229,7 +9229,7 @@ SQL);
             || self::EXPECTED_MAPPING_QUESTIONS !== \count($questionIds)
         ) {
             throw new RuntimeException(sprintf(
-                'Unexpected Ricky quiz answer mapping size: answers=%d, questions=%d.',
+                'Unexpected legacy quiz answer mapping size: answers=%d, questions=%d.',
                 \count($rows),
                 \count($questionIds)
             ));
@@ -9255,7 +9255,7 @@ SQL);
             }
 
             $this->addSql(
-                'INSERT INTO tmp_ricky_quiz_answer_map (
+                'INSERT INTO tmp_legacy_quiz_answer_map (
                     answer_iid,
                     question_iid
                  ) VALUES '.implode(', ', $values)
@@ -9266,7 +9266,7 @@ SQL);
     private function queueDuplicateKeyGuard(string $invalidConditionSql): void
     {
         $this->addSql(
-            'INSERT INTO tmp_ricky_quiz_answer_guard (id) '
+            'INSERT INTO tmp_legacy_quiz_answer_guard (id) '
             .$invalidConditionSql
         );
     }
@@ -9286,7 +9286,7 @@ SQL);
             $this->abortIf(
                 !$schema->hasTable($tableName),
                 sprintf(
-                    'Ricky quiz answer relation repair requires table %s.',
+                    'Legacy quiz answer relation repair requires table %s.',
                     $tableName
                 )
             );
@@ -9296,7 +9296,7 @@ SQL);
                 $this->abortIf(
                     !$table->hasColumn($columnName),
                     sprintf(
-                        'Ricky quiz answer relation repair requires column %s.%s.',
+                        'Legacy quiz answer relation repair requires column %s.%s.',
                         $tableName,
                         $columnName
                     )

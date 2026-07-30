@@ -20,8 +20,8 @@ final class Version20230904173400 extends AbstractMigrationChamilo
 {
     private const int AGENDA_BATCH_SIZE = 250;
     private const string DOCTRINE_STRING_TYPE_COMMENT = '(DC2Type:string)';
-    private const string MAP_TABLE = 'tmp_ricky_personal_agenda_map';
-    private const string PARENT_INDEX = 'idx_ricky_personal_agenda_parent_event';
+    private const string MAP_TABLE = 'tmp_legacy_personal_agenda_map';
+    private const string PARENT_INDEX = 'idx_legacy_personal_agenda_parent_event';
     private const array LONG_TITLE_TABLES = [
         'resource_node',
         'c_calendar_event',

@@ -152,7 +152,7 @@ SQL
         );
 
         $this->write(\sprintf(
-            'Certificate DBAL metadata phase completed: seen=%d/%d prepared=%d remaining_eligible=%d missing_user_node=%d elapsed=%ds. Physical files must be processed with chamilo:migration:migrate-ricky-certificate-files.',
+            'Certificate DBAL metadata phase completed: seen=%d/%d prepared=%d remaining_eligible=%d missing_user_node=%d elapsed=%ds. Physical files must be processed with chamilo:migration:migrate-certificate-files.',
             $seen,
             $total,
             $prepared,
@@ -304,7 +304,7 @@ SQL
     {
         // Existing certificate resources were created through
         // GradebookCertificateRepository and are the safest source of truth
-        // for this upgraded Ricky database.
+        // for this upgraded legacy database.
         $id = $this->connection->fetchOne(
             <<<'SQL'
 SELECT rn.resource_type_id

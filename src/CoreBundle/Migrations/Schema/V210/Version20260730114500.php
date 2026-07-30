@@ -23,7 +23,7 @@ final class Version20260730114500 extends AbstractMigrationChamilo
     private const INSERT_BATCH_SIZE = 500;
     private const MAPPING_SHA256 = 'dbe256ccb9493ed059d5fee4c2f093ae7095cbe8cf455fff85f4e24299299a32';
 
-    private const MAPPING_GZIP_BASE64 = <<<'RICKY_MAPPING'
+    private const MAPPING_GZIP_BASE64 = <<<'LEGACY_QUIZ_MAPPING'
 H4sICJF9a2oCA3JpY2t5X3F1aXpfcmVsYXRpb25fbWFwcGluZ18yMDI2MDczMF8xMTM2MzAudHN2AEydYZbsqA6Df99ZTcDYwP43NtEnp7vPe2faqVsVORBE
 IBKMf+Pf+C/e/87/1vvfeP87/633v/Ev3/+uf/X+N//t//L91/P+d/6773/fXzzvn/cn4/3z/tv8r/49/+bwn8uflfyp5/0z/pW+Mv/V4s/g0/gX8f55cR7/
 2fwpffieNM/79/325E9c/iydYP+byZ/UD8+/6D/68P4LpTHeBPSL8V7b9t+RfPBeYOnve4kCGO8FCmG81xP+6+8pA375Yh//HcWp97/FB+df8ov7by7/je2/
@@ -4423,11 +4423,11 @@ zMpyccyKYgjDaVsuhvCRthUxOWZlMTlmZTE5ZkUxhAW0rWjLMSuKISygbbkYwtbblpUHR2hbVh6Mr21Z
 QoRB9H/DExbo7kaWsCy3jSzhDm0bWcIN2jayhPuzbWQJ42jbyBJW0LaRJSynbf/nqx8QjwTlLl+dTFy+OmVa+erIdvnqqHb56oh25eoLxNW7r8DVUezy1RFs
 H5bUcJK2YzLI9zEZ1PuYDOp9TAb1PiaDeh+TQb2PyaDex2RQ72MyqPcJGcl3f0xG8t0fk5F698dkJN79MRlpd39MRtLdH5ORcvfHZCTc/TEZ6XZ/TEay3Z+Q
 kWz3ZjJS7d5MRqLdm8lIs3szGUl2974O/KW9mYwEuzeTkV53757AXNqbyUitewuZ/6n1/wE6J1aYM9IRAA==
-RICKY_MAPPING;
+LEGACY_QUIZ_MAPPING;
 
     public function getDescription(): string
     {
-        return 'Restore the audited Ricky quiz-question relations in the already-migrated Chamilo 2 database.';
+        return 'Restore the audited legacy quiz-question relations in the already-migrated Chamilo 2 database.';
     }
 
     public function isTransactional(): bool
@@ -4451,7 +4451,7 @@ RICKY_MAPPING;
             self::EXPECTED_QUIZ_ROWS !== $quizRows
             || self::EXPECTED_QUESTION_ROWS !== $questionRows,
             sprintf(
-                'Ricky quiz relation repair refused because the target snapshot differs: c_quiz=%d, c_quiz_question=%d.',
+                'Legacy quiz relation repair refused because the target snapshot differs: c_quiz=%d, c_quiz_question=%d.',
                 $quizRows,
                 $questionRows
             )
@@ -4460,34 +4460,34 @@ RICKY_MAPPING;
         $mappingRows = $this->decodeMappingRows();
 
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_quiz_relation_guard'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_quiz_relation_guard'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_quiz_relation_state'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_quiz_relation_state'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_quiz_relation_stats'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_quiz_relation_stats'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE IF EXISTS tmp_ricky_quiz_relation_map'
+            'DROP TEMPORARY TABLE IF EXISTS tmp_legacy_quiz_relation_map'
         );
 
         $this->addSql(<<<'SQL'
-CREATE TEMPORARY TABLE tmp_ricky_quiz_relation_map (
+CREATE TEMPORARY TABLE tmp_legacy_quiz_relation_map (
     quiz_id INT NOT NULL,
     question_order INT NOT NULL,
     question_id INT NOT NULL,
     current_iid INT DEFAULT NULL,
     destination LONGTEXT DEFAULT NULL,
     PRIMARY KEY (quiz_id, question_id),
-    INDEX idx_tmp_ricky_question (question_id)
+    INDEX idx_tmp_legacy_question (question_id)
 ) ENGINE=InnoDB
 SQL);
 
         $this->queueMappingRows($mappingRows);
 
         $this->addSql(<<<'SQL'
-CREATE TEMPORARY TABLE tmp_ricky_quiz_relation_stats (
+CREATE TEMPORARY TABLE tmp_legacy_quiz_relation_stats (
     metric VARCHAR(64) NOT NULL,
     metric_value BIGINT NOT NULL,
     PRIMARY KEY (metric)
@@ -4495,46 +4495,46 @@ CREATE TEMPORARY TABLE tmp_ricky_quiz_relation_stats (
 SQL);
 
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'mapping_rows', COUNT(*)
-FROM tmp_ricky_quiz_relation_map
+FROM tmp_legacy_quiz_relation_map
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'mapping_quizzes', COUNT(DISTINCT quiz_id)
-FROM tmp_ricky_quiz_relation_map
+FROM tmp_legacy_quiz_relation_map
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'mapping_quiz_305_rows', COUNT(*)
-FROM tmp_ricky_quiz_relation_map
+FROM tmp_legacy_quiz_relation_map
 WHERE quiz_id = 305
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'missing_target_quizzes', COUNT(*)
-FROM tmp_ricky_quiz_relation_map mapping
+FROM tmp_legacy_quiz_relation_map mapping
 LEFT JOIN c_quiz quiz
     ON quiz.iid = mapping.quiz_id
 WHERE quiz.iid IS NULL
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'missing_target_questions', COUNT(*)
-FROM tmp_ricky_quiz_relation_map mapping
+FROM tmp_legacy_quiz_relation_map mapping
 LEFT JOIN c_quiz_question question
     ON question.iid = mapping.question_id
 WHERE question.iid IS NULL
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'current_rows', COUNT(*)
 FROM c_quiz_rel_question
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'matched_mapping_pairs', COUNT(*)
-FROM tmp_ricky_quiz_relation_map mapping
+FROM tmp_legacy_quiz_relation_map mapping
 WHERE EXISTS (
     SELECT 1
     FROM c_quiz_rel_question relation
@@ -4543,9 +4543,9 @@ WHERE EXISTS (
 )
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'missing_mapping_pairs', COUNT(*)
-FROM tmp_ricky_quiz_relation_map mapping
+FROM tmp_legacy_quiz_relation_map mapping
 WHERE NOT EXISTS (
     SELECT 1
     FROM c_quiz_rel_question relation
@@ -4554,20 +4554,20 @@ WHERE NOT EXISTS (
 )
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'extra_current_rows', COUNT(*)
 FROM c_quiz_rel_question relation
 WHERE NOT EXISTS (
     SELECT 1
-    FROM tmp_ricky_quiz_relation_map mapping
+    FROM tmp_legacy_quiz_relation_map mapping
     WHERE mapping.quiz_id = relation.quiz_id
       AND mapping.question_id = relation.question_id
 )
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'order_mismatches', COUNT(*)
-FROM tmp_ricky_quiz_relation_map mapping
+FROM tmp_legacy_quiz_relation_map mapping
 WHERE EXISTS (
     SELECT 1
     FROM c_quiz_rel_question relation
@@ -4583,7 +4583,7 @@ AND NOT EXISTS (
 )
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'duplicate_current_pairs', COUNT(*)
 FROM (
     SELECT relation.quiz_id, relation.question_id
@@ -4593,7 +4593,7 @@ FROM (
 ) duplicate_pairs
 SQL);
         $this->addSql(<<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_stats (metric, metric_value)
+INSERT INTO tmp_legacy_quiz_relation_stats (metric, metric_value)
 SELECT 'destination_conflicts', COUNT(*)
 FROM (
     SELECT relation.quiz_id, relation.question_id
@@ -4603,21 +4603,21 @@ FROM (
 ) conflicting_destinations
 WHERE EXISTS (
     SELECT 1
-    FROM tmp_ricky_quiz_relation_map mapping
+    FROM tmp_legacy_quiz_relation_map mapping
     WHERE mapping.quiz_id = conflicting_destinations.quiz_id
       AND mapping.question_id = conflicting_destinations.question_id
 )
 SQL);
 
         $this->addSql(<<<'SQL'
-CREATE TEMPORARY TABLE tmp_ricky_quiz_relation_state (
+CREATE TEMPORARY TABLE tmp_legacy_quiz_relation_state (
     repair_required TINYINT NOT NULL
 ) ENGINE=InnoDB
 SQL);
 
         $this->addSql(sprintf(
             <<<'SQL'
-INSERT INTO tmp_ricky_quiz_relation_state (repair_required)
+INSERT INTO tmp_legacy_quiz_relation_state (repair_required)
 SELECT CASE
     WHEN
         MAX(CASE WHEN metric = 'current_rows' THEN metric_value END) = %d
@@ -4633,7 +4633,7 @@ SELECT CASE
     THEN 1
     ELSE 2
 END
-FROM tmp_ricky_quiz_relation_stats
+FROM tmp_legacy_quiz_relation_stats
 SQL,
             self::EXPECTED_MAPPING_ROWS,
             self::EXPECTED_BROKEN_TARGET_ROWS,
@@ -4642,33 +4642,33 @@ SQL,
         ));
 
         $this->addSql(
-            'CREATE TEMPORARY TABLE tmp_ricky_quiz_relation_guard (id TINYINT NOT NULL PRIMARY KEY) ENGINE=InnoDB'
+            'CREATE TEMPORARY TABLE tmp_legacy_quiz_relation_guard (id TINYINT NOT NULL PRIMARY KEY) ENGINE=InnoDB'
         );
         $this->addSql(
-            'INSERT INTO tmp_ricky_quiz_relation_guard (id) VALUES (1)'
+            'INSERT INTO tmp_legacy_quiz_relation_guard (id) VALUES (1)'
         );
 
         $this->queueDuplicateKeyGuard(
             "SELECT 1
-             FROM tmp_ricky_quiz_relation_stats
+             FROM tmp_legacy_quiz_relation_stats
              WHERE metric = 'mapping_rows'
                AND metric_value <> ".self::EXPECTED_MAPPING_ROWS
         );
         $this->queueDuplicateKeyGuard(
             "SELECT 1
-             FROM tmp_ricky_quiz_relation_stats
+             FROM tmp_legacy_quiz_relation_stats
              WHERE metric = 'mapping_quizzes'
                AND metric_value <> ".self::EXPECTED_MAPPING_QUIZZES
         );
         $this->queueDuplicateKeyGuard(
             "SELECT 1
-             FROM tmp_ricky_quiz_relation_stats
+             FROM tmp_legacy_quiz_relation_stats
              WHERE metric = 'mapping_quiz_305_rows'
                AND metric_value <> ".self::EXPECTED_QUIZ_305_ROWS
         );
         $this->queueDuplicateKeyGuard(
             "SELECT 1
-             FROM tmp_ricky_quiz_relation_stats
+             FROM tmp_legacy_quiz_relation_stats
              WHERE metric IN (
                  'missing_target_quizzes',
                  'missing_target_questions',
@@ -4679,12 +4679,12 @@ SQL,
         );
         $this->queueDuplicateKeyGuard(
             'SELECT 1
-             FROM tmp_ricky_quiz_relation_state
+             FROM tmp_legacy_quiz_relation_state
              WHERE repair_required = 2'
         );
 
         $this->addSql(<<<'SQL'
-UPDATE tmp_ricky_quiz_relation_map mapping
+UPDATE tmp_legacy_quiz_relation_map mapping
 LEFT JOIN (
     SELECT
         relation.quiz_id,
@@ -4705,7 +4705,7 @@ SQL);
 DELETE FROM c_quiz_rel_question
 WHERE (
     SELECT repair_required
-    FROM tmp_ricky_quiz_relation_state
+    FROM tmp_legacy_quiz_relation_state
 ) = 1
 SQL);
 
@@ -4723,8 +4723,8 @@ SELECT
     mapping.question_id,
     mapping.quiz_id,
     mapping.destination
-FROM tmp_ricky_quiz_relation_map mapping
-CROSS JOIN tmp_ricky_quiz_relation_state state
+FROM tmp_legacy_quiz_relation_map mapping
+CROSS JOIN tmp_legacy_quiz_relation_state state
 WHERE state.repair_required = 1
 ORDER BY
     mapping.quiz_id,
@@ -4743,7 +4743,7 @@ SQL);
 SELECT 1
 WHERE EXISTS (
     SELECT 1
-    FROM tmp_ricky_quiz_relation_map mapping
+    FROM tmp_legacy_quiz_relation_map mapping
     LEFT JOIN c_quiz_rel_question relation
         ON relation.quiz_id = mapping.quiz_id
        AND relation.question_id = mapping.question_id
@@ -4756,7 +4756,7 @@ SELECT 1
 WHERE EXISTS (
     SELECT 1
     FROM c_quiz_rel_question relation
-    LEFT JOIN tmp_ricky_quiz_relation_map mapping
+    LEFT JOIN tmp_legacy_quiz_relation_map mapping
         ON mapping.quiz_id = relation.quiz_id
        AND mapping.question_id = relation.question_id
        AND mapping.question_order = relation.question_order
@@ -4808,20 +4808,20 @@ OR (
 SQL);
 
         $this->addSql(
-            'DROP TEMPORARY TABLE tmp_ricky_quiz_relation_guard'
+            'DROP TEMPORARY TABLE tmp_legacy_quiz_relation_guard'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE tmp_ricky_quiz_relation_state'
+            'DROP TEMPORARY TABLE tmp_legacy_quiz_relation_state'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE tmp_ricky_quiz_relation_stats'
+            'DROP TEMPORARY TABLE tmp_legacy_quiz_relation_stats'
         );
         $this->addSql(
-            'DROP TEMPORARY TABLE tmp_ricky_quiz_relation_map'
+            'DROP TEMPORARY TABLE tmp_legacy_quiz_relation_map'
         );
 
         $this->write(sprintf(
-            'Ricky quiz relation repair queued: %d authoritative relations across %d quizzes; quiz 305 contains %d relations.',
+            'Legacy quiz relation repair queued: %d authoritative relations across %d quizzes; quiz 305 contains %d relations.',
             self::EXPECTED_MAPPING_ROWS,
             self::EXPECTED_MAPPING_QUIZZES,
             self::EXPECTED_QUIZ_305_ROWS
@@ -4850,20 +4850,20 @@ SQL);
 
         if (false === $compressed) {
             throw new RuntimeException(
-                'Unable to decode the embedded Ricky quiz relation mapping.'
+                'Unable to decode the embedded legacy quiz relation mapping.'
             );
         }
 
         $raw = gzdecode($compressed);
         if (false === $raw) {
             throw new RuntimeException(
-                'Unable to decompress the embedded Ricky quiz relation mapping.'
+                'Unable to decompress the embedded legacy quiz relation mapping.'
             );
         }
 
         if (!hash_equals(self::MAPPING_SHA256, hash('sha256', $raw))) {
             throw new RuntimeException(
-                'The embedded Ricky quiz relation mapping checksum is invalid.'
+                'The embedded legacy quiz relation mapping checksum is invalid.'
             );
         }
 
@@ -4880,7 +4880,7 @@ SQL);
                 )
             ) {
                 throw new RuntimeException(sprintf(
-                    'Invalid Ricky quiz relation mapping row at line %d.',
+                    'Invalid legacy quiz relation mapping row at line %d.',
                     $lineNumber + 1
                 ));
             }
@@ -4891,7 +4891,7 @@ SQL);
 
             if ($quizId <= 0 || $questionOrder < 0 || $questionId <= 0) {
                 throw new RuntimeException(sprintf(
-                    'Invalid Ricky quiz relation values at line %d.',
+                    'Invalid legacy quiz relation values at line %d.',
                     $lineNumber + 1
                 ));
             }
@@ -4899,7 +4899,7 @@ SQL);
             $pairKey = $quizId.':'.$questionId;
             if (isset($pairs[$pairKey])) {
                 throw new RuntimeException(sprintf(
-                    'Duplicate Ricky quiz-question pair at line %d.',
+                    'Duplicate legacy quiz-question pair at line %d.',
                     $lineNumber + 1
                 ));
             }
@@ -4914,7 +4914,7 @@ SQL);
             || self::EXPECTED_MAPPING_QUIZZES !== \count($quizIds)
         ) {
             throw new RuntimeException(sprintf(
-                'Unexpected Ricky quiz mapping size: rows=%d, quizzes=%d.',
+                'Unexpected legacy quiz mapping size: rows=%d, quizzes=%d.',
                 \count($rows),
                 \count($quizIds)
             ));
@@ -4941,7 +4941,7 @@ SQL);
             }
 
             $this->addSql(
-                'INSERT INTO tmp_ricky_quiz_relation_map (
+                'INSERT INTO tmp_legacy_quiz_relation_map (
                     quiz_id,
                     question_order,
                     question_id
@@ -4953,7 +4953,7 @@ SQL);
     private function queueDuplicateKeyGuard(string $invalidConditionSql): void
     {
         $this->addSql(
-            'INSERT INTO tmp_ricky_quiz_relation_guard (id) '
+            'INSERT INTO tmp_legacy_quiz_relation_guard (id) '
             .$invalidConditionSql
         );
     }
@@ -4976,7 +4976,7 @@ SQL);
             $this->abortIf(
                 !$schema->hasTable($tableName),
                 sprintf(
-                    'Ricky quiz relation repair requires table %s.',
+                    'Legacy quiz relation repair requires table %s.',
                     $tableName
                 )
             );
@@ -4986,7 +4986,7 @@ SQL);
                 $this->abortIf(
                     !$table->hasColumn($columnName),
                     sprintf(
-                        'Ricky quiz relation repair requires column %s.%s.',
+                        'Legacy quiz relation repair requires column %s.%s.',
                         $tableName,
                         $columnName
                     )
@@ -5011,7 +5011,7 @@ SQL
         $this->abortIf(
             $externalReferences > 0,
             sprintf(
-                'Ricky quiz relation repair refused because %d external foreign keys reference c_quiz_rel_question.iid.',
+                'Legacy quiz relation repair refused because %d external foreign keys reference c_quiz_rel_question.iid.',
                 $externalReferences
             )
         );

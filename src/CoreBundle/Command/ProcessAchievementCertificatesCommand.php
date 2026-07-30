@@ -22,10 +22,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 
 #[AsCommand(
-    name: 'chamilo:migration:process-ricky-certificates',
-    description: 'Generate missing Ricky certificates safely for one configured course.'
+    name: 'chamilo:migration:process-achievement-certificates',
+    description: 'Generate missing achievement certificates safely for one configured course.'
 )]
-final class ProcessRickyCertificatesCommand extends Command
+final class ProcessAchievementCertificatesCommand extends Command
 {
     private const CERTIFICATE_SUBJECT_FIELD =
         'plugin_gradingelectronic_certificate_notification_subject';
@@ -63,7 +63,7 @@ final class ProcessRickyCertificatesCommand extends Command
                 'completion-mode',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Completion source: course-rule or gradebook. The legacy ricky-rule alias remains accepted.',
+                'Completion source: course-rule or gradebook.',
                 'course-rule'
             )
             ->addOption(
@@ -124,7 +124,7 @@ final class ProcessRickyCertificatesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Process Ricky certificates');
+        $io->title('Process achievement certificates');
 
         try {
             $this->bootstrapLegacy();
@@ -146,10 +146,6 @@ final class ProcessRickyCertificatesCommand extends Command
             $afterUserId = $this->boundedNonNegativeOption($input, 'after-user-id', PHP_INT_MAX);
             $dryRun = (bool) $input->getOption('dry-run');
             $sendNotification = (bool) $input->getOption('send-notification');
-
-            if ('ricky-rule' === $completionMode) {
-                $completionMode = 'course-rule';
-            }
 
             if (!\in_array($completionMode, ['course-rule', 'gradebook'], true)) {
                 $io->error('--completion-mode must be course-rule or gradebook.');
@@ -202,7 +198,7 @@ final class ProcessRickyCertificatesCommand extends Command
                 && !$this->evaluator->supports($courseId)
             ) {
                 throw new RuntimeException(sprintf(
-                    'Course %d has no persisted Ricky completion rule. '
+                    'Course %d has no persisted completion rule. '
                     .'Use --completion-mode=gradebook only for a course whose legacy '
                     .'automatic process was verified to use the native gradebook result.',
                     $courseId
@@ -242,7 +238,7 @@ final class ProcessRickyCertificatesCommand extends Command
                 ['Category title' => (string) $category['title']],
                 ['Minimum score' => $this->formatNumber($minimumScore)],
                 ['Completion source' => 'course-rule' === $completionMode
-                    ? 'persisted Ricky rule'
+                    ? 'persisted course completion rule'
                     : 'native gradebook (explicit)'],
                 ['Mode' => $dryRun ? 'dry-run' : 'generate and notify'],
                 ['Sender ID' => $sendNotification ? (string) $senderId : 'not used'],

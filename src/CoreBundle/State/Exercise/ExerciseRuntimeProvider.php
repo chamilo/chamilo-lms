@@ -138,7 +138,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $response->description = (string) $quiz->getDescription();
         $response->settings = $settings;
         $response->questions = $questions;
-        $response->legacyUrls = $this->getLegacyUrls($quiz, $course, $session);
+        $response->legacyUrls = $this->getLegacyUrls($quiz, $course, $session, $request);
         $response->questionCount = $this->countAnswerableQuestions($questions);
         $response->totalScore = $this->getTotalScore($questions);
         $requiresLegacyRuntime = true === ($settings['requiresLegacyRuntime'] ?? false);
@@ -2228,13 +2228,38 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     /**
      * @return array<string, string>
      */
-    private function getLegacyUrls(CQuiz $quiz, Course $course, ?Session $session): array
+    private function getLegacyUrls(CQuiz $quiz, Course $course, ?Session $session, Request $request): array
     {
         $baseParams = [
             'exerciseId' => (int) $quiz->getIid(),
             'cid' => (int) $course->getId(),
             'sid' => (int) ($session?->getId() ?? 0),
+            'gid' => $request->query->getInt('gid'),
+            'legacy' => 1,
         ];
+
+        foreach (
+            [
+                'origin',
+                'learnpath_id',
+                'learnpath_item_id',
+                'learnpath_item_view_id',
+                'lp_id',
+                'lp_init',
+                'item_id',
+                'returnToLp',
+                'embedded',
+                'gradebook',
+                'isStudentView',
+                'preview',
+                'attemptId',
+            ] as $key
+        ) {
+            $value = $request->query->get($key);
+            if (null !== $value && '' !== (string) $value) {
+                $baseParams[$key] = (string) $value;
+            }
+        }
 
         return [
             'overview' => '/main/exercise/overview.php?'.http_build_query($baseParams),

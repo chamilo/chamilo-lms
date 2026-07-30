@@ -1286,9 +1286,26 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             'cid' => (int) $course->getId(),
             'sid' => (int) ($session?->getId() ?? 0),
             'gid' => $request->query->getInt('gid'),
+            'legacy' => 1,
         ];
 
-        foreach (['origin', 'learnpath_id', 'learnpath_item_id', 'learnpath_item_view_id'] as $key) {
+        foreach (
+            [
+                'origin',
+                'learnpath_id',
+                'learnpath_item_id',
+                'learnpath_item_view_id',
+                'lp_id',
+                'lp_init',
+                'item_id',
+                'returnToLp',
+                'embedded',
+                'gradebook',
+                'isStudentView',
+                'preview',
+                'attemptId',
+            ] as $key
+        ) {
             $value = $request->query->get($key);
             if (null !== $value && '' !== (string) $value) {
                 $baseParams[$key] = (string) $value;

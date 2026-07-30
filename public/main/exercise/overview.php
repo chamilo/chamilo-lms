@@ -68,6 +68,45 @@ if (empty($origin) && !empty($learnpath_id)) {
     $origin = 'learnpath';
 }
 
+$useExplicitLegacyRuntime = 1 === (int) ($_GET['legacy'] ?? 0);
+if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && !$useExplicitLegacyRuntime) {
+    $vueParams = [];
+    foreach (
+        [
+            'gradebook',
+            'origin',
+            'learnpath_id',
+            'learnpath_item_id',
+            'learnpath_item_view_id',
+            'lp_id',
+            'lp_init',
+            'item_id',
+            'returnToLp',
+            'embedded',
+            'isStudentView',
+            'preview',
+            'attemptId',
+        ] as $key
+    ) {
+        $value = $_GET[$key] ?? null;
+        if (null !== $value && '' !== (string) $value) {
+            $vueParams[$key] = Security::remove_XSS((string) $value);
+        }
+    }
+
+    $vueOverviewUrl = ExerciseLib::buildVueOverviewUrl(
+        $exercise_id,
+        $vueParams,
+        $courseId,
+        $sessionId,
+        isset($_REQUEST['gid']) ? (int) $_REQUEST['gid'] : api_get_group_id()
+    );
+    if (null !== $vueOverviewUrl) {
+        header('Location: '.$vueOverviewUrl, true, 302);
+        exit;
+    }
+}
+
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exercise_id,

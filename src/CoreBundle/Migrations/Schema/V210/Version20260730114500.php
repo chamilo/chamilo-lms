@@ -4450,7 +4450,7 @@ LEGACY_QUIZ_MAPPING;
         $this->abortIf(
             self::EXPECTED_QUIZ_ROWS !== $quizRows
             || self::EXPECTED_QUESTION_ROWS !== $questionRows,
-            sprintf(
+            \sprintf(
                 'Legacy quiz relation repair refused because the target snapshot differs: c_quiz=%d, c_quiz_question=%d.',
                 $quizRows,
                 $questionRows
@@ -4615,7 +4615,7 @@ CREATE TEMPORARY TABLE tmp_legacy_quiz_relation_state (
 ) ENGINE=InnoDB
 SQL);
 
-        $this->addSql(sprintf(
+        $this->addSql(\sprintf(
             <<<'SQL'
 INSERT INTO tmp_legacy_quiz_relation_state (repair_required)
 SELECT CASE
@@ -4820,7 +4820,7 @@ SQL);
             'DROP TEMPORARY TABLE tmp_legacy_quiz_relation_map'
         );
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Legacy quiz relation repair queued: %d authoritative relations across %d quizzes; quiz 305 contains %d relations.',
             self::EXPECTED_MAPPING_ROWS,
             self::EXPECTED_MAPPING_QUIZZES,
@@ -4849,22 +4849,16 @@ SQL);
         $compressed = base64_decode($encoded, true);
 
         if (false === $compressed) {
-            throw new RuntimeException(
-                'Unable to decode the embedded legacy quiz relation mapping.'
-            );
+            throw new RuntimeException('Unable to decode the embedded legacy quiz relation mapping.');
         }
 
         $raw = gzdecode($compressed);
         if (false === $raw) {
-            throw new RuntimeException(
-                'Unable to decompress the embedded legacy quiz relation mapping.'
-            );
+            throw new RuntimeException('Unable to decompress the embedded legacy quiz relation mapping.');
         }
 
         if (!hash_equals(self::MAPPING_SHA256, hash('sha256', $raw))) {
-            throw new RuntimeException(
-                'The embedded legacy quiz relation mapping checksum is invalid.'
-            );
+            throw new RuntimeException('The embedded legacy quiz relation mapping checksum is invalid.');
         }
 
         $rows = [];
@@ -4879,10 +4873,7 @@ SQL);
                     $matches
                 )
             ) {
-                throw new RuntimeException(sprintf(
-                    'Invalid legacy quiz relation mapping row at line %d.',
-                    $lineNumber + 1
-                ));
+                throw new RuntimeException(\sprintf('Invalid legacy quiz relation mapping row at line %d.', $lineNumber + 1));
             }
 
             $quizId = (int) $matches[1];
@@ -4890,18 +4881,12 @@ SQL);
             $questionId = (int) $matches[3];
 
             if ($quizId <= 0 || $questionOrder < 0 || $questionId <= 0) {
-                throw new RuntimeException(sprintf(
-                    'Invalid legacy quiz relation values at line %d.',
-                    $lineNumber + 1
-                ));
+                throw new RuntimeException(\sprintf('Invalid legacy quiz relation values at line %d.', $lineNumber + 1));
             }
 
             $pairKey = $quizId.':'.$questionId;
             if (isset($pairs[$pairKey])) {
-                throw new RuntimeException(sprintf(
-                    'Duplicate legacy quiz-question pair at line %d.',
-                    $lineNumber + 1
-                ));
+                throw new RuntimeException(\sprintf('Duplicate legacy quiz-question pair at line %d.', $lineNumber + 1));
             }
 
             $pairs[$pairKey] = true;
@@ -4913,11 +4898,7 @@ SQL);
             self::EXPECTED_MAPPING_ROWS !== \count($rows)
             || self::EXPECTED_MAPPING_QUIZZES !== \count($quizIds)
         ) {
-            throw new RuntimeException(sprintf(
-                'Unexpected legacy quiz mapping size: rows=%d, quizzes=%d.',
-                \count($rows),
-                \count($quizIds)
-            ));
+            throw new RuntimeException(\sprintf('Unexpected legacy quiz mapping size: rows=%d, quizzes=%d.', \count($rows), \count($quizIds)));
         }
 
         return $rows;
@@ -4932,7 +4913,7 @@ SQL);
             $values = [];
 
             foreach ($batch as [$quizId, $questionOrder, $questionId]) {
-                $values[] = sprintf(
+                $values[] = \sprintf(
                     '(%d, %d, %d)',
                     $quizId,
                     $questionOrder,
@@ -4975,7 +4956,7 @@ SQL);
         foreach ($requiredColumns as $tableName => $columns) {
             $this->abortIf(
                 !$schema->hasTable($tableName),
-                sprintf(
+                \sprintf(
                     'Legacy quiz relation repair requires table %s.',
                     $tableName
                 )
@@ -4985,7 +4966,7 @@ SQL);
             foreach ($columns as $columnName) {
                 $this->abortIf(
                     !$table->hasColumn($columnName),
-                    sprintf(
+                    \sprintf(
                         'Legacy quiz relation repair requires column %s.%s.',
                         $tableName,
                         $columnName
@@ -5010,7 +4991,7 @@ SQL
 
         $this->abortIf(
             $externalReferences > 0,
-            sprintf(
+            \sprintf(
                 'Legacy quiz relation repair refused because %d external foreign keys reference c_quiz_rel_question.iid.',
                 $externalReferences
             )

@@ -617,6 +617,7 @@ class ResourceListener
         $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
             ->setParameter('path', $docID)
             ->setParameter('type', 'document')
-            ->execute();
+            ->execute()
+        ;
     }
 }

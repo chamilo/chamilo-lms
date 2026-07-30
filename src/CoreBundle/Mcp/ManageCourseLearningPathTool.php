@@ -27,6 +27,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Throwable;
 
 use const DATE_ATOM;
+use const PREG_SPLIT_NO_EMPTY;
 
 final readonly class ManageCourseLearningPathTool
 {
@@ -340,6 +341,7 @@ final readonly class ManageCourseLearningPathTool
                 if ((int) $candidate->getIid() === $itemId) {
                     $item = $candidate;
                     array_splice($items, $index, 1);
+
                     break;
                 }
             }
@@ -638,6 +640,7 @@ final readonly class ManageCourseLearningPathTool
                 if ((int) $item->getIid() === $afterItemId) {
                     $valid = true;
                     $previousItemId = $afterItemId;
+
                     break;
                 }
             }
@@ -650,6 +653,7 @@ final readonly class ManageCourseLearningPathTool
         }
 
         require_once api_get_path(SYS_CODE_PATH).'lp/learnpath.class.php';
+
         require_once api_get_path(SYS_CODE_PATH).'exercise/exercise.class.php';
         $courseInfo = api_get_course_info($course->getCode());
         if (!\is_array($courseInfo) || [] === $courseInfo) {
@@ -675,6 +679,7 @@ final readonly class ManageCourseLearningPathTool
                 if ((int) $item->getIid() === $itemId) {
                     $newItem = $item;
                     array_splice($items, $index, 1);
+
                     break;
                 }
             }
@@ -683,6 +688,7 @@ final readonly class ManageCourseLearningPathTool
                 foreach ($items as $index => $item) {
                     if ((int) $item->getIid() === $afterItemId) {
                         $targetIndex = $index + 1;
+
                         break;
                     }
                 }
@@ -703,7 +709,7 @@ final readonly class ManageCourseLearningPathTool
         }
 
         /** @var list<CLpItem> $items */
-        $items = $this->entityManager->createQueryBuilder()
+        return $this->entityManager->createQueryBuilder()
             ->select('item')
             ->from(CLpItem::class, 'item')
             ->andWhere('IDENTITY(item.lp) = :learningPathId')
@@ -717,8 +723,6 @@ final readonly class ManageCourseLearningPathTool
             ->getQuery()
             ->getResult()
         ;
-
-        return $items;
     }
 
     /**
@@ -804,7 +808,7 @@ final readonly class ManageCourseLearningPathTool
                 'title' => $item->getTitle(),
                 'type' => $item->getItemType(),
                 'resource_id' => (int) ($item->getPath() ?: $item->getRef()),
-                'parent_item_id' => $item->getParent()?->getItemType() === 'root'
+                'parent_item_id' => 'root' === $item->getParent()?->getItemType()
                     ? null
                     : (int) $item->getParent()?->getIid(),
                 'display_order' => (int) $item->getDisplayOrder(),

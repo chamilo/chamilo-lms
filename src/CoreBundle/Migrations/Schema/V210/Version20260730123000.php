@@ -8987,14 +8987,14 @@ LEGACY_ANSWER_MAPPING;
 
         $this->abortIf(
             $answerRows < self::MINIMUM_TARGET_ANSWER_ROWS,
-            sprintf(
+            \sprintf(
                 'Legacy quiz answer relation repair refused because c_quiz_answer contains only %d rows.',
                 $answerRows
             )
         );
         $this->abortIf(
             self::EXPECTED_QUIZ_305_QUESTIONS !== $quiz305Questions,
-            sprintf(
+            \sprintf(
                 'Legacy quiz answer relation repair requires the quiz-question repair first: quiz 305 has %d relations.',
                 $quiz305Questions
             )
@@ -9136,7 +9136,7 @@ SQL);
             'DROP TEMPORARY TABLE tmp_legacy_quiz_answer_map'
         );
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Legacy quiz answer relation repair queued: %d answers mapped to %d questions; quiz 305 must expose %d answers across %d questions.',
             self::EXPECTED_MAPPING_ROWS,
             self::EXPECTED_MAPPING_QUESTIONS,
@@ -9166,22 +9166,16 @@ SQL);
         $compressed = base64_decode($encoded, true);
 
         if (false === $compressed) {
-            throw new RuntimeException(
-                'Unable to decode the embedded legacy quiz answer mapping.'
-            );
+            throw new RuntimeException('Unable to decode the embedded legacy quiz answer mapping.');
         }
 
         $raw = gzdecode($compressed);
         if (false === $raw) {
-            throw new RuntimeException(
-                'Unable to decompress the embedded legacy quiz answer mapping.'
-            );
+            throw new RuntimeException('Unable to decompress the embedded legacy quiz answer mapping.');
         }
 
         if (!hash_equals(self::MAPPING_SHA256, hash('sha256', $raw))) {
-            throw new RuntimeException(
-                'The embedded legacy quiz answer mapping checksum is invalid.'
-            );
+            throw new RuntimeException('The embedded legacy quiz answer mapping checksum is invalid.');
         }
 
         $rows = [];
@@ -9196,27 +9190,18 @@ SQL);
                     $matches
                 )
             ) {
-                throw new RuntimeException(sprintf(
-                    'Invalid legacy quiz answer mapping row at line %d.',
-                    $lineNumber + 1
-                ));
+                throw new RuntimeException(\sprintf('Invalid legacy quiz answer mapping row at line %d.', $lineNumber + 1));
             }
 
             $answerId = (int) $matches[1];
             $questionId = (int) $matches[2];
 
             if ($answerId <= 0 || $questionId <= 0) {
-                throw new RuntimeException(sprintf(
-                    'Invalid legacy quiz answer mapping values at line %d.',
-                    $lineNumber + 1
-                ));
+                throw new RuntimeException(\sprintf('Invalid legacy quiz answer mapping values at line %d.', $lineNumber + 1));
             }
 
             if (isset($answerIds[$answerId])) {
-                throw new RuntimeException(sprintf(
-                    'Duplicate legacy answer iid at line %d.',
-                    $lineNumber + 1
-                ));
+                throw new RuntimeException(\sprintf('Duplicate legacy answer iid at line %d.', $lineNumber + 1));
             }
 
             $answerIds[$answerId] = true;
@@ -9228,11 +9213,7 @@ SQL);
             self::EXPECTED_MAPPING_ROWS !== \count($rows)
             || self::EXPECTED_MAPPING_QUESTIONS !== \count($questionIds)
         ) {
-            throw new RuntimeException(sprintf(
-                'Unexpected legacy quiz answer mapping size: answers=%d, questions=%d.',
-                \count($rows),
-                \count($questionIds)
-            ));
+            throw new RuntimeException(\sprintf('Unexpected legacy quiz answer mapping size: answers=%d, questions=%d.', \count($rows), \count($questionIds)));
         }
 
         return $rows;
@@ -9247,7 +9228,7 @@ SQL);
             $values = [];
 
             foreach ($batch as [$answerId, $questionId]) {
-                $values[] = sprintf(
+                $values[] = \sprintf(
                     '(%d, %d)',
                     $answerId,
                     $questionId
@@ -9285,7 +9266,7 @@ SQL);
         foreach ($requiredColumns as $tableName => $columns) {
             $this->abortIf(
                 !$schema->hasTable($tableName),
-                sprintf(
+                \sprintf(
                     'Legacy quiz answer relation repair requires table %s.',
                     $tableName
                 )
@@ -9295,7 +9276,7 @@ SQL);
             foreach ($columns as $columnName) {
                 $this->abortIf(
                     !$table->hasColumn($columnName),
-                    sprintf(
+                    \sprintf(
                         'Legacy quiz answer relation repair requires column %s.%s.',
                         $tableName,
                         $columnName

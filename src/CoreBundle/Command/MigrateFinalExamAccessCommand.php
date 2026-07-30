@@ -764,7 +764,7 @@ final class MigrateFinalExamAccessCommand extends Command
             return false;
         }
 
-        if (array_key_exists('source', $existingRule)) {
+        if (\array_key_exists('source', $existingRule)) {
             $existingRule['source'] = self::SOURCE;
         }
 

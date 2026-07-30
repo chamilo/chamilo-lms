@@ -92,7 +92,7 @@ final readonly class CreateCourseAssignmentTool
 
         try {
             return new DateTime($dueAt);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw new InvalidArgumentException('The dueAt value must be a valid ISO 8601 date and time.');
         }
     }

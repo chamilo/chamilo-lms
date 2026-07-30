@@ -224,8 +224,7 @@ final readonly class McpCourseAssignmentCreator
         Course $course,
         bool $created,
         bool $updatedExisting,
-    ): array
-    {
+    ): array {
         $assignment = $publication->getAssignment();
 
         return [
@@ -239,7 +238,7 @@ final readonly class McpCourseAssignmentCreator
             'maximum_score' => $publication->getQualification(),
             'submission_mode' => $publication->getAllowTextAssignment(),
             'due_at' => $assignment?->getExpiresOn()?->format(DATE_ATOM),
-            'published' => $publication->getFirstResourceLink()?->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED,
+            'published' => ResourceLink::VISIBILITY_PUBLISHED === $publication->getFirstResourceLink()?->getVisibility(),
             'content_url' => '/resources/assignment/'
                 .(int) $course->getResourceNode()?->getId()
                 .'/submission/'

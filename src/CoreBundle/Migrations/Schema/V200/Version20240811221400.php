@@ -68,7 +68,7 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE ticket_category_rel_user DROP FOREIGN KEY IF EXISTS FK_5B8A987A76ED395');
         $this->addSql('ALTER TABLE ticket_category_rel_user ADD CONSTRAINT FK_5B8A987A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
 
-        // track_e_attempt (about 8.5M rows on Ricky): combine index and
+        // track_e_attempt (about 8.5M rows on large legacy installations): combine index and
         // column removals into one ALTER to avoid rebuilding/scanning the
         // table multiple times.
         $this->addSql(

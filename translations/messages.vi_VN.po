@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Công thức mẫu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -8551,6 +8551,9 @@ msgstr "Công ty"
 
 msgid "Reporting"
 msgstr "Báo cáo"
+
+msgid "Analytics"
+msgstr "Phân tích"
 
 msgid "Update"
 msgstr "Cập nhật"
@@ -37392,6 +37395,9 @@ msgstr "Cấu hình Git remote (.git\/config) đã thay đổi. Hãy xác minh �
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Quét đã dừng sớm vì không thể đọc một thư mục con (kiểm tra quyền tệp). Kết quả bên dưới có thể chỉ là một phần."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Quá nhiều thay đổi để liệt kê đầy đủ; chỉ các mục đầu tiên của mỗi danh mục được hiển thị bên dưới. Xem nhật ký CEF để có danh sách đầy đủ."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% tệp không thể đọc (quyền) và đã bị bỏ qua."
 
@@ -37476,6 +37482,27 @@ msgstr "Chưa có cảnh báo nào được ghi lại."
 msgid "Git remote changed"
 msgstr "Git remote đã thay đổi"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Quá nhiều thay đổi để liệt kê đầy đủ; chỉ các mục đầu tiên của mỗi danh mục được hiển thị bên dưới. Xem %link_start%nhật ký CEF%link_end% để có danh sách đầy đủ."
+msgid "Press enter to select"
+msgstr "Nhấn enter để chọn"
+
+msgid "Press enter to remove"
+msgstr "Nhấn enter để xóa"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Không tìm thấy phần tử nào. Hãy thử thay đổi truy vấn tìm kiếm."
+
+msgid "List is empty."
+msgstr "Danh sách trống."
+
+msgid "Your session has expired. Please try again."
+msgstr "Phiên của bạn đã hết hạn. Vui lòng thử lại."
+
+msgid "Generate with AI"
+msgstr "Tạo bằng AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Một hình minh họa hiện đại, thân thiện thể hiện chủ đề của khóa học này, theo phong cách thiết kế phẳng sạch sẽ, sử dụng màu sắc của nền tảng làm điểm nhấn."
+
+msgid "Back to account"
+msgstr "Quay lại tài khoản"
 

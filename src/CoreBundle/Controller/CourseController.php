@@ -1806,8 +1806,11 @@ class CourseController extends ToolBaseController
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.$course_id.'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
-                        // Redirecting to the LP
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+                        // Redirecting to the migrated LP list.
+                        $url = $this->buildLearningPathVueToolUrl();
+                        if (null === $url) {
+                            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+                        }
                         $_SESSION[$session_key] = true;
                         header(\sprintf('Location: %s', $url));
 
@@ -1841,9 +1844,12 @@ class CourseController extends ToolBaseController
                         } else {
                             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                             if (!isset($_SESSION[$session_key])) {
-                                // Redirecting to the LP
-                                $url = api_get_path(WEB_CODE_PATH).
-                                    'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
+                                // Redirecting to the migrated LP runtime.
+                                $url = $this->buildLearningPathVueToolUrl((int) $lp_data['iid']);
+                                if (null === $url) {
+                                    $url = api_get_path(WEB_CODE_PATH).
+                                        'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
+                                }
 
                                 $_SESSION[$session_key] = true;
                                 header(\sprintf('Location: %s', $url));
@@ -1968,6 +1974,38 @@ class CourseController extends ToolBaseController
                 )
             );
         }
+    }
+
+    private function buildLearningPathVueToolUrl(?int $lpId = null): ?string
+    {
+        $course = $this->getCourse();
+        if (!$course instanceof Course) {
+            $course = api_get_course_entity();
+        }
+
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return null;
+        }
+
+        $nodeId = $course->getResourceNode()->getId();
+        if (null === $nodeId) {
+            return null;
+        }
+
+        $path = '/resources/lp/'.(int) $nodeId.'/';
+        if (null !== $lpId && $lpId > 0) {
+            $path .= $lpId.'/runtime';
+        }
+
+        $query = http_build_query([
+            'cid' => (int) api_get_course_int_id(),
+            'sid' => (int) api_get_session_id(),
+            'gid' => (int) api_get_group_id(),
+            'origin' => 'learnpath',
+            'isStudentView' => 'true',
+        ]);
+
+        return rtrim(api_get_path(WEB_PATH), '/').$path.'?'.$query;
     }
 
     private function buildExerciseVueToolUrl(?int $exerciseId = null): ?string

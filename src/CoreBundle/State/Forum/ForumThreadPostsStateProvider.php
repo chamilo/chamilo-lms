@@ -28,6 +28,7 @@ use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -41,6 +42,9 @@ use Throwable;
  */
 final class ForumThreadPostsStateProvider implements ProviderInterface
 {
+    private const DEFAULT_ITEMS_PER_PAGE = 25;
+    private const MAX_ITEMS_PER_PAGE = 100;
+
     use ForumCourseSettingHelperTrait;
     use ForumExtraFieldHelperTrait;
     use ForumGradebookGuardTrait;
@@ -140,28 +144,49 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             }
         }
 
-        $postsQueryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('p', 'a')
-            ->from(CForumPost::class, 'p')
-            ->leftJoin('p.attachments', 'a')
-            ->andWhere('IDENTITY(p.thread) = :threadId')
-            ->andWhere('IDENTITY(p.forum) = :forumId')
-            ->setParameter('threadId', $thread->getIid(), Types::INTEGER)
-            ->setParameter('forumId', $forum->getIid(), Types::INTEGER)
+        $page = max(1, $request->query->getInt('page', 1));
+        $itemsPerPage = min(
+            self::MAX_ITEMS_PER_PAGE,
+            max(1, $request->query->getInt('itemsPerPage', self::DEFAULT_ITEMS_PER_PAGE)),
+        );
+
+        $totalItems = (int) $this->createPostsQueryBuilder($thread, $forum, $canManage)
+            ->select('COUNT(p.iid)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+        $totalPages = $totalItems > 0 ? (int) ceil($totalItems / $itemsPerPage) : 0;
+
+        $postIdRows = $this->createPostsQueryBuilder($thread, $forum, $canManage)
+            ->select('p.iid')
             ->orderBy('p.postDate', 'ASC')
             ->addOrderBy('p.iid', 'ASC')
+            ->setFirstResult(($page - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage)
+            ->getQuery()
+            ->getArrayResult()
         ;
+        $postIds = array_map(
+            static fn (array $row): int => (int) $row['iid'],
+            $postIdRows,
+        );
 
-        if (!$canManage) {
-            $postsQueryBuilder
-                ->andWhere('p.visible = :visible')
-                ->andWhere('p.status = :validatedStatus OR p.status IS NULL')
-                ->setParameter('visible', true, Types::BOOLEAN)
-                ->setParameter('validatedStatus', CForumPost::STATUS_VALIDATED, Types::INTEGER)
+        $posts = [];
+        if ([] !== $postIds) {
+            $posts = $this->entityManager->createQueryBuilder()
+                ->select('p', 'a')
+                ->from(CForumPost::class, 'p')
+                ->leftJoin('p.attachments', 'a')
+                ->andWhere('p.iid IN (:postIds)')
+                ->setParameter('postIds', $postIds)
+                ->orderBy('p.postDate', 'ASC')
+                ->addOrderBy('p.iid', 'ASC')
+                ->getQuery()
+                ->getResult()
             ;
         }
 
-        $posts = $postsQueryBuilder->getQuery()->getResult();
+        $firstPostId = 1 === $page && [] !== $postIds ? $postIds[0] : 0;
 
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
         $lockedByGradebook = $this->isForumThreadLockedByGradebook(
@@ -197,10 +222,41 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                     $course,
                     $session,
                     $group,
+                    $firstPostId,
                 ),
                 $posts,
             ),
+            'page' => $page,
+            'itemsPerPage' => $itemsPerPage,
+            'totalItems' => $totalItems,
+            'totalPages' => $totalPages,
+            'hasNextPage' => $page < $totalPages,
         ];
+    }
+
+    private function createPostsQueryBuilder(
+        CForumThread $thread,
+        CForum $forum,
+        bool $canManage,
+    ): QueryBuilder {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->from(CForumPost::class, 'p')
+            ->andWhere('IDENTITY(p.thread) = :threadId')
+            ->andWhere('IDENTITY(p.forum) = :forumId')
+            ->setParameter('threadId', $thread->getIid(), Types::INTEGER)
+            ->setParameter('forumId', $forum->getIid(), Types::INTEGER)
+        ;
+
+        if (!$canManage) {
+            $queryBuilder
+                ->andWhere('p.visible = :visible')
+                ->andWhere('p.status = :validatedStatus OR p.status IS NULL')
+                ->setParameter('visible', true, Types::BOOLEAN)
+                ->setParameter('validatedStatus', CForumPost::STATUS_VALIDATED, Types::INTEGER)
+            ;
+        }
+
+        return $queryBuilder;
     }
 
     private function assertResourceIsVisible(?ResourceNode $resourceNode): void
@@ -335,6 +391,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         Course $course,
         ?Session $session,
         ?CGroup $group,
+        int $firstPostId,
     ): array {
         $canEdit = !$lockedByGradebook && $this->canEditPost($post, $forum, $thread, $canManage);
         $canModerate = $canManage && !$lockedByGradebook;
@@ -394,7 +451,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'canToggleVisibility' => $canModerate,
             'canReplyToPost' => $this->canReply($forum, $thread),
             'canQuote' => $this->canReply($forum, $thread),
-            'canMove' => $canModerate && !$this->isFirstPost($post, $thread),
+            'canMove' => $canModerate && $post->getIid() !== $firstPostId,
             'revisionRequested' => $revisionRequested,
             'revisionLanguage' => $revisionLanguage,
             'canAskRevision' => !$lockedByGradebook && $isAuthor && $this->areForumPostRevisionsEnabled(),
@@ -592,22 +649,6 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         };
     }
 
-    private function isFirstPost(CForumPost $post, CForumThread $thread): bool
-    {
-        $firstPostId = $this->entityManager->createQueryBuilder()
-            ->select('p.iid')
-            ->from(CForumPost::class, 'p')
-            ->andWhere('IDENTITY(p.thread) = :threadId')
-            ->setParameter('threadId', $thread->getIid(), Types::INTEGER)
-            ->orderBy('p.postDate', 'ASC')
-            ->addOrderBy('p.iid', 'ASC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
-
-        return (int) $firstPostId === $post->getIid();
-    }
 
     private function canReply(CForum $forum, CForumThread $thread): bool
     {

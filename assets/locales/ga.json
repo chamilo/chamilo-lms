@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Cruthaigh paic\u00e9id ch\u00farsa ar feadh tr\u00e9imhse \u00e1irithe le seisi\u00fain oili\u00fana",
     "Sessions management": "Bainist\u00edocht seisi\u00fan",
     "Tracking": "Rian\u00fa",
+    "Analytics": "Anail\u00eds\u00edocht",
     "View reports, statistics and tracking data": "F\u00e9ach tuairisc\u00ed, staitistic\u00ed agus sonra\u00ed rianaithe",
     "Manage the skills of your users, through courses and badges": "Bainistigh scileanna do chuid \u00fas\u00e1ideoir\u00ed, tr\u00ed ch\u00farsa\u00ed agus suaill\u00ed",
     "Personal data protection": "Cosaint sonra\u00ed pearsanta",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Ag taispe\u00e1int {0} post",
     "Showing {0} tasks": "Ag taispe\u00e1int {0} tasc",
     "contains {0} items": "ag brath {0} m\u00edreanna",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Br\u00faigh Enter chun roghn\u00fa",
+    "Press enter to remove": "Br\u00faigh Enter chun baint",
+    "No elements found. Consider changing the search query.": "N\u00edor aims\u00edodh aon eilimint\u00ed. Smaoinigh ar an iarratas cuardaigh a athr\u00fa.",
+    "List is empty.": "T\u00e1 an liosta folamh."
 }

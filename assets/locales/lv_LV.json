@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Izveidojiet kursu paketes noteiktam laikam ar apm\u0101c\u012bbu sesij\u0101m",
     "Sessions management": "Sesiju p\u0101rvald\u012bba",
     "Tracking": "Sekojums",
+    "Analytics": "Anal\u012btika",
     "View reports, statistics and tracking data": "Skat\u012bt p\u0101rskatus, statistiku un seko\u0161anas datus",
     "Manage the skills of your users, through courses and badges": "P\u0101rvaldiet savu lietot\u0101ju prasmes caur kursiem un noz\u012bm\u012bt\u0113m",
     "Personal data protection": "Personas datu aiz neuro",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "R\u0101da {0} ierakstus",
     "Showing {0} tasks": "R\u0101da {0} uzdevumus",
     "contains {0} items": "satur {0} vien\u012bbas",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Nospiediet Enter, lai atlas\u012btu",
+    "Press enter to remove": "Nospiediet Enter, lai no\u0146emtu",
+    "No elements found. Consider changing the search query.": "Nav atrasti elementi. M\u0113\u0123iniet main\u012bt mekl\u0113\u0161anas vaic\u0101jumu.",
+    "List is empty.": "Saraksts ir tuk\u0161s."
 }

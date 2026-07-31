@@ -818,6 +818,22 @@ async function flushScormRuntime(reason = "flush") {
   await scormRuntimeContext.flush(reason)
 }
 
+function handleScormNavigate(navRequest, data) {
+  const request = String(navRequest || "").trim()
+
+  if (request === "continue" && data?.nextItemId) {
+    void openItem(data.nextItemId)
+    return
+  }
+  if (request === "previous" && data?.previousItemId) {
+    void openItem(data.previousItemId)
+    return
+  }
+  if (["exit", "exitAll", "suspendAll", "abandon", "abandonAll"].includes(request)) {
+    void leaveRuntime(runtimeHomeUrl.value)
+  }
+}
+
 function installScormRuntime(data, { forceRecreate = false } = {}) {
   const config = data?.scorm || {}
   const itemId = Number(data?.currentItemId || 0)
@@ -848,6 +864,8 @@ function installScormRuntime(data, { forceRecreate = false } = {}) {
     userId: Number(config.userId || 0),
     lpType: Number(config.lpType || 0),
     itemType: String(config.itemType || ""),
+    hasNextItem: Boolean(data?.nextItemId),
+    hasPreviousItem: Boolean(data?.previousItemId),
     commit: async (payload) => {
       await lpService.commitScormRuntime(lpId.value, itemId, contextParams.value, {
         ...payload,
@@ -866,6 +884,7 @@ function installScormRuntime(data, { forceRecreate = false } = {}) {
         csrfToken,
       }),
     onCommitted: scheduleRuntimeRefresh,
+    onNavigate: (navRequest) => handleScormNavigate(navRequest, data),
   })
   scormRuntimeKey = key
 

@@ -1340,6 +1340,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Display official code in exercises results',
                     'comment' => "Whether to show the students' official code in the exercises results reports",
                 ],
+                [
+                    'name' => 'quiz_result_pdf_export_include_official_code_in_file_name',
+                    'title' => 'Include official code in exported quiz result PDF file name',
+                    'comment' => "Whether to include the student's official code in the file name when exporting a quiz result to PDF",
+                ],
             ],
             'security' => [
                 [
@@ -2007,6 +2012,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'multilevel_grading',
                     'title' => 'Enable Multi-Level Attendance Grading',
                     'comment' => 'Allows grading attendance with multiple levels instead of a simple present/absent system.',
+                ],
+                [
+                    'name' => 'attendance_add_official_code',
+                    'title' => "Show students' official code in attendance sheets",
+                    'comment' => "Whether to display the students' official code alongside their name in attendance sheets and lists.",
                 ],
             ],
             'display' => [
@@ -3168,6 +3178,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'oauth_server_enabled',
                     'title' => 'Enable the OAuth authorization server',
                     'comment' => 'Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user\'s own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on.',
+                ],
+                [
+                    'name' => 'mcp_enabled',
+                    'title' => 'Enable MCP server',
+                    'comment' => 'Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp.',
+                ],
+                [
+                    'name' => 'mcp_allowed_roles',
+                    'title' => 'Allow MCP by roles',
+                    'comment' => 'JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections.',
                 ],
             ],
             'session' => [

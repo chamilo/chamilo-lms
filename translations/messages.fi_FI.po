@@ -8552,6 +8552,9 @@ msgstr "Organisaatio"
 msgid "Reporting"
 msgstr "Raportointi"
 
+msgid "Analytics"
+msgstr "Analytiikka"
+
 msgid "Update"
 msgstr "Päivitä"
 
@@ -37392,6 +37395,9 @@ msgstr "Git-etäasetukset (.git\/config) ovat muuttuneet. Varmista, että muutos
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skannaus keskeytyi, koska alihakemistoa ei voitu lukea (tarkista tiedostojen käyttöoikeudet). Alla olevat tulokset voivat olla osittaisia."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Liian monta muutosta lueteltavaksi kokonaisuudessaan; vain kunkin kategorian ensimmäiset merkinnät näytetään alla. Katso täydellinen luettelo CEF-lokista."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% tiedosto(a) ei voitu lukea (käyttöoikeudet) ja ne ohitettiin."
 
@@ -37476,6 +37482,27 @@ msgstr "Hälytyksiä ei ole vielä tallennettu."
 msgid "Git remote changed"
 msgstr "Git-etäyhteys muuttunut"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Liian monta muutosta lueteltavaksi kokonaisuudessaan; vain kunkin kategorian ensimmäiset merkinnät näytetään alla. Katso täydellinen luettelo %link_start%CEF-lokista%link_end%."
+msgid "Press enter to select"
+msgstr "Valitse painamalla enter"
+
+msgid "Press enter to remove"
+msgstr "Poista painamalla enter"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Elementtejä ei löytynyt. Kokeile muuttaa hakulauseketta."
+
+msgid "List is empty."
+msgstr "Lista on tyhjä."
+
+msgid "Your session has expired. Please try again."
+msgstr "Istuntosi on vanhentunut. Yritä uudelleen."
+
+msgid "Generate with AI"
+msgstr "Luo tekoälyllä"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Nykyaikainen, kutsuva kuvitus, joka edustaa tämän kurssin aihetta puhtaassa flat-design-tyylissä ja käyttää alustani värejä korostuksina."
+
+msgid "Back to account"
+msgstr "Takaisin tilille"
 

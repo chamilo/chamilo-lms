@@ -27,7 +27,7 @@ class ResourceLinkRepository extends SortableRepository
     private array $toolList = [
         'course_description' => '/resources/course-description/%resource_node_id%/',
         'document' => '/resources/document/%resource_node_id%/',
-        'learnpath' => '/main/lp/lp_controller.php',
+        'learnpath' => '/resources/lp/%resource_node_id%/',
         'link' => '/resources/links/%resource_node_id%/',
         'quiz' => '/resources/exercise/%resource_node_id%/',
         'announcement' => '/resources/announcement/%resource_node_id%/',

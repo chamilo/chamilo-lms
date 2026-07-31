@@ -30,6 +30,8 @@ final readonly class ListDocumentsTool
      * @return array{
      *     course_id: int,
      *     total: int,
+     *     title_filter: string|null,
+     *     limit: int,
      *     documents: array<int, array{
      *         document_id: int,
      *         title: string,
@@ -41,12 +43,12 @@ final readonly class ListDocumentsTool
      */
     #[McpTool(
         name: 'list_documents',
-        description: 'List the documents in a base course managed by the authenticated teacher (title, modification date, size, language and internal ID) so the MCP client can locate one document within the list before referencing it precisely in another tool call. Not meant to return document content.',
+        description: 'List or filter documents in a base course managed by the authenticated teacher. Returns title, modification date, size, language and internal ID, but not document content. Use titleContains to narrow the result before referencing a document in another tool call.',
     )]
-    public function listDocuments(int $courseId): array
+    public function listDocuments(int $courseId, ?string $titleContains = null, int $limit = 50): array
     {
         try {
-            return $this->doListDocuments($courseId);
+            return $this->doListDocuments($courseId, $titleContains, $limit);
         } catch (ToolCallException $exception) {
             throw $exception;
         } catch (AccessDeniedException|InvalidArgumentException|RuntimeException $exception) {
@@ -60,6 +62,8 @@ final readonly class ListDocumentsTool
      * @return array{
      *     course_id: int,
      *     total: int,
+     *     title_filter: string|null,
+     *     limit: int,
      *     documents: array<int, array{
      *         document_id: int,
      *         title: string,
@@ -69,13 +73,21 @@ final readonly class ListDocumentsTool
      *     }>
      * }
      */
-    private function doListDocuments(int $courseId): array
+    private function doListDocuments(int $courseId, ?string $titleContains, int $limit): array
     {
+        if ($limit < 1 || $limit > 100) {
+            throw new InvalidArgumentException('The document result limit must be between 1 and 100.');
+        }
+
+        $titleContains = null !== $titleContains ? trim($titleContains) : '';
+        if (mb_strlen($titleContains) > 250) {
+            throw new InvalidArgumentException('The document title filter cannot be longer than 250 characters.');
+        }
+
         $context = $this->courseContext->resolve($courseId);
         $course = $context['course'];
 
-        /** @var CDocument[] $documents */
-        $documents = $this->entityManager->createQueryBuilder()
+        $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('document')
             ->from(CDocument::class, 'document')
             ->innerJoin('document.resourceNode', 'node')
@@ -91,9 +103,19 @@ final readonly class ListDocumentsTool
             ->setParameter('folderType', 'folder')
             ->setParameter('isTemplate', false)
             ->orderBy('document.title', 'ASC')
-            ->getQuery()
-            ->getResult()
+            ->addOrderBy('document.iid', 'ASC')
+            ->setMaxResults($limit)
         ;
+
+        if ('' !== $titleContains) {
+            $queryBuilder
+                ->andWhere('LOWER(document.title) LIKE :titleContains')
+                ->setParameter('titleContains', '%'.mb_strtolower($titleContains).'%', Types::STRING)
+            ;
+        }
+
+        /** @var CDocument[] $documents */
+        $documents = $queryBuilder->getQuery()->getResult();
 
         $items = [];
         foreach ($documents as $document) {
@@ -110,6 +132,8 @@ final readonly class ListDocumentsTool
 
         return [
             'course_id' => (int) $course->getId(),
+            'title_filter' => '' !== $titleContains ? $titleContains : null,
+            'limit' => $limit,
             'total' => \count($items),
             'documents' => $items,
         ];

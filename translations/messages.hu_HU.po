@@ -8550,6 +8550,9 @@ msgstr "Szervezet"
 msgid "Reporting"
 msgstr "Jelentés"
 
+msgid "Analytics"
+msgstr "Analitika"
+
 msgid "Update"
 msgstr "Frissít"
 
@@ -37390,6 +37393,9 @@ msgstr "A Git távoli konfigurációja (.git\/config) megváltozott. Ellenőrizz
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "A szkennelés idő előtt leállt, mert egy alkönyvtár nem olvasható (ellenőrizze a fájljogosultságokat). Az alábbi eredmények részlegesek lehetnek."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Túl sok változás a teljes listázáshoz; csak az egyes kategóriák első bejegyzései láthatók alább. A teljes listához lásd a CEF naplót."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fájl nem olvasható (jogosultságok miatt), ezért kihagyásra került."
 
@@ -37474,6 +37480,27 @@ msgstr "Még nem rögzítettek riasztást."
 msgid "Git remote changed"
 msgstr "Git távoli tároló megváltozott"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Túl sok változás a teljes listázáshoz; az egyes kategóriák első bejegyzései láthatók lent. A teljes listához lásd a %link_start%CEF naplót%link_end%."
+msgid "Press enter to select"
+msgstr "Nyomja meg az Enter billentyűt a kiválasztáshoz"
+
+msgid "Press enter to remove"
+msgstr "Nyomja meg az Enter billentyűt az eltávolításhoz"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nem található elem. Próbálja meg módosítani a keresési kifejezést."
+
+msgid "List is empty."
+msgstr "A lista üres."
+
+msgid "Your session has expired. Please try again."
+msgstr "A munkamenet lejárt. Kérjük, próbálja meg újra."
+
+msgid "Generate with AI"
+msgstr "Generálás AI-val"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Egy modern, barátságos illusztráció, amely a kurzus témáját ábrázolja, letisztult lapos stílusban, a platform színeit hangsúlyként használva."
+
+msgid "Back to account"
+msgstr "Vissza a fiókhoz"
 

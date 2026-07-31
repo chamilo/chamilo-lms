@@ -8560,6 +8560,9 @@ msgstr "Εταιρια"
 msgid "Reporting"
 msgstr "Αναφορές"
 
+msgid "Analytics"
+msgstr "Αναλυτικά"
+
 msgid "Update"
 msgstr "Ενημέρωση"
 
@@ -37405,6 +37408,9 @@ msgstr "Η διαμόρφωση του απομακρυσμένου Git (.git/co
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Η σάρωση σταμάτησε πρόωρα επειδή δεν ήταν δυνατή η ανάγνωση ενός υποκαταλόγου (ελέγξτε τα δικαιώματα αρχείων). Τα αποτελέσματα παρακάτω ενδέχεται να είναι μερικά."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Υπερβολικά πολλές αλλαγές για πλήρη εμφάνιση· εμφανίζονται μόνο οι πρώτες καταχωρίσεις κάθε κατηγορίας. Δείτε το αρχείο καταγραφής CEF για την πλήρη λίστα."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% αρχείο(α) δεν ήταν δυνατή η ανάγνωσή τους (δικαιώματα) και παραλείφθηκαν."
 
@@ -37489,6 +37495,27 @@ msgstr "Δεν έχει καταγραφεί ακόμη καμία ειδοπο�
 msgid "Git remote changed"
 msgstr "Το απομακρυσμένο Git άλλαξε"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Πάρα πολλές αλλαγές για πλήρη εμφάνιση· εμφανίζονται μόνο οι πρώτες καταχωρίσεις κάθε κατηγορίας. Δείτε το %link_start%αρχείο καταγραφής CEF%link_end% για την πλήρη λίστα."
+msgid "Press enter to select"
+msgstr "Πατήστε Enter για επιλογή"
+
+msgid "Press enter to remove"
+msgstr "Πατήστε Enter για αφαίρεση"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Δεν βρέθηκαν στοιχεία. Δοκιμάστε να αλλάξετε το ερώτημα αναζήτησης."
+
+msgid "List is empty."
+msgstr "Η λίστα είναι κενή."
+
+msgid "Your session has expired. Please try again."
+msgstr "Η συνεδρία σας έληξε. Προσπαθήστε ξανά."
+
+msgid "Generate with AI"
+msgstr "Δημιουργία με AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Μια σύγχρονη, φιλική εικόνα που αντιπροσωπεύει το θέμα αυτού του μαθήματος, σε καθαρό στυλ flat-design, χρησιμοποιώντας τα χρώματα της πλατφόρμας μας ως τόνους."
+
+msgid "Back to account"
+msgstr "Επιστροφή στον λογαριασμό"
 

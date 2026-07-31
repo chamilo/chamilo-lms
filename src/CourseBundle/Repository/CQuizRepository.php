@@ -61,15 +61,21 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
 
     public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
     {
-        $params = [
-            'exerciseId' => $resource->getResourceIdentifier(),
-        ];
+        $exerciseId = (int) $resource->getResourceIdentifier();
+        $courseNodeId = $resource instanceof CQuiz
+            ? (int) ($resource->getResourceNode()?->getParent()?->getId() ?? 0)
+            : 0;
 
-        if (!empty($extraParams)) {
-            $params = array_merge($params, $extraParams);
+        if ($exerciseId <= 0 || $courseNodeId <= 0) {
+            $params = array_merge(['exerciseId' => $exerciseId], $extraParams);
+
+            return '/main/exercise/overview.php?'.http_build_query($params);
         }
 
-        return '/main/exercise/overview.php?'.http_build_query($params);
+        unset($extraParams['exerciseId'], $extraParams['node'], $extraParams['legacy']);
+        $url = '/resources/exercise/'.$courseNodeId.'/'.$exerciseId.'/overview';
+
+        return [] === $extraParams ? $url : $url.'?'.http_build_query($extraParams);
     }
 
     public function findAutoLaunchableQuizByCourseAndSession(Course $course, ?Session $session = null): ?int

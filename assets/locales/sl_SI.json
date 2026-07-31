@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Ustvarite pakete te\u010dajev za dolo\u010den \u010das s trening sejami",
     "Sessions management": "Upravljanje sej",
     "Tracking": "Sledenje",
+    "Analytics": "Analitika",
     "View reports, statistics and tracking data": "Ogled poro\u010dil, statistik in podatkov o sledenju",
     "Manage the skills of your users, through courses and badges": "Upravljajte spretnosti svojih uporabnikov prek te\u010dajev in zna\u010dk",
     "Personal data protection": "Za\u0161\u010dita osebnih podatkov",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Prikazujem {0} objav",
     "Showing {0} tasks": "Prikazujem {0} nalog",
     "contains {0} items": "vsebuje {0} elementov",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Pritisnite Enter za izbiro",
+    "Press enter to remove": "Pritisnite Enter za odstranitev",
+    "No elements found. Consider changing the search query.": "Ni najdenih elementov. Poskusite spremeniti iskalni niz.",
+    "List is empty.": "Seznam je prazen."
 }

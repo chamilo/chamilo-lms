@@ -295,11 +295,15 @@ function getContextParams() {
   addOptionalQueryParam(params, "learnpath_item_id")
   addOptionalQueryParam(params, "learnpath_item_view_id")
   addOptionalQueryParam(params, "lp_id")
+  addOptionalQueryParam(params, "item_id")
   addOptionalQueryParam(params, "node")
   addOptionalQueryParam(params, "type")
   addOptionalQueryParam(params, "returnToLp")
+  addOptionalQueryParam(params, "embedded")
+  addOptionalQueryParam(params, "gradebook")
   addOptionalQueryParam(params, "isStudentView")
   addOptionalQueryParam(params, "preview")
+  addOptionalQueryParam(params, "attemptId")
 
   return params
 }
@@ -315,13 +319,16 @@ function isEmbeddedInLearnpath() {
       const parentPath = window.parent.location?.pathname || ""
       const referrer = document.referrer || ""
 
-      return parentPath.includes("/main/lp/")
+      return parentPath.includes("/resources/lp/")
+        || parentPath.includes("/main/lp/")
         || parentPath.includes("/main/newscorm/")
+        || referrer.includes("/resources/lp/")
         || referrer.includes("/main/lp/")
         || referrer.includes("/main/newscorm/")
     }
   } catch (error) {
-    return (document.referrer || "").includes("/main/lp/")
+    return (document.referrer || "").includes("/resources/lp/")
+      || (document.referrer || "").includes("/main/lp/")
       || (document.referrer || "").includes("/main/newscorm/")
   }
 

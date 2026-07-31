@@ -56,6 +56,7 @@ const READ_ONLY_PREFIXES = [
   "cmi.entry",
   "cmi.launch_data",
   "cmi._version",
+  "cmi.comments_from_lms",
 ]
 
 const WRITE_ONLY_ELEMENTS = new Set([
@@ -65,16 +66,44 @@ const WRITE_ONLY_ELEMENTS = new Set([
   "cmi.session_time",
 ])
 
+// Simplified adl.nav.request support: continue/previous/exit-family only, no sequencing, no choice/jump targets.
+const ADL_ELEMENT_NAMES = new Set(["adl.nav.request", "adl.nav.request_valid.continue", "adl.nav.request_valid.previous"])
+
+const ADL_READ_ONLY_ELEMENTS = new Set(["adl.nav.request_valid.continue", "adl.nav.request_valid.previous"])
+
+const ADL_NAV_REQUEST_KEYWORDS = new Set([
+  "_none_",
+  "continue",
+  "previous",
+  "exit",
+  "exitAll",
+  "suspendAll",
+  "abandon",
+  "abandonAll",
+])
+
+const ACTIONABLE_NAV_REQUESTS = new Set(["continue", "previous", "exit", "exitAll", "suspendAll", "abandon", "abandonAll"])
+
 function isReadOnlyElement(name) {
   if (name.endsWith("._children") || name.endsWith("._count")) {
+    return true
+  }
+  if (ADL_READ_ONLY_ELEMENTS.has(name)) {
     return true
   }
 
   return READ_ONLY_PREFIXES.some((prefix) => name === prefix || name.startsWith(`${prefix}.`))
 }
 
-function isValidElementName(name) {
-  return typeof name === "string" && /^cmi(?:\.|$)/.test(name)
+function isValidElementName(name, is2004) {
+  if (typeof name !== "string") {
+    return false
+  }
+  if (/^cmi(?:\.|$)/.test(name)) {
+    return true
+  }
+
+  return Boolean(is2004) && ADL_ELEMENT_NAMES.has(name)
 }
 
 function getSetValueError(name, value, is2004) {
@@ -106,6 +135,14 @@ function getSetValueError(name, value, is2004) {
 
   if (name === "cmi.learner_preference.audio_captioning") {
     if (!["-1", "0", "1"].includes(normalizedValue)) {
+      return "406"
+    }
+  }
+
+  if (name === "adl.nav.request") {
+    const isKeyword = ADL_NAV_REQUEST_KEYWORDS.has(normalizedValue)
+    const isTargeted = /^\{target=.*\}(choice|jump)$/.test(normalizedValue)
+    if (!isKeyword && !isTargeted) {
       return "406"
     }
   }
@@ -169,6 +206,12 @@ function setDynamicCount(values, name) {
     const count = Math.max(Number(values[countKey] || 0), Number(responseMatch[2]) + 1)
     values[countKey] = String(count)
   }
+
+  const commentMatch = name.match(/^cmi\.comments_from_learner\.(\d+)\./)
+  if (commentMatch) {
+    const count = Math.max(Number(values["cmi.comments_from_learner._count"] || 0), Number(commentMatch[1]) + 1)
+    values["cmi.comments_from_learner._count"] = String(count)
+  }
 }
 
 export function createScormRuntimeApi({
@@ -186,10 +229,21 @@ export function createScormRuntimeApi({
   commit,
   beacon,
   onCommitted,
+  onNavigate,
+  hasNextItem = false,
+  hasPreviousItem = false,
 }) {
   const values = { ...(initialValues || {}) }
   const is2004 = String(version) === "2004"
   const errors = is2004 ? ERROR_MESSAGES_2004 : ERROR_MESSAGES_12
+
+  if (is2004) {
+    if (!("adl.nav.request" in values)) {
+      values["adl.nav.request"] = "_none_"
+    }
+    values["adl.nav.request_valid.continue"] = hasNextItem ? "true" : "false"
+    values["adl.nav.request_valid.previous"] = hasPreviousItem ? "true" : "false"
+  }
   let initialized = false
   let terminated = false
   let dirty = false
@@ -345,7 +399,16 @@ export function createScormRuntimeApi({
 
     terminated = true
     clearError()
-    void queueCommit("terminate", true)
+
+    const pendingNavRequest = is2004 ? String(values["adl.nav.request"] || "_none_") : "_none_"
+    if (is2004) {
+      values["adl.nav.request"] = "_none_"
+    }
+
+    const commitPromise = queueCommit("terminate", true)
+    if (onNavigate && ACTIONABLE_NAV_REQUESTS.has(pendingNavRequest)) {
+      void commitPromise.then(() => onNavigate(pendingNavRequest))
+    }
 
     return "true"
   }
@@ -363,7 +426,7 @@ export function createScormRuntimeApi({
       setError(is2004 ? "123" : "301")
       return ""
     }
-    if (!isValidElementName(name)) {
+    if (!isValidElementName(name, is2004)) {
       setError("401")
       logScorm(`LMSGetValue ('${name}') Error '${getErrorString("401")}'`, 1)
       return ""
@@ -395,7 +458,7 @@ export function createScormRuntimeApi({
     if (terminated) {
       return setError(is2004 ? "133" : "301") ? "true" : "false"
     }
-    if (!isValidElementName(name)) {
+    if (!isValidElementName(name, is2004)) {
       return setError("401") ? "true" : "false"
     }
     if (isReadOnlyElement(name)) {

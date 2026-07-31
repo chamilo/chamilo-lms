@@ -2698,16 +2698,16 @@ class UserManager
         // the results afterwards in PHP takes about 1/1000th of the time
         // (0.1s + 0.0s) for the same set of data, so we do it this way...
         $dqlStudent = "SELECT $dqlSelect
-            FROM ChamiloCoreBundle:Session AS s
-            LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
-            INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
-            LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
+            FROM Chamilo\CoreBundle\Entity\Session AS s
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionRelCourseRelUser AS scu WITH scu.session = s
+            INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelSession AS url WITH url.session = s.id
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionCategory AS sc WITH s.category = sc
             WHERE scu.user = :user AND url.url = :url ";
         $dqlCoach = "SELECT $dqlSelect
-            FROM ChamiloCoreBundle:Session AS s
-            INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
-            LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-            INNER JOIN ChamiloCoreBundle:SessionRelUser AS su WITH su.session = s
+            FROM Chamilo\CoreBundle\Entity\Session AS s
+            INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelSession AS url WITH url.session = s.id
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionCategory AS sc WITH s.category = sc
+            INNER JOIN Chamilo\CoreBundle\Entity\SessionRelUser AS su WITH su.session = s
             WHERE (su.user = :user AND su.relationType = ".SessionEntity::GENERAL_COACH.") AND url.url = :url ";
 
         // Default order
@@ -4530,8 +4530,8 @@ class UserManager
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND (
             u.last_login IS NULL OR
-            u.last_login = '0000-00-00 00:00:00' OR
-            u.last_login = '0000-00-00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00 00:00:00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00' OR
             u.last_login <= '$lastConnectionDate'
         ) ";
         }
@@ -4746,7 +4746,7 @@ class UserManager
         $users = implode(', ', $usersId);
         Database::getManager()
             ->createQuery('
-                DELETE FROM ChamiloCoreBundle:UserRelUser uru
+                DELETE FROM Chamilo\CoreBundle\Entity\UserRelUser uru
                 WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type AND uru.userId IN (:users_ids)
             ')
             ->execute(['hrm_id' => $hrmId, 'relation_type' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);

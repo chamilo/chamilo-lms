@@ -23,13 +23,13 @@ use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 
 #[AsCommand(
-    name: 'chamilo:migration:migrate-ricky-completion-rules',
-    description: 'Persist Ricky Rescue legacy completion formulas as generic course completion rules.'
+    name: 'chamilo:migration:migrate-completion-rules',
+    description: 'Persist legacy completion formulas as generic course completion rules.'
 )]
-final class MigrateRickyCompletionRulesCommand extends Command
+final class MigrateCompletionRulesCommand extends Command
 {
-    private const string SOURCE = 'ricky_legacy_completion_rule';
-    private const string LEGACY_SOURCE_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
+    private const string SOURCE = 'legacy_course_completion_rule';
+    private const string SOURCE_DATA_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
     private const string AUDIT_REPORT_SHA256 = '7e9ae6aa2b26ee9a282c14314ef71e7df30f24eb24cbc044ab65a2e2d6ffa692';
 
     private const array RULES = [
@@ -1345,13 +1345,13 @@ final class MigrateRickyCompletionRulesCommand extends Command
                 'course-code',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Migrate only one configured Ricky course code.'
+                'Migrate only one configured course code.'
             )
             ->addOption(
                 'force',
                 null,
                 InputOption::VALUE_NONE,
-                'Replace an existing value only when it was created by this Ricky migration command.'
+                'Replace an existing value only when it was created from the same audited source data.'
             )
         ;
     }
@@ -1359,7 +1359,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Migrate Ricky completion rules');
+        $io->title('Migrate completion rules');
 
         $dryRun = (bool) $input->getOption('dry-run');
         $force = (bool) $input->getOption('force');
@@ -1443,17 +1443,19 @@ final class MigrateRickyCompletionRulesCommand extends Command
 
                 if (1 === \count($existingValues)) {
                     $existingRule = $this->decodeRule((string) $existingValues[0]['field_value']);
-                    if (null !== $existingRule && $existingRule == $rule) {
+                    $comparableExistingRule = $existingRule;
+                    if ($this->isManagedRule($comparableExistingRule)) {
+                        $comparableExistingRule['source'] = self::SOURCE;
+                    }
+
+                    if (null !== $comparableExistingRule && $comparableExistingRule == $rule) {
                         ++$summary['already_configured'];
                         $io->writeln(\sprintf('Already configured: %s', $courseCode));
 
                         continue;
                     }
 
-                    $existingSource = null === $existingRule
-                        ? ''
-                        : trim((string) ($existingRule['source'] ?? ''));
-                    if (!$force || self::SOURCE !== $existingSource) {
+                    if (!$force || !$this->isManagedRule($existingRule)) {
                         ++$summary['conflicting_existing'];
                         $io->warning(\sprintf(
                             'Course %s already has a different completion rule; use --force only for values created by this command.',
@@ -1530,8 +1532,8 @@ final class MigrateRickyCompletionRulesCommand extends Command
 
             $io->success(
                 $dryRun
-                ? 'Ricky completion rule dry-run completed without changing data.'
-                : 'Ricky completion rules were persisted as generic course configuration.'
+                ? 'Completion rule dry-run completed without changing data.'
+                : 'Completion rules were persisted as generic course configuration.'
             );
 
             return Command::SUCCESS;
@@ -1567,7 +1569,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
 
         $key = 'course:'.$requestedCourseCode;
         if (!isset(self::RULES[$key])) {
-            throw new RuntimeException(\sprintf('No Ricky legacy completion rule is configured for course %s.', $requestedCourseCode));
+            throw new RuntimeException(\sprintf('No legacy completion rule is configured for course %s.', $requestedCourseCode));
         }
 
         return [$key => self::RULES[$key]];
@@ -1692,12 +1694,34 @@ final class MigrateRickyCompletionRulesCommand extends Command
             'source' => self::SOURCE,
             'source_course_code' => $courseCode,
             'source_course_id' => (int) $legacyRule['course_id'],
-            'legacy_source_sha256' => self::LEGACY_SOURCE_SHA256,
+            'legacy_source_sha256' => self::SOURCE_DATA_SHA256,
             'audit_report_sha256' => self::AUDIT_REPORT_SHA256,
             'migration_complete' => 0 === $unresolvedExerciseCount,
             'unresolved_exercise_count' => $unresolvedExerciseCount,
             'components' => $components,
         ];
+    }
+
+    /**
+     * @param array<string, mixed>|null $rule
+     */
+    private function isManagedRule(?array $rule): bool
+    {
+        if (null === $rule) {
+            return false;
+        }
+
+        if (self::SOURCE === trim((string) ($rule['source'] ?? ''))) {
+            return true;
+        }
+
+        return hash_equals(
+            self::SOURCE_DATA_SHA256,
+            trim((string) ($rule['legacy_source_sha256'] ?? ''))
+        ) && hash_equals(
+            self::AUDIT_REPORT_SHA256,
+            trim((string) ($rule['audit_report_sha256'] ?? ''))
+        );
     }
 
     /**
@@ -1708,7 +1732,7 @@ final class MigrateRickyCompletionRulesCommand extends Command
         try {
             return json_encode($rule, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException('Could not encode a Ricky completion rule.', 0, $exception);
+            throw new RuntimeException('Could not encode a completion rule.', 0, $exception);
         }
     }
 

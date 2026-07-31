@@ -20,7 +20,7 @@ use Throwable;
 final class Version20201216120654 extends AbstractMigrationChamilo
 {
     private const int ORM_FLUSH_BATCH_SIZE = 100;
-    private const string CGLOSSARY_CID_INDEX = 'idx_ricky_migration_cglossary_c_id';
+    private const string CGLOSSARY_CID_INDEX = 'idx_legacy_migration_cglossary_c_id';
 
     public function getDescription(): string
     {

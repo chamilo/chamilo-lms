@@ -431,23 +431,65 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * Get URL where to go to if the user clicks on the link.
-     * First we go to exercise_jump.php and then to the result page.
-     * Check this php file for more info.
+     * Get the migrated exercise or learning path URL used by the gradebook.
+     * The legacy jump page remains available only as a compatibility fallback.
      */
     public function get_link()
     {
-        $sessionId = $this->get_session_id();
+        $sessionId = (int) $this->get_session_id();
+        $courseId = (int) $this->getCourseId();
         $data = $this->get_exercise_data();
-        $exerciseId = $data['iid'];
-        $path = isset($data['path']) ? $data['path'] : '';
+        $exerciseId = (int) ($data['iid'] ?? 0);
+        $path = (string) ($data['path'] ?? '');
+        $course = api_get_course_entity($courseId);
+        $courseNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+        if ($courseNodeId > 0 && $exerciseId > 0) {
+            $lpList = Exercise::getLpListFromExercise($exerciseId, $courseId);
+            if (1 === count($lpList)) {
+                $firstLp = reset($lpList);
+                $lpId = (int) ($firstLp['lp_id'] ?? 0);
+                $itemId = (int) ($firstLp['item_id'] ?? 0);
+
+                if ($lpId > 0) {
+                    $params = [
+                        'cid' => $courseId,
+                        'sid' => $sessionId,
+                        'gid' => (int) api_get_group_id(),
+                        'gradebook' => 1,
+                        'origin' => 'gradebook',
+                        'isStudentView' => 'true',
+                    ];
+                    if ($itemId > 0) {
+                        $params['item_id'] = $itemId;
+                    }
+
+                    return rtrim(api_get_path(WEB_PATH), '/').'/resources/lp/'
+                        .$courseNodeId.'/'.$lpId.'/runtime?'.http_build_query($params);
+                }
+            }
+
+            $vueUrl = ExerciseLib::buildVueOverviewUrl(
+                $exerciseId,
+                [
+                    'gradebook' => 'view',
+                    'origin' => 'gradebook',
+                ],
+                $courseId,
+                $sessionId,
+                (int) api_get_group_id()
+            );
+            if (null !== $vueUrl) {
+                return $vueUrl;
+            }
+        }
 
         return api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
             .http_build_query(
                 [
                     'path' => $path,
                     'sid' => $sessionId,
-                    'cid' => $this->getCourseId(),
+                    'cid' => $courseId,
                     'gradebook' => 'view',
                     'exerciseId' => $exerciseId,
                     'type' => $this->get_type(),

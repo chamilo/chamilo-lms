@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Jọwọ kọ ọrọ rẹ si isalẹ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìṣirò fọ́ọ̀mù : ṣe iṣiro Ìwọn Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́ orí</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Akọ tabi abo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tabi F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìwọn ara</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gíga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìwọn Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìwọn ara/Gíga<sup>2</sup> (Wo.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àpilẹkọ Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Kọ adirẹẹsi silẹ"
@@ -8546,6 +8546,9 @@ msgstr "Ile-iṣẹ́"
 
 msgid "Reporting"
 msgstr "Ìròyìn"
+
+msgid "Analytics"
+msgstr "Àwọn ìtúpalẹ̀"
 
 msgid "Update"
 msgstr "Ṣàtúnṣe"
@@ -35488,7 +35491,7 @@ msgid "%s results"
 msgstr "%s àbájáde"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìṣirò fọ́ọ̀mù : ṣe iṣiro Ìwọn Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́ orí</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Akọ tabi abo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tabi F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìwọn ara</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gíga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìwọn Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìwọn ara/Gíga<sup>2</sup> (Wo.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àpilẹkọ Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Ti yọkuro"
@@ -36487,22 +36490,22 @@ msgid "View threads"
 msgstr "Wo àwọn ìsọ̀rọ̀"
 
 msgid "No auth source"
-msgstr "No auth source"
+msgstr "Kò sí orísun ìdájọ́"
 
 msgid "You must add at least one question"
-msgstr "You must add at least one question"
+msgstr "O gbọdọ̀ fi ìbéèrè kan kọjá"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Àwọn ìgbésẹ̀ tó ti dé"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Ọ̀nà ohun èlò"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Lo àwọn àlàyé fáìlì"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Lo awọn alaye ero"
 
 msgid "Apply plan failed"
 msgstr "Ìtọ́lẹ̀ ètò kùnà"
@@ -37339,137 +37342,161 @@ msgid "required"
 msgstr "dandan"
 
 msgid "Incorrect password."
-msgstr ""
+msgstr "Ọrọigbaniwọle ti ko tọ."
 
 msgid "File integrity alerting paused for 1 hour."
-msgstr ""
+msgstr "Ifiranṣẹ iduroṣinṣin faili ti da duro fun wakati 1."
 
 msgid "New baseline established: %s files."
-msgstr ""
+msgstr "Ipele ipilẹ tuntun ti ṣeto: %s faili."
 
 msgid "Scan complete: changes were detected."
-msgstr ""
+msgstr "Ayẹwo pari: awọn iyipada ti ri."
 
 msgid "Scan complete: no changes were detected."
-msgstr ""
+msgstr "Ayẹwo pari: ko si iyipada ti ri."
 
 msgid "File integrity"
-msgstr ""
+msgstr "Iduroṣinṣin faili"
 
 msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
-msgstr ""
+msgstr "Iroyin yii ṣe afiwe awọn faili ti a fi sori ẹrọ (gbogbo nkan ayafi var/ ati .git/, botilẹjẹpe .git/config tun wa ni iṣọra lati mu ọna jijin ti a gba) pẹlu ipele ipilẹ ti o gbẹkẹle, lati ṣe awari awọn afikun, iyipada tabi piparẹ ti a ko nireti."
 
 msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
-msgstr ""
+msgstr "O le ṣe atunyẹwo iroyin tuntun ni isalẹ. Ṣiṣe ayẹwo, idaduro ifiranṣẹ, tabi ṣeto ipele ipilẹ tuntun nilo alabojuto agbaye."
 
 msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
-msgstr ""
+msgstr "Ifiranṣẹ ti da duro lọwọlọwọ fun itọju. Yoo tun bẹrẹ laifọwọyi ni %date%."
 
 msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
-msgstr ""
+msgstr "Ko si ayẹwo ti a ti ṣe tẹlẹ. Ṣe ọkan nibi, tabi lati laini aṣẹ pẹlu app:file-integrity:scan."
 
 msgid "Last scan"
-msgstr ""
+msgstr "Ayẹwo ti o kẹhin"
 
 msgid "Files scanned"
-msgstr ""
+msgstr "Awọn faili ti a ṣayẹwo"
 
 msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
-msgstr ""
+msgstr "Ko si ipele ipilẹ ti o wa tẹlẹ: ayẹwo yii ṣeto ọkan. Awọn iyipada yoo jẹ ijabọ lati ayẹwo ti o tẹle."
 
 msgid "No changes detected since the baseline."
-msgstr ""
+msgstr "Ko si iyipada ti a ri lati ipele ipilẹ."
 
 msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
-msgstr ""
+msgstr "Iṣeto ọna jijin Git (.git/config) ti yipada. Ṣayẹwo pe eyi ni a nireti."
 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
-msgstr ""
+msgstr "Ayẹwo naa duro ni kutukutu nitori pe subdirectory kan ko le ṣe kika (ṣayẹwo awọn igbanilaaye faili). Awọn abajade ni isalẹ le jẹ apakan."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Ọpọlọpọ awọn iyipada ju lati ṣe atokọ ni kikun; awọn titẹ sii akọkọ nikan ti ẹka kọọkan ni a fihan ni isalẹ. Wo iwe akọọlẹ CEF fun atokọ pipe."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
-msgstr ""
+msgstr "%count% faili ko le ṣe kika (awọn igbanilaaye) ati pe a fo wọn."
 
 msgid "Run a scan now"
-msgstr ""
+msgstr "Ṣe ayẹwo bayi"
 
 msgid "Pause alerting for 1 hour (for maintenance)"
-msgstr ""
+msgstr "Da ifiranṣẹ duro fun wakati 1 (fun itọju)"
 
 msgid "Pause for 1 hour"
-msgstr ""
+msgstr "Da duro fun wakati 1"
 
 msgid "Trust the current file tree as the new baseline"
-msgstr ""
+msgstr "Gbẹkẹle igi faili lọwọlọwọ bi ipele ipilẹ tuntun"
 
 msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
-msgstr ""
+msgstr "Eyi yoo gbẹkẹle gbogbo faili lọwọlọwọ bi o tọ, pẹlu eyikeyi iyipada ti a ko ṣe atunyẹwo. Tẹsiwaju?"
 
 msgid "Establish new baseline"
-msgstr ""
+msgstr "Ṣeto ipele ipilẹ tuntun"
 
 msgid "Schedule the scan from a system crontab, for example"
-msgstr ""
+msgstr "Ṣeto ayẹwo lati crontab eto kan, fun apẹẹrẹ"
 
 msgid "File integrity alert on %platform%"
-msgstr ""
+msgstr "Ifiranṣẹ iduroṣinṣin faili lori %platform%"
 
 msgid "A file integrity scan detected changes on the platform:"
-msgstr ""
+msgstr "Ayẹwo iduroṣinṣin faili ri awọn iyipada lori pẹpẹ naa:"
 
 msgid "Added files"
-msgstr ""
+msgstr "Awọn faili ti a fi kun"
 
 msgid "Modified files"
-msgstr ""
+msgstr "Awọn faili ti a ṣe atunṣe"
 
 msgid "Deleted files"
-msgstr ""
+msgstr "Awọn faili ti a paarẹ"
 
 msgid "Review the full report from Administration > Security > File integrity."
-msgstr ""
+msgstr "Ṣe atunyẹwo iroyin pipe lati Isakoso > Aabo > Iduroṣinṣin faili."
 
 msgid "Password to confirm pausing alerts"
-msgstr ""
+msgstr "Ọrọigbaniwọle lati jẹrisi idaduro awọn ifiranṣẹ"
 
 msgid "Password to confirm the new baseline"
-msgstr ""
+msgstr "Ọrọigbaniwọle lati jẹrisi ipele ipilẹ tuntun"
 
 msgid "A scan is already running. Please wait for it to finish before starting another one."
-msgstr ""
+msgstr "Ayẹwo kan ti n ṣiṣẹ tẹlẹ. Jọwọ duro fun lati pari ṣaaju ki o to bẹrẹ ọkan miiran."
 
 msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
-msgstr ""
+msgstr "Ayẹwo kan n ṣiṣẹ lọwọlọwọ (ti bẹrẹ ni %date%). Ayẹwo pipe le gba iṣẹju pupọ; oju-iwe yii le tun gbejade lailewu lati ṣayẹwo ilọsiwaju."
 
 msgid "Currently processing"
-msgstr ""
+msgstr "Ṣiṣe lọwọlọwọ"
 
 msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
-msgstr ""
+msgstr "Ayẹwo iṣaaju (ti bẹrẹ ni %date%) ti da duro ṣaaju ki o to pari — ilana naa ko ṣiṣẹ mọ. O le bẹrẹ tuntun lailewu."
 
 msgid "files"
-msgstr ""
+msgstr "awọn faili"
 
 msgid "Permissions changed"
-msgstr ""
+msgstr "Awọn igbanilaaye ti yipada"
 
 msgid "Files with changed permissions"
-msgstr ""
+msgstr "Awọn faili pẹlu awọn igbanilaaye ti o yipada"
 
 msgid "Alert history"
-msgstr ""
+msgstr "Itan ifiranṣẹ"
 
 msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
-msgstr ""
+msgstr "Gbogbo ayẹwo ti o ri nkan kan, ti a tọju paapaa lẹhin ti a ti yanju iyipada tabi ti ṣeto ipele ipilẹ tuntun — ko dabi iroyin ti o wa loke, ayẹwo mimọ tabi atunṣeto ko le paarẹ eyi."
 
 msgid "This entry was truncated at capture time; see the CEF log for the complete list."
-msgstr ""
+msgstr "Iṣẹlẹ yii ti ge ni akoko gbigba; wo iwe akọọlẹ CEF fun atokọ pipe."
 
 msgid "No alert has been recorded yet."
-msgstr ""
+msgstr "Ko si ifiranṣẹ ti a ti gbasilẹ tẹlẹ."
 
 msgid "Git remote changed"
-msgstr ""
+msgstr "Ọna jijin Git ti yipada"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr ""
+msgid "Press enter to select"
+msgstr "Tẹ enter lati yan"
+
+msgid "Press enter to remove"
+msgstr "Tẹ enter lati yọkuro"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Kò rí ohunkóhun. Ronú láti yí ìbéèrè àwárí padà."
+
+msgid "List is empty."
+msgstr "Àkójọ jẹ́ òfìfo."
+
+msgid "Your session has expired. Please try again."
+msgstr "Ìsinsìnyí rẹ ti pari. Jọ̀ọ́ gbiyanju lẹẹkansi."
+
+msgid "Generate with AI"
+msgstr "Ṣẹda pẹlu AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Àwòrán ìgbàlódé, tí ó ń rọ̀rùn tí ó ń ṣàfihàn àkórí ẹ̀kọ́ yìí, ní ara ìmúrasílẹ̀ pẹlẹbẹ, ní lílo àwọn àwọ̀ pẹpẹ mi gẹ́gẹ́ bí àfikún."
+
+msgid "Back to account"
+msgstr "Padà sí àkọọ́lẹ̀"
 

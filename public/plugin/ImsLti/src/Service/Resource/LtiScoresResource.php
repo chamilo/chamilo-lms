@@ -141,7 +141,7 @@ class LtiScoresResource extends LtiAdvantageServiceResource
         $evaluation = $this->lineItem->getEvaluation();
 
         $result = Database::getManager()
-            ->getRepository('ChamiloCoreBundle:GradebookResult')
+            ->getRepository('Chamilo\CoreBundle\Entity\GradebookResult')
             ->findOneBy(
                 [
                     'userId' => $data['userId'],

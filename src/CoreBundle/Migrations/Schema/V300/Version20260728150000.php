@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V200;
+namespace Chamilo\CoreBundle\Migrations\Schema\V300;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;

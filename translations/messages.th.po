@@ -8552,6 +8552,9 @@ msgstr "บริษัท"
 msgid "Reporting"
 msgstr "รายงาน"
 
+msgid "Analytics"
+msgstr "การวิเคราะห์"
+
 msgid "Update"
 msgstr "อัปเดต"
 
@@ -16779,7 +16782,7 @@ msgid "Fill with demo content"
 msgstr "กรอกด้วยเนื้อหาตัวอย่าง"
 
 msgid "Single Sign On"
-msgstr "Single Sign On"
+msgstr "การลงชื่อเข้าใช้ครั้งเดียว"
 
 msgid "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup."
 msgstr "การเปิดใช้งาน Single Sign On ช่วยให้คุณเชื่อมต่อแพลตฟอร์มนี้เป็น slave ของ authentication master เช่น เว็บไซต์ Drupal ที่มีปลั๊กอิน Drupal-Chamilo หรือการตั้งค่า master อื่นๆ ที่คล้ายกัน"
@@ -37392,6 +37395,9 @@ msgstr "การกำหนดค่ารีโมท Git (.git/config) ม�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "การสแกนหยุดก่อนกำหนดเนื่องจากไม่สามารถอ่านไดเรกทอรีย่อยได้ (ตรวจสอบสิทธิ์ไฟล์) ผลลัพธ์ด้านล่างอาจไม่สมบูรณ์"
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "มีการเปลี่ยนแปลงมากเกินไปที่จะแสดงทั้งหมด; แสดงเฉพาะรายการแรกของแต่ละหมวดด้านล่าง ดูบันทึก CEF สำหรับรายการทั้งหมด"
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ไฟล์ไม่สามารถอ่านได้ (สิทธิ์) และถูกข้าม"
 
@@ -37476,6 +37482,27 @@ msgstr "ยังไม่มีบันทึกการแจ้งเตื
 msgid "Git remote changed"
 msgstr "รีโมท Git เปลี่ยนแปลง"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgid "Press enter to select"
+msgstr "กด Enter เพื่อเลือก"
+
+msgid "Press enter to remove"
+msgstr "กด Enter เพื่อลบ"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "ไม่พบองค์ประกอบ ลองเปลี่ยนคำค้นหา"
+
+msgid "List is empty."
+msgstr "รายการว่างเปล่า"
+
+msgid "Your session has expired. Please try again."
+msgstr "เซสชันของคุณหมดอายุแล้ว โปรดลองอีกครั้ง"
+
+msgid "Generate with AI"
+msgstr "สร้างด้วย AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "ภาพประกอบสมัยใหม่ที่เป็นมิตร แสดงหัวข้อของหลักสูตรนี้ ในสไตล์ flat-design ที่สะอาดตา โดยใช้สีของแพลตฟอร์มเป็นสีเน้น"
+
+msgid "Back to account"
+msgstr "กลับไปยังบัญชี"
 

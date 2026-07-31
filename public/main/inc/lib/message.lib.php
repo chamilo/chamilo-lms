@@ -1492,7 +1492,7 @@ class MessageManager
         $layoutContent = '';
         $emailbody = '';
         $mailTemplateManager = new MailTemplateManager();
-        $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
+        $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.html.twig');
         if (!empty($templateText)) {
             // Stored mail templates are admin-edited and therefore untrusted: render
             // them through a sandboxed Twig environment instead of compiling the raw

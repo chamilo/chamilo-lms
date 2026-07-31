@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -45,6 +46,7 @@ class PlatformConfigurationController extends AbstractController
     public function list(
         SettingsManager $settingsManager,
         AuthenticationConfigHelper $authenticationConfigHelper,
+        McpAccessPolicy $mcpAccessPolicy,
         UrlGeneratorInterface $urlGenerator,
     ): Response {
         $requestSession = $this->getRequest()->getSession();
@@ -228,6 +230,12 @@ class PlatformConfigurationController extends AbstractController
             }
 
             $user = $this->userHelper->getCurrent();
+
+            $configuration['settings']['security.oauth_server_enabled'] = $settingsManager->getSetting(
+                'security.oauth_server_enabled',
+                true,
+            );
+            $configuration['settings']['security.mcp_access_allowed'] = $mcpAccessPolicy->canUse($user);
 
             $configuration['settings']['ticket.show_link_ticket_notification'] = $settingsManager->getSetting(
                 'ticket.show_link_ticket_notification'

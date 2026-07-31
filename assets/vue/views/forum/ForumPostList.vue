@@ -122,6 +122,13 @@
     </div>
 
     <div
+      v-else-if="loadError"
+      class="rounded-xl border border-danger bg-white p-6 text-center text-sm text-danger"
+    >
+      {{ t("Could not retrieve posts") }}
+    </div>
+
+    <div
       v-else-if="!posts.length"
       class="rounded-xl border border-gray-20 bg-white p-6 text-center text-sm text-gray-600"
     >
@@ -364,6 +371,31 @@
           </div>
         </div>
       </article>
+
+      <div class="flex items-center justify-center text-xs text-gray-500">
+        {{ posts.length }} / {{ totalItems }}
+      </div>
+
+      <div
+        v-if="hasMorePosts"
+        ref="loadMoreSentinel"
+        class="flex min-h-10 items-center justify-center"
+      >
+        <span
+          v-if="isLoadingMore"
+          class="text-sm text-gray-500"
+        >
+          {{ t("Loading") }}
+        </span>
+        <BaseButton
+          v-else-if="!supportsIntersectionObserver"
+          :label="t('Load more')"
+          icon="plus"
+          size="small"
+          type="plain"
+          @click="loadNextPage"
+        />
+      </div>
     </div>
 
     <BaseDialog
@@ -437,7 +469,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -463,12 +495,21 @@ const securityStore = useSecurityStore()
 const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(false)
+const isLoadingMore = ref(false)
+const loadError = ref(false)
 const isSavingEdit = ref(false)
 const isSavingMove = ref(false)
 const isLoadingMoveOptions = ref(false)
 const forum = ref(null)
 const thread = ref(null)
 const posts = ref([])
+const currentPage = ref(1)
+const totalItems = ref(0)
+const totalPages = ref(0)
+const itemsPerPage = 25
+const loadMoreSentinel = ref(null)
+const supportsIntersectionObserver = typeof window !== "undefined" && "IntersectionObserver" in window
+let postObserver = null
 const csrfToken = ref("")
 const editDialogVisible = ref(false)
 const moveDialogVisible = ref(false)
@@ -507,6 +548,9 @@ const viewTypeOptions = computed(() => [
   { label: t("Nested"), value: "nested" },
 ])
 const displayedPosts = computed(() => buildDisplayedPosts(posts.value, viewType.value))
+const hasMorePosts = computed(
+  () => currentPage.value < totalPages.value && posts.value.length < totalItems.value,
+)
 
 function sanitizePostText(value) {
   return sanitizeHtml(value || "")
@@ -885,27 +929,118 @@ async function ensureToken() {
   csrfToken.value = tokenResponse.token || ""
 }
 
+function disconnectPostObserver() {
+  if (postObserver) {
+    postObserver.disconnect()
+    postObserver = null
+  }
+}
+
+async function observeLoadMoreSentinel() {
+  disconnectPostObserver()
+
+  if (!supportsIntersectionObserver || !hasMorePosts.value) {
+    return
+  }
+
+  await nextTick()
+
+  if (!loadMoreSentinel.value) {
+    return
+  }
+
+  postObserver = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        void loadNextPage()
+      }
+    },
+    { rootMargin: "400px 0px" },
+  )
+  postObserver.observe(loadMoreSentinel.value)
+}
+
+function updatePagination(data, requestedPage) {
+  currentPage.value = Number(data.page || requestedPage || 1)
+  totalItems.value = Number(data.totalItems || 0)
+  totalPages.value = Number(data.totalPages || 0)
+}
+
+function mergePosts(currentPosts, newPosts) {
+  const byId = new Map(currentPosts.map((post) => [Number(post.iid), post]))
+
+  newPosts.forEach((post) => {
+    byId.set(Number(post.iid), post)
+  })
+
+  return Array.from(byId.values())
+}
+
 async function loadPosts() {
+  disconnectPostObserver()
   isLoading.value = true
+  loadError.value = false
+  currentPage.value = 1
+  totalItems.value = 0
+  totalPages.value = 0
 
   try {
     const [data, tokenResponse] = await Promise.all([
-      forumService.getThreadPosts(threadId.value, forumId.value, baseQuery.value),
+      forumService.getThreadPosts(threadId.value, forumId.value, {
+        ...baseQuery.value,
+        page: 1,
+        itemsPerPage,
+      }),
       forumService.getActionToken(),
     ])
 
     forum.value = data.forum
     thread.value = { ...(data.thread || {}), canReply: Boolean(data.canReply) }
     posts.value = data.posts || []
+    updatePagination(data, 1)
     if (!route.query.view && forum.value?.defaultView) {
       viewType.value = ["flat", "threaded", "nested"].includes(forum.value.defaultView) ? forum.value.defaultView : "flat"
     }
     csrfToken.value = tokenResponse.token || ""
   } catch (error) {
+    loadError.value = true
     console.error("Error fetching forum posts:", error)
     notifications.showErrorNotification(t("Could not retrieve posts"))
   } finally {
     isLoading.value = false
+    await observeLoadMoreSentinel()
+  }
+}
+
+async function loadNextPage() {
+  if (isLoading.value || isLoadingMore.value || !hasMorePosts.value) {
+    return
+  }
+
+  const nextPage = currentPage.value + 1
+  isLoadingMore.value = true
+  disconnectPostObserver()
+
+  try {
+    const data = await forumService.getThreadPosts(threadId.value, forumId.value, {
+      ...baseQuery.value,
+      page: nextPage,
+      itemsPerPage,
+    })
+
+    forum.value = data.forum || forum.value
+    thread.value = {
+      ...(data.thread || thread.value || {}),
+      canReply: Boolean(data.canReply ?? thread.value?.canReply),
+    }
+    posts.value = mergePosts(posts.value, data.posts || [])
+    updatePagination(data, nextPage)
+  } catch (error) {
+    console.error("Error fetching more forum posts:", error)
+    notifications.showErrorNotification(t("Could not retrieve posts"))
+  } finally {
+    isLoadingMore.value = false
+    await observeLoadMoreSentinel()
   }
 }
 
@@ -1224,4 +1359,5 @@ async function deleteAttachment(attachment) {
 }
 
 onMounted(loadPosts)
+onBeforeUnmount(disconnectPostObserver)
 </script>

@@ -727,7 +727,7 @@ class GroupManager
 
         $em
             ->createQuery(
-                'DELETE FROM ChamiloCourseBundle:CForum f WHERE f.forumOfGroup = :group'
+                'DELETE FROM Chamilo\CourseBundle\Entity\CForum f WHERE f.forumOfGroup = :group'
             )
             ->execute(['group' => $groupIid]);
 
@@ -1564,10 +1564,10 @@ class GroupManager
         $em = Database::getManager();
         $subscriptions = $em
             ->createQuery("
-                SELECT u.id FROM ChamiloCoreBundle:User u
-                INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
+                SELECT u.id FROM Chamilo\CoreBundle\Entity\User u
+                INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gu
                 WITH u.id = gu.user
-                INNER JOIN ChamiloCourseBundle:CGroup g
+                INNER JOIN Chamilo\CourseBundle\Entity\CGroup g
                 WITH gu.group = g.iid
                 WHERE g.iid = :group
                     $activeCondition
@@ -1596,10 +1596,10 @@ class GroupManager
 
         return $em
             ->createQuery("
-                SELECT COUNT(u.id) FROM ChamiloCoreBundle:User u
-                INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
+                SELECT COUNT(u.id) FROM Chamilo\CoreBundle\Entity\User u
+                INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gu
                 WITH u.id = gu.user
-                INNER JOIN ChamiloCourseBundle:CGroup g
+                INNER JOIN Chamilo\CourseBundle\Entity\CGroup g
                 WITH gu.group = g.iid
                 WHERE g.iid = :group
                     $activeCondition

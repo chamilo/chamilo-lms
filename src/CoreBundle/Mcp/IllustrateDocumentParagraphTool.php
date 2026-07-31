@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Mcp;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
+use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
 use Chamilo\CoreBundle\Service\Document\DocumentParagraphMediaEmbedder;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -30,6 +31,7 @@ final readonly class IllustrateDocumentParagraphTool
         private CourseRelUserRepository $courseRelUserRepository,
         private CDocumentRepository $documentRepository,
         private DocumentParagraphMediaEmbedder $mediaEmbedder,
+        private CourseDocumentContentService $documentContentService,
     ) {}
 
     /**
@@ -55,12 +57,14 @@ final readonly class IllustrateDocumentParagraphTool
      */
     #[McpTool(
         name: 'illustrate_document_paragraph',
-        description: 'Insert an existing image or video from the same course Documents tool before or after a selected paragraph in an editable HTML document.',
+        description: 'Illustrate a specific section or paragraph of an editable HTML document by inserting an existing image or video from the same course Documents tool. Identify both the target document and media by ID or exact title. Use paragraphNumber or a distinctive paragraphText excerpt, and choose before or after placement.',
     )]
     public function illustrateDocumentParagraph(
         int $courseId,
-        int $documentId,
-        int $mediaDocumentId,
+        ?int $documentId = null,
+        ?int $mediaDocumentId = null,
+        ?string $documentTitle = null,
+        ?string $mediaTitle = null,
         ?int $paragraphNumber = null,
         ?string $paragraphText = null,
         ?string $altText = null,
@@ -72,6 +76,8 @@ final readonly class IllustrateDocumentParagraphTool
                 $courseId,
                 $documentId,
                 $mediaDocumentId,
+                $documentTitle,
+                $mediaTitle,
                 $paragraphNumber,
                 $paragraphText,
                 $altText,
@@ -110,8 +116,10 @@ final readonly class IllustrateDocumentParagraphTool
      */
     private function doIllustrateDocumentParagraph(
         int $courseId,
-        int $documentId,
-        int $mediaDocumentId,
+        ?int $documentId,
+        ?int $mediaDocumentId,
+        ?string $documentTitle,
+        ?string $mediaTitle,
         ?int $paragraphNumber,
         ?string $paragraphText,
         ?string $altText,
@@ -120,18 +128,6 @@ final readonly class IllustrateDocumentParagraphTool
     ): array {
         if ($courseId <= 0) {
             throw new InvalidArgumentException('The course ID must be a positive integer.');
-        }
-
-        if ($documentId <= 0) {
-            throw new InvalidArgumentException('The target document ID must be a positive integer.');
-        }
-
-        if ($mediaDocumentId <= 0) {
-            throw new InvalidArgumentException('The media document ID must be a positive integer.');
-        }
-
-        if ($documentId === $mediaDocumentId) {
-            throw new InvalidArgumentException('The target document and media document must be different.');
         }
 
         $placement = strtolower(trim($placement));
@@ -159,26 +155,20 @@ final readonly class IllustrateDocumentParagraphTool
             throw new AccessDeniedException('The course was not found or is not managed by the authenticated teacher.');
         }
 
-        $document = $this->documentRepository->find($documentId);
-        if (!$document instanceof CDocument) {
-            throw new InvalidArgumentException('The target document was not found.');
-        }
-
-        $mediaDocument = $this->documentRepository->find($mediaDocumentId);
-        if (!$mediaDocument instanceof CDocument) {
-            throw new InvalidArgumentException('The media document was not found.');
-        }
-
-        $this->assertDocumentBelongsToCourse(
-            $document,
-            $courseId,
-            'target document',
+        $document = $this->documentContentService->resolveDocument(
+            $course,
+            $documentId,
+            $documentTitle,
         );
-        $this->assertDocumentBelongsToCourse(
-            $mediaDocument,
-            $courseId,
-            'media document',
+        $mediaDocument = $this->documentContentService->resolveDocument(
+            $course,
+            $mediaDocumentId,
+            $mediaTitle,
         );
+
+        if ((int) $document->getIid() === (int) $mediaDocument->getIid()) {
+            throw new InvalidArgumentException('The target document and media document must be different.');
+        }
         $this->assertEditableHtmlDocument($document);
         $mediaType = $this->assertImageOrVideoDocument($mediaDocument);
 
@@ -217,30 +207,6 @@ final readonly class IllustrateDocumentParagraphTool
             ],
             'placement' => $placement,
         ];
-    }
-
-    private function assertDocumentBelongsToCourse(
-        CDocument $document,
-        int $courseId,
-        string $label,
-    ): void {
-        $resourceNode = $document->getResourceNode();
-        if (null === $resourceNode) {
-            throw new AccessDeniedException(ucfirst($label).' has no resource node.');
-        }
-
-        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
-            $linkedCourse = $resourceLink->getCourse();
-
-            if (
-                null !== $linkedCourse
-                && (int) $linkedCourse->getId() === $courseId
-            ) {
-                return;
-            }
-        }
-
-        throw new AccessDeniedException(ucfirst($label).' does not belong to the selected course.');
     }
 
     private function assertEditableHtmlDocument(

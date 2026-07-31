@@ -8611,6 +8611,9 @@ msgstr "Organisation / Firma"
 msgid "Reporting"
 msgstr "Auswertung"
 
+msgid "Analytics"
+msgstr "Analytics"
+
 msgid "Update"
 msgstr "Aktualisierung"
 
@@ -39057,3 +39060,13 @@ msgstr "Liste ist leer."
 
 msgid "Your session has expired. Please try again."
 msgstr "Ihre Sitzung ist abgelaufen. Bitte versuchen Sie es erneut."
+
+msgid "Generate with AI"
+msgstr "Mit KI generieren"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Eine moderne, einladende Illustration, die das Thema dieses Kurses in einem sauberen Flat-Design-Stil darstellt und die Farben meiner Plattform als Akzente verwendet."
+
+msgid "Back to account"
+msgstr "Zurück zum Konto"
+

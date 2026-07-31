@@ -30,7 +30,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
     public function isTransactional(): bool
     {
         // Every replacement is idempotent. Committing statement by statement makes
-        // this migration safely resumable on large Ricky tables.
+        // this migration safely resumable on large legacy tables.
         return false;
     }
 

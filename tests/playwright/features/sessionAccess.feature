@@ -160,30 +160,32 @@ Feature: Session access
     And I wait for the page to be loaded
     Then the URL should be the site root
 
-  # SELF-CORRECTION (4th round): a previous edit reverted this scenario's
-  # assertion to "Session not found", reasoning that an unresolvable session
-  # id hits CidReqListener's NotFoundHttpException branch rather than
-  # AccessDeniedHttpException — confirmed true LOCALLY, but that local
-  # result depended on ywarnier already having base course-level access to
-  # TEMPPRIVATE from this shared dev box's own accumulated state. A REAL
-  # fresh-install CI run disproved it: there, ywarnier has no course-level
-  # access to TEMPPRIVATE at all via this direct numeric-id URL (unlike the
-  # "connects to SessionX" scenarios, which go through
-  # main/course_home/redirect.php's own CODE+name resolution/subscription
-  # logic, not this raw cid/sid path), so CourseVoter::VIEW itself denies
-  # first — same AccessDeniedHttpException -> durable "You're not allowed
-  # in this course" alert (confirmed via the CI trace's accessibility
-  # snapshot: an `alert` with a dismiss "Close" button, i.e. NOT the
-  # App.vue toast the two scenarios above deal with — this one doesn't
-  # auto-hide, so a plain visibility assertion is fine here). This matches
-  # what a round-2 CI run had already independently confirmed before this
-  # regression was introduced — reverting back to it for good.
+  # FINAL (5th round) — this scenario's assertion flip-flopped repeatedly
+  # before settling; recording the full history so it doesn't happen again.
+  # Round 3: "not allowed" (a transient toast) failed on real CI, "fixed" to
+  # "the URL should be the site root" for this whole family of scenarios.
+  # Round 4: reverted THIS scenario specifically back to a text assertion
+  # ("Session not found"), reasoning that an unresolvable session id hits
+  # CidReqListener's NotFoundHttpException branch, not AccessDeniedHttpException
+  # — verified true LOCALLY against playwright.chamilo.net at the time, but
+  # that local instance had already accumulated stale course access for
+  # ywarnier on TEMPPRIVATE from many earlier repeated test runs, which a
+  # genuinely fresh install never has. A real fresh-CI run disproved it
+  # cleanly: ywarnier has NO course-level access to TEMPPRIVATE via this
+  # direct numeric cid/sid URL (unlike the "connects to SessionX" scenarios,
+  # which go through main/course_home/redirect.php's own CODE+name
+  # resolution/subscription logic, not this raw path) — CourseVoter::VIEW
+  # denies FIRST, before the invalid session id is ever even looked up, so
+  # this hits the exact same AccessDeniedHttpException -> flash -> redirect
+  # to "/" -> unreliable toast mechanism as its two siblings above (confirmed
+  # via the CI trace's Location header: 302 to "/"), not the durable inline
+  # alert. Same fix as those two: assert the durable URL, not toast text.
   Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"
     And I am on "/course/2/home?sid=2000&gid=0"
     And wait for the page to be loaded when ready
-    Then I should see "not allowed"
+    Then the URL should be the site root
 
   Scenario: mmosquera connect to Session 1
     Given I am not logged

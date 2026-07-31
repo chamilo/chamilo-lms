@@ -19,6 +19,28 @@
           }}
         </p>
 
+        <div class="rounded-xl border border-gray-25 bg-gray-10 p-4 text-sm space-y-2">
+          <p>
+            {{ t("You can also connect an MCP client directly by pointing it to the following endpoint:") }}
+          </p>
+          <div class="flex flex-col gap-2 md:flex-row">
+            <input
+              name="mcp_endpoint"
+              class="min-w-0 flex-1 rounded-lg border border-gray-25 bg-white px-3 py-2 font-mono text-sm"
+              :value="mcpEndpoint"
+              readonly
+              type="text"
+              @focus="$event.target.select()"
+            />
+            <BaseButton
+              :label="t('Copy')"
+              icon="copy"
+              type="primary"
+              @click="copyMcpEndpoint"
+            />
+          </div>
+        </div>
+
         <div
           v-if="isLoading"
           class="text-sm text-gray-50"
@@ -86,6 +108,7 @@ const { abbreviatedDatetime } = useFormatDate()
 const isLoading = ref(true)
 const isRevoking = ref(null)
 const apps = ref([])
+const mcpEndpoint = `${window.location.origin}/mcp`
 
 async function loadApps() {
   isLoading.value = true
@@ -120,6 +143,16 @@ async function revokeApp(app) {
     notifications.showErrorNotification(error)
   } finally {
     isRevoking.value = null
+  }
+}
+
+async function copyMcpEndpoint() {
+  try {
+    await navigator.clipboard.writeText(mcpEndpoint)
+    notifications.showSuccessNotification(t("Copied to clipboard"))
+  } catch (error) {
+    console.error("Error copying MCP endpoint", error)
+    notifications.showErrorNotification(t("Could not copy the MCP endpoint"))
   }
 }
 

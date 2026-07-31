@@ -326,6 +326,19 @@ class Certificate extends Model
                     }
                 }
             }
+        } elseif (!empty($categoryId)) {
+            // This certificate is tied to a course/session category, so it was
+            // already certified in the past. The live gradebook score can drop
+            // below the certification threshold afterwards (deleted exercise,
+            // changed minimum score, category load failure, etc.), making
+            // is_certificate_available() return false on a later view. Never
+            // fall back to the general/custom certificate in that case: keep
+            // serving the certificate that was already issued for this course.
+            if (!empty($this->certificate_data['path_certificate'])) {
+                return true;
+            }
+
+            return false;
         } else {
             $this->check_certificate_path();
 

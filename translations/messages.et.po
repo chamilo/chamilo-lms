@@ -37505,3 +37505,45 @@ msgstr "Kaasaegne, tervitatav illustratsioon, mis esindab selle kursuse teemat p
 msgid "Back to account"
 msgstr "Tagasi kontole"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Teie tagasiside aitab meil tulevasi koolitusi parendada."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Täname tagasiside jagamise eest."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Kui rahul olete koolituse üldise kvaliteediga?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Kui rahul olete sisu asjakohasusega?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Kui rahul olete selgituste selgusega?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Kui rahul olete koolituse korralduse ja tempoga?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Kui rahul olete õpitu praktilise kasulikkusega?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Kas soovitaksite seda koolitust teistele?"
+
+msgid "What should we improve in future editions?"
+msgstr "Mida peaksime tulevastes väljaannetes parendama?"
+
+msgid "Very satisfied"
+msgstr "Väga rahul"
+
+msgid "Satisfied"
+msgstr "Rahul"
+
+msgid "Neutral"
+msgstr "Neutraalne"
+
+msgid "Dissatisfied"
+msgstr "Rahulolematu"
+
+msgid "Very dissatisfied"
+msgstr "Väga rahulolematu"
+

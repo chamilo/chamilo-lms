@@ -37504,3 +37504,45 @@ msgstr "Модерна, добредојдена илустрација што �
 msgid "Back to account"
 msgstr "Назад кон сметка"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Вашата повратна информација ќе ни помогне да ги подобриме идните обуки."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Ви благодариме што ја споделивте вашата повратна информација."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Колку сте задоволни со општиот квалитет на обуката?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Колку сте задоволни со релевантноста на содржината?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Колку сте задоволни со јасноста на објаснувањата?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Колку сте задоволни со организацијата и темпото на обуката?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Колку сте задоволни со практичната корисност на она што го научивте?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Дали би ја препорачале оваа обука на други луѓе?"
+
+msgid "What should we improve in future editions?"
+msgstr "Што треба да подобриме во идните изданија?"
+
+msgid "Very satisfied"
+msgstr "Многу задоволен"
+
+msgid "Satisfied"
+msgstr "Задоволен"
+
+msgid "Neutral"
+msgstr "Неутрален"
+
+msgid "Dissatisfied"
+msgstr "Незадоволен"
+
+msgid "Very dissatisfied"
+msgstr "Многу незадоволен"
+

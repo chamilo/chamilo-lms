@@ -37504,3 +37504,45 @@ msgstr "Léaráid nua-aimseartha, fáilteach a léiríonn ábhar an chúrsa seo,
 msgid "Back to account"
 msgstr "Ar ais chuig an gcuntas"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Cabhróidh do fhaisnéis linn seisiúin oiliúna amach anseo a fheabhsú."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Go raibh maith agat as do fhaisnéis a roinnt."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Cén leibhéal sástachta atá agat le cáilíocht iomlán na hoiliúna?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Cén leibhéal sástachta atá agat le hábharthacht an ábhair?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Cén leibhéal sástachta atá agat le soiléire na mínithe?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Cén leibhéal sástachta atá agat le heagrú agus luas na hoiliúna?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Cén leibhéal sástachta atá agat le húsáid phraiticiúil an méid a d'fhoghlaim tú?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "An molfá an oiliúint seo do dhaoine eile?"
+
+msgid "What should we improve in future editions?"
+msgstr "Céard ba chóir dúinn a fheabhsú in eagráin amach anseo?"
+
+msgid "Very satisfied"
+msgstr "An-sásta"
+
+msgid "Satisfied"
+msgstr "Sásta"
+
+msgid "Neutral"
+msgstr "Neodrach"
+
+msgid "Dissatisfied"
+msgstr "Neamhshásta"
+
+msgid "Very dissatisfied"
+msgstr "An-neamhshásta"
+

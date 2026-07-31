@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukázkový vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorek vzorce: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -26617,7 +26617,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurace připojení LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Pole definující hostitele a port pro LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Nastavit datum expirace při prvním přihlášení"
@@ -37499,4 +37499,46 @@ msgstr "Moderní a přívětivá ilustrace představující téma tohoto kurzu v
 
 msgid "Back to account"
 msgstr "Zpět na účet"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Vaše zpětná vazba nám pomůže zlepšit budoucí školení."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Děkujeme za sdílení vaší zpětné vazby."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Jak jste spokojeni s celkovou kvalitou školení?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Jak jste spokojeni s relevantností obsahu?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Jak jste spokojeni s jasností vysvětlení?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Jak jste spokojeni s organizací a tempem školení?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Jak jste spokojeni s praktickou užitečností toho, co jste se naučili?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Doporučili byste toto školení ostatním?"
+
+msgid "What should we improve in future editions?"
+msgstr "Co bychom měli v budoucích vydáních zlepšit?"
+
+msgid "Very satisfied"
+msgstr "Velmi spokojen(a)"
+
+msgid "Satisfied"
+msgstr "Spokojen(a)"
+
+msgid "Neutral"
+msgstr "Neutrální"
+
+msgid "Dissatisfied"
+msgstr "Nespokojen(a)"
+
+msgid "Very dissatisfied"
+msgstr "Velmi nespokojen(a)"
 

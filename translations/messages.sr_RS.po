@@ -37507,3 +37507,45 @@ msgstr "Moderna, prijateljska ilustracija koja predstavlja temu ovog kursa, u č
 msgid "Back to account"
 msgstr "Nazad na nalog"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Your feedback will help us improve future training sessions."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Hvala što ste podelili svoje mišljenje."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Koliko ste zadovoljni ukupnim kvalitetom obuke?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Koliko ste zadovoljni relevantnošću sadržaja?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Koliko ste zadovoljni jasnoćom objašnjenja?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Koliko ste zadovoljni organizacijom i tempom obuke?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Koliko ste zadovoljni praktičnom korisnošću onoga što ste naučili?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Da li biste preporučili ovu obuku drugim ljudima?"
+
+msgid "What should we improve in future editions?"
+msgstr "Šta bismo trebalo da poboljšamo u narednim izdanjima?"
+
+msgid "Very satisfied"
+msgstr "Veoma zadovoljan"
+
+msgid "Satisfied"
+msgstr "Zadovoljan"
+
+msgid "Neutral"
+msgstr "Neutralan"
+
+msgid "Dissatisfied"
+msgstr "Nezadovoljan"
+
+msgid "Very dissatisfied"
+msgstr "Veoma nezadovoljan"
+

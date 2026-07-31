@@ -37520,3 +37520,45 @@ msgstr "Sodoben, vabljiv prikaz teme tega tečaja v čistem ravnem slogu, z upor
 msgid "Back to account"
 msgstr "Nazaj na račun"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Vaše povratne informacije nam bodo pomagale izboljšati prihodnje izobraževalne seje."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Hvala, ker ste delili svoje povratne informacije."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Kako zadovoljni ste s splošno kakovostjo usposabljanja?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Kako zadovoljni ste z ustreznostjo vsebine?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Kako zadovoljni ste s jasnostjo razlag?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Kako zadovoljni ste z organizacijo in tempom usposabljanja?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Kako zadovoljni ste s praktično uporabnostjo tega, kar ste se naučili?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Bi to usposabljanje priporočili drugim?"
+
+msgid "What should we improve in future editions?"
+msgstr "Kaj bi morali izboljšati v prihodnjih izvedbah?"
+
+msgid "Very satisfied"
+msgstr "Zelo zadovoljen"
+
+msgid "Satisfied"
+msgstr "Zadovoljen"
+
+msgid "Neutral"
+msgstr "Nevtralen"
+
+msgid "Dissatisfied"
+msgstr "Nezadovoljen"
+
+msgid "Very dissatisfied"
+msgstr "Zelo nezadovoljen"
+

@@ -37506,3 +37506,45 @@ msgstr "Una ilustración moderna y acogedora que representa el tema de este curs
 msgid "Back to account"
 msgstr "Volver a la cuenta"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr ""
+
+msgid "Thank you for sharing your feedback."
+msgstr ""
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr ""
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr ""
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr ""
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr ""
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr ""
+
+msgid "Would you recommend this training to other people?"
+msgstr ""
+
+msgid "What should we improve in future editions?"
+msgstr ""
+
+msgid "Very satisfied"
+msgstr ""
+
+msgid "Satisfied"
+msgstr ""
+
+msgid "Neutral"
+msgstr ""
+
+msgid "Dissatisfied"
+msgstr ""
+
+msgid "Very dissatisfied"
+msgstr ""
+

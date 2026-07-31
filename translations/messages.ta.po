@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:அடைவு,, application/msword:MsWord,, application/octet-stream:ஆக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:கோப்புறை,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -37503,4 +37503,46 @@ msgstr "இந்தப் பாடத்தின் தலைப்பைப�
 
 msgid "Back to account"
 msgstr "கணக்கிற்குத் திரும்பவும்"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "உங்கள் கருத்து எதிர்கால பயிற்சி அமர்வுகளை மேம்படுத்த எங்களுக்கு உதவும்."
+
+msgid "Thank you for sharing your feedback."
+msgstr "உங்கள் கருத்தைப் பகிர்ந்தமைக்கு நன்றி."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "பயிற்சியின் ஒட்டுமொத்த தரத்தால் நீங்கள் எவ்வளவு திருப்தியடைகிறீர்கள்?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "உள்ளடக்கத்தின் பொருத்தத்தால் நீங்கள் எவ்வளவு திருப்தியடைகிறீர்கள்?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "விளக்கங்களின் தெளிவால் நீங்கள் எவ்வளவு திருப்தியடைகிறீர்கள்?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "பயிற்சியின் அமைப்பு மற்றும் வேகத்தால் நீங்கள் எவ்வளவு திருப்தியடைகிறீர்கள்?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "நீங்கள் கற்றுக்கொண்டவற்றின் நடைமுறைப் பயன்பாட்டால் நீங்கள் எவ்வளவு திருப்தியடைகிறீர்கள்?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "இந்தப் பயிற்சியை மற்றவர்களுக்கு பரிந்துரை செய்வீர்களா?"
+
+msgid "What should we improve in future editions?"
+msgstr "எதிர்கால பதிப்புகளில் நாங்கள் எதை மேம்படுத்த வேண்டும்?"
+
+msgid "Very satisfied"
+msgstr "மிகவும் திருப்தி"
+
+msgid "Satisfied"
+msgstr "திருப்தி"
+
+msgid "Neutral"
+msgstr "நடுநிலை"
+
+msgid "Dissatisfied"
+msgstr "திருப்தியற்ற"
+
+msgid "Very dissatisfied"
+msgstr "மிகவும் திருப்தியற்ற"
 

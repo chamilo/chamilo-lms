@@ -37518,3 +37518,45 @@ msgstr "رسم توضيحي حديث وجذاب يمثل موضوع هذه ال�
 msgid "Back to account"
 msgstr "العودة إلى الحساب"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "ستساعدنا ملاحظاتك في تحسين جلسات التدريب المستقبلية."
+
+msgid "Thank you for sharing your feedback."
+msgstr "شكراً لمشاركتك ملاحظاتك."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "ما مدى رضاك عن الجودة العامة للتدريب؟"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "ما مدى رضاك عن ملاءمة المحتوى؟"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "ما مدى رضاك عن وضوح الشروحات؟"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "ما مدى رضاك عن تنظيم وسرعة التدريب؟"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "ما مدى رضاك عن الفائدة العملية مما تعلمته؟"
+
+msgid "Would you recommend this training to other people?"
+msgstr "هل توصي بهذا التدريب لأشخاص آخرين؟"
+
+msgid "What should we improve in future editions?"
+msgstr "ما الذي يجب تحسينه في الإصدارات المستقبلية؟"
+
+msgid "Very satisfied"
+msgstr "راضٍ جداً"
+
+msgid "Satisfied"
+msgstr "راضٍ"
+
+msgid "Neutral"
+msgstr "محايد"
+
+msgid "Dissatisfied"
+msgstr "غير راضٍ"
+
+msgid "Very dissatisfied"
+msgstr "غير راضٍ جداً"
+

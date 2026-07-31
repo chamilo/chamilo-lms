@@ -37506,3 +37506,45 @@ msgstr "Съвременна, приветлива илюстрация, пре�
 msgid "Back to account"
 msgstr "Обратно към профила"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Вашата обратна връзка ще ни помогне да подобрим бъдещите обучения."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Благодарим ви, че споделихте мнението си."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Колко сте доволни от общото качество на обучението?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Колко сте доволни от релевантността на съдържанието?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Колко сте доволни от яснотата на обясненията?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Колко сте доволни от организацията и темпото на обучението?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Колко сте доволни от практическата полезност на наученото?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Бихте ли препоръчали това обучение на други хора?"
+
+msgid "What should we improve in future editions?"
+msgstr "Какво трябва да подобрим в бъдещите издания?"
+
+msgid "Very satisfied"
+msgstr "Много доволен"
+
+msgid "Satisfied"
+msgstr "Доволен"
+
+msgid "Neutral"
+msgstr "Неутрален"
+
+msgid "Dissatisfied"
+msgstr "Недоволен"
+
+msgid "Very dissatisfied"
+msgstr "Много недоволен"
+

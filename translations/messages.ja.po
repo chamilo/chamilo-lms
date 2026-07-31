@@ -2086,7 +2086,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:著作権あり,, no:著作権なし"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:フォルダ,, application/msword:MsWord,, application/octet-stream:オクテットストリーム,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:フォルダー,, application/msword:MsWord,, application/octet-stream:オクテットストリーム,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:演習,,      simulation:シミュレーション,,      questionnaire:アンケート,,      diagram:図表,,      figure:図,,      graph:グラフ,,      index:索引,,      slide:スライド,,      table:表,,      narrative text:叙述テキスト,,      exam:試験,,      experiment:実験,,      problem statement:問題文,,      self assessment:自己評価,,      lecture:講義"
@@ -37569,4 +37569,46 @@ msgstr "このコースのトピックを表す、クリーンなフラットデ
 
 msgid "Back to account"
 msgstr "アカウントに戻る"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "ご意見は今後の研修改善に役立てられます。"
+
+msgid "Thank you for sharing your feedback."
+msgstr "ご意見をお寄せいただきありがとうございます。"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "研修全体の質にご満足いただけましたか？"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "内容の関連性にご満足いただけましたか？"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "説明の分かりやすさにご満足いただけましたか？"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "研修の構成と進行ペースにご満足いただけましたか？"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "学んだ内容の実践的有用性にご満足いただけましたか？"
+
+msgid "Would you recommend this training to other people?"
+msgstr "この研修を他の方にお勧めいただけますか？"
+
+msgid "What should we improve in future editions?"
+msgstr "今後の研修で改善すべき点は何ですか？"
+
+msgid "Very satisfied"
+msgstr "非常に満足"
+
+msgid "Satisfied"
+msgstr "満足"
+
+msgid "Neutral"
+msgstr "普通"
+
+msgid "Dissatisfied"
+msgstr "不満"
+
+msgid "Very dissatisfied"
+msgstr "非常に不満"
 

@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -37503,4 +37503,46 @@ msgstr "Egy modern, barátságos illusztráció, amely a kurzus témáját ábr�
 
 msgid "Back to account"
 msgstr "Vissza a fiókhoz"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Visszajelzése segít nekünk a jövőbeli képzések javításában."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Köszönjük, hogy megosztotta visszajelzését."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Mennyire elégedett a képzés általános minőségével?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Mennyire elégedett a tartalom relevanciájával?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Mennyire elégedett a magyarázatok érthetőségével?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Mennyire elégedett a képzés szervezésével és tempójával?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Mennyire elégedett a tanultak gyakorlati hasznosságával?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ajánlaná ezt a képzést másoknak?"
+
+msgid "What should we improve in future editions?"
+msgstr "Mit kellene javítanunk a jövőbeli kiadásokban?"
+
+msgid "Very satisfied"
+msgstr "Nagyon elégedett"
+
+msgid "Satisfied"
+msgstr "Elégedett"
+
+msgid "Neutral"
+msgstr "Semleges"
+
+msgid "Dissatisfied"
+msgstr "Elégedetlen"
+
+msgid "Very dissatisfied"
+msgstr "Nagyon elégedetlen"
 

@@ -37504,3 +37504,45 @@ msgstr "이 강의 주제를 나타내는 현대적이고 친근한 일러스트
 msgid "Back to account"
 msgstr "계정으로 돌아가기"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "귀하의 피드백은 향후 교육 세션 개선에 도움이 됩니다."
+
+msgid "Thank you for sharing your feedback."
+msgstr "피드백을 공유해 주셔서 감사합니다."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "교육의 전반적인 품질에 얼마나 만족하십니까?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "콘텐츠의 관련성에 얼마나 만족하십니까?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "설명의 명확성에 얼마나 만족하십니까?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "교육의 구성 및 진행 속도에 얼마나 만족하십니까?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "배운 내용의 실질적 유용성에 얼마나 만족하십니까?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "이 교육을 다른 사람에게 추천하시겠습니까?"
+
+msgid "What should we improve in future editions?"
+msgstr "향후 교육에서 개선해야 할 점은 무엇입니까?"
+
+msgid "Very satisfied"
+msgstr "매우 만족"
+
+msgid "Satisfied"
+msgstr "만족"
+
+msgid "Neutral"
+msgstr "보통"
+
+msgid "Dissatisfied"
+msgstr "불만족"
+
+msgid "Very dissatisfied"
+msgstr "매우 불만족"
+

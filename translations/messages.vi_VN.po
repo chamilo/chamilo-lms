@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Công thức mẫu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -37505,4 +37505,46 @@ msgstr "Một hình minh họa hiện đại, thân thiện thể hiện chủ �
 
 msgid "Back to account"
 msgstr "Quay lại tài khoản"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Phản hồi của bạn sẽ giúp chúng tôi cải thiện các buổi đào tạo trong tương lai."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Cảm ơn bạn đã chia sẻ phản hồi."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Bạn hài lòng đến mức nào với chất lượng tổng thể của buổi đào tạo?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Bạn hài lòng đến mức nào với mức độ phù hợp của nội dung?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Bạn hài lòng đến mức nào với sự rõ ràng của các giải thích?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Bạn hài lòng đến mức nào với sự tổ chức và nhịp độ của buổi đào tạo?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Bạn hài lòng đến mức nào với tính hữu ích thực tiễn của những gì bạn đã học?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Bạn có khuyến nghị buổi đào tạo này cho người khác không?"
+
+msgid "What should we improve in future editions?"
+msgstr "Chúng tôi nên cải thiện điều gì trong các lần tổ chức sau?"
+
+msgid "Very satisfied"
+msgstr "Rất hài lòng"
+
+msgid "Satisfied"
+msgstr "Hài lòng"
+
+msgid "Neutral"
+msgstr "Trung lập"
+
+msgid "Dissatisfied"
+msgstr "Không hài lòng"
+
+msgid "Very dissatisfied"
+msgstr "Rất không hài lòng"
 

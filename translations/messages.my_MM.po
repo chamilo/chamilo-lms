@@ -35198,25 +35198,25 @@ msgid "Commercial and freemium plugins"
 msgstr "စီးပွားရေးနှင့် freemium ပလပ်ဂင်များ"
 
 msgid "All plugins"
-msgstr ""
+msgstr "ပလပ်အင်အားလုံး"
 
 msgid "No plugins were found for this category."
-msgstr ""
+msgstr "ဤအမျိုးအစားအတွက် ပလပ်အင်များ မတွေ့ရှိပါ။"
 
 msgid "Search plugins"
-msgstr ""
+msgstr "ပလပ်အင်များ ရှာဖွေရန်"
 
 msgid "Search by name or description"
-msgstr ""
+msgstr "အမည် သို့မဟုတ် ဖော်ပြချက်ဖြင့် ရှာဖွေရန်"
 
 msgid "Advanced filters"
-msgstr ""
+msgstr "အဆင့်မြင့် စစ်ထုတ်မှုများ"
 
 msgid "All statuses"
-msgstr ""
+msgstr "အခြေအနေအားလုံး"
 
 msgid "All sources"
-msgstr ""
+msgstr "အရင်းအမြစ်အားလုံး"
 
 msgid "All types"
 msgstr "အမျိုးအစားအားလုံး"
@@ -35666,25 +35666,25 @@ msgid "No users selected."
 msgstr "အသုံးပြုသူများ ရွေးချယ်မထားပါ။"
 
 msgid "%s user(s) processed."
-msgstr ""
+msgstr "%s အသုံးပြုသူ(များ) လုပ်ဆောင်ပြီးပါပြီ။"
 
 msgid "Invalid CSRF token."
-msgstr ""
+msgstr "CSRF တိုကင် မမှန်ကန်ပါ။"
 
 msgid "[%s] Please change your password"
-msgstr ""
+msgstr "[%s] သင့်စကားဝှက်ကို ပြောင်းလဲပါ"
 
 msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
-msgstr ""
+msgstr "ချစ်ခင်ရပါသော %s၊\n\nကျွန်ုပ်တို့၏ လုံခြုံရေးလုပ်ငန်းစဉ်အရ သင်သည် အင်တာနက်ပေါ်တွင် အသုံးများသော စကားဝှက်ကို အသုံးပြုနေကြောင်း တွေ့ရှိရပါသည်။ ထို့ကြောင့် သင့်အကောင့်ကို အလွယ်တကူ ခိုးယူနိုင်ပါသည်။ ၎င်းသည် ရိုးရှင်းသော အစဉ်လိုက် သို့မဟုတ် အလွန်အသုံးများသော စကားလုံးတစ်ခု ဖြစ်နိုင်ပါသည်၊ ကျွန်ုပ်တို့ အတိအကျ မသိရပါ (သင့်စကားဝှက်ကို ကျွန်ုပ်တို့ မမြင်နိုင်ပါ)၊ သို့သော် ပလက်ဖောင်းသို့ ချိတ်ဆက်ပြီး စကားဝှက်ပြောင်းလဲရန် တောင်းဆိုပါရန် မေတ္တာရပ်ခံပါသည်။ ယခုလုပ်ဆောင်ရန် ဤနေရာတွင် လင့်ခ်ကို လိုက်နာပါ။ %s\n\nဤလုပ်ငန်းစဉ်တွင် ကျွန်ုပ်တို့သည် သင့်စကားဝှက်ကို ဘယ်သောအခါမှ မတောင်းဆိုပါ။ သင်သည် သင့်အသုံးပြုသူအမည် သို့မဟုတ် အီးမေးလ်ကို ထည့်သွင်းရုံဖြင့် လင့်ခ်တစ်ခု ပေးပို့ပါမည်။ စကားဝှက်ပြောင်းလဲရန် သင့်လက်ရှိစကားဝှက်ကို ထည့်သွင်းရန် တောင်းဆိုပါက တစ်စုံတစ်ယောက်သည် သင့်အကောင့်ကို ဖရစ်ရှင်း (Phishing) လုပ်ရန် ကြိုးစားနေခြင်း ဖြစ်နိုင်ပါသည်။ လုံခြုံစိတ်ချစွာ ထားရန် ယခုပင် သင့်စကားဝှက်ကို ပြောင်းလဲပါ။\n\n%s\n%s"
 
 msgid "[%s] Your password has been reset"
-msgstr ""
+msgstr "[%s] သင့်စကားဝှက်ကို ပြန်လည်သတ်မှတ်ပြီးပါပြီ"
 
 msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
-msgstr ""
+msgstr "ချစ်ခင်ရပါသော %s၊\n\nကျွန်ုပ်တို့၏ လုံခြုံရေးလုပ်ငန်းစဉ်အရ သင်သည် အင်တာနက်ပေါ်တွင် အသုံးများသော စကားဝှက်ကို အသုံးပြုနေကြောင်း တွေ့ရှိရပါသည်။ ထို့ကြောင့် သင့်အကောင့်ကို အလွယ်တကူ ခိုးယူနိုင်ပါသည်။ ကြိုတင်ကာကွယ်မှုအဖြစ် စကားဝှက်ပြန်လည်သတ်မှတ်ရန် လုပ်ငန်းစဉ်ကို စတင်ရန် ဆုံးဖြတ်ခဲ့ပါသည်။ သင့်အလိုအလျောက် ထုတ်ပေးထားသော စကားဝှက်အသစ်မှာ-\n\n%s\n\nယခု ဤစကားဝှက်အသစ်ကို အသုံးပြု၍ ပလက်ဖောင်းသို့ မကြာမီ ဝင်ရောက်ပြီး သင့်ကိုယ်ပိုင် လုံခြုံသော စကားဝှက်ကို သတ်မှတ်ပါ။\n\nလုံခြုံစိတ်ချစွာ ထားပါ။\n\n%s\n%s"
 
 msgid "Signature saved successfully"
-msgstr ""
+msgstr "လက်မှတ်ကို အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ"
 
 msgid "Invalid request payload."
 msgstr "တောင်းဆိုမှု ဒေတာမမှန်ပါ။"
@@ -36500,88 +36500,88 @@ msgid "You must add at least one question"
 msgstr "အနည်းဆုံး မေးခွန်းတစ်ခု ထည့်ရမည်"
 
 msgid "Advanced actions"
-msgstr ""
+msgstr "အဆင့်မြင့် လုပ်ဆောင်ချက်များ"
 
 msgid "Application path"
-msgstr ""
+msgstr "အပလီကေးရှင်း လမ်းကြောင်း"
 
 msgid "Apply files details"
-msgstr ""
+msgstr "ဖိုင်အသေးစိတ်များ အသုံးချရန်"
 
 msgid "Apply plan details"
-msgstr ""
+msgstr "အစီအစဉ်အသေးစိတ်များ အသုံးချရန်"
 
 msgid "Apply plan failed"
-msgstr ""
+msgstr "အစီအစဉ် အသုံးချမှု မအောင်မြင်ပါ"
 
 msgid "Apply plan ready"
-msgstr ""
+msgstr "အစီအစဉ် အသုံးချရန် အဆင်သင့်ဖြစ်ပါပြီ"
 
 msgid "Apply preparation"
-msgstr ""
+msgstr "ပြင်ဆင်မှု အသုံးချရန်"
 
 msgid "Apply staged files"
-msgstr ""
+msgstr "အဆင့်ဆင့်ထားသော ဖိုင်များ အသုံးချရန်"
 
 msgid "Applying files..."
-msgstr ""
+msgstr "ဖိုင်များ အသုံးချနေသည်..."
 
 msgid "Audit file"
-msgstr ""
+msgstr "စစ်ဆေးရေး ဖိုင်"
 
 msgid "Backup directory"
-msgstr ""
+msgstr "အရန်သိမ်းဆည်းရေး လမ်းညွှန်တွဲ"
 
 msgid "Baseline clean"
-msgstr ""
+msgstr "အခြေခံအဆင့် သန့်ရှင်းမှု"
 
 msgid "Baseline warnings"
-msgstr ""
+msgstr "အခြေခံအဆင့် သတိပေးချက်များ"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr ""
+msgstr "အဆင့်ဆင့်ထားသော ပက်ကေ့ချ်မှ လုံခြုံသော အသုံးချမှု အစီအစဉ်တစ်ခု တည်ဆောက်ပါ။ ၎င်းသည် ဖိုင်များ၊ ခွင့်ပြုချက်များ၊ အရန်သိမ်းဆည်းရေး လမ်းကြောင်းနှင့် သော့ခတ်မှု အခြေအနေကိုသာ စစ်ဆေးပါသည်။ ဖိုင်များကို အစားထိုးမည်မဟုတ်ပါ။"
 
 msgid "Build production frontend assets."
-msgstr ""
+msgstr "ထုတ်လုပ်မှု ရှေ့ဆုံး ပိုင်ဆိုင်မှုများ တည်ဆောက်ပါ။"
 
 msgid "Building plan..."
-msgstr ""
+msgstr "အစီအစဉ် တည်ဆောက်နေသည်..."
 
 msgid "Channel"
-msgstr ""
+msgstr "ချန်နယ်"
 
 msgid "Check"
-msgstr ""
+msgstr "စစ်ဆေးရန်"
 
 msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
-msgstr ""
+msgstr "ရရှိနိုင်သော Chamilo အပ်ဒိတ်များကို စစ်ဆေးပါ၊ ပက်ကေ့ချ်များကို အတည်ပြုပါ၊ ဖိုင်များကို အဆင့်ဆင့်ထားပါ၊ ထိန်းချုပ်ထားသော အပ်ဒိတ်အပြီး အဆင့်များကို လုပ်ဆောင်ပါ။"
 
 msgid "Check manifest"
-msgstr ""
+msgstr "မန်နီဖက်စ် စစ်ဆေးရန်"
 
 msgid "Checking post-apply actions..."
-msgstr ""
+msgstr "အသုံးချပြီးနောက် လုပ်ဆောင်ချက်များ စစ်ဆေးနေသည်..."
 
 msgid "Checking..."
-msgstr ""
+msgstr "စစ်ဆေးနေသည်..."
 
 msgid "Composer install"
-msgstr ""
+msgstr "Composer ထည့်သွင်းရန်"
 
 msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
-msgstr ""
+msgstr "Composer၊ Yarn နှင့် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှု လုပ်ဆောင်ချက်များသည် မှီခိုမှုများ၊ ထုတ်လုပ်ထားသော ပိုင်ဆိုင်မှုများ သို့မဟုတ် ဒေတာဘေ့စ်ကို ပြောင်းလဲနိုင်ပါသည်။ အရန်သိမ်းဆည်းမှုများနှင့် ခွင့်ပြုချက်များကို အတည်ပြုပြီးမှသာ ၎င်းတို့ကို ရွေးချယ်ပါ။"
 
 msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
-msgstr ""
+msgstr "ဆာဗာပေါ်တွင် CHAMILO_UPDATE_MANIFEST_URL ကို ပြင်ဆင်သတ်မှတ်ပါ သို့မဟုတ် HTTPS မန်နီဖက်စ် URL တစ်ခု ပံ့ပိုးပါ။"
 
 msgid "Configured"
-msgstr ""
+msgstr "ပြင်ဆင်သတ်မှတ်ပြီး"
 
 msgid "Current migration"
-msgstr ""
+msgstr "လက်ရှိ ရွှေ့ပြောင်းမှု"
 
 msgid "Database baseline"
-msgstr ""
+msgstr "ဒေတာဘေ့စ် အခြေခံအဆင့်"
 
 msgid "Database migration safety review"
 msgstr ""
@@ -37034,25 +37034,25 @@ msgid "Comment added"
 msgstr ""
 
 msgid "Comment is required"
-msgstr ""
+msgstr "မှတ်ချက်လိုအပ်ပါသည်"
 
 msgid "Comment score"
-msgstr ""
+msgstr "မှတ်ချက်အမှတ်"
 
 msgid "Compare selected versions line by line"
-msgstr ""
+msgstr "ရွေးချယ်ထားသော ဗားရှင်းများကို စာကြောင်းအလိုက် နှိုင်းယှဉ်ပါ"
 
 msgid "Compare selected versions word by word"
-msgstr ""
+msgstr "ရွေးချယ်ထားသော ဗားရှင်းများကို စကားလုံးအလိုက် နှိုင်းယှဉ်ပါ"
 
 msgid "Compare versions"
-msgstr ""
+msgstr "ဗားရှင်းများကို နှိုင်းယှဉ်ပါ"
 
 msgid "Copy completed"
-msgstr ""
+msgstr "ကူးယူမှု ပြီးဆုံးပါပြီ"
 
 msgid "Create individual Wiki work pages for learners"
-msgstr ""
+msgstr "သင်ယူသူများအတွက် တစ်ဦးချင်း Wiki အလုပ်စာမျက်နှာများ ဖန်တီးပါ"
 
 msgid "Current view mode"
 msgstr "လက်ရှိ ကြည့်ရှုမှုပုံစံ"
@@ -37205,154 +37205,154 @@ msgid "Subcategories"
 msgstr "အမျိုးအစားခွဲများ"
 
 msgid "Tap on the left or right to navigate"
-msgstr ""
+msgstr "ဘယ် သို့မဟုတ် ညာကို နှိပ်၍ ရှာဖွေပါ"
 
 msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
-msgstr ""
+msgstr "Wiki တာဝန်ပေးအပ်မှု နောက်ဆုံးရက် ကျော်လွန်သွားပါပြီ၊ သို့သော် နောက်ကျတင်သွင်းခွင့်ပြုထားပါသည်။"
 
 msgid "The Wiki assignment deadline has passed."
-msgstr ""
+msgstr "Wiki တာဝန်ပေးအပ်မှု နောက်ဆုံးရက် ကျော်လွန်သွားပါပြီ။"
 
 msgid "The Wiki assignment has not started yet."
-msgstr ""
+msgstr "Wiki တာဝန်ပေးအပ်မှု မစတင်သေးပါ။"
 
 msgid "The Wiki page edition lock is required before saving."
-msgstr ""
+msgstr "သိမ်းဆည်းရန် Wiki စာမျက်နှာ တည်းဖြတ်မှု သော့ခတ်ရန် လိုအပ်ပါသည်။"
 
 msgid "The announcement was saved, but an attachment could not be uploaded."
-msgstr ""
+msgstr "ကြေညာချက်ကို သိမ်းဆည်းပြီးပါပြီ၊ သို့သော် ပူးတွဲဖိုင်တစ်ခုကို တင်ပို့၍ မရပါ။"
 
 msgid "The announcement was saved, but email delivery failed."
-msgstr ""
+msgstr "ကြေညာချက်ကို သိမ်းဆည်းပြီးပါပြီ၊ သို့သော် အီးမေးလ် ပို့ဆောင်မှု မအောင်မြင်ပါ။"
 
 msgid "The announcement was saved, but no email could be delivered."
-msgstr ""
+msgstr "ကြေညာချက်ကို သိမ်းဆည်းပြီးပါပြီ၊ သို့သော် အီးမေးလ် ပို့ဆောင်မှု မရှိပါ။"
 
 msgid "The category has been created"
-msgstr ""
+msgstr "အမျိုးအစားကို ဖန်တီးပြီးပါပြီ"
 
 msgid "The category has been deleted"
-msgstr ""
+msgstr "အမျိုးအစားကို ဖျက်ပြီးပါပြီ"
 
 msgid "The category has been updated"
-msgstr ""
+msgstr "အမျိုးအစားကို အပ်ဒိတ်လုပ်ပြီးပါပြီ"
 
 msgid "The end date is invalid"
-msgstr ""
+msgstr "အဆုံးသတ်ရက်စွဲ မမှန်ကန်ပါ"
 
 msgid "The maximum number of versions must be a non-negative integer"
-msgstr ""
+msgstr "ဗားရှင်းအများဆုံးအရေအတွက်သည် အနုတ်မဟုတ်သော ကိန်းပြည့်ဖြစ်ရမည်"
 
 msgid "The maximum number of words must be a non-negative integer"
-msgstr ""
+msgstr "စကားလုံးအများဆုံးအရေအတွက်သည် အနုတ်မဟုတ်သော ကိန်းပြည့်ဖြစ်ရမည်"
 
 msgid "The print window could not be opened"
-msgstr ""
+msgstr "ပုံနှိပ်မျက်နှာပြင်ကို ဖွင့်၍ မရပါ"
 
 msgid "The start date is invalid"
-msgstr ""
+msgstr "စတင်ရက်စွဲ မမှန်ကန်ပါ"
 
 msgid "These settings apply to the whole course, including its sessions and groups."
-msgstr ""
+msgstr "ဤဆက်တင်များသည် သင်တန်း၊ အပါအဝင် အစည်းအဝေးများနှင့် အုပ်စုများအားလုံးအတွက် သက်ရောက်ပါသည်။"
 
 msgid "This announcement has already been sent by email."
-msgstr ""
+msgstr "ဤကြေညာချက်ကို အီးမေးလ်ဖြင့် ပို့ပြီးပါပြီ။"
 
 msgid "This discussion is hidden from learners"
-msgstr ""
+msgstr "ဤဆွေးနွေးမှုကို သင်ယူသူများမှ ဖုံးကွယ်ထားပါသည်"
 
 msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
-msgstr ""
+msgstr "ဤမျိုးဆက်သစ် AI ကိရိယာသည် သင့်သင်တန်းကို သရုပ်ဖော်ရန် ပုံများနှင့် ဗီဒီယိုတိုများ ဖန်တီးခွင့်ပြုပါသည်။ သင်လိုချင်သည့်အရာကို စာသားဖြင့် ရှင်းပြခြင်းဖြင့် ပြင်ဆင်ထားသော AI မော်ဒယ်အား ပုံ သို့မဟုတ် ဗီဒီယို ထုတ်လုပ်ရန် လိုအပ်သော အချက်အလက်များကို ပေးအပ်ပါသည်။ ကျေးဇူးပြု၍ စိတ်ရှည်ပါ။ AI မော်ဒယ်သည် အချိန်ယူပြီး ရလဒ်အချို့ ထုတ်လုပ်ပါမည်၊ ထိုရလဒ်ကို သင့်စာရွက်စာတမ်းဖိုင်တွဲတွင် သိမ်းဆည်းပြီး HTML စာတမ်းတစ်ခုတွင် ထည့်သွင်းလိုပေမည်။ AI မော်ဒယ်အားလုံးသည် အမြန်နှုန်း သို့မဟုတ် အရည်အသွေးတွင် တူညီမှုမရှိပါ။ AI မော်ဒယ်သည် သင့်တောင်းဆိုချက်၏ ပိုမိုအသေးစိတ်ဖော်ပြချက်ဖြစ်သော ပြင်ဆင်ထားသော အချက်အလက်ကိုလည်း ပေးအပ်နိုင်ပါသည်။ ထို့နောက် ထိုပြင်ဆင်ထားသော အချက်အလက်ကို သင့်တောင်းဆိုချက်ကို ချိန်ညှိရန် အသုံးပြုနိုင်ပါသည်။ ဤကိရိယာသည် အထူးသဖြင့် ဗီဒီယိုများအတွက် သင့်အဖွဲ့အစည်းအတွက် ကုန်ကျစရိတ်များစွာ ဖြစ်ပေါ်စေနိုင်ကြောင်း သတိပြုပါ၊ ထုတ်လုပ်ထားသော မီဒီယာကို သိမ်းဆည်းရန် မဆုံးဖြတ်သော်လည်း ဖြစ်နိုင်ပါသည်။ ကျေးဇူးပြု၍ သင့်လျော်စွာ အသုံးပြုပါ။ သင်ရှာဖွေနေသည့်အရာကို မရရှိပါက သင့်လက်ဝယ်ရှိ AI မော်ဒယ်အတွက် အချက်အလက်ပေးပို့ခြင်း နည်းလမ်းများကို အွန်လိုင်းတွင် ရှာဖွေရန် အချိန်ယူပါ။"
 
 msgid "This history belongs to the base course. Restore is available after creating a session version."
-msgstr ""
+msgstr "ဤမှတ်တမ်းသည် အခြေခံသင်တန်းမှ ဖြစ်ပါသည်။ ပြန်လည်ထည့်သွင်းမှုကို အစည်းအဝေးဗားရှင်း ဖန်တီးပြီးမှ ရရှိနိုင်ပါသည်။"
 
 msgid "This image replaces the default forum icon shown next to the forum title."
-msgstr ""
+msgstr "ဤပုံသည် ဖိုရမ်ခေါင်းစဉ်ဘေးတွင် ပြသထားသော ပုံမှန်ဖိုရမ်အိုင်ကွန်ကို အစားထိုးပါသည်။"
 
 msgid "This page comes from the base course. Saving it will create a version for the current session."
-msgstr ""
+msgstr "ဤစာမျက်နှာသည် အခြေခံသင်တန်းမှ ဖြစ်ပါသည်။ သိမ်းဆည်းခြင်းဖြင့် လက်ရှိအစည်းအဝေးအတွက် ဗားရှင်းတစ်ခု ဖန်တီးပါမည်။"
 
 msgid "This will also delete %s subcategories."
-msgstr ""
+msgstr "ဤအရာသည် %s အမျိုးအစားခွဲများကိုလည်း ဖျက်ပစ်ပါမည်။"
 
 msgid "This will create individual work pages for %s learners."
-msgstr ""
+msgstr "ဤအရာသည် %s သင်ယူသူများအတွက် တစ်ဦးချင်း အလုပ်စာမျက်နှာများ ဖန်တီးပါမည်။"
 
 msgid "Thread history"
-msgstr ""
+msgstr "ချည်မျှင်မှတ်တမ်း"
 
 msgid "Title and content"
-msgstr ""
+msgstr "ခေါင်းစဉ်နှင့် အကြောင်းအရာ"
 
 msgid "Unable to cancel renewal right now."
-msgstr ""
+msgstr "ယခုအချိန်တွင် သက်တမ်းတိုးခွင့်ကို ပယ်ဖျက်၍ မရပါ။"
 
 msgid "Unable to restore renewal right now."
-msgstr ""
+msgstr "ယခုအချိန်တွင် သက်တမ်းတိုးခွင့်ကို ပြန်လည်ထည့်သွင်း၍ မရပါ။"
 
 msgid "Unlock page"
-msgstr ""
+msgstr "စာမျက်နှာကို ဖွင့်ပါ"
 
 msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
-msgstr ""
+msgstr "အတွင်းပိုင်း Wiki လင့်ခ်များ ဖန်တီးရန် [[Page]] သို့မဟုတ် [[Page|မြင်သာသော စာသား]] ကို အသုံးပြုပါ။"
 
 msgid "Use a spacebar or arrow keys to navigate"
-msgstr ""
+msgstr "နေရာချခြင်း သို့မဟုတ် မြားခလုတ်များဖြင့် ရှာဖွေပါ"
 
 msgid "View version"
-msgstr ""
+msgstr "ဗားရှင်းကို ကြည့်ရှုပါ"
 
 msgid "Visible only to teachers"
-msgstr ""
+msgstr "ဆရာများသာ မြင်နိုင်ပါသည်"
 
 msgid "Weight is required"
-msgstr ""
+msgstr "အလေးချိန် လိုအပ်ပါသည်"
 
 msgid "Wiki categories are disabled for this course."
-msgstr ""
+msgstr "Wiki အမျိုးအစားများကို ဤသင်တန်းအတွက် ပိတ်ထားပါသည်။"
 
 msgid "Wiki categories enabled"
-msgstr ""
+msgstr "Wiki အမျိုးအစားများ ဖွင့်ထားပါသည်"
 
 msgid "Wiki html strict filtering"
-msgstr ""
+msgstr "Wiki html တင်းကျပ်စွာ စစ်ထုတ်ခြင်း"
 
 msgid "Wiki settings"
-msgstr ""
+msgstr "Wiki ဆက်တင်များ"
 
 msgid "Wiki settings updated"
-msgstr ""
+msgstr "Wiki ဆက်တင်များ အပ်ဒိတ်လုပ်ပြီးပါပြီ"
 
 msgid "You are viewing a historical version of this page"
-msgstr ""
+msgstr "သင်သည် ဤစာမျက်နှာ၏ သမိုင်းဗားရှင်းကို ကြည့်ရှုနေပါသည်"
 
 msgid "You can attach one or more files to this reply."
-msgstr ""
+msgstr "ဤပြန်ကြားချက်တွင် ဖိုင်တစ်ခု သို့မဟုတ် တစ်ခုထက်ပိုသော ဖိုင်များ ပူးတွဲနိုင်ပါသည်။"
 
 msgid "You can edit this assignment page, but learner work pages will not be modified."
-msgstr ""
+msgstr "သင်သည် ဤတာဝန်ပေးအပ်မှု စာမျက်နှာကို တည်းဖြတ်နိုင်ပါသည်၊ သို့သော် သင်ယူသူ အလုပ်စာမျက်နှာများကို ပြင်ဆင်မည်မဟုတ်ပါ။"
 
 msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
-msgstr ""
+msgstr "မေးခွန်းတွင် {{class_name}} နှင့် {{student_full_name}} တက်ဂ်များကို အသုံးပြုနိုင်ပါသည်။"
 
 msgid "You have 20 minutes to edit this page before the editing lock expires."
-msgstr ""
+msgstr "တည်းဖြတ်မှုလော့ခ်မသက်တမ်းကုန်မီ ဤစာမျက်နှာကို တည်းဖြတ်ရန် သင့်တွင် မိနစ် ၂၀ ရှိပါသည်။"
 
 msgid "by"
-msgstr ""
+msgstr "မှ"
 
 msgid "required"
-msgstr ""
+msgstr "လိုအပ်သည်"
 
 msgid "Incorrect password."
-msgstr ""
+msgstr "စကားဝှက်မှားယွင်းနေပါသည်။"
 
 msgid "File integrity alerting paused for 1 hour."
-msgstr ""
+msgstr "ဖိုင်ခိုင်မာမှုသတိပေးချက်ကို ၁ နာရီကြာ ရပ်ဆိုင်းထားပါသည်။"
 
 msgid "New baseline established: %s files."
-msgstr ""
+msgstr "အခြေခံအသစ်သတ်မှတ်ပြီး၊ %s ဖိုင်များ။"
 
 msgid "Scan complete: changes were detected."
 msgstr "စကင်ဖတ်မှု ပြီးဆုံးပါပြီ။ ပြောင်းလဲမှုများ တွေ့ရှိပါသည်။"
@@ -37503,4 +37503,46 @@ msgstr "ဤသင်တန်း၏ အကြောင်းအရာကို �
 
 msgid "Back to account"
 msgstr "အကောင့်သို့ ပြန်သွားပါ"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "သင်၏တုံ့ပြန်ချက်သည် အနာဂတ်သင်တန်းများကို တိုးတက်စေရန် ကူညီပါလိမ့်မည်။"
+
+msgid "Thank you for sharing your feedback."
+msgstr "သင်၏တုံ့ပြန်ချက်ကို မျှဝေပေးသည့်အတွက် ကျေးဇူးတင်ပါသည်။"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "သင်တန်း၏ အလုံးစုံအရည်အသွေးအပေါ် မည်မျှကျေနပ်ပါသလဲ။"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "အကြောင်းအရာ၏ သက်ဆိုင်မှုအပေါ် မည်မျှကျေနပ်ပါသလဲ။"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "ရှင်းလင်းချက်များ၏ ရှင်းလင်းမှုအပေါ် မည်မျှကျေနပ်ပါသလဲ။"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "သင်တန်း၏ စည်းရုံးမှုနှင့် အရှိန်အဟုန်အပေါ် မည်မျှကျေနပ်ပါသလဲ။"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "သင်သင်ယူခဲ့သည့်အရာများ၏ လက်တွေ့အသုံးဝင်မှုအပေါ် မည်မျှကျေနပ်ပါသလဲ။"
+
+msgid "Would you recommend this training to other people?"
+msgstr "ဤသင်တန်းကို အခြားသူများအား အကြံပြုပါမည်လား။"
+
+msgid "What should we improve in future editions?"
+msgstr "အနာဂတ်ထုတ်ဝေမှုများတွင် ကျွန်ုပ်တို့ မည်သည့်အရာကို တိုးတက်စေသင့်သနည်း။"
+
+msgid "Very satisfied"
+msgstr "အလွန်ကျေနပ်သည်"
+
+msgid "Satisfied"
+msgstr "ကျေနပ်သည်"
+
+msgid "Neutral"
+msgstr "ဘက်မလိုက်"
+
+msgid "Dissatisfied"
+msgstr "ကျေနပ်မှုမရှိ"
+
+msgid "Very dissatisfied"
+msgstr "အလွန်ကျေနပ်မှုမရှိ"
 

@@ -26934,7 +26934,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options forhindrer at en nettleser prøver å MIME-sniffe innholdstypen og tvinger den til å holde seg til den deklarerte innholdstypen. Den eneste gyldige verdien for denne overskriften er 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Sikkerhetsreferansepolicy"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy er en ny overskrift som lar et nettsted kontrollere hvor mye informasjon nettleseren inkluderer ved navigering bort fra et dokument, og bør settes av alle nettsteder."
@@ -26946,7 +26946,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "Blokker umiddelbart brukere som har blitt deaktivert av administratoren gjennom brukeradministrasjon. Ellers vil brukere som har blitt deaktivert beholde sine tidligere privilegier til de logger ut."
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "Økt-cookie samesite"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "Aktiver samesite:None-parameter for sesjonskapsel. Mer info: https://www.chromium.org/updates/same-site og https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -28209,7 +28209,7 @@ msgid "Super admin"
 msgstr "Superadmin"
 
 msgid "Global admin"
-msgstr "Global admin"
+msgstr "Global administrator"
 
 msgid "Question manager"
 msgstr "Spørsmålshåndtering"
@@ -37503,5 +37503,47 @@ msgid "A modern, welcoming illustration representing this course's topic, in a c
 msgstr "En moderne, innbydende illustrasjon som representerer dette kursets tema, i en ren flat-design-stil, med plattformens farger som aksenter."
 
 msgid "Back to account"
-msgstr ""
+msgstr "Tilbake til konto"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Din tilbakemelding vil hjelpe oss å forbedre fremtidige opplæringsøkter."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Takk for at du delte tilbakemeldingen din."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Hvor fornøyd er du med den generelle kvaliteten på opplæringen?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Hvor fornøyd er du med innholdets relevans?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Hvor fornøyd er du med forklaringenes klarhet?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Hvor fornøyd er du med opplæringens organisering og tempo?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Hvor fornøyd er du med den praktiske nytten av det du lærte?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Vil du anbefale denne opplæringen til andre?"
+
+msgid "What should we improve in future editions?"
+msgstr "Hva bør vi forbedre i fremtidige utgaver?"
+
+msgid "Very satisfied"
+msgstr "Svært fornøyd"
+
+msgid "Satisfied"
+msgstr "Fornøyd"
+
+msgid "Neutral"
+msgstr "Nøytral"
+
+msgid "Dissatisfied"
+msgstr "Misfornøyd"
+
+msgid "Very dissatisfied"
+msgstr "Svært misfornøyd"
 

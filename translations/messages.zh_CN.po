@@ -37506,3 +37506,45 @@ msgstr "以干净的扁平设计风格，使用平台配色作为点缀，呈现
 msgid "Back to account"
 msgstr "返回账户"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "您的反馈将帮助我们改进未来的培训课程。"
+
+msgid "Thank you for sharing your feedback."
+msgstr "感谢您分享反馈。"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "您对培训的整体质量满意吗？"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "您对内容的关联性满意吗？"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "您对讲解的清晰度满意吗？"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "您对培训的组织和节奏满意吗？"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "您对所学内容的实用性满意吗？"
+
+msgid "Would you recommend this training to other people?"
+msgstr "您会向他人推荐本次培训吗？"
+
+msgid "What should we improve in future editions?"
+msgstr "未来版本中我们应改进哪些方面？"
+
+msgid "Very satisfied"
+msgstr "非常满意"
+
+msgid "Satisfied"
+msgstr "满意"
+
+msgid "Neutral"
+msgstr "中立"
+
+msgid "Dissatisfied"
+msgstr "不满意"
+
+msgid "Very dissatisfied"
+msgstr "非常不满意"
+

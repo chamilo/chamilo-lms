@@ -37519,3 +37519,45 @@ msgstr "Unha ilustración moderna e acolledora que representa o tema deste curso
 msgid "Back to account"
 msgstr "Volver á conta"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "A súa opinión axudaranos a mellorar as futuras sesións de formación."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Grazas por compartir a súa opinión."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Que tan satisfeito está coa calidade xeral da formación?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Que tan satisfeito está coa relevancia do contido?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Que tan satisfeito está coa claridade das explicacións?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Que tan satisfeito está coa organización e o ritmo da formación?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Que tan satisfeito está coa utilidade práctica do que aprendeu?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Recomendaría esta formación a outras persoas?"
+
+msgid "What should we improve in future editions?"
+msgstr "Que deberiamos mellorar nas futuras edicións?"
+
+msgid "Very satisfied"
+msgstr "Moi satisfeito"
+
+msgid "Satisfied"
+msgstr "Satisfeito"
+
+msgid "Neutral"
+msgstr "Neutral"
+
+msgid "Dissatisfied"
+msgstr "Insatisfeito"
+
+msgid "Very dissatisfied"
+msgstr "Moi insatisfeito"
+

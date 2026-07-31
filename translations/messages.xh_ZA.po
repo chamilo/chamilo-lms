@@ -37500,3 +37500,45 @@ msgstr "Umzekeliso wangoku, owamkelekileyo omele umxholo wale khosi, ngendlela e
 msgid "Back to account"
 msgstr "Buyela kwi-akhawunti"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Your feedback will help us improve future training sessions."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Enkosi ngokwabelana ngengxelo yakho."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Woneliseke kangakanani ngumgangatho jikelele woqeqesho?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Woneliseke kangakanani ngokufaneleka komxholo?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Woneliseke kangakanani ngokucaca kweenkcazo?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Woneliseke kangakanani ngolungelelwaniso nesantya soqeqesho?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Woneliseke kangakanani ngokusebenziseka ngokusebenzayo koko ukuqeqeshiweyo?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ungayincoma lo mqeqesho kwabanye abantu?"
+
+msgid "What should we improve in future editions?"
+msgstr "Yintoni esinokuyiphucula kwiinkqubo ezizayo?"
+
+msgid "Very satisfied"
+msgstr "Woneliseke kakhulu"
+
+msgid "Satisfied"
+msgstr "Wonelisekile"
+
+msgid "Neutral"
+msgstr "Phakathi"
+
+msgid "Dissatisfied"
+msgstr "Akanelisekanga"
+
+msgid "Very dissatisfied"
+msgstr "Akanelisekanga kwaphela"
+

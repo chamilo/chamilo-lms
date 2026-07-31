@@ -37517,3 +37517,45 @@ msgstr "איור מודרני ומזמין המייצג את נושא הקורס
 msgid "Back to account"
 msgstr "חזרה לחשבון"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "המשוב שלך יעזור לנו לשפר את מפגשי ההדרכה הבאים."
+
+msgid "Thank you for sharing your feedback."
+msgstr "תודה ששיתפת את המשוב שלך."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "עד כמה אתה מרוצה מאיכות ההדרכה הכללית?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "עד כמה אתה מרוצה מהרלוונטיות של התוכן?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "עד כמה אתה מרוצה מבהירות ההסברים?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "עד כמה אתה מרוצה מארגון וקצב ההדרכה?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "עד כמה אתה מרוצה מהתועלת המעשית של מה שלמדת?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "האם תמליץ על הדרכה זו לאנשים אחרים?"
+
+msgid "What should we improve in future editions?"
+msgstr "מה כדאי לשפר במהדורות הבאות?"
+
+msgid "Very satisfied"
+msgstr "מרוצה מאוד"
+
+msgid "Satisfied"
+msgstr "מרוצה"
+
+msgid "Neutral"
+msgstr "נייטרלי"
+
+msgid "Dissatisfied"
+msgstr "לא מרוצה"
+
+msgid "Very dissatisfied"
+msgstr "לא מרוצה כלל"
+

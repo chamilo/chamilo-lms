@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -37503,4 +37503,46 @@ msgstr "Այս դասընթացի թեման ներկայացնող ժամանա
 
 msgid "Back to account"
 msgstr "Վերադառնալ հաշվին"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Ձեր կարծիքը կօգնի մեզ բարելավել ապագա վերապատրաստման դասընթացները։"
+
+msgid "Thank you for sharing your feedback."
+msgstr "Շնորհակալություն Ձեր կարծիքը կիսելու համար։"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Որքա՞ն գոհ եք վերապատրաստման ընդհանուր որակից։"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Որքա՞ն գոհ եք բովանդակության համապատասխանությունից։"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Որքա՞ն գոհ եք բացատրությունների հստակությունից։"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Որքա՞ն գոհ եք վերապատրաստման կազմակերպումից և տեմպից։"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Որքա՞ն գոհ եք սովորածի գործնական օգտակարությունից։"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Կառաջարկե՞ք այս վերապատրաստումը այլ մարդկանց։"
+
+msgid "What should we improve in future editions?"
+msgstr "Ի՞նչ պետք է բարելավենք ապագա թողարկումներում։"
+
+msgid "Very satisfied"
+msgstr "Շատ գոհ"
+
+msgid "Satisfied"
+msgstr "Գոհ"
+
+msgid "Neutral"
+msgstr "Չեզոք"
+
+msgid "Dissatisfied"
+msgstr "Անգոհ"
+
+msgid "Very dissatisfied"
+msgstr "Շատ անգոհ"
 

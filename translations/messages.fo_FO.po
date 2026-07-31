@@ -37500,3 +37500,45 @@ msgstr "Ein nútímans, vælkomin mynd sum vísir evnið á hesum kurssinum, í 
 msgid "Back to account"
 msgstr "Aftur til konto"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Tín viðmerking fer at hjálpa okkum at bøta um framtíðar venjingar."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Takk fyri at tú deildi tína viðmerking."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Hvussu nøgd ert tú við samlaðu dygdini á venjingini?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Hvussu nøgd ert tú við viðkomandi innihaldinum?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Hvussu nøgd ert tú við greiðsluni av frágreiðingunum?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Hvussu nøgd ert tú við skipanini og tempoinum á venjingini?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Hvussu nøgd ert tú við praktiska nyttuni av tí tú lærði?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Vilt tú viðmæla hesa venjingina fyri øðrum?"
+
+msgid "What should we improve in future editions?"
+msgstr "Hvat skulu vit bøta um í framtíðar útgávum?"
+
+msgid "Very satisfied"
+msgstr "Nógv nøgd/ur"
+
+msgid "Satisfied"
+msgstr "Nøgd/ur"
+
+msgid "Neutral"
+msgstr "Hvørki ella"
+
+msgid "Dissatisfied"
+msgstr "Ónøgd/ur"
+
+msgid "Very dissatisfied"
+msgstr "Nógv ónøgd/ur"
+

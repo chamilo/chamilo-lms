@@ -37520,3 +37520,45 @@ msgstr "O ilustrație modernă și primitoare care reprezintă tema acestui curs
 msgid "Back to account"
 msgstr "Înapoi la cont"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Feedback-ul dvs. ne va ajuta să îmbunătățim sesiunile viitoare de formare."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Vă mulțumim pentru feedback-ul dvs."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Cât de mulțumit sunteți de calitatea generală a formării?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Cât de mulțumit sunteți de relevanța conținutului?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Cât de mulțumit sunteți de claritatea explicațiilor?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Cât de mulțumit sunteți de organizarea și ritmul formării?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Cât de mulțumit sunteți de utilitatea practică a celor învățate?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ați recomanda această formare altor persoane?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ce ar trebui să îmbunătățim în edițiile viitoare?"
+
+msgid "Very satisfied"
+msgstr "Foarte mulțumit"
+
+msgid "Satisfied"
+msgstr "Mulțumit"
+
+msgid "Neutral"
+msgstr "Neutru"
+
+msgid "Dissatisfied"
+msgstr "Nemulțumit"
+
+msgid "Very dissatisfied"
+msgstr "Foarte nemulțumit"
+

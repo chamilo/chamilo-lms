@@ -26910,7 +26910,7 @@ msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue 
 msgstr "HTTP Public Key Pinning verndar vefsvæðið þitt gegn MiTM árásum með því að nota sviknar X.509 vottorð. Með því að leyfa aðeins auðkenni sem vafrinn ætti að treysta á eru notendur þínir verndaðir ef vottorðayfirvald er brotið."
 
 msgid "HTTP Public Key Pinning report only"
-msgstr "HTTP Public Key Pinning report only"
+msgstr "HTTP Public Key Pinning skýrsla aðeins"
 
 msgid "This setting allows you to experiment by reporting but not enforcing some HTTP Public Key Pinning."
 msgstr "Þessi stilling gerir þér kleift að prófa með því að tilkynna en ekki framfylgja einhverri HTTP Public Key Pinning."
@@ -26934,7 +26934,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options kemur í veg fyrir að vafrinn reyni að MIME-sniffa efnistegundina og neyðir hann til að halda sig við tilgreinda efnistegund. Eina gilda gildið fyrir þessa haus er 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Öryggis tilvísunarstefna"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy er nýr haus sem gerir vefsvæði kleift að stjórna hversu miklar upplýsingar vafrinn inniheldur við leiðsögn frá skjali og ætti að vera stilltur af öllum vefsvæðum."
@@ -31512,37 +31512,37 @@ msgid "Unknown course"
 msgstr "Óþekkt námskeið"
 
 msgid "Certificate not found."
-msgstr ""
+msgstr "Skírteini fannst ekki."
 
 msgid "Security token expired. Please reload the page and try again."
-msgstr ""
+msgstr "Öryggistákn er útrunnið. Vinsamlegast endurhlaðið síðuna og reynið aftur."
 
 msgid "Only platform administrators can change the course visibility."
-msgstr ""
+msgstr "Aðeins kerfisstjórar geta breytt sýnileika námskeiðs."
 
 msgid "Unexpected error while subscribing the user"
-msgstr ""
+msgstr "Óvænt villa við að skrá notandann"
 
 msgid "Search in resource logs"
-msgstr ""
+msgstr "Leita í auðlindaskrám"
 
 msgid "Include this learning path in the global search results"
-msgstr ""
+msgstr "Hafa þessa námsleið með í almennum leitarniðurstöðum"
 
 msgid "The course code already exists"
-msgstr ""
+msgstr "Námskeiðskóði er þegar til"
 
 msgid "Latest news"
-msgstr ""
+msgstr "Nýjustu fréttir"
 
 msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
-msgstr ""
+msgstr "Fáðu nýjustu fréttir frá Chamilo, þar á meðal öryggisveikleika og viðburði, beint inn í stjórnunarborðið þitt. Þessar fréttir verða athugaðar á Chamilo fréttamiðlaranum í hvert skipti sem þú hleður inn stjórnunarsíðunni og eru aðeins sýnilegar stjórnendum."
 
 msgid "Chamilo support block"
-msgstr ""
+msgstr "Chamilo stuðningskassi"
 
 msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
-msgstr ""
+msgstr "Fáðu fagleg ráð og auðvelda leið til að hafa samband við opinbera þjónustuaðila fyrir faglegan stuðning, beint frá framleiðendum Chamilo. Þessi kassi birtist á stjórnunarsíðunni þinni, er aðeins sýnilegur stjórnendum og uppfærist í hvert skipti sem þú hleður inn stjórnunarsíðunni."
 
 msgid "Hide option to send announcements to HR users"
 msgstr "Fela valkost til að senda tilkynningar til HR-notenda"
@@ -37504,4 +37504,46 @@ msgstr "Nútímaleg, velkomin mynd sem sýnir efnisviðfangsefni þessa námskei
 
 msgid "Back to account"
 msgstr "Til baka á reikning"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Þín endurgjöf mun hjálpa okkur að bæta framtíðarþjálfun."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Þakka þér fyrir að deila endurgjöf þinni."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Hversu ánægður ertu með heildargæði þjálfunarinnar?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Hversu ánægður ertu með viðeigandi efnisins?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Hversu ánægður ertu með skýrleika skýringanna?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Hversu ánægður ertu með skipulag og hraða þjálfunarinnar?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Hversu ánægður ertu með hagnýta nytsemi þess sem þú lærðir?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Myndirðu mæla með þessari þjálfun fyrir aðra?"
+
+msgid "What should we improve in future editions?"
+msgstr "Hvað ættum við að bæta í framtíðarútgáfum?"
+
+msgid "Very satisfied"
+msgstr "Mjög ánægður"
+
+msgid "Satisfied"
+msgstr "Ánægður"
+
+msgid "Neutral"
+msgstr "Hlutlaus"
+
+msgid "Dissatisfied"
+msgstr "Óánægður"
+
+msgid "Very dissatisfied"
+msgstr "Mjög óánægður"
 

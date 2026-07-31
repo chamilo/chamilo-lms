@@ -37506,3 +37506,45 @@ msgstr "Bu kursun konusunu temsil eden, temiz düz tasarım tarzında, platform 
 msgid "Back to account"
 msgstr "Hesaba geri dön"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Geri bildiriminiz gelecek eğitim oturumlarını iyileştirmemize yardımcı olacaktır."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Geri bildiriminizi paylaştığınız için teşekkür ederiz."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Eğitimin genel kalitesinden ne kadar memnunsunuz?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "İçeriğin uygunluğundan ne kadar memnunsunuz?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Açıklamaların netliğinden ne kadar memnunsunuz?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Eğitimin organizasyonu ve temposundan ne kadar memnunsunuz?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Öğrendiklerinizin pratik yararlılığından ne kadar memnunsunuz?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Bu eğitimi başkalarına önerir misiniz?"
+
+msgid "What should we improve in future editions?"
+msgstr "Gelecek baskılarda neyi iyileştirmeliyiz?"
+
+msgid "Very satisfied"
+msgstr "Çok memnunum"
+
+msgid "Satisfied"
+msgstr "Memnunum"
+
+msgid "Neutral"
+msgstr "Nötr"
+
+msgid "Dissatisfied"
+msgstr "Memnun değilim"
+
+msgid "Very dissatisfied"
+msgstr "Hiç memnun değilim"
+

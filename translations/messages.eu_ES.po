@@ -37511,3 +37511,45 @@ msgstr "Ikastaro honen gaia irudikatzen duen ilustrazio modernoa eta atsegina, d
 msgid "Back to account"
 msgstr "Itzuli kontura"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Zure iruzkinak etorkizuneko prestakuntza saioak hobetzen lagunduko digu."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Eskerrik asko zure iruzkina partekatzeagatik."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Zein pozik zaude prestakuntzaren kalitate orokorrarekin?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Zein pozik zaude edukien egokitasunarekin?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Zein pozik zaude azalpenen argitasunarekin?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Zein pozik zaude prestakuntzaren antolaketarekin eta erritmoarekin?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Zein pozik zaude ikasitakoaren erabilgarritasun praktikoarekin?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Prestakuntza hau beste pertsonei gomendatuko al zenieke?"
+
+msgid "What should we improve in future editions?"
+msgstr "Zer hobetu beharko genuke etorkizuneko edizioetan?"
+
+msgid "Very satisfied"
+msgstr "Oso pozik"
+
+msgid "Satisfied"
+msgstr "Pozik"
+
+msgid "Neutral"
+msgstr "Neutrala"
+
+msgid "Dissatisfied"
+msgstr "Ez pozik"
+
+msgid "Very dissatisfied"
+msgstr "Oso ez pozik"
+

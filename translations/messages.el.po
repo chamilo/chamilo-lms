@@ -37519,3 +37519,45 @@ msgstr "Μια σύγχρονη, φιλική εικόνα που αντιπρο
 msgid "Back to account"
 msgstr "Επιστροφή στον λογαριασμό"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Τα σχόλιά σας θα μας βοηθήσουν να βελτιώσουμε τις μελλοντικές εκπαιδευτικές συνεδρίες."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Σας ευχαριστούμε που μοιραστήκατε τα σχόλιά σας."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Πόσο ικανοποιημένοι είστε από τη συνολική ποιότητα της εκπαίδευσης;"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Πόσο ικανοποιημένοι είστε από τη συνάφεια του περιεχομένου;"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Πόσο ικανοποιημένοι είστε από την σαφήνεια των εξηγήσεων;"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Πόσο ικανοποιημένοι είστε από την οργάνωση και τον ρυθμό της εκπαίδευσης;"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Πόσο ικανοποιημένοι είστε από την πρακτική χρησιμότητα όσων μάθατε;"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Θα συνιστούσατε αυτή την εκπαίδευση σε άλλα άτομα;"
+
+msgid "What should we improve in future editions?"
+msgstr "Τι πρέπει να βελτιώσουμε σε μελλοντικές εκδόσεις;"
+
+msgid "Very satisfied"
+msgstr "Πολύ ικανοποιημένος"
+
+msgid "Satisfied"
+msgstr "Ικανοποιημένος"
+
+msgid "Neutral"
+msgstr "Ουδέτερος"
+
+msgid "Dissatisfied"
+msgstr "Δυσαρεστημένος"
+
+msgid "Very dissatisfied"
+msgstr "Πολύ δυσαρεστημένος"
+

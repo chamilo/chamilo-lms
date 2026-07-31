@@ -37500,3 +37500,45 @@ msgstr "এই কোর্সের বিষয় উপস্থাপনকা
 msgid "Back to account"
 msgstr "অ্যাকাউন্টে ফিরে যান"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "আপনার মতামত ভবিষ্যতের প্রশিক্ষণ সেশন উন্নত করতে আমাদের সাহায্য করবে।"
+
+msgid "Thank you for sharing your feedback."
+msgstr "আপনার মতামত শেয়ার করার জন্য ধন্যবাদ।"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "প্রশিক্ষণের সামগ্রিক মানের সাথে আপনি কতটা সন্তুষ্ট?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "বিষয়বস্তুর প্রাসঙ্গিকতার সাথে আপনি কতটা সন্তুষ্ট?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "ব্যাখ্যার স্পষ্টতার সাথে আপনি কতটা সন্তুষ্ট?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "প্রশিক্ষণের সংগঠন ও গতির সাথে আপনি কতটা সন্তুষ্ট?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "আপনি যা শিখেছেন তার ব্যবহারিক উপযোগিতার সাথে আপনি কতটা সন্তুষ্ট?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "আপনি কি অন্যদের এই প্রশিক্ষণের সুপারিশ করবেন?"
+
+msgid "What should we improve in future editions?"
+msgstr "ভবিষ্যতের সংস্করণে আমাদের কী উন্নতি করা উচিত?"
+
+msgid "Very satisfied"
+msgstr "খুব সন্তুষ্ট"
+
+msgid "Satisfied"
+msgstr "সন্তুষ্ট"
+
+msgid "Neutral"
+msgstr "নিরপেক্ষ"
+
+msgid "Dissatisfied"
+msgstr "অসন্তুষ্ট"
+
+msgid "Very dissatisfied"
+msgstr "খুব অসন্তুষ্ট"
+

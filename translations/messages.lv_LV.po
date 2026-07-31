@@ -37505,3 +37505,45 @@ msgstr "Mūsdienīga, viesmīlīga ilustrācija, kas attēlo šī kursa tēmu, t
 msgid "Back to account"
 msgstr "Atpakaļ uz kontu"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Jūsu atsauksmes palīdzēs mums uzlabot nākotnes mācību sesijas."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Paldies, ka dalījāties ar savām atsauksmēm."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Cik apmierināti esat ar kopējo mācību kvalitāti?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Cik apmierināti esat ar satura atbilstību?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Cik apmierināti esat ar skaidrojumu skaidrību?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Cik apmierināti esat ar mācību organizāciju un tempu?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Cik apmierināti esat ar apgūtā praktisko lietderību?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Vai ieteiktu šo mācību citiem cilvēkiem?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ko mums vajadzētu uzlabot nākotnes izdevumos?"
+
+msgid "Very satisfied"
+msgstr "Ļoti apmierināts"
+
+msgid "Satisfied"
+msgstr "Apmierināts"
+
+msgid "Neutral"
+msgstr "Neitrāls"
+
+msgid "Dissatisfied"
+msgstr "Neapmierināts"
+
+msgid "Very dissatisfied"
+msgstr "Ļoti neapmierināts"
+

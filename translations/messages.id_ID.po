@@ -37504,3 +37504,45 @@ msgstr "Ilustrasi modern dan ramah yang mewakili topik kursus ini, dengan gaya d
 msgid "Back to account"
 msgstr "Kembali ke akun"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Your feedback will help us improve future training sessions."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Terima kasih telah membagikan umpan balik Anda."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Seberapa puas Anda dengan kualitas keseluruhan pelatihan ini?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Seberapa puas Anda dengan relevansi konten?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Seberapa puas Anda dengan kejelasan penjelasan?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Seberapa puas Anda dengan organisasi dan kecepatan pelatihan?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Seberapa puas Anda dengan kegunaan praktis dari apa yang Anda pelajari?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Apakah Anda akan merekomendasikan pelatihan ini kepada orang lain?"
+
+msgid "What should we improve in future editions?"
+msgstr "Apa yang harus kami tingkatkan di edisi mendatang?"
+
+msgid "Very satisfied"
+msgstr "Sangat puas"
+
+msgid "Satisfied"
+msgstr "Puas"
+
+msgid "Neutral"
+msgstr "Netral"
+
+msgid "Dissatisfied"
+msgstr "Tidak puas"
+
+msgid "Very dissatisfied"
+msgstr "Sangat tidak puas"
+

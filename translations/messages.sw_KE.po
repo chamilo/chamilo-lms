@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fodera,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -37499,4 +37499,46 @@ msgstr "Kielelezo cha kisasa na kinachokaribisha kinachowakilisha mada ya kozi h
 
 msgid "Back to account"
 msgstr "Rudi kwenye akaunti"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Maoni yako yatatusaidia kuboresha vipindi vya mafunzo vijavyo."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Asante kwa kushiriki maoni yako."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Unafurahishwa kiasi gani na ubora wa jumla wa mafunzo?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Unafurahishwa kiasi gani na umuhimu wa maudhui?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Unafurahishwa kiasi gani na uwazi wa maelezo?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Unafurahishwa kiasi gani na mpangilio na mwendo wa mafunzo?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Unafurahishwa kiasi gani na manufaa ya vitendo ya uliyojifunza?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Je, ungependekeza mafunzo haya kwa watu wengine?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ni nini tunapaswa kuboresha katika matoleo ya baadaye?"
+
+msgid "Very satisfied"
+msgstr "Nimeridhika sana"
+
+msgid "Satisfied"
+msgstr "Nimeridhika"
+
+msgid "Neutral"
+msgstr "Sina maoni"
+
+msgid "Dissatisfied"
+msgstr "Sijaridhika"
+
+msgid "Very dissatisfied"
+msgstr "Sijaridhika sana"
 

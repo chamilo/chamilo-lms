@@ -37504,3 +37504,45 @@ msgstr "تصویر مدرن و خوش‌آمدگویی که موضوع این د
 msgid "Back to account"
 msgstr "بازگشت به حساب"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "بازخورد شما به ما کمک می‌کند جلسات آموزشی آینده را بهبود بخشیم."
+
+msgid "Thank you for sharing your feedback."
+msgstr "از به اشتراک گذاشتن بازخوردتان سپاسگزاریم."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "از کیفیت کلی آموزش چقدر راضی هستید؟"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "از ارتباط محتوای آموزش با نیازهایتان چقدر راضی هستید؟"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "از وضوح توضیحات چقدر راضی هستید؟"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "از سازماندهی و سرعت آموزش چقدر راضی هستید؟"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "از کاربردی بودن آنچه آموخته‌اید چقدر راضی هستید؟"
+
+msgid "Would you recommend this training to other people?"
+msgstr "آیا این آموزش را به دیگران توصیه می‌کنید؟"
+
+msgid "What should we improve in future editions?"
+msgstr "در ویرایش‌های آینده چه چیزی را باید بهبود بخشیم؟"
+
+msgid "Very satisfied"
+msgstr "بسیار راضی"
+
+msgid "Satisfied"
+msgstr "راضی"
+
+msgid "Neutral"
+msgstr "خنثی"
+
+msgid "Dissatisfied"
+msgstr "ناراضی"
+
+msgid "Very dissatisfied"
+msgstr "بسیار ناراضی"
+

@@ -36648,37 +36648,37 @@ msgid "You must add at least one question"
 msgstr "ທ່ານຕ້ອງເພີ່ມຢ່າງໜ້ອຍໜຶ່ງຄຳຖາມ"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "ການດຳເນີນການຂັ້ນສູງ"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "ເສັ້ນທາງແອັບພລິເຄຊັນ"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "ນຳໃຊ້ລາຍລະອຽດໄຟລ໌"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "ນຳໃຊ້ລາຍລະອຽດແຜນ"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "ນຳໃຊ້ແຜນລົ້ມເຫຼວ"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "ນຳໃຊ້ແຜນພ້ອມ"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "ນຳໃຊ້ການກະກຽມ"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "ນຳໃຊ້ໄຟລ໌ທີ່ຈັດສະເຕຈ"
 
 msgid "Applying files..."
-msgstr "Applying files..."
+msgstr "ກຳລັງນຳໃຊ້ໄຟລ໌..."
 
 msgid "Audit file"
-msgstr "Audit file"
+msgstr "ກວດສອບໄຟລ໌"
 
 msgid "Backup directory"
-msgstr "Backup directory"
+msgstr "ໄດເລກະທໍລີສຳຮອງ"
 
 msgid "Baseline clean"
 msgstr "Baseline clean"
@@ -36687,13 +36687,13 @@ msgid "Baseline warnings"
 msgstr "Baseline warnings"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "ສ້າງແຜນນຳໃຊ້ທີ່ປອດໄພຈາກແພັກເກັດທີ່ຈັດສະເຕຈ. ນີ້ກວດສອບພຽງໄຟລ໌, ການອະນຸຍາດ, ເສັ້ນທາງສຳຮອງ ແລະ ສະຖານະລັອກເທົ່ານັ້ນ. ມັນບໍ່ແທນທີ່ໄຟລ໌."
 
 msgid "Build production frontend assets."
-msgstr "Build production frontend assets."
+msgstr "ສ້າງຊັບສິນ frontend ການຜະລິດ."
 
 msgid "Building plan..."
-msgstr "Building plan..."
+msgstr "ກຳລັງສ້າງແຜນ..."
 
 msgid "Channel"
 msgstr "Channel"
@@ -36702,13 +36702,13 @@ msgid "Check"
 msgstr "Check"
 
 msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
-msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "ກວດສອບການອັບເດດ Chamilo ທີ່ມີ, ກວດສອບແພັກເກັດ, ຈັດສະເຕຈໄຟລ໌ ແລະ ດຳເນີນການຂັ້ນຕອນຫຼັງການອັບເດດທີ່ຄວບຄຸມ."
 
 msgid "Check manifest"
-msgstr "Check manifest"
+msgstr "ກວດສອບ manifest"
 
 msgid "Checking post-apply actions..."
-msgstr "Checking post-apply actions..."
+msgstr "ກຳລັງກວດສອບການດຳເນີນການຫຼັງການນຳໃຊ້..."
 
 msgid "Checking..."
 msgstr "Checking..."
@@ -36717,16 +36717,16 @@ msgid "Composer install"
 msgstr "Composer install"
 
 msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
-msgstr "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "ການດຳເນີນການ Composer, Yarn ແລະ ການຍ້າຍຖານຂໍ້ມູນສາມາດແກ້ໄຂຄວາມຂຶ່ນອີງ, ຊັບສິນທີ່ສ້າງ ຫຼື ຖານຂໍ້ມູນ. ເລືອກພຽງຫຼັງຈາກຢືນຢັນການສຳຮອງ ແລະ ການອະນຸຍາດ."
 
 msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
-msgstr "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "ກຳນົດຄ່າ CHAMILO_UPDATE_MANIFEST_URL ໃນເຊີບເວີ ຫຼື ສະໜອງ URL manifest HTTPS."
 
 msgid "Configured"
 msgstr "Configured"
 
 msgid "Current migration"
-msgstr "Current migration"
+msgstr "ການຍ້າຍຖານຂໍ້ມູນປັດຈຸບັນ"
 
 msgid "Database baseline"
 msgstr "ຖານຂໍ້ມູນພື້ນຖານ"
@@ -37029,19 +37029,19 @@ msgid "The operation log reports that post-apply actions completed successfully.
 msgstr "ບັນທຶກການດຳເນີນການລາຍງານວ່າການດຳເນີນການຫຼັງການນຳໃຊ້ສຳເລັດ."
 
 msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
-msgstr ""
+msgstr "ຄຳສັ່ງຫຼັງການນຳໃຊ້ທີ່ເລືອກສຳເລັດແລ້ວ, ແຕ່ການຕອບສະໜອງ HTTP ສຸດທ້າຍລົ້ມເຫຼວ. ໂຫຼດໜ້າໃໝ່ ແລະ ກວດສອບການອະນຸຍາດແຄຊຣັນໄທມ໌ ຖ້າໜ້າບໍ່ໂຫຼດຖືກຕ້ອງ."
 
 msgid "The updater does not create or restore database backups."
-msgstr ""
+msgstr "ຕົວອັບເດດບໍ່ສ້າງ ຫຼື ກູ້ຄືນສຳຮອງຖານຂໍ້ມູນ."
 
 msgid "These actions are safe to run from the UI after reviewing the update result."
-msgstr ""
+msgstr "ການດຳເນີນການເຫຼົ່ານີ້ປອດໄພທີ່ຈະດຳເນີນຈາກ UI ຫຼັງຈາກກວດສອບຜົນການອັບເດດ."
 
 msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
-msgstr ""
+msgstr "ຄຳສັ່ງເຫຼົ່ານີ້ສາມາດແກ້ໄຂຄວາມຂຶ່ນອີງ, ຊັບສິນທີ່ສ້າງ, ແຄຊ ຫຼື ຖານຂໍ້ມູນ. ຢືນຢັນການສຳຮອງກ່ອນດຳເນີນການຕໍ່."
 
 msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
-msgstr ""
+msgstr "ການດຳເນີນການນີ້ແກ້ໄຂໄຟລ໌ໃນການຕິດຕັ້ງ Chamilo. ໃຫ້ແນ່ໃຈວ່າແຜນນຳໃຊ້ໄດ້ຖືກກວດສອບ ແລະ ເປີດການສຳຮອງກ່ອນດຳເນີນການຕໍ່."
 
 msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
 msgstr ""
@@ -37651,4 +37651,46 @@ msgstr "ຮູບປະກອບທັນສະໄໝ ທີ່ສະແດງ�
 
 msgid "Back to account"
 msgstr "ກັບໄປບັນຊີ"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr ""
+
+msgid "Thank you for sharing your feedback."
+msgstr ""
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr ""
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr ""
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr ""
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "ທ່ານພໍໃຈກັບການຈັດຕັ້ງ ແລະ ຈັງຫວະຂອງການຝຶກອົບຮົມຫຼາຍປານໃດ?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "ທ່ານພໍໃຈກັບປະໂຫຍດຕົວຈິງຂອງສິ່ງທີ່ທ່ານໄດ້ຮຽນຮູ້ຫຼາມປານໃດ?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "ທ່ານຈະແນະນຳການຝຶກອົບຮົມນີ້ໃຫ້ກັບບຸກຄົນອື່ນໆບໍ?"
+
+msgid "What should we improve in future editions?"
+msgstr "ພວກເຮົາຄວນປັບປຸງຫຍັງໃນການຈັດຕັ້ງຄັ້ງຕໍ່ໄປ?"
+
+msgid "Very satisfied"
+msgstr "ພໍໃຈຫຼາຍ"
+
+msgid "Satisfied"
+msgstr "ພໍໃຈ"
+
+msgid "Neutral"
+msgstr "ປານກາງ"
+
+msgid "Dissatisfied"
+msgstr "ບໍ່ພໍໃຈ"
+
+msgid "Very dissatisfied"
+msgstr "ບໍ່ພໍໃຈເລີຍ"
 

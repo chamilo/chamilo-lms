@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:कपीराइट,, no:कपीराइट नभएको"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फोल्डर,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:व्यायाम,,      simulation:सिमुलेशन,,      questionnaire:प्रश्नावली,,      diagram:डायाग्राम,,      figure:चित्र,,      graph:ग्राफ,,      index:सूची,,      slide:स्लाइड,,      table:तालिका,,      narrative text:कथन पाठ,,      exam:परीक्षा,,      experiment:प्रयोग,,      problem statement:समस्या कथन,,      self assessment:आत्म मूल्याङ्कन,,      lecture:व्याख्यान"
@@ -37503,4 +37503,46 @@ msgstr "यो कोर्सको विषयलाई प्रतिनि
 
 msgid "Back to account"
 msgstr "खातामा फर्कनुहोस्"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "तपाईंको प्रतिक्रियाले हामीलाई भविष्यका तालिम सत्रहरू सुधार्न मद्दत गर्नेछ।"
+
+msgid "Thank you for sharing your feedback."
+msgstr "तपाईंको प्रतिक्रिया साझा गर्नुभएकोमा धन्यवाद।"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "तालिमको समग्र गुणस्तरप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "सामग्रीको प्रासंगिकताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "व्याख्याको स्पष्टताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "तालिमको संगठन र गतिप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "तपाईंले सिकेको कुराको व्यावहारिक उपयोगिताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "के तपाईं यो तालिम अरूलाई सिफारिस गर्नुहुन्छ?"
+
+msgid "What should we improve in future editions?"
+msgstr "भविष्यका संस्करणहरूमा हामीले के सुधार गर्नुपर्छ?"
+
+msgid "Very satisfied"
+msgstr "धेरै सन्तुष्ट"
+
+msgid "Satisfied"
+msgstr "सन्तुष्ट"
+
+msgid "Neutral"
+msgstr "तटस्थ"
+
+msgid "Dissatisfied"
+msgstr "असन्तुष्ट"
+
+msgid "Very dissatisfied"
+msgstr "धेरै असन्तुष्ट"
 

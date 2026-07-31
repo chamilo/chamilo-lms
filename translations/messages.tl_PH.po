@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad sa pagpuno ng form : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Laki<sup>2</sup> (Tingnan ang <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -34555,7 +34555,7 @@ msgid "Mailing cannot be combined with other recipients."
 msgstr "Hindi maaaring pagsamahin ang Mailing sa iba pang mga tatanggap."
 
 msgid "Social map"
-msgstr "Social map"
+msgstr "Mapa ng social"
 
 msgid "The map plugin is not enabled or configured."
 msgstr "Hindi naka-enable o naka-configure ang map plugin."
@@ -34582,7 +34582,7 @@ msgid "Provider: Google Maps"
 msgstr "Provider: Google Maps"
 
 msgid "Personal files"
-msgstr "Personal files"
+msgstr "Personal na mga file"
 
 msgid "Upload image"
 msgstr "Mag-upload ng larawan"
@@ -34936,25 +34936,25 @@ msgid "Flat gradebook results view."
 msgstr "Flat na view ng gradebook results."
 
 msgid "Evaluation log"
-msgstr "Evaluation log"
+msgstr "Log ng evaluation"
 
 msgid "Change log for gradebook evaluations."
 msgstr "Change log para sa gradebook evaluations."
 
 msgid "Link log"
-msgstr "Link log"
+msgstr "Log ng link"
 
 msgid "Change log for gradebook links."
 msgstr "Change log para sa gradebook links."
 
 msgid "Result details"
-msgstr "Result details"
+msgstr "Detalye ng resulta"
 
 msgid "Detailed view of a gradebook result."
 msgstr "Detalyadong view ng gradebook result."
 
 msgid "Personal certificates report."
-msgstr "Personal certificates report."
+msgstr "Ulat ng personal na mga sertipiko."
 
 msgid "User move statistics"
 msgstr "Mga istatistika ng galaw ng gumagamit"
@@ -35491,7 +35491,7 @@ msgid "%s results"
 msgstr "%s resulta"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng pagpuno sa form na aktibidad : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Tingnan ang <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Natanggal"
@@ -35878,7 +35878,7 @@ msgid "Meeting dates"
 msgstr "Mga petsa ng meeting"
 
 msgid "Meeting poll"
-msgstr "Meeting poll"
+msgstr "Poll ng meeting"
 
 msgid "My availability"
 msgstr "Aking availability"
@@ -36496,10 +36496,10 @@ msgid "You must add at least one question"
 msgstr "Dapat kang magdagdag ng hindi bababa sa isang tanong"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Advanced na mga aksyon"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Path ng application"
 
 msgid "Apply files details"
 msgstr "Ilapat ang mga detalye ng files"
@@ -37390,7 +37390,7 @@ msgid "The scan stopped early because a subdirectory could not be read (check fi
 msgstr "Maagang tumigil ang scan dahil hindi mabasa ang isang subdirectory (suriin ang mga pahintulot sa file). Maaaring bahagi lamang ang mga resulta sa ibaba."
 
 msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Masyadong maraming pagbabago para ilista nang buo; tanging ang unang mga entry ng bawat kategorya ang ipinapakita sa ibaba. Tingnan ang CEF log para sa kumpletong listahan."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% (na) file ang hindi mabasa (mga pahintulot) at nilaktawan."
@@ -37477,26 +37477,68 @@ msgid "Git remote changed"
 msgstr "Nagbago ang Git remote"
 
 msgid "Press enter to select"
-msgstr "Press enter to select"
+msgstr "Pindutin ang enter para pumili"
 
 msgid "Press enter to remove"
-msgstr "Press enter to remove"
+msgstr "Pindutin ang enter para alisin"
 
 msgid "No elements found. Consider changing the search query."
-msgstr "No elements found. Consider changing the search query."
+msgstr "Walang nahanap na elemento. Isaalang-alang ang pagbabago ng search query."
 
 msgid "List is empty."
-msgstr "List is empty."
+msgstr "Walang laman ang listahan."
 
 msgid "Your session has expired. Please try again."
-msgstr "Your session has expired. Please try again."
+msgstr "Nag-expire na ang iyong session. Pakisubukan muli."
 
 msgid "Generate with AI"
-msgstr "Generate with AI"
+msgstr "Gumawa gamit ang AI"
 
 msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
-msgstr "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Isang modernong, nakakaengganyong ilustrasyon na kumakatawan sa paksa ng kursong ito, sa malinis na flat-design na istilo, gamit ang mga kulay ng aking platform bilang mga accent."
 
 msgid "Back to account"
-msgstr "Back to account"
+msgstr "Bumalik sa account"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Ang iyong feedback ay makakatulong sa amin na mapabuti ang mga susunod na sesyon ng pagsasanay."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Salamat sa pagbabahagi ng iyong feedback."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Gaano ka nasisiyahan sa pangkalahatang kalidad ng pagsasanay?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Gaano ka nasisiyahan sa kaugnayan ng nilalaman?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Gaano ka nasisiyahan sa kalinawan ng mga paliwanag?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Gaano ka nasisiyahan sa organisasyon at bilis ng pagsasanay?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Gaano ka nasisiyahan sa praktikal na gamit ng iyong natutunan?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Irekomenda mo ba ang pagsasanay na ito sa ibang tao?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ano ang dapat naming pagbutihin sa mga susunod na edisyon?"
+
+msgid "Very satisfied"
+msgstr "Lubos na nasiyahan"
+
+msgid "Satisfied"
+msgstr "Nasiyahan"
+
+msgid "Neutral"
+msgstr "Walang kinikilingan"
+
+msgid "Dissatisfied"
+msgstr "Hindi nasiyahan"
+
+msgid "Very dissatisfied"
+msgstr "Lubhang hindi nasiyahan"
 

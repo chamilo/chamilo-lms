@@ -37506,3 +37506,45 @@ msgstr "En moderne, indbydende illustration, der repræsenterer dette kursus' em
 msgid "Back to account"
 msgstr "Tilbage til konto"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Din feedback vil hjælpe os med at forbedre fremtidige kurser."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Tak, fordi du deler din feedback."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Hvor tilfreds er du med den samlede kvalitet af kurset?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Hvor tilfreds er du med indholdets relevans?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Hvor tilfreds er du med forklaringernes klarhed?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Hvor tilfreds er du med kursets organisering og tempo?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Hvor tilfreds er du med den praktiske nytteværdi af det, du har lært?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Vil du anbefale dette kursus til andre?"
+
+msgid "What should we improve in future editions?"
+msgstr "Hvad bør vi forbedre i fremtidige udgaver?"
+
+msgid "Very satisfied"
+msgstr "Meget tilfreds"
+
+msgid "Satisfied"
+msgstr "Tilfreds"
+
+msgid "Neutral"
+msgstr "Neutral"
+
+msgid "Dissatisfied"
+msgstr "Utilfreds"
+
+msgid "Very dissatisfied"
+msgstr "Meget utilfreds"
+

@@ -37500,3 +37500,45 @@ msgstr "Sawir casri ah oo soo dhawaynaya oo matalaya mawduuca koorsadan, qaab na
 msgid "Back to account"
 msgstr "Ku noqo akoonka"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Your feedback will help us improve future training sessions."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Waxaad ku mahadsantahay inaad nala wadaagtay ra'yigaaga."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Ilaa intee ayaad ku qanacsan tahay tayada guud ee tababarka?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Ilaa intee ayaad ku qanacsan tahay ku habboonaanta nuxurka?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Ilaa intee ayaad ku qanacsan tahay cadaynta sharraxaadaha?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Ilaa intee ayaad ku qanacsan tahay abaabulka iyo xawaaraha tababarka?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Ilaa intee ayaad ku qanacsan tahay faa'iidada dhabta ah ee waxaad baratay?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Miyaad kula talin lahayd tababarkan dadka kale?"
+
+msgid "What should we improve in future editions?"
+msgstr "Maxaa inoo hagaajin karnaa daabacadaha mustaqbalka?"
+
+msgid "Very satisfied"
+msgstr "Aad ugu qanacsan"
+
+msgid "Satisfied"
+msgstr "Ku qanacsan"
+
+msgid "Neutral"
+msgstr "Dhexdhexaad"
+
+msgid "Dissatisfied"
+msgstr "Aan ku qanacsanayn"
+
+msgid "Very dissatisfied"
+msgstr "Aad ugu qanacsanayn"
+

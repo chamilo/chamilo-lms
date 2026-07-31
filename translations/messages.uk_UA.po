@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "З повагою"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Зразок формули: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Приклад формули: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Діапазони змінних"
@@ -37499,4 +37499,46 @@ msgstr "Сучасна, приваблива ілюстрація, що пред
 
 msgid "Back to account"
 msgstr "Повернутися до облікового запису"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Ваш відгук допоможе нам покращити майбутні навчальні сесії."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Дякуємо, що поділилися своїм відгуком."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Наскільки ви задоволені загальною якістю навчання?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Наскільки ви задоволені релевантністю контенту?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Наскільки ви задоволені зрозумілістю пояснень?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Наскільки ви задоволені організацією та темпом навчання?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Наскільки ви задоволені практичною корисністю отриманих знань?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Чи порекомендуєте ви це навчання іншим?"
+
+msgid "What should we improve in future editions?"
+msgstr "Що ми можемо покращити в майбутніх випусках?"
+
+msgid "Very satisfied"
+msgstr "Дуже задоволений(-на)"
+
+msgid "Satisfied"
+msgstr "Задоволений(-на)"
+
+msgid "Neutral"
+msgstr "Нейтрально"
+
+msgid "Dissatisfied"
+msgstr "Незадоволений(-на)"
+
+msgid "Very dissatisfied"
+msgstr "Дуже незадоволений(-на)"
 

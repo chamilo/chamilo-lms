@@ -37505,3 +37505,45 @@ msgstr "Šiuolaikiška, kviečianti iliustracija, vaizduojanti šio kurso temą,
 msgid "Back to account"
 msgstr "Grįžti į paskyrą"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Jūsų atsiliepimai padės mums tobulinti būsimus mokymus."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Dėkojame, kad pasidalinote savo atsiliepimais."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Kiek esate patenkinti bendra mokymų kokybe?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Kiek esate patenkinti turinio aktualumu?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Kiek esate patenkinti paaiškinimų aiškumu?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Kiek esate patenkinti mokymų organizavimu ir tempu?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Kiek esate patenkinti praktine to, ko išmokote, nauda?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ar rekomenduotumėte šiuos mokymus kitiems?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ką turėtume tobulinti būsimuose leidiniuose?"
+
+msgid "Very satisfied"
+msgstr "Labai patenkintas (-a)"
+
+msgid "Satisfied"
+msgstr "Patenkintas (-a)"
+
+msgid "Neutral"
+msgstr "Neutralus (-i)"
+
+msgid "Dissatisfied"
+msgstr "Nepatenkintas (-a)"
+
+msgid "Very dissatisfied"
+msgstr "Labai nepatenkintas (-a)"
+

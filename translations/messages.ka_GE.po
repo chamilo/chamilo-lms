@@ -37500,3 +37500,45 @@ msgstr "თანამედროვე, მისასალმებელ�
 msgid "Back to account"
 msgstr "ანგარიშზე დაბრუნება"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "თქვენი გამოხმაურება დაგვეხმარება მომავალი ტრენინგების გაუმჯობესებაში."
+
+msgid "Thank you for sharing your feedback."
+msgstr "გმადლობთ გამოხმაურებისთვის."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "რამდენად კმაყოფილი ხართ ტრენინგის საერთო ხარისხით?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "რამდენად კმაყოფილი ხართ შინაარსის შესაბამისობით?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "რამდენად კმაყოფილი ხართ ახსნების სიცხადით?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "რამდენად კმაყოფილი ხართ ტრენინგის ორგანიზებითა და ტემპით?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "რამდენად კმაყოფილი ხართ იმის პრაქტიკული სარგებლობით, რაც ისწავლეთ?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "გირჩევთ ამ ტრენინგს სხვა ადამიანებს?"
+
+msgid "What should we improve in future editions?"
+msgstr "რა უნდა გავაუმჯობესოთ მომავალ გამოცემებში?"
+
+msgid "Very satisfied"
+msgstr "ძალიან კმაყოფილი"
+
+msgid "Satisfied"
+msgstr "კმაყოფილი"
+
+msgid "Neutral"
+msgstr "ნეიტრალური"
+
+msgid "Dissatisfied"
+msgstr "უკმაყოფილო"
+
+msgid "Very dissatisfied"
+msgstr "ძალიან უკმაყოფილო"
+

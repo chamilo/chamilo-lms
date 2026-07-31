@@ -37504,3 +37504,45 @@ msgstr "Një ilustrim modern dhe mikpritës që përfaqëson temën e këtij kur
 msgid "Back to account"
 msgstr "Kthehu te llogaria"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Feedback-u juaj do të na ndihmojë të përmirësojmë sesionet e ardhshme të trajnimit."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Faleminderit që ndatë feedback-un tuaj."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Sa i kënaqur jeni me cilësinë e përgjithshme të trajnimit?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Sa i kënaqur jeni me rëndësinë e përmbajtjes?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Sa i kënaqur jeni me qartësinë e shpjegimeve?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Sa i kënaqur jeni me organizimin dhe ritmin e trajnimit?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Sa i kënaqur jeni me dobinë praktike të asaj që keni mësuar?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "A do ta rekomandoni këtë trajnim për persona të tjerë?"
+
+msgid "What should we improve in future editions?"
+msgstr "Çfarë duhet të përmirësojmë në edicionet e ardhshme?"
+
+msgid "Very satisfied"
+msgstr "Shumë i kënaqur"
+
+msgid "Satisfied"
+msgstr "I kënaqur"
+
+msgid "Neutral"
+msgstr "Neutral"
+
+msgid "Dissatisfied"
+msgstr "I pakënaqur"
+
+msgid "Very dissatisfied"
+msgstr "Shumë i pakënaqur"
+

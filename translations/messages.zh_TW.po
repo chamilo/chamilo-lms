@@ -37506,3 +37506,45 @@ msgstr "以乾淨的平面設計風格，使用本平台色彩作為強調，呈
 msgid "Back to account"
 msgstr "返回帳戶"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "您的回饋將有助於我們改進未來的培訓課程。"
+
+msgid "Thank you for sharing your feedback."
+msgstr "感謝您分享您的回饋。"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "您對本次培訓的整體品質滿意嗎？"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "您對課程內容的相關性滿意嗎？"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "您對解說的清晰度滿意嗎？"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "您對培訓的組織與進度滿意嗎？"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "您對所學內容的實用性滿意嗎？"
+
+msgid "Would you recommend this training to other people?"
+msgstr "您會推薦此培訓給其他人嗎？"
+
+msgid "What should we improve in future editions?"
+msgstr "未來課程應如何改進？"
+
+msgid "Very satisfied"
+msgstr "非常滿意"
+
+msgid "Satisfied"
+msgstr "滿意"
+
+msgid "Neutral"
+msgstr "普通"
+
+msgid "Dissatisfied"
+msgstr "不滿意"
+
+msgid "Very dissatisfied"
+msgstr "非常不滿意"
+

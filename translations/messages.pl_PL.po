@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Z poważaniem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Przykładowy wzór: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Przykładowy wzór: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Zakresy zmiennych"
@@ -37509,4 +37509,46 @@ msgstr "Nowoczesna, przyjazna ilustracja przedstawiająca temat tego kursu, w cz
 
 msgid "Back to account"
 msgstr "Powrót do konta"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Twoja opinia pomoże nam ulepszyć przyszłe szkolenia."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Dziękujemy za podzielenie się opinią."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Jak bardzo jesteś zadowolony(-a) z ogólnej jakości szkolenia?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Jak bardzo jesteś zadowolony(-a) z trafności treści?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Jak bardzo jesteś zadowolony(-a) ze zrozumiałości wyjaśnień?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Jak bardzo jesteś zadowolony(-a) z organizacji i tempa szkolenia?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Jak bardzo jesteś zadowolony(-a) z praktycznej przydatności tego, czego się nauczyłeś(-aś)?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Czy poleciłbyś(-a) to szkolenie innym osobom?"
+
+msgid "What should we improve in future editions?"
+msgstr "Co powinniśmy poprawić w przyszłych edycjach?"
+
+msgid "Very satisfied"
+msgstr "Bardzo zadowolony(-a)"
+
+msgid "Satisfied"
+msgstr "Zadowolony(-a)"
+
+msgid "Neutral"
+msgstr "Neutralny(-a)"
+
+msgid "Dissatisfied"
+msgstr "Niezadowolony(-a)"
+
+msgid "Very dissatisfied"
+msgstr "Bardzo niezadowolony(-a)"
 

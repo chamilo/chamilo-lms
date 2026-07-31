@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Jọwọ kọ ọrọ rẹ si isalẹ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìṣirò fọ́ọ̀mù : ṣe iṣiro Ìwọn Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́ orí</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Akọ tabi abo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tabi F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìwọn ara</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gíga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìwọn Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìwọn ara/Gíga<sup>2</sup> (Wo.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àpilẹkọ Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìṣirò fọ́ọ̀mù: ṣe iṣiro Ìwọn Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́ orí</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Akọ/Abo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tàbí F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìwọn</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gíga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìwọn Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìwọn/Gíga<sup>2</sup> (Wo.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àpilẹ̀kọ Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Kọ adirẹẹsi silẹ"
@@ -35491,7 +35491,7 @@ msgid "%s results"
 msgstr "%s àbájáde"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìṣirò fọ́ọ̀mù : ṣe iṣiro Ìwọn Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́ orí</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Akọ tabi abo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tabi F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìwọn ara</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gíga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìwọn Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìwọn ara/Gíga<sup>2</sup> (Wo.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àpilẹkọ Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìṣirò fọ́ọ̀mù: ṣe iṣiro Ìwọn Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́ orí</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Akọ/Abo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tàbí F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìwọn</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gíga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìwọn Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìwọn/Gíga<sup>2</sup> (Wo.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àpilẹ̀kọ Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Ti yọkuro"
@@ -37499,4 +37499,46 @@ msgstr "Àwòrán ìgbàlódé, tí ó ń rọ̀rùn tí ó ń ṣàfihàn àkó
 
 msgid "Back to account"
 msgstr "Padà sí àkọọ́lẹ̀"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Ẹ̀rí rẹ yóò ṣèrànwọ́ láti mú ìdàgbàsókè àwọn ìdásílẹ̀ ìdánilẹ́kọ̀ọ́ ọjọ́ iwájú."
+
+msgid "Thank you for sharing your feedback."
+msgstr "A dúpẹ́ fún ìpín ẹ̀rí rẹ."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Báwo ni o ṣe tẹ́lọ́rùn pẹ̀lú ìdíyelé gbogbogbòò ti ìdásílẹ̀ ìdánilẹ́kọ̀ọ́ náà?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Báwo ni o ṣe tẹ́lọ́rùn pẹ̀lú ìbámu àkóónú náà?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Báwo ni o ṣe ní ìtẹ́lọ́rùn pẹ̀lú ìmúmọ́ra àwọn àlàyé náà?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Báwo ni o ṣe ní ìtẹ́lọ́rùn pẹ̀lú ìṣètò àti ìṣísọ́pọ̀ ìdánilẹ́kọ̀ọ́ náà?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Báwo ni o ṣe ní ìtẹ́lọ́rùn pẹ̀lú ìwúlò àwọn ohun tí o kọ́ ní ìṣe?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ṣé o máa dámọ̀ràn ìdánilẹ́kọ̀ọ́ yìí fún àwọn ènìyàn mìíràn?"
+
+msgid "What should we improve in future editions?"
+msgstr "Kí ni a gbọ́dọ̀ mú dára sí ní àwọn ìtẹ̀jáde ọjọ́ iwájú?"
+
+msgid "Very satisfied"
+msgstr "Inú mi dùn gan-an"
+
+msgid "Satisfied"
+msgstr "Inú mi dùn"
+
+msgid "Neutral"
+msgstr "Ìbámu"
+
+msgid "Dissatisfied"
+msgstr "Inú mi kò dùn"
+
+msgid "Very dissatisfied"
+msgstr "Inú mi kò dùn rárá"
 

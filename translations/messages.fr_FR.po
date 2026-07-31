@@ -39386,3 +39386,45 @@ msgstr "Une illustration moderne et accueillante représentant le sujet de ce co
 msgid "Back to account"
 msgstr "Retour au compte"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Vos commentaires nous aideront à améliorer les prochaines sessions de formation."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Merci d'avoir partagé vos commentaires."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Dans quelle mesure êtes-vous satisfait de la qualité globale de la formation ?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Dans quelle mesure êtes-vous satisfait de la pertinence du contenu ?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Dans quelle mesure êtes-vous satisfait de la clarté des explications ?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Dans quelle mesure êtes-vous satisfait de l'organisation et du rythme de la formation ?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Dans quelle mesure êtes-vous satisfait de l'utilité pratique de ce que vous avez appris ?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Recommanderiez-vous cette formation à d'autres personnes ?"
+
+msgid "What should we improve in future editions?"
+msgstr "Que devrions-nous améliorer dans les prochaines éditions ?"
+
+msgid "Very satisfied"
+msgstr "Très satisfait"
+
+msgid "Satisfied"
+msgstr "Satisfait"
+
+msgid "Neutral"
+msgstr "Neutre"
+
+msgid "Dissatisfied"
+msgstr "Insatisfait"
+
+msgid "Very dissatisfied"
+msgstr "Très insatisfait"
+

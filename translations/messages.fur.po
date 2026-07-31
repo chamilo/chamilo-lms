@@ -37500,3 +37500,45 @@ msgstr "Une ilustrazion moderne e ospitâl che rapresente l'argoment di chest co
 msgid "Back to account"
 msgstr "Torne al account"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Il to judizi al judarà a miorâ lis sessions di formazion dal futûr."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Graciis par vê condividût il to judizi."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Cuant sei sodisfat de cualitât gjenerâl de formazion?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Cuant sei sodisfat de rilevance dal contignût?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Cuant sei sodisfat de clarece des spiegazions?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Cuant sei sodisfat de organizazion e dal ritmi de formazion?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Cuant sei sodisfat de utilitât pratiche di ce che tu âs imparât?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Consiglarestu cheste formazion a altris personis?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ce varessin di miorâ tes edizions dal futûr?"
+
+msgid "Very satisfied"
+msgstr "Molt sodisfat"
+
+msgid "Satisfied"
+msgstr "Sodisfat"
+
+msgid "Neutral"
+msgstr "Neutrâl"
+
+msgid "Dissatisfied"
+msgstr "No sodisfat"
+
+msgid "Very dissatisfied"
+msgstr "Molt no sodisfat"
+

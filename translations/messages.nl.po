@@ -39584,3 +39584,45 @@ msgstr "Een moderne, uitnodigende illustratie die het onderwerp van deze cursus 
 msgid "Back to account"
 msgstr "Terug naar account"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Uw feedback helpt ons toekomstige trainingen te verbeteren."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Bedankt voor het delen van uw feedback."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Hoe tevreden bent u over de algemene kwaliteit van de training?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Hoe tevreden bent u over de relevantie van de inhoud?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Hoe tevreden bent u over de duidelijkheid van de uitleg?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Hoe tevreden bent u over de organisatie en het tempo van de training?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Hoe tevreden bent u over het praktisch nut van wat u hebt geleerd?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Zou u deze training aan anderen aanbevelen?"
+
+msgid "What should we improve in future editions?"
+msgstr "Wat moeten we in toekomstige edities verbeteren?"
+
+msgid "Very satisfied"
+msgstr "Zeer tevreden"
+
+msgid "Satisfied"
+msgstr "Tevreden"
+
+msgid "Neutral"
+msgstr "Neutraal"
+
+msgid "Dissatisfied"
+msgstr "Ontevreden"
+
+msgid "Very dissatisfied"
+msgstr "Zeer ontevreden"
+

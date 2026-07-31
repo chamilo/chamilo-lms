@@ -37506,3 +37506,45 @@ msgstr "Nykyaikainen, kutsuva kuvitus, joka edustaa tämän kurssin aihetta puht
 msgid "Back to account"
 msgstr "Takaisin tilille"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Palautteesi auttaa meitä parantamaan tulevia koulutuksia."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Kiitos palautteestasi."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Kuinka tyytyväinen olet koulutuksen kokonaislaatuun?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Kuinka tyytyväinen olet sisällön merkityksellisyyteen?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Kuinka tyytyväinen olet selitysten selkeyteen?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Kuinka tyytyväinen olet koulutuksen organisointiin ja etenemistahtiin?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Kuinka tyytyväinen olet oppimasi käytännön hyödyllisyyteen?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Suosittelisitko tätä koulutusta muille?"
+
+msgid "What should we improve in future editions?"
+msgstr "Mitä meidän tulisi parantaa tulevissa versioissa?"
+
+msgid "Very satisfied"
+msgstr "Erittäin tyytyväinen"
+
+msgid "Satisfied"
+msgstr "Tyytyväinen"
+
+msgid "Neutral"
+msgstr "Neutraali"
+
+msgid "Dissatisfied"
+msgstr "Tyytymätön"
+
+msgid "Very dissatisfied"
+msgstr "Erittäin tyytymätön"
+

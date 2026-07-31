@@ -10,8 +10,6 @@
         </div>
       </template>
 
-      <hr class="-mt-2 mb-4 -mx-4" />
-
       <div class="space-y-4">
         <p>
           {{
@@ -21,6 +19,28 @@
           }}
         </p>
 
+        <div class="rounded-xl border border-gray-25 bg-gray-10 p-4 text-sm space-y-2">
+          <p>
+            {{ t("You can also connect an MCP client directly by pointing it to the following endpoint:") }}
+          </p>
+          <div class="flex flex-col gap-2 md:flex-row">
+            <input
+              name="mcp_endpoint"
+              class="min-w-0 flex-1 rounded-lg border border-gray-25 bg-white px-3 py-2 font-mono text-sm"
+              :value="mcpEndpoint"
+              readonly
+              type="text"
+              @focus="$event.target.select()"
+            />
+            <BaseButton
+              :label="t('Copy')"
+              icon="copy"
+              type="primary"
+              @click="copyMcpEndpoint"
+            />
+          </div>
+        </div>
+
         <div
           v-if="isLoading"
           class="text-sm text-gray-50"
@@ -28,12 +48,12 @@
           {{ t("Loading...") }}
         </div>
 
-        <div
+        <Message
           v-else-if="apps.length === 0"
-          class="rounded-xl border border-gray-25 bg-gray-10 p-4 text-sm text-gray-50"
+          severity="info"
         >
           {{ t("No applications are currently connected to your account.") }}
-        </div>
+        </Message>
 
         <div
           v-else
@@ -47,8 +67,10 @@
             <div class="min-w-0">
               <p class="font-semibold text-gray-90">{{ app.clientName }}</p>
               <p class="text-sm text-gray-50">
-                {{ t("Connected on") }}: {{ formatDate(app.connectedAt) }}
-                <template v-if="app.lastUsedAt"> · {{ t("Last used") }}: {{ formatDate(app.lastUsedAt) }}</template>
+                {{ t("Connected on") }}: {{ abbreviatedDatetime(app.connectedAt) }}
+                <template v-if="app.lastUsedAt">
+                  · {{ t("Last used") }}: {{ abbreviatedDatetime(app.lastUsedAt) }}</template
+                >
               </p>
             </div>
 
@@ -72,39 +94,21 @@ import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
+import Message from "primevue/message"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import oauthConnectedAppService from "../../services/oauthConnectedAppService"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
 const notifications = useNotification()
+const { abbreviatedDatetime } = useFormatDate()
 
-const isLoading = ref(false)
+const isLoading = ref(true)
 const isRevoking = ref(null)
 const apps = ref([])
-
-function getErrorMessage(error) {
-  return (
-    error?.response?.data?.detail ||
-    error?.response?.data?.["hydra:description"] ||
-    error?.response?.data?.message ||
-    t("The operation could not be completed.")
-  )
-}
-
-function formatDate(value) {
-  if (!value) {
-    return "-"
-  }
-
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) {
-    return value
-  }
-
-  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(date)
-}
+const mcpEndpoint = `${window.location.origin}/mcp`
 
 async function loadApps() {
   isLoading.value = true
@@ -113,7 +117,7 @@ async function loadApps() {
     apps.value = await oauthConnectedAppService.list()
   } catch (error) {
     console.error("Error loading authorized applications", error)
-    notifications.showErrorNotification(getErrorMessage(error))
+    notifications.showErrorNotification(error)
   } finally {
     isLoading.value = false
   }
@@ -136,9 +140,19 @@ async function revokeApp(app) {
     notifications.showSuccessNotification(t("Application revoked"))
   } catch (error) {
     console.error("Error revoking authorized application", error)
-    notifications.showErrorNotification(getErrorMessage(error))
+    notifications.showErrorNotification(error)
   } finally {
     isRevoking.value = null
+  }
+}
+
+async function copyMcpEndpoint() {
+  try {
+    await navigator.clipboard.writeText(mcpEndpoint)
+    notifications.showSuccessNotification(t("Copied to clipboard"))
+  } catch (error) {
+    console.error("Error copying MCP endpoint", error)
+    notifications.showErrorNotification(t("Could not copy the MCP endpoint"))
   }
 }
 

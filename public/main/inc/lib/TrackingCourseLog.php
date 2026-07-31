@@ -675,7 +675,7 @@ class TrackingCourseLog
         // ---------------------------------------------------------------------
         // Sorting / limits
         // ---------------------------------------------------------------------
-        $direction = strtoupper($direction);
+        $direction = strtoupper((string) $direction);
         if (!in_array($direction, ['ASC', 'DESC'], true)) {
             $direction = 'ASC';
         }

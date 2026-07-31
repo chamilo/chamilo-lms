@@ -23,12 +23,12 @@ use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 
 #[AsCommand(
-    name: 'chamilo:migration:audit-ricky-completion-rules',
-    description: 'Audit Ricky completion references and separate verified exercise mappings from review-required candidates without changing data.'
+    name: 'chamilo:migration:audit-completion-rules',
+    description: 'Audit configured completion references and separate verified exercise mappings from review-required candidates without changing data.'
 )]
-final class AuditRickyCompletionRulesCommand extends Command
+final class AuditCompletionRulesCommand extends Command
 {
-    private const string LEGACY_SOURCE_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
+    private const string SOURCE_DATA_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
 
     private const string EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
 
@@ -539,7 +539,7 @@ final class AuditRickyCompletionRulesCommand extends Command
                 'course-code',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Limits the audit to one or more Ricky course codes.'
+                'Limits the audit to one or more configured course codes.'
             )
             ->addOption(
                 'output',
@@ -553,7 +553,7 @@ final class AuditRickyCompletionRulesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Audit Ricky completion rules');
+        $io->title('Audit completion rules');
 
         $requestedCodes = array_values(array_unique(array_filter(array_map(
             static fn (mixed $value): string => trim((string) $value),
@@ -566,7 +566,7 @@ final class AuditRickyCompletionRulesCommand extends Command
         );
         $unknownCodes = array_values(array_diff($requestedCodes, $knownCodes));
         if ([] !== $unknownCodes) {
-            $io->error('Unknown Ricky course code(s): '.implode(', ', $unknownCodes));
+            $io->error('Unknown configured course code(s): '.implode(', ', $unknownCodes));
 
             return Command::INVALID;
         }
@@ -588,7 +588,7 @@ final class AuditRickyCompletionRulesCommand extends Command
             $report = [
                 'generated_at' => gmdate('c'),
                 'audit_version' => 4,
-                'legacy_source_sha256' => self::LEGACY_SOURCE_SHA256,
+                'legacy_source_sha256' => self::SOURCE_DATA_SHA256,
                 'selected_rule_count' => \count($selectedRules),
                 'tracking_backup_available' => $hasTrackingBackup,
                 'summary' => $this->newSummary(),
@@ -630,7 +630,7 @@ final class AuditRickyCompletionRulesCommand extends Command
             return Command::FAILURE;
         }
 
-        $io->success('Read-only Ricky completion-rule audit completed.');
+        $io->success('Read-only completion-rule audit completed.');
 
         return Command::SUCCESS;
     }

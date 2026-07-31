@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula lagina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula lagina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -8551,6 +8551,9 @@ msgstr "Erakundea"
 
 msgid "Reporting"
 msgstr "Txostenak"
+
+msgid "Analytics"
+msgstr "Analitika"
 
 msgid "Update"
 msgstr "Eguneratu"
@@ -26894,7 +26897,7 @@ msgid "HTTP Strict Transport Security is an excellent feature to support on your
 msgstr "HTTP Strict Transport Security zure gunearen ezaugarri bikaina da eta TLSren ezarpenera indartzen du User Agentek HTTPS erabilera betetzea lortuz. Gomendatutako balioa: 'strict-transport-security: max-age=63072000; includeSubDomains'. Ikusi https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. 'preload' atziki gehigarria sartu dezakezu, baina TLDn ondorioak ditu, beraz arretaz egin. Ikusi https://hstspreload.org/. Hutsik utzi ezaktzeko."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Eduki Segurtasun Politika"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy XSS erasoen aurrean zure guneari babesteko neurri eraginkorra da. Onartutako edureren iturburuak zerrendatuz, nabigatzaileak eduki maltzurrik kargatzea ekidin dezakezu. Ezarpen hau WYSIWYG editoreekin konplikatua da, baina iframeen sarrera autorizatzeko domeinu guztiak child-src adierazpenean gehitu badituzu, adibide honek funtzionatuko luke. JavaScript kanpoko iturrietatik (SVG irudien barnean barne) exekutatzea ekidin dezakezu 'script-src' argumentuan zerrenda zorrotza erabiliz. Hutsik utzi ezaktzeko. Adibide ezarpena: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -37397,6 +37400,9 @@ msgstr "Git urruneko konfigurazioa (.git/config) aldatu da. Egiaztatu hau espero
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Eskaneatzea goiz gelditu da azpidirektorio bat ezin izan delako irakurri (egiaztatu fitxategien baimenak). Beheko emaitzak partzialak izan daitezke."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Aldaketa gehiegi zerrenda osoan erakusteko; behean kategoria bakoitzeko lehen sarrerak soilik erakusten dira. Ikusi CEF erregistroa zerrenda osoa ikusteko."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fitxategi ezin izan dira irakurri (baimenak) eta saltatu egin dira."
 
@@ -37481,6 +37487,27 @@ msgstr "Oraindik ez da alertarik erregistratu."
 msgid "Git remote changed"
 msgstr "Git urruneko aldaketa"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Aldaketa gehiegi zerrenda osoan erakusteko; behean kategoria bakoitzeko lehen sarrerak soilik erakusten dira. Ikusi zerrenda osoa %link_start%CEF erregistroan%link_end%."
+msgid "Press enter to select"
+msgstr "Sakatu enter hautatzeko"
+
+msgid "Press enter to remove"
+msgstr "Sakatu enter kentzeko"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Ez da elementurik aurkitu. Aldatu bilaketa kontsulta."
+
+msgid "List is empty."
+msgstr "Zerrenda hutsik dago."
+
+msgid "Your session has expired. Please try again."
+msgstr "Zure saioa iraungi da. Saiatu berriro."
+
+msgid "Generate with AI"
+msgstr "Sortu IA-rekin"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Ikastaro honen gaia irudikatzen duen ilustrazio modernoa eta atsegina, diseinu lau garbiaren estiloan, plataformaren koloreak azentu gisa erabiliz."
+
+msgid "Back to account"
+msgstr "Itzuli kontura"
 

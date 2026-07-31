@@ -22,7 +22,7 @@ $is_allowedToEdit = $is_courseAdmin;
 
 $em = Database::getManager();
 /** @var \Chamilo\CoreBundle\Entity\Course $course */
-$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+$course = $em->find('Chamilo\CoreBundle\Entity\Course', api_get_course_int_id());
 $ltiToolRepo = $em->getRepository(ExternalTool::class);
 
 $categories = Category::load(null, null, $course->getCode(), null, null, $sessionId);
@@ -102,7 +102,7 @@ if ($form->validate()) {
     $eval->add();
 
     /** @var GradebookEvaluation $gradebookEval */
-    $gradebookEval = $em->find('ChamiloCoreBundle:GradebookEvaluation', $eval->get_id());
+    $gradebookEval = $em->find('Chamilo\CoreBundle\Entity\GradebookEvaluation', $eval->get_id());
     $ltiTool->setGradebookEval($gradebookEval);
 
     $em->persist($ltiTool);

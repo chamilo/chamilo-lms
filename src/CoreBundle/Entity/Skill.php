@@ -41,9 +41,10 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'groups' => ['skill:tree:read'],
             ],
             output: SkillTreeNode::class,
-            provider: SkillTreeStateProvider::class
+            provider: SkillTreeStateProvider::class,
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR')"
         ),
-        new GetCollection(),
+        new GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR')"),
         new Get(),
     ],
     normalizationContext: [

@@ -1258,11 +1258,11 @@ class GradebookUtils
         //Update weight into student publication(work)
         $em
             ->createQuery('
-                UPDATE ChamiloCourseBundle:CStudentPublication w
+                UPDATE Chamilo\CourseBundle\Entity\CStudentPublication w
                 SET w.weight = :final_weight
                 WHERE
                     w.iid = (
-                        SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
+                        SELECT l.refId FROM Chamilo\CoreBundle\Entity\GradebookLink l
                         WHERE l.id = :link AND l.type = :type
                     )
             ')

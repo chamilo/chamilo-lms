@@ -875,8 +875,8 @@ class ExtraFieldOption extends Model
     {
         $extraFieldType = $this->getExtraField()->getItemType();
 
-        $dql = "SELECT o FROM ChamiloCoreBundle:ExtraFieldOptions o
-            INNER JOIN ChamiloCoreBundle:ExtraField f WITH o.field = f.id
+        $dql = "SELECT o FROM Chamilo\CoreBundle\Entity\ExtraFieldOptions o
+            INNER JOIN Chamilo\CoreBundle\Entity\ExtraField f WITH o.field = f.id
             WHERE f.variable = :variable AND f.itemType = :item_type
             ORDER BY o.value ASC";
 

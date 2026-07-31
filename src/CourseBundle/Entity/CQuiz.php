@@ -555,7 +555,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
 
     public function getNotifications(): string
     {
-        return $this->notifications;
+        return $this->notifications ?? '';
     }
 
     public function setNotifications(string $notifications): self

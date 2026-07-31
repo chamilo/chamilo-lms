@@ -8547,6 +8547,9 @@ msgstr "Společnost"
 msgid "Reporting"
 msgstr "Hlásení"
 
+msgid "Analytics"
+msgstr "Analytika"
+
 msgid "Update"
 msgstr "Aktualizovat"
 
@@ -26614,7 +26617,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurace připojení LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Pole definující hostitele a port pro LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Nastavit datum expirace při prvním přihlášení"
@@ -37386,6 +37389,9 @@ msgstr "Konfigurace vzdáleného úložiště Git (.git\/config) se změnila. Ov
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skenování bylo předčasně ukončeno, protože nebylo možné přečíst podadresář (zkontrolujte oprávnění k souborům). Výsledky níže mohou být částečné."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Příliš mnoho změn pro úplný výpis; níže jsou zobrazeny pouze první položky z každé kategorie. Úplný seznam naleznete v protokolu CEF."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% soubor(ů) se nepodařilo přečíst (nedostatečná oprávnění) a byly přeskočeny."
 
@@ -37470,6 +37476,27 @@ msgstr "Zatím nebylo zaznamenáno žádné upozornění."
 msgid "Git remote changed"
 msgstr "Vzdálený repozitář Git změněn"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Příliš mnoho změn pro úplný výpis; níže jsou zobrazeny pouze první položky z každé kategorie. Úplný seznam naleznete v %link_start%CEF log%link_end%."
+msgid "Press enter to select"
+msgstr "Stiskněte Enter pro výběr"
+
+msgid "Press enter to remove"
+msgstr "Stiskněte Enter pro odstranění"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nenalezeny žádné prvky. Zkuste změnit vyhledávací dotaz."
+
+msgid "List is empty."
+msgstr "Seznam je prázdný."
+
+msgid "Your session has expired. Please try again."
+msgstr "Vaše relace vypršela. Zkuste to prosím znovu."
+
+msgid "Generate with AI"
+msgstr "Generovat pomocí AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Moderní a přívětivá ilustrace představující téma tohoto kurzu ve stylu čistého flat designu s použitím barev vaší platformy jako akcentů."
+
+msgid "Back to account"
+msgstr "Zpět na účet"
 

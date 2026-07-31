@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "مثال على الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "مثال على الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -8560,6 +8560,9 @@ msgstr "المؤسسة"
 
 msgid "Reporting"
 msgstr "التقرير"
+
+msgid "Analytics"
+msgstr "التحليلات"
 
 msgid "Update"
 msgstr "تحديث"
@@ -37404,6 +37407,9 @@ msgstr "تم تغيير تكوين Git البعيد (.git\/config). تحقق م�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "توقف الفحص مبكرًا لأنه تعذر قراءة دليل فرعي (تحقق من أذونات الملفات). قد تكون النتائج أدناه جزئية."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "تغييرات كثيرة جداً لعرضها كاملة؛ تُعرض أدناه الإدخالات الأولى فقط من كل فئة. راجع سجل CEF للقائمة الكاملة."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "تعذرت قراءة %count% ملف (أذونات) وتم تخطيها."
 
@@ -37488,6 +37494,27 @@ msgstr "لم يُسجَّل أي تنبيه بعد."
 msgid "Git remote changed"
 msgstr "تم تغيير مستودع Git البعيد"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "عدد التغييرات كبير جداً لعرضها بالكامل؛ يتم عرض الإدخالات الأولى فقط من كل فئة أدناه. راجع %link_start%سجل CEF%link_end% للقائمة الكاملة."
+msgid "Press enter to select"
+msgstr "اضغط Enter للتحديد"
+
+msgid "Press enter to remove"
+msgstr "اضغط Enter للإزالة"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "لم يتم العثور على عناصر. يُرجى تغيير استعلام البحث."
+
+msgid "List is empty."
+msgstr "القائمة فارغة."
+
+msgid "Your session has expired. Please try again."
+msgstr "انتهت صلاحية جلستك. يُرجى المحاولة مرة أخرى."
+
+msgid "Generate with AI"
+msgstr "إنشاء باستخدام الذكاء الاصطناعي"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "رسم توضيحي حديث وجذاب يمثل موضوع هذه الدورة، بأسلوب تصميم مسطح نظيف، باستخدام ألوان منصتي كلمسات."
+
+msgid "Back to account"
+msgstr "العودة إلى الحساب"
 

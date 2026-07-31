@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Opret kursuspakker til en bestemt periode med undervisningssessioner",
     "Sessions management": "Sessionsadministration",
     "Tracking": "Sporing",
+    "Analytics": "Analytics",
     "View reports, statistics and tracking data": "Vis rapporter, statistik og sporingsdata",
     "Manage the skills of your users, through courses and badges": "Administrer dine brugeres kompetencer gennem kurser og badges",
     "Personal data protection": "Persondata beskyttelse",
@@ -2494,7 +2495,7 @@
     "Apply plan details": "Apply plan details",
     "Apply plan failed": "Apply plan failed",
     "Apply plan ready": "Apply plan ready",
-    "Apply preparation": "Apply preparation",
+    "Apply preparation": "Anvend forberedelse",
     "Apply staged files": "Anvend stagede filer",
     "Applying files...": "Anvender filer...",
     "Are you sure to copy": "Er du sikker p\u00e5 at kopiere",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Viser {0} opslag",
     "Showing {0} tasks": "Viser {0} opgaver",
     "contains {0} items": "indeholder {0} elementer",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Tryk enter for at v\u00e6lge",
+    "Press enter to remove": "Tryk enter for at fjerne",
+    "No elements found. Consider changing the search query.": "Ingen elementer fundet. Overvej at \u00e6ndre s\u00f8geforesp\u00f8rgslen.",
+    "List is empty.": "Listen er tom."
 }

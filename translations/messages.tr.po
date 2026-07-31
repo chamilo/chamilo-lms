@@ -8552,6 +8552,9 @@ msgstr "Şirket"
 msgid "Reporting"
 msgstr "Raporlama"
 
+msgid "Analytics"
+msgstr "Analitik"
+
 msgid "Update"
 msgstr "Güncelle"
 
@@ -37392,6 +37395,9 @@ msgstr "Git uzak yapılandırması (.git/config) değişti. Bunun beklenen bir d
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Tarama erken durdu çünkü bir alt dizin okunamadı (dosya izinlerini kontrol edin). Aşağıdaki sonuçlar kısmi olabilir."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Tam listeyi göstermek için çok fazla değişiklik var; yalnızca her kategorinin ilk girdileri aşağıda gösterilmektedir. Tam liste için CEF günlüğüne bakın."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% dosya okunamadı (izinler) ve atlandı."
 
@@ -37476,6 +37482,27 @@ msgstr "Henüz hiçbir uyarı kaydedilmedi."
 msgid "Git remote changed"
 msgstr "Git uzak deposu değiştirildi"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Listelenecek çok fazla değişiklik var; her kategorinin yalnızca ilk girdileri aşağıda gösterilmektedir. Tam liste için %link_start%CEF günlüğü%link_end% sayfasına bakın."
+msgid "Press enter to select"
+msgstr "Seçmek için enter tuşuna basın"
+
+msgid "Press enter to remove"
+msgstr "Kaldırmak için enter tuşuna basın"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Öğe bulunamadı. Arama sorgusunu değiştirmeyi deneyin."
+
+msgid "List is empty."
+msgstr "Liste boş."
+
+msgid "Your session has expired. Please try again."
+msgstr "Oturumunuzun süresi doldu. Lütfen tekrar deneyin."
+
+msgid "Generate with AI"
+msgstr "Yapay Zeka ile Oluştur"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Bu kursun konusunu temsil eden, temiz düz tasarım tarzında, platform renklerimi vurgu olarak kullanan modern ve davetkar bir illüstrasyon."
+
+msgid "Back to account"
+msgstr "Hesaba geri dön"
 

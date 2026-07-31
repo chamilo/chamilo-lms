@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Z poważaniem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Przykładowy wzór: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Przykładowy wzór: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Zakresy zmiennych"
@@ -8550,6 +8550,9 @@ msgstr "Organizacja"
 
 msgid "Reporting"
 msgstr "Raporty"
+
+msgid "Analytics"
+msgstr "Analityka"
 
 msgid "Update"
 msgstr "Aktualizuj"
@@ -37396,6 +37399,9 @@ msgstr "Konfiguracja zdalnego repozytorium Git (.git/config) uległa zmianie. Sp
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skanowanie zostało przerwane, ponieważ nie można odczytać podkatalogu (sprawdź uprawnienia do plików). Wyniki poniżej mogą być częściowe."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Zbyt wiele zmian, aby wyświetlić je w całości; poniżej pokazano tylko pierwsze wpisy z każdej kategorii. Pełną listę znajdziesz w dzienniku CEF."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% plik(ów) nie można było odczytać (uprawnienia) i zostały pominięte."
 
@@ -37480,6 +37486,27 @@ msgstr "Nie zarejestrowano jeszcze żadnego alertu."
 msgid "Git remote changed"
 msgstr "Zmieniono zdalne repozytorium Git"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Zbyt wiele zmian, aby wyświetlić je w całości; poniżej pokazano tylko pierwsze wpisy z każdej kategorii. Pełną listę znajdziesz w %link_start%dzienniku CEF%link_end%."
+msgid "Press enter to select"
+msgstr "Naciśnij Enter, aby wybrać"
+
+msgid "Press enter to remove"
+msgstr "Naciśnij Enter, aby usunąć"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nie znaleziono elementów. Rozważ zmianę zapytania wyszukiwania."
+
+msgid "List is empty."
+msgstr "Lista jest pusta."
+
+msgid "Your session has expired. Please try again."
+msgstr "Twoja sesja wygasła. Spróbuj ponownie."
+
+msgid "Generate with AI"
+msgstr "Generuj za pomocą AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Nowoczesna, przyjazna ilustracja przedstawiająca temat tego kursu, w czystym stylu flat-design, z akcentami w kolorach mojej platformy."
+
+msgid "Back to account"
+msgstr "Powrót do konta"
 

@@ -28,6 +28,20 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
     public static function getTemplatesGrouped(): array
     {
         return [
+            'security' => [
+                [
+                    'variable' => 'mcp_allowed_roles',
+                    'json_example' => [
+                        'ADMIN' => true,
+                        'COURSEMANAGER' => true,
+                        'STUDENT' => false,
+                        'DRH' => false,
+                        'SESSIONADMIN' => false,
+                        'STUDENT_BOSS' => false,
+                        'INVITEE' => false,
+                    ],
+                ],
+            ],
             'search' => [
                 [
                     'variable' => 'search_prefilter_prefix',

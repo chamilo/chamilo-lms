@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primjer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raspon varijabli"
@@ -8546,6 +8546,9 @@ msgstr "Kompanija"
 
 msgid "Reporting"
 msgstr "Izvještavanje"
+
+msgid "Analytics"
+msgstr "Analitika"
 
 msgid "Update"
 msgstr "Ažuriraj"
@@ -36493,10 +36496,10 @@ msgid "You must add at least one question"
 msgstr "Morate dodati barem jedno pitanje"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Napredne radnje"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Putanja aplikacije"
 
 msgid "Apply files details"
 msgstr "Primijeni detalje datoteka"
@@ -37386,6 +37389,9 @@ msgstr "Konfiguracija Git udaljenog repozitorija (.git/config) je promijenjena. 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skeniranje je ranije zaustavljeno jer se poddirektorij nije mogao pročitati (provjerite dozvole datoteka). Rezultati ispod mogu biti djelimični."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Previše promjena za potpuni prikaz; prikazani su samo prvi unosi svake kategorije. Potpuni popis potražite u CEF dnevniku."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% datoteka se nije moglo pročitati (dozvole) i preskočene su."
 
@@ -37470,6 +37476,27 @@ msgstr "Još nije zabilježeno nijedno upozorenje."
 msgid "Git remote changed"
 msgstr "Git udaljeni repozitorij promijenjen"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Previše promjena za potpuni prikaz; ispod su prikazani samo prvi unosi svake kategorije. Pogledajte %link_start%CEF dnevnik%link_end% za potpunu listu."
+msgid "Press enter to select"
+msgstr "Pritisnite Enter za odabir"
+
+msgid "Press enter to remove"
+msgstr "Pritisnite Enter za uklanjanje"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nema pronađenih elemenata. Razmislite o promjeni upita za pretragu."
+
+msgid "List is empty."
+msgstr "Lista je prazna."
+
+msgid "Your session has expired. Please try again."
+msgstr "Vaša sesija je istekla. Molimo pokušajte ponovo."
+
+msgid "Generate with AI"
+msgstr "Generiši pomoću AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Moderna, dobrodošla ilustracija koja predstavlja temu ovog kursa, u čistom flat-dizajn stilu, koristeći boje moje platforme kao akcente."
+
+msgid "Back to account"
+msgstr "Nazad na račun"
 

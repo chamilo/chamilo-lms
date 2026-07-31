@@ -83,6 +83,25 @@ async function checkSession() {
 }
 
 /**
+ * Returns the current server-side session expiration metadata.
+ * This endpoint also starts or refreshes an anonymous session when needed.
+ *
+ * @returns {Promise<Object>}
+ */
+async function getSessionExpiration() {
+  return await baseService.get("/session/expiration")
+}
+
+/**
+ * Explicitly renews the current server-side session.
+ *
+ * @returns {Promise<Object>}
+ */
+async function keepSessionAlive() {
+  return await baseService.post("/session/keep-alive", {})
+}
+
+/**
  * Fetches the contextual ROLE_CURRENT_COURSE_* roles the current user holds for
  * the given course context, as resolved authoritatively by the backend.
  * @param {Object} context
@@ -139,6 +158,8 @@ export default {
   loginLdap,
   getLoginCaptchaStatus,
   checkSession,
+  getSessionExpiration,
+  keepSessionAlive,
   getCourseContextRoles,
   loginTokenRequest,
   loginTokenCheck,

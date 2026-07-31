@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\AiProvider\AiImageProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiVideoJobProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
+use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Session;
@@ -28,6 +29,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use DateTime;
 use DateTimeImmutable;
@@ -91,6 +93,7 @@ class AiController extends AbstractController
         private readonly MessageHelper $messageHelper,
         private readonly AiDisclosureHelper $aiDisclosureHelper,
         private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
+        private readonly CCourseDescriptionRepository $courseDescriptionRepository,
     ) {}
 
     #[Route('/text_providers', name: 'chamilo_core_ai_text_providers', methods: ['GET'])]
@@ -1983,6 +1986,326 @@ class AiController extends AbstractController
                 'text' => 'An error occurred while generating the image. Please contact the administrator.',
             ], 500);
         }
+    }
+
+    #[Route('/generate_course_picture', name: 'chamilo_core_ai_generate_course_picture', methods: ['POST'])]
+    public function generateCoursePicture(Request $request, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
+    {
+        try {
+            try {
+                $this->denyIfNotTeacher();
+            } catch (AccessDeniedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Access denied.',
+                ], 403);
+            }
+
+            $data = json_decode($request->getContent(), true);
+            if (!\is_array($data)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid JSON payload.',
+                ], 400);
+            }
+
+            $cid = (int) ($data['cid'] ?? 0);
+            $userPrompt = trim((string) ($data['prompt'] ?? ''));
+            $submittedToken = (string) ($data['_token'] ?? '');
+
+            if ($cid <= 0 || '' === $userPrompt) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid request parameters. Ensure all fields are filled correctly.',
+                ], 400);
+            }
+
+            $csrfTokenId = 'ai_generate_course_picture_'.$cid;
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $submittedToken))) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid security token. Please reload the page and try again.',
+                ], 403);
+            }
+
+            /** @var Course|null $course */
+            $course = $this->em->getRepository(Course::class)->find($cid);
+            if (null === $course) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Course not found.',
+                ], 404);
+            }
+
+            // Object-level check: the client-supplied cid must be a course the current
+            // user actually manages, not merely any course with the feature enabled.
+            try {
+                $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+            } catch (AccessDeniedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Access denied.',
+                ], 403);
+            }
+
+            if (!$this->isAiFeatureEnabledForCourse('image_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
+            $availableProviders = $this->aiProviderFactory->getProvidersForType('image');
+            if (empty($availableProviders)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'No AI providers available for image generation.',
+                ], 400);
+            }
+
+            $prompt = $this->buildCoursePicturePrompt($course, $userPrompt);
+
+            $errors = [];
+            $providerUsed = null;
+            $result = null;
+
+            foreach ($availableProviders as $providerName) {
+                try {
+                    $quotaMessage = $this->getAiTokenQuotaExceededMessage($providerName, 'image');
+                    if (null !== $quotaMessage) {
+                        $errors[$providerName] = $quotaMessage;
+
+                        continue;
+                    }
+
+                    $aiService = $this->aiProviderFactory->getProvider($providerName, 'image');
+
+                    if (!$aiService instanceof AiImageProviderInterface) {
+                        $errors[$providerName] = 'Provider does not implement image generation interface.';
+
+                        continue;
+                    }
+
+                    $result = $aiService->generateImage($prompt, 'course_picture', [
+                        'language' => $request->getLocale(),
+                        'n' => 1,
+                    ]);
+
+                    if (empty($result)) {
+                        $errors[$providerName] = 'Provider returned an empty response.';
+
+                        continue;
+                    }
+
+                    if (\is_string($result) && str_starts_with($result, 'Error:')) {
+                        $errors[$providerName] = $result;
+                        $result = null;
+
+                        continue;
+                    }
+
+                    $providerUsed = $providerName;
+
+                    break;
+                } catch (Throwable $e) {
+                    $errors[$providerName] = $e->getMessage();
+
+                    continue;
+                }
+            }
+
+            if (null === $providerUsed || empty($result)) {
+                error_log('[AI][course_picture] Image generation failed for all providers: '.json_encode($errors));
+
+                $firstError = '';
+                foreach ($errors as $err) {
+                    if (\is_string($err) && '' !== trim($err)) {
+                        $firstError = trim($err);
+
+                        break;
+                    }
+                }
+
+                $message = 'All image providers failed.';
+                $statusCode = 500;
+                if ('' !== $firstError && $this->isAiTokenQuotaMessage($firstError)) {
+                    $message = $firstError;
+                    $statusCode = 429;
+                }
+
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => $message,
+                ], $statusCode);
+            }
+
+            $this->aiDisclosureHelper->logAudit(
+                targetKey: 'course_picture:'.sha1($prompt),
+                userId: $this->getCurrentUserId(),
+                meta: [
+                    'feature' => 'image_generator',
+                    'mode' => 'generated',
+                    'provider' => $providerUsed,
+                    'tool' => 'course_picture',
+                ],
+                courseId: $cid,
+                sessionId: api_get_session_id()
+            );
+
+            if (\is_string($result)) {
+                $normalized = [
+                    'content' => trim($result),
+                    'url' => null,
+                    'is_base64' => true,
+                    'content_type' => 'image/png',
+                    'revised_prompt' => null,
+                ];
+
+                $payload = [
+                    'success' => true,
+                    'text' => $normalized['content'],
+                    'result' => $normalized,
+                    'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
+                ];
+
+                if ($this->shouldExposeProviderDetails()) {
+                    $payload['provider_used'] = $providerUsed;
+                }
+
+                return new JsonResponse($payload);
+            }
+
+            $url = isset($result['url']) && \is_string($result['url']) ? trim($result['url']) : '';
+            $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
+
+            if ('' === $content && '' !== $url && false === (bool) ($result['is_base64'] ?? false)) {
+                $fetched = $this->fetchUrlAsBase64($url, 10 * 1024 * 1024);
+                $result['content'] = $fetched['content'];
+                $result['content_type'] = $fetched['content_type'];
+                $result['is_base64'] = true;
+                $result['url'] = null;
+            }
+
+            $text = '';
+            if (!empty($result['content']) && \is_string($result['content'])) {
+                $text = trim($result['content']);
+            }
+
+            $payload = [
+                'success' => true,
+                'text' => $text,
+                'result' => $result,
+                'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
+            ];
+
+            if ($this->shouldExposeProviderDetails()) {
+                $payload['provider_used'] = $providerUsed;
+            }
+
+            return new JsonResponse($payload);
+        } catch (Exception $e) {
+            error_log('[AI][course_picture] Controller exception: '.$e->getMessage());
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'An error occurred while generating the image. Please contact the administrator.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Builds the full prompt sent to the AI model: course title, first course description
+     * entry, and the current color theme are included as guidelines, on top of the
+     * illustration-style instructions the user typed in the modal.
+     */
+    private function buildCoursePicturePrompt(Course $course, string $userPrompt): string
+    {
+        $parts = [
+            'Create a flat-design digital illustration to use as a course thumbnail in an online course catalog, '
+            .'widescreen landscape orientation (16:9).',
+            'Depict the subject conceptually and abstractly, in a clean modern vector-illustration style with soft '
+            .'shapes; do not depict photorealistic people.',
+            'Do not include any readable text, letters, numbers, or logos anywhere in the image.',
+            'Center the main subject with clear space near all four edges, since the image will be cropped to a '
+            .'widescreen thumbnail.',
+            \sprintf('Course title: "%s".', $course->getTitle()),
+        ];
+
+        $description = $this->firstCourseDescriptionText($course);
+        if ('' !== $description) {
+            $parts[] = \sprintf('Course description, to use as context for the topic: "%s".', $description);
+        }
+
+        $colorGuideline = $this->buildColorGuidelineFromCurrentTheme();
+        if ('' !== $colorGuideline) {
+            $parts[] = \sprintf('Use these colors as accents in the illustration palette: %s.', $colorGuideline);
+        }
+
+        $parts[] = \sprintf('Illustration instructions: %s', $userPrompt);
+
+        return implode(' ', $parts);
+    }
+
+    private function firstCourseDescriptionText(Course $course): string
+    {
+        $descriptions = $this->courseDescriptionRepository->findAllInCourse($course);
+        $first = $descriptions[0] ?? null;
+
+        if (null === $first) {
+            return '';
+        }
+
+        $text = trim(strip_tags((string) $first->getContent()));
+
+        if (mb_strlen($text) > 500) {
+            $text = mb_substr($text, 0, 500).'...';
+        }
+
+        return $text;
+    }
+
+    private function buildColorGuidelineFromCurrentTheme(): string
+    {
+        /** @var AccessUrlRelColorTheme|null $activeRel */
+        $activeRel = $this->em->getRepository(AccessUrlRelColorTheme::class)->findOneBy([
+            'url' => api_get_current_access_url_id(),
+            'active' => true,
+        ]);
+
+        $colorTheme = $activeRel?->getColorTheme();
+        if (null === $colorTheme) {
+            return '';
+        }
+
+        $variables = $colorTheme->getVariables();
+        $labelsByVariable = [
+            '--color-primary-base' => 'primary',
+            '--color-secondary-base' => 'secondary',
+            '--color-tertiary-base' => 'tertiary',
+        ];
+
+        $parts = [];
+        foreach ($labelsByVariable as $cssVariable => $label) {
+            $hex = $this->rgbTripletToHex((string) ($variables[$cssVariable] ?? ''));
+            if (null !== $hex) {
+                $parts[] = $label.' '.$hex;
+            }
+        }
+
+        return implode(', ', $parts);
+    }
+
+    private function rgbTripletToHex(string $triplet): ?string
+    {
+        $components = preg_split('/\s+/', trim($triplet));
+        if (!\is_array($components) || 3 !== \count($components)) {
+            return null;
+        }
+
+        foreach ($components as $component) {
+            if (!is_numeric($component)) {
+                return null;
+            }
+        }
+
+        return \sprintf('#%02X%02X%02X', (int) $components[0], (int) $components[1], (int) $components[2]);
     }
 
     #[Route('/generate_video', name: 'chamilo_core_ai_generate_video', methods: ['POST'])]

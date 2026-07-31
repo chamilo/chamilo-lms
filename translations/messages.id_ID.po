@@ -8550,6 +8550,9 @@ msgstr "Perusahaan"
 msgid "Reporting"
 msgstr "Laporan"
 
+msgid "Analytics"
+msgstr "Analitik"
+
 msgid "Update"
 msgstr "Perbarui"
 
@@ -36512,7 +36515,7 @@ msgid "Apply plan failed"
 msgstr "Apply plan failed"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Terapkan rencana yang siap"
 
 msgid "Apply preparation"
 msgstr "Terapkan persiapan"
@@ -37390,6 +37393,9 @@ msgstr "Konfigurasi jarak jauh Git (.git/config) telah berubah. Verifikasi bahwa
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Pemindaian berhenti lebih awal karena subdirektori tidak dapat dibaca (periksa izin berkas). Hasil di bawah mungkin tidak lengkap."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Terlalu banyak perubahan untuk ditampilkan secara lengkap; hanya entri pertama dari setiap kategori yang ditampilkan di bawah. Lihat log CEF untuk daftar lengkap."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% berkas tidak dapat dibaca (izin) dan dilewati."
 
@@ -37474,6 +37480,27 @@ msgstr "Belum ada peringatan yang tercatat."
 msgid "Git remote changed"
 msgstr "Git jarak jauh berubah"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Terlalu banyak perubahan untuk ditampilkan secara lengkap; hanya entri pertama dari setiap kategori yang ditampilkan di bawah ini. Lihat %link_start%log CEF%link_end% untuk daftar lengkap."
+msgid "Press enter to select"
+msgstr "Tekan enter untuk memilih"
+
+msgid "Press enter to remove"
+msgstr "Tekan enter untuk menghapus"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Tidak ada elemen ditemukan. Pertimbangkan untuk mengubah kueri pencarian."
+
+msgid "List is empty."
+msgstr "Daftar kosong."
+
+msgid "Your session has expired. Please try again."
+msgstr "Sesi Anda telah kedaluwarsa. Silakan coba lagi."
+
+msgid "Generate with AI"
+msgstr "Buat dengan AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Ilustrasi modern dan ramah yang mewakili topik kursus ini, dengan gaya desain datar yang bersih, menggunakan warna platform saya sebagai aksen."
+
+msgid "Back to account"
+msgstr "Kembali ke akun"
 

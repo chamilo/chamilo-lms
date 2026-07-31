@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Kreirajte pakete kurseva za odre\u0111eno vrijeme sa sesijama obuke",
     "Sessions management": "Upravljanje sesijama",
     "Tracking": "Pra\u0107enje",
+    "Analytics": "Analitika",
     "View reports, statistics and tracking data": "Pogledajte izvje\u0161taje, statistike i podatke pra\u0107enja",
     "Manage the skills of your users, through courses and badges": "Upravljajte vje\u0161tinama va\u0161ih korisnika, kroz kurseve i badge-ove",
     "Personal data protection": "Za\u0161tita osobnih podataka",
@@ -2467,7 +2468,7 @@
     "Add test after each page": "Dodaj test nakon svake stranice",
     "Add users to a class": "Dodaj korisnike u klasu",
     "Additional fields": "Dodatna polja",
-    "Advanced actions": "Advanced actions",
+    "Advanced actions": "Napredne radnje",
     "All day": "Cijeli dan",
     "All pages": "Sve stranice",
     "Allow .htaccess from SCORM packages": "Dozvoli .htaccess iz SCORM paketa",
@@ -2488,7 +2489,7 @@
     "Answer options": "Opcije odgovora",
     "Answered": "Odgovoreno",
     "Answers": "Odgovori",
-    "Application path": "Application path",
+    "Application path": "Putanja aplikacije",
     "Apply": "Prijavi",
     "Apply files details": "Primijeni detalje datoteka",
     "Apply plan details": "Primijeni detalje plana",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Prikazujem {0} objava",
     "Showing {0} tasks": "Prikazujem {0} zadataka",
     "contains {0} items": "sadr\u017ei {0} stavki",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Pritisnite Enter za odabir",
+    "Press enter to remove": "Pritisnite Enter za uklanjanje",
+    "No elements found. Consider changing the search query.": "Nema prona\u0111enih elemenata. Razmislite o promjeni upita za pretragu.",
+    "List is empty.": "Lista je prazna."
 }

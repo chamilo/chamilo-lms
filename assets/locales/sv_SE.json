@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Skapa kurs paket f\u00f6r en viss tid med tr\u00e4ningssessioner",
     "Sessions management": "Sessionhantering",
     "Tracking": "Sp\u00e5rning",
+    "Analytics": "Analys",
     "View reports, statistics and tracking data": "Visa rapporter, statistik och sp\u00e5rningsdata",
     "Manage the skills of your users, through courses and badges": "Hantera f\u00e4rdigheterna hos dina anv\u00e4ndare, genom kurser och m\u00e4rken",
     "Personal data protection": "Personuppgisskydd",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Visar {0} inl\u00e4gg",
     "Showing {0} tasks": "Visar {0} uppgifter",
     "contains {0} items": "inneh\u00e5ller {0} objekt",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Tryck p\u00e5 Enter f\u00f6r att v\u00e4lja",
+    "Press enter to remove": "Tryck p\u00e5 Enter f\u00f6r att ta bort",
+    "No elements found. Consider changing the search query.": "Inga element hittades. \u00d6verv\u00e4g att \u00e4ndra s\u00f6kningen.",
+    "List is empty.": "Listan \u00e4r tom."
 }

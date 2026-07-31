@@ -8553,6 +8553,9 @@ msgstr "Компанија"
 msgid "Reporting"
 msgstr "Izveštaji"
 
+msgid "Analytics"
+msgstr "Analitika"
+
 msgid "Update"
 msgstr "Ажурирај"
 
@@ -37393,6 +37396,9 @@ msgstr "Konfiguracija Git udaljenog repozitorijuma (.git/config) je promenjena. 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skeniranje je rano prekinuto jer se poddirektorijum nije mogao pročitati (proverite dozvole datoteka). Rezultati ispod mogu biti delimični."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% datoteka se nije moglo pročitati (dozvole) i preskočene su."
 
@@ -37477,6 +37483,27 @@ msgstr "Još uvek nije zabeleženo nijedno upozorenje."
 msgid "Git remote changed"
 msgstr "Git udaljeni repozitorijum promenjen"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Previše izmena za potpuni prikaz; prikazane su samo prve stavke svake kategorije. Pogledajte %link_start%CEF dnevnik%link_end% za potpunu listu."
+msgid "Press enter to select"
+msgstr "Press enter to select"
+
+msgid "Press enter to remove"
+msgstr "Press enter to remove"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "No elements found. Consider changing the search query."
+
+msgid "List is empty."
+msgstr "List is empty."
+
+msgid "Your session has expired. Please try again."
+msgstr "Your session has expired. Please try again."
+
+msgid "Generate with AI"
+msgstr "Generiši pomoću veštačke inteligencije"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Moderna, prijateljska ilustracija koja predstavlja temu ovog kursa, u čistom flat-dizajn stilu, koristeći boje moje platforme kao akcente."
+
+msgid "Back to account"
+msgstr "Nazad na nalog"
 

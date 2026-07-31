@@ -49,12 +49,21 @@ final readonly class GetCourseTestResponseStatusTool
      *         incomplete_attempts: int,
      *         considered_attempts: int,
      *         ignored_non_student_attempts: int
+     *     },
+     *     teachers: array{
+     *         total_teachers: int,
+     *         teachers_with_completed_attempts: int,
+     *         teachers_with_incomplete_attempts: int,
+     *         completed_attempts: int,
+     *         incomplete_attempts: int,
+     *         teacher_attempted: bool,
+     *         counts_towards_student_totals: false
      *     }
      * }
      */
     #[McpTool(
         name: 'get_course_test_response_status',
-        description: 'Return response status for a test in a base course managed by the authenticated teacher. Answered students have at least one completed attempt. Students with only incomplete attempts remain pending and are reported as in progress.',
+        description: 'Return response status for a test in a base course managed by the authenticated teacher. Student totals only include active students. Teacher attempts are reported separately and never count toward the student response rate, so say no student answered when appropriate while still mentioning teacher activity.',
     )]
     public function getCourseTestResponseStatus(int $courseId, int $testId): array
     {
@@ -87,6 +96,15 @@ final readonly class GetCourseTestResponseStatusTool
      *         incomplete_attempts: int,
      *         considered_attempts: int,
      *         ignored_non_student_attempts: int
+     *     },
+     *     teachers: array{
+     *         total_teachers: int,
+     *         teachers_with_completed_attempts: int,
+     *         teachers_with_incomplete_attempts: int,
+     *         completed_attempts: int,
+     *         incomplete_attempts: int,
+     *         teacher_attempted: bool,
+     *         counts_towards_student_totals: false
      *     }
      * }
      */

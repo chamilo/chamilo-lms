@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמה לנוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמה לנוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -8558,6 +8558,9 @@ msgstr "חברה\ עוסק מורשה"
 
 msgid "Reporting"
 msgstr "דיווח"
+
+msgid "Analytics"
+msgstr "אנליטיקס"
 
 msgid "Update"
 msgstr "עידכון"
@@ -37403,6 +37406,9 @@ msgstr "הגדרת ה-Git המרוחקת (.git\/config) השתנתה. יש לו�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "הסריקה הופסקה מוקדם מכיוון שלא ניתן לקרוא תיקיית משנה (בדוק הרשאות קבצים). התוצאות להלן עשויות להיות חלקיות."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "יותר מדי שינויים להצגה מלאה; מוצגות רק הרשומות הראשונות בכל קטגוריה. ראו את יומן ה-CEF לרשימה המלאה."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% קובץ/ים לא ניתן/ו לקריאה (הרשאות) ולכן דולג/ו."
 
@@ -37487,6 +37493,27 @@ msgstr "טרם נרשמה התראה."
 msgid "Git remote changed"
 msgstr "ה־Git המרוחק שונה"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "יותר מדי שינויים להצגה מלאה; מוצגות להלן רק הרשומות הראשונות מכל קטגוריה. ראו את %link_start%יומן CEF%link_end% לרשימה המלאה."
+msgid "Press enter to select"
+msgstr "לחצו על Enter לבחירה"
+
+msgid "Press enter to remove"
+msgstr "לחצו על Enter להסרה"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "לא נמצאו פריטים. שקלו לשנות את שאילתת החיפוש."
+
+msgid "List is empty."
+msgstr "הרשימה ריקה."
+
+msgid "Your session has expired. Please try again."
+msgstr "פג תוקף ההפעלה שלכם. נסו שוב."
+
+msgid "Generate with AI"
+msgstr "יצירה באמצעות AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "איור מודרני ומזמין המייצג את נושא הקורס הזה, בסגנון עיצוב שטוח נקי, תוך שימוש בצבעי הפלטפורמה שלי כהדגשות."
+
+msgid "Back to account"
+msgstr "חזרה לחשבון"
 

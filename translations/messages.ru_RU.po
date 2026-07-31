@@ -8553,6 +8553,9 @@ msgstr "Организация"
 msgid "Reporting"
 msgstr "Отчет"
 
+msgid "Analytics"
+msgstr "Аналитика"
+
 msgid "Update"
 msgstr "Обновить"
 
@@ -37393,6 +37396,9 @@ msgstr "Конфигурация удалённого репозитория Git
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Сканирование завершилось досрочно, так как не удалось прочитать подкаталог (проверьте права доступа к файлам). Результаты ниже могут быть неполными."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Слишком много изменений для полного отображения; ниже показаны только первые записи каждой категории. Полный список см. в журнале CEF."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% файл(ов) не удалось прочитать (права доступа) и они были пропущены."
 
@@ -37477,6 +37483,27 @@ msgstr "Оповещений ещё не записано."
 msgid "Git remote changed"
 msgstr "Удалённый репозиторий Git изменён"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Слишком много изменений для полного отображения; ниже показаны только первые записи каждой категории. Полный список см. в %link_start%журнале CEF%link_end%."
+msgid "Press enter to select"
+msgstr "Нажмите Enter для выбора"
+
+msgid "Press enter to remove"
+msgstr "Нажмите Enter для удаления"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Элементы не найдены. Попробуйте изменить поисковый запрос."
+
+msgid "List is empty."
+msgstr "Список пуст."
+
+msgid "Your session has expired. Please try again."
+msgstr "Ваша сессия истекла. Пожалуйста, попробуйте снова."
+
+msgid "Generate with AI"
+msgstr "Сгенерировать с помощью ИИ"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Современная, приветливая иллюстрация, представляющая тему этого курса, в чистом плоском стиле, с использованием цветов моей платформы в качестве акцентов."
+
+msgid "Back to account"
+msgstr "Вернуться к аккаунту"
 

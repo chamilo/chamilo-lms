@@ -2110,7 +2110,8 @@ class Category implements GradebookItem
         GradebookCategory $category,
         int $user_id,
         bool $sendNotification = false,
-        bool $skipGenerationIfExists = false
+        bool $skipGenerationIfExists = false,
+        array $notification = []
     ) {
         $categoryId = (int) $category->getId();
         $sessionId  = $category->getSession() ? (int) $category->getSession()->getId() : 0;
@@ -2212,7 +2213,8 @@ class Category implements GradebookItem
                 0,
                 $sendNotification,
                 true,
-                $pathToCertificate
+                $pathToCertificate,
+                $notification
             );
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
@@ -2695,7 +2697,7 @@ class Category implements GradebookItem
     public static function findByCertificate($id)
     {
         $category = Database::getManager()
-            ->createQuery('SELECT c.catId FROM ChamiloCoreBundle:GradebookCertificate c WHERE c.id = :id')
+            ->createQuery('SELECT c.catId FROM Chamilo\CoreBundle\Entity\GradebookCertificate c WHERE c.id = :id')
             ->setParameters(['id' => $id])
             ->getOneOrNullResult();
 

@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\OAuthAccessTokenRepository;
 use Chamilo\CoreBundle\Repository\UserApiKeyRepository;
+use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
 use Chamilo\CoreBundle\Service\Mcp\McpApiKeyManager;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthMetadataService;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthTokenService;
@@ -45,6 +46,7 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
         private readonly RateLimiterFactory $mcpAuthenticationLimiter,
         private readonly OAuthMetadataService $oauthMetadata,
         private readonly OAuthAccessTokenRepository $oauthAccessTokenRepository,
+        private readonly McpAccessPolicy $mcpAccessPolicy,
     ) {}
 
     public function supports(Request $request): ?bool
@@ -183,6 +185,12 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
             throw new CustomUserMessageAuthenticationException('Invalid or revoked MCP OAuth access token.');
         }
 
+        $expectedResource = rtrim($this->oauthMetadata->getResourceIdentifier('mcp'), '/');
+        $tokenResource = rtrim((string) $token->getResource(), '/');
+        if ('' === $tokenResource || !hash_equals($expectedResource, $tokenResource)) {
+            throw new CustomUserMessageAuthenticationException('Invalid or revoked MCP OAuth access token.');
+        }
+
         if (!$token->getClient()->isActiveAt($now)) {
             throw new CustomUserMessageAuthenticationException('Invalid or revoked MCP OAuth access token.');
         }
@@ -244,6 +252,10 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
 
         if (!$this->accessUrlRepository->isUrlActiveForUser($accessUrl, $user)) {
             throw new CustomUserMessageAuthenticationException('The MCP user is not active on this Chamilo portal.');
+        }
+
+        if (!$this->mcpAccessPolicy->canUse($user)) {
+            throw new CustomUserMessageAuthenticationException('MCP access is disabled or not allowed for this user role.');
         }
     }
 }

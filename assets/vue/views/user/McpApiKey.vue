@@ -64,12 +64,12 @@
 
             <template v-if="apiKey.createdAt">
               <dt class="font-semibold">{{ t("Created at") }}</dt>
-              <dd>{{ formatDate(apiKey.createdAt) }}</dd>
+              <dd>{{ abbreviatedDatetime(apiKey.createdAt) }}</dd>
             </template>
 
             <template v-if="apiKey.lastUsedAt">
               <dt class="font-semibold">{{ t("Last used at") }}</dt>
-              <dd>{{ formatDate(apiKey.lastUsedAt) }}</dd>
+              <dd>{{ abbreviatedDatetime(apiKey.lastUsedAt) }}</dd>
             </template>
           </dl>
 
@@ -155,14 +155,16 @@ import { useI18n } from "vue-i18n"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import mcpApiKeyService from "../../services/mcpApiKeyService"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
 const notifications = useNotification()
+const { abbreviatedDatetime } = useFormatDate()
 
-const isLoading = ref(false)
+const isLoading = ref(true)
 const isSaving = ref(false)
 const plainKey = ref("")
 const apiKey = reactive(createEmptyApiKey())
@@ -182,28 +184,6 @@ function applyApiKey(data = {}) {
   Object.assign(apiKey, createEmptyApiKey(), data)
 }
 
-function getErrorMessage(error) {
-  return (
-    error?.response?.data?.detail ||
-    error?.response?.data?.["hydra:description"] ||
-    error?.response?.data?.message ||
-    t("The MCP API key operation could not be completed.")
-  )
-}
-
-function formatDate(value) {
-  if (!value) {
-    return "-"
-  }
-
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) {
-    return value
-  }
-
-  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(date)
-}
-
 async function loadApiKey() {
   isLoading.value = true
 
@@ -211,7 +191,7 @@ async function loadApiKey() {
     applyApiKey(await mcpApiKeyService.getCurrent())
   } catch (error) {
     console.error("Error loading MCP API key metadata", error)
-    notifications.showErrorNotification(getErrorMessage(error))
+    notifications.showErrorNotification(error)
   } finally {
     isLoading.value = false
   }
@@ -238,7 +218,7 @@ async function generateKey() {
     notifications.showSuccessNotification(t("MCP API key generated"))
   } catch (error) {
     console.error("Error generating MCP API key", error)
-    notifications.showErrorNotification(getErrorMessage(error))
+    notifications.showErrorNotification(error)
   } finally {
     isSaving.value = false
   }
@@ -262,7 +242,7 @@ async function revokeKey() {
     notifications.showSuccessNotification(t("MCP API key revoked"))
   } catch (error) {
     console.error("Error revoking MCP API key", error)
-    notifications.showErrorNotification(getErrorMessage(error))
+    notifications.showErrorNotification(error)
   } finally {
     isSaving.value = false
   }

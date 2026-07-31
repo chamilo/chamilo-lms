@@ -8547,6 +8547,9 @@ msgstr "कंपनी"
 msgid "Reporting"
 msgstr "रिपोर्टिंग"
 
+msgid "Analytics"
+msgstr "विश्लेषण"
+
 msgid "Update"
 msgstr "अपडेट"
 
@@ -37386,6 +37389,9 @@ msgstr "Git रिमोट कॉन्फ़िगरेशन (.git/config) �
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "स्कैन जल्दी रुका क्योंकि एक उपनिर्देशिका पढ़ी नहीं जा सकी (फ़ाइल अनुमतियाँ जांचें)। नीचे के परिणाम आंशिक हो सकते हैं।"
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "सूची में सभी परिवर्तनों को दिखाना संभव नहीं; प्रत्येक श्रेणी की केवल प्रथम प्रविष्टियाँ नीचे दिखाई गई हैं। पूर्ण सूची के लिए CEF लॉग देखें।"
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% फ़ाइल(ें) पढ़ी नहीं जा सकीं (अनुमतियाँ) और छोड़ दी गईं।"
 
@@ -37470,6 +37476,27 @@ msgstr "अभी तक कोई चेतावनी दर्ज नही�
 msgid "Git remote changed"
 msgstr "Git रिमोट बदला गया"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "सूची में पूर्ण रूप से दिखाने के लिए बहुत अधिक परिवर्तन; नीचे प्रत्येक श्रेणी की केवल प्रथम प्रविष्टियाँ दिखाई गई हैं। पूर्ण सूची के लिए %link_start%CEF लॉग%link_end% देखें।"
+msgid "Press enter to select"
+msgstr "चयन करने के लिए एंटर दबाएँ"
+
+msgid "Press enter to remove"
+msgstr "हटाने के लिए एंटर दबाएँ"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "कोई तत्व नहीं मिला। खोज क्वेरी बदलने पर विचार करें।"
+
+msgid "List is empty."
+msgstr "सूची खाली है।"
+
+msgid "Your session has expired. Please try again."
+msgstr "आपका सत्र समाप्त हो गया है। कृपया पुनः प्रयास करें।"
+
+msgid "Generate with AI"
+msgstr "AI से उत्पन्न करें"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "इस पाठ्यक्रम के विषय को दर्शाने वाला एक आधुनिक, स्वागत योग्य चित्रण, स्वच्छ फ्लैट-डिज़ाइन शैली में, प्लेटफ़ॉर्म के रंगों को उच्चारण के रूप में उपयोग करते हुए।"
+
+msgid "Back to account"
+msgstr "खाते पर वापस जाएँ"
 

@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Kurti kurso paketus tam tikram laikui su mokymo sesijomis",
     "Sessions management": "Sesij\u0173 valdymas",
     "Tracking": "Steb\u0117jimas",
+    "Analytics": "Analitika",
     "View reports, statistics and tracking data": "Per\u017ei\u016br\u0117ti ataskaitas, statistik\u0105 ir steb\u0117jimo duomenis",
     "Manage the skills of your users, through courses and badges": "Valdykite savo vartotoj\u0173 \u012fg\u016bd\u017eius per kursus ir \u017eenklelius",
     "Personal data protection": "Asmens duomen\u0173 apsauga",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Rodoma {0} \u012fra\u0161\u0173",
     "Showing {0} tasks": "Rodoma {0} u\u017eduo\u010di\u0173",
     "contains {0} items": "apima {0} elementus",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Paspauskite Enter, kad pasirinktum\u0117te",
+    "Press enter to remove": "Paspauskite Enter, kad pa\u0161alintum\u0117te",
+    "No elements found. Consider changing the search query.": "Element\u0173 nerasta. Pabandykite pakeisti paie\u0161kos u\u017eklaus\u0105.",
+    "List is empty.": "S\u0105ra\u0161as tu\u0161\u010dias."
 }

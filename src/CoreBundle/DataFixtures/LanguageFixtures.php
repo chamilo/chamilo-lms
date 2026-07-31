@@ -614,6 +614,38 @@ class LanguageFixtures extends Fixture
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
+            [
+                'original_name' => 'Eesti keel',
+                'english_name' => 'estonian',
+                'isocode' => 'et',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'Malti',
+                'english_name' => 'maltese',
+                'isocode' => 'mt',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'Íslenska',
+                'english_name' => 'icelandic',
+                'isocode' => 'is_IS',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'Norsk bokmål',
+                'english_name' => 'bokmal',
+                'isocode' => 'nb_NO',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
         ];
     }
 }

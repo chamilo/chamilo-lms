@@ -8560,6 +8560,9 @@ msgstr "Organització"
 msgid "Reporting"
 msgstr "Informes"
 
+msgid "Analytics"
+msgstr "Analítiques"
+
 msgid "Update"
 msgstr "Actualitzar"
 
@@ -37405,6 +37408,9 @@ msgstr "La configuració remota de Git (.git/config) ha canviat. Verifiqueu que 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "L'escaneig s'ha aturat abans d'hora perquè no s'ha pogut llegir un subdirectori (comproveu els permisos dels fitxers). Els resultats a continuació poden ser parcials."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Massa canvis per mostrar-los complets; només es mostren les primeres entrades de cada categoria. Consulteu el registre CEF per veure la llista completa."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fitxer(s) no s'han pogut llegir (permisos) i s'han omès."
 
@@ -37489,6 +37495,27 @@ msgstr "Encara no s'ha registrat cap alerta."
 msgid "Git remote changed"
 msgstr "El repositori remot de Git ha canviat"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Massa canvis per mostrar-los complets; només es mostren les primeres entrades de cada categoria. Consulteu el %link_start%registre CEF%link_end% per veure la llista completa."
+msgid "Press enter to select"
+msgstr "Premeu Intro per seleccionar"
+
+msgid "Press enter to remove"
+msgstr "Premeu Intro per eliminar"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "No s'han trobat elements. Proveu de canviar la consulta de cerca."
+
+msgid "List is empty."
+msgstr "La llista és buida."
+
+msgid "Your session has expired. Please try again."
+msgstr "La vostra sessió ha caducat. Torneu-ho a provar."
+
+msgid "Generate with AI"
+msgstr "Genera amb IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Una il·lustració moderna i acollidora que representa el tema d'aquest curs, en un estil de disseny pla net, utilitzant els colors de la meva plataforma com a accents."
+
+msgid "Back to account"
+msgstr "Torna al compte"
 

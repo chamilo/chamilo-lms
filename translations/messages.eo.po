@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosierujo,, application/msword:MsWord,, application/octet-stream:Okta fluo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -8551,6 +8551,9 @@ msgstr "Entrepreno"
 
 msgid "Reporting"
 msgstr "Raportado"
+
+msgid "Analytics"
+msgstr "Analitiko"
 
 msgid "Update"
 msgstr "Ĝisdatigi"
@@ -37392,6 +37395,9 @@ msgstr "La Git fora agordo (.git/config) ŝanĝiĝis. Kontrolu ĉu tio estis ate
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "La skanado ĉesis frue ĉar subdosierujo ne povis esti legata (kontrolu dosierpermesojn). Rezultoj sube povas esti partaj."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Tro multaj ŝanĝoj por listigi plene; nur la unuaj eroj de ĉiu kategorio estas montrataj sube. Vidu la CEF-protokolon por la kompleta listo."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% dosiero(j) ne povis esti legata(j) (permesoj) kaj estis preterpasita(j)."
 
@@ -37476,6 +37482,27 @@ msgstr "Ankoraŭ neniu averto estis registrita."
 msgid "Git remote changed"
 msgstr "Git fora deponejo ŝanĝiĝis"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Tro multaj ŝanĝoj por listigi plene; nur la unuaj eroj de ĉiu kategorio estas montrataj sube. Vidu la %link_start%CEF-protokolon%link_end% por la kompleta listo."
+msgid "Press enter to select"
+msgstr "Premu enigon por elekti"
+
+msgid "Press enter to remove"
+msgstr "Premu enigon por forigi"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Neniuj elementoj trovitaj. Konsideru ŝanĝi la serĉan demandon."
+
+msgid "List is empty."
+msgstr "Listo estas malplena."
+
+msgid "Your session has expired. Please try again."
+msgstr "Via seanco eksvalidiĝis. Bonvolu provi denove."
+
+msgid "Generate with AI"
+msgstr "Generi per AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Moderna, bonvena ilustraĵo reprezentanta la temon de ĉi tiu kurso, en pura plata-dezajna stilo, uzante la kolorojn de mia platformo kiel akcentojn."
+
+msgid "Back to account"
+msgstr "Reen al konto"
 

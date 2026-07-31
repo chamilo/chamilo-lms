@@ -62,7 +62,7 @@ final class Version20250501000100 extends AbstractMigrationChamilo
 
         if (!$hasUrl && !$hasCorrectionUrl) {
             // These legacy source columns are intentionally removed by
-            // Version20240811221400. Earlier Ricky migrations already copied
+            // Version20240811221400. Earlier legacy migrations already copied
             // the available publication and correction files before that
             // destructive schema cleanup.
             $this->getLogger()->notice(

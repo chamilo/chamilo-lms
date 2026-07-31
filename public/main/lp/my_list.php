@@ -41,7 +41,7 @@ if (!empty($courses)) {
                 )
             ";
 
-    $dql = "SELECT lp FROM ChamiloCourseBundle:CLp as lp
+    $dql = "SELECT lp FROM Chamilo\CourseBundle\Entity\CLp as lp
             WHERE
                 $conditions
                 $courseCondition

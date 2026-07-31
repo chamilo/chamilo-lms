@@ -6,6 +6,49 @@ mcp:
     instructions: |
         This server exposes Chamilo LMS capabilities to authenticated users.
         Every capability must respect the permissions of the authenticated Chamilo user.
+
+        Treat the current tools/list response as the source of truth for what Chamilo can do.
+        Do not deny a capability that has a matching tool. Do not claim that a resource was
+        created or updated until the corresponding tool returns a successful final result
+        containing the persisted resource ID. Surface every tool error to the user instead
+        of silently waiting or pretending the operation succeeded.
+
+        Some AI-assisted operations take time and emit progress notifications. Keep waiting
+        for the final tools/call result while progress is being reported. Never automatically
+        repeat a create operation after a timeout or error, because a retry can create a
+        duplicate. First use list/read/status tools to verify whether the resource exists.
+
+        Documents can be filtered by title with list_documents and then read or edited by title.
+        create_course_document automatically assigns a unique title when an exact title already
+        exists. Use update_course_settings to change safe course properties and
+        update_course_test_settings to edit test configuration. New MCP-created tests randomize
+        answer order by default.
+        To create an AI image, use create_course_illustration. To place an image in a specific
+        document section, first create or locate the image, then call
+        illustrate_document_paragraph with the target document title and a paragraph number
+        or distinctive paragraph text.
+
+        Learning paths can be created in one call with create_course_learning_path, or built
+        conversationally with create_empty_learning_path followed by add_learning_path_page,
+        add_learning_path_document and add_learning_path_test. After each change, use
+        get_learning_path_structure and only report success when the persisted structure
+        contains the expected items. Use move_learning_path_item, remove_learning_path_item,
+        update_learning_path_item and update_learning_path for later corrections.
+
+        create_course_assignment is idempotent by exact title inside a course and supports a real
+        dueAt or dueInDays deadline. A returned created=false value means the existing assignment
+        was reused, not that the call failed. A survey or learning path is successful only when its
+        result reports verified_in_course=true.
+
+        For the "Course Description" tool, call get_course_description_template first: it returns
+        the 7 standard sections (Description, Objectives, Topics, Methodology, Course material,
+        Resources, Assessment) with a guiding question for each and whether it already has content.
+        Ask the user the guiding question for each section they want to write, then call
+        create_course_description with the matching descriptionType. Calling it again with the same
+        descriptionType (1-7) updates that section in place instead of duplicating it; descriptionType
+        8 always adds a new custom "Other" item. Use edit_course_description to change content, title
+        or language on an existing item. There is no delete tool for course descriptions yet. Write
+        the HTML content with the same style conventions as create_course_document.
     client_transports:
         stdio: true
         http: true

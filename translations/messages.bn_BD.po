@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ফর্মুলা নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ফর্মুলার উদাহরণ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -8546,6 +8546,9 @@ msgstr "কোম্পানি"
 
 msgid "Reporting"
 msgstr "রিপোর্টিং"
+
+msgid "Analytics"
+msgstr "বিশ্লেষণ"
 
 msgid "Update"
 msgstr "আপডেট"
@@ -37386,6 +37389,9 @@ msgstr "Git রিমোট কনফিগারেশন (.git/config) পর�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "স্ক্যান তাড়াতাড়ি বন্ধ হয়েছে কারণ একটি সাবডিরেক্টরি পড়া যায়নি (ফাইল অনুমতি চেক করুন)। নিচের ফলাফল আংশিক হতে পারে।"
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "পুরোপুরি তালিকাভুক্ত করার জন্য অনেক পরিবর্তন; প্রতিটি বিভাগের প্রথম এন্ট্রিগুলো নিচে দেখানো হয়েছে। সম্পূর্ণ তালিকার জন্য CEF লগ দেখুন।"
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ফাইল(গুলো) পড়া যায়নি (অনুমতি) এবং এড়িয়ে যাওয়া হয়েছে।"
 
@@ -37470,6 +37476,27 @@ msgstr "এখনো কোনো সতর্কতা রেকর্ড ক�
 msgid "Git remote changed"
 msgstr "Git রিমোট পরিবর্তিত হয়েছে"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "তালিকাভুক্ত করার জন্য অনেক পরিবর্তন; প্রতিটি বিভাগের শুধুমাত্র প্রথম এন্ট্রিগুলি নিচে দেখানো হয়েছে। সম্পূর্ণ তালিকার জন্য %link_start%CEF লগ%link_end% দেখুন।"
+msgid "Press enter to select"
+msgstr "নির্বাচন করতে এন্টার চাপুন"
+
+msgid "Press enter to remove"
+msgstr "অপসারণ করতে এন্টার চাপুন"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "কোনো উপাদান পাওয়া যায়নি। অনুসন্ধান কোয়েরি পরিবর্তন করার কথা বিবেচনা করুন।"
+
+msgid "List is empty."
+msgstr "তালিকা খালি।"
+
+msgid "Your session has expired. Please try again."
+msgstr "আপনার সেশনের মেয়াদ শেষ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।"
+
+msgid "Generate with AI"
+msgstr "AI দিয়ে তৈরি করুন"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "এই কোর্সের বিষয় উপস্থাপনকারী একটি আধুনিক, স্বাগতমূলক ইলাস্ট্রেশন, পরিষ্কার ফ্ল্যাট-ডিজাইন স্টাইলে, আমার প্ল্যাটফর্মের রঙগুলোকে অ্যাকসেন্ট হিসেবে ব্যবহার করে।"
+
+msgid "Back to account"
+msgstr "অ্যাকাউন্টে ফিরে যান"
 

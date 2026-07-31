@@ -54,6 +54,7 @@ class Certificate extends Model
      * @param bool $sendNotification      send message to student
      * @param bool $updateCertificateData
      * @param string $pathToCertificate
+     * @param array  $notification
      *
      * If no ID given, take user_id and try to generate one
      */
@@ -62,7 +63,8 @@ class Certificate extends Model
         $userId = 0,
         $sendNotification = false,
         $updateCertificateData = true,
-        $pathToCertificate = ''
+        $pathToCertificate = '',
+        array $notification = []
     ) {
         $this->table   = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->user_id = !empty($userId) ? (int) $userId : api_get_user_id();
@@ -102,7 +104,13 @@ class Certificate extends Model
         // Keep original behavior: optionally generate on construct.
         if ($this->force_certificate_generation) {
             try {
-                $this->generate(['certificate_path' => $pathToCertificate], $sendNotification);
+                $this->generate(
+                    [
+                        'certificate_path' => $pathToCertificate,
+                        'notification' => $notification,
+                    ],
+                    $sendNotification
+                );
                 // Refresh in-memory HTML for PDF generation after generate().
                 $refetched = $certRepo->getCertificateByUserId($categoryId === 0 ? null : $categoryId, $this->user_id);
                 if ($refetched && $refetched->hasResourceNode()) {
@@ -122,7 +130,13 @@ class Certificate extends Model
             !$this->force_certificate_generation
         ) {
             try {
-                $this->generate(['certificate_path' => $pathToCertificate], $sendNotification);
+                $this->generate(
+                    [
+                        'certificate_path' => $pathToCertificate,
+                        'notification' => $notification,
+                    ],
+                    $sendNotification
+                );
                 $refetched = $certRepo->getCertificateByUserId($categoryId === 0 ? null : $categoryId, $this->user_id);
                 if ($refetched && $refetched->hasResourceNode()) {
                     $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($refetched);
@@ -455,10 +469,21 @@ class Certificate extends Model
                 $this->certificate_data['file_content']     = $html;
                 $this->certificate_data['path_certificate'] = '';
 
-                // Send notification if required (we have course context here)
+                // Send the notification only after the certificate resource exists.
                 if ($sendNotification) {
-                    $subject = get_lang('Certificate notification');
-                    $message = nl2br(get_lang('((user_first_name)),'));
+                    $notification = is_array($params['notification'] ?? null)
+                        ? $params['notification']
+                        : [];
+                    $subject = trim((string) ($notification['subject'] ?? ''));
+                    $message = trim((string) ($notification['message'] ?? ''));
+
+                    if ('' === $subject) {
+                        $subject = get_lang('Certificate notification');
+                    }
+                    if ('' === $message) {
+                        $message = nl2br(get_lang('((user_first_name)),'));
+                    }
+
                     $htmlUrl = '';
                     try {
                         $htmlUrl = $certRepo->getResourceFileUrl($entity);
@@ -466,16 +491,26 @@ class Certificate extends Model
                         error_log('[CERT::generate] getResourceFileUrl failed for notification: '.$e->getMessage());
                     }
 
-                    self::sendNotification(
+                    $notificationSent = self::sendNotification(
                         $subject,
                         $message,
                         api_get_user_info($this->user_id),
                         $courseInfo,
                         [
-                            'score_certificate' => $score,
-                            'html_url'          => $htmlUrl,
-                        ]
+                            'score_certificate' => round($score),
+                            'html_url' => $htmlUrl,
+                        ],
+                        !empty($notification),
+                        (int) ($notification['sender_id'] ?? 0)
                     );
+
+                    if (!$notificationSent) {
+                        error_log(sprintf(
+                            '[CERT::generate] Notification failed after certificate generation. cat=%d user=%d',
+                            (int) $categoryId,
+                            (int) $this->user_id
+                        ));
+                    }
                 }
 
                 return true;
@@ -553,13 +588,22 @@ class Certificate extends Model
         $message,
         $userInfo,
         $courseInfo,
-        $certificateInfo
+        $certificateInfo,
+        bool $forceEmailSubject = false,
+        int $senderId = 0
     ) {
         if (empty($userInfo) || empty($courseInfo)) {
             return false;
         }
 
-        $currentUserInfo = api_get_user_info();
+        $currentUserInfo = $senderId > 0
+            ? api_get_user_info($senderId)
+            : api_get_user_info();
+
+        if (empty($currentUserInfo['id'])) {
+            return false;
+        }
+
         $url = '';
 
         // Prefer resource URL if present
@@ -583,7 +627,7 @@ class Certificate extends Model
         ];
 
         $message = str_replace(self::notificationTags(), $replace, $message);
-        MessageManager::send_message(
+        return (bool) MessageManager::send_message(
             $userInfo['id'],
             $subject,
             $message,
@@ -593,7 +637,11 @@ class Certificate extends Model
             0,
             0,
             0,
-            $currentUserInfo['id']
+            $currentUserInfo['id'],
+            false,
+            0,
+            false,
+            $forceEmailSubject
         );
     }
 

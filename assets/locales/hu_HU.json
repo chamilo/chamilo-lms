@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Hozzon l\u00e9tre kurzuscsomagokat bizonyos id\u0151re k\u00e9pz\u00e9si foglalkoz\u00e1sokkal",
     "Sessions management": "Foglalkoz\u00e1skezel\u00e9s",
     "Tracking": "K\u00f6vet\u00e9s",
+    "Analytics": "Analitika",
     "View reports, statistics and tracking data": "Jelent\u00e9sek, statisztik\u00e1k \u00e9s k\u00f6vet\u00e9si adatok megtekint\u00e9se",
     "Manage the skills of your users, through courses and badges": "Kezelje felhaszn\u00e1l\u00f3i k\u00e9szs\u00e9geit kurzusokon \u00e9s jelv\u00e9nyeken kereszt\u00fcl",
     "Personal data protection": "Szem\u00e9lyes adatv\u00e9delem",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "{0} bejegyz\u00e9s megjelen\u00edt\u00e9se",
     "Showing {0} tasks": "{0} feladat megjelen\u00edt\u00e9se",
     "contains {0} items": "{0} elemet tartalmaz",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Nyomja meg az Enter billenty\u0171t a kiv\u00e1laszt\u00e1shoz",
+    "Press enter to remove": "Nyomja meg az Enter billenty\u0171t az elt\u00e1vol\u00edt\u00e1shoz",
+    "No elements found. Consider changing the search query.": "Nem tal\u00e1lhat\u00f3 elem. Pr\u00f3b\u00e1lja meg m\u00f3dos\u00edtani a keres\u00e9si kifejez\u00e9st.",
+    "List is empty.": "A lista \u00fcres."
 }

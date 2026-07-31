@@ -78,7 +78,7 @@
     </template>
   </Toast>
 
-  <SessionExpirationWarning />
+  <SessionExpirationWarning v-if="securityStore.isAuthenticated" />
 </template>
 
 <script setup>

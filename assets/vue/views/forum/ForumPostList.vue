@@ -483,11 +483,13 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import forumService from "../../services/forumService"
 import { useSecurityStore } from "../../store/securityStore"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
-const { t, d, locale } = useI18n()
+const { t, d } = useI18n()
+const { relativeDatetime } = useFormatDate()
 const route = useRoute()
 const router = useRouter()
 const notifications = useNotification()
@@ -719,18 +721,6 @@ function getAttachmentUrl(attachment) {
   return attachment.downloadUrl || attachment.contentUrl || attachment.url || "#"
 }
 
-const relativeTimeFormatter = computed(() => {
-  try {
-    // Intl requires a BCP-47 tag (hyphen); vue-i18n's locale here is
-    // Chamilo's own underscore-separated isocode (e.g. "en_US").
-    return new Intl.RelativeTimeFormat(locale.value?.replace("_", "-") || undefined, { numeric: "auto" })
-  } catch (error) {
-    console.error("Error creating relative time formatter:", error)
-
-    return null
-  }
-})
-
 function normalizeDateValue(value) {
   if (!value) {
     return ""
@@ -859,24 +849,7 @@ function formatRelativeTime(value) {
     return ""
   }
 
-  const diffInSeconds = Math.round((date.getTime() - Date.now()) / 1000)
-  const units = [
-    { unit: "year", seconds: 31536000 },
-    { unit: "month", seconds: 2592000 },
-    { unit: "week", seconds: 604800 },
-    { unit: "day", seconds: 86400 },
-    { unit: "hour", seconds: 3600 },
-    { unit: "minute", seconds: 60 },
-    { unit: "second", seconds: 1 },
-  ]
-  const selected = units.find((item) => Math.abs(diffInSeconds) >= item.seconds) || units[units.length - 1]
-  const amount = Math.round(diffInSeconds / selected.seconds)
-
-  if (relativeTimeFormatter.value) {
-    return relativeTimeFormatter.value.format(amount, selected.unit)
-  }
-
-  return formatDate(value)
+  return relativeDatetime(date) ?? formatDate(value)
 }
 
 function isTeacherRole(item) {

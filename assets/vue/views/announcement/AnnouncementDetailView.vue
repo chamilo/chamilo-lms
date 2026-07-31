@@ -106,7 +106,7 @@
           </span>
           <span>
             {{ t("Latest update") }}:
-            {{ formatDate(announcement.updatedAt) }}
+            {{ abbreviatedDatetime(announcement.updatedAt) ?? "-" }}
           </span>
         </div>
       </template>
@@ -234,12 +234,14 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import announcementService from "../../services/announcementService"
 
 const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { requireConfirmation } = useConfirmation()
+const { abbreviatedDatetime } = useFormatDate()
 
 const announcement = ref(null)
 const canManage = ref(false)
@@ -295,24 +297,6 @@ const editRoute = computed(() => ({
   },
   query: getContextParams(),
 }))
-
-function formatDate(value) {
-  if (!value) {
-    return "-"
-  }
-
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) {
-    return value
-  }
-
-  // Intl requires a BCP-47 tag (hyphen); vue-i18n's locale here is Chamilo's
-  // own underscore-separated isocode (e.g. "en_US"), which Intl throws on.
-  return new Intl.DateTimeFormat(locale.value.replace("_", "-"), {
-    dateStyle: "long",
-    timeStyle: "short",
-  }).format(date)
-}
 
 function formatFileSize(value) {
   const size = Number(value || 0)

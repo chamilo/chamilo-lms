@@ -5,12 +5,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $token = isset($_GET['token']) ? $_GET['token'] : '';
 
-if (!ctype_alnum($token)) {
+if (!is_string($token) || !ctype_alnum($token)) {
     $token = '';
 }
 
 /** @var \Chamilo\UserBundle\Entity\User $user */
-$user = UserManager::getManager()->findUserByConfirmationToken($token);
+$user = $token !== '' ? UserManager::getManager()->findUserByConfirmationToken($token) : null;
 
 if ($user) {
     $user->setActive(1); // Set to 1 to activate the user

@@ -8016,6 +8016,11 @@ function api_is_multiple_url_enabled()
 /**
  * Returns a md5 unique id.
  *
+ * WARNING: this value is derived from the clock (time() + uniqid()) and is
+ * therefore predictable. It must never be used for security-sensitive,
+ * unguessable values such as password reset or e-mail confirmation tokens.
+ * Use api_generate_secure_token() instead.
+ *
  * @todo add more parameters
  */
 function api_get_unique_id()
@@ -8023,6 +8028,30 @@ function api_get_unique_id()
     $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
 
     return $id;
+}
+
+/**
+ * Generates a cryptographically secure random token, suitable for password
+ * reset links, e-mail confirmation links and any other unguessable secret
+ * sent to a user.
+ *
+ * The returned value only contains hexadecimal characters, so it is safe to
+ * put in a URL and it passes the ctype_alnum() checks done by the consumers.
+ *
+ * @param int $bytes Number of random bytes to read (the returned string is twice as long)
+ *
+ * @throws Exception if no appropriate source of randomness is available
+ *
+ * @return string
+ */
+function api_generate_secure_token($bytes = 32)
+{
+    $bytes = (int) $bytes;
+    if ($bytes < 16) {
+        $bytes = 16;
+    }
+
+    return bin2hex(random_bytes($bytes));
 }
 
 /**

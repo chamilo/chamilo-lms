@@ -6,11 +6,13 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $token = $_GET['token'] ?? '';
 
-if (!ctype_alnum($token)) {
+if (!is_string($token) || !ctype_alnum($token)) {
     $token = '';
 }
 
-$user = UserManager::getManager()->findUserByConfirmationToken($token);
+// Never look up an empty token: it would match any row left with an empty
+// confirmation_token instead of failing.
+$user = $token !== '' ? UserManager::getManager()->findUserByConfirmationToken($token) : null;
 
 if (!$user) {
     Display::addFlash(
@@ -60,8 +62,12 @@ if ($form->validate()) {
     $password = $values['pass1'];
     $token = $values['token'];
 
+    if (!is_string($token) || !ctype_alnum($token)) {
+        $token = '';
+    }
+
     /** @var \Chamilo\UserBundle\Entity\User $user */
-    $user = UserManager::getManager()->findUserByConfirmationToken($token);
+    $user = $token !== '' ? UserManager::getManager()->findUserByConfirmationToken($token) : null;
 
     if ($user) {
         if (!$user->isPasswordRequestNonExpired($ttl)) {

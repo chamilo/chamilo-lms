@@ -378,6 +378,22 @@ Then("I fill in tinymce field {string} with {string}", async ({ page }, field: s
   }, { id: fieldId, value })
 })
 
+// Not ported — new, for toolWork.feature's Vue create/edit assignment
+// dialogs (AssignmentForm.vue-style). BaseTinyEditor generates a fresh,
+// unpredictable instance id per mount (`tiny-vue_<random>`) rather than a
+// stable one tied to the field name, so there's no id to resolveField()
+// against at all — confirmed via a real DOM dump. Since these dialogs only
+// ever have ONE editor open at a time, `tinymce.activeEditor` reliably
+// identifies it without needing an id.
+Then("I fill in the active tinymce editor with {string}", async ({ page }, value: string) => {
+  await page.waitForFunction(() => Boolean((window as any).tinymce?.activeEditor))
+  await page.evaluate((value) => {
+    const editor = (window as any).tinymce.activeEditor
+    editor.setContent(value)
+    editor.fire("change")
+  }, value)
+})
+
 // Mink's "I check ..." checks a checkbox, same id -> name -> label resolution.
 Then("I check {string}", async ({ page }, field: string) => {
   await (await resolveField(page, field)).check()
@@ -401,6 +417,29 @@ When("I check the {string} radio button", async ({ page }, label: string) => {
 // covers any onclick/change listener the original's bare .prop() skipped).
 When("I check the {string} radio button selector", async ({ page }, selector: string) => {
   await page.locator(selector).check()
+})
+
+// Ported from FeatureContext::iCheckTheRadioButtonWithValue(). The original
+// shelled out to jQuery to force the DOM `checked` property directly
+// (`$('input[type="radio"][name=X][value=Y]').prop('checked', true)`) — a
+// real .check() click is the direct Playwright equivalent and also fires any
+// onclick/change listener the original bypassed. Used for platform settings
+// rendered as name/value radio groups (e.g. toolLp.feature's
+// "hide_scorm_pdf_link" YesNoType setting), where the two options share one
+// `name` and are distinguished only by `value`, not by a stable id.
+Given("I check the {string} radio button with {string} value", async ({ page }, name: string, value: string) => {
+  await page.locator(`input[type="radio"][name="${name}"][value="${value}"]`).check()
+})
+
+// Not ported — new, for toolLp.feature's PDF-export-icon platform-setting
+// check (an icon whose only identifier is its `title` attribute, shown/
+// hidden entirely based on a setting — no surrounding text to assert on).
+Then("I should see an icon with title {string}", async ({ page }, title: string) => {
+  await expect(page.locator(`[title="${title}"]`).first()).toBeVisible()
+})
+
+Then("I should not see an icon with title {string}", async ({ page }, title: string) => {
+  await expect(page.locator(`[title="${title}"]`)).toHaveCount(0)
 })
 
 // Not ported — new. Mirrors FeatureContext's own generic Select2/ajax-select
@@ -848,6 +887,26 @@ Then("I click the {string} icon in the row for {string}", async ({ page }, selec
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 
+// Not ported — new, for toolLink.feature (and any other page laying its list
+// out as `<div class="card">` items rather than a `<table>`). Same row-
+// scoping intent as the step above, but matches the card by its own EXACT
+// title text (not a substring "hasText") — link.php's card layout means
+// two of this feature's own test items ("Chamilo" / "Chamilo in category
+// 1", "Category 1" / "...category 1") are substrings of each other, so a
+// plain substring match would ambiguously match more than one card.
+Then(
+  "I click the {string} icon in the card for {string}",
+  async ({ page }, selector: string, cardText: string) => {
+    page.once("dialog", (dialog) => dialog.accept())
+    await page
+      .locator(".card")
+      .filter({ has: page.getByText(cardText, { exact: true }) })
+      .locator(selector)
+      .first()
+      .click()
+  },
+)
+
 // Not ported — new, for toolDocument.feature's own cleanup scenarios
 // specifically (deleting several test-created documents back to back). A
 // real CI run (twice, with a different document missing each time) showed
@@ -891,7 +950,18 @@ When("I follow {string}", async ({ page }, link: string) => {
     await byTitle.first().click()
     return
   }
-  await page.getByRole("link", { name: link }).first().click()
+  const roleLink = page.getByRole("link", { name: link })
+  if (await isSoonVisible(roleLink)) {
+    await roleLink.first().click()
+    return
+  }
+  // Not in the original Mink cascade — new. toolWork.feature's Vue
+  // assignment list renders its row title as a plain `<a>` with NO `href`
+  // attribute at all (confirmed via a real DOM dump) — without an href, it
+  // has no implicit "link" role, so getByRole("link") never matches it.
+  // Falls back to a plain exact-text match, which works regardless of the
+  // element's actual role/tag.
+  await page.getByText(link, { exact: true }).first().click()
 })
 
 // Ported from FeatureContext::confirmPopup(). Native `confirm()` dialogs are

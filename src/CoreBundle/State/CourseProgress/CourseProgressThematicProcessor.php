@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State\CourseProgress;
 
 use ApiPlatform\Metadata\Operation;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematic;
 use Chamilo\CoreBundle\Entity\Course;
@@ -87,7 +87,7 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
         }
 
         $thematic = null;
-        if ($operation instanceof Put) {
+        if ($operation instanceof Patch) {
             $thematicId = isset($uriVariables['iid']) ? (int) $uriVariables['iid'] : 0;
             $thematic = $this->getEditableThematic($thematicId, $course, $session);
         }

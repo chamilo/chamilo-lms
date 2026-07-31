@@ -49,6 +49,14 @@ mcp:
         8 always adds a new custom "Other" item. Use edit_course_description to change content, title
         or language on an existing item. There is no delete tool for course descriptions yet. Write
         the HTML content with the same style conventions as create_course_document.
+
+        get_course_tests, get_course_test_questions and get_course_test_question_answers are
+        read-only: use them to review a test's title/settings, then its questions (type, total
+        score, category) and finally the proposed answers of one question (feedback, score).
+        Locate a test by testId or exact testTitle, and a question by questionId from
+        get_course_test_questions. Unlike the other course tools, these three are also available
+        platform-wide (not only for the test's own course) to users with a question manager or
+        administrator role.
     client_transports:
         stdio: true
         http: true

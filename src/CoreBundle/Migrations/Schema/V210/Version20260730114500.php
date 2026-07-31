@@ -12,6 +12,7 @@ use RuntimeException;
 
 final class Version20260730114500 extends AbstractMigrationChamilo
 {
+    private const REPAIR_OPT_IN_ENV = 'CHAMILO_RUN_AUDITED_LEGACY_QUIZ_REPAIRS';
     private const EXPECTED_MAPPING_ROWS = 86115;
     private const EXPECTED_MAPPING_QUIZZES = 1293;
     private const EXPECTED_QUIZ_305_ROWS = 109;
@@ -4437,6 +4438,15 @@ LEGACY_QUIZ_MAPPING;
 
     public function up(Schema $schema): void
     {
+        if ('1' !== (string) \getenv(self::REPAIR_OPT_IN_ENV)) {
+            $this->write(sprintf(
+                'Audited legacy quiz relation repair skipped. Set %s=1 only for the validated target database.',
+                self::REPAIR_OPT_IN_ENV
+            ));
+
+            return;
+        }
+
         $this->requireTargetSchema($schema);
         $this->abortOnExternalRelationReferences();
 

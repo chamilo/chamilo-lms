@@ -12,6 +12,7 @@ use RuntimeException;
 
 final class Version20260730123000 extends AbstractMigrationChamilo
 {
+    private const REPAIR_OPT_IN_ENV = 'CHAMILO_RUN_AUDITED_LEGACY_QUIZ_REPAIRS';
     private const EXPECTED_MAPPING_ROWS = 369437;
     private const EXPECTED_MAPPING_QUESTIONS = 87901;
     private const MINIMUM_TARGET_ANSWER_ROWS = 369457;
@@ -8974,6 +8975,15 @@ LEGACY_ANSWER_MAPPING;
 
     public function up(Schema $schema): void
     {
+        if ('1' !== (string) \getenv(self::REPAIR_OPT_IN_ENV)) {
+            $this->write(sprintf(
+                'Audited legacy quiz answer repair skipped. Set %s=1 only for the validated target database.',
+                self::REPAIR_OPT_IN_ENV
+            ));
+
+            return;
+        }
+
         $this->requireTargetSchema($schema);
 
         $answerRows = (int) $this->connection->fetchOne(

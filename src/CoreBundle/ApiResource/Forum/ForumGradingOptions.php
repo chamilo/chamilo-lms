@@ -57,7 +57,7 @@ final class ForumGradingOptions
     public array $categories = [];
 
     /**
-     * @param  array<int, array<string, mixed>>  $categories
+     * @param array<int, array<string, mixed>> $categories
      */
     public static function fromCategories(array $categories): self
     {

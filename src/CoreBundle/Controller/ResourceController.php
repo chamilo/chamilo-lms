@@ -174,6 +174,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceFile = null;
         if ($resourceFileId) {
             $resourceFile = $this->resourceFileRepository->find($resourceFileId);
+
+            // The selected file must belong to the resource node in the path; otherwise the
+            // resourceFileId parameter is an IDOR oracle for arbitrary resource files.
+            if ($resourceFile instanceof ResourceFile
+                && $resourceFile->getResourceNode()?->getId() !== $resourceNode->getId()
+            ) {
+                throw new FileNotFoundException($this->trans('Resource file not found for the given resource node'));
+            }
         }
 
         $resourceFile ??= $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
@@ -667,6 +675,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $variant = $em->getRepository(ResourceFile::class)->find($id);
         if (!$variant) {
             return $this->json(['error' => 'Variant not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $resourceNode = $variant->getResourceNode();
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException();
+        }
+
+        // Require edit permission on the owning resource node (admins pass via ROLE_ADMIN).
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        // Only genuine access-URL variants may be removed here, never a primary resource file.
+        if (null === $variant->getAccessUrl()) {
+            throw new NotFoundHttpException();
         }
 
         $em->remove($variant);

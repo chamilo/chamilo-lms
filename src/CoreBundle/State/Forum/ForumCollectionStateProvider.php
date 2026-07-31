@@ -231,7 +231,8 @@ final class ForumCollectionStateProvider implements ProviderInterface
             ->setParameter('userId', (int) $user->getId())
             ->setParameter('forumIds', $forumIds)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         $subscribedForumIds = [];
         foreach ($rows as $row) {
@@ -271,7 +272,8 @@ final class ForumCollectionStateProvider implements ProviderInterface
             ->setParameter('forumIds', $forumIds)
             ->groupBy('thread.forum')
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         foreach ($threadRows as $row) {
             $forumId = (int) ($row['forumId'] ?? 0);
@@ -288,7 +290,8 @@ final class ForumCollectionStateProvider implements ProviderInterface
             ->setParameter('forumIds', $forumIds)
             ->groupBy('thread.forum')
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         foreach ($postRows as $row) {
             $forumId = (int) ($row['forumId'] ?? 0);

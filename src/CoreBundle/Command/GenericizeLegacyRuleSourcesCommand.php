@@ -76,10 +76,7 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
             foreach (self::SOURCE_MAPPINGS as $mapping) {
                 $legacySources = $this->findNonGenericSources($mapping);
                 if (\count($legacySources) > 1) {
-                    throw new RuntimeException(\sprintf(
-                        '%s contains multiple non-generic source markers; no value was changed.',
-                        $mapping['label']
-                    ));
+                    throw new RuntimeException(\sprintf('%s contains multiple non-generic source markers; no value was changed.', $mapping['label']));
                 }
 
                 $legacySource = $legacySources[0] ?? null;
@@ -147,21 +144,13 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
 
                 $currentSources = $this->findNonGenericSources($mapping);
                 if ([$legacySource] !== $currentSources) {
-                    throw new RuntimeException(\sprintf(
-                        '%s source markers changed during execution; no value was committed.',
-                        $mapping['label']
-                    ));
+                    throw new RuntimeException(\sprintf('%s source markers changed during execution; no value was committed.', $mapping['label']));
                 }
 
                 $expectedRows = $this->countRows($mapping, $legacySource);
                 $updatedRows = $this->updateRows($mapping, $legacySource);
                 if ($updatedRows !== $expectedRows) {
-                    throw new RuntimeException(\sprintf(
-                        '%s expected %d updates but changed %d rows.',
-                        $mapping['label'],
-                        $expectedRows,
-                        $updatedRows
-                    ));
+                    throw new RuntimeException(\sprintf('%s expected %d updates but changed %d rows.', $mapping['label'], $expectedRows, $updatedRows));
                 }
 
                 $summary['updated_rows'] += $updatedRows;
@@ -175,10 +164,7 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
             }
 
             if (0 !== $remainingLegacyRows) {
-                throw new RuntimeException(\sprintf(
-                    '%d legacy source marker rows remain after the update.',
-                    $remainingLegacyRows
-                ));
+                throw new RuntimeException(\sprintf('%d legacy source marker rows remain after the update.', $remainingLegacyRows));
             }
 
             $this->connection->commit();

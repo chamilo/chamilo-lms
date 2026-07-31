@@ -42,13 +42,12 @@ use Throwable;
  */
 final class ForumThreadPostsStateProvider implements ProviderInterface
 {
-    private const DEFAULT_ITEMS_PER_PAGE = 25;
-    private const MAX_ITEMS_PER_PAGE = 100;
-
     use ForumCourseSettingHelperTrait;
     use ForumExtraFieldHelperTrait;
     use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
+    private const DEFAULT_ITEMS_PER_PAGE = 25;
+    private const MAX_ITEMS_PER_PAGE = 100;
 
     /**
      * @var array<int, string>
@@ -648,7 +647,6 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             default => 'Waiting for moderation',
         };
     }
-
 
     private function canReply(CForum $forum, CForumThread $thread): bool
     {

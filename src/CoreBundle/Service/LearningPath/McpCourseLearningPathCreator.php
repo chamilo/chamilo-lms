@@ -662,7 +662,8 @@ final readonly class McpCourseLearningPathCreator
             ->setParameter('learningPathId', (int) $learningPath->getIid(), Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->getQuery()
-            ->getSingleScalarResult() > 0;
+            ->getSingleScalarResult() > 0
+        ;
 
         $persistedItemCount = (int) $this->entityManager->createQueryBuilder()
             ->select('COUNT(verifiedItem.iid)')
@@ -672,7 +673,8 @@ final readonly class McpCourseLearningPathCreator
             ->setParameter('learningPathId', (int) $learningPath->getIid(), Types::INTEGER)
             ->setParameter('rootType', 'root', Types::STRING)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
 
         if (!$verifiedInCourse || $persistedItemCount !== \count($orderedItemIds)) {
             throw new RuntimeException('The learning path was created but its persisted course structure could not be verified.');

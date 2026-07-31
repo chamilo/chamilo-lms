@@ -152,7 +152,8 @@ final readonly class TrainingSatisfactionSurveyCreator
             ->setParameter('surveyId', $surveyId, Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->getQuery()
-            ->getSingleScalarResult() > 0;
+            ->getSingleScalarResult() > 0
+        ;
 
         if (!$verifiedInCourse) {
             throw new RuntimeException('Chamilo created the survey but it could not be verified in the selected course.');

@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use JsonException;
 
+use const JSON_THROW_ON_ERROR;
+
 final readonly class McpAccessPolicy
 {
     /**

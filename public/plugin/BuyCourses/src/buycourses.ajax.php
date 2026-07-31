@@ -770,6 +770,10 @@ switch ($action) {
             : null;
 
         $buyerIp = trim((string) ($serviceSale['buyer_ip'] ?? ''));
+        $buyerCountryCode = strtoupper(trim((string) ($serviceSale['buyer_country'] ?? '')));
+        $buyerCountry = '' !== $buyerCountryCode
+            ? (string) ($plugin->getVatCountryOptions()[$buyerCountryCode] ?? $buyerCountryCode)
+            : '';
         $buyerVatNumber = trim((string) ($serviceSale['buyer_vat_number'] ?? ''));
         $buyerBusinessName = trim((string) ($serviceSale['buyer_business_name'] ?? ''));
         $sellerVatNumber = trim((string) ($globalParameters['seller_vat_number'] ?? ''));
@@ -795,6 +799,10 @@ switch ($action) {
             ['label' => $plugin->get_lang('PurchaserUser'), 'value' => (string) ($serviceSale['buyer']['username'] ?? '')],
             ['label' => get_lang('Email'), 'value' => (string) ($serviceSale['buyer']['email'] ?? '')],
         ];
+
+        if ('' !== $buyerCountry) {
+            $saleRows[] = ['label' => $plugin->get_lang('BuyerCountry'), 'value' => $buyerCountry];
+        }
 
         if ('' !== $buyerIp) {
             $saleRows[] = ['label' => $plugin->get_lang('BuyerIp'), 'value' => $buyerIp];

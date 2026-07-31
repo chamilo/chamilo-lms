@@ -3080,6 +3080,18 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
+                    'name' => 'session_expiration_warning_enabled',
+                    'title' => 'Enable session expiration warning',
+                    'comment' => 'Show a warning to authenticated users before their server-side session expires.',
+                    'selected_value' => 'false',
+                ],
+                [
+                    'name' => 'session_expiration_warning_seconds',
+                    'title' => 'Session expiration warning time',
+                    'comment' => 'Number of seconds before session expiration when the warning is displayed. The default is 180 seconds.',
+                    'selected_value' => '180',
+                ],
+                [
                     'name' => 'proxy_settings',
                     'title' => 'Proxy settings',
                     'comment' => 'Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.',

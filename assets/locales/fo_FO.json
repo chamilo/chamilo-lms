@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Stovna l\u00edkupakkur fyri ein \u00e1virst t\u00ed\u00f0 vi\u00f0 \u00fatb\u00fagvingarsamtalum",
     "Sessions management": "Samtalsst\u00fdring",
     "Tracking": "Sporing",
+    "Analytics": "Greining",
     "View reports, statistics and tracking data": "V\u00eds sk\u00fdrslur, talfr\u00e6\u00f0i og sporingard\u00e1ta",
     "Manage the skills of your users, through courses and badges": "St\u00fdr f\u00edggindi hj\u00e1 br\u00fakarunum t\u00ednum, gj\u00f8gnum l\u00edkur og merki",
     "Personal data protection": "Verjuleiki fyri pers\u00f3nsumstillingum",
@@ -1400,7 +1401,7 @@
     "Selected items will be the only ones included in the exported file.": "Valdir lutir ver\u00f0a einastu inninhaldnum \u00ed eksportf\u00edlunni.",
     "Moodle export": "Moodle eksport",
     "Moodle version": "Moodle \u00fatg\u00e1va",
-    "Admin ID": "Admin ID",
+    "Admin ID": "Stj\u00f3rnanda ID",
     "Internal integer user id": "Innanh\u00fasligur heiltalsbr\u00fakar-ID",
     "Moodle requires an internal user id stored in XML. If in doubt, use 1.": "Moodle krevur ein innanh\u00fasligan br\u00fakara-ID goymd \u00ed XML. Um ivi, br\u00faka 1.",
     "Username to appear as owner of imported items": "Br\u00fakarnafn i\u00f0 skal v\u00edva sum eigari av innfluttum lutum",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "V\u00edsir {0} innlegg",
     "Showing {0} tasks": "V\u00edsir {0} uppg\u00e1vur",
     "contains {0} items": "innheldur {0} lutir",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Tr\u00fdst \u00e1 Enter fyri at velja",
+    "Press enter to remove": "Tr\u00fdst \u00e1 Enter fyri at sleppa",
+    "No elements found. Consider changing the search query.": "Einki funni\u00f0. Royn at broyta leitingina.",
+    "List is empty.": "Listin er t\u00f3mur."
 }

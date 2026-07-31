@@ -8547,6 +8547,9 @@ msgstr "კომპანია"
 msgid "Reporting"
 msgstr "ანგარიშგება"
 
+msgid "Analytics"
+msgstr "ანალიტიკა"
+
 msgid "Update"
 msgstr "განახლება"
 
@@ -36493,52 +36496,52 @@ msgid "You must add at least one question"
 msgstr "თქვენ უნდა დაამატოთ მინიმუმ ერთი კითხვა"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "დამატებითი მოქმედებები"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "აპლიკაციის გზა"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "ფაილების დეტალების გამოყენება"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "გეგმის დეტალების გამოყენება"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "გეგმის გამოყენება ვერ მოხერხდა"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "გეგმის გამოყენება მზადაა"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "მომზადების გამოყენება"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "დასტური ფაილების გამოყენება"
 
 msgid "Applying files..."
-msgstr "Applying files..."
+msgstr "ფაილების გამოყენება..."
 
 msgid "Audit file"
-msgstr "Audit file"
+msgstr "ფაილის აუდიტი"
 
 msgid "Backup directory"
-msgstr "Backup directory"
+msgstr "სარეზერვო დირექტორია"
 
 msgid "Baseline clean"
-msgstr "Baseline clean"
+msgstr "საბაზისო გასუფთავება"
 
 msgid "Baseline warnings"
-msgstr "Baseline warnings"
+msgstr "საბაზისო გაფრთხილებები"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "დასტური პაკეტიდან უსაფრთხო გამოყენების გეგმის შექმნა. ეს მხოლოდ ფაილებს, უფლებებს, სარეზერვო გზას და დაბლოკვის სტატუსს ამოწმებს. ფაილებს არ ცვლის."
 
 msgid "Build production frontend assets."
-msgstr "Build production frontend assets."
+msgstr "წარმოების წინა ფრონტენდის აქტივების აგება."
 
 msgid "Building plan..."
-msgstr "Building plan..."
+msgstr "გეგმის აგება..."
 
 msgid "Channel"
 msgstr "Channel"
@@ -36547,34 +36550,34 @@ msgid "Check"
 msgstr "Check"
 
 msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
-msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "ხელმისაწვდომი Chamilo განახლებების შემოწმება, პაკეტების ვერიფიკაცია, ფაილების დასტური და კონტროლირებადი განახლების შემდგომი ნაბიჯების გაშვება."
 
 msgid "Check manifest"
-msgstr "Check manifest"
+msgstr "მანიფესტის შემოწმება"
 
 msgid "Checking post-apply actions..."
-msgstr "Checking post-apply actions..."
+msgstr "გამოყენების შემდგომი მოქმედებების შემოწმება..."
 
 msgid "Checking..."
 msgstr "Checking..."
 
 msgid "Composer install"
-msgstr "Composer install"
+msgstr "Composer-ის ინსტალაცია"
 
 msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
-msgstr "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn და მონაცემთა ბაზის მიგრაციის მოქმედებებმა შეიძლება შეცვალონ დამოკიდებულებები, გენერირებული აქტივები ან მონაცემთა ბაზა. აირჩიეთ ისინი მხოლოდ სარეზერვო ასლების და უფლებების დადასტურების შემდეგ."
 
 msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
-msgstr "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "სერვერზე CHAMILO_UPDATE_MANIFEST_URL-ის კონფიგურაცია ან HTTPS მანიფესტის URL-ის მიწოდება."
 
 msgid "Configured"
 msgstr "Configured"
 
 msgid "Current migration"
-msgstr "Current migration"
+msgstr "მიმდინარე მიგრაცია"
 
 msgid "Database baseline"
-msgstr "Database baseline"
+msgstr "მონაცემთა ბაზის საბაზისო მდგომარეობა"
 
 msgid "Database migration safety review"
 msgstr "მონაცემთა ბაზის მიგრაციის უსაფრთხოების მიმოხილვა"
@@ -37339,137 +37342,161 @@ msgid "required"
 msgstr "აუცილებელი"
 
 msgid "Incorrect password."
-msgstr "Incorrect password."
+msgstr "არასწორი პაროლი."
 
 msgid "File integrity alerting paused for 1 hour."
-msgstr "File integrity alerting paused for 1 hour."
+msgstr "ფაილების მთლიანობის შეტყობინებები შეჩერებულია 1 საათით."
 
 msgid "New baseline established: %s files."
-msgstr ""
+msgstr "ახალი საბაზისო მონაცემები დადგენილია: %s ფაილი."
 
 msgid "Scan complete: changes were detected."
-msgstr ""
+msgstr "სკანირება დასრულდა: ცვლილებები გამოვლინდა."
 
 msgid "Scan complete: no changes were detected."
-msgstr ""
+msgstr "სკანირება დასრულდა: ცვლილებები არ გამოვლინდა."
 
 msgid "File integrity"
-msgstr ""
+msgstr "ფაილების მთლიანობა"
 
 msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
-msgstr ""
+msgstr "ეს ანგარიში ადარებს დაყენებულ ფაილებს (ყველაფერი var/ და .git/ გარდა, თუმცა .git/config მაინც მონიტორინგდება დისტანციური შეჭრის აღმოსაჩენად) სანდო საბაზისო მონაცემებთან, მოულოდნელი დამატებების, ცვლილებების ან წაშლების გამოსავლენად."
 
 msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
-msgstr ""
+msgstr "შეგიძლიათ ნახოთ უახლესი ანგარიში ქვემოთ. სკანირების ჩატარება, შეტყობინებების შეჩერება ან ახალი საბაზისო მონაცემების დადგენა მოითხოვს გლობალურ ადმინისტრატორს."
 
 msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
-msgstr ""
+msgstr "შეტყობინებები ამჟამად შეჩერებულია მოვლისთვის. ის ავტომატურად განახლდება %date%-ზე."
 
 msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
-msgstr ""
+msgstr "სკანირება ჯერ არ ჩატარებულა. ჩაატარეთ აქედან ან ბრძანების სტრიქონიდან app:file-integrity:scan-ით."
 
 msgid "Last scan"
-msgstr ""
+msgstr "ბოლო სკანირება"
 
 msgid "Files scanned"
-msgstr ""
+msgstr "სკანირებული ფაილები"
 
 msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
-msgstr ""
+msgstr "საბაზისო მონაცემები ჯერ არ არსებობდა: ამ სკანირებამ დაადგინა ისინი. ცვლილებები მოხსენდება მომდევნო სკანირებიდან."
 
 msgid "No changes detected since the baseline."
-msgstr ""
+msgstr "საბაზისო მონაცემებიდან ცვლილებები არ გამოვლინდა."
 
 msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
-msgstr ""
+msgstr "Git-ის დისტანციური კონფიგურაცია (.git/config) შეიცვალა. გადაამოწმეთ, რომ ეს მოსალოდნელი იყო."
 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
-msgstr ""
+msgstr "სკანირება ადრე შეწყდა, რადგან ქვედირექტორია ვერ წაიკითხა (შეამოწმეთ ფაილების უფლებები). ქვემოთ მოცემული შედეგები შეიძლება იყოს ნაწილობრივი."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "ზედმეტად ბევრი ცვლილება სრულად ჩამოსათვლელად; ქვემოთ ნაჩვენებია თითოეული კატეგორიის პირველი ჩანაწერები. სრული სიისთვის იხილეთ CEF ჟურნალი."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
-msgstr ""
+msgstr "%count% ფაილი ვერ წაიკითხა (უფლებები) და გამოტოვებულია."
 
 msgid "Run a scan now"
-msgstr ""
+msgstr "სკანირების ჩატარება ახლა"
 
 msgid "Pause alerting for 1 hour (for maintenance)"
-msgstr ""
+msgstr "შეტყობინებების შეჩერება 1 საათით (მოვლისთვის)"
 
 msgid "Pause for 1 hour"
-msgstr ""
+msgstr "შეჩერება 1 საათით"
 
 msgid "Trust the current file tree as the new baseline"
-msgstr ""
+msgstr "მიმდინარე ფაილების ხის სანდო საბაზისო მონაცემებად მიჩნევა"
 
 msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
-msgstr ""
+msgstr "ეს ყველა მიმდინარე ფაილს სწორად მიიჩნევს, მათ შორის ნებისმიერ გადაუმოწმებელ ცვლილებას. გავაგრძელოთ?"
 
 msgid "Establish new baseline"
-msgstr ""
+msgstr "ახალი საბაზისო მონაცემების დადგენა"
 
 msgid "Schedule the scan from a system crontab, for example"
-msgstr ""
+msgstr "სკანირების დაგეგმვა სისტემური კრონტაბიდან, მაგალითად"
 
 msgid "File integrity alert on %platform%"
-msgstr ""
+msgstr "ფაილების მთლიანობის შეტყობინება %platform%-ზე"
 
 msgid "A file integrity scan detected changes on the platform:"
-msgstr ""
+msgstr "ფაილების მთლიანობის სკანირებამ აღმოაჩინა ცვლილებები პლატფორმაზე:"
 
 msgid "Added files"
-msgstr ""
+msgstr "დამატებული ფაილები"
 
 msgid "Modified files"
-msgstr ""
+msgstr "შეცვლილი ფაილები"
 
 msgid "Deleted files"
-msgstr ""
+msgstr "წაშლილი ფაილები"
 
 msgid "Review the full report from Administration > Security > File integrity."
-msgstr ""
+msgstr "სრული ანგარიშის განხილვა ადმინისტრაცია > უსაფრთხოება > ფაილების მთლიანობა."
 
 msgid "Password to confirm pausing alerts"
-msgstr ""
+msgstr "პაროლი შეტყობინებების შეჩერების დასადასტურებლად"
 
 msgid "Password to confirm the new baseline"
-msgstr ""
+msgstr "პაროლი ახალი საბაზისო მონაცემების დასადასტურებლად"
 
 msgid "A scan is already running. Please wait for it to finish before starting another one."
-msgstr ""
+msgstr "სკანირება უკვე მიმდინარეობს. გთხოვთ, დაელოდოთ მის დასრულებას სანამ ახალს დაიწყებთ."
 
 msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
-msgstr ""
+msgstr "სკანირება ამჟამად მიმდინარეობს (დაიწყო %date%-ზე). სრულ სკანირებას შეიძლება რამდენიმე წუთი დასჭირდეს; ამ გვერდის უსაფრთხოდ განახლება შესაძლებელია პროგრესის შესამოწმებლად."
 
 msgid "Currently processing"
-msgstr ""
+msgstr "ამჟამად მუშავდება"
 
 msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
-msgstr ""
+msgstr "წინა სკანირება (დაიწყო %date%-ზე) შეწყდა მის დასრულებამდე — პროცესი აღარ მუშაობს. შეგიძლიათ უსაფრთხოდ დაიწყოთ ახალი."
 
 msgid "files"
-msgstr ""
+msgstr "ფაილები"
 
 msgid "Permissions changed"
-msgstr ""
+msgstr "უფლებები შეიცვალა"
 
 msgid "Files with changed permissions"
-msgstr ""
+msgstr "ფაილები შეცვლილი უფლებებით"
 
 msgid "Alert history"
-msgstr ""
+msgstr "შეტყობინებების ისტორია"
 
 msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
-msgstr ""
+msgstr "ყველა სკანირება, რომელმაც რამე აღმოაჩინა, ინახება მაშინაც კი, როდესაც გადახრა გადაწყდება ან ახალი საბაზისო მონაცემები დადგინდება — განსხვავებით ზემოთ მოცემული ანგარიშისგან, სუფთა სკანირება ან ხელახალი საბაზისო მონაცემები არასოდეს ასუფთავებს ამას."
 
 msgid "This entry was truncated at capture time; see the CEF log for the complete list."
-msgstr ""
+msgstr "ეს ჩანაწერი შეკვეცილია ჩაწერის დროს; სრული სიისთვის იხილეთ CEF ჟურნალი."
 
 msgid "No alert has been recorded yet."
-msgstr ""
+msgstr "შეტყობინება ჯერ არ ჩაწერილა."
 
 msgid "Git remote changed"
-msgstr ""
+msgstr "Git-ის დისტანციური კავშირი შეიცვალა"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr ""
+msgid "Press enter to select"
+msgstr "დააჭირეთ Enter-ს არჩევისთვის"
+
+msgid "Press enter to remove"
+msgstr "დააჭირეთ Enter-ს წასაშლელად"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "ელემენტები ვერ მოიძებნა. განიხილეთ საძიებო მოთხოვნის შეცვლა."
+
+msgid "List is empty."
+msgstr "სია ცარიელია."
+
+msgid "Your session has expired. Please try again."
+msgstr "თქვენი სესია ამოიწურა. გთხოვთ, სცადოთ ხელახლა."
+
+msgid "Generate with AI"
+msgstr "AI-ით გენერირება"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "თანამედროვე, მისასალმებელი ილუსტრაცია, რომელიც წარმოადგენს ამ კურსის თემას, სუფთა ბრტყელი დიზაინის სტილში, ჩემი პლატფორმის ფერების გამოყენებით აქცენტებად."
+
+msgid "Back to account"
+msgstr "ანგარიშზე დაბრუნება"
 

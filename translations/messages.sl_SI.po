@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "S spoštovanjem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorec formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorec formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Obseg spremenljivk območja"
@@ -8560,6 +8560,9 @@ msgstr "Organizacija"
 
 msgid "Reporting"
 msgstr "Poročila"
+
+msgid "Analytics"
+msgstr "Analitika"
 
 msgid "Update"
 msgstr "Ažuriraj"
@@ -37406,6 +37409,9 @@ msgstr "Konfiguracija oddaljenega Git repozitorija (.git\/config) se je spremeni
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Pregled se je predčasno ustavil, ker ni bilo mogoče prebrati podimenika (preverite dovoljenja datotek). Spodnji rezultati so lahko delni."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Preveč sprememb za popoln prikaz; spodaj so prikazani le prvi vnosi vsake kategorije. Za celoten seznam glejte dnevnik CEF."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% datotek(e) ni bilo mogoče prebrati (dovoljenja) in so bile preskočene."
 
@@ -37490,6 +37496,27 @@ msgstr "Opozorilo še ni bilo zabeleženo."
 msgid "Git remote changed"
 msgstr "Oddaljeni Git spremenjen"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Preveč sprememb za popoln seznam; spodaj so prikazani le prvi vnosi vsake kategorije. Za celoten seznam glejte %link_start%CEF dnevnik%link_end%."
+msgid "Press enter to select"
+msgstr "Pritisnite Enter za izbiro"
+
+msgid "Press enter to remove"
+msgstr "Pritisnite Enter za odstranitev"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Ni najdenih elementov. Poskusite spremeniti iskalni niz."
+
+msgid "List is empty."
+msgstr "Seznam je prazen."
+
+msgid "Your session has expired. Please try again."
+msgstr "Vaša seja je potekla. Prosimo, poskusite znova."
+
+msgid "Generate with AI"
+msgstr "Ustvari z AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Sodoben, vabljiv prikaz teme tega tečaja v čistem ravnem slogu, z uporabo barv vaše platforme kot poudarkov."
+
+msgid "Back to account"
+msgstr "Nazaj na račun"
 

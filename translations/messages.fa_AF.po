@@ -8547,6 +8547,9 @@ msgstr "شرکت"
 msgid "Reporting"
 msgstr "گزارش‌گیری"
 
+msgid "Analytics"
+msgstr "تحلیل‌ها"
+
 msgid "Update"
 msgstr "به‌روزرسانی"
 
@@ -37386,6 +37389,9 @@ msgstr "پیکربندی ریموت Git (.git/config) تغییر کرده است
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "اسکن زودتر متوقف شد زیرا یک زیرپوشه قابل خواندن نبود (مجوزهای فایل را بررسی کنید). نتایج زیر ممکن است ناقص باشند."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "تغییرات بسیار زیاد برای فهرست کامل؛ فقط اولین ورودی‌های هر دسته در زیر نشان داده شده‌اند. برای فهرست کامل به گزارش CEF مراجعه کنید."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% فایل(ها) به دلیل مجوزها قابل خواندن نبودند و نادیده گرفته شدند."
 
@@ -37470,6 +37476,27 @@ msgstr "هنوز هیچ هشداری ثبت نشده است."
 msgid "Git remote changed"
 msgstr "ریموت Git تغییر کرد"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "تغییرات بسیار زیاد برای فهرست کامل؛ فقط اولین ورودی‌های هر دسته در زیر نشان داده شده‌اند. برای فهرست کامل به %link_start%لاگ CEF%link_end% مراجعه کنید."
+msgid "Press enter to select"
+msgstr "برای انتخاب، کلید Enter را فشار دهید"
+
+msgid "Press enter to remove"
+msgstr "برای حذف، کلید Enter را فشار دهید"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "هیچ عنصری یافت نشد. تغییر عبارت جستجو را در نظر بگیرید."
+
+msgid "List is empty."
+msgstr "فهرست خالی است."
+
+msgid "Your session has expired. Please try again."
+msgstr "نشست شما منقضی شده است. لطفاً دوباره تلاش کنید."
+
+msgid "Generate with AI"
+msgstr "تولید با هوش مصنوعی"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "تصویر مدرن و خوش‌آمدگویی که موضوع این دوره را در سبک طراحی تخت و تمیز نشان می‌دهد و از رنگ‌های پلتفرم من به عنوان تأکید استفاده می‌کند."
+
+msgid "Back to account"
+msgstr "بازگشت به حساب"
 

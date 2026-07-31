@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Kutiripakunata kamachinakuy yachaykunawan paqarimuy",
     "Sessions management": "Musyukuna kamachiy",
     "Tracking": "Yachakuy",
+    "Analytics": "Yupay qhaway",
     "View reports, statistics and tracking data": "Willakuykunata, estadistikakunata, yachakuy suyukunata rikunayki",
     "Manage the skills of your users, through courses and badges": "Yachaykunawan llanthukunawan rurakuna yachanakunata kamachinakuy",
     "Personal data protection": "Qespisqan yachaykunaq amachay",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "{0} willakuy rikuchiq",
     "Showing {0} tasks": "{0} kamachiy rikuchiq",
     "contains {0} items": "{0} niqikuna hap'in",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Presiona enter para seleccionar",
+    "Press enter to remove": "Presiona enter para eliminar",
+    "No elements found. Consider changing the search query.": "No se encontraron elementos. Considera cambiar la consulta de b\u00fasqueda.",
+    "List is empty.": "La lista est\u00e1 vac\u00eda."
 }

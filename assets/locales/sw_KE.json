@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Unda vifurushi vya kozi kwa muda maalum na vikao vya mafunzo",
     "Sessions management": "Udhibiti wa vikao",
     "Tracking": "Ufuatiliaji",
+    "Analytics": "Uchambuzi",
     "View reports, statistics and tracking data": "Tazama ripoti, takwimu na data ya ufuatiliaji",
     "Manage the skills of your users, through courses and badges": "Dhibiti ustadi wa watumiaji wako, kupitia kozi na beji",
     "Personal data protection": "Ulinzi wa data za kibinafsi",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Inayoonyesha {0} machapisho",
     "Showing {0} tasks": "Inayoonyesha {0} kazi",
     "contains {0} items": "ina vitu {0}",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Bonyeza ingiza kuchagua",
+    "Press enter to remove": "Bonyeza ingiza kuondoa",
+    "No elements found. Consider changing the search query.": "Hakuna vipengele vilivyopatikana. Fikiria kubadilisha hoja ya utafutaji.",
+    "List is empty.": "Orodha ni tupu."
 }

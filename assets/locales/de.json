@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Erstellen Sie Kurspakete f\u00fcr einen bestimmten Zeitraum mit Trainingssessions",
     "Sessions management": "Session-Verwaltung",
     "Tracking": "Tracking",
+    "Analytics": "Analytics",
     "View reports, statistics and tracking data": "Berichte, Statistiken und Tracking-Daten anzeigen",
     "Manage the skills of your users, through courses and badges": "Verwalten Sie die F\u00e4higkeiten Ihrer Nutzer durch Kurse und Abzeichen",
     "Personal data protection": "Sicherheit pers\u00f6nlicher Daten",
@@ -2388,7 +2389,7 @@
     "View threads": "Themen anzeigen",
     "Current": "Aktuell",
     "No auth source": "Keine Authentifizierungsquelle",
-    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximale Anzahl erlaubter Abonnements. Bei 0 eingeben, um es nicht zu begrenzen.",
+    "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximale Anzahl erlaubter Abonnements. Auf 0 lassen, um es nicht zu begrenzen.",
     "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Willkommen</strong> zum Chamilo Lernpfad Erstellungstool.<br />Sie k\u00f6nnen Ihren Lernpfad Schritt f\u00fcr Schritt erstellen.  Die Struktur Ihres Lernpfads erscheint links in dem Menu.",
     "To start, give a title to your course": "Beginnen Sie damit, Ihrem Lernpfad einen Titel zu geben",
     "Learning path name": "Lernpfad",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "{0} Beitr\u00e4ge anzeigen",
     "Showing {0} tasks": "{0} Aufgaben anzeigen",
     "contains {0} items": "enth\u00e4lt {0} Elemente",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Auf Enter dr\u00fccken, um auszuw\u00e4hlen",
+    "Press enter to remove": "Auf Enter dr\u00fccken, um es zu entfernen.",
+    "No elements found. Consider changing the search query.": "Keine Ergebnisse gefunden. \u00c4ndern Sie Ihre Suchanfrage.",
+    "List is empty.": "Liste ist leer."
 }

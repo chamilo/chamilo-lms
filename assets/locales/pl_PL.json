@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Tw\u00f3rz pakiety kurs\u00f3w na okre\u015blony czas z sesjami szkoleniowymi",
     "Sessions management": "Zarz\u0105dzanie sesjami",
     "Tracking": "\u015aledzenie",
+    "Analytics": "Analityka",
     "View reports, statistics and tracking data": "Wy\u015bwietl raporty, statystyki i dane \u015bledzenia",
     "Manage the skills of your users, through courses and badges": "Zarz\u0105dzaj umiej\u0119tno\u015bciami swoich u\u017cytkownik\u00f3w poprzez kursy i odznaki",
     "Personal data protection": "Ochrona danych osobowych",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Wy\u015bwietlanie {0} post\u00f3w",
     "Showing {0} tasks": "Wy\u015bwietlanie {0} zada\u0144",
     "contains {0} items": "zawiera {0} element\u00f3w",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Naci\u015bnij Enter, aby wybra\u0107",
+    "Press enter to remove": "Naci\u015bnij Enter, aby usun\u0105\u0107",
+    "No elements found. Consider changing the search query.": "Nie znaleziono element\u00f3w. Rozwa\u017c zmian\u0119 zapytania wyszukiwania.",
+    "List is empty.": "Lista jest pusta."
 }

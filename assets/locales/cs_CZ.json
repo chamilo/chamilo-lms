@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Vytv\u00e1\u0159ejte bal\u00ed\u010dky kurz\u016f na ur\u010ditou dobu s tr\u00e9ninkov\u00fdmi sezen\u00edmi",
     "Sessions management": "Spr\u00e1va sezen\u00ed",
     "Tracking": "Sledov\u00e1n\u00ed",
+    "Analytics": "Analytika",
     "View reports, statistics and tracking data": "Zobrazit zpr\u00e1vy, statistiky a sledovac\u00ed data",
     "Manage the skills of your users, through courses and badges": "Spravujte dovednosti sv\u00fdch u\u017eivatel\u016f prost\u0159ednictv\u00edm kurz\u016f a odznak\u016f",
     "Personal data protection": "Ochrana osobn\u00edch \u00fadaj\u016f",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Zobrazuji {0} p\u0159\u00edsp\u011bvk\u016f",
     "Showing {0} tasks": "Zobrazuji {0} \u00fakol\u016f",
     "contains {0} items": "obsahuje {0} polo\u017eek",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Stiskn\u011bte Enter pro v\u00fdb\u011br",
+    "Press enter to remove": "Stiskn\u011bte Enter pro odstran\u011bn\u00ed",
+    "No elements found. Consider changing the search query.": "Nenalezeny \u017e\u00e1dn\u00e9 prvky. Zkuste zm\u011bnit vyhled\u00e1vac\u00ed dotaz.",
+    "List is empty.": "Seznam je pr\u00e1zdn\u00fd."
 }

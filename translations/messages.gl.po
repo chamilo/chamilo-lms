@@ -8560,6 +8560,9 @@ msgstr "Organización"
 msgid "Reporting"
 msgstr "Informe"
 
+msgid "Analytics"
+msgstr "Analítica"
+
 msgid "Update"
 msgstr "Actualizar"
 
@@ -37405,6 +37408,9 @@ msgstr "A configuración do remoto de Git (.git/config) cambiou. Verifique se er
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "O escaneo detívose prematuramente porque non se puido ler un subdirectorio (comprobe os permisos dos ficheiros). Os resultados a continuación poden ser parciais."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Demasiados cambios para listar en total; só se amosan as primeiras entradas de cada categoría. Consulte o rexistro CEF para ver a lista completa."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ficheiro(s) non puideron lerse (permisos) e omitíronse."
 
@@ -37489,6 +37495,27 @@ msgstr "Aínda non se rexistrou ningunha alerta."
 msgid "Git remote changed"
 msgstr "Cambiou o remoto de Git"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Demasiados cambios para listar en detalle; só se amosan as primeiras entradas de cada categoría. Consulte o %link_start%rexistro CEF%link_end% para ver a lista completa."
+msgid "Press enter to select"
+msgstr "Prema Intro para seleccionar"
+
+msgid "Press enter to remove"
+msgstr "Prema Intro para eliminar"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Non se atoparon elementos. Probe a cambiar a consulta de busca."
+
+msgid "List is empty."
+msgstr "A lista está baleira."
+
+msgid "Your session has expired. Please try again."
+msgstr "A súa sesión caducou. Por favor, inténteo de novo."
+
+msgid "Generate with AI"
+msgstr "Xerar con IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Unha ilustración moderna e acolledora que representa o tema deste curso, nun estilo limpo de deseño plano, usando as cores da miña plataforma como acentos."
+
+msgid "Back to account"
+msgstr "Volver á conta"
 

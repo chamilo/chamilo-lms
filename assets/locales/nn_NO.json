@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Opprett kurs-pakke for ein viss tid med trenings\u00f8kter",
     "Sessions management": "\u00d8ktadministrasjon",
     "Tracking": "Sporing",
+    "Analytics": "Analysar",
     "View reports, statistics and tracking data": "Vis rapportar, statistikk og sporeringsdata",
     "Manage the skills of your users, through courses and badges": "Administrer ferdigheitane til brukarane dine, gjennom kurs og merke",
     "Personal data protection": "Personvern",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Viser {0} innlegg",
     "Showing {0} tasks": "Viser {0} oppg\u00e5ver",
     "contains {0} items": "inneheld {0} element",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Trykk enter for \u00e5 velje",
+    "Press enter to remove": "Trykk enter for \u00e5 fjerne",
+    "No elements found. Consider changing the search query.": "Ingen element funne. Vurder \u00e5 endre s\u00f8kespurnaden.",
+    "List is empty.": "Lista er tom."
 }

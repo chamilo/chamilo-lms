@@ -8561,6 +8561,9 @@ msgstr "Companie"
 msgid "Reporting"
 msgstr "Reportaj"
 
+msgid "Analytics"
+msgstr "Analiză"
+
 msgid "Update"
 msgstr "Actualizeaza"
 
@@ -37406,6 +37409,9 @@ msgstr "Configurația remote Git (.git/config) a fost modificată. Verificați d
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Scanarea s-a oprit prematur deoarece un subdirector nu a putut fi citit (verificați permisiunile fișierelor). Rezultatele de mai jos pot fi parțiale."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Prea multe modificări pentru a fi afișate integral; doar primele intrări din fiecare categorie sunt afișate mai jos. Consultați jurnalul CEF pentru lista completă."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fișier(e) nu au putut fi citite (permisiuni) și au fost omise."
 
@@ -37490,6 +37496,27 @@ msgstr "Nu a fost înregistrată nicio alertă încă."
 msgid "Git remote changed"
 msgstr "Remote Git modificat"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Prea multe modificări pentru a fi afișate integral; doar primele intrări din fiecare categorie sunt afișate mai jos. Consultați %link_start%jurnalul CEF%link_end% pentru lista completă."
+msgid "Press enter to select"
+msgstr "Apăsați Enter pentru a selecta"
+
+msgid "Press enter to remove"
+msgstr "Apăsați Enter pentru a elimina"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nu s-au găsit elemente. Încercați să modificați interogarea de căutare."
+
+msgid "List is empty."
+msgstr "Lista este goală."
+
+msgid "Your session has expired. Please try again."
+msgstr "Sesiunea dvs. a expirat. Vă rugăm să încercați din nou."
+
+msgid "Generate with AI"
+msgstr "Generare cu IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "O ilustrație modernă și primitoare care reprezintă tema acestui curs, într-un stil plat curat, folosind culorile platformei mele ca accente."
+
+msgid "Back to account"
+msgstr "Înapoi la cont"
 

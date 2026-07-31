@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Buat paket kursus untuk waktu tertentu dengan sesi pelatihan",
     "Sessions management": "Manajemen sesi",
     "Tracking": "Pelacakan",
+    "Analytics": "Analitik",
     "View reports, statistics and tracking data": "Lihat laporan, statistik dan data pelacakan",
     "Manage the skills of your users, through courses and badges": "Kelola keterampilan pengguna Anda, melalui kursus dan lencana",
     "Personal data protection": "Perlindungan data pribadi",
@@ -2493,7 +2494,7 @@
     "Apply files details": "Apply files details",
     "Apply plan details": "Apply plan details",
     "Apply plan failed": "Apply plan failed",
-    "Apply plan ready": "Apply plan ready",
+    "Apply plan ready": "Terapkan rencana yang siap",
     "Apply preparation": "Terapkan persiapan",
     "Apply staged files": "Terapkan berkas bertahap",
     "Applying files...": "Menerapkan berkas...",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Menampilkan {0} kiriman",
     "Showing {0} tasks": "Menampilkan {0} tugas",
     "contains {0} items": "berisi {0} item",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Tekan enter untuk memilih",
+    "Press enter to remove": "Tekan enter untuk menghapus",
+    "No elements found. Consider changing the search query.": "Tidak ada elemen ditemukan. Pertimbangkan untuk mengubah kueri pencarian.",
+    "List is empty.": "Daftar kosong."
 }

@@ -8778,6 +8778,9 @@ msgstr "Organisation"
 msgid "Reporting"
 msgstr "Suivi"
 
+msgid "Analytics"
+msgstr "Analytique"
+
 msgid "Update"
 msgstr "Actualiser"
 
@@ -39359,7 +39362,6 @@ msgstr "Aucune alerte n'a encore été enregistrée."
 msgid "Git remote changed"
 msgstr "Dépôt Git distant modifié"
 
-
 msgid "Press enter to select"
 msgstr "Appuyez sur Entrée pour sélectionner"
 
@@ -39375,5 +39377,12 @@ msgstr "La liste est vide."
 msgid "Your session has expired. Please try again."
 msgstr "Votre session a expiré. Veuillez réessayer."
 
+msgid "Generate with AI"
+msgstr "Générer avec l'IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Une illustration moderne et accueillante représentant le sujet de ce cours, dans un style flat design épuré, en utilisant les couleurs de ma plateforme comme accents."
+
 msgid "Back to account"
 msgstr "Retour au compte"
+

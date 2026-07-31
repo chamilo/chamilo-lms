@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Atentamente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Muestra de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Ranges de variables"
@@ -8551,6 +8551,9 @@ msgstr "Organización"
 
 msgid "Reporting"
 msgstr "Informes"
+
+msgid "Analytics"
+msgstr "Analítica"
 
 msgid "Update"
 msgstr "Actualizar"
@@ -37392,6 +37395,9 @@ msgstr "La configuración remota de Git (.git/config) camudó. Verifica que fuer
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "L'escáner paró enantes porque nun pudo lleese un subdireutoriu (comprueba los permisos de ficheros). Los resultaos embaxo puen ser parciales."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Demasiaos cambeos pa llistar completos; namái se amuesen les primeres entraes de cada categoría embaxo. Consulta'l rexistru CEF pa la llista completa."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ficheru(os) nun pudieron lleese (permisos) y saltáronse."
 
@@ -37476,6 +37482,27 @@ msgstr "Entá nun se grabó nenguna alerta."
 msgid "Git remote changed"
 msgstr "Git remotu camudáu"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Demasiaos cambeos pa llistar completos; namái s'amuesen les primeres entraes de cada categoría embaxo. Consulta'l %link_start%rexistru CEF%link_end% pa la llista completa."
+msgid "Press enter to select"
+msgstr "Primi Intro pa seleicionar"
+
+msgid "Press enter to remove"
+msgstr "Primi Intro pa desaniciar"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nun s'atoparon elementos. Prueba camudar la consulta de busca."
+
+msgid "List is empty."
+msgstr "La llista ta vacía."
+
+msgid "Your session has expired. Please try again."
+msgstr "La to sesión caducó. Vuelvi a intentalo."
+
+msgid "Generate with AI"
+msgstr "Xenerar con IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Una ilustración moderna y acogedora que representa'l tema d'esti cursu, nun estilu de diseñu planu llimpiu, usando los colores de la mio plataforma como acentos."
+
+msgid "Back to account"
+msgstr "Volver a la cuenta"
 

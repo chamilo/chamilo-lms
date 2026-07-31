@@ -8550,6 +8550,9 @@ msgstr "Syarikat"
 msgid "Reporting"
 msgstr "Laporan"
 
+msgid "Analytics"
+msgstr "Analitik"
+
 msgid "Update"
 msgstr "Kemas kini"
 
@@ -36491,49 +36494,49 @@ msgid "View threads"
 msgstr "Lihat tren"
 
 msgid "No auth source"
-msgstr "No auth source"
+msgstr "Tiada sumber pengesahan"
 
 msgid "You must add at least one question"
-msgstr "You must add at least one question"
+msgstr "Anda mesti menambah sekurang-kurangnya satu soalan"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Tindakan lanjutan"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Laluan aplikasi"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Guna butiran fail"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Guna butiran pelan"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Guna pelan gagal"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Guna pelan sedia"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "Guna persediaan"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "Guna fail berperingkat"
 
 msgid "Applying files..."
-msgstr "Applying files..."
+msgstr "Mengguna fail..."
 
 msgid "Audit file"
-msgstr "Audit file"
+msgstr "Fail audit"
 
 msgid "Backup directory"
-msgstr "Backup directory"
+msgstr "Direktori sandaran"
 
 msgid "Baseline clean"
-msgstr "Baseline clean"
+msgstr "Baseline bersih"
 
 msgid "Baseline warnings"
-msgstr "Baseline warnings"
+msgstr "Amaran baseline"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
 msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
@@ -36542,7 +36545,7 @@ msgid "Build production frontend assets."
 msgstr "Build production frontend assets."
 
 msgid "Building plan..."
-msgstr "Building plan..."
+msgstr "Membina pelan..."
 
 msgid "Channel"
 msgstr "Channel"
@@ -37343,10 +37346,10 @@ msgid "required"
 msgstr "diperlukan"
 
 msgid "Incorrect password."
-msgstr "Incorrect password."
+msgstr "Kata laluan tidak betul."
 
 msgid "File integrity alerting paused for 1 hour."
-msgstr "File integrity alerting paused for 1 hour."
+msgstr "Makluman integriti fail dijeda selama 1 jam."
 
 msgid "New baseline established: %s files."
 msgstr "Garis dasar baharu ditetapkan: %s fail."
@@ -37389,6 +37392,9 @@ msgstr "Konfigurasi jauh Git (.git/config) telah berubah. Sahkan ini adalah sepe
 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Imbasan berhenti awal kerana subdirektori tidak dapat dibaca (semak kebenaran fail). Keputusan di bawah mungkin tidak lengkap."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Terlalu banyak perubahan untuk disenaraikan sepenuhnya; hanya entri pertama bagi setiap kategori ditunjukkan di bawah. Rujuk log CEF untuk senarai lengkap."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fail tidak dapat dibaca (kebenaran) dan telah dilangkau."
@@ -37474,6 +37480,27 @@ msgstr "Tiada amaran direkodkan lagi."
 msgid "Git remote changed"
 msgstr "Git jauh berubah"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Terlalu banyak perubahan untuk disenaraikan sepenuhnya; hanya entri pertama bagi setiap kategori ditunjukkan di bawah. Sila lihat %link_start%log CEF%link_end% untuk senarai lengkap."
+msgid "Press enter to select"
+msgstr "Tekan enter untuk memilih"
+
+msgid "Press enter to remove"
+msgstr "Tekan enter untuk mengeluarkan"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Tiada elemen dijumpai. Sila ubah pertanyaan carian."
+
+msgid "List is empty."
+msgstr "Senarai kosong."
+
+msgid "Your session has expired. Please try again."
+msgstr "Sesi anda telah tamat. Sila cuba lagi."
+
+msgid "Generate with AI"
+msgstr "Jana dengan AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Ilustrasi moden dan mesra yang mewakili topik kursus ini, dalam gaya reka bentuk rata yang bersih, menggunakan warna platform saya sebagai aksen."
+
+msgid "Back to account"
+msgstr "Kembali ke akaun"
 

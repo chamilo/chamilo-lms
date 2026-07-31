@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -8550,6 +8550,9 @@ msgstr "Cuideachta"
 
 msgid "Reporting"
 msgstr "Tuairisciú"
+
+msgid "Analytics"
+msgstr "Anailísíocht"
 
 msgid "Update"
 msgstr "Nuashonraigh"
@@ -37390,6 +37393,9 @@ msgstr "Tá cumraíocht chianfhostaíochta Git (.git/config) athraithe. Deimhnig
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Stop an scanadh go luath mar níorbh fhéidir fo-eolaire a léamh (seiceáil ceadanna comhaid). D’fhéadfadh na torthaí thíos a bheith páirteach."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "An iomarca athruithe le liostú go hiomlán; ní thaispeántar ach na chéad iontrálacha i ngach catagóir thíos. Féach loga CEF chun an liosta iomlán a fheiceáil."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "Níorbh fhéidir %count% comhad a léamh (ceadanna) agus rinneadh iad a scipeáil."
 
@@ -37474,6 +37480,27 @@ msgstr "Níl aon fholáireamh taifeadta fós."
 msgid "Git remote changed"
 msgstr "Athraíodh an cianstóras Git"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "An iomarca athruithe le liostú ina n-iomláine; ní thaispeántar ach na chéad iontrálacha de gach catagóir thíos. Féach ar an %link_start%log CEF%link_end% chun an liosta iomlán a fheiceáil."
+msgid "Press enter to select"
+msgstr "Brúigh Enter chun roghnú"
+
+msgid "Press enter to remove"
+msgstr "Brúigh Enter chun baint"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Níor aimsíodh aon eilimintí. Smaoinigh ar an iarratas cuardaigh a athrú."
+
+msgid "List is empty."
+msgstr "Tá an liosta folamh."
+
+msgid "Your session has expired. Please try again."
+msgstr "Tá do sheisiún as feidhm. Bain triail eile as."
+
+msgid "Generate with AI"
+msgstr "Gin le AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Léaráid nua-aimseartha, fáilteach a léiríonn ábhar an chúrsa seo, i stíl dhearaidh réidh ghlan, ag úsáid dathanna mo phlátaform mar bhéim."
+
+msgid "Back to account"
+msgstr "Ar ais chuig an gcuntas"
 

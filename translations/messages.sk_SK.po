@@ -8560,6 +8560,9 @@ msgstr "Organizácia"
 msgid "Reporting"
 msgstr "Hlásenie"
 
+msgid "Analytics"
+msgstr "Analytika"
+
 msgid "Update"
 msgstr "Aktualizovať"
 
@@ -37405,6 +37408,9 @@ msgstr "Konfigurácia vzdialeného úložiska Git (.git/config) sa zmenila. Over
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skenovanie sa predčasne zastavilo, pretože nebolo možné prečítať podadresár (skontrolujte oprávnenia súborov). Výsledky nižšie môžu byť čiastočné."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% súborov nebolo možné načítať (prístupové práva) a boli preskočené."
 
@@ -37489,6 +37495,27 @@ msgstr "Zatiaľ nebolo zaznamenané žiadne upozornenie."
 msgid "Git remote changed"
 msgstr "Vzdialené úložisko Git sa zmenilo"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgid "Press enter to select"
+msgstr "Press enter to select"
+
+msgid "Press enter to remove"
+msgstr "Press enter to remove"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "No elements found. Consider changing the search query."
+
+msgid "List is empty."
+msgstr "List is empty."
+
+msgid "Your session has expired. Please try again."
+msgstr "Your session has expired. Please try again."
+
+msgid "Generate with AI"
+msgstr "Generate with AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+
+msgid "Back to account"
+msgstr "Back to account"
 

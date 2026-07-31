@@ -8550,6 +8550,9 @@ msgstr "Организација"
 msgid "Reporting"
 msgstr "Извештаи"
 
+msgid "Analytics"
+msgstr "Аналитика"
+
 msgid "Update"
 msgstr "Ажурирање"
 
@@ -37390,6 +37393,9 @@ msgstr "Конфигурацијата на Git далечинскиот сер�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Скенирањето рано престана бидејќи потдиректориум не можеше да се прочита (проверете ги дозволите за датотеки). Резултатите подолу може да бидат делумни."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Премногу промени за целосен приказ; прикажани се само првите записи од секоја категорија. Погледнете го CEF дневникот за целосната листа."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% датотека(и) не можеа да се прочитаат (дозволи) и беа прескокнати."
 
@@ -37474,6 +37480,27 @@ msgstr "Сè уште не е забележано известување."
 msgid "Git remote changed"
 msgstr "Git далечински сервер е променет"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Премногу промени за целосно прикажување; подолу се прикажани само првите записи од секоја категорија. Погледнете го %link_start%CEF логот%link_end% за целосната листа."
+msgid "Press enter to select"
+msgstr "Притиснете Enter за избор"
+
+msgid "Press enter to remove"
+msgstr "Притиснете Enter за отстранување"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Не се пронајдени елементи. Размислете за промена на пребарувањето."
+
+msgid "List is empty."
+msgstr "Листата е празна."
+
+msgid "Your session has expired. Please try again."
+msgstr "Вашата сесија истече. Обидете се повторно."
+
+msgid "Generate with AI"
+msgstr "Генерирај со AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Модерна, добредојдена илустрација што ја претставува темата на овој курс, во чист рамен стил, со боите на мојата платформа како акценти."
+
+msgid "Back to account"
+msgstr "Назад кон сметка"
 

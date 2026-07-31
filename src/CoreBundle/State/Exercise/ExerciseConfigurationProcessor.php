@@ -52,6 +52,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private const FEEDBACK_TYPE_EXAM = 2;
     private const FEEDBACK_TYPE_POPUP = 3;
     private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
+    private const QUESTION_SELECTION_RANDOM = 2;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const CSRF_TOKEN_ID = 'exercise_configuration';
     private const MEDIA_QUESTION = 15;
@@ -172,7 +173,17 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         }
 
         $lockLearningPathFields = $this->shouldLockFieldsForEdit($quiz);
-        $random = $lockLearningPathFields ? (int) $quiz->getRandom() : $this->normalizeRandomQuestionCount($data->random);
+        $questionSelectionType = $this->normalizeQuestionSelectionType($data->questionSelectionType);
+        $random = 0;
+        $randomByCategory = 0;
+        if (self::QUESTION_SELECTION_RANDOM === $questionSelectionType) {
+            $random = $lockLearningPathFields
+                ? (int) $quiz->getRandom()
+                : $this->normalizeRandomQuestionCount($data->random);
+            if (0 !== $random) {
+                $randomByCategory = $this->normalizeRandomByCategory($data->randomByCategory);
+            }
+        }
         $maxAttempt = $lockLearningPathFields ? $quiz->getMaxAttempt() : max(0, $data->maxAttempt);
         $propagateNeg = $lockLearningPathFields ? $quiz->getPropagateNeg() : ($data->propagateNeg ? 1 : 0);
         $reviewAnswers = $lockLearningPathFields ? $quiz->getReviewAnswers() : ($data->reviewAnswers ? 1 : 0);
@@ -188,7 +199,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             ->setMaxAttempt($maxAttempt)
             ->setPassPercentage(max(0, min(100, $data->passPercentage)))
             ->setRandom($random)
-            ->setRandomByCategory($this->normalizeRandomByCategory($data->randomByCategory))
+            ->setRandomByCategory($randomByCategory)
             ->setRandomAnswers($data->randomAnswers)
             ->setShowPreviousButton($data->showPreviousButton)
             ->setPreventBackwards($data->preventBackwards ? 1 : 0)
@@ -199,7 +210,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             ->setSound((string) $data->sound)
             ->setFeedbackType($feedbackType)
             ->setResultsDisabled($resultsDisabled)
-            ->setQuestionSelectionType($this->normalizeQuestionSelectionType($data->questionSelectionType))
+            ->setQuestionSelectionType($questionSelectionType)
             ->setDisplayCategoryName($data->displayCategoryName ? 1 : 0)
             ->setHideQuestionTitle($data->hideQuestionTitle)
             ->setHideQuestionNumber($data->hideQuestionNumber ? 1 : 0)

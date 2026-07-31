@@ -37502,3 +37502,6 @@ msgstr "Generate with AI"
 
 msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
 msgstr "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+
+msgid "Back to account"
+msgstr "Back to account"

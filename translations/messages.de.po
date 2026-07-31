@@ -39057,3 +39057,6 @@ msgstr "Liste ist leer."
 
 msgid "Your session has expired. Please try again."
 msgstr "Ihre Sitzung ist abgelaufen. Bitte versuchen Sie es erneut."
+
+msgid "Back to account"
+msgstr "Zurück zum Konto"

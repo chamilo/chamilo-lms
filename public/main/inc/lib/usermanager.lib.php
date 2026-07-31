@@ -5687,7 +5687,7 @@ SQL;
      */
     public static function sendUserConfirmationMail(User $user)
     {
-        $uniqueId = bin2hex(random_bytes(32));
+        $uniqueId = api_generate_secure_token();
         $user->setConfirmationToken($uniqueId);
 
         Database::getManager()->persist($user);
@@ -6395,7 +6395,7 @@ SQL;
         if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
             1 === (int) $askPassword['ask_new_password']
         ) {
-            $uniqueId = bin2hex(random_bytes(32));
+            $uniqueId = api_generate_secure_token();
             $userObj = api_get_user_entity($userId);
             $userObj->setConfirmationToken($uniqueId);
             $userObj->setPasswordRequestedAt(new \DateTime());

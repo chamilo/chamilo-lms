@@ -197,7 +197,7 @@ class Login
 
     public static function sendResetEmail(User $user)
     {
-        $uniqueId = bin2hex(random_bytes(32));
+        $uniqueId = api_generate_secure_token();
         $user->setConfirmationToken($uniqueId);
         $user->setPasswordRequestedAt(new \DateTime());
 
@@ -236,7 +236,7 @@ class Login
             return null;
         }
 
-        $token = bin2hex(random_bytes(32));
+        $token = api_generate_secure_token();
         $userEntity->setConfirmationToken($token);
         $userEntity->setPasswordRequestedAt(new \DateTime());
 

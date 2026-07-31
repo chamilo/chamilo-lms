@@ -6027,11 +6027,32 @@ function api_is_multiple_url_enabled(): bool
 /**
  * Returns a md5 unique id.
  *
+ * The value is derived from the current time and is therefore predictable, so
+ * it must not be used as a secret. For security tokens (password reset, e-mail
+ * confirmation, ...) use api_generate_secure_token() instead.
+ *
  * @todo add more parameters
  */
 function api_get_unique_id()
 {
     return md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
+}
+
+/**
+ * Generates a cryptographically secure, unpredictable random token, suitable
+ * for use as a secret (password reset links, e-mail confirmation links, ...).
+ *
+ * Unlike api_get_unique_id(), the returned value is not derived from the clock.
+ *
+ * @param int $bytes Number of random bytes to read (a floor of 16 is enforced)
+ *
+ * @return string
+ */
+function api_generate_secure_token($bytes = 32)
+{
+    $bytes = max(16, (int) $bytes);
+
+    return bin2hex(random_bytes($bytes));
 }
 
 /**

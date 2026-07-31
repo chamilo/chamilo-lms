@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Maak cursuspakketten voor een bepaalde tijd met trainingssessies",
     "Sessions management": "Beheer van sessies",
     "Tracking": "Volgen",
+    "Analytics": "Analytics",
     "View reports, statistics and tracking data": "Rapporten, statistieken en volggegevens bekijken",
     "Manage the skills of your users, through courses and badges": "Beheer de vaardigheden van uw gebruikers, via cursussen en badges",
     "Personal data protection": "Persoonsgegevensbescherming",
@@ -2387,7 +2388,7 @@
     "Moderated": "Gemodereerd",
     "View threads": "Onderwerpen bekijken",
     "Current": "Huidig",
-    "No auth source": "No auth source",
+    "No auth source": "Geen authenticatiebron",
     "Maximum number of subscriptions allowed. Leave at 0 to not limit it.": "Maximaal aantal toegestane inschrijvingen. Laat op 0 staan om het niet te beperken.",
     "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.": "<strong>Welkom</strong> bij het Chamilo Leerpad auteursgedeelte.<br> Je leert stap voor stap een leerpad aanmaken. De structuur van jouw leerpad zal verschijnen in een menu langs de linkerzijde van het venster.",
     "To start, give a title to your course": "Om te starten, geef een titel voor uw leerpad",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Toont {0} berichten",
     "Showing {0} tasks": "Toont {0} taken",
     "contains {0} items": "bevat {0} items",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Druk op enter om te selecteren",
+    "Press enter to remove": "Druk op enter om te verwijderen",
+    "No elements found. Consider changing the search query.": "Geen elementen gevonden. Overweeg de zoekopdracht aan te passen.",
+    "List is empty.": "De lijst is leeg."
 }

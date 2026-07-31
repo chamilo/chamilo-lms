@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Sortu ikastaro paketeak denbora jakin baterako prestakuntza saioekin",
     "Sessions management": "Saioek kudeaketa",
     "Tracking": "Jarraitzea",
+    "Analytics": "Analitika",
     "View reports, statistics and tracking data": "Txostenak, estatistikak eta jarraipen datuak ikusi",
     "Manage the skills of your users, through courses and badges": "Kudeatu zure erabiltzaileen gaitasunak, ikastaroen eta dominaren bidez",
     "Personal data protection": "Datu pertsonalen babesa",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "{0} mezu erakusten",
     "Showing {0} tasks": "{0} zeregin erakusten",
     "contains {0} items": "{0} elementu dauzka",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Sakatu enter hautatzeko",
+    "Press enter to remove": "Sakatu enter kentzeko",
+    "No elements found. Consider changing the search query.": "Ez da elementurik aurkitu. Aldatu bilaketa kontsulta.",
+    "List is empty.": "Zerrenda hutsik dago."
 }

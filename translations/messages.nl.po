@@ -8593,6 +8593,9 @@ msgstr "Instelling"
 msgid "Reporting"
 msgstr "Rapportering"
 
+msgid "Analytics"
+msgstr "Analytics"
+
 msgid "Update"
 msgstr "Updaten"
 
@@ -38571,7 +38574,7 @@ msgid "View threads"
 msgstr "Onderwerpen bekijken"
 
 msgid "No auth source"
-msgstr "No auth source"
+msgstr "Geen authenticatiebron"
 
 msgid "You must add at least one question"
 msgstr "U moet minstens één vraag toevoegen"
@@ -39470,6 +39473,9 @@ msgstr "De Git-remoteconfiguratie (.git/config) is gewijzigd. Controleer of dit 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "De scan is vroegtijdig gestopt omdat een subdirectory niet kon worden gelezen (controleer bestandsrechten). Resultaten hieronder kunnen onvolledig zijn."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Te veel wijzigingen om volledig weer te geven; alleen de eerste items van elke categorie worden hieronder getoond. Zie het CEF-log voor de volledige lijst."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% bestand(en) kon(den) niet worden gelezen (rechten) en werd(en) overgeslagen."
 
@@ -39554,6 +39560,27 @@ msgstr "Er is nog geen waarschuwing vastgelegd."
 msgid "Git remote changed"
 msgstr "Git-remote gewijzigd"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Te veel wijzigingen om volledig weer te geven; alleen de eerste items van elke categorie worden hieronder getoond. Zie het %link_start%CEF-log%link_end% voor de volledige lijst."
+msgid "Press enter to select"
+msgstr "Druk op enter om te selecteren"
+
+msgid "Press enter to remove"
+msgstr "Druk op enter om te verwijderen"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Geen elementen gevonden. Overweeg de zoekopdracht aan te passen."
+
+msgid "List is empty."
+msgstr "De lijst is leeg."
+
+msgid "Your session has expired. Please try again."
+msgstr "Uw sessie is verlopen. Probeer het opnieuw."
+
+msgid "Generate with AI"
+msgstr "Genereren met AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Een moderne, uitnodigende illustratie die het onderwerp van deze cursus weergeeft, in een strakke flat-designstijl, met de kleuren van mijn platform als accenten."
+
+msgid "Back to account"
+msgstr "Terug naar account"
 

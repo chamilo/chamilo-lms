@@ -8551,6 +8551,9 @@ msgstr "Kompani"
 msgid "Reporting"
 msgstr "Raportim"
 
+msgid "Analytics"
+msgstr "Analitika"
+
 msgid "Update"
 msgstr "Përditëso"
 
@@ -36491,58 +36494,58 @@ msgid "View threads"
 msgstr "Shiko temat"
 
 msgid "No auth source"
-msgstr "No auth source"
+msgstr "Asnjë burim autentikimi"
 
 msgid "You must add at least one question"
-msgstr "You must add at least one question"
+msgstr "Duhet të shtoni të paktën një pyetje"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Veprime të avancuara"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Rrugë aplikacioni"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Apliko detajet e skedarëve"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Apliko detajet e planit"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Aplikimi i planit dështoi"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Apliko planin gati"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "Apliko përgatitjen"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "Apliko skedarët e skeduar"
 
 msgid "Applying files..."
-msgstr "Applying files..."
+msgstr "Duke aplikuar skedarët..."
 
 msgid "Audit file"
-msgstr "Audit file"
+msgstr "Skedar auditimi"
 
 msgid "Backup directory"
-msgstr "Backup directory"
+msgstr "Direktoria e rezervës"
 
 msgid "Baseline clean"
-msgstr "Baseline clean"
+msgstr "Pastrim bazë"
 
 msgid "Baseline warnings"
-msgstr "Baseline warnings"
+msgstr "Paralajmërime bazë"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Ndërto një plan aplikimi të sigurt nga paketa e skeduar. Kjo kontrollon vetëm skedarët, lejet, rrugën e rezervës dhe statusin e bllokimit. Nuk zëvendëson skedarët."
 
 msgid "Build production frontend assets."
-msgstr "Build production frontend assets."
+msgstr "Ndërto asetet e frontend-it të prodhimit."
 
 msgid "Building plan..."
-msgstr "Building plan..."
+msgstr "Duke ndërtuar planin..."
 
 msgid "Channel"
 msgstr "Channel"
@@ -36551,13 +36554,13 @@ msgid "Check"
 msgstr "Check"
 
 msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
-msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Kontrollo për përditësime të disponueshme të Chamilo, verifiko paketat, skedarët e skeduar dhe ekzekuto hapat e kontrolluar pas përditësimit."
 
 msgid "Check manifest"
-msgstr "Check manifest"
+msgstr "Kontrollo manifestin"
 
 msgid "Checking post-apply actions..."
-msgstr "Checking post-apply actions..."
+msgstr "Duke kontrolluar veprimet pas aplikimit..."
 
 msgid "Checking..."
 msgstr "Po kontrollohet..."
@@ -37343,10 +37346,10 @@ msgid "required"
 msgstr "i detyrueshëm"
 
 msgid "Incorrect password."
-msgstr "Incorrect password."
+msgstr "Fjalëkalim i pasaktë."
 
 msgid "File integrity alerting paused for 1 hour."
-msgstr "File integrity alerting paused for 1 hour."
+msgstr "Kontrolli i integritetit të skedarit është ndalur për 1 orë."
 
 msgid "New baseline established: %s files."
 msgstr "Baza e re e vendosur: %s skedarë."
@@ -37389,6 +37392,9 @@ msgstr "Konfigurimi i remote-it Git (.git/config) është ndryshuar. Verifikoni 
 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skanimi u ndal herët sepse një nën-direktori nuk mund të lexohej (kontrolloni lejet e skedarëve). Rezultatet më poshtë mund të jenë të pjesshme."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Shumë ndryshime për t'u listuar plotësisht; vetëm hyrjet e para të çdo kategorie shfaqen më poshtë. Shihni regjistrin CEF për listën e plotë."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% skedar(ë) nuk mund të lexoheshin (leje) dhe u anashkaluan."
@@ -37474,6 +37480,27 @@ msgstr "Asnjë njoftim nuk është regjistruar ende."
 msgid "Git remote changed"
 msgstr "Remote-i Git u ndryshua"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Shumë ndryshime për t'u listuar plotësisht; vetëm hyrjet e para të çdo kategorie shfaqen më poshtë. Shihni %link_start%regjistrin CEF%link_end% për listën e plotë."
+msgid "Press enter to select"
+msgstr "Shtypni enter për të zgjedhur"
+
+msgid "Press enter to remove"
+msgstr "Shtypni enter për të hequr"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Asnjë element nuk u gjet. Konsideroni ndryshimin e kërkesës së kërkimit."
+
+msgid "List is empty."
+msgstr "Lista është bosh."
+
+msgid "Your session has expired. Please try again."
+msgstr "Sesioni juaj ka skaduar. Ju lutemi provoni përsëri."
+
+msgid "Generate with AI"
+msgstr "Gjenero me AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Një ilustrim modern dhe mikpritës që përfaqëson temën e këtij kursi, në stil të pastër flat-design, duke përdorur ngjyrat e platformës sime si thekse."
+
+msgid "Back to account"
+msgstr "Kthehu te llogaria"
 

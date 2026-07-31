@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Muestra de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Qillqay ruwana: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpet,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -8551,6 +8551,9 @@ msgstr "May wasi"
 
 msgid "Reporting"
 msgstr "Willaykuna"
+
+msgid "Analytics"
+msgstr "Yupay qhaway"
 
 msgid "Update"
 msgstr "Kunanyachiy"
@@ -37392,6 +37395,9 @@ msgstr "Git remote qallariy (.git/config) hukchasqa kashan. Kay munasqa kasqanta
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Qhawayqa ñawpaqta sayarqan, huk qhipa ñan mana ñawirisqa karqan (willañiqikunap kamachiyta qhaway). Urin willaykuna mana hunt'asqa kanman."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Demasiados cambios para listar completamente; solo se muestran las primeras entradas de cada categoría. Ver el registro CEF para la lista completa."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% willañiqi mana ñawirisqa karqan (kamachiyrayku) hinaspa saqesqa karqan."
 
@@ -37476,6 +37482,27 @@ msgstr "Manaraq willay qelqasqa kanchu."
 msgid "Git remote changed"
 msgstr "Git remote hukchasqa"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Demasiados cambios para listar completamente; solo se muestran las primeras entradas de cada categoría. Ver el %link_start%registro CEF%link_end% para la lista completa."
+msgid "Press enter to select"
+msgstr "Presiona enter para seleccionar"
+
+msgid "Press enter to remove"
+msgstr "Presiona enter para eliminar"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "No se encontraron elementos. Considera cambiar la consulta de búsqueda."
+
+msgid "List is empty."
+msgstr "La lista está vacía."
+
+msgid "Your session has expired. Please try again."
+msgstr "Tu sesión ha expirado. Por favor intenta de nuevo."
+
+msgid "Generate with AI"
+msgstr "Generar con IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Una ilustración moderna y acogedora que representa el tema de este curso, en un estilo limpio de diseño plano, usando los colores de mi plataforma como acentos."
+
+msgid "Back to account"
+msgstr "Volver a la cuenta"
 

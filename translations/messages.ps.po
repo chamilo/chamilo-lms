@@ -8547,6 +8547,9 @@ msgstr "شرکت"
 msgid "Reporting"
 msgstr "رپورټینګ"
 
+msgid "Analytics"
+msgstr "تحلیلونه"
+
 msgid "Update"
 msgstr "اپډېټ"
 
@@ -37386,6 +37389,9 @@ msgstr "د Git لرې ترتیب (.git/config) بدل شوی دی. تصدیق ک
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "سکین ژر ودرېد ځکه چې یو فرعي لارښود نه شو لوستل کېدای (د فایل اجازې وګورئ). لاندې پایلې ممکن نيمګړې وي."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "د بشپړ لیست کولو لپاره ډیر بدلونونه؛ یوازې د هرې کټګورۍ لومړني داخلونه لاندې ښودل شوي. د بشپړ لیست لپاره CEF لاګ وګورئ."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% فایل(ونه) نه شو لوستل کېدای (اجازې) او پریښودل شول."
 
@@ -37470,6 +37476,27 @@ msgstr "تر اوسه هیڅ خبرتیا ثبت شوې نه ده."
 msgid "Git remote changed"
 msgstr "Git ریموټ بدل شو"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "د لیست کولو لپاره ډېر بدلونونه؛ یوازې د هرې کټګورۍ لومړني ننوتنې لاندې ښودل شوي. بشپړ لیست لپاره %link_start%CEF لاگ%link_end% وګورئ."
+msgid "Press enter to select"
+msgstr "د انتخاب لپاره انټر فشار ورکړئ"
+
+msgid "Press enter to remove"
+msgstr "د لرې کولو لپاره انټر فشار ورکړئ"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "هیڅ عناصر ونه موندل شول. د لټون پوښتنې بدلولو ته پام وکړئ."
+
+msgid "List is empty."
+msgstr "لیست خالي دی."
+
+msgid "Your session has expired. Please try again."
+msgstr "ستاسو ناسته پای ته ورسېده. مهرباني وکړئ بیا هڅه وکړئ."
+
+msgid "Generate with AI"
+msgstr "د AI سره جوړول"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "د دې کورس موضوع استازیتوب کوونکی عصري او ښه راغلاست انځور، په پاک فلیټ ډیزاین سټایل کې، زما پلیټ فارم رنګونه د ټینګار په توګه کارول."
+
+msgid "Back to account"
+msgstr "حساب ته بیرته"
 

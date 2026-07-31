@@ -8552,6 +8552,9 @@ msgstr "機構"
 msgid "Reporting"
 msgstr "報告"
 
+msgid "Analytics"
+msgstr "分析"
+
 msgid "Update"
 msgstr "更新"
 
@@ -37392,6 +37395,9 @@ msgstr "Git 遠端設定 (.git/config) 已變更。請確認此變更是預期�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "掃描因無法讀取子目錄而提前停止（請檢查檔案權限）。以下結果可能不完整。"
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "變更過多無法完整列出；以下僅顯示各類別的前幾筆。完整清單請參閱 CEF 記錄檔。"
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% 個檔案因權限問題無法讀取而略過。"
 
@@ -37476,6 +37482,27 @@ msgstr "尚未記錄任何警示。"
 msgid "Git remote changed"
 msgstr "Git 遠端已變更"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "變更過多無法完整列出；以下僅顯示各類別的前幾筆。請參閱 %link_start%CEF 記錄%link_end% 以取得完整清單。"
+msgid "Press enter to select"
+msgstr "按 Enter 鍵選擇"
+
+msgid "Press enter to remove"
+msgstr "按 Enter 鍵移除"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "找不到任何項目。請嘗試變更搜尋條件。"
+
+msgid "List is empty."
+msgstr "清單為空。"
+
+msgid "Your session has expired. Please try again."
+msgstr "您的工作階段已逾時。請再試一次。"
+
+msgid "Generate with AI"
+msgstr "使用 AI 產生"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "以乾淨的平面設計風格，使用本平台色彩作為強調，呈現此課程主題的現代歡迎插圖。"
+
+msgid "Back to account"
+msgstr "返回帳戶"
 

@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Luo kurssipaketit tietyksi ajaksi koulutuksellisilla istunnoilla",
     "Sessions management": "Istuntojen hallinta",
     "Tracking": "Seuranta",
+    "Analytics": "Analytiikka",
     "View reports, statistics and tracking data": "N\u00e4yt\u00e4 raportit, tilastot ja seurannan tiedot",
     "Manage the skills of your users, through courses and badges": "Hallitse k\u00e4ytt\u00e4j\u00e4si taitoja kursseilla ja merkkeill\u00e4",
     "Personal data protection": "Henkil\u00f6tietojen suoja",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "N\u00e4ytt\u00e4\u00e4 {0} viesti\u00e4",
     "Showing {0} tasks": "N\u00e4ytt\u00e4\u00e4 {0} teht\u00e4v\u00e4\u00e4",
     "contains {0} items": "sis\u00e4lt\u00e4\u00e4 {0} kohdetta",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Valitse painamalla enter",
+    "Press enter to remove": "Poista painamalla enter",
+    "No elements found. Consider changing the search query.": "Elementtej\u00e4 ei l\u00f6ytynyt. Kokeile muuttaa hakulauseketta.",
+    "List is empty.": "Lista on tyhj\u00e4."
 }

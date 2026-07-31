@@ -8551,6 +8551,9 @@ msgstr "ကုမ္ပဏီ"
 msgid "Reporting"
 msgstr "အစီရင်ခံခြင်း"
 
+msgid "Analytics"
+msgstr ""
+
 msgid "Update"
 msgstr "အဆင့်မြှင့်တင်ပါ"
 
@@ -34766,22 +34769,22 @@ msgid "Inactive or suspicious user accounts report."
 msgstr "မလှုပ်ရှားသော သို့မဟုတ် သံသယဖြစ်ဖွယ် အသုံးပြုသူ အကောင့်များ အစီရင်ခံစာ။"
 
 msgid "Users activity statistics."
-msgstr ""
+msgstr "အသုံးပြုသူများ၏ လုပ်ဆောင်မှုဆိုင်ရာ စာရင်းအင်းများ။"
 
 msgid "Currently online users report."
-msgstr ""
+msgstr "လက်ရှိ အွန်လိုင်းအသုံးပြုသူများ အစီရင်ခံစာ။"
 
 msgid "New user registrations over time."
-msgstr ""
+msgstr "အချိန်အလိုက် အသုံးပြုသူအသစ် မှတ်ပုံတင်မှုများ။"
 
 msgid "Course and session subscriptions over time."
-msgstr ""
+msgstr "အချိန်အလိုက် သင်တန်းနှင့် အစည်းအဝေး စာရင်းသွင်းမှုများ။"
 
 msgid "Duplicate user detection and maintenance report."
-msgstr ""
+msgstr "အသုံးပြုသူ ထပ်တူတူညီမှု ရှာဖွေခြင်းနှင့် ထိန်းသိမ်းမှု အစီရင်ခံစာ။"
 
 msgid "Platform user/session statistics."
-msgstr ""
+msgstr "ပလက်ဖောင်း အသုံးပြုသူ/အစည်းအဝေး စာရင်းအင်းများ။"
 
 msgid "Quarterly platform report."
 msgstr "သုံးလတစ်ကြိမ် ပလက်ဖောင်း အစီရင်ခံစာ။"
@@ -35084,115 +35087,115 @@ msgid "Authentication methods"
 msgstr "အတည်ပြုမှု နည်းလမ်းများ"
 
 msgid "Set password manually"
-msgstr ""
+msgstr "စကားဝှက်ကို ကိုယ်တိုင်သတ်မှတ်ပါ"
 
 msgid "Report role matrix"
-msgstr ""
+msgstr "အခန်းကဏ္ဍ မက်ထရစ် အစီရင်ခံစာ"
 
 msgid "Report permission categories"
-msgstr ""
+msgstr "ခွင့်ပြုချက် အမျိုးအစားများ အစီရင်ခံစာ"
 
 msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
-msgstr ""
+msgstr "ဤမှတ်ပုံတင်တွင် သိရှိထားသော အစီရင်ခံစာ စာမျက်နှာများ၊ ၎င်းတို့၏ အမျိုးအစား၊ စံ URL၊ အမွေဆက်ခံ URL နှင့် မျှော်မှန်းထားသော အခန်းကဏ္ဍ ပရိသတ်တို့ကို စာရင်းပြုစုထားသည်။ စံ URL များသည် မှတ်တမ်းတင်ထားသော အစီရင်ခံစာ အခန်းကဏ္ဍ မက်ထရစ်ကို အကောင်အထည်ဖော်သည်။"
 
 msgid "reports"
-msgstr ""
+msgstr "အစီရင်ခံစာများ"
 
 msgid "Canonical URL"
-msgstr ""
+msgstr "စံ URL"
 
 msgid "Legacy URL"
-msgstr ""
+msgstr "အမွေဆက်ခံ URL"
 
 msgid "Permission category"
-msgstr ""
+msgstr "ခွင့်ပြုချက် အမျိုးအစား"
 
 msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
-msgstr ""
+msgstr "ဤမက်ထရစ်သည် အစီရင်ခံစာတစ်ခုစီအတွက် မျှော်မှန်းထားသော ပရိသတ်ကို မှတ်တမ်းတင်ထားပြီး စံ အစီရင်ခံစာ ဝင်ခွင့်အမှတ်ဖြင့် အကောင်အထည်ဖော်သည်။"
 
 msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
-msgstr ""
+msgstr "ဤသော့များသည် အစီရင်ခံစာများကို ဝင်ရောက်ခွင့်နယ်ပယ်အလိုက် အုပ်စုဖွဲ့ပြီး အစီရင်ခံစာ မှတ်ပုံတင်မှုမှ အသုံးပြုသည်။ နောက်ပိုင်းတွင် ၎င်းတို့ကို ပိုမိုတိကျသော ပလက်ဖောင်း ခွင့်ပြုချက်များနှင့် ချိတ်ဆက်နိုင်သည်။"
 
 msgid "Permission"
-msgstr ""
+msgstr "ခွင့်ပြုချက်"
 
 msgid "Clear active session"
-msgstr ""
+msgstr "လက်ရှိ အစည်းအဝေးကို ရှင်းလင်းပါ"
 
 msgid "Are you sure you want to clear this user active session?"
-msgstr ""
+msgstr "ဤအသုံးပြုသူ၏ လက်ရှိ အစည်းအဝေးကို ရှင်းလင်းရန် သေချာပါသလား။"
 
 msgid "Preview shown without course context. Some course-specific data may be unavailable."
-msgstr ""
+msgstr "သင်တန်းအကြောင်းအရာမပါဘဲ အစမ်းကြည့်ရှုထားသည်။ သင်တန်းဆိုင်ရာ အချက်အလက်အချို့ မရရှိနိုင်ပါ။"
 
 msgid "Preview is not available for this question."
-msgstr ""
+msgstr "ဤမေးခွန်းအတွက် အစမ်းကြည့်ရှုမှု မရရှိနိုင်ပါ။"
 
 msgid "Edition is not allowed without a course context."
-msgstr ""
+msgstr "သင်တန်းအကြောင်းအရာမပါဘဲ တည်းဖြတ်ခွင့် မပြုပါ။"
 
 msgid "This plugin does not use regions."
-msgstr ""
+msgstr "ဤပလပ်ဂင်သည် ဒေသများကို အသုံးမပြုပါ။"
 
 msgid "No plugins with regions were found."
-msgstr ""
+msgstr "ဒေသများပါသော ပလပ်ဂင်များ မတွေ့ရှိပါ။"
 
 msgid "Freemium"
-msgstr ""
+msgstr "Freemium"
 
 msgid "Commercial service"
-msgstr ""
+msgstr "စီးပွားရေးဝန်ဆောင်မှု"
 
 msgid "Commercial"
-msgstr ""
+msgstr "စီးပွားရေး"
 
 msgid "100% free"
-msgstr ""
+msgstr "၁၀၀% အခမဲ့"
 
 msgid "Displayed above the public login form."
-msgstr ""
+msgstr "အများပြည်သူ ဝင်ရောက်မှုပုံစံ အထက်တွင် ပြသထားသည်။"
 
 msgid "Displayed below the public login form."
-msgstr ""
+msgstr "အများပြည်သူ ဝင်ရောက်မှုပုံစံ အောက်တွင် ပြသထားသည်။"
 
 msgid "Displayed before the footer area."
-msgstr ""
+msgstr "အောက်ခြေ ဧရိယာမတိုင်မီ ပြသထားသည်။"
 
 msgid "Displayed in the left footer column."
-msgstr ""
+msgstr "အောက်ခြေ ဘယ်ကော်လံတွင် ပြသထားသည်။"
 
 msgid "Displayed in the center footer column."
-msgstr ""
+msgstr "အောက်ခြေ အလယ်ကော်လံတွင် ပြသထားသည်။"
 
 msgid "Displayed in the right footer column."
-msgstr ""
+msgstr "အောက်ခြေ ညာကော်လံတွင် ပြသထားသည်။"
 
 msgid "Showing all plugins."
-msgstr ""
+msgstr "ပလပ်ဂင်အားလုံးကို ပြသထားသည်။"
 
 msgid "Some plugins are still pending functional verification."
-msgstr ""
+msgstr "ပလပ်ဂင်အချို့သည် လုပ်ဆောင်မှုဆိုင်ရာ စစ်ဆေးမှု ဆိုင်းငံ့လျက်ရှိသည်။"
 
 msgid "Show verified plugins only"
-msgstr ""
+msgstr "အတည်ပြုထားသော ပလပ်ဂင်များကိုသာ ပြပါ"
 
 msgid "Showing verified plugins only."
-msgstr ""
+msgstr "အတည်ပြုထားသော ပလပ်ဂင်များကိုသာ ပြသထားသည်။"
 
 msgid "Pending plugins are temporarily hidden until they are adapted and tested."
-msgstr ""
+msgstr "ဆိုင်းငံ့ထားသော ပလပ်ဂင်များကို လိုက်လျောညီထွေဖြစ်အောင် ပြုလုပ်ပြီး စမ်းသပ်မှု မပြီးမချင်း ယာယီဖွက်ထားသည်။"
 
 msgid "Show all plugins"
-msgstr ""
+msgstr "ပလပ်ဂင်အားလုံး ပြပါ"
 
 msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
-msgstr ""
+msgstr "တရားဝင်နှင့် အခမဲ့ ပလပ်ဂင်များကို စီးပွားရေးဝန်ဆောင်မှုများ သို့မဟုတ် အခကြေးငွေပေးရသော ကမ်းလှမ်းမှုများပေါ်တွင် မူတည်နိုင်သော ပလပ်ဂင်များနှင့် သီးခြားစာရင်းပြုစုထားသည်။"
 
 msgid "Included free plugins"
-msgstr ""
+msgstr "ပါဝင်သော အခမဲ့ ပလပ်ဂင်များ"
 
 msgid "Commercial and freemium plugins"
-msgstr ""
+msgstr "စီးပွားရေးနှင့် freemium ပလပ်ဂင်များ"
 
 msgid "All plugins"
 msgstr ""
@@ -37052,154 +37055,154 @@ msgid "Create individual Wiki work pages for learners"
 msgstr ""
 
 msgid "Current view mode"
-msgstr ""
+msgstr "လက်ရှိ ကြည့်ရှုမှုပုံစံ"
 
 msgid "Delete Wiki"
-msgstr ""
+msgstr "Wiki ဖျက်ရန်"
 
 msgid "Delete page"
-msgstr ""
+msgstr "စာမျက်နှာ ဖျက်ရန်"
 
 msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
-msgstr ""
+msgstr "Wiki ပင်မစာမျက်နှာကို ဖျက်ရန် အကြံပြုမထားပါ။ နောက်မှ ပြန်ဖန်တီးနိုင်ပါသည်။"
 
 msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
-msgstr ""
+msgstr "Wiki ကို ပိတ်ထားခြင်းဖြင့် ပုံမှန် Wiki စာမျက်နှာများနှင့် လုပ်ဆောင်ချက်များကို ပိတ်ထားမည်။ ဤဆက်တင်စာမျက်နှာကို သင်တန်းဆရာများအတွက် ဆက်လက်ရရှိနိုင်ပါသည်။"
 
 msgid "Discussion"
-msgstr ""
+msgstr "ဆွေးနွေးမှု"
 
 msgid "Edit Comment"
-msgstr ""
+msgstr "မှတ်ချက် တည်းဖြတ်ရန်"
 
 msgid "Edit page"
-msgstr ""
+msgstr "စာမျက်နှာ တည်းဖြတ်ရန်"
 
 msgid "End date must be after or equal to expiration date"
-msgstr ""
+msgstr "ပြီးဆုံးရက်သည် သက်တမ်းကုန်ဆုံးရက်ထက် နောက်ကျခြင်း သို့မဟုတ် တူညီရမည်"
 
 msgid "Enter a search term to find Wiki pages"
-msgstr ""
+msgstr "Wiki စာမျက်နှာများရှာရန် ရှာဖွေမှုစကားလုံး ထည့်ပါ"
 
 msgid "Expiration date must be before or equal to end date"
-msgstr ""
+msgstr "သက်တမ်းကုန်ဆုံးရက်သည် ပြီးဆုံးရက်ထက် စောခြင်း သို့မဟုတ် တူညီရမည်"
 
 msgid "Failed email recipients"
-msgstr ""
+msgstr "အီးမေးလ် လက်ခံသူများ ပို့ဆောင်မှု မအောင်မြင်ပါ"
 
 msgid "Finish and return to learning path"
-msgstr ""
+msgstr "ပြီးဆုံးပြီး သင်ယူမှုလမ်းကြောင်းသို့ ပြန်သွားရန်"
 
 msgid "Forum image"
-msgstr ""
+msgstr "ဖိုရမ်ပုံ"
 
 msgid "Hide discussion"
-msgstr ""
+msgstr "ဆွေးနွေးမှု ဖွက်ရန်"
 
 msgid "Hide page"
-msgstr ""
+msgstr "စာမျက်နှာ ဖွက်ရန်"
 
 msgid "I changed my mind"
-msgstr ""
+msgstr "စိတ်ပြောင်းသွားပါပြီ"
 
 msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
-msgstr ""
+msgstr "မရွေးချယ်ပါက ထိုဖိုင်များကို ပလက်ဖောင်းစီမံခန့်ခွဲသူမှ 'ဖိုင်အချက်အလက်' ကိရိယာမှတစ်ဆင့် ဆက်လက်ရရှိနိုင်ပါသည်။"
 
 msgid "Internal message failures"
-msgstr ""
+msgstr "အတွင်းပိုင်း မက်ဆေ့ချ် ပို့ဆောင်မှု မအောင်မြင်မှုများ"
 
 msgid "Internal messages available"
-msgstr ""
+msgstr "အတွင်းပိုင်း မက်ဆေ့ချ်များ ရရှိနိုင်ပါသည်"
 
 msgid "Internal messages created now"
-msgstr ""
+msgstr "အတွင်းပိုင်း မက်ဆေ့ချ်များ ယခု ဖန်တီးပြီးပါပြီ"
 
 msgid "Item score"
-msgstr ""
+msgstr "အမှတ်ပေးမှု"
 
 msgid "Last post"
-msgstr ""
+msgstr "နောက်ဆုံးပို့စ်"
 
 msgid "Lock page"
-msgstr ""
+msgstr "စာမျက်နှာ သော့ခတ်ရန်"
 
 msgid "Manage categories"
-msgstr ""
+msgstr "အမျိုးအစားများ စီမံရန်"
 
 msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
-msgstr ""
+msgstr "ဤစာတမ်းကို AI အကူအညီဖြင့် ဖန်တီးထားကြောင်း အမှတ်အသားပြုပါ။ အကြောင်းအရာကို AI ကိရိယာများဖြင့် ဖန်တီးခြင်း သို့မဟုတ် သိသိသာသာ ပြင်ဆင်ခြင်းဖြစ်ပါက အသုံးပြုပါ။"
 
 msgid "Maximum score is required"
-msgstr ""
+msgstr "အများဆုံးရမှတ် လိုအပ်ပါသည်"
 
 msgid "Metric"
-msgstr ""
+msgstr "မက်ထရစ်"
 
 msgid "New comments are blocked in this discussion"
-msgstr ""
+msgstr "ဤဆွေးနွေးမှုတွင် မှတ်ချက်အသစ်များ ပိတ်ထားပါသည်"
 
 msgid "No Wiki categories are available yet."
-msgstr ""
+msgstr "Wiki အမျိုးအစားများ မရရှိနိုင်သေးပါ။"
 
 msgid "No categories found"
-msgstr ""
+msgstr "အမျိုးအစားများ မတွေ့ပါ"
 
 msgid "No content"
-msgstr ""
+msgstr "အကြောင်းအရာ မရှိပါ"
 
 msgid "No parent category"
-msgstr ""
+msgstr "မိဘအမျိုးအစား မရှိပါ"
 
 msgid "Number of comments scored"
-msgstr ""
+msgstr "မှတ်ချက်များ အမှတ်ပေးပြီးသော အရေအတွက်"
 
 msgid "Old version"
-msgstr ""
+msgstr "ဗားရှင်းဟောင်း"
 
 msgid "Only image files are allowed."
-msgstr ""
+msgstr "ပုံဖိုင်များသာ ခွင့်ပြုပါသည်။"
 
 msgid "Please fill all required fields"
-msgstr ""
+msgstr "လိုအပ်သော အကွက်များအားလုံး ဖြည့်ပါ"
 
 msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
-msgstr ""
+msgstr "အတန်း သို့မဟုတ် ကျောင်းသား နေရာယူမှုများပါသော မေးခွန်းများကို သင်တန်းအတန်းများ သို့မဟုတ် အုပ်စုများအတွက် ဖန်တီးပါမည်- %s"
 
 msgid "Ratings are blocked in this discussion"
-msgstr ""
+msgstr "ဤဆွေးနွေးမှုတွင် အဆင့်သတ်မှတ်မှုများ ပိတ်ထားပါသည်"
 
 msgid "Remove image"
-msgstr ""
+msgstr "ပုံ ဖယ်ရှားရန်"
 
 msgid "Restore renewal"
-msgstr ""
+msgstr "သက်တမ်းတိုးခြင်း ပြန်လည်ရယူရန်"
 
 msgid "Restore version"
-msgstr ""
+msgstr "ဗားရှင်း ပြန်လည်ရယူရန်"
 
 msgid "Search in"
-msgstr ""
+msgstr "ရှာဖွေမှု တွင်"
 
 msgid "Select group"
-msgstr ""
+msgstr "အုပ်စု ရွေးချယ်ရန်"
 
 msgid "Select image"
-msgstr ""
+msgstr "ပုံ ရွေးချယ်ရန်"
 
 msgid "Selected image"
-msgstr ""
+msgstr "ရွေးချယ်ထားသော ပုံ"
 
 msgid "Show discussion"
-msgstr ""
+msgstr "ဆွေးနွေးမှု ပြရန်"
 
 msgid "Show page"
-msgstr ""
+msgstr "စာမျက်နှာ ပြရန်"
 
 msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
-msgstr ""
+msgstr "ဖိုင်အချို့ သို့မဟုတ် ဖိုင်တွဲအချို့တွင် စာရေးခွင့်မရှိပါ။ Chamilo ကို ထည့်သွင်းနိုင်ရန် ၎င်းတို့၏ ခွင့်ပြုချက်များကို ပထမဦးစွာ ပြောင်းလဲရပါမည် (CHMOD အသုံးပြု၍)။ ကျေးဇူးပြု၍ ဖတ်ပါ"
 
 msgid "Subcategories"
-msgstr ""
+msgstr "အမျိုးအစားခွဲများ"
 
 msgid "Tap on the left or right to navigate"
 msgstr ""
@@ -37352,7 +37355,7 @@ msgid "New baseline established: %s files."
 msgstr ""
 
 msgid "Scan complete: changes were detected."
-msgstr ""
+msgstr "စကင်ဖတ်မှု ပြီးဆုံးပါပြီ။ ပြောင်းလဲမှုများ တွေ့ရှိပါသည်။"
 
 msgid "Scan complete: no changes were detected."
 msgstr "စကင်ဖတ်မှု ပြီးဆုံးပါပြီ။ ပြောင်းလဲမှုများ မတွေ့ရှိပါ။"
@@ -37389,6 +37392,9 @@ msgstr "Git အဝေးထိန်း ပြင်ဆင်မှု (.git/con
 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "စကင်ဖတ်မှုကို စောစီးစွာ ရပ်တန့်လိုက်ပါသည်။ အကြောင်းမှာ လက်အောက်ခံ ဖိုင်တွဲတစ်ခုကို ဖတ်၍မရသောကြောင့် ဖြစ်သည် (ဖိုင်ခွင့်ပြုချက်များကို စစ်ဆေးပါ)။ အောက်ပါ ရလဒ်များမှာ တစ်စိတ်တစ်ပိုင်း ဖြစ်နိုင်ပါသည်။"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "ပြောင်းလဲမှုများ များလွန်းသဖြင့် အပြည့်အစုံ မဖော်ပြနိုင်ပါ။ အမျိုးအစားတစ်ခုစီ၏ ပထမဆုံး စာရင်းများကိုသာ အောက်တွင် ပြသထားပါသည်။ အပြည့်အစုံအတွက် CEF မှတ်တမ်းကို ကြည့်ပါ။"
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ဖိုင်(များ) ကို ဖတ်၍မရပါ (ခွင့်ပြုချက်များ) နှင့် ကျော်သွားပါသည်။"
@@ -37474,6 +37480,27 @@ msgstr "သတိပေးချက် မှတ်တမ်းတင်ထာ�
 msgid "Git remote changed"
 msgstr "Git အဝေးထိန်း ပြောင်းလဲသွားပါပြီ"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "အပြောင်းအလဲများ အလွန်များပြားသောကြောင့် စာရင်းအပြည့်အစုံကို ပြသ၍မရပါ။ အမျိုးအစားတစ်ခုစီ၏ ပထမဆုံးအချက်အလက်များကိုသာ အောက်တွင်ပြသထားပါသည်။ စာရင်းအပြည့်အစုံကို %link_start%CEF မှတ်တမ်း%link_end% တွင်ကြည့်ပါ။"
+msgid "Press enter to select"
+msgstr "ရွေးချယ်ရန် Enter နှိပ်ပါ"
+
+msgid "Press enter to remove"
+msgstr "ဖယ်ရှားရန် Enter နှိပ်ပါ"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "မည်သည့်အရာမှ မတွေ့ပါ။ ရှာဖွေမှုစကားလုံး ပြောင်းလဲကြည့်ပါ။"
+
+msgid "List is empty."
+msgstr "စာရင်း ဗလာဖြစ်နေပါသည်။"
+
+msgid "Your session has expired. Please try again."
+msgstr "သင့်အစည်းအဝေး သက်တမ်းကုန်ဆုံးပါပြီ။ ထပ်မံကြိုးစားပါ။"
+
+msgid "Generate with AI"
+msgstr "AI ဖြင့် ထုတ်လုပ်ပါ"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "ဤသင်တန်း၏ အကြောင်းအရာကို ကိုယ်စားပြုသော ခေတ်မီပြီး ကြိုဆိုဖွယ်ကောင်းသည့် သရုပ်ဖော်ပုံ၊ သန့်ရှင်းသော ပြားချပ်ဒီဇိုင်းပုံစံ၊ ကျွန်ုပ်တို့၏ ပလက်ဖောင်း အရောင်များကို အလေးပေးအသုံးပြုထားသည်။"
+
+msgid "Back to account"
+msgstr "အကောင့်သို့ ပြန်သွားပါ"
 

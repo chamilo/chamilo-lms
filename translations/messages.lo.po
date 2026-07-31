@@ -350,7 +350,7 @@ msgid "Sincerely"
 msgstr "ດ້ວຍຄວາມຈິງໃຈ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ຕົວอย่างສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ຕົວຢ່າງສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ຊ່ວງຂອງຕົວປ່ຽນ"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ແມ່ນ:ມີລິຂະສິດ,, ບໍ່:ບໍ່ມີລິຂະສິດ"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ໂຟລເດີ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":ບົດເຝິກຫັດ:ບົດເຝິກຫັດ,,      ຈຳລອງ:ຈຳລອງ,,      ແບບສອບຖາມ:ແບບສອບຖາມ,,      ແຜນວາດ:ແຜນວາດ,,      ຮູບ:ຮູບ,,      ກຣາຟ:ກຣາຟ,,      ດັດຊະນີ:ດັດຊະນີ,,      ສະໄລ້:ສະໄລ້,,      ຕາຕະລາງ:ຕາຕະລາງ,,      ຂໍ້ຄວາມບັນຍາຍ:ຂໍ້ຄວາມບັນຍາຍ,,      ສອບເສັງ:ສອບເສັງ,,      ທົດລອງ:ທົດລອງ,,      ບັນຫາ:ບັນຫາ,,      ປະເມີນຕົນເອງ:ປະເມີນຕົນເອງ,,      ບັນຍາຍ:ບັນຍາຍ"
@@ -8570,6 +8570,9 @@ msgstr "ບໍລິສັດ"
 
 msgid "Reporting"
 msgstr "ການລາຍງານ"
+
+msgid "Analytics"
+msgstr "Analytics"
 
 msgid "Update"
 msgstr "ອັບເດດ"
@@ -35825,20 +35828,8 @@ msgstr ""
 msgid "[%s] Your password has been reset"
 msgstr "[%s] ລະຫັດຜ່ານຂອງທ່ານຖືກຕັ້ງໃໝ່ແລ້ວ"
 
-msgid ""
-"Dear %s,\n"
-"\n"
-"Our security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n"
-"\n"
-"%s\n"
-"\n"
-"Please login to the platform soon (using this new password) to set your own, personal and secure, password.\n"
-"\n"
-"Be safe.\n"
-"\n"
-"%s\n"
-"%s"
-msgstr ""
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
 
 msgid "Signature saved successfully"
 msgstr "ບັນທຶກລາຍເຊັນສຳເລັດແລ້ວ"
@@ -36657,385 +36648,385 @@ msgid "You must add at least one question"
 msgstr "ທ່ານຕ້ອງເພີ່ມຢ່າງໜ້ອຍໜຶ່ງຄຳຖາມ"
 
 msgid "Advanced actions"
-msgstr ""
+msgstr "Advanced actions"
 
 msgid "Application path"
-msgstr ""
+msgstr "Application path"
 
 msgid "Apply files details"
-msgstr ""
+msgstr "Apply files details"
 
 msgid "Apply plan details"
-msgstr ""
+msgstr "Apply plan details"
 
 msgid "Apply plan failed"
-msgstr ""
+msgstr "Apply plan failed"
 
 msgid "Apply plan ready"
-msgstr ""
+msgstr "Apply plan ready"
 
 msgid "Apply preparation"
-msgstr ""
+msgstr "Apply preparation"
 
 msgid "Apply staged files"
-msgstr ""
+msgstr "Apply staged files"
 
 msgid "Applying files..."
-msgstr ""
+msgstr "Applying files..."
 
 msgid "Audit file"
-msgstr ""
+msgstr "Audit file"
 
 msgid "Backup directory"
-msgstr ""
+msgstr "Backup directory"
 
 msgid "Baseline clean"
-msgstr ""
+msgstr "Baseline clean"
 
 msgid "Baseline warnings"
-msgstr ""
+msgstr "Baseline warnings"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr ""
+msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
 
 msgid "Build production frontend assets."
-msgstr ""
+msgstr "Build production frontend assets."
 
 msgid "Building plan..."
-msgstr ""
+msgstr "Building plan..."
 
 msgid "Channel"
-msgstr ""
+msgstr "Channel"
 
 msgid "Check"
-msgstr ""
+msgstr "Check"
 
 msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
-msgstr ""
+msgstr "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
 
 msgid "Check manifest"
-msgstr ""
+msgstr "Check manifest"
 
 msgid "Checking post-apply actions..."
-msgstr ""
+msgstr "Checking post-apply actions..."
 
 msgid "Checking..."
-msgstr ""
+msgstr "Checking..."
 
 msgid "Composer install"
-msgstr ""
+msgstr "Composer install"
 
 msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
-msgstr ""
+msgstr "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
 
 msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
-msgstr ""
+msgstr "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
 
 msgid "Configured"
-msgstr ""
+msgstr "Configured"
 
 msgid "Current migration"
-msgstr ""
+msgstr "Current migration"
 
 msgid "Database baseline"
-msgstr ""
+msgstr "ຖານຂໍ້ມູນພື້ນຖານ"
 
 msgid "Database migration safety review"
-msgstr ""
+msgstr "ການກວດສອບຄວາມປອດໄພການຍ້າຍຖານຂໍ້ມູນ"
 
 msgid "Database migrations"
-msgstr ""
+msgstr "ການຍ້າຍຖານຂໍ້ມູນ"
 
 msgid "Development mode"
-msgstr ""
+msgstr "ໂໝດພັດທະນາ"
 
 msgid "Do not enable this unless the update backup and server permissions were reviewed."
-msgstr ""
+msgstr "ຢ່າເປີດໃຊ້ງານນີ້ ເວັ້ນເສຍແຕ່ວ່າການສຳຮອງຂໍ້ມູນການອັບເດດ ແລະ ການອະນຸຍາດເຊີບເວີໄດ້ຮັບການກວດສອບແລ້ວ."
 
 msgid "Doctrine dry-run command"
-msgstr ""
+msgstr "ຄຳສັ່ງ Doctrine dry-run"
 
 msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
-msgstr ""
+msgstr "Doctrine ໄດ້ລາຍງານເຕືອນກ່ຽວກັບຖານຂໍ້ມູນພື້ນຖານ. ໂປຣແກຣມອັບເດດຈະຍັງຄົງປະຕິບັດການຍ້າຍ V210 ທີ່ຖືກຈັດຂັ້ນຕອນເທົ່ານັ້ນ ຫຼັງຈາກການຢືນຢັນຢ່າງຊັດເຈນ."
 
 msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
-msgstr ""
+msgstr "Doctrine ຈະປະຕິບັດການຍ້າຍ V210 ທີ່ຖືກຈັດຂັ້ນຕອນເທົ່ານັ້ນ ຫຼັງຈາກການກວດສອບຄວາມປອດໄພຜ່ານແລ້ວ."
 
 msgid "Dry-run exit code"
-msgstr ""
+msgstr "ລະຫັດອອກຂອງ Dry-run"
 
 msgid "Executed unavailable migrations"
-msgstr ""
+msgstr "ການຍ້າຍທີ່ບໍ່ສາມາດປະຕິບັດໄດ້ຖືກປະຕິບັດແລ້ວ"
 
 msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
-msgstr ""
+msgstr "ແຕກຊອງອັບເດດທີ່ຢັ້ງຢືນແລ້ວໄປຍັງໄດເຣັກທໍຣີຂັ້ນຕອນເພື່ອການກວດສອບ. ນີ້ບໍ່ໄດ້ແທນທີ່ໄຟລ໌, ບໍ່ປະຕິບັດການຍ້າຍ ຫຼື ແກ້ໄຂຖານຂໍ້ມູນ."
 
 msgid "File apply available"
-msgstr ""
+msgstr "ໄຟລ໌ພ້ອມນຳໃຊ້"
 
 msgid "Files to replace"
-msgstr ""
+msgstr "ໄຟລ໌ທີ່ຈະແທນທີ່"
 
 msgid "I confirm that a database backup exists and was verified before running migrations."
-msgstr ""
+msgstr "ຂ້ອຍຢືນຢັນວ່າການສຳຮອງຖານຂໍ້ມູນມີຢູ່ ແລະ ໄດ້ຮັບການກວດສອບກ່ອນປະຕິບັດການຍ້າຍ."
 
 msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
-msgstr ""
+msgstr "ຂ້ອຍເຂົ້າໃຈວ່າການກະທຳຂັ້ນສູງສາມາດແກ້ໄຂຄວາມຂຶ່ນອີງ, ຊັບສິນທີ່ສ້າງ ຫຼື ຖານຂໍ້ມູນ."
 
 msgid "I understand this will replace files in the Chamilo installation."
-msgstr ""
+msgstr "ຂ້ອຍເຂົ້າໃຈວ່ານີ້ຈະແທນທີ່ໄຟລ໌ໃນການຕິດຕັ້ງ Chamilo."
 
 msgid "I understand this will run update commands on the server."
-msgstr ""
+msgstr "ຂ້ອຍເຂົ້າໃຈວ່ານີ້ຈະປະຕິບັດຄຳສັ່ງອັບເດດໃນເຊີບເວີ."
 
 msgid "Install frontend dependencies before rebuilding assets."
-msgstr ""
+msgstr "ຕິດຕັ້ງຄວາມຂຶ່ນອີງສ່ວນໜ້າກ່ອນສ້າງຊັບສິນໃໝ່."
 
 msgid "Installed version"
-msgstr ""
+msgstr "ລຸ້ນທີ່ຕິດຕັ້ງແລ້ວ"
 
 msgid "Latest migration"
-msgstr ""
+msgstr "ການຍ້າຍຫຼ້າສຸດ"
 
 msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
-msgstr ""
+msgstr "ປ່ອຍໃຫ້ເສັ້ນທາງຊອງ ແລະ ລາຍເຊັນວ່າງເພື່ອດາວໂຫຼດຈາກ URL ທີ່ຢັ້ງຢືນແລ້ວ. ເສັ້ນທາງທ້ອງຖິ່ນມີໃຫ້ສະເພາະການທົດສອບພັດທະນາເທົ່ານັ້ນ."
 
 msgid "Live command log"
-msgstr ""
+msgstr "ບັນທຶກຄຳສັ່ງສົດ"
 
 msgid "Live update log"
-msgstr ""
+msgstr "ບັນທຶກອັບເດດສົດ"
 
 msgid "Local test options"
-msgstr ""
+msgstr "ຕົວເລືອກການທົດສອບທ້ອງຖິ່ນ"
 
 msgid "Local test update notice link"
-msgstr ""
+msgstr "ລິ້ງແຈ້ງເຕືອນການອັບເດດທ້ອງຖິ່ນ"
 
 msgid "Local update notice simulation"
-msgstr ""
+msgstr "ການຈຳລອງແຈ້ງເຕືອນການອັບເດດທ້ອງຖິ່ນ"
 
 msgid "Local update notice simulation is only available in development mode."
-msgstr ""
+msgstr "ການຈຳລອງແຈ້ງເຕືອນການອັບເດດທ້ອງຖິ່ນມີໃຫ້ສະເພາະໃນໂໝດພັດທະນາເທົ່ານັ້ນ."
 
 msgid "Manifest"
-msgstr ""
+msgstr "ໄຟລ໌ manifest"
 
 msgid "Manifest source"
-msgstr ""
+msgstr "ແຫຼ່ງ manifest"
 
 msgid "Migration safety details"
-msgstr ""
+msgstr "ລາຍລະອຽດການກວດສອບຄວາມປອດໄພການຍ້າຍ"
 
 msgid "Migration safety review failed"
-msgstr ""
+msgstr "ການກວດສອບຄວາມປອດໄພການຍ້າຍລົ້ມເຫຼວ"
 
 msgid "Migration safety review ready"
-msgstr ""
+msgstr "ການກວດສອບຄວາມປອດໄພການຍ້າຍພ້ອມແລ້ວ"
 
 msgid "Migration target"
-msgstr ""
+msgstr "ເປົ້າໝາຍການຍ້າຍ"
 
 msgid "New files"
-msgstr ""
+msgstr "ໄຟລ໌ໃໝ່"
 
 msgid "New migrations reported by Doctrine"
-msgstr ""
+msgstr "ການຍ້າຍໃໝ່ທີ່ Doctrine ລາຍງານ"
 
 msgid "Next migration"
-msgstr ""
+msgstr "ການຍ້າຍຕໍ່ໄປ"
 
 msgid "No executed unavailable migration was reported."
-msgstr ""
+msgstr "ບໍ່ມີການຍ້າຍທີ່ບໍ່ສາມາດປະຕິບັດໄດ້ຖືກລາຍງານ."
 
 msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
-msgstr ""
+msgstr "ຍັງບໍ່ມີ URL manifest ທາງການຕັ້ງຄ່າ. ໃຊ້ URL HTTPS ຫຼື ເສັ້ນທາງທ້ອງຖິ່ນສຳລັບການທົດສອບພັດທະນາ."
 
 msgid "No pending migration was detected before the staged update target."
-msgstr ""
+msgstr "ບໍ່ພົບການຍ້າຍທີ່ຍັງຄ້າງກ່ອນເປົ້າໝາຍການອັບເດດທີ່ຖືກຈັດຂັ້ນຕອນ."
 
 msgid "Not configured"
-msgstr ""
+msgstr "ຍັງບໍ່ໄດ້ຕັ້ງຄ່າ"
 
 msgid "Not detected"
-msgstr ""
+msgstr "ບໍ່ພົບ"
 
 msgid "Official Chamilo update channel"
-msgstr ""
+msgstr "ຊ່ອງທາງອັບເດດ Chamilo ທາງການ"
 
 msgid "Package SHA-256"
-msgstr ""
+msgstr "SHA-256 ຂອງຊອງ"
 
 msgid "Package URL"
-msgstr ""
+msgstr "URL ຂອງຊອງ"
 
 msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
-msgstr ""
+msgstr "ໄຟລ໌ຊອງ ແລະ ລາຍເຊັນຈະຖືກດາວໂຫຼດຈາກ manifest. ເສັ້ນທາງທ້ອງຖິ່ນຖືກປິດໃຊ້ງານໃນສະພາບແວດລ້ອມນີ້."
 
 msgid "Package path"
-msgstr ""
+msgstr "ເສັ້ນທາງຊອງ"
 
 msgid "Package staged successfully"
-msgstr ""
+msgstr "ຈັດຂັ້ນຕອນຊອງສຳເລັດແລ້ວ"
 
 msgid "Package staging failed"
-msgstr ""
+msgstr "ການຈັດຂັ້ນຕອນຊອງລົ້ມເຫຼວ"
 
 msgid "Package verification"
-msgstr ""
+msgstr "ການກວດສອບຊອງ"
 
 msgid "Package verification failed"
-msgstr ""
+msgstr "ການກວດສອບຊອງລົ້ມເຫຼວ"
 
 msgid "Package verified successfully"
-msgstr ""
+msgstr "ກວດສອບແພັກເກັດສຳເລັດ"
 
 msgid "Pending migrations before this update"
-msgstr ""
+msgstr "ການຍ້າຍຖານຂໍ້ມູນທີ່ຍັງຄ້າງກ່ອນການອັບເດດນີ້"
 
 msgid "Planned backup path"
-msgstr ""
+msgstr "ເສັ້ນທາງສຳຮອງທີ່ວາງແຜນ"
 
 msgid "Post-apply actions completed"
-msgstr ""
+msgstr "ການດຳເນີນການຫຼັງການນຳໃຊ້ສຳເລັດ"
 
 msgid "Post-apply actions failed"
-msgstr ""
+msgstr "ການດຳເນີນການຫຼັງການນຳໃຊ້ລົ້ມເຫຼວ"
 
 msgid "Post-apply actions ready"
-msgstr ""
+msgstr "ການດຳເນີນການຫຼັງການນຳໃຊ້ພ້ອມ"
 
 msgid "Post-apply checks"
-msgstr ""
+msgstr "ການກວດສອບຫຼັງການນຳໃຊ້"
 
 msgid "Post-apply checks failed"
-msgstr ""
+msgstr "ການກວດສອບຫຼັງການນຳໃຊ້ລົ້ມເຫຼວ"
 
 msgid "Post-apply details"
-msgstr ""
+msgstr "ລາຍລະອຽດຫຼັງການນຳໃຊ້"
 
 msgid "Post-apply run details"
-msgstr ""
+msgstr "ລາຍລະອຽດການດຳເນີນການຫຼັງການນຳໃຊ້"
 
 msgid "Preflight checks"
-msgstr ""
+msgstr "ການກວດສອບກ່ອນນຳໃຊ້"
 
 msgid "Preflight checks completed"
-msgstr ""
+msgstr "ການກວດສອບກ່ອນນຳໃຊ້ສຳເລັດ"
 
 msgid "Preflight checks failed"
-msgstr ""
+msgstr "ການກວດສອບກ່ອນນຳໃຊ້ລົ້ມເຫຼວ"
 
 msgid "Preflight details"
-msgstr ""
+msgstr "ລາຍລະອຽດກ່ອນນຳໃຊ້"
 
 msgid "Prepare staging"
-msgstr ""
+msgstr "ກະກຽມພື້ນທີ່ທົດສອບ"
 
 msgid "Preparing staging..."
-msgstr ""
+msgstr "ກຳລັງກະກຽມພື້ນທີ່ທົດສອບ..."
 
 msgid "Production mode"
-msgstr ""
+msgstr "ໂໝດການຜະລິດ"
 
 msgid "Released at"
-msgstr ""
+msgstr "ປ່ອຍອອກເມື່ອ"
 
 msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
-msgstr ""
+msgstr "ແທນທີ່ໄຟລ໌ Chamilo ຈາກແພັກເກັດທີ່ຈັດເກັບໂດຍໃຊ້ແຜນການນຳໃຊ້ທີ່ກວດສອບແລ້ວ. ນີ້ບໍ່ໄດ້ດຳເນີນການຍ້າຍຖານຂໍ້ມູນ, Composer, Yarn ຫຼືຄຳສັ່ງແຄຊ."
 
 msgid "Review apply plan"
-msgstr ""
+msgstr "ກວດສອບແຜນການນຳໃຊ້"
 
 msgid "Review database migrations"
-msgstr ""
+msgstr "ກວດສອບການຍ້າຍຖານຂໍ້ມູນ"
 
 msgid "Review post-apply actions"
-msgstr ""
+msgstr "ກວດສອບການດຳເນີນການຫຼັງການນຳໃຊ້"
 
 msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
-msgstr ""
+msgstr "ກວດສອບຄຳສັ່ງຄູ່ມືທີ່ແນະນຳຫຼັງຈາກນຳໃຊ້ໄຟລ໌ອັບເດດ. ຂັ້ນຕອນນີ້ບໍ່ໄດ້ດຳເນີນ Composer, Yarn, ການຍ້າຍຖານຂໍ້ມູນ ຫຼືຄຳສັ່ງແຄຊ."
 
 msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
-msgstr ""
+msgstr "ກວດສອບການຍ້າຍຖານຂໍ້ມູນ Doctrine ທີ່ຈັດເກັບ ແລະ ຜົນລັບການທົດລອງກ່ອນດຳເນີນການຍ້າຍຖານຂໍ້ມູນ."
 
 msgid "Reviewing database migrations..."
-msgstr ""
+msgstr "ກຳລັງກວດສອບການຍ້າຍຖານຂໍ້ມູນ..."
 
 msgid "Run and pass the migration safety review before executing database migrations."
-msgstr ""
+msgstr "ດຳເນີນ ແລະ ຜ່ານການກວດສອບຄວາມປອດໄພການຍ້າຍຖານຂໍ້ມູນກ່ອນດຳເນີນການຍ້າຍຖານຂໍ້ມູນ."
 
 msgid "Run environment checks before any future update application step. This does not modify files or the database."
-msgstr ""
+msgstr "ດຳເນີນການກວດສອບສະພາບແວດລ້ອມກ່ອນຂັ້ນຕອນການນຳໃຊ້ອັບເດດໃດໆ. ນີ້ບໍ່ໄດ້ແກ້ໄຂໄຟລ໌ ຫຼືຖານຂໍ້ມູນ."
 
 msgid "Run post-apply actions"
-msgstr ""
+msgstr "ດຳເນີນການດຳເນີນການຫຼັງການນຳໃຊ້"
 
 msgid "Run preflight checks"
-msgstr ""
+msgstr "ດຳເນີນການກວດສອບກ່ອນນຳໃຊ້"
 
 msgid "Run selected post-apply actions"
-msgstr ""
+msgstr "ດຳເນີນການດຳເນີນການຫຼັງການນຳໃຊ້ທີ່ເລືອກ"
 
 msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
-msgstr ""
+msgstr "ດຳເນີນການດຳເນີນການຫຼັງການນຳໃຊ້ທີ່ເລືອກຈາກເຊີບເວີໂດຍໃຊ້ລາຍຊື່ອະນຸຍາດທີ່ຄວບຄຸມ. ບໍ່ຮັບຄຳສັ່ງຊື່ທີ່ກຳນົດເອງ."
 
 msgid "Run these commands manually from the server after confirming the file update result and backups."
-msgstr ""
+msgstr "ດຳເນີນເຫຼົ່າຄຳສັ່ງເຫຼົ່ານີ້ດ້ວຍຕົນເອງຈາກເຊີບເວີຫຼັງຈາກຢືນຢັນຜົນລັບການອັບເດດໄຟລ໌ ແລະ ການສຳຮອງຂໍ້ມູນ."
 
 msgid "Running post-apply actions from the UI is disabled in production mode."
-msgstr ""
+msgstr "ການດຳເນີນການດຳເນີນການຫຼັງການນຳໃຊ້ຈາກ UI ຖືກປິດໃຊ້ງານໃນໂໝດການຜະລິດ."
 
 msgid "Running post-apply actions..."
-msgstr ""
+msgstr "ກຳລັງດຳເນີນການດຳເນີນການຫຼັງການນຳໃຊ້..."
 
 msgid "Safe actions"
-msgstr ""
+msgstr "ການດຳເນີນການທີ່ປອດໄພ"
 
 msgid "Signature path"
-msgstr ""
+msgstr "ເສັ້ນທາງລາຍເຊັນ"
 
 msgid "Signature verification cannot be skipped in this environment."
-msgstr ""
+msgstr "ການກວດສອບລາຍເຊັນບໍ່ສາມາດຂ້າມໄດ້ໃນສະພາບແວດລ້ອມນີ້."
 
 msgid "Skip signature verification for local development tests"
-msgstr ""
+msgstr "ຂ້າມການກວດສອບລາຍເຊັນສຳລັບການທົດສອບການພັດທະນາທ້ອງຖິ່ນ"
 
 msgid "Staged file application failed"
-msgstr ""
+msgstr "ການນຳໃຊ້ໄຟລ໌ທີ່ຈັດເກັບລົ້ມເຫຼວ"
 
 msgid "Staged files applied successfully"
-msgstr ""
+msgstr "ການນຳໃຊ້ໄຟລ໌ທີ່ຈັດເກັບສຳເລັດ"
 
 msgid "Staging details"
-msgstr ""
+msgstr "ລາຍລະອຽດການຈັດເກັບ"
 
 msgid "Staging directory"
-msgstr ""
+msgstr "ໄດເຣັກທໍຣີການຈັດເກັບ"
 
 msgid "Staging extraction"
-msgstr ""
+msgstr "ການສະກັດການຈັດເກັບ"
 
 msgid "Symfony cache clear"
-msgstr ""
+msgstr "ລ້າງແຄຊ Symfony"
 
 msgid "System update"
-msgstr ""
+msgstr "ອັບເດດລະບົບ"
 
 msgid "Target version"
-msgstr ""
+msgstr "ເວີຊັນປາຍທາງ"
 
 msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
-msgstr ""
+msgstr "URL ຂອງ manifest ທາງການທີ່ຕັ້ງຄ່າໄດ້ຖືກຕື່ມລ່ວງໜ້າ. ທ່ານສາມາດປ່ຽນເປັນ manifest HTTPS ອື່ນໄດ້ຖ້າຕ້ອງການ."
 
 msgid "The database migration baseline is clean."
-msgstr ""
+msgstr "ຖານຂໍ້ມູນການຍ້າຍຖານຂໍ້ມູນແມ່ນສະອາດ."
 
 msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
-msgstr ""
+msgstr "ການຕອບກັບ HTTP ສຸດທ້າຍລົ້ມເຫຼວຫຼັງຈາກການດຳເນີນການສຳເລັດ. ນີ້ມັກເກີດຈາກການອະນຸຍາດແຄຊຂອງເວລາດຳເນີນການ ຫຼືການເລີ່ມເຄື່ອງແມ່ຂ່າຍເວັບໃໝ່ໃນລະຫວ່າງການຮ້ອງຂໍ."
 
 msgid "The operation log reports that post-apply actions completed successfully."
-msgstr ""
+msgstr "ບັນທຶກການດຳເນີນການລາຍງານວ່າການດຳເນີນການຫຼັງການນຳໃຊ້ສຳເລັດ."
 
 msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
 msgstr ""
@@ -37550,6 +37541,9 @@ msgstr ""
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr ""
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr ""
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr ""
 
@@ -37634,5 +37628,27 @@ msgstr ""
 msgid "Git remote changed"
 msgstr ""
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr ""
+msgid "Press enter to select"
+msgstr "ກົດ Enter ເພື່ອເລືອກ"
+
+msgid "Press enter to remove"
+msgstr "ກົດ Enter ເພື່ອລຶບ"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "ບໍ່ພົບອົງປະກອບ. ລອງປ່ຽນຄຳຄົ້ນຫາ."
+
+msgid "List is empty."
+msgstr "ລາຍການວ່າງເປົ່າ."
+
+msgid "Your session has expired. Please try again."
+msgstr "ເຊດຊັນຂອງທ່ານໝົດອາຍຸແລ້ວ. ກະລຸນາລອງໃໝ່."
+
+msgid "Generate with AI"
+msgstr "ສ້າງດ້ວຍ AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "ຮູບປະກອບທັນສະໄໝ ທີ່ສະແດງເຖິງຫົວຂໍ້ຂອງຫຼັກສູດນີ້ ໃນຮູບແບບຮາບຮຽບ ໂດຍໃຊ້ສີຂອງແພລດຟອມເປັນສີເນັ້ນ."
+
+msgid "Back to account"
+msgstr "ກັບໄປບັນຊີ"
+

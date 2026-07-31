@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "\u4e3a\u4e00\u5b9a\u65f6\u95f4\u521b\u5efa\u5e26\u6709\u57f9\u8bad\u4f1a\u8bdd\u7684\u8bfe\u7a0b\u5305",
     "Sessions management": "\u4f1a\u8bdd\u7ba1\u7406",
     "Tracking": "\u8ddf\u8e2a",
+    "Analytics": "\u5206\u6790",
     "View reports, statistics and tracking data": "\u67e5\u770b\u62a5\u544a\u3001\u7edf\u8ba1\u548c\u8ddf\u8e2a\u6570\u636e",
     "Manage the skills of your users, through courses and badges": "\u901a\u8fc7\u8bfe\u7a0b\u548c\u5fbd\u7ae0\u7ba1\u7406\u7528\u6237\u6280\u80fd",
     "Personal data protection": "\u4e2a\u4eba\u6570\u636e\u4fdd\u62a4",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "\u663e\u793a {0} \u6761\u5e16\u5b50",
     "Showing {0} tasks": "\u663e\u793a {0} \u4e2a\u4efb\u52a1",
     "contains {0} items": "\u5305\u542b {0} \u9879",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "\u6309 Enter \u952e\u9009\u62e9",
+    "Press enter to remove": "\u6309 Enter \u952e\u79fb\u9664",
+    "No elements found. Consider changing the search query.": "\u672a\u627e\u5230\u4efb\u4f55\u5143\u7d20\u3002\u8bf7\u5c1d\u8bd5\u66f4\u6539\u641c\u7d22\u6761\u4ef6\u3002",
+    "List is empty.": "\u5217\u8868\u4e3a\u7a7a\u3002"
 }

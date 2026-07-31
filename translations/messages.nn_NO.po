@@ -8550,6 +8550,9 @@ msgstr "Firma"
 msgid "Reporting"
 msgstr "Rapportering"
 
+msgid "Analytics"
+msgstr "Analysar"
+
 msgid "Update"
 msgstr "Oppdater"
 
@@ -37390,6 +37393,9 @@ msgstr "Git-fjernkonfigurasjonen (.git/config) har endra seg. Verifiser at dette
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skanninga stoppa tidleg fordi ei undermappe ikkje kunne lesast (sjekk filrettar). Resultata nedanfor kan vere ufullstendige."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fil(er) kunne ikkje lesast (rettar) og vart hoppa over."
 
@@ -37474,6 +37480,27 @@ msgstr "Ingen varsel er registrert enno."
 msgid "Git remote changed"
 msgstr "Git-fjernlager endra"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr ""
+msgid "Press enter to select"
+msgstr "Trykk enter for å velje"
+
+msgid "Press enter to remove"
+msgstr "Trykk enter for å fjerne"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Ingen element funne. Vurder å endre søkespurnaden."
+
+msgid "List is empty."
+msgstr "Lista er tom."
+
+msgid "Your session has expired. Please try again."
+msgstr "Økta di har gått ut. Prøv igjen."
+
+msgid "Generate with AI"
+msgstr "Generer med AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+
+msgid "Back to account"
+msgstr "Tilbake til konto"
 

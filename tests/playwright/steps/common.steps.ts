@@ -887,6 +887,25 @@ Then("I click the {string} icon in the row for {string}", async ({ page }, selec
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 
+// Not ported — new, for toolGroup.feature's group_category action icons
+// (edit/create-groups/delete). Unlike a group ROW (a real `<tr>`), a
+// category's own header is a `<div class="page-header section-header">`
+// (the title) with its action icons as SIBLING `<a>` elements, both inside
+// a shared `<div class="p-toolbar-group-start p-toolbar-group-left">` —
+// confirmed via a real DOM dump; the existing row-scoped step above can't
+// find anything here since there's no enclosing `<tr>` at all.
+Then(
+  "I click the {string} icon in the group category header for {string}",
+  async ({ page }, selector: string, categoryText: string) => {
+    page.once("dialog", (dialog) => dialog.accept())
+    await page
+      .locator("div.p-toolbar-group-start.p-toolbar-group-left", { hasText: categoryText })
+      .locator(selector)
+      .first()
+      .click()
+  },
+)
+
 // Not ported — new, for toolLink.feature (and any other page laying its list
 // out as `<div class="card">` items rather than a `<table>`). Same row-
 // scoping intent as the step above, but matches the card by its own EXACT
@@ -1283,4 +1302,63 @@ Given("I am on the attendance page {string}", async ({ page }, pathTemplate: str
     )
   }
   await gotoReliably(page, pathTemplate.replace("ATTENDANCE_ID", lastCreatedAttendanceId))
+})
+
+// Ported from FeatureContext::saveCurrentUrlWithName() / visitUrlSavedWithName().
+// toolGroup.feature's cross-user access-check scenario creates several
+// announcements as one user, captures each one's own URL, logs in as a
+// DIFFERENT user, then revisits those exact URLs to check access. A plain
+// module-level Map is enough — every save/visit pair happens within the
+// same scenario, and each scenario file gets a fresh module instance.
+const savedUrls = new Map<string, string>()
+
+Then("I save current URL with name {string}", async ({ page }, name: string) => {
+  savedUrls.set(name, page.url())
+})
+
+Then("I visit URL saved with name {string}", async ({ page }, name: string) => {
+  const url = savedUrls.get(name)
+  if (!url) {
+    throw new Error(`No URL was saved under the name "${name}"`)
+  }
+  await gotoReliably(page, url)
+})
+
+// Ported from FeatureContext::iMoveBackwardOnePage() (Mink's back() call).
+Then("I move backward one page", async ({ page }) => {
+  await page.goBack()
+})
+
+// Not ported — new, for toolGroup.feature's persistence checks after a
+// settings save that shows no flash message at all (see common.steps.ts's
+// other "no flash appears" notes for this feature) — re-opening the same
+// form and reading a plain field's real value back is the only way left to
+// confirm a save actually took effect.
+Then("the field {string} should have value {string}", async ({ page }, field: string, value: string) => {
+  await expect(await resolveField(page, field)).toHaveValue(value)
+})
+
+// Not ported — new, companion to "I check the ... radio button with ...
+// value" above, for the same reason as the step just above: confirming a
+// radio-group save actually persisted, since this tool's own settings
+// saves show no flash message.
+Then(
+  "the {string} radio button with {string} value should be checked",
+  async ({ page }, name: string, value: string) => {
+    await expect(page.locator(`input[type="radio"][name="${name}"][value="${value}"]`)).toBeChecked()
+  },
+)
+
+// Not ported — new, for toolGroup.feature's Vue announcement recipients
+// field (PrimeVue MultiSelect, id="multiSelect") — a checkbox-list dropdown
+// replacing the legacy dual-listbox "choose_recipients"/"users" widget
+// entirely for this form. Matches an option by its exact visible text
+// (e.g. "Fiona Apple Maggart (fapple)"), same text-matching rationale as
+// "I select ... from the multiselect ..." above.
+When("I press the multiselect option {string} in {string}", async ({ page }, optionText: string, fieldId: string) => {
+  const field = page.locator(`#${fieldId}`)
+  await field.scrollIntoViewIfNeeded()
+  await field.click({ force: true })
+  await page.getByText(optionText, { exact: true }).click()
+  await page.keyboard.press("Escape")
 })

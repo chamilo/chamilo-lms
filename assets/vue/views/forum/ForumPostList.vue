@@ -721,7 +721,9 @@ function getAttachmentUrl(attachment) {
 
 const relativeTimeFormatter = computed(() => {
   try {
-    return new Intl.RelativeTimeFormat(locale.value || undefined, { numeric: "auto" })
+    // Intl requires a BCP-47 tag (hyphen); vue-i18n's locale here is
+    // Chamilo's own underscore-separated isocode (e.g. "en_US").
+    return new Intl.RelativeTimeFormat(locale.value?.replace("_", "-") || undefined, { numeric: "auto" })
   } catch (error) {
     console.error("Error creating relative time formatter:", error)
 

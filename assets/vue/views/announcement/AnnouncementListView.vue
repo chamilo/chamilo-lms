@@ -427,7 +427,9 @@ function formatDate(value) {
     return value
   }
 
-  return new Intl.DateTimeFormat(locale.value, {
+  // Intl requires a BCP-47 tag (hyphen); vue-i18n's locale here is Chamilo's
+  // own underscore-separated isocode (e.g. "en_US"), which Intl throws on.
+  return new Intl.DateTimeFormat(locale.value.replace("_", "-"), {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date)

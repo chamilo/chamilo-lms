@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Kreu kursajn paka\u0135ojn por certa tempo kun trejnadaj seancoj",
     "Sessions management": "Mastrumado de seancoj",
     "Tracking": "Spurado",
+    "Analytics": "Analitiko",
     "View reports, statistics and tracking data": "Vidi raportojn, statistikojn kaj spurajn datumojn",
     "Manage the skills of your users, through courses and badges": "Administri la kapablojn de viaj uzantoj, tra kursoj kaj insignoj",
     "Personal data protection": "Protektado de persona datumoj",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Montras {0} afi\u015dojn",
     "Showing {0} tasks": "Montras {0} taskojn",
     "contains {0} items": "enhavas {0} elementojn",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Premu enigon por elekti",
+    "Press enter to remove": "Premu enigon por forigi",
+    "No elements found. Consider changing the search query.": "Neniuj elementoj trovitaj. Konsideru \u015dan\u011di la ser\u0109an demandon.",
+    "List is empty.": "Listo estas malplena."
 }

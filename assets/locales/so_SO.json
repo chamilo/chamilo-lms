@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Samee xirmooyin koorsada muddo gaaban leh fadhiyo tababar",
     "Sessions management": "Maamulka fadhiyada",
     "Tracking": "Raacista",
+    "Analytics": "Analytics",
     "View reports, statistics and tracking data": "Eeg warbixinnada, tirakoobka iyo xogta raadraaca",
     "Manage the skills of your users, through courses and badges": "Maamul xirfadaha isticmaaleeyaashaada, iyada oo loo marayo koorsooyinka iyo calaamadaha",
     "Personal data protection": "Difaaca xogta shakhsi ahaaneed",
@@ -2511,7 +2512,7 @@
     "Assigned to": "La magacaabay",
     "Attachment has been deleted": "Lifaaqa waa la tirtiray",
     "Attempt": "Isku day",
-    "Audit file": "Audit file",
+    "Audit file": "Faylka xog-ururinta",
     "Authoring": "Qoraal qorista",
     "Available": "Diirran",
     "Available from": "La heli karo laga bilaabo",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Muujinaya {0} qoraalo",
     "Showing {0} tasks": "Muujinaya {0} hawlaha",
     "contains {0} items": "waxay ka kooban tahay {0} walxood",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Guji Enter si aad u doorato",
+    "Press enter to remove": "Guji Enter si aad u tirtirto",
+    "No elements found. Consider changing the search query.": "Wax walxood lama helin. Tixgeli beddelidda weydiinta raadinta.",
+    "List is empty.": "Liiska waa madhan yahay."
 }

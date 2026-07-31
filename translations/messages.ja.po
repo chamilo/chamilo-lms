@@ -8616,6 +8616,9 @@ msgstr "会社"
 msgid "Reporting"
 msgstr "レポート作成"
 
+msgid "Analytics"
+msgstr "アナリティクス"
+
 msgid "Update"
 msgstr "更新"
 
@@ -37456,6 +37459,9 @@ msgstr "Gitリモート設定（.git/config）が変更されました。意図�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "サブディレクトリが読み取れなかったため、スキャンは途中で停止しました。以下の結果は一部のみである可能性があります。"
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "変更が多すぎてすべて表示できません。各カテゴリの最初のエントリのみ表示しています。完全なリストはCEFログを参照してください。"
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ファイルが読み取れず（権限）、スキップされました。"
 
@@ -37540,6 +37546,27 @@ msgstr "まだアラートは記録されていません。"
 msgid "Git remote changed"
 msgstr "Git リモートが変更されました"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "変更が多すぎるため全件を表示できません。各カテゴリの最初のエントリのみ表示しています。完全なリストは%link_start%CEFログ%link_end%を参照してください。"
+msgid "Press enter to select"
+msgstr "Enterキーを押して選択"
+
+msgid "Press enter to remove"
+msgstr "Enterキーを押して削除"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "要素が見つかりません。検索条件を変更してください。"
+
+msgid "List is empty."
+msgstr "リストが空です。"
+
+msgid "Your session has expired. Please try again."
+msgstr "セッションの有効期限が切れました。もう一度お試しください。"
+
+msgid "Generate with AI"
+msgstr "AIで生成"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "このコースのトピックを表す、クリーンなフラットデザインスタイルで、プラットフォームの色をアクセントに使用した、モダンで親しみやすいイラスト。"
+
+msgid "Back to account"
+msgstr "アカウントに戻る"
 

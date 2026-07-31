@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Crear de pach\u00e8ts de cors per un temps cert amb de sesions de formacion",
     "Sessions management": "Gestion de las sesions",
     "Tracking": "Segament",
+    "Analytics": "Analiticas",
     "View reports, statistics and tracking data": "Veire los rap\u00f2rts, estadisticas e donadas de segament",
     "Manage the skills of your users, through courses and badges": "Gerir las compet\u00e9ncias de v\u00f2stres utilizaires, a trav\u00e8rs dels cors e de las ins\u00edgnas",
     "Personal data protection": "Proteccion de las donadas personals",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Afichatge de {0} publicacions",
     "Showing {0} tasks": "Afichatge de {0} taches",
     "contains {0} items": "conten {0} elements",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Quichatz Entrada per seleccionar",
+    "Press enter to remove": "Quichatz Entrada per suprimir",
+    "No elements found. Consider changing the search query.": "Cap d\u2019element pas trobat. Ensajatz de cambiar la rec\u00e8rca.",
+    "List is empty.": "La lista es voida."
 }

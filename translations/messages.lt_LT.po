@@ -8552,6 +8552,9 @@ msgstr "Organizacija"
 msgid "Reporting"
 msgstr "Ataskaitos"
 
+msgid "Analytics"
+msgstr "Analitika"
+
 msgid "Update"
 msgstr "Atnaujinimas"
 
@@ -37391,6 +37394,9 @@ msgstr "Git nuotolinė konfigūracija (.git/config) pasikeitė. Patikrinkite, ar
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Nuskaitymas sustojo anksčiau, nes nepavyko perskaityti pakatalogio (patikrinkite failų leidimus). Žemiau pateikti rezultatai gali būti daliniai."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Per daug pakeitimų, kad būtų galima parodyti visus; žemiau rodomi tik pirmieji kiekvienos kategorijos įrašai. Visą sąrašą rasite CEF žurnale."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% failo(-ų) nepavyko perskaityti (leidimai) ir jie buvo praleisti."
 
@@ -37475,6 +37481,27 @@ msgstr "Dar nėra užfiksuota jokių įspėjimų."
 msgid "Git remote changed"
 msgstr "Git nuotolinis šaltinis pakeistas"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Per daug pakeitimų, kad būtų galima parodyti visus; žemiau rodomi tik pirmieji kiekvienos kategorijos įrašai. Visą sąrašą rasite %link_start%CEF žurnale%link_end%."
+msgid "Press enter to select"
+msgstr "Paspauskite Enter, kad pasirinktumėte"
+
+msgid "Press enter to remove"
+msgstr "Paspauskite Enter, kad pašalintumėte"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Elementų nerasta. Pabandykite pakeisti paieškos užklausą."
+
+msgid "List is empty."
+msgstr "Sąrašas tuščias."
+
+msgid "Your session has expired. Please try again."
+msgstr "Jūsų sesija baigėsi. Bandykite dar kartą."
+
+msgid "Generate with AI"
+msgstr "Generuoti su DI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Šiuolaikiška, kviečianti iliustracija, vaizduojanti šio kurso temą, švariu plokščio dizaino stiliumi, naudojant mano platformos spalvas kaip akcentus."
+
+msgid "Back to account"
+msgstr "Grįžti į paskyrą"
 

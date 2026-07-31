@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
+        new Get(security: "object.getMessage() != null and is_granted('VIEW', object.getMessage())"),
     ],
     normalizationContext: [
         'groups' => ['message:read'],

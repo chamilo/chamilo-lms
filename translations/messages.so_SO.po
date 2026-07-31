@@ -8547,6 +8547,9 @@ msgstr "Shirkad"
 msgid "Reporting"
 msgstr "War-bixinta"
 
+msgid "Analytics"
+msgstr "Analytics"
+
 msgid "Update"
 msgstr "Cusboonaysii"
 
@@ -36520,7 +36523,7 @@ msgid "Applying files..."
 msgstr "Applying files..."
 
 msgid "Audit file"
-msgstr "Audit file"
+msgstr "Faylka xog-ururinta"
 
 msgid "Backup directory"
 msgstr "Galka kaydinta"
@@ -37386,6 +37389,9 @@ msgstr "Qaabeynta fog ee Git (.git/config) waa la beddelay. Xaqiiji in tani ay a
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Baadhitaanku wuxuu joogsaday goor hore sababtoo ah ma jirin in la akhriyo hoosaad (hubi oggolaanshaha faylka). Natiijooyinka hoos waxaa laga yaabaa inay qayb ahaan yihiin."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Isbeddelo badan oo aan lagu qori karin oo dhan; kaliya qoraallada ugu horreeya ee qayb kasta ayaa hoos lagu muujiyey. Eeg diiwaanka CEF si aad u hesho liiska dhammaystiran."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fayl (faylasha) lama akhri karin (oggolaanshaha) waana la booday."
 
@@ -37470,6 +37476,27 @@ msgstr "Wax digniin ah weli lama diiwaangelin."
 msgid "Git remote changed"
 msgstr "Fogeynta Git waa la beddelay"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Isbeddelo badan oo aan si buuxda loo taxin karin; kaliya qoraallada ugu horreeya ee qayb kasta ayaa hoos lagu muujiyay. Eeg %link_start%CEF log%link_end% si aad u hesho liiska dhammaystiran."
+msgid "Press enter to select"
+msgstr "Guji Enter si aad u doorato"
+
+msgid "Press enter to remove"
+msgstr "Guji Enter si aad u tirtirto"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Wax walxood lama helin. Tixgeli beddelidda weydiinta raadinta."
+
+msgid "List is empty."
+msgstr "Liiska waa madhan yahay."
+
+msgid "Your session has expired. Please try again."
+msgstr "Kalfadhigaaga wuu dhammaaday. Fadlan mar kale isku day."
+
+msgid "Generate with AI"
+msgstr "Ku soo saar AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Sawir casri ah oo soo dhawaynaya oo matalaya mawduuca koorsadan, qaab nadiif ah oo siman, iyadoo la isticmaalayo midabada barnaamijka sidii midabyo."
+
+msgid "Back to account"
+msgstr "Ku noqo akoonka"
 

@@ -8550,6 +8550,9 @@ msgstr "회사"
 msgid "Reporting"
 msgstr "보고서"
 
+msgid "Analytics"
+msgstr "분석"
+
 msgid "Update"
 msgstr "업데이트"
 
@@ -37390,6 +37393,9 @@ msgstr "Git 원격 구성(.git/config)이 변경되었습니다. 의도된 변�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "하위 디렉터리를 읽을 수 없어 스캔이 조기에 중지되었습니다(파일 권한 확인). 아래 결과는 일부일 수 있습니다."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "전체 목록을 표시하기에는 변경 사항이 너무 많습니다. 각 카테고리의 첫 항목만 아래에 표시됩니다. 전체 목록은 CEF 로그를 참조하세요."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count%개 파일을 읽을 수 없어(권한 문제) 건너뛰었습니다."
 
@@ -37474,6 +37480,27 @@ msgstr "아직 기록된 알림이 없습니다."
 msgid "Git remote changed"
 msgstr "Git 원격 저장소 변경됨"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "변경 사항이 너무 많아 전체 목록을 표시할 수 없습니다. 각 범주의 첫 항목만 아래에 표시됩니다. 전체 목록은 %link_start%CEF 로그%link_end%를 참조하세요."
+msgid "Press enter to select"
+msgstr "선택하려면 Enter 키를 누르세요"
+
+msgid "Press enter to remove"
+msgstr "제거하려면 Enter 키를 누르세요"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "요소를 찾을 수 없습니다. 검색어를 변경해 보세요."
+
+msgid "List is empty."
+msgstr "목록이 비어 있습니다."
+
+msgid "Your session has expired. Please try again."
+msgstr "세션이 만료되었습니다. 다시 시도해 주세요."
+
+msgid "Generate with AI"
+msgstr "AI로 생성"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "이 강의 주제를 나타내는 현대적이고 친근한 일러스트레이션으로, 깔끔한 플랫 디자인 스타일에 플랫폼 색상을 강조색으로 사용합니다."
+
+msgid "Back to account"
+msgstr "계정으로 돌아가기"
 

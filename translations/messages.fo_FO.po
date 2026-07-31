@@ -8547,6 +8547,9 @@ msgstr "Fyrilit"
 msgid "Reporting"
 msgstr "Rapportering"
 
+msgid "Analytics"
+msgstr "Greining"
+
 msgid "Update"
 msgstr "Dagfør"
 
@@ -32128,7 +32131,7 @@ msgid "Moodle version"
 msgstr "Moodle útgáva"
 
 msgid "Admin ID"
-msgstr "Admin ID"
+msgstr "Stjórnanda ID"
 
 msgid "Internal integer user id"
 msgstr "Innanhúsligur heiltalsbrúkar-ID"
@@ -37342,49 +37345,52 @@ msgid "Incorrect password."
 msgstr "Rangt loyniorð."
 
 msgid "File integrity alerting paused for 1 hour."
-msgstr "File integrity alerting paused for 1 hour."
+msgstr "Skráarheilleiki viðvörun sett í hlé í 1 tíma."
 
 msgid "New baseline established: %s files."
-msgstr "New baseline established: %s files."
+msgstr "Nýtt grunnlína sett: %s skrár."
 
 msgid "Scan complete: changes were detected."
-msgstr "Scan complete: changes were detected."
+msgstr "Skönnun lokið: breytingar fundust."
 
 msgid "Scan complete: no changes were detected."
-msgstr "Scan complete: no changes were detected."
+msgstr "Skönnun lokið: engar breytingar fundust."
 
 msgid "File integrity"
-msgstr "File integrity"
+msgstr "Skráarheilleiki"
 
 msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
-msgstr "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Þessi skýrsla ber saman uppsettar skrár (allt nema var/ og .git/, þó .git/config er enn fylgst með til að fanga fjarstýringu sem hefur verið rænt) við trausta grunnlínu, til að greina óvæntar viðbætur, breytingar eða eyðingar."
 
 msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
-msgstr "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Þú getur skoðað nýjustu skýrsluna hér að neðan. Að keyra skönnun, setja viðvörun í hlé eða setja nýja grunnlínu krefst alþjóðlegs stjórnanda."
 
 msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
-msgstr "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Viðvörun er nú sett í hlé vegna viðhalds. Hún mun sjálfkrafa hefjast aftur %date%."
 
 msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
-msgstr "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Engin skönnun hefur verið keyrð enn. Keyrðu eina hér, eða frá skipanalínu með app:file-integrity:scan."
 
 msgid "Last scan"
-msgstr "Last scan"
+msgstr "Síðasta skönnun"
 
 msgid "Files scanned"
-msgstr "Files scanned"
+msgstr "Skrár skannaðar"
 
 msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
-msgstr "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Engin grunnlína var til enn: þessi skönnun setti eina. Breytingar verða tilkynntar frá næstu skönnun."
 
 msgid "No changes detected since the baseline."
-msgstr "No changes detected since the baseline."
+msgstr "Engar breytingar fundust síðan grunnlína var sett."
 
 msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
-msgstr "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git fjarstýringarskipan (.git/config) hefur breyst. Staðfestu að þetta hafi verið væntanlegt."
 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skanningin steðgaði fyrr, tí ein undirmappa kundi ikki lesast (kanna fíluheimildir). Niðurstøðurnar niðanfyri kunnu vera ófullfíggjaðar."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Ov nógvar broytingar at vísa í fullum; bert tær fyrstu í hvørjum bólki eru vístar niðanfyri. Sí CEF-loggin fyri fulla listan."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fíla(r) kundu ikki lesast (heimildir) og vórðu hoppaðar yvir."
@@ -37470,6 +37476,27 @@ msgstr "Ongin ávaring er skrásett enn."
 msgid "Git remote changed"
 msgstr "Git-fjarstýring broytt"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr ""
+msgid "Press enter to select"
+msgstr "Trýst á Enter fyri at velja"
+
+msgid "Press enter to remove"
+msgstr "Trýst á Enter fyri at sleppa"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Einki funnið. Royn at broyta leitingina."
+
+msgid "List is empty."
+msgstr "Listin er tómur."
+
+msgid "Your session has expired. Please try again."
+msgstr "Tíni setur er útgingin. Vinarliga royn aftur."
+
+msgid "Generate with AI"
+msgstr "Ger við AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Ein nútímans, vælkomin mynd sum vísir evnið á hesum kurssinum, í einum reinum flat-design stíl, við litunum á mínum platformi sum accent."
+
+msgid "Back to account"
+msgstr "Aftur til konto"
 

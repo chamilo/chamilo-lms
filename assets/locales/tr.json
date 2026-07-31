@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "E\u011fitim oturumlar\u0131 ile belirli bir s\u00fcre i\u00e7in kurs paketleri olu\u015fturun",
     "Sessions management": "Oturum y\u00f6netimi",
     "Tracking": "\u0130zleme",
+    "Analytics": "Analitik",
     "View reports, statistics and tracking data": "Raporlar\u0131, istatistikleri ve izleme verilerini g\u00f6r\u00fcnt\u00fcle",
     "Manage the skills of your users, through courses and badges": "Kullan\u0131c\u0131lar\u0131n\u0131z\u0131n becerilerini kurslar ve rozetler arac\u0131l\u0131\u011f\u0131yla y\u00f6netin",
     "Personal data protection": "Ki\u015fisel veri korumas\u0131",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "{0} g\u00f6nderi g\u00f6steriliyor",
     "Showing {0} tasks": "{0} g\u00f6rev g\u00f6steriliyor",
     "contains {0} items": "{0} \u00f6\u011fe i\u00e7eriyor",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Se\u00e7mek i\u00e7in enter tu\u015funa bas\u0131n",
+    "Press enter to remove": "Kald\u0131rmak i\u00e7in enter tu\u015funa bas\u0131n",
+    "No elements found. Consider changing the search query.": "\u00d6\u011fe bulunamad\u0131. Arama sorgusunu de\u011fi\u015ftirmeyi deneyin.",
+    "List is empty.": "Liste bo\u015f."
 }

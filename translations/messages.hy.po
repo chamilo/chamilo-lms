@@ -8551,6 +8551,9 @@ msgstr "Ընկերություն"
 msgid "Reporting"
 msgstr "Զեկույցներ"
 
+msgid "Analytics"
+msgstr "Վերլուծություն"
+
 msgid "Update"
 msgstr "Նորացնել"
 
@@ -37390,6 +37393,9 @@ msgstr "Git-ի հեռակա կազմաձևումը (.git/config) փոխվել է
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Սկանավորումը վաղաժամկետ դադարեցվեց, քանի որ ենթաթղթապանակը հնարավոր չէր կարդալ (ստուգեք ֆայլերի թույլտվությունները)։ Ստորև բերված արդյունքները կարող են մասնակի լինել։"
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Չափազանց շատ փոփոխություններ՝ ամբողջությամբ ցուցադրելու համար. ցուցադրվում են միայն յուրաքանչյուր կատեգորիայի առաջին գրառումները։ Ամբողջական ցանկը տեսեք CEF մատյանում։"
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% ֆայլ(եր) հնարավոր չէր կարդալ (թույլտվություններ) և բաց թողնվեցին։"
 
@@ -37474,6 +37480,27 @@ msgstr "Ահազանգ դեռ չի գրանցվել։"
 msgid "Git remote changed"
 msgstr "Git հեռակա փոխվել է"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Չափազանց շատ փոփոխություններ՝ ամբողջությամբ ցուցադրելու համար. ստորև ցուցադրված են յուրաքանչյուր կատեգորիայի միայն առաջին գրառումները։ Տես %link_start%CEF մատյան%link_end% ամբողջական ցանկի համար։"
+msgid "Press enter to select"
+msgstr "Սեղմեք Enter՝ ընտրելու համար"
+
+msgid "Press enter to remove"
+msgstr "Սեղմեք Enter՝ հեռացնելու համար"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Ոչ մի տարր չի գտնվել։ Փորձեք փոխել որոնման հարցումը։"
+
+msgid "List is empty."
+msgstr "Ցանկը դատարկ է։"
+
+msgid "Your session has expired. Please try again."
+msgstr "Ձեր նիստը ժամկետանց է։ Խնդրում ենք կրկին փորձել։"
+
+msgid "Generate with AI"
+msgstr "Ստեղծել AI-ով"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Այս դասընթացի թեման ներկայացնող ժամանակակից, հյուրընկալ նկարազարդում՝ մաքուր հարթ դիզայնի ոճով, օգտագործելով իմ հարթակի գույները որպես շեշտադրումներ։"
+
+msgid "Back to account"
+msgstr "Վերադառնալ հաշվին"
 

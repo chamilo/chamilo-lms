@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fodera,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -8546,6 +8546,9 @@ msgstr "Kampuni"
 
 msgid "Reporting"
 msgstr "Ripoti"
+
+msgid "Analytics"
+msgstr "Uchambuzi"
 
 msgid "Update"
 msgstr "Sasisha"
@@ -37386,6 +37389,9 @@ msgstr "Mipangilio ya mbali ya Git (.git/config) imebadilika. Thibitisha ikiwa h
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Uchanganuzi ulisimama mapema kwa sababu saraka ndogo haikuweza kusomwa (angalia ruhusa za faili). Matokeo hapa chini yanaweza kuwa sehemu tu."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Mabadiliko mengi sana kuorodheshwa kikamilifu; maingizo ya kwanza tu ya kila kategoria yanaonyeshwa hapa chini. Angalia kumbukumbu ya CEF kwa orodha kamili."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "Faili %count% hazikuweza kusomwa (ruhusa) na zilirukwa."
 
@@ -37470,6 +37476,27 @@ msgstr "Hakuna arifa iliyorekodiwa bado."
 msgid "Git remote changed"
 msgstr "Git remote imebadilika"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Mabadiliko mengi sana kuorodheshwa kikamilifu; maingizo ya kwanza tu ya kila kategoria yanaonyeshwa hapa chini. Angalia %link_start%logi ya CEF%link_end% kwa orodha kamili."
+msgid "Press enter to select"
+msgstr "Bonyeza ingiza kuchagua"
+
+msgid "Press enter to remove"
+msgstr "Bonyeza ingiza kuondoa"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Hakuna vipengele vilivyopatikana. Fikiria kubadilisha hoja ya utafutaji."
+
+msgid "List is empty."
+msgstr "Orodha ni tupu."
+
+msgid "Your session has expired. Please try again."
+msgstr "Muda wako wa kipindi umekwisha. Tafadhali jaribu tena."
+
+msgid "Generate with AI"
+msgstr "Tengeneza kwa AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Kielelezo cha kisasa na kinachokaribisha kinachowakilisha mada ya kozi hii, kwa mtindo safi wa muundo bapa, ukitumia rangi za jukwaa langu kama mapambo."
+
+msgid "Back to account"
+msgstr "Rudi kwenye akaunti"
 

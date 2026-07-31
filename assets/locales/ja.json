@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "\u30c8\u30ec\u30fc\u30cb\u30f3\u30b0\u30bb\u30c3\u30b7\u30e7\u30f3\u4ed8\u304d\u306e\u4e00\u5b9a\u671f\u9593\u306e\u30b3\u30fc\u30b9\u30d1\u30c3\u30b1\u30fc\u30b8\u3092\u4f5c\u6210",
     "Sessions management": "\u30bb\u30c3\u30b7\u30e7\u30f3\u7ba1\u7406",
     "Tracking": "\u30c8\u30e9\u30c3\u30ad\u30f3\u30b0",
+    "Analytics": "\u30a2\u30ca\u30ea\u30c6\u30a3\u30af\u30b9",
     "View reports, statistics and tracking data": "\u30ec\u30dd\u30fc\u30c8\u3001\u7d71\u8a08\u3001\u30c8\u30e9\u30c3\u30ad\u30f3\u30b0\u30c7\u30fc\u30bf\u3092\u8868\u793a",
     "Manage the skills of your users, through courses and badges": "\u30b3\u30fc\u30b9\u3068\u30d0\u30c3\u30b8\u3092\u901a\u3058\u305f\u30e6\u30fc\u30b6\u30fc\u306e\u30b9\u30ad\u30eb\u3092\u7ba1\u7406",
     "Personal data protection": "\u500b\u4eba\u30c7\u30fc\u30bf\u4fdd\u8b77",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "{0}\u4ef6\u306e\u6295\u7a3f\u3092\u8868\u793a\u4e2d",
     "Showing {0} tasks": "{0}\u4ef6\u306e\u30bf\u30b9\u30af\u3092\u8868\u793a\u4e2d",
     "contains {0} items": "{0}\u9805\u76ee\u3092\u542b\u307f\u307e\u3059",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Enter\u30ad\u30fc\u3092\u62bc\u3057\u3066\u9078\u629e",
+    "Press enter to remove": "Enter\u30ad\u30fc\u3092\u62bc\u3057\u3066\u524a\u9664",
+    "No elements found. Consider changing the search query.": "\u8981\u7d20\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3002\u691c\u7d22\u6761\u4ef6\u3092\u5909\u66f4\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
+    "List is empty.": "\u30ea\u30b9\u30c8\u304c\u7a7a\u3067\u3059\u3002"
 }

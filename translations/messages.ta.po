@@ -8551,6 +8551,9 @@ msgstr "நிறுவனம்"
 msgid "Reporting"
 msgstr "அறிக்கையிடல்"
 
+msgid "Analytics"
+msgstr "பகுப்பாய்வு"
+
 msgid "Update"
 msgstr "புதுப்பி"
 
@@ -37390,6 +37393,9 @@ msgstr "Git ரிமோட் உள்ளமைவு (.git/config) மாற�
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "ஒரு துணை அடைவைப் படிக்க முடியாததால் ஸ்கேன் முன்கூட்டியே நிறுத்தப்பட்டது (கோப்பு அனுமதிகளைச் சரிபார்க்கவும்). கீழே உள்ள முடிவுகள் பகுதியாக இருக்கலாம்."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "முழுமையாகப் பட்டியலிட அதிக மாற்றங்கள் உள்ளன; ஒவ்வொரு வகையின் முதல் உள்ளீடுகள் மட்டும் கீழே காட்டப்பட்டுள்ளன. முழு பட்டியலுக்கு CEF பதிவைப் பார்க்கவும்."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% கோப்பு(கள்) படிக்க முடியவில்லை (அனுமதிகள்) மற்றும் தவிர்க்கப்பட்டன."
 
@@ -37474,6 +37480,27 @@ msgstr "இதுவரை எந்த எச்சரிக்கையும�
 msgid "Git remote changed"
 msgstr "Git தொலைநிலை மாற்றப்பட்டது"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
+msgid "Press enter to select"
+msgstr "தேர்ந்தெடுக்க Enter ஐ அழுத்தவும்"
+
+msgid "Press enter to remove"
+msgstr "நீக்க Enter ஐ அழுத்தவும்"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "எந்த உறுப்புகளும் கிடைக்கவில்லை. தேடல் வினவலை மாற்றுவதைக் கருத்தில் கொள்ளுங்கள்."
+
+msgid "List is empty."
+msgstr "பட்டியல் காலியாக உள்ளது."
+
+msgid "Your session has expired. Please try again."
+msgstr "உங்கள் அமர்வு காலாவதியானது. மீண்டும் முயற்சிக்கவும்."
+
+msgid "Generate with AI"
+msgstr "AI உடன் உருவாக்கவும்"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "இந்தப் பாடத்தின் தலைப்பைப் பிரதிநிதித்துவப்படுத்தும் நவீன, வரவேற்கத்தக்க விளக்கப்படம், தூய்மையான தட்டையான வடிவமைப்பு பாணியில், என் தளத்தின் வண்ணங்களை உச்சரிப்புகளாகப் பயன்படுத்தி."
+
+msgid "Back to account"
+msgstr "கணக்கிற்குத் திரும்பவும்"
 

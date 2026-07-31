@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Crear paquetes de cursos para un tempo determinado con sesi\u00f3ns de formaci\u00f3n",
     "Sessions management": "Xesti\u00f3n de sesi\u00f3ns",
     "Tracking": "Seguimento",
+    "Analytics": "Anal\u00edtica",
     "View reports, statistics and tracking data": "Ver informes, estat\u00edsticas e datos de seguimento",
     "Manage the skills of your users, through courses and badges": "Xestionar as competencias dos seus usuarios, a trav\u00e9s de cursos e insignias",
     "Personal data protection": "Protecci\u00f3n de datos persoais",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Mostrando {0} publicaci\u00f3ns",
     "Showing {0} tasks": "Mostrando {0} tarefas",
     "contains {0} items": "cont\u00e9n {0} elementos",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Prema Intro para seleccionar",
+    "Press enter to remove": "Prema Intro para eliminar",
+    "No elements found. Consider changing the search query.": "Non se atoparon elementos. Probe a cambiar a consulta de busca.",
+    "List is empty.": "A lista est\u00e1 baleira."
 }

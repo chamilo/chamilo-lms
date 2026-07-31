@@ -65,6 +65,30 @@ function bbb_has_valid_action_token(): bool
         && hash_equals($sessionToken, $requestToken);
 }
 
+/**
+ * Bridges a plain GET navigation (bookmark/shared link) into the POST-with-token
+ * request the meeting-creation gate requires, without ever putting the CSRF token
+ * in a GET URL (which would leak it into server logs, browser history and the
+ * Referer header). The token is minted and embedded server-side into a page that
+ * only the already-authenticated user's own browser will load and auto-submit,
+ * so a third-party site cannot replay this to forge the request.
+ */
+function bbb_render_csrf_bridge(Bbb $bbb): never
+{
+    $url = htmlspecialchars($bbb->getConferenceUrl(), ENT_QUOTES, 'UTF-8');
+    $token = htmlspecialchars($bbb->getActionCsrfToken(), ENT_QUOTES, 'UTF-8');
+    $label = htmlspecialchars($bbb->plugin->get_lang('ClickToContinue'), ENT_QUOTES, 'UTF-8');
+
+    echo '<!DOCTYPE html><html><body onload="document.forms[0].submit()">'
+        .'<form method="post" action="'.$url.'">'
+        .'<input type="hidden" name="action" value="start">'
+        .'<input type="hidden" name="bbb_token" value="'.$token.'">'
+        .'<noscript><button type="submit">'.$label.'</button></noscript>'
+        .'</form>'
+        .'</body></html>';
+    exit;
+}
+
 function bbb_normalize_same_origin_document_url(string $url): ?string
 {
     $url = trim($url);
@@ -233,7 +257,14 @@ if ($bbb->pluginEnabled) {
                     }
                 } else {
                     if ($bbb->isConferenceManager()) {
-                        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !bbb_has_valid_action_token()) {
+                        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                            // Direct GET link (bookmark/shared link, no pre-upload
+                            // documents to carry over): bridge to POST instead of
+                            // failing outright.
+                            bbb_render_csrf_bridge($bbb);
+                        }
+
+                        if (!bbb_has_valid_action_token()) {
                             bbb_flash_redirect(
                                 Display::return_message(get_lang('Your session has expired. Please try again.'), 'error'),
                                 $bbb

@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Srdačan pozdrav"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Uzorak formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rasponi varijabli"
@@ -8550,6 +8550,9 @@ msgstr "Organizacija"
 
 msgid "Reporting"
 msgstr "Izvještavanje"
+
+msgid "Analytics"
+msgstr "Analitika"
 
 msgid "Update"
 msgstr "Ažuriraj"
@@ -36495,46 +36498,46 @@ msgid "No auth source"
 msgstr "No auth source"
 
 msgid "You must add at least one question"
-msgstr "You must add at least one question"
+msgstr "Morate dodati barem jedno pitanje"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Napredne radnje"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Putanja aplikacije"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Primijeni detalje datoteka"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Primijeni detalje plana"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Primjena plana nije uspjela"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Primjena plana spremna"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "Primjena pripreme"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "Primijeni pripremljene datoteke"
 
 msgid "Applying files..."
-msgstr "Applying files..."
+msgstr "Primjena datoteka..."
 
 msgid "Audit file"
-msgstr "Audit file"
+msgstr "Revizijska datoteka"
 
 msgid "Backup directory"
-msgstr "Backup directory"
+msgstr "Direktorij sigurnosne kopije"
 
 msgid "Baseline clean"
-msgstr "Baseline clean"
+msgstr "Osnovno čišćenje"
 
 msgid "Baseline warnings"
-msgstr "Baseline warnings"
+msgstr "Upozorenja osnovne linije"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
 msgstr "Izradi siguran plan primjene iz pripremljenog paketa. Ovo samo provjerava datoteke, dozvole, putanju sigurnosne kopije i status zaključavanja. Ne zamjenjuje datoteke."
@@ -37391,6 +37394,9 @@ msgstr "Konfiguracija Git udaljenog repozitorija (.git/config) promijenjena je. 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skeniranje je prijevremeno zaustavljeno jer se podmapa nije mogla pročitati (provjerite dozvole datoteka). Rezultati u nastavku mogu biti djelomični."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Previše promjena za potpuni prikaz; prikazani su samo prvi unosi svake kategorije. Potpuni popis potražite u CEF zapisniku."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% datoteka nije se moglo pročitati (dozvole) i preskočene su."
 
@@ -37475,6 +37481,27 @@ msgstr "Još nije zabilježeno nijedno upozorenje."
 msgid "Git remote changed"
 msgstr "Git udaljeni repozitorij promijenjen"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Previše promjena za potpuni prikaz; prikazuju se samo prvi unosi svake kategorije. Pogledajte %link_start%CEF zapis%link_end% za potpuni popis."
+msgid "Press enter to select"
+msgstr "Pritisnite Enter za odabir"
+
+msgid "Press enter to remove"
+msgstr "Pritisnite Enter za uklanjanje"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nema pronađenih elemenata. Razmislite o promjeni upita za pretraživanje."
+
+msgid "List is empty."
+msgstr "Popis je prazan."
+
+msgid "Your session has expired. Please try again."
+msgstr "Vaša sesija je istekla. Pokušajte ponovno."
+
+msgid "Generate with AI"
+msgstr "Generiraj pomoću umjetne inteligencije"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Moderna, privlačna ilustracija koja predstavlja temu ovog tečaja, u čistom flat-dizajnu, koristeći boje moje platforme kao naglaske."
+
+msgid "Back to account"
+msgstr "Natrag na račun"
 

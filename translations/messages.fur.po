@@ -8547,6 +8547,9 @@ msgstr "Impresa"
 msgid "Reporting"
 msgstr "Rapuarts"
 
+msgid "Analytics"
+msgstr "Analitiche"
+
 msgid "Update"
 msgstr "Agiorne"
 
@@ -37386,6 +37389,9 @@ msgstr "La configurazion dal remote Git (.git/config) e je cambiade. Verifiche c
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "La scansion si è fermade prime parcè che no si è podût lei une sot-cartel (controle i permès dai files). I risultâts chi sot a podin jessi parziâi."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Tropis cambiaments par listâ in plen; dome lis primis vôs di ogni categorie a son mostradis ca sot. Viôt il regjistri CEF par la liste complete."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% file(s) no si àn podût lei (permès) e a son stâts saltâts."
 
@@ -37470,6 +37476,27 @@ msgstr "Nissun avîs al è stât regjistrât ancjemò."
 msgid "Git remote changed"
 msgstr "Remote Git modificât"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Tropis modifichis par listâlis dal dut; a son mostrâts dome i prins elements di ogni categorie. Viôt il %link_start%log CEF%link_end% pe liste complete."
+msgid "Press enter to select"
+msgstr "Frache Invio par selezionâ"
+
+msgid "Press enter to remove"
+msgstr "Frache Invio par gjavâ"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nissun element cjatât. Prove a cambiâ la interogazion di ricercje."
+
+msgid "List is empty."
+msgstr "La liste e je vueide."
+
+msgid "Your session has expired. Please try again."
+msgstr "La tô session e je scjadude. Torne a provâ."
+
+msgid "Generate with AI"
+msgstr "Gjenere cun IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Une ilustrazion moderne e ospitâl che rapresente l'argoment di chest cors, in stîl flat-design net, doprant i colôrs de mê plateforme come detais."
+
+msgid "Back to account"
+msgstr "Torne al account"
 

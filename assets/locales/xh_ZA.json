@@ -366,6 +366,7 @@
     "Create course packages for a certain time with training sessions": "Yenza iipakethi zezifundo zexesha elithile kunye neeseshini zoqeqesho",
     "Sessions management": "Ulawulo lweeseshini",
     "Tracking": "Ukulandelela",
+    "Analytics": "Analytics",
     "View reports, statistics and tracking data": "Jonga iingxelo, iinkcukacha-manani kunye nedatha yokulandelela",
     "Manage the skills of your users, through courses and badges": "Lawula izakhono zabasebenzisi bakho, ngokusebenzisa izifundo kunye neebhedji",
     "Personal data protection": "Ukukhuselwa kwedatha yobuqu",
@@ -3111,7 +3112,7 @@
     "Words": "Amagama",
     "Words count per page": "Inani lamagama kwiphepha ngalinye",
     "Yarn build": "Yarn build",
-    "Yarn install": "Yarn install",
+    "Yarn install": "Faka i-yarn",
     "You are modifying logos for the default visual theme \u201cchamilo\u201d. Consider creating/using a custom visual theme to avoid overriding defaults.": "You are modifying logos for the default visual theme \u201cchamilo\u201d. Consider creating/using a custom visual theme to avoid overriding defaults.",
     "You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.": "Awuvunyelwanga ukubona eli phepha. Mhlawumbi uxhumo lwakho luphelelwe lixesha okanye uzama ukufikelela kwiphepha apho ungalonwanga amalungelo okufikelela ngokwaneleyo.",
     "You are viewing a historical version of this page": "Ujonga inguqulelo yembali yeli phepha",
@@ -3135,8 +3136,8 @@
     "Showing {0} posts": "Kuboniswa iiposti {0}",
     "Showing {0} tasks": "Kuboniswa imisebenzi {0}",
     "contains {0} items": "iqaqambile {0} izinto",
-    "Press enter to select": "Press enter to select",
-    "Press enter to remove": "Press enter to remove",
-    "No elements found. Consider changing the search query.": "No elements found. Consider changing the search query.",
-    "List is empty.": "List is empty."
+    "Press enter to select": "Cofa u-enter ukukhetha",
+    "Press enter to remove": "Cofa u-enter ukususa",
+    "No elements found. Consider changing the search query.": "Akukho zinto zifunyenweyo. Cinga ngokutshintsha umbuzo wokukhangela.",
+    "List is empty.": "Uluhlu alunanto."
 }

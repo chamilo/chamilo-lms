@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -8550,6 +8550,9 @@ msgstr "Organizācija"
 
 msgid "Reporting"
 msgstr "Atskaites"
+
+msgid "Analytics"
+msgstr "Analītika"
 
 msgid "Update"
 msgstr "Atjaunināt"
@@ -37391,6 +37394,9 @@ msgstr "Git attālās konfigurācijas (.git/config) ir mainījusies. Pārbaudiet
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Skenēšana priekšlaicīgi pārtraukta, jo apakšdirektoriju nevarēja nolasīt (pārbaudiet failu atļaujas). Zemāk redzamie rezultāti var būt daļēji."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Pārāk daudz izmaiņu, lai parādītu pilnu sarakstu; zemāk redzami tikai pirmie ieraksti katrā kategorijā. Pilnu sarakstu skatiet CEF žurnālā."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% failu(s) nevarēja nolasīt (atļaujas) un tika izlaisti."
 
@@ -37475,6 +37481,27 @@ msgstr "Vēl nav reģistrēts neviens brīdinājums."
 msgid "Git remote changed"
 msgstr "Git attālā krātuve mainīta"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Pārāk daudz izmaiņu, lai parādītu pilnu sarakstu; zemāk redzami tikai pirmie ieraksti katrā kategorijā. Pilnu sarakstu skatiet %link_start%CEF žurnālā%link_end%."
+msgid "Press enter to select"
+msgstr "Nospiediet Enter, lai atlasītu"
+
+msgid "Press enter to remove"
+msgstr "Nospiediet Enter, lai noņemtu"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nav atrasti elementi. Mēģiniet mainīt meklēšanas vaicājumu."
+
+msgid "List is empty."
+msgstr "Saraksts ir tukšs."
+
+msgid "Your session has expired. Please try again."
+msgstr "Jūsu sesija ir beigusies. Lūdzu, mēģiniet vēlreiz."
+
+msgid "Generate with AI"
+msgstr "Ģenerēt ar AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Mūsdienīga, viesmīlīga ilustrācija, kas attēlo šī kursa tēmu, tīrā plakana dizaina stilā, izmantojot platformas krāsas kā akcentus."
+
+msgid "Back to account"
+msgstr "Atpakaļ uz kontu"
 

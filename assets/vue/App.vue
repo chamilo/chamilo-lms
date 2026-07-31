@@ -77,6 +77,8 @@
       </div>
     </template>
   </Toast>
+
+  <SessionExpirationWarning v-if="securityStore.isAuthenticated" />
 </template>
 
 <script setup>
@@ -107,6 +109,7 @@ import EmptyLayout from "./components/layout/EmptyLayout.vue"
 import DashboardLayout from "./components/layout/DashboardLayout.vue"
 import AccessUrlChooserLayout from "./components/layout/AccessUrlChooserLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
+import SessionExpirationWarning from "./components/security/SessionExpirationWarning.vue"
 
 import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"

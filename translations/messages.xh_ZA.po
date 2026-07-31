@@ -8547,6 +8547,9 @@ msgstr "Inkampani"
 msgid "Reporting"
 msgstr "Ukuxela"
 
+msgid "Analytics"
+msgstr "Analytics"
+
 msgid "Update"
 msgstr "Hlaziya"
 
@@ -36958,7 +36961,7 @@ msgid "Yarn build"
 msgstr "Yarn build"
 
 msgid "Yarn install"
-msgstr "Yarn install"
+msgstr "Faka i-yarn"
 
 msgid "A comment is required"
 msgstr "Kufuneka izimvo"
@@ -37386,6 +37389,9 @@ msgstr "Uqwalaselo lwe-Git remote (.git/config) lutshintshile. Qinisekisa ukuba 
 msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
 msgstr "Ukuhlolwa kumiswe kwangethuba kuba isikhombisi esingaphantsi asikwazanga kufundwa (jonga iimvume zefayile). Iziphumo ezingezantsi zinokuba ngamaqhekeza."
 
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Kukho iinguquko ezininzi kakhulu ukuba zingadweliswa ngokupheleleyo; kuphela amangenelo okuqala kwicandelo ngalinye abonisiwe ngezantsi. Jonga i-CEF log ukufumana uluhlu olupheleleyo."
+
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "Iifayile ezi-%count% azikwazanga kufundwa (iimvume) kwaye zitsitswe."
 
@@ -37470,6 +37476,27 @@ msgstr "Akukho silumkiso sifakwe ngoku."
 msgid "Git remote changed"
 msgstr "I-Git remote itshintshile"
 
-msgid "Too many changes to list in full; only the first entries of each category are shown below. See the %link_start%CEF log%link_end% for the complete list."
-msgstr "Iinguquko ezininzi kakhulu ukuba zingadweliswa ngokupheleleyo; kuphela amangenelo okuqala kwicandelo ngalinye abonisiwe ngezantsi. Bona %link_start%CEF log%link_end% ukufumana uluhlu olupheleleyo."
+msgid "Press enter to select"
+msgstr "Cofa u-enter ukukhetha"
+
+msgid "Press enter to remove"
+msgstr "Cofa u-enter ukususa"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Akukho zinto zifunyenweyo. Cinga ngokutshintsha umbuzo wokukhangela."
+
+msgid "List is empty."
+msgstr "Uluhlu alunanto."
+
+msgid "Your session has expired. Please try again."
+msgstr "Iseshoni yakho iphelelwe lixesha. Nceda uzame kwakhona."
+
+msgid "Generate with AI"
+msgstr "Yenza nge-AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Umzekeliso wangoku, owamkelekileyo omele umxholo wale khosi, ngendlela ecocekileyo yoyilo olusicaba, usebenzisa imibala yeqonga lam njengokugqamisa."
+
+msgid "Back to account"
+msgstr "Buyela kwi-akhawunti"
 

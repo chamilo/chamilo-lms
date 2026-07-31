@@ -21,6 +21,16 @@
 #   elements — confirmed via live DOM inspection. Needed a fix to the
 #   shared pressButton() helper (see common.steps.ts) to actually resolve
 #   these; without it "I press 'Delete'" here would fail.
+# - UPDATE — a real CI run showed the original "select all" approach (a
+#   blind click on the `th.ui-th-ltr` header cell, relying on jqGrid's own
+#   click delegation to toggle the checkbox inside it) occasionally not
+#   actually selecting any row (cold jqGrid bootstrap timing) — the delete
+#   flow then hit a "Please, select row" warning dialog instead of the real
+#   confirmation, and "I press 'Delete'" fell through to an unrelated
+#   per-row delete icon hidden behind that warning's backdrop, hanging for
+#   the full test timeout. Replaced with a new, verified
+#   "I select all rows in the ... grid" step that clicks the real checkbox
+#   directly and asserts it's actually checked before moving on.
 Feature: Announcement tool
   In order to use the Announcement tool
   The teachers should be able to create Announcements
@@ -61,7 +71,7 @@ Feature: Announcement tool
   Scenario: Delete all announcements
     Given I am on "/main/announcements/announcements.php?cid=1"
     And I wait for the page to be loaded
-    Then I click the "th.ui-th-ltr" element
+    Then I select all rows in the "announcements" grid
     And I click the "span.mdi-trash-can-outline" element
     And I press "Delete"
     And I wait for the page to be loaded

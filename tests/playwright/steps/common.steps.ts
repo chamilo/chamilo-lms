@@ -796,6 +796,24 @@ Then("I click the {string} element", async ({ page }, selector: string) => {
   await page.locator(`${selector}:visible`).first().click()
 })
 
+// Not ported — new, for toolAnnouncement.feature's bulk-delete flow
+// (jqGrid's own "select all" header checkbox, `#cb_<gridName>`). A real CI
+// run showed the previous approach — a blind "I click the ... element" on
+// the header `<th>`, relying on jqGrid's own click delegation to toggle
+// the checkbox inside it — occasionally not actually checking the row
+// (cold jqGrid bootstrap timing, same general class of issue already
+// documented for career.feature's jqGrid): the delete flow then showed a
+// "Please, select row" warning dialog instead of the real delete
+// confirmation, and everything downstream failed confusingly. This clicks
+// the real checkbox input directly and asserts it's actually checked
+// (auto-retrying) before returning, so a failed toggle fails LOUDLY right
+// here instead of cascading into a wrong-dialog mess several steps later.
+Then("I select all rows in the {string} grid", async ({ page }, gridName: string) => {
+  const checkbox = page.locator(`#cb_${gridName}`)
+  await checkbox.click()
+  await expect(checkbox).toBeChecked()
+})
+
 // Not ported — new, for pages with real pre-existing data alongside whatever
 // a scenario creates (e.g. class.feature's /admin/usergroups: the shared dev
 // box already has other classes). A blind `.first()` (as "I click the ...
@@ -814,6 +832,30 @@ Then("I click the {string} element", async ({ page }, selector: string) => {
 Then("I click the {string} icon in the row for {string}", async ({ page }, selector: string, rowText: string) => {
   page.once("dialog", (dialog) => dialog.accept())
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
+})
+
+// Not ported — new, for toolDocument.feature's own cleanup scenarios
+// specifically (deleting several test-created documents back to back). A
+// real CI run (twice, with a different document missing each time) showed
+// a row genuinely absent by the time its own delete step ran, even though
+// nothing in THIS feature's own scenarios removes it early — most likely
+// cross-file worker interference on the same shared "TEMP" course's
+// Documents tool (e.g. course.feature's own "Make sure the documents tool
+// is available" check runs concurrently, in a different worker, against
+// the exact same course). Since these particular steps exist purely to
+// clean up this feature's own test data (the actual delete FLOW is already
+// covered by "Search for ... and delete it" above), skip gracefully
+// instead of hanging for the full test timeout when the row is already
+// gone for any reason — the end state ("row X no longer present") is the
+// same either way.
+Then("I delete the document {string} if present", async ({ page }, rowText: string) => {
+  const row = page.locator("tr", { hasText: rowText })
+  if ((await row.count()) === 0) {
+    return
+  }
+  await row.getByTitle("Delete").first().click()
+  await pressButton(page, "Yes")
+  await expect(page.locator("body")).not.toContainText(rowText)
 })
 
 // Mink's built-in "I follow" (MinkContext::iClickLink(), not custom

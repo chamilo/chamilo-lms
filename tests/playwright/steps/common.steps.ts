@@ -809,6 +809,20 @@ Then("I click the {string} element", async ({ page }, selector: string) => {
 // (auto-retrying) before returning, so a failed toggle fails LOUDLY right
 // here instead of cascading into a wrong-dialog mess several steps later.
 Then("I select all rows in the {string} grid", async ({ page }, gridName: string) => {
+  // Even after that fix, a real CI run showed the SAME "Please, select row"
+  // warning again — turns out clicking+verifying the header checkbox alone
+  // isn't enough. jqGrid loads its row data via its own AJAX call, separate
+  // from and after the initial page load; clicking the header checkbox
+  // before that AJAX response has rendered any `<tbody>` rows toggles the
+  // checkbox's own visual state (querying it in isolation, as the previous
+  // fix did, sees exactly this and reports "success") but has nothing to
+  // actually select — jqGrid's internal selected-row bookkeeping stays
+  // empty regardless, since it never propagates to rows that didn't exist
+  // yet at click time. Confirmed locally: with rows already loaded, every
+  // row's own checkbox correctly ends up checked; the fix is to wait for at
+  // least one real data row to exist FIRST (the actual "grid is ready"
+  // signal), not just for the header checkbox's own state.
+  await page.locator(`#${gridName} tbody input[type="checkbox"]`).first().waitFor({ state: "attached" })
   const checkbox = page.locator(`#cb_${gridName}`)
   await checkbox.click()
   await expect(checkbox).toBeChecked()

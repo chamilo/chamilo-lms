@@ -41,6 +41,8 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'password_requirements' => '',
             'allow_online_users_by_status' => '',
             'security_session_cookie_samesite_none' => 'false',
+            'session_expiration_warning_enabled' => 'false',
+            'session_expiration_warning_seconds' => '180',
             'anonymous_autoprovisioning' => 'false',
             'access_to_personal_file_for_all' => 'false',
             'password_rotation_days' => '0',
@@ -87,6 +89,8 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('password_requirements', TextareaType::class)
             ->add('allow_online_users_by_status', TextareaType::class)
             ->add('security_session_cookie_samesite_none', YesNoType::class)
+            ->add('session_expiration_warning_enabled', YesNoType::class)
+            ->add('session_expiration_warning_seconds', TextType::class)
             ->add('anonymous_autoprovisioning', YesNoType::class)
             ->add('access_to_personal_file_for_all', YesNoType::class)
             ->add('password_rotation_days', TextType::class)

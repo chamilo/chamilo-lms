@@ -7,9 +7,9 @@
  */
 require_once '../main/inc/global.inc.php';
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
-$userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
-$certificateId = isset($_GET['id']) ? $_GET['id'] : 0;
+$action = $_GET['action'] ?? null;
+$userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+$certificateId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $category = Category::findByCertificate($certificateId);
 
@@ -28,18 +28,31 @@ if (!empty($category) && !empty($category->get_course_code())) {
     $language_interface_initial_value = $language_interface;
 }
 
-$certificate = new Certificate($certificateId, $userId);
-$certificateData = $certificate->get($certificateId);
+// Access control has to be fully settled *before* instantiating Certificate: its constructor
+// regenerates the certificate as a side effect (writes the HTML file, updates the gradebook
+// row and assigns skills to the owner). Instantiating first would let an unauthenticated
+// visitor trigger those writes for any certificate by iterating ?id=N, even though the
+// checks below would then deny the response.
+$certificateData = Certificate::getCertificateData($certificateId);
 if (empty($certificateData)) {
     api_not_allowed(false, Display::return_message(get_lang('NoCertificateAvailable'), 'warning'));
 }
 
-// Access control: only the owner, a platform admin, or a teacher of the certificate's course
-// may view or export a certificate. Compare against $certificate->user_id (set from DB in the
-// constructor) — not the $userId GET parameter, which an attacker can spoof to their own ID
-// while supplying someone else's certificate $id.
+// Only the owner, a platform admin, or a teacher of the certificate's course may view or
+// export a certificate. Compare against the owner recorded in the database — not the $userId
+// GET parameter, which an attacker can spoof to their own ID while supplying someone else's
+// certificate $id.
+// Anonymous visitors are only ever allowed to reach a certificate that was explicitly
+// published for public verification, and that must hold for every action: the 'export' branch
+// never calls isVisible(), so leaving the check to the 'default' branch alone let an
+// unauthenticated visitor enumerate ?action=export&id=N and download the full PDF (name,
+// course, score) of every certificate on the platform.
 $currentUserId = api_get_user_id();
-if (!api_is_anonymous() && (int) $currentUserId !== (int) $certificate->user_id) {
+if (api_is_anonymous()) {
+    if (!Certificate::isPubliclyVisible($certificateData['cat_id'])) {
+        api_not_allowed(false, Display::return_message(get_lang('CertificateExistsButNotPublic'), 'warning'));
+    }
+} elseif ((int) $currentUserId !== (int) $certificateData['user_id']) {
     $isCourseTeacher = false;
     if (!empty($category) && !empty($category->get_course_code())) {
         $isCourseTeacher = CourseManager::is_course_teacher($currentUserId, $category->get_course_code());
@@ -48,6 +61,8 @@ if (!api_is_anonymous() && (int) $currentUserId !== (int) $certificate->user_id)
         api_not_allowed(true);
     }
 }
+
+$certificate = new Certificate($certificateId, $userId);
 
 CustomCertificatePlugin::redirectCheck($certificate, $certificateId, $userId);
 

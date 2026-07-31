@@ -612,17 +612,40 @@ class Certificate extends Model
             return true;
         }
 
+        if (!isset($this->certificate_data, $this->certificate_data['cat_id'])) {
+            return false;
+        }
+
+        return self::isPubliclyVisible($this->certificate_data['cat_id']);
+    }
+
+    /**
+     * Check whether certificates of the given gradebook category may be shown to
+     * anonymous visitors, based on the global and the course "allow_public_certificates"
+     * settings.
+     *
+     * Static so that the check can be run before a Certificate object is instantiated:
+     * the constructor regenerates the certificate as a side effect, which must not happen
+     * before the caller has been authorized.
+     *
+     * @param int $catId Gradebook category ID
+     *
+     * @return bool
+     */
+    public static function isPubliclyVisible($catId)
+    {
+        $catId = (int) $catId;
+        if (empty($catId)) {
+            return false;
+        }
+
         if (api_get_setting('allow_public_certificates') != 'true') {
             // The "non-public" setting is set, so do not print
             return false;
         }
 
-        if (!isset($this->certificate_data, $this->certificate_data['cat_id'])) {
-            return false;
-        }
-
         $gradeBook = new Gradebook();
-        $gradeBookInfo = $gradeBook->get($this->certificate_data['cat_id']);
+        $gradeBookInfo = $gradeBook->get($catId);
 
         if (empty($gradeBookInfo['course_code'])) {
             return false;
@@ -891,6 +914,36 @@ class Certificate extends Model
      *
      * @return array
      */
+    /**
+     * Get a single certificate row by its ID.
+     *
+     * Static so the certificate data (owner, category) can be read for authorization
+     * purposes without instantiating this class, whose constructor regenerates the
+     * certificate as a side effect.
+     *
+     * @param int $id
+     *
+     * @return array Empty array if no such certificate
+     */
+    public static function getCertificateData($id)
+    {
+        $id = (int) $id;
+        if (empty($id)) {
+            return [];
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = "SELECT * FROM $table
+                WHERE id = $id";
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) === 0) {
+            return [];
+        }
+
+        return Database::fetch_assoc($rs);
+    }
+
     public static function getCertificateByUser($userId)
     {
         $userId = (int) $userId;

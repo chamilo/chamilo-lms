@@ -7119,7 +7119,7 @@ SQL;
      */
     public static function sendUserConfirmationMail(User $user)
     {
-        $uniqueId = api_get_unique_id();
+        $uniqueId = api_generate_secure_token();
         $user->setConfirmationToken($uniqueId);
 
         Database::getManager()->persist($user);
@@ -7748,7 +7748,7 @@ SQL;
             if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
                 1 === (int) $askPassword['ask_new_password']
             ) {
-                $uniqueId = api_get_unique_id();
+                $uniqueId = api_generate_secure_token();
                 $userObj = api_get_user_entity($userId);
 
                 $userObj->setConfirmationToken($uniqueId);
@@ -7798,7 +7798,7 @@ SQL;
                 }
             }
             if ($forceRotate) {
-                $uniqueId = api_get_unique_id();
+                $uniqueId = api_generate_secure_token();
                 $userObj = api_get_user_entity($userId);
 
                 $userObj->setConfirmationToken($uniqueId);

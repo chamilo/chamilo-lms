@@ -219,7 +219,7 @@ class Login
 
     public static function sendResetEmail(User $user)
     {
-        $uniqueId = api_get_unique_id();
+        $uniqueId = api_generate_secure_token();
         $user->setConfirmationToken($uniqueId);
         $user->setPasswordRequestedAt(new \DateTime());
 
@@ -258,7 +258,7 @@ class Login
      */
     public static function generate_reset_token($userId)
     {
-        $token = bin2hex(random_bytes(32));
+        $token = api_generate_secure_token();
         $em = Database::getManager();
         /** @var User $user */
         $user = $em->find('ChamiloUserBundle:User', (int) $userId);

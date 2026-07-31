@@ -55,7 +55,7 @@ class SecurityController extends AbstractController
      */
     private const string MFA_SECRET_V2_PREFIX = 'v2:';
 
-    private const int SESSION_EXPIRATION_WARNING_SECONDS = 1380;
+    private const int SESSION_EXPIRATION_WARNING_SECONDS = 180;
     private const string SESSION_KEEP_ALIVE_KEY = '_session_keep_alive_at';
 
     public function __construct(
@@ -285,12 +285,14 @@ class SecurityController extends AbstractController
         return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
     #[Route('/session/expiration', name: 'session_expiration_status', methods: ['GET'])]
     public function sessionExpirationStatus(Request $request): JsonResponse
     {
         return $this->createSessionExpirationResponse($request);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
     #[Route('/session/keep-alive', name: 'session_keep_alive', methods: ['POST'])]
     public function sessionKeepAlive(Request $request): JsonResponse
     {
@@ -299,6 +301,27 @@ class SecurityController extends AbstractController
 
     private function createSessionExpirationResponse(Request $request): JsonResponse
     {
+        $featureEnabled = 'true' === $this->settingsManager->getSetting(
+            'security.session_expiration_warning_enabled',
+            true
+        );
+
+        if (!$featureEnabled) {
+            $response = new JsonResponse([
+                'enabled' => false,
+                'isAuthenticated' => true,
+                'lifetime' => 0,
+                'warningSeconds' => 0,
+                'expiresAt' => 0,
+                'logoutUrl' => '/logout',
+            ]);
+
+            $response->headers->set('Cache-Control', 'no-store, private');
+            $response->headers->set('Pragma', 'no-cache');
+
+            return $response;
+        }
+
         $session = $request->getSession();
 
         if (!$session->isStarted()) {
@@ -317,16 +340,22 @@ class SecurityController extends AbstractController
             $lifetime = max(0, (int) ini_get('session.gc_maxlifetime'));
         }
 
-        $warningSeconds = $lifetime > 1
-            ? min(self::SESSION_EXPIRATION_WARNING_SECONDS, $lifetime - 1)
-            : 0;
+        $configuredWarningSeconds = (int) $this->settingsManager->getSetting(
+            'security.session_expiration_warning_seconds',
+            true
+        );
 
-        $user = $this->getUser();
-        $isAuthenticated = $user instanceof User && User::ANONYMOUS !== $user->getStatus();
+        if ($configuredWarningSeconds <= 0) {
+            $configuredWarningSeconds = self::SESSION_EXPIRATION_WARNING_SECONDS;
+        }
+
+        $warningSeconds = $lifetime > 1
+            ? min($configuredWarningSeconds, $lifetime - 1)
+            : 0;
 
         $response = new JsonResponse([
             'enabled' => $lifetime > 1 && $warningSeconds > 0,
-            'isAuthenticated' => $isAuthenticated,
+            'isAuthenticated' => true,
             'lifetime' => $lifetime,
             'warningSeconds' => $warningSeconds,
             'expiresAt' => $lifetime > 0 ? $now + $lifetime : 0,

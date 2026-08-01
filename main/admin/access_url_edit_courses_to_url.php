@@ -31,12 +31,12 @@ $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAc
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
-    $add_type = Security::remove_XSS($_REQUEST['add_type']);
+    $add_type = $_REQUEST['add_type'] === 'unique' ? 'unique' : 'multiple';
 }
 
 $access_url_id = 1;
 if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id'] != '') {
-    $access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
+    $access_url_id = (int) $_REQUEST['access_url_id'];
 }
 
 $xajax->processRequests();

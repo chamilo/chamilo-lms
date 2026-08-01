@@ -179,12 +179,36 @@ const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\
 // getByLabel('subject', { exact: true }) because BaseInputText's real
 // name="subject" attribute hadn't rendered yet when this ran.
 async function resolveField(page: Page, field: string) {
-  if (looksLikeIdentifier(field)) {
-    const byId = page.locator(`#${field}`)
-    await byId
-      .first()
-      .waitFor({ state: "attached", timeout: 5000 })
-      .catch(() => {})
+  const byId = looksLikeIdentifier(field) ? page.locator(`#${field}`) : null
+  const byName = page.locator(`[name="${field}"]`)
+
+  // Wait for whichever tier attaches first, instead of the old sequential
+  // id-then-name grace periods. Real CI failures: group_creation.php's row
+  // inputs (name="group_0_name", NO matching id — public/main/group/
+  // group_creation.php) and the forum reply form's post_title field (same
+  // name-only shape) each used to burn the full 5000ms id-tier wait — twice
+  // per "I fill in the following:" table row (once per pass) — before ever
+  // falling back to the [name=...] tier that actually matches. That alone
+  // ate 50s+ of the 90s test timeout on toolGroup's "Create 5 groups" before
+  // it ever reached the category selects, cascading into ~20 dependent
+  // scenarios that all depend on those groups existing. Racing both tiers
+  // means a name-only field resolves as fast as the name tier alone would,
+  // while a genuinely id-only field is unaffected (id tier still wins the
+  // race on its own).
+  await Promise.race(
+    [
+      byId
+        ?.first()
+        .waitFor({ state: "attached", timeout: 5000 })
+        .catch(() => {}),
+      byName
+        .first()
+        .waitFor({ state: "attached", timeout: 5000 })
+        .catch(() => {}),
+    ].filter(Boolean),
+  )
+
+  if (byId) {
     const idCount = await byId.count()
     if (idCount === 1) return byId
     if (idCount > 1) {
@@ -193,11 +217,6 @@ async function resolveField(page: Page, field: string) {
     }
   }
 
-  const byName = page.locator(`[name="${field}"]`)
-  await byName
-    .first()
-    .waitFor({ state: "attached", timeout: 2000 })
-    .catch(() => {})
   const nameCount = await byName.count()
   if (nameCount === 1) return byName
   if (nameCount > 1) {
@@ -219,7 +238,22 @@ async function resolveField(page: Page, field: string) {
   // the fill side instead of the assertion side — exact matching makes a
   // genuinely-missing field fail fast and clearly instead of silently
   // latching onto the wrong one.
-  return page.getByLabel(field, { exact: true })
+  //
+  // A plain `{ exact: true }` string still isn't enough, though: BaseInputText
+  // /BaseInputTextWithVuelidate render a required field's label as "* Title",
+  // not "Title" (labelWithRequiredIfNeeded() prepends "* "), so an exact
+  // match against the bare field name can never succeed for any required
+  // field — not "close enough to eventually match once it renders", but a
+  // permanent mismatch that hangs for the rest of the test's timeout. Real CI
+  // failure: toolDocument.feature's document-edit form (UpdateFile.vue via
+  // FormNewDocument.vue, "title" is vuelidate `required`) fetches the
+  // existing document over the network before rendering, so its #title/
+  // [name] tiers above can genuinely still be unattached once this fallback
+  // is reached — and from there `getByLabel("title", { exact: true })` could
+  // never match "* Title" no matter how much longer it waited. The regex
+  // keeps the same whole-string precision (no accidental "Moodle password"
+  // -style substring matches) while tolerating an optional leading "* ".
+  return page.getByLabel(new RegExp(`^\\*?\\s*${escapeRegExp(field)}$`, "i"))
 }
 
 // A plain .fill() sets the DOM value and dispatches one `input` event, which

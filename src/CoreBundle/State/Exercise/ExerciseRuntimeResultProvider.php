@@ -50,6 +50,7 @@ use Throwable;
 final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 {
     private const STATUS_COMPLETED = 'completed';
+    private const STATUS_LEGACY_COMPLETED = '';
     private const ANNOTATION = 20;
     private const ANSWER_IN_OFFICE_DOC = 30;
     private const HOTSPOT_DELINEATION = 8;
@@ -105,7 +106,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $canManage);
         $attempt = $this->getAttempt($attemptId, $quiz, $course, $session, $canManage);
-        if (self::STATUS_COMPLETED !== (string) $attempt->getStatus()) {
+        if (!$this->isCompletedAttempt($attempt)) {
             throw new BadRequestHttpException('The requested attempt has not been completed yet.');
         }
 
@@ -575,6 +576,15 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         return $attempt;
     }
 
+    private function isCompletedAttempt(TrackEExercise $attempt): bool
+    {
+        return \in_array(
+            (string) $attempt->getStatus(),
+            [self::STATUS_LEGACY_COMPLETED, self::STATUS_COMPLETED],
+            true,
+        );
+    }
+
     /**
      * @return array<int, int>
      */
@@ -823,11 +833,12 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ->andWhere('IDENTITY(completedAttempt.quiz) = :exerciseId')
             ->andWhere('IDENTITY(completedAttempt.course) = :courseId')
             ->andWhere('IDENTITY(completedAttempt.user) = :userId')
-            ->andWhere('completedAttempt.status = :status')
+            ->andWhere('(completedAttempt.status = :legacyCompletedStatus OR completedAttempt.status = :completedStatus)')
             ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setParameter('userId', (int) $attempt->getUser()->getId(), Types::INTEGER)
-            ->setParameter('status', self::STATUS_COMPLETED)
+            ->setParameter('legacyCompletedStatus', self::STATUS_LEGACY_COMPLETED, Types::STRING)
+            ->setParameter('completedStatus', self::STATUS_COMPLETED, Types::STRING)
         ;
 
         if (null !== $session) {
@@ -858,7 +869,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         return [
             'attemptId' => (int) $attempt->getExeId(),
-            'status' => (string) $attempt->getStatus(),
+            'status' => self::STATUS_COMPLETED,
             'score' => true === ($visibility['showTotalScore'] ?? false) ? $score : null,
             'maxScore' => true === ($visibility['showTotalScore'] ?? false) ? $maxScore : null,
             'percentage' => true === ($visibility['showTotalScore'] ?? false) ? $percentage : null,
@@ -2422,8 +2433,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setParameter('userId', (int) $attempt->getUser()->getId(), Types::INTEGER)
-            ->setParameter('emptyStatus', '')
-            ->setParameter('completedStatus', self::STATUS_COMPLETED)
+            ->setParameter('emptyStatus', self::STATUS_LEGACY_COMPLETED, Types::STRING)
+            ->setParameter('completedStatus', self::STATUS_COMPLETED, Types::STRING)
             ->setParameter('learnpathId', (int) $attempt->getOrigLpId(), Types::INTEGER)
             ->setParameter('learnpathItemId', (int) $attempt->getOrigLpItemId(), Types::INTEGER)
             ->setParameter('learnpathItemViewId', (int) $attempt->getOrigLpItemViewId(), Types::INTEGER)
@@ -2467,10 +2478,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ->from(TrackEExercise::class, 'attempt')
             ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
             ->andWhere('IDENTITY(attempt.course) = :courseId')
-            ->andWhere('attempt.status = :status')
+            ->andWhere('(attempt.status = :legacyCompletedStatus OR attempt.status = :completedStatus)')
             ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('status', self::STATUS_COMPLETED)
+            ->setParameter('legacyCompletedStatus', self::STATUS_LEGACY_COMPLETED, Types::STRING)
+            ->setParameter('completedStatus', self::STATUS_COMPLETED, Types::STRING)
             ->orderBy('attempt.score', 'DESC')
             ->addOrderBy('attempt.exeDate', 'ASC')
         ;

@@ -274,10 +274,35 @@ async function resolveField(page: Page, field: string) {
 // (in this case: a 401 on a completely different login attempt). This is
 // worth keeping permanently regardless of this specific bug — the same
 // silent-mismatch class of issue could hit any field on any future feature.
+//
+// Atomic .fill() recovery on mismatch, not an immediate throw: real CI
+// failure on ticket.feature's "title" field (BaseInputText inside a fresh
+// BaseDialog — id="ticket-setting-title", name="title", TicketSettingsView.
+// vue) — pressSequentially() landed a truncated value ("Vue Ti" instead of
+// "Vue Ticket Project"), i.e. a PREFIX survived and the rest was lost, the
+// signature of something interrupting mid-keystroke (most likely a re-render
+// of the input triggered by its own first keystrokes' reactive side effects,
+// e.g. an :is-invalid recompute) rather than a simple slow-render race.
+// First tried a same-strategy retry (clear + pressSequentially again on
+// mismatch) — that made things WORSE on the next CI run: it turned this
+// truncation into 3 separate TinyMCE-never-initializes hangs plus a
+// cascading 4th failure, i.e. repeating the exact per-keystroke interaction
+// re-triggers whatever disruption caused the truncation in the first place.
+// A single atomic .fill() as the recovery path sidesteps that entirely —
+// one DOM value assignment + one input event, nothing for a mid-typing
+// re-render to interrupt — while still preserving the original detection
+// design for a field that's genuinely broken both ways (e.g. the PrimeVue
+// <Password> widget below, which was already confirmed to defeat both
+// pressSequentially AND a plain .fill() — this recovery attempt will fail
+// exactly the same way for that case, and the throw below still fires).
 async function fillReliably(locator: ReturnType<Page["locator"]>, value: string) {
   await locator.clear()
   await locator.pressSequentially(value)
-  const actual = await locator.inputValue()
+  let actual = await locator.inputValue()
+  if (actual !== value) {
+    await locator.fill(value)
+    actual = await locator.inputValue()
+  }
   if (actual !== value) {
     throw new Error(
       `Fill did not take effect: expected "${value}", but the field's value is "${actual}" ` +

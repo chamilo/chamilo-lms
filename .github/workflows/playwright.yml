@@ -188,6 +188,29 @@ jobs:
                     BASE_URL: http://localhost
                 run: yarn test:playwright:seed-private-course
 
+            # Real, confirmed root cause: GroupSettingsSchema.php's schema
+            # default for 'allow_group_categories' is 'false'. toolGroup.
+            # feature's entire category/group listing depends on it being
+            # 'true' for the whole file's run. adminSettings.feature's own
+            # "Update 'allow_group_categories' setting" scenario sets it to
+            # 'Yes', but that Feature is tagged @settings and its BeforeAll/
+            # AfterAll pair only restores it back to whatever was snapshotted
+            # BEFORE that scenario ran — 'false' on a fresh install — once
+            # its own scenarios finish. Since different feature files still
+            # run concurrently across workers, toolGroup.feature only saw
+            # 'true' during the narrow window while adminSettings.feature's
+            # own scenario had it temporarily flipped — a real CI run showed
+            # toolGroup.feature's very first scenario seeing genuinely zero
+            # categories rendered, no server error, right after creating one.
+            # Setting it here, once, before the main batch starts, closes
+            # that race for the whole run (it also makes adminSettings.
+            # feature's own snapshot see 'true' as the "current" value, so
+            # its restore-at-the-end keeps it 'true' too, not 'false').
+            -   name: Seed platform settings
+                env:
+                    BASE_URL: http://localhost
+                run: yarn test:playwright:seed-settings
+
             -   name: Playwright tests
                 env:
                     BASE_URL: http://localhost

@@ -11,7 +11,8 @@
     "test:playwright:seed": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Create tests users successfully\" --timeout=120000",
     "test:playwright:seed-course": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Create a course before testing\" --timeout=120000",
     "test:playwright:seed-private-course": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Create a private course before testing\" --timeout=120000",
-    "test:playwright": "playwright test --config=tests/playwright/playwright.config.ts --grep-invert \"Installation process|Create tests users successfully|Create a course before testing|Create a private course before testing\"",
+    "test:playwright:seed-settings": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Enable group categories before testing\" --timeout=120000",
+    "test:playwright": "playwright test --config=tests/playwright/playwright.config.ts --grep-invert \"Installation process|Create tests users successfully|Create a course before testing|Create a private course before testing|Enable group categories before testing\"",
     "test:playwright:ui": "playwright test --config=tests/playwright/playwright.config.ts --ui"
   },
   "dependencies": {

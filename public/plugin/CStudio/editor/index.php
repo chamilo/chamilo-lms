@@ -1,6 +1,7 @@
 <?php
 
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 require_once __DIR__.'/../0_dal/dal.global_lib.php';
 
@@ -35,6 +36,8 @@ $loadh = '';
 $changColor = '';
 $changQuizzColor = '';
 $localFolder = '';
+$cstudioAiCsrfToken = '';
+$cstudioLegacyCsrfToken = '';
 
 if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
@@ -125,6 +128,14 @@ if (isset($_GET['id'])) {
         exit;
     }
     echo "<script>console.log('api_get_user_id');</script>";
+    $cstudioLegacyCsrfToken = savedCSRFToken($VDB->w_api_get_user_id());
+
+    /** @var CsrfTokenManagerInterface $csrfTokenManager */
+    $csrfTokenManager = Container::$container->get(CsrfTokenManagerInterface::class);
+    $cstudioAiCsrfToken = $csrfTokenManager
+        ->getToken('cstudio_ai_'.$idPage)
+        ->getValue()
+    ;
 
     if ('' != $idPage && 0 != $idPage) {
         $pluginFileSystem = Container::getPluginsFileSystem();
@@ -328,6 +339,7 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <link href="dist/css/grapes.min.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="dist/grapesjs-preset-webpage.min.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="jscss/oel-teachdoc.css?v=<?php echo $version; ?>" rel="stylesheet" />
+    <link href="jscss/cstudio-ai.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="templates/styles/classic-ux.css?v=<?php echo $version; ?>" rel="stylesheet"/>
 
     <script src="dist/js/filestack-0.1.10.js?v=<?php echo $version; ?>"></script>
@@ -342,6 +354,15 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <script src="jscss/oel-teachdoc-x.js?v=<?php echo $version; ?>"></script>
     <script src="../resources/js/cstudio-i18n.js?v=<?php echo $version; ?>"></script>
     <script src="jscss/oel-teachdoc.js?v=<?php echo $version; ?>"></script>
+    <script>
+      window.cstudioAiConfig = <?php echo json_encode([
+          'endpoint' => api_get_path(WEB_PATH).'ai/cstudio',
+          'pageId' => (int) $idPage,
+          'csrfToken' => $cstudioAiCsrfToken,
+          'locale' => $cstudioInterfaceLocale,
+      ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+    </script>
+    <script src="jscss/cstudio-ai.js?v=<?php echo $version; ?>"></script>
     <script>correctPositionsEditor();</script>
 
     <?php
@@ -375,7 +396,7 @@ if (isset($_GET['pty'])) {
 
     <script src="../resources/interfaces/xapi/base64.js"></script>
     <form method="POST" action="index.php">
-    <input type="hidden" id="cotk" name="csrf_oel_token" value="<?php echo savedCSRFToken($VDB->w_api_get_user_id()); ?>">
+    <input type="hidden" id="cotk" name="csrf_oel_token" value="<?php echo htmlspecialchars($cstudioLegacyCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
     </form>
     <?php
     if (false != strpos($base_html, 'txtmathjax')) {

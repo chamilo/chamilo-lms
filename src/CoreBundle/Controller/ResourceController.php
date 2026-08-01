@@ -729,6 +729,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // This covers files uploaded before the MIME-type allowlist was introduced.
         $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
 
+        // Such files are always delivered as a neutral download, so the browser can never
+        // execute them in the Chamilo origin, whatever the requested mode is.
+        $forceSocialHtmlDownload = $isSocialAttachment && str_contains($mimeType, 'html');
+        if ($forceSocialHtmlDownload) {
+            $mimeType = 'application/octet-stream';
+        }
+
         // SVG: sanitize before serving in any mode (view or download).
         // Glide is raster-only and cannot process SVG; sanitization strips embedded scripts regardless of how the file was stored.
         if ('image/svg+xml' === $mimeType) {
@@ -759,7 +766,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             case 'show':
             default:
-                $forceDownload = false;
+                $forceDownload = $forceSocialHtmlDownload;
 
                 // If it's an image then send it to Glide.
                 if (str_contains($mimeType, 'image')) {
@@ -947,6 +954,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        if ($forceSocialHtmlDownload) {
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
+        }
+
         $response->headers->set('Content-Length', (string) $length);
         $response->headers->set('Accept-Ranges', 'bytes');
         $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");

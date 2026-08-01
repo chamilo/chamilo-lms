@@ -585,7 +585,7 @@ let settingsPage: import("@playwright/test").Page | undefined
 // waitUntil:"load" is enough for the next step's own locator auto-wait /
 // explicit "wait for the page..." steps to take over; the value of this
 // helper is the interrupt-retry, not a second settle strategy.
-async function gotoReliably(page: Page, path: string, maxAttempts = 3) {
+async function gotoReliably(page: Page, path: string, maxAttempts = 5) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       await page.goto(path)
@@ -594,7 +594,17 @@ async function gotoReliably(page: Page, path: string, maxAttempts = 3) {
       if (!String(error).includes("is interrupted by another navigation") || attempt === maxAttempts) {
         throw error
       }
+      // A real CI failure (toolLp.feature, under CI's slower/loaded response
+      // times vs local) still exhausted the previous 3 attempts: the
+      // interrupting navigation was still in flight, so waitForLoadState
+      // resolved against it near-instantly and the very next goto() raced
+      // it again. A short fixed pause between attempts (on top of the
+      // existing wait) gives that in-flight navigation more real wall-clock
+      // room to actually finish settling before retrying, without needing
+      // this to be airtight — it only has to outlast the interrupting
+      // navigation often enough that 5 attempts don't run out first.
       await page.waitForLoadState("load").catch(() => {})
+      await page.waitForTimeout(1000)
     }
   }
 }

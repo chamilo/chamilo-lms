@@ -78,3 +78,4 @@ Feature: Link tool
     And I click the "i.mdi-delete" icon in the card for "Link Category Test"
     And wait very long for the page to be loaded
     Then I should not see an error
+    Then I should not see "Link Category Test"

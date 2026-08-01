@@ -16073,6 +16073,11 @@ function haveSpeedTools(nameObj,nameObj2) {
             r = true;
         }
     }
+    if (typeof window.cstudioAiCanHandleSelection === "function") {
+        if (window.cstudioAiCanHandleSelection(nameObj, nameObj2)) {
+            r = true;
+        }
+    }
     return r;
 }
 
@@ -16099,6 +16104,10 @@ function installSpeedTools() {
         var coolTools = '<a onClick="RapidStyleTxtBox();" ';
         coolTools += ' class="style-over-opt" ></a>';
         $('.ludiSpeedTools').html(coolTools);
+    }
+
+    if (typeof window.cstudioAiInstallSpeedTool === "function") {
+        window.cstudioAiInstallSpeedTool();
     }
 
 }

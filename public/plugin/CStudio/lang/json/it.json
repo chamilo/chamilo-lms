@@ -95,7 +95,6 @@
   "Separator": "Separatore",
   "Title 1": "Titolo 1",
   "Title 2": "Titolo 2",
-  "Text Bloc": "Blocco di testo",
   "Card": "Scheda",
   "Quiz": "Quiz",
   "Drag & Drop": "Trascina e rilascia",
@@ -144,5 +143,6 @@
   "Image": "Immagine",
   "Audio": "Audio",
   "Check the answers": "Controlla le risposte",
-  "Table": "Tabella"
+  "Table": "Tabella",
+  "Text Block": "Blocco di testo"
 }

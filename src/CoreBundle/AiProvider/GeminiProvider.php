@@ -404,13 +404,20 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         }
 
         return 'predict' === $format
-            ? $this->requestImagenPredict($resolved['url'], $prompt, $resolved['n'], $toolName)
+            ? $this->requestImagenPredict(
+                $resolved['url'],
+                $prompt,
+                $resolved['n'],
+                $toolName,
+                $resolved['aspect_ratio'],
+            )
             : $this->requestGeminiGenerateContentImage(
                 $resolved['url'],
                 $prompt,
                 $resolved['n'],
                 $resolved['response_modalities'],
-                $toolName
+                $toolName,
+                $resolved['aspect_ratio'],
             );
     }
 
@@ -492,7 +499,8 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         string $prompt,
         int $n,
         array $modalities,
-        string $toolName
+        string $toolName,
+        string $aspectRatio,
     ): array {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -529,6 +537,12 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
                 'responseModalities' => array_values(array_unique($cleanModalities)),
             ],
         ];
+
+        if ('' !== $aspectRatio) {
+            $payload['generationConfig']['imageConfig'] = [
+                'aspectRatio' => $aspectRatio,
+            ];
+        }
 
         if ($n > 1) {
             $payload['generationConfig']['candidateCount'] = $n;
@@ -578,8 +592,13 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         ];
     }
 
-    private function requestImagenPredict(string $url, string $prompt, int $n, string $toolName): array
-    {
+    private function requestImagenPredict(
+        string $url,
+        string $prompt,
+        int $n,
+        string $toolName,
+        string $aspectRatio,
+    ): array {
         $userId = $this->getUserId();
         if (!$userId) {
             return [
@@ -600,6 +619,10 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
                 'sampleCount' => $n > 0 ? $n : 1,
             ],
         ];
+
+        if ('' !== $aspectRatio) {
+            $payload['parameters']['aspectRatio'] = $aspectRatio;
+        }
 
         $data = $this->postJson($url, $payload);
         if (empty($data)) {
@@ -1318,6 +1341,11 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 
         $format = (string) (($options['request_format'] ?? null) ?? $this->imageRequestFormat);
 
+        $aspectRatio = trim((string) ($options['aspect_ratio'] ?? ''));
+        if (!\in_array($aspectRatio, ['1:1', '16:9', '9:16'], true)) {
+            $aspectRatio = '';
+        }
+
         $n = (int) (($options['n'] ?? null) ?? $this->imageN);
         if ($n <= 0) {
             $n = 1;
@@ -1344,6 +1372,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             'request_format' => $format,
             'n' => $n,
             'response_modalities' => $modalities,
+            'aspect_ratio' => $aspectRatio,
         ];
     }
 

@@ -37542,3 +37542,93 @@ msgstr "ناراضی"
 msgid "Very dissatisfied"
 msgstr "بسیار ناراضی"
 
+msgid "Add destination"
+msgstr "افزودن مقصد"
+
+msgid "Add this test to the assessment tool"
+msgstr "افزودن این آزمون به ابزار ارزیابی"
+
+msgid "Attempts and timing"
+msgstr "تلاش‌ها و زمان‌بندی"
+
+msgid "Available questions"
+msgstr "سوالات موجود"
+
+msgid "Cancel and return to learning path"
+msgstr "لغو و بازگشت به مسیر یادگیری"
+
+msgid "Category destinations"
+msgstr "مقصدهای دسته‌بندی"
+
+msgid "Classification"
+msgstr "طبقه‌بندی"
+
+msgid "Context"
+msgstr "زمینه"
+
+msgid "Could not load exercise configuration"
+msgstr "بارگذاری پیکربندی تمرین ممکن نیست"
+
+msgid "Could not save exercise"
+msgstr "ذخیره تمرین ممکن نیست"
+
+msgid "Display and learning path"
+msgstr "نمایش و مسیر یادگیری"
+
+msgid "Edit test"
+msgstr "ویرایش آزمون"
+
+msgid "Exercise settings saved."
+msgstr "تنظیمات تمرین ذخیره شد."
+
+msgid "Extra settings"
+msgstr "تنظیمات اضافی"
+
+msgid "Feedback and results"
+msgstr "بازخورد و نتایج"
+
+msgid "Finish exercise"
+msgstr "پایان تمرین"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "زبان این تمرین را به عنوان فراداده منبع شناسایی می‌کند. به تنهایی جستجو را فعال نمی‌کند."
+
+msgid "Maximum score (%)"
+msgstr "حداکثر نمره (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "فراداده شامل مهارت‌ها و فیلدهای اضافی پیکربندی‌شده برای تمرین‌ها است. اختیاری است و تا باز شدن پنهان می‌ماند."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "هنوز هیچ دسته‌بندی سوالی برای این تمرین در دسترس نیست."
+
+msgid "Question categories matrix"
+msgstr "ماتریس دسته‌بندی سوالات"
+
+msgid "Questions behavior"
+msgstr "رفتار سوالات"
+
+msgid "Random by category"
+msgstr "تصادفی بر اساس دسته‌بندی"
+
+msgid "Remove destination"
+msgstr "حذف مقصد"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "قوانین بر اساس درصد نمره به ترتیب صعودی ارزیابی می‌شوند. برای پایان آزمون، پایان تمرین را انتخاب کنید."
+
+msgid "Score and final messages"
+msgstr "نمره و پیام‌های نهایی"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "برخی گزینه‌ها پس از ایجاد تمرین قفل می‌شوند."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "این مقدار به عنوان مدت زمان کل به دقیقه ذخیره می‌شود."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "از ۰ برای نگه داشتن همه سوالات موجود استفاده کنید. از -۱ جایی که همه سوالات موجود مجاز هستند استفاده کنید."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "از این فیلدها برای طبقه‌بندی تمرین مستقل از گزینه‌های نمایش آن استفاده کنید."
+

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -37541,4 +37541,94 @@ msgstr "Inú mi kò dùn"
 
 msgid "Very dissatisfied"
 msgstr "Inú mi kò dùn rárá"
+
+msgid "Add destination"
+msgstr "Add destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Add this test to the assessment tool"
+
+msgid "Attempts and timing"
+msgstr "Attempts and timing"
+
+msgid "Available questions"
+msgstr "Available questions"
+
+msgid "Cancel and return to learning path"
+msgstr "Cancel and return to learning path"
+
+msgid "Category destinations"
+msgstr "Category destinations"
+
+msgid "Classification"
+msgstr "Ìsọ̀rí"
+
+msgid "Context"
+msgstr "Ìpọ̀"
+
+msgid "Could not load exercise configuration"
+msgstr "Kò le ṣe ìtẹ̀jáde àwọn ààtò ìdánwò"
+
+msgid "Could not save exercise"
+msgstr "Kò le fi ìdánwò pamọ́"
+
+msgid "Display and learning path"
+msgstr "Ìfihàn àti ọ̀nà ìkẹ́kọ̀ọ́"
+
+msgid "Edit test"
+msgstr "Ṣàtúnṣe ìdánwò"
+
+msgid "Exercise settings saved."
+msgstr "Àwọn ààtò ìdánwò ti fi pamọ́."
+
+msgid "Extra settings"
+msgstr "Àwọn ààtò àfikún"
+
+msgid "Feedback and results"
+msgstr "Èsì àti àbájáde"
+
+msgid "Finish exercise"
+msgstr "Parí ìdánwò"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Ó ṣe àfihàn èdè ìdánwò yìí gẹ́gẹ́ bí àkọsílẹ̀ oríṣìrìṣì. Kò ṣe ìwádí àtòjọ nípa ara rẹ̀."
+
+msgid "Maximum score (%)"
+msgstr "Àmì tó ga jù (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Àkọsílẹ̀ ní àwọn òye àti àwọn ààyè àfikún tí a ṣètò fún àwọn ìdánwò. Kò pọndandan, ó sì máa wà ní ìpamọ́ títí di ìgbà tí a bá ṣí i."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Kò sí àwọn ẹ̀ka ìbéèrè tó wà fún ìdánwò yìí báyìí."
+
+msgid "Question categories matrix"
+msgstr "Mátíríìsì àwọn ẹ̀ka ìbéèrè"
+
+msgid "Questions behavior"
+msgstr "Ìhùwàsí àwọn ìbéèrè"
+
+msgid "Random by category"
+msgstr "Lọ́nà àrìnàkò nípa ẹ̀ka"
+
+msgid "Remove destination"
+msgstr "Yọ ibi tí a fẹ́ lọ"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Àwọn òfin ni a ṣe àgbéyẹ̀wò nípa ìṣìpín àmì ní àtẹ̀lé. Yan Parí ìdánwò láti parí ìdánwò náà."
+
+msgid "Score and final messages"
+msgstr "Àmì àti àwọn ìsọfúnni ìparí"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Àwọn àṣàyàn kan ti wa ní ìtìpa lẹ́yìn tí a ti dá ìdánwò náà."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Iye yìí ni a fi pamọ́ gẹ́gẹ́ bí àpapọ̀ àkókò ní ìṣẹ́jú."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Lo 0 láti fi gbogbo àwọn ìbéèrè tó wà. Lo -1 níbi tí gbogbo àwọn ìbéèrè tó wà bá ti yọ̀ǹda."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Lo àwọn ààyè wọ̀nyí láti ṣe ìsọ̀rí ìdánwò láì ní ìsopọ̀ pẹ̀lú àwọn àṣàyàn ìfihàn rẹ̀."
 

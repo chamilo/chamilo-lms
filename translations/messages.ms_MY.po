@@ -37546,3 +37546,93 @@ msgstr "Dissatisfied"
 msgid "Very dissatisfied"
 msgstr "Very dissatisfied"
 
+msgid "Add destination"
+msgstr "Add destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Add this test to the assessment tool"
+
+msgid "Attempts and timing"
+msgstr "Attempts and timing"
+
+msgid "Available questions"
+msgstr "Available questions"
+
+msgid "Cancel and return to learning path"
+msgstr "Cancel and return to learning path"
+
+msgid "Category destinations"
+msgstr "Category destinations"
+
+msgid "Classification"
+msgstr "Classification"
+
+msgid "Context"
+msgstr "Konteks"
+
+msgid "Could not load exercise configuration"
+msgstr "Tidak dapat memuatkan konfigurasi latihan"
+
+msgid "Could not save exercise"
+msgstr "Tidak dapat menyimpan latihan"
+
+msgid "Display and learning path"
+msgstr "Paparan dan laluan pembelajaran"
+
+msgid "Edit test"
+msgstr "Edit ujian"
+
+msgid "Exercise settings saved."
+msgstr "Tetapan latihan telah disimpan."
+
+msgid "Extra settings"
+msgstr "Tetapan tambahan"
+
+msgid "Feedback and results"
+msgstr "Maklum balas dan keputusan"
+
+msgid "Finish exercise"
+msgstr "Tamatkan latihan"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Mengenal pasti bahasa latihan ini sebagai metadata sumber. Ia tidak membolehkan pengindeksan carian secara automatik."
+
+msgid "Maximum score (%)"
+msgstr "Skor maksimum (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata mengandungi kemahiran dan medan tambahan yang dikonfigurasikan untuk latihan. Ia adalah pilihan dan kekal tersembunyi sehingga dibuka."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Tiada kategori soalan tersedia untuk latihan ini lagi."
+
+msgid "Question categories matrix"
+msgstr "Matriks kategori soalan"
+
+msgid "Questions behavior"
+msgstr "Kelakuan soalan"
+
+msgid "Random by category"
+msgstr "Rawak mengikut kategori"
+
+msgid "Remove destination"
+msgstr "Buang destinasi"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Peraturan dinilai mengikut peratusan skor secara menaik. Pilih Tamatkan latihan untuk menamatkan ujian."
+
+msgid "Score and final messages"
+msgstr "Skor dan mesej akhir"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Sesetengah pilihan dikunci selepas latihan dicipta."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Nilai ini disimpan sebagai tempoh keseluruhan dalam minit."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Gunakan 0 untuk mengekalkan semua soalan yang tersedia. Gunakan -1 di mana semua soalan yang tersedia dibenarkan."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Gunakan medan ini untuk mengklasifikasikan latihan secara bebas daripada pilihan paparannya."
+

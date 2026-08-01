@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -37545,4 +37545,94 @@ msgstr "Elégedetlen"
 
 msgid "Very dissatisfied"
 msgstr "Nagyon elégedetlen"
+
+msgid "Add destination"
+msgstr "Cél hozzáadása"
+
+msgid "Add this test to the assessment tool"
+msgstr "Teszt hozzáadása az értékelési eszközhöz"
+
+msgid "Attempts and timing"
+msgstr "Kísérletek és időzítés"
+
+msgid "Available questions"
+msgstr "Elérhető kérdések"
+
+msgid "Cancel and return to learning path"
+msgstr "Mégse és visszatérés a tanulási útvonalhoz"
+
+msgid "Category destinations"
+msgstr "Kategória célok"
+
+msgid "Classification"
+msgstr "Osztályozás"
+
+msgid "Context"
+msgstr "Kontextus"
+
+msgid "Could not load exercise configuration"
+msgstr "Nem sikerült betölteni a gyakorlat konfigurációját"
+
+msgid "Could not save exercise"
+msgstr "Nem sikerült menteni a gyakorlatot"
+
+msgid "Display and learning path"
+msgstr "Megjelenítés és tanulási útvonal"
+
+msgid "Edit test"
+msgstr "Teszt szerkesztése"
+
+msgid "Exercise settings saved."
+msgstr "Gyakorlat beállításai mentve."
+
+msgid "Extra settings"
+msgstr "Extra beállítások"
+
+msgid "Feedback and results"
+msgstr "Visszajelzés és eredmények"
+
+msgid "Finish exercise"
+msgstr "Gyakorlat befejezése"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Azonosítja ennek a gyakorlatnak a nyelvét erőforrás-metaadatként. Ez önmagában nem engedélyezi a keresési indexelést."
+
+msgid "Maximum score (%)"
+msgstr "Maximális pontszám (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "A metaadat tartalmazza a gyakorlatokhoz konfigurált készségeket és további mezőket. Opcionális, és rejtve marad, amíg meg nem nyitják."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Ehhez a gyakorlathoz még nincsenek elérhető kérdéskategóriák."
+
+msgid "Question categories matrix"
+msgstr "Kérdéskategóriák mátrixa"
+
+msgid "Questions behavior"
+msgstr "Kérdések viselkedése"
+
+msgid "Random by category"
+msgstr "Véletlenszerű kategória szerint"
+
+msgid "Remove destination"
+msgstr "Cél eltávolítása"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "A szabályok pontszázalék szerint növekvő sorrendben kerülnek kiértékelésre. A teszt befejezéséhez válassza a Gyakorlat befejezése lehetőséget."
+
+msgid "Score and final messages"
+msgstr "Pontszám és végső üzenetek"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Néhány beállítás zárolva van a gyakorlat létrehozása után."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Ez az érték percben tárolódik mint teljes időtartam."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Használjon 0-t az összes elérhető kérdés megtartásához. Használjon -1-et, ha az összes elérhető kérdés engedélyezett."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Használja ezeket a mezőket a gyakorlat osztályozásához függetlenül a megjelenítési beállításaitól."
 

@@ -37546,3 +37546,93 @@ msgstr "Dissatisfied"
 msgid "Very dissatisfied"
 msgstr "Very dissatisfied"
 
+msgid "Add destination"
+msgstr "Add destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Add this test to the assessment tool"
+
+msgid "Attempts and timing"
+msgstr "Attempts and timing"
+
+msgid "Available questions"
+msgstr "Available questions"
+
+msgid "Cancel and return to learning path"
+msgstr "Cancel and return to learning path"
+
+msgid "Category destinations"
+msgstr "Category destinations"
+
+msgid "Classification"
+msgstr "Classification"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "Could not load exercise configuration"
+msgstr "Kunne ikkje laste inn øvingskonfigurasjon"
+
+msgid "Could not save exercise"
+msgstr "Kunne ikkje lagre øving"
+
+msgid "Display and learning path"
+msgstr "Visning og læringssti"
+
+msgid "Edit test"
+msgstr "Rediger prøve"
+
+msgid "Exercise settings saved."
+msgstr "Øvingsinnstillingar lagra."
+
+msgid "Extra settings"
+msgstr "Ekstra innstillingar"
+
+msgid "Feedback and results"
+msgstr "Tilbakemelding og resultat"
+
+msgid "Finish exercise"
+msgstr "Fullfør øving"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifiserer språket til denne øvinga som ressursmetadata. Dette aktiverer ikkje søkeindeksering i seg sjølv."
+
+msgid "Maximum score (%)"
+msgstr "Maksimal poengsum (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata inneheld ferdigheiter og tilleggsfelt som er konfigurerte for øvingar. Dette er valfritt og held seg skjult til det blir opna."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Ingen spørsmålskategoriar er tilgjengelege for denne øvinga enno."
+
+msgid "Question categories matrix"
+msgstr "Spørsmålskategoriar-matrise"
+
+msgid "Questions behavior"
+msgstr "Spørsmålsåtferd"
+
+msgid "Random by category"
+msgstr "Tilfeldig etter kategori"
+
+msgid "Remove destination"
+msgstr "Fjern mål"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reglar blir vurderte etter poengprosent i stigande rekkjefølgje. Vel Fullfør øving for å avslutte prøva."
+
+msgid "Score and final messages"
+msgstr "Poengsum og sluttmeldingar"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Nokre val er låste etter at øvinga er oppretta."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Denne verdien blir lagra som total varigheit i minutt."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Bruk 0 for å behalde alle tilgjengelege spørsmål. Bruk -1 der alle tilgjengelege spørsmål er tillatne."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Bruk desse felta til å klassifisere øvinga uavhengig av visingsvala."
+

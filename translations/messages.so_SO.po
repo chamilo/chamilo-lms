@@ -37542,3 +37542,93 @@ msgstr "Aan ku qanacsanayn"
 msgid "Very dissatisfied"
 msgstr "Aad ugu qanacsanayn"
 
+msgid "Add destination"
+msgstr "Ku dar meel loo socdo"
+
+msgid "Add this test to the assessment tool"
+msgstr "Ku dar imtixaankan qalabka qiimaynta"
+
+msgid "Attempts and timing"
+msgstr "Isku dayo iyo waqti"
+
+msgid "Available questions"
+msgstr "Su'aalaha la heli karo"
+
+msgid "Cancel and return to learning path"
+msgstr "Jooji oo ku noqo dariiqa waxbarashada"
+
+msgid "Category destinations"
+msgstr "Meelaha loo socdo ee qaybaha"
+
+msgid "Classification"
+msgstr "Kala soocid"
+
+msgid "Context"
+msgstr "Macnaha guud"
+
+msgid "Could not load exercise configuration"
+msgstr "Lama rarin karin qaabeynta jimicsiga"
+
+msgid "Could not save exercise"
+msgstr "Lama kaydin karin jimicsiga"
+
+msgid "Display and learning path"
+msgstr "Muuqaal iyo dariiqa waxbarashada"
+
+msgid "Edit test"
+msgstr "Wax ka beddel imtixaanka"
+
+msgid "Exercise settings saved."
+msgstr "Dejinta jimicsiga waa la kaydiyay."
+
+msgid "Extra settings"
+msgstr "Dejinta dheeraadka ah"
+
+msgid "Feedback and results"
+msgstr "Jawaab celin iyo natiijooyin"
+
+msgid "Finish exercise"
+msgstr "Dhammaystir jimicsiga"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Waxay aqoonsanaysaa luqadda jimicsigan sida xogta kheyraadka. Iyadu ma oggolaanayso tusmada raadinta oo keligeed."
+
+msgid "Maximum score (%)"
+msgstr "Dhibcaha ugu badan (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Xogta waxay ka kooban tahay xirfado iyo goobo dheeraad ah oo loo habeeyay jimicsiyada. Waa ikhtiyaari oo waa qarsoon ilaa la furo."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Wali ma jiraan qaybo su'aalo oo loo heli karo jimicsigan."
+
+msgid "Question categories matrix"
+msgstr "Shaxda qaybaha su'aalaha"
+
+msgid "Questions behavior"
+msgstr "Habdhaqanka su'aalaha"
+
+msgid "Random by category"
+msgstr "Ku kala doorasho qayb ahaan"
+
+msgid "Remove destination"
+msgstr "Ka saar meel loo socdo"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Xeerarka waxaa lagu qiimeeyaa boqolkiiba dhibcaha si kor u kaca. Doorasho Dhammaystir jimicsiga si aad u dhamaystirto imtixaanka."
+
+msgid "Score and final messages"
+msgstr "Dhibcaha iyo farriimaha ugu dambeeya"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Qaar ka mid ah xulashooyinka waa la xirayaa ka dib markii jimicsiga la abuuray."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Qiimahan waxaa lagu kaydiyaa waqti guud oo daqiiqo ah."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Isticmaal 0 si aad u haysato dhammaan su'aalaha la heli karo. Isticmaal -1 halka dhammaan su'aalaha la heli karo la oggol yahay."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Isticmaal goobahan si aad u kala soocdo jimicsiga si ka madax bannaan xulashooyinka muuqaalkiisa."
+

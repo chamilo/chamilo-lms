@@ -37548,3 +37548,93 @@ msgstr "Utilfreds"
 msgid "Very dissatisfied"
 msgstr "Meget utilfreds"
 
+msgid "Add destination"
+msgstr "Tilføj destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Tilføj denne test til vurderingsværktøjet"
+
+msgid "Attempts and timing"
+msgstr "Forsøg og timing"
+
+msgid "Available questions"
+msgstr "Tilgængelige spørgsmål"
+
+msgid "Cancel and return to learning path"
+msgstr "Annuller og vend tilbage til læringssti"
+
+msgid "Category destinations"
+msgstr "Kategoridestinationer"
+
+msgid "Classification"
+msgstr "Klassifikation"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "Could not load exercise configuration"
+msgstr "Kunne ikke indlæse øvelseskonfiguration"
+
+msgid "Could not save exercise"
+msgstr "Kunne ikke gemme øvelse"
+
+msgid "Display and learning path"
+msgstr "Visning og læringssti"
+
+msgid "Edit test"
+msgstr "Rediger test"
+
+msgid "Exercise settings saved."
+msgstr "Øvelsesindstillinger gemt."
+
+msgid "Extra settings"
+msgstr "Ekstra indstillinger"
+
+msgid "Feedback and results"
+msgstr "Feedback og resultater"
+
+msgid "Finish exercise"
+msgstr "Afslut øvelse"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identificerer sproget for denne øvelse som ressourcemetadata. Det aktiverer ikke søgeindeksering i sig selv."
+
+msgid "Maximum score (%)"
+msgstr "Maksimal score (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata indeholder færdigheder og yderligere felter konfigureret til øvelser. Det er valgfrit og forbliver skjult, indtil det åbnes."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Ingen spørgsmålskategorier er tilgængelige for denne øvelse endnu."
+
+msgid "Question categories matrix"
+msgstr "Spørgsmålskategorimatrix"
+
+msgid "Questions behavior"
+msgstr "Spørgsmålsadfærd"
+
+msgid "Random by category"
+msgstr "Tilfældig efter kategori"
+
+msgid "Remove destination"
+msgstr "Fjern destination"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Regler evalueres efter scoreprocent i stigende rækkefølge. Vælg Afslut øvelse for at afslutte testen."
+
+msgid "Score and final messages"
+msgstr "Score og afsluttende beskeder"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Nogle indstillinger er låst, efter at øvelsen er oprettet."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Denne værdi gemmes som samlet varighed i minutter."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Brug 0 for at beholde alle tilgængelige spørgsmål. Brug -1, hvor alle tilgængelige spørgsmål er tilladt."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Brug disse felter til at klassificere øvelsen uafhængigt af dens visningsindstillinger."
+

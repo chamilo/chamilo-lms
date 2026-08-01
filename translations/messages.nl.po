@@ -39626,3 +39626,93 @@ msgstr "Ontevreden"
 msgid "Very dissatisfied"
 msgstr "Zeer ontevreden"
 
+msgid "Add destination"
+msgstr "Bestemming toevoegen"
+
+msgid "Add this test to the assessment tool"
+msgstr "Deze test toevoegen aan de toetsentool"
+
+msgid "Attempts and timing"
+msgstr "Pogingen en timing"
+
+msgid "Available questions"
+msgstr "Beschikbare vragen"
+
+msgid "Cancel and return to learning path"
+msgstr "Annuleren en terugkeren naar leerpad"
+
+msgid "Category destinations"
+msgstr "Bestemmingen per categorie"
+
+msgid "Classification"
+msgstr "Classificatie"
+
+msgid "Context"
+msgstr "Context"
+
+msgid "Could not load exercise configuration"
+msgstr "Oefeningsconfiguratie kon niet worden geladen"
+
+msgid "Could not save exercise"
+msgstr "Oefening kon niet worden opgeslagen"
+
+msgid "Display and learning path"
+msgstr "Weergave en leerpad"
+
+msgid "Edit test"
+msgstr "Test bewerken"
+
+msgid "Exercise settings saved."
+msgstr "Oefeningsinstellingen opgeslagen."
+
+msgid "Extra settings"
+msgstr "Extra instellingen"
+
+msgid "Feedback and results"
+msgstr "Feedback en resultaten"
+
+msgid "Finish exercise"
+msgstr "Oefening afronden"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identificeert de taal van deze oefening als metadata van de bron. Dit schakelt op zichzelf geen zoekindexering in."
+
+msgid "Maximum score (%)"
+msgstr "Maximumscore (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata bevat vaardigheden en extra velden die voor oefeningen zijn geconfigureerd. Dit is optioneel en blijft verborgen tot het wordt geopend."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Er zijn nog geen vraaggroepen beschikbaar voor deze oefening."
+
+msgid "Question categories matrix"
+msgstr "Matrix van vraaggroepen"
+
+msgid "Questions behavior"
+msgstr "Vraaggedrag"
+
+msgid "Random by category"
+msgstr "Willekeurig per categorie"
+
+msgid "Remove destination"
+msgstr "Bestemming verwijderen"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Regels worden geëvalueerd op basis van scorepercentage in oplopende volgorde. Selecteer Oefening afronden om de test te beëindigen."
+
+msgid "Score and final messages"
+msgstr "Score en eindberichten"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Sommige opties worden vergrendeld nadat de oefening is aangemaakt."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Deze waarde wordt opgeslagen als totale duur in minuten."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Gebruik 0 om alle beschikbare vragen te behouden. Gebruik -1 waar alle beschikbare vragen zijn toegestaan."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Gebruik deze velden om de oefening onafhankelijk van de weergaveopties te classificeren."
+

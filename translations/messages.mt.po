@@ -37547,3 +37547,93 @@ msgstr "Mhux sodisfatt"
 msgid "Very dissatisfied"
 msgstr "Mhux sodisfatt ħafna"
 
+msgid "Add destination"
+msgstr "Żid destinazzjoni"
+
+msgid "Add this test to the assessment tool"
+msgstr "Żid dan it-test mal-għodda tal-valutazzjoni"
+
+msgid "Attempts and timing"
+msgstr "Tentattivi u ħin"
+
+msgid "Available questions"
+msgstr "Mistoqsijiet disponibbli"
+
+msgid "Cancel and return to learning path"
+msgstr "Ikkanċella u rritorna għall-mogħdija tat-tagħlim"
+
+msgid "Category destinations"
+msgstr "Destinazzjonijiet tal-kategorija"
+
+msgid "Classification"
+msgstr "Klassifikazzjoni"
+
+msgid "Context"
+msgstr "Kuntest"
+
+msgid "Could not load exercise configuration"
+msgstr "Ma setax jitgħabba l-konfigurazzjoni tal-eżerċizzju"
+
+msgid "Could not save exercise"
+msgstr "Ma setax jiġi ssejvjat l-eżerċizzju"
+
+msgid "Display and learning path"
+msgstr "Wirja u mogħdija tat-tagħlim"
+
+msgid "Edit test"
+msgstr "Editja t-test"
+
+msgid "Exercise settings saved."
+msgstr "Is-settings tal-eżerċizzju ġew issejvjati."
+
+msgid "Extra settings"
+msgstr "Settings addizzjonali"
+
+msgid "Feedback and results"
+msgstr "Feedback u riżultati"
+
+msgid "Finish exercise"
+msgstr "Temmi l-eżerċizzju"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Jidentifika l-lingwa ta' dan l-eżerċizzju bħala metadata tar-riżorsa. Ma jippermettix l-indiċjar għat-tfittxija waħdu."
+
+msgid "Maximum score (%)"
+msgstr "Punteġġ massimu (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Il-metadata tinkludi ħiliet u oqsma addizzjonali kkonfigurati għall-eżerċizzji. Hija fakultattiva u tibqa' moħbija sakemm tinfetaħ."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "M'hemm l-ebda kategoriji ta' mistoqsijiet disponibbli għal dan l-eżerċizzju s'issa."
+
+msgid "Question categories matrix"
+msgstr "Matriċi tal-kategoriji tal-mistoqsijiet"
+
+msgid "Questions behavior"
+msgstr "Imġiba tal-mistoqsijiet"
+
+msgid "Random by category"
+msgstr "Random skont il-kategorija"
+
+msgid "Remove destination"
+msgstr "Neħħi d-destinazzjoni"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Ir-regoli jiġu evalwati skont il-persentaġġ tal-punteġġ f'ordni axxendenti. Agħżel Temmi l-eżerċizzju biex ttemm it-test."
+
+msgid "Score and final messages"
+msgstr "Punteġġ u messaġġi finali"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Xi għażliet jissakkru wara li jkun ġie maħluq l-eżerċizzju."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Dan il-valur jinħażen bħala tul totali f'minuti."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Uża 0 biex iżżomm il-mistoqsijiet kollha disponibbli. Uża -1 fejn il-mistoqsijiet kollha disponibbli huma permessi."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Uża dawn l-oqsma biex tikkklassifika l-eżerċizzju indipendentement mill-għażliet tal-wiri tiegħu."
+

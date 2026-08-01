@@ -37542,3 +37542,93 @@ msgstr "ناراضي"
 msgid "Very dissatisfied"
 msgstr "ډېر ناراضي"
 
+msgid "Add destination"
+msgstr "د منزل اضافه کول"
+
+msgid "Add this test to the assessment tool"
+msgstr "دا ازموینه د ارزونې وسیلې ته اضافه کړئ"
+
+msgid "Attempts and timing"
+msgstr "هڅې او وخت"
+
+msgid "Available questions"
+msgstr "شته پوښتنې"
+
+msgid "Cancel and return to learning path"
+msgstr "لغوه کول او د زده کړې لارې ته بیرته راستنېدل"
+
+msgid "Category destinations"
+msgstr "د کټګورۍ منزلونه"
+
+msgid "Classification"
+msgstr "طبقه بندي"
+
+msgid "Context"
+msgstr "متن"
+
+msgid "Could not load exercise configuration"
+msgstr "د تمرین تنظیمات نه شي پورته کولای"
+
+msgid "Could not save exercise"
+msgstr "تمرین نه شي خوندي کولای"
+
+msgid "Display and learning path"
+msgstr "ښودنه او د زده کړې لاره"
+
+msgid "Edit test"
+msgstr "ازموینه سمول"
+
+msgid "Exercise settings saved."
+msgstr "د تمرین تنظیمات خوندي شول."
+
+msgid "Extra settings"
+msgstr "اضافي تنظیمات"
+
+msgid "Feedback and results"
+msgstr "غبرګون او پایلې"
+
+msgid "Finish exercise"
+msgstr "تمرین بشپړول"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "د دې تمرین ژبه د سرچینې میټاډاټا په توګه پېژني. دا پخپله د لټون شاخص جوړولو وړتیا نه فعالوي."
+
+msgid "Maximum score (%)"
+msgstr "اعظمي نمرې (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "میټاډاټا مهارتونه او اضافي ساحې لري چې د تمرینونو لپاره تنظیم شوي. دا اختیاري ده او تر هغه پورې پټه پاتې کېږي چې نه وي پرانستل شوې."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "د دې تمرین لپاره تر اوسه هیڅ پوښتنې کټګورۍ شتون نلري."
+
+msgid "Question categories matrix"
+msgstr "د پوښتنو کټګوریو مټریکس"
+
+msgid "Questions behavior"
+msgstr "د پوښتنو چلند"
+
+msgid "Random by category"
+msgstr "د کټګورۍ له مخې تصادفي"
+
+msgid "Remove destination"
+msgstr "د منزل لرې کول"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "قواعد د نمرې سلنې له مخې په زیاتېدونکي ترتیب سره ارزول کېږي. د ازموینې د پای ته رسولو لپاره بشپړ تمرین غوره کړئ."
+
+msgid "Score and final messages"
+msgstr "نمرې او وروستنۍ پیغامونه"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "ځینې اختیارونه د تمرین له جوړېدو وروسته تړل شوي دي."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "دا ارزښت په ټولیز وخت (دقیقو) کې ساتل کېږي."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "د ټولو شته پوښتنو ساتلو لپاره 0 وکاروئ. -1 وکاروئ چیرته چې ټولې شته پوښتنې اجازه لري."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "دا ساحې وکاروئ ترڅو تمرین له خپلو ښودنې اختیارونو څخه خپلواکه طبقه بندي کړئ."
+

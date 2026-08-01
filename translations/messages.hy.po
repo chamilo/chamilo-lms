@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -37545,4 +37545,94 @@ msgstr "Անգոհ"
 
 msgid "Very dissatisfied"
 msgstr "Շատ անգոհ"
+
+msgid "Add destination"
+msgstr "Ավելացնել նպատակակետ"
+
+msgid "Add this test to the assessment tool"
+msgstr "Ավելացնել այս թեստը գնահատման գործիքին"
+
+msgid "Attempts and timing"
+msgstr "Փորձեր և ժամանակացույց"
+
+msgid "Available questions"
+msgstr "Հասանելի հարցեր"
+
+msgid "Cancel and return to learning path"
+msgstr "Չեղարկել և վերադառնալ ուսումնական ուղի"
+
+msgid "Category destinations"
+msgstr "Կատեգորիայի նպատակակետեր"
+
+msgid "Classification"
+msgstr "Դասակարգում"
+
+msgid "Context"
+msgstr "Համատեքստ"
+
+msgid "Could not load exercise configuration"
+msgstr "Չհաջողվեց բեռնել վարժության կազմաձևումը"
+
+msgid "Could not save exercise"
+msgstr "Չհաջողվեց պահպանել վարժությունը"
+
+msgid "Display and learning path"
+msgstr "Ցուցադրում և ուսումնական ուղի"
+
+msgid "Edit test"
+msgstr "Խմբագրել թեստը"
+
+msgid "Exercise settings saved."
+msgstr "Վարժության կարգավորումները պահպանվեցին։"
+
+msgid "Extra settings"
+msgstr "Լրացուցիչ կարգավորումներ"
+
+msgid "Feedback and results"
+msgstr "Հետադարձ կապ և արդյունքներ"
+
+msgid "Finish exercise"
+msgstr "Ավարտել վարժությունը"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Նույնականացնում է այս վարժության լեզուն որպես ռեսուրսի մետատվյալներ։ Այն ինքնին չի ապահովում որոնման ինդեքսավորում։"
+
+msgid "Maximum score (%)"
+msgstr "Առավելագույն միավոր (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Մետատվյալները պարունակում են հմտություններ և վարժությունների համար կազմաձևված լրացուցիչ դաշտեր։ Այն կամընտիր է և մնում է թաքնված մինչև բացվելը։"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Այս վարժության համար դեռ հասանելի հարցերի կատեգորիաներ չկան։"
+
+msgid "Question categories matrix"
+msgstr "Հարցերի կատեգորիաների մատրից"
+
+msgid "Questions behavior"
+msgstr "Հարցերի վարքագիծ"
+
+msgid "Random by category"
+msgstr "Պատահական ըստ կատեգորիայի"
+
+msgid "Remove destination"
+msgstr "Հեռացնել նշանակումը"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Կանոնները գնահատվում են միավորների տոկոսով աճման կարգով։ Ընտրեք «Ավարտել վարժությունը»՝ թեստն ավարտելու համար։"
+
+msgid "Score and final messages"
+msgstr "Միավորներ և վերջնական հաղորդագրություններ"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Որոշ ընտրանքներ արգելափակվում են վարժությունը ստեղծելուց հետո։"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Այս արժեքը պահվում է որպես ընդհանուր տևողություն րոպեներով։"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Օգտագործեք 0՝ բոլոր հասանելի հարցերը պահպանելու համար։ Օգտագործեք -1՝ բոլոր հասանելի հարցերը թույլատրելու համար։"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Օգտագործեք այս դաշտերը՝ վարժությունը դասակարգելու համար՝ անկախ դրա ցուցադրման ընտրանքներից։"
 

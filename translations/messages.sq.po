@@ -37546,3 +37546,93 @@ msgstr "I pakënaqur"
 msgid "Very dissatisfied"
 msgstr "Shumë i pakënaqur"
 
+msgid "Add destination"
+msgstr "Shto destinacion"
+
+msgid "Add this test to the assessment tool"
+msgstr "Shto këtë test në mjetin e vlerësimit"
+
+msgid "Attempts and timing"
+msgstr "Përpjekjet dhe koha"
+
+msgid "Available questions"
+msgstr "Pyetjet e disponueshme"
+
+msgid "Cancel and return to learning path"
+msgstr "Anulo dhe kthehu te rruga e të mësuarit"
+
+msgid "Category destinations"
+msgstr "Destinacionet e kategorisë"
+
+msgid "Classification"
+msgstr "Klasifikimi"
+
+msgid "Context"
+msgstr "Konteksti"
+
+msgid "Could not load exercise configuration"
+msgstr "Nuk u ngarkua konfigurimi i ushtrimit"
+
+msgid "Could not save exercise"
+msgstr "Nuk u ruajt ushtrimi"
+
+msgid "Display and learning path"
+msgstr "Shfaqja dhe rruga e të mësuarit"
+
+msgid "Edit test"
+msgstr "Ndrysho testin"
+
+msgid "Exercise settings saved."
+msgstr "Cilësimet e ushtrimit u ruajtën."
+
+msgid "Extra settings"
+msgstr "Cilësime shtesë"
+
+msgid "Feedback and results"
+msgstr "Reagimi dhe rezultatet"
+
+msgid "Finish exercise"
+msgstr "Përfundo ushtrimin"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifikon gjuhën e këtij ushtrimi si metadatë burimi. Nuk mundëson indeksimin e kërkimit vetë."
+
+msgid "Maximum score (%)"
+msgstr "Pikët maksimale (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadatat përmbajnë aftësi dhe fusha shtesë të konfiguruara për ushtrimet. Është opsionale dhe mbetet e fshehur derisa të hapet."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Nuk ka ende kategori pyetjesh të disponueshme për këtë ushtrim."
+
+msgid "Question categories matrix"
+msgstr "Matrica e kategorive të pyetjeve"
+
+msgid "Questions behavior"
+msgstr "Sjellja e pyetjeve"
+
+msgid "Random by category"
+msgstr "Rastësore sipas kategorisë"
+
+msgid "Remove destination"
+msgstr "Hiq destinacionin"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Rregullat vlerësohen sipas përqindjes së rezultateve në rend rritës. Zgjidhni Përfundo ushtrimin për të mbyllur testin."
+
+msgid "Score and final messages"
+msgstr "Rezultati dhe mesazhet përfundimtare"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Disa opsione janë të bllokuara pasi ushtrimi është krijuar."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Kjo vlerë ruhet si kohëzgjatje totale në minuta."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Përdorni 0 për të mbajtur të gjitha pyetjet e disponueshme. Përdorni -1 ku lejohen të gjitha pyetjet e disponueshme."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Përdorni këto fusha për të klasifikuar ushtrimin në mënyrë të pavarur nga opsionet e shfaqjes."
+

@@ -37542,3 +37542,93 @@ msgstr "অসন্তুষ্ট"
 msgid "Very dissatisfied"
 msgstr "খুব অসন্তুষ্ট"
 
+msgid "Add destination"
+msgstr "গন্তব্য যোগ করুন"
+
+msgid "Add this test to the assessment tool"
+msgstr "মূল্যায়ন টুলে এই পরীক্ষা যোগ করুন"
+
+msgid "Attempts and timing"
+msgstr "প্রচেষ্টা এবং সময়সীমা"
+
+msgid "Available questions"
+msgstr "উপলব্ধ প্রশ্ন"
+
+msgid "Cancel and return to learning path"
+msgstr "বাতিল করুন এবং শেখার পথে ফিরে যান"
+
+msgid "Category destinations"
+msgstr "বিভাগের গন্তব্য"
+
+msgid "Classification"
+msgstr "শ্রেণিবিন্যাস"
+
+msgid "Context"
+msgstr "প্রসঙ্গ"
+
+msgid "Could not load exercise configuration"
+msgstr "অনুশীলন কনফিগারেশন লোড করা যায়নি"
+
+msgid "Could not save exercise"
+msgstr "অনুশীলন সংরক্ষণ করা যায়নি"
+
+msgid "Display and learning path"
+msgstr "প্রদর্শন এবং শেখার পথ"
+
+msgid "Edit test"
+msgstr "পরীক্ষা সম্পাদনা করুন"
+
+msgid "Exercise settings saved."
+msgstr "অনুশীলন সেটিংস সংরক্ষিত হয়েছে।"
+
+msgid "Extra settings"
+msgstr "অতিরিক্ত সেটিংস"
+
+msgid "Feedback and results"
+msgstr "ফিডব্যাক এবং ফলাফল"
+
+msgid "Finish exercise"
+msgstr "অনুশীলন সম্পন্ন করুন"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "এই অনুশীলনের ভাষা রিসোর্স মেটাডেটা হিসেবে চিহ্নিত করে। এটি নিজে থেকে সার্চ ইনডেক্সিং সক্ষম করে না।"
+
+msgid "Maximum score (%)"
+msgstr "সর্বোচ্চ স্কোর (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "মেটাডেটাতে অনুশীলনের জন্য কনফিগার করা দক্ষতা এবং অতিরিক্ত ক্ষেত্র থাকে। এটি ঐচ্ছিক এবং খোলা না হওয়া পর্যন্ত লুকানো থাকে।"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "এই অনুশীলনের জন্য এখনো কোনো প্রশ্ন বিভাগ উপলব্ধ নেই।"
+
+msgid "Question categories matrix"
+msgstr "প্রশ্ন বিভাগের ম্যাট্রিক্স"
+
+msgid "Questions behavior"
+msgstr "প্রশ্নের আচরণ"
+
+msgid "Random by category"
+msgstr "বিভাগ অনুসারে র‍্যান্ডম"
+
+msgid "Remove destination"
+msgstr "গন্তব্য সরান"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "নিয়মগুলি স্কোর শতাংশ অনুসারে ঊর্ধ্বক্রমে মূল্যায়ন করা হয়। পরীক্ষা শেষ করতে অনুশীলন সম্পন্ন করুন নির্বাচন করুন।"
+
+msgid "Score and final messages"
+msgstr "স্কোর এবং চূড়ান্ত বার্তা"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "অনুশীলন তৈরি হওয়ার পর কিছু অপশন লক করা থাকে।"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "এই মানটি মোট সময়কাল মিনিট হিসেবে সংরক্ষিত হয়।"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "সব উপলব্ধ প্রশ্ন রাখতে 0 ব্যবহার করুন। সব উপলব্ধ প্রশ্ন অনুমোদিত হলে -1 ব্যবহার করুন।"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "প্রদর্শন অপশন থেকে স্বাধীনভাবে অনুশীলন শ্রেণিবদ্ধ করতে এই ক্ষেত্রগুলি ব্যবহার করুন।"
+

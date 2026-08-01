@@ -37549,3 +37549,93 @@ msgstr "Не доволен"
 msgid "Very dissatisfied"
 msgstr "Очень не доволен"
 
+msgid "Add destination"
+msgstr "Добавить назначение"
+
+msgid "Add this test to the assessment tool"
+msgstr "Добавить этот тест в инструмент оценивания"
+
+msgid "Attempts and timing"
+msgstr "Попытки и время"
+
+msgid "Available questions"
+msgstr "Доступные вопросы"
+
+msgid "Cancel and return to learning path"
+msgstr "Отменить и вернуться к учебному пути"
+
+msgid "Category destinations"
+msgstr "Назначения категорий"
+
+msgid "Classification"
+msgstr "Классификация"
+
+msgid "Context"
+msgstr "Контекст"
+
+msgid "Could not load exercise configuration"
+msgstr "Не удалось загрузить конфигурацию упражнения"
+
+msgid "Could not save exercise"
+msgstr "Не удалось сохранить упражнение"
+
+msgid "Display and learning path"
+msgstr "Отображение и учебный путь"
+
+msgid "Edit test"
+msgstr "Редактировать тест"
+
+msgid "Exercise settings saved."
+msgstr "Настройки упражнения сохранены."
+
+msgid "Extra settings"
+msgstr "Дополнительные настройки"
+
+msgid "Feedback and results"
+msgstr "Обратная связь и результаты"
+
+msgid "Finish exercise"
+msgstr "Завершить упражнение"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Определяет язык этого упражнения как метаданные ресурса. Сам по себе не включает индексацию для поиска."
+
+msgid "Maximum score (%)"
+msgstr "Максимальный балл (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Метаданные содержат навыки и дополнительные поля, настроенные для упражнений. Необязательны и скрыты до открытия."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Для этого упражнения пока нет доступных категорий вопросов."
+
+msgid "Question categories matrix"
+msgstr "Матрица категорий вопросов"
+
+msgid "Questions behavior"
+msgstr "Поведение вопросов"
+
+msgid "Random by category"
+msgstr "Случайно по категориям"
+
+msgid "Remove destination"
+msgstr "Удалить назначение"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Правила оцениваются по процентам баллов в порядке возрастания. Выберите Завершить упражнение, чтобы закончить тест."
+
+msgid "Score and final messages"
+msgstr "Баллы и итоговые сообщения"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Некоторые параметры заблокированы после создания упражнения."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Это значение сохраняется как общая продолжительность в минутах."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Используйте 0, чтобы сохранить все доступные вопросы. Используйте -1, чтобы разрешить все доступные вопросы."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Используйте эти поля для классификации упражнения независимо от его параметров отображения."
+

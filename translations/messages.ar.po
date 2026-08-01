@@ -37560,3 +37560,93 @@ msgstr "غير راضٍ"
 msgid "Very dissatisfied"
 msgstr "غير راضٍ جداً"
 
+msgid "Add destination"
+msgstr "إضافة وجهة"
+
+msgid "Add this test to the assessment tool"
+msgstr "إضافة هذا الاختبار إلى أداة التقييم"
+
+msgid "Attempts and timing"
+msgstr "المحاولات والتوقيت"
+
+msgid "Available questions"
+msgstr "الأسئلة المتاحة"
+
+msgid "Cancel and return to learning path"
+msgstr "إلغاء والعودة إلى مسار التعلم"
+
+msgid "Category destinations"
+msgstr "وجهات الفئة"
+
+msgid "Classification"
+msgstr "التصنيف"
+
+msgid "Context"
+msgstr "السياق"
+
+msgid "Could not load exercise configuration"
+msgstr "تعذر تحميل إعدادات التمرين"
+
+msgid "Could not save exercise"
+msgstr "تعذر حفظ التمرين"
+
+msgid "Display and learning path"
+msgstr "العرض ومسار التعلم"
+
+msgid "Edit test"
+msgstr "تعديل الاختبار"
+
+msgid "Exercise settings saved."
+msgstr "تم حفظ إعدادات التمرين."
+
+msgid "Extra settings"
+msgstr "إعدادات إضافية"
+
+msgid "Feedback and results"
+msgstr "التغذية الراجعة والنتائج"
+
+msgid "Finish exercise"
+msgstr "إنهاء التمرين"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "يحدد لغة هذا التمرين كبيانات وصفية للمورد. لا يُمكّن الفهرسة للبحث تلقائيًا."
+
+msgid "Maximum score (%)"
+msgstr "الدرجة القصوى (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "تحتوي البيانات الوصفية على المهارات والحقول الإضافية المُعدّة للتمارين. وهي اختيارية وتبقى مخفية حتى يتم فتحها."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "لا توجد فئات أسئلة متاحة لهذا التمرين بعد."
+
+msgid "Question categories matrix"
+msgstr "مصفوفة فئات الأسئلة"
+
+msgid "Questions behavior"
+msgstr "سلوك الأسئلة"
+
+msgid "Random by category"
+msgstr "عشوائي حسب الفئة"
+
+msgid "Remove destination"
+msgstr "إزالة الوجهة"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "تُقيَّم القواعد حسب نسبة الدرجة تصاعديًا. اختر إنهاء التمرين لإنهاء الاختبار."
+
+msgid "Score and final messages"
+msgstr "الدرجة والرسائل النهائية"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "بعض الخيارات تُقفل بعد إنشاء التمرين."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "تُخزن هذه القيمة كمدة إجمالية بالدقائق."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "استخدم 0 للاحتفاظ بجميع الأسئلة المتاحة. استخدم -1 حيث يُسمح بجميع الأسئلة المتاحة."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "استخدم هذه الحقول لتصنيف التمرين بشكل مستقل عن خيارات العرض."
+

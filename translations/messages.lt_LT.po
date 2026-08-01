@@ -37547,3 +37547,93 @@ msgstr "Nepatenkintas (-a)"
 msgid "Very dissatisfied"
 msgstr "Labai nepatenkintas (-a)"
 
+msgid "Add destination"
+msgstr "Pridėti paskirties vietą"
+
+msgid "Add this test to the assessment tool"
+msgstr "Pridėti šį testą prie vertinimo įrankio"
+
+msgid "Attempts and timing"
+msgstr "Bandymai ir laikas"
+
+msgid "Available questions"
+msgstr "Turimi klausimai"
+
+msgid "Cancel and return to learning path"
+msgstr "Atšaukti ir grįžti į mokymosi kelią"
+
+msgid "Category destinations"
+msgstr "Kategorijų paskirties vietos"
+
+msgid "Classification"
+msgstr "Klasifikacija"
+
+msgid "Context"
+msgstr "Kontekstas"
+
+msgid "Could not load exercise configuration"
+msgstr "Nepavyko įkelti pratimo konfigūracijos"
+
+msgid "Could not save exercise"
+msgstr "Nepavyko išsaugoti pratimo"
+
+msgid "Display and learning path"
+msgstr "Rodymas ir mokymosi kelias"
+
+msgid "Edit test"
+msgstr "Redaguoti testą"
+
+msgid "Exercise settings saved."
+msgstr "Pratimo nustatymai išsaugoti."
+
+msgid "Extra settings"
+msgstr "Papildomi nustatymai"
+
+msgid "Feedback and results"
+msgstr "Grįžtamasis ryšys ir rezultatai"
+
+msgid "Finish exercise"
+msgstr "Baigti pratimą"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Nurodo šio pratimo kalbą kaip ištekliaus metaduomenis. Pats savaime neįgalina paieškos indeksavimo."
+
+msgid "Maximum score (%)"
+msgstr "Maksimalus balas (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metaduomenyse yra pratimams sukonfigūruoti įgūdžiai ir papildomi laukai. Tai neprivaloma ir lieka paslėpta, kol nebus atidaryta."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Šiam pratimui dar nėra prieinamų klausimų kategorijų."
+
+msgid "Question categories matrix"
+msgstr "Klausimų kategorijų matrica"
+
+msgid "Questions behavior"
+msgstr "Klausimų elgsena"
+
+msgid "Random by category"
+msgstr "Atsitiktinai pagal kategoriją"
+
+msgid "Remove destination"
+msgstr "Pašalinti paskirties vietą"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Taisyklės vertinamos pagal balų procentą didėjimo tvarka. Norėdami baigti testą, pasirinkite Baigti pratimą."
+
+msgid "Score and final messages"
+msgstr "Balas ir galutiniai pranešimai"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Kai kurios parinktys užrakinamos sukūrus pratimą."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Ši reikšmė saugoma kaip bendra trukmė minutėmis."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Naudokite 0, kad išsaugotumėte visus turimus klausimus. Naudokite -1, jei leidžiami visi turimi klausimai."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Naudokite šiuos laukus pratimui klasifikuoti nepriklausomai nuo jo rodymo parinkčių."
+

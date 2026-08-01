@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:கோப்புறை,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:கோப்புறை,, application/msword:MsWord,, application/octet-stream:ஆக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -37545,4 +37545,94 @@ msgstr "திருப்தியற்ற"
 
 msgid "Very dissatisfied"
 msgstr "மிகவும் திருப்தியற்ற"
+
+msgid "Add destination"
+msgstr "இலக்கைச் சேர்க்கவும்"
+
+msgid "Add this test to the assessment tool"
+msgstr "இந்தச் சோதனையை மதிப்பீட்டுக் கருவியில் சேர்க்கவும்"
+
+msgid "Attempts and timing"
+msgstr "முயற்சிகள் மற்றும் நேரம்"
+
+msgid "Available questions"
+msgstr "கிடைக்கும் கேள்விகள்"
+
+msgid "Cancel and return to learning path"
+msgstr "ரத்து செய்து கற்றல் பாதைக்குத் திரும்பவும்"
+
+msgid "Category destinations"
+msgstr "வகை இலக்குகள்"
+
+msgid "Classification"
+msgstr "வகைப்படுத்தல்"
+
+msgid "Context"
+msgstr "சூழல்"
+
+msgid "Could not load exercise configuration"
+msgstr "பயிற்சி உள்ளமைவை ஏற்ற முடியவில்லை"
+
+msgid "Could not save exercise"
+msgstr "பயிற்சியைச் சேமிக்க முடியவில்லை"
+
+msgid "Display and learning path"
+msgstr "காட்சி மற்றும் கற்றல் பாதை"
+
+msgid "Edit test"
+msgstr "சோதனையைத் திருத்தவும்"
+
+msgid "Exercise settings saved."
+msgstr "பயிற்சி அமைப்புகள் சேமிக்கப்பட்டன."
+
+msgid "Extra settings"
+msgstr "கூடுதல் அமைப்புகள்"
+
+msgid "Feedback and results"
+msgstr "பின்னூட்டம் மற்றும் முடிவுகள்"
+
+msgid "Finish exercise"
+msgstr "பயிற்சியை முடிக்கவும்"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "இந்தப் பயிற்சியின் மொழியை வள மெட்டாடேட்டாவாக அடையாளப்படுத்துகிறது. இது தானாகவே தேடல் அட்டவணையை இயக்காது."
+
+msgid "Maximum score (%)"
+msgstr "அதிகபட்ச மதிப்பெண் (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "மெட்டாடேட்டாவில் பயிற்சிகளுக்காக உள்ளமைக்கப்பட்ட திறன்கள் மற்றும் கூடுதல் புலங்கள் உள்ளன. இது விருப்பமானது மற்றும் திறக்கப்படும் வரை மறைந்திருக்கும்."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "இந்தப் பயிற்சிக்கு இன்னும் கேள்வி வகைகள் எதுவும் கிடைக்கவில்லை."
+
+msgid "Question categories matrix"
+msgstr "கேள்வி வகைகள் அணி"
+
+msgid "Questions behavior"
+msgstr "கேள்விகளின் நடத்தை"
+
+msgid "Random by category"
+msgstr "வகை அடிப்படையில் சீரற்றது"
+
+msgid "Remove destination"
+msgstr "இலக்கை அகற்றவும்"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "விதிகள் மதிப்பெண் சதவீதத்தின் அடிப்படையில் ஏறுவரிசையில் மதிப்பிடப்படுகின்றன. சோதனையை முடிக்க முடிக்கவும் என்பதைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Score and final messages"
+msgstr "மதிப்பெண் மற்றும் இறுதி செய்திகள்"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "பயிற்சி உருவாக்கப்பட்ட பிறகு சில விருப்பங்கள் பூட்டப்படும்."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "இந்த மதிப்பு நிமிடங்களில் மொத்த கால அளவாகச் சேமிக்கப்படுகிறது."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "அனைத்து கிடைக்கும் கேள்விகளையும் வைத்திருக்க 0 ஐப் பயன்படுத்தவும். அனைத்து கிடைக்கும் கேள்விகளும் அனுமதிக்கப்படும் இடத்தில் -1 ஐப் பயன்படுத்தவும்."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "இந்தப் புலங்களைப் பயன்படுத்தி பயிற்சியை அதன் காட்சி விருப்பங்களிலிருந்து சுயாதீனமாக வகைப்படுத்தவும்."
 

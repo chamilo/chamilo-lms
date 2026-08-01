@@ -37562,3 +37562,93 @@ msgstr "Nezadovoljen"
 msgid "Very dissatisfied"
 msgstr "Zelo nezadovoljen"
 
+msgid "Add destination"
+msgstr "Dodaj cilj"
+
+msgid "Add this test to the assessment tool"
+msgstr "Dodaj ta test v orodje za ocenjevanje"
+
+msgid "Attempts and timing"
+msgstr "Poskusi in časovna omejitev"
+
+msgid "Available questions"
+msgstr "Razpoložljiva vprašanja"
+
+msgid "Cancel and return to learning path"
+msgstr "Prekliči in vrni se na učno pot"
+
+msgid "Category destinations"
+msgstr "Cilji kategorij"
+
+msgid "Classification"
+msgstr "Razvrstitev"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "Could not load exercise configuration"
+msgstr "Ni bilo mogoče naložiti konfiguracije vaje"
+
+msgid "Could not save exercise"
+msgstr "Ni bilo mogoče shraniti vaje"
+
+msgid "Display and learning path"
+msgstr "Prikaz in učna pot"
+
+msgid "Edit test"
+msgstr "Uredi test"
+
+msgid "Exercise settings saved."
+msgstr "Nastavitve vaje so shranjene."
+
+msgid "Extra settings"
+msgstr "Dodatne nastavitve"
+
+msgid "Feedback and results"
+msgstr "Povratne informacije in rezultati"
+
+msgid "Finish exercise"
+msgstr "Zaključi vajo"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Določa jezik te vaje kot metapodatek vira. Samo po sebi ne omogoča indeksiranja za iskanje."
+
+msgid "Maximum score (%)"
+msgstr "Najvišji rezultat (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metapodatki vsebujejo spretnosti in dodatna polja, nastavljena za vaje. Je neobvezno in ostane skrito, dokler ni odprto."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Za to vajo še ni na voljo nobenih kategorij vprašanj."
+
+msgid "Question categories matrix"
+msgstr "Matrika kategorij vprašanj"
+
+msgid "Questions behavior"
+msgstr "Obnašanje vprašanj"
+
+msgid "Random by category"
+msgstr "Naključno po kategoriji"
+
+msgid "Remove destination"
+msgstr "Odstrani cilj"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Pravila se ocenjujejo po odstotku rezultatov v naraščajočem vrstnem redu. Izberite Zaključi vajo za konec testa."
+
+msgid "Score and final messages"
+msgstr "Rezultat in končna sporočila"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Nekatere možnosti so zaklenjene po ustvarjanju vaje."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Ta vrednost je shranjena kot skupno trajanje v minutah."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Uporabite 0, da ohranite vsa razpoložljiva vprašanja. Uporabite -1, kjer so dovoljena vsa razpoložljiva vprašanja."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Uporabite ta polja za razvrščanje vaje neodvisno od njenih možnosti prikaza."
+

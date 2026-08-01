@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -37546,4 +37546,94 @@ msgstr "Neapmierināts"
 
 msgid "Very dissatisfied"
 msgstr "Ļoti neapmierināts"
+
+msgid "Add destination"
+msgstr "Pievienot mērķi"
+
+msgid "Add this test to the assessment tool"
+msgstr "Pievienot šo testu novērtēšanas rīkam"
+
+msgid "Attempts and timing"
+msgstr "Mēģinājumi un laiks"
+
+msgid "Available questions"
+msgstr "Pieejamie jautājumi"
+
+msgid "Cancel and return to learning path"
+msgstr "Atcelt un atgriezties uz mācību ceļu"
+
+msgid "Category destinations"
+msgstr "Kategoriju mērķi"
+
+msgid "Classification"
+msgstr "Klasifikācija"
+
+msgid "Context"
+msgstr "Konteksts"
+
+msgid "Could not load exercise configuration"
+msgstr "Nevarēja ielādēt vingrinājuma konfigurāciju"
+
+msgid "Could not save exercise"
+msgstr "Nevarēja saglabāt vingrinājumu"
+
+msgid "Display and learning path"
+msgstr "Attēlojums un mācību ceļš"
+
+msgid "Edit test"
+msgstr "Rediģēt testu"
+
+msgid "Exercise settings saved."
+msgstr "Vingrinājuma iestatījumi saglabāti."
+
+msgid "Extra settings"
+msgstr "Papildu iestatījumi"
+
+msgid "Feedback and results"
+msgstr "Atsauksmes un rezultāti"
+
+msgid "Finish exercise"
+msgstr "Pabeigt vingrinājumu"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identificē šī vingrinājuma valodu kā resursa metadatus. Tas pats par sevi neiespējo meklēšanas indeksēšanu."
+
+msgid "Maximum score (%)"
+msgstr "Maksimālais vērtējums (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadati satur prasmes un papildu laukus, kas konfigurēti vingrinājumiem. Tas ir neobligāts un paliek paslēpts, līdz tiek atvērts."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Šim vingrinājumam vēl nav pieejamas jautājumu kategorijas."
+
+msgid "Question categories matrix"
+msgstr "Jautājumu kategoriju matrica"
+
+msgid "Questions behavior"
+msgstr "Jautājumu uzvedība"
+
+msgid "Random by category"
+msgstr "Nejauši pēc kategorijas"
+
+msgid "Remove destination"
+msgstr "Noņemt mērķi"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Noteikumi tiek vērtēti pēc punktu procentuālā daudzuma augošā secībā. Atlasiet Pabeigt vingrinājumu, lai pabeigtu testu."
+
+msgid "Score and final messages"
+msgstr "Punkti un noslēguma ziņojumi"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Dažas opcijas tiek bloķētas pēc vingrinājuma izveides."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Šī vērtība tiek saglabāta kā kopējais ilgums minūtēs."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Izmantojiet 0, lai saglabātu visus pieejamos jautājumus. Izmantojiet -1, ja ir atļauti visi pieejamie jautājumi."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Izmantojiet šos laukus, lai klasificētu vingrinājumu neatkarīgi no tā attēlošanas opcijām."
 

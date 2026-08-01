@@ -37548,3 +37548,93 @@ msgstr "Memnun değilim"
 msgid "Very dissatisfied"
 msgstr "Hiç memnun değilim"
 
+msgid "Add destination"
+msgstr "Hedef ekle"
+
+msgid "Add this test to the assessment tool"
+msgstr "Bu testi değerlendirme aracına ekle"
+
+msgid "Attempts and timing"
+msgstr "Deneme ve zamanlama"
+
+msgid "Available questions"
+msgstr "Mevcut sorular"
+
+msgid "Cancel and return to learning path"
+msgstr "İptal et ve öğrenme yoluna dön"
+
+msgid "Category destinations"
+msgstr "Kategori hedefleri"
+
+msgid "Classification"
+msgstr "Sınıflandırma"
+
+msgid "Context"
+msgstr "Bağlam"
+
+msgid "Could not load exercise configuration"
+msgstr "Alıştırma yapılandırması yüklenemedi"
+
+msgid "Could not save exercise"
+msgstr "Alıştırma kaydedilemedi"
+
+msgid "Display and learning path"
+msgstr "Görüntüleme ve öğrenme yolu"
+
+msgid "Edit test"
+msgstr "Testi düzenle"
+
+msgid "Exercise settings saved."
+msgstr "Alıştırma ayarları kaydedildi."
+
+msgid "Extra settings"
+msgstr "Ek ayarlar"
+
+msgid "Feedback and results"
+msgstr "Geri bildirim ve sonuçlar"
+
+msgid "Finish exercise"
+msgstr "Alıştırmayı bitir"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Bu alıştırmanın dilini kaynak meta verisi olarak tanımlar. Tek başına arama dizinlemesini etkinleştirmez."
+
+msgid "Maximum score (%)"
+msgstr "Maksimum puan (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Meta veriler, alıştırmalar için yapılandırılmış becerileri ve ek alanları içerir. İsteğe bağlıdır ve açılana kadar gizli kalır."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Bu alıştırma için henüz soru kategorisi mevcut değil."
+
+msgid "Question categories matrix"
+msgstr "Soru kategorileri matrisi"
+
+msgid "Questions behavior"
+msgstr "Soru davranışı"
+
+msgid "Random by category"
+msgstr "Kategoriye göre rastgele"
+
+msgid "Remove destination"
+msgstr "Hedefi kaldır"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Kurallar puan yüzdesine göre artan sırada değerlendirilir. Testi bitirmek için Alıştırmayı bitir'i seçin."
+
+msgid "Score and final messages"
+msgstr "Puan ve son mesajlar"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Alıştırma oluşturulduktan sonra bazı seçenekler kilitlenir."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Bu değer dakika cinsinden toplam süre olarak saklanır."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Tüm mevcut soruları korumak için 0 kullanın. Tüm mevcut sorulara izin verilen yerlerde -1 kullanın."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Bu alanları alıştırmayı görüntüleme seçeneklerinden bağımsız olarak sınıflandırmak için kullanın."
+

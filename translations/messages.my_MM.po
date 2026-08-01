@@ -36584,49 +36584,49 @@ msgid "Database baseline"
 msgstr "ဒေတာဘေ့စ် အခြေခံအဆင့်"
 
 msgid "Database migration safety review"
-msgstr ""
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှု လုံခြုံရေး ပြန်လည်သုံးသပ်မှု"
 
 msgid "Database migrations"
-msgstr ""
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများ"
 
 msgid "Development mode"
-msgstr ""
+msgstr "ဖွံ့ဖြိုးတိုးတက်မှု မုဒ်"
 
 msgid "Do not enable this unless the update backup and server permissions were reviewed."
-msgstr ""
+msgstr "အပ်ဒိတ် အရန်သိမ်းဆည်းမှုနှင့် ဆာဗာ ခွင့်ပြုချက်များကို ပြန်လည်သုံးသပ်ပြီးမှသာ ဤအရာကို ဖွင့်ပါ။"
 
 msgid "Doctrine dry-run command"
-msgstr ""
+msgstr "Doctrine dry-run အမိန့်"
 
 msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
-msgstr ""
+msgstr "Doctrine သည် သမိုင်းဆိုင်ရာ အခြေခံသတိပေးချက်များကို အစီရင်ခံခဲ့သည်။ အပ်ဒိတ်လုပ်ဆောင်သူသည် အတည်ပြုချက်ရရှိပြီးမှသာ အဆင့်ဆင့်ခွဲထားသော V210 ရွှေ့ပြောင်းမှုများကို လုပ်ဆောင်မည်။"
 
 msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
-msgstr ""
+msgstr "Doctrine သည် လုံခြုံရေး ပြန်လည်သုံးသပ်မှု အောင်မြင်ပြီးမှသာ အဆင့်ဆင့်ခွဲထားသော V210 ရွှေ့ပြောင်းမှုများကို အတည်ပြုချက်ဖြင့် လုပ်ဆောင်မည်။"
 
 msgid "Dry-run exit code"
-msgstr ""
+msgstr "Dry-run ထွက်ပေါက် ကုဒ်"
 
 msgid "Executed unavailable migrations"
-msgstr ""
+msgstr "မရရှိနိုင်သော ရွှေ့ပြောင်းမှုများ လုပ်ဆောင်ခဲ့သည်"
 
 msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
-msgstr ""
+msgstr "အတည်ပြုထားသော အပ်ဒိတ် ပက်ကေ့ဂျ်ကို စစ်ဆေးရန်အတွက် အဆင့်ဆင့်ခွဲထားသော ဖိုင်တွဲတစ်ခုသို့ ထုတ်ယူပါ။ ဤအရာသည် ဖိုင်များကို အစားထိုးခြင်း၊ ရွှေ့ပြောင်းမှုများ လုပ်ဆောင်ခြင်း သို့မဟုတ် ဒေတာဘေ့စ်ကို ပြင်ဆင်ခြင်း မဟုတ်ပါ။"
 
 msgid "File apply available"
-msgstr ""
+msgstr "ဖိုင် အသုံးချနိုင်မှု ရရှိနိုင်သည်"
 
 msgid "Files to replace"
-msgstr ""
+msgstr "အစားထိုးရန် ဖိုင်များ"
 
 msgid "I confirm that a database backup exists and was verified before running migrations."
-msgstr ""
+msgstr "ဒေတာဘေ့စ် အရန်သိမ်းဆည်းမှု ရှိပြီး ရွှေ့ပြောင်းမှုများ မလုပ်ဆောင်မီ အတည်ပြုပြီးဖြစ်ကြောင်း အတည်ပြုပါသည်။"
 
 msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
-msgstr ""
+msgstr "အဆင့်မြင့် လုပ်ဆောင်ချက်များသည် မှီခိုမှုများ၊ ထုတ်လုပ်ထားသော ပိုင်ဆိုင်မှုများ သို့မဟုတ် ဒေတာဘေ့စ်ကို ပြင်ဆင်နိုင်ကြောင်း နားလည်ပါသည်။"
 
 msgid "I understand this will replace files in the Chamilo installation."
-msgstr ""
+msgstr "ဤအရာသည် Chamilo တပ်ဆင်မှုရှိ ဖိုင်များကို အစားထိုးမည်ဖြစ်ကြောင်း နားလည်ပါသည်။"
 
 msgid "I understand this will run update commands on the server."
 msgstr "ဤအရာသည် ဆာဗာပေါ်တွင် အပ်ဒိတ်အမိန့်များကို လုပ်ဆောင်မည်ကို ကျွန်ုပ်နားလည်ပါသည်။"
@@ -36779,259 +36779,259 @@ msgid "Preparing staging..."
 msgstr "အဆင့်ဆင့်လုပ်ဆောင်မှု ပြင်ဆင်နေသည်..."
 
 msgid "Production mode"
-msgstr ""
+msgstr "ထုတ်လုပ်မှု မုဒ်"
 
 msgid "Released at"
-msgstr ""
+msgstr "ထုတ်ပြန်ခဲ့သည့် အချိန်"
 
 msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
-msgstr ""
+msgstr "ပြန်လည်သုံးသပ်ထားသော အသုံးချ အစီအစဉ်ကို အသုံးပြု၍ အဆင့်ဆင့်ခွဲထားသော ပက်ကေ့ဂျ်မှ Chamilo ဖိုင်များကို အစားထိုးပါ။ ဤအရာသည် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများ၊ Composer၊ Yarn သို့မဟုတ် ကက်ရှ် အမိန့်များကို လုပ်ဆောင်မည် မဟုတ်ပါ။"
 
 msgid "Review apply plan"
-msgstr ""
+msgstr "အသုံးချ အစီအစဉ် ပြန်လည်သုံးသပ်မှု"
 
 msgid "Review database migrations"
-msgstr ""
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများ ပြန်လည်သုံးသပ်မှု"
 
 msgid "Review post-apply actions"
-msgstr ""
+msgstr "အသုံးချပြီးနောက် လုပ်ဆောင်ချက်များ ပြန်လည်သုံးသပ်မှု"
 
 msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
-msgstr ""
+msgstr "အပ်ဒိတ် ဖိုင်များ အသုံးချပြီးနောက် အကြံပြုထားသော လက်စွဲ အမိန့်များကို ပြန်လည်သုံးသပ်ပါ။ ဤအဆင့်သည် Composer၊ Yarn၊ ရွှေ့ပြောင်းမှုများ သို့မဟုတ် ကက်ရှ် အမိန့်များကို လုပ်ဆောင်မည် မဟုတ်ပါ။"
 
 msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
-msgstr ""
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများ မလုပ်ဆောင်မီ အဆင့်ဆင့်ခွဲထားသော Doctrine ရွှေ့ပြောင်းမှုများနှင့် dry-run ရလဒ်ကို ပြန်လည်သုံးသပ်ပါ။"
 
 msgid "Reviewing database migrations..."
-msgstr ""
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများ ပြန်လည်သုံးသပ်နေသည်..."
 
 msgid "Run and pass the migration safety review before executing database migrations."
-msgstr ""
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများ မလုပ်ဆောင်မီ ရွှေ့ပြောင်းမှု လုံခြုံရေး ပြန်လည်သုံးသပ်မှု လုပ်ဆောင်ပြီး အောင်မြင်ပါစေ။"
 
 msgid "Run environment checks before any future update application step. This does not modify files or the database."
-msgstr ""
+msgstr "အနာဂတ် အပ်ဒိတ် အသုံးချ အဆင့်များ မလုပ်ဆောင်မီ ပတ်ဝန်းကျင် စစ်ဆေးမှုများ လုပ်ဆောင်ပါ။ ဤအရာသည် ဖိုင်များ သို့မဟုတ် ဒေတာဘေ့စ်ကို ပြင်ဆင်မည် မဟုတ်ပါ။"
 
 msgid "Run post-apply actions"
-msgstr ""
+msgstr "အသုံးချပြီးနောက် လုပ်ဆောင်ချက်များ လုပ်ဆောင်ပါ"
 
 msgid "Run preflight checks"
-msgstr ""
+msgstr "preflight စစ်ဆေးမှုများ လုပ်ဆောင်ပါ"
 
 msgid "Run selected post-apply actions"
-msgstr ""
+msgstr "ရွေးချယ်ထားသော အသုံးချပြီးနောက် လုပ်ဆောင်ချက်များ လုပ်ဆောင်ပါ"
 
 msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
-msgstr ""
+msgstr "ထိန်းချုပ်ထားသော ခွင့်ပြုစာရင်းကို အသုံးပြု၍ ဆာဗာမှ ရွေးချယ်ထားသော အသုံးချပြီးနောက် လုပ်ဆောင်ချက်များကို လုပ်ဆောင်ပါ။ စိတ်ကြိုက် shell အမိန့်များကို လက်ခံမည် မဟုတ်ပါ။"
 
 msgid "Run these commands manually from the server after confirming the file update result and backups."
-msgstr ""
+msgstr "ဖိုင် အပ်ဒိတ် ရလဒ်နှင့် အရန်သိမ်းဆည်းမှုများကို အတည်ပြုပြီးနောက် ဆာဗာမှ ဤအမိန့်များကို လက်စွဲဖြင့် လုပ်ဆောင်ပါ။"
 
 msgid "Running post-apply actions from the UI is disabled in production mode."
-msgstr ""
+msgstr "ထုတ်လုပ်မှု မုဒ်တွင် UI မှ အသုံးချပြီးနောက် လုပ်ဆောင်ချက်များ လုပ်ဆောင်ခြင်းကို ပိတ်ထားသည်။"
 
 msgid "Running post-apply actions..."
-msgstr ""
+msgstr "အသုံးချပြီးနောက် လုပ်ဆောင်ချက်များ လုပ်ဆောင်နေသည်..."
 
 msgid "Safe actions"
-msgstr ""
+msgstr "လုံခြုံသော လုပ်ဆောင်ချက်များ"
 
 msgid "Signature path"
-msgstr ""
+msgstr "လက်မှတ် လမ်းကြောင်း"
 
 msgid "Signature verification cannot be skipped in this environment."
-msgstr ""
+msgstr "ဤပတ်ဝန်းကျင်တွင် လက်မှတ် အတည်ပြုခြင်းကို ကျော်လွှားမရနိုင်ပါ။"
 
 msgid "Skip signature verification for local development tests"
-msgstr ""
+msgstr "ဒေသတွင်း ဖွံ့ဖြိုးတိုးတက်မှု စမ်းသပ်မှုများအတွက် လက်မှတ် အတည်ပြုခြင်းကို ကျော်လွှားပါ"
 
 msgid "Staged file application failed"
-msgstr ""
+msgstr "အဆင့်ဆင့်ခွဲထားသော ဖိုင် အသုံးချမှု မအောင်မြင်ပါ"
 
 msgid "Staged files applied successfully"
-msgstr ""
+msgstr "အဆင့်ဆင့်ခွဲထားသော ဖိုင်များ အောင်မြင်စွာ အသုံးချခဲ့သည်"
 
 msgid "Staging details"
-msgstr ""
+msgstr "အဆင့်ဆင့်ခွဲထားသော အသေးစိတ်အချက်အလက်များ"
 
 msgid "Staging directory"
-msgstr ""
+msgstr "အဆင့်ဆင့်ခွဲထားသော ဖိုင်တွဲ"
 
 msgid "Staging extraction"
-msgstr ""
+msgstr "အဆင့်ဆင့်ခွဲထားသော ထုတ်ယူမှု"
 
 msgid "Symfony cache clear"
-msgstr ""
+msgstr "Symfony ကက်ရှ် ရှင်းလင်းခြင်း"
 
 msgid "System update"
-msgstr ""
+msgstr "စနစ် အပ်ဒိတ်"
 
 msgid "Target version"
-msgstr ""
+msgstr "ပစ်မှတ် ဗားရှင်း"
 
 msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
-msgstr ""
+msgstr "သတ်မှတ်ထားသော တရားဝင် မန်နီဖက်စ် URL ကို ကြိုတင်ဖြည့်ထားသည်။ လိုအပ်ပါက အခြား HTTPS မန်နီဖက်စ်တစ်ခုသို့ ပြောင်းလဲနိုင်သည်။"
 
 msgid "The database migration baseline is clean."
-msgstr ""
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှု အခြေခံသည် သန့်ရှင်းသည်။"
 
 msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
-msgstr ""
+msgstr "လုပ်ဆောင်မှု ပြီးဆုံးပြီးနောက် နောက်ဆုံး HTTP တုံ့ပြန်မှု မအောင်မြင်ခဲ့ပါ။ ဤသည်မှာ အများအားဖြင့် အချိန်နှင့်တပြေးညီ ကက်ရှ် ခွင့်ပြုချက်များ သို့မဟုတ် တောင်းဆိုမှုအတွင်း ဝဘ်ဆာဗာ ပြန်လည်စတင်ခြင်းကြောင့် ဖြစ်သည်။"
 
 msgid "The operation log reports that post-apply actions completed successfully."
-msgstr ""
+msgstr "လုပ်ဆောင်မှု မှတ်တမ်းတွင် အသုံးချပြီးနောက် လုပ်ဆောင်ချက်များ အောင်မြင်စွာ ပြီးဆုံးခဲ့ကြောင်း ဖော်ပြထားသည်။"
 
 msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
-msgstr ""
+msgstr "ရွေးချယ်ထားသော အသုံးချပြီးနောက် အမိန့်များ အောင်မြင်စွာ ပြီးဆုံးခဲ့သော်လည်း နောက်ဆုံး HTTP တုံ့ပြန်မှု မအောင်မြင်ခဲ့ပါ။ စာမျက်နှာ မှန်ကန်စွာ မတင်ပါက စာမျက်နှာကို ပြန်လည်စတင်ပြီး အချိန်နှင့်တပြေးညီ ကက်ရှ် ခွင့်ပြုချက်များကို စစ်ဆေးပါ။"
 
 msgid "The updater does not create or restore database backups."
-msgstr ""
+msgstr "အပ်ဒိတ်လုပ်ဆောင်သူသည် ဒေတာဘေ့စ် အရန်သိမ်းဆည်းမှုများကို ဖန်တီးခြင်း သို့မဟုတ် ပြန်လည်ထည့်သွင်းခြင်း မလုပ်ပါ။"
 
 msgid "These actions are safe to run from the UI after reviewing the update result."
-msgstr ""
+msgstr "ဤလုပ်ဆောင်ချက်များသည် အပ်ဒိတ်ရလဒ်ကို ပြန်လည်သုံးသပ်ပြီးနောက် UI မှ လုပ်ဆောင်ရန် ဘေးကင်းသည်။"
 
 msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
-msgstr ""
+msgstr "ဤအမိန့်များသည် မှီခိုမှုများ၊ ထုတ်လုပ်ထားသော ပိုင်ဆိုင်မှုများ၊ ကက်ရှ် သို့မဟုတ် ဒေတာဘေ့စ်ကို ပြောင်းလဲနိုင်သည်။ ဆက်လက်မလုပ်ဆောင်မီ အရန်သိမ်းဆည်းမှုများကို အတည်ပြုပါ။"
 
 msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
-msgstr ""
+msgstr "ဤလုပ်ဆောင်ချက်သည် Chamilo တပ်ဆင်မှုရှိ ဖိုင်များကို ပြောင်းလဲသည်။ ဆက်လက်မလုပ်ဆောင်မီ အသုံးချမှုအစီအစဉ်ကို ပြန်လည်သုံးသပ်ပြီး အရန်သိမ်းဆည်းမှုများ ဖွင့်ထားကြောင်း သေချာပါစေ။"
 
 msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
-msgstr ""
+msgstr "ဤဖွံ့ဖြိုးမှုဆိုင်ရာ ထည့်သွင်းမှုသည် ဒေသတွင်း စမ်းသပ်ပက်ကေ့ဂျ် လမ်းကြောင်းများကို အသုံးပြု၍ အနာဂတ် Chamilo.org အပ်ဒိတ် အသိပေးချက်ကို အတုယူသည်။"
 
 msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
-msgstr ""
+msgstr "ဤမျက်နှာပြင်ကို တရားဝင် အပ်ဒိတ် အသိပေးချက်မှ ဖွင့်ခဲ့သော်လည်း တရားဝင် မန်နီဖက်စ် အရင်းအမြစ်ကို သတ်မှတ်ထားခြင်း မရှိသေးပါ။"
 
 msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
-msgstr ""
+msgstr "ဤမျက်နှာပြင်ကို အပ်ဒိတ် အသိပေးချက်မှ ဖွင့်ခဲ့သည်။ မန်နီဖက်စ် စစ်ဆေးမှုကိုသာ အလိုအလျောက် စတင်သည်။"
 
 msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
-msgstr ""
+msgstr "ဤအဆင့်သည် ပြန်လည်သုံးသပ်မှုတစ်ခုကို ပြင်ဆင်သည်။ ဖိုင်အစားထိုးမှုသည် နောက်ပိုင်း Apply staged files အဆင့်တွင် သော့ခတ်မှု၊ အရန်သိမ်းဆည်းမှုနှင့် ပြန်လည်ထည့်သွင်းမှု ကာကွယ်မှုဖြင့် ဖြစ်ပေါ်သည်။"
 
 msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
-msgstr ""
+msgstr "ဤအပ်ဒိတ်လုပ်ဆောင်သူသည် ဒေတာဘေ့စ် အရန်သိမ်းဆည်းမှု မဖန်တီးပါ။ ရွှေ့ပြောင်းမှုများ မလုပ်ဆောင်မီ အရန်သိမ်းဆည်းမှုတစ်ခု ဖန်တီးပြီး စစ်ဆေးပါ။"
 
 msgid "Trusted public key"
-msgstr ""
+msgstr "ယုံကြည်ရသော အများပြည်သူ သော့"
 
 msgid "Trusted signing key"
-msgstr ""
+msgstr "ယုံကြည်ရသော လက်မှတ်ရေးထိုး သော့"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr ""
+msgstr "အတည်ပြုရန် APPLY UPDATE FILES ဟု ရိုက်ထည့်ပါ"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr ""
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို အတည်ပြုရန် RUN DATABASE MIGRATIONS ဟု ရိုက်ထည့်ပါ"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr ""
+msgstr "အတည်ပြုရန် RUN POST UPDATE ACTIONS ဟု ရိုက်ထည့်ပါ"
 
 msgid "Unknown update notice source."
-msgstr ""
+msgstr "အပ်ဒိတ် အသိပေးချက် အရင်းအမြစ် မသိရှိပါ။"
 
 msgid "Update availability"
-msgstr ""
+msgstr "အပ်ဒိတ် ရရှိနိုင်မှု"
 
 msgid "Update directory"
-msgstr ""
+msgstr "အပ်ဒိတ် လမ်းညွှန်တွဲ"
 
 msgid "Update lock path"
-msgstr ""
+msgstr "အပ်ဒိတ် သော့ခတ်မှု လမ်းကြောင်း"
 
 msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
-msgstr ""
+msgstr "ယခင်အဆင့်မှ ထုတ်လုပ်ထားသော အဆင့်မြှင့်တင်မှု လမ်းညွှန်တွဲကို အသုံးပြုပါ။ နောက်ခံသည် var/update/staging အတွင်းရှိ လမ်းညွှန်တွဲများကိုသာ လက်ခံသည်။"
 
 msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
-msgstr ""
+msgstr "ဖွံ့ဖြိုးမှုဆိုင်ရာ စမ်းသပ်မှုများအတွင်း အနာဂတ် Chamilo.org အပ်ဒိတ် အသိပေးချက်ကို အတုယူရန် ဤလင့်ခ်ကို အသုံးပြုပါ။"
 
 msgid "Use this only for local development tests. Production updates must use the server configured key."
-msgstr ""
+msgstr "ဤသည်ကို ဒေသတွင်း ဖွံ့ဖြိုးမှုဆိုင်ရာ စမ်းသပ်မှုများအတွက်သာ အသုံးပြုပါ။ ထုတ်လုပ်မှုဆိုင်ရာ အပ်ဒိတ်များသည် ဆာဗာမှ သတ်မှတ်ထားသော သော့ကို အသုံးပြုရမည်။"
 
 msgid "Verification details"
-msgstr ""
+msgstr "စစ်ဆေးမှု အသေးစိတ်များ"
 
 msgid "Verify package"
-msgstr ""
+msgstr "ပက်ကေ့ဂျ် စစ်ဆေးခြင်း"
 
 msgid "Verifying..."
-msgstr ""
+msgstr "စစ်ဆေးနေသည်..."
 
 msgid "Waiting for command progress events..."
-msgstr ""
+msgstr "အမိန့် တိုးတက်မှု ဖြစ်ရပ်များကို စောင့်ဆိုင်းနေသည်..."
 
 msgid "Waiting for update progress events..."
-msgstr ""
+msgstr "အပ်ဒိတ် တိုးတက်မှု ဖြစ်ရပ်များကို စောင့်ဆိုင်းနေသည်..."
 
 msgid "Yarn build"
-msgstr ""
+msgstr "Yarn တည်ဆောက်မှု"
 
 msgid "Yarn install"
-msgstr ""
+msgstr "Yarn ထည့်သွင်းမှု"
 
 msgid "A comment is required"
-msgstr ""
+msgstr "မှတ်ချက်တစ်ခု လိုအပ်သည်"
 
 msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
-msgstr ""
+msgstr "အမည်တူ ဒေတာဘေ့စ်တစ်ခု ရှိပြီးဖြစ်သည်။ ၎င်းတွင် ဇယားများ ပါရှိပါက ဖျက်ပစ်မည်။ ဗလာဖြစ်ပါက ပြန်လည်အသုံးပြုမည်။"
 
 msgid "AI generated"
-msgstr ""
+msgstr "AI ထုတ်လုပ်ထားသည်"
 
 msgid "Add at least one question before returning to the learning path."
-msgstr ""
+msgstr "သင်ယူမှုလမ်းကြောင်းသို့ ပြန်မသွားမီ အနည်းဆုံး မေးခွန်းတစ်ခု ထည့်ပါ။"
 
 msgid "Add attachments"
-msgstr ""
+msgstr "ပူးတွဲဖိုင်များ ထည့်ပါ"
 
 msgid "Additional fields"
-msgstr ""
+msgstr "နောက်ထပ် အကွက်များ"
 
 msgid "Allow comments"
-msgstr ""
+msgstr "မှတ်ချက်များ ခွင့်ပြုပါ"
 
 msgid "Allow new pages"
-msgstr ""
+msgstr "စာမျက်နှာအသစ်များ ခွင့်ပြုပါ"
 
 msgid "Allow ratings"
-msgstr ""
+msgstr "အဆင့်သတ်မှတ်မှုများ ခွင့်ပြုပါ"
 
 msgid "Are you sure you want to delete all items?"
-msgstr ""
+msgstr "အရာအားလုံးကို ဖျက်ရန် သေချာပါသလား။"
 
 msgid "Are you sure you want to restore automatic renewal?"
-msgstr ""
+msgstr "အလိုအလျောက် သက်တမ်းတိုးခြင်းကို ပြန်လည်စတင်ရန် သေချာပါသလား။"
 
 msgid "Attachment has been deleted"
-msgstr ""
+msgstr "ပူးတွဲဖိုင်ကို ဖျက်ပြီးပါပြီ"
 
 msgid "Backup file"
-msgstr ""
+msgstr "အရန်သိမ်းဆည်းမှု ဖိုင်"
 
 msgid "Block comments"
-msgstr ""
+msgstr "မှတ်ချက်များ ပိတ်ဆို့ပါ"
 
 msgid "Block new pages"
-msgstr ""
+msgstr "စာမျက်နှာအသစ်များကို ပိတ်ဆို့ရန်"
 
 msgid "Block ratings"
-msgstr ""
+msgstr "အဆင့်သတ်မှတ်မှုများကို ပိတ်ဆို့ရန်"
 
 msgid "Cancel renewal"
-msgstr ""
+msgstr "သက်တမ်းတိုးခြင်းကို ပယ်ဖျက်ရန်"
 
 msgid "Category links will be removed from %s Wiki pages."
-msgstr ""
+msgstr "အမျိုးအစားလင့်ခ်များကို %s Wiki စာမျက်နှာများမှ ဖယ်ရှားပါမည်။"
 
 msgid "Change"
-msgstr ""
+msgstr "ပြောင်းလဲရန်"
 
 msgid "Clear group"
-msgstr ""
+msgstr "အုပ်စုကို ရှင်းလင်းရန်"
 
 msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
-msgstr ""
+msgstr "တည်းဖြတ်ကိရိယာထဲသို့ ထည့်သွင်းရန် တက်ဂ်တစ်ခုကို နှိပ်ပါ။ ဤနေရာယူမှုများကို လက်မှတ်ထုတ်လုပ်သည့်အခါ အစားထိုးပါမည်။"
 
 msgid "Comment added"
-msgstr ""
+msgstr "မှတ်ချက် ထည့်သွင်းပြီးပါပြီ"
 
 msgid "Comment is required"
 msgstr "မှတ်ချက်လိုအပ်ပါသည်"
@@ -37545,4 +37545,94 @@ msgstr "ကျေနပ်မှုမရှိ"
 
 msgid "Very dissatisfied"
 msgstr "အလွန်ကျေနပ်မှုမရှိ"
+
+msgid "Add destination"
+msgstr "ဦးတည်ရာထည့်ရန်"
+
+msgid "Add this test to the assessment tool"
+msgstr "ဤစစ်ဆေးမှုကို အကဲဖြတ်ကိရိယာသို့ ထည့်ရန်"
+
+msgid "Attempts and timing"
+msgstr "ကြိုးပမ်းမှုများနှင့် အချိန်ကာလ"
+
+msgid "Available questions"
+msgstr "ရရှိနိုင်သော မေးခွန်းများ"
+
+msgid "Cancel and return to learning path"
+msgstr "ပယ်ဖျက်ပြီး သင်ယူမှုလမ်းကြောင်းသို့ ပြန်သွားရန်"
+
+msgid "Category destinations"
+msgstr "အမျိုးအစား ဦးတည်ရာများ"
+
+msgid "Classification"
+msgstr "အမျိုးအစားခွဲခြားခြင်း"
+
+msgid "Context"
+msgstr "အကြောင်းအရာ"
+
+msgid "Could not load exercise configuration"
+msgstr "လေ့ကျင့်ခန်း ပြင်ဆင်မှုကို တင်ဆောင်၍မရပါ"
+
+msgid "Could not save exercise"
+msgstr "လေ့ကျင့်ခန်းကို သိမ်းဆည်း၍မရပါ"
+
+msgid "Display and learning path"
+msgstr "ပြသမှုနှင့် သင်ယူမှုလမ်းကြောင်း"
+
+msgid "Edit test"
+msgstr "စစ်ဆေးမှုကို တည်းဖြတ်ရန်"
+
+msgid "Exercise settings saved."
+msgstr "လေ့ကျင့်ခန်း ဆက်တင်များကို သိမ်းဆည်းပြီးပါပြီ။"
+
+msgid "Extra settings"
+msgstr "နောက်ထပ် ဆက်တင်များ"
+
+msgid "Feedback and results"
+msgstr "တုံ့ပြန်ချက်နှင့် ရလဒ်များ"
+
+msgid "Finish exercise"
+msgstr "လေ့ကျင့်ခန်း ပြီးဆုံးရန်"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "ဤလေ့ကျင့်ခန်းကို အရင်းအမြစ်မက်တာဒေတာအဖြစ် ဘာသာစကားကို ဖော်ထုတ်သည်။ ရှာဖွေမှုအညွှန်းတပ်ခြင်းကို သူ့ဘာသာ ဖွင့်မပေးပါ။"
+
+msgid "Maximum score (%)"
+msgstr "အများဆုံး ရမှတ် (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "မက်တာဒေတာတွင် လေ့ကျင့်ခန်းများအတွက် ပြင်ဆင်ထားသော ကျွမ်းကျင်မှုများနှင့် နောက်ထပ်အကွက်များ ပါဝင်သည်။ ဤအရာသည် ရွေးချယ်နိုင်ပြီး ဖွင့်မထားမချင်း ဖုံးကွယ်ထားပါသည်။"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "ဤလေ့ကျင့်ခန်းအတွက် မေးခွန်းအမျိုးအစားများ မရရှိနိုင်သေးပါ။"
+
+msgid "Question categories matrix"
+msgstr "မေးခွန်းအမျိုးအစားများ မက်ထရစ်"
+
+msgid "Questions behavior"
+msgstr "မေးခွန်းများ၏ အပြုအမူ"
+
+msgid "Random by category"
+msgstr "အမျိုးအစားအလိုက် ကျပန်း"
+
+msgid "Remove destination"
+msgstr "ဦးတည်ရာကို ဖယ်ရှားရန်"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "စည်းမျဉ်းများကို ရမှတ်ရာခိုင်နှုန်းအလိုက် တက်သည့်အစဉ်အတိုင်း အကဲဖြတ်ပါသည်။ စစ်ဆေးမှုအဆုံးသတ်ရန် လေ့ကျင့်ခန်း ပြီးဆုံးရန် ရွေးချယ်ပါ။"
+
+msgid "Score and final messages"
+msgstr "ရမှတ်နှင့် နိဂုံးစကားများ"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "လေ့ကျင့်ခန်း ဖန်တီးပြီးနောက် အချို့ရွေးချယ်စရာများကို ပိတ်ထားပါသည်။"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "ဤတန်ဖိုးကို စုစုပေါင်းကြာချိန်အဖြစ် မိနစ်ဖြင့် သိမ်းဆည်းထားပါသည်။"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "ရရှိနိုင်သော မေးခွန်းအားလုံးကို ထိန်းသိမ်းရန် 0 ကို အသုံးပြုပါ။ ရရှိနိုင်သော မေးခွန်းအားလုံးကို ခွင့်ပြုရန် -1 ကို အသုံးပြုပါ။"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "ဤအကွက်များကို ပြသမှုရွေးချယ်စရာများမှ သီးခြားစီ လေ့ကျင့်ခန်းကို အမျိုးအစားခွဲရန် အသုံးပြုပါ။"
 

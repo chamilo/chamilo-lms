@@ -37542,3 +37542,93 @@ msgstr "असंतुष्ट"
 msgid "Very dissatisfied"
 msgstr "बहुत असंतुष्ट"
 
+msgid "Add destination"
+msgstr "गंतव्य जोड़ें"
+
+msgid "Add this test to the assessment tool"
+msgstr "इस परीक्षण को मूल्यांकन उपकरण में जोड़ें"
+
+msgid "Attempts and timing"
+msgstr "प्रयास और समय"
+
+msgid "Available questions"
+msgstr "उपलब्ध प्रश्न"
+
+msgid "Cancel and return to learning path"
+msgstr "रद्द करें और अधिगम पथ पर लौटें"
+
+msgid "Category destinations"
+msgstr "श्रेणी गंतव्य"
+
+msgid "Classification"
+msgstr "वर्गीकरण"
+
+msgid "Context"
+msgstr "संदर्भ"
+
+msgid "Could not load exercise configuration"
+msgstr "व्यायाम कॉन्फ़िगरेशन लोड नहीं किया जा सका"
+
+msgid "Could not save exercise"
+msgstr "व्यायाम सहेजा नहीं जा सका"
+
+msgid "Display and learning path"
+msgstr "प्रदर्शन और अधिगम पथ"
+
+msgid "Edit test"
+msgstr "परीक्षण संपादित करें"
+
+msgid "Exercise settings saved."
+msgstr "व्यायाम सेटिंग्स सहेजी गईं।"
+
+msgid "Extra settings"
+msgstr "अतिरिक्त सेटिंग्स"
+
+msgid "Feedback and results"
+msgstr "प्रतिक्रिया और परिणाम"
+
+msgid "Finish exercise"
+msgstr "व्यायाम समाप्त करें"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "इस व्यायाम की भाषा को संसाधन मेटाडेटा के रूप में पहचानता है। यह स्वयं खोज अनुक्रमण सक्षम नहीं करता।"
+
+msgid "Maximum score (%)"
+msgstr "अधिकतम अंक (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "मेटाडेटा में व्यायामों के लिए कॉन्फ़िगर किए गए कौशल और अतिरिक्त फ़ील्ड शामिल हैं। यह वैकल्पिक है और खोले जाने तक छिपा रहता है।"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "इस व्यायाम के लिए अभी कोई प्रश्न श्रेणियाँ उपलब्ध नहीं हैं।"
+
+msgid "Question categories matrix"
+msgstr "प्रश्न श्रेणियाँ मैट्रिक्स"
+
+msgid "Questions behavior"
+msgstr "प्रश्न व्यवहार"
+
+msgid "Random by category"
+msgstr "श्रेणी के अनुसार यादृच्छिक"
+
+msgid "Remove destination"
+msgstr "गंतव्य हटाएँ"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "नियमों का मूल्यांकन अंक प्रतिशत के आधार पर आरोही क्रम में किया जाता है। परीक्षण समाप्त करने के लिए व्यायाम समाप्त करें चुनें।"
+
+msgid "Score and final messages"
+msgstr "अंक और अंतिम संदेश"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "व्यायाम बनाने के बाद कुछ विकल्प लॉक हो जाते हैं।"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "यह मान कुल अवधि मिनटों में संग्रहीत किया जाता है।"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "सभी उपलब्ध प्रश्न रखने के लिए 0 का उपयोग करें। -1 का उपयोग करें जहाँ सभी उपलब्ध प्रश्नों की अनुमति है।"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "व्यायाम को उसके प्रदर्शन विकल्पों से स्वतंत्र रूप से वर्गीकृत करने के लिए इन क्षेत्रों का उपयोग करें।"
+

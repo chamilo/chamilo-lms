@@ -37553,3 +37553,93 @@ msgstr "Ez pozik"
 msgid "Very dissatisfied"
 msgstr "Oso ez pozik"
 
+msgid "Add destination"
+msgstr "Gehitu helmuga"
+
+msgid "Add this test to the assessment tool"
+msgstr "Gehitu proba hau ebaluazio tresnari"
+
+msgid "Attempts and timing"
+msgstr "Saiakerak eta denbora"
+
+msgid "Available questions"
+msgstr "Galdera erabilgarriak"
+
+msgid "Cancel and return to learning path"
+msgstr "Utzi eta itzuli ikaskuntza ibilbidera"
+
+msgid "Category destinations"
+msgstr "Kategoria helmugak"
+
+msgid "Classification"
+msgstr "Sailkapena"
+
+msgid "Context"
+msgstr "Testuingurua"
+
+msgid "Could not load exercise configuration"
+msgstr "Ezin izan da ariketaren konfigurazioa kargatu"
+
+msgid "Could not save exercise"
+msgstr "Ezin izan da ariketa gorde"
+
+msgid "Display and learning path"
+msgstr "Bistaratzea eta ikaskuntza ibilbidea"
+
+msgid "Edit test"
+msgstr "Editatu proba"
+
+msgid "Exercise settings saved."
+msgstr "Ariketaren ezarpenak gorde dira."
+
+msgid "Extra settings"
+msgstr "Ezarpen gehigarriak"
+
+msgid "Feedback and results"
+msgstr "Feedbacka eta emaitzak"
+
+msgid "Finish exercise"
+msgstr "Amaitu ariketa"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifikatu ariketa honen hizkuntza baliabideen metadatu gisa. Ez du bilaketa indexazioa gaitzen berez."
+
+msgid "Maximum score (%)"
+msgstr "Gehieneko puntuazioa (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadatuak ariketetarako konfiguratutako trebetasunak eta eremu gehigarriak ditu. Aukerakoa da eta ezkutuan geratzen da ireki arte."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Ez dago galdera kategoriarik eskuragarri ariketa honetarako oraindik."
+
+msgid "Question categories matrix"
+msgstr "Galdera kategorien matrizea"
+
+msgid "Questions behavior"
+msgstr "Galderen portaera"
+
+msgid "Random by category"
+msgstr "Ausaz kategoriaren arabera"
+
+msgid "Remove destination"
+msgstr "Kendu helburua"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Arauak puntuazioaren ehunekoaren arabera ebaluatzen dira goranzko ordenan. Aukeratu Amaitu ariketa proba amaitzeko."
+
+msgid "Score and final messages"
+msgstr "Puntuazioa eta azken mezuak"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Aukera batzuk blokeatuta daude ariketa sortu ondoren."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Balio hau gordetzen da iraupen oso gisa minututan."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Erabili 0 eskuragarri dauden galdera guztiak mantentzeko. Erabili -1 eskuragarri dauden galdera guztiak onartzeko."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Erabili eremu hauek ariketa sailkatzeko bere bistaratze-aukerekin lotu gabe."
+

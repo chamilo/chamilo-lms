@@ -2111,7 +2111,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:sans copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossier,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossier,, application/msword:MsWord,, application/octet-stream:Flux octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercice,,      simulation:simulation,,      questionnaire:enquête,,      diagram:diagramme,,      figure:figure,,      graph:graphe,,      index:index,,      slide:diapo,,      table:table,,      narrative text:texte narratif,,      exam:examen,,      experiment:expérience,,      problem statement:problème,,      self assessment:auto-évaluation,,      lecture:présentation"
@@ -39427,4 +39427,94 @@ msgstr "Insatisfait"
 
 msgid "Very dissatisfied"
 msgstr "Très insatisfait"
+
+msgid "Add destination"
+msgstr "Ajouter une destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Ajouter ce test à l'outil d'évaluation"
+
+msgid "Attempts and timing"
+msgstr "Tentatives et durée"
+
+msgid "Available questions"
+msgstr "Questions disponibles"
+
+msgid "Cancel and return to learning path"
+msgstr "Annuler et retourner au parcours d'apprentissage"
+
+msgid "Category destinations"
+msgstr "Destinations des catégories"
+
+msgid "Classification"
+msgstr "Classification"
+
+msgid "Context"
+msgstr "Contexte"
+
+msgid "Could not load exercise configuration"
+msgstr "Impossible de charger la configuration de l'exercice"
+
+msgid "Could not save exercise"
+msgstr "Impossible d'enregistrer l'exercice"
+
+msgid "Display and learning path"
+msgstr "Affichage et parcours d'apprentissage"
+
+msgid "Edit test"
+msgstr "Modifier le test"
+
+msgid "Exercise settings saved."
+msgstr "Paramètres de l'exercice enregistrés."
+
+msgid "Extra settings"
+msgstr "Paramètres supplémentaires"
+
+msgid "Feedback and results"
+msgstr "Commentaires et résultats"
+
+msgid "Finish exercise"
+msgstr "Terminer l'exercice"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifie la langue de cet exercice comme métadonnée de la ressource. Cela n'active pas l'indexation de recherche par lui-même."
+
+msgid "Maximum score (%)"
+msgstr "Score maximum (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Les métadonnées contiennent des compétences et des champs supplémentaires configurés pour les exercices. C'est optionnel et reste masqué jusqu'à son ouverture."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Aucune catégorie de question n'est disponible pour cet exercice pour l'instant."
+
+msgid "Question categories matrix"
+msgstr "Matrice des catégories de questions"
+
+msgid "Questions behavior"
+msgstr "Comportement des questions"
+
+msgid "Random by category"
+msgstr "Aléatoire par catégorie"
+
+msgid "Remove destination"
+msgstr "Supprimer la destination"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Les règles sont évaluées par pourcentage de score dans l'ordre croissant. Sélectionnez Terminer l'exercice pour mettre fin au test."
+
+msgid "Score and final messages"
+msgstr "Score et messages finaux"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Certaines options sont verrouillées après la création de l'exercice."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Cette valeur est enregistrée comme durée totale en minutes."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Utilisez 0 pour conserver toutes les questions disponibles. Utilisez -1 pour autoriser toutes les questions disponibles."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Utilisez ces champs pour classer l'exercice indépendamment de ses options d'affichage."
 

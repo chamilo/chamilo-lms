@@ -37548,3 +37548,93 @@ msgstr "不满意"
 msgid "Very dissatisfied"
 msgstr "非常不满意"
 
+msgid "Add destination"
+msgstr "添加目标"
+
+msgid "Add this test to the assessment tool"
+msgstr "将此测试添加到评估工具"
+
+msgid "Attempts and timing"
+msgstr "尝试次数与时间"
+
+msgid "Available questions"
+msgstr "可用题目"
+
+msgid "Cancel and return to learning path"
+msgstr "取消并返回学习路径"
+
+msgid "Category destinations"
+msgstr "类别目标"
+
+msgid "Classification"
+msgstr "分类"
+
+msgid "Context"
+msgstr "上下文"
+
+msgid "Could not load exercise configuration"
+msgstr "无法加载练习配置"
+
+msgid "Could not save exercise"
+msgstr "无法保存练习"
+
+msgid "Display and learning path"
+msgstr "显示与学习路径"
+
+msgid "Edit test"
+msgstr "编辑测试"
+
+msgid "Exercise settings saved."
+msgstr "练习设置已保存。"
+
+msgid "Extra settings"
+msgstr "额外设置"
+
+msgid "Feedback and results"
+msgstr "反馈与结果"
+
+msgid "Finish exercise"
+msgstr "完成练习"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "将此练习的语言标识为资源元数据。该操作本身不会启用搜索索引。"
+
+msgid "Maximum score (%)"
+msgstr "最高得分（%）"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "元数据包含为练习配置的技能和附加字段。此项为可选，保持隐藏直至打开。"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "此练习尚无可用的题目类别。"
+
+msgid "Question categories matrix"
+msgstr "题目类别矩阵"
+
+msgid "Questions behavior"
+msgstr "题目行为"
+
+msgid "Random by category"
+msgstr "按类别随机"
+
+msgid "Remove destination"
+msgstr "移除目标"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "规则按得分百分比升序评估。选择“完成练习”以结束测试。"
+
+msgid "Score and final messages"
+msgstr "得分与最终消息"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "部分选项在练习创建后将被锁定。"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "此值以分钟为单位存储为总时长。"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "使用 0 保留所有可用题目。使用 -1 表示允许所有可用题目。"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "使用这些字段对练习进行分类，与其显示选项无关。"
+

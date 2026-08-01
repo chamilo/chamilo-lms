@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -37547,4 +37547,94 @@ msgstr "Không hài lòng"
 
 msgid "Very dissatisfied"
 msgstr "Rất không hài lòng"
+
+msgid "Add destination"
+msgstr "Thêm điểm đến"
+
+msgid "Add this test to the assessment tool"
+msgstr "Thêm bài kiểm tra này vào công cụ đánh giá"
+
+msgid "Attempts and timing"
+msgstr "Số lần thử và thời gian"
+
+msgid "Available questions"
+msgstr "Câu hỏi có sẵn"
+
+msgid "Cancel and return to learning path"
+msgstr "Hủy và quay lại lộ trình học tập"
+
+msgid "Category destinations"
+msgstr "Điểm đến theo danh mục"
+
+msgid "Classification"
+msgstr "Phân loại"
+
+msgid "Context"
+msgstr "Ngữ cảnh"
+
+msgid "Could not load exercise configuration"
+msgstr "Không thể tải cấu hình bài tập"
+
+msgid "Could not save exercise"
+msgstr "Không thể lưu bài tập"
+
+msgid "Display and learning path"
+msgstr "Hiển thị và lộ trình học tập"
+
+msgid "Edit test"
+msgstr "Chỉnh sửa bài kiểm tra"
+
+msgid "Exercise settings saved."
+msgstr "Đã lưu cài đặt bài tập."
+
+msgid "Extra settings"
+msgstr "Cài đặt bổ sung"
+
+msgid "Feedback and results"
+msgstr "Phản hồi và kết quả"
+
+msgid "Finish exercise"
+msgstr "Hoàn thành bài tập"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Xác định ngôn ngữ của bài tập này dưới dạng siêu dữ liệu tài nguyên. Điều này không tự động bật đánh chỉ mục tìm kiếm."
+
+msgid "Maximum score (%)"
+msgstr "Điểm tối đa (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Siêu dữ liệu chứa kỹ năng và các trường bổ sung được cấu hình cho bài tập. Đây là tùy chọn và vẫn ẩn cho đến khi được mở."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Chưa có danh mục câu hỏi nào cho bài tập này."
+
+msgid "Question categories matrix"
+msgstr "Ma trận danh mục câu hỏi"
+
+msgid "Questions behavior"
+msgstr "Hành vi câu hỏi"
+
+msgid "Random by category"
+msgstr "Ngẫu nhiên theo danh mục"
+
+msgid "Remove destination"
+msgstr "Xóa điểm đến"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Các quy tắc được đánh giá theo tỷ lệ phần trăm điểm theo thứ tự tăng dần. Chọn Hoàn thành bài tập để kết thúc bài kiểm tra."
+
+msgid "Score and final messages"
+msgstr "Điểm số và thông báo cuối cùng"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Một số tùy chọn bị khóa sau khi bài tập đã được tạo."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Giá trị này được lưu dưới dạng tổng thời lượng tính bằng phút."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Sử dụng 0 để giữ tất cả câu hỏi có sẵn. Sử dụng -1 khi cho phép tất cả câu hỏi có sẵn."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Sử dụng các trường này để phân loại bài tập độc lập với các tùy chọn hiển thị."
 

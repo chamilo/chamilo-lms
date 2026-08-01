@@ -37559,3 +37559,93 @@ msgstr "לא מרוצה"
 msgid "Very dissatisfied"
 msgstr "לא מרוצה כלל"
 
+msgid "Add destination"
+msgstr "הוסף יעד"
+
+msgid "Add this test to the assessment tool"
+msgstr "הוסף בדיקה זו לכלי ההערכה"
+
+msgid "Attempts and timing"
+msgstr "ניסיונות ותזמון"
+
+msgid "Available questions"
+msgstr "שאלות זמינות"
+
+msgid "Cancel and return to learning path"
+msgstr "בטל וחזור לנתיב הלמידה"
+
+msgid "Category destinations"
+msgstr "יעדי קטגוריה"
+
+msgid "Classification"
+msgstr "סיווג"
+
+msgid "Context"
+msgstr "הקשר"
+
+msgid "Could not load exercise configuration"
+msgstr "לא ניתן לטעון את תצורת התרגיל"
+
+msgid "Could not save exercise"
+msgstr "לא ניתן לשמור את התרגיל"
+
+msgid "Display and learning path"
+msgstr "תצוגה ונתיב למידה"
+
+msgid "Edit test"
+msgstr "ערוך בדיקה"
+
+msgid "Exercise settings saved."
+msgstr "הגדרות התרגיל נשמרו."
+
+msgid "Extra settings"
+msgstr "הגדרות נוספות"
+
+msgid "Feedback and results"
+msgstr "משוב ותוצאות"
+
+msgid "Finish exercise"
+msgstr "סיים תרגיל"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "מזהה את השפה של תרגיל זה כמטא-נתונים של המשאב. אין בכך כדי לאפשר אינדוקס חיפוש בפני עצמו."
+
+msgid "Maximum score (%)"
+msgstr "ציון מקסימלי (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "המטא-נתונים מכילים מיומנויות ושדות נוספים שהוגדרו לתרגילים. אופציונלי ונותר מוסתר עד לפתיחה."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "אין קטגוריות שאלות זמינות עדיין לתרגיל זה."
+
+msgid "Question categories matrix"
+msgstr "מטריצת קטגוריות שאלות"
+
+msgid "Questions behavior"
+msgstr "התנהגות שאלות"
+
+msgid "Random by category"
+msgstr "אקראי לפי קטגוריה"
+
+msgid "Remove destination"
+msgstr "הסר יעד"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "הכללים נבדקים לפי אחוז הציון בסדר עולה. בחר סיים תרגיל כדי לסיים את הבדיקה."
+
+msgid "Score and final messages"
+msgstr "ציון והודעות סופיות"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "חלק מהאפשרויות נעולות לאחר יצירת התרגיל."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "ערך זה נשמר כמשך כולל בדקות."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "השתמש ב-0 כדי לשמור על כל השאלות הזמינות. השתמש ב-1- כאשר כל השאלות הזמינות מותרות."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "השתמש בשדות אלה כדי לסווג את התרגיל בנפרד מאפשרויות התצוגה שלו."
+

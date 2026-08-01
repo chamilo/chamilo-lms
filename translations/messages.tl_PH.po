@@ -35491,7 +35491,7 @@ msgid "%s results"
 msgstr "%s resulta"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng pagpuno sa form na aktibidad : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Tingnan ang <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Natanggal"
@@ -37541,4 +37541,94 @@ msgstr "Hindi nasiyahan"
 
 msgid "Very dissatisfied"
 msgstr "Lubhang hindi nasiyahan"
+
+msgid "Add destination"
+msgstr "Add destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Add this test to the assessment tool"
+
+msgid "Attempts and timing"
+msgstr "Attempts and timing"
+
+msgid "Available questions"
+msgstr "Available questions"
+
+msgid "Cancel and return to learning path"
+msgstr "Cancel and return to learning path"
+
+msgid "Category destinations"
+msgstr "Category destinations"
+
+msgid "Classification"
+msgstr "Classification"
+
+msgid "Context"
+msgstr "Context"
+
+msgid "Could not load exercise configuration"
+msgstr "Could not load exercise configuration"
+
+msgid "Could not save exercise"
+msgstr "Could not save exercise"
+
+msgid "Display and learning path"
+msgstr "Display and learning path"
+
+msgid "Edit test"
+msgstr "Edit test"
+
+msgid "Exercise settings saved."
+msgstr "Exercise settings saved."
+
+msgid "Extra settings"
+msgstr "Extra settings"
+
+msgid "Feedback and results"
+msgstr "Feedback and results"
+
+msgid "Finish exercise"
+msgstr "Finish exercise"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+
+msgid "Maximum score (%)"
+msgstr "Maximum score (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "No question categories are available for this exercise yet."
+
+msgid "Question categories matrix"
+msgstr "Question categories matrix"
+
+msgid "Questions behavior"
+msgstr "Questions behavior"
+
+msgid "Random by category"
+msgstr "Random by category"
+
+msgid "Remove destination"
+msgstr "Remove destination"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+
+msgid "Score and final messages"
+msgstr "Score and final messages"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Some options are locked after the exercise has been created."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "This value is stored as total duration in minutes."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Gamitin ang 0 para mapanatili ang lahat ng available na tanong. Gamitin ang -1 kung saan pinapayagan ang lahat ng available na tanong."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Gamitin ang mga field na ito para uriin ang ehersisyo nang hiwalay sa mga opsyon sa pagpapakita nito."
 

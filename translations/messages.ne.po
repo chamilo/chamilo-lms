@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:कपीराइट,, no:कपीराइट नभएको"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फोल्डर,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:व्यायाम,,      simulation:सिमुलेशन,,      questionnaire:प्रश्नावली,,      diagram:डायाग्राम,,      figure:चित्र,,      graph:ग्राफ,,      index:सूची,,      slide:स्लाइड,,      table:तालिका,,      narrative text:कथन पाठ,,      exam:परीक्षा,,      experiment:प्रयोग,,      problem statement:समस्या कथन,,      self assessment:आत्म मूल्याङ्कन,,      lecture:व्याख्यान"
@@ -37545,4 +37545,94 @@ msgstr "असन्तुष्ट"
 
 msgid "Very dissatisfied"
 msgstr "धेरै असन्तुष्ट"
+
+msgid "Add destination"
+msgstr "गन्तव्य थप्नुहोस्"
+
+msgid "Add this test to the assessment tool"
+msgstr "यो परीक्षा मूल्यांकन उपकरणमा थप्नुहोस्"
+
+msgid "Attempts and timing"
+msgstr "प्रयास र समय"
+
+msgid "Available questions"
+msgstr "उपलब्ध प्रश्नहरू"
+
+msgid "Cancel and return to learning path"
+msgstr "रद्द गर्नुहोस् र सिकाइ मार्गमा फर्कनुहोस्"
+
+msgid "Category destinations"
+msgstr "कोटि गन्तव्यहरू"
+
+msgid "Classification"
+msgstr "वर्गीकरण"
+
+msgid "Context"
+msgstr "सन्दर्भ"
+
+msgid "Could not load exercise configuration"
+msgstr "व्यायाम कन्फिगरेसन लोड गर्न सकिएन"
+
+msgid "Could not save exercise"
+msgstr "व्यायाम बचत गर्न सकिएन"
+
+msgid "Display and learning path"
+msgstr "प्रदर्शन र सिकाइ मार्ग"
+
+msgid "Edit test"
+msgstr "परीक्षा सम्पादन गर्नुहोस्"
+
+msgid "Exercise settings saved."
+msgstr "व्यायाम सेटिङहरू बचत गरियो।"
+
+msgid "Extra settings"
+msgstr "अतिरिक्त सेटिङहरू"
+
+msgid "Feedback and results"
+msgstr "प्रतिक्रिया र नतिजाहरू"
+
+msgid "Finish exercise"
+msgstr "व्यायाम समाप्त गर्नुहोस्"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "यो व्यायामको भाषा स्रोत मेटाडेटाको रूपमा पहिचान गर्दछ। यसले आफैं खोज अनुक्रमणिका सक्षम गर्दैन।"
+
+msgid "Maximum score (%)"
+msgstr "अधिकतम अंक (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "मेटाडेटामा व्यायामका लागि कन्फिगर गरिएका सीप र अतिरिक्त क्षेत्रहरू समावेश छन्। यो वैकल्पिक छ र खोलिएसम्म लुकाइएको रहन्छ।"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "यो व्यायामका लागि अहिलेसम्म कुनै प्रश्न कोटि उपलब्ध छैन।"
+
+msgid "Question categories matrix"
+msgstr "प्रश्न कोटि म्याट्रिक्स"
+
+msgid "Questions behavior"
+msgstr "प्रश्न व्यवहार"
+
+msgid "Random by category"
+msgstr "कोटि अनुसार अनियमित"
+
+msgid "Remove destination"
+msgstr "गन्तव्य हटाउनुहोस्"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "नियमहरू अंक प्रतिशत अनुसार आरोही क्रममा मूल्यांकन गरिन्छ। परीक्षा समाप्त गर्न समाप्त व्यायाम चयन गर्नुहोस्।"
+
+msgid "Score and final messages"
+msgstr "अंक र अन्तिम सन्देशहरू"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "व्यायाम सिर्जना भएपछि केही विकल्पहरू लक हुन्छन्।"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "यो मान मिनेटमा कुल अवधिको रूपमा भण्डारण गरिन्छ।"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "सबै उपलब्ध प्रश्नहरू राख्न ० प्रयोग गर्नुहोस्। सबै उपलब्ध प्रश्नहरूलाई अनुमति दिइएको ठाउँमा -१ प्रयोग गर्नुहोस्।"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "यी क्षेत्रहरू प्रयोग गरेर अभ्यासलाई यसको प्रदर्शन विकल्पहरूबाट स्वतन्त्र रूपमा वर्गीकरण गर्नुहोस्।"
 

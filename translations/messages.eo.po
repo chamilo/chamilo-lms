@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulo-ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -37547,4 +37547,94 @@ msgstr "Malkontenta"
 
 msgid "Very dissatisfied"
 msgstr "Tre malkontenta"
+
+msgid "Add destination"
+msgstr "Aldoni celon"
+
+msgid "Add this test to the assessment tool"
+msgstr "Aldoni ĉi tiun teston al la taksa ilo"
+
+msgid "Attempts and timing"
+msgstr "Provadoj kaj tempigo"
+
+msgid "Available questions"
+msgstr "Disponeblaj demandoj"
+
+msgid "Cancel and return to learning path"
+msgstr "Nuligi kaj reveni al lernopado"
+
+msgid "Category destinations"
+msgstr "Kategoriaj celoj"
+
+msgid "Classification"
+msgstr "Klasifiko"
+
+msgid "Context"
+msgstr "Kunteksto"
+
+msgid "Could not load exercise configuration"
+msgstr "Ne eblis ŝargi la ekzercan agordon"
+
+msgid "Could not save exercise"
+msgstr "Ne eblis konservi la ekzercon"
+
+msgid "Display and learning path"
+msgstr "Montrado kaj lernopado"
+
+msgid "Edit test"
+msgstr "Redakti teston"
+
+msgid "Exercise settings saved."
+msgstr "Ekzercaj agordoj konservitaj."
+
+msgid "Extra settings"
+msgstr "Pliaj agordoj"
+
+msgid "Feedback and results"
+msgstr "Retroinformo kaj rezultoj"
+
+msgid "Finish exercise"
+msgstr "Fini ekzercon"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identigas la lingvon de ĉi tiu ekzerco kiel rimedan metadatumon. Ĝi mem ne ebligas serĉan indeksadon."
+
+msgid "Maximum score (%)"
+msgstr "Maksimuma poentaro (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadatumoj enhavas kapablojn kaj pliajn kampojn agorditajn por ekzercoj. Ĝi estas laŭvola kaj restas kaŝita ĝis malfermita."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Neniuj demando-kategorioj estas ankoraŭ disponeblaj por ĉi tiu ekzerco."
+
+msgid "Question categories matrix"
+msgstr "Matrico de demandaj kategorioj"
+
+msgid "Questions behavior"
+msgstr "Konduto de demandoj"
+
+msgid "Random by category"
+msgstr "Hazarda laŭ kategorio"
+
+msgid "Remove destination"
+msgstr "Forigi celon"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reguloj estas taksataj laŭ poentaro en kreskanta ordo. Elektu Finigi ekzercon por fini la teston."
+
+msgid "Score and final messages"
+msgstr "Poentaro kaj finaj mesaĝoj"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Iuj opcioj estas ŝlositaj post kiam la ekzerco estas kreita."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Ĉi tiu valoro estas konservata kiel totala daŭro en minutoj."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Uzu 0 por konservi ĉiujn disponeblajn demandojn. Uzu -1 kie ĉiuj disponeblaj demandoj estas permesitaj."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Uzu ĉi tiujn kampojn por klasifiki la ekzercon sendepende de ĝiaj montraj opcioj."
 

@@ -37548,3 +37548,93 @@ msgstr "不滿意"
 msgid "Very dissatisfied"
 msgstr "非常不滿意"
 
+msgid "Add destination"
+msgstr "新增目的地"
+
+msgid "Add this test to the assessment tool"
+msgstr "將此測驗加入評量工具"
+
+msgid "Attempts and timing"
+msgstr "作答次數與時間"
+
+msgid "Available questions"
+msgstr "可用題目"
+
+msgid "Cancel and return to learning path"
+msgstr "取消並返回學習路徑"
+
+msgid "Category destinations"
+msgstr "類別目的地"
+
+msgid "Classification"
+msgstr "分類"
+
+msgid "Context"
+msgstr "情境"
+
+msgid "Could not load exercise configuration"
+msgstr "無法載入測驗設定"
+
+msgid "Could not save exercise"
+msgstr "無法儲存測驗"
+
+msgid "Display and learning path"
+msgstr "顯示與學習路徑"
+
+msgid "Edit test"
+msgstr "編輯測驗"
+
+msgid "Exercise settings saved."
+msgstr "測驗設定已儲存。"
+
+msgid "Extra settings"
+msgstr "額外設定"
+
+msgid "Feedback and results"
+msgstr "回饋與結果"
+
+msgid "Finish exercise"
+msgstr "完成測驗"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "將此測驗的語言標示為資源中繼資料。此設定不會啟用搜尋索引功能。"
+
+msgid "Maximum score (%)"
+msgstr "最高分數（%）"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "中繼資料包含為測驗設定的技能與額外欄位。此為選填項目，需開啟後才會顯示。"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "目前尚無可供此測驗使用的題目類別。"
+
+msgid "Question categories matrix"
+msgstr "題目類別矩陣"
+
+msgid "Questions behavior"
+msgstr "題目行為"
+
+msgid "Random by category"
+msgstr "依類別隨機"
+
+msgid "Remove destination"
+msgstr "移除目的地"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "規則依分數百分比由低至高評估。請選擇「完成測驗」以結束測驗。"
+
+msgid "Score and final messages"
+msgstr "分數與結束訊息"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "部分選項在測驗建立後即會鎖定。"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "此數值將以分鐘為單位儲存為總時長。"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "使用 0 保留所有可用題目。使用 -1 表示允許所有可用題目。"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "使用這些欄位來獨立於顯示選項之外分類練習。"
+

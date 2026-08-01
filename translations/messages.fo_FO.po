@@ -37542,3 +37542,93 @@ msgstr "Ónøgd/ur"
 msgid "Very dissatisfied"
 msgstr "Nógv ónøgd/ur"
 
+msgid "Add destination"
+msgstr "Legg til mál"
+
+msgid "Add this test to the assessment tool"
+msgstr "Legg hetta roynd til metingartólið"
+
+msgid "Attempts and timing"
+msgstr "Royndir og tíð"
+
+msgid "Available questions"
+msgstr "Tøkur spurningar"
+
+msgid "Cancel and return to learning path"
+msgstr "Ógilda og far aftur til lærustíggjan"
+
+msgid "Category destinations"
+msgstr "Bólkamál"
+
+msgid "Classification"
+msgstr "Flokking"
+
+msgid "Context"
+msgstr "Samanhangur"
+
+msgid "Could not load exercise configuration"
+msgstr "Kundi ikki innlesa royndaruppseting"
+
+msgid "Could not save exercise"
+msgstr "Kundi ikki goyma roynd"
+
+msgid "Display and learning path"
+msgstr "Vísing og lærustíggja"
+
+msgid "Edit test"
+msgstr "Rætta roynd"
+
+msgid "Exercise settings saved."
+msgstr "Royndaruppseting goymd."
+
+msgid "Extra settings"
+msgstr "Víðkaðar innstillingar"
+
+msgid "Feedback and results"
+msgstr "Endurgjald og úrslit"
+
+msgid "Finish exercise"
+msgstr "Enda roynd"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Vísir málið á hesi venjing sum tilfeingis-metadata. Tað ger ikki sjálvt møguligt at leita."
+
+msgid "Maximum score (%)"
+msgstr "Hægsta stig (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata innihalda førleikar og aðrar upplýsingar, sum eru settar fyri venjingar. Tað er valfrítt og er fjalt, til tað verður latið upp."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Ongar spurningsbólkar eru tøkir fyri hesa venjing enn."
+
+msgid "Question categories matrix"
+msgstr "Spurningsbólkamatrisa"
+
+msgid "Questions behavior"
+msgstr "Spurningsatferð"
+
+msgid "Random by category"
+msgstr "Tilvildarligt eftir bólki"
+
+msgid "Remove destination"
+msgstr "Tak burtur mál"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reglur verða mettar eftir stigaprosenti í vaksandi raðfylgi. Vel Enda venjing fyri at enda próvtøku."
+
+msgid "Score and final messages"
+msgstr "Stig og endalig boð"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Nakrar møguleikar eru læstir, eftir at venjingin er stovnað."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Hetta virði verður goymt sum samlað tíð í minuttum."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Nýt 0 fyri at varðveita allar tøkar spurningar. Nýt -1 har allir tøkir spurningar eru loyvdir."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Nýt hesar teigar til at flokka venjingina óheft av vísingarmøguleikum."
+

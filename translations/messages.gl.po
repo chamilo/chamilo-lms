@@ -37561,3 +37561,93 @@ msgstr "Insatisfeito"
 msgid "Very dissatisfied"
 msgstr "Moi insatisfeito"
 
+msgid "Add destination"
+msgstr "Engadir destino"
+
+msgid "Add this test to the assessment tool"
+msgstr "Engadir esta proba á ferramenta de avaliación"
+
+msgid "Attempts and timing"
+msgstr "Intentos e tempo"
+
+msgid "Available questions"
+msgstr "Preguntas dispoñibles"
+
+msgid "Cancel and return to learning path"
+msgstr "Cancelar e volver á ruta de aprendizaxe"
+
+msgid "Category destinations"
+msgstr "Destinos da categoría"
+
+msgid "Classification"
+msgstr "Clasificación"
+
+msgid "Context"
+msgstr "Contexto"
+
+msgid "Could not load exercise configuration"
+msgstr "Non foi posible cargar a configuración do exercicio"
+
+msgid "Could not save exercise"
+msgstr "Non foi posible gardar o exercicio"
+
+msgid "Display and learning path"
+msgstr "Visualización e ruta de aprendizaxe"
+
+msgid "Edit test"
+msgstr "Editar proba"
+
+msgid "Exercise settings saved."
+msgstr "Configuración do exercicio gardada."
+
+msgid "Extra settings"
+msgstr "Configuración adicional"
+
+msgid "Feedback and results"
+msgstr "Retroalimentación e resultados"
+
+msgid "Finish exercise"
+msgstr "Finalizar exercicio"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifica o idioma deste exercicio como metadato do recurso. Non activa a indexación de busca por si mesmo."
+
+msgid "Maximum score (%)"
+msgstr "Puntuación máxima (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Os metadatos conteñen competencias e campos adicionais configurados para exercicios. É opcional e permanece oculto ata que se abra."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Aínda non hai categorías de preguntas dispoñibles para este exercicio."
+
+msgid "Question categories matrix"
+msgstr "Matriz de categorías de preguntas"
+
+msgid "Questions behavior"
+msgstr "Comportamento das preguntas"
+
+msgid "Random by category"
+msgstr "Aleatorio por categoría"
+
+msgid "Remove destination"
+msgstr "Eliminar destino"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "As regras avalíanse por porcentaxe de puntuación en orde ascendente. Seleccione Finalizar exercicio para rematar a proba."
+
+msgid "Score and final messages"
+msgstr "Puntuación e mensaxes finais"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Algunhas opcións están bloqueadas despois de crear o exercicio."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Este valor gárdase como duración total en minutos."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Use 0 para manter todas as preguntas dispoñibles. Use -1 onde se permitan todas as preguntas dispoñibles."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Use estes campos para clasificar o exercicio independentemente das súas opcións de visualización."
+

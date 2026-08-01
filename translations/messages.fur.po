@@ -37542,3 +37542,93 @@ msgstr "No sodisfat"
 msgid "Very dissatisfied"
 msgstr "Molt no sodisfat"
 
+msgid "Add destination"
+msgstr "Zonte destinazion"
+
+msgid "Add this test to the assessment tool"
+msgstr "Zonte chest test al strument di valutazion"
+
+msgid "Attempts and timing"
+msgstr "Tentatîfs e timp"
+
+msgid "Available questions"
+msgstr "Domandis disponibils"
+
+msgid "Cancel and return to learning path"
+msgstr "Anule e torne al percors di aprendiment"
+
+msgid "Category destinations"
+msgstr "Destinazions di categorie"
+
+msgid "Classification"
+msgstr "Classificazion"
+
+msgid "Context"
+msgstr "Contest"
+
+msgid "Could not load exercise configuration"
+msgstr "No si è podût cjariâ la configurazion dal esercizi"
+
+msgid "Could not save exercise"
+msgstr "No si è podût salvâ l'esercizi"
+
+msgid "Display and learning path"
+msgstr "Visualizazion e percors di aprendiment"
+
+msgid "Edit test"
+msgstr "Modifiche test"
+
+msgid "Exercise settings saved."
+msgstr "Impostazions dal esercizi salvadis."
+
+msgid "Extra settings"
+msgstr "Impostazions adizionâls"
+
+msgid "Feedback and results"
+msgstr "Coment e risultâts"
+
+msgid "Finish exercise"
+msgstr "Finìs l'esercizi"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifiche la lenghe di chest esercizi come metadâts de risorse. Nol abilite di per sè la indicizazion di ricercje."
+
+msgid "Maximum score (%)"
+msgstr "Puntegji massim (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "I metadâts a contignin competencis e cjamps adizionâls configurâts pai esercizis. Al è opzionâl e al reste platât fin cuant che al ven viert."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "No son ancjemò categoriis di domandis disponibils par chest esercizi."
+
+msgid "Question categories matrix"
+msgstr "Matricule des categoriis di domandis"
+
+msgid "Questions behavior"
+msgstr "Comportament des domandis"
+
+msgid "Random by category"
+msgstr "Casuâl par categorie"
+
+msgid "Remove destination"
+msgstr "Gjave destinazion"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Lis regulis a son valutadis in base ae percentuâl dal ponts in ordin cressint. Selezione Finìs l'esercizi par terminâ il test."
+
+msgid "Score and final messages"
+msgstr "Ponts e messaçs finals"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Cualchi opzion e je blocade dopo che l'esercizi al è stât creât."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Chest valôr al è memorizât come durade totâl in minûts."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Dopre 0 par tignî dutis lis domandis disponibii. Dopre -1 dulà che a son permetudis dutis lis domandis disponibii."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Dopre chescj cjamps par classificâ l'esercizi in maniere indipendent des sôs opzions di visualizazion."
+

@@ -37546,3 +37546,93 @@ msgstr "Neamhshásta"
 msgid "Very dissatisfied"
 msgstr "An-neamhshásta"
 
+msgid "Add destination"
+msgstr "Cuir ceann scríbe leis"
+
+msgid "Add this test to the assessment tool"
+msgstr "Cuir an triail seo leis an uirlis mheasúnaithe"
+
+msgid "Attempts and timing"
+msgstr "Iarrachtaí agus amú"
+
+msgid "Available questions"
+msgstr "Ceisteanna atá ar fáil"
+
+msgid "Cancel and return to learning path"
+msgstr "Cealaigh agus fill ar an gcosán foghlama"
+
+msgid "Category destinations"
+msgstr "Ceann scríbe na gcatagóirí"
+
+msgid "Classification"
+msgstr "Aicmiú"
+
+msgid "Context"
+msgstr "Comhthéacs"
+
+msgid "Could not load exercise configuration"
+msgstr "Níorbh fhéidir cumraíocht an chleachtaidh a luchtú"
+
+msgid "Could not save exercise"
+msgstr "Níorbh fhéidir an cleachtadh a shábháil"
+
+msgid "Display and learning path"
+msgstr "Taispeáint agus cosán foghlama"
+
+msgid "Edit test"
+msgstr "Cuir an triail in eagar"
+
+msgid "Exercise settings saved."
+msgstr "Socruithe an chleachtaidh sábháilte."
+
+msgid "Extra settings"
+msgstr "Socruithe breise"
+
+msgid "Feedback and results"
+msgstr "Aiseolas agus torthaí"
+
+msgid "Finish exercise"
+msgstr "Críochnaigh an cleachtadh"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Aithníonn sé teanga an chleachtaidh seo mar mheitidháta acmhainne. Ní chumasaíonn sé innéacsú cuardaigh leis féin."
+
+msgid "Maximum score (%)"
+msgstr "Scór uasta (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Tá scileanna agus réimsí breise atá cumraithe do chleachtaí i meitidháta. Tá sé roghnach agus fanann sé folaithe go dtí go n-osclaítear é."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Níl aon chatagóir ceisteanna ar fáil don chleachtadh seo fós."
+
+msgid "Question categories matrix"
+msgstr "Maitrís chatagóirí ceisteanna"
+
+msgid "Questions behavior"
+msgstr "Iompar ceisteanna"
+
+msgid "Random by category"
+msgstr "Randamach de réir catagóire"
+
+msgid "Remove destination"
+msgstr "Bain an ceann scríbe"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Déantar na rialacha a mheas de réir scór faoin gcéad in ord ardaitheach. Roghnaigh Críochnaigh an cleachtadh chun deireadh a chur leis an triail."
+
+msgid "Score and final messages"
+msgstr "Scór agus teachtaireachtaí deiridh"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Tá roinnt roghanna faoi ghlas tar éis an cleachtadh a chruthú."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Stóráiltear an luach seo mar ré iomlán i nóiméid."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Úsáid 0 chun gach ceist atá ar fáil a choinneáil. Úsáid -1 nuair a cheadaítear gach ceist atá ar fáil."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Úsáid na réimsí seo chun an cleachtadh a aicmiú go neamhspleách ar a roghanna taispeána."
+

@@ -37547,3 +37547,93 @@ msgstr "Dissatisfied"
 
 msgid "Very dissatisfied"
 msgstr "Very dissatisfied"
+
+msgid "Add destination"
+msgstr "Add destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Add this test to the assessment tool"
+
+msgid "Attempts and timing"
+msgstr "Attempts and timing"
+
+msgid "Available questions"
+msgstr "Available questions"
+
+msgid "Cancel and return to learning path"
+msgstr "Cancel and return to learning path"
+
+msgid "Category destinations"
+msgstr "Category destinations"
+
+msgid "Classification"
+msgstr "Classification"
+
+msgid "Context"
+msgstr "Context"
+
+msgid "Could not load exercise configuration"
+msgstr "Could not load exercise configuration"
+
+msgid "Could not save exercise"
+msgstr "Could not save exercise"
+
+msgid "Display and learning path"
+msgstr "Display and learning path"
+
+msgid "Edit test"
+msgstr "Edit test"
+
+msgid "Exercise settings saved."
+msgstr "Exercise settings saved."
+
+msgid "Extra settings"
+msgstr "Extra settings"
+
+msgid "Feedback and results"
+msgstr "Feedback and results"
+
+msgid "Finish exercise"
+msgstr "Finish exercise"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+
+msgid "Maximum score (%)"
+msgstr "Maximum score (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "No question categories are available for this exercise yet."
+
+msgid "Question categories matrix"
+msgstr "Question categories matrix"
+
+msgid "Questions behavior"
+msgstr "Questions behavior"
+
+msgid "Random by category"
+msgstr "Random by category"
+
+msgid "Remove destination"
+msgstr "Remove destination"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+
+msgid "Score and final messages"
+msgstr "Score and final messages"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Some options are locked after the exercise has been created."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "This value is stored as total duration in minutes."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Use these fields to classify the exercise independently from its display options."

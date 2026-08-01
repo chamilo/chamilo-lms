@@ -37542,3 +37542,93 @@ msgstr "უკმაყოფილო"
 msgid "Very dissatisfied"
 msgstr "ძალიან უკმაყოფილო"
 
+msgid "Add destination"
+msgstr "დანიშნულების დამატება"
+
+msgid "Add this test to the assessment tool"
+msgstr "ამ ტესტის შეფასების ინსტრუმენტში დამატება"
+
+msgid "Attempts and timing"
+msgstr "მცდელობები და დრო"
+
+msgid "Available questions"
+msgstr "ხელმისაწვდომი კითხვები"
+
+msgid "Cancel and return to learning path"
+msgstr "გაუქმება და სასწავლო გზაზე დაბრუნება"
+
+msgid "Category destinations"
+msgstr "კატეგორიის დანიშნულებები"
+
+msgid "Classification"
+msgstr "კლასიფიკაცია"
+
+msgid "Context"
+msgstr "კონტექსტი"
+
+msgid "Could not load exercise configuration"
+msgstr "ვერ ჩაიტვირთა სავარჯიშოს კონფიგურაცია"
+
+msgid "Could not save exercise"
+msgstr "ვერ შეინახა სავარჯიშო"
+
+msgid "Display and learning path"
+msgstr "ჩვენება და სასწავლო გზა"
+
+msgid "Edit test"
+msgstr "ტესტის რედაქტირება"
+
+msgid "Exercise settings saved."
+msgstr "სავარჯიშოს პარამეტრები შენახულია."
+
+msgid "Extra settings"
+msgstr "დამატებითი პარამეტრები"
+
+msgid "Feedback and results"
+msgstr "უკუკავშირი და შედეგები"
+
+msgid "Finish exercise"
+msgstr "სავარჯიშოს დასრულება"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "განსაზღვრავს ამ სავარჯიშოს ენას რესურსის მეტამონაცემებში. თავისთავად არ უზრუნველყოფს საძიებო ინდექსაციას."
+
+msgid "Maximum score (%)"
+msgstr "მაქსიმალური ქულა (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "მეტამონაცემები შეიცავს უნარებს და დამატებით ველებს, რომლებიც კონფიგურირებულია სავარჯიშოებისთვის. ეს არასავალდებულოა და რჩება დამალული, სანამ არ გაიხსნება."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "ამ სავარჯიშოსთვის ჯერ არ არის ხელმისაწვდომი კითხვების კატეგორიები."
+
+msgid "Question categories matrix"
+msgstr "კითხვების კატეგორიების მატრიცა"
+
+msgid "Questions behavior"
+msgstr "კითხვების ქცევა"
+
+msgid "Random by category"
+msgstr "შემთხვევითი კატეგორიის მიხედვით"
+
+msgid "Remove destination"
+msgstr "დანიშნულების წაშლა"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "წესები ფასდება ქულის პროცენტის მიხედვით აღმავალი თანმიმდევრობით. აირჩიეთ სავარჯიშოს დასრულება ტესტის დასასრულებლად."
+
+msgid "Score and final messages"
+msgstr "ქულა და საბოლოო შეტყობინებები"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "ზოგიერთი პარამეტრი დაბლოკილია სავარჯიშოს შექმნის შემდეგ."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "ეს მნიშვნელობა ინახება როგორც საერთო ხანგრძლივობა წუთებში."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "გამოიყენეთ 0 ყველა ხელმისაწვდომი კითხვის შესანარჩუნებლად. გამოიყენეთ -1, სადაც ყველა ხელმისაწვდომი კითხვა დაშვებულია."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "გამოიყენეთ ეს ველები სავარჯიშოს კლასიფიკაციისთვის მისი ჩვენების პარამეტრებისგან დამოუკიდებლად."
+

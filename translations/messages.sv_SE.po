@@ -35497,7 +35497,7 @@ msgid "%s results"
 msgstr "%s resultat"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsaktivitet : beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://sv.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsformulär : beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Borttagen"
@@ -37547,4 +37547,94 @@ msgstr "Missnöjd"
 
 msgid "Very dissatisfied"
 msgstr "Mycket missnöjd"
+
+msgid "Add destination"
+msgstr "Lägg till destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Lägg till detta test i bedömningsverktyget"
+
+msgid "Attempts and timing"
+msgstr "Försök och tidsbegränsning"
+
+msgid "Available questions"
+msgstr "Tillgängliga frågor"
+
+msgid "Cancel and return to learning path"
+msgstr "Avbryt och återgå till inlärningsväg"
+
+msgid "Category destinations"
+msgstr "Kategoridestinationer"
+
+msgid "Classification"
+msgstr "Klassificering"
+
+msgid "Context"
+msgstr "Kontext"
+
+msgid "Could not load exercise configuration"
+msgstr "Kunde inte ladda övningskonfiguration"
+
+msgid "Could not save exercise"
+msgstr "Kunde inte spara övning"
+
+msgid "Display and learning path"
+msgstr "Visning och inlärningsväg"
+
+msgid "Edit test"
+msgstr "Redigera test"
+
+msgid "Exercise settings saved."
+msgstr "Övningsinställningar sparade."
+
+msgid "Extra settings"
+msgstr "Extra inställningar"
+
+msgid "Feedback and results"
+msgstr "Feedback och resultat"
+
+msgid "Finish exercise"
+msgstr "Avsluta övning"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifierar språket för denna övning som resursmetadata. Aktiverar inte sökindexering i sig."
+
+msgid "Maximum score (%)"
+msgstr "Maximal poäng (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata innehåller färdigheter och ytterligare fält konfigurerade för övningar. Det är valfritt och förblir dolt tills det öppnas."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Inga frågekategorier är tillgängliga för denna övning ännu."
+
+msgid "Question categories matrix"
+msgstr "Frågekategorier-matris"
+
+msgid "Questions behavior"
+msgstr "Frågornas beteende"
+
+msgid "Random by category"
+msgstr "Slumpmässigt per kategori"
+
+msgid "Remove destination"
+msgstr "Ta bort mål"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reglerna utvärderas efter poängprocent i stigande ordning. Välj Avsluta övning för att avsluta testet."
+
+msgid "Score and final messages"
+msgstr "Poäng och slutmeddelanden"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Vissa alternativ låses efter att övningen har skapats."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Detta värde lagras som total varaktighet i minuter."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Använd 0 för att behålla alla tillgängliga frågor. Använd -1 där alla tillgängliga frågor tillåts."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Använd dessa fält för att klassificera övningen oberoende av dess visningsalternativ."
 

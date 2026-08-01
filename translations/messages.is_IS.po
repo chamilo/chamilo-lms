@@ -13005,61 +13005,61 @@ msgid "Edit term"
 msgstr "Breyta hugtaki"
 
 msgid "Delete term"
-msgstr ""
+msgstr "Eyða hugtaki"
 
 msgid "Pre-defined"
-msgstr ""
+msgstr "Forstillt"
 
 msgid "Term added"
-msgstr ""
+msgstr "Hugtak bætt við"
 
 msgid "You must enter a term"
-msgstr ""
+msgstr "Þú verður að slá inn hugtak"
 
 msgid "You must enter a term definition"
-msgstr ""
+msgstr "Þú verður að slá inn skilgreiningu hugtaks"
 
 msgid "This glossary term already exists. Please change the term name."
-msgstr ""
+msgstr "Þetta hugtak er þegar til í orðasafninu. Vinsamlegast breyttu nafni hugtaksins."
 
 msgid "Glossary management"
-msgstr ""
+msgstr "Stjórnun orðasafns"
 
 msgid "The term has moved"
-msgstr ""
+msgstr "Hugtakið hefur verið fært"
 
 msgid "Forums Help"
-msgstr ""
+msgstr "Hjálp um spjallborð"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr ""
+msgstr "<p> Spjallborðið er umræðutæki fyrir ósamstillt skriflegt starf.  Í samanburði við tölvupóst er spjallborð fyrir opinberar eða hálfopinberar hópumræður. </p>Til að nota Chamilo spjallborðið þurfa meðlimir einfaldlega að nota vafrann sinn - þeir þurfa ekki sérstakan biðlara. </p>Til að skipuleggja spjallborð, smelltu á Spjallborðstólið. Umræður eru skipulagðar stigveldis samkvæmt eftirfarandi uppbyggingu: </ p><b> Flokkur> Spjallborð> Umræðuefni> Innlegg</ b> </ p> Til að tryggja að meðlimir geti tekið þátt í spjallborðinu á skipulegan og skilvirkan hátt er nauðsynlegt í fyrstu að búa til flokka og spjallborð; þá er það þátttakenda að búa til umræðuefni og innlegg. Sjálfgefið inniheldur spjallborðið einn (opinberan) flokk, dæmi um umræðuefni og dæmi um innlegg. Þú getur bætt spjallborðum við flokkinn,  breytt titli hans eða búið til aðra flokka þar sem þú gætir síðan búið til ný spjallborð. (Ekki rugla saman flokkum og spjallborðum, og mundu að flokkur sem inniheldur ekkert spjallborð er gagnslaus og er ekki sýndur.)</p>\n<p>Lýsing spjallborðs gæti innihaldið lista yfir meðlimi þess, skilgreiningu á tilgangi þess, markmið, verkefni, þema o.s.frv.</p><p>Hópaspjallborð ætti ekki að búa til í gegnum Spjallborðstólið heldur í gegnum Hópatólið, þar sem þú getur ákveðið hvort hópaspjallborð þín eigi að vera einkarekin eða opinber, á sama tíma og þú gefur stað fyrir að deila hópaskjölum.</p><b> Kennsluráð</ b></ p> Námsspjallborð er ekki alveg það sama og spjallborðin sem þú ert vanur að sjá á internetinu. Í fyrsta lagi er ekki mögulegt fyrir nemendur að breyta innleggjum sínum eftir að þau hafa verið birt þar sem námskeiðið er röklega geymt til að leyfa að rekja það sem hefur verið sagt áður. Ennfremur leyfa Chamilo spjallborð sérstaka notkun sem skiptir máli fyrir kennslu. Til dæmis birta sumir kennarar/þjálfarar leiðréttingar beint í spjallborðum á eftirfarandi hátt: <li> Nemanda er beðið um að birta skýrslu beint í spjallborðinu, </ li> Kennarinn leiðréttir hana með því að smella á Breyta (gul blýantur) og merkja hana með grafískum ritli (lit, undirstrikun o.s.frv.) </ li> Að lokum njóta aðrir nemendur góðs af því að sjá leiðréttingarnar sem gerðar voru á framleiðslu eins þeirra, </ li> Athugaðu að sama meginreglan er hægt að beita á milli nemenda, en mun krefjast þess að hann afriti/lími skilaboð félaga síns vegna þess að nemendur / þjálfanemendur geta ekki breytt innleggjum hvors annars. <. li> </ ul>"
 
 msgid "Dropbox Help"
-msgstr ""
+msgstr "Hjálp um Dropbox"
 
 msgid "<p>The dropbox tool is a Content Management Tool facilitating peer-to-peer data exchange. It accepts any filetype (Word, Excel, PDF etc.) It will overwrite existing files with the same name only if directed to do so.<br /> <br /> Learners can can only send a file to their teacher, unless the system administrator has enabled sharing between users. A course manager, however, can opt to to send a file to all course users. <br /> <br />The system administrator can configure the dropbox so that a user can receive but not send files.<br /> <br /> If the file list gets too long, some or all files can be deleted from the list, although the  file itself remaims available to other users until all users have deleted  it.<br /> </p><p>In the received folder, the dropbox tool displays files that have been sent to you and in the sent folder it shows files sent to other course members.</p><p>To send a document to more than one person, you need to hold CTRLand check the multiple select box(i.e.the  field showing the list of members).</p>"
-msgstr ""
+msgstr "<p>Dropbox-tólið er efnisstjórnunartól sem auðveldar jafningjaskipti gagna. Það tekur við hvaða skráargerð sem er (Word, Excel, PDF o.s.frv.) Það mun aðeins skrifa yfir núverandi skrár með sama nafni ef það er beint til þess.<br /> <br /> Nemendur geta aðeins sent skrá til kennara síns, nema kerfisstjórinn hafi virkjað deilingu milli notenda. Námskeiðsstjóri getur hins vegar valið að senda skrá til allra notenda námskeiðsins. <br /> <br />Kerfisstjórinn getur stillt dropbox svo að notandi geti tekið á móti en ekki sent skrár.<br /> <br /> Ef skráalistin verður of löng er hægt að eyða sumum eða öllum skrám úr listanum, þó að skráin sjálf haldist tiltæk fyrir aðra notendur þar til allir notendur hafa eytt henni.<br /> </p><p>Í mótteknum möppu sýnir dropbox-tólið skrár sem hafa verið sendar til þín og í sendum möppu sýnir það skrár sem sendar hafa verið til annarra námskeiðsmeðlima.</p><p>Til að senda skjal til fleiri en eins manns þarftu að halda CTRL og haka við margvalskassann (þ.e. reitinn sem sýnir listann yfir meðlimi).</p>"
 
 msgid "Homepage Help"
-msgstr ""
+msgstr "Hjálp um heimasíðu"
 
 msgid "<p>The Course Homepage displays a range of tools (introductory text,  description, documents manager etc.) This page is modular in the sense that you can hide or show any of the tools in learner view with a single click on the 'eye' icon (hidden tools can be reactivated any time. </p><b>Navigation</b><p>In order to browse the course, you can simply click on the icons; a 'breadcrumb' navigation tool at the top of the page allows you to retrace your steps back to the course homepage.</p><b>Best practice</b><p>To help motivate learners, it is helpful to make you course appear 'alive' by suggesting that there is always someone present 'behind the screen'. An effective way to make this impression is to update the introductory text (just click on the yellow pencil) at least once a week with the latest news, deadlines etc.</p><p>When you construct your course, try the following steps:<ol><li>In the Course Settings, make course acccess private and subscription available only to trainers. That way, nobody can enter your course area during construction,</li><li>Use whatever tools you need to 'fill' your area with content, activities, guidelines, tests etc.,</li><li>Now hide all tools so your home page is empty in learner view by clicking on the eyes to make the icons grey. </li><li>Use the Learning Path tool to create a learning path to structure the way learners will follow it and learn within it. That way, although you will be using the other tools, you don't initially need to show them on the homepage. </li><li>Click on the eye icon beside the path you created to show it on your home page.</li><li>your course is ready to view. Its homepage will display an introductory text followed by a single link to lead learners into and through the course. Click on the Learner View button (top right) to see the course from the learner's point of view.<I></I></li></ol>"
-msgstr ""
+msgstr "<p>Námskeiðsheimasíðan sýnir ýmis tól (inngangstexta,  lýsingu, skjalastjóra o.s.frv.) Þessi síða er mátbundin í þeim skilningi að þú getur falið eða sýnt hvaða tól sem er í nemendasýn með einum smelli á 'auga' táknið (falin tól er hægt að virkja aftur hvenær sem er. </p><b>Leiðsögn</b><p>Til að vafra um námskeiðið geturðu einfaldlega smellt á táknin; 'brauðmolaslóð' leiðsagnarverkfæri efst á síðunni gerir þér kleift að rekja skref þín aftur til námskeiðsheimasíðunnar.</p><b>Besta starfsvenja</b><p>Til að hjálpa til við að hvetja nemendur er gagnlegt að láta námskeiðið þitt virðast 'lifandi' með því að gefa til kynna að alltaf sé einhver til staðar 'á bak við skjáinn'. Áhrifarík leið til að gefa þessa tilfinningu er að uppfæra inngangstextann (smelltu bara á gula blýantinn) að minnsta kosti einu sinni í viku með nýjustu fréttum, skiladögum o.s.frv.</p><p>Þegar þú býrð til námskeiðið þitt, reyndu eftirfarandi skref:<ol><li>Í námskeiðsstillingum, gerðu námskeiðsaðgang einkareknan og áskrift aðeins tiltæka fyrir þjálfara. Þannig getur enginn farið inn á námskeiðssvæðið þitt á meðan það er í smíðum,</li><li>Notaðu hvaða tól sem þú þarft til að 'fylla' svæðið þitt með efni, athöfnum, leiðbeiningum, prófum o.s.frv.,</li><li>Feldu nú öll tól svo heimasíðan þín sé tóm í nemendasýn með því að smella á augun til að gera táknin grá. </li><li>Notaðu Námsleiðartólið til að búa til námsleið til að skipuleggja hvernig nemendur munu fylgja henni og læra innan hennar. Þannig, þó að þú munir nota hin tólin, þarftu ekki upphaflega að sýna þau á heimasíðunni. </li><li>Smelltu á augatáknið við hlið leiðarinnar sem þú bjóst til til að sýna hana á heimasíðunni.</li><li>Námskeiðið þitt er tilbúið til skoðunar. Heimasíða þess mun sýna inngangstexta fylgt eftir með einum hlekk til að leiða nemendur inn í og í gegnum námskeiðið. Smelltu á Nemendasýn hnappinn (efst til hægri) til að sjá námskeiðið frá sjónarhóli nemandans.<I></I></li></ol>"
 
 msgid "Chamilo LIVE Help"
-msgstr ""
+msgstr "Hjálp um Chamilo LIVE"
 
 msgid "The GoogleMaps plugin needs to be enabled by the platform administrator in order to show the map."
-msgstr ""
+msgstr "GoogleMaps viðbótin þarf að vera virkjuð af kerfisstjóra til að sýna kortið."
 
 msgid "Chamilo Help"
-msgstr ""
+msgstr "Chamilo Hjálp"
 
 msgid "Documents Help"
-msgstr ""
+msgstr "Hjálp um skjöl"
 
 msgid "Users Help"
-msgstr ""
+msgstr "Hjálp um notendur"
 
 msgid "Tests Help"
 msgstr "Próf – Hjálp"
@@ -14112,40 +14112,40 @@ msgid "Add to gradebook"
 msgstr "Bæta við einkunnabók"
 
 msgid "Weight inside assessment"
-msgstr ""
+msgstr "Vægi innan mats"
 
 msgid "Date limits"
-msgstr ""
+msgstr "Dagsetningarmörk"
 
 msgid "Posted sending deadline"
-msgstr ""
+msgstr "Frestur fyrir innsendingu"
 
 msgid "Directory created"
-msgstr ""
+msgstr "Mappa búin til"
 
 msgid "Deadline for assignments"
-msgstr ""
+msgstr "Frestur fyrir verkefni"
 
 msgid "Enable handing over deadline (visible to learners)"
-msgstr ""
+msgstr "Virkja frest fyrir afhendingu (sýnilegt nemendum)"
 
 msgid "Enable final acceptance date (invisible to learners)"
-msgstr ""
+msgstr "Virkja lokadagsetningu (ósýnilegt nemendum)"
 
 msgid "Impossible to save the document"
-msgstr ""
+msgstr "Ekki hægt að vista skjalið"
 
 msgid "End date cannot be before the expiry date"
-msgstr ""
+msgstr "Lokadagsetning getur ekki verið á undan fyrningardagsetningu"
 
 msgid "Select a filter"
-msgstr ""
+msgstr "Veldu síu"
 
 msgid "Filter by not expired"
-msgstr ""
+msgstr "Sía eftir ekki útrunnum"
 
 msgid "Filter assignments"
-msgstr ""
+msgstr "Sía verkefni"
 
 msgid "Minimum score expected"
 msgstr ""
@@ -37546,4 +37546,94 @@ msgstr "Óánægður"
 
 msgid "Very dissatisfied"
 msgstr "Mjög óánægður"
+
+msgid "Add destination"
+msgstr "Bæta við áfangastað"
+
+msgid "Add this test to the assessment tool"
+msgstr "Bæta þessu prófi við matsverkfærið"
+
+msgid "Attempts and timing"
+msgstr "Tilraunir og tímasetning"
+
+msgid "Available questions"
+msgstr "Tiltækar spurningar"
+
+msgid "Cancel and return to learning path"
+msgstr "Hætta við og fara aftur í námsleið"
+
+msgid "Category destinations"
+msgstr "Flokka áfangastaði"
+
+msgid "Classification"
+msgstr "Flokkun"
+
+msgid "Context"
+msgstr "Samhengi"
+
+msgid "Could not load exercise configuration"
+msgstr "Ekki tókst að hlaða inn stillingum æfingar"
+
+msgid "Could not save exercise"
+msgstr "Ekki tókst að vista æfingu"
+
+msgid "Display and learning path"
+msgstr "Birting og námsleið"
+
+msgid "Edit test"
+msgstr "Breyta prófi"
+
+msgid "Exercise settings saved."
+msgstr "Stillingar æfingar vistaðar."
+
+msgid "Extra settings"
+msgstr "Viðbótarstillingar"
+
+msgid "Feedback and results"
+msgstr "Endurgjöf og niðurstöður"
+
+msgid "Finish exercise"
+msgstr "Ljúka æfingu"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Tilgreinir tungumál þessarar æfingar sem auðlindalýsigögn. Virkjar ekki leitarskráningu sjálfkrafa."
+
+msgid "Maximum score (%)"
+msgstr "Hámarksstig (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Lýsigögn innihalda færni og viðbótarreiti sem stilltir eru fyrir æfingar. Það er valfrjálst og haldist falið þar til það er opnað."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Engir spurningaflokkar eru tiltækir fyrir þessa æfingu ennþá."
+
+msgid "Question categories matrix"
+msgstr "Spurningaflokka fylki"
+
+msgid "Questions behavior"
+msgstr "Hegðun spurninga"
+
+msgid "Random by category"
+msgstr "Slembið eftir flokki"
+
+msgid "Remove destination"
+msgstr "Fjarlægja áfangastað"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reglur eru metnar eftir stigaprósentu í hækkandi röð. Veldu Ljúka æfingu til að enda prófið."
+
+msgid "Score and final messages"
+msgstr "Stig og loka skilaboð"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Sumir valkostir eru læstir eftir að æfingin hefur verið búin til."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Þetta gildi er geymt sem heildartímalengd í mínútum."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Notaðu 0 til að halda öllum tiltækum spurningum. Notaðu -1 þar sem allar tiltækar spurningar eru leyfðar."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Notaðu þessi reiti til að flokka æfinguna óháð birtingarvalkostum hennar."
 

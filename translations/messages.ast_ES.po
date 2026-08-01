@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:ensin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Direutoriu,, application/msword:MsWord,, application/octet-stream:Fluyíu d'octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Direutoriu,, application/msword:MsWord,, application/octet-stream:Fluxu d'octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exerciciu,, simulation:simulación,, questionnaire:cuestionariu,, diagram:diagrama,, figure:figura,, graph:gráficu,, index:índiz,, slide:diapositiva,, table:tabla,, narrative text:testu narrativu,, exam:exame,, experiment:esperimentu,, problem statement:problema,, self assessment:autoevaluación,, lecture:llectura"
@@ -37547,4 +37547,94 @@ msgstr "Insatisfiechu"
 
 msgid "Very dissatisfied"
 msgstr "Mui insatisfiechu"
+
+msgid "Add destination"
+msgstr "Amestar destín"
+
+msgid "Add this test to the assessment tool"
+msgstr "Amestar esti test a la ferramienta d'evaluación"
+
+msgid "Attempts and timing"
+msgstr "Intentos y tiempu"
+
+msgid "Available questions"
+msgstr "Entrugues disponibles"
+
+msgid "Cancel and return to learning path"
+msgstr "Encaboxar y volver al camín d'aprendizaxe"
+
+msgid "Category destinations"
+msgstr "Destinos de categoría"
+
+msgid "Classification"
+msgstr "Clasificación"
+
+msgid "Context"
+msgstr "Contestu"
+
+msgid "Could not load exercise configuration"
+msgstr "Nun se pudo cargar la configuración del exerciciu"
+
+msgid "Could not save exercise"
+msgstr "Nun se pudo guardar l'exerciciu"
+
+msgid "Display and learning path"
+msgstr "Visualización y camín d'aprendizaxe"
+
+msgid "Edit test"
+msgstr "Editar test"
+
+msgid "Exercise settings saved."
+msgstr "Configuración del exerciciu guardada."
+
+msgid "Extra settings"
+msgstr "Configuración estra"
+
+msgid "Feedback and results"
+msgstr "Retroalimentación y resultaos"
+
+msgid "Finish exercise"
+msgstr "Finar exerciciu"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifica l'idioma d'esti exerciciu como metadatos del recursu. Nun habilita l'indexación de busca por sigo mesmu."
+
+msgid "Maximum score (%)"
+msgstr "Puntuación máxima (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Los metadatos contienen habilidaes y campos adicionales configuraos pa exercicios. Ye opcional y permanece ocultu hasta que s'abra."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Nun hai categoríes d'entrugues disponibles pa esti exerciciu entá."
+
+msgid "Question categories matrix"
+msgstr "Matriz de categoríes d'entrugues"
+
+msgid "Questions behavior"
+msgstr "Comportamientu de les entrugues"
+
+msgid "Random by category"
+msgstr "Al debalu per categoría"
+
+msgid "Remove destination"
+msgstr "Quitar destín"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Les regles evalúense per porcentaxe de puntuación en orde ascendente. Seleiciona Finar exerciciu pa finar el test."
+
+msgid "Score and final messages"
+msgstr "Puntuación y mensaxes finales"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Dalgunes opciones tán bloquiaes depués de que se creara l'exerciciu."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Esti valor guárdase como duración total en minutos."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Usa 0 pa caltener toles entrugues disponibles. Usa -1 onde se dexen toles entrugues disponibles."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Usa estos campos pa clasificar l'exerciciu independientemente de les sos opciones de visualización."
 

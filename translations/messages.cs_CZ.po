@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorek vzorce: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -37541,4 +37541,94 @@ msgstr "Nespokojen(a)"
 
 msgid "Very dissatisfied"
 msgstr "Velmi nespokojen(a)"
+
+msgid "Add destination"
+msgstr "Přidat cíl"
+
+msgid "Add this test to the assessment tool"
+msgstr "Přidat tento test do nástroje pro hodnocení"
+
+msgid "Attempts and timing"
+msgstr "Pokusy a časování"
+
+msgid "Available questions"
+msgstr "Dostupné otázky"
+
+msgid "Cancel and return to learning path"
+msgstr "Zrušit a vrátit se k výukové cestě"
+
+msgid "Category destinations"
+msgstr "Cíle kategorií"
+
+msgid "Classification"
+msgstr "Klasifikace"
+
+msgid "Context"
+msgstr "Kontext"
+
+msgid "Could not load exercise configuration"
+msgstr "Nelze načíst konfiguraci cvičení"
+
+msgid "Could not save exercise"
+msgstr "Nelze uložit cvičení"
+
+msgid "Display and learning path"
+msgstr "Zobrazení a výuková cesta"
+
+msgid "Edit test"
+msgstr "Upravit test"
+
+msgid "Exercise settings saved."
+msgstr "Nastavení cvičení uložena."
+
+msgid "Extra settings"
+msgstr "Další nastavení"
+
+msgid "Feedback and results"
+msgstr "Zpětná vazba a výsledky"
+
+msgid "Finish exercise"
+msgstr "Dokončit cvičení"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifikuje jazyk tohoto cvičení jako metadata zdroje. Samo o sobě neumožňuje indexování pro vyhledávání."
+
+msgid "Maximum score (%)"
+msgstr "Maximální skóre (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata obsahují dovednosti a další pole nastavená pro cvičení. Jsou volitelná a zůstávají skrytá, dokud nejsou otevřena."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Pro toto cvičení zatím nejsou dostupné žádné kategorie otázek."
+
+msgid "Question categories matrix"
+msgstr "Matice kategorií otázek"
+
+msgid "Questions behavior"
+msgstr "Chování otázek"
+
+msgid "Random by category"
+msgstr "Náhodně podle kategorie"
+
+msgid "Remove destination"
+msgstr "Odstranit cíl"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Pravidla jsou vyhodnocována podle procenta skóre ve vzestupném pořadí. Pro ukončení testu vyberte Dokončit cvičení."
+
+msgid "Score and final messages"
+msgstr "Skóre a závěrečné zprávy"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Některé možnosti jsou po vytvoření cvičení uzamčeny."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Tato hodnota je uložena jako celková doba trvání v minutách."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Použijte 0 pro zachování všech dostupných otázek. Použijte -1, kde jsou povoleny všechny dostupné otázky."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Tato pole použijte k samostatné klasifikaci cvičení nezávisle na možnostech zobrazení."
 

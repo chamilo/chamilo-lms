@@ -37546,3 +37546,93 @@ msgstr "불만족"
 msgid "Very dissatisfied"
 msgstr "매우 불만족"
 
+msgid "Add destination"
+msgstr "대상 추가"
+
+msgid "Add this test to the assessment tool"
+msgstr "이 시험을 평가 도구에 추가"
+
+msgid "Attempts and timing"
+msgstr "응시 및 시간 설정"
+
+msgid "Available questions"
+msgstr "사용 가능한 문제"
+
+msgid "Cancel and return to learning path"
+msgstr "취소하고 학습 경로로 돌아가기"
+
+msgid "Category destinations"
+msgstr "카테고리 대상"
+
+msgid "Classification"
+msgstr "분류"
+
+msgid "Context"
+msgstr "컨텍스트"
+
+msgid "Could not load exercise configuration"
+msgstr "연습 구성 로드 실패"
+
+msgid "Could not save exercise"
+msgstr "연습 저장 실패"
+
+msgid "Display and learning path"
+msgstr "표시 및 학습 경로"
+
+msgid "Edit test"
+msgstr "시험 편집"
+
+msgid "Exercise settings saved."
+msgstr "연습 설정이 저장되었습니다."
+
+msgid "Extra settings"
+msgstr "추가 설정"
+
+msgid "Feedback and results"
+msgstr "피드백 및 결과"
+
+msgid "Finish exercise"
+msgstr "연습 종료"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "이 연습의 언어를 리소스 메타데이터로 식별합니다. 검색 색인 생성은 활성화되지 않습니다."
+
+msgid "Maximum score (%)"
+msgstr "최대 점수 (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "메타데이터에는 연습에 대해 구성된 기술 및 추가 필드가 포함됩니다. 선택 사항이며 열기 전까지 숨겨져 있습니다."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "이 연습에 사용할 수 있는 문제 카테고리가 아직 없습니다."
+
+msgid "Question categories matrix"
+msgstr "문제 카테고리 매트릭스"
+
+msgid "Questions behavior"
+msgstr "문제 동작"
+
+msgid "Random by category"
+msgstr "카테고리별 무작위"
+
+msgid "Remove destination"
+msgstr "대상 제거"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "규칙은 점수 백분율에 따라 오름차순으로 평가됩니다. 시험을 종료하려면 연습 종료를 선택하세요."
+
+msgid "Score and final messages"
+msgstr "점수 및 최종 메시지"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "일부 옵션은 연습이 생성된 후 잠깁니다."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "이 값은 총 소요 시간(분)으로 저장됩니다."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "사용 가능한 모든 문제를 유지하려면 0을 사용하세요. 모든 사용 가능한 문제를 허용하려면 -1을 사용하세요."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "이 필드를 사용하여 연습문제를 표시 옵션과 독립적으로 분류하십시오."
+

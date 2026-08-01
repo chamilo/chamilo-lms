@@ -37542,3 +37542,93 @@ msgstr "Pas satisfach"
 msgid "Very dissatisfied"
 msgstr "Fòrça insatisfach"
 
+msgid "Add destination"
+msgstr "Apondre una destinacion"
+
+msgid "Add this test to the assessment tool"
+msgstr "Apondre aqueste tèst a l'aisina d'evaluacion"
+
+msgid "Attempts and timing"
+msgstr "Tènts e durada"
+
+msgid "Available questions"
+msgstr "Questions disponiblas"
+
+msgid "Cancel and return to learning path"
+msgstr "Anullar e tornar al camin d'aprendissatge"
+
+msgid "Category destinations"
+msgstr "Destinacions de categoria"
+
+msgid "Classification"
+msgstr "Classificacion"
+
+msgid "Context"
+msgstr "Contèxte"
+
+msgid "Could not load exercise configuration"
+msgstr "Impossible de cargar la configuracion de l'exercici"
+
+msgid "Could not save exercise"
+msgstr "Impossible d'enregistrar l'exercici"
+
+msgid "Display and learning path"
+msgstr "Afichatge e camin d'aprendissatge"
+
+msgid "Edit test"
+msgstr "Modificar lo tèst"
+
+msgid "Exercise settings saved."
+msgstr "Paramètres de l'exercici enregistrats."
+
+msgid "Extra settings"
+msgstr "Paramètres suplementaris"
+
+msgid "Feedback and results"
+msgstr "Comentaris e resultats"
+
+msgid "Finish exercise"
+msgstr "Acabar l'exercici"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifica la lenga d'aqueste exercici coma metadonadas de la ressorsa. Aquò activa pas l'indexacion per la recèrca."
+
+msgid "Maximum score (%)"
+msgstr "Puntacion maximala (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Las metadonadas contenon de competéncias e de camps suplementaris configurats per los exercicis. Es facultatiu e demòra amagat fins a son dobèrtura."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Cap de categoria de question es pas encara disponibla per aqueste exercici."
+
+msgid "Question categories matrix"
+msgstr "Matritz de las categorias de questions"
+
+msgid "Questions behavior"
+msgstr "Comportament de las questions"
+
+msgid "Random by category"
+msgstr "Aleatòri per categoria"
+
+msgid "Remove destination"
+msgstr "Suprimir la destinacion"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Las règlas son evaluadas per percentatge de puntacion en òrdre creissent. Causir Acabar l'exercici per acabar lo tèst."
+
+msgid "Score and final messages"
+msgstr "Puntacion e messatges finals"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "D'unas opcions son verrolhadas aprèp la creacion de l'exercici."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Aquesta valor es enregistrada coma durada totala en minutas."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Utilizar 0 per gardar totas las questions disponiblas. Utilizar -1 per autorizar totas las questions disponiblas."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Utilizar aquestes camps per classificar l'exercici independentament de sas opcions d'afichatge."
+

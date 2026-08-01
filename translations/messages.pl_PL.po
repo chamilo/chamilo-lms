@@ -37552,3 +37552,93 @@ msgstr "Niezadowolony(-a)"
 msgid "Very dissatisfied"
 msgstr "Bardzo niezadowolony(-a)"
 
+msgid "Add destination"
+msgstr "Dodaj miejsce docelowe"
+
+msgid "Add this test to the assessment tool"
+msgstr "Dodaj ten test do narzędzia oceny"
+
+msgid "Attempts and timing"
+msgstr "Próby i czas"
+
+msgid "Available questions"
+msgstr "Dostępne pytania"
+
+msgid "Cancel and return to learning path"
+msgstr "Anuluj i wróć do ścieżki nauczania"
+
+msgid "Category destinations"
+msgstr "Miejsca docelowe kategorii"
+
+msgid "Classification"
+msgstr "Klasyfikacja"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "Could not load exercise configuration"
+msgstr "Nie można załadować konfiguracji ćwiczenia"
+
+msgid "Could not save exercise"
+msgstr "Nie można zapisać ćwiczenia"
+
+msgid "Display and learning path"
+msgstr "Wyświetlanie i ścieżka nauczania"
+
+msgid "Edit test"
+msgstr "Edytuj test"
+
+msgid "Exercise settings saved."
+msgstr "Ustawienia ćwiczenia zostały zapisane."
+
+msgid "Extra settings"
+msgstr "Dodatkowe ustawienia"
+
+msgid "Feedback and results"
+msgstr "Informacja zwrotna i wyniki"
+
+msgid "Finish exercise"
+msgstr "Zakończ ćwiczenie"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Określa język tego ćwiczenia jako metadane zasobu. Nie włącza samodzielnie indeksowania wyszukiwania."
+
+msgid "Maximum score (%)"
+msgstr "Maksymalny wynik (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadane zawierają umiejętności i dodatkowe pola skonfigurowane dla ćwiczeń. Jest opcjonalne i pozostaje ukryte do momentu otwarcia."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Brak dostępnych kategorii pytań dla tego ćwiczenia."
+
+msgid "Question categories matrix"
+msgstr "Macierz kategorii pytań"
+
+msgid "Questions behavior"
+msgstr "Zachowanie pytań"
+
+msgid "Random by category"
+msgstr "Losowo według kategorii"
+
+msgid "Remove destination"
+msgstr "Usuń miejsce docelowe"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reguły są oceniane według procentu wyniku w kolejności rosnącej. Wybierz Zakończ ćwiczenie, aby zakończyć test."
+
+msgid "Score and final messages"
+msgstr "Wynik i komunikaty końcowe"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Niektóre opcje są zablokowane po utworzeniu ćwiczenia."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Ta wartość jest przechowywana jako całkowity czas trwania w minutach."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Użyj 0, aby zachować wszystkie dostępne pytania. Użyj -1, gdy dozwolone są wszystkie dostępne pytania."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Użyj tych pól, aby sklasyfikować ćwiczenie niezależnie od opcji wyświetlania."
+

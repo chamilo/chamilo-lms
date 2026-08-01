@@ -37546,3 +37546,93 @@ msgstr "Незадоволен"
 msgid "Very dissatisfied"
 msgstr "Многу незадоволен"
 
+msgid "Add destination"
+msgstr "Додај дестинација"
+
+msgid "Add this test to the assessment tool"
+msgstr "Додај го овој тест во алатката за оценување"
+
+msgid "Attempts and timing"
+msgstr "Обиди и време"
+
+msgid "Available questions"
+msgstr "Достапни прашања"
+
+msgid "Cancel and return to learning path"
+msgstr "Откажи и врати се на патеката за учење"
+
+msgid "Category destinations"
+msgstr "Дестинации на категорија"
+
+msgid "Classification"
+msgstr "Класификација"
+
+msgid "Context"
+msgstr "Контекст"
+
+msgid "Could not load exercise configuration"
+msgstr "Не може да се вчита конфигурацијата на вежбата"
+
+msgid "Could not save exercise"
+msgstr "Не може да се зачува вежбата"
+
+msgid "Display and learning path"
+msgstr "Приказ и патека за учење"
+
+msgid "Edit test"
+msgstr "Уреди тест"
+
+msgid "Exercise settings saved."
+msgstr "Поставките за вежбата се зачувани."
+
+msgid "Extra settings"
+msgstr "Дополнителни поставки"
+
+msgid "Feedback and results"
+msgstr "Повратни информации и резултати"
+
+msgid "Finish exercise"
+msgstr "Заврши ја вежбата"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Ја идентификува јазикот на оваа вежба како метаподаток на ресурсот. Не овозможува индексирање за пребарување сам по себе."
+
+msgid "Maximum score (%)"
+msgstr "Максимален резултат (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Метаподатоците содржат вештини и дополнителни полиња конфигурирани за вежби. Ова е опционално и останува скриено додека не се отвори."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Сè уште нема достапни категории на прашања за оваа вежба."
+
+msgid "Question categories matrix"
+msgstr "Матрица на категории на прашања"
+
+msgid "Questions behavior"
+msgstr "Однесување на прашањата"
+
+msgid "Random by category"
+msgstr "Случајно по категорија"
+
+msgid "Remove destination"
+msgstr "Отстрани дестинација"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Правилата се оценуваат според процентот на поени во растечки редослед. Изберете Заврши вежба за да го завршите тестот."
+
+msgid "Score and final messages"
+msgstr "Поени и завршни пораки"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Некои опции се заклучени откако вежбата е креирана."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Оваа вредност се чува како вкупно траење во минути."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Користете 0 за да ги задржите сите достапни прашања. Користете -1 каде што се дозволени сите достапни прашања."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Користете ги овие полиња за да ја класифицирате вежбата независно од нејзините опции за приказ."
+

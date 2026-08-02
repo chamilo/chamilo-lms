@@ -253,7 +253,20 @@ async function resolveField(page: Page, field: string) {
   // never match "* Title" no matter how much longer it waited. The regex
   // keeps the same whole-string precision (no accidental "Moodle password"
   // -style substring matches) while tolerating an optional leading "* ".
-  return page.getByLabel(new RegExp(`^\\*?\\s*${escapeRegExp(field)}$`, "i"))
+  //
+  // Needs `\s*` on BOTH sides of the optional star, not just after it: real
+  // CI failure on skill.feature's "argumentation" field (legacy QuickForm,
+  // public/main/skills/assign.php) — its actual label markup is
+  // `<label><span class="form_required">*</span>\n    Argumentation\n
+  // </label>`, i.e. NEWLINE-and-indentation whitespace before the "*" too,
+  // and trailing whitespace after the field name, neither of which the
+  // original `^\*?\s*...$` accounted for — confirmed live that regex matched
+  // zero elements against this exact label, while adding a leading `\s*`
+  // (before the star) and a trailing `\s*` (before `$`) matched it correctly.
+  // This fallback tier is only reached when id/name both miss, which is rare
+  // but not impossible under CI timing (see resolveField above) — when it IS
+  // reached, it must actually match, not hang for the rest of the test.
+  return page.getByLabel(new RegExp(`^\\s*\\*?\\s*${escapeRegExp(field)}\\s*$`, "i"))
 }
 
 // A plain .fill() sets the DOM value and dispatches one `input` event, which

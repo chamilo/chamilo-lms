@@ -46,6 +46,17 @@
 #   of the setting) instead of silently keeping an assertion that documents
 #   behavior that no longer exists — flagged to the user, worth a follow-up
 #   Vue fix, not fixed as part of this migration task.
+# - The two "Check session description..." scenarios below used to leave
+#   show_session_description permanently at Yes for the rest of the run
+#   (its schema default is No) — the LAST of the two scenarios happens to
+#   set it to Yes, with no teardown at all. Same class of bug that caused
+#   toolGroup.feature's "0 categories rendered" mystery (a different
+#   setting, same root cause: one file's mutation outliving its own run).
+#   The @settings-sessionManagement tag below wires up a BeforeAll/AfterAll
+#   pair (registerSettingsGuard() in common.steps.ts) that snapshots this
+#   setting's real current value before this file's scenarios run and
+#   restores it after the last one finishes.
+@settings-sessionManagement
 Feature: Session management tool
   In order to use the session tool
   The admin should be able to create a session

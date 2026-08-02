@@ -57,6 +57,17 @@
 # - "Add an exercise to LP" was already dead/commented-out in the original
 #   Behat file (references a pre-existing "Exercise 1" this suite never
 #   creates) — dropped, not ported, matching this migration's convention.
+# - The two "Check the PDF export..." scenarios below toggle
+#   hide_scorm_pdf_link No then Yes with no teardown — they happen to leave
+#   it at Yes, which IS this setting's actual schema default, but only
+#   because that scenario runs last; not a deliberate guarantee, and the
+#   same fragile pattern that left OTHER settings (show_session_description,
+#   admins_can_set_users_pass) stuck at the WRONG value in other files. The
+#   @settings-toolLp tag below wires up a BeforeAll/AfterAll pair
+#   (registerSettingsGuard() in common.steps.ts) that snapshots this
+#   setting's real current value before this file's scenarios run and
+#   restores it after the last one finishes, regardless of scenario order.
+@settings-toolLp
 Feature: LP tool
   In order to use the LP tool
   The teachers should be able to create LPs

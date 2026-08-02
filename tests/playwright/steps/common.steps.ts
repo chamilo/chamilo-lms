@@ -588,37 +588,119 @@ Then("I additionally select {string} from {string}", async ({ page }, optionLabe
   await locator.selectOption([...currentLabels, optionLabel].map((label) => ({ label })))
 })
 
-// Not ported from Behat — the original adminSettings.feature has no
-// teardown at all and just leaves platform settings permanently changed.
-// Added here specifically so this feature is safe to run repeatedly against
-// a real, shared instance. Runs once for the whole file (BeforeAll/AfterAll
-// tagged to @settings, not a Before/After per scenario), matching how
-// "Seed test users" is also a single one-time action, not per-scenario:
-// snapshot whatever each setting's actual current value already is (not a
-// hardcoded assumed default, which could be wrong for a given instance and
-// would itself be an unwanted mutation) before any @settings scenario
-// mutates it, then restore exactly that once after the last one finishes.
-// BeforeAll/AfterAll are worker-scoped: with fullyParallel:false a single
-// feature file's scenarios run sequentially within one worker, so this
-// runs once per worker touching @settings scenarios, not once per scenario.
-const SETTINGS_PAGES = [
+// Not ported from Behat — the original adminSettings.feature (and every
+// OTHER feature below found to mutate a platform setting) has no teardown
+// at all and just leaves platform settings permanently changed for the rest
+// of the run. Real, confirmed consequence: createUser.feature's "Create a
+// HRM user" sets admins_can_set_users_pass to Yes and never reverts it;
+// sessionManagement.feature's two "Check session description..." scenarios
+// leave show_session_description at Yes (its schema default is No — this
+// one was a genuine unrestored leak, not a coincidence); toolLp.feature's
+// two "Check the PDF export..." scenarios happen to leave hide_scorm_pdf_
+// link at Yes, its actual schema default, but only because that scenario
+// runs last — pure luck of ordering, not a deliberate guarantee. All three
+// were confirmed live on this project's own long-lived test instance,
+// already stuck at Yes from earlier runs. And this is exactly the same
+// class of bug that caused toolGroup.feature's "0 categories rendered"
+// mystery (allow_group_categories toggled by adminSettings.feature,
+// restored too late relative to other files running concurrently) —
+// except these three were never even caught by an @settings-style restore
+// in the first place.
+//
+// registerSettingsGuard() makes this pattern reusable instead of the one
+// hardcoded copy adminSettings.feature used to have: each feature file that
+// touches a platform setting gets its OWN tag and its OWN small pages list
+// (not one shared global list every tagged file would otherwise redundantly
+// snapshot/restore in full) — snapshot whatever each setting's actual
+// current value already is (not a hardcoded assumed default, which could be
+// wrong for a given instance and would itself be an unwanted mutation)
+// before any scenario in that file mutates it, then restore exactly that
+// once after the file's last scenario finishes. BeforeAll/AfterAll here are
+// Playwright's own per-file hooks (scoped to whichever file has a scenario
+// carrying the given tag), not a single global per-worker lifetime — so
+// tagging four different files with four different tags gives each one its
+// own independent snapshot-at-start/restore-at-end cycle, without any of
+// them stepping on each other.
+function registerSettingsGuard(tag: string, pages: { path: string; field: string }[]) {
+  const snapshot = new Map<string, string[]>()
+
+  // Shared between BeforeAll and AfterAll deliberately: creating a *fresh*
+  // browser context in AfterAll (as a first attempt did) raced against
+  // Playwright's own worker teardown — by the time AfterAll runs, the worker
+  // has finished all its assigned tests and is winding down, and a brand new
+  // context's navigation could never complete (a plain "Sign in" click hung
+  // past even a very generous per-action timeout). Keeping the one context
+  // BeforeAll already opened alive in between, instead of closing and
+  // recreating it, sidesteps that race entirely — it's an already-running,
+  // healthy context the whole time, just idle between the two hooks.
+  let guardPage: import("@playwright/test").Page | undefined
+
+  BeforeAll({ tags: tag }, async ({ browser, baseURL }) => {
+    const page = await loginAsAdminOnFreshPage(browser, baseURL)
+    guardPage = page
+    for (const { path, field } of pages) {
+      await gotoReliably(page, path)
+      const values: string[] = await page.locator(`#${field}`).evaluate((el) =>
+        Array.from((el as HTMLSelectElement).selectedOptions).map((option) => option.value),
+      )
+      snapshot.set(field, values)
+    }
+  })
+
+  AfterAll({ tags: tag }, async () => {
+    if (!guardPage) return
+    const page = guardPage
+    for (const { path, field } of pages) {
+      const values = snapshot.get(field)
+      if (!values) continue
+      await gotoReliably(page, path)
+      await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
+      // "Save settings" (not "Save"): matches the literal button text on
+      // every /admin/settings/* page confirmed live (both the
+      // search_settings?keyword=... pages and category pages like
+      // /admin/settings/lp) — pressButton()'s early exact-match tiers need
+      // the literal text, not a substring; "Save" alone only happens to
+      // work via its much later substring-fallback tier.
+      await pressButton(page, "Save settings")
+      // "Save settings" is a form submit — likely POST-redirect-GET under
+      // the hood. The NEXT iteration's own gotoReliably() now absorbs a
+      // still-lagging redirect from this Save if one occurs, so this wait
+      // just needs to be reasonable, not airtight.
+      await page.waitForLoadState("networkidle")
+    }
+    await page.context().close()
+  })
+}
+
+registerSettingsGuard("@settings", [
   { path: "/admin/settings/search_settings?keyword=changeable_options", field: "form_changeable_options" },
   { path: "/admin/settings/search_settings?keyword=allow_registration", field: "form_allow_registration" },
   { path: "/admin/settings/search_settings?keyword=allow_group_categories", field: "form_allow_group_categories" },
-]
+])
 
-const settingsSnapshot = new Map<string, string[]>()
+// createUser.feature's "Create a HRM user" needs this on temporarily (see
+// that scenario's own comment) to make the manual-password field appear.
+registerSettingsGuard("@settings-createUser", [
+  {
+    path: "/admin/settings/search_settings?keyword=admins_can_set_users_pass",
+    field: "form_admins_can_set_users_pass",
+  },
+])
 
-// Shared between BeforeAll and AfterAll deliberately: creating a *fresh*
-// browser context in AfterAll (as a first attempt did) raced against
-// Playwright's own worker teardown — by the time AfterAll runs, the worker
-// has finished all its assigned tests and is winding down, and a brand new
-// context's navigation could never complete (a plain "Sign in" click hung
-// past even a very generous per-action timeout). Keeping the one context
-// BeforeAll already opened alive in between, instead of closing and
-// recreating it, sidesteps that race entirely — it's an already-running,
-// healthy context the whole time, just idle between the two hooks.
-let settingsPage: import("@playwright/test").Page | undefined
+// sessionManagement.feature's two "Check session description..." scenarios
+// toggle this between No and Yes to test the settings-toggle UI itself
+// (the setting has no actual effect on session display in the current Vue
+// frontend — see that file's own header comment).
+registerSettingsGuard("@settings-sessionManagement", [
+  { path: "/admin/settings/search_settings?keyword=show_session_description", field: "form_show_session_description" },
+])
+
+// toolLp.feature's two "Check the PDF export..." scenarios toggle this
+// between No and Yes to exercise the LP list's PDF-export icon under both
+// states.
+registerSettingsGuard("@settings-toolLp", [
+  { path: "/admin/settings/lp", field: "form_hide_scorm_pdf_link" },
+])
 
 // Wraps page.goto() for the settings BeforeAll/AfterAll loops specifically.
 // Both hooks have now independently hit the SAME failure, despite two
@@ -694,36 +776,6 @@ async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Brows
   await page.waitForURL((url) => !url.pathname.startsWith("/login"))
   return page
 }
-
-BeforeAll({ tags: "@settings" }, async ({ browser, baseURL }) => {
-  const page = await loginAsAdminOnFreshPage(browser, baseURL)
-  settingsPage = page
-  for (const { path, field } of SETTINGS_PAGES) {
-    await gotoReliably(page, path)
-    const values: string[] = await page.locator(`#${field}`).evaluate((el) =>
-      Array.from((el as HTMLSelectElement).selectedOptions).map((option) => option.value),
-    )
-    settingsSnapshot.set(field, values)
-  }
-})
-
-AfterAll({ tags: "@settings" }, async () => {
-  if (!settingsPage) return
-  const page = settingsPage
-  for (const { path, field } of SETTINGS_PAGES) {
-    const values = settingsSnapshot.get(field)
-    if (!values) continue
-    await gotoReliably(page, path)
-    await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
-    await pressButton(page, "Save")
-    // "Save" is a form submit — likely POST-redirect-GET under the hood.
-    // The NEXT iteration's own gotoReliably() now absorbs a still-lagging
-    // redirect from this Save if one occurs, so this wait just needs to be
-    // reasonable, not airtight.
-    await page.waitForLoadState("networkidle")
-  }
-  await page.context().close()
-})
 
 // pressButton()'s tiers each need to decide "does THIS locator apply" before
 // falling through to the next one — but a plain `.count()` is an instant,

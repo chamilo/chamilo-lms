@@ -432,8 +432,8 @@ Feature: Group tool
     Then I should see "Announcement will be sent to"
     Then I press "Save"
     And I wait for the page to be loaded when ready
-    Then I save current URL with name "announcement_for_all_users_group_0001_public"
     Then I should see "Announcement for all users inside Group 0001"
+    Then I save current URL with name "announcement_for_all_users_group_0001_public"
 
   Scenario: Create an announcement for fapple inside Group 0001
     Given I am on "/main/group/group.php?cid=1&sid=0"

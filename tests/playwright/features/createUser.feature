@@ -47,11 +47,17 @@
 #   KNOWN password (same "username as its own password" convention every
 #   other fixed test account here uses), which is only possible with a
 #   manually-set password — so that scenario now enables
-#   `admins_can_set_users_pass` via the settings UI first, and doesn't
-#   restore it afterward (a deliberate, low-risk, permanent side effect for
-#   this suite, same category as course.feature leaving "TEMP" behind — it
-#   only grants admins an existing, already-permission-gated capability, not
-#   a new attack surface).
+#   `admins_can_set_users_pass` via the settings UI first. UPDATE: this used
+#   to be left unrestored deliberately ("low-risk permanent side effect") —
+#   revisited because leaving ANY platform setting changed for the rest of
+#   the run is exactly the class of bug that caused toolGroup.feature's
+#   "0 categories rendered" mystery (a DIFFERENT setting, same root cause:
+#   one file's mutation outliving its own run, observed by whatever else
+#   happens to run concurrently or afterward). The @settings-createUser tag
+#   below wires up a BeforeAll/AfterAll pair (registerSettingsGuard() in
+#   common.steps.ts) that snapshots this setting's real current value before
+#   this file's scenarios run and restores it after the last one finishes —
+#   same mechanism adminSettings.feature's own @settings tag already used.
 #   This also exposed a real robustness gap in `resolveField()`'s final
 #   `getByLabel()` fallback (fixed in common.steps.ts): with the field gone,
 #   it fell through to a case-insensitive SUBSTRING match on "password" and
@@ -71,7 +77,7 @@
 #   The actual authorization decision is still fully enforced afterward by
 #   `SwitchUserSubscriber`, which always delegates to
 #   `LoginAsAuthorizationChecker` regardless of who reaches the controller.
-@administration
+@administration @settings-createUser
 Feature: Users management as admin
   In order to add users
   As an administrator

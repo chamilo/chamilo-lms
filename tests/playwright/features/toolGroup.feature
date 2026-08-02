@@ -433,6 +433,9 @@ Feature: Group tool
     Then I press "Save"
     And I wait for the page to be loaded when ready
     Then I should see "Announcement for all users inside Group 0001"
+    Then I follow "Announcement for all users inside Group 0001"
+    And I wait for the page to be loaded when ready
+    Then I should see "Announcement description in Group 0001"
     Then I save current URL with name "announcement_for_all_users_group_0001_public"
 
   Scenario: Create an announcement for fapple inside Group 0001
@@ -455,6 +458,9 @@ Feature: Group tool
     Then I press "Save"
     And I wait for the page to be loaded when ready
     Then I should see "Announcement for user fapple inside Group 0001"
+    Then I follow "Announcement for user fapple inside Group 0001"
+    And I wait for the page to be loaded when ready
+    Then I should see "Announcement description for user fapple inside Group 0001"
     Then I save current URL with name "announcement_for_user_fapple_group_0001_public"
 
   Scenario: Create an announcement for everybody inside Group 0003 (private)
@@ -474,6 +480,9 @@ Feature: Group tool
     Then I press "Save"
     And I wait for the page to be loaded when ready
     Then I should see "Announcement for all users inside Group 0003"
+    Then I follow "Announcement for all users inside Group 0003"
+    And I wait for the page to be loaded when ready
+    Then I should see "Announcement description in Group 0003"
     Then I save current URL with name "announcement_for_all_users_group_0003_private"
 
   Scenario: Create an announcement for fapple inside Group 0003
@@ -495,6 +504,9 @@ Feature: Group tool
     Then I press "Save"
     And I wait for the page to be loaded when ready
     Then I should see "Announcement for user fapple inside Group 0003"
+    Then I follow "Announcement for user fapple inside Group 0003"
+    And I wait for the page to be loaded when ready
+    Then I should see "Announcement description for user fapple inside Group 0003"
     Then I save current URL with name "announcement_for_user_fapple_group_0003_private"
 
   Scenario: Create an announcement as acostea and send only to fapple
@@ -518,6 +530,9 @@ Feature: Group tool
     Then I press "Save"
     And I wait for the page to be loaded when ready
     Then I should see "Announcement only for fapple Group 0005"
+    Then I follow "Announcement only for fapple Group 0005"
+    And I wait for the page to be loaded when ready
+    Then I should see "Announcement description only for fapple Group 0005"
     Then I save current URL with name "announcement_only_for_fapple_private"
 
   # REAL, CONFIRMED BEHAVIOR (see header comment): access to a group's
@@ -530,36 +545,36 @@ Feature: Group tool
     Given I am not logged
     Given I am logged as "fapple"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
-    And I wait for the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should not see "not allowed"
     And I should see "Announcement description in Group 0001"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
-    And I wait for the page to be loaded when ready
-    Then I should not see "not allowed"
+    And I wait for the page to be loaded
+    And I should see "Announcement description for user fapple inside Group 0001"
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
-    And I wait for the page to be loaded when ready
-    Then I should not see "not allowed"
+    And I wait for the page to be loaded
+    And I should see "Announcement description in Group 0003"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
-    And I wait for the page to be loaded when ready
-    Then I should not see "not allowed"
+    And I wait for the page to be loaded
+    And I should see "Announcement description for user fapple inside Group 0003"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
-    And I wait for the page to be loaded when ready
-    Then I should not see "not allowed"
+    And I wait for the page to be loaded
+    And I should see "Announcement description only for fapple Group 0005"
 
     Given I am not logged
     Given I am logged as "acostea"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
-    And I wait for the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
-    And I wait for the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
-    And I wait for the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
-    And I wait for the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should see "not allowed"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
-    And I wait for the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should see "not allowed"

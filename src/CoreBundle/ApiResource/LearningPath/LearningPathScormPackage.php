@@ -33,6 +33,9 @@ use Chamilo\CoreBundle\Controller\Api\LearningPathScormRuntimePackageAction;
                 summary: 'Download an authorized SCORM package for the active runtime item',
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            outputFormats: [
+                'zip' => ['application/zip'],
+            ],
             output: false,
             read: false,
             name: 'download_learning_path_scorm_runtime_package',

@@ -19866,7 +19866,7 @@ msgid "Last Name and First Name"
 msgstr "Prénom et nom de famille"
 
 msgid "Plugins"
-msgstr "Extensions"
+msgstr "Plugins"
 
 msgid "Detailed"
 msgstr "Détaillé"

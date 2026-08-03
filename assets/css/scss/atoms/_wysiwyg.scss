@@ -1,4 +1,11 @@
-.wysiwyg {
+// The prose-h*: variants below @apply .text-h1 … .text-h6, so the typography
+// utilities must be part of every stylesheet that includes the mixin.
+@use "../settings/typography";
+
+// Base typography for HTML authored with the WYSIWYG editor.
+// Exposed as a mixin so the same rules apply while editing (TinyMCE iframe body,
+// see editor_content.scss) and while rendering.
+@mixin wysiwyg-content {
   @apply prose max-w-none space-y-4
     prose-h1:text-h1
     prose-h2:text-h2
@@ -13,4 +20,8 @@
   > * {
     @apply my-0;
   }
+}
+
+.wysiwyg {
+  @include wysiwyg-content;
 }

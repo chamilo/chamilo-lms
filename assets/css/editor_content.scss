@@ -1,9 +1,16 @@
 @use "tailwind";
+@use "scss/atoms/wysiwyg";
 
 // Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
 
 // Reset styles
 .tiny-content {
+  // Tailwind's preflight (pulled in by @use "tailwind" above) flattens headings,
+  // lists and block margins. This is the only stylesheet loaded inside the TinyMCE
+  // iframe, so the base typography has to be restored here. The rules below this
+  // mixin keep overriding it: they are @apply'd utilities and carry !important,
+  // while prose is emitted as a low-specificity component.
+  @include wysiwyg.wysiwyg-content;
   @apply block w-full;
 }
 

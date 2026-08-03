@@ -57,6 +57,31 @@
 # - "Add an exercise to LP" was already dead/commented-out in the original
 #   Behat file (references a pre-existing "Exercise 1" this suite never
 #   creates) — dropped, not ported, matching this migration's convention.
+# - REAL BUG FOUND (root-caused via a live CI failure, not guessed): "Enter
+#   LP"'s "Then I should see 'Document 1'" was failing because "LP 1"'s
+#   runtime view genuinely had zero items — NOT a rendering/timing race.
+#   "Add document to LP"'s old "I follow 'Edit learnpath'" clicks the FIRST
+#   a[title='Edit learnpath']:visible in DOM order (the shared step's
+#   tiered fallback), which is only safe when "LP 1" is the only LP in
+#   course TEMP's list. It never is on the shared dev box: confirmed via a
+#   direct DB query that toolGlossary.feature's own "Create Learning path
+#   named Glossary in course TEMP" scenario creates an LP titled "Glossary"
+#   on every run with no teardown of its own, so several stray ones
+#   accumulate over time and can sort before "LP 1". The document ended up
+#   attached to one of those instead of "LP 1" (confirmed: c_lp_item's
+#   "Document 1" row pointed at a "Glossary" LP's iid, not "LP 1"'s), so
+#   "LP 1" itself had nothing but its root item. Fixed by scoping the click
+#   to "LP 1"'s own row via the new "I click the ... icon in the LP panel
+#   for ..." step (common.steps.ts), same shape as the card/notebook-entry/
+#   table-row scoped steps already established there for this exact class
+#   of bug. toolGlossary.feature's missing teardown of its own "Glossary" LP
+#   is a separate, pre-existing defect in that file (fixed there, not here).
+#   "Delete a LP" and "Delete a LP category" below had the exact same
+#   unscoped-click vulnerability (confirmed live: with a stray extra "LP 1"
+#   present, "Delete a LP" deleted the wrong one and its own "should not see
+#   'LP 1'" assertion then failed against the survivor) — scoped the same
+#   way via "... icon in the LP panel for ..." / "... icon in the LP
+#   category header for ...".
 # - The two "Check the PDF export..." scenarios below toggle
 #   hide_scorm_pdf_link No then Yes with no teardown — they happen to leave
 #   it at Yes, which IS this setting's actual schema default, but only
@@ -97,7 +122,7 @@ Feature: LP tool
   Scenario: Add document to LP
     Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
     And I wait for the page to be loaded when ready
-    And I follow "Edit learnpath"
+    And I click the "a[title='Edit learnpath']" icon in the LP panel for "LP 1"
     And wait for the page to be loaded when ready
     Then I press "Create a new document"
     And wait for the page to be loaded when ready
@@ -155,7 +180,7 @@ Feature: LP tool
     Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
     And I wait for the page to be loaded when ready
     Then I should see "LP 1"
-    And I click the ".lp-panel__action-buttons button[title='More actions']" element
+    And I click the ".lp-panel__action-buttons button[title='More actions']" icon in the LP panel for "LP 1"
     And I follow "Delete"
     And I press "Yes"
     And I wait for the page to be loaded when ready
@@ -165,7 +190,7 @@ Feature: LP tool
     Given I am on "/main/lp/lp_controller.php?cid=1"
     And I wait for the page to be loaded when ready
     Then I should see "LP category 1"
-    And I click the "i.mdi-dots-vertical" element
+    And I click the "i.mdi-dots-vertical" icon in the LP category header for "LP category 1"
     And I follow "Delete"
     And I press "Yes"
     And I wait for the page to be loaded when ready

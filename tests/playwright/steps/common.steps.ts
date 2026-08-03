@@ -88,17 +88,32 @@ Given(
 async function loginAs(page: Page, username: string) {
   // Real CI failure: admin/fileIntegrity.feature's "Non-administrators
   // cannot access ..." scenario has a Background that logs in as admin,
-  // then the scenario itself switches to "I am a student" — the first
-  // scenario in this suite to log in as one user and then a DIFFERENT one
-  // within the same browser context. Confirmed live: navigating to /login
-  // while already authenticated redirects straight to /home without ever
-  // rendering the login form, so #login never appears and the fill() below
-  // hangs for the rest of the test timeout. Visiting /logout first is a
-  // harmless no-op when already logged out (confirmed live: 200, lands on
-  // "/"), so this is safe to do unconditionally rather than detecting
-  // whether a switch is actually needed.
-  await page.goto("/logout")
+  // then the scenario itself switches to "I am a student" — logging in as
+  // one user and then a DIFFERENT one within the same browser context,
+  // with no explicit logout step of its own in between (unlike toolGroup.
+  // feature's "I am not logged" -> "I am logged as 'acostea'" pattern
+  // below, which already handles this explicitly). Confirmed live:
+  // navigating to /login while already authenticated redirects straight to
+  // /home without ever rendering the login form, so #login never appears
+  // and the fill() below hangs for the rest of the test timeout.
+  //
+  // Only logging out when actually still authenticated (rather than
+  // unconditionally, as a first version of this fix did) matters: a real CI
+  // failure showed that unconditional extra round-trip shifting the timing
+  // of the ALREADY-delicate session-establishment race documented below
+  // (toolGroup.feature's own scenarios, which already do their own explicit
+  // "I am not logged" first) — the redundant second logout added just
+  // enough extra delay/variance to make that pre-existing race resurface.
+  // Checking whether #login actually rendered costs nothing extra in the
+  // overwhelmingly common case (a fresh, already-logged-out context, or a
+  // file that already logs out explicitly like toolGroup.feature) and only
+  // pays the logout+retry cost in the genuine cross-login-call case this
+  // fix targets.
   await page.goto("/login")
+  if (!(await page.locator("#login").isVisible().catch(() => false))) {
+    await page.goto("/logout")
+    await page.goto("/login")
+  }
   await page.locator("#login").fill(username)
   await page.locator("#password").fill(username)
   await page
@@ -1289,6 +1304,92 @@ Then(
       .click()
   },
 )
+
+// Not ported — new, for toolLp.feature's "Add document to LP" scenario. Real
+// CI failure root-caused (not guessed): course TEMP's LP list is genuinely
+// never empty on the shared dev box — toolGlossary.feature's own "Create
+// Learning path named Glossary in course TEMP" scenario creates an LP titled
+// "Glossary" on every run with no teardown, so it accumulates (confirmed via
+// a direct DB query: 6 stray rows in c_lp titled "Glossary" from a single
+// day's runs). "I follow 'Edit learnpath'" resolves via the shared step's
+// a[title=]:visible tier and clicks the FIRST such icon in DOM order, which
+// isn't guaranteed to be the LP this scenario just created — confirmed live
+// the new document ends up attached to whichever LP happened to sort first
+// (a pre-existing "Glossary" one), not "LP 1", leaving "LP 1" itself with
+// zero items. That is the actual root cause of a real "Enter LP" scenario
+// failure downstream (its runtime view for "LP 1" has nothing to show,
+// because "Document 1" was never added to it). Same fix shape as the
+// card/notebook-entry steps above: scope the click to the LP's own panel
+// (`.lp-panel`, LpRowItem.vue), matched by its exact title text, so this
+// scenario is correct regardless of how many other LPs already exist.
+Then(
+  "I click the {string} icon in the LP panel for {string}",
+  async ({ page }, selector: string, lpTitle: string) => {
+    await page
+      .locator(".lp-panel")
+      .filter({ has: page.getByText(lpTitle, { exact: true }) })
+      .locator(selector)
+      .first()
+      .click()
+  },
+)
+
+// Not ported — new, for toolLp.feature's "Delete a LP category" scenario.
+// Same ambiguity class as the LP-panel step above, applied to categories:
+// "i.mdi-dots-vertical" unscoped would hit the FIRST category's menu icon in
+// DOM order, not necessarily "LP category 1"'s own one, if the shared dev
+// box ever has more than one LP category in course TEMP. LpCategorySection.vue
+// renders each category as its own `<header>` containing both the category
+// title (`<h2>`) and its "More actions" dots-vertical icon, so scoping to the
+// header containing the exact category title is collision-proof the same way.
+Then(
+  "I click the {string} icon in the LP category header for {string}",
+  async ({ page }, selector: string, categoryTitle: string) => {
+    await page
+      .locator("header")
+      .filter({ has: page.getByText(categoryTitle, { exact: true }) })
+      .locator(selector)
+      .first()
+      .click()
+  },
+)
+
+// Not ported — new, for toolGlossary.feature's "Create Learning path named
+// Glossary in course TEMP" scenario. Without this, the LP created here was
+// never cleaned up (confirmed live: 6 stray "Glossary" LPs had accumulated
+// in c_lp from repeated runs before this fix), which is what broke
+// toolLp.feature's own "Add document to LP" scenario downstream — see the
+// step above for the full chain. Deletes by the LP's own numeric id
+// (extracted from the current URL, `/resources/lp/<node>/<iid>/...`, right
+// after "Continue" lands on the builder), not by title: titles aren't
+// unique here (this suite's own convention allows creating a second
+// "Glossary" LP fine), so a title-based delete could hit the WRONG one.
+// `.lp-panel[data-lp-id="..."]` (confirmed live via a real DOM dump) is
+// exact and collision-proof regardless of how many same-titled LPs exist.
+// Each panel actually renders TWO "More actions" buttons (LpRowItem.vue's
+// desktop button plus a `.lp-panel__mobile-dropdown` duplicate for narrow
+// viewports) — `:visible` picks whichever one is actually shown at the
+// current viewport, confirmed live (a plain, unfiltered locator throws a
+// strict-mode "resolved to 2 elements" error).
+Then("I delete the learning path I just created", async ({ page }) => {
+  const match = page.url().match(/\/resources\/lp\/\d+\/(\d+)\//)
+  if (!match) {
+    throw new Error(`Could not find a learning path id in the current URL: ${page.url()}`)
+  }
+  const lpId = match[1]
+  await gotoReliably(page, "/main/course_home/redirect.php?cidReq=TEMP")
+  await page.getByRole("link", { name: "Learning paths", exact: true }).first().click()
+  await page.waitForLoadState("networkidle")
+  const panel = page.locator(`.lp-panel[data-lp-id="${lpId}"]`)
+  await panel.locator('button[title="More actions"]:visible').first().click()
+  await page.getByText("Delete", { exact: true }).click()
+  await page
+    .locator(".p-confirmdialog, [role='alertdialog']")
+    .getByRole("button", { name: /Yes|Delete/i })
+    .first()
+    .click()
+  await expect(panel).toHaveCount(0)
+})
 
 // Not ported — new, for toolDocument.feature's own cleanup scenarios
 // specifically (deleting several test-created documents back to back). A

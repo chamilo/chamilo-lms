@@ -23,6 +23,19 @@
 # "Hello" absent) but appears once Andrea's own private conversation with
 # admin ("John_Doe_chat") is opened — "HelloAndrea" contains "Hello" as a
 # substring, matching the original scenario's own substring assertion.
+#
+# Real CI-only failure: clicking a private-chat button calls
+# switchConversation(), which triggers its own async fetch() for that
+# conversation's history (chat.html.twig's polling client) — not a real page
+# navigation, so "wait for the page to be loaded" (domcontentloaded only) is
+# a near no-op here and gives that fetch no extra time to land before the
+# very next action. Scenario 1 sends its private message immediately after
+# switching to Andrea's conversation with nothing confirming the switch
+# actually completed first, and scenario 2 asserts on the fetched history
+# right after switching to admin's conversation the same way — on a loaded
+# CI runner either race can plausibly lose. Both now use "I wait for the
+# page content to settle" (bounded networkidle) right after switching
+# conversations instead.
 @common @tools
 Feature: Chat tool
   In order to communicate with other users
@@ -44,7 +57,7 @@ Feature: Chat tool
 
     # Open private chat with Andrea and send a private message
     Then I click the "button#Andrea_Costea_chat" element
-    And wait for the page to be loaded
+    And I wait for the page content to settle
     Then I fill in the following:
       | chat-writer | HelloAndrea |
     Then I click the "button#chat-send-message" element
@@ -61,5 +74,5 @@ Feature: Chat tool
 
     # Click on admin's own chat entry (fixture display name "John Doe") and assert the private message
     Then I click the "button#John_Doe_chat" element
-    And wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should see "Hello"

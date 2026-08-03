@@ -138,6 +138,16 @@ Feature: Glossary tool
     And I press "Continue"
     And I wait for the page to be loaded
     Then I should see "Glossary"
+    # Real bug this scenario caused downstream, found via a live CI failure:
+    # this LP was never cleaned up, so repeated runs left stray "Glossary"
+    # LPs accumulating in course TEMP — toolLp.feature's own "Add document
+    # to LP" scenario picks the FIRST LP-edit icon in DOM order, so those
+    # strays could (and did) make it attach its document to the WRONG LP
+    # instead of "LP 1", breaking a completely unrelated file. Deleting the
+    # one just created (by its own id, not by title — see common.steps.ts)
+    # keeps this scenario self-contained instead of polluting shared course
+    # data for every other file that also uses course TEMP.
+    And I delete the learning path I just created
 
   Scenario: Glossary export form is reachable
     Given I am on course "TEMP" homepage

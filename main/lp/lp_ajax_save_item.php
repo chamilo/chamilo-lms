@@ -61,7 +61,7 @@ function save_item(
     $statusSignalReceived = 0,
     $forceIframeSave = 0
 ) {
-    $debug = 1;
+    $debug = 0;
     $return = null;
     $courseCode = api_get_course_id();
     if (!empty($courseId)) {

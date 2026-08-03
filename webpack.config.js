@@ -164,6 +164,13 @@ Encore.copyFiles({
 class CopyUnhashedAssetsPlugin {
   apply(compiler) {
     compiler.hooks.afterEmit.tap("CopyUnhashedAssetsPlugin", () => {
+      // Only production builds emit content hashes. Development builds already write
+      // the unhashed filenames, so copying a hashed file left over by an earlier
+      // production build would silently overwrite them with stale content.
+      if (!isProd) {
+        return
+      }
+
       const buildPath = path.resolve(__dirname, "public/build")
       const cssPath = path.join(buildPath, "css")
       const qtipDistPath = path.join(buildPath, "libs/qtip2/dist")

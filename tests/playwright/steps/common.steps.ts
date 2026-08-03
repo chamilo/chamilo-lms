@@ -26,6 +26,13 @@ Given("I am on {string}", async ({ page }, path: string) => {
   await gotoReliably(page, path)
 })
 
+// Mink's "I am on the homepage" (MinkContext::iAmOnHomepage(), visits the
+// base URL "/") — registration.feature is the first ported scenario to use
+// it; every other ported file navigates to an explicit path instead.
+Given("I am on the homepage", async ({ page }) => {
+  await gotoReliably(page, "/")
+})
+
 // Ported from FeatureContext::iAmOnCourseXHomepage(): navigates via the
 // legacy redirect entry point (cidReq resolves the course by its code, not
 // its numeric id) and asserts no visible error, matching the original's own
@@ -79,6 +86,18 @@ Given(
 // steps' own locator auto-wait / explicit "wait for the page..." covers
 // destination-page readiness.
 async function loginAs(page: Page, username: string) {
+  // Real CI failure: admin/fileIntegrity.feature's "Non-administrators
+  // cannot access ..." scenario has a Background that logs in as admin,
+  // then the scenario itself switches to "I am a student" — the first
+  // scenario in this suite to log in as one user and then a DIFFERENT one
+  // within the same browser context. Confirmed live: navigating to /login
+  // while already authenticated redirects straight to /home without ever
+  // rendering the login form, so #login never appears and the fill() below
+  // hangs for the rest of the test timeout. Visiting /logout first is a
+  // harmless no-op when already logged out (confirmed live: 200, lands on
+  // "/"), so this is safe to do unconditionally rather than detecting
+  // whether a switch is actually needed.
+  await page.goto("/logout")
   await page.goto("/login")
   await page.locator("#login").fill(username)
   await page.locator("#password").fill(username)
@@ -558,6 +577,72 @@ When(
   },
 )
 
+// Not ported — new, for toolGlossary.feature's "Create glossary term"
+// scenario. Real, confirmed live flake on the shared box (reproduced
+// directly via a raw script, not just from a single test failure):
+// GlossaryForm.vue's submitGlossaryForm() sometimes shows the "Could not
+// create glossary term" error toast and stays on the create form EVEN
+// THOUGH the POST to /api/glossaries already returned 201 and the row was
+// actually persisted — confirmed by querying /api/glossaries?q=<title>
+// immediately after such a "failure" and finding the row already there.
+// Repeating the same title on a naive retry would then collide with that
+// already-created row (CGlossary enforces a "glossary term already exists"
+// uniqueness check) and fail a SECOND time for a different reason, making
+// a blind retry actively worse. Instead: after Save, if the error toast
+// shows up, check whether the term was actually created despite it (GET
+// the collection filtered by title) before deciding whether to retry —
+// only a genuine failure (term truly absent) retries the form submit once.
+When(
+  "I create the glossary term {string} with description {string}",
+  async ({ page }, title: string, description: string) => {
+    async function submit() {
+      await page.locator("#term-name").fill(title)
+      await page.locator("#term-description").fill(description)
+      await page.locator("button", { hasText: "Save term" }).first().click()
+      // Race the two possible outcomes rather than waiting for either one's
+      // own fixed timeout first — whichever happens first tells us which
+      // path to take next.
+      await Promise.race([
+        page.waitForURL((url) => !url.pathname.includes("/create"), { timeout: 10_000 }).catch(() => {}),
+        page.getByText("Could not create glossary term").waitFor({ timeout: 10_000 }).catch(() => {}),
+      ])
+    }
+
+    async function termExists(): Promise<boolean> {
+      const cid = new URLSearchParams(new URL(page.url()).search).get("cid") ?? ""
+      const gid = new URLSearchParams(new URL(page.url()).search).get("gid") ?? ""
+      const response = await page.request.get(
+        `/api/glossaries?cid=${encodeURIComponent(cid)}&gid=${encodeURIComponent(gid)}&q=${encodeURIComponent(title)}`,
+        { headers: { Accept: "application/ld+json" } },
+      )
+      const rows = await response.json().catch(() => [])
+      return Array.isArray(rows) && rows.some((row) => row.title === title)
+    }
+
+    await submit()
+    if (await termExists()) {
+      // Created for real, whether or not the error toast fired — the SPA
+      // may still be sitting on the create form if it did; navigate to the
+      // list so the caller's own "I should see" assertion has something to
+      // find.
+      if (page.url().includes("/create")) {
+        await page.goBack()
+        await page.waitForLoadState("domcontentloaded")
+      }
+      return
+    }
+    // Genuinely not created — retry the whole submit exactly once.
+    await submit()
+    if (!(await termExists())) {
+      throw new Error(`Glossary term "${title}" was not created after two attempts.`)
+    }
+    if (page.url().includes("/create")) {
+      await page.goBack()
+      await page.waitForLoadState("domcontentloaded")
+    }
+  },
+)
+
 // Not ported — new, for toolWork.feature's Vue create/edit assignment
 // dialogs (AssignmentForm.vue-style). BaseTinyEditor generates a fresh,
 // unpredictable instance id per mount (`tiny-vue_<random>`) rather than a
@@ -810,6 +895,13 @@ registerSettingsGuard("@settings-toolLp", [
   { path: "/admin/settings/lp", field: "form_hide_scorm_pdf_link" },
 ])
 
+// toolGlossary.feature's "Enable glossary display in extra tools" scenario
+// sets this to "Learning path" with no teardown in the original Behat file —
+// same leaked-setting pattern already fixed for toolLp/sessionManagement.
+registerSettingsGuard("@settings-toolGlossary", [
+  { path: "/admin/settings/glossary", field: "form_show_glossary_in_extra_tools" },
+])
+
 // Wraps page.goto() for the settings BeforeAll/AfterAll loops specifically.
 // Both hooks have now independently hit the SAME failure, despite two
 // separate rounds of adjusting the wait BEFORE each goto() (domcontentloaded
@@ -847,10 +939,16 @@ registerSettingsGuard("@settings-toolLp", [
 // waitUntil:"load" is enough for the next step's own locator auto-wait /
 // explicit "wait for the page..." steps to take over; the value of this
 // helper is the interrupt-retry, not a second settle strategy.
+// Tracks the last navigation's HTTP response, for "the response status code
+// should be ..." below — module-scoped like lastCreatedAttendanceId elsewhere
+// in this file, since step definitions don't share a return value with each
+// other otherwise.
+let lastNavigationResponse: import("@playwright/test").Response | null = null
+
 async function gotoReliably(page: Page, path: string, maxAttempts = 5) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      await page.goto(path)
+      lastNavigationResponse = await page.goto(path)
       return
     } catch (error) {
       if (!String(error).includes("is interrupted by another navigation") || attempt === maxAttempts) {
@@ -1162,6 +1260,30 @@ Then(
     await page
       .locator(".card")
       .filter({ has: page.getByText(cardText, { exact: true }) })
+      .locator(selector)
+      .first()
+      .click()
+  },
+)
+
+// Not ported — new, for toolNotebook.feature. PrimeVue's <Card> (used by
+// NotebookListView.vue) renders `class="p-card ..."`, a single class token —
+// not a substring match for ".card", so the step above can't find these at
+// all (confirmed live). Also genuinely needed, not just a selector nuance:
+// the shared dev box always has other real notebook entries alongside
+// whatever this feature creates, so a blind "I click the ... element"
+// .first() would silently act on an unrelated pre-existing note instead of
+// this scenario's own one (same trap class.feature's own header comment
+// documents). Scopes by the card's own `data-type="notebook"` marker
+// (NotebookListView.vue sets this on every BaseCard) filtered to the one
+// containing the given exact title text.
+Then(
+  "I click the {string} icon in the notebook entry for {string}",
+  async ({ page }, selector: string, entryTitle: string) => {
+    page.once("dialog", (dialog) => dialog.accept())
+    await page
+      .locator("[data-type='notebook']")
+      .filter({ has: page.getByText(entryTitle, { exact: true }) })
       .locator(selector)
       .first()
       .click()
@@ -1482,6 +1604,20 @@ Then("I should not see an error", async ({ page }) => {
   await expect(page.locator("body")).not.toContainText("Internal server error")
   await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
   await expect(page.locator(".p-message-error")).toHaveCount(0)
+})
+
+// Mink's "the response status code should be ..." (MinkContext::
+// assertResponseStatus()), for admin/fileIntegrity.feature's access-control
+// scenario. Reads the response captured by the last "I am on ..." navigation
+// (gotoReliably) rather than making its own request, matching the original's
+// own semantics of asserting on the CURRENT page's response, not a fresh one.
+Then("the response status code should be {int}", async ({}, statusCode: number) => {
+  if (!lastNavigationResponse) {
+    throw new Error(
+      'No navigation response recorded yet — "the response status code should be ..." must follow an "I am on ..." step.',
+    )
+  }
+  expect(lastNavigationResponse.status()).toBe(statusCode)
 })
 
 // Ported from FeatureContext::focus() (Mink's findField() id -> name -> label

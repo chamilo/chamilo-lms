@@ -142,7 +142,9 @@ jobs:
                     yarn test:playwright:install
                     sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env
                     sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env
-                    printf '\nwhen@prod:\n    framework:\n        http_cache: true\n' >> config/packages/framework.yaml
+                    if grep -q "APP_ENV='prod'" .env; then
+                      printf 'framework:\n    http_cache: true\n' > config/packages/prod/framework.yaml
+                    fi
                     sudo php bin/console cache:clear
                     sudo chmod -R 777 var
 

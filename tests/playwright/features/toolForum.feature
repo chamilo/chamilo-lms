@@ -68,6 +68,32 @@ Feature: Forum tool
     Then I should see "Reply"
     Then I should not see an error
 
+  # Runs BEFORE "Delete a forum thread" below, unlike the original Behat
+  # order — real, confirmed CI failure: deletePost() (forumfunction.inc.php)
+  # doesn't cascade-delete a thread's replies when its original post is
+  # deleted, it re-parents them and leaves them in place (a thread is only
+  # actually removed once its last surviving post is gone). viewthread.php
+  # recomputes "which post is the thread's OP" on every load as MIN(iid)
+  # among surviving posts, and OP posts don't render a quote icon at all
+  # (viewthread.php's `$isOp` gate). So running "Delete a forum thread"
+  # (which deletes "Thread One", the OP) first left "Reply" promoted to OP
+  # by the time this scenario ran, permanently hiding the quote icon it
+  # depends on — deterministic given this file's fixed scenario order, not a
+  # flake. Reordering (quote, then delete) sidesteps this without touching
+  # the app's own deliberate re-parenting behavior.
+  Scenario: Quote a forum message
+    Given I am on "/main/forum/index.php?cid=1"
+    And I wait for the page to be loaded
+    And I follow "Forum Test"
+    And I wait for the page to be loaded
+    When I follow "Thread One"
+    And I wait for the page to be loaded
+    When I click the "i.mdi-comment-quote" element
+    And I wait for the page to be loaded
+    And I press "SubmitPost"
+    And wait for the page to be loaded
+    Then I should see "Quoting"
+
   Scenario: Delete a forum thread
     Given I am on "/main/forum/index.php?cid=1"
     And I wait for the page to be loaded
@@ -79,12 +105,3 @@ Feature: Forum tool
     And I confirm the popup
     And wait for the page to be loaded
     Then I should not see an error
-
-  Scenario: Quote a forum message
-    Given I am on "/main/forum/viewthread.php?forum=1&thread=1&cid=1"
-    And I wait for the page to be loaded
-    When I click the "i.mdi-comment-quote" element
-    And I wait for the page to be loaded
-    And I press "SubmitPost"
-    And wait for the page to be loaded
-    Then I should see "Quoting"

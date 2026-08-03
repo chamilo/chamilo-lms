@@ -87,6 +87,22 @@ async function loginAs(page: Page, username: string) {
     .first()
     .click()
   await page.waitForURL((url) => !url.pathname.startsWith("/login"))
+  // Real CI failure: toolGroup.feature's "Create an announcement as acostea
+  // ..." scenario does "I am not logged" -> "I am logged as 'acostea'" ->
+  // immediately navigates to group.php, which then rendered with a genuine
+  // PHP warning ("Trying to access array offset on false" in
+  // groupmanager.lib.php's processGroups(), where api_get_user_info()
+  // returned false) — the server-side session wasn't fully established yet
+  // for this brand-new login by the time the very next request landed,
+  // leaving the group list broken for that one render (confirmed via the
+  // provisioning log; the page snapshot at failure time showed an
+  // anonymous/logged-out-looking page). `waitForURL` only confirms the
+  // browser left /login, not that the landing page (and whatever it fires
+  // on mount) has settled — same root class of "acted too fast right after
+  // a redirect" issue gotoReliably() already hardens against elsewhere, just
+  // session-establishment instead of navigation-interruption. Waiting for
+  // the landing page's own load state gives that a moment to finish first.
+  await page.waitForLoadState("domcontentloaded")
 }
 
 Given("I am a platform administrator", async ({ page }) => {
@@ -449,6 +465,98 @@ Then("I fill in tinymce field {string} with {string}", async ({ page }, field: s
     editor.fire("change")
   }, { id: fieldId, value })
 })
+
+// Not ported — new, replaces the separate "click add" + "fill title" +
+// "fill tinymce" step sequence for ticket.feature's 4 "Create a Ticket X"
+// scenarios (project/category/status/priority) with one atomic, retriable
+// unit. Real, confirmed CI-only flake, never once reproduced across repeated
+// local runs on a stable, uncontended box: TinyMCE's own init() for the
+// dialog's description editor occasionally never completes — no console
+// error, no exception, completely silent — and the target element itself
+// stops existing in the DOM shortly after (confirmed live via a direct
+// diagnostic script). A real CI trace showed the page load and the
+// dialog-open click alone had already taken ~10s combined before the dialog
+// even opened on the run that hit this, pointing to a resource-contention-
+// sensitive race inside TinyMCE's own third-party init code — more likely
+// to surface on a loaded shared CI runner than a dedicated local box — not
+// a bug in our own step code or the Vue component. Once it happens, waiting
+// longer never recovers it (the element is just gone); the only real fix is
+// a fresh mount, i.e. closing and reopening the dialog. A prior, narrower
+// retry attempt elsewhere (just re-typing a truncated title on mismatch)
+// made a DIFFERENT failure worse, so this retries the WHOLE open+fill
+// sequence as one unit, exactly once, rather than repeating just the doomed
+// action in place.
+When(
+  "I create a ticket setting with title {string} and description {string}",
+  async ({ page }, title: string, description: string) => {
+    const STEP_TIMEOUT = 10_000
+    const TINYMCE_READY_TIMEOUT = 20_000
+    const CANCEL_TIMEOUT = 5_000
+
+    async function openAndFill(): Promise<boolean> {
+      await page.locator("#ticket-settings-add:visible").first().click({ timeout: STEP_TIMEOUT })
+      await fillReliably(await resolveField(page, "title"), title)
+
+      // Known id from TicketSettingsView.vue's `editor-id="ticket-setting-description"`,
+      // set on BaseTinyEditor's own element as soon as it mounts, well before
+      // tinymce.init() itself completes — located directly with a bounded wait
+      // rather than through resolveField()'s generic id/name/label tiers.
+      // BaseTinyEditor renders no <label> at all, so resolveField's getByLabel
+      // fallback can never match and would wait UNBOUNDED (no timeout of its
+      // own) for a match that can never come. Real CI failure: this exact path
+      // burned the entire 90s test timeout before ever reaching the tinymce
+      // wait below, leaving no time for the close-and-retry recovery.
+      const fieldId = "ticket-setting-description"
+      await page.locator(`#${fieldId}`).waitFor({ state: "attached", timeout: STEP_TIMEOUT })
+
+      try {
+        await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), fieldId, {
+          timeout: TINYMCE_READY_TIMEOUT,
+        })
+      } catch {
+        return false
+      }
+      await page.evaluate(
+        ({ id, value }) => {
+          const editor = (window as any).tinymce.get(id)
+          editor.setContent(value)
+          editor.fire("change")
+        },
+        { id: fieldId, value: description },
+      )
+      return true
+    }
+
+    async function tryOpenAndFill(): Promise<boolean> {
+      try {
+        return await openAndFill()
+      } catch {
+        return false
+      }
+    }
+
+    if (await tryOpenAndFill()) return
+
+    // Recovery: discard the stuck dialog (and its never-initialized editor)
+    // and reopen it fresh, exactly once. Bounded AND tolerant of the click
+    // itself failing: a real CI trace showed the whole dialog — not just the
+    // editor — can already be gone by this point, so there may be no Cancel
+    // button left to click at all. Either way, only a fresh mount for the
+    // retry matters; a prior version of this recovery clicked Cancel with no
+    // timeout, which then hung for the rest of the 90s test timeout in 4 of 5
+    // observed CI failures once the button was never going to appear.
+    await page
+      .getByRole("button", { name: "Cancel", exact: true })
+      .click({ timeout: CANCEL_TIMEOUT })
+      .catch(() => {})
+
+    if (!(await tryOpenAndFill())) {
+      throw new Error(
+        'TinyMCE editor "ticket-setting-description" never became ready, even after closing and reopening the dialog once.',
+      )
+    }
+  },
+)
 
 // Not ported — new, for toolWork.feature's Vue create/edit assignment
 // dialogs (AssignmentForm.vue-style). BaseTinyEditor generates a fresh,

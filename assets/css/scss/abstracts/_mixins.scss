@@ -45,6 +45,27 @@
   }
 }
 
+// Base typography for HTML authored with the WYSIWYG editor, shared by the .wysiwyg
+// render surface and by the TinyMCE iframe body (see editor_content.scss).
+// The prose-h*: variants @apply .text-h1 … .text-h6, so any stylesheet including
+// this mixin must also pull in scss/settings/typography.
+@mixin wysiwyg-content {
+  @apply prose max-w-none space-y-4
+    prose-h1:text-h1
+    prose-h2:text-h2
+    prose-h3:text-h3
+    prose-h4:text-h4
+    prose-h5:text-h5
+    prose-h6:text-h6
+    prose-img:inline-block prose-img:my-2
+    prose-a:text-info
+  ;
+
+  > * {
+    @apply my-0;
+  }
+}
+
 @mixin button-text-style($color) {
   @apply bg-transparent text-#{$color} border-transparent
     focus-visible:outline-#{$color} focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;

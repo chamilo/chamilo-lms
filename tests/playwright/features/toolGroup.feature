@@ -541,40 +541,52 @@ Feature: Group tool
   # whether the visiting user is among the announcement's own chosen
   # recipients. fapple is a member of Group 0001, 0003 and 0005; acostea is
   # a member of Group 0002 and 0005 only (added in earlier scenarios).
+  #
+  # REAL CI FAILURE, test-authoring bug (not an app bug): acostea's own
+  # "not allowed" check against "announcement_only_for_fapple_private" used
+  # to fail every time — that announcement was created by acostea themselves
+  # ("Create an announcement as acostea and send only to fapple" above), so
+  # visiting it as acostea correctly shows the FULL content plus an edit
+  # link (confirmed live: the page renders the announcement's own heading,
+  # description, and an `edit/<id>` link) — an author can always see their
+  # own creation regardless of who else it's targeted at. The test's own
+  # expectation that acostea would be denied here was simply wrong; fixed
+  # to assert the same "can see own content" behavior already asserted for
+  # fapple elsewhere in this scenario, not "not allowed".
   Scenario: Check fapple/acostea access of announcements
     Given I am not logged
     Given I am logged as "fapple"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should not see "not allowed"
     And I should see "Announcement description in Group 0001"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     And I should see "Announcement description for user fapple inside Group 0001"
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     And I should see "Announcement description in Group 0003"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     And I should see "Announcement description for user fapple inside Group 0003"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     And I should see "Announcement description only for fapple Group 0005"
 
     Given I am not logged
     Given I am logged as "acostea"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should see "not allowed"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
-    And I wait for the page to be loaded
-    Then I should see "not allowed"
+    And I wait for the page content to settle
+    And I should see "Announcement description only for fapple Group 0005"

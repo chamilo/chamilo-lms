@@ -1339,6 +1339,28 @@ Then(/^(?:|I )wait one minute for the page to be loaded$/, async ({ page }) => {
   await page.waitForLoadState("networkidle")
 })
 
+// Not ported — new. Bounded middle ground between the two waits above: a
+// plain domcontentloaded settles fast but can leave a full-page-reload SPA
+// route's own async content-fetch still in flight when the very next
+// assertion's own (finite) auto-retry window starts, while "when ready"
+// (networkidle) can hang the ENTIRE test timeout on this app's persistent
+// background polling (already documented). Real CI failure: toolGroup.
+// feature's "Check fapple/acostea access of announcements" visits 5 group-
+// scoped announcement URLs back-to-back per user via "I visit URL saved
+// with name ..." (a full page.goto() reload each time, re-bootstrapping the
+// whole Vue app from scratch, not a cheap SPA-internal transition) — the
+// underlying API call itself was confirmed live to be fast and correct
+// (~300ms, right error body) for the specific check that failed, so the gap
+// was in the FRONTEND finishing its async fetch-and-render within the
+// assertion's own window, not the backend. Catching networkidle's own
+// timeout (rather than using its default, which is the FULL test timeout)
+// gives real extra settling time when the network genuinely does go quiet
+// soon, without the unbounded hang risk.
+Then(/^(?:|I )wait for the page content to settle$/, async ({ page }) => {
+  await page.waitForLoadState("domcontentloaded")
+  await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => {})
+})
+
 // Ported from FeatureContext::iShouldNotSeeAnError(). Its own .alert-danger
 // check explicitly tolerates one that exists but has `display:none;` in its
 // style attribute — jqGrid (careers.php and other legacy jqGrid list pages)

@@ -86,7 +86,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         if (null !== $ldapConfig['password_attribute']) {
             $dataCorrespondence = array_values($this->dataCorrespondence + [$ldapConfig['password_attribute']]);
         } else {
-            $dataCorrespondence = $this->dataCorrespondence;
+            $dataCorrespondence = array_values($this->dataCorrespondence);
         }
 
         // Always use the queryString approach (search for actual DN, then bind) unless the admin

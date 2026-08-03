@@ -1,5 +1,4 @@
-@use "../abstracts/mixins" as m;
-
-.wysiwyg {
-  @include m.wysiwyg-content;
-}
+// The .wysiwyg class was replaced by .tiny-content, which carries the same base
+// typography (abstracts/mixins → wysiwyg-content) plus Chamilo's own rules for
+// editor content. See assets/css/editor_content.scss.
+// Kept as an empty partial so external themes still resolving this path do not break.

@@ -38,6 +38,18 @@
 #        file). Scoped to the row containing "ywarnier" instead, exactly like
 #        class.feature's own fix for the identical class of bug.
 #
+# 3. Entering the tool itself needs its own dedicated step, "I follow the
+#    course tool 'Users'", not the shared "I follow". The course homepage's
+#    "Users" tool link and the Administration SIDEBAR's own "Users" menu
+#    entry both resolve to exact text "Users" on the same page — a real CI
+#    failure (fresh, cold-cache install) showed the shared step's cascade
+#    losing the timing race against the course-tools list's own async
+#    render and falling through to its plain exact-text fallback tier,
+#    which then grabbed the sidebar's entry (permanently not visible, its
+#    submenu collapsed) instead of the course tool's own link, hanging for
+#    the full test timeout. See the step's own comment in common.steps.ts
+#    for the full DOM-level confirmation.
+#
 # Side-effect note: unsubscribing a user here is only "safe" on this shared
 # box because of what each user's role in course TEMP actually is right now
 # (confirmed live via /api/course_rel_users?course=1):
@@ -64,7 +76,7 @@ Feature: Users tool
   Scenario: Admin searches for 'amann' and unsubscribes the user
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I follow "Users"
+    And I follow the course tool "Users"
     And I wait for the page to be loaded
     And I fill in the following:
       | search_user_keyword | amann |
@@ -87,7 +99,7 @@ Feature: Users tool
   Scenario: Admin uses a specific tab then searches for 'ywarnier' and unsubscribes
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I follow "Users"
+    And I follow the course tool "Users"
     And I wait for the page to be loaded
     And I follow "Trainers"
     And I wait for the page to be loaded

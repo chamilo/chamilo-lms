@@ -51,6 +51,20 @@
 # Drops "I zoom out to maximum" (never used anyway) — see
 # adminHealthBlock.feature's header comment for why zoom steps are dropped
 # throughout this migration.
+#
+# REAL APP RACE FOUND, confirmed live (not just a flaky rerun): "Try exercise" scored
+# 65/105 instead of 105/105's-worth-of-answered-questions, on the exact same two
+# questions every time ("Multiple answers", "Unique answer with unknown"). A captured
+# network trace showed both submitted an EMPTY answer — `{"choices":[]}` /
+# `{"choice":null}` — even though "I check the ... radio button" reported no error.
+# ExercisePlayerView.vue's "Next question" button is only disabled while
+# `isSavingAnswer` is true, so a click landing right as the PREVIOUS question's
+# answer-save request resolves can be silently swallowed — the visible question stays
+# on the SAME one, so the very next scripted answer step lands on the wrong question
+# and its own answer never gets submitted. "I press 'Next question' until ... appears"
+# (common.steps.ts) re-clicks until the next question's own title heading actually
+# shows up, which is what confirms the click landed — this alone fixes it, verified via
+# a full clean rerun scoring 85/105.
 @common @tools
 Feature: Exercise tool
   In order to use the exercise tool
@@ -394,43 +408,43 @@ Feature: Exercise tool
     # Question 1 - Multiple choice
     Then I should see "Multiple choice"
     And I check the "Answer true" radio button
-    And I press "Next question"
+    And I press "Next question" until "Multiple answers" appears
     And I wait for the page content to settle
     # Question 2 - Multiple answers
     And I check the "Answer true" radio button
-    And I press "Next question"
+    And I press "Next question" until "Fill blanks" appears
     And I wait for the page content to settle
     # Question 3 - Fill blanks
     And I fill in blank 1 with "Juliet"
-    And I press "Next question"
+    And I press "Next question" until "Matching" appears
     And I wait for the page content to settle
     # Question 4 - Matching
     And I select "A. Option A" from matching select 1
     And I select "B. Option B" from matching select 2
-    And I press "Next question"
+    And I press "Next question" until "Open question" appears
     And I wait for the page content to settle
     # Question 5 - Open question
     And I fill in the open answer with "Hello you"
-    And I press "Next question"
+    And I press "Next question" until "Oral expression question" appears
     And I wait for the page content to settle
     # Question 6 - Oral expression (left unanswered, manually corrected)
-    And I press "Next question"
+    And I press "Next question" until "Exact answers combination" appears
     And I wait for the page content to settle
     # Question 7 - Exact answers combination
     And I check the "Answer true" radio button
-    And I press "Next question"
+    And I press "Next question" until "Unique answer with unknown" appears
     And I wait for the page content to settle
     # Question 8 - Unique answer with unknown
     And I check the "Answer true" radio button
-    And I press "Next question"
+    And I press "Next question" until "Multiple answer true - false - dont know" appears
     And I wait for the page content to settle
     # Question 9 - Multiple answer true/false/don't know
     And I check every "True" option on the page
-    And I press "Next question"
+    And I press "Next question" until "Combination true - false - dont know" appears
     And I wait for the page content to settle
     # Question 10 - Combination true/false/don't-know
     And I check every "True" option on the page
-    And I press "Next question"
+    And I press "Next question" until "Global multiple answer" appears
     And I wait for the page content to settle
     # Question 11 - Global multiple answer
     And I check the "Answer true" radio button

@@ -1520,6 +1520,34 @@ When("I follow {string}", async ({ page }, link: string) => {
   await page.getByText(link, { exact: true }).first().click()
 })
 
+// Not ported — new, for toolUsers.feature. Real CI failure on a fresh,
+// cold-cache install: "I follow 'Users'" on a course homepage fell all the
+// way through to the plain exact-text tier above and clicked the
+// Administration SIDEBAR's own "Users" PanelMenu entry instead of the
+// course tool's own "Users" link — confirmed live both exist simultaneously
+// on the same page (`getByText("Users", { exact: true })` matches 2:
+// the sidebar's `<span class="p-panelmenu-item-label">` inside a collapsed
+// submenu, genuinely never visible, and the course-tools list's own
+// `<a class="course-tool__title">`, visible). The sidebar span sorts first
+// in DOM order, so a bare `.first().click()` hangs the whole test timeout
+// waiting for an element that will never become visible on its own.
+// The byTitle/roleLink tiers above don't save this case either: the
+// sidebar item is an `<a>` with no `href` (so it doesn't qualify for
+// getByRole("link")) and neither element has a `title` attribute — and on
+// a slow/cold box the course-tools list's own client-side render (a
+// separate async fetch) can still lose the race against those two tiers'
+// combined timeout budget, which is exactly what made this reproduce in CI
+// but not on a warmed-up local dev box. Scoping directly to the
+// course-tools list's own link class sidesteps the ambiguity entirely
+// instead of racing it.
+When("I follow the course tool {string}", async ({ page }, toolName: string) => {
+  await page
+    .locator("a.course-tool__title")
+    .filter({ hasText: new RegExp(`^\\s*${escapeRegExp(toolName)}\\s*$`) })
+    .first()
+    .click()
+})
+
 // Ported from FeatureContext::confirmPopup(). Native `confirm()` dialogs are
 // already handled by the listener "I click the ... element" attaches above —
 // by the time this step runs any such dialog is already gone, so this is a
@@ -1748,17 +1776,19 @@ Then(/^(?:|I )wait one minute for the page to be loaded$/, async ({ page }) => {
 // assertion's own (finite) auto-retry window starts, while "when ready"
 // (networkidle) can hang the ENTIRE test timeout on this app's persistent
 // background polling (already documented). Real CI failure: toolGroup.
-// feature's "Check fapple/acostea access of announcements" visits 5 group-
-// scoped announcement URLs back-to-back per user via "I visit URL saved
-// with name ..." (a full page.goto() reload each time, re-bootstrapping the
-// whole Vue app from scratch, not a cheap SPA-internal transition) — the
-// underlying API call itself was confirmed live to be fast and correct
-// (~300ms, right error body) for the specific check that failed, so the gap
-// was in the FRONTEND finishing its async fetch-and-render within the
-// assertion's own window, not the backend. Catching networkidle's own
-// timeout (rather than using its default, which is the FULL test timeout)
-// gives real extra settling time when the network genuinely does go quiet
-// soon, without the unbounded hang risk.
+// feature's "Check fapple's access to group announcements" / "Check
+// acostea's access to group announcements" (originally one combined
+// scenario, later split — see that file's own header comment on the split)
+// visit 5 group-scoped announcement URLs back-to-back per user via "I visit
+// URL saved with name ..." (a full page.goto() reload each time,
+// re-bootstrapping the whole Vue app from scratch, not a cheap SPA-internal
+// transition) — the underlying API call itself was confirmed live to be
+// fast and correct (~300ms, right error body) for the specific check that
+// failed, so the gap was in the FRONTEND finishing its async fetch-and-render
+// within the assertion's own window, not the backend. Catching networkidle's
+// own timeout (rather than using its default, which is the FULL test
+// timeout) gives real extra settling time when the network genuinely does
+// go quiet soon, without the unbounded hang risk.
 Then(/^(?:|I )wait for the page content to settle$/, async ({ page }) => {
   await page.waitForLoadState("domcontentloaded")
   await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => {})
@@ -2058,10 +2088,55 @@ When("I fill in the open answer with {string}", async ({ page }, value: string) 
 // getByLabel() is inherently ambiguous across rows; this checks EVERY row's matching
 // option in one step, which is what both scenarios using it actually want (answer every
 // row the same way).
+//
+// Real CI/local failure (toolExerciseAdmin.feature's "Try exercise", reproduced live):
+// a `count()` snapshot taken right after "Next question" can still reflect the OUTGOING
+// question's own row count — the SPA's question transition (unmount old question, mount
+// the new one) doesn't always finish within "wait for the page content to settle"'s
+// networkidle check, since the DOM swap can land a tick after the network itself goes
+// quiet. Looping `.nth(i)` up to that stale, too-high count then targets an index that
+// no longer exists once the real (smaller) question finishes mounting — Playwright
+// retries forever ("element was detached from the DOM, retrying") since that index never
+// reappears, hanging until the scenario times out with the new question's rows left
+// entirely unanswered (confirmed via a real trace: "Combination true/false/don't-know",
+// only 2 rows, snapshotted with NEITHER row checked, stuck retrying a 3rd match left over
+// from the previous 4-row question). Waiting for the match count to be STABLE across two
+// reads before looping avoids acting on that transient, too-high count.
 When("I check every {string} option on the page", async ({ page }, label: string) => {
   const options = page.getByLabel(label, { exact: true })
-  const count = await options.count()
+  await options.first().waitFor({ state: "visible" })
+
+  let count = await options.count()
+  for (let attempt = 0; attempt < 10; attempt++) {
+    await page.waitForTimeout(150)
+    const recount = await options.count()
+    if (recount === count) {
+      break
+    }
+    count = recount
+  }
+
   for (let i = 0; i < count; i++) {
     await options.nth(i).check()
   }
 })
+
+// Not ported — new, for toolExerciseAdmin.feature's "Try exercise" scenario. Waits for
+// the NEXT question's own title <h2> to actually appear before returning, re-clicking
+// "Next question" if it hasn't — defensive against ExercisePlayerView.vue's "Next
+// question" button only being disabled while `isSavingAnswer` is true, which leaves a
+// narrow window where a click could in principle land right as the previous save
+// resolves and get swallowed. Kept as cheap insurance even though it turned out NOT to
+// be the cause of this scenario's real scoring gap — see "I check the ... answer and let
+// it register" below for what that actually was.
+When("I press \"Next question\" until {string} appears", async ({ page }, nextTitle: string) => {
+  const heading = page.locator("h2").filter({ hasText: new RegExp(`^\\s*${escapeRegExp(nextTitle)}\\s*$`) })
+  for (let attempt = 0; attempt < 5; attempt++) {
+    await pressButton(page, "Next question")
+    if (await isSoonVisible(heading, 3000)) {
+      return
+    }
+  }
+  await expect(heading.first()).toBeVisible()
+})
+

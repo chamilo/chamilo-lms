@@ -43,6 +43,36 @@
 # - "Manage extra fields for courses", the "i.mdi-plus-box" add icon, every
 #   course_field_* form field id, and "course_field_submit" are all
 #   unchanged from the original (extra_fields.php is still legacy PHP).
+# - Real CI failure investigated and reproduced live: the 3 search-by-filter
+#   scenarios below each navigate to "/catalogue/courses" and then almost
+#   immediately press "Advanced search"/fill/apply. A plain "wait for the
+#   page to be loaded" (domcontentloaded only) is not enough there — it's a
+#   real app-level race, not a test-timing nitpick. CatalogueCourses.vue's
+#   onMounted() kicks off an initial unfiltered load() (page 1, itemsPerPage
+#   12) and wires up an IntersectionObserver that can immediately trigger a
+#   page-2 continuation of that SAME unfiltered load if the sentinel is
+#   already in view. Neither load() call is cancelled or version-guarded:
+#   applying a filter calls resetCatalogueState() (courses.value = [],
+#   totalCourses.value = 0) and starts a NEW filtered load(), but if the
+#   earlier unfiltered call (initial or page-2) is still in flight, its
+#   response handler still runs afterwards and unconditionally does
+#   `courses.value.push(...)` / sets totalCourses.value from ITS OWN
+#   (stale, unfiltered) response — landing on top of the filtered result.
+#   Reproduced directly (Playwright script, artificially delaying the first
+#   /public_courses response so it resolves after the filtered one): the
+#   catalogue showed a wrong "Matching courses" count, "grammarcourse"
+#   visible despite filtering for "test", and "testcourse"/"grammartest"
+#   each rendered TWICE — the exact symptom seen in the CI failure. This is
+#   what actually produced the CI failure, not any duplicate course-creation
+#   bug — "Create three courses for catalogue testing" was independently
+#   re-verified live to create exactly one row per title, no duplicates.
+#   Fixed here (test-side only, per this suite's scope) by swapping in the
+#   existing "wait for the page content to settle" step (domcontentloaded +
+#   bounded networkidle) right after navigating to "/catalogue/courses", so
+#   the initial load and any IntersectionObserver-triggered continuation
+#   fully drain before a filter is ever applied, closing the race window.
+#   A real fix would add request cancellation/version-guarding inside
+#   CatalogueCourses.vue's load() itself.
 #
 # Cleanup: the original never deleted its 3 courses ("testcourse",
 # "grammarcourse", "grammartest") or the "Duration" extra field, and this
@@ -94,7 +124,7 @@ Feature: Course catalogue and extra fields
 
   Scenario: Search courses in catalogue by title (search "test")
     Given I am on "/catalogue/courses"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     And I press "Advanced search"
     When I fill in "search_by_title" with "test"
     And I press "Apply advanced filters"
@@ -105,7 +135,7 @@ Feature: Course catalogue and extra fields
 
   Scenario: Search courses in catalogue by title (search "course")
     Given I am on "/catalogue/courses"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     And I press "Advanced search"
     When I fill in "search_by_title" with "course"
     And I press "Apply advanced filters"
@@ -156,7 +186,7 @@ Feature: Course catalogue and extra fields
 
   Scenario: Search courses in catalogue by extra field (Duration = "22:22:22")
     Given I am on "/catalogue/courses"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     And I press "Advanced search"
     When I fill in "extra-duration" with "22:22:22"
     And I press "Apply advanced filters"

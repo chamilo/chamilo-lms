@@ -105,7 +105,7 @@
 #   confirmed live, access is enforced as GROUP-MEMBERSHIP-ONLY regardless
 #   of which of those two is selected (a course member who is not a member
 #   of the group gets "You are not allowed to view this announcement." even
-#   under the "Public access" setting). The final scenario below asserts
+#   under the "Public access" setting). The final two scenarios below assert
 #   against this CONFIRMED real behavior (group membership, not the
 #   public/private label) rather than the original's assumption that
 #   "public access" would let any course member in — flagged here as a
@@ -153,7 +153,18 @@ Feature: Group tool
     And I am on course "TEMP" homepage
 
   Scenario: Create a group directory
-    Given I am on "/main/group/group_category.php?cid=1&sid=0&action=add_category"
+    # group.php auto-creates a "Default groups" category as a side effect of
+    # loading the page, but ONLY the very first time it's visited for a course
+    # with zero categories (GroupManager::create_category() inside `if
+    # (empty($categories))`, public/main/group/group.php). Jumping straight to
+    # group_category.php's add-category URL (as this scenario used to) skips
+    # that landing page entirely, so "Default groups" never gets created and
+    # "Delete default category" (right after this one) has nothing to find.
+    # Visiting group.php first, before creating "Group category 1", triggers
+    # it — confirmed live: both categories coexist afterward.
+    Given I am on "/main/group/group.php?cid=1&sid=0"
+    And I wait for the page to be loaded when ready
+    And I am on "/main/group/group_category.php?cid=1&sid=0&action=add_category"
     And I wait for the page to be loaded when ready
     When I fill in the following:
       | title | Group category 1 |
@@ -553,7 +564,34 @@ Feature: Group tool
   # expectation that acostea would be denied here was simply wrong; fixed
   # to assert the same "can see own content" behavior already asserted for
   # fapple elsewhere in this scenario, not "not allowed".
-  Scenario: Check fapple/acostea access of announcements
+  #
+  # REAL, RECURRING CI FAILURE (test-authoring bug, timeout budget — not an
+  # app bug, not a step race): this used to be ONE scenario covering both
+  # users back-to-back, and kept failing in multiple separate real CI runs
+  # with different symptoms each time (once a bare timeout mid-navigation on
+  # a topbar/sidebar-only page, once a near-empty snapshot) — both are exactly
+  # what Playwright's OWN test-level timeout teardown looks like when it
+  # fires mid-navigation, not a specific step's own bug. Root cause: the
+  # combined scenario did 2 logins + 10 full `page.goto()` reloads of the Vue
+  # SPA (each one re-bootstrapping the whole app from scratch via "I visit
+  # URL saved with name ...", not a cheap SPA-internal transition), by far
+  # the most sequential full navigations of any single scenario in this
+  # suite — well beyond the "3 rounds of navigate+select+save+wait" that
+  # playwright.config.ts's own `timeout` comment already documents as
+  # landing in the 55-65s range on cold CI. With no per-step slack in a
+  # single shared 90s budget, cumulative jitter across 12 navigations could
+  # push the total past the ceiling, killing the test mid-navigation at
+  # whatever point it happened to reach — which explains why the symptom
+  # differed run to run. Fixed by splitting at the existing fapple/acostea
+  # boundary (each half already did its own independent "I am not logged" /
+  # "I am logged as ..." login, so the split is free) into two scenarios,
+  # halving the navigation count per scenario well under the 90s budget,
+  # rather than inflating the GLOBAL timeout for the entire suite to cover
+  # one unusually long, serial scenario. The two scenarios still share the
+  # module-level `savedUrls` map with every other scenario in this file
+  # (same worker/process, see common.steps.ts), so nothing about the actual
+  # checks below changed.
+  Scenario: Check fapple's access to group announcements
     Given I am not logged
     Given I am logged as "fapple"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
@@ -573,6 +611,7 @@ Feature: Group tool
     And I wait for the page content to settle
     And I should see "Announcement description only for fapple Group 0005"
 
+  Scenario: Check acostea's access to group announcements
     Given I am not logged
     Given I am logged as "acostea"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"

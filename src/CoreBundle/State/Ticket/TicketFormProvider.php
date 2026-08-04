@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Ticket\TicketForm;
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
@@ -69,6 +71,7 @@ final readonly class TicketFormProvider implements ProviderInterface
         $projects = $this->getProjects($accessUrl);
         $project = $this->resolveProject($projects, $request->query->getInt('projectId'));
         $sessionId = max(0, $request->query->getInt('sessionId'));
+        $requestedCourseId = max(0, $request->query->getInt('courseId'));
 
         $result = new TicketForm();
         $result->isAdmin = $isAdmin;
@@ -94,11 +97,13 @@ final readonly class TicketFormProvider implements ProviderInterface
             $isAdmin,
         );
         $result->courses = $this->getCourses(
+            (int) $user->getId(),
             (int) $accessUrl->getId(),
             $sessionId,
             $isAdmin,
             $result->sessions,
         );
+        $result->courseId = $this->resolveCourseId($result->courses, $requestedCourseId);
         $result->maxUploadSize = max(
             0,
             (int) $this->settingsManager->getSetting('message.message_max_upload_filesize'),
@@ -372,36 +377,79 @@ final readonly class TicketFormProvider implements ProviderInterface
      *
      * @return array<int, array{id: int, label: string, code: string}>
      */
-    private function getCourses(int $accessUrlId, int $sessionId, bool $isAdmin, array $sessions): array
-    {
-        if ($sessionId <= 0) {
-            return [];
+    private function getCourses(
+        int $userId,
+        int $accessUrlId,
+        int $sessionId,
+        bool $isAdmin,
+        array $sessions,
+    ): array {
+        if ($sessionId > 0) {
+            if (!$isAdmin && !\in_array($sessionId, array_column($sessions, 'id'), true)) {
+                throw new BadRequestHttpException('The requested session is not available to the authenticated user.');
+            }
+
+            $rows = $this->entityManager
+                ->createQueryBuilder()
+                ->select([
+                    'DISTINCT course.id AS id',
+                    'course.title AS label',
+                    'course.code AS code',
+                ])
+                ->from(SessionRelCourse::class, 'sessionRelCourse')
+                ->innerJoin('sessionRelCourse.course', 'course')
+                ->innerJoin('course.urls', 'urlRel')
+                ->andWhere('IDENTITY(sessionRelCourse.session) = :sessionId')
+                ->andWhere('IDENTITY(urlRel.url) = :accessUrlId')
+                ->setParameter('sessionId', $sessionId, Types::INTEGER)
+                ->setParameter('accessUrlId', $accessUrlId, Types::INTEGER)
+                ->orderBy('course.title', 'ASC')
+                ->getQuery()
+                ->getArrayResult()
+            ;
+
+            return $this->normalizeCourseRows($rows);
         }
 
-        if (!$isAdmin && !\in_array($sessionId, array_column($sessions, 'id'), true)) {
-            throw new BadRequestHttpException('The requested session is not available to the authenticated user.');
-        }
-
-        $rows = $this->entityManager
+        $queryBuilder = $this->entityManager
             ->createQueryBuilder()
             ->select([
                 'DISTINCT course.id AS id',
                 'course.title AS label',
                 'course.code AS code',
             ])
-            ->from(SessionRelCourse::class, 'sessionRelCourse')
-            ->innerJoin('sessionRelCourse.course', 'course')
-            ->innerJoin('course.urls', 'urlRel')
-            ->andWhere('IDENTITY(sessionRelCourse.session) = :sessionId')
-            ->andWhere('IDENTITY(urlRel.url) = :accessUrlId')
-            ->setParameter('sessionId', $sessionId, Types::INTEGER)
-            ->setParameter('accessUrlId', $accessUrlId, Types::INTEGER)
-            ->orderBy('course.title', 'ASC')
-            ->getQuery()
-            ->getArrayResult()
         ;
 
+        if ($isAdmin) {
+            $queryBuilder->from(Course::class, 'course');
+        } else {
+            $queryBuilder
+                ->from(CourseRelUser::class, 'courseRelUser')
+                ->innerJoin('courseRelUser.course', 'course')
+                ->andWhere('IDENTITY(courseRelUser.user) = :userId')
+                ->setParameter('userId', $userId, Types::INTEGER)
+            ;
+        }
+
+        $queryBuilder
+            ->innerJoin('course.urls', 'urlRel')
+            ->andWhere('IDENTITY(urlRel.url) = :accessUrlId')
+            ->setParameter('accessUrlId', $accessUrlId, Types::INTEGER)
+            ->orderBy('course.title', 'ASC')
+        ;
+
+        return $this->normalizeCourseRows($queryBuilder->getQuery()->getArrayResult());
+    }
+
+    /**
+     * @param array<int, array{id: int|string, label: string, code: string}> $rows
+     *
+     * @return array<int, array{id: int, label: string, code: string}>
+     */
+    private function normalizeCourseRows(array $rows): array
+    {
         $result = [];
+
         foreach ($rows as $row) {
             $id = (int) $row['id'];
             $label = trim((string) $row['label']);
@@ -409,13 +457,31 @@ final readonly class TicketFormProvider implements ProviderInterface
                 continue;
             }
 
-            $result[] = [
+            $result[$id] = [
                 'id' => $id,
                 'label' => $label,
                 'code' => trim((string) $row['code']),
             ];
         }
 
-        return $result;
+        return array_values($result);
+    }
+
+    /**
+     * @param array<int, array{id: int, label: string, code: string}> $courses
+     */
+    private function resolveCourseId(array $courses, int $requestedCourseId): int
+    {
+        if ($requestedCourseId <= 0) {
+            return 0;
+        }
+
+        foreach ($courses as $course) {
+            if ($requestedCourseId === $course['id']) {
+                return $requestedCourseId;
+            }
+        }
+
+        return 0;
     }
 }

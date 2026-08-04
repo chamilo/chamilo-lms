@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Tal p\u00e5 kommentarar som er vurderte",
     "Number of items": "Antall elementer",
     "Number of questions": "Antall sp\u00f8rsm\u00e5l",
-    "Number of questions limited to a maximum of {0}": "Tal p\u00e5 sp\u00f8rsm\u00e5l begrensa til maks {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "M\u00e5lsettning",
     "Official Chamilo update channel": "Offisiell Chamilo-oppdateringskanal",
     "Offline": "Fr\u00e5kopla",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Oppdater denne tittelen i l\u00e6ringsstier",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Bruk 0 for \u00e5 behalde alle tilgjengelege sp\u00f8rsm\u00e5l. Bruk -1 der alle tilgjengelege sp\u00f8rsm\u00e5l er tillatne.",
     "Use these fields to classify the exercise independently from its display options.": "Bruk desse felta til \u00e5 klassifisere \u00f8vinga uavhengig av visingsvala.",
-    "Weight": "Vekt"
+    "Weight": "Vekt",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

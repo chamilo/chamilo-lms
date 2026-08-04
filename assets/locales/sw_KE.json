@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Idadi ya maoni yaliyopimwa",
     "Number of items": "Idadi ya vitu",
     "Number of questions": "Idadi ya maswali",
-    "Number of questions limited to a maximum of {0}": "Idadi ya maswali imezuiliwa kwa kiwango cha juu cha {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Malengo",
     "Official Chamilo update channel": "Kituo rasmi cha sasisho cha Chamilo",
     "Offline": "Toto",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Sasisha kichwa hiki katika njia za kujifunza",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Tumia 0 ili kuhifadhi maswali yote yanayopatikana. Tumia -1 ambapo maswali yote yanayopatikana yanaruhusiwa.",
     "Use these fields to classify the exercise independently from its display options.": "Tumia sehemu hizi kuainisha zoezi bila kujali chaguzi za onyesho lake.",
-    "Weight": "Uzito"
+    "Weight": "Uzito",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

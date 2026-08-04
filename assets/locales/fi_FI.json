@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Pisteytettyjen kommenttien m\u00e4\u00e4r\u00e4",
     "Number of items": "Kohteiden m\u00e4\u00e4r\u00e4",
     "Number of questions": "Kysymysten m\u00e4\u00e4r\u00e4",
-    "Number of questions limited to a maximum of {0}": "Kysymysten m\u00e4\u00e4r\u00e4 rajoitettu enint\u00e4\u00e4n {0}:aan",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Tavoitteet",
     "Official Chamilo update channel": "Virallinen Chamilo-p\u00e4ivityskanava",
     "Offline": "Poissa verkosta",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "P\u00e4ivit\u00e4 t\u00e4m\u00e4 otsikko oppimispoluissa",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "K\u00e4yt\u00e4 arvoa 0 s\u00e4ilytt\u00e4\u00e4ksesi kaikki k\u00e4ytett\u00e4viss\u00e4 olevat kysymykset. K\u00e4yt\u00e4 arvoa -1, kun kaikki k\u00e4ytett\u00e4viss\u00e4 olevat kysymykset sallitaan.",
     "Use these fields to classify the exercise independently from its display options.": "K\u00e4yt\u00e4 n\u00e4it\u00e4 kentti\u00e4 harjoituksen luokittelemiseen riippumatta sen n\u00e4ytt\u00f6asetuksista.",
-    "Weight": "Paino"
+    "Weight": "Paino",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

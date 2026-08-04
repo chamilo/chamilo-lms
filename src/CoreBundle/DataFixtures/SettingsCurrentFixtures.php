@@ -3450,6 +3450,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Hide legal accept checkbox in Terms and Conditions page',
                     'comment' => 'If set to true, removes the "I have read and accept" checkbox in the Terms and Conditions page flow.',
                 ],
+                [
+                    'name' => 'allow_invitation_registration',
+                    'title' => 'Allow registration via course invitation links',
+                    'comment' => 'When enabled, a teacher/admin can send a one-time invitation link from a course\'s Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled.',
+                ],
             ],
             'work' => [
                 [

@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Po\u010det hodnocen\u00fdch koment\u00e1\u0159\u016f",
     "Number of items": "po\u010det polo\u017eek",
     "Number of questions": "Po\u010det ot\u00e1zek",
-    "Number of questions limited to a maximum of {0}": "Po\u010det ot\u00e1zek omezen maxim\u00e1ln\u011b na {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "C\u00edle",
     "Official Chamilo update channel": "Ofici\u00e1ln\u00ed aktualiza\u010dn\u00ed kan\u00e1l Chamilo",
     "Offline": "Offline",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Aktualizovat tento n\u00e1zev v v\u00fdukov\u00fdch cest\u00e1ch",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Pou\u017eijte 0 pro zachov\u00e1n\u00ed v\u0161ech dostupn\u00fdch ot\u00e1zek. Pou\u017eijte -1, kde jsou povoleny v\u0161echny dostupn\u00e9 ot\u00e1zky.",
     "Use these fields to classify the exercise independently from its display options.": "Tato pole pou\u017eijte k samostatn\u00e9 klasifikaci cvi\u010den\u00ed nez\u00e1visle na mo\u017enostech zobrazen\u00ed.",
-    "Weight": "V\u00e1ha"
+    "Weight": "V\u00e1ha",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

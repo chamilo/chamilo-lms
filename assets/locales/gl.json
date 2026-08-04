@@ -2787,7 +2787,7 @@
     "Number of comments scored": "N\u00famero de comentarios puntuados",
     "Number of items": "N\u00famero de elementos",
     "Number of questions": "N\u00famero de preguntas",
-    "Number of questions limited to a maximum of {0}": "N\u00famero de preguntas limitado a un m\u00e1ximo de {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Obxectivos",
     "Official Chamilo update channel": "Canal oficial de actualizaci\u00f3n de Chamilo",
     "Offline": "Desconectado",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Actualizar este t\u00edtulo nos cami\u00f1os de aprendizaxe",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Use 0 para manter todas as preguntas dispo\u00f1ibles. Use -1 onde se permitan todas as preguntas dispo\u00f1ibles.",
     "Use these fields to classify the exercise independently from its display options.": "Use estes campos para clasificar o exercicio independentemente das s\u00faas opci\u00f3ns de visualizaci\u00f3n.",
-    "Weight": "Peso"
+    "Weight": "Peso",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

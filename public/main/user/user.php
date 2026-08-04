@@ -45,6 +45,21 @@ $canEditUsers = 'true' === api_get_setting('workflows.allow_user_course_subscrip
 $canEdit = api_is_allowed_to_edit(null, true);
 $canRead = api_is_allowed_to_edit(null, true) || api_is_coach();
 
+// Sending a course invitation subscribes to the whole session when one is set,
+// so in session context it is restricted to session admins/general coaches,
+// not the broader course-coach-in-session audience covered by $canEdit.
+$canManageCourseInvitations = api_is_platform_admin();
+if (!$canManageCourseInvitations) {
+    if ($sessionId > 0) {
+        $sessionEntity = api_get_session_entity($sessionId);
+        $currentUserEntity = api_get_user_entity($user_id);
+        $canManageCourseInvitations = api_is_session_admin()
+            || (null !== $sessionEntity && null !== $currentUserEntity && $sessionEntity->hasUserAsGeneralCoach($currentUserEntity));
+    } else {
+        $canManageCourseInvitations = $canEdit;
+    }
+}
+
 // Can't auto unregister from a session
 if (!empty($sessionId)) {
     $course_info['unsubscribe'] = 0;
@@ -657,6 +672,12 @@ if ($canRead) {
     if ($canEditUsers && $canEdit) {
         $actionsLeft .= '<a href="user_import.php?'.api_get_cidreq().'&action=import&type='.$type.'">'.
             Display::getMdiIcon('import_csv', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import users list')).'</a> ';
+    }
+
+    if ($canManageCourseInvitations) {
+        $invitationUrl = api_get_path(WEB_PATH).'resources/course-invitation/?'.api_get_cidreq();
+        $actionsLeft .= '<a href="'.$invitationUrl.'">'.
+            Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Invite by email')).'</a> ';
     }
 
     if ($canRead) {

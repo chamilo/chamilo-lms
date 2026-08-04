@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Puanlanan yorum say\u0131s\u0131",
     "Number of items": "\u0130\u00e7erik say\u0131s\u0131",
     "Number of questions": "Soru say\u0131s\u0131",
-    "Number of questions limited to a maximum of {0}": "Soru say\u0131s\u0131 en fazla {0} ile s\u0131n\u0131rl\u0131",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Ama\u00e7lar",
     "Official Chamilo update channel": "Resmi Chamilo g\u00fcncelleme kanal\u0131",
     "Offline": "\u00c7evrimd\u0131\u015f\u0131",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "\u00d6\u011frenme yollar\u0131nda bu ba\u015fl\u0131\u011f\u0131 g\u00fcncelle",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "T\u00fcm mevcut sorular\u0131 korumak i\u00e7in 0 kullan\u0131n. T\u00fcm mevcut sorulara izin verilen yerlerde -1 kullan\u0131n.",
     "Use these fields to classify the exercise independently from its display options.": "Bu alanlar\u0131 al\u0131\u015ft\u0131rmay\u0131 g\u00f6r\u00fcnt\u00fcleme se\u00e7eneklerinden ba\u011f\u0131ms\u0131z olarak s\u0131n\u0131fland\u0131rmak i\u00e7in kullan\u0131n.",
-    "Weight": "A\u011f\u0131rl\u0131k"
+    "Weight": "A\u011f\u0131rl\u0131k",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

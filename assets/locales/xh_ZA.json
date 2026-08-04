@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Inani leengxelo ezinikwe amanqaku",
     "Number of items": "Inani lezinto",
     "Number of questions": "Inani lemibuzo",
-    "Number of questions limited to a maximum of {0}": "Inani leemibuzo likhawulelwe kubuninzi be-{0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Iinjongo",
     "Official Chamilo update channel": "Isiteshi sohlaziyo esisemthethweni se-Chamilo",
     "Offline": "Ngaphandle kwentanethi",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Hlaziya esi sihlelo kwizindlela zokufunda",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Sebenzisa u-0 ukugcina yonke imibuzo ekhoyo. Sebenzisa u--1 apho yonke imibuzo ekhoyo ivunyelwe.",
     "Use these fields to classify the exercise independently from its display options.": "Sebenzisa la macandelo ukuhlela umsebenzi ngokuzimeleyo kwiinketho zokuboniswa kwawo.",
-    "Weight": "Ubunzima"
+    "Weight": "Ubunzima",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Tal av vi\u00f0merkingum, sum eru stiggevnar",
     "Number of items": "Tal av lutum",
     "Number of questions": "Tal av spurningum",
-    "Number of questions limited to a maximum of {0}": "Tal av spurningum taktak til m\u00e1na\u00f0arteljarar {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "M\u00e1l",
     "Official Chamilo update channel": "Alment Chamilo-uppdateringsr\u00e1s",
     "Offline": "Av",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Dagf\u00f8r hesa heiti\u00f0 \u00ed l\u00e6rug\u00f8tum",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "N\u00fdt 0 fyri at var\u00f0veita allar t\u00f8kar spurningar. N\u00fdt -1 har allir t\u00f8kir spurningar eru loyvdir.",
     "Use these fields to classify the exercise independently from its display options.": "N\u00fdt hesar teigar til at flokka venjingina \u00f3heft av v\u00edsingarm\u00f8guleikum.",
-    "Weight": "Veging"
+    "Weight": "Veging",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

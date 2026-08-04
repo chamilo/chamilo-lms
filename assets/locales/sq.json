@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Numri i komenteve t\u00eb vler\u00ebsuara",
     "Number of items": "Numri i artikujve",
     "Number of questions": "Numri i pyetjeve",
-    "Number of questions limited to a maximum of {0}": "Numri i pyetjeve i kufizuar n\u00eb maksimumin {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Objektivat",
     "Official Chamilo update channel": "Kanali zyrtar i p\u00ebrdit\u00ebsimit t\u00eb Chamilo",
     "Offline": "Offline",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "P\u00ebrdit\u00ebso k\u00ebt\u00eb titull n\u00eb shtigjet e m\u00ebsimit",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "P\u00ebrdorni 0 p\u00ebr t\u00eb mbajtur t\u00eb gjitha pyetjet e disponueshme. P\u00ebrdorni -1 ku lejohen t\u00eb gjitha pyetjet e disponueshme.",
     "Use these fields to classify the exercise independently from its display options.": "P\u00ebrdorni k\u00ebto fusha p\u00ebr t\u00eb klasifikuar ushtrimin n\u00eb m\u00ebnyr\u00eb t\u00eb pavarur nga opsionet e shfaqjes.",
-    "Weight": "Pesha"
+    "Weight": "Pesha",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

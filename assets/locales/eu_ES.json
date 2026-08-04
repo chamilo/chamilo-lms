@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Puntuatutako iruzkinen kopurua",
     "Number of items": "elementu kopurua",
     "Number of questions": "Galderen kopurua",
-    "Number of questions limited to a maximum of {0}": "Galderen kopurua {0} gehienez mugatua",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Helburuak",
     "Official Chamilo update channel": "Chamilo eguneratze-kanal ofiziala",
     "Offline": "Deskonektaturik",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Eguneratu izenburu hau ikasgai-bideetan",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Erabili 0 eskuragarri dauden galdera guztiak mantentzeko. Erabili -1 eskuragarri dauden galdera guztiak onartzeko.",
     "Use these fields to classify the exercise independently from its display options.": "Erabili eremu hauek ariketa sailkatzeko bere bistaratze-aukerekin lotu gabe.",
-    "Weight": "Ponderazioa"
+    "Weight": "Ponderazioa",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

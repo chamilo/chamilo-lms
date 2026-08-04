@@ -1787,6 +1787,14 @@ ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_USER FOREIGN KEY (user
 // LMS will try to update SCO status every time the status is not sent by the SCO
 //$_configuration['scorm_lms_update_sco_status_all_time'] = false;
 
+// To let a SCO that only ever reports lesson_status 'incomplete' (and never a real
+// terminal status nor a meaningful LMSFinish()) be marked completed by Chamilo when the
+// user leaves it, enable this per-LP extrafield (disabled by default, off for every LP
+// unless explicitly turned on for that LP):
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (6, 13, 'lp_sco_complete_on_leave_when_incomplete', 'Complete SCO on leave when status stays incomplete', '', 0, 1, 0, 1, 0, NOW());
+*/
+
 // Show online user only to Administrators
 //$_configuration['whoisonline_only_for_admin'] = false;
 

@@ -180,10 +180,36 @@ function save_item(
             }
         }
 
+        // A SCO that never calls LMSSetValue(cmi.core.lesson_status) leaves $status at
+        // its initialised default (empty/'undefined'). Some real-world packages only
+        // ever report 'incomplete' once and never send a real terminal status or call
+        // LMSFinish() meaningfully - this per-LP extra field optionally treats that the
+        // same way, so the LMS can still resolve completion on leave (restoring the
+        // pre-Chrome-deprecation-fix behaviour), without changing this for every LP.
+        $scoCompleteOnLeaveWhenIncomplete = false;
+        if ('sco' === $my_type) {
+            $extraFieldValue = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable(
+                $lp_id,
+                'lp_sco_complete_on_leave_when_incomplete'
+            );
+            if (is_array($extraFieldValue)) {
+                $scoCompleteOnLeaveWhenIncomplete = $extraFieldValue['value'] !== '0';
+            }
+        }
+        $scoReportedNoStatus = (
+            empty($status)
+            || 'undefined' === $status
+            || (
+                'incomplete' === $status
+                && 'sco' === $my_type
+                && $scoCompleteOnLeaveWhenIncomplete
+            )
+        );
+
         $statusIsSet = false;
         if ($saveStatus) {
             // Default behaviour.
-            if (isset($status) && $status != '' && $status != 'undefined') {
+            if (isset($status) && !$scoReportedNoStatus) {
                 if ($debug > 1) {
                     error_log('Calling set_status('.$status.')');
                 }
@@ -335,11 +361,30 @@ function save_item(
              * cmi.core.lesson_status.  There is some additional requirements
              * that must be adhered to successfully handle these cases:.
              */
+            // Same relaxation as $scoReportedNoStatus: a DB status of 'incomplete' left
+            // over from the SCO's one-time placeholder call is not "genuine progress"
+            // when this LP has opted in, so it shouldn't block the LMS from resolving
+            // completion any more than a still-"not attempted" item would.
+            $currentDbStatus = $myLPI->get_status();
+            $currentStatusCountsAsNotAttempted = (
+                'not attempted' === $currentDbStatus
+                || ('incomplete' === $currentDbStatus && $scoCompleteOnLeaveWhenIncomplete)
+            );
             $LMSUpdateStatus = true;
-            if (!api_get_configuration_value('scorm_lms_update_status_all_time') && $myLPI->get_status() !== "not attempted") {
+            if (!api_get_configuration_value('scorm_lms_update_sco_status_all_time') && !$currentStatusCountsAsNotAttempted) {
                 $LMSUpdateStatus = false;
             }
-            if (!$statusIsSet && empty($status) && !$statusSignalReceived && $LMSUpdateStatus) {
+            if ($debug > 1) {
+                error_log(
+                    "SCO completion check: my_type=$my_type statusSignalReceived=$statusSignalReceived "
+                    ."scoCompleteOnLeaveWhenIncomplete=".var_export($scoCompleteOnLeaveWhenIncomplete, true)
+                    ." scoReportedNoStatus=".var_export($scoReportedNoStatus, true)
+                    ." currentDbStatus=$currentDbStatus statusIsSet=".var_export($statusIsSet, true)
+                    ." LMSUpdateStatus=".var_export($LMSUpdateStatus, true)
+                    ." lmsFinish=$lmsFinish userNavigatesAway=$userNavigatesAway"
+                );
+            }
+            if (!$statusIsSet && $scoReportedNoStatus && $LMSUpdateStatus) {
                 /**
                  * Upon initial launch the LMS should set the
                  * cmi.core.lesson_status to "not attempted".

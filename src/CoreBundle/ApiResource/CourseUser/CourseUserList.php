@@ -119,6 +119,9 @@ final class CourseUserList
     #[Groups(['course_user_list:read'])]
     public bool $showSessionManagement = false;
 
+    #[Groups(['course_user_list:read'])]
+    public bool $showClasses = false;
+
     public function getId(): string
     {
         return $this->id;

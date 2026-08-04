@@ -29,5 +29,11 @@ export default {
       meta: { requiresAuth: true, breadcrumb: "Import users list" },
       component: () => import("../views/courseUser/CourseUserImportView.vue"),
     },
+    {
+      name: "CourseUserClasses",
+      path: "classes",
+      meta: { requiresAuth: true, breadcrumb: "Classes" },
+      component: () => import("../views/courseUser/CourseClassListView.vue"),
+    },
   ],
 }

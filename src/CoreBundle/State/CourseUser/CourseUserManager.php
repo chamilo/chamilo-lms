@@ -152,6 +152,11 @@ final readonly class CourseUserManager
             ));
     }
 
+    public function canShowSubscriptionTabs(Course $course, ?Session $session): bool
+    {
+        return $this->canSubscribe($course, $session);
+    }
+
     public function canUnsubscribe(Course $course, ?Session $session): bool
     {
         return $this->canSubscribe($course, $session);
@@ -284,6 +289,10 @@ final readonly class CourseUserManager
                 $this->settingsManager->getSetting('allow_tutors_to_assign_students_to_session', true),
             ),
             'showClasses' => $this->canManageClasses($course, $session),
+            'showSubscriptionTabs' => $this->canShowSubscriptionTabs($course, $session),
+            'groupsUrl' => $this->buildLegacyUrl('/main/group/group.php', $course, $session, [
+                'gid' => $request->query->getInt('gid'),
+            ]),
         ];
     }
 
@@ -353,6 +362,11 @@ final readonly class CourseUserManager
             'sessionId' => $session?->getId(),
             'type' => $type,
             'canManage' => true,
+            'showSubscriptionTabs' => $this->canShowSubscriptionTabs($course, $session),
+            'showClasses' => $this->canManageClasses($course, $session),
+            'groupsUrl' => $this->buildLegacyUrl('/main/group/group.php', $course, $session, [
+                'gid' => $request->query->getInt('gid'),
+            ]),
             'canSubscribe' => $this->canSubscribe($course, $session)
                 && (self::TYPE_TEACHER === $type || '' === $this->getLimitWarning($course, $session)),
             'showEmail' => $showEmail,

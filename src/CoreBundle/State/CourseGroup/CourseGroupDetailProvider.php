@@ -1,0 +1,43 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\State\CourseGroup;
+
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupDetail;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
+/**
+ * @implements ProviderInterface<CourseGroupDetail>
+ */
+final readonly class CourseGroupDetailProvider implements ProviderInterface
+{
+    public function __construct(
+        private RequestStack $requestStack,
+        private CourseGroupManager $manager,
+        private CsrfTokenManagerInterface $csrfTokenManager,
+    ) {}
+
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): CourseGroupDetail
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            throw new BadRequestHttpException('The current request is not available.');
+        }
+        $groupId = (int) ($uriVariables['groupId'] ?? $request->attributes->get('groupId', 0));
+        $data = $this->manager->getDetailData($request, $groupId);
+        $resource = new CourseGroupDetail();
+        foreach ($data as $property => $value) {
+            $resource->{$property} = $value;
+        }
+        $resource->csrfToken = $this->csrfTokenManager->getToken($this->manager->getCsrfIntention())->getValue();
+
+        return $resource;
+    }
+}

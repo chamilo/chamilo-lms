@@ -1,27 +1,35 @@
 <?php
 
-/* For licensing terms, see /license.txt */
-
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V210;
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-final class Version20260716130000 extends AbstractMigrationChamilo
+/**
+ * Runs before Version20201216110722, which fully hydrates CAttendance/Course
+ * via the ORM (->find()). Both entities' current mapping includes a `room`
+ * (room_id) column, but on the DB side these are only added much later by
+ * V210/Version20260716130000 - so they must exist here for a full
+ * migrate-from-legacy run to reach that point without crashing on
+ * "Unknown column 'room_id'".
+ *
+ * Duplicates the full body of V210/Version20260716130000 (room metadata +
+ * every room_id column/FK/index it adds), each block guarded so it's a no-op
+ * once that later migration - itself guarded the same way - has already run.
+ */
+final class Version20201210100013 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Add room metadata and room assignments for session courses and attendances.';
+        return 'Add room metadata and room_id columns early (needed by a later migration\'s ORM hydration).';
     }
 
     public function up(Schema $schema): void
     {
-        // Every block below may already exist: Version20201210100013 (V200)
-        // creates the same room metadata/room_id columns early, because a
-        // full migrate-from-legacy run needs them before that point in the
-        // sequence (ORM hydration of CAttendance/Course via ->find()).
         if (!$schema->getTable('room')->hasColumn('floor_number')) {
             $this->addSql('ALTER TABLE room ADD floor_number INT DEFAULT NULL, ADD capacity INT DEFAULT NULL');
         }

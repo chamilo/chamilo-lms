@@ -167,6 +167,9 @@ final readonly class CourseClassManager
             'view' => $view,
             'groupFilter' => $groupFilter,
             'canManage' => true,
+            'groupsUrl' => $this->buildLegacyUrl('/main/group/group.php', $course, $session, [
+                'gid' => $request->query->getInt('gid'),
+            ]),
             'information' => self::VIEW_REGISTERED === $view
                 ? 'Information: This list shows the classes already linked to this course. '
                     .'Use the add icon above to browse available classes.'
@@ -521,6 +524,20 @@ final readonly class CourseClassManager
         $itemsPerPage = min(100, max(5, $request->query->getInt('itemsPerPage', 20)));
 
         return array_values(\array_slice($items, ($page - 1) * $itemsPerPage, $itemsPerPage));
+    }
+
+    /**
+     * @param array<string, int|string|null> $extra
+     */
+    private function buildLegacyUrl(string $path, Course $course, ?Session $session, array $extra = []): string
+    {
+        $query = array_filter([
+            'cid' => (int) $course->getId(),
+            'sid' => $session?->getId(),
+            ...$extra,
+        ], static fn (mixed $value): bool => null !== $value && '' !== $value && 0 !== $value);
+
+        return $path.'?'.http_build_query($query);
     }
 
     private function isEnabled(mixed $value): bool

@@ -72,6 +72,9 @@ final class CourseClassList
     public bool $canManage = false;
 
     #[Groups(['course_class_list:read'])]
+    public string $groupsUrl = '';
+
+    #[Groups(['course_class_list:read'])]
     public string $csrfToken = '';
 
     #[Groups(['course_class_list:read'])]

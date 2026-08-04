@@ -15,6 +15,20 @@
             :type="userType === TEACHER ? 'primary' : 'primary-text'"
             @click="changeType(TEACHER)"
           />
+          <BaseButton
+            v-if="showSubscriptionTabs"
+            :label="t('Groups')"
+            :route="buildGroupsRoute()"
+            icon="join-group"
+            type="primary-text"
+          />
+          <BaseButton
+            v-if="showSubscriptionTabs && showClasses"
+            :label="t('Classes')"
+            :route="buildClassesRoute()"
+            icon="sessions"
+            type="primary-text"
+          />
         </div>
       </template>
 
@@ -227,7 +241,7 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import courseUserService from "../../services/courseUserService"
-import { getCourseContext } from "../../utils/courseContext"
+import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
 
 const STUDENT = 5
 const TEACHER = 1
@@ -235,7 +249,7 @@ const TEACHER = 1
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { cid, sid, gid } = getCourseContext()
+const { cid, sid, gid, contextQuery } = useRouteCourseContext()
 
 const users = ref([])
 const totalItems = ref(0)
@@ -259,6 +273,9 @@ const itemsPerPage = ref(20)
 const sortField = ref("lastname")
 const sortOrder = ref("asc")
 const canSubscribe = ref(false)
+const showSubscriptionTabs = ref(false)
+const showClasses = ref(false)
+const groupsUrl = ref("")
 const showEmail = ref(false)
 const westernNameOrder = ref(true)
 
@@ -302,6 +319,9 @@ async function loadUsers() {
     csrfToken.value = response.csrfToken || ""
     profilingFields.value = response.extraFields || []
     canSubscribe.value = Boolean(response.canSubscribe)
+    showSubscriptionTabs.value = Boolean(response.showSubscriptionTabs)
+    showClasses.value = Boolean(response.showClasses)
+    groupsUrl.value = response.groupsUrl || ""
     showEmail.value = Boolean(response.showEmail)
     westernNameOrder.value = response.westernNameOrder !== false
     warningMessage.value = response.warning || ""
@@ -317,11 +337,19 @@ async function loadUsers() {
 function changeType(type) {
   selectedUserIds.value = []
   page.value = 1
-  router.push({ name: "CourseUserSubscribe", params: route.params, query: { ...route.query, type } })
+  router.push({ name: "CourseUserSubscribe", params: route.params, query: { ...contextQuery.value, type } })
 }
 
 function buildListRoute() {
-  return { name: "CourseUserList", params: route.params, query: { ...route.query, type: userType.value } }
+  return { name: "CourseUserList", params: route.params, query: { ...contextQuery.value, type: userType.value } }
+}
+
+function buildGroupsRoute() {
+  return { name: "CourseUserGroups", params: route.params, query: contextQuery.value }
+}
+
+function buildClassesRoute() {
+  return { name: "CourseUserClasses", params: route.params, query: { ...contextQuery.value, type: undefined } }
 }
 
 function applySearch() {

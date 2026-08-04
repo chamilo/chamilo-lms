@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Portfolio;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\Controller\Api\PortfolioCommentFormAction;
 use Chamilo\CoreBundle\State\Portfolio\PortfolioCommentFormProcessor;
@@ -26,6 +27,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             deserialize: false,
             name: 'post_portfolio_comment',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: PortfolioCommentFormProcessor::class,
         ),
         new Post(
@@ -37,6 +48,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             deserialize: false,
             name: 'post_portfolio_comment_edit',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: PortfolioCommentFormProcessor::class,
         ),
     ],

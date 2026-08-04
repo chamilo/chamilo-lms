@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\State\Portfolio\PortfolioManagementProcessor;
 use Chamilo\CoreBundle\State\Portfolio\PortfolioManagementProvider;
@@ -23,6 +24,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(summary: 'Read Portfolio category and tag management data'),
             security: "is_granted('ROLE_USER')",
             name: 'get_portfolio_management',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: PortfolioManagementProvider::class,
         ),
         new Post(
@@ -31,6 +42,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_USER')",
             read: false,
             name: 'post_portfolio_management_action',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: PortfolioManagementProcessor::class,
         ),
     ],

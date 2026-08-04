@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -41,6 +42,7 @@ final readonly class PortfolioManagementProcessor implements ProcessorInterface
         private ExtraFieldRepository $extraFieldRepository,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -63,8 +65,8 @@ final readonly class PortfolioManagementProcessor implements ProcessorInterface
         $this->validatePortfolioCsrfToken($this->csrfTokenManager, ['csrfToken' => $data->csrfToken]);
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->entityManager, $request);
-        $session = $this->getPortfolioSession($this->entityManager, $request, $course);
+        $course = $this->getPortfolioCourse($this->cidReqHelper);
+        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
         $canManageTags = $course instanceof Course
             && $this->canManagePortfolioCourse($this->security, $currentUser, $course, $session);
         $result = new PortfolioManagement();

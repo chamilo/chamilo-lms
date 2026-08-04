@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Portfolio;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Portfolio\PortfolioListProvider;
@@ -22,8 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'List portfolio items in course or personal context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'user', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'date', in: 'query', required: false, schema: ['type' => 'string', 'format' => 'date']),
                     new Parameter(name: 'text', in: 'query', required: false, schema: ['type' => 'string']),
@@ -40,6 +39,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 ],
             ),
             security: "is_granted('ROLE_USER')",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             name: 'get_portfolio_list',
             provider: PortfolioListProvider::class,
         ),

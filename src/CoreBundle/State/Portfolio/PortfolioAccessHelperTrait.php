@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -47,14 +48,14 @@ trait PortfolioAccessHelperTrait
         return $user;
     }
 
-    private function getPortfolioCourse(EntityManagerInterface $entityManager, Request $request): ?Course
+    private function getPortfolioCourse(CidReqHelper $cidReqHelper): ?Course
     {
-        $courseId = $request->query->getInt('cid');
+        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
         if ($courseId <= 0) {
             return null;
         }
 
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
+        $course = $cidReqHelper->getDoctrineCourseEntity();
         if (!$course instanceof Course) {
             throw new BadRequestHttpException('The requested course was not found.');
         }
@@ -63,11 +64,10 @@ trait PortfolioAccessHelperTrait
     }
 
     private function getPortfolioSession(
-        EntityManagerInterface $entityManager,
-        Request $request,
+        CidReqHelper $cidReqHelper,
         ?Course $course,
     ): ?Session {
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
         if ($sessionId <= 0) {
             return null;
         }
@@ -76,7 +76,7 @@ trait PortfolioAccessHelperTrait
             throw new BadRequestHttpException('A session requires a course context.');
         }
 
-        $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        $session = $cidReqHelper->getDoctrineSessionEntity();
         if (!$session instanceof Session) {
             throw new BadRequestHttpException('The requested session was not found.');
         }

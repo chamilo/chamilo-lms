@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Event\PortfolioItemDeletedEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemHighlightedEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemScoredEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemVisibilityChangedEvent;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
@@ -48,6 +49,7 @@ final readonly class PortfolioActionProcessor implements ProcessorInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private EventDispatcherInterface $eventDispatcher,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -70,8 +72,8 @@ final readonly class PortfolioActionProcessor implements ProcessorInterface
         $this->validatePortfolioCsrfToken($this->csrfTokenManager, ['csrfToken' => $data->csrfToken]);
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->entityManager, $request);
-        $session = $this->getPortfolioSession($this->entityManager, $request, $course);
+        $course = $this->getPortfolioCourse($this->cidReqHelper);
+        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
         $advancedSharing = $course instanceof Course && $this->portfolioBoolean(
             $this->settingsManager->getSetting('platform.portfolio_advanced_sharing', true),
         );

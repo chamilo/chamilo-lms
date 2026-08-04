@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\PortfolioItemViewedEvent;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
@@ -55,6 +56,7 @@ final readonly class PortfolioItemProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private EventDispatcherInterface $eventDispatcher,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -74,8 +76,8 @@ final readonly class PortfolioItemProvider implements ProviderInterface
         }
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->entityManager, $request);
-        $session = $this->getPortfolioSession($this->entityManager, $request, $course);
+        $course = $this->getPortfolioCourse($this->cidReqHelper);
+        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
 
         if ($course instanceof Course
             && !$this->canReadPortfolioCourse(

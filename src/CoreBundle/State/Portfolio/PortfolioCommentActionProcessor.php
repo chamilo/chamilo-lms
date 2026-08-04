@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\PortfolioCommentScoredEvent;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -44,6 +45,7 @@ final readonly class PortfolioCommentActionProcessor implements ProcessorInterfa
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private EventDispatcherInterface $eventDispatcher,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -66,8 +68,8 @@ final readonly class PortfolioCommentActionProcessor implements ProcessorInterfa
         $this->validatePortfolioCsrfToken($this->csrfTokenManager, ['csrfToken' => $data->csrfToken]);
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->entityManager, $request);
-        $session = $this->getPortfolioSession($this->entityManager, $request, $course);
+        $course = $this->getPortfolioCourse($this->cidReqHelper);
+        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
         $advancedSharing = $course instanceof Course && $this->portfolioBoolean(
             $this->settingsManager->getSetting('platform.portfolio_advanced_sharing', true),
         );

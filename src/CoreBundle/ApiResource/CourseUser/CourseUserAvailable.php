@@ -85,6 +85,15 @@ final class CourseUserAvailable
     public array $extraFields = [];
 
     #[Groups(['course_user_available:read'])]
+    public bool $showSubscriptionTabs = false;
+
+    #[Groups(['course_user_available:read'])]
+    public bool $showClasses = false;
+
+    #[Groups(['course_user_available:read'])]
+    public string $groupsUrl = '';
+
+    #[Groups(['course_user_available:read'])]
     public string $warning = '';
 
     #[Groups(['course_user_available:read'])]

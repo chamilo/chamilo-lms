@@ -2,7 +2,10 @@
   <section class="space-y-6">
     <BaseToolbar>
       <template #start>
-        <div class="flex flex-wrap items-center gap-2">
+        <div
+          v-if="permissions.showSubscriptionTabs"
+          class="flex flex-wrap items-center gap-2"
+        >
           <BaseButton
             :label="t('Learners')"
             icon="account"
@@ -14,6 +17,19 @@
             icon="human-male-board"
             :type="userType === TEACHER ? 'primary' : 'primary-text'"
             @click="changeType(TEACHER)"
+          />
+          <BaseButton
+            :label="t('Groups')"
+            :route="buildGroupsRoute()"
+            icon="join-group"
+            type="primary-text"
+          />
+          <BaseButton
+            v-if="permissions.showClasses"
+            :label="t('Classes')"
+            :route="buildClassesRoute()"
+            icon="sessions"
+            type="primary-text"
           />
         </div>
       </template>
@@ -69,16 +85,6 @@
             :tooltip="t('Export to PDF')"
             type="primary"
             @click="exportFile('pdf')"
-          />
-          <BaseButton
-            v-if="permissions.showClasses"
-            :label="t('Classes')"
-            :route="buildClassesRoute()"
-            icon="sessions"
-            only-icon
-            size="normal"
-            :tooltip="t('Classes')"
-            type="primary"
           />
           <BaseButton
             v-if="permissions.showSessionManagement"
@@ -379,7 +385,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseUserService from "../../services/courseUserService"
-import { getCourseContext } from "../../utils/courseContext"
+import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
 
 const STUDENT = 5
 const TEACHER = 1
@@ -388,7 +394,7 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { requireConfirmation } = useConfirmation()
-const { cid, sid, gid } = getCourseContext()
+const { cid, sid, gid, contextQuery } = useRouteCourseContext()
 
 const users = ref([])
 const totalItems = ref(0)
@@ -420,6 +426,8 @@ const permissions = ref({
   showSessionManagement: false,
   sessionManagementUrl: "",
   showClasses: false,
+  showSubscriptionTabs: false,
+  groupsUrl: "",
 })
 
 const userType = computed(() => (Number(route.query.type) === TEACHER ? TEACHER : STUDENT))
@@ -473,6 +481,8 @@ async function loadUsers() {
       showSessionManagement: Boolean(response.showSessionManagement),
       sessionManagementUrl: response.sessionManagementUrl || "",
       showClasses: Boolean(response.showClasses),
+      showSubscriptionTabs: Boolean(response.showSubscriptionTabs),
+      groupsUrl: response.groupsUrl || "",
     }
     selectedUserIds.value = selectedUserIds.value.filter((id) => users.value.some((user) => user.id === id))
   } catch (error) {
@@ -486,28 +496,32 @@ async function loadUsers() {
 function changeType(type) {
   selectedUserIds.value = []
   page.value = 1
-  router.push({ name: "CourseUserList", params: route.params, query: { ...route.query, type } })
+  router.push({ name: "CourseUserList", params: route.params, query: { ...contextQuery.value, type } })
 }
 
 function buildSubscribeRoute() {
-  return { name: "CourseUserSubscribe", params: route.params, query: { ...route.query, type: userType.value } }
+  return { name: "CourseUserSubscribe", params: route.params, query: { ...contextQuery.value, type: userType.value } }
 }
 
 function buildImportRoute() {
-  return { name: "CourseUserImport", params: route.params, query: { ...route.query, type: userType.value } }
+  return { name: "CourseUserImport", params: route.params, query: { ...contextQuery.value, type: userType.value } }
+}
+
+function buildGroupsRoute() {
+  return { name: "CourseUserGroups", params: route.params, query: contextQuery.value }
 }
 
 function buildClassesRoute() {
-  return { name: "CourseUserClasses", params: route.params, query: { ...route.query, type: undefined } }
+  return { name: "CourseUserClasses", params: route.params, query: { ...contextQuery.value, type: undefined } }
 }
 
 function buildSessionsRoute() {
   return {
     name: "CourseSessionList",
     query: {
-      cid: route.query.cid || cid.value || undefined,
-      sid: route.query.sid || sid.value || undefined,
-      gid: route.query.gid || gid.value || undefined,
+      cid: cid.value || undefined,
+      sid: sid.value,
+      gid: gid.value,
       courseUserNode: route.params.node || undefined,
       courseUserType: route.query.type || undefined,
     },

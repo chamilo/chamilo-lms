@@ -40,6 +40,7 @@ final readonly class CourseClassListProvider implements ProviderInterface
         $resource->view = (string) $data['view'];
         $resource->groupFilter = (int) $data['groupFilter'];
         $resource->canManage = !empty($data['canManage']);
+        $resource->groupsUrl = (string) ($data['groupsUrl'] ?? '');
         $resource->csrfToken = $this->csrfTokenManager->getToken('course_class_management')->getValue();
         $resource->information = (string) $data['information'];
 

@@ -38,6 +38,18 @@ final class Version20201216110722 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        // The current CAttendance mapping includes `room` (room_id), added by a
+        // much later migration (V210/Version20260716130000). Every ->find() call
+        // below fully hydrates CAttendance/Course/User, so the column must exist
+        // before any of them run. Guarded so it's a no-op once that later
+        // migration has already created it.
+        $attendanceTable = $schema->getTable('c_attendance');
+        if (!$attendanceTable->hasColumn('room_id')) {
+            $this->addSql('ALTER TABLE c_attendance ADD room_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_attendance ADD CONSTRAINT FK_4136349254177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE SET NULL');
+            $this->addSql('CREATE INDEX IDX_4136349254177093 ON c_attendance (room_id)');
+        }
+
         $attendanceRepo = $this->container->get(CAttendanceRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
         $userRepo = $this->container->get(UserRepository::class);

@@ -14,6 +14,7 @@
       ref="inputFile"
       :accept="accept"
       class="hidden"
+      :name="name"
       type="file"
     />
   </div>
@@ -30,6 +31,10 @@ defineProps({
     required: true,
   },
   accept: {
+    type: String,
+    default: undefined,
+  },
+  name: {
     type: String,
     default: undefined,
   },

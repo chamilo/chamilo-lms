@@ -22,6 +22,14 @@ require_once __DIR__.'/../inc/global.inc.php';
  * This script displays a form for registering new users.
  */
 
+// This page's URL can carry a one-time course-invitation token
+// (?invitation=<hash>, see CourseInvitationRegistrationGate below). Force a
+// strict referrer policy so that token can never leak to a third-party
+// resource this page might load (fonts, analytics, embeds, etc.) via the
+// Referer header — without this, an older/non-compliant browser default
+// could send the full URL, hash included, to such a third party.
+header('Referrer-Policy: strict-origin-when-cross-origin');
+
 // Quick hack to adapt the registration form result to the selected registration language.
 if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];

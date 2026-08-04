@@ -1,9 +1,18 @@
 @use "tailwind";
+@use "scss/abstracts/mixins" as m;
+// Provides the .text-h1 … .text-h6 utilities that wysiwyg-content applies.
+@use "scss/settings/typography";
 
 // Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
 
 // Reset styles
 .tiny-content {
+  // Tailwind's preflight (pulled in by @use "tailwind" above) flattens headings,
+  // lists and block margins. This is the only stylesheet loaded inside the TinyMCE
+  // iframe, so the base typography has to be restored here. The rules below this
+  // mixin keep overriding it: they are @apply'd utilities and carry !important,
+  // while prose is emitted as a low-specificity component.
+  @include m.wysiwyg-content;
   @apply block w-full;
 }
 

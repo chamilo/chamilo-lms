@@ -24,9 +24,14 @@ final class Version20260716130000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE session_rel_course ADD CONSTRAINT FK_12D110D354177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE SET NULL');
         $this->addSql('CREATE INDEX IDX_12D110D354177093 ON session_rel_course (room_id)');
 
-        $this->addSql('ALTER TABLE c_attendance ADD room_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE c_attendance ADD CONSTRAINT FK_4136349254177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE SET NULL');
-        $this->addSql('CREATE INDEX IDX_4136349254177093 ON c_attendance (room_id)');
+        // May already exist: Version20201216110722 (V200) creates this column early
+        // because it needs it before that point in the sequence (full ORM hydration
+        // of CAttendance via ->find() in a legacy-DB migration run).
+        if (!$schema->getTable('c_attendance')->hasColumn('room_id')) {
+            $this->addSql('ALTER TABLE c_attendance ADD room_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_attendance ADD CONSTRAINT FK_4136349254177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE SET NULL');
+            $this->addSql('CREATE INDEX IDX_4136349254177093 ON c_attendance (room_id)');
+        }
 
         $this->addSql('ALTER TABLE c_attendance_calendar ADD room_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_attendance_calendar ADD CONSTRAINT FK_AA3A9AB854177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE SET NULL');

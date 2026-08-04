@@ -917,6 +917,57 @@ registerSettingsGuard("@settings-toolGlossary", [
   { path: "/admin/settings/glossary", field: "form_show_glossary_in_extra_tools" },
 ])
 
+// Same snapshot-before/restore-after intent as registerSettingsGuard() above,
+// but for a single free-text <textarea> setting instead of a <select> —
+// courseCatalogue.feature's "course_catalog_settings" field (CatalogSettingsSchema,
+// rendered as a TextareaType on /admin/settings/catalog) has no
+// .selectedOptions to read, so that helper's snapshot logic doesn't apply.
+// The original Behat courseCatalogue.feature scenario left this setting
+// permanently mutated (same leaked-setting class already fixed above for
+// several other files) — restoring whatever value this box actually had
+// before the scenario ran (confirmed live: blank on this shared box, but not
+// hardcoding that — a different install could have a real configured value)
+// keeps every other suite/session that depends on catalogue behavior
+// unaffected once this file's scenarios finish.
+//
+// Needs an explicit bounded networkidle wait (not just domcontentloaded)
+// before reading/writing the field: confirmed live that /admin/settings/catalog
+// is a Vue SPA settings page whose form (including the "Save settings"
+// button) only appears once its own settings fetch resolves — a plain
+// page.goto() alone can still observe an empty textarea and 0 Save buttons.
+function registerTextSettingsGuard(tag: string, path: string, field: string) {
+  let snapshot: string | null = null
+  let guardPage: Page | undefined
+
+  async function settle(page: Page) {
+    await page.waitForLoadState("domcontentloaded")
+    await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => {})
+  }
+
+  BeforeAll({ tags: tag }, async ({ browser, baseURL }) => {
+    const page = await loginAsAdminOnFreshPage(browser, baseURL)
+    guardPage = page
+    await gotoReliably(page, path)
+    await settle(page)
+    snapshot = await page.locator(`#${field}`).inputValue()
+  })
+
+  AfterAll({ tags: tag }, async () => {
+    if (!guardPage || snapshot === null) return
+    const page = guardPage
+    await gotoReliably(page, path)
+    await settle(page)
+    await page.locator(`#${field}`).fill(snapshot)
+    await pressButton(page, "Save settings")
+    await page.waitForLoadState("networkidle")
+    await page.context().close()
+  })
+}
+
+// courseCatalogue.feature's "Update catalogue settings..." scenario is the
+// only place in this suite that mutates course_catalog_settings.
+registerTextSettingsGuard("@settings-courseCatalogue", "/admin/settings/catalog", "form_course_catalog_settings")
+
 // Wraps page.goto() for the settings BeforeAll/AfterAll loops specifically.
 // Both hooks have now independently hit the SAME failure, despite two
 // separate rounds of adjusting the wait BEFORE each goto() (domcontentloaded
@@ -1237,8 +1288,19 @@ Then("I select all rows in the {string} grid", async ({ page }, gridName: string
 // delete icon triggers a native confirm(), same as career.feature's) — a
 // no-op for class.feature's PrimeVue ConfirmDialog usage, which never fires
 // a native dialog.
+//
+// Real CI failure: courseCatalogue.feature's cleanup scenario calls this
+// step 3 times in a row (once per course) — `page.once` only removes a
+// listener once ITS event actually fires, so when the underlying page never
+// triggers a native dialog (PrimeVue-only, as above), all 3 registrations
+// stay attached simultaneously. If a genuine native dialog does eventually
+// fire once (e.g. a `beforeunload` prompt from navigating away), Playwright
+// invokes every still-registered listener for it, not just one — the first
+// to call `.accept()` succeeds and every other throws "Cannot accept dialog
+// which is already handled!". The dialog IS handled correctly either way,
+// so swallowing that specific race is safe.
 Then("I click the {string} icon in the row for {string}", async ({ page }, selector: string, rowText: string) => {
-  page.once("dialog", (dialog) => dialog.accept())
+  page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 
@@ -1429,8 +1491,18 @@ When("I follow {string}", async ({ page }, link: string) => {
       return
     }
   }
+  // Real CI failure: questionPool.feature's course-tool toolbars (Vue
+  // "Tests"/"Exercises" views) render their icon-only links a moment after
+  // the page itself settles — not necessarily gated by any network request
+  // Playwright can observe (client-side reactive state), so even a
+  // preceding bounded "wait for the page content to settle" step doesn't
+  // reliably cover it. This tier's own instant, non-retrying `.count()`
+  // check could lose that race and fall through to the roleLink/exact-text
+  // tiers below for a link that WOULD have matched a moment later — the
+  // same brief-render-delay tolerance the roleLink tier right below
+  // already gets via isSoonVisible(), just not applied here until now.
   const byTitle = page.locator(`a[title="${link}"]:visible`)
-  if (await byTitle.count()) {
+  if (await isSoonVisible(byTitle)) {
     await byTitle.first().click()
     return
   }
@@ -1862,4 +1934,134 @@ When("I press the multiselect option {string} in {string}", async ({ page }, opt
   await field.click({ force: true })
   await page.getByText(optionText, { exact: true }).click()
   await page.keyboard.press("Escape")
+})
+
+// Not ported — new, for toolExerciseAdmin.feature. ExerciseQuestionSelectorView.vue's
+// question-type picker (the icon grid on the "Add a question" page) renders each type as
+// an icon-only <a> with NO visible text at all — a visually-hidden `sr-only` span carries
+// the bare label, but both the real `title` AND `aria-label` attributes are set to the
+// much longer `"{Label} - {help text}"` string (questionTypeTitle()) instead. That breaks
+// both existing "I follow" tiers that could otherwise apply here: the exact-title tier
+// needs the FULL string including the help text (which a Gherkin author shouldn't have to
+// spell out and which differs per question type), and getByRole("link", { name }) computes
+// its accessible name from that same long aria-label, not the sr-only text, so a plain
+// label wouldn't exact-match either. Matches on the title attribute's own PREFIX instead —
+// stable regardless of how long or how frequently-changed the trailing help text is.
+When("I follow the question type {string}", async ({ page }, label: string) => {
+  await page.locator(`a[title^="${label} - "]`).first().click()
+})
+
+// Not ported — new, for toolExerciseAdmin.feature's question-creation scenarios.
+// ExerciseQuestionEditorView.vue's answer-table rows (Unique/Multiple answer, Exact
+// selection, True-false variants, Global multiple answer, etc.) render each row's
+// Answer/Comment TinyMCE editor with an id built from a per-row `localId` that embeds
+// `Date.now()` (`exercise-answer-answer-${localId}` / `exercise-answer-comment-${localId}`,
+// regenerated on every page load) — there is no fixed id "I fill in tinymce field ... with
+// ..." could target for a specific row. `localId` itself always starts with the row's own
+// zero-based index (`${index}-${timestamp}`), which IS stable, so this locates the row's
+// real (random) editor id via that index prefix instead, then reuses the same
+// set-content-and-fire-change approach as this file's other tinymce steps.
+async function fillExerciseAnswerCell(page: Page, idPrefix: string, rowNumber: number, value: string) {
+  const locator = page.locator(`textarea[id^="${idPrefix}${rowNumber - 1}-"]`)
+  await locator.first().waitFor({ state: "attached" })
+  const id = await locator.first().getAttribute("id")
+  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), id)
+  await page.evaluate(
+    ({ id, value }) => {
+      const editor = (window as any).tinymce.get(id)
+      editor.setContent(value)
+      editor.fire("change")
+    },
+    { id, value },
+  )
+}
+
+When("I fill in the answer {int} text with {string}", async ({ page }, rowNumber: number, value: string) => {
+  await fillExerciseAnswerCell(page, "exercise-answer-answer-", rowNumber, value)
+})
+
+When("I fill in the answer {int} comment with {string}", async ({ page }, rowNumber: number, value: string) => {
+  await fillExerciseAnswerCell(page, "exercise-answer-comment-answer-", rowNumber, value)
+})
+
+// Not ported — new, companion to the two steps above. A row's own "correct" control is
+// EITHER a single shared-name radio group with no per-row id at all (single-correct
+// question types, e.g. Unique answer — every row's radio is literally
+// `name="correct_answer"`) OR a per-row-indexed checkbox (multi-correct types, e.g.
+// Multiple answer — `name="correct_answer_{index}"`), depending on the question type being
+// created — tries the indexed checkbox first (only ever present for multi-correct types)
+// and falls back to the Nth radio in the shared group otherwise.
+When("I mark answer {int} as correct", async ({ page }, rowNumber: number) => {
+  const indexed = page.locator(`input[name="correct_answer_${rowNumber - 1}"]`)
+  if (await indexed.count()) {
+    await indexed.check()
+    return
+  }
+  await page.locator('input[name="correct_answer"]').nth(rowNumber - 1).check()
+})
+
+// Not ported — new, for the Matching question type's own "Match them" pair-answer
+// editors — same randomized-id problem as the answer-table cells above
+// (`exercise-matching-pair-${pair.localId}`, where `localId` is `pair-${timestamp}-
+// {position}`), fixed the same way: locate the Nth pair's real editor id via DOM order
+// (there are only ever two pair editors on this form) rather than a fixed id. Unlike the
+// answer-table cells, the two MATCH OPTION editors ("A"/"B") are NOT randomized
+// (`exercise-matching-option-option-1` / `-2`, confirmed live) and so need no equivalent
+// step — the existing "I fill in tinymce field ... with ..." already works on those.
+When("I fill in matching pair {int} with {string}", async ({ page }, pairNumber: number, value: string) => {
+  const id = await page
+    .locator('textarea[id^="exercise-matching-pair-pair-"]')
+    .nth(pairNumber - 1)
+    .getAttribute("id")
+  if (!id) {
+    throw new Error(`Could not find matching pair ${pairNumber}'s answer editor.`)
+  }
+  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), id)
+  await page.evaluate(
+    ({ id, value }) => {
+      const editor = (window as any).tinymce.get(id)
+      editor.setContent(value)
+      editor.fire("change")
+    },
+    { id, value },
+  )
+})
+
+// Not ported — new, for toolExerciseAdmin.feature's "Try exercise" scenario.
+// ExercisePlayerView.vue's Matching question renders each pair's "Matches To" <select>
+// with NO associated <label> at all (just a plain "Answer A"/"Answer B" header cell, not a
+// real <label for="...">) — resolveField()'s getByLabel fallback can never match it. Only
+// one matching question is ever on screen at a time (one-question-per-page runtime), so
+// targeting by DOM order (the Nth <select> on the whole page) is unambiguous.
+When("I select {string} from matching select {int}", async ({ page }, optionLabel: string, selectNumber: number) => {
+  await page.locator("select").nth(selectNumber - 1).selectOption({ label: optionLabel })
+})
+
+// Not ported — new, for the Fill in blanks question's runtime answer inputs. Their real
+// name (`question_{questionId}_blank_{n}`) embeds the question's numeric id, only known at
+// runtime — matches on the stable "_blank_{n}" SUFFIX instead of the full name.
+When("I fill in blank {int} with {string}", async ({ page }, blankNumber: number, value: string) => {
+  await page.locator(`input[name$="_blank_${blankNumber}"]`).fill(value)
+})
+
+// Not ported — new, for the Open question type's runtime answer field — a plain
+// <textarea> at runtime (ExercisePlayerView.vue), unlike the question-EDITOR's own
+// TinyMCE-based answer fields, with a dynamic `name="question_{id}_text"` and no
+// <label>. Only one such textarea is ever on screen (one-question-per-page runtime).
+When("I fill in the open answer with {string}", async ({ page }, value: string) => {
+  await page.locator("textarea").first().fill(value)
+})
+
+// Not ported — new, for the True/False/Don't-know question types' runtime radios
+// (Multiple answer true/false/don't know, Combination true/false/don't-know) — every row
+// repeats the exact same three labels ("True"/"False"/"Don't know"), so a single
+// getByLabel() is inherently ambiguous across rows; this checks EVERY row's matching
+// option in one step, which is what both scenarios using it actually want (answer every
+// row the same way).
+When("I check every {string} option on the page", async ({ page }, label: string) => {
+  const options = page.getByLabel(label, { exact: true })
+  const count = await options.count()
+  for (let i = 0; i < count; i++) {
+    await options.nth(i).check()
+  }
 })

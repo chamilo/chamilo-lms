@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukázkový vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -26617,7 +26617,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurace připojení LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Pole definující hostitele a port pro LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Nastavit datum expirace při prvním přihlášení"
@@ -37631,4 +37631,1300 @@ msgstr "Použijte 0 pro zachování všech dostupných otázek. Použijte -1, kd
 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Tato pole použijte k samostatné klasifikaci cvičení nezávisle na možnostech zobrazení."
+
+msgid "Invite by email"
+msgstr "Pozvat e-mailem"
+
+msgid "Invitation has been sent"
+msgstr "Pozvánka byla odeslána"
+
+msgid "Sent on"
+msgstr "Odesláno"
+
+msgid "Accepted on"
+msgstr "Přijato"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Tento kurz je otevřen v rámci relace. Odeslání pozvánky zde přihlásí příjemce k celé relaci %s, nikoli pouze k tomuto kurzu."
+
+msgid "Revoke"
+msgstr "Zrušit"
+
+msgid "Revoked"
+msgstr "Zrušeno"
+
+msgid "Invitation has been revoked"
+msgstr "Pozvánka byla zrušena"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Opravdu chcete zrušit pozvánku odeslanou uživateli %s?"
+
+msgid "No default room"
+msgstr "Žádná výchozí místnost"
+
+msgid "Floor"
+msgstr "Podlaží"
+
+msgid "Capacity"
+msgstr "Kapacita"
+
+msgid "Use attendance default room"
+msgstr "Použít výchozí místnost pro docházku"
+
+msgid "Floor number"
+msgstr "Číslo podlaží"
+
+msgid "Copy to students"
+msgstr "Kopírovat studentům"
+
+msgid "Generate a quick test on this topic"
+msgstr "Vygenerovat rychlý test na toto téma"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Uložený obsah dokumentu bude odeslán k zpracování modelu AI."
+
+msgid "MCP API key"
+msgstr "Klíč API MCP"
+
+msgid "Authorized applications"
+msgstr "Autorizované aplikace"
+
+msgid "Your session is about to expire"
+msgstr "Vaše relace brzy vyprší"
+
+msgid "Do you want to continue your session?"
+msgstr "Chcete pokračovat v relaci?"
+
+msgid "Stay connected"
+msgstr "Zůstat připojen"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Budete odhlášeni za %s sekund."
+
+msgid "No descriptions available yet."
+msgstr "Zatím nejsou k dispozici žádné popisy."
+
+msgid "%s users selected"
+msgstr "Vybráno %s uživatelů"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Vybraní uživatelé byli zapsáni do kurzu"
+
+msgid "Import teachers"
+msgstr "Importovat učitele"
+
+msgid "Import learners"
+msgstr "Importovat účastníky"
+
+msgid "Select CSV file"
+msgstr "Vybrat soubor CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Některé uživatele nebylo možné zapsat"
+
+msgid "Browse available classes"
+msgstr "Procházet dostupné třídy"
+
+msgid "Back to linked classes"
+msgstr "Zpět na propojené třídy"
+
+msgid "No classes are currently linked to this course."
+msgstr "K tomuto kurzu nejsou aktuálně přiřazeny žádné třídy."
+
+msgid "No available classes were found for this course."
+msgstr "Pro tento kurz nebyly nalezeny žádné dostupné třídy."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Opravdu chcete odhlásit vybrané uživatele?"
+
+msgid "Learning path access"
+msgstr "Přístup k učební cestě"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "K této učební cestě mají přístup pouze vybraní uživatelé a skupiny. Spravujte je po uložení."
+
+msgid "All current and future course users can access this learning path."
+msgstr "K této učební cestě mají přístup všichni současní i budoucí uživatelé kurzu."
+
+msgid "All course users"
+msgstr "Všichni uživatelé kurzu"
+
+msgid "Selected users and groups"
+msgstr "Vybraní uživatelé a skupiny"
+
+msgid "No access"
+msgstr "Žádný přístup"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "K této učební cestě mají přístup pouze uživatelé a skupiny přidané zde."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Počet otázek omezen na maximálně %s"
+
+msgid "Open exercise player"
+msgstr "Otevřít přehrávač cvičení"
+
+msgid "The score is hidden for this exercise."
+msgstr "Výsledek tohoto cvičení je skrytý."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Opravy jsou skryté podle nastavení výsledků cvičení."
+
+msgid "Progressive adaptive result"
+msgstr "Progresivní adaptivní výsledek"
+
+msgid "Achieved level"
+msgstr "Dosažená úroveň"
+
+msgid "Correction history"
+msgstr "Historie oprav"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historie ručních oprav provedených pro tento pokus."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Toto cvičení používá režim výsledků radar/spiderweb. Graf není na této stránce dostupný."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Podrobnosti otázek jsou skryté podle nastavení výsledků cvičení."
+
+msgid "Media question"
+msgstr "Mediální otázka"
+
+msgid "Pending correction"
+msgstr "Čeká na opravu"
+
+msgid "No answer"
+msgstr "Žádná odpověď"
+
+msgid "Blank %s"
+msgstr "Prázdné %s"
+
+msgid "Your order"
+msgstr "Vaše pořadí"
+
+msgid "Correct order"
+msgstr "Správné pořadí"
+
+msgid "Delineation review"
+msgstr "Kontrola vymezení"
+
+msgid "Learner clicks"
+msgstr "Kliknutí účastníka"
+
+msgid "Question image"
+msgstr "Obrázek otázky"
+
+msgid "No hotspot image available"
+msgstr "Není k dispozici žádný hotspot obrázek"
+
+msgid "Learner delineation"
+msgstr "Vymezení účastníka"
+
+msgid "Expected delineation"
+msgstr "Očekávané vymezení"
+
+msgid "Expected zones"
+msgstr "Očekávané zóny"
+
+msgid "Zone"
+msgstr "Zóna"
+
+msgid "Learner annotation"
+msgstr "Anotace účastníka"
+
+msgid "No annotation image available"
+msgstr "Žádný obrázek anotace není k dispozici"
+
+msgid "This answer is pending teacher correction."
+msgstr "Tato odpověď čeká na opravu učitelem."
+
+msgid "Teacher comment"
+msgstr "Komentář učitele"
+
+msgid "Teacher correction"
+msgstr "Oprava učitele"
+
+msgid "Save correction"
+msgstr "Uložit opravu"
+
+msgid "Learner audio"
+msgstr "Audio žáka"
+
+msgid "Download audio"
+msgstr "Stáhnout audio"
+
+msgid "No uploaded audio"
+msgstr "Žádné nahrané audio"
+
+msgid "Learner Office document"
+msgstr "Kancelářský dokument žáka"
+
+msgid "Learner file"
+msgstr "Soubor žáka"
+
+msgid "Download Office document"
+msgstr "Stáhnout kancelářský dokument"
+
+msgid "No submitted document"
+msgstr "Žádný odevzdaný dokument"
+
+msgid "No uploaded file"
+msgstr "Žádný nahraný soubor"
+
+msgid "Content item"
+msgstr "Položka obsahu"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Tento typ otázky nelze na této stránce zkontrolovat."
+
+msgid "Exercise completed"
+msgstr "Cvičení dokončeno"
+
+msgid "Could not start the attempt"
+msgstr "Pokus se nepodařilo spustit"
+
+msgid "Invalid exercise attempt"
+msgstr "Neplatný pokus o cvičení"
+
+msgid "Could not load exercise result"
+msgstr "Výsledek cvičení se nepodařilo načíst"
+
+msgid "Could not load AI providers"
+msgstr "Poskytovatele AI se nepodařilo načíst"
+
+msgid "Could not generate AI suggestion"
+msgstr "Návrh AI se nepodařilo vygenerovat"
+
+msgid "Correction saved"
+msgstr "Oprava uložena"
+
+msgid "Could not save correction"
+msgstr "Opravu se nepodařilo uložit"
+
+msgid "Create exercise"
+msgstr "Vytvořit cvičení"
+
+msgid "Exercise categories"
+msgstr "Kategorie cvičení"
+
+msgid "Question categories"
+msgstr "Kategorie otázek"
+
+msgid "Search by exercise title or description."
+msgstr "Hledat podle názvu nebo popisu cvičení."
+
+msgid "Search exercises"
+msgstr "Hledat cvičení"
+
+msgid "No exercises found"
+msgstr "Žádná cvičení nenalezena"
+
+msgid "Open exercise"
+msgstr "Otevřít cvičení"
+
+msgid "Disable autolaunch"
+msgstr "Zakázat automatické spuštění"
+
+msgid "Enable autolaunch"
+msgstr "Povolit automatické spuštění"
+
+msgid "Export QTI2"
+msgstr "Exportovat QTI2"
+
+msgid "Bulk actions"
+msgstr "Hromadné akce"
+
+msgid "Selected exercises"
+msgstr "Vybraná cvičení"
+
+msgid "No exercises selected"
+msgstr "Žádná cvičení nevybrána"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Opravdu chcete tuto akci použít na vybraná cvičení?"
+
+msgid "Bulk action completed"
+msgstr "Hromadná akce dokončena"
+
+msgid "Could not update exercises"
+msgstr "Cvičení se nepodařilo aktualizovat"
+
+msgid "Could not update exercise"
+msgstr "Cvičení se nepodařilo aktualizovat"
+
+msgid "Copy exercise"
+msgstr "Kopírovat cvičení"
+
+msgid "Delete exercise"
+msgstr "Smazat cvičení"
+
+msgid "Could not load exercises"
+msgstr "Cvičení se nepodařilo načíst"
+
+msgid "No limit"
+msgstr "Bez omezení"
+
+msgid "Add selected questions to the test"
+msgstr "Přidat vybrané otázky do testu"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Tuto otázku nelze zde upravit, protože je použita v aktivním testu."
+
+msgid "This question cannot be edited here."
+msgstr "Tuto otázku zde nelze upravit."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Tuto otázku zde nelze smazat, protože je použita v aktivním testu."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Tuto otázku nelze smazat, protože váš přístup je omezen nastavením platformy."
+
+msgid "Already in test"
+msgstr "Již v testu"
+
+msgid "Select at least one question."
+msgstr "Vyberte alespoň jednu otázku."
+
+msgid "Question bank updated"
+msgstr "Banka otázek byla aktualizována"
+
+msgid "Could not update the question bank"
+msgstr "Banku otázek nelze aktualizovat"
+
+msgid "Could not load the question bank"
+msgstr "Banku otázek nelze načíst"
+
+msgid "Total score"
+msgstr "Celkové skóre"
+
+msgid "Starting"
+msgstr "Zahajování"
+
+msgid "Attempt history"
+msgstr "Historie pokusů"
+
+msgid "No attempts yet"
+msgstr "Zatím žádné pokusy"
+
+msgid "Invalid exercise"
+msgstr "Neplatné cvičení"
+
+msgid "Could not load exercise overview"
+msgstr "Nelze načíst přehled cvičení"
+
+msgid "Open test"
+msgstr "Otevřít test"
+
+msgid "Random answers"
+msgstr "Náhodné odpovědi"
+
+msgid "Prevent moving backwards"
+msgstr "Zabránit návratu zpět"
+
+msgid "Previous button hidden"
+msgstr "Tlačítko Předchozí skryto"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Toto cvičení používá možnosti, které vyžadují jiný testovací přehrávač."
+
+msgid "Continue test"
+msgstr "Pokračovat v testu"
+
+msgid "Attempt started"
+msgstr "Pokus zahájen"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Náhled učitele nevytváří sledovaný pokus."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Spusťte nebo obnovte pokus o cvičení. Návrhy odpovědí lze uložit před finálním odesláním."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Časový limit dosažen. Pokus se ukončuje."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Čas na otázku vypršel. Odpověď se ukládá."
+
+msgid "Finishing"
+msgstr "Ukončování"
+
+msgid "Draft saved"
+msgstr "Návrh uložen"
+
+msgid "Statement"
+msgstr "Prohlášení"
+
+msgid "Drop each option on the matching answer"
+msgstr "Přetáhněte každou možnost k odpovídající odpovědi"
+
+msgid "Clear match"
+msgstr "Zrušit shodu"
+
+msgid "Click to place the selected option here"
+msgstr "Kliknutím umístěte vybranou možnost sem"
+
+msgid "Select an option, then click here"
+msgstr "Vyberte možnost a poté klikněte sem"
+
+msgid "Already matched"
+msgstr "Již spárováno"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Možnost můžete přetáhnout k odpovědi nebo vybrat možnost a poté kliknout na cílové pole."
+
+msgid "Put the items in the correct order."
+msgstr "Seřaďte položky ve správném pořadí."
+
+msgid "Move left"
+msgstr "Přesunout doleva"
+
+msgid "Move right"
+msgstr "Přesunout doprava"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Položky můžete přetahovat doleva nebo doprava nebo použít tlačítka pro změnu pořadí."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Položky můžete přetahovat nebo použít tlačítka pro změnu pořadí."
+
+msgid "Or upload an audio file"
+msgstr "Nebo nahrajte zvukový soubor"
+
+msgid "Selected audio"
+msgstr "Vybraný zvuk"
+
+msgid "Uploaded audio"
+msgstr "Nahraný zvuk"
+
+msgid "Office document"
+msgstr "Dokument Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Dokončete dokument v editoru níže. Soubor bude připojen k tomuto pokusu pro opravu učitelem."
+
+msgid "Reload Office editor"
+msgstr "Znovu načíst editor Office"
+
+msgid "Prepare Office document"
+msgstr "Připravit dokument Office"
+
+msgid "Open in new tab"
+msgstr "Otevřít na nové kartě"
+
+msgid "Preparing Office document"
+msgstr "Připravování dokumentu Office"
+
+msgid "Submitted document"
+msgstr "Odeslaný dokument"
+
+msgid "Annotation tools"
+msgstr "Nástroje pro anotace"
+
+msgid "Text to place"
+msgstr "Text k umístění"
+
+msgid "Click the image to place the text annotation."
+msgstr "Kliknutím na obrázek umístěte textovou anotaci."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Kliknutím na obrázek přidejte body cesty. Použijte Nová cesta pro oddělení cest."
+
+msgid "Start new path"
+msgstr "Nová cesta"
+
+msgid "Current annotations"
+msgstr "Aktuální poznámky"
+
+msgid "Remove point"
+msgstr "Odstranit bod"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Klikněte na obrázek pro nakreslení ohraničujícího polygonu."
+
+msgid "Click a marker to remove it."
+msgstr "Klikněte na značku pro její odstranění."
+
+msgid "Placed"
+msgstr "Umístěno"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Vyberte odpověď a poté klikněte na obrázek pro její označení."
+
+msgid "Reading speed"
+msgstr "Rychlost čtení"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Tento typ otázky nelze v tomto přehrávači zobrazit."
+
+msgid "Save draft"
+msgstr "Uložit koncept"
+
+msgid "I confirm that my answers were saved."
+msgstr "Potvrzuji, že mé odpovědi byly uloženy."
+
+msgid "Finish test"
+msgstr "Dokončit test"
+
+msgid "Attempt finished"
+msgstr "Pokus dokončen"
+
+msgid "Question category"
+msgstr "Kategorie otázky"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Dokončili jste otázky související s touto kategorií otázek, je to vaše poslední možnost vrátit se a tyto otázky upravit."
+
+msgid "Question time left"
+msgstr "Zbývající čas na otázku"
+
+msgid "Time left"
+msgstr "Zbývající čas"
+
+msgid "Current attempt"
+msgstr "Aktuální pokus"
+
+msgid "Could not save draft answer"
+msgstr "Nelze uložit koncept odpovědi"
+
+msgid "Could not load exercise"
+msgstr "Nelze načíst cvičení"
+
+msgid "Draft answer saved"
+msgstr "Koncept odpovědi uložen"
+
+msgid "Could not finish the attempt"
+msgstr "Nelze dokončit pokus"
+
+msgid "Could not prepare Office document"
+msgstr "Nelze připravit dokument Office"
+
+msgid "Back to learner score"
+msgstr "Zpět na skóre účastníka"
+
+msgid "Disable auto refresh"
+msgstr "Zakázat automatické obnovení"
+
+msgid "Enable auto refresh"
+msgstr "Povolit automatické obnovení"
+
+msgid "Live window"
+msgstr "Živé okno"
+
+msgid "Ongoing attempts"
+msgstr "Probíhající pokusy"
+
+msgid "Completed attempts"
+msgstr "Dokončené pokusy"
+
+msgid "Started"
+msgstr "Zahájeno"
+
+msgid "Last activity"
+msgstr "Poslední aktivita"
+
+msgid "Could not load live results"
+msgstr "Nelze načíst živé výsledky"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Toto cvičení je pouze pro čtení, protože je součástí vzdělávací cesty."
+
+msgid "Select a question type to create a question."
+msgstr "Vyberte typ otázky pro vytvoření otázky."
+
+msgid "Click to preview"
+msgstr "Klikněte pro náhled"
+
+msgid "Hide preview"
+msgstr "Skrýt náhled"
+
+msgid "Shape"
+msgstr "Tvar"
+
+msgid "Coordinates"
+msgstr "Souřadnice"
+
+msgid "Blanks"
+msgstr "Mezery"
+
+msgid "Switchable blanks"
+msgstr "Přepínatelné mezery"
+
+msgid "Blank"
+msgstr "Mezera"
+
+msgid "Input width"
+msgstr "Šířka vstupu"
+
+msgid "Orientation"
+msgstr "Orientace"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Není dostupné s aktuálním režimem zpětné vazby cvičení"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Není dostupné při vytváření vzdělávací cesty"
+
+msgid "Delete question"
+msgstr "Smazat otázku"
+
+msgid "Could not update exercise questions"
+msgstr "Nelze aktualizovat otázky cvičení"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Nelze přidat cvičení do vzdělávací cesty"
+
+msgid "A valid exercise id is required."
+msgstr "Je vyžadováno platné ID cvičení."
+
+msgid "Could not load exercise questions"
+msgstr "Nelze načíst otázky cvičení"
+
+msgid "Delete selected attempts"
+msgstr "Smazat vybrané pokusy"
+
+msgid "Before date"
+msgstr "Před datem"
+
+msgid "Pending corrections"
+msgstr "Čekající opravy"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Tento test je uzamčen klasifikací. Akce pro čištění pokusů jsou zakázány."
+
+msgid "No attempts found"
+msgstr "Nenalezeny žádné pokusy"
+
+msgid "Review"
+msgstr "Posoudit"
+
+msgid "Print/PDF"
+msgstr "Tisk/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Nelze načíst zprávu o testu"
+
+msgid "Select at least one attempt"
+msgstr "Vyberte alespoň jeden pokus"
+
+msgid "Delete selected attempts?"
+msgstr "Smazat vybrané pokusy?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Odeslat e-maily s výsledky posouzených pokusů?"
+
+msgid "Could not send emails"
+msgstr "Nelze odeslat e-maily"
+
+msgid "Exercise result emails sent"
+msgstr "E-maily s výsledky testu odeslány"
+
+msgid "Skipped"
+msgstr "Přeskočeno"
+
+msgid "Close attempt?"
+msgstr "Uzavřít pokus?"
+
+msgid "Attempt closed"
+msgstr "Pokus uzavřen"
+
+msgid "Could not close attempt"
+msgstr "Nelze uzavřít pokus"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Odeslat výsledek tohoto pokusu e-mailem účastníkovi?"
+
+msgid "Email sent"
+msgstr "E-mail odeslán"
+
+msgid "Could not send email"
+msgstr "Nelze odeslat e-mail"
+
+msgid "Attempt deleted"
+msgstr "Pokus smazán"
+
+msgid "Could not delete attempt"
+msgstr "Nelze smazat pokus"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Vyberte soubor CSV obsahující sloupce s názvem a popisem."
+
+msgid "Manage categories used to classify questions."
+msgstr "Spravovat kategorie pro klasifikaci otázek."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Spravovat kategorie pro klasifikaci testů."
+
+msgid "Could not load categories"
+msgstr "Nelze načíst kategorie"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Importované kategorie: %s. Přeskočené řádky: %s."
+
+msgid "Imported categories: %s."
+msgstr "Importované kategorie: %s."
+
+msgid "Could not import categories"
+msgstr "Nelze importovat kategorie"
+
+msgid "Could not save category"
+msgstr "Nelze uložit kategorii"
+
+msgid "Answer distribution"
+msgstr "Rozložení odpovědí"
+
+msgid "Configured answers"
+msgstr "Nakonfigurované odpovědi"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Podrobné počítání odpovědí pro některé typy otázek není v migrované zprávě zatím dostupné."
+
+msgid "No report by question data found"
+msgstr "Nenalezena žádná data zprávy podle otázky"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Podrobné počítání odpovědí pro tento typ otázky není v migrované zprávě zatím dostupné."
+
+msgid "No answer distribution found"
+msgstr "Nenalezeno žádné rozložení odpovědí"
+
+msgid "Could not load report by question"
+msgstr "Nelze načíst zprávu podle otázky"
+
+msgid "Question settings"
+msgstr "Nastavení otázky"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Pro neomezený čas ponechte prázdné nebo 0."
+
+msgid "Time limit in seconds"
+msgstr "Časový limit v sekundách"
+
+msgid "Attached questions"
+msgstr "Připojené otázky"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Zde jsou uvedeny pouze otázky připojené k této mediální otázce v rámci aktuálního testu."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "K této mediální otázce nejsou v aktuálním testu připojeny žádné otázky."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Nahrajte šablonu dokumentu Office, kterou budou účastníci upravovat pomocí OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Nahradit dokument Office"
+
+msgid "Current Office document"
+msgstr "Aktuální dokument Office"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Tato otázka se opravuje ručně po odevzdání upraveného dokumentu účastníkem."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Celkové skóre se vypočítá jako součet skóre hotspotů."
+
+msgid "Global score"
+msgstr "Globální skóre"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Vyberte řádek hotspotu, zvolte jeho tvar a poté kreslete přes obrázek. U polygonů klikněte na každý bod a dokončete polygon, nebo dvojklikem dokončete."
+
+msgid "Finish polygon"
+msgstr "Dokončit polygon"
+
+msgid "Calculated answer"
+msgstr "Vypočítaná odpověď"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Napište text níže a použijte hranaté závorky [...] k označení jednoho nebo více prázdných míst."
+
+msgid "Lowest value"
+msgstr "Nejnižší hodnota"
+
+msgid "Highest value"
+msgstr "Nejvyšší hodnota"
+
+msgid "Fill in blanks"
+msgstr "Vyplnit mezery"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Použijte vybrané značky k označení mezer. Příklad: Hlavní město Peru je [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Zadejte možnosti rozbalovací nabídky, jednu odpověď na řádek. Poté označte očekávané odpovědi níže, jako v původním nástroji."
+
+msgid "Refresh answers"
+msgstr "Obnovit odpovědi"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Tato otázka s rozbalovací kombinací používá jedno globální skóre, jako v původním nástroji."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Zadejte prosím alespoň dvě možnosti rozbalovací nabídky."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Nejprve vytvořte cílové možnosti, poté přiřaďte každou položku ke správné možnosti."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Tato přiřazovací kombinovaná otázka používá jedno globální skóre, jako v původním nástroji."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Vytvořte kroky a vyberte očekávanou pozici pro každý z nich, jako v původním nástroji Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Účastníci vyberou Pravda nebo Nepravda a poté během pokusu zvolí stupeň jistoty. Editor ukládá stejná skóre Správně/Špatně a úrovně jistoty jako původní nástroj."
+
+msgid "Hotspot combination"
+msgstr "Hotspot kombinace"
+
+msgid "Add delineation"
+msgstr "Přidat vymezení"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Tato otázka z dokumentu Office nemá žádné možnosti odpovědí. Skóre je přiřazeno během opravy/prohlížení výsledků."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Tato otázka na nahrávání nemá žádné možnosti odpovědí. Skóre je přiřazeno během opravy/prohlížení výsledků."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Tato otázka na ústní projev nemá žádné možnosti odpovědí. Skóre je přiřazeno během opravy/prohlížení výsledků."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Tato otevřená otázka nemá žádné možnosti odpovědí. Skóre je přiřazeno během opravy/prohlížení výsledků."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Přidat text k četbě s nastavením rychlosti posouvání."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Přidat obsah, média nebo kontext četby bez přidání skóre."
+
+msgid "Insert a page break without adding score."
+msgstr "Vložit zalomení stránky bez přidání skóre."
+
+msgid "Could not save question"
+msgstr "Otázku nelze uložit"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Povoleny jsou pouze dokumenty DOC, DOCX, XLS nebo XLSX."
+
+msgid "Please select an Office document."
+msgstr "Vyberte prosím dokument Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Nakreslete prosím alespoň jeden hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Nakreslete prosím alespoň jedno vymezení."
+
+msgid "The fill in blanks text is required."
+msgstr "Text pro vyplnění mezer je povinný."
+
+msgid "At least one expected answer is required."
+msgstr "Je vyžadována alespoň jedna očekávaná odpověď."
+
+msgid "At least two draggable items are required."
+msgstr "Jsou vyžadovány alespoň dvě přetahovatelné položky."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Každá přetahovatelná položka musí být propojena s platnou cílovou pozicí."
+
+msgid "At least two matching options are required."
+msgstr "Jsou vyžadovány alespoň dvě možnosti pro přiřazení."
+
+msgid "At least two matching pairs are required."
+msgstr "Jsou vyžadovány alespoň dva přiřazovací páry."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Každý přiřazovací pár musí být propojen s platnou možností."
+
+msgid "At least two answers are required."
+msgstr "Jsou vyžadovány alespoň dvě odpovědi."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Každá odpověď pravda/nepravda musí mít vybráno Pravda nebo Nepravda."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Otázka s jedinou odpovědí musí mít přesně jednu správnou odpověď."
+
+msgid "At least one correct answer is required."
+msgstr "Je vyžadována alespoň jedna správná odpověď."
+
+msgid "Could not load question"
+msgstr "Otázku nelze načíst"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Vyberte kurz a exportujte globální zprávu o výsledcích cvičení jako CSV."
+
+msgid "Back to reports catalog"
+msgstr "Zpět do katalogu zpráv"
+
+msgid "Could not load exercise global report"
+msgstr "Globální zprávu o cvičení nelze načíst"
+
+msgid "Imported questions"
+msgstr "Importované otázky"
+
+msgid "Aiken content"
+msgstr "Obsah Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Generátor AI Aiken nelze načíst"
+
+msgid "Could not generate Aiken content"
+msgstr "Obsah Aiken nelze vygenerovat"
+
+msgid "Could not import generated Aiken content"
+msgstr "Vygenerovaný obsah Aiken nelze importovat"
+
+msgid "Back to my courses"
+msgstr "Zpět do mých kurzů"
+
+msgid "Open report"
+msgstr "Otevřít zprávu"
+
+msgid "Questions with no automatic correction"
+msgstr "Otázky bez automatické opravy"
+
+msgid "Could not load pending attempts"
+msgstr "Nelze načíst čekající pokusy"
+
+msgid "Skipped questions"
+msgstr "Přeskočené otázky"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Import Aiken rozdělí celkovou váhu mezi importované otázky, pokud otázka nedefinuje SCORE."
+
+msgid "Import warnings"
+msgstr "Upozornění při importu"
+
+msgid "Could not import questions"
+msgstr "Nelze importovat otázky"
+
+msgid "No question statistics found"
+msgstr "Nenalezeny žádné statistiky otázek"
+
+msgid "Could not load question statistics"
+msgstr "Nelze načíst statistiky otázek"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Můžete také připojit klienta MCP přímo zadáním následujícího koncového bodu:"
+
+msgid "No applications are currently connected to your account."
+msgstr "K vašemu účtu nejsou v současné době připojeny žádné aplikace."
+
+msgid "Connected on"
+msgstr "Připojeno dne"
+
+msgid "Last used"
+msgstr "Naposledy použito"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s již nebude mít přístup k vašemu účtu Chamilo. Pokračovat?"
+
+msgid "Application revoked"
+msgstr "Aplikace zrušena"
+
+msgid "Copied to clipboard"
+msgstr "Zkopírováno do schránky"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Nelze zkopírovat koncový bod MCP"
+
+msgid "MCP endpoint"
+msgstr "Koncový bod MCP"
+
+msgid "API key"
+msgstr "API klíč"
+
+msgid "Last used at"
+msgstr "Naposledy použito"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Zkopírujte tento klíč nyní. Nebude zobrazen znovu."
+
+msgid "Rotate API key"
+msgstr "Obnovit API klíč"
+
+msgid "Revoke API key"
+msgstr "Zrušit API klíč"
+
+msgid "Remote MCP connection"
+msgstr "Vzdálené připojení MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Nakonfigurujte klienta MCP s následujícími hodnotami:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Aktuální klíč přestane okamžitě fungovat. Pokračovat?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Bude vygenerován nový osobní API klíč MCP. Pokračovat?"
+
+msgid "MCP API key generated"
+msgstr "API klíč MCP vygenerován"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Připojení klienti MCP používající tento klíč přestanou okamžitě fungovat. Pokračovat?"
+
+msgid "MCP API key revoked"
+msgstr "API klíč MCP zrušen"
+
+msgid "Could not copy the API key"
+msgstr "Nelze zkopírovat API klíč"
+
+msgid "Project"
+msgstr "Projekt"
+
+msgid "Close old tickets"
+msgstr "Zavřít staré tikety"
+
+msgid "Close tickets older than seven days?"
+msgstr "Zavřít tikety starší než sedm dní?"
+
+msgid "Assignment history"
+msgstr "Historie přiřazení"
+
+msgid "Translate with AI"
+msgstr "Přeložit pomocí AI"
+
+msgid "Target language"
+msgstr "Cílový jazyk"
+
+msgid "Please select a provider"
+msgstr "Vyberte prosím poskytovatele"
+
+msgid "Generate translation"
+msgstr "Vygenerovat překlad"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Alespoň jedna sekce podmínek musí obsahovat text."
+
+msgid "No active target languages are available."
+msgstr "Nejsou dostupné žádné aktivní cílové jazyky."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Data přístupu"
+
+msgid "Coach access dates"
+msgstr "Data přístupu kouče"
+
+msgid "No sessions found"
+msgstr "Nenalezeny žádné sezení"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Vyberte kurzy, ke kterým tento uživatel v tomto sezení nesmí mít přístup."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Uživatel nemůže být zablokován ze všech kurzů v sezení. Místo toho uživatele odhlaste."
+
+msgid "Users subscribed to this session"
+msgstr "Uživatelé přihlášení k tomuto sezení"
+
+msgid "No available users found"
+msgstr "Nenalezeni žádní dostupní uživatelé"
+
+msgid "Subscribe this user to the session?"
+msgstr "Přihlásit tohoto uživatele k sezení?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Přihlásit vybrané uživatele k sezení?"
+
+msgid "General tutor planning"
+msgstr "Obecné plánování tutorů"
+
+msgid "User is already registered by another tutor."
+msgstr "Uživatel je již registrován jiným tutorem."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Tuto kopii dostáváte, protože jste tutor kurzu"
+
+msgid "General tutor"
+msgstr "Obecný tutor"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Zvažte kurzy, tutory, technickou podporu, učitele a/nebo dostupné materiály."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutoři přihlášení jako učitelé v kurzu %s"
+
+msgid "Tutor name"
+msgstr "Jméno tutora"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Tutoři sezení jsou koordinátoři sezení a mohou působit jako tutoři pro každý kurz v sezení. Jako tutoři sezení mohou být vybráni pouze uživatelé s rolí učitele."
+
+msgid "Access start date for tutors"
+msgstr "Datum zahájení přístupu pro tutory"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Datum, kdy je sezení zpřístupněno tutorům, aby se mohli připravit před připojením studentů"
+
+msgid "Access end date for tutors"
+msgstr "Datum ukončení přístupu pro tutory"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Datum, kdy je sezení uzavřeno pro tutory. Dodatečná lhůta jim umožní exportovat všechny relevantní sledovací informace"
+
+msgid "Tutor and student"
+msgstr "Tutor a student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Tato zpráva zobrazuje týdenní rozložení sezení podle obecných tutorů ve zvoleném časovém období."
+
+msgid "User is general tutor in some sessions"
+msgstr "Uživatel je obecným tutorem v některých sezeních"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Učitelé budou přidáni jako tutoři do všech kurzových sezení."
+
+msgid "Delete failed: invalid question id."
+msgstr "Odstranění selhalo: neplatné ID otázky."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Průměrný počet sezení na obecného tutora sezení"
+
+msgid "No room"
+msgstr "Žádná místnost"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importovat učitele kurzu jako tutory kurzu v sezení"
+
+msgid "Clean and update course tutors"
+msgstr "Vyčistit a aktualizovat tutory kurzu"
+
+msgid "Add me as tutor"
+msgstr "Přidat mě jako tutora"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Nelze přidat průzkum do vzdělávací cesty"
+
+msgid "Access dates for tutors"
+msgstr "Data přístupu pro tutory"
+
+msgid "Tutor and group member"
+msgstr "Tutor a člen skupiny"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Dosáhli jste denního limitu AI tokenů. Zkuste to prosím zítra."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Dosáhli jste měsíčního limitu AI tokenů. Zkuste to prosím příští měsíc."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Tento kód kurzu již existuje, zvolte prosím jiný kód."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Tento název kurzu již existuje, zvolte prosím jiný název."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Viditelnost tohoto nástroje nelze změnit"
+
+msgid "Invalid visibility"
+msgstr "Neplatná viditelnost"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Tuto kopii dostáváte, protože jste jedním z tutorů kurzu"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Tuto kopii dostáváte, protože jste tutor kurzu"
+
+msgid "Manual completion"
+msgstr "Ruční dokončení"
+
+msgid "Send to tutors"
+msgstr "Odeslat tutorům"
+
+msgid "Lab title"
+msgstr "Název laboratoře"
+
+msgid "Lab week"
+msgstr "Týden laboratoře"
+
+msgid "Final exam access rule"
+msgstr "Pravidlo přístupu ke závěrečné zkoušce"
+
+msgid "Course completion rule"
+msgstr "Pravidlo dokončení kurzu"
+
+msgid "You have been invited to join a course"
+msgstr "Byli jste pozváni k připojení ke kurzu"
+
+msgid "No user has been found"
+msgstr "Nebyl nalezen žádný uživatel"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Vybraný uživatel nemůže být v tomto kontextu přihlášen"
+
+msgid "No change has been made"
+msgstr "Nebyla provedena žádná změna"
+
+msgid "Back to group list"
+msgstr "Zpět na seznam skupin"
+
+msgid "Remove class link"
+msgstr "Odstranit propojení třídy"
+
+msgid "Group settings"
+msgstr "Nastavení skupiny"
+
+msgid "Self-registration allowed"
+msgstr "Povolena vlastní registrace"
+
+msgid "Self-unregistration allowed"
+msgstr "Povoleno vlastní odregistrování"
+
+msgid "This group is linked to the class"
+msgstr "Tato skupina je propojena s třídou"
+
+msgid "Create one or more empty course groups"
+msgstr "Vytvořit jednu nebo více prázdných skupin kurzu"
+
+msgid "Number of places"
+msgstr "Počet míst"
+
+msgid "Base group"
+msgstr "Základní skupina"
+
+msgid "Share"
+msgstr "Sdílet"
+
+msgid "Collaboration"
+msgstr "Spolupráce"
+
+msgid "The group title is required."
+msgstr "Název skupiny je povinný."
+
+msgid "Back to group area"
+msgstr "Zpět do oblasti skupin"
+
+msgid "Members are managed by the linked class"
+msgstr "Členové jsou spravováni propojenou třídou"
+
+msgid "%s groups selected"
+msgstr "%s skupin vybráno"
+
+msgid "Fill selected groups"
+msgstr "Vyplnit vybrané skupiny"
+
+msgid "Empty selected groups"
+msgstr "Vyprázdnit vybrané skupiny"
+
+msgid "Fill group"
+msgstr "Naplnit skupinu"
+
+msgid "Empty group"
+msgstr "Vyprázdnit skupinu"
+
+msgid "Groups per user"
+msgstr "Skupin na uživatele"
+
+msgid "No tutors"
+msgstr "Žádní lektoři"
+
+msgid "No users"
+msgstr "Žádní uživatelé"
 

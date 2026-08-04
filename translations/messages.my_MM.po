@@ -37636,3 +37636,1299 @@ msgstr "ရရှိနိုင်သော မေးခွန်းအား�
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "ဤအကွက်များကို ပြသမှုရွေးချယ်စရာများမှ သီးခြားစီ လေ့ကျင့်ခန်းကို အမျိုးအစားခွဲရန် အသုံးပြုပါ။"
 
+msgid "Invite by email"
+msgstr "အီးမေးလ်ဖြင့် ဖိတ်ကြားပါ"
+
+msgid "Invitation has been sent"
+msgstr "ဖိတ်ကြားချက် ပေးပို့ပြီးပါပြီ"
+
+msgid "Sent on"
+msgstr "ပေးပို့ခဲ့သည့်နေ့"
+
+msgid "Accepted on"
+msgstr "လက်ခံခဲ့သည့်နေ့"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "ဤသင်တန်းကို အစည်းအဝေးတစ်ခုတွင် ဖွင့်ထားပါသည်။ ဤနေရာတွင် ဖိတ်ကြားချက်ပေးပို့ခြင်းသည် လက်ခံသူကို ဤသင်တန်းတစ်ခုတည်းမဟုတ်ဘဲ အစည်းအဝေးတစ်ခုလုံး %s တွင် စာရင်းသွင်းပေးပါမည်။"
+
+msgid "Revoke"
+msgstr "ပြန်လည်ရုပ်သိမ်းပါ"
+
+msgid "Revoked"
+msgstr "ပြန်လည်ရုပ်သိမ်းပြီး"
+
+msgid "Invitation has been revoked"
+msgstr "ဖိတ်ကြားချက်ကို ပြန်လည်ရုပ်သိမ်းပြီးပါပြီ"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "%s ထံ ပေးပို့ခဲ့သော ဖိတ်ကြားချက်ကို ပြန်လည်ရုပ်သိမ်းရန် သေချာပါသလား။"
+
+msgid "No default room"
+msgstr "မူရင်းအခန်း မရှိပါ"
+
+msgid "Floor"
+msgstr "ထပ်"
+
+msgid "Capacity"
+msgstr "ဆံ့နိုင်မှု"
+
+msgid "Use attendance default room"
+msgstr "မူရင်းအခန်းကို အသုံးပြုပါ"
+
+msgid "Floor number"
+msgstr "ထပ်နံပါတ်"
+
+msgid "Copy to students"
+msgstr "ကျောင်းသားများထံ ကူးယူပါ"
+
+msgid "Generate a quick test on this topic"
+msgstr "ဤအကြောင်းအရာတွင် အမြန်စစ်ဆေးမှု ဖန်တီးပါ"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "သိမ်းဆည်းထားသော စာရွက်စာတမ်း အကြောင်းအရာကို စီမံဆောင်ရွက်ရန် AI မော်ဒယ်သို့ ပေးပို့ပါမည်။"
+
+msgid "MCP API key"
+msgstr "MCP API ကီး"
+
+msgid "Authorized applications"
+msgstr "ခွင့်ပြုထားသော အပလီကေးရှင်းများ"
+
+msgid "Your session is about to expire"
+msgstr "သင့်အစည်းအဝေး သက်တမ်းကုန်တော့မည်"
+
+msgid "Do you want to continue your session?"
+msgstr "သင့်အစည်းအဝေးကို ဆက်လက်လုပ်ဆောင်လိုပါသလား။"
+
+msgid "Stay connected"
+msgstr "ဆက်သွယ်နေပါ"
+
+msgid "You will be signed out in %s seconds."
+msgstr "%s စက္ကန့်အတွင်း သင်ထွက်သွားပါမည်။"
+
+msgid "No descriptions available yet."
+msgstr "ဖော်ပြချက်များ မရရှိသေးပါ။"
+
+msgid "%s users selected"
+msgstr "%s အသုံးပြုသူများ ရွေးချယ်ပြီး"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "ရွေးချယ်ထားသော အသုံးပြုသူများကို သင်တန်းတွင် စာရင်းသွင်းပြီးပါပြီ"
+
+msgid "Import teachers"
+msgstr "ဆရာများ တင်သွင်းပါ"
+
+msgid "Import learners"
+msgstr "ကျောင်းသားများ တင်သွင်းပါ"
+
+msgid "Select CSV file"
+msgstr "CSV ဖိုင်ရွေးပါ"
+
+msgid "Some users could not be subscribed"
+msgstr "အချို့အသုံးပြုသူများကို စာရင်းသွင်း၍ မရပါ"
+
+msgid "Browse available classes"
+msgstr "ရရှိနိုင်သော အတန်းများကို ရှာဖွေပါ"
+
+msgid "Back to linked classes"
+msgstr "ချိတ်ဆက်ထားသော အတန်းများသို့ ပြန်သွားပါ"
+
+msgid "No classes are currently linked to this course."
+msgstr "ဤသင်တန်းနှင့် လက်ရှိချိတ်ဆက်ထားသော အတန်းများ မရှိပါ။"
+
+msgid "No available classes were found for this course."
+msgstr "ဤသင်တန်းအတွက် ရရှိနိုင်သော အတန်းများ မတွေ့ရှိပါ။"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "ရွေးချယ်ထားသော အသုံးပြုသူများကို စာရင်းမှဖယ်ရှားရန် သေချာပါသလား။"
+
+msgid "Learning path access"
+msgstr "သင်ယူမှုလမ်းကြောင်း ဝင်ရောက်ခွင့်"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "ရွေးချယ်ထားသော အသုံးပြုသူများနှင့် အုပ်စုများသာ ဤသင်ယူမှုလမ်းကြောင်းကို ဝင်ရောက်နိုင်ပါသည်။ သိမ်းဆည်းပြီးနောက် ၎င်းတို့ကို စီမံပါ။"
+
+msgid "All current and future course users can access this learning path."
+msgstr "လက်ရှိနှင့် အနာဂတ် သင်တန်းအသုံးပြုသူအားလုံး ဤသင်ယူမှုလမ်းကြောင်းကို ဝင်ရောက်နိုင်ပါသည်။"
+
+msgid "All course users"
+msgstr "သင်တန်းအသုံးပြုသူအားလုံး"
+
+msgid "Selected users and groups"
+msgstr "ရွေးချယ်ထားသော အသုံးပြုသူများနှင့် အုပ်စုများ"
+
+msgid "No access"
+msgstr "ဝင်ရောက်ခွင့်မရှိ"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "ဤနေရာတွင် ထည့်သွင်းထားသော အသုံးပြုသူများနှင့် အုပ်စုများသာ ဤသင်ယူမှုလမ်းကြောင်းကို ဝင်ရောက်နိုင်ပါသည်။"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "မေးခွန်းအရေအတွက်ကို အများဆုံး %s အထိ ကန့်သတ်ထားသည်"
+
+msgid "Open exercise player"
+msgstr "လေ့ကျင့်ခန်း ကစားသမားကို ဖွင့်ရန်"
+
+msgid "The score is hidden for this exercise."
+msgstr "ဤလေ့ကျင့်ခန်းအတွက် ရမှတ်ကို ဖုံးကွယ်ထားသည်။"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "လေ့ကျင့်ခန်းရလဒ်ဆက်တင်များအရ ပြင်ဆင်မှုများကို ဖုံးကွယ်ထားသည်။"
+
+msgid "Progressive adaptive result"
+msgstr "တိုးတက်မှုအလိုက် လိုက်လျောညီထွေရှိသော ရလဒ်"
+
+msgid "Achieved level"
+msgstr "ရရှိခဲ့သော အဆင့်"
+
+msgid "Correction history"
+msgstr "ပြင်ဆင်မှု မှတ်တမ်း"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "ဤကြိုးပမ်းမှုအတွက် လုပ်ဆောင်ခဲ့သော လက်စွဲပြင်ဆင်မှုများ၏ မှတ်တမ်း။"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "ဤလေ့ကျင့်ခန်းသည် ရေဒါ/ပင့်ကူမျှင်ရလဒ်မုဒ်ကို အသုံးပြုသည်။ ဤစာမျက်နှာတွင် ဇယားကို မရရှိနိုင်ပါ။"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "လေ့ကျင့်ခန်းရလဒ်ဆက်တင်များအရ မေးခွန်းအသေးစိတ်များကို ဖုံးကွယ်ထားသည်။"
+
+msgid "Media question"
+msgstr "မီဒီယာ မေးခွန်း"
+
+msgid "Pending correction"
+msgstr "ပြင်ဆင်မှု စောင့်ဆိုင်းနေသည်"
+
+msgid "No answer"
+msgstr "အဖြေမရှိပါ"
+
+msgid "Blank %s"
+msgstr "အလွတ် %s"
+
+msgid "Your order"
+msgstr "သင်၏ အစဉ်လိုက်"
+
+msgid "Correct order"
+msgstr "မှန်ကန်သော အစဉ်လိုက်"
+
+msgid "Delineation review"
+msgstr "သတ်မှတ်မှု ပြန်လည်သုံးသပ်ခြင်း"
+
+msgid "Learner clicks"
+msgstr "သင်ယူသူ နှိပ်ချက်များ"
+
+msgid "Question image"
+msgstr "မေးခွန်း ပုံရိပ်"
+
+msgid "No hotspot image available"
+msgstr "အပူအစက် ပုံရိပ် မရရှိနိုင်ပါ"
+
+msgid "Learner delineation"
+msgstr "သင်ယူသူ သတ်မှတ်မှု"
+
+msgid "Expected delineation"
+msgstr "မျှော်မှန်းထားသော သတ်မှတ်မှု"
+
+msgid "Expected zones"
+msgstr "မျှော်မှန်းထားသော ဇုန်များ"
+
+msgid "Zone"
+msgstr "ဇုန်"
+
+msgid "Learner annotation"
+msgstr "သင်ယူသူ မှတ်စု"
+
+msgid "No annotation image available"
+msgstr "မှတ်စု ပုံရိပ် မရရှိနိုင်ပါ"
+
+msgid "This answer is pending teacher correction."
+msgstr "ဤအဖြေကို ဆရာမှ ပြင်ဆင်ရန် စောင့်ဆိုင်းနေသည်။"
+
+msgid "Teacher comment"
+msgstr "ဆရာ မှတ်ချက်"
+
+msgid "Teacher correction"
+msgstr "ဆရာ ပြင်ဆင်မှု"
+
+msgid "Save correction"
+msgstr "ပြင်ဆင်မှု သိမ်းဆည်းရန်"
+
+msgid "Learner audio"
+msgstr "သင်ယူသူ အသံ"
+
+msgid "Download audio"
+msgstr "အသံ ဒေါင်းလုဒ်လုပ်ရန်"
+
+msgid "No uploaded audio"
+msgstr "တင်ပြထားသော အသံ မရှိပါ"
+
+msgid "Learner Office document"
+msgstr "သင်ယူသူ အော်ဖစ် စာတမ်း"
+
+msgid "Learner file"
+msgstr "သင်ယူသူ ဖိုင်"
+
+msgid "Download Office document"
+msgstr "အော်ဖစ် စာတမ်း ဒေါင်းလုဒ်လုပ်ရန်"
+
+msgid "No submitted document"
+msgstr "တင်သွင်းထားသော စာတမ်း မရှိပါ"
+
+msgid "No uploaded file"
+msgstr "တင်ပြထားသော ဖိုင် မရှိပါ"
+
+msgid "Content item"
+msgstr "အကြောင်းအရာ အရာ"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "ဤမေးခွန်းအမျိုးအစားကို ဤစာမျက်နှာတွင် ပြန်လည်သုံးသပ်၍ မရပါ။"
+
+msgid "Exercise completed"
+msgstr "လေ့ကျင့်ခန်း ပြီးဆုံးပြီ"
+
+msgid "Could not start the attempt"
+msgstr "ကြိုးပမ်းမှု စတင်၍ မရပါ"
+
+msgid "Invalid exercise attempt"
+msgstr "မမှန်ကန်သော လေ့ကျင့်ခန်း ကြိုးပမ်းမှု"
+
+msgid "Could not load exercise result"
+msgstr "လေ့ကျင့်ခန်း ရလဒ် တင်ပြ၍ မရပါ"
+
+msgid "Could not load AI providers"
+msgstr "AI ပံ့ပိုးသူများ တင်ပြ၍ မရပါ"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI အကြံပြုချက် ထုတ်လုပ်၍ မရပါ"
+
+msgid "Correction saved"
+msgstr "ပြင်ဆင်မှု သိမ်းဆည်းပြီး"
+
+msgid "Could not save correction"
+msgstr "ပြင်ဆင်မှု သိမ်းဆည်း၍ မရပါ"
+
+msgid "Create exercise"
+msgstr "လေ့ကျင့်ခန်း ဖန်တီးရန်"
+
+msgid "Exercise categories"
+msgstr "လေ့ကျင့်ခန်း အမျိုးအစားများ"
+
+msgid "Question categories"
+msgstr "မေးခွန်းအမျိုးအစားများ"
+
+msgid "Search by exercise title or description."
+msgstr "လေ့ကျင့်ခန်းခေါင်းစဉ် သို့မဟုတ် ဖော်ပြချက်ဖြင့် ရှာဖွေပါ။"
+
+msgid "Search exercises"
+msgstr "လေ့ကျင့်ခန်းများ ရှာဖွေရန်"
+
+msgid "No exercises found"
+msgstr "လေ့ကျင့်ခန်း မတွေ့ပါ"
+
+msgid "Open exercise"
+msgstr "လေ့ကျင့်ခန်း ဖွင့်ရန်"
+
+msgid "Disable autolaunch"
+msgstr "အလိုအလျောက်စတင်မှု ပိတ်ရန်"
+
+msgid "Enable autolaunch"
+msgstr "အလိုအလျောက်စတင်မှု ဖွင့်ရန်"
+
+msgid "Export QTI2"
+msgstr "QTI2 ပို့ရန်"
+
+msgid "Bulk actions"
+msgstr "အစုလိုက်လုပ်ဆောင်မှုများ"
+
+msgid "Selected exercises"
+msgstr "ရွေးချယ်ထားသော လေ့ကျင့်ခန်းများ"
+
+msgid "No exercises selected"
+msgstr "လေ့ကျင့်ခန်း မရွေးချယ်ထားပါ"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "ရွေးချယ်ထားသော လေ့ကျင့်ခန်းများတွင် ဤလုပ်ဆောင်မှုကို အသုံးပြုမည်မှာ သေချာပါသလား။"
+
+msgid "Bulk action completed"
+msgstr "အစုလိုက်လုပ်ဆောင်မှု ပြီးဆုံးပါပြီ"
+
+msgid "Could not update exercises"
+msgstr "လေ့ကျင့်ခန်းများ အပ်ဒိတ်မလုပ်နိုင်ပါ"
+
+msgid "Could not update exercise"
+msgstr "လေ့ကျင့်ခန်း အပ်ဒိတ်မလုပ်နိုင်ပါ"
+
+msgid "Copy exercise"
+msgstr "လေ့ကျင့်ခန်း ကူးယူရန်"
+
+msgid "Delete exercise"
+msgstr "လေ့ကျင့်ခန်း ဖျက်ရန်"
+
+msgid "Could not load exercises"
+msgstr "လေ့ကျင့်ခန်းများ တင်မရပါ"
+
+msgid "No limit"
+msgstr "ကန့်သတ်မှုမရှိ"
+
+msgid "Add selected questions to the test"
+msgstr "ရွေးချယ်ထားသော မေးခွန်းများကို စစ်ဆေးမှုတွင် ထည့်ရန်"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "ဤမေးခွန်းကို လက်ရှိစစ်ဆေးမှုတွင် အသုံးပြုထားပြီး ဤနေရာတွင် တည်းဖြတ်၍မရပါ။"
+
+msgid "This question cannot be edited here."
+msgstr "ဤမေးခွန်းကို ဤနေရာတွင် တည်းဖြတ်၍မရပါ။"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "ဤမေးခွန်းကို လက်ရှိစစ်ဆေးမှုတွင် အသုံးပြုထားပြီး ဤနေရာတွင် ဖျက်၍မရပါ။"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "သင့်ဝင်ရောက်ခွင့်ကို ပလက်ဖောင်းဆက်တင်များက ကန့်သတ်ထားသောကြောင့် ဤမေးခွန်းကို ဖျက်၍မရပါ။"
+
+msgid "Already in test"
+msgstr "စစ်ဆေးမှုတွင် ရှိပြီးသား"
+
+msgid "Select at least one question."
+msgstr "အနည်းဆုံး မေးခွန်းတစ်ခု ရွေးချယ်ပါ။"
+
+msgid "Question bank updated"
+msgstr "မေးခွန်းဘဏ် အပ်ဒိတ်လုပ်ပြီးပါပြီ"
+
+msgid "Could not update the question bank"
+msgstr "မေးခွန်းဘဏ် အပ်ဒိတ်မလုပ်နိုင်ပါ"
+
+msgid "Could not load the question bank"
+msgstr "မေးခွန်းဘဏ် တင်မရပါ"
+
+msgid "Total score"
+msgstr "စုစုပေါင်းရမှတ်"
+
+msgid "Starting"
+msgstr "စတင်နေသည်"
+
+msgid "Attempt history"
+msgstr "ကြိုးပမ်းမှုမှတ်တမ်း"
+
+msgid "No attempts yet"
+msgstr "ကြိုးပမ်းမှု မရှိသေးပါ"
+
+msgid "Invalid exercise"
+msgstr "မမှန်ကန်သော လေ့ကျင့်ခန်း"
+
+msgid "Could not load exercise overview"
+msgstr "လေ့ကျင့်ခန်းခြုံငုံသုံးသပ်ချက် တင်မရပါ"
+
+msgid "Open test"
+msgstr "စစ်ဆေးမှု ဖွင့်ရန်"
+
+msgid "Random answers"
+msgstr "ကျပန်းအဖြေများ"
+
+msgid "Prevent moving backwards"
+msgstr "နောက်ပြန်ရွေ့လျားမှု တားဆီးရန်"
+
+msgid "Previous button hidden"
+msgstr "ယခင်ခလုတ် ဖွက်ထားသည်"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "ဤလေ့ကျင့်ခန်းသည် စစ်ဆေးမှုပလေယာအခြားတစ်ခု လိုအပ်သော ရွေးချယ်စရာများကို အသုံးပြုထားသည်။"
+
+msgid "Continue test"
+msgstr "စစ်ဆေးမှု ဆက်လက်လုပ်ဆောင်ရန်"
+
+msgid "Attempt started"
+msgstr "ကြိုးပမ်းမှု စတင်ပြီးပါပြီ"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "ဆရာအစမ်းကြည့်မှုသည် မှတ်တမ်းတင်ထားသော ကြိုးပမ်းမှုတစ်ခု ဖန်တီးမပေးပါ။"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "လေ့ကျင့်ခန်းကြိုးပမ်းမှုတစ်ခု စတင်ပါ သို့မဟုတ် ပြန်လည်စတင်ပါ။ နောက်ဆုံးတင်သွင်းမှုမတိုင်မီ မူကြမ်းအဖြေများကို သိမ်းဆည်းနိုင်ပါသည်။"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "အချိန်ကန့်သတ်ချက် ရောက်ရှိပါပြီ။ ကြိုးပမ်းမှုကို အဆုံးသတ်နေသည်။"
+
+msgid "Question time reached. Saving your answer."
+msgstr "မေးခွန်းအချိန် ရောက်ရှိပါပြီ။ သင့်အဖြေကို သိမ်းဆည်းနေသည်။"
+
+msgid "Finishing"
+msgstr "အဆုံးသတ်နေသည်"
+
+msgid "Draft saved"
+msgstr "မူကြမ်း သိမ်းဆည်းပြီးပါပြီ"
+
+msgid "Statement"
+msgstr "ထုတ်ပြန်ချက်"
+
+msgid "Drop each option on the matching answer"
+msgstr "တူညီသောအဖြေနှင့် ကိုက်ညီသော ရွေးချယ်စရာတစ်ခုစီကို ချထားပါ"
+
+msgid "Clear match"
+msgstr "ရှင်းလင်းသော ကိုက်ညီမှု"
+
+msgid "Click to place the selected option here"
+msgstr "ရွေးချယ်ထားသော ရွေးချယ်စရာကို ဤနေရာတွင် ထားရန် နှိပ်ပါ"
+
+msgid "Select an option, then click here"
+msgstr "ရွေးချယ်စရာတစ်ခုကို ရွေးပြီး ဤနေရာကို နှိပ်ပါ"
+
+msgid "Already matched"
+msgstr "ရှိပြီးသား ကိုက်ညီမှု"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "ရွေးချယ်စရာတစ်ခုကို အဖြေတစ်ခုသို့ ဆွဲယူနိုင်သည်၊ သို့မဟုတ် ရွေးချယ်စရာတစ်ခုကို ရွေးပြီး ပစ်မှတ်အကွက်တစ်ခုကို နှိပ်နိုင်သည်။"
+
+msgid "Put the items in the correct order."
+msgstr "အရာများကို မှန်ကန်သော အစဉ်လိုက် ထားပါ။"
+
+msgid "Move left"
+msgstr "ဘယ်ဘက်သို့ ရွှေ့ပါ"
+
+msgid "Move right"
+msgstr "ညာဘက်သို့ ရွှေ့ပါ"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "အရာများကို ဘယ်ဘက် သို့မဟုတ် ညာဘက်သို့ ဆွဲယူနိုင်သည်၊ သို့မဟုတ် အစဉ်လိုက်ပြောင်းရန် ရွှေ့ခလုတ်များကို အသုံးပြုနိုင်သည်။"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "အရာများကို ဆွဲယူနိုင်သည် သို့မဟုတ် အစဉ်လိုက်ပြောင်းရန် ရွှေ့ခလုတ်များကို အသုံးပြုနိုင်သည်။"
+
+msgid "Or upload an audio file"
+msgstr "သို့မဟုတ် အသံဖိုင်တစ်ခု တင်ပါ"
+
+msgid "Selected audio"
+msgstr "ရွေးချယ်ထားသော အသံ"
+
+msgid "Uploaded audio"
+msgstr "တင်ထားသော အသံ"
+
+msgid "Office document"
+msgstr "ရုံးသုံးစာတမ်း"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "အောက်ပါ တည်းဖြတ်ကိရိယာတွင် စာတမ်းကို ပြီးစီးပါ။ ဖိုင်ကို ဆရာမှ ပြင်ဆင်ရန် ဤကြိုးပမ်းမှုနှင့် တွဲထားပါမည်။"
+
+msgid "Reload Office editor"
+msgstr "Office တည်းဖြတ်ကိရိယာ ပြန်တင်ပါ"
+
+msgid "Prepare Office document"
+msgstr "Office စာတမ်း ပြင်ဆင်ပါ"
+
+msgid "Open in new tab"
+msgstr "တပ်ဘ်အသစ်တွင် ဖွင့်ပါ"
+
+msgid "Preparing Office document"
+msgstr "Office စာတမ်း ပြင်ဆင်နေသည်"
+
+msgid "Submitted document"
+msgstr "တင်သွင်းထားသော စာတမ်း"
+
+msgid "Annotation tools"
+msgstr "မှတ်ချက်ကိရိယာများ"
+
+msgid "Text to place"
+msgstr "နေရာချရန် စာသား"
+
+msgid "Click the image to place the text annotation."
+msgstr "စာသားမှတ်ချက်ကို နေရာချရန် ပုံကို နှိပ်ပါ။"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "လမ်းကြောင်းအမှတ်များ ထည့်ရန် ပုံကို နှိပ်ပါ။ လမ်းကြောင်းများကို ခွဲရန် လမ်းကြောင်းအသစ် စတင်ပါ။"
+
+msgid "Start new path"
+msgstr "လမ်းကြောင်းအသစ် စတင်ပါ"
+
+msgid "Current annotations"
+msgstr "လက်ရှိ မှတ်ချက်များ"
+
+msgid "Remove point"
+msgstr "အမှတ်ကို ဖယ်ရှားပါ"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "ပုံတွင် နယ်နိမိတ်ပုံစံကို ဆွဲရန် နှိပ်ပါ။"
+
+msgid "Click a marker to remove it."
+msgstr "အမှတ်တစ်ခုကို ဖယ်ရှားရန် နှိပ်ပါ။"
+
+msgid "Placed"
+msgstr "နေရာချပြီး"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "အဖြေတစ်ခုကို ရွေးပြီး အမှတ်အသားပြုရန် ပုံပေါ်တွင် နှိပ်ပါ။"
+
+msgid "Reading speed"
+msgstr "ဖတ်နှုန်း"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "ဤမေးခွန်းအမျိုးအစားကို ဤကစားသမားတွင် ပြသ၍ မရပါ။"
+
+msgid "Save draft"
+msgstr "မူကြမ်း သိမ်းဆည်းပါ"
+
+msgid "I confirm that my answers were saved."
+msgstr "ကျွန်ုပ်၏ အဖြေများကို သိမ်းဆည်းပြီးကြောင်း အတည်ပြုပါသည်။"
+
+msgid "Finish test"
+msgstr "စမ်းသပ်မှု ပြီးဆုံးပါ"
+
+msgid "Attempt finished"
+msgstr "ကြိုးပမ်းမှု ပြီးဆုံးပြီ"
+
+msgid "Question category"
+msgstr "မေးခွန်း အမျိုးအစား"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "ဤမေးခွန်းအမျိုးအစားနှင့် သက်ဆိုင်သော မေးခွန်းများကို သင်ပြီးဆုံးပြီ၊ ထိုမေးခွန်းများကို ပြန်သွားပြီး ပြန်လည်သုံးသပ်ရန် နောက်ဆုံးအခွင့်အရေး ဖြစ်သည်။"
+
+msgid "Question time left"
+msgstr "မေးခွန်း ကျန်ရှိချိန်"
+
+msgid "Time left"
+msgstr "ကျန်ရှိချိန်"
+
+msgid "Current attempt"
+msgstr "လက်ရှိ ကြိုးပမ်းမှု"
+
+msgid "Could not save draft answer"
+msgstr "မူကြမ်းအဖြေ သိမ်းဆည်း၍ မရပါ"
+
+msgid "Could not load exercise"
+msgstr "လေ့ကျင့်ခန်း တင်၍ မရပါ"
+
+msgid "Draft answer saved"
+msgstr "မူကြမ်းအဖြေ သိမ်းဆည်းပြီး"
+
+msgid "Could not finish the attempt"
+msgstr "ကြိုးပမ်းမှု ပြီးဆုံး၍ မရပါ"
+
+msgid "Could not prepare Office document"
+msgstr "Office စာတမ်း ပြင်ဆင်၍ မရပါ"
+
+msgid "Back to learner score"
+msgstr "သင်ယူသူ ရမှတ်သို့ ပြန်သွားပါ"
+
+msgid "Disable auto refresh"
+msgstr "အလိုအလျောက် ပြန်လည်တင်ခြင်း ပိတ်ပါ"
+
+msgid "Enable auto refresh"
+msgstr "အလိုအလျောက် ပြန်လည်တင်ခြင်း ဖွင့်ပါ"
+
+msgid "Live window"
+msgstr "တိုက်ရိုက်ဝင်ဒိုး"
+
+msgid "Ongoing attempts"
+msgstr "ဆက်လက်လုပ်ဆောင်နေသော ကြိုးပမ်းမှုများ"
+
+msgid "Completed attempts"
+msgstr "ပြီးစီးသော ကြိုးပမ်းမှုများ"
+
+msgid "Started"
+msgstr "စတင်ခဲ့သည်"
+
+msgid "Last activity"
+msgstr "နောက်ဆုံးလုပ်ဆောင်မှု"
+
+msgid "Could not load live results"
+msgstr "တိုက်ရိုက်ရလဒ်များကို တင်မရပါ"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "ဤလေ့ကျင့်ခန်းသည် သင်ယူမှုလမ်းကြောင်းတစ်ခုတွင် ပါဝင်သောကြောင့် ဖတ်ရန်သာဖြစ်သည်။"
+
+msgid "Select a question type to create a question."
+msgstr "မေးခွန်းတစ်ခုဖန်တီးရန် မေးခွန်းအမျိုးအစားတစ်ခုကို ရွေးချယ်ပါ။"
+
+msgid "Click to preview"
+msgstr "အစမ်းကြည့်ရန် နှိပ်ပါ"
+
+msgid "Hide preview"
+msgstr "အစမ်းကြည့်မှုကို ဖွက်ပါ"
+
+msgid "Shape"
+msgstr "ပုံသဏ္ဌာန်"
+
+msgid "Coordinates"
+msgstr "ကိုဩဒိနိတ်များ"
+
+msgid "Blanks"
+msgstr "ကွက်လပ်များ"
+
+msgid "Switchable blanks"
+msgstr "ပြောင်းလဲနိုင်သော ကွက်လပ်များ"
+
+msgid "Blank"
+msgstr "ကွက်လပ်"
+
+msgid "Input width"
+msgstr "ထည့်သွင်းမှုအကျယ်"
+
+msgid "Orientation"
+msgstr "ဦးတည်ချက်"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "လက်ရှိလေ့ကျင့်ခန်း တုံ့ပြန်မှုမုဒ်တွင် မရရှိနိုင်ပါ"
+
+msgid "Not available in the learning path creation flow"
+msgstr "သင်ယူမှုလမ်းကြောင်း ဖန်တီးမှုစီးကြောင်းတွင် မရရှိနိုင်ပါ"
+
+msgid "Delete question"
+msgstr "မေးခွန်းကို ဖျက်ပါ"
+
+msgid "Could not update exercise questions"
+msgstr "လေ့ကျင့်ခန်းမေးခွန်းများကို အပ်ဒိတ်မလုပ်နိုင်ပါ"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "လေ့ကျင့်ခန်းကို သင်ယူမှုလမ်းကြောင်းသို့ ထည့်သွင်းမရပါ"
+
+msgid "A valid exercise id is required."
+msgstr "မှန်ကန်သော လေ့ကျင့်ခန်း ID တစ်ခု လိုအပ်ပါသည်။"
+
+msgid "Could not load exercise questions"
+msgstr "လေ့ကျင့်ခန်းမေးခွန်းများကို တင်မရပါ"
+
+msgid "Delete selected attempts"
+msgstr "ရွေးချယ်ထားသော ကြိုးပမ်းမှုများကို ဖျက်ပါ"
+
+msgid "Before date"
+msgstr "ရက်စွဲမတိုင်မီ"
+
+msgid "Pending corrections"
+msgstr "စောင့်ဆိုင်းနေသော ပြင်ဆင်မှုများ"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "ဤလေ့ကျင့်ခန်းကို အဆင့်မှတ်တမ်းစာအုပ်မှ ပိတ်ထားပါသည်။ ကြိုးပမ်းမှုရှင်းလင်းမှုလုပ်ဆောင်ချက်များကို ပိတ်ထားပါသည်။"
+
+msgid "No attempts found"
+msgstr "ကြိုးပမ်းမှုများ မတွေ့ပါ"
+
+msgid "Review"
+msgstr "ပြန်လည်သုံးသပ်ပါ"
+
+msgid "Print/PDF"
+msgstr "ပရင့်/ပီဒီအက်ဖ်"
+
+msgid "Could not load exercise report"
+msgstr "လေ့ကျင့်ခန်းအစီရင်ခံစာကို တင်မရပါ"
+
+msgid "Select at least one attempt"
+msgstr "အနည်းဆုံး ကြိုးပမ်းမှုတစ်ခု ရွေးချယ်ပါ"
+
+msgid "Delete selected attempts?"
+msgstr "ရွေးချယ်ထားသော ကြိုးပမ်းမှုများကို ဖျက်မည်လား။"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "ပြန်လည်သုံးသပ်ထားသော ကြိုးပမ်းမှုရလဒ်အီးမေးလ်များကို ပို့မည်လား။"
+
+msgid "Could not send emails"
+msgstr "အီးမေးလ်များ ပို့မရပါ"
+
+msgid "Exercise result emails sent"
+msgstr "လေ့ကျင့်ခန်းရလဒ်အီးမေးလ်များ ပို့ပြီးပါပြီ"
+
+msgid "Skipped"
+msgstr "ကျော်သွားသည်"
+
+msgid "Close attempt?"
+msgstr "ကြိုးပမ်းမှုကို ပိတ်မည်လား။"
+
+msgid "Attempt closed"
+msgstr "ကြိုးပမ်းမှု ပိတ်ပြီးပါပြီ"
+
+msgid "Could not close attempt"
+msgstr "ကြိုးပမ်းမှုကို ပိတ်မရပါ"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "ဤကြိုးပမ်းမှုရလဒ်ကို သင်ယူသူထံ အီးမေးလ်ဖြင့် ပို့မည်လား။"
+
+msgid "Email sent"
+msgstr "အီးမေးလ် ပို့ပြီးပါပြီ"
+
+msgid "Could not send email"
+msgstr "အီးမေးလ် ပို့မရပါ"
+
+msgid "Attempt deleted"
+msgstr "ကြိုးပမ်းမှု ဖျက်ပြီးပါပြီ"
+
+msgid "Could not delete attempt"
+msgstr "ကြိုးပမ်းမှုကို ဖျက်မရပါ"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "ခေါင်းစဉ်နှင့် ဖော်ပြချက်ကော်လံများပါဝင်သော CSV ဖိုင်တစ်ခုကို ရွေးချယ်ပါ။"
+
+msgid "Manage categories used to classify questions."
+msgstr "မေးခွန်းများကို ခွဲခြားရန် အသုံးပြုသော အမျိုးအစားများကို စီမံပါ။"
+
+msgid "Manage categories used to classify exercises."
+msgstr "လေ့ကျင့်ခန်းများကို ခွဲခြားရန် အသုံးပြုသော အမျိုးအစားများကို စီမံပါ။"
+
+msgid "Could not load categories"
+msgstr "အမျိုးအစားများကို တင်မရပါ"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr ""
+
+msgid "Imported categories: %s."
+msgstr ""
+
+msgid "Could not import categories"
+msgstr ""
+
+msgid "Could not save category"
+msgstr ""
+
+msgid "Answer distribution"
+msgstr ""
+
+msgid "Configured answers"
+msgstr ""
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr ""
+
+msgid "No report by question data found"
+msgstr ""
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr ""
+
+msgid "No answer distribution found"
+msgstr ""
+
+msgid "Could not load report by question"
+msgstr ""
+
+msgid "Question settings"
+msgstr ""
+
+msgid "Leave empty or 0 for no time limit."
+msgstr ""
+
+msgid "Time limit in seconds"
+msgstr ""
+
+msgid "Attached questions"
+msgstr ""
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr ""
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr ""
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr ""
+
+msgid "Replace Office document"
+msgstr ""
+
+msgid "Current Office document"
+msgstr ""
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr ""
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr ""
+
+msgid "Global score"
+msgstr ""
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr ""
+
+msgid "Finish polygon"
+msgstr ""
+
+msgid "Calculated answer"
+msgstr ""
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr ""
+
+msgid "Lowest value"
+msgstr ""
+
+msgid "Highest value"
+msgstr ""
+
+msgid "Fill in blanks"
+msgstr ""
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr ""
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr ""
+
+msgid "Refresh answers"
+msgstr ""
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr ""
+
+msgid "Please enter at least two dropdown options."
+msgstr ""
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr ""
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr ""
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr ""
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr ""
+
+msgid "Hotspot combination"
+msgstr ""
+
+msgid "Add delineation"
+msgstr ""
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr ""
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr ""
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr ""
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr ""
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr ""
+
+msgid "Add content, media or reading context without adding score."
+msgstr ""
+
+msgid "Insert a page break without adding score."
+msgstr ""
+
+msgid "Could not save question"
+msgstr ""
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr ""
+
+msgid "Please select an Office document."
+msgstr "ရုံးသုံးစာရွက်စာတမ်းတစ်ခုကို ရွေးချယ်ပါ။"
+
+msgid "Please draw at least one hotspot."
+msgstr "အနည်းဆုံး တစ်ခုသော hotspot ကို ဆွဲပါ။"
+
+msgid "Please draw at least one delineation."
+msgstr "အနည်းဆုံး တစ်ခုသော သတ်မှတ်မှုကို ဆွဲပါ။"
+
+msgid "The fill in blanks text is required."
+msgstr "ကွက်လပ်ဖြည့်စာသားကို လိုအပ်ပါသည်။"
+
+msgid "At least one expected answer is required."
+msgstr "အနည်းဆုံး မျှော်မှန်းထားသော အဖြေတစ်ခု လိုအပ်ပါသည်။"
+
+msgid "At least two draggable items are required."
+msgstr "အနည်းဆုံး ဆွဲယူနိုင်သော အရာနှစ်ခု လိုအပ်ပါသည်။"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "ဆွဲယူနိုင်သော အရာတစ်ခုစီသည် မှန်ကန်သော ပစ်မှတ်တည်နေရာနှင့် ချိတ်ဆက်ရပါမည်။"
+
+msgid "At least two matching options are required."
+msgstr "အနည်းဆုံး ကိုက်ညီမှုရွေးချယ်စရာ နှစ်ခု လိုအပ်ပါသည်။"
+
+msgid "At least two matching pairs are required."
+msgstr "အနည်းဆုံး ကိုက်ညီမှုအတွဲ နှစ်ခု လိုအပ်ပါသည်။"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "ကိုက်ညီမှုအတွဲတစ်ခုစီသည် မှန်ကန်သော ရွေးချယ်စရာနှင့် ချိတ်ဆက်ရပါမည်။"
+
+msgid "At least two answers are required."
+msgstr "အနည်းဆုံး အဖြေ နှစ်ခု လိုအပ်ပါသည်။"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "မှန်/မှားအဖြေတစ်ခုစီတွင် မှန် သို့မဟုတ် မှားကို ရွေးချယ်ရပါမည်။"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "တစ်ခုတည်းသော အဖြေမေးခွန်းတွင် မှန်ကန်သော အဖြေ တစ်ခုတည်းသာ ရှိရပါမည်။"
+
+msgid "At least one correct answer is required."
+msgstr "အနည်းဆုံး မှန်ကန်သော အဖြေတစ်ခု လိုအပ်ပါသည်။"
+
+msgid "Could not load question"
+msgstr "မေးခွန်းကို တင်မရနိုင်ပါ"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "သင်တန်းတစ်ခုကို ရွေးချယ်ပြီး ကမ္ဘာလုံးဆိုင်ရာ လေ့ကျင့်ခန်း ရလဒ်အစီရင်ခံစာကို CSV အဖြစ် ထုတ်ယူပါ။"
+
+msgid "Back to reports catalog"
+msgstr "အစီရင်ခံစာ ကတ်တလောက်သို့ ပြန်သွားပါ"
+
+msgid "Could not load exercise global report"
+msgstr "လေ့ကျင့်ခန်း ကမ္ဘာလုံးဆိုင်ရာ အစီရင်ခံစာကို တင်မရနိုင်ပါ"
+
+msgid "Imported questions"
+msgstr "တင်သွင်းထားသော မေးခွန်းများ"
+
+msgid "Aiken content"
+msgstr "Aiken အကြောင်းအရာ"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken ထုတ်လုပ်ကိရိယာကို တင်မရနိုင်ပါ"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken အကြောင်းအရာကို ထုတ်လုပ်မရနိုင်ပါ"
+
+msgid "Could not import generated Aiken content"
+msgstr "ထုတ်လုပ်ထားသော Aiken အကြောင်းအရာကို တင်သွင်းမရနိုင်ပါ"
+
+msgid "Back to my courses"
+msgstr "ကျွန်ုပ်၏ သင်တန်းများသို့ ပြန်သွားပါ"
+
+msgid "Open report"
+msgstr "အစီရင်ခံစာ ဖွင့်ပါ"
+
+msgid "Questions with no automatic correction"
+msgstr "အလိုအလျောက် ပြင်ဆင်မှုမရှိသော မေးခွန်းများ"
+
+msgid "Could not load pending attempts"
+msgstr "ဆိုင်းငံ့ထားသော ကြိုးပမ်းမှုများကို တင်မရနိုင်ပါ"
+
+msgid "Skipped questions"
+msgstr "ကျော်လွှားထားသော မေးခွန်းများ"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken တင်သွင်းမှုသည် မေးခွန်းတစ်ခုက ရမှတ်ကို သတ်မှတ်မထားပါက ဤစုစုပေါင်းအလေးချိန်ကို တင်သွင်းထားသော မေးခွန်းများတွင် ခွဲဝေပေးပါသည်။"
+
+msgid "Import warnings"
+msgstr "တင်သွင်းမှု သတိပေးချက်များ"
+
+msgid "Could not import questions"
+msgstr "မေးခွန်းများကို တင်သွင်းမရနိုင်ပါ"
+
+msgid "No question statistics found"
+msgstr "မေးခွန်း စာရင်းအင်းများ မတွေ့ပါ"
+
+msgid "Could not load question statistics"
+msgstr "မေးခွန်း စာရင်းအင်းများကို တင်မရနိုင်ပါ"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "အောက်ပါ endpoint သို့ ညွှန်ပြခြင်းဖြင့် MCP client တစ်ခုကို တိုက်ရိုက်ချိတ်ဆက်နိုင်ပါသည်-"
+
+msgid "No applications are currently connected to your account."
+msgstr "လက်ရှိတွင် သင့်အကောင့်နှင့် ချိတ်ဆက်ထားသော အပလီကေးရှင်းများ မရှိပါ။"
+
+msgid "Connected on"
+msgstr "ချိတ်ဆက်ထားသော နေ့စွဲ"
+
+msgid "Last used"
+msgstr "နောက်ဆုံး အသုံးပြုခဲ့သည့် နေ့စွဲ"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s သည် သင့် Chamilo အကောင့်ကို ဆက်လက်အသုံးပြုနိုင်တော့မည် မဟုတ်ပါ။ ဆက်လက်လုပ်ဆောင်မည်လား။"
+
+msgid "Application revoked"
+msgstr "အပလီကေးရှင်း ရုပ်သိမ်းပြီးပါပြီ"
+
+msgid "Copied to clipboard"
+msgstr "ကလစ်ဘုတ်သို့ ကူးယူပြီးပါပြီ"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP endpoint ကို ကူးယူမရနိုင်ပါ"
+
+msgid "MCP endpoint"
+msgstr "MCP endpoint"
+
+msgid "API key"
+msgstr "API သော့"
+
+msgid "Last used at"
+msgstr "နောက်ဆုံး အသုံးပြုခဲ့သည့် နေ့စွဲ"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "ဤသော့ကို ယခု ကူးယူပါ။ ထပ်မံပြသမည် မဟုတ်ပါ။"
+
+msgid "Rotate API key"
+msgstr "API သော့ လှည့်ပါ"
+
+msgid "Revoke API key"
+msgstr "API သော့ ရုပ်သိမ်းပါ"
+
+msgid "Remote MCP connection"
+msgstr "အဝေးထိန်း MCP ချိတ်ဆက်မှု"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "အောက်ပါတန်ဖိုးများဖြင့် သင့် MCP client ကို ပြင်ဆင်ပါ-"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "လက်ရှိသော့သည် ချက်ချင်း အလုပ်လုပ်တော့မည် မဟုတ်ပါ။ ဆက်လက်လုပ်ဆောင်မည်လား။"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr ""
+
+msgid "MCP API key generated"
+msgstr ""
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr ""
+
+msgid "MCP API key revoked"
+msgstr ""
+
+msgid "Could not copy the API key"
+msgstr ""
+
+msgid "Project"
+msgstr ""
+
+msgid "Close old tickets"
+msgstr ""
+
+msgid "Close tickets older than seven days?"
+msgstr ""
+
+msgid "Assignment history"
+msgstr ""
+
+msgid "Translate with AI"
+msgstr ""
+
+msgid "Target language"
+msgstr ""
+
+msgid "Please select a provider"
+msgstr ""
+
+msgid "Generate translation"
+msgstr ""
+
+msgid "At least one terms and conditions section must contain text."
+msgstr ""
+
+msgid "No active target languages are available."
+msgstr ""
+
+msgid "Tutor"
+msgstr ""
+
+msgid "Access dates"
+msgstr ""
+
+msgid "Coach access dates"
+msgstr ""
+
+msgid "No sessions found"
+msgstr ""
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr ""
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr ""
+
+msgid "Users subscribed to this session"
+msgstr ""
+
+msgid "No available users found"
+msgstr ""
+
+msgid "Subscribe this user to the session?"
+msgstr ""
+
+msgid "Subscribe the selected users to the session?"
+msgstr ""
+
+msgid "General tutor planning"
+msgstr ""
+
+msgid "User is already registered by another tutor."
+msgstr ""
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr ""
+
+msgid "General tutor"
+msgstr ""
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr ""
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr ""
+
+msgid "Tutor name"
+msgstr ""
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr ""
+
+msgid "Access start date for tutors"
+msgstr ""
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr ""
+
+msgid "Access end date for tutors"
+msgstr ""
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr ""
+
+msgid "Tutor and student"
+msgstr ""
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr ""
+
+msgid "User is general tutor in some sessions"
+msgstr ""
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr ""
+
+msgid "Delete failed: invalid question id."
+msgstr ""
+
+msgid "Average number of sessions per general session tutor"
+msgstr ""
+
+msgid "No room"
+msgstr ""
+
+msgid "Import course teachers as course tutors in the session"
+msgstr ""
+
+msgid "Clean and update course tutors"
+msgstr ""
+
+msgid "Add me as tutor"
+msgstr ""
+
+msgid "Unable to add the survey to the learning path"
+msgstr ""
+
+msgid "Access dates for tutors"
+msgstr ""
+
+msgid "Tutor and group member"
+msgstr ""
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "သင်၏နေ့စဉ် AI တိုကင်ကန့်သတ်ချက်ကို ရောက်ရှိပြီးဖြစ်ပါသည်။ မနက်ဖြန်တွင် ထပ်မံကြိုးစားပါ။"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "သင်၏လစဉ် AI တိုကင်ကန့်သတ်ချက်ကို ရောက်ရှိပြီးဖြစ်ပါသည်။ နောက်လတွင် ထပ်မံကြိုးစားပါ။"
+
+msgid "This course code already exists, please choose another code."
+msgstr "ဤသင်တန်းကုဒ်သည် ရှိပြီးဖြစ်ပါသည်၊ အခြားကုဒ်တစ်ခုကို ရွေးချယ်ပါ။"
+
+msgid "This course title already exists, please choose another title."
+msgstr "ဤသင်တန်းခေါင်းစဉ်သည် ရှိပြီးဖြစ်ပါသည်၊ အခြားခေါင်းစဉ်တစ်ခုကို ရွေးချယ်ပါ။"
+
+msgid "This tool visibility cannot be changed"
+msgstr "ဤကိရိယာ၏ မြင်သာမှုကို ပြောင်းလဲ၍မရပါ"
+
+msgid "Invalid visibility"
+msgstr "မြင်သာမှု မမှန်ကန်ပါ"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "သင်သည် သင်တန်းဆရာများထဲမှ တစ်ဦးဖြစ်သောကြောင့် မိတ္တူတစ်စောင် ရရှိနေပါသည်"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "သင်သည် သင်တန်းဆရာဖြစ်သောကြောင့် မိတ္တူတစ်စောင် ရရှိနေပါသည်"
+
+msgid "Manual completion"
+msgstr "လက်စွဲပြီးစီးမှု"
+
+msgid "Send to tutors"
+msgstr "ဆရာများထံ ပို့ပါ"
+
+msgid "Lab title"
+msgstr "ဓာတ်ခွဲခန်း ခေါင်းစဉ်"
+
+msgid "Lab week"
+msgstr "ဓာတ်ခွဲခန်း အပတ်"
+
+msgid "Final exam access rule"
+msgstr "နောက်ဆုံးစာမေးပွဲ ဝင်ရောက်ခွင့် စည်းမျဉ်း"
+
+msgid "Course completion rule"
+msgstr "သင်တန်း ပြီးစီးမှု စည်းမျဉ်း"
+
+msgid "You have been invited to join a course"
+msgstr "သင်တန်းတစ်ခုသို့ ပါဝင်ရန် ဖိတ်ခေါ်ခံရပါသည်"
+
+msgid "No user has been found"
+msgstr "အသုံးပြုသူ မတွေ့ရှိပါ"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "ရွေးချယ်ထားသော အသုံးပြုသူကို ဤအကြောင်းအရာတွင် စာရင်းသွင်း၍မရပါ"
+
+msgid "No change has been made"
+msgstr "ပြောင်းလဲမှု မရှိပါ"
+
+msgid "Back to group list"
+msgstr "အုပ်စုစာရင်းသို့ ပြန်သွားပါ"
+
+msgid "Remove class link"
+msgstr "အတန်း ချိတ်ဆက်မှု ဖယ်ရှားပါ"
+
+msgid "Group settings"
+msgstr "အုပ်စု ဆက်တင်များ"
+
+msgid "Self-registration allowed"
+msgstr "ကိုယ်တိုင်မှတ်ပုံတင်ခွင့်ပြုထားသည်"
+
+msgid "Self-unregistration allowed"
+msgstr "ကိုယ်တိုင်မှတ်ပုံပယ်ဖျက်ခွင့်ပြုထားသည်"
+
+msgid "This group is linked to the class"
+msgstr "ဤအုပ်စုကို အတန်းနှင့် ချိတ်ဆက်ထားပါသည်"
+
+msgid "Create one or more empty course groups"
+msgstr "ဗလာသင်တန်းအုပ်စုတစ်ခု သို့မဟုတ် တစ်ခုထက်ပိုသော အုပ်စုများ ဖန်တီးပါ"
+
+msgid "Number of places"
+msgstr "နေရာအရေအတွက်"
+
+msgid "Base group"
+msgstr "အခြေခံအုပ်စု"
+
+msgid "Share"
+msgstr "မျှဝေပါ"
+
+msgid "Collaboration"
+msgstr "ပူးပေါင်းဆောင်ရွက်မှု"
+
+msgid "The group title is required."
+msgstr "အုပ်စုခေါင်းစဉ် လိုအပ်ပါသည်။"
+
+msgid "Back to group area"
+msgstr "အုပ်စုဧရိယာသို့ ပြန်သွားပါ"
+
+msgid "Members are managed by the linked class"
+msgstr "အဖွဲ့ဝင်များကို ချိတ်ဆက်ထားသော အတန်းမှ စီမံခန့်ခွဲပါသည်"
+
+msgid "%s groups selected"
+msgstr "%s အုပ်စုများ ရွေးချယ်ထားသည်"
+
+msgid "Fill selected groups"
+msgstr "ရွေးချယ်ထားသော အုပ်စုများကို ဖြည့်ပါ"
+
+msgid "Empty selected groups"
+msgstr "ရွေးချယ်ထားသော အုပ်စုများကို ရှင်းပါ"
+
+msgid "Fill group"
+msgstr "အုပ်စု ဖြည့်ပါ"
+
+msgid "Empty group"
+msgstr "အုပ်စု ရှင်းပါ"
+
+msgid "Groups per user"
+msgstr "အသုံးပြုသူတစ်ဦးလျှင် အုပ်စုအရေအတွက်"
+
+msgid "No tutors"
+msgstr "ဆရာများ မရှိပါ"
+
+msgid "No users"
+msgstr "အသုံးပြုသူများ မရှိပါ"
+

@@ -37649,3 +37649,1299 @@ msgstr "השתמש ב-0 כדי לשמור על כל השאלות הזמינות.
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "השתמש בשדות אלה כדי לסווג את התרגיל בנפרד מאפשרויות התצוגה שלו."
 
+msgid "Invite by email"
+msgstr "הזמן בדוא\"ל"
+
+msgid "Invitation has been sent"
+msgstr "ההזמנה נשלחה"
+
+msgid "Sent on"
+msgstr "נשלח ב"
+
+msgid "Accepted on"
+msgstr "התקבל ב"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "קורס זה פתוח במסגרת סשן. שליחת הזמנה כאן תרשום את הנמען לכל הסשן %s, ולא רק לקורס זה."
+
+msgid "Revoke"
+msgstr "בטל"
+
+msgid "Revoked"
+msgstr "בוטל"
+
+msgid "Invitation has been revoked"
+msgstr "ההזמנה בוטלה"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "האם אתה בטוח שברצונך לבטל את ההזמנה שנשלחה ל-%s?"
+
+msgid "No default room"
+msgstr "אין חדר ברירת מחדל"
+
+msgid "Floor"
+msgstr "קומה"
+
+msgid "Capacity"
+msgstr "קיבולת"
+
+msgid "Use attendance default room"
+msgstr "השתמש בחדר ברירת המחדל לנוכחות"
+
+msgid "Floor number"
+msgstr "מספר קומה"
+
+msgid "Copy to students"
+msgstr "העתק לתלמידים"
+
+msgid "Generate a quick test on this topic"
+msgstr "צור מבחן מהיר בנושא זה"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "תוכן המסמך שנשמר יישלח למודל AI לעיבוד."
+
+msgid "MCP API key"
+msgstr "מפתח API של MCP"
+
+msgid "Authorized applications"
+msgstr "יישומים מורשים"
+
+msgid "Your session is about to expire"
+msgstr "הסשן שלך עומד לפוג"
+
+msgid "Do you want to continue your session?"
+msgstr "האם ברצונך להמשיך את הסשן?"
+
+msgid "Stay connected"
+msgstr "הישאר מחובר"
+
+msgid "You will be signed out in %s seconds."
+msgstr "תנותק בעוד %s שניות."
+
+msgid "No descriptions available yet."
+msgstr "אין תיאורים זמינים עדיין."
+
+msgid "%s users selected"
+msgstr "%s משתמשים נבחרו"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "המשתמשים שנבחרו נרשמו לקורס"
+
+msgid "Import teachers"
+msgstr "ייבא מורים"
+
+msgid "Import learners"
+msgstr "ייבא לומדים"
+
+msgid "Select CSV file"
+msgstr "בחר קובץ CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "לא ניתן לרשום חלק מהמשתמשים"
+
+msgid "Browse available classes"
+msgstr "עיין בכיתות זמינות"
+
+msgid "Back to linked classes"
+msgstr "חזור לכיתות המקושרות"
+
+msgid "No classes are currently linked to this course."
+msgstr "אין כיתות המקושרות כעת לקורס זה."
+
+msgid "No available classes were found for this course."
+msgstr "לא נמצאו כיתות זמינות לקורס זה."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "האם אתה בטוח שברצונך לבטל את הרישום של המשתמשים שנבחרו?"
+
+msgid "Learning path access"
+msgstr "גישה לנתיב הלמידה"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "רק משתמשים וקבוצות שנבחרו יכולים לגשת לנתיב הלמידה הזה. נהל אותם לאחר השמירה."
+
+msgid "All current and future course users can access this learning path."
+msgstr "כל משתמשי הקורס הנוכחיים והעתידיים יכולים לגשת לנתיב הלמידה הזה."
+
+msgid "All course users"
+msgstr "כל משתמשי הקורס"
+
+msgid "Selected users and groups"
+msgstr "משתמשים וקבוצות שנבחרו"
+
+msgid "No access"
+msgstr "אין גישה"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "רק משתמשים וקבוצות שנוספו כאן יכולים לגשת לנתיב הלמידה הזה."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "מספר השאלות מוגבל ל-%s לכל היותר"
+
+msgid "Open exercise player"
+msgstr "פתח את נגן התרגילים"
+
+msgid "The score is hidden for this exercise."
+msgstr "הציון מוסתר עבור תרגיל זה."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "התיקונים מוסתרים בהתאם להגדרות תוצאות התרגיל."
+
+msgid "Progressive adaptive result"
+msgstr "תוצאה אדפטיבית הדרגתית"
+
+msgid "Achieved level"
+msgstr "רמת הישג"
+
+msgid "Correction history"
+msgstr "היסטוריית תיקונים"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "היסטוריית התיקונים הידניים שבוצעו עבור ניסיון זה."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "תרגיל זה משתמש במצב תוצאה של רדאר/קורי עכביש. התרשים אינו זמין בדף זה."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "פרטי השאלה מוסתרים בהתאם להגדרות תוצאות התרגיל."
+
+msgid "Media question"
+msgstr "שאלת מדיה"
+
+msgid "Pending correction"
+msgstr "ממתין לתיקון"
+
+msgid "No answer"
+msgstr "אין תשובה"
+
+msgid "Blank %s"
+msgstr "ריק %s"
+
+msgid "Your order"
+msgstr "הסדר שלך"
+
+msgid "Correct order"
+msgstr "הסדר הנכון"
+
+msgid "Delineation review"
+msgstr "סקירת תיחום"
+
+msgid "Learner clicks"
+msgstr "לחיצות הלומד"
+
+msgid "Question image"
+msgstr "תמונת השאלה"
+
+msgid "No hotspot image available"
+msgstr "אין תמונת נקודה חמה זמינה"
+
+msgid "Learner delineation"
+msgstr "תיחום הלומד"
+
+msgid "Expected delineation"
+msgstr "תיחום צפוי"
+
+msgid "Expected zones"
+msgstr "אזורים צפויים"
+
+msgid "Zone"
+msgstr "אזור"
+
+msgid "Learner annotation"
+msgstr "הערה של הלומד"
+
+msgid "No annotation image available"
+msgstr "אין תמונת הערה זמינה"
+
+msgid "This answer is pending teacher correction."
+msgstr "תשובה זו ממתינה לתיקון המורה."
+
+msgid "Teacher comment"
+msgstr "הערת המורה"
+
+msgid "Teacher correction"
+msgstr "תיקון המורה"
+
+msgid "Save correction"
+msgstr "שמור תיקון"
+
+msgid "Learner audio"
+msgstr "שמע הלומד"
+
+msgid "Download audio"
+msgstr "הורד שמע"
+
+msgid "No uploaded audio"
+msgstr "אין שמע שהועלה"
+
+msgid "Learner Office document"
+msgstr "מסמך Office של הלומד"
+
+msgid "Learner file"
+msgstr "קובץ הלומד"
+
+msgid "Download Office document"
+msgstr "הורד מסמך Office"
+
+msgid "No submitted document"
+msgstr "לא הוגש מסמך"
+
+msgid "No uploaded file"
+msgstr "לא הועלה קובץ"
+
+msgid "Content item"
+msgstr "פריט תוכן"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "לא ניתן לסקור את סוג השאלה הזה בדף זה."
+
+msgid "Exercise completed"
+msgstr "התרגיל הושלם"
+
+msgid "Could not start the attempt"
+msgstr "לא ניתן להתחיל את הניסיון"
+
+msgid "Invalid exercise attempt"
+msgstr "ניסיון תרגיל לא תקין"
+
+msgid "Could not load exercise result"
+msgstr "לא ניתן לטעון את תוצאת התרגיל"
+
+msgid "Could not load AI providers"
+msgstr "לא ניתן לטעון ספקי AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "לא ניתן ליצור הצעת AI"
+
+msgid "Correction saved"
+msgstr "התיקון נשמר"
+
+msgid "Could not save correction"
+msgstr "לא ניתן לשמור את התיקון"
+
+msgid "Create exercise"
+msgstr "צור תרגיל"
+
+msgid "Exercise categories"
+msgstr "קטגוריות תרגילים"
+
+msgid "Question categories"
+msgstr "קטגוריות שאלות"
+
+msgid "Search by exercise title or description."
+msgstr "חפש לפי כותרת או תיאור התרגיל."
+
+msgid "Search exercises"
+msgstr "חפש תרגילים"
+
+msgid "No exercises found"
+msgstr "לא נמצאו תרגילים"
+
+msgid "Open exercise"
+msgstr "פתח תרגיל"
+
+msgid "Disable autolaunch"
+msgstr "בטל הפעלה אוטומטית"
+
+msgid "Enable autolaunch"
+msgstr "הפעל הפעלה אוטומטית"
+
+msgid "Export QTI2"
+msgstr "ייצא QTI2"
+
+msgid "Bulk actions"
+msgstr "פעולות מרובות"
+
+msgid "Selected exercises"
+msgstr "תרגילים נבחרים"
+
+msgid "No exercises selected"
+msgstr "לא נבחרו תרגילים"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "האם אתה בטוח שברצונך להחיל פעולה זו על התרגילים הנבחרים?"
+
+msgid "Bulk action completed"
+msgstr "פעולת מרובים הושלמה"
+
+msgid "Could not update exercises"
+msgstr "לא ניתן לעדכן תרגילים"
+
+msgid "Could not update exercise"
+msgstr "לא ניתן לעדכן תרגיל"
+
+msgid "Copy exercise"
+msgstr "העתק תרגיל"
+
+msgid "Delete exercise"
+msgstr "מחק תרגיל"
+
+msgid "Could not load exercises"
+msgstr "לא ניתן לטעון תרגילים"
+
+msgid "No limit"
+msgstr "ללא הגבלה"
+
+msgid "Add selected questions to the test"
+msgstr "הוסף את השאלות הנבחרות למבחן"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "שאלה זו משמשת במבחן פעיל ולא ניתן לערוך אותה כאן."
+
+msgid "This question cannot be edited here."
+msgstr "לא ניתן לערוך שאלה זו כאן."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "שאלה זו משמשת במבחן פעיל ולא ניתן למחוק אותה כאן."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "לא ניתן למחוק שאלה זו מכיוון שהגישה שלך מוגבלת על ידי הגדרות הפלטפורמה."
+
+msgid "Already in test"
+msgstr "כבר במבחן"
+
+msgid "Select at least one question."
+msgstr "בחר לפחות שאלה אחת."
+
+msgid "Question bank updated"
+msgstr "מאגר השאלות עודכן"
+
+msgid "Could not update the question bank"
+msgstr "לא ניתן לעדכן את מאגר השאלות"
+
+msgid "Could not load the question bank"
+msgstr "לא ניתן לטעון את מאגר השאלות"
+
+msgid "Total score"
+msgstr "ציון כולל"
+
+msgid "Starting"
+msgstr "מתחיל"
+
+msgid "Attempt history"
+msgstr "היסטוריית ניסיונות"
+
+msgid "No attempts yet"
+msgstr "אין ניסיונות עדיין"
+
+msgid "Invalid exercise"
+msgstr "תרגיל לא תקין"
+
+msgid "Could not load exercise overview"
+msgstr "לא ניתן לטעון סקירת תרגיל"
+
+msgid "Open test"
+msgstr "פתח מבחן"
+
+msgid "Random answers"
+msgstr "תשובות אקראיות"
+
+msgid "Prevent moving backwards"
+msgstr "מנע חזרה אחורה"
+
+msgid "Previous button hidden"
+msgstr "כפתור הקודם מוסתר"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "תרגיל זה משתמש באפשרויות הדורשות נגן מבחן אחר."
+
+msgid "Continue test"
+msgstr "המשך מבחן"
+
+msgid "Attempt started"
+msgstr "הניסיון התחיל"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "תצוגת מורה אינה יוצרת ניסיון מעקב."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "התחל או המשך ניסיון תרגיל. ניתן לשמור תשובות טיוטה לפני שליחה סופית."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "הגעת למגבלת הזמן. מסיים את הניסיון."
+
+msgid "Question time reached. Saving your answer."
+msgstr "הגעת לזמן השאלה. שומר את תשובתך."
+
+msgid "Finishing"
+msgstr "מסיים"
+
+msgid "Draft saved"
+msgstr "טיוטה נשמרה"
+
+msgid "Statement"
+msgstr "הצהרה"
+
+msgid "Drop each option on the matching answer"
+msgstr "גרור כל אפשרות לתשובה המתאימה"
+
+msgid "Clear match"
+msgstr "נקה התאמה"
+
+msgid "Click to place the selected option here"
+msgstr "לחץ כדי למקם כאן את האפשרות שנבחרה"
+
+msgid "Select an option, then click here"
+msgstr "בחר אפשרות, ואז לחץ כאן"
+
+msgid "Already matched"
+msgstr "כבר הותאם"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "ניתן לגרור אפשרות לתשובה, או לבחור אפשרות ואז ללחוץ על תיבת יעד."
+
+msgid "Put the items in the correct order."
+msgstr "סדר את הפריטים בסדר הנכון."
+
+msgid "Move left"
+msgstr "הזז שמאלה"
+
+msgid "Move right"
+msgstr "הזז ימינה"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "ניתן לגרור פריטים שמאלה או ימינה, או להשתמש בכפתורי ההזזה לשינוי הסדר."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "ניתן לגרור פריטים או להשתמש בכפתורי ההזזה לשינוי הסדר."
+
+msgid "Or upload an audio file"
+msgstr "או העלה קובץ שמע"
+
+msgid "Selected audio"
+msgstr "שמע נבחר"
+
+msgid "Uploaded audio"
+msgstr "שמע שהועלה"
+
+msgid "Office document"
+msgstr "מסמך Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "השלם את המסמך בעורך למטה. הקובץ יצורף לניסיון זה לתיקון על ידי המורה."
+
+msgid "Reload Office editor"
+msgstr "טען מחדש עורך Office"
+
+msgid "Prepare Office document"
+msgstr "הכן מסמך Office"
+
+msgid "Open in new tab"
+msgstr "פתח בכרטיסייה חדשה"
+
+msgid "Preparing Office document"
+msgstr "מכין מסמך Office"
+
+msgid "Submitted document"
+msgstr "מסמך שהוגש"
+
+msgid "Annotation tools"
+msgstr "כלי הערות"
+
+msgid "Text to place"
+msgstr "טקסט להצבה"
+
+msgid "Click the image to place the text annotation."
+msgstr "לחץ על התמונה כדי למקם את הערת הטקסט."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "לחץ על התמונה כדי להוסיף נקודות מסלול. השתמש ב'התחל מסלול חדש' להפרדת מסלולים."
+
+msgid "Start new path"
+msgstr "התחל מסלול חדש"
+
+msgid "Current annotations"
+msgstr "הערות נוכחיות"
+
+msgid "Remove point"
+msgstr "הסר נקודה"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "לחץ על התמונה כדי לצייר את מצולע התיחום."
+
+msgid "Click a marker to remove it."
+msgstr "לחץ על סמן כדי להסירו."
+
+msgid "Placed"
+msgstr "הוצב"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "בחר תשובה, ואז לחץ על התמונה כדי לסמן אותה."
+
+msgid "Reading speed"
+msgstr "מהירות קריאה"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "סוג שאלה זה אינו ניתן להצגה בנגן זה."
+
+msgid "Save draft"
+msgstr "שמור טיוטה"
+
+msgid "I confirm that my answers were saved."
+msgstr "אני מאשר שהתשובות שלי נשמרו."
+
+msgid "Finish test"
+msgstr "סיים מבחן"
+
+msgid "Attempt finished"
+msgstr "ניסיון הסתיים"
+
+msgid "Question category"
+msgstr "קטגוריית שאלה"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "סיימת את השאלות הקשורות לקטגוריית שאלה זו, זו ההזדמנות האחרונה שלך לחזור ולתקן שאלות אלו."
+
+msgid "Question time left"
+msgstr "זמן שאלה שנותר"
+
+msgid "Time left"
+msgstr "זמן שנותר"
+
+msgid "Current attempt"
+msgstr "ניסיון נוכחי"
+
+msgid "Could not save draft answer"
+msgstr "לא ניתן לשמור טיוטת תשובה"
+
+msgid "Could not load exercise"
+msgstr "לא ניתן לטעון את התרגיל"
+
+msgid "Draft answer saved"
+msgstr "טיוטת תשובה נשמרה"
+
+msgid "Could not finish the attempt"
+msgstr "לא ניתן לסיים את הניסיון"
+
+msgid "Could not prepare Office document"
+msgstr "לא ניתן להכין מסמך Office"
+
+msgid "Back to learner score"
+msgstr "חזרה לציון הלומד"
+
+msgid "Disable auto refresh"
+msgstr "בטל רענון אוטומטי"
+
+msgid "Enable auto refresh"
+msgstr "אפשר רענון אוטומטי"
+
+msgid "Live window"
+msgstr "חלון חי"
+
+msgid "Ongoing attempts"
+msgstr "ניסיונות פעילים"
+
+msgid "Completed attempts"
+msgstr "ניסיונות שהושלמו"
+
+msgid "Started"
+msgstr "התחיל"
+
+msgid "Last activity"
+msgstr "פעילות אחרונה"
+
+msgid "Could not load live results"
+msgstr "לא ניתן לטעון תוצאות חיות"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "תרגיל זה לקריאה בלבד מכיוון שהוא כלול בנתיב למידה."
+
+msgid "Select a question type to create a question."
+msgstr "בחר סוג שאלה ליצירת שאלה."
+
+msgid "Click to preview"
+msgstr "לחץ לתצוגה מקדימה"
+
+msgid "Hide preview"
+msgstr "הסתר תצוגה מקדימה"
+
+msgid "Shape"
+msgstr "צורה"
+
+msgid "Coordinates"
+msgstr "קואורדינטות"
+
+msgid "Blanks"
+msgstr "חללים"
+
+msgid "Switchable blanks"
+msgstr "חללים ניתנים להחלפה"
+
+msgid "Blank"
+msgstr "חלל"
+
+msgid "Input width"
+msgstr "רוחב קלט"
+
+msgid "Orientation"
+msgstr "כיוון"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "לא זמין במצב המשוב הנוכחי של התרגיל"
+
+msgid "Not available in the learning path creation flow"
+msgstr "לא זמין בתהליך יצירת נתיב הלמידה"
+
+msgid "Delete question"
+msgstr "מחק שאלה"
+
+msgid "Could not update exercise questions"
+msgstr "לא ניתן לעדכן את שאלות התרגיל"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "לא ניתן להוסיף את התרגיל לנתיב הלמידה"
+
+msgid "A valid exercise id is required."
+msgstr "נדרש מזהה תרגיל תקין."
+
+msgid "Could not load exercise questions"
+msgstr "לא ניתן לטעון את שאלות התרגיל"
+
+msgid "Delete selected attempts"
+msgstr "מחק ניסיונות נבחרים"
+
+msgid "Before date"
+msgstr "לפני תאריך"
+
+msgid "Pending corrections"
+msgstr "תיקונים ממתינים"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "תרגיל זה נעול על ידי ספר הציונים. פעולות ניקוי ניסיונות מושבתות."
+
+msgid "No attempts found"
+msgstr "לא נמצאו ניסיונות"
+
+msgid "Review"
+msgstr "סקירה"
+
+msgid "Print/PDF"
+msgstr "הדפס/PDF"
+
+msgid "Could not load exercise report"
+msgstr "לא ניתן לטעון דוח תרגיל"
+
+msgid "Select at least one attempt"
+msgstr "בחר ניסיון אחד לפחות"
+
+msgid "Delete selected attempts?"
+msgstr "למחוק את הניסיונות הנבחרים?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "לשלוח הודעות דוא\"ל של תוצאות ניסיון שנבדקו?"
+
+msgid "Could not send emails"
+msgstr "לא ניתן לשלוח הודעות דוא\"ל"
+
+msgid "Exercise result emails sent"
+msgstr "הודעות דוא\"ל של תוצאות תרגיל נשלחו"
+
+msgid "Skipped"
+msgstr "דילג"
+
+msgid "Close attempt?"
+msgstr "לסגור ניסיון?"
+
+msgid "Attempt closed"
+msgstr "ניסיון נסגר"
+
+msgid "Could not close attempt"
+msgstr "לא ניתן לסגור ניסיון"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "לשלוח את תוצאת ניסיון זה בדוא\"ל ללומד?"
+
+msgid "Email sent"
+msgstr "הודעת דוא\"ל נשלחה"
+
+msgid "Could not send email"
+msgstr "לא ניתן לשלוח דוא\"ל"
+
+msgid "Attempt deleted"
+msgstr "הניסיון נמחק"
+
+msgid "Could not delete attempt"
+msgstr "לא ניתן למחוק את הניסיון"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "בחר קובץ CSV המכיל עמודות כותרת ותיאור."
+
+msgid "Manage categories used to classify questions."
+msgstr "ניהול קטגוריות המשמשות לסיווג שאלות."
+
+msgid "Manage categories used to classify exercises."
+msgstr "ניהול קטגוריות המשמשות לסיווג תרגילים."
+
+msgid "Could not load categories"
+msgstr "לא ניתן לטעון קטגוריות"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "קטגוריות שיובאו: %s. שורות שדולגו: %s."
+
+msgid "Imported categories: %s."
+msgstr "קטגוריות שיובאו: %s."
+
+msgid "Could not import categories"
+msgstr "לא ניתן לייבא קטגוריות"
+
+msgid "Could not save category"
+msgstr "לא ניתן לשמור קטגוריה"
+
+msgid "Answer distribution"
+msgstr "התפלגות תשובות"
+
+msgid "Configured answers"
+msgstr "תשובות מוגדרות"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "ספירת תשובות מפורטת עבור חלק מסוגי השאלות אינה זמינה עדיין בדוח המועבר."
+
+msgid "No report by question data found"
+msgstr "לא נמצאו נתוני דוח לפי שאלה"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "ספירת תשובות מפורטת עבור סוג שאלה זה אינה זמינה עדיין בדוח המועבר."
+
+msgid "No answer distribution found"
+msgstr "לא נמצאה התפלגות תשובות"
+
+msgid "Could not load report by question"
+msgstr "לא ניתן לטעון דוח לפי שאלה"
+
+msgid "Question settings"
+msgstr "הגדרות שאלה"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "השאר ריק או 0 ללא מגבלת זמן."
+
+msgid "Time limit in seconds"
+msgstr "מגבלת זמן בשניות"
+
+msgid "Attached questions"
+msgstr "שאלות מצורפות"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "רק שאלות המצורפות לשאלת מדיה זו בתוך התרגיל הנוכחי מוצגות כאן."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "אין שאלות המצורפות לשאלת מדיה זו בתרגיל הנוכחי."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "העלה את תבנית מסמך Office שהלומדים יערכו באמצעות OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "החלף מסמך Office"
+
+msgid "Current Office document"
+msgstr "מסמך Office נוכחי"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "שאלה זו מתוקנת ידנית לאחר שהלומד מגיש את המסמך הערוך."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "הציון הכולל מחושב כסכום הציונים של נקודות החום."
+
+msgid "Global score"
+msgstr "ציון גלובלי"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "בחר שורת נקודת חום, בחר את צורתה, ואז צייר על התמונה. עבור מצולעים, לחץ על כל נקודה וסיים את המצולע, או לחץ פעמיים לסיום."
+
+msgid "Finish polygon"
+msgstr "סיים מצולע"
+
+msgid "Calculated answer"
+msgstr "תשובה מחושבת"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "הקלד את הטקסט שלך למטה והשתמש בסוגריים מרובעים [...] להגדרת מקום אחד או יותר."
+
+msgid "Lowest value"
+msgstr "ערך נמוך ביותר"
+
+msgid "Highest value"
+msgstr "ערך גבוה ביותר"
+
+msgid "Fill in blanks"
+msgstr "מלא חסרים"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "השתמש בסמנים שנבחרו להגדרת חסרים. דוגמה: בירת פרו היא [לימה]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "הזן את אפשרויות התפריט הנשלף, תשובה אחת בכל שורה. לאחר מכן סמן את התשובות הצפויות למטה, כמו בכלי הישן."
+
+msgid "Refresh answers"
+msgstr "רענן תשובות"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "שאלת שילוב תפריט נשלף זו משתמשת בציון גלובלי אחד, כמו בגרסה הישנה."
+
+msgid "Please enter at least two dropdown options."
+msgstr "הזן לפחות שתי אפשרויות תפריט נשלף."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "צור תחילה אפשרויות יעד, ואז קשר כל פריט לאפשרות הנכונה."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "שאלת שילוב התאמה זו משתמשת בציון גלובלי אחד, כמו בגרסה הישנה."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "צור את השלבים ובחר את המיקום הצפוי לכל אחד, כמו ב-Dragable הישן."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "הלומדים יבחרו נכון או לא נכון ולאחר מכן יבחרו את מידת הוודאות שלהם במהלך הניסיון. העורך שומר את אותם ציונים נכון/לא נכון ורמות ודאות כמו בגרסה הישנה."
+
+msgid "Hotspot combination"
+msgstr "שילוב נקודות חום"
+
+msgid "Add delineation"
+msgstr "הוסף תיחום"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "לשאלת מסמך Office זו אין אפשרויות תשובה. הציון שלה נקבע במהלך התיקון/סקירת התוצאות."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "לשאלת העלאה זו אין אפשרויות תשובה. הניקוד נקבע במהלך הבדיקה/סקירת התוצאות."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "לשאלת הביטוי בעל פה זו אין אפשרויות תשובה. הניקוד נקבע במהלך הבדיקה/סקירת התוצאות."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "לשאלה הפתוחה זו אין אפשרויות תשובה. הניקוד נקבע במהלך הבדיקה/סקירת התוצאות."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "הוסף טקסט קריאה עם הגדרות מהירות גלילה."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "הוסף תוכן, מדיה או הקשר קריאה ללא הוספת ניקוד."
+
+msgid "Insert a page break without adding score."
+msgstr "הכנס מעבר עמוד ללא הוספת ניקוד."
+
+msgid "Could not save question"
+msgstr "לא ניתן לשמור את השאלה"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "רק מסמכי DOC, DOCX, XLS או XLSX מותרים."
+
+msgid "Please select an Office document."
+msgstr "אנא בחר מסמך Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "אנא צייר לפחות אזור חם אחד."
+
+msgid "Please draw at least one delineation."
+msgstr "אנא צייר לפחות תיחום אחד."
+
+msgid "The fill in blanks text is required."
+msgstr "נדרש טקסט למילוי החסר."
+
+msgid "At least one expected answer is required."
+msgstr "נדרשת לפחות תשובה צפויה אחת."
+
+msgid "At least two draggable items are required."
+msgstr "נדרשים לפחות שני פריטים לגרירה."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "כל פריט לגרירה חייב להיות מקושר למיקום יעד תקין."
+
+msgid "At least two matching options are required."
+msgstr "נדרשות לפחות שתי אפשרויות התאמה."
+
+msgid "At least two matching pairs are required."
+msgstr "נדרשות לפחות שתי זוגות התאמה."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "כל זוג התאמה חייב להיות מקושר לאפשרות תקינה."
+
+msgid "At least two answers are required."
+msgstr "נדרשות לפחות שתי תשובות."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "לכל תשובת נכון/לא נכון חייב להיות נכון או לא נכון נבחר."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "שאלת תשובה ייחודית חייבת להכיל בדיוק תשובה נכונה אחת."
+
+msgid "At least one correct answer is required."
+msgstr "נדרשת לפחות תשובה נכונה אחת."
+
+msgid "Could not load question"
+msgstr "לא ניתן לטעון את השאלה"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "בחר קורס וייצא את דוח תוצאות התרגול הגלובלי כ-CSV."
+
+msgid "Back to reports catalog"
+msgstr "חזור לקטלוג הדוחות"
+
+msgid "Could not load exercise global report"
+msgstr "לא ניתן לטעון את דוח התרגול הגלובלי"
+
+msgid "Imported questions"
+msgstr "שאלות מיובאות"
+
+msgid "Aiken content"
+msgstr "תוכן Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "לא ניתן לטעון את מחולל ה-AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "לא ניתן ליצור תוכן Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "לא ניתן לייבא תוכן Aiken שנוצר"
+
+msgid "Back to my courses"
+msgstr "חזור לקורסים שלי"
+
+msgid "Open report"
+msgstr "פתח דוח"
+
+msgid "Questions with no automatic correction"
+msgstr "שאלות ללא תיקון אוטומטי"
+
+msgid "Could not load pending attempts"
+msgstr "לא ניתן לטעון ניסיונות ממתינים"
+
+msgid "Skipped questions"
+msgstr "שאלות שדולגו"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "ייבוא Aiken מפזר את המשקל הכולל הזה בין השאלות המיובאות אלא אם כן שאלה מגדירה SCORE."
+
+msgid "Import warnings"
+msgstr "אזהרות ייבוא"
+
+msgid "Could not import questions"
+msgstr "לא ניתן לייבא שאלות"
+
+msgid "No question statistics found"
+msgstr "לא נמצאו סטטיסטיקות שאלות"
+
+msgid "Could not load question statistics"
+msgstr "לא ניתן לטעון סטטיסטיקות שאלות"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "ניתן גם לחבר לקוח MCP ישירות על ידי הפנייתו לנקודת הקצה הבאה:"
+
+msgid "No applications are currently connected to your account."
+msgstr "אין יישומים המחוברים כעת לחשבונך."
+
+msgid "Connected on"
+msgstr "התחבר ב"
+
+msgid "Last used"
+msgstr "שימוש אחרון"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s לא יוכל עוד לגשת לחשבון Chamilo שלך. להמשיך?"
+
+msgid "Application revoked"
+msgstr "היישום בוטל"
+
+msgid "Copied to clipboard"
+msgstr "הועתק ללוח"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "לא ניתן להעתיק את נקודת הקצה של MCP"
+
+msgid "MCP endpoint"
+msgstr "נקודת קצה MCP"
+
+msgid "API key"
+msgstr "מפתח API"
+
+msgid "Last used at"
+msgstr "שימוש אחרון ב"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "העתק מפתח זה כעת. הוא לא יוצג שוב."
+
+msgid "Rotate API key"
+msgstr "סובב מפתח API"
+
+msgid "Revoke API key"
+msgstr "בטל מפתח API"
+
+msgid "Remote MCP connection"
+msgstr "חיבור MCP מרוחק"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "הגדר את לקוח ה-MCP שלך עם הערכים הבאים:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "המפתח הנוכחי יפסיק לפעול מיד. להמשיך?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "מפתח API אישי חדש של MCP ייווצר. להמשיך?"
+
+msgid "MCP API key generated"
+msgstr "מפתח API של MCP נוצר"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "לקוחות MCP מחוברים המשתמשים במפתח זה יפסיקו לפעול מיד. להמשיך?"
+
+msgid "MCP API key revoked"
+msgstr "מפתח API של MCP בוטל"
+
+msgid "Could not copy the API key"
+msgstr "לא ניתן להעתיק את מפתח ה-API"
+
+msgid "Project"
+msgstr "פרויקט"
+
+msgid "Close old tickets"
+msgstr "סגור פניות ישנות"
+
+msgid "Close tickets older than seven days?"
+msgstr "לסגור פניות בנות יותר משבעה ימים?"
+
+msgid "Assignment history"
+msgstr "היסטוריית משימות"
+
+msgid "Translate with AI"
+msgstr "תרגם באמצעות AI"
+
+msgid "Target language"
+msgstr "שפת יעד"
+
+msgid "Please select a provider"
+msgstr "אנא בחר ספק"
+
+msgid "Generate translation"
+msgstr "צור תרגום"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "לפחות סעיף אחד של תנאים והגבלות חייב להכיל טקסט."
+
+msgid "No active target languages are available."
+msgstr "אין שפות יעד פעילות זמינות."
+
+msgid "Tutor"
+msgstr "מדריך"
+
+msgid "Access dates"
+msgstr "תאריכי גישה"
+
+msgid "Coach access dates"
+msgstr "תאריכי גישה למדריך"
+
+msgid "No sessions found"
+msgstr "לא נמצאו מפגשים"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "בחר את הקורסים שהמשתמש לא יוכל לגשת אליהם במפגש זה."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "לא ניתן לחסום משתמש מכל הקורסים במפגש. בטל את הרישום של המשתמש במקום."
+
+msgid "Users subscribed to this session"
+msgstr "משתמשים הרשומים למפגש זה"
+
+msgid "No available users found"
+msgstr "לא נמצאו משתמשים זמינים"
+
+msgid "Subscribe this user to the session?"
+msgstr "לרשום משתמש זה למפגש?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "לרשום את המשתמשים הנבחרים למפגש?"
+
+msgid "General tutor planning"
+msgstr "תכנון מדריך כללי"
+
+msgid "User is already registered by another tutor."
+msgstr "המשתמש כבר רשום על ידי מדריך אחר."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "העתק זה נשלח אליך מכיוון שאתה מדריך הקורס"
+
+msgid "General tutor"
+msgstr "מדריך כללי"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "שקול את הקורסים, המדריכים, שירות התמיכה הטכנית, המורים ו/או החומרים הזמינים."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "מדריכים הרשומים כמורים בקורס %s"
+
+msgid "Tutor name"
+msgstr "שם המדריך"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "מדריכי המפגש הם מתאמים של המפגש ויכולים לשמש כמדריכים לכל קורס במפגש. רק משתמשים בעלי תפקיד מורה יכולים להיבחר כמדריכי מפגש."
+
+msgid "Access start date for tutors"
+msgstr "תאריך התחלת גישה למדריכים"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "התאריך שבו המפגש הופך לזמין למדריכים, כדי שיוכלו להכינו לפני שהסטודנטים מתחברים"
+
+msgid "Access end date for tutors"
+msgstr "תאריך סיום גישה למדריכים"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "התאריך שבו המפגש נסגר למדריכים. העיכוב הנוסף יאפשר להם לייצא את כל מידע המעקב הרלוונטי"
+
+msgid "Tutor and student"
+msgstr "מדריך וסטודנט"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "דוח זה מציג את התפלגות המפגשים השבועית לכל מדריך כללי בטווח התאריכים שנבחר."
+
+msgid "User is general tutor in some sessions"
+msgstr "המשתמש הוא מדריך כללי בכמה מפגשים"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "המורים יתווספו כמדריכים בכל מפגשי הקורס."
+
+msgid "Delete failed: invalid question id."
+msgstr "המחיקה נכשלה: מזהה שאלה לא תקין."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "מספר ממוצע של מפגשים לכל מנחה מפגש כללי"
+
+msgid "No room"
+msgstr "אין חדר"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "ייבא מורי קורס כמנחי קורס במפגש"
+
+msgid "Clean and update course tutors"
+msgstr "נקה ועדכן מנחי קורס"
+
+msgid "Add me as tutor"
+msgstr "הוסף אותי כמנחה"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "לא ניתן להוסיף את הסקר לנתיב הלמידה"
+
+msgid "Access dates for tutors"
+msgstr "תאריכי גישה למנחים"
+
+msgid "Tutor and group member"
+msgstr "מנחה וחבר קבוצה"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "הגעת למגבלת האסימונים היומית שלך ב-AI. נסה שוב מחר."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "הגעת למגבלת האסימונים החודשית שלך ב-AI. נסה שוב בחודש הבא."
+
+msgid "This course code already exists, please choose another code."
+msgstr "קוד קורס זה כבר קיים, בחר קוד אחר."
+
+msgid "This course title already exists, please choose another title."
+msgstr "כותרת קורס זו כבר קיימת, בחר כותרת אחרת."
+
+msgid "This tool visibility cannot be changed"
+msgstr "לא ניתן לשנות את נראות כלי זה"
+
+msgid "Invalid visibility"
+msgstr "נראות לא תקינה"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "העתק זה נשלח אליך מכיוון שאתה אחד ממנחי הקורס"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "העתק זה נשלח אליך מכיוון שאתה מנחה הקורס"
+
+msgid "Manual completion"
+msgstr "השלמה ידנית"
+
+msgid "Send to tutors"
+msgstr "שלח למנחים"
+
+msgid "Lab title"
+msgstr "כותרת מעבדה"
+
+msgid "Lab week"
+msgstr "שבוע מעבדה"
+
+msgid "Final exam access rule"
+msgstr "כלל גישה לבחינה הסופית"
+
+msgid "Course completion rule"
+msgstr "כלל השלמת קורס"
+
+msgid "You have been invited to join a course"
+msgstr "הוזמנת להצטרף לקורס"
+
+msgid "No user has been found"
+msgstr "לא נמצא משתמש"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "לא ניתן לרשום את המשתמש שנבחר בהקשר זה"
+
+msgid "No change has been made"
+msgstr "לא בוצע שינוי"
+
+msgid "Back to group list"
+msgstr "חזור לרשימת הקבוצות"
+
+msgid "Remove class link"
+msgstr "הסר קישור לכיתה"
+
+msgid "Group settings"
+msgstr "הגדרות קבוצה"
+
+msgid "Self-registration allowed"
+msgstr "הרשמה עצמית מותרת"
+
+msgid "Self-unregistration allowed"
+msgstr "ביטול הרשמה עצמי מותר"
+
+msgid "This group is linked to the class"
+msgstr "קבוצה זו מקושרת לכיתה"
+
+msgid "Create one or more empty course groups"
+msgstr "צור קבוצת קורס ריקה אחת או יותר"
+
+msgid "Number of places"
+msgstr "מספר מקומות"
+
+msgid "Base group"
+msgstr "קבוצת בסיס"
+
+msgid "Share"
+msgstr "שתף"
+
+msgid "Collaboration"
+msgstr "שיתוף פעולה"
+
+msgid "The group title is required."
+msgstr "כותרת הקבוצה נדרשת."
+
+msgid "Back to group area"
+msgstr "חזור לאזור הקבוצות"
+
+msgid "Members are managed by the linked class"
+msgstr "החברים מנוהלים על ידי הכיתה המקושרת"
+
+msgid "%s groups selected"
+msgstr "%s קבוצות נבחרו"
+
+msgid "Fill selected groups"
+msgstr "מלא קבוצות נבחרות"
+
+msgid "Empty selected groups"
+msgstr "רוקן קבוצות נבחרות"
+
+msgid "Fill group"
+msgstr "מלא קבוצה"
+
+msgid "Empty group"
+msgstr "רוקן קבוצה"
+
+msgid "Groups per user"
+msgstr "קבוצות למשתמש"
+
+msgid "No tutors"
+msgstr "אין מנחים"
+
+msgid "No users"
+msgstr "אין משתמשים"
+

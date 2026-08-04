@@ -39716,3 +39716,1299 @@ msgstr "Gebruik 0 om alle beschikbare vragen te behouden. Gebruik -1 waar alle b
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Gebruik deze velden om de oefening onafhankelijk van de weergaveopties te classificeren."
 
+msgid "Invite by email"
+msgstr "Uitnodigen per e-mail"
+
+msgid "Invitation has been sent"
+msgstr "Uitnodiging is verzonden"
+
+msgid "Sent on"
+msgstr "Verzonden op"
+
+msgid "Accepted on"
+msgstr "Geaccepteerd op"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Deze cursus is geopend in een sessie. Het verzenden van een uitnodiging hier abonneert de ontvanger op de volledige sessie %s, niet alleen op deze cursus."
+
+msgid "Revoke"
+msgstr "Intrekken"
+
+msgid "Revoked"
+msgstr "Ingetrokken"
+
+msgid "Invitation has been revoked"
+msgstr "Uitnodiging is ingetrokken"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Weet u zeker dat u de uitnodiging aan %s wilt intrekken?"
+
+msgid "No default room"
+msgstr "Geen standaardruimte"
+
+msgid "Floor"
+msgstr "Verdieping"
+
+msgid "Capacity"
+msgstr "Capaciteit"
+
+msgid "Use attendance default room"
+msgstr "Standaardruimte voor aanwezigheid gebruiken"
+
+msgid "Floor number"
+msgstr "Verdiepingsnummer"
+
+msgid "Copy to students"
+msgstr "Kopiëren naar studenten"
+
+msgid "Generate a quick test on this topic"
+msgstr "Genereer een snelle test over dit onderwerp"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "De opgeslagen documentinhoud wordt naar een AI-model gestuurd voor verwerking."
+
+msgid "MCP API key"
+msgstr "MCP API-sleutel"
+
+msgid "Authorized applications"
+msgstr "Geautoriseerde applicaties"
+
+msgid "Your session is about to expire"
+msgstr "Uw sessie verloopt bijna"
+
+msgid "Do you want to continue your session?"
+msgstr "Wilt u uw sessie voortzetten?"
+
+msgid "Stay connected"
+msgstr "Verbonden blijven"
+
+msgid "You will be signed out in %s seconds."
+msgstr "U wordt over %s seconden afgemeld."
+
+msgid "No descriptions available yet."
+msgstr "Nog geen beschrijvingen beschikbaar."
+
+msgid "%s users selected"
+msgstr "%s gebruikers geselecteerd"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "De geselecteerde gebruikers zijn ingeschreven voor de cursus"
+
+msgid "Import teachers"
+msgstr "Docenten importeren"
+
+msgid "Import learners"
+msgstr "Cursisten importeren"
+
+msgid "Select CSV file"
+msgstr "CSV-bestand selecteren"
+
+msgid "Some users could not be subscribed"
+msgstr "Sommige gebruikers konden niet worden ingeschreven"
+
+msgid "Browse available classes"
+msgstr "Beschikbare klassen doorbladeren"
+
+msgid "Back to linked classes"
+msgstr "Terug naar gekoppelde klassen"
+
+msgid "No classes are currently linked to this course."
+msgstr "Er zijn momenteel geen klassen aan deze cursus gekoppeld."
+
+msgid "No available classes were found for this course."
+msgstr "Er zijn geen beschikbare klassen gevonden voor deze cursus."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Weet u zeker dat u de geselecteerde gebruikers wilt uitschrijven?"
+
+msgid "Learning path access"
+msgstr "Toegang tot leerpad"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Alleen geselecteerde gebruikers en groepen hebben toegang tot dit leerpad. Beheer ze na het opslaan."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Alle huidige en toekomstige cursusgebruikers hebben toegang tot dit leerpad."
+
+msgid "All course users"
+msgstr "Alle cursusgebruikers"
+
+msgid "Selected users and groups"
+msgstr "Geselecteerde gebruikers en groepen"
+
+msgid "No access"
+msgstr "Geen toegang"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Alleen gebruikers en groepen die hier zijn toegevoegd, hebben toegang tot dit leerpad."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Aantal vragen beperkt tot maximaal %s"
+
+msgid "Open exercise player"
+msgstr "Oefeningsspeler openen"
+
+msgid "The score is hidden for this exercise."
+msgstr "De score is verborgen voor deze oefening."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Correcties zijn verborgen volgens de instellingen voor oefenresultaten."
+
+msgid "Progressive adaptive result"
+msgstr "Progressief adaptief resultaat"
+
+msgid "Achieved level"
+msgstr "Bereikt niveau"
+
+msgid "Correction history"
+msgstr "Correctiegeschiedenis"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Geschiedenis van handmatige correcties voor deze poging."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Deze oefening gebruikt de radar/spinnenweb-resultaatmodus. De grafiek is niet beschikbaar op deze pagina."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Vraagdetails zijn verborgen volgens de instellingen voor oefenresultaten."
+
+msgid "Media question"
+msgstr "Mediavraag"
+
+msgid "Pending correction"
+msgstr "Correctie in behandeling"
+
+msgid "No answer"
+msgstr "Geen antwoord"
+
+msgid "Blank %s"
+msgstr "Leeg %s"
+
+msgid "Your order"
+msgstr "Uw volgorde"
+
+msgid "Correct order"
+msgstr "Correcte volgorde"
+
+msgid "Delineation review"
+msgstr "Aflijning beoordelen"
+
+msgid "Learner clicks"
+msgstr "Klikken van de leerling"
+
+msgid "Question image"
+msgstr "Vraagafbeelding"
+
+msgid "No hotspot image available"
+msgstr "Geen hotspotafbeelding beschikbaar"
+
+msgid "Learner delineation"
+msgstr "Aflijning van de leerling"
+
+msgid "Expected delineation"
+msgstr "Verwachte aflijning"
+
+msgid "Expected zones"
+msgstr "Verwachte zones"
+
+msgid "Zone"
+msgstr "Zone"
+
+msgid "Learner annotation"
+msgstr "Annotatie van de leerling"
+
+msgid "No annotation image available"
+msgstr "Geen annotatieafbeelding beschikbaar"
+
+msgid "This answer is pending teacher correction."
+msgstr "Dit antwoord wacht op correctie door de docent."
+
+msgid "Teacher comment"
+msgstr "Opmerking van de docent"
+
+msgid "Teacher correction"
+msgstr "Correctie door de docent"
+
+msgid "Save correction"
+msgstr "Correctie opslaan"
+
+msgid "Learner audio"
+msgstr "Audio van de leerling"
+
+msgid "Download audio"
+msgstr "Audio downloaden"
+
+msgid "No uploaded audio"
+msgstr "Geen geüploade audio"
+
+msgid "Learner Office document"
+msgstr "Office-document van de leerling"
+
+msgid "Learner file"
+msgstr "Bestand van de leerling"
+
+msgid "Download Office document"
+msgstr "Office-document downloaden"
+
+msgid "No submitted document"
+msgstr "Geen ingediend document"
+
+msgid "No uploaded file"
+msgstr "Geen geüpload bestand"
+
+msgid "Content item"
+msgstr "Inhoudsitem"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Dit vraagtype kan niet worden beoordeeld op deze pagina."
+
+msgid "Exercise completed"
+msgstr "Oefening voltooid"
+
+msgid "Could not start the attempt"
+msgstr "De poging kon niet worden gestart"
+
+msgid "Invalid exercise attempt"
+msgstr "Ongeldige oefeningspoging"
+
+msgid "Could not load exercise result"
+msgstr "Oefenresultaat kon niet worden geladen"
+
+msgid "Could not load AI providers"
+msgstr "AI-providers konden niet worden geladen"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI-suggestie kon niet worden gegenereerd"
+
+msgid "Correction saved"
+msgstr "Correctie opgeslagen"
+
+msgid "Could not save correction"
+msgstr "Correctie kon niet worden opgeslagen"
+
+msgid "Create exercise"
+msgstr "Oefening maken"
+
+msgid "Exercise categories"
+msgstr "Oefencategorieën"
+
+msgid "Question categories"
+msgstr "Vraagcategorieën"
+
+msgid "Search by exercise title or description."
+msgstr "Zoeken op oefentitel of beschrijving."
+
+msgid "Search exercises"
+msgstr "Oefeningen zoeken"
+
+msgid "No exercises found"
+msgstr "Geen oefeningen gevonden"
+
+msgid "Open exercise"
+msgstr "Oefening openen"
+
+msgid "Disable autolaunch"
+msgstr "Automatisch starten uitschakelen"
+
+msgid "Enable autolaunch"
+msgstr "Automatisch starten inschakelen"
+
+msgid "Export QTI2"
+msgstr "QTI2 exporteren"
+
+msgid "Bulk actions"
+msgstr "Bulkacties"
+
+msgid "Selected exercises"
+msgstr "Geselecteerde oefeningen"
+
+msgid "No exercises selected"
+msgstr "Geen oefeningen geselecteerd"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Weet u zeker dat u deze actie wilt toepassen op de geselecteerde oefeningen?"
+
+msgid "Bulk action completed"
+msgstr "Bulkactie voltooid"
+
+msgid "Could not update exercises"
+msgstr "Oefeningen konden niet worden bijgewerkt"
+
+msgid "Could not update exercise"
+msgstr "Oefening kon niet worden bijgewerkt"
+
+msgid "Copy exercise"
+msgstr "Oefening kopiëren"
+
+msgid "Delete exercise"
+msgstr "Oefening verwijderen"
+
+msgid "Could not load exercises"
+msgstr "Oefeningen konden niet worden geladen"
+
+msgid "No limit"
+msgstr "Geen limiet"
+
+msgid "Add selected questions to the test"
+msgstr "Geselecteerde vragen toevoegen aan de test"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Deze vraag wordt gebruikt in een actieve test en kan hier niet worden bewerkt."
+
+msgid "This question cannot be edited here."
+msgstr "Deze vraag kan hier niet worden bewerkt."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Deze vraag wordt gebruikt in een actieve test en kan hier niet worden verwijderd."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Deze vraag kan niet worden verwijderd omdat uw toegang beperkt is door de platforminstellingen."
+
+msgid "Already in test"
+msgstr "Al in test"
+
+msgid "Select at least one question."
+msgstr "Selecteer minstens één vraag."
+
+msgid "Question bank updated"
+msgstr "Vragenbank bijgewerkt"
+
+msgid "Could not update the question bank"
+msgstr "Vragenbank kon niet worden bijgewerkt"
+
+msgid "Could not load the question bank"
+msgstr "Vragenbank kon niet worden geladen"
+
+msgid "Total score"
+msgstr "Totaalscore"
+
+msgid "Starting"
+msgstr "Starten"
+
+msgid "Attempt history"
+msgstr "Poginggeschiedenis"
+
+msgid "No attempts yet"
+msgstr "Nog geen pogingen"
+
+msgid "Invalid exercise"
+msgstr "Ongeldige oefening"
+
+msgid "Could not load exercise overview"
+msgstr "Oefeningsoverzicht kon niet worden geladen"
+
+msgid "Open test"
+msgstr "Test openen"
+
+msgid "Random answers"
+msgstr "Willekeurige antwoorden"
+
+msgid "Prevent moving backwards"
+msgstr "Teruggaan voorkomen"
+
+msgid "Previous button hidden"
+msgstr "Vorige-knop verborgen"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Deze oefening gebruikt opties die een andere testspeler vereisen."
+
+msgid "Continue test"
+msgstr "Test voortzetten"
+
+msgid "Attempt started"
+msgstr "Poging gestart"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Docentvoorbeeld maakt geen bijgehouden poging aan."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Start of hervat een oefeningspoging. Conceptantwoorden kunnen worden opgeslagen vóór de definitieve indiening."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Tijdslimiet bereikt. Poging wordt afgerond."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Vragetijd bereikt. Uw antwoord wordt opgeslagen."
+
+msgid "Finishing"
+msgstr "Afronden"
+
+msgid "Draft saved"
+msgstr "Concept opgeslagen"
+
+msgid "Statement"
+msgstr "Stelling"
+
+msgid "Drop each option on the matching answer"
+msgstr "Sleep elke optie naar het bijbehorende antwoord"
+
+msgid "Clear match"
+msgstr "Overeenkomst wissen"
+
+msgid "Click to place the selected option here"
+msgstr "Klik om de geselecteerde optie hier te plaatsen"
+
+msgid "Select an option, then click here"
+msgstr "Selecteer een optie en klik hier"
+
+msgid "Already matched"
+msgstr "Al gekoppeld"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "U kunt een optie naar een antwoord slepen of een optie selecteren en vervolgens op een doelvak klikken."
+
+msgid "Put the items in the correct order."
+msgstr "Plaats de items in de juiste volgorde."
+
+msgid "Move left"
+msgstr "Naar links verplaatsen"
+
+msgid "Move right"
+msgstr "Verplaats naar rechts"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "U kunt items naar links of rechts slepen of de verplaatsknoppen gebruiken om de volgorde te wijzigen."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "U kunt items slepen of de verplaatsknoppen gebruiken om de volgorde te wijzigen."
+
+msgid "Or upload an audio file"
+msgstr "Of upload een audiobestand"
+
+msgid "Selected audio"
+msgstr "Geselecteerde audio"
+
+msgid "Uploaded audio"
+msgstr "Geüploade audio"
+
+msgid "Office document"
+msgstr "Office-document"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Vul het document in de editor hieronder in. Het bestand wordt aan deze poging toegevoegd voor correctie door de docent."
+
+msgid "Reload Office editor"
+msgstr "Office-editor opnieuw laden"
+
+msgid "Prepare Office document"
+msgstr "Office-document voorbereiden"
+
+msgid "Open in new tab"
+msgstr "Openen in nieuw tabblad"
+
+msgid "Preparing Office document"
+msgstr "Office-document voorbereiden"
+
+msgid "Submitted document"
+msgstr "Ingediend document"
+
+msgid "Annotation tools"
+msgstr "Annotatiehulpmiddelen"
+
+msgid "Text to place"
+msgstr "Tekst om te plaatsen"
+
+msgid "Click the image to place the text annotation."
+msgstr "Klik op de afbeelding om de tekstannotatie te plaatsen."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Klik op de afbeelding om padpunten toe te voegen. Gebruik 'Nieuw pad starten' om paden te scheiden."
+
+msgid "Start new path"
+msgstr "Nieuw pad starten"
+
+msgid "Current annotations"
+msgstr "Huidige annotaties"
+
+msgid "Remove point"
+msgstr "Punt verwijderen"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Klik op de afbeelding om de afbakeningspolygoon te tekenen."
+
+msgid "Click a marker to remove it."
+msgstr "Klik op een markering om deze te verwijderen."
+
+msgid "Placed"
+msgstr "Geplaatst"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Selecteer een antwoord en klik vervolgens op de afbeelding om het te markeren."
+
+msgid "Reading speed"
+msgstr "Leessnelheid"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Dit vraagtype kan niet worden weergegeven in deze speler."
+
+msgid "Save draft"
+msgstr "Concept opslaan"
+
+msgid "I confirm that my answers were saved."
+msgstr "Ik bevestig dat mijn antwoorden zijn opgeslagen."
+
+msgid "Finish test"
+msgstr "Toets afronden"
+
+msgid "Attempt finished"
+msgstr "Poging voltooid"
+
+msgid "Question category"
+msgstr "Vraagcategorie"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "U hebt de vragen met betrekking tot deze vraagcategorie voltooid. Dit is uw laatste kans om terug te gaan en deze vragen te herzien."
+
+msgid "Question time left"
+msgstr "Resterende tijd voor de vraag"
+
+msgid "Time left"
+msgstr "Resterende tijd"
+
+msgid "Current attempt"
+msgstr "Huidige poging"
+
+msgid "Could not save draft answer"
+msgstr "Kan conceptantwoord niet opslaan"
+
+msgid "Could not load exercise"
+msgstr "Kan oefening niet laden"
+
+msgid "Draft answer saved"
+msgstr "Conceptantwoord opgeslagen"
+
+msgid "Could not finish the attempt"
+msgstr "Kan de poging niet afronden"
+
+msgid "Could not prepare Office document"
+msgstr "Kan Office-document niet voorbereiden"
+
+msgid "Back to learner score"
+msgstr "Terug naar leerlingenscore"
+
+msgid "Disable auto refresh"
+msgstr "Automatisch vernieuwen uitschakelen"
+
+msgid "Enable auto refresh"
+msgstr "Automatisch vernieuwen inschakelen"
+
+msgid "Live window"
+msgstr "Live-venster"
+
+msgid "Ongoing attempts"
+msgstr "Lopende pogingen"
+
+msgid "Completed attempts"
+msgstr "Voltooide pogingen"
+
+msgid "Started"
+msgstr "Gestart"
+
+msgid "Last activity"
+msgstr "Laatste activiteit"
+
+msgid "Could not load live results"
+msgstr "Kan live-resultaten niet laden"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Deze oefening is alleen-lezen omdat deze is opgenomen in een leerpad."
+
+msgid "Select a question type to create a question."
+msgstr "Selecteer een vraagtype om een vraag te maken."
+
+msgid "Click to preview"
+msgstr "Klik om voorvertoning te bekijken"
+
+msgid "Hide preview"
+msgstr "Voorvertoning verbergen"
+
+msgid "Shape"
+msgstr "Vorm"
+
+msgid "Coordinates"
+msgstr "Coördinaten"
+
+msgid "Blanks"
+msgstr "Lege plekken"
+
+msgid "Switchable blanks"
+msgstr "Wisselbare lege plekken"
+
+msgid "Blank"
+msgstr "Lege plek"
+
+msgid "Input width"
+msgstr "Invoerveldbreedte"
+
+msgid "Orientation"
+msgstr "Oriëntatie"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Niet beschikbaar met de huidige oefenfeedbackmodus"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Niet beschikbaar in de leerpadcreatieflow"
+
+msgid "Delete question"
+msgstr "Vraag verwijderen"
+
+msgid "Could not update exercise questions"
+msgstr "Kon oefenvragen niet bijwerken"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Kon de oefening niet toevoegen aan het leerpad"
+
+msgid "A valid exercise id is required."
+msgstr "Een geldig oefenings-ID is vereist."
+
+msgid "Could not load exercise questions"
+msgstr "Kon oefenvragen niet laden"
+
+msgid "Delete selected attempts"
+msgstr "Geselecteerde pogingen verwijderen"
+
+msgid "Before date"
+msgstr "Voor datum"
+
+msgid "Pending corrections"
+msgstr "Wachtende correcties"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Deze oefening is vergrendeld door het cijferboek. Acties voor het opschonen van pogingen zijn uitgeschakeld."
+
+msgid "No attempts found"
+msgstr "Geen pogingen gevonden"
+
+msgid "Review"
+msgstr "Beoordelen"
+
+msgid "Print/PDF"
+msgstr "Afdrukken/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Kon oefenrapport niet laden"
+
+msgid "Select at least one attempt"
+msgstr "Selecteer minstens één poging"
+
+msgid "Delete selected attempts?"
+msgstr "Geselecteerde pogingen verwijderen?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Beoordeelde pogingsresultaten per e-mail verzenden?"
+
+msgid "Could not send emails"
+msgstr "Kon e-mails niet verzenden"
+
+msgid "Exercise result emails sent"
+msgstr "E-mails met oefenresultaten verzonden"
+
+msgid "Skipped"
+msgstr "Overgeslagen"
+
+msgid "Close attempt?"
+msgstr "Poging sluiten?"
+
+msgid "Attempt closed"
+msgstr "Poging gesloten"
+
+msgid "Could not close attempt"
+msgstr "Kon poging niet sluiten"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Dit pogingsresultaat per e-mail naar de leerling verzenden?"
+
+msgid "Email sent"
+msgstr "E-mail verzonden"
+
+msgid "Could not send email"
+msgstr "Kon e-mail niet verzenden"
+
+msgid "Attempt deleted"
+msgstr "Poging verwijderd"
+
+msgid "Could not delete attempt"
+msgstr "Kon poging niet verwijderen"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Selecteer een CSV-bestand met titel- en beschrijvingskolommen."
+
+msgid "Manage categories used to classify questions."
+msgstr "Beheer categorieën die worden gebruikt om vragen te classificeren."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Beheer categorieën die worden gebruikt om oefeningen te classificeren."
+
+msgid "Could not load categories"
+msgstr "Kon categorieën niet laden"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Geïmporteerde categorieën: %s. Overgeslagen rijen: %s."
+
+msgid "Imported categories: %s."
+msgstr "Geïmporteerde categorieën: %s."
+
+msgid "Could not import categories"
+msgstr "Kon categorieën niet importeren"
+
+msgid "Could not save category"
+msgstr "Kon categorie niet opslaan"
+
+msgid "Answer distribution"
+msgstr "Antwoordverdeling"
+
+msgid "Configured answers"
+msgstr "Geconfigureerde antwoorden"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Gedetailleerde antwoordtelling voor sommige vraagtypes is nog niet beschikbaar in het gemigreerde rapport."
+
+msgid "No report by question data found"
+msgstr "Geen rapport per vraag gevonden"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Gedetailleerde antwoordtelling voor dit vraagtype is nog niet beschikbaar in het gemigreerde rapport."
+
+msgid "No answer distribution found"
+msgstr "Geen antwoordverdeling gevonden"
+
+msgid "Could not load report by question"
+msgstr "Kan rapport per vraag niet laden"
+
+msgid "Question settings"
+msgstr "Vraaginstellingen"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Laat leeg of 0 voor geen tijdslimiet."
+
+msgid "Time limit in seconds"
+msgstr "Tijdslimiet in seconden"
+
+msgid "Attached questions"
+msgstr "Bijgevoegde vragen"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Alleen vragen die aan deze mediavraag zijn gekoppeld binnen de huidige oefening worden hier weergegeven."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Er zijn geen vragen aan deze mediavraag gekoppeld in de huidige oefening."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Upload het Office-documentsjabloon dat cursisten met OnlyOffice zullen bewerken."
+
+msgid "Replace Office document"
+msgstr "Office-document vervangen"
+
+msgid "Current Office document"
+msgstr "Huidig Office-document"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Deze vraag wordt handmatig gecorrigeerd nadat de cursist het bewerkte document indient."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "De totaalscore wordt berekend als de som van de hotspot-scores."
+
+msgid "Global score"
+msgstr "Globale score"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Selecteer een hotspotrij, kies de vorm en teken over de afbeelding. Voor polygonen klik je op elk punt en voltooi je de veelhoek, of dubbelklik je om te voltooien."
+
+msgid "Finish polygon"
+msgstr "Veelhoek voltooien"
+
+msgid "Calculated answer"
+msgstr "Berekend antwoord"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Typ hieronder uw tekst en gebruik vierkante haken [...] om één of meer lege plekken te definiëren."
+
+msgid "Lowest value"
+msgstr "Laagste waarde"
+
+msgid "Highest value"
+msgstr "Hoogste waarde"
+
+msgid "Fill in blanks"
+msgstr "Lege plekken invullen"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Gebruik de geselecteerde markeringen om lege plekken te definiëren. Voorbeeld: De hoofdstad van Peru is [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Voer de keuzelijstopties in, één antwoord per regel. Markeer daarna de verwachte antwoorden hieronder, zoals in de oude tool."
+
+msgid "Refresh answers"
+msgstr "Antwoorden vernieuwen"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Deze keuzelijstcombinatievraag gebruikt één globale score, zoals in de oude versie."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Voer minstens twee keuzelijstopties in."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Maak eerst bestemmingsopties aan en koppel daarna elk item aan de juiste optie."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Deze matchingcombinatievraag gebruikt één globale score, zoals in de oude versie."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Maak de stappen aan en kies de verwachte positie voor elk item, zoals in de oude sleepbare versie."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Cursisten kiezen Waar of Onwaar en selecteren daarna hun mate van zekerheid tijdens de poging. De editor bewaart dezelfde Correct/Fout-scores en zekerheidsniveaus als in de oude versie."
+
+msgid "Hotspot combination"
+msgstr "Hotspotcombinatie"
+
+msgid "Add delineation"
+msgstr "Aflijning toevoegen"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Deze Office-documentvraag heeft geen antwoordopties. De score wordt toegekend tijdens de correctie/resultatenbeoordeling."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Deze uploadvraag heeft geen antwoordopties. De score wordt toegekend tijdens de correctie/resultatenbeoordeling."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Deze mondelinge uitdrukkingsvraag heeft geen antwoordopties. De score wordt toegekend tijdens de correctie/resultatenbeoordeling."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Deze open vraag heeft geen antwoordopties. De score wordt toegekend tijdens de correctie/resultatenbeoordeling."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Voeg een leestekst toe met instellingen voor scrollsnelheid."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Voeg inhoud, media of leescontext toe zonder score toe te voegen."
+
+msgid "Insert a page break without adding score."
+msgstr "Voeg een paginascheiding in zonder score toe te voegen."
+
+msgid "Could not save question"
+msgstr "Kan vraag niet opslaan"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Alleen DOC-, DOCX-, XLS- of XLSX-documenten zijn toegestaan."
+
+msgid "Please select an Office document."
+msgstr "Selecteer een Office-document."
+
+msgid "Please draw at least one hotspot."
+msgstr "Teken minstens één hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Teken minstens één aflijning."
+
+msgid "The fill in blanks text is required."
+msgstr "De tekst voor het invullen van lege plekken is verplicht."
+
+msgid "At least one expected answer is required."
+msgstr "Minstens één verwacht antwoord is verplicht."
+
+msgid "At least two draggable items are required."
+msgstr "Minstens twee sleepbare items zijn verplicht."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Elk sleepbaar item moet aan een geldige doelpositie worden gekoppeld."
+
+msgid "At least two matching options are required."
+msgstr "Er zijn minstens twee overeenkomende opties vereist."
+
+msgid "At least two matching pairs are required."
+msgstr "Er zijn minstens twee overeenkomende paren vereist."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Elk overeenkomend paar moet aan een geldige optie gekoppeld zijn."
+
+msgid "At least two answers are required."
+msgstr "Er zijn minstens twee antwoorden vereist."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Bij elk waar/onwaar-antwoord moet Waar of Onwaar geselecteerd zijn."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Een unieke-antwoordvraag moet precies één juist antwoord hebben."
+
+msgid "At least one correct answer is required."
+msgstr "Er is minstens één juist antwoord vereist."
+
+msgid "Could not load question"
+msgstr "Kon de vraag niet laden"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Selecteer een cursus en exporteer het globale oefenresultatenrapport als CSV."
+
+msgid "Back to reports catalog"
+msgstr "Terug naar rapportencatalogus"
+
+msgid "Could not load exercise global report"
+msgstr "Kon het globale oefenrapport niet laden"
+
+msgid "Imported questions"
+msgstr "Geïmporteerde vragen"
+
+msgid "Aiken content"
+msgstr "Aiken-inhoud"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Kon de AI Aiken-generator niet laden"
+
+msgid "Could not generate Aiken content"
+msgstr "Kon de Aiken-inhoud niet genereren"
+
+msgid "Could not import generated Aiken content"
+msgstr "Kon de gegenereerde Aiken-inhoud niet importeren"
+
+msgid "Back to my courses"
+msgstr "Terug naar mijn cursussen"
+
+msgid "Open report"
+msgstr "Rapport openen"
+
+msgid "Questions with no automatic correction"
+msgstr "Vragen zonder automatische correctie"
+
+msgid "Could not load pending attempts"
+msgstr "Kon de lopende pogingen niet laden"
+
+msgid "Skipped questions"
+msgstr "Overgeslagen vragen"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken-import verdeelt dit totale gewicht over de geïmporteerde vragen, tenzij een vraag SCORE definieert."
+
+msgid "Import warnings"
+msgstr "Importwaarschuwingen"
+
+msgid "Could not import questions"
+msgstr "Kon de vragen niet importeren"
+
+msgid "No question statistics found"
+msgstr "Geen vraagstatistieken gevonden"
+
+msgid "Could not load question statistics"
+msgstr "Kon de vraagstatistieken niet laden"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "U kunt ook rechtstreeks een MCP-client verbinden door deze naar het volgende eindpunt te verwijzen:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Er zijn momenteel geen applicaties aan uw account gekoppeld."
+
+msgid "Connected on"
+msgstr "Verbonden op"
+
+msgid "Last used"
+msgstr "Laatst gebruikt"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s zal geen toegang meer hebben tot uw Chamilo-account. Doorgaan?"
+
+msgid "Application revoked"
+msgstr "Applicatie ingetrokken"
+
+msgid "Copied to clipboard"
+msgstr "Gekopieerd naar klembord"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Kon het MCP-eindpunt niet kopiëren"
+
+msgid "MCP endpoint"
+msgstr "MCP-eindpunt"
+
+msgid "API key"
+msgstr "API-sleutel"
+
+msgid "Last used at"
+msgstr "Laatst gebruikt op"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopieer deze sleutel nu. Hij wordt niet opnieuw getoond."
+
+msgid "Rotate API key"
+msgstr "API-sleutel vernieuwen"
+
+msgid "Revoke API key"
+msgstr "API-sleutel intrekken"
+
+msgid "Remote MCP connection"
+msgstr "Externe MCP-verbinding"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Configureer uw MCP-client met de volgende waarden:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "De huidige sleutel stopt onmiddellijk met werken. Doorgaan?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Er wordt een nieuwe persoonlijke MCP API-sleutel gegenereerd. Doorgaan?"
+
+msgid "MCP API key generated"
+msgstr "MCP API-sleutel gegenereerd"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Verbonden MCP-clients die deze sleutel gebruiken, stoppen onmiddellijk met werken. Doorgaan?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API-sleutel ingetrokken"
+
+msgid "Could not copy the API key"
+msgstr "Kon de API-sleutel niet kopiëren"
+
+msgid "Project"
+msgstr "Project"
+
+msgid "Close old tickets"
+msgstr "Oude tickets sluiten"
+
+msgid "Close tickets older than seven days?"
+msgstr "Tickets ouder dan zeven dagen sluiten?"
+
+msgid "Assignment history"
+msgstr "Opdrachtgeschiedenis"
+
+msgid "Translate with AI"
+msgstr "Vertalen met AI"
+
+msgid "Target language"
+msgstr "Doeltaal"
+
+msgid "Please select a provider"
+msgstr "Selecteer een provider"
+
+msgid "Generate translation"
+msgstr "Vertaling genereren"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Ten minste één sectie met algemene voorwaarden moet tekst bevatten."
+
+msgid "No active target languages are available."
+msgstr "Er zijn geen actieve doeltalen beschikbaar."
+
+msgid "Tutor"
+msgstr "Begeleider"
+
+msgid "Access dates"
+msgstr "Toegangsdatums"
+
+msgid "Coach access dates"
+msgstr "Toegangsdatums begeleider"
+
+msgid "No sessions found"
+msgstr "Geen sessies gevonden"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Selecteer de cursussen waartoe deze gebruiker in deze sessie geen toegang mag hebben."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Een gebruiker kan niet voor elke cursus in de sessie worden geblokkeerd. Schrijf de gebruiker in plaats daarvan uit."
+
+msgid "Users subscribed to this session"
+msgstr "Gebruikers ingeschreven voor deze sessie"
+
+msgid "No available users found"
+msgstr "Geen beschikbare gebruikers gevonden"
+
+msgid "Subscribe this user to the session?"
+msgstr "Deze gebruiker inschrijven voor de sessie?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "De geselecteerde gebruikers inschrijven voor de sessie?"
+
+msgid "General tutor planning"
+msgstr "Algemene begeleidersplanning"
+
+msgid "User is already registered by another tutor."
+msgstr "De gebruiker is al geregistreerd door een andere begeleider."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "U ontvangt een kopie omdat u begeleider bent van de cursus"
+
+msgid "General tutor"
+msgstr "Algemene begeleider"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Houd rekening met de cursussen, begeleiders, een technische helpdesk, docenten en/of beschikbare materialen."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Begeleiders ingeschreven als docenten in cursus %s"
+
+msgid "Tutor name"
+msgstr "Naam begeleider"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Sessiesbegeleiders zijn coördinatoren van de sessie en kunnen optreden als begeleider voor elke cursus in de sessie. Alleen gebruikers met de docentrol kunnen worden geselecteerd als sessiesbegeleider."
+
+msgid "Access start date for tutors"
+msgstr "Startdatum toegang voor begeleiders"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Datum waarop de sessie beschikbaar wordt voor begeleiders, zodat zij deze kunnen voorbereiden voordat de studenten zich aanmelden"
+
+msgid "Access end date for tutors"
+msgstr "Einddatum toegang voor begeleiders"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Datum waarop de sessie wordt gesloten voor begeleiders. De extra tijd stelt hen in staat alle relevante trackinginformatie te exporteren"
+
+msgid "Tutor and student"
+msgstr "Begeleider en student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Dit rapport toont de wekelijkse verdeling van sessies per algemene begeleider in het geselecteerde datumbereik."
+
+msgid "User is general tutor in some sessions"
+msgstr "Gebruiker is algemene begeleider in enkele sessies"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Docenten worden toegevoegd als begeleiders in alle cursussessies."
+
+msgid "Delete failed: invalid question id."
+msgstr "Verwijderen mislukt: ongeldige vraag-id."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Gemiddeld aantal sessies per algemene sessiebegeleider"
+
+msgid "No room"
+msgstr "Geen ruimte"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Cursusdocenten importeren als cursusbegeleiders in de sessie"
+
+msgid "Clean and update course tutors"
+msgstr "Cursusbegeleiders opschonen en bijwerken"
+
+msgid "Add me as tutor"
+msgstr "Mij toevoegen als begeleider"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Kan de enquête niet toevoegen aan het leerpad"
+
+msgid "Access dates for tutors"
+msgstr "Toegangsdatums voor begeleiders"
+
+msgid "Tutor and group member"
+msgstr "Begeleider en groeps lid"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Uw dagelijkse AI-tokenlimiet is bereikt. Probeer het morgen opnieuw."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Uw maandelijkse AI-tokenlimiet is bereikt. Probeer het volgende maand opnieuw."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Deze cursuscode bestaat al, kies een andere code."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Deze cursustitel bestaat al, kies een andere titel."
+
+msgid "This tool visibility cannot be changed"
+msgstr "De zichtbaarheid van dit hulpmiddel kan niet worden gewijzigd"
+
+msgid "Invalid visibility"
+msgstr "Ongeldige zichtbaarheid"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "U ontvangt een kopie omdat u een van de cursusbegeleiders bent"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "U ontvangt een kopie omdat u de cursusbegeleider bent"
+
+msgid "Manual completion"
+msgstr "Handmatige voltooiing"
+
+msgid "Send to tutors"
+msgstr "Verzenden naar begeleiders"
+
+msgid "Lab title"
+msgstr "Labtitel"
+
+msgid "Lab week"
+msgstr "Labweek"
+
+msgid "Final exam access rule"
+msgstr "Toegangsregel voor het eindexamen"
+
+msgid "Course completion rule"
+msgstr "Voltooiingsregel voor de cursus"
+
+msgid "You have been invited to join a course"
+msgstr "U bent uitgenodigd om deel te nemen aan een cursus"
+
+msgid "No user has been found"
+msgstr "Geen gebruiker gevonden"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "De geselecteerde gebruiker kan niet worden ingeschreven in deze context"
+
+msgid "No change has been made"
+msgstr "Er is geen wijziging aangebracht"
+
+msgid "Back to group list"
+msgstr "Terug naar groepslijst"
+
+msgid "Remove class link"
+msgstr "Koppelklasse verwijderen"
+
+msgid "Group settings"
+msgstr "Groepsinstellingen"
+
+msgid "Self-registration allowed"
+msgstr "Zelfinschrijving toegestaan"
+
+msgid "Self-unregistration allowed"
+msgstr "Zelfuitschrijving toegestaan"
+
+msgid "This group is linked to the class"
+msgstr "Deze groep is gekoppeld aan de klas"
+
+msgid "Create one or more empty course groups"
+msgstr "Maak een of meer lege cursusgroepen aan"
+
+msgid "Number of places"
+msgstr "Aantal plaatsen"
+
+msgid "Base group"
+msgstr "Basisgroep"
+
+msgid "Share"
+msgstr "Delen"
+
+msgid "Collaboration"
+msgstr "Samenwerking"
+
+msgid "The group title is required."
+msgstr "De groepsnaam is verplicht."
+
+msgid "Back to group area"
+msgstr "Terug naar groepsruimte"
+
+msgid "Members are managed by the linked class"
+msgstr "Leden worden beheerd door de gekoppelde klas"
+
+msgid "%s groups selected"
+msgstr "%s groepen geselecteerd"
+
+msgid "Fill selected groups"
+msgstr "Geselecteerde groepen vullen"
+
+msgid "Empty selected groups"
+msgstr "Geselecteerde groepen leegmaken"
+
+msgid "Fill group"
+msgstr "Groep vullen"
+
+msgid "Empty group"
+msgstr "Groep leegmaken"
+
+msgid "Groups per user"
+msgstr "Groepen per gebruiker"
+
+msgid "No tutors"
+msgstr "Geen begeleiders"
+
+msgid "No users"
+msgstr "Geen gebruikers"
+

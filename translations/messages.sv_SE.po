@@ -35497,7 +35497,7 @@ msgid "%s results"
 msgstr "%s resultat"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsformulär : beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsformulär: beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://sv.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Borttagen"
@@ -37637,4 +37637,1300 @@ msgstr "Använd 0 för att behålla alla tillgängliga frågor. Använd -1 där 
 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Använd dessa fält för att klassificera övningen oberoende av dess visningsalternativ."
+
+msgid "Invite by email"
+msgstr "Bjud in via e-post"
+
+msgid "Invitation has been sent"
+msgstr "Inbjudan har skickats"
+
+msgid "Sent on"
+msgstr "Skickad den"
+
+msgid "Accepted on"
+msgstr "Accepterad den"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Denna kurs är öppen i en session. Att skicka en inbjudan här prenumererar mottagaren på hela sessionen %s, inte bara denna kurs."
+
+msgid "Revoke"
+msgstr "Återkalla"
+
+msgid "Revoked"
+msgstr "Återkallad"
+
+msgid "Invitation has been revoked"
+msgstr "Inbjudan har återkallats"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Är du säker på att du vill återkalla inbjudan som skickats till %s?"
+
+msgid "No default room"
+msgstr "Inget standardrum"
+
+msgid "Floor"
+msgstr "Våning"
+
+msgid "Capacity"
+msgstr "Kapacitet"
+
+msgid "Use attendance default room"
+msgstr "Använd närvarons standardrum"
+
+msgid "Floor number"
+msgstr "Våningsnummer"
+
+msgid "Copy to students"
+msgstr "Kopiera till studenter"
+
+msgid "Generate a quick test on this topic"
+msgstr "Skapa ett snabbt test på detta ämne"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Det sparade dokumentets innehåll kommer att skickas till en AI-modell för bearbetning."
+
+msgid "MCP API key"
+msgstr "MCP API-nyckel"
+
+msgid "Authorized applications"
+msgstr "Auktoriserade applikationer"
+
+msgid "Your session is about to expire"
+msgstr "Din session håller på att löpa ut"
+
+msgid "Do you want to continue your session?"
+msgstr "Vill du fortsätta din session?"
+
+msgid "Stay connected"
+msgstr "Fortsätt ansluten"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Du loggas ut om %s sekunder."
+
+msgid "No descriptions available yet."
+msgstr "Inga beskrivningar tillgängliga ännu."
+
+msgid "%s users selected"
+msgstr "%s användare valda"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "De valda användarna har registrerats på kursen"
+
+msgid "Import teachers"
+msgstr "Importera lärare"
+
+msgid "Import learners"
+msgstr "Importera deltagare"
+
+msgid "Select CSV file"
+msgstr "Välj CSV-fil"
+
+msgid "Some users could not be subscribed"
+msgstr "Vissa användare kunde inte registreras"
+
+msgid "Browse available classes"
+msgstr "Bläddra bland tillgängliga klasser"
+
+msgid "Back to linked classes"
+msgstr "Tillbaka till länkade klasser"
+
+msgid "No classes are currently linked to this course."
+msgstr "Inga klasser är för närvarande länkade till denna kurs."
+
+msgid "No available classes were found for this course."
+msgstr "Inga tillgängliga klasser hittades för denna kurs."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Är du säker på att du vill avregistrera de valda användarna?"
+
+msgid "Learning path access"
+msgstr "Åtkomst till inlärningsväg"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Endast valda användare och grupper kan komma åt denna inlärningsväg. Hantera dem efter att du sparat."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Alla nuvarande och framtida kursanvändare kan komma åt denna inlärningsväg."
+
+msgid "All course users"
+msgstr "Alla kursanvändare"
+
+msgid "Selected users and groups"
+msgstr "Valda användare och grupper"
+
+msgid "No access"
+msgstr "Ingen åtkomst"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Endast användare och grupper som lagts till här kan komma åt denna inlärningsväg."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Antalet frågor begränsat till högst %s"
+
+msgid "Open exercise player"
+msgstr "Öppna övningsspelaren"
+
+msgid "The score is hidden for this exercise."
+msgstr "Poängen är dold för denna övning."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Rättningar är dolda enligt övningens resultatinställningar."
+
+msgid "Progressive adaptive result"
+msgstr "Progressivt adaptivt resultat"
+
+msgid "Achieved level"
+msgstr "Uppnådd nivå"
+
+msgid "Correction history"
+msgstr "Rättningshistorik"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historik över manuella rättningar för detta försök."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Denna övning använder radar-/spindelnätsresultatläge. Diagrammet är inte tillgängligt på denna sida."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Frågedetaljer är dolda enligt övningens resultatinställningar."
+
+msgid "Media question"
+msgstr "Mediefråga"
+
+msgid "Pending correction"
+msgstr "Väntar på rättning"
+
+msgid "No answer"
+msgstr "Inget svar"
+
+msgid "Blank %s"
+msgstr "Tom %s"
+
+msgid "Your order"
+msgstr "Din ordning"
+
+msgid "Correct order"
+msgstr "Korrekt ordning"
+
+msgid "Delineation review"
+msgstr "Avgränsningsgranskning"
+
+msgid "Learner clicks"
+msgstr "Deltagarklick"
+
+msgid "Question image"
+msgstr "Frågebild"
+
+msgid "No hotspot image available"
+msgstr "Ingen hotspot-bild tillgänglig"
+
+msgid "Learner delineation"
+msgstr "Deltagaravgränsning"
+
+msgid "Expected delineation"
+msgstr "Förväntad avgränsning"
+
+msgid "Expected zones"
+msgstr "Förväntade zoner"
+
+msgid "Zone"
+msgstr "Zon"
+
+msgid "Learner annotation"
+msgstr "Deltagaranteckning"
+
+msgid "No annotation image available"
+msgstr "Ingen anteckningsbild tillgänglig"
+
+msgid "This answer is pending teacher correction."
+msgstr "Detta svar väntar på lärarrättning."
+
+msgid "Teacher comment"
+msgstr "Lärarkommentar"
+
+msgid "Teacher correction"
+msgstr "Lärarens rättning"
+
+msgid "Save correction"
+msgstr "Spara rättning"
+
+msgid "Learner audio"
+msgstr "Elevens ljud"
+
+msgid "Download audio"
+msgstr "Ladda ner ljud"
+
+msgid "No uploaded audio"
+msgstr "Inget uppladdat ljud"
+
+msgid "Learner Office document"
+msgstr "Elevens Office-dokument"
+
+msgid "Learner file"
+msgstr "Elevens fil"
+
+msgid "Download Office document"
+msgstr "Ladda ner Office-dokument"
+
+msgid "No submitted document"
+msgstr "Inget inlämnat dokument"
+
+msgid "No uploaded file"
+msgstr "Ingen uppladdad fil"
+
+msgid "Content item"
+msgstr "Innehållsobjekt"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Den här frågetypen kan inte granskas på den här sidan."
+
+msgid "Exercise completed"
+msgstr "Övning slutförd"
+
+msgid "Could not start the attempt"
+msgstr "Kunde inte starta försöket"
+
+msgid "Invalid exercise attempt"
+msgstr "Ogiltigt övningsförsök"
+
+msgid "Could not load exercise result"
+msgstr "Kunde inte ladda övningsresultat"
+
+msgid "Could not load AI providers"
+msgstr "Kunde inte ladda AI-leverantörer"
+
+msgid "Could not generate AI suggestion"
+msgstr "Kunde inte generera AI-förslag"
+
+msgid "Correction saved"
+msgstr "Rättning sparad"
+
+msgid "Could not save correction"
+msgstr "Kunde inte spara rättning"
+
+msgid "Create exercise"
+msgstr "Skapa övning"
+
+msgid "Exercise categories"
+msgstr "Övningskategorier"
+
+msgid "Question categories"
+msgstr "Frågkategorier"
+
+msgid "Search by exercise title or description."
+msgstr "Sök efter övningstitel eller beskrivning."
+
+msgid "Search exercises"
+msgstr "Sök övningar"
+
+msgid "No exercises found"
+msgstr "Inga övningar hittades"
+
+msgid "Open exercise"
+msgstr "Öppna övning"
+
+msgid "Disable autolaunch"
+msgstr "Inaktivera automatisk start"
+
+msgid "Enable autolaunch"
+msgstr "Aktivera automatisk start"
+
+msgid "Export QTI2"
+msgstr "Exportera QTI2"
+
+msgid "Bulk actions"
+msgstr "Massåtgärder"
+
+msgid "Selected exercises"
+msgstr "Valda övningar"
+
+msgid "No exercises selected"
+msgstr "Inga övningar valda"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Är du säker på att du vill utföra den här åtgärden på de valda övningarna?"
+
+msgid "Bulk action completed"
+msgstr "Massåtgärd slutförd"
+
+msgid "Could not update exercises"
+msgstr "Kunde inte uppdatera övningar"
+
+msgid "Could not update exercise"
+msgstr "Kunde inte uppdatera övning"
+
+msgid "Copy exercise"
+msgstr "Kopiera övning"
+
+msgid "Delete exercise"
+msgstr "Ta bort övning"
+
+msgid "Could not load exercises"
+msgstr "Kunde inte ladda övningar"
+
+msgid "No limit"
+msgstr "Ingen gräns"
+
+msgid "Add selected questions to the test"
+msgstr "Lägg till valda frågor i testet"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Den här frågan används i ett aktivt test och kan inte redigeras här."
+
+msgid "This question cannot be edited here."
+msgstr "Den här frågan kan inte redigeras här."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Den här frågan används i ett aktivt test och kan inte tas bort här."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Den här frågan kan inte tas bort eftersom din åtkomst är begränsad av plattformens inställningar."
+
+msgid "Already in test"
+msgstr "Redan i test"
+
+msgid "Select at least one question."
+msgstr "Välj minst en fråga."
+
+msgid "Question bank updated"
+msgstr "Frågebank uppdaterad"
+
+msgid "Could not update the question bank"
+msgstr "Kunde inte uppdatera frågebanken"
+
+msgid "Could not load the question bank"
+msgstr "Kunde inte ladda frågebanken"
+
+msgid "Total score"
+msgstr "Totalpoäng"
+
+msgid "Starting"
+msgstr "Startar"
+
+msgid "Attempt history"
+msgstr "Försökshistorik"
+
+msgid "No attempts yet"
+msgstr "Inga försök ännu"
+
+msgid "Invalid exercise"
+msgstr "Ogiltig övning"
+
+msgid "Could not load exercise overview"
+msgstr "Kunde inte ladda övningsöversikt"
+
+msgid "Open test"
+msgstr "Öppna test"
+
+msgid "Random answers"
+msgstr "Slumpade svar"
+
+msgid "Prevent moving backwards"
+msgstr "Förhindra bakåtsteg"
+
+msgid "Previous button hidden"
+msgstr "Föregående-knapp dold"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Denna övning använder alternativ som kräver en annan testspelare."
+
+msgid "Continue test"
+msgstr "Fortsätt test"
+
+msgid "Attempt started"
+msgstr "Försök startat"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Lärarförhandsvisning skapar inget spårat försök."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Starta eller återuppta ett övningsförsök. Utkast kan sparas innan slutlig inlämning."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Tidsgränsen nådd. Avslutar försöket."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Frågetid nådd. Sparar ditt svar."
+
+msgid "Finishing"
+msgstr "Avslutar"
+
+msgid "Draft saved"
+msgstr "Utkast sparat"
+
+msgid "Statement"
+msgstr "Uppgift"
+
+msgid "Drop each option on the matching answer"
+msgstr "Dra varje alternativ till rätt svar"
+
+msgid "Clear match"
+msgstr "Rensa matchning"
+
+msgid "Click to place the selected option here"
+msgstr "Klicka för att placera det valda alternativet här"
+
+msgid "Select an option, then click here"
+msgstr "Välj ett alternativ, klicka sedan här"
+
+msgid "Already matched"
+msgstr "Redan matchat"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Du kan dra ett alternativ till ett svar eller välja ett alternativ och sedan klicka på en målruta."
+
+msgid "Put the items in the correct order."
+msgstr "Placera objekten i rätt ordning."
+
+msgid "Move left"
+msgstr "Flytta vänster"
+
+msgid "Move right"
+msgstr "Flytta höger"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Du kan dra objekt åt vänster eller höger eller använda flyttknapparna för att ändra ordningen."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Du kan dra objekt eller använda flyttknapparna för att ändra ordningen."
+
+msgid "Or upload an audio file"
+msgstr "Eller ladda upp en ljudfil"
+
+msgid "Selected audio"
+msgstr "Valt ljud"
+
+msgid "Uploaded audio"
+msgstr "Uppladdat ljud"
+
+msgid "Office document"
+msgstr "Office-dokument"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Fyll i dokumentet i redigeraren nedan. Filen bifogas till detta försök för lärarens rättning."
+
+msgid "Reload Office editor"
+msgstr "Ladda om Office-redigeraren"
+
+msgid "Prepare Office document"
+msgstr "Förbered Office-dokument"
+
+msgid "Open in new tab"
+msgstr "Öppna i ny flik"
+
+msgid "Preparing Office document"
+msgstr "Förbereder Office-dokument"
+
+msgid "Submitted document"
+msgstr "Inlämnat dokument"
+
+msgid "Annotation tools"
+msgstr "Annoteringsverktyg"
+
+msgid "Text to place"
+msgstr "Text att placera"
+
+msgid "Click the image to place the text annotation."
+msgstr "Klicka på bilden för att placera textannoteringen."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Klicka på bilden för att lägga till linjepunkter. Använd Starta ny linje för att separera linjer."
+
+msgid "Start new path"
+msgstr "Starta ny linje"
+
+msgid "Current annotations"
+msgstr "Aktuella annoteringar"
+
+msgid "Remove point"
+msgstr "Ta bort punkt"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Klicka på bilden för att rita avgränsningspolygonen."
+
+msgid "Click a marker to remove it."
+msgstr "Klicka på en markör för att ta bort den."
+
+msgid "Placed"
+msgstr "Placerad"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Välj ett svar och klicka sedan på bilden för att markera det."
+
+msgid "Reading speed"
+msgstr "Läshastighet"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Den här frågetypen kan inte visas i den här spelaren."
+
+msgid "Save draft"
+msgstr "Spara utkast"
+
+msgid "I confirm that my answers were saved."
+msgstr "Jag bekräftar att mina svar har sparats."
+
+msgid "Finish test"
+msgstr "Avsluta test"
+
+msgid "Attempt finished"
+msgstr "Försök avslutat"
+
+msgid "Question category"
+msgstr "Frågekategori"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Du har avslutat frågorna som hör till den här frågekategorin. Det är din sista chans att gå tillbaka och ändra dessa frågor."
+
+msgid "Question time left"
+msgstr "Frågetid kvar"
+
+msgid "Time left"
+msgstr "Tid kvar"
+
+msgid "Current attempt"
+msgstr "Aktuellt försök"
+
+msgid "Could not save draft answer"
+msgstr "Kunde inte spara utkast till svar"
+
+msgid "Could not load exercise"
+msgstr "Kunde inte ladda övning"
+
+msgid "Draft answer saved"
+msgstr "Utkast till svar sparat"
+
+msgid "Could not finish the attempt"
+msgstr "Kunde inte avsluta försöket"
+
+msgid "Could not prepare Office document"
+msgstr "Kunde inte förbereda Office-dokument"
+
+msgid "Back to learner score"
+msgstr "Tillbaka till elevens resultat"
+
+msgid "Disable auto refresh"
+msgstr "Inaktivera automatisk uppdatering"
+
+msgid "Enable auto refresh"
+msgstr "Aktivera automatisk uppdatering"
+
+msgid "Live window"
+msgstr "Live-fönster"
+
+msgid "Ongoing attempts"
+msgstr "Pågående försök"
+
+msgid "Completed attempts"
+msgstr "Avslutade försök"
+
+msgid "Started"
+msgstr "Startad"
+
+msgid "Last activity"
+msgstr "Senaste aktivitet"
+
+msgid "Could not load live results"
+msgstr "Kunde inte ladda live-resultat"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Den här övningen är skrivskyddad eftersom den ingår i en inlärningsväg."
+
+msgid "Select a question type to create a question."
+msgstr "Välj en frågetyp för att skapa en fråga."
+
+msgid "Click to preview"
+msgstr "Klicka för att förhandsgranska"
+
+msgid "Hide preview"
+msgstr "Dölj förhandsgranskning"
+
+msgid "Shape"
+msgstr "Form"
+
+msgid "Coordinates"
+msgstr "Koordinater"
+
+msgid "Blanks"
+msgstr "Tomrum"
+
+msgid "Switchable blanks"
+msgstr "Växlingsbara tomrum"
+
+msgid "Blank"
+msgstr "Tomrum"
+
+msgid "Input width"
+msgstr "Inmatningsbredd"
+
+msgid "Orientation"
+msgstr "Orientering"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Inte tillgänglig med aktuellt återkopplingsläge för övningen"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Inte tillgänglig i flödet för att skapa inlärningsvägar"
+
+msgid "Delete question"
+msgstr "Ta bort fråga"
+
+msgid "Could not update exercise questions"
+msgstr "Kunde inte uppdatera övningsfrågor"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Kunde inte lägga till övningen i inlärningsvägen"
+
+msgid "A valid exercise id is required."
+msgstr "Ett giltigt övnings-id krävs."
+
+msgid "Could not load exercise questions"
+msgstr "Kunde inte ladda övningsfrågor"
+
+msgid "Delete selected attempts"
+msgstr "Ta bort valda försök"
+
+msgid "Before date"
+msgstr "Före datum"
+
+msgid "Pending corrections"
+msgstr "Väntande rättningar"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Den här övningen är låst av betygsboken. Åtgärder för att rensa försök är inaktiverade."
+
+msgid "No attempts found"
+msgstr "Inga försök hittades"
+
+msgid "Review"
+msgstr "Granska"
+
+msgid "Print/PDF"
+msgstr "Skriv ut/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Kunde inte ladda övningsrapport"
+
+msgid "Select at least one attempt"
+msgstr "Välj minst ett försök"
+
+msgid "Delete selected attempts?"
+msgstr "Ta bort valda försök?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Skicka e-post med resultat för granskade försök?"
+
+msgid "Could not send emails"
+msgstr "Kunde inte skicka e-post"
+
+msgid "Exercise result emails sent"
+msgstr "E-post med övningsresultat skickades"
+
+msgid "Skipped"
+msgstr "Hoppad över"
+
+msgid "Close attempt?"
+msgstr "Stäng försök?"
+
+msgid "Attempt closed"
+msgstr "Försök stängt"
+
+msgid "Could not close attempt"
+msgstr "Kunde inte stänga försök"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Skicka resultat för detta försök via e-post till eleven?"
+
+msgid "Email sent"
+msgstr "E-post skickat"
+
+msgid "Could not send email"
+msgstr "Kunde inte skicka e-post"
+
+msgid "Attempt deleted"
+msgstr "Försök borttaget"
+
+msgid "Could not delete attempt"
+msgstr "Kunde inte ta bort försök"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Välj en CSV-fil som innehåller kolumner för titel och beskrivning."
+
+msgid "Manage categories used to classify questions."
+msgstr "Hantera kategorier som används för att klassificera frågor."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Hantera kategorier som används för att klassificera övningar."
+
+msgid "Could not load categories"
+msgstr "Kunde inte ladda kategorier"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Importerade kategorier: %s. Överhoppade rader: %s."
+
+msgid "Imported categories: %s."
+msgstr "Importerade kategorier: %s."
+
+msgid "Could not import categories"
+msgstr "Kunde inte importera kategorier"
+
+msgid "Could not save category"
+msgstr "Kunde inte spara kategori"
+
+msgid "Answer distribution"
+msgstr "Svarsfördelning"
+
+msgid "Configured answers"
+msgstr "Konfigurerade svar"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Detaljerad svarsräkning för vissa frågetyper är inte tillgänglig i den migrerade rapporten ännu."
+
+msgid "No report by question data found"
+msgstr "Inga frågerapportdata hittades"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Detaljerad svarsräkning för denna frågetyp är inte tillgänglig i den migrerade rapporten ännu."
+
+msgid "No answer distribution found"
+msgstr "Ingen svarsfördelning hittades"
+
+msgid "Could not load report by question"
+msgstr "Kunde inte ladda rapport per fråga"
+
+msgid "Question settings"
+msgstr "Frågeinställningar"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Lämna tomt eller 0 för ingen tidsgräns."
+
+msgid "Time limit in seconds"
+msgstr "Tidsgräns i sekunder"
+
+msgid "Attached questions"
+msgstr "Bifogade frågor"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Endast frågor som är bifogade till denna medietypfråga inom den aktuella övningen listas här."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Inga frågor är bifogade till denna medietypfråga i den aktuella övningen."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Ladda upp Office-dokumentmallen som eleverna kommer att redigera med OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Ersätt Office-dokument"
+
+msgid "Current Office document"
+msgstr "Aktuellt Office-dokument"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Denna fråga rättas manuellt efter att eleven skickat in det redigerade dokumentet."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Totalpoäng beräknas som summan av hotspot-poäng."
+
+msgid "Global score"
+msgstr "Global poäng"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Välj en hotspot-rad, välj dess form och rita sedan över bilden. För polygoner, klicka på varje punkt och avsluta polygonen, eller dubbelklicka för att avsluta."
+
+msgid "Finish polygon"
+msgstr "Avsluta polygon"
+
+msgid "Calculated answer"
+msgstr "Beräknat svar"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Skriv din text nedan och använd hakparenteser [...] för att definiera ett eller flera tomrum."
+
+msgid "Lowest value"
+msgstr "Lägsta värde"
+
+msgid "Highest value"
+msgstr "Högsta värde"
+
+msgid "Fill in blanks"
+msgstr "Fyll i luckor"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Använd de valda markörerna för att definiera luckor. Exempel: Perus huvudstad är [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Ange rullgardinsalternativen, ett svar per rad. Markera sedan de förväntade svaren nedan, som i det äldre verktyget."
+
+msgid "Refresh answers"
+msgstr "Uppdatera svar"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Denna kombinationsfråga med rullgardinsmenyer använder en global poäng, som i det äldre verktyget."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Ange minst två rullgardinsalternativ."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Skapa först målalternativ, koppla sedan varje objekt till rätt alternativ."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Denna matchningskombinationsfråga använder en global poäng, som i det äldre verktyget."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Skapa stegen och välj förväntad position för varje, som i det äldre Draggable-verktyget."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Eleverna väljer Sant eller Falskt och anger sedan sin säkerhetsgrad under försöket. Redigeraren sparar samma Rätt/Fel-poäng och säkerhetsnivåer som i det äldre verktyget."
+
+msgid "Hotspot combination"
+msgstr "Hotspot-kombination"
+
+msgid "Add delineation"
+msgstr "Lägg till avgränsning"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Denna Office-dokumentfråga har inga svarsalternativ. Poängen tilldelas vid rättning/resultatgranskning."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Denna uppladdningsfråga har inga svarsalternativ. Poängen tilldelas vid rättning/resultatgranskning."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Denna muntliga uttrycksfråga har inga svarsalternativ. Poängen tilldelas vid rättning/resultatgranskning."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Denna öppna frågan har inga svarsalternativ. Poängen tilldelas vid rättning/resultatgranskning."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Lägg till en lästext med inställningar för rullningshastighet."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Lägg till innehåll, media eller läskontext utan att lägga till poäng."
+
+msgid "Insert a page break without adding score."
+msgstr "Infoga ett sidbrytning utan att lägga till poäng."
+
+msgid "Could not save question"
+msgstr "Kunde inte spara frågan"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Endast DOC-, DOCX-, XLS- eller XLSX-dokument är tillåtna."
+
+msgid "Please select an Office document."
+msgstr "Välj ett Office-dokument."
+
+msgid "Please draw at least one hotspot."
+msgstr "Rita minst en hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Rita minst en avgränsning."
+
+msgid "The fill in blanks text is required."
+msgstr "Texten för att fylla i luckor är obligatorisk."
+
+msgid "At least one expected answer is required."
+msgstr "Minst ett förväntat svar krävs."
+
+msgid "At least two draggable items are required."
+msgstr "Minst två dragbara objekt krävs."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Varje dragbart objekt måste kopplas till en giltig målposition."
+
+msgid "At least two matching options are required."
+msgstr "Minst två matchningsalternativ krävs."
+
+msgid "At least two matching pairs are required."
+msgstr "Minst två matchningspar krävs."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Varje matchningspar måste kopplas till ett giltigt alternativ."
+
+msgid "At least two answers are required."
+msgstr "Minst två svar krävs."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Varje sant/falskt-svar måste ha Sant eller Falskt valt."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "En unik svarsfråga måste ha exakt ett rätt svar."
+
+msgid "At least one correct answer is required."
+msgstr "Minst ett rätt svar krävs."
+
+msgid "Could not load question"
+msgstr "Kunde inte ladda frågan"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Välj en kurs och exportera den globala övningsresultatrapporten som CSV."
+
+msgid "Back to reports catalog"
+msgstr "Tillbaka till rapportkatalogen"
+
+msgid "Could not load exercise global report"
+msgstr "Kunde inte ladda global övningsrapport"
+
+msgid "Imported questions"
+msgstr "Importerade frågor"
+
+msgid "Aiken content"
+msgstr "Aiken-innehåll"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Kunde inte ladda AI Aiken-generator"
+
+msgid "Could not generate Aiken content"
+msgstr "Kunde inte generera Aiken-innehåll"
+
+msgid "Could not import generated Aiken content"
+msgstr "Kunde inte importera genererat Aiken-innehåll"
+
+msgid "Back to my courses"
+msgstr "Tillbaka till mina kurser"
+
+msgid "Open report"
+msgstr "Öppna rapport"
+
+msgid "Questions with no automatic correction"
+msgstr "Frågor utan automatisk rättning"
+
+msgid "Could not load pending attempts"
+msgstr "Kunde inte ladda väntande försök"
+
+msgid "Skipped questions"
+msgstr "Hoppa över frågor"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken-import fördelar denna totalvikt över importerade frågor om inte en fråga definierar SCORE."
+
+msgid "Import warnings"
+msgstr "Importvarningar"
+
+msgid "Could not import questions"
+msgstr "Kunde inte importera frågor"
+
+msgid "No question statistics found"
+msgstr "Ingen frågestatistik hittades"
+
+msgid "Could not load question statistics"
+msgstr "Kunde inte ladda frågestatistik"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Du kan också ansluta en MCP-klient direkt genom att peka den mot följande slutpunkt:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Inga applikationer är för närvarande anslutna till ditt konto."
+
+msgid "Connected on"
+msgstr "Ansluten den"
+
+msgid "Last used"
+msgstr "Senast använd"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s kommer inte längre att kunna komma åt ditt Chamilo-konto. Fortsätt?"
+
+msgid "Application revoked"
+msgstr "Applikation återkallad"
+
+msgid "Copied to clipboard"
+msgstr "Kopierad till urklipp"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Kunde inte kopiera MCP-slutpunkten"
+
+msgid "MCP endpoint"
+msgstr "MCP-slutpunkt"
+
+msgid "API key"
+msgstr "API-nyckel"
+
+msgid "Last used at"
+msgstr "Senast använd den"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopiera denna nyckel nu. Den kommer inte att visas igen."
+
+msgid "Rotate API key"
+msgstr "Rotera API-nyckel"
+
+msgid "Revoke API key"
+msgstr "Återkalla API-nyckel"
+
+msgid "Remote MCP connection"
+msgstr "Fjärranslutning via MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Konfigurera din MCP-klient med följande värden:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Den aktuella nyckeln slutar fungera omedelbart. Fortsätt?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "En ny personlig MCP API-nyckel kommer att genereras. Fortsätt?"
+
+msgid "MCP API key generated"
+msgstr "MCP API-nyckel genererad"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Anslutna MCP-klienter som använder denna nyckel slutar fungera omedelbart. Fortsätt?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API-nyckel återkallad"
+
+msgid "Could not copy the API key"
+msgstr "Kunde inte kopiera API-nyckeln"
+
+msgid "Project"
+msgstr "Projekt"
+
+msgid "Close old tickets"
+msgstr "Stäng gamla ärenden"
+
+msgid "Close tickets older than seven days?"
+msgstr "Stäng ärenden äldre än sju dagar?"
+
+msgid "Assignment history"
+msgstr "Uppgiftshistorik"
+
+msgid "Translate with AI"
+msgstr "Översätt med AI"
+
+msgid "Target language"
+msgstr "Målspråk"
+
+msgid "Please select a provider"
+msgstr "Välj en leverantör"
+
+msgid "Generate translation"
+msgstr "Generera översättning"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Minst en avsnitt för användarvillkor måste innehålla text."
+
+msgid "No active target languages are available."
+msgstr "Inga aktiva målspråk är tillgängliga."
+
+msgid "Tutor"
+msgstr "Handledare"
+
+msgid "Access dates"
+msgstr "Åtkomstdatum"
+
+msgid "Coach access dates"
+msgstr "Handledarens åtkomstdatum"
+
+msgid "No sessions found"
+msgstr "Inga sessioner hittades"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Välj de kurser som denna användare inte ska kunna komma åt i denna session."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "En användare kan inte blockeras från alla kurser i sessionen. Avregistrera användaren istället."
+
+msgid "Users subscribed to this session"
+msgstr "Användare registrerade i denna session"
+
+msgid "No available users found"
+msgstr "Inga tillgängliga användare hittades"
+
+msgid "Subscribe this user to the session?"
+msgstr "Registrera denna användare i sessionen?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Registrera de valda användarna i sessionen?"
+
+msgid "General tutor planning"
+msgstr "Allmän handledarplanering"
+
+msgid "User is already registered by another tutor."
+msgstr "Användaren är redan registrerad av en annan handledare."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Du får en kopia eftersom du är kursansvarig"
+
+msgid "General tutor"
+msgstr "Allmän handledare"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Ta hänsyn till kurser, handledare, teknisk support, lärare och/eller tillgängligt material."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Handledare registrerade som lärare i kursen %s"
+
+msgid "Tutor name"
+msgstr "Handledarens namn"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Sessionshandledare är samordnare för sessionen och kan fungera som handledare för varje kurs i sessionen. Endast användare med lärarrollen kan väljas som sessionshandledare."
+
+msgid "Access start date for tutors"
+msgstr "Startdatum för handledarnas åtkomst"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Datum då sessionen görs tillgänglig för handledare, så att de kan förbereda den innan studenterna ansluter sig"
+
+msgid "Access end date for tutors"
+msgstr "Slutdatum för handledarnas åtkomst"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Datum då sessionen stängs för handledare. Den extra tiden gör det möjligt för dem att exportera all relevant uppföljningsinformation"
+
+msgid "Tutor and student"
+msgstr "Handledare och student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Denna rapport visar veckofördelningen av sessioner per allmän handledare inom det valda datumintervallet."
+
+msgid "User is general tutor in some sessions"
+msgstr "Användaren är allmän handledare i vissa sessioner"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Lärare kommer att läggas till som handledare i alla kurssessioner."
+
+msgid "Delete failed: invalid question id."
+msgstr "Borttagning misslyckades: ogiltigt fråge-id."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Genomsnittligt antal sessioner per allmän sessionshandledare"
+
+msgid "No room"
+msgstr "Inget rum"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importera kurslärare som kurshandledare i sessionen"
+
+msgid "Clean and update course tutors"
+msgstr "Rensa och uppdatera kurshandledare"
+
+msgid "Add me as tutor"
+msgstr "Lägg till mig som handledare"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Det gick inte att lägga till undersökningen i inlärningsvägen"
+
+msgid "Access dates for tutors"
+msgstr "Åtkomstdatum för handledare"
+
+msgid "Tutor and group member"
+msgstr "Handledare och gruppmedlem"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Din dagliga AI-token-gräns har nåtts. Försök igen imorgon."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Din månatliga AI-token-gräns har nåtts. Försök igen nästa månad."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Denna kurskod finns redan, välj en annan kod."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Denna kursrubrik finns redan, välj en annan rubrik."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Det går inte att ändra synligheten för detta verktyg"
+
+msgid "Invalid visibility"
+msgstr "Ogiltig synlighet"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Du får en kopia eftersom du är en av kursens handledare"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Du får en kopia eftersom du är kursens handledare"
+
+msgid "Manual completion"
+msgstr "Manuell slutförande"
+
+msgid "Send to tutors"
+msgstr "Skicka till handledare"
+
+msgid "Lab title"
+msgstr "Laboratorietitel"
+
+msgid "Lab week"
+msgstr "Laboratorievecka"
+
+msgid "Final exam access rule"
+msgstr "Åtkomstregel för slutprov"
+
+msgid "Course completion rule"
+msgstr "Regel för kursavslutning"
+
+msgid "You have been invited to join a course"
+msgstr "Du har blivit inbjuden att gå med i en kurs"
+
+msgid "No user has been found"
+msgstr "Ingen användare hittades"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Den valda användaren kan inte registreras i detta sammanhang"
+
+msgid "No change has been made"
+msgstr "Ingen ändring har gjorts"
+
+msgid "Back to group list"
+msgstr "Tillbaka till grupplistan"
+
+msgid "Remove class link"
+msgstr "Ta bort klasslänk"
+
+msgid "Group settings"
+msgstr "Gruppinställningar"
+
+msgid "Self-registration allowed"
+msgstr "Självregistrering tillåten"
+
+msgid "Self-unregistration allowed"
+msgstr "Självavregistrering tillåten"
+
+msgid "This group is linked to the class"
+msgstr "Denna grupp är kopplad till klassen"
+
+msgid "Create one or more empty course groups"
+msgstr "Skapa en eller flera tomma kursgrupper"
+
+msgid "Number of places"
+msgstr "Antal platser"
+
+msgid "Base group"
+msgstr "Basgrupp"
+
+msgid "Share"
+msgstr "Dela"
+
+msgid "Collaboration"
+msgstr "Samarbete"
+
+msgid "The group title is required."
+msgstr "Gruppens titel krävs."
+
+msgid "Back to group area"
+msgstr "Tillbaka till gruppområdet"
+
+msgid "Members are managed by the linked class"
+msgstr "Medlemmarna hanteras av den länkade klassen"
+
+msgid "%s groups selected"
+msgstr "%s grupper valda"
+
+msgid "Fill selected groups"
+msgstr "Fyll valda grupper"
+
+msgid "Empty selected groups"
+msgstr "Töm valda grupper"
+
+msgid "Fill group"
+msgstr "Fyll grupp"
+
+msgid "Empty group"
+msgstr "Töm grupp"
+
+msgid "Groups per user"
+msgstr "Grupper per användare"
+
+msgid "No tutors"
+msgstr "Inga handledare"
+
+msgid "No users"
+msgstr "Inga användare"
 

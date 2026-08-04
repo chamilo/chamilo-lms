@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Sekiranya ini"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Julat pembolehubah"
@@ -37635,4 +37635,1300 @@ msgstr "Gunakan 0 untuk mengekalkan semua soalan yang tersedia. Gunakan -1 di ma
 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Gunakan medan ini untuk mengklasifikasikan latihan secara bebas daripada pilihan paparannya."
+
+msgid "Invite by email"
+msgstr "Invite by email"
+
+msgid "Invitation has been sent"
+msgstr "Jemputan telah dihantar"
+
+msgid "Sent on"
+msgstr "Dihantar pada"
+
+msgid "Accepted on"
+msgstr "Diterima pada"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Kursus ini dibuka dalam sesi. Menghantar jemputan di sini akan melanggan penerima ke seluruh sesi %s, bukan hanya kursus ini."
+
+msgid "Revoke"
+msgstr "Batalkan"
+
+msgid "Revoked"
+msgstr "Dibatalkan"
+
+msgid "Invitation has been revoked"
+msgstr "Jemputan telah dibatalkan"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Adakah anda pasti mahu membatalkan jemputan yang dihantar kepada %s?"
+
+msgid "No default room"
+msgstr "Tiada bilik lalai"
+
+msgid "Floor"
+msgstr "Tingkat"
+
+msgid "Capacity"
+msgstr "Kapasiti"
+
+msgid "Use attendance default room"
+msgstr "Guna bilik lalai kehadiran"
+
+msgid "Floor number"
+msgstr "Nombor tingkat"
+
+msgid "Copy to students"
+msgstr "Salin kepada pelajar"
+
+msgid "Generate a quick test on this topic"
+msgstr "Jana ujian pantas mengenai topik ini"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Kandungan dokumen yang disimpan akan dihantar kepada model AI untuk diproses."
+
+msgid "MCP API key"
+msgstr "Kunci API MCP"
+
+msgid "Authorized applications"
+msgstr "Aplikasi yang dibenarkan"
+
+msgid "Your session is about to expire"
+msgstr "Sesi anda akan tamat tempoh"
+
+msgid "Do you want to continue your session?"
+msgstr "Adakah anda mahu meneruskan sesi anda?"
+
+msgid "Stay connected"
+msgstr "Kekal disambungkan"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Anda akan ditandatang keluar dalam %s saat."
+
+msgid "No descriptions available yet."
+msgstr "Tiada keterangan tersedia lagi."
+
+msgid "%s users selected"
+msgstr "%s pengguna dipilih"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Pengguna yang dipilih telah dilanggan ke kursus"
+
+msgid "Import teachers"
+msgstr "Import guru"
+
+msgid "Import learners"
+msgstr "Import pelajar"
+
+msgid "Select CSV file"
+msgstr "Pilih fail CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Sesetengah pengguna tidak dapat dilanggan"
+
+msgid "Browse available classes"
+msgstr "Lihat kelas yang tersedia"
+
+msgid "Back to linked classes"
+msgstr "Kembali ke kelas yang dipautkan"
+
+msgid "No classes are currently linked to this course."
+msgstr "Tiada kelas yang dipautkan dengan kursus ini pada masa ini."
+
+msgid "No available classes were found for this course."
+msgstr "Tiada kelas yang tersedia ditemui untuk kursus ini."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Adakah anda pasti mahu membatalkan langganan pengguna yang dipilih?"
+
+msgid "Learning path access"
+msgstr "Akses laluan pembelajaran"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Hanya pengguna dan kumpulan yang dipilih boleh mengakses laluan pembelajaran ini. Uruskan mereka selepas menyimpan."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Semua pengguna kursus semasa dan akan datang boleh mengakses laluan pembelajaran ini."
+
+msgid "All course users"
+msgstr "Semua pengguna kursus"
+
+msgid "Selected users and groups"
+msgstr "Pengguna dan kumpulan yang dipilih"
+
+msgid "No access"
+msgstr "Tiada akses"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Hanya pengguna dan kumpulan yang ditambah di sini boleh mengakses laluan pembelajaran ini."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Bilangan soalan dihadkan kepada maksimum %s"
+
+msgid "Open exercise player"
+msgstr "Buka pemain senaman"
+
+msgid "The score is hidden for this exercise."
+msgstr "Markah disembunyikan untuk senaman ini."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Pembetulan disembunyikan mengikut tetapan keputusan senaman."
+
+msgid "Progressive adaptive result"
+msgstr "Keputusan adaptif progresif"
+
+msgid "Achieved level"
+msgstr "Tahap dicapai"
+
+msgid "Correction history"
+msgstr "Sejarah pembetulan"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Sejarah pembetulan manual yang dibuat untuk cubaan ini."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Senaman ini menggunakan mod keputusan radar/sarang labah-labah. Carta tidak tersedia pada halaman ini."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Butiran soalan disembunyikan mengikut tetapan keputusan latihan."
+
+msgid "Media question"
+msgstr "Soalan media"
+
+msgid "Pending correction"
+msgstr "Pembetulan belum selesai"
+
+msgid "No answer"
+msgstr "Tiada jawapan"
+
+msgid "Blank %s"
+msgstr "Kosong %s"
+
+msgid "Your order"
+msgstr "Susunan anda"
+
+msgid "Correct order"
+msgstr "Susunan yang betul"
+
+msgid "Delineation review"
+msgstr "Semakan garisan"
+
+msgid "Learner clicks"
+msgstr "Klik pelajar"
+
+msgid "Question image"
+msgstr "Imej soalan"
+
+msgid "No hotspot image available"
+msgstr "Tiada imej hotspot tersedia"
+
+msgid "Learner delineation"
+msgstr "Garisan pelajar"
+
+msgid "Expected delineation"
+msgstr "Garisan yang dijangka"
+
+msgid "Expected zones"
+msgstr "Zon yang dijangka"
+
+msgid "Zone"
+msgstr "Zon"
+
+msgid "Learner annotation"
+msgstr "Anotasi pelajar"
+
+msgid "No annotation image available"
+msgstr "Tiada imej anotasi tersedia"
+
+msgid "This answer is pending teacher correction."
+msgstr "Jawapan ini menunggu pembetulan guru."
+
+msgid "Teacher comment"
+msgstr "Komen guru"
+
+msgid "Teacher correction"
+msgstr "Pembetulan guru"
+
+msgid "Save correction"
+msgstr "Simpan pembetulan"
+
+msgid "Learner audio"
+msgstr "Audio pelajar"
+
+msgid "Download audio"
+msgstr "Muat turun audio"
+
+msgid "No uploaded audio"
+msgstr "Tiada audio dimuat naik"
+
+msgid "Learner Office document"
+msgstr "Dokumen Office pelajar"
+
+msgid "Learner file"
+msgstr "Fail pelajar"
+
+msgid "Download Office document"
+msgstr "Muat turun dokumen Office"
+
+msgid "No submitted document"
+msgstr "Tiada dokumen diserahkan"
+
+msgid "No uploaded file"
+msgstr "Tiada fail dimuat naik"
+
+msgid "Content item"
+msgstr "Item kandungan"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Jenis soalan ini tidak boleh disemak di halaman ini."
+
+msgid "Exercise completed"
+msgstr "Latihan selesai"
+
+msgid "Could not start the attempt"
+msgstr "Tidak dapat memulakan percubaan"
+
+msgid "Invalid exercise attempt"
+msgstr "Percubaan latihan tidak sah"
+
+msgid "Could not load exercise result"
+msgstr "Tidak dapat memuatkan keputusan latihan"
+
+msgid "Could not load AI providers"
+msgstr "Tidak dapat memuatkan penyedia AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Tidak dapat menjana cadangan AI"
+
+msgid "Correction saved"
+msgstr "Pembetulan disimpan"
+
+msgid "Could not save correction"
+msgstr "Tidak dapat menyimpan pembetulan"
+
+msgid "Create exercise"
+msgstr "Cipta latihan"
+
+msgid "Exercise categories"
+msgstr "Kategori latihan"
+
+msgid "Question categories"
+msgstr "Kategori soalan"
+
+msgid "Search by exercise title or description."
+msgstr "Cari mengikut tajuk atau huraian latihan."
+
+msgid "Search exercises"
+msgstr "Cari latihan"
+
+msgid "No exercises found"
+msgstr "Tiada latihan dijumpai"
+
+msgid "Open exercise"
+msgstr "Buka latihan"
+
+msgid "Disable autolaunch"
+msgstr "Lumpuhkan pelancaran automatik"
+
+msgid "Enable autolaunch"
+msgstr "Dayakan pelancaran automatik"
+
+msgid "Export QTI2"
+msgstr "Eksport QTI2"
+
+msgid "Bulk actions"
+msgstr "Tindakan pukal"
+
+msgid "Selected exercises"
+msgstr "Latihan terpilih"
+
+msgid "No exercises selected"
+msgstr "Tiada latihan dipilih"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Adakah anda pasti mahu melaksanakan tindakan ini pada latihan yang dipilih?"
+
+msgid "Bulk action completed"
+msgstr "Tindakan pukal selesai"
+
+msgid "Could not update exercises"
+msgstr "Tidak dapat mengemas kini latihan"
+
+msgid "Could not update exercise"
+msgstr "Tidak dapat mengemas kini latihan"
+
+msgid "Copy exercise"
+msgstr "Salin latihan"
+
+msgid "Delete exercise"
+msgstr "Padam latihan"
+
+msgid "Could not load exercises"
+msgstr "Tidak dapat memuatkan latihan"
+
+msgid "No limit"
+msgstr "Tiada had"
+
+msgid "Add selected questions to the test"
+msgstr "Tambah soalan terpilih ke dalam ujian"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Soalan ini digunakan dalam ujian aktif dan tidak boleh diedit di sini."
+
+msgid "This question cannot be edited here."
+msgstr "Soalan ini tidak boleh diedit di sini."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Soalan ini digunakan dalam ujian aktif dan tidak boleh dipadam di sini."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Soalan ini tidak boleh dipadam kerana akses anda dihadkan oleh tetapan platform."
+
+msgid "Already in test"
+msgstr "Sudah dalam ujian"
+
+msgid "Select at least one question."
+msgstr "Pilih sekurang-kurangnya satu soalan."
+
+msgid "Question bank updated"
+msgstr "Bank soalan dikemas kini"
+
+msgid "Could not update the question bank"
+msgstr "Tidak dapat mengemas kini bank soalan"
+
+msgid "Could not load the question bank"
+msgstr "Tidak dapat memuatkan bank soalan"
+
+msgid "Total score"
+msgstr "Jumlah markah"
+
+msgid "Starting"
+msgstr "Bermula"
+
+msgid "Attempt history"
+msgstr "Sejarah percubaan"
+
+msgid "No attempts yet"
+msgstr "Belum ada percubaan"
+
+msgid "Invalid exercise"
+msgstr "Latihan tidak sah"
+
+msgid "Could not load exercise overview"
+msgstr "Tidak dapat memuatkan gambaran keseluruhan latihan"
+
+msgid "Open test"
+msgstr "Buka ujian"
+
+msgid "Random answers"
+msgstr "Jawapan rawak"
+
+msgid "Prevent moving backwards"
+msgstr "Halang pergerakan ke belakang"
+
+msgid "Previous button hidden"
+msgstr "Butang sebelumnya disembunyikan"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Latihan ini menggunakan pilihan yang memerlukan pemain ujian yang berbeza."
+
+msgid "Continue test"
+msgstr "Teruskan ujian"
+
+msgid "Attempt started"
+msgstr "Percubaan dimulakan"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Pratonton guru tidak mewujudkan percubaan yang direkodkan."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Mulakan atau sambung semula percubaan latihan. Jawapan draf boleh disimpan sebelum penyerahan akhir."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Had masa dicapai. Menamatkan percubaan."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Masa soalan dicapai. Menyimpan jawapan anda."
+
+msgid "Finishing"
+msgstr "Menamatkan"
+
+msgid "Draft saved"
+msgstr "Draf disimpan"
+
+msgid "Statement"
+msgstr "Pernyataan"
+
+msgid "Drop each option on the matching answer"
+msgstr "Letakkan setiap pilihan pada jawapan yang sepadan"
+
+msgid "Clear match"
+msgstr "Padam padanan"
+
+msgid "Click to place the selected option here"
+msgstr "Klik untuk meletakkan pilihan yang dipilih di sini"
+
+msgid "Select an option, then click here"
+msgstr "Pilih pilihan, kemudian klik di sini"
+
+msgid "Already matched"
+msgstr "Sudah dipadankan"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Anda boleh seret pilihan ke jawapan, atau pilih pilihan dan kemudian klik kotak sasaran."
+
+msgid "Put the items in the correct order."
+msgstr "Susun item mengikut urutan yang betul."
+
+msgid "Move left"
+msgstr "Gerakkan ke kiri"
+
+msgid "Move right"
+msgstr "Gerakkan ke kanan"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Anda boleh seret item ke kiri atau kanan, atau gunakan butang gerak untuk menukar urutan."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Anda boleh seret item atau gunakan butang alih untuk menukar susunan."
+
+msgid "Or upload an audio file"
+msgstr "Atau muat naik fail audio"
+
+msgid "Selected audio"
+msgstr "Audio dipilih"
+
+msgid "Uploaded audio"
+msgstr "Audio dimuat naik"
+
+msgid "Office document"
+msgstr "Dokumen pejabat"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Lengkapkan dokumen dalam editor di bawah. Fail akan dilampirkan pada percubaan ini untuk pembetulan guru."
+
+msgid "Reload Office editor"
+msgstr "Muat semula editor Office"
+
+msgid "Prepare Office document"
+msgstr "Sediakan dokumen Office"
+
+msgid "Open in new tab"
+msgstr "Buka dalam tab baharu"
+
+msgid "Preparing Office document"
+msgstr "Menyediakan dokumen Office"
+
+msgid "Submitted document"
+msgstr "Dokumen yang dihantar"
+
+msgid "Annotation tools"
+msgstr "Alat anotasi"
+
+msgid "Text to place"
+msgstr "Teks untuk diletakkan"
+
+msgid "Click the image to place the text annotation."
+msgstr "Klik imej untuk meletakkan anotasi teks."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Klik imej untuk menambah titik laluan. Gunakan Mulakan laluan baharu untuk memisahkan laluan."
+
+msgid "Start new path"
+msgstr "Mulakan laluan baharu"
+
+msgid "Current annotations"
+msgstr "Anotasi semasa"
+
+msgid "Remove point"
+msgstr "Buang titik"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Klik imej untuk melukis poligon penandaan."
+
+msgid "Click a marker to remove it."
+msgstr "Klik penanda untuk membuangnya."
+
+msgid "Placed"
+msgstr "Diletakkan"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Pilih jawapan, kemudian klik pada imej untuk menandakannya."
+
+msgid "Reading speed"
+msgstr "Kelajuan membaca"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Jenis soalan ini tidak boleh dipaparkan dalam pemain ini."
+
+msgid "Save draft"
+msgstr "Simpan draf"
+
+msgid "I confirm that my answers were saved."
+msgstr "Saya mengesahkan bahawa jawapan saya telah disimpan."
+
+msgid "Finish test"
+msgstr "Tamatkan ujian"
+
+msgid "Attempt finished"
+msgstr "Percubaan selesai"
+
+msgid "Question category"
+msgstr "Kategori soalan"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Anda telah menyelesaikan soalan yang berkaitan dengan kategori soalan ini, ini adalah peluang terakhir anda untuk kembali dan menyemak semula soalan tersebut."
+
+msgid "Question time left"
+msgstr "Masa soalan tinggal"
+
+msgid "Time left"
+msgstr "Masa tinggal"
+
+msgid "Current attempt"
+msgstr "Percubaan semasa"
+
+msgid "Could not save draft answer"
+msgstr "Tidak dapat menyimpan draf jawapan"
+
+msgid "Could not load exercise"
+msgstr "Tidak dapat memuatkan latihan"
+
+msgid "Draft answer saved"
+msgstr "Draf jawapan disimpan"
+
+msgid "Could not finish the attempt"
+msgstr "Tidak dapat menamatkan percubaan"
+
+msgid "Could not prepare Office document"
+msgstr "Tidak dapat menyediakan dokumen Office"
+
+msgid "Back to learner score"
+msgstr "Kembali ke markah pelajar"
+
+msgid "Disable auto refresh"
+msgstr "Lumpuhkan penyegaran automatik"
+
+msgid "Enable auto refresh"
+msgstr "Dayakan penyegaran automatik"
+
+msgid "Live window"
+msgstr "Tetingkap langsung"
+
+msgid "Ongoing attempts"
+msgstr "Percubaan sedang berjalan"
+
+msgid "Completed attempts"
+msgstr "Percubaan selesai"
+
+msgid "Started"
+msgstr "Dimulakan"
+
+msgid "Last activity"
+msgstr "Aktiviti terakhir"
+
+msgid "Could not load live results"
+msgstr "Tidak dapat memuatkan hasil langsung"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Latihan ini hanya boleh dibaca kerana ia disertakan dalam laluan pembelajaran."
+
+msgid "Select a question type to create a question."
+msgstr "Pilih jenis soalan untuk mencipta soalan."
+
+msgid "Click to preview"
+msgstr "Klik untuk pratonton"
+
+msgid "Hide preview"
+msgstr "Sembunyikan pratonton"
+
+msgid "Shape"
+msgstr "Bentuk"
+
+msgid "Coordinates"
+msgstr "Koordinat"
+
+msgid "Blanks"
+msgstr "Kosong"
+
+msgid "Switchable blanks"
+msgstr "Kosong boleh tukar"
+
+msgid "Blank"
+msgstr "Kosong"
+
+msgid "Input width"
+msgstr "Lebar input"
+
+msgid "Orientation"
+msgstr "Orientasi"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Tidak tersedia dengan mod maklum balas latihan semasa"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Tidak tersedia dalam aliran penciptaan laluan pembelajaran"
+
+msgid "Delete question"
+msgstr "Padam soalan"
+
+msgid "Could not update exercise questions"
+msgstr "Tidak dapat mengemas kini soalan latihan"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Tidak dapat menambah latihan ke laluan pembelajaran"
+
+msgid "A valid exercise id is required."
+msgstr "ID latihan yang sah diperlukan."
+
+msgid "Could not load exercise questions"
+msgstr "Tidak dapat memuatkan soalan latihan"
+
+msgid "Delete selected attempts"
+msgstr "Padam percubaan yang dipilih"
+
+msgid "Before date"
+msgstr "Sebelum tarikh"
+
+msgid "Pending corrections"
+msgstr "Pembetulan belum selesai"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Latihan ini dikunci oleh buku gred. Tindakan pembersihan percubaan dilumpuhkan."
+
+msgid "No attempts found"
+msgstr "Tiada percubaan dijumpai"
+
+msgid "Review"
+msgstr "Semak"
+
+msgid "Print/PDF"
+msgstr "Cetak/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Tidak dapat memuatkan laporan latihan"
+
+msgid "Select at least one attempt"
+msgstr "Pilih sekurang-kurangnya satu percubaan"
+
+msgid "Delete selected attempts?"
+msgstr "Padam percubaan yang dipilih?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Hantar e-mel keputusan percubaan yang disemak?"
+
+msgid "Could not send emails"
+msgstr "Tidak dapat menghantar e-mel"
+
+msgid "Exercise result emails sent"
+msgstr "E-mel keputusan latihan dihantar"
+
+msgid "Skipped"
+msgstr "Dilepaskan"
+
+msgid "Close attempt?"
+msgstr "Tutup percubaan?"
+
+msgid "Attempt closed"
+msgstr "Percubaan ditutup"
+
+msgid "Could not close attempt"
+msgstr "Tidak dapat menutup percubaan"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Hantar keputusan percubaan ini melalui e-mel kepada pelajar?"
+
+msgid "Email sent"
+msgstr "E-mel dihantar"
+
+msgid "Could not send email"
+msgstr "Tidak dapat menghantar e-mel"
+
+msgid "Attempt deleted"
+msgstr "Percubaan dipadam"
+
+msgid "Could not delete attempt"
+msgstr "Tidak dapat memadam percubaan"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Pilih fail CSV yang mengandungi lajur tajuk dan penerangan."
+
+msgid "Manage categories used to classify questions."
+msgstr "Urus kategori yang digunakan untuk mengelaskan soalan."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Urus kategori yang digunakan untuk mengelaskan latihan."
+
+msgid "Could not load categories"
+msgstr "Tidak dapat memuatkan kategori"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Kategori diimport: %s. Baris dilangkau: %s."
+
+msgid "Imported categories: %s."
+msgstr "Kategori diimport: %s."
+
+msgid "Could not import categories"
+msgstr "Tidak dapat mengimport kategori"
+
+msgid "Could not save category"
+msgstr "Tidak dapat menyimpan kategori"
+
+msgid "Answer distribution"
+msgstr "Taburan jawapan"
+
+msgid "Configured answers"
+msgstr "Jawapan dikonfigurasikan"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Pengiraan jawapan terperinci untuk beberapa jenis soalan belum tersedia dalam laporan yang dihantar lagi."
+
+msgid "No report by question data found"
+msgstr "Tiada data laporan mengikut soalan dijumpai"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Pengiraan jawapan terperinci untuk jenis soalan ini belum tersedia dalam laporan yang dihantar lagi."
+
+msgid "No answer distribution found"
+msgstr "Tiada taburan jawapan ditemui"
+
+msgid "Could not load report by question"
+msgstr "Tidak dapat memuatkan laporan mengikut soalan"
+
+msgid "Question settings"
+msgstr "Tetapan soalan"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Biarkan kosong atau 0 untuk tiada had masa."
+
+msgid "Time limit in seconds"
+msgstr "Had masa dalam saat"
+
+msgid "Attached questions"
+msgstr "Soalan yang dilampirkan"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Hanya soalan yang dilampirkan kepada soalan media ini dalam latihan semasa disenaraikan di sini."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Tiada soalan dilampirkan kepada soalan media ini dalam latihan semasa."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Muat naik templat dokumen Office yang akan diedit oleh pelajar dengan OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Gantikan dokumen Office"
+
+msgid "Current Office document"
+msgstr "Dokumen Office semasa"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Soalan ini akan dibetulkan secara manual selepas pelajar menghantar dokumen yang telah diedit."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Skor keseluruhan dikira sebagai jumlah skor hotspot."
+
+msgid "Global score"
+msgstr "Skor global"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Pilih baris hotspot, pilih bentuknya, kemudian lukis di atas imej. Untuk poligon, klik setiap titik dan selesaikan poligon, atau klik dua kali untuk menyelesaikan."
+
+msgid "Finish polygon"
+msgstr "Selesaikan poligon"
+
+msgid "Calculated answer"
+msgstr "Jawapan dikira"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Sila taip teks anda di bawah dan gunakan tanda kurung segiempat [...] untuk menentukan satu atau lebih ruang kosong."
+
+msgid "Lowest value"
+msgstr "Nilai terendah"
+
+msgid "Highest value"
+msgstr "Nilai tertinggi"
+
+msgid "Fill in blanks"
+msgstr "Isi tempat kosong"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Gunakan penanda yang dipilih untuk menentukan ruang kosong. Contoh: Ibu negara Peru ialah [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Masukkan pilihan dropdown, satu jawapan setiap baris. Kemudian tandakan jawapan yang dijangka di bawah, seperti alat warisan."
+
+msgid "Refresh answers"
+msgstr "Segar semula jawapan"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Soalan kombinasi dropdown ini menggunakan satu skor global, seperti warisan."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Sila masukkan sekurang-kurangnya dua pilihan dropdown."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Cipta pilihan destinasi terlebih dahulu, kemudian pautkan setiap item kepada pilihan yang betul."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Soalan kombinasi padanan ini menggunakan satu skor global, seperti warisan."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Cipta langkah-langkah dan pilih kedudukan yang dijangka untuk setiap satu, seperti Draggable warisan."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Pelajar akan memilih Betul atau Salah dan kemudian memilih tahap keyakinan mereka semasa percubaan. Editor menyimpan skor Betul/Salah dan tahap keyakinan yang sama seperti warisan."
+
+msgid "Hotspot combination"
+msgstr "Kombinasi hotspot"
+
+msgid "Add delineation"
+msgstr "Tambah penandaan"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Soalan dokumen Office ini tiada pilihan jawapan. Skornya ditetapkan semasa pembetulan/semakan keputusan."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Soalan muat naik ini tiada pilihan jawapan. Skornya ditetapkan semasa pembetulan/semakan keputusan."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Soalan ungkapan lisan ini tiada pilihan jawapan. Skornya ditetapkan semasa pembetulan/semakan keputusan."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Soalan terbuka ini tiada pilihan jawapan. Skornya ditetapkan semasa pembetulan/semakan keputusan."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Tambah teks bacaan dengan tetapan kelajuan skrol."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Tambah kandungan, media atau konteks bacaan tanpa menambah skor."
+
+msgid "Insert a page break without adding score."
+msgstr "Sisipkan pemisah halaman tanpa menambah skor."
+
+msgid "Could not save question"
+msgstr "Tidak dapat menyimpan soalan"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Hanya dokumen DOC, DOCX, XLS atau XLSX dibenarkan."
+
+msgid "Please select an Office document."
+msgstr "Sila pilih dokumen Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Sila lukis sekurang-kurangnya satu hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Sila lukis sekurang-kurangnya satu penandaan."
+
+msgid "The fill in blanks text is required."
+msgstr "Teks isi tempat kosong diperlukan."
+
+msgid "At least one expected answer is required."
+msgstr "Sekurang-kurangnya satu jawapan yang dijangka diperlukan."
+
+msgid "At least two draggable items are required."
+msgstr "Sekurang-kurangnya dua item boleh seret diperlukan."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Setiap item boleh seret mesti dipautkan kepada kedudukan sasaran yang sah."
+
+msgid "At least two matching options are required."
+msgstr "Sekurang-kurangnya dua pilihan padanan diperlukan."
+
+msgid "At least two matching pairs are required."
+msgstr "Sekurang-kurangnya dua pasangan padanan diperlukan."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Setiap pasangan yang sepadan mesti dihubungkan dengan pilihan yang sah."
+
+msgid "At least two answers are required."
+msgstr "Sekurang-kurangnya dua jawapan diperlukan."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Setiap jawapan benar/salah mesti memilih Benar atau Salah."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Soalan jawapan unik mesti mempunyai tepat satu jawapan yang betul."
+
+msgid "At least one correct answer is required."
+msgstr "Sekurang-kurangnya satu jawapan yang betul diperlukan."
+
+msgid "Could not load question"
+msgstr "Tidak dapat memuatkan soalan"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Pilih kursus dan eksport laporan hasil senaman global sebagai CSV."
+
+msgid "Back to reports catalog"
+msgstr "Kembali ke katalog laporan"
+
+msgid "Could not load exercise global report"
+msgstr "Tidak dapat memuatkan laporan global senaman"
+
+msgid "Imported questions"
+msgstr "Soalan yang diimport"
+
+msgid "Aiken content"
+msgstr "Kandungan Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Tidak dapat memuatkan penjana AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Tidak dapat menjana kandungan Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Tidak dapat mengimport kandungan Aiken yang dijana"
+
+msgid "Back to my courses"
+msgstr "Kembali ke kursus saya"
+
+msgid "Open report"
+msgstr "Buka laporan"
+
+msgid "Questions with no automatic correction"
+msgstr "Soalan tanpa pembetulan automatik"
+
+msgid "Could not load pending attempts"
+msgstr "Tidak dapat memuatkan percubaan tertunggak"
+
+msgid "Skipped questions"
+msgstr "Soalan yang dilangkau"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Import Aiken mengagihkan jumlah berat ini kepada soalan yang diimport melainkan soalan menentukan SKOR."
+
+msgid "Import warnings"
+msgstr "Amaran import"
+
+msgid "Could not import questions"
+msgstr "Tidak dapat mengimport soalan"
+
+msgid "No question statistics found"
+msgstr "Tiada statistik soalan dijumpai"
+
+msgid "Could not load question statistics"
+msgstr "Tidak dapat memuatkan statistik soalan"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Anda juga boleh menyambungkan klien MCP secara langsung dengan menujukannya ke titik akhir berikut:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Tiada aplikasi yang sedang disambungkan ke akaun anda."
+
+msgid "Connected on"
+msgstr "Disambungkan pada"
+
+msgid "Last used"
+msgstr "Terakhir digunakan"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s tidak lagi dapat mengakses akaun Chamilo anda. Teruskan?"
+
+msgid "Application revoked"
+msgstr "Aplikasi dibatalkan"
+
+msgid "Copied to clipboard"
+msgstr "Disalin ke papan keratan"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Tidak dapat menyalin titik akhir MCP"
+
+msgid "MCP endpoint"
+msgstr "Titik akhir MCP"
+
+msgid "API key"
+msgstr "Kunci API"
+
+msgid "Last used at"
+msgstr "Terakhir digunakan pada"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Salin kunci ini sekarang. Ia tidak akan ditunjukkan lagi."
+
+msgid "Rotate API key"
+msgstr "Putar kunci API"
+
+msgid "Revoke API key"
+msgstr "Batalkan kunci API"
+
+msgid "Remote MCP connection"
+msgstr "Sambungan MCP jauh"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Konfigurasikan klien MCP anda dengan nilai berikut:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Kunci semasa akan berhenti berfungsi serta-merta. Teruskan?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Kunci API MCP peribadi baharu akan dijana. Teruskan?"
+
+msgid "MCP API key generated"
+msgstr "Kunci API MCP dijana"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Klien MCP yang disambungkan menggunakan kunci ini akan berhenti berfungsi serta-merta. Teruskan?"
+
+msgid "MCP API key revoked"
+msgstr "Kunci API MCP dibatalkan"
+
+msgid "Could not copy the API key"
+msgstr "Tidak dapat menyalin kunci API"
+
+msgid "Project"
+msgstr "Projek"
+
+msgid "Close old tickets"
+msgstr "Tutup tiket lama"
+
+msgid "Close tickets older than seven days?"
+msgstr "Tutup tiket yang lebih lama daripada tujuh hari?"
+
+msgid "Assignment history"
+msgstr "Sejarah tugasan"
+
+msgid "Translate with AI"
+msgstr "Terjemah dengan AI"
+
+msgid "Target language"
+msgstr "Bahasa sasaran"
+
+msgid "Please select a provider"
+msgstr "Sila pilih penyedia"
+
+msgid "Generate translation"
+msgstr "Jana terjemahan"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Sekurang-kurangnya satu bahagian terma dan syarat mesti mengandungi teks."
+
+msgid "No active target languages are available."
+msgstr "Tiada bahasa sasaran aktif tersedia."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Tarikh akses"
+
+msgid "Coach access dates"
+msgstr "Tarikh akses jurulatih"
+
+msgid "No sessions found"
+msgstr "Tiada sesi ditemui"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Pilih kursus yang tidak boleh diakses oleh pengguna ini dalam sesi ini."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Pengguna tidak boleh disekat daripada semua kursus dalam sesi. Langgan keluar pengguna sebaliknya."
+
+msgid "Users subscribed to this session"
+msgstr "Pengguna yang melanggan sesi ini"
+
+msgid "No available users found"
+msgstr "Tiada pengguna tersedia ditemui"
+
+msgid "Subscribe this user to the session?"
+msgstr "Langgan pengguna ini ke sesi?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Langgan pengguna terpilih ke sesi?"
+
+msgid "General tutor planning"
+msgstr "Perancangan tutor umum"
+
+msgid "User is already registered by another tutor."
+msgstr "Pengguna telah didaftarkan oleh tutor lain."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Anda menerima salinan kerana anda adalah tutor kursus"
+
+msgid "General tutor"
+msgstr "Tutor umum"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Pertimbangkan kursus, tutor, meja bantuan teknikal, guru, dan/atau bahan yang tersedia."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutor yang dilanggan sebagai guru dalam kursus %s"
+
+msgid "Tutor name"
+msgstr "Nama tutor"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Tutor sesi adalah penyelaras sesi dan boleh bertindak sebagai tutor untuk setiap kursus dalam sesi. Hanya pengguna dengan peranan guru boleh dipilih sebagai tutor sesi."
+
+msgid "Access start date for tutors"
+msgstr "Tarikh mula akses untuk tutor"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Tarikh sesi disediakan kepada tutor, supaya mereka boleh menyediakannya sebelum pelajar menyambung"
+
+msgid "Access end date for tutors"
+msgstr "Tarikh tamat akses untuk tutor"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Tarikh sesi ditutup kepada tutor. Tempoh tambahan akan membolehkan mereka mengeksport semua maklumat penjejakan yang berkaitan"
+
+msgid "Tutor and student"
+msgstr "Tutor dan pelajar"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Laporan ini menunjukkan taburan mingguan sesi mengikut tutor umum dalam julat tarikh yang dipilih."
+
+msgid "User is general tutor in some sessions"
+msgstr "Pengguna adalah tutor umum dalam beberapa sesi"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Guru akan ditambah sebagai tutor dalam semua sesi kursus."
+
+msgid "Delete failed: invalid question id."
+msgstr "Padam gagal: id soalan tidak sah."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Purata bilangan sesi setiap tutor sesi umum"
+
+msgid "No room"
+msgstr "Tiada bilik"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Import guru kursus sebagai tutor kursus dalam sesi"
+
+msgid "Clean and update course tutors"
+msgstr "Bersihkan dan kemas kini tutor kursus"
+
+msgid "Add me as tutor"
+msgstr "Tambah saya sebagai tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Tidak dapat menambah tinjauan ke laluan pembelajaran"
+
+msgid "Access dates for tutors"
+msgstr "Tarikh akses untuk tutor"
+
+msgid "Tutor and group member"
+msgstr "Tutor dan ahli kumpulan"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Had token AI harian anda telah dicapai. Sila cuba lagi esok."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Had token AI bulanan anda telah dicapai. Sila cuba lagi bulan depan."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Kod kursus ini sudah wujud, sila pilih kod lain."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Tajuk kursus ini sudah wujud, sila pilih tajuk lain."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Kebolehlihatan alat ini tidak boleh diubah"
+
+msgid "Invalid visibility"
+msgstr "Kebolehlihatan tidak sah"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Anda menerima salinan kerana anda adalah salah seorang tutor kursus"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Anda menerima salinan kerana anda adalah tutor kursus"
+
+msgid "Manual completion"
+msgstr "Penyelesaian manual"
+
+msgid "Send to tutors"
+msgstr "Hantar kepada tutor"
+
+msgid "Lab title"
+msgstr "Tajuk makmal"
+
+msgid "Lab week"
+msgstr "Minggu makmal"
+
+msgid "Final exam access rule"
+msgstr "Peraturan akses peperiksaan akhir"
+
+msgid "Course completion rule"
+msgstr "Peraturan penyelesaian kursus"
+
+msgid "You have been invited to join a course"
+msgstr "Anda telah dijemput untuk menyertai kursus"
+
+msgid "No user has been found"
+msgstr "Tiada pengguna ditemui"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Pengguna yang dipilih tidak boleh didaftarkan dalam konteks ini"
+
+msgid "No change has been made"
+msgstr "Tiada perubahan dibuat"
+
+msgid "Back to group list"
+msgstr "Kembali ke senarai kumpulan"
+
+msgid "Remove class link"
+msgstr "Buang pautan kelas"
+
+msgid "Group settings"
+msgstr "Tetapan kumpulan"
+
+msgid "Self-registration allowed"
+msgstr "Pendaftaran sendiri dibenarkan"
+
+msgid "Self-unregistration allowed"
+msgstr "Pembatalan pendaftaran sendiri dibenarkan"
+
+msgid "This group is linked to the class"
+msgstr "Kumpulan ini dipautkan kepada kelas"
+
+msgid "Create one or more empty course groups"
+msgstr "Cipta satu atau lebih kumpulan kursus kosong"
+
+msgid "Number of places"
+msgstr "Bilangan tempat"
+
+msgid "Base group"
+msgstr "Kumpulan asas"
+
+msgid "Share"
+msgstr "Kongsi"
+
+msgid "Collaboration"
+msgstr "Kerjasama"
+
+msgid "The group title is required."
+msgstr "Tajuk kumpulan diperlukan."
+
+msgid "Back to group area"
+msgstr "Kembali ke kawasan kumpulan"
+
+msgid "Members are managed by the linked class"
+msgstr "Ahli diuruskan oleh kelas yang dipautkan"
+
+msgid "%s groups selected"
+msgstr "%s kumpulan dipilih"
+
+msgid "Fill selected groups"
+msgstr "Isi kumpulan yang dipilih"
+
+msgid "Empty selected groups"
+msgstr "Kosongkan kumpulan yang dipilih"
+
+msgid "Fill group"
+msgstr "Isi kumpulan"
+
+msgid "Empty group"
+msgstr "Kosongkan kumpulan"
+
+msgid "Groups per user"
+msgstr "Kumpulan setiap pengguna"
+
+msgid "No tutors"
+msgstr "Tiada tutor"
+
+msgid "No users"
+msgstr "Tiada pengguna"
 

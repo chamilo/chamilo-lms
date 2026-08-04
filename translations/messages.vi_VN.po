@@ -37638,3 +37638,1299 @@ msgstr "Sử dụng 0 để giữ tất cả câu hỏi có sẵn. Sử dụng -
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Sử dụng các trường này để phân loại bài tập độc lập với các tùy chọn hiển thị."
 
+msgid "Invite by email"
+msgstr "Mời qua email"
+
+msgid "Invitation has been sent"
+msgstr "Lời mời đã được gửi"
+
+msgid "Sent on"
+msgstr "Đã gửi vào"
+
+msgid "Accepted on"
+msgstr "Đã chấp nhận vào"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Khóa học này được mở trong một phiên học. Gửi lời mời tại đây sẽ đăng ký người nhận vào toàn bộ phiên học %s, không chỉ khóa học này."
+
+msgid "Revoke"
+msgstr "Thu hồi"
+
+msgid "Revoked"
+msgstr "Đã thu hồi"
+
+msgid "Invitation has been revoked"
+msgstr "Lời mời đã bị thu hồi"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Bạn có chắc chắn muốn thu hồi lời mời đã gửi cho %s không?"
+
+msgid "No default room"
+msgstr "Không có phòng mặc định"
+
+msgid "Floor"
+msgstr "Tầng"
+
+msgid "Capacity"
+msgstr "Sức chứa"
+
+msgid "Use attendance default room"
+msgstr "Sử dụng phòng mặc định điểm danh"
+
+msgid "Floor number"
+msgstr "Số tầng"
+
+msgid "Copy to students"
+msgstr "Sao chép cho học viên"
+
+msgid "Generate a quick test on this topic"
+msgstr "Tạo bài kiểm tra nhanh về chủ đề này"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Nội dung tài liệu đã lưu sẽ được gửi đến mô hình AI để xử lý."
+
+msgid "MCP API key"
+msgstr "Khóa API MCP"
+
+msgid "Authorized applications"
+msgstr "Ứng dụng được ủy quyền"
+
+msgid "Your session is about to expire"
+msgstr "Phiên của bạn sắp hết hạn"
+
+msgid "Do you want to continue your session?"
+msgstr "Bạn có muốn tiếp tục phiên không?"
+
+msgid "Stay connected"
+msgstr "Giữ kết nối"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Bạn sẽ bị đăng xuất sau %s giây."
+
+msgid "No descriptions available yet."
+msgstr "Chưa có mô tả nào."
+
+msgid "%s users selected"
+msgstr "Đã chọn %s người dùng"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Người dùng đã chọn đã được đăng ký vào khóa học"
+
+msgid "Import teachers"
+msgstr "Nhập giáo viên"
+
+msgid "Import learners"
+msgstr "Nhập học viên"
+
+msgid "Select CSV file"
+msgstr "Chọn tệp CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Một số người dùng không thể đăng ký"
+
+msgid "Browse available classes"
+msgstr "Duyệt các lớp có sẵn"
+
+msgid "Back to linked classes"
+msgstr "Quay lại các lớp đã liên kết"
+
+msgid "No classes are currently linked to this course."
+msgstr "Hiện chưa có lớp nào được liên kết với khóa học này."
+
+msgid "No available classes were found for this course."
+msgstr "Không tìm thấy lớp nào khả dụng cho khóa học này."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Bạn có chắc chắn muốn hủy đăng ký người dùng đã chọn không?"
+
+msgid "Learning path access"
+msgstr "Truy cập lộ trình học tập"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Chỉ người dùng và nhóm được chọn mới có thể truy cập lộ trình học tập này. Quản lý họ sau khi lưu."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Tất cả người dùng hiện tại và tương lai của khóa học đều có thể truy cập lộ trình học tập này."
+
+msgid "All course users"
+msgstr "Tất cả người dùng khóa học"
+
+msgid "Selected users and groups"
+msgstr "Người dùng và nhóm được chọn"
+
+msgid "No access"
+msgstr "Không có quyền truy cập"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Chỉ người dùng và nhóm được thêm vào đây mới có thể truy cập lộ trình học tập này."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Số lượng câu hỏi được giới hạn tối đa là %s"
+
+msgid "Open exercise player"
+msgstr "Mở trình phát bài tập"
+
+msgid "The score is hidden for this exercise."
+msgstr "Điểm số bị ẩn đối với bài tập này."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Phần sửa chữa bị ẩn theo cài đặt kết quả bài tập."
+
+msgid "Progressive adaptive result"
+msgstr "Kết quả thích ứng tiến bộ"
+
+msgid "Achieved level"
+msgstr "Cấp độ đạt được"
+
+msgid "Correction history"
+msgstr "Lịch sử sửa chữa"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Lịch sử sửa chữa thủ công cho lần thử này."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Bài tập này sử dụng chế độ kết quả radar/nhện. Biểu đồ không khả dụng trên trang này."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Chi tiết câu hỏi bị ẩn theo cài đặt kết quả bài tập."
+
+msgid "Media question"
+msgstr "Câu hỏi đa phương tiện"
+
+msgid "Pending correction"
+msgstr "Chờ sửa chữa"
+
+msgid "No answer"
+msgstr "Không có câu trả lời"
+
+msgid "Blank %s"
+msgstr "Ô trống %s"
+
+msgid "Your order"
+msgstr "Thứ tự của bạn"
+
+msgid "Correct order"
+msgstr "Thứ tự đúng"
+
+msgid "Delineation review"
+msgstr "Xem xét phân định"
+
+msgid "Learner clicks"
+msgstr "Số lần nhấp của người học"
+
+msgid "Question image"
+msgstr "Hình ảnh câu hỏi"
+
+msgid "No hotspot image available"
+msgstr "Không có hình ảnh điểm nóng"
+
+msgid "Learner delineation"
+msgstr "Phân định của người học"
+
+msgid "Expected delineation"
+msgstr "Phân định mong đợi"
+
+msgid "Expected zones"
+msgstr "Vùng mong đợi"
+
+msgid "Zone"
+msgstr "Vùng"
+
+msgid "Learner annotation"
+msgstr "Chú thích của người học"
+
+msgid "No annotation image available"
+msgstr "Không có hình ảnh chú thích"
+
+msgid "This answer is pending teacher correction."
+msgstr "Câu trả lời này đang chờ giáo viên sửa chữa."
+
+msgid "Teacher comment"
+msgstr "Nhận xét của giáo viên"
+
+msgid "Teacher correction"
+msgstr "Sửa chữa của giáo viên"
+
+msgid "Save correction"
+msgstr "Lưu sửa chữa"
+
+msgid "Learner audio"
+msgstr "Âm thanh của người học"
+
+msgid "Download audio"
+msgstr "Tải xuống âm thanh"
+
+msgid "No uploaded audio"
+msgstr "Không có âm thanh được tải lên"
+
+msgid "Learner Office document"
+msgstr "Tài liệu Office của người học"
+
+msgid "Learner file"
+msgstr "Tệp của người học"
+
+msgid "Download Office document"
+msgstr "Tải xuống tài liệu Office"
+
+msgid "No submitted document"
+msgstr "Không có tài liệu được nộp"
+
+msgid "No uploaded file"
+msgstr "Không có tệp được tải lên"
+
+msgid "Content item"
+msgstr "Mục nội dung"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Loại câu hỏi này không thể được xem xét trên trang này."
+
+msgid "Exercise completed"
+msgstr "Bài tập đã hoàn thành"
+
+msgid "Could not start the attempt"
+msgstr "Không thể bắt đầu lần thử"
+
+msgid "Invalid exercise attempt"
+msgstr "Lần thử bài tập không hợp lệ"
+
+msgid "Could not load exercise result"
+msgstr "Không thể tải kết quả bài tập"
+
+msgid "Could not load AI providers"
+msgstr "Không thể tải nhà cung cấp AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Không thể tạo gợi ý AI"
+
+msgid "Correction saved"
+msgstr "Đã lưu chỉnh sửa"
+
+msgid "Could not save correction"
+msgstr "Không thể lưu chỉnh sửa"
+
+msgid "Create exercise"
+msgstr "Tạo bài tập"
+
+msgid "Exercise categories"
+msgstr "Danh mục bài tập"
+
+msgid "Question categories"
+msgstr "Danh mục câu hỏi"
+
+msgid "Search by exercise title or description."
+msgstr "Tìm kiếm theo tiêu đề hoặc mô tả bài tập."
+
+msgid "Search exercises"
+msgstr "Tìm kiếm bài tập"
+
+msgid "No exercises found"
+msgstr "Không tìm thấy bài tập"
+
+msgid "Open exercise"
+msgstr "Mở bài tập"
+
+msgid "Disable autolaunch"
+msgstr "Tắt tự động khởi chạy"
+
+msgid "Enable autolaunch"
+msgstr "Bật tự động khởi chạy"
+
+msgid "Export QTI2"
+msgstr "Xuất QTI2"
+
+msgid "Bulk actions"
+msgstr "Hành động hàng loạt"
+
+msgid "Selected exercises"
+msgstr "Bài tập đã chọn"
+
+msgid "No exercises selected"
+msgstr "Chưa chọn bài tập nào"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Bạn có chắc chắn muốn áp dụng hành động này cho các bài tập đã chọn không?"
+
+msgid "Bulk action completed"
+msgstr "Hành động hàng loạt đã hoàn tất"
+
+msgid "Could not update exercises"
+msgstr "Không thể cập nhật các bài tập"
+
+msgid "Could not update exercise"
+msgstr "Không thể cập nhật bài tập"
+
+msgid "Copy exercise"
+msgstr "Sao chép bài tập"
+
+msgid "Delete exercise"
+msgstr "Xóa bài tập"
+
+msgid "Could not load exercises"
+msgstr "Không thể tải bài tập"
+
+msgid "No limit"
+msgstr "Không giới hạn"
+
+msgid "Add selected questions to the test"
+msgstr "Thêm câu hỏi đã chọn vào bài kiểm tra"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Câu hỏi này đang được sử dụng trong bài kiểm tra đang hoạt động và không thể chỉnh sửa tại đây."
+
+msgid "This question cannot be edited here."
+msgstr "Câu hỏi này không thể chỉnh sửa tại đây."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Câu hỏi này đang được sử dụng trong bài kiểm tra đang hoạt động và không thể xóa tại đây."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Không thể xóa câu hỏi này vì quyền truy cập của bạn bị hạn chế bởi cài đặt nền tảng."
+
+msgid "Already in test"
+msgstr "Đã có trong bài kiểm tra"
+
+msgid "Select at least one question."
+msgstr "Chọn ít nhất một câu hỏi."
+
+msgid "Question bank updated"
+msgstr "Ngân hàng câu hỏi đã được cập nhật"
+
+msgid "Could not update the question bank"
+msgstr "Không thể cập nhật ngân hàng câu hỏi"
+
+msgid "Could not load the question bank"
+msgstr "Không thể tải ngân hàng câu hỏi"
+
+msgid "Total score"
+msgstr "Tổng điểm"
+
+msgid "Starting"
+msgstr "Đang bắt đầu"
+
+msgid "Attempt history"
+msgstr "Lịch sử lần thử"
+
+msgid "No attempts yet"
+msgstr "Chưa có lần thử nào"
+
+msgid "Invalid exercise"
+msgstr "Bài tập không hợp lệ"
+
+msgid "Could not load exercise overview"
+msgstr "Không thể tải tổng quan bài tập"
+
+msgid "Open test"
+msgstr "Mở bài kiểm tra"
+
+msgid "Random answers"
+msgstr "Trả lời ngẫu nhiên"
+
+msgid "Prevent moving backwards"
+msgstr "Ngăn di chuyển ngược"
+
+msgid "Previous button hidden"
+msgstr "Nút quay lại bị ẩn"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Bài tập này sử dụng các tùy chọn yêu cầu trình phát bài kiểm tra khác."
+
+msgid "Continue test"
+msgstr "Tiếp tục bài kiểm tra"
+
+msgid "Attempt started"
+msgstr "Lần thử đã bắt đầu"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Xem trước của giáo viên không tạo lần thử được theo dõi."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Bắt đầu hoặc tiếp tục một lần thử bài tập. Có thể lưu câu trả lời nháp trước khi nộp bài cuối cùng."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Đã hết thời gian. Đang hoàn tất lần thử."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Đã hết thời gian cho câu hỏi. Đang lưu câu trả lời của bạn."
+
+msgid "Finishing"
+msgstr "Đang hoàn tất"
+
+msgid "Draft saved"
+msgstr "Bản nháp đã lưu"
+
+msgid "Statement"
+msgstr "Đề bài"
+
+msgid "Drop each option on the matching answer"
+msgstr "Kéo từng lựa chọn vào câu trả lời phù hợp"
+
+msgid "Clear match"
+msgstr "Xóa ghép đôi"
+
+msgid "Click to place the selected option here"
+msgstr "Nhấp để đặt lựa chọn đã chọn vào đây"
+
+msgid "Select an option, then click here"
+msgstr "Chọn một lựa chọn, sau đó nhấp vào đây"
+
+msgid "Already matched"
+msgstr "Đã ghép đôi"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Bạn có thể kéo một lựa chọn vào câu trả lời, hoặc chọn một lựa chọn rồi nhấp vào hộp đích."
+
+msgid "Put the items in the correct order."
+msgstr "Sắp xếp các mục theo đúng thứ tự."
+
+msgid "Move left"
+msgstr "Di chuyển sang trái"
+
+msgid "Move right"
+msgstr "Di chuyển sang phải"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Bạn có thể kéo các mục sang trái hoặc phải, hoặc sử dụng nút di chuyển để thay đổi thứ tự."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Bạn có thể kéo các mục hoặc sử dụng nút di chuyển để thay đổi thứ tự."
+
+msgid "Or upload an audio file"
+msgstr "Hoặc tải lên tệp âm thanh"
+
+msgid "Selected audio"
+msgstr "Âm thanh đã chọn"
+
+msgid "Uploaded audio"
+msgstr "Âm thanh đã tải lên"
+
+msgid "Office document"
+msgstr "Tài liệu Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Hoàn thành tài liệu trong trình soạn thảo bên dưới. Tệp sẽ được đính kèm vào lần thử này để giáo viên chấm."
+
+msgid "Reload Office editor"
+msgstr "Tải lại trình soạn thảo Office"
+
+msgid "Prepare Office document"
+msgstr "Chuẩn bị tài liệu Office"
+
+msgid "Open in new tab"
+msgstr "Mở trong tab mới"
+
+msgid "Preparing Office document"
+msgstr "Đang chuẩn bị tài liệu Office"
+
+msgid "Submitted document"
+msgstr "Tài liệu đã nộp"
+
+msgid "Annotation tools"
+msgstr "Công cụ chú thích"
+
+msgid "Text to place"
+msgstr "Văn bản cần đặt"
+
+msgid "Click the image to place the text annotation."
+msgstr "Nhấp vào hình ảnh để đặt chú thích văn bản."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Nhấp vào hình ảnh để thêm các điểm đường. Sử dụng Bắt đầu đường mới để tách các đường."
+
+msgid "Start new path"
+msgstr "Bắt đầu đường mới"
+
+msgid "Current annotations"
+msgstr "Chú thích hiện tại"
+
+msgid "Remove point"
+msgstr "Xóa điểm"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Nhấp vào hình ảnh để vẽ đa giác phân định."
+
+msgid "Click a marker to remove it."
+msgstr "Nhấp vào một điểm đánh dấu để xóa nó."
+
+msgid "Placed"
+msgstr "Đã đặt"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Chọn một câu trả lời, sau đó nhấp vào hình ảnh để đánh dấu."
+
+msgid "Reading speed"
+msgstr "Tốc độ đọc"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Loại câu hỏi này không thể hiển thị trong trình phát này."
+
+msgid "Save draft"
+msgstr "Lưu bản nháp"
+
+msgid "I confirm that my answers were saved."
+msgstr "Tôi xác nhận rằng các câu trả lời của tôi đã được lưu."
+
+msgid "Finish test"
+msgstr "Hoàn tất bài kiểm tra"
+
+msgid "Attempt finished"
+msgstr "Lần thử đã hoàn tất"
+
+msgid "Question category"
+msgstr "Danh mục câu hỏi"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Bạn đã hoàn thành các câu hỏi liên quan đến danh mục câu hỏi này, đây là cơ hội cuối cùng để quay lại và sửa đổi các câu hỏi đó."
+
+msgid "Question time left"
+msgstr "Thời gian còn lại cho câu hỏi"
+
+msgid "Time left"
+msgstr "Thời gian còn lại"
+
+msgid "Current attempt"
+msgstr "Lần thử hiện tại"
+
+msgid "Could not save draft answer"
+msgstr "Không thể lưu câu trả lời nháp"
+
+msgid "Could not load exercise"
+msgstr "Không thể tải bài tập"
+
+msgid "Draft answer saved"
+msgstr "Đã lưu câu trả lời nháp"
+
+msgid "Could not finish the attempt"
+msgstr "Không thể kết thúc lần thử"
+
+msgid "Could not prepare Office document"
+msgstr "Không thể chuẩn bị tài liệu Office"
+
+msgid "Back to learner score"
+msgstr "Quay lại điểm người học"
+
+msgid "Disable auto refresh"
+msgstr "Tắt tự động làm mới"
+
+msgid "Enable auto refresh"
+msgstr "Bật tự động làm mới"
+
+msgid "Live window"
+msgstr "Cửa sổ trực tiếp"
+
+msgid "Ongoing attempts"
+msgstr "Các lần thử đang diễn ra"
+
+msgid "Completed attempts"
+msgstr "Các lần thử đã hoàn thành"
+
+msgid "Started"
+msgstr "Đã bắt đầu"
+
+msgid "Last activity"
+msgstr "Hoạt động cuối"
+
+msgid "Could not load live results"
+msgstr "Không thể tải kết quả trực tiếp"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Bài tập này chỉ đọc vì nó nằm trong lộ trình học tập."
+
+msgid "Select a question type to create a question."
+msgstr "Chọn loại câu hỏi để tạo câu hỏi."
+
+msgid "Click to preview"
+msgstr "Nhấn để xem trước"
+
+msgid "Hide preview"
+msgstr "Ẩn xem trước"
+
+msgid "Shape"
+msgstr "Hình dạng"
+
+msgid "Coordinates"
+msgstr "Tọa độ"
+
+msgid "Blanks"
+msgstr "Chỗ trống"
+
+msgid "Switchable blanks"
+msgstr "Chỗ trống có thể chuyển đổi"
+
+msgid "Blank"
+msgstr "Chỗ trống"
+
+msgid "Input width"
+msgstr "Chiều rộng ô nhập"
+
+msgid "Orientation"
+msgstr "Hướng"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Không khả dụng với chế độ phản hồi bài tập hiện tại"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Không khả dụng trong quy trình tạo lộ trình học tập"
+
+msgid "Delete question"
+msgstr "Xóa câu hỏi"
+
+msgid "Could not update exercise questions"
+msgstr "Không thể cập nhật câu hỏi bài tập"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Không thể thêm bài tập vào lộ trình học tập"
+
+msgid "A valid exercise id is required."
+msgstr "Cần có ID bài tập hợp lệ."
+
+msgid "Could not load exercise questions"
+msgstr "Không thể tải câu hỏi bài tập"
+
+msgid "Delete selected attempts"
+msgstr "Xóa các lần thử đã chọn"
+
+msgid "Before date"
+msgstr "Trước ngày"
+
+msgid "Pending corrections"
+msgstr "Chờ chấm điểm"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Bài tập này bị khóa bởi sổ điểm. Các hành động dọn dẹp lần thử bị vô hiệu hóa."
+
+msgid "No attempts found"
+msgstr "Không tìm thấy lần thử nào"
+
+msgid "Review"
+msgstr "Xem lại"
+
+msgid "Print/PDF"
+msgstr "In/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Không thể tải báo cáo bài tập"
+
+msgid "Select at least one attempt"
+msgstr "Chọn ít nhất một lần thử"
+
+msgid "Delete selected attempts?"
+msgstr "Xóa các lần thử đã chọn?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Gửi email kết quả lần thử đã xem xét?"
+
+msgid "Could not send emails"
+msgstr "Không thể gửi email"
+
+msgid "Exercise result emails sent"
+msgstr "Đã gửi email kết quả bài tập"
+
+msgid "Skipped"
+msgstr "Đã bỏ qua"
+
+msgid "Close attempt?"
+msgstr "Đóng lần thử?"
+
+msgid "Attempt closed"
+msgstr "Đã đóng lần thử"
+
+msgid "Could not close attempt"
+msgstr "Không thể đóng bài làm"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Gửi kết quả bài làm này qua email cho học viên?"
+
+msgid "Email sent"
+msgstr "Đã gửi email"
+
+msgid "Could not send email"
+msgstr "Không thể gửi email"
+
+msgid "Attempt deleted"
+msgstr "Đã xóa bài làm"
+
+msgid "Could not delete attempt"
+msgstr "Không thể xóa bài làm"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Chọn tệp CSV chứa cột tiêu đề và mô tả."
+
+msgid "Manage categories used to classify questions."
+msgstr "Quản lý các danh mục dùng để phân loại câu hỏi."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Quản lý các danh mục dùng để phân loại bài tập."
+
+msgid "Could not load categories"
+msgstr "Không thể tải danh mục"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Đã nhập danh mục: %s. Bỏ qua dòng: %s."
+
+msgid "Imported categories: %s."
+msgstr "Đã nhập danh mục: %s."
+
+msgid "Could not import categories"
+msgstr "Không thể nhập danh mục"
+
+msgid "Could not save category"
+msgstr "Không thể lưu danh mục"
+
+msgid "Answer distribution"
+msgstr "Phân bố câu trả lời"
+
+msgid "Configured answers"
+msgstr "Câu trả lời đã cấu hình"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Tính năng đếm chi tiết câu trả lời cho một số loại câu hỏi chưa có trong báo cáo đã di chuyển."
+
+msgid "No report by question data found"
+msgstr "Không tìm thấy dữ liệu báo cáo theo câu hỏi"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Tính năng đếm chi tiết câu trả lời cho loại câu hỏi này chưa có trong báo cáo đã di chuyển."
+
+msgid "No answer distribution found"
+msgstr "Không tìm thấy phân bố câu trả lời"
+
+msgid "Could not load report by question"
+msgstr "Không thể tải báo cáo theo câu hỏi"
+
+msgid "Question settings"
+msgstr "Cài đặt câu hỏi"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Để trống hoặc 0 nếu không giới hạn thời gian."
+
+msgid "Time limit in seconds"
+msgstr "Giới hạn thời gian (giây)"
+
+msgid "Attached questions"
+msgstr "Câu hỏi đã đính kèm"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Chỉ liệt kê các câu hỏi được đính kèm với câu hỏi phương tiện này trong bài tập hiện tại."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Không có câu hỏi nào được đính kèm với câu hỏi phương tiện này trong bài tập hiện tại."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Tải lên mẫu tài liệu Office mà học viên sẽ chỉnh sửa bằng OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Thay thế tài liệu Office"
+
+msgid "Current Office document"
+msgstr "Tài liệu Office hiện tại"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Câu hỏi này được chấm thủ công sau khi học viên nộp tài liệu đã chỉnh sửa."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Điểm tổng được tính bằng tổng điểm các điểm nóng."
+
+msgid "Global score"
+msgstr "Điểm tổng"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Chọn một dòng điểm nóng, chọn hình dạng, sau đó vẽ lên hình ảnh. Với đa giác, nhấp từng điểm và kết thúc đa giác, hoặc nhấp đúp để kết thúc."
+
+msgid "Finish polygon"
+msgstr "Kết thúc đa giác"
+
+msgid "Calculated answer"
+msgstr "Câu trả lời tính toán"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Vui lòng nhập văn bản bên dưới và dùng dấu ngoặc vuông [...] để xác định một hoặc nhiều chỗ trống."
+
+msgid "Lowest value"
+msgstr "Giá trị thấp nhất"
+
+msgid "Highest value"
+msgstr "Giá trị cao nhất"
+
+msgid "Fill in blanks"
+msgstr "Điền chỗ trống"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Dùng các điểm đánh dấu đã chọn để xác định chỗ trống. Ví dụ: Thủ đô của Peru là [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Nhập các tùy chọn danh sách thả xuống, mỗi câu trả lời một dòng. Sau đó đánh dấu các câu trả lời mong đợi bên dưới, giống công cụ cũ."
+
+msgid "Refresh answers"
+msgstr "Làm mới câu trả lời"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Câu hỏi kết hợp danh sách thả xuống này dùng một điểm tổng, giống phiên bản cũ."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Vui lòng nhập ít nhất hai tùy chọn danh sách thả xuống."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Tạo các tùy chọn đích trước, sau đó liên kết từng mục với tùy chọn đúng."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Câu hỏi kết hợp ghép đôi này dùng một điểm tổng, giống phiên bản cũ."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Tạo các bước và chọn vị trí mong đợi cho từng bước, giống Draggable cũ."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Học viên sẽ chọn Đúng hoặc Sai, sau đó chọn mức độ chắc chắn trong quá trình làm bài. Trình soạn thảo lưu cùng điểm Đúng/Sai và mức độ chắc chắn như phiên bản cũ."
+
+msgid "Hotspot combination"
+msgstr "Kết hợp điểm nóng"
+
+msgid "Add delineation"
+msgstr "Thêm đường phân định"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Câu hỏi văn bản Office này không có phương án trả lời. Điểm số được gán trong quá trình chấm điểm/xem kết quả."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Câu hỏi tải lên này không có phương án trả lời. Điểm số được gán trong quá trình chấm điểm/xem kết quả."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Câu hỏi diễn đạt bằng lời nói này không có phương án trả lời. Điểm số được gán trong quá trình chấm điểm/xem kết quả."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Câu hỏi mở này không có phương án trả lời. Điểm số được gán trong quá trình chấm điểm/xem kết quả."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Thêm văn bản đọc với cài đặt tốc độ cuộn."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Thêm nội dung, phương tiện hoặc ngữ cảnh đọc mà không thêm điểm."
+
+msgid "Insert a page break without adding score."
+msgstr "Chèn ngắt trang mà không thêm điểm."
+
+msgid "Could not save question"
+msgstr "Không thể lưu câu hỏi"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Chỉ cho phép tài liệu DOC, DOCX, XLS hoặc XLSX."
+
+msgid "Please select an Office document."
+msgstr "Vui lòng chọn một tài liệu Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Vui lòng vẽ ít nhất một điểm nóng."
+
+msgid "Please draw at least one delineation."
+msgstr "Vui lòng vẽ ít nhất một đường phân định."
+
+msgid "The fill in blanks text is required."
+msgstr "Văn bản điền vào chỗ trống là bắt buộc."
+
+msgid "At least one expected answer is required."
+msgstr "Cần ít nhất một câu trả lời mong đợi."
+
+msgid "At least two draggable items are required."
+msgstr "Cần ít nhất hai mục có thể kéo."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Mỗi mục có thể kéo phải được liên kết với một vị trí đích hợp lệ."
+
+msgid "At least two matching options are required."
+msgstr "Cần ít nhất hai tùy chọn ghép cặp."
+
+msgid "At least two matching pairs are required."
+msgstr "Cần ít nhất hai cặp ghép cặp."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Mỗi cặp ghép cặp phải được liên kết với một tùy chọn hợp lệ."
+
+msgid "At least two answers are required."
+msgstr "Cần ít nhất hai câu trả lời."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Mỗi câu trả lời đúng/sai phải chọn Đúng hoặc Sai."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Câu hỏi có một câu trả lời duy nhất phải có đúng một câu trả lời đúng."
+
+msgid "At least one correct answer is required."
+msgstr "Cần ít nhất một câu trả lời đúng."
+
+msgid "Could not load question"
+msgstr "Không thể tải câu hỏi"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Chọn một khóa học và xuất báo cáo kết quả bài tập toàn cục dưới dạng CSV."
+
+msgid "Back to reports catalog"
+msgstr "Quay lại danh mục báo cáo"
+
+msgid "Could not load exercise global report"
+msgstr "Không thể tải báo cáo toàn cục bài tập"
+
+msgid "Imported questions"
+msgstr "Các câu hỏi đã nhập"
+
+msgid "Aiken content"
+msgstr "Nội dung Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Không thể tải trình tạo AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Không thể tạo nội dung Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Không thể nhập nội dung Aiken đã tạo"
+
+msgid "Back to my courses"
+msgstr "Quay lại các khóa học của tôi"
+
+msgid "Open report"
+msgstr "Mở báo cáo"
+
+msgid "Questions with no automatic correction"
+msgstr "Các câu hỏi không có chấm điểm tự động"
+
+msgid "Could not load pending attempts"
+msgstr "Không thể tải các lần thử đang chờ"
+
+msgid "Skipped questions"
+msgstr "Các câu hỏi đã bỏ qua"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Nhập Aiken phân phối tổng trọng số này cho các câu hỏi đã nhập trừ khi một câu hỏi xác định SCORE."
+
+msgid "Import warnings"
+msgstr "Cảnh báo nhập"
+
+msgid "Could not import questions"
+msgstr "Không thể nhập câu hỏi"
+
+msgid "No question statistics found"
+msgstr "Không tìm thấy thống kê câu hỏi"
+
+msgid "Could not load question statistics"
+msgstr "Không thể tải thống kê câu hỏi"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Bạn cũng có thể kết nối trực tiếp một máy khách MCP bằng cách trỏ nó đến điểm cuối sau:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Hiện tại không có ứng dụng nào được kết nối với tài khoản của bạn."
+
+msgid "Connected on"
+msgstr "Đã kết nối vào"
+
+msgid "Last used"
+msgstr "Sử dụng lần cuối"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s sẽ không còn truy cập được vào tài khoản Chamilo của bạn nữa. Tiếp tục?"
+
+msgid "Application revoked"
+msgstr "Ứng dụng đã thu hồi"
+
+msgid "Copied to clipboard"
+msgstr "Đã sao chép vào bảng tạm"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Không thể sao chép điểm cuối MCP"
+
+msgid "MCP endpoint"
+msgstr "Điểm cuối MCP"
+
+msgid "API key"
+msgstr "Khóa API"
+
+msgid "Last used at"
+msgstr "Sử dụng lần cuối lúc"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Sao chép khóa này ngay. Khóa sẽ không được hiển thị lại."
+
+msgid "Rotate API key"
+msgstr "Xoay khóa API"
+
+msgid "Revoke API key"
+msgstr "Thu hồi khóa API"
+
+msgid "Remote MCP connection"
+msgstr "Kết nối MCP từ xa"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Cấu hình ứng dụng khách MCP của bạn với các giá trị sau:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Khóa hiện tại sẽ ngừng hoạt động ngay lập tức. Tiếp tục?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Một khóa API MCP cá nhân mới sẽ được tạo. Tiếp tục?"
+
+msgid "MCP API key generated"
+msgstr "Khóa API MCP đã được tạo"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Các ứng dụng khách MCP đang sử dụng khóa này sẽ ngừng hoạt động ngay lập tức. Tiếp tục?"
+
+msgid "MCP API key revoked"
+msgstr "Khóa API MCP đã bị thu hồi"
+
+msgid "Could not copy the API key"
+msgstr "Không thể sao chép khóa API"
+
+msgid "Project"
+msgstr "Dự án"
+
+msgid "Close old tickets"
+msgstr "Đóng phiếu cũ"
+
+msgid "Close tickets older than seven days?"
+msgstr "Đóng các phiếu cũ hơn bảy ngày?"
+
+msgid "Assignment history"
+msgstr "Lịch sử phân công"
+
+msgid "Translate with AI"
+msgstr "Dịch bằng AI"
+
+msgid "Target language"
+msgstr "Ngôn ngữ đích"
+
+msgid "Please select a provider"
+msgstr "Vui lòng chọn nhà cung cấp"
+
+msgid "Generate translation"
+msgstr "Tạo bản dịch"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Ít nhất một phần điều khoản và điều kiện phải có nội dung."
+
+msgid "No active target languages are available."
+msgstr "Không có ngôn ngữ đích đang hoạt động."
+
+msgid "Tutor"
+msgstr "Gia sư"
+
+msgid "Access dates"
+msgstr "Ngày truy cập"
+
+msgid "Coach access dates"
+msgstr "Ngày truy cập của huấn luyện viên"
+
+msgid "No sessions found"
+msgstr "Không tìm thấy buổi học nào"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Chọn các khóa học mà người dùng này không được phép truy cập trong buổi học này."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Một người dùng không thể bị chặn khỏi mọi khóa học trong buổi học. Thay vào đó, hãy hủy đăng ký người dùng."
+
+msgid "Users subscribed to this session"
+msgstr "Người dùng đã đăng ký buổi học này"
+
+msgid "No available users found"
+msgstr "Không tìm thấy người dùng khả dụng"
+
+msgid "Subscribe this user to the session?"
+msgstr "Đăng ký người dùng này vào buổi học?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Đăng ký các người dùng đã chọn vào buổi học?"
+
+msgid "General tutor planning"
+msgstr "Lập kế hoạch gia sư chung"
+
+msgid "User is already registered by another tutor."
+msgstr "Người dùng đã được đăng ký bởi gia sư khác."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Bạn nhận được bản sao vì bạn là gia sư khóa học"
+
+msgid "General tutor"
+msgstr "Gia sư chung"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Xem xét các khóa học, gia sư, bộ phận hỗ trợ kỹ thuật, giáo viên và/hoặc tài liệu có sẵn."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Gia sư đã đăng ký làm giáo viên trong khóa học %s"
+
+msgid "Tutor name"
+msgstr "Tên gia sư"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Gia sư buổi học là điều phối viên cho buổi học và có thể đóng vai trò gia sư cho mỗi khóa học trong buổi học. Chỉ người dùng có vai trò giáo viên mới có thể được chọn làm gia sư buổi học."
+
+msgid "Access start date for tutors"
+msgstr "Ngày bắt đầu truy cập cho gia sư"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Ngày mà buổi học được cung cấp cho gia sư, để họ có thể chuẩn bị trước khi học viên kết nối"
+
+msgid "Access end date for tutors"
+msgstr "Ngày kết thúc truy cập cho gia sư"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Ngày mà buổi học bị đóng đối với gia sư. Thời gian bổ sung sẽ cho phép họ xuất tất cả thông tin theo dõi liên quan"
+
+msgid "Tutor and student"
+msgstr "Gia sư và học viên"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Báo cáo này hiển thị phân bố hàng tuần của các buổi học theo gia sư chung trong khoảng ngày đã chọn."
+
+msgid "User is general tutor in some sessions"
+msgstr "Người dùng là gia sư chung trong một số buổi học"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Giáo viên sẽ được thêm làm trợ giảng trong tất cả các phiên học của khóa học."
+
+msgid "Delete failed: invalid question id."
+msgstr "Xóa thất bại: mã câu hỏi không hợp lệ."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Số phiên trung bình mỗi trợ giảng phiên chung"
+
+msgid "No room"
+msgstr "Không có phòng"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Nhập giáo viên khóa học làm trợ giảng khóa học trong phiên"
+
+msgid "Clean and update course tutors"
+msgstr "Xóa và cập nhật trợ giảng khóa học"
+
+msgid "Add me as tutor"
+msgstr "Thêm tôi làm trợ giảng"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Không thể thêm khảo sát vào lộ trình học tập"
+
+msgid "Access dates for tutors"
+msgstr "Ngày truy cập cho trợ giảng"
+
+msgid "Tutor and group member"
+msgstr "Trợ giảng và thành viên nhóm"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Bạn đã đạt giới hạn token AI hàng ngày. Vui lòng thử lại vào ngày mai."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Bạn đã đạt giới hạn token AI hàng tháng. Vui lòng thử lại vào tháng sau."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Mã khóa học này đã tồn tại, vui lòng chọn mã khác."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Tiêu đề khóa học này đã tồn tại, vui lòng chọn tiêu đề khác."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Không thể thay đổi khả năng hiển thị của công cụ này"
+
+msgid "Invalid visibility"
+msgstr "Khả năng hiển thị không hợp lệ"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Bạn nhận được bản sao vì bạn là một trong những trợ giảng khóa học"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Bạn nhận được bản sao vì bạn là trợ giảng khóa học"
+
+msgid "Manual completion"
+msgstr "Hoàn thành thủ công"
+
+msgid "Send to tutors"
+msgstr "Gửi đến trợ giảng"
+
+msgid "Lab title"
+msgstr "Tiêu đề phòng thí nghiệm"
+
+msgid "Lab week"
+msgstr "Tuần phòng thí nghiệm"
+
+msgid "Final exam access rule"
+msgstr "Quy tắc truy cập thi cuối kỳ"
+
+msgid "Course completion rule"
+msgstr "Quy tắc hoàn thành khóa học"
+
+msgid "You have been invited to join a course"
+msgstr "Bạn đã được mời tham gia khóa học"
+
+msgid "No user has been found"
+msgstr "Không tìm thấy người dùng nào"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Người dùng đã chọn không thể đăng ký trong ngữ cảnh này"
+
+msgid "No change has been made"
+msgstr "Không có thay đổi nào được thực hiện"
+
+msgid "Back to group list"
+msgstr "Quay lại danh sách nhóm"
+
+msgid "Remove class link"
+msgstr "Xóa liên kết lớp"
+
+msgid "Group settings"
+msgstr "Cài đặt nhóm"
+
+msgid "Self-registration allowed"
+msgstr "Cho phép tự đăng ký"
+
+msgid "Self-unregistration allowed"
+msgstr "Cho phép tự hủy đăng ký"
+
+msgid "This group is linked to the class"
+msgstr "Nhóm này được liên kết với lớp"
+
+msgid "Create one or more empty course groups"
+msgstr "Tạo một hoặc nhiều nhóm khóa học trống"
+
+msgid "Number of places"
+msgstr "Số chỗ"
+
+msgid "Base group"
+msgstr "Nhóm cơ sở"
+
+msgid "Share"
+msgstr "Chia sẻ"
+
+msgid "Collaboration"
+msgstr "Hợp tác"
+
+msgid "The group title is required."
+msgstr "Tiêu đề nhóm là bắt buộc."
+
+msgid "Back to group area"
+msgstr "Quay lại khu vực nhóm"
+
+msgid "Members are managed by the linked class"
+msgstr "Thành viên được quản lý bởi lớp liên kết"
+
+msgid "%s groups selected"
+msgstr "%s nhóm đã chọn"
+
+msgid "Fill selected groups"
+msgstr "Điền các nhóm đã chọn"
+
+msgid "Empty selected groups"
+msgstr "Làm trống các nhóm đã chọn"
+
+msgid "Fill group"
+msgstr "Điền nhóm"
+
+msgid "Empty group"
+msgstr "Làm trống nhóm"
+
+msgid "Groups per user"
+msgstr "Số nhóm mỗi người dùng"
+
+msgid "No tutors"
+msgstr "Không có trợ giảng"
+
+msgid "No users"
+msgstr "Không có người dùng"
+

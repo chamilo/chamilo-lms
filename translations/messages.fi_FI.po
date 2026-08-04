@@ -37638,3 +37638,1299 @@ msgstr "Käytä arvoa 0 säilyttääksesi kaikki käytettävissä olevat kysymyk
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Käytä näitä kenttiä harjoituksen luokittelemiseen riippumatta sen näyttöasetuksista."
 
+msgid "Invite by email"
+msgstr "Kutsu sähköpostilla"
+
+msgid "Invitation has been sent"
+msgstr "Kutsu on lähetetty"
+
+msgid "Sent on"
+msgstr "Lähetetty"
+
+msgid "Accepted on"
+msgstr "Hyväksytty"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Tämä kurssi on avoinna istunnossa. Tämän kutsun lähettäminen tilaa vastaanottajan koko istuntoon %s, ei pelkästään tähän kurssiin."
+
+msgid "Revoke"
+msgstr "Peruuta"
+
+msgid "Revoked"
+msgstr "Peruutettu"
+
+msgid "Invitation has been revoked"
+msgstr "Kutsu on peruutettu"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Haluatko varmasti peruuttaa kutsun, joka on lähetetty käyttäjälle %s?"
+
+msgid "No default room"
+msgstr "Ei oletushuoneita"
+
+msgid "Floor"
+msgstr "Kerros"
+
+msgid "Capacity"
+msgstr "Kapasiteetti"
+
+msgid "Use attendance default room"
+msgstr "Käytä läsnäolon oletushuonetta"
+
+msgid "Floor number"
+msgstr "Kerrosnumero"
+
+msgid "Copy to students"
+msgstr "Kopioi opiskelijoille"
+
+msgid "Generate a quick test on this topic"
+msgstr "Luo nopea testi tästä aiheesta"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Tallennettu asiakirjan sisältö lähetetään käsiteltäväksi tekoälymallille."
+
+msgid "MCP API key"
+msgstr "MCP API-avain"
+
+msgid "Authorized applications"
+msgstr "Valtuutetut sovellukset"
+
+msgid "Your session is about to expire"
+msgstr "Istuntosi on päättymässä"
+
+msgid "Do you want to continue your session?"
+msgstr "Haluatko jatkaa istuntoasi?"
+
+msgid "Stay connected"
+msgstr "Pysy yhteydessä"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Sinut kirjataan ulos %s sekunnin kuluttua."
+
+msgid "No descriptions available yet."
+msgstr "Kuvauksia ei ole vielä saatavilla."
+
+msgid "%s users selected"
+msgstr "%s käyttäjää valittu"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Valitut käyttäjät on tilattu kurssille"
+
+msgid "Import teachers"
+msgstr "Tuo opettajia"
+
+msgid "Import learners"
+msgstr "Tuo oppijoita"
+
+msgid "Select CSV file"
+msgstr "Valitse CSV-tiedosto"
+
+msgid "Some users could not be subscribed"
+msgstr "Joitakin käyttäjiä ei voitu tilata"
+
+msgid "Browse available classes"
+msgstr "Selaa käytettävissä olevia luokkia"
+
+msgid "Back to linked classes"
+msgstr "Takaisin linkitettyihin luokkiin"
+
+msgid "No classes are currently linked to this course."
+msgstr "Tähän kurssiin ei ole tällä hetkellä linkitetty luokkia."
+
+msgid "No available classes were found for this course."
+msgstr "Tälle kurssille ei löytynyt saatavilla olevia ryhmiä."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Haluatko varmasti poistaa valittujen käyttäjien ilmoittautumisen?"
+
+msgid "Learning path access"
+msgstr "Oppimispolun käyttöoikeus"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Vain valitut käyttäjät ja ryhmät voivat käyttää tätä oppimispolkua. Hallinnoi heitä tallentamisen jälkeen."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Kaikki nykyiset ja tulevat kurssin käyttäjät voivat käyttää tätä oppimispolkua."
+
+msgid "All course users"
+msgstr "Kaikki kurssin käyttäjät"
+
+msgid "Selected users and groups"
+msgstr "Valitut käyttäjät ja ryhmät"
+
+msgid "No access"
+msgstr "Ei käyttöoikeutta"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Vain tähän lisätyt käyttäjät ja ryhmät voivat käyttää tätä oppimispolkua."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Kysymysten määrä rajoitettu enintään %s"
+
+msgid "Open exercise player"
+msgstr "Avaa harjoitusten suoritusympäristö"
+
+msgid "The score is hidden for this exercise."
+msgstr "Tämän harjoituksen pisteet on piilotettu."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Korjaukset on piilotettu harjoituksen tulosten asetusten mukaisesti."
+
+msgid "Progressive adaptive result"
+msgstr "Progressiivinen mukautuva tulos"
+
+msgid "Achieved level"
+msgstr "Saavutettu taso"
+
+msgid "Correction history"
+msgstr "Korjaushistoria"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Tälle yritykselle tehdyt manuaaliset korjaukset."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Tämä harjoitus käyttää tutka-/hämähäkkiverkkotulostilaa. Kaavio ei ole saatavilla tällä sivulla."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Kysymysten yksityiskohdat on piilotettu harjoituksen tulosten asetusten mukaisesti."
+
+msgid "Media question"
+msgstr "Mediakysymys"
+
+msgid "Pending correction"
+msgstr "Odottaa korjausta"
+
+msgid "No answer"
+msgstr "Ei vastausta"
+
+msgid "Blank %s"
+msgstr "Tyhjä %s"
+
+msgid "Your order"
+msgstr "Sinun järjestys"
+
+msgid "Correct order"
+msgstr "Oikea järjestys"
+
+msgid "Delineation review"
+msgstr "Rajausarviointi"
+
+msgid "Learner clicks"
+msgstr "Oppijan klikkaukset"
+
+msgid "Question image"
+msgstr "Kysymyksen kuva"
+
+msgid "No hotspot image available"
+msgstr "Ei hotspot-kuvaa saatavilla"
+
+msgid "Learner delineation"
+msgstr "Oppijan rajaus"
+
+msgid "Expected delineation"
+msgstr "Odotettu rajaus"
+
+msgid "Expected zones"
+msgstr "Odotetut alueet"
+
+msgid "Zone"
+msgstr "Alue"
+
+msgid "Learner annotation"
+msgstr "Oppijan merkintä"
+
+msgid "No annotation image available"
+msgstr "Ei merkintäkuvaa saatavilla"
+
+msgid "This answer is pending teacher correction."
+msgstr "Tämä vastaus odottaa opettajan korjausta."
+
+msgid "Teacher comment"
+msgstr "Opettajan kommentti"
+
+msgid "Teacher correction"
+msgstr "Opettajan korjaus"
+
+msgid "Save correction"
+msgstr "Tallenna korjaus"
+
+msgid "Learner audio"
+msgstr "Oppijan ääni"
+
+msgid "Download audio"
+msgstr "Lataa ääni"
+
+msgid "No uploaded audio"
+msgstr "Ei ladattua ääntä"
+
+msgid "Learner Office document"
+msgstr "Oppijan Office-asiakirja"
+
+msgid "Learner file"
+msgstr "Oppijan tiedosto"
+
+msgid "Download Office document"
+msgstr "Lataa Office-asiakirja"
+
+msgid "No submitted document"
+msgstr "Ei lähetettyä asiakirjaa"
+
+msgid "No uploaded file"
+msgstr "Ei ladattua tiedostoa"
+
+msgid "Content item"
+msgstr "Sisältökohde"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Tätä kysymystyyppiä ei voi tarkistaa tällä sivulla."
+
+msgid "Exercise completed"
+msgstr "Harjoitus suoritettu"
+
+msgid "Could not start the attempt"
+msgstr "Yritystä ei voitu käynnistää"
+
+msgid "Invalid exercise attempt"
+msgstr "Virheellinen harjoitusyritys"
+
+msgid "Could not load exercise result"
+msgstr "Harjoitustulosta ei voitu ladata"
+
+msgid "Could not load AI providers"
+msgstr "AI-palveluntarjoajia ei voitu ladata"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI-ehdotusta ei voitu luoda"
+
+msgid "Correction saved"
+msgstr "Korjaus tallennettu"
+
+msgid "Could not save correction"
+msgstr "Korjausta ei voitu tallentaa"
+
+msgid "Create exercise"
+msgstr "Luo harjoitus"
+
+msgid "Exercise categories"
+msgstr "Harjoituskategoriat"
+
+msgid "Question categories"
+msgstr "Kysymyskategoriat"
+
+msgid "Search by exercise title or description."
+msgstr "Hae harjoituksen otsikolla tai kuvauksella."
+
+msgid "Search exercises"
+msgstr "Hae harjoituksia"
+
+msgid "No exercises found"
+msgstr "Harjoituksia ei löytynyt"
+
+msgid "Open exercise"
+msgstr "Avaa harjoitus"
+
+msgid "Disable autolaunch"
+msgstr "Poista automaattikäynnistys käytöstä"
+
+msgid "Enable autolaunch"
+msgstr "Ota automaattikäynnistys käyttöön"
+
+msgid "Export QTI2"
+msgstr "Vie QTI2-muodossa"
+
+msgid "Bulk actions"
+msgstr "Joukko-operaatiot"
+
+msgid "Selected exercises"
+msgstr "Valitut harjoitukset"
+
+msgid "No exercises selected"
+msgstr "Ei valittuja harjoituksia"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Haluatko varmasti suorittaa tämän toiminnon valituille harjoituksille?"
+
+msgid "Bulk action completed"
+msgstr "Joukko-operaatio suoritettu"
+
+msgid "Could not update exercises"
+msgstr "Harjoituksia ei voitu päivittää"
+
+msgid "Could not update exercise"
+msgstr "Harjoitusta ei voitu päivittää"
+
+msgid "Copy exercise"
+msgstr "Kopioi harjoitus"
+
+msgid "Delete exercise"
+msgstr "Poista harjoitus"
+
+msgid "Could not load exercises"
+msgstr "Harjoituksia ei voitu ladata"
+
+msgid "No limit"
+msgstr "Ei rajoitusta"
+
+msgid "Add selected questions to the test"
+msgstr "Lisää valitut kysymykset testiin"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Tätä kysymystä käytetään aktiivisessa testissä, eikä sitä voi muokata täällä."
+
+msgid "This question cannot be edited here."
+msgstr "Tätä kysymystä ei voi muokata täällä."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Tätä kysymystä käytetään aktiivisessa testissä, eikä sitä voi poistaa täällä."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Tätä kysymystä ei voi poistaa, koska käyttöoikeuksiasi rajoittavat alustan asetukset."
+
+msgid "Already in test"
+msgstr "Jo testissä"
+
+msgid "Select at least one question."
+msgstr "Valitse vähintään yksi kysymys."
+
+msgid "Question bank updated"
+msgstr "Kysymyspankki päivitetty"
+
+msgid "Could not update the question bank"
+msgstr "Kysymyspankkia ei voitu päivittää"
+
+msgid "Could not load the question bank"
+msgstr "Kysymyspankkia ei voitu ladata"
+
+msgid "Total score"
+msgstr "Kokonaispisteet"
+
+msgid "Starting"
+msgstr "Aloitetaan"
+
+msgid "Attempt history"
+msgstr "Yrityshistoria"
+
+msgid "No attempts yet"
+msgstr "Ei yrityksiä vielä"
+
+msgid "Invalid exercise"
+msgstr "Virheellinen harjoitus"
+
+msgid "Could not load exercise overview"
+msgstr "Harjoituksen yleiskatsausta ei voitu ladata"
+
+msgid "Open test"
+msgstr "Avaa testi"
+
+msgid "Random answers"
+msgstr "Satunnaiset vastaukset"
+
+msgid "Prevent moving backwards"
+msgstr "Estä taaksepäin siirtyminen"
+
+msgid "Previous button hidden"
+msgstr "Edellinen-painike piilotettu"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Tämä harjoitus käyttää asetuksia, jotka vaativat eri testisoittimen."
+
+msgid "Continue test"
+msgstr "Jatka testiä"
+
+msgid "Attempt started"
+msgstr "Yritys aloitettu"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Opettajan esikatselu ei luo seurattua yritystä."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Aloita tai jatka harjoitusyritystä. Luonnosvastaukset voidaan tallentaa ennen lopullista lähetystä."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Aikaraja saavutettu. Yritys päätetään."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Kysymyksen aika saavutettu. Vastauksesi tallennetaan."
+
+msgid "Finishing"
+msgstr "Päätetään"
+
+msgid "Draft saved"
+msgstr "Luonnos tallennettu"
+
+msgid "Statement"
+msgstr "Ohjeistus"
+
+msgid "Drop each option on the matching answer"
+msgstr "Pudota kukin vaihtoehto vastaavaan vastaukseen"
+
+msgid "Clear match"
+msgstr "Poista vastaavuus"
+
+msgid "Click to place the selected option here"
+msgstr "Klikkaa asettaaksesi valitun vaihtoehdon tähän"
+
+msgid "Select an option, then click here"
+msgstr "Valitse vaihtoehto, sitten klikkaa tähän"
+
+msgid "Already matched"
+msgstr "Jo vastaavoitu"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Voit vetää vaihtoehdon vastaukseen tai valita vaihtoehdon ja klikata kohderuutua."
+
+msgid "Put the items in the correct order."
+msgstr "Aseta kohteet oikeaan järjestykseen."
+
+msgid "Move left"
+msgstr "Siirrä vasemmalle"
+
+msgid "Move right"
+msgstr "Siirrä oikealle"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Voit vetää kohteita vasemmalle tai oikealle tai käyttää siirtonappeja järjestyksen muuttamiseen."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Voit vetää kohteita tai käyttää siirtonappeja järjestyksen muuttamiseen."
+
+msgid "Or upload an audio file"
+msgstr "Tai lataa äänitiedosto"
+
+msgid "Selected audio"
+msgstr "Valittu ääni"
+
+msgid "Uploaded audio"
+msgstr "Ladattu ääni"
+
+msgid "Office document"
+msgstr "Toimistoasiakirja"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Täydennä asiakirja alla olevassa editorissa. Tiedosto liitetään tähän yritykseen opettajan tarkistettavaksi."
+
+msgid "Reload Office editor"
+msgstr "Lataa Office-editori uudelleen"
+
+msgid "Prepare Office document"
+msgstr "Valmistele Office-asiakirja"
+
+msgid "Open in new tab"
+msgstr "Avaa uudessa välilehdessä"
+
+msgid "Preparing Office document"
+msgstr "Valmistellaan Office-asiakirjaa"
+
+msgid "Submitted document"
+msgstr "Lähetetty asiakirja"
+
+msgid "Annotation tools"
+msgstr "Merkintätyökalut"
+
+msgid "Text to place"
+msgstr "Sijoitettava teksti"
+
+msgid "Click the image to place the text annotation."
+msgstr "Klikkaa kuvaa asettaaksesi tekstimerkinnän."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Klikkaa kuvaa lisätäksesi polkupisteitä. Käytä Uusi polku -painiketta erottaaksesi polut."
+
+msgid "Start new path"
+msgstr "Aloita uusi polku"
+
+msgid "Current annotations"
+msgstr "Nykyiset merkinnät"
+
+msgid "Remove point"
+msgstr "Poista piste"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Klikkaa kuvaa piirtääksesi rajausmonikulmion."
+
+msgid "Click a marker to remove it."
+msgstr "Klikkaa merkkiä poistaaksesi sen."
+
+msgid "Placed"
+msgstr "Sijoitettu"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Valitse vastaus, sitten klikkaa kuvaa merkataksesi sen."
+
+msgid "Reading speed"
+msgstr "Lukunopeus"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Tätä kysymystyyppiä ei voi näyttää tässä soittimessa."
+
+msgid "Save draft"
+msgstr "Tallenna luonnos"
+
+msgid "I confirm that my answers were saved."
+msgstr "Vahvistan, että vastaukseni on tallennettu."
+
+msgid "Finish test"
+msgstr "Lopeta testi"
+
+msgid "Attempt finished"
+msgstr "Yritys päätetty"
+
+msgid "Question category"
+msgstr "Kysymysluokka"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Olet vastannut tämän kysymysluokan kysymyksiin, tämä on viimeinen mahdollisuutesi palata ja tarkistaa nämä kysymykset."
+
+msgid "Question time left"
+msgstr "Kysymyksen jäljellä oleva aika"
+
+msgid "Time left"
+msgstr "Aikaa jäljellä"
+
+msgid "Current attempt"
+msgstr "Nykyinen yritys"
+
+msgid "Could not save draft answer"
+msgstr "Luonnosvastausta ei voitu tallentaa"
+
+msgid "Could not load exercise"
+msgstr "Harjoitusta ei voitu ladata"
+
+msgid "Draft answer saved"
+msgstr "Luonnosvastaus tallennettu"
+
+msgid "Could not finish the attempt"
+msgstr "Yritystä ei voitu päättää"
+
+msgid "Could not prepare Office document"
+msgstr "Office-asiakirjaa ei voitu valmistella"
+
+msgid "Back to learner score"
+msgstr "Takaisin oppijan tuloksiin"
+
+msgid "Disable auto refresh"
+msgstr "Poista automaattinen päivitys"
+
+msgid "Enable auto refresh"
+msgstr "Ota automaattinen päivitys käyttöön"
+
+msgid "Live window"
+msgstr "Live-ikkuna"
+
+msgid "Ongoing attempts"
+msgstr "Käynnissä olevat yritykset"
+
+msgid "Completed attempts"
+msgstr "Päättyneet yritykset"
+
+msgid "Started"
+msgstr "Aloitettu"
+
+msgid "Last activity"
+msgstr "Viimeisin toiminta"
+
+msgid "Could not load live results"
+msgstr "Live-tuloksia ei voitu ladata"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Tämä harjoitus on vain luettavissa, koska se sisältyy oppimispolkuun."
+
+msgid "Select a question type to create a question."
+msgstr "Valitse kysymystyyppi luodaksesi kysymyksen."
+
+msgid "Click to preview"
+msgstr "Klikkaa esikatsellaksesi"
+
+msgid "Hide preview"
+msgstr "Piilota esikatselu"
+
+msgid "Shape"
+msgstr "Muoto"
+
+msgid "Coordinates"
+msgstr "Koordinaatit"
+
+msgid "Blanks"
+msgstr "Tyhjät kohdat"
+
+msgid "Switchable blanks"
+msgstr "Vaihdettavat tyhjät kohdat"
+
+msgid "Blank"
+msgstr "Tyhjä kohta"
+
+msgid "Input width"
+msgstr "Syötteen leveys"
+
+msgid "Orientation"
+msgstr "Suunta"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Ei käytettävissä nykyisessä harjoituksen palautetilassa"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Ei käytettävissä oppimispolun luontiprosessissa"
+
+msgid "Delete question"
+msgstr "Poista kysymys"
+
+msgid "Could not update exercise questions"
+msgstr "Harjoituksen kysymyksiä ei voitu päivittää"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Harjoitusta ei voitu lisätä oppimispolkuun"
+
+msgid "A valid exercise id is required."
+msgstr "Kelvollinen harjoitustunnus vaaditaan."
+
+msgid "Could not load exercise questions"
+msgstr "Harjoituksen kysymyksiä ei voitu ladata"
+
+msgid "Delete selected attempts"
+msgstr "Poista valitut yritykset"
+
+msgid "Before date"
+msgstr "Ennen päivämäärää"
+
+msgid "Pending corrections"
+msgstr "Odottaa korjauksia"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Tämä harjoitus on lukittu arviointikirjan toimesta. Yritysten siivoustoiminnot on poistettu käytöstä."
+
+msgid "No attempts found"
+msgstr "Yrityksiä ei löytynyt"
+
+msgid "Review"
+msgstr "Tarkista"
+
+msgid "Print/PDF"
+msgstr "Tulosta/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Harjoitusraporttia ei voitu ladata"
+
+msgid "Select at least one attempt"
+msgstr "Valitse vähintään yksi yritys"
+
+msgid "Delete selected attempts?"
+msgstr "Poistetaanko valitut yritykset?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Lähetetäänkö tarkistettujen yritysten tulossähköpostit?"
+
+msgid "Could not send emails"
+msgstr "Sähköposteja ei voitu lähettää"
+
+msgid "Exercise result emails sent"
+msgstr "Harjoitustulossähköpostit lähetetty"
+
+msgid "Skipped"
+msgstr "Ohitettu"
+
+msgid "Close attempt?"
+msgstr "Suljetaanko yritys?"
+
+msgid "Attempt closed"
+msgstr "Yritys suljettu"
+
+msgid "Could not close attempt"
+msgstr "Yritystä ei voitu sulkea"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Lähetetäänkö tämän yrityksen tulos oppijalle sähköpostitse?"
+
+msgid "Email sent"
+msgstr "Sähköposti lähetetty"
+
+msgid "Could not send email"
+msgstr "Sähköpostia ei voitu lähettää"
+
+msgid "Attempt deleted"
+msgstr "Yritys poistettu"
+
+msgid "Could not delete attempt"
+msgstr "Yritystä ei voitu poistaa"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Valitse CSV-tiedosto, joka sisältää otsikko- ja kuvaussarakkeet."
+
+msgid "Manage categories used to classify questions."
+msgstr "Hallinnoi kysymysten luokitteluun käytettäviä kategorioita."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Hallinnoi harjoitusten luokitteluun käytettäviä kategorioita."
+
+msgid "Could not load categories"
+msgstr "Kategorioita ei voitu ladata"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Tuodut kategoriat: %s. Ohitetut rivit: %s."
+
+msgid "Imported categories: %s."
+msgstr "Tuodut kategoriat: %s."
+
+msgid "Could not import categories"
+msgstr "Kategorioita ei voitu tuoda"
+
+msgid "Could not save category"
+msgstr "Kategoriaa ei voitu tallentaa"
+
+msgid "Answer distribution"
+msgstr "Vastausjakauma"
+
+msgid "Configured answers"
+msgstr "Määritetyt vastaukset"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Yksityiskohtainen vastauslaskenta ei ole vielä käytettävissä siirretyissä raporteissa tietyille kysymystyypeille."
+
+msgid "No report by question data found"
+msgstr "Kysymyskohtaista raporttidataa ei löytynyt"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Yksityiskohtainen vastauslaskenta ei ole vielä käytettävissä siirretyissä raporteissa tälle kysymystyypille."
+
+msgid "No answer distribution found"
+msgstr "Vastausjakaumaa ei löytynyt"
+
+msgid "Could not load report by question"
+msgstr "Kysymyskohtaista raporttia ei voitu ladata"
+
+msgid "Question settings"
+msgstr "Kysymyksen asetukset"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Jätä tyhjäksi tai 0, jos aikarajaa ei ole."
+
+msgid "Time limit in seconds"
+msgstr "Aikaraja sekunteina"
+
+msgid "Attached questions"
+msgstr "Liitetyt kysymykset"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Tässä näkyvät vain nykyiseen harjoitukseen liitetyt kysymykset."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Tähän mediakysymykseen ei ole liitetty kysymyksiä nykyisessä harjoituksessa."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Lataa Office-asiakirjamalli, jota oppijat muokkaavat OnlyOfficella."
+
+msgid "Replace Office document"
+msgstr "Korvaa Office-asiakirja"
+
+msgid "Current Office document"
+msgstr "Nykyinen Office-asiakirja"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Tämä kysymys korjataan manuaalisesti oppijan lähetettyä muokatun asiakirjan."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Kokonaispisteet lasketaan hotspot-pisteiden summana."
+
+msgid "Global score"
+msgstr "Yhteispisteet"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Valitse hotspot-rivi, valitse sen muoto ja piirrä kuvaan. Monikulmioille klikkaa jokaista pistettä ja viimeistele monikulmio tai kaksoisklikkaa viimeistelyä varten."
+
+msgid "Finish polygon"
+msgstr "Viimeistele monikulmio"
+
+msgid "Calculated answer"
+msgstr "Laskettu vastaus"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Kirjoita tekstisi alle ja käytä hakasulkeita [...] yhden tai useamman tyhjän kohdan määrittämiseen."
+
+msgid "Lowest value"
+msgstr "Pienin arvo"
+
+msgid "Highest value"
+msgstr "Suurin arvo"
+
+msgid "Fill in blanks"
+msgstr "Täytä tyhjät kohdat"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Käytä valittuja merkkejä tyhjien kohtien määrittämiseen. Esimerkki: Perun pääkaupunki on [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Syötä pudotusvalikon vaihtoehdot, yksi vastaus riville. Merkitse sitten odotetut vastaukset alla kuten vanhassa työkalussa."
+
+msgid "Refresh answers"
+msgstr "Päivitä vastaukset"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Tämä pudotusvalintakysymys käyttää yhtä yhteispistettä kuten vanha versio."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Syötä vähintään kaksi pudotusvalikon vaihtoehtoa."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Luo ensin kohdevaihtoehdot, sitten linkitä jokainen kohde oikeaan vaihtoehtoon."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Tämä yhdistämiskysymys käyttää yhtä yhteispistettä kuten vanha versio."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Luo vaiheet ja valitse kunkin odotettu sijainti kuten vanhassa vedettävässä työkalussa."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Oppijat valitsevat Tosi tai Epätosi ja sitten varmuusasteensa yrityksen aikana. Editori tallentaa samat Oikein/Väärin-pisteet ja varmuustasot kuin vanha versio."
+
+msgid "Hotspot combination"
+msgstr "Hotspot-yhdistelmä"
+
+msgid "Add delineation"
+msgstr "Lisää rajaus"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Tällä Office-asiakirjakysymyksellä ei ole vastausvaihtoehtoja. Sen pisteytys määritetään korjauksen/tulosten tarkastelun yhteydessä."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Tällä latauskysymyksellä ei ole vastausvaihtoehtoja. Sen pisteytys määritetään korjauksen/tulosten tarkastelun yhteydessä."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Tällä suullisen ilmaisun kysymyksellä ei ole vastausvaihtoehtoja. Sen pisteytys määritetään korjauksen/tulosten tarkastelun yhteydessä."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Tällä avoimella kysymyksellä ei ole vastausvaihtoehtoja. Sen pisteytys määritetään korjauksen/tulosten tarkastelun yhteydessä."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Lisää luettava teksti vieritysnopeuden asetuksilla."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Lisää sisältöä, mediaa tai lukukontekstia ilman pisteytystä."
+
+msgid "Insert a page break without adding score."
+msgstr "Lisää sivunvaihto ilman pisteytystä."
+
+msgid "Could not save question"
+msgstr "Kysymystä ei voitu tallentaa"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Vain DOC-, DOCX-, XLS- tai XLSX-tiedostot ovat sallittuja."
+
+msgid "Please select an Office document."
+msgstr "Valitse Office-asiakirja."
+
+msgid "Please draw at least one hotspot."
+msgstr "Piirrä vähintään yksi hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Piirrä vähintään yksi rajaus."
+
+msgid "The fill in blanks text is required."
+msgstr "Täydennettävä teksti on pakollinen."
+
+msgid "At least one expected answer is required."
+msgstr "Vähintään yksi odotettu vastaus on pakollinen."
+
+msgid "At least two draggable items are required."
+msgstr "Vähintään kaksi vedettävää kohdetta on pakollinen."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Jokainen vedettävä kohde on linkitettävä kelvolliseen kohdepaikkaan."
+
+msgid "At least two matching options are required."
+msgstr "Vähintään kaksi vastaavaa vaihtoehtoa on pakollinen."
+
+msgid "At least two matching pairs are required."
+msgstr "Vähintään kaksi vastaavaa paria on pakollinen."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Jokainen vastaava pari on linkitettävä kelvolliseen vaihtoehtoon."
+
+msgid "At least two answers are required."
+msgstr "Vähintään kaksi vastausta on pakollinen."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Jokaisella tosi/epätosi-vastauksella on oltava valittuna Tosi tai Epätosi."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Yksilöllisen vastauksen kysymyksessä on oltava tasan yksi oikea vastaus."
+
+msgid "At least one correct answer is required."
+msgstr "Vähintään yksi oikea vastaus on pakollinen."
+
+msgid "Could not load question"
+msgstr "Kysymystä ei voitu ladata"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Valitse kurssi ja vie globaali harjoitustulosten raportti CSV-muodossa."
+
+msgid "Back to reports catalog"
+msgstr "Takaisin raporttiluetteloon"
+
+msgid "Could not load exercise global report"
+msgstr "Harjoituksen globaalia raporttia ei voitu ladata"
+
+msgid "Imported questions"
+msgstr "Tuodut kysymykset"
+
+msgid "Aiken content"
+msgstr "Aiken-sisältö"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken -generaattoria ei voitu ladata"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken-sisältöä ei voitu luoda"
+
+msgid "Could not import generated Aiken content"
+msgstr "Luotua Aiken-sisältöä ei voitu tuoda"
+
+msgid "Back to my courses"
+msgstr "Takaisin omiin kursseihin"
+
+msgid "Open report"
+msgstr "Avaa raportti"
+
+msgid "Questions with no automatic correction"
+msgstr "Kysymykset ilman automaattista korjausta"
+
+msgid "Could not load pending attempts"
+msgstr "Odottavia yrityksiä ei voitu ladata"
+
+msgid "Skipped questions"
+msgstr "Ohitetut kysymykset"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken-tuonti jakaa tämän kokonaispainon tuoduille kysymyksille, ellei kysymys määritä SCORE-arvoa."
+
+msgid "Import warnings"
+msgstr "Tuontivaroitukset"
+
+msgid "Could not import questions"
+msgstr "Kysymyksiä ei voitu tuoda"
+
+msgid "No question statistics found"
+msgstr "Kysymystilastoja ei löytynyt"
+
+msgid "Could not load question statistics"
+msgstr "Kysymystilastoja ei voitu ladata"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Voit myös yhdistää MCP-asiakkaan suoraan osoittamalla sen seuraavaan päätepisteeseen:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Tiliisi ei ole tällä hetkellä yhdistettyjä sovelluksia."
+
+msgid "Connected on"
+msgstr "Yhdistetty"
+
+msgid "Last used"
+msgstr "Viimeksi käytetty"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ei enää voi käyttää Chamilo-tiliäsi. Jatketaanko?"
+
+msgid "Application revoked"
+msgstr "Sovellus peruutettu"
+
+msgid "Copied to clipboard"
+msgstr "Kopioitu leikepöydälle"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP-päätepistettä ei voitu kopioida"
+
+msgid "MCP endpoint"
+msgstr "MCP-päätepiste"
+
+msgid "API key"
+msgstr "API-avain"
+
+msgid "Last used at"
+msgstr "Viimeksi käytetty"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopioi tämä avain nyt. Sitä ei näytetä uudelleen."
+
+msgid "Rotate API key"
+msgstr "Vaihda API-avain"
+
+msgid "Revoke API key"
+msgstr "Peruuta API-avain"
+
+msgid "Remote MCP connection"
+msgstr "Etä-MCP-yhteys"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Määritä MCP-asiakasohjelma seuraavilla arvoilla:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Nykyinen avain lakkaa toimimasta heti. Jatketaanko?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Uusi henkilökohtainen MCP API-avain luodaan. Jatketaanko?"
+
+msgid "MCP API key generated"
+msgstr "MCP API-avain luotu"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Tätä avainta käyttävät MCP-asiakkaat lakkaavat toimimasta heti. Jatketaanko?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API-avain peruutettu"
+
+msgid "Could not copy the API key"
+msgstr "API-avaimen kopiointi epäonnistui"
+
+msgid "Project"
+msgstr "Projekti"
+
+msgid "Close old tickets"
+msgstr "Sulje vanhat tiketit"
+
+msgid "Close tickets older than seven days?"
+msgstr "Suljetaanko yli seitsemän päivää vanhat tiketit?"
+
+msgid "Assignment history"
+msgstr "Tehtävähistoria"
+
+msgid "Translate with AI"
+msgstr "Käännä tekoälyllä"
+
+msgid "Target language"
+msgstr "Kohdekieli"
+
+msgid "Please select a provider"
+msgstr "Valitse palveluntarjoaja"
+
+msgid "Generate translation"
+msgstr "Luo käännös"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Vähintään yhdessä käyttöehdot-osiossa on oltava tekstiä."
+
+msgid "No active target languages are available."
+msgstr "Aktiivisia kohdekieliä ei ole saatavilla."
+
+msgid "Tutor"
+msgstr "Tuutori"
+
+msgid "Access dates"
+msgstr "Käyttöpäivämäärät"
+
+msgid "Coach access dates"
+msgstr "Valmentajan käyttöpäivämäärät"
+
+msgid "No sessions found"
+msgstr "Istuntoja ei löytynyt"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Valitse kurssit, joihin tämän käyttäjän ei tule päästä istunnossa."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Käyttäjää ei voi estää kaikista istunnon kursseista. Poista käyttäjä tilauksesta sen sijaan."
+
+msgid "Users subscribed to this session"
+msgstr "Istuntoon tilatut käyttäjät"
+
+msgid "No available users found"
+msgstr "Käytettävissä olevia käyttäjiä ei löytynyt"
+
+msgid "Subscribe this user to the session?"
+msgstr "Tilataanko tämä käyttäjä istuntoon?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Tilataanko valitut käyttäjät istuntoon?"
+
+msgid "General tutor planning"
+msgstr "Yleinen tuutorisuunnittelu"
+
+msgid "User is already registered by another tutor."
+msgstr "Käyttäjä on jo rekisteröity toisen tuutorin toimesta."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Saat kopion, koska olet kurssin tuutori"
+
+msgid "General tutor"
+msgstr "Yleinen tuutori"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Huomioi kurssit, tuutorit, tekninen tukipalvelu, opettajat ja/tai käytettävissä olevat materiaalit."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tuutorit, jotka on lisätty opettajiksi kurssilla %s"
+
+msgid "Tutor name"
+msgstr "Tuutorin nimi"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Istunnon tuutorit koordinoivat istuntoa ja voivat toimia tuutoreina jokaisella istunnon kurssilla. Vain opettajan roolissa olevat käyttäjät voidaan valita istunnon tuutoreiksi."
+
+msgid "Access start date for tutors"
+msgstr "Tuutorien pääsyn aloituspäivämäärä"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Päivämäärä, jolloin istunto avataan tuutoreille, jotta he voivat valmistella sen ennen opiskelijoiden liittymistä"
+
+msgid "Access end date for tutors"
+msgstr "Tuutorien pääsyn päättymispäivämäärä"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Päivämäärä, jolloin istunto suljetaan tuutoreilta. Lisäaika mahdollistaa kaikkien tarvittavien seurantatietojen viennin"
+
+msgid "Tutor and student"
+msgstr "Tuutori ja opiskelija"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Tämä raportti näyttää istuntojen viikoittaisen jakautumisen yleisten tuutorien kesken valitulla ajanjaksolla."
+
+msgid "User is general tutor in some sessions"
+msgstr "Käyttäjä on yleinen tuutori joissakin istunnoissa"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Opettajat lisätään tuutoreiksi kaikissa kurssi-istunnoissa."
+
+msgid "Delete failed: invalid question id."
+msgstr "Poisto epäonnistui: virheellinen kysymyksen tunnus."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Istuntojen keskimääräinen määrä yleistä istuntotutorointia kohden"
+
+msgid "No room"
+msgstr "Ei tilaa"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Tuo kurssin opettajat kurssitutoreiksi istuntoon"
+
+msgid "Clean and update course tutors"
+msgstr "Tyhjennä ja päivitä kurssitutorit"
+
+msgid "Add me as tutor"
+msgstr "Lisää minut tutoriksi"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Kyselyn lisääminen oppimispolkuun epäonnistui"
+
+msgid "Access dates for tutors"
+msgstr "Tutorien käyttöoikeuspäivät"
+
+msgid "Tutor and group member"
+msgstr "Tutor ja ryhmän jäsen"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Päivittäinen tekoälytoken-raja on saavutettu. Yritä uudelleen huomenna."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Kuukausittainen tekoälytoken-raja on saavutettu. Yritä uudelleen ensi kuussa."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Tämä kurssikoodi on jo käytössä, valitse toinen koodi."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Tämä kurssin nimi on jo käytössä, valitse toinen nimi."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Tämän työkalun näkyvyyttä ei voi muuttaa"
+
+msgid "Invalid visibility"
+msgstr "Virheellinen näkyvyys"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Saat kopion, koska olet yksi kurssin tutoreista"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Saat kopion, koska olet kurssin tutori"
+
+msgid "Manual completion"
+msgstr "Manuaalinen suoritus"
+
+msgid "Send to tutors"
+msgstr "Lähetä tutoreille"
+
+msgid "Lab title"
+msgstr "Laboratorion nimi"
+
+msgid "Lab week"
+msgstr "Laboratorioviikko"
+
+msgid "Final exam access rule"
+msgstr "Loppukokeen käyttöoikeussääntö"
+
+msgid "Course completion rule"
+msgstr "Kurssin suorittamissääntö"
+
+msgid "You have been invited to join a course"
+msgstr "Sinut on kutsuttu liittymään kurssille"
+
+msgid "No user has been found"
+msgstr "Käyttäjää ei löytynyt"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Valittua käyttäjää ei voi tilata tässä kontekstissa"
+
+msgid "No change has been made"
+msgstr "Muutoksia ei tehty"
+
+msgid "Back to group list"
+msgstr "Takaisin ryhmäluetteloon"
+
+msgid "Remove class link"
+msgstr "Poista luokkayhteys"
+
+msgid "Group settings"
+msgstr "Ryhmän asetukset"
+
+msgid "Self-registration allowed"
+msgstr "Itseilmoittautuminen sallittu"
+
+msgid "Self-unregistration allowed"
+msgstr "Itseilmoittautumisen peruminen sallittu"
+
+msgid "This group is linked to the class"
+msgstr "Tämä ryhmä on linkitetty luokkaan"
+
+msgid "Create one or more empty course groups"
+msgstr "Luo yksi tai useampi tyhjä kurssiryhmä"
+
+msgid "Number of places"
+msgstr "Paikkojen määrä"
+
+msgid "Base group"
+msgstr "Perusryhmä"
+
+msgid "Share"
+msgstr "Jaa"
+
+msgid "Collaboration"
+msgstr "Yhteistyö"
+
+msgid "The group title is required."
+msgstr "Ryhmän otsikko on pakollinen."
+
+msgid "Back to group area"
+msgstr "Takaisin ryhmäalueelle"
+
+msgid "Members are managed by the linked class"
+msgstr "Jäsenet hallinnoi linkitetty luokka"
+
+msgid "%s groups selected"
+msgstr "%s ryhmää valittu"
+
+msgid "Fill selected groups"
+msgstr "Täytä valitut ryhmät"
+
+msgid "Empty selected groups"
+msgstr "Tyhjennä valitut ryhmät"
+
+msgid "Fill group"
+msgstr "Täytä ryhmä"
+
+msgid "Empty group"
+msgstr "Tyhjennä ryhmä"
+
+msgid "Groups per user"
+msgstr "Ryhmät käyttäjää kohden"
+
+msgid "No tutors"
+msgstr "Ei ohjaajia"
+
+msgid "No users"
+msgstr "Ei käyttäjiä"
+

@@ -37784,3 +37784,1299 @@ msgstr "ໃຊ້ 0 ເພື່ອເກັບຄຳຖາມທັງໝົດ
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "ໃຊ້ຊ່ອງຂໍ້ມູນເຫຼົ່ານີ້ເພື່ອຈັດປະເພດແບບຝຶກຫັດໂດຍບໍ່ຂຶ້ນກັບຕົວເລືອກການສະແດງຜົນ."
 
+msgid "Invite by email"
+msgstr "ເຊີນໂດຍອີເມວ"
+
+msgid "Invitation has been sent"
+msgstr "ການເຊີນໄດ້ຖືກສົ່ງແລ້ວ"
+
+msgid "Sent on"
+msgstr "ສົ່ງເມື່ອ"
+
+msgid "Accepted on"
+msgstr "ຍອມຮັບເມື່ອ"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "ຫຼັກສູດນີ້ເປີດໃນພາກການສຶກສາ. ການສົ່ງການເຊີນທີ່ນີ້ຈະສະໝັກຜູ້ຮັບເຂົ້າພາກການສຶກສາທັງໝົດ %s, ບໍ່ແມ່ນພຽງແຕ່ຫຼັກສູດນີ້."
+
+msgid "Revoke"
+msgstr "ຖອນການເຊີນ"
+
+msgid "Revoked"
+msgstr "ຖອນການເຊີນແລ້ວ"
+
+msgid "Invitation has been revoked"
+msgstr "ການເຊີນໄດ້ຖືກຖອນແລ້ວ"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຖອນການເຊີນທີ່ສົ່ງໄປຫາ %s?"
+
+msgid "No default room"
+msgstr "ບໍ່ມີຫ້ອງເລີ່ມຕົ້ນ"
+
+msgid "Floor"
+msgstr "ຊັ້ນ"
+
+msgid "Capacity"
+msgstr "ຄວາມສາມາດ"
+
+msgid "Use attendance default room"
+msgstr "ໃຊ້ຫ້ອງເລີ່ມຕົ້ນສຳລັບການເຂົ້າຮຽນ"
+
+msgid "Floor number"
+msgstr "ເລກຊັ້ນ"
+
+msgid "Copy to students"
+msgstr "ສຳເນົາໃຫ້ນັກຮຽນ"
+
+msgid "Generate a quick test on this topic"
+msgstr "ສ້າງການທົດສອບໄວສຳລັບຫົວຂໍ້ນີ້"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "ເນື້ອຫາເອກະສານທີ່ບັນທຶກຈະຖືກສົ່ງໄປຫາແບບຈຳລອງ AI ເພື່ອປະມວນຜົນ."
+
+msgid "MCP API key"
+msgstr "ກະແຈ API MCP"
+
+msgid "Authorized applications"
+msgstr "ແອັບພລິເຄຊັນທີ່ໄດ້ຮັບອະນຸຍາດ"
+
+msgid "Your session is about to expire"
+msgstr "ພາກການສຶກສາຂອງທ່ານກຳລັງຈະໝົດອາຍຸ"
+
+msgid "Do you want to continue your session?"
+msgstr "ທ່ານຕ້ອງການສືບຕໍ່ພາກການສຶກສາຂອງທ່ານບໍ?"
+
+msgid "Stay connected"
+msgstr "ຢູ່ເຊື່ອມຕໍ່"
+
+msgid "You will be signed out in %s seconds."
+msgstr "ທ່ານຈະຖືກອອກຈາກລະບົບໃນ %s ວິນາທີ."
+
+msgid "No descriptions available yet."
+msgstr "ຍັງບໍ່ມີຄຳອະທິບາຍ."
+
+msgid "%s users selected"
+msgstr "ເລືອກ %s ຜູ້ໃຊ້"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "ຜູ້ໃຊ້ທີ່ເລືອກໄດ້ຖືກສະໝັກເຂົ້າຫຼັກສູດແລ້ວ"
+
+msgid "Import teachers"
+msgstr "ນຳເຂົ້າຄູອາຈານ"
+
+msgid "Import learners"
+msgstr "ນຳເຂົ້ານັກຮຽນ"
+
+msgid "Select CSV file"
+msgstr "ເລືອກໄຟລ໌ CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "ບາງຜູ້ໃຊ້ບໍ່ສາມາດສະໝັກໄດ້"
+
+msgid "Browse available classes"
+msgstr "ຊອກຫາຫ້ອງຮຽນທີ່ມີ"
+
+msgid "Back to linked classes"
+msgstr "ກັບໄປຫ້ອງຮຽນທີ່ເຊື່ອມໂຍງ"
+
+msgid "No classes are currently linked to this course."
+msgstr "ບໍ່ມີຫ້ອງຮຽນໃດເຊື່ອມໂຍງກັບຫຼັກສູດນີ້ໃນປັດຈຸບັນ."
+
+msgid "No available classes were found for this course."
+msgstr "ບໍ່ພົບຫ້ອງຮຽນທີ່ມີສຳລັບຫຼັກສູດນີ້."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຍົກເລີກການສະໝັກຜູ້ໃຊ້ທີ່ເລືອກ?"
+
+msgid "Learning path access"
+msgstr "ການເຂົ້າເຖິງເສັ້ນທາງການຮຽນ"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "ມີພຽງແຕ່ຜູ້ໃຊ້ແລະກຸ່ມທີ່ເລືອກເທົ່ານັ້ນທີ່ສາມາດເຂົ້າເຖິງເສັ້ນທາງການຮຽນນີ້. ຈັດການພວກເຂົາຫຼັງຈາກບັນທຶກ."
+
+msgid "All current and future course users can access this learning path."
+msgstr "ຜູ້ໃຊ້ຫຼັກສູດທັງໝົດໃນປັດຈຸບັນແລະອະນາຄົດສາມາດເຂົ້າເຖິງເສັ້ນທາງການຮຽນນີ້."
+
+msgid "All course users"
+msgstr "ຜູ້ໃຊ້ຫຼັກສູດທັງໝົດ"
+
+msgid "Selected users and groups"
+msgstr "ຜູ້ໃຊ້ແລະກຸ່ມທີ່ເລືອກ"
+
+msgid "No access"
+msgstr "ບໍ່ມີການເຂົ້າເຖິງ"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "ມີພຽງແຕ່ຜູ້ໃຊ້ແລະກຸ່ມທີ່ເພີ່ມທີ່ນີ້ເທົ່ານັ້ນທີ່ສາມາດເຂົ້າເຖິງເສັ້ນທາງການຮຽນນີ້."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "ຈຳນວນຄຳຖາມຖືກຈຳກັດສູງສຸດ %s"
+
+msgid "Open exercise player"
+msgstr "ເປີດຕົວຫຼິ້ນແບບຝຶກຫັດ"
+
+msgid "The score is hidden for this exercise."
+msgstr "ຄະແນນຖືກເຊື່ອງໄວ້ສຳລັບແບບຝຶກຫັດນີ້."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "ການແກ້ໄຂຖືກເຊື່ອງໄວ້ຕາມການຕັ້ງຄ່າຜົນແບບຝຶກຫັດ."
+
+msgid "Progressive adaptive result"
+msgstr "ຜົນການປັບຕົວແບບກ້າວໜ້າ"
+
+msgid "Achieved level"
+msgstr "ລະດັບທີ່ບັນລຸ"
+
+msgid "Correction history"
+msgstr "ປະຫວັດການແກ້ໄຂ"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "ປະຫວັດການແກ້ໄຂດ້ວຍມືທີ່ເຮັດສຳລັບການພະຍາຍາມນີ້."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "ແບບຝຶກຫັດນີ້ໃຊ້ຮູບແບບຜົນໄດ້ຮັບ radar/spiderweb. ບໍ່ສາມາດສະແດງຕາຕະລາງໃນໜ້ານີ້ໄດ້."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "ລາຍລະອຽດຄຳຖາມຖືກເຊື່ອງໄວ້ຕາມການຕັ້ງຄ່າຜົນໄດ້ຮັບຂອງແບບຝຶກຫັດ."
+
+msgid "Media question"
+msgstr "ຄຳຖາມສື່ມວນຊົນ"
+
+msgid "Pending correction"
+msgstr "ລໍຖ້າການແກ້ໄຂ"
+
+msgid "No answer"
+msgstr "ບໍ່ມີຄຳຕອບ"
+
+msgid "Blank %s"
+msgstr "ວ່າງ %s"
+
+msgid "Your order"
+msgstr "ລຳດັບຂອງທ່ານ"
+
+msgid "Correct order"
+msgstr "ລຳດັບທີ່ຖືກຕ້ອງ"
+
+msgid "Delineation review"
+msgstr "ການກວດສອບການກຳນົດເຂດ"
+
+msgid "Learner clicks"
+msgstr "ຜູ້ຮຽນກົດ"
+
+msgid "Question image"
+msgstr "ຮູບພາບຄຳຖາມ"
+
+msgid "No hotspot image available"
+msgstr "ບໍ່ມີຮູບພາບ hotspot"
+
+msgid "Learner delineation"
+msgstr "ການກຳນົດເຂດຂອງຜູ້ຮຽນ"
+
+msgid "Expected delineation"
+msgstr "ການກຳນົດເຂດທີ່ຄາດຫວັງ"
+
+msgid "Expected zones"
+msgstr "ເຂດທີ່ຄາດຫວັງ"
+
+msgid "Zone"
+msgstr "ເຂດ"
+
+msgid "Learner annotation"
+msgstr "ຄຳອະທິບາຍຂອງຜູ້ຮຽນ"
+
+msgid "No annotation image available"
+msgstr "ບໍ່ມີຮູບພາບຄຳອະທິບາຍ"
+
+msgid "This answer is pending teacher correction."
+msgstr "ຄຳຕອບນີ້ລໍຖ້າການແກ້ໄຂຂອງຄູ."
+
+msgid "Teacher comment"
+msgstr "ຄຳເຫັນຂອງຄູ"
+
+msgid "Teacher correction"
+msgstr "ການແກ້ໄຂຂອງຄູ"
+
+msgid "Save correction"
+msgstr "ບັນທຶກການແກ້ໄຂ"
+
+msgid "Learner audio"
+msgstr "ສຽງຂອງຜູ້ຮຽນ"
+
+msgid "Download audio"
+msgstr "ດາວໂຫຼດສຽງ"
+
+msgid "No uploaded audio"
+msgstr "ບໍ່ມີສຽງທີ່ອັບໂຫຼດ"
+
+msgid "Learner Office document"
+msgstr "ເອກະສານ Office ຂອງຜູ້ຮຽນ"
+
+msgid "Learner file"
+msgstr "ໄຟລ໌ຂອງຜູ້ຮຽນ"
+
+msgid "Download Office document"
+msgstr "ດາວໂຫຼດເອກະສານ Office"
+
+msgid "No submitted document"
+msgstr "ບໍ່ມີເອກະສານທີ່ສົ່ງ"
+
+msgid "No uploaded file"
+msgstr "ບໍ່ມີໄຟລ໌ທີ່ອັບໂຫຼດ"
+
+msgid "Content item"
+msgstr "ລາຍການເນື້ອຫາ"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "ບໍ່ສາມາດກວດສອບປະເພດຄຳຖາມນີ້ໃນໜ້ານີ້ໄດ້."
+
+msgid "Exercise completed"
+msgstr "ແບບຝຶກຫັດສຳເລັດແລ້ວ"
+
+msgid "Could not start the attempt"
+msgstr "ບໍ່ສາມາດເລີ່ມການພະຍາຍາມໄດ້"
+
+msgid "Invalid exercise attempt"
+msgstr "ການພະຍາຍາມແບບຝຶກຫັດບໍ່ຖືກຕ້ອງ"
+
+msgid "Could not load exercise result"
+msgstr "ບໍ່ສາມາດໂຫຼດຜົນໄດ້ຮັບແບບຝຶກຫັດໄດ້"
+
+msgid "Could not load AI providers"
+msgstr "ບໍ່ສາມາດໂຫຼດຜູ້ໃຫ້ບໍລິການ AI ໄດ້"
+
+msgid "Could not generate AI suggestion"
+msgstr "ບໍ່ສາມາດສ້າງຄຳແນະນຳ AI ໄດ້"
+
+msgid "Correction saved"
+msgstr "ບັນທຶກການແກ້ໄຂແລ້ວ"
+
+msgid "Could not save correction"
+msgstr "ບໍ່ສາມາດບັນທຶກການແກ້ໄຂໄດ້"
+
+msgid "Create exercise"
+msgstr "ສ້າງແບບຝຶກຫັດ"
+
+msgid "Exercise categories"
+msgstr "ໝວດໝູ່ແບບຝຶກຫັດ"
+
+msgid "Question categories"
+msgstr "ໝວດໝູ່ຄຳຖາມ"
+
+msgid "Search by exercise title or description."
+msgstr "ຄົ້ນຫາຕາມຊື່ຫຼືລາຍລະອຽດແບບຝຶກຫັດ."
+
+msgid "Search exercises"
+msgstr "ຄົ້ນຫາແບບຝຶກຫັດ"
+
+msgid "No exercises found"
+msgstr "ບໍ່ພົບແບບຝຶກຫັດ"
+
+msgid "Open exercise"
+msgstr "ເປີດແບບຝຶກຫັດ"
+
+msgid "Disable autolaunch"
+msgstr "ປິດການເປີດອັດຕະໂນມັດ"
+
+msgid "Enable autolaunch"
+msgstr "ເປີດການເປີດອັດຕະໂນມັດ"
+
+msgid "Export QTI2"
+msgstr "ສົ່ງອອກ QTI2"
+
+msgid "Bulk actions"
+msgstr "ການດຳເນີນການຈຳນວນຫຼາຍ"
+
+msgid "Selected exercises"
+msgstr "ແບບຝຶກຫັດທີ່ເລືອກ"
+
+msgid "No exercises selected"
+msgstr "ບໍ່ມີແບບຝຶກຫັດທີ່ເລືອກ"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການນຳໃຊ້ການດຳເນີນການນີ້ກັບແບບຝຶກຫັດທີ່ເລືອກ?"
+
+msgid "Bulk action completed"
+msgstr "ການດຳເນີນການຈຳນວນຫຼາຍສຳເລັດແລ້ວ"
+
+msgid "Could not update exercises"
+msgstr "ບໍ່ສາມາດອັບເດດແບບຝຶກຫັດໄດ້"
+
+msgid "Could not update exercise"
+msgstr "ບໍ່ສາມາດອັບເດດແບບຝຶກຫັດໄດ້"
+
+msgid "Copy exercise"
+msgstr "ສຳເນົາແບບຝຶກຫັດ"
+
+msgid "Delete exercise"
+msgstr "ລຶບແບບຝຶກຫັດ"
+
+msgid "Could not load exercises"
+msgstr "ບໍ່ສາມາດໂຫຼດແບບຝຶກຫັດໄດ້"
+
+msgid "No limit"
+msgstr "ບໍ່ຈຳກັດ"
+
+msgid "Add selected questions to the test"
+msgstr "ເພີ່ມຄຳຖາມທີ່ເລືອກໄປຫາການທົດສອບ"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "ຄຳຖາມນີ້ຖືກໃຊ້ໃນການທົດສອບທີ່ກຳລັງດຳເນີນ ແລະບໍ່ສາມາດແກ້ໄຂໄດ້ທີ່ນີ້."
+
+msgid "This question cannot be edited here."
+msgstr "ຄຳຖາມນີ້ບໍ່ສາມາດແກ້ໄຂໄດ້ທີ່ນີ້."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "ຄຳຖາມນີ້ຖືກໃຊ້ໃນການທົດສອບທີ່ກຳລັງດຳເນີນ ແລະບໍ່ສາມາດລຶບໄດ້ທີ່ນີ້."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "ຄຳຖາມນີ້ບໍ່ສາມາດລຶບໄດ້ ເນື່ອງຈາກການເຂົ້າເຖິງຂອງທ່ານຖືກຈຳກັດໂດຍການຕັ້ງຄ່າຂອງລະບົບ."
+
+msgid "Already in test"
+msgstr "ມີໃນການທົດສອບແລ້ວ"
+
+msgid "Select at least one question."
+msgstr "ກະລຸນາເລືອກຄຳຖາມຢ່າງໜ້ອຍໜຶ່ງຂໍ້."
+
+msgid "Question bank updated"
+msgstr "ອັບເດດຄັງຄຳຖາມແລ້ວ"
+
+msgid "Could not update the question bank"
+msgstr "ບໍ່ສາມາດອັບເດດຄັງຄຳຖາມໄດ້"
+
+msgid "Could not load the question bank"
+msgstr "ບໍ່ສາມາດໂຫຼດຄັງຄຳຖາມໄດ້"
+
+msgid "Total score"
+msgstr "ຄະແນນລວມ"
+
+msgid "Starting"
+msgstr "ກຳລັງເລີ່ມ"
+
+msgid "Attempt history"
+msgstr "ປະຫວັດການພະຍາຍາມ"
+
+msgid "No attempts yet"
+msgstr "ຍັງບໍ່ມີການພະຍາຍາມ"
+
+msgid "Invalid exercise"
+msgstr "ແບບຝຶກຫັດບໍ່ຖືກຕ້ອງ"
+
+msgid "Could not load exercise overview"
+msgstr "ບໍ່ສາມາດໂຫຼດພາບລວມແບບຝຶກຫັດໄດ້"
+
+msgid "Open test"
+msgstr "ເປີດການທົດສອບ"
+
+msgid "Random answers"
+msgstr "ຄຳຕອບແບບສຸ່ມ"
+
+msgid "Prevent moving backwards"
+msgstr "ປ້ອງກັນການຖອຍຫຼັງ"
+
+msgid "Previous button hidden"
+msgstr "ເຊື່ອງປຸ່ມກ່ອນໜ້າ"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "ແບບຝຶກຫັດນີ້ໃຊ້ຕົວເລືອກທີ່ຕ້ອງການຜູ້ຫຼິ້ນການທົດສອບແບບອື່ນ."
+
+msgid "Continue test"
+msgstr "ສືບຕໍ່ການທົດສອບ"
+
+msgid "Attempt started"
+msgstr "ເລີ່ມການພະຍາຍາມ"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "ການສະແດງຕົວຢ່າງຂອງຄູບໍ່ສ້າງການພະຍາຍາມທີ່ຖືກຕິດຕາມ."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "ເລີ່ມ ຫຼື ສືບຕໍ່ການພະຍາຍາມແບບຝຶກຫັດ. ສາມາດບັນທຶກຄຳຕອບຮ່າງກ່ອນສົ່ງສຸດທ້າຍ."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "ເຖິງຂີດຈຳກັດເວລາແລ້ວ. ກຳລັງສິ້ນສຸດການພະຍາຍາມ."
+
+msgid "Question time reached. Saving your answer."
+msgstr "ເຖິງເວລາຄຳຖາມແລ້ວ. ກຳລັງບັນທຶກຄຳຕອບຂອງທ່ານ."
+
+msgid "Finishing"
+msgstr "ກຳລັງສິ້ນສຸດ"
+
+msgid "Draft saved"
+msgstr "ບັນທຶກຮ່າງແລ້ວ"
+
+msgid "Statement"
+msgstr "ຄຳຖະແຫຼງ"
+
+msgid "Drop each option on the matching answer"
+msgstr "ວາງຕົວເລືອກແຕ່ລະຂໍ້ໃສ່ຄຳຕອບທີ່ກົງກັນ"
+
+msgid "Clear match"
+msgstr "ລຶບການຈັບຄູ່"
+
+msgid "Click to place the selected option here"
+msgstr "ຄລິກເພື່ອວາງຕົວເລືອກທີ່ເລືອກໄວ້ທີ່ນີ້"
+
+msgid "Select an option, then click here"
+msgstr "ເລືອກຕົວເລືອກ, ຫຼັງຈາກນັ້ນຄລິກທີ່ນີ້"
+
+msgid "Already matched"
+msgstr "ຈັບຄູ່ແລ້ວ"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "ທ່ານສາມາດລາກຕົວເລືອກໄປຫາຄຳຕອບ, ຫຼືເລືອກຕົວເລືອກແລ້ວຄລິກໃສ່ກ່ອງເປົ້າໝາຍ."
+
+msgid "Put the items in the correct order."
+msgstr "ຈັດລາຍການໃຫ້ຖືກຕ້ອງຕາມລຳດັບ."
+
+msgid "Move left"
+msgstr "ຍ້າຍໄປຊ້າຍ"
+
+msgid "Move right"
+msgstr "ຍ້າຍໄປຂວາ"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "ທ່ານສາມາດລາກລາຍການໄປຊ້າຍ ຫຼື ຂວາ ຫຼື ໃຊ້ປຸ່ມຍ້າຍເພື່ອປ່ຽນລຳດັບ."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "ທ່ານສາມາດລາກລາຍການ ຫຼື ໃຊ້ປຸ່ມຍ້າຍເພື່ອປ່ຽນລຳດັບ."
+
+msgid "Or upload an audio file"
+msgstr "ຫຼື ອັບໂຫຼດໄຟລ໌ສຽງ"
+
+msgid "Selected audio"
+msgstr "ສຽງທີ່ເລືອກ"
+
+msgid "Uploaded audio"
+msgstr "ສຽງທີ່ອັບໂຫຼດ"
+
+msgid "Office document"
+msgstr "ເອກະສານ Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "ຕອບເອກະສານໃນຕົວແກ້ໄຂຂ້າງລຸ່ມນີ້. ໄຟລ໌ຈະຖືກແນບກັບການພະຍາຍາມນີ້ເພື່ອໃຫ້ອາຈານກວດ."
+
+msgid "Reload Office editor"
+msgstr "ໂຫຼດຕົວແກ້ໄຂ Office ໃໝ່"
+
+msgid "Prepare Office document"
+msgstr "ກະກຽມເອກະສານ Office"
+
+msgid "Open in new tab"
+msgstr "ເປີດໃນແທັບໃໝ່"
+
+msgid "Preparing Office document"
+msgstr "ກຳລັງກະກຽມເອກະສານ Office"
+
+msgid "Submitted document"
+msgstr "ເອກະສານທີ່ສົ່ງ"
+
+msgid "Annotation tools"
+msgstr "ເຄື່ອງມືບັນທຶກ"
+
+msgid "Text to place"
+msgstr "ຂໍ້ຄວາມທີ່ຈະວາງ"
+
+msgid "Click the image to place the text annotation."
+msgstr "ຄລິກຮູບເພື່ອວາງຂໍ້ຄວາມບັນທຶກ."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "ຄລິກຮູບເພື່ອເພີ່ມຈຸດເສັ້ນທາງ. ໃຊ້ເລີ່ມເສັ້ນທາງໃໝ່ເພື່ອແຍກເສັ້ນທາງ."
+
+msgid "Start new path"
+msgstr "ເລີ່ມເສັ້ນທາງໃໝ່"
+
+msgid "Current annotations"
+msgstr "ບັນທຶກປັດຈຸບັນ"
+
+msgid "Remove point"
+msgstr "ລຶບຈຸດ"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "ຄລິກຮູບເພື່ອວາດຮູບຫຼາຍຫຼ່ຽມ."
+
+msgid "Click a marker to remove it."
+msgstr "ຄລິກເຄື່ອງໝາຍເພື່ອລຶບ."
+
+msgid "Placed"
+msgstr "ວາງແລ້ວ"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "ເລືອກຄຳຕອບ ຫຼັງຈາກນັ້ນຄລິກຮູບເພື່ອໝາຍ."
+
+msgid "Reading speed"
+msgstr "ຄວາມໄວໃນການອ່ານ"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "ປະເພດຄຳຖາມນີ້ບໍ່ສາມາດສະແດງໃນຕົວຫຼິ້ນນີ້ໄດ້."
+
+msgid "Save draft"
+msgstr "ບັນທຶກສະບັບຮ່າງ"
+
+msgid "I confirm that my answers were saved."
+msgstr "ຂ້ອຍຢືນຢັນວ່າຄຳຕອບຂອງຂ້ອຍຖືກບັນທຶກແລ້ວ."
+
+msgid "Finish test"
+msgstr "ສຳເລັດການທົດສອບ"
+
+msgid "Attempt finished"
+msgstr "ການພະຍາຍາມສຳເລັດແລ້ວ"
+
+msgid "Question category"
+msgstr "ໝວດຄຳຖາມ"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "ທ່ານໄດ້ສຳເລັດຄຳຖາມທີ່ກ່ຽວຂ້ອງກັບໝວດນີ້ ນີ້ແມ່ນໂອກາດສຸດທ້າຍຂອງທ່ານທີ່ຈະກັບໄປແກ້ໄຂຄຳຖາມເຫຼົ່ານັ້ນ."
+
+msgid "Question time left"
+msgstr "ເວລາຄຳຖາມທີ່ເຫຼືອ"
+
+msgid "Time left"
+msgstr "ເວລາທີ່ເຫຼືອ"
+
+msgid "Current attempt"
+msgstr "ການພະຍາຍາມປັດຈຸບັນ"
+
+msgid "Could not save draft answer"
+msgstr "ບໍ່ສາມາດບັນທຶກຄຳຕອບສະບັບຮ່າງ"
+
+msgid "Could not load exercise"
+msgstr "ບໍ່ສາມາດໂຫຼດແບບຝຶກຫັດ"
+
+msgid "Draft answer saved"
+msgstr "ບັນທຶກຄຳຕອບສະບັບຮ່າງແລ້ວ"
+
+msgid "Could not finish the attempt"
+msgstr "ບໍ່ສາມາດສຳເລັດການພະຍາຍາມ"
+
+msgid "Could not prepare Office document"
+msgstr "ບໍ່ສາມາດກະກຽມເອກະສານ Office"
+
+msgid "Back to learner score"
+msgstr "ກັບໄປຄະແນນຜູ້ຮຽນ"
+
+msgid "Disable auto refresh"
+msgstr "ປິດການຟື້ນຟູອັດຕະໂນມັດ"
+
+msgid "Enable auto refresh"
+msgstr "ເປີດການຟື້ນຟູອັດຕະໂນມັດ"
+
+msgid "Live window"
+msgstr "ໜ້າຕ່າງສົດ"
+
+msgid "Ongoing attempts"
+msgstr "ການພະຍາຍາມທີ່ກຳລັງດຳເນີນ"
+
+msgid "Completed attempts"
+msgstr "ການພະຍາຍາມທີ່ສຳເລັດ"
+
+msgid "Started"
+msgstr "ເລີ່ມແລ້ວ"
+
+msgid "Last activity"
+msgstr "ກິດຈະກຳຫຼ້າສຸດ"
+
+msgid "Could not load live results"
+msgstr "ບໍ່ສາມາດໂຫຼດຜົນໄດ້ຮັບສົດ"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "ແບບຝຶກຫັດນີ້ເປັນແບບອ່ານຢ່າງດຽວເພາະຖືກລວມໃນເສັ້ນທາງການຮຽນ."
+
+msgid "Select a question type to create a question."
+msgstr "ເລືອກປະເພດຄຳຖາມເພື່ອສ້າງຄຳຖາມ."
+
+msgid "Click to preview"
+msgstr "ກົດເພື່ອເບິ່ງຕົວຢ່າງ"
+
+msgid "Hide preview"
+msgstr "ເຊື່ອງຕົວຢ່າງ"
+
+msgid "Shape"
+msgstr "ຮູບຮ່າງ"
+
+msgid "Coordinates"
+msgstr "ພິກັດ"
+
+msgid "Blanks"
+msgstr "ຊ່ອງຫວ່າງ"
+
+msgid "Switchable blanks"
+msgstr "ຊ່ອງຫວ່າງສາມາດປ່ຽນໄດ້"
+
+msgid "Blank"
+msgstr "ຊ່ອງຫວ່າງ"
+
+msgid "Input width"
+msgstr "ຄວາມກວ້າງຂອງການປ້ອນ"
+
+msgid "Orientation"
+msgstr "ທິດທາງ"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "ບໍ່ສາມາດໃຊ້ໄດ້ກັບໂໝດຕອບກັບແບບຝຶກຫັດປັດຈຸບັນ"
+
+msgid "Not available in the learning path creation flow"
+msgstr "ບໍ່ສາມາດໃຊ້ໄດ້ໃນການສ້າງເສັ້ນທາງການຮຽນ"
+
+msgid "Delete question"
+msgstr "ລຶບຄຳຖາມ"
+
+msgid "Could not update exercise questions"
+msgstr "ບໍ່ສາມາດອັບເດດຄຳຖາມແບບຝຶກຫັດ"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "ບໍ່ສາມາດເພີ່ມແບບຝຶກຫັດໃສ່ເສັ້ນທາງການຮຽນ"
+
+msgid "A valid exercise id is required."
+msgstr "ຕ້ອງການ ID ແບບຝຶກຫັດທີ່ຖືກຕ້ອງ."
+
+msgid "Could not load exercise questions"
+msgstr "ບໍ່ສາມາດໂຫຼດຄຳຖາມແບບຝຶກຫັດ"
+
+msgid "Delete selected attempts"
+msgstr "ລຶບການພະຍາຍາມທີ່ເລືອກ"
+
+msgid "Before date"
+msgstr "ກ່ອນວັນທີ"
+
+msgid "Pending corrections"
+msgstr "ການແກ້ໄຂທີ່ຍັງຄ້າງ"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "ແບບຝຶກຫັດນີ້ຖືກລັອກໂດຍປື້ມຄະແນນ. ການດຳເນີນການລ້າງຂໍ້ມູນການພະຍາຍາມຖືກປິດໃຊ້ງານ."
+
+msgid "No attempts found"
+msgstr "ບໍ່ພົບການພະຍາຍາມ"
+
+msgid "Review"
+msgstr "ກວດສອບ"
+
+msgid "Print/PDF"
+msgstr "ພິມ/PDF"
+
+msgid "Could not load exercise report"
+msgstr "ບໍ່ສາມາດໂຫຼດບົດລາຍງານແບບຝຶກຫັດ"
+
+msgid "Select at least one attempt"
+msgstr "ເລືອກການພະຍາຍາມຢ່າງໜ້ອຍໜຶ່ງຄັ້ງ"
+
+msgid "Delete selected attempts?"
+msgstr "ລຶບການພະຍາຍາມທີ່ເລືອກ?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "ສົ່ງອີເມວຜົນການພະຍາຍາມທີ່ກວດສອບແລ້ວ?"
+
+msgid "Could not send emails"
+msgstr "ບໍ່ສາມາດສົ່ງອີເມວ"
+
+msgid "Exercise result emails sent"
+msgstr "ສົ່ງອີເມວຜົນແບບຝຶກຫັດແລ້ວ"
+
+msgid "Skipped"
+msgstr "ຂ້າມ"
+
+msgid "Close attempt?"
+msgstr "ປິດການພະຍາຍາມ?"
+
+msgid "Attempt closed"
+msgstr "ປິດການພະຍາຍາມແລ້ວ"
+
+msgid "Could not close attempt"
+msgstr "ບໍ່ສາມາດປິດການພະຍາຍາມ"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "ສົ່ງຜົນການພະຍາຍາມນີ້ຜ່ານອີເມວໃຫ້ນັກຮຽນ?"
+
+msgid "Email sent"
+msgstr "ສົ່ງອີເມວແລ້ວ"
+
+msgid "Could not send email"
+msgstr "ບໍ່ສາມາດສົ່ງອີເມວ"
+
+msgid "Attempt deleted"
+msgstr "ລຶບການພະຍາຍາມແລ້ວ"
+
+msgid "Could not delete attempt"
+msgstr "ບໍ່ສາມາດລຶບການພະຍາຍາມ"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "ເລືອກໄຟລ໌ CSV ທີ່ມີຖັນຊື່ຫົວຂໍ້ ແລະ ຄຳອະທິບາຍ."
+
+msgid "Manage categories used to classify questions."
+msgstr "ຈັດການປະເພດທີ່ໃຊ້ຈັດປະເພດຄຳຖາມ."
+
+msgid "Manage categories used to classify exercises."
+msgstr "ຈັດການປະເພດທີ່ໃຊ້ຈັດປະເພດແບບຝຶກຫັດ."
+
+msgid "Could not load categories"
+msgstr "ບໍ່ສາມາດໂຫຼດປະເພດ"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "ນຳເຂົ້າປະເພດ: %s. ແຖວທີ່ຂ້າມ: %s."
+
+msgid "Imported categories: %s."
+msgstr "ນຳເຂົ້າປະເພດ: %s."
+
+msgid "Could not import categories"
+msgstr "ບໍ່ສາມາດນຳເຂົ້າປະເພດ"
+
+msgid "Could not save category"
+msgstr "ບໍ່ສາມາດບັນທຶກປະເພດ"
+
+msgid "Answer distribution"
+msgstr "ການແຈກຢາຍຄຳຕອບ"
+
+msgid "Configured answers"
+msgstr "ຄຳຕອບທີ່ຕັ້ງຄ່າແລ້ວ"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "ການນັບຄຳຕອບລາຍລະອຽດສຳລັບບາງປະເພດຄຳຖາມຍັງບໍ່ມີໃນບົດລາຍງານທີ່ຍ້າຍມາໃໝ່."
+
+msgid "No report by question data found"
+msgstr "ບໍ່ພົບຂໍ້ມູນບົດລາຍງານຕາມຄຳຖາມ"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr ""
+
+msgid "No answer distribution found"
+msgstr ""
+
+msgid "Could not load report by question"
+msgstr ""
+
+msgid "Question settings"
+msgstr ""
+
+msgid "Leave empty or 0 for no time limit."
+msgstr ""
+
+msgid "Time limit in seconds"
+msgstr ""
+
+msgid "Attached questions"
+msgstr ""
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr ""
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr ""
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr ""
+
+msgid "Replace Office document"
+msgstr ""
+
+msgid "Current Office document"
+msgstr ""
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr ""
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr ""
+
+msgid "Global score"
+msgstr ""
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr ""
+
+msgid "Finish polygon"
+msgstr ""
+
+msgid "Calculated answer"
+msgstr ""
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr ""
+
+msgid "Lowest value"
+msgstr ""
+
+msgid "Highest value"
+msgstr ""
+
+msgid "Fill in blanks"
+msgstr ""
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr ""
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr ""
+
+msgid "Refresh answers"
+msgstr ""
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr ""
+
+msgid "Please enter at least two dropdown options."
+msgstr ""
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr ""
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr ""
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr ""
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr ""
+
+msgid "Hotspot combination"
+msgstr ""
+
+msgid "Add delineation"
+msgstr ""
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr ""
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr ""
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr ""
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr ""
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr ""
+
+msgid "Add content, media or reading context without adding score."
+msgstr ""
+
+msgid "Insert a page break without adding score."
+msgstr ""
+
+msgid "Could not save question"
+msgstr ""
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr ""
+
+msgid "Please select an Office document."
+msgstr ""
+
+msgid "Please draw at least one hotspot."
+msgstr ""
+
+msgid "Please draw at least one delineation."
+msgstr ""
+
+msgid "The fill in blanks text is required."
+msgstr ""
+
+msgid "At least one expected answer is required."
+msgstr ""
+
+msgid "At least two draggable items are required."
+msgstr ""
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr ""
+
+msgid "At least two matching options are required."
+msgstr ""
+
+msgid "At least two matching pairs are required."
+msgstr "ຕ້ອງມີຄູ່ທີ່ກົງກັນຢ່າງໜ້ອຍສອງຄູ່."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "ແຕ່ລະຄູ່ທີ່ກົງກັນຕ້ອງເຊື່ອມຕໍ່ກັບຕົວເລືອກທີ່ຖືກຕ້ອງ."
+
+msgid "At least two answers are required."
+msgstr "ຕ້ອງມີຄຳຕອບຢ່າງໜ້ອຍສອງຄຳ."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "ແຕ່ລະຄຳຕອບຖືກ/ຜິດຕ້ອງເລືອກຖືກ ຫຼື ຜິດ."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "ຄຳຖາມຄຳຕອບທີ່ຖືກຕ້ອງຕ້ອງມີຄຳຕອບທີ່ຖືກຕ້ອງພຽງຄຳດຽວ."
+
+msgid "At least one correct answer is required."
+msgstr "ຕ້ອງມີຄຳຕອບທີ່ຖືກຕ້ອງຢ່າງໜ້ອຍໜຶ່ງຄຳ."
+
+msgid "Could not load question"
+msgstr "ບໍ່ສາມາດໂຫຼດຄຳຖາມໄດ້"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "ເລືອກຫຼັກສູດ ແລະ ສົ່ງອອກບົດລາຍງານຜົນແບບຝຶກຫັດທັງໝົດເປັນ CSV."
+
+msgid "Back to reports catalog"
+msgstr "ກັບໄປທີ່ລາຍການບົດລາຍງານ"
+
+msgid "Could not load exercise global report"
+msgstr "ບໍ່ສາມາດໂຫຼດບົດລາຍງານທັງໝົດຂອງແບບຝຶກຫັດໄດ້"
+
+msgid "Imported questions"
+msgstr "ຄຳຖາມທີ່ນຳເຂົ້າແລ້ວ"
+
+msgid "Aiken content"
+msgstr "ເນື້ອຫາ Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "ບໍ່ສາມາດໂຫຼດເຄື່ອງມືສ້າງ AI Aiken ໄດ້"
+
+msgid "Could not generate Aiken content"
+msgstr "ບໍ່ສາມາດສ້າງເນື້ອຫາ Aiken ໄດ້"
+
+msgid "Could not import generated Aiken content"
+msgstr "ບໍ່ສາມາດນຳເຂົ້າເນື້ອຫາ Aiken ທີ່ສ້າງແລ້ວໄດ້"
+
+msgid "Back to my courses"
+msgstr "ກັບໄປຫຼັກສູດຂອງຂ້ອຍ"
+
+msgid "Open report"
+msgstr "ເປີດບົດລາຍງານ"
+
+msgid "Questions with no automatic correction"
+msgstr "ຄຳຖາມທີ່ບໍ່ມີການແກ້ໄຂອັດຕະໂນມັດ"
+
+msgid "Could not load pending attempts"
+msgstr "ບໍ່ສາມາດໂຫຼດການພະຍາຍາມທີ່ຍັງຄ້າງຢູ່ໄດ້"
+
+msgid "Skipped questions"
+msgstr "ຄຳຖາມທີ່ຂ້າມ"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "ການນຳເຂົ້າ Aiken ຈະແຈກຢາຍນ້ຳໜັກທັງໝົດນີ້ໃຫ້ກັບຄຳຖາມທີ່ນຳເຂົ້າ ເວັ້ນເສຍແຕ່ຄຳຖາມທີ່ກຳນົດ SCORE."
+
+msgid "Import warnings"
+msgstr "ຄຳເຕືອນການນຳເຂົ້າ"
+
+msgid "Could not import questions"
+msgstr "ບໍ່ສາມາດນຳເຂົ້າຄຳຖາມໄດ້"
+
+msgid "No question statistics found"
+msgstr "ບໍ່ພົບສະຖິຕິຄຳຖາມ"
+
+msgid "Could not load question statistics"
+msgstr "ບໍ່ສາມາດໂຫຼດສະຖິຕິຄຳຖາມໄດ້"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "ທ່ານຍັງສາມາດເຊື່ອມຕໍ່ໄຄລເອັນ MCP ໂດຍກົງໄດ້ໂດຍຊີ້ໄປຫາຈຸດເຊື່ອມຕໍ່ຕໍ່ໄປນີ້:"
+
+msgid "No applications are currently connected to your account."
+msgstr "ບໍ່ມີແອັບພລິເຄຊັນທີ່ເຊື່ອມຕໍ່ກັບບັນຊີຂອງທ່ານໃນປັດຈຸບັນ."
+
+msgid "Connected on"
+msgstr "ເຊື່ອມຕໍ່ເມື່ອ"
+
+msgid "Last used"
+msgstr "ໃຊ້ຄັ້ງສຸດທ້າຍ"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ຈະບໍ່ສາມາດເຂົ້າເຖິງບັນຊີ Chamilo ຂອງທ່ານອີກຕໍ່ໄປ. ດຳເນີນການຕໍ່ບໍ?"
+
+msgid "Application revoked"
+msgstr "ແອັບພລິເຄຊັນຖືກຖອນການເຂົ້າເຖິງ"
+
+msgid "Copied to clipboard"
+msgstr "ຄັດລອກໄປຍັງຄລິບບອດແລ້ວ"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "ບໍ່ສາມາດຄັດລອກຈຸດເຊື່ອມຕໍ່ MCP ໄດ້"
+
+msgid "MCP endpoint"
+msgstr "ຈຸດເຊື່ອມຕໍ່ MCP"
+
+msgid "API key"
+msgstr "ກະແຈ API"
+
+msgid "Last used at"
+msgstr "ໃຊ້ຄັ້ງສຸດທ້າຍເມື່ອ"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "ຄັດລອກກະແຈນີ້ດຽວນີ້. ມັນຈະບໍ່ສະແດງອີກ."
+
+msgid "Rotate API key"
+msgstr "ໝຸນວຽນກະແຈ API"
+
+msgid "Revoke API key"
+msgstr "ຖອນການເຂົ້າເຖິງກະແຈ API"
+
+msgid "Remote MCP connection"
+msgstr "ການເຊື່ອມຕໍ່ MCP ທາງໄກ"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "ຕັ້ງຄ່າໄຄລເອັນ MCP ຂອງທ່ານດ້ວຍຄ່າຕ່າງໆດັ່ງຕໍ່ໄປນີ້:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "ກະແຈປັດຈຸບັນຈະຢຸດເຮັດວຽກທັນທີ. ດຳເນີນການຕໍ່ບໍ?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "ກະແຈ API MCP ສ່ວນຕົວໃໝ່ຈະຖືກສ້າງຂຶ້ນ. ດຳເນີນການຕໍ່ບໍ?"
+
+msgid "MCP API key generated"
+msgstr "ສ້າງກະແຈ API MCP ແລ້ວ"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "ໄຄລເອັນ MCP ທີ່ເຊື່ອມຕໍ່ໂດຍໃຊ້ກະແຈນີ້ຈະຢຸດເຮັດວຽກທັນທີ. ດຳເນີນການຕໍ່ບໍ?"
+
+msgid "MCP API key revoked"
+msgstr "ຖອນການເຂົ້າເຖິງກະແຈ API MCP ແລ້ວ"
+
+msgid "Could not copy the API key"
+msgstr "ບໍ່ສາມາດຄັດລອກກະແຈ API ໄດ້"
+
+msgid "Project"
+msgstr "ໂຄງການ"
+
+msgid "Close old tickets"
+msgstr "ປິດປີ້ເກົ່າ"
+
+msgid "Close tickets older than seven days?"
+msgstr "ປິດປີ້ທີ່ເກົ່າກວ່າເຈັດມື້ບໍ?"
+
+msgid "Assignment history"
+msgstr "ປະຫວັດການມອບໝາຍ"
+
+msgid "Translate with AI"
+msgstr "ແປດ້ວຍ AI"
+
+msgid "Target language"
+msgstr "ພາສາເປົ້າໝາຍ"
+
+msgid "Please select a provider"
+msgstr "ກະລຸນາເລືອກຜູ້ໃຫ້ບໍລິການ"
+
+msgid "Generate translation"
+msgstr "ສ້າງການແປ"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "ຢ່າງໜ້ອຍຕ້ອງມີຂໍ້ຄວາມໃນສ່ວນເງື່ອນໄຂ ແລະ ຂໍ້ກຳນົດຢ່າງໜຶ່ງ."
+
+msgid "No active target languages are available."
+msgstr "ບໍ່ມີພາສາເປົ້າໝາຍທີ່ເຄື່ອນໄຫວ."
+
+msgid "Tutor"
+msgstr "ຜູ້ຊ່ວຍສອນ"
+
+msgid "Access dates"
+msgstr "ວັນທີເຂົ້າເຖິງ"
+
+msgid "Coach access dates"
+msgstr "ວັນທີເຂົ້າເຖິງຂອງຜູ້ຊ່ວຍສອນ"
+
+msgid "No sessions found"
+msgstr "ບໍ່ພົບພາກຮຽນ"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "ເລືອກຫຼັກສູດທີ່ຜູ້ໃຊ້ນີ້ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນພາກຮຽນນີ້."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "ບໍ່ສາມາດບລັອກຜູ້ໃຊ້ອອກຈາກທຸກຫຼັກສູດໃນພາກຮຽນໄດ້. ກະລຸນາຍົກເລີກການສະໝັກແທນ."
+
+msgid "Users subscribed to this session"
+msgstr "ຜູ້ໃຊ້ທີ່ສະໝັກໃນພາກຮຽນນີ້"
+
+msgid "No available users found"
+msgstr "ບໍ່ພົບຜູ້ໃຊ້ທີ່ມີຢູ່"
+
+msgid "Subscribe this user to the session?"
+msgstr "ສະໝັກຜູ້ໃຊ້ນີ້ເຂົ້າໃນພາກຮຽນ?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "ສະໝັກຜູ້ໃຊ້ທີ່ເລືອກເຂົ້າໃນພາກຮຽນ?"
+
+msgid "General tutor planning"
+msgstr "ການວາງແຜນຜູ້ຊ່ວຍສອນທົ່ວໄປ"
+
+msgid "User is already registered by another tutor."
+msgstr "ຜູ້ໃຊ້ນີ້ລົງທະບຽນໂດຍຜູ້ຊ່ວຍສອນອື່ນແລ້ວ."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "ທ່ານໄດ້ຮັບສຳເນົາເພາະທ່ານເປັນຜູ້ຊ່ວຍສອນຫຼັກສູດ"
+
+msgid "General tutor"
+msgstr "ຜູ້ຊ່ວຍສອນທົ່ວໄປ"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "ພິຈາລະນາຫຼັກສູດ, ຜູ້ຊ່ວຍສອນ, ສູນຊ່ວຍເຫຼືອດ້ານເຕັກນິກ, ຄູອາຈານ ແລະ/ຫຼື ວັດສະດຸທີ່ມີຢູ່."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "ຜູ້ຊ່ວຍສອນທີ່ລົງທະບຽນເປັນຄູອາຈານໃນຫຼັກສູດ %s"
+
+msgid "Tutor name"
+msgstr "ຊື່ຜູ້ຊ່ວຍສອນ"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "ຜູ້ຊ່ວຍສອນພາກຮຽນເປັນຜູ້ປະສານງານຂອງພາກຮຽນ ແລະ ສາມາດເຮັດໜ້າທີ່ເປັນຜູ້ຊ່ວຍສອນໃນທຸກຫຼັກສູດພາຍໃນພາກຮຽນ. ມີພຽງຜູ້ໃຊ້ທີ່ມີບົດບາດເປັນຄູອາຈານເທົ່ານັ້ນທີ່ສາມາດເລືອກເປັນຜູ້ຊ່ວຍສອນພາກຮຽນໄດ້."
+
+msgid "Access start date for tutors"
+msgstr "ວັນທີເລີ່ມເຂົ້າເຖິງສຳລັບຜູ້ຊ່ວຍສອນ"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "ວັນທີທີ່ພາກຮຽນຖືກເປີດໃຫ້ຜູ້ຊ່ວຍສອນເພື່ອກະກຽມກ່ອນທີ່ນັກສຶກສາຈະເຂົ້າເຖິງ"
+
+msgid "Access end date for tutors"
+msgstr "ວັນທີສິ້ນສຸດການເຂົ້າເຖິງສຳລັບຜູ້ຊ່ວຍສອນ"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "ວັນທີທີ່ພາກຮຽນຖືກປິດສຳລັບຜູ້ຊ່ວຍສອນ. ໄລຍະເວລາເພີ່ມເຕີມຈະຊ່ວຍໃຫ້ພວກເຂົາສາມາດສົ່ງອອກຂໍ້ມູນການຕິດຕາມທັງໝົດ"
+
+msgid "Tutor and student"
+msgstr "ຜູ້ຊ່ວຍສອນ ແລະ ນັກສຶກສາ"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "ບົດລາຍງານນີ້ສະແດງການແຈກຢາຍປະຈຳອາທິດຂອງພາກຮຽນຕາມຜູ້ຊ່ວຍສອນທົ່ວໄປໃນຊ່ວງວັນທີທີ່ເລືອກ."
+
+msgid "User is general tutor in some sessions"
+msgstr "ຜູ້ໃຊ້ເປັນຜູ້ຊ່ວຍສອນທົ່ວໄປໃນບາງພາກຮຽນ"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "ຄູອາຈານຈະຖືກເພີ່ມເປັນຜູ້ຊ່ວຍສອນໃນທຸກພາກຮຽນຂອງຫຼັກສູດ."
+
+msgid "Delete failed: invalid question id."
+msgstr "ລົບລ້າງບໍ່ສຳເລັດ: ລະຫັດຄຳຖາມບໍ່ຖືກຕ້ອງ."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "ຈຳນວນສະເລ່ຍຂອງພາກຮຽນຕໍ່ຜູ້ຊ່ວຍສອນພາກຮຽນທົ່ວໄປ"
+
+msgid "No room"
+msgstr "ບໍ່ມີຫ້ອງ"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "ນຳເຂົ້າຄູອາຈານຫຼັກສູດເປັນຜູ້ຊ່ວຍສອນຫຼັກສູດໃນພາກຮຽນ"
+
+msgid "Clean and update course tutors"
+msgstr "ລ້າງ ແລະ ອັບເດດຜູ້ຊ່ວຍສອນຫຼັກສູດ"
+
+msgid "Add me as tutor"
+msgstr "ເພີ່ມຂ້ອຍເປັນຜູ້ຊ່ວຍສອນ"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "ບໍ່ສາມາດເພີ່ມແບບສຳຫຼວດເຂົ້າໃນເສັ້ນທາງການຮຽນ"
+
+msgid "Access dates for tutors"
+msgstr "ວັນທີເຂົ້າເຖິງສຳລັບຜູ້ຊ່ວຍສອນ"
+
+msgid "Tutor and group member"
+msgstr "ຜູ້ຊ່ວຍສອນ ແລະ ສະມາຊິກກຸ່ມ"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "ທ່ານໄດ້ເຖິງຂີດຈຳກັດໂທເຄັນ AI ປະຈຳວັນແລ້ວ. ກະລຸນາລອງໃໝ່ມື້ອື່ນ."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "ທ່ານໄດ້ເຖິງຂີດຈຳກັດໂທເຄັນ AI ປະຈຳເດືອນແລ້ວ. ກະລຸນາລອງໃໝ່ເດືອນໜ້າ."
+
+msgid "This course code already exists, please choose another code."
+msgstr "ລະຫັດຫຼັກສູດນີ້ມີຢູ່ແລ້ວ, ກະລຸນາເລືອກລະຫັດອື່ນ."
+
+msgid "This course title already exists, please choose another title."
+msgstr "ຊື່ຫຼັກສູດນີ້ມີຢູ່ແລ້ວ, ກະລຸນາເລືອກຊື່ອື່ນ."
+
+msgid "This tool visibility cannot be changed"
+msgstr "ບໍ່ສາມາດປ່ຽນການເບິ່ງເຫັນຂອງເຄື່ອງມືນີ້ໄດ້"
+
+msgid "Invalid visibility"
+msgstr "ການເບິ່ງເຫັນບໍ່ຖືກຕ້ອງ"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "ທ່ານໄດ້ຮັບສຳເນົາເພາະທ່ານເປັນໜຶ່ງໃນບັນດາຜູ້ຊ່ວຍສອນຫຼັກສູດ"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "ທ່ານໄດ້ຮັບສຳເນົາເພາະທ່ານເປັນຜູ້ຊ່ວຍສອນຫຼັກສູດ"
+
+msgid "Manual completion"
+msgstr "ການສຳເລັດດ້ວຍຕົນເອງ"
+
+msgid "Send to tutors"
+msgstr "ສົ່ງໃຫ້ຜູ້ສອນ"
+
+msgid "Lab title"
+msgstr "ຊື່ຫ້ອງທົດລອງ"
+
+msgid "Lab week"
+msgstr "ອາທິດຫ້ອງທົດລອງ"
+
+msgid "Final exam access rule"
+msgstr "ກົດລະບຽບການເຂົ້າເຖິງການສອບເສັງສຸດທ້າຍ"
+
+msgid "Course completion rule"
+msgstr "ກົດລະບຽບການສຳເລັດຫຼັກສູດ"
+
+msgid "You have been invited to join a course"
+msgstr "ທ່ານໄດ້ຮັບການເຊີນເຂົ້າຮ່ວມຫຼັກສູດ"
+
+msgid "No user has been found"
+msgstr "ບໍ່ພົບຜູ້ໃຊ້"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "ຜູ້ໃຊ້ທີ່ເລືອກບໍ່ສາມາດລົງທະບຽນໃນບໍລິບົດນີ້ໄດ້"
+
+msgid "No change has been made"
+msgstr "ບໍ່ມີການປ່ຽນແປງ"
+
+msgid "Back to group list"
+msgstr "ກັບໄປລາຍການກຸ່ມ"
+
+msgid "Remove class link"
+msgstr "ລຶບການເຊື່ອມຕໍ່ຫ້ອງຮຽນ"
+
+msgid "Group settings"
+msgstr "ການຕັ້ງຄ່າກຸ່ມ"
+
+msgid "Self-registration allowed"
+msgstr "ອະນຸຍາດການລົງທະບຽນດ້ວຍຕົນເອງ"
+
+msgid "Self-unregistration allowed"
+msgstr "ອະນຸຍາດການຍົກເລີກການລົງທະບຽນດ້ວຍຕົນເອງ"
+
+msgid "This group is linked to the class"
+msgstr "ກຸ່ມນີ້ເຊື່ອມຕໍ່ກັບຫ້ອງຮຽນ"
+
+msgid "Create one or more empty course groups"
+msgstr "ສ້າງກຸ່ມຫຼັກສູດຫວ່າງເປົ່າໜຶ່ງ ຫຼື ຫຼາຍກຸ່ມ"
+
+msgid "Number of places"
+msgstr "ຈຳນວນບ່ອນ"
+
+msgid "Base group"
+msgstr "ກຸ່ມພື້ນຖານ"
+
+msgid "Share"
+msgstr "ແບ່ງປັນ"
+
+msgid "Collaboration"
+msgstr "ການຮ່ວມມື"
+
+msgid "The group title is required."
+msgstr "ຕ້ອງການຊື່ກຸ່ມ."
+
+msgid "Back to group area"
+msgstr "ກັບໄປພື້ນທີ່ກຸ່ມ"
+
+msgid "Members are managed by the linked class"
+msgstr "ສະມາຊິກຖືກຈັດການໂດຍຫ້ອງຮຽນທີ່ເຊື່ອມຕໍ່"
+
+msgid "%s groups selected"
+msgstr "ເລືອກກຸ່ມ %s"
+
+msgid "Fill selected groups"
+msgstr "ຕື່ມກຸ່ມທີ່ເລືອກ"
+
+msgid "Empty selected groups"
+msgstr "ລ້າງກຸ່ມທີ່ເລືອກ"
+
+msgid "Fill group"
+msgstr "ຕື່ມກຸ່ມ"
+
+msgid "Empty group"
+msgstr "ລ້າງກຸ່ມ"
+
+msgid "Groups per user"
+msgstr "ກຸ່ມຕໍ່ຜູ້ໃຊ້"
+
+msgid "No tutors"
+msgstr "ບໍ່ມີຜູ້ສອນ"
+
+msgid "No users"
+msgstr "ບໍ່ມີຜູ້ໃຊ້"
+

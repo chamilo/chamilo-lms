@@ -2147,7 +2147,7 @@
     "Notify me by e-mail when somebody replies": "\u0f58\u0f72\u0f42\u0f0b\u0f58\u0f72\u0f0b\u0f5a\u0f7c\u0f44\u0f0b\u0f5a\u0f7c\u0f44\u0f0b\u0f60\u0f56\u0fb2\u0f7a\u0f63\u0f0b\u0f60\u0f56\u0fb1\u0f74\u0f44\u0f0b\u0f53\u0f0b\u0f42\u0fb3\u0f7c\u0f42\u0f0b\u0f60\u0f55\u0fb2\u0f72\u0f53\u0f0b\u0f42\u0fb1\u0f72\u0f66\u0f0b\u0f44\u0f7c\u0f0b\u0f66\u0fa4\u0fb2\u0f7c\u0f51\u0f0d",
     "Number of comments scored": "Number of comments scored",
     "Number of questions": "\u0f51\u0fb2\u0f72\u0f0b\u0f56\u0f60\u0f72\u0f0b\u0f62\u0f72\u0f58\u0f0b\u0f42\u0fb2\u0f44\u0f66\u0f0b\u0f0d",
-    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
+    "Number of questions limited to a maximum of {0}": "\u0f60\u0f51\u0fb2\u0f72\u0f0b\u0f56\u0f60\u0f72\u0f0b\u0f42\u0fb2\u0f44\u0f66\u0f0b\u0f63\u0f0b\u0f63\u0fb7\u0f42\u0f0b\u0f54\u0f60\u0f72\u0f0b\u0f58\u0f5a\u0f58\u0f66\u0f0b\u0f40\u0fb1\u0f72\u0f0b\u0f62\u0f92\u0fb1\u0f74\u0f0b\u0f58\u0f5a\u0f53\u0f0b\u0f63\u0f0b\u0f42\u0f5e\u0f72\u0f0b\u0f62\u0fa9\u0f7c\u0f58\u0f66\u0f0b\u0f60\u0f51\u0f74\u0f42 {0}",
     "Objectives": "\u0f51\u0f7c\u0f53\u0f0b\u0f62\u0f92\u0fb1\u0f74\u0f53",
     "Official Chamilo update channel": "Official Chamilo update channel",
     "Offline": "\u0f58\u0f72\u0f0b\u0f60\u0f7c\u0f44\u0f0b\u0f66\u0f90\u0f56\u0f66\u0f0d",
@@ -2506,5 +2506,6 @@
     "Revoke": "Revoke",
     "Revoked": "Revoked",
     "Invitation has been revoked": "Invitation has been revoked",
-    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?",
+    "Request confirmation": "\u0f60\u0f5b\u0f72\u0f53\u0f0b\u0f66\u0f90\u0f7c\u0f62\u0f0b\u0f66\u0f92\u0fb2\u0f74\u0f56\u0f0b\u0f54\u0f0d"
 }

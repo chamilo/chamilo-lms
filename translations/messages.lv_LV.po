@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -37636,4 +37636,1300 @@ msgstr "Izmantojiet 0, lai saglabātu visus pieejamos jautājumus. Izmantojiet -
 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Izmantojiet šos laukus, lai klasificētu vingrinājumu neatkarīgi no tā attēlošanas opcijām."
+
+msgid "Invite by email"
+msgstr "Uzaicināt pa e-pastu"
+
+msgid "Invitation has been sent"
+msgstr "Uzaicinājums nosūtīts"
+
+msgid "Sent on"
+msgstr "Nosūtīts"
+
+msgid "Accepted on"
+msgstr "Pieņemts"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Šis kurss ir atvērts sesijā. Uzaicinājuma nosūtīšana šeit abonēs saņēmēju visai sesijai %s, ne tikai šim kursam."
+
+msgid "Revoke"
+msgstr "Atsaukt"
+
+msgid "Revoked"
+msgstr "Atsaukts"
+
+msgid "Invitation has been revoked"
+msgstr "Uzaicinājums atsaukts"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Vai tiešām vēlaties atsaukt uzaicinājumu, kas nosūtīts %s?"
+
+msgid "No default room"
+msgstr "Nav noklusējuma telpas"
+
+msgid "Floor"
+msgstr "Stāvs"
+
+msgid "Capacity"
+msgstr "Ietilpība"
+
+msgid "Use attendance default room"
+msgstr "Izmantot noklusējuma telpu apmeklējumam"
+
+msgid "Floor number"
+msgstr "Stāva numurs"
+
+msgid "Copy to students"
+msgstr "Kopēt studentiem"
+
+msgid "Generate a quick test on this topic"
+msgstr "Ģenerēt ātro testu par šo tēmu"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Saglabātais dokumenta saturs tiks nosūtīts AI modelim apstrādei."
+
+msgid "MCP API key"
+msgstr "MCP API atslēga"
+
+msgid "Authorized applications"
+msgstr "Autorizētās lietotnes"
+
+msgid "Your session is about to expire"
+msgstr "Jūsu sesija drīz beigsies"
+
+msgid "Do you want to continue your session?"
+msgstr "Vai vēlaties turpināt sesiju?"
+
+msgid "Stay connected"
+msgstr "Palikt pieslēgtam"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Jūs tiksiet izrakstīts pēc %s sekundēm."
+
+msgid "No descriptions available yet."
+msgstr "Apraksti vēl nav pieejami."
+
+msgid "%s users selected"
+msgstr "Atlasīti %s lietotāji"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Atlasītie lietotāji ir pierakstīti kursā"
+
+msgid "Import teachers"
+msgstr "Importēt pasniedzējus"
+
+msgid "Import learners"
+msgstr "Importēt izglītojamos"
+
+msgid "Select CSV file"
+msgstr "Izvēlēties CSV failu"
+
+msgid "Some users could not be subscribed"
+msgstr "Dažus lietotājus nevarēja pierakstīt"
+
+msgid "Browse available classes"
+msgstr "Pārlūkot pieejamās klases"
+
+msgid "Back to linked classes"
+msgstr "Atpakaļ uz saistītajām klasēm"
+
+msgid "No classes are currently linked to this course."
+msgstr "Pašlaik šim kursam nav saistītu klašu."
+
+msgid "No available classes were found for this course."
+msgstr "Šim kursam nav atrastas pieejamās klases."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Vai tiešām vēlaties noņemt pierakstu atlasītajiem lietotājiem?"
+
+msgid "Learning path access"
+msgstr "Mācību ceļa piekļuve"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Tikai atlasītie lietotāji un grupas var piekļūt šim mācību ceļam. Pārvaldiet tos pēc saglabāšanas."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Visi pašreizējie un nākotnes kursa lietotāji var piekļūt šim mācību ceļam."
+
+msgid "All course users"
+msgstr "Visi kursa lietotāji"
+
+msgid "Selected users and groups"
+msgstr "Atlasītie lietotāji un grupas"
+
+msgid "No access"
+msgstr "Nav piekļuves"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Tikai šeit pievienotie lietotāji un grupas var piekļūt šim mācību ceļam."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Jautājumu skaits ierobežots līdz maksimāli %s"
+
+msgid "Open exercise player"
+msgstr "Atvērt vingrinājuma atskaņotāju"
+
+msgid "The score is hidden for this exercise."
+msgstr "Šim vingrinājumam rezultāts ir paslēpts."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Labojumi ir paslēpti saskaņā ar vingrinājuma rezultātu iestatījumiem."
+
+msgid "Progressive adaptive result"
+msgstr "Progresīvs adaptīvs rezultāts"
+
+msgid "Achieved level"
+msgstr "Sasniegtais līmenis"
+
+msgid "Correction history"
+msgstr "Labojumu vēsture"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Šim mēģinājumam veikto manuālo labojumu vēsture."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Šis vingrinājums izmanto radara/zirnekļtīkla rezultātu režīmu. Diagramma šajā lapā nav pieejama."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Jautājumu detaļas ir paslēptas saskaņā ar vingrinājuma rezultātu iestatījumiem."
+
+msgid "Media question"
+msgstr "Multivides jautājums"
+
+msgid "Pending correction"
+msgstr "Gaida labojumu"
+
+msgid "No answer"
+msgstr "Nav atbildes"
+
+msgid "Blank %s"
+msgstr "Tukšs %s"
+
+msgid "Your order"
+msgstr "Jūsu secība"
+
+msgid "Correct order"
+msgstr "Pareizā secība"
+
+msgid "Delineation review"
+msgstr "Delineācijas pārskats"
+
+msgid "Learner clicks"
+msgstr "Izglītojamā klikšķi"
+
+msgid "Question image"
+msgstr "Jautājuma attēls"
+
+msgid "No hotspot image available"
+msgstr "Nav pieejams hotspot attēls"
+
+msgid "Learner delineation"
+msgstr "Izglītojamā delineācija"
+
+msgid "Expected delineation"
+msgstr "Paredzētā delineācija"
+
+msgid "Expected zones"
+msgstr "Paredzētās zonas"
+
+msgid "Zone"
+msgstr "Zona"
+
+msgid "Learner annotation"
+msgstr "Izglītojamā anotācija"
+
+msgid "No annotation image available"
+msgstr "Nav pieejams anotācijas attēls"
+
+msgid "This answer is pending teacher correction."
+msgstr "Šī atbilde gaida pasniedzēja labojumu."
+
+msgid "Teacher comment"
+msgstr "Pasniedzēja komentārs"
+
+msgid "Teacher correction"
+msgstr "Pasniedzēja labojums"
+
+msgid "Save correction"
+msgstr "Saglabāt labojumu"
+
+msgid "Learner audio"
+msgstr "Audios ieraksts"
+
+msgid "Download audio"
+msgstr "Lejupielādēt audio"
+
+msgid "No uploaded audio"
+msgstr "Nav augšupielādēta audio"
+
+msgid "Learner Office document"
+msgstr "Office dokuments"
+
+msgid "Learner file"
+msgstr "Fails"
+
+msgid "Download Office document"
+msgstr "Lejupielādēt Office dokumentu"
+
+msgid "No submitted document"
+msgstr "Nav iesniegts dokuments"
+
+msgid "No uploaded file"
+msgstr "Nav augšupielādēts fails"
+
+msgid "Content item"
+msgstr "Satura vienums"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Šo jautājuma veidu nevar pārskatīt šajā lapā."
+
+msgid "Exercise completed"
+msgstr "Vingrinājums pabeigts"
+
+msgid "Could not start the attempt"
+msgstr "Nevarēja sākt mēģinājumu"
+
+msgid "Invalid exercise attempt"
+msgstr "Nederīgs vingrinājuma mēģinājums"
+
+msgid "Could not load exercise result"
+msgstr "Nevarēja ielādēt vingrinājuma rezultātu"
+
+msgid "Could not load AI providers"
+msgstr "Nevarēja ielādēt AI pakalpojumu sniedzējus"
+
+msgid "Could not generate AI suggestion"
+msgstr "Nevarēja ģenerēt AI ieteikumu"
+
+msgid "Correction saved"
+msgstr "Labojums saglabāts"
+
+msgid "Could not save correction"
+msgstr "Nevarēja saglabāt labojumu"
+
+msgid "Create exercise"
+msgstr "Izveidot vingrinājumu"
+
+msgid "Exercise categories"
+msgstr "Vingrinājumu kategorijas"
+
+msgid "Question categories"
+msgstr "Jautājumu kategorijas"
+
+msgid "Search by exercise title or description."
+msgstr "Meklēt pēc vingrinājuma nosaukuma vai apraksta."
+
+msgid "Search exercises"
+msgstr "Meklēt vingrinājumus"
+
+msgid "No exercises found"
+msgstr "Nav atrasti vingrinājumi"
+
+msgid "Open exercise"
+msgstr "Atvērt vingrinājumu"
+
+msgid "Disable autolaunch"
+msgstr "Atslēgt automātisko palaišanu"
+
+msgid "Enable autolaunch"
+msgstr "Ieslēgt automātisko palaišanu"
+
+msgid "Export QTI2"
+msgstr "Eksportēt QTI2"
+
+msgid "Bulk actions"
+msgstr "Masveida darbības"
+
+msgid "Selected exercises"
+msgstr "Atlasītie vingrinājumi"
+
+msgid "No exercises selected"
+msgstr "Nav atlasītu vingrinājumu"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Vai tiešām vēlaties piemērot šo darbību atlasītajiem vingrinājumiem?"
+
+msgid "Bulk action completed"
+msgstr "Masveida darbība pabeigta"
+
+msgid "Could not update exercises"
+msgstr "Nevarēja atjaunināt vingrinājumus"
+
+msgid "Could not update exercise"
+msgstr "Nevarēja atjaunināt vingrinājumu"
+
+msgid "Copy exercise"
+msgstr "Kopēt vingrinājumu"
+
+msgid "Delete exercise"
+msgstr "Dzēst vingrinājumu"
+
+msgid "Could not load exercises"
+msgstr "Nevarēja ielādēt vingrinājumus"
+
+msgid "No limit"
+msgstr "Bez ierobežojuma"
+
+msgid "Add selected questions to the test"
+msgstr "Pievienot atlasītos jautājumus testam"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Šis jautājums tiek izmantots aktīvā testā un šeit nevar tikt rediģēts."
+
+msgid "This question cannot be edited here."
+msgstr "Šo jautājumu šeit nevar rediģēt."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Šis jautājums tiek izmantots aktīvā testā un šeit nevar tikt dzēsts."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Šo jautājumu nevar dzēst, jo jūsu piekļuve ir ierobežota platformas iestatījumos."
+
+msgid "Already in test"
+msgstr "Jau testā"
+
+msgid "Select at least one question."
+msgstr "Atlasiet vismaz vienu jautājumu."
+
+msgid "Question bank updated"
+msgstr "Jautājumu banka atjaunināta"
+
+msgid "Could not update the question bank"
+msgstr "Nevarēja atjaunināt jautājumu banku"
+
+msgid "Could not load the question bank"
+msgstr "Nevarēja ielādēt jautājumu banku"
+
+msgid "Total score"
+msgstr "Kopējais vērtējums"
+
+msgid "Starting"
+msgstr "Sākšana"
+
+msgid "Attempt history"
+msgstr "Mēģinājumu vēsture"
+
+msgid "No attempts yet"
+msgstr "Vēl nav mēģinājumu"
+
+msgid "Invalid exercise"
+msgstr "Nederīgs uzdevums"
+
+msgid "Could not load exercise overview"
+msgstr "Nevarēja ielādēt uzdevuma pārskatu"
+
+msgid "Open test"
+msgstr "Atvērt testu"
+
+msgid "Random answers"
+msgstr "Nejaušas atbildes"
+
+msgid "Prevent moving backwards"
+msgstr "Aizliegt pārvietošanos atpakaļ"
+
+msgid "Previous button hidden"
+msgstr "Iepriekšējās pogas paslēpta"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Šis uzdevums izmanto opcijas, kurām nepieciešams cits testa atskaņotājs."
+
+msgid "Continue test"
+msgstr "Turpināt testu"
+
+msgid "Attempt started"
+msgstr "Mēģinājums sākts"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Skolotāja priekšskatījums neveido izsekotu mēģinājumu."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Sākt vai atsākt uzdevuma mēģinājumu. Melnraksta atbildes var saglabāt pirms galīgās iesniegšanas."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Laika limits sasniegts. Mēģinājums tiek pabeigts."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Jautājuma laiks beidzies. Atbilde tiek saglabāta."
+
+msgid "Finishing"
+msgstr "Pabeigšana"
+
+msgid "Draft saved"
+msgstr "Melnraksts saglabāts"
+
+msgid "Statement"
+msgstr "Paziņojums"
+
+msgid "Drop each option on the matching answer"
+msgstr "Novietojiet katru opciju pie atbilstošās atbildes"
+
+msgid "Clear match"
+msgstr "Notīrīt atbilstību"
+
+msgid "Click to place the selected option here"
+msgstr "Noklikšķiniet, lai novietotu izvēlēto opciju šeit"
+
+msgid "Select an option, then click here"
+msgstr "Izvēlieties opciju, pēc tam noklikšķiniet šeit"
+
+msgid "Already matched"
+msgstr "Jau saskaņots"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Varat vilkt opciju uz atbildi vai izvēlēties opciju un pēc tam noklikšķināt uz mērķa lauka."
+
+msgid "Put the items in the correct order."
+msgstr "Sakārtojiet elementus pareizā secībā."
+
+msgid "Move left"
+msgstr "Pārvietot pa kreisi"
+
+msgid "Move right"
+msgstr "Pārvietot pa labi"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Varat vilkt elementus pa kreisi vai pa labi, vai izmantot pārvietošanas pogas, lai mainītu secību."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Varat vilkt elementus vai izmantot pārvietošanas pogas, lai mainītu secību."
+
+msgid "Or upload an audio file"
+msgstr "Vai augšupielādēt audio failu"
+
+msgid "Selected audio"
+msgstr "Izvēlētais audio"
+
+msgid "Uploaded audio"
+msgstr "Augšupielādētais audio"
+
+msgid "Office document"
+msgstr "Biroja dokuments"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Pabeidziet dokumentu zemāk esošajā redaktorā. Fails tiks pievienots šim mēģinājumam skolotāja labošanai."
+
+msgid "Reload Office editor"
+msgstr "Pārlādēt Office redaktoru"
+
+msgid "Prepare Office document"
+msgstr "Sagatavot Office dokumentu"
+
+msgid "Open in new tab"
+msgstr "Atvērt jaunā cilnē"
+
+msgid "Preparing Office document"
+msgstr "Office dokumenta sagatavošana"
+
+msgid "Submitted document"
+msgstr "Iesniegtais dokuments"
+
+msgid "Annotation tools"
+msgstr "Anotācijas rīki"
+
+msgid "Text to place"
+msgstr "Teksts, ko novietot"
+
+msgid "Click the image to place the text annotation."
+msgstr "Noklikšķiniet uz attēla, lai novietotu teksta anotāciju."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Noklikšķiniet uz attēla, lai pievienotu ceļa punktus. Izmantojiet Jauns ceļš, lai atdalītu ceļus."
+
+msgid "Start new path"
+msgstr "Sākt jaunu ceļu"
+
+msgid "Current annotations"
+msgstr "Pašreizējās anotācijas"
+
+msgid "Remove point"
+msgstr "Noņemt punktu"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Noklikšķiniet uz attēla, lai uzzīmētu norobežojuma daudzstūri."
+
+msgid "Click a marker to remove it."
+msgstr "Noklikšķiniet uz marķiera, lai to noņemtu."
+
+msgid "Placed"
+msgstr "Novietots"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Izvēlieties atbildi, pēc tam noklikšķiniet uz attēla, lai to atzīmētu."
+
+msgid "Reading speed"
+msgstr "Lasīšanas ātrums"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Šo jautājuma veidu nevar parādīt šajā atskaņotājā."
+
+msgid "Save draft"
+msgstr "Saglabāt melnrakstu"
+
+msgid "I confirm that my answers were saved."
+msgstr "Apstiprinu, ka manas atbildes tika saglabātas."
+
+msgid "Finish test"
+msgstr "Pabeigt testu"
+
+msgid "Attempt finished"
+msgstr "Mēģinājums pabeigts"
+
+msgid "Question category"
+msgstr "Jautājuma kategorija"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Jūs pabeidzāt jautājumus, kas saistīti ar šo jautājuma kategoriju, tā ir jūsu pēdējā iespēja atgriezties un pārskatīt šos jautājumus."
+
+msgid "Question time left"
+msgstr "Jautājuma atlikušais laiks"
+
+msgid "Time left"
+msgstr "Atlikušais laiks"
+
+msgid "Current attempt"
+msgstr "Pašreizējais mēģinājums"
+
+msgid "Could not save draft answer"
+msgstr "Nevarēja saglabāt melnraksta atbildi"
+
+msgid "Could not load exercise"
+msgstr "Nevarēja ielādēt uzdevumu"
+
+msgid "Draft answer saved"
+msgstr "Melnraksta atbilde saglabāta"
+
+msgid "Could not finish the attempt"
+msgstr "Nevarēja pabeigt mēģinājumu"
+
+msgid "Could not prepare Office document"
+msgstr "Nevarēja sagatavot Office dokumentu"
+
+msgid "Back to learner score"
+msgstr "Atpakaļ pie dalībnieka rezultāta"
+
+msgid "Disable auto refresh"
+msgstr "Atslēgt automātisko atsvaidzināšanu"
+
+msgid "Enable auto refresh"
+msgstr "Ieslēgt automātisko atsvaidzināšanu"
+
+msgid "Live window"
+msgstr "Tiešraides logs"
+
+msgid "Ongoing attempts"
+msgstr "Notiekošie mēģinājumi"
+
+msgid "Completed attempts"
+msgstr "Pabeigtie mēģinājumi"
+
+msgid "Started"
+msgstr "Sākts"
+
+msgid "Last activity"
+msgstr "Pēdējā darbība"
+
+msgid "Could not load live results"
+msgstr "Nevarēja ielādēt tiešraides rezultātus"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Šis uzdevums ir tikai lasāms, jo tas ir iekļauts mācību ceļā."
+
+msgid "Select a question type to create a question."
+msgstr "Izvēlieties jautājuma veidu, lai izveidotu jautājumu."
+
+msgid "Click to preview"
+msgstr "Noklikšķiniet, lai priekšskatītu"
+
+msgid "Hide preview"
+msgstr "Paslēpt priekšskatījumu"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Koordinātas"
+
+msgid "Blanks"
+msgstr "Tukšumi"
+
+msgid "Switchable blanks"
+msgstr "Pārslēdzami tukšumi"
+
+msgid "Blank"
+msgstr "Tukšums"
+
+msgid "Input width"
+msgstr "Ievades platums"
+
+msgid "Orientation"
+msgstr "Orientācija"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Nav pieejams ar pašreizējo uzdevuma atgriezeniskās saites režīmu"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Nav pieejams mācību ceļa izveides plūsmā"
+
+msgid "Delete question"
+msgstr "Dzēst jautājumu"
+
+msgid "Could not update exercise questions"
+msgstr "Nevarēja atjaunināt uzdevuma jautājumus"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Nevarēja pievienot uzdevumu mācību ceļam"
+
+msgid "A valid exercise id is required."
+msgstr "Nepieciešams derīgs uzdevuma ID."
+
+msgid "Could not load exercise questions"
+msgstr "Nevarēja ielādēt uzdevuma jautājumus"
+
+msgid "Delete selected attempts"
+msgstr "Dzēst atlasītos mēģinājumus"
+
+msgid "Before date"
+msgstr "Pirms datuma"
+
+msgid "Pending corrections"
+msgstr "Gaidošās labojumi"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Šis uzdevums ir bloķēts ar vērtējumu grāmatu. Mēģinājumu tīrīšanas darbības ir atspējotas."
+
+msgid "No attempts found"
+msgstr "Mēģinājumi nav atrasti"
+
+msgid "Review"
+msgstr "Pārskatīt"
+
+msgid "Print/PDF"
+msgstr "Drukāt/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Nevarēja ielādēt uzdevuma atskaiti"
+
+msgid "Select at least one attempt"
+msgstr "Atlasiet vismaz vienu mēģinājumu"
+
+msgid "Delete selected attempts?"
+msgstr "Dzēst atlasītos mēģinājumus?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Sūtīt pārskatīto mēģinājumu rezultātu e-pastus?"
+
+msgid "Could not send emails"
+msgstr "Nevarēja nosūtīt e-pastus"
+
+msgid "Exercise result emails sent"
+msgstr "Uzdevuma rezultātu e-pasti nosūtīti"
+
+msgid "Skipped"
+msgstr "Izlaists"
+
+msgid "Close attempt?"
+msgstr "Aizvērt mēģinājumu?"
+
+msgid "Attempt closed"
+msgstr "Mēģinājums aizvērts"
+
+msgid "Could not close attempt"
+msgstr "Nevarēja aizvērt mēģinājumu"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Sūtīt šī mēģinājuma rezultātu pa e-pastu izglītojamajam?"
+
+msgid "Email sent"
+msgstr "E-pasts nosūtīts"
+
+msgid "Could not send email"
+msgstr "Nevarēja nosūtīt e-pastu"
+
+msgid "Attempt deleted"
+msgstr "Mēģinājums dzēsts"
+
+msgid "Could not delete attempt"
+msgstr "Nevarēja dzēst mēģinājumu"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Atlasiet CSV failu, kas satur virsraksta un apraksta kolonnas."
+
+msgid "Manage categories used to classify questions."
+msgstr "Pārvaldīt kategorijas, ko izmanto jautājumu klasificēšanai."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Pārvaldīt kategorijas, ko izmanto uzdevumu klasificēšanai."
+
+msgid "Could not load categories"
+msgstr "Nevarēja ielādēt kategorijas"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Importētās kategorijas: %s. Izlaistās rindas: %s."
+
+msgid "Imported categories: %s."
+msgstr "Importētās kategorijas: %s."
+
+msgid "Could not import categories"
+msgstr "Nevarēja importēt kategorijas"
+
+msgid "Could not save category"
+msgstr "Nevarēja saglabāt kategoriju"
+
+msgid "Answer distribution"
+msgstr "Atbilžu sadalījums"
+
+msgid "Configured answers"
+msgstr "Konfigurētās atbildes"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Detalizēta atbilžu skaitīšana dažiem jautājumu veidiem pagaidām nav pieejama migrētajā atskaitē."
+
+msgid "No report by question data found"
+msgstr "Nav atrasti dati par atskaiti pēc jautājumiem"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Detalizēta atbilžu skaitīšana šim jautājumu veidam pagaidām nav pieejama migrētajā atskaitē."
+
+msgid "No answer distribution found"
+msgstr "Nav atrasts atbilžu sadalījums"
+
+msgid "Could not load report by question"
+msgstr "Nevarēja ielādēt atskaiti pēc jautājumiem"
+
+msgid "Question settings"
+msgstr "Jautājuma iestatījumi"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Atstājiet tukšu vai 0, ja nav laika ierobežojuma."
+
+msgid "Time limit in seconds"
+msgstr "Laika ierobežojums sekundēs"
+
+msgid "Attached questions"
+msgstr "Piesaistītie jautājumi"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Šeit ir uzskaitīti tikai tie jautājumi, kas pašreizējā uzdevumā ir piesaistīti šim multivides jautājumam."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Pašreizējā uzdevumā šim multivides jautājumam nav piesaistīti jautājumi."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Augšupielādējiet Office dokumenta veidni, ko izglītojamie rediģēs ar OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Aizvietot Office dokumentu"
+
+msgid "Current Office document"
+msgstr "Pašreizējais Office dokuments"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Šis jautājums tiek labots manuāli pēc tam, kad izglītojamais iesniedz rediģēto dokumentu."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Kopējais vērtējums tiek aprēķināts kā karsto punktu vērtējumu summa."
+
+msgid "Global score"
+msgstr "Globālais vērtējums"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Atlasiet karsto punktu rindu, izvēlieties tā formu, pēc tam zīmējiet virs attēla. Daudzstūriem noklikšķiniet uz katra punkta un pabeidziet daudzstūri vai veiciet dubultklikšķi, lai pabeigtu."
+
+msgid "Finish polygon"
+msgstr "Pabeigt daudzstūri"
+
+msgid "Calculated answer"
+msgstr "Aprēķinātā atbilde"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Lūdzu, zemāk ierakstiet savu tekstu un izmantojiet kvadrātiekavas [...], lai definētu vienu vai vairākas tukšās vietas."
+
+msgid "Lowest value"
+msgstr "Zemākā vērtība"
+
+msgid "Highest value"
+msgstr "Augstākā vērtība"
+
+msgid "Fill in blanks"
+msgstr "Aizpildīt tukšās vietas"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Izmantojiet atlasītos marķierus, lai definētu tukšumus. Piemērs: Peru galvaspilsēta ir [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Ievadiet nolaižamās izvēlnes opcijas, vienu atbildi katrā rindā. Pēc tam atzīmējiet paredzamās atbildes zemāk, kā mantojumā esošajā rīkā."
+
+msgid "Refresh answers"
+msgstr "Atsvaidzināt atbildes"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Šis nolaižamās izvēlnes kombinācijas jautājums izmanto vienu kopējo vērtējumu, kā mantojumā."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Lūdzu, ievadiet vismaz divas nolaižamās izvēlnes opcijas."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Vispirms izveidojiet galamērķa opcijas, pēc tam saistiet katru vienību ar pareizo opciju."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Šis atbilstības kombinācijas jautājums izmanto vienu kopējo vērtējumu, kā mantojumā."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Izveidojiet soļus un izvēlieties paredzamo pozīciju katram, kā mantojumā esošajā vilkšanas rīkā."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Mācību dalībnieki izvēlēsies Patiess vai Nepatiess un pēc tam norādīs savu pārliecības pakāpi mēģinājuma laikā. Redaktors saglabā tos pašus Pareizi/Nepareizi vērtējumus un pārliecības līmeņus kā mantojumā."
+
+msgid "Hotspot combination"
+msgstr "Aktīvās zonas kombinācija"
+
+msgid "Add delineation"
+msgstr "Pievienot norobežojumu"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Šim Office dokumenta jautājumam nav atbilžu opciju. Tā vērtējums tiek piešķirts labošanas/rezultātu pārskatīšanas laikā."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Šim augšupielādes jautājumam nav atbilžu opciju. Tā vērtējums tiek piešķirts labošanas/rezultātu pārskatīšanas laikā."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Šim mutvārdu izteiksmes jautājumam nav atbilžu opciju. Tā vērtējums tiek piešķirts labošanas/rezultātu pārskatīšanas laikā."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Šim atvērtā tipa jautājumam nav atbilžu opciju. Tā vērtējums tiek piešķirts labošanas/rezultātu pārskatīšanas laikā."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Pievienot lasāmtekstu ar ritināšanas ātruma iestatījumiem."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Pievienot saturu, multividi vai lasīšanas kontekstu, nepievienojot vērtējumu."
+
+msgid "Insert a page break without adding score."
+msgstr "Ievietot lapas pārtraukumu, nepievienojot vērtējumu."
+
+msgid "Could not save question"
+msgstr "Neizdevās saglabāt jautājumu"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Atļauti tikai DOC, DOCX, XLS vai XLSX dokumenti."
+
+msgid "Please select an Office document."
+msgstr "Lūdzu, atlasiet Office dokumentu."
+
+msgid "Please draw at least one hotspot."
+msgstr "Lūdzu, uzzīmējiet vismaz vienu aktīvo zonu."
+
+msgid "Please draw at least one delineation."
+msgstr "Lūdzu, uzzīmējiet vismaz vienu norobežojumu."
+
+msgid "The fill in blanks text is required."
+msgstr "Aizpildāmo tukšumu teksts ir obligāts."
+
+msgid "At least one expected answer is required."
+msgstr "Nepieciešama vismaz viena paredzamā atbilde."
+
+msgid "At least two draggable items are required."
+msgstr "Nepieciešami vismaz divi vilkšanas elementi."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Katrs vilkšanas elements jāsaista ar derīgu mērķa pozīciju."
+
+msgid "At least two matching options are required."
+msgstr "Nepieciešamas vismaz divas atbilstības opcijas."
+
+msgid "At least two matching pairs are required."
+msgstr "Nepieciešami vismaz divi atbilstības pāri."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Katrs atbilstības pāris jāsaista ar derīgu opciju."
+
+msgid "At least two answers are required."
+msgstr "Nepieciešamas vismaz divas atbildes."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Katrai patiess/nepatiess atbildei jābūt atlasītam Patiess vai Nepatiess."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Vienas pareizās atbildes jautājumam jābūt tieši vienai pareizai atbildei."
+
+msgid "At least one correct answer is required."
+msgstr "Nepieciešama vismaz viena pareizā atbilde."
+
+msgid "Could not load question"
+msgstr "Neizdevās ielādēt jautājumu"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Atlasiet kursu un eksportējiet globālo uzdevumu rezultātu pārskatu kā CSV."
+
+msgid "Back to reports catalog"
+msgstr "Atpakaļ uz pārskatu katalogu"
+
+msgid "Could not load exercise global report"
+msgstr "Neizdevās ielādēt uzdevuma globālo pārskatu"
+
+msgid "Imported questions"
+msgstr "Importētie jautājumi"
+
+msgid "Aiken content"
+msgstr "Aiken saturs"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Neizdevās ielādēt AI Aiken ģeneratoru"
+
+msgid "Could not generate Aiken content"
+msgstr "Neizdevās ģenerēt Aiken saturu"
+
+msgid "Could not import generated Aiken content"
+msgstr "Neizdevās importēt ģenerēto Aiken saturu"
+
+msgid "Back to my courses"
+msgstr "Atpakaļ uz maniem kursiem"
+
+msgid "Open report"
+msgstr "Atvērt pārskatu"
+
+msgid "Questions with no automatic correction"
+msgstr "Jautājumi bez automātiskās labošanas"
+
+msgid "Could not load pending attempts"
+msgstr "Neizdevās ielādēt neizpildītos mēģinājumus"
+
+msgid "Skipped questions"
+msgstr "Izlaistie jautājumi"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken imports sadala šo kopējo svaru starp importētajiem jautājumiem, ja vien jautājums nedefinē SCORE."
+
+msgid "Import warnings"
+msgstr "Importēšanas brīdinājumi"
+
+msgid "Could not import questions"
+msgstr "Nevarēja importēt jautājumus"
+
+msgid "No question statistics found"
+msgstr "Nav atrasta jautājumu statistika"
+
+msgid "Could not load question statistics"
+msgstr "Nevarēja ielādēt jautājumu statistiku"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Varat arī tieši izveidot savienojumu ar MCP klientu, norādot uz šo galapunktu:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Pašlaik neviena lietotne nav savienota ar jūsu kontu."
+
+msgid "Connected on"
+msgstr "Savienots"
+
+msgid "Last used"
+msgstr "Pēdējoreiz izmantots"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s vairs nevarēs piekļūt jūsu Chamilo kontam. Turpināt?"
+
+msgid "Application revoked"
+msgstr "Lietotne atsaukta"
+
+msgid "Copied to clipboard"
+msgstr "Kopēts starpliktuvē"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Nevarēja kopēt MCP galapunktu"
+
+msgid "MCP endpoint"
+msgstr "MCP galapunkts"
+
+msgid "API key"
+msgstr "API atslēga"
+
+msgid "Last used at"
+msgstr "Pēdējoreiz izmantots"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopējiet šo atslēgu tagad. Tā vairs netiks rādīta."
+
+msgid "Rotate API key"
+msgstr "Rotēt API atslēgu"
+
+msgid "Revoke API key"
+msgstr "Atsaukt API atslēgu"
+
+msgid "Remote MCP connection"
+msgstr "Attālināts MCP savienojums"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Konfigurējiet savu MCP klientu ar šādām vērtībām:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Pašreizējā atslēga nekavējoties pārtrauks darboties. Turpināt?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Tiks ģenerēta jauna personīgā MCP API atslēga. Turpināt?"
+
+msgid "MCP API key generated"
+msgstr "MCP API atslēga ģenerēta"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "MCP klienti, kas izmanto šo atslēgu, nekavējoties pārtrauks darboties. Turpināt?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API atslēga atsaukta"
+
+msgid "Could not copy the API key"
+msgstr "Nevarēja kopēt API atslēgu"
+
+msgid "Project"
+msgstr "Projekts"
+
+msgid "Close old tickets"
+msgstr "Aizvērt vecās biļetes"
+
+msgid "Close tickets older than seven days?"
+msgstr "Aizvērt biļetes, kas vecākas par septiņām dienām?"
+
+msgid "Assignment history"
+msgstr "Uzdevumu vēsture"
+
+msgid "Translate with AI"
+msgstr "Tulkot ar MI"
+
+msgid "Target language"
+msgstr "Mērķa valoda"
+
+msgid "Please select a provider"
+msgstr "Lūdzu, atlasiet pakalpojumu sniedzēju"
+
+msgid "Generate translation"
+msgstr "Ģenerēt tulkojumu"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Vismaz vienā noteikumu un nosacījumu sadaļā jābūt tekstam."
+
+msgid "No active target languages are available."
+msgstr "Nav pieejamu aktīvu mērķa valodu."
+
+msgid "Tutor"
+msgstr "Pasniedzējs"
+
+msgid "Access dates"
+msgstr "Piekļuves datumi"
+
+msgid "Coach access dates"
+msgstr "Pasniedzēja piekļuves datumi"
+
+msgid "No sessions found"
+msgstr "Nav atrastas sesijas"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Atlasiet kursus, kuriem šim lietotājam šajā sesijā nedrīkst būt piekļuves."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Lietotāju nevar bloķēt no visiem kursiem sesijā. Tā vietā atteikt lietotāju."
+
+msgid "Users subscribed to this session"
+msgstr "Lietotāji, kas pierakstījušies šajā sesijā"
+
+msgid "No available users found"
+msgstr "Nav atrasti pieejamie lietotāji"
+
+msgid "Subscribe this user to the session?"
+msgstr "Pierakstīt šo lietotāju sesijai?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Pierakstīt atlasītos lietotājus sesijai?"
+
+msgid "General tutor planning"
+msgstr "Vispārējā pasniedzēja plānošana"
+
+msgid "User is already registered by another tutor."
+msgstr "Lietotājs jau ir reģistrēts pie cita pasniedzēja."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Jūs saņemat kopiju, jo esat kursa pasniedzējs"
+
+msgid "General tutor"
+msgstr "Vispārējais pasniedzējs"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Apsveriet pieejamos kursus, pasniedzējus, tehnisko palīdzības dienestu, skolotājus un/vai materiālus."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Kursā %s kā pasniedzēji pierakstītie tutori"
+
+msgid "Tutor name"
+msgstr "Tutora vārds"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Sesijas tutori ir sesijas koordinatori un var darboties kā tutori katrā sesijas kursā. Par sesijas tutoriem var izvēlēties tikai lietotājus ar pasniedzēja lomu."
+
+msgid "Access start date for tutors"
+msgstr "Tutoriem pieejas sākuma datums"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Datums, kad sesija kļūst pieejama tutoriem, lai viņi varētu to sagatavot pirms studentu pieslēgšanās"
+
+msgid "Access end date for tutors"
+msgstr "Tutoriem pieejas beigu datums"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Datums, kad sesija tutoriem tiek slēgta. Papildu laiks ļaus viņiem eksportēt visu attiecīgo izsekošanas informāciju"
+
+msgid "Tutor and student"
+msgstr "Tutors un students"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Šajā pārskatā parādīts sesiju nedēļas sadalījums pēc vispārējā tutora izvēlētajā datumu diapazonā."
+
+msgid "User is general tutor in some sessions"
+msgstr "Lietotājs ir vispārējais tutors dažās sesijās"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Pasniedzēji tiks pievienoti kā tutori visās kursa sesijās."
+
+msgid "Delete failed: invalid question id."
+msgstr "Dzēšana neizdevās: nederīgs jautājuma ID."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Vidējais sesiju skaits uz vienu vispārējo sesijas tutoru"
+
+msgid "No room"
+msgstr "Nav telpas"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importēt kursa pasniedzējus kā kursa tutorus sesijā"
+
+msgid "Clean and update course tutors"
+msgstr "Notīrīt un atjaunināt kursa tutorus"
+
+msgid "Add me as tutor"
+msgstr "Pievienot mani kā tutoru"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Nevar pievienot aptauju mācību ceļam"
+
+msgid "Access dates for tutors"
+msgstr "Tutoriem pieejas datumi"
+
+msgid "Tutor and group member"
+msgstr "Tutors un grupas dalībnieks"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Jūsu dienas AI tokenu limits ir sasniegts. Lūdzu, mēģiniet vēlāk rīt."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Jūsu mēneša AI tokenu limits ir sasniegts. Lūdzu, mēģiniet vēlāk nākamajā mēnesī."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Šis kursa kods jau pastāv, lūdzu, izvēlieties citu kodu."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Šis kursa nosaukums jau pastāv, lūdzu, izvēlieties citu nosaukumu."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Šī rīka redzamību nevar mainīt"
+
+msgid "Invalid visibility"
+msgstr "Nederīga redzamība"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Jūs saņemat kopiju, jo esat viens no kursa tutoriem"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Jūs saņemat kopiju, jo esat kursa tutors"
+
+msgid "Manual completion"
+msgstr "Manuālā pabeigšana"
+
+msgid "Send to tutors"
+msgstr "Sūtīt tutoriem"
+
+msgid "Lab title"
+msgstr "Laboratorijas nosaukums"
+
+msgid "Lab week"
+msgstr "Laboratorijas nedēļa"
+
+msgid "Final exam access rule"
+msgstr "Gala eksāmena piekļuves noteikums"
+
+msgid "Course completion rule"
+msgstr "Kursa pabeigšanas noteikums"
+
+msgid "You have been invited to join a course"
+msgstr "Jūs esat uzaicināts pievienoties kursam"
+
+msgid "No user has been found"
+msgstr "Nav atrasts neviens lietotājs"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Izvēlēto lietotāju šajā kontekstā nevar pierakstīt"
+
+msgid "No change has been made"
+msgstr "Nav veiktas izmaiņas"
+
+msgid "Back to group list"
+msgstr "Atpakaļ uz grupu sarakstu"
+
+msgid "Remove class link"
+msgstr "Noņemt klases saiti"
+
+msgid "Group settings"
+msgstr "Grupas iestatījumi"
+
+msgid "Self-registration allowed"
+msgstr "Atļauta pašreģistrācija"
+
+msgid "Self-unregistration allowed"
+msgstr "Atļauta pašatteikšanās"
+
+msgid "This group is linked to the class"
+msgstr "Šī grupa ir saistīta ar klasi"
+
+msgid "Create one or more empty course groups"
+msgstr "Izveidot vienu vai vairākas tukšas kursa grupas"
+
+msgid "Number of places"
+msgstr "Vietu skaits"
+
+msgid "Base group"
+msgstr "Pamata grupa"
+
+msgid "Share"
+msgstr "Kopīgot"
+
+msgid "Collaboration"
+msgstr "Sadarbība"
+
+msgid "The group title is required."
+msgstr "Grupas nosaukums ir obligāts."
+
+msgid "Back to group area"
+msgstr "Atpakaļ uz grupas apgabalu"
+
+msgid "Members are managed by the linked class"
+msgstr "Dalībniekus pārvalda saistītā klase"
+
+msgid "%s groups selected"
+msgstr "%s grupas atlasītas"
+
+msgid "Fill selected groups"
+msgstr "Aizpildīt atlasītās grupas"
+
+msgid "Empty selected groups"
+msgstr "Iztukšot atlasītās grupas"
+
+msgid "Fill group"
+msgstr "Aizpildīt grupu"
+
+msgid "Empty group"
+msgstr "Iztukšot grupu"
+
+msgid "Groups per user"
+msgstr "Grupas uz lietotāju"
+
+msgid "No tutors"
+msgstr "Nav pasniedzēju"
+
+msgid "No users"
+msgstr "Nav lietotāju"
 

@@ -37632,3 +37632,1299 @@ msgstr "Isticmaal 0 si aad u haysato dhammaan su'aalaha la heli karo. Isticmaal 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Isticmaal goobahan si aad u kala soocdo jimicsiga si ka madax bannaan xulashooyinka muuqaalkiisa."
 
+msgid "Invite by email"
+msgstr "Ku martiqaad iimayl"
+
+msgid "Invitation has been sent"
+msgstr "Martiqaadka waa la diray"
+
+msgid "Sent on"
+msgstr "Waxaa la diray"
+
+msgid "Accepted on"
+msgstr "Waxaa la aqbalay"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Kooraskan wuxuu ku furan yahay kalfadhi. Dirista martiqaadka halkan waxay qori doontaa qofka la dirayo kalfadhiga oo dhan %s, ma aha oo keliya kooraskan."
+
+msgid "Revoke"
+msgstr "Ka noqosho"
+
+msgid "Revoked"
+msgstr "Waa la noqday"
+
+msgid "Invitation has been revoked"
+msgstr "Martiqaadka waa la noqday"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Ma hubtaa inaad doonayso inaad ka noqoto martiqaadka loo diray %s?"
+
+msgid "No default room"
+msgstr "Qol caadi ah ma jiro"
+
+msgid "Floor"
+msgstr "Dabaq"
+
+msgid "Capacity"
+msgstr "Awood"
+
+msgid "Use attendance default room"
+msgstr "Isticmaal qolka caadiga ah ee xaadiritaanka"
+
+msgid "Floor number"
+msgstr "Lambarka dabaqa"
+
+msgid "Copy to students"
+msgstr "Nuqul u samee ardayda"
+
+msgid "Generate a quick test on this topic"
+msgstr "Samee imtixaan degdeg ah mawduucan"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Waxyaabaha dukumeentiga la keydiyay waxaa loo diri doonaa qaabka AI si loo habeeyo."
+
+msgid "MCP API key"
+msgstr "Furaha API ee MCP"
+
+msgid "Authorized applications"
+msgstr "Barnaamijyada la oggol yahay"
+
+msgid "Your session is about to expire"
+msgstr "Kalfadhigaaga wuxuu ku dhow yahay inuu dhammaado"
+
+msgid "Do you want to continue your session?"
+msgstr "Ma doonaysaa inaad sii waddo kalfadhigaaga?"
+
+msgid "Stay connected"
+msgstr "Sii wad xiriirka"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Waxaa lagaa saari doonaa %s ilbiriqsi gudahood."
+
+msgid "No descriptions available yet."
+msgstr "Sharraxno ma jiraan weli."
+
+msgid "%s users selected"
+msgstr "%s isticmaalayaal la doortay"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Isticmaalayaasha la doortay waa la qoray koorsada"
+
+msgid "Import teachers"
+msgstr "Soo dejinta macallimiinta"
+
+msgid "Import learners"
+msgstr "Soo dejinta ardayda"
+
+msgid "Select CSV file"
+msgstr "Dooro faylka CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Qaar ka mid ah isticmaalayaasha lama qori karin"
+
+msgid "Browse available classes"
+msgstr "Baadh fasallada la heli karo"
+
+msgid "Back to linked classes"
+msgstr "Ku noqo fasallada la xiriiray"
+
+msgid "No classes are currently linked to this course."
+msgstr "Hadda fasallo kuma xirna koorsadan."
+
+msgid "No available classes were found for this course."
+msgstr "Fasallo la heli karo looma helin koorsadan."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Ma hubtaa inaad doonayso inaad ka qorto isticmaalayaasha la doortay?"
+
+msgid "Learning path access"
+msgstr "Helitaanka dariiqa barashada"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Kaliya isticmaalayaasha iyo kooxaha la doortay ayaa geli kara dariiqan barashada. Maamul iyaga ka dib markaad kaydiso."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Dhammaan isticmaalayaasha koorsada ee hadda iyo mustaqbalka ayaa geli kara dariiqan barashada."
+
+msgid "All course users"
+msgstr "Dhammaan isticmaalayaasha koorsada"
+
+msgid "Selected users and groups"
+msgstr "Istigmaalayaasha iyo kooxaha la doortay"
+
+msgid "No access"
+msgstr "Helitaan ma jiro"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Kaliya isticmaalayaasha iyo kooxaha halkan lagu daray ayaa geli kara dariiqan barashada."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Tirada su'aalaha waxay ku xaddidan tahay ugu badnaan %s"
+
+msgid "Open exercise player"
+msgstr "Fur ciyaartoyga jimicsiga"
+
+msgid "The score is hidden for this exercise."
+msgstr "Dhibcaha waa qarsoon yihiin jimicsigan."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Sixidda waa la qariyay sida ku xusan dejinta natiijada jimicsiga."
+
+msgid "Progressive adaptive result"
+msgstr "Natiijo la qabsanaya oo horumarsan"
+
+msgid "Achieved level"
+msgstr "Heerka la gaaray"
+
+msgid "Correction history"
+msgstr "Taariikhda sixidda"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Taariikhda sixidda gacanta ee la sameeyay isku daygan."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Jimicsigan wuxuu isticmaalayaa habka natiijada radar/spiderweb. Jaantuska lagama heli karo boggan."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Faahfaahinta su'aasha waa la qariyey sida uu dhigayo dejinta natiijada jimicsiga."
+
+msgid "Media question"
+msgstr "Su'aal warbaahineed"
+
+msgid "Pending correction"
+msgstr "Sugaya sixid"
+
+msgid "No answer"
+msgstr "Jawaab ma jirto"
+
+msgid "Blank %s"
+msgstr "Meel bannaan %s"
+
+msgid "Your order"
+msgstr "Dalabkaaga"
+
+msgid "Correct order"
+msgstr "Dalabka saxda ah"
+
+msgid "Delineation review"
+msgstr "Dib u eegista xariiqda"
+
+msgid "Learner clicks"
+msgstr "Riixitaanka ardayga"
+
+msgid "Question image"
+msgstr "Sawirka su'aasha"
+
+msgid "No hotspot image available"
+msgstr "Sawir hotspot lama heli karo"
+
+msgid "Learner delineation"
+msgstr "Xariiqda ardayga"
+
+msgid "Expected delineation"
+msgstr "Xariiqda la filayo"
+
+msgid "Expected zones"
+msgstr "Aagagga la filayo"
+
+msgid "Zone"
+msgstr "Aag"
+
+msgid "Learner annotation"
+msgstr "Qoraalka ardayga"
+
+msgid "No annotation image available"
+msgstr "Sawir qoraal ah lama heli karo"
+
+msgid "This answer is pending teacher correction."
+msgstr "Jawaashan waxay sugaysaa sixid macallin."
+
+msgid "Teacher comment"
+msgstr "Faallo macallin"
+
+msgid "Teacher correction"
+msgstr "Sixid macallin"
+
+msgid "Save correction"
+msgstr "Kaydi sixid"
+
+msgid "Learner audio"
+msgstr "Maqalka ardayga"
+
+msgid "Download audio"
+msgstr "Soo dejiso maqal"
+
+msgid "No uploaded audio"
+msgstr "Maqal la soo geliyey ma jiro"
+
+msgid "Learner Office document"
+msgstr "Dukumeenti Office ee ardayga"
+
+msgid "Learner file"
+msgstr "Faylka ardayga"
+
+msgid "Download Office document"
+msgstr "Soo dejiso dukumeenti Office"
+
+msgid "No submitted document"
+msgstr "Dukumeenti la soo gudbiyey ma jiro"
+
+msgid "No uploaded file"
+msgstr "Fayl la soo geliyey ma jiro"
+
+msgid "Content item"
+msgstr "Shayga nuxurka"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Noocan su'aasha lagama eegi karo boggan."
+
+msgid "Exercise completed"
+msgstr "Jimicsi waa la dhammaystiray"
+
+msgid "Could not start the attempt"
+msgstr "Isku dayga lama bilaabi karo"
+
+msgid "Invalid exercise attempt"
+msgstr "Isku day jimicsi aan sax ahayn"
+
+msgid "Could not load exercise result"
+msgstr "Natiijada jimicsiga lama soo dejin karo"
+
+msgid "Could not load AI providers"
+msgstr "Bixiyeyaasha AI lama soo dejin karo"
+
+msgid "Could not generate AI suggestion"
+msgstr "Talo AI lama abuuri karo"
+
+msgid "Correction saved"
+msgstr "Sixid waa la kaydiyey"
+
+msgid "Could not save correction"
+msgstr "Sixid lama kaydin karo"
+
+msgid "Create exercise"
+msgstr "Abuur jimicsi"
+
+msgid "Exercise categories"
+msgstr "Qaybaha jimicsiga"
+
+msgid "Question categories"
+msgstr "Qaybaha su'aalaha"
+
+msgid "Search by exercise title or description."
+msgstr "Raadi magaca jimicsiga ama sharraxaadda."
+
+msgid "Search exercises"
+msgstr "Raadi jimicsiyada"
+
+msgid "No exercises found"
+msgstr "Jimicsi lama helin"
+
+msgid "Open exercise"
+msgstr "Fur jimicsi"
+
+msgid "Disable autolaunch"
+msgstr "Dami bilaw toos ah"
+
+msgid "Enable autolaunch"
+msgstr "Daar bilaw toos ah"
+
+msgid "Export QTI2"
+msgstr "Dhoofinta QTI2"
+
+msgid "Bulk actions"
+msgstr "Ficilada waaweyn"
+
+msgid "Selected exercises"
+msgstr "Jimicsiyada la doortay"
+
+msgid "No exercises selected"
+msgstr "Ma jiraan jimicsiyo la doortay"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Ma hubtaa inaad rabto inaad ficilkan ku dabaqdo jimicsiyada la doortay?"
+
+msgid "Bulk action completed"
+msgstr "Ficilkii waaweynaa waa la dhammaystiray"
+
+msgid "Could not update exercises"
+msgstr "Ma suurtagelin in jimicsiyada la cusbooneysiiyo"
+
+msgid "Could not update exercise"
+msgstr "Ma suurtagelin in jimicsiga la cusbooneysiiyo"
+
+msgid "Copy exercise"
+msgstr "Nuqul jimicsi"
+
+msgid "Delete exercise"
+msgstr "Tirtir jimicsi"
+
+msgid "Could not load exercises"
+msgstr "Ma suurtagelin in jimicsiyada la soo dejiyo"
+
+msgid "No limit"
+msgstr "Xad la'aan"
+
+msgid "Add selected questions to the test"
+msgstr "Ku dar su'aalaha la doortay imtixaanka"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Su'aashan waxaa loo isticmaalaa imtixaan firfircoon oo halkan laguma beddeli karo."
+
+msgid "This question cannot be edited here."
+msgstr "Su'aashan halkan laguma beddeli karo."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Su'aashan waxaa loo isticmaalaa imtixaan firfircoon oo halkan laguma tirtiri karo."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Su'aashan lama tirtiri karo sababtoo ah gelitaankaaga waxaa xaddiday dejinta barnaamijka."
+
+msgid "Already in test"
+msgstr "Horeba imtixaanka ugu jiray"
+
+msgid "Select at least one question."
+msgstr "Ugu yaraan hal su'aal dooro."
+
+msgid "Question bank updated"
+msgstr "Bangiga su'aalaha waa la cusbooneysiiyay"
+
+msgid "Could not update the question bank"
+msgstr "Ma suurtagelin in bangiga su'aalaha la cusbooneysiiyo"
+
+msgid "Could not load the question bank"
+msgstr "Ma suurtagelin in bangiga su'aalaha la soo dejiyo"
+
+msgid "Total score"
+msgstr "Wadarta dhibcaha"
+
+msgid "Starting"
+msgstr "Bilowga"
+
+msgid "Attempt history"
+msgstr "Taariikhda isku dayga"
+
+msgid "No attempts yet"
+msgstr "Wali isku day ma jiraan"
+
+msgid "Invalid exercise"
+msgstr "Jimicsi aan sax ahayn"
+
+msgid "Could not load exercise overview"
+msgstr "Ma suurtagelin in dulmarka jimicsiga la soo dejiyo"
+
+msgid "Open test"
+msgstr "Furan imtixaan"
+
+msgid "Random answers"
+msgstr "Jawaabo aan kala sooc lahayn"
+
+msgid "Prevent moving backwards"
+msgstr "Ka hortag dib u noqoshada"
+
+msgid "Previous button hidden"
+msgstr "Badhanka hore waa qarsoon"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Jimicsigani wuxuu isticmaalaa xulashooyin u baahan ciyaartoy imtixaan oo ka duwan."
+
+msgid "Continue test"
+msgstr "Sii wad imtixaanka"
+
+msgid "Attempt started"
+msgstr "Isku dayga waa la bilaabay"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Muuqaalka macalinku ma abuuro isku day la raacayo."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Bilow ama dib u bilow isku day jimicsi. Jawaabaha qabyada ah waa la kaydin karaa ka hor inta aan la soo gudbin kama dambaysta."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Waqti xaddidan waa la gaaray. Dhamaystirka isku dayga."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Waqti su'aasha waa la gaaray. Kaydinta jawaabtaada."
+
+msgid "Finishing"
+msgstr "Dhamaystirka"
+
+msgid "Draft saved"
+msgstr "Qabyo waa la kaydiyay"
+
+msgid "Statement"
+msgstr "Bayaan"
+
+msgid "Drop each option on the matching answer"
+msgstr "Ku tuur xulasho kasta jawaabta u dhiganta"
+
+msgid "Clear match"
+msgstr "Tirtir iswaafajinta"
+
+msgid "Click to place the selected option here"
+msgstr "Guji si aad halkan ugu dhejiso xulashada la doortay"
+
+msgid "Select an option, then click here"
+msgstr "Dooro xulasho, ka dibna halkan guji"
+
+msgid "Already matched"
+msgstr "Horeba loo iswaafajiyay"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Waxaad jiidi kartaa xulasho jawaab, ama dooro xulasho ka dibna guji sanduuq bartilmaameed."
+
+msgid "Put the items in the correct order."
+msgstr "Ku dheji walxaha sida saxda ah."
+
+msgid "Move left"
+msgstr "U dhaqaaq bidix"
+
+msgid "Move right"
+msgstr "U dhaqaaq midig"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Waxaad u jiidi kartaa walxaha bidix ama midig, ama isticmaal badhamada dhaqaajinta si aad u beddesho nidaamka."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Waxaad u jiidi kartaa walxaha ama isticmaal badhamada dhaqaajinta si aad u beddesho nidaamka."
+
+msgid "Or upload an audio file"
+msgstr "Ama soo geli fayl maqal ah"
+
+msgid "Selected audio"
+msgstr "Maqalka la doortay"
+
+msgid "Uploaded audio"
+msgstr "Maqalka la soo geliyay"
+
+msgid "Office document"
+msgstr "Dukumeenti xafiiska"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Dhamaystir dukumeentiga tifaftiraha hoose. Faylka waxaa lagu lifaaqi doonaa isku daygan si macalinka u saxo."
+
+msgid "Reload Office editor"
+msgstr "Dib u soo dejinta tifaftiraha Office"
+
+msgid "Prepare Office document"
+msgstr "Diyaari dukumeenti Office"
+
+msgid "Open in new tab"
+msgstr "Ka fur tab cusub"
+
+msgid "Preparing Office document"
+msgstr "Diyaarinta dukumeenti Office"
+
+msgid "Submitted document"
+msgstr "Dukumeenti la gudbiyay"
+
+msgid "Annotation tools"
+msgstr "Qalabka sharraxaadda"
+
+msgid "Text to place"
+msgstr "Qoraal la dhigayo"
+
+msgid "Click the image to place the text annotation."
+msgstr "Riix sawirka si aad u dhigto sharraxaadda qoraalka."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Riix sawirka si aad ugu darto dhibco jidka. Isticmaal Bilow jid cusub si aad u kala go'do jidadka."
+
+msgid "Start new path"
+msgstr "Bilow jid cusub"
+
+msgid "Current annotations"
+msgstr "Sharraxaadaha hadda"
+
+msgid "Remove point"
+msgstr "Ka saar dhibic"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Riix sawirka si aad u sawirto geesaha xadeynta."
+
+msgid "Click a marker to remove it."
+msgstr "Riix calaamad si aad u saarto."
+
+msgid "Placed"
+msgstr "La dhigay"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Dooro jawaab, ka dib riix sawirka si aad u calaamadiso."
+
+msgid "Reading speed"
+msgstr "Xawaaraha akhriska"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Noocan su'aasha lama soo bandhigi karo ciyaartoygan."
+
+msgid "Save draft"
+msgstr "Kaydi qabyo"
+
+msgid "I confirm that my answers were saved."
+msgstr "Waxaan xaqiijinayaa in jawaabahayga la kaydiyay."
+
+msgid "Finish test"
+msgstr "Dhamee imtixaanka"
+
+msgid "Attempt finished"
+msgstr "Isku dayga waa la dhameeyay"
+
+msgid "Question category"
+msgstr "Qaybta su'aasha"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Waxaad dhameysay su'aalaha la xiriira qaybtan su'aasha, waa fursaddaada ugu dambeysa inaad dib ugu noqoto oo aad dib u eegto su'aalahan."
+
+msgid "Question time left"
+msgstr "Waqtiga su'aasha hadhay"
+
+msgid "Time left"
+msgstr "Waqtiga hadhay"
+
+msgid "Current attempt"
+msgstr "Isku dayga hadda"
+
+msgid "Could not save draft answer"
+msgstr "Lama kaydin karo jawaabta qabyada"
+
+msgid "Could not load exercise"
+msgstr "Lama soo dejin karo jimicsiga"
+
+msgid "Draft answer saved"
+msgstr "Jawaabta qabyada waa la kaydiyay"
+
+msgid "Could not finish the attempt"
+msgstr "Lama dhameyn karo isku dayga"
+
+msgid "Could not prepare Office document"
+msgstr "Lama diyaarin karo dukumeenti Office"
+
+msgid "Back to learner score"
+msgstr "Dib ugu noqo dhibcaha ardayga"
+
+msgid "Disable auto refresh"
+msgstr "Dami dib u cusboonaysiinta otomaatiga"
+
+msgid "Enable auto refresh"
+msgstr "Daar dib u cusboonaysiinta otomaatiga"
+
+msgid "Live window"
+msgstr "Daaqadda tooska ah"
+
+msgid "Ongoing attempts"
+msgstr "Isku dayada socda"
+
+msgid "Completed attempts"
+msgstr "Isku dayada la dhameeyay"
+
+msgid "Started"
+msgstr "La bilaabay"
+
+msgid "Last activity"
+msgstr "Waxqabadka ugu dambeeyay"
+
+msgid "Could not load live results"
+msgstr "Lama soo dejin karo natiijooyinka tooska ah"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Jimicsigan waa mid akhris-keliya ah maxaa yeelay waxa lagu daray waddo waxbarasho."
+
+msgid "Select a question type to create a question."
+msgstr "Dooro nooca su'aasha si aad u abuurto su'aal."
+
+msgid "Click to preview"
+msgstr "Guji si aad u aragto"
+
+msgid "Hide preview"
+msgstr "Qari aragga"
+
+msgid "Shape"
+msgstr "Qaab"
+
+msgid "Coordinates"
+msgstr "Meelaha"
+
+msgid "Blanks"
+msgstr "Meelaha bannaan"
+
+msgid "Switchable blanks"
+msgstr "Meelaha bannaan ee la beddeli karo"
+
+msgid "Blank"
+msgstr "Meel bannaan"
+
+msgid "Input width"
+msgstr "Ballaca gelinta"
+
+msgid "Orientation"
+msgstr "Jihayn"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Lama heli karo habka jawaab-celinta jimicsiga ee hadda"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Lama heli karo socodka abuurista dariiqa barashada"
+
+msgid "Delete question"
+msgstr "Tirtir su'aasha"
+
+msgid "Could not update exercise questions"
+msgstr "Su'aalaha jimicsiga lama cusboonaysiin karin"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Jimicsiga lama ku dari karin dariiqa barashada"
+
+msgid "A valid exercise id is required."
+msgstr "Aqoonsi jimicsi oo sax ah ayaa loo baahan yahay."
+
+msgid "Could not load exercise questions"
+msgstr "Su'aalaha jimicsiga lama soo dejin karin"
+
+msgid "Delete selected attempts"
+msgstr "Tirtir isku-dayada la doortay"
+
+msgid "Before date"
+msgstr "Taariikhda ka hor"
+
+msgid "Pending corrections"
+msgstr "Sixidda sugaya"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Jimicsigan waxaa xiray buugga darajooyinka. Ficilada nadiifinta isku-dayada waa la damiyay."
+
+msgid "No attempts found"
+msgstr "Isku-day lama helin"
+
+msgid "Review"
+msgstr "Dib u eegis"
+
+msgid "Print/PDF"
+msgstr "Daabac/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Warbixinta jimicsiga lama soo dejin karin"
+
+msgid "Select at least one attempt"
+msgstr "Ugu yaraan hal isku-day dooro"
+
+msgid "Delete selected attempts?"
+msgstr "Tirtir isku-dayada la doortay?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "U dir iimaylka natiijada isku-dayga dib loo eegay?"
+
+msgid "Could not send emails"
+msgstr "Iimayl lama dirin"
+
+msgid "Exercise result emails sent"
+msgstr "Iimaylka natiijada jimicsiga waa la diray"
+
+msgid "Skipped"
+msgstr "La booday"
+
+msgid "Close attempt?"
+msgstr "Xidho isku-dayga?"
+
+msgid "Attempt closed"
+msgstr "Isku-dayga waa la xidhay"
+
+msgid "Could not close attempt"
+msgstr "Isku-dayga lama xidhi karin"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "U dir natiijada isku-daygan iimayl ahaan ardayga?"
+
+msgid "Email sent"
+msgstr "Iimaylka waa la diray"
+
+msgid "Could not send email"
+msgstr "Iimayl lama dirin"
+
+msgid "Attempt deleted"
+msgstr "Isku-dayga waa la tirtiray"
+
+msgid "Could not delete attempt"
+msgstr "Isku-dayga lama tirtiri karin"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Xulo fayl CSV ah oo ka kooban tiirar cinwaan iyo sharraxaad ah."
+
+msgid "Manage categories used to classify questions."
+msgstr "Maamul qaybaha loo isticmaalo kala soocidda su'aalaha."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Maamul qaybaha loo isticmaalo kala soocidda jimicsiyada."
+
+msgid "Could not load categories"
+msgstr "Qaybaha lama soo dejin karin"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Qaybaha la soo dhoofiyay: %s. Safafka la booday: %s."
+
+msgid "Imported categories: %s."
+msgstr "Qaybaha la soo dhoofiyay: %s."
+
+msgid "Could not import categories"
+msgstr "Qaybaha lama soo dhoofin karin"
+
+msgid "Could not save category"
+msgstr "Qaybta lama kaydin karin"
+
+msgid "Answer distribution"
+msgstr "Qaybinta jawaabaha"
+
+msgid "Configured answers"
+msgstr "Jawaabaha la habeeyay"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Tirinta jawaabaha faahfaahsan ee noocyada su'aalaha qaarkood weli lagama heli karo warbixinta la soo saaray."
+
+msgid "No report by question data found"
+msgstr "Warbixinta su'aal kasta xog ah lama helin"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Wajiga jawaabta faahfaahsan ee noocan su'aasha ah weli lagama heli karo warbixinta la soo saaray."
+
+msgid "No answer distribution found"
+msgstr "Wax jawaab ah lama helin"
+
+msgid "Could not load report by question"
+msgstr "Warbixinta su'aasha kuma soo shubin karin"
+
+msgid "Question settings"
+msgstr "Dejinta su'aasha"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Ka dhig madhan ama 0 haddii aanay jirin xad waqti ah."
+
+msgid "Time limit in seconds"
+msgstr "Waqti xadid ah ilbiriqsi"
+
+msgid "Attached questions"
+msgstr "Su'aalaha ku lifaaqan"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Halkan waxaa lagu soo bandhigayaa oo keliya su'aalaha ku lifaaqan su'aashan warbaahinta ee jimicsiga hadda."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Wax su'aal ah kuma lifaaqna su'aashan warbaahinta ee jimicsiga hadda."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Soo gel dukumeenti xafiiska ee ardaydu wax ku beddeli doonaan OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Beddel dukumeenti xafiiska"
+
+msgid "Current Office document"
+msgstr "Dukumeenti xafiiska ee hadda"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Su'aashan waxaa gacanta lagu saxayaa ka dib markii ardaygu soo gudbiyo dukumeentiga la beddelay."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Wadarta dhibcaha waxaa loo xisaabiyaa sidii wadarta dhibcaha hotspot."
+
+msgid "Global score"
+msgstr "Dhibcaha guud"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Xulo saf hotspot, dooro qaabkiisa, ka dibna ku sawir sawirka. Xagga geesaha, guji dhibco kasta oo dhammee geesaha, ama laba-guji si aad u dhamayso."
+
+msgid "Finish polygon"
+msgstr "Dhammee geesaha"
+
+msgid "Calculated answer"
+msgstr "Jawaab la xisaabiyay"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Fadlan hoos ku qor qoraagaaga oo isticmaal laba-xaraf [...] si aad u qeexdo hal ama dhowr meel bannaan."
+
+msgid "Lowest value"
+msgstr "Qiimaha ugu hooseeya"
+
+msgid "Highest value"
+msgstr "Qiimaha ugu sareeya"
+
+msgid "Fill in blanks"
+msgstr "Buuxi meelaha bannaan"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Isticmaal calaamadaha la doortay si aad u qeexdo meelaha bannaan. Tusaale: Caasimadda Peru waa [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Geli xulashooyinka hoos-u-dhaca, hal jawaab safkiiba. Ka dibna calaamadi jawaabaha la filayo hoos, sida qalabka hore."
+
+msgid "Refresh answers"
+msgstr "Cusboonaysii jawaabaha"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Su'aashan hoos-u-dhaca isku-dhafka ah waxay isticmaashaa hal dhibic guud, sida qalabka hore."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Fadlan geli ugu yaraan laba xulasho oo hoos-u-dhac ah."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Marka hore abuur xulashooyinka meesha loo socdo, ka dibna ku xidho shay kasta xulashada saxda ah."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Su'aashan isku-dhafka ah ee iswaafajinta waxay isticmaashaa hal dhibic guud, sida qalabka hore."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Abuur tillaabooyinka oo dooro booska la filayo ee mid kasta, sida qalabka hore ee La Jiidi karo."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Ardaydu waxay dooran doonaan Run ama Been ka dibna dooran doonaan heerka hubaalnimadooda inta lagu jiro isku dayga. Tifatiraha wuxuu kaydiyaa dhibcaha Sax/Wax khaldan iyo heerarka hubaalnimada sida qalabka hore."
+
+msgid "Hotspot combination"
+msgstr "Isku-dhafka hotspot"
+
+msgid "Add delineation"
+msgstr "Ku dar xadid"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Su'aashan dukumeenti xafiiska ma laha xulasho jawaab ah. Dhibicdeeda waxaa la siiyaa inta lagu jiro sixidda/dib u eegidda natiijooyinka."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Su'aashan soo gelinta ma laha xulasho jawaab ah. Dhibicdeeda waxaa la siiyaa inta lagu jiro sixidda/dib u eegidda natiijooyinka."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Su'aashan hadalka ah ma laha xulasho jawaab ah. Dhibicdeeda waxaa la siiyaa inta lagu jiro sixidda/dib u eegidda natiijooyinka."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Su'aashan furan ma laha xulasho jawaab ah. Dhibicdeeda waxaa la siiyaa inta lagu jiro sixidda/dib u eegidda natiijooyinka."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Ku dar qoraal akhris leh dejinta xawaaraha duubista."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Ku dar nuxur, warbaahin ama macnaha akhriska adoon ku darin dhibic."
+
+msgid "Insert a page break without adding score."
+msgstr "Geli jebinta bogga adoon ku darin dhibic."
+
+msgid "Could not save question"
+msgstr "Su'aasha lama kaydin karin"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Waxaa la oggol yahay oo keliya dukumeenti DOC, DOCX, XLS ama XLSX."
+
+msgid "Please select an Office document."
+msgstr "Fadlan dooro dukumeenti xafiiska."
+
+msgid "Please draw at least one hotspot."
+msgstr "Fadlan sawir ugu yaraan hal hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Fadlan sawir ugu yaraan hal xadid."
+
+msgid "The fill in blanks text is required."
+msgstr "Qoraalka buuxinta meelaha bannaan waa loo baahan yahay."
+
+msgid "At least one expected answer is required."
+msgstr "Ugu yaraan hal jawaab oo la filayo waa loo baahan yahay."
+
+msgid "At least two draggable items are required."
+msgstr "Ugu yaraan laba shay oo la jiidi karo waa loo baahan yahay."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Shay kasta oo la jiidi karo waa inuu ku xidhan yahay boos sax ah oo la bartilmaameedsanayo."
+
+msgid "At least two matching options are required."
+msgstr "Ugu yaraan laba xulasho oo iswaafajin ah waa loo baahan yahay."
+
+msgid "At least two matching pairs are required."
+msgstr "Ugu yaraan laba lammaane oo iswaafaqsan ayaa loo baahan yahay."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Lammaane kasta oo iswaafaqsan waa in lagu xidho doorasho sax ah."
+
+msgid "At least two answers are required."
+msgstr "Ugu yaraan laba jawaab ayaa loo baahan yahay."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Jawaab kasta oo run/been ah waa in la doortaa Run ama Been."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Su'aal jawaabta ah waa in ay yeelataa hal jawaab oo sax ah oo keliya."
+
+msgid "At least one correct answer is required."
+msgstr "Ugu yaraan hal jawaab oo sax ah ayaa loo baahan yahay."
+
+msgid "Could not load question"
+msgstr "Su'aasha lama soo dejin karo"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Dooro koorso oo soo dhoofi warbixinta natiijooyinka jimicsiga guud sida CSV."
+
+msgid "Back to reports catalog"
+msgstr "Ku noqo buugga warbixinnada"
+
+msgid "Could not load exercise global report"
+msgstr "Warbixinta jimicsiga guud lama soo dejin karo"
+
+msgid "Imported questions"
+msgstr "Su'aalaha la soo dhoofiyay"
+
+msgid "Aiken content"
+msgstr "Waxyaabaha Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken generator lama soo dejin karo"
+
+msgid "Could not generate Aiken content"
+msgstr "Waxyaabaha Aiken lama soo saari karo"
+
+msgid "Could not import generated Aiken content"
+msgstr "Waxyaabaha Aiken ee la soo saaray lama soo dhoofin karo"
+
+msgid "Back to my courses"
+msgstr "Ku noqo koorsooyinkayga"
+
+msgid "Open report"
+msgstr "Fur warbixinta"
+
+msgid "Questions with no automatic correction"
+msgstr "Su'aalaha aan lahayn sixid toos ah"
+
+msgid "Could not load pending attempts"
+msgstr "Isku dayada sugaya lama soo dejin karo"
+
+msgid "Skipped questions"
+msgstr "Su'aalaha la dhaafay"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Soo dejinta Aiken waxay u qaybisaa miisaankan guud su'aalaha la soo dhoofiyay haddii aan su'aal qeexin SCORE."
+
+msgid "Import warnings"
+msgstr "Digniinaha soo dejinta"
+
+msgid "Could not import questions"
+msgstr "Su'aalaha lama soo dhoofin karo"
+
+msgid "No question statistics found"
+msgstr "Tirakoobka su'aalaha lama helin"
+
+msgid "Could not load question statistics"
+msgstr "Tirakoobka su'aalaha lama soo dejin karo"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Waxaad sidoo kale ku xidhi kartaa macmiil MCP toos ah adigoo u tilmaamaya barta soo socota:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Wax codsiyo ah hadda kuma xidhnid akoonkaaga."
+
+msgid "Connected on"
+msgstr "Ku xidhan"
+
+msgid "Last used"
+msgstr "Markii ugu dambeysay la isticmaalay"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s mar dambe ma awoodi doono inuu galo akoonkaaga Chamilo. Sii wad?"
+
+msgid "Application revoked"
+msgstr "Codsiga waa la buriyay"
+
+msgid "Copied to clipboard"
+msgstr "Waxaa lagu koobiyay sabuuradda"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Barta dhamaadka MCP lama koobin karo"
+
+msgid "MCP endpoint"
+msgstr "Barta dhamaadka MCP"
+
+msgid "API key"
+msgstr "Furaha API"
+
+msgid "Last used at"
+msgstr "Markii ugu dambeysay la isticmaalay"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Hadda koobi furahan. Mar dambe lama soo bandhigi doono."
+
+msgid "Rotate API key"
+msgstr "Beddel furaha API"
+
+msgid "Revoke API key"
+msgstr "Bur furaha API"
+
+msgid "Remote MCP connection"
+msgstr "Xidhiidhka fog ee MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Macmiilkaaga MCP ku habbee qiyamka soo socda:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Furaha hadda wuxuu joojin doonaa shaqada isla markiiba. Sii wad?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Furaha shakhsi ah oo cusub oo MCP API ah ayaa la soo saari doonaa. Sii wad?"
+
+msgid "MCP API key generated"
+msgstr "Furaha MCP API waa la soo saaray"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Macmiilada MCP ee isticmaalaya furahan waxay joojin doonaan shaqada isla markiiba. Sii wad?"
+
+msgid "MCP API key revoked"
+msgstr "Furaha MCP API waa la buriyay"
+
+msgid "Could not copy the API key"
+msgstr "Furaha API lama koobin karo"
+
+msgid "Project"
+msgstr "Mashruuc"
+
+msgid "Close old tickets"
+msgstr "Xidho tigidhada hore"
+
+msgid "Close tickets older than seven days?"
+msgstr "Xidho tigidhada ka weyn toddoba maalmood?"
+
+msgid "Assignment history"
+msgstr "Taariikhda shaqada"
+
+msgid "Translate with AI"
+msgstr "Turjun AI-ga"
+
+msgid "Target language"
+msgstr "Luqadda loo jeediyo"
+
+msgid "Please select a provider"
+msgstr "Fadlan dooro bixiye"
+
+msgid "Generate translation"
+msgstr "Abuur turjumid"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Ugu yaraan hal qayb oo shuruudaha iyo shuruucda ah waa inay qoraal ka kooban tahay."
+
+msgid "No active target languages are available."
+msgstr "Ma jiraan luqado la beegsanayo oo firfircoon."
+
+msgid "Tutor"
+msgstr "Macallin"
+
+msgid "Access dates"
+msgstr "Taariikhaha gelitaanka"
+
+msgid "Coach access dates"
+msgstr "Taariikhaha gelitaanka macallinka"
+
+msgid "No sessions found"
+msgstr "Ma jiraan kalfadhiyo la helay"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Dooro koorsooyinka isticmaalahan uusan geli karin kalfadhigan."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Isticmaaluhu kama xannibi karo koorso kasta oo kalfadhiga ah. Halkii, ka saar isticmaalaha."
+
+msgid "Users subscribed to this session"
+msgstr "Isticmaalayaasha ku biiray kalfadhigan"
+
+msgid "No available users found"
+msgstr "Ma jiraan isticmaalayaal la heli karo"
+
+msgid "Subscribe this user to the session?"
+msgstr "Ku biir isticmaalahan kalfadhiga?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Ku biir isticmaalayaasha la doortay kalfadhiga?"
+
+msgid "General tutor planning"
+msgstr "Qorsheynta macallinka guud"
+
+msgid "User is already registered by another tutor."
+msgstr "Isticmaalaha waxaa hore u diiwaangeliyey macallin kale."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Waxaad helaysaa nuqul maxaa yeelay waxaad tahay macallinka koorsada"
+
+msgid "General tutor"
+msgstr "Macallinka guud"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Tixgeli koorsooyinka, macallimiinta, gargaarka farsamada, macallimiinta, iyo/ama agabka la heli karo."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Macallimiinta ku biiray macallimiin ahaan koorsada %s"
+
+msgid "Tutor name"
+msgstr "Magaca macallinka"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Macallimiinta kalfadhigu waa isku-duwayaasha kalfadhiga waxayna u dhaqmi karaan sidii macallimiin koorsada kasta oo kalfadhiga ah. Kaliya isticmaalayaasha leh doorka macallinka ayaa loo dooran karaa macallimiinta kalfadhiga."
+
+msgid "Access start date for tutors"
+msgstr "Taariikhda bilowga gelitaanka macallimiinta"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Taariikhda kalfadhiga loo diyaariyo macallimiinta, si ay ugu diyaargaroobaan ka hor intaan ardaydu isku xidhin"
+
+msgid "Access end date for tutors"
+msgstr "Taariikhda dhammaadka gelitaanka macallimiinta"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Taariikhda kalfadhiga loo xidho macallimiinta. Waqtiga dheeraadka ah wuxuu u oggolaanayaa inay dhoofiyaan dhammaan macluumaadka la socodka ee khuseeya"
+
+msgid "Tutor and student"
+msgstr "Macallin iyo arday"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Warbixintan waxay muujinaysaa qaybinta toddobaadlaha ah ee kalfadhiyada macallin kasta oo guud inta u dhaxaysa taariikhda la doortay."
+
+msgid "User is general tutor in some sessions"
+msgstr "Isticmaaluhu waa macallin guud kalfadhiyo qaarkood"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Macallimiinta waxaa loogu dari doonaa macallimiin ahaan dhammaan koorsooyinka kalfadhiyada."
+
+msgid "Delete failed: invalid question id."
+msgstr "Tirtiriddu way fashilantay: aqoonsiga su'aasha waa mid aan sax ahayn."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Celceliska tirada kalfadhiyada macallin kasta oo guud"
+
+msgid "No room"
+msgstr "Qol ma jiro"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Soo deji macallimiinta koorsada sidii macallimiin koorsada kalfadhiga"
+
+msgid "Clean and update course tutors"
+msgstr "Nadiifi oo cusbooneysii macallimiinta koorsada"
+
+msgid "Add me as tutor"
+msgstr "Aniga igu dar macallin ahaan"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Ma awoodo inaan ku daro sahanka waddada barashada"
+
+msgid "Access dates for tutors"
+msgstr "Taariikhaha gelitaanka macallimiinta"
+
+msgid "Tutor and group member"
+msgstr "Macallin iyo xubin kooxeed"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Xadkaaga maalinlaha ah ee calaamadaha AI-ga waa la gaadhay. Fadlan isku day berri."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Xadkaaga bisha ee calaamadaha AI-ga waa la gaadhay. Fadlan isku day bisha dambe."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Koodhkan koorsada waa hore u jiraa, fadlan dooro koodh kale."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Cinwaankan koorsada waa hore u jiraa, fadlan dooro cinwaan kale."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Muuqashada qalabkan lama beddeli karo"
+
+msgid "Invalid visibility"
+msgstr "Muuqasho aan sax ahayn"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Waxaad helaysaa nuqul maxaa yeelay waxaad ka mid tahay macallimiinta koorsada"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Waxaad helaysaa nuqul maxaa yeelay waxaad tahay macallinka koorsada"
+
+msgid "Manual completion"
+msgstr "Dhammaystirka gacanta"
+
+msgid "Send to tutors"
+msgstr "U dir macallimiinta"
+
+msgid "Lab title"
+msgstr "Cinwaanka shaybaarka"
+
+msgid "Lab week"
+msgstr "Toddobaadka shaybaarka"
+
+msgid "Final exam access rule"
+msgstr "Xeerka gelitaanka imtixaanka ugu dambeeya"
+
+msgid "Course completion rule"
+msgstr "Xeerka dhammaystirka koorsada"
+
+msgid "You have been invited to join a course"
+msgstr "Waxaa lagu martiqaaday inaad ku biirto koorsada"
+
+msgid "No user has been found"
+msgstr "Lama helin isticmaale"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Isticmaalaha la doortay laguma diiwaangelin karo xaaladdan"
+
+msgid "No change has been made"
+msgstr "Wax isbeddel ah lama samayn"
+
+msgid "Back to group list"
+msgstr "Ku noqo liiska kooxaha"
+
+msgid "Remove class link"
+msgstr "Ka saar xiriirka fasalka"
+
+msgid "Group settings"
+msgstr "Dejinta kooxda"
+
+msgid "Self-registration allowed"
+msgstr "Is-diiwaangelinta waa la oggol yahay"
+
+msgid "Self-unregistration allowed"
+msgstr "Is-ka-diiwaangelinta waa la oggol yahay"
+
+msgid "This group is linked to the class"
+msgstr "Kooxdan waxay ku xidhan tahay fasalka"
+
+msgid "Create one or more empty course groups"
+msgstr "Abuur hal ama ka badan kooxo koorsada oo madhan"
+
+msgid "Number of places"
+msgstr "Tirada boosaska"
+
+msgid "Base group"
+msgstr "Kooxda aasaasiga ah"
+
+msgid "Share"
+msgstr "La wadaag"
+
+msgid "Collaboration"
+msgstr "Wadashaqayn"
+
+msgid "The group title is required."
+msgstr "Cinwaanka kooxda waa loo baahan yahay."
+
+msgid "Back to group area"
+msgstr "Ku noqo aagga kooxda"
+
+msgid "Members are managed by the linked class"
+msgstr "Xubnaha waxaa maamula fasalka ku xidhan"
+
+msgid "%s groups selected"
+msgstr "%s kooxood ayaa la doortay"
+
+msgid "Fill selected groups"
+msgstr "Buuxi kooxaha la doortay"
+
+msgid "Empty selected groups"
+msgstr "Madhaji kooxaha la doortay"
+
+msgid "Fill group"
+msgstr "Buuxi kooxda"
+
+msgid "Empty group"
+msgstr "Madhaji kooxda"
+
+msgid "Groups per user"
+msgstr "Kooxo isticmaale kasta"
+
+msgid "No tutors"
+msgstr "Macallimiin ma jiraan"
+
+msgid "No users"
+msgstr "Isticmaalayaal ma jiraan"
+

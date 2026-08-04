@@ -37651,3 +37651,1299 @@ msgstr "Utilitzeu 0 per mantenir totes les preguntes disponibles. Utilitzeu -1 q
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Utilitzeu aquests camps per classificar l'exercici independentment de les seves opcions de visualització."
 
+msgid "Invite by email"
+msgstr "Convidar per correu electrònic"
+
+msgid "Invitation has been sent"
+msgstr "S'ha enviat la invitació"
+
+msgid "Sent on"
+msgstr "Enviat el"
+
+msgid "Accepted on"
+msgstr "Acceptat el"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Aquest curs està obert en una sessió. Enviar una invitació aquí subscriurà el destinatari a tota la sessió %s, no només a aquest curs."
+
+msgid "Revoke"
+msgstr "Revocar"
+
+msgid "Revoked"
+msgstr "Revocat"
+
+msgid "Invitation has been revoked"
+msgstr "S'ha revocat la invitació"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Esteu segur que voleu revocar la invitació enviada a %s?"
+
+msgid "No default room"
+msgstr "Sense aula per defecte"
+
+msgid "Floor"
+msgstr "Planta"
+
+msgid "Capacity"
+msgstr "Capacitat"
+
+msgid "Use attendance default room"
+msgstr "Utilitzar l'aula per defecte d'assistència"
+
+msgid "Floor number"
+msgstr "Número de planta"
+
+msgid "Copy to students"
+msgstr "Copiar als estudiants"
+
+msgid "Generate a quick test on this topic"
+msgstr "Generar una prova ràpida sobre aquest tema"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "El contingut del document desat s'enviarà a un model d'IA per al seu processament."
+
+msgid "MCP API key"
+msgstr "Clau API MCP"
+
+msgid "Authorized applications"
+msgstr "Aplicacions autoritzades"
+
+msgid "Your session is about to expire"
+msgstr "La vostra sessió està a punt d'expirar"
+
+msgid "Do you want to continue your session?"
+msgstr "Voleu continuar la sessió?"
+
+msgid "Stay connected"
+msgstr "Mantenir la connexió"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Se us desconnectarà en %s segons."
+
+msgid "No descriptions available yet."
+msgstr "Encara no hi ha descripcions disponibles."
+
+msgid "%s users selected"
+msgstr "%s usuaris seleccionats"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Els usuaris seleccionats s'han subscrit al curs"
+
+msgid "Import teachers"
+msgstr "Importar professors"
+
+msgid "Import learners"
+msgstr "Importar alumnes"
+
+msgid "Select CSV file"
+msgstr "Selecciona un fitxer CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Alguns usuaris no s'han pogut subscriure"
+
+msgid "Browse available classes"
+msgstr "Explora les classes disponibles"
+
+msgid "Back to linked classes"
+msgstr "Torna a les classes enllaçades"
+
+msgid "No classes are currently linked to this course."
+msgstr "Actualment no hi ha cap classe enllaçada amb aquest curs."
+
+msgid "No available classes were found for this course."
+msgstr "No s'han trobat classes disponibles per a aquest curs."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Segur que vols cancel·lar la subscripció dels usuaris seleccionats?"
+
+msgid "Learning path access"
+msgstr "Accés al itinerari d'aprenentatge"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Només els usuaris i grups seleccionats poden accedir a aquest itinerari d'aprenentatge. Gestiona'ls després de desar."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Tots els usuaris actuals i futurs del curs poden accedir a aquest itinerari d'aprenentatge."
+
+msgid "All course users"
+msgstr "Tots els usuaris del curs"
+
+msgid "Selected users and groups"
+msgstr "Usuaris i grups seleccionats"
+
+msgid "No access"
+msgstr "Sense accés"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Només els usuaris i grups afegits aquí poden accedir a aquest itinerari d'aprenentatge."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Nombre de preguntes limitat a un màxim de %s"
+
+msgid "Open exercise player"
+msgstr "Obre el reproductor d'exercicis"
+
+msgid "The score is hidden for this exercise."
+msgstr "La puntuació està oculta per a aquest exercici."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Les correccions estan ocultes segons la configuració dels resultats de l'exercici."
+
+msgid "Progressive adaptive result"
+msgstr "Resultat adaptatiu progressiu"
+
+msgid "Achieved level"
+msgstr "Nivell assolit"
+
+msgid "Correction history"
+msgstr "Historial de correccions"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historial de correccions manuals fetes per a aquest intent."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Aquest exercici utilitza el mode de resultat de radar/xarxa d'aranya. El gràfic no està disponible en aquesta pàgina."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Els detalls de les preguntes estan ocults segons la configuració dels resultats de l'exercici."
+
+msgid "Media question"
+msgstr "Pregunta multimèdia"
+
+msgid "Pending correction"
+msgstr "Correcció pendent"
+
+msgid "No answer"
+msgstr "Sense resposta"
+
+msgid "Blank %s"
+msgstr "Blanc %s"
+
+msgid "Your order"
+msgstr "El teu ordre"
+
+msgid "Correct order"
+msgstr "Ordre correcte"
+
+msgid "Delineation review"
+msgstr "Revisió de la delineació"
+
+msgid "Learner clicks"
+msgstr "Clics de l'alumne"
+
+msgid "Question image"
+msgstr "Imatge de la pregunta"
+
+msgid "No hotspot image available"
+msgstr "No hi ha cap imatge de punt calent disponible"
+
+msgid "Learner delineation"
+msgstr "Delineació de l'alumne"
+
+msgid "Expected delineation"
+msgstr "Delineació esperada"
+
+msgid "Expected zones"
+msgstr "Zones esperades"
+
+msgid "Zone"
+msgstr "Zona"
+
+msgid "Learner annotation"
+msgstr "Anotació de l'alumne"
+
+msgid "No annotation image available"
+msgstr "No hi ha cap imatge d'anotació disponible"
+
+msgid "This answer is pending teacher correction."
+msgstr "Aquesta resposta està pendent de correcció pel professor."
+
+msgid "Teacher comment"
+msgstr "Comentari del professor"
+
+msgid "Teacher correction"
+msgstr "Correcció del professor"
+
+msgid "Save correction"
+msgstr "Desa la correcció"
+
+msgid "Learner audio"
+msgstr "Àudio de l'alumne"
+
+msgid "Download audio"
+msgstr "Descarrega l'àudio"
+
+msgid "No uploaded audio"
+msgstr "Cap àudio pujat"
+
+msgid "Learner Office document"
+msgstr "Document d'Office de l'alumne"
+
+msgid "Learner file"
+msgstr "Fitxer de l'alumne"
+
+msgid "Download Office document"
+msgstr "Descarrega el document d'Office"
+
+msgid "No submitted document"
+msgstr "Cap document lliurat"
+
+msgid "No uploaded file"
+msgstr "Cap fitxer pujat"
+
+msgid "Content item"
+msgstr "Element de contingut"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Aquest tipus de pregunta no es pot revisar en aquesta pàgina."
+
+msgid "Exercise completed"
+msgstr "Exercici completat"
+
+msgid "Could not start the attempt"
+msgstr "No s'ha pogut iniciar l'intent"
+
+msgid "Invalid exercise attempt"
+msgstr "Intent d'exercici no vàlid"
+
+msgid "Could not load exercise result"
+msgstr "No s'ha pogut carregar el resultat de l'exercici"
+
+msgid "Could not load AI providers"
+msgstr "No s'han pogut carregar els proveïdors d'IA"
+
+msgid "Could not generate AI suggestion"
+msgstr "No s'ha pogut generar el suggeriment d'IA"
+
+msgid "Correction saved"
+msgstr "Correcció desada"
+
+msgid "Could not save correction"
+msgstr "No s'ha pogut desar la correcció"
+
+msgid "Create exercise"
+msgstr "Crea exercici"
+
+msgid "Exercise categories"
+msgstr "Categories d'exercicis"
+
+msgid "Question categories"
+msgstr "Categories de preguntes"
+
+msgid "Search by exercise title or description."
+msgstr "Cerca per títol o descripció de l'exercici."
+
+msgid "Search exercises"
+msgstr "Cerca exercicis"
+
+msgid "No exercises found"
+msgstr "No s'han trobat exercicis"
+
+msgid "Open exercise"
+msgstr "Obre exercici"
+
+msgid "Disable autolaunch"
+msgstr "Desactiva llançament automàtic"
+
+msgid "Enable autolaunch"
+msgstr "Activa llançament automàtic"
+
+msgid "Export QTI2"
+msgstr "Exporta QTI2"
+
+msgid "Bulk actions"
+msgstr "Accions massives"
+
+msgid "Selected exercises"
+msgstr "Exercicis seleccionats"
+
+msgid "No exercises selected"
+msgstr "Cap exercici seleccionat"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Esteu segur que voleu aplicar aquesta acció als exercicis seleccionats?"
+
+msgid "Bulk action completed"
+msgstr "Acció massiva completada"
+
+msgid "Could not update exercises"
+msgstr "No s'han pogut actualitzar els exercicis"
+
+msgid "Could not update exercise"
+msgstr "No s'ha pogut actualitzar l'exercici"
+
+msgid "Copy exercise"
+msgstr "Copia exercici"
+
+msgid "Delete exercise"
+msgstr "Suprimeix exercici"
+
+msgid "Could not load exercises"
+msgstr "No s'han pogut carregar els exercicis"
+
+msgid "No limit"
+msgstr "Sense límit"
+
+msgid "Add selected questions to the test"
+msgstr "Afegeix les preguntes seleccionades a la prova"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Aquesta pregunta s'utilitza en una prova activa i no es pot editar aquí."
+
+msgid "This question cannot be edited here."
+msgstr "Aquesta pregunta no es pot editar aquí."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Aquesta pregunta s'utilitza en una prova activa i no es pot suprimir aquí."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Aquesta pregunta no es pot suprimir perquè el vostre accés està limitat per la configuració de la plataforma."
+
+msgid "Already in test"
+msgstr "Ja és a la prova"
+
+msgid "Select at least one question."
+msgstr "Seleccioneu com a mínim una pregunta."
+
+msgid "Question bank updated"
+msgstr "Banc de preguntes actualitzat"
+
+msgid "Could not update the question bank"
+msgstr "No s'ha pogut actualitzar el banc de preguntes"
+
+msgid "Could not load the question bank"
+msgstr "No s'ha pogut carregar el banc de preguntes"
+
+msgid "Total score"
+msgstr "Puntuació total"
+
+msgid "Starting"
+msgstr "Iniciant"
+
+msgid "Attempt history"
+msgstr "Historial d'intents"
+
+msgid "No attempts yet"
+msgstr "Encara no hi ha intents"
+
+msgid "Invalid exercise"
+msgstr "Exercici no vàlid"
+
+msgid "Could not load exercise overview"
+msgstr "No s'ha pogut carregar la visió general de l'exercici"
+
+msgid "Open test"
+msgstr "Obre prova"
+
+msgid "Random answers"
+msgstr "Respostes aleatòries"
+
+msgid "Prevent moving backwards"
+msgstr "Impedir retrocedir"
+
+msgid "Previous button hidden"
+msgstr "Botó anterior ocult"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Aquest exercici utilitza opcions que requereixen un reproductor de proves diferent."
+
+msgid "Continue test"
+msgstr "Continuar la prova"
+
+msgid "Attempt started"
+msgstr "Intent iniciat"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "La previsualització del professor no crea un intent registrat."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Inicieu o repreneu un intent d'exercici. Les respostes esborrany es poden desar abans de l'enviament final."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Límit de temps assolit. Finalitzant l'intent."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Temps de la pregunta assolit. Desant la resposta."
+
+msgid "Finishing"
+msgstr "Finalitzant"
+
+msgid "Draft saved"
+msgstr "Esborrany desat"
+
+msgid "Statement"
+msgstr "Enunciat"
+
+msgid "Drop each option on the matching answer"
+msgstr "Arrossegueu cada opció a la resposta corresponent"
+
+msgid "Clear match"
+msgstr "Esborrar coincidència"
+
+msgid "Click to place the selected option here"
+msgstr "Feu clic per col·locar l'opció seleccionada aquí"
+
+msgid "Select an option, then click here"
+msgstr "Seleccioneu una opció i després feu clic aquí"
+
+msgid "Already matched"
+msgstr "Ja coincidit"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Podeu arrossegar una opció a una resposta, o seleccionar una opció i després fer clic en un quadre de destinació."
+
+msgid "Put the items in the correct order."
+msgstr "Col·loqueu els elements en l'ordre correcte."
+
+msgid "Move left"
+msgstr "Moure a l'esquerra"
+
+msgid "Move right"
+msgstr "Moure a la dreta"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Podeu arrossegar elements a l'esquerra o a la dreta, o utilitzar els botons de moviment per canviar l'ordre."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Podeu arrossegar elements o utilitzar els botons de moviment per canviar l'ordre."
+
+msgid "Or upload an audio file"
+msgstr "O pujar un fitxer d'àudio"
+
+msgid "Selected audio"
+msgstr "Àudio seleccionat"
+
+msgid "Uploaded audio"
+msgstr "Àudio pujat"
+
+msgid "Office document"
+msgstr "Document d'ofimàtica"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Completeu el document a l'editor següent. El fitxer s'adjuntarà a aquest intent per a la correcció del professor."
+
+msgid "Reload Office editor"
+msgstr "Recarregar l'editor d'ofimàtica"
+
+msgid "Prepare Office document"
+msgstr "Preparar document d'ofimàtica"
+
+msgid "Open in new tab"
+msgstr "Obrir en una pestanya nova"
+
+msgid "Preparing Office document"
+msgstr "Preparant document d'ofimàtica"
+
+msgid "Submitted document"
+msgstr "Document enviat"
+
+msgid "Annotation tools"
+msgstr "Eines d'anotació"
+
+msgid "Text to place"
+msgstr "Text a col·locar"
+
+msgid "Click the image to place the text annotation."
+msgstr "Feu clic a la imatge per col·locar l'anotació de text."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Feu clic a la imatge per afegir punts de camí. Utilitzeu Iniciar camí nou per separar camins."
+
+msgid "Start new path"
+msgstr "Iniciar camí nou"
+
+msgid "Current annotations"
+msgstr "Anotacions actuals"
+
+msgid "Remove point"
+msgstr "Eliminar punt"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Feu clic a la imatge per dibuixar el polígon de delineació."
+
+msgid "Click a marker to remove it."
+msgstr "Feu clic en un marcador per eliminar-lo."
+
+msgid "Placed"
+msgstr "Col·locat"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Seleccioneu una resposta i després feu clic a la imatge per marcar-la."
+
+msgid "Reading speed"
+msgstr "Velocitat de lectura"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Aquest tipus de pregunta no es pot mostrar en aquest reproductor."
+
+msgid "Save draft"
+msgstr "Desar esborrany"
+
+msgid "I confirm that my answers were saved."
+msgstr "Confirmo que les meves respostes s'han desat."
+
+msgid "Finish test"
+msgstr "Finalitzar prova"
+
+msgid "Attempt finished"
+msgstr "Intent finalitzat"
+
+msgid "Question category"
+msgstr "Categoria de pregunta"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Heu finalitzat les preguntes relacionades amb aquesta categoria de pregunta. Aquesta és la vostra última oportunitat per tornar enrere i revisar-les."
+
+msgid "Question time left"
+msgstr "Temps restant de la pregunta"
+
+msgid "Time left"
+msgstr "Temps restant"
+
+msgid "Current attempt"
+msgstr "Intent actual"
+
+msgid "Could not save draft answer"
+msgstr "No s'ha pogut desar l'esborrany de resposta"
+
+msgid "Could not load exercise"
+msgstr "No s'ha pogut carregar l'exercici"
+
+msgid "Draft answer saved"
+msgstr "Esborrany de resposta desat"
+
+msgid "Could not finish the attempt"
+msgstr "No s'ha pogut finalitzar l'intent"
+
+msgid "Could not prepare Office document"
+msgstr "No s'ha pogut preparar el document d'Office"
+
+msgid "Back to learner score"
+msgstr "Torna a la puntuació de l'alumne"
+
+msgid "Disable auto refresh"
+msgstr "Desactiva l'actualització automàtica"
+
+msgid "Enable auto refresh"
+msgstr "Activa l'actualització automàtica"
+
+msgid "Live window"
+msgstr "Finestra en directe"
+
+msgid "Ongoing attempts"
+msgstr "Intents en curs"
+
+msgid "Completed attempts"
+msgstr "Intents completats"
+
+msgid "Started"
+msgstr "Iniciat"
+
+msgid "Last activity"
+msgstr "Última activitat"
+
+msgid "Could not load live results"
+msgstr "No s'han pogut carregar els resultats en directe"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Aquest exercici és de només lectura perquè està inclòs en un itinerari d'aprenentatge."
+
+msgid "Select a question type to create a question."
+msgstr "Seleccioneu un tipus de pregunta per crear-ne una."
+
+msgid "Click to preview"
+msgstr "Feu clic per previsualitzar"
+
+msgid "Hide preview"
+msgstr "Oculta la previsualització"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Coordenades"
+
+msgid "Blanks"
+msgstr "Buits"
+
+msgid "Switchable blanks"
+msgstr "Buits commutables"
+
+msgid "Blank"
+msgstr "Buit"
+
+msgid "Input width"
+msgstr "Amplada del camp"
+
+msgid "Orientation"
+msgstr "Orientació"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "No disponible amb el mode de retroalimentació actual de l'exercici"
+
+msgid "Not available in the learning path creation flow"
+msgstr "No disponible en el procés de creació d'itineraris d'aprenentatge"
+
+msgid "Delete question"
+msgstr "Suprimeix la pregunta"
+
+msgid "Could not update exercise questions"
+msgstr "No s'han pogut actualitzar les preguntes de l'exercici"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "No s'ha pogut afegir l'exercici a l'itinerari d'aprenentatge"
+
+msgid "A valid exercise id is required."
+msgstr "Cal un identificador d'exercici vàlid."
+
+msgid "Could not load exercise questions"
+msgstr "No s'han pogut carregar les preguntes de l'exercici"
+
+msgid "Delete selected attempts"
+msgstr "Suprimeix els intents seleccionats"
+
+msgid "Before date"
+msgstr "Abans de la data"
+
+msgid "Pending corrections"
+msgstr "Correccions pendents"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Aquest exercici està bloquejat pel llibre de qualificacions. Les accions de neteja d'intents estan desactivades."
+
+msgid "No attempts found"
+msgstr "No s'han trobat intents"
+
+msgid "Review"
+msgstr "Revisa"
+
+msgid "Print/PDF"
+msgstr "Imprimeix/PDF"
+
+msgid "Could not load exercise report"
+msgstr "No s'ha pogut carregar l'informe de l'exercici"
+
+msgid "Select at least one attempt"
+msgstr "Seleccioneu com a mínim un intent"
+
+msgid "Delete selected attempts?"
+msgstr "Voleu suprimir els intents seleccionats?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Voleu enviar els correus electrònics amb els resultats dels intents revisats?"
+
+msgid "Could not send emails"
+msgstr "No s'han pogut enviar els correus electrònics"
+
+msgid "Exercise result emails sent"
+msgstr "Correus de resultats d'exercicis enviats"
+
+msgid "Skipped"
+msgstr "Omesos"
+
+msgid "Close attempt?"
+msgstr "Tancar l'intent?"
+
+msgid "Attempt closed"
+msgstr "Intent tancat"
+
+msgid "Could not close attempt"
+msgstr "No s'ha pogut tancar l'intent"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Voleu enviar el resultat d'aquest intent per correu electrònic a l'alumne?"
+
+msgid "Email sent"
+msgstr "Correu electrònic enviat"
+
+msgid "Could not send email"
+msgstr "No s'ha pogut enviar el correu electrònic"
+
+msgid "Attempt deleted"
+msgstr "Intent suprimit"
+
+msgid "Could not delete attempt"
+msgstr "No s'ha pogut suprimir l'intent"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Seleccioneu un fitxer CSV que contingui columnes de títol i descripció."
+
+msgid "Manage categories used to classify questions."
+msgstr "Gestiona les categories utilitzades per classificar preguntes."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Gestiona les categories utilitzades per classificar exercicis."
+
+msgid "Could not load categories"
+msgstr "No s'han pogut carregar les categories"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Categories importades: %s. Files omeses: %s."
+
+msgid "Imported categories: %s."
+msgstr "Categories importades: %s."
+
+msgid "Could not import categories"
+msgstr "No s'han pogut importar les categories"
+
+msgid "Could not save category"
+msgstr "No s'ha pogut desar la categoria"
+
+msgid "Answer distribution"
+msgstr "Distribució de respostes"
+
+msgid "Configured answers"
+msgstr "Respostes configurades"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "El recompte detallat de respostes per a alguns tipus de preguntes encara no està disponible a l'informe migrat."
+
+msgid "No report by question data found"
+msgstr "No s'han trobat dades d'informe per pregunta"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "El recompte detallat de respostes per a aquest tipus de pregunta encara no està disponible a l'informe migrat."
+
+msgid "No answer distribution found"
+msgstr "No s'ha trobat cap distribució de respostes"
+
+msgid "Could not load report by question"
+msgstr "No s'ha pogut carregar l'informe per pregunta"
+
+msgid "Question settings"
+msgstr "Configuració de la pregunta"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Deixeu-ho buit o 0 per no establir límit de temps."
+
+msgid "Time limit in seconds"
+msgstr "Límit de temps en segons"
+
+msgid "Attached questions"
+msgstr "Preguntes adjuntades"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Aquí només es llisten les preguntes adjuntades a aquesta pregunta de mitjans dins de l'exercici actual."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "No hi ha cap pregunta adjuntada a aquesta pregunta de mitjans a l'exercici actual."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Pengeu la plantilla de document d'Office que els alumnes editaran amb OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Substitueix el document d'Office"
+
+msgid "Current Office document"
+msgstr "Document d'Office actual"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Aquesta pregunta es corregeix manualment després que l'alumne enviï el document editat."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "La puntuació total es calcula com la suma de les puntuacions dels punts calents."
+
+msgid "Global score"
+msgstr "Puntuació global"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Seleccioneu una fila de punt calent, trieu la seva forma i després dibuixeu sobre la imatge. Per als polígons, feu clic a cada punt i acabeu el polígon, o feu doble clic per acabar."
+
+msgid "Finish polygon"
+msgstr "Acaba el polígon"
+
+msgid "Calculated answer"
+msgstr "Resposta calculada"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Escriviu el text a continuació i utilitzeu claudàtors [...] per definir un o més buits."
+
+msgid "Lowest value"
+msgstr "Valor més baix"
+
+msgid "Highest value"
+msgstr "Valor més alt"
+
+msgid "Fill in blanks"
+msgstr "Omplir buits"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Utilitzeu els marcadors seleccionats per definir els buits. Exemple: La capital del Perú és [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Introduïu les opcions del desplegable, una resposta per línia. Després marqueu les respostes esperades a continuació, com a l'eina antiga."
+
+msgid "Refresh answers"
+msgstr "Actualitza les respostes"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Aquesta pregunta de combinació de desplegables utilitza una puntuació global, com l'antiga."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Introduïu com a mínim dues opcions de desplegable."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Creeu primer les opcions de destinació i després enllaceu cada element amb l'opció correcta."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Aquesta pregunta de combinació de correspondència utilitza una puntuació global, com a l'antic sistema."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Creeu els passos i trieu la posició esperada per a cadascun, com a l'antic sistema d'arrossegar."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Els estudiants triaran Vertader o Fals i després seleccionaran el seu grau de certesa durant l'intent. L'editor emmagatzema les mateixes puntuacions Correcte/Incorrecte i nivells de certesa que l'antic sistema."
+
+msgid "Hotspot combination"
+msgstr "Combinació de punts calents"
+
+msgid "Add delineation"
+msgstr "Afegeix delimitació"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Aquesta pregunta de document d'Office no té opcions de resposta. La seva puntuació s'assigna durant la correcció/revisió de resultats."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Aquesta pregunta de càrrega no té opcions de resposta. La seva puntuació s'assigna durant la correcció/revisió de resultats."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Aquesta pregunta d'expressió oral no té opcions de resposta. La seva puntuació s'assigna durant la correcció/revisió de resultats."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Aquesta pregunta oberta no té opcions de resposta. La seva puntuació s'assigna durant la correcció/revisió de resultats."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Afegeix un text de lectura amb configuració de velocitat de desplaçament."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Afegeix contingut, mitjans o context de lectura sense afegir puntuació."
+
+msgid "Insert a page break without adding score."
+msgstr "Insereix un salt de pàgina sense afegir puntuació."
+
+msgid "Could not save question"
+msgstr "No s'ha pogut desar la pregunta"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Només es permeten documents DOC, DOCX, XLS o XLSX."
+
+msgid "Please select an Office document."
+msgstr "Seleccioneu un document d'Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Dibuixeu com a mínim un punt calent."
+
+msgid "Please draw at least one delineation."
+msgstr "Dibuixeu com a mínim una delimitació."
+
+msgid "The fill in blanks text is required."
+msgstr "El text per omplir els buits és obligatori."
+
+msgid "At least one expected answer is required."
+msgstr "Cal com a mínim una resposta esperada."
+
+msgid "At least two draggable items are required."
+msgstr "Cal com a mínim dos elements arrossegables."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Cada element arrossegable ha d'estar enllaçat a una posició de destinació vàlida."
+
+msgid "At least two matching options are required."
+msgstr "Cal com a mínim dues opcions de correspondència."
+
+msgid "At least two matching pairs are required."
+msgstr "Cal com a mínim dos parells de correspondència."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Cada parell de correspondència ha d'estar enllaçat a una opció vàlida."
+
+msgid "At least two answers are required."
+msgstr "Cal com a mínim dues respostes."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Cada resposta de vertader/fals ha de tenir seleccionat Vertader o Fals."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Una pregunta de resposta única ha de tenir exactament una resposta correcta."
+
+msgid "At least one correct answer is required."
+msgstr "Cal com a mínim una resposta correcta."
+
+msgid "Could not load question"
+msgstr "No s'ha pogut carregar la pregunta"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Seleccioneu un curs i exporteu l'informe global de resultats de l'exercici com a CSV."
+
+msgid "Back to reports catalog"
+msgstr "Torna al catàleg d'informes"
+
+msgid "Could not load exercise global report"
+msgstr "No s'ha pogut carregar l'informe global de l'exercici"
+
+msgid "Imported questions"
+msgstr "Preguntes importades"
+
+msgid "Aiken content"
+msgstr "Contingut Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "No s'ha pogut carregar el generador AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "No s'ha pogut generar el contingut Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "No s'ha pogut importar el contingut Aiken generat"
+
+msgid "Back to my courses"
+msgstr "Torna als meus cursos"
+
+msgid "Open report"
+msgstr "Obre l'informe"
+
+msgid "Questions with no automatic correction"
+msgstr "Preguntes sense correcció automàtica"
+
+msgid "Could not load pending attempts"
+msgstr "No s'ha pogut carregar els intents pendents"
+
+msgid "Skipped questions"
+msgstr "Preguntes omeses"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "La importació Aiken distribueix aquest pes total entre les preguntes importades, llevat que una pregunta defineixi SCORE."
+
+msgid "Import warnings"
+msgstr "Avisos d'importació"
+
+msgid "Could not import questions"
+msgstr "No s'han pogut importar les preguntes"
+
+msgid "No question statistics found"
+msgstr "No s'han trobat estadístiques de preguntes"
+
+msgid "Could not load question statistics"
+msgstr "No s'han pogut carregar les estadístiques de preguntes"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "També podeu connectar un client MCP directament apuntant-lo al punt final següent:"
+
+msgid "No applications are currently connected to your account."
+msgstr "No hi ha cap aplicació connectada actualment al vostre compte."
+
+msgid "Connected on"
+msgstr "Connectat el"
+
+msgid "Last used"
+msgstr "Darrer ús"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ja no podrà accedir al vostre compte de Chamilo. Voleu continuar?"
+
+msgid "Application revoked"
+msgstr "Aplicació revocada"
+
+msgid "Copied to clipboard"
+msgstr "Copiat al porta-retalls"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "No s'ha pogut copiar el punt final MCP"
+
+msgid "MCP endpoint"
+msgstr "Punt final MCP"
+
+msgid "API key"
+msgstr "Clau API"
+
+msgid "Last used at"
+msgstr "Darrer ús a"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Copieu aquesta clau ara. No es tornarà a mostrar."
+
+msgid "Rotate API key"
+msgstr "Rotar clau API"
+
+msgid "Revoke API key"
+msgstr "Revocar clau API"
+
+msgid "Remote MCP connection"
+msgstr "Connexió MCP remota"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Configureu el vostre client MCP amb els valors següents:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "La clau actual deixarà de funcionar immediatament. Voleu continuar?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Es generarà una nova clau API MCP personal. Voleu continuar?"
+
+msgid "MCP API key generated"
+msgstr "Clau API MCP generada"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Els clients MCP connectats que utilitzin aquesta clau deixaran de funcionar immediatament. Voleu continuar?"
+
+msgid "MCP API key revoked"
+msgstr "Clau API MCP revocada"
+
+msgid "Could not copy the API key"
+msgstr "No s'ha pogut copiar la clau API"
+
+msgid "Project"
+msgstr "Projecte"
+
+msgid "Close old tickets"
+msgstr "Tancar tiquets antics"
+
+msgid "Close tickets older than seven days?"
+msgstr "Tancar tiquets de més de set dies?"
+
+msgid "Assignment history"
+msgstr "Historial d'assignacions"
+
+msgid "Translate with AI"
+msgstr "Traduir amb IA"
+
+msgid "Target language"
+msgstr "Llengua de destinació"
+
+msgid "Please select a provider"
+msgstr "Seleccioneu un proveïdor"
+
+msgid "Generate translation"
+msgstr "Generar traducció"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Almenys una secció de termes i condicions ha de contenir text."
+
+msgid "No active target languages are available."
+msgstr "No hi ha llengües de destinació actives disponibles."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Dates d'accés"
+
+msgid "Coach access dates"
+msgstr "Dates d'accés del tutor"
+
+msgid "No sessions found"
+msgstr "No s'han trobat sessions"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Seleccioneu els cursos als quals aquest usuari no ha de poder accedir en aquesta sessió."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Un usuari no pot ser bloquejat de tots els cursos de la sessió. Cancel·leu la subscripció de l'usuari."
+
+msgid "Users subscribed to this session"
+msgstr "Usuaris subscrits a aquesta sessió"
+
+msgid "No available users found"
+msgstr "No s'han trobat usuaris disponibles"
+
+msgid "Subscribe this user to the session?"
+msgstr "Voleu subscriure aquest usuari a la sessió?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Voleu subscriure els usuaris seleccionats a la sessió?"
+
+msgid "General tutor planning"
+msgstr "Planificació general del tutor"
+
+msgid "User is already registered by another tutor."
+msgstr "L'usuari ja està registrat per un altre tutor."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Esteu rebent una còpia perquè sou tutor del curs"
+
+msgid "General tutor"
+msgstr "Tutor general"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Tingueu en compte els cursos, els tutors, el servei d'assistència tècnica, els professors i/o els materials disponibles."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutors subscrits com a professors al curs %s"
+
+msgid "Tutor name"
+msgstr "Nom del tutor"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Els tutors de sessió són coordinadors de la sessió i poden actuar com a tutors de cada curs de la sessió. Només es poden seleccionar com a tutors de sessió els usuaris amb rol de professor."
+
+msgid "Access start date for tutors"
+msgstr "Data d'inici d'accés per als tutors"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Data en què la sessió està disponible per als tutors, perquè puguin preparar-la abans que es connectin els estudiants"
+
+msgid "Access end date for tutors"
+msgstr "Data de final d'accés per als tutors"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Data en què la sessió es tanca per als tutors. El retard addicional els permetrà exportar tota la informació de seguiment rellevant"
+
+msgid "Tutor and student"
+msgstr "Tutor i estudiant"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Aquest informe mostra la distribució setmanal de les sessions per tutor general en el període seleccionat."
+
+msgid "User is general tutor in some sessions"
+msgstr "L'usuari és tutor general en algunes sessions"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Els professors s'afegiran com a tutors en totes les sessions del curs."
+
+msgid "Delete failed: invalid question id."
+msgstr "Error en suprimir: identificador de pregunta no vàlid."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Nombre mitjà de sessions per tutor general de sessió"
+
+msgid "No room"
+msgstr "Sense aula"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importar els professors del curs com a tutors del curs a la sessió"
+
+msgid "Clean and update course tutors"
+msgstr "Netejar i actualitzar els tutors del curs"
+
+msgid "Add me as tutor"
+msgstr "Afegir-me com a tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "No s'ha pogut afegir l'enquesta a la ruta d'aprenentatge"
+
+msgid "Access dates for tutors"
+msgstr "Dates d'accés per als tutors"
+
+msgid "Tutor and group member"
+msgstr "Tutor i membre del grup"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "S'ha assolit el límit diari de fitxes d'IA. Torneu-ho a provar demà."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "S'ha assolit el límit mensual de fitxes d'IA. Torneu-ho a provar el mes vinent."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Aquest codi de curs ja existeix, trieu-ne un altre."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Aquest títol de curs ja existeix, trieu-ne un altre."
+
+msgid "This tool visibility cannot be changed"
+msgstr "No es pot canviar la visibilitat d'aquesta eina"
+
+msgid "Invalid visibility"
+msgstr "Visibilitat no vàlida"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Rebeu una còpia perquè sou un dels tutors del curs"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Rebeu una còpia perquè sou el tutor del curs"
+
+msgid "Manual completion"
+msgstr "Finalització manual"
+
+msgid "Send to tutors"
+msgstr "Envia als tutors"
+
+msgid "Lab title"
+msgstr "Títol del laboratori"
+
+msgid "Lab week"
+msgstr "Setmana del laboratori"
+
+msgid "Final exam access rule"
+msgstr "Regla d'accés a l'examen final"
+
+msgid "Course completion rule"
+msgstr "Regla de finalització del curs"
+
+msgid "You have been invited to join a course"
+msgstr "Heu estat convidat a unir-vos a un curs"
+
+msgid "No user has been found"
+msgstr "No s'ha trobat cap usuari"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "L'usuari seleccionat no es pot subscriure en aquest context"
+
+msgid "No change has been made"
+msgstr "No s'ha fet cap canvi"
+
+msgid "Back to group list"
+msgstr "Tornar a la llista de grups"
+
+msgid "Remove class link"
+msgstr "Suprimir l'enllaç de classe"
+
+msgid "Group settings"
+msgstr "Configuració del grup"
+
+msgid "Self-registration allowed"
+msgstr "Permesa l'autoinscripció"
+
+msgid "Self-unregistration allowed"
+msgstr "Permesa la baixa automàtica"
+
+msgid "This group is linked to the class"
+msgstr "Aquest grup està enllaçat amb la classe"
+
+msgid "Create one or more empty course groups"
+msgstr "Crea un o més grups de curs buits"
+
+msgid "Number of places"
+msgstr "Nombre de places"
+
+msgid "Base group"
+msgstr "Grup base"
+
+msgid "Share"
+msgstr "Compartir"
+
+msgid "Collaboration"
+msgstr "Col·laboració"
+
+msgid "The group title is required."
+msgstr "El títol del grup és obligatori."
+
+msgid "Back to group area"
+msgstr "Tornar a l'àrea de grups"
+
+msgid "Members are managed by the linked class"
+msgstr "Els membres són gestionats per la classe enllaçada"
+
+msgid "%s groups selected"
+msgstr "%s grups seleccionats"
+
+msgid "Fill selected groups"
+msgstr "Omplir els grups seleccionats"
+
+msgid "Empty selected groups"
+msgstr "Buidar els grups seleccionats"
+
+msgid "Fill group"
+msgstr "Omplir grup"
+
+msgid "Empty group"
+msgstr "Buidar grup"
+
+msgid "Groups per user"
+msgstr "Grups per usuari"
+
+msgid "No tutors"
+msgstr "Sense tutors"
+
+msgid "No users"
+msgstr "Sense usuaris"
+

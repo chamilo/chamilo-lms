@@ -37643,3 +37643,1299 @@ msgstr "Erabili 0 eskuragarri dauden galdera guztiak mantentzeko. Erabili -1 esk
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Erabili eremu hauek ariketa sailkatzeko bere bistaratze-aukerekin lotu gabe."
 
+msgid "Invite by email"
+msgstr "Gonbidatu posta elektroniko bidez"
+
+msgid "Invitation has been sent"
+msgstr "Gonbidapena bidali da"
+
+msgid "Sent on"
+msgstr "Bidalia"
+
+msgid "Accepted on"
+msgstr "Onartua"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Ikastaro hau saio batean irekita dago. Hemen gonbidapen bat bidaltzeak hartzailea saio osoan %s harpidetuko du, ez ikastaro honetan bakarrik."
+
+msgid "Revoke"
+msgstr "Ezeztatu"
+
+msgid "Revoked"
+msgstr "Ezeztatua"
+
+msgid "Invitation has been revoked"
+msgstr "Gonbidapena ezeztatu da"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Ziur al zaude %s erabiltzaileari bidalitako gonbidapena ezeztatu nahi duzula?"
+
+msgid "No default room"
+msgstr "Ez dago gela lehenetsirik"
+
+msgid "Floor"
+msgstr "Solairua"
+
+msgid "Capacity"
+msgstr "Edukiera"
+
+msgid "Use attendance default room"
+msgstr "Erabili asistentziaren gela lehenetsia"
+
+msgid "Floor number"
+msgstr "Solairu zenbakia"
+
+msgid "Copy to students"
+msgstr "Kopiatu ikasleei"
+
+msgid "Generate a quick test on this topic"
+msgstr "Sortu proba azkar bat gai honetan"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Gordetako dokumentuaren edukia AI eredu batera bidaliko da prozesatzeko."
+
+msgid "MCP API key"
+msgstr "MCP API gakoa"
+
+msgid "Authorized applications"
+msgstr "Baimendutako aplikazioak"
+
+msgid "Your session is about to expire"
+msgstr "Zure saioa iraungitzear dago"
+
+msgid "Do you want to continue your session?"
+msgstr "Zure saioarekin jarraitu nahi duzu?"
+
+msgid "Stay connected"
+msgstr "Jarraitu konektatuta"
+
+msgid "You will be signed out in %s seconds."
+msgstr "%s segundo barru saioa amaituko da."
+
+msgid "No descriptions available yet."
+msgstr "Ez dago deskribapenik oraindik."
+
+msgid "%s users selected"
+msgstr "%s erabiltzaile hautatu dira"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Hautatutako erabiltzaileak ikastaroan inskribatu dira"
+
+msgid "Import teachers"
+msgstr "Inportatu irakasleak"
+
+msgid "Import learners"
+msgstr "Inportatu ikasleak"
+
+msgid "Select CSV file"
+msgstr "Hautatu CSV fitxategia"
+
+msgid "Some users could not be subscribed"
+msgstr "Ezinezkoa izan da erabiltzaile batzuk inskribatzea"
+
+msgid "Browse available classes"
+msgstr "Arakatu eskuragarri dauden klaseak"
+
+msgid "Back to linked classes"
+msgstr "Itzuli lotutako klaseetara"
+
+msgid "No classes are currently linked to this course."
+msgstr "Ez dago klase loturik ikastaro honekin."
+
+msgid "No available classes were found for this course."
+msgstr "Ez da klase eskuragarririk aurkitu ikastaro honetarako."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Ziur zaude hautatutako erabiltzaileak desinskribatu nahi dituzula?"
+
+msgid "Learning path access"
+msgstr "Ikaskuntza-bidearen sarbidea"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Hautatutako erabiltzaileek eta taldeek bakarrik sar dezakete ikaskuntza-bide hau. Kudeatu itzazu gorde ondoren."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Ikastaroaren uneko eta etorkizuneko erabiltzaile guztiek sar dezakete ikaskuntza-bide hau."
+
+msgid "All course users"
+msgstr "Ikastaroaren erabiltzaile guztiak"
+
+msgid "Selected users and groups"
+msgstr "Hautatutako erabiltzaileak eta taldeak"
+
+msgid "No access"
+msgstr "Sarbiderik ez"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Hemen gehitutako erabiltzaileek eta taldeek bakarrik sar dezakete ikaskuntza-bide hau."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Galdera kopurua %s(e)ra mugatuta dago gehienez"
+
+msgid "Open exercise player"
+msgstr "Ireki ariketen erreproduzigailua"
+
+msgid "The score is hidden for this exercise."
+msgstr "Puntuazioa ezkutuan dago ariketa honetarako."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Zuzenketak ezkutuan daude ariketaren emaitzen ezarpenen arabera."
+
+msgid "Progressive adaptive result"
+msgstr "Emaitza moldakor progresiboa"
+
+msgid "Achieved level"
+msgstr "Lortutako maila"
+
+msgid "Correction history"
+msgstr "Zuzenketa-historia"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Saiakera honetarako egindako eskuzko zuzenketa-historia."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Ariketa honek radar/armiarm-sare emaitza modua erabiltzen du. Grafikoa ez dago eskuragarri orri honetan."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Galderen xehetasunak ezkutuan daude ariketaren emaitzen ezarpenen arabera."
+
+msgid "Media question"
+msgstr "Multimedia galdera"
+
+msgid "Pending correction"
+msgstr "Zuzenketa zain"
+
+msgid "No answer"
+msgstr "Erantzunik ez"
+
+msgid "Blank %s"
+msgstr "%s hutsunea"
+
+msgid "Your order"
+msgstr "Zure ordena"
+
+msgid "Correct order"
+msgstr "Ordena zuzena"
+
+msgid "Delineation review"
+msgstr "Mugaketa berrikuspena"
+
+msgid "Learner clicks"
+msgstr "Ikaslearen klikak"
+
+msgid "Question image"
+msgstr "Galderaren irudia"
+
+msgid "No hotspot image available"
+msgstr "Ez dago hotspot irudirik eskuragarri"
+
+msgid "Learner delineation"
+msgstr "Ikaslearen mugaketa"
+
+msgid "Expected delineation"
+msgstr "Espero den mugaketa"
+
+msgid "Expected zones"
+msgstr "Espero diren eremuak"
+
+msgid "Zone"
+msgstr "Eremua"
+
+msgid "Learner annotation"
+msgstr "Ikaslearen oharrak"
+
+msgid "No annotation image available"
+msgstr "Ez dago ohar-irudirik eskuragarri"
+
+msgid "This answer is pending teacher correction."
+msgstr "Erantzun hau irakaslearen zuzenketa zain dago."
+
+msgid "Teacher comment"
+msgstr "Irakaslearen iruzkina"
+
+msgid "Teacher correction"
+msgstr "Irakaslearen zuzenketa"
+
+msgid "Save correction"
+msgstr "Gorde zuzenketa"
+
+msgid "Learner audio"
+msgstr "Ikaslearen audioa"
+
+msgid "Download audio"
+msgstr "Deskargatu audioa"
+
+msgid "No uploaded audio"
+msgstr "Ez dago igotako audiorik"
+
+msgid "Learner Office document"
+msgstr "Ikaslearen bulegoko dokumentua"
+
+msgid "Learner file"
+msgstr "Ikaslearen fitxategia"
+
+msgid "Download Office document"
+msgstr "Deskargatu bulegoko dokumentua"
+
+msgid "No submitted document"
+msgstr "Ez da dokumenturik bidali"
+
+msgid "No uploaded file"
+msgstr "Ez dago igotako fitxategirik"
+
+msgid "Content item"
+msgstr "Eduki-elementua"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Galdera mota hau ezin da berrikusi orri honetan."
+
+msgid "Exercise completed"
+msgstr "Ariketa osatu da"
+
+msgid "Could not start the attempt"
+msgstr "Ezin izan da saiakera hasi"
+
+msgid "Invalid exercise attempt"
+msgstr "Ariketa-saiakera baliogabea"
+
+msgid "Could not load exercise result"
+msgstr "Ezin izan da ariketa-emaitza kargatu"
+
+msgid "Could not load AI providers"
+msgstr "Ezin izan dira AA hornitzaileak kargatu"
+
+msgid "Could not generate AI suggestion"
+msgstr "Ezin izan da AA iradokizunik sortu"
+
+msgid "Correction saved"
+msgstr "Zuzenketa gorde da"
+
+msgid "Could not save correction"
+msgstr "Ezin izan da zuzenketa gorde"
+
+msgid "Create exercise"
+msgstr "Sortu ariketa"
+
+msgid "Exercise categories"
+msgstr "Ariketa-kategoriak"
+
+msgid "Question categories"
+msgstr "Galdera-kategoriak"
+
+msgid "Search by exercise title or description."
+msgstr "Bilatu ariketa-izenburuaren edo deskribapenaren arabera."
+
+msgid "Search exercises"
+msgstr "Bilatu ariketak"
+
+msgid "No exercises found"
+msgstr "Ez da ariketarik aurkitu"
+
+msgid "Open exercise"
+msgstr "Ireki ariketa"
+
+msgid "Disable autolaunch"
+msgstr "Desgaitu autohasiera"
+
+msgid "Enable autolaunch"
+msgstr "Gaitu autohasiera"
+
+msgid "Export QTI2"
+msgstr "Esportatu QTI2"
+
+msgid "Bulk actions"
+msgstr "Ekintza masiboak"
+
+msgid "Selected exercises"
+msgstr "Hautatutako ariketak"
+
+msgid "No exercises selected"
+msgstr "Ez da ariketarik hautatu"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Ziur al zaude ekintza hau hautatutako ariketetan aplikatu nahi duzula?"
+
+msgid "Bulk action completed"
+msgstr "Ekintza masiboa osatu da"
+
+msgid "Could not update exercises"
+msgstr "Ezin izan dira ariketak eguneratu"
+
+msgid "Could not update exercise"
+msgstr "Ezin izan da ariketa eguneratu"
+
+msgid "Copy exercise"
+msgstr "Kopiatu ariketa"
+
+msgid "Delete exercise"
+msgstr "Ezabatu ariketa"
+
+msgid "Could not load exercises"
+msgstr "Ezin izan dira ariketak kargatu"
+
+msgid "No limit"
+msgstr "Mugarik ez"
+
+msgid "Add selected questions to the test"
+msgstr "Gehitu hautatutako galderak testari"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Galdera hau aktibo dagoen testu batean erabiltzen da eta ezin da hemen editatu."
+
+msgid "This question cannot be edited here."
+msgstr "Galdera hau ezin da hemen editatu."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Galdera hau aktibo dagoen testu batean erabiltzen da eta ezin da hemen ezabatu."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Galdera hau ezin da ezabatu zure sarbidea plataformaren ezarpenek mugatzen dutelako."
+
+msgid "Already in test"
+msgstr "Dagoeneko testuan"
+
+msgid "Select at least one question."
+msgstr "Hautatu gutxienez galdera bat."
+
+msgid "Question bank updated"
+msgstr "Galdera-bankua eguneratu da"
+
+msgid "Could not update the question bank"
+msgstr "Ezin izan da galdera-bankua eguneratu"
+
+msgid "Could not load the question bank"
+msgstr "Ezin izan da galdera-bankua kargatu"
+
+msgid "Total score"
+msgstr "Puntuazio osoa"
+
+msgid "Starting"
+msgstr "Hasten"
+
+msgid "Attempt history"
+msgstr "Saiakera-historia"
+
+msgid "No attempts yet"
+msgstr "Oraindik ez dago saiakerarik"
+
+msgid "Invalid exercise"
+msgstr "Ariketa baliogabea"
+
+msgid "Could not load exercise overview"
+msgstr "Ezin izan da ariketa-ikuspegia kargatu"
+
+msgid "Open test"
+msgstr "Ireki proba"
+
+msgid "Random answers"
+msgstr "Erantzun ausazkoak"
+
+msgid "Prevent moving backwards"
+msgstr "Atzera egitea eragotzi"
+
+msgid "Previous button hidden"
+msgstr "Aurreko botoia ezkutatu"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Ariketa honek proba-jokalari desberdina behar duten aukerak erabiltzen ditu."
+
+msgid "Continue test"
+msgstr "Jarraitu proba"
+
+msgid "Attempt started"
+msgstr "Saiakera hasi da"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Irakaslearen aurrebistak ez du jarraipeneko saiakerarik sortzen."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Hasi edo jarraitu ariketa-saiakera bat. Zirriborro-erantzunak gorde daitezke azken bidalketa egin aurretik."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Denbora-muga iritsi da. Saiakera amaitzen."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Galdera-denbora iritsi da. Zure erantzuna gordetzen."
+
+msgid "Finishing"
+msgstr "Amaitzen"
+
+msgid "Draft saved"
+msgstr "Zirriborroa gorde da"
+
+msgid "Statement"
+msgstr "Adierazpena"
+
+msgid "Drop each option on the matching answer"
+msgstr "Jarri aukera bakoitza dagokion erantzunean"
+
+msgid "Clear match"
+msgstr "Garbitu parekatzea"
+
+msgid "Click to place the selected option here"
+msgstr "Egin klik aukeratutako aukera hemen jartzeko"
+
+msgid "Select an option, then click here"
+msgstr "Hautatu aukera bat, ondoren egin klik hemen"
+
+msgid "Already matched"
+msgstr "Dagoeneko parekatuta"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Aukera bat erantzun batera arrastatu dezakezu, edo aukera bat hautatu eta gero helburu-koadro batean klik egin."
+
+msgid "Put the items in the correct order."
+msgstr "Jarri elementuak ordena zuzenean."
+
+msgid "Move left"
+msgstr "Mugitu ezkerrera"
+
+msgid "Move right"
+msgstr "Mugitu eskuinera"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Elementuak ezkerrera edo eskuinera arrastatu ditzakezu, edo mugimendu-botoiak erabili ordena aldatzeko."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Elementuak arrastatu edo mugimendu-botoiak erabili ditzakezu ordena aldatzeko."
+
+msgid "Or upload an audio file"
+msgstr "Edo igo audio-fitxategi bat"
+
+msgid "Selected audio"
+msgstr "Hautatutako audioa"
+
+msgid "Uploaded audio"
+msgstr "Igotako audioa"
+
+msgid "Office document"
+msgstr "Bulego-dokumentua"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Osatu dokumentua beheko editorean. Fitxategia saiakera honi erantsiko zaio irakasleak zuzentzeko."
+
+msgid "Reload Office editor"
+msgstr "Birkargatu Bulego-editorea"
+
+msgid "Prepare Office document"
+msgstr "Prestatu Bulego-dokumentua"
+
+msgid "Open in new tab"
+msgstr "Ireki fitxa berrian"
+
+msgid "Preparing Office document"
+msgstr "Bulego-dokumentua prestatzen"
+
+msgid "Submitted document"
+msgstr "Bidalitako dokumentua"
+
+msgid "Annotation tools"
+msgstr "Ohar-tresnak"
+
+msgid "Text to place"
+msgstr "Kokatu beharreko testua"
+
+msgid "Click the image to place the text annotation."
+msgstr "Egin klik irudian testu-oharra kokatzeko."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Egin klik irudian bide-puntuak gehitzeko. Erabili Hasi bide berria bideak bereizteko."
+
+msgid "Start new path"
+msgstr "Hasi bide berria"
+
+msgid "Current annotations"
+msgstr "Uneko oharrak"
+
+msgid "Remove point"
+msgstr "Kendu puntua"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Egin klik irudian mugaketa-poligonoa marrazteko."
+
+msgid "Click a marker to remove it."
+msgstr "Egin klik markatzaile batean kentzeko."
+
+msgid "Placed"
+msgstr "Kokatuta"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Hautatu erantzun bat, ondoren egin klik irudian markatzeko."
+
+msgid "Reading speed"
+msgstr "Irakurtzeko abiadura"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Galdera mota hau ezin da erakutsi erreproduzigailu honetan."
+
+msgid "Save draft"
+msgstr "Gorde zirriborroa"
+
+msgid "I confirm that my answers were saved."
+msgstr "Berresten dut nire erantzunak gorde direla."
+
+msgid "Finish test"
+msgstr "Amaitu proba"
+
+msgid "Attempt finished"
+msgstr "Saiakera amaitu da"
+
+msgid "Question category"
+msgstr "Galdera kategoria"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Galdera kategoriako galdera guztiak erantzun dituzu, azken aukera duzu atzera egiteko eta galdera horiek berrikusteko."
+
+msgid "Question time left"
+msgstr "Galderarako geratzen den denbora"
+
+msgid "Time left"
+msgstr "Geratzen den denbora"
+
+msgid "Current attempt"
+msgstr "Uneko saiakera"
+
+msgid "Could not save draft answer"
+msgstr "Ezin izan da zirriborroko erantzuna gorde"
+
+msgid "Could not load exercise"
+msgstr "Ezin izan da ariketa kargatu"
+
+msgid "Draft answer saved"
+msgstr "Zirriborroko erantzuna gorde da"
+
+msgid "Could not finish the attempt"
+msgstr "Ezin izan da saiakera amaitu"
+
+msgid "Could not prepare Office document"
+msgstr "Ezin izan da Office dokumentua prestatu"
+
+msgid "Back to learner score"
+msgstr "Itzuli ikaslearen puntuaziora"
+
+msgid "Disable auto refresh"
+msgstr "Desgaitu auto-eguneratzea"
+
+msgid "Enable auto refresh"
+msgstr "Gaitu auto-eguneratzea"
+
+msgid "Live window"
+msgstr "Leiho zuzena"
+
+msgid "Ongoing attempts"
+msgstr "Saiakera aktiboak"
+
+msgid "Completed attempts"
+msgstr "Saiakera osatuak"
+
+msgid "Started"
+msgstr "Hasi da"
+
+msgid "Last activity"
+msgstr "Azken jarduera"
+
+msgid "Could not load live results"
+msgstr "Ezin izan dira zuzeneko emaitzak kargatu"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Ariketa hau irakurtzeko soilik da, ikaskuntza ibilbide batean sartuta dagoelako."
+
+msgid "Select a question type to create a question."
+msgstr "Hautatu galdera mota bat galdera sortzeko."
+
+msgid "Click to preview"
+msgstr "Egin klik aurrebista ikusteko"
+
+msgid "Hide preview"
+msgstr "Ezkutatu aurrebista"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Koordenatuak"
+
+msgid "Blanks"
+msgstr "Hutsuneak"
+
+msgid "Switchable blanks"
+msgstr "Aldagarriak diren hutsuneak"
+
+msgid "Blank"
+msgstr "Hutsunea"
+
+msgid "Input width"
+msgstr "Sarreraren zabalera"
+
+msgid "Orientation"
+msgstr "Orientazioa"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Ez dago eskuragarri ariketa honen feedback moduarekin"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Ez dago eskuragarri ikaskuntza ibilbidea sortzeko fluxuan"
+
+msgid "Delete question"
+msgstr "Ezabatu galdera"
+
+msgid "Could not update exercise questions"
+msgstr "Ezin izan dira ariketa galderak eguneratu"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Ezin izan da ariketa ikaskuntza ibilbidean gehitu"
+
+msgid "A valid exercise id is required."
+msgstr "Ariketa ID baliozkoa behar da."
+
+msgid "Could not load exercise questions"
+msgstr "Ezin izan dira ariketa galderak kargatu"
+
+msgid "Delete selected attempts"
+msgstr "Ezabatu hautatutako saiakerak"
+
+msgid "Before date"
+msgstr "Data baino lehen"
+
+msgid "Pending corrections"
+msgstr "Zuzenketa zain"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Ariketa hau gradebook-ek blokeatuta dago. Saiakera garbitzeko ekintzak desgaituta daude."
+
+msgid "No attempts found"
+msgstr "Ez da saiakerarik aurkitu"
+
+msgid "Review"
+msgstr "Berrikusi"
+
+msgid "Print/PDF"
+msgstr "Inprimatu/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Ezin izan da ariketaren txostena kargatu"
+
+msgid "Select at least one attempt"
+msgstr "Hautatu gutxienez saiakera bat"
+
+msgid "Delete selected attempts?"
+msgstr "Hautatutako saiakerak ezabatu?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Berrikusitako saiakeren emaitzen mezuak bidali?"
+
+msgid "Could not send emails"
+msgstr "Ezin izan dira mezuak bidali"
+
+msgid "Exercise result emails sent"
+msgstr "Ariketaren emaitzen mezuak bidali dira"
+
+msgid "Skipped"
+msgstr "Saltatua"
+
+msgid "Close attempt?"
+msgstr "Saiakera itxi?"
+
+msgid "Attempt closed"
+msgstr "Saiakera itxi da"
+
+msgid "Could not close attempt"
+msgstr "Ezin izan da saiakera itxi"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Bidali saiakera honen emaitza ikasleari posta elektroniko bidez?"
+
+msgid "Email sent"
+msgstr "Mezua bidali da"
+
+msgid "Could not send email"
+msgstr "Ezin izan da mezua bidali"
+
+msgid "Attempt deleted"
+msgstr "Saiakera ezabatu da"
+
+msgid "Could not delete attempt"
+msgstr "Ezin izan da saiakera ezabatu"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Hautatu izenburua eta deskribapena dituzten zutabeak dituen CSV fitxategi bat."
+
+msgid "Manage categories used to classify questions."
+msgstr "Kudeatu galderak sailkatzeko erabiltzen diren kategoriak."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Kudeatu ariketak sailkatzeko erabiltzen diren kategoriak."
+
+msgid "Could not load categories"
+msgstr "Ezin izan dira kategoriak kargatu"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Inportatutako kategoriak: %s. Saltatutako errenkadak: %s."
+
+msgid "Imported categories: %s."
+msgstr "Inportatutako kategoriak: %s."
+
+msgid "Could not import categories"
+msgstr "Ezin izan dira kategoriak inportatu"
+
+msgid "Could not save category"
+msgstr "Ezin izan da kategoria gorde"
+
+msgid "Answer distribution"
+msgstr "Erantzunen banaketa"
+
+msgid "Configured answers"
+msgstr "Konfiguratutako erantzunak"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Galdera mota batzuen erantzunen zenbaketa xehatua ez dago oraindik eskuragarri migrazioaren txostenean."
+
+msgid "No report by question data found"
+msgstr "Ez da aurkitu galderaren araberako txosten daturik"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Galdera mota honen erantzunen zenbaketa xehatua ez dago oraindik eskuragarri migrazioaren txostenean."
+
+msgid "No answer distribution found"
+msgstr "Ez da aurkitu erantzunen banaketarik"
+
+msgid "Could not load report by question"
+msgstr "Ezin izan da galderaren araberako txostena kargatu"
+
+msgid "Question settings"
+msgstr "Galderaren ezarpenak"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Utzi hutsik edo 0 denbora-mugarik ez izateko."
+
+msgid "Time limit in seconds"
+msgstr "Denbora-muga segundotan"
+
+msgid "Attached questions"
+msgstr "Erantsitako galderak"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Hemen ariketa honetako multimedia-galdera honi erantsitako galderak baino ez dira zerrendatzen."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Ez dago galderarik erantsita ariketa honetako multimedia-galdera honi."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Kargatu ikasleek OnlyOffice-rekin editatuko duten bulegoko dokumentuaren txantiloia."
+
+msgid "Replace Office document"
+msgstr "Ordeztu bulegoko dokumentua"
+
+msgid "Current Office document"
+msgstr "Uneko bulegoko dokumentua"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Galdera hau eskuz zuzentzen da ikasleak editatutako dokumentua bidali ondoren."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Puntuazio osoa hotspot puntuazioen batura gisa kalkulatzen da."
+
+msgid "Global score"
+msgstr "Puntuazio globala"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Hautatu hotspot errenkada bat, aukeratu bere forma eta marraztu irudiaren gainean. Poligonoetarako, egin klik puntu bakoitzean eta amaitu poligonoa, edo egin klik bikoitza amaitzeko."
+
+msgid "Finish polygon"
+msgstr "Amaitu poligonoa"
+
+msgid "Calculated answer"
+msgstr "Kalkulatutako erantzuna"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Idatzi zure testua behean eta erabili kortxete karratuak [...] hutsune bat edo gehiago definitzeko."
+
+msgid "Lowest value"
+msgstr "Balio txikiena"
+
+msgid "Highest value"
+msgstr "Balio altuena"
+
+msgid "Fill in blanks"
+msgstr "Bete hutsuneak"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Erabili hautatutako markatzaileak hutsuneak definitzeko. Adibidez: Peruko hiriburua [Lima] da."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Sartu goitibeherako aukerak, erantzun bat lerro bakoitzeko. Ondoren, markatu beheko espero diren erantzunak, tresna zaharraren antzera."
+
+msgid "Refresh answers"
+msgstr "Freskatu erantzunak"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Goitibeherako konbinazio galdera honek puntuazio global bakarra erabiltzen du, zaharraren antzera."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Sartu gutxienez bi goitibeherako aukera."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Sortu helburuko aukerak lehenik, ondoren lotu elementu bakoitza aukera zuzenarekin."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Lotura konbinazio galdera honek puntuazio global bakarra erabiltzen du, zaharraren antzera."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Sortu urratsak eta aukeratu bakoitzaren espero den kokapena, Draggable zaharraren antzera."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Ikasleek Egia edo Gezurra aukeratuko dute eta gero ziurtasun maila hautatuko dute saiakeran. Editoreak puntuazio zuzen/oker eta ziurtasun maila berak gordetzen ditu zaharraren antzera."
+
+msgid "Hotspot combination"
+msgstr "Puntu beroen konbinazioa"
+
+msgid "Add delineation"
+msgstr "Gehitu mugaketa"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Bulego dokumentu galdera honek ez du erantzun aukerarik. Bere puntuazioa zuzenketa/emaitzen berrikusketan esleitzen da."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Igoera galdera honek ez du erantzun aukerarik. Bere puntuazioa zuzenketa/emaitzen berrikusketan esleitzen da."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ahozko adierazpen galdera honek ez du erantzun aukerarik. Bere puntuazioa zuzenketa/emaitzen berrikusketan esleitzen da."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Galdera ireki honek ez du erantzun aukerarik. Bere puntuazioa zuzenketa/emaitzen berrikusketan esleitzen da."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Gehitu irakurketa testu bat korritze abiaduraren ezarpenekin."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Gehitu edukia, multimedia edo irakurketa testuingurua puntuaziorik gehitu gabe."
+
+msgid "Insert a page break without adding score."
+msgstr "Txertatu orri-jauzia puntuaziorik gehitu gabe."
+
+msgid "Could not save question"
+msgstr "Ezin izan da galdera gorde"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "DOC, DOCX, XLS edo XLSX dokumentuak bakarrik onartzen dira."
+
+msgid "Please select an Office document."
+msgstr "Hautatu Bulego dokumentu bat."
+
+msgid "Please draw at least one hotspot."
+msgstr "Marraztu gutxienez puntu bero bat."
+
+msgid "Please draw at least one delineation."
+msgstr "Marraztu gutxienez mugaketa bat."
+
+msgid "The fill in blanks text is required."
+msgstr "Hutsuneak betetzeko testua beharrezkoa da."
+
+msgid "At least one expected answer is required."
+msgstr "Gutxienez espero den erantzun bat beharrezkoa da."
+
+msgid "At least two draggable items are required."
+msgstr "Gutxienez bi elementu arrastagarri behar dira."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Elementu arrastagarri bakoitza helburuko kokapen baliozko batekin lotu behar da."
+
+msgid "At least two matching options are required."
+msgstr "Gutxienez bi lotura aukera behar dira."
+
+msgid "At least two matching pairs are required."
+msgstr "Gutxienez bi lotura pare behar dira."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Lotura pare bakoitza aukera baliozko batekin lotu behar da."
+
+msgid "At least two answers are required."
+msgstr "Gutxienez bi erantzun behar dira."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Egia/Gezurra erantzun bakoitzak Egia edo Gezurra hautatuta izan behar du."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Erantzun bakarreko galdera batek erantzun zuzen bakar bat izan behar du."
+
+msgid "At least one correct answer is required."
+msgstr "Gutxienez erantzun zuzen bat behar da."
+
+msgid "Could not load question"
+msgstr "Ezin izan da galdera kargatu"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Hautatu ikastaro bat eta esportatu ariketa emaitzen txosten globala CSV gisa."
+
+msgid "Back to reports catalog"
+msgstr "Itzuli txostenen katalogora"
+
+msgid "Could not load exercise global report"
+msgstr "Ezin izan da ariketa txosten globala kargatu"
+
+msgid "Imported questions"
+msgstr "Inportatutako galderak"
+
+msgid "Aiken content"
+msgstr "Aiken edukia"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Ezin izan da AI Aiken sortzailea kargatu"
+
+msgid "Could not generate Aiken content"
+msgstr "Ezin izan da Aiken edukia sortu"
+
+msgid "Could not import generated Aiken content"
+msgstr "Ezin izan da sortutako Aiken edukia inportatu"
+
+msgid "Back to my courses"
+msgstr "Itzuli nire ikastaroetara"
+
+msgid "Open report"
+msgstr "Ireki txostena"
+
+msgid "Questions with no automatic correction"
+msgstr "Zuzenketa automatikorik gabeko galderak"
+
+msgid "Could not load pending attempts"
+msgstr "Ezin izan dira zain dauden saiakerak kargatu"
+
+msgid "Skipped questions"
+msgstr "Saltatutako galderak"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken inportazioak pisu oso hau banatzen du inportatutako galderen artean, galdera batek SCORE definitzen ez badu."
+
+msgid "Import warnings"
+msgstr "Inportazio abisuak"
+
+msgid "Could not import questions"
+msgstr "Ezin izan da galderarik inportatu"
+
+msgid "No question statistics found"
+msgstr "Ez da galderen estatistikarik aurkitu"
+
+msgid "Could not load question statistics"
+msgstr "Ezin izan dira galderen estatistikak kargatu"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "MCP bezero bat zuzenean konekta dezakezu honako amaiera-puntu honetara zuzenduz:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Ez dago aplikaziorik zure kontura konektatuta une honetan."
+
+msgid "Connected on"
+msgstr "Konektatuta"
+
+msgid "Last used"
+msgstr "Azken erabilera"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ez da zure Chamilo kontura sartu ahal izango gehiago. Jarraitu?"
+
+msgid "Application revoked"
+msgstr "Aplikazioa baliogabetu da"
+
+msgid "Copied to clipboard"
+msgstr "Arbelera kopiatu da"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Ezin izan da MCP amaiera-puntua kopiatu"
+
+msgid "MCP endpoint"
+msgstr "MCP amaiera-puntua"
+
+msgid "API key"
+msgstr "API gakoa"
+
+msgid "Last used at"
+msgstr "Azken erabilera"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopia ezazu gako hau orain. Ez da berriro erakutsiko."
+
+msgid "Rotate API key"
+msgstr "Biratu API gakoa"
+
+msgid "Revoke API key"
+msgstr "Baliogabetu API gakoa"
+
+msgid "Remote MCP connection"
+msgstr "Urruneko MCP konexioa"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Konfiguratu zure MCP bezeroa honako balioekin:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Uneko gakoa berehala utziko du funtzionatzeari. Jarraitu?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "MCP API gako pertsonal berri bat sortuko da. Jarraitu?"
+
+msgid "MCP API key generated"
+msgstr "MCP API gakoa sortu da"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Gako hau erabiltzen duten MCP bezero konektatuak berehala utziko dute funtzionatzeari. Jarraitu?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API gakoa baliogabetu da"
+
+msgid "Could not copy the API key"
+msgstr "Ezin izan da API gakoa kopiatu"
+
+msgid "Project"
+msgstr "Proiektua"
+
+msgid "Close old tickets"
+msgstr "Itxi tiket zaharrak"
+
+msgid "Close tickets older than seven days?"
+msgstr "Itxi zazpi egun baino zaharragoak diren tiketak?"
+
+msgid "Assignment history"
+msgstr "Esleipen-historia"
+
+msgid "Translate with AI"
+msgstr "Itzuli IA bidez"
+
+msgid "Target language"
+msgstr "Helburuko hizkuntza"
+
+msgid "Please select a provider"
+msgstr "Hautatu hornitzaile bat"
+
+msgid "Generate translation"
+msgstr "Sortu itzulpena"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Gutxienez termino eta baldintzen atal batek testua izan behar du."
+
+msgid "No active target languages are available."
+msgstr "Ez dago helburuko hizkuntza aktiborik eskuragarri."
+
+msgid "Tutor"
+msgstr "Tutorea"
+
+msgid "Access dates"
+msgstr "Sarbide-datak"
+
+msgid "Coach access dates"
+msgstr "Entrenatzailearen sarbide-datak"
+
+msgid "No sessions found"
+msgstr "Ez da saiorik aurkitu"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Hautatu erabiltzaile honek saio honetan sartu ezin izango dituen ikastaroak."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Erabiltzaile bat ezin da saioaren ikastaro guztietatik blokeatu. Kendu harpidetza erabiltzaileari horren ordez."
+
+msgid "Users subscribed to this session"
+msgstr "Saio honetara harpidetutako erabiltzaileak"
+
+msgid "No available users found"
+msgstr "Ez da erabiltzailerik aurkitu eskuragarri"
+
+msgid "Subscribe this user to the session?"
+msgstr "Harpidetu erabiltzaile hau saioan?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Harpidetu hautatutako erabiltzaileak saioan?"
+
+msgid "General tutor planning"
+msgstr "Tutore orokorraren plangintza"
+
+msgid "User is already registered by another tutor."
+msgstr "Erabiltzailea beste tutore batek erregistratu du dagoeneko."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Kopia bat jasotzen ari zara ikastaroaren tutorea zarelako"
+
+msgid "General tutor"
+msgstr "Tutore orokorra"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Kontuan hartu ikastaroak, tutoreak, laguntza teknikoa, irakasleak eta/edo eskuragarri dauden materialak."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutoreak irakasle gisa harpidetuta daude %s ikastaroan"
+
+msgid "Tutor name"
+msgstr "Tutoraren izena"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Saio-tutoreak saioaren koordinatzaileak dira eta saioaren ikastaro bakoitzean tutore gisa jardun dezakete. Irakasle rola duten erabiltzaileak soilik hauta daitezke saio-tutore gisa."
+
+msgid "Access start date for tutors"
+msgstr "Tutoreentzako sarbide-hasiera data"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Saioa tutoreentzat eskuragarri jartzen den data, ikasleak konektatu aurretik prestatu ahal izan dezaten"
+
+msgid "Access end date for tutors"
+msgstr "Tutoreentzako sarbide-amaiera data"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Saioa tutoreentzat itxi egiten den data. Atzerapen gehigarriak jarraipen-informazio garrantzitsua esportatzen utziko die"
+
+msgid "Tutor and student"
+msgstr "Tutorea eta ikaslea"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Txosten honek hautatutako data-tartean saio-tutore orokorraren saio-banaketa astekoa erakusten du."
+
+msgid "User is general tutor in some sessions"
+msgstr "Erabiltzailea saio batzuetan tutore orokorra da"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Irakasleak tutore gisa gehituko dira ikastaro-saio guztietan."
+
+msgid "Delete failed: invalid question id."
+msgstr "Ezabaketa huts egin du: galdera ID baliogabea."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Saio-tutore orokorraren batez besteko saio kopurua"
+
+msgid "No room"
+msgstr "Gelarik ez"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Inportatu ikastaro-irakasleak saioaren ikastaro-tutore gisa"
+
+msgid "Clean and update course tutors"
+msgstr "Garbitu eta eguneratu ikastaro-tutoreak"
+
+msgid "Add me as tutor"
+msgstr "Gehitu ni tutore gisa"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Ezin izan da inkesta ikaskuntza-bidean gehitu"
+
+msgid "Access dates for tutors"
+msgstr "Tutoreentzako sarbide-datak"
+
+msgid "Tutor and group member"
+msgstr "Tutorea eta taldeko kidea"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Zure eguneko AI token-muga iritsi da. Saiatu berriro bihar."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Zure hileko AI token-muga iritsi da. Saiatu berriro hurrengo hilean."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Ikastaro-kode hau dagoeneko existitzen da, aukeratu beste kode bat."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Ikastaro-izenburu hau dagoeneko existitzen da, aukeratu beste izenburu bat."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Tresna honen ikusgaitasuna ezin da aldatu"
+
+msgid "Invalid visibility"
+msgstr "Ikusgaitasun baliogabea"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Kopia jasotzen ari zara ikastaro-tutoreetako bat zarelako"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Kopia jasotzen ari zara ikastaro-tutorea zarelako"
+
+msgid "Manual completion"
+msgstr "Eskuzko osaketa"
+
+msgid "Send to tutors"
+msgstr "Bidali tutoreei"
+
+msgid "Lab title"
+msgstr "Laborategiaren izenburua"
+
+msgid "Lab week"
+msgstr "Laborategiaren astea"
+
+msgid "Final exam access rule"
+msgstr "Azken azterketaren sarbide-araua"
+
+msgid "Course completion rule"
+msgstr "Ikastaro-osaketaren araua"
+
+msgid "You have been invited to join a course"
+msgstr "Ikastaro batera batzeko gonbidapena jaso duzu"
+
+msgid "No user has been found"
+msgstr "Ez da erabiltzailerik aurkitu"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Hautatutako erabiltzailea ezin da testuinguru honetan harpidetu"
+
+msgid "No change has been made"
+msgstr "Ez da aldaketarik egin"
+
+msgid "Back to group list"
+msgstr "Itzuli talde zerrendara"
+
+msgid "Remove class link"
+msgstr "Kendu klase esteka"
+
+msgid "Group settings"
+msgstr "Talde ezarpenak"
+
+msgid "Self-registration allowed"
+msgstr "Auto-erregistroa onartzen da"
+
+msgid "Self-unregistration allowed"
+msgstr "Auto-deserregistroa onartzen da"
+
+msgid "This group is linked to the class"
+msgstr "Talde hau klasearekin lotuta dago"
+
+msgid "Create one or more empty course groups"
+msgstr "Sortu ikastaro talde huts bat edo gehiago"
+
+msgid "Number of places"
+msgstr "Toki kopurua"
+
+msgid "Base group"
+msgstr "Oinarrizko taldea"
+
+msgid "Share"
+msgstr "Partekatu"
+
+msgid "Collaboration"
+msgstr "Lankidetza"
+
+msgid "The group title is required."
+msgstr "Talde izenburua beharrezkoa da."
+
+msgid "Back to group area"
+msgstr "Itzuli talde areara"
+
+msgid "Members are managed by the linked class"
+msgstr "Kideak lotutako klaseak kudeatzen ditu"
+
+msgid "%s groups selected"
+msgstr "%s talde hautatuta"
+
+msgid "Fill selected groups"
+msgstr "Bete hautatutako taldeak"
+
+msgid "Empty selected groups"
+msgstr "Hustu hautatutako taldeak"
+
+msgid "Fill group"
+msgstr "Bete taldea"
+
+msgid "Empty group"
+msgstr "Hustu taldea"
+
+msgid "Groups per user"
+msgstr "Talde erabiltzaileko"
+
+msgid "No tutors"
+msgstr "Ez dago tutorerik"
+
+msgid "No users"
+msgstr "Ez dago erabiltzailerik"
+

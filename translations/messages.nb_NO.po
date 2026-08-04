@@ -37637,3 +37637,1299 @@ msgstr "Bruk 0 for å beholde alle tilgjengelige spørsmål. Bruk -1 der alle ti
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Bruk disse feltene til å klassifisere øvelsen uavhengig av visningsalternativer."
 
+msgid "Invite by email"
+msgstr "Inviter via e-post"
+
+msgid "Invitation has been sent"
+msgstr "Invitasjonen er sendt"
+
+msgid "Sent on"
+msgstr "Sendt"
+
+msgid "Accepted on"
+msgstr "Akseptert"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Dette kurset er åpnet i en økt. Å sende en invitasjon her vil abonnere mottakeren på hele økten %s, ikke bare dette kurset."
+
+msgid "Revoke"
+msgstr "Tilbakekall"
+
+msgid "Revoked"
+msgstr "Tilbakekalt"
+
+msgid "Invitation has been revoked"
+msgstr "Invitasjonen er tilbakekalt"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Er du sikker på at du vil tilbakekalle invitasjonen sendt til %s?"
+
+msgid "No default room"
+msgstr "Ingen standardrom"
+
+msgid "Floor"
+msgstr "Etasje"
+
+msgid "Capacity"
+msgstr "Kapasitet"
+
+msgid "Use attendance default room"
+msgstr "Bruk standardrom for oppmøte"
+
+msgid "Floor number"
+msgstr "Etasjenummer"
+
+msgid "Copy to students"
+msgstr "Kopier til studenter"
+
+msgid "Generate a quick test on this topic"
+msgstr "Generer en hurtigtest om dette emnet"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Det lagrede dokumentinnholdet vil bli sendt til en AI-modell for behandling."
+
+msgid "MCP API key"
+msgstr "MCP API-nøkkel"
+
+msgid "Authorized applications"
+msgstr "Autoriserte applikasjoner"
+
+msgid "Your session is about to expire"
+msgstr "Økten din er i ferd med å utløpe"
+
+msgid "Do you want to continue your session?"
+msgstr "Vil du fortsette økten?"
+
+msgid "Stay connected"
+msgstr "Forbli tilkoblet"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Du vil bli logget ut om %s sekunder."
+
+msgid "No descriptions available yet."
+msgstr "Ingen beskrivelser tilgjengelig ennå."
+
+msgid "%s users selected"
+msgstr "%s brukere valgt"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "De valgte brukerne er påmeldt kurset"
+
+msgid "Import teachers"
+msgstr "Importer lærere"
+
+msgid "Import learners"
+msgstr "Importer elever"
+
+msgid "Select CSV file"
+msgstr "Velg CSV-fil"
+
+msgid "Some users could not be subscribed"
+msgstr "Noen brukere kunne ikke påmeldes"
+
+msgid "Browse available classes"
+msgstr "Bla gjennom tilgjengelige klasser"
+
+msgid "Back to linked classes"
+msgstr "Tilbake til koblede klasser"
+
+msgid "No classes are currently linked to this course."
+msgstr "Ingen klasser er for øyeblikket koblet til dette kurset."
+
+msgid "No available classes were found for this course."
+msgstr "Ingen tilgjengelige klasser ble funnet for dette kurset."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Er du sikker på at du vil melde av de valgte brukerne?"
+
+msgid "Learning path access"
+msgstr "Tilgang til læringssti"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Bare valgte brukere og grupper kan få tilgang til denne læringsstien. Administrer dem etter lagring."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Alle nåværende og fremtidige kursbrukere kan få tilgang til denne læringsstien."
+
+msgid "All course users"
+msgstr "Alle kursbrukere"
+
+msgid "Selected users and groups"
+msgstr "Valgte brukere og grupper"
+
+msgid "No access"
+msgstr "Ingen tilgang"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Bare brukere og grupper som er lagt til her kan få tilgang til denne læringsstien."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Antall spørsmål begrenset til maksimalt %s"
+
+msgid "Open exercise player"
+msgstr "Åpne øvelsesavspiller"
+
+msgid "The score is hidden for this exercise."
+msgstr "Poengsummen er skjult for denne øvelsen."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Rettelser er skjult i henhold til innstillingene for øvelsesresultat."
+
+msgid "Progressive adaptive result"
+msgstr "Progressivt adaptivt resultat"
+
+msgid "Achieved level"
+msgstr "Oppnådd nivå"
+
+msgid "Correction history"
+msgstr "Rettelseshistorikk"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historikk over manuelle rettelser gjort for dette forsøket."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Denne øvelsen bruker radar-/spiderweb-resultatmodus. Diagrammet er ikke tilgjengelig på denne siden."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Spørsmålsdetaljer er skjult i henhold til innstillingene for øvelsesresultat."
+
+msgid "Media question"
+msgstr "Mediaspørsmål"
+
+msgid "Pending correction"
+msgstr "Venter på retting"
+
+msgid "No answer"
+msgstr "Intet svar"
+
+msgid "Blank %s"
+msgstr "Tom %s"
+
+msgid "Your order"
+msgstr "Din rekkefølge"
+
+msgid "Correct order"
+msgstr "Korrekt rekkefølge"
+
+msgid "Delineation review"
+msgstr "Avgrensningsgjennomgang"
+
+msgid "Learner clicks"
+msgstr "Elevklikk"
+
+msgid "Question image"
+msgstr "Spørsmålsbilde"
+
+msgid "No hotspot image available"
+msgstr "Intet hotspot-bilde tilgjengelig"
+
+msgid "Learner delineation"
+msgstr "Elevavgrensning"
+
+msgid "Expected delineation"
+msgstr "Forventet avgrensning"
+
+msgid "Expected zones"
+msgstr "Forventede soner"
+
+msgid "Zone"
+msgstr "Sone"
+
+msgid "Learner annotation"
+msgstr "Elevannotasjon"
+
+msgid "No annotation image available"
+msgstr "Intet annotasjonsbilde tilgjengelig"
+
+msgid "This answer is pending teacher correction."
+msgstr "Dette svaret venter på lærerrättning."
+
+msgid "Teacher comment"
+msgstr "Lærerkommentar"
+
+msgid "Teacher correction"
+msgstr "Lærerrättning"
+
+msgid "Save correction"
+msgstr "Lagre retting"
+
+msgid "Learner audio"
+msgstr "Elevlyd"
+
+msgid "Download audio"
+msgstr "Last ned lyd"
+
+msgid "No uploaded audio"
+msgstr "Ingen opplastet lyd"
+
+msgid "Learner Office document"
+msgstr "Elev Office-dokument"
+
+msgid "Learner file"
+msgstr "Elevfil"
+
+msgid "Download Office document"
+msgstr "Last ned Office-dokument"
+
+msgid "No submitted document"
+msgstr "Intet innsendt dokument"
+
+msgid "No uploaded file"
+msgstr "Ingen opplastet fil"
+
+msgid "Content item"
+msgstr "Innholdselement"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Denne spørsmålstypen kan ikke gjennomgås på denne siden."
+
+msgid "Exercise completed"
+msgstr "Øvelse fullført"
+
+msgid "Could not start the attempt"
+msgstr "Kunne ikke starte forsøket"
+
+msgid "Invalid exercise attempt"
+msgstr "Ugyldig øvelsesforsøk"
+
+msgid "Could not load exercise result"
+msgstr "Kunne ikke laste øvelsesresultat"
+
+msgid "Could not load AI providers"
+msgstr "Kunne ikke laste AI-leverandører"
+
+msgid "Could not generate AI suggestion"
+msgstr "Kunne ikke generere AI-forslag"
+
+msgid "Correction saved"
+msgstr "Rettelse lagret"
+
+msgid "Could not save correction"
+msgstr "Kunne ikke lagre rettelse"
+
+msgid "Create exercise"
+msgstr "Opprett øvelse"
+
+msgid "Exercise categories"
+msgstr "Øvelseskategorier"
+
+msgid "Question categories"
+msgstr "Spørsmålskategorier"
+
+msgid "Search by exercise title or description."
+msgstr "Søk etter øvelsestittel eller beskrivelse."
+
+msgid "Search exercises"
+msgstr "Søk i øvelser"
+
+msgid "No exercises found"
+msgstr "Ingen øvelser funnet"
+
+msgid "Open exercise"
+msgstr "Åpne øvelse"
+
+msgid "Disable autolaunch"
+msgstr "Deaktiver automatisk start"
+
+msgid "Enable autolaunch"
+msgstr "Aktiver automatisk start"
+
+msgid "Export QTI2"
+msgstr "Eksporter QTI2"
+
+msgid "Bulk actions"
+msgstr "Massehandlinger"
+
+msgid "Selected exercises"
+msgstr "Valgte øvelser"
+
+msgid "No exercises selected"
+msgstr "Ingen øvelser valgt"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Er du sikker på at du vil utføre denne handlingen på de valgte øvelsene?"
+
+msgid "Bulk action completed"
+msgstr "Massehandling fullført"
+
+msgid "Could not update exercises"
+msgstr "Kunne ikke oppdatere øvelser"
+
+msgid "Could not update exercise"
+msgstr "Kunne ikke oppdatere øvelse"
+
+msgid "Copy exercise"
+msgstr "Kopier øvelse"
+
+msgid "Delete exercise"
+msgstr "Slett øvelse"
+
+msgid "Could not load exercises"
+msgstr "Kunne ikke laste øvelser"
+
+msgid "No limit"
+msgstr "Ingen grense"
+
+msgid "Add selected questions to the test"
+msgstr "Legg til valgte spørsmål i testen"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Dette spørsmålet brukes i en aktiv test og kan ikke redigeres her."
+
+msgid "This question cannot be edited here."
+msgstr "Dette spørsmålet kan ikke redigeres her."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Dette spørsmålet brukes i en aktiv test og kan ikke slettes her."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Dette spørsmålet kan ikke slettes fordi tilgangen din er begrenset av plattforminnstillingene."
+
+msgid "Already in test"
+msgstr "Allerede i test"
+
+msgid "Select at least one question."
+msgstr "Velg minst ett spørsmål."
+
+msgid "Question bank updated"
+msgstr "Spørsmålsbank oppdatert"
+
+msgid "Could not update the question bank"
+msgstr "Kunne ikke oppdatere spørsmålsbanken"
+
+msgid "Could not load the question bank"
+msgstr "Kunne ikke laste spørsmålsbanken"
+
+msgid "Total score"
+msgstr "Total poengsum"
+
+msgid "Starting"
+msgstr "Starter"
+
+msgid "Attempt history"
+msgstr "Forsøkshistorikk"
+
+msgid "No attempts yet"
+msgstr "Ingen forsøk ennå"
+
+msgid "Invalid exercise"
+msgstr "Ugyldig øvelse"
+
+msgid "Could not load exercise overview"
+msgstr "Kunne ikke laste øvelsesoversikt"
+
+msgid "Open test"
+msgstr "Åpne test"
+
+msgid "Random answers"
+msgstr "Tilfeldige svar"
+
+msgid "Prevent moving backwards"
+msgstr "Forhindre tilbakegående navigasjon"
+
+msgid "Previous button hidden"
+msgstr "Forrige-knapp skjult"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Denne øvelsen bruker alternativer som krever en annen testspiller."
+
+msgid "Continue test"
+msgstr "Fortsett test"
+
+msgid "Attempt started"
+msgstr "Forsøk startet"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Lærervisuell forhåndsvisning oppretter ikke et sporet forsøk."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Start eller fortsett et øvelsesforsøk. Utkast til svar kan lagres før endelig innsending."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Tidsgrense nådd. Avslutter forsøket."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Spørsmålstid nådd. Lagrer svaret ditt."
+
+msgid "Finishing"
+msgstr "Avslutter"
+
+msgid "Draft saved"
+msgstr "Utkast lagret"
+
+msgid "Statement"
+msgstr "Uttalelse"
+
+msgid "Drop each option on the matching answer"
+msgstr "Dra hvert alternativ til det riktige svaret"
+
+msgid "Clear match"
+msgstr "Fjern kobling"
+
+msgid "Click to place the selected option here"
+msgstr "Klikk for å plassere det valgte alternativet her"
+
+msgid "Select an option, then click here"
+msgstr "Velg et alternativ, deretter klikk her"
+
+msgid "Already matched"
+msgstr "Allerede koblet"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Du kan dra et alternativ til et svar, eller velge et alternativ og deretter klikke på en målboks."
+
+msgid "Put the items in the correct order."
+msgstr "Sett elementene i riktig rekkefølge."
+
+msgid "Move left"
+msgstr "Flytt til venstre"
+
+msgid "Move right"
+msgstr "Flytt til høyre"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Du kan dra elementer til venstre eller høyre, eller bruke flytt-knappene for å endre rekkefølgen."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Du kan dra elementer eller bruke flytt-knappene for å endre rekkefølgen."
+
+msgid "Or upload an audio file"
+msgstr "Eller last opp en lydfil"
+
+msgid "Selected audio"
+msgstr "Valgt lyd"
+
+msgid "Uploaded audio"
+msgstr "Opplastet lyd"
+
+msgid "Office document"
+msgstr "Kontordokument"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Fullfør dokumentet i redigeringsprogrammet nedenfor. Filen vil bli lagt ved dette forsøket for lærerkorrigering."
+
+msgid "Reload Office editor"
+msgstr "Last inn Office-redigerer på nytt"
+
+msgid "Prepare Office document"
+msgstr "Forbered Office-dokument"
+
+msgid "Open in new tab"
+msgstr "Åpne i ny fane"
+
+msgid "Preparing Office document"
+msgstr "Forbereder Office-dokument"
+
+msgid "Submitted document"
+msgstr "Innsendt dokument"
+
+msgid "Annotation tools"
+msgstr "Annoteringsverktøy"
+
+msgid "Text to place"
+msgstr "Tekst som skal plasseres"
+
+msgid "Click the image to place the text annotation."
+msgstr "Klikk på bildet for å plassere tekstannoteringen."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Klikk på bildet for å legge til bane-punkter. Bruk Start ny bane for å skille baner."
+
+msgid "Start new path"
+msgstr "Start ny bane"
+
+msgid "Current annotations"
+msgstr "Gjeldende annoteringer"
+
+msgid "Remove point"
+msgstr "Fjern punkt"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Klikk på bildet for å tegne avgrensningspolygonet."
+
+msgid "Click a marker to remove it."
+msgstr "Klikk på en markør for å fjerne den."
+
+msgid "Placed"
+msgstr "Plassert"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Velg et svar, deretter klikk på bildet for å markere det."
+
+msgid "Reading speed"
+msgstr "Lesefart"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Denne spørsmålstypen kan ikke vises i denne avspilleren."
+
+msgid "Save draft"
+msgstr "Lagre utkast"
+
+msgid "I confirm that my answers were saved."
+msgstr "Jeg bekrefter at svarene mine ble lagret."
+
+msgid "Finish test"
+msgstr "Fullfør testen"
+
+msgid "Attempt finished"
+msgstr "Forsøk fullført"
+
+msgid "Question category"
+msgstr "Spørsmålskategori"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Du har fullført spørsmålene knyttet til denne spørsmålskategorien, dette er din siste sjanse til å gå tilbake og revidere disse spørsmålene."
+
+msgid "Question time left"
+msgstr "Spørsmålstid igjen"
+
+msgid "Time left"
+msgstr "Tid igjen"
+
+msgid "Current attempt"
+msgstr "Gjeldende forsøk"
+
+msgid "Could not save draft answer"
+msgstr "Kunne ikke lagre utkast til svar"
+
+msgid "Could not load exercise"
+msgstr "Kunne ikke laste inn øvelse"
+
+msgid "Draft answer saved"
+msgstr "Utkast til svar lagret"
+
+msgid "Could not finish the attempt"
+msgstr "Kunne ikke fullføre forsøket"
+
+msgid "Could not prepare Office document"
+msgstr "Kunne ikke forberede Office-dokument"
+
+msgid "Back to learner score"
+msgstr "Tilbake til elevresultat"
+
+msgid "Disable auto refresh"
+msgstr "Deaktiver automatisk oppdatering"
+
+msgid "Enable auto refresh"
+msgstr "Aktiver automatisk oppdatering"
+
+msgid "Live window"
+msgstr "Live-vindu"
+
+msgid "Ongoing attempts"
+msgstr "Pågående forsøk"
+
+msgid "Completed attempts"
+msgstr "Fullførte forsøk"
+
+msgid "Started"
+msgstr "Startet"
+
+msgid "Last activity"
+msgstr "Siste aktivitet"
+
+msgid "Could not load live results"
+msgstr "Kunne ikke laste live-resultater"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Denne øvelsen er skrivebeskyttet fordi den er inkludert i en læringssti."
+
+msgid "Select a question type to create a question."
+msgstr "Velg en spørsmålstype for å opprette et spørsmål."
+
+msgid "Click to preview"
+msgstr "Klikk for å forhåndsvise"
+
+msgid "Hide preview"
+msgstr "Skjul forhåndsvisning"
+
+msgid "Shape"
+msgstr "Form"
+
+msgid "Coordinates"
+msgstr "Koordinater"
+
+msgid "Blanks"
+msgstr "Blanke"
+
+msgid "Switchable blanks"
+msgstr "Byttbare blanke"
+
+msgid "Blank"
+msgstr "Blank"
+
+msgid "Input width"
+msgstr "Inndatabredde"
+
+msgid "Orientation"
+msgstr "Retning"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Ikke tilgjengelig med gjeldende tilbakemeldingsmodus for øvelsen"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Ikke tilgjengelig i opprettelsesflyten for læringssti"
+
+msgid "Delete question"
+msgstr "Slett spørsmål"
+
+msgid "Could not update exercise questions"
+msgstr "Kunne ikke oppdatere øvelsesspørsmål"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Kunne ikke legge til øvelsen i læringsstien"
+
+msgid "A valid exercise id is required."
+msgstr "En gyldig øvelses-ID er påkrevd."
+
+msgid "Could not load exercise questions"
+msgstr "Kunne ikke laste øvelsesspørsmål"
+
+msgid "Delete selected attempts"
+msgstr "Slett valgte forsøk"
+
+msgid "Before date"
+msgstr "Før dato"
+
+msgid "Pending corrections"
+msgstr "Ventende rettelser"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Denne øvelsen er låst av karakterboken. Handlinger for opprydding av forsøk er deaktivert."
+
+msgid "No attempts found"
+msgstr "Ingen forsøk funnet"
+
+msgid "Review"
+msgstr "Gjennomgå"
+
+msgid "Print/PDF"
+msgstr "Skriv ut/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Kunne ikke laste øvelsesrapport"
+
+msgid "Select at least one attempt"
+msgstr "Velg minst ett forsøk"
+
+msgid "Delete selected attempts?"
+msgstr "Slette valgte forsøk?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Sende e-poster med gjennomgåtte forsøksresultater?"
+
+msgid "Could not send emails"
+msgstr "Kunne ikke sende e-poster"
+
+msgid "Exercise result emails sent"
+msgstr "E-poster med øvelsesresultater sendt"
+
+msgid "Skipped"
+msgstr "Hoppet over"
+
+msgid "Close attempt?"
+msgstr "Lukke forsøk?"
+
+msgid "Attempt closed"
+msgstr "Forsøk lukket"
+
+msgid "Could not close attempt"
+msgstr "Kunne ikke lukke forsøk"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Sende resultatet av dette forsøket via e-post til eleven?"
+
+msgid "Email sent"
+msgstr "E-post sendt"
+
+msgid "Could not send email"
+msgstr "Kunne ikke sende e-post"
+
+msgid "Attempt deleted"
+msgstr "Forsøk slettet"
+
+msgid "Could not delete attempt"
+msgstr "Kunne ikke slette forsøk"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Velg en CSV-fil som inneholder kolonner for tittel og beskrivelse."
+
+msgid "Manage categories used to classify questions."
+msgstr "Administrer kategorier som brukes til å klassifisere spørsmål."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Administrer kategorier som brukes til å klassifisere øvelser."
+
+msgid "Could not load categories"
+msgstr "Kunne ikke laste kategorier"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Importerte kategorier: %s. Hoppet over rader: %s."
+
+msgid "Imported categories: %s."
+msgstr "Importerte kategorier: %s."
+
+msgid "Could not import categories"
+msgstr "Kunne ikke importere kategorier"
+
+msgid "Could not save category"
+msgstr "Kunne ikke lagre kategori"
+
+msgid "Answer distribution"
+msgstr "Svarfordeling"
+
+msgid "Configured answers"
+msgstr "Konfigurerte svar"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Detaljert svaropptelling for noen spørsmålstyper er ikke tilgjengelig i den migrerte rapporten ennå."
+
+msgid "No report by question data found"
+msgstr "Ingen rapport etter spørsmålsdata funnet"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Detaljert svaropptelling for denne spørsmålstypen er ikke tilgjengelig i den migrerte rapporten ennå."
+
+msgid "No answer distribution found"
+msgstr "Ingen svarfordeling funnet"
+
+msgid "Could not load report by question"
+msgstr "Kunne ikke laste rapport etter spørsmål"
+
+msgid "Question settings"
+msgstr "Spørsmålsinnstillinger"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "La stå tom eller 0 for ingen tidsbegrensning."
+
+msgid "Time limit in seconds"
+msgstr "Tidsbegrensning i sekunder"
+
+msgid "Attached questions"
+msgstr "Tilknyttede spørsmål"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Bare spørsmål knyttet til dette mediespørsmålet inne i den gjeldende øvelsen vises her."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Ingen spørsmål er knyttet til dette mediespørsmålet i den gjeldende øvelsen."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Last opp Office-dokumentmalen som deltakerne vil redigere med OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Erstatt Office-dokument"
+
+msgid "Current Office document"
+msgstr "Gjeldende Office-dokument"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Dette spørsmålet rettes manuelt etter at deltakeren sender inn det redigerte dokumentet."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Total poengsum beregnes som summen av hotspot-poeng."
+
+msgid "Global score"
+msgstr "Global poengsum"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Velg en hotspot-rad, velg formen, og tegn deretter over bildet. For polygoner, klikk hvert punkt og fullfør polygonen, eller dobbeltklikk for å fullføre."
+
+msgid "Finish polygon"
+msgstr "Fullfør polygon"
+
+msgid "Calculated answer"
+msgstr "Beregnet svar"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Skriv inn teksten din nedenfor og bruk firkantede parenteser [...] for å definere ett eller flere tomrom."
+
+msgid "Lowest value"
+msgstr "Laveste verdi"
+
+msgid "Highest value"
+msgstr "Høyeste verdi"
+
+msgid "Fill in blanks"
+msgstr "Fyll ut tomrom"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Bruk de valgte markørene for å definere tomrom. Eksempel: Hovedstaden i Peru er [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Skriv inn rullegardin-alternativene, ett svar per linje. Merk deretter de forventede svarene nedenfor, som i det gamle verktøyet."
+
+msgid "Refresh answers"
+msgstr "Oppdater svar"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Dette kombinasjonsspørsmålet med rullegardin bruker én global poengsum, som i det gamle verktøyet."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Skriv inn minst to rullegardin-alternativer."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Opprett destinasjonsalternativer først, deretter koble hvert element til riktig alternativ."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Dette kombinasjonsspørsmålet med matching bruker én global poengsum, som i det gamle verktøyet."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Opprett trinnene og velg forventet posisjon for hvert, som i det gamle Draggable-verktøyet."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Deltakerne velger Sant eller Usant og deretter sin grad av sikkerhet under forsøket. Editoren lagrer de samme Riktig/Feil-poengene og sikkerhetsnivåene som i det gamle verktøyet."
+
+msgid "Hotspot combination"
+msgstr "Hotspot-kombinasjon"
+
+msgid "Add delineation"
+msgstr "Legg til avgrensning"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Dette Office-dokumentspørsmålet har ingen svaralternativer. Poengsummen tildeles under retting/resultatgjennomgang."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Dette opplastingsspørsmålet har ingen svaralternativer. Poengsummen tildeles under retting/resultatgjennomgang."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Dette muntlige uttrykksspørsmålet har ingen svaralternativer. Poengsummen tildeles under retting/resultatgjennomgang."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Dette åpne spørsmålet har ingen svaralternativer. Poengsummen tildeles under retting/resultatgjennomgang."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Legg til en lesetekst med innstillinger for rullehastighet."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Legg til innhold, media eller lesekontekst uten å legge til poeng."
+
+msgid "Insert a page break without adding score."
+msgstr "Sett inn sideskift uten å legge til poengsum."
+
+msgid "Could not save question"
+msgstr "Kunne ikke lagre spørsmålet"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Bare DOC, DOCX, XLS eller XLSX-dokumenter er tillatt."
+
+msgid "Please select an Office document."
+msgstr "Vennligst velg et Office-dokument."
+
+msgid "Please draw at least one hotspot."
+msgstr "Vennligst tegn minst ett hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Vennligst tegn minst én avgrensning."
+
+msgid "The fill in blanks text is required."
+msgstr "Teksten for fyll inn blanke felter er påkrevd."
+
+msgid "At least one expected answer is required."
+msgstr "Minst ett forventet svar er påkrevd."
+
+msgid "At least two draggable items are required."
+msgstr "Minst to dra-elementer er påkrevd."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Hvert dra-element må være koblet til en gyldig målposisjon."
+
+msgid "At least two matching options are required."
+msgstr "Minst to samsvarsalternativer er påkrevd."
+
+msgid "At least two matching pairs are required."
+msgstr "Minst to samsvarende par er påkrevd."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Hvert samsvarende par må være koblet til et gyldig alternativ."
+
+msgid "At least two answers are required."
+msgstr "Minst to svar er påkrevd."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Hvert sant/usant-svar må ha Sant eller Usant valgt."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Et spørsmål med unikt svar må ha nøyaktig ett riktig svar."
+
+msgid "At least one correct answer is required."
+msgstr "Minst ett riktig svar er påkrevd."
+
+msgid "Could not load question"
+msgstr "Kunne ikke laste spørsmålet"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Velg et kurs og eksporter den globale øvelsesresultatrapporten som CSV."
+
+msgid "Back to reports catalog"
+msgstr "Tilbake til rapporteringskatalogen"
+
+msgid "Could not load exercise global report"
+msgstr "Kunne ikke laste global øvelsesrapport"
+
+msgid "Imported questions"
+msgstr "Importerte spørsmål"
+
+msgid "Aiken content"
+msgstr "Aiken-innhold"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Kunne ikke laste AI Aiken-generator"
+
+msgid "Could not generate Aiken content"
+msgstr "Kunne ikke generere Aiken-innhold"
+
+msgid "Could not import generated Aiken content"
+msgstr "Kunne ikke importere generert Aiken-innhold"
+
+msgid "Back to my courses"
+msgstr "Tilbake til mine kurs"
+
+msgid "Open report"
+msgstr "Åpne rapport"
+
+msgid "Questions with no automatic correction"
+msgstr "Spørsmål uten automatisk retting"
+
+msgid "Could not load pending attempts"
+msgstr "Kunne ikke laste ventende forsøk"
+
+msgid "Skipped questions"
+msgstr "Hoppet over spørsmål"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken-import fordeler denne totale vekten på importerte spørsmål med mindre et spørsmål definerer SCORE."
+
+msgid "Import warnings"
+msgstr "Importadvarsler"
+
+msgid "Could not import questions"
+msgstr "Kunne ikke importere spørsmål"
+
+msgid "No question statistics found"
+msgstr "Ingen spørsmålsstatistikk funnet"
+
+msgid "Could not load question statistics"
+msgstr "Kunne ikke laste spørsmålsstatistikk"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Du kan også koble en MCP-klient direkte ved å peke den til følgende endepunkt:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Ingen applikasjoner er for øyeblikket koblet til kontoen din."
+
+msgid "Connected on"
+msgstr "Koblet på"
+
+msgid "Last used"
+msgstr "Sist brukt"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s vil ikke lenger kunne få tilgang til Chamilo-kontoen din. Fortsette?"
+
+msgid "Application revoked"
+msgstr "Applikasjon tilbakekalt"
+
+msgid "Copied to clipboard"
+msgstr "Kopiert til utklippstavle"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Kunne ikke kopiere MCP-endepunktet"
+
+msgid "MCP endpoint"
+msgstr "MCP-endepunkt"
+
+msgid "API key"
+msgstr "API-nøkkel"
+
+msgid "Last used at"
+msgstr "Sist brukt på"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopier denne nøkkelen nå. Den vil ikke vises igjen."
+
+msgid "Rotate API key"
+msgstr "Roter API-nøkkel"
+
+msgid "Revoke API key"
+msgstr "Tilbakekall API-nøkkel"
+
+msgid "Remote MCP connection"
+msgstr "Ekstern MCP-tilkobling"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Konfigurer MCP-klienten med følgende verdier:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Den gjeldende nøkkelen vil slutte å fungere umiddelbart. Fortsett?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "En ny personlig MCP API-nøkkel vil bli generert. Fortsett?"
+
+msgid "MCP API key generated"
+msgstr "MCP API-nøkkel generert"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Tilkoblede MCP-klienter som bruker denne nøkkelen vil slutte å fungere umiddelbart. Fortsett?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API-nøkkel tilbakekalt"
+
+msgid "Could not copy the API key"
+msgstr "Kunne ikke kopiere API-nøkkelen"
+
+msgid "Project"
+msgstr "Prosjekt"
+
+msgid "Close old tickets"
+msgstr "Lukk gamle saker"
+
+msgid "Close tickets older than seven days?"
+msgstr "Lukk saker eldre enn syv dager?"
+
+msgid "Assignment history"
+msgstr "Oppgavehistorikk"
+
+msgid "Translate with AI"
+msgstr "Oversett med AI"
+
+msgid "Target language"
+msgstr "Målspråk"
+
+msgid "Please select a provider"
+msgstr "Vennligst velg en leverandør"
+
+msgid "Generate translation"
+msgstr "Generer oversettelse"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Minst én seksjon for vilkår og betingelser må inneholde tekst."
+
+msgid "No active target languages are available."
+msgstr "Ingen aktive målspråk er tilgjengelige."
+
+msgid "Tutor"
+msgstr "Veileder"
+
+msgid "Access dates"
+msgstr "Tilgangsdatoer"
+
+msgid "Coach access dates"
+msgstr "Veilederens tilgangsdatoer"
+
+msgid "No sessions found"
+msgstr "Ingen økter funnet"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Velg kursene som denne brukeren ikke skal ha tilgang til i denne økten."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "En bruker kan ikke blokkeres fra alle kurs i økten. Avmeld brukeren i stedet."
+
+msgid "Users subscribed to this session"
+msgstr "Brukere påmeldt denne økten"
+
+msgid "No available users found"
+msgstr "Ingen tilgjengelige brukere funnet"
+
+msgid "Subscribe this user to the session?"
+msgstr "Meld på denne brukeren til økten?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Meld på de valgte brukerne til økten?"
+
+msgid "General tutor planning"
+msgstr "Generell veilederplanlegging"
+
+msgid "User is already registered by another tutor."
+msgstr "Brukeren er allerede registrert av en annen veileder."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Du mottar en kopi fordi du er kursveileder"
+
+msgid "General tutor"
+msgstr "Generell veileder"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Ta hensyn til kursene, veilederne, en teknisk brukerstøtte, lærere og/eller tilgjengelige materialer."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Veiledere påmeldt som lærere i kurs %s"
+
+msgid "Tutor name"
+msgstr "Veiledernavn"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Øktveiledere er koordinatorer for økten og kan fungere som veiledere for hvert kurs i økten. Bare brukere med lærerrollen kan velges som øktveiledere."
+
+msgid "Access start date for tutors"
+msgstr "Startdato for veilederens tilgang"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Datoen økten gjøres tilgjengelig for veiledere, slik at de kan forberede den før studentene kobler seg til"
+
+msgid "Access end date for tutors"
+msgstr "Sluttdato for veilederens tilgang"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Datoen økten stenges for veiledere. Den ekstra forsinkelsen lar dem eksportere all relevant sporingsinformasjon"
+
+msgid "Tutor and student"
+msgstr "Veileder og student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Denne rapporten viser ukentlig fordeling av økter per generell veileder i det valgte datoområdet."
+
+msgid "User is general tutor in some sessions"
+msgstr "Brukeren er generell veileder i noen økter"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Lærere vil bli lagt til som veiledere i alle kursøkter."
+
+msgid "Delete failed: invalid question id."
+msgstr "Sletting mislyktes: ugyldig spørsmåls-ID."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Gjennomsnittlig antall økter per generell øktveileder"
+
+msgid "No room"
+msgstr "Ingen rom"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importer kurslærere som kursveiledere i økten"
+
+msgid "Clean and update course tutors"
+msgstr "Rens og oppdater kursveiledere"
+
+msgid "Add me as tutor"
+msgstr "Legg meg til som veileder"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Kan ikke legge til undersøkelsen i læringsstien"
+
+msgid "Access dates for tutors"
+msgstr "Tilgangsdatoer for veiledere"
+
+msgid "Tutor and group member"
+msgstr "Veileder og gruppemedlem"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Din daglige AI-token-grense er nådd. Vennligst prøv igjen i morgen."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Din månedlige AI-token-grense er nådd. Vennligst prøv igjen neste måned."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Denne emnekoden finnes allerede, vennligst velg en annen kode."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Denne emnetittelen finnes allerede, vennligst velg en annen tittel."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Dette verktøyets synlighet kan ikke endres"
+
+msgid "Invalid visibility"
+msgstr "Ugyldig synlighet"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Du mottar en kopi fordi du er en av emneveilederne"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Du mottar en kopi fordi du er emneveileder"
+
+msgid "Manual completion"
+msgstr "Manuell fullføring"
+
+msgid "Send to tutors"
+msgstr "Send til veiledere"
+
+msgid "Lab title"
+msgstr "Lab-tittel"
+
+msgid "Lab week"
+msgstr "Lab-uke"
+
+msgid "Final exam access rule"
+msgstr "Regel for tilgang til avsluttende eksamen"
+
+msgid "Course completion rule"
+msgstr "Regel for emnefullføring"
+
+msgid "You have been invited to join a course"
+msgstr "Du er invitert til å bli med i et emne"
+
+msgid "No user has been found"
+msgstr "Ingen bruker funnet"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Den valgte brukeren kan ikke meldes på i denne konteksten"
+
+msgid "No change has been made"
+msgstr "Ingen endring er gjort"
+
+msgid "Back to group list"
+msgstr "Tilbake til gruppeliste"
+
+msgid "Remove class link"
+msgstr "Fjern klasselenke"
+
+msgid "Group settings"
+msgstr "Gruppeinnstillinger"
+
+msgid "Self-registration allowed"
+msgstr "Selvregistrering tillatt"
+
+msgid "Self-unregistration allowed"
+msgstr "Selvavregistrering tillatt"
+
+msgid "This group is linked to the class"
+msgstr "Denne gruppen er koblet til klassen"
+
+msgid "Create one or more empty course groups"
+msgstr "Opprett en eller flere tomme emnegrupper"
+
+msgid "Number of places"
+msgstr "Antall plasser"
+
+msgid "Base group"
+msgstr "Grunngruppe"
+
+msgid "Share"
+msgstr "Del"
+
+msgid "Collaboration"
+msgstr "Samarbeid"
+
+msgid "The group title is required."
+msgstr "Gruppetittelen er påkrevd."
+
+msgid "Back to group area"
+msgstr "Tilbake til gruppeområdet"
+
+msgid "Members are managed by the linked class"
+msgstr "Medlemmer administreres av den tilknyttede klassen"
+
+msgid "%s groups selected"
+msgstr "%s grupper valgt"
+
+msgid "Fill selected groups"
+msgstr "Fyll valgte grupper"
+
+msgid "Empty selected groups"
+msgstr "Tøm valgte grupper"
+
+msgid "Fill group"
+msgstr "Fyll gruppe"
+
+msgid "Empty group"
+msgstr "Tøm gruppe"
+
+msgid "Groups per user"
+msgstr "Grupper per bruker"
+
+msgid "No tutors"
+msgstr "Ingen veiledere"
+
+msgid "No users"
+msgstr "Ingen brukere"
+

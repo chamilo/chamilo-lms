@@ -37636,3 +37636,1299 @@ msgstr "அனைத்து கிடைக்கும் கேள்வி�
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "இந்தப் புலங்களைப் பயன்படுத்தி பயிற்சியை அதன் காட்சி விருப்பங்களிலிருந்து சுயாதீனமாக வகைப்படுத்தவும்."
 
+msgid "Invite by email"
+msgstr "மின்னஞ்சல் மூலம் அழைக்கவும்"
+
+msgid "Invitation has been sent"
+msgstr "அழைப்பு அனுப்பப்பட்டது"
+
+msgid "Sent on"
+msgstr "அனுப்பப்பட்ட தேதி"
+
+msgid "Accepted on"
+msgstr "ஏற்றுக்கொள்ளப்பட்ட தேதி"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "இந்தப் பாடநெறி ஒரு அமர்வில் திறக்கப்பட்டுள்ளது. இங்கு அழைப்பு அனுப்பினால் பெறுநர் %s முழு அமர்விற்கும் பதிவு செய்யப்படுவார், இந்தப் பாடநெறிக்கு மட்டும் அல்ல."
+
+msgid "Revoke"
+msgstr "ரத்து செய்"
+
+msgid "Revoked"
+msgstr "ரத்து செய்யப்பட்டது"
+
+msgid "Invitation has been revoked"
+msgstr "அழைப்பு ரத்து செய்யப்பட்டது"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "%s க்கு அனுப்பப்பட்ட அழைப்பை ரத்து செய்ய விரும்புகிறீர்களா?"
+
+msgid "No default room"
+msgstr "இயல்புநிலை அறை இல்லை"
+
+msgid "Floor"
+msgstr "தளம்"
+
+msgid "Capacity"
+msgstr "இருக்கை எண்ணிக்கை"
+
+msgid "Use attendance default room"
+msgstr "வருகை இயல்புநிலை அறையைப் பயன்படுத்து"
+
+msgid "Floor number"
+msgstr "தள எண்"
+
+msgid "Copy to students"
+msgstr "மாணவர்களுக்கு நகலெடு"
+
+msgid "Generate a quick test on this topic"
+msgstr "இந்தத் தலைப்பில் விரைவு சோதனை உருவாக்கு"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "சேமிக்கப்பட்ட ஆவண உள்ளடக்கம் AI மாதிரிக்கு செயலாக்க அனுப்பப்படும்."
+
+msgid "MCP API key"
+msgstr "MCP API விசை"
+
+msgid "Authorized applications"
+msgstr "அங்கீகரிக்கப்பட்ட பயன்பாடுகள்"
+
+msgid "Your session is about to expire"
+msgstr "உங்கள் அமர்வு காலாவதியாகவுள்ளது"
+
+msgid "Do you want to continue your session?"
+msgstr "உங்கள் அமர்வைத் தொடர விரும்புகிறீர்களா?"
+
+msgid "Stay connected"
+msgstr "இணைந்திரு"
+
+msgid "You will be signed out in %s seconds."
+msgstr "நீங்கள் %s வினாடிகளில் வெளியேறுவீர்கள்."
+
+msgid "No descriptions available yet."
+msgstr "விளக்கங்கள் இன்னும் கிடைக்கவில்லை."
+
+msgid "%s users selected"
+msgstr "%s பயனர்கள் தேர்ந்தெடுக்கப்பட்டனர்"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயனர்கள் பாடநெறியில் பதிவு செய்யப்பட்டனர்"
+
+msgid "Import teachers"
+msgstr "ஆசிரியர்களை இறக்குமதி செய்"
+
+msgid "Import learners"
+msgstr "கற்பவர்களை இறக்குமதி செய்"
+
+msgid "Select CSV file"
+msgstr "CSV கோப்பைத் தேர்ந்தெடு"
+
+msgid "Some users could not be subscribed"
+msgstr "சில பயனர்களைப் பதிவு செய்ய முடியவில்லை"
+
+msgid "Browse available classes"
+msgstr "கிடைக்கும் வகுப்புகளை உலாவுக"
+
+msgid "Back to linked classes"
+msgstr "இணைக்கப்பட்ட வகுப்புகளுக்குத் திரும்பு"
+
+msgid "No classes are currently linked to this course."
+msgstr "இந்தப் பாடத்துடன் தற்போது எந்த வகுப்புகளும் இணைக்கப்படவில்லை."
+
+msgid "No available classes were found for this course."
+msgstr "இந்தப் பாடத்திற்கு கிடைக்கும் வகுப்புகள் எதுவும் கிடைக்கவில்லை."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயனர்களை நீக்க விரும்புகிறீர்களா?"
+
+msgid "Learning path access"
+msgstr "கற்றல் பாதை அணுகல்"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயனர்கள் மற்றும் குழுக்கள் மட்டுமே இந்தக் கற்றல் பாதையை அணுக முடியும். சேமித்த பிறகு அவற்றை நிர்வகிக்கவும்."
+
+msgid "All current and future course users can access this learning path."
+msgstr "தற்போதைய மற்றும் எதிர்கால பாடப் பயனர்கள் அனைவரும் இந்தக் கற்றல் பாதையை அணுக முடியும்."
+
+msgid "All course users"
+msgstr "அனைத்து பாடப் பயனர்கள்"
+
+msgid "Selected users and groups"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயனர்கள் மற்றும் குழுக்கள்"
+
+msgid "No access"
+msgstr "அணுகல் இல்லை"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "இங்கு சேர்க்கப்பட்ட பயனர்கள் மற்றும் குழுக்கள் மட்டுமே இந்தக் கற்றல் பாதையை அணுக முடியும்."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "கேள்விகளின் எண்ணிக்கை அதிகபட்சம் %s ஆக வரையறுக்கப்பட்டுள்ளது"
+
+msgid "Open exercise player"
+msgstr "பயிற்சி இயக்கியைத் திறக்கவும்"
+
+msgid "The score is hidden for this exercise."
+msgstr "இந்தப் பயிற்சிக்கான மதிப்பெண் மறைக்கப்பட்டுள்ளது."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "பயிற்சி முடிவு அமைப்புகளின்படி திருத்தங்கள் மறைக்கப்பட்டுள்ளன."
+
+msgid "Progressive adaptive result"
+msgstr "முற்போக்கான தகவமைப்பு முடிவு"
+
+msgid "Achieved level"
+msgstr "அடைந்த நிலை"
+
+msgid "Correction history"
+msgstr "திருத்த வரலாறு"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "இந்த முயற்சிக்கான கைமுறை திருத்தங்களின் வரலாறு."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "இந்தப் பயிற்சி ரேடார்/ஸ்பைடர்வெப் முடிவு முறையைப் பயன்படுத்துகிறது. விளக்கப்படம் இந்தப் பக்கத்தில் கிடைக்கவில்லை."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "பயிற்சி முடிவு அமைப்புகளின்படி கேள்வி விவரங்கள் மறைக்கப்பட்டுள்ளன."
+
+msgid "Media question"
+msgstr "ஊடகக் கேள்வி"
+
+msgid "Pending correction"
+msgstr "திருத்தம் நிலுவையில் உள்ளது"
+
+msgid "No answer"
+msgstr "பதில் இல்லை"
+
+msgid "Blank %s"
+msgstr "வெற்றிடம் %s"
+
+msgid "Your order"
+msgstr "உங்கள் வரிசை"
+
+msgid "Correct order"
+msgstr "சரியான வரிசை"
+
+msgid "Delineation review"
+msgstr "வரையறை மறுஆய்வு"
+
+msgid "Learner clicks"
+msgstr "கற்பவர் கிளிக்குகள்"
+
+msgid "Question image"
+msgstr "கேள்வி படம்"
+
+msgid "No hotspot image available"
+msgstr "ஹாட்ஸ்பாட் படம் கிடைக்கவில்லை"
+
+msgid "Learner delineation"
+msgstr "கற்பவர் வரையறை"
+
+msgid "Expected delineation"
+msgstr "எதிர்பார்க்கப்படும் வரையறை"
+
+msgid "Expected zones"
+msgstr "எதிர்பார்க்கப்படும் மண்டலங்கள்"
+
+msgid "Zone"
+msgstr "மண்டலம்"
+
+msgid "Learner annotation"
+msgstr "கற்பவர் குறிப்பு"
+
+msgid "No annotation image available"
+msgstr "குறிப்பு படம் கிடைக்கவில்லை"
+
+msgid "This answer is pending teacher correction."
+msgstr "இந்தப் பதில் ஆசிரியர் திருத்தத்திற்காக நிலுவையில் உள்ளது."
+
+msgid "Teacher comment"
+msgstr "ஆசிரியர் கருத்து"
+
+msgid "Teacher correction"
+msgstr "ஆசிரியர் திருத்தம்"
+
+msgid "Save correction"
+msgstr "திருத்தத்தைச் சேமிக்கவும்"
+
+msgid "Learner audio"
+msgstr "கற்பவர் ஒலி"
+
+msgid "Download audio"
+msgstr "ஒலியைப் பதிவிறக்கவும்"
+
+msgid "No uploaded audio"
+msgstr "பதிவேற்றிய ஒலி இல்லை"
+
+msgid "Learner Office document"
+msgstr "கற்பவர் ஆபீஸ் ஆவணம்"
+
+msgid "Learner file"
+msgstr "கற்பவர் கோப்பு"
+
+msgid "Download Office document"
+msgstr "ஆபீஸ் ஆவணத்தைப் பதிவிறக்கவும்"
+
+msgid "No submitted document"
+msgstr "சமர்ப்பிக்கப்பட்ட ஆவணம் இல்லை"
+
+msgid "No uploaded file"
+msgstr "பதிவேற்றிய கோப்பு இல்லை"
+
+msgid "Content item"
+msgstr "உள்ளடக்க உருப்படி"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "இந்தக் கேள்வி வகையை இந்தப் பக்கத்தில் மதிப்பாய்வு செய்ய முடியாது."
+
+msgid "Exercise completed"
+msgstr "பயிற்சி முடிந்தது"
+
+msgid "Could not start the attempt"
+msgstr "முயற்சியைத் தொடங்க முடியவில்லை"
+
+msgid "Invalid exercise attempt"
+msgstr "தவறான பயிற்சி முயற்சி"
+
+msgid "Could not load exercise result"
+msgstr "பயிற்சி முடிவை ஏற்ற முடியவில்லை"
+
+msgid "Could not load AI providers"
+msgstr "AI வழங்குநர்களை ஏற்ற முடியவில்லை"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI பரிந்துரையை உருவாக்க முடியவில்லை"
+
+msgid "Correction saved"
+msgstr "திருத்தம் சேமிக்கப்பட்டது"
+
+msgid "Could not save correction"
+msgstr "திருத்தத்தைச் சேமிக்க முடியவில்லை"
+
+msgid "Create exercise"
+msgstr "பயிற்சியை உருவாக்கு"
+
+msgid "Exercise categories"
+msgstr "பயிற்சி வகைகள்"
+
+msgid "Question categories"
+msgstr "கேள்வி வகைகள்"
+
+msgid "Search by exercise title or description."
+msgstr "பயிற்சி தலைப்பு அல்லது விளக்கத்தால் தேடவும்."
+
+msgid "Search exercises"
+msgstr "பயிற்சிகளைத் தேடு"
+
+msgid "No exercises found"
+msgstr "பயிற்சிகள் எதுவும் கிடைக்கவில்லை"
+
+msgid "Open exercise"
+msgstr "பயிற்சியைத் திற"
+
+msgid "Disable autolaunch"
+msgstr "தானியங்கு தொடக்கத்தை முடக்கு"
+
+msgid "Enable autolaunch"
+msgstr "தானியங்கு தொடக்கத்தை இயக்கு"
+
+msgid "Export QTI2"
+msgstr "QTI2 ஏற்றுமதி"
+
+msgid "Bulk actions"
+msgstr "மொத்த செயல்கள்"
+
+msgid "Selected exercises"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயிற்சிகள்"
+
+msgid "No exercises selected"
+msgstr "பயிற்சிகள் எதுவும் தேர்ந்தெடுக்கப்படவில்லை"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயிற்சிகளுக்கு இந்தச் செயலைப் பயன்படுத்த விரும்புகிறீர்களா?"
+
+msgid "Bulk action completed"
+msgstr "மொத்த செயல் முடிந்தது"
+
+msgid "Could not update exercises"
+msgstr "பயிற்சிகளைப் புதுப்பிக்க முடியவில்லை"
+
+msgid "Could not update exercise"
+msgstr "பயிற்சியைப் புதுப்பிக்க முடியவில்லை"
+
+msgid "Copy exercise"
+msgstr "பயிற்சியை நகலெடு"
+
+msgid "Delete exercise"
+msgstr "பயிற்சியை நீக்கு"
+
+msgid "Could not load exercises"
+msgstr "பயிற்சிகளை ஏற்ற முடியவில்லை"
+
+msgid "No limit"
+msgstr "வரம்பு இல்லை"
+
+msgid "Add selected questions to the test"
+msgstr "தேர்ந்தெடுக்கப்பட்ட கேள்விகளைச் சோதனைக்குச் சேர்க்கவும்"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "இந்தக் கேள்வி செயலில் உள்ள சோதனையில் பயன்படுத்தப்படுகிறது மற்றும் இங்கே திருத்த முடியாது."
+
+msgid "This question cannot be edited here."
+msgstr "இந்தக் கேள்வியை இங்கே திருத்த முடியாது."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "இந்தக் கேள்வி செயலில் உள்ள சோதனையில் பயன்படுத்தப்படுகிறது மற்றும் இங்கே நீக்க முடியாது."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "உங்கள் அணுகல் தள அமைப்புகளால் வரம்பிடப்பட்டுள்ளதால் இந்தக் கேள்வியை நீக்க முடியாது."
+
+msgid "Already in test"
+msgstr "ஏற்கனவே சோதனையில் உள்ளது"
+
+msgid "Select at least one question."
+msgstr "குறைந்தது ஒரு கேள்வியைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Question bank updated"
+msgstr "கேள்வி வங்கி புதுப்பிக்கப்பட்டது"
+
+msgid "Could not update the question bank"
+msgstr "கேள்வி வங்கியைப் புதுப்பிக்க முடியவில்லை"
+
+msgid "Could not load the question bank"
+msgstr "கேள்வி வங்கியை ஏற்ற முடியவில்லை"
+
+msgid "Total score"
+msgstr "மொத்த மதிப்பெண்"
+
+msgid "Starting"
+msgstr "தொடங்குகிறது"
+
+msgid "Attempt history"
+msgstr "முயற்சி வரலாறு"
+
+msgid "No attempts yet"
+msgstr "இதுவரை முயற்சிகள் இல்லை"
+
+msgid "Invalid exercise"
+msgstr "தவறான பயிற்சி"
+
+msgid "Could not load exercise overview"
+msgstr "பயிற்சி மேலோட்டத்தை ஏற்ற முடியவில்லை"
+
+msgid "Open test"
+msgstr "சோதனையைத் திற"
+
+msgid "Random answers"
+msgstr "சீரற்ற பதில்கள்"
+
+msgid "Prevent moving backwards"
+msgstr "பின்னோக்கிச் செல்வதைத் தடு"
+
+msgid "Previous button hidden"
+msgstr "முந்தைய பொத்தான் மறைக்கப்பட்டுள்ளது"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "இந்தப் பயிற்சி வேறு சோதனை பிளேயரைத் தேவைப்படுத்தும் விருப்பங்களைப் பயன்படுத்துகிறது."
+
+msgid "Continue test"
+msgstr "சோதனையைத் தொடரவும்"
+
+msgid "Attempt started"
+msgstr "முயற்சி தொடங்கப்பட்டது"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "ஆசிரியர் முன்னோட்டம் கண்காணிக்கப்பட்ட முயற்சியை உருவாக்காது."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "ஒரு பயிற்சி முயற்சியைத் தொடங்கவும் அல்லது தொடரவும். இறுதி சமர்ப்பிப்புக்கு முன் வரைவு பதில்களைச் சேமிக்க முடியும்."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "நேர வரம்பு எட்டப்பட்டது. முயற்சியை முடிக்கிறது."
+
+msgid "Question time reached. Saving your answer."
+msgstr "கேள்வி நேரம் எட்டப்பட்டது. உங்கள் பதிலைச் சேமிக்கிறது."
+
+msgid "Finishing"
+msgstr "முடிக்கிறது"
+
+msgid "Draft saved"
+msgstr "வரைவு சேமிக்கப்பட்டது"
+
+msgid "Statement"
+msgstr "கூற்று"
+
+msgid "Drop each option on the matching answer"
+msgstr "ஒவ்வொரு விருப்பத்தையும் பொருத்தமான பதிலில் விடுங்கள்"
+
+msgid "Clear match"
+msgstr "பொருத்தத்தை அழிக்கவும்"
+
+msgid "Click to place the selected option here"
+msgstr "தேர்ந்தெடுக்கப்பட்ட விருப்பத்தை இங்கே வைக்க கிளிக் செய்யவும்"
+
+msgid "Select an option, then click here"
+msgstr "ஒரு விருப்பத்தைத் தேர்ந்தெடுத்து, பின்னர் இங்கே கிளிக் செய்யவும்"
+
+msgid "Already matched"
+msgstr "ஏற்கனவே பொருத்தப்பட்டது"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "நீங்கள் ஒரு விருப்பத்தை ஒரு பதிலுக்கு இழுக்கலாம் அல்லது ஒரு விருப்பத்தைத் தேர்ந்தெடுத்து பின்னர் ஒரு இலக்குப் பெட்டியில் கிளிக் செய்யலாம்."
+
+msgid "Put the items in the correct order."
+msgstr "உருப்படிகளை சரியான வரிசையில் வைக்கவும்."
+
+msgid "Move left"
+msgstr "இடதுபுறம் நகர்த்தவும்"
+
+msgid "Move right"
+msgstr "வலதுபுறம் நகர்த்தவும்"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "நீங்கள் உருப்படிகளை இடது அல்லது வலதுபுறம் இழுக்கலாம் அல்லது வரிசையை மாற்ற நகர்த்தல் பொத்தான்களைப் பயன்படுத்தலாம்."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "நீங்கள் உருப்படிகளை இழுக்கலாம் அல்லது வரிசையை மாற்ற நகர்த்தல் பொத்தான்களைப் பயன்படுத்தலாம்."
+
+msgid "Or upload an audio file"
+msgstr "அல்லது ஒரு ஆடியோ கோப்பைப் பதிவேற்றவும்"
+
+msgid "Selected audio"
+msgstr "தேர்ந்தெடுக்கப்பட்ட ஆடியோ"
+
+msgid "Uploaded audio"
+msgstr "பதிவேற்றப்பட்ட ஆடியோ"
+
+msgid "Office document"
+msgstr "அலுவலக ஆவணம்"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "கீழே உள்ள எடிட்டரில் ஆவணத்தை முடிக்கவும். கோப்பு ஆசிரியர் திருத்தத்திற்காக இந்த முயற்சியுடன் இணைக்கப்படும்."
+
+msgid "Reload Office editor"
+msgstr "அலுவலக எடிட்டரை மீண்டும் ஏற்றவும்"
+
+msgid "Prepare Office document"
+msgstr "அலுவலக ஆவணத்தைத் தயாரிக்கவும்"
+
+msgid "Open in new tab"
+msgstr "புதிய தாவலில் திறக்கவும்"
+
+msgid "Preparing Office document"
+msgstr "அலுவலக ஆவணத்தைத் தயாரிக்கிறது"
+
+msgid "Submitted document"
+msgstr "சமர்ப்பிக்கப்பட்ட ஆவணம்"
+
+msgid "Annotation tools"
+msgstr "அனோடேஷன் கருவிகள்"
+
+msgid "Text to place"
+msgstr "வைக்க வேண்டிய உரை"
+
+msgid "Click the image to place the text annotation."
+msgstr "உரை அனோடேஷனை வைக்க படத்தை கிளிக் செய்யவும்."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "பாதை புள்ளிகளைச் சேர்க்க படத்தை கிளிக் செய்யவும். பாதைகளைப் பிரிக்க புதிய பாதையைத் தொடங்கவும்."
+
+msgid "Start new path"
+msgstr "புதிய பாதையைத் தொடங்கவும்"
+
+msgid "Current annotations"
+msgstr "தற்போதைய அனோடேஷன்கள்"
+
+msgid "Remove point"
+msgstr "புள்ளியை அகற்றவும்"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "வரையறை பல்லுறுப்புக்கோணத்தை வரைய படத்தை கிளிக் செய்யவும்."
+
+msgid "Click a marker to remove it."
+msgstr "ஒரு குறிப்பானை அகற்ற அதை கிளிக் செய்யவும்."
+
+msgid "Placed"
+msgstr "வைக்கப்பட்டது"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "ஒரு பதிலைத் தேர்ந்தெடுத்து, பின்னர் அதைக் குறிக்க படத்தில் கிளிக் செய்யவும்."
+
+msgid "Reading speed"
+msgstr "வாசிப்பு வேகம்"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "இந்தக் கேள்வி வகையை இந்த பிளேயரில் காட்ட முடியாது."
+
+msgid "Save draft"
+msgstr "வரைவைச் சேமிக்கவும்"
+
+msgid "I confirm that my answers were saved."
+msgstr "எனது பதில்கள் சேமிக்கப்பட்டதாக நான் உறுதிப்படுத்துகிறேன்."
+
+msgid "Finish test"
+msgstr "சோதனையை முடிக்கவும்"
+
+msgid "Attempt finished"
+msgstr "முயற்சி முடிந்தது"
+
+msgid "Question category"
+msgstr "கேள்வி வகை"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "இந்தக் கேள்வி வகையுடன் தொடர்புடைய கேள்விகளை நீங்கள் முடித்துவிட்டீர்கள், அந்தக் கேள்விகளை மீண்டும் பார்வையிட்டு திருத்துவதற்கான கடைசி வாய்ப்பு இது."
+
+msgid "Question time left"
+msgstr "கேள்விக்கான மீதமுள்ள நேரம்"
+
+msgid "Time left"
+msgstr "மீதமுள்ள நேரம்"
+
+msgid "Current attempt"
+msgstr "தற்போதைய முயற்சி"
+
+msgid "Could not save draft answer"
+msgstr "வரைவு பதிலைச் சேமிக்க முடியவில்லை"
+
+msgid "Could not load exercise"
+msgstr "பயிற்சியை ஏற்ற முடியவில்லை"
+
+msgid "Draft answer saved"
+msgstr "வரைவு பதில் சேமிக்கப்பட்டது"
+
+msgid "Could not finish the attempt"
+msgstr "முயற்சியை முடிக்க முடியவில்லை"
+
+msgid "Could not prepare Office document"
+msgstr "ஆபீஸ் ஆவணத்தைத் தயாரிக்க முடியவில்லை"
+
+msgid "Back to learner score"
+msgstr "கற்போர் மதிப்பெண்ணுக்குத் திரும்பு"
+
+msgid "Disable auto refresh"
+msgstr "தானியங்கி புதுப்பிப்பை முடக்கு"
+
+msgid "Enable auto refresh"
+msgstr "தானியங்கி புதுப்பிப்பை இயக்கு"
+
+msgid "Live window"
+msgstr "நேரடி சாளரம்"
+
+msgid "Ongoing attempts"
+msgstr "நடைபெறும் முயற்சிகள்"
+
+msgid "Completed attempts"
+msgstr "முடிக்கப்பட்ட முயற்சிகள்"
+
+msgid "Started"
+msgstr "தொடங்கப்பட்டது"
+
+msgid "Last activity"
+msgstr "கடைசி செயல்பாடு"
+
+msgid "Could not load live results"
+msgstr "நேரடி முடிவுகளை ஏற்ற முடியவில்லை"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "இந்தப் பயிற்சி படிப்பு பாதையில் சேர்க்கப்பட்டுள்ளதால் படிக்க மட்டுமே உள்ளது."
+
+msgid "Select a question type to create a question."
+msgstr "கேள்வி ஒன்றை உருவாக்க கேள்வி வகையைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Click to preview"
+msgstr "முன்னோட்டத்திற்கு கிளிக் செய்யவும்"
+
+msgid "Hide preview"
+msgstr "முன்னோட்டத்தை மறை"
+
+msgid "Shape"
+msgstr "வடிவம்"
+
+msgid "Coordinates"
+msgstr "ஆயத்தொலைவுகள்"
+
+msgid "Blanks"
+msgstr "வெற்றிடங்கள்"
+
+msgid "Switchable blanks"
+msgstr "மாற்றக்கூடிய வெற்றிடங்கள்"
+
+msgid "Blank"
+msgstr "வெற்றிடம்"
+
+msgid "Input width"
+msgstr "உள்ளீட்டு அகலம்"
+
+msgid "Orientation"
+msgstr "திசை"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "தற்போதைய பயிற்சி பின்னூட்ட முறையில் கிடைக்கவில்லை"
+
+msgid "Not available in the learning path creation flow"
+msgstr "கற்றல் பாதை உருவாக்க ஓட்டத்தில் கிடைக்கவில்லை"
+
+msgid "Delete question"
+msgstr "கேள்வியை நீக்கு"
+
+msgid "Could not update exercise questions"
+msgstr "பயிற்சி கேள்விகளைப் புதுப்பிக்க முடியவில்லை"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "பயிற்சியை கற்றல் பாதையில் சேர்க்க முடியவில்லை"
+
+msgid "A valid exercise id is required."
+msgstr "செல்லுபடியாகும் பயிற்சி ஐடி தேவை."
+
+msgid "Could not load exercise questions"
+msgstr "பயிற்சி கேள்விகளை ஏற்ற முடியவில்லை"
+
+msgid "Delete selected attempts"
+msgstr "தேர்ந்தெடுத்த முயற்சிகளை நீக்கு"
+
+msgid "Before date"
+msgstr "தேதிக்கு முன்"
+
+msgid "Pending corrections"
+msgstr "நிலுவையிலுள்ள திருத்தங்கள்"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "இந்தப் பயிற்சி தரப்புத்தகத்தால் பூட்டப்பட்டுள்ளது. முயற்சி தூய்மைப்படுத்தல் செயல்கள் முடக்கப்பட்டுள்ளன."
+
+msgid "No attempts found"
+msgstr "முயற்சிகள் எதுவும் கிடைக்கவில்லை"
+
+msgid "Review"
+msgstr "மதிப்பாய்வு"
+
+msgid "Print/PDF"
+msgstr "அச்சிடு/PDF"
+
+msgid "Could not load exercise report"
+msgstr "பயிற்சி அறிக்கையை ஏற்ற முடியவில்லை"
+
+msgid "Select at least one attempt"
+msgstr "குறைந்தது ஒரு முயற்சியைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Delete selected attempts?"
+msgstr "தேர்ந்தெடுத்த முயற்சிகளை நீக்கவா?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "மதிப்பாய்வு செய்யப்பட்ட முயற்சி முடிவு மின்னஞ்சல்களை அனுப்பவா?"
+
+msgid "Could not send emails"
+msgstr "மின்னஞ்சல்களை அனுப்ப முடியவில்லை"
+
+msgid "Exercise result emails sent"
+msgstr "பயிற்சி முடிவு மின்னஞ்சல்கள் அனுப்பப்பட்டன"
+
+msgid "Skipped"
+msgstr "தவிர்க்கப்பட்டது"
+
+msgid "Close attempt?"
+msgstr "முயற்சியை மூடவா?"
+
+msgid "Attempt closed"
+msgstr "முயற்சி மூடப்பட்டது"
+
+msgid "Could not close attempt"
+msgstr "முயற்சியை மூட முடியவில்லை"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "இந்த முயற்சி முடிவை மின்னஞ்சல் மூலம் கற்பவருக்கு அனுப்பவா?"
+
+msgid "Email sent"
+msgstr "மின்னஞ்சல் அனுப்பப்பட்டது"
+
+msgid "Could not send email"
+msgstr "மின்னஞ்சலை அனுப்ப முடியவில்லை"
+
+msgid "Attempt deleted"
+msgstr "முயற்சி நீக்கப்பட்டது"
+
+msgid "Could not delete attempt"
+msgstr "முயற்சியை நீக்க முடியவில்லை"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "தலைப்பு மற்றும் விளக்கம் நெடுவரிசைகளைக் கொண்ட CSV கோப்பைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Manage categories used to classify questions."
+msgstr "கேள்விகளை வகைப்படுத்தப் பயன்படும் வகைகளை நிர்வகிக்கவும்."
+
+msgid "Manage categories used to classify exercises."
+msgstr "பயிற்சிகளை வகைப்படுத்தப் பயன்படும் வகைகளை நிர்வகிக்கவும்."
+
+msgid "Could not load categories"
+msgstr "வகைகளை ஏற்ற முடியவில்லை"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "இறக்குமதி செய்யப்பட்ட வகைகள்: %s. தவிர்க்கப்பட்ட வரிகள்: %s."
+
+msgid "Imported categories: %s."
+msgstr "இறக்குமதி செய்யப்பட்ட வகைகள்: %s."
+
+msgid "Could not import categories"
+msgstr "வகைகளை இறக்குமதி செய்ய முடியவில்லை"
+
+msgid "Could not save category"
+msgstr "வகையைச் சேமிக்க முடியவில்லை"
+
+msgid "Answer distribution"
+msgstr "பதில் பரவல்"
+
+msgid "Configured answers"
+msgstr "உள்ளமைக்கப்பட்ட பதில்கள்"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "சில கேள்வி வகைகளுக்கான விரிவான பதில் எண்ணிக்கை இடம்பெயர்ந்த அறிக்கையில் இன்னும் கிடைக்கவில்லை."
+
+msgid "No report by question data found"
+msgstr "கேள்வி அடிப்படையிலான அறிக்கை தரவு எதுவும் கிடைக்கவில்லை"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "இந்த கேள்வி வகைக்கான விரிவான பதில் எண்ணிக்கை இடம்பெயர்ந்த அறிக்கையில் இன்னும் கிடைக்கவில்லை."
+
+msgid "No answer distribution found"
+msgstr "பதில் பரவல் எதுவும் கிடைக்கவில்லை"
+
+msgid "Could not load report by question"
+msgstr "கேள்வி அடிப்படையிலான அறிக்கையை ஏற்ற முடியவில்லை"
+
+msgid "Question settings"
+msgstr "கேள்வி அமைப்புகள்"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "நேர வரம்பு இல்லாததற்கு காலியாக விடவும் அல்லது 0 என உள்ளிடவும்."
+
+msgid "Time limit in seconds"
+msgstr "நேர வரம்பு (வினாடிகளில்)"
+
+msgid "Attached questions"
+msgstr "இணைக்கப்பட்ட கேள்விகள்"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "தற்போதைய பயிற்சிக்குள் இந்த ஊடகக் கேள்வியுடன் இணைக்கப்பட்ட கேள்விகள் மட்டுமே இங்கே பட்டியலிடப்பட்டுள்ளன."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "தற்போதைய பயிற்சியில் இந்த ஊடகக் கேள்வியுடன் எந்த கேள்விகளும் இணைக்கப்படவில்லை."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "கற்பவர்கள் OnlyOffice உடன் திருத்தும் அலுவலக ஆவண வார்ப்புருவைப் பதிவேற்றவும்."
+
+msgid "Replace Office document"
+msgstr "அலுவலக ஆவணத்தை மாற்றவும்"
+
+msgid "Current Office document"
+msgstr "தற்போதைய அலுவலக ஆவணம்"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "கற்பவர் திருத்திய ஆவணத்தைச் சமர்ப்பித்த பிறகு இந்தக் கேள்வி கைமுறையாகத் திருத்தப்படும்."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "மொத்த மதிப்பெண் ஹாட்ஸ்பாட் மதிப்பெண்களின் கூட்டுத்தொகையாகக் கணக்கிடப்படுகிறது."
+
+msgid "Global score"
+msgstr "உலகளாவிய மதிப்பெண்"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "ஹாட்ஸ்பாட் வரிசையைத் தேர்ந்தெடுக்கவும், அதன் வடிவத்தைத் தேர்வுசெய்யவும், பின்னர் படத்தின் மேல் வரையவும். பலகோணங்களுக்கு, ஒவ்வொரு புள்ளியையும் கிளிக் செய்து பலகோணத்தை முடிக்கவும் அல்லது இருமுறை கிளிக் செய்து முடிக்கவும்."
+
+msgid "Finish polygon"
+msgstr "பலகோணத்தை முடிக்கவும்"
+
+msgid "Calculated answer"
+msgstr "கணக்கிடப்பட்ட பதில்"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "கீழே உங்கள் உரையைத் தட்டச்சு செய்து ஒன்று அல்லது அதற்கு மேற்பட்ட காலியிடங்களை வரையறுக்க சதுர அடைப்புக்குறிகளை [...] பயன்படுத்தவும்."
+
+msgid "Lowest value"
+msgstr "குறைந்த மதிப்பு"
+
+msgid "Highest value"
+msgstr "அதிக மதிப்பு"
+
+msgid "Fill in blanks"
+msgstr "காலியிடங்களை நிரப்பவும்"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "காலியிடங்களை வரையறுக்கத் தேர்ந்தெடுக்கப்பட்ட குறிப்பான்களைப் பயன்படுத்தவும். எடுத்துக்காட்டு: பெருவின் தலைநகரம் [லிமா]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "கீழ்தோன்றல் விருப்பங்களை உள்ளிடவும், ஒரு வரிக்கு ஒரு பதில். பின்னர் எதிர்பார்க்கப்படும் பதில்களை கீழே குறிக்கவும், மரபு கருவியைப் போல."
+
+msgid "Refresh answers"
+msgstr "பதில்களைப் புதுப்பிக்கவும்"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "இந்த கீழ்தோன்றல் சேர்க்கை கேள்வி மரபைப் போல ஒரு உலகளாவிய மதிப்பெண்ணைப் பயன்படுத்துகிறது."
+
+msgid "Please enter at least two dropdown options."
+msgstr "குறைந்தது இரண்டு கீழ்தோன்றல் விருப்பங்களை உள்ளிடவும்."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "முதலில் இலக்கு விருப்பங்களை உருவாக்கவும், பின்னர் ஒவ்வொரு உருப்படியையும் சரியான விருப்பத்துடன் இணைக்கவும்."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "இந்த பொருத்துதல் சேர்க்கை கேள்வி மரபைப் போல ஒரு உலகளாவிய மதிப்பெண்ணைப் பயன்படுத்துகிறது."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "படிகளை உருவாக்கி, ஒவ்வொன்றிற்கும் எதிர்பார்க்கப்படும் நிலையைத் தேர்வுசெய்யவும், மரபு இழுத்து விடக்கூடியது போல."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "கற்பவர்கள் உண்மை அல்லது பொய்யைத் தேர்ந்தெடுத்து, முயற்சியின் போது தங்கள் உறுதியின் அளவைத் தேர்ந்தெடுப்பார்கள். எடிட்டர் பழைய முறையில் உள்ள அதே சரி/தவறு மதிப்பெண்கள் மற்றும் உறுதி நிலைகளைச் சேமிக்கிறது."
+
+msgid "Hotspot combination"
+msgstr "ஹாட்ஸ்பாட் சேர்க்கை"
+
+msgid "Add delineation"
+msgstr "வரையறை சேர்க்கவும்"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "இந்த ஆபீஸ் ஆவணக் கேள்விக்கு பதில் விருப்பங்கள் இல்லை. அதன் மதிப்பெண் திருத்தம்/முடிவுகள் மதிப்பாய்வின் போது ஒதுக்கப்படும்."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "இந்தப் பதிவேற்றக் கேள்விக்கு பதில் விருப்பங்கள் இல்லை. அதன் மதிப்பெண் திருத்தம்/முடிவுகள் மதிப்பாய்வின் போது ஒதுக்கப்படும்."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "இந்த வாய்மொழிக் கேள்விக்கு பதில் விருப்பங்கள் இல்லை. அதன் மதிப்பெண் திருத்தம்/முடிவுகள் மதிப்பாய்வின் போது ஒதுக்கப்படும்."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "இந்த திறந்த கேள்விக்கு பதில் விருப்பங்கள் இல்லை. அதன் மதிப்பெண் திருத்தம்/முடிவுகள் மதிப்பாய்வின் போது ஒதுக்கப்படும்."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "உருளும் வேக அமைப்புகளுடன் வாசிப்பு உரையைச் சேர்க்கவும்."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "மதிப்பெண் சேர்க்காமல் உள்ளடக்கம், ஊடகம் அல்லது வாசிப்பு சூழலைச் சேர்க்கவும்."
+
+msgid "Insert a page break without adding score."
+msgstr "மதிப்பெண் சேர்க்காமல் பக்க இடைவெளியைச் செருகவும்."
+
+msgid "Could not save question"
+msgstr "கேள்வியைச் சேமிக்க முடியவில்லை"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "DOC, DOCX, XLS அல்லது XLSX ஆவணங்கள் மட்டுமே அனுமதிக்கப்படும்."
+
+msgid "Please select an Office document."
+msgstr "ஒரு ஆபீஸ் ஆவணத்தைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Please draw at least one hotspot."
+msgstr "குறைந்தது ஒரு ஹாட்ஸ்பாட்டை வரையவும்."
+
+msgid "Please draw at least one delineation."
+msgstr "குறைந்தது ஒரு வரையறையை வரையவும்."
+
+msgid "The fill in blanks text is required."
+msgstr "வெற்றிடங்களை நிரப்பும் உரை தேவை."
+
+msgid "At least one expected answer is required."
+msgstr "குறைந்தது ஒரு எதிர்பார்க்கப்படும் பதில் தேவை."
+
+msgid "At least two draggable items are required."
+msgstr "குறைந்தது இரண்டு இழுத்துச் செல்லக்கூடிய உருப்படிகள் தேவை."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "ஒவ்வொரு இழுத்துச் செல்லக்கூடிய உருப்படியும் செல்லுபடியாகும் இலக்கு நிலையுடன் இணைக்கப்பட வேண்டும்."
+
+msgid "At least two matching options are required."
+msgstr "குறைந்தது இரண்டு பொருத்தும் விருப்பங்கள் தேவை."
+
+msgid "At least two matching pairs are required."
+msgstr "குறைந்தது இரண்டு பொருத்தும் ஜோடிகள் தேவை."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "ஒவ்வொரு பொருத்தும் ஜோடியும் செல்லுபடியாகும் விருப்பத்துடன் இணைக்கப்பட வேண்டும்."
+
+msgid "At least two answers are required."
+msgstr "குறைந்தது இரண்டு பதில்கள் தேவை."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "ஒவ்வொரு உண்மை/பொய் பதிலுக்கும் உண்மை அல்லது பொய் தேர்ந்தெடுக்கப்பட வேண்டும்."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "ஒரு தனித்துவமான பதில் கேள்விக்கு சரியாக ஒரு சரியான பதில் இருக்க வேண்டும்."
+
+msgid "At least one correct answer is required."
+msgstr "குறைந்தது ஒரு சரியான பதில் தேவை."
+
+msgid "Could not load question"
+msgstr "கேள்வியை ஏற்ற முடியவில்லை"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "ஒரு பாடத்தைத் தேர்ந்தெடுத்து உலகளாவிய பயிற்சி முடிவுகள் அறிக்கையை CSV ஆக ஏற்றுமதி செய்யவும்."
+
+msgid "Back to reports catalog"
+msgstr "அறிக்கைகள் பட்டியலுக்குத் திரும்பவும்"
+
+msgid "Could not load exercise global report"
+msgstr "பயிற்சி உலகளாவிய அறிக்கையை ஏற்ற முடியவில்லை"
+
+msgid "Imported questions"
+msgstr "இறக்குமதி செய்யப்பட்ட கேள்விகள்"
+
+msgid "Aiken content"
+msgstr "Aiken உள்ளடக்கம்"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken உருவாக்கியை ஏற்ற முடியவில்லை"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken உள்ளடக்கத்தை உருவாக்க முடியவில்லை"
+
+msgid "Could not import generated Aiken content"
+msgstr "உருவாக்கப்பட்ட Aiken உள்ளடக்கத்தை இறக்குமதி செய்ய முடியவில்லை"
+
+msgid "Back to my courses"
+msgstr "எனது பாடங்களுக்குத் திரும்பவும்"
+
+msgid "Open report"
+msgstr "அறிக்கையைத் திறக்கவும்"
+
+msgid "Questions with no automatic correction"
+msgstr "தானியங்கி திருத்தம் இல்லாத கேள்விகள்"
+
+msgid "Could not load pending attempts"
+msgstr "நிலுவையில் உள்ள முயற்சிகளை ஏற்ற முடியவில்லை"
+
+msgid "Skipped questions"
+msgstr "தவிர்க்கப்பட்ட கேள்விகள்"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken இறக்குமதி இறக்குமதி செய்யப்பட்ட கேள்விகளில் இந்த மொத்த எடையைப் பிரித்து வழங்கும், ஒரு கேள்வி SCORE ஐ வரையறுக்காத வரை."
+
+msgid "Import warnings"
+msgstr "இறக்குமதி எச்சரிக்கைகள்"
+
+msgid "Could not import questions"
+msgstr "கேள்விகளை இறக்குமதி செய்ய முடியவில்லை"
+
+msgid "No question statistics found"
+msgstr "கேள்வி புள்ளிவிவரங்கள் எதுவும் கிடைக்கவில்லை"
+
+msgid "Could not load question statistics"
+msgstr "கேள்வி புள்ளிவிவரங்களை ஏற்ற முடியவில்லை"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "பின்வரும் இறுதிப்புள்ளியைச் சுட்டிக்காட்டி MCP கிளையண்டை நேரடியாக இணைக்கலாம்:"
+
+msgid "No applications are currently connected to your account."
+msgstr "தற்போது உங்கள் கணக்குடன் எந்த பயன்பாடுகளும் இணைக்கப்படவில்லை."
+
+msgid "Connected on"
+msgstr "இணைக்கப்பட்டது"
+
+msgid "Last used"
+msgstr "கடைசியாகப் பயன்படுத்தப்பட்டது"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s உங்கள் Chamilo கணக்கை அணுக முடியாது. தொடரவா?"
+
+msgid "Application revoked"
+msgstr "பயன்பாடு ரத்து செய்யப்பட்டது"
+
+msgid "Copied to clipboard"
+msgstr "கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP இறுதிப்புள்ளியை நகலெடுக்க முடியவில்லை"
+
+msgid "MCP endpoint"
+msgstr "MCP இறுதிப்புள்ளி"
+
+msgid "API key"
+msgstr "API விசை"
+
+msgid "Last used at"
+msgstr "கடைசியாக பயன்படுத்தியது"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "இந்த விசையை இப்போது நகலெடுக்கவும். இது மீண்டும் காட்டப்படாது."
+
+msgid "Rotate API key"
+msgstr "API விசையை மாற்றவும்"
+
+msgid "Revoke API key"
+msgstr "API விசையை ரத்து செய்யவும்"
+
+msgid "Remote MCP connection"
+msgstr "தொலைநிலை MCP இணைப்பு"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "பின்வரும் மதிப்புகளுடன் உங்கள் MCP கிளையண்டை உள்ளமைக்கவும்:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "தற்போதைய விசை உடனடியாக வேலை செய்வதை நிறுத்தும். தொடரவா?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "புதிய தனிப்பட்ட MCP API விசை உருவாக்கப்படும். தொடரவா?"
+
+msgid "MCP API key generated"
+msgstr "MCP API விசை உருவாக்கப்பட்டது"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "இந்த விசையைப் பயன்படுத்தும் இணைக்கப்பட்ட MCP கிளையண்டுகள் உடனடியாக வேலை செய்வதை நிறுத்தும். தொடரவா?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API விசை ரத்து செய்யப்பட்டது"
+
+msgid "Could not copy the API key"
+msgstr "API விசையை நகலெடுக்க முடியவில்லை"
+
+msgid "Project"
+msgstr "திட்டம்"
+
+msgid "Close old tickets"
+msgstr "பழைய டிக்கெட்டுகளை மூடவும்"
+
+msgid "Close tickets older than seven days?"
+msgstr "ஏழு நாட்களுக்கு மேல் பழைய டிக்கெட்டுகளை மூடவா?"
+
+msgid "Assignment history"
+msgstr "ஒதுக்கீட்டு வரலாறு"
+
+msgid "Translate with AI"
+msgstr "AI உடன் மொழிபெயர்க்கவும்"
+
+msgid "Target language"
+msgstr "இலக்கு மொழி"
+
+msgid "Please select a provider"
+msgstr "தயவுசெய்து ஒரு வழங்குநரைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Generate translation"
+msgstr "மொழிபெயர்ப்பை உருவாக்கவும்"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "குறைந்தது ஒரு விதிமுறைகள் மற்றும் நிபந்தனைகள் பிரிவில் உரை இருக்க வேண்டும்."
+
+msgid "No active target languages are available."
+msgstr "செயலில் உள்ள இலக்கு மொழிகள் எதுவும் கிடைக்கவில்லை."
+
+msgid "Tutor"
+msgstr "பயிற்றுவிப்பாளர்"
+
+msgid "Access dates"
+msgstr "அணுகல் தேதிகள்"
+
+msgid "Coach access dates"
+msgstr "பயிற்சியாளர் அணுகல் தேதிகள்"
+
+msgid "No sessions found"
+msgstr "அமர்வுகள் எதுவும் கிடைக்கவில்லை"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "இந்த அமர்வில் இந்த பயனர் அணுக முடியாத படிப்புகளைத் தேர்ந்தெடுக்கவும்."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "ஒரு பயனரை அமர்வில் உள்ள ஒவ்வொரு படிப்பிலிருந்தும் தடுக்க முடியாது. அதற்குப் பதிலாக பயனரை குழுவிலகச் செய்யவும்."
+
+msgid "Users subscribed to this session"
+msgstr "இந்த அமர்வுக்கு சந்தா செய்த பயனர்கள்"
+
+msgid "No available users found"
+msgstr "கிடைக்கக்கூடிய பயனர்கள் எவரும் கிடைக்கவில்லை"
+
+msgid "Subscribe this user to the session?"
+msgstr "இந்த பயனரை அமர்வுக்கு சந்தா செய்யவா?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயனர்களை அமர்வுக்கு சந்தா செய்யவா?"
+
+msgid "General tutor planning"
+msgstr "பொது பயிற்றுவிப்பாளர் திட்டமிடல்"
+
+msgid "User is already registered by another tutor."
+msgstr "பயனர் ஏற்கனவே மற்றொரு பயிற்றுவிப்பாளரால் பதிவு செய்யப்பட்டுள்ளார்."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "நீங்கள் ஒரு படிப்பு பயிற்றுவிப்பாளர் என்பதால் நகல் பெறுகிறீர்கள்"
+
+msgid "General tutor"
+msgstr "பொது பயிற்றுவிப்பாளர்"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "படிப்புகள், பயிற்றுவிப்பாளர்கள், தொழில்நுட்ப உதவி மையம், ஆசிரியர்கள் மற்றும்/அல்லது கிடைக்கும் பொருட்களைக் கருத்தில் கொள்ளவும்."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "%s படிப்பில் ஆசிரியர்களாக சந்தா செய்த பயிற்றுவிப்பாளர்கள்"
+
+msgid "Tutor name"
+msgstr "பயிற்றுவிப்பாளர் பெயர்"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "அமர்வு பயிற்றுவிப்பாளர்கள் அமர்வுக்கான ஒருங்கிணைப்பாளர்கள் மற்றும் அமர்வில் உள்ள ஒவ்வொரு படிப்புக்கும் பயிற்றுவிப்பாளர்களாக செயல்படலாம். ஆசிரியர் பங்கு உள்ள பயனர்கள் மட்டுமே அமர்வு பயிற்றுவிப்பாளர்களாக தேர்ந்தெடுக்கப்படலாம்."
+
+msgid "Access start date for tutors"
+msgstr "பயிற்றுவிப்பாளர்களுக்கான அணுகல் தொடக்க தேதி"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "மாணவர்கள் இணைப்பதற்கு முன் தயாரிக்க அனுமதிக்கும் வகையில் அமர்வு பயிற்றுவிப்பாளர்களுக்கு கிடைக்கச் செய்யப்படும் தேதி"
+
+msgid "Access end date for tutors"
+msgstr "பயிற்றுவிப்பாளர்களுக்கான அணுகல் இறுதி தேதி"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "அமர்வு பயிற்றுவிப்பாளர்களுக்கு மூடப்படும் தேதி. கூடுதல் தாமதம் அவர்கள் அனைத்து தொடர்புடைய கண்காணிப்பு தகவல்களையும் ஏற்றுமதி செய்ய அனுமதிக்கும்"
+
+msgid "Tutor and student"
+msgstr "பயிற்றுவிப்பாளர் மற்றும் மாணவர்"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "இந்த அறிக்கை தேர்ந்தெடுக்கப்பட்ட தேதி வரம்பில் பொதுப் பயிற்றுவிப்பாளர்களின் அமர்வுகளின் வாராந்திர பங்கீட்டைக் காட்டுகிறது."
+
+msgid "User is general tutor in some sessions"
+msgstr "பயனர் சில அமர்வுகளில் பொதுப் பயிற்றுவிப்பாளராக உள்ளார்"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "ஆசிரியர்கள் அனைத்து பாட அமர்வுகளிலும் பயிற்றுவிப்பாளர்களாகச் சேர்க்கப்படுவார்கள்."
+
+msgid "Delete failed: invalid question id."
+msgstr "நீக்கம் தோல்வியடைந்தது: தவறான கேள்வி ஐடி."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "பொதுப் பயிற்றுவிப்பாளருக்கான சராசரி அமர்வுகளின் எண்ணிக்கை"
+
+msgid "No room"
+msgstr "அறை இல்லை"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "அமர்வில் பாட ஆசிரியர்களைப் பாடப் பயிற்றுவிப்பாளர்களாக இறக்குமதி செய்யவும்"
+
+msgid "Clean and update course tutors"
+msgstr "பாடப் பயிற்றுவிப்பாளர்களைச் சுத்தம் செய்து புதுப்பிக்கவும்"
+
+msgid "Add me as tutor"
+msgstr "என்னைப் பயிற்றுவிப்பாளராகச் சேர்க்கவும்"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "கற்றல் பாதையில் கணக்கெடுப்பைச் சேர்க்க முடியவில்லை"
+
+msgid "Access dates for tutors"
+msgstr "பயிற்றுவிப்பாளர்களுக்கான அணுகல் தேதிகள்"
+
+msgid "Tutor and group member"
+msgstr "பயிற்றுவிப்பாளர் மற்றும் குழு உறுப்பினர்"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "உங்கள் தினசரி AI டோக்கன் வரம்பை அடைந்துவிட்டீர்கள். தயவுசெய்து நாளை மீண்டும் முயற்சிக்கவும்."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "உங்கள் மாதாந்திர AI டோக்கன் வரம்பை அடைந்துவிட்டீர்கள். தயவுசெய்து அடுத்த மாதம் மீண்டும் முயற்சிக்கவும்."
+
+msgid "This course code already exists, please choose another code."
+msgstr "இந்தப் பாடக் குறியீடு ஏற்கனவே உள்ளது, தயவுசெய்து வேறு குறியீட்டைத் தேர்ந்தெடுக்கவும்."
+
+msgid "This course title already exists, please choose another title."
+msgstr "இந்தப் பாடத் தலைப்பு ஏற்கனவே உள்ளது, தயவுசெய்து வேறு தலைப்பைத் தேர்ந்தெடுக்கவும்."
+
+msgid "This tool visibility cannot be changed"
+msgstr "இந்தக் கருவி தெரிவுநிலையை மாற்ற முடியாது"
+
+msgid "Invalid visibility"
+msgstr "தவறான தெரிவுநிலை"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "நீங்கள் பாடப் பயிற்றுவிப்பாளர்களில் ஒருவராக இருப்பதால் நகல் பெறுகிறீர்கள்"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "நீங்கள் பாடப் பயிற்றுவிப்பாளராக இருப்பதால் நகல் பெறுகிறீர்கள்"
+
+msgid "Manual completion"
+msgstr "கையேடு நிறைவு"
+
+msgid "Send to tutors"
+msgstr "பயிற்றுவிப்பாளர்களுக்கு அனுப்பவும்"
+
+msgid "Lab title"
+msgstr "ஆய்வகத் தலைப்பு"
+
+msgid "Lab week"
+msgstr "ஆய்வக வாரம்"
+
+msgid "Final exam access rule"
+msgstr "இறுதித் தேர்வு அணுகல் விதி"
+
+msgid "Course completion rule"
+msgstr "பாட நிறைவு விதி"
+
+msgid "You have been invited to join a course"
+msgstr "ஒரு பாடத்தில் சேர அழைக்கப்பட்டுள்ளீர்"
+
+msgid "No user has been found"
+msgstr "பயனர் எவரும் கண்டறியப்படவில்லை"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயனரை இந்தச் சூழலில் சேர்க்க முடியாது"
+
+msgid "No change has been made"
+msgstr "எந்த மாற்றமும் செய்யப்படவில்லை"
+
+msgid "Back to group list"
+msgstr "குழுப் பட்டியலுக்குத் திரும்பவும்"
+
+msgid "Remove class link"
+msgstr "வகுப்பு இணைப்பை அகற்றவும்"
+
+msgid "Group settings"
+msgstr "குழு அமைப்புகள்"
+
+msgid "Self-registration allowed"
+msgstr "தன்னிச்சையான பதிவு அனுமதிக்கப்பட்டது"
+
+msgid "Self-unregistration allowed"
+msgstr "தன்னிச்சையான பதிவு நீக்கம் அனுமதிக்கப்பட்டது"
+
+msgid "This group is linked to the class"
+msgstr "இந்தக் குழு வகுப்புடன் இணைக்கப்பட்டுள்ளது"
+
+msgid "Create one or more empty course groups"
+msgstr "ஒன்று அல்லது அதற்கு மேற்பட்ட வெற்று பாடக் குழுக்களை உருவாக்கவும்"
+
+msgid "Number of places"
+msgstr "இடங்களின் எண்ணிக்கை"
+
+msgid "Base group"
+msgstr "அடிப்படைக் குழு"
+
+msgid "Share"
+msgstr "பகிர்"
+
+msgid "Collaboration"
+msgstr "ஒத்துழைப்பு"
+
+msgid "The group title is required."
+msgstr "குழுத் தலைப்பு தேவை."
+
+msgid "Back to group area"
+msgstr "குழுப் பகுதிக்குத் திரும்பவும்"
+
+msgid "Members are managed by the linked class"
+msgstr "இணைக்கப்பட்ட வகுப்பால் உறுப்பினர்கள் நிர்வகிக்கப்படுகின்றனர்"
+
+msgid "%s groups selected"
+msgstr "%s குழுக்கள் தேர்ந்தெடுக்கப்பட்டன"
+
+msgid "Fill selected groups"
+msgstr "தேர்ந்தெடுக்கப்பட்ட குழுக்களை நிரப்பவும்"
+
+msgid "Empty selected groups"
+msgstr "தேர்ந்தெடுக்கப்பட்ட குழுக்களை காலியாக்கவும்"
+
+msgid "Fill group"
+msgstr "குழுவை நிரப்பவும்"
+
+msgid "Empty group"
+msgstr "குழுவை காலியாக்கவும்"
+
+msgid "Groups per user"
+msgstr "பயனருக்கான குழுக்கள்"
+
+msgid "No tutors"
+msgstr "பயிற்றுநர்கள் இல்லை"
+
+msgid "No users"
+msgstr "பயனர்கள் இல்லை"
+

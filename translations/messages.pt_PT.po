@@ -37644,3 +37644,1299 @@ msgstr "Utilize 0 para manter todas as perguntas disponíveis. Utilize -1 para p
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Utilize estes campos para classificar o exercício independentemente das suas opções de visualização."
 
+msgid "Invite by email"
+msgstr "Convidar por email"
+
+msgid "Invitation has been sent"
+msgstr "O convite foi enviado"
+
+msgid "Sent on"
+msgstr "Enviado em"
+
+msgid "Accepted on"
+msgstr "Aceite em"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Este curso está aberto numa sessão. Enviar um convite aqui inscreverá o destinatário na sessão inteira %s, e não apenas neste curso."
+
+msgid "Revoke"
+msgstr "Revogar"
+
+msgid "Revoked"
+msgstr "Revogado"
+
+msgid "Invitation has been revoked"
+msgstr "O convite foi revogado"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Tem a certeza de que pretende revogar o convite enviado para %s?"
+
+msgid "No default room"
+msgstr "Sem sala predefinida"
+
+msgid "Floor"
+msgstr "Piso"
+
+msgid "Capacity"
+msgstr "Capacidade"
+
+msgid "Use attendance default room"
+msgstr "Usar sala predefinida de presenças"
+
+msgid "Floor number"
+msgstr "Número do piso"
+
+msgid "Copy to students"
+msgstr "Copiar para os alunos"
+
+msgid "Generate a quick test on this topic"
+msgstr "Gerar um teste rápido sobre este tema"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "O conteúdo do documento guardado será enviado para um modelo de IA para processamento."
+
+msgid "MCP API key"
+msgstr "Chave da API MCP"
+
+msgid "Authorized applications"
+msgstr "Aplicações autorizadas"
+
+msgid "Your session is about to expire"
+msgstr "A sua sessão está prestes a expirar"
+
+msgid "Do you want to continue your session?"
+msgstr "Pretende continuar a sua sessão?"
+
+msgid "Stay connected"
+msgstr "Manter-se ligado"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Será desconectado em %s segundos."
+
+msgid "No descriptions available yet."
+msgstr "Ainda não existem descrições disponíveis."
+
+msgid "%s users selected"
+msgstr "%s utilizadores selecionados"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Os utilizadores selecionados foram inscritos no curso"
+
+msgid "Import teachers"
+msgstr "Importar professores"
+
+msgid "Import learners"
+msgstr "Importar alunos"
+
+msgid "Select CSV file"
+msgstr "Selecionar ficheiro CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Alguns utilizadores não puderam ser inscritos"
+
+msgid "Browse available classes"
+msgstr "Explorar turmas disponíveis"
+
+msgid "Back to linked classes"
+msgstr "Voltar às turmas associadas"
+
+msgid "No classes are currently linked to this course."
+msgstr "Nenhuma turma está atualmente associada a este curso."
+
+msgid "No available classes were found for this course."
+msgstr "Não foram encontradas turmas disponíveis para este curso."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Tem a certeza de que pretende cancelar a inscrição dos utilizadores selecionados?"
+
+msgid "Learning path access"
+msgstr "Acesso ao percurso de aprendizagem"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Apenas os utilizadores e grupos selecionados podem aceder a este percurso de aprendizagem. Faça a gestão após guardar."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Todos os utilizadores atuais e futuros do curso podem aceder a este percurso de aprendizagem."
+
+msgid "All course users"
+msgstr "Todos os utilizadores do curso"
+
+msgid "Selected users and groups"
+msgstr "Utilizadores e grupos selecionados"
+
+msgid "No access"
+msgstr "Sem acesso"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Apenas os utilizadores e grupos adicionados aqui podem aceder a este percurso de aprendizagem."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Número de perguntas limitado a um máximo de %s"
+
+msgid "Open exercise player"
+msgstr "Abrir reprodutor de exercícios"
+
+msgid "The score is hidden for this exercise."
+msgstr "A pontuação está oculta para este exercício."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "As correções estão ocultas de acordo com as definições de resultados do exercício."
+
+msgid "Progressive adaptive result"
+msgstr "Resultado adaptativo progressivo"
+
+msgid "Achieved level"
+msgstr "Nível alcançado"
+
+msgid "Correction history"
+msgstr "Histórico de correções"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Histórico de correções manuais efetuadas nesta tentativa."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Este exercício utiliza o modo de resultado radar/teia de aranha. O gráfico não está disponível nesta página."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Os detalhes das perguntas estão ocultos de acordo com as definições de resultados do exercício."
+
+msgid "Media question"
+msgstr "Pergunta multimédia"
+
+msgid "Pending correction"
+msgstr "Correção pendente"
+
+msgid "No answer"
+msgstr "Sem resposta"
+
+msgid "Blank %s"
+msgstr "Espaço em branco %s"
+
+msgid "Your order"
+msgstr "A sua ordem"
+
+msgid "Correct order"
+msgstr "Ordem correta"
+
+msgid "Delineation review"
+msgstr "Revisão de delineação"
+
+msgid "Learner clicks"
+msgstr "Cliques do aluno"
+
+msgid "Question image"
+msgstr "Imagem da pergunta"
+
+msgid "No hotspot image available"
+msgstr "Nenhuma imagem de ponto ativo disponível"
+
+msgid "Learner delineation"
+msgstr "Delineação do aluno"
+
+msgid "Expected delineation"
+msgstr "Delineação esperada"
+
+msgid "Expected zones"
+msgstr "Zonas esperadas"
+
+msgid "Zone"
+msgstr "Zona"
+
+msgid "Learner annotation"
+msgstr "Anotação do aluno"
+
+msgid "No annotation image available"
+msgstr "Nenhuma imagem de anotação disponível"
+
+msgid "This answer is pending teacher correction."
+msgstr "Esta resposta aguarda correção do professor."
+
+msgid "Teacher comment"
+msgstr "Comentário do professor"
+
+msgid "Teacher correction"
+msgstr "Correção do professor"
+
+msgid "Save correction"
+msgstr "Guardar correção"
+
+msgid "Learner audio"
+msgstr "Áudio do aluno"
+
+msgid "Download audio"
+msgstr "Descarregar áudio"
+
+msgid "No uploaded audio"
+msgstr "Nenhum áudio carregado"
+
+msgid "Learner Office document"
+msgstr "Documento Office do aluno"
+
+msgid "Learner file"
+msgstr "Ficheiro do aluno"
+
+msgid "Download Office document"
+msgstr "Descarregar documento Office"
+
+msgid "No submitted document"
+msgstr "Nenhum documento submetido"
+
+msgid "No uploaded file"
+msgstr "Nenhum ficheiro carregado"
+
+msgid "Content item"
+msgstr "Item de conteúdo"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Este tipo de pergunta não pode ser revisto nesta página."
+
+msgid "Exercise completed"
+msgstr "Exercício concluído"
+
+msgid "Could not start the attempt"
+msgstr "Não foi possível iniciar a tentativa"
+
+msgid "Invalid exercise attempt"
+msgstr "Tentativa de exercício inválida"
+
+msgid "Could not load exercise result"
+msgstr "Não foi possível carregar o resultado do exercício"
+
+msgid "Could not load AI providers"
+msgstr "Não foi possível carregar os fornecedores de IA"
+
+msgid "Could not generate AI suggestion"
+msgstr "Não foi possível gerar a sugestão de IA"
+
+msgid "Correction saved"
+msgstr "Correção guardada"
+
+msgid "Could not save correction"
+msgstr "Não foi possível guardar a correção"
+
+msgid "Create exercise"
+msgstr "Criar exercício"
+
+msgid "Exercise categories"
+msgstr "Categorias de exercícios"
+
+msgid "Question categories"
+msgstr "Categorias de perguntas"
+
+msgid "Search by exercise title or description."
+msgstr "Pesquisar por título ou descrição do exercício."
+
+msgid "Search exercises"
+msgstr "Pesquisar exercícios"
+
+msgid "No exercises found"
+msgstr "Nenhum exercício encontrado"
+
+msgid "Open exercise"
+msgstr "Abrir exercício"
+
+msgid "Disable autolaunch"
+msgstr "Desativar lançamento automático"
+
+msgid "Enable autolaunch"
+msgstr "Ativar lançamento automático"
+
+msgid "Export QTI2"
+msgstr "Exportar QTI2"
+
+msgid "Bulk actions"
+msgstr "Ações em massa"
+
+msgid "Selected exercises"
+msgstr "Exercícios selecionados"
+
+msgid "No exercises selected"
+msgstr "Nenhum exercício selecionado"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Tem a certeza de que pretende aplicar esta ação aos exercícios selecionados?"
+
+msgid "Bulk action completed"
+msgstr "Ação em massa concluída"
+
+msgid "Could not update exercises"
+msgstr "Não foi possível atualizar os exercícios"
+
+msgid "Could not update exercise"
+msgstr "Não foi possível atualizar o exercício"
+
+msgid "Copy exercise"
+msgstr "Copiar exercício"
+
+msgid "Delete exercise"
+msgstr "Eliminar exercício"
+
+msgid "Could not load exercises"
+msgstr "Não foi possível carregar os exercícios"
+
+msgid "No limit"
+msgstr "Sem limite"
+
+msgid "Add selected questions to the test"
+msgstr "Adicionar perguntas selecionadas ao teste"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Esta pergunta é utilizada num teste ativo e não pode ser editada aqui."
+
+msgid "This question cannot be edited here."
+msgstr "Esta pergunta não pode ser editada aqui."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Esta pergunta é utilizada num teste ativo e não pode ser eliminada aqui."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Esta pergunta não pode ser eliminada porque o seu acesso é limitado pelas definições da plataforma."
+
+msgid "Already in test"
+msgstr "Já está no teste"
+
+msgid "Select at least one question."
+msgstr "Selecione pelo menos uma pergunta."
+
+msgid "Question bank updated"
+msgstr "Banco de perguntas atualizado"
+
+msgid "Could not update the question bank"
+msgstr "Não foi possível atualizar o banco de perguntas"
+
+msgid "Could not load the question bank"
+msgstr "Não foi possível carregar o banco de perguntas"
+
+msgid "Total score"
+msgstr "Pontuação total"
+
+msgid "Starting"
+msgstr "Início"
+
+msgid "Attempt history"
+msgstr "Histórico de tentativas"
+
+msgid "No attempts yet"
+msgstr "Ainda sem tentativas"
+
+msgid "Invalid exercise"
+msgstr "Exercício inválido"
+
+msgid "Could not load exercise overview"
+msgstr "Não foi possível carregar a visão geral do exercício"
+
+msgid "Open test"
+msgstr "Abrir teste"
+
+msgid "Random answers"
+msgstr "Respostas aleatórias"
+
+msgid "Prevent moving backwards"
+msgstr "Impedir retrocesso"
+
+msgid "Previous button hidden"
+msgstr "Botão anterior oculto"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Este exercício utiliza opções que requerem um reprodutor de teste diferente."
+
+msgid "Continue test"
+msgstr "Continuar teste"
+
+msgid "Attempt started"
+msgstr "Tentativa iniciada"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "A pré-visualização do professor não cria uma tentativa registada."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Iniciar ou retomar uma tentativa de exercício. As respostas em rascunho podem ser guardadas antes da submissão final."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Tempo limite atingido. A concluir a tentativa."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Tempo da questão atingido. A guardar a sua resposta."
+
+msgid "Finishing"
+msgstr "A concluir"
+
+msgid "Draft saved"
+msgstr "Rascunho guardado"
+
+msgid "Statement"
+msgstr "Enunciado"
+
+msgid "Drop each option on the matching answer"
+msgstr "Arraste cada opção para a resposta correspondente"
+
+msgid "Clear match"
+msgstr "Limpar correspondência"
+
+msgid "Click to place the selected option here"
+msgstr "Clique para colocar a opção selecionada aqui"
+
+msgid "Select an option, then click here"
+msgstr "Selecione uma opção e depois clique aqui"
+
+msgid "Already matched"
+msgstr "Já correspondido"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Pode arrastar uma opção para uma resposta ou selecionar uma opção e depois clicar numa caixa de destino."
+
+msgid "Put the items in the correct order."
+msgstr "Coloque os itens na ordem correta."
+
+msgid "Move left"
+msgstr "Mover para a esquerda"
+
+msgid "Move right"
+msgstr "Mover para a direita"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Pode arrastar os itens para a esquerda ou direita ou usar os botões de mover para alterar a ordem."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Pode arrastar os itens ou usar os botões de mover para alterar a ordem."
+
+msgid "Or upload an audio file"
+msgstr "Ou carregar um ficheiro de áudio"
+
+msgid "Selected audio"
+msgstr "Áudio selecionado"
+
+msgid "Uploaded audio"
+msgstr "Áudio carregado"
+
+msgid "Office document"
+msgstr "Documento Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Complete o documento no editor abaixo. O ficheiro será anexado a esta tentativa para correção do professor."
+
+msgid "Reload Office editor"
+msgstr "Recarregar editor Office"
+
+msgid "Prepare Office document"
+msgstr "Preparar documento Office"
+
+msgid "Open in new tab"
+msgstr "Abrir num novo separador"
+
+msgid "Preparing Office document"
+msgstr "A preparar documento Office"
+
+msgid "Submitted document"
+msgstr "Documento submetido"
+
+msgid "Annotation tools"
+msgstr "Ferramentas de anotação"
+
+msgid "Text to place"
+msgstr "Texto a colocar"
+
+msgid "Click the image to place the text annotation."
+msgstr "Clique na imagem para colocar a anotação de texto."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Clique na imagem para adicionar pontos do caminho. Use Iniciar novo caminho para separar caminhos."
+
+msgid "Start new path"
+msgstr "Iniciar novo caminho"
+
+msgid "Current annotations"
+msgstr "Anotações atuais"
+
+msgid "Remove point"
+msgstr "Remover ponto"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Clique na imagem para desenhar o polígono de delimitação."
+
+msgid "Click a marker to remove it."
+msgstr "Clique num marcador para o remover."
+
+msgid "Placed"
+msgstr "Colocado"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Selecione uma resposta e clique na imagem para a marcar."
+
+msgid "Reading speed"
+msgstr "Velocidade de leitura"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Este tipo de pergunta não pode ser exibido neste reprodutor."
+
+msgid "Save draft"
+msgstr "Guardar rascunho"
+
+msgid "I confirm that my answers were saved."
+msgstr "Confirmo que as minhas respostas foram guardadas."
+
+msgid "Finish test"
+msgstr "Terminar teste"
+
+msgid "Attempt finished"
+msgstr "Tentativa concluída"
+
+msgid "Question category"
+msgstr "Categoria da pergunta"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Terminou as perguntas desta categoria. Esta é a sua última oportunidade para voltar e rever essas perguntas."
+
+msgid "Question time left"
+msgstr "Tempo restante da pergunta"
+
+msgid "Time left"
+msgstr "Tempo restante"
+
+msgid "Current attempt"
+msgstr "Tentativa atual"
+
+msgid "Could not save draft answer"
+msgstr "Não foi possível guardar o rascunho da resposta"
+
+msgid "Could not load exercise"
+msgstr "Não foi possível carregar o exercício"
+
+msgid "Draft answer saved"
+msgstr "Rascunho da resposta guardado"
+
+msgid "Could not finish the attempt"
+msgstr "Não foi possível concluir a tentativa"
+
+msgid "Could not prepare Office document"
+msgstr "Não foi possível preparar o documento Office"
+
+msgid "Back to learner score"
+msgstr "Voltar à pontuação do aluno"
+
+msgid "Disable auto refresh"
+msgstr "Desativar atualização automática"
+
+msgid "Enable auto refresh"
+msgstr "Ativar atualização automática"
+
+msgid "Live window"
+msgstr "Janela em tempo real"
+
+msgid "Ongoing attempts"
+msgstr "Tentativas em curso"
+
+msgid "Completed attempts"
+msgstr "Tentativas concluídas"
+
+msgid "Started"
+msgstr "Iniciado"
+
+msgid "Last activity"
+msgstr "Última atividade"
+
+msgid "Could not load live results"
+msgstr "Não foi possível carregar os resultados em tempo real"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Este exercício é apenas de leitura porque está incluído num percurso de aprendizagem."
+
+msgid "Select a question type to create a question."
+msgstr "Selecione um tipo de pergunta para criar uma pergunta."
+
+msgid "Click to preview"
+msgstr "Clique para pré-visualizar"
+
+msgid "Hide preview"
+msgstr "Ocultar pré-visualização"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Coordenadas"
+
+msgid "Blanks"
+msgstr "Espaços em branco"
+
+msgid "Switchable blanks"
+msgstr "Espaços em branco alternáveis"
+
+msgid "Blank"
+msgstr "Espaço em branco"
+
+msgid "Input width"
+msgstr "Largura do campo"
+
+msgid "Orientation"
+msgstr "Orientação"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Não disponível com o modo de feedback atual do exercício"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Não disponível no fluxo de criação do percurso de aprendizagem"
+
+msgid "Delete question"
+msgstr "Eliminar pergunta"
+
+msgid "Could not update exercise questions"
+msgstr "Não foi possível atualizar as perguntas do exercício"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Não foi possível adicionar o exercício ao percurso de aprendizagem"
+
+msgid "A valid exercise id is required."
+msgstr "É necessário um ID de exercício válido."
+
+msgid "Could not load exercise questions"
+msgstr "Não foi possível carregar as perguntas do exercício"
+
+msgid "Delete selected attempts"
+msgstr "Eliminar tentativas selecionadas"
+
+msgid "Before date"
+msgstr "Antes da data"
+
+msgid "Pending corrections"
+msgstr "Correções pendentes"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Este exercício está bloqueado pelo livro de classificações. As ações de limpeza de tentativas estão desativadas."
+
+msgid "No attempts found"
+msgstr "Nenhuma tentativa encontrada"
+
+msgid "Review"
+msgstr "Rever"
+
+msgid "Print/PDF"
+msgstr "Imprimir/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Não foi possível carregar o relatório do exercício"
+
+msgid "Select at least one attempt"
+msgstr "Selecione pelo menos uma tentativa"
+
+msgid "Delete selected attempts?"
+msgstr "Eliminar as tentativas selecionadas?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Enviar e-mails com os resultados das tentativas revistas?"
+
+msgid "Could not send emails"
+msgstr "Não foi possível enviar os e-mails"
+
+msgid "Exercise result emails sent"
+msgstr "E-mails com os resultados do exercício enviados"
+
+msgid "Skipped"
+msgstr "Ignorado"
+
+msgid "Close attempt?"
+msgstr "Fechar tentativa?"
+
+msgid "Attempt closed"
+msgstr "Tentativa fechada"
+
+msgid "Could not close attempt"
+msgstr "Não foi possível fechar a tentativa"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Enviar o resultado desta tentativa por e-mail ao formando?"
+
+msgid "Email sent"
+msgstr "E-mail enviado"
+
+msgid "Could not send email"
+msgstr "Não foi possível enviar o e-mail"
+
+msgid "Attempt deleted"
+msgstr "Tentativa eliminada"
+
+msgid "Could not delete attempt"
+msgstr "Não foi possível eliminar a tentativa"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Selecione um ficheiro CSV que contenha as colunas título e descrição."
+
+msgid "Manage categories used to classify questions."
+msgstr "Gerir categorias usadas para classificar perguntas."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Gerir categorias usadas para classificar exercícios."
+
+msgid "Could not load categories"
+msgstr "Não foi possível carregar as categorias"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Categorias importadas: %s. Linhas ignoradas: %s."
+
+msgid "Imported categories: %s."
+msgstr "Categorias importadas: %s."
+
+msgid "Could not import categories"
+msgstr "Não foi possível importar as categorias"
+
+msgid "Could not save category"
+msgstr "Não foi possível guardar a categoria"
+
+msgid "Answer distribution"
+msgstr "Distribuição das respostas"
+
+msgid "Configured answers"
+msgstr "Respostas configuradas"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "A contagem detalhada de respostas para alguns tipos de pergunta ainda não está disponível no relatório migrado."
+
+msgid "No report by question data found"
+msgstr "Não foram encontrados dados de relatório por pergunta"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "A contagem detalhada de respostas para este tipo de pergunta ainda não está disponível no relatório migrado."
+
+msgid "No answer distribution found"
+msgstr "Não foi encontrada distribuição de respostas"
+
+msgid "Could not load report by question"
+msgstr "Não foi possível carregar o relatório por pergunta"
+
+msgid "Question settings"
+msgstr "Definições da pergunta"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Deixe em branco ou 0 para sem limite de tempo."
+
+msgid "Time limit in seconds"
+msgstr "Limite de tempo em segundos"
+
+msgid "Attached questions"
+msgstr "Perguntas anexadas"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Apenas as perguntas anexadas a esta pergunta multimédia dentro do exercício atual são listadas aqui."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Não existem perguntas anexadas a esta pergunta multimédia no exercício atual."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Carregue o modelo de documento Office que os formandos editarão com o OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Substituir documento Office"
+
+msgid "Current Office document"
+msgstr "Documento Office atual"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Esta pergunta é corrigida manualmente após o formando submeter o documento editado."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "A pontuação total é calculada como a soma das pontuações das zonas ativas."
+
+msgid "Global score"
+msgstr "Pontuação global"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Selecione uma linha de zona ativa, escolha a sua forma e desenhe sobre a imagem. Para polígonos, clique em cada ponto e termine o polígono, ou faça duplo clique para terminar."
+
+msgid "Finish polygon"
+msgstr "Terminar polígono"
+
+msgid "Calculated answer"
+msgstr "Resposta calculada"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Por favor, escreva o seu texto abaixo e utilize parênteses retos [...] para definir um ou mais espaços em branco."
+
+msgid "Lowest value"
+msgstr "Valor mais baixo"
+
+msgid "Highest value"
+msgstr "Valor mais alto"
+
+msgid "Fill in blanks"
+msgstr "Preencher lacunas"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Utilize os marcadores selecionados para definir as lacunas. Exemplo: A capital do Peru é [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Introduza as opções do menu suspenso, uma resposta por linha. Depois marque as respostas esperadas abaixo, como na ferramenta antiga."
+
+msgid "Refresh answers"
+msgstr "Atualizar respostas"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Esta questão de combinação com menu suspenso utiliza uma pontuação global, como na versão anterior."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Por favor, introduza pelo menos duas opções de menu suspenso."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Crie primeiro as opções de destino e depois associe cada item à opção correta."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Esta questão de combinação por associação utiliza uma pontuação global, como na versão anterior."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Crie os passos e escolha a posição esperada para cada um, como no arrastável antigo."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Os alunos escolherão Verdadeiro ou Falso e depois selecionarão o seu grau de certeza durante a tentativa. O editor armazena as mesmas pontuações Certo/Errado e níveis de certeza que a versão anterior."
+
+msgid "Hotspot combination"
+msgstr "Combinação de ponto ativo"
+
+msgid "Add delineation"
+msgstr "Adicionar delimitação"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Esta questão de documento Office não tem opções de resposta. A sua pontuação é atribuída durante a correção/revisão dos resultados."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Esta questão de carregamento não tem opções de resposta. A sua pontuação é atribuída durante a correção/revisão dos resultados."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Esta questão de expressão oral não tem opções de resposta. A sua pontuação é atribuída durante a correção/revisão dos resultados."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Esta questão aberta não tem opções de resposta. A sua pontuação é atribuída durante a correção/revisão dos resultados."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Adicionar um texto de leitura com definições de velocidade de deslocação."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Adicionar conteúdo, media ou contexto de leitura sem adicionar pontuação."
+
+msgid "Insert a page break without adding score."
+msgstr "Inserir uma quebra de página sem adicionar pontuação."
+
+msgid "Could not save question"
+msgstr "Não foi possível guardar a questão"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Apenas são permitidos documentos DOC, DOCX, XLS ou XLSX."
+
+msgid "Please select an Office document."
+msgstr "Por favor, selecione um documento Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Por favor, desenhe pelo menos um ponto ativo."
+
+msgid "Please draw at least one delineation."
+msgstr "Por favor, desenhe pelo menos uma delimitação."
+
+msgid "The fill in blanks text is required."
+msgstr "O texto de preenchimento de lacunas é obrigatório."
+
+msgid "At least one expected answer is required."
+msgstr "É necessária pelo menos uma resposta esperada."
+
+msgid "At least two draggable items are required."
+msgstr "São necessários pelo menos dois itens arrastáveis."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Cada item arrastável deve estar associado a uma posição de destino válida."
+
+msgid "At least two matching options are required."
+msgstr "São necessárias pelo menos duas opções de associação."
+
+msgid "At least two matching pairs are required."
+msgstr "São necessários pelo menos dois pares de associação."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Cada par de associação deve estar ligado a uma opção válida."
+
+msgid "At least two answers are required."
+msgstr "São necessárias pelo menos duas respostas."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Cada resposta verdadeiro/falso deve ter Verdadeiro ou Falso selecionado."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Uma questão de resposta única deve ter exatamente uma resposta correta."
+
+msgid "At least one correct answer is required."
+msgstr "É necessária pelo menos uma resposta correta."
+
+msgid "Could not load question"
+msgstr "Não foi possível carregar a questão"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Selecione um curso e exporte o relatório global de resultados do exercício como CSV."
+
+msgid "Back to reports catalog"
+msgstr "Voltar ao catálogo de relatórios"
+
+msgid "Could not load exercise global report"
+msgstr "Não foi possível carregar o relatório global do exercício"
+
+msgid "Imported questions"
+msgstr "Questões importadas"
+
+msgid "Aiken content"
+msgstr "Conteúdo Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Não foi possível carregar o gerador de IA Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Não foi possível gerar o conteúdo Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Não foi possível importar o conteúdo Aiken gerado"
+
+msgid "Back to my courses"
+msgstr "Voltar aos meus cursos"
+
+msgid "Open report"
+msgstr "Abrir relatório"
+
+msgid "Questions with no automatic correction"
+msgstr "Questões sem correção automática"
+
+msgid "Could not load pending attempts"
+msgstr "Não foi possível carregar as tentativas pendentes"
+
+msgid "Skipped questions"
+msgstr "Questões ignoradas"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "A importação Aiken distribui este peso total pelas questões importadas, a menos que uma questão defina SCORE."
+
+msgid "Import warnings"
+msgstr "Avisos de importação"
+
+msgid "Could not import questions"
+msgstr "Não foi possível importar as perguntas"
+
+msgid "No question statistics found"
+msgstr "Não foram encontradas estatísticas de perguntas"
+
+msgid "Could not load question statistics"
+msgstr "Não foi possível carregar as estatísticas de perguntas"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Também pode ligar um cliente MCP diretamente, apontando-o para o seguinte endpoint:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Nenhuma aplicação está atualmente ligada à sua conta."
+
+msgid "Connected on"
+msgstr "Ligado em"
+
+msgid "Last used"
+msgstr "Última utilização"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s deixará de poder aceder à sua conta Chamilo. Continuar?"
+
+msgid "Application revoked"
+msgstr "Aplicação revogada"
+
+msgid "Copied to clipboard"
+msgstr "Copiado para a área de transferência"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Não foi possível copiar o endpoint MCP"
+
+msgid "MCP endpoint"
+msgstr "Endpoint MCP"
+
+msgid "API key"
+msgstr "Chave API"
+
+msgid "Last used at"
+msgstr "Última utilização em"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Copie esta chave agora. Não voltará a ser mostrada."
+
+msgid "Rotate API key"
+msgstr "Rodar chave API"
+
+msgid "Revoke API key"
+msgstr "Revogar chave API"
+
+msgid "Remote MCP connection"
+msgstr "Ligação MCP remota"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Configure o seu cliente MCP com os seguintes valores:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "A chave atual deixará de funcionar imediatamente. Continuar?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Será gerada uma nova chave API MCP pessoal. Continuar?"
+
+msgid "MCP API key generated"
+msgstr "Chave API MCP gerada"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Os clientes MCP ligados que utilizam esta chave deixarão de funcionar imediatamente. Continuar?"
+
+msgid "MCP API key revoked"
+msgstr "Chave API MCP revogada"
+
+msgid "Could not copy the API key"
+msgstr "Não foi possível copiar a chave API"
+
+msgid "Project"
+msgstr "Projeto"
+
+msgid "Close old tickets"
+msgstr "Fechar tickets antigos"
+
+msgid "Close tickets older than seven days?"
+msgstr "Fechar tickets com mais de sete dias?"
+
+msgid "Assignment history"
+msgstr "Histórico de atribuições"
+
+msgid "Translate with AI"
+msgstr "Traduzir com IA"
+
+msgid "Target language"
+msgstr "Idioma de destino"
+
+msgid "Please select a provider"
+msgstr "Por favor, selecione um fornecedor"
+
+msgid "Generate translation"
+msgstr "Gerar tradução"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Pelo menos uma secção de termos e condições deve conter texto."
+
+msgid "No active target languages are available."
+msgstr "Não existem idiomas de destino ativos disponíveis."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Datas de acesso"
+
+msgid "Coach access dates"
+msgstr "Datas de acesso do formador"
+
+msgid "No sessions found"
+msgstr "Não foram encontradas sessões"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Selecione os cursos a que este utilizador não deve poder aceder nesta sessão."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Um utilizador não pode ser bloqueado de todos os cursos da sessão. Em vez disso, remova a inscrição do utilizador."
+
+msgid "Users subscribed to this session"
+msgstr "Utilizadores inscritos nesta sessão"
+
+msgid "No available users found"
+msgstr "Não foram encontrados utilizadores disponíveis"
+
+msgid "Subscribe this user to the session?"
+msgstr "Inscrever este utilizador na sessão?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Inscrever os utilizadores selecionados na sessão?"
+
+msgid "General tutor planning"
+msgstr "Planeamento geral do tutor"
+
+msgid "User is already registered by another tutor."
+msgstr "O utilizador já está registado por outro tutor."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Está a receber uma cópia porque é tutor do curso"
+
+msgid "General tutor"
+msgstr "Tutor geral"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Considere os cursos, tutores, suporte técnico, professores e/ou materiais disponíveis."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutores inscritos como professores no curso %s"
+
+msgid "Tutor name"
+msgstr "Nome do tutor"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Os tutores de sessão são coordenadores da sessão e podem atuar como tutores em cada curso da sessão. Apenas utilizadores com o papel de professor podem ser selecionados como tutores de sessão."
+
+msgid "Access start date for tutors"
+msgstr "Data de início de acesso para tutores"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Data em que a sessão fica disponível para os tutores, permitindo-lhes prepará-la antes de os alunos acederem"
+
+msgid "Access end date for tutors"
+msgstr "Data de fim de acesso para tutores"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Data em que a sessão é encerrada para os tutores. O prazo adicional permite-lhes exportar toda a informação relevante de acompanhamento"
+
+msgid "Tutor and student"
+msgstr "Tutor e aluno"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Este relatório mostra a distribuição semanal de sessões por tutor geral no intervalo de datas selecionado."
+
+msgid "User is general tutor in some sessions"
+msgstr "O utilizador é tutor geral em algumas sessões"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Os professores serão adicionados como tutores em todas as sessões do curso."
+
+msgid "Delete failed: invalid question id."
+msgstr "Falha ao eliminar: ID de questão inválido."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Número médio de sessões por tutor geral de sessão"
+
+msgid "No room"
+msgstr "Sem sala"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importar professores do curso como tutores do curso na sessão"
+
+msgid "Clean and update course tutors"
+msgstr "Limpar e atualizar tutores do curso"
+
+msgid "Add me as tutor"
+msgstr "Adicionar-me como tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Não foi possível adicionar o inquérito ao percurso de aprendizagem"
+
+msgid "Access dates for tutors"
+msgstr "Datas de acesso para tutores"
+
+msgid "Tutor and group member"
+msgstr "Tutor e membro do grupo"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "O limite diário de tokens de IA foi atingido. Tente novamente amanhã."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "O limite mensal de tokens de IA foi atingido. Tente novamente no próximo mês."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Este código de curso já existe, escolha outro código."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Este título de curso já existe, escolha outro título."
+
+msgid "This tool visibility cannot be changed"
+msgstr "A visibilidade desta ferramenta não pode ser alterada"
+
+msgid "Invalid visibility"
+msgstr "Visibilidade inválida"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Está a receber uma cópia porque é um dos tutores do curso"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Está a receber uma cópia porque é o tutor do curso"
+
+msgid "Manual completion"
+msgstr "Conclusão manual"
+
+msgid "Send to tutors"
+msgstr "Enviar para tutores"
+
+msgid "Lab title"
+msgstr "Título do laboratório"
+
+msgid "Lab week"
+msgstr "Semana do laboratório"
+
+msgid "Final exam access rule"
+msgstr "Regra de acesso ao exame final"
+
+msgid "Course completion rule"
+msgstr "Regra de conclusão do curso"
+
+msgid "You have been invited to join a course"
+msgstr "Foi convidado a juntar-se a um curso"
+
+msgid "No user has been found"
+msgstr "Nenhum utilizador encontrado"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "O utilizador selecionado não pode ser inscrito neste contexto"
+
+msgid "No change has been made"
+msgstr "Nenhuma alteração foi efetuada"
+
+msgid "Back to group list"
+msgstr "Voltar à lista de grupos"
+
+msgid "Remove class link"
+msgstr "Remover ligação à turma"
+
+msgid "Group settings"
+msgstr "Definições do grupo"
+
+msgid "Self-registration allowed"
+msgstr "Autoinscrição permitida"
+
+msgid "Self-unregistration allowed"
+msgstr "Autodesinscrição permitida"
+
+msgid "This group is linked to the class"
+msgstr "Este grupo está ligado à turma"
+
+msgid "Create one or more empty course groups"
+msgstr "Criar um ou mais grupos de curso vazios"
+
+msgid "Number of places"
+msgstr "Número de lugares"
+
+msgid "Base group"
+msgstr "Grupo base"
+
+msgid "Share"
+msgstr "Partilhar"
+
+msgid "Collaboration"
+msgstr "Colaboração"
+
+msgid "The group title is required."
+msgstr "O título do grupo é obrigatório."
+
+msgid "Back to group area"
+msgstr "Voltar à área do grupo"
+
+msgid "Members are managed by the linked class"
+msgstr "Os membros são geridos pela turma associada"
+
+msgid "%s groups selected"
+msgstr "%s grupos selecionados"
+
+msgid "Fill selected groups"
+msgstr "Preencher grupos selecionados"
+
+msgid "Empty selected groups"
+msgstr "Esvaziar grupos selecionados"
+
+msgid "Fill group"
+msgstr "Preencher grupo"
+
+msgid "Empty group"
+msgstr "Esvaziar grupo"
+
+msgid "Groups per user"
+msgstr "Grupos por utilizador"
+
+msgid "No tutors"
+msgstr "Sem tutores"
+
+msgid "No users"
+msgstr "Sem utilizadores"
+

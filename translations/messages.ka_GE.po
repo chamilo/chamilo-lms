@@ -37632,3 +37632,1299 @@ msgstr "გამოიყენეთ 0 ყველა ხელმისა�
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "გამოიყენეთ ეს ველები სავარჯიშოს კლასიფიკაციისთვის მისი ჩვენების პარამეტრებისგან დამოუკიდებლად."
 
+msgid "Invite by email"
+msgstr "მოწვევა ელფოსტით"
+
+msgid "Invitation has been sent"
+msgstr "მოწვევა გაიგზავნა"
+
+msgid "Sent on"
+msgstr "გაიგზავნა"
+
+msgid "Accepted on"
+msgstr "მიღებულია"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "ეს კურსი სესიაშია გახსნილი. აქ მოწვევის გაგზავნა აბონენტს მთელ სესიაზე %s დაარეგისტრირებს და არა მხოლოდ ამ კურსზე."
+
+msgid "Revoke"
+msgstr "გაუქმება"
+
+msgid "Revoked"
+msgstr "გაუქმებულია"
+
+msgid "Invitation has been revoked"
+msgstr "მოწვევა გაუქმდა"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ გააუქმოთ მოწვევა, რომელიც გაეგზავნა %s-ს?"
+
+msgid "No default room"
+msgstr "ნაგულისხმევი ოთახი არ არის"
+
+msgid "Floor"
+msgstr "სართული"
+
+msgid "Capacity"
+msgstr "ტევადობა"
+
+msgid "Use attendance default room"
+msgstr "დასწრების ნაგულისხმევი ოთახის გამოყენება"
+
+msgid "Floor number"
+msgstr "სართულის ნომერი"
+
+msgid "Copy to students"
+msgstr "სტუდენტებისთვის კოპირება"
+
+msgid "Generate a quick test on this topic"
+msgstr "ამ თემაზე სწრაფი ტესტის გენერირება"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "შენახული დოკუმენტის შიგთავსი დამუშავებისთვის AI მოდელს გადაეცემა."
+
+msgid "MCP API key"
+msgstr "MCP API გასაღები"
+
+msgid "Authorized applications"
+msgstr "ავტორიზებული აპლიკაციები"
+
+msgid "Your session is about to expire"
+msgstr "თქვენი სესია ამოიწურება"
+
+msgid "Do you want to continue your session?"
+msgstr "გსურთ სესიის გაგრძელება?"
+
+msgid "Stay connected"
+msgstr "დაკავშირებული დარჩენა"
+
+msgid "You will be signed out in %s seconds."
+msgstr "თქვენ გამოხვალთ სისტემიდან %s წამში."
+
+msgid "No descriptions available yet."
+msgstr "აღწერები ჯერ არ არის ხელმისაწვდომი."
+
+msgid "%s users selected"
+msgstr "%s მომხმარებელი არჩეულია"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "არჩეული მომხმარებლები კურსზე დარეგისტრირდნენ"
+
+msgid "Import teachers"
+msgstr "მასწავლებლების იმპორტი"
+
+msgid "Import learners"
+msgstr "სტუდენტების იმპორტი"
+
+msgid "Select CSV file"
+msgstr "აირჩიეთ CSV ფაილი"
+
+msgid "Some users could not be subscribed"
+msgstr "ზოგიერთი მომხმარებლის გამოწერა ვერ მოხერხდა"
+
+msgid "Browse available classes"
+msgstr "ხელმისაწვდომი კლასების ნახვა"
+
+msgid "Back to linked classes"
+msgstr "დაბრუნება დაკავშირებულ კლასებში"
+
+msgid "No classes are currently linked to this course."
+msgstr "ამ კურსთან ამჟამად დაკავშირებული კლასები არ არის."
+
+msgid "No available classes were found for this course."
+msgstr "ამ კურსისთვის ხელმისაწვდომი კლასები ვერ მოიძებნა."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ არჩეული მომხმარებლების გამოწერის გაუქმება?"
+
+msgid "Learning path access"
+msgstr "სასწავლო გზის წვდომა"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "მხოლოდ არჩეულ მომხმარებლებსა და ჯგუფებს შეუძლიათ ამ სასწავლო გზაზე წვდომა. მართეთ ისინი შენახვის შემდეგ."
+
+msgid "All current and future course users can access this learning path."
+msgstr "ყველა მიმდინარე და მომავალ კურსის მომხმარებელს შეუძლია ამ სასწავლო გზაზე წვდომა."
+
+msgid "All course users"
+msgstr "ყველა კურსის მომხმარებელი"
+
+msgid "Selected users and groups"
+msgstr "არჩეული მომხმარებლები და ჯგუფები"
+
+msgid "No access"
+msgstr "წვდომა არ არის"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "მხოლოდ აქ დამატებულ მომხმარებლებსა და ჯგუფებს შეუძლიათ ამ სასწავლო გზაზე წვდომა."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "კითხვების რაოდენობა შეზღუდულია მაქსიმუმ %s-ით"
+
+msgid "Open exercise player"
+msgstr "სავარჯიშოს პლეერის გახსნა"
+
+msgid "The score is hidden for this exercise."
+msgstr "ამ სავარჯიშოსთვის ქულა დამალულია."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "შესწორებები დამალულია სავარჯიშოს შედეგების პარამეტრების მიხედვით."
+
+msgid "Progressive adaptive result"
+msgstr "პროგრესული ადაპტური შედეგი"
+
+msgid "Achieved level"
+msgstr "მიღწეული დონე"
+
+msgid "Correction history"
+msgstr "შესწორების ისტორია"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "ამ მცდელობისთვის განხორციელებული ხელით შესწორებების ისტორია."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "ეს სავარჯიშო იყენებს რადარის/ობობის ქსელის შედეგის რეჟიმს. დიაგრამა ამ გვერდზე მიუწვდომელია."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "კითხვების დეტალები დამალულია სავარჯიშოს შედეგების პარამეტრების მიხედვით."
+
+msgid "Media question"
+msgstr "მედია კითხვა"
+
+msgid "Pending correction"
+msgstr "შესწორება მოლოდინში"
+
+msgid "No answer"
+msgstr "პასუხი არ არის"
+
+msgid "Blank %s"
+msgstr "ცარიელი %s"
+
+msgid "Your order"
+msgstr "თქვენი თანმიმდევრობა"
+
+msgid "Correct order"
+msgstr "სწორი თანმიმდევრობა"
+
+msgid "Delineation review"
+msgstr "დელინეაციის განხილვა"
+
+msgid "Learner clicks"
+msgstr "სტუდენტის დაწკაპუნებები"
+
+msgid "Question image"
+msgstr "კითხვის სურათი"
+
+msgid "No hotspot image available"
+msgstr "ჰოტსპოტის სურათი მიუწვდომელია"
+
+msgid "Learner delineation"
+msgstr "სტუდენტის დელინეაცია"
+
+msgid "Expected delineation"
+msgstr "მოსალოდნელი დელინეაცია"
+
+msgid "Expected zones"
+msgstr "მოსალოდნელი ზონები"
+
+msgid "Zone"
+msgstr "ზონა"
+
+msgid "Learner annotation"
+msgstr "სტუდენტის ანოტაცია"
+
+msgid "No annotation image available"
+msgstr "ანოტაციის სურათი მიუწვდომელია"
+
+msgid "This answer is pending teacher correction."
+msgstr "ეს პასუხი მასწავლებლის შესწორებას ელოდება."
+
+msgid "Teacher comment"
+msgstr "მასწავლებლის კომენტარი"
+
+msgid "Teacher correction"
+msgstr "მასწავლებლის შესწორება"
+
+msgid "Save correction"
+msgstr "შესწორების შენახვა"
+
+msgid "Learner audio"
+msgstr "სტუდენტის აუდიო"
+
+msgid "Download audio"
+msgstr "აუდიოს ჩამოტვირთვა"
+
+msgid "No uploaded audio"
+msgstr "ატვირთული აუდიო არ არის"
+
+msgid "Learner Office document"
+msgstr "სტუდენტის Office დოკუმენტი"
+
+msgid "Learner file"
+msgstr "მსმენელის ფაილი"
+
+msgid "Download Office document"
+msgstr "Office დოკუმენტის ჩამოტვირთვა"
+
+msgid "No submitted document"
+msgstr "დოკუმენტი არ არის წარდგენილი"
+
+msgid "No uploaded file"
+msgstr "ფაილი არ არის ატვირთული"
+
+msgid "Content item"
+msgstr "შიგთავსის ელემენტი"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "ამ ტიპის კითხვის გადახედვა ამ გვერდზე შეუძლებელია."
+
+msgid "Exercise completed"
+msgstr "სავარჯიშო დასრულდა"
+
+msgid "Could not start the attempt"
+msgstr "მცდელობის დაწყება ვერ მოხერხდა"
+
+msgid "Invalid exercise attempt"
+msgstr "სავარჯიშოს მცდელობა არასწორია"
+
+msgid "Could not load exercise result"
+msgstr "სავარჯიშოს შედეგის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Could not load AI providers"
+msgstr "AI პროვაიდერების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI შეთავაზების გენერირება ვერ მოხერხდა"
+
+msgid "Correction saved"
+msgstr "შესწორება შენახულია"
+
+msgid "Could not save correction"
+msgstr "შესწორების შენახვა ვერ მოხერხდა"
+
+msgid "Create exercise"
+msgstr "სავარჯიშოს შექმნა"
+
+msgid "Exercise categories"
+msgstr "სავარჯიშოს კატეგორიები"
+
+msgid "Question categories"
+msgstr "კითხვების კატეგორიები"
+
+msgid "Search by exercise title or description."
+msgstr "ძებნა სავარჯიშოს სათაურით ან აღწერით."
+
+msgid "Search exercises"
+msgstr "სავარჯიშოების ძებნა"
+
+msgid "No exercises found"
+msgstr "სავარჯიშოები ვერ მოიძებნა"
+
+msgid "Open exercise"
+msgstr "სავარჯიშოს გახსნა"
+
+msgid "Disable autolaunch"
+msgstr "ავტოგაშვების გამორთვა"
+
+msgid "Enable autolaunch"
+msgstr "ავტოგაშვების ჩართვა"
+
+msgid "Export QTI2"
+msgstr "QTI2 ექსპორტი"
+
+msgid "Bulk actions"
+msgstr "მასობრივი მოქმედებები"
+
+msgid "Selected exercises"
+msgstr "არჩეული სავარჯიშოები"
+
+msgid "No exercises selected"
+msgstr "სავარჯიშოები არ არის არჩეული"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ მოქმედების გამოყენება არჩეულ სავარჯიშოებზე?"
+
+msgid "Bulk action completed"
+msgstr "მასობრივი მოქმედება დასრულდა"
+
+msgid "Could not update exercises"
+msgstr "სავარჯიშოების განახლება ვერ მოხერხდა"
+
+msgid "Could not update exercise"
+msgstr "სავარჯიშოს განახლება ვერ მოხერხდა"
+
+msgid "Copy exercise"
+msgstr "სავარჯიშოს კოპირება"
+
+msgid "Delete exercise"
+msgstr "სავარჯიშოს წაშლა"
+
+msgid "Could not load exercises"
+msgstr "სავარჯიშოების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "No limit"
+msgstr "შეზღუდვა არ არის"
+
+msgid "Add selected questions to the test"
+msgstr "არჩეული კითხვების დამატება ტესტში"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "ეს კითხვა გამოიყენება აქტიურ ტესტში და აქ ვერ ჩასწორდება."
+
+msgid "This question cannot be edited here."
+msgstr "ამ კითხვის რედაქტირება აქ შეუძლებელია."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "ეს კითხვა გამოიყენება აქტიურ ტესტში და აქ ვერ წაიშლება."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "ამ კითხვის წაშლა შეუძლებელია, რადგან თქვენი წვდომა შეზღუდულია პლატფორმის პარამეტრებით."
+
+msgid "Already in test"
+msgstr "უკვე ტესტშია"
+
+msgid "Select at least one question."
+msgstr "აირჩიეთ მინიმუმ ერთი კითხვა."
+
+msgid "Question bank updated"
+msgstr "კითხვების ბანკი განახლდა"
+
+msgid "Could not update the question bank"
+msgstr "კითხვების ბანკის განახლება ვერ მოხერხდა"
+
+msgid "Could not load the question bank"
+msgstr "კითხვების ბანკის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Total score"
+msgstr "საერთო ქულა"
+
+msgid "Starting"
+msgstr "დაწყება"
+
+msgid "Attempt history"
+msgstr "მცდელობების ისტორია"
+
+msgid "No attempts yet"
+msgstr "მცდელობები ჯერ არ არის"
+
+msgid "Invalid exercise"
+msgstr "არასწორი სავარჯიშო"
+
+msgid "Could not load exercise overview"
+msgstr "ვერ მოხერხდა სავარჯიშოს მიმოხილვის ჩატვირთვა"
+
+msgid "Open test"
+msgstr "ტესტის გახსნა"
+
+msgid "Random answers"
+msgstr "შემთხვევითი პასუხები"
+
+msgid "Prevent moving backwards"
+msgstr "უკან გადასვლის აკრძალვა"
+
+msgid "Previous button hidden"
+msgstr "წინა ღილაკი დამალულია"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "ეს სავარჯიშო იყენებს პარამეტრებს, რომლებიც სხვა ტესტის პლეერს მოითხოვს."
+
+msgid "Continue test"
+msgstr "ტესტის გაგრძელება"
+
+msgid "Attempt started"
+msgstr "მცდელობა დაიწყო"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "მასწავლებლის წინასწარი ნახვა არ ქმნის თვალყურადევნებულ მცდელობას."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "დაიწყეთ ან განაგრძეთ სავარჯიშოს მცდელობა. შავი პასუხები შეიძლება შეინახოს საბოლოო გაგზავნამდე."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "დროის ლიმიტი ამოიწურა. მცდელობის დასრულება."
+
+msgid "Question time reached. Saving your answer."
+msgstr "კითხვის დრო ამოიწურა. თქვენი პასუხის შენახვა."
+
+msgid "Finishing"
+msgstr "დასრულება"
+
+msgid "Draft saved"
+msgstr "შავი შენახულია"
+
+msgid "Statement"
+msgstr "განცხადება"
+
+msgid "Drop each option on the matching answer"
+msgstr "თითოეული ვარიანტი შესაბამის პასუხზე გადაიტანეთ"
+
+msgid "Clear match"
+msgstr "შესაბამისობის გასუფთავება"
+
+msgid "Click to place the selected option here"
+msgstr "დააჭირეთ არჩეული ვარიანტის აქ განსათავსებლად"
+
+msgid "Select an option, then click here"
+msgstr "აირჩიეთ ვარიანტი, შემდეგ დააჭირეთ აქ"
+
+msgid "Already matched"
+msgstr "უკვე შესაბამისია"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "შეგიძლიათ ვარიანტი პასუხზე გადაათრიოთ ან ვარიანტი აირჩიოთ და შემდეგ სამიზნე ველზე დააჭიროთ."
+
+msgid "Put the items in the correct order."
+msgstr "ელემენტები სწორი თანმიმდევრობით დაალაგეთ."
+
+msgid "Move left"
+msgstr "მარცხნივ გადაადგილება"
+
+msgid "Move right"
+msgstr "მარჯვნივ გადაადგილება"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "შეგიძლიათ ელემენტები მარცხნივ ან მარჯვნივ გადაათრიოთ ან გადაადგილების ღილაკები გამოიყენოთ თანმიმდევრობის შესაცვლელად."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "შეგიძლიათ ელემენტები გადაათრიოთ ან გადაადგილების ღილაკები გამოიყენოთ თანმიმდევრობის შესაცვლელად."
+
+msgid "Or upload an audio file"
+msgstr "ან ატვირთეთ აუდიო ფაილი"
+
+msgid "Selected audio"
+msgstr "არჩეული აუდიო"
+
+msgid "Uploaded audio"
+msgstr "ატვირთული აუდიო"
+
+msgid "Office document"
+msgstr "ოფისის დოკუმენტი"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "დაასრულეთ დოკუმენტი ქვემოთ მოცემულ რედაქტორში. ფაილი ამ მცდელობას დაერთვება მასწავლებლის შესწორებისთვის."
+
+msgid "Reload Office editor"
+msgstr "ოფისის რედაქტორის გადატვირთვა"
+
+msgid "Prepare Office document"
+msgstr "ოფისის დოკუმენტის მომზადება"
+
+msgid "Open in new tab"
+msgstr "ახალ ჩანართში გახსნა"
+
+msgid "Preparing Office document"
+msgstr "ოფისის დოკუმენტის მომზადება"
+
+msgid "Submitted document"
+msgstr "გაგზავნილი დოკუმენტი"
+
+msgid "Annotation tools"
+msgstr "ანოტაციის ინსტრუმენტები"
+
+msgid "Text to place"
+msgstr "განსათავსებელი ტექსტი"
+
+msgid "Click the image to place the text annotation."
+msgstr "დააჭირეთ სურათს ტექსტური ანოტაციის განსათავსებლად."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "დააჭირეთ სურათს ბილიკის წერტილების დასამატებლად. ახალი ბილიკის დასაწყებად გამოიყენეთ ახალი ბილიკის დაწყება."
+
+msgid "Start new path"
+msgstr "ახალი ბილიკის დაწყება"
+
+msgid "Current annotations"
+msgstr "მიმდინარე ანოტაციები"
+
+msgid "Remove point"
+msgstr "წერტილის წაშლა"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "დააჭირეთ სურათს დელინეაციის პოლიგონის დასახატად."
+
+msgid "Click a marker to remove it."
+msgstr "დააჭირეთ მარკერს მის წასაშლელად."
+
+msgid "Placed"
+msgstr "განთავსებულია"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "აირჩიეთ პასუხი, შემდეგ დააჭირეთ სურათს მის მოსანიშნად."
+
+msgid "Reading speed"
+msgstr "კითხვის სიჩქარე"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "ამ ტიპის კითხვა ამ პლეერში ვერ გამოჩნდება."
+
+msgid "Save draft"
+msgstr "შავის შენახვა"
+
+msgid "I confirm that my answers were saved."
+msgstr "ვადასტურებ, რომ ჩემი პასუხები შენახულია."
+
+msgid "Finish test"
+msgstr "ტესტის დასრულება"
+
+msgid "Attempt finished"
+msgstr "მცდელობა დასრულდა"
+
+msgid "Question category"
+msgstr "კითხვის კატეგორია"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "თქვენ დაასრულეთ ამ კითხვის კატეგორიასთან დაკავშირებული კითხვები, ეს თქვენი ბოლო შანსია დაბრუნდეთ და გადახედოთ ამ კითხვებს."
+
+msgid "Question time left"
+msgstr "კითხვისთვის დარჩენილი დრო"
+
+msgid "Time left"
+msgstr "დარჩენილი დრო"
+
+msgid "Current attempt"
+msgstr "მიმდინარე მცდელობა"
+
+msgid "Could not save draft answer"
+msgstr "მონახაზის პასუხის შენახვა ვერ მოხერხდა"
+
+msgid "Could not load exercise"
+msgstr "სავარჯიშოს ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Draft answer saved"
+msgstr "მონახაზის პასუხი შენახულია"
+
+msgid "Could not finish the attempt"
+msgstr "მცდელობის დასრულება ვერ მოხერხდა"
+
+msgid "Could not prepare Office document"
+msgstr "Office დოკუმენტის მომზადება ვერ მოხერხდა"
+
+msgid "Back to learner score"
+msgstr "მსმენელის ქულებზე დაბრუნება"
+
+msgid "Disable auto refresh"
+msgstr "ავტომატური განახლების გამორთვა"
+
+msgid "Enable auto refresh"
+msgstr "ავტომატური განახლების ჩართვა"
+
+msgid "Live window"
+msgstr "ცოცხალი ფანჯარა"
+
+msgid "Ongoing attempts"
+msgstr "მიმდინარე მცდელობები"
+
+msgid "Completed attempts"
+msgstr "დასრულებული მცდელობები"
+
+msgid "Started"
+msgstr "დაიწყო"
+
+msgid "Last activity"
+msgstr "ბოლო აქტივობა"
+
+msgid "Could not load live results"
+msgstr "ცოცხალი შედეგების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "ეს სავარჯიშო მხოლოდ წასაკითხია, რადგან ის შედის სასწავლო გზაში."
+
+msgid "Select a question type to create a question."
+msgstr "აირჩიეთ კითხვის ტიპი კითხვის შესაქმნელად."
+
+msgid "Click to preview"
+msgstr "დააჭირეთ გადახედვისთვის"
+
+msgid "Hide preview"
+msgstr "გადახედვის დამალვა"
+
+msgid "Shape"
+msgstr "ფორმა"
+
+msgid "Coordinates"
+msgstr "კოორდინატები"
+
+msgid "Blanks"
+msgstr "ცარიელი ადგილები"
+
+msgid "Switchable blanks"
+msgstr "გადართვადი ცარიელი ადგილები"
+
+msgid "Blank"
+msgstr "ცარიელი ადგილი"
+
+msgid "Input width"
+msgstr "შეყვანის ველის სიგანე"
+
+msgid "Orientation"
+msgstr "ორიენტაცია"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "მიუწვდომელია მიმდინარე სავარჯიშოს უკუკავშირის რეჟიმში"
+
+msgid "Not available in the learning path creation flow"
+msgstr "მიუწვდომელია სასწავლო გზის შექმნის პროცესში"
+
+msgid "Delete question"
+msgstr "კითხვის წაშლა"
+
+msgid "Could not update exercise questions"
+msgstr "სავარჯიშოს კითხვების განახლება ვერ მოხერხდა"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "სავარჯიშოს სასწავლო გზაში დამატება ვერ მოხერხდა"
+
+msgid "A valid exercise id is required."
+msgstr "საჭიროა სავარჯიშოს სწორი ID."
+
+msgid "Could not load exercise questions"
+msgstr "სავარჯიშოს კითხვების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Delete selected attempts"
+msgstr "არჩეული მცდელობების წაშლა"
+
+msgid "Before date"
+msgstr "თარიღამდე"
+
+msgid "Pending corrections"
+msgstr "მიმდინარე შესწორებები"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "ეს სავარჯიშო დაბლოკილია ქულათა წიგნის მიერ. მცდელობების გასუფთავების მოქმედებები გამორთულია."
+
+msgid "No attempts found"
+msgstr "მცდელობები ვერ მოიძებნა"
+
+msgid "Review"
+msgstr "გადახედვა"
+
+msgid "Print/PDF"
+msgstr "დაბეჭდვა/PDF"
+
+msgid "Could not load exercise report"
+msgstr "სავარჯიშოს ანგარიშის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Select at least one attempt"
+msgstr "აირჩიეთ მინიმუმ ერთი მცდელობა"
+
+msgid "Delete selected attempts?"
+msgstr "წავშალოთ არჩეული მცდელობები?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "გაგზავნოთ განხილული მცდელობის შედეგების ელფოსტები?"
+
+msgid "Could not send emails"
+msgstr "ელფოსტების გაგზავნა ვერ მოხერხდა"
+
+msgid "Exercise result emails sent"
+msgstr "სავარჯიშოს შედეგების ელფოსტები გაიგზავნა"
+
+msgid "Skipped"
+msgstr "გამოტოვებული"
+
+msgid "Close attempt?"
+msgstr "დავხუროთ მცდელობა?"
+
+msgid "Attempt closed"
+msgstr "მცდელობა დაიხურა"
+
+msgid "Could not close attempt"
+msgstr "მცდელობის დახურვა ვერ მოხერხდა"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "გავაგზავნოთ ამ მცდელობის შედეგი ელფოსტით მოსწავლისთვის?"
+
+msgid "Email sent"
+msgstr "ელფოსტა გაიგზავნა"
+
+msgid "Could not send email"
+msgstr "ელფოსტის გაგზავნა ვერ მოხერხდა"
+
+msgid "Attempt deleted"
+msgstr "მცდელობა წაიშალა"
+
+msgid "Could not delete attempt"
+msgstr "მცდელობის წაშლა ვერ მოხერხდა"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "აირჩიეთ CSV ფაილი, რომელიც შეიცავს სათაურისა და აღწერის სვეტებს."
+
+msgid "Manage categories used to classify questions."
+msgstr "მართეთ კატეგორიები, რომლებიც გამოიყენება კითხვების კლასიფიკაციისთვის."
+
+msgid "Manage categories used to classify exercises."
+msgstr "მართეთ კატეგორიები, რომლებიც გამოიყენება სავარჯიშოების კლასიფიკაციისთვის."
+
+msgid "Could not load categories"
+msgstr "კატეგორიების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "იმპორტირებული კატეგორიები: %s. გამოტოვებული მწკრივები: %s."
+
+msgid "Imported categories: %s."
+msgstr "იმპორტირებული კატეგორიები: %s."
+
+msgid "Could not import categories"
+msgstr "კატეგორიების იმპორტი ვერ მოხერხდა"
+
+msgid "Could not save category"
+msgstr "კატეგორიის შენახვა ვერ მოხერხდა"
+
+msgid "Answer distribution"
+msgstr "პასუხების განაწილება"
+
+msgid "Configured answers"
+msgstr "კონფიგურირებული პასუხები"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "ზოგიერთი კითხვის ტიპისთვის დეტალური პასუხების დათვლა მიგრირებულ ანგარიშში ჯერ არ არის ხელმისაწვდომი."
+
+msgid "No report by question data found"
+msgstr "კითხვის მიხედვით ანგარიშის მონაცემები ვერ მოიძებნა"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "ამ კითხვის ტიპისთვის დეტალური პასუხების დათვლა მიგრირებულ ანგარიშში ჯერ არ არის ხელმისაწვდომი."
+
+msgid "No answer distribution found"
+msgstr "პასუხების განაწილება ვერ მოიძებნა"
+
+msgid "Could not load report by question"
+msgstr "კითხვის მიხედვით ანგარიშის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Question settings"
+msgstr "კითხვის პარამეტრები"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "დატოვეთ ცარიელი ან 0 დროის შეზღუდვის გარეშე."
+
+msgid "Time limit in seconds"
+msgstr "დროის შეზღუდვა წამებში"
+
+msgid "Attached questions"
+msgstr "მიმაგრებული კითხვები"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "აქ ჩამოთვლილია მხოლოდ ის კითხვები, რომლებიც მიმაგრებულია ამ მედია კითხვაზე მიმდინარე სავარჯიშოში."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "ამ მედია კითხვაზე მიმდინარე სავარჯიშოში კითხვები არ არის მიმაგრებული."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "ატვირთეთ Office დოკუმენტის შაბლონი, რომელსაც მოსწავლეები OnlyOffice-ით დაარედაქტირებენ."
+
+msgid "Replace Office document"
+msgstr "Office დოკუმენტის შეცვლა"
+
+msgid "Current Office document"
+msgstr "მიმდინარე Office დოკუმენტი"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "ეს კითხვა ხელით სწორდება მას შემდეგ, რაც მოსწავლე წარადგენს რედაქტირებულ დოკუმენტს."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "საერთო ქულა გამოითვლება როგორც hotspot ქულების ჯამი."
+
+msgid "Global score"
+msgstr "გლობალური ქულა"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "აირჩიეთ hotspot მწკრივი, აირჩიეთ მისი ფორმა, შემდეგ დახაზეთ სურათზე. პოლიგონებისთვის დააწკაპუნეთ თითოეულ წერტილზე და დაასრულეთ პოლიგონი, ან ორჯერ დააწკაპუნეთ დასასრულებლად."
+
+msgid "Finish polygon"
+msgstr "პოლიგონის დასრულება"
+
+msgid "Calculated answer"
+msgstr "გამოთვლილი პასუხი"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "გთხოვთ, ჩაწეროთ თქვენი ტექსტი ქვემოთ და გამოიყენოთ კვადრატული ფრჩხილები [...] ერთი ან მეტი ცარიელი ადგილის განსაზღვრისთვის."
+
+msgid "Lowest value"
+msgstr "ყველაზე დაბალი მნიშვნელობა"
+
+msgid "Highest value"
+msgstr "ყველაზე მაღალი მნიშვნელობა"
+
+msgid "Fill in blanks"
+msgstr "ცარიელი ადგილების შევსება"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "გამოიყენეთ არჩეული მარკერები ცარიელი ადგილების განსაზღვრისთვის. მაგალითი: პერუს დედაქალაქია [ლიმა]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "შეიყვანეთ ჩამოსაშლელი ვარიანტები, ერთი პასუხი თითო ხაზზე. შემდეგ მონიშნეთ მოსალოდნელი პასუხები ქვემოთ, როგორც ძველ ინსტრუმენტში."
+
+msgid "Refresh answers"
+msgstr "პასუხების განახლება"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "ეს ჩამოსაშლელი კომბინაციის კითხვა იყენებს ერთ გლობალურ ქულას, როგორც ძველ ვერსიაში."
+
+msgid "Please enter at least two dropdown options."
+msgstr "გთხოვთ, შეიყვანოთ მინიმუმ ორი ჩამოსაშლელი ვარიანტი."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "ჯერ შექმენით დანიშნულების ვარიანტები, შემდეგ დააკავშირეთ თითოეული ელემენტი სწორ ვარიანტთან."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "ეს შესაბამისობის კომბინაციის კითხვა იყენებს ერთ გლობალურ ქულას, როგორც ძველ ვერსიაში."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "შექმენით ნაბიჯები და აირჩიეთ თითოეული მათგანის მოსალოდნელი პოზიცია, როგორც ძველ Draggable-ში."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "სწავლების მონაწილეები აირჩევენ სწორი/არასწორი და შემდეგ მიუთითებენ თავიანთი დარწმუნებულობის ხარისხს მცდელობისას. რედაქტორი ინახავს იგივე სწორი/არასწორი ქულებს და დარწმუნებულობის დონეებს, როგორც ძველ ვერსიაში."
+
+msgid "Hotspot combination"
+msgstr "Hotspot კომბინაცია"
+
+msgid "Add delineation"
+msgstr "დელინეაციის დამატება"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "ამ Office დოკუმენტის კითხვას არ აქვს პასუხის ვარიანტები. მისი ქულა ენიჭება შემოწმების/შედეგების განხილვისას."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "ამ ატვირთვის კითხვას არ აქვს პასუხის ვარიანტები. მისი ქულა ენიჭება შემოწმების/შედეგების განხილვისას."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "ამ ზეპირი გამოხატვის კითხვას არ აქვს პასუხის ვარიანტები. მისი ქულა ენიჭება შემოწმების/შედეგების განხილვისას."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "ამ ღია კითხვას არ აქვს პასუხის ვარიანტები. მისი ქულა ენიჭება შემოწმების/შედეგების განხილვისას."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "დაამატეთ კითხვის ტექსტი გადახვევის სიჩქარის პარამეტრებით."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "დაამატეთ შინაარსი, მედია ან კითხვის კონტექსტი ქულის დამატების გარეშე."
+
+msgid "Insert a page break without adding score."
+msgstr "ჩასვით გვერდის გაყოფა ქულის დამატების გარეშე."
+
+msgid "Could not save question"
+msgstr "კითხვის შენახვა ვერ მოხერხდა"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "ნებადართულია მხოლოდ DOC, DOCX, XLS ან XLSX დოკუმენტები."
+
+msgid "Please select an Office document."
+msgstr "გთხოვთ, აირჩიოთ Office დოკუმენტი."
+
+msgid "Please draw at least one hotspot."
+msgstr "გთხოვთ, დახაზოთ მინიმუმ ერთი hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "გთხოვთ, დახაზოთ მინიმუმ ერთი დელინეაცია."
+
+msgid "The fill in blanks text is required."
+msgstr "აუცილებელია ცარიელი ადგილების შევსების ტექსტი."
+
+msgid "At least one expected answer is required."
+msgstr "აუცილებელია მინიმუმ ერთი მოსალოდნელი პასუხი."
+
+msgid "At least two draggable items are required."
+msgstr "აუცილებელია მინიმუმ ორი გადასაადგილებელი ელემენტი."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "თითოეული გადასაადგილებელი ელემენტი უნდა იყოს დაკავშირებული სწორ სამიზნე პოზიციასთან."
+
+msgid "At least two matching options are required."
+msgstr "აუცილებელია მინიმუმ ორი შესაბამისობის ვარიანტი."
+
+msgid "At least two matching pairs are required."
+msgstr "აუცილებელია მინიმუმ ორი შესაბამისობის წყვილი."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "თითოეული შესაბამისობის წყვილი უნდა იყოს დაკავშირებული სწორ ვარიანტთან."
+
+msgid "At least two answers are required."
+msgstr "აუცილებელია მინიმუმ ორი პასუხი."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "თითოეულ სწორი/არასწორი პასუხს უნდა ჰქონდეს არჩეული სწორი ან არასწორი."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "უნიკალური პასუხის კითხვას უნდა ჰქონდეს ზუსტად ერთი სწორი პასუხი."
+
+msgid "At least one correct answer is required."
+msgstr "აუცილებელია მინიმუმ ერთი სწორი პასუხი."
+
+msgid "Could not load question"
+msgstr "კითხვის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "აირჩიეთ კურსი და ექსპორტირებეთ გლობალური სავარჯიშო შედეგების ანგარიში CSV ფორმატში."
+
+msgid "Back to reports catalog"
+msgstr "უკან ანგარიშების კატალოგში"
+
+msgid "Could not load exercise global report"
+msgstr "სავარჯიშოს გლობალური ანგარიშის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Imported questions"
+msgstr "იმპორტირებული კითხვები"
+
+msgid "Aiken content"
+msgstr "Aiken შინაარსი"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken გენერატორის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken შინაარსის გენერირება ვერ მოხერხდა"
+
+msgid "Could not import generated Aiken content"
+msgstr "გენერირებული Aiken შინაარსის იმპორტირება ვერ მოხერხდა"
+
+msgid "Back to my courses"
+msgstr "უკან ჩემს კურსებში"
+
+msgid "Open report"
+msgstr "ანგარიშის გახსნა"
+
+msgid "Questions with no automatic correction"
+msgstr "კითხვები ავტომატური შემოწმების გარეშე"
+
+msgid "Could not load pending attempts"
+msgstr "მიმდინარე მცდელობების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Skipped questions"
+msgstr "გამოტოვებული კითხვები"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken იმპორტი ანაწილებს ამ საერთო წონას იმპორტირებულ კითხვებს შორის, თუ კითხვა არ განსაზღვრავს SCORE-ს."
+
+msgid "Import warnings"
+msgstr "იმპორტის გაფრთხილებები"
+
+msgid "Could not import questions"
+msgstr "კითხვების იმპორტირება ვერ მოხერხდა"
+
+msgid "No question statistics found"
+msgstr "კითხვის სტატისტიკა ვერ მოიძებნა"
+
+msgid "Could not load question statistics"
+msgstr "კითხვის სტატისტიკის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "ასევე შეგიძლიათ MCP კლიენტის პირდაპირ დაკავშირება შემდეგი endpoint-ის მითითებით:"
+
+msgid "No applications are currently connected to your account."
+msgstr "ამჟამად თქვენს ანგარიშთან დაკავშირებული აპლიკაციები არ არის."
+
+msgid "Connected on"
+msgstr "დაკავშირებულია"
+
+msgid "Last used"
+msgstr "ბოლოს გამოყენებული"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ვეღარ შეძლებს თქვენს Chamilo ანგარიშზე წვდომას. გავაგრძელოთ?"
+
+msgid "Application revoked"
+msgstr "აპლიკაცია გაუქმდა"
+
+msgid "Copied to clipboard"
+msgstr "დაკოპირებულია ბუფერში"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP წერტილის კოპირება ვერ მოხერხდა"
+
+msgid "MCP endpoint"
+msgstr "MCP წერტილი"
+
+msgid "API key"
+msgstr "API გასაღები"
+
+msgid "Last used at"
+msgstr "ბოლოს გამოყენებული"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "დააკოპირეთ ეს გასაღები ახლავე. ის აღარ გამოჩნდება."
+
+msgid "Rotate API key"
+msgstr "API გასაღების შეცვლა"
+
+msgid "Revoke API key"
+msgstr "API გასაღების გაუქმება"
+
+msgid "Remote MCP connection"
+msgstr "დისტანციური MCP კავშირი"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "მიუთითეთ შემდეგი მნიშვნელობები თქვენს MCP კლიენტში:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "მიმდინარე გასაღები დაუყოვნებლივ შეწყვეტს მუშაობას. გავაგრძელოთ?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "შეიქმნება ახალი პერსონალური MCP API გასაღები. გავაგრძელოთ?"
+
+msgid "MCP API key generated"
+msgstr "MCP API გასაღები შეიქმნა"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "ამ გასაღების გამოყენებით დაკავშირებული MCP კლიენტები დაუყოვნებლივ შეწყვეტენ მუშაობას. გავაგრძელოთ?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API გასაღები გაუქმდა"
+
+msgid "Could not copy the API key"
+msgstr "API გასაღების კოპირება ვერ მოხერხდა"
+
+msgid "Project"
+msgstr "პროექტი"
+
+msgid "Close old tickets"
+msgstr "ძველი ბილეთების დახურვა"
+
+msgid "Close tickets older than seven days?"
+msgstr "დავხუროთ ბილეთები, რომლებიც შვიდ დღეზე ძველია?"
+
+msgid "Assignment history"
+msgstr "დავალების ისტორია"
+
+msgid "Translate with AI"
+msgstr "AI-ით თარგმნა"
+
+msgid "Target language"
+msgstr "სამიზნე ენა"
+
+msgid "Please select a provider"
+msgstr "გთხოვთ, აირჩიოთ პროვაიდერი"
+
+msgid "Generate translation"
+msgstr "თარგმანის გენერირება"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "ტერმინებისა და პირობების ერთი მაინც უნდა შეიცავდეს ტექსტს."
+
+msgid "No active target languages are available."
+msgstr "აქტიური სამიზნე ენები არ არის ხელმისაწვდომი."
+
+msgid "Tutor"
+msgstr "ტუტორი"
+
+msgid "Access dates"
+msgstr "წვდომის თარიღები"
+
+msgid "Coach access dates"
+msgstr "ტუტორის წვდომის თარიღები"
+
+msgid "No sessions found"
+msgstr "სესიები ვერ მოიძებნა"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "აირჩიეთ კურსები, რომლებზეც ამ მომხმარებელს არ უნდა ჰქონდეს წვდომა ამ სესიაში."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "მომხმარებელი არ შეიძლება დაიბლოკოს სესიის ყველა კურსიდან. ამის ნაცვლად გააუქმეთ მისი გამოწერა."
+
+msgid "Users subscribed to this session"
+msgstr "მომხმარებლები, რომლებიც გამოწერილი არიან ამ სესიაზე"
+
+msgid "No available users found"
+msgstr "ხელმისაწვდომი მომხმარებლები ვერ მოიძებნა"
+
+msgid "Subscribe this user to the session?"
+msgstr "გამოვწეროთ ეს მომხმარებელი სესიაზე?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "გამოვწეროთ არჩეული მომხმარებლები სესიაზე?"
+
+msgid "General tutor planning"
+msgstr "ტუტორის ზოგადი დაგეგმვა"
+
+msgid "User is already registered by another tutor."
+msgstr "მომხმარებელი უკვე რეგისტრირებულია სხვა ტუტორის მიერ."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "თქვენ იღებთ ასლს, რადგან ხართ კურსის ტუტორი"
+
+msgid "General tutor"
+msgstr "ზოგადი ტუტორი"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "გაითვალისწინეთ კურსები, ტუტორები, ტექნიკური დახმარების სამსახური, მასწავლებლები და/ან ხელმისაწვდომი მასალები."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "ტუტორები, რომლებიც რეგისტრირებულნი არიან როგორც მასწავლებლები კურსში %s"
+
+msgid "Tutor name"
+msgstr "ტუტორის სახელი"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "სესიის ტუტორები არიან სესიის კოორდინატორები და შეუძლიათ იმოქმედონ როგორც ტუტორები სესიის თითოეულ კურსში. სესიის ტუტორად შეიძლება აირჩიონ მხოლოდ მომხმარებლები, რომლებსაც აქვთ მასწავლებლის როლი."
+
+msgid "Access start date for tutors"
+msgstr "ტუტორების წვდომის დაწყების თარიღი"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "თარიღი, როდესაც სესია ხელმისაწვდომი ხდება ტუტორებისთვის, რათა მათ მოამზადონ ის სანამ სტუდენტები დაუკავშირდებიან"
+
+msgid "Access end date for tutors"
+msgstr "ტუტორებისთვის წვდომის დასრულების თარიღი"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "თარიღი, როდესაც სესია იხურება ტუტორებისთვის. დამატებითი დრო მათ საშუალებას მისცემს ექსპორტირება გაუკეთონ ყველა შესაბამისი თვალთვალის ინფორმაციას"
+
+msgid "Tutor and student"
+msgstr "ტუტორი და სტუდენტი"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "ეს ანგარიში აჩვენებს სესიების კვირეულ განაწილებას ზოგადი ტუტორის მიხედვით არჩეულ თარიღთა დიაპაზონში."
+
+msgid "User is general tutor in some sessions"
+msgstr "მომხმარებელი არის ზოგადი ტუტორი ზოგიერთ სესიაში"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "მასწავლებლები დაემატებიან როგორც ტუტორები ყველა კურსის სესიაში."
+
+msgid "Delete failed: invalid question id."
+msgstr "წაშლა ვერ მოხერხდა: კითხვის არასწორი ID."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "საშუალო სესიების რაოდენობა ზოგადი სესიის ტუტორის მიხედვით"
+
+msgid "No room"
+msgstr "ოთახი არ არის"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "კურსის მასწავლებლების იმპორტირება კურსის ტუტორებად სესიაში"
+
+msgid "Clean and update course tutors"
+msgstr "კურსის ტუტორების გასუფთავება და განახლება"
+
+msgid "Add me as tutor"
+msgstr "მე დამამატე როგორც ტუტორი"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "ვერ მოხერხდა გამოკითხვის დამატება სწავლების გზაზე"
+
+msgid "Access dates for tutors"
+msgstr "ტუტორებისთვის წვდომის თარიღები"
+
+msgid "Tutor and group member"
+msgstr "ტუტორი და ჯგუფის წევრი"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "თქვენი ყოველდღიური AI ტოკენის ლიმიტი ამოიწურა. გთხოვთ სცადოთ ხვალ."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "თქვენი ყოველთვიური AI ტოკენის ლიმიტი ამოიწურა. გთხოვთ სცადოთ მომავალ თვეში."
+
+msgid "This course code already exists, please choose another code."
+msgstr "ეს კურსის კოდი უკვე არსებობს, გთხოვთ აირჩიოთ სხვა კოდი."
+
+msgid "This course title already exists, please choose another title."
+msgstr "ეს კურსის სათაური უკვე არსებობს, გთხოვთ აირჩიოთ სხვა სათაური."
+
+msgid "This tool visibility cannot be changed"
+msgstr "ამ ხელსაწყოს ხილვადობის შეცვლა შეუძლებელია"
+
+msgid "Invalid visibility"
+msgstr "არასწორი ხილვადობა"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "თქვენ იღებთ ასლს, რადგან თქვენ ხართ ერთ-ერთი კურსის ტუტორი"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "თქვენ იღებთ ასლს, რადგან თქვენ ხართ კურსის ტუტორი"
+
+msgid "Manual completion"
+msgstr "ხელით დასრულება"
+
+msgid "Send to tutors"
+msgstr "ტუტორებისთვის გაგზავნა"
+
+msgid "Lab title"
+msgstr "ლაბორატორიის სათაური"
+
+msgid "Lab week"
+msgstr "ლაბორატორიის კვირა"
+
+msgid "Final exam access rule"
+msgstr "ფინალური გამოცდის წვდომის წესი"
+
+msgid "Course completion rule"
+msgstr "კურსის დასრულების წესი"
+
+msgid "You have been invited to join a course"
+msgstr "თქვენ მიიწვიეს კურსში შესაერთებლად"
+
+msgid "No user has been found"
+msgstr "მომხმარებელი ვერ მოიძებნა"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "არჩეული მომხმარებელი ვერ დარეგისტრირდება ამ კონტექსტში"
+
+msgid "No change has been made"
+msgstr "ცვლილება არ განხორციელებულა"
+
+msgid "Back to group list"
+msgstr "ჯგუფების სიაში დაბრუნება"
+
+msgid "Remove class link"
+msgstr "კლასის ბმულის წაშლა"
+
+msgid "Group settings"
+msgstr "ჯგუფის პარამეტრები"
+
+msgid "Self-registration allowed"
+msgstr "თვითრეგისტრაცია დაშვებულია"
+
+msgid "Self-unregistration allowed"
+msgstr "თვითრეგისტრაციის გაუქმება დაშვებულია"
+
+msgid "This group is linked to the class"
+msgstr "ეს ჯგუფი დაკავშირებულია კლასთან"
+
+msgid "Create one or more empty course groups"
+msgstr "შექმენით ერთი ან მეტი ცარიელი კურსის ჯგუფი"
+
+msgid "Number of places"
+msgstr "ადგილების რაოდენობა"
+
+msgid "Base group"
+msgstr "საბაზო ჯგუფი"
+
+msgid "Share"
+msgstr "გაზიარება"
+
+msgid "Collaboration"
+msgstr "თანამშრომლობა"
+
+msgid "The group title is required."
+msgstr "ჯგუფის სათაური აუცილებელია."
+
+msgid "Back to group area"
+msgstr "ჯგუფის არეალში დაბრუნება"
+
+msgid "Members are managed by the linked class"
+msgstr "წევრები იმართებიან დაკავშირებული კლასის მიერ"
+
+msgid "%s groups selected"
+msgstr "%s ჯგუფი არჩეულია"
+
+msgid "Fill selected groups"
+msgstr "არჩეული ჯგუფების შევსება"
+
+msgid "Empty selected groups"
+msgstr "არჩეული ჯგუფების გასუფთავება"
+
+msgid "Fill group"
+msgstr "ჯგუფის შევსება"
+
+msgid "Empty group"
+msgstr "ჯგუფის გასუფთავება"
+
+msgid "Groups per user"
+msgstr "ჯგუფები მომხმარებლის მიხედვით"
+
+msgid "No tutors"
+msgstr "მასწავლებლები არ არიან"
+
+msgid "No users"
+msgstr "მომხმარებლები არ არიან"
+

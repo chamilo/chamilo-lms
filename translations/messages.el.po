@@ -37651,3 +37651,1299 @@ msgstr "Χρησιμοποιήστε το 0 για να διατηρήσετε �
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Χρησιμοποιήστε αυτά τα πεδία για να ταξινομήσετε την άσκηση ανεξάρτητα από τις επιλογές εμφάνισής της."
 
+msgid "Invite by email"
+msgstr "Πρόσκληση μέσω email"
+
+msgid "Invitation has been sent"
+msgstr "Η πρόσκληση έχει σταλεί"
+
+msgid "Sent on"
+msgstr "Στάλθηκε στις"
+
+msgid "Accepted on"
+msgstr "Έγινε αποδεκτό στις"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Αυτό το μάθημα είναι ανοιχτό σε συνεδρία. Η αποστολή πρόσκλησης εδώ θα εγγράψει τον παραλήπτη σε ολόκληρη τη συνεδρία %s, όχι μόνο σε αυτό το μάθημα."
+
+msgid "Revoke"
+msgstr "Ανάκληση"
+
+msgid "Revoked"
+msgstr "Ανακλήθηκε"
+
+msgid "Invitation has been revoked"
+msgstr "Η πρόσκληση έχει ανακληθεί"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Είστε βέβαιοι ότι θέλετε να ανακαλέσετε την πρόσκληση που στάλθηκε στον/στην %s;"
+
+msgid "No default room"
+msgstr "Καμία προεπιλεγμένη αίθουσα"
+
+msgid "Floor"
+msgstr "Όροφος"
+
+msgid "Capacity"
+msgstr "Χωρητικότητα"
+
+msgid "Use attendance default room"
+msgstr "Χρήση προεπιλεγμένης αίθουσας παρουσίας"
+
+msgid "Floor number"
+msgstr "Αριθμός ορόφου"
+
+msgid "Copy to students"
+msgstr "Αντιγραφή στους φοιτητές"
+
+msgid "Generate a quick test on this topic"
+msgstr "Δημιουργία γρήγορου τεστ σε αυτό το θέμα"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Το αποθηκευμένο περιεχόμενο του εγγράφου θα σταλεί σε μοντέλο AI για επεξεργασία."
+
+msgid "MCP API key"
+msgstr "Κλειδί API MCP"
+
+msgid "Authorized applications"
+msgstr "Εξουσιοδοτημένες εφαρμογές"
+
+msgid "Your session is about to expire"
+msgstr "Η συνεδρία σας πρόκειται να λήξει"
+
+msgid "Do you want to continue your session?"
+msgstr "Θέλετε να συνεχίσετε τη συνεδρία σας;"
+
+msgid "Stay connected"
+msgstr "Παραμείνετε συνδεδεμένος/η"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Θα αποσυνδεθείτε σε %s δευτερόλεπτα."
+
+msgid "No descriptions available yet."
+msgstr "Δεν υπάρχουν διαθέσιμες περιγραφές ακόμα."
+
+msgid "%s users selected"
+msgstr "%s χρήστες επιλέχθηκαν"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Οι επιλεγμένοι χρήστες έχουν εγγραφεί στο μάθημα"
+
+msgid "Import teachers"
+msgstr "Εισαγωγή εκπαιδευτών"
+
+msgid "Import learners"
+msgstr "Εισαγωγή εκπαιδευομένων"
+
+msgid "Select CSV file"
+msgstr "Επιλογή αρχείου CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Ορισμένοι χρήστες δεν μπόρεσαν να εγγραφούν"
+
+msgid "Browse available classes"
+msgstr "Περιήγηση διαθέσιμων τάξεων"
+
+msgid "Back to linked classes"
+msgstr "Επιστροφή στις συνδεδεμένες τάξεις"
+
+msgid "No classes are currently linked to this course."
+msgstr "Δεν υπάρχουν τάξεις συνδεδεμένες με αυτό το μάθημα."
+
+msgid "No available classes were found for this course."
+msgstr "Δεν βρέθηκαν διαθέσιμες τάξεις για αυτό το μάθημα."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε την εγγραφή των επιλεγμένων χρηστών;"
+
+msgid "Learning path access"
+msgstr "Πρόσβαση στη διαδρομή μάθησης"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Μόνο επιλεγμένοι χρήστες και ομάδες μπορούν να έχουν πρόσβαση σε αυτή τη διαδρομή μάθησης. Διαχειριστείτε τους μετά την αποθήκευση."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Όλοι οι τρέχοντες και μελλοντικοί χρήστες του μαθήματος μπορούν να έχουν πρόσβαση σε αυτή τη διαδρομή μάθησης."
+
+msgid "All course users"
+msgstr "Όλοι οι χρήστες του μαθήματος"
+
+msgid "Selected users and groups"
+msgstr "Επιλεγμένοι χρήστες και ομάδες"
+
+msgid "No access"
+msgstr "Χωρίς πρόσβαση"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Μόνο οι χρήστες και οι ομάδες που προστίθενται εδώ μπορούν να έχουν πρόσβαση σε αυτή τη διαδρομή μάθησης."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Ο αριθμός των ερωτήσεων περιορίζεται σε μέγιστο %s"
+
+msgid "Open exercise player"
+msgstr "Άνοιγμα προγράμματος αναπαραγωγής ασκήσεων"
+
+msgid "The score is hidden for this exercise."
+msgstr "Η βαθμολογία είναι κρυφή για αυτή την άσκηση."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Οι διορθώσεις είναι κρυφές σύμφωνα με τις ρυθμίσεις αποτελεσμάτων της άσκησης."
+
+msgid "Progressive adaptive result"
+msgstr "Προοδευτικό προσαρμοστικό αποτέλεσμα"
+
+msgid "Achieved level"
+msgstr "Επίπεδο που επιτεύχθηκε"
+
+msgid "Correction history"
+msgstr "Ιστορικό διορθώσεων"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Ιστορικό χειροκίνητων διορθώσεων για αυτή την προσπάθεια."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Αυτή η άσκηση χρησιμοποιεί τη λειτουργία αποτελεσμάτων ραντάρ/ιστού αράχνης. Το γράφημα δεν είναι διαθέσιμο σε αυτή τη σελίδα."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Οι λεπτομέρειες των ερωτήσεων είναι κρυφές σύμφωνα με τις ρυθμίσεις αποτελεσμάτων της άσκησης."
+
+msgid "Media question"
+msgstr "Ερώτηση πολυμέσων"
+
+msgid "Pending correction"
+msgstr "Εκκρεμεί διόρθωση"
+
+msgid "No answer"
+msgstr "Καμία απάντηση"
+
+msgid "Blank %s"
+msgstr "Κενό %s"
+
+msgid "Your order"
+msgstr "Η σειρά σας"
+
+msgid "Correct order"
+msgstr "Σωστή σειρά"
+
+msgid "Delineation review"
+msgstr "Αναθεώρηση οριοθέτησης"
+
+msgid "Learner clicks"
+msgstr "Κλικ μαθητή"
+
+msgid "Question image"
+msgstr "Εικόνα ερώτησης"
+
+msgid "No hotspot image available"
+msgstr "Δεν υπάρχει διαθέσιμη εικόνα hotspot"
+
+msgid "Learner delineation"
+msgstr "Οριοθέτηση μαθητή"
+
+msgid "Expected delineation"
+msgstr "Αναμενόμενη οριοθέτηση"
+
+msgid "Expected zones"
+msgstr "Αναμενόμενες ζώνες"
+
+msgid "Zone"
+msgstr "Ζώνη"
+
+msgid "Learner annotation"
+msgstr "Σχόλιο μαθητή"
+
+msgid "No annotation image available"
+msgstr "Δεν υπάρχει διαθέσιμη εικόνα σχολιασμού"
+
+msgid "This answer is pending teacher correction."
+msgstr "Αυτή η απάντηση εκκρεμεί για διόρθωση από τον καθηγητή."
+
+msgid "Teacher comment"
+msgstr "Σχόλιο καθηγητή"
+
+msgid "Teacher correction"
+msgstr "Διόρθωση καθηγητή"
+
+msgid "Save correction"
+msgstr "Αποθήκευση διόρθωσης"
+
+msgid "Learner audio"
+msgstr "Ήχος μαθητή"
+
+msgid "Download audio"
+msgstr "Λήψη ήχου"
+
+msgid "No uploaded audio"
+msgstr "Δεν υπάρχει μεταφορτωμένος ήχος"
+
+msgid "Learner Office document"
+msgstr "Έγγραφο Office μαθητή"
+
+msgid "Learner file"
+msgstr "Αρχείο μαθητή"
+
+msgid "Download Office document"
+msgstr "Λήψη εγγράφου Office"
+
+msgid "No submitted document"
+msgstr "Δεν υποβλήθηκε έγγραφο"
+
+msgid "No uploaded file"
+msgstr "Δεν υπάρχει μεταφορτωμένο αρχείο"
+
+msgid "Content item"
+msgstr "Στοιχείο περιεχομένου"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Αυτός ο τύπος ερώτησης δεν μπορεί να ελεγχθεί σε αυτή τη σελίδα."
+
+msgid "Exercise completed"
+msgstr "Η άσκηση ολοκληρώθηκε"
+
+msgid "Could not start the attempt"
+msgstr "Δεν ήταν δυνατή η έναρξη της προσπάθειας"
+
+msgid "Invalid exercise attempt"
+msgstr "Μη έγκυρη προσπάθεια άσκησης"
+
+msgid "Could not load exercise result"
+msgstr "Δεν ήταν δυνατή η φόρτωση του αποτελέσματος της άσκησης"
+
+msgid "Could not load AI providers"
+msgstr "Δεν ήταν δυνατή η φόρτωση των παρόχων AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Δεν ήταν δυνατή η δημιουργία πρότασης AI"
+
+msgid "Correction saved"
+msgstr "Η διόρθωση αποθηκεύτηκε"
+
+msgid "Could not save correction"
+msgstr "Δεν ήταν δυνατή η αποθήκευση της διόρθωσης"
+
+msgid "Create exercise"
+msgstr "Δημιουργία άσκησης"
+
+msgid "Exercise categories"
+msgstr "Κατηγορίες ασκήσεων"
+
+msgid "Question categories"
+msgstr "Κατηγορίες ερωτήσεων"
+
+msgid "Search by exercise title or description."
+msgstr "Αναζήτηση με βάση τον τίτλο ή την περιγραφή της άσκησης."
+
+msgid "Search exercises"
+msgstr "Αναζήτηση ασκήσεων"
+
+msgid "No exercises found"
+msgstr "Δεν βρέθηκαν ασκήσεις"
+
+msgid "Open exercise"
+msgstr "Άνοιγμα άσκησης"
+
+msgid "Disable autolaunch"
+msgstr "Απενεργοποίηση αυτόματης εκκίνησης"
+
+msgid "Enable autolaunch"
+msgstr "Ενεργοποίηση αυτόματης εκκίνησης"
+
+msgid "Export QTI2"
+msgstr "Εξαγωγή QTI2"
+
+msgid "Bulk actions"
+msgstr "Μαζικές ενέργειες"
+
+msgid "Selected exercises"
+msgstr "Επιλεγμένες ασκήσεις"
+
+msgid "No exercises selected"
+msgstr "Δεν έχουν επιλεγεί ασκήσεις"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Είστε βέβαιοι ότι θέλετε να εφαρμόσετε αυτήν την ενέργεια στις επιλεγμένες ασκήσεις;"
+
+msgid "Bulk action completed"
+msgstr "Η μαζική ενέργεια ολοκληρώθηκε"
+
+msgid "Could not update exercises"
+msgstr "Δεν ήταν δυνατή η ενημέρωση των ασκήσεων"
+
+msgid "Could not update exercise"
+msgstr "Δεν ήταν δυνατή η ενημέρωση της άσκησης"
+
+msgid "Copy exercise"
+msgstr "Αντιγραφή άσκησης"
+
+msgid "Delete exercise"
+msgstr "Διαγραφή άσκησης"
+
+msgid "Could not load exercises"
+msgstr "Δεν ήταν δυνατή η φόρτωση των ασκήσεων"
+
+msgid "No limit"
+msgstr "Χωρίς όριο"
+
+msgid "Add selected questions to the test"
+msgstr "Προσθήκη επιλεγμένων ερωτήσεων στο τεστ"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Αυτή η ερώτηση χρησιμοποιείται σε ενεργό τεστ και δεν μπορεί να επεξεργαστεί εδώ."
+
+msgid "This question cannot be edited here."
+msgstr "Αυτή η ερώτηση δεν μπορεί να επεξεργαστεί εδώ."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Αυτή η ερώτηση χρησιμοποιείται σε ενεργό τεστ και δεν μπορεί να διαγραφεί εδώ."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Αυτή η ερώτηση δεν μπορεί να διαγραφεί επειδή η πρόσβασή σας περιορίζεται από τις ρυθμίσεις της πλατφόρμας."
+
+msgid "Already in test"
+msgstr "Ήδη στο τεστ"
+
+msgid "Select at least one question."
+msgstr "Επιλέξτε τουλάχιστον μία ερώτηση."
+
+msgid "Question bank updated"
+msgstr "Η τράπεζα ερωτήσεων ενημερώθηκε"
+
+msgid "Could not update the question bank"
+msgstr "Δεν ήταν δυνατή η ενημέρωση της τράπεζας ερωτήσεων"
+
+msgid "Could not load the question bank"
+msgstr "Δεν ήταν δυνατή η φόρτωση της τράπεζας ερωτήσεων"
+
+msgid "Total score"
+msgstr "Συνολική βαθμολογία"
+
+msgid "Starting"
+msgstr "Έναρξη"
+
+msgid "Attempt history"
+msgstr "Ιστορικό προσπαθειών"
+
+msgid "No attempts yet"
+msgstr "Δεν υπάρχουν ακόμη προσπάθειες"
+
+msgid "Invalid exercise"
+msgstr "Μη έγκυρη άσκηση"
+
+msgid "Could not load exercise overview"
+msgstr "Δεν ήταν δυνατή η φόρτωση της επισκόπησης της άσκησης"
+
+msgid "Open test"
+msgstr "Άνοιγμα τεστ"
+
+msgid "Random answers"
+msgstr "Τυχαίες απαντήσεις"
+
+msgid "Prevent moving backwards"
+msgstr "Αποτροπή οπισθοδρόμησης"
+
+msgid "Previous button hidden"
+msgstr "Κρυφό κουμπί προηγούμενου"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Αυτή η άσκηση χρησιμοποιεί επιλογές που απαιτούν διαφορετικό πρόγραμμα αναπαραγωγής δοκιμών."
+
+msgid "Continue test"
+msgstr "Συνέχεια δοκιμής"
+
+msgid "Attempt started"
+msgstr "Η προσπάθεια ξεκίνησε"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Η προεπισκόπηση του εκπαιδευτή δεν δημιουργεί καταγεγραμμένη προσπάθεια."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Ξεκινήστε ή συνεχίστε μια προσπάθεια άσκησης. Οι πρόχειρες απαντήσεις μπορούν να αποθηκευτούν πριν από την τελική υποβολή."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Το χρονικό όριο έληξε. Ολοκλήρωση της προσπάθειας."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Ο χρόνος της ερώτησης έληξε. Αποθήκευση της απάντησής σας."
+
+msgid "Finishing"
+msgstr "Ολοκλήρωση"
+
+msgid "Draft saved"
+msgstr "Πρόχειρο αποθηκεύτηκε"
+
+msgid "Statement"
+msgstr "Δήλωση"
+
+msgid "Drop each option on the matching answer"
+msgstr "Σύρετε κάθε επιλογή στην αντίστοιχη απάντηση"
+
+msgid "Clear match"
+msgstr "Καθαρισμός αντιστοίχισης"
+
+msgid "Click to place the selected option here"
+msgstr "Κάντε κλικ για να τοποθετήσετε την επιλεγμένη επιλογή εδώ"
+
+msgid "Select an option, then click here"
+msgstr "Επιλέξτε μια επιλογή και μετά κάντε κλικ εδώ"
+
+msgid "Already matched"
+msgstr "Ήδη αντιστοιχισμένο"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Μπορείτε να σύρετε μια επιλογή σε μια απάντηση ή να επιλέξετε μια επιλογή και μετά να κάνετε κλικ σε ένα πλαίσιο προορισμού."
+
+msgid "Put the items in the correct order."
+msgstr "Τοποθετήστε τα στοιχεία στη σωστή σειρά."
+
+msgid "Move left"
+msgstr "Μετακίνηση αριστερά"
+
+msgid "Move right"
+msgstr "Μετακίνηση δεξιά"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Μπορείτε να σύρετε στοιχεία αριστερά ή δεξιά ή να χρησιμοποιήσετε τα κουμπιά μετακίνησης για να αλλάξετε τη σειρά."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Μπορείτε να σύρετε στοιχεία ή να χρησιμοποιήσετε τα κουμπιά μετακίνησης για να αλλάξετε τη σειρά."
+
+msgid "Or upload an audio file"
+msgstr "Ή μεταφορτώστε ένα αρχείο ήχου"
+
+msgid "Selected audio"
+msgstr "Επιλεγμένος ήχος"
+
+msgid "Uploaded audio"
+msgstr "Μεταφορτωμένος ήχος"
+
+msgid "Office document"
+msgstr "Έγγραφο Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Συμπληρώστε το έγγραφο στον παρακάτω επεξεργαστή. Το αρχείο θα επισυναφθεί σε αυτή την προσπάθεια για διόρθωση από τον εκπαιδευτή."
+
+msgid "Reload Office editor"
+msgstr "Επαναφόρτωση επεξεργαστή Office"
+
+msgid "Prepare Office document"
+msgstr "Προετοιμασία εγγράφου Office"
+
+msgid "Open in new tab"
+msgstr "Άνοιγμα σε νέα καρτέλα"
+
+msgid "Preparing Office document"
+msgstr "Προετοιμασία εγγράφου Office"
+
+msgid "Submitted document"
+msgstr "Υποβληθέν έγγραφο"
+
+msgid "Annotation tools"
+msgstr "Εργαλεία σχολιασμού"
+
+msgid "Text to place"
+msgstr "Κείμενο προς τοποθέτηση"
+
+msgid "Click the image to place the text annotation."
+msgstr "Κάντε κλικ στην εικόνα για να τοποθετήσετε τον σχολιασμό κειμένου."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Κάντε κλικ στην εικόνα για να προσθέσετε σημεία διαδρομής. Χρησιμοποιήστε «Έναρξη νέας διαδρομής» για να διαχωρίσετε διαδρομές."
+
+msgid "Start new path"
+msgstr "Έναρξη νέας διαδρομής"
+
+msgid "Current annotations"
+msgstr "Τρέχοντες σχολιασμοί"
+
+msgid "Remove point"
+msgstr "Αφαίρεση σημείου"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Κάντε κλικ στην εικόνα για να σχεδιάσετε το πολύγωνο οριοθέτησης."
+
+msgid "Click a marker to remove it."
+msgstr "Κάντε κλικ σε έναν δείκτη για να τον αφαιρέσετε."
+
+msgid "Placed"
+msgstr "Τοποθετήθηκε"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Επιλέξτε μια απάντηση και μετά κάντε κλικ στην εικόνα για να την επισημάνετε."
+
+msgid "Reading speed"
+msgstr "Ταχύτητα ανάγνωσης"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Αυτός ο τύπος ερώτησης δεν μπορεί να εμφανιστεί σε αυτόν τον αναπαραγωγό."
+
+msgid "Save draft"
+msgstr "Αποθήκευση προχείρου"
+
+msgid "I confirm that my answers were saved."
+msgstr "Επιβεβαιώνω ότι οι απαντήσεις μου αποθηκεύτηκαν."
+
+msgid "Finish test"
+msgstr "Ολοκλήρωση δοκιμής"
+
+msgid "Attempt finished"
+msgstr "Η προσπάθεια ολοκληρώθηκε"
+
+msgid "Question category"
+msgstr "Κατηγορία ερώτησης"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Ολοκληρώσατε τις ερωτήσεις που σχετίζονται με αυτή την κατηγορία ερωτήσεων, είναι η τελευταία σας ευκαιρία να επιστρέψετε και να αναθεωρήσετε αυτές τις ερωτήσεις."
+
+msgid "Question time left"
+msgstr "Χρόνος ερώτησης που απομένει"
+
+msgid "Time left"
+msgstr "Χρόνος που απομένει"
+
+msgid "Current attempt"
+msgstr "Τρέχουσα προσπάθεια"
+
+msgid "Could not save draft answer"
+msgstr "Αδυναμία αποθήκευσης προσχέδιου απάντησης"
+
+msgid "Could not load exercise"
+msgstr "Αδυναμία φόρτωσης άσκησης"
+
+msgid "Draft answer saved"
+msgstr "Το προσχέδιο απάντησης αποθηκεύτηκε"
+
+msgid "Could not finish the attempt"
+msgstr "Αδυναμία ολοκλήρωσης της προσπάθειας"
+
+msgid "Could not prepare Office document"
+msgstr "Αδυναμία προετοιμασίας εγγράφου Office"
+
+msgid "Back to learner score"
+msgstr "Επιστροφή στη βαθμολογία εκπαιδευόμενου"
+
+msgid "Disable auto refresh"
+msgstr "Απενεργοποίηση αυτόματης ανανέωσης"
+
+msgid "Enable auto refresh"
+msgstr "Ενεργοποίηση αυτόματης ανανέωσης"
+
+msgid "Live window"
+msgstr "Ζωντανό παράθυρο"
+
+msgid "Ongoing attempts"
+msgstr "Σε εξέλιξη προσπάθειες"
+
+msgid "Completed attempts"
+msgstr "Ολοκληρωμένες προσπάθειες"
+
+msgid "Started"
+msgstr "Ξεκίνησε"
+
+msgid "Last activity"
+msgstr "Τελευταία δραστηριότητα"
+
+msgid "Could not load live results"
+msgstr "Αδυναμία φόρτωσης ζωντανών αποτελεσμάτων"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Αυτή η άσκηση είναι μόνο για ανάγνωση επειδή περιλαμβάνεται σε μια διαδρομή μάθησης."
+
+msgid "Select a question type to create a question."
+msgstr "Επιλέξτε τύπο ερώτησης για να δημιουργήσετε ερώτηση."
+
+msgid "Click to preview"
+msgstr "Κάντε κλικ για προεπισκόπηση"
+
+msgid "Hide preview"
+msgstr "Απόκρυψη προεπισκόπησης"
+
+msgid "Shape"
+msgstr "Σχήμα"
+
+msgid "Coordinates"
+msgstr "Συντεταγμένες"
+
+msgid "Blanks"
+msgstr "Κενά"
+
+msgid "Switchable blanks"
+msgstr "Εναλλάξιμα κενά"
+
+msgid "Blank"
+msgstr "Κενό"
+
+msgid "Input width"
+msgstr "Πλάτος πεδίου"
+
+msgid "Orientation"
+msgstr "Προσανατολισμός"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Μη διαθέσιμο με την τρέχουσα λειτουργία ανατροφοδότησης της άσκησης"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Μη διαθέσιμο κατά τη δημιουργία διαδρομής μάθησης"
+
+msgid "Delete question"
+msgstr "Διαγραφή ερώτησης"
+
+msgid "Could not update exercise questions"
+msgstr "Αδυναμία ενημέρωσης ερωτήσεων άσκησης"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Αδυναμία προσθήκης της άσκησης στη διαδρομή μάθησης"
+
+msgid "A valid exercise id is required."
+msgstr "Απαιτείται έγκυρο αναγνωριστικό άσκησης."
+
+msgid "Could not load exercise questions"
+msgstr "Αδυναμία φόρτωσης ερωτήσεων άσκησης"
+
+msgid "Delete selected attempts"
+msgstr "Διαγραφή επιλεγμένων προσπαθειών"
+
+msgid "Before date"
+msgstr "Πριν από την ημερομηνία"
+
+msgid "Pending corrections"
+msgstr "Εκκρεμείς διορθώσεις"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Αυτή η άσκηση είναι κλειδωμένη από το βαθμολόγιο. Οι ενέργειες καθαρισμού προσπαθειών είναι απενεργοποιημένες."
+
+msgid "No attempts found"
+msgstr "Δεν βρέθηκαν προσπάθειες"
+
+msgid "Review"
+msgstr "Αναθεώρηση"
+
+msgid "Print/PDF"
+msgstr "Εκτύπωση/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Αδυναμία φόρτωσης αναφοράς άσκησης"
+
+msgid "Select at least one attempt"
+msgstr "Επιλέξτε τουλάχιστον μία προσπάθεια"
+
+msgid "Delete selected attempts?"
+msgstr "Διαγραφή επιλεγμένων προσπαθειών;"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Αποστολή email αποτελεσμάτων αναθεωρημένων προσπαθειών;"
+
+msgid "Could not send emails"
+msgstr "Αδυναμία αποστολής email"
+
+msgid "Exercise result emails sent"
+msgstr "Τα email αποτελεσμάτων άσκησης στάλθηκαν"
+
+msgid "Skipped"
+msgstr "Παραλείφθηκε"
+
+msgid "Close attempt?"
+msgstr "Κλείσιμο προσπάθειας;"
+
+msgid "Attempt closed"
+msgstr "Η προσπάθεια έκλεισε"
+
+msgid "Could not close attempt"
+msgstr "Δεν ήταν δυνατό να κλείσει η προσπάθεια"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Αποστολή αποτελέσματος αυτής της προσπάθειας μέσω email στον εκπαιδευόμενο;"
+
+msgid "Email sent"
+msgstr "Το email στάλθηκε"
+
+msgid "Could not send email"
+msgstr "Δεν ήταν δυνατή η αποστολή email"
+
+msgid "Attempt deleted"
+msgstr "Η προσπάθεια διαγράφηκε"
+
+msgid "Could not delete attempt"
+msgstr "Δεν ήταν δυνατή η διαγραφή της προσπάθειας"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Επιλέξτε ένα αρχείο CSV που περιέχει στήλες τίτλου και περιγραφής."
+
+msgid "Manage categories used to classify questions."
+msgstr "Διαχείριση κατηγοριών που χρησιμοποιούνται για την ταξινόμηση ερωτήσεων."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Διαχείριση κατηγοριών που χρησιμοποιούνται για την ταξινόμηση ασκήσεων."
+
+msgid "Could not load categories"
+msgstr "Δεν ήταν δυνατή η φόρτωση κατηγοριών"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Εισαγωγή κατηγοριών: %s. Παραλειφθείσες γραμμές: %s."
+
+msgid "Imported categories: %s."
+msgstr "Εισαγωγή κατηγοριών: %s."
+
+msgid "Could not import categories"
+msgstr "Δεν ήταν δυνατή η εισαγωγή κατηγοριών"
+
+msgid "Could not save category"
+msgstr "Δεν ήταν δυνατή η αποθήκευση κατηγορίας"
+
+msgid "Answer distribution"
+msgstr "Κατανομή απαντήσεων"
+
+msgid "Configured answers"
+msgstr "Διαμορφωμένες απαντήσεις"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Η λεπτομερής καταμέτρηση απαντήσεων για ορισμένους τύπους ερωτήσεων δεν είναι ακόμη διαθέσιμη στην μετεγκατεστημένη αναφορά."
+
+msgid "No report by question data found"
+msgstr "Δεν βρέθηκαν δεδομένα αναφοράς ανά ερώτηση"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Η λεπτομερής καταμέτρηση απαντήσεων για αυτόν τον τύπο ερώτησης δεν είναι ακόμη διαθέσιμη στην μετεγκατεστημένη αναφορά."
+
+msgid "No answer distribution found"
+msgstr "Δεν βρέθηκε κατανομή απαντήσεων"
+
+msgid "Could not load report by question"
+msgstr "Δεν ήταν δυνατή η φόρτωση της αναφοράς ανά ερώτηση"
+
+msgid "Question settings"
+msgstr "Ρυθμίσεις ερώτησης"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Αφήστε κενό ή 0 για χωρίς χρονικό όριο."
+
+msgid "Time limit in seconds"
+msgstr "Χρονικό όριο σε δευτερόλεπτα"
+
+msgid "Attached questions"
+msgstr "Συνημμένες ερωτήσεις"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Εδώ εμφανίζονται μόνο οι ερωτήσεις που είναι συνημμένες σε αυτήν την ερώτηση πολυμέσων μέσα στην τρέχουσα άσκηση."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Δεν υπάρχουν ερωτήσεις συνημμένες σε αυτήν την ερώτηση πολυμέσων στην τρέχουσα άσκηση."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Ανεβάστε το πρότυπο εγγράφου Office που θα επεξεργαστούν οι εκπαιδευόμενοι με το OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Αντικατάσταση εγγράφου Office"
+
+msgid "Current Office document"
+msgstr "Τρέχον έγγραφο Office"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Αυτή η ερώτηση διορθώνεται χειροκίνητα μετά την υποβολή του επεξεργασμένου εγγράφου από τον εκπαιδευόμενο."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Η συνολική βαθμολογία υπολογίζεται ως το άθροισμα των βαθμολογιών hotspot."
+
+msgid "Global score"
+msgstr "Συνολική βαθμολογία"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Επιλέξτε μια γραμμή hotspot, επιλέξτε το σχήμα της και σχεδιάστε πάνω στην εικόνα. Για πολύγωνα, κάντε κλικ σε κάθε σημείο και ολοκληρώστε το πολύγωνο ή κάντε διπλό κλικ για ολοκλήρωση."
+
+msgid "Finish polygon"
+msgstr "Ολοκλήρωση πολυγώνου"
+
+msgid "Calculated answer"
+msgstr "Υπολογισμένη απάντηση"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Πληκτρολογήστε το κείμενό σας παρακάτω και χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά."
+
+msgid "Lowest value"
+msgstr "Χαμηλότερη τιμή"
+
+msgid "Highest value"
+msgstr "Υψηλότερη τιμή"
+
+msgid "Fill in blanks"
+msgstr "Συμπλήρωση κενών"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Χρησιμοποιήστε τους επιλεγμένους δείκτες για να ορίσετε κενά. Παράδειγμα: Η πρωτεύουσα του Περού είναι [Λίμα]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Εισαγάγετε τις επιλογές αναπτυσσόμενου μενού, μία απάντηση ανά γραμμή. Στη συνέχεια, σημειώστε τις αναμενόμενες απαντήσεις παρακάτω, όπως στο παλαιότερο εργαλείο."
+
+msgid "Refresh answers"
+msgstr "Ανανέωση απαντήσεων"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Αυτή η ερώτηση συνδυασμού αναπτυσσόμενου μενού χρησιμοποιεί μία συνολική βαθμολογία, όπως το παλαιότερο."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Εισαγάγετε τουλάχιστον δύο επιλογές αναπτυσσόμενου μενού."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Δημιουργήστε πρώτα τις επιλογές προορισμού και στη συνέχεια συνδέστε κάθε στοιχείο με τη σωστή επιλογή."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Αυτή η ερώτηση συνδυασμού αντιστοίχισης χρησιμοποιεί μία συνολική βαθμολογία, όπως το παλαιότερο."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Δημιουργήστε τα βήματα και επιλέξτε την αναμενόμενη θέση για το καθένα, όπως το παλαιότερο Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Οι εκπαιδευόμενοι θα επιλέξουν Σωστό ή Λάθος και στη συνέχεια θα επιλέξουν το βαθμό βεβαιότητάς τους κατά την προσπάθεια. Ο επεξεργαστής αποθηκεύει τις ίδιες βαθμολογίες Σωστό/Λάθος και επίπεδα βεβαιότητας όπως το παλαιότερο."
+
+msgid "Hotspot combination"
+msgstr "Συνδυασμός hotspot"
+
+msgid "Add delineation"
+msgstr "Προσθήκη οριοθέτησης"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Αυτή η ερώτηση εγγράφου Office δεν έχει επιλογές απάντησης. Η βαθμολογία της αποδίδεται κατά τη διόρθωση/αναθεώρηση αποτελεσμάτων."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Αυτή η ερώτηση μεταφόρτωσης δεν έχει επιλογές απάντησης. Η βαθμολογία της αποδίδεται κατά τη διόρθωση/αναθεώρηση αποτελεσμάτων."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Αυτή η ερώτηση προφορικής έκφρασης δεν έχει επιλογές απάντησης. Η βαθμολογία της αποδίδεται κατά τη διόρθωση/αναθεώρηση αποτελεσμάτων."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Αυτή η ανοιχτή ερώτηση δεν έχει επιλογές απάντησης. Η βαθμολογία της αποδίδεται κατά τη διόρθωση/αναθεώρηση αποτελεσμάτων."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Προσθήκη κειμένου ανάγνωσης με ρυθμίσεις ταχύτητας κύλισης."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Προσθήκη περιεχομένου, πολυμέσων ή πλαισίου ανάγνωσης χωρίς προσθήκη βαθμολογίας."
+
+msgid "Insert a page break without adding score."
+msgstr "Εισαγωγή αλλαγής σελίδας χωρίς προσθήκη βαθμολογίας."
+
+msgid "Could not save question"
+msgstr "Αδυναμία αποθήκευσης ερώτησης"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Επιτρέπονται μόνο έγγραφα DOC, DOCX, XLS ή XLSX."
+
+msgid "Please select an Office document."
+msgstr "Παρακαλώ επιλέξτε ένα έγγραφο Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Παρακαλώ σχεδιάστε τουλάχιστον ένα hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Παρακαλώ σχεδιάστε τουλάχιστον μία οριοθέτηση."
+
+msgid "The fill in blanks text is required."
+msgstr "Απαιτείται το κείμενο συμπλήρωσης κενών."
+
+msgid "At least one expected answer is required."
+msgstr "Απαιτείται τουλάχιστον μία αναμενόμενη απάντηση."
+
+msgid "At least two draggable items are required."
+msgstr "Απαιτούνται τουλάχιστον δύο μετακινούμενα στοιχεία."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Κάθε μετακινούμενο στοιχείο πρέπει να συνδέεται με έγκυρη θέση προορισμού."
+
+msgid "At least two matching options are required."
+msgstr "Απαιτούνται τουλάχιστον δύο επιλογές αντιστοίχισης."
+
+msgid "At least two matching pairs are required."
+msgstr "Απαιτούνται τουλάχιστον δύο ζεύγη αντιστοίχισης."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Κάθε ζεύγος αντιστοίχισης πρέπει να συνδέεται με έγκυρη επιλογή."
+
+msgid "At least two answers are required."
+msgstr "Απαιτούνται τουλάχιστον δύο απαντήσεις."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Κάθε απάντηση αληθές/ψευδές πρέπει να έχει επιλεγμένο το Αληθές ή το Ψευδές."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Μια ερώτηση μοναδικής απάντησης πρέπει να έχει ακριβώς μία σωστή απάντηση."
+
+msgid "At least one correct answer is required."
+msgstr "Απαιτείται τουλάχιστον μία σωστή απάντηση."
+
+msgid "Could not load question"
+msgstr "Αδυναμία φόρτωσης ερώτησης"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Επιλέξτε ένα μάθημα και εξάγετε την καθολική αναφορά αποτελεσμάτων ασκήσεων ως CSV."
+
+msgid "Back to reports catalog"
+msgstr "Επιστροφή στον κατάλογο αναφορών"
+
+msgid "Could not load exercise global report"
+msgstr "Αδυναμία φόρτωσης καθολικής αναφοράς άσκησης"
+
+msgid "Imported questions"
+msgstr "Εισαγόμενες ερωτήσεις"
+
+msgid "Aiken content"
+msgstr "Περιεχόμενο Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Αδυναμία φόρτωσης γεννήτριας AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Αδυναμία δημιουργίας περιεχομένου Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Αδυναμία εισαγωγής δημιουργημένου περιεχομένου Aiken"
+
+msgid "Back to my courses"
+msgstr "Επιστροφή στα μαθήματά μου"
+
+msgid "Open report"
+msgstr "Άνοιγμα αναφοράς"
+
+msgid "Questions with no automatic correction"
+msgstr "Ερωτήσεις χωρίς αυτόματη διόρθωση"
+
+msgid "Could not load pending attempts"
+msgstr "Αδυναμία φόρτωσης εκκρεμών προσπαθειών"
+
+msgid "Skipped questions"
+msgstr "Ερωτήσεις που παραλείφθηκαν"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Η εισαγωγή Aiken κατανέμει αυτό το συνολικό βάρος στις εισαγόμενες ερωτήσεις, εκτός αν μια ερώτηση ορίζει SCORE."
+
+msgid "Import warnings"
+msgstr "Προειδοποιήσεις εισαγωγής"
+
+msgid "Could not import questions"
+msgstr "Αδυναμία εισαγωγής ερωτήσεων"
+
+msgid "No question statistics found"
+msgstr "Δεν βρέθηκαν στατιστικά ερωτήσεων"
+
+msgid "Could not load question statistics"
+msgstr "Αδυναμία φόρτωσης στατιστικών ερωτήσεων"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Μπορείτε επίσης να συνδέσετε έναν πελάτη MCP απευθείας, δείχνοντάς τον στο ακόλουθο τελικό σημείο:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Δεν υπάρχουν εφαρμογές συνδεδεμένες αυτήν τη στιγμή με τον λογαριασμό σας."
+
+msgid "Connected on"
+msgstr "Συνδέθηκε στις"
+
+msgid "Last used"
+msgstr "Τελευταία χρήση"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "Το %s δεν θα μπορεί πλέον να έχει πρόσβαση στον λογαριασμό σας στο Chamilo. Συνέχεια;"
+
+msgid "Application revoked"
+msgstr "Η εφαρμογή ανακλήθηκε"
+
+msgid "Copied to clipboard"
+msgstr "Αντιγράφηκε στο πρόχειρο"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Αδυναμία αντιγραφής του τελικού σημείου MCP"
+
+msgid "MCP endpoint"
+msgstr "Τελικό σημείο MCP"
+
+msgid "API key"
+msgstr "Κλειδί API"
+
+msgid "Last used at"
+msgstr "Τελευταία χρήση στις"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Αντιγράψτε αυτό το κλειδί τώρα. Δεν θα εμφανιστεί ξανά."
+
+msgid "Rotate API key"
+msgstr "Ανανέωση κλειδιού API"
+
+msgid "Revoke API key"
+msgstr "Ανάκληση κλειδιού API"
+
+msgid "Remote MCP connection"
+msgstr "Απομακρυσμένη σύνδεση MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Ρυθμίστε τον πελάτη MCP με τις ακόλουθες τιμές:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Το τρέχον κλειδί θα σταματήσει να λειτουργεί αμέσως. Συνέχεια;"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Θα δημιουργηθεί νέο προσωπικό κλειδί API MCP. Συνέχεια;"
+
+msgid "MCP API key generated"
+msgstr "Δημιουργήθηκε κλειδί API MCP"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Οι συνδεδεμένοι πελάτες MCP που χρησιμοποιούν αυτό το κλειδί θα σταματήσουν να λειτουργούν αμέσως. Συνέχεια;"
+
+msgid "MCP API key revoked"
+msgstr "Ανακλήθηκε το κλειδί API MCP"
+
+msgid "Could not copy the API key"
+msgstr "Αδυναμία αντιγραφής του κλειδιού API"
+
+msgid "Project"
+msgstr "Έργο"
+
+msgid "Close old tickets"
+msgstr "Κλείσιμο παλαιών αιτημάτων"
+
+msgid "Close tickets older than seven days?"
+msgstr "Κλείσιμο αιτημάτων παλαιότερων των επτά ημερών;"
+
+msgid "Assignment history"
+msgstr "Ιστορικό αναθέσεων"
+
+msgid "Translate with AI"
+msgstr "Μετάφραση με AI"
+
+msgid "Target language"
+msgstr "Γλώσσα προορισμού"
+
+msgid "Please select a provider"
+msgstr "Επιλέξτε έναν πάροχο"
+
+msgid "Generate translation"
+msgstr "Δημιουργία μετάφρασης"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Τουλάχιστον μία ενότητα όρων και προϋποθέσεων πρέπει να περιέχει κείμενο."
+
+msgid "No active target languages are available."
+msgstr "Δεν υπάρχουν διαθέσιμες ενεργές γλώσσες προορισμού."
+
+msgid "Tutor"
+msgstr "Εκπαιδευτής"
+
+msgid "Access dates"
+msgstr "Ημερομηνίες πρόσβασης"
+
+msgid "Coach access dates"
+msgstr "Ημερομηνίες πρόσβασης εκπαιδευτή"
+
+msgid "No sessions found"
+msgstr "Δεν βρέθηκαν συνεδρίες"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Επιλέξτε τα μαθήματα στα οποία ο χρήστης δεν θα έχει πρόσβαση σε αυτή τη συνεδρία."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Ο χρήστης δεν μπορεί να αποκλειστεί από όλα τα μαθήματα της συνεδρίας. Αποεγγραφείτε τον χρήστη."
+
+msgid "Users subscribed to this session"
+msgstr "Χρήστες εγγεγραμμένοι σε αυτή τη συνεδρία"
+
+msgid "No available users found"
+msgstr "Δεν βρέθηκαν διαθέσιμοι χρήστες"
+
+msgid "Subscribe this user to the session?"
+msgstr "Εγγραφή αυτού του χρήστη στη συνεδρία;"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Εγγραφή των επιλεγμένων χρηστών στη συνεδρία;"
+
+msgid "General tutor planning"
+msgstr "Γενικός προγραμματισμός εκπαιδευτών"
+
+msgid "User is already registered by another tutor."
+msgstr "Ο χρήστης είναι ήδη εγγεγραμμένος από άλλον εκπαιδευτή."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Λαμβάνετε αντίγραφο επειδή είστε εκπαιδευτής μαθήματος"
+
+msgid "General tutor"
+msgstr "Γενικός εκπαιδευτής"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Λάβετε υπόψη τα μαθήματα, τους εκπαιδευτές, την τεχνική υποστήριξη, τους διδάσκοντες και/ή τα διαθέσιμα υλικά."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Εκπαιδευτές εγγεγραμμένοι ως διδάσκοντες στο μάθημα %s"
+
+msgid "Tutor name"
+msgstr "Όνομα εκπαιδευτή"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Οι εκπαιδευτές συνεδρίας είναι συντονιστές της συνεδρίας και μπορούν να ενεργούν ως εκπαιδευτές για κάθε μάθημα της συνεδρίας. Μόνο χρήστες με ρόλο διδάσκοντα μπορούν να επιλεγούν ως εκπαιδευτές συνεδρίας."
+
+msgid "Access start date for tutors"
+msgstr "Ημερομηνία έναρξης πρόσβασης για εκπαιδευτές"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Η ημερομηνία κατά την οποία η συνεδρία καθίσταται διαθέσιμη στους εκπαιδευτές, ώστε να την προετοιμάσουν πριν συνδεθούν οι σπουδαστές"
+
+msgid "Access end date for tutors"
+msgstr "Ημερομηνία λήξης πρόσβασης για εκπαιδευτές"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Η ημερομηνία κατά την οποία η συνεδρία κλείνει για τους εκπαιδευτές. Η πρόσθετη καθυστέρηση θα τους επιτρέψει να εξάγουν όλες τις σχετικές πληροφορίες παρακολούθησης"
+
+msgid "Tutor and student"
+msgstr "Εκπαιδευτής και σπουδαστής"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Αυτή η αναφορά δείχνει την εβδομαδιαία κατανομή των συνεδριών ανά γενικό εκπαιδευτή στο επιλεγμένο χρονικό διάστημα."
+
+msgid "User is general tutor in some sessions"
+msgstr "Ο χρήστης είναι γενικός εκπαιδευτής σε ορισμένες συνεδρίες"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Οι εκπαιδευτές θα προστεθούν ως εκπαιδευτές σε όλες τις συνεδρίες του μαθήματος."
+
+msgid "Delete failed: invalid question id."
+msgstr "Η διαγραφή απέτυχε: μη έγκυρο αναγνωριστικό ερώτησης."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Μέσος αριθμός συνεδριών ανά γενικό εκπαιδευτή συνεδριών"
+
+msgid "No room"
+msgstr "Δεν υπάρχει αίθουσα"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Εισαγωγή εκπαιδευτών μαθήματος ως εκπαιδευτών μαθήματος στη συνεδρία"
+
+msgid "Clean and update course tutors"
+msgstr "Καθαρισμός και ενημέρωση εκπαιδευτών μαθήματος"
+
+msgid "Add me as tutor"
+msgstr "Προσθήκη μου ως εκπαιδευτή"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Αδυναμία προσθήκης της έρευνας στη διαδρομή μάθησης"
+
+msgid "Access dates for tutors"
+msgstr "Ημερομηνίες πρόσβασης για εκπαιδευτές"
+
+msgid "Tutor and group member"
+msgstr "Εκπαιδευτής και μέλος ομάδας"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Έχετε φτάσει το ημερήσιο όριο διακριτικών AI. Δοκιμάστε ξανά αύριο."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Έχετε φτάσει το μηνιαίο όριο διακριτικών AI. Δοκιμάστε ξανά τον επόμενο μήνα."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Αυτός ο κωδικός μαθήματος υπάρχει ήδη, επιλέξτε άλλον κωδικό."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Αυτός ο τίτλος μαθήματος υπάρχει ήδη, επιλέξτε άλλον τίτλο."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Η ορατότητα αυτού του εργαλείου δεν μπορεί να αλλάξει"
+
+msgid "Invalid visibility"
+msgstr "Μη έγκυρη ορατότητα"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Λαμβάνετε αντίγραφο επειδή είστε ένας από τους εκπαιδευτές του μαθήματος"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Λαμβάνετε αντίγραφο επειδή είστε ο εκπαιδευτής του μαθήματος"
+
+msgid "Manual completion"
+msgstr "Χειροκίνητη ολοκλήρωση"
+
+msgid "Send to tutors"
+msgstr "Αποστολή στους εκπαιδευτές"
+
+msgid "Lab title"
+msgstr "Τίτλος εργαστηρίου"
+
+msgid "Lab week"
+msgstr "Εβδομάδα εργαστηρίου"
+
+msgid "Final exam access rule"
+msgstr "Κανόνας πρόσβασης τελικής εξέτασης"
+
+msgid "Course completion rule"
+msgstr "Κανόνας ολοκλήρωσης μαθήματος"
+
+msgid "You have been invited to join a course"
+msgstr "Έχετε προσκληθεί να συμμετάσχετε σε ένα μάθημα"
+
+msgid "No user has been found"
+msgstr "Δεν βρέθηκε χρήστης"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Ο επιλεγμένος χρήστης δεν μπορεί να εγγραφεί σε αυτό το πλαίσιο"
+
+msgid "No change has been made"
+msgstr "Δεν έγινε καμία αλλαγή"
+
+msgid "Back to group list"
+msgstr "Επιστροφή στη λίστα ομάδων"
+
+msgid "Remove class link"
+msgstr "Αφαίρεση σύνδεσης τάξης"
+
+msgid "Group settings"
+msgstr "Ρυθμίσεις ομάδας"
+
+msgid "Self-registration allowed"
+msgstr "Επιτρέπεται η αυτόματη εγγραφή"
+
+msgid "Self-unregistration allowed"
+msgstr "Επιτρέπεται η αυτόματη διαγραφή"
+
+msgid "This group is linked to the class"
+msgstr "Αυτή η ομάδα είναι συνδεδεμένη με την τάξη"
+
+msgid "Create one or more empty course groups"
+msgstr "Δημιουργία μίας ή περισσότερων κενών ομάδων μαθήματος"
+
+msgid "Number of places"
+msgstr "Αριθμός θέσεων"
+
+msgid "Base group"
+msgstr "Βασική ομάδα"
+
+msgid "Share"
+msgstr "Κοινή χρήση"
+
+msgid "Collaboration"
+msgstr "Συνεργασία"
+
+msgid "The group title is required."
+msgstr "Ο τίτλος της ομάδας είναι υποχρεωτικός."
+
+msgid "Back to group area"
+msgstr "Επιστροφή στην περιοχή ομάδων"
+
+msgid "Members are managed by the linked class"
+msgstr "Τα μέλη διαχειρίζονται από τη συνδεδεμένη τάξη"
+
+msgid "%s groups selected"
+msgstr "%s ομάδες επιλέχθηκαν"
+
+msgid "Fill selected groups"
+msgstr "Γέμισμα επιλεγμένων ομάδων"
+
+msgid "Empty selected groups"
+msgstr "Άδειασμα επιλεγμένων ομάδων"
+
+msgid "Fill group"
+msgstr "Γέμισμα ομάδας"
+
+msgid "Empty group"
+msgstr "Άδειασμα ομάδας"
+
+msgid "Groups per user"
+msgstr "Ομάδες ανά χρήστη"
+
+msgid "No tutors"
+msgstr "Χωρίς εκπαιδευτές"
+
+msgid "No users"
+msgstr "Χωρίς χρήστες"
+

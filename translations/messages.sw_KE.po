@@ -37632,3 +37632,1299 @@ msgstr "Tumia 0 ili kuhifadhi maswali yote yanayopatikana. Tumia -1 ambapo maswa
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Tumia sehemu hizi kuainisha zoezi bila kujali chaguzi za onyesho lake."
 
+msgid "Invite by email"
+msgstr "Alika kwa barua pepe"
+
+msgid "Invitation has been sent"
+msgstr "Mwaliko umetumwa"
+
+msgid "Sent on"
+msgstr "Imetumwa tarehe"
+
+msgid "Accepted on"
+msgstr "Imekubaliwa tarehe"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Kozi hii imefunguliwa katika kipindi. Kutuma mwaliko hapa kutasajili mpokeaji kwenye kipindi kizima %s, sio kozi hii pekee."
+
+msgid "Revoke"
+msgstr "Batilisha"
+
+msgid "Revoked"
+msgstr "Imetolewa"
+
+msgid "Invitation has been revoked"
+msgstr "Mwaliko umeghairiwa"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Je, una uhakika unataka kughairi mwaliko uliotumwa kwa %s?"
+
+msgid "No default room"
+msgstr "Hakuna chumba cha chaguomsingi"
+
+msgid "Floor"
+msgstr "Sakafu"
+
+msgid "Capacity"
+msgstr "Uwezo"
+
+msgid "Use attendance default room"
+msgstr "Tumia chumba cha chaguomsingi cha mahudhurio"
+
+msgid "Floor number"
+msgstr "Nambari ya sakafu"
+
+msgid "Copy to students"
+msgstr "Nakili kwa wanafunzi"
+
+msgid "Generate a quick test on this topic"
+msgstr "Tengeneza mtihani wa haraka kuhusu mada hii"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Yaliyomo ya hati iliyohifadhiwa yatatumwa kwa modeli ya AI kwa ajili ya usindikaji."
+
+msgid "MCP API key"
+msgstr "Ufunguo wa API wa MCP"
+
+msgid "Authorized applications"
+msgstr "Programu zilizoidhinishwa"
+
+msgid "Your session is about to expire"
+msgstr "Kipindi chako kinakaribia kumalizika"
+
+msgid "Do you want to continue your session?"
+msgstr "Je, ungependa kuendelea na kipindi chako?"
+
+msgid "Stay connected"
+msgstr "Endelea kuunganishwa"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Utatoka nje kwa sekunde %s."
+
+msgid "No descriptions available yet."
+msgstr "Hakuna maelezo yaliyopatikana bado."
+
+msgid "%s users selected"
+msgstr "Watumiaji %s wamechaguliwa"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Watumiaji waliochaguliwa wamesajiliwa kwenye kozi"
+
+msgid "Import teachers"
+msgstr "Leta walimu"
+
+msgid "Import learners"
+msgstr "Leta wanafunzi"
+
+msgid "Select CSV file"
+msgstr "Chagua faili ya CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Baadhi ya watumiaji hawakuweza kusajiliwa"
+
+msgid "Browse available classes"
+msgstr "Vinjari madarasa yanayopatikana"
+
+msgid "Back to linked classes"
+msgstr "Rudi kwenye madarasa yaliyounganishwa"
+
+msgid "No classes are currently linked to this course."
+msgstr "Hakuna madarasa yaliyounganishwa na kozi hii kwa sasa."
+
+msgid "No available classes were found for this course."
+msgstr "Hakuna madarasa yanayopatikana yaliyopatikana kwa kozi hii."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Je, una uhakika unataka kuwafuta usajili wa watumiaji waliochaguliwa?"
+
+msgid "Learning path access"
+msgstr "Ufikiaji wa njia ya kujifunza"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Ni watumiaji na vikundi vilivyochaguliwa pekee vinaweza kufikia njia hii ya kujifunza. Dhibiti baada ya kuhifadhi."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Watumiaji wote wa sasa na wa baadaye wa kozi wanaweza kufikia njia hii ya kujifunza."
+
+msgid "All course users"
+msgstr "Watumiaji wote wa kozi"
+
+msgid "Selected users and groups"
+msgstr "Watumiaji na vikundi vilivyochaguliwa"
+
+msgid "No access"
+msgstr "Hakuna ufikiaji"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Ni watumiaji na vikundi vilivyoongezwa hapa pekee wanaweza kufikia njia hii ya kujifunza."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Idadi ya maswali imepunguzwa hadi kiwango cha juu cha %s"
+
+msgid "Open exercise player"
+msgstr "Fungua kicheza mazoezi"
+
+msgid "The score is hidden for this exercise."
+msgstr "Alama imefichwa kwa zoezi hili."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Masahihisho yamefichwa kulingana na mipangilio ya matokeo ya zoezi."
+
+msgid "Progressive adaptive result"
+msgstr "Matokeo ya kurekebisha yanayobadilika"
+
+msgid "Achieved level"
+msgstr "Kiwango kilichopatikana"
+
+msgid "Correction history"
+msgstr "Historia ya masahihisho"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historia ya masahihisho ya mwongozo yaliyofanywa kwa jaribio hili."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Zoezi hili linatumia hali ya matokeo ya rada/tovuti. Chati haipatikani kwenye ukurasa huu."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Maelezo ya maswali yamefichwa kulingana na mipangilio ya matokeo ya zoezi."
+
+msgid "Media question"
+msgstr "Swali la midia"
+
+msgid "Pending correction"
+msgstr "Kusubiri masahihisho"
+
+msgid "No answer"
+msgstr "Hakuna jibu"
+
+msgid "Blank %s"
+msgstr "Nafasi %s"
+
+msgid "Your order"
+msgstr "Agizo lako"
+
+msgid "Correct order"
+msgstr "Mpangilio sahihi"
+
+msgid "Delineation review"
+msgstr "Uhakiki wa mipaka"
+
+msgid "Learner clicks"
+msgstr "Mibofyo ya mwanafunzi"
+
+msgid "Question image"
+msgstr "Picha ya swali"
+
+msgid "No hotspot image available"
+msgstr "Hakuna picha ya eneo maalum inayopatikana"
+
+msgid "Learner delineation"
+msgstr "Uwekaji mipaka wa mwanafunzi"
+
+msgid "Expected delineation"
+msgstr "Uwekaji mipaka unaotarajiwa"
+
+msgid "Expected zones"
+msgstr "Maeneo yanayotarajiwa"
+
+msgid "Zone"
+msgstr "Eneo"
+
+msgid "Learner annotation"
+msgstr "Ufafanuzi wa mwanafunzi"
+
+msgid "No annotation image available"
+msgstr "Hakuna picha ya ufafanuzi inayopatikana"
+
+msgid "This answer is pending teacher correction."
+msgstr "Jibu hili linangoja marekebisho ya mwalimu."
+
+msgid "Teacher comment"
+msgstr "Maoni ya mwalimu"
+
+msgid "Teacher correction"
+msgstr "Marekebisho ya mwalimu"
+
+msgid "Save correction"
+msgstr "Hifadhi marekebisho"
+
+msgid "Learner audio"
+msgstr "Sauti ya mwanafunzi"
+
+msgid "Download audio"
+msgstr "Pakua sauti"
+
+msgid "No uploaded audio"
+msgstr "Hakuna sauti iliyopakiwa"
+
+msgid "Learner Office document"
+msgstr "Hati ya Ofisi ya mwanafunzi"
+
+msgid "Learner file"
+msgstr "Faili la mwanafunzi"
+
+msgid "Download Office document"
+msgstr "Pakua hati ya Ofisi"
+
+msgid "No submitted document"
+msgstr "Hakuna hati iliyowasilishwa"
+
+msgid "No uploaded file"
+msgstr "Hakuna faili iliyopakiwa"
+
+msgid "Content item"
+msgstr "Kipengee cha maudhui"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Aina hii ya swali haiwezi kukaguliwa kwenye ukurasa huu."
+
+msgid "Exercise completed"
+msgstr "Zoezi limekamilika"
+
+msgid "Could not start the attempt"
+msgstr "Haikuweza kuanza jaribio"
+
+msgid "Invalid exercise attempt"
+msgstr "Jaribio la zoezi batili"
+
+msgid "Could not load exercise result"
+msgstr "Haikuweza kupakia matokeo ya zoezi"
+
+msgid "Could not load AI providers"
+msgstr "Haikuweza kupakia watoa huduma wa AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Haikuweza kutengeneza pendekezo la AI"
+
+msgid "Correction saved"
+msgstr "Marekebisho yamehifadhiwa"
+
+msgid "Could not save correction"
+msgstr "Haikuweza kuhifadhi marekebisho"
+
+msgid "Create exercise"
+msgstr "Unda zoezi"
+
+msgid "Exercise categories"
+msgstr "Kategoria za mazoezi"
+
+msgid "Question categories"
+msgstr "Kategoria za maswali"
+
+msgid "Search by exercise title or description."
+msgstr "Tafuta kwa kichwa au maelezo ya zoezi."
+
+msgid "Search exercises"
+msgstr "Tafuta mazoezi"
+
+msgid "No exercises found"
+msgstr "Hakuna mazoezi yaliyopatikana"
+
+msgid "Open exercise"
+msgstr "Fungua zoezi"
+
+msgid "Disable autolaunch"
+msgstr "Lemaza uzinduzi otomatiki"
+
+msgid "Enable autolaunch"
+msgstr "Wezesha uzinduzi otomatiki"
+
+msgid "Export QTI2"
+msgstr "Hamisha QTI2"
+
+msgid "Bulk actions"
+msgstr "Vitendo vingi"
+
+msgid "Selected exercises"
+msgstr "Mazoezi yaliyochaguliwa"
+
+msgid "No exercises selected"
+msgstr "Hakuna mazoezi yaliyochaguliwa"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Je, una uhakika unataka kutumia kitendo hiki kwa mazoezi yaliyochaguliwa?"
+
+msgid "Bulk action completed"
+msgstr "Kitendo cha wingi kimekamilika"
+
+msgid "Could not update exercises"
+msgstr "Haikuweza kusasisha mazoezi"
+
+msgid "Could not update exercise"
+msgstr "Haikuweza kusasisha zoezi"
+
+msgid "Copy exercise"
+msgstr "Nakili zoezi"
+
+msgid "Delete exercise"
+msgstr "Futa zoezi"
+
+msgid "Could not load exercises"
+msgstr "Haikuweza kupakia mazoezi"
+
+msgid "No limit"
+msgstr "Hakuna kikomo"
+
+msgid "Add selected questions to the test"
+msgstr "Ongeza maswali yaliyochaguliwa kwenye jaribio"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Swali hili linatumika katika jaribio linaloendelea na haliwezi kuhaririwa hapa."
+
+msgid "This question cannot be edited here."
+msgstr "Swali hili haliwezi kuhaririwa hapa."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Swali hili linatumika katika jaribio linaloendelea na haliwezi kufutwa hapa."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Swali hili haliwezi kufutwa kwa sababu ufikiaji wako umezuiliwa na mipangilio ya jukwaa."
+
+msgid "Already in test"
+msgstr "Tayari katika jaribio"
+
+msgid "Select at least one question."
+msgstr "Chagua angalau swali moja."
+
+msgid "Question bank updated"
+msgstr "Benki ya maswali imesasishwa"
+
+msgid "Could not update the question bank"
+msgstr "Haikuweza kusasisha benki ya maswali"
+
+msgid "Could not load the question bank"
+msgstr "Haikuweza kupakia benki ya maswali"
+
+msgid "Total score"
+msgstr "Jumla ya alama"
+
+msgid "Starting"
+msgstr "Kuanza"
+
+msgid "Attempt history"
+msgstr "Historia ya majaribio"
+
+msgid "No attempts yet"
+msgstr "Bado hakuna majaribio"
+
+msgid "Invalid exercise"
+msgstr "Zoezi batili"
+
+msgid "Could not load exercise overview"
+msgstr "Haikuweza kupakia muhtasari wa zoezi"
+
+msgid "Open test"
+msgstr "Fungua jaribio"
+
+msgid "Random answers"
+msgstr "Majibu nasibu"
+
+msgid "Prevent moving backwards"
+msgstr "Zuia kurudi nyuma"
+
+msgid "Previous button hidden"
+msgstr "Kitufe cha nyuma kimefichwa"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Zoezi hili linatumia chaguzi zinazohitaji kicheza jaribio tofauti."
+
+msgid "Continue test"
+msgstr "Endelea na jaribio"
+
+msgid "Attempt started"
+msgstr "Jaribio limeanza"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Uhakiki wa mwalimu hauundi jaribio linalofuatiliwa."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Anza au endelea jaribio la zoezi. Majibu ya rasimu yanaweza kuhifadhiwa kabla ya kuwasilishwa."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Muda umefikia kikomo. Inamaliza jaribio."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Muda wa swali umefikia. Inahifadhi jibu lako."
+
+msgid "Finishing"
+msgstr "Inamaliza"
+
+msgid "Draft saved"
+msgstr "Rasimu imehifadhiwa"
+
+msgid "Statement"
+msgstr "Taarifa"
+
+msgid "Drop each option on the matching answer"
+msgstr "Weka kila chaguo kwenye jibu linalolingana"
+
+msgid "Clear match"
+msgstr "Futa mechi"
+
+msgid "Click to place the selected option here"
+msgstr "Bonyeza ili kuweka chaguo lililochaguliwa hapa"
+
+msgid "Select an option, then click here"
+msgstr "Chagua chaguo, kisha bonyeza hapa"
+
+msgid "Already matched"
+msgstr "Tayari limefananishwa"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Unaweza kuburuta chaguo hadi jibu, au kuchagua chaguo kisha kubonyeza kisanduku cha lengo."
+
+msgid "Put the items in the correct order."
+msgstr "Weka vitu kwa mpangilio sahihi."
+
+msgid "Move left"
+msgstr "Sogeza kushoto"
+
+msgid "Move right"
+msgstr "Sogeza kulia"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Unaweza kuburuta vitu kushoto au kulia, au kutumia vitufe vya kusogeza kubadilisha mpangilio."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Unaweza kuburuta vitu au kutumia vitufe vya kusogeza kubadilisha mpangilio."
+
+msgid "Or upload an audio file"
+msgstr "Au pakia faili ya sauti"
+
+msgid "Selected audio"
+msgstr "Sauti iliyochaguliwa"
+
+msgid "Uploaded audio"
+msgstr "Sauti iliyopakiwa"
+
+msgid "Office document"
+msgstr "Hati ya ofisi"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Kamilisha hati kwenye kihariri kilicho chini. Faili itaambatanishwa na jaribio hili kwa ajili ya marekebisho ya mwalimu."
+
+msgid "Reload Office editor"
+msgstr "Pakia upya kihariri cha Ofisi"
+
+msgid "Prepare Office document"
+msgstr "Andaa hati ya Ofisi"
+
+msgid "Open in new tab"
+msgstr "Fungua kwenye kichupo kipya"
+
+msgid "Preparing Office document"
+msgstr "Inaandaa hati ya Ofisi"
+
+msgid "Submitted document"
+msgstr "Hati iliyowasilishwa"
+
+msgid "Annotation tools"
+msgstr "Zana za maelezo"
+
+msgid "Text to place"
+msgstr "Maandishi ya kuweka"
+
+msgid "Click the image to place the text annotation."
+msgstr "Bonyeza picha ili kuweka maelezo ya maandishi."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Bonyeza picha ili kuongeza pointi za njia. Tumia Anza njia mpya kutenganisha njia."
+
+msgid "Start new path"
+msgstr "Anza njia mpya"
+
+msgid "Current annotations"
+msgstr "Maelezo ya sasa"
+
+msgid "Remove point"
+msgstr "Ondoa pointi"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Bonyeza picha ili kuchora poligoni ya uwekaji mipaka."
+
+msgid "Click a marker to remove it."
+msgstr "Bonyeza alama ili kuiondoa."
+
+msgid "Placed"
+msgstr "Imewekwa"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Chagua jibu, kisha bonyeza picha ili kuialama."
+
+msgid "Reading speed"
+msgstr "Kasi ya kusoma"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Aina hii ya swali haiwezi kuonyeshwa kwenye kicheza hiki."
+
+msgid "Save draft"
+msgstr "Hifadhi rasimu"
+
+msgid "I confirm that my answers were saved."
+msgstr "Ninathibitisha kuwa majibu yangu yamehifadhiwa."
+
+msgid "Finish test"
+msgstr "Maliza mtihani"
+
+msgid "Attempt finished"
+msgstr "Jaribio limekamilika"
+
+msgid "Question category"
+msgstr "Kategoria ya swali"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Umemaliza maswali yanayohusiana na kategoria hii ya swali, ni nafasi yako ya mwisho kurudi na kuyarekebisha maswali hayo."
+
+msgid "Question time left"
+msgstr "Muda uliosalia wa swali"
+
+msgid "Time left"
+msgstr "Muda uliosalia"
+
+msgid "Current attempt"
+msgstr "Jaribio la sasa"
+
+msgid "Could not save draft answer"
+msgstr "Haikuweza kuhifadhi jibu la rasimu"
+
+msgid "Could not load exercise"
+msgstr "Haikuweza kupakia zoezi"
+
+msgid "Draft answer saved"
+msgstr "Jibu la rasimu limehifadhiwa"
+
+msgid "Could not finish the attempt"
+msgstr "Haikuweza kumaliza jaribio"
+
+msgid "Could not prepare Office document"
+msgstr "Haikuweza kuandaa hati ya Ofisi"
+
+msgid "Back to learner score"
+msgstr "Rudi kwenye alama za mwanafunzi"
+
+msgid "Disable auto refresh"
+msgstr "Zima upyaaji kiotomatiki"
+
+msgid "Enable auto refresh"
+msgstr "Washa upyaaji kiotomatiki"
+
+msgid "Live window"
+msgstr "Dirisha la moja kwa moja"
+
+msgid "Ongoing attempts"
+msgstr "Majaribio yanayoendelea"
+
+msgid "Completed attempts"
+msgstr "Majaribio yaliyokamilika"
+
+msgid "Started"
+msgstr "Imeanza"
+
+msgid "Last activity"
+msgstr "Shughuli ya mwisho"
+
+msgid "Could not load live results"
+msgstr "Haikuweza kupakia matokeo ya moja kwa moja"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Zoezi hili ni la kusoma pekee kwa sababu limejumuishwa kwenye njia ya kujifunza."
+
+msgid "Select a question type to create a question."
+msgstr "Chagua aina ya swali ili kuunda swali."
+
+msgid "Click to preview"
+msgstr "Bonyeza ili kutazama mapema"
+
+msgid "Hide preview"
+msgstr "Ficha onyesho la mapema"
+
+msgid "Shape"
+msgstr "Umbo"
+
+msgid "Coordinates"
+msgstr "Viratibu"
+
+msgid "Blanks"
+msgstr "Nafasi"
+
+msgid "Switchable blanks"
+msgstr "Nafasi zinazoweza kubadilishwa"
+
+msgid "Blank"
+msgstr "Nafasi"
+
+msgid "Input width"
+msgstr "Upana wa ingizo"
+
+msgid "Orientation"
+msgstr "Mwelekeo"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Haipatikani na hali ya maoni ya zoezi la sasa"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Haipatikani katika mtiririko wa kuunda njia ya kujifunza"
+
+msgid "Delete question"
+msgstr "Futa swali"
+
+msgid "Could not update exercise questions"
+msgstr "Haikuweza kusasisha maswali ya zoezi"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Haikuweza kuongeza zoezi kwenye njia ya kujifunza"
+
+msgid "A valid exercise id is required."
+msgstr "Kitambulisho halali cha zoezi kinahitajika."
+
+msgid "Could not load exercise questions"
+msgstr "Haikuweza kupakia maswali ya zoezi"
+
+msgid "Delete selected attempts"
+msgstr "Futa majaribio yaliyochaguliwa"
+
+msgid "Before date"
+msgstr "Kabla ya tarehe"
+
+msgid "Pending corrections"
+msgstr "Masahihisho yanayosubiri"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Zoezi hili limefungwa na daftari la alama. Vitendo vya kusafisha majaribio vimelemazwa."
+
+msgid "No attempts found"
+msgstr "Hakuna majaribio yaliyopatikana"
+
+msgid "Review"
+msgstr "Kagua"
+
+msgid "Print/PDF"
+msgstr "Chapisha/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Haikuweza kupakia ripoti ya zoezi"
+
+msgid "Select at least one attempt"
+msgstr "Chagua angalau jaribio moja"
+
+msgid "Delete selected attempts?"
+msgstr "Futa majaribio yaliyochaguliwa?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Tuma barua pepe za matokeo ya jaribio lililokaguliwa?"
+
+msgid "Could not send emails"
+msgstr "Haikuweza kutuma barua pepe"
+
+msgid "Exercise result emails sent"
+msgstr "Barua pepe za matokeo ya zoezi zimetumwa"
+
+msgid "Skipped"
+msgstr "Imepitishwa"
+
+msgid "Close attempt?"
+msgstr "Funga jaribio?"
+
+msgid "Attempt closed"
+msgstr "Jaribio limefungwa"
+
+msgid "Could not close attempt"
+msgstr "Haikuweza kufunga jaribio"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Tuma matokeo ya jaribio hili kwa barua pepe kwa mwanafunzi?"
+
+msgid "Email sent"
+msgstr "Barua pepe imetumwa"
+
+msgid "Could not send email"
+msgstr "Haikuweza kutuma barua pepe"
+
+msgid "Attempt deleted"
+msgstr "Jaribio limefutwa"
+
+msgid "Could not delete attempt"
+msgstr "Haikuweza kufuta jaribio"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Chagua faili ya CSV iliyo na safu za kichwa na maelezo."
+
+msgid "Manage categories used to classify questions."
+msgstr "Dhibiti kategoria zinazotumika kuainisha maswali."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Dhibiti kategoria zinazotumika kuainisha mazoezi."
+
+msgid "Could not load categories"
+msgstr "Haikuweza kupakia kategoria"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Kategoria zilizolettwa: %s. Safu zilizorukwa: %s."
+
+msgid "Imported categories: %s."
+msgstr "Kategoria zilizolettwa: %s."
+
+msgid "Could not import categories"
+msgstr "Haikuweza kuleta kategoria"
+
+msgid "Could not save category"
+msgstr "Haikuweza kuhifadhi kategoria"
+
+msgid "Answer distribution"
+msgstr "Usambazaji wa majibu"
+
+msgid "Configured answers"
+msgstr "Majibu yaliyosanidiwa"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Kuhesabu majibu ya kina kwa aina fulani za maswali hakupatikani bado katika ripoti iliyohamishwa."
+
+msgid "No report by question data found"
+msgstr "Hakuna data ya ripoti kwa swali iliyopatikana"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Kuhesabu majibu ya kina kwa aina hii ya swali hakupatikani bado katika ripoti iliyohamishwa."
+
+msgid "No answer distribution found"
+msgstr "Hakuna usambazaji wa majibu uliopatikana"
+
+msgid "Could not load report by question"
+msgstr "Haikuweza kupakia ripoti kwa swali"
+
+msgid "Question settings"
+msgstr "Mipangilio ya swali"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Acha tupu au 0 kwa hakuna kikomo cha muda."
+
+msgid "Time limit in seconds"
+msgstr "Kikomo cha muda kwa sekunde"
+
+msgid "Attached questions"
+msgstr "Maswali yaliyoambatanishwa"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Maswali yaliyoshikamana na swali hili la midia ndani ya zoezi la sasa pekee ndiyo yameorodheshwa hapa."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Hakuna maswali yaliyoshikamana na swali hili la midia katika zoezi la sasa."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Pakia kiolezo cha hati ya Ofisi ambacho wanafunzi watahariri kwa OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Badilisha hati ya Ofisi"
+
+msgid "Current Office document"
+msgstr "Hati ya sasa ya Ofisi"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Swali hili hurekebishwa kwa mkono baada ya mwanafunzi kuwasilisha hati iliyohaririwa."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Alama ya jumla huhesabwa kama jumla ya alama za sehemu moto."
+
+msgid "Global score"
+msgstr "Alama ya jumla"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Chagua safu ya sehemu moto, chagua umbo lake, kisha chora juu ya picha. Kwa poligoni, bofya kila nukta na kumaliza poligoni, au bofya mara mbili kumaliza."
+
+msgid "Finish polygon"
+msgstr "Maliza poligoni"
+
+msgid "Calculated answer"
+msgstr "Jibu lililohesabwa"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Tafadhali andika maandishi yako hapa chini na tumia mabano ya mraba [...] kufafanua nafasi moja au zaidi."
+
+msgid "Lowest value"
+msgstr "Thamani ya chini"
+
+msgid "Highest value"
+msgstr "Thamani ya juu"
+
+msgid "Fill in blanks"
+msgstr "Jaza nafasi"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Tumia viashiria vilivyochaguliwa kufafanua nafasi. Mfano: Mji mkuu wa Peru ni [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Weka chaguzi za kunjuzi, jibu moja kwa kila mstari. Kisha alama majibu yanayotarajiwa hapa chini, kama zana ya zamani."
+
+msgid "Refresh answers"
+msgstr "Onyesha upya majibu"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Swali hili la mchanganyiko wa kunjuzi hutumia alama moja ya jumla, kama ya zamani."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Tafadhali weka angalau chaguzi mbili za kunjuzi."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Unda chaguzi za mahali pa mwisho kwanza, kisha unganisha kila kipengee na chaguo sahihi."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Swali hili la mchanganyiko wa kulinganisha hutumia alama moja ya jumla, kama ya zamani."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Unda hatua na uchague nafasi inayotarajiwa kwa kila moja, kama Draggable ya zamani."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Wanafunzi watachagua Kweli au Si kweli kisha wachague kiwango cha uhakika wao wakati wa jaribio. Kihariri huhifadhi alama sawa za Sahihi/Si sahihi na viwango vya uhakika kama za zamani."
+
+msgid "Hotspot combination"
+msgstr "Mchanganyiko wa sehemu moto"
+
+msgid "Add delineation"
+msgstr "Ongeza uwekaji mipaka"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Swali hili la hati ya Ofisi halina chaguzi za majibu. Alama yake hupewa wakati wa marekebisho/ukaguzi wa matokeo."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Swali hili la upakiaji halina chaguzi za majibu. Alama yake hupewa wakati wa marekebisho/ukaguzi wa matokeo."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Swali hili la kujieleza kwa mdomo halina chaguzi za majibu. Alama yake hupewa wakati wa marekebisho/ukaguzi wa matokeo."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Swali hili la wazi halina chaguzi za majibu. Alama yake hupewa wakati wa marekebisho/ukaguzi wa matokeo."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Ongeza maandishi ya kusoma yenye mipangilio ya kasi ya kusogeza."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Ongeza maudhui, midia au muktadha wa kusoma bila kuongeza alama."
+
+msgid "Insert a page break without adding score."
+msgstr "Ingiza mapumziko ya ukurasa bila kuongeza alama."
+
+msgid "Could not save question"
+msgstr "Haikuweza kuhifadhi swali"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Nyaraka za DOC, DOCX, XLS au XLSX pekee zinazoruhusiwa."
+
+msgid "Please select an Office document."
+msgstr "Tafadhali chagua hati ya Ofisi."
+
+msgid "Please draw at least one hotspot."
+msgstr "Tafadhali chora angalau sehemu moja moto."
+
+msgid "Please draw at least one delineation."
+msgstr "Tafadhali chora angalau uwekaji mipaka mmoja."
+
+msgid "The fill in blanks text is required."
+msgstr "Maandishi ya kujaza nafasi yanahitajika."
+
+msgid "At least one expected answer is required."
+msgstr "Angalau jibu moja linalotarajiwa linahitajika."
+
+msgid "At least two draggable items are required."
+msgstr "Angalau vipengee viwili vinavyoweza kuburuzwa vinahitajika."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Kila kipengee kinachoweza kuburuzwa lazima kiunganishwe na nafasi halali ya lengo."
+
+msgid "At least two matching options are required."
+msgstr "Angalau chaguzi mbili za kulinganisha zinahitajika."
+
+msgid "At least two matching pairs are required."
+msgstr "Angalau jozi mbili za kulinganisha zinahitajika."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Kila jozi ya kulinganisha lazima iunganishwe na chaguo halali."
+
+msgid "At least two answers are required."
+msgstr "Angalau majibu mawili yanahitajika."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Kila jibu la kweli/si kweli lazima liwe na Kweli au Si kweli limechaguliwa."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Swali la jibu la kipekee lazima liwe na jibu moja sahihi haswa."
+
+msgid "At least one correct answer is required."
+msgstr "Angalau jibu moja sahihi linahitajika."
+
+msgid "Could not load question"
+msgstr "Haikuweza kupakia swali"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Chagua kozi na uhamishe ripoti ya matokeo ya mazoezi ya kimataifa kama CSV."
+
+msgid "Back to reports catalog"
+msgstr "Rudi kwenye orodha ya ripoti"
+
+msgid "Could not load exercise global report"
+msgstr "Haikuweza kupakia ripoti ya mazoezi ya kimataifa"
+
+msgid "Imported questions"
+msgstr "Maswali yaliyoingizwa"
+
+msgid "Aiken content"
+msgstr "Maudhui ya Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Haikuweza kupakia jenereta ya AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Haikuweza kutengeneza maudhui ya Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Haikuweza kuingiza maudhui ya Aiken yaliyotengenezwa"
+
+msgid "Back to my courses"
+msgstr "Rudi kwenye kozi zangu"
+
+msgid "Open report"
+msgstr "Fungua ripoti"
+
+msgid "Questions with no automatic correction"
+msgstr "Maswali yasiyo na marekebisho ya kiotomatiki"
+
+msgid "Could not load pending attempts"
+msgstr "Haikuweza kupakia majaribio yanayosubiri"
+
+msgid "Skipped questions"
+msgstr "Maswali yaliyorukwa"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Uingizaji wa Aiken husambaza uzito huu wote kwenye maswali yaliyoingizwa isipokuwa swali linafafanua SCORE."
+
+msgid "Import warnings"
+msgstr "Onyo za uingizaji"
+
+msgid "Could not import questions"
+msgstr "Haikuweza kuingiza maswali"
+
+msgid "No question statistics found"
+msgstr "Hakuna takwimu za maswali zilizopatikana"
+
+msgid "Could not load question statistics"
+msgstr "Haikuweza kupakia takwimu za maswali"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Unaweza pia kuunganisha mteja wa MCP moja kwa moja kwa kumwelekeza kwenye kiungo kifuatacho:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Hakuna programu zilizounganishwa kwenye akaunti yako kwa sasa."
+
+msgid "Connected on"
+msgstr "Iliyounganishwa tarehe"
+
+msgid "Last used"
+msgstr "Ilitumika mwisho"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s haitoweza tena kufikia akaunti yako ya Chamilo. Endelea?"
+
+msgid "Application revoked"
+msgstr "Programu imetolewa"
+
+msgid "Copied to clipboard"
+msgstr "Imenakiliwa kwenye ubao wa kunakili"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Haikuweza kunakili kiungo cha MCP"
+
+msgid "MCP endpoint"
+msgstr "Kiungo cha MCP"
+
+msgid "API key"
+msgstr "Ufunguo wa API"
+
+msgid "Last used at"
+msgstr "Ilitumika mwisho tarehe"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Nakili ufunguo huu sasa. Hautaonyeshwa tena."
+
+msgid "Rotate API key"
+msgstr "Zungusha ufunguo wa API"
+
+msgid "Revoke API key"
+msgstr "Tolea ufunguo wa API"
+
+msgid "Remote MCP connection"
+msgstr "Muunganisho wa mbali wa MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Sanidi mteja wako wa MCP kwa kutumia thamani zifuatazo:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Ufunguo wa sasa utaacha kufanya kazi mara moja. Endelea?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Ufunguo mpya wa kibinafsi wa MCP API utatengenezwa. Endelea?"
+
+msgid "MCP API key generated"
+msgstr "Ufunguo wa MCP API umetengenezwa"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Wateja wa MCP wanaotumia ufunguo huu wataacha kufanya kazi mara moja. Endelea?"
+
+msgid "MCP API key revoked"
+msgstr "Ufunguo wa MCP API umetolewa"
+
+msgid "Could not copy the API key"
+msgstr "Haikuweza kunakili ufunguo wa API"
+
+msgid "Project"
+msgstr "Mradi"
+
+msgid "Close old tickets"
+msgstr "Funga tiketi za zamani"
+
+msgid "Close tickets older than seven days?"
+msgstr "Funga tiketi za zaidi ya siku saba?"
+
+msgid "Assignment history"
+msgstr "Historia ya kazi"
+
+msgid "Translate with AI"
+msgstr "Tafsiri kwa AI"
+
+msgid "Target language"
+msgstr "Lugha lengwa"
+
+msgid "Please select a provider"
+msgstr "Tafadhali chagua mtoa huduma"
+
+msgid "Generate translation"
+msgstr "Tengeneza tafsiri"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Angalau sehemu moja ya masharti na masharti lazima iwe na maandishi."
+
+msgid "No active target languages are available."
+msgstr "Hakuna lugha lengwa zinazotumika zinazopatikana."
+
+msgid "Tutor"
+msgstr "Mkufunzi"
+
+msgid "Access dates"
+msgstr "Tarehe za ufikiaji"
+
+msgid "Coach access dates"
+msgstr "Tarehe za ufikiaji wa mkufunzi"
+
+msgid "No sessions found"
+msgstr "Hakuna vipindi vilivyopatikana"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Chagua kozi ambazo mtumiaji huyu hataruhusiwa kuzifikia katika kipindi hiki."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Mtumiaji hawezi kuzuiwa kutoka kozi zote katika kipindi. Badala yake, msajili mtumiaji."
+
+msgid "Users subscribed to this session"
+msgstr "Watumiaji waliosajiliwa katika kipindi hiki"
+
+msgid "No available users found"
+msgstr "Hakuna watumiaji waliopatikana"
+
+msgid "Subscribe this user to the session?"
+msgstr "Msajili mtumiaji huyu kwenye kipindi?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Msajili watumiaji waliochaguliwa kwenye kipindi?"
+
+msgid "General tutor planning"
+msgstr "Mpango wa mkufunzi mkuu"
+
+msgid "User is already registered by another tutor."
+msgstr "Mtumiaji tayari amesajiliwa na mkufunzi mwingine."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Unapokea nakala kwa sababu wewe ni mkufunzi wa kozi"
+
+msgid "General tutor"
+msgstr "Mkufunzi mkuu"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Fikiria kozi, wakufunzi, huduma ya usaidizi wa kiufundi, walimu, na/au nyenzo zinazopatikana."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Wakufunzi waliosajiliwa kama walimu katika kozi %s"
+
+msgid "Tutor name"
+msgstr "Jina la mkufunzi"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Wakufunzi wa kipindi ni waratibu wa kipindi na wanaweza kufanya kazi kama wakufunzi wa kila kozi katika kipindi. Ni watumiaji walio na jukumu la mwalimu pekee wanaoweza kuchaguliwa kama wakufunzi wa kipindi."
+
+msgid "Access start date for tutors"
+msgstr "Tarehe ya kuanza ya ufikiaji kwa wakufunzi"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Tarehe ambayo kipindi kinapatikana kwa wakufunzi, ili waweze kukitayarisha kabla ya wanafunzi kuunganishwa"
+
+msgid "Access end date for tutors"
+msgstr "Tarehe ya mwisho ya ufikiaji kwa wakufunzi"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Tarehe ambayo kipindi kinafungwa kwa wakufunzi. Muda wa ziada utawaruhusu kusafirisha taarifa zote muhimu za ufuatiliaji"
+
+msgid "Tutor and student"
+msgstr "Mkufunzi na mwanafunzi"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Ripoti hii inaonyesha usambazaji wa kila wiki wa vipindi kwa kila mkufunzi mkuu katika kipindi cha tarehe kilichochaguliwa."
+
+msgid "User is general tutor in some sessions"
+msgstr "Mtumiaji ni mkufunzi mkuu katika baadhi ya vipindi"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Walimu wataongezwa kama wakufunzi katika vipindi vyote vya kozi."
+
+msgid "Delete failed: invalid question id."
+msgstr "Kufuta kumeshindwa: kitambulisho cha swali si sahihi."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Wastani wa idadi ya vipindi kwa kila mkufunzi mkuu wa kipindi"
+
+msgid "No room"
+msgstr "Hakuna chumba"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Ingiza walimu wa kozi kama wakufunzi wa kozi katika kipindi"
+
+msgid "Clean and update course tutors"
+msgstr "Safisha na usasishe wakufunzi wa kozi"
+
+msgid "Add me as tutor"
+msgstr "Nijumuishe kama mkufunzi"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Haijawezekana kuongeza utafiti kwenye njia ya kujifunza"
+
+msgid "Access dates for tutors"
+msgstr "Tarehe za ufikiaji kwa wakufunzi"
+
+msgid "Tutor and group member"
+msgstr "Mkufunzi na mwanachama wa kikundi"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Umeifikia kikomo cha kila siku cha tokeni za AI. Tafadhali jaribu tena kesho."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Umeifikia kikomo cha kila mwezi cha tokeni za AI. Tafadhali jaribu tena mwezi ujao."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Msimbo huu wa kozi tayari upo, tafadhali chagua msimbo mwingine."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Kichwa hiki cha kozi tayari kipo, tafadhali chagua kichwa kingine."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Mwonekano wa zana hii hauwezi kubadilishwa"
+
+msgid "Invalid visibility"
+msgstr "Mwonekano batili"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Unapokea nakala kwa sababu wewe ni mmoja wa wakufunzi wa kozi"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Unapokea nakala kwa sababu wewe ni mkufunzi wa kozi"
+
+msgid "Manual completion"
+msgstr "Kukamilisha kwa mikono"
+
+msgid "Send to tutors"
+msgstr "Tuma kwa wakufunzi"
+
+msgid "Lab title"
+msgstr "Kichwa cha maabara"
+
+msgid "Lab week"
+msgstr "Wiki ya maabara"
+
+msgid "Final exam access rule"
+msgstr "Kanuni ya ufikiaji wa mtihani wa mwisho"
+
+msgid "Course completion rule"
+msgstr "Kanuni ya kukamilisha kozi"
+
+msgid "You have been invited to join a course"
+msgstr "Umealikwa kujiunga na kozi"
+
+msgid "No user has been found"
+msgstr "Hakuna mtumiaji aliyepatikana"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Mtumiaji aliyechaguliwa hawezi kujisajili katika muktadha huu"
+
+msgid "No change has been made"
+msgstr "Hakuna mabadiliko yaliyofanywa"
+
+msgid "Back to group list"
+msgstr "Rudi kwenye orodha ya vikundi"
+
+msgid "Remove class link"
+msgstr "Ondoa kiungo cha darasa"
+
+msgid "Group settings"
+msgstr "Mipangilio ya kikundi"
+
+msgid "Self-registration allowed"
+msgstr "Kujiandikisha mwenyewe kunaruhusiwa"
+
+msgid "Self-unregistration allowed"
+msgstr "Kujiondoa mwenyewe kunaruhusiwa"
+
+msgid "This group is linked to the class"
+msgstr "Kikundi hiki kimeunganishwa na darasa"
+
+msgid "Create one or more empty course groups"
+msgstr "Unda kikundi kimoja au zaidi cha kozi tupu"
+
+msgid "Number of places"
+msgstr "Idadi ya nafasi"
+
+msgid "Base group"
+msgstr "Kikundi cha msingi"
+
+msgid "Share"
+msgstr "Shiriki"
+
+msgid "Collaboration"
+msgstr "Ushirikiano"
+
+msgid "The group title is required."
+msgstr "Kichwa cha kikundi kinahitajika."
+
+msgid "Back to group area"
+msgstr "Rudi kwenye eneo la kikundi"
+
+msgid "Members are managed by the linked class"
+msgstr "Wanachama wanasimamiwa na darasa lililounganishwa"
+
+msgid "%s groups selected"
+msgstr "Vikundi %s vimechaguliwa"
+
+msgid "Fill selected groups"
+msgstr "Jaza vikundi vilivyochaguliwa"
+
+msgid "Empty selected groups"
+msgstr "Futa vikundi vilivyochaguliwa"
+
+msgid "Fill group"
+msgstr "Jaza kikundi"
+
+msgid "Empty group"
+msgstr "Futa kikundi"
+
+msgid "Groups per user"
+msgstr "Vikundi kwa kila mtumiaji"
+
+msgid "No tutors"
+msgstr "Hakuna wakufunzi"
+
+msgid "No users"
+msgstr "Hakuna watumiaji"
+

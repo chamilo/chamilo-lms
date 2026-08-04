@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوښۍ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -37631,4 +37631,1300 @@ msgstr "د ټولو شته پوښتنو ساتلو لپاره 0 وکاروئ. -1
 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "دا ساحې وکاروئ ترڅو تمرین له خپلو ښودنې اختیارونو څخه خپلواکه طبقه بندي کړئ."
+
+msgid "Invite by email"
+msgstr "د برېښنالیک له لارې بلنه"
+
+msgid "Invitation has been sent"
+msgstr "بلنه استول شوې ده"
+
+msgid "Sent on"
+msgstr "استول شوې په"
+
+msgid "Accepted on"
+msgstr "منل شوې په"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "دا کورس په یوه سیشن کې پرانيستل شوی دی. دلته بلنه استول به ترلاسه کوونکی د ټول سیشن %s لپاره نوم لیکنه وکړي، نه یوازې د دې کورس لپاره."
+
+msgid "Revoke"
+msgstr "لغوه کول"
+
+msgid "Revoked"
+msgstr "لغوه شوی"
+
+msgid "Invitation has been revoked"
+msgstr "بلنه لغوه شوې ده"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "آیا تاسې ډاډه یاست چې د %s ته استول شوې بلنه لغوه کول غواړئ؟"
+
+msgid "No default room"
+msgstr "هیڅ ډیفالټ خونه نشته"
+
+msgid "Floor"
+msgstr "پوړ"
+
+msgid "Capacity"
+msgstr "ظرفیت"
+
+msgid "Use attendance default room"
+msgstr "د حاضرۍ ډیفالټ خونه وکاروئ"
+
+msgid "Floor number"
+msgstr "د پوړ شمېره"
+
+msgid "Copy to students"
+msgstr "زده کوونکو ته کاپي کول"
+
+msgid "Generate a quick test on this topic"
+msgstr "په دې موضوع باندې یو چټک ازموینه جوړول"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "ذخیره شوي سند منځپانګه به د پروسس لپاره AI ماډل ته واستول شي."
+
+msgid "MCP API key"
+msgstr "MCP API کیلي"
+
+msgid "Authorized applications"
+msgstr "مجاز غوښتنلیکونه"
+
+msgid "Your session is about to expire"
+msgstr "ستاسې سیشن نږدې پای ته رسېږي"
+
+msgid "Do you want to continue your session?"
+msgstr "آیا غواړئ خپل سیشن ته دوام ورکړئ؟"
+
+msgid "Stay connected"
+msgstr "نښلېدل پاتې شئ"
+
+msgid "You will be signed out in %s seconds."
+msgstr "تاسې به په %s ثانیو کې وتل شئ."
+
+msgid "No descriptions available yet."
+msgstr "تر اوسه هیڅ تشریحات شتون نلري."
+
+msgid "%s users selected"
+msgstr "%s کاروونکي غوره شوي"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "غوره شوي کاروونکي کورس ته نوم لیکنه شوي دي"
+
+msgid "Import teachers"
+msgstr "ښوونکي واردول"
+
+msgid "Import learners"
+msgstr "زده کوونکي واردول"
+
+msgid "Select CSV file"
+msgstr "CSV فایل غوره کړئ"
+
+msgid "Some users could not be subscribed"
+msgstr "ځینې کاروونکي نشي نوم لیکنه کېدای"
+
+msgid "Browse available classes"
+msgstr "شته ټولګي وګورئ"
+
+msgid "Back to linked classes"
+msgstr "شریکو ټولګیو ته بیرته"
+
+msgid "No classes are currently linked to this course."
+msgstr "اوس مهال د دې کورس سره هیڅ ټولګي شریک شوي نه دي."
+
+msgid "No available classes were found for this course."
+msgstr "د دې کورس لپاره هیڅ شته ټولګي ونه موندل شول."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "آیا تاسې ډاډه یاست چې غوره شوي کاروونکي نوم لیکنه لغوه کول غواړئ؟"
+
+msgid "Learning path access"
+msgstr "د زده کړې لارې لاسرسی"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "یوازې غوره شوي کاروونکي او ډلې کولی شي دې زده کړې لارې ته لاسرسی ولري. د خوندي کولو وروسته یې اداره کړئ."
+
+msgid "All current and future course users can access this learning path."
+msgstr "ټول اوسني او راتلونکي کورس کاروونکي کولی شي دې زده کړې لارې ته لاسرسی ولري."
+
+msgid "All course users"
+msgstr "ټول کورس کاروونکي"
+
+msgid "Selected users and groups"
+msgstr "ټاکل شوي کاروونکي او ډلې"
+
+msgid "No access"
+msgstr "لاسرسی نشته"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "یوازې هغه کاروونکي او ډلې چې دلته اضافه شوي دي کولی شي دې زده کړې لارې ته لاسرسی ولري."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "د پوښتنو شمېر تر %s پورې محدود دی"
+
+msgid "Open exercise player"
+msgstr "د تمرین پلیر پرانيستل"
+
+msgid "The score is hidden for this exercise."
+msgstr "د دې تمرین لپاره نمرې پټې دي."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "اصلاحات د تمرین د پایلو ترتیباتو له مخې پټ شوي دي."
+
+msgid "Progressive adaptive result"
+msgstr "تدریجي تطابقي پایله"
+
+msgid "Achieved level"
+msgstr "ترلاسه شوی کچه"
+
+msgid "Correction history"
+msgstr "د اصلاح تاریخ"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "د دې هڅې لپاره د لاسي اصلاحاتو تاریخ."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "دا تمرین د رادار/سپایډر ویب پایلې حالت کاروي. چارټ په دې پاڼه کې شتون نلري."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "د پوښتنو جزیات د تمرین د پایلو ترتیباتو له مخې پټ شوي دي."
+
+msgid "Media question"
+msgstr "رسنیزه پوښتنه"
+
+msgid "Pending correction"
+msgstr "اصلاح ته انتظار"
+
+msgid "No answer"
+msgstr "ځواب نشته"
+
+msgid "Blank %s"
+msgstr "تشه %s"
+
+msgid "Your order"
+msgstr "ستاسو ترتیب"
+
+msgid "Correct order"
+msgstr "سم ترتیب"
+
+msgid "Delineation review"
+msgstr "د خطاطۍ بیاکتنه"
+
+msgid "Learner clicks"
+msgstr "د زده کوونکي کلیکونه"
+
+msgid "Question image"
+msgstr "د پوښتنې انځور"
+
+msgid "No hotspot image available"
+msgstr "د هټ سپاټ انځور شتون نلري"
+
+msgid "Learner delineation"
+msgstr "د زده کوونکي خطاطي"
+
+msgid "Expected delineation"
+msgstr "تمه شوې خطاطي"
+
+msgid "Expected zones"
+msgstr "تمه شوې زونونه"
+
+msgid "Zone"
+msgstr "زون"
+
+msgid "Learner annotation"
+msgstr "د زده کوونکي تشریح"
+
+msgid "No annotation image available"
+msgstr "د تشریح انځور شتون نلري"
+
+msgid "This answer is pending teacher correction."
+msgstr "دا ځواب د ښوونکي اصلاح ته انتظار دی."
+
+msgid "Teacher comment"
+msgstr "د ښوونکي تبصره"
+
+msgid "Teacher correction"
+msgstr "د ښوونکي اصلاح"
+
+msgid "Save correction"
+msgstr "اصلاح خوندي کول"
+
+msgid "Learner audio"
+msgstr "د زده کوونکي غږ"
+
+msgid "Download audio"
+msgstr "غږ ډاونلوډ کول"
+
+msgid "No uploaded audio"
+msgstr "اپلوډ شوی غږ نشته"
+
+msgid "Learner Office document"
+msgstr "د زده کوونکي دفتري سند"
+
+msgid "Learner file"
+msgstr "د زده کوونکي دوتنه"
+
+msgid "Download Office document"
+msgstr "دفتري سند ډاونلوډ کول"
+
+msgid "No submitted document"
+msgstr "سپارل شوی سند نشته"
+
+msgid "No uploaded file"
+msgstr "اپلوډ شوې دوتنه نشته"
+
+msgid "Content item"
+msgstr "منځپانګه توکی"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "د دې پوښتنې ډول په دې پاڼه کې نشي بیاکتل کېدای."
+
+msgid "Exercise completed"
+msgstr "تمرین بشپړ شو"
+
+msgid "Could not start the attempt"
+msgstr "هڅه پیل نشوه"
+
+msgid "Invalid exercise attempt"
+msgstr "ناسمه تمرین هڅه"
+
+msgid "Could not load exercise result"
+msgstr "د تمرین پایله نه شوه بارېدای"
+
+msgid "Could not load AI providers"
+msgstr "AI چمتوونکي نه شول بارېدای"
+
+msgid "Could not generate AI suggestion"
+msgstr "د AI وړاندیز جوړول ممکن نه و"
+
+msgid "Correction saved"
+msgstr "اصلاح خوندي شوه"
+
+msgid "Could not save correction"
+msgstr "اصلاح خوندي کول ممکن نه و"
+
+msgid "Create exercise"
+msgstr "تمرین جوړول"
+
+msgid "Exercise categories"
+msgstr "د تمرین کټګورۍ"
+
+msgid "Question categories"
+msgstr "د پوښتنو کټګورۍ"
+
+msgid "Search by exercise title or description."
+msgstr "د تمرین د سرلیک یا تشریح له مخې لټول."
+
+msgid "Search exercises"
+msgstr "تمرینونه لټول"
+
+msgid "No exercises found"
+msgstr "هیڅ تمرین ونه موندل شو"
+
+msgid "Open exercise"
+msgstr "تمرین پرانيستل"
+
+msgid "Disable autolaunch"
+msgstr "اتومات پیل غیرفعال کول"
+
+msgid "Enable autolaunch"
+msgstr "اتومات پیل فعال کول"
+
+msgid "Export QTI2"
+msgstr "QTI2 صادرول"
+
+msgid "Bulk actions"
+msgstr "ډله ییزې کړنې"
+
+msgid "Selected exercises"
+msgstr "ټاکل شوي تمرینونه"
+
+msgid "No exercises selected"
+msgstr "هیڅ تمرین نه دی ټاکل شوی"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "ایا تاسو ډاډه یاست چې دا کړنه په ټاکل شویو تمرینونو باندې پلي کول غواړئ؟"
+
+msgid "Bulk action completed"
+msgstr "ډله ییزه کړنه بشپړه شوه"
+
+msgid "Could not update exercises"
+msgstr "تمرینونه تازه کول ممکن نه و"
+
+msgid "Could not update exercise"
+msgstr "تمرین تازه کول ممکن نه و"
+
+msgid "Copy exercise"
+msgstr "تمرین کاپي کول"
+
+msgid "Delete exercise"
+msgstr "تمرین ړنګول"
+
+msgid "Could not load exercises"
+msgstr "تمرینونه بارول ممکن نه و"
+
+msgid "No limit"
+msgstr "هیڅ حد نه"
+
+msgid "Add selected questions to the test"
+msgstr "ټاکل شوې پوښتنې ازموینې ته اضافه کول"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "دا پوښتنه په فعاله ازموینه کې کارول شوې او دلته نه شي سمون کیدای."
+
+msgid "This question cannot be edited here."
+msgstr "دا پوښتنه دلته نه شي سمون کیدای."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "دا پوښتنه په فعاله ازموینه کې کارول شوې او دلته نه شي ړنګ کیدای."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "دا پوښتنه نه شي ړنګ کیدای ځکه چې ستاسو لاسرسی د پلیټ فارم ترتیباتو له مخې محدود دی."
+
+msgid "Already in test"
+msgstr "دمخه په ازموینه کې"
+
+msgid "Select at least one question."
+msgstr "لږ تر لږه یوه پوښتنه وټاکئ."
+
+msgid "Question bank updated"
+msgstr "د پوښتنو بانک تازه شو"
+
+msgid "Could not update the question bank"
+msgstr "د پوښتنو بانک تازه کول ممکن نه و"
+
+msgid "Could not load the question bank"
+msgstr "د پوښتنو بانک بارول ممکن نه و"
+
+msgid "Total score"
+msgstr "ټوله نمره"
+
+msgid "Starting"
+msgstr "پیل کول"
+
+msgid "Attempt history"
+msgstr "د هڅې تاریخ"
+
+msgid "No attempts yet"
+msgstr "تر اوسه هیڅ هڅه نه ده شوې"
+
+msgid "Invalid exercise"
+msgstr "ناسم تمرین"
+
+msgid "Could not load exercise overview"
+msgstr "د تمرین عمومي کتنه بارول ممکن نه و"
+
+msgid "Open test"
+msgstr "ازموینه پرانيستل"
+
+msgid "Random answers"
+msgstr "تصادفي ځوابونه"
+
+msgid "Prevent moving backwards"
+msgstr "شاته تګ مخنیوی"
+
+msgid "Previous button hidden"
+msgstr "مخکینۍ تڼۍ پټه"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "دا تمرین داسې انتخابونه کاروي چې مختلف ازموینې پلیر ته اړتیا لري."
+
+msgid "Continue test"
+msgstr "ازموینه دوام ورکول"
+
+msgid "Attempt started"
+msgstr "هڅه پیل شوه"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "د ښوونکي مخکتنه تعقیب شوې هڅه نه جوړوي."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "د تمرین هڅه پیل یا بیا پیل کړئ. مسوده ځوابونه د وروستي سپارلو دمخه خوندي کیدای شي."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "وخت حد ته ورسید. هڅه پای ته رسول."
+
+msgid "Question time reached. Saving your answer."
+msgstr "د پوښتنې وخت پای ته ورسید. ځواب مو خوندي کیږي."
+
+msgid "Finishing"
+msgstr "پای ته رسول"
+
+msgid "Draft saved"
+msgstr "مسوده خوندي شوه"
+
+msgid "Statement"
+msgstr "بیان"
+
+msgid "Drop each option on the matching answer"
+msgstr "هر اختیار د سمون ځواب باندې واچوئ"
+
+msgid "Clear match"
+msgstr "سمون پاک کړئ"
+
+msgid "Click to place the selected option here"
+msgstr "دلته د ټاکل شوي اختیار ځای پر ځای کولو لپاره کلیک وکړئ"
+
+msgid "Select an option, then click here"
+msgstr "یو اختیار وټاکئ، بیا دلته کلیک وکړئ"
+
+msgid "Already matched"
+msgstr "دمخه سمون شوی"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "تاسو کولی شئ یو اختیار یو ځواب ته کش کړئ، یا یو اختیار وټاکئ او بیا یو هدف بکس کلیک کړئ."
+
+msgid "Put the items in the correct order."
+msgstr "توکي په سمه ترتیب کې واچوئ."
+
+msgid "Move left"
+msgstr "چپ ته خوځول"
+
+msgid "Move right"
+msgstr "ښي ته خوځول"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "تاسو کولی شئ توکي چپ یا ښي ته کش کړئ، یا د خوځولو تڼۍ وکاروئ ترڅو ترتیب بدل کړئ."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "تاسو کولی شئ توکي کش کړئ یا د خوځولو تڼۍ وکاروئ ترڅو ترتیب بدل کړئ."
+
+msgid "Or upload an audio file"
+msgstr "یا یو آډیو فایل اپلوډ کړئ"
+
+msgid "Selected audio"
+msgstr "ټاکل شوی آډیو"
+
+msgid "Uploaded audio"
+msgstr "اپلوډ شوی آډیو"
+
+msgid "Office document"
+msgstr "دفتري سند"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "سند په لاندې ایډیټر کې بشپړ کړئ. فایل به د ښوونکي اصلاح لپاره دې هڅې سره ضمیمه شي."
+
+msgid "Reload Office editor"
+msgstr "د دفتر ایډیټر بیا بارول"
+
+msgid "Prepare Office document"
+msgstr "دفتري سند چمتو کړئ"
+
+msgid "Open in new tab"
+msgstr "په نوې ټب کې پرانيستل"
+
+msgid "Preparing Office document"
+msgstr "دفتري سند چمتو کول"
+
+msgid "Submitted document"
+msgstr "سپارل شوی سند"
+
+msgid "Annotation tools"
+msgstr "تشریحي وسایل"
+
+msgid "Text to place"
+msgstr "د ځای پر ځای کولو متن"
+
+msgid "Click the image to place the text annotation."
+msgstr "د متن تشریح ځای پر ځای کولو لپاره انځور کلیک کړئ."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "د لارې ټکي اضافه کولو لپاره انځور کلیک کړئ. لارې جلا کولو لپاره نوې لاره پیل کړئ."
+
+msgid "Start new path"
+msgstr "نوې لاره پیل کړئ"
+
+msgid "Current annotations"
+msgstr "اوسنۍ تشریحات"
+
+msgid "Remove point"
+msgstr "ټکی لرې کړئ"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "د حد پولیګون رسمولو لپاره انځور کلیک کړئ."
+
+msgid "Click a marker to remove it."
+msgstr "د لرې کولو لپاره یو مارکر کلیک کړئ."
+
+msgid "Placed"
+msgstr "ځای پر ځای شوی"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "یو ځواب وټاکئ، بیا د نښه کولو لپاره انځور کلیک کړئ."
+
+msgid "Reading speed"
+msgstr "د لوستلو سرعت"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "دا د پوښتنې ډول په دې پلیر کې نه ښودل کیدی شي."
+
+msgid "Save draft"
+msgstr "مسوده خوندي کړئ"
+
+msgid "I confirm that my answers were saved."
+msgstr "زه تاییدوم چې زما ځوابونه خوندي شوي دي."
+
+msgid "Finish test"
+msgstr "ازموینه پای ته ورسوئ"
+
+msgid "Attempt finished"
+msgstr "هڅه پای ته ورسیده"
+
+msgid "Question category"
+msgstr "د پوښتنې کټګوري"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "تاسو د دې پوښتنې کټګورۍ پورې اړوند پوښتنې پای ته ورسولې، دا ستاسو وروستۍ چانس دی چې بیرته لاړ شئ او هغه پوښتنې بیاکتنه وکړئ."
+
+msgid "Question time left"
+msgstr "د پوښتنې پاتې وخت"
+
+msgid "Time left"
+msgstr "پاتې وخت"
+
+msgid "Current attempt"
+msgstr "اوسنۍ هڅه"
+
+msgid "Could not save draft answer"
+msgstr "مسوده ځواب نه شو خوندي کولای"
+
+msgid "Could not load exercise"
+msgstr "تمرین نه شو بارولای"
+
+msgid "Draft answer saved"
+msgstr "مسوده ځواب خوندي شو"
+
+msgid "Could not finish the attempt"
+msgstr "هڅه بشپړه نشوه"
+
+msgid "Could not prepare Office document"
+msgstr "د آفيس سند چمتو نشو"
+
+msgid "Back to learner score"
+msgstr "د زده کوونکي نمرې ته بېرته"
+
+msgid "Disable auto refresh"
+msgstr "خودکار تازه کول غیرفعال کړئ"
+
+msgid "Enable auto refresh"
+msgstr "خودکار تازه کول فعال کړئ"
+
+msgid "Live window"
+msgstr "ژوندۍ کړکۍ"
+
+msgid "Ongoing attempts"
+msgstr "جاري هڅې"
+
+msgid "Completed attempts"
+msgstr "بشپړې شوې هڅې"
+
+msgid "Started"
+msgstr "پيل شوې"
+
+msgid "Last activity"
+msgstr "وروستۍ فعاليت"
+
+msgid "Could not load live results"
+msgstr "ژوندۍ پايلې نه شي بارېدلی"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "دا تمرین يوازې د لوستلو لپاره دی ځکه چې دا په يوې زده کړې لار کې شامل دی."
+
+msgid "Select a question type to create a question."
+msgstr "د پوښتنې جوړولو لپاره د پوښتنې ډول وټاکئ."
+
+msgid "Click to preview"
+msgstr "د مخکتنې لپاره کلیک وکړئ"
+
+msgid "Hide preview"
+msgstr "مخکتنه پټه کړئ"
+
+msgid "Shape"
+msgstr "شکل"
+
+msgid "Coordinates"
+msgstr "همغږۍ"
+
+msgid "Blanks"
+msgstr "تشې"
+
+msgid "Switchable blanks"
+msgstr "بدلېدونکې تشې"
+
+msgid "Blank"
+msgstr "تشه"
+
+msgid "Input width"
+msgstr "د ننوتلو پلنوالی"
+
+msgid "Orientation"
+msgstr "لورى"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "د اوسني تمرین د غبرګون حالت سره شتون نلري"
+
+msgid "Not available in the learning path creation flow"
+msgstr "د زده کړې لارې جوړولو بهير کې شتون نلري"
+
+msgid "Delete question"
+msgstr "پوښتنه ړنګول"
+
+msgid "Could not update exercise questions"
+msgstr "د تمرین پوښتنې نه شي تازه کولى"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "تمرین د زده کړې لارې ته نه شي اضافه کولى"
+
+msgid "A valid exercise id is required."
+msgstr "يو معتبر تمرین پېژندنې ته اړتيا ده."
+
+msgid "Could not load exercise questions"
+msgstr "د تمرین پوښتنې نه شي بارېدلی"
+
+msgid "Delete selected attempts"
+msgstr "ټاکل شوې هڅې ړنګول"
+
+msgid "Before date"
+msgstr "د نېټې مخکې"
+
+msgid "Pending corrections"
+msgstr "پاتې اصلاحات"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "دا تمرین د نمرې کتاب لخوا تړل شوی دی. د هڅې پاکولو کړنې غیرفعال دي."
+
+msgid "No attempts found"
+msgstr "هېڅ هڅه ونه موندل شوه"
+
+msgid "Review"
+msgstr "بيا کتنه"
+
+msgid "Print/PDF"
+msgstr "چاپ/PDF"
+
+msgid "Could not load exercise report"
+msgstr "د تمرین راپور نه شي بارېدلی"
+
+msgid "Select at least one attempt"
+msgstr "لږ تر لږه يوه هڅه وټاکئ"
+
+msgid "Delete selected attempts?"
+msgstr "ټاکل شوې هڅې ړنګول؟"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "د بيا کتل شوې هڅې پايلې برېښناليکونه ولېږل شي؟"
+
+msgid "Could not send emails"
+msgstr "برېښناليکونه نه شي لېږل کىدلى"
+
+msgid "Exercise result emails sent"
+msgstr "د تمرین پايلې برېښناليکونه ولېږل شول"
+
+msgid "Skipped"
+msgstr "پرېښودل شوې"
+
+msgid "Close attempt?"
+msgstr "هڅه وتړل شي؟"
+
+msgid "Attempt closed"
+msgstr "هڅه وتړل شوه"
+
+msgid "Could not close attempt"
+msgstr "هڅه نه شي تړل کىدلى"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "د دې هڅې پايله د زده کوونکي ته برېښناليک له لارې ولېږل شي؟"
+
+msgid "Email sent"
+msgstr "برېښناليک ولېږل شو"
+
+msgid "Could not send email"
+msgstr "برېښناليک نه شي لېږل کىدلى"
+
+msgid "Attempt deleted"
+msgstr "هڅه ړنګه شوه"
+
+msgid "Could not delete attempt"
+msgstr "هڅه نشو ړنګولای"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "د سرلیک او تشریح ستنو لرونکی CSV فایل وټاکئ."
+
+msgid "Manage categories used to classify questions."
+msgstr "هغه کټګورۍ وسموئ چې د پوښتنو د طبقه‌بندۍ لپاره کارول کېږي."
+
+msgid "Manage categories used to classify exercises."
+msgstr "هغه کټګورۍ وسموئ چې د تمرینونو د طبقه‌بندۍ لپاره کارول کېږي."
+
+msgid "Could not load categories"
+msgstr "کټګورۍ نه‌شو پورته کولای"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "وارد شوې کټګورۍ: %s. پاتې شوې قطارونه: %s."
+
+msgid "Imported categories: %s."
+msgstr "وارد شوې کټګورۍ: %s."
+
+msgid "Could not import categories"
+msgstr "کټګورۍ نه‌شو واردولای"
+
+msgid "Could not save category"
+msgstr "کټګوري نه‌شو خوندي کولای"
+
+msgid "Answer distribution"
+msgstr "د ځوابونو وېش"
+
+msgid "Configured answers"
+msgstr "ترتیب شوي ځوابونه"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "د ځینو پوښتنو ډولونو لپاره تفصیلي ځواب شمېرنه په مهاجرت شوي راپور کې تر اوسه شتون نه لري."
+
+msgid "No report by question data found"
+msgstr "د پوښتنې له مخې راپور معلومات ونه موندل شول"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "د دې پوښتنې ډول لپاره تفصیلي ځواب شمېرنه په مهاجرت شوي راپور کې تر اوسه شتون نه لري."
+
+msgid "No answer distribution found"
+msgstr "د ځواب وېش ونه موندل شو"
+
+msgid "Could not load report by question"
+msgstr "د پوښتنې له مخې راپور نه‌شو پورته کولای"
+
+msgid "Question settings"
+msgstr "د پوښتنې امستنې"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "د وخت د حد نه شتون لپاره تش یا ۰ پریږدئ."
+
+msgid "Time limit in seconds"
+msgstr "د وخت حد په ثانیو کې"
+
+msgid "Attached questions"
+msgstr "نښلول شوې پوښتنې"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "دلته یوازې هغه پوښتنې لیست شوي چې د اوسني تمرین دننه د دې رسنیزې پوښتنې سره نښلول شوي دي."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "په اوسني تمرین کې د دې رسنیزې پوښتنې سره هیڅ پوښتنه نښلول شوې نه ده."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "د دفتري سند ټیمپلیټ پورته کړئ چې زده‌کوونکي به یې له OnlyOffice سره سم کړي."
+
+msgid "Replace Office document"
+msgstr "دفتري سند بدلول"
+
+msgid "Current Office document"
+msgstr "اوسنی دفتري سند"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "دا پوښتنه له دې وروسته چې زده‌کوونکی سم شوی سند وسپاري، په لاسي ډول سمېږي."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "ټوله نمره د هټسپټ نمرو د جمعې په توګه محاسبه کېږي."
+
+msgid "Global score"
+msgstr "نړیواله نمره"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "د هټسپټ یو قطار وټاکئ، بڼه یې غوره کړئ، بیا د انځور پر سر رسم کړئ. د څو ضلعي (پولیګون) لپاره هر ټکی کلیک کړئ او پولیګون بشپړ کړئ، یا د بشپړولو لپاره دوه ځله کلیک کړئ."
+
+msgid "Finish polygon"
+msgstr "پولیګون بشپړول"
+
+msgid "Calculated answer"
+msgstr "محاسبه شوی ځواب"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "مهرباني وکړئ خپل متن لاندې ولیکئ او د تشو ځایونو د تعریف لپاره له مربع قوسونو [...] څخه کار واخلئ."
+
+msgid "Lowest value"
+msgstr "ټیټه ارزښت"
+
+msgid "Highest value"
+msgstr "لوړه ارزښت"
+
+msgid "Fill in blanks"
+msgstr "تشې ډکول"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "د تشو د تعریف لپاره ټاکل شوي نښه‌ګانې وکاروئ. بېلګه: د پیرو پلازمینه [لیما] ده."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "د ډراپ‌ډاون انتخابونه دننه کړئ، هر ځواب په یوه کرښه کې. بیا لاندې متوقع ځوابونه په نښه کړئ، لکه د زاړه اوزار په څېر."
+
+msgid "Refresh answers"
+msgstr "ځوابونه تازه کول"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "دا ډراپ‌ډاون ترکیبي پوښتنه یوه نړیواله نمره کاروي، لکه زاړه."
+
+msgid "Please enter at least two dropdown options."
+msgstr "مهرباني وکړئ لږ تر لږه دوه ډراپ‌ډاون انتخابونه دننه کړئ."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "لومړی د منزل انتخابونه جوړ کړئ، بیا هر توکی له سم انتخاب سره ونښلوئ."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "دا سموني ترکیبي پوښتنه یوه نړیواله نمره کاروي، لکه زاړه."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "ګامونه جوړ کړئ او د هر یو لپاره متوقع موقعیت غوره کړئ، لکه زاړه درېګېبل."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "زده‌کوونکي به ریښتینی یا غلط غوره کړي او بیا به د هڅې پر مهال د خپل باور درجه وټاکي. ایډیټر هماغه سم/غلط نمرې او د باور کچې لکه زاړه خوندي کوي."
+
+msgid "Hotspot combination"
+msgstr "هټسپټ ترکیب"
+
+msgid "Add delineation"
+msgstr "تحدید اضافه کول"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "دا دفتري سند پوښتنه هیڅ ځواب انتخابونه نه لري. نمره یې د سمولو/پایلې بیاکتنې پر مهال ټاکل کېږي."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "دا اپلوډ پوښتنه هیڅ ځواب انتخابونه نه لري. نمره یې د سمولو/پایلې بیاکتنې پر مهال ټاکل کېږي."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "دا شفاهي بیان پوښتنه هیڅ ځواب انتخابونه نه لري. نمره یې د سمولو/پایلې بیاکتنې پر مهال ټاکل کېږي."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "دا خلاصه پوښتنه هیڅ ځواب انتخابونه نه لري. نمره یې د سمولو/پایلې بیاکتنې پر مهال ټاکل کېږي."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "د سکرول سرعت تنظیماتو سره د لوستلو متن اضافه کړئ."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "د نمرې اضافه کولو پرته منځپانګه، رسنۍ یا لوستلو شرایط اضافه کړئ."
+
+msgid "Insert a page break without adding score."
+msgstr "د نمرې اضافه کولو پرته د مخ ماتونه داخل کړئ."
+
+msgid "Could not save question"
+msgstr "پوښتنه نه شوه خوندي کولای"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "یوازې DOC، DOCX، XLS یا XLSX اسناد اجازه لري."
+
+msgid "Please select an Office document."
+msgstr "مهرباني وکړئ یو آفس سند وټاکئ."
+
+msgid "Please draw at least one hotspot."
+msgstr "مهرباني وکړئ لږترلږه یو هټ سپاټ رسم کړئ."
+
+msgid "Please draw at least one delineation."
+msgstr "مهرباني وکړئ لږترلږه یو حد رسم کړئ."
+
+msgid "The fill in blanks text is required."
+msgstr "د تشو ډکولو متن اړین دی."
+
+msgid "At least one expected answer is required."
+msgstr "لږترلږه یو متوقع ځواب اړین دی."
+
+msgid "At least two draggable items are required."
+msgstr "لږترلږه دوه کش کولو وړ توکي اړین دي."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "هر کش کولو وړ توکی باید یو معتبر هدف ځای سره ونښلول شي."
+
+msgid "At least two matching options are required."
+msgstr "لږترلږه دوه سمون اختیارونه اړین دي."
+
+msgid "At least two matching pairs are required."
+msgstr "لږترلږه دوه سمون جوړې اړین دي."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "هره سمون جوړه باید یو معتبر اختیار سره ونښلول شي."
+
+msgid "At least two answers are required."
+msgstr "لږترلږه دوه ځوابونه اړین دي."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "هر ریښتیا/غلط ځواب باید ریښتیا یا غلط وټاکل شي."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "یوه ځانګړی ځواب پوښتنه باید دقیقاً یو سم ځواب ولري."
+
+msgid "At least one correct answer is required."
+msgstr "لږترلږه یو سم ځواب اړین دی."
+
+msgid "Could not load question"
+msgstr "پوښتنه نه شوه بار کولای"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "یو کورس وټاکئ او د نړیوال تمرین پایلو راپور د CSV په توګه صادر کړئ."
+
+msgid "Back to reports catalog"
+msgstr "راپورونو کتلاګ ته بیرته"
+
+msgid "Could not load exercise global report"
+msgstr "د تمرین نړیوال راپور نه شوه بار کولای"
+
+msgid "Imported questions"
+msgstr "وارد شوې پوښتنې"
+
+msgid "Aiken content"
+msgstr "Aiken منځپانګه"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken جنراتور نه شوه بار کولای"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken منځپانګه نه شوه جوړولای"
+
+msgid "Could not import generated Aiken content"
+msgstr "جوړ شوې Aiken منځپانګه نه شوه واردولای"
+
+msgid "Back to my courses"
+msgstr "زما کورسونو ته بیرته"
+
+msgid "Open report"
+msgstr "راپور خلاص کړئ"
+
+msgid "Questions with no automatic correction"
+msgstr "پوښتنې بې له اتوماتیک اصلاح"
+
+msgid "Could not load pending attempts"
+msgstr "پاتې هڅې نه شوه بار کولای"
+
+msgid "Skipped questions"
+msgstr "پریښودل شوې پوښتنې"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken واردول دا ټول وزن د وارد شوو پوښتنو ترمنځ ویشي پرته له دې چې یوه پوښتنه SCORE تعریف کړي."
+
+msgid "Import warnings"
+msgstr "واردولو خبرداریونه"
+
+msgid "Could not import questions"
+msgstr "پوښتنې نه شوه واردولای"
+
+msgid "No question statistics found"
+msgstr "هیڅ پوښتنې احصایې ونه موندل شوې"
+
+msgid "Could not load question statistics"
+msgstr "د پوښتنو احصایې نه شوه بار کولای"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "تاسو کولی شئ یو MCP کلاینټ مستقیماً د لاندې پای ټکی ته په اشاره کولو سره ونښلوئ:"
+
+msgid "No applications are currently connected to your account."
+msgstr "اوس مهال ستاسو حساب سره هیڅ غوښتنلیکونه وصل نه دي."
+
+msgid "Connected on"
+msgstr "وصل شوی په"
+
+msgid "Last used"
+msgstr "وروستی کارول شوی"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s به نور ستاسو Chamilo حساب ته لاسرسی ونلري. دوام ورکړئ؟"
+
+msgid "Application revoked"
+msgstr "غوښتنلیک لغوه شو"
+
+msgid "Copied to clipboard"
+msgstr "کلپبورډ ته کاپي شو"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP پای ټکی نه شوه کاپي کولای"
+
+msgid "MCP endpoint"
+msgstr "MCP پای ټکی"
+
+msgid "API key"
+msgstr "API کیلي"
+
+msgid "Last used at"
+msgstr "وروستی کارول شوی په"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "دا کیلي اوس کاپي کړئ. دا به بیا ونه ښودل شي."
+
+msgid "Rotate API key"
+msgstr "API کیلي څرخول"
+
+msgid "Revoke API key"
+msgstr "API کیلي لغوه کول"
+
+msgid "Remote MCP connection"
+msgstr "لرې MCP اړیکه"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "خپل MCP کلاینټ د لاندې ارزښتونو سره تنظیم کړئ:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "اوسنۍ کیلي به سمدلاسه کار ودروي. دوام ورکړئ؟"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "یوه نوې شخصي MCP API کیلي به جوړه شي. دوام ورکړئ؟"
+
+msgid "MCP API key generated"
+msgstr "MCP API کیلي جوړه شوه"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "د دې کیلي کاروونکي MCP کلاینټونه به سمدلاسه کار ودروي. دوام ورکړئ؟"
+
+msgid "MCP API key revoked"
+msgstr "MCP API کیلي لغوه شوه"
+
+msgid "Could not copy the API key"
+msgstr "د API کیلي کاپي نه شو کړای"
+
+msgid "Project"
+msgstr "پروژه"
+
+msgid "Close old tickets"
+msgstr "زړې ټکټونه تړل"
+
+msgid "Close tickets older than seven days?"
+msgstr "له اوو ورځو څخه زړې ټکټونه تړل شي؟"
+
+msgid "Assignment history"
+msgstr "د دندې تاریخ"
+
+msgid "Translate with AI"
+msgstr "د AI سره ژباړل"
+
+msgid "Target language"
+msgstr "هدف ژبه"
+
+msgid "Please select a provider"
+msgstr "مهرباني وکړئ یو چمتوونکی وټاکئ"
+
+msgid "Generate translation"
+msgstr "ژباړه جوړول"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "لږ تر لږه یوه د شرایطو او احکامو برخه باید متن ولري."
+
+msgid "No active target languages are available."
+msgstr "هیڅ فعال هدف ژبې شتون نلري."
+
+msgid "Tutor"
+msgstr "ښوونکی"
+
+msgid "Access dates"
+msgstr "د لاسرسي نیټې"
+
+msgid "Coach access dates"
+msgstr "د روزونکي د لاسرسي نیټې"
+
+msgid "No sessions found"
+msgstr "هیڅ سیشنونه ونه موندل شول"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "هغه کورسونه وټاکئ چې دا کاروونکی په دې سیشن کې لاسرسی نه شي کولی."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "کاروونکی له سیشن کې له هر کورس څخه نشي بندېدای. پرځای یې کاروونکی لغوه کړئ."
+
+msgid "Users subscribed to this session"
+msgstr "د دې سیشن لپاره ثبت شوي کاروونکي"
+
+msgid "No available users found"
+msgstr "هیڅ شته کاروونکي ونه موندل شول"
+
+msgid "Subscribe this user to the session?"
+msgstr "دا کاروونکی سیشن ته ثبت کړئ؟"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "ټاکل شوي کاروونکي سیشن ته ثبت کړئ؟"
+
+msgid "General tutor planning"
+msgstr "عمومي ښوونکي پلان جوړونه"
+
+msgid "User is already registered by another tutor."
+msgstr "کاروونکی د بل ښوونکي لخوا ثبت شوی دی."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "تاسو یوه کاپي ترلاسه کوئ ځکه چې تاسو د کورس ښوونکی یاست"
+
+msgid "General tutor"
+msgstr "عمومي ښوونکی"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "کورسونه، ښوونکي، تخنیکي مرسته، ښوونکي، او/یا موجود مواد په پام کې ونیسئ."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "ښوونکي په کورس %s کې د ښوونکو په توګه اضافه شوي"
+
+msgid "Tutor name"
+msgstr "د ښوونکي نوم"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "د سیشن ښوونکي د سیشن همغږي کوونکي دي او د سیشن په هر کورس کې د ښوونکو په توګه عمل کولی شي. یوازې هغه کاروونکي چې د ښوونکي رول لري د سیشن ښوونکو په توګه ټاکل کیدی شي."
+
+msgid "Access start date for tutors"
+msgstr "د ښوونکو لپاره د لاسرسي پیل نیټه"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "هغه نیټه چې سیشن د ښوونکو لپاره شتون لري، ترڅو دوی د زده کوونکو له وصلیدو مخکې چمتووالی ونیسي"
+
+msgid "Access end date for tutors"
+msgstr "د ښوونکو لپاره د لاسرسي پای نیټه"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "هغه نیټه چې سیشن د ښوونکو لپاره تړل کیږي. اضافي ځنډ به دوی ته اجازه ورکړي چې ټول اړوند تعقیب معلومات صادر کړي"
+
+msgid "Tutor and student"
+msgstr "ښوونکی او زده کوونکی"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "دا راپور د ټاکل شوې نیټې په حد کې د عمومي ښوونکي لخوا د سیشنونو اونيز ویش ښیي."
+
+msgid "User is general tutor in some sessions"
+msgstr "کاروونکی په ځینو سیشنونو کې عمومي ښوونکی دی"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "ښوونکي به په ټولو کورس سیشنونو کې د ښوونکو په توګه اضافه شي."
+
+msgid "Delete failed: invalid question id."
+msgstr "ړنګول ناکام شول: ناسم پوښتنې ID."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "د عمومي سیشن ښوونکي لخوا د سیشنونو اوسط شمیر"
+
+msgid "No room"
+msgstr "هیڅ خونه نشته"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "د کورس ښوونکي د سیشن په کورس ښوونکو کې وارد کړئ"
+
+msgid "Clean and update course tutors"
+msgstr "کورس ټیوټران پاک او تازه کړئ"
+
+msgid "Add me as tutor"
+msgstr "زه د ټیوټر په توګه اضافه کړئ"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "د زده کړې لارې ته سروې اضافه کول ممکن نه دي"
+
+msgid "Access dates for tutors"
+msgstr "ټیوټرانو ته د لاسرسي نیټې"
+
+msgid "Tutor and group member"
+msgstr "ټیوټر او ډله غړی"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "ستاسو ورځنۍ AI ټوکن حد ته رسیدلی. مهرباني وکړئ سبا بیا هڅه وکړئ."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "ستاسو میاشتنی AI ټوکن حد ته رسیدلی. مهرباني وکړئ راتلونکې میاشت بیا هڅه وکړئ."
+
+msgid "This course code already exists, please choose another code."
+msgstr "دا کورس کوډ لا دمخه شتون لري، مهرباني وکړئ بل کوډ غوره کړئ."
+
+msgid "This course title already exists, please choose another title."
+msgstr "دا کورس سرلیک لا دمخه شتون لري، مهرباني وکړئ بل سرلیک غوره کړئ."
+
+msgid "This tool visibility cannot be changed"
+msgstr "د دې وسیلې لیدل کیدای نشي بدل شي"
+
+msgid "Invalid visibility"
+msgstr "ناسم لید"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "تاسو یوه کاپي ترلاسه کوئ ځکه چې تاسو د کورس ټیوټرانو څخه یو یاست"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "تاسو یوه کاپي ترلاسه کوئ ځکه چې تاسو د کورس ټیوټر یاست"
+
+msgid "Manual completion"
+msgstr "لاسي بشپړتیا"
+
+msgid "Send to tutors"
+msgstr "ټیوټرانو ته واستوئ"
+
+msgid "Lab title"
+msgstr "لابراتوار سرلیک"
+
+msgid "Lab week"
+msgstr "لابراتوار اونۍ"
+
+msgid "Final exam access rule"
+msgstr "وروستۍ ازموینې لاسرسي قاعده"
+
+msgid "Course completion rule"
+msgstr "کورس بشپړتیا قاعده"
+
+msgid "You have been invited to join a course"
+msgstr "تاسو ته د کورس سره یوځای کیدو بلنه شوې"
+
+msgid "No user has been found"
+msgstr "هیڅ کارن ونه موندل شو"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "ټاکل شوی کارن په دې شرایطو کې نشي شامل کیدای"
+
+msgid "No change has been made"
+msgstr "هیڅ بدلون نه دی راغلی"
+
+msgid "Back to group list"
+msgstr "د ډلې لیست ته بیرته"
+
+msgid "Remove class link"
+msgstr "د ټولګي لینک لرې کړئ"
+
+msgid "Group settings"
+msgstr "د ډلې ترتیبات"
+
+msgid "Self-registration allowed"
+msgstr "خپله ثبت اجازه لري"
+
+msgid "Self-unregistration allowed"
+msgstr "خپله غیر ثبت اجازه لري"
+
+msgid "This group is linked to the class"
+msgstr "دا ډله د ټولګي سره تړلې ده"
+
+msgid "Create one or more empty course groups"
+msgstr "یو یا څو خالي کورس ډلې جوړ کړئ"
+
+msgid "Number of places"
+msgstr "د ځایونو شمیر"
+
+msgid "Base group"
+msgstr "اساسي ډله"
+
+msgid "Share"
+msgstr "شریکول"
+
+msgid "Collaboration"
+msgstr "همکاري"
+
+msgid "The group title is required."
+msgstr "د ډلې سرلیک اړین دی."
+
+msgid "Back to group area"
+msgstr "د ډلې ساحې ته بیرته"
+
+msgid "Members are managed by the linked class"
+msgstr "غړي د تړل شوي ټولګي لخوا اداره کیږي"
+
+msgid "%s groups selected"
+msgstr "%s ډلې غوره شوې"
+
+msgid "Fill selected groups"
+msgstr "غوره شوې ډلې ډک کړئ"
+
+msgid "Empty selected groups"
+msgstr "غوره شوې ډلې خالي کړئ"
+
+msgid "Fill group"
+msgstr "ډله ډکه کړئ"
+
+msgid "Empty group"
+msgstr "ډله خالي کړئ"
+
+msgid "Groups per user"
+msgstr "د هر کارن ډلې"
+
+msgid "No tutors"
+msgstr "هیڅ ټیوټران نشته"
+
+msgid "No users"
+msgstr "هیڅ کارنان نشته"
 

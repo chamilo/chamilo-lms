@@ -37638,3 +37638,1299 @@ msgstr "Usa 0 pa caltener toles entrugues disponibles. Usa -1 onde se dexen tole
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Usa estos campos pa clasificar l'exerciciu independientemente de les sos opciones de visualización."
 
+msgid "Invite by email"
+msgstr "Convidar per corréu electrónicu"
+
+msgid "Invitation has been sent"
+msgstr "La invitación foi unviada"
+
+msgid "Sent on"
+msgstr "Unviáu el"
+
+msgid "Accepted on"
+msgstr "Aceutáu el"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Esti cursu ta abiertu nuna sesión. Al unviar una invitación equí, el destinatariu va suscribise a la sesión completa %s, non namás a esti cursu."
+
+msgid "Revoke"
+msgstr "Revocar"
+
+msgid "Revoked"
+msgstr "Revocáu"
+
+msgid "Invitation has been revoked"
+msgstr "La invitación foi revocada"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "¿De xuru que quies revocar la invitación unviada a %s?"
+
+msgid "No default room"
+msgstr "Nun hai sala predeterminada"
+
+msgid "Floor"
+msgstr "Planta"
+
+msgid "Capacity"
+msgstr "Capacidá"
+
+msgid "Use attendance default room"
+msgstr "Usar la sala predeterminada d'asistencia"
+
+msgid "Floor number"
+msgstr "Númberu de planta"
+
+msgid "Copy to students"
+msgstr "Copiar a los estudiantes"
+
+msgid "Generate a quick test on this topic"
+msgstr "Xenerar una prueba rápida sobre esti tema"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "El conteníu del documentu guardáu va unviase a un modelu d'IA pa procesalu."
+
+msgid "MCP API key"
+msgstr "Clave API MCP"
+
+msgid "Authorized applications"
+msgstr "Aplicaciones autorizaes"
+
+msgid "Your session is about to expire"
+msgstr "La to sesión ta a piques d'espirar"
+
+msgid "Do you want to continue your session?"
+msgstr "¿Quies siguir cola to sesión?"
+
+msgid "Stay connected"
+msgstr "Quedar coneutáu"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Vas ser desconectáu en %s segundos."
+
+msgid "No descriptions available yet."
+msgstr "Entá nun hai descripciones disponibles."
+
+msgid "%s users selected"
+msgstr "%s usuarios seleicionaos"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Los usuarios seleicionaos fueron suscritos al cursu"
+
+msgid "Import teachers"
+msgstr "Importar profesores"
+
+msgid "Import learners"
+msgstr "Importar alumnos"
+
+msgid "Select CSV file"
+msgstr "Seleicionar ficheru CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Dalgunos usuarios nun pudieron ser suscritos"
+
+msgid "Browse available classes"
+msgstr "Esplorar clases disponibles"
+
+msgid "Back to linked classes"
+msgstr "Volver a les clases enllazaes"
+
+msgid "No classes are currently linked to this course."
+msgstr "Nun hai clases enllazaes a esti cursu."
+
+msgid "No available classes were found for this course."
+msgstr "Nun s'atoparon clases disponibles pa esti cursu."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "¿De xuru que quies dar de baxa a los usuarios seleicionaos?"
+
+msgid "Learning path access"
+msgstr "Accesu al camín d'aprendizaxe"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Namás los usuarios y grupos seleicionaos puen acceder a esti camín d'aprendizaxe. Xestiónalos depués de guardar."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Tolos usuarios actuales y futuros del cursu puen acceder a esti camín d'aprendizaxe."
+
+msgid "All course users"
+msgstr "Tolos usuarios del cursu"
+
+msgid "Selected users and groups"
+msgstr "Usuarios y grupos seleicionaos"
+
+msgid "No access"
+msgstr "Ensin accesu"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Namás los usuarios y grupos amestaos equí puen acceder a esti camín d'aprendizaxe."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Númberu de entrugues llendáu a un máximu de %s"
+
+msgid "Open exercise player"
+msgstr "Abrir reproductor d'exercicios"
+
+msgid "The score is hidden for this exercise."
+msgstr "La puntuación ta oculta pa esti exerciciu."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Les correiciones tán ocultes según la configuración de resultaos del exerciciu."
+
+msgid "Progressive adaptive result"
+msgstr "Resultáu adautativu progresivu"
+
+msgid "Achieved level"
+msgstr "Nivel algamáu"
+
+msgid "Correction history"
+msgstr "Historial de correiciones"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historial de correiciones manuales feches pa esti intentu."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Esti exerciciu usa'l mou de resultaos radar/araña. El gráficu nun ta disponible nesta páxina."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Los detalles de les entrugues tán ocultos según la configuración de resultaos del exerciciu."
+
+msgid "Media question"
+msgstr "Entruga multimedia"
+
+msgid "Pending correction"
+msgstr "Correición pendiente"
+
+msgid "No answer"
+msgstr "Ensin respuesta"
+
+msgid "Blank %s"
+msgstr "Espaciu en blancu %s"
+
+msgid "Your order"
+msgstr "El to orde"
+
+msgid "Correct order"
+msgstr "Orde correutu"
+
+msgid "Delineation review"
+msgstr "Revisión de delineación"
+
+msgid "Learner clicks"
+msgstr "Clics del alumnu"
+
+msgid "Question image"
+msgstr "Imaxe de la entruga"
+
+msgid "No hotspot image available"
+msgstr "Nun hai imaxe de puntu caliente disponible"
+
+msgid "Learner delineation"
+msgstr "Delineación del alumnu"
+
+msgid "Expected delineation"
+msgstr "Delineación esperada"
+
+msgid "Expected zones"
+msgstr "Zones esperaes"
+
+msgid "Zone"
+msgstr "Zona"
+
+msgid "Learner annotation"
+msgstr "Anotación del alumnu"
+
+msgid "No annotation image available"
+msgstr "Nun hai imaxe d'anotación disponible"
+
+msgid "This answer is pending teacher correction."
+msgstr "Esta respuesta ta pendiente de correición del profesor."
+
+msgid "Teacher comment"
+msgstr "Comentariu del profesor"
+
+msgid "Teacher correction"
+msgstr "Correición del profesor"
+
+msgid "Save correction"
+msgstr "Guardar correición"
+
+msgid "Learner audio"
+msgstr "Audiu del alumnu"
+
+msgid "Download audio"
+msgstr "Descargar audiu"
+
+msgid "No uploaded audio"
+msgstr "Ensin audiu xubíu"
+
+msgid "Learner Office document"
+msgstr "Documentu Office del alumnu"
+
+msgid "Learner file"
+msgstr "Ficheru del alumnu"
+
+msgid "Download Office document"
+msgstr "Descargar documentu Office"
+
+msgid "No submitted document"
+msgstr "Ensin documentu unviáu"
+
+msgid "No uploaded file"
+msgstr "Ensin ficheru xubíu"
+
+msgid "Content item"
+msgstr "Elementu de conteníu"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Esti tipu d'entruga nun pue revisase nesta páxina."
+
+msgid "Exercise completed"
+msgstr "Exerciciu completáu"
+
+msgid "Could not start the attempt"
+msgstr "Nun pudo aniciase l'intentu"
+
+msgid "Invalid exercise attempt"
+msgstr "Intentu d'exerciciu non válidu"
+
+msgid "Could not load exercise result"
+msgstr "Nun pudo cargase'l resultáu del exerciciu"
+
+msgid "Could not load AI providers"
+msgstr "Nun pudieron cargase los proveedores d'IA"
+
+msgid "Could not generate AI suggestion"
+msgstr "Nun pudo xenerase la suxerencia d'IA"
+
+msgid "Correction saved"
+msgstr "Correición guardada"
+
+msgid "Could not save correction"
+msgstr "Nun pudo guardase la correición"
+
+msgid "Create exercise"
+msgstr "Crear exerciciu"
+
+msgid "Exercise categories"
+msgstr "Categoríes d'exercicios"
+
+msgid "Question categories"
+msgstr "Categoríes de entrugues"
+
+msgid "Search by exercise title or description."
+msgstr "Buscar per títulu o descripción del exerciciu."
+
+msgid "Search exercises"
+msgstr "Buscar exercicios"
+
+msgid "No exercises found"
+msgstr "Nun s'atoparon exercicios"
+
+msgid "Open exercise"
+msgstr "Abrir exerciciu"
+
+msgid "Disable autolaunch"
+msgstr "Desactivar llanzamientu automáticu"
+
+msgid "Enable autolaunch"
+msgstr "Activar llanzamientu automáticu"
+
+msgid "Export QTI2"
+msgstr "Esportar QTI2"
+
+msgid "Bulk actions"
+msgstr "Aiciones masives"
+
+msgid "Selected exercises"
+msgstr "Exercicios seleicionaos"
+
+msgid "No exercises selected"
+msgstr "Nun hai exercicios seleicionaos"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "¿De xuru que quies aplicar esta aición a los exercicios seleicionaos?"
+
+msgid "Bulk action completed"
+msgstr "Aición masiva completada"
+
+msgid "Could not update exercises"
+msgstr "Nun pudieron anovase los exercicios"
+
+msgid "Could not update exercise"
+msgstr "Nun pudo anovase l'exerciciu"
+
+msgid "Copy exercise"
+msgstr "Copiar exerciciu"
+
+msgid "Delete exercise"
+msgstr "Desaniciar exerciciu"
+
+msgid "Could not load exercises"
+msgstr "Nun pudieron cargase los exercicios"
+
+msgid "No limit"
+msgstr "Ensin llende"
+
+msgid "Add selected questions to the test"
+msgstr "Amestar les entrugues seleicionaes a la prueba"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Esta entruga úsase nuna prueba activa y nun puede editase equí."
+
+msgid "This question cannot be edited here."
+msgstr "Esta entruga nun puede editase equí."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Esta entruga úsase nuna prueba activa y nun puede desaniciase equí."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Esta entruga nun puede desaniciase porque'l to accesu ta llindáu pola configuración de la plataforma."
+
+msgid "Already in test"
+msgstr "Yá ta na prueba"
+
+msgid "Select at least one question."
+msgstr "Seleiciona polo menos una entruga."
+
+msgid "Question bank updated"
+msgstr "Bancu d'entrugues anováu"
+
+msgid "Could not update the question bank"
+msgstr "Nun pudo anovase'l bancu d'entrugues"
+
+msgid "Could not load the question bank"
+msgstr "Nun pudo cargase'l bancu d'entrugues"
+
+msgid "Total score"
+msgstr "Puntuación total"
+
+msgid "Starting"
+msgstr "Aniciando"
+
+msgid "Attempt history"
+msgstr "Historial d'intentos"
+
+msgid "No attempts yet"
+msgstr "Entá nun hai intentos"
+
+msgid "Invalid exercise"
+msgstr "Exerciciu non válidu"
+
+msgid "Could not load exercise overview"
+msgstr "Nun pudo cargase'l resume del exerciciu"
+
+msgid "Open test"
+msgstr "Abrir prueba"
+
+msgid "Random answers"
+msgstr "Respuestes al debalu"
+
+msgid "Prevent moving backwards"
+msgstr "Torgar dir p'atrás"
+
+msgid "Previous button hidden"
+msgstr "Botón anterior ocultu"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Esti exerciciu usa opciones que requieren un reproductor de pruebes distintu."
+
+msgid "Continue test"
+msgstr "Siguir la prueba"
+
+msgid "Attempt started"
+msgstr "Intentu aniciáu"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "La vista previa del profesor nun crea un intentu rexistráu."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Aniciar o reaniciar un intentu d'exerciciu. Les rempuestes provisionales puen guardase enantes del unviu final."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Tiempu escosáu. Finando l'intentu."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Tiempu de la entruga escosáu. Guardando la rempuesta."
+
+msgid "Finishing"
+msgstr "Finando"
+
+msgid "Draft saved"
+msgstr "Borrador guardáu"
+
+msgid "Statement"
+msgstr "Enunciáu"
+
+msgid "Drop each option on the matching answer"
+msgstr "Suelta cada opción na rempuesta correspondiente"
+
+msgid "Clear match"
+msgstr "Quitar coincidencia"
+
+msgid "Click to place the selected option here"
+msgstr "Fai clic pa allugar equí la opción seleicionada"
+
+msgid "Select an option, then click here"
+msgstr "Seleiciona una opción y depués fai clic equí"
+
+msgid "Already matched"
+msgstr "Yá coincidíu"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Pues arrastrar una opción a una rempuesta, o seleicionar una opción y depués facer clic nun cuadru destín."
+
+msgid "Put the items in the correct order."
+msgstr "Pon los elementos nel orde correutu."
+
+msgid "Move left"
+msgstr "Mover a la esquierda"
+
+msgid "Move right"
+msgstr "Mover a la drecha"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Pues arrastrar elementos a la esquierda o drecha, o usar los botones de movimientu pa camudar l'orde."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Pues arrastrar elementos o usar los botones de movimientu pa camudar l'orde."
+
+msgid "Or upload an audio file"
+msgstr "O xubir un ficheru d'audio"
+
+msgid "Selected audio"
+msgstr "Audio seleicionáu"
+
+msgid "Uploaded audio"
+msgstr "Audio xubíu"
+
+msgid "Office document"
+msgstr "Documentu d'oficina"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Completa'l documentu nel editor d'embaxo. El ficheru axuntarase a esti intentu pa la correición del profesor."
+
+msgid "Reload Office editor"
+msgstr "Recargar l'editor d'oficina"
+
+msgid "Prepare Office document"
+msgstr "Preparar documentu d'oficina"
+
+msgid "Open in new tab"
+msgstr "Abrir nuna llingüeta nueva"
+
+msgid "Preparing Office document"
+msgstr "Preparando documentu d'oficina"
+
+msgid "Submitted document"
+msgstr "Documentu unviáu"
+
+msgid "Annotation tools"
+msgstr "Ferramientes d'anotación"
+
+msgid "Text to place"
+msgstr "Testu pa allugar"
+
+msgid "Click the image to place the text annotation."
+msgstr "Fai clic na imaxe pa allugar l'anotación de testu."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Fai clic na imaxe p'amestar puntos de camín. Usa «Aniciar camín nuevu» pa dixebrar caminos."
+
+msgid "Start new path"
+msgstr "Aniciar camín nuevu"
+
+msgid "Current annotations"
+msgstr "Anotaciones actuales"
+
+msgid "Remove point"
+msgstr "Quitar puntu"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Fai clic na imaxe pa dibuxar el polígonu de delineación."
+
+msgid "Click a marker to remove it."
+msgstr "Fai clic nun marcador pa quitalu."
+
+msgid "Placed"
+msgstr "Allugáu"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Seleiciona una rempuesta y depués fai clic na imaxe pa marcala."
+
+msgid "Reading speed"
+msgstr "Velocidá de llectura"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Esti tipu d'entruga nun pue amosase nesti reproductor."
+
+msgid "Save draft"
+msgstr "Guardar borrador"
+
+msgid "I confirm that my answers were saved."
+msgstr "Confirmo que les mios rempuestes guardáronse."
+
+msgid "Finish test"
+msgstr "Finar la prueba"
+
+msgid "Attempt finished"
+msgstr "Intentu fináu"
+
+msgid "Question category"
+msgstr "Categoría d'entrugues"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Finasti les entrugues rellacionaes con esta categoría d'entrugues, ye la to última oportunidá pa volver y revisar eses entrugues."
+
+msgid "Question time left"
+msgstr "Tiempu restante de la entruga"
+
+msgid "Time left"
+msgstr "Tiempu restante"
+
+msgid "Current attempt"
+msgstr "Intentu actual"
+
+msgid "Could not save draft answer"
+msgstr "Nun se pudo guardar el borrador de la rempuesta"
+
+msgid "Could not load exercise"
+msgstr "Nun se pudo cargar l'exerciciu"
+
+msgid "Draft answer saved"
+msgstr "Borrador de la rempuesta guardáu"
+
+msgid "Could not finish the attempt"
+msgstr "Nun se pudo finar l'intentu"
+
+msgid "Could not prepare Office document"
+msgstr "Nun se pudo preparar el documentu d'Office"
+
+msgid "Back to learner score"
+msgstr "Volver a la puntuación del alumnu"
+
+msgid "Disable auto refresh"
+msgstr "Desactivar anovamientu automáticu"
+
+msgid "Enable auto refresh"
+msgstr "Activar anovamientu automáticu"
+
+msgid "Live window"
+msgstr "Ventana en direutu"
+
+msgid "Ongoing attempts"
+msgstr "Intentos en cursu"
+
+msgid "Completed attempts"
+msgstr "Intentos completaos"
+
+msgid "Started"
+msgstr "Aniciáu"
+
+msgid "Last activity"
+msgstr "Última actividá"
+
+msgid "Could not load live results"
+msgstr "Nun se pudieron cargar los resultaos en direutu"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Esti exerciciu ye de namái llectura porque ta incluyíu nuna ruta d'aprendizaxe."
+
+msgid "Select a question type to create a question."
+msgstr "Seleicione un tipu de entruga pa crear una entruga."
+
+msgid "Click to preview"
+msgstr "Clic pa previsualizar"
+
+msgid "Hide preview"
+msgstr "Anubrir previsualización"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Coordenaes"
+
+msgid "Blanks"
+msgstr "Espacios en blancu"
+
+msgid "Switchable blanks"
+msgstr "Espacios en blancu intercambiables"
+
+msgid "Blank"
+msgstr "Espaciu en blancu"
+
+msgid "Input width"
+msgstr "Anchor de la entrada"
+
+msgid "Orientation"
+msgstr "Orientación"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Non disponible col mou de retroalimentación actual del exerciciu"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Non disponible nel fluxu de creación de rutes d'aprendizaxe"
+
+msgid "Delete question"
+msgstr "Desaniciar entruga"
+
+msgid "Could not update exercise questions"
+msgstr "Nun se pudieron anovar les entrugues del exerciciu"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Nun se pudo amestar l'exerciciu a la ruta d'aprendizaxe"
+
+msgid "A valid exercise id is required."
+msgstr "Ríquese un id válidu d'exerciciu."
+
+msgid "Could not load exercise questions"
+msgstr "Nun se pudieron cargar les entrugues del exerciciu"
+
+msgid "Delete selected attempts"
+msgstr "Desaniciar los intentos seleicionaos"
+
+msgid "Before date"
+msgstr "Enantes de la fecha"
+
+msgid "Pending corrections"
+msgstr "Correiciones pendientes"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Esti exerciciu ta bloquiáu pol cuadernu de notes. Les aiciones de llimpieza d'intentos tán desactivaes."
+
+msgid "No attempts found"
+msgstr "Nun s'atoparon intentos"
+
+msgid "Review"
+msgstr "Revisar"
+
+msgid "Print/PDF"
+msgstr "Imprentar/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Nun se pudo cargar l'informe del exerciciu"
+
+msgid "Select at least one attempt"
+msgstr "Seleicione polo menos un intentu"
+
+msgid "Delete selected attempts?"
+msgstr "¿Desaniciar los intentos seleicionaos?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "¿Unviar correos electrónicos colos resultaos de los intentos revisaos?"
+
+msgid "Could not send emails"
+msgstr "Nun se pudieron unviar los correos electrónicos"
+
+msgid "Exercise result emails sent"
+msgstr "Correos electrónicos de resultaos del exerciciu unviaos"
+
+msgid "Skipped"
+msgstr "Saltáu"
+
+msgid "Close attempt?"
+msgstr "¿Zarrar l'intentu?"
+
+msgid "Attempt closed"
+msgstr "Intentu zarráu"
+
+msgid "Could not close attempt"
+msgstr "Nun se pudo zarrar l'intentu"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "¿Unviar per corréu electrónicu'l resultáu d'esti intentu al alumnu?"
+
+msgid "Email sent"
+msgstr "Corréu electrónicu unviáu"
+
+msgid "Could not send email"
+msgstr "Nun se pudo unviar el corréu electrónicu"
+
+msgid "Attempt deleted"
+msgstr "Intentu desaniciáu"
+
+msgid "Could not delete attempt"
+msgstr "Nun se pudo desaniciar l'intentu"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Seleiciona un ficheru CSV que contenga columnes de títulu y descripción."
+
+msgid "Manage categories used to classify questions."
+msgstr "Xestionar categoríes usaes pa clasificar entrugues."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Xestionar categoríes usaes pa clasificar exercicios."
+
+msgid "Could not load categories"
+msgstr "Nun se pudieron cargar les categoríes"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Categoríes importaes: %s. Files omitíes: %s."
+
+msgid "Imported categories: %s."
+msgstr "Categoríes importaes: %s."
+
+msgid "Could not import categories"
+msgstr "Nun se pudieron importar les categoríes"
+
+msgid "Could not save category"
+msgstr "Nun se pudo guardar la categoría"
+
+msgid "Answer distribution"
+msgstr "Distribución de rempuestes"
+
+msgid "Configured answers"
+msgstr "Rempuestes configuraes"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "El recuentu detalláu de rempuestes pa dalgunos tipos d'entrugues entá nun ta disponible nel informe migráu."
+
+msgid "No report by question data found"
+msgstr "Nun s'atoparon datos del informe per entruga"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "El recuentu detalláu de rempuestes pa esti tipu d'entruga entá nun ta disponible nel informe migráu."
+
+msgid "No answer distribution found"
+msgstr "Nun s'atopó la distribución de rempuestes"
+
+msgid "Could not load report by question"
+msgstr "Nun se pudo cargar l'informe per entruga"
+
+msgid "Question settings"
+msgstr "Configuración d'entrugues"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Dexar baleru o 0 pa nun tener llende de tiempu."
+
+msgid "Time limit in seconds"
+msgstr "Llende de tiempu en segundos"
+
+msgid "Attached questions"
+msgstr "Entrugues axuntaes"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Equí namás s'amuesen les entrugues axuntaes a esta entruga multimedia dientro del exerciciu actual."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Nun hai entrugues axuntaes a esta entruga multimedia nel exerciciu actual."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Xube la plantía de documentu d'Office qu'editarán los alumnos con OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Camudar documentu d'Office"
+
+msgid "Current Office document"
+msgstr "Documentu d'Office actual"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Esta entruga corríxese manualmente depués de qu'el alumnu unvie'l documentu editáu."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "La puntuación total calcúlase como la suma de les puntuaciones de los puntos calientes."
+
+msgid "Global score"
+msgstr "Puntuación global"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Seleiciona una filera de puntu caliente, escueye la so forma y depués dibuxa sobre la imaxe. Pa polígonos, fai clic en cada puntu y fina'l polígonu, o fai doble clic pa finalizalu."
+
+msgid "Finish polygon"
+msgstr "Finar polígonu"
+
+msgid "Calculated answer"
+msgstr "Respuesta calculada"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Escribi'l to testu embaxo y usa corchetes [...] pa definir unu o más blancos."
+
+msgid "Lowest value"
+msgstr "Valor más baxu"
+
+msgid "Highest value"
+msgstr "Valor más altu"
+
+msgid "Fill in blanks"
+msgstr "Rellenar blancos"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Usa los marcadores seleicionaos pa definir blancos. Exemplu: La capital de Perú ye [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Introduz les opciones del desplegable, una rempuesta per llinia. Depués marca les rempuestes esperaes embaxo, como na ferramienta heredada."
+
+msgid "Refresh answers"
+msgstr "Refrescar rempuestes"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Esta entruga de combinación de desplegables usa una puntuación global, como na versión heredada."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Introduz polo menos dos opciones de desplegable."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Crea primero les opciones de destín y depués enllaza cada elementu cola opción correuta."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Esta entruga de combinación de coincidencies usa una puntuación global, como na versión heredada."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Crea los pasos y escueye la posición esperada pa cada unu, como na versión heredada d'Arrastrable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Los alumnos escoyerán Verdaderu o Falsu y depués seleicionarán el so grau de certidume mientres l'intentu. L'editor guarda les mesmes puntuaciones Correutu/Erróneu y niveles de certidume que la versión heredada."
+
+msgid "Hotspot combination"
+msgstr "Combinación de puntos calientes"
+
+msgid "Add delineation"
+msgstr "Amestar delineación"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Esta entruga de documentu d'Office nun tien opciones de rempuesta. La so puntuación asígnase mientres la correición/revisión de resultaos."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Esta entruga de xubida nun tien opciones de rempuesta. La so puntuación asígnase mientres la correición/revisión de resultaos."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Esta entruga d'espresión oral nun tien opciones de rempuesta. La so puntuación asígnase mientres la correición/revisión de resultaos."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Esta entruga abierta nun tien opciones de rempuesta. La so puntuación asígnase mientres la correición/revisión de resultaos."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Amestar un testu de llectura con axustes de velocidá de desplazamientu."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Amestar conteníu, multimedia o contestu de llectura ensin amestar puntuación."
+
+msgid "Insert a page break without adding score."
+msgstr "Inxertar un saltu de páxina ensin amestar puntuación."
+
+msgid "Could not save question"
+msgstr "Nun se pudo guardar la entruga"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Namái se permiten documentos DOC, DOCX, XLS o XLSX."
+
+msgid "Please select an Office document."
+msgstr "Seleiciona un documentu d'Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Dibuxa polo menos un puntu activu."
+
+msgid "Please draw at least one delineation."
+msgstr "Dibuxa polo menos una delineación."
+
+msgid "The fill in blanks text is required."
+msgstr "Ríquese'l testu pa rellenar los blancos."
+
+msgid "At least one expected answer is required."
+msgstr "Ríquese polo menos una rempuesta esperada."
+
+msgid "At least two draggable items are required."
+msgstr "Riquir polo menos dos elementos arrastrables."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Cada elementu arrastrable tien de tar enllazáu a una posición de destín válida."
+
+msgid "At least two matching options are required."
+msgstr "Riquir polo menos dos opciones de coincidencia."
+
+msgid "At least two matching pairs are required."
+msgstr "Riquir polo menos dos pares de coincidencia."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Cada par de coincidencia tien de tar enllazáu a una opción válida."
+
+msgid "At least two answers are required."
+msgstr "Riquir polo menos dos rempuestes."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Cada rempuesta de verdaderu/falsu tien de tener seleicionáu Verdaderu o Falsu."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Una entruga d'una única rempuesta tien de tener exautamente una rempuesta correuta."
+
+msgid "At least one correct answer is required."
+msgstr "Ríquese polo menos una rempuesta correuta."
+
+msgid "Could not load question"
+msgstr "Nun se pudo cargar la entruga"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Seleiciona un cursu y esporta l'informe global de resultaos del exerciciu en formatu CSV."
+
+msgid "Back to reports catalog"
+msgstr "Volver al catálogu d'informes"
+
+msgid "Could not load exercise global report"
+msgstr "Nun se pudo cargar l'informe global del exerciciu"
+
+msgid "Imported questions"
+msgstr "Entrugues importaes"
+
+msgid "Aiken content"
+msgstr "Conteníu Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Nun se pudo cargar el xenerador AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Nun se pudo xenerar el conteníu Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Nun se pudo importar el conteníu Aiken xeneráu"
+
+msgid "Back to my courses"
+msgstr "Volver a los mios cursos"
+
+msgid "Open report"
+msgstr "Abrir informe"
+
+msgid "Questions with no automatic correction"
+msgstr "Entrugues ensin correición automática"
+
+msgid "Could not load pending attempts"
+msgstr "Nun se pudo cargar los intentos pendientes"
+
+msgid "Skipped questions"
+msgstr "Entrugues omitíes"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "La importación Aiken distribúi esti pesu total ente les entrugues importaes a menos que una entruga defina SCORE."
+
+msgid "Import warnings"
+msgstr "Avisos d'importación"
+
+msgid "Could not import questions"
+msgstr "Nun se pudieron importar les entrugues"
+
+msgid "No question statistics found"
+msgstr "Nun s'atoparon estadístiques d'entrugues"
+
+msgid "Could not load question statistics"
+msgstr "Nun se pudieron cargar les estadístiques d'entrugues"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Tamién pues coneutar un veceru MCP direutamente apuntando al siguiente puntu final:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Nun hai aplicaciones conectaes anguaño a la to cuenta."
+
+msgid "Connected on"
+msgstr "Coneutáu'l"
+
+msgid "Last used"
+msgstr "Usáu per última vegada"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s yá nun podrá acceder a la to cuenta de Chamilo. ¿Siguir?"
+
+msgid "Application revoked"
+msgstr "Aplicación revocada"
+
+msgid "Copied to clipboard"
+msgstr "Copiáu al cartafueyu"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Nun pudo copiase'l puntu final MCP"
+
+msgid "MCP endpoint"
+msgstr "Puntu final MCP"
+
+msgid "API key"
+msgstr "Clave API"
+
+msgid "Last used at"
+msgstr "Usáu per última vegada en"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Copia esta clave agora. Nun va amosase otra vegada."
+
+msgid "Rotate API key"
+msgstr "Rotar clave API"
+
+msgid "Revoke API key"
+msgstr "Revocar clave API"
+
+msgid "Remote MCP connection"
+msgstr "Conexón remota MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Configura'l to veceru MCP colos siguientes valores:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "La clave actual va dexar de funcionar darréu. ¿Siguir?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Va xenerase una nueva clave API MCP personal. ¿Siguir?"
+
+msgid "MCP API key generated"
+msgstr "Clave API MCP xenerada"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Los veceros MCP conectaos qu'usen esta clave van dexar de funcionar darréu. ¿Siguir?"
+
+msgid "MCP API key revoked"
+msgstr "Clave API MCP revocada"
+
+msgid "Could not copy the API key"
+msgstr "Nun pudo copiase la clave API"
+
+msgid "Project"
+msgstr "Proyeutu"
+
+msgid "Close old tickets"
+msgstr "Zarrar tickets vieyos"
+
+msgid "Close tickets older than seven days?"
+msgstr "¿Zarrar los tickets con más de siete díes?"
+
+msgid "Assignment history"
+msgstr "Historial d'asignaciones"
+
+msgid "Translate with AI"
+msgstr "Traducir con IA"
+
+msgid "Target language"
+msgstr "Llingua de destín"
+
+msgid "Please select a provider"
+msgstr "Seleiciona un fornidor"
+
+msgid "Generate translation"
+msgstr "Xenerar traducción"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Polo menos una seición de términos y condiciones tien de tener testu."
+
+msgid "No active target languages are available."
+msgstr "Nun hai llingües de destín actives disponibles."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Dates d'accesu"
+
+msgid "Coach access dates"
+msgstr "Dates d'accesu del profesor"
+
+msgid "No sessions found"
+msgstr "Nun s'atoparon sesiones"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Seleiciona los cursos a los que esti usuariu nun va poder acceder nesta sesión."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Nun se pue bloquiar a un usuariu de tolos cursos de la sesión. Desinscribe al usuariu en cuenta d'ello."
+
+msgid "Users subscribed to this session"
+msgstr "Usuarios suscritos a esta sesión"
+
+msgid "No available users found"
+msgstr "Nun s'atoparon usuarios disponibles"
+
+msgid "Subscribe this user to the session?"
+msgstr "¿Suscribir esti usuariu a la sesión?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "¿Suscribir los usuarios seleicionaos a la sesión?"
+
+msgid "General tutor planning"
+msgstr "Planificación xeneral del tutor"
+
+msgid "User is already registered by another tutor."
+msgstr "L'usuariu yá ta rexistráu por otru tutor."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Tas recibiendo una copia porque yes tutor del cursu"
+
+msgid "General tutor"
+msgstr "Tutor xeneral"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Considera los cursos, los tutores, un serviciu d'ayuda téunica, los profesores y/o los materiales disponibles."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutores suscritos como profesores nel cursu %s"
+
+msgid "Tutor name"
+msgstr "Nome del tutor"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Los tutores de sesión son coordinadores de la sesión y puen actuar como tutores pa cada cursu de la sesión. Namás puen seleicionase como tutores de sesión los usuarios col rol de profesor."
+
+msgid "Access start date for tutors"
+msgstr "Data d'aniciu d'accesu pa los tutores"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Data na que la sesión ta disponible pa los tutores, pa que la puen preparar enantes de que se coneuten los estudiantes"
+
+msgid "Access end date for tutors"
+msgstr "Data de fin d'accesu pa los tutores"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Data na que la sesión ta zarrada pa los tutores. L'atraeu adicional va permiti-yos esportar tola información de seguimientu relevante"
+
+msgid "Tutor and student"
+msgstr "Tutor y estudiante"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Esti informe amuesa la distribución selmanal de sesiones per tutor xeneral nel intervalu de dates seleicionáu."
+
+msgid "User is general tutor in some sessions"
+msgstr "L'usuariu ye tutor xeneral en delles sesiones"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Los profesores van a amestase como tutores en toles sesiones del cursu."
+
+msgid "Delete failed: invalid question id."
+msgstr "Falló'l desaniciu: ID de entruga non válida."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Númberu mediu de sesiones per tutor de sesión xeneral"
+
+msgid "No room"
+msgstr "Ensin aula"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importar profesores del cursu como tutores del cursu na sesión"
+
+msgid "Clean and update course tutors"
+msgstr "Llimpiar y anovar tutores del cursu"
+
+msgid "Add me as tutor"
+msgstr "Amestame como tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Nun ye posible amestar la encuesta al camín d'aprendizaxe"
+
+msgid "Access dates for tutors"
+msgstr "Dates d'accesu pa tutores"
+
+msgid "Tutor and group member"
+msgstr "Tutor y miembru del grupu"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Algamóse'l llímite diariu de tokens d'IA. Vuelvi a intentalo mañana."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Algamóse'l llímite mensual de tokens d'IA. Vuelvi a intentalo'l mes que vien."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Esti códigu de cursu yá esiste, escueyi otru códigu."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Esti títulu de cursu yá esiste, escueyi otru títulu."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Nun se pue camudar la visibilidá d'esta ferramienta"
+
+msgid "Invalid visibility"
+msgstr "Visibilidá non válida"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Tas recibiendo una copia porque yes unu de los tutores del cursu"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Tas recibiendo una copia porque yes el tutor del cursu"
+
+msgid "Manual completion"
+msgstr "Completáu manualmente"
+
+msgid "Send to tutors"
+msgstr "Unviar a los tutores"
+
+msgid "Lab title"
+msgstr "Títulu del llaboratoriu"
+
+msgid "Lab week"
+msgstr "Selmana del llaboratoriu"
+
+msgid "Final exam access rule"
+msgstr "Regla d'accesu al examen final"
+
+msgid "Course completion rule"
+msgstr "Regla de fin del cursu"
+
+msgid "You have been invited to join a course"
+msgstr "Convidáronte a xunite a un cursu"
+
+msgid "No user has been found"
+msgstr "Nun s'atopó nengún usuariu"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "L'usuariu seleicionáu nun se pue inscribir nesti contestu"
+
+msgid "No change has been made"
+msgstr "Nun se fizo nengún cambiu"
+
+msgid "Back to group list"
+msgstr "Volver a la llista de grupos"
+
+msgid "Remove class link"
+msgstr "Quitar enllaz de clase"
+
+msgid "Group settings"
+msgstr "Configuración del grupu"
+
+msgid "Self-registration allowed"
+msgstr "Autorregístru permitíu"
+
+msgid "Self-unregistration allowed"
+msgstr "Autodesinscripción permitida"
+
+msgid "This group is linked to the class"
+msgstr "Esti grupu ta enllazáu a la clase"
+
+msgid "Create one or more empty course groups"
+msgstr "Crear unu o más grupos de cursu vacíos"
+
+msgid "Number of places"
+msgstr "Númberu de places"
+
+msgid "Base group"
+msgstr "Grupu base"
+
+msgid "Share"
+msgstr "Compartir"
+
+msgid "Collaboration"
+msgstr "Colaboración"
+
+msgid "The group title is required."
+msgstr "El títulu del grupu ye obligatoriu."
+
+msgid "Back to group area"
+msgstr "Volver a l'área de grupos"
+
+msgid "Members are managed by the linked class"
+msgstr "Los miembros xestiónense pola clase enllazada"
+
+msgid "%s groups selected"
+msgstr "%s grupos seleicionaos"
+
+msgid "Fill selected groups"
+msgstr "Rellenar grupos seleicionaos"
+
+msgid "Empty selected groups"
+msgstr "Vaciar grupos seleicionaos"
+
+msgid "Fill group"
+msgstr "Rellenar grupu"
+
+msgid "Empty group"
+msgstr "Vaciar grupu"
+
+msgid "Groups per user"
+msgstr "Grupos per usuariu"
+
+msgid "No tutors"
+msgstr "Ensin tutores"
+
+msgid "No users"
+msgstr "Ensin usuarios"
+

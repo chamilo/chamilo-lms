@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -37631,4 +37631,1300 @@ msgstr "Gamitin ang 0 para mapanatili ang lahat ng available na tanong. Gamitin 
 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Gamitin ang mga field na ito para uriin ang ehersisyo nang hiwalay sa mga opsyon sa pagpapakita nito."
+
+msgid "Invite by email"
+msgstr "Invite by email"
+
+msgid "Invitation has been sent"
+msgstr "Invitation has been sent"
+
+msgid "Sent on"
+msgstr "Ipinadala noong"
+
+msgid "Accepted on"
+msgstr "Tinanggap noong"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Bukas ang kursong ito sa isang sesyon. Ang pagpapadala ng imbitasyon dito ay magpapatala sa tatanggap sa buong sesyon %s, hindi lamang sa kursong ito."
+
+msgid "Revoke"
+msgstr "Bawiin"
+
+msgid "Revoked"
+msgstr "Binawi"
+
+msgid "Invitation has been revoked"
+msgstr "Binawi ang imbitasyon"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Sigurado ka bang bawiin ang imbitasyong ipinadala kay %s?"
+
+msgid "No default room"
+msgstr "Walang default na silid"
+
+msgid "Floor"
+msgstr "Palapag"
+
+msgid "Capacity"
+msgstr "Kapasidad"
+
+msgid "Use attendance default room"
+msgstr "Gamitin ang default na silid ng pagdalo"
+
+msgid "Floor number"
+msgstr "Numero ng palapag"
+
+msgid "Copy to students"
+msgstr "Kopyahin sa mga mag-aaral"
+
+msgid "Generate a quick test on this topic"
+msgstr "Gumawa ng mabilis na pagsusulit tungkol sa paksang ito"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Ipapadala ang naka-save na nilalaman ng dokumento sa isang modelo ng AI para sa pagproseso."
+
+msgid "MCP API key"
+msgstr "MCP API key"
+
+msgid "Authorized applications"
+msgstr "Mga awtorisadong aplikasyon"
+
+msgid "Your session is about to expire"
+msgstr "Malapit nang mag-expire ang iyong sesyon"
+
+msgid "Do you want to continue your session?"
+msgstr "Gusto mo bang ipagpatuloy ang iyong sesyon?"
+
+msgid "Stay connected"
+msgstr "Manatiling nakakonekta"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Magsi-sign out ka sa loob ng %s segundo."
+
+msgid "No descriptions available yet."
+msgstr "Wala pang mga paglalarawan."
+
+msgid "%s users selected"
+msgstr "%s mga user ang napili"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Naka-enroll na ang mga napiling user sa kursong ito"
+
+msgid "Import teachers"
+msgstr "I-import ang mga guro"
+
+msgid "Import learners"
+msgstr "I-import ang mga mag-aaral"
+
+msgid "Select CSV file"
+msgstr "Pumili ng CSV file"
+
+msgid "Some users could not be subscribed"
+msgstr "Hindi ma-enroll ang ilang user"
+
+msgid "Browse available classes"
+msgstr "Tingnan ang mga available na klase"
+
+msgid "Back to linked classes"
+msgstr "Bumalik sa mga naka-link na klase"
+
+msgid "No classes are currently linked to this course."
+msgstr "Walang klase na kasalukuyang naka-link sa kursong ito."
+
+msgid "No available classes were found for this course."
+msgstr "Walang available na klase na natagpuan para sa kursong ito."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Sigurado ka bang i-unsubscribe ang mga napiling user?"
+
+msgid "Learning path access"
+msgstr "Access sa learning path"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Tanging napiling user at grupo lamang ang makaka-access sa learning path na ito. Pamahalaan sila pagkatapos i-save."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Lahat ng kasalukuyan at hinaharap na user ng kurso ay makaka-access sa learning path na ito."
+
+msgid "All course users"
+msgstr "Lahat ng user ng kurso"
+
+msgid "Selected users and groups"
+msgstr "Napiling user at grupo"
+
+msgid "No access"
+msgstr "Walang access"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Tanging user at grupo lamang na idinagdag dito ang makaka-access sa learning path na ito."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Limitado ang bilang ng mga tanong sa maximum na %s"
+
+msgid "Open exercise player"
+msgstr "Buksan ang exercise player"
+
+msgid "The score is hidden for this exercise."
+msgstr "Nakatago ang iskor para sa exercise na ito."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Nakatago ang mga pagwawasto ayon sa mga setting ng resulta ng exercise."
+
+msgid "Progressive adaptive result"
+msgstr "Progressive adaptive result"
+
+msgid "Achieved level"
+msgstr "Naabot na antas"
+
+msgid "Correction history"
+msgstr "Kasaysayan ng pagwawasto"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Kasaysayan ng mga manual na pagwawasto na ginawa para sa pagtatangkang ito."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Gumagamit ang exercise na ito ng radar/spiderweb result mode. Hindi available ang chart sa pahinang ito."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Nakatago ang mga detalye ng tanong ayon sa mga setting ng resulta ng exercise."
+
+msgid "Media question"
+msgstr "Tanong sa media"
+
+msgid "Pending correction"
+msgstr "Naghihintay ng pagwawasto"
+
+msgid "No answer"
+msgstr "Walang sagot"
+
+msgid "Blank %s"
+msgstr "Blangko %s"
+
+msgid "Your order"
+msgstr "Iyong pagkakasunod-sunod"
+
+msgid "Correct order"
+msgstr "Tamang pagkakasunod-sunod"
+
+msgid "Delineation review"
+msgstr "Pagsusuri ng paglalarawan"
+
+msgid "Learner clicks"
+msgstr "Mga pag-click ng mag-aaral"
+
+msgid "Question image"
+msgstr "Larawan ng tanong"
+
+msgid "No hotspot image available"
+msgstr "Walang larawan ng hotspot na magagamit"
+
+msgid "Learner delineation"
+msgstr "Paglalarawan ng mag-aaral"
+
+msgid "Expected delineation"
+msgstr "Inaasahang paglalarawan"
+
+msgid "Expected zones"
+msgstr "Inaasahang mga sona"
+
+msgid "Zone"
+msgstr "Sona"
+
+msgid "Learner annotation"
+msgstr "Anotasyon ng mag-aaral"
+
+msgid "No annotation image available"
+msgstr "Walang larawan ng anotasyon na magagamit"
+
+msgid "This answer is pending teacher correction."
+msgstr "Naghihintay pa ng pagwawasto ng guro ang sagot na ito."
+
+msgid "Teacher comment"
+msgstr "Komento ng guro"
+
+msgid "Teacher correction"
+msgstr "Pagwawasto ng guro"
+
+msgid "Save correction"
+msgstr "I-save ang pagwawasto"
+
+msgid "Learner audio"
+msgstr "Audio ng mag-aaral"
+
+msgid "Download audio"
+msgstr "I-download ang audio"
+
+msgid "No uploaded audio"
+msgstr "Walang na-upload na audio"
+
+msgid "Learner Office document"
+msgstr "Dokumento ng Office ng mag-aaral"
+
+msgid "Learner file"
+msgstr "File ng mag-aaral"
+
+msgid "Download Office document"
+msgstr "I-download ang dokumento ng Office"
+
+msgid "No submitted document"
+msgstr "Walang naisumiteng dokumento"
+
+msgid "No uploaded file"
+msgstr "Walang na-upload na file"
+
+msgid "Content item"
+msgstr "Nilalaman"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Hindi masusuri ang ganitong uri ng tanong sa pahinang ito."
+
+msgid "Exercise completed"
+msgstr "Natapos na ang ehersisyo"
+
+msgid "Could not start the attempt"
+msgstr "Hindi masimulan ang pagsubok"
+
+msgid "Invalid exercise attempt"
+msgstr "Di-wastong pagsubok sa ehersisyo"
+
+msgid "Could not load exercise result"
+msgstr "Hindi ma-load ang resulta ng ehersisyo"
+
+msgid "Could not load AI providers"
+msgstr "Hindi ma-load ang mga provider ng AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Hindi makabuo ng mungkahi ng AI"
+
+msgid "Correction saved"
+msgstr "Na-save ang pagwawasto"
+
+msgid "Could not save correction"
+msgstr "Hindi ma-save ang pagwawasto"
+
+msgid "Create exercise"
+msgstr "Gumawa ng ehersisyo"
+
+msgid "Exercise categories"
+msgstr "Mga kategorya ng ehersisyo"
+
+msgid "Question categories"
+msgstr "Mga kategorya ng tanong"
+
+msgid "Search by exercise title or description."
+msgstr "Maghanap ayon sa pamagat o paglalarawan ng ehersisyo."
+
+msgid "Search exercises"
+msgstr "Maghanap ng mga ehersisyo"
+
+msgid "No exercises found"
+msgstr "Walang nakitang ehersisyo"
+
+msgid "Open exercise"
+msgstr "Buksan ang ehersisyo"
+
+msgid "Disable autolaunch"
+msgstr "Huwag paganahin ang awtomatikong paglulunsad"
+
+msgid "Enable autolaunch"
+msgstr "Paganahin ang awtomatikong paglulunsad"
+
+msgid "Export QTI2"
+msgstr "I-export ang QTI2"
+
+msgid "Bulk actions"
+msgstr "Maramihang aksyon"
+
+msgid "Selected exercises"
+msgstr "Mga napiling ehersisyo"
+
+msgid "No exercises selected"
+msgstr "Walang napiling ehersisyo"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Sigurado ka bang nais mong isagawa ang aksyong ito sa mga napiling ehersisyo?"
+
+msgid "Bulk action completed"
+msgstr "Natapos ang maramihang aksyon"
+
+msgid "Could not update exercises"
+msgstr "Hindi na-update ang mga ehersisyo"
+
+msgid "Could not update exercise"
+msgstr "Hindi na-update ang ehersisyo"
+
+msgid "Copy exercise"
+msgstr "Kopyahin ang ehersisyo"
+
+msgid "Delete exercise"
+msgstr "Tanggalin ang ehersisyo"
+
+msgid "Could not load exercises"
+msgstr "Hindi ma-load ang mga ehersisyo"
+
+msgid "No limit"
+msgstr "Walang limitasyon"
+
+msgid "Add selected questions to the test"
+msgstr "Idagdag ang mga napiling tanong sa pagsusulit"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Ginagamit ang tanong na ito sa isang aktibong pagsusulit at hindi maaaring i-edit dito."
+
+msgid "This question cannot be edited here."
+msgstr "Hindi maaaring i-edit ang tanong na ito dito."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Ginagamit ang tanong na ito sa isang aktibong pagsusulit at hindi maaaring tanggalin dito."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Hindi maaaring tanggalin ang tanong na ito dahil limitado ang iyong access ayon sa mga setting ng plataporma."
+
+msgid "Already in test"
+msgstr "Nasa pagsusulit na"
+
+msgid "Select at least one question."
+msgstr "Pumili ng hindi bababa sa isang tanong."
+
+msgid "Question bank updated"
+msgstr "Na-update ang bangko ng tanong"
+
+msgid "Could not update the question bank"
+msgstr "Hindi na-update ang bangko ng tanong"
+
+msgid "Could not load the question bank"
+msgstr "Hindi ma-load ang bangko ng tanong"
+
+msgid "Total score"
+msgstr "Kabuuang iskor"
+
+msgid "Starting"
+msgstr "Sinimulan"
+
+msgid "Attempt history"
+msgstr "Kasaysayan ng pagtatangka"
+
+msgid "No attempts yet"
+msgstr "Wala pang pagtatangka"
+
+msgid "Invalid exercise"
+msgstr "Di-wastong ehersisyo"
+
+msgid "Could not load exercise overview"
+msgstr "Hindi ma-load ang pangkalahatang-ideya ng ehersisyo"
+
+msgid "Open test"
+msgstr "Buksan ang pagsusulit"
+
+msgid "Random answers"
+msgstr "Random na sagot"
+
+msgid "Prevent moving backwards"
+msgstr "Pigilan ang pag-urong"
+
+msgid "Previous button hidden"
+msgstr "Nakatago ang nakaraang button"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Gumagamit ang ehersisyong ito ng mga opsyon na nangangailangan ng ibang player ng pagsusulit."
+
+msgid "Continue test"
+msgstr "Ipagpatuloy ang pagsusulit"
+
+msgid "Attempt started"
+msgstr "Sinimulan ang pagtatangka"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Ang preview ng guro ay hindi lumilikha ng naitalang pagtatangka."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Simulan o ipagpatuloy ang pagtatangka sa ehersisyo. Maaaring i-save ang draft na sagot bago ang huling pagsusumite."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Naabot ang limitasyon sa oras. Tinatapos ang pagtatangka."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Naabot ang oras para sa tanong. Sine-save ang iyong sagot."
+
+msgid "Finishing"
+msgstr "Tinatapos"
+
+msgid "Draft saved"
+msgstr "Na-save ang draft"
+
+msgid "Statement"
+msgstr "Pahayag"
+
+msgid "Drop each option on the matching answer"
+msgstr "Ihulog ang bawat opsyon sa katugmang sagot"
+
+msgid "Clear match"
+msgstr "I-clear ang tugma"
+
+msgid "Click to place the selected option here"
+msgstr "I-click upang ilagay ang napiling opsyon dito"
+
+msgid "Select an option, then click here"
+msgstr "Pumili ng opsyon, pagkatapos ay i-click dito"
+
+msgid "Already matched"
+msgstr "Naitugma na"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Maaari mong i-drag ang isang opsyon sa isang sagot, o pumili ng opsyon at pagkatapos ay i-click ang target na kahon."
+
+msgid "Put the items in the correct order."
+msgstr "Ilagay ang mga item sa tamang pagkakasunod-sunod."
+
+msgid "Move left"
+msgstr "Ilipat sa kaliwa"
+
+msgid "Move right"
+msgstr "Ilipat sa kanan"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Maaari mong i-drag ang mga item pakaliwa o pakanan, o gamitin ang mga move button upang baguhin ang pagkakasunod-sunod."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Maaari mong i-drag ang mga item o gamitin ang mga move button upang baguhin ang pagkakasunod-sunod."
+
+msgid "Or upload an audio file"
+msgstr "O mag-upload ng audio file"
+
+msgid "Selected audio"
+msgstr "Napiling audio"
+
+msgid "Uploaded audio"
+msgstr "Na-upload na audio"
+
+msgid "Office document"
+msgstr "Dokumento ng opisina"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Kumpletuhin ang dokumento sa editor sa ibaba. Ang file ay ikakabit sa pagsubok na ito para sa pagwawasto ng guro."
+
+msgid "Reload Office editor"
+msgstr "I-reload ang Office editor"
+
+msgid "Prepare Office document"
+msgstr "Ihanda ang Office document"
+
+msgid "Open in new tab"
+msgstr "Buksan sa bagong tab"
+
+msgid "Preparing Office document"
+msgstr "Inihahanda ang Office document"
+
+msgid "Submitted document"
+msgstr "Naisumiteng dokumento"
+
+msgid "Annotation tools"
+msgstr "Mga tool sa anotasyon"
+
+msgid "Text to place"
+msgstr "Teksto na ilalagay"
+
+msgid "Click the image to place the text annotation."
+msgstr "I-click ang larawan para ilagay ang anotasyon ng teksto."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "I-click ang larawan para magdagdag ng mga punto ng landas. Gamitin ang Simulan ang bagong landas para paghiwalayin ang mga landas."
+
+msgid "Start new path"
+msgstr "Simulan ang bagong landas"
+
+msgid "Current annotations"
+msgstr "Kasalukuyang mga anotasyon"
+
+msgid "Remove point"
+msgstr "Alisin ang punto"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "I-click ang larawan para iguhit ang polygon ng paglalarawan."
+
+msgid "Click a marker to remove it."
+msgstr "I-click ang marker para alisin ito."
+
+msgid "Placed"
+msgstr "Inilagay"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Pumili ng sagot, pagkatapos i-click ang larawan para markahan ito."
+
+msgid "Reading speed"
+msgstr "Bilis ng pagbabasa"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Hindi maipapakita ang ganitong uri ng tanong sa player na ito."
+
+msgid "Save draft"
+msgstr "I-save ang draft"
+
+msgid "I confirm that my answers were saved."
+msgstr "Kinukumpirma ko na ang aking mga sagot ay na-save."
+
+msgid "Finish test"
+msgstr "Tapusin ang pagsusulit"
+
+msgid "Attempt finished"
+msgstr "Natapos ang pagsubok"
+
+msgid "Question category"
+msgstr "Kategorya ng tanong"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Natapos mo na ang mga tanong na may kaugnayan sa kategoryang ito, ito ang huling pagkakataon mo para bumalik at baguhin ang mga tanong na iyon."
+
+msgid "Question time left"
+msgstr "Natitirang oras ng tanong"
+
+msgid "Time left"
+msgstr "Natitirang oras"
+
+msgid "Current attempt"
+msgstr "Kasalukuyang pagsubok"
+
+msgid "Could not save draft answer"
+msgstr "Hindi ma-save ang draft na sagot"
+
+msgid "Could not load exercise"
+msgstr "Hindi ma-load ang ehersisyo"
+
+msgid "Draft answer saved"
+msgstr "Na-save ang draft na sagot"
+
+msgid "Could not finish the attempt"
+msgstr "Hindi matapos ang pagsubok"
+
+msgid "Could not prepare Office document"
+msgstr "Hindi maihanda ang Office document"
+
+msgid "Back to learner score"
+msgstr "Bumalik sa iskor ng mag-aaral"
+
+msgid "Disable auto refresh"
+msgstr "Huwag paganahin ang auto refresh"
+
+msgid "Enable auto refresh"
+msgstr "Paganahin ang auto refresh"
+
+msgid "Live window"
+msgstr "Live window"
+
+msgid "Ongoing attempts"
+msgstr "Mga patuloy na pagsubok"
+
+msgid "Completed attempts"
+msgstr "Mga natapos na pagsubok"
+
+msgid "Started"
+msgstr "Sinimulan"
+
+msgid "Last activity"
+msgstr "Huling aktibidad"
+
+msgid "Could not load live results"
+msgstr "Hindi ma-load ang live na resulta"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Ang ehersisyong ito ay read-only dahil kasama ito sa isang learning path."
+
+msgid "Select a question type to create a question."
+msgstr "Pumili ng uri ng tanong para gumawa ng tanong."
+
+msgid "Click to preview"
+msgstr "I-click para i-preview"
+
+msgid "Hide preview"
+msgstr "Itago ang preview"
+
+msgid "Shape"
+msgstr "Hugis"
+
+msgid "Coordinates"
+msgstr "Mga Koordinasyon"
+
+msgid "Blanks"
+msgstr "Mga Blangko"
+
+msgid "Switchable blanks"
+msgstr "Mga Blangkong Mapapalitan"
+
+msgid "Blank"
+msgstr "Blangko"
+
+msgid "Input width"
+msgstr "Lapad ng Input"
+
+msgid "Orientation"
+msgstr "Oryentasyon"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Hindi magagamit sa kasalukuyang mode ng feedback ng ehersisyo"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Hindi magagamit sa daloy ng paglikha ng learning path"
+
+msgid "Delete question"
+msgstr "Tanggalin ang tanong"
+
+msgid "Could not update exercise questions"
+msgstr "Hindi ma-update ang mga tanong ng ehersisyo"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Hindi maidagdag ang ehersisyo sa learning path"
+
+msgid "A valid exercise id is required."
+msgstr "Kinakailangan ang wastong ID ng ehersisyo."
+
+msgid "Could not load exercise questions"
+msgstr "Hindi ma-load ang mga tanong ng ehersisyo"
+
+msgid "Delete selected attempts"
+msgstr "Tanggalin ang mga napiling pagsubok"
+
+msgid "Before date"
+msgstr "Bago ang petsa"
+
+msgid "Pending corrections"
+msgstr "Mga nakabinbing pagwawasto"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Naka-lock ang ehersisyong ito ng gradebook. Hindi pinagana ang mga aksyon sa paglilinis ng pagsubok."
+
+msgid "No attempts found"
+msgstr "Walang nahanap na pagsubok"
+
+msgid "Review"
+msgstr "Suriin"
+
+msgid "Print/PDF"
+msgstr "I-print/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Hindi ma-load ang ulat ng ehersisyo"
+
+msgid "Select at least one attempt"
+msgstr "Pumili ng hindi bababa sa isang pagsubok"
+
+msgid "Delete selected attempts?"
+msgstr "Tanggalin ang mga napiling pagsubok?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Ipadala ang mga email ng resulta ng nasuring pagsubok?"
+
+msgid "Could not send emails"
+msgstr "Hindi maipadala ang mga email"
+
+msgid "Exercise result emails sent"
+msgstr "Naipadala ang mga email ng resulta ng ehersisyo"
+
+msgid "Skipped"
+msgstr "Nilaktawan"
+
+msgid "Close attempt?"
+msgstr "Isara ang pagsubok?"
+
+msgid "Attempt closed"
+msgstr "Isinara ang pagsubok"
+
+msgid "Could not close attempt"
+msgstr "Hindi maisara ang pagsubok"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Ipadala ang resulta ng pagsubok na ito sa pamamagitan ng email sa mag-aaral?"
+
+msgid "Email sent"
+msgstr "Naipadala ang email"
+
+msgid "Could not send email"
+msgstr "Hindi maipadala ang email"
+
+msgid "Attempt deleted"
+msgstr "Natanggal ang pagsubok"
+
+msgid "Could not delete attempt"
+msgstr "Hindi matanggal ang pagsubok"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Pumili ng CSV file na naglalaman ng mga kolum ng pamagat at paglalarawan."
+
+msgid "Manage categories used to classify questions."
+msgstr "Pamahalaan ang mga kategoryang ginagamit upang uriin ang mga tanong."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Pamahalaan ang mga kategoryang ginagamit upang uriin ang mga ehersisyo."
+
+msgid "Could not load categories"
+msgstr "Hindi ma-load ang mga kategorya"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Na-import na mga kategorya: %s. Mga nilaktawang hilera: %s."
+
+msgid "Imported categories: %s."
+msgstr "Na-import na mga kategorya: %s."
+
+msgid "Could not import categories"
+msgstr "Hindi ma-import ang mga kategorya"
+
+msgid "Could not save category"
+msgstr "Hindi mai-save ang kategorya"
+
+msgid "Answer distribution"
+msgstr "Pamamahagi ng sagot"
+
+msgid "Configured answers"
+msgstr "Mga naka-configure na sagot"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Hindi pa magagamit sa na-migrate na ulat ang detalyadong pagbibilang ng sagot para sa ilang uri ng tanong."
+
+msgid "No report by question data found"
+msgstr "Walang nahanap na data ng ulat ayon sa tanong"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Hindi pa magagamit sa na-migrate na ulat ang detalyadong pagbibilang ng sagot para sa uri ng tanong na ito."
+
+msgid "No answer distribution found"
+msgstr "Walang nahanap na pamamahagi ng sagot"
+
+msgid "Could not load report by question"
+msgstr "Hindi ma-load ang ulat ayon sa tanong"
+
+msgid "Question settings"
+msgstr "Mga setting ng tanong"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Iwanang blangko o 0 kung walang limitasyon sa oras."
+
+msgid "Time limit in seconds"
+msgstr "Limitasyon sa oras sa mga segundo"
+
+msgid "Attached questions"
+msgstr "Mga tanong na nakakabit"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Tanging mga tanong na nakakabit sa tanong na ito sa kasalukuyang ehersisyo ang nakalista dito."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Walang tanong na nakakabit sa tanong na ito sa kasalukuyang ehersisyo."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "I-upload ang template ng dokumentong Office na ie-edit ng mga mag-aaral gamit ang OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Palitan ang dokumentong Office"
+
+msgid "Current Office document"
+msgstr "Kasalukuyang dokumentong Office"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Ang tanong na ito ay itinutuwid nang mano-mano pagkatapos isumite ng mag-aaral ang na-edit na dokumento."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Ang kabuuang iskor ay kinakalkula bilang kabuuan ng mga iskor sa hotspot."
+
+msgid "Global score"
+msgstr "Pangkalahatang iskor"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Pumili ng hilera ng hotspot, piliin ang hugis nito, pagkatapos ay iguhit sa ibabaw ng larawan. Para sa mga poligon, i-click ang bawat punto at tapusin ang poligon, o i-double-click upang tapusin."
+
+msgid "Finish polygon"
+msgstr "Tapusin ang poligon"
+
+msgid "Calculated answer"
+msgstr "Kalkuladong sagot"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Mangyaring i-type ang iyong teksto sa ibaba at gamitin ang mga square bracket [...] upang tukuyin ang isa o higit pang blangko."
+
+msgid "Lowest value"
+msgstr "Pinakamababang halaga"
+
+msgid "Highest value"
+msgstr "Pinakamataas na halaga"
+
+msgid "Fill in blanks"
+msgstr "Punan ang mga blangko"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Gamitin ang mga napiling marker upang tukuyin ang mga blangko. Halimbawa: Ang kabisera ng Peru ay [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Ilagay ang mga opsyon sa dropdown, isang sagot bawat linya. Pagkatapos ay markahan ang inaasahang mga sagot sa ibaba, tulad ng legacy tool."
+
+msgid "Refresh answers"
+msgstr "I-refresh ang mga sagot"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Ang dropdown combination question na ito ay gumagamit ng isang global score, tulad ng legacy."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Mangyaring maglagay ng hindi bababa sa dalawang opsyon sa dropdown."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Gumawa muna ng mga opsyon sa destinasyon, pagkatapos ay i-link ang bawat item sa tamang opsyon."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Ang matching combination question na ito ay gumagamit ng isang global score, tulad ng legacy."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Gumawa ng mga hakbang at piliin ang inaasahang posisyon para sa bawat isa, tulad ng legacy Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Pipiliin ng mga mag-aaral ang Tama o Mali at pagkatapos ay pipiliin ang kanilang antas ng katiyakan sa panahon ng pagsubok. Iniimbak ng editor ang parehong mga iskor na Tama/Mali at antas ng katiyakan tulad ng legacy."
+
+msgid "Hotspot combination"
+msgstr "Hotspot combination"
+
+msgid "Add delineation"
+msgstr "Magdagdag ng delineation"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ang tanong na ito tungkol sa dokumentong Office ay walang mga opsyon sa sagot. Ang iskor nito ay itinatalaga sa panahon ng pagwawasto/pagsusuri ng mga resulta."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ang tanong na ito tungkol sa pag-upload ay walang mga opsyon sa sagot. Ang iskor nito ay itinatalaga sa panahon ng pagwawasto/pagsusuri ng mga resulta."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ang tanong na ito tungkol sa oral expression ay walang mga opsyon sa sagot. Ang iskor nito ay itinatalaga sa panahon ng pagwawasto/pagsusuri ng mga resulta."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ang tanong na ito tungkol sa open question ay walang mga opsyon sa sagot. Ang iskor nito ay itinatalaga sa panahon ng pagwawasto/pagsusuri ng mga resulta."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Magdagdag ng teksto para sa pagbabasa na may mga setting ng bilis ng pag-scroll."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Magdagdag ng nilalaman, media o konteksto ng pagbabasa nang hindi nagdaragdag ng iskor."
+
+msgid "Insert a page break without adding score."
+msgstr "Maglagay ng page break nang hindi nagdaragdag ng iskor."
+
+msgid "Could not save question"
+msgstr "Hindi ma-save ang tanong"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Tanging mga dokumentong DOC, DOCX, XLS o XLSX ang pinapayagan."
+
+msgid "Please select an Office document."
+msgstr "Mangyaring pumili ng dokumentong Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Mangyaring gumuhit ng hindi bababa sa isang hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Mangyaring gumuhit ng hindi bababa sa isang delineation."
+
+msgid "The fill in blanks text is required."
+msgstr "Kinakailangan ang teksto para sa fill in blanks."
+
+msgid "At least one expected answer is required."
+msgstr "Kinakailangan ang hindi bababa sa isang inaasahang sagot."
+
+msgid "At least two draggable items are required."
+msgstr "Kinakailangan ang hindi bababa sa dalawang draggable items."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Ang bawat draggable item ay dapat na naka-link sa isang wastong target position."
+
+msgid "At least two matching options are required."
+msgstr "Kinakailangan ang hindi bababa sa dalawang matching options."
+
+msgid "At least two matching pairs are required."
+msgstr "Kinakailangan ang hindi bababa sa dalawang matching pairs."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Ang bawat matching pair ay dapat na naka-link sa isang wastong option."
+
+msgid "At least two answers are required."
+msgstr "Kinakailangan ang hindi bababa sa dalawang sagot."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Ang bawat sagot na tama/mali ay dapat may napiling Tama o Mali."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Ang tanong na may natatanging sagot ay dapat may eksaktong isang tamang sagot."
+
+msgid "At least one correct answer is required."
+msgstr "Kinakailangan ang hindi bababa sa isang tamang sagot."
+
+msgid "Could not load question"
+msgstr "Hindi ma-load ang tanong"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Pumili ng kurso at i-export ang ulat ng pandaigdigang resulta ng pagsasanay bilang CSV."
+
+msgid "Back to reports catalog"
+msgstr "Bumalik sa katalogo ng mga ulat"
+
+msgid "Could not load exercise global report"
+msgstr "Hindi ma-load ang pandaigdigang ulat ng pagsasanay"
+
+msgid "Imported questions"
+msgstr "Na-import na mga tanong"
+
+msgid "Aiken content"
+msgstr "Nilalaman ng Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Hindi ma-load ang AI Aiken generator"
+
+msgid "Could not generate Aiken content"
+msgstr "Hindi makabuo ng nilalaman ng Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Hindi ma-import ang nabuong nilalaman ng Aiken"
+
+msgid "Back to my courses"
+msgstr "Bumalik sa aking mga kurso"
+
+msgid "Open report"
+msgstr "Buksan ang ulat"
+
+msgid "Questions with no automatic correction"
+msgstr "Mga tanong na walang awtomatikong pagwawasto"
+
+msgid "Could not load pending attempts"
+msgstr "Hindi ma-load ang mga nakabinbing pagsubok"
+
+msgid "Skipped questions"
+msgstr "Mga tanong na nilaktawan"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Ipinamamahagi ng Aiken import ang kabuuang timbang na ito sa mga na-import na tanong maliban kung may tinukoy na SCORE ang tanong."
+
+msgid "Import warnings"
+msgstr "Mga babala sa pag-import"
+
+msgid "Could not import questions"
+msgstr "Hindi ma-import ang mga tanong"
+
+msgid "No question statistics found"
+msgstr "Walang nahanap na istatistika ng tanong"
+
+msgid "Could not load question statistics"
+msgstr "Hindi ma-load ang istatistika ng tanong"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Maaari mo ring direktang ikonekta ang isang MCP client sa pamamagitan ng pagturo nito sa sumusunod na endpoint:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Walang mga application na kasalukuyang nakakonekta sa iyong account."
+
+msgid "Connected on"
+msgstr "Nakakonekta noong"
+
+msgid "Last used"
+msgstr "Huling ginamit"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "Hindi na makaka-access ang %s sa iyong Chamilo account. Magpatuloy?"
+
+msgid "Application revoked"
+msgstr "Na-revoke ang application"
+
+msgid "Copied to clipboard"
+msgstr "Nakopya sa clipboard"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Hindi makopya ang MCP endpoint"
+
+msgid "MCP endpoint"
+msgstr "MCP endpoint"
+
+msgid "API key"
+msgstr "API key"
+
+msgid "Last used at"
+msgstr "Huling ginamit noong"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopyahin ang key na ito ngayon. Hindi na ito ipapakita muli."
+
+msgid "Rotate API key"
+msgstr "I-rotate ang API key"
+
+msgid "Revoke API key"
+msgstr "I-revoke ang API key"
+
+msgid "Remote MCP connection"
+msgstr "Remote MCP connection"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "I-configure ang iyong MCP client gamit ang mga sumusunod na halaga:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Hindi na gagana ang kasalukuyang key agad. Magpatuloy?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Bubuo ng bagong personal na MCP API key. Magpatuloy?"
+
+msgid "MCP API key generated"
+msgstr "Nabuo ang MCP API key"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Hindi na gagana agad ang mga konektadong MCP client na gumagamit ng key na ito. Magpatuloy?"
+
+msgid "MCP API key revoked"
+msgstr "Na-revoke ang MCP API key"
+
+msgid "Could not copy the API key"
+msgstr "Hindi makopya ang API key"
+
+msgid "Project"
+msgstr "Proyekto"
+
+msgid "Close old tickets"
+msgstr "Isara ang mga lumang ticket"
+
+msgid "Close tickets older than seven days?"
+msgstr "Isara ang mga ticket na higit sa pitong araw?"
+
+msgid "Assignment history"
+msgstr "Kasaysayan ng takdang-aralin"
+
+msgid "Translate with AI"
+msgstr "Isalin gamit ang AI"
+
+msgid "Target language"
+msgstr "Target language"
+
+msgid "Please select a provider"
+msgstr "Mangyaring pumili ng provider"
+
+msgid "Generate translation"
+msgstr "Bumuo ng salin"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Dapat may nilalaman ang hindi bababa sa isang seksyon ng mga tuntunin at kondisyon."
+
+msgid "No active target languages are available."
+msgstr "Walang aktibong target na wika na magagamit."
+
+msgid "Tutor"
+msgstr "Tagapagturo"
+
+msgid "Access dates"
+msgstr "Mga petsa ng pag-access"
+
+msgid "Coach access dates"
+msgstr "Mga petsa ng pag-access ng tagapagturo"
+
+msgid "No sessions found"
+msgstr "Walang sesyon na natagpuan"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Piliin ang mga kurso na hindi dapat ma-access ng user na ito sa sesyong ito."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Hindi maaaring harangan ang user sa lahat ng kurso sa sesyon. Mag-unsubscribe na lang ng user."
+
+msgid "Users subscribed to this session"
+msgstr "Mga user na naka-subscribe sa sesyong ito"
+
+msgid "No available users found"
+msgstr "Walang available na user na natagpuan"
+
+msgid "Subscribe this user to the session?"
+msgstr "I-subscribe ang user na ito sa sesyon?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "I-subscribe ang mga napiling user sa sesyon?"
+
+msgid "General tutor planning"
+msgstr "Pangkalahatang pagpaplano ng tagapagturo"
+
+msgid "User is already registered by another tutor."
+msgstr "Nakarehistro na ang user ng ibang tagapagturo."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Tumatanggap ka ng kopya dahil ikaw ay tagapagturo ng kurso"
+
+msgid "General tutor"
+msgstr "Pangkalahatang tagapagturo"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Isaalang-alang ang mga kurso, tagapagturo, teknikal na helpdesk, guro, at/o mga materyales na magagamit."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Mga tagapagturo na naka-subscribe bilang guro sa kurso %s"
+
+msgid "Tutor name"
+msgstr "Pangalan ng tagapagturo"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Ang mga tagapagturo ng sesyon ay mga coordinator ng sesyon at maaaring kumilos bilang tagapagturo para sa bawat kurso sa sesyon. Tanging mga user na may tungkulin ng guro ang maaaring piliin bilang tagapagturo ng sesyon."
+
+msgid "Access start date for tutors"
+msgstr "Petsa ng simula ng pag-access para sa mga tagapagturo"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Petsa kung kailan magiging available ang sesyon sa mga tagapagturo, upang makapaghanda sila bago makakonekta ang mga mag-aaral"
+
+msgid "Access end date for tutors"
+msgstr "Petsa ng pagtatapos ng pag-access para sa mga tagapagturo"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Petsa kung kailan isasara ang sesyon sa mga tagapagturo. Ang karagdagang pagkaantala ay magpapahintulot sa kanila na i-export ang lahat ng nauugnay na impormasyon sa pagsubaybay"
+
+msgid "Tutor and student"
+msgstr "Tagapagturo at mag-aaral"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Ipinapakita ng ulat na ito ang lingguhang distribusyon ng mga sesyon kada pangkalahatang tagapagturo sa napiling saklaw ng petsa."
+
+msgid "User is general tutor in some sessions"
+msgstr "Ang user ay pangkalahatang tagapagturo sa ilang mga sesyon"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Idaragdag ang mga guro bilang tagapagturo sa lahat ng sesyon ng kurso."
+
+msgid "Delete failed: invalid question id."
+msgstr "Nabigo ang pagtanggal: hindi wastong id ng tanong."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Average na bilang ng mga sesyon kada pangkalahatang tagapagturo ng sesyon"
+
+msgid "No room"
+msgstr "Walang silid"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "I-import ang mga guro ng kurso bilang mga tagapagturo ng kurso sa sesyon"
+
+msgid "Clean and update course tutors"
+msgstr "Linisin at i-update ang mga tagapagturo ng kurso"
+
+msgid "Add me as tutor"
+msgstr "Idagdag ako bilang tagapagturo"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Hindi maidaragdag ang survey sa learning path"
+
+msgid "Access dates for tutors"
+msgstr "Mga petsa ng pag-access para sa mga tagapagturo"
+
+msgid "Tutor and group member"
+msgstr "Tagapagturo at miyembro ng grupo"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Naabot na ang iyong pang-araw-araw na limitasyon ng AI token. Pakisubukan muli bukas."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Naabot na ang iyong buwanang limitasyon ng AI token. Pakisubukan muli sa susunod na buwan."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Umiiral na ang code ng kursong ito, mangyaring pumili ng ibang code."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Umiiral na ang pamagat ng kursong ito, mangyaring pumili ng ibang pamagat."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Hindi mababago ang visibility ng tool na ito"
+
+msgid "Invalid visibility"
+msgstr "Hindi wastong visibility"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Tumatanggap ka ng kopya dahil isa ka sa mga tagapagturo ng kurso"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Tumatanggap ka ng kopya dahil ikaw ang tagapagturo ng kurso"
+
+msgid "Manual completion"
+msgstr "Manu-manong pagkumpleto"
+
+msgid "Send to tutors"
+msgstr "Ipadala sa mga tagapagturo"
+
+msgid "Lab title"
+msgstr "Pamagat ng Lab"
+
+msgid "Lab week"
+msgstr "Linggo ng Lab"
+
+msgid "Final exam access rule"
+msgstr "Patakaran sa pag-access sa huling pagsusulit"
+
+msgid "Course completion rule"
+msgstr "Patakaran sa pagkumpleto ng kurso"
+
+msgid "You have been invited to join a course"
+msgstr "Inimbitahan ka na sumali sa isang kurso"
+
+msgid "No user has been found"
+msgstr "Walang nakitang gumagamit"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Hindi maaring i-subscribe ang napiling gumagamit sa kontekstong ito"
+
+msgid "No change has been made"
+msgstr "Walang pagbabagong ginawa"
+
+msgid "Back to group list"
+msgstr "Bumalik sa listahan ng grupo"
+
+msgid "Remove class link"
+msgstr "Alisin ang link ng klase"
+
+msgid "Group settings"
+msgstr "Mga setting ng grupo"
+
+msgid "Self-registration allowed"
+msgstr "Pinapayagan ang sariling pagpaparehistro"
+
+msgid "Self-unregistration allowed"
+msgstr "Pinapayagan ang sariling pag-unregister"
+
+msgid "This group is linked to the class"
+msgstr "Naka-link ang grupong ito sa klase"
+
+msgid "Create one or more empty course groups"
+msgstr "Lumikha ng isa o higit pang walang laman na grupo ng kurso"
+
+msgid "Number of places"
+msgstr "Bilang ng mga puwesto"
+
+msgid "Base group"
+msgstr "Base na grupo"
+
+msgid "Share"
+msgstr "Ibahagi"
+
+msgid "Collaboration"
+msgstr "Pakikipagtulungan"
+
+msgid "The group title is required."
+msgstr "Kinakailangan ang pamagat ng grupo."
+
+msgid "Back to group area"
+msgstr "Bumalik sa lugar ng grupo"
+
+msgid "Members are managed by the linked class"
+msgstr "Pinamamahalaan ang mga miyembro ng naka-link na klase"
+
+msgid "%s groups selected"
+msgstr "%s na mga grupong napili"
+
+msgid "Fill selected groups"
+msgstr "Punan ang mga napiling grupo"
+
+msgid "Empty selected groups"
+msgstr "I-empty ang mga napiling grupo"
+
+msgid "Fill group"
+msgstr "Punan ang grupo"
+
+msgid "Empty group"
+msgstr "I-empty ang grupo"
+
+msgid "Groups per user"
+msgstr "Mga grupo bawat gumagamit"
+
+msgid "No tutors"
+msgstr "Walang mga tutor"
+
+msgid "No users"
+msgstr "Walang mga gumagamit"
 

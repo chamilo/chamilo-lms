@@ -122,6 +122,12 @@ final class CourseUserList
     #[Groups(['course_user_list:read'])]
     public bool $showClasses = false;
 
+    #[Groups(['course_user_list:read'])]
+    public bool $showSubscriptionTabs = false;
+
+    #[Groups(['course_user_list:read'])]
+    public string $groupsUrl = '';
+
     public function getId(): string
     {
         return $this->id;

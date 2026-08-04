@@ -102,13 +102,13 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import courseUserService from "../../services/courseUserService"
-import { getCourseContext } from "../../utils/courseContext"
+import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
 
 const TEACHER = 1
 
 const { t } = useI18n()
 const route = useRoute()
-const { cid, sid, gid } = getCourseContext()
+const { cid, sid, gid, contextQuery } = useRouteCourseContext()
 
 const selectedFile = ref(null)
 const replaceUsers = ref(false)
@@ -134,7 +134,7 @@ function requestParams() {
 }
 
 function buildListRoute() {
-  return { name: "CourseUserList", params: route.params, query: { ...route.query, type: userType.value } }
+  return { name: "CourseUserList", params: route.params, query: { ...contextQuery.value, type: userType.value } }
 }
 
 async function loadImportConfiguration() {

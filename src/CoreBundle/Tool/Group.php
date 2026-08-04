@@ -23,7 +23,7 @@ class Group extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/group/group.php';
+        return '/resources/course-users/:nodeId/groups';
     }
 
     public function getIcon(): string

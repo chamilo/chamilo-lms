@@ -16,6 +16,12 @@
             type="primary-text"
           />
           <BaseButton
+            :label="t('Groups')"
+            :route="buildGroupsRoute()"
+            icon="join-group"
+            type="primary-text"
+          />
+          <BaseButton
             :label="t('Classes')"
             icon="sessions"
             type="primary"
@@ -226,7 +232,7 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseClassService from "../../services/courseClassService"
-import { getCourseContext } from "../../utils/courseContext"
+import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
 
 const REGISTERED = "registered"
 const AVAILABLE = "not_registered"
@@ -239,7 +245,7 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { requireConfirmation } = useConfirmation()
-const { cid, sid, gid } = getCourseContext()
+const { cid, sid, gid, contextQuery } = useRouteCourseContext()
 
 const classes = ref([])
 const totalItems = ref(0)
@@ -249,6 +255,7 @@ const errorMessage = ref("")
 const successMessage = ref("")
 const informationMessage = ref("")
 const csrfToken = ref("")
+const groupsUrl = ref("")
 const page = ref(1)
 const itemsPerPage = ref(20)
 const sortField = ref("title")
@@ -290,6 +297,7 @@ async function loadClasses() {
     classes.value = response.items || []
     totalItems.value = Number(response.totalItems || 0)
     csrfToken.value = response.csrfToken || ""
+    groupsUrl.value = response.groupsUrl || ""
     informationMessage.value = response.information || ""
   } catch (error) {
     console.error("[CourseClass] Failed to load classes", error)
@@ -299,12 +307,24 @@ async function loadClasses() {
   }
 }
 
+function buildGroupsRoute() {
+  return { name: "CourseUserGroups", params: route.params, query: contextQuery.value }
+}
+
 function buildUsersRoute() {
-  return { name: "CourseUserList", params: route.params, query: { ...route.query, view: undefined, type: STUDENT } }
+  return {
+    name: "CourseUserList",
+    params: route.params,
+    query: { ...contextQuery.value, view: undefined, type: STUDENT },
+  }
 }
 
 function buildTeachersRoute() {
-  return { name: "CourseUserList", params: route.params, query: { ...route.query, view: undefined, type: TEACHER } }
+  return {
+    name: "CourseUserList",
+    params: route.params,
+    query: { ...contextQuery.value, view: undefined, type: TEACHER },
+  }
 }
 
 function toggleView() {
@@ -314,7 +334,7 @@ function toggleView() {
   router.push({
     name: "CourseUserClasses",
     params: route.params,
-    query: { ...route.query, view: isRegisteredView.value ? AVAILABLE : REGISTERED },
+    query: { ...contextQuery.value, view: isRegisteredView.value ? AVAILABLE : REGISTERED },
   })
 }
 

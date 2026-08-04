@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State\LearningPath;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
@@ -30,6 +31,7 @@ final readonly class LearningPathReorderProcessor implements ProcessorInterface
         private RequestStack $requestStack,
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -43,9 +45,9 @@ final readonly class LearningPathReorderProcessor implements ProcessorInterface
         $this->validateActionToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertLearningPathTeacher($this->security);
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $order = $payload['order'] ?? $payload['ids'] ?? null;
         if (!\is_array($order) || [] === $order) {

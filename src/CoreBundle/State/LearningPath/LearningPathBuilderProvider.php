@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -40,8 +41,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -60,7 +59,6 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private RequestStack $requestStack,
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
@@ -71,6 +69,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         private ResourceNodeRepository $resourceNodeRepository,
         private AiFeatureAccessHelper $aiFeatureAccessHelper,
         private AiProviderFactory $aiProviderFactory,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -79,15 +78,10 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): LearningPathBuilder
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
         $this->assertLearningPathTeacher($this->security);
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
         $lp = $this->lpRepository->find($lpId);

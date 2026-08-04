@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -58,6 +59,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private CGroupRepository $groupRepository,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -72,9 +74,9 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         }
 
         $this->assertLearningPathTeacher($this->security);
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $lp = $this->getLearningPath($uriVariables);
         $this->getEditableResourceLink($lp, $course, $session, $group, $this->security);
 

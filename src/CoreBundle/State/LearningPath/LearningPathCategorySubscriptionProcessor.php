@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -51,6 +52,7 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -70,9 +72,9 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
 
         $this->assertLearningPathTeacher($this->security);
         $this->validateActionToken($this->csrfTokenManager, $data->csrfTokenInput);
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $category = $this->getCategory($uriVariables);
         $this->assertCategoryContext($category, $course, $session, $group);
         $this->assertCategorySubscriptionsEnabled();

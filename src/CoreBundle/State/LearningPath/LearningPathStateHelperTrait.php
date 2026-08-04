@@ -86,14 +86,14 @@ trait LearningPathStateHelperTrait
             || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
-    private function getContextCourse(EntityManagerInterface $entityManager, Request $request): Course
+    private function getContextCourse(CidReqHelper $cidReqHelper): Course
     {
-        $courseId = $request->query->getInt('cid');
+        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
         if ($courseId <= 0) {
             throw new BadRequestHttpException('Missing course id.');
         }
 
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
+        $course = $cidReqHelper->getDoctrineCourseEntity();
         if (!$course instanceof Course) {
             throw new NotFoundHttpException('Course not found.');
         }
@@ -101,14 +101,17 @@ trait LearningPathStateHelperTrait
         return $course;
     }
 
-    private function getContextSession(EntityManagerInterface $entityManager, Request $request, Course $course): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
+    private function getContextSession(
+        EntityManagerInterface $entityManager,
+        CidReqHelper $cidReqHelper,
+        Course $course,
+    ): ?Session {
+        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
         if ($sessionId <= 0) {
             return null;
         }
 
-        $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        $session = $cidReqHelper->getDoctrineSessionEntity();
         if (!$session instanceof Session) {
             throw new NotFoundHttpException('Session not found.');
         }
@@ -125,14 +128,7 @@ trait LearningPathStateHelperTrait
         return $session;
     }
 
-    private function getContextGroup(EntityManagerInterface $entityManager, Request $request, Course $course): ?CGroup
-    {
-        $groupId = $request->query->getInt('gid');
-
-        return $groupId > 0 ? $this->findValidatedGroup($entityManager, $groupId, $course) : null;
-    }
-
-    private function getValidatedGroupFromContext(
+    private function getContextGroup(
         EntityManagerInterface $entityManager,
         CidReqHelper $cidReqHelper,
         Course $course,

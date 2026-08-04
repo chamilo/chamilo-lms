@@ -88,7 +88,7 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
             }
         }
 
-        $group = $this->getValidatedGroupFromContext($this->entityManager, $this->cidReqHelper, $course);
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $title = isset($filters['title']) ? trim((string) $filters['title']) : null;
         $canManage = $this->canManageLearningPaths($this->security)
             && !$this->isStudentViewRequest($this->requestStack);

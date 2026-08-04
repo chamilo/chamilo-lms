@@ -96,6 +96,10 @@ final class Version20201216110722 extends AbstractMigrationChamilo
         foreach ($courseIds as $courseId) {
             $courseId = (int) $courseId;
             [$course, $admin] = $this->reloadAttendanceContext($courseId, $adminId, $courseRepo, $userRepo);
+            // $attendanceResourceType was fetched once before the loop and becomes a
+            // detached/stale reference after every entityManager->clear() below - just
+            // like $course/$admin, it must be refetched whenever the context reloads.
+            $attendanceResourceType = $attendanceRepo->getResourceType();
 
             if (null === $course) {
                 $this->write(\sprintf('Course %s not found - skipping attendances migration', $courseId));
@@ -157,6 +161,7 @@ final class Version20201216110722 extends AbstractMigrationChamilo
                     $this->entityManager->clear();
 
                     [$course, $admin] = $this->reloadAttendanceContext($courseId, $adminId, $courseRepo, $userRepo);
+                    $attendanceResourceType = $attendanceRepo->getResourceType();
                 }
             }
 

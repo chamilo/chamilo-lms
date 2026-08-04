@@ -34,6 +34,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
                         required: false,
                         schema: ['type' => 'integer'],
                     ),
+                    new Parameter(
+                        name: 'courseId',
+                        in: 'query',
+                        description: 'Selected course id used to prefill the ticket form',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -96,6 +103,9 @@ final class TicketForm
 
     #[Groups(['ticket_form:read'])]
     public int $sessionId = 0;
+
+    #[Groups(['ticket_form:read'])]
+    public int $courseId = 0;
 
     #[Groups(['ticket_form:read'])]
     public int $defaultPriorityId = 1;

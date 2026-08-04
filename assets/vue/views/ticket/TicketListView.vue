@@ -40,7 +40,7 @@
               :label="t('Add')"
               only-icon
               size="normal"
-              :route="{ name: 'TicketCreate', query: { project_id: String(selectedProjectId) } }"
+              :route="{ name: 'TicketCreate', query: ticketCreateQuery }"
               type="success"
             />
 
@@ -405,6 +405,24 @@ const emptyFilters = () => ({
 const filters = reactive(emptyFilters())
 const pendingFilters = reactive(emptyFilters())
 
+const ticketContextQuery = computed(() => {
+  const query = {}
+  const courseId = Number(route.query.cid || route.query.course_id || 0)
+  const sessionId = Number(route.query.sid || route.query.session_id || 0)
+  const groupId = Number(route.query.gid || 0)
+
+  if (courseId > 0) query.cid = String(courseId)
+  if (sessionId > 0) query.sid = String(sessionId)
+  if (groupId > 0) query.gid = String(groupId)
+
+  return query
+})
+
+const ticketCreateQuery = computed(() => ({
+  ...ticketContextQuery.value,
+  project_id: String(selectedProjectId.value),
+}))
+
 const assigneeOptions = computed(() => [
   {
     id: 0,
@@ -541,7 +559,7 @@ function handleSort(event) {
 }
 
 function syncRouteQuery() {
-  const query = {}
+  const query = { ...ticketContextQuery.value }
 
   if (filters.projectId) query.project_id = String(filters.projectId)
   if (filters.keyword) query.keyword = filters.keyword

@@ -71,6 +71,16 @@
             @click="exportFile('pdf')"
           />
           <BaseButton
+            v-if="permissions.showClasses"
+            :label="t('Classes')"
+            :route="buildClassesRoute()"
+            icon="sessions"
+            only-icon
+            size="normal"
+            :tooltip="t('Classes')"
+            type="primary"
+          />
+          <BaseButton
             v-if="permissions.showSessionManagement"
             :label="t('Course sessions')"
             :to-url="permissions.sessionManagementUrl"
@@ -409,6 +419,7 @@ const permissions = ref({
   westernNameOrder: true,
   showSessionManagement: false,
   sessionManagementUrl: "",
+  showClasses: false,
 })
 
 const userType = computed(() => (Number(route.query.type) === TEACHER ? TEACHER : STUDENT))
@@ -461,6 +472,7 @@ async function loadUsers() {
       westernNameOrder: response.westernNameOrder !== false,
       showSessionManagement: Boolean(response.showSessionManagement),
       sessionManagementUrl: response.sessionManagementUrl || "",
+      showClasses: Boolean(response.showClasses),
     }
     selectedUserIds.value = selectedUserIds.value.filter((id) => users.value.some((user) => user.id === id))
   } catch (error) {
@@ -483,6 +495,10 @@ function buildSubscribeRoute() {
 
 function buildImportRoute() {
   return { name: "CourseUserImport", params: route.params, query: { ...route.query, type: userType.value } }
+}
+
+function buildClassesRoute() {
+  return { name: "CourseUserClasses", params: route.params, query: { ...route.query, type: undefined } }
 }
 
 function applySearch() {

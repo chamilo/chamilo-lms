@@ -33,6 +33,7 @@ import portfolio from "./portfolio"
 import wiki from "./wiki"
 import courseProgress from "./courseProgress"
 import courseUser from "./courseUser"
+import myClass from "./myClass"
 import announcement from "./announcement"
 import ticket from "./ticket"
 import glossary from "./glossary"
@@ -530,6 +531,7 @@ const router = createRouter({
     wiki,
     courseProgress,
     courseUser,
+    myClass,
     announcement,
     ticket,
     glossary,

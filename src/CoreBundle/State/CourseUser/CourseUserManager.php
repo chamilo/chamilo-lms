@@ -167,6 +167,21 @@ final readonly class CourseUserManager
         return null === $session && $this->canManage($course, $session);
     }
 
+    public function canManageClasses(Course $course, ?Session $session): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        if (!$this->canSubscribe($course, $session)) {
+            return false;
+        }
+
+        return !$session instanceof Session || !$this->isEnabled(
+            $this->settingsManager->getSetting('session.session_classes_tab_disable', true),
+        );
+    }
+
     public function getLimitWarning(Course $course, ?Session $session): string
     {
         if ($session instanceof Session || !$this->canManage($course, $session)) {
@@ -268,6 +283,7 @@ final readonly class CourseUserManager
             'showSessionManagement' => $canManage && $this->isEnabled(
                 $this->settingsManager->getSetting('allow_tutors_to_assign_students_to_session', true),
             ),
+            'showClasses' => $this->canManageClasses($course, $session),
         ];
     }
 

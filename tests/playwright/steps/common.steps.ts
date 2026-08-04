@@ -518,14 +518,25 @@ Then("I fill in tinymce field {string} with {string}", async ({ page }, field: s
 // a fresh mount, i.e. closing and reopening the dialog. A prior, narrower
 // retry attempt elsewhere (just re-typing a truncated title on mismatch)
 // made a DIFFERENT failure worse, so this retries the WHOLE open+fill
-// sequence as one unit, exactly once, rather than repeating just the doomed
-// action in place.
+// sequence as one unit rather than repeating just the doomed action in place.
+//
+// A single retry (2 attempts total) still surfaced this in real CI runs —
+// each fresh mount is an independent roll of the same race, not a guaranteed
+// recovery, so one retry only halves the odds of hitting the ceiling rather
+// than closing it. Bumped to 2 retries (3 attempts total), which is as far
+// as this can go without risking the outer 90s test timeout (playwright.
+// config.ts): 3 attempts at the existing 10s/20s sub-timeouts fit with room
+// to spare for the rest of the scenario's own steps, but raising either
+// sub-timeout too would eat back into that margin, so both are left as-is —
+// the extra attempt is the lever that actually helps here (a fresh mount
+// each time), not more patience on a mount that's already stuck.
 When(
   "I create a ticket setting with title {string} and description {string}",
   async ({ page }, title: string, description: string) => {
     const STEP_TIMEOUT = 10_000
     const TINYMCE_READY_TIMEOUT = 20_000
     const CANCEL_TIMEOUT = 5_000
+    const MAX_ATTEMPTS = 3
 
     async function openAndFill(): Promise<boolean> {
       await page.locator("#ticket-settings-add:visible").first().click({ timeout: STEP_TIMEOUT })
@@ -569,25 +580,28 @@ When(
       }
     }
 
-    if (await tryOpenAndFill()) return
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      if (await tryOpenAndFill()) return
 
-    // Recovery: discard the stuck dialog (and its never-initialized editor)
-    // and reopen it fresh, exactly once. Bounded AND tolerant of the click
-    // itself failing: a real CI trace showed the whole dialog — not just the
-    // editor — can already be gone by this point, so there may be no Cancel
-    // button left to click at all. Either way, only a fresh mount for the
-    // retry matters; a prior version of this recovery clicked Cancel with no
-    // timeout, which then hung for the rest of the 90s test timeout in 4 of 5
-    // observed CI failures once the button was never going to appear.
-    await page
-      .getByRole("button", { name: "Cancel", exact: true })
-      .click({ timeout: CANCEL_TIMEOUT })
-      .catch(() => {})
+      if (attempt === MAX_ATTEMPTS) {
+        throw new Error(
+          `TinyMCE editor "ticket-setting-description" never became ready, even after closing and reopening the dialog ${MAX_ATTEMPTS - 1} times.`,
+        )
+      }
 
-    if (!(await tryOpenAndFill())) {
-      throw new Error(
-        'TinyMCE editor "ticket-setting-description" never became ready, even after closing and reopening the dialog once.',
-      )
+      // Recovery: discard the stuck dialog (and its never-initialized editor)
+      // and reopen it fresh. Bounded AND tolerant of the click itself
+      // failing: a real CI trace showed the whole dialog — not just the
+      // editor — can already be gone by this point, so there may be no
+      // Cancel button left to click at all. Either way, only a fresh mount
+      // for the retry matters; a prior version of this recovery clicked
+      // Cancel with no timeout, which then hung for the rest of the 90s test
+      // timeout in 4 of 5 observed CI failures once the button was never
+      // going to appear.
+      await page
+        .getByRole("button", { name: "Cancel", exact: true })
+        .click({ timeout: CANCEL_TIMEOUT })
+        .catch(() => {})
     }
   },
 )

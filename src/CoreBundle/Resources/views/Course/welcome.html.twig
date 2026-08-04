@@ -55,7 +55,7 @@
                     <div class="item">
                         {{ 'tool_members.png' | icon(64, 'Subscribe user to course'|trans ) }}
                         <div class="caption">
-                            <a href="/main/user/subscribe_user.php?{{ { 'cid': course.id}|url_encode }}" class="btn btn-outline-primary">
+                            <a href="/resources/course-users/{{ course.resourceNode.id }}/subscribe?{{ { 'cid': course.id, 'sid': 0, 'gid': 0, 'type': 5}|url_encode }}" class="btn btn-outline-primary">
                                 <em class="fa fa-user-plus"></em> {{ 'Subscribe user to course'|trans }}
                             </a>
                         </div>

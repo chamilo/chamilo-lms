@@ -9490,6 +9490,12 @@ document.addEventListener("DOMContentLoaded", function () {
             case TOOL_GROUP:
                 return $main_dir_path.'group/group.php?'.$extraParams;
             case TOOL_USER:
+                $course = $em->getRepository(Course::class)->find((int) $course_id);
+                if ($course instanceof Course && $course->hasResourceNode()) {
+                    return api_get_path(WEB_PATH).'resources/course-users/'.
+                        $course->getResourceNode()->getId().'/?'.$extraParams;
+                }
+
                 return $main_dir_path.'user/user.php?'.$extraParams;
             case TOOL_STUDENTPUBLICATION:
                 $repo = Container::getStudentPublicationRepository();

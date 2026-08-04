@@ -2859,8 +2859,15 @@ class Attendance
                 </form>';
                 $content .= $form;
             } else {
+                $courseUsersUrl = api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq();
+                $course = api_get_course_entity();
+                if ($course && $course->hasResourceNode()) {
+                    $courseUsersUrl = api_get_path(WEB_PATH).'resources/course-users/'.
+                        $course->getResourceNode()->getId().'/?'.api_get_cidreq();
+                }
+
                 $content .= Display::return_message(
-                    '<a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.
+                    '<a href="'.$courseUsersUrl.'">'.
                     get_lang('There are no registered learners inside the course').'</a>',
                     'warning',
                     false

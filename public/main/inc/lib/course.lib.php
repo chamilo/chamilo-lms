@@ -7099,13 +7099,22 @@ class CourseManager
             return 0;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = "SELECT COUNT(DISTINCT user_id) AS total
-                FROM $table
-                WHERE c_id = $courseId
-                  AND status = ".STUDENT."
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+                FROM (
+                    SELECT user_id
+                    FROM $courseUserTable
+                    WHERE c_id = $courseId
+                      AND status = ".STUDENT."
+                      AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                    UNION
+                    SELECT user_id
+                    FROM $sessionCourseUserTable
+                    WHERE c_id = $courseId
+                      AND status = ".STUDENT."
+                ) subscribed_users";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC') ?: [];
@@ -7165,14 +7174,23 @@ class CourseManager
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $idList = implode(',', $userIds);
 
         $sql = "SELECT COUNT(DISTINCT user_id) AS already
-                FROM $table
-                WHERE c_id = $courseId
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                  AND user_id IN ($idList)";
+                FROM (
+                    SELECT user_id
+                    FROM $courseUserTable
+                    WHERE c_id = $courseId
+                      AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                      AND user_id IN ($idList)
+                    UNION
+                    SELECT user_id
+                    FROM $sessionCourseUserTable
+                    WHERE c_id = $courseId
+                      AND user_id IN ($idList)
+                ) existing_users";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC') ?: [];

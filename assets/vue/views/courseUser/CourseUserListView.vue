@@ -83,7 +83,7 @@
           <BaseButton
             v-if="permissions.showSessionManagement"
             :label="t('Course sessions')"
-            :to-url="permissions.sessionManagementUrl"
+            :route="buildSessionsRoute()"
             icon="sessions"
             only-icon
             size="normal"
@@ -499,6 +499,19 @@ function buildImportRoute() {
 
 function buildClassesRoute() {
   return { name: "CourseUserClasses", params: route.params, query: { ...route.query, type: undefined } }
+}
+
+function buildSessionsRoute() {
+  return {
+    name: "CourseSessionList",
+    query: {
+      cid: route.query.cid || cid.value || undefined,
+      sid: route.query.sid || sid.value || undefined,
+      gid: route.query.gid || gid.value || undefined,
+      courseUserNode: route.params.node || undefined,
+      courseUserType: route.query.type || undefined,
+    },
+  }
 }
 
 function applySearch() {

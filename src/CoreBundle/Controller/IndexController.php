@@ -46,6 +46,7 @@ class IndexController extends BaseController
     #[Route('/resources/survey/{vueRouting}', name: 'resources_survey_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/exercise/{vueRouting}', name: 'resources_exercise_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/course-description/{vueRouting}', name: 'resources_course_description_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/course-invitation/{vueRouting}', name: 'resources_course_invitation_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/notebook/{vueRouting}', name: 'resources_notebook_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/portfolio/{vueRouting}', name: 'resources_portfolio_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/wiki/{vueRouting}', name: 'resources_wiki_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]

@@ -2787,7 +2787,7 @@
     "Number of comments scored": "L\u00edon na dtr\u00e1chta\u00ed a sc\u00f3r\u00e1ladh",
     "Number of items": "L\u00edon na m\u00edreanna",
     "Number of questions": "L\u00edon na gceisteanna",
-    "Number of questions limited to a maximum of {0}": "L\u00edon na gceisteanna teoranta go huasal {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Cusp\u00f3ir\u00ed",
     "Official Chamilo update channel": "Cain\u00e9al nuashonraithe oifigi\u00fail Chamilo",
     "Offline": "As l\u00edne",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Nuashonraigh an teideal seo i gcos\u00e1in foghlama",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "\u00das\u00e1id 0 chun gach ceist at\u00e1 ar f\u00e1il a choinne\u00e1il. \u00das\u00e1id -1 nuair a cheada\u00edtear gach ceist at\u00e1 ar f\u00e1il.",
     "Use these fields to classify the exercise independently from its display options.": "\u00das\u00e1id na r\u00e9ims\u00ed seo chun an cleachtadh a aicmi\u00fa go neamhsple\u00e1ch ar a roghanna taispe\u00e1na.",
-    "Weight": "Me\u00e1chan"
+    "Weight": "Me\u00e1chan",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

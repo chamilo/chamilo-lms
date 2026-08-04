@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Tirada faallooyinka la qiimeeyay",
     "Number of items": "Tirada walxaha",
     "Number of questions": "Tirada su'aalaha",
-    "Number of questions limited to a maximum of {0}": "Tirada su'aalaha waxaa lagu xadiday ugu badnaan {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Hadafka",
     "Official Chamilo update channel": "Kanaalka cusboonaysiinta rasmi ah ee Chamilo",
     "Offline": "Ka maqan",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Cusboonaysii cinwaankan wadooyinka waxbarashada",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Isticmaal 0 si aad u haysato dhammaan su'aalaha la heli karo. Isticmaal -1 halka dhammaan su'aalaha la heli karo la oggol yahay.",
     "Use these fields to classify the exercise independently from its display options.": "Isticmaal goobahan si aad u kala soocdo jimicsiga si ka madax bannaan xulashooyinka muuqaalkiisa.",
-    "Weight": "Miisaan"
+    "Weight": "Miisaan",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

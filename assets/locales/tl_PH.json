@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Bilang ng mga komento na may marka",
     "Number of items": "Bilang ng mga item",
     "Number of questions": "Bilang ng mga tanong",
-    "Number of questions limited to a maximum of {0}": "Bilang ng mga tanong na limitado sa maksimum na {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Mga Layunin",
     "Official Chamilo update channel": "Opisyal na update channel ng Chamilo",
     "Offline": "Offline",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "I-update ang titulong ito sa learning paths",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Gamitin ang 0 para mapanatili ang lahat ng available na tanong. Gamitin ang -1 kung saan pinapayagan ang lahat ng available na tanong.",
     "Use these fields to classify the exercise independently from its display options.": "Gamitin ang mga field na ito para uriin ang ehersisyo nang hiwalay sa mga opsyon sa pagpapakita nito.",
-    "Weight": "Timbang"
+    "Weight": "Timbang",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

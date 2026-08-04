@@ -548,7 +548,7 @@
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Algunos directorios y los ficheros que contienen deben tener habilitados los permisos de escritura en el servidor web para que Chamilo pueda funcionar (env\u00edo de ficheros por parte de los estudiantes, ficheros html de la p\u00e1gina principal,...). Esto puede suponer un cambio manual en su servidor (debe realizarse fuera de este interfaz).",
     "A database with the same name already exists. It will be deleted.": "Una base de datos con el mismo nombre ya existe. Ser\u00e1 eliminada.",
     "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Cuando entra en su plataforma por primera vez, la mejor manera de entenderla es registrarse con la opci\u00f3n 'Profesor (crear un curso)' y seguir las instrucciones.",
-    "You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better.": "Est\u00e1 a punto de comenzar a utilizar una de las mejores plataformas de e-learning de c\u00f3digo abierto del mercado. Al igual que muchos otros proyectos de c\u00f3digo abierto, Chamilo cuenta con el respaldo de una amplia comunidad de alumnos, tutores, desarrolladores, creadores de contenido y empresas que desean promover mejor el proyecto.",
+    "You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better.": "You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better.",
     "By knowing a little bit more about you, a platform administrator, one of the most important user type for us, who will manage this e-learning system, we will be able to let people know, statistically, how our software is used while respecting your privacy. We will also be able to let you know when we organize events that might be relevant to you or offer additional services that might be of value to your organisation.": "Al conocer un poco m\u00e1s sobre usted, un administrador de plataforma, uno de los tipos de usuario m\u00e1s importantes para nosotros, que gestionar\u00e1 este sistema de e-learning, podremos informar a las personas, estad\u00edsticamente, c\u00f3mo se utiliza nuestro software respetando su privacidad. Tambi\u00e9n podremos informarle cuando organicemos eventos que puedan ser relevantes para usted o ofrecer servicios adicionales que puedan ser de valor para su organizaci\u00f3n.",
     "By filling this form, you agree that the editor of Chamilo, the {0} company, registered in Belgium, and/or members of its network of partners (exclusively Chamilo services providers) might occasionally send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flows, with a thorough respect of your time and your privacy.": "Al completar este formulario, usted acepta que el editor de Chamilo, la empresa {0}, registrada en B\u00e9lgica, y/o miembros de su red de socios (exclusivamente proveedores de servicios de Chamilo) puedan ocasionalmente enviarle informaci\u00f3n por correo electr\u00f3nico sobre eventos importantes o actualizaciones en el software o la comunidad de Chamilo. Esto ayudar\u00e1 a que la comunidad crezca como una entidad organizada donde fluye la informaci\u00f3n, con un profundo respeto por su tiempo y su privacidad.",
     "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next.": "Tenga en cuenta que NO ES OBLIGATORIO completar este formulario. Si desea permanecer an\u00f3nimo, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador de portal registrado, pero respetaremos su decisi\u00f3n. Simplemente deje este formulario vac\u00edo y haga clic en Siguiente.",
@@ -2787,7 +2787,7 @@
     "Number of comments scored": "N\u00famero de comentarios puntuados",
     "Number of items": "N\u00famero de elementos",
     "Number of questions": "N\u00famero de preguntas",
-    "Number of questions limited to a maximum of {0}": "N\u00famero de preguntas limitado a un m\u00e1ximo de {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Objetivos",
     "Official Chamilo update channel": "Canal oficial de actualizaciones de Chamilo",
     "Offline": "Desconectado",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Actualizar este t\u00edtulo en las lecciones",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Utilice 0 para mantener todas las preguntas disponibles. Utilice -1 donde se permiten todas las preguntas disponibles.",
     "Use these fields to classify the exercise independently from its display options.": "Utilice estos campos para clasificar el ejercicio independientemente de sus opciones de visualizaci\u00f3n.",
-    "Weight": "Ponderaci\u00f3n"
+    "Weight": "Ponderaci\u00f3n",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

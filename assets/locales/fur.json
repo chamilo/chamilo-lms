@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Numar di coments valut\u00e2ts",
     "Number of items": "N\u00fbmar di element",
     "Number of questions": "N\u00fbmar di domandis",
-    "Number of questions limited to a maximum of {0}": "Numar di domandis limit\u00e2t a un max di {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Obiet\u00eefs",
     "Official Chamilo update channel": "Can\u00e2l ufici\u00e2l di inzornament di Chamilo",
     "Offline": "Offline",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Anov\u00e2 chest titol intun percors di apreniment",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Dopre 0 par tign\u00ee dutis lis domandis disponibii. Dopre -1 dul\u00e0 che a son permetudis dutis lis domandis disponibii.",
     "Use these fields to classify the exercise independently from its display options.": "Dopre chescj cjamps par classific\u00e2 l'esercizi in maniere indipendent des s\u00f4s opzions di visualizazion.",
-    "Weight": "Podes"
+    "Weight": "Podes",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

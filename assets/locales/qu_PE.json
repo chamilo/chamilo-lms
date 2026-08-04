@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Comentariokuna yupasqa yupay",
     "Number of items": "Hayka imaymanakuna",
     "Number of questions": "Pauri kasilla",
-    "Number of questions limited to a maximum of {0}": "Pauqakuna huk pachakama {0} nima",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Aypanakuna",
     "Official Chamilo update channel": "Oficial Chamilo actualizaci\u00f3n canal",
     "Offline": "Mana willakuy",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Yachay \u00f1anpi qillqaq yarpay",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "0 nisqata akllay tukuy tapukuykunaqpaq. -1 nisqata akllay tukuy tapukuykunaqpaq.",
     "Use these fields to classify the exercise independently from its display options.": "Kay kamachiykunata akllay yachay ruwayta imaymana ukhupi churaypaq, mana rikch'ay kamachiykunamanta.",
-    "Weight": "Peso"
+    "Weight": "Peso",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

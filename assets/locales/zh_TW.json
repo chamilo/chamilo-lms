@@ -2787,7 +2787,7 @@
     "Number of comments scored": "\u5df2\u8a55\u5206\u8a55\u8ad6\u6578",
     "Number of items": "\u9805\u76ee\u6578\u91cf",
     "Number of questions": "\u984c\u76ee\u6578\u91cf",
-    "Number of questions limited to a maximum of {0}": "\u984c\u76ee\u6578\u91cf\u9650\u5236\u70ba\u6700\u591a {0} \u500b",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "\u76ee\u6a19",
     "Official Chamilo update channel": "\u5b98\u65b9 Chamilo \u66f4\u65b0\u983b\u9053",
     "Offline": "\u96e2\u7dda",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "\u5728\u5b78\u7fd2\u8def\u5f91\u4e2d\u66f4\u65b0\u6b64\u6a19\u984c",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "\u4f7f\u7528 0 \u4fdd\u7559\u6240\u6709\u53ef\u7528\u984c\u76ee\u3002\u4f7f\u7528 -1 \u8868\u793a\u5141\u8a31\u6240\u6709\u53ef\u7528\u984c\u76ee\u3002",
     "Use these fields to classify the exercise independently from its display options.": "\u4f7f\u7528\u9019\u4e9b\u6b04\u4f4d\u4f86\u7368\u7acb\u65bc\u986f\u793a\u9078\u9805\u4e4b\u5916\u5206\u985e\u7df4\u7fd2\u3002",
-    "Weight": "\u6b0a\u91cd"
+    "Weight": "\u6b0a\u91cd",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

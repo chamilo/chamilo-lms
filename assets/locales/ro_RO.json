@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Num\u0103r de comentarii evaluate",
     "Number of items": "Numar de elemente",
     "Number of questions": "Num\u0103r de \u00eentreb\u0103ri",
-    "Number of questions limited to a maximum of {0}": "Num\u0103rul de \u00eentreb\u0103ri limitat la maximum {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Obiective",
     "Official Chamilo update channel": "Canal oficial de actualizare Chamilo",
     "Offline": "Desconectat",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Actualizeaz\u0103 acest titlu \u00een parcursurile de \u00eenv\u0103\u021bare",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Utiliza\u021bi 0 pentru a p\u0103stra toate \u00eentreb\u0103rile disponibile. Utiliza\u021bi -1 acolo unde sunt permise toate \u00eentreb\u0103rile disponibile.",
     "Use these fields to classify the exercise independently from its display options.": "Utiliza\u021bi aceste c\u00e2mpuri pentru a clasifica exerci\u021biul independent de op\u021biunile sale de afi\u0219are.",
-    "Weight": "Pondere"
+    "Weight": "Pondere",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

@@ -37551,3 +37551,28 @@ msgstr ""
 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr ""
+msgid "Invite by email"
+msgstr ""
+
+msgid "Invitation has been sent"
+msgstr ""
+
+msgid "Sent on"
+msgstr ""
+
+msgid "Accepted on"
+msgstr ""
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr ""
+msgid "Revoke"
+msgstr ""
+
+msgid "Revoked"
+msgstr ""
+
+msgid "Invitation has been revoked"
+msgstr ""
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr ""

@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Iye \u00e0w\u1ecdn \u00ecd\u00e1h\u00f9n t\u00ed a \u1e63\u00e0y\u1eb9\u0300w\u00f2",
     "Number of items": "N\u1ecdmba \u00e0w\u00f9j\u1ecd \u00ecpinnu",
     "Number of questions": "N\u1ecdmba \u00ecb\u00e9\u00e8r\u00e8",
-    "Number of questions limited to a maximum of {0}": "N\u1ecd\u0301mb\u00e0 \u00ecb\u00e9\u00e8r\u00e8 ti pin si \u00ecd\u00ed \u00ecp\u1ecd\u0300j\u00f9 {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Aw\u1ecdn ibi-af\u1eb9de",
     "Official Chamilo update channel": "\u00cck\u00e0nn\u00ec \u00ecs\u1ecdd\u1ecd\u0300m\u1ecd Chamilo",
     "Offline": "P\u00e0\u00e1p\u00e0\u00e1",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "\u1e62e imudojuiw\u1ecdn ak\u1ecdle yii ni aw\u1ecdn \u1ecdna \u1eb9k\u1ecd",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Lo 0 l\u00e1ti fi gbogbo \u00e0w\u1ecdn \u00ecb\u00e9\u00e8r\u00e8 t\u00f3 w\u00e0. Lo -1 n\u00edbi t\u00ed gbogbo \u00e0w\u1ecdn \u00ecb\u00e9\u00e8r\u00e8 t\u00f3 w\u00e0 b\u00e1 ti y\u1ecd\u0300\u01f9da.",
     "Use these fields to classify the exercise independently from its display options.": "Lo \u00e0w\u1ecdn \u00e0\u00e0y\u00e8 w\u1ecd\u0300ny\u00ed l\u00e1ti \u1e63e \u00ecs\u1ecd\u0300r\u00ed \u00ecd\u00e1nw\u00f2 l\u00e1\u00ec n\u00ed \u00ecsop\u1ecd\u0300 p\u1eb9\u0300l\u00fa \u00e0w\u1ecdn \u00e0\u1e63\u00e0y\u00e0n \u00ecfih\u00e0n r\u1eb9\u0300.",
-    "Weight": "\u00c0w\u00f9j\u1ecd"
+    "Weight": "\u00c0w\u00f9j\u1ecd",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

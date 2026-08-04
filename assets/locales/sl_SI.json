@@ -2787,7 +2787,7 @@
     "Number of comments scored": "\u0160tevilo ocenjenih komentarjev",
     "Number of items": "\u0161tevilo elementov",
     "Number of questions": "\u0160tevilo vpra\u0161anj",
-    "Number of questions limited to a maximum of {0}": "\u0160tevilo vpra\u0161anj omejeno na najve\u010d {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Cilji",
     "Official Chamilo update channel": "Uradni kanal posodobitev Chamilo",
     "Offline": "Brez povezave",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "A\u017euriraj ta naslov v u\u010dnih poteh",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Uporabite 0, da ohranite vsa razpolo\u017eljiva vpra\u0161anja. Uporabite -1, kjer so dovoljena vsa razpolo\u017eljiva vpra\u0161anja.",
     "Use these fields to classify the exercise independently from its display options.": "Uporabite ta polja za razvr\u0161\u010danje vaje neodvisno od njenih mo\u017enosti prikaza.",
-    "Weight": "Ute\u017e"
+    "Weight": "Ute\u017e",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

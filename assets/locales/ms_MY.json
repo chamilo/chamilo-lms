@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Bilangan komen yang dinilai",
     "Number of items": "Bilangan item",
     "Number of questions": "Bilangan soalan",
-    "Number of questions limited to a maximum of {0}": "Bilangan soalan terhad kepada maksimum {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Objektif",
     "Official Chamilo update channel": "Saluran kemas kini rasmi Chamilo",
     "Offline": "Luar talian",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Kemas kini tajuk ini dalam laluan pembelajaran",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Gunakan 0 untuk mengekalkan semua soalan yang tersedia. Gunakan -1 di mana semua soalan yang tersedia dibenarkan.",
     "Use these fields to classify the exercise independently from its display options.": "Gunakan medan ini untuk mengklasifikasikan latihan secara bebas daripada pilihan paparannya.",
-    "Weight": "Berat"
+    "Weight": "Berat",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Pontozott megjegyz\u00e9sek sz\u00e1ma",
     "Number of items": "elemek sz\u00e1ma",
     "Number of questions": "K\u00e9rd\u00e9sek sz\u00e1ma",
-    "Number of questions limited to a maximum of {0}": "A k\u00e9rd\u00e9sek sz\u00e1ma legfeljebb {0}-ra korl\u00e1tozva",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "C\u00e9lkit\u0171z\u00e9sek",
     "Official Chamilo update channel": "Hivatalos Chamilo friss\u00edt\u00e9si csatorna",
     "Offline": "Offline",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "C\u00edm friss\u00edt\u00e9se a tanul\u00e1si \u00fatvonalakban",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Haszn\u00e1ljon 0-t az \u00f6sszes el\u00e9rhet\u0151 k\u00e9rd\u00e9s megtart\u00e1s\u00e1hoz. Haszn\u00e1ljon -1-et, ha az \u00f6sszes el\u00e9rhet\u0151 k\u00e9rd\u00e9s enged\u00e9lyezett.",
     "Use these fields to classify the exercise independently from its display options.": "Haszn\u00e1lja ezeket a mez\u0151ket a gyakorlat oszt\u00e1lyoz\u00e1s\u00e1hoz f\u00fcggetlen\u00fcl a megjelen\u00edt\u00e9si be\u00e1ll\u00edt\u00e1sait\u00f3l.",
-    "Weight": "S\u00faly"
+    "Weight": "S\u00faly",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

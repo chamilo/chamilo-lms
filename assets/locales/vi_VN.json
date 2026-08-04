@@ -2787,7 +2787,7 @@
     "Number of comments scored": "S\u1ed1 l\u01b0\u1ee3ng nh\u1eadn x\u00e9t \u0111\u01b0\u1ee3c ch\u1ea5m \u0111i\u1ec3m",
     "Number of items": "S\u1ed1 l\u01b0\u1ee3ng m\u1ee5c",
     "Number of questions": "S\u1ed1 l\u01b0\u1ee3ng c\u00e2u h\u1ecfi",
-    "Number of questions limited to a maximum of {0}": "S\u1ed1 l\u01b0\u1ee3ng c\u00e2u h\u1ecfi b\u1ecb gi\u1edbi h\u1ea1n t\u1ed1i \u0111a {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "M\u1ee5c ti\u00eau",
     "Official Chamilo update channel": "K\u00eanh c\u1eadp nh\u1eadt Chamilo ch\u00ednh th\u1ee9c",
     "Offline": "Ngo\u1ea1i tuy\u1ebfn",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "C\u1eadp nh\u1eadt ti\u00eau \u0111\u1ec1 n\u00e0y trong l\u1ed9 tr\u00ecnh h\u1ecdc t\u1eadp",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "S\u1eed d\u1ee5ng 0 \u0111\u1ec3 gi\u1eef t\u1ea5t c\u1ea3 c\u00e2u h\u1ecfi c\u00f3 s\u1eb5n. S\u1eed d\u1ee5ng -1 khi cho ph\u00e9p t\u1ea5t c\u1ea3 c\u00e2u h\u1ecfi c\u00f3 s\u1eb5n.",
     "Use these fields to classify the exercise independently from its display options.": "S\u1eed d\u1ee5ng c\u00e1c tr\u01b0\u1eddng n\u00e0y \u0111\u1ec3 ph\u00e2n lo\u1ea1i b\u00e0i t\u1eadp \u0111\u1ed9c l\u1eadp v\u1edbi c\u00e1c t\u00f9y ch\u1ecdn hi\u1ec3n th\u1ecb.",
-    "Weight": "Tr\u1ecdng s\u1ed1"
+    "Weight": "Tr\u1ecdng s\u1ed1",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

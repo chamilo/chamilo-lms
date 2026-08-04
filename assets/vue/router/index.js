@@ -28,6 +28,7 @@ import forum from "./forum"
 import survey from "./survey"
 import exercise from "./exercise"
 import courseDescription from "./courseDescription"
+import courseInvitation from "./courseInvitation"
 import notebook from "./notebook"
 import portfolio from "./portfolio"
 import wiki from "./wiki"
@@ -528,6 +529,7 @@ const router = createRouter({
     survey,
     exercise,
     courseDescription,
+    courseInvitation,
     notebook,
     wiki,
     courseProgress,

@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Koment\u0101ru skaits ar v\u0113rt\u0113jumu",
     "Number of items": "lietu skaits",
     "Number of questions": "Jaut\u0101jumu skaits",
-    "Number of questions limited to a maximum of {0}": "Jaut\u0101jumu skaits ierobe\u017eots l\u012bdz maksimumam {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Kurs\u0101 sasniedzamie m\u0113r\u0137i",
     "Official Chamilo update channel": "Ofici\u0101lais Chamilo atjaunin\u0101\u0161anas kan\u0101ls",
     "Offline": "Bezsaist\u0113",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Atjaunin\u0101t \u0161o nosaukumu m\u0101c\u012bbu ce\u013cos",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Izmantojiet 0, lai saglab\u0101tu visus pieejamos jaut\u0101jumus. Izmantojiet -1, ja ir at\u013cauti visi pieejamie jaut\u0101jumi.",
     "Use these fields to classify the exercise independently from its display options.": "Izmantojiet \u0161os laukus, lai klasific\u0113tu vingrin\u0101jumu neatkar\u012bgi no t\u0101 att\u0113lo\u0161anas opcij\u0101m.",
-    "Weight": "Max., ieskait\u0113s ieg\u016bstam\u0101, punktu summa"
+    "Weight": "Max., ieskait\u0113s ieg\u016bstam\u0101, punktu summa",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

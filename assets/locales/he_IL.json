@@ -2787,7 +2787,7 @@
     "Number of comments scored": "\u05de\u05e1\u05e4\u05e8 \u05d4\u05d4\u05e2\u05e8\u05d5\u05ea \u05e9\u05e7\u05d9\u05d1\u05dc\u05d5 \u05e6\u05d9\u05d5\u05df",
     "Number of items": "\u05de\u05e1\u05e4\u05e8 \u05e4\u05e8\u05d9\u05d8\u05d9\u05dd",
     "Number of questions": "\u05de\u05e1\u05e4\u05e8 \u05e9\u05d0\u05dc\u05d5\u05ea",
-    "Number of questions limited to a maximum of {0}": "\u05de\u05e1\u05e4\u05e8 \u05d4\u05e9\u05d0\u05dc\u05d5\u05ea \u05de\u05d5\u05d2\u05d1\u05dc \u05dc\u05de\u05d9\u05e0\u05d9\u05de\u05d5\u05dd \u05e9\u05dc {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "\u05de\u05d8\u05e8\u05d5\u05ea",
     "Official Chamilo update channel": "\u05e2\u05e8\u05d5\u05e5 \u05e2\u05d3\u05db\u05d5\u05df \u05e8\u05e9\u05de\u05d9 \u05e9\u05dc Chamilo",
     "Offline": "\u05dc\u05d0 \u05de\u05e7\u05d5\u05d5\u05df",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "\u05e2\u05d3\u05db\u05df \u05db\u05d5\u05ea\u05e8\u05ea \u05d6\u05d5 \u05d1\u05e0\u05ea\u05d9\u05d1\u05d9 \u05dc\u05de\u05d9\u05d3\u05d4",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "\u05d4\u05e9\u05ea\u05de\u05e9 \u05d1-0 \u05db\u05d3\u05d9 \u05dc\u05e9\u05de\u05d5\u05e8 \u05e2\u05dc \u05db\u05dc \u05d4\u05e9\u05d0\u05dc\u05d5\u05ea \u05d4\u05d6\u05de\u05d9\u05e0\u05d5\u05ea. \u05d4\u05e9\u05ea\u05de\u05e9 \u05d1-1- \u05db\u05d0\u05e9\u05e8 \u05db\u05dc \u05d4\u05e9\u05d0\u05dc\u05d5\u05ea \u05d4\u05d6\u05de\u05d9\u05e0\u05d5\u05ea \u05de\u05d5\u05ea\u05e8\u05d5\u05ea.",
     "Use these fields to classify the exercise independently from its display options.": "\u05d4\u05e9\u05ea\u05de\u05e9 \u05d1\u05e9\u05d3\u05d5\u05ea \u05d0\u05dc\u05d4 \u05db\u05d3\u05d9 \u05dc\u05e1\u05d5\u05d5\u05d2 \u05d0\u05ea \u05d4\u05ea\u05e8\u05d2\u05d9\u05dc \u05d1\u05e0\u05e4\u05e8\u05d3 \u05de\u05d0\u05e4\u05e9\u05e8\u05d5\u05d9\u05d5\u05ea \u05d4\u05ea\u05e6\u05d5\u05d2\u05d4 \u05e9\u05dc\u05d5.",
-    "Weight": "\u05de\u05e9\u05e7\u05dc"
+    "Weight": "\u05de\u05e9\u05e7\u05dc",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

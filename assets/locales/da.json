@@ -2787,7 +2787,7 @@
     "Number of comments scored": "Antal scorede kommentarer",
     "Number of items": "antal objekter",
     "Number of questions": "Antal sp\u00f8rgsm\u00e5l",
-    "Number of questions limited to a maximum of {0}": "Antal sp\u00f8rgsm\u00e5l begr\u00e6nset til maksimum {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "M\u00e5l",
     "Official Chamilo update channel": "Officiel Chamilo-opdateringskanal",
     "Offline": "Offline",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Opdater denne titel i l\u00e6ringsstier",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Brug 0 for at beholde alle tilg\u00e6ngelige sp\u00f8rgsm\u00e5l. Brug -1, hvor alle tilg\u00e6ngelige sp\u00f8rgsm\u00e5l er tilladt.",
     "Use these fields to classify the exercise independently from its display options.": "Brug disse felter til at klassificere \u00f8velsen uafh\u00e6ngigt af dens visningsindstillinger.",
-    "Weight": "V\u00e6gt"
+    "Weight": "V\u00e6gt",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

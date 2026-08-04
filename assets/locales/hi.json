@@ -2787,7 +2787,7 @@
     "Number of comments scored": "\u0938\u094d\u0915\u094b\u0930 \u0915\u0940 \u0917\u0908 \u091f\u093f\u092a\u094d\u092a\u0923\u093f\u092f\u094b\u0902 \u0915\u0940 \u0938\u0902\u0916\u094d\u092f\u093e",
     "Number of items": "\u0906\u0907\u091f\u092e\u094b\u0902 \u0915\u0940 \u0938\u0902\u0916\u094d\u092f\u093e",
     "Number of questions": "\u092a\u094d\u0930\u0936\u094d\u0928\u094b\u0902 \u0915\u0940 \u0938\u0902\u0916\u094d\u092f\u093e",
-    "Number of questions limited to a maximum of {0}": "\u092a\u094d\u0930\u0936\u094d\u0928\u094b\u0902 \u0915\u0940 \u0938\u0902\u0916\u094d\u092f\u093e \u0905\u0927\u093f\u0915\u0924\u092e {0} \u0924\u0915 \u0938\u0940\u092e\u093f\u0924",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "\u0909\u0926\u094d\u0926\u0947\u0936\u094d\u092f",
     "Official Chamilo update channel": "\u0906\u0927\u093f\u0915\u093e\u0930\u093f\u0915 \u091a\u092e\u093f\u0932\u094b \u0905\u092a\u0921\u0947\u091f \u091a\u0948\u0928\u0932",
     "Offline": "\u0911\u092b\u0932\u093e\u0907\u0928",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "\u0932\u0930\u094d\u0928\u093f\u0902\u0917 \u092a\u0925 \u092e\u0947\u0902 \u0907\u0938 \u0936\u0940\u0930\u094d\u0937\u0915 \u0915\u094b \u0905\u092a\u0921\u0947\u091f \u0915\u0930\u0947\u0902",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "\u0938\u092d\u0940 \u0909\u092a\u0932\u092c\u094d\u0927 \u092a\u094d\u0930\u0936\u094d\u0928 \u0930\u0916\u0928\u0947 \u0915\u0947 \u0932\u093f\u090f 0 \u0915\u093e \u0909\u092a\u092f\u094b\u0917 \u0915\u0930\u0947\u0902\u0964 -1 \u0915\u093e \u0909\u092a\u092f\u094b\u0917 \u0915\u0930\u0947\u0902 \u091c\u0939\u093e\u0901 \u0938\u092d\u0940 \u0909\u092a\u0932\u092c\u094d\u0927 \u092a\u094d\u0930\u0936\u094d\u0928\u094b\u0902 \u0915\u0940 \u0905\u0928\u0941\u092e\u0924\u093f \u0939\u0948\u0964",
     "Use these fields to classify the exercise independently from its display options.": "\u0935\u094d\u092f\u093e\u092f\u093e\u092e \u0915\u094b \u0909\u0938\u0915\u0947 \u092a\u094d\u0930\u0926\u0930\u094d\u0936\u0928 \u0935\u093f\u0915\u0932\u094d\u092a\u094b\u0902 \u0938\u0947 \u0938\u094d\u0935\u0924\u0902\u0924\u094d\u0930 \u0930\u0942\u092a \u0938\u0947 \u0935\u0930\u094d\u0917\u0940\u0915\u0943\u0924 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093f\u090f \u0907\u0928 \u0915\u094d\u0937\u0947\u0924\u094d\u0930\u094b\u0902 \u0915\u093e \u0909\u092a\u092f\u094b\u0917 \u0915\u0930\u0947\u0902\u0964",
-    "Weight": "\u0935\u091c\u0928"
+    "Weight": "\u0935\u091c\u0928",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

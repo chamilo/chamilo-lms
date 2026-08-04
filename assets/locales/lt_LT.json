@@ -2787,7 +2787,7 @@
     "Number of comments scored": "\u012evertint\u0173 komentar\u0173 skai\u010dius",
     "Number of items": "element\u0173 skai\u010dius",
     "Number of questions": "Klausim\u0173 skai\u010dius",
-    "Number of questions limited to a maximum of {0}": "Klausim\u0173 skai\u010dius ribojamas iki maksimalaus {0}",
+    "Number of questions limited to a maximum of {0}": "Number of questions limited to a maximum of {0}",
     "Objectives": "Tikslai",
     "Official Chamilo update channel": "Oficialus Chamilo atnaujinimo kanalas",
     "Offline": "Neprisijung\u0119s",
@@ -3210,5 +3210,14 @@
     "Update this title in learning paths": "Atnaujinti \u0161\u012f pavadinim\u0105 mokymosi keliuose",
     "Use 0 to keep all available questions. Use -1 where all available questions are allowed.": "Naudokite 0, kad i\u0161saugotum\u0117te visus turimus klausimus. Naudokite -1, jei leid\u017eiami visi turimi klausimai.",
     "Use these fields to classify the exercise independently from its display options.": "Naudokite \u0161iuos laukus pratimui klasifikuoti nepriklausomai nuo jo rodymo parink\u010di\u0173.",
-    "Weight": "Svoris"
+    "Weight": "Svoris",
+    "Invite by email": "Invite by email",
+    "Invitation has been sent": "Invitation has been sent",
+    "Sent on": "Sent on",
+    "Accepted on": "Accepted on",
+    "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.": "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session {0}, not just this course.",
+    "Revoke": "Revoke",
+    "Revoked": "Revoked",
+    "Invitation has been revoked": "Invitation has been revoked",
+    "Are you sure you want to revoke the invitation sent to {0}?": "Are you sure you want to revoke the invitation sent to {0}?"
 }

@@ -37637,3 +37637,28 @@ msgstr "Use 0 to keep all available questions. Use -1 where all available questi
 
 msgid "Use these fields to classify the exercise independently from its display options."
 msgstr "Use these fields to classify the exercise independently from its display options."
+msgid "Invite by email"
+msgstr "Invite by email"
+
+msgid "Invitation has been sent"
+msgstr "Invitation has been sent"
+
+msgid "Sent on"
+msgstr "Sent on"
+
+msgid "Accepted on"
+msgstr "Accepted on"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgid "Revoke"
+msgstr "Revoke"
+
+msgid "Revoked"
+msgstr "Revoked"
+
+msgid "Invitation has been revoked"
+msgstr "Invitation has been revoked"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Are you sure you want to revoke the invitation sent to %s?"

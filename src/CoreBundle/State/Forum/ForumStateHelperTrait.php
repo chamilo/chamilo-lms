@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTimeImmutable;
@@ -56,14 +57,14 @@ trait ForumStateHelperTrait
         return $this->isTeacher($security) && !$this->isStudentView($request);
     }
 
-    private function getCourse(EntityManagerInterface $entityManager, Request $request): Course
+    private function getCourse(CidReqHelper $cidReqHelper): Course
     {
-        $courseId = $request->query->getInt('cid');
+        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
         if ($courseId <= 0) {
             throw new BadRequestHttpException('Missing course id.');
         }
 
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
+        $course = $cidReqHelper->getDoctrineCourseEntity();
         if (!$course instanceof Course) {
             throw new NotFoundHttpException('Course not found.');
         }
@@ -71,21 +72,21 @@ trait ForumStateHelperTrait
         return $course;
     }
 
-    private function getSession(EntityManagerInterface $entityManager, Request $request): ?Session
+    private function getSession(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper): ?Session
     {
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
         if ($sessionId <= 0) {
             return null;
         }
 
-        $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        $session = $cidReqHelper->getDoctrineSessionEntity();
         if (!$session instanceof Session) {
             throw new NotFoundHttpException('Session not found.');
         }
 
-        $courseId = $request->query->getInt('cid');
+        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
         if ($courseId > 0) {
-            $course = $entityManager->getRepository(Course::class)->find($courseId);
+            $course = $cidReqHelper->getDoctrineCourseEntity();
             if (!$course instanceof Course) {
                 throw new NotFoundHttpException('Course not found.');
             }
@@ -103,9 +104,9 @@ trait ForumStateHelperTrait
         return $session;
     }
 
-    private function getGroup(EntityManagerInterface $entityManager, Request $request): ?CGroup
+    private function getGroup(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper): ?CGroup
     {
-        $groupId = $request->query->getInt('gid');
+        $groupId = (int) ($cidReqHelper->getGroupId() ?? 0);
         if ($groupId <= 0) {
             return null;
         }
@@ -191,9 +192,9 @@ trait ForumStateHelperTrait
         }
     }
 
-    private function canListForumWithCurrentSettings(CForum $forum, Request $request, bool $displayGroupForums): bool
+    private function canListForumWithCurrentSettings(CForum $forum, CidReqHelper $cidReqHelper, bool $displayGroupForums): bool
     {
-        if ($displayGroupForums || $request->query->getInt('gid') > 0) {
+        if ($displayGroupForums || (int) ($cidReqHelper->getGroupId() ?? 0) > 0) {
             return true;
         }
 

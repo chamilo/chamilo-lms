@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -54,6 +55,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         private readonly Security $security,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly SettingsManager $settingsManager,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -80,7 +82,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         $thread = $this->getThread($uriVariables, $request);
         $this->assertEditableForumResource($thread->getResourceNode(), $this->security);
 
-        $course = $this->getCourse($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread);
         $enabled = $this->getBoolean($payload, 'enabled');
 
@@ -177,8 +179,8 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
             throw new NotFoundHttpException('User not found.');
         }
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
         $qualifyUser = $this->security->getUser();
         if (!$qualifyUser instanceof User) {
             throw new AccessDeniedHttpException('A valid user is required.');

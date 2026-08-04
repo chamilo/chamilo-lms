@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -55,6 +56,7 @@ final class ForumProcessor implements ProcessorInterface
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly SettingsManager $settingsManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CForum|JsonResponse
@@ -72,9 +74,9 @@ final class ForumProcessor implements ProcessorInterface
         }
 
         if ('create_forum' === $operationName) {
-            $course = $this->getCourse($this->entityManager, $request);
-            $session = $this->getSession($this->entityManager, $request);
-            $group = $this->getGroup($this->entityManager, $request);
+            $course = $this->getCourse($this->cidReqHelper);
+            $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+            $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
             $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
             $this->assertParentResourceNodeIsWritableInForumContext(
                 $this->entityManager,
@@ -139,9 +141,9 @@ final class ForumProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
-        $group = $this->getGroup($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
 
         $this->applyPayloadToForum($forum, $payload, false, $course, $session, $group);
         $this->entityManager->persist($forum);
@@ -182,8 +184,8 @@ final class ForumProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
         $targetVisible = $this->getTargetVisibility($payload, $forum, $course, $session);
         $visible = $this->setForumResourceVisibility($forum, $this->forumRepository, $course, $session, $targetVisible);
         $this->entityManager->flush();
@@ -209,9 +211,9 @@ final class ForumProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
-        $group = $this->getGroup($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $position = $this->moveForumResource($forum, $course, $session, $group, (string) ($payload['direction'] ?? ''));
         $this->entityManager->flush();
 
@@ -234,7 +236,7 @@ final class ForumProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $course = $this->getCourse($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
         if ($this->areForumPostNotificationsHidden($this->entityManager, $course)) {
             throw new AccessDeniedHttpException('Forum notifications are disabled for this course.');
         }

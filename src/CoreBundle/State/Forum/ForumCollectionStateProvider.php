@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -42,6 +43,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
         private readonly CForumCategoryRepository $forumCategoryRepository,
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -80,13 +82,13 @@ final class ForumCollectionStateProvider implements ProviderInterface
     {
         $this->assertForumMemberAccess($this->security, 'You are not allowed to access forums.');
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
-        $group = $this->getGroup($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $parentNode = $this->getParentNode($this->entityManager, $request);
         $showHidden = $this->canManageForumsInCurrentView($this->security, $request);
         $user = $this->getCurrentUser();
-        $displayGroupForums = $this->shouldDisplayGroupForumsInGeneralTool($request);
+        $displayGroupForums = $this->shouldDisplayGroupForumsInGeneralTool($this->cidReqHelper);
 
         $categoryIds = $this->getCategoryIdsBelowParent(
             $course,
@@ -113,7 +115,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
             if (
                 !$forum instanceof CForum
                 || !$this->forumBelongsToRequestedParent($forum, $parentNode->getId(), $categoryIds)
-                || !$this->canListForumWithCurrentSettings($forum, $request, $displayGroupForums)
+                || !$this->canListForumWithCurrentSettings($forum, $this->cidReqHelper, $displayGroupForums)
             ) {
                 continue;
             }
@@ -182,9 +184,9 @@ final class ForumCollectionStateProvider implements ProviderInterface
         return $parentNodeId === $forum->getResourceNode()?->getParent()?->getId();
     }
 
-    private function shouldDisplayGroupForumsInGeneralTool(Request $request): bool
+    private function shouldDisplayGroupForumsInGeneralTool(CidReqHelper $cidReqHelper): bool
     {
-        if ($request->query->getInt('gid') > 0) {
+        if ((int) ($cidReqHelper->getGroupId() ?? 0) > 0) {
             return true;
         }
 

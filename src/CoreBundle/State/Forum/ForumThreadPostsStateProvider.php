@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -64,6 +65,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly IllustrationRepository $illustrationRepository,
         private readonly CourseAccessResolver $courseAccessResolver,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -127,9 +129,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             throw new BadRequestHttpException('Forum does not match the requested thread.');
         }
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
-        $group = $this->getGroup($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $canManage = $this->canManageForumsInCurrentView($this->security, $request);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
@@ -620,7 +622,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         }
 
         try {
-            $course = $this->getCourse($this->entityManager, $request);
+            $course = $this->getCourse($this->cidReqHelper);
         } catch (Throwable) {
             return false;
         }

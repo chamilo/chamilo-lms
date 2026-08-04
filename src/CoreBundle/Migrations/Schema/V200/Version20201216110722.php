@@ -45,9 +45,12 @@ final class Version20201216110722 extends AbstractMigrationChamilo
         // migration has already created it.
         $attendanceTable = $schema->getTable('c_attendance');
         if (!$attendanceTable->hasColumn('room_id')) {
-            $this->addSql('ALTER TABLE c_attendance ADD room_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_attendance ADD CONSTRAINT FK_4136349254177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE SET NULL');
-            $this->addSql('CREATE INDEX IDX_4136349254177093 ON c_attendance (room_id)');
+            // Must take effect immediately (not via addSql(), which only runs after
+            // up() returns): the ->find() calls below need the column to already
+            // exist in the database.
+            $this->connection->executeStatement('ALTER TABLE c_attendance ADD room_id INT DEFAULT NULL');
+            $this->connection->executeStatement('ALTER TABLE c_attendance ADD CONSTRAINT FK_4136349254177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE SET NULL');
+            $this->connection->executeStatement('CREATE INDEX IDX_4136349254177093 ON c_attendance (room_id)');
         }
 
         $attendanceRepo = $this->container->get(CAttendanceRepository::class);

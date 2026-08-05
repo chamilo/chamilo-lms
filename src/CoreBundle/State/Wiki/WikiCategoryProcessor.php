@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiCategoryInput;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Repository\CWikiCategoryRepository;
@@ -38,6 +39,7 @@ final readonly class WikiCategoryProcessor implements ProcessorInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiCategoryService $categoryService,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -63,7 +65,7 @@ final readonly class WikiCategoryProcessor implements ProcessorInterface
         $group = $this->getWikiGroup($this->entityManager, $request);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isStudentView()) {
             throw new AccessDeniedHttpException('Wiki categories cannot be managed in student view.');
         }
 

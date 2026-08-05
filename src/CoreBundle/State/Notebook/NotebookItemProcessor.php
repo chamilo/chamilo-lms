@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Notebook\NotebookItem;
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CNotebook;
@@ -44,6 +45,7 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
         private SettingsManager $settingsManager,
         private NotebookWriteProtection $writeProtection,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -75,7 +77,7 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to view Notebook in this context.');
         }
 
-        $studentView = $this->isNotebookStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         if (!$this->canWriteNotebook(
             $this->entityManager,
             $this->security,

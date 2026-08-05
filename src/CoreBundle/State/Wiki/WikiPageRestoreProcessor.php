@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageHistory;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
@@ -47,6 +48,7 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiNotificationService $notificationService,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -72,7 +74,7 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         $group = $this->getWikiGroup($this->entityManager, $request);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isStudentView()) {
             throw new AccessDeniedHttpException('Wiki versions cannot be restored in student view.');
         }
 

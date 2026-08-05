@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPage;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageAction;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
@@ -46,6 +47,7 @@ final readonly class WikiPageProvider implements ProviderInterface
         private WikiPageRenderer $renderer,
         private WikiAssignmentFeedbackResolver $feedbackResolver,
         private WikiCategoryService $categoryService,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -73,7 +75,7 @@ final readonly class WikiPageProvider implements ProviderInterface
 
         $this->registerToolAccess();
 
-        $studentView = $this->isWikiStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         $canManage = !$studentView && $this->canManageWikiContext(
             $this->entityManager,
             $this->security,

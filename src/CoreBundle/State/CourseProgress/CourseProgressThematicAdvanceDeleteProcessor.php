@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicAdvance;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -44,6 +45,7 @@ final readonly class CourseProgressThematicAdvanceDeleteProcessor implements Pro
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -76,7 +78,7 @@ final readonly class CourseProgressThematicAdvanceDeleteProcessor implements Pro
 
     private function assertCanManage(Request $request, Course $course, ?Session $session): void
     {
-        if (!$this->isCourseProgressStudentView($request, (int) $course->getId())
+        if (!$this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())
             && $this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

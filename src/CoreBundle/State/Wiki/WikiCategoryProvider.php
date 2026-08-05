@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiCategoryCollection;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -34,6 +35,7 @@ final readonly class WikiCategoryProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiCategoryService $categoryService,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -55,7 +57,7 @@ final readonly class WikiCategoryProvider implements ProviderInterface
         $group = $this->getWikiGroup($this->entityManager, $request);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isStudentView()) {
             throw new AccessDeniedHttpException('Wiki categories cannot be managed in student view.');
         }
 

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\CourseDescription\CourseDescriptionList;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -41,6 +42,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -63,7 +65,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to view course descriptions in this context.');
         }
 
-        $studentView = $this->isStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         $canManage = !$studentView && $this->canManageCourseDescriptions(
             $this->entityManager,
             $this->security,
@@ -264,18 +266,5 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         $value = $this->settingsManager->getSetting($name, true);
 
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
-    }
-
-    private function isStudentView(Request $request): bool
-    {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
     }
 }

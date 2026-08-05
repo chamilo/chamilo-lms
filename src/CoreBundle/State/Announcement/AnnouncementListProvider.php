@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -44,6 +45,7 @@ final readonly class AnnouncementListProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -76,7 +78,7 @@ final readonly class AnnouncementListProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to view announcements in this context.');
         }
 
-        $studentView = $this->isStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         $canManage = !$studentView && $this->canManageAnnouncements(
             $this->entityManager,
             $this->security,

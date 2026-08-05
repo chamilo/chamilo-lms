@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageForm;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
@@ -46,6 +47,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         private WikiPageRenderer $renderer,
         private WikiAssignmentService $assignmentService,
         private WikiCategoryService $categoryService,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -67,7 +69,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         $group = $this->getWikiGroup($this->entityManager, $request);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isStudentView()) {
             throw new AccessDeniedHttpException('Wiki pages cannot be edited in student view.');
         }
 
@@ -205,7 +207,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         $form->canConfigureAssignment = $canManage && 'index' !== ($sourcePage?->getReflink() ?? $reflink);
         $form->categoriesEnabled = $categoriesEnabled;
         $form->canManageCategories = $categoriesEnabled
-            && !$this->isWikiStudentView($request)
+            && !$this->studentViewHelper->isStudentView()
             && $this->canManageWikiContext(
                 $this->entityManager,
                 $this->security,

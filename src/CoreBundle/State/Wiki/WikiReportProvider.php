@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\ApiResource\Wiki\WikiReport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -64,6 +65,7 @@ final readonly class WikiReportProvider implements ProviderInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiCategoryService $categoryService,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -89,7 +91,7 @@ final readonly class WikiReportProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to read Wiki reports in this context.');
         }
 
-        $studentView = $this->isWikiStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         $canManage = !$studentView && $this->canManageWikiContext(
             $this->entityManager,
             $this->security,

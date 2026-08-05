@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageForm;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
@@ -43,6 +44,7 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -68,7 +70,7 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
         $group = $this->getWikiGroup($this->entityManager, $request);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isStudentView()) {
             throw new AccessDeniedHttpException('Wiki pages cannot be edited in student view.');
         }
 

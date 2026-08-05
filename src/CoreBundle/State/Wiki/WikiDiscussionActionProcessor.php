@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiDiscussion;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiDiscussionAction;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiMailcue;
@@ -40,6 +41,7 @@ final readonly class WikiDiscussionActionProcessor implements ProcessorInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -69,7 +71,7 @@ final readonly class WikiDiscussionActionProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to use Wiki discussions in this context.');
         }
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isStudentView()) {
             throw new AccessDeniedHttpException('Wiki discussion actions are not available in student view.');
         }
 

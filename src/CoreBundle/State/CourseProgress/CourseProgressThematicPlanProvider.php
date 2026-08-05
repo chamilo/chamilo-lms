@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicPlan;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
@@ -67,6 +68,7 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -94,7 +96,7 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
 
     private function assertCanManage(Request $request, Course $course, ?Session $session): void
     {
-        if (!$this->isCourseProgressStudentView($request, (int) $course->getId())
+        if (!$this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())
             && $this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

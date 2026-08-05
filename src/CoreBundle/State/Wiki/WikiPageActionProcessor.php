@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -46,6 +47,7 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiNotificationService $notificationService,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -71,7 +73,7 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         $group = $this->getWikiGroup($this->entityManager, $request);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isStudentView()) {
             throw new AccessDeniedHttpException('Wiki management actions are not available in student view.');
         }
 

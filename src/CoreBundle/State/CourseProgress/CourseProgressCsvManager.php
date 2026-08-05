@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseProgress;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
@@ -50,6 +51,7 @@ final readonly class CourseProgressCsvManager
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     public function export(Request $request): StreamedResponse
@@ -181,7 +183,7 @@ final readonly class CourseProgressCsvManager
         $session = $this->getCourseProgressSession($request, $this->entityManager);
         $this->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isCourseProgressStudentView($request, (int) $course->getId())
+        if ($this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())
             || !$this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

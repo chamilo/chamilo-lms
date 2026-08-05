@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiSettings;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -30,6 +31,7 @@ final readonly class WikiSettingsProcessor implements ProcessorInterface
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsCourseManager $settingsCourseManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -54,7 +56,7 @@ final readonly class WikiSettingsProcessor implements ProcessorInterface
         $group = $this->getWikiGroup($this->entityManager, $request);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request) || !$this->canManageWikiCourseSettings($this->security, $course)) {
+        if ($this->studentViewHelper->isStudentView() || !$this->canManageWikiCourseSettings($this->security, $course)) {
             throw new AccessDeniedHttpException('You are not allowed to manage Wiki settings.');
         }
 

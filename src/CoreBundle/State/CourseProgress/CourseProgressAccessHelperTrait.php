@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -189,24 +190,9 @@ trait CourseProgressAccessHelperTrait
         return $session instanceof Session && $this->isSessionAdminReadingAllowed($user, $settingsManager);
     }
 
-    private function isCourseProgressStudentView(Request $request, int $courseId): bool
+    private function isCourseProgressStudentView(StudentViewHelper $studentViewHelper, int $courseId): bool
     {
-        if ($request->query->has('isStudentView') && $request->query->getBoolean('isStudentView')) {
-            return true;
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        $session = $request->getSession();
-        $legacyCourseStudentView = $session->get('student_view_course_'.$courseId);
-
-        if (null !== $legacyCourseStudentView) {
-            return (bool) $legacyCourseStudentView;
-        }
-
-        return 'studentview' === $session->get('studentview');
+        return $studentViewHelper->isStudentViewForCourse($courseId);
     }
 
     private function thematicBelongsToExactContext(

@@ -17,7 +17,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use JsonException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -57,13 +56,6 @@ trait LearningPathStateHelperTrait
         if (!$csrfTokenManager->isTokenValid(new CsrfToken(self::ACTION_TOKEN_INTENTION, $token))) {
             throw new AccessDeniedHttpException('Invalid CSRF token.');
         }
-    }
-
-    private function isStudentViewRequest(RequestStack $requestStack): bool
-    {
-        $value = strtolower(trim((string) $requestStack->getCurrentRequest()?->query->get('isStudentView', 'false')));
-
-        return \in_array($value, ['1', 'true', 'yes', 'on'], true);
     }
 
     private function assertLearningPathTeacher(Security $security): void

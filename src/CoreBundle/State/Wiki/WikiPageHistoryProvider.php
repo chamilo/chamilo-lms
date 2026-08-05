@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageHistory;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
@@ -42,6 +43,7 @@ final readonly class WikiPageHistoryProvider implements ProviderInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiPageDiffService $diffService,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -97,7 +99,7 @@ final readonly class WikiPageHistoryProvider implements ProviderInterface
             throw new NotFoundHttpException('The requested Wiki page was not found in the current context.');
         }
 
-        $studentView = $this->isWikiStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         $canManage = !$studentView && $this->canManageWikiContext(
             $this->entityManager,
             $this->security,

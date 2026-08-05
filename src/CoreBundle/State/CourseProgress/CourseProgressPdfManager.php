@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -47,6 +48,7 @@ final readonly class CourseProgressPdfManager
         private Security $security,
         private SettingsManager $settingsManager,
         private TranslatorInterface $translator,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     public function export(Request $request, ?int $thematicId = null): Response
@@ -102,7 +104,7 @@ final readonly class CourseProgressPdfManager
         $session = $this->getCourseProgressSession($request, $this->entityManager);
         $this->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isCourseProgressStudentView($request, (int) $course->getId())
+        if ($this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())
             || !$this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

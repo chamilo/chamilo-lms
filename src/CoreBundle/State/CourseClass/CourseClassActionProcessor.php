@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\State\CourseClass;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseClass\CourseClassAction;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -21,7 +20,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class CourseClassActionProcessor implements ProcessorInterface
 {
     public function __construct(
-        private RequestStack $requestStack,
         private CourseClassManager $manager,
         private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
@@ -42,12 +40,7 @@ final readonly class CourseClassActionProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('The current request is not available.');
-        }
-
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanManage($course, $session);
         $usergroup = $this->manager->findAccessibleGroup($data->usergroupId);
 

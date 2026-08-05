@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\ApiResource\CourseClass;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseClass\CourseClassActionProcessor;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -21,45 +21,75 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-classes/actions/add',
             openapi: new Operation(
                 summary: 'Link a class to the current course or session',
-                parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
             name: 'post_course_class_add',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: CourseClassActionProcessor::class,
         ),
         new Post(
             uriTemplate: '/course-classes/actions/remove',
             openapi: new Operation(
                 summary: 'Remove a class and apply legacy user unsubscription behavior',
-                parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
             name: 'post_course_class_remove',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: CourseClassActionProcessor::class,
         ),
         new Post(
             uriTemplate: '/course-classes/actions/remove-only',
             openapi: new Operation(
                 summary: 'Remove only the class relation and keep users subscribed',
-                parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
             name: 'post_course_class_remove_only',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: CourseClassActionProcessor::class,
         ),
     ],

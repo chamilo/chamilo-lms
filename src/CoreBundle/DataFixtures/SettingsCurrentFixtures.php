@@ -3493,6 +3493,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
+                    'name' => 'add_fullname_in_file_download',
+                    'title' => 'Add student fullname in file download name',
+                    'comment' => 'Add the student full name to assignment file names when downloading individual submissions or assignment packages.',
+                ],
+                [
                     'name' => 'block_student_publication_add_documents',
                     'title' => 'Prevent adding documents to assignments',
                     'comment' => '',

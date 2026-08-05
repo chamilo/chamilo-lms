@@ -11,9 +11,9 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseInvitation\CourseInvitationItem;
 use Chamilo\CoreBundle\Entity\CourseInvitation;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\CourseInvitationRepository;
 use Chamilo\CoreBundle\Service\CourseInvitation\CourseInvitationTokenService;
-use Doctrine\ORM\EntityManagerInterface;
 use JsonException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,11 +36,11 @@ final readonly class CourseInvitationRevokeProcessor implements ProcessorInterfa
 
     public function __construct(
         private RequestStack $requestStack,
-        private EntityManagerInterface $entityManager,
         private CourseInvitationRepository $invitationRepository,
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private CourseInvitationTokenService $tokenService,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -54,8 +54,8 @@ final readonly class CourseInvitationRevokeProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request, $this->entityManager);
-        $session = $this->getSession($request, $this->entityManager);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->getSession($this->cidReqHelper);
         $this->assertSessionBelongsToCourse($session, $course);
 
         if (!$this->canManageCourseInvitations($this->security, $course, $session)) {

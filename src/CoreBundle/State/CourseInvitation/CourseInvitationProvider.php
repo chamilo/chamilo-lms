@@ -11,14 +11,11 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseInvitation\CourseInvitationItem;
 use Chamilo\CoreBundle\Entity\CourseInvitation;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\CourseInvitationRepository;
 use Chamilo\CoreBundle\Service\CourseInvitation\CourseInvitationTokenService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -30,12 +27,11 @@ final readonly class CourseInvitationProvider implements ProviderInterface
     use CourseInvitationAccessHelperTrait;
 
     public function __construct(
-        private RequestStack $requestStack,
-        private EntityManagerInterface $entityManager,
         private CourseInvitationRepository $invitationRepository,
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private CourseInvitationTokenService $tokenService,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -44,13 +40,8 @@ final readonly class CourseInvitationProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|CourseInvitationItem|null
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request instanceof Request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-
-        $course = $this->getCourse($request, $this->entityManager);
-        $session = $this->getSession($request, $this->entityManager);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->getSession($this->cidReqHelper);
         $this->assertSessionBelongsToCourse($session, $course);
 
         if (!$this->canManageCourseInvitations($this->security, $course, $session)) {

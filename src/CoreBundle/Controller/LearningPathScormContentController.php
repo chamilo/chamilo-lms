@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use ApiPlatform\Metadata\Get;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Service\LearningPath\ScormRuntimeManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathRuntimeProvider;
@@ -57,6 +58,7 @@ final class LearningPathScormContentController extends AbstractController
         string $path,
         Request $request,
         EntityManagerInterface $entityManager,
+        CidReqHelper $cidReqHelper,
         Security $security,
         LearningPathRuntimeProvider $runtimeProvider,
         ScormRuntimeManager $runtimeManager,
@@ -80,9 +82,9 @@ final class LearningPathScormContentController extends AbstractController
             throw new NotFoundHttpException('SCORM content not found.');
         }
 
-        $course = $this->getContextCourse($entityManager, $request);
-        $session = $this->getContextSession($entityManager, $request, $course);
-        $group = $this->getContextGroup($entityManager, $request, $course);
+        $course = $this->getContextCourse($cidReqHelper);
+        $session = $cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($entityManager, $cidReqHelper, $course);
         $resourceNode = $lp->getResourceNode();
         if (null === $resourceNode || !$security->isGranted('VIEW', $resourceNode)) {
             throw new AccessDeniedHttpException('The SCORM learning path is not available.');

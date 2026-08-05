@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -45,6 +46,7 @@ final readonly class LearningPathScormPackageAction
         private ResourceNodeRepository $resourceNodeRepository,
         private CDocumentRepository $documentRepository,
         private CLpRepository $learningPathRepository,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function __invoke(int $lpId, Request $request): Response
@@ -53,15 +55,15 @@ final readonly class LearningPathScormPackageAction
             throw new AccessDeniedHttpException('SCORM package download is disabled.');
         }
 
-        $course = $this->getContextCourse($this->entityManager, $request);
+        $course = $this->getContextCourse($this->cidReqHelper);
         $requestedNodeId = $request->query->getInt('node');
         $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
         if ($requestedNodeId > 0 && $requestedNodeId !== $courseNodeId) {
             throw new AccessDeniedHttpException('The requested resource node does not belong to this course.');
         }
 
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $learningPath = $this->learningPathRepository->find($lpId);
         if (!$learningPath instanceof CLp || CLp::SCORM_TYPE !== $learningPath->getLpType()) {
